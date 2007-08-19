@@ -75,9 +75,13 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		/** Return the location(s) of the resource (URL, file path, etc.) */
 		virtual QStringList location() const = 0;
 
+		/** Return the type of the resource (URL, file, etc.)
+		 *  for display purposes. */
+		virtual QString displayType() const = 0;
+
 		/** Return the location of the resource (URL, file path, etc.)
 		 *  for display purposes. */
-		virtual QString displayLocation(bool prefix = false) const = 0;
+		virtual QString displayLocation() const = 0;
 
 		/** Change the resource's location. The resource will be reloaded if active. */
 		virtual bool setLocation(const QString& locn, const QString& locn2 = QString()) = 0;

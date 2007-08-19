@@ -155,9 +155,9 @@ SpecialActions::SpecialActions(QWidget* parent)
 	mPreAction = new KLineEdit(this);
 	label->setBuddy(mPreAction);
 	mPreAction->setWhatsThis(i18nc("@info:whatsthis",
-	                              "Enter a shell command to execute before the alarm is displayed.\n"
-	                              "Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.\n"
-	                              "N.B. KAlarm will wait for the command to complete before displaying the alarm."));
+	                              "<para>Enter a shell command to execute before the alarm is displayed.</para>"
+	                              "<para>Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.</para>"
+	                              "<para><note>KAlarm will wait for the command to complete before displaying the alarm.</note></para>"));
 	topLayout->addWidget(mPreAction);
 	topLayout->addSpacing(KDialog::spacingHint());
 
@@ -169,9 +169,9 @@ SpecialActions::SpecialActions(QWidget* parent)
 	mPostAction = new KLineEdit(this);
 	label->setBuddy(mPostAction);
 	mPostAction->setWhatsThis(i18nc("@info:whatsthis",
-	                               "Enter a shell command to execute after the alarm window is closed.\n"
-	                               "Note that it is not executed after closing a reminder window. If you defer "
-	                               "the alarm, it is not executed until the alarm is finally acknowledged or closed."));
+	                               "<para>Enter a shell command to execute after the alarm window is closed.</para>"
+	                               "<para>Note that it is not executed after closing a reminder window. If you defer "
+	                               "the alarm, it is not executed until the alarm is finally acknowledged or closed.</para>"));
 	topLayout->addWidget(mPostAction);
 }
 

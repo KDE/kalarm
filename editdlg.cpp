@@ -261,7 +261,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	mDeferTimeLabel = new QLabel(mDeferGroup);
 	hlayout->addWidget(mDeferTimeLabel);
 
-	mDeferChangeButton = new QPushButton(i18nc("@action:button", "C&hange..."), mDeferGroup);
+	mDeferChangeButton = new QPushButton(i18nc("@action:button", "Change..."), mDeferGroup);
 	mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
 	connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
 	mDeferChangeButton->setWhatsThis(i18nc("@info:whatsthis", "Change the alarm's deferred time, or cancel the deferral"));
@@ -283,7 +283,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTemplateTimeType(QAbstractButton*)));
 
-		mTemplateDefaultTime = new RadioButton(i18nc("@option:radio", "&Default time"), templateTimeBox);
+		mTemplateDefaultTime = new RadioButton(i18nc("@option:radio", "Default time"), templateTimeBox);
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
 		mTemplateDefaultTime->setReadOnly(mReadOnly);
 		mTemplateDefaultTime->setWhatsThis(i18nc("@info:whatsthis", "Do not specify a start time for alarms based on this template. "
@@ -302,16 +302,17 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mTemplateTime = new TimeEdit(box);
 		mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
 		mTemplateTime->setReadOnly(mReadOnly);
-		mTemplateTime->setWhatsThis(QString("%1\n\n%2").arg(i18nc("@info:whatsthis", "Enter the start time for alarms based on this template."))
-		                                               .arg(TimeSpinBox::shiftWhatsThis()));
+		mTemplateTime->setWhatsThis(i18nc("@info:whatsthis",
+		      "<para>Enter the start time for alarms based on this template.</para><para>%1</para>",
+		      TimeSpinBox::shiftWhatsThis()));
 		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 0, 1, Qt::AlignLeft);
 
-		mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "An&y time"), templateTimeBox);
+		mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "Date only"), templateTimeBox);
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
-		mTemplateAnyTime->setWhatsThis(i18nc("@info:whatsthis", "Set the '%1' option for alarms based on this template.", i18n("Any time")));
+		mTemplateAnyTime->setWhatsThis(i18nc("@info:whatsthis", "Set the <interface>Date</interface> option for alarms based on this template."));
 		mTemplateTimeGroup->addButton(mTemplateAnyTime);
 		grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
@@ -329,8 +330,8 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mTemplateTimeAfter->setValue(1439);
 		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
 		mTemplateTimeAfter->setReadOnly(mReadOnly);
-		mTemplateTimeAfter->setWhatsThis(QString("%1\n\n%2").arg(AlarmTimeWidget::i18n_what_TimeAfterPeriod())
-		                                                    .arg(TimeSpinBox::shiftWhatsThis()));
+		mTemplateTimeAfter->setWhatsThis(i18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
+		                                       AlarmTimeWidget::i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
@@ -350,7 +351,9 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	label = new QLabel(i18nc("@label", "Recurrence:"), box);
 	label->setFixedSize(label->sizeHint());
 	mRecurrenceText = new QLabel(box);
-	box->setWhatsThis(i18nc("@info:whatsthis", "How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition."));
+	box->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>How often the alarm recurs.</para>"
+	      "<para>The times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition.</para>"));
 	box->setFixedHeight(box->sizeHint().height());
 	topLayout->addWidget(box);
 

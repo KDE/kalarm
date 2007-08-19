@@ -106,14 +106,28 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 		}
 		case Qt::ToolTipRole:
 		{
-			QString tipText = resource->resourceName() + '\n';
-			tipText += resource->displayLocation(true);
+			QString name = "@" + resource->resourceName();   // insert markers for stripping out name
+			QString type = "@" + resource->displayType();
 			bool inactive = !resource->isActive();
-			if (inactive)
-				tipText += '\n' + i18nc("@info:tooltip", "Disabled");
-			if (resource->readOnly())
-				tipText += (inactive ? ", " : "\n") + i18nc("@info:tooltip", "Read-only");
-			return tipText;
+			QString disabled = i18nc("@info/plain", "Disabled");
+			QString readonly = i18nc("@info/plain", "Read-only");
+			if (inactive  &&  resource->readOnly())
+				return i18nc("@info:tooltip",
+				             "%1"
+				             "<br/>%2: <filename>%3</filename>"
+				             "<br/>%4, %5",
+				             name, type, resource->displayLocation(), disabled, readonly);
+			if (inactive  ||  resource->readOnly())
+				return i18nc("@info:tooltip",
+				             "%1"
+				             "<br/>%2: <filename>%3</filename>"
+				             "<br/>%4",
+				             name, type, resource->displayLocation(),
+				             (inactive ? disabled : readonly));
+			return i18nc("@info:tooltip",
+			             "%1"
+			             "<br/>%2: <filename>%3</filename>",
+			             name, type, resource->displayLocation());
 		}
 		default:
 			break;
@@ -462,10 +476,12 @@ bool ResourceView::viewportEvent(QEvent* e)
 		if (qVariantCanConvert<QString>(value))
 		{
 			QString toolTip = value.toString();
-			int i = toolTip.indexOf('\n');
+			int i = toolTip.indexOf('@');
 			if (i > 0)
 			{
-				QString name = toolTip.left(i);
+				int j = toolTip.indexOf("<br", i + 1);
+				int k = toolTip.indexOf('@', j);
+				QString name = toolTip.mid(i + 1, j - i - 1);
 				value = model()->data(index, Qt::FontRole);
 				QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
 				int textWidth = fm.boundingRect(name).width() + 1;
@@ -481,7 +497,14 @@ bool ResourceView::viewportEvent(QEvent* e)
 				{
 					// The whole of the resource name is already displayed,
 					// so omit it from the tooltip.
-					toolTip = toolTip.mid(i + 1);
+					int k = toolTip.indexOf('@', j);
+					if (k > 0)
+						toolTip.remove(i, k + 1 - i);
+				}
+				else
+				{
+					toolTip.remove(k, 1);
+					toolTip.remove(i, 1);
 				}
 			}
 			QToolTip::showText(he->globalPos(), toolTip, this);

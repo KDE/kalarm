@@ -156,6 +156,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Font and colour sample display
 	mFontColourSample = new QLineEdit(group);
 	mFontColourSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
+	mFontColourSample->setCursorPosition(0);
 	mFontColourSample->setMinimumHeight(mFontColourSample->fontMetrics().lineSpacing());
 	mFontColourSample->setAlignment(Qt::AlignCenter);
 	mFontColourSample->setWhatsThis(i18nc("@info:whatsthis",

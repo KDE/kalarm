@@ -121,8 +121,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mAtLoginButton->setFixedSize(mAtLoginButton->sizeHint());
 	mAtLoginButton->setReadOnly(mReadOnly);
 	mAtLoginButton->setWhatsThis(i18nc("@info:whatsthis",
-	                                  "Trigger the alarm at the specified date/time and at every login until then.\n"
-	                                  "Note that it will also be triggered any time the alarm daemon is restarted."));
+	                                  "<para>Trigger the alarm at the specified date/time and at every login until then.</para>"
+	                                  "<para>Note that it will also be triggered any time the alarm daemon is restarted.</para>"));
 	mRuleButtonGroup->addButton(mAtLoginButton);
 	vlayout->addWidget(mAtLoginButton);
 
@@ -206,7 +206,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	vlayout = new QVBoxLayout(mRangeButtonBox);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
-	mNoEndDateButton = new RadioButton(i18nc("@option:radio", "No &end"), mRangeButtonBox);
+	mNoEndDateButton = new RadioButton(i18nc("@option:radio", "No end"), mRangeButtonBox);
 	mNoEndDateButton->setFixedSize(mNoEndDateButton->sizeHint());
 	mNoEndDateButton->setReadOnly(mReadOnly);
 	mNoEndDateButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm indefinitely"));
@@ -217,7 +217,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
-	mRepeatCountButton = new RadioButton(i18nc("@option:radio", "End a&fter:"), mRangeButtonBox);
+	mRepeatCountButton = new RadioButton(i18nc("@option:radio", "End after:"), mRangeButtonBox);
 	mRepeatCountButton->setReadOnly(mReadOnly);
 	mRepeatCountButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm for the number of times specified"));
 	mRangeButtonGroup->addButton(mRepeatCountButton);
@@ -241,22 +241,22 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
-	mEndDateButton = new RadioButton(i18nc("@option:radio", "End &by:"), mRangeButtonBox);
+	mEndDateButton = new RadioButton(i18nc("@option:radio", "End by:"), mRangeButtonBox);
 	mEndDateButton->setReadOnly(mReadOnly);
 	mEndDateButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm until the date/time specified"));
 	mRangeButtonGroup->addButton(mEndDateButton);
 	mEndDateEdit = new DateEdit(mRangeButtonBox);
 	mEndDateEdit->setFixedSize(mEndDateEdit->sizeHint());
 	mEndDateEdit->setReadOnly(mReadOnly);
-	static const QString tzText = i18nc("@info:whatsthis", "This uses the same time zone as the start time.");
-	static const QString lastDateText = i18nc("@info:whatsthis", "Enter the last date to repeat the alarm.");
-	mEndDateEdit->setWhatsThis(QString("%1\n%2").arg(lastDateText).arg(tzText));
+	static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
+	mEndDateEdit->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Enter the last date to repeat the alarm.</para><para>%1</para>", tzText));
 	mEndDateButton->setFocusWidget(mEndDateEdit);
 	mEndTimeEdit = new TimeEdit(mRangeButtonBox);
 	mEndTimeEdit->setFixedSize(mEndTimeEdit->sizeHint());
 	mEndTimeEdit->setReadOnly(mReadOnly);
-	static const QString lastTimeText = i18nc("@info:whatsthis", "Enter the last time to repeat the alarm.");
-	mEndTimeEdit->setWhatsThis(QString("%1\n%2\n\n%3").arg(lastTimeText).arg(tzText).arg(TimeSpinBox::shiftWhatsThis()));
+	mEndTimeEdit->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Enter the last time to repeat the alarm.</para><para>%1</para><para>%2</para>", tzText, TimeSpinBox::shiftWhatsThis()));
 	mEndAnyTimeCheckBox = new CheckBox(i18nc("@option:check", "Any time"), mRangeButtonBox);
 	mEndAnyTimeCheckBox->setFixedSize(mEndAnyTimeCheckBox->sizeHint());
 	mEndAnyTimeCheckBox->setReadOnly(mReadOnly);
@@ -277,7 +277,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	// Create the exceptions group which specifies dates to be excluded
 	// from the recurrence.
 
-	mExceptionGroup = new QGroupBox(i18nc("@title:group", "E&xceptions"), this);
+	mExceptionGroup = new QGroupBox(i18nc("@title:group", "Exceptions"), this);
 	topLayout->addWidget(mExceptionGroup);
 	topLayout->setStretchFactor(mExceptionGroup, 2);
 	hlayout = new QHBoxLayout(mExceptionGroup);
@@ -336,7 +336,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mWorkTimeOnly = new CheckBox(i18nc("@option:check", "Only during working hours"), mExceptionGroup);
 	mWorkTimeOnly->setFixedSize(mWorkTimeOnly->sizeHint());
 	mWorkTimeOnly->setReadOnly(mReadOnly);
-	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis", "Only execute the alarm during working hours.\nYou can specify working hours in the Preferences dialog."));
+	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis", "<para>Only execute the alarm during working hours.</para><para>You can specify working hours in the Preferences dialog.</para>"));
 	vlayout->addWidget(mWorkTimeOnly);
 
 	// Simple repetition button

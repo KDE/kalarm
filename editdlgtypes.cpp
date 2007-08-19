@@ -213,6 +213,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	// Font and colour sample display
 	mFontColourSample = new QLineEdit(parent);
 	mFontColourSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
+	mFontColourSample->setCursorPosition(0);
 	mFontColourSample->setMinimumHeight(mFontColourSample->fontMetrics().lineSpacing());
 	mFontColourSample->setAlignment(Qt::AlignCenter);
 	mFontColourSample->setWhatsThis(i18nc("@info:whatsthis",
@@ -252,7 +253,7 @@ ColourCombo* EditDisplayAlarmDlg::createBgColourChooser(KHBox** box, QWidget* pa
 {
 	*box = new KHBox(parent);   // this is to control the QWhatsThis text display area
 	(*box)->setMargin(0);
-	QLabel* label = new QLabel(i18nc("@label:listbox", "&Background color:"), *box);
+	QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), *box);
 	label->setFixedSize(label->sizeHint());
 	ColourCombo* widget = new ColourCombo(*box);
 	QSize size = widget->sizeHint();
@@ -271,7 +272,7 @@ Reminder* EditDisplayAlarmDlg::createReminder(QWidget* parent)
 {
 	static const QString reminderText = i18nc("@info:whatsthis", "Enter how long in advance of the main alarm to display a reminder alarm.");
 	return new Reminder(i18nc("@info:whatsthis", "Check to additionally display a reminder in advance of the main alarm time(s)."),
-	                    QString("%1\n\n%2").arg(reminderText).arg(TimeSpinBox::shiftWhatsThis()),
+	                    i18nc("@info:whatsthis", "<para>Enter how long in advance of the main alarm to display a reminder alarm.</para><para>%1</para>", TimeSpinBox::shiftWhatsThis()),
 	                    true, true, parent);
 }
 
@@ -650,10 +651,10 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 					case BLANK:
 						KMessageBox::sorry(const_cast<EditDisplayAlarmDlg*>(this), i18nc("@info", "Please select a file to display"));
 						return false;
-					case NONEXISTENT:     errmsg = i18nc("@info", "<filename>%1</filename>\nnot found", alarmtext);  break;
-					case DIRECTORY:       errmsg = i18nc("@info", "<filename>%1</filename>\nis a folder", alarmtext);  break;
-					case UNREADABLE:      errmsg = i18nc("@info", "<filename>%1</filename>\nis not readable", alarmtext);  break;
-					case NOT_TEXT_IMAGE:  errmsg = i18nc("@info", "<filename>%1</filename>\nappears not to be a text or image file", alarmtext);  break;
+					case NONEXISTENT:     errmsg = i18nc("@info", "<filename>%1</filename> not found", alarmtext);  break;
+					case DIRECTORY:       errmsg = i18nc("@info", "<filename>%1</filename> is a folder", alarmtext);  break;
+					case UNREADABLE:      errmsg = i18nc("@info", "<filename>%1</filename> is not readable", alarmtext);  break;
+					case NOT_TEXT_IMAGE:  errmsg = i18nc("@info", "<filename>%1</filename> appears not to be a text or image file", alarmtext);  break;
 					case NONE:
 					default:
 						break;
@@ -946,7 +947,7 @@ void EditCommandAlarmDlg::type_trySuccessMessage(ShellProcess* proc, const QStri
 	if (mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
 	{
 		theApp()->commandMessage(proc, this);
-		KMessageBox::information(this, i18nc("@info", "Command executed:\n<icode>%1</icode>", text));
+		KMessageBox::information(this, i18nc("@info", "Command executed: <icode>%1</icode>", text));
 		theApp()->commandMessage(proc, 0);
 	}
 }
@@ -1095,7 +1096,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	grid = new QGridLayout();
 	grid->setMargin(0);
 	frameLayout->addLayout(grid);
-	label = new QLabel(i18nc("@label:listbox", "Attachment&s:"), parent);
+	label = new QLabel(i18nc("@label:listbox", "Attachments:"), parent);
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 
@@ -1117,7 +1118,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mEmailAddAttachButton->setWhatsThis(i18nc("@info:whatsthis", "Add an attachment to the email."));
 	grid->addWidget(mEmailAddAttachButton, 0, 2);
 
-	mEmailRemoveButton = new QPushButton(i18nc("@action:button", "Remo&ve"), parent);
+	mEmailRemoveButton = new QPushButton(i18nc("@action:button", "Remove"), parent);
 	connect(mEmailRemoveButton, SIGNAL(clicked()), SLOT(slotRemoveAttachment()));
 	mEmailRemoveButton->setWhatsThis(i18nc("@info:whatsthis", "Remove the highlighted attachment from the email."));
 	grid->addWidget(mEmailRemoveButton, 1, 2);
@@ -1271,7 +1272,7 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 		if (!bad.isEmpty())
 		{
 			mEmailToEdit->setFocus();
-			KMessageBox::error(this, i18nc("@info", "Invalid email address:\n<email>%1</email>", bad));
+			KMessageBox::error(this, i18nc("@info", "Invalid email address: <email>%1</email>", bad));
 			return false;
 		}
 	}
@@ -1295,12 +1296,12 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 				break;      // empty
 			case -1:
 				mEmailAttachList->setFocus();
-				KMessageBox::error(this, i18nc("@info", "Invalid email attachment:\n<filename>%1</filename>", att));
+				KMessageBox::error(this, i18nc("@info", "Invalid email attachment: <filename>%1</filename>", att));
 				return false;
 		}
 	}
 	if (trial  &&  KMessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to send the email now to the specified recipient(s)?"),
-	                                                  i18nc("@action:button", "Confirm Email"), KGuiItem(i18nc("@action:button", "&Send"))) != KMessageBox::Continue)
+	                                                  i18nc("@action:button", "Confirm Email"), KGuiItem(i18nc("@action:button", "Send"))) != KMessageBox::Continue)
 		return false;
 	return true;
 }
@@ -1310,10 +1311,13 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 */
 void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
 {
-	QString bcc;
+	QString msg;
 	if (mEmailBcc->isChecked())
-		bcc = i18nc("@info", "\nBcc: <email>%1</email>", Preferences::emailBccAddress());
-	KMessageBox::information(this, i18nc("@info", "Email sent to:\n%1%2", mEmailAddresses.join("\n"), bcc));
+		msg = i18nc("@info", "Email sent to:<br/>%1<br/>Bcc: <email>%2</email>",
+		            mEmailAddresses.join("<br/>"), Preferences::emailBccAddress());
+	else
+		msg = i18nc("@info", "Email sent to:<br/>%1", mEmailAddresses.join("<br/>"));
+	KMessageBox::information(this, msg);
 }
 
 /******************************************************************************

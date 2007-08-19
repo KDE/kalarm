@@ -317,8 +317,12 @@ QStringList KAResourceRemote::location() const
 	return QStringList(downloadUrl().url()) << uploadUrl().url();
 }
 
-QString KAResourceRemote::displayLocation(bool prefix) const
+QString KAResourceRemote::displayLocation() const
 {
-	QString loc = mDownloadUrl.prettyUrl();
-	return prefix ? i18nc("@info", "URL: <filename>%1</filename>", loc) : loc;
+	return mDownloadUrl.prettyUrl();
+}
+
+QString KAResourceRemote::displayType() const
+{
+	return i18nc("@info/plain", "URL");
 }

@@ -58,7 +58,7 @@ class AlarmTimeWidget : public QFrame
 		QSize            sizeHint() const              { return minimumSizeHint(); }
 
 		static QString   i18n_radio_TimeFromNow();  // text of 'Time from now:' radio button
-		static QString   i18n_what_TimeAfterPeriod();
+		static QString   i18n_TimeAfterPeriod();
 		static const int maxDelayTime;    // maximum time from now
 
 	signals:

@@ -57,7 +57,8 @@ class KALARM_EXPORT KAResourceRemote : public AlarmResource
 		bool         setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl);
 		KUrl         downloadUrl() const                { return mDownloadUrl; }
 		KUrl         uploadUrl() const                  { return mUploadUrl; }
-		virtual QString     displayLocation(bool prefix = false) const;
+		virtual QString     displayType() const;
+		virtual QString     displayLocation() const;
 		virtual QStringList location() const;
 		virtual bool        setLocation(const QString& downloadUrl, const QString& uploadUrl);
 		virtual void showProgress(bool show)            { mShowProgress = show; }

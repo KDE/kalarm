@@ -45,9 +45,9 @@ static const QTime time_23_59(23, 59);
 const int AlarmTimeWidget::maxDelayTime = 99*60 + 59;    // < 100 hours
 
 QString AlarmTimeWidget::i18n_radio_TimeFromNow()   { return i18nc("@option:radio", "Time from now:"); }
-QString AlarmTimeWidget::i18n_what_TimeAfterPeriod()
+QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 {
-	return i18nc("@info:whatsthis", "Enter the length of time (in hours and minutes) after "
+	return i18nc("@info/plain", "Enter the length of time (in hours and minutes) after "
 	            "the current time to schedule the alarm.");
 }
 
@@ -78,12 +78,11 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 
 void AlarmTimeWidget::init(int mode, const QString& title)
 {
-	static const QString recurText = i18nc("@info:whatsthis",
-	                                       "For a simple repetition, enter the date/time of the first occurrence.\n"
-	                                      "If a recurrence is configured, the start date/time will be adjusted "
-	                                      "to the first recurrence on or after the entered date/time."); 
-	static const QString tzText = i18nc("@info:whatsthis",
-	                                    "This uses <application>KAlarm</application>'s default time zone, set in the Preferences dialog.");
+	static const QString recurText = i18nc("@info/plain",
+	                                       "If a recurrence is configured, the start date/time will be adjusted "
+	                                       "to the first recurrence on or after the entered date/time."); 
+	static const QString tzText = i18nc("@info/plain",
+	                                    "This uses KAlarm's default time zone, set in the Preferences dialog.");
 
 	QWidget* topWidget;
 	if (title.isEmpty())
@@ -136,8 +135,9 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	mDateEdit = new DateEdit(topWidget);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateChanged(const QDate&)), SLOT(dateTimeChanged()));
-	static const QString enterDateText = i18nc("@info:whatsthis", "Enter the date to schedule the alarm.");
-	mDateEdit->setWhatsThis(QString("%1\n%2").arg(enterDateText).arg(mDeferring ? tzText : recurText));
+	mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Enter the date to schedule the alarm.</para>"
+	      "<para>%1</para>", (mDeferring ? tzText : recurText)));
 	topLayout->addWidget(mDateEdit, 1, 1, Qt::AlignLeft);
 	mDateTimeRadio->setFocusWidget(mDateEdit);
 	if (mDateRadio)
@@ -147,8 +147,10 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	mTimeEdit = new TimeEdit(topWidget);
 	mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
 	connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
-	static const QString enterTimeText = i18nc("@info:whatsthis", "Enter the time to schedule the alarm.");
-	mTimeEdit->setWhatsThis(QString("%1\n%2\n\n%3").arg(enterTimeText).arg(mDeferring ? tzText : recurText).arg(TimeSpinBox::shiftWhatsThis()));
+	mTimeEdit->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Enter the time to schedule the alarm.</para>"
+	      "<para>%1</para>"
+	      "<para>%2</para>", (mDeferring ? tzText : recurText), TimeSpinBox::shiftWhatsThis()));
 	topLayout->addWidget(mTimeEdit, row, (mDateRadio ? 1 : 2), Qt::AlignLeft);
 	++row;
 
@@ -184,8 +186,8 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	mDelayTimeEdit->setValue(1439);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
-	mDelayTimeEdit->setWhatsThis(mDeferring ? QString("%1\n\n%2").arg(i18n_what_TimeAfterPeriod()).arg(TimeSpinBox::shiftWhatsThis())
-	                                        : QString("%1\n%2\n\n%3").arg(i18n_what_TimeAfterPeriod()).arg(recurText).arg(TimeSpinBox::shiftWhatsThis()));
+	mDelayTimeEdit->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
+	                                        : i18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
 	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 	topLayout->addWidget(mDelayTimeEdit, row, 1, Qt::AlignLeft);
 

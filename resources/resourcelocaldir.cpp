@@ -408,10 +408,14 @@ bool KAResourceLocalDir::setLocation(const QString& dirName, const QString&)
 	return setDirName(newURL);
 }
 
-QString KAResourceLocalDir::displayLocation(bool prefix) const
+QString KAResourceLocalDir::displayLocation() const
 {
-	QString loc = mURL.path();
-	return prefix ? i18nc("@info", "Directory: <filename>%1</filename>", loc) : loc;
+	return mURL.path();
+}
+
+QString KAResourceLocalDir::displayType() const
+{
+	return i18nc("@info/plain", "Directory");
 }
 
 QDateTime readLastModified(const QString& filePath)

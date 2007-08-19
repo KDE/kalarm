@@ -580,8 +580,8 @@ void MessageWin::initView()
 		mDeferButton->setFixedSize(mDeferButton->sizeHint());
 		connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
 		grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
-		mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "Defer the alarm until later.\n"
-		                                "You will be prompted to specify when the alarm should be redisplayed."));
+		mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
+		                                "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
 
 		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 	}
@@ -1045,7 +1045,7 @@ void MessageWin::slotPlayAudio()
 	if (0)
 	{
 		kError(5950) << "MessageWin::playAudio(): Open failure:" << mAudioFile;
-		KMessageBox::error(this, i18nc("@info", "Cannot open audio file:\n<filename>%1</filename>", mAudioFile));
+		KMessageBox::error(this, i18nc("@info", "Cannot open audio file: <filename>%1</filename>", mAudioFile));
 		return;
 	}
 	mPlayedOnce = false;
@@ -1520,7 +1520,7 @@ void MessageWin::slotDefer()
 			{
 				// The event doesn't exist any more !?!, so recurrence data,
 				// flags, and more, have been lost.
-				KMessageBox::error(this, QString::fromLatin1("%1\n%2").arg(i18nc("@info", "Cannot defer alarm:")).arg(i18nc("@info", "Alarm not found")));
+				KMessageBox::error(this, i18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
 				raise();
 				delete mDeferDlg;
 				mDeferDlg = 0;

@@ -315,35 +315,14 @@ QString AlarmResource::infoText() const
 	QString enabled = isActive() ? i18nc("@info/plain", "Enabled") : i18nc("@info/plain", "Disabled");
 	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain", "Yes") : i18nc("@info/plain", "No");
 	return i18nc("@info",
-	    "<resource>%1</resource>"
-	    "<br>Resource type: %2"
-	    "<br>Contents: %3"
-	    "<br>%4"
-	    "<br>Permissions: %5"
-	    "<br>Status: %6"
-	    "<br>Default resource: %7",
-	    resourceName(), factory->typeName(type()), atype, displayLocation(true), perms, enabled, std);
-
-/*	QString txt = i18nc("@info", "<resource>%1</resource>", resourceName());
-	KRES::Factory* factory = KRES::Factory::self("alarms");
-	txt += "<br>" + i18nc("@info", "Resource type: <resource>%1</resource>", factory->typeName(type()));
-	QString type;
-	switch (mType)
-	{
-		case ACTIVE:    type = i18nc("@info", "Active alarms");  break;
-		case ARCHIVED:  type = i18nc("@info", "Archived alarms");  break;
-		case TEMPLATE:  type = i18nc("@info", "Alarm templates");  break;
-		default:        break;
-	}
-	txt += "<br>" + i18nc("@info Content type (active alarms, etc)", "Contents: <resource>%1</resource>", type);
-	txt += "<br>" + displayLocation(true);
-	type = readOnly() ? i18nc("@info", "Read-only") : i18nc("@info", "Read-write");
-	txt += "<br>" + i18nc("@info Access permissions (read-only, etc)", "Permissions: <resource>%1</resource>", type);
-	type = isActive() ? i18nc("@info", "Enabled") : i18nc("@info", "Disabled");
-	txt += "<br>" + i18nc("@info Enabled/disabled status", "Status: <resource>%1</resource>", type);
-	type = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info", "Yes") : i18nc("@info", "No");
-	txt += "<br>" + i18nc("@info", "Default resource: <resource>%1</resource>", type);
-	return txt;*/
+	    "<title>%1</title>"
+	    "<br/>Resource type: %2"
+	    "<br/>Contents: %3"
+	    "<br/>%4: <filename>%5</filename>"
+	    "<br/>Permissions: %6"
+	    "<br/>Status: %7"
+	    "<br/>Default resource: %8",
+	    resourceName(), factory->typeName(type()), atype, displayType(), displayLocation(), perms, enabled, std);
 }
 
 void AlarmResource::lock(const QString& path)

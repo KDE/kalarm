@@ -48,7 +48,8 @@ class KALARM_EXPORT KAResourceLocal : public AlarmResource
 
 		QString      fileName() const;
 		bool         setFileName(const KUrl&);
-		virtual QString     displayLocation(bool prefix = false) const;
+		virtual QString     displayType() const;
+		virtual QString     displayLocation() const;
 		virtual QStringList location() const   { return QStringList(fileName()); }
 		virtual bool        setLocation(const QString& fileName, const QString& = QString());
 		virtual void writeConfig(KConfigGroup&);

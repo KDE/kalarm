@@ -83,11 +83,11 @@ struct KAMailData
 };
 
 
-QString KAMail::i18n_msg_NeedFromEmailAddress()
-{ return i18nc("@info", "A 'From' email address must be configured in order to execute email alarms."); }
+QString KAMail::i18n_NeedFromEmailAddress()
+{ return i18nc("@info/plain", "A 'From' email address must be configured in order to execute email alarms."); }
 
 QString KAMail::i18n_sent_mail()
-{ return i18nc("@info KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
+{ return i18nc("@info/plain KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
 KPIMIdentities::IdentityManager* KAMail::mIdentityManager = 0;
 KPIMIdentities::IdentityManager* KAMail::identityManager()

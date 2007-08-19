@@ -45,11 +45,11 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	  mAutoCloseShown(false)
 {
 	QString whatsThis = i18nc("@info:whatsthis",
-	                          "If checked, the alarm will be canceled if it cannot be triggered within the "
+	                          "<para>If checked, the alarm will be canceled if it cannot be triggered within the "
 	                         "specified period after its scheduled time. Possible reasons for not triggering "
-	                         "include your being logged off, X not running, or the alarm daemon not running.\n\n"
-	                         "If unchecked, the alarm will be triggered at the first opportunity after "
-	                         "its scheduled time, regardless of how late it is.");
+	                         "include your being logged off, X not running, or the alarm daemon not running.</para>"
+	                         "<para>If unchecked, the alarm will be triggered at the first opportunity after "
+	                         "its scheduled time, regardless of how late it is.</para>");
 
 	mLayout = new QVBoxLayout(this);
 	mLayout->setMargin(0);
@@ -71,7 +71,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	mStack->addWidget(mTimeSelectorFrame);
 	vlayout = new QVBoxLayout(mTimeSelectorFrame);
 	vlayout->setMargin(0);
-	mTimeSelector = new TimeSelector(i18nc("@option:check Cancel if late by 10 minutes", "Ca&ncel if late by"), QString(),
+	mTimeSelector = new TimeSelector(i18nc("@option:check Cancel if late by 10 minutes", "Cancel if late by"), QString(),
 	                                 whatsThis, i18nc("@label:whatsthis", "Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
