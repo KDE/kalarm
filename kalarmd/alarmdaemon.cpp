@@ -643,7 +643,7 @@ void AlarmDaemon::setTimerStatus()
 	if (!mAlarmTimer->isActive()  &&  loaded)
 	{
 		// Timeout every minute.
-		// But first synchronise to one second after the minute boundary.
+		// But first synchronize to one second after the minute boundary.
 		int firstInterval = DAEMON_CHECK_INTERVAL + 1 - QTime::currentTime().second();
 		mAlarmTimer->start(1000 * firstInterval);
 		mAlarmTimerSyncing = (firstInterval != DAEMON_CHECK_INTERVAL);

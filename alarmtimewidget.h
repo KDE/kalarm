@@ -96,7 +96,7 @@ class AlarmTimeWidget : public QFrame
 		bool             mMinDateTimeIsNow; // earliest allowed date/time is the current time
 		bool             mPastMax;          // current time is past the maximum date/time
 		bool             mMinMaxTimeSet;    // limits have been set for the time edit control
-		bool             mTimerSyncing;     // mTimer is not yet synchronised to the minute boundary
+		bool             mTimerSyncing;     // mTimer is not yet synchronized to the minute boundary
 };
 
 #endif // ALARMTIMEWIDGET_H

@@ -72,7 +72,7 @@ class SpecialActions : public QWidget
 };
 
 
-// Pre- and post-alarm actions dialogue displayed by the push button
+// Pre- and post-alarm actions dialog displayed by the push button
 class SpecialActionsDlg : public KDialog
 {
 		Q_OBJECT

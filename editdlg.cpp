@@ -1,5 +1,5 @@
 /*
-*  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
+*  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
 *  Program:  kalarm
 *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
 *
@@ -121,7 +121,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent& event, bool new
 * Parameters:
 *   Template = true to edit/create an alarm template
 *            = false to edit/create an alarm.
-*   event   != to initialise the dialogue to show the specified event's data.
+*   event   != to initialise the dialog to show the specified event's data.
 */
 EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* parent, GetResourceType getResource)
 	: KDialog(parent),
@@ -414,7 +414,7 @@ EditAlarmDlg::~EditAlarmDlg()
 }
 
 /******************************************************************************
-* Initialise the dialogue controls from the specified event.
+* Initialise the dialog controls from the specified event.
 */
 void EditAlarmDlg::initValues(const KAEvent* event)
 {
@@ -619,7 +619,7 @@ bool EditAlarmDlg::stateChanged() const
 }
 
 /******************************************************************************
-* Get the currently entered dialogue data.
+* Get the currently entered dialog data.
 * The data is returned in the supplied KAEvent instance.
 * Reply = false if the only change has been to an existing deferral.
 */
@@ -648,7 +648,7 @@ bool EditAlarmDlg::getEvent(KAEvent& event, AlarmResource*& resource)
 }
 
 /******************************************************************************
-*  Extract the data in the dialogue and set up a KAEvent from it.
+*  Extract the data in the dialog and set up a KAEvent from it.
 *  If 'trial' is true, the event is set up for a simple one-off test, ignoring
 *  recurrence, reminder, template etc. data.
 */
@@ -906,7 +906,7 @@ bool EditAlarmDlg::validate()
 			mResource = AlarmResources::instance()->resourceForIncidence(mResourceEventId);
 			AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
 			if (mResource->alarmType() != type)
-				mResource = 0;   // event may have expired while dialogue was open
+				mResource = 0;   // event may have expired while dialog was open
 		}
 		if (!mResource  ||  !mResource->writable())
 		{
@@ -944,7 +944,7 @@ kDebug()<<"Text="<<text<<":";
 
 /******************************************************************************
 *  Called when the Load Template button is clicked.
-*  Prompt to select a template and initialise the dialogue with its contents.
+*  Prompt to select a template and initialise the dialog with its contents.
 */
 void EditAlarmDlg::slotDefault()
 {

@@ -26,7 +26,7 @@
 #include "synchtimer.h"
 
 
-/** StartOfDayTimer is an application-wide timer synchronised to the user-defined
+/** StartOfDayTimer is an application-wide timer synchronized to the user-defined
  *  start-of-day time (set in KAlarm's Preferences dialog).
  *  It automatically adjusts to any changes in the start-of-day time.
  *

@@ -1,5 +1,5 @@
 /*
- *  synchtimer.cpp  -  timers which synchronise to time boundaries
+ *  synchtimer.cpp  -  timers which synchronize to time boundaries
  *  Program:  kalarm
  *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
  *
@@ -26,7 +26,7 @@
 
 /*=============================================================================
 =  Class: SynchTimer
-=  Virtual base class for application-wide timer synchronised to a time boundary.
+=  Virtual base class for application-wide timer synchronized to a time boundary.
 =============================================================================*/
 
 SynchTimer::SynchTimer()
@@ -91,7 +91,7 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 
 /*=============================================================================
 =  Class: MinuteTimer
-=  Application-wide timer synchronised to the minute boundary.
+=  Application-wide timer synchronized to the minute boundary.
 =============================================================================*/
 
 MinuteTimer* MinuteTimer::mInstance = 0;
@@ -119,7 +119,7 @@ void MinuteTimer::slotTimer()
 
 /*=============================================================================
 =  Class: DailyTimer
-=  Application-wide timer synchronised to midnight.
+=  Application-wide timer synchronized to midnight.
 =============================================================================*/
 
 QList<DailyTimer*> DailyTimer::mFixedTimers;

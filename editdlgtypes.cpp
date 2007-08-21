@@ -1,5 +1,5 @@
 /*
-*  editdlgtypes.cpp  -  dialogues to create or edit alarm or alarm template types
+*  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
 *  Program:  kalarm
 *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
 *
@@ -116,7 +116,7 @@ QString EditDisplayAlarmDlg::i18n_chk_ConfirmAck()    { return i18nc("@option:ch
 * Parameters:
 *   Template = true to edit/create an alarm template
 *            = false to edit/create an alarm.
-*   event   != to initialise the dialogue to show the specified event's data.
+*   event   != to initialise the dialog to show the specified event's data.
 */
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::MESSAGE, parent, getResource),
@@ -269,7 +269,7 @@ CheckBox* EditDisplayAlarmDlg::createConfirmAckCheckbox(QWidget* parent)
 }
 
 /******************************************************************************
-* Initialise the dialogue controls from the specified event.
+* Initialise the dialog controls from the specified event.
 */
 void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 {
@@ -456,7 +456,7 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 }
 
 /******************************************************************************
-* Extract the data in the dialogue specific to the alarm type and set up a
+* Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
 void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
@@ -647,7 +647,7 @@ QString EditCommandAlarmDlg::i18n_chk_ExecInTermWindow()   { return i18nc("@opti
 * Parameters:
 *   Template = true to edit/create an alarm template
 *            = false to edit/create an alarm.
-*   event   != to initialise the dialogue to show the specified event's data.
+*   event   != to initialise the dialog to show the specified event's data.
 */
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::COMMAND, parent, getResource)
@@ -723,7 +723,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mCmdLogFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or path of the log file."));
 
 	// Log file browse button.
-	// The file browser dialogue is activated by the PickLogFileRadio class.
+	// The file browser dialog is activated by the PickLogFileRadio class.
 	QPushButton* browseButton = new QPushButton(box);
 	browseButton->setIcon(SmallIcon("document-open"));
 	browseButton->setFixedSize(browseButton->sizeHint());
@@ -753,7 +753,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 }
 
 /******************************************************************************
-* Initialise the dialogue controls from the specified event.
+* Initialise the dialog controls from the specified event.
 */
 void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
 {
@@ -839,7 +839,7 @@ bool EditCommandAlarmDlg::type_stateChanged() const
 }
 
 /******************************************************************************
-* Extract the data in the dialogue specific to the alarm type and set up a
+* Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
 void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
@@ -961,7 +961,7 @@ QString EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()    { return i18nc("@option
 * Parameters:
 *   Template = true to edit/create an alarm template
 *            = false to edit/create an alarm.
-*   event   != to initialise the dialogue to show the specified event's data.
+*   event   != to initialise the dialog to show the specified event's data.
 */
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource),
@@ -1090,7 +1090,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 }
 
 /******************************************************************************
-* Initialise the dialogue controls from the specified event.
+* Initialise the dialog controls from the specified event.
 */
 void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
 {
@@ -1194,7 +1194,7 @@ bool EditEmailAlarmDlg::type_stateChanged() const
 }
 
 /******************************************************************************
-* Extract the data in the dialogue specific to the alarm type and set up a
+* Extract the data in the dialog specific to the alarm type and set up a
 * KAEvent from it.
 */
 void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)

@@ -37,7 +37,7 @@
 
 /*=============================================================================
 = Class SpecialActionsButton
-= Button to display the Special Alarm Actions dialogue.
+= Button to display the Special Alarm Actions dialog.
 =============================================================================*/
 
 SpecialActionsButton::SpecialActionsButton(QWidget* parent)
@@ -81,7 +81,7 @@ void SpecialActionsButton::slotButtonPressed()
 
 /*=============================================================================
 = Class SpecialActionsDlg
-= Pre- and post-alarm actions dialogue.
+= Pre- and post-alarm actions dialog.
 =============================================================================*/
 
 static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";

@@ -1,5 +1,5 @@
 /*
- *  editdlg.h  -  dialogue to create or modify an alarm or alarm template
+ *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
  *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
@@ -162,8 +162,8 @@ class EditAlarmDlg : public KDialog
 		bool                mExpiredRecurrence;  // initially a recurrence which has expired
 		mutable bool        mChanged;            // controls other than deferral have changed since dialog was displayed
 		mutable bool        mOnlyDeferred;       // the only change made in the dialog was to the existing deferral
-		bool                mDesiredReadOnly;    // the specified read-only status of the dialogue
-		bool                mReadOnly;           // the actual read-only status of the dialogue
+		bool                mDesiredReadOnly;    // the specified read-only status of the dialog
+		bool                mReadOnly;           // the actual read-only status of the dialog
 
 		// Initial state of all controls
 		KAEvent*            mSavedEvent;

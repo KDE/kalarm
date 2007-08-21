@@ -1,5 +1,5 @@
 /*
- *  synchtimer.h  -  timers which synchronise to time boundaries
+ *  synchtimer.h  -  timers which synchronize to time boundaries
  *  Program:  kalarm
  *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
  *
@@ -21,7 +21,7 @@
 #ifndef SYNCHTIMER_H
 #define SYNCHTIMER_H
 
-/* @file synchtimer.h - timers which synchronise to time boundaries */
+/* @file synchtimer.h - timers which synchronize to time boundaries */
 
 #include <QObject>
 #include <QList>
@@ -29,7 +29,7 @@
 #include <QDateTime>
 class QTimer;
 
-/** SynchTimer is a virtual base class for application-wide timers synchronised
+/** SynchTimer is a virtual base class for application-wide timers synchronized
  *  to a time boundary.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
@@ -69,7 +69,7 @@ class SynchTimer : public QObject
 };
 
 
-/** MinuteTimer is an application-wide timer synchronised to the minute boundary.
+/** MinuteTimer is an application-wide timer synchronized to the minute boundary.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
@@ -105,9 +105,9 @@ class MinuteTimer : public SynchTimer
 };
 
 
-/** DailyTimer is an application-wide timer synchronised to a specified time of day, local time.
+/** DailyTimer is an application-wide timer synchronized to a specified time of day, local time.
  *
- *  Daily timers come in two flavours: fixed, which can only be accessed through static methods,
+ *  Daily timers come in two flavors: fixed, which can only be accessed through static methods,
  *  and variable, whose time can be adjusted and which are accessed through non-static methods.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
@@ -171,7 +171,7 @@ class DailyTimer : public SynchTimer
 };
 
 
-/** MidnightTimer is an application-wide timer synchronised to midnight, local time.
+/** MidnightTimer is an application-wide timer synchronized to midnight, local time.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */

@@ -37,11 +37,11 @@ class LineEdit;
  *  the radio button is selected, the chosen file name is never blank.
  *
  *  To achieve this, whenever the button is newly selected and the
- *  file name is currently blank, the file picker dialogue is displayed to choose a
- *  file. If the dialogue exits without a file being chosen, the radio button selection
+ *  file name is currently blank, the file picker dialog is displayed to choose a
+ *  file. If the dialog exits without a file being chosen, the radio button selection
  *  is reverted to the previously selected button in the parent button group.
  *
- *  The class handles the activation of the file picker dialogue (via a virtual method
+ *  The class handles the activation of the file picker dialog (via a virtual method
  *  which must be supplied by deriving a class from this one). It also handles all
  *  enabling and disabling of the browse button and edit box when the enable state of
  *  the radio button is changed, and when the radio button selection changes.
@@ -53,7 +53,7 @@ class PickFileRadio : public RadioButton
 		Q_OBJECT
 	public:
 		/** Constructor.
-		 *  @param button Push button to invoke the file picker dialogue.
+		 *  @param button Push button to invoke the file picker dialog.
 		 *  @param edit File name edit widget, or null if there is none.
 		 *  @param text Radio button's text.
 		 *  @param parent Button group which is to be the parent object for the radio button.
@@ -66,7 +66,7 @@ class PickFileRadio : public RadioButton
 		 */
 		PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent);
 		/** Initialises the widget.
-		 *  @param button Push button to invoke the file picker dialogue.
+		 *  @param button Push button to invoke the file picker dialog.
 		 *  @param edit File name edit widget, or null if there is none.
 		 */
 		void            init(QPushButton* button, LineEdit* edit = 0);
@@ -75,9 +75,9 @@ class PickFileRadio : public RadioButton
 		 *  @param readOnly True to set the widgets read-only, false to set them read-write.
 		 */
 		virtual void    setReadOnly(bool readOnly);
-		/** Chooses a file, for example by displaying a file selection dialogue.
+		/** Chooses a file, for example by displaying a file selection dialog.
 		 *  This method is called when the push button is clicked - the client
-		 *  should not activate a file selection dialogue directly.
+		 *  should not activate a file selection dialog directly.
 		 *  @return Selected file name, or QString() if no selection made.
 		 */
 		virtual QString pickFile() = 0;

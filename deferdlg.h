@@ -1,5 +1,5 @@
 /*
- *  deferdlg.h  -  dialogue to defer an alarm
+ *  deferdlg.h  -  dialog to defer an alarm
  *  Program:  kalarm
  *  Copyright © 2002-2004,2006,2007 by David Jarvie <software@astrojar.org.uk>
  *

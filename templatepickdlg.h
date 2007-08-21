@@ -1,5 +1,5 @@
 /*
- *  templatepickdlg.h  -  dialogue to choose an alarm template
+ *  templatepickdlg.h  -  dialog to choose an alarm template
  *  Program:  kalarm
  *  Copyright © 2004,2006,2007 by David Jarvie <software@astrojar.org.uk>
  *

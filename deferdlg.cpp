@@ -1,5 +1,5 @@
 /*
- *  deferdlg.cpp  -  dialogue to defer an alarm
+ *  deferdlg.cpp  -  dialog to defer an alarm
  *  Program:  kalarm
  *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *

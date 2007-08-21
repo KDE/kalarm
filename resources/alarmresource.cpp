@@ -313,15 +313,15 @@ QString AlarmResource::infoText() const
 	}
 	QString perms = readOnly() ? i18nc("@info/plain", "Read-only") : i18nc("@info/plain", "Read-write");
 	QString enabled = isActive() ? i18nc("@info/plain", "Enabled") : i18nc("@info/plain", "Disabled");
-	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain", "Yes") : i18nc("@info/plain", "No");
-	return i18nc("@info",
+	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info:plain", "Yes") : i18nc("@info:plain", "No");
+	return i18nc("@info:plain",
 	    "<title>%1</title>"
-	    "<br/>Resource type: %2"
-	    "<br/>Contents: %3"
-	    "<br/>%4: <filename>%5</filename>"
-	    "<br/>Permissions: %6"
-	    "<br/>Status: %7"
-	    "<br/>Default resource: %8",
+	    "<br />Resource type: %2"
+	    "<br />Contents: %3"
+	    "<br />%4: <filename>%5</filename>"
+	    "<br />Permissions: %6"
+	    "<br />Status: %7"
+	    "<br />Default resource: %8",
 	    resourceName(), factory->typeName(type()), atype, displayType(), displayLocation(), perms, enabled, std);
 }
 

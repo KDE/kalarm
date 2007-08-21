@@ -834,7 +834,7 @@ void doEditNewAlarm(EditAlarmDlg* editDlg)
 }
 
 /******************************************************************************
-* Display the alarm edit dialogue to edit a new alarm, preset with a template.
+* Display the alarm edit dialog to edit a new alarm, preset with a template.
 */
 bool editNewAlarm(const QString& templateName, QWidget* parent)
 {
@@ -890,7 +890,7 @@ void editNewTemplate(const KAEvent& preset, QWidget* parent)
 }
 
 /******************************************************************************
-* Open the Edit Alarm dialogue to edit the specified alarm.
+* Open the Edit Alarm dialog to edit the specified alarm.
 */
 void editAlarm(KAEvent& event, QWidget* parent)
 {
@@ -922,7 +922,7 @@ void editAlarm(KAEvent& event, QWidget* parent)
 }
 
 /******************************************************************************
-* Display the alarm edit dialogue to edit a specified alarm.
+* Display the alarm edit dialog to edit a specified alarm.
 */
 bool editAlarm(const QString& eventID, QWidget* parent)
 {
@@ -954,7 +954,7 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 }
 
 /******************************************************************************
-* Open the Edit Alarm dialogue to edit the specified template.
+* Open the Edit Alarm dialog to edit the specified template.
 */
 void editTemplate(KAEvent& event, QWidget* parent)
 {
@@ -976,7 +976,7 @@ void editTemplate(KAEvent& event, QWidget* parent)
 }
 
 /******************************************************************************
-* Open the Edit Alarm dialogue to view the specified alarm (read-only).
+* Open the Edit Alarm dialog to view the specified alarm (read-only).
 */
 void viewAlarm(const KAEvent& event, QWidget* parent)
 {
@@ -1316,7 +1316,7 @@ FileType fileType(const QString& mimetype)
 }
 
 /******************************************************************************
-* Display a modal dialogue to choose an existing file, initially highlighting
+* Display a modal dialog to choose an existing file, initially highlighting
 * any specified file.
 * @param initialFile The file to initially highlight - must be a full path name or URL.
 * @param defaultDir The directory to start in if @p initialFile is empty. If empty,
@@ -1374,13 +1374,13 @@ QString weekDayName(int day, const KLocale* locale)
 {
 	switch (day)
 	{
-		case 1: return ki18n("Monday").toString(locale);
-		case 2: return ki18n("Tuesday").toString(locale);
-		case 3: return ki18n("Wednesday").toString(locale);
-		case 4: return ki18n("Thursday").toString(locale);
-		case 5: return ki18n("Friday").toString(locale);
-		case 6: return ki18n("Saturday").toString(locale);
-		case 7: return ki18n("Sunday").toString(locale);
+		case 1: return ki18n("Name of the weekday", "Monday").toString(locale);
+		case 2: return ki18n("Name of the weekday", "Tuesday").toString(locale);
+		case 3: return ki18n("Name of the weekday", "Wednesday").toString(locale);
+		case 4: return ki18n("Name of the weekday", "Thursday").toString(locale);
+		case 5: return ki18n("Name of the weekday", "Friday").toString(locale);
+		case 6: return ki18n("Name of the weekday", "Saturday").toString(locale);
+		case 7: return ki18n("Name of the weekday", "Sunday").toString(locale);
 	}
 	return QString();
 }

@@ -115,7 +115,7 @@ void KAlarmPrefDlg::display()
 		KWindowInfo info = KWindowSystem::windowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
 		KWindowSystem::setCurrentDesktop(info.desktop());
 #endif
-		mInstance->showNormal();   // un-minimise it if necessary
+		mInstance->showNormal();   // un-minimize it if necessary
 		mInstance->raise();
 		mInstance->activateWindow();
 	}
@@ -237,7 +237,7 @@ void KAlarmPrefDlg::slotOk()
 		KDialog::accept();
 }
 
-// Discard the current preferences and close the dialogue
+// Discard the current preferences and close the dialog
 void KAlarmPrefDlg::slotCancel()
 {
 	kDebug(5950) << "KAlarmPrefDlg::slotCancel()";

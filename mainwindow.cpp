@@ -861,7 +861,7 @@ void MainWindow::slotBirthdays()
 
 /******************************************************************************
 *  Called when the Templates menu item is selected, to display the alarm
-*  template editing dialogue.
+*  template editing dialog.
 */
 void MainWindow::slotTemplates()
 {
@@ -875,13 +875,13 @@ void MainWindow::slotTemplates()
 }
 
 /******************************************************************************
-*  Called when the alarm template editing dialogue has exited.
+*  Called when the alarm template editing dialog has exited.
 */
 void MainWindow::slotTemplatesEnd()
 {
 	if (mTemplateDlg)
 	{
-		mTemplateDlg->delayedDestruct();   // this deletes the dialogue once it is safe to do so
+		mTemplateDlg->delayedDestruct();   // this deletes the dialog once it is safe to do so
 		mTemplateDlg = 0;
 		enableTemplateMenuItem(true);      // re-enable menu item in all windows
 	}

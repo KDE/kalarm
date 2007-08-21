@@ -1,5 +1,5 @@
 /*
- *  templatedlg.cpp  -  dialogue to create, edit and delete alarm templates
+ *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
  *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *

@@ -540,7 +540,7 @@ void MessageWin::initView()
 		layout->addStretch();
 		if (!mDontShowAgain.isEmpty())
 		{
-			mDontShowAgainCheck = new QCheckBox(i18nc("@option:check", "Don't display this error message again for this alarm"), topWidget);
+			mDontShowAgainCheck = new QCheckBox(i18nc("@option:check", "Do not display this error message again for this alarm"), topWidget);
 			mDontShowAgainCheck->setFixedSize(mDontShowAgainCheck->sizeHint());
 			topLayout->addWidget(mDontShowAgainCheck, 0, Qt::AlignLeft);
 		}
@@ -1100,7 +1100,7 @@ void MessageWin::repeat(const KAAlarm& alarm)
 {
 	if (mDeferDlg)
 	{
-		// Cancel any deferral dialogue so that the user notices something's going on,
+		// Cancel any deferral dialog so that the user notices something's going on,
 		// and also because the deferral time limit will have changed.
 		delete mDeferDlg;
 		mDeferDlg = 0;

@@ -1,5 +1,5 @@
 /*
- *  repetition.h  -  pushbutton and dialogue to specify alarm repetition
+ *  repetition.h  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
  *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *

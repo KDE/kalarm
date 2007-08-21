@@ -1508,18 +1508,18 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	grid->setMargin(0);
 	grid->setSpacing(KDialog::spacingHint());
 	const KLocale* locale = KGlobal::locale();
-	mMonthBox[0] = new CheckBox(ki18n("January").toString(locale), w);
-	mMonthBox[1] = new CheckBox(ki18n("February").toString(locale), w);
-	mMonthBox[2] = new CheckBox(ki18n("March").toString(locale), w);
-	mMonthBox[3] = new CheckBox(ki18n("April").toString(locale), w);
-	mMonthBox[4] = new CheckBox(ki18n("May").toString(locale), w);
-	mMonthBox[5] = new CheckBox(ki18n("June").toString(locale), w);
-	mMonthBox[6] = new CheckBox(ki18n("July").toString(locale), w);
-	mMonthBox[7] = new CheckBox(ki18n("August").toString(locale), w);
-	mMonthBox[8] = new CheckBox(ki18n("September").toString(locale), w);
-	mMonthBox[9] = new CheckBox(ki18n("October").toString(locale), w);
-	mMonthBox[10] = new CheckBox(ki18n("November").toString(locale), w);
-	mMonthBox[11] = new CheckBox(ki18n("December").toString(locale), w);
+	mMonthBox[0] = new CheckBox(ki18n("Month of the year", "January").toString(locale), w);
+	mMonthBox[1] = new CheckBox(ki18n("Month of the year", "February").toString(locale), w);
+	mMonthBox[2] = new CheckBox(ki18n("Month of the year", "March").toString(locale), w);
+	mMonthBox[3] = new CheckBox(ki18n("Month of the year", "April").toString(locale), w);
+	mMonthBox[4] = new CheckBox(ki18n("Month of the year", "May").toString(locale), w);
+	mMonthBox[5] = new CheckBox(ki18n("Month of the year", "June").toString(locale), w);
+	mMonthBox[6] = new CheckBox(ki18n("Month of the year", "July").toString(locale), w);
+	mMonthBox[7] = new CheckBox(ki18n("Month of the year", "August").toString(locale), w);
+	mMonthBox[8] = new CheckBox(ki18n("Month of the year", "September").toString(locale), w);
+	mMonthBox[9] = new CheckBox(ki18n("Month of the year", "October").toString(locale), w);
+	mMonthBox[10] = new CheckBox(ki18n("Month of the year", "November").toString(locale), w);
+	mMonthBox[11] = new CheckBox(ki18n("Month of the year", "December").toString(locale), w);
 	for (int i = 0;  i < 12;  ++i)
 	{
 		mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());

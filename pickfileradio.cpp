@@ -163,7 +163,7 @@ void PickFileRadio::slotPickFile()
 	{
 		// No file is selected, so revert to the previous radio button selection.
 		// But wait a moment before setting the radio button, or it won't work.
-		mRevertButton = true;   // prevent picker dialogue popping up twice
+		mRevertButton = true;   // prevent picker dialog popping up twice
 		QTimer::singleShot(0, this, SLOT(setLastButton()));
 	}
 }

@@ -165,7 +165,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	label->setBuddy(mFadeSlider);
 	mFadeVolumeBox->setWhatsThis(i18nc("@info:whatsthis", "Choose the initial volume for playing the sound file."));
 
-	// Restore the dialogue size from last time
+	// Restore the dialog size from last time
 	QSize s;
 	if (KAlarm::readConfigWindowSize(SOUND_DIALOG_NAME, s))
 		resize(s);
@@ -188,7 +188,7 @@ SoundDlg::~SoundDlg()
 }
 
 /******************************************************************************
- * Set the read-only status of the dialogue.
+ * Set the read-only status of the dialog.
  */
 void SoundDlg::setReadOnly(bool readOnly)
 {

@@ -89,7 +89,7 @@ class SoundPicker : public QFrame
 		KUrl           fileSetting() const   { return mFile; }
 		/** Returns the current file repetition setting regardless of whether the 'file' option is selected. */
 		bool           repeatSetting() const { return mRepeat; }
-		/** Display a dialogue to choose a sound file, initially highlighting
+		/** Display a dialog to choose a sound file, initially highlighting
 		 *  @p initialFile if non-null.
 		 *  @param initialDir  Initial directory to display if @p initialFile is null. If a file is
 		 *                     chosen, this is updated to the directory containing the chosen file.

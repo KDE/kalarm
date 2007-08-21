@@ -1,5 +1,5 @@
 /*
- *  repetition.cpp  -  pushbutton and dialogue to specify alarm repetition
+ *  repetition.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
  *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
@@ -37,7 +37,7 @@
 
 /*=============================================================================
 = Class RepetitionButton
-= Button to display the Simple Alarm Repetition dialogue.
+= Button to display the Simple Alarm Repetition dialog.
 =============================================================================*/
 
 RepetitionButton::RepetitionButton(const QString& caption, bool waitForInitialisation, QWidget* parent)
@@ -137,7 +137,7 @@ void RepetitionButton::displayDialog()
 
 /*=============================================================================
 = Class RepetitionDlg
-= Simple alarm repetition dialogue.
+= Simple alarm repetition dialog.
 =============================================================================*/
 
 static const int MAX_COUNT = 9999;    // maximum range for count spinbox

@@ -284,7 +284,7 @@ void SoundPicker::slotPickFile()
 #if 0
 // Remove mRevertType, setLastType(), #include QTimer
 		// But wait a moment until setting the radio button, or it won't work.
-		mRevertType = true;   // prevent sound dialogue popping up twice
+		mRevertType = true;   // prevent sound dialog popping up twice
 		QTimer::singleShot(0, this, SLOT(setLastType()));
 #else
 		mTypeCombo->setCurrentIndex(indexes[mLastType]);
@@ -305,7 +305,7 @@ void SoundPicker::setLastType()
 }
 
 /******************************************************************************
-* Display a dialogue to choose a sound file, initially highlighting any
+* Display a dialog to choose a sound file, initially highlighting any
 * specified file. 'initialFile' must be a full path name or URL.
 * 'defaultDir' is updated to the directory containing the chosen file.
 * Reply = URL selected. If none is selected, URL.isEmpty() is true.

@@ -158,7 +158,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		static void    enableTemplateMenuItem(bool);
 
 		static WindowList    mWindowList;   // active main windows
-		static TemplateDlg*  mTemplateDlg;  // the one and only template dialogue
+		static TemplateDlg*  mTemplateDlg;  // the one and only template dialog
 
 		AlarmListFilterModel* mListFilterModel;
 		AlarmListView*       mListView;
