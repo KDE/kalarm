@@ -45,7 +45,7 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool cancelButton, QWidg
 	setWindowModality(Qt::WindowModal);
 	setCaption(i18nc("@title:window", "Defer Alarm"));
 	setButtons(Ok | Cancel | User1);
-	setButtonGuiItem(User1, KGuiItem(i18nc("@action:button", "Cancel &Deferral")));
+	setButtonGuiItem(User1, KGuiItem(i18nc("@action:button", "Cancel Deferral")));
 	if (!cancelButton)
 		showButton(User1, false);
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));

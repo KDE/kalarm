@@ -103,7 +103,7 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	topLayout->setMargin(title.isEmpty() ? 0 : KDialog::marginHint());
 
 	// At time radio button
-	mDateTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "&Defer to date/time:") : i18nc("@option:radio", "&Date/time")), topWidget);
+	mDateTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer to date/time:") : i18nc("@option:radio", "Date/time")), topWidget);
 	mDateTimeRadio->setFixedSize(mDateTimeRadio->sizeHint());
 	mDateTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm to the specified date and time.")
 	                                        : i18nc("@info:whatsthis", "Schedule the alarm at the specified date and time."));
@@ -163,7 +163,7 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 		topLayout->addWidget(mTimeZone, 1, 3, Qt::AlignLeft);
 
 		// Time zone checkbox
-		mNoTimeZone = new CheckBox(i18nc("@option:check", "Ignore time &zone"), topWidget);
+		mNoTimeZone = new CheckBox(i18nc("@option:check", "Ignore time zone"), topWidget);
 		connect(mNoTimeZone, SIGNAL(toggled(bool)), SLOT(slotTimeZoneToggled(bool)));
 		mNoTimeZone->setWhatsThis(i18nc("@info:whatsthis",
 		                                "<para>Check to use the local computer time, ignoring time zones.</para>"
@@ -174,7 +174,7 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	}
 
 	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer for time &interval:") : i18n_radio_TimeFromNow()), topWidget);
+	mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer for time interval:") : i18n_radio_TimeFromNow()), topWidget);
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
 	mAfterTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now.")
 	                                         : i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));

@@ -68,7 +68,7 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 		box->setSpacing(KDialog::spacingHint());
 		layout->addWidget(box);
 
-		QLabel* label = new QLabel(i18nc("@label:listbox", "&Foreground color:"), box);
+		QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
 		label->setMinimumSize(label->sizeHint());
 		mFgColourButton = new ColourCombo(box);
 		mFgColourButton->setMinimumSize(mFgColourButton->sizeHint());
@@ -86,7 +86,7 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 	box->setSpacing(KDialog::spacingHint());
 	layout->addWidget(box);
 
-	QLabel* label = new QLabel(i18nc("@label:listbox", "&Background color:"), box);
+	QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
 	label->setMinimumSize(label->sizeHint());
 	mBgColourButton = new ColourCombo(box);
 	mBgColourButton->setMinimumSize(mBgColourButton->sizeHint());
@@ -100,13 +100,13 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 		layout = new QHBoxLayout();
 		layout->setMargin(0);
 		topLayout->addLayout(layout);
-		QPushButton* button = new QPushButton(i18nc("@action:button", "Add Co&lor..."), page);
+		QPushButton* button = new QPushButton(i18nc("@action:button", "Add Color..."), page);
 		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
 		button->setWhatsThis(i18nc("@info:whatsthis", "Choose a new color to add to the color selection list."));
 		layout->addWidget(button);
 
-		mRemoveColourButton = new QPushButton(i18nc("@action:button", "&Remove Color"), page);
+		mRemoveColourButton = new QPushButton(i18nc("@action:button", "Remove Color"), page);
 		mRemoveColourButton->setFixedSize(mRemoveColourButton->sizeHint());
 		connect(mRemoveColourButton, SIGNAL(clicked()), SLOT(slotRemoveColour()));
 		mRemoveColourButton->setWhatsThis(i18nc("@info:whatsthis", "Remove the color currently shown in the background color chooser, from the color selection list."));
@@ -118,7 +118,7 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 		layout = new QHBoxLayout();
 		layout->setMargin(0);
 		topLayout->addLayout(layout);
-		mDefaultFont = new CheckBox(i18nc("@option:check", "Use &default font"), page);
+		mDefaultFont = new CheckBox(i18nc("@option:check", "Use default font"), page);
 		mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
 		connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));
 		mDefaultFont->setWhatsThis(i18nc("@info:whatsthis", "Check to use the default font current at the time the alarm is displayed."));
