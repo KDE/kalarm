@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright (c) 2003-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,28 +23,29 @@
 
 #include <QFont>
 #include <QColor>
+#include <QFrame>
 #include <kdialog.h>
-#include "pushbutton.h"
 
-//class QLineEdit;
+class QLineEdit;
 class FontColourChooser;
+class PushButton;
 
 
-class FontColourButton : public PushButton
+class FontColourButton : public QFrame
 {
 		Q_OBJECT
 	public:
 		FontColourButton(QWidget* parent = 0);
-		void          setDefaultFont()                   { mDefaultFont = true; }
-		void          setFont(const QFont& font)         { mFont = font;  mDefaultFont = false; }
-		void          setBgColour(const QColor& colour)  { mBgColour = colour; }
-		void          setFgColour(const QColor& colour)  { mFgColour = colour; }
-		bool          defaultFont() const                { return mDefaultFont; }
-		QFont         font() const                       { return mFont; }
-		QColor        bgColour() const                   { return mBgColour; }
-		QColor        fgColour() const                   { return mFgColour; }
-		virtual void  setReadOnly(bool ro)               { mReadOnly = ro; }
-		virtual bool  isReadOnly() const                 { return mReadOnly; }
+		void          setDefaultFont();
+		void          setFont(const QFont&);
+		void          setBgColour(const QColor&);
+		void          setFgColour(const QColor&);
+		bool          defaultFont() const    { return mDefaultFont; }
+		QFont         font() const           { return mFont; }
+		QColor        bgColour() const       { return mBgColour; }
+		QColor        fgColour() const       { return mFgColour; }
+		virtual void  setReadOnly(bool ro)   { mReadOnly = ro; }
+		virtual bool  isReadOnly() const     { return mReadOnly; }
 
 	signals:
 		void          selected();
@@ -53,11 +54,12 @@ class FontColourButton : public PushButton
 		void          slotButtonPressed();
 
 	private:
-		QColor    mBgColour, mFgColour;
-		QFont     mFont;
-//		QLineEdit* mFontColourSample;
-		bool      mDefaultFont;
-		bool      mReadOnly;
+		PushButton* mButton;
+		QColor      mBgColour, mFgColour;
+		QFont       mFont;
+		QLineEdit*  mSample;
+		bool        mDefaultFont;
+		bool        mReadOnly;
 };
 
 

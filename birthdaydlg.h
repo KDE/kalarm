@@ -29,7 +29,6 @@
 
 class QFocusEvent;
 class QTreeView;
-class QLineEdit;
 class CheckBox;
 class FontColourButton;
 class SoundPicker;
@@ -53,8 +52,6 @@ class BirthdayDlg : public KDialog
 	private slots:
 		void           slotSelectionChanged();
 		void           slotTextLostFocus();
-		void           slotFontColourSelected();
-		void           slotBgColourSelected(const QColor&);
 		void           resizeViewColumns();
 		void           addrBookError();
 
@@ -65,7 +62,6 @@ class BirthdayDlg : public KDialog
 		Reminder*             mReminder;
 		SoundPicker*          mSoundPicker;
 		FontColourButton*     mFontColourButton;
-		QLineEdit*            mFontColourSample;
 		CheckBox*             mConfirmAck;
 		LateCancelSelector*   mLateCancel;
 		SpecialActionsButton* mSpecialActionsButton;

@@ -198,31 +198,13 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a text or image file to display."));
 
-	// Colour choice drop-down list
-	QHBoxLayout* hlayout = new QHBoxLayout();
-	hlayout->setMargin(0);
-	hlayout->setSpacing(spacingHint());
-	frameLayout->addLayout(hlayout);
-
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(parent);
-	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
-	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
-	hlayout->addWidget(mFontColourButton);
-
-	// Font and colour sample display
-	mFontColourSample = new QLineEdit(parent);
-	mFontColourSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
-	mFontColourSample->setCursorPosition(0);
-	mFontColourSample->setMinimumHeight(mFontColourSample->fontMetrics().lineSpacing());
-	mFontColourSample->setAlignment(Qt::AlignCenter);
-	mFontColourSample->setWhatsThis(i18nc("@info:whatsthis",
-	      "This sample text illustrates the current font and color settings. "
-	      "You may edit it to test special characters."));
-	hlayout->addWidget(mFontColourSample);
+	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 1.5);
+	frameLayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
-	hlayout = new QHBoxLayout();
+	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	frameLayout->addLayout(hlayout);
 	mSoundPicker = new SoundPicker(parent);
@@ -354,7 +336,6 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	}
-	slotFontColourSelected();   // set colour & font in sample widget
 
 }
 
@@ -552,28 +533,6 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 	}
 	if (focus)
 		focus->setFocus();
-}
-
-/******************************************************************************
-* Called when the a new background colour has been selected using the colour
-* combo box.
-*/
-void EditDisplayAlarmDlg::slotBgColourSelected(const QColor& colour)
-{
-	mFontColourButton->setBgColour(colour);
-}
-
-/******************************************************************************
-* Called when the a new font and colour have been selected using the font &
-* colour pushbutton.
-*/
-void EditDisplayAlarmDlg::slotFontColourSelected()
-{
-	QPalette pal = mFontColourSample->palette();
-	pal.setColor(mFontColourSample->backgroundRole(), mFontColourButton->bgColour());
-	pal.setColor(mFontColourSample->foregroundRole(), mFontColourButton->fgColour());
-	mFontColourSample->setPalette(pal);
-	mFontColourSample->setFont(mFontColourButton->font());
 }
 
 /******************************************************************************

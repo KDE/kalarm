@@ -141,28 +141,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->setMargin(marginHint());
 	groupLayout->setSpacing(spacingHint());
 
-	// Colour choice drop-down list
-	QHBoxLayout* hlayout = new QHBoxLayout();
-	hlayout->setMargin(0);
-	hlayout->setSpacing(spacingHint());
-	groupLayout->addLayout(hlayout);
-
 	// Font and colour choice drop-down list
 	mFontColourButton = new FontColourButton(group);
 	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
-	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
-	hlayout->addWidget(mFontColourButton);
-
-	// Font and colour sample display
-	mFontColourSample = new QLineEdit(group);
-	mFontColourSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
-	mFontColourSample->setCursorPosition(0);
-	mFontColourSample->setMinimumHeight(mFontColourSample->fontMetrics().lineSpacing());
-	mFontColourSample->setAlignment(Qt::AlignCenter);
-	mFontColourSample->setWhatsThis(i18nc("@info:whatsthis",
-	      "This sample text illustrates the current font and color settings. "
-	      "You may edit it to test special characters."));
-	hlayout->addWidget(mFontColourSample);
+	groupLayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(group);
@@ -180,7 +162,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	hlayout = new QHBoxLayout();
+	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
 	groupLayout->addLayout(hlayout);
@@ -218,7 +200,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Set the values to their defaults
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(Preferences::defaultBgColour());
-	slotFontColourSelected();   // set colour & font in sample widget
 	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::Days);
 	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
@@ -343,26 +324,4 @@ void BirthdayDlg::slotTextLostFocus()
 		mSuffixText = suffix;
 		BirthdayModel::instance()->setPrefixSuffix(mPrefixText, mSuffixText);
 	}
-}
-
-/******************************************************************************
-*  Called when the a new background colour has been selected using the colour
-*  combo box.
-*/
-void BirthdayDlg::slotBgColourSelected(const QColor& colour)
-{
-	mFontColourButton->setBgColour(colour);
-}
-
-/******************************************************************************
-*  Called when the a new font and colour have been selected using the font &
-*  colour pushbutton.
-*/
-void BirthdayDlg::slotFontColourSelected()
-{
-	QPalette pal = mFontColourSample->palette();
-	pal.setColor(mFontColourSample->backgroundRole(), mFontColourButton->bgColour());
-	pal.setColor(mFontColourSample->foregroundRole(), mFontColourButton->fgColour());
-	mFontColourSample->setPalette(pal);
-	mFontColourSample->setFont(mFontColourButton->font());
 }

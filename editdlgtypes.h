@@ -29,7 +29,6 @@
 
 class QAbstractButton;
 class QComboBox;
-class QLineEdit;
 class KHBox;
 class EmailIdCombo;
 class CheckBox;
@@ -79,8 +78,6 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 
 	private slots:
 		void            slotAlarmTypeChanged(int index);
-		void            slotFontColourSelected();
-		void            slotBgColourSelected(const QColor&);
 
 	private:
 		void            setSoundPicker();
@@ -92,7 +89,6 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
 		FontColourButton*   mFontColourButton;
-		QLineEdit*          mFontColourSample;
 		SpecialActionsButton* mSpecialActionsButton;
 		unsigned long       mKMailSerialNumber;  // if email text, message's KMail serial number, else 0
 		bool                mReminderDeferral;
