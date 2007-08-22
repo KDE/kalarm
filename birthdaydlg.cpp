@@ -141,9 +141,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->setMargin(marginHint());
 	groupLayout->setSpacing(spacingHint());
 
-	// Font and colour choice drop-down list
+	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(group);
-	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
+	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
 	groupLayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
@@ -190,7 +190,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	hlayout->addWidget(mLateCancel);
 	hlayout->addStretch();
 
-	// Simple repetition button
+	// Sub-repetition button
 	mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), false, group);
 	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
 	mSubRepetition->set(0, 0, true, 364*24*60);
@@ -200,6 +200,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Set the values to their defaults
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(Preferences::defaultBgColour());
+	mFontColourButton->setFgColour(Preferences::defaultFgColour());
 	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::Days);
 	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),

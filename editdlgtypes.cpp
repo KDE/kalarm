@@ -198,9 +198,9 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a text or image file to display."));
 
-	// Font and colour choice drop-down list
+	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(parent);
-	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 1.5);
+	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
 	frameLayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
@@ -287,7 +287,6 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mFontColourButton->setFgColour(event->fgColour());
-//		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
 		mConfirmAck->setChecked(event->confirmAck());
 		bool recurs = event->recurs();
 		int reminderMins = event->reminder();
@@ -327,7 +326,6 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
-//		mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
 		mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 		reminder()->setMinutes(0, false);
 		reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
@@ -370,7 +368,6 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 	mTypeCombo->setReadOnly(readOnly);
 	mTextMessageEdit->setReadOnly(readOnly);
 	mFileMessageEdit->setReadOnly(readOnly);
-//	mBgColourChoose->setReadOnly(readOnly);
 	mFontColourButton->setReadOnly(readOnly);
 	mSoundPicker->setReadOnly(readOnly);
 	mConfirmAck->setReadOnly(readOnly);
