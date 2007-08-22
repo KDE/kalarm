@@ -112,9 +112,9 @@ class KAAlarmEventBase
 		float              mFadeVolume;       // initial volume for sound file, or < 0 for no fade
 		int                mFadeSeconds;      // fade time for sound file, or 0 if none
 		Type               mActionType;       // alarm action type
-		int                mRepeatCount;      // simple repetition count (excluding the first time)
-		int                mRepeatInterval;   // simple repetition interval (minutes)
-		int                mNextRepeat;       // repetition count of next due repetition
+		int                mRepeatCount;      // sub-repetition count (excluding the first time)
+		int                mRepeatInterval;   // sub-repetition interval (minutes)
+		int                mNextRepeat;       // repetition count of next due sub-repetition
 		int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
 		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
 		bool               mCommandScript;    // the command text is a script, not a shell command line

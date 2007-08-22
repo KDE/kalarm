@@ -1052,7 +1052,7 @@ DateTime KAEvent::displayDateTime() const
 		{
 			// It's a repetition inside a recurrence, each of which occurs
 			// at different times of day.
-			// Find the previous recurrence (as opposed to simple repetition)
+			// Find the previous recurrence (as opposed to sub-repetition)
 			DateTime newdt;
 			previousOccurrence(kdt.addSecs(1), newdt, false);
 			if (!newdt.isValid())
@@ -1071,7 +1071,7 @@ DateTime KAEvent::displayDateTime() const
 			bool lastRecurrence = false;
 			for (int n = 0;  n < 7*24*60;  ++n)
 			{
-				// Check the simple repetitions for this recurrence
+				// Check the sub-repetitions for this recurrence
 #ifdef __GNUC__
 #warning Speed this up for the usual case of short repeat interval
 #warning or if !repeatTimeVaries (but remember time zone changes)
@@ -1119,9 +1119,9 @@ DateTime KAEvent::displayDateTime() const
 		}
 		else if (repeatTimeVaries) //  && !recurTimeVaries && recurType != KARecurrence::NO_RECUR
 		{
-			// There's a simple repetition which occurs at different times of
+			// There's a sub-repetition which occurs at different times of
 			// day, inside a recurrence which occurs at the same time of day.
-			// Find the previous recurrence (as opposed to simple repetition)
+			// Find the previous recurrence (as opposed to sub-repetition)
 			DateTime newdt;
 			previousOccurrence(kdt.addSecs(1), newdt, false);
 			if (!newdt.isValid())
@@ -1141,7 +1141,7 @@ DateTime KAEvent::displayDateTime() const
 			unsigned days = 0;
 			for ( ; ; )
 			{
-				// Check the simple repetitions for this recurrence
+				// Check the sub-repetitions for this recurrence
 #ifdef __GNUC__
 #warning Speed this up for the usual case of short repeat interval
 #warning (but remember time zone changes)
@@ -1161,7 +1161,7 @@ DateTime KAEvent::displayDateTime() const
 						}
 						else if (!repeatsDuringWork  &&  --repeatsToCheck <= 0)
 						{
-							// Simple repetitions never occur during working hours
+							// Sub-repetitions never occur during working hours
 #ifdef __GNUC__
 #warning Check if it will occur during working hours after seasonal time change
 #endif
@@ -2144,7 +2144,7 @@ void KAEvent::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceI
 
 /******************************************************************************
  * Determine whether the event will occur after the specified date/time.
- * If 'includeRepetitions' is true and the alarm has a simple repetition, it
+ * If 'includeRepetitions' is true and the alarm has a sub-repetition, it
  * returns true if any repetitions occur after the specified date/time.
  */
 bool KAEvent::occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const
@@ -2219,13 +2219,13 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 
 	if (type != NO_OCCURRENCE  &&  result <= preDateTime)
 	{
-		// The next occurrence is a simple repetition
+		// The next occurrence is a sub-repetition
 		int repetition = result.secsTo(preDateTime) / repeatSecs + 1;
 		DateTime repeatDT = result.addSecs(repetition * repeatSecs);
 		if (recurs)
 		{
 			// We've found a recurrence before the specified date/time, which has
-			// a simple repetition after the date/time.
+			// a sub-repetition after the date/time.
 			// However, if the intervals between recurrences vary, we could possibly
 			// have missed a later recurrence, which fits the criterion, so check again.
 			DateTime dt;
@@ -2236,7 +2236,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 				result = dt;
 				if (includeRepetitions == RETURN_REPETITION  &&  result <= preDateTime)
 				{
-					// The next occurrence is a simple repetition
+					// The next occurrence is a sub-repetition
 					int repetition = result.secsTo(preDateTime) / repeatSecs + 1;
 					result = result.addSecs(repetition * repeatSecs);
 					type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
@@ -2246,7 +2246,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 		}
 		if (includeRepetitions == RETURN_REPETITION)
 		{
-			// The next occurrence is a simple repetition
+			// The next occurrence is a sub-repetition
 			result = repeatDT;
 			type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 		}
@@ -2257,7 +2257,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 /******************************************************************************
  * Get the date/time of the last previous occurrence of the event, before the
  * specified date/time.
- * If 'includeRepetitions' is true and the alarm has a simple repetition, the
+ * If 'includeRepetitions' is true and the alarm has a sub-repetition, the
  * last previous repetition is returned if appropriate.
  * 'result' = date/time of previous occurrence, or invalid date/time if none.
  */
@@ -2313,7 +2313,7 @@ KAEvent::OccurType KAEvent::previousOccurrence(const KDateTime& afterDateTime, D
  * Set the date/time of the event to the next scheduled occurrence after the
  * specified date/time, provided that this is later than its current date/time.
  * Any reminder alarm is adjusted accordingly.
- * If 'includeRepetitions' is true and the alarm has a simple repetition, and
+ * If 'includeRepetitions' is true and the alarm has a sub-repetition, and
  * a repetition of a previous recurrence occurs after the specified date/time,
  * that repetition is set as the next occurrence.
  */
@@ -2371,7 +2371,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
 		qint64 secs = dt.effectiveKDateTime().secsTo_long(preDateTime);
 		if (secs >= 0)
 		{
-			// The next occurrence is a simple repetition.
+			// The next occurrence is a sub-repetition.
 			type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 			mNextRepeat = static_cast<int>(secs / (60 * mRepeatInterval)) + 1;
 			// Repetitions can't have a reminder, so remove any.
@@ -2548,12 +2548,12 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 		mRemainingRecurrences = 0;
 	}
 
-	// Adjust simple repetition values to fit the recurrence
+	// Adjust sub-repetition values to fit the recurrence
 	setRepetition(mRepeatInterval, mRepeatCount);
 }
 
 /******************************************************************************
-*  Initialise the event's simple repetition.
+*  Initialise the event's sub-repetition.
 *  The repetition length is adjusted if necessary to fit any recurrence interval.
 *  Reply = false if a non-daily interval was specified for a date-only recurrence.
 */

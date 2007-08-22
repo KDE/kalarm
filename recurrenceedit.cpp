@@ -339,7 +339,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis", "<para>Only execute the alarm during working hours.</para><para>You can specify working hours in the Preferences dialog.</para>"));
 	vlayout->addWidget(mWorkTimeOnly);
 
-	// Simple repetition button
+	// Sub-repetition button
 	mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), true, this);
 	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
 	mSubRepetition->setReadOnly(mReadOnly);

@@ -103,8 +103,8 @@ class KAlarmIface
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Simple repetition repeat interval in minutes, or 0 for no simple repetition.
-	 *  @param repeatCount    Simple repetition repeat count (after the first occurrence), or 0 for no simple repetition.
+	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
+	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
 	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
 	 */
 	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
@@ -178,8 +178,8 @@ class KAlarmIface
 	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
 	 *                        a reminder alarm, or 0 for no reminder.
 	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Simple repetition repeat interval in minutes, or 0 for no simple repetition.
-	 *  @param repeatCount    Simple repetition repeat count (after the first occurrence), or 0 for no simple repetition.
+	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
+	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
 	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
 	 */
 	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
@@ -233,8 +233,8 @@ class KAlarmIface
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
 	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Simple repetition repeat interval in minutes, or 0 for no simple repetition.
-	 *  @param repeatCount    Simple repetition repeat count (after the first occurrence), or 0 for no simple repetition.
+	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
+	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
 	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
 	 */
 	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
@@ -279,8 +279,8 @@ class KAlarmIface
 	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
 	 *  @param flags          OR of flag bits defined in Flags enum.
 	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Simple repetition repeat interval in minutes, or 0 for no simple repetition.
-	 *  @param repeatCount    Simple repetition repeat count (after the first occurrence), or 0 for no simple repetition.
+	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
+	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
 	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
 	 */
 	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
