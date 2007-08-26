@@ -808,7 +808,7 @@ void KAlarmApp::doQuit(QWidget* parent)
 	kDebug(5950) << "KAlarmApp::doQuit()";
 	if (mDisableAlarmsIfStopped
 	&&  MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
-	                                      i18nc("@info", "Quitting will disable alarms\n(once any alarm message windows are closed)."),
+	                                      i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
 	                                      QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
 	                                     ) != KMessageBox::Yes)
 		return;

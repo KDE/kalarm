@@ -1018,7 +1018,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 
 	if (!Daemon::monitoringAlarms())
 	{
-		if (KMessageBox::warningYesNo(parent, i18nc("@info", "Alarms are currently disabled.\nDo you want to enable alarms now?"),
+		if (KMessageBox::warningYesNo(parent, i18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
 		                              QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
 		                              QLatin1String("EditEnableAlarms"))
 		                == KMessageBox::Yes)

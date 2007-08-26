@@ -349,8 +349,8 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 		// No match was found
 		if (mFound)
 		{
-			QString msg = forward ? i18nc("@info", "End of alarm list reached.\nContinue from the beginning?")
-			                      : i18nc("@info", "Beginning of alarm list reached.\nContinue from the end?");
+			QString msg = forward ? i18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
+			                      : i18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
 			if (KMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
 			{
 				findNext(forward, false);
