@@ -1519,8 +1519,7 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay)
 {
 	kdDebug(5950) << "KAlarmApp::rescheduleAlarm()" << endl;
-	bool update        = false;
-	bool updateDisplay = false;
+	bool update = false;
 	if (alarm.reminder()  ||  alarm.deferred())
 	{
 		// It's an advance warning alarm or an extra deferred alarm, so delete it
@@ -1574,11 +1573,6 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	{
 		event.cancelCancelledDeferral();
 		KAlarm::updateEvent(event, 0);     // update the window lists and calendar file
-	}
-	else if (updateDisplay)
-	{
-		Daemon::eventHandled(event.id(), false);
-		AlarmListView::modifyEvent(event, 0);
 	}
 }
 

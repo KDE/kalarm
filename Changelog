@@ -1,6 +1,10 @@
 KAlarm
 
+=== Version 1.4.11 --- 7 March 2007 ===
+Show file name as a tooltip on sound type combo box when "file" is selected.
+
 === Version 1.4.10 --- 3 March 2007 ===
+Add play button to sound file selection dialogue.
 Prevent simple repetitions triggering again when KAlarm is restarted.
 Fix recurring alarms being triggered on exception days.
 Fix start-of-day time being ignored for date-only alarms.
@@ -27,7 +31,7 @@ Tidy up alarm edit/preferences dialogue sound type options into a combo box.
 Add context help for sound file fade options.
 
 === Version 1.4.5 (KDE 3.5.5) --- 29 September 2006 ===
-Improve edit dialogue layout (Reminder controls moved to below Time box).
+Improve alarm edit dialogue layout (Reminder controls moved to below Time box).
 
 === Version 1.4.4 --- 11 July 2006 ===
 Use an alarm's previous deferral time interval as default for its next deferral.

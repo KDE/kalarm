@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,11 +26,12 @@
 #include <kdialogbase.h>
 
 class QHBox;
+class QPushButton;
+class LineEdit;
 class PushButton;
 class CheckBox;
 class SpinBox;
 class Slider;
-class LineEdit;
 
 
 class SoundDlg : public KDialogBase
@@ -41,7 +42,7 @@ class SoundDlg : public KDialogBase
 		         const QString& caption, QWidget* parent, const char* name = 0);
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
-		QString        getFile() const;
+		QString        getFile() const       { return mFileName; }
 		bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const;
 		QString        defaultDir() const    { return mDefaultDir; }
 
@@ -61,8 +62,12 @@ class SoundDlg : public KDialogBase
 		void           slotPickFile();
 		void           slotVolumeToggled(bool on);
 		void           slotFadeToggled(bool on);
+		void           playSound();
 
 	private:
+		bool           checkFile();
+
+		QPushButton*   mFilePlay;
 		LineEdit*      mFileEdit;
 		PushButton*    mFileBrowseButton;
 		CheckBox*      mRepeatCheckbox;
@@ -74,6 +79,7 @@ class SoundDlg : public KDialogBase
 		QHBox*         mFadeVolumeBox;
 		Slider*        mFadeSlider;
 		QString        mDefaultDir;     // current default directory for mFileEdit
+		QString        mFileName;
 		bool           mReadOnly;
 };
 
