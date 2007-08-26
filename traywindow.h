@@ -24,6 +24,7 @@
 #include <QIcon>
 #include <ksystemtrayicon.h>
 #include "alarmevent.h"
+#include "editdlg.h"
 
 class QEvent;
 class QDragEnterEvent;
@@ -59,7 +60,7 @@ class TrayWindow : public KSystemTrayIcon
 
 	private slots:
                 void         slotActivated(QSystemTrayIcon::ActivationReason reason);
-		void         slotNewAlarm(KAEvent::Action);
+		void         slotNewAlarm(EditAlarmDlg::Type);
 		void         slotNewFromTemplate(const KAEvent&);
 		void         slotPreferences();
 		void         setEnabledStatus(bool status);

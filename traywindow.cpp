@@ -91,7 +91,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
 	actions->addAction(QLatin1String("tNew"), mActionNew);
 	contextMenu()->addAction(mActionNew);
-	connect(mActionNew, SIGNAL(selected(KAEvent::Action)), SLOT(slotNewAlarm(KAEvent::Action)));
+	connect(mActionNew, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNewAlarm(EditAlarmDlg::Type)));
 
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
@@ -142,9 +142,9 @@ void TrayWindow::slotResourceStatusChanged()
 /******************************************************************************
 *  Called when the "New Alarm" menu item is selected to edit a new alarm.
 */
-void TrayWindow::slotNewAlarm(KAEvent::Action action)
+void TrayWindow::slotNewAlarm(EditAlarmDlg::Type type)
 {
-	KAlarm::editNewAlarm(action);
+	KAlarm::editNewAlarm(type);
 }
 
 /******************************************************************************
