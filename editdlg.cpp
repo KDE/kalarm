@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1211,7 +1211,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 		if (!mTemplate)
 			dt = mAlarmDateTime.dateTime();
 		else if (mTemplateUseTime->isOn())
-			dt.setTime(mTemplateTime->time());
+			dt = QDateTime(QDate(2000,1,1), mTemplateTime->time());
 	}
 	KAEvent::Action type = getAlarmType();
 	event.set(dt, text, mBgColourChoose->color(), mFontColourButton->fgColour(), mFontColourButton->font(),

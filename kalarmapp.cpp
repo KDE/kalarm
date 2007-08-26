@@ -67,8 +67,8 @@
 #include <netwm.h>
 
 
-static bool convWakeTime(const QCString timeParam, QDateTime&, bool& noTime);
-static bool convInterval(QCString timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
+static bool convWakeTime(const QCString& timeParam, QDateTime&, bool& noTime);
+static bool convInterval(const QCString& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -1362,7 +1362,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
-											cancel = true;   // last ocurrence (and there are no repetitions)
+											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1394,7 +1394,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
 										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event.recurs())
-											cancel = true;   // last ocurrence (and there are no repetitions)
+											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											late = true;
 									}
@@ -1623,10 +1623,27 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 		{
 			// Display a message or file, provided that the same event isn't already being displayed
 			MessageWin* win = MessageWin::findEvent(event.id());
-			if (!win  &&  !noPreAction  &&  !event.preAction().isEmpty()  &&  ShellProcess::authorised())
+			// Find if we're changing a reminder message to the real message
+			bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
+			bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
+			if (!reminder  &&  !event.deferred()
+			&&  (replaceReminder || !win)  &&  !noPreAction
+			&&  !event.preAction().isEmpty()  &&  ShellProcess::authorised())
 			{
-				// There is no message window currently displayed for this alarm,
+				// It's not a reminder or a deferred alarm, and there is no message window
+				// (other than a reminder window) currently displayed for this alarm,
 				// and we need to execute a command before displaying the new window.
+				// Check whether the command is already being executed for this alarm.
+				for (QValueList<ProcData*>::Iterator it = mCommandProcesses.begin();  it != mCommandProcesses.end();  ++it)
+				{
+					ProcData* pd = *it;
+					if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
+					{
+						kdDebug(5950) << "KAlarmApp::execAlarm(): already executing pre-DISPLAY command" << endl;
+						return pd->process;   // already executing - don't duplicate the action
+					}
+				}
+
 				QString command = event.preAction();
 				kdDebug(5950) << "KAlarmApp::execAlarm(): pre-DISPLAY command: " << command << endl;
 				int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
@@ -1638,7 +1655,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				delete win;        // event is disabled - close its window
 			else if (!win
 			     ||  !win->hasDefer() && !alarm.repeatAtLogin()
-			     ||  (win->alarmType() & KAAlarm::REMINDER_ALARM) && !(alarm.type() & KAAlarm::REMINDER_ALARM))
+			     ||  replaceReminder)
 			{
 				// Either there isn't already a message for this event,
 				// or there is a repeat-at-login message with no Defer
@@ -1666,11 +1683,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				kdDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: (script)" << endl;
 				QString tmpfile = createTempScriptFile(command, false, event, alarm);
 				if (tmpfile.isEmpty())
-				{
-					QStringList errmsgs(i18n("Error creating temporary script file"));
-					(new MessageWin(event, alarm.dateTime(), errmsgs))->show();
 					result = 0;
-				}
 				else
 					result = doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE));
 			}
@@ -1716,6 +1729,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
+	kdDebug(5950) << "KAlarmApp::doShellCommand(" << command << ", " << event.id() << ")" << endl;
 	KProcess::Communication comms = KProcess::NoCommunication;
 	QString cmd;
 	QString tmpXtermFile;
@@ -2016,7 +2030,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 *  The parameter is in the form [[[yyyy-]mm-]dd-]hh:mm or yyyy-mm-dd.
 *  Reply = true if successful.
 */
-static bool convWakeTime(const QCString timeParam, QDateTime& dateTime, bool& noTime)
+static bool convWakeTime(const QCString& timeParam, QDateTime& dateTime, bool& noTime)
 {
 	if (timeParam.length() > 19)
 		return false;
@@ -2107,46 +2121,47 @@ static bool convWakeTime(const QCString timeParam, QDateTime& dateTime, bool& no
 *  Convert a time interval command line parameter.
 *  Reply = true if successful.
 */
-static bool convInterval(QCString timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
+static bool convInterval(const QCString& timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
 {
+	QCString timeString = timeParam;
 	// Get the recurrence interval
 	bool ok = true;
 	uint interval = 0;
-	bool negative = (timeParam[0] == '-');
+	bool negative = (timeString[0] == '-');
 	if (negative)
-		timeParam = timeParam.right(1);
-	uint length = timeParam.length();
-	switch (timeParam[length - 1])
+		timeString = timeString.right(1);
+	uint length = timeString.length();
+	switch (timeString[length - 1])
 	{
 		case 'Y':
 			if (!allowMonthYear)
 				ok = false;
 			recurType = KARecurrence::ANNUAL_DATE;
-			timeParam = timeParam.left(length - 1);
+			timeString = timeString.left(length - 1);
 			break;
 		case 'W':
 			recurType = KARecurrence::WEEKLY;
-			timeParam = timeParam.left(length - 1);
+			timeString = timeString.left(length - 1);
 			break;
 		case 'D':
 			recurType = KARecurrence::DAILY;
-			timeParam = timeParam.left(length - 1);
+			timeString = timeString.left(length - 1);
 			break;
 		case 'M':
 		{
-			int i = timeParam.find('H');
+			int i = timeString.find('H');
 			if (i < 0)
 			{
 				if (!allowMonthYear)
 					ok = false;
 				recurType = KARecurrence::MONTHLY_DAY;
-				timeParam = timeParam.left(length - 1);
+				timeString = timeString.left(length - 1);
 			}
 			else
 			{
 				recurType = KARecurrence::MINUTELY;
-				interval = timeParam.left(i).toUInt(&ok) * 60;
-				timeParam = timeParam.mid(i + 1, length - i - 2);
+				interval = timeString.left(i).toUInt(&ok) * 60;
+				timeString = timeString.mid(i + 1, length - i - 2);
 			}
 			break;
 		}
@@ -2155,7 +2170,7 @@ static bool convInterval(QCString timeParam, KARecurrence::Type& recurType, int&
 			break;
 	}
 	if (ok)
-		interval += timeParam.toUInt(&ok);
+		interval += timeString.toUInt(&ok);
 	timeInterval = static_cast<int>(interval);
 	if (negative)
 		timeInterval = -timeInterval;

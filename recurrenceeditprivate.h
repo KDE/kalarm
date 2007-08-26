@@ -1,7 +1,7 @@
 /*
  *  recurrenceeditprivate.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  Copyright (c) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -85,7 +85,7 @@ class DayWeekRule : public Rule
 		            bool readOnly, QWidget* parent, const char* name = 0);
 		QBitArray        days() const;
 		void             setDays(bool);
-		void             setDays(QBitArray& days);
+		void             setDays(const QBitArray& days);
 		void             setDay(int dayOfWeek);
 		virtual QWidget* validate(QString& errorMessage);
 		virtual void     saveState();

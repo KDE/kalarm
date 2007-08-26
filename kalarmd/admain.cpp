@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 {
 	KAboutData aboutData(DAEMON_APP_NAME, I18N_NOOP("KAlarm Daemon"),
 	                     DAEMON_VERSION, I18N_NOOP("KAlarm Alarm Daemon"), KAboutData::License_GPL,
-	                     "Copyright 1997-1999 Preston Brown\nCopyright 2000-2001 Cornelius Schumacher\nCopyright 2001,2004-2006 David Jarvie", 0,
+	                     "Copyright 1997-1999 Preston Brown\nCopyright 2000-2001 Cornelius Schumacher\nCopyright 2001,2004-2007 David Jarvie", 0,
 	                     "http://www.astrojar.org.uk/kalarm");
 	aboutData.addAuthor("David Jarvie", I18N_NOOP("Maintainer"), "software@astrojar.org.uk");
 	aboutData.addAuthor("Cornelius Schumacher", I18N_NOOP("Author"), "schumacher@kde.org");

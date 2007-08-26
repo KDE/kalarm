@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.cpp  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -359,22 +359,47 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 		return;
 
 	QDateTime now  = QDateTime::currentDateTime();
-	QDateTime now1 = now.addSecs(1);
 	kdDebug(5901) << "  To: " << now.toString() << endl;
 	QValueList<KCal::Alarm*> alarms = cal->alarmsTo(now);
 	if (!alarms.count())
 		return;
+	QValueList<KCal::Event*> eventsDone;
 	for (QValueList<KCal::Alarm*>::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
 	{
 		KCal::Event* event = dynamic_cast<KCal::Event*>((*it)->parent());
-		if (!event)
-			continue;
+		if (!event  ||  eventsDone.find(event) != eventsDone.end())
+			continue;   // either not an event, or the event has already been processed
+		eventsDone += event;
 		const QString& eventID = event->uid();
 		kdDebug(5901) << "AlarmDaemon::checkAlarms(): event " << eventID  << endl;
 
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
+		bool recurs = event->doesRecur();
+		QStringList flags = QStringList::split(QString::fromLatin1(";"), event->customProperty("KALARM", "FLAGS"), false);
+		bool floats = (flags.find(QString::fromLatin1("DATE")) != flags.end());
+		QDateTime nextDateTime = event->dtStart();
+		if (recurs)
+		{
+			QString prop = event->customProperty("KALARM", "NEXTRECUR");
+			if (prop.length() >= 8)
+			{
+				// The next due recurrence time is specified
+				QDate d(prop.left(4).toInt(), prop.mid(4,2).toInt(), prop.mid(6,2).toInt());
+				if (d.isValid())
+				{
+					if (floats  &&  prop.length() == 8)
+						nextDateTime = d;
+					else if (!floats  &&  prop.length() == 15  &&  prop[8] == QChar('T'))
+					{
+						QTime t(prop.mid(9,2).toInt(), prop.mid(11,2).toInt(), prop.mid(13,2).toInt());
+						if (t.isValid())
+							nextDateTime = QDateTime(d, t);
+					}
+				}
+			}
+		}
 		QValueList<QDateTime> alarmtimes;
 		KCal::Alarm::List alarms = event->alarms();
 		for (KCal::Alarm::List::ConstIterator al = alarms.begin();  al != alarms.end();  ++al)
@@ -382,7 +407,40 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 			KCal::Alarm* alarm = *al;
 			QDateTime dt;
 			if (alarm->enabled())
-				dt = alarm->previousRepetition(now1);   // get latest due repetition (if any)
+			{
+				QDateTime dt1;
+				if (recurs  &&  !alarm->hasTime())
+				{
+					// Find the latest recurrence for the alarm.
+					// Need to do this for alarms with offsets in order to detect
+					// reminders due for recurrences.
+					int offset = alarm->hasStartOffset() ? alarm->startOffset().asSeconds()
+					           : alarm->endOffset().asSeconds() + event->dtStart().secsTo(event->dtEnd());
+					if (offset)
+					{
+						dt1 = nextDateTime.addSecs(offset);
+						if (dt1 > now)
+							dt1 = QDateTime();
+					}
+				}
+				// Get latest due repetition, or the recurrence time if none
+				dt = nextDateTime;
+				if (nextDateTime <= now  &&  alarm->repeatCount() > 0)
+				{
+					int snoozeSecs = alarm->snoozeTime() * 60;
+					QDateTime lastRepetition = nextDateTime.addSecs(alarm->repeatCount() * snoozeSecs);
+					if (lastRepetition <= now)
+						dt = lastRepetition;
+					else
+					{
+						int repetition = nextDateTime.secsTo(now) / snoozeSecs;
+						dt = nextDateTime.addSecs(repetition * snoozeSecs);
+					}
+				}
+				if (!dt.isValid()  ||  dt > now
+				||  dt1.isValid()  &&  dt1 > dt)  // already tested dt1 <= now
+					dt = dt1;
+			}
 			alarmtimes.append(dt);
 		}
 		if (!cal->eventHandled(event, alarmtimes))

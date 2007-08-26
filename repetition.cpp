@@ -1,7 +1,7 @@
 /*
  *  repetition.cpp  -  pushbutton and dialogue to specify alarm repetition
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -52,7 +52,16 @@ RepetitionButton::RepetitionButton(const QString& caption, bool waitForInitialis
 	  mWaitForInit(waitForInitialisation),
 	  mReadOnly(false)
 {
+	setToggleButton(true);
+	setOn(false);
 	connect(this, SIGNAL(clicked()), SLOT(slotPressed()));
+}
+
+void RepetitionButton::set(int interval, int count)
+{
+	mInterval = interval;
+	mCount = count;
+	setOn(mInterval && mCount);
 }
 
 /******************************************************************************
@@ -64,6 +73,7 @@ void RepetitionButton::set(int interval, int count, bool dateOnly, int maxDurati
 	mCount       = count;
 	mMaxDuration = maxDuration;
 	mDateOnly    = dateOnly;
+	setOn(mInterval && mCount);
 }
 
 /******************************************************************************
@@ -97,6 +107,8 @@ void RepetitionButton::initialise(int interval, int count, bool dateOnly, int ma
 		mDialog->set(interval, count, dateOnly, maxDuration);
 		displayDialog();    // display the dialog now
 	}
+	else
+		setOn(mInterval && mCount);
 }
 
 /******************************************************************************
@@ -119,6 +131,7 @@ void RepetitionButton::displayDialog()
 		mInterval = mDialog->interval();
 		emit changed();
 	}
+	setOn(mInterval && mCount);
 	delete mDialog;
 	mDialog = 0;
 }
@@ -259,7 +272,7 @@ void RepetitionDlg::set(int interval, int count, bool dateOnly, int maxDuration)
 		mDuration->setMinutes(count * interval, mDateOnly, units);
 		mCountButton->setChecked(true);
 	}
-	setReadOnly(!mMaxDuration);
+	mTimeSelector->setEnabled(mMaxDuration);
 }
 
 /******************************************************************************
