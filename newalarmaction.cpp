@@ -59,10 +59,7 @@ void NewAlarmAction::slotInitMenu()
 */
 void NewAlarmAction::slotSelected(QAction* action)
 {
-kDebug(5950)<<"NewAlarmAction::slotSelected()";
 	QMap<QAction*, EditAlarmDlg::Type>::const_iterator it = mTypes.find(action);
 	if (it != mTypes.end())
-{kDebug(5950)<<"NewAlarmAction::slotSelected(): emitted"<<it.value();
 		emit selected(it.value());
-}
 }
