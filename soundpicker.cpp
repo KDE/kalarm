@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,9 +80,10 @@ SoundPicker::SoundPicker(QWidget* parent, const char* name)
 
 	// Sound file picker button
 	mFilePicker = new PushButton(this);
-	mFilePicker->setPixmap(SmallIcon("playsound"));
+	mFilePicker->setPixmap(SmallIcon("fileopen"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
+	QToolTip::add(mFilePicker, i18n("Choose a file"));
 	QWhatsThis::add(mFilePicker, i18n("Configure a sound file to play when the alarm is displayed."));
 	soundLayout->addWidget(mFilePicker);
 
@@ -187,9 +188,12 @@ void SoundPicker::set(SoundPicker::Type type, const QString& f, float volume, fl
 	mFadeVolume  = fadeVolume;
 	mFadeSeconds = fadeSeconds;
 	mRepeat      = repeat;
-	QToolTip::add(mFilePicker, mFile);
 	mTypeCombo->setCurrentItem(type);  // this doesn't trigger slotTypeSelected()
 	mFilePicker->setEnabled(type == PLAY_FILE);
+	if (type == PLAY_FILE)
+		QToolTip::add(mTypeCombo, mFile);
+	else
+		QToolTip::remove(mTypeCombo);
 	mLastType = type;
 }
 
@@ -201,8 +205,12 @@ void SoundPicker::slotTypeSelected(int id)
 	Type newType = static_cast<Type>(id);
 	if (newType == mLastType)
 		return;
+	QString tooltip;
 	if (mLastType == PLAY_FILE)
+	{
 		mFilePicker->setEnabled(false);
+		QToolTip::remove(mTypeCombo);
+	}
 	else if (newType == PLAY_FILE)
 	{
 		if (mFile.isEmpty())
@@ -212,6 +220,7 @@ void SoundPicker::slotTypeSelected(int id)
 				return;    // revert to previously selected type
 		}
 		mFilePicker->setEnabled(true);
+		QToolTip::add(mTypeCombo, mFile);
 	}
 	mLastType = newType;
 }
@@ -248,12 +257,14 @@ void SoundPicker::slotPickFile()
 		mDefaultDir = dlg.defaultDir();
 	}
 #endif
-	QToolTip::add(mFilePicker, mFile);
 	if (mFile.isEmpty())
 	{
 		// No audio file is selected, so revert to previously selected option
 		mTypeCombo->setCurrentItem(mLastType);
+		QToolTip::remove(mTypeCombo);
 	}
+	else
+		QToolTip::add(mTypeCombo, mFile);
 }
 
 /******************************************************************************
