@@ -61,7 +61,6 @@
 #include <kglobal.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
-#include <kstaticdeleter.h>
 #include <netwm.h>
 #include <kdebug.h>
 #include <kshell.h>
