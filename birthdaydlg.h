@@ -43,7 +43,7 @@ class BirthdayDlg : public KDialog
 {
 		Q_OBJECT
 	public:
-		BirthdayDlg(QWidget* parent = 0);
+		explicit BirthdayDlg(QWidget* parent = 0);
 		QList<KAEvent> events() const;
 
 	protected slots:
