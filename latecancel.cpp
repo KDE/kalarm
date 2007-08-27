@@ -51,12 +51,12 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	                         "<para>If unchecked, the alarm will be triggered at the first opportunity after "
 	                         "its scheduled time, regardless of how late it is.</para>");
 
-	mLayout = new QVBoxLayout(this);
-	mLayout->setMargin(0);
-	mLayout->setSpacing(KDialog::spacingHint());
+	QVBoxLayout* topLayout = new QVBoxLayout(this);
+	topLayout->setMargin(0);
+	topLayout->setSpacing(KDialog::spacingHint());
 
 	mStack = new QStackedWidget(this);
-	mLayout->addWidget(mStack, 0, Qt::AlignLeft);
+	topLayout->addWidget(mStack, 0, Qt::AlignLeft);
 	mCheckboxFrame = new QFrame();
 	mStack->addWidget(mCheckboxFrame);
 	QVBoxLayout* vlayout = new QVBoxLayout(mCheckboxFrame);
@@ -76,11 +76,12 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
 	vlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
+	mStack->setFixedHeight(qMax(mCheckbox->height(), mTimeSelector->sizeHint().height()));
 
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->addSpacing(3*KDialog::spacingHint());
-	mLayout->addLayout(hlayout);
+	topLayout->addLayout(hlayout);
 	mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
 	mAutoClose->setFixedSize(mAutoClose->sizeHint());
 	mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
@@ -133,7 +134,7 @@ void LateCancelSelector::showAutoClose(bool show)
 	else
 		mAutoClose->hide();
 	mAutoCloseShown = show;
-	mLayout->activate();
+	updateGeometry();
 }
 
 bool LateCancelSelector::isAutoClose() const

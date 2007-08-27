@@ -25,7 +25,6 @@
 
 #include "timeperiod.h"
 #include "timeselector.h"
-class QBoxLayout;
 class QStackedWidget;
 class CheckBox;
 
@@ -52,7 +51,6 @@ class LateCancelSelector : public QFrame
 		void            slotToggled(bool);
 
 	private:
-		QBoxLayout*     mLayout;            // overall layout for the widget
 		QStackedWidget* mStack;             // contains mCheckboxFrame and mTimeSelectorFrame
 		QFrame*         mCheckboxFrame;
 		CheckBox*       mCheckbox;          // displayed when late cancellation is not selected

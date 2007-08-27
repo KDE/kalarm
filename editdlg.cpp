@@ -491,12 +491,10 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 			altext.setScript(event->cleanText());
 		else
 			altext.setText(event->cleanText());
-#warning Check this stuff
 		setAction(action, altext);
 
 		mLateCancel->setMinutes(event->lateCancel(), event->startDateTime().isDateOnly(),
 		                        TimePeriod::HoursMinutes);
-		mLateCancel->setFixedSize(mLateCancel->sizeHint());
 		if (mShowInKorganizer)
 			mShowInKorganizer->setChecked(event->copyToKOrganizer());
 		type_initValues(event);
@@ -516,13 +514,13 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		else
 			mTimeWidget->setDateTime(defaultTime);
 		mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HoursMinutes);
-		mLateCancel->setFixedSize(mLateCancel->sizeHint());
 		if (mShowInKorganizer)
 			mShowInKorganizer->setChecked(Preferences::defaultCopyToKOrganizer());
 		type_initValues(0);
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
 	}
+	mLateCancel->setFixedSize(mLateCancel->sizeHint());   // do this after type_initValues()
 
 	if (!deferGroupVisible)
 		mDeferGroup->hide();
