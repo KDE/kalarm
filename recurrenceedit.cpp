@@ -1508,7 +1508,8 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	grid->setMargin(0);
 	grid->setSpacing(KDialog::spacingHint());
 	const KLocale* locale = KGlobal::locale();
-	mMonthBox[0] = new CheckBox(ki18nc("Month of the year", "February").toString(locale), w);
+	mMonthBox[0] = new CheckBox(ki18nc("Month of the year", "January").toString(locale), w);
+	mMonthBox[1] = new CheckBox(ki18nc("Month of the year", "February").toString(locale), w);
 	mMonthBox[2] = new CheckBox(ki18nc("Month of the year", "March").toString(locale), w);
 	mMonthBox[3] = new CheckBox(ki18nc("Month of the year", "April").toString(locale), w);
 	mMonthBox[4] = new CheckBox(ki18nc("Month of the year", "May").toString(locale), w);
