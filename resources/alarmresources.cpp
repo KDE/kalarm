@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -40,7 +40,7 @@
 
 using namespace KCal;
 
-static KStaticDeleter<AlarmResources> theInstance;
+static K3StaticDeleter<AlarmResources> theInstance;
 
 AlarmResources* AlarmResources::mInstance = 0;
 QString         AlarmResources::mReservedFile;

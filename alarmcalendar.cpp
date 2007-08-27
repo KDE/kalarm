@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kstaticdeleter.h>
+#include <k3staticdeleter.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kio/netaccess.h>
@@ -61,8 +61,8 @@ QString AlarmCalendar::icalProductId()
 }
 
 static const QString displayCalendarName = QLatin1String("displaying.ics");
-static KStaticDeleter<AlarmCalendar> resourceCalendarDeleter;   // ensure that the calendar destructor is called
-static KStaticDeleter<AlarmCalendar> displayCalendarDeleter;    // ensure that the calendar destructor is called
+static K3StaticDeleter<AlarmCalendar> resourceCalendarDeleter;   // ensure that the calendar destructor is called
+static K3StaticDeleter<AlarmCalendar> displayCalendarDeleter;    // ensure that the calendar destructor is called
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = 0;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = 0;
