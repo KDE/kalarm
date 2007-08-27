@@ -104,8 +104,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	topLayout->addSpacing(KDialog::spacingHint());
 	topLayout->addWidget(mDeleteButton, 0, Qt::AlignHCenter);
 	mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted resource"));
-	mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Remove the highlighted resource from the list.\n"
-	                                 "The resource itself is left intact, and may subsequently be reinstated in the list if desired."));
+	mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Remove the highlighted resource from the list.</para>"
+	                                 "<para>The resource itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));
 	mEditButton->setDisabled(true);
 	mDeleteButton->setDisabled(true);
 	connect(mAddButton, SIGNAL(clicked()), SLOT(addResource()));

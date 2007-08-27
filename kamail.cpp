@@ -114,7 +114,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		from = mIdentityManager->identityForName(event.emailFromKMail()).fullEmailAddr();
 		if (from.isEmpty())
 		{
-			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.\n<application>KMail</application> identity <resource>%1</resource> not found.", event.emailFromKMail()));
+			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br /><application>KMail</application> identity <resource>%1</resource> not found.", event.emailFromKMail()));
 			return false;
 		}
 	}
@@ -123,14 +123,17 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		switch (Preferences::emailFrom())
 		{
 			case Preferences::MAIL_FROM_KMAIL:
-				errmsgs = errors(i18nc("@info", "No 'From' email address is configured (no default <application>KMail</application> identity found)\nPlease set it in <application>KMail</application> or in the <application>KAlarm</application> Preferences dialog."));
+				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default <application>KMail</application> identity found)</para>"
+				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 			case Preferences::MAIL_FROM_CONTROL_CENTRE:
-				errmsgs = errors(i18nc("@info", "No 'From' email address is configured.\nPlease set it in the KDE Control Center or in the <application>KAlarm</application> Preferences dialog."));
+				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
+				                                "<para>Please set it in the KDE Control Center or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 			case Preferences::MAIL_FROM_ADDR:
 			default:
-				errmsgs = errors(i18nc("@info", "No 'From' email address is configured.\nPlease set it in the <application>KAlarm</application> Preferences dialog."));
+				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
+				                                "<para>Please set it in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 		}
 		return false;
@@ -372,12 +375,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 		{
 			QString attachment = (*at).toLocal8Bit();
 			KUrl url(attachment);
-			QString attachError = i18nc("@info", "Error attaching file:\n<filename>%1</filename>", attachment);
+			QString attachError = i18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
 			url.cleanPath();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
 				kError(5950) << "KAMail::appendBodyAttachments(): not found:" << attachment;
-				return i18nc("@info", "Attachment not found:\n<filename>%1</filename>", attachment);
+				return i18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
 			}
 			KFileItem fi(uds, url);
 			if (fi.isDir()  ||  !fi.isReadable()) {

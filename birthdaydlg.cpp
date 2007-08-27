@@ -129,10 +129,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
 	mListView->setWhatsThis(i18nc("@info:whatsthis",
-	      "Select birthdays to set alarms for.\n"
-	      "This list shows all birthdays in <application>KAddressBook</application> except those for which alarms already exist.\n\n"
-	      "You can select multiple birthdays at one time by dragging the mouse over the list, "
-	      "or by clicking the mouse while pressing Ctrl or Shift."));
+	      "<para>Select birthdays to set alarms for.<br />"
+	      "This list shows all birthdays in <application>KAddressBook</application> except those for which alarms already exist.</para>"
+	      "<para>You can select multiple birthdays at one time by dragging the mouse over the list, "
+	      "or by clicking the mouse while pressing Ctrl or Shift.</para>"));
 	layout->addWidget(mListView);
 
 	group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), topWidget);

@@ -1085,7 +1085,7 @@ QString runKMail(bool minimise)
 	QString dbusService = KMAIL_DBUS_SERVICE;
 	QString errmsg;
 	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DBUS_WINDOW) : QString()), dbusService, errmsg))
-		return i18nc("@info", "Unable to start <application>KMail</application>\n(<message>%1</message>)", errmsg);
+		return i18nc("@info", "Unable to start <application>KMail</application><br />(<message>%1</message>)", errmsg);
 	return QString();
 }
 
