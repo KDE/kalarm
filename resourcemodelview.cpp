@@ -106,8 +106,8 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 		}
 		case Qt::ToolTipRole:
 		{
-			QString name = "@" + resource->resourceName();   // insert markers for stripping out name
-			QString type = "@" + resource->displayType();
+			QString name = '@' + resource->resourceName();   // insert markers for stripping out name
+			QString type = '@' + resource->displayType();
 			bool inactive = !resource->isActive();
 			QString disabled = i18nc("@info/plain", "Disabled");
 			QString readonly = i18nc("@info/plain", "Read-only");

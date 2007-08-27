@@ -184,7 +184,7 @@ bool CalendarCompat::isUTC(const QString& localFile)
 					while (++i < end)
 					{
 						if (lines[i].startsWith("CREATED:"))
-							return lines[i].endsWith("Z");
+							return lines[i].endsWith('Z');
 					}
 				}
 			}

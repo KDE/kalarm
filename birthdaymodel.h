@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef EVENTLISTMODEL_H
-#define EVENTLISTMODEL_H
+#ifndef BIRTHDAYMODEL_H
+#define BIRTHDAYMODEL_H
 
 #include "kalarm.h"
 
@@ -80,5 +80,5 @@ class BirthdaySortModel : public QSortFilterProxyModel
 		BirthdayModel::Data* rowData(const QModelIndex&) const;
 };
 
-#endif // EVENTLISTMODEL_H
+#endif // BIRTHDAYMODEL_H
 
