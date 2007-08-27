@@ -167,6 +167,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mTypeCombo->addItem(fileItem);     // index = tFILE
 	mTypeCombo->addItem(commandItem);  // index = tCOMMAND
 	mTypeCombo->setFixedSize(mTypeCombo->sizeHint());
+	mTypeCombo->setCurrentIndex(-1);    // ensure slotAlarmTypeChanged() is called when index is set
 	connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotAlarmTypeChanged(int)));
 	label->setBuddy(mTypeCombo);
 	box->setWhatsThis(i18nc("@info:whatsthis", "<para>Select what the alarm should display:"
@@ -226,25 +227,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFilePadding->setMargin(0);
 	frameLayout->addWidget(mFilePadding);
 	frameLayout->setStretchFactor(mFilePadding, 1);
-}
-
-/******************************************************************************
-* Create a widget to choose the alarm message background colour.
-*/
-ColourCombo* EditDisplayAlarmDlg::createBgColourChooser(KHBox** box, QWidget* parent)
-{
-	*box = new KHBox(parent);   // this is to control the QWhatsThis text display area
-	(*box)->setMargin(0);
-	QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), *box);
-	label->setFixedSize(label->sizeHint());
-	ColourCombo* widget = new ColourCombo(*box);
-	QSize size = widget->sizeHint();
-	widget->setMinimumHeight(size.height() + 4);
-	widget->setToolTip(i18nc("@info:tooltip", "Message color"));
-	label->setBuddy(widget);
-	(*box)->setFixedHeight((*box)->sizeHint().height());
-	(*box)->setWhatsThis(i18nc("@info:whatsthis", "Choose the background color for the alarm message."));
-	return widget;
 }
 
 /******************************************************************************

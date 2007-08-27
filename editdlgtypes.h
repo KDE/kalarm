@@ -58,7 +58,6 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 
 		virtual Reminder*   createReminder(QWidget* parent);
 		static CheckBox*    createConfirmAckCheckbox(QWidget* parent);
-		static ColourCombo* createBgColourChooser(KHBox** box, QWidget* parent);
 
 		static QString  i18n_chk_ConfirmAck();    // text of 'Confirm acknowledgement' checkbox
 
