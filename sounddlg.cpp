@@ -101,7 +101,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	layout->addWidget(mRepeatCheckbox);
 
 	// Volume
-	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Volume"), page);
+	QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), page);
 	layout->addWidget(group);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(marginHint());

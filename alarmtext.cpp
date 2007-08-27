@@ -247,7 +247,7 @@ void AlarmText::setUpTranslations()
 	{
 		mFromPrefix    = i18nc("@info/plain 'From' email address", "From:");
 		mToPrefix      = i18nc("@info/plain Email addressee", "To:");
-		mCcPrefix      = i18nc("@info/plain", "Copy-to in email headers", "Cc:");
+		mCcPrefix      = i18nc("@info/plain Copy-to in email headers", "Cc:");
 		mDatePrefix    = i18nc("@info/plain", "Date:");
 		mSubjectPrefix = i18nc("@info/plain Email subject", "Subject:");
 	}

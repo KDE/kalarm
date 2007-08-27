@@ -312,7 +312,7 @@ QVariant EventListModel::headerData(int section, Qt::Orientation orientation, in
 				case TextColumn:
 					return i18nc("@title:column", "Message, File or Command");
 				case TemplateNameColumn:
-					return i18nc("@title:column", "Name");
+					return i18nc("@title:column Template name", "Name");
 			}
 		}
 		else if (role == Qt::WhatsThisRole)
@@ -576,7 +576,7 @@ KCal::Event* EventListModel::event(const QModelIndex& index)
 QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 {
 	if (!dateTime.isValid())
-		return i18nc("@info", "Never");
+		return i18nc("@info Alarm never occurs", "Never");
 	KLocale* locale = KGlobal::locale();
 	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
 	QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
@@ -613,7 +613,7 @@ QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 {
 	if (!dateTime.isValid())
-		return i18nc("@info", "Never");
+		return i18nc("@info Alarm never occurs", "Never");
 	KDateTime now = KDateTime::currentUtcDateTime();
 	if (dateTime.isDateOnly())
 	{

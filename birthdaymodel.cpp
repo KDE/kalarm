@@ -110,7 +110,7 @@ QVariant BirthdayModel::headerData(int section, Qt::Orientation orientation, int
 			switch (section)
 			{
 				case NameColumn:
-					return i18nc("@title:column", "Name");
+					return i18nc("@title:column Name of person", "Name");
 				case DateColumn:
 					return i18nc("@title:column", "Birthday");
 			}

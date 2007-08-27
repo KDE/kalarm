@@ -59,7 +59,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
 
   generalGroupBox->setTitle(i18nc("@title:group", "General Settings"));
 
-  gbLayout->addWidget(new QLabel(i18nc("@label:textbox", "Name:"), generalGroupBox ), 0, 0 );
+  gbLayout->addWidget(new QLabel(i18nc("@label:textbox Resource name", "Name:"), generalGroupBox ), 0, 0 );
 
   mName = new KLineEdit();
   gbLayout->addWidget( mName, 0, 1 );

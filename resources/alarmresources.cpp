@@ -165,7 +165,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 		else if (fileName == mReservedFile)
 		{
 			kError(KARES_DEBUG) << "AlarmResources::addDefaultResource():" << configKey << ": name not allowed:" << fileName;
-			mConstructionError = i18n("%1: file name not permitted: <filename>%2</filename>", configKey, fileName);
+			mConstructionError = i18nc("@info", "%1: file name not permitted: <filename>%2</filename>", configKey, fileName);
 			return 0;
 		}
 		else

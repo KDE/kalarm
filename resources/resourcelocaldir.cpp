@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on resourcelocaldir.cpp in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -164,7 +164,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 		{
 			// Check the next file in the directory
 			QString id = entries[i];
-			if (id.endsWith("~"))   // backup file, ignore it
+			if (id.endsWith('~'))   // backup file, ignore it
 				continue;
 			QString fileName = dirName + '/' + id;
 			foundFile = true;
@@ -415,7 +415,7 @@ QString KAResourceLocalDir::displayLocation() const
 
 QString KAResourceLocalDir::displayType() const
 {
-	return i18nc("@info/plain", "Directory");
+	return i18nc("@info/plain Directory in filesystem", "Directory");
 }
 
 QDateTime readLastModified(const QString& filePath)
