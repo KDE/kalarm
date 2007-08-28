@@ -76,8 +76,8 @@ class BLineEdit : public QLineEdit
 {
 		Q_OBJECT
 	public:
-		BLineEdit(QWidget* parent = 0)                       : QLineEdit(parent) { }
-		BLineEdit(const QString& text, QWidget* parent = 0)  : QLineEdit(text, parent) { }
+		explicit BLineEdit(QWidget* parent = 0)                       : QLineEdit(parent) { }
+		explicit BLineEdit(const QString& text, QWidget* parent = 0)  : QLineEdit(text, parent) { }
 	signals:
 		void         focusLost();
 	protected:
