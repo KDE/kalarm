@@ -1480,7 +1480,7 @@ ViewPrefTab::ViewPrefTab()
 	mShowResources = new QCheckBox(i18nc("@option:check", "Show resources"), this);
 	mShowResources->setMinimumSize(mShowResources->sizeHint());
 	mShowResources->setWhatsThis(
-	      i18nc("@info:whatsthis", "Specify whether to show the list of alarm resources beside the alarm list"));
+	      i18nc("@info:whatsthis", "Specify whether to show the list of alarm resources beside the alarm list."));
 
 	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm List"), this);
 	QVBoxLayout* vlayout = new QVBoxLayout(group);
@@ -1490,18 +1490,18 @@ ViewPrefTab::ViewPrefTab()
 	mListShowTime = new QCheckBox(MainWindow::i18n_chk_ShowAlarmTime(), group);
 	mListShowTime->setMinimumSize(mListShowTime->sizeHint());
 	connect(mListShowTime, SIGNAL(toggled(bool)), SLOT(slotListTimeToggled(bool)));
-	mListShowTime->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the alarm list, the time at which each alarm is due"));
+	mListShowTime->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the alarm list, the time at which each alarm is due."));
 	vlayout->addWidget(mListShowTime, 0, Qt::AlignLeft);
 
 	mListShowTimeTo = new QCheckBox(MainWindow::i18n_chk_ShowTimeToAlarm(), group);
 	mListShowTimeTo->setMinimumSize(mListShowTimeTo->sizeHint());
 	connect(mListShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotListTimeToToggled(bool)));
-	mListShowTimeTo->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the alarm list, how long until each alarm is due"));
+	mListShowTimeTo->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the alarm list, how long until each alarm is due."));
 	vlayout->addWidget(mListShowTimeTo, 0, Qt::AlignLeft);
 
 	mShowArchivedAlarms = new QCheckBox(MainWindow::i18n_chk_ShowArchivedAlarms(), group);
 	mShowArchivedAlarms->setMinimumSize(mShowArchivedAlarms->sizeHint());
-	mShowArchivedAlarms->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show archived alarms in the alarm list"));
+	mShowArchivedAlarms->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show archived alarms in the alarm list."));
 	vlayout->addWidget(mShowArchivedAlarms, 0, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
@@ -1517,7 +1517,7 @@ ViewPrefTab::ViewPrefTab()
 	mTooltipShowAlarms->setMinimumSize(mTooltipShowAlarms->sizeHint());
 	connect(mTooltipShowAlarms, SIGNAL(toggled(bool)), SLOT(slotTooltipAlarmsToggled(bool)));
 	mTooltipShowAlarms->setWhatsThis(
-	      i18nc("@info:whatsthis", "Specify whether to include in the system tray tooltip, a summary of alarms due in the next 24 hours"));
+	      i18nc("@info:whatsthis", "Specify whether to include in the system tray tooltip, a summary of alarms due in the next 24 hours."));
 	grid->addWidget(mTooltipShowAlarms, 0, 0, 1, 3, Qt::AlignLeft);
 
 	KHBox* box = new KHBox(group);
@@ -1537,13 +1537,13 @@ ViewPrefTab::ViewPrefTab()
 	mTooltipShowTime = new QCheckBox(MainWindow::i18n_chk_ShowAlarmTime(), group);
 	mTooltipShowTime->setMinimumSize(mTooltipShowTime->sizeHint());
 	connect(mTooltipShowTime, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToggled(bool)));
-	mTooltipShowTime->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, the time at which each alarm is due"));
+	mTooltipShowTime->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, the time at which each alarm is due."));
 	grid->addWidget(mTooltipShowTime, 2, 1, 1, 2, Qt::AlignLeft);
 
 	mTooltipShowTimeTo = new QCheckBox(MainWindow::i18n_chk_ShowTimeToAlarm(), group);
 	mTooltipShowTimeTo->setMinimumSize(mTooltipShowTimeTo->sizeHint());
 	connect(mTooltipShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToToggled(bool)));
-	mTooltipShowTimeTo->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, how long until each alarm is due"));
+	mTooltipShowTimeTo->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, how long until each alarm is due."));
 	grid->addWidget(mTooltipShowTimeTo, 3, 1, 1, 2, Qt::AlignLeft);
 
 	box = new KHBox(group);   // this is to control the QWhatsThis text display area
@@ -1553,7 +1553,7 @@ ViewPrefTab::ViewPrefTab()
 	mTooltipTimeToPrefixLabel->setFixedSize(mTooltipTimeToPrefixLabel->sizeHint());
 	mTooltipTimeToPrefix = new QLineEdit(box);
 	mTooltipTimeToPrefixLabel->setBuddy(mTooltipTimeToPrefix);
-	box->setWhatsThis(i18nc("@info:whatsthis", "Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip"));
+	box->setWhatsThis(i18nc("@info:whatsthis", "Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip."));
 	box->setFixedHeight(box->sizeHint().height());
 	grid->addWidget(box, 4, 2, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
