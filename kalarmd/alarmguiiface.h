@@ -21,9 +21,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ALARMGUIIFACE_H
-#define ALARMGUIIFACE_H
-
+#ifndef KALARM_ALARMGUIIFACE_H
+#define KALARM_ALARMGUIIFACE_H
 
 namespace KAlarmd
 {
@@ -42,4 +41,4 @@ namespace KAlarmd
 	};
 }
 
-#endif
+#endif // KALARM_ALARMGUIIFACE_H

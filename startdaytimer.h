@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef STARTDAYTIMER_H
-#define STARTDAYTIMER_H
+#ifndef KALARM_STARTDAYTIMER_H
+#define KALARM_STARTDAYTIMER_H
 
 /* @file startdaytimer.h - timer triggered at the user-defined start-of-day time */
 
@@ -62,5 +62,4 @@ class StartOfDayTimer : public DailyTimer
 		static StartOfDayTimer* mInstance;    // exists solely to receive signals
 };
 
-#endif // STARTDAYTIMER_H
-
+#endif // KALARM_STARTDAYTIMER_H
