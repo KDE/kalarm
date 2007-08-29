@@ -278,7 +278,7 @@ void ResourceSelector::selectionChanged()
 */
 void ResourceSelector::initActions(KActionCollection* actions)
 {
-	mActionReload      = new KAction(KIcon("view-refresh"), i18nc("@action", "Re&load"), this);
+	mActionReload      = new KAction(KIcon("view-refresh"), i18nc("@action Reload resource", "Re&load"), this);
 	actions->addAction(QLatin1String("resReload"), mActionReload);
 	connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
 	mActionSave        = new KAction(KIcon("document-save"), i18nc("@action", "&Save"), this);

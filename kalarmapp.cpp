@@ -328,7 +328,7 @@ int KAlarmApp::newInstance()
 				args->clear();      // free up memory
 				if (eventID.startsWith(QLatin1String("ad:")))
 				{
-					// It's a notification from the alarm deamon
+					// It's a notification from the alarm daemon
 					eventID = eventID.mid(3);
 					Daemon::queueEvent(eventID);
 				}
