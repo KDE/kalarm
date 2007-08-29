@@ -51,6 +51,7 @@
 #include "alarmcalendar.h"
 #include "alarmresources.h"
 #include "daemon.h"
+#include "packedlayout.h"
 #include "preferences.h"
 #include "resourceconfigdialog.h"
 #include "resourcemodelview.h"
@@ -69,7 +70,6 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 
 	QLabel* label = new QLabel(i18nc("@title:group", "Resources"), this);
 	topLayout->addWidget(label, 0, Qt::AlignHCenter);
-	topLayout->addSpacing(KDialog::spacingHint());
 
 	mAlarmType = new QComboBox(this);
 	mAlarmType->addItem(i18nc("@item:inlistbox", "Active Alarms"));
@@ -78,6 +78,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	mAlarmType->setFixedHeight(mAlarmType->sizeHint().height());
 	mAlarmType->setWhatsThis(i18nc("@info:whatsthis", "Choose which type of data to show alarm resources for"));
 	topLayout->addWidget(mAlarmType);
+	// No spacing between combo box and listview.
 
 	ResourceModel* model = ResourceModel::instance(this);
 	ResourceFilterModel* filterModel = new ResourceFilterModel(model, this);
@@ -94,15 +95,17 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	topLayout->addWidget(mListView);
 	topLayout->addSpacing(KDialog::spacingHint());
 
+	PackedLayout* blayout = new PackedLayout(Qt::AlignHCenter);
+	blayout->setMargin(0);
+	blayout->setSpacing(KDialog::spacingHint());
+	topLayout->addLayout(blayout);
 
 	mAddButton    = new QPushButton(i18nc("@action:button", "Add..."), this);
 	mEditButton   = new QPushButton(i18nc("@action:button", "Edit..."), this);
 	mDeleteButton = new QPushButton(i18nc("@action:button", "Remove"), this);
-	topLayout->addWidget(mAddButton, 0, Qt::AlignHCenter);
-	topLayout->addSpacing(KDialog::spacingHint());
-	topLayout->addWidget(mEditButton, 0, Qt::AlignHCenter);
-	topLayout->addSpacing(KDialog::spacingHint());
-	topLayout->addWidget(mDeleteButton, 0, Qt::AlignHCenter);
+	blayout->addWidget(mAddButton);
+	blayout->addWidget(mEditButton);
+	blayout->addWidget(mDeleteButton);
 	mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted resource"));
 	mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Remove the highlighted resource from the list.</para>"
 	                                 "<para>The resource itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));

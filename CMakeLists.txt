@@ -26,6 +26,7 @@ set(libkalarm_SRCS
 	${CMAKE_SOURCE_DIR}/kalarm/lib/datetime.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/label.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/messagebox.cpp 
+	${CMAKE_SOURCE_DIR}/kalarm/lib/packedlayout.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/pushbutton.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/radiobutton.cpp 
 	${CMAKE_SOURCE_DIR}/kalarm/lib/timeedit.cpp 
