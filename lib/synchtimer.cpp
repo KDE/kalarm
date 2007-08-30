@@ -31,7 +31,7 @@
 
 SynchTimer::SynchTimer()
 {
-	mTimer = new QTimer(this);
+	mTimer = new QTimer(this, "mTimer");
 }
 
 SynchTimer::~SynchTimer()
