@@ -56,6 +56,8 @@ class PackedLayout : public QLayout
 		int arrange(const QRect&, bool set) const;
 		QList<QLayoutItem*> mItems;
 		Qt::Alignment mAlignment;
+		mutable int mWidthCached;
+		mutable int mHeightCached;
 };
 
 #endif // PACKEDLAYOUT_H

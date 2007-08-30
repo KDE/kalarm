@@ -24,13 +24,15 @@
 
 PackedLayout::PackedLayout(QWidget* parent, Qt::Alignment alignment)
 	: QLayout(parent),
-	  mAlignment(alignment)
+	  mAlignment(alignment),
+	  mWidthCached(0)
 {
 }
 
 PackedLayout::PackedLayout(Qt::Alignment alignment)
 	: QLayout(),
-	  mAlignment(alignment)
+	  mAlignment(alignment),
+	  mWidthCached(0)
 {
 }
 
@@ -45,6 +47,7 @@ PackedLayout::~PackedLayout()
  */
 void PackedLayout::addItem(QLayoutItem* item)
 {
+	mWidthCached = 0;
 	mItems.append(item);
 }
 
@@ -62,7 +65,12 @@ QLayoutItem* PackedLayout::takeAt(int index)
 
 int PackedLayout::heightForWidth(int w) const
 {
-	return arrange(QRect(0, 0, w, 0), false);
+	if (w != mWidthCached)
+	{
+		mHeightCached = arrange(QRect(0, 0, w, 0), false);
+		mWidthCached = w;
+	}
+	return mHeightCached;
 }
 
 void PackedLayout::setGeometry(const QRect& rect)
@@ -89,6 +97,7 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
 	int yrow = 0;
 	QList<QRect> posn;
 	int end = mItems.count();
+	QList<QLayoutItem*> items;
 	for (int i = 0;  i < end;  ++i)
 	{
 		QLayoutItem* item = mItems[i];
@@ -105,42 +114,49 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
 		}
 		else
 			yrow = qMax(yrow, size.height());
+		items.append(item);
 		posn.append(QRect(QPoint(x, y), size));
 		x = right + spacing();
 	}
 	if (set)
 	{
-		// Set the positions of all the layout items
-		for (int i = 0;  i < end; )
+		int count = items.count();
+		if (mAlignment == Qt::AlignLeft)
 		{
-			if (mAlignment == Qt::AlignLeft)
+			// Left aligned: no position adjustment needed
+			// Set the positions of all the layout items
+			for (int i = 0;  i < count;  ++i)
+				items[i]->setGeometry(posn[i]);
+		}
+		else
+		{
+			// Set the positions of all the layout items
+			for (int i = 0;  i < count; )
 			{
-				mItems[i]->setGeometry(posn[i]);
-				++i;
-			}
-			else
-			{
-				// Find all the items in this row
+				// Adjust item positions a row at a time
 				y = posn[i].y();
 				int last;   // after last item in this row
-				for (last = i + 1;  last < end && posn[last].y() == y;  ++last) ;
+				for (last = i + 1;  last < count && posn[last].y() == y;  ++last) ;
 				int n = last - i;   // number of items in this row
 				int free = rect.right() - posn[last - 1].right();
 				switch (mAlignment)
 				{
+					case Qt::AlignJustify:
+						if (n > 1)
+						{
+							for (int j = 0;  i < last;  ++j, ++i)
+								items[i]->setGeometry(QRect(QPoint(posn[i].x() + (free * j)/(n - 1), y), posn[i].size()));
+							break;
+						}
+						// fall through to AlignHCenter
 					case Qt::AlignHCenter:
 						free /= 2;
 						// fall through to AlignRight
 					case Qt::AlignRight:
 						for ( ;  i < last;  ++i)
-							mItems[i]->setGeometry(QRect(QPoint(posn[i].x() + free, y), posn[i].size()));
+							items[i]->setGeometry(QRect(QPoint(posn[i].x() + free, y), posn[i].size()));
 						break;
-					case Qt::AlignJustify:
-						for (int j = 0;  j < n;  ++j)
-							mItems[i]->setGeometry(QRect(QPoint(posn[i].x() + (free * j)/(n - 1), y), posn[i].size()));
-						i += n;
-						break;
-					case Qt::AlignLeft:
+					default:
 						break;
 				}
 			}
