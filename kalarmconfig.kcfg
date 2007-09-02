@@ -80,12 +80,7 @@
     </entry>
     <entry name="RunInSystemTray" type="Bool">
       <label context="@label">Run continuously in system tray</label>
-      <whatsthis context="@info:whatsthis"><para>Check to run <application>KAlarm</application> continuously in the KDE system tray.</para>
-         <para><note label='Notes'></note></para><para>
-         <list><item>With this option selected, closing the system tray icon will quit <application>KAlarm</application>.</item>
-         <item>You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon.
-         Running in the system tray simply provides easy access and a status indication.</item></list></para>
-      </whatsthis>
+      <whatsthis context="@info:whatsthis"><para>Check to run <application>KAlarm</application> continuously in the KDE system tray.</para><para><note label='Notes'></note></para><para><list><item>With this option selected, closing the system tray icon will quit <application>KAlarm</application>.</item><item>You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.</item></list></para></whatsthis>
       <default>true</default>
       <emit signal="runInSystemTrayChanged"/>
     </entry>
@@ -102,17 +97,12 @@
     </entry>
     <entry name="AskResource" type="Bool">
       <label context="@label">Prompt for which resource to store in</label>
-      <whatsthis context="@info:whatsthis"><para>When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.</para>
-        <para>Note that archived alarms are always stored in the default archived alarm resource.</para>
-      </whatsthis>
+      <whatsthis context="@info:whatsthis"><para>When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.</para><para>Note that archived alarms are always stored in the default archived alarm resource.</para></whatsthis>
       <default>true</default>
     </entry>
     <entry name="ModalMessages" type="Bool">
       <label context="@label">Message windows have a title bar and take keyboard focus</label>
-      <whatsthis context="@info:whatsthis"><para>Specify the characteristics of alarm message windows:
-        <list><item>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.</item>
-        <item>If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>
-      </whatsthis>
+      <whatsthis context="@info:whatsthis"><para>Specify the characteristics of alarm message windows:<list><item>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.</item><item>If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para></whatsthis>
       <default>true</default>
     </entry>
     <entry name="MessageButtonDelay" type="Int">
@@ -353,9 +343,7 @@
     </entry>
     <entry name="DefaultFeb29Type" key="Feb29Recur" type="Enum">
       <label context="@label">In non-leap years, repeat yearly February 29th alarms on:</label>
-      <whatsthis context="@info:whatsthis">For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.
-        <note>The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</note>
-      </whatsthis>
+      <whatsthis context="@info:whatsthis">For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.<note>The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</note></whatsthis>
       <choices name="Feb29Type" prefix="Feb29_">
         <choice name="Feb28"><label>February 28th</label></choice>
         <choice name="Mar1"><label>March 1st</label></choice>
