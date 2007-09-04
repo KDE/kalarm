@@ -937,7 +937,7 @@ Event::List AlarmCalendar::eventsWithAlarms(const KDateTime& from, const KDateTi
 						}
 						// Adjust the 'from' date/time and find the next recurrence at or after it
 						KDateTime pre = from.addSecs(-offset - 1);
-						if (e->floats()  &&  pre.time() < Preferences::startOfDay())
+						if (e->allDay()  &&  pre.time() < Preferences::startOfDay())
 							pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 						dt = e->recurrence()->getNextDateTime(pre);
 						if (!dt.isValid())

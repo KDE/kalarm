@@ -260,13 +260,13 @@ void KAEvent::set(const Event* event)
 		}
 	}
 	bool ok;
-	bool floats = false;
+	bool allDay = false;
 	QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
 	flags += QString();    // to avoid having to check for end of list
 	for (int i = 0, end = flags.count() - 1;  i < end;  ++i)
 	{
 		if (flags[i] == DATE_ONLY_FLAG)
-			floats = true;
+			allDay = true;
 		else if (flags[i] == CONFIRM_ACK_FLAG)
 			mConfirmAck = true;
 		else if (flags[i] == EMAIL_BCC_FLAG)
@@ -363,7 +363,7 @@ void KAEvent::set(const Event* event)
 		}
 	}
 	mStartDateTime = event->dtStart();
-	if (floats)
+	if (allDay)
 	{
 		// A date-only event is indicated by the X-KDE-KALARM-FLAGS:DATE property, not
 		// by a date-only start date/time (for the reasons given in updateKCalEvent()).
@@ -377,9 +377,9 @@ void KAEvent::set(const Event* event)
 		QDate d(prop.left(4).toInt(), prop.mid(4,2).toInt(), prop.mid(6,2).toInt());
 		if (d.isValid())
 		{
-			if (floats  &&  prop.length() == 8)
+			if (allDay  &&  prop.length() == 8)
 				mNextMainDateTime.setDate(d);
-			else if (!floats  &&  prop.length() == 15  &&  prop[8] == QChar('T'))
+			else if (!allDay  &&  prop.length() == 15  &&  prop[8] == QChar('T'))
 			{
 				QTime t(prop.mid(9,2).toInt(), prop.mid(11,2).toInt(), prop.mid(13,2).toInt());
 				if (t.isValid())
@@ -1392,7 +1392,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	ev->clearAlarms();
 
 	/* Always set DTSTART as date/time, and use the category "DATE" to indicate
-	 * a date-only event, instead of calling setFloats(). This is necessary to
+	 * a date-only event, instead of calling setAllDay(). This is necessary to
 	 * allow the alarm to float within the 24-hour period defined by the
 	 * start-of-day time rather than midnight to midnight.
 	 * RFC2445 states that alarm trigger times specified in absolute terms
@@ -1401,7 +1401,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	 * an absolute time.
 	 */
 	ev->setDtStart(mStartDateTime.effectiveKDateTime());
-	ev->setFloats(false);
+	ev->setAllDay(false);
 	ev->setHasEndDate(false);
 
 	DateTime dtMain = original ? mStartDateTime : mNextMainDateTime;
@@ -2537,7 +2537,7 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 	{
 		mRecurrence = new KARecurrence(recurrence);
 		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
-		mRecurrence->setFloats(mStartDateTime.isDateOnly());
+		mRecurrence->setAllDay(mStartDateTime.isDateOnly());
 		mRemainingRecurrences = mRecurrence->duration();
 		if (mRemainingRecurrences > 0  &&  !isTemplate())
 			mRemainingRecurrences -= mRecurrence->durationTo(mNextMainDateTime.effectiveKDateTime()) - 1;
@@ -3025,11 +3025,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 		bool addLateCancel = false;
 		QStringList flags;
 
-		if (pre_0_7  &&  event->floats())
+		if (pre_0_7  &&  event->allDay())
 		{
 			// It's a KAlarm pre-0.7 calendar file.
 			// Ensure that when the calendar is saved, the alarm time isn't lost.
-			event->setFloats(false);
+			event->setAllDay(false);
 			converted = true;
 		}
 
@@ -3171,9 +3171,9 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			if (KCalEvent::status(event) == KCalEvent::ARCHIVED)
 				event->setCreated(event->dtEnd());
 			KDateTime start = event->dtStart();
-			if (event->floats())
+			if (event->allDay())
 			{
-				event->setFloats(false);
+				event->setAllDay(false);
 				start.setTime(startOfDay);
 				flags += DATE_ONLY_FLAG;
 			}
@@ -3363,9 +3363,9 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			 * the next recurrence.
 			 */
 			QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
-			bool floats = flags.contains(DATE_ONLY_FLAG);
+			bool allDay = flags.contains(DATE_ONLY_FLAG);
 			KDateTime startDateTime = event->dtStart();
-			if (floats)
+			if (allDay)
 				startDateTime.setDateOnly(true);
 			// Convert the main alarm and get the next main trigger time from it
 			KDateTime nextMainDateTime;
@@ -3395,13 +3395,13 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				{
 					mainExpired = false;
 					nextMainDateTime = alarm->time();
-					nextMainDateTime.setDateOnly(floats);
+					nextMainDateTime.setDateOnly(allDay);
 					nextMainDateTime = nextMainDateTime.toTimeSpec(startDateTime);
 					if (nextMainDateTime != startDateTime)
 					{
 						QDateTime dt = nextMainDateTime.dateTime();
 						event->setCustomProperty(KCalendar::APPNAME, NEXT_RECUR_PROPERTY,
-						                         dt.toString(floats ? "yyyyMMdd" : "yyyyMMddThhmmss"));
+						                         dt.toString(allDay ? "yyyyMMdd" : "yyyyMMddThhmmss"));
 					}
 					alarm->setStartOffset(0);
 				}
@@ -3413,7 +3413,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				// Set the alarm offset relative to the first actual occurrence
 				// (taking account of possible exceptions).
 				KDateTime dt = event->recurrence()->getNextDateTime(startDateTime.addDays(-1));
-				dt.setDateOnly(floats);
+				dt.setDateOnly(allDay);
 				adjustment = startDateTime.secsTo(dt);
 			}
 			else
