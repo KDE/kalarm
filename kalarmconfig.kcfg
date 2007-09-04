@@ -172,10 +172,7 @@
     </entry>
     <entry name="EmailClient" key="EmailClient" type="Enum">
       <label context="@label">Email client</label>
-      <whatsthis context="@info:whatsthis"><para>How to send email when an email alarm is triggered.
-        <list><item>KMail: The email is sent automatically via <application>KMail</application>. <application>KMail</application> is started first if necessary.</item>
-        <item>Sendmail: The email is sent automatically. This option will only work if your system is configured to use <application>sendmail</application> or a sendmail compatible mail transport agent.</item></list></para>
-      </whatsthis>
+      <whatsthis context="@info:whatsthis"><para>How to send email when an email alarm is triggered.<list><item>KMail: The email is sent automatically via <application>KMail</application>. <application>KMail</application> is started first if necessary.</item><item>Sendmail: The email is sent automatically. This option will only work if your system is configured to use <application>sendmail</application> or a sendmail compatible mail transport agent.</item></list></para></whatsthis>
       <choices name="MailClient">
 	      <choice name="sendmail"><label>Sendmail</label></choice>
 	      <choice name="kmail"><label>KMail</label></choice>
