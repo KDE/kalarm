@@ -118,6 +118,7 @@ void RepetitionButton::initialise(int interval, int count, bool dateOnly, int ma
 */
 void RepetitionButton::displayDialog()
 {
+	bool change = false;
 	if (mReadOnly)
 	{
 		mDialog->setReadOnly(true);
@@ -127,11 +128,13 @@ void RepetitionButton::displayDialog()
 	{
 		mCount    = mDialog->count();
 		mInterval = mDialog->interval();
-		emit changed();
+		change = true;
 	}
 	setChecked(mInterval && mCount);
 	delete mDialog;
 	mDialog = 0;
+	if (change)
+		emit changed();   // delete dialog first, or initialise() will redisplay dialog
 }
 
 
