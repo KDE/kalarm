@@ -487,11 +487,12 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 }
 
 /******************************************************************************
-* Return whether there is a sub-repetition within the recurrence.
+* Return the sub-repetition count within the recurrence, i.e. the number of
+* repetitions after the main recurrence.
 */
 int RecurrenceEdit::subRepeatCount(int* subRepeatInterval) const
 {
-	int count = mRuleButtonType >= SUBDAILY  &&  mSubRepetition->count();
+	int count = (mRuleButtonType >= SUBDAILY) ? mSubRepetition->count() : 0;
 	if (subRepeatInterval)
 		*subRepeatInterval = count ? mSubRepetition->interval() : 0;
 	return count;
