@@ -1038,7 +1038,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 
-	mEmailAttachList = new QComboBox(parent);
+	mEmailAttachList = new KComboBox(parent);
 	mEmailAttachList->setEditable(true);
 	mEmailAttachList->setMinimumSize(mEmailAttachList->sizeHint());
 	if (mEmailAttachList->lineEdit())

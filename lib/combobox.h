@@ -1,7 +1,7 @@
 /*
  *  combobox.h  -  combo box with read-only option
  *  Program:  kalarm
- *  Copyright © 2002,2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,22 +21,22 @@
 #ifndef COMBOBOX_H
 #define COMBOBOX_H
 
-#include <QComboBox>
+#include <kcombobox.h>
 class QMouseEvent;
 class QKeyEvent;
 
 
 /**
- *  @short A QComboBox with read-only option.
+ *  @short A KComboBox with read-only option.
  *
- *  The ComboBox class is a QComboBox with a read-only option.
+ *  The ComboBox class is a KComboBox with a read-only option.
  *
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class ComboBox : public QComboBox
+class ComboBox : public KComboBox
 {
 		Q_OBJECT
 	public:

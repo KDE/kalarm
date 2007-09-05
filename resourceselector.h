@@ -31,12 +31,12 @@
 #include "alarmresource.h"
 #include "alarmresources.h"
 
-class QComboBox;
 class QPushButton;
 class QResizeEvent;
 class KAction;
 class KActionCollection;
 class KToggleAction;
+class KComboBox;
 class KMenu;
 class ResourceView;
 using KCal::ResourceCalendar;
@@ -81,7 +81,7 @@ class ResourceSelector : public QFrame
 	AlarmResource* currentResource() const;
 
 	AlarmResources* mCalendar;
-	QComboBox*      mAlarmType;
+	KComboBox*      mAlarmType;
 	ResourceView*   mListView;
 	QPushButton*    mAddButton;
 	QPushButton*    mDeleteButton;
