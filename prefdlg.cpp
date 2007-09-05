@@ -602,10 +602,9 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	box->setFixedHeight(box->sizeHint().height());
 	QWhatsThis::add(box,
 	      i18n("Choose how to send email when an email alarm is triggered.\n"
-	           "KMail: The email is added to KMail's outbox if KMail is running. If not, "
-	           "a KMail composer window is displayed to enable you to send the email.\n"
+	           "KMail: The email is sent automatically via KMail. KMail is started first if necessary.\n"
 	           "Sendmail: The email is sent automatically. This option will only work if "
-	           "your system is configured to use 'sendmail' or a sendmail compatible mail transport agent."));
+	           "your system is configured to use sendmail or a sendmail compatible mail transport agent."));
 
 	box = new QHBox(mPage);   // this is to allow left adjustment
 	mEmailCopyToKMail = new QCheckBox(i18n("Co&py sent emails into KMail's %1 folder").arg(KAMail::i18n_sent_mail()), box);
