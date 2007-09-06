@@ -381,7 +381,7 @@ void MainWindow::initActions()
 	connect(mActionRedo->popupMenu(), SIGNAL(activated(int)), SLOT(slotRedoItem(int)));
 	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
 	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
-	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(updateTrayIconAction()));
+	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPrefsChanged()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
 	// Set menu item states
@@ -389,9 +389,7 @@ void MainWindow::initActions()
 	mActionShowTime->setChecked(mShowTime);
 	mActionShowTimeTo->setChecked(mShowTimeTo);
 	mActionShowExpired->setChecked(mShowExpired);
-	if (!Preferences::expiredKeepDays())
-		mActionShowExpired->setEnabled(false);
-	updateTrayIconAction();         // set the correct text for this action
+	slotPrefsChanged();         // set the correct text for this action
 	mActionUndo->setEnabled(Undo::haveUndo());
 	mActionRedo->setEnabled(Undo::haveRedo());
 	mActionFindNext->setEnabled(false);
@@ -933,6 +931,15 @@ void MainWindow::slotTemplatesEnd()
 void MainWindow::slotToggleTrayIcon()
 {
 	theApp()->displayTrayIcon(!theApp()->trayIconDisplayed(), this);
+}
+
+/******************************************************************************
+* Called when the user preferences have changed.
+*/
+void MainWindow::slotPrefsChanged()
+{
+	mActionShowExpired->setEnabled(Preferences::expiredKeepDays());
+	updateTrayIconAction();
 }
 
 /******************************************************************************
