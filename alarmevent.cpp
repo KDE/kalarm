@@ -1474,12 +1474,12 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 		QStringList list;
 		if (mDeferralTime.isDateOnly())
 		{
-			startOffset = nextDateTime.secsTo(mDeferralTime);
+			startOffset = nextDateTime.secsTo(mDeferralTime.effectiveKDateTime());
 			list += DATE_DEFERRAL_TYPE;
 		}
 		else
 		{
-			startOffset = nextDateTime.effectiveKDateTime().secsTo(mDeferralTime.effectiveKDateTime());
+			startOffset = nextDateTime.effectiveKDateTime().secsTo(mDeferralTime);
 			list += TIME_DEFERRAL_TYPE;
 		}
 		if (mDeferral == REMINDER_DEFERRAL)
