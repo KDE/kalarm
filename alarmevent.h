@@ -457,8 +457,9 @@ class KAEvent : public KAAlarmEventBase
 		KARecurrence::Type checkRecur() const;
 		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result, int& remainingCount) const;
 		OccurType          previousRecurrence(const KDateTime& afterDateTime, DateTime& result) const;
-		KCal::Alarm*       initKcalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
-		KCal::Alarm*       initKcalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+		KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+		KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+		static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
 		static void        readAlarms(const KCal::Event*, void* alarmMap);
 		static void        readAlarm(const KCal::Alarm*, AlarmData&);
 		inline void        set_deferral(DeferType);
