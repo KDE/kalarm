@@ -998,6 +998,10 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	ev.setTransparency(Event::Transparent);
 
 	// Set up event-specific data
+
+	// Set up custom properties.
+	ev.removeCustomProperty(APPNAME, NEXT_RECUR_PROPERTY);
+
 	QStringList cats;
 	if (mStartDateTime.isDateOnly())
 		cats.append(DATE_ONLY_CATEGORY);
