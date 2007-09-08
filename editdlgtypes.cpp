@@ -98,6 +98,9 @@ class PickLogFileRadio : public PickFileRadio
 		return KAlarm::browseFile(i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
 		                          KFile::LocalOnly, parentWidget());
 	}
+#ifdef __GNUC__
+#warning Remove file:// prefix from file name in LineEdit
+#endif
     private:
 	QString mDefaultDir;   // default directory for log file browse button
 };
@@ -692,10 +695,6 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	// Log file name edit box
 	KHBox* box = new KHBox(cmdOutputBox);
 	box->setMargin(0);
-#ifdef __GNUC__
-#warning Check pixelMetric() / subRect()
-#endif
-//	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->subRect(QStyle::SR_RadioButtonIndicator, mCmdExecInTerm).width());   // indent the edit box
 	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
 	mCmdLogFileEdit->setAcceptDrops(true);
