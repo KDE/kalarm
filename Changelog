@@ -1,5 +1,10 @@
 KAlarm
 
+=== Version 1.4.15 --- 7 September 2007 ===
+Fix deferrals of recurring alarms not triggering correctly.
+Fix failure to archive details of repetitions within a recurrence.
+Enable/disable "Show expired alarms" action when preferences change.
+
 === Version 1.4.14 --- 5 August 2007 ===
 Fix handling of exception dates in recurrences.
 In sound file dialogue change Play button to a Stop button while playing a file.
