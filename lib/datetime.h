@@ -1,7 +1,7 @@
 /*
  *  datetime.h  -  date/time representation with optional date-only value
  *  Program:  kalarm
- *  Copyright (C) 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -94,6 +94,10 @@ class DateTime
 		 *  by setStartOfDay().
 		 */
 		QDateTime dateTime() const;
+		/** Returns the date and time of the value.
+		 *  if the value is date-only, the time part returned is 00:00:00.
+		 */
+		QDateTime rawDateTime() const     { return mDateTime; }
 		/** Sets a date-time or date-only value.
 		 *  @param dt the date-time to use.
 		 *  @param dateOnly True to set a date-only value; false to set a date-time value.

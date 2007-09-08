@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -129,6 +129,7 @@ class MainWindow : public MainWindowBase
 		void           slotInitRedoMenu();
 		void           slotUndoStatus(const QString&, const QString&);
 		void           slotFindActive(bool);
+		void           slotPrefsChanged();
 		void           updateTrayIconAction();
 		void           updateActionsMenu();
 		void           columnsReordered();
