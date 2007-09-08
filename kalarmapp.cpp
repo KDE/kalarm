@@ -1643,7 +1643,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
 	kDebug(5950) << "KAlarmApp::doShellCommand(" << command << "," << event.id() << ")";
-	K3Process::Communication comms = K3Process::NoCommunication;
+	QIODevice::OpenMode mode = QIODevice::WriteOnly;
 	QString cmd;
 	QString tmpXtermFile;
 	if (flags & ProcData::EXEC_IN_XTERM)
@@ -1694,38 +1694,40 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	else
 	{
 		cmd = command;
-		comms = K3Process::AllOutput;
+		mode = QIODevice::ReadWrite;
 	}
 	ShellProcess* proc = new ShellProcess(cmd);
+	proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
-	QPointer<ShellProcess> logproc = 0;
-	if (comms == K3Process::AllOutput  &&  !event.logFile().isEmpty())
+	if (mode == QIODevice::ReadWrite  &&  !event.logFile().isEmpty())
 	{
 		// Output is to be appended to a log file.
 		// Set up a logging process to write the command's output to.
-		connect(proc, SIGNAL(receivedStdout(K3Process*,char*,int)), SLOT(slotCommandOutput(K3Process*,char*,int)));
-		connect(proc, SIGNAL(receivedStderr(K3Process*,char*,int)), SLOT(slotCommandOutput(K3Process*,char*,int)));
-		logproc = new ShellProcess(QString::fromLatin1("cat >>%1").arg(event.logFile()));
-		connect(logproc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotLogProcExited(ShellProcess*)));
-		logproc->start(K3Process::Stdin);
 		QString heading;
 		if (alarm  &&  alarm->dateTime().isValid())
 		{
 			QString dateTime = alarm->dateTime().formatLocale();
+#warning Time wrong in command log file
 			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
 		}
 		else
 			heading = QLatin1String("\n******* KAlarm *******\n");
-		QByteArray hdg = heading.toLatin1();
-		logproc->writeStdin(hdg, hdg.length());
+		QFile logfile(QFile::encodeName(event.logFile()));
+		if (logfile.open(QIODevice::Append | QIODevice::Text))
+		{
+			QTextStream out(&logfile);
+			out << heading;
+			logfile.close();
+		}
+		proc->setStandardOutputFile(event.logFile(), QIODevice::Append);
 	}
-	ProcData* pd = new ProcData(proc, logproc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
+	ProcData* pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
 	if (flags & ProcData::TEMP_FILE)
 		pd->tempFiles += command;
 	if (!tmpXtermFile.isEmpty())
 		pd->tempFiles += tmpXtermFile;
 	mCommandProcesses.append(pd);
-	if (proc->start(comms))
+	if (proc->start(mode))
 		return proc;
 
 	// Error executing command - report it
@@ -1766,34 +1768,6 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 }
 
 /******************************************************************************
-* Called when an executing command alarm sends output to stdout or stderr.
-*/
-void KAlarmApp::slotCommandOutput(K3Process* proc, char* buffer, int bufflen)
-{
-//kDebug(5950) << "KAlarmApp::slotCommandOutput(): '" << QByteArray(buffer, bufflen) << "'";
-	// Find this command in the command list
-	for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
-	{
-		ProcData* pd = mCommandProcesses[i];
-		if (pd->process == proc  &&  pd->logProcess)
-		{
-			pd->logProcess->writeStdin(buffer, bufflen);
-			break;
-		}
-	}
-}
-
-/******************************************************************************
-* Called when a logging process completes.
-*/
-void KAlarmApp::slotLogProcExited(ShellProcess* proc)
-{
-	// Because it's held as a guarded pointer in the ProcData structure,
-	// we don't need to set any pointers to zero.
-	delete proc;
-}
-
-/******************************************************************************
 * Called when a command alarm's execution completes.
 */
 void KAlarmApp::slotCommandExited(ShellProcess* proc)
@@ -1805,12 +1779,8 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 		ProcData* pd = mCommandProcesses[i];
 		if (pd->process == proc)
 		{
-			// Found the command
-			if (pd->logProcess)
-				pd->logProcess->stdinExit();   // terminate the logging process
-
-			// Check its exit status
-			if (!proc->normalExit())
+			// Found the command. Check its exit status.
+			if (!proc->exitStatus() == QProcess::NormalExit)
 			{
 				QString errmsg = proc->errorMessage();
 				kWarning(5950) << "KAlarmApp::slotCommandExited(" << pd->event->cleanText() << "):" << errmsg;
@@ -2115,9 +2085,8 @@ static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurT
 }
 
 
-KAlarmApp::ProcData::ProcData(ShellProcess* p, ShellProcess* logp, KAEvent* e, KAAlarm* a, int f)
+KAlarmApp::ProcData::ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f)
 	: process(p),
-	  logProcess(logp),
 	  event(e),
 	  alarm(a),
 	  messageBoxParent(0),

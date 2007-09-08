@@ -25,11 +25,11 @@
 
 #include <QQueue>
 #include <QByteArray>
-#include <k3process.h>
+#include <kprocess.h>
 
 
 /**
- *  @short Enhanced K3Process to run a shell command.
+ *  @short Enhanced KProcess to run a shell command.
  *
  *  The ShellProcess class runs a shell command and interprets the shell exit status
  *  as far as possible. It blocks execution if shell access is prohibited. It buffers
@@ -39,17 +39,17 @@
  *  allowed at all. If not (e.g. if the user is running in kiosk mode), it blocks
  *  execution.
  *
- *  Derived from K3Process, this class additionally tries to interpret the shell
+ *  Derived from KProcess, this class additionally tries to interpret the shell
  *  exit status. Different shells use different exit codes. Currently, if bash or ksh
  *  report that the command could not be found or could not be executed, the NOT_FOUND
  *  status is returned.
  *
- *  Writes to the process's stdin are buffered, so that unlike with K3Process, there
+ *  Writes to the process's stdin are buffered, so that unlike with KProcess, there
  *  is no need to wait for the write to complete before writing again.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class ShellProcess : public K3Process
+class ShellProcess : public KProcess
 {
 		Q_OBJECT
 	public:
@@ -76,10 +76,9 @@ class ShellProcess : public K3Process
 		 */
 		explicit ShellProcess(const QString& command);
 		/** Executes the configured command.
-		 *  @param comm Which communication links should be established to the child process
-		 *  (stdin/stdout/stderr).
+		 *  @param openMode WriteOnly for stdin only, ReadOnly for stdout/stderr only, else ReadWrite.
 		 */
-		bool            start(Communication comm = NoCommunication);
+		bool            start(OpenMode = ReadWrite);
 		/** Returns the current status of the shell process. */
 		Status          status() const       { return mStatus; }
 		/** Returns whether the command was run successfully.
@@ -115,17 +114,21 @@ class ShellProcess : public K3Process
 		 *  if start() did not attempt to start the command execution, e.g. in kiosk mode.
 		 */
 		void  shellExited(ShellProcess*);
+		/** Signal emitted when input is available from the process's stdout. */
+		void  receivedStdout(ShellProcess*);
+		/** Signal emitted when input is available from the process's stderr. */
+		void  receivedStderr(ShellProcess*);
 
 	private slots:
-		void  writtenStdin(K3Process*);
-		void  slotExited(K3Process*);
+		void  writtenStdin(qint64 bytes);
+		void  stdoutReady()         { emit receivedStdout(this); }
+		void  stderrReady()         { emit receivedStderr(this); }
+		void  slotExited(int exitCode, QProcess::ExitStatus);
 
 	private:
 		// Prohibit the following inherited methods
 		ShellProcess&  operator<<(const QString&);
-		ShellProcess&  operator<<(const QByteArray&);
 		ShellProcess&  operator<<(const QStringList&);
-		ShellProcess&  operator<<(const char*);
 
 		static QByteArray  mShellName;    // name of shell to be used
 		static QByteArray  mShellPath;    // path of shell to be used
@@ -133,6 +136,7 @@ class ShellProcess : public K3Process
 		static bool        mAuthorised;   // true if shell commands are authorised
 		QString            mCommand;      // copy of command to be executed
 		QQueue<QByteArray> mStdinQueue;   // queued strings to send to STDIN
+		qint64             mStdinBytes;   // bytes still to be written from first queued string
 		Status             mStatus;       // current execution status
 		bool               mStdinExit;    // exit once STDIN queue has been written
 };

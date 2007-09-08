@@ -96,8 +96,6 @@ class KAlarmApp : public KUniqueApplication
 		void               slotPreferencesChanged();
 		void               setArchivePurgeDays();
 		void               slotPurge()                     { purge(mArchivedPurgeDays); }
-		void               slotCommandOutput(K3Process*, char* buffer, int bufflen);
-		void               slotLogProcExited(ShellProcess*);
 		void               slotCommandExited(ShellProcess*);
 	private:
 		enum EventFunc
@@ -108,7 +106,7 @@ class KAlarmApp : public KUniqueApplication
 		};
 		struct ProcData
 		{
-			ProcData(ShellProcess*, ShellProcess* logprocess, KAEvent*, KAAlarm*, int flags = 0);
+			ProcData(ShellProcess*, KAEvent*, KAAlarm*, int flags = 0);
 			~ProcData();
 			enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08,
 			       TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20 };
@@ -119,7 +117,6 @@ class KAlarmApp : public KUniqueApplication
 			bool                 tempFile() const    { return flags & TEMP_FILE; }
 			bool                 execInXterm() const { return flags & EXEC_IN_XTERM; }
 			ShellProcess*          process;
-			QPointer<ShellProcess> logProcess;
 			KAEvent*               event;
 			KAAlarm*               alarm;
 			QPointer<QWidget>      messageBoxParent;

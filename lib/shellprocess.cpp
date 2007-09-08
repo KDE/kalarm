@@ -20,6 +20,7 @@
 
 
 #include <stdlib.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <kapplication.h>
 #include <klocale.h>
@@ -36,28 +37,31 @@ bool       ShellProcess::mAuthorised  = false;
 
 
 ShellProcess::ShellProcess(const QString& command)
-	: K3Process(),
-	  mCommand(command),
+	: mCommand(command),
+	  mStdinBytes(0),
 	  mStatus(INACTIVE),
 	  mStdinExit(false)
 {
-	setUseShell(true, shellName());
 }
 
 /******************************************************************************
 * Execute a command.
 */
-bool ShellProcess::start(Communication comm)
+bool ShellProcess::start(OpenMode openMode)
 {
 	if (!authorised())
 	{
 		mStatus = UNAUTHORISED;
 		return false;
 	}
-	K3Process::operator<<(mCommand);
-	connect(this, SIGNAL(wroteStdin(K3Process*)), SLOT(writtenStdin(K3Process*)));
-	connect(this, SIGNAL(processExited(K3Process*)), SLOT(slotExited(K3Process*)));
-	if (!K3Process::start(K3Process::NotifyOnExit, comm))
+	connect(this, SIGNAL(bytesWritten(qint64)), SLOT(writtenStdin(qint64)));
+	connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotExited(int, QProcess::ExitStatus)));
+	connect(this, SIGNAL(readyReadStandardOutput()), SLOT(stdoutReady()));
+	connect(this, SIGNAL(readyReadStandardError()), SLOT(stderrReady()));
+	QStringList args;
+	args << "-c" << mCommand;
+	QProcess::start(shellName(), args, openMode);
+	if (!waitForStarted())
 	{
 		mStatus = START_FAIL;
 		return false;
@@ -71,22 +75,21 @@ bool ShellProcess::start(Communication comm)
 * Interprets the exit status according to which shell was called, and emits
 * a shellExited() signal.
 */
-void ShellProcess::slotExited(K3Process* proc)
+void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
 	kDebug(5950) << "ShellProcess::slotExited()";
 	mStdinQueue.clear();
 	mStatus = SUCCESS;
-	if (!proc->normalExit())
+	if (exitStatus != NormalExit)
 	{
-		kWarning(5950) << "ShellProcess::slotExited(" << mCommand << ")" << mShellName << ": died/killed";
+		kWarning(5950) << "ShellProcess::slotExited(" << mCommand << ")" << mShellName << ": crashed/killed";
 		mStatus = DIED;
 	}
 	else
 	{
 		// Some shells report if the command couldn't be found, or is not executable
-		int status = proc->exitStatus();
-		if (mShellName == "bash"  &&  (status == 126 || status == 127)
-		||  mShellName == "ksh"  &&  status == 127)
+		if (mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127)
+		||  mShellName == "ksh"  &&  exitCode == 127)
 		{
 			kWarning(5950) << "ShellProcess::slotExited(" << mCommand << ")" << mShellName << ": not found or not executable";
 			mStatus = NOT_FOUND;
@@ -101,24 +104,33 @@ void ShellProcess::slotExited(K3Process* proc)
 void ShellProcess::writeStdin(const char* buffer, int bufflen)
 {
 	QByteArray scopy(buffer, bufflen);    // construct a deep copy
-	bool write = mStdinQueue.isEmpty();
+	bool doWrite = mStdinQueue.isEmpty();
 	mStdinQueue.enqueue(scopy);
-	if (write)
-		K3Process::writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
+	if (doWrite)
+	{
+		mStdinBytes = mStdinQueue.head().length();
+		write(mStdinQueue.head());
+	}
 }
 
 /******************************************************************************
 * Called when output to STDIN completes.
 * Send the next queued output, if any.
-* Note that buffers written to STDIN must not be freed until the writtenStdin()
+* Note that buffers written to STDIN must not be freed until the bytesWritten()
 * signal has been processed.
 */
-void ShellProcess::writtenStdin(K3Process* proc)
+void ShellProcess::writtenStdin(qint64 bytes)
 {
+	mStdinBytes -= bytes;
+	if (mStdinBytes > 0)
+		return;   // buffer has only been partially written so far
 	if (!mStdinQueue.isEmpty())
 		mStdinQueue.dequeue();   // free the buffer which has now been written
 	if (!mStdinQueue.isEmpty())
-		proc->writeStdin(mStdinQueue.head(), mStdinQueue.head().length());
+	{
+		mStdinBytes = mStdinQueue.head().length();
+		write(mStdinQueue.head());
+	}
 	else if (mStdinExit)
 		kill();
 }
