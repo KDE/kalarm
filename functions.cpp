@@ -1341,7 +1341,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 		return QString();
 	KUrl url = fileDlg.selectedUrl();
 	defaultDir = url.path();
-	return url.prettyUrl();
+	return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
 }
 
 /******************************************************************************
