@@ -57,7 +57,6 @@
 #include <kmimetype.h>
 #include <kmessagebox.h>
 #include <kwindowsystem.h>
-#include <k3process.h>
 #include <kio/netaccess.h>
 #include <knotification.h>
 #include <kpushbutton.h>

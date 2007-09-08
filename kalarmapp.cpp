@@ -55,7 +55,6 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
-#include <k3process.h>
 #include <ktemporaryfile.h>
 #include <kfileitem.h>
 #include <kglobal.h>
