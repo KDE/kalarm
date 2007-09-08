@@ -98,9 +98,6 @@ class PickLogFileRadio : public PickFileRadio
 		return KAlarm::browseFile(i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
 		                          KFile::LocalOnly, parentWidget());
 	}
-#ifdef __GNUC__
-#warning Remove file:// prefix from file name in LineEdit
-#endif
     private:
 	QString mDefaultDir;   // default directory for log file browse button
 };
