@@ -1,7 +1,7 @@
 /*
  *  shellprocess.h  -  execute a process through the shell
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@
 
 
 /**
- *  @short Enhanced K3ShellProcess.
+ *  @short Enhanced K3Process to run a shell command.
  *
  *  The ShellProcess class runs a shell command and interprets the shell exit status
  *  as far as possible. It blocks execution if shell access is prohibited. It buffers
@@ -39,17 +39,17 @@
  *  allowed at all. If not (e.g. if the user is running in kiosk mode), it blocks
  *  execution.
  *
- *  Derived from K3ShellProcess, this class additionally tries to interpret the shell
+ *  Derived from K3Process, this class additionally tries to interpret the shell
  *  exit status. Different shells use different exit codes. Currently, if bash or ksh
  *  report that the command could not be found or could not be executed, the NOT_FOUND
  *  status is returned.
  *
- *  Writes to the process's stdin are buffered, so that unlike with K3ShellProcess, there
- *  is not need to wait for the write to complete before writing again.
+ *  Writes to the process's stdin are buffered, so that unlike with K3Process, there
+ *  is no need to wait for the write to complete before writing again.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class ShellProcess : public K3ShellProcess
+class ShellProcess : public K3Process
 {
 		Q_OBJECT
 	public:

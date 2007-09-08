@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  Copyright (c) 2004,2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,11 +36,12 @@ bool       ShellProcess::mAuthorised  = false;
 
 
 ShellProcess::ShellProcess(const QString& command)
-	: K3ShellProcess(shellName()),
+	: K3Process(),
 	  mCommand(command),
 	  mStatus(INACTIVE),
 	  mStdinExit(false)
 {
+	setUseShell(true, shellName());
 }
 
 /******************************************************************************
@@ -53,10 +54,10 @@ bool ShellProcess::start(Communication comm)
 		mStatus = UNAUTHORISED;
 		return false;
 	}
-	K3ShellProcess::operator<<(mCommand);
+	K3Process::operator<<(mCommand);
 	connect(this, SIGNAL(wroteStdin(K3Process*)), SLOT(writtenStdin(K3Process*)));
 	connect(this, SIGNAL(processExited(K3Process*)), SLOT(slotExited(K3Process*)));
-	if (!K3ShellProcess::start(K3Process::NotifyOnExit, comm))
+	if (!K3Process::start(K3Process::NotifyOnExit, comm))
 	{
 		mStatus = START_FAIL;
 		return false;
@@ -158,8 +159,8 @@ QString ShellProcess::errorMessage() const
 
 /******************************************************************************
 * Determine which shell to use.
-* This is a duplication of what K3ShellProcess does, but we need to know
-* which shell is used in order to decide what its exit code means.
+* Don't use K3Process::setUseShell(), since we need to know which shell is used
+* in order to decide what its exit code means.
 */
 const QByteArray& ShellProcess::shellPath()
 {
