@@ -171,8 +171,8 @@ QString ShellProcess::errorMessage() const
 
 /******************************************************************************
 * Determine which shell to use.
-* Don't use K3Process::setUseShell(), since we need to know which shell is used
-* in order to decide what its exit code means.
+* Don't use the KProcess default shell, since we need to know which shell is
+* used in order to decide what its exit code means.
 */
 const QByteArray& ShellProcess::shellPath()
 {
