@@ -153,7 +153,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 				case SortRole:
 				{
 					DateTime due = event.expired() ? event.startDateTime() : event.displayDateTime();
-					return due.isValid() ? KDateTime(due).toUtc().dateTime()
+					return due.isValid() ? due.effectiveKDateTime().toUtc().dateTime()
 					                     : QDateTime(QDate(9999,12,31), QTime(0,0,0));
 				}
 				default:
@@ -220,10 +220,6 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					v.setValue(*eventIcon(event));
 					return v;
 				}
-case Qt::BackgroundRole:
-if (event.action() == KAEvent::COMMAND)
-	return QColor(Qt::red);
-break;
 				case Qt::TextAlignmentRole:
 					return Qt::AlignHCenter;
 				case Qt::SizeHintRole:
