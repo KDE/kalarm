@@ -1239,7 +1239,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					updateCalAndDisplay = false;
 				}
 				// Check if the alarm is due yet.
-				KDateTime nextDT = alarm.dateTime(true);
+				KDateTime nextDT = alarm.dateTime(true).kDateTime();
 				int secs = nextDT.secsTo(now);
 				if (secs < 0)
 				{

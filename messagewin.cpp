@@ -327,7 +327,7 @@ void MessageWin::initView()
 		// Alarm date/time.
 		// Display time zone if not local time zone.
 		QLabel* label = new QLabel(frame ? frame : topWidget);
-		label->setText(KGlobal::locale()->formatDateTime(KDateTime(mDateTime), KLocale::ShortDate, KLocale::DateTimeFormatOptions(mDateTime.isLocalZone() ? 0 : KLocale::TimeZone)));
+		label->setText(KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(mDateTime.isLocalZone() ? 0 : KLocale::TimeZone)));
 		if (!frame)
 			label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());

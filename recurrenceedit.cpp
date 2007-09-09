@@ -747,7 +747,7 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
  */
 void RecurrenceEdit::set(const KAEvent& event)
 {
-	setDefaults(KDateTime(event.mainDateTime()));
+	setDefaults(event.mainDateTime().kDateTime());
 	if (event.repeatAtLogin())
 	{
 		mAtLoginButton->setChecked(true);

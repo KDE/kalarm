@@ -450,7 +450,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 			button->setChecked(true);
 			mTemplateTimeAfter->setValue(afterTime > 0 ? afterTime : 1);
 			if (!noTime && useTime)
-				mTemplateTime->setValue(KDateTime(event->mainDateTime()).time());
+				mTemplateTime->setValue(event->mainDateTime().kDateTime().time());
 			else
 				mTemplateTime->setValue(0);
 		}
@@ -468,7 +468,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 				}
 				else
 				{
-					KDateTime dt = event->startDateTime();
+					KDateTime dt = event->startDateTime().kDateTime();
 					now = now.toTimeSpec(dt);
 					QDate d = now.date();
 					if (!dt.isDateOnly()  &&  now.time() >= dt.time())
@@ -821,13 +821,13 @@ bool EditAlarmDlg::validate()
 			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 			bool dateOnly = mAlarmDateTime.isDateOnly();
 			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
-			||  !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
+			||  !dateOnly  &&  mAlarmDateTime.rawDateTime() < now.dateTime())
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
 				dateOnly = mAlarmDateTime.isDateOnly();
 				if ((dateOnly  &&  mAlarmDateTime.date() < now.date()
-				     || !dateOnly  &&  KDateTime(mAlarmDateTime).dateTime() < now.dateTime())
+				     || !dateOnly  &&  mAlarmDateTime.rawDateTime() < now.dateTime())
 				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
@@ -1060,7 +1060,7 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 		}
 		mRecurrenceEdit->setStartDate(mAlarmDateTime.date(), now.date());
 		if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
-			mRecurrenceEdit->setEndDateTime(expired ? now : KDateTime(mAlarmDateTime));
+			mRecurrenceEdit->setEndDateTime(expired ? now : mAlarmDateTime.kDateTime());
 	}
 	mRecurPageShown = true;
 }
@@ -1082,7 +1082,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 		if (atLogin)
 		{
 			mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
-			mRecurrenceEdit->setEndDateTime(mAlarmDateTime);
+			mRecurrenceEdit->setEndDateTime(mAlarmDateTime.kDateTime());
 		}
 		if (mReminder)
 			mReminder->enableOnceOnly(recurs && !atLogin);
