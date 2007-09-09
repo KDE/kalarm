@@ -1669,16 +1669,17 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 /******************************************************************************
 *  Called when the recurrence type selection changes.
 *  Enables/disables date-only alarms as appropriate.
+*  Enables/disables controls depending on at-login setting.
 */
 void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 {
+	bool atLogin = (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN);
 	if (!mTemplate)
 	{
 		bool recurs = (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR);
 		if (mDeferGroup)
 			mDeferGroup->setEnabled(recurs);
 		mTimeWidget->enableAnyTime(!recurs || repeatType != RecurrenceEdit::SUBDAILY);
-		bool atLogin = (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN);
 		if (atLogin)
 		{
 			mAlarmDateTime = mTimeWidget->getDateTime(0, false, false);
@@ -1686,6 +1687,10 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 		}
 		mReminder->enableOnceOnly(recurs && !atLogin);
 	}
+	mReminder->setEnabled(!atLogin);
+        mLateCancel->setEnabled(!atLogin);
+        if (mShowInKorganizer)
+                mShowInKorganizer->setEnabled(!atLogin);
 	slotRecurFrequencyChange();
 }
 
