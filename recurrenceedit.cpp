@@ -243,7 +243,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	vlayout->addLayout(hlayout);
 	mEndDateButton = new RadioButton(i18nc("@option:radio", "End by:"), mRangeButtonBox);
 	mEndDateButton->setReadOnly(mReadOnly);
-	mEndDateButton->setWhatsThis(i18nc("@info:whatsthis", "Repeat the alarm until the date/time specified"));
+	mEndDateButton->setWhatsThis(
+	      i18nc("@info:whatsthis", "<para>Repeat the alarm until the date/time specified.</para>"
+	            "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
 	mRangeButtonGroup->addButton(mEndDateButton);
 	mEndDateEdit = new DateEdit(mRangeButtonBox);
 	mEndDateEdit->setFixedSize(mEndDateEdit->sizeHint());
