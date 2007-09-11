@@ -607,9 +607,9 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 			kDebug(5900) <<"AlarmDaemon::notifyEvent(): '" << mClientName <<"' not found";
 			return;
 		}
-		QStringList lst;
-		lst << "--handleEvent" << id;
-		QProcess::startDetached(mClientExe,lst);
+		QStringList args;
+		args << "--handleEvent" << id;
+		QProcess::startDetached(mClientExe, args);
 		kDebug(5900) <<"AlarmDaemon::notifyEvent(): used command line";
 	}
 	else

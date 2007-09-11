@@ -1,7 +1,7 @@
 /*
  *  combobox.cpp  -  combo box with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2002, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@
 
 
 ComboBox::ComboBox(QWidget* parent)
-	: QComboBox(parent),
+	: KComboBox(parent),
 	  mReadOnly(false)
 { }
 
@@ -48,29 +48,29 @@ void ComboBox::mousePressEvent(QMouseEvent* e)
 		if (e->button() == Qt::LeftButton)
 			return;
 	}
-	QComboBox::mousePressEvent(e);
+	KComboBox::mousePressEvent(e);
 }
 
 void ComboBox::mouseReleaseEvent(QMouseEvent* e)
 {
 	if (!mReadOnly)
-		QComboBox::mouseReleaseEvent(e);
+		KComboBox::mouseReleaseEvent(e);
 }
 
 void ComboBox::mouseMoveEvent(QMouseEvent* e)
 {
 	if (!mReadOnly)
-		QComboBox::mouseMoveEvent(e);
+		KComboBox::mouseMoveEvent(e);
 }
 
 void ComboBox::keyPressEvent(QKeyEvent* e)
 {
 	if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
-		QComboBox::keyPressEvent(e);
+		KComboBox::keyPressEvent(e);
 }
 
 void ComboBox::keyReleaseEvent(QKeyEvent* e)
 {
 	if (!mReadOnly)
-		QComboBox::keyReleaseEvent(e);
+		KComboBox::keyReleaseEvent(e);
 }

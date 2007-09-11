@@ -25,7 +25,6 @@
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QPushButton>
-#include <QComboBox>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -40,6 +39,7 @@
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <kcombobox.h>
 #include <kcolorcombo.h>
 #include <KStandardGuiItem>
 #include <ksystemtimezone.h>
@@ -554,7 +554,7 @@ TimePrefTab::TimePrefTab()
 	mTimeZone = new TimeZoneCombo(box);
 	mTimeZone->setMaxVisibleItems(15);
 #else
-	mTimeZone = new QComboBox(box);
+	mTimeZone = new KComboBox(box);
 	mTimeZone->setMaxVisibleItems(15);
 	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
 	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
@@ -1175,7 +1175,7 @@ EditPrefTab::EditPrefTab()
 	vlayout->addWidget(box);
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Reminder units:"), box);
 	label->setFixedSize(label->sizeHint());
-	mReminderUnits = new QComboBox(box);
+	mReminderUnits = new KComboBox(box);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Hours/Minutes"), TimePeriod::HoursMinutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Days"), TimePeriod::Days);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Weeks"), TimePeriod::Weeks);
@@ -1196,7 +1196,7 @@ EditPrefTab::EditPrefTab()
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
-	mSound = new QComboBox(bbox);
+	mSound = new KComboBox(bbox);
 	mSound->addItem(SoundPicker::i18n_combo_None());         // index 0
 	mSound->addItem(SoundPicker::i18n_combo_Beep());         // index 1
 	mSound->addItem(SoundPicker::i18n_combo_File());         // index 2
@@ -1283,7 +1283,7 @@ EditPrefTab::EditPrefTab()
 	itemBox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18nc("@label:listbox", "Recurrence:"), itemBox);
 	label->setFixedSize(label->sizeHint());
-	mRecurPeriod = new QComboBox(itemBox);
+	mRecurPeriod = new KComboBox(itemBox);
 	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_NoRecur());
 	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_AtLogin());
 	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_HourlyMinutely());

@@ -1,7 +1,7 @@
 /*
  *  datetime.h  -  date/time with start-of-day time for date-only values 
  *  Program:  kalarm
- *  Copyright © 2003,2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,24 +51,24 @@ class DateTime
 		                               : mDateTime(dt, spec) { }
 		/** Constructor for a date-time value. */
 		DateTime(const KDateTime& dt)  : mDateTime(dt) { }
-		/** Conversion operator to KDateTime. */
-		operator KDateTime() const     { return mDateTime; }
 		/** Assignment operator.
 		 *  Sets the value to a specified date-time.
 		 */
 		DateTime& operator=(const KDateTime& dt)
-		                           { mDateTime = dt;  return *this; }
+		                              { mDateTime = dt;  return *this; }
 		/** Returns true if the date is null and, if it is a date-time value, the time is also null. */
-		bool isNull() const        { return mDateTime.isNull(); }
+		bool isNull() const           { return mDateTime.isNull(); }
 		/** Returns true if the date is valid and, if it is a date-time value, the time is also valid. */
-		bool isValid() const       { return mDateTime.isValid(); }
+		bool isValid() const          { return mDateTime.isValid(); }
 		/** Returns true if it is date-only value. */
-		bool isDateOnly() const    { return mDateTime.isDateOnly(); }
+		bool isDateOnly() const       { return mDateTime.isDateOnly(); }
 		/** Returns the date part of the value. */
-		QDate date() const         { return mDateTime.date(); }
+		QDate date() const            { return mDateTime.date(); }
 		/** Returns the date and time of the value.
 		 *  If the value is date-only, the time part returned is 00:00:00. */
-		QDateTime actualDateTime() const;
+		QDateTime rawDateTime() const { return mDateTime.dateTime(); }
+		/** Returns the date and time of the value as a KDateTime. */
+		KDateTime kDateTime() const   { return mDateTime; }
 		/** Returns the time part of the value.
 		 *  If the value is date-only, the time returned is the start-of-day time set by setStartOfDay().
 		 */

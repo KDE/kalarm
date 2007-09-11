@@ -28,7 +28,7 @@
 #include "editdlg.h"
 
 class QAbstractButton;
-class QComboBox;
+class KComboBox;
 class KHBox;
 class EmailIdCombo;
 class CheckBox;
@@ -205,7 +205,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		QPushButton*        mEmailAddressButton; // email open address book button
 		LineEdit*           mEmailSubjectEdit;
 		TextEdit*           mEmailMessageEdit;   // email body edit box
-		QComboBox*          mEmailAttachList;
+		KComboBox*          mEmailAttachList;
 		QPushButton*        mEmailAddAttachButton;
 		QPushButton*        mEmailRemoveButton;
 		CheckBox*           mEmailBcc;

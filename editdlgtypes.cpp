@@ -692,10 +692,6 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	// Log file name edit box
 	KHBox* box = new KHBox(cmdOutputBox);
 	box->setMargin(0);
-#ifdef __GNUC__
-#warning Check pixelMetric() / subRect()
-#endif
-//	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->subRect(QStyle::SR_RadioButtonIndicator, mCmdExecInTerm).width());   // indent the edit box
 	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
 	mCmdLogFileEdit->setAcceptDrops(true);
@@ -1038,7 +1034,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 0, 0);
 
-	mEmailAttachList = new QComboBox(parent);
+	mEmailAttachList = new KComboBox(parent);
 	mEmailAttachList->setEditable(true);
 	mEmailAttachList->setMinimumSize(mEmailAttachList->sizeHint());
 	if (mEmailAttachList->lineEdit())

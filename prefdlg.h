@@ -30,10 +30,10 @@ class QCheckBox;
 class QAbstractButton;
 class QRadioButton;
 class QPushButton;
-class QComboBox;
 class QLineEdit;
 class QLabel;
 class KTimeZone;
+class KComboBox;
 class KColorCombo;
 class FontColourChooser;
 class ButtonGroup;
@@ -251,19 +251,19 @@ class EditPrefTab : public PrefsTabBase
 	private:
 		QCheckBox*      mAutoClose;
 		QCheckBox*      mConfirmAck;
-		QComboBox*      mReminderUnits;
+		KComboBox*      mReminderUnits;
 		SpecialActionsButton* mSpecialActionsButton;
 		QCheckBox*      mCmdScript;
 		QCheckBox*      mCmdXterm;
 		QCheckBox*      mEmailBcc;
-		QComboBox*      mSound;
+		KComboBox*      mSound;
 		QLabel*         mSoundFileLabel;
 		QLineEdit*      mSoundFile;
 		QPushButton*    mSoundFileBrowse;
 		QCheckBox*      mSoundRepeat;
 		QCheckBox*      mCopyToKOrganizer;
 		QCheckBox*      mLateCancel;
-		QComboBox*      mRecurPeriod;
+		KComboBox*      mRecurPeriod;
 		ButtonGroup*    mFeb29;
 
 		static int soundIndex(Preferences::SoundType);

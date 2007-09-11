@@ -307,7 +307,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
 				if (errorWidget)
 					*errorWidget = mTimeEdit;
-				return DateTime();
+				return KDateTime();
 			}
 		}
 		return result;

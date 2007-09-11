@@ -26,7 +26,6 @@
 
 #include <QLayout>
 #include <QLabel>
-#include <QComboBox>
 #include <QPushButton>
 
 #include <QTimer>
@@ -39,6 +38,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
+#include <kcombobox.h>
 #include <kinputdialog.h>
 #include <kmenu.h>
 #include <kdebug.h>
@@ -71,7 +71,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	QLabel* label = new QLabel(i18nc("@title:group", "Resources"), this);
 	topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
-	mAlarmType = new QComboBox(this);
+	mAlarmType = new KComboBox(this);
 	mAlarmType->addItem(i18nc("@item:inlistbox", "Active Alarms"));
 	mAlarmType->addItem(i18nc("@item:inlistbox", "Archived Alarms"));
 	mAlarmType->addItem(i18nc("@item:inlistbox", "Alarm Templates"));
