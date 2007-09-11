@@ -66,13 +66,13 @@ bool DBusHandler::triggerEvent(const QString& eventId)
 bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
                                   const QString& audioUrl, int reminderMins, const QString& recurrence,
-                                  int repeatInterval, int repeatCount)
+                                  int subRepeatInterval, int subRepeatCount)
 {
 	KDateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioUrl), reminderMins, recur, repeatInterval, repeatCount);
+	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioUrl), reminderMins, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
@@ -101,13 +101,13 @@ bool DBusHandler::scheduleMessage(const QString& message, const QString& startDa
 
 bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
                                const QString& audioUrl, int reminderMins, const QString& recurrence,
-                               int repeatInterval, int repeatCount)
+                               int subRepeatInterval, int subRepeatCount)
 {
 	KDateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleFile(KUrl(url), start, lateCancel, flags, bgColor, KUrl(audioUrl), reminderMins, recur, repeatInterval, repeatCount);
+	return scheduleFile(KUrl(url), start, lateCancel, flags, bgColor, KUrl(audioUrl), reminderMins, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
@@ -131,13 +131,13 @@ bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime,
 }
 
 bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
-                                  const QString& recurrence, int repeatInterval, int repeatCount)
+                                  const QString& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	KDateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleCommand(commandLine, start, lateCancel, flags, recur, repeatInterval, repeatCount);
+	return scheduleCommand(commandLine, start, lateCancel, flags, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
@@ -164,13 +164,13 @@ bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& sta
 
 bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
-                                const QString& recurrence, int repeatInterval, int repeatCount)
+                                const QString& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	KDateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, repeatInterval, repeatCount);
+	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
@@ -212,7 +212,7 @@ bool DBusHandler::editNew(const QString& templateName)
 bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                   const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
-                                  int repeatInterval, int repeatCount)
+                                  int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	QColor bg = convertBgColour(bgColor);
@@ -242,7 +242,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start
 		}
 	}
 	return theApp()->scheduleEvent(KAEvent::MESSAGE, message, start, lateCancel, kaEventFlags, bg, fg, font,
-	                               audioFile.url(), -1, reminderMins, recurrence, repeatInterval, repeatCount);
+	                               audioFile.url(), -1, reminderMins, recurrence, subRepeatInterval, subRepeatCount);
 }
 
 /******************************************************************************
@@ -251,14 +251,14 @@ bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start
 bool DBusHandler::scheduleFile(const KUrl& file,
                                const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
-                               int repeatInterval, int repeatCount)
+                               int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	QColor bg = convertBgColour(bgColor);
 	if (!bg.isValid())
 		return false;
 	return theApp()->scheduleEvent(KAEvent::FILE, file.url(), start, lateCancel, kaEventFlags, bg, Qt::black, QFont(),
-	                               audioFile.url(), -1, reminderMins, recurrence, repeatInterval, repeatCount);
+	                               audioFile.url(), -1, reminderMins, recurrence, subRepeatInterval, subRepeatCount);
 }
 
 /******************************************************************************
@@ -266,11 +266,11 @@ bool DBusHandler::scheduleFile(const KUrl& file,
 */
 bool DBusHandler::scheduleCommand(const QString& commandLine,
                                   const KDateTime& start, int lateCancel, unsigned flags,
-                                  const KARecurrence& recurrence, int repeatInterval, int repeatCount)
+                                  const KARecurrence& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString(), -1, 0, recurrence, repeatInterval, repeatCount);
+	                               QString(), -1, 0, recurrence, subRepeatInterval, subRepeatCount);
 }
 
 /******************************************************************************
@@ -279,7 +279,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine,
 bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
                                 const QString& message, const QString& attachments,
                                 const KDateTime& start, int lateCancel, unsigned flags,
-                                const KARecurrence& recurrence, int repeatInterval, int repeatCount)
+                                const KARecurrence& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	if (!fromID.isEmpty())
@@ -310,7 +310,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString(), -1, 0, recurrence, repeatInterval, repeatCount, fromID, addrs, subject, atts);
+	                               QString(), -1, 0, recurrence, subRepeatInterval, subRepeatCount, fromID, addrs, subject, atts);
 }
 
 
@@ -409,12 +409,20 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
 }
 
 bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, 
-                                    const QString& startDateTime, const QString& icalRecurrence)
+                                    const QString& startDateTime, const QString& icalRecurrence,
+				    int& subRepeatInterval)
 {
 	start = convertDateTime(startDateTime);
 	if (!start.isValid())
 		return false;
-	return recurrence.set(icalRecurrence);
+	if (!recurrence.set(icalRecurrence))
+		return false;
+	if (subRepeatInterval  &&  recurrence.type() == KARecurrence::NO_RECUR)
+	{
+		subRepeatInterval = 0;
+		kWarning(5950) << "D-Bus call: no recurrence specified, so sub-repetition ignored";
+	}
+	return true;
 }
 
 bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, const QString& startDateTime,
@@ -459,7 +467,7 @@ bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const KDateTime& s
 		case YEARLY:    type = KARecurrence::ANNUAL_DATE;  break;
 			break;
 		default:
-			kError(5950) << "D-Bus call: invalid repeat type:" << recurType;
+			kError(5950) << "D-Bus call: invalid recurrence type:" << recurType;
 			return false;
 	}
 	recurrence.set(type, recurInterval, recurCount, start, end);
