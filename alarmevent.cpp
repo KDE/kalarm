@@ -1341,20 +1341,12 @@ Alarm* KAEvent::initKCalAlarm(Event& event, int startOffsetSecs, const QStringLi
 					alltypes += FILE_TYPE;
 					// fall through to T_MESSAGE
 				case T_MESSAGE:
-				{
-					QString font;
-					if (!mDefaultFont)
-					{
-						font = mFont.toString();
-						font.replace(',', QString::fromLatin1("\\,"));  // need to quote commas
-					}
 					alarm->setDisplayAlarm(AlarmText::toCalendarText(mText));
 					alarm->setCustomProperty(APPNAME, FONT_COLOUR_PROPERTY,
 						      QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
 										     .arg(mFgColour.name())
-										     .arg(font));
+										     .arg(mDefaultFont ? QString::null : mFont.toString()));
 					break;
-				}
 				case T_COMMAND:
 					if (mCommandScript)
 						alarm->setProcedureAlarm("", mText);
