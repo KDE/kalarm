@@ -1307,9 +1307,6 @@ void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Chang
 		w->mActionCreateTemplate->setEnabled(templat);
 		w->slotSelection();
 	}
-
-	if (change == AlarmResources::Location)
-		EventListModel::alarms()->reload();
 }
 
 /******************************************************************************
