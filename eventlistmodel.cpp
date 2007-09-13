@@ -427,31 +427,43 @@ kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()";
 */
 void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::Change change)
 {
-	if (change != AlarmResources::Colour)
-		return;
-kDebug(5950)<<"EventListModel::slotResourceStatusChanged(Colour)"<<endl;
-	AlarmResources* resources = AlarmResources::instance();
-	int firstRow = -1;
-	for (int row = 0, end = mEvents.count();  row < end;  ++row)
+	switch (change)
 	{
-		if (resources->resourceForIncidence(mEvents[row]->uid()) == resource)
+		case AlarmResources::Colour:
 		{
-			// For efficiency, emit a single signal for each group
-			// of consecutive alarms for the resource, rather than a separate
-			// signal for each alarm.
-			if (firstRow < 0)
-				firstRow = row;
+kDebug(5950)<<"EventListModel::slotResourceStatusChanged(Colour)"<<endl;
+			AlarmResources* resources = AlarmResources::instance();
+			int firstRow = -1;
+			for (int row = 0, end = mEvents.count();  row < end;  ++row)
+			{
+				if (resources->resourceForIncidence(mEvents[row]->uid()) == resource)
+				{
+					// For efficiency, emit a single signal for each group
+					// of consecutive alarms for the resource, rather than a separate
+					// signal for each alarm.
+					if (firstRow < 0)
+						firstRow = row;
+				}
+				else if (firstRow >= 0)
+				{
+					emit dataChanged(index(firstRow, 0), index(row - 1, ColumnCount - 1));
+					firstRow = -1;
+				}
+			}
+			if (firstRow >= 0)
+				emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
+			break;
 		}
-		else if (firstRow >= 0)
-		{
-			emit dataChanged(index(firstRow, 0), index(row - 1, ColumnCount - 1));
-kDebug()<<"=== changed rows: "<<firstRow<<" - "<<row-1<<endl;
-			firstRow = -1;
-		}
+		case AlarmResources::Location:
+			// The resource location has changed, so reload the new resource
+#ifdef __GNUC__
+#warning Only reload the relevant resource
+#endif
+			reload();
+			break;
+		default:
+			break;
 	}
-	if (firstRow >= 0)
-		emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
-if (firstRow >= 0) kDebug()<<"=== changed rows: "<<firstRow<<" - "<<mEvents.count()-1<<endl;
 }
 
 /******************************************************************************
@@ -745,4 +757,9 @@ KCal::Event* EventListFilterModel::event(const QModelIndex& index) const
 KCal::Event* EventListFilterModel::event(int row) const
 {
 	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
+}
+
+void EventListFilterModel::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+	emit dataChanged(mapFromSource(topLeft), mapFromSource(bottomRight));
 }

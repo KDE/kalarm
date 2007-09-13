@@ -110,10 +110,14 @@ class EventListModel : public QAbstractTableModel
 
 class EventListFilterModel : public QSortFilterProxyModel
 {
+		Q_OBJECT
 	public:
 		explicit EventListFilterModel(EventListModel* baseModel, QObject* parent = 0);
 		KCal::Event* event(int row) const;
 		KCal::Event* event(const QModelIndex&) const;
+	
+	private slots:
+		void     slotDataChanged(const QModelIndex&, const QModelIndex&);
 };
 
 #endif // EVENTLISTMODEL_H
