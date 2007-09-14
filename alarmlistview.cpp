@@ -166,11 +166,13 @@ void AlarmListView::selectTimeColumns(bool time, bool timeTo)
 //	}
 }
 
+/*
 void AlarmListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
-/*	for (int col = topLeft.column();  col < bottomRight.column();  ++col)
+	for (int col = topLeft.column();  col < bottomRight.column();  ++col)
 	{
 		if (col != header()->resizeMode(col) == QHeaderView::ResizeToContents)
 			resizeColumnToContents(col);
-	}*/
+	}
 }
+*/

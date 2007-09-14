@@ -38,8 +38,8 @@ class AlarmListView : public EventListView
 		void              selectTimeColumns(bool time, bool timeTo);
 		QList<int>        columnOrder() const;
 
-	protected slots:
-		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+//	protected slots:
+//		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 };
 
 #endif // ALARMLISTVIEW_H

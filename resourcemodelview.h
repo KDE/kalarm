@@ -46,6 +46,7 @@ class ResourceModel : public QAbstractListModel
 		virtual bool     setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole);
 		virtual Qt::ItemFlags flags(const QModelIndex&) const;
 		AlarmResource*   resource(const QModelIndex&) const;
+		void             removeResource(AlarmResource*);
 		void             notifyChange(const QModelIndex&);
 
 	private slots:

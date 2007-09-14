@@ -70,6 +70,7 @@ class EventListModel : public QAbstractTableModel
 		void                  updateEvent(KCal::Event* oldEvent, KCal::Event* newEvent);
 		void                  removeEvent(const KCal::Event* event) { removeEvent(mEvents.indexOf(const_cast<KCal::Event*>(event))); }
 		void                  removeEvent(const QString& eventId)   { removeEvent(findEvent(eventId)); }
+		void                  removeResource(AlarmResource*);
 		static KCal::Event*   event(const QModelIndex&);
 
 	public slots:

@@ -55,8 +55,6 @@ class ResourceSelector : public QFrame
 	void  setContextMenu(KMenu*);
 
     signals:
-	/** Signal that a resource has been added, removed or its active status changed. */
-	void  resourcesChanged();
 	void  resized(const QSize& oldSize, const QSize& newSize);
 
     protected:
