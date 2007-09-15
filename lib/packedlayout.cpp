@@ -142,13 +142,17 @@ int PackedLayout::arrange(const QRect& rect, bool set) const
 				switch (mAlignment)
 				{
 					case Qt::AlignJustify:
-						if (n > 1)
+						if (n == 1)
+						{
+							items[i]->setGeometry(posn[i]);
+							++i;
+						}
+						else if (n > 1)
 						{
 							for (int j = 0;  i < last;  ++j, ++i)
 								items[i]->setGeometry(QRect(QPoint(posn[i].x() + (free * j)/(n - 1), y), posn[i].size()));
-							break;
 						}
-						// fall through to AlignHCenter
+						break;
 					case Qt::AlignHCenter:
 						free /= 2;
 						// fall through to AlignRight

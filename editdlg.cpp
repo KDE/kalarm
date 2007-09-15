@@ -59,6 +59,7 @@
 #include "latecancel.h"
 #include "lineedit.h"
 #include "mainwindow.h"
+#include "packedlayout.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
@@ -331,7 +332,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box = new KHBox(templateTimeBox);
 		box->setMargin(0);
 		box->setSpacing(spacingHint());
-		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_radio_TimeFromNow(), box);
+		mTemplateUseTimeAfter = new RadioButton(i18nc("@option:radio", "Time from now:"), box);
 		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
 		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
 		mTemplateUseTimeAfter->setWhatsThis(i18nc("@info:whatsthis",
@@ -371,17 +372,16 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	mLateCancel = new LateCancelSelector(true, mainPage);
 	topLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
-	hlayout = new QHBoxLayout();
-	topLayout->addLayout(hlayout);
+	PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
+	playout->setSpacing(2*spacingHint());
+	topLayout->addLayout(playout);
 
 	// Acknowledgement confirmation required - default = no confirmation
 	CheckBox* confirmAck = type_createConfirmAckCheckbox(mainPage);
 	if (confirmAck)
 	{
 		confirmAck->setFixedSize(confirmAck->sizeHint());
-		hlayout->addWidget(confirmAck);
-		hlayout->addSpacing(2*spacingHint());
-		hlayout->addStretch();
+		playout->addWidget(confirmAck);
 	}
 
 	if (theApp()->korganizerEnabled())
@@ -390,7 +390,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mainPage);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
 		mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
-		hlayout->addWidget(mShowInKorganizer);
+		playout->addWidget(mShowInKorganizer);
 	}
 
 	setButtonWhatsThis(Ok, i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));

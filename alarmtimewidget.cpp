@@ -44,7 +44,6 @@ static const QTime time_23_59(23, 59);
 
 const int AlarmTimeWidget::maxDelayTime = 99*60 + 59;    // < 100 hours
 
-QString AlarmTimeWidget::i18n_radio_TimeFromNow()   { return i18nc("@option:radio", "Time from now:"); }
 QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 {
 	return i18nc("@info/plain", "Enter the length of time (in hours and minutes) after "
@@ -182,7 +181,7 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 	}
 	else
 	{
-		mAfterTime = new CheckBox(i18n_radio_TimeFromNow(), topWidget);
+		mAfterTime = new CheckBox(i18nc("@option:check", "Time from now:"), topWidget);
 		connect(mAfterTime, SIGNAL(toggled(bool)), SLOT(slotAfterTimeToggled(bool)));
 		mAfterTime->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
 	}
