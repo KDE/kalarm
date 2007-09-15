@@ -272,6 +272,18 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	hlayout->setMargin(0);
 	topLayout->addLayout(hlayout);
 
+	// Recurrence type display
+	KHBox* recurBox = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
+	recurBox->setMargin(0);
+	recurBox->setSpacing(spacingHint());
+	label = new QLabel(i18nc("@label", "Recurrence:"), recurBox);
+	label->setFixedSize(label->sizeHint());
+	mRecurrenceText = new QLabel(recurBox);
+	recurBox->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>How often the alarm recurs.</para>"
+	      "<para>The times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition.</para>"));
+	recurBox->setFixedHeight(recurBox->sizeHint().height());
+
 	// Date and time entry
 	if (mTemplate)
 	{
@@ -335,27 +347,17 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
+		recurBox->setParent(templateTimeBox);
+		grid->addWidget(recurBox, 2, 0, 1, -1, Qt::AlignLeft);
+
 		hlayout->addStretch();
 	}
 	else
 	{
-		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
+		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage, recurBox);
 		connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
-
-	// Recurrence type display
-	KHBox* box = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
-	box->setMargin(0);
-	box->setSpacing(spacingHint());
-	label = new QLabel(i18nc("@label", "Recurrence:"), box);
-	label->setFixedSize(label->sizeHint());
-	mRecurrenceText = new QLabel(box);
-	box->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>How often the alarm recurs.</para>"
-	      "<para>The times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition.</para>"));
-	box->setFixedHeight(box->sizeHint().height());
-	topLayout->addWidget(box);
 
 	// Reminder
 	mReminder = createReminder(mainPage);

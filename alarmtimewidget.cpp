@@ -55,28 +55,28 @@ QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 /******************************************************************************
 * Construct a widget with a group box and title.
 */
-AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent)
+AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent, QWidget* custom)
 	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	init(mode, groupBoxTitle);
+	init(mode, custom, groupBoxTitle);
 }
 
 /******************************************************************************
 * Construct a widget without a group box or title.
 */
-AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
+AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, QWidget* custom)
 	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	init(mode);
+	init(mode, custom);
 }
 
-void AlarmTimeWidget::init(int mode, const QString& title)
+void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 {
 	static const QString recurText = i18nc("@info/plain",
 	                                       "If a recurrence is configured, the start date/time will be adjusted "
@@ -173,13 +173,21 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 		topLayout->addWidget(mNoTimeZone, 2, 3, Qt::AlignLeft);
 	}
 
-	// 'Time from now' radio button/label
-	mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer for time interval:") : i18n_radio_TimeFromNow()), topWidget);
-	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
-	mAfterTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now.")
-	                                         : i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
-	mButtonGroup->addButton(mAfterTimeRadio);
-	topLayout->addWidget(mAfterTimeRadio, row, 0, Qt::AlignLeft);
+	// 'Time from now' radio button/checkbox
+	if (mDeferring)
+	{
+		mAfterTime = new RadioButton(i18nc("@option:radio", "Defer for time interval:"), topWidget);
+		mAfterTime->setWhatsThis(i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now."));
+		mButtonGroup->addButton(mAfterTime);
+	}
+	else
+	{
+		mAfterTime = new CheckBox(i18n_radio_TimeFromNow(), topWidget);
+		connect(mAfterTime, SIGNAL(toggled(bool)), SLOT(slotAfterTimeToggled(bool)));
+		mAfterTime->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
+	}
+	mAfterTime->setFixedSize(mAfterTime->sizeHint());
+	topLayout->addWidget(mAfterTime, row, 0, Qt::AlignLeft);
 
 	// Delay time spin box
 	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
@@ -188,13 +196,25 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
 	mDelayTimeEdit->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
 	                                        : i18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
-	mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
+	if (mDeferring)
+		static_cast<RadioButton*>(mAfterTime)->setFocusWidget(mDelayTimeEdit);
+	else
+		static_cast<CheckBox*>(mAfterTime)->setFocusWidget(mDelayTimeEdit);
 	topLayout->addWidget(mDelayTimeEdit, row, 1, Qt::AlignLeft);
+
+	// Custom widget
+	if (custom)
+	{
+		custom->setParent(this);
+		topLayout->addWidget(custom, row, 3, Qt::AlignLeft);
+	}
 
 	topLayout->setColumnStretch(2, 1);
 
 	// Initialise the radio button statuses
 	mDateTimeRadio->setChecked(true);
+	if (!mDeferring)
+		slotAfterTimeToggled(false);
 
 	// Timeout every minute to update alarm time fields.
 	MinuteTimer::connect(this, SLOT(slotTimer()));
@@ -210,12 +230,14 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 	mDateTimeRadio->setReadOnly(ro);
 	mDateEdit->setReadOnly(ro);
 	mTimeEdit->setReadOnly(ro);
-	if (!mDeferring)
+	if (mDeferring)
+		static_cast<RadioButton*>(mAfterTime)->setReadOnly(ro);
+	else
 	{
+		static_cast<CheckBox*>(mAfterTime)->setReadOnly(ro);
 		mTimeZone->setReadOnly(ro);
 		mNoTimeZone->setReadOnly(ro);
 	}
-	mAfterTimeRadio->setReadOnly(ro);
 	mDelayTimeEdit->setReadOnly(ro);
 }
 
@@ -224,8 +246,11 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 */
 void AlarmTimeWidget::selectTimeFromNow(int minutes)
 {
-	mAfterTimeRadio->setChecked(true);
-//	mButtonGroup->slotButtonSet(mAfterTimeRadio);
+	if (mDeferring)
+		static_cast<RadioButton*>(mAfterTime)->setChecked(true);
+	else
+		static_cast<CheckBox*>(mAfterTime)->setChecked(true);
+	mAfterTime->setChecked(true);
 	if (minutes > 0)
 		mDelayTimeEdit->setValue(minutes);
 }
@@ -247,7 +272,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 		*errorWidget = 0;
 	KDateTime now = KDateTime::currentUtcDateTime();
 	now.setTime(QTime(now.time().hour(), now.time().minute(), 0));
-	if (mAfterTimeRadio->isChecked())
+	if (mAfterTime->isChecked())
 	{
 		if (!mDelayTimeEdit->isValid())
 		{
@@ -524,7 +549,7 @@ void AlarmTimeWidget::slotTimer()
 		setMaxDelayTime(now);
 	}
 
-	if (mAfterTimeRadio->isChecked())
+	if (mAfterTime->isChecked())
 		delayTimeChanged(mDelayTimeEdit->value());
 	else
 		dateTimeChanged();
@@ -546,8 +571,23 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 	int minutes = (KDateTime::currentUtcDateTime().secsTo(at) + 59) / 60;
 	if (minutes <= 0)
 		mDelayTimeEdit->setValid(true);
-	mDelayTimeEdit->setEnabled(mAfterTimeRadio->isChecked());
+	if (mDeferring)
+		mDelayTimeEdit->setEnabled(mAfterTime->isChecked());
 	setAnyTime();
+}
+
+/******************************************************************************
+* Called after the mAfterTime checkbox has been toggled.
+*/
+void AlarmTimeWidget::slotAfterTimeToggled(bool on)
+{
+	if (on)
+		mDateTimeRadio->setChecked(true);
+	mDateTimeRadio->setEnabled(!on);
+	mDateRadio->setEnabled(!on);
+	mDateEdit->setEnabled(!on);
+	mTimeEdit->setEnabled(!on);
+	mDelayTimeEdit->setEnabled(on);
 }
 
 /******************************************************************************
@@ -555,7 +595,7 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 */
 void AlarmTimeWidget::slotTimeZoneToggled(bool on)
 {
-	mTimeZone->setEnabled(!on && !mAfterTimeRadio->isChecked());
+	mTimeZone->setEnabled(!on);
 }
 
 /******************************************************************************
