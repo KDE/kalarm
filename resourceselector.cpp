@@ -454,10 +454,7 @@ void ResourceSelector::showInfo()
 {
 	AlarmResource* resource = currentResource();
 	if (resource)
-	{
-		QString txt = "<qt>" + resource->infoText() + "</qt>";
-		KMessageBox::information(this, txt);
-	}
+		KMessageBox::information(this, resource->infoText());
 }
 
 /******************************************************************************

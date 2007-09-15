@@ -314,7 +314,7 @@ QString AlarmResource::infoText() const
 	QString perms = readOnly() ? i18nc("@info/plain", "Read-only") : i18nc("@info/plain", "Read-write");
 	QString enabled = isActive() ? i18nc("@info/plain", "Enabled") : i18nc("@info/plain", "Disabled");
 	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain Parameter in 'Default resource: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default resource: Yes/No'", "No");
-	return i18nc("@info/plain",
+	return i18nc("@info",
 	    "<title>%1</title>"
 	    "<para>Resource type: %2<br />"
 	    "Contents: %3<br />"
