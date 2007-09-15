@@ -1297,18 +1297,17 @@ FileType fileType(const QString& mimetype)
 	int slash = mimetype.indexOf(QLatin1Char('/'));
 	if (slash < 0)
 		return Unknown;
-	QString type = mimetype.mid(slash + 1);
-	const char* typel = type.toLatin1();
+	QByteArray type = mimetype.mid(slash + 1).toLatin1();
 	if (mimetype.startsWith(QLatin1String("application")))
 	{
 		for (int i = 0;  applicationTypes[i];  ++i)
-			if (!strcmp(typel, applicationTypes[i]))
+			if (!strcmp(type, applicationTypes[i]))
 				return TextApplication;
 	}
 	else if (mimetype.startsWith(QLatin1String("text")))
 	{
 		for (int i = 0;  formattedTextTypes[i];  ++i)
-			if (!strcmp(typel, formattedTextTypes[i]))
+			if (!strcmp(type, formattedTextTypes[i]))
 				return TextFormatted;
 		return TextPlain;
 	}
