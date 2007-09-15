@@ -77,6 +77,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 
 	private slots:
 		void            slotAlarmTypeChanged(int index);
+		void            slotPickFile();
 
 	private:
 		void            setSoundPicker();
