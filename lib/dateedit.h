@@ -38,7 +38,7 @@ class QKeyEvent;
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
-class DateEdit : public KDateEdit
+class DateEdit : public KPIM::KDateEdit
 {
 		Q_OBJECT
 	public:
