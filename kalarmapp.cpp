@@ -1706,7 +1706,6 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		if (alarm  &&  alarm->dateTime().isValid())
 		{
 			QString dateTime = alarm->dateTime().formatLocale();
-#warning Time wrong in command log file
 			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
 		}
 		else
