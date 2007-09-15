@@ -56,7 +56,7 @@ FontColourButton::FontColourButton(QWidget* parent)
 
 	// Font and colour sample display
 	mSample = new QLineEdit(this);
-	mSample->setMinimumHeight(qMax(mSample->fontMetrics().lineSpacing(), mButton->height()));
+	mSample->setMinimumHeight(qMax(mSample->fontMetrics().lineSpacing(), mButton->height()*3/2));
 	mSample->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
 	mSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
 	mSample->setCursorPosition(0);
