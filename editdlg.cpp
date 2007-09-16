@@ -1022,8 +1022,6 @@ void EditAlarmDlg::slotEditDeferral()
 */
 void EditAlarmDlg::slotShowMainPage()
 {
-#warning Does the focus need to be set when reverting to main page?
-//	slotAlarmTypeChanged(0);
 	if (!mMainPageShown)
 	{
 		if (mTemplateName)
