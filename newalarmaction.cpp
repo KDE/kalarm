@@ -31,7 +31,7 @@
 
 
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
-	: KActionMenu(KIcon("new"), label, parent)
+	: KActionMenu(KIcon("document-new"), label, parent)
 {
 	setShortcuts(KStandardShortcut::openNew());
 	QAction* act = menu()->addAction(KIcon(QLatin1String("??")), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@item:inmenu", "Display Alarm")));
