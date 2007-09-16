@@ -180,12 +180,6 @@ MainWindow::MainWindow(bool restored)
 	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotDoubleClicked(const QModelIndex&)));
 	connect(mListView, SIGNAL(rightButtonClicked(const QPoint&)), SLOT(slotRightButtonClicked(const QPoint&)));
 	connect(mListView->header(), SIGNAL(sectionMoved(int,int,int)), SLOT(columnsReordered()));
-#ifdef __GNUC__
-#warning Try to avoid reloading the entire list when resources change?
-#warning Model should be told to reload independently of resource selector?
-#endif
-//	connect(mResourceSelector, SIGNAL(resourcesChanged()), EventListModel::alarms(), SLOT(reload()));
-//	connect(resources, SIGNAL(calendarChanged()), EventListModel::alarms(), SLOT(reload()));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
 	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
