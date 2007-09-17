@@ -24,19 +24,27 @@
 #include <QMouseEvent>
 #include <QApplication>
 
+#include <kconfiggroup.h>
+
 #include "eventlistmodel.h"
 #include "alarmlistfiltermodel.h"
 #include "alarmlistview.moc"
 
 
-AlarmListView::AlarmListView(QWidget* parent)
-	: EventListView(parent)
+AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
+	: EventListView(parent),
+	  mConfigGroup(configGroup)
 {
+	connect(header(), SIGNAL(sectionMoved(int, int, int)), SLOT(sectionMoved()));
 }
 
 void AlarmListView::setModel(QAbstractItemModel* model)
 {
 	EventListView::setModel(model);
+	KConfigGroup config(KGlobal::config(), mConfigGroup);
+	QByteArray settings = config.readEntry("ListHead", QByteArray());
+	if (!settings.isEmpty())
+		header()->restoreState(settings);
 	header()->setMovable(true);
 	header()->setStretchLastSection(false);
 	header()->setResizeMode(EventListModel::TimeColumn, QHeaderView::ResizeToContents);
@@ -51,78 +59,15 @@ void AlarmListView::setModel(QAbstractItemModel* model)
 	header()->resizeSection(EventListModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
 }
 
-void AlarmListView::setColumnOrder(const QList<int>& order)
-{
-	// Set the column order
-	if (order.count() >= AlarmListFilterModel::ColumnCount)
-	{
-		// The column order is specified
-		int posn[AlarmListFilterModel::ColumnCount];
-		int i;
-		for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
-			posn[i] = -1;
-		for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
-		{
-			int ord = order[i];
-			if (ord < AlarmListFilterModel::ColumnCount  &&  ord >= 0)
-				posn[i] = ord;
-		}
-		bool ok = true;
-		for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
-			if (posn[i] < 0)
-				ok = false;    // no column is specified at this position
-		if (ok  &&  posn[EventListModel::TextColumn] != EventListModel::TextColumn)
-		{
-			// Shift the message column to be last, since otherwise
-			// column widths get screwed up.
-			int messageCol = posn[EventListModel::TextColumn];
-			for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
-				if (posn[i] > messageCol)
-					--posn[i];
-			posn[EventListModel::TextColumn] = EventListModel::TextColumn;
-		}
-		if (ok)
-		{
-			// Check whether the columns need to be reordered
-			for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
-				if (posn[i] != i)
-				{
-					ok = false;
-					break;
-				}
-			if (!ok)
-			{
-				// Reorder the columns
-				for (i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
-				{
-#ifdef __GNUC__
-#warning Reorder the columns
-#endif
-			//		int j = posn.indexOf(i);
-			//		moveSection(j, i);
-				}
-			}
-		}
-	}
-}
-
 /******************************************************************************
-* Return the column order.
+* Called when the column order is changed.
+* Save the new order for restoration on program restart.
 */
-QList<int> AlarmListView::columnOrder() const
+void AlarmListView::sectionMoved()
 {
-	int order[AlarmListFilterModel::ColumnCount];
-	QHeaderView* head = header();
-	order[EventListModel::TimeColumn]   = head->visualIndex(EventListModel::TimeColumn);
-	order[EventListModel::TimeToColumn] = head->visualIndex(EventListModel::TimeToColumn);
-	order[EventListModel::RepeatColumn] = head->visualIndex(EventListModel::RepeatColumn);
-	order[EventListModel::ColourColumn] = head->visualIndex(EventListModel::ColourColumn);
-	order[EventListModel::TypeColumn]   = head->visualIndex(EventListModel::TypeColumn);
-	order[EventListModel::TextColumn]   = head->visualIndex(EventListModel::TextColumn);
-	QList<int> orderList;
-	for (int i = 0;  i < AlarmListFilterModel::ColumnCount;  ++i)
-		orderList += order[i];
-	return orderList;
+	KConfigGroup config(KGlobal::config(), mConfigGroup);
+	config.writeEntry("ListHead", header()->saveState());
+	config.sync();
 }
 
 /******************************************************************************
