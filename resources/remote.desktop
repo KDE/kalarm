@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Alarms in Remote File
 Name[be]=Каляндар у аддаленым файле
 Name[bg]=Аларми в отдалечен файл
@@ -21,6 +20,6 @@ Name[x-test]=xxAlarms in Remote Filexx
 Name[zh_TW]=遠端檔案的鬧鐘
 X-KDE-Library=kalarm_remote
 Type=Service
-ServiceTypes=KResources/Plugin
+X-KDE-ServiceTypes=KResources/Plugin
 X-KDE-ResourceFamily=alarms
 X-KDE-ResourceType=remote

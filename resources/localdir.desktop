@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Alarms in Local Directory
 Name[be]=Каляндар у мясцовай тэчцы
 Name[bg]=Аларми в локална директория
@@ -21,6 +20,6 @@ Name[x-test]=xxAlarms in Local Directoryxx
 Name[zh_TW]=本地目錄中的鬧鐘
 X-KDE-Library=kalarm_localdir
 Type=Service
-ServiceTypes=KResources/Plugin
+X-KDE-ServiceTypes=KResources/Plugin
 X-KDE-ResourceFamily=alarms
 X-KDE-ResourceType=localdir

@@ -1,6 +1,5 @@
 # KDE Config File
 [Desktop Entry]
-Encoding=UTF-8
 Name=Alarms
 Name[bg]=Аларми
 Name[de]=Erinnerungen
@@ -19,6 +18,5 @@ Name[sv]=Alarm
 Name[x-test]=xxAlarmsxx
 Name[zh_TW]=鬧鐘
 Type=Service
-ServiceTypes=KResources/Manager
-
+X-KDE-ServiceTypes=KResources/Manager
 X-KDE-ResourceFamily=alarms
