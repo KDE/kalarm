@@ -40,7 +40,6 @@
 #include <ktoolinvocation.h>
 
 #include "alarmguiiface.h"
-#include "notifyinterface.h"
 #include "resources/alarmresources.h"
 #include "alarmdaemon.moc"
 
@@ -58,8 +57,9 @@ const char* CLIENT_KEY       = "Client";
 const char* DCOP_OBJECT_KEY  = "DCOP object";
 const char* START_CLIENT_KEY = "Start";
 
-static const char* KALARM_DBUS_SERVICE = "org.kde.kalarm";
-static const char* NOTIFY_DBUS_OBJECT  = "/notify";    // D-Bus object path of KAlarm's notification interface
+static const char* KALARM_DBUS_SERVICE   = "org.kde.kalarm";
+static const char* NOTIFY_DBUS_OBJECT    = "/notify";    // D-Bus object path of KAlarm's notification interface
+static const char* NOTIFY_DBUS_INTERFACE = "org.kde.kalarm.notify";
 
 
 AlarmDaemon::EventsMap  AlarmDaemon::mEventsHandled;
@@ -143,10 +143,27 @@ void AlarmDaemon::quit()
 	exit(0);
 }
 
-OrgKdeKalarmNotifyInterface* AlarmDaemon::kalarmNotifyDBus()
+/******************************************************************************
+* Open the D-Bus connection to KAlarm's notification interface.
+*
+* IMPORTANT NOTE:
+*       QDBus calls need to be used directly instead of using the Qt
+*       auto-generated interface class. This is because the latter doesn't
+*       return errors, for example when the /notify object hasn't yet been
+*       created by KAlarm.
+*/
+QDBusInterface* AlarmDaemon::kalarmNotifyDBus()
 {
 	if (!mDBusNotify)
-		mDBusNotify = new org::kde::kalarm::notify(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, QDBusConnection::sessionBus());
+	{
+		mDBusNotify = new QDBusInterface(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, NOTIFY_DBUS_INTERFACE);
+		if (!mDBusNotify->isValid())
+		{
+			kError(5900) <<"AlarmDaemon: KAlarm D-Bus notification interface not available:" << mDBusNotify->lastError().message();
+			delete mDBusNotify;
+			mDBusNotify = 0;
+		}
+	}
 	return mDBusNotify;
 }
 
@@ -159,7 +176,7 @@ bool AlarmDaemon::checkDBusResult(const char* funcname)
 	QDBusError err = mDBusNotify->lastError();
 	if (!err.isValid())
 		return true;    // no error
-	kError(5950) <<"AlarmDaemon:" << funcname <<"() D-Bus call failed:" << err.message();
+	kError(5900) <<"AlarmDaemon:" << funcname <<"() D-Bus call failed:" << err.message();
 	return false;
 }
 
@@ -302,9 +319,12 @@ void AlarmDaemon::reloadResource(AlarmResource* resource, bool reset)
 */
 void AlarmDaemon::cacheDownloaded(AlarmResource* resource)
 {
-	kalarmNotifyDBus()->cacheDownloaded(resource->identifier());
-	checkDBusResult("cacheDownloaded");
-	kDebug(5900) <<"AlarmDaemon::cacheDownloaded(" << resource->identifier() <<")";
+	if (kalarmNotifyDBus())
+	{
+		kalarmNotifyDBus()->call("cacheDownloaded", resource->identifier());
+		checkDBusResult("cacheDownloaded");
+		kDebug(5900) <<"AlarmDaemon::cacheDownloaded(" << resource->identifier() <<")";
+	}
 }
 
 /******************************************************************************
@@ -414,8 +434,11 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 	}
 
 	// Notify the client of whether the call succeeded.
-	kalarmNotifyDBus()->registered(false, result);
-	checkDBusResult("registered");
+	if (kalarmNotifyDBus())
+	{
+		kalarmNotifyDBus()->call("registered", false, result);
+		checkDBusResult("registered");
+	}
 	kDebug(5900) <<"AlarmDaemon::registerApp() ->" << result;
 }
 
@@ -574,22 +597,10 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 	kDebug(5900) <<"AlarmDaemon::notifyEvent(" << eventID <<"): notification type=" << mClientStart;
 	QString id = QLatin1String("ad:") + eventID;    // prefix to indicate that the notification if from the daemon
 
-	// Check if the client application is running and ready to receive notification
+	// Check if the client application is running, and if so, whether it is ready
+	// to receive notification (i.e. our D-Bus interface has been created).
 	bool registered = isClientRegistered();
-	bool ready = registered;
-	if (registered)
-	{
-		// It's running, but check if it has created our D-Bus interface yet
-#ifdef __GNUC__
-#warning Check if KAlarm D-Bus interface has been created yet
-#endif
-#if 0
-		DCOPCStringList objects = kapp->dcopClient()->remoteObjects(mClientName);
-		if (objects.indexOf(mClientDBusObj) < 0)
-			ready = false;
-#endif
-	}
-	if (!ready)
+	if (!registered  ||  !kalarmNotifyDBus())
 	{
 		// KAlarm is not running, or is not yet ready to receive notifications.
 		if (!mClientStart)
@@ -615,9 +626,12 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 	else
 	{
 		// Notify the client by telling it the event ID
-		kalarmNotifyDBus()->handleEvent(id);
-		if (!checkDBusResult("handleEvent"))
-			return;
+		if (kalarmNotifyDBus())
+		{
+			kalarmNotifyDBus()->call("handleEvent", id);
+			if (!checkDBusResult("handleEvent"))
+				return;
+		}
 	}
 	setEventPending(event, alarmtimes);
 }
@@ -669,8 +683,11 @@ void AlarmDaemon::notifyCalStatus()
 		KAlarmd::CalendarStatus change = unloaded ? KAlarmd::CALENDAR_UNAVAILABLE
 		                               : mEnabled ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED;
 		kDebug(5900) <<"AlarmDaemon::notifyCalStatus() sending:" << mClientName <<" ->" << change;
-		kalarmNotifyDBus()->alarmDaemonUpdate(change);
-		checkDBusResult("alarmDaemonUpdate");
+		if (kalarmNotifyDBus())
+		{
+			kalarmNotifyDBus()->call("alarmDaemonUpdate", change);
+			checkDBusResult("alarmDaemonUpdate");
+		}
 	}
 }
 
