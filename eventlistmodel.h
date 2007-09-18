@@ -65,6 +65,7 @@ class EventListModel : public QAbstractTableModel
 		QModelIndex           eventIndex(const KCal::Event*) const;
 		QModelIndex           eventIndex(const QString& eventId) const;
 		void                  addEvent(KCal::Event*);
+		void                  addEvents(const KCal::Event::List&);
 		void                  updateEvent(KCal::Event* event)       { updateEvent(mEvents.indexOf(event)); }
 		void                  updateEvent(const QString& eventId)   { updateEvent(findEvent(eventId)); }
 		void                  updateEvent(KCal::Event* oldEvent, KCal::Event* newEvent);

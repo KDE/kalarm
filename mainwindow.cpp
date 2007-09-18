@@ -181,9 +181,6 @@ MainWindow::MainWindow(bool restored)
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
 	initActions();
 
-#ifdef __GNUC__
-#warning Does not save to correct group in config file
-#endif
 	setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
 	mWindowList.append(this);
 	if (mWindowList.count() == 1  &&  Daemon::isDcopHandlerReady())
@@ -803,11 +800,7 @@ void MainWindow::slotShowArchived()
 */
 void MainWindow::slotImportAlarms()
 {
-	if (AlarmCalendar::importAlarms(this))
-		EventListModel::alarms()->reload();
-#ifdef __GNUC__
-#warning Is reload necessary, or can signal tell EventListModel?
-#endif
+	AlarmCalendar::importAlarms(this);
 }
 
 /******************************************************************************

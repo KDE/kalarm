@@ -423,7 +423,6 @@ void EventListModel::slotUpdateWorkingHours()
 
 /******************************************************************************
 * Called when a resource status has changed.
-* If the resource's display colour has changed, update all its alarms.
 */
 void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::Change change)
 {
@@ -587,6 +586,21 @@ void EventListModel::addEvent(KCal::Event* event)
 	int row = mEvents.count();
 	beginInsertRows(QModelIndex(), row, row);
 	mEvents += event;
+	endInsertRows();
+}
+
+/******************************************************************************
+* Add an event to the list.
+*/
+void EventListModel::addEvents(const KCal::Event::List& events)
+{
+	KCal::Event::List evs;
+	for (int i = 0, count = events.count();  i < count;  ++i)
+		if (KAEvent(events[i]).category() & mStatus)
+			evs += events[i];
+	int row = mEvents.count();
+	beginInsertRows(QModelIndex(), row, row + evs.count() - 1);
+	mEvents += evs;
 	endInsertRows();
 }
 
