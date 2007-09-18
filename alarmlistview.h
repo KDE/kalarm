@@ -23,6 +23,7 @@
 
 #include "kalarm.h"
 
+#include <QByteArray>
 #include <kcal/event.h>
 
 #include "eventlistview.h"
@@ -32,14 +33,17 @@ class AlarmListView : public EventListView
 {
 		Q_OBJECT
 	public:
-		explicit AlarmListView(QWidget* parent = 0);
+		explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = 0);
 		virtual void      setModel(QAbstractItemModel*);
-		void              setColumnOrder(const QList<int>& order);
 		void              selectTimeColumns(bool time, bool timeTo);
-		QList<int>        columnOrder() const;
 
-	protected slots:
-		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+//	protected slots:
+//		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
+	private slots:
+		void              sectionMoved();
+
+	private:
+		QByteArray        mConfigGroup;
 };
 
 #endif // ALARMLISTVIEW_H

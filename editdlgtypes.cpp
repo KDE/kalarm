@@ -69,23 +69,6 @@ enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 
 
 /*=============================================================================
-= Class PickAlarmFileRadio
-=============================================================================*/
-class PickAlarmFileRadio : public PickFileRadio
-{
-    public:
-	PickAlarmFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
-		: PickFileRadio(text, group, parent) { }
-	virtual QString pickFile()    // called when browse button is pressed to select a file to display
-	{
-		return KAlarm::browseFile(i18nc("@title:window", "Choose Text or Image File to Display"), mDefaultDir, fileEdit()->text(),
-		                          QString(), KFile::ExistingOnly, parentWidget());
-	}
-    private:
-	QString mDefaultDir;   // default directory for file browse button
-};
-
-/*=============================================================================
 = Class PickLogFileRadio
 =============================================================================*/
 class PickLogFileRadio : public PickFileRadio
@@ -198,6 +181,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a text or image file to display."));
+	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
 
 	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(parent);
@@ -512,6 +496,17 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 	}
 	if (focus)
 		focus->setFocus();
+}
+
+/******************************************************************************
+* Called when the file browse button is pressed to select a file to display.
+*/
+void EditDisplayAlarmDlg::slotPickFile()
+{
+	static QString defaultDir;   // default directory for file browse button
+	QString file = KAlarm::browseFile(i18nc("@title:window", "Choose Text or Image File to Display"),
+	                                  defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
+	mFileMessageEdit->setText(file);
 }
 
 /******************************************************************************

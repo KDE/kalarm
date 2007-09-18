@@ -21,8 +21,8 @@
       <arg name="audioFile" type="s" direction="in"/>
       <arg name="reminderMins" type="i" direction="in"/>
       <arg name="recurrence" type="s" direction="in"/>
-      <arg name="repeatInterval" type="i" direction="in"/>
-      <arg name="repeatCount" type="i" direction="in"/>
+      <arg name="subRepeatInterval" type="i" direction="in"/>
+      <arg name="subRepeatCount" type="i" direction="in"/>
     </method>
     <method name="scheduleMessage">
       <arg type="b" direction="out"/>
@@ -64,8 +64,8 @@
       <arg name="audioFile" type="s" direction="in"/>
       <arg name="reminderMins" type="i" direction="in"/>
       <arg name="recurrence" type="s" direction="in"/>
-      <arg name="repeatInterval" type="i" direction="in"/>
-      <arg name="repeatCount" type="i" direction="in"/>
+      <arg name="subRepeatInterval" type="i" direction="in"/>
+      <arg name="subRepeatCount" type="i" direction="in"/>
     </method>
     <method name="scheduleFile">
       <arg type="b" direction="out"/>
@@ -100,8 +100,8 @@
       <arg name="lateCancel" type="i" direction="in"/>
       <arg name="flags" type="u" direction="in"/>
       <arg name="recurrence" type="s" direction="in"/>
-      <arg name="repeatInterval" type="i" direction="in"/>
-      <arg name="repeatCount" type="i" direction="in"/>
+      <arg name="subRepeatInterval" type="i" direction="in"/>
+      <arg name="subRepeatCount" type="i" direction="in"/>
     </method>
     <method name="scheduleCommand">
       <arg type="b" direction="out"/>
@@ -134,8 +134,8 @@
       <arg name="lateCancel" type="i" direction="in"/>
       <arg name="flags" type="u" direction="in"/>
       <arg name="recurrence" type="s" direction="in"/>
-      <arg name="repeatInterval" type="i" direction="in"/>
-      <arg name="repeatCount" type="i" direction="in"/>
+      <arg name="subRepeatInterval" type="i" direction="in"/>
+      <arg name="subRepeatCount" type="i" direction="in"/>
     </method>
     <method name="scheduleEmail">
       <arg type="b" direction="out"/>

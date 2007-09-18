@@ -311,6 +311,20 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		  KCal::SortDirection sortDirection = KCal::SortDirectionAscending);
 
 		/**
+		   Return a sorted, unfiltered list of all Events for one resource.
+		   Call this in preference to AlarmResource::rawEvents(), to ensure
+		   that the overall events index is updated.
+
+		   @param resource the AlarmResource to retrieve events for
+		   @param sortField specifies the EventSortField.
+		   @param sortDirection specifies the SortDirection.
+		   @return the list of all unfiltered Events sorted as specified.
+		*/
+		virtual KCal::Event::List rawEvents(AlarmResource* resource,
+		  KCal::EventSortField sortField = KCal::EventSortUnsorted,
+		  KCal::SortDirection sortDirection = KCal::SortDirectionAscending);
+
+		/**
 		   Return an unfiltered list of all Events which occur on the given
 		   timestamp.
 

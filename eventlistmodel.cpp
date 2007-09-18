@@ -339,7 +339,7 @@ void EventListModel::slotUpdateTimeTo()
 */
 void EventListModel::slotUpdateArchivedColour(const QColor&)
 {
-kDebug(5950)<<"EventListModel::slotUpdateArchivedColour()";
+	kDebug(5950) << "EventListModel::slotUpdateArchivedColour()";
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -366,7 +366,7 @@ kDebug(5950)<<"EventListModel::slotUpdateArchivedColour()";
 */
 void EventListModel::slotUpdateDisabledColour(const QColor&)
 {
-kDebug(5950)<<"EventListModel::slotUpdateDisabledColour()";
+	kDebug(5950) << "EventListModel::slotUpdateDisabledColour()";
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -395,7 +395,7 @@ kDebug(5950)<<"EventListModel::slotUpdateDisabledColour()";
 */
 void EventListModel::slotUpdateWorkingHours()
 {
-kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()";
+	kDebug(5950) << "EventListModel::slotUpdateWorkingHours()";
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -427,31 +427,109 @@ kDebug(5950)<<"EventListModel::slotUpdateWorkingHours()";
 */
 void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::Change change)
 {
-	if (change != AlarmResources::Colour)
-		return;
-kDebug(5950)<<"EventListModel::slotResourceStatusChanged(Colour)"<<endl;
-	AlarmResources* resources = AlarmResources::instance();
-	int firstRow = -1;
-	for (int row = 0, end = mEvents.count();  row < end;  ++row)
+	bool added = false;
+	switch (change)
 	{
-		if (resources->resourceForIncidence(mEvents[row]->uid()) == resource)
+		case AlarmResources::Added:
+			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Added)";
+			added = true;
+			break;
+		case AlarmResources::Deleted:
+			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Deleted)";
+			removeResource(resource);
+			return;
+		case AlarmResources::Location:
+			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Location)";
+			removeResource(resource);
+			added = true;
+			break;
+		case AlarmResources::Enabled:
+			if (resource->isActive())
+				added = true;
+			else
+				removeResource(resource);
+			break;
+		case AlarmResources::Colour:
 		{
-			// For efficiency, emit a single signal for each group
-			// of consecutive alarms for the resource, rather than a separate
-			// signal for each alarm.
-			if (firstRow < 0)
-				firstRow = row;
+			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Colour)";
+			AlarmResources* resources = AlarmResources::instance();
+			int firstRow = -1;
+			for (int row = 0, end = mEvents.count();  row < end;  ++row)
+			{
+				if (resources->resource(mEvents[row]) == resource)
+				{
+					// For efficiency, emit a single signal for each group
+					// of consecutive alarms for the resource, rather than a separate
+					// signal for each alarm.
+					if (firstRow < 0)
+						firstRow = row;
+				}
+				else if (firstRow >= 0)
+				{
+					emit dataChanged(index(firstRow, 0), index(row - 1, ColumnCount - 1));
+					firstRow = -1;
+				}
+			}
+			if (firstRow >= 0)
+				emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
+			return;
 		}
-		else if (firstRow >= 0)
+		case AlarmResources::ReadOnly:
+			return;
+	}
+
+	if (added)
+	{
+		KCal::Event::List list = AlarmCalendar::resources()->events(resource, mStatus);
+		if (!list.isEmpty())
 		{
-			emit dataChanged(index(firstRow, 0), index(row - 1, ColumnCount - 1));
-kDebug()<<"=== changed rows: "<<firstRow<<" - "<<row-1<<endl;
-			firstRow = -1;
+			int row = mEvents.count();
+			beginInsertRows(QModelIndex(), row, row + list.count() - 1);
+			mEvents += list;
+			endInsertRows();
 		}
 	}
-	if (firstRow >= 0)
-		emit dataChanged(index(firstRow, 0), index(mEvents.count() - 1, ColumnCount - 1));
-if (firstRow >= 0) kDebug()<<"=== changed rows: "<<firstRow<<" - "<<mEvents.count()-1<<endl;
+}
+
+/******************************************************************************
+* Remove a resource's events from the list.
+* This has to be called before the resource is actually deleted. If not, timer
+* based updates can occur between the resource being deleted and
+* slotResourceStatusChanged(Deleted) being triggered, leading to crashes when
+* data from the resource's events is fetched.
+*/
+void EventListModel::removeResource(AlarmResource* resource)
+{
+	kDebug(5950) << "EventListModel::removeResource()";
+	AlarmResources* resources = AlarmResources::instance();
+	int lastRow = -1;
+	for (int row = mEvents.count();  --row >= 0; )
+	{
+		AlarmResource* r = resources->resource(mEvents[row]);
+		if (!r  ||  r == resource)
+		{
+			// For efficiency, delete each group of consecutive
+			// alarms for the resource, rather than deleting each
+			// alarm separately.
+			if (lastRow < 0)
+				lastRow = row;
+		}
+		else if (lastRow >= 0)
+		{
+			beginRemoveRows(QModelIndex(), row + 1, lastRow);
+			while (lastRow > row)
+				mEvents.removeAt(lastRow--);
+			endRemoveRows();
+			lastRow = -1;
+		}
+	}
+	if (lastRow >= 0)
+	{
+		beginRemoveRows(QModelIndex(), 0, lastRow);
+		while (lastRow >= 0)
+			mEvents.removeAt(lastRow--);
+		endRemoveRows();
+	}
 }
 
 /******************************************************************************
@@ -745,4 +823,9 @@ KCal::Event* EventListFilterModel::event(const QModelIndex& index) const
 KCal::Event* EventListFilterModel::event(int row) const
 {
 	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
+}
+
+void EventListFilterModel::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
+{
+	emit dataChanged(mapFromSource(topLeft), mapFromSource(bottomRight));
 }

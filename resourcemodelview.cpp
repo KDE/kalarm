@@ -208,8 +208,7 @@ void ResourceModel::notifyChange(const QModelIndex& index)
 }
 
 /******************************************************************************
-* Initialise or update the birthday selection list by fetching all birthdays
-* from the address book and displaying those which do not already have alarms.
+* Reload the resources list.
 */
 void ResourceModel::refresh()
 {
@@ -241,6 +240,20 @@ void ResourceModel::addResource(AlarmResource* resource)
 	beginInsertRows(QModelIndex(), row, row);
 	mResources += resource;
 	endInsertRows();
+}
+
+/******************************************************************************
+* Delete the specified resource from the list.
+*/
+void ResourceModel::removeResource(AlarmResource* resource)
+{
+	int row = mResources.indexOf(resource);
+	if (row >= 0)
+	{
+		beginRemoveRows(QModelIndex(), row, row);
+		mResources.removeAt(row);
+		endRemoveRows();
+	}
 }
 
 /******************************************************************************

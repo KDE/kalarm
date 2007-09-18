@@ -70,6 +70,7 @@ class EventListModel : public QAbstractTableModel
 		void                  updateEvent(KCal::Event* oldEvent, KCal::Event* newEvent);
 		void                  removeEvent(const KCal::Event* event) { removeEvent(mEvents.indexOf(const_cast<KCal::Event*>(event))); }
 		void                  removeEvent(const QString& eventId)   { removeEvent(findEvent(eventId)); }
+		void                  removeResource(AlarmResource*);
 		static KCal::Event*   event(const QModelIndex&);
 
 	public slots:
@@ -110,10 +111,14 @@ class EventListModel : public QAbstractTableModel
 
 class EventListFilterModel : public QSortFilterProxyModel
 {
+		Q_OBJECT
 	public:
 		explicit EventListFilterModel(EventListModel* baseModel, QObject* parent = 0);
 		KCal::Event* event(int row) const;
 		KCal::Event* event(const QModelIndex&) const;
+	
+	private slots:
+		void     slotDataChanged(const QModelIndex&, const QModelIndex&);
 };
 
 #endif // EVENTLISTMODEL_H

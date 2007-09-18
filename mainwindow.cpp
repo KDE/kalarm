@@ -145,8 +145,6 @@ MainWindow::MainWindow(bool restored)
 		KConfigGroup config(KGlobal::config(), WINDOW_NAME);
 		mResourcesWidth = config.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
 	}
-	KConfigGroup config(KGlobal::config(), WINDOW_NAME);
-	QList<int> order = config.readEntry("ColumnOrder", QList<int>());
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
 	if (!mShowTimeTo)
@@ -169,9 +167,8 @@ MainWindow::MainWindow(bool restored)
 	// Create the alarm list widget
 	mListFilterModel = new AlarmListFilterModel(EventListModel::alarms());
 	mListFilterModel->setStatusFilter(mShowArchived ? static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED) : KCalEvent::ACTIVE);
-	mListView = new AlarmListView(mSplitter);
+	mListView = new AlarmListView(WINDOW_NAME, mSplitter);
 	mListView->setModel(mListFilterModel);
-	mListView->setColumnOrder(order);
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	mListView->sortByColumn(mShowTime ? EventListModel::TimeColumn : EventListModel::TimeToColumn, Qt::AscendingOrder);
 	mListDelegate = new AlarmListDelegate(mListView);
@@ -179,13 +176,6 @@ MainWindow::MainWindow(bool restored)
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
 	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotDoubleClicked(const QModelIndex&)));
 	connect(mListView, SIGNAL(rightButtonClicked(const QPoint&)), SLOT(slotRightButtonClicked(const QPoint&)));
-	connect(mListView->header(), SIGNAL(sectionMoved(int,int,int)), SLOT(columnsReordered()));
-#ifdef __GNUC__
-#warning Try to avoid reloading the entire list when resources change?
-#warning Model should be told to reload independently of resource selector?
-#endif
-//	connect(mResourceSelector, SIGNAL(resourcesChanged()), EventListModel::alarms(), SLOT(reload()));
-//	connect(resources, SIGNAL(calendarChanged()), EventListModel::alarms(), SLOT(reload()));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
 	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
@@ -368,17 +358,6 @@ void MainWindow::hideEvent(QHideEvent* he)
 }
 
 /******************************************************************************
-*  Called when the list's column order is changed.
-*  Save the new column order as the default the next time the program is run.
-*/
-void MainWindow::columnsReordered()
-{
-	KConfigGroup config(KGlobal::config(), WINDOW_NAME);
-	config.writeEntry("ColumnOrder", mListView->columnOrder());
-	config.sync();
-}
-
-/******************************************************************************
 *  Initialise the menu, toolbar and main window actions.
 */
 void MainWindow::initActions()
@@ -449,7 +428,7 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	mActionToggleResourceSel = new KToggleAction(KIcon("view_choose"), i18nc("@action", "Show &Resources"), this);
+	mActionToggleResourceSel = new KToggleAction(i18nc("@action", "Show &Resources"), this);
 	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
@@ -1307,9 +1286,6 @@ void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Chang
 		w->mActionCreateTemplate->setEnabled(templat);
 		w->slotSelection();
 	}
-
-	if (change == AlarmResources::Location)
-		EventListModel::alarms()->reload();
 }
 
 /******************************************************************************

@@ -704,6 +704,16 @@ Event::List AlarmResources::rawEvents(EventSortField sortField, SortDirection so
 	return sortEvents(&result, sortField, sortDirection);
 }
 
+Event::List AlarmResources::rawEvents(AlarmResource* resource, EventSortField sortField, SortDirection sortDirection)
+{
+	kDebug(KARES_DEBUG) << "AlarmResources::rawEvents(resource)";
+	Event::List result;
+	if (!resource->isActive())
+		return result;
+	appendEvents(result, resource->rawEvents(EventSortUnsorted), resource);
+	return sortEvents(&result, sortField, sortDirection);
+}
+
 void AlarmResources::appendEvents(Event::List& result, const Event::List& events, AlarmResource* resource)
 {
 	result += events;
@@ -842,7 +852,7 @@ void AlarmResources::resourceModified(AlarmResource* resource)
 void AlarmResources::resourceDeleted(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::resourceDeleted(" << resource->resourceName() << ")";
-	resource->disconnect(this);
+//	resource->disconnect(this);
 	emit signalResourceDeleted(resource);
 	emit resourceStatusChanged(resource, Deleted);
 }

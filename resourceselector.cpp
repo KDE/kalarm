@@ -51,6 +51,7 @@
 #include "alarmcalendar.h"
 #include "alarmresources.h"
 #include "daemon.h"
+#include "eventlistmodel.h"
 #include "packedlayout.h"
 #include "preferences.h"
 #include "resourceconfigdialog.h"
@@ -145,7 +146,6 @@ void ResourceSelector::alarmTypeSelected()
 	static_cast<ResourceFilterModel*>(mListView->model())->setFilter(mCurrentAlarmType);
 	mAddButton->setWhatsThis(addTip);
 	mAddButton->setToolTip(addTip);
-	emit resourcesChanged();
 }
 
 /******************************************************************************
@@ -257,12 +257,16 @@ void ResourceSelector::removeResource()
 	if (KMessageBox::warningContinueCancel(this, text, "", KStandardGuiItem::remove()) == KMessageBox::Cancel)
 		return;
 
+	// Remove resource from alarm and resource lists before deleting it, to avoid
+	// crashes when display updates occur immediately after it is deleted.
+	if (resource->alarmType() == AlarmResource::TEMPLATE)
+		EventListModel::templates()->removeResource(resource);
+	else
+		EventListModel::alarms()->removeResource(resource);
+	ResourceModel::instance()->removeResource(resource);
 	AlarmResourceManager* manager = mCalendar->resourceManager();
 	manager->remove(resource);
 	manager->writeConfig();
-//	mListView->takeItem(item);
-//	delete item;
-	emit resourcesChanged();
 }
 
 /******************************************************************************
@@ -450,10 +454,7 @@ void ResourceSelector::showInfo()
 {
 	AlarmResource* resource = currentResource();
 	if (resource)
-	{
-		QString txt = "<qt>" + resource->infoText() + "</qt>";
-		KMessageBox::information(this, txt);
-	}
+		KMessageBox::information(this, resource->infoText());
 }
 
 /******************************************************************************

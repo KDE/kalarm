@@ -1,7 +1,7 @@
 /*
  *  dbushandler.h  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2001,2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class DBusHandler : public QObject, public KAlarmIface
 	Q_SCRIPTABLE bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  const QString& bgColor, const QString& fgColor, const QString& font,
 	                                  const QString& audioUrl, int reminderMins, const QString& recurrence,
-	                                  int repeatInterval, int repeatCount);
+	                                  int subRepeatInterval, int subRepeatCount);
 	Q_SCRIPTABLE bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  const QString& bgColor, const QString& fgColor, const QString& font,
 	                                  const QString& audioUrl, int reminderMins, int recurType, int recurInterval, int recurCount);
@@ -52,20 +52,20 @@ class DBusHandler : public QObject, public KAlarmIface
 	                                  const QString& audioUrl, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
 	Q_SCRIPTABLE bool scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
 	                               const QString& audioUrl, int reminderMins, const QString& recurrence,
-	                               int repeatInterval, int repeatCount);
+	                               int subRepeatInterval, int subRepeatCount);
 	Q_SCRIPTABLE bool scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
 	                               const QString& audioUrl, int reminderMins, int recurType, int recurInterval, int recurCount);
 	Q_SCRIPTABLE bool scheduleFile(const QString& url, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
 	                               const QString& audioUrl, int reminderMins, int recurType, int recurInterval, const QString& endDateTime);
 	Q_SCRIPTABLE bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
-	                                  const QString& recurrence, int repeatInterval, int repeatCount);
+	                                  const QString& recurrence, int subRepeatInterval, int subRepeatCount);
 	Q_SCRIPTABLE bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  int recurType, int recurInterval, int recurCount);
 	Q_SCRIPTABLE bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                  int recurType, int recurInterval, const QString& endDateTime);
 	Q_SCRIPTABLE bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                                const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
-	                                const QString& recurrence, int repeatInterval, int repeatCount);
+	                                const QString& recurrence, int subRepeatInterval, int subRepeatCount);
 	Q_SCRIPTABLE bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                                const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                int recurType, int recurInterval, int recurCount);
@@ -79,19 +79,19 @@ class DBusHandler : public QObject, public KAlarmIface
 	static bool scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
 	                            const QString& bgColor, const QString& fgColor, const QString& fontStr,
 	                            const KUrl& audioFile, int reminderMins, const KARecurrence&,
-	                            int repeatInterval = 0, int repeatCount = 0);
+	                            int subRepeatInterval = 0, int subRepeatCount = 0);
 	static bool scheduleFile(const KUrl& file, const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
 	                         const KUrl& audioFile, int reminderMins, const KARecurrence&,
-	                         int repeatInterval = 0, int repeatCount = 0);
+	                         int subRepeatInterval = 0, int subRepeatCount = 0);
 	static bool scheduleCommand(const QString& commandLine, const KDateTime& start, int lateCancel, unsigned flags,
-	                            const KARecurrence&, int repeatInterval = 0, int repeatCount = 0);
+	                            const KARecurrence&, int subRepeatInterval = 0, int subRepeatCount = 0);
 	static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                          const QString& attachments, const KDateTime& start, int lateCancel, unsigned flags,
-	                          const KARecurrence&, int repeatInterval = 0, int repeatCount = 0);
+	                          const KARecurrence&, int subRepeatInterval = 0, int subRepeatCount = 0);
 	static KDateTime convertDateTime(const QString& dateTime, const KDateTime& = KDateTime());
 	static unsigned  convertStartFlags(const KDateTime& start, unsigned flags);
 	static QColor    convertBgColour(const QString& bgColor);
-	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence);
+	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence, int& subRepeatInterval);
 	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, int recurCount);
 	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
 	static bool      convertRecurrence(KARecurrence&, const KDateTime& start, int recurType, int recurInterval, int recurCount, const KDateTime& end);

@@ -871,11 +871,12 @@ KAEvent AlarmCalendar::templateEvent(const QString& templateName)
 * Return all events in the calendar which contain alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-Event::List AlarmCalendar::events(KCalEvent::Status type)
+Event::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Status type)
 {
-	if (!mCalendar)
-		return Event::List();
-	Event::List list = mCalendar->rawEvents();
+	Event::List list;
+	if (!mCalendar  ||  resource && mCalType != RESOURCES)
+		return list;
+	list = resource ? AlarmResources::instance()->rawEvents(resource) : mCalendar->rawEvents();
 	for (int i = 0;  i < list.count();  )
 	{
 		Event* event = list[i];

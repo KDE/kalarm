@@ -67,7 +67,7 @@ static const QString KMAIL_SERNUM_FLAG     = QLatin1String("KMAIL");
 
 static const QByteArray NEXT_RECUR_PROPERTY("NEXTRECUR");     // X-KDE-KALARM-NEXTRECUR property
 static const QByteArray REPEAT_PROPERTY("REPEAT");            // X-KDE-KALARM-REPEAT property
-static const QByteArray ARCHIVE_PROPERTY("ARCHIVE");          // X-KDE-KALARM-SAVE property
+static const QByteArray ARCHIVE_PROPERTY("ARCHIVE");          // X-KDE-KALARM-ARCHIVE property
 static const QString ARCHIVE_REMINDER_ONCE_TYPE = QLatin1String("ONCE");
 static const QByteArray LOG_PROPERTY("LOG");                  // X-KDE-KALARM-LOG property
 static const QString xtermURL = QLatin1String("xterm:");

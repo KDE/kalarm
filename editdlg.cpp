@@ -59,6 +59,7 @@
 #include "latecancel.h"
 #include "lineedit.h"
 #include "mainwindow.h"
+#include "packedlayout.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
@@ -272,6 +273,18 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	hlayout->setMargin(0);
 	topLayout->addLayout(hlayout);
 
+	// Recurrence type display
+	KHBox* recurBox = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
+	recurBox->setMargin(0);
+	recurBox->setSpacing(spacingHint());
+	label = new QLabel(i18nc("@label", "Recurrence:"), recurBox);
+	label->setFixedSize(label->sizeHint());
+	mRecurrenceText = new QLabel(recurBox);
+	recurBox->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>How often the alarm recurs.</para>"
+	      "<para>The times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition.</para>"));
+	recurBox->setFixedHeight(recurBox->sizeHint().height());
+
 	// Date and time entry
 	if (mTemplate)
 	{
@@ -319,7 +332,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box = new KHBox(templateTimeBox);
 		box->setMargin(0);
 		box->setSpacing(spacingHint());
-		mTemplateUseTimeAfter = new RadioButton(AlarmTimeWidget::i18n_radio_TimeFromNow(), box);
+		mTemplateUseTimeAfter = new RadioButton(i18nc("@option:radio", "Time from now:"), box);
 		mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
 		mTemplateUseTimeAfter->setReadOnly(mReadOnly);
 		mTemplateUseTimeAfter->setWhatsThis(i18nc("@info:whatsthis",
@@ -335,27 +348,17 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
+		recurBox->setParent(templateTimeBox);
+		grid->addWidget(recurBox, 2, 0, 1, -1, Qt::AlignLeft);
+
 		hlayout->addStretch();
 	}
 	else
 	{
-		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
+		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage, recurBox);
 		connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
-
-	// Recurrence type display
-	KHBox* box = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
-	box->setMargin(0);
-	box->setSpacing(spacingHint());
-	label = new QLabel(i18nc("@label", "Recurrence:"), box);
-	label->setFixedSize(label->sizeHint());
-	mRecurrenceText = new QLabel(box);
-	box->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>How often the alarm recurs.</para>"
-	      "<para>The times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition.</para>"));
-	box->setFixedHeight(box->sizeHint().height());
-	topLayout->addWidget(box);
 
 	// Reminder
 	mReminder = createReminder(mainPage);
@@ -369,17 +372,16 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	mLateCancel = new LateCancelSelector(true, mainPage);
 	topLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
-	hlayout = new QHBoxLayout();
-	topLayout->addLayout(hlayout);
+	PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
+	playout->setSpacing(2*spacingHint());
+	topLayout->addLayout(playout);
 
 	// Acknowledgement confirmation required - default = no confirmation
 	CheckBox* confirmAck = type_createConfirmAckCheckbox(mainPage);
 	if (confirmAck)
 	{
 		confirmAck->setFixedSize(confirmAck->sizeHint());
-		hlayout->addWidget(confirmAck);
-		hlayout->addSpacing(2*spacingHint());
-		hlayout->addStretch();
+		playout->addWidget(confirmAck);
 	}
 
 	if (theApp()->korganizerEnabled())
@@ -388,7 +390,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mainPage);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
 		mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
-		hlayout->addWidget(mShowInKorganizer);
+		playout->addWidget(mShowInKorganizer);
 	}
 
 	setButtonWhatsThis(Ok, i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
@@ -1020,8 +1022,6 @@ void EditAlarmDlg::slotEditDeferral()
 */
 void EditAlarmDlg::slotShowMainPage()
 {
-#warning Does the focus need to be set when reverting to main page?
-//	slotAlarmTypeChanged(0);
 	if (!mMainPageShown)
 	{
 		if (mTemplateName)

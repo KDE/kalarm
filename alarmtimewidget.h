@@ -42,8 +42,8 @@ class AlarmTimeWidget : public QFrame
 			AT_TIME,     // "At ..."
 			DEFER_TIME   // "Defer to ..."
 		};
-		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0);
-		explicit AlarmTimeWidget(int mode, QWidget* parent = 0);
+		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, QWidget* custom = 0);
+		explicit AlarmTimeWidget(int mode, QWidget* parent = 0, QWidget* custom = 0);
 		KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void             setDateTime(const DateTime&);
 		void             setMinDateTimeIsCurrent();
@@ -57,7 +57,6 @@ class AlarmTimeWidget : public QFrame
 		void             selectTimeFromNow(int minutes = 0);
 		QSize            sizeHint() const              { return minimumSizeHint(); }
 
-		static QString   i18n_radio_TimeFromNow();  // text of 'Time from now:' radio button
 		static QString   i18n_TimeAfterPeriod();
 		static const int maxDelayTime;    // maximum time from now
 
@@ -68,12 +67,13 @@ class AlarmTimeWidget : public QFrame
 	protected slots:
 		void             slotTimer();
 		void             slotButtonSet(QAbstractButton*);
+		void             slotAfterTimeToggled(bool);
 		void             dateTimeChanged();
 		void             delayTimeChanged(int);
 		void             slotTimeZoneToggled(bool);
 
 	private:
-		void             init(int mode, const QString& groupBoxTitle = QString());
+		void             init(int mode, QWidget* custom, const QString& groupBoxTitle = QString());
 		void             setAnyTime();
 		void             setMaxDelayTime(const KDateTime& now);
 		void             setMaxMinTimeIf(const KDateTime& now);
@@ -81,7 +81,7 @@ class AlarmTimeWidget : public QFrame
 		ButtonGroup*     mButtonGroup;
 		RadioButton*     mDateRadio;
 		RadioButton*     mDateTimeRadio;
-		RadioButton*     mAfterTimeRadio;
+		QAbstractButton* mAfterTime;
 		DateEdit*        mDateEdit;
 		TimeEdit*        mTimeEdit;
 		TimeSpinBox*     mDelayTimeEdit;

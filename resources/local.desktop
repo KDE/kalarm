@@ -1,13 +1,15 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Alarms in Local File
 Name[bg]=Аларми в локален файл
+Name[de]=Erinnerungen in lokaler Datei
 Name[el]=Ειδοποιήσεις σε τοπικό αρχείο
 Name[es]=Alarmas en archivo local
 Name[fa]=هشدارها در پروندۀ محلی
 Name[ga]=Aláraim i gComhad Logánta
+Name[it]=Promemoria in file locale
 Name[ja]=ローカルファイルのアラーム
 Name[kk]=Жергілікті файлдағы ескертулер
+Name[ko]=지역 파일에 저장한 알람
 Name[ne]=स्थानीय फाइलमा संसूचक
 Name[nl]=Herinneringen in lokaal bestand
 Name[pa]=ਲੋਕਲ ਫਾਇਲ ਵਿੱਚ ਅਲਾਰਮ
@@ -18,6 +20,6 @@ Name[x-test]=xxAlarms in Local Filexx
 Name[zh_TW]=本地檔案中的鬧鐘
 X-KDE-Library=kalarm_local
 Type=Service
-ServiceTypes=KResources/Plugin
+X-KDE-ServiceTypes=KResources/Plugin
 X-KDE-ResourceFamily=alarms
 X-KDE-ResourceType=file

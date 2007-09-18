@@ -1,13 +1,15 @@
 # KDE Config File
 [Desktop Entry]
-Encoding=UTF-8
 Name=Alarms
 Name[bg]=Аларми
+Name[de]=Erinnerungen
 Name[el]=Ειδοποιήσεις
 Name[es]=Alarmas
 Name[ga]=Aláraim
+Name[it]=Promemoria
 Name[ja]=アラーム
 Name[kk]=Ескертулер
+Name[ko]=알람
 Name[ne]=संसूचक
 Name[nl]=Herinneringen
 Name[pa]=ਅਲਾਰਮ
@@ -17,6 +19,5 @@ Name[sv]=Alarm
 Name[x-test]=xxAlarmsxx
 Name[zh_TW]=鬧鐘
 Type=Service
-ServiceTypes=KResources/Manager
-
+X-KDE-ServiceTypes=KResources/Manager
 X-KDE-ResourceFamily=alarms

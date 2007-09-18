@@ -436,19 +436,19 @@ void Daemon::enableCalendar(bool enable)
 */
 void Daemon::enableAutoStart(bool enable)
 {
-	// Tell the alarm daemon in case it is running.
-	daemonDBus()->enableAutoStart(enable);
-	if (!checkDBusResult("enableAutoStart"))
-#ifdef __GNUC__
-#warning Check that false is returned if daemon is not running
-#endif
+	if (isDaemonRegistered())
 	{
-		// Failure - the daemon probably isn't running, so rewrite its config file for it
-		KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
-		KConfigGroup config(&adconfig, DAEMON_AUTOSTART_SECTION);
-		config.writeEntry(DAEMON_AUTOSTART_KEY, enable);
-		config.sync();
+		// Tell the alarm daemon since it seems to be running.
+		daemonDBus()->enableAutoStart(enable);
+		if (checkDBusResult("enableAutoStart"))
+			return;
 	}
+	// Failure - the daemon probably isn't running, so rewrite its config file for it
+	kDebug(5950) << "Daemon::enableAutoStart(" << enable << "): write config";
+	KConfig adconfig(KStandardDirs::locate("config", DAEMON_APP_NAME"rc"));
+	KConfigGroup config(&adconfig, DAEMON_AUTOSTART_SECTION);
+	config.writeEntry(DAEMON_AUTOSTART_KEY, enable);
+	config.sync();
 }
 
 /******************************************************************************

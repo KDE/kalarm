@@ -26,7 +26,7 @@
 
 #include <kcal/calendarlocal.h>
 
-class OrgKdeKalarmNotifyInterface;
+class QDBusInterface;
 class AlarmResource;
 
 
@@ -82,7 +82,7 @@ class AlarmDaemon : public QObject
 		void    notifyCalStatus();
 		bool    isClientRegistered() const;
 		void    setTimerStatus();
-		OrgKdeKalarmNotifyInterface* kalarmNotifyDBus();
+		QDBusInterface* kalarmNotifyDBus();
 		bool    checkDBusResult(const char* funcname);
 
 		void    setEventPending(const KCal::Event*, const QList<KDateTime>&);
@@ -96,7 +96,7 @@ class AlarmDaemon : public QObject
 		static EventsMap  mEventsHandled;  // IDs of already triggered events which have been processed by KAlarm
 		static EventsMap  mEventsPending;  // IDs of already triggered events not yet processed by KAlarm
 
-		OrgKdeKalarmNotifyInterface* mDBusNotify;     // client's notification D-Bus interface
+		QDBusInterface* mDBusNotify;     // client's notification D-Bus interface
 		QString    mClientName;          // client's executable and DCOP name
 		QString    mClientDBusObj;       // object path to receive D-Bus messages
 		QString    mClientExe;           // client executable path (if mClientStart true)

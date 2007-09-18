@@ -115,11 +115,6 @@ class MessageText : public QTextEdit
 static const Qt::WFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
 static const Qt::WFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
 static const Qt::WidgetAttribute WidgetFlags  = Qt::WA_DeleteOnClose;
-#ifdef __GNUC__
-#warning WA_GroupLeader deprecated and replaced with MainWindowBase::setWindowModality() - check
-#endif
-static const int WidgetFlags2 = 0;//Qt::WA_GroupLeader;
-//static const Qt::WidgetAttribute WidgetFlags2 = 0;//Qt::WA_GroupLeader;
 
 
 QList<MessageWin*> MessageWin::mWindowList;
@@ -174,7 +169,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mDisableDeferral(false)
 {
 	kDebug(5950) << "MessageWin::MessageWin(event)";
-	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
+	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MessageWin");    // used by LikeBack
 	if (!(flags & NO_INIT_VIEW))
@@ -244,7 +239,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime,
 	  mDisableDeferral(false)
 {
 	kDebug(5950) << "MessageWin::MessageWin(errmsg)";
-	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags | WidgetFlags2));
+	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
 	setWindowModality(Qt::WindowModal);
 	setObjectName("ErrorWin");    // used by LikeBack
 	initView();
