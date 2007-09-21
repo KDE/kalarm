@@ -1,2 +1,3 @@
 #! /bin/sh
-$XGETTEXT *.h *.cpp lib/*.h lib/*.cpp kalarmd/*.cpp -o $podir/kalarm.pot
+$EXTRACTRC `find . -name "*.rc" -o -name "*.ui" -o -name "*.kcfg"` >> rc.cpp || exit 11
+$XGETTEXT `find . -name "*.cpp" -o -name "*.h"` -o $podir/kalarm.pot
