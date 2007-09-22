@@ -719,7 +719,7 @@ StorePrefTab::StorePrefTab()
 	mDefaultResource->setFixedSize(mDefaultResource->sizeHint());
 	mDefaultResource->setWhatsThis(i18nc("@info:whatsthis", "Add all new alarms and alarm templates to the default resources, without prompting."));
 	layout->addWidget(mDefaultResource, 0, Qt::AlignLeft);
-	mAskResource = new QRadioButton(i18nc("@option:radio", "Prompt for which resource to store in."), group);
+	mAskResource = new QRadioButton(i18nc("@option:radio", "Prompt for which resource to store in"), group);
 	bgroup->addButton(mAskResource);
 	mAskResource->setFixedSize(mAskResource->sizeHint());
 	mAskResource->setWhatsThis(i18nc("@info:whatsthis",
