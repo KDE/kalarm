@@ -17,6 +17,7 @@ Name[pt]=Alarmes
 Name[pt_BR]=Alarmes
 Name[sv]=Alarm
 Name[x-test]=xxAlarmsxx
+Name[zh_CN]=提醒事项
 Name[zh_TW]=鬧鐘
 Type=Service
 X-KDE-ServiceTypes=KResources/Manager

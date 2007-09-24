@@ -47,6 +47,7 @@
 #include "alarmresources.h"
 #include "calendarcompat.h"
 #include "daemon.h"
+#include "eventlistmodel.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -519,6 +520,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 		AlarmResource* activeRes   = 0;
 		AlarmResource* archivedRes = 0;
 		AlarmResource* templateRes = 0;
+		Event::List newEvents;
 		Event::List events = cal.rawEvents();
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
@@ -571,14 +573,20 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			// Give the event a new ID and add it to the resources
 			newev->setUid(KCalEvent::uid(CalFormat::createUniqueId(), type));
 			if (resources->addEvent(newev, *res))
+			{
 				saveRes = true;
+				newEvents += newev;
+			}
 			else
 				success = false;
 		}
 
 		// Save the resources if they have been modified
 		if (saveRes)
+		{
 			resources->save();
+			EventListModel::alarms()->addEvents(newEvents);
+		}
 	}
 	if (!local)
 		KIO::NetAccess::removeTempFile(filename);

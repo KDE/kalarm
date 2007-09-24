@@ -64,6 +64,7 @@ Comment[tg]=Соати рӯимизии зангдори шахсӣ (ба нам
 Comment[tr]=Kişisel Alarm Zamanlayıcı
 Comment[uk]=Персональний планувальник нагадувань: стартує як піктограма в лотку
 Comment[x-test]=xxPersonal Alarm Scheduler: start as system tray iconxx
+Comment[zh_CN]=个人日程提醒程序：以系统托盘图标启动
 Comment[zh_TW]=警示/提醒訊息排程器：以系統列圖示的方式啟動
 Terminal=false
 X-KDE-autostart-phase=2
