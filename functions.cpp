@@ -461,6 +461,9 @@ UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgPare
 			}
 			if (archive  &&  event.toBeArchived())
 				addArchivedEvent(event);     // this changes the event ID to an archived ID
+#ifdef __GNUC__
+#warning Prevent calendar being saved for each addArchivedEvent()
+#endif
 		}
 		if (!cal->deleteEvent(id, false))   // don't save calendar after deleting
 		{
@@ -1115,6 +1118,7 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 #ifdef __GNUC__
 #warning Minimise window
 #endif
+//Call D-Bus app/MainWin showMinimized()???
 //			QDBusInterface iface(dbusService, DBUS_OBJECT, DBUS_IFACE);
 			QDBusInterface iface(dbusService, QString(), QString());
 			QDBusError err = iface.callWithArgumentList(QDBus::NoBlock, QLatin1String("minimize"), QList<QVariant>());
