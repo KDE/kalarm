@@ -322,7 +322,27 @@ void MessageWin::initView()
 		// Alarm date/time.
 		// Display time zone if not local time zone.
 		QLabel* label = new QLabel(frame ? frame : topWidget);
-		label->setText(KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(mDateTime.isLocalZone() ? 0 : KLocale::TimeZone)));
+		QString tm;
+		if (mDateTime.isDateOnly())
+			tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
+		else
+		{
+			bool showZone = false;
+			if (mDateTime.timeType() == KDateTime::UTC
+			||  mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone())
+			{
+				// Display time zone abbreviation if it's different from the local
+				// zone. Note that the iCalendar time zone might represent the local
+				// time zone in a slightly different way from the system time zone,
+				// so the zone comparison above might not produce the desired result.
+				QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
+				KDateTime local = mDateTime.kDateTime();
+				local.setTimeSpec(KDateTime::Spec::LocalZone());
+				showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
+			}
+			tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
+		}
+		label->setText(tm);
 		if (!frame)
 			label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
