@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -141,7 +141,7 @@ QRect SpinBox2::down2Rect() const
 	return mUpdown2->downRect();
 }
 
-void SpinBox2::setLineStep(int step)
+void SpinBox2::setSingleStep(int step)
 {
 	mSingleStep = step;
 	if (reverseButtons())
@@ -336,8 +336,8 @@ void SpinBox2::stepPage(int step)
 			adjust = 0;    // allow stepping to the minimum or maximum value
 		mSpinbox->addValue(adjust + step);
 	}
-	bool focus = mSpinbox->selectOnStep() && mUpdown2->hasFocus();
-	if (focus)
+	mSpinbox->setFocus();
+	if (mSpinbox->selectOnStep())
 		mSpinbox->selectAll();
 
 	// Make the covering arrows image show the pressed arrow

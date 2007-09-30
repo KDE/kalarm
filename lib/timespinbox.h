@@ -81,6 +81,10 @@ class TimeSpinBox : public SpinBox2
 		void            setMaximum(const QTime& t)   { SpinBox2::setMaximum(t.hour()*60 + t.minute()); }
 		/** Returns the maximum value which can be held in the spin box. */
 		QTime           maxTime() const              { int mv = maximum();  return QTime(mv/60, mv%60); }
+		/** Called whenever the user triggers a step, to adjust the value of the spin box.
+		 *  If the value was previously invalid, the spin box is set to the minimum value.
+		 */
+		virtual void    stepBy(int increment);
 		/** Returns a text describing use of the shift key as an accelerator for
 		 *  the spin buttons, designed for incorporation into WhatsThis texts.
 		 */
@@ -96,14 +100,6 @@ class TimeSpinBox : public SpinBox2
 		virtual void    setValue(int minutes);
 		/** Sets the value of the spin box. */
 		void            setValue(const QTime& t)     { setValue(t.hour()*60 + t.minute()); }
-		/** Increments the spin box value.
-		 *  If the value was previously invalid, the spin box is set to the minimum value.
-		 */
-		virtual void    stepUp();
-		/** Decrements the spin box value.
-		 *  If the value was previously invalid, the spin box is set to the minimum value.
-		 */
-		virtual void    stepDown();
 
 	protected:
 		virtual QString textFromValue(int v) const;

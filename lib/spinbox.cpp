@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  Copyright © 2002,2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,6 +19,8 @@
  */
 
 #include <kdeversion.h>
+#include <kdebug.h>
+
 #include <QLineEdit>
 #include <QObject>
 #include <QApplication>
@@ -115,18 +117,11 @@ void SpinBox::setSingleShiftStep(int step)
 		QSpinBox::setSingleStep(step);
 }
 
-void SpinBox::stepUp()
+void SpinBox::stepBy(int steps)
 {
-	int step = QSpinBox::singleStep();
-	addValue(step);
-	emit stepped(step);
-}
-
-void SpinBox::stepDown()
-{
-	int step = -QSpinBox::singleStep();
-	addValue(step);
-	emit stepped(step);
+	int increment = steps * singleStep();
+	addValue(increment);
+	emit stepped(increment);
 }
 
 /******************************************************************************
@@ -175,15 +170,8 @@ void SpinBox::valueChange()
 			mShiftMaxBound = false;
 		}
 
-#ifdef __GNUC__
-#warning Fix this
-#endif
-//??? 		bool focus = !mSelectOnStep && hasFocus();
-//		if (focus)
-//			clearFocus();     // prevent selection of the spin box text
-//		QSpinBox::valueChange();
-//		if (focus)
-//			setFocus();
+ 		if (!mSelectOnStep && hasFocus())
+			lineEdit()->deselect();   // prevent selection of the spin box text
 	}
 }
 

@@ -214,20 +214,12 @@ void TimeSpinBox::setValue(int minutes)
  * Step the spin box value.
  * If it was invalid, set it valid and set the value to the minimum.
  */
-void TimeSpinBox::stepUp()
+void TimeSpinBox::stepBy(int increment)
 {
 	if (mInvalid)
 		setValid(true);
 	else
-		SpinBox2::stepUp();
-}
-
-void TimeSpinBox::stepDown()
-{
-	if (mInvalid)
-		setValid(true);
-	else
-		SpinBox2::stepDown();
+		SpinBox2::stepBy(increment);
 }
 
 bool TimeSpinBox::isValid() const
