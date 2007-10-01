@@ -619,7 +619,7 @@ void MessageWin::initView()
 	if (mKMailSerialNumber)
 	{
 		// KMail button
-		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), K3Icon::MainToolbar);
+		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), KIconLoader::MainToolbar);
 		mKMailButton = new QPushButton(topWidget);
 		mKMailButton->setIcon(pixmap);
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
@@ -632,7 +632,7 @@ void MessageWin::initView()
 		mKMailButton = 0;
 
 	// KAlarm button
-	QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), K3Icon::MainToolbar);
+	QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
 	mKAlarmButton = new QPushButton(topWidget);
 	mKAlarmButton->setIcon(pixmap);
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
