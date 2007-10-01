@@ -119,7 +119,7 @@ void SpinBox::setSingleShiftStep(int step)
 
 void SpinBox::stepBy(int steps)
 {
-	int increment = steps * singleStep();
+	int increment = steps * QSpinBox::singleStep();
 	addValue(increment);
 	emit stepped(increment);
 }
@@ -233,10 +233,6 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 	return QSpinBox::eventFilter(obj, e);
 }
 
-#ifdef __GNUC__
-#warning What about QEvent::ShortcutOverride??
-#endif
-
 void SpinBox::mousePressEvent(QMouseEvent* e)
 {
 	if (!clickEvent(e))
@@ -316,7 +312,6 @@ bool SpinBox::keyEvent(QKeyEvent* e)
 		// The left mouse button is down, and the Shift or Alt key has changed
 		if (mReadOnly)
 			return true;   // discard the event
-		state ^= (key == Qt::Key_Shift) ? Qt::ShiftModifier : Qt::AltModifier;    // new state
 		bool shift = (state & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 		if (!shift && mShiftMouse  ||  shift && !mShiftMouse)
 		{
