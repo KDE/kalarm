@@ -20,6 +20,7 @@
 
 #include "kalarm.h"
 
+#include <QLineEdit>
 #include <klocale.h>
 
 #include "timespinbox.moc"
@@ -51,6 +52,7 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
 	setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
 	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
 	setSelectOnStep(false);
+	setAlignment(Qt::AlignHCenter);
 	connect(this, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
 }
 
@@ -65,8 +67,9 @@ TimeSpinBox::TimeSpinBox(int minMinute, int maxMinute, QWidget* parent)
 	  mEnteredSetValue(false)
 {
 	setReverseWithLayout(false);   // keep buttons the same way round even if right-to-left language
-	setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
+	setShiftSteps(5, 300);    // shift-left button increments 5 min / 5 hours
 	setSelectOnStep(false);
+	setAlignment(Qt::AlignRight);
 }
 
 QString TimeSpinBox::shiftWhatsThis()
@@ -89,7 +92,7 @@ QString TimeSpinBox::textFromValue(int v) const
 			v -= 720;      // convert 13 - 23 hours to 1 - 11
 	}
 	QString s;
-	s.sprintf("%02d:%02d", v/60, v%60);
+	s.sprintf((wrapping() ? "%02d:%02d" : "%d:%02d"), v/60, v%60);
 	return s;
 }
 

@@ -21,8 +21,6 @@
 #ifndef SPINBOX2_H
 #define SPINBOX2_H
 
-//#include <qglobal.h>
-//Added by qt3to4:
 #include <QFrame>
 class QShowEvent;
 class QResizeEvent;
@@ -117,6 +115,8 @@ class SpinBox2 : public QFrame
 		 */
 		bool                wrapping() const            { return mSpinbox->wrapping(); }
 
+		/** Set the text alignment of the widget */
+		void                setAlignment(Qt::Alignment a) { mSpinbox->setAlignment(a); }
 		/** Sets the button symbols to use (arrows or plus/minus). */
 		void                setButtonSymbols(QSpinBox::ButtonSymbols);
 		/** Returns the button symbols currently in use (arrows or plus/minus). */
