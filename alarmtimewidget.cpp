@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@
 static const QTime time_23_59(23, 59);
 
 
-const int AlarmTimeWidget::maxDelayTime = 99*60 + 59;    // < 100 hours
+const int AlarmTimeWidget::maxDelayTime = 999*60 + 59;    // < 1000 hours
 
 QString AlarmTimeWidget::i18n_w_TimeFromNow()     { return i18n("Time from no&w:"); }
 QString AlarmTimeWidget::i18n_TimeAfterPeriod()
@@ -143,7 +143,7 @@ void AlarmTimeWidget::init(int mode)
 
 	// Delay time spin box
 	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, this);
-	mDelayTimeEdit->setValue(1439);
+	mDelayTimeEdit->setValue(maxDelayTime);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
 	QWhatsThis::add(mDelayTimeEdit,

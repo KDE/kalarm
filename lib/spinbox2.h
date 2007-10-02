@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define SPINBOX2_H
 
 #include <qglobal.h>
+#include <qlineedit.h>
 
 class SpinMirror;
 class ExtraSpinBox;
@@ -60,7 +61,7 @@ class SpinBox2 : public QFrame
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		SpinBox2(QWidget* parent = 0, const char* name = 0);
+		explicit SpinBox2(QWidget* parent = 0, const char* name = 0);
 		/** Constructor.
 		 *  @param minValue The minimum value which the spin box can have.
 		 *  @param maxValue The maximum value which the spin box can have.
@@ -113,6 +114,8 @@ class SpinBox2 : public QFrame
 		 */
 		bool                wrapping() const            { return mSpinbox->wrapping(); }
 
+		/** Set the text alignment of the widget */
+		void                setAlignment(int a)         { mSpinbox->setAlignment(a); }
 		/** Sets the button symbols to use (arrows or plus/minus). */
 		virtual void        setButtonSymbols(QSpinBox::ButtonSymbols);
 		/** Returns the button symbols currently in use (arrows or plus/minus). */
@@ -282,6 +285,7 @@ class SpinBox2 : public QFrame
 				                : SpinBox(parent, name), owner(sb2) { }
 				MainSpinBox(int minValue, int maxValue, int step, SpinBox2* sb2, QWidget* parent, const char* name = 0)
 				                : SpinBox(minValue, maxValue, step, parent, name), owner(sb2) { }
+				void            setAlignment(int a)       { editor()->setAlignment(a); }
 				virtual QString mapValueToText(int v)     { return owner->mapValueToText(v); }
 				virtual int     mapTextToValue(bool* ok)  { return owner->mapTextToValue(ok); }
 				QString         mapValToText(int v)       { return SpinBox::mapValueToText(v); }
