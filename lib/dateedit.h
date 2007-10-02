@@ -1,7 +1,7 @@
 /*
  *  dateedit.h  -  date entry widget
  *  Program:  kalarm
- *  Copyright (C) 2002 - 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ class DateEdit : public KDateEdit
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		DateEdit(QWidget* parent = 0, const char* name = 0);
+		explicit DateEdit(QWidget* parent = 0, const char* name = 0);
 		/** Returns true if the widget contains a valid date. */
 		bool         isValid() const              { return date().isValid(); }
 		/** Returns the earliest date which can be entered.
