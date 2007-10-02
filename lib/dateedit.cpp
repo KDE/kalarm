@@ -91,7 +91,7 @@ void DateEdit::mousePressEvent(QMouseEvent *e)
 	if (isReadOnly())
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	KDateEdit::mousePressEvent(e);

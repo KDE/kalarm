@@ -1,7 +1,7 @@
 /*
  *  colourcombo.cpp  -  colour selection combo box
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  Some code taken from kdelibs/kdeui/kcolorcombo.cpp in the KDE libraries:
  *  Copyright (C) 1997 Martin Jones (mjones@kde.org)
@@ -26,7 +26,6 @@
 #include <klocale.h>
 #include <kcolordialog.h>
 
-#include "kalarmapp.h"
 #include "preferences.h"
 #include "colourcombo.moc"
 
@@ -209,7 +208,7 @@ void ColourCombo::mousePressEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QComboBox::mousePressEvent(e);
