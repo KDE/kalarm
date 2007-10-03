@@ -30,7 +30,6 @@ class KDateTime;
 
 #include <kuniqueapplication.h>
 #include <kurl.h>
-class K3Process;
 namespace KCal { class Event; }
 
 #include "alarmevent.h"
