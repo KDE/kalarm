@@ -322,7 +322,27 @@ void MessageWin::initView()
 		// Alarm date/time.
 		// Display time zone if not local time zone.
 		QLabel* label = new QLabel(frame ? frame : topWidget);
-		label->setText(KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(mDateTime.isLocalZone() ? 0 : KLocale::TimeZone)));
+		QString tm;
+		if (mDateTime.isDateOnly())
+			tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
+		else
+		{
+			bool showZone = false;
+			if (mDateTime.timeType() == KDateTime::UTC
+			||  mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone())
+			{
+				// Display time zone abbreviation if it's different from the local
+				// zone. Note that the iCalendar time zone might represent the local
+				// time zone in a slightly different way from the system time zone,
+				// so the zone comparison above might not produce the desired result.
+				QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
+				KDateTime local = mDateTime.kDateTime();
+				local.setTimeSpec(KDateTime::Spec::LocalZone());
+				showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
+			}
+			tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
+		}
+		label->setText(tm);
 		if (!frame)
 			label->setFrameStyle(QFrame::Box | QFrame::Raised);
 		label->setFixedSize(label->sizeHint());
@@ -599,7 +619,7 @@ void MessageWin::initView()
 	if (mKMailSerialNumber)
 	{
 		// KMail button
-		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), K3Icon::MainToolbar);
+		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), KIconLoader::MainToolbar);
 		mKMailButton = new QPushButton(topWidget);
 		mKMailButton->setIcon(pixmap);
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
@@ -612,7 +632,7 @@ void MessageWin::initView()
 		mKMailButton = 0;
 
 	// KAlarm button
-	QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), K3Icon::MainToolbar);
+	QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
 	mKAlarmButton = new QPushButton(topWidget);
 	mKAlarmButton->setIcon(pixmap);
 	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
@@ -759,7 +779,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	QString zone         = config.readEntry("TimeZone");
 	if (zone.isEmpty())
 		mDateTime = KDateTime(dt, KDateTime::ClockTime);
-	else if (zone == QString::fromLatin1("UTC"))
+	else if (zone == QLatin1String("UTC"))
 	{
 		dt.setTimeSpec(Qt::UTC);
 		mDateTime = KDateTime(dt, KDateTime::UTC);
@@ -962,31 +982,10 @@ void MessageWin::playAudio()
 	{
 		if (!mVolume  &&  mFadeVolume <= 0)
 			return;    // ensure zero volume doesn't play anything
-		QString play = mAudioFile;
-		QString file = QLatin1String("file:");
-		if (mAudioFile.startsWith(file))
-			play = mAudioFile.mid(file.length());
-#if 0
-		Phonon::SimplePlayer* player = new Phonon::SimplePlayer(this);
-		player->play(KUrl(QFile::encodeName(play)));
-#else
-		// An audio file is specified. Because loading it may take some time,
-		// call it on a timer to allow the window to display first.
-		Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, this);
-		output->setVolume(mVolume);
-		mAudioObject = new Phonon::MediaObject(this);
-		mAudioObject->setCurrentSource(play);
-		Phonon::Path path = Phonon::createPath(mAudioObject, output);
-		if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
-		{
-			Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(this);
-			fader->setVolume(mFadeVolume);
-			fader->fadeIn(mFadeSeconds);
-			path.insertEffect(fader);
-		}
-		connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()));
+		// An audio file is specified. Because initialising the sound system
+		// and loading the file may take some time, call it on a timer to
+		// allow the window to display first.
 		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));
-#endif
 	}
 	else if (mSpeak)
 	{
@@ -1031,17 +1030,34 @@ void MessageWin::slotSpeak()
 */
 void MessageWin::slotPlayAudio()
 {
-	// First check that it exists, to avoid possible crashes if the filename is badly specified
-	MainWindow* mmw = MainWindow::mainMainWindow();
-#ifdef __GNUC__
-#warning Use mmw for error messages
-#endif
-	if (0)
+	if (mAudioObject)
+		return;
+	mAudioObject = new Phonon::MediaObject(this);
+	QString audioFile = mAudioFile;
+	audioFile.replace(QRegExp("^file:/*"), "/");
+	Phonon::MediaSource source(audioFile);
+	if (source.type() == Phonon::MediaSource::Invalid)
 	{
-		kError(5950) << "MessageWin::playAudio(): Open failure:" << mAudioFile;
-		KMessageBox::error(this, i18nc("@info", "Cannot open audio file: <filename>%1</filename>", mAudioFile));
+		delete mAudioObject;
+		mAudioObject = 0;
+		kError(5950) << "MessageWin::playAudio(): Open failure:" << audioFile;
+		KMessageBox::error(this, i18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile));
 		return;
 	}
+	QCoreApplication::processEvents();
+	mAudioObject->setCurrentSource(source);
+	Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);
+	output->setVolume(mVolume);
+	Phonon::Path path = Phonon::createPath(mAudioObject, output);
+	if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
+	{
+		Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(mAudioObject);
+		fader->setVolume(mFadeVolume);
+		fader->fadeIn(mFadeSeconds);
+		path.insertEffect(fader);
+	}
+	connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()));
+	// First check that it exists, to avoid possible crashes if the filename is badly specified
 	mPlayedOnce = false;
 	mSilenceButton->setEnabled(true);
 	checkAudioPlay();
@@ -1081,6 +1097,7 @@ void MessageWin::stopPlay()
 	{
 		mAudioObject->stop();
 		delete mAudioObject;
+		mAudioObject = 0;
 	}
 	if (mSilenceButton)
 		mSilenceButton->setEnabled(false);
@@ -1178,6 +1195,7 @@ void MessageWin::showEvent(QShowEvent* se)
 		 * method is called, so for large windows the size needs to be
 		 * set again later.
 		 */
+		bool execComplete = true;
 		QSize s = sizeHint();     // fit the window round the message
 		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
 			KAlarm::readConfigWindowSize("FileMessage", s);
@@ -1232,9 +1250,10 @@ void MessageWin::showEvent(QShowEvent* se)
 			{
 				mPositioning = true;
 				move(x, y);
+				execComplete = false;
 			}
 		}
-		if (!mPositioning)
+		if (execComplete)
 			displayComplete();    // play audio, etc.
 		if (mAction == KAEvent::MESSAGE)
 		{

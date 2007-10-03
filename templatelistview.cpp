@@ -32,6 +32,7 @@
 TemplateListView::TemplateListView(QWidget* parent)
 	: EventListView(parent)
 {
+	setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
 }
 
 void TemplateListView::setModel(QAbstractItemModel* model)
@@ -52,7 +53,3 @@ void TemplateListView::dataChanged(const QModelIndex& topLeft, const QModelIndex
 			resizeColumnToContents(col);
 	}*/
 }
-
-#ifdef __GNUC__
-#warning Set default whatsthis = i18nc("@info:whatsthis", "The list of alarm templates")
-#endif

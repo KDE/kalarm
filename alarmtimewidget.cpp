@@ -42,7 +42,7 @@
 static const QTime time_23_59(23, 59);
 
 
-const int AlarmTimeWidget::maxDelayTime = 99*60 + 59;    // < 100 hours
+const int AlarmTimeWidget::maxDelayTime = 999*60 + 59;    // < 1000 hours
 
 QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 {
@@ -190,7 +190,7 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 
 	// Delay time spin box
 	mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
-	mDelayTimeEdit->setValue(1439);
+	mDelayTimeEdit->setValue(maxDelayTime);
 	mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
 	connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
 	mDelayTimeEdit->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())

@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 #ifndef SPINBOX2_H
 #define SPINBOX2_H
 
-//#include <qglobal.h>
-//Added by qt3to4:
 #include <QFrame>
 class QShowEvent;
 class QResizeEvent;
@@ -89,16 +87,20 @@ class SpinBox2 : public QFrame
 		/** Returns the spin box's text, including any prefix() and suffix(). */
 		QString             text() const                { return mSpinbox->text(); }
 		/** Returns the prefix for the spin box's text. */
-		virtual QString     prefix() const              { return mSpinbox->prefix(); }
+		QString             prefix() const              { return mSpinbox->prefix(); }
 		/** Returns the suffix for the spin box's text. */
-		virtual QString     suffix() const              { return mSpinbox->suffix(); }
+		QString             suffix() const              { return mSpinbox->suffix(); }
+		/** Sets the prefix which is prepended to the start of the displayed text. */
+		void                setPrefix(const QString& text)  { mSpinbox->setPrefix(text); }
+		/** Sets the suffix which is prepended to the start of the displayed text. */
+		void                setSuffix(const QString& text)  { mSpinbox->setSuffix(text); }
 		/** Returns the spin box's text with no prefix(), suffix() or leading or trailing whitespace. */
-		virtual QString     cleanText() const           { return mSpinbox->cleanText(); }
+		QString             cleanText() const           { return mSpinbox->cleanText(); }
 
 		/** Sets the special-value text which, if non-null, is displayed instead of a numeric
 		 *  value when the current value is equal to minimum().
 		 */
-		virtual void        setSpecialValueText(const QString& text)  { mSpinbox->setSpecialValueText(text); }
+		void                setSpecialValueText(const QString& text)  { mSpinbox->setSpecialValueText(text); }
 		/** Returns the special-value text which, if non-null, is displayed instead of a numeric
 		 *  value when the current value is equal to minimum().
 		 */
@@ -107,14 +109,16 @@ class SpinBox2 : public QFrame
 		/** Sets whether it is possible to step the value from the highest value to the
 		 *  lowest value and vice versa.
 		 */
-		virtual void        setWrapping(bool on);
+		void                setWrapping(bool on);
 		/** Returns whether it is possible to step the value from the highest value to the
 		 *  lowest value and vice versa.
 		 */
 		bool                wrapping() const            { return mSpinbox->wrapping(); }
 
+		/** Set the text alignment of the widget */
+		void                setAlignment(Qt::Alignment a) { mSpinbox->setAlignment(a); }
 		/** Sets the button symbols to use (arrows or plus/minus). */
-		virtual void        setButtonSymbols(QSpinBox::ButtonSymbols);
+		void                setButtonSymbols(QSpinBox::ButtonSymbols);
 		/** Returns the button symbols currently in use (arrows or plus/minus). */
 		QSpinBox::ButtonSymbols buttonSymbols() const   { return mSpinbox->buttonSymbols(); }
 
@@ -172,7 +176,7 @@ class SpinBox2 : public QFrame
 		 *  i.e. the amount by which the spin box value changes when a right-hand
 		 *  spin button is clicked without the shift key being pressed.
 		 */
-		void                setLineStep(int step);
+		void                setSingleStep(int step);
 		/** Sets the unshifted step increments for the two pairs of spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a spin button
 		 *  is clicked without the shift key being pressed.
@@ -206,22 +210,14 @@ class SpinBox2 : public QFrame
 		void                subtractSingle()            { addValue(-mSingleStep); }
 		/** Adjusts the current value by adding @p change. */
 		void                addValue(int change)        { mSpinbox->addValue(change); }
+		/** Increments the current value by adding the unshifted increment for
+		 *  the right-hand spin buttons.
+		 */
+		virtual void        stepBy(int increment)       { addValue(increment); }
 
 	public slots:
 		/** Sets the current value to @p val. */
-		virtual void        setValue(int val)           { mSpinbox->setValue(val); }
-		/** Sets the prefix which is prepended to the start of the displayed text. */
-		virtual void        setPrefix(const QString& text)  { mSpinbox->setPrefix(text); }
-		/** Sets the suffix which is prepended to the start of the displayed text. */
-		virtual void        setSuffix(const QString& text)  { mSpinbox->setSuffix(text); }
-		/** Increments the current value by adding the unshifted step increment for
-		 *  the right-hand spin buttons.
-		 */
-		virtual void        stepUp()                    { addValue(mSingleStep); }
-		/** Decrements the current value by subtracting the unshifted step increment for
-		 *  the right-hand spin buttons.
-		 */
-		virtual void        stepDown()                  { addValue(-mSingleStep); }
+		void                setValue(int val)           { mSpinbox->setValue(val); }
 		/** Increments the current value by adding the unshifted step increment for
 		 *  the left-hand spin buttons.
 		 */
@@ -231,7 +227,7 @@ class SpinBox2 : public QFrame
 		 */
 		virtual void        pageDown()                  { addValue(-mPageStep); }
 		/** Selects all the text in the spin box's editor. */
-		virtual void        selectAll()                 { mSpinbox->selectAll(); }
+		void                selectAll()                 { mSpinbox->selectAll(); }
 		/** Sets whether the widget is enabled. */
 		virtual void        setEnabled(bool enabled);
 
