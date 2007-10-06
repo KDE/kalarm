@@ -29,7 +29,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kcal/calendarlocal.h>
-
+#include <kconfiggroup.h>
 #include "resourcelocal.moc"
 
 using namespace KCal;

@@ -28,7 +28,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-
+#include <kconfiggroup.h>
 #include <kcal/calendarlocal.h>
 #include <kcal/event.h>
 
