@@ -996,8 +996,12 @@ void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
 	for (int i = 0, end = ids.count();  i < end;  ++i)
 	{
 		int id = ids[i];
-		QAction* act = menu->addAction(i18nc("@action Undo [action]: message", "%1 %2: %3",
-		                               action, Undo::actionText(type, id), Undo::description(type, id)));
+		QString actText = Undo::actionText(type, id);
+		QString descrip = Undo::description(type, id);
+		QString text = descrip.isEmpty()
+		             ? i18nc("@action Undo/Redo [action]", "%1 %2", action, actText)
+		             : i18nc("@action Undo [action]: message", "%1 %2: %3", action, actText, descrip);
+		QAction* act = menu->addAction(text);
 		mUndoMenuIds[act] = id;
 	}
 }
