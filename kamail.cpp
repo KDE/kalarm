@@ -530,7 +530,18 @@ uint KAMail::identityUoid(const QString& identityUoidOrName)
 	bool ok;
 	uint id = identityUoidOrName.toUInt(&ok);
 	if (!ok  ||  identityManager()->identityForUoid(id).isNull())
-		id = identityManager()->identityForName(identityUoidOrName).uoid();
+	{
+		identityManager();   // fetch it if not already done
+		for (KPIMIdentities::IdentityManager::ConstIterator it = mIdentityManager->begin();
+		     it != mIdentityManager->end();  ++it)
+		{
+			if ((*it).identityName() == identityUoidOrName)
+			{
+				id = (*it).uoid();
+				break;
+			}
+		}
+	}
 	return id;
 }
 
