@@ -27,9 +27,9 @@
 
 #include <kstandarddirs.h>
 #include <klocale.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kcal/calendarlocal.h>
-#include <kconfiggroup.h>
 
 #include "resourcelocal.moc"
 
