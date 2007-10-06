@@ -840,13 +840,13 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 			mActionType = T_MESSAGE;
 			break;
 	}
+	mEventID.clear();
+	mTemplateName.clear();
+	mResourceId.clear();
+	mPreAction.clear();
+	mPostAction.clear();
 	mText                   = (mActionType == T_COMMAND) ? text.trimmed() : text;
-	mCategory               = KCalEvent::EMPTY;
-	mEventID               .clear();
-	mTemplateName          .clear();
-	mResourceId            .clear();
-	mPreAction             .clear();
-	mPostAction            .clear();
+	mCategory               = KCalEvent::ACTIVE;
 	mAudioFile              = "";
 	mSoundVolume            = -1;
 	mFadeVolume             = -1;
