@@ -160,7 +160,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	mViewPage = new ViewPrefTab;
 	mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
 	mViewPageItem->setHeader(i18nc("@title", "View Settings"));
-	mViewPageItem->setIcon(KIcon(DesktopIcon("view_choose")));
+	mViewPageItem->setIcon(KIcon(DesktopIcon("view-choose")));
 	addPage(mViewPageItem);
 
 	mFontColourPage = new FontColourPrefTab;
