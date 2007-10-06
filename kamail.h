@@ -63,6 +63,7 @@ class KAMail : public QObject
 		static QString     convertAttachments(const QString& attachments, QStringList& list);
 		static KPIMIdentities::IdentityManager* identityManager();
 		static bool        identitiesExist();
+		static uint        identityUoid(const QString& identityUoidOrName);
 		static QString     controlCentreAddress();
 		static QString     getMailBody(quint32 serialNumber);
 		static QString     i18n_NeedFromEmailAddress();

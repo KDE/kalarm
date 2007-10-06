@@ -1507,9 +1507,9 @@ bool sendToKOrganizer(const KAEvent& event)
 			break;
 		case KAEvent::EMAIL:
 		{
-			QString from = event.emailFromKMail().isEmpty()
-			             ? Preferences::emailAddress()
-			             : KAMail::identityManager()->identityForName(event.emailFromKMail()).fullEmailAddr();
+			QString from = event.emailFromId()
+			             ? KAMail::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
+			             : Preferences::emailAddress();
 			AlarmText atext;
 			atext.setEmail(event.emailAddresses(", "), from, QString(), QString(), event.emailSubject(), QString());
 			kcalEvent->setSummary(atext.displayText());

@@ -373,7 +373,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QString          alMessage;
-				QString          alFromID;
+				uint             alFromID;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QString          alSubject;
@@ -409,7 +409,7 @@ int KAlarmApp::newInstance()
 					if (args->isSet("subject"))
 						alSubject = args->getOption("subject");
 					if (args->isSet("from-id"))
-						alFromID = args->getOption("from-id");
+						alFromID = KAMail::identityUoid(args->getOption("from-id"));
 					QStringList params = args->getOptionList("mail");
 					for (QStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
@@ -1125,7 +1125,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
-                              const QString& mailFromID, const EmailAddressList& mailAddresses,
+                              uint mailFromID, const EmailAddressList& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
 	kDebug(5950) << "KAlarmApp::scheduleEvent():" << text;

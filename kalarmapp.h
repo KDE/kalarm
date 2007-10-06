@@ -78,8 +78,7 @@ class KAlarmApp : public KUniqueApplication
 		                                 const QFont&, const QString& audioFile, float audioVolume,
 		                                 int reminderMinutes, const KARecurrence& recurrence,
 						 int repeatInterval, int repeatCount,
-		                                 const QString& mailFromID = QString(),
-		                                 const EmailAddressList& mailAddresses = EmailAddressList(),
+		                                 uint mailFromID = 0, const EmailAddressList& mailAddresses = EmailAddressList(),
 		                                 const QString& mailSubject = QString(),
 		                                 const QStringList& mailAttachments = QStringList());
 		bool               dbusHandleEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_HANDLE); }

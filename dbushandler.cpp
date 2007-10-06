@@ -282,9 +282,11 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 const KARecurrence& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
+	uint senderId = 0;
 	if (!fromID.isEmpty())
 	{
-		if (KAMail::identityManager()->identityForName(fromID).isNull())
+		senderId = KAMail::identityUoid(fromID);
+		if (!senderId)
 		{
 			kError(5950) << "D-Bus call scheduleEmail(): unknown sender ID:" << fromID;
 			return false;
@@ -310,7 +312,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString(), -1, 0, recurrence, subRepeatInterval, subRepeatCount, fromID, addrs, subject, atts);
+	                               QString(), -1, 0, recurrence, subRepeatInterval, subRepeatCount, senderId, addrs, subject, atts);
 }
 
 

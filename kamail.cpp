@@ -113,23 +113,22 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 {
 	QString err;
 	KPIMIdentities::Identity identity;
-	if (jobdata.event.emailFromKMail().isEmpty())
+	if (!jobdata.event.emailFromId())
 		jobdata.from = Preferences::emailAddress();
 	else
 	{
-		identity = mIdentityManager->identityForName(jobdata.event.emailFromKMail());
+		identity = mIdentityManager->identityForUoid(jobdata.event.emailFromId());
 		if (identity.isNull())
 		{
-			kError(5950) << "KAMail::sendKMail(): identity" << jobdata.event.emailFromKMail() << "not found";
-			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br /><application>KMail</application> identity <resource>%1</resource> not found.", jobdata.event.emailFromKMail()));
-//			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> not found", jobdata.event.emailFromKMail()));
+			kError(5950) << "KAMail::sendKMail(): identity" << jobdata.event.emailFromId() << "not found";
+			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
 		jobdata.from = identity.fullEmailAddr();
 		if (jobdata.from.isEmpty())
 		{
-			kError(5950) << "KAMail::sendKMail(): identity" << jobdata.event.emailFromKMail() << ": no email address";
-//			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> has no email address", jobdata.event.emailFromKMail()));
+			kError(5950) << "KAMail::sendKMail(): identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
+			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> has no email address", identity.identityName()));
 			return -1;
 		}
 	}
@@ -138,7 +137,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		switch (Preferences::emailFrom())
 		{
 			case Preferences::MAIL_FROM_KMAIL:
-				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default <application>KMail</application> identity found)</para>"
+				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default email identity found)</para>"
 				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 			case Preferences::MAIL_FROM_CONTROL_CENTRE:
@@ -229,15 +228,15 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		MailTransport::Transport* transport = manager->transportByName(identity.transport(), true);
 		if (!transport)
 		{
-			kError(5950) << "KAMail::sendKMail(): no mail transport found for identity" << jobdata.event.emailFromKMail();
-			errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", jobdata.event.emailFromKMail()));
+			kError(5950) << "KAMail::sendKMail(): no mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
+			errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
 			return -1;
 		}
 		int transportId = transport->id();
 		MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
 		if (!mailjob)
 		{
-			kError(5950) << "KAMail::sendKMail(): failed to create mail transport job for identity" << jobdata.event.emailFromKMail();
+			kError(5950) << "KAMail::sendKMail(): failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
 			return -1;
 		}
@@ -507,10 +506,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 			QString domain = addr.mailboxList.first().addrSpec().domain;
 			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
 			{
-				QString text = (Preferences::emailClient() == Preferences::kmail)
-				             ? i18nc("@info", "An email has been queued to be sent by <application>KMail</application>")
-				             : i18nc("@info", "An email has been queued to be sent");
-				KMessageBox::information(0, text, QString(), Preferences::EMAIL_QUEUED_NOTIFY);
+				KMessageBox::information(0, i18nc("@info", "An email has been queued to be sent"), QString(), Preferences::EMAIL_QUEUED_NOTIFY);
 				return;
 			}
 		}
@@ -518,12 +514,24 @@ void KAMail::notifyQueued(const KAEvent& event)
 }
 
 /******************************************************************************
-*  Return whether any KMail identities exist.
+*  Return whether any email identities exist.
 */
 bool KAMail::identitiesExist()
 {
 	identityManager();    // create identity manager if not already done
 	return mIdentityManager->begin() != mIdentityManager->end();
+}
+
+/******************************************************************************
+*  Fetch the uoid of an email identity name or uoid string.
+*/
+uint KAMail::identityUoid(const QString& identityUoidOrName)
+{
+	bool ok;
+	uint id = identityUoidOrName.toUInt(&ok);
+	if (!ok  ||  identityManager()->identityForUoid(id).isNull())
+		id = identityManager()->identityForName(identityUoidOrName).uoid();
+	return id;
 }
 
 /******************************************************************************
