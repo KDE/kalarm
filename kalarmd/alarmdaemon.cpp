@@ -31,6 +31,7 @@
 #include <kapplication.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <ksystemtimezone.h>
 #include <kdatetime.h>
 #include <kdebug.h>
