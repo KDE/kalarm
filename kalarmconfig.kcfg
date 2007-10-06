@@ -10,8 +10,7 @@
   <include>qcolor.h</include>
   <include>qnamespace.h</include>
   <include>kglobalsettings.h</include>
-  <include>kamail.h</include>
-  <include>timeperiod.h</include>
+  <include>"timeperiod.h"</include>
 
   <signal name="messageColoursChanged">
   </signal>

@@ -21,21 +21,41 @@
 #ifndef KAMAIL_H
 #define KAMAIL_H
 
+#include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QQueue>
+
+#include "alarmevent.h"
+
 class KUrl;
-class KAEvent;
+class KJob;
+class DateTime;
 class EmailAddressList;
 namespace KPIMIdentities { class IdentityManager; }
+namespace MailTransport  { class TransportJob; }
 namespace KMime { namespace Types { struct Address; } }
 
-struct KAMailData;
 
-
-class KAMail
+class KAMail : public QObject
 {
+		Q_OBJECT
 	public:
-		static bool        send(const KAEvent&, QStringList& errmsgs, bool allowNotify = true);
+		// Data to store for each mail send job.
+		// Some data is required by KAMail, while other data is used by the caller.
+		struct JobData
+		{
+			JobData() {}
+			JobData(KAEvent& e, const KAAlarm& a, bool resched, bool notify)
+			      : event(e), alarm(a), reschedule(resched), allowNotify(notify) {}
+			KAEvent  event;
+			KAAlarm  alarm;
+			QString  from, bcc;
+			bool     reschedule;
+			bool     allowNotify;
+		};
+
+		static int         send(JobData&, QStringList& errmsgs);
 		static int         checkAddress(QString& address);
 		static int         checkAttachment(QString& attachment, KUrl* = 0);
 		static bool        checkAttachment(const KUrl&);
@@ -48,15 +68,23 @@ class KAMail
 		static QString     i18n_NeedFromEmailAddress();
 		static QString     i18n_sent_mail();
 
+	private slots:
+		void               slotEmailSent(KJob*);
+
 	private:
-		static KPIMIdentities::IdentityManager* mIdentityManager;     // KMail identity manager
-		static QString     sendKMail(const KAMailData&);
-		static QString     initHeaders(const KAMailData&, bool dateId);
+		KAMail() {}
+		static KAMail*     instance();
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
-		static QString     addToKMailFolder(const KAMailData&, const char* folder, bool checkKmailRunning);
+		static QString     addToKMailFolder(const JobData&, const char* folder, bool checkKmailRunning);
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
-		static QStringList errors(const QString& error = QString(), bool sendfail = true);
+		enum ErrType { SEND_FAIL, SEND_ERROR, COPY_ERROR };
+		static QStringList errors(const QString& error = QString(), ErrType = SEND_FAIL);
+
+		static KAMail*     mInstance;
+		static QQueue<MailTransport::TransportJob*> mJobs;
+		static QQueue<JobData>                      mJobData;
+		static KPIMIdentities::IdentityManager* mIdentityManager;     // KMail identity manager
 };
 
 #endif // KAMAIL_H

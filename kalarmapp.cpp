@@ -1612,25 +1612,39 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 		{
 			kDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to:" << event.emailAddresses(",");
 			QStringList errmsgs;
-			if (!KAMail::send(event, errmsgs, (reschedule || allowDefer)))
-				result = 0;
-			if (!errmsgs.isEmpty())
+			KAMail::JobData data(event, alarm, reschedule, (reschedule || allowDefer));
+			int ans = KAMail::send(data, errmsgs);
+			if (ans)
 			{
-				// Some error occurred, although the email may have been sent successfully
-				if (result)
-					kDebug(5950) << "KAlarmApp::execAlarm(): copy error:" << errmsgs[1];
-				else
-					kDebug(5950) << "KAlarmApp::execAlarm(): failed:" << errmsgs[1];
-				MessageWin::showError(event, alarm.dateTime(), errmsgs);
+				// The email has either been sent or failed - not queued
+				if (ans < 0)
+					result = 0;  // failure
+				emailSent(data, errmsgs, (ans > 0));
 			}
-			if (reschedule)
-				rescheduleAlarm(event, alarm, true);
 			break;
 		}
 		default:
 			return 0;
 	}
 	return result;
+}
+
+/******************************************************************************
+* Called when sending an email has completed.
+*/
+void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, bool copyerr)
+{
+	if (!errmsgs.isEmpty())
+	{
+		// Some error occurred, although the email may have been sent successfully
+		if (copyerr)
+			kDebug(5950) << "KAlarmApp::execAlarm(): copy error:" << errmsgs[1];
+		else
+			kDebug(5950) << "KAlarmApp::execAlarm(): failed:" << errmsgs[1];
+		MessageWin::showError(data.event, data.alarm.dateTime(), errmsgs);
+	}
+	if (data.reschedule)
+		rescheduleAlarm(data.event, data.alarm, true);
 }
 
 /******************************************************************************

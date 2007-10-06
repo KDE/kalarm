@@ -47,7 +47,10 @@ class EmailAddressList : public QList<KCal::Person>
 		EmailAddressList() : QList<KCal::Person>() { }
 		EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
 		EmailAddressList& operator=(const QList<KCal::Person>&);
+		operator QStringList() const;
 		QString join(const QString& separator) const;
+	private:
+		QString address(int index) const;
 };
 
 

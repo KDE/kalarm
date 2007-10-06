@@ -3788,6 +3788,17 @@ EmailAddressList& EmailAddressList::operator=(const QList<Person>& addresses)
 }
 
 /******************************************************************************
+* Return the email address list as a string list of email addresses.
+*/
+EmailAddressList::operator QStringList() const
+{
+	QStringList list;
+	for (int p = 0, end = count();  p < end;  ++p)
+		list += address(p);
+	return list;
+}
+
+/******************************************************************************
  * Return the email address list as a string, each address being delimited by
  * the specified separator string.
  */
@@ -3801,32 +3812,44 @@ QString EmailAddressList::join(const QString& separator) const
 			first = false;
 		else
 			result += separator;
-
-		bool quote = false;
-		QString name = (*this)[p].name();
-		if (!name.isEmpty())
-		{
-			// Need to enclose the name in quotes if it has any special characters
-			int len = name.length();
-			for (int i = 0;  i < len;  ++i)
-			{
-				QChar ch = name[i];
-				if (!ch.isLetterOrNumber())
-				{
-					quote = true;
-					result += '\"';
-					break;
-				}
-			}
-			result += (*this)[p].name();
-			result += (quote ? "\" <" : " <");
-			quote = true;    // need angle brackets round email address
-		}
-
-		result += (*this)[p].email();
-		if (quote)
-			result += '>';
+		result += address(p);
 	}
+	return result;
+}
+
+/******************************************************************************
+* Convert one item into an email address, including name.
+*/
+QString EmailAddressList::address(int index) const
+{
+	if (index < 0  ||  index > count())
+		return QString();
+	QString result;
+	bool quote = false;
+	KCal::Person person = (*this)[index];
+	QString name = person.name();
+	if (!name.isEmpty())
+	{
+		// Need to enclose the name in quotes if it has any special characters
+		int len = name.length();
+		for (int i = 0;  i < len;  ++i)
+		{
+			QChar ch = name[i];
+			if (!ch.isLetterOrNumber())
+			{
+				quote = true;
+				result += '\"';
+				break;
+			}
+		}
+		result += (*this)[index].name();
+		result += (quote ? "\" <" : " <");
+		quote = true;    // need angle brackets round email address
+	}
+
+	result += person.email();
+	if (quote)
+		result += '>';
 	return result;
 }
 

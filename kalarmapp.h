@@ -33,6 +33,7 @@ class KDateTime;
 namespace KCal { class Event; }
 
 #include "alarmevent.h"
+#include "kamail.h"
 class DBusHandler;
 class MainWindow;
 class TrayWindow;
@@ -86,6 +87,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               dbusDeleteEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
 	public slots:
 		void               processQueue();
+		void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
 	signals:
 		void               trayIconToggled();
 	protected:
