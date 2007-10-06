@@ -23,6 +23,7 @@
 #include <QFile>
 
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kabc/lock.h>
