@@ -1032,8 +1032,13 @@ void MainWindow::initUndoMenu(KPopupMenu* menu, Undo::Type type)
 	for (QValueList<int>::ConstIterator it = ids.begin();  it != ids.end();  ++it)
 	{
 		int id = *it;
-		menu->insertItem(i18n("Undo [action]: message", "%1 %2: %3")
-		                       .arg(action).arg(Undo::actionText(type, id)).arg(Undo::description(type, id)), id);
+		QString actText = Undo::actionText(type, id);
+		QString descrip = Undo::description(type, id);
+		QString text = descrip.isEmpty()
+//		             ? i18n("Undo/Redo [action]", "%1 %2").arg(action).arg(actText)
+		             ? QString("%1 %2").arg(action).arg(actText)
+		             : i18n("Undo [action]: message", "%1 %2: %3").arg(action).arg(actText).arg(descrip);
+		menu->insertItem(text, id);
 	}
 }
 
