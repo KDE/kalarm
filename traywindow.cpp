@@ -234,14 +234,15 @@ bool TrayWindow::event(QEvent* e)
 	if (e->type() != QEvent::ToolTip)
 		return KSystemTrayIcon::event(e);
 	QHelpEvent* he = (QHelpEvent*)e;
+	QString altext;
+	if (Preferences::tooltipAlarmCount())
+		altext = tooltipAlarmText();
 	QString text;
 	if (Daemon::monitoringAlarms())
-		text = KGlobal::mainComponent().aboutData()->programName();
+		text = i18nc("@info:tooltip", "%1%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	else
-		text = i18nc("@info", "%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
+		text = i18nc("@info:tooltip", "%1 - disabled%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	kDebug(5950) << "TrayWindow::event():" << text;
-	if (Preferences::tooltipAlarmCount())
-		tooltipAlarmText(text);
 	QToolTip::showText(he->globalPos(), text);
 	return true;
 }
@@ -250,7 +251,7 @@ bool TrayWindow::event(QEvent* e)
 *  Return the tooltip text showing alarms due in the next 24 hours.
 *  The limit of 24 hours is because only times, not dates, are displayed.
 */
-void TrayWindow::tooltipAlarmText(QString& text) const
+QString TrayWindow::tooltipAlarmText() const
 {
 	KAEvent event;
 	const QString& prefix = Preferences::tooltipTimeToPrefix();
@@ -275,12 +276,10 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 			item.dateTime = dateTime;
 
 			// The alarm is due today, or early tomorrow
-			bool space = false;
 			if (Preferences::showTooltipAlarmTime())
 			{
 				item.text += KGlobal::locale()->formatTime(item.dateTime.time());
 				item.text += QLatin1Char(' ');
-				space = true;
 			}
 			if (Preferences::showTooltipTimeToAlarm())
 			{
@@ -291,14 +290,11 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 				minutes[0] = (mins%60) / 10 + '0';
 				minutes[1] = (mins%60) % 10 + '0';
 				if (Preferences::showTooltipAlarmTime())
-					item.text += i18nc("@info:tooltip prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
+					item.text += i18nc("@info/plain prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
 				else
-					item.text += i18nc("@info:tooltip prefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
+					item.text += i18nc("@info/plain prefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
 				item.text += QLatin1Char(' ');
-				space = true;
 			}
-			if (space)
-				item.text += QLatin1Char(' ');
 			item.text += AlarmText::summary(event);
 
 			// Insert the item into the list in time-sorted order
@@ -312,15 +308,16 @@ void TrayWindow::tooltipAlarmText(QString& text) const
 		}
 	}
 	kDebug(5950) << "TrayWindow::tooltipAlarmText():";
+	QString text;
 	int count = 0;
 	for (i = 0, iend = items.count();  i < iend;  ++i)
 	{
 		kDebug(5950) << "--" << (count+1) << ")" << items[i].text;
-		text += '\n';
-		text += items[i].text;
+		text += "<br />" + items[i].text;
 		if (++count == maxCount)
 			break;
 	}
+	return text;
 }
 
 /******************************************************************************
