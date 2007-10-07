@@ -47,12 +47,13 @@ class KAMail : public QObject
 		{
 			JobData() {}
 			JobData(KAEvent& e, const KAAlarm& a, bool resched, bool notify)
-			      : event(e), alarm(a), reschedule(resched), allowNotify(notify) {}
+			      : event(e), alarm(a), reschedule(resched), allowNotify(notify), queued(false) {}
 			KAEvent  event;
 			KAAlarm  alarm;
 			QString  from, bcc;
 			bool     reschedule;
 			bool     allowNotify;
+			bool     queued;
 		};
 
 		static int         send(JobData&, QStringList& errmsgs);

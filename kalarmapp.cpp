@@ -1513,6 +1513,7 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 * Execute an alarm by displaying its message or file, or executing its command.
 * Reply = ShellProcess instance if a command alarm
 *       != 0 if successful
+*       = -1 if execution has not completed
 *       = 0 if the alarm is disabled, or if an error message was output.
 */
 void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule, bool allowDefer, bool noPreAction)
@@ -1613,13 +1614,19 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			kDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to:" << event.emailAddresses(",");
 			QStringList errmsgs;
 			KAMail::JobData data(event, alarm, reschedule, (reschedule || allowDefer));
+			data.queued = true;
 			int ans = KAMail::send(data, errmsgs);
 			if (ans)
 			{
 				// The email has either been sent or failed - not queued
 				if (ans < 0)
 					result = 0;  // failure
+				data.queued = false;
 				emailSent(data, errmsgs, (ans > 0));
+			}
+			else
+			{
+				result = (void*)-1;   // email has been queued
 			}
 			break;
 		}
@@ -1643,6 +1650,8 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
 			kDebug(5950) << "KAlarmApp::execAlarm(): failed:" << errmsgs[1];
 		MessageWin::showError(data.event, data.alarm.dateTime(), errmsgs);
 	}
+	else if (data.queued)
+		emit execAlarmSuccess();
 	if (data.reschedule)
 		rescheduleAlarm(data.event, data.alarm, true);
 }
@@ -1739,6 +1748,9 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	if (!tmpXtermFile.isEmpty())
 		pd->tempFiles += tmpXtermFile;
 	mCommandProcesses.append(pd);
+#ifdef __GNUC__
+#warning No error reported even if file does not exist
+#endif
 	if (proc->start(mode))
 		return proc;
 

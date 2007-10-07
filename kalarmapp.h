@@ -89,6 +89,7 @@ class KAlarmApp : public KUniqueApplication
 		void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
 	signals:
 		void               trayIconToggled();
+		void               execAlarmSuccess();
 	protected:
 		KAlarmApp();
 	private slots:
