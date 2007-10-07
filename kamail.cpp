@@ -240,10 +240,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
 			return -1;
 		}
-#ifdef __GNUC__
-#warning Does time stamp need to be set?
-#endif
-		QString message = initHeaders(jobdata, false, false);
+		QString message = initHeaders(jobdata, true, true);
 		message += jobdata.event.message();
 		err = appendBodyAttachments(message, jobdata.event);
 		if (!err.isNull())
@@ -253,7 +250,8 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		}
 		mailjob->setSender(jobdata.from);
 		mailjob->setTo(QStringList(jobdata.event.emailAddresses()));
-		mailjob->setBcc(QStringList(jobdata.bcc));
+		if (!jobdata.bcc.isEmpty())
+			mailjob->setBcc(QStringList(jobdata.bcc));
 		mailjob->setData(message.toLocal8Bit());
 		mJobs.enqueue(mailjob);
 		mJobData.enqueue(jobdata);
@@ -363,9 +361,11 @@ QString initHeaders(const KAMail::JobData& data, bool dateId, bool addresses)
 	if (dateId)
 	{
 		KDateTime now = KDateTime::currentUtcDateTime();
+		QString from = data.from;
+		from.remove(QRegExp("^.*<")).remove(QRegExp(">.*$"));
 		message = QLatin1String("Date: ");
 		message += now.toTimeSpec(Preferences::timeZone()).toString(KDateTime::RFCDateDay);
-		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(now.toTime_t()).arg(now.time().msec()).arg(data.from);
+		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(now.toTime_t()).arg(now.time().msec()).arg(from);
 	}
 	if (addresses)
 	{
@@ -375,7 +375,7 @@ QString initHeaders(const KAMail::JobData& data, bool dateId, bool addresses)
 			message += QLatin1String("\nBcc: ") + data.bcc;
 	}
 	message += QLatin1String("\nSubject: ") + data.event.emailSubject();
-	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(KGlobal::mainComponent().aboutData()->programName());
+	message += QString::fromLatin1("\nX-Mailer: %1/" KALARM_VERSION).arg(KGlobal::mainComponent().aboutData()->programName());
 	return message;
 }
 
