@@ -1748,9 +1748,6 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	if (!tmpXtermFile.isEmpty())
 		pd->tempFiles += tmpXtermFile;
 	mCommandProcesses.append(pd);
-#ifdef __GNUC__
-#warning No error reported even if file does not exist
-#endif
 	if (proc->start(mode))
 		return proc;
 
@@ -1804,7 +1801,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 		if (pd->process == proc)
 		{
 			// Found the command. Check its exit status.
-			if (!proc->exitStatus() == QProcess::NormalExit)
+			if (proc->status() != ShellProcess::SUCCESS)
 			{
 				QString errmsg = proc->errorMessage();
 				kWarning(5950) << "KAlarmApp::slotCommandExited(" << pd->event->cleanText() << "):" << errmsg;
