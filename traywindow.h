@@ -44,7 +44,6 @@ class TrayWindow : public KSystemTrayIcon
 		void         removeWindow(MainWindow*);
 		MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }
 		void         setAssocMainWindow(MainWindow* win)   { mAssocMainWindow = win; }
-		void         tooltipAlarmText(QString& text) const;
 
 	public slots:
 		void         slotQuit();
@@ -67,6 +66,7 @@ class TrayWindow : public KSystemTrayIcon
 		void         slotResourceStatusChanged();
 
 	private:
+		QString      tooltipAlarmText() const;
 
 		MainWindow*     mAssocMainWindow;     // main window associated with this, or null
 		QIcon           mIconEnabled, mIconDisabled;
