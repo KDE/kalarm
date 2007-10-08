@@ -1176,6 +1176,7 @@ EditPrefTab::EditPrefTab()
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Reminder units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mReminderUnits = new KComboBox(box);
+	mReminderUnits->addItem(i18nc("@item:inlistbox", "Minutes"), TimePeriod::Minutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Hours/Minutes"), TimePeriod::HoursMinutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Days"), TimePeriod::Days);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Weeks"), TimePeriod::Weeks);
@@ -1333,10 +1334,11 @@ void EditPrefTab::restore(bool)
 	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 	switch (Preferences::defaultReminderUnits())
 	{
-		case TimePeriod::Weeks:        index = 2; break;
-		case TimePeriod::Days:         index = 1; break;
-		case TimePeriod::HoursMinutes:
-		default:                       index = 0; break;
+		case TimePeriod::Weeks:        index = 3; break;
+		case TimePeriod::Days:         index = 2; break;
+		default:
+		case TimePeriod::HoursMinutes: index = 1; break;
+		case TimePeriod::Minutes:      index = 0; break;
 	}
 	mReminderUnits->setCurrentIndex(index);
 	mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
@@ -1374,10 +1376,11 @@ void EditPrefTab::apply(bool syncToDisc)
 	TimePeriod::Units units;
 	switch (mReminderUnits->currentIndex())
 	{
-		case 2:  units = TimePeriod::Weeks;        break;
-		case 1:  units = TimePeriod::Days;         break;
-		case 0:
-		default: units = TimePeriod::HoursMinutes; break;
+		case 3:  units = TimePeriod::Weeks;        break;
+		case 2:  units = TimePeriod::Days;         break;
+		default:
+		case 1:  units = TimePeriod::HoursMinutes; break;
+		case 0:  units = TimePeriod::Minutes;      break;
 	}
 	if (units != Preferences::defaultReminderUnits())
 		Preferences::setDefaultReminderUnits(units);

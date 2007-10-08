@@ -34,13 +34,13 @@ class TimeSpinBox;
  *  @short Time period entry widget.
  *
  *  The TimePeriod class provides a widget for entering a time period as a number of
- *  weeks, days, or hours and minutes.
+ *  weeks, days, hours and minutes, or minutes.
  *
- *  It displays a combo box to select the time units (weeks, days or hours and minutes)
- *  alongside a spin box to enter the number of units. The type of spin box displayed
- *  alters according to the units selection: day and week values are entered in a normal
- *  spin box, while hours and minutes are entered in a time spin box (with two pairs of
- *  spin buttons, one for hours and one for minutes).
+ *  It displays a combo box to select the time units (weeks, days, hours and minutes, or
+ *  minutes) alongside a spin box to enter the number of units. The type of spin box
+ *  displayed alters according to the units selection: day, week and minute values are
+ *  entered in a normal spin box, while hours and minutes are entered in a time spin box
+ *  (with two pairs of spin buttons, one for hours and one for minutes).
  *
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
@@ -52,19 +52,21 @@ class TimePeriod : public KHBox
 		Q_OBJECT
 	public:
 		/** Units for the time period.
+		 *  @li Minutes - the time period is entered as a number of minutes.
 		 *  @li HoursMinutes - the time period is entered as an hours/minutes value.
 		 *  @li Days - the time period is entered as a number of days.
 		 *  @li Weeks - the time period is entered as a number of weeks.
 		 */
-		enum Units { HoursMinutes, Days, Weeks };
+		enum Units { Minutes, HoursMinutes, Days, Weeks };
 
 		/** Constructor.
-		 *  @param allowHourMinute Set false to prevent hours/minutes from being allowed
-		 *         as units; only days and weeks can ever be used, regardless of other
-		 *         method calls. Set true to allow hours/minutes, days or weeks as units.
+		 *  @param allowMinute Set false to prevent hours/minutes or minutes from
+		 *         being allowed as units; only days and weeks can ever be used,
+		 *         regardless of other method calls. Set true to allow minutes,
+		 *         hours/minutes, days or weeks as units.
 		 *  @param parent The parent object of this widget.
 		 */
-		TimePeriod(bool allowHourMinute, QWidget* parent);
+		TimePeriod(bool allowMinute, QWidget* parent);
 		/** Returns true if the widget is read only. */
 		bool          isReadOnly() const             { return mReadOnly; }
 		/** Sets whether the widget is read-only for the user. If read-only,
@@ -80,13 +82,15 @@ class TimePeriod : public KHBox
 		 *  @param defaultUnits The units to display initially in the combo box.
 		 */
 		void          setMinutes(int minutes, bool dateOnly, Units defaultUnits);
-		/** Enables or disables hours/minutes units in the combo box. To disable hours/minutes,
-		 *  set @p dateOnly true; to enable hours/minutes, set @p dateOnly false. But note that
+		/** Enables or disables minutes and hours/minutes units in the combo box. To
+		 *  disable minutes and hours/minutes, set @p dateOnly true; to enable minutes
+		 *  and hours/minutes, set @p dateOnly false. But note that minutes and
 		 *  hours/minutes cannot be enabled if it was disallowed in the constructor.
 		 */
 		void          setDateOnly(bool dateOnly)     { setDateOnly(minutes(), dateOnly, true); }
-		/** Sets the maximum values for the hours/minutes and days/weeks spin boxes.
-		 *  Set @p hourmin = 0 to leave the hours/minutes maximum unchanged.
+		/** Sets the maximum values for the minutes and hours/minutes, and days/weeks
+		 *  spin boxes.
+		 *  Set @p hourmin = 0 to leave the minutes and hours/minutes maximum unchanged.
 		 */
 		void          setMaximum(int hourmin, int days);
 		/** Sets whether the editor text is to be selected whenever spin buttons are
@@ -117,16 +121,17 @@ class TimePeriod : public KHBox
 		void            showHourMin(bool hourMin);
 		void            adjustDayWeekShown();
 
+		static QString i18n_minutes();       // text of 'minutes' units, lower case
 		static QString i18n_hours_mins();    // text of 'hours/minutes' units
 		static QString i18n_days();          // text of 'days' units
 		static QString i18n_weeks();         // text of 'weeks' units
 
 		QStackedWidget* mSpinStack;          // displays either the days/weeks or hours:minutes spinbox
-		SpinBox*        mSpinBox;            // the days/weeks value spinbox
+		SpinBox*        mSpinBox;            // the minutes/days/weeks value spinbox
 		TimeSpinBox*    mTimeSpinBox;        // the hours:minutes value spinbox
 		ComboBox*       mUnitsCombo;
 		int             mMaxDays;            // maximum day count
-		int             mDateOnlyOffset;     // for mUnitsCombo: 1 if hours/minutes is disabled, else 0
+		int             mDateOnlyOffset;     // for mUnitsCombo: 2 if minutes & hours/minutes is disabled, else 0
 		Units           mMaxUnitShown;       // for mUnitsCombo: maximum units shown
 		bool            mNoHourMinute;       // hours/minutes cannot be displayed, ever
 		bool            mReadOnly;           // the widget is read only

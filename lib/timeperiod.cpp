@@ -33,11 +33,12 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
+QString TimePeriod::i18n_minutes()      { return i18nc("@item:inlistbox", "minutes"); }
 QString TimePeriod::i18n_hours_mins()   { return i18nc("@item:inlistbox", "hours/minutes"); }
 QString TimePeriod::i18n_days()         { return i18nc("@item:inlistbox", "days"); }
 QString TimePeriod::i18n_weeks()        { return i18nc("@item:inlistbox", "weeks"); }
 
-static const int maxMinutes = 100*60-1;   // absolute maximum value for hours:minutes = 99H59M
+static const int maxMinutes = 1000*60-1;   // absolute maximum value for hours:minutes = 999H59M
 
 /*=============================================================================
 = Class TimePeriod
@@ -61,7 +62,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
 	mSpinStack->addWidget(mSpinBox);
 
 	mTimeSpinBox = new TimeSpinBox(0, 99999, mSpinStack);
-	mTimeSpinBox->setRange(1, maxMinutes);    // max 99H59M
+	mTimeSpinBox->setRange(1, maxMinutes);    // max 999H59M
 	connect(mTimeSpinBox, SIGNAL(valueChanged(int)), SLOT(slotTimeChanged(int)));
 	mSpinStack->addWidget(mTimeSpinBox);
 
@@ -72,10 +73,11 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
 	mUnitsCombo = new ComboBox(this);
 	mUnitsCombo->setEditable(false);
 	if (mNoHourMinute)
-		mDateOnlyOffset = 1;
+		mDateOnlyOffset = 2;
 	else
 	{
 		mDateOnlyOffset = 0;
+		mUnitsCombo->addItem(i18n_minutes());
 		mUnitsCombo->addItem(i18n_hours_mins());
 	}
 	mUnitsCombo->addItem(i18n_days());
@@ -144,22 +146,22 @@ void TimePeriod::setMaximum(int hourmin, int days)
  */
 int TimePeriod::minutes() const
 {
+	int factor = 0;
 	switch (mUnitsCombo->currentIndex() + mDateOnlyOffset)
 	{
 		case HoursMinutes:
 			return mTimeSpinBox->value();
-		case Days:
-			return mSpinBox->value() * 24*60;
-		case Weeks:
-			return mSpinBox->value() * 7*24*60;
+		case Minutes:  factor = 1;  break;
+		case Days:     factor = 24*60;  break;
+		case Weeks:    factor = 7*24*60;  break;
 	}
-	return 0;
+	return mSpinBox->value() * factor;
 }
 
 /******************************************************************************
 *  Initialise the controls with a specified time period.
 *  The time unit combo-box is initialised to 'defaultUnits', but if 'dateOnly'
-*  is true, it will never be initialised to hours/minutes.
+*  is true, it will never be initialised to minutes or hours/minutes.
 */
 void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUnits)
 {
@@ -171,7 +173,7 @@ void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUn
 	{
 		int count = mins;
 		if (mins % (24*60))
-			item = HoursMinutes;
+			item = (defaultUnits == Minutes) ? Minutes : HoursMinutes;
 		else if (mins % (7*24*60))
 		{
 			item = Days;
@@ -227,21 +229,25 @@ TimePeriod::Units TimePeriod::setDateOnly(int mins, bool dateOnly, bool signal)
 		if (!dateOnly  &&  mDateOnlyOffset)
 		{
 			// Change from date-only to allow hours/minutes
-			mUnitsCombo->insertItem(0, i18n_hours_mins());
+			mUnitsCombo->insertItem(0, i18n_minutes());
+			mUnitsCombo->insertItem(1, i18n_hours_mins());
 			mDateOnlyOffset = 0;
 			adjustDayWeekShown();
-			mUnitsCombo->setCurrentIndex(++index);
+			mUnitsCombo->setCurrentIndex(index += 2);
 		}
 		else if (dateOnly  &&  !mDateOnlyOffset)
 		{
 			// Change from allowing hours/minutes to date-only
 			mUnitsCombo->removeItem(0);
-			mDateOnlyOffset = 1;
-			if (index)
-				--index;
+			mUnitsCombo->removeItem(0);
+			mDateOnlyOffset = 2;
+			if (index > 2)
+				index -= 2;
+			else
+				index = 0;
 			adjustDayWeekShown();
 			mUnitsCombo->setCurrentIndex(index);
-			if (units == HoursMinutes)
+			if (units == HoursMinutes  ||  units == Minutes)
 			{
 				// Set units to days and round up the warning period
 				units = Days;
@@ -301,6 +307,9 @@ void TimePeriod::setUnitRange()
 			// fall through to Days
 		case Days:
 			maxval = mMaxDays ? mMaxDays : 1;
+			break;
+		case Minutes:
+			maxval = mTimeSpinBox->maximum();
 			break;
 		case HoursMinutes:
 		default:

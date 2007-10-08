@@ -352,6 +352,7 @@
       <label context="@label">Reminder units</label>
       <whatsthis context="@info:whatsthis">Default reminder time units in the alarm edit dialog.</whatsthis>
        <choices name="TimePeriod::Units">
+        <choice name="Minutes"></choice>
         <choice name="HoursMinutes"><label>Hours/Minutes</label></choice>
         <choice name="Days"/>
         <choice name="Weeks"/>
