@@ -3058,12 +3058,9 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	static const QString ARCHIVE_CATEGORIES        = QLatin1String("SAVE:");
 	static const QString LOG_CATEGORY              = QLatin1String("LOG:");
 
-	// KAlarm pre-1.9.9, and KDE 3 properties
+	// KAlarm pre-1.9.9 properties
 	static const QByteArray KMAIL_ID_PROPERTY("KMAILID");    // X-KDE-KALARM-KMAILID property
 
-#ifdef __GNUC__
-#warning Do not return here if a KDE 3 calendar
-#endif
 	if (version >= calVersion())
 		return false;
 
@@ -3079,6 +3076,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	bool pre_1_9_0 = (version < KAlarm::Version(1,9,0));
 	bool pre_1_9_2 = (version < KAlarm::Version(1,9,2));
 	bool pre_1_9_7 = (version < KAlarm::Version(1,9,7));
+	bool pre_1_9_9 = (version < KAlarm::Version(1,9,9));
 	Q_ASSERT(calVersion() == KAlarm::Version(1,9,9));
 
 	QTime startOfDay = Preferences::startOfDay();
@@ -3518,20 +3516,24 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			}
 		}
 
-		// KAlarm pre-1.9.9, and later KDE 3 calendar files
-		// Convert email identity names to uoids.
-		for (int i = 0, alend = alarms.count();  i < alend;  ++i)
+		if (pre_1_9_9)
 		{
-			Alarm* alarm = alarms[i];
-			QString name = alarm->customProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
-			if (name.isEmpty())
-				continue;
-			uint id = KAMail::identityUoid(name);
-			if (id)
-				alarm->setCustomProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(id));
-			alarm->removeCustomProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
+			/*
+			 * It's a KAlarm pre-1.9.9 calendar file.
+			 * Convert email identity names to uoids.
+			 */
+			for (int i = 0, alend = alarms.count();  i < alend;  ++i)
+			{
+				Alarm* alarm = alarms[i];
+				QString name = alarm->customProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
+				if (name.isEmpty())
+					continue;
+				uint id = KAMail::identityUoid(name);
+				if (id)
+					alarm->setCustomProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(id));
+				alarm->removeCustomProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
+			}
 		}
-
 
 		if (readOnly)
 			event->setReadOnly(true);
