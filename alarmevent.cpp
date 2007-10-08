@@ -87,7 +87,7 @@ static const QByteArray NEXT_REPEAT_PROPERTY("NEXTREPEAT");   // X-KDE-KALARM-NE
 // - Display alarm properties
 static const QByteArray FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
-static const QByteArray EMAIL_ID_PROPERTY("EMAILID");         // X-KDE-KALARM-KMAILID property
+static const QByteArray EMAIL_ID_PROPERTY("EMAILID");         // X-KDE-KALARM-EMAILID property
 // - Audio alarm properties
 static const QByteArray VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
@@ -3059,7 +3059,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	static const QString LOG_CATEGORY              = QLatin1String("LOG:");
 
 	// KAlarm pre-1.9.9, and KDE 3 properties
-	static const QByteArray KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
+	static const QByteArray KMAIL_ID_PROPERTY("KMAILID");    // X-KDE-KALARM-KMAILID property
 
 #ifdef __GNUC__
 #warning Do not return here if a KDE 3 calendar
