@@ -372,15 +372,17 @@ QString KAMail::initHeaders(const KAMailData& data, bool dateId)
 		time_t timenow = tod.tv_sec;
 		char buff[64];
 		strftime(buff, sizeof(buff), "Date: %a, %d %b %Y %H:%M:%S %z", localtime(&timenow));
+		QString from = data.from;
+		from.replace(QRegExp("^.*<"), QString::null).replace(QRegExp(">.*$"), QString::null);
 		message = QString::fromLatin1(buff);
-		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(timenow).arg(tod.tv_usec).arg(data.from);
+		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(timenow).arg(tod.tv_usec).arg(from);
 	}
 	message += QString::fromLatin1("From: ") + data.from;
 	message += QString::fromLatin1("\nTo: ") + data.event.emailAddresses(", ");
 	if (!data.bcc.isEmpty())
 		message += QString::fromLatin1("\nBcc: ") + data.bcc;
 	message += QString::fromLatin1("\nSubject: ") + data.event.emailSubject();
-	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(kapp->aboutData()->programName());
+	message += QString::fromLatin1("\nX-Mailer: %1/" KALARM_VERSION).arg(kapp->aboutData()->programName());
 	return message;
 }
 
