@@ -75,7 +75,7 @@ bool parseAddressList( const char* & scursor, const char * const send,
 }
 
 
-static QString initHeaders(const KAMail::JobData&, bool dateId, bool addresses);
+static QString initHeaders(const KAMail::JobData&, bool dateId);
 
 QString KAMail::i18n_NeedFromEmailAddress()
 { return i18nc("@info/plain", "A 'From' email address must be configured in order to execute email alarms."); }
@@ -120,14 +120,14 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		identity = mIdentityManager->identityForUoid(jobdata.event.emailFromId());
 		if (identity.isNull())
 		{
-			kError(5950) << "KAMail::sendKMail(): identity" << jobdata.event.emailFromId() << "not found";
+			kError(5950) << "KAMail::send(): identity" << jobdata.event.emailFromId() << "not found";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
 		jobdata.from = identity.fullEmailAddr();
 		if (jobdata.from.isEmpty())
 		{
-			kError(5950) << "KAMail::sendKMail(): identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
+			kError(5950) << "KAMail::send(): identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> has no email address", identity.identityName()));
 			return -1;
 		}
@@ -165,7 +165,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		if (!command.isNull())
 		{
 			command += QLatin1String(" -oi -t ");
-			textComplete = initHeaders(jobdata, false, true);
+			textComplete = initHeaders(jobdata, false);
 		}
 		else
 		{
@@ -228,7 +228,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		MailTransport::Transport* transport = manager->transportByName(identity.transport(), true);
 		if (!transport)
 		{
-			kError(5950) << "KAMail::sendKMail(): no mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
+			kError(5950) << "KAMail::send(): no mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
 			return -1;
 		}
@@ -236,11 +236,11 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
 		if (!mailjob)
 		{
-			kError(5950) << "KAMail::sendKMail(): failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
+			kError(5950) << "KAMail::send(): failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
 			return -1;
 		}
-		QString message = initHeaders(jobdata, true, true);
+		QString message = initHeaders(jobdata, true);
 		message += jobdata.event.message();
 		err = appendBodyAttachments(message, jobdata.event);
 		if (!err.isNull())
@@ -316,7 +316,7 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 		err = KAlarm::runKMail(true);
 	if (err.isNull())
 	{
-		QString message = initHeaders(data, true, true);
+		QString message = initHeaders(data, true);
 		err = appendBodyAttachments(message, data.event);
 		if (!err.isNull())
 			return err;
@@ -355,7 +355,7 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 /******************************************************************************
 * Create the headers part of the email.
 */
-QString initHeaders(const KAMail::JobData& data, bool dateId, bool addresses)
+QString initHeaders(const KAMail::JobData& data, bool dateId)
 {
 	QString message;
 	if (dateId)
@@ -367,13 +367,10 @@ QString initHeaders(const KAMail::JobData& data, bool dateId, bool addresses)
 		message += now.toTimeSpec(Preferences::timeZone()).toString(KDateTime::RFCDateDay);
 		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(now.toTime_t()).arg(now.time().msec()).arg(from);
 	}
-	if (addresses)
-	{
-		message += QLatin1String("From: ") + data.from;
-		message += QLatin1String("\nTo: ") + data.event.emailAddresses(", ");
-		if (!data.bcc.isEmpty())
-			message += QLatin1String("\nBcc: ") + data.bcc;
-	}
+	message += QLatin1String("From: ") + data.from;
+	message += QLatin1String("\nTo: ") + data.event.emailAddresses(", ");
+	if (!data.bcc.isEmpty())
+		message += QLatin1String("\nBcc: ") + data.bcc;
 	message += QLatin1String("\nSubject: ") + data.event.emailSubject();
 	message += QString::fromLatin1("\nX-Mailer: %1/" KALARM_VERSION).arg(KGlobal::mainComponent().aboutData()->programName());
 	return message;
