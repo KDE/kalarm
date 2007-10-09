@@ -1072,7 +1072,7 @@ void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
 		if (mEmailFromList)
-			mEmailFromList->setCurrentIdentity(event->emailFromKMail());
+			mEmailFromList->setCurrentIdentity(event->emailFromId());
 	}
 	else
 	{
@@ -1171,9 +1171,7 @@ void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
 {
 	Q_UNUSED(trial);
 	event.set(dt, text, QColor(), QColor(), QFont(), KAEvent::EMAIL, lateCancel, getAlarmFlags());
-	QString from;
-	if (mEmailFromList)
-		from = mEmailFromList->currentIdentityName();
+	uint from = mEmailFromList ? mEmailFromList->currentIdentity() : 0;
 	event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 }
 

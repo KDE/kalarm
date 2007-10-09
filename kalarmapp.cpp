@@ -117,8 +117,6 @@ KAlarmApp::KAlarmApp()
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
 		DateTime::setStartOfDay(mStartOfDay);
 		mPrefsArchivedColour   = Preferences::archivedColour();
-		mPrefsShowTime         = Preferences::showAlarmTime();
-		mPrefsShowTimeTo       = Preferences::showTimeToAlarm();
 	}
 
 	// Check if the speech synthesis daemon is installed
@@ -373,7 +371,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QString          alMessage;
-				QString          alFromID;
+				uint             alFromID;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QString          alSubject;
@@ -409,7 +407,7 @@ int KAlarmApp::newInstance()
 					if (args->isSet("subject"))
 						alSubject = args->getOption("subject");
 					if (args->isSet("from-id"))
-						alFromID = args->getOption("from-id");
+						alFromID = KAMail::identityUoid(args->getOption("from-id"));
 					QStringList params = args->getOptionList("mail");
 					for (QStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
@@ -1040,15 +1038,6 @@ void KAlarmApp::slotPreferencesChanged()
 
 	// In case the date for February 29th recurrences has changed
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
-
-	if (Preferences::showAlarmTime()   != mPrefsShowTime
-	||  Preferences::showTimeToAlarm() != mPrefsShowTimeTo)
-	{
-		// The default alarm list time columns selection has changed
-		MainWindow::updateTimeColumns(mPrefsShowTime, mPrefsShowTimeTo);
-		mPrefsShowTime   = Preferences::showAlarmTime();
-		mPrefsShowTimeTo = Preferences::showTimeToAlarm();
-	}
 }
 
 /******************************************************************************
@@ -1125,7 +1114,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
-                              const QString& mailFromID, const EmailAddressList& mailAddresses,
+                              uint mailFromID, const EmailAddressList& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
 	kDebug(5950) << "KAlarmApp::scheduleEvent():" << text;
@@ -1513,6 +1502,7 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 * Execute an alarm by displaying its message or file, or executing its command.
 * Reply = ShellProcess instance if a command alarm
 *       != 0 if successful
+*       = -1 if execution has not completed
 *       = 0 if the alarm is disabled, or if an error message was output.
 */
 void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule, bool allowDefer, bool noPreAction)
@@ -1612,25 +1602,47 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 		{
 			kDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to:" << event.emailAddresses(",");
 			QStringList errmsgs;
-			if (!KAMail::send(event, errmsgs, (reschedule || allowDefer)))
-				result = 0;
-			if (!errmsgs.isEmpty())
+			KAMail::JobData data(event, alarm, reschedule, (reschedule || allowDefer));
+			data.queued = true;
+			int ans = KAMail::send(data, errmsgs);
+			if (ans)
 			{
-				// Some error occurred, although the email may have been sent successfully
-				if (result)
-					kDebug(5950) << "KAlarmApp::execAlarm(): copy error:" << errmsgs[1];
-				else
-					kDebug(5950) << "KAlarmApp::execAlarm(): failed:" << errmsgs[1];
-				MessageWin::showError(event, alarm.dateTime(), errmsgs);
+				// The email has either been sent or failed - not queued
+				if (ans < 0)
+					result = 0;  // failure
+				data.queued = false;
+				emailSent(data, errmsgs, (ans > 0));
 			}
-			if (reschedule)
-				rescheduleAlarm(event, alarm, true);
+			else
+			{
+				result = (void*)-1;   // email has been queued
+			}
 			break;
 		}
 		default:
 			return 0;
 	}
 	return result;
+}
+
+/******************************************************************************
+* Called when sending an email has completed.
+*/
+void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, bool copyerr)
+{
+	if (!errmsgs.isEmpty())
+	{
+		// Some error occurred, although the email may have been sent successfully
+		if (copyerr)
+			kDebug(5950) << "KAlarmApp::execAlarm(): copy error:" << errmsgs[1];
+		else
+			kDebug(5950) << "KAlarmApp::execAlarm(): failed:" << errmsgs[1];
+		MessageWin::showError(data.event, data.alarm.dateTime(), errmsgs);
+	}
+	else if (data.queued)
+		emit execAlarmSuccess();
+	if (data.reschedule)
+		rescheduleAlarm(data.event, data.alarm, true);
 }
 
 /******************************************************************************
@@ -1778,7 +1790,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 		if (pd->process == proc)
 		{
 			// Found the command. Check its exit status.
-			if (!proc->exitStatus() == QProcess::NormalExit)
+			if (proc->status() != ShellProcess::SUCCESS)
 			{
 				QString errmsg = proc->errorMessage();
 				kWarning(5950) << "KAlarmApp::slotCommandExited(" << pd->event->cleanText() << "):" << errmsg;

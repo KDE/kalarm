@@ -21,7 +21,6 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "kamail.h"
 
-#include "alarmevent.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kmailinterface.h"
@@ -55,6 +54,9 @@
 
 #include <kpimidentities/identitymanager.h>
 #include <kpimidentities/identity.h>
+#include <mailtransport/transportmanager.h>
+#include <mailtransport/transport.h>
+#include <mailtransport/transportjob.h>
 #include <kcal/person.h>
 
 #include <kmime/kmime_header_parsing.h>
@@ -72,16 +74,8 @@ bool parseAddressList( const char* & scursor, const char * const send,
                        QList<KMime::Types::Address> & result, bool isCRLF=false );
 }
 
-struct KAMailData
-{
-	KAMailData(const KAEvent& e, const QString& fr, const QString& bc, bool allownotify)
-	                 : event(e), from(fr), bcc(bc), allowNotify(allownotify) { }
-	const KAEvent& event;
-	QString        from;
-	QString        bcc;
-	bool           allowNotify;
-};
 
+static QString initHeaders(const KAMail::JobData&, bool dateId);
 
 QString KAMail::i18n_NeedFromEmailAddress()
 { return i18nc("@info/plain", "A 'From' email address must be configured in order to execute email alarms."); }
@@ -89,7 +83,18 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18nc("@info/plain KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
-KPIMIdentities::IdentityManager* KAMail::mIdentityManager = 0;
+KAMail*                              KAMail::mInstance = 0;   // used only to enable signals/slots to work
+QQueue<MailTransport::TransportJob*> KAMail::mJobs;
+QQueue<KAMail::JobData>              KAMail::mJobData;
+KPIMIdentities::IdentityManager*     KAMail::mIdentityManager = 0;
+
+KAMail* KAMail::instance()
+{
+	if (!mInstance)
+		mInstance = new KAMail();
+	return mInstance;
+}
+
 KPIMIdentities::IdentityManager* KAMail::identityManager()
 {
 	if (!mIdentityManager)
@@ -100,30 +105,39 @@ KPIMIdentities::IdentityManager* KAMail::identityManager()
 
 /******************************************************************************
 * Send the email message specified in an event.
-* Reply = true if the message was sent - 'errmsgs' may contain copy error messages.
-*       = false if the message was not sent - 'errmsgs' contains the error messages.
+* Reply = 1 if the message was sent - 'errmsgs' may contain copy error messages.
+*       = 0 if the message is queued for sending.
+*       = -1 if the message was not sent - 'errmsgs' contains the error messages.
 */
-bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
+int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 {
 	QString err;
-	QString from;
-	if (event.emailFromKMail().isEmpty())
-		from = Preferences::emailAddress();
+	KPIMIdentities::Identity identity;
+	if (!jobdata.event.emailFromId())
+		jobdata.from = Preferences::emailAddress();
 	else
 	{
-		from = mIdentityManager->identityForName(event.emailFromKMail()).fullEmailAddr();
-		if (from.isEmpty())
+		identity = mIdentityManager->identityForUoid(jobdata.event.emailFromId());
+		if (identity.isNull())
 		{
-			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br /><application>KMail</application> identity <resource>%1</resource> not found.", event.emailFromKMail()));
-			return false;
+			kError(5950) << "KAMail::send(): identity" << jobdata.event.emailFromId() << "not found";
+			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
+			return -1;
+		}
+		jobdata.from = identity.fullEmailAddr();
+		if (jobdata.from.isEmpty())
+		{
+			kError(5950) << "KAMail::send(): identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
+			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> has no email address", identity.identityName()));
+			return -1;
 		}
 	}
-	if (from.isEmpty())
+	if (jobdata.from.isEmpty())
 	{
 		switch (Preferences::emailFrom())
 		{
 			case Preferences::MAIL_FROM_KMAIL:
-				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default <application>KMail</application> identity found)</para>"
+				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default email identity found)</para>"
 				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 			case Preferences::MAIL_FROM_CONTROL_CENTRE:
@@ -136,13 +150,11 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 				                                "<para>Please set it in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 		}
-		return false;
+		return -1;
 	}
-	KAMailData data(event, from,
-	                (event.emailBcc() ? Preferences::emailBccAddress() : QString()),
-	                allowNotify);
-	kDebug(5950) << "KAlarmApp::sendEmail(): To:" << event.emailAddresses(",")
-	              << endl << "Subject:" << event.emailSubject();
+	jobdata.bcc  = (jobdata.event.emailBcc() ? Preferences::emailBccAddress() : QString());
+	kDebug(5950) << "KAlarmApp::sendEmail(): To:" << jobdata.event.emailAddresses(",")
+	              << endl << "Subject:" << jobdata.event.emailSubject();
 
 	if (Preferences::emailClient() == Preferences::sendmail)
 	{
@@ -153,7 +165,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		if (!command.isNull())
 		{
 			command += QLatin1String(" -oi -t ");
-			textComplete = initHeaders(data, false);
+			textComplete = initHeaders(jobdata, false);
 		}
 		else
 		{
@@ -161,29 +173,29 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 			if (command.isNull())
 			{
 				errmsgs = errors(i18nc("@info", "<command>%1</command> not found", QLatin1String("sendmail"))); // give up
-				return false;
+				return -1;
 			}
 
 			command += QLatin1String(" -s ");
-			command += KShell::quoteArg(event.emailSubject());
+			command += KShell::quoteArg(jobdata.event.emailSubject());
 
-			if (!data.bcc.isEmpty())
+			if (!jobdata.bcc.isEmpty())
 			{
 				command += QLatin1String(" -b ");
-				command += KShell::quoteArg(data.bcc);
+				command += KShell::quoteArg(jobdata.bcc);
 			}
 
 			command += ' ';
-			command += event.emailAddresses(" "); // locally provided, okay
+			command += jobdata.event.emailAddresses(" "); // locally provided, okay
 		}
 
 		// Add the body and attachments to the message.
 		// (Sendmail requires attachments to have already been included in the message.)
-		err = appendBodyAttachments(textComplete, event);
+		err = appendBodyAttachments(textComplete, jobdata.event);
 		if (!err.isNull())
 		{
 			errmsgs = errors(err);
-			return false;
+			return -1;
 		}
 
 		// Execute the send command
@@ -192,7 +204,7 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		{
 			kError(5950) << "KAMail::send(): Unable to open a pipe to" << command;
 			errmsgs = errors();
-			return false;
+			return -1;
 		}
 		fwrite(textComplete.toLocal8Bit(), textComplete.length(), 1, fd);
 		pclose(fd);
@@ -200,66 +212,96 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		if (Preferences::emailCopyToKMail())
 		{
 			// Create a copy of the sent email in KMail's 'Sent-mail' folder
-			err = addToKMailFolder(data, "sent-mail", true);
+			err = addToKMailFolder(jobdata, "sent-mail", true);
 			if (!err.isNull())
-				errmsgs = errors(err, false);    // not a fatal error - continue
+				errmsgs = errors(err, COPY_ERROR);    // not a fatal error - continue
 		}
 
-		if (allowNotify)
-			notifyQueued(event);
+		if (jobdata.allowNotify)
+			notifyQueued(jobdata.event);
+		return 1;
 	}
 	else
 	{
-		// Use KMail to send the message
-		err = sendKMail(data);
+		// Use KDE to send the message
+		MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
+		MailTransport::Transport* transport = manager->transportByName(identity.transport(), true);
+		if (!transport)
+		{
+			kError(5950) << "KAMail::send(): no mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
+			errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
+			return -1;
+		}
+		int transportId = transport->id();
+		MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
+		if (!mailjob)
+		{
+			kError(5950) << "KAMail::send(): failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
+			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
+			return -1;
+		}
+		QString message = initHeaders(jobdata, true);
+		message += jobdata.event.message();
+		err = appendBodyAttachments(message, jobdata.event);
 		if (!err.isNull())
 		{
 			errmsgs = errors(err);
-			return false;
+			return -1;
 		}
+		mailjob->setSender(jobdata.from);
+		mailjob->setTo(QStringList(jobdata.event.emailAddresses()));
+		if (!jobdata.bcc.isEmpty())
+			mailjob->setBcc(QStringList(jobdata.bcc));
+		mailjob->setData(message.toLocal8Bit());
+		mJobs.enqueue(mailjob);
+		mJobData.enqueue(jobdata);
+		if (mJobs.count() == 1)
+		{
+			// There are no jobs already active or queued, so send now
+			connect(mailjob, SIGNAL(result(KJob*)), instance(), SLOT(slotEmailSent(KJob*)));
+			mailjob->start();
+		}
+		return 0;
 	}
-	return true;
 }
 
 /******************************************************************************
-* Send the email message via KMail.
-* Reply = reason for failure (which may be the empty string)
-*       = null string if success.
+* Called when sending an email is complete.
 */
-QString KAMail::sendKMail(const KAMailData& data)
+void KAMail::slotEmailSent(KJob* job)
 {
-	QString err = KAlarm::runKMail(true);
-	if (!err.isNull())
-		return err;
-
-	// KMail is now running
-	QList<QVariant> args;
-	args << data.from;
-	args << data.event.emailAddresses(", ");
-	args << "";    // CC:
-	args << data.bcc;
-	args << data.event.emailSubject();
-	args << data.event.message();
-#ifdef __GNUC__
-#warning Append attachment URL list
-#endif
-//	args << KUrl::List(data.event.emailAttachments());
-#ifdef __GNUC__
-#warning Set correct DBus interface/object for kmail
-#endif
-	QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("MailTransportServiceIface"));
-	QDBusReply<bool> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("sendMessage"), args);
-	if (!reply.isValid())
-		kError(5950) << "KAMail::sendKMail(): D-Bus call failed:" << reply.error().message();
-	else if (!reply.value())
-		kError(5950) << "KAMail::sendKMail(): D-Bus call returned error";
-	else
+	QStringList errmsgs;
+	JobData jobdata;
+	if (job->error())
 	{
-		if (data.allowNotify)
-			notifyQueued(data.event);
-		return QString();
+		kError(5950) << "KAMail::slotEmailSent(): failed:" << job->error();
+		errmsgs = errors(job->errorString(), SEND_ERROR);
 	}
-	return i18nc("@info", "Error calling <application>KMail</application>");
+	if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != mJobs.head())
+	{
+		// The queue has been corrupted, so we can't locate the job's data
+		kError(5950) << "KAMail::slotEmailSent(): wrong job at head of queue: wiping queue";
+		mJobs.clear();
+		mJobData.clear();
+		if (!errmsgs.isEmpty())
+			theApp()->emailSent(jobdata, errmsgs);
+		errmsgs.clear();
+		errmsgs += i18nc("@info", "Emails may not have been sent");
+		errmsgs += i18nc("@info", "Program error");
+		theApp()->emailSent(jobdata, errmsgs);
+		return;
+	}
+	mJobs.dequeue();
+	jobdata = mJobData.dequeue();
+	if (jobdata.allowNotify)
+		notifyQueued(jobdata.event);
+	theApp()->emailSent(jobdata, errmsgs);
+	if (!mJobs.isEmpty())
+	{
+		// Send the next queued email
+		connect(mJobs.head(), SIGNAL(result(KJob*)), instance(), SLOT(slotEmailSent(KJob*)));
+		mJobs.head()->start();
+	}
 }
 
 /******************************************************************************
@@ -267,7 +309,7 @@ QString KAMail::sendKMail(const KAMailData& data)
 * Reply = reason for failure (which may be the empty string)
 *       = null string if success.
 */
-QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, bool checkKmailRunning)
+QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool checkKmailRunning)
 {
 	QString err;
 	if (checkKmailRunning)
@@ -313,22 +355,24 @@ QString KAMail::addToKMailFolder(const KAMailData& data, const char* folder, boo
 /******************************************************************************
 * Create the headers part of the email.
 */
-QString KAMail::initHeaders(const KAMailData& data, bool dateId)
+QString initHeaders(const KAMail::JobData& data, bool dateId)
 {
 	QString message;
 	if (dateId)
 	{
 		KDateTime now = KDateTime::currentUtcDateTime();
+		QString from = data.from;
+		from.remove(QRegExp("^.*<")).remove(QRegExp(">.*$"));
 		message = QLatin1String("Date: ");
 		message += now.toTimeSpec(Preferences::timeZone()).toString(KDateTime::RFCDateDay);
-		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(now.toTime_t()).arg(now.time().msec()).arg(data.from);
+		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(now.toTime_t()).arg(now.time().msec()).arg(from);
 	}
 	message += QLatin1String("From: ") + data.from;
 	message += QLatin1String("\nTo: ") + data.event.emailAddresses(", ");
 	if (!data.bcc.isEmpty())
 		message += QLatin1String("\nBcc: ") + data.bcc;
 	message += QLatin1String("\nSubject: ") + data.event.emailSubject();
-	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(KGlobal::mainComponent().aboutData()->programName());
+	message += QString::fromLatin1("\nX-Mailer: %1/" KALARM_VERSION).arg(KGlobal::mainComponent().aboutData()->programName());
 	return message;
 }
 
@@ -459,10 +503,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 			QString domain = addr.mailboxList.first().addrSpec().domain;
 			if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
 			{
-				QString text = (Preferences::emailClient() == Preferences::kmail)
-				             ? i18nc("@info", "An email has been queued to be sent by <application>KMail</application>")
-				             : i18nc("@info", "An email has been queued to be sent");
-				KMessageBox::information(0, text, QString(), Preferences::EMAIL_QUEUED_NOTIFY);
+				KMessageBox::information(0, i18nc("@info", "An email has been queued to be sent"), QString(), Preferences::EMAIL_QUEUED_NOTIFY);
 				return;
 			}
 		}
@@ -470,12 +511,35 @@ void KAMail::notifyQueued(const KAEvent& event)
 }
 
 /******************************************************************************
-*  Return whether any KMail identities exist.
+*  Return whether any email identities exist.
 */
 bool KAMail::identitiesExist()
 {
 	identityManager();    // create identity manager if not already done
 	return mIdentityManager->begin() != mIdentityManager->end();
+}
+
+/******************************************************************************
+*  Fetch the uoid of an email identity name or uoid string.
+*/
+uint KAMail::identityUoid(const QString& identityUoidOrName)
+{
+	bool ok;
+	uint id = identityUoidOrName.toUInt(&ok);
+	if (!ok  ||  identityManager()->identityForUoid(id).isNull())
+	{
+		identityManager();   // fetch it if not already done
+		for (KPIMIdentities::IdentityManager::ConstIterator it = mIdentityManager->begin();
+		     it != mIdentityManager->end();  ++it)
+		{
+			if ((*it).identityName() == identityUoidOrName)
+			{
+				id = (*it).uoid();
+				break;
+			}
+		}
+	}
+	return id;
 }
 
 /******************************************************************************
@@ -741,10 +805,15 @@ bool KAMail::checkAttachment(const KUrl& url)
 /******************************************************************************
 * Set the appropriate error messages for a given error string.
 */
-QStringList KAMail::errors(const QString& err, bool sendfail)
+QStringList KAMail::errors(const QString& err, ErrType prefix)
 {
-	QString error1 = sendfail ? i18nc("@info", "Failed to send email")
-	                          : i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());
+	QString error1;
+	switch (prefix)
+	{
+		case SEND_FAIL:  error1 = i18nc("@info", "Failed to send email");  break;
+		case SEND_ERROR:  error1 = i18nc("@info", "Error sending email");  break;
+		case COPY_ERROR:  error1 = i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());  break;
+	}
 	if (err.isEmpty())
 		return QStringList(error1);
 	QStringList errs(QString::fromLatin1("%1:").arg(error1));

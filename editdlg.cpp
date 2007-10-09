@@ -931,15 +931,23 @@ void EditAlarmDlg::slotTry()
 	QString text;
 	if (checkText(text))
 	{
-kDebug()<<"Text="<<text<<":";
 		if (!type_validate(true))
 			return;
 		KAEvent event;
 		setEvent(event, text, true);
+		connect(theApp(), SIGNAL(execAlarmSuccess()), SLOT(slotTrySuccess()));
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
-		if (proc)
+		if (proc  &&  proc != (void*)-1)
 			type_trySuccessMessage((ShellProcess*)proc, text);
 	}
+}
+
+/******************************************************************************
+*  Called when the Try action has completed, successfully.
+*/
+void EditAlarmDlg::slotTrySuccess()
+{
+	type_trySuccessMessage(0, QString());
 }
 
 /******************************************************************************

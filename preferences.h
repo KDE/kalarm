@@ -63,8 +63,6 @@ class Preferences : public PreferencesBase
 		static void             setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
 		static bool             confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
 		static void             setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
-		static bool             showAlarmTime()                  { return !self()->showTimeToAlarm() || self()->base_ShowAlarmTime(); }
-		static void             setShowAlarmTime(bool yes)       { self()->setBase_ShowAlarmTime(yes); }
 		static bool             emailCopyToKMail()               { return self()->mBase_EmailCopyToKMail  &&  self()->mEmailClient == sendmail; }
 		static void             setEmailCopyToKMail(bool yes)    { self()->setBase_EmailCopyToKMail(yes); }
 		static bool             emailQueuedNotify()              { return notifying(EMAIL_QUEUED_NOTIFY); }
@@ -105,7 +103,7 @@ class Preferences : public PreferencesBase
 		static KTimeZone        mSystemTimeZone;
 
 		// All the following members are accessed by the Preferences dialog classes
-		ColourList          mMessageColours;
+		ColourList              mMessageColours;
 		static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
 		static QTime            mOldStartOfDay;       // previous start-of-day time
 		static bool             mStartOfDayChanged;   // start-of-day check value doesn't tally with new StartOfDay

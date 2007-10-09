@@ -47,7 +47,10 @@ class EmailAddressList : public QList<KCal::Person>
 		EmailAddressList() : QList<KCal::Person>() { }
 		EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
 		EmailAddressList& operator=(const QList<KCal::Person>&);
+		operator QStringList() const;
 		QString join(const QString& separator) const;
+	private:
+		QString address(int index) const;
 };
 
 
@@ -60,7 +63,7 @@ class KAAlarmEventBase
 		QString            message() const             { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString(); }
 		QString            fileName() const            { return (mActionType == T_FILE) ? mText : QString(); }
 		QString            command() const             { return (mActionType == T_COMMAND) ? mText : QString(); }
-		QString            emailFromKMail() const      { return mEmailFromKMail; }
+		uint               emailFromId() const         { return mEmailFromIdentity; }
 		const EmailAddressList& emailAddresses() const { return mEmailAddresses; }
 		QString            emailAddresses(const QString& sep) const  { return mEmailAddresses.join(sep); }
 		const QString&     emailSubject() const        { return mEmailSubject; }
@@ -104,7 +107,7 @@ class KAAlarmEventBase
 		QColor             mBgColour;         // background colour of alarm message
 		QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
 		QFont              mFont;             // font of alarm message (ignored if mDefaultFont true)
-		QString            mEmailFromKMail;   // KMail identity for email 'From' field, or empty
+		uint               mEmailFromIdentity;// standard email identity uoid for 'From' field, or empty
 		EmailAddressList   mEmailAddresses;   // ATTENDEE: addresses to send email to
 		QString            mEmailSubject;     // SUMMARY: subject line of email
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
@@ -311,11 +314,11 @@ class KAEvent : public KAAlarmEventBase
 		                            { set(dt, filename, bg, fg, f, FILE, lateCancel, flags); }
 		void               setCommand(const QDate&, const QString& command, int lateCancel, int flags, const QString& logfile = QString());
 		void               setCommand(const KDateTime&, const QString& command, int lateCancel, int flags, const QString& logfile = QString());
-		void               setEmail(const QDate&, const QString& from, const EmailAddressList&, const QString& subject,
+		void               setEmail(const QDate&, uint from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
-		void               setEmail(const KDateTime&, const QString& from, const EmailAddressList&, const QString& subject,
+		void               setEmail(const KDateTime&, uint from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
-		void               setEmail(const QString& from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
+		void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
 		void               setTemplate(const QString& name, int afterTime = -1);
 		void               setActions(const QString& pre, const QString& post)   { mPreAction = pre;  mPostAction = post;  mUpdated = true; }

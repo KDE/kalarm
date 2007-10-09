@@ -145,8 +145,8 @@ bool KAResourceRemote::doLoad(bool syncCache)
 	if (syncCache)
 	{
 		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): downloading...";
-		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, true,
-					      false, (mShowProgress && hasGui()));
+		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, KIO::Overwrite |
+         (mShowProgress && hasGui()) ? KIO::DefaultFlags : KIO::HideProgressInfo);
 		connect(mDownloadJob, SIGNAL(result(KJob*)), SLOT(slotLoadJobResult(KJob*)));
 #if 0
 		if (mShowProgress  &&  hasGui())
@@ -254,7 +254,7 @@ bool KAResourceRemote::doSave(bool syncCache)
 	saveToCache();
 	if (syncCache)
 	{
-		mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, true, false, hasGui());
+		mUploadJob = KIO::file_copy(KUrl(cacheFile()), mUploadUrl, -1, KIO::Overwrite | (hasGui()?KIO::DefaultFlags:KIO::HideProgressInfo));
 		connect(mUploadJob, SIGNAL(result(KJob*)), SLOT(slotSaveJobResult(KJob*)));
 	}
 	return true;

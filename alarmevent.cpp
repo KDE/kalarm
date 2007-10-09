@@ -46,8 +46,8 @@ using namespace KCal;
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
-QString KAEvent::calVersionString()  { return QString::fromLatin1("1.9.7"); }
-int     KAEvent::calVersion()        { return KAlarm::Version(1,9,7); }
+QString KAEvent::calVersionString()  { return QString::fromLatin1("1.9.9"); }
+int     KAEvent::calVersion()        { return KAlarm::Version(1,9,9); }
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -87,7 +87,7 @@ static const QByteArray NEXT_REPEAT_PROPERTY("NEXTREPEAT");   // X-KDE-KALARM-NE
 // - Display alarm properties
 static const QByteArray FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
-static const QByteArray KMAIL_ID_PROPERTY("KMAILID");         // X-KDE-KALARM-KMAILID property
+static const QByteArray EMAIL_ID_PROPERTY("EMAILID");         // X-KDE-KALARM-EMAILID property
 // - Audio alarm properties
 static const QByteArray VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
@@ -105,7 +105,7 @@ struct AlarmData
 {
 	const Alarm*           alarm;
 	QString                cleanText;       // text or audio file name
-	QString                emailFromKMail;
+	uint                   emailFromId;
 	QFont                  font;
 	QColor                 bgColour, fgColour;
 	float                  soundVolume;
@@ -388,24 +388,24 @@ void KAEvent::set(const Event* event)
 
 	// Extract status from the event's alarms.
 	// First set up defaults.
-	mActionType       = T_MESSAGE;
-	mMainExpired      = true;
-	mRepeatAtLogin    = false;
-	mDisplaying       = false;
-	mRepeatSound      = false;
-	mCommandScript    = false;
-	mDeferral         = NO_DEFERRAL;
-	mSoundVolume      = -1;
-	mFadeVolume       = -1;
-	mFadeSeconds      = 0;
-	mReminderMinutes  = 0;
-	mNextRepeat       = 0;
-	mText             = "";
-	mAudioFile        = "";
-	mPreAction        = "";
-	mPostAction       = "";
-	mEmailFromKMail   = "";
-	mEmailSubject     = "";
+	mActionType        = T_MESSAGE;
+	mMainExpired       = true;
+	mRepeatAtLogin     = false;
+	mDisplaying        = false;
+	mRepeatSound       = false;
+	mCommandScript     = false;
+	mDeferral          = NO_DEFERRAL;
+	mSoundVolume       = -1;
+	mFadeVolume        = -1;
+	mFadeSeconds       = 0;
+	mReminderMinutes   = 0;
+	mNextRepeat        = 0;
+	mEmailFromIdentity = 0;
+	mText              = "";
+	mAudioFile         = "";
+	mPreAction         = "";
+	mPostAction        = "";
+	mEmailSubject      = "";
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
 	clearRecur();
@@ -541,10 +541,10 @@ void KAEvent::set(const Event* event)
 							mCommandScript = data.commandScript;
 							break;
 						case T_EMAIL:
-							mEmailFromKMail   = data.emailFromKMail;
-							mEmailAddresses   = data.alarm->mailAddresses();
-							mEmailSubject     = data.alarm->mailSubject();
-							mEmailAttachments = data.alarm->mailAttachments();
+							mEmailFromIdentity = data.emailFromId;
+							mEmailAddresses    = data.alarm->mailAddresses();
+							mEmailSubject      = data.alarm->mailSubject();
+							mEmailAttachments  = data.alarm->mailAttachments();
 							break;
 						default:
 							break;
@@ -690,9 +690,9 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data)
 			}
 			break;
 		case Alarm::Email:
-			data.action           = T_EMAIL;
-			data.emailFromKMail   = alarm->customProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
-			data.cleanText        = alarm->mailText();
+			data.action      = T_EMAIL;
+			data.emailFromId = alarm->customProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY).toUInt();
+			data.cleanText   = alarm->mailText();
 			break;
 		case Alarm::Display:
 		{
@@ -840,13 +840,13 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 			mActionType = T_MESSAGE;
 			break;
 	}
+	mEventID.clear();
+	mTemplateName.clear();
+	mResourceId.clear();
+	mPreAction.clear();
+	mPostAction.clear();
 	mText                   = (mActionType == T_COMMAND) ? text.trimmed() : text;
-	mCategory               = KCalEvent::EMPTY;
-	mEventID               .clear();
-	mTemplateName          .clear();
-	mResourceId            .clear();
-	mPreAction             .clear();
-	mPostAction            .clear();
+	mCategory               = KCalEvent::ACTIVE;
 	mAudioFile              = "";
 	mSoundVolume            = -1;
 	mFadeVolume             = -1;
@@ -905,32 +905,32 @@ void KAEvent::setLogFile(const QString& logfile)
 /******************************************************************************
  * Initialise an email KAEvent.
  */
-void KAEvent::setEmail(const QDate& d, const QString& from, const EmailAddressList& addresses, const QString& subject,
+void KAEvent::setEmail(const QDate& d, uint from, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
 {
 	set(d, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags | ANY_TIME);
-	mEmailFromKMail   = from;
-	mEmailAddresses   = addresses;
-	mEmailSubject     = subject;
-	mEmailAttachments = attachments;
+	mEmailFromIdentity = from;
+	mEmailAddresses    = addresses;
+	mEmailSubject      = subject;
+	mEmailAttachments  = attachments;
 }
 
-void KAEvent::setEmail(const KDateTime& dt, const QString& from, const EmailAddressList& addresses, const QString& subject,
+void KAEvent::setEmail(const KDateTime& dt, uint from, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
 {
 	set(dt, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags);
-	mEmailFromKMail   = from;
-	mEmailAddresses   = addresses;
-	mEmailSubject     = subject;
-	mEmailAttachments = attachments;
+	mEmailFromIdentity = from;
+	mEmailAddresses    = addresses;
+	mEmailSubject      = subject;
+	mEmailAttachments  = attachments;
 }
 
-void KAEvent::setEmail(const QString& from, const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
+void KAEvent::setEmail(uint from, const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
 {
-	mEmailFromKMail   = from;
-	mEmailAddresses   = addresses;
-	mEmailSubject     = subject;
-	mEmailAttachments = attachments;
+	mEmailFromIdentity = from;
+	mEmailAddresses    = addresses;
+	mEmailSubject      = subject;
+	mEmailAttachments  = attachments;
 }
 
 void KAEvent::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds)
@@ -1690,8 +1690,8 @@ Alarm* KAEvent::initKCalAlarm(Event* event, int startOffsetSecs, const QStringLi
 					break;
 				case T_EMAIL:
 					alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
-					if (!mEmailFromKMail.isEmpty())
-						alarm->setCustomProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY, mEmailFromKMail);
+					if (mEmailFromIdentity)
+						alarm->setCustomProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(mEmailFromIdentity));
 					break;
 				case T_AUDIO:
 					break;
@@ -1743,10 +1743,10 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mCommandScript  = mCommandScript;
 		if (mActionType == T_EMAIL)
 		{
-			al.mEmailFromKMail   = mEmailFromKMail;
-			al.mEmailAddresses   = mEmailAddresses;
-			al.mEmailSubject     = mEmailSubject;
-			al.mEmailAttachments = mEmailAttachments;
+			al.mEmailFromIdentity = mEmailFromIdentity;
+			al.mEmailAddresses    = mEmailAddresses;
+			al.mEmailSubject      = mEmailSubject;
+			al.mEmailAttachments  = mEmailAttachments;
 		}
 		switch (type)
 		{
@@ -3058,6 +3058,9 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	static const QString ARCHIVE_CATEGORIES        = QLatin1String("SAVE:");
 	static const QString LOG_CATEGORY              = QLatin1String("LOG:");
 
+	// KAlarm pre-1.9.9 properties
+	static const QByteArray KMAIL_ID_PROPERTY("KMAILID");    // X-KDE-KALARM-KMAILID property
+
 	if (version >= calVersion())
 		return false;
 
@@ -3073,7 +3076,8 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	bool pre_1_9_0 = (version < KAlarm::Version(1,9,0));
 	bool pre_1_9_2 = (version < KAlarm::Version(1,9,2));
 	bool pre_1_9_7 = (version < KAlarm::Version(1,9,7));
-	Q_ASSERT(calVersion() == KAlarm::Version(1,9,7));
+	bool pre_1_9_9 = (version < KAlarm::Version(1,9,9));
+	Q_ASSERT(calVersion() == KAlarm::Version(1,9,9));
 
 	QTime startOfDay = Preferences::startOfDay();
 	KTimeZone localZone;
@@ -3512,6 +3516,25 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			}
 		}
 
+		if (pre_1_9_9)
+		{
+			/*
+			 * It's a KAlarm pre-1.9.9 calendar file.
+			 * Convert email identity names to uoids.
+			 */
+			for (int i = 0, alend = alarms.count();  i < alend;  ++i)
+			{
+				Alarm* alarm = alarms[i];
+				QString name = alarm->customProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
+				if (name.isEmpty())
+					continue;
+				uint id = KAMail::identityUoid(name);
+				if (id)
+					alarm->setCustomProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(id));
+				alarm->removeCustomProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
+			}
+		}
+
 		if (readOnly)
 			event->setReadOnly(true);
 	}
@@ -3652,34 +3675,34 @@ const char* KAAlarm::debugType(Type type)
 
 void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 {
-	mEventID          = rhs.mEventID;
-	mText             = rhs.mText;
-	mNextMainDateTime = rhs.mNextMainDateTime;
-	mBgColour         = rhs.mBgColour;
-	mFgColour         = rhs.mFgColour;
-	mFont             = rhs.mFont;
-	mEmailFromKMail   = rhs.mEmailFromKMail;
-	mEmailAddresses   = rhs.mEmailAddresses;
-	mEmailSubject     = rhs.mEmailSubject;
-	mEmailAttachments = rhs.mEmailAttachments;
-	mSoundVolume      = rhs.mSoundVolume;
-	mFadeVolume       = rhs.mFadeVolume;
-	mFadeSeconds      = rhs.mFadeSeconds;
-	mActionType       = rhs.mActionType;
-	mCommandScript    = rhs.mCommandScript;
-	mRepeatCount      = rhs.mRepeatCount;
-	mRepeatInterval   = rhs.mRepeatInterval;
-	mNextRepeat       = rhs.mNextRepeat;
-	mBeep             = rhs.mBeep;
-	mSpeak            = rhs.mSpeak;
-	mRepeatSound      = rhs.mRepeatSound;
-	mRepeatAtLogin    = rhs.mRepeatAtLogin;
-	mDisplaying       = rhs.mDisplaying;
-	mLateCancel       = rhs.mLateCancel;
-	mAutoClose        = rhs.mAutoClose;
-	mEmailBcc         = rhs.mEmailBcc;
-	mConfirmAck       = rhs.mConfirmAck;
-	mDefaultFont      = rhs.mDefaultFont;
+	mEventID           = rhs.mEventID;
+	mText              = rhs.mText;
+	mNextMainDateTime  = rhs.mNextMainDateTime;
+	mBgColour          = rhs.mBgColour;
+	mFgColour          = rhs.mFgColour;
+	mFont              = rhs.mFont;
+	mEmailFromIdentity = rhs.mEmailFromIdentity;
+	mEmailAddresses    = rhs.mEmailAddresses;
+	mEmailSubject      = rhs.mEmailSubject;
+	mEmailAttachments  = rhs.mEmailAttachments;
+	mSoundVolume       = rhs.mSoundVolume;
+	mFadeVolume        = rhs.mFadeVolume;
+	mFadeSeconds       = rhs.mFadeSeconds;
+	mActionType        = rhs.mActionType;
+	mCommandScript     = rhs.mCommandScript;
+	mRepeatCount       = rhs.mRepeatCount;
+	mRepeatInterval    = rhs.mRepeatInterval;
+	mNextRepeat        = rhs.mNextRepeat;
+	mBeep              = rhs.mBeep;
+	mSpeak             = rhs.mSpeak;
+	mRepeatSound       = rhs.mRepeatSound;
+	mRepeatAtLogin     = rhs.mRepeatAtLogin;
+	mDisplaying        = rhs.mDisplaying;
+	mLateCancel        = rhs.mLateCancel;
+	mAutoClose         = rhs.mAutoClose;
+	mEmailBcc          = rhs.mEmailBcc;
+	mConfirmAck        = rhs.mConfirmAck;
+	mDefaultFont       = rhs.mDefaultFont;
 }
 
 void KAAlarmEventBase::set(int flags)
@@ -3726,7 +3749,7 @@ void KAAlarmEventBase::dumpDebug() const
 	kDebug(5950) <<"-- mNextMainDateTime:" << mNextMainDateTime.toString();
 	if (mActionType == T_EMAIL)
 	{
-		kDebug(5950) <<"-- mEmail: FromKMail:" << mEmailFromKMail;
+		kDebug(5950) <<"-- mEmail: FromKMail:" << mEmailFromIdentity;
 		kDebug(5950) <<"--         Addresses:" << mEmailAddresses.join(",");
 		kDebug(5950) <<"--         Subject:" << mEmailSubject;
 		kDebug(5950) <<"--         Attachments:" << mEmailAttachments.join(",");
@@ -3788,6 +3811,17 @@ EmailAddressList& EmailAddressList::operator=(const QList<Person>& addresses)
 }
 
 /******************************************************************************
+* Return the email address list as a string list of email addresses.
+*/
+EmailAddressList::operator QStringList() const
+{
+	QStringList list;
+	for (int p = 0, end = count();  p < end;  ++p)
+		list += address(p);
+	return list;
+}
+
+/******************************************************************************
  * Return the email address list as a string, each address being delimited by
  * the specified separator string.
  */
@@ -3801,32 +3835,44 @@ QString EmailAddressList::join(const QString& separator) const
 			first = false;
 		else
 			result += separator;
-
-		bool quote = false;
-		QString name = (*this)[p].name();
-		if (!name.isEmpty())
-		{
-			// Need to enclose the name in quotes if it has any special characters
-			int len = name.length();
-			for (int i = 0;  i < len;  ++i)
-			{
-				QChar ch = name[i];
-				if (!ch.isLetterOrNumber())
-				{
-					quote = true;
-					result += '\"';
-					break;
-				}
-			}
-			result += (*this)[p].name();
-			result += (quote ? "\" <" : " <");
-			quote = true;    // need angle brackets round email address
-		}
-
-		result += (*this)[p].email();
-		if (quote)
-			result += '>';
+		result += address(p);
 	}
+	return result;
+}
+
+/******************************************************************************
+* Convert one item into an email address, including name.
+*/
+QString EmailAddressList::address(int index) const
+{
+	if (index < 0  ||  index > count())
+		return QString();
+	QString result;
+	bool quote = false;
+	KCal::Person person = (*this)[index];
+	QString name = person.name();
+	if (!name.isEmpty())
+	{
+		// Need to enclose the name in quotes if it has any special characters
+		int len = name.length();
+		for (int i = 0;  i < len;  ++i)
+		{
+			QChar ch = name[i];
+			if (!ch.isLetterOrNumber())
+			{
+				quote = true;
+				result += '\"';
+				break;
+			}
+		}
+		result += (*this)[index].name();
+		result += (quote ? "\" <" : " <");
+		quote = true;    // need angle brackets round email address
+	}
+
+	result += person.email();
+	if (quote)
+		result += '>';
 	return result;
 }
 

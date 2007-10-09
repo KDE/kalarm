@@ -30,10 +30,10 @@ class KDateTime;
 
 #include <kuniqueapplication.h>
 #include <kurl.h>
-class K3Process;
 namespace KCal { class Event; }
 
 #include "alarmevent.h"
+#include "kamail.h"
 class DBusHandler;
 class MainWindow;
 class TrayWindow;
@@ -78,8 +78,7 @@ class KAlarmApp : public KUniqueApplication
 		                                 const QFont&, const QString& audioFile, float audioVolume,
 		                                 int reminderMinutes, const KARecurrence& recurrence,
 						 int repeatInterval, int repeatCount,
-		                                 const QString& mailFromID = QString(),
-		                                 const EmailAddressList& mailAddresses = EmailAddressList(),
+		                                 uint mailFromID = 0, const EmailAddressList& mailAddresses = EmailAddressList(),
 		                                 const QString& mailSubject = QString(),
 		                                 const QStringList& mailAttachments = QStringList());
 		bool               dbusHandleEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_HANDLE); }
@@ -87,8 +86,10 @@ class KAlarmApp : public KUniqueApplication
 		bool               dbusDeleteEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
 	public slots:
 		void               processQueue();
+		void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
 	signals:
 		void               trayIconToggled();
+		void               execAlarmSuccess();
 	protected:
 		KAlarmApp();
 	private slots:
@@ -169,8 +170,6 @@ class KAlarmApp : public KUniqueApplication
 		bool               mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 		bool               mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
 		bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
-		bool               mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
-		bool               mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

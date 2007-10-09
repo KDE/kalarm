@@ -30,3 +30,13 @@ Group=General
 Options=overwrite
 ScriptArguments=1.9.5
 Script=kalarm-version.pl
+
+# KAlarm version 1.9.9
+# Transfer some keys from [General] to [View]
+Id=1.9.9
+File=kalarmrc
+Group=General,View
+Key=ShowResources,ShowResources
+Key=ShowExpiredAlarms,ShowArchivedAlarms
+Key=ShowAlarmTime,ShowAlarmTime
+Key=ShowTimeToAlarm,ShowTimeToAlarm

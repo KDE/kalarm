@@ -111,6 +111,7 @@ class EditAlarmDlg : public KDialog
 		void            slotAnyTimeToggled(bool anyTime);
 		void            slotTemplateTimeType(QAbstractButton*);
 		void            slotSetSubRepetition();
+		void            slotTrySuccess();
 
 	private:
 		void            init(const KAEvent* event, GetResourceType getResource);
