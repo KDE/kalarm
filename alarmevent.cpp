@@ -3203,9 +3203,6 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					Recurrence* recur = event->recurrence();
 					if (recur  &&  recur->recurs())
 					{
-#ifdef __GNUC__
-#warning Fix snoozeTime() duration
-#endif
 						recur->setMinutely(alarm->snoozeTime().asSeconds() / 60);
 						recur->setDuration(alarm->repeatCount() + 1);
 						alarm->setRepeatCount(0);
