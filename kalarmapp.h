@@ -170,8 +170,6 @@ class KAlarmApp : public KUniqueApplication
 		bool               mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
 		bool               mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
 		bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
-		bool               mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
-		bool               mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

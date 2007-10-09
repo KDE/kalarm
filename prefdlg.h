@@ -281,20 +281,14 @@ class ViewPrefTab : public PrefsTabBase
 		virtual void apply(bool syncToDisc);
 
 	private slots:
-		void         slotListTimeToggled(bool);
-		void         slotListTimeToToggled(bool);
 		void         slotTooltipAlarmsToggled(bool);
 		void         slotTooltipMaxToggled(bool);
 		void         slotTooltipTimeToggled(bool);
 		void         slotTooltipTimeToToggled(bool);
 
 	private:
-		void         setList(bool time, bool timeTo);
 		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
-		QCheckBox*   mShowResources;
-		QCheckBox*   mListShowTime;
-		QCheckBox*   mListShowTimeTo;
 		QCheckBox*   mTooltipShowAlarms;
 		QCheckBox*   mTooltipMaxAlarms;
 		SpinBox*     mTooltipMaxAlarmCount;
@@ -303,7 +297,6 @@ class ViewPrefTab : public PrefsTabBase
 		QLineEdit*   mTooltipTimeToPrefix;
 		QLabel*      mTooltipTimeToPrefixLabel;
 		QCheckBox*   mModalMessages;
-		QCheckBox*   mShowArchivedAlarms;
 		SpinBox*     mDaemonTrayCheckInterval;
 };
 

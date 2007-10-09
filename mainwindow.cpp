@@ -85,6 +85,12 @@ using namespace KCal;
 static const char* UI_FILE     = "kalarmui.rc";
 static const char* WINDOW_NAME = "MainWindow";
 
+static const char* VIEW_GROUP         = "View";
+static const char* SHOW_TIME_KEY      = "ShowAlarmTime";
+static const char* SHOW_TIME_TO_KEY   = "ShowTimeToAlarm";
+static const char* SHOW_ARCHIVED_KEY  = "ShowArchivedAlarms";
+static const char* SHOW_RESOURCES_KEY = "ShowResources";
+
 static QString   undoText;
 static QString   undoTextStripped;
 static QIcon     undoIcon;
@@ -109,7 +115,6 @@ QString MainWindow::i18n_chk_ShowAlarmTime()       { return i18nc("@option:check
 QString MainWindow::i18n_o_ShowTimeToAlarms()      { return i18nc("@action", "Show Time t&o Alarms"); }
 QString MainWindow::i18n_chk_ShowTimeToAlarm()     { return i18nc("@option:check", "Show time until alarm"); }
 QString MainWindow::i18n_a_ShowArchivedAlarms()    { return i18nc("@action", "Show &Archived Alarms"); }
-QString MainWindow::i18n_chk_ShowArchivedAlarms()  { return i18nc("@option:check", "Show Archived Alarms"); }
 QString MainWindow::i18n_tip_ShowArchivedAlarms()  { return i18nc("@info:tooltip", "Show Archived Alarms"); }
 QString MainWindow::i18n_tip_HideArchivedAlarms()  { return i18nc("@info:tooltip", "Hide Archived Alarms"); }
 
@@ -129,10 +134,6 @@ MainWindow::MainWindow(bool restored)
 	: MainWindowBase(0, Qt::WindowContextHelpButtonHint),
 	  mResourcesWidth(-1),
 	  mHiddenTrayParent(false),
-	  mShowResources(Preferences::showResources()),
-	  mShowArchived(Preferences::showArchivedAlarms()),
-	  mShowTime(Preferences::showAlarmTime()),
-	  mShowTimeTo(Preferences::showTimeToAlarm()),
 	  mShown(false)
 {
 	kDebug(5950) << "MainWindow::MainWindow()";
@@ -140,10 +141,15 @@ MainWindow::MainWindow(bool restored)
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MainWin");    // used by LikeBack
 	setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
+	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+	mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
+	mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);
+	mShowTime      = config.readEntry(SHOW_TIME_KEY, true);
+	mShowTimeTo    = config.readEntry(SHOW_TIME_TO_KEY, false);
 	if (!restored)
 	{
-		KConfigGroup config(KGlobal::config(), WINDOW_NAME);
-		mResourcesWidth = config.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
+		KConfigGroup wconfig(KGlobal::config(), WINDOW_NAME);
+		mResourcesWidth = wconfig.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
 	}
 
 	setAcceptDrops(true);         // allow drag-and-drop onto this window
@@ -561,39 +567,6 @@ void MainWindow::updateKeepArchived(int days)
 }
 
 /******************************************************************************
-* Called when the show-alarm-time or show-time-to-alarm setting changes in the
-* user preferences.
-* Update the alarm list in every main window instance to show the new default
-* columns. No change is made if a window isn't using the old settings.
-*/
-void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
-{
-	kDebug(5950) << "MainWindow::updateShowAlarmTimes()";
-	bool newTime   = Preferences::showAlarmTime();
-	bool newTimeTo = Preferences::showTimeToAlarm();
-	if (!newTime  &&  !newTimeTo)
-		newTime = true;     // at least one time column must be displayed
-	if (!oldTime  &&  !oldTimeTo)
-		oldTime = true;     // at least one time column must have been displayed
-	if (newTime != oldTime  ||  newTimeTo != oldTimeTo)
-	{
-		for (int i = 0, end = mWindowList.count();  i < end;  ++i)
-		{
-			MainWindow* w = mWindowList[i];
-			if (w->mShowTime   == oldTime
-			&&  w->mShowTimeTo == oldTimeTo)
-			{
-				w->mShowTime   = newTime;
-				w->mShowTimeTo = newTimeTo;
-				w->mActionShowTime->setChecked(newTime);
-				w->mActionShowTimeTo->setChecked(newTimeTo);
-				w->mListView->selectTimeColumns(newTime, newTimeTo);
-			}
-		}
-	}
-}
-
-/******************************************************************************
 * Select an alarm in the displayed list.
 */
 void MainWindow::selectEvent(const QString& eventID)
@@ -766,7 +739,11 @@ void MainWindow::slotShowTime()
 	if (!mShowTime  &&  !mShowTimeTo)
 		slotShowTimeTo();    // at least one time column must be displayed
 	else
+	{
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+		config.writeEntry(SHOW_TIME_KEY, mShowTime);
+	}
 }
 
 /******************************************************************************
@@ -779,7 +756,11 @@ void MainWindow::slotShowTimeTo()
 	if (!mShowTimeTo  &&  !mShowTime)
 		slotShowTime();    // at least one time column must be displayed
 	else
+	{
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+		config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
+	}
 }
 
 /******************************************************************************
@@ -792,6 +773,8 @@ void MainWindow::slotShowArchived()
 	mActionShowArchived->setToolTip(mShowArchived ? i18n_tip_HideArchivedAlarms() : i18n_tip_ShowArchivedAlarms());
 	mListFilterModel->setStatusFilter(mShowArchived ? static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED) : KCalEvent::ACTIVE);
 	mListView->reset();
+	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+	config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);
 }
 
 /******************************************************************************
@@ -872,8 +855,8 @@ void MainWindow::slotToggleTrayIcon()
 */
 void MainWindow::slotToggleResourceSelector()
 {
-	bool show = mActionToggleResourceSel->isChecked();
-	if (show)
+	mShowResources = mActionToggleResourceSel->isChecked();
+	if (mShowResources)
 	{
 		if (mResourcesWidth <= 0)
 		{
@@ -893,6 +876,9 @@ void MainWindow::slotToggleResourceSelector()
 	}
 	else
 		mResourceSelector->hide();
+
+	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+	config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
 }
 
 /******************************************************************************

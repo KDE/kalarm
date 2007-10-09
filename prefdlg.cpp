@@ -1480,35 +1480,7 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab()
 	: PrefsTabBase()
 {
-	mShowResources = new QCheckBox(i18nc("@option:check", "Show resources"), this);
-	mShowResources->setMinimumSize(mShowResources->sizeHint());
-	mShowResources->setWhatsThis(
-	      i18nc("@info:whatsthis", "Specify whether to show the list of alarm resources beside the alarm list."));
-
-	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm List"), this);
-	QVBoxLayout* vlayout = new QVBoxLayout(group);
-	vlayout->setMargin(KDialog::marginHint());
-	vlayout->setSpacing(KDialog::spacingHint());
-
-	mListShowTime = new QCheckBox(MainWindow::i18n_chk_ShowAlarmTime(), group);
-	mListShowTime->setMinimumSize(mListShowTime->sizeHint());
-	connect(mListShowTime, SIGNAL(toggled(bool)), SLOT(slotListTimeToggled(bool)));
-	mListShowTime->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the alarm list, the time at which each alarm is due."));
-	vlayout->addWidget(mListShowTime, 0, Qt::AlignLeft);
-
-	mListShowTimeTo = new QCheckBox(MainWindow::i18n_chk_ShowTimeToAlarm(), group);
-	mListShowTimeTo->setMinimumSize(mListShowTimeTo->sizeHint());
-	connect(mListShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotListTimeToToggled(bool)));
-	mListShowTimeTo->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the alarm list, how long until each alarm is due."));
-	vlayout->addWidget(mListShowTimeTo, 0, Qt::AlignLeft);
-
-	mShowArchivedAlarms = new QCheckBox(MainWindow::i18n_chk_ShowArchivedAlarms(), group);
-	mShowArchivedAlarms->setMinimumSize(mShowArchivedAlarms->sizeHint());
-	mShowArchivedAlarms->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show archived alarms in the alarm list."));
-	vlayout->addWidget(mShowArchivedAlarms, 0, Qt::AlignLeft);
-	group->setMaximumHeight(group->sizeHint().height());
-
-	group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"), this);
+	QGroupBox* group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"), this);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
@@ -1589,35 +1561,22 @@ ViewPrefTab::ViewPrefTab()
 
 void ViewPrefTab::restore(bool)
 {
-	mShowResources->setChecked(Preferences::showResources());
-	setList(Preferences::showAlarmTime(),
-	        Preferences::showTimeToAlarm());
 	setTooltip(Preferences::tooltipAlarmCount(),
 	           Preferences::showTooltipAlarmTime(),
 	           Preferences::showTooltipTimeToAlarm(),
 	           Preferences::tooltipTimeToPrefix());
 	mModalMessages->setChecked(Preferences::modalMessages());
-	mShowArchivedAlarms->setChecked(Preferences::showArchivedAlarms());
 	mDaemonTrayCheckInterval->setValue(Preferences::daemonTrayCheckInterval());
 }
 
 void ViewPrefTab::apply(bool syncToDisc)
 {
-	bool b = mShowResources->isChecked();
-	if (b != Preferences::showResources())
-		Preferences::setShowResources(b);
-	b = mListShowTime->isChecked();
-	if (b != Preferences::showAlarmTime())
-		Preferences::setShowAlarmTime(b);
-	b = mListShowTimeTo->isChecked();
-	if (b != Preferences::showTimeToAlarm())
-		Preferences::setShowTimeToAlarm(b);
 	int n = mTooltipShowAlarms->isChecked() ? -1 : 0;
 	if (n  &&  mTooltipMaxAlarms->isChecked())
 		n = mTooltipMaxAlarmCount->value();
 	if (n != Preferences::tooltipAlarmCount())
 		Preferences::setTooltipAlarmCount(n);
-	b = mTooltipShowTime->isChecked();
+	bool b = mTooltipShowTime->isChecked();
 	if (b != Preferences::showTooltipAlarmTime())
 		Preferences::setShowTooltipAlarmTime(b);
 	b = mTooltipShowTimeTo->isChecked();
@@ -1629,30 +1588,10 @@ void ViewPrefTab::apply(bool syncToDisc)
 	b = mModalMessages->isChecked();
 	if (b != Preferences::modalMessages())
 		Preferences::setModalMessages(b);
-	b = mShowArchivedAlarms->isChecked();
-	if (b != Preferences::showArchivedAlarms())
-		Preferences::setShowArchivedAlarms(b);
 	int i = mDaemonTrayCheckInterval->value();
 	if (i != Preferences::daemonTrayCheckInterval())
 		Preferences::setDaemonTrayCheckInterval(i);
 	PrefsTabBase::apply(syncToDisc);
-}
-
-void ViewPrefTab::setList(bool time, bool timeTo)
-{
-	if (!timeTo)
-		time = true;    // ensure that at least one option is ticked
-
-	// Set the states of the two checkboxes without calling signal
-	// handlers, since these could change the checkboxes' states.
-	mListShowTime->blockSignals(true);
-	mListShowTimeTo->blockSignals(true);
-
-	mListShowTime->setChecked(time);
-	mListShowTimeTo->setChecked(timeTo);
-
-	mListShowTime->blockSignals(false);
-	mListShowTimeTo->blockSignals(false);
 }
 
 void ViewPrefTab::setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix)
@@ -1680,18 +1619,6 @@ void ViewPrefTab::setTooltip(int maxAlarms, bool time, bool timeTo, const QStrin
 	// Enable/disable controls according to their states
 	slotTooltipTimeToToggled(timeTo);
 	slotTooltipAlarmsToggled(maxAlarms);
-}
-
-void ViewPrefTab::slotListTimeToggled(bool on)
-{
-	if (!on  &&  !mListShowTimeTo->isChecked())
-		mListShowTimeTo->setChecked(true);
-}
-
-void ViewPrefTab::slotListTimeToToggled(bool on)
-{
-	if (!on  &&  !mListShowTime->isChecked())
-		mListShowTime->setChecked(true);
 }
 
 void ViewPrefTab::slotTooltipAlarmsToggled(bool on)

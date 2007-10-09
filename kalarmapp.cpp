@@ -117,8 +117,6 @@ KAlarmApp::KAlarmApp()
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
 		DateTime::setStartOfDay(mStartOfDay);
 		mPrefsArchivedColour   = Preferences::archivedColour();
-		mPrefsShowTime         = Preferences::showAlarmTime();
-		mPrefsShowTimeTo       = Preferences::showTimeToAlarm();
 	}
 
 	// Check if the speech synthesis daemon is installed
@@ -1040,15 +1038,6 @@ void KAlarmApp::slotPreferencesChanged()
 
 	// In case the date for February 29th recurrences has changed
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
-
-	if (Preferences::showAlarmTime()   != mPrefsShowTime
-	||  Preferences::showTimeToAlarm() != mPrefsShowTimeTo)
-	{
-		// The default alarm list time columns selection has changed
-		MainWindow::updateTimeColumns(mPrefsShowTime, mPrefsShowTimeTo);
-		mPrefsShowTime   = Preferences::showAlarmTime();
-		mPrefsShowTimeTo = Preferences::showTimeToAlarm();
-	}
 }
 
 /******************************************************************************

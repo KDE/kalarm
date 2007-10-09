@@ -28,10 +28,6 @@
     <argument type="DateTime">Base_WorkDayEnd</argument>
     <argument type="Int">Base_WorkDays</argument>
   </signal>
-  <signal name="showTimeChanged">
-    <argument type="Bool">Base_ShowAlarmTime</argument>
-    <argument type="Bool">ShowTimeToAlarm</argument>
-  </signal>
   <signal name="daemonTrayCheckIntervalChanged">
     <argument type="Int">DaemonTrayCheckInterval</argument>
   </signal>
@@ -114,28 +110,6 @@
       <default>0</default>
       <min>-1</min>
       <max>10</max>   <!-- Prevent windows being unusable for a long time -->
-    </entry>
-    <entry name="ShowResources" type="Bool">
-      <label context="@label">Show resources</label>
-      <whatsthis context="@info:whatsthis">Specify whether to show the list of alarm resources beside the alarm list.</whatsthis>
-      <default>false</default>
-    </entry>
-    <entry name="ShowArchivedAlarms" key="ShowExpiredAlarms" type="Bool">
-      <label context="@label">Show archived alarms</label>
-      <whatsthis context="@info:whatsthis">Specify whether to show archived alarms in the alarm list.</whatsthis>
-      <default>false</default>
-    </entry>
-    <entry name="Base_ShowAlarmTime" key="ShowAlarmTime" type="Bool">
-      <label context="@label">Show alarm time</label>
-      <whatsthis context="@info:whatsthis">Specify whether to show in the alarm list, the time at which each alarm is due.</whatsthis>
-      <default>true</default>
-      <emit signal="showTimeChanged"/>
-    </entry>
-    <entry name="ShowTimeToAlarm" type="Bool">
-      <label context="@label">Show time to alarm</label>
-      <whatsthis context="@info:whatsthis">Specify whether to show in the alarm list, how long until each alarm is due.</whatsthis>
-      <default>false</default>
-      <emit signal="showTimeChanged"/>
     </entry>
     <entry name="TooltipAlarmCount" type="Int">
       <label context="@label">Number of alarms to show in system tray tooltip</label>
