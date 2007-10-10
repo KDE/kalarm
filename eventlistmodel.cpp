@@ -714,7 +714,7 @@ QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 	{
 		int days = now.date().daysTo(dateTime.date());
 		// xgettext: no-c-format
-		return i18nc("@info/plain n days", " %1d ", days);
+		return i18nc("@info/plain n days", "%1d", days);
 	}
 	int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
 	if (mins < 0)
@@ -723,10 +723,10 @@ QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 	minutes[0] = (mins%60) / 10 + '0';
 	minutes[1] = (mins%60) % 10 + '0';
 	if (mins < 24*60)
-		return i18nc("@info/plain hours:minutes", " %1:%2 ", mins/60, minutes);
+		return i18nc("@info/plain hours:minutes", "%1:%2", mins/60, minutes);
 	int days = mins / (24*60);
 	mins = mins % (24*60);
-	return i18nc("@info/plain days hours:minutes", " %1d %2:%3 ", days, mins/60, minutes);
+	return i18nc("@info/plain days hours:minutes", "%1d %2:%3", days, mins/60, minutes);
 }
 
 /******************************************************************************
