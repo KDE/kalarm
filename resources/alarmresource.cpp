@@ -296,6 +296,7 @@ bool AlarmResource::saveAndClose(CacheAction action, Incidence* incidence)
 void AlarmResource::doClose()
 {
 	mCloseAfterSave = false;
+	emit invalidate(this);
 	KCal::ResourceCached::doClose();
 	mLoaded = mLoading = false;
 	mCompatibilityMap.clear();
