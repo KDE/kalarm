@@ -40,6 +40,7 @@ class RadioButton;
 class Reminder;
 class SoundPicker;
 class SpecialActionsButton;
+class CommandEdit;
 class LineEdit;
 class TextEdit;
 
@@ -78,6 +79,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 	private slots:
 		void            slotAlarmTypeChanged(int index);
 		void            slotPickFile();
+		void            slotCmdScriptToggled(bool);
 
 	private:
 		void            setSoundPicker();
@@ -99,6 +101,8 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		LineEdit*           mFileMessageEdit;    // text file URL edit box
 		QPushButton*        mFileBrowseButton;   // text file browse button
 		QString             mFileDefaultDir;     // default directory for browse button
+		// Command output alarm widgets
+		CommandEdit*        mCmdEdit;
 
 		// Initial state of all controls
 		Preferences::SoundType mSavedSoundType;        // mSoundPicker sound type
@@ -152,9 +156,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 
 	private:
 		// Command alarm options
-		CheckBox*           mCmdTypeScript;      // entering a script
-		LineEdit*           mCmdCommandEdit;     // command line edit box
-		TextEdit*           mCmdScriptEdit;      // script edit box
+		CommandEdit*        mCmdEdit;
 		ButtonGroup*        mCmdOutputGroup;     // what to do with command output
 		RadioButton*        mCmdExecInTerm;
 		RadioButton*        mCmdLogToFile;

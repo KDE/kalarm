@@ -798,7 +798,7 @@ bool EditAlarmDlg::validate()
 			return false;
 		}
 	}
-	else if(mTimeWidget)
+	else if (mTimeWidget)
 	{
 		QWidget* errWidget;
 		mAlarmDateTime = mTimeWidget->getDateTime(0, !timedRecurrence, false, &errWidget);
