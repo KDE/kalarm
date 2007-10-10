@@ -908,14 +908,16 @@ bool EditAlarmDlg::validate()
 			if (mResource->alarmType() != type)
 				mResource = 0;   // event may have expired while dialog was open
 		}
+		bool cancelled = false;
 		if (!mResource  ||  !mResource->writable())
 		{
 			KCalEvent::Status type = mTemplate ? KCalEvent::TEMPLATE : KCalEvent::ACTIVE;
-			mResource = AlarmResources::instance()->destination(type, this);
+			mResource = AlarmResources::instance()->destination(type, this, false, &cancelled);
 		}
 		if (!mResource)
 		{
-			KMessageBox::sorry(this, i18nc("@info", "You must select a resource to save the alarm in"));
+			if (!cancelled)
+				KMessageBox::sorry(this, i18nc("@info", "You must select a resource to save the alarm in"));
 			return false;
 		}
 	}

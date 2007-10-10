@@ -1,7 +1,7 @@
 /*
  *  resourceremote.cpp  -  KAlarm remote alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on resourceremote.cpp in kresources,
  *  Copyright (c) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -127,6 +127,7 @@ bool KAResourceRemote::doLoad(bool syncCache)
 		return false;
 	}
 	mLoaded = false;
+	emit invalidate(this);
 	calendar()->close();
 	clearChanges();
 	if (!isActive())
@@ -177,6 +178,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 	bool err = false;
 	if (job)
 	{
+		emit invalidate(this);
 		calendar()->close();
 		clearChanges();
 		if (job->error())

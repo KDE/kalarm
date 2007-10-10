@@ -143,6 +143,7 @@ TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCol
 UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParent, int options, bool showKOrgErr)
 {
 	kDebug(5950) << "KAlarm::addEvent():" << event.id();
+	bool cancelled = false;
 	UpdateStatus status = UPDATE_OK;
 	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
 		status = UPDATE_FAILED;
@@ -150,7 +151,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParen
 	{
 		// Save the event details in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::resources();
-		KCal::Event* kcalEvent = cal->addEvent(event, msgParent, (options & USE_EVENT_ID), resource, (options & NO_RESOURCE_PROMPT));
+		KCal::Event* kcalEvent = cal->addEvent(event, msgParent, (options & USE_EVENT_ID), resource, (options & NO_RESOURCE_PROMPT), &cancelled);
 		if (!kcalEvent)
 			status = UPDATE_FAILED;
 		else if (!cal->save())
@@ -168,7 +169,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParen
 		}
 	}
 
-	if (status != UPDATE_OK  &&  msgParent)
+	if (status != UPDATE_OK  &&  !cancelled  &&  msgParent)
 		displayUpdateError(msgParent, status, ERR_ADD, 1, 1, showKOrgErr);
 	return status;
 }

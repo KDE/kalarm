@@ -62,7 +62,7 @@ class AlarmCalendar : public QObject
 		KCal::Event::List     events(AlarmResource*, KCalEvent::Status = KCalEvent::EMPTY);
 		KCal::Event::List     eventsWithAlarms(const KDateTime& from, const KDateTime& to, KCalEvent::Status);
 		bool                  eventReadOnly(const QString& uniqueID) const;
-		KCal::Event*          addEvent(KAEvent&, QWidget* promptParent = 0, bool useEventID = false, AlarmResource* = 0, bool noPrompt = false);
+		KCal::Event*          addEvent(KAEvent&, QWidget* promptParent = 0, bool useEventID = false, AlarmResource* = 0, bool noPrompt = false, bool* cancelled = 0);
 		KCal::Event*          modifyEvent(const QString& oldEventId, KAEvent& newEvent);
 		KCal::Event*          updateEvent(const KAEvent&);
 		bool                  deleteEvent(const QString& eventID, bool save = false);

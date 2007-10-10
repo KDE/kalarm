@@ -140,6 +140,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	setCompatibility(KCalendar::ByEvent);
 	if (syncCache)
 	{
+		emit invalidate(this);
 		calendar()->close();
 		clearChanges();
 	}
@@ -212,7 +213,10 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	if (!syncCache)
 	{
 		if (mLastModified.isEmpty())
+		{
+			emit invalidate(this);
 			calendar()->close();
+		}
 		else
 		{
 			// Delete any events in the calendar for which files were not found

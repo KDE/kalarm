@@ -440,6 +440,10 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Deleted)";
 			removeResource(resource);
 			return;
+		case AlarmResources::Invalidated:
+			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Invalidated)";
+			removeResource(resource);
+			return;
 		case AlarmResources::Location:
 			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Location)";
 			removeResource(resource);
@@ -495,8 +499,8 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 
 /******************************************************************************
 * Remove a resource's events from the list.
-* This has to be called before the resource is actually deleted. If not, timer
-* based updates can occur between the resource being deleted and
+* This has to be called before the resource is actually deleted or reloaded. If
+* not, timer based updates can occur between the resource being deleted and
 * slotResourceStatusChanged(Deleted) being triggered, leading to crashes when
 * data from the resource's events is fetched.
 */

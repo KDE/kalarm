@@ -186,22 +186,25 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 	return resource;
 }
 
-bool AlarmResources::addEvent(Event* event, KCalEvent::Status type, QWidget* promptParent, bool noPrompt)
+AlarmResources::Result AlarmResources::addEvent(Event* event, KCalEvent::Status type, QWidget* promptParent, bool noPrompt)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::addEvent(" << event->uid() << ")";
-	AlarmResource* resource = destination(type, promptParent, noPrompt);
+	bool cancelled;
+	AlarmResource* resource = destination(type, promptParent, noPrompt, &cancelled);
 	if (!resource)
 	{
-		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource";
 		delete event;
-		return false;
+		if (cancelled)
+			return Cancelled;
+		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource";
+		return Failed;
 	}
 	if (!addEvent(event, resource))
 	{
 		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): failed";
-		return false;    // event was deleted by addEvent()
+		return Failed;    // event was deleted by addEvent()
 	}
-	return true;
+	return Success;
 }
 
 AlarmResource* AlarmResources::getStandardResource(AlarmResource::Type type)
@@ -294,15 +297,17 @@ int AlarmResources::activeCount(AlarmResource::Type type, bool writable)
 	return count;
 }
 
-AlarmResource* AlarmResources::destination(Incidence* incidence, QWidget* promptParent)
+AlarmResource* AlarmResources::destination(Incidence* incidence, QWidget* promptParent, bool* cancelled)
 {
 	Event* event = dynamic_cast<Event*>(incidence);
 	KCalEvent::Status type = event ? KCalEvent::status(event) : KCalEvent::ACTIVE;
-	return destination(type, promptParent);
+	return destination(type, promptParent, false, cancelled);
 }
 
-AlarmResource* AlarmResources::destination(KCalEvent::Status type, QWidget* promptParent, bool noPrompt)
+AlarmResource* AlarmResources::destination(KCalEvent::Status type, QWidget* promptParent, bool noPrompt, bool* cancelled)
 {
+	if (cancelled)
+		*cancelled = false;
 	AlarmResource* standard;
 	AlarmResource::Type calType;
 	switch (type)
@@ -346,8 +351,12 @@ AlarmResource* AlarmResources::destination(KCalEvent::Status type, QWidget* prom
 		case 1:
 //			return static_cast<AlarmResource*>(list.first());
 		default:
+		{
 			KRES::Resource* r = KRES::SelectDialog::getResource(list, promptParent);
+			if (!r  &&  cancelled)
+				*cancelled = true;
 			return static_cast<AlarmResource*>(r);
+		}
 	}
 }
 
@@ -596,10 +605,11 @@ bool AlarmResources::addEvent(Event* event, AlarmResource* resource)
 	return false;
 }
 
-bool AlarmResources::addEvent(Event* event, QWidget* promptParent)
+AlarmResources::Result AlarmResources::addEvent(Event* event, QWidget* promptParent)
 {
 	kDebug(KARES_DEBUG) << "AlarmResources::addEvent" << this;
-	AlarmResource* resource = destination(event, promptParent);
+	bool cancelled;
+	AlarmResource* resource = destination(event, promptParent, &cancelled);
 	if (resource)
 	{
 		mResourceMap[event] = resource;
@@ -610,13 +620,15 @@ bool AlarmResources::addEvent(Event* event, QWidget* promptParent)
 			mResourceMap[event] = resource;
 			setModified(true);
 			endChange(event);
-			return true;
+			return Success;
 		}
 		mResourceMap.remove(event);
 	}
+	else if (cancelled)
+		return Cancelled;
 	else
 		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource";
-	return false;
+	return Failed;
 }
 
 bool AlarmResources::deleteEvent(Event *event)
@@ -733,6 +745,7 @@ void AlarmResources::connectResource(AlarmResource* resource)
 	connect(resource, SIGNAL(readOnlyChanged(AlarmResource*)), SLOT(slotReadOnlyChanged(AlarmResource*)));
 	connect(resource, SIGNAL(locationChanged(AlarmResource*)), SLOT(slotLocationChanged(AlarmResource*)));
 	connect(resource, SIGNAL(colourChanged(AlarmResource*)), SLOT(slotColourChanged(AlarmResource*)));
+	connect(resource, SIGNAL(invalidate(AlarmResource*)), SLOT(slotResourceInvalidated(AlarmResource*)));
 	connect(resource, SIGNAL(loaded(AlarmResource*)), SLOT(slotResourceLoaded(AlarmResource*)));
 	connect(resource, SIGNAL(resLoaded(AlarmResource*)), SLOT(slotResLoaded(AlarmResource*)));
 	connect(resource, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
@@ -746,6 +759,11 @@ void AlarmResources::connectResource(AlarmResource* resource)
 	                  SLOT(slotLoadError(ResourceCalendar*, const QString&)));
 	connect(resource, SIGNAL(resourceSaveError(ResourceCalendar*, const QString&)),
 	                  SLOT(slotSaveError(ResourceCalendar*, const QString&)));
+}
+
+void AlarmResources::slotResourceInvalidated(AlarmResource* resource)
+{
+	emit resourceStatusChanged(resource, Invalidated);
 }
 
 void AlarmResources::slotResourceLoaded(AlarmResource* resource)
