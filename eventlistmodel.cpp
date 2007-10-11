@@ -90,9 +90,6 @@ for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event"<<(void*)mEvents[x];
 		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
 	}
 	MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
-#ifdef __GNUC__
-#warning Need to update when a resource is reloaded, to prevent crash
-#endif
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 }
 
