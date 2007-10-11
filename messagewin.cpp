@@ -30,7 +30,6 @@
 #include <QPushButton>
 #include <QCheckBox>
 #include <QLabel>
-#include <QTextEdit>
 #include <QPalette>
 #include <QTimer>
 #include <QPixmap>
@@ -45,7 +44,7 @@
 
 #include <kstandarddirs.h>
 #include <kaction.h>
-#include <KStandardGuiItem>
+#include <kstandardguiitem.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kconfig.h>
@@ -56,6 +55,7 @@
 #include <kglobalsettings.h>
 #include <kmimetype.h>
 #include <kmessagebox.h>
+#include <ktextedit.h>
 #include <kwindowsystem.h>
 #include <kio/netaccess.h>
 #include <knotification.h>
@@ -76,6 +76,7 @@
 #include "kmailinterface.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "shellprocess.h"
 #include "synchtimer.h"
 #include "messagewin.moc"
 
@@ -94,11 +95,11 @@ static const int proximityButtonDelay = 1000;    // (milliseconds)
 static const int proximityMultiple = 10;         // multiple of button height distance from cursor for proximity
 
 // A text label widget which can be scrolled and copied with the mouse
-class MessageText : public QTextEdit
+class MessageText : public KTextEdit
 {
 	public:
 		MessageText(QWidget* parent = 0)
-			: QTextEdit(parent)
+			: KTextEdit(parent)
 		{
 			setReadOnly(true);
 			setFrameStyle(NoFrame);
@@ -106,6 +107,15 @@ class MessageText : public QTextEdit
 		}
 		int scrollBarHeight() const     { return horizontalScrollBar()->height(); }
 		int scrollBarWidth() const      { return verticalScrollBar()->width(); }
+		void setBackgroundColour(const QColor& c)
+		{
+			QPalette pal = palette();
+			pal.setColor(backgroundRole(), c);
+			setPalette(pal);
+			pal = viewport()->palette();
+			pal.setColor(viewport()->backgroundRole(), c);
+			viewport()->setPalette(pal);
+		}
 //TODO: Restore the following line
 //		virtual QSize sizeHint() const  { return QSize(contentsWidth() + scrollBarWidth(), contentsHeight() + scrollBarHeight()); }
 };
@@ -153,6 +163,7 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
 	  mFlags(event.flags()),
@@ -227,6 +238,7 @@ MessageWin::MessageWin(const KAEvent& event, const DateTime& alarmDateTime,
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
 	  mErrorWindow(true),
@@ -256,6 +268,7 @@ MessageWin::MessageWin()
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
 	  mErrorWindow(false),
@@ -421,12 +434,7 @@ void MessageWin::initView()
 				// Using MessageText instead of QLabel allows scrolling and mouse copying
 				MessageText* text = new MessageText(topWidget);
 				text->setAutoFillBackground(true);
-				QPalette pal = text->palette();
-				pal.setColor(text->backgroundRole(), mBgColour);
-				text->setPalette(pal);
-				pal = text->viewport()->palette();
-				pal.setColor(text->viewport()->backgroundRole(), mBgColour);
-				text->viewport()->setPalette(pal);
+				text->setBackgroundColour(mBgColour);
 				text->setTextColor(mFgColour);
 				text->setCurrentFont(mFont);
 				text->insertPlainText(mMessage);
@@ -459,6 +467,24 @@ void MessageWin::initView()
 				break;
 			}
 			case KAEvent::COMMAND:
+			{
+				mCommandText = new MessageText(topWidget);
+				mCommandText->setMinimumSize(mCommandText->sizeHint());
+				mCommandText->setBackgroundColour(mBgColour);
+				mCommandText->setTextColor(mFgColour);
+				mCommandText->setCurrentFont(mFont);
+				topLayout->addWidget(mCommandText);
+
+				// Set the default size to 20 lines square.
+				// Note that after the first file has been displayed, this size
+				// is overridden by the user-set default stored in the config file.
+				// So there is no need to calculate an accurate size.
+				int h = 20*mCommandText->fontMetrics().lineSpacing() + 2*mCommandText->frameWidth();
+				mCommandText->resize(QSize(h, h).expandedTo(mCommandText->sizeHint()));
+				mCommandText->setWhatsThis(i18nc("@info:whatsthis", "The output of the alarm's command"));
+				theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), this, SLOT(readProcessOutput(ShellProcess*)));
+				break;
+			}
 			case KAEvent::EMAIL:
 			default:
 				break;
@@ -704,6 +730,16 @@ void MessageWin::setRemainingTextMinute()
 	else
 		text = i18ncp("@info", "in 1 hour %2 minutes' time", "in %1 hours %2 minutes' time", mins/60, mins%60);
 	mRemainingText->setText(text);
+}
+
+/******************************************************************************
+* Called when output is available from the command which is providing the text
+* for this window.
+*/
+void MessageWin::readProcessOutput(ShellProcess* proc)
+{
+	QByteArray data = proc->readAll();
+	mCommandText->insertPlainText(QString::fromLocal8Bit(data.data()));
 }
 
 /******************************************************************************

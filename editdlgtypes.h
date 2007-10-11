@@ -105,13 +105,15 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		CommandEdit*        mCmdEdit;
 
 		// Initial state of all controls
-		Preferences::SoundType mSavedSoundType;        // mSoundPicker sound type
+		int                 mSavedType;             // mTypeCombo index
+		Preferences::SoundType mSavedSoundType;     // mSoundPicker sound type
 		bool                mSavedSound;            // mSoundPicker sound status
 		bool                mSavedRepeatSound;      // mSoundPicker repeat status
 		KUrl                mSavedSoundFile;        // mSoundPicker sound file
 		float               mSavedSoundVolume;      // mSoundPicker volume
 		float               mSavedSoundFadeVolume;  // mSoundPicker fade volume
 		int                 mSavedSoundFadeSeconds; // mSoundPicker fade time
+		bool                mSavedCmdScript;        // mCmdEdit->isScript() status
 		bool                mSavedConfirmAck;       // mConfirmAck status
 		QFont               mSavedFont;             // mFontColourButton font
 		QColor              mSavedBgColour;         // mBgColourChoose selection
@@ -165,7 +167,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 		KHBox*              mCmdPadding;
 
 		// Initial state of all controls
-		bool                mSavedCmdScript;        // mCmdTypeScript status
+		bool                mSavedCmdScript;        // mCmdEdit->isScript() status
 		QAbstractButton*    mSavedCmdOutputRadio;   // selected button in mCmdOutputGroup
 		QString             mSavedCmdLogFile;       // mCmdLogFileEdit value
 };

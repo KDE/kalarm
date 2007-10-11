@@ -34,9 +34,11 @@ class QResizeEvent;
 class QCloseEvent;
 class QPushButton;
 class KPushButton;
+class MessageText;
 class QCheckBox;
 class QLabel;
 class DeferAlarmDlg;
+class ShellProcess;
 namespace Phonon { class MediaObject; }
 
 /**
@@ -92,6 +94,7 @@ class MessageWin : public MainWindowBase
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
 		void                setMaxSize();
+		void                readProcessOutput(ShellProcess*);
 
 	private:
 		MessageWin(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
@@ -141,6 +144,7 @@ class MessageWin : public MainWindowBase
 		QPushButton*        mSilenceButton;
 		QPushButton*        mKAlarmButton;
 		QPushButton*        mKMailButton;
+		MessageText*        mCommandText;     // shows output from command
 		QCheckBox*          mDontShowAgainCheck;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred

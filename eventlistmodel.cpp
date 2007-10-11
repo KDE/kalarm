@@ -201,7 +201,8 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			{
 				case Qt::BackgroundRole:
 					if (event.action() == KAEvent::MESSAGE
-					||  event.action() == KAEvent::FILE)
+					||  event.action() == KAEvent::FILE
+					||  event.action() == KAEvent::COMMAND && event.commandDisplay())
 						return event.bgColour();
 				case SortRole:
 				{
@@ -783,11 +784,17 @@ QPixmap* EventListModel::eventIcon(const KAEvent& event) const
 {
 	switch (event.action())
 	{
-		case KAAlarm::FILE:     return mFileIcon;
-		case KAAlarm::COMMAND:  return mCommandIcon;
-		case KAAlarm::EMAIL:    return mEmailIcon;
+		case KAAlarm::FILE:
+			return mFileIcon;
+		case KAAlarm::EMAIL:
+			return mEmailIcon;
+		case KAAlarm::COMMAND:
+			if (!event.commandDisplay())
+				return mCommandIcon;
+			// fall through to MESSAGE
 		case KAAlarm::MESSAGE:
-		default:                return mTextIcon;
+		default:
+			return mTextIcon;
 	}
 }
 

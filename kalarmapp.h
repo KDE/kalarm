@@ -67,6 +67,7 @@ class KAlarmApp : public KUniqueApplication
 		virtual void       commitData(QSessionManager&);
 
 		void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
+		ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, const QObject* receiver = 0, const char* slot = 0);
 		void               alarmCompleted(const KAEvent&);
 		void               rescheduleAlarm(KAEvent& e, const KAAlarm& a)   { rescheduleAlarm(e, a, true); }
 		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
@@ -110,13 +111,14 @@ class KAlarmApp : public KUniqueApplication
 			ProcData(ShellProcess*, KAEvent*, KAAlarm*, int flags = 0);
 			~ProcData();
 			enum { PRE_ACTION = 0x01, POST_ACTION = 0x02, RESCHEDULE = 0x04, ALLOW_DEFER = 0x08,
-			       TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20 };
+			       TEMP_FILE = 0x10, EXEC_IN_XTERM = 0x20, DISP_OUTPUT = 0x40 };
 			bool                 preAction() const   { return flags & PRE_ACTION; }
 			bool                 postAction() const  { return flags & POST_ACTION; }
 			bool                 reschedule() const  { return flags & RESCHEDULE; }
 			bool                 allowDefer() const  { return flags & ALLOW_DEFER; }
 			bool                 tempFile() const    { return flags & TEMP_FILE; }
 			bool                 execInXterm() const { return flags & EXEC_IN_XTERM; }
+			bool                 dispOutput() const  { return flags & DISP_OUTPUT; }
 			ShellProcess*          process;
 			KAEvent*               event;
 			KAAlarm*               alarm;
@@ -143,7 +145,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               handleEvent(const QString& eventID, EventFunc);
 		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
 		void               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
-		ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags = 0);
+		ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags = 0, const QObject* receiver = 0, const char* slot = 0);
 		QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&);
 		void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
 		void               purge(int daysToKeep);

@@ -325,6 +325,10 @@ void EditDisplayAlarmDlg::setAction(KAEvent::Action action, const AlarmText& ala
 			mTypeCombo->setCurrentIndex(tFILE);
 			mFileMessageEdit->setText(text);
 			break;
+		case KAEvent::COMMAND:
+			mTypeCombo->setCurrentIndex(tCOMMAND);
+			mCmdEdit->setText(alarmText);
+			break;
 		default:
 			Q_ASSERT(0);
 			break;
@@ -339,6 +343,7 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 	mTypeCombo->setReadOnly(readOnly);
 	mTextMessageEdit->setReadOnly(readOnly);
 	mFileMessageEdit->setReadOnly(readOnly);
+	mCmdEdit->setReadOnly(readOnly);
 	mFontColourButton->setReadOnly(readOnly);
 	mSoundPicker->setReadOnly(readOnly);
 	mConfirmAck->setReadOnly(readOnly);
@@ -364,6 +369,8 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 {
 	EditAlarmDlg::saveState(event);
+	mSavedType        = mTypeCombo->currentIndex();
+	mSavedCmdScript   = mCmdEdit->isScript();
 	mSavedSoundType   = mSoundPicker->sound();
 	mSavedSoundFile   = mSoundPicker->file();
 	mSavedSoundVolume = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
@@ -390,7 +397,9 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 */
 bool EditDisplayAlarmDlg::type_stateChanged() const
 {
-	if (mSavedSoundType  != mSoundPicker->sound()
+	if (mSavedType       != mTypeCombo->currentIndex()
+	||  mSavedCmdScript  != mCmdEdit->isScript()
+	||  mSavedSoundType  != mSoundPicker->sound()
 	||  mSavedConfirmAck != mConfirmAck->isChecked()
 	||  mSavedFont       != mFontColourButton->font()
 	||  mSavedFgColour   != mFontColourButton->fgColour()
@@ -432,13 +441,13 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 	KAEvent::Action type;
 	switch (mTypeCombo->currentIndex())
 	{
-		case tTEXT:  type = KAEvent::MESSAGE; break;
-		case tFILE:  type = KAEvent::FILE; break;
-		case tCOMMAND:    // not implemented yet
-		default:    type = KAEvent::MESSAGE; break;
+		case tFILE:     type = KAEvent::FILE; break;
+		case tCOMMAND:  type = KAEvent::COMMAND; break;
+		default:
+		case tTEXT:     type = KAEvent::MESSAGE; break;
 	}
-	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(), mFontColourButton->font(),
-	          type, lateCancel, getAlarmFlags());
+	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(),
+	          mFontColourButton->font(), type, lateCancel, getAlarmFlags());
 	if (type == KAEvent::MESSAGE)
 	{
 		if (AlarmText::checkIfEmail(text))
@@ -450,7 +459,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 	event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
 	if (!trial)
 		event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
-	if (mSpecialActionsButton)
+	if (mSpecialActionsButton  &&  mSpecialActionsButton->isVisible())
 		event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
 }
 
@@ -459,18 +468,21 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 */
 int EditDisplayAlarmDlg::getAlarmFlags() const
 {
+	bool cmd = (mTypeCombo->currentIndex() == tCOMMAND);
 	return EditAlarmDlg::getAlarmFlags()
 	     | (mSoundPicker->sound() == Preferences::Sound_Beep  ? KAEvent::BEEP : 0)
 	     | (mSoundPicker->sound() == Preferences::Sound_Speak ? KAEvent::SPEAK : 0)
 	     | (mSoundPicker->repeat()                            ? KAEvent::REPEAT_SOUND : 0)
 	     | (mConfirmAck->isChecked()                          ? KAEvent::CONFIRM_ACK : 0)
 	     | (lateCancel()->isAutoClose()                       ? KAEvent::AUTO_CLOSE : 0)
-	     | (mFontColourButton->defaultFont()                  ? KAEvent::DEFAULT_FONT : 0);
+	     | (mFontColourButton->defaultFont()                  ? KAEvent::DEFAULT_FONT : 0)
+	     | (cmd                                               ? KAEvent::DISPLAY_COMMAND : 0)
+	     | (cmd && mCmdEdit->isScript()                       ? KAEvent::SCRIPT : 0);
 }
 
 /******************************************************************************
-*  Called when one of the alarm action type radio buttons is clicked,
-*  to display the appropriate set of controls for that action type.
+*  Called when one of the alarm display type combo box is changed, to display
+*  the appropriate set of controls for that action type.
 */
 void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 {
@@ -484,6 +496,8 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mTextMessageEdit->show();
 			mFontColourButton->show();
 			mSoundPicker->showSpeak(true);
+			if (mSpecialActionsButton)
+				mSpecialActionsButton->show();
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the alarm message now"));
 			focus = mTextMessageEdit;
 			break;
@@ -494,6 +508,8 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mCmdEdit->hide();
 			mFontColourButton->hide();
 			mSoundPicker->showSpeak(false);
+			if (mSpecialActionsButton)
+				mSpecialActionsButton->show();
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the file now"));
 			mFileMessageEdit->setNoSelect();
 			focus = mFileMessageEdit;
@@ -505,6 +521,8 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mCmdEdit->show();
 			mFontColourButton->show();
 			mSoundPicker->showSpeak(true);
+			if (mSpecialActionsButton)
+				mSpecialActionsButton->hide();
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the command output now"));
 			focus = mCmdEdit;
 			break;
@@ -771,7 +789,7 @@ void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
 void EditCommandAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 {
 	Q_ASSERT(action == KAEvent::COMMAND);
-	mCmdEdit->setText(alarmText.displayText());
+	mCmdEdit->setText(alarmText);
 }
 
 /******************************************************************************

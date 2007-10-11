@@ -108,9 +108,12 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent& event, bool new
 {
 	switch (event.action())
 	{
+		case KAEvent::COMMAND:
+			if (!event.commandDisplay())
+				return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+			// fall through to MESSAGE
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:     return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-		case KAEvent::COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 		case KAEvent::EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 	}
 	return 0;

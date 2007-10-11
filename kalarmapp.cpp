@@ -1517,17 +1517,22 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 
 	void* result = (void*)1;
 	event.setArchive();
-	switch (alarm.action())
+	KAAlarm::Action action = alarm.action();
+	if (action == KAAlarm::COMMAND && event.commandDisplay())
+		action = KAAlarm::MESSAGE;
+	switch (action)
 	{
 		case KAAlarm::MESSAGE:
 		case KAAlarm::FILE:
 		{
-			// Display a message or file, provided that the same event isn't already being displayed
+			// Display a message, file or command output, provided that the same event
+			// isn't already being displayed
 			MessageWin* win = MessageWin::findEvent(event.id());
 			// Find if we're changing a reminder message to the real message
 			bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
 			bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
-			if (!reminder  &&  !event.deferred()
+			if (alarm.action() != KAAlarm::COMMAND
+			&&  !reminder  &&  !event.deferred()
 			&&  (replaceReminder || !win)  &&  !noPreAction
 			&&  !event.preAction().isEmpty()  &&  ShellProcess::authorised())
 			{
@@ -1576,28 +1581,10 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			break;
 		}
 		case KAAlarm::COMMAND:
-		{
-			int flags = event.commandXterm() ? ProcData::EXEC_IN_XTERM : 0;
-			QString command = event.cleanText();
-			if (event.commandScript())
-			{
-				// Store the command script in a temporary file for execution
-				kDebug(5950) << "KAlarmApp::execAlarm(): COMMAND: (script)";
-				QString tmpfile = createTempScriptFile(command, false, event, alarm);
-				if (tmpfile.isEmpty())
-					result = 0;
-				else
-					result = doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE));
-			}
-			else
-			{
-				kDebug(5950) << "KAlarmApp::execAlarm(): COMMAND:" << command;
-				result = doShellCommand(command, event, &alarm, flags);
-			}
+			result = execCommandAlarm(event, alarm);
 			if (reschedule)
 				rescheduleAlarm(event, alarm, true);
 			break;
-		}
 		case KAAlarm::EMAIL:
 		{
 			kDebug(5950) << "KAlarmApp::execAlarm(): EMAIL to:" << event.emailAddresses(",");
@@ -1646,12 +1633,40 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
 }
 
 /******************************************************************************
+* Execute the command specified in a command alarm.
+* To connect to the output ready signals of the process, specify a slot to be
+* called by supplying 'receiver' and 'slot' parameters.
+*/
+ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& alarm, const QObject* receiver, const char* slot)
+{
+	int flags = (event.commandXterm()   ? ProcData::EXEC_IN_XTERM : 0)
+	          | (event.commandDisplay() ? ProcData::DISP_OUTPUT : 0);
+	QString command = event.cleanText();
+	if (event.commandScript())
+	{
+		// Store the command script in a temporary file for execution
+		kDebug(5950) << "KAlarmApp::execCommandAlarm(): (script)";
+		QString tmpfile = createTempScriptFile(command, false, event, alarm);
+		if (tmpfile.isEmpty())
+			return 0;
+		return doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE), receiver, slot);
+	}
+	else
+	{
+		kDebug(5950) << "KAlarmApp::execCommandAlarm():" << command;
+		return doShellCommand(command, event, &alarm, flags, receiver, slot);
+	}
+}
+
+/******************************************************************************
 * Execute a shell command line specified by an alarm.
 * If the PRE_ACTION bit of 'flags' is set, the alarm will be executed via
 * execAlarm() once the command completes, the execAlarm() parameters being
 * derived from the remaining bits in 'flags'.
+* To connect to the output ready signals of the process, specify a slot to be
+* called by supplying 'receiver' and 'slot' parameters.
 */
-ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags)
+ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, const QObject* receiver, const char* slot)
 {
 	kDebug(5950) << "KAlarmApp::doShellCommand(" << command << "," << event.id() << ")";
 	QIODevice::OpenMode mode = QIODevice::WriteOnly;
@@ -1710,6 +1725,11 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	ShellProcess* proc = new ShellProcess(cmd);
 	proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
 	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
+	if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slot)
+	{
+		connect(proc, SIGNAL(receivedStdout(ShellProcess*)), receiver, slot);
+		connect(proc, SIGNAL(receivedStderr(ShellProcess*)), receiver, slot);
+	}
 	if (mode == QIODevice::ReadWrite  &&  !event.logFile().isEmpty())
 	{
 		// Output is to be appended to a log file.
