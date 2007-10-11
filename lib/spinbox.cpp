@@ -226,6 +226,7 @@ void SpinBox::focusOutEvent(QFocusEvent* e)
 		interpretText();
 		mEdited = false;
 	}
+	QSpinBox::focusOutEvent(e);
 }
 
 void SpinBox::mousePressEvent(QMouseEvent* e)
