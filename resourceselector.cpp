@@ -160,6 +160,8 @@ void ResourceSelector::addResource()
 	                                     i18nc("@info", "Select storage type of new resource:"), descs, 0, false, &ok, this);
 	if (!ok)
 		return;
+        if( descs.isEmpty())
+                return;
 	QString type = manager->resourceTypeNames()[descs.indexOf(desc)];
 	AlarmResource* resource = dynamic_cast<AlarmResource*>(manager->createResource(type));
 	if (!resource)
