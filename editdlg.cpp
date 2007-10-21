@@ -80,10 +80,12 @@ static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 
 inline QString recurText(const KAEvent& event)
 {
+	QString r;
 	if (event.repeatCount())
-		return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+		r = QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
 	else
-		return event.recurrenceText();
+		r = event.recurrenceText();
+	return i18nc("@title:tab", "&Recurrence - [%1]", r);
 }
 
 // Collect these widget labels together to ensure consistent wording and
@@ -236,7 +238,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	// Recurrence tab
 	KVBox* recurTab = new KVBox;
 	recurTab->setMargin(marginHint());
-	mTabs->addTab(recurTab, i18nc("@title:tab", "&Recurrence"));
+	mTabs->addTab(recurTab, QString());
 	mRecurPageIndex = 1;
 	mRecurrenceEdit = new RecurrenceEdit(mReadOnly, recurTab);
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
@@ -275,18 +277,6 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	topLayout->addLayout(hlayout);
-
-	// Recurrence type display
-	KHBox* recurBox = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
-	recurBox->setMargin(0);
-	recurBox->setSpacing(spacingHint());
-	label = new QLabel(i18nc("@label", "Recurrence:"), recurBox);
-	label->setFixedSize(label->sizeHint());
-	mRecurrenceText = new QLabel(recurBox);
-	recurBox->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>How often the alarm recurs.</para>"
-	      "<para>The times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition.</para>"));
-	recurBox->setFixedHeight(recurBox->sizeHint().height());
 
 	// Date and time entry
 	if (mTemplate)
@@ -351,14 +341,11 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
-		recurBox->setParent(templateTimeBox);
-		grid->addWidget(recurBox, 2, 0, 1, -1, Qt::AlignLeft);
-
 		hlayout->addStretch();
 	}
 	else
 	{
-		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage, recurBox);
+		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
 		connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
@@ -504,7 +491,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 			mShowInKorganizer->setChecked(event->copyToKOrganizer());
 		type_initValues(event);
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		mRecurrenceText->setText(recurText(*event));
+		mTabs->setTabText(mRecurPageIndex, recurText(*event));
 	}
 	else
 	{
@@ -1119,7 +1106,7 @@ kDebug()<<"slotRecurFrequencyChange()"<<endl;
 	slotSetSubRepetition();
 	KAEvent event;
 	mRecurrenceEdit->updateEvent(event, false);
-	mRecurrenceText->setText(recurText(event));
+	mTabs->setTabText(mRecurPageIndex, recurText(event));
 }
 
 /******************************************************************************

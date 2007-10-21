@@ -149,7 +149,6 @@ class EditAlarmDlg : public KDialog
 		Reminder*           mReminder;           // null except for display alarms
 		CheckBox*           mShowInKorganizer;
 
-		QLabel*             mRecurrenceText;
 		RecurrenceEdit*     mRecurrenceEdit;
 
 		QString             mAlarmMessage;       // message text/file name/command/email message
