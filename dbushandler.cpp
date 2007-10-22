@@ -197,6 +197,22 @@ bool DBusHandler::edit(const QString& eventID)
 	return KAlarm::editAlarm(eventID);
 }
 
+bool DBusHandler::editNew(int type)
+{
+	EditAlarmDlg::Type dlgtype;
+	switch (type)
+	{
+		case DISPLAY:  dlgtype = EditAlarmDlg::DISPLAY;  break;
+		case COMMAND:  dlgtype = EditAlarmDlg::COMMAND;  break;
+		case EMAIL:    dlgtype = EditAlarmDlg::EMAIL;  break;
+		default:
+			kError(5950) << "D-Bus call: invalid alarm type:" << type;
+			return false;
+	}
+	KAlarm::editNewAlarm(dlgtype);
+	return true;
+}
+
 bool DBusHandler::editNew(const QString& templateName)
 {
 	return KAlarm::editNewAlarm(templateName);
@@ -212,6 +228,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start
                                   int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
+	KAEvent::Action action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::COMMAND : KAEvent::MESSAGE;
 	QColor bg = convertBgColour(bgColor);
 	if (!bg.isValid())
 		return false;
@@ -238,7 +255,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start
 			return false;
 		}
 	}
-	return theApp()->scheduleEvent(KAEvent::MESSAGE, message, start, lateCancel, kaEventFlags, bg, fg, font,
+	return theApp()->scheduleEvent(action, message, start, lateCancel, kaEventFlags, bg, fg, font,
 	                               audioFile.url(), -1, reminderMins, recurrence, subRepeatInterval, subRepeatCount);
 }
 
@@ -386,6 +403,7 @@ unsigned DBusHandler::convertStartFlags(const KDateTime& start, unsigned flags)
 	if (flags & REPEAT_SOUND)    kaEventFlags |= KAEvent::REPEAT_SOUND;
 	if (flags & AUTO_CLOSE)      kaEventFlags |= KAEvent::AUTO_CLOSE;
 	if (flags & EMAIL_BCC)       kaEventFlags |= KAEvent::EMAIL_BCC;
+	if (flags & DISPLAY_COMMAND) kaEventFlags |= KAEvent::DISPLAY_COMMAND;
 	if (flags & SCRIPT)          kaEventFlags |= KAEvent::SCRIPT;
 	if (flags & EXEC_IN_XTERM)   kaEventFlags |= KAEvent::EXEC_IN_XTERM;
 	if (flags & SHOW_IN_KORG)    kaEventFlags |= KAEvent::COPY_KORGANIZER;
@@ -464,7 +482,6 @@ bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const KDateTime& s
 		case WEEKLY:    type = KARecurrence::WEEKLY;  break;
 		case MONTHLY:   type = KARecurrence::MONTHLY_DAY;  break;
 		case YEARLY:    type = KARecurrence::ANNUAL_DATE;  break;
-			break;
 		default:
 			kError(5950) << "D-Bus call: invalid recurrence type:" << recurType;
 			return false;

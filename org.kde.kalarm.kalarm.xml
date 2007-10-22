@@ -171,6 +171,10 @@
     </method>
     <method name="editNew">
       <arg type="b" direction="out"/>
+      <arg name="type" type="i" direction="in"/>
+    </method>
+    <method name="editNew">
+      <arg type="b" direction="out"/>
       <arg name="templateName" type="s" direction="in"/>
     </method>
   </interface>

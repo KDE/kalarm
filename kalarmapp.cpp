@@ -353,11 +353,22 @@ int KAlarmApp::newInstance()
 				}
 			}
 			else
-			if (args->isSet("edit-new")  ||  args->isSet("edit-new-preset"))
+			if (args->isSet("edit-new-display")  ||  args->isSet("edit-new-command")  ||  args->isSet("edit-new-email"))
 			{
-				QString templ;
-				if (args->isSet("edit-new-preset"))
-					templ = args->getOption("edit-new-preset");
+				EditAlarmDlg::Type type = args->isSet("edit-new-display") ? EditAlarmDlg::DISPLAY
+				                        : args->isSet("edit-new-command") ? EditAlarmDlg::COMMAND
+				                        : EditAlarmDlg::EMAIL;
+				if (!initCheck())
+				{
+					exitCode = 1;
+					break;
+				}
+				KAlarm::editNewAlarm(type);
+			}
+			else
+			if (args->isSet("edit-new-preset"))
+			{
+				QString templ = args->getOption("edit-new-preset");
 				if (!initCheck())
 				{
 					exitCode = 1;
@@ -366,7 +377,7 @@ int KAlarmApp::newInstance()
 				KAlarm::editNewAlarm(templ);
 			}
 			else
-			if (args->isSet("file")  ||  args->isSet("exec")  ||  args->isSet("mail")  ||  args->count())
+			if (args->isSet("file")  ||  args->isSet("exec")  ||  args->isSet("exec-display")  ||  args->isSet("mail")  ||  args->count())
 			{
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
@@ -375,6 +386,7 @@ int KAlarmApp::newInstance()
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QString          alSubject;
+				int flags = KAEvent::DEFAULT_FONT;
 				if (args->isSet("file"))
 				{
 					kDebug(5950) << "KAlarmApp::newInstance(): file";
@@ -386,6 +398,23 @@ int KAlarmApp::newInstance()
 						USAGE(i18nc("@info:shell", "message incompatible with <icode>%1</icode>", QLatin1String("--file")))
 					alMessage = args->getOption("file");
 					action = KAEvent::FILE;
+				}
+				else if (args->isSet("exec-display"))
+				{
+					kDebug(5950)<<"KAlarmApp::newInstance(): exec-display\n";
+					if (args->isSet("exec"))
+						USAGE(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--exec"), QLatin1String("--exec-display")))
+					if (args->isSet("mail"))
+						USAGE(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--mail"), QLatin1String("--exec-display")))
+					alMessage = args->getOption("exec-display");
+					int n = args->count();
+					for (int i = 0;  i < n;  ++i)
+					{
+						alMessage += ' ';
+						alMessage += args->arg(i);
+					}
+					action = KAEvent::COMMAND;
+					flags |= KAEvent::DISPLAY_COMMAND;
 				}
 				else if (args->isSet("exec"))
 				{
@@ -629,7 +658,6 @@ int KAlarmApp::newInstance()
 				else if (args->isSet("auto-close"))
 					USAGE(i18nc("@info:shell", "<icode>%1</icode> requires <icode>%2</icode>", QLatin1String("--auto-close"), QLatin1String("--late-cancel")))
 
-				int flags = KAEvent::DEFAULT_FONT;
 				if (args->isSet("ack-confirm"))
 					flags |= KAEvent::CONFIRM_ACK;
 				if (args->isSet("auto-close"))
@@ -1206,6 +1234,9 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_TRIGGER:    // handle it if it's due, else execute it regardless
 		case EVENT_HANDLE:     // handle it if it's due
 		{
+#ifdef __GNUC__
+#warning Archived alarms are sometimes treated as active
+#endif
 			KDateTime now = KDateTime::currentUtcDateTime();
 			DateTime  repeatDT;
 			bool updateCalAndDisplay = false;

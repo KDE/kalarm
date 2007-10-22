@@ -73,6 +73,7 @@ class DBusHandler : public QObject, public KAlarmIface
 	                                const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                int recurType, int recurInterval, const QString& endDateTime);
 	Q_SCRIPTABLE bool edit(const QString& eventID);
+	Q_SCRIPTABLE bool editNew(int type);
 	Q_SCRIPTABLE bool editNew(const QString& templateName);
 
     private:

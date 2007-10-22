@@ -1,7 +1,7 @@
 /*
  *  kalarmiface.h  -  D-Bus interface to KAlarm
  *  Program:  kalarm
- *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ class KAlarmIface
 	 *  @li REPEAT_SOUND    - repeat the sound file while the alarm is displayed.
 	 *  @li CONFIRM_ACK     - closing the alarm message window requires a confirmation prompt.
 	 *  @li AUTO_CLOSE      - auto-close the alarm window after the late-cancel period.
+	 *  @li DISPLAY_COMMAND - display command output in the alarm window.
 	 *  @li SCRIPT          - the command to execute is a script, not a shell command line.
 	 *  @li EXEC_IN_XTERM   - execute the command alarm in a terminal window.
 	 *  @li EMAIL_BCC       - send a blind copy the email to the user.
@@ -56,7 +57,8 @@ class KAlarmIface
 		SCRIPT          = 0x80,    // command is a script, not a shell command line
 		EXEC_IN_XTERM   = 0x100,   // execute command alarm in terminal window
 		SPEAK           = 0x200,   // speak the alarm message when it is displayed
-		SHOW_IN_KORG    = 0x400    // show the alarm as an event in KOrganizer
+		SHOW_IN_KORG    = 0x400,   // show the alarm as an event in KOrganizer
+		DISPLAY_COMMAND = 0x800    // display command output in alarm window
 	};
 	/** Values for the @p repeatType parameter of "scheduleXxxx()" D-Bus calls.
 	 *  @li MINUTELY - the repeat interval is measured in minutes.
@@ -73,272 +75,17 @@ class KAlarmIface
 		MONTHLY  = 4,    // the repeat interval is measured in months
 		YEARLY   = 5     // the repeat interval is measured in years
 	};
-
-#if 0
-    k_dcop:
-	/** Cancel (delete) an already scheduled alarm.
-	 *  @param eventId - The unique ID of the event to be cancelled, as stored in the calendar file @p url.
+	/** Values for the @p type parameter of "editNew()" D-Bus call.
+	 *  @li DISPLAY - create a display alarm.
+	 *  @li COMMAND - create a command alarm.
+	 *  @li EMAIL   - create an email alarm.
 	 */
-	virtual bool cancelEvent(const QString& eventId) = 0;
-
-	/** Trigger the immediate display or execution of an alarm, regardless of what time it is scheduled for.
-	 *  @param eventId - The unique ID of the event to be triggered, as stored in the calendar file @p url.
-	 */
-	virtual bool triggerEvent(const QString& eventId) = 0;
-
-	/** Schedule a message display alarm.
-	 *  @param message        The text of the message to display.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
-	 *                        current default background colour. The string may be in any of the formats
-	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param fgColor        The foreground colour for the alarm message, or QString() for the current
-	 *                        default foreground colour. The format of the string is the same as for @p bgColor.
-	 *  @param font           The font for the alarm message, or QString() for the default message font
-	 *                        current at the time the message is displayed. The string should be in format
-	 *                        returned by QFont::toString().
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
-	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
-	 *                        a reminder alarm, or 0 for no reminder.
-	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
-	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
-	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KUrl& audioFile, int reminderMins, const QString& recurrence,
-	                             int repeatInterval, int repeatCount) = 0;
-	/** Schedule a message display alarm.
-	 *  @param message        The text of the message to display.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
-	 *                        current default background colour. The string may be in any of the formats
-	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param fgColor        The foreground colour for the alarm message, or QString() for the current
-	 *                        default foreground colour. The format of the string is the same as for @p bgColor.
-	 *  @param font           The font for the alarm message, or QString() for the default message font
-	 *                        current at the time the message is displayed. The string should be in format
-	 *                        returned by QFont::toString().
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
-	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
-	 *                        a reminder alarm, or 0 for no reminder.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param repeatCount    Recurrence count (after the first occurrence), or 0 for no recurrence.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
-	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KUrl& audioFile, int reminderMins,
-	                             int repeatType, int repeatInterval, int repeatCount) = 0;
-	/** Schedule a message display alarm.
-	 *  @param message        The text of the message to display.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
-	 *                        current default background colour. The string may be in any of the formats
-	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param fgColor        The foreground colour for the alarm message, or QString() for the current
-	 *                        default foreground colour. The format of the string is the same as for @p bgColor.
-	 *  @param font           The font for the alarm message, or QString() for the default message font
-	 *                        current at the time the message is displayed. The string should be in format
-	 *                        returned by QFont::toString().
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
-	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
-	 *                        a reminder alarm, or 0 for no reminder.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param endDateTime    Date/time after which the recurrence will end.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
-	                             const QString& bgColor, const QString& fgColor, const QString& font,
-	                             const KUrl& audioFile, int reminderMins,
-	                             int repeatType, int repeatInterval, const QString& endDateTime) = 0;
-	
-	/** Schedule a file display alarm.
-	 *  @param file           The text or image file to display.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
-	 *                        current default background colour. The string may be in any of the formats
-	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
-	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
-	 *                        a reminder alarm, or 0 for no reminder.
-	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
-	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KUrl& audioFile, int reminderMins, const QString& recurrence,
-	                          int repeatInterval, int repeatCount) = 0;
-	/** Schedule a file display alarm.
-	 *  @param file           The text or image file to display.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
-	 *                        current default background colour. The string may be in any of the formats
-	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
-	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
-	 *                        a reminder alarm, or 0 for no reminder.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param repeatCount    Recurrence count (after the first occurrence), or 0 for no recurrence.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KUrl& audioFile, int reminderMins, int repeatType, int repeatInterval, int repeatCount) = 0;
-	/** Schedule a file display alarm.
-	 *  @param file           The text or image file to display.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param bgColor        The background colour for the alarm message window, or QString() for the
-	 *                        current default background colour. The string may be in any of the formats
-	 *                        accepted by QColor::QColor(const QString&).
-	 *  @param audioFile      The audio file to play when the alarm is displayed, or QString() for none.
-	 *  @param reminderMins   The number of minutes in advance of the main alarm and its recurrences to display
-	 *                        a reminder alarm, or 0 for no reminder.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param endDateTime    Date/time after which the recurrence will end.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleFile(const KUrl& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
-	                          const KUrl& audioFile, int reminderMins,
-	                          int repeatType, int repeatInterval, const QString& endDateTime) = 0;
-	
-	/** Schedule a command execution alarm.
-	 *  @param commandLine    The command line or command script to execute.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
-	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
-	                             const QString& recurrence, int repeatInterval, int repeatCount) = 0;
-	/** Schedule a command execution alarm.
-	 *  @param commandLine    The command line or command script to execute.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param repeatCount    Recurrence count (after the first occurrence), or 0 for no recurrence.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
-	                             int repeatType, int repeatInterval, int repeatCount) = 0;
-	/** Schedule a command execution alarm.
-	 *  @param commandLine    The command line or command script to execute.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param endDateTime    Date/time after which the recurrence will end.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
-	                             int repeatType, int repeatInterval, const QString& endDateTime) = 0;
-
-	/** Schedule an email alarm.
-	 *  @param fromID         The KMail identity to use as the sender of the email, or QString() to use KAlarm's default sender ID.
-	 *  @param addresses      Comma-separated list of addresses to send the email to.
-	 *  @param subject        Subject line of the email.
-	 *  @param message        Email message's body text.
-	 *  @param attachments    Comma- or semicolon-separated list of paths or URLs of files to send as
-	 *                        attachments to the email.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in Flags enum.
-	 *  @param recurrence     Recurrence specification using iCalendar syntax (defined in RFC2445).
-	 *  @param repeatInterval Sub-repetition repeat interval in minutes, or 0 for no sub-repetition.
-	 *  @param repeatCount    Sub-repetition repeat count (after the first occurrence), or 0 for no sub-repetition.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
-	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
-	                           const QString& recurrence, int repeatInterval, int repeatCount) = 0;
-	/** Schedule an email alarm.
-	 *  @param fromID         The KMail identity to use as the sender of the email, or QString() to use KAlarm's default sender ID.
-	 *  @param addresses      Comma-separated list of addresses to send the email to.
-	 *  @param subject        Subject line of the email.
-	 *  @param message        Email message's body text.
-	 *  @param attachments    Comma- or semicolon-separated list of paths or URLs of files to send as
-	 *                        attachments to the email.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in the Flags enum.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param repeatCount    Recurrence count (after the first occurrence), or 0 for no recurrence.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
-	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
-	                           int repeatType, int repeatInterval, int repeatCount) = 0;
-	/** Schedule an email alarm.
-	 *  @param fromID         The KMail identity to use as the sender of the email, or QString() to use KAlarm's default sender ID.
-	 *  @param addresses      Comma-separated list of addresses to send the email to.
-	 *  @param subject        Subject line of the email.
-	 *  @param message        Email message's body text.
-	 *  @param attachments    Comma- or semicolon-separated list of paths or URLs of files to send as
-	 *                        attachments to the email.
-	 *  @param startDateTime  Start date/time, in the format YYYY-MM-DD[THH:MM[:SS]] or [T]HH:MM[:SS]
-	 *  @param lateCancel     Late-cancellation period in minutes, or 0 for no cancellation.
-	 *  @param flags          OR of flag bits defined in the Flags enum.
-	 *  @param repeatType     The time units to use for recurrence. The actual recurrence interval is equal to 
-	 *                        @p repeatType multiplied by @p repeatInterval.
-	 *                        The value of @p repeatType must a value defined in the RecurType enum.
-	 *  @param repeatInterval Recurrence interval in units defined by @p repeatType, or 0 for no recurrence.
-	 *  @param endDateTime    Date/time after which the recurrence will end.
-	 *  @return true if alarm was scheduled successfully, false if configuration errors were found.
-	 */
-	virtual bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
-	                           const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
-	                           int repeatType, int repeatInterval, const QString& endDateTime) = 0;
-	/** Open the alarm edit dialog to edit an existing alarm.
-	 *  @param eventId       The unique ID of the event to be edited, or QString() to create a new alarm.
-	 *  @return false if the alarm could not be found or is read-only, true otherwise.
-	 */
-	virtual bool edit(const QString& eventID) = 0;
-	/** Open the alarm edit dialog to edit a new alarm.
-	 *  @param templateName  Name of the alarm template to base the new alarm on, or QString() if none.
-	 *                       If a template is specified but cannot be found, the alarm edit dialog is still
-	 *                       opened but is (obviously) not preset with the template.
-	 *  @return false if an alarm template was specified but could not be found, true otherwise.
-	 */
-	virtual bool editNew(const QString& templateName) = 0;
-#endif
+	enum AlarmType
+	{
+		DISPLAY = 1,    // display alarm
+		COMMAND = 2,    // command alarm
+		EMAIL   = 3     // email alarm
+	};
 };
 
 #endif // KALARMIFACE_H
