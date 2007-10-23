@@ -141,7 +141,8 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 		mAnyTimeCheckBox = new CheckBox(i18nc("@option:check", "Any time"), timeBox);
 		mAnyTimeCheckBox->setFixedSize(mAnyTimeCheckBox->sizeHint());
 		connect(mAnyTimeCheckBox, SIGNAL(toggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-		mAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis", "Trigger the alarm at the first opportunity on the selected date."));
+		mAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis",
+		      "Check to specify only a date (without a time) for the alarm. The alarm will trigger at the first opportunity on the selected date."));
 	}
 
 	// 'Time from now' radio button/label
