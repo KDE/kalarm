@@ -158,7 +158,7 @@ void ResourceSelector::addResource()
 	bool ok = false;
 	QString desc = KInputDialog::getItem(i18nc("@title:window", "Resource Configuration"),
 	                                     i18nc("@info", "Select storage type of new resource:"), descs, 0, false, &ok, this);
-	if (!ok)
+	if (!ok  ||  descs.isEmpty())
 		return;
 	QString type = manager->resourceTypeNames()[descs.indexOf(desc)];
 	AlarmResource* resource = dynamic_cast<AlarmResource*>(manager->createResource(type));

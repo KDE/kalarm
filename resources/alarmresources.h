@@ -41,7 +41,9 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 {
 		Q_OBJECT
 	public:
-		enum Change { Added, Deleted, Enabled, ReadOnly, Location, Colour };
+		enum Change { Added, Deleted, Invalidated, Enabled, ReadOnly, Location, Colour };
+		// Return code when the user can cancel an operation
+		enum Result { Success, Cancelled, Failed };
 
 		class Ticket
 		{
@@ -102,9 +104,10 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 
 		/** Add an event to the resource calendar.
 		 *  The resource calendar takes ownership of the event.
-		 *  @return false if error, in which case the event is deleted.
+		 *  @return Success if success; otherwise the event is deleted, and
+		 *          Cancelled or Failed is returned.
 		 */
-		bool addEvent(KCal::Event*, KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false);
+		Result addEvent(KCal::Event*, KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false);
 
 		/** Return whether all, some or none of the active resources are loaded.
 		 *  @return 0 if no resources are loaded,
@@ -217,7 +220,11 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
     */
     void setAskDestinationPolicy(bool ask)  { mAskDestination = ask; }
 
-		AlarmResource* destination(KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false);
+		/** Find the resource to be used to store an event of a given type.
+		 *  @param cancelled If non-null: set to true if the user cancelled
+		 *             the prompt dialogue; set to false if any other error.
+		 */
+		AlarmResource* destination(KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false, bool* cancelled = 0);
 
     /**
        Request ticket for saving the Calendar.  If a ticket is returned the
@@ -273,7 +280,10 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		   @return true if the Event was successfully inserted; false otherwise.
 		*/
 		virtual bool addEvent(KCal::Event* event)   { return addEvent(event, (QWidget*)0); }
-		bool addEvent(KCal::Event* event, QWidget* promptParent);
+		/** @return Success if success; otherwise the event is deleted, and
+		 *          Cancelled or Failed is returned.
+		 */
+		Result addEvent(KCal::Event* event, QWidget* promptParent);
 
 		/**
 		   Insert an Event into a Calendar Resource.
@@ -480,11 +490,12 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		void slotResourceDownloading(AlarmResource*, unsigned long percent);
 		void slotCacheDownloaded(AlarmResource*);
 		void slotResourceChanged(ResourceCalendar*);
+		void slotResourceInvalidated(AlarmResource*);
 
 	private:
 		AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly, bool passiveClient);
 		AlarmResource* addDefaultResource(const KConfigGroup&, AlarmResource::Type);
-		AlarmResource* destination(KCal::Incidence*, QWidget* promptParent);
+		AlarmResource* destination(KCal::Incidence*, QWidget* promptParent, bool* cancelled = 0);
 		void  appendEvents(KCal::Event::List& result, const KCal::Event::List& events, AlarmResource*);
 		void  slotResourceStatusChanged(AlarmResource*, Change);
 		void  remap(AlarmResource*);

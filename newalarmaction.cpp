@@ -34,7 +34,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
 	: KActionMenu(KIcon("document-new"), label, parent)
 {
 	setShortcuts(KStandardShortcut::openNew());
-	QAction* act = menu()->addAction(KIcon(QLatin1String("??")), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@item:inmenu", "Display Alarm")));
+	QAction* act = menu()->addAction(KIcon(QLatin1String("view-remove")), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@item:inmenu", "Display Alarm")));
 	mTypes[act] = EditAlarmDlg::DISPLAY;
 	mCommandAction = menu()->addAction(KIcon(QLatin1String("exec")), (templates ? i18nc("@item:inmenu", "&Command Alarm Template") : i18nc("@item:inmenu", "Command Alarm")));
 	mTypes[mCommandAction] = EditAlarmDlg::COMMAND;

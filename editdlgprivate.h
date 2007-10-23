@@ -1,7 +1,7 @@
 /*
  *  editdlgprivate.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2003-2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include <QFrame>
 class QDragEnterEvent;
 class QShowEvent;
+class CheckBox;
+class LineEdit;
 
 
 class PageFrame : public QFrame
@@ -45,6 +47,29 @@ class TextEdit : public QTextEdit
 		explicit TextEdit(QWidget* parent);
 	protected:
 		virtual void dragEnterEvent(QDragEnterEvent*);
+};
+
+class CommandEdit : public QWidget
+{
+		Q_OBJECT
+	public:
+		CommandEdit(QWidget* parent);
+		bool      isScript() const;
+		void      setScript(bool);
+		QString   text() const;
+		void      setText(const AlarmText&);
+		void      setReadOnly(bool);
+
+	signals:
+		void      scriptToggled(bool);
+
+	private slots:
+		void      slotCmdScriptToggled(bool);
+
+	private:
+		CheckBox* mTypeScript;      // entering a script
+		LineEdit* mCommandEdit;     // command line edit box
+		TextEdit* mScriptEdit;      // script edit box
 };
 
 #endif // EDITDLGPRIVATE_H

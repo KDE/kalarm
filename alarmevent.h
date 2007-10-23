@@ -83,7 +83,6 @@ class KAAlarmEventBase
 		int                repeatInterval() const      { return mRepeatInterval; }
 		bool               displaying() const          { return mDisplaying; }
 		bool               beep() const                { return mBeep; }
-		bool               speak() const               { return (mActionType == T_MESSAGE) && mSpeak; }
 		int                flags() const;
 #ifdef NDEBUG
 		void               dumpDebug() const  { }
@@ -122,7 +121,6 @@ class KAAlarmEventBase
 		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
 		bool               mCommandScript;    // the command text is a script, not a shell command line
 		bool               mBeep;             // whether to beep when the alarm is displayed
-		bool               mSpeak;            // whether to speak the message when the alarm is displayed
 		bool               mRepeatSound;      // whether to repeat the sound file while the alarm is displayed
 		bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
 		bool               mDisplaying;       // whether the alarm is currently being displayed (i.e. in displaying calendar)
@@ -139,7 +137,7 @@ class KAAlarmEventBase
 class KAAlarm : public KAAlarmEventBase
 {
 	public:
-		// Define the basic KAAlaem action types
+		// Define the basic KAAlarm action types
 		enum Action
 		{
 			MESSAGE = T_MESSAGE,   // KCal::Alarm::Display type: display a text message
@@ -249,6 +247,7 @@ class KAEvent : public KAAlarmEventBase
 			SPEAK           = 0x1000,  // speak the message when the alarm is displayed
 		        COPY_KORGANIZER = 0x2000,  // KOrganizer should hold a copy of the event
 			WORK_TIME_ONLY  = 0x4000,  // trigger alarm only during working hours
+			DISPLAY_COMMAND = 0x8000,  // display command output in alarm window
 			// The following are read-only internal values
 			REMINDER        = 0x10000,
 			DEFERRAL        = 0x20000,
@@ -363,7 +362,7 @@ class KAEvent : public KAAlarmEventBase
 		KAAlarm            convertDisplayingAlarm() const;
 		bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool original = false, bool cancelCancelledDefer = false) const;
 		Action             action() const                 { return (Action)mActionType; }
-		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE; }
+		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE || mActionType == T_COMMAND && mCommandDisplay; }
 		const QString&     id() const                     { return mEventID; }
 		bool               valid() const                  { return mAlarmCount  &&  (mAlarmCount != 1 || !mRepeatAtLogin); }
 		int                alarmCount() const             { return mAlarmCount; }
@@ -386,9 +385,11 @@ class KAEvent : public KAAlarmEventBase
 		const QString&     messageFileOrCommand() const   { return mText; }
 		QString            logFile() const                { return mLogFile; }
 		bool               commandXterm() const           { return mCommandXterm; }
+		bool               commandDisplay() const         { return mCommandDisplay; }
 		unsigned long      kmailSerialNumber() const      { return mKMailSerialNumber; }
 		bool               copyToKOrganizer() const       { return mCopyToKOrganizer; }
 		bool               workTimeOnly() const           { return mWorkTimeOnly; }
+		bool               speak() const                  { return (mActionType == T_MESSAGE  ||  mActionType == T_COMMAND && mCommandDisplay) && mSpeak; }
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return !mAudioFile.isEmpty() ? mSoundVolume : -1; }
 		float              fadeVolume() const             { return !mAudioFile.isEmpty() && mSoundVolume >= 0 && mFadeSeconds ? mFadeVolume : -1; }
@@ -463,8 +464,8 @@ class KAEvent : public KAAlarmEventBase
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
-		static void        readAlarms(const KCal::Event*, void* alarmMap);
-		static void        readAlarm(const KCal::Alarm*, AlarmData&);
+		static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
+		static void        readAlarm(const KCal::Alarm*, AlarmData&, bool cmdDisplay = false);
 		inline void        set_deferral(DeferType);
 		inline void        set_reminder(int minutes);
 		inline void        set_archiveReminder();
@@ -493,6 +494,8 @@ class KAEvent : public KAAlarmEventBase
 		QString            mLogFile;          // alarm output is to be logged to this URL
 		KCalEvent::Status  mCategory;         // event category (active, archived, template, ...)
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
+		bool               mCommandDisplay;   // command output is to be displayed in an alarm window
+		bool               mSpeak;            // whether to speak the message when the alarm is displayed
 		bool               mCopyToKOrganizer; // KOrganizer should hold a copy of the event
 		bool               mWorkTimeOnly;     // trigger alarm only during working hours
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence

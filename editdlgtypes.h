@@ -40,6 +40,7 @@ class RadioButton;
 class Reminder;
 class SoundPicker;
 class SpecialActionsButton;
+class CommandEdit;
 class LineEdit;
 class TextEdit;
 
@@ -78,6 +79,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 	private slots:
 		void            slotAlarmTypeChanged(int index);
 		void            slotPickFile();
+		void            slotCmdScriptToggled(bool);
 
 	private:
 		void            setSoundPicker();
@@ -99,15 +101,19 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		LineEdit*           mFileMessageEdit;    // text file URL edit box
 		QPushButton*        mFileBrowseButton;   // text file browse button
 		QString             mFileDefaultDir;     // default directory for browse button
+		// Command output alarm widgets
+		CommandEdit*        mCmdEdit;
 
 		// Initial state of all controls
-		Preferences::SoundType mSavedSoundType;        // mSoundPicker sound type
+		int                 mSavedType;             // mTypeCombo index
+		Preferences::SoundType mSavedSoundType;     // mSoundPicker sound type
 		bool                mSavedSound;            // mSoundPicker sound status
 		bool                mSavedRepeatSound;      // mSoundPicker repeat status
 		KUrl                mSavedSoundFile;        // mSoundPicker sound file
 		float               mSavedSoundVolume;      // mSoundPicker volume
 		float               mSavedSoundFadeVolume;  // mSoundPicker fade volume
 		int                 mSavedSoundFadeSeconds; // mSoundPicker fade time
+		bool                mSavedCmdScript;        // mCmdEdit->isScript() status
 		bool                mSavedConfirmAck;       // mConfirmAck status
 		QFont               mSavedFont;             // mFontColourButton font
 		QColor              mSavedBgColour;         // mBgColourChoose selection
@@ -152,9 +158,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 
 	private:
 		// Command alarm options
-		CheckBox*           mCmdTypeScript;      // entering a script
-		LineEdit*           mCmdCommandEdit;     // command line edit box
-		TextEdit*           mCmdScriptEdit;      // script edit box
+		CommandEdit*        mCmdEdit;
 		ButtonGroup*        mCmdOutputGroup;     // what to do with command output
 		RadioButton*        mCmdExecInTerm;
 		RadioButton*        mCmdLogToFile;
@@ -163,7 +167,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 		KHBox*              mCmdPadding;
 
 		// Initial state of all controls
-		bool                mSavedCmdScript;        // mCmdTypeScript status
+		bool                mSavedCmdScript;        // mCmdEdit->isScript() status
 		QAbstractButton*    mSavedCmdOutputRadio;   // selected button in mCmdOutputGroup
 		QString             mSavedCmdLogFile;       // mCmdLogFileEdit value
 };

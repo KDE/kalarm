@@ -90,9 +90,6 @@ for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event"<<(void*)mEvents[x];
 		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
 	}
 	MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
-#ifdef __GNUC__
-#warning Need to update when a resource is reloaded, to prevent crash
-#endif
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 }
 
@@ -204,7 +201,8 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			{
 				case Qt::BackgroundRole:
 					if (event.action() == KAEvent::MESSAGE
-					||  event.action() == KAEvent::FILE)
+					||  event.action() == KAEvent::FILE
+					||  event.action() == KAEvent::COMMAND && event.commandDisplay())
 						return event.bgColour();
 				case SortRole:
 				{
@@ -440,6 +438,10 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Deleted)";
 			removeResource(resource);
 			return;
+		case AlarmResources::Invalidated:
+			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Invalidated)";
+			removeResource(resource);
+			return;
 		case AlarmResources::Location:
 			kDebug(5950) << "EventListModel::slotResourceStatusChanged(Location)";
 			removeResource(resource);
@@ -495,8 +497,8 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 
 /******************************************************************************
 * Remove a resource's events from the list.
-* This has to be called before the resource is actually deleted. If not, timer
-* based updates can occur between the resource being deleted and
+* This has to be called before the resource is actually deleted or reloaded. If
+* not, timer based updates can occur between the resource being deleted and
 * slotResourceStatusChanged(Deleted) being triggered, leading to crashes when
 * data from the resource's events is fetched.
 */
@@ -667,7 +669,7 @@ KCal::Event* EventListModel::event(const QModelIndex& index)
 QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 {
 	if (!dateTime.isValid())
-		return i18nc("@info Alarm never occurs", "Never");
+		return i18nc("@info/plain Alarm never occurs", "Never");
 	KLocale* locale = KGlobal::locale();
 	KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
 	QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
@@ -704,13 +706,13 @@ QString EventListModel::alarmTimeText(const DateTime& dateTime) const
 QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 {
 	if (!dateTime.isValid())
-		return i18nc("@info Alarm never occurs", "Never");
+		return i18nc("@info/plain Alarm never occurs", "Never");
 	KDateTime now = KDateTime::currentUtcDateTime();
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());
 		// xgettext: no-c-format
-		return i18nc("@info n days", " %1d ", days);
+		return i18nc("@info/plain n days", "%1d", days);
 	}
 	int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
 	if (mins < 0)
@@ -719,10 +721,10 @@ QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 	minutes[0] = (mins%60) / 10 + '0';
 	minutes[1] = (mins%60) % 10 + '0';
 	if (mins < 24*60)
-		return i18nc("@info hours:minutes", " %1:%2 ", mins/60, minutes);
+		return i18nc("@info/plain hours:minutes", "%1:%2", mins/60, minutes);
 	int days = mins / (24*60);
 	mins = mins % (24*60);
-	return i18nc("@info days hours:minutes", " %1d %2:%3 ", days, mins/60, minutes);
+	return i18nc("@info/plain days hours:minutes", "%1d %2:%3", days, mins/60, minutes);
 }
 
 /******************************************************************************
@@ -782,11 +784,17 @@ QPixmap* EventListModel::eventIcon(const KAEvent& event) const
 {
 	switch (event.action())
 	{
-		case KAAlarm::FILE:     return mFileIcon;
-		case KAAlarm::COMMAND:  return mCommandIcon;
-		case KAAlarm::EMAIL:    return mEmailIcon;
+		case KAAlarm::FILE:
+			return mFileIcon;
+		case KAAlarm::EMAIL:
+			return mEmailIcon;
+		case KAAlarm::COMMAND:
+			if (!event.commandDisplay())
+				return mCommandIcon;
+			// fall through to MESSAGE
 		case KAAlarm::MESSAGE:
-		default:                return mTextIcon;
+		default:
+			return mTextIcon;
 	}
 }
 

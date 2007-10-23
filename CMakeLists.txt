@@ -1,12 +1,9 @@
 project(kalarm)
 
-include_directories( 
-	${CMAKE_SOURCE_DIR}/kcal/
-	${CMAKE_SOURCE_DIR}/kcal/libical/src/
-	${CMAKE_BINARY_DIR}/kcal/libical/src/
-	${CMAKE_SOURCE_DIR}/kalarm 
-	${CMAKE_SOURCE_DIR}/kalarm/lib 
-	${CMAKE_SOURCE_DIR}/kalarm/resources 
+include_directories(
+        ./ 
+	./lib 
+	./resources 
 ) 
 
 add_subdirectory( kalarmd ) 
@@ -17,28 +14,28 @@ add_subdirectory( pixmaps )
 
 ########### next target ###############
 set(libkalarm_SRCS
-	${CMAKE_SOURCE_DIR}/kalarm/lib/buttongroup.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/checkbox.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/colourcombo.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/colourlist.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/combobox.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/dateedit.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/datetime.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/label.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/messagebox.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/packedlayout.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/pushbutton.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/radiobutton.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/timeedit.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/timespinbox.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/timeperiod.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/timezonecombo.cpp
-	${CMAKE_SOURCE_DIR}/kalarm/lib/shellprocess.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/slider.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/spinbox.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/spinbox2.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/lineedit.cpp 
-	${CMAKE_SOURCE_DIR}/kalarm/lib/synchtimer.cpp
+	lib/buttongroup.cpp 
+	lib/checkbox.cpp 
+	lib/colourcombo.cpp 
+	lib/colourlist.cpp 
+	lib/combobox.cpp 
+	lib/dateedit.cpp 
+	lib/datetime.cpp 
+	lib/label.cpp 
+	lib/messagebox.cpp 
+	lib/packedlayout.cpp 
+	lib/pushbutton.cpp 
+	lib/radiobutton.cpp 
+	lib/timeedit.cpp 
+	lib/timespinbox.cpp 
+	lib/timeperiod.cpp 
+	lib/timezonecombo.cpp
+	lib/shellprocess.cpp 
+	lib/slider.cpp 
+	lib/spinbox.cpp 
+	lib/spinbox2.cpp 
+	lib/lineedit.cpp 
+	lib/synchtimer.cpp
 )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS}
@@ -98,7 +95,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler )
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.notify.xml daemon_p.h NotificationHandler )
 qt4_add_dbus_interfaces(kalarm_bin_SRCS kalarmd/org.kde.kalarm.kalarmd.Daemon.xml )
-qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_SOURCE_DIR}/kmail/org.kde.kmail.kmail.xml )
+qt4_add_dbus_interfaces(kalarm_bin_SRCS ../kmail/org.kde.kmail.kmail.xml )
 
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)

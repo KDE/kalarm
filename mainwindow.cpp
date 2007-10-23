@@ -527,10 +527,6 @@ void MainWindow::initActions()
 	mActionEnable->setEnabled(false);
 	mActionCreateTemplate->setEnabled(false);
 
-	KToolBar* tb = toolBar();
-	if (tb)
-		tb->applySettings(KGlobal::config()->group("Toolbars"));
-
 	Undo::emitChanged();     // set the Undo/Redo menu texts
 	Daemon::checkStatus();
 	Daemon::monitoringAlarms();

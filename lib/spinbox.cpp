@@ -183,15 +183,6 @@ void SpinBox::textEdited()
 	mEdited = true;
 }
 
-void SpinBox::updateDisplay()
-{
-	mEdited = false;
-#ifdef __GNUC__
-#warning Fix this
-#endif
-//	QSpinBox::updateDisplay();
-}
-
 /******************************************************************************
 * Receives events destined for the spin widget or for the edit field.
 */
@@ -224,13 +215,18 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 				return true;
 			}
 		}
-		else if (e->type() == QEvent::Leave)
-		{
-			if (mEdited)
-				interpretText();
-		}
 	}
 	return QSpinBox::eventFilter(obj, e);
+}
+
+void SpinBox::focusOutEvent(QFocusEvent* e)
+{
+	if (mEdited)
+	{
+		interpretText();
+		mEdited = false;
+	}
+	QSpinBox::focusOutEvent(e);
 }
 
 void SpinBox::mousePressEvent(QMouseEvent* e)
@@ -254,10 +250,16 @@ bool SpinBox::clickEvent(QMouseEvent* e)
 			return true;   // discard the event
 		mCurrentButton = whichButton(e->pos());
 		if (mCurrentButton == NO_BUTTON)
+		{
+			e->accept();
 			return true;
+		}
 		bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 		if (setShiftStepping(shift))
+		{
+			e->accept();
 			return true;     // hide the event from the spin widget
+		}
 	}
 	return false;
 }
@@ -284,7 +286,10 @@ void SpinBox::mouseMoveEvent(QMouseEvent* e)
 			mCurrentButton = newButton;
 			bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
 			if (setShiftStepping(shift))
+			{
+				e->accept();
 				return;     // hide the event from the spin widget
+			}
 		}
 	}
 	QSpinBox::mouseMoveEvent(e);
@@ -318,7 +323,10 @@ bool SpinBox::keyEvent(QKeyEvent* e)
 			// The effective shift state has changed.
 			// Set normal or shift stepping as appropriate.
 			if (setShiftStepping(shift))
+			{
+				e->accept();
 				return true;     // hide the event from the spin widget
+			}
 		}
 	}
 	return false;
@@ -493,7 +501,7 @@ void SpinBox::initStyleOption(QStyleOptionSpinBox& so) const
 	so.init(this);
 //	so.activeSubControls = ??;
 	so.subControls   = mUpDownOnly ? QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame
-	                                   : QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame | QStyle::SC_SpinBoxEditField;
+	                               : QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame | QStyle::SC_SpinBoxEditField;
 	so.buttonSymbols = buttonSymbols();
 	so.frame         = hasFrame();
 	so.stepEnabled   = stepEnabled();

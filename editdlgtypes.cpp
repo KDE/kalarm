@@ -183,6 +183,11 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a text or image file to display."));
 	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
 
+	// Command type checkbox and edit box
+	mCmdEdit = new CommandEdit(parent);
+	frameLayout->addWidget(mCmdEdit);
+	connect(mCmdEdit, SIGNAL(scriptToggled(bool)), SLOT(slotCmdScriptToggled(bool)));
+
 	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(parent);
 	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
@@ -320,6 +325,10 @@ void EditDisplayAlarmDlg::setAction(KAEvent::Action action, const AlarmText& ala
 			mTypeCombo->setCurrentIndex(tFILE);
 			mFileMessageEdit->setText(text);
 			break;
+		case KAEvent::COMMAND:
+			mTypeCombo->setCurrentIndex(tCOMMAND);
+			mCmdEdit->setText(alarmText);
+			break;
 		default:
 			Q_ASSERT(0);
 			break;
@@ -334,6 +343,7 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 	mTypeCombo->setReadOnly(readOnly);
 	mTextMessageEdit->setReadOnly(readOnly);
 	mFileMessageEdit->setReadOnly(readOnly);
+	mCmdEdit->setReadOnly(readOnly);
 	mFontColourButton->setReadOnly(readOnly);
 	mSoundPicker->setReadOnly(readOnly);
 	mConfirmAck->setReadOnly(readOnly);
@@ -359,6 +369,8 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 {
 	EditAlarmDlg::saveState(event);
+	mSavedType        = mTypeCombo->currentIndex();
+	mSavedCmdScript   = mCmdEdit->isScript();
 	mSavedSoundType   = mSoundPicker->sound();
 	mSavedSoundFile   = mSoundPicker->file();
 	mSavedSoundVolume = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
@@ -385,7 +397,9 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 */
 bool EditDisplayAlarmDlg::type_stateChanged() const
 {
-	if (mSavedSoundType  != mSoundPicker->sound()
+	if (mSavedType       != mTypeCombo->currentIndex()
+	||  mSavedCmdScript  != mCmdEdit->isScript()
+	||  mSavedSoundType  != mSoundPicker->sound()
 	||  mSavedConfirmAck != mConfirmAck->isChecked()
 	||  mSavedFont       != mFontColourButton->font()
 	||  mSavedFgColour   != mFontColourButton->fgColour()
@@ -427,13 +441,13 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 	KAEvent::Action type;
 	switch (mTypeCombo->currentIndex())
 	{
-		case tTEXT:  type = KAEvent::MESSAGE; break;
-		case tFILE:  type = KAEvent::FILE; break;
-		case tCOMMAND:    // not implemented yet
-		default:    type = KAEvent::MESSAGE; break;
+		case tFILE:     type = KAEvent::FILE; break;
+		case tCOMMAND:  type = KAEvent::COMMAND; break;
+		default:
+		case tTEXT:     type = KAEvent::MESSAGE; break;
 	}
-	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(), mFontColourButton->font(),
-	          type, lateCancel, getAlarmFlags());
+	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(),
+	          mFontColourButton->font(), type, lateCancel, getAlarmFlags());
 	if (type == KAEvent::MESSAGE)
 	{
 		if (AlarmText::checkIfEmail(text))
@@ -445,7 +459,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 	event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
 	if (!trial)
 		event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
-	if (mSpecialActionsButton)
+	if (mSpecialActionsButton  &&  mSpecialActionsButton->isVisible())
 		event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
 }
 
@@ -454,18 +468,21 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 */
 int EditDisplayAlarmDlg::getAlarmFlags() const
 {
+	bool cmd = (mTypeCombo->currentIndex() == tCOMMAND);
 	return EditAlarmDlg::getAlarmFlags()
 	     | (mSoundPicker->sound() == Preferences::Sound_Beep  ? KAEvent::BEEP : 0)
 	     | (mSoundPicker->sound() == Preferences::Sound_Speak ? KAEvent::SPEAK : 0)
 	     | (mSoundPicker->repeat()                            ? KAEvent::REPEAT_SOUND : 0)
 	     | (mConfirmAck->isChecked()                          ? KAEvent::CONFIRM_ACK : 0)
 	     | (lateCancel()->isAutoClose()                       ? KAEvent::AUTO_CLOSE : 0)
-	     | (mFontColourButton->defaultFont()                  ? KAEvent::DEFAULT_FONT : 0);
+	     | (mFontColourButton->defaultFont()                  ? KAEvent::DEFAULT_FONT : 0)
+	     | (cmd                                               ? KAEvent::DISPLAY_COMMAND : 0)
+	     | (cmd && mCmdEdit->isScript()                       ? KAEvent::SCRIPT : 0);
 }
 
 /******************************************************************************
-*  Called when one of the alarm action type radio buttons is clicked,
-*  to display the appropriate set of controls for that action type.
+*  Called when one of the alarm display type combo box is changed, to display
+*  the appropriate set of controls for that action type.
 */
 void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 {
@@ -475,9 +492,12 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 		case tTEXT:    // text message
 			mFileBox->hide();
 			mFilePadding->hide();
+			mCmdEdit->hide();
 			mTextMessageEdit->show();
 			mFontColourButton->show();
 			mSoundPicker->showSpeak(true);
+			if (mSpecialActionsButton)
+				mSpecialActionsButton->show();
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the alarm message now"));
 			focus = mTextMessageEdit;
 			break;
@@ -485,13 +505,26 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mTextMessageEdit->hide();
 			mFileBox->show();
 			mFilePadding->show();
+			mCmdEdit->hide();
 			mFontColourButton->hide();
 			mSoundPicker->showSpeak(false);
+			if (mSpecialActionsButton)
+				mSpecialActionsButton->show();
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the file now"));
 			mFileMessageEdit->setNoSelect();
 			focus = mFileMessageEdit;
 			break;
 		case tCOMMAND:    // command output
+			mTextMessageEdit->hide();
+			mFileBox->hide();
+			mFilePadding->show();
+			mCmdEdit->show();
+			mFontColourButton->show();
+			mSoundPicker->showSpeak(true);
+			if (mSpecialActionsButton)
+				mSpecialActionsButton->hide();
+			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the command output now"));
+			focus = mCmdEdit;
 			break;
 	}
 	if (focus)
@@ -507,6 +540,18 @@ void EditDisplayAlarmDlg::slotPickFile()
 	QString file = KAlarm::browseFile(i18nc("@title:window", "Choose Text or Image File to Display"),
 	                                  defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
 	mFileMessageEdit->setText(file);
+}
+
+/******************************************************************************
+* Called when one of the command type radio buttons is clicked,
+* to display the appropriate edit field.
+*/
+void EditDisplayAlarmDlg::slotCmdScriptToggled(bool on)
+{
+	if (on)
+		mFilePadding->hide();
+	else
+		mFilePadding->show();
 }
 
 /******************************************************************************
@@ -600,6 +645,7 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 			break;
 		}
 		case tCOMMAND:
+			result = mCmdEdit->text();
 			break;
 	}
 	return true;
@@ -654,19 +700,9 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
 	setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Execute the specified command now"));
 
-	mCmdTypeScript = new CheckBox(i18n_chk_EnterScript(), parent);
-	mCmdTypeScript->setFixedSize(mCmdTypeScript->sizeHint());
-	connect(mCmdTypeScript, SIGNAL(toggled(bool)), SLOT(slotCmdScriptToggled(bool)));
-	mCmdTypeScript->setWhatsThis(i18nc("@info:whatsthis", "Check to enter the contents of a script instead of a shell command line"));
-	frameLayout->addWidget(mCmdTypeScript, 0, Qt::AlignLeft);
-
-	mCmdCommandEdit = new LineEdit(LineEdit::Url, parent);
-	mCmdCommandEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter a shell command to execute."));
-	frameLayout->addWidget(mCmdCommandEdit);
-
-	mCmdScriptEdit = new TextEdit(parent);
-	mCmdScriptEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the contents of a script to execute"));
-	frameLayout->addWidget(mCmdScriptEdit);
+	mCmdEdit = new CommandEdit(parent);
+	connect(mCmdEdit, SIGNAL(scriptToggled(bool)), SLOT(slotCmdScriptToggled(bool)));
+	frameLayout->addWidget(mCmdEdit);
 
 	// What to do with command output
 
@@ -740,11 +776,11 @@ void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
 	else
 	{
 		// Set the values to their defaults
-		mCmdTypeScript->setChecked(Preferences::defaultCmdScript());
+		mCmdEdit->setScript(Preferences::defaultCmdScript());
 		mCmdLogFileEdit->setText(Preferences::defaultCmdLogFile());    // set file name before setting radio button
 		mCmdOutputGroup->setButton(Preferences::defaultCmdLogType());
 	}
-	slotCmdScriptToggled(mCmdTypeScript->isChecked());
+	slotCmdScriptToggled(mCmdEdit->isScript());
 }
 
 /******************************************************************************
@@ -753,13 +789,7 @@ void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
 void EditCommandAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 {
 	Q_ASSERT(action == KAEvent::COMMAND);
-	QString text = alarmText.displayText();
-	bool script = alarmText.isScript();
-	mCmdTypeScript->setChecked(script);
-	if (script)
-		mCmdScriptEdit->setPlainText(text);
-	else
-		mCmdCommandEdit->setText(text);
+	mCmdEdit->setText(alarmText);
 }
 
 /******************************************************************************
@@ -769,9 +799,7 @@ void EditCommandAlarmDlg::setReadOnly(bool readOnly)
 {
 	if (!isTemplate()  &&  !ShellProcess::authorised())
 		readOnly = true;     // don't allow editing of existing command alarms in kiosk mode
-	mCmdTypeScript->setReadOnly(readOnly);
-	mCmdCommandEdit->setReadOnly(readOnly);
-	mCmdScriptEdit->setReadOnly(readOnly);
+	mCmdEdit->setReadOnly(readOnly);
 	mCmdExecInTerm->setReadOnly(readOnly);
 	mCmdLogToFile->setReadOnly(readOnly);
 	mCmdDiscardOutput->setReadOnly(readOnly);
@@ -784,7 +812,7 @@ void EditCommandAlarmDlg::setReadOnly(bool readOnly)
 void EditCommandAlarmDlg::saveState(const KAEvent* event)
 {
 	EditAlarmDlg::saveState(event);
-	mSavedCmdScript      = mCmdTypeScript->isChecked();
+	mSavedCmdScript      = mCmdEdit->isScript();
 	mSavedCmdOutputRadio = mCmdOutputGroup->checkedButton();
 	mSavedCmdLogFile     = mCmdLogFileEdit->text();
 }
@@ -797,7 +825,7 @@ void EditCommandAlarmDlg::saveState(const KAEvent* event)
 */
 bool EditCommandAlarmDlg::type_stateChanged() const
 {
-	if (mSavedCmdScript      != mCmdTypeScript->isChecked()
+	if (mSavedCmdScript      != mCmdEdit->isScript()
 	||  mSavedCmdOutputRadio != mCmdOutputGroup->checkedButton())
 		return true;
 	if (mCmdOutputGroup->checkedButton() == mCmdLogToFile)
@@ -826,7 +854,7 @@ void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 int EditCommandAlarmDlg::getAlarmFlags() const
 {
 	return EditAlarmDlg::getAlarmFlags()
-	     | (mCmdTypeScript->isChecked()                        ? KAEvent::SCRIPT : 0)
+	     | (mCmdEdit->isScript()                               ? KAEvent::SCRIPT : 0)
 	     | (mCmdOutputGroup->checkedButton() == mCmdExecInTerm ? KAEvent::EXEC_IN_XTERM : 0);
 }
 
@@ -888,19 +916,9 @@ void EditCommandAlarmDlg::type_trySuccessMessage(ShellProcess* proc, const QStri
 void EditCommandAlarmDlg::slotCmdScriptToggled(bool on)
 {
 	if (on)
-	{
-		mCmdCommandEdit->hide();
 		mCmdPadding->hide();
-		mCmdScriptEdit->show();
-		mCmdScriptEdit->setFocus();
-	}
 	else
-	{
-		mCmdScriptEdit->hide();
-		mCmdCommandEdit->show();
 		mCmdPadding->show();
-		mCmdCommandEdit->setFocus();
-	}
 }
 
 /******************************************************************************
@@ -909,11 +927,7 @@ void EditCommandAlarmDlg::slotCmdScriptToggled(bool on)
 bool EditCommandAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
 	Q_UNUSED(showErrorMessage);
-	if (mCmdTypeScript->isChecked())
-		result = mCmdScriptEdit->toPlainText();
-	else
-		result = mCmdCommandEdit->text();
-	result = result.trimmed();
+	result = mCmdEdit->text();
 	return true;
 }
 
@@ -1308,9 +1322,107 @@ bool EditEmailAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 
 
 /*=============================================================================
+= Class CommandEdit
+= A widget to allow entry of a command or a command script.
+=============================================================================*/
+CommandEdit::CommandEdit(QWidget* parent)
+	: QWidget(parent)
+{
+	QVBoxLayout* vlayout = new QVBoxLayout(this);
+	vlayout->setMargin(0);
+	vlayout->setSpacing(KDialog::spacingHint());
+	mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
+	mTypeScript->setFixedSize(mTypeScript->sizeHint());
+	connect(mTypeScript, SIGNAL(toggled(bool)), SLOT(slotCmdScriptToggled(bool)));
+	mTypeScript->setWhatsThis(i18nc("@info:whatsthis", "Check to enter the contents of a script instead of a shell command line"));
+	vlayout->addWidget(mTypeScript, 0, Qt::AlignLeft);
+
+	mCommandEdit = new LineEdit(LineEdit::Url, this);
+	mCommandEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter a shell command to execute."));
+	vlayout->addWidget(mCommandEdit);
+
+	mScriptEdit = new TextEdit(this);
+	mScriptEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the contents of a script to execute"));
+	vlayout->addWidget(mScriptEdit);
+
+	slotCmdScriptToggled(mTypeScript->isChecked());
+}
+
+/******************************************************************************
+* Initialise the widget controls from the specified event.
+*/
+void CommandEdit::setScript(bool script)
+{
+	mTypeScript->setChecked(script);
+}
+
+bool CommandEdit::isScript() const
+{
+	return mTypeScript->isChecked();
+}
+
+/******************************************************************************
+* Set the widget's text.
+*/
+void CommandEdit::setText(const AlarmText& alarmText)
+{
+	QString text = alarmText.displayText();
+	bool script = alarmText.isScript();
+	mTypeScript->setChecked(script);
+	if (script)
+		mScriptEdit->setPlainText(text);
+	else
+		mCommandEdit->setText(text);
+}
+
+/******************************************************************************
+* Return the widget's text.
+*/
+QString CommandEdit::text() const
+{
+	QString result;
+	if (mTypeScript->isChecked())
+		result = mScriptEdit->toPlainText();
+	else
+		result = mCommandEdit->text();
+	return result.trimmed();
+}
+
+/******************************************************************************
+* Set the read-only status of all controls.
+*/
+void CommandEdit::setReadOnly(bool readOnly)
+{
+	mTypeScript->setReadOnly(readOnly);
+	mCommandEdit->setReadOnly(readOnly);
+	mScriptEdit->setReadOnly(readOnly);
+}
+
+/******************************************************************************
+* Called when one of the command type radio buttons is clicked,
+* to display the appropriate edit field.
+*/
+void CommandEdit::slotCmdScriptToggled(bool on)
+{
+	if (on)
+	{
+		mCommandEdit->hide();
+		mScriptEdit->show();
+		mScriptEdit->setFocus();
+	}
+	else
+	{
+		mScriptEdit->hide();
+		mCommandEdit->show();
+		mCommandEdit->setFocus();
+	}
+	emit scriptToggled(on);
+}
+
+
+/*=============================================================================
 = Class TextEdit
 = A text edit field with a minimum height of 3 text lines.
-= Provides KDE 2 compatibility.
 =============================================================================*/
 TextEdit::TextEdit(QWidget* parent)
 	: QTextEdit(parent)

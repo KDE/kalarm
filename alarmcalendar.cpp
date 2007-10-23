@@ -575,7 +575,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			if (resources->addEvent(newev, *res))
 			{
 				saveRes = true;
-				newEvents += newev;
+				if (type != KCalEvent::TEMPLATE)
+					newEvents += newev;
 			}
 			else
 				success = false;
@@ -657,8 +658,10 @@ void AlarmCalendar::purgeEvents(Event::List events)
 * Reply = the KCal::Event as written to the calendar
 *       = 0 if an error occurred, in which case 'event' is unchanged.
 */
-Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEventID, AlarmResource* resource, bool noPrompt)
+Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEventID, AlarmResource* resource, bool noPrompt, bool* cancelled)
 {
+	if (cancelled)
+		*cancelled = false;
 	if (!mOpen)
 		return 0;
 	// Check that the event type is valid for the calendar
@@ -707,7 +710,12 @@ Event* AlarmCalendar::addEvent(KAEvent& event, QWidget* promptParent, bool useEv
 		if (resource)
 			ok = AlarmResources::instance()->addEvent(kcalEvent, resource);
 		else
-			ok = AlarmResources::instance()->addEvent(kcalEvent, type, promptParent, noPrompt);
+		{
+			AlarmResources::Result ans = AlarmResources::instance()->addEvent(kcalEvent, type, promptParent, noPrompt);
+			if (ans == AlarmResources::Cancelled  &&  cancelled)
+				*cancelled = true;
+			ok = (ans == AlarmResources::Success);
+		}
 		if (!ok)
 		{
 			event = oldEvent;

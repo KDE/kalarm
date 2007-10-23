@@ -80,10 +80,12 @@ static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 
 inline QString recurText(const KAEvent& event)
 {
+	QString r;
 	if (event.repeatCount())
-		return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+		r = QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
 	else
-		return event.recurrenceText();
+		r = event.recurrenceText();
+	return i18nc("@title:tab", "&Recurrence - [%1]", r);
 }
 
 // Collect these widget labels together to ensure consistent wording and
@@ -108,9 +110,12 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent& event, bool new
 {
 	switch (event.action())
 	{
+		case KAEvent::COMMAND:
+			if (!event.commandDisplay())
+				return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+			// fall through to MESSAGE
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:     return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-		case KAEvent::COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 		case KAEvent::EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 	}
 	return 0;
@@ -233,7 +238,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	// Recurrence tab
 	KVBox* recurTab = new KVBox;
 	recurTab->setMargin(marginHint());
-	mTabs->addTab(recurTab, i18nc("@title:tab", "&Recurrence"));
+	mTabs->addTab(recurTab, QString());
 	mRecurPageIndex = 1;
 	mRecurrenceEdit = new RecurrenceEdit(mReadOnly, recurTab);
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
@@ -272,18 +277,6 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	topLayout->addLayout(hlayout);
-
-	// Recurrence type display
-	KHBox* recurBox = new KHBox(mainPage);   // this is to control the QWhatsThis text display area
-	recurBox->setMargin(0);
-	recurBox->setSpacing(spacingHint());
-	label = new QLabel(i18nc("@label", "Recurrence:"), recurBox);
-	label->setFixedSize(label->sizeHint());
-	mRecurrenceText = new QLabel(recurBox);
-	recurBox->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>How often the alarm recurs.</para>"
-	      "<para>The times shown are those configured in the Recurrence tab for the recurrence and optional sub-repetition.</para>"));
-	recurBox->setFixedHeight(recurBox->sizeHint().height());
 
 	// Date and time entry
 	if (mTemplate)
@@ -348,14 +341,11 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 1, 1, Qt::AlignLeft);
 
-		recurBox->setParent(templateTimeBox);
-		grid->addWidget(recurBox, 2, 0, 1, -1, Qt::AlignLeft);
-
 		hlayout->addStretch();
 	}
 	else
 	{
-		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage, recurBox);
+		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
 		connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
@@ -501,7 +491,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 			mShowInKorganizer->setChecked(event->copyToKOrganizer());
 		type_initValues(event);
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
-		mRecurrenceText->setText(recurText(*event));
+		mTabs->setTabText(mRecurPageIndex, recurText(*event));
 	}
 	else
 	{
@@ -798,7 +788,7 @@ bool EditAlarmDlg::validate()
 			return false;
 		}
 	}
-	else if(mTimeWidget)
+	else if (mTimeWidget)
 	{
 		QWidget* errWidget;
 		mAlarmDateTime = mTimeWidget->getDateTime(0, !timedRecurrence, false, &errWidget);
@@ -908,14 +898,16 @@ bool EditAlarmDlg::validate()
 			if (mResource->alarmType() != type)
 				mResource = 0;   // event may have expired while dialog was open
 		}
+		bool cancelled = false;
 		if (!mResource  ||  !mResource->writable())
 		{
 			KCalEvent::Status type = mTemplate ? KCalEvent::TEMPLATE : KCalEvent::ACTIVE;
-			mResource = AlarmResources::instance()->destination(type, this);
+			mResource = AlarmResources::instance()->destination(type, this, false, &cancelled);
 		}
 		if (!mResource)
 		{
-			KMessageBox::sorry(this, i18nc("@info", "You must select a resource to save the alarm in"));
+			if (!cancelled)
+				KMessageBox::sorry(this, i18nc("@info", "You must select a resource to save the alarm in"));
 			return false;
 		}
 	}
@@ -1114,7 +1106,7 @@ kDebug()<<"slotRecurFrequencyChange()"<<endl;
 	slotSetSubRepetition();
 	KAEvent event;
 	mRecurrenceEdit->updateEvent(event, false);
-	mRecurrenceText->setText(recurText(event));
+	mTabs->setTabText(mRecurPageIndex, recurText(event));
 }
 
 /******************************************************************************

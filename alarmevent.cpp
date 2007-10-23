@@ -71,6 +71,7 @@ static const QByteArray ARCHIVE_PROPERTY("ARCHIVE");          // X-KDE-KALARM-AR
 static const QString ARCHIVE_REMINDER_ONCE_TYPE = QLatin1String("ONCE");
 static const QByteArray LOG_PROPERTY("LOG");                  // X-KDE-KALARM-LOG property
 static const QString xtermURL = QLatin1String("xterm:");
+static const QString displayURL = QLatin1String("display:");
 
 // - General alarm properties
 static const QByteArray TYPE_PROPERTY("TYPE");                // X-KDE-KALARM-TYPE property
@@ -187,6 +188,8 @@ void KAEvent::copy(const KAEvent& event)
 	mLogFile                 = event.mLogFile;
 	mCategory                = event.mCategory;
 	mCommandXterm            = event.mCommandXterm;
+	mCommandDisplay          = event.mCommandDisplay;
+	mSpeak                   = event.mSpeak;
 	mKMailSerialNumber       = event.mKMailSerialNumber;
 	mCopyToKOrganizer        = event.mCopyToKOrganizer;
 	mWorkTimeOnly            = event.mWorkTimeOnly;
@@ -215,14 +218,15 @@ void KAEvent::set(const Event* event)
 	mEventID                = event->uid();
 	mCategory               = KCalEvent::status(event, &mResourceId);
 	mRevision               = event->revision();
-	mTemplateName          .clear();
-	mLogFile               .clear();
-	mResourceId            .clear();
+	mTemplateName.clear();
+	mLogFile.clear();
+	mResourceId.clear();
 	mTemplateAfterTime      = -1;
 	mBeep                   = false;
 	mSpeak                  = false;
 	mEmailBcc               = false;
 	mCommandXterm           = false;
+	mCommandDisplay         = false;
 	mCopyToKOrganizer       = false;
 	mWorkTimeOnly           = false;
 	mConfirmAck             = false;
@@ -325,6 +329,8 @@ void KAEvent::set(const Event* event)
 	{
 		if (prop == xtermURL)
 			mCommandXterm = true;
+		else if (prop == displayURL)
+			mCommandDisplay = true;
 		else
 			mLogFile = prop;
 	}
@@ -412,7 +418,7 @@ void KAEvent::set(const Event* event)
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
 	AlarmMap alarmMap;
-	readAlarms(event, &alarmMap);
+	readAlarms(event, &alarmMap, mCommandDisplay);
 
 	// Incorporate the alarms' details into the overall event
 	mAlarmCount = 0;       // initialise as invalid
@@ -527,6 +533,11 @@ void KAEvent::set(const Event* event)
 					mText = (mActionType == T_COMMAND) ? data.cleanText.trimmed() : data.cleanText;
 					switch (data.action)
 					{
+						case T_COMMAND:
+							mCommandScript = data.commandScript;
+							if (!mCommandDisplay)
+								break;
+							// fall through to T_MESSAGE
 						case T_MESSAGE:
 							mFont        = data.font;
 							mDefaultFont = data.defaultFont;
@@ -536,9 +547,6 @@ void KAEvent::set(const Event* event)
 						case T_FILE:
 							mBgColour    = data.bgColour;
 							mFgColour    = data.fgColour;
-							break;
-						case T_COMMAND:
-							mCommandScript = data.commandScript;
 							break;
 						case T_EMAIL:
 							mEmailFromIdentity = data.emailFromId;
@@ -643,7 +651,7 @@ DateTime KAEvent::readDateTime(const Event* event, bool dateOnly, DateTime& star
  * Parse the alarms for a KCal::Event.
  * Reply = map of alarm data, indexed by KAAlarm::Type
  */
-void KAEvent::readAlarms(const Event* event, void* almap)
+void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 {
 	AlarmMap* alarmMap = (AlarmMap*)almap;
 	Alarm::List alarms = event->alarms();
@@ -651,7 +659,7 @@ void KAEvent::readAlarms(const Event* event, void* almap)
 	{
 		// Parse the next alarm's text
 		AlarmData data;
-		readAlarm(*it, data);
+		readAlarm(*it, data, cmdDisplay);
 		if (data.type != KAAlarm::INVALID__ALARM)
 			alarmMap->insert(data.type, data);
 	}
@@ -661,7 +669,7 @@ void KAEvent::readAlarms(const Event* event, void* almap)
  * Parse a KCal::Alarm.
  * Reply = alarm ID (sequence number)
  */
-void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data)
+void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 {
 	// Parse the next alarm's text
 	data.alarm           = alarm;
@@ -688,16 +696,16 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data)
 					data.cleanText += ' ';
 				data.cleanText += alarm->programArguments();
 			}
-			break;
-		case Alarm::Email:
-			data.action      = T_EMAIL;
-			data.emailFromId = alarm->customProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY).toUInt();
-			data.cleanText   = alarm->mailText();
-			break;
+			if (!cmdDisplay)
+				break;
+			// fall through to Display
 		case Alarm::Display:
 		{
-			data.action    = T_MESSAGE;
-			data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
+			if (alarm->type() == Alarm::Display)
+			{
+				data.action    = T_MESSAGE;
+				data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
+			}
 			QString property = alarm->customProperty(KCalendar::APPNAME, FONT_COLOUR_PROPERTY);
 			QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
 			data.bgColour = QColor(255, 255, 255);   // white
@@ -723,6 +731,11 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data)
 				data.font.fromString(list[2]);
 			break;
 		}
+		case Alarm::Email:
+			data.action      = T_EMAIL;
+			data.emailFromId = alarm->customProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY).toUInt();
+			data.cleanText   = alarm->mailText();
+			break;
 		case Alarm::Audio:
 		{
 			data.action      = T_AUDIO;
@@ -882,7 +895,7 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel, int flags, const QString& logfile)
 {
 	if (!logfile.isEmpty())
-		flags &= ~EXEC_IN_XTERM;
+		flags &= ~(EXEC_IN_XTERM | DISPLAY_COMMAND);
 	set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME);
 	mLogFile = logfile;
 }
@@ -890,7 +903,7 @@ void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel,
 void KAEvent::setCommand(const KDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile)
 {
 	if (!logfile.isEmpty())
-		flags &= ~EXEC_IN_XTERM;
+		flags &= ~(EXEC_IN_XTERM | DISPLAY_COMMAND);
 	set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags);
 	mLogFile = logfile;
 }
@@ -899,7 +912,7 @@ void KAEvent::setLogFile(const QString& logfile)
 {
 	mLogFile = logfile;
 	if (!logfile.isEmpty())
-		mCommandXterm = false;
+		mCommandDisplay = mCommandXterm = false;
 }
 
 /******************************************************************************
@@ -1335,18 +1348,26 @@ void KAEvent::set(int flags)
 	mStartDateTime.setDateOnly(flags & ANY_TIME);
 	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
 	mCommandXterm     = flags & EXEC_IN_XTERM;
+	mCommandDisplay   = flags & DISPLAY_COMMAND;
 	mCopyToKOrganizer = flags & COPY_KORGANIZER;
 	mWorkTimeOnly     = flags & WORK_TIME_ONLY;
 	mEnabled          = !(flags & DISABLED);
-	mUpdated          = true;
+	mSpeak            = flags & SPEAK;
+	if (mSpeak)
+		mBeep = false;
+	mUpdated = true;
 }
 
 int KAEvent::flags() const
 {
+	if (mSpeak)
+		const_cast<KAEvent*>(this)->mBeep = false;
 	return KAAlarmEventBase::flags()
 	     | (mStartDateTime.isDateOnly() ? ANY_TIME : 0)
 	     | (mDeferral > 0               ? DEFERRAL : 0)
+	     | (mSpeak                      ? SPEAK : 0)
 	     | (mCommandXterm               ? EXEC_IN_XTERM : 0)
+	     | (mCommandDisplay             ? DISPLAY_COMMAND : 0)
 	     | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
 	     | (mWorkTimeOnly               ? WORK_TIME_ONLY : 0)
 	     | (mEnabled                    ? 0 : DISABLED);
@@ -1413,6 +1434,8 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 
 	if (mCommandXterm)
 		ev->setCustomProperty(KCalendar::APPNAME, LOG_PROPERTY, xtermURL);
+	else if (mCommandDisplay)
+		ev->setCustomProperty(KCalendar::APPNAME, LOG_PROPERTY, displayURL);
 	else if (!mLogFile.isEmpty())
 		ev->setCustomProperty(KCalendar::APPNAME, LOG_PROPERTY, mLogFile);
 	if (mArchive  &&  !original)
@@ -1670,6 +1693,8 @@ Alarm* KAEvent::initKCalAlarm(Event* event, int startOffsetSecs, const QStringLi
 				                         QString::number(mNextRepeat));
 			// fall through to INVALID_ALARM
 		case KAAlarm::INVALID_ALARM:
+		{
+			bool display = false;
 			switch (mActionType)
 			{
 				case T_FILE:
@@ -1677,16 +1702,14 @@ Alarm* KAEvent::initKCalAlarm(Event* event, int startOffsetSecs, const QStringLi
 					// fall through to T_MESSAGE
 				case T_MESSAGE:
 					alarm->setDisplayAlarm(AlarmText::toCalendarText(mText));
-					alarm->setCustomProperty(KCalendar::APPNAME, FONT_COLOUR_PROPERTY,
-						      QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
-										     .arg(mFgColour.name())
-										     .arg(mDefaultFont ? QString() : mFont.toString()));
+					display = true;
 					break;
 				case T_COMMAND:
 					if (mCommandScript)
 						alarm->setProcedureAlarm("", mText);
 					else
 						setProcedureAlarm(alarm, mText);
+					display = mCommandDisplay;
 					break;
 				case T_EMAIL:
 					alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
@@ -1696,7 +1719,13 @@ Alarm* KAEvent::initKCalAlarm(Event* event, int startOffsetSecs, const QStringLi
 				case T_AUDIO:
 					break;
 			}
+			if (display)
+				alarm->setCustomProperty(KCalendar::APPNAME, FONT_COLOUR_PROPERTY,
+				                         QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
+				                                                        .arg(mFgColour.name())
+				                                                        .arg(mDefaultFont ? QString() : mFont.toString()));
 			break;
+		}
 		case KAAlarm::REMINDER_ALARM:
 		case KAAlarm::DEFERRED_ALARM:
 		case KAAlarm::DEFERRED_REMINDER_ALARM:
@@ -1727,7 +1756,6 @@ KAAlarm KAEvent::alarm(KAAlarm::Type type) const
 		al.mFont           = mFont;
 		al.mDefaultFont    = mDefaultFont;
 		al.mBeep           = mBeep;
-		al.mSpeak          = mSpeak;
 		al.mSoundVolume    = mSoundVolume;
 		al.mFadeVolume     = mFadeVolume;
 		al.mFadeSeconds    = mFadeSeconds;
@@ -3554,6 +3582,7 @@ void KAEvent::dumpDebug() const
 	}
 	if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
 	{
+		kDebug(5950) <<"-- mSpeak:" << (mSpeak ?"true" :"false");
 		kDebug(5950) <<"-- mAudioFile:" << mAudioFile;
 		kDebug(5950) <<"-- mPreAction:" << mPreAction;
 		kDebug(5950) <<"-- mPostAction:" << mPostAction;
@@ -3561,6 +3590,7 @@ void KAEvent::dumpDebug() const
 	else if (mActionType == T_COMMAND)
 	{
 		kDebug(5950) <<"-- mCommandXterm:" << (mCommandXterm ?"true" :"false");
+		kDebug(5950) <<"-- mCommandDisplay:" << (mCommandDisplay ?"true" :"false");
 		kDebug(5950) <<"-- mLogFile:" << mLogFile;
 	}
 	kDebug(5950) <<"-- mKMailSerialNumber:" << mKMailSerialNumber;
@@ -3694,7 +3724,6 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mRepeatInterval    = rhs.mRepeatInterval;
 	mNextRepeat        = rhs.mNextRepeat;
 	mBeep              = rhs.mBeep;
-	mSpeak             = rhs.mSpeak;
 	mRepeatSound       = rhs.mRepeatSound;
 	mRepeatAtLogin     = rhs.mRepeatAtLogin;
 	mDisplaying        = rhs.mDisplaying;
@@ -3707,8 +3736,7 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 
 void KAAlarmEventBase::set(int flags)
 {
-	mSpeak         = flags & KAEvent::SPEAK;
-	mBeep          = (flags & KAEvent::BEEP) && !mSpeak;
+	mBeep          = flags & KAEvent::BEEP;
 	mRepeatSound   = flags & KAEvent::REPEAT_SOUND;
 	mRepeatAtLogin = flags & KAEvent::REPEAT_AT_LOGIN;
 	mAutoClose     = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
@@ -3721,8 +3749,7 @@ void KAAlarmEventBase::set(int flags)
 
 int KAAlarmEventBase::flags() const
 {
-	return (mBeep && !mSpeak ? KAEvent::BEEP : 0)
-	     | (mSpeak           ? KAEvent::SPEAK : 0)
+	return (mBeep            ? KAEvent::BEEP : 0)
 	     | (mRepeatSound     ? KAEvent::REPEAT_SOUND : 0)
 	     | (mRepeatAtLogin   ? KAEvent::REPEAT_AT_LOGIN : 0)
 	     | (mAutoClose       ? KAEvent::AUTO_CLOSE : 0)
@@ -3761,7 +3788,6 @@ void KAAlarmEventBase::dumpDebug() const
 	if (!mDefaultFont)
 		kDebug(5950) <<"-- mFont:" << mFont.toString();
 	kDebug(5950) <<"-- mBeep:" << (mBeep ?"true" :"false");
-	kDebug(5950) <<"-- mSpeak:" << (mSpeak ?"true" :"false");
 	if (mActionType == T_AUDIO)
 	{
 		if (mSoundVolume >= 0)

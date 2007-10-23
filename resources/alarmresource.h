@@ -174,6 +174,9 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		virtual void cancelDownload(bool /*disable*/ = false)  {}
 
 	signals:
+		/** Signal that the resource is about to close or reload.
+		 *  This signal warns that all events are about to be deleted. */
+		void invalidate(AlarmResource*);
 		/** Signal that loading of the resource has completed, whether
 		 *  successfully or not.
 		 *  This signal is always emitted after a resource is loaded. */

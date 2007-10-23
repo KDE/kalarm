@@ -63,9 +63,12 @@ int main(int argc, char *argv[])
 	options.add("disable", ki18n("Disable the alarm"));
 	options.add("e");
 	options.add("!exec <commandline>", ki18n("Execute a shell command line"));
+	options.add("E");
+	options.add("!exec-display <commandline>", ki18n("Command line to generate alarm message text"));
 	options.add("edit <eventID>", ki18n("Display the alarm edit dialog to edit the specified alarm"));
-	options.add("n");
-	options.add("edit-new", ki18n("Display the alarm edit dialog to edit a new alarm"));
+	options.add("edit-new-display", ki18n("Display the alarm edit dialog to edit a new display alarm"));
+	options.add("edit-new-command", ki18n("Display the alarm edit dialog to edit a new command alarm"));
+	options.add("edit-new-email", ki18n("Display the alarm edit dialog to edit a new email alarm"));
 	options.add("edit-new-preset <templateName>", ki18n("Display the alarm edit dialog, preset with a template"));
 	options.add("f");
 	options.add("file <url>", ki18n("File to display"));

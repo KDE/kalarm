@@ -105,8 +105,8 @@ class SpinBox : public QSpinBox
 		QRect        downRect() const;
 		/** Returns the rectangle containing the up and down arrows. */
 		QRect        upDownRect() const;
-/** Sets whether the edit field is displayed. */
-void         setUpDownOnly(bool only)              { mUpDownOnly = only; }
+		/** Sets whether the edit field is displayed. */
+		void         setUpDownOnly(bool only)              { mUpDownOnly = only; }
 		/** Initialise a QStyleOptionSpinBox with this instance's details. */
 		void         initStyleOption(QStyleOptionSpinBox&) const;
 
@@ -131,12 +131,9 @@ void         setUpDownOnly(bool only)              { mUpDownOnly = only; }
 		virtual int  shiftStepAdjustment(int oldValue, int shiftStep);
 		/** Receives events destined for the spin widget or for the edit field. */
 		virtual bool eventFilter(QObject*, QEvent*);
-		/** Updates the contents of the embedded QLineEdit to reflect the current value
-		 *  using textFromValue(). Also enables/disables the up/down push buttons accordingly.
-		 */
-		virtual void updateDisplay();
 
-virtual void paintEvent(QPaintEvent*);
+		virtual void paintEvent(QPaintEvent*);
+		virtual void focusOutEvent(QFocusEvent*);
 		virtual void mousePressEvent(QMouseEvent*);
 		virtual void mouseDoubleClickEvent(QMouseEvent*);
 		virtual void mouseReleaseEvent(QMouseEvent*);
@@ -166,7 +163,7 @@ virtual void paintEvent(QPaintEvent*);
 		bool         mShiftMinBound;    // true if a temporary minimum bound has been set during shift stepping
 		bool         mShiftMaxBound;    // true if a temporary maximum bound has been set during shift stepping
 		bool         mSelectOnStep;     // select the editor text whenever spin buttons are clicked (default)
-bool         mUpDownOnly;       // true if edit field isn't displayed
+		bool         mUpDownOnly;       // true if edit field isn't displayed
 		bool         mReadOnly;         // value cannot be changed
 		bool         mSuppressSignals;
 		bool         mEdited;           // text field has been edited

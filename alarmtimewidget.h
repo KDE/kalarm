@@ -67,7 +67,7 @@ class AlarmTimeWidget : public QFrame
 	protected slots:
 		void             slotTimer();
 		void             slotButtonSet(QAbstractButton*);
-		void             slotAfterTimeToggled(bool);
+		void             slotAnyTimeToggled(bool);
 		void             dateTimeChanged();
 		void             delayTimeChanged(int);
 		void             slotTimeZoneToggled(bool);
@@ -79,9 +79,9 @@ class AlarmTimeWidget : public QFrame
 		void             setMaxMinTimeIf(const KDateTime& now);
 
 		ButtonGroup*     mButtonGroup;
-		RadioButton*     mDateRadio;
-		RadioButton*     mDateTimeRadio;
-		QAbstractButton* mAfterTime;
+		RadioButton*     mAtTimeRadio;
+		RadioButton*     mAfterTimeRadio;
+		CheckBox*        mAnyTimeCheckBox;
 		DateEdit*        mDateEdit;
 		TimeEdit*        mTimeEdit;
 		TimeSpinBox*     mDelayTimeEdit;

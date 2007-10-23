@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_SOURCE_DIR}/kalarm  )
+include_directories( ../  )
 
 
 ########### next target ###############
