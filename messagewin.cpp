@@ -829,7 +829,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	if (dateOnly)
 		mDateTime.setDateOnly(true);
 	mCloseTime           = config.readEntry("Expiry", invalidDateTime);
-	mAudioFile           = config.readPathEntry(QLatin1String("AudioFile"));
+	mAudioFile           = config.readPathEntry("AudioFile", QString());
 	mVolume              = static_cast<float>(config.readEntry("Volume", 0)) / 100;
 	mFadeVolume          = -1;
 	mFadeSeconds         = 0;

@@ -364,7 +364,7 @@ QString translateXTermPath(const QString& cmdline, bool write)
 	else
 	{
 		group.writeEntry(TEMP, cmd);
-		cmd = group.readPathEntry(TEMP);
+		cmd = group.readPathEntry(TEMP, QString());
 	}
 	group.deleteEntry(TEMP);
 	if (quoted)
