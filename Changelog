@@ -1,6 +1,9 @@
 KAlarm
 
-=== Version 1.4.17 --- 8 October 2007 ===
+=== Version 1.4.18 --- 25 October 2007 ===
+Simplify recurrence text shown in alarm edit dialogue Alarm tab when possible.
+
+=== Version 1.4.17 (KDE 3.5.8) --- 8 October 2007 ===
 Allow time-from-now values up to 999 hours to be entered.
 Fix incorrect email headers resulting in failure to send some emails.
 

@@ -128,7 +128,10 @@ class PickLogFileRadio : public PickFileRadio
 
 inline QString recurText(const KAEvent& event)
 {
-	return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+	if (event.repeatCount())
+		return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+	else
+		return event.recurrenceText();
 }
 
 // Collect these widget labels together to ensure consistent wording and
