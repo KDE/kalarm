@@ -209,9 +209,9 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
 
 	KActionCollection* actions = new KActionCollection(this);
-	actions->setAssociatedWidget(mListView);
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
 	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+	actions->associateWidget(mListView);
 
 	enableButtonOk(false);     // only enable OK button when something is selected
 }
