@@ -104,7 +104,7 @@ if (UNIX)
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-target_link_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDE4_KPIMIDENTITIES_LIBS} ${KDE4_MAILTRANSPORT_LIBS} ${KDE4_PHONON_LIBS} kdepim)
+kdepim4_link_unique_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDE4_KPIMIDENTITIES_LIBS} ${KDE4_MAILTRANSPORT_LIBS} ${KDE4_PHONON_LIBS} kdepim)
 
 
 install(TARGETS kalarm_bin DESTINATION ${BIN_INSTALL_DIR} )
