@@ -48,7 +48,7 @@ KAResourceLocalDir::KAResourceLocalDir()
 KAResourceLocalDir::KAResourceLocalDir(const KConfigGroup& group)
 	: AlarmResource(group)
 {
-	mURL = KUrl(group.readPathEntry("CalendarURL"));
+	mURL = KUrl(group.readPathEntry("CalendarURL", QString()));
 	init();
 }
 

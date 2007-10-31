@@ -149,7 +149,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 			return 0;
 	}
 	AlarmResource* resource = 0;
-	QString fileName = config.readPathEntry(configKey);
+	QString fileName = config.readPathEntry(configKey, QString());
 	if (!fileName.isEmpty())
 	{
 		// Calendar is specified in KAlarm config file

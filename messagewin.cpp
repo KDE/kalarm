@@ -116,10 +116,23 @@ class MessageText : public KTextEdit
 			pal.setColor(viewport()->backgroundRole(), c);
 			viewport()->setPalette(pal);
 		}
-//TODO: Restore the following line
-//		virtual QSize sizeHint() const  { return QSize(contentsWidth() + scrollBarWidth(), contentsHeight() + scrollBarHeight()); }
+		virtual QSize sizeHint() const
+		{
+			QSizeF docsize = document()->size();
+			return QSize(static_cast<int>(docsize.width() + 0.99) + verticalScrollBar()->width(),
+			             static_cast<int>(docsize.height() + 0.99) + horizontalScrollBar()->height());
+		}
 };
 
+
+static QRect desktopWorkArea()
+{
+#ifdef Q_WS_X11
+	return KWindowSystem::workArea();
+#else
+	return qApp->desktop()->availableGeometry();
+#endif
+}
 
 // Basic flags for the window
 static const Qt::WFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
@@ -450,11 +463,9 @@ void MessageWin::initView()
 				topLayout->addSpacing(vspace);
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
-#ifdef Q_WS_X11
-				if (text->sizeHint().width() >= KWindowSystem::workArea().width()*2/3)
+				if (text->sizeHint().width() >= desktopWorkArea().width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
-#endif
 				{
 					QHBoxLayout* layout = new QHBoxLayout();
 					layout->addSpacing(hspace);
@@ -474,13 +485,6 @@ void MessageWin::initView()
 				mCommandText->setTextColor(mFgColour);
 				mCommandText->setCurrentFont(mFont);
 				topLayout->addWidget(mCommandText);
-
-				// Set the default size to 20 lines square.
-				// Note that after the first file has been displayed, this size
-				// is overridden by the user-set default stored in the config file.
-				// So there is no need to calculate an accurate size.
-				int h = 20*mCommandText->fontMetrics().lineSpacing() + 2*mCommandText->frameWidth();
-				mCommandText->resize(QSize(h, h).expandedTo(mCommandText->sizeHint()));
 				mCommandText->setWhatsThis(i18nc("@info:whatsthis", "The output of the alarm's command"));
 				theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), this, SLOT(readProcessOutput(ShellProcess*)));
 				break;
@@ -734,12 +738,16 @@ void MessageWin::setRemainingTextMinute()
 
 /******************************************************************************
 * Called when output is available from the command which is providing the text
-* for this window.
+* for this window. Add the output and resize the window to show it.
 */
 void MessageWin::readProcessOutput(ShellProcess* proc)
 {
 	QByteArray data = proc->readAll();
-	mCommandText->insertPlainText(QString::fromLocal8Bit(data.data()));
+	if (!data.isEmpty())
+	{
+		mCommandText->insertPlainText(QString::fromLocal8Bit(data.data()));
+		resize(sizeHint());
+	}
 }
 
 /******************************************************************************
@@ -779,7 +787,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
 		if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
 		{
 			// Only need to restart sound file playing if it's being repeated
-			config.writePathEntry(QLatin1String("AudioFile"), mAudioFile);
+			config.writePathEntry("AudioFile", mAudioFile);
 			config.writeEntry("Volume", static_cast<int>(mVolume * 100));
 		}
 		config.writeEntry("Speak", mSpeak);
@@ -829,7 +837,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	if (dateOnly)
 		mDateTime.setDateOnly(true);
 	mCloseTime           = config.readEntry("Expiry", invalidDateTime);
-	mAudioFile           = config.readPathEntry(QLatin1String("AudioFile"));
+	mAudioFile           = config.readPathEntry("AudioFile", QString());
 	mVolume              = static_cast<float>(config.readEntry("Volume", 0)) / 100;
 	mFadeVolume          = -1;
 	mFadeSeconds         = 0;
@@ -1193,23 +1201,36 @@ void MessageWin::show()
 
 /******************************************************************************
 *  Returns the window's recommended size exclusive of its frame.
-*  For message windows, the size if limited to fit inside the working area of
-*  the desktop.
 */
 QSize MessageWin::sizeHint() const
 {
-	if (mAction != KAEvent::MESSAGE)
-		return MainWindowBase::sizeHint();
-#ifdef Q_WS_X11
-	QSize desktop  = KWindowSystem::workArea().size();
-#else
-	QSize desktop  = qApp->desktop()->availableGeometry().size();
-#endif
-	QSize frame = frameGeometry().size();
-	QSize contents = geometry().size();
-	QSize maxSize(desktop.width() - (frame.width() - contents.width()),
-	              desktop.height() - (frame.height() - contents.height()));
-	return MainWindowBase::sizeHint().boundedTo(maxSize);
+	QSize desired;
+	switch (mAction)
+	{
+		case KAEvent::MESSAGE:
+			desired = MainWindowBase::sizeHint();
+			break;
+		case KAEvent::COMMAND:
+			if (mShown)
+			{
+				// For command output, expand the window to accommodate the text
+				QSize texthint = mCommandText->sizeHint();
+				int w = texthint.width() + 2*KDialog::marginHint();
+				if (w < width())
+					w = width();
+				int ypadding = height() - mCommandText->height();
+				desired = QSize(w, texthint.height() + ypadding);
+				break;
+			}
+			// fall through to default
+		default:
+			return MainWindowBase::sizeHint();
+	}
+
+	// Limit the size to fit inside the working area of the desktop
+	QSize desktop  = desktopWorkArea().size();
+	QSize frameThickness = frameGeometry().size() - geometry().size();  // title bar & window frame
+	return desired.boundedTo(desktop - frameThickness);
 }
 
 /******************************************************************************
@@ -1251,11 +1272,7 @@ void MessageWin::showEvent(QShowEvent* se)
 			 *      See the Qt documentation on window geometry for more details.
 			 */
 			// PROBLEM: The frame size is not known yet!
-#ifdef Q_WS_X11
-			QRect desk = KWindowSystem::workArea();
-#else
-			QRect desk = qApp->desktop()->availableGeometry();
-#endif
+			QRect desk = desktopWorkArea();
 			QPoint cursor = QCursor::pos();
 			QRect frame = frameGeometry();
 			QRect rect  = geometry();
