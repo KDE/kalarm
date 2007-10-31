@@ -69,7 +69,7 @@ class DateTime
 		 *  Sets the value to a specified date-only value.
 		 */
 		DateTime& operator=(const QDate& d)
-		                               { mDateTime.setDate(d);  mDateOnly = true;  return *this; }
+		                               { mDateTime.setDate(d); mDateTime.setTime(QTime());  mDateOnly = true;  return *this; }
 		/** Returns true if the date is null and, if it is a date-time value, the time is also null. */
 		bool      isNull() const       { return mDateTime.date().isNull()  &&  (mDateOnly || mDateTime.time().isNull()); }
 		/** Returns true if the date is valid and, if it is a date-time value, the time is also valid. */
