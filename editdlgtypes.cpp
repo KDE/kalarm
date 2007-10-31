@@ -517,7 +517,7 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 		case tCOMMAND:    // command output
 			mTextMessageEdit->hide();
 			mFileBox->hide();
-			mFilePadding->show();
+			slotCmdScriptToggled(mCmdEdit->isScript());  // show/hide mFilePadding
 			mCmdEdit->show();
 			mFontColourButton->show();
 			mSoundPicker->showSpeak(true);
@@ -1418,6 +1418,20 @@ void CommandEdit::slotCmdScriptToggled(bool on)
 	}
 	emit scriptToggled(on);
 }
+
+/******************************************************************************
+* Returns the minimum size of the widget.
+*/
+QSize CommandEdit::minimumSizeHint() const
+{
+	QSize t(mTypeScript->minimumSizeHint());
+	QSize s(mCommandEdit->minimumSizeHint().expandedTo(mScriptEdit->minimumSizeHint()));
+	s.setHeight(s.height() + KDialog::spacingHint() + t.height());
+	if (s.width() < t.width())
+		s.setWidth(t.width());
+	return s;
+}
+
 
 
 /*=============================================================================

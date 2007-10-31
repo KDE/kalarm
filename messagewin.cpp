@@ -99,7 +99,8 @@ class MessageText : public KTextEdit
 {
 	public:
 		MessageText(QWidget* parent = 0)
-			: KTextEdit(parent)
+			: KTextEdit(parent),
+			  mNewLine(false)
 		{
 			setReadOnly(true);
 			setFrameStyle(NoFrame);
@@ -122,6 +123,10 @@ class MessageText : public KTextEdit
 			return QSize(static_cast<int>(docsize.width() + 0.99) + verticalScrollBar()->width(),
 			             static_cast<int>(docsize.height() + 0.99) + horizontalScrollBar()->height());
 		}
+		bool newLine() const       { return mNewLine; }
+		void setNewLine(bool nl)   { mNewLine = nl; }
+	private:
+		bool mNewLine;
 };
 
 
@@ -480,7 +485,6 @@ void MessageWin::initView()
 			case KAEvent::COMMAND:
 			{
 				mCommandText = new MessageText(topWidget);
-				mCommandText->setMinimumSize(mCommandText->sizeHint());
 				mCommandText->setBackgroundColour(mBgColour);
 				mCommandText->setTextColor(mFgColour);
 				mCommandText->setCurrentFont(mFont);
@@ -745,7 +749,13 @@ void MessageWin::readProcessOutput(ShellProcess* proc)
 	QByteArray data = proc->readAll();
 	if (!data.isEmpty())
 	{
-		mCommandText->insertPlainText(QString::fromLocal8Bit(data.data()));
+		// Strip any trailing newline, to avoid showing trailing blank line
+		// in message window.
+		if (mCommandText->newLine())
+			mCommandText->append("\n");
+		int nl = data.endsWith('\n') ? 1 : 0;
+		mCommandText->setNewLine(nl);
+		mCommandText->insertPlainText(QString::fromLocal8Bit(data.data(), data.length() - nl));
 		resize(sizeHint());
 	}
 }
