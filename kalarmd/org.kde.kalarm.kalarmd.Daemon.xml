@@ -34,6 +34,7 @@
       <arg name="serviceName" type="s" direction="in"/>
       <arg name="dbusObject" type="s" direction="in"/>
       <arg name="startClient" type="b" direction="in"/>
+      <arg name="startDayMinute" type="i" direction="in"/>
     </method>
     <method name="registerChange">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
@@ -45,6 +46,10 @@
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="id" type="s" direction="in"/>
       <arg name="reload" type="b" direction="in"/>
+    </method>
+    <method name="setStartOfDay">
+      <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
+      <arg name="startDayMinute" type="i" direction="in"/>
     </method>
     <method name="quit">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>

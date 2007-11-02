@@ -52,6 +52,7 @@ class Daemon : public QObject
 		static bool      stop();
 		static bool      autoStart();
 		static void      enableAutoStart(bool enable);
+		static void      setStartOfDay();
 		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
 		static void      checkStatus()           { checkIfRunning(); }
 		static bool      monitoringAlarms();

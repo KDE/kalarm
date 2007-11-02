@@ -207,8 +207,9 @@ bool Daemon::registerWith(bool reregister)
 	}
 	else
 	{
+		QTime sod = Preferences::startOfDay();
 		daemonDBus()->registerApp(KGlobal::mainComponent().aboutData()->appName(), KALARM_DBUS_SERVICE,
-		                          QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped);
+		                          QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped, sod.hour() * 60 + sod.minute());
 		result = checkDBusResult("registerApp");
 	}
 	if (!result)
@@ -449,6 +450,16 @@ void Daemon::enableAutoStart(bool enable)
 	KConfigGroup config(&adconfig, DAEMON_AUTOSTART_SECTION);
 	config.writeEntry(DAEMON_AUTOSTART_KEY, enable);
 	config.sync();
+}
+ 
+/******************************************************************************
+* Tell the alarm daemon the start-of-day time for date-only alarms.
+*/
+void Daemon::setStartOfDay()
+{
+	QTime sod = Preferences::startOfDay();
+	daemonDBus()->setStartOfDay(sod.hour() * 60 + sod.minute());
+	checkDBusResult("setStartOfDay");
 }
 
 /******************************************************************************

@@ -50,6 +50,7 @@
 // Allow plenty of time for session restoration to happen first.
 static const int KALARM_AUTOSTART_TIMEOUT = 30;
 #endif
+static const int SECS_PER_DAY = 3600 * 24;
 
 // Config file key strings
 const char* CLIENT_GROUP     = "Client";
@@ -98,6 +99,10 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	resources->load();
 	connect(resources, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(cacheDownloaded(AlarmResource*)));
 
+	KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
+	const KConfigGroup group = kaconfig.group("General");
+	mStartOfDay = group.readEntry(QString::fromLatin1("StartOfDay"), QDateTime(QDate(1900,1,1), QTime())).time();
+
 #ifdef AUTOSTART_KALARM
 	if (autostart)
 	{
@@ -111,8 +116,6 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 		 * come in the wrong order, KAlarm won't know that it is supposed to restore
 		 * itself and instead will simply open a new window.
 		 */
-		KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
-		const KConfigGroup group = kaconfig.group("General");
 		autostart = group.readEntry("AutostartTray", false);
 		if (autostart)
 		{
@@ -371,9 +374,11 @@ void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient)
+void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient, int startDayMinute)
 {
 	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << "," << serviceName << "," <<  dbusObject << "," << startClient << ")";
+	if (startDayMinute >= 0  &&  startDayMinute < 24*60)
+		mStartOfDay = QTime(startDayMinute / 60, startDayMinute % 60);
 	registerApp(appName, serviceName, dbusObject, startClient, true);
 }
 
@@ -455,6 +460,18 @@ void AlarmDaemon::enableAutoStart(bool on, bool sync)
         group.writeEntry(DAEMON_AUTOSTART_KEY, on);
 	if (sync)
 		config->sync();
+}
+
+/******************************************************************************
+* D-Bus call to set the start-of-day time for date-only alarms.
+*/
+void AlarmDaemon::setStartOfDay(int startDayMinute)
+{
+	int h = startDayMinute / 60;
+	int m = startDayMinute % 60;
+	kDebug(5900) << "AlarmDaemon::setStartOfDay(" << h << ":" << m << ")";
+	if (startDayMinute >= 0  &&  startDayMinute < 24*60)
+		mStartOfDay = QTime(h, m);
 }
 
 /******************************************************************************
@@ -564,19 +581,25 @@ void AlarmDaemon::checkAlarms()
 					if (offset)
 					{
 						dt1 = nextDateTime.addSecs(offset);
+						if (floats)
+							dt1.setTime(mStartOfDay);
 						if (dt1 > now)
 							dt1 = KDateTime();
 					}
 				}
 				// Get latest due repetition, or the recurrence time if none
 				dt = nextDateTime;
-				if (nextDateTime <= now  &&  alarm->repeatCount() > 0)
+				if (floats)
+					dt.setTime(mStartOfDay);
+				if (dt <= now  &&  alarm->repeatCount() > 0)
 				{
 					int snoozeSecs = alarm->snoozeTime() * 60;
-					int repetition = nextDateTime.secsTo_long(now) / snoozeSecs;
+					int repetition = dt.secsTo_long(now) / snoozeSecs;
 					if (repetition > alarm->repeatCount())
 						repetition = alarm->repeatCount();
 					dt = nextDateTime.addSecs(repetition * snoozeSecs);
+					if (floats)
+						dt.setTime(mStartOfDay);
 				}
 				if (!dt.isValid()  ||  dt > now
 				||  dt1.isValid()  &&  dt1 > dt)  // already tested dt1 <= now
