@@ -234,7 +234,7 @@ void KAEvent::set(const Event& event)
 	mEnabled                = true;
 	bool ok;
 	bool dateOnly = false;
-	const QStringList& cats = event.categories();
+	const QStringList cats = event.categories();
 	for (unsigned int i = 0;  i < cats.count();  ++i)
 	{
 		if (cats[i] == DATE_ONLY_CATEGORY)
@@ -2131,7 +2131,10 @@ KAEvent::OccurType KAEvent::nextRecurrence(const QDateTime& preDateTime, DateTim
 	QDateTime recurStart = mRecurrence->startDateTime();
 	QDateTime pre = preDateTime;
 	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::startOfDay())
+	{
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
+		pre.setTime(Preferences::startOfDay());
+	}
 	remainingCount = 0;
 	QDateTime dt = mRecurrence->getNextDateTime(pre);
 	result.set(dt, mStartDateTime.isDateOnly());
@@ -2621,7 +2624,7 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
 	{
 		Event* event = *evit;
-		const QStringList& cats = event->categories();
+		const QStringList cats = event->categories();
 		if (cats.find(DATE_ONLY_CATEGORY) != cats.end())
 		{
 			// It's an untimed event, so fix it

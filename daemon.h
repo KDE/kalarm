@@ -1,7 +1,7 @@
 /*
  *  daemon.h  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,6 +48,7 @@ class Daemon : public QObject
 		static bool      stop();
 		static bool      autoStart();
 		static void      enableAutoStart(bool enable);
+		static void      setStartOfDay();
 		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
 		static void      checkStatus()           { checkIfRunning(); }
 		static bool      monitoringAlarms();

@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.h  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -52,10 +52,11 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		               { reloadCal(appname, expandURL(urlString), false); }
 		void    resetCalendar(const QCString& appname, const QString& urlString)
 		               { reloadCal(appname, expandURL(urlString), true); }
-		void    registerApp(const QCString& appName, const QString& appTitle,
-		                    const QCString& dcopObject, const QString& calendarUrl, bool startClient);
+		void    registerApp(const QCString& appName, const QString& appTitle, const QCString& dcopObject,
+		                    const QString& calendarUrl, bool startClient, int startDayMinute);
 		void    registerChange(const QCString& appName, bool startClient);
 		void    eventHandled(const QCString& appname, const QString& calendarURL, const QString& eventID, bool reload);
+		void    setStartOfDay(int startDayMinute);
 		void    quit();
 		// Other methods
 		void    startMonitoring();
@@ -71,6 +72,7 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		QTimer* mAlarmTimer;
 		int     mAlarmTimerSyncCount; // countdown to re-synching the alarm timer
 		bool    mAlarmTimerSyncing;   // true while alarm timer interval < 1 minute
+		QTime   mStartOfDay;          // start of day for date-only alarms
 };
 
 #endif // ALARMDAEMON_H

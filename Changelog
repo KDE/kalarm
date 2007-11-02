@@ -1,6 +1,8 @@
 KAlarm
 
-=== Version 1.4.18 --- 31 October 2007 ===
+=== Version 1.4.18 --- 2 November 2007 ===
+Fix failure to trigger some date-only alarms (e.g. after system hibernation).
+Fix date-only alarms triggering every minute until start-of-day time.
 Simplify recurrence text shown in alarm edit dialogue Alarm tab when possible.
 Prevent error after browsing for command log file, due to file:// prefix.
 

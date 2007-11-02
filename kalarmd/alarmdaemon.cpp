@@ -51,6 +51,7 @@
 // Allow plenty of time for session restoration to happen first.
 static const int KALARM_AUTOSTART_TIMEOUT = 30;
 #endif
+static const int SECS_PER_DAY = 3600 * 24;
 
 
 AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
@@ -62,6 +63,11 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
 	ADConfigData::readConfig();
 
 	ADConfigData::enableAutoStart(true);    // switch autostart on whenever the program is run
+
+	KConfig kaconfig(locate("config", "kalarmrc"));
+	kaconfig.setGroup(QString::fromLatin1("General"));
+	QDateTime defTime(QDate(1900,1,1), QTime());
+	mStartOfDay = kaconfig.readDateTimeEntry(QString::fromLatin1("StartOfDay"), &defTime).time();
 
 #ifdef AUTOSTART_KALARM
 	if (autostart)
@@ -76,8 +82,6 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
 		 * come in the wrong order, KAlarm won't know that it is supposed to restore
 		 * itself and instead will simply open a new window.
 		 */
-		KConfig kaconfig(locate("config", "kalarmrc"));
-		kaconfig.setGroup(QString::fromLatin1("General"));
 		autostart = kaconfig.readBoolEntry(QString::fromLatin1("AutostartTray"), false);
 		if (autostart)
 		{
@@ -219,7 +223,7 @@ void AlarmDaemon::eventHandled(const QCString& appname, const QString& calendarU
 */
 void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
                               const QCString& dcopObject, const QString& calendarUrl,
-			      bool startClient)
+			      bool startClient, int startDayMinute)
 {
 	kdDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << appTitle << ", "
 	              <<  dcopObject << ", " << startClient << ")" << endl;
@@ -253,6 +257,8 @@ void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
 			client = new ClientInfo(appName, appTitle, dcopObject, calendarUrl, startClient);
 		client->calendar()->setUnregistered(false);
 		ADConfigData::writeClient(appName, client);
+		if (startDayMinute >= 0  &&  startDayMinute < 24*60)
+			mStartOfDay = QTime(startDayMinute / 60, startDayMinute % 60);
 
 		ADConfigData::enableAutoStart(true);
 		setTimerStatus();
@@ -306,6 +312,18 @@ void AlarmDaemon::enableAutoStart(bool on)
 	ADConfigData::enableAutoStart(on);
 }
 
+/******************************************************************************
+* DCOP call to set the start-of-day time for date-only alarms.
+*/
+void AlarmDaemon::setStartOfDay(int startDayMinute)
+{
+	int h = startDayMinute / 60;
+	int m = startDayMinute % 60;
+	kdDebug(5900) << "AlarmDaemon::setStartOfDay(" << h << ":" << m << ")" << endl;
+	if (startDayMinute >= 0  &&  startDayMinute < 24*60)
+		mStartOfDay = QTime(h, m);
+}
+ 
 /******************************************************************************
 * Check if any alarms are pending for any enabled calendar, and display the
 * pending alarms.
@@ -377,8 +395,8 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
 		bool recurs = event->doesRecur();
-		QStringList flags = QStringList::split(QString::fromLatin1(";"), event->customProperty("KALARM", "FLAGS"), false);
-		bool floats = (flags.find(QString::fromLatin1("DATE")) != flags.end());
+		const QStringList cats = event->categories();
+		bool floats = (cats.find(QString::fromLatin1("DATE")) != cats.end());
 		QDateTime nextDateTime = event->dtStart();
 		if (recurs)
 		{
@@ -400,6 +418,8 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 				}
 			}
 		}
+		if (floats)
+			nextDateTime.setTime(mStartOfDay);
 		QValueList<QDateTime> alarmtimes;
 		KCal::Alarm::List alarms = event->alarms();
 		for (KCal::Alarm::List::ConstIterator al = alarms.begin();  al != alarms.end();  ++al)
@@ -418,7 +438,7 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 					           : alarm->endOffset().asSeconds() + event->dtStart().secsTo(event->dtEnd());
 					if (offset)
 					{
-						dt1 = nextDateTime.addSecs(offset);
+						dt1 = nextDateTime.addSecs(floats ? (offset/SECS_PER_DAY)*SECS_PER_DAY : offset);
 						if (dt1 > now)
 							dt1 = QDateTime();
 					}
@@ -428,13 +448,15 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 				if (nextDateTime <= now  &&  alarm->repeatCount() > 0)
 				{
 					int snoozeSecs = alarm->snoozeTime() * 60;
-					QDateTime lastRepetition = nextDateTime.addSecs(alarm->repeatCount() * snoozeSecs);
+					int offset = alarm->repeatCount() * snoozeSecs;
+					QDateTime lastRepetition = nextDateTime.addSecs(floats ? (offset/SECS_PER_DAY)*SECS_PER_DAY : offset);
 					if (lastRepetition <= now)
 						dt = lastRepetition;
 					else
 					{
 						int repetition = nextDateTime.secsTo(now) / snoozeSecs;
-						dt = nextDateTime.addSecs(repetition * snoozeSecs);
+						int offset = repetition * snoozeSecs;
+						dt = nextDateTime.addSecs(floats ? (offset/SECS_PER_DAY)*SECS_PER_DAY : offset);
 					}
 				}
 				if (!dt.isValid()  ||  dt > now

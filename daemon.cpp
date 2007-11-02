@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright (c) 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -185,7 +185,10 @@ bool Daemon::registerWith(bool reregister)
 	if (reregister)
 		s.registerChange(appname, !disabledIfStopped);
 	else
-		s.registerApp(appname, kapp->aboutData()->programName(), QCString(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped);
+	{
+		QTime sod = Preferences::startOfDay();
+		s.registerApp(appname, kapp->aboutData()->programName(), QCString(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped, sod.hour() * 60 + sod.minute());
+	}
 	if (!s.ok())
 	{
 		registrationResult(reregister, KAlarmd::FAILURE);
@@ -381,6 +384,18 @@ void Daemon::enableAutoStart(bool enable)
 	adconfig.setGroup(QString::fromLatin1(DAEMON_AUTOSTART_SECTION));
 	adconfig.writeEntry(QString::fromLatin1(DAEMON_AUTOSTART_KEY), enable);
 	adconfig.sync();
+}
+
+/******************************************************************************
+* Tell the alarm daemon the start-of-day time for date-only alarms.
+*/
+void Daemon::setStartOfDay()
+{
+	QTime sod = Preferences::startOfDay();
+	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
+	s.setStartOfDay(sod.hour() * 60 + sod.minute());
+	if (!s.ok())
+		kdError(5950) << "Daemon::setStartOfDay(): dcop send failed" << endl;
 }
 
 /******************************************************************************
