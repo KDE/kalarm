@@ -2496,7 +2496,10 @@ KAEvent::OccurType KAEvent::nextRecurrence(const KDateTime& preDateTime, DateTim
 	KDateTime recurStart = mRecurrence->startDateTime();
 	KDateTime pre = preDateTime;
 	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::startOfDay())
+	{
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
+		pre.setTime(Preferences::startOfDay());
+	}
 	remainingCount = 0;
 	KDateTime dt = mRecurrence->getNextDateTime(pre);
 	result = dt;

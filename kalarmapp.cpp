@@ -1073,6 +1073,7 @@ void KAlarmApp::slotPreferencesChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
+	Daemon::setStartOfDay();   // tell the alarm daemon the new time
 	QTime sod = Preferences::startOfDay();
 	DateTime::setStartOfDay(sod);
 	AlarmCalendar* cal = AlarmCalendar::resources();
@@ -1238,7 +1239,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 #warning Archived alarms are sometimes treated as active
 #endif
 			KDateTime now = KDateTime::currentUtcDateTime();
-			DateTime  repeatDT;
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
 			KAAlarm alarmToExecute;
@@ -1246,20 +1246,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 			// Note that the main alarm is fetched before any other alarms.
 			for (KAAlarm alarm = event.firstAlarm();  alarm.valid();  alarm = event.nextAlarm(alarm))
 			{
-				if (alarm.deferred()  &&  event.repeatCount()
-				&&  repeatDT.isValid()  &&  alarm.dateTime() > repeatDT)
-				{
-					// This deferral of a repeated alarm is later than the last previous
-					// occurrence of the main alarm, so use the deferral alarm instead.
-					// If the deferral is not yet due, this prevents the main alarm being
-					// triggered repeatedly. If the deferral is due, this triggers it
-					// in preference to the main alarm.
-					alarmToExecute      = KAAlarm();
-					alarmToExecuteValid = false;
-					updateCalAndDisplay = false;
-				}
 				// Check if the alarm is due yet.
-				KDateTime nextDT = alarm.dateTime(true).kDateTime();
+				KDateTime nextDT = alarm.dateTime(true).effectiveKDateTime();
 				int secs = nextDT.secsTo(now);
 				if (secs < 0)
 				{
@@ -1280,6 +1268,9 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					// The alarm is restricted to working hours (apart from reminders and
 					// deferrals). This needs to be re-evaluated every time it triggers,
 					// since working hours could change.
+#ifdef __GNUC__
+#warning What if date-only?
+#endif
 					reschedule = !KAlarm::isWorkingTime(nextDT);
 					if (reschedule)
 						kDebug(5950) << "KAlarmApp::handleEvent(): not during working hours";
