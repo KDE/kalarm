@@ -2,7 +2,7 @@
  *  resourceremote.cpp  -  KAlarm remote alarm calendar resource
  *  Program:  kalarm
  *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
- *  Based on resourceremote.cpp in kresources,
+ *  Based on resourceremote.cpp in kresources (updated to rev 721447),
  *  Copyright (c) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -74,7 +74,7 @@ KAResourceRemote::KAResourceRemote(Type type, const KUrl& downloadUrl, const KUr
 void KAResourceRemote::init()
 {
 	setType("remote");   // set resource type
-	lock(QString(""));   // don't use QString() !
+	lock(cacheFile());
 }
 
 KAResourceRemote::~KAResourceRemote()
@@ -124,7 +124,7 @@ bool KAResourceRemote::doLoad(bool syncCache)
 	if (mDownloadJob)
 	{
 		kWarning(KARES_DEBUG) << "KAResourceRemote::doLoad(): download still in progress";
-		return false;
+		return true;
 	}
 	mLoaded = false;
 	emit invalidate(this);
@@ -143,7 +143,14 @@ bool KAResourceRemote::doLoad(bool syncCache)
 	}
 	emit resourceChanged(this);
 
-	if (syncCache)
+	if (!syncCache)
+	{
+		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): from cache";
+		slotLoadJobResult(0);
+	}
+	else if (!lock()->lock())
+		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): cache file is locked - something else must be loading the file";
+	else
 	{
 		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): downloading...";
 		mDownloadJob = KIO::file_copy(mDownloadUrl, KUrl(cacheFile()), -1, KIO::Overwrite |
@@ -157,11 +164,6 @@ bool KAResourceRemote::doLoad(bool syncCache)
 			emit downloading(this, 0);
 		}
 #endif
-	}
-	else
-	{
-		kDebug(KARES_DEBUG) << "KAResourceRemote::doLoad(" << mDownloadUrl.prettyUrl() << "): from cache";
-		slotLoadJobResult(0);
 	}
 	return true;
 }
@@ -213,6 +215,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 		mLoaded = true;
 	}
 	mLoading = false;
+	lock()->unlock();
 	emit loaded(this);
 }
 
@@ -228,6 +231,7 @@ void KAResourceRemote::cancelDownload(bool disable)
 		emit downloading(this, (unsigned long)-1);
 #endif
 		mLoading = false;
+		lock()->unlock();
 		emit loaded(this);
 	}
 }
