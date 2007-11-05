@@ -2,7 +2,7 @@
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
  *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
- *  Based on resourcelocaldir.cpp in libkcal,
+ *  Based on resourcelocaldir.cpp in libkcal (updated to rev 645858),
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -54,7 +54,7 @@ KAResourceLocalDir::KAResourceLocalDir(const KConfigGroup& group)
 
 KAResourceLocalDir::KAResourceLocalDir(Type type, const QString& dirName)
 	: AlarmResource(type),
-	  mURL(KUrl(dirName))
+	  mURL(KUrl::fromPath(dirName))
 {
 	init();
 }
