@@ -2,7 +2,7 @@
  *  resourcelocal.cpp  -  KAlarm local calendar resource
  *  Program:  kalarm
  *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
- *  Based on resourcelocal.cpp in libkcal,
+ *  Based on resourcelocal.cpp in libkcal (updated to rev 645858),
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -51,7 +51,7 @@ KAResourceLocal::KAResourceLocal(const KConfigGroup& group)
 
 KAResourceLocal::KAResourceLocal(Type type, const QString& fileName)
 	: AlarmResource(type),
-	  mURL(KUrl(fileName))
+	  mURL(KUrl::fromPath(fileName))
 {
 	init();
 }
