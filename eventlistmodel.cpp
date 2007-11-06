@@ -485,6 +485,11 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 	if (added)
 	{
 		KCal::Event::List list = AlarmCalendar::resources()->events(resource, mStatus);
+		for (int i = list.count();  --i >= 0;  )
+		{
+			if (mEvents.indexOf(list[i]))
+				list.removeAt(i);    // avoid creating duplicate entries
+		}
 		if (!list.isEmpty())
 		{
 			int row = mEvents.count();
