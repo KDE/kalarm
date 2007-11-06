@@ -86,6 +86,7 @@ Preferences* Preferences::self()
 Preferences::Preferences()
 {
 	QObject::connect(this, SIGNAL(base_StartOfDayChanged(const QDateTime&)), SLOT(startDayChange(const QDateTime&)));
+	QObject::connect(this, SIGNAL(base_TimeZoneChanged(const QString&)), SLOT(timeZoneChange(const QString&)));
 }
 
 /******************************************************************************
@@ -113,6 +114,11 @@ KTimeZone Preferences::timeZone(bool reload)
 void Preferences::setTimeZone(const KTimeZone& tz)
 {
 	self()->setBase_TimeZone(tz.isValid() ? tz.name() : QString());
+}
+
+void Preferences::timeZoneChange(const QString& zone)
+{
+	emit mInstance->timeZoneChanged(timeZone(false));
 }
 
 ColourList Preferences::messageColours()

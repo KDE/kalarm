@@ -46,10 +46,10 @@ class AlarmDaemon : public QObject
 		Q_SCRIPTABLE void resetResource(const QString& id)    { reloadResource(id, true, true); }
 		Q_SCRIPTABLE void resourceActive(const QString& id, bool active);
 		Q_SCRIPTABLE void resourceLocation(const QString& id, const QString& locn, const QString& locn2);
-		Q_SCRIPTABLE void registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient, int startDayMinute);
+		Q_SCRIPTABLE void registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient);
 		Q_SCRIPTABLE void registerChange(const QString& appName, const QString& serviceName, bool startClient);
 		Q_SCRIPTABLE void eventHandled(const QString& eventID, bool reload);
-		Q_SCRIPTABLE void setStartOfDay(int startDayMinute);
+		Q_SCRIPTABLE void timeConfigChanged()                 { readKAlarmConfig(); }
 		Q_SCRIPTABLE void quit();
 
 	private slots:
@@ -73,7 +73,7 @@ class AlarmDaemon : public QObject
 		typedef QMap<QString, EventItem>  EventsMap;    // event ID, sequence no/times
 
 		void    readConfig();
-		KDateTime::Spec timeSpec();
+		void    readKAlarmConfig();
 		void    startMonitoring();
 		void    registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient, bool init);
 		void    enableAutoStart(bool on, bool sync);
@@ -101,7 +101,10 @@ class AlarmDaemon : public QObject
 		QString    mClientName;          // client's executable and DCOP name
 		QString    mClientDBusObj;       // object path to receive D-Bus messages
 		QString    mClientExe;           // client executable path (if mClientStart true)
+		KDateTime::Spec mTimeSpec;       // default time zone or spec
 		QTime      mStartOfDay;          // start of day for date-only alarms
+		QTime      mWorkDayStart;        // start of working day
+		QTime      mWorkDayEnd;          // end of working day
 		QTimer*    mAlarmTimer;
 		int        mAlarmTimerSyncCount; // countdown to re-synching the alarm timer
 		bool       mAlarmTimerSyncing;   // true while alarm timer interval < 1 minute

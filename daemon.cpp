@@ -93,6 +93,9 @@ void Daemon::initialise()
 		mInstance = new Daemon();
 	connect(AlarmResources::instance(), SIGNAL(resourceSaved(AlarmResource*)), mInstance, SLOT(slotResourceSaved(AlarmResource*)));
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), mInstance, SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
+	Preferences::connect(SIGNAL(timeZoneChanged(const KTimeZone&)), mInstance, SLOT(notifyTimeChanged()));
+	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&, const QTime&)), mInstance, SLOT(notifyTimeChanged()));
+	Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), mInstance, SLOT(notifyTimeChanged()));
 }
 
 /******************************************************************************
@@ -209,7 +212,7 @@ bool Daemon::registerWith(bool reregister)
 	{
 		QTime sod = Preferences::startOfDay();
 		daemonDBus()->registerApp(KGlobal::mainComponent().aboutData()->appName(), KALARM_DBUS_SERVICE,
-		                          QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped, sod.hour() * 60 + sod.minute());
+		                          QString(NOTIFY_DBUS_OBJECT), !disabledIfStopped);
 		result = checkDBusResult("registerApp");
 	}
 	if (!result)
@@ -453,13 +456,13 @@ void Daemon::enableAutoStart(bool enable)
 }
  
 /******************************************************************************
-* Tell the alarm daemon the start-of-day time for date-only alarms.
+* Notify the alarm daemon that the start-of-day time for date-only alarms, the
+* working day times, or the default time zone have changed.
 */
-void Daemon::setStartOfDay()
+void Daemon::notifyTimeChanged()
 {
-	QTime sod = Preferences::startOfDay();
-	daemonDBus()->setStartOfDay(sod.hour() * 60 + sod.minute());
-	checkDBusResult("setStartOfDay");
+	daemonDBus()->timeConfigChanged();
+	checkDBusResult("timeConfigChanged");
 }
 
 /******************************************************************************

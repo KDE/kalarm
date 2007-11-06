@@ -52,7 +52,6 @@ class Daemon : public QObject
 		static bool      stop();
 		static bool      autoStart();
 		static void      enableAutoStart(bool enable);
-		static void      setStartOfDay();
 		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
 		static void      checkStatus()           { checkIfRunning(); }
 		static bool      monitoringAlarms();
@@ -71,6 +70,7 @@ class Daemon : public QObject
 		void             daemonRunning(bool running);
 
 	private slots:
+		void             notifyTimeChanged();
 		void             slotResourceSaved(AlarmResource*);
 		void             slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 		void             checkIfStarted();
