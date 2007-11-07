@@ -1,7 +1,7 @@
 /*
  *  dateedit.cpp  -  date entry widget
  *  Program:  kalarm
- *  Copyright (c) 2002 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 DateEdit::DateEdit(QWidget* parent, const char* name)
 	: KDateEdit(parent, name)
 {
+	connect(this, SIGNAL(dateEntered(const QDate&)), SLOT(newDateEntered(const QDate&)));
 }
 
 void DateEdit::setMinDate(const QDate& d, const QString& errorDate)
@@ -52,7 +53,7 @@ void DateEdit::setInvalid()
 }
 
 // Check a new date against any minimum or maximum date.
-bool DateEdit::assignDate(const QDate& newDate)
+void DateEdit::newDateEntered(const QDate& newDate)
 {
 	if (newDate.isValid())
 	{
@@ -60,16 +61,13 @@ bool DateEdit::assignDate(const QDate& newDate)
 		{
 			pastLimitMessage(mMinDate, mMinDateErrString,
 					 i18n("Date cannot be earlier than %1"));
-			return false;
 		}
-		if (mMaxDate.isValid()  &&  newDate > mMaxDate)
+		else if (mMaxDate.isValid()  &&  newDate > mMaxDate)
 		{
 			pastLimitMessage(mMaxDate, mMaxDateErrString,
 					 i18n("Date cannot be later than %1"));
-			return false;
 		}
 	}
-	return KDateEdit::assignDate(newDate);
 }
 
 void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const QString& defaultError)

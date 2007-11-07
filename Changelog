@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.4.19 --- 8 November 2007 ===
+Prevent error messages while typing date value, until finished entering it.
+
 === Version 1.4.18 --- 2 November 2007 ===
 Fix failure to trigger some date-only alarms (e.g. after system hibernation).
 Fix date-only alarms triggering every minute until start-of-day time.
