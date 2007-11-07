@@ -112,7 +112,7 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 	// Date edit box
 	mDateEdit = new DateEdit(topWidget);
 	mDateEdit->setFixedSize(mDateEdit->sizeHint());
-	connect(mDateEdit, SIGNAL(dateChanged(const QDate&)), SLOT(dateTimeChanged()));
+	connect(mDateEdit, SIGNAL(dateEntered(const QDate&)), SLOT(dateTimeChanged()));
 	mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the date to schedule the alarm.</para>"
 	      "<para>%1</para>", (mDeferring ? tzText : recurText)));
