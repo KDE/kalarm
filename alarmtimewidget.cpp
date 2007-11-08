@@ -208,6 +208,7 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 		QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"), box);
 		mTimeZone = new TimeZoneCombo(box);
 		mTimeZone->setMaxVisibleItems(15);
+		connect(mTimeZone, SIGNAL(activated(int)), SLOT(slotTimeZoneChanged()));
 		box->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));
 		label->setBuddy(mTimeZone);
 		layout->addWidget(box);
@@ -229,7 +230,7 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 	slotButtonSet(mAtTimeRadio);
 
 	// Timeout every minute to update alarm time fields.
-	MinuteTimer::connect(this, SLOT(slotTimer()));
+	MinuteTimer::connect(this, SLOT(updateTimes()));
 }
 
 /******************************************************************************
@@ -291,7 +292,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 		int delayMins = mDelayTimeEdit->value();
 		if (minsFromNow)
 			*minsFromNow = delayMins;
-		return now.addSecs(delayMins * 60).toTimeSpec(timeSpec());
+		return now.addSecs(delayMins * 60).toTimeSpec(mTimeSpec);
 	}
 	else
 	{
@@ -319,7 +320,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 		KDateTime result;
 		if (dateOnly)
 		{
-			result = KDateTime(mDateEdit->date(), timeSpec());
+			result = KDateTime(mDateEdit->date(), mTimeSpec);
 			if (checkExpired  &&  result.date() < now.date())
 			{
 				if (showErrorMessage)
@@ -331,7 +332,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 		}
 		else
 		{
-			result = KDateTime(mDateEdit->date(), mTimeEdit->time(), timeSpec());
+			result = KDateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
 			if (checkExpired  &&  result <= now.addSecs(1))
 			{
 				if (showErrorMessage)
@@ -346,29 +347,19 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 }
 
 /******************************************************************************
-* Get the time specification to use.
-*/
-KDateTime::Spec AlarmTimeWidget::timeSpec() const
-{
-	if (mDeferring)
-		return mTimeSpec.isValid() ? mTimeSpec : KDateTime::LocalZone;
-	if (mNoTimeZone->isChecked())
-		return KDateTime::ClockTime;
-	KTimeZone tz = mTimeZone->timeZone();
-	return tz.isValid() ? KDateTime::Spec(tz) : KDateTime::LocalZone;
-}
-
-/******************************************************************************
 * Set the date/time.
 */
 void AlarmTimeWidget::setDateTime(const DateTime& dt)
 {
 	// Set the time zone first so that the call to dateTimeChanged() works correctly.
-	if (!mDeferring)
+	if (mDeferring)
+		mTimeSpec = dt.timeSpec().isValid() ? dt.timeSpec() : KDateTime::LocalZone;
+	else
 	{
 		KTimeZone tz = dt.timeZone();
 		mNoTimeZone->setChecked(!tz.isValid());
 		mTimeZone->setTimeZone(tz.isValid() ? tz : Preferences::timeZone());
+		slotTimeZoneChanged();
 	}
 
 	if (dt.date().isValid())
@@ -400,7 +391,7 @@ void AlarmTimeWidget::setMinDateTimeIsCurrent()
 {
 	mMinDateTimeIsNow = true;
 	mMinDateTime = KDateTime();
-	KDateTime now = KDateTime::currentDateTime(timeSpec());
+	KDateTime now = KDateTime::currentDateTime(mTimeSpec);
 	mDateEdit->setMinDate(now.date());
 	setMaxMinTimeIf(now);
 }
@@ -412,9 +403,9 @@ void AlarmTimeWidget::setMinDateTimeIsCurrent()
 void AlarmTimeWidget::setMinDateTime(const KDateTime& dt)
 {
 	mMinDateTimeIsNow = false;
-	mMinDateTime = dt;
-	mDateEdit->setMinDate(dt.date());
-	setMaxMinTimeIf(KDateTime::currentDateTime(dt.timeSpec()));
+	mMinDateTime = dt.toTimeSpec(mTimeSpec);
+	mDateEdit->setMinDate(mMinDateTime.date());
+	setMaxMinTimeIf(KDateTime::currentDateTime(mTimeSpec));
 }
 
 /******************************************************************************
@@ -425,11 +416,11 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 {
 	mPastMax = false;
 	if (dt.isValid()  &&  dt.isDateOnly())
-		mMaxDateTime = dt.effectiveKDateTime().addSecs(24*3600 - 60);
+		mMaxDateTime = dt.effectiveKDateTime().addSecs(24*3600 - 60).toTimeSpec(mTimeSpec);
 	else
-		mMaxDateTime = dt.effectiveKDateTime();
+		mMaxDateTime = dt.kDateTime().toTimeSpec(mTimeSpec);
 	mDateEdit->setMaxDate(mMaxDateTime.date());
-	KDateTime now = KDateTime::currentDateTime(dt.timeSpec());
+	KDateTime now = KDateTime::currentDateTime(mTimeSpec);
 	setMaxMinTimeIf(now);
 	setMaxDelayTime(now);
 }
@@ -519,19 +510,19 @@ void AlarmTimeWidget::enableAnyTime(bool enable)
 * Called every minute to update the alarm time data entry fields.
 * If the maximum date/time has been reached, a 'pastMax()' signal is emitted.
 */
-void AlarmTimeWidget::slotTimer()
+void AlarmTimeWidget::updateTimes()
 {
 	KDateTime now;
 	if (mMinDateTimeIsNow)
 	{
 		// Make sure that the minimum date is updated when the day changes
-		now = KDateTime::currentDateTime(mMinDateTime.timeSpec());
+		now = KDateTime::currentDateTime(mTimeSpec);
 		mDateEdit->setMinDate(now.date());
 	}
 	if (mMaxDateTime.isValid())
 	{
 		if (!now.isValid())
-			now = KDateTime::currentDateTime(mMinDateTime.timeSpec());
+			now = KDateTime::currentDateTime(mTimeSpec);
 		if (!mPastMax)
 		{
 			// Check whether the maximum date/time has now been reached
@@ -574,7 +565,7 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 	if (mAnyTimeCheckBox)
 		mAnyTimeCheckBox->setEnabled(at && mAnyTimeAllowed);
 	// Ensure that the value of the delay edit box is > 0.
-	KDateTime att(mDateEdit->date(), mTimeEdit->time(), timeSpec());
+	KDateTime att(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
 	int minutes = (KDateTime::currentUtcDateTime().secsTo(att) + 59) / 60;
 	if (minutes <= 0)
 		mDelayTimeEdit->setValid(true);
@@ -592,11 +583,30 @@ void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 }
 
 /******************************************************************************
+* Called after a new selection has been made in the time zone combo box.
+* Re-evaluates the time specification to use.
+*/
+void AlarmTimeWidget::slotTimeZoneChanged()
+{
+	if (mNoTimeZone->isChecked())
+		mTimeSpec = KDateTime::ClockTime;
+	else
+	{
+		KTimeZone tz = mTimeZone->timeZone();
+		mTimeSpec = tz.isValid() ? KDateTime::Spec(tz) : KDateTime::LocalZone;
+	}
+	mMinDateTime = mMinDateTime.toTimeSpec(mTimeSpec);
+	mMaxDateTime = mMaxDateTime.toTimeSpec(mTimeSpec);
+	updateTimes();
+}
+
+/******************************************************************************
 * Called after the mNoTimeZone checkbox has been toggled.
 */
 void AlarmTimeWidget::slotTimeZoneToggled(bool on)
 {
 	mTimeZone->setEnabled(!on);
+	slotTimeZoneChanged();
 }
 
 /******************************************************************************
@@ -605,7 +615,7 @@ void AlarmTimeWidget::slotTimeZoneToggled(bool on)
 */
 void AlarmTimeWidget::dateTimeChanged()
 {
-	KDateTime dt(mDateEdit->date(), mTimeEdit->time(), timeSpec());
+	KDateTime dt(mDateEdit->date(), mTimeEdit->time(), mTimeSpec);
 	int minutes = (KDateTime::currentUtcDateTime().secsTo(dt) + 59) / 60;
 	bool blocked = mDelayTimeEdit->signalsBlocked();
 	mDelayTimeEdit->blockSignals(true);     // prevent infinite recursion between here and delayTimeChanged()
@@ -624,7 +634,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 {
 	if (mDelayTimeEdit->isValid())
 	{
-		QDateTime dt = KDateTime::currentUtcDateTime().addSecs(minutes * 60).toTimeSpec(timeSpec()).dateTime();
+		QDateTime dt = KDateTime::currentUtcDateTime().addSecs(minutes * 60).toTimeSpec(mTimeSpec).dateTime();
 		bool blockedT = mTimeEdit->signalsBlocked();
 		bool blockedD = mDateEdit->signalsBlocked();
 		mTimeEdit->blockSignals(true);     // prevent infinite recursion between here and dateTimeChanged()
