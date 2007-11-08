@@ -1234,9 +1234,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_TRIGGER:    // handle it if it's due, else execute it regardless
 		case EVENT_HANDLE:     // handle it if it's due
 		{
-#ifdef __GNUC__
-#warning Archived alarms are sometimes treated as active
-#endif
 			KDateTime now = KDateTime::currentUtcDateTime();
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
