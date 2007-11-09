@@ -401,7 +401,7 @@ int KAlarmApp::newInstance()
 				}
 				else if (args->isSet("exec-display"))
 				{
-					kDebug(5950)<<"KAlarmApp::newInstance(): exec-display\n";
+					kDebug(5950) << "KAlarmApp::newInstance(): exec-display";
 					if (args->isSet("exec"))
 						USAGE(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--exec"), QLatin1String("--exec-display")))
 					if (args->isSet("mail"))
