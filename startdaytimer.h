@@ -1,7 +1,7 @@
 /*
  *  startdaytimer.h  -  timer triggered at the user-defined start-of-day time
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef STARTOFDAYTIMER_H
-#define STARTOFDAYTIMER_H
+#ifndef STARTDAYTIMER_H
+#define STARTDAYTIMER_H
 
 /* @file startdaytimer.h - timer triggered at the user-defined start-of-day time */
 
@@ -62,5 +62,5 @@ class StartOfDayTimer : public DailyTimer
 		static StartOfDayTimer* mInstance;    // exists solely to receive signals
 };
 
-#endif // STARTOFDAYTIMER_H
+#endif // STARTDAYTIMER_H
 

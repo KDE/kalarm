@@ -1,7 +1,7 @@
 /*
  *  alarmdaemoniface.h  -  DCOP request interface
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2001, 2004, 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2007 by David Jarvie <software@astrojar.org.uk>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -34,10 +34,11 @@ class AlarmDaemonIface : virtual public DCOPObject
     virtual ASYNC enableCalendar(const QString& urlString, bool enable) = 0;
     virtual ASYNC reloadCalendar(const QCString& appname, const QString& urlString) = 0;
     virtual ASYNC resetCalendar(const QCString& appname, const QString& urlString) = 0;
-    virtual ASYNC registerApp(const QCString& appName, const QString& appTitle,
-                              const QCString& dcopObject, const QString& calendarUrl, bool startClient) = 0;
+    virtual ASYNC registerApp(const QCString& appName, const QString& appTitle, const QCString& dcopObject,
+                              const QString& calendarUrl, bool startClient, int startDayMinute) = 0;
     virtual ASYNC registerChange(const QCString& appName, bool startClient) = 0;
     virtual ASYNC eventHandled(const QCString& appname, const QString& calendarURL, const QString& eventID, bool reload) = 0;
+    virtual ASYNC setStartOfDay(int startDayMinute) = 0;
     virtual ASYNC quit() = 0;
 };
 

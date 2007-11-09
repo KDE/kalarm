@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -102,7 +102,7 @@ void ShellProcess::slotExited(KProcess* proc)
 void ShellProcess::writeStdin(const char* buffer, int bufflen)
 {
 	QCString scopy(buffer, bufflen+1);    // construct a deep copy
-	bool write = !mStdinQueue.count();
+	bool write = mStdinQueue.isEmpty();
 	mStdinQueue.append(scopy);
 	if (write)
 		KProcess::writeStdin(mStdinQueue.first(), mStdinQueue.first().length());
@@ -117,7 +117,7 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
 void ShellProcess::writtenStdin(KProcess* proc)
 {
 	mStdinQueue.pop_front();   // free the buffer which has now been written
-	if (mStdinQueue.count())
+	if (!mStdinQueue.isEmpty())
 		proc->writeStdin(mStdinQueue.first(), mStdinQueue.first().length());
 	else if (mStdinExit)
 		kill();

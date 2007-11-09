@@ -1152,6 +1152,7 @@ void KAlarmApp::slotPreferencesChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
+	Daemon::setStartOfDay();   // tell the alarm daemon the new time
 	QTime sod = Preferences::startOfDay();
 	DateTime::setStartOfDay(sod);
 	AlarmCalendar* cal = AlarmCalendar::activeCalendar();
@@ -1287,7 +1288,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_HANDLE:     // handle it if it's due
 		{
 			QDateTime now = QDateTime::currentDateTime();
-			DateTime  repeatDT;
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
 			KAAlarm alarmToExecute;
@@ -1295,20 +1295,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 			// Note that the main alarm is fetched before any other alarms.
 			for (KAAlarm alarm = event.firstAlarm();  alarm.valid();  alarm = event.nextAlarm(alarm))
 			{
-				if (alarm.deferred()  &&  event.repeatCount()
-				&&  repeatDT.isValid()  &&  alarm.dateTime() > repeatDT)
-				{
-					// This deferral of a repeated alarm is later than the last previous
-					// occurrence of the main alarm, so use the deferral alarm instead.
-					// If the deferral is not yet due, this prevents the main alarm being
-					// triggered repeatedly. If the deferral is due, this triggers it
-					// in preference to the main alarm.
-					alarmToExecute      = KAAlarm();
-					alarmToExecuteValid = false;
-					updateCalAndDisplay = false;
-				}
 				// Check if the alarm is due yet.
-				int secs = alarm.dateTime(true).secsTo(now);
+				int secs = alarm.dateTime(true).dateTime().secsTo(now);
 				if (secs < 0)
 				{
 					// This alarm is definitely not due yet

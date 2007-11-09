@@ -1,7 +1,7 @@
 /*
  *  shellprocess.h  -  execute a process through the shell
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
  *  status is returned.
  *
  *  Writes to the process's stdin are buffered, so that unlike with KShellProcess, there
- *  is not need to wait for the write to complete before writing again.
+ *  is no need to wait for the write to complete before writing again.
  *
  *  @author David Jarvie <software@astrojar.org.uk>
  */
@@ -72,7 +72,7 @@ class ShellProcess : public KShellProcess
 		/** Constructor.
 		 *  @param command The command line to be run when start() is called.
 		 */
-		ShellProcess(const QString& command);
+		explicit ShellProcess(const QString& command);
 		/** Executes the configured command.
 		 *  @param comm Which communication links should be established to the child process
 		 *  (stdin/stdout/stderr).

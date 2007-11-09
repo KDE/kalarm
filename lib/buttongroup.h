@@ -1,7 +1,7 @@
 /*
  *  buttongroup.h  -  QButtonGroup with an extra signal and Qt 2 compatibility
  *  Program:  kalarm
- *  Copyright (c) 2002, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004,2006 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ class ButtonGroup : public QButtonGroup
 		 *  @param parent The parent object of this widget.
 		 *  @param name The name of this widget.
 		 */
-		ButtonGroup(QWidget* parent, const char* name = 0);
+		explicit ButtonGroup(QWidget* parent, const char* name = 0);
 		/** Constructor.
 		 *  @param title The title displayed for this button group.
 		 *  @param parent The parent object of this widget.

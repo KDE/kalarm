@@ -1,7 +1,7 @@
 /*
  *  slider.cpp  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie  software@astrojar.org.uk
+ *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ void Slider::mousePressEvent(QMouseEvent* e)
 	if (mReadOnly)
 	{
 		// Swallow up the event if it's the left button
-		if (e->button() == LeftButton)
+		if (e->button() == Qt::LeftButton)
 			return;
 	}
 	QSlider::mousePressEvent(e);
