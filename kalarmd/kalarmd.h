@@ -22,10 +22,11 @@
 #define KALARMD_H
 
 
-#define DAEMON_VERSION       "5.1"              // kalarmd version number
-#define DAEMON_APP_NAME      "kalarmd"          // executable name of alarm daemon application
-#define DAEMON_DBUS_SERVICE  "org.kde.kalarm.kalarmd"  // D-Bus service name of alarm daemon application
-#define DAEMON_DBUS_OBJECT   "/daemon"          // object path of kalarmd's D-Bus interface
+#define DAEMON_VERSION            "5.1"         // kalarmd version number string
+#define DAEMON_VERSION_NUM        50100         // kalarmd version number integer
+#define DAEMON_APP_NAME           "kalarmd"     // executable name of alarm daemon application
+#define DAEMON_DBUS_SERVICE       "org.kde.kalarm.kalarmd"  // D-Bus service name of alarm daemon application
+#define DAEMON_DBUS_OBJECT        "/daemon"     // object path of kalarmd's D-Bus interface
 
 #define DAEMON_CHECK_INTERVAL     60            // the daemon checks calendar files every minute
 

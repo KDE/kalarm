@@ -195,10 +195,18 @@ bool Daemon::registerWith(bool reregister)
 {
 	if (mRegisterTimer)
 		return true;
-	if (mStatus == STOPPED  ||  mStatus == RUNNING)
-		return false;
-	if (mStatus == REGISTERED  &&  !reregister)
-		return true;
+	switch (mStatus)
+	{
+		case STOPPED:
+		case RUNNING:
+			return false;
+		case REGISTERED:
+			if (!reregister)
+				return true;
+			break;
+		case READY:
+			break;
+	}
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kDebug(5950) << (reregister ?"Daemon::reregisterWith():" :"Daemon::registerWith():") << (disabledIfStopped ?"NO_START" :"COMMAND_LINE");
@@ -229,50 +237,75 @@ bool Daemon::registerWith(bool reregister)
 /******************************************************************************
 * Called when the daemon has notified us of the result of the register() DCOP call.
 */
-void Daemon::registrationResult(bool reregister, int result)
+void Daemon::registrationResult(bool reregister, int result, int version)
 {
-	kDebug(5950) << "Daemon::registrationResult(" << reregister << ")";
+	kDebug(5950) << "Daemon::registrationResult(" << reregister << ") version:" << version;
 	delete mRegisterTimer;
 	mRegisterTimer = 0;
 	bool firstTime = !mInitialised;
 	mInitialised = true;
-	switch (result)
+	bool failed = false;
+	QString errmsg;
+	if (version  &&  version != DAEMON_VERSION_NUM)
 	{
-		case KAlarmd::SUCCESS:
-			break;
-		case KAlarmd::NOT_FOUND:
-			// We've successfully registered with the daemon, but the daemon can't
-			// find the KAlarm executable so won't be able to restart KAlarm if
-			// KAlarm exits.
-			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call:" << KGlobal::mainComponent().aboutData()->appName() << " not found";
-			KMessageBox::error(0, i18nc("@info", "Alarms will be disabled if you stop <application>KAlarm</application>.<br />"
-			                           "(Installation or configuration error: <command>%1</command> cannot locate <command>%2</command> executable.)",
-			                            QLatin1String(DAEMON_APP_NAME),
-			                            KGlobal::mainComponent().aboutData()->appName()));
-			break;
-		case KAlarmd::FAILURE:
-		default:
-			kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call failed ->" << result;
-			if (!reregister)
-			{
-				if (mStatus == REGISTERED)
-					setStatus(READY);
-				if (!mRegisterFailMsg)
+		failed = true;
+		errmsg = i18nc("@info", "Cannot enable alarms.<br />Installation or configuration error: "
+		               "<application>Alarm Daemon</application> (<command>%1</command>) version is incompatible.",
+		               QLatin1String(DAEMON_APP_NAME));
+	}
+	else
+	{
+		switch (result)
+		{
+			case KAlarmd::SUCCESS:
+				break;
+			case KAlarmd::NOT_FOUND:
+				// We've successfully registered with the daemon, but the daemon can't
+				// find the KAlarm executable so won't be able to restart KAlarm if
+				// KAlarm exits.
+				kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call:" << KGlobal::mainComponent().aboutData()->appName() << " not found";
+				KMessageBox::error(0, i18nc("@info", "Alarms will be disabled if you stop <application>KAlarm</application>.<br />"
+				                           "(Installation or configuration error: <command>%1</command> cannot locate <command>%2</command> executable.)",
+				                            QLatin1String(DAEMON_APP_NAME),
+				                            KGlobal::mainComponent().aboutData()->appName()));
+				break;
+			case KAlarmd::FAILURE:
+			default:
+				// Either the daemon reported an error in the registration D-Bus call,
+				// there was a D-Bus error calling the daemon, or a timeout on the reply.
+				kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call failed ->" << result;
+				failed = true;
+				if (!reregister)
 				{
-					mRegisterFailMsg = true;
-					KMessageBox::error(0, i18nc("@info", "Cannot enable alarms:<br />"
-					                            "Failed to register with <application>Alarm Daemon</application> (<command>%1</command>)",
-					                            QLatin1String(DAEMON_APP_NAME)));
+					errmsg = i18nc("@info", "Cannot enable alarms:<br />"
+					               "Failed to register with <application>Alarm Daemon</application> (<command>%1</command>)"
+					               "(Possible installation or configuration error)",
+					               QLatin1String(DAEMON_APP_NAME));
 				}
-			}
-			if (firstTime)
+				break;
+		}
+	}
+
+	if (failed)
+	{
+		if (!errmsg.isEmpty())
+		{
+			if (mStatus == REGISTERED)
+				setStatus(READY);
+			if (!mRegisterFailMsg)
 			{
-				// This is the first time we've tried to register with the
-				// daemon, so notify the result. On success, setStatus() does the
-				// notification, but we need to do it manually here on failure.
-				emit mInstance->registered(false);
+				mRegisterFailMsg = true;
+				KMessageBox::error(0, errmsg);
 			}
-			return;
+		}
+		if (firstTime)
+		{
+			// This is the first time we've tried to register with the
+			// daemon, so notify the result. On success, setStatus() does the
+			// notification, but we need to do it manually here on failure.
+			emit mInstance->registered(false);
+		}
+		return;
 	}
 
 	if (!reregister)
@@ -786,9 +819,9 @@ void NotificationHandler::handleEvent(const QString& eventId)
 * D-Bus call from the alarm daemon to notify the success or failure of a
 * registration request from KAlarm.
 */
-void NotificationHandler::registered(bool reregister, int result)
+void NotificationHandler::registered(bool reregister, int result, int version)
 {
-	Daemon::registrationResult(reregister, result);
+	Daemon::registrationResult(reregister, result, version);
 }
 
 /******************************************************************************

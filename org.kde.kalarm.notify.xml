@@ -13,6 +13,7 @@
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>
       <arg name="reregister" type="b" direction="in"/>
       <arg name="result" type="i" direction="in"/>
+      <arg name="version" type="i" direction="in"/>
     </method>
     <method name="cacheDownloaded">
       <annotation name="org.freedesktop.DBus.Method.NoReply" value="true"/>

@@ -451,7 +451,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 	// Notify the client of whether the call succeeded.
 	if (kalarmNotifyDBus())
 	{
-		kalarmNotifyDBus()->call("registered", false, result);
+		kalarmNotifyDBus()->call("registered", false, result, DAEMON_VERSION_NUM);
 		checkDBusResult("registered");
 	}
 	kDebug(5900) << "AlarmDaemon::registerApp() ->" << result;
