@@ -1939,7 +1939,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 		type = NO_OCCURRENCE;
 	}
 
-	if (type != NO_OCCURRENCE  &&  result <= preDateTime)
+	if (type != NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != IGNORE_REPETITION)
 	{
 		// The next occurrence is a simple repetition
 		int repetition = result.secsTo(preDateTime) / repeatSecs + 1;
@@ -2042,9 +2042,9 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
  * Set the date/time of the event to the next scheduled occurrence after the
  * specified date/time, provided that this is later than its current date/time.
  * Any reminder alarm is adjusted accordingly.
- * If 'includeRepetitions' is true and the alarm has a simple repetition, and
- * a repetition of a previous recurrence occurs after the specified date/time,
- * that repetition is set as the next occurrence.
+ * If the alarm has a simple repetition, and a repetition of a previous
+ * recurrence occurs after the specified date/time, that repetition is set as
+ * the next occurrence.
  */
 KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime)
 {
