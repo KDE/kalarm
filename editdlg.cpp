@@ -1254,6 +1254,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 	}
 	if (!trial)
 	{
+		if (mSimpleRepetition->count())
+			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event, !mTemplate);
@@ -1287,8 +1289,6 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 					event.defer(mDeferDateTime, deferReminder, false);
 			}
 		}
-		if (mSimpleRepetition->count())
-			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mTemplate)
 		{
 			int afterTime = mTemplateDefaultTime->isOn() ? 0
