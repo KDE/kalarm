@@ -1,7 +1,7 @@
 /*
  *  dateedit.h  -  date entry widget
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -77,10 +77,9 @@ class DateEdit : public KPIM::KDateEdit
 		virtual void mouseMoveEvent(QMouseEvent*);
 		virtual void keyPressEvent(QKeyEvent*);
 		virtual void keyReleaseEvent(QKeyEvent*);
-		/** Checks whether @p date lies within the allowed range of values.
-		 *  If so, sets the new value. If not, an error message is displayed.
-		 */
-		virtual bool assignDate(const QDate& date);
+
+	private slots:
+		void         newDateEntered(const QDate&);
 
 	private:
 		void         pastLimitMessage(const QDate& limit, const QString& error, const KLocalizedString& defaultError);

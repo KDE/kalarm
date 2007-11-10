@@ -63,6 +63,17 @@ static const char* KALARM_DBUS_SERVICE   = "org.kde.kalarm";
 static const char* NOTIFY_DBUS_OBJECT    = "/notify";    // D-Bus object path of KAlarm's notification interface
 static const char* NOTIFY_DBUS_INTERFACE = "org.kde.kalarm.notify";
 
+// KAlarm config file keys
+static const char* TIMEZONE       = "TimeZone";
+static const char* START_OF_DAY   = "StartOfDay";
+static const char* WORK_DAY_START = "WorkDayStart";
+static const char* WORK_DAY_END   = "WorkDayEnd";
+
+// Event properties
+static const QByteArray NEXT_RECUR_PROPERTY("NEXTRECUR");     // X-KDE-KALARM-NEXTRECUR property
+static const QByteArray FLAGS_PROPERTY("FLAGS");              // X-KDE-KALARM-FLAGS property
+static const QString DATE_ONLY_FLAG(QLatin1String("DATE"));
+static const QString WORK_TIME_ONLY_FLAG(QLatin1String("WORKTIME"));
 
 AlarmDaemon::EventsMap  AlarmDaemon::mEventsHandled;
 AlarmDaemon::EventsMap  AlarmDaemon::mEventsPending;
@@ -82,6 +93,8 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	AlarmDaemon::readConfig();
 	enableAutoStart(true);    // switch autostart on whenever the program is run
 
+	readKAlarmConfig();       // read time-related KAlarm config items
+
 	/* Open the alarm resources, ignoring archived alarms and alarm templates.
 	 * The alarm daemon is responsible for downloading remote resources (i.e. for updating
 	 * their cache files), while KAlarm simply loads them from cache. This prevents useless
@@ -90,7 +103,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	 * config file.
 	 */
 	AlarmResources::setDebugArea(5902);
-	AlarmResources* resources = AlarmResources::create(timeSpec(), true, true);
+	AlarmResources* resources = AlarmResources::create(mTimeSpec, true, true);
 	resources->setNoGui(true);           // don't try to display messages, or we'll crash
 	// The daemon is responsible for loading calendars (including downloading to cache for remote
 	// resources), while KAlarm is responsible for all updates.
@@ -98,10 +111,6 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 	connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(resourceLoaded(AlarmResource*)));
 	resources->load();
 	connect(resources, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(cacheDownloaded(AlarmResource*)));
-
-	KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
-	const KConfigGroup group = kaconfig.group("General");
-	mStartOfDay = group.readEntry(QString::fromLatin1("StartOfDay"), QDateTime(QDate(1900,1,1), QTime())).time();
 
 #ifdef AUTOSTART_KALARM
 	if (autostart)
@@ -116,6 +125,8 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 		 * come in the wrong order, KAlarm won't know that it is supposed to restore
 		 * itself and instead will simply open a new window.
 		 */
+		KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
+		const KConfigGroup group = kaconfig.group("General");
 		autostart = group.readEntry("AutostartTray", false);
 		if (autostart)
 		{
@@ -374,11 +385,9 @@ void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 *      a hang if the daemon happens to send a notification to KAlarm at the
 *      same time as KAlarm calls this D-Bus method.
 */
-void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient, int startDayMinute)
+void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient)
 {
 	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << "," << serviceName << "," <<  dbusObject << "," << startClient << ")";
-	if (startDayMinute >= 0  &&  startDayMinute < 24*60)
-		mStartOfDay = QTime(startDayMinute / 60, startDayMinute % 60);
 	registerApp(appName, serviceName, dbusObject, startClient, true);
 }
 
@@ -442,7 +451,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 	// Notify the client of whether the call succeeded.
 	if (kalarmNotifyDBus())
 	{
-		kalarmNotifyDBus()->call("registered", false, result);
+		kalarmNotifyDBus()->call("registered", false, result, DAEMON_VERSION_NUM);
 		checkDBusResult("registered");
 	}
 	kDebug(5900) << "AlarmDaemon::registerApp() ->" << result;
@@ -453,25 +462,13 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 */
 void AlarmDaemon::enableAutoStart(bool on, bool sync)
 {
-        kDebug(5900) << "AlarmDaemon::enableAutoStart(" << on << ")";
-        KSharedConfig::Ptr config = KGlobal::config();
+	kDebug(5900) << "AlarmDaemon::enableAutoStart(" << on << ")";
+	KSharedConfig::Ptr config = KGlobal::config();
 	config->reparseConfiguration();
 	KConfigGroup group(config, DAEMON_AUTOSTART_SECTION);
-        group.writeEntry(DAEMON_AUTOSTART_KEY, on);
+	group.writeEntry(DAEMON_AUTOSTART_KEY, on);
 	if (sync)
 		config->sync();
-}
-
-/******************************************************************************
-* D-Bus call to set the start-of-day time for date-only alarms.
-*/
-void AlarmDaemon::setStartOfDay(int startDayMinute)
-{
-	int h = startDayMinute / 60;
-	int m = startDayMinute % 60;
-	kDebug(5900) << "AlarmDaemon::setStartOfDay(" << h << ":" << m << ")";
-	if (startDayMinute >= 0  &&  startDayMinute < 24*60)
-		mStartOfDay = QTime(h, m);
 }
 
 /******************************************************************************
@@ -515,12 +512,15 @@ void AlarmDaemon::checkAlarms()
 	if (!mEnabled  ||  !resources->loadedState(AlarmResource::ACTIVE))
 		return;
 
-	KDateTime now  = KDateTime::currentUtcDateTime();
-	KDateTime now1 = now.addSecs(1);
+	KDateTime now = KDateTime::currentUtcDateTime();
 	kDebug(5901) << "  To:" << now;
 	QList<KCal::Alarm*> alarms = resources->alarmsTo(now);
 	if (alarms.isEmpty())
 		return;
+#ifdef USE_TZ
+	QTime nowTime;    // 'now' in default KAlarm time zone
+	bool  nowTimeValid = false;
+#endif
 	QList<KCal::Event*> eventsDone;
 	for (int i = 0, end = alarms.count();  i < end;  ++i)
 	{
@@ -535,13 +535,14 @@ void AlarmDaemon::checkAlarms()
 		// The times in 'alarmtimes' corresponding to due alarms are set.
 		// The times for non-due alarms are set invalid in 'alarmtimes'.
 		bool recurs = event->recurs();
-		QStringList flags = event->customProperty("KALARM", "FLAGS").split(QLatin1Char(';'), QString::SkipEmptyParts);
-		bool floats = flags.contains(QString::fromLatin1("DATE"));
+		QStringList flags = event->customProperty("KALARM", FLAGS_PROPERTY).split(QLatin1Char(';'), QString::SkipEmptyParts);
+		bool floats = flags.contains(DATE_ONLY_FLAG);
+		bool workfloats = floats && flags.contains(WORK_TIME_ONLY_FLAG);
 		KDateTime nextDateTime = event->dtStart();
 		nextDateTime.setDateOnly(floats);
 		if (recurs)
 		{
-			QString prop = event->customProperty("KALARM", "NEXTRECUR");
+			QString prop = event->customProperty("KALARM", NEXT_RECUR_PROPERTY);
 			if (prop.length() >= 8)
 			{
 				// The next due recurrence time is specified
@@ -593,6 +594,7 @@ void AlarmDaemon::checkAlarms()
 					dt.setTime(mStartOfDay);
 				if (dt <= now  &&  alarm->repeatCount() > 0)
 				{
+					// Note that repetitions of date-only alarms are date-only
 					int snoozeSecs = alarm->snoozeTime() * 60;
 					int repetition = dt.secsTo_long(now) / snoozeSecs;
 					if (repetition > alarm->repeatCount())
@@ -604,6 +606,23 @@ void AlarmDaemon::checkAlarms()
 				if (!dt.isValid()  ||  dt > now
 				||  dt1.isValid()  &&  dt1 > dt)  // already tested dt1 <= now
 					dt = dt1;
+			}
+			if (workfloats  &&  dt.isValid())
+			{
+				// It's a date-only alarm, and it is restricted to working hours.
+				// Suppress it until we're inside working hours.
+#ifdef USE_TZ
+				if (!nowTimeValid)
+				{
+					nowTime = now.toTimeSpec(mTimeSpec).time();
+					nowTimeValid = true;
+				}
+				if (nowTime < mWorkDayStart  ||  nowTime >= mWorkDayEnd)
+					dt = KDateTime();
+#else
+				if (now.time() < mWorkDayStart  ||  now.time() >= mWorkDayEnd)
+					dt = KDateTime();
+#endif
 			}
 			alarmtimes.append(dt);
 		}
@@ -668,9 +687,9 @@ void AlarmDaemon::setTimerStatus()
 #ifdef AUTOSTART_KALARM
 	if (mAutoStarting)
 		return;
-        if (!mAlarmTimer)
-        {
-                // KAlarm is now running, so start monitoring alarms
+	if (!mAlarmTimer)
+	{
+		// KAlarm is now running, so start monitoring alarms
 		startMonitoring();
 		return;    // startMonitoring() calls this method
 	}
@@ -839,24 +858,32 @@ void AlarmDaemon::readConfig()
 	}
 
 	// Remove obsolete CheckInterval entry (if it exists)
-        config.changeGroup("General");
-	config.deleteEntry("CheckInterval");
-	config.sync();
+	KConfigGroup configg(KGlobal::config(), "General");
+	configg.deleteEntry("CheckInterval");
+	configg.sync();
 }
 
 /******************************************************************************
-* Read the timezone to use. Try to read it from KAlarm's config file. If the
-* entry there is blank, use local clock time.
+* Read all relevant items from KAlarm config.
+* Executed on DCOP call to notify a time related value change in the KAlarm
+* config file.
 */
-KDateTime::Spec AlarmDaemon::timeSpec()
+void AlarmDaemon::readKAlarmConfig()
 {
-	KConfig kaconfig(KStandardDirs::locate("config", "kalarmrc"));
-	const KConfigGroup group = kaconfig.group("General");
-	QString zone = group.readEntry("Timezone", QString());
+	kDebug(5900) << "AlarmDaemon::readKAlarmConfig()";
+	KConfig config(KStandardDirs::locate("config", "kalarmrc"));
+	const KConfigGroup group = config.group("General");
+	QString zone = group.readEntry(TIMEZONE, QString());
 	if (zone.isEmpty())
-		return KDateTime::ClockTime;
-	KTimeZone tz = KSystemTimeZones::zone(zone);
-	return tz.isValid() ? tz : KSystemTimeZones::local();
+		mTimeSpec = KDateTime::ClockTime;
+	else
+	{
+		KTimeZone tz = KSystemTimeZones::zone(zone);
+		mTimeSpec = tz.isValid() ? tz : KSystemTimeZones::local();
+	}
+	mStartOfDay   = group.readEntry(START_OF_DAY, QDateTime()).time();
+	mWorkDayStart = group.readEntry(WORK_DAY_START, QDateTime(QDate(1900,1,1), mStartOfDay)).time();
+	mWorkDayEnd   = group.readEntry(WORK_DAY_END, QDateTime(QDate(1900,1,1), mWorkDayStart)).time();
 }
 
 /******************************************************************************

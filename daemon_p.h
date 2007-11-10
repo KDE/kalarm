@@ -38,7 +38,7 @@ class NotificationHandler : public QObject
 		// D-Bus interface
 		void alarmDaemonUpdate(int calendarStatus);
 		void handleEvent(const QString& eventID);
-		void registered(bool reregister, int result);
+		void registered(bool reregister, int result, int version);
 		void cacheDownloaded(const QString& resourceID);
 };
 

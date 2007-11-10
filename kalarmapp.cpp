@@ -401,7 +401,7 @@ int KAlarmApp::newInstance()
 				}
 				else if (args->isSet("exec-display"))
 				{
-					kDebug(5950)<<"KAlarmApp::newInstance(): exec-display\n";
+					kDebug(5950) << "KAlarmApp::newInstance(): exec-display";
 					if (args->isSet("exec"))
 						USAGE(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--exec"), QLatin1String("--exec-display")))
 					if (args->isSet("mail"))
@@ -1057,7 +1057,7 @@ void KAlarmApp::slotPreferencesChanged()
 	{
 		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by Daemon::reregister()
 		Preferences::setQuitWarn(true);   // since mode has changed, re-allow warning messages on Quit
-		Daemon::reregister();           // re-register with the alarm daemon
+		Daemon::reregister();             // re-register with the alarm daemon
 	}
 
 	// Change alarm times for date-only alarms if the start of day time has changed
@@ -1073,7 +1073,6 @@ void KAlarmApp::slotPreferencesChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
-	Daemon::setStartOfDay();   // tell the alarm daemon the new time
 	QTime sod = Preferences::startOfDay();
 	DateTime::setStartOfDay(sod);
 	AlarmCalendar* cal = AlarmCalendar::resources();
@@ -1235,9 +1234,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_TRIGGER:    // handle it if it's due, else execute it regardless
 		case EVENT_HANDLE:     // handle it if it's due
 		{
-#ifdef __GNUC__
-#warning Archived alarms are sometimes treated as active
-#endif
 			KDateTime now = KDateTime::currentUtcDateTime();
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
@@ -1258,7 +1254,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					||  nextDT > now.toTimeSpec(KDateTime::ClockTime))
 					{
 						// This alarm is definitely not due yet
-						kDebug(5950) << "KAlarmApp::handleEvent(): alarm" << alarm.type() << ": not due";
+						kDebug(5950) << "KAlarmApp::handleEvent(): alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not due";
 						continue;
 					}
 				}
@@ -1268,12 +1264,16 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					// The alarm is restricted to working hours (apart from reminders and
 					// deferrals). This needs to be re-evaluated every time it triggers,
 					// since working hours could change.
-#ifdef __GNUC__
-#warning What if date-only?
-#endif
-					reschedule = !KAlarm::isWorkingTime(nextDT);
+					if (alarm.dateTime().isDateOnly())
+					{
+						KDateTime dt(nextDT);
+						dt.setDateOnly(true);
+						reschedule = !KAlarm::isWorkingTime(dt);
+					}
+					else
+						reschedule = !KAlarm::isWorkingTime(nextDT);
 					if (reschedule)
-						kDebug(5950) << "KAlarmApp::handleEvent(): not during working hours";
+						kDebug(5950) << "KAlarmApp::handleEvent(): alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours";
 				}
 				if (!reschedule  &&  alarm.repeatAtLogin())
 				{

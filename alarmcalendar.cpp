@@ -842,7 +842,7 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 Event* AlarmCalendar::createKCalEvent(const KAEvent& ev, const QString& baseID, bool original, bool cancelCancelledDefer) const
 {
 	if (mCalType != RESOURCES)
-		kFatal(5950) <<"AlarmCalendar::createKCalEvent(KAEvent): invalid for display calendar";
+		kFatal(5950) << "AlarmCalendar::createKCalEvent(KAEvent): invalid for display calendar";
 	// If the event exists in the calendar, we want to keep any custom
 	// properties. So copy the calendar KCal::Event to base the new one on.
 	QString id = baseID.isEmpty() ? ev.id() : baseID;

@@ -52,7 +52,6 @@ class Daemon : public QObject
 		static bool      stop();
 		static bool      autoStart();
 		static void      enableAutoStart(bool enable);
-		static void      setStartOfDay();
 		static void      setAlarmsEnabled()      { mInstance->setAlarmsEnabled(true); }
 		static void      checkStatus()           { checkIfRunning(); }
 		static bool      monitoringAlarms();
@@ -71,6 +70,7 @@ class Daemon : public QObject
 		void             daemonRunning(bool running);
 
 	private slots:
+		void             notifyTimeChanged();
 		void             slotResourceSaved(AlarmResource*);
 		void             slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 		void             checkIfStarted();
@@ -91,7 +91,7 @@ class Daemon : public QObject
 		};
 		Daemon() { }
 		static bool      registerWith(bool reregister);
-		static void      registrationResult(bool reregister, int result);
+		static void      registrationResult(bool reregister, int result, int version = 0);
 		static void      reload();
 		static void      notifyEventHandled(const QString& eventID, bool reloadCal);
 		static void      updateRegisteredStatus(bool timeout = false);

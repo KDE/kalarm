@@ -50,7 +50,7 @@ class AlarmTimeWidget : public QFrame
 		void             setMinDateTime(const KDateTime& = KDateTime());
 		void             setMaxDateTime(const DateTime& = DateTime());
 		const KDateTime& maxDateTime() const           { return mMaxDateTime; }
-		KDateTime::Spec  timeSpec() const;
+		KDateTime::Spec  timeSpec() const              { return mTimeSpec; }
 		void             setReadOnly(bool);
 		bool             anyTime() const               { return mAnyTime; }
 		void             enableAnyTime(bool enable);
@@ -65,11 +65,12 @@ class AlarmTimeWidget : public QFrame
 		void             pastMax();
 
 	protected slots:
-		void             slotTimer();
+		void             updateTimes();
 		void             slotButtonSet(QAbstractButton*);
-		void             slotAnyTimeToggled(bool);
 		void             dateTimeChanged();
 		void             delayTimeChanged(int);
+		void             slotAnyTimeToggled(bool);
+		void             slotTimeZoneChanged();
 		void             slotTimeZoneToggled(bool);
 
 	private:
@@ -89,7 +90,7 @@ class AlarmTimeWidget : public QFrame
 		TimeZoneCombo*   mTimeZone;
 		KDateTime        mMinDateTime;      // earliest allowed date/time
 		KDateTime        mMaxDateTime;      // latest allowed date/time
-		KDateTime::Spec  mTimeSpec;         // time spec used (if time zone selector widget not shown)
+		KDateTime::Spec  mTimeSpec;         // time spec used
 		int              mAnyTime;          // 0 = date/time is specified, 1 = only a date, -1 = uninitialised
 		bool             mAnyTimeAllowed;   // 'mAnyTimeCheckBox' is enabled
 		bool             mDeferring;        // being used to enter a deferral time

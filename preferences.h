@@ -86,10 +86,12 @@ class Preferences : public PreferencesBase
 
 
 	signals:
+		void  timeZoneChanged(const KTimeZone& newTz);
 		void  startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
 		void  workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
 	private slots:
+		void  timeZoneChange(const QString&);
 		void  startDayChange(const QDateTime&);
 		void  workTimeChange(const QDateTime&, const QDateTime&, int days);
 
