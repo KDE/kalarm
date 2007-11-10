@@ -924,16 +924,10 @@ void KAEvent::adjustStartDate(const QDate& d)
  * Return the time of the next scheduled occurrence of the event.
  * Reminders and deferred reminders can optionally be ignored.
  */
-DateTime KAEvent::nextDateTime(bool includeReminders) const
+DateTime KAEvent::displayDateTime() const
 {
-	if (includeReminders  &&  mReminderMinutes)
-	{
-		if (!mReminderOnceOnly  ||  mNextMainDateTime == mStartDateTime)
-			return mNextMainDateTime.addSecs(-mReminderMinutes * 60);
-	}
 	DateTime dt = mainDateTime(true);
-	if (mDeferral > 0
-	&&  (includeReminders  ||  mDeferral != REMINDER_DEFERRAL))
+	if (mDeferral > 0  &&  mDeferral != REMINDER_DEFERRAL)
 	{
 		if (mMainExpired)
 			return mDeferralTime;

@@ -397,7 +397,7 @@ class KAEvent : public KAAlarmEventBase
 		DateTime           deferDateTime() const          { return mDeferralTime; }
 		DateTime           deferralLimit(DeferLimitType* = 0) const;
 		int                deferDefaultMinutes() const    { return mDeferDefaultMinutes; }
-		DateTime           nextDateTime(bool includeReminders = true) const;
+		DateTime           displayDateTime() const;
 		const QString&     messageFileOrCommand() const   { return mText; }
 		QString            logFile() const                { return mLogFile; }
 		bool               commandXterm() const           { return mCommandXterm; }
