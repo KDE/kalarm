@@ -85,7 +85,7 @@ for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event"<<(void*)mEvents[x];
 	{
 		mTextIcon    = new QPixmap(SmallIcon("text"));
 		mFileIcon    = new QPixmap(SmallIcon("document-open"));
-		mCommandIcon = new QPixmap(SmallIcon("exec"));
+		mCommandIcon = new QPixmap(SmallIcon("system-run"));
 		mEmailIcon   = new QPixmap(SmallIcon("mail"));
 		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
 	}
