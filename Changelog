@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.4.19 --- 10 November 2007 ===
+=== Version 1.4.19 --- 11 November 2007 ===
+Fix KAlarm hanging especially on startup, and freezing the system for a while.
 Fix next occurrence time set after editing alarm, when it's a sub-repetition.
 Prevent error messages while typing date value, until user finishes entering it.
 
