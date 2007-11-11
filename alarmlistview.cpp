@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of outstanding alarms
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -421,7 +421,7 @@ AlarmListViewItem::AlarmListViewItem(AlarmListView* parent, const KAEvent& event
 {
 	setLastColumnText();     // set the message column text
 
-	DateTime dateTime = event.expired() ? event.startDateTime() : event.nextDateTime(false);
+	DateTime dateTime = event.expired() ? event.startDateTime() : event.displayDateTime();
 	if (parent->column(AlarmListView::TIME_COLUMN) >= 0)
 		setText(parent->column(AlarmListView::TIME_COLUMN), alarmTimeText(dateTime));
 	if (parent->column(AlarmListView::TIME_TO_COLUMN) >= 0)
@@ -527,7 +527,7 @@ QString AlarmListViewItem::timeToAlarmText(const QDateTime& now) const
 {
 	if (event().expired())
 		return QString::null;
-	DateTime dateTime = event().nextDateTime(false);
+	DateTime dateTime = event().displayDateTime();
 	if (dateTime.isDateOnly())
 	{
 		int days = now.date().daysTo(dateTime.date());

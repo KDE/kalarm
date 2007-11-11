@@ -1254,9 +1254,20 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 	}
 	if (!trial)
 	{
+		if (mSimpleRepetition->count())
+			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event, !mTemplate);
+			QDateTime now = QDateTime::currentDateTime();
+			bool dateOnly = mAlarmDateTime.isDateOnly();
+			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
+			||  !dateOnly  &&  mAlarmDateTime.rawDateTime() < now)
+			{
+				// A timed recurrence has an entered start date which has
+				// already expired, so we must adjust the next repetition.
+				event.setNextOccurrence(now);
+			}
 			mAlarmDateTime = event.startDateTime();
 			if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
 			{
@@ -1278,8 +1289,6 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 					event.defer(mDeferDateTime, deferReminder, false);
 			}
 		}
-		if (mSimpleRepetition->count())
-			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mTemplate)
 		{
 			int afterTime = mTemplateDefaultTime->isOn() ? 0
