@@ -182,7 +182,6 @@ void KAEvent::copy(const KAEvent& event)
 	mArchiveReminderMinutes  = event.mArchiveReminderMinutes;
 	mDeferDefaultMinutes     = event.mDeferDefaultMinutes;
 	mRevision                = event.mRevision;
-	mRemainingRecurrences    = event.mRemainingRecurrences;
 	mAlarmCount              = event.mAlarmCount;
 	mDeferral                = event.mDeferral;
 	mLogFile                 = event.mLogFile;
@@ -2396,10 +2395,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 	OccurType type;
 	bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
 	if (recurs)
-	{
-		int remainingCount;
-		type = nextRecurrence(pre, result, remainingCount);
-	}
+		type = nextRecurrence(pre, result);
 	else if (pre < mNextMainDateTime.effectiveKDateTime())
 	{
 		result = mNextMainDateTime;
@@ -2531,16 +2527,13 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
 	}
 	else if (checkRecur() != KARecurrence::NO_RECUR)
 	{
-		int remainingCount;
-		type = nextRecurrence(pre, dt, remainingCount);
+		type = nextRecurrence(pre, dt);
 		if (type == NO_OCCURRENCE)
 			return NO_OCCURRENCE;
 		if (type != FIRST_OR_ONLY_OCCURRENCE  &&  dt != mNextMainDateTime)
 		{
 			// Need to reschedule the next trigger date/time
 			mNextMainDateTime = dt;
-			if (mRecurrence->duration() > 0)
-				mRemainingRecurrences = remainingCount;
 			// Reinstate the reminder (if any) for the rescheduled recurrence
 			if (mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
 			{
@@ -2589,9 +2582,8 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
  * Get the date/time of the next recurrence of the event, after the specified
  * date/time.
  * 'result' = date/time of next occurrence, or invalid date/time if none.
- * 'remainingCount' = number of repetitions due, including the next occurrence.
  */
-KAEvent::OccurType KAEvent::nextRecurrence(const KDateTime& preDateTime, DateTime& result, int& remainingCount) const
+KAEvent::OccurType KAEvent::nextRecurrence(const KDateTime& preDateTime, DateTime& result) const
 {
 	KDateTime recurStart = mRecurrence->startDateTime();
 	KDateTime pre = preDateTime;
@@ -2600,19 +2592,14 @@ KAEvent::OccurType KAEvent::nextRecurrence(const KDateTime& preDateTime, DateTim
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 		pre.setTime(Preferences::startOfDay());
 	}
-	remainingCount = 0;
 	KDateTime dt = mRecurrence->getNextDateTime(pre);
 	result = dt;
 	result.setDateOnly(mStartDateTime.isDateOnly());
 	if (!dt.isValid())
 		return NO_OCCURRENCE;
 	if (dt == recurStart)
-	{
-		remainingCount = mRecurrence->duration();
 		return FIRST_OR_ONLY_OCCURRENCE;
-	}
-	remainingCount = mRecurrence->duration() - mRecurrence->durationTo(dt) + 1;
-	if (remainingCount == 1)
+	if (mRecurrence->duration() >= 0  &&  dt == mRecurrence->endDateTime())
 		return LAST_RECURRENCE;
 	return result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
@@ -2708,9 +2695,8 @@ void KAEvent::setFirstRecurrence()
 	// Set the frequency to 1 to find the first possible occurrence
 	int frequency = mRecurrence->frequency();
 	mRecurrence->setFrequency(1);
-	int remainingCount;
 	DateTime next;
-	nextRecurrence(mNextMainDateTime.effectiveKDateTime(), next, remainingCount);
+	nextRecurrence(mNextMainDateTime.effectiveKDateTime(), next);
 	if (!next.isValid())
 		mRecurrence->setStartDateTime(recurStart);   // reinstate the old value
 	else
@@ -2735,15 +2721,9 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 		mRecurrence = new KARecurrence(recurrence);
 		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
 		mRecurrence->setAllDay(mStartDateTime.isDateOnly());
-		mRemainingRecurrences = mMainExpired ? 0 : mRecurrence->duration();
-		if (mRemainingRecurrences > 0  &&  !isTemplate())
-			mRemainingRecurrences -= mRecurrence->durationTo(mNextMainDateTime.effectiveKDateTime()) - 1;
 	}
 	else
-	{
 		mRecurrence = 0;
-		mRemainingRecurrences = 0;
-	}
 
 	// Adjust sub-repetition values to fit the recurrence
 	setRepetition(mRepeatInterval, mRepeatCount);
@@ -2953,7 +2933,6 @@ bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count
 		if (mRecurrence->init(recurType, freq, count, mNextMainDateTime.kDateTime(), end, feb29))
 		{
 			mUpdated = true;
-			mRemainingRecurrences = count;
 			return true;
 		}
 	}
@@ -2969,7 +2948,6 @@ void KAEvent::clearRecur()
 	mUpdated = true;
 	delete mRecurrence;
 	mRecurrence = 0;
-	mRemainingRecurrences = 0;
 }
 
 /******************************************************************************
@@ -3725,8 +3703,6 @@ void KAEvent::dumpDebug() const
 	}
 	kDebug(5950) << "-- mRevision:" << mRevision;
 	kDebug(5950) << "-- mRecurrence:" << (mRecurrence ?"true" :"false");
-	if (mRecurrence)
-		kDebug(5950) << "-- mRemainingRecurrences:" << mRemainingRecurrences;
 	kDebug(5950) << "-- mAlarmCount:" << mAlarmCount;
 	kDebug(5950) << "-- mMainExpired:" << (mMainExpired ?"true" :"false");
 	kDebug(5950) << "KAEvent dump end";

@@ -404,7 +404,6 @@ class KAEvent : public KAAlarmEventBase
 		int                longestRecurrenceInterval() const    { return mRecurrence ? mRecurrence->longestInterval() : 0; }
 		QString            recurrenceText(bool brief = false) const;
 		QString            repetitionText(bool brief = false) const;
-		int                remainingRecurrences() const   { return mRemainingRecurrences; }
 		bool               occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const;
 		OccurType          nextOccurrence(const KDateTime& preDateTime, DateTime& result, OccurOption = IGNORE_REPETITION) const;
 		OccurType          previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
@@ -459,7 +458,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, Preferences::Feb29Type = Preferences::Feb29_None);
 		void               clearRecur();
 		KARecurrence::Type checkRecur() const;
-		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result, int& remainingCount) const;
+		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result) const;
 		OccurType          previousRecurrence(const KDateTime& afterDateTime, DateTime& result) const;
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
@@ -486,7 +485,6 @@ class KAEvent : public KAAlarmEventBase
 		int                mDeferDefaultMinutes; // default number of minutes for deferral dialog, or 0 to select time control
 		int                mRevision;         // SEQUENCE: revision number of the original alarm, or 0
 		KARecurrence*      mRecurrence;       // RECUR: recurrence specification, or 0 if none
-		int                mRemainingRecurrences; // remaining number of alarm recurrences including initial time, -1 to repeat indefinitely
 		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
 		DeferType          mDeferral;         // whether the alarm is an extra deferred/deferred-reminder alarm
 		unsigned long      mKMailSerialNumber;// if email text, message's KMail serial number
