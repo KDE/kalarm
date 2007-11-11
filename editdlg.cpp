@@ -660,6 +660,15 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event, !mTemplate);
+			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
+			bool dateOnly = mAlarmDateTime.isDateOnly();
+			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
+			||  !dateOnly  &&  mAlarmDateTime.kDateTime() < now)
+			{
+				// A timed recurrence has an entered start date which has
+				// already expired, so we must adjust the next repetition.
+				event.setNextOccurrence(now);
+			}
 			mAlarmDateTime = event.startDateTime();
 			if (mDeferDateTime.isValid()  &&  mDeferDateTime < mAlarmDateTime)
 			{
@@ -813,14 +822,11 @@ bool EditAlarmDlg::validate()
 			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 			bool dateOnly = mAlarmDateTime.isDateOnly();
 			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
-			||  !dateOnly  &&  mAlarmDateTime.rawDateTime() < now.dateTime())
+			||  !dateOnly  &&  mAlarmDateTime.kDateTime() < now)
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
-				dateOnly = mAlarmDateTime.isDateOnly();
-				if ((dateOnly  &&  mAlarmDateTime.date() < now.date()
-				     || !dateOnly  &&  mAlarmDateTime.rawDateTime() < now.dateTime())
-				&&  event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
+				if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
 					return false;

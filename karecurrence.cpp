@@ -707,8 +707,9 @@ int KARecurrence::longestInterval() const
 			if (days.isEmpty())
 				return freq * 1440;
 
-			// It recurs only on certain days of the week, so the maximum interval
-			// will be greater than the frequency.
+			// After applying the frequency, the specified days of the week
+			// further restrict when the recurrence occurs.
+			// So the maximum interval will be greater than the frequency.
 			bool ds[7] = { false, false, false, false, false, false, false };
 			for (int i = 0, end = days.count();  i < end;  ++i)
 				if (days[i].pos() == 0)
@@ -813,6 +814,73 @@ int KARecurrence::longestInterval() const
 			break;
 	}
 	return 0;
+}
+
+/******************************************************************************
+* Return the interval in minutes between recurrences, if the interval between
+* successive occurrences does not vary.
+* Reply = 0 if recurrence does not occur at fixed intervals.
+*/
+int KARecurrence::regularInterval() const
+{
+	int freq = frequency();
+	switch (type())
+	{
+		case MINUTELY:
+			return freq;
+		case DAILY:
+		{
+			QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
+			if (days.isEmpty())
+				return freq * 24*60;
+			// After applying the frequency, the specified days of the week
+			// further restrict when the recurrence occurs.
+			// Find which days occur, and count the number of days which occur.
+			bool ds[7] = { false, false, false, false, false, false, false };
+			for (int i = 0, end = days.count();  i < end;  ++i)
+				if (days[i].pos() == 0)
+					ds[days[i].day() - 1] = true;
+			if (!(freq % 7))
+			{
+				// It will recur on the same day of the week every time.
+				// Check whether that day is in the list of included days.
+				return ds[startDate().dayOfWeek() - 1] ? freq * 24*60 : 0;
+			}
+			int n = 0;   // number of days which occur
+			for (int i = 0;  i < 7;  ++i)
+				if (ds[i])
+					++n;
+			if (n == 7)
+				return freq * 24*60;   // every day is included
+			if (n == 1)
+				return freq * 7 * 24*60;   // only one day of the week is included
+			return 0;
+		}
+		case WEEKLY:
+		{
+			QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
+			if (days.isEmpty())
+				return freq * 7*24*60;
+			// The specified days of the week occur every week in which the
+			// recurrence occurs.
+			// Find which days occur, and count the number of days which occur.
+			bool ds[7] = { false, false, false, false, false, false, false };
+			for (int i = 0, end = days.count();  i < end;  ++i)
+				if (days[i].pos() == 0)
+					ds[days[i].day() - 1] = true;
+			int n = 0;   // number of days which occur
+			for (int i = 0;  i < 7;  ++i)
+				if (ds[i])
+					++n;
+			if (n == 7)
+				return (freq == 1) ? 24*60 : 0;  // every day is included
+			if (n == 1)
+				return freq * 7*24*60;   // only one day of the week is included
+			return 0;
+		}
+		default:
+			return 0;
+	}
 }
 
 /******************************************************************************

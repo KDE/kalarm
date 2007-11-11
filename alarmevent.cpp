@@ -648,9 +648,9 @@ DateTime KAEvent::readDateTime(const Event* event, bool dateOnly, DateTime& star
 }
 
 /******************************************************************************
- * Parse the alarms for a KCal::Event.
- * Reply = map of alarm data, indexed by KAAlarm::Type
- */
+* Parse the alarms for a KCal::Event.
+* Reply = map of alarm data, indexed by KAAlarm::Type
+*/
 void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 {
 	AlarmMap* alarmMap = (AlarmMap*)almap;
@@ -666,9 +666,9 @@ void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 }
 
 /******************************************************************************
- * Parse a KCal::Alarm.
- * Reply = alarm ID (sequence number)
- */
+* Parse a KCal::Alarm.
+* Reply = alarm ID (sequence number)
+*/
 void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 {
 	// Parse the next alarm's text
@@ -832,8 +832,8 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 }
 
 /******************************************************************************
- * Initialise the KAEvent with the specified parameters.
- */
+* Initialise the KAEvent with the specified parameters.
+*/
 void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& bg, const QColor& fg,
                   const QFont& font, Action action, int lateCancel, int flags)
 {
@@ -890,8 +890,8 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 }
 
 /******************************************************************************
- * Initialise a command KAEvent.
- */
+* Initialise a command KAEvent.
+*/
 void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel, int flags, const QString& logfile)
 {
 	if (!logfile.isEmpty())
@@ -916,8 +916,8 @@ void KAEvent::setLogFile(const QString& logfile)
 }
 
 /******************************************************************************
- * Initialise an email KAEvent.
- */
+* Initialise an email KAEvent.
+*/
 void KAEvent::setEmail(const QDate& d, uint from, const EmailAddressList& addresses, const QString& subject,
 			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
 {
@@ -996,9 +996,9 @@ void KAEvent::setReminder(int minutes, bool onceOnly)
 }
 
 /******************************************************************************
- * Reinitialise the start date/time by adjusting its date part, and setting
- * the next scheduled alarm to the new start date/time.
- */
+* Reinitialise the start date/time by adjusting its date part, and setting
+* the next scheduled alarm to the new start date/time.
+*/
 void KAEvent::adjustStartDate(const QDate& d)
 {
 	mStartDateTime.setDate(d);
@@ -1013,26 +1013,17 @@ void KAEvent::adjustStartDate(const QDate& d)
 */
 DateTime KAEvent::displayDateTime() const
 {
-#if 0
-	if (includeReminders  &&  mReminderMinutes)
-	{
-		if (!mReminderOnceOnly  ||  mNextMainDateTime == mStartDateTime)
-			return mNextMainDateTime.addSecs(-mReminderMinutes * 60);
-	}
-	DateTime dt = mainDateTime(true);
-	if (mDeferral > 0
-	&&  (includeReminders  ||  mDeferral != REMINDER_DEFERRAL))
-#endif
 	bool deferred = (mDeferral > 0  &&  mDeferral != REMINDER_DEFERRAL);
 	if (deferred  &&  mMainExpired)
 		return mDeferralTime;
-	DateTime dt = mainDateTime(true);
+	DateTime dt = mainDateTime(true);   // time of next recurrence or sub-repetition
 	if (deferred  &&  mDeferralTime < dt)
 		return mDeferralTime;
 	if (mWorkTimeOnly
 	&&  (mRepeatCount && mRepeatInterval || checkRecur() != KARecurrence::NO_RECUR)
 	&&  !KAlarm::isWorkingTime(dt.kDateTime()))
 	{
+		kDebug(5950) << "KAEvent::displayDateTime(): working hours only, next=" << dt.kDateTime().dateTime();
 		// The alarm is restricted to working hours. Find the next
 		// occurrence during working hours.
 
@@ -1069,8 +1060,8 @@ DateTime KAEvent::displayDateTime() const
 			else if (recurCount > 0)
 				recurEnd = mRecurrence->startDateTime().addSecs((recurCount - 1) * recurFreq);
 		}
-		if (recurTimeVaries  &&  (!mRepeatCount || !mRepeatInterval)
-		||  repeatTimeVaries  &&  recurType == KARecurrence::NO_RECUR)
+		if (recurTimeVaries  &&  !repeatCount
+		||  repeatTimeVaries  &&  recurType == KARecurrence::NO_RECUR  &&  !mStartDateTime.isDateOnly())
 		{
 			// The alarm repeats at regular clock intervals, at different
 			// times of day, EITHER by recurrence OR by repetition.
@@ -1118,7 +1109,8 @@ DateTime KAEvent::displayDateTime() const
 			}
 			return KDateTime();   // too many iterations - can't really happen
 		}
-		else if (recurTimeVaries)
+
+		if (recurTimeVaries)
 		{
 			// It's a repetition inside a recurrence, each of which occurs
 			// at different times of day.
@@ -1187,7 +1179,8 @@ DateTime KAEvent::displayDateTime() const
 			}
 			return KDateTime();   // too many iterations - can't really happen
 		}
-		else if (repeatTimeVaries) //  && !recurTimeVaries && recurType != KARecurrence::NO_RECUR
+
+		if (repeatTimeVaries  &&  !mStartDateTime.isDateOnly()) //  && recurType != KARecurrence::NO_RECUR
 		{
 			// There's a sub-repetition which occurs at different times of
 			// day, inside a recurrence which occurs at the same time of day.
@@ -1262,35 +1255,155 @@ DateTime KAEvent::displayDateTime() const
 			}
 			return KDateTime();  // not found - give up
 		}
-		else
-		{
-			// The alarm always occurs at the same time of day.
-			// Check whether it can ever occur during working hours.
-			if (!mayOccurDailyDuringWork(kdt))
-				return KDateTime();   // never occurs during working hours
 
-			// Find the next working day it occurs on
-			unsigned days = 0;
-			for ( ; ; )
+		if (mStartDateTime.isDateOnly())
+		{
+			// It's a date-only alarm.
+			if (repeatCount * mRepeatInterval < 24*60)
+				repeatCount = 0;   // repetitions last less than a day, so being date-only never occur
+			bool weeklyRepeat = repeatCount && !(mRepeatInterval % (7*24*60));
+			int interval = mRecurrence->regularInterval();
+			if (interval  &&  !(interval % (7*24*60)))
 			{
+				// It recurs on the same day each week
+				if (!repeatCount || weeklyRepeat)
+					return KDateTime();   // any repetitions are also weekly
+
+				// It's a weekly recurrence with a non-weekly sub-repetition.
+				// Check one cycle of repetitions for the next one that lands
+				// on a working day.
 				DateTime newdt;
-				OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
+				previousOccurrence(dt.kDateTime().addDays(1), newdt, false);
 				if (!newdt.isValid())
-					return KDateTime();
+					return KDateTime();   // this should never happen
 				kdt = newdt.effectiveKDateTime();
-				int day = kdt.date().dayOfWeek() - 1;
-				if (workDays.testBit(day))
-					break;   // found a working day occurrence
-				// Prevent indefinite looping (which should never happen anyway)
-				if (!(type & OCCURRENCE_REPEAT))
+				int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+				for (int repeatNum = mNextRepeat + 1;  ;  ++repeatNum)
 				{
+					if (repeatNum > repeatCount)
+						repeatNum = 0;
+					if (repeatNum == mNextRepeat)
+						break;
+					if (!repeatNum)
+					{
+						nextOccurrence(newdt.kDateTime(), newdt, IGNORE_REPETITION);
+						if (workDays.testBit(day))
+							return newdt.kDateTime();
+						kdt = newdt.effectiveKDateTime();
+					}
+					else
+					{
+						// Do it this way because sub-daily repetitions produce
+						// date-only repetition times, meaning that more than one
+						// repetition could fall on the same day.
+						int inc = (mRepeatInterval * repeatNum) / (24*60);
+						if (workDays.testBit((day + inc) % 7))
+						{
+							kdt = kdt.addDays(inc);
+							kdt.setDateOnly(true);
+							return kdt;
+						}
+					}
+				}
+				return KDateTime();
+			}
+			if (!repeatCount  ||  weeklyRepeat)
+			{
+				// It's a date-only alarm with either no sub-repetition or a
+				// sub-repetition which always falls on the same day of the week
+				// as the recurrence (if any).
+				unsigned days = 0;
+				for ( ; ; )
+				{
+					DateTime newdt;
+					kdt.setTime(QTime(23,59,59));
+					nextOccurrence(kdt, newdt, IGNORE_REPETITION);
+					if (!newdt.isValid())
+						return KDateTime();
+					kdt = newdt.effectiveKDateTime();
+					int day = kdt.date().dayOfWeek() - 1;
+					if (workDays.testBit(day))
+						break;   // found a working day occurrence
+					// Prevent indefinite looping (which should never happen anyway)
 					if (days == 0x7F)
 						return KDateTime();  // found a recurrence on every day of the week!?!
 					days |= 1 << day;
 				}
+				kdt.setDateOnly(true);
+				return kdt;
 			}
-			dt.setDate(kdt.date());
+
+			// The recurrence (if any) occurs on different days of the week,
+			// as does the sub-repetition.
+			// Find the previous recurrence (as opposed to sub-repetition)
+			DateTime newdt;
+			unsigned days = 1 << (kdt.date().dayOfWeek() - 1);
+			previousOccurrence(dt.kDateTime().addDays(1), newdt, false);
+			if (!newdt.isValid())
+				return KDateTime();   // this should never happen
+			kdt = newdt.effectiveKDateTime();
+			int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+			for (int repeatNum = mNextRepeat;  ;  repeatNum = 0)
+			{
+				while (++repeatNum <= repeatCount)
+				{
+					// Do it this way because sub-daily repetitions produce
+					// date-only repetition times, meaning that more than one
+					// repetition could fall on the same day.
+					int inc = (mRepeatInterval * repeatNum) / (24*60);
+					if (workDays.testBit((day + inc) % 7))
+					{
+						kdt = kdt.addDays(inc);
+						kdt.setDateOnly(true);
+						return kdt;
+					}
+					if (days == 0x7F)
+						return KDateTime();  // found a recurrence on every day of the week!?!
+					days |= 1 << day;
+				}
+				nextOccurrence(kdt, newdt, IGNORE_REPETITION);
+				if (!newdt.isValid())
+					return KDateTime();
+				kdt = newdt.effectiveKDateTime();
+				day = kdt.date().dayOfWeek() - 1;
+				if (workDays.testBit(day))
+				{
+					kdt.setDateOnly(true);
+					return kdt;
+				}
+				if (days == 0x7F)
+					return KDateTime();  // found a recurrence on every day of the week!?!
+				days |= 1 << day;
+			}
+			return KDateTime();
 		}
+
+		// The alarm always occurs at the same time of day.
+		// Check whether it can ever occur during working hours.
+		if (!mayOccurDailyDuringWork(kdt))
+			return KDateTime();   // never occurs during working hours
+
+		// Find the next working day it occurs on
+		unsigned days = 0;
+		for ( ; ; )
+		{
+			DateTime newdt;
+			OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
+			if (!newdt.isValid())
+				return KDateTime();
+			kdt = newdt.effectiveKDateTime();
+			int day = kdt.date().dayOfWeek() - 1;
+			if (workDays.testBit(day))
+				break;   // found a working day occurrence
+			// Prevent indefinite looping (which should never happen anyway)
+			if (!(type & OCCURRENCE_REPEAT))
+			{
+				if (days == 0x7F)
+					return KDateTime();  // found a recurrence on every day of the week!?!
+				days |= 1 << day;
+			}
+		}
+		dt.setDate(kdt.date());
 	}
 	return dt;
 }
@@ -1308,21 +1421,8 @@ bool KAEvent::mayOccurDailyDuringWork(const KDateTime& kdt) const
 	&&  (kdt.time() < Preferences::workDayStart() || kdt.time() >= Preferences::workDayEnd()))
 		return false;   // its time is outside working hours
 	// Check if it always occurs on the same day of the week
-	bool weekly = false;
-	switch (mRecurrence->type())
-	{
-		case KARecurrence::MINUTELY:
-			weekly = !(mRecurrence->frequency() % (7*24*60));
-			break;
-		case KARecurrence::DAILY:
-			weekly = !(mRecurrence->frequency() % 7);
-			break;
-		case KARecurrence::WEEKLY:
-			weekly = true;
-		default:
-			break;
-	}
-	if (weekly)
+	int interval = mRecurrence->regularInterval();
+	if (interval  &&  !(interval % (7*24*60)))
 	{
 		// It recurs weekly
 		if (!mRepeatCount || !(mRepeatInterval % (7*24*60)))
@@ -2218,8 +2318,8 @@ KAAlarm KAEvent::convertDisplayingAlarm() const
 }
 
 /******************************************************************************
- * Reinstate the original event from the 'displaying' event.
- */
+* Reinstate the original event from the 'displaying' event.
+*/
 void KAEvent::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
 {
 	set(kcalEvent);
@@ -2311,7 +2411,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 		type = NO_OCCURRENCE;
 	}
 
-	if (type != NO_OCCURRENCE  &&  result <= preDateTime)
+	if (type != NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != IGNORE_REPETITION)
 	{
 		// The next occurrence is a sub-repetition
 		int repetition = result.secsTo(preDateTime) / repeatSecs + 1;
@@ -2407,9 +2507,9 @@ KAEvent::OccurType KAEvent::previousOccurrence(const KDateTime& afterDateTime, D
  * Set the date/time of the event to the next scheduled occurrence after the
  * specified date/time, provided that this is later than its current date/time.
  * Any reminder alarm is adjusted accordingly.
- * If 'includeRepetitions' is true and the alarm has a sub-repetition, and
- * a repetition of a previous recurrence occurs after the specified date/time,
- * that repetition is set as the next occurrence.
+ * If the alarm has a sub-repetition, and a repetition of a previous recurrence
+ * occurs after the specified date/time, that repetition is set as the next
+ * occurrence.
  */
 KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
 {
@@ -2495,7 +2595,7 @@ KAEvent::OccurType KAEvent::nextRecurrence(const KDateTime& preDateTime, DateTim
 {
 	KDateTime recurStart = mRecurrence->startDateTime();
 	KDateTime pre = preDateTime;
-	if (mStartDateTime.isDateOnly()  &&  preDateTime.time() < Preferences::startOfDay())
+	if (mStartDateTime.isDateOnly()  &&  !pre.isDateOnly()  &&  pre.time() < Preferences::startOfDay())
 	{
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 		pre.setTime(Preferences::startOfDay());
@@ -3234,9 +3334,6 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					Recurrence* recur = event->recurrence();
 					if (recur  &&  recur->recurs())
 					{
-#ifdef __GNUC__
-#warning Fix snoozeTime() duration
-#endif
 						recur->setMinutely(alarm->snoozeTime().asSeconds() / 60);
 						recur->setDuration(alarm->repeatCount() + 1);
 						alarm->setRepeatCount(0);
