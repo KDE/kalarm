@@ -53,6 +53,10 @@ static const int KALARM_AUTOSTART_TIMEOUT = 30;
 #endif
 static const int SECS_PER_DAY = 3600 * 24;
 
+// KAlarm config file keys
+static const QString START_OF_DAY(QString::fromLatin1("StartOfDay"));
+static const QString AUTOSTART_TRAY(QString::fromLatin1("AutostartTray"));
+
 
 AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
 	: DCOPObject(name),
@@ -64,10 +68,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
 
 	ADConfigData::enableAutoStart(true);    // switch autostart on whenever the program is run
 
-	KConfig kaconfig(locate("config", "kalarmrc"));
-	kaconfig.setGroup(QString::fromLatin1("General"));
-	QDateTime defTime(QDate(1900,1,1), QTime());
-	mStartOfDay = kaconfig.readDateTimeEntry(QString::fromLatin1("StartOfDay"), &defTime).time();
+	readKAlarmConfig();       // read time-related KAlarm config items
 
 #ifdef AUTOSTART_KALARM
 	if (autostart)
@@ -82,7 +83,9 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent, const char *name)
 		 * come in the wrong order, KAlarm won't know that it is supposed to restore
 		 * itself and instead will simply open a new window.
 		 */
-		autostart = kaconfig.readBoolEntry(QString::fromLatin1("AutostartTray"), false);
+		KConfig kaconfig(locate("config", "kalarmrc"));
+		kaconfig.setGroup(QString::fromLatin1("General"));
+		autostart = kaconfig.readBoolEntry(AUTOSTART_TRAY, false);
 		if (autostart)
 		{
 			kdDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm\n";
@@ -223,7 +226,7 @@ void AlarmDaemon::eventHandled(const QCString& appname, const QString& calendarU
 */
 void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
                               const QCString& dcopObject, const QString& calendarUrl,
-			      bool startClient, int startDayMinute)
+			      bool startClient)
 {
 	kdDebug(5900) << "AlarmDaemon::registerApp(" << appName << ", " << appTitle << ", "
 	              <<  dcopObject << ", " << startClient << ")" << endl;
@@ -257,8 +260,6 @@ void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
 			client = new ClientInfo(appName, appTitle, dcopObject, calendarUrl, startClient);
 		client->calendar()->setUnregistered(false);
 		ADConfigData::writeClient(appName, client);
-		if (startDayMinute >= 0  &&  startDayMinute < 24*60)
-			mStartOfDay = QTime(startDayMinute / 60, startDayMinute % 60);
 
 		ADConfigData::enableAutoStart(true);
 		setTimerStatus();
@@ -268,7 +269,7 @@ void AlarmDaemon::registerApp(const QCString& appName, const QString& appTitle,
 
 	// Notify the client of whether the call succeeded.
 	AlarmGuiIface_stub stub(appName, dcopObject);
-	stub.registered(false, result);
+	stub.registered(false, result, DAEMON_VERSION_NUM);
 	kdDebug(5900) << "AlarmDaemon::registerApp() -> " << result << endl;
 }
 
@@ -300,7 +301,7 @@ void AlarmDaemon::registerChange(const QCString& appName, bool startClient)
 
 	// Notify the client of whether the call succeeded.
 	AlarmGuiIface_stub stub(appName, client->dcopObject());
-	stub.registered(true, result);
+	stub.registered(true, result, DAEMON_VERSION_NUM);
 	kdDebug(5900) << "AlarmDaemon::registerChange() -> " << result << endl;
 }
 
@@ -310,18 +311,6 @@ void AlarmDaemon::registerChange(const QCString& appName, bool startClient)
 void AlarmDaemon::enableAutoStart(bool on)
 {
 	ADConfigData::enableAutoStart(on);
-}
-
-/******************************************************************************
-* DCOP call to set the start-of-day time for date-only alarms.
-*/
-void AlarmDaemon::setStartOfDay(int startDayMinute)
-{
-	int h = startDayMinute / 60;
-	int m = startDayMinute % 60;
-	kdDebug(5900) << "AlarmDaemon::setStartOfDay(" << h << ":" << m << ")" << endl;
-	if (startDayMinute >= 0  &&  startDayMinute < 24*60)
-		mStartOfDay = QTime(h, m);
 }
  
 /******************************************************************************
@@ -596,6 +585,20 @@ void AlarmDaemon::notifyCalStatus(const ADCalendar* cal)
 		if (!stub.ok())
 			kdError(5900) << "AlarmDaemon::notifyCalStatus(): dcop send failed:" << appname << endl;
 	}
+}
+
+/******************************************************************************
+* Read all relevant items from KAlarm config.
+* Executed on DCOP call to notify a time related value change in the KAlarm
+* config file.
+*/
+void AlarmDaemon::readKAlarmConfig()
+{
+	KConfig config(locate("config", "kalarmrc"));
+	config.setGroup(QString::fromLatin1("General"));
+	QDateTime defTime(QDate(1900,1,1), QTime());
+	mStartOfDay = config.readDateTimeEntry(START_OF_DAY, &defTime).time();
+	kdDebug(5900) << "AlarmDaemon::readKAlarmConfig()" << endl;
 }
 
 /******************************************************************************

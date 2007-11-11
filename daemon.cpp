@@ -60,7 +60,7 @@ class NotificationHandler : public QObject, virtual public AlarmGuiIface
 		// DCOP interface
 		void  alarmDaemonUpdate(int calendarStatus, const QString& calendarURL);
 		void  handleEvent(const QString& calendarURL, const QString& eventID);
-		void  registered(bool reregister, int result);
+		void  registered(bool reregister, int result, int version);
 };
 
 
@@ -173,10 +173,18 @@ bool Daemon::registerWith(bool reregister)
 {
 	if (mRegisterTimer)
 		return true;
-	if (mStatus == STOPPED  ||  mStatus == RUNNING)
-		return false;
-	if (mStatus == REGISTERED  &&  !reregister)
-		return true;
+	switch (mStatus)
+	{
+		case STOPPED:
+		case RUNNING:
+			return false;
+		case REGISTERED:
+			if (!reregister)
+				return true;
+			break;
+		case READY:
+			break;
+	}
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
 	kdDebug(5950) << (reregister ? "Daemon::reregisterWith(): " : "Daemon::registerWith(): ") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE") << endl;
@@ -187,10 +195,11 @@ bool Daemon::registerWith(bool reregister)
 	else
 	{
 		QTime sod = Preferences::startOfDay();
-		s.registerApp(appname, kapp->aboutData()->programName(), QCString(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped, sod.hour() * 60 + sod.minute());
+		s.registerApp(appname, kapp->aboutData()->programName(), QCString(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped);
 	}
 	if (!s.ok())
 	{
+		kdError(5950) << "Daemon::registerWith(" << reregister << "): DCOP error" << endl;
 		registrationResult(reregister, KAlarmd::FAILURE);
 		return false;
 	}
@@ -203,37 +212,63 @@ bool Daemon::registerWith(bool reregister)
 /******************************************************************************
 * Called when the daemon has notified us of the result of the register() DCOP call.
 */
-void Daemon::registrationResult(bool reregister, int result)
+void Daemon::registrationResult(bool reregister, int result, int version)
 {
-	kdDebug(5950) << "Daemon::registrationResult(" << reregister << ")\n";
+	kdDebug(5950) << "Daemon::registrationResult(" << reregister << ") version: " << version << endl;
 	delete mRegisterTimer;
 	mRegisterTimer = 0;
-	switch (result)
+	bool failed = false;
+	QString errmsg;
+	if (version  &&  version != DAEMON_VERSION_NUM)
 	{
-		case KAlarmd::SUCCESS:
-			break;
-		case KAlarmd::NOT_FOUND:
-			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
-			KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
-			                           "(Installation or configuration error: %1 cannot locate %2 executable.)")
-			                           .arg(QString::fromLatin1(DAEMON_APP_NAME))
-			                           .arg(kapp->aboutData()->appName()));
-			break;
-		case KAlarmd::FAILURE:
-		default:
-			kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed -> " << result << endl;
-			if (!reregister)
-			{
-				if (mStatus == REGISTERED)
-					mStatus = READY;
-				if (!mRegisterFailMsg)
+		failed = true;
+		errmsg = i18n("Cannot enable alarms.\nInstallation or configuration error: Alarm Daemon (%1) version is incompatible.")
+		              .arg(QString::fromLatin1(DAEMON_APP_NAME));
+	}
+	else
+	{
+		switch (result)
+		{
+			case KAlarmd::SUCCESS:
+				break;
+			case KAlarmd::NOT_FOUND:
+				// We've successfully registered with the daemon, but the daemon can't
+				// find the KAlarm executable so won't be able to restart KAlarm if
+				// KAlarm exits.
+				kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call: " << kapp->aboutData()->appName() << " not found\n";
+				KMessageBox::error(0, i18n("Alarms will be disabled if you stop KAlarm.\n"
+							   "(Installation or configuration error: %1 cannot locate %2 executable.)")
+							   .arg(QString::fromLatin1(DAEMON_APP_NAME))
+							   .arg(kapp->aboutData()->appName()));
+				break;
+			case KAlarmd::FAILURE:
+			default:
+				// Either the daemon reported an error in the registration DCOP call,
+				// there was a DCOP error calling the daemon, or a timeout on the reply.
+				kdError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp dcop call failed -> " << result << endl;
+				failed = true;
+				if (!reregister)
 				{
-					mRegisterFailMsg = true;
-					KMessageBox::error(0, i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)")
-					                           .arg(QString::fromLatin1(DAEMON_APP_NAME)));
+					errmsg = i18n("Cannot enable alarms:\nFailed to register with Alarm Daemon (%1)")
+					              .arg(QString::fromLatin1(DAEMON_APP_NAME));
 				}
+				break;
+		}
+	}
+
+	if (failed)
+	{
+		if (!errmsg.isEmpty())
+		{
+			if (mStatus == REGISTERED)
+				mStatus = READY;
+			if (!mRegisterFailMsg)
+			{
+				mRegisterFailMsg = true;
+				KMessageBox::error(0, errmsg);
 			}
-			return;
+		}
+		return;
 	}
 
 	if (!reregister)
@@ -387,15 +422,15 @@ void Daemon::enableAutoStart(bool enable)
 }
 
 /******************************************************************************
-* Tell the alarm daemon the start-of-day time for date-only alarms.
+* Notify the alarm daemon that the start-of-day time for date-only alarms has
+* changed.
 */
-void Daemon::setStartOfDay()
+void Daemon::notifyTimeChanged()
 {
-	QTime sod = Preferences::startOfDay();
 	AlarmDaemonIface_stub s(DAEMON_APP_NAME, DAEMON_DCOP_OBJECT);
-	s.setStartOfDay(sod.hour() * 60 + sod.minute());
+	s.timeConfigChanged();
 	if (!s.ok())
-		kdError(5950) << "Daemon::setStartOfDay(): dcop send failed" << endl;
+		kdError(5950) << "Daemon::timeConfigChanged(): dcop send failed" << endl;
 }
 
 /******************************************************************************
@@ -680,9 +715,9 @@ void NotificationHandler::handleEvent(const QString& url, const QString& eventId
  * DCOP call from the alarm daemon to notify the success or failure of a
  * registration request from KAlarm.
  */
-void NotificationHandler::registered(bool reregister, int result)
+void NotificationHandler::registered(bool reregister, int result, int version)
 {
-	Daemon::registrationResult(reregister, result);
+	Daemon::registrationResult(reregister, result, version);
 }
 
 

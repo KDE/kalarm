@@ -1,7 +1,7 @@
 /*
  *  kalarmd.h  -  global header file
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (c) 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,8 @@
 #include <config.h>
 #endif
 
-#define DAEMON_VERSION            "4.2"         // kalarmd version number
+#define DAEMON_VERSION            "4.3"         // kalarmd version number string
+#define DAEMON_VERSION_NUM        40300         // kalarmd version number integer
 #define DAEMON_APP_NAME           "kalarmd"     // DCOP name of alarm daemon application
 #define DAEMON_DCOP_OBJECT        "ad"          // DCOP name of kalarmd's DCOP interface
 
