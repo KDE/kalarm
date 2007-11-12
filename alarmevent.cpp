@@ -1022,7 +1022,6 @@ DateTime KAEvent::displayDateTime() const
 	&&  (mRepeatCount && mRepeatInterval || checkRecur() != KARecurrence::NO_RECUR)
 	&&  !KAlarm::isWorkingTime(dt.kDateTime()))
 	{
-		kDebug(5950) << "KAEvent::displayDateTime(): working hours only, next=" << dt.kDateTime().dateTime();
 		// The alarm is restricted to working hours. Find the next
 		// occurrence during working hours.
 
@@ -1485,7 +1484,8 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	||  !mAlarmCount  &&  (!original || !mMainExpired))
 		return false;
 
-	checkRecur();     // ensure recurrence/repetition data is consistent
+	ev->startUpdates();   // prevent multiple update notifications
+	checkRecur();         // ensure recurrence/repetition data is consistent
 	bool readOnly = ev->isReadOnly();
 	ev->setReadOnly(false);
 	ev->setTransparency(Event::Transparent);
@@ -1734,6 +1734,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	if (mSaveDateTime.isValid())
 		ev->setCreated(mSaveDateTime);
 	ev->setReadOnly(readOnly);
+	ev->endUpdates();     // finally issue an update notification
 	return true;
 }
 
@@ -3201,6 +3202,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 		Alarm::List alarms = event->alarms();
 		if (alarms.isEmpty())
 			continue;    // KAlarm isn't interested in events without alarms
+		event->startUpdates();   // prevent multiple update notifications
 		bool readOnly = event->isReadOnly();
 		if (readOnly)
 			event->setReadOnly(false);
@@ -3643,6 +3645,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 
 		if (readOnly)
 			event->setReadOnly(true);
+		event->endUpdates();     // finally issue an update notification
 	}
 	return converted;
 }
