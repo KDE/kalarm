@@ -53,12 +53,13 @@ class AlarmDaemon : public QObject, virtual public AlarmDaemonIface
 		void    resetCalendar(const QCString& appname, const QString& urlString)
 		               { reloadCal(appname, expandURL(urlString), true); }
 		void    registerApp(const QCString& appName, const QString& appTitle, const QCString& dcopObject,
-		                    const QString& calendarUrl, bool startClient, int startDayMinute);
+		                    const QString& calendarUrl, bool startClient);
 		void    registerChange(const QCString& appName, bool startClient);
 		void    eventHandled(const QCString& appname, const QString& calendarURL, const QString& eventID, bool reload);
-		void    setStartOfDay(int startDayMinute);
+		void    timeConfigChanged()   { readKAlarmConfig(); }
 		void    quit();
 		// Other methods
+		void    readKAlarmConfig();
 		void    startMonitoring();
 		void    enableCal(const QString& urlString, bool enable);
 		void    reloadCal(const QCString& appname, const QString& urlString, bool reset);

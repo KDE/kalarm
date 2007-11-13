@@ -1152,7 +1152,7 @@ void KAlarmApp::slotPreferencesChanged()
 */
 void KAlarmApp::changeStartOfDay()
 {
-	Daemon::setStartOfDay();   // tell the alarm daemon the new time
+	Daemon::notifyTimeChanged();   // tell the alarm daemon the new time
 	QTime sod = Preferences::startOfDay();
 	DateTime::setStartOfDay(sod);
 	AlarmCalendar* cal = AlarmCalendar::activeCalendar();

@@ -1,7 +1,7 @@
 /*
  *  alarmguiiface.h  -  DCOP interface which alarm daemon clients must implement
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright (C) 2001, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004,2007 by David Jarvie <software@astrojar.org.uk>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
@@ -63,8 +63,9 @@ class AlarmGuiIface : virtual public DCOPObject
 
 		/** Called to indicate success/failure of (re)register() call.
 		    @param result success/failure code. Value is of type RegisterResult.
+		    @param version kalarmd version, e.g. 50101 indicates 5.1.1.
 		 */
-		virtual ASYNC registered(bool reregister, int result) = 0;
+		virtual ASYNC registered(bool reregister, int result, int version) = 0;
 };
 
 #endif
