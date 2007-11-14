@@ -65,7 +65,7 @@
 #include <kshell.h>
 
 static bool convWakeTime(const QByteArray& timeParam, KDateTime&, const KDateTime& defaultDt = KDateTime());
-static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
+static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 
 /******************************************************************************
  * Find the maximum number of seconds late which a late-cancel alarm is allowed
