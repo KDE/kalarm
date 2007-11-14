@@ -1886,8 +1886,7 @@ bool KAEvent::occursAfter(const QDateTime& preDateTime, bool includeRepetitions)
 
 	if (includeRepetitions  &&  mRepeatCount)
 	{
-		dt.addSecs(mRepeatCount * mRepeatInterval * 60);
-		if (preDateTime < dt)
+		if (preDateTime < dt.addSecs(mRepeatCount * mRepeatInterval * 60))
 			return true;
 	}
 	return false;
@@ -1905,7 +1904,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 	QDateTime pre = preDateTime;
 	if (includeRepetitions != IGNORE_REPETITION)
 	{
-		if (!mRepeatCount)
+		if (!mRepeatCount  ||  !mRepeatInterval)
 			includeRepetitions = IGNORE_REPETITION;
 		else
 		{
