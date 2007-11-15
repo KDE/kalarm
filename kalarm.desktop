@@ -1,6 +1,5 @@
 # KDE Config File
 [Desktop Entry]
-Encoding=UTF-8
 Name=KAlarm
 Name[af]=K-alarm
 Name[bg]=Аларма
@@ -17,7 +16,7 @@ Name[zh_TW]=KAlarm 鬧鐘
 Type=Application
 Exec=kalarm -caption "%c" %i
 Icon=kalarm
-DocPath=kalarm/index.html
+X-DocPath=kalarm/index.html
 GenericName=Personal Alarm Scheduler
 GenericName[af]=Persoonlike alarm skeduleerder
 GenericName[bg]=Настройки на аларма
