@@ -1611,7 +1611,8 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 					set_deferral(NO_DEFERRAL);
 			}
 			// Remove any reminder alarm, but keep a note of it for archiving purposes
-			set_archiveReminder();
+			if (mReminderMinutes)
+				set_archiveReminder();
 		}
 		if (mDeferral != REMINDER_DEFERRAL)
 		{

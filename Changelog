@@ -2,6 +2,7 @@ KAlarm
 
 === Version 1.4.20 --- 18 November 2007 ===
 Fix deferral of non-recurring alarms not working.
+Fix loss of reminder details in archive when alarm has had a reminder deferred.
 Fix inability to reactivate deleted alarms which still have repetitions to go.
 Fix incorrect interpretation of --late-cancel weekly parameter on command line.
 
