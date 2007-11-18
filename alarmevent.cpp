@@ -1184,15 +1184,20 @@ bool KAEvent::updateKCalEvent(Event& ev, bool checkUid, bool original, bool canc
 	if (mDeferral > 0  ||  mDeferral == CANCEL_DEFERRAL && !cancelCancelledDefer)
 	{
 		DateTime nextDateTime = mNextMainDateTime;
-		if (mMainExpired && !original  &&  checkRecur() != KARecurrence::NO_RECUR)
+		if (mMainExpired)
 		{
-			// It's a deferral of an expired recurrence.
-			// Need to ensure that the alarm offset is to an occurrence
-			// which isn't excluded by an exception - otherwise, it will
-			// never be triggered. So choose the first recurrence which
-			// isn't an exception.
-			nextDateTime = mRecurrence->getNextDateTime(mStartDateTime.dateTime().addDays(-1));
-			nextDateTime.setDateOnly(mStartDateTime.isDateOnly());
+			if (checkRecur() == KARecurrence::NO_RECUR)
+				nextDateTime = mStartDateTime;
+			else if (!original)
+			{
+				// It's a deferral of an expired recurrence.
+				// Need to ensure that the alarm offset is to an occurrence
+				// which isn't excluded by an exception - otherwise, it will
+				// never be triggered. So choose the first recurrence which
+				// isn't an exception.
+				nextDateTime = mRecurrence->getNextDateTime(mStartDateTime.dateTime().addDays(-1));
+				nextDateTime.setDateOnly(mStartDateTime.isDateOnly());
+			}
 		}
 		int startOffset;
 		QStringList list;
