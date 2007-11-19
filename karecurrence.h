@@ -64,6 +64,7 @@ class KARecurrence : public KCal::Recurrence
 		KDateTime   getNextDateTime(const KDateTime& preDateTime) const;
 		KDateTime   getPreviousDateTime(const KDateTime& afterDateTime) const;
 		int         longestInterval() const;
+		int         regularInterval() const;
 		Type        type() const;
 		static Type type(const KCal::RecurrenceRule*);
 		static bool dailyType(const KCal::RecurrenceRule*);

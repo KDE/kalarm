@@ -1,6 +1,5 @@
 # KDE Config File
 [Desktop Entry]
-Encoding=UTF-8
 Name=KAlarm
 Name[af]=K-alarm
 Name[bg]=Аларма
@@ -17,7 +16,7 @@ Name[zh_TW]=KAlarm 鬧鐘
 Exec=kalarm --tray
 Icon=kalarm
 Type=Application
-DocPath=kalarm/index.html
+X-DocPath=kalarm/index.html
 Comment=Personal Alarm Scheduler: start as system tray icon
 Comment[af]=Persoonlike alarm skeduleerder: begin as stelsel laai ikoon
 Comment[bg]=Аларма: стартиране като икона в системния панел

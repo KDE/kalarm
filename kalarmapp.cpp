@@ -65,7 +65,7 @@
 #include <kshell.h>
 
 static bool convWakeTime(const QByteArray& timeParam, KDateTime&, const KDateTime& defaultDt = KDateTime());
-static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
+static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 
 /******************************************************************************
  * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -629,29 +629,17 @@ int KAlarmApp::newInstance()
 						USAGE(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", opt, QLatin1String("--mail")))
 					KARecurrence::Type recurType;
 					QString optval = args->getOption(onceOnly ? "reminder-once" : "reminder");
-					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder").toLocal8Bit(), recurType, reminderMinutes);
-					if (ok)
-					{
-						switch (recurType)
-						{
-							case KARecurrence::MINUTELY:
-								if (alarmTime.isDateOnly())
-									USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", opt))
-								break;
-							case KARecurrence::DAILY:     reminderMinutes *= 1440;  break;
-							case KARecurrence::WEEKLY:    reminderMinutes *= 7*1440;  break;
-							default:   ok = false;  break;
-						}
-					}
-					if (!ok)
+					if (!convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder").toLocal8Bit(), recurType, reminderMinutes))
 						USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter", opt))
+					if (recurType == KARecurrence::MINUTELY  &&  alarmTime.isDateOnly())
+						USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", opt))
 				}
 
 				int lateCancel = 0;
 				if (args->isSet("late-cancel"))
 				{
 					KARecurrence::Type recurType;
-					bool ok = convInterval(args->getOption("late-cancel").toLocal8Bit(), recurType, lateCancel, false);
+					bool ok = convInterval(args->getOption("late-cancel").toLocal8Bit(), recurType, lateCancel);
 					if (!ok  ||  lateCancel <= 0)
 						USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter", QLatin1String("late-cancel")))
 				}
@@ -2077,8 +2065,10 @@ static bool convWakeTime(const QByteArray& timeParam, KDateTime& dateTime, const
 }
 
 /******************************************************************************
-*  Convert a time interval command line parameter.
-*  Reply = true if successful.
+* Convert a time interval command line parameter.
+* 'timeInterval' receives the count for the recurType. If 'allowMonthYear' is
+* false, 'timeInterval' is converted to minutes.
+* Reply = true if successful.
 */
 static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
 {
@@ -2130,6 +2120,21 @@ static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurT
 	}
 	if (ok)
 		interval += timeString.toUInt(&ok);
+	if (!allowMonthYear)
+	{
+		// Convert time interval to minutes
+		switch (recurType)
+		{
+			case KARecurrence::WEEKLY:
+				interval *= 7;
+				// fall through to DAILY
+			case KARecurrence::DAILY:
+				interval *= 24*60;
+				break;
+			default:
+				break;
+		}
+	}
 	timeInterval = static_cast<int>(interval);
 	if (negative)
 		timeInterval = -timeInterval;

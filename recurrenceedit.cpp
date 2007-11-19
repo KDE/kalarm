@@ -757,7 +757,6 @@ void RecurrenceEdit::set(const KAEvent& event)
 		return;
 	}
 	mNoneButton->setChecked(true);
-	int repeatDuration;
 	KARecurrence* recurrence = event.recurrence();
 	if (!recurrence)
 		return;
@@ -844,21 +843,26 @@ void RecurrenceEdit::set(const KAEvent& event)
 	}
 
 	mRule->setFrequency(recurrence->frequency());
-	repeatDuration = event.remainingRecurrences();
 
 	// Get range information
 	KDateTime endtime = mCurrStartDateTime;
-	if (repeatDuration == -1)
+	int duration = recurrence->duration();
+	if (duration == -1)
 		mNoEndDateButton->setChecked(true);
-	else if (repeatDuration)
+	else if (duration)
 	{
 		mRepeatCountButton->setChecked(true);
-		if (event.mainExpired())
+		int repeatCount;
+		if (event.expired())
+			repeatCount = duration;
+		else if (event.mainExpired())
 		{
 			mRepeatCountEntry->setMinimum(0);
-			repeatDuration = 0;
+			repeatCount = 0;
 		}
-		mRepeatCountEntry->setValue(repeatDuration);
+		else
+			repeatCount = duration - recurrence->durationTo(KDateTime::currentDateTime(recurrence->startDateTime().timeSpec()));
+		mRepeatCountEntry->setValue(repeatCount);
 	}
 	else
 	{

@@ -89,7 +89,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 
 	// Sound file picker button
 	mFilePicker = new PushButton(this);
-	mFilePicker->setIcon(SmallIcon("playsound"));
+	mFilePicker->setIcon(SmallIcon("audio-x-generic"));
 	mFilePicker->setFixedSize(mFilePicker->sizeHint());
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
 	mFilePicker->setToolTip(i18nc("@info:tooltip", "Configure sound file"));

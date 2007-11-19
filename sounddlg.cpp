@@ -281,7 +281,7 @@ void SoundDlg::playSound()
 	}
 	if (!checkFile())
 		return;
-	mPlayer = Phonon::createPlayer(Phonon::NotificationCategory, mUrl);
+	mPlayer = Phonon::createPlayer(Phonon::MusicCategory, mUrl);
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
 	mFilePlay->setIcon(SmallIcon("media-playback-stop"));   // change the play button to a stop button
 	mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
