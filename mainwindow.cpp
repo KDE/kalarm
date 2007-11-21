@@ -181,7 +181,7 @@ MainWindow::MainWindow(bool restored)
 	mListView->setItemDelegate(mListDelegate);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
 	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotDoubleClicked(const QModelIndex&)));
-	connect(mListView, SIGNAL(rightButtonClicked(const QPoint&)), SLOT(slotRightButtonClicked(const QPoint&)));
+	connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
 	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
@@ -1334,12 +1334,12 @@ void MainWindow::slotSelection()
 }
 
 /******************************************************************************
-*  Called when the mouse right button is clicked on the ListView.
+*  Called when a context menu is requested in the ListView.
 *  Displays a context menu to modify or delete the selected item.
 */
-void MainWindow::slotRightButtonClicked(const QPoint& globalPos)
+void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
-	kDebug(5950) << "MainWindow::slotRightButtonClicked()";
+	kDebug(5950) << "MainWindow::slotContextMenuRequested()";
 	if (mContextMenu)
 		mContextMenu->popup(globalPos);
 }

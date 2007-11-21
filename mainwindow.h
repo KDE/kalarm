@@ -119,7 +119,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotNewToolbarConfig();
 		void           slotQuit();
 		void           slotSelection();
-		void           slotRightButtonClicked(const QPoint& globalPos);
+		void           slotContextMenuRequested(const QPoint& globalPos);
 		void           slotDoubleClicked(const QModelIndex&);
 		void           slotShowTime();
 		void           slotShowTimeTo();

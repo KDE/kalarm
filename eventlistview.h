@@ -53,12 +53,12 @@ class EventListView : public QTreeView
 		virtual void      slotFindPrev()       { findNext(false); }
 
 	signals:
-		void              rightButtonClicked(const QPoint& globalPos);
+		void              contextMenuRequested(const QPoint& globalPos);
 		void              findActive(bool);
 
 	protected:
 		virtual bool      viewportEvent(QEvent*);
-		virtual void      mouseReleaseEvent(QMouseEvent*);
+		virtual void      contextMenuEvent(QContextMenuEvent*);
 
 	private:
 		void              findNext(bool forward);

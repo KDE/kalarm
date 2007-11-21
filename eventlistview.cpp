@@ -177,12 +177,9 @@ bool EventListView::viewportEvent(QEvent* e)
 }
 
 /******************************************************************************
-* Called when a mouse button is released.
+* Called when a context menu event is requested by mouse or key.
 */
-void EventListView::mouseReleaseEvent(QMouseEvent* e)
+void EventListView::contextMenuEvent(QContextMenuEvent* e)
 {
-	if (e->button() == Qt::RightButton)
-		emit rightButtonClicked(e->globalPos());
-	else
-		QTreeView::mouseReleaseEvent(e);
+	emit contextMenuRequested(e->globalPos());
 }
