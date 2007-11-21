@@ -115,7 +115,8 @@ class MainWindow : public MainWindowBase
 		void           slotQuit();
 		void           slotDeletion();
 		void           slotSelection();
-		void           slotMouseClicked(int button, QListViewItem* item, const QPoint&, int);
+		void           slotContextMenuRequested(QListViewItem*, const QPoint&, int);
+		void           slotMouseClicked(int button, QListViewItem*, const QPoint&, int);
 		void           slotDoubleClicked(QListViewItem*);
 		void           slotShowTime();
 		void           slotShowTimeTo();

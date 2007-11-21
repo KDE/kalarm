@@ -1,5 +1,8 @@
 KAlarm
 
+=== Version 1.4.21 --- 21 November 2007 ===
+Make the Menu key work in the alarm list.
+
 === Version 1.4.20 --- 18 November 2007 ===
 Fix deferral of non-recurring alarms not working.
 Fix loss of reminder details in archive when alarm has had a reminder deferred.

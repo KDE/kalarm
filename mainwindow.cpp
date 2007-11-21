@@ -146,6 +146,8 @@ MainWindow::MainWindow(bool restored)
 
 	connect(mListView, SIGNAL(itemDeleted()), SLOT(slotDeletion()));
 	connect(mListView, SIGNAL(selectionChanged()), SLOT(slotSelection()));
+	connect(mListView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+	        SLOT(slotContextMenuRequested(QListViewItem*, const QPoint&, int)));
 	connect(mListView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	connect(mListView, SIGNAL(executed(QListViewItem*)), SLOT(slotDoubleClicked(QListViewItem*)));
@@ -1346,21 +1348,26 @@ void MainWindow::slotSelection()
 }
 
 /******************************************************************************
-*  Called when the mouse is clicked on the ListView.
-*  Deselects the current item and disables the actions if appropriate, or
-*  displays a context menu to modify or delete the selected item.
+* Called when a context menu is requested either by a mouse click or by a
+* key press.
+*/
+void MainWindow::slotContextMenuRequested(QListViewItem* item, const QPoint& pt, int)
+{
+	kdDebug(5950) << "MainWindow::slotContextMenuRequested()" << endl;
+	if (mContextMenu)
+		mContextMenu->popup(pt);
+}
+
+/******************************************************************************
+* Called when the mouse is clicked on the ListView.
+* Deselects the current item and disables the actions if appropriate.
+* Note that if a right button click is handled by slotContextMenuRequested().
 */
 void MainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint& pt, int)
 {
-	if (button == Qt::RightButton)
+	if (button != Qt::RightButton  &&  !item)
 	{
-		kdDebug(5950) << "MainWindow::slotMouseClicked(right)\n";
-		if (mContextMenu)
-			mContextMenu->popup(pt);
-	}
-	else if (!item)
-	{
-		kdDebug(5950) << "MainWindow::slotMouseClicked(left)\n";
+		kdDebug(5950) << "MainWindow::slotMouseClicked(left)" << endl;
 		mListView->clearSelection();
 		mActionCreateTemplate->setEnabled(false);
 		mActionCopy->setEnabled(false);
