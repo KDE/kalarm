@@ -333,11 +333,14 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 	bool writable = false;
 	int type = -1;
 	AlarmResource* resource = 0;
-	QModelIndex index = mListView->indexAt(viewportPos);
-	if (index.isValid())
-		resource = static_cast<ResourceFilterModel*>(mListView->model())->resource(index);
-	else
-		mListView->clearSelection();
+	if (mListView->selectionModel()->hasSelection())
+	{
+		QModelIndex index = mListView->indexAt(viewportPos);
+		if (index.isValid())
+			resource = static_cast<ResourceFilterModel*>(mListView->model())->resource(index);
+		else
+			mListView->clearSelection();
+	}
 	if (resource)
 	{
 		active   = resource->isEnabled();
