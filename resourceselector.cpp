@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -174,7 +174,7 @@ void ResourceSelector::addResource()
 	ResourceConfigDialog dlg(this, resource);
 	if (dlg.exec())
 	{
-		resource->setActive(true);
+		resource->setEnabled(true);
 		resource->setTimeSpec(Preferences::timeZone());
 		manager->add(resource);
 		manager->writeConfig();
