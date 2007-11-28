@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,6 +117,8 @@ class AlarmCalendar : public QObject
 		bool                  mOpen;               // true if the calendar file is open
 		int                   mUpdateCount;        // nesting level of group of calendar update calls
 		bool                  mUpdateSave;         // save() was called while mUpdateCount > 0
+
+		using QObject::event;   // prevent "hidden" warning
 };
 
 #endif // ALARMCALENDAR_H
