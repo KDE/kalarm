@@ -1,7 +1,7 @@
 /*
  *  repetition.h  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,11 +38,11 @@ class RepetitionButton : public QPushButton
 		Q_OBJECT
 	public:
 		RepetitionButton(const QString& caption, bool waitForInitialisation, QWidget* parent);
-		void           set(int interval, int count);
-		void           set(int interval, int count, bool dateOnly, int maxDuration = -1);
-		void           initialise(int interval, int count, bool dateOnly, int maxDuration = -1);   // use only after needsInitialisation() signal
+		void           set(const KCal::Duration& interval, int count);
+		void           set(const KCal::Duration& interval, int count, bool dateOnly, int maxDuration = -1);
+		void           initialise(const KCal::Duration& interval, int count, bool dateOnly, int maxDuration = -1);   // use only after needsInitialisation() signal
 		void           activate()               { activate(false); }
-		int            interval() const         { return mInterval; }
+		KCal::Duration interval() const         { return mInterval; }
 		int            count() const            { return mCount; }
 		virtual void   setReadOnly(bool ro)     { mReadOnly = ro; }
 		virtual bool   isReadOnly() const       { return mReadOnly; }
@@ -59,7 +59,7 @@ class RepetitionButton : public QPushButton
 		void           displayDialog();
 
 		RepetitionDlg* mDialog;
-		int            mInterval;     // interval between repetitions, in minutes
+		KCal::Duration mInterval;     // interval between repetitions, in minutes
 		int            mCount;        // total number of repetitions, including first occurrence
 		int            mMaxDuration;  // maximum allowed duration in minutes, or -1 for infinite
 		bool           mDateOnly;     // hours/minutes cannot be displayed
@@ -74,15 +74,15 @@ class RepetitionDlg : public KDialog
 	public:
 		RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = 0);
 		void           setReadOnly(bool);
-		void           set(int interval, int count, bool dateOnly = false, int maxDuration = -1);
-		int            interval() const;     // get the interval between repetitions, in minutes
+		void           set(const KCal::Duration& interval, int count, bool dateOnly = false, int maxDuration = -1);
+		KCal::Duration interval() const;     // get the interval between repetitions, in minutes
 		int            count() const;        // get the repeat count
 
 	private slots:
 		void           typeClicked();
-		void           intervalChanged(int);
+		void           intervalChanged(const KCal::Duration&);
 		void           countChanged(int);
-		void           durationChanged(int);
+		void           durationChanged(const KCal::Duration&);
 		void           repetitionToggled(bool);
 
 	private:

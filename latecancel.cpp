@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kcal/duration.h>
 
 #include "checkbox.h"
 #include "latecancel.moc"
@@ -108,13 +109,18 @@ void LateCancelSelector::setReadOnly(bool ro)
 
 int LateCancelSelector::minutes() const
 {
-	return mTimeSelector->minutes();
+	return mTimeSelector->period().asSeconds() / 60;
 }
 
 void LateCancelSelector::setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits)
 {
 	slotToggled(minutes);
-	mTimeSelector->setMinutes(minutes, dateOnly, defaultUnits);
+	KCal::Duration period;
+	if (minutes % (24*60))
+		period = KCal::Duration(minutes * 60, KCal::Duration::Seconds);
+	else
+		period = KCal::Duration(minutes / (24*60), KCal::Duration::Days);
+	mTimeSelector->setPeriod(period, dateOnly, defaultUnits);
 }
 
 void LateCancelSelector::setDateOnly(bool dateOnly)

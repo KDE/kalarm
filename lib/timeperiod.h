@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <khbox.h>
+#include <kcal/duration.h>
 
 class QStackedWidget;
 class ComboBox;
@@ -45,7 +46,7 @@ class TimeSpinBox;
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class TimePeriod : public KHBox
 {
@@ -74,20 +75,20 @@ class TimePeriod : public KHBox
 		 *  @param readOnly True to set the widget read-only, false to set it read-write.
 		 */
 		virtual void  setReadOnly(bool readOnly);
-		/** Gets the entered time period expressed in minutes. */
-		int           minutes() const;
+		/** Gets the entered time period. */
+		KCal::Duration period() const;
 		/** Initialises the time period value.
-		 *  @param minutes The value of the time period to set, expressed as a number of minutes.
+		 *  @param period The value of the time period to set.
 		 *  @param dateOnly True to restrict the units available in the combo box to days or weeks.
 		 *  @param defaultUnits The units to display initially in the combo box.
 		 */
-		void          setMinutes(int minutes, bool dateOnly, Units defaultUnits);
+		void          setPeriod(const KCal::Duration& period, bool dateOnly, Units defaultUnits);
 		/** Enables or disables minutes and hours/minutes units in the combo box. To
 		 *  disable minutes and hours/minutes, set @p dateOnly true; to enable minutes
 		 *  and hours/minutes, set @p dateOnly false. But note that minutes and
 		 *  hours/minutes cannot be enabled if it was disallowed in the constructor.
 		 */
-		void          setDateOnly(bool dateOnly)     { setDateOnly(minutes(), dateOnly, true); }
+		void          setDateOnly(bool dateOnly)     { setDateOnly(period(), dateOnly, true); }
 		/** Sets the maximum values for the minutes and hours/minutes, and days/weeks
 		 *  spin boxes.
 		 *  Set @p hourmin = 0 to leave the minutes and hours/minutes maximum unchanged.
@@ -106,9 +107,9 @@ class TimePeriod : public KHBox
 
 	signals:
 		/** This signal is emitted whenever the value held in the widget changes.
-		 *  @param minutes The current value of the time period, expressed in minutes.
+		 *  @param period The current value of the time period.
 		 */
-		void            valueChanged(int minutes);   // value has changed
+		void            valueChanged(const KCal::Duration& period);
 
 	private slots:
 		void            slotUnitsSelected(int index);
@@ -116,7 +117,7 @@ class TimePeriod : public KHBox
 		void            slotTimeChanged(int minutes);
 
 	private:
-		Units           setDateOnly(int minutes, bool dateOnly, bool signal);
+		Units           setDateOnly(const KCal::Duration&, bool dateOnly, bool signal);
 		void            setUnitRange();
 		void            showHourMin(bool hourMin);
 		void            adjustDayWeekShown();

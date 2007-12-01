@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 
 #include <kcal/person.h>
 #include <kcal/event.h>
+#include <kcal/duration.h>
 namespace KCal { class CalendarLocal; }
 
 #include "datetime.h"
@@ -80,7 +81,7 @@ class KAAlarmEventBase
 		bool               confirmAck() const          { return mConfirmAck; }
 		bool               repeatAtLogin() const       { return mRepeatAtLogin; }
 		int                repeatCount() const         { return mRepeatCount; }
-		int                repeatInterval() const      { return mRepeatInterval; }
+		KCal::Duration     repeatInterval() const      { return mRepeatInterval; }
 		bool               displaying() const          { return mDisplaying; }
 		bool               beep() const                { return mBeep; }
 		int                flags() const;
@@ -115,7 +116,7 @@ class KAAlarmEventBase
 		int                mFadeSeconds;      // fade time for sound file, or 0 if none
 		Type               mActionType;       // alarm action type
 		int                mRepeatCount;      // sub-repetition count (excluding the first time)
-		int                mRepeatInterval;   // sub-repetition interval (minutes)
+		KCal::Duration     mRepeatInterval;   // sub-repetition interval
 		int                mNextRepeat;       // repetition count of next due sub-repetition
 		int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
 		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
@@ -197,7 +198,7 @@ class KAAlarm : public KAAlarmEventBase
 		const QString&     eventID() const              { return mEventID; }
 		DateTime           dateTime(bool withRepeats = false) const
 		                                                { return (withRepeats && mNextRepeat && mRepeatInterval)
-		                                                    ? mNextMainDateTime.addSecs(mNextRepeat * mRepeatInterval * 60) : mNextMainDateTime; }
+		                                                    ? (mRepeatInterval * mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
 		QDate              date() const                 { return mNextMainDateTime.date(); }
 		QTime              time() const                 { return mNextMainDateTime.effectiveTime(); }
 		QString            audioFile() const            { return (mActionType == T_AUDIO) && !mBeep ? mText : QString(); }
@@ -369,11 +370,11 @@ class KAEvent : public KAAlarmEventBase
 		const DateTime&    startDateTime() const          { return mStartDateTime; }
 		DateTime           mainDateTime(bool withRepeats = false) const
 		                                                  { return (withRepeats && mNextRepeat && mRepeatInterval)
-		                                                    ? mNextMainDateTime.addSecs(mNextRepeat * mRepeatInterval * 60) : mNextMainDateTime; }
+		                                                    ? (mRepeatInterval * mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
 		QDate              mainDate() const               { return mNextMainDateTime.date(); }
 		QTime              mainTime() const               { return mNextMainDateTime.effectiveTime(); }
 		DateTime           mainEndRepeatTime() const      { return (mRepeatCount > 0 && mRepeatInterval)
-		                                                    ? mNextMainDateTime.addSecs(mRepeatCount * mRepeatInterval * 60) : mNextMainDateTime; }
+		                                                    ? (mRepeatInterval * mRepeatCount).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
 		int                reminder() const               { return mReminderMinutes; }
 		bool               reminderOnceOnly() const       { return mReminderOnceOnly; }
 		bool               reminderDeferral() const       { return mDeferral == REMINDER_DEFERRAL; }
@@ -401,7 +402,7 @@ class KAEvent : public KAAlarmEventBase
 		KARecurrence::Type recurType() const              { return checkRecur(); }
 		KARecurrence*      recurrence() const             { return mRecurrence; }
 		int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
-		int                longestRecurrenceInterval() const    { return mRecurrence ? mRecurrence->longestInterval() : 0; }
+		KCal::Duration     longestRecurrenceInterval() const    { return mRecurrence ? mRecurrence->longestInterval() : KCal::Duration(0); }
 		QString            recurrenceText(bool brief = false) const;
 		QString            repetitionText(bool brief = false) const;
 		bool               occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const;
@@ -423,7 +424,7 @@ class KAEvent : public KAAlarmEventBase
 			int        weeknum;     // week in month, or < 0 to count from end of month
 			QBitArray  days;        // days in week
 		};
-		bool               setRepetition(int interval, int count);
+		bool               setRepetition(const KCal::Duration&, int count);
 		void               setNoRecur()                   { clearRecur(); }
 		void               setRecurrence(const KARecurrence&);
 		bool               setRecurMinutely(int freq, int count, const KDateTime& end);
@@ -443,6 +444,7 @@ class KAEvent : public KAAlarmEventBase
 		static QString     calVersionString();
 		static bool        adjustStartOfDay(const KCal::Event::List&);
 		static bool        convertKCalEvents(KCal::CalendarLocal&, int version, bool adjustSummerTime);
+		static bool        convertRepetitions(KCal::CalendarLocal&);
 
 	private:
 		enum DeferType {
@@ -458,8 +460,11 @@ class KAEvent : public KAAlarmEventBase
 		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, Preferences::Feb29Type = Preferences::Feb29_None);
 		void               clearRecur();
 		KARecurrence::Type checkRecur() const;
+		void               checkRepetition() const;
 		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result) const;
 		OccurType          previousRecurrence(const KDateTime& afterDateTime, DateTime& result) const;
+		int                nextWorkRepetition(const KDateTime& pre) const;
+		static bool        convertRepetition(KCal::Event*);
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);

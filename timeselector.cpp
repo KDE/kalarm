@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,8 @@
 #include "checkbox.h"
 #include "timeselector.moc"
 
+using namespace KCal;
+
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent)
@@ -54,7 +56,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 	mPeriod = new TimePeriod(allowHourMinute, box);
 	mPeriod->setFixedSize(mPeriod->sizeHint());
 	mPeriod->setSelectOnStep(false);
-	connect(mPeriod, SIGNAL(valueChanged(int)), SLOT(periodChanged(int)));
+	connect(mPeriod, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(periodChanged(const KCal::Duration&)));
 	mSelect->setFocusWidget(mPeriod);
 	mPeriod->setEnabled(false);
 
@@ -90,7 +92,7 @@ void TimeSelector::setChecked(bool on)
 	if (on != mSelect->isChecked())
 	{
 		mSelect->setChecked(on);
-		emit valueChanged(minutes());
+		emit valueChanged(period());
 	}
 }
 
@@ -108,9 +110,9 @@ void TimeSelector::setDateOnly(bool dateOnly)
  * Get the specified number of minutes.
  * Reply = 0 if unselected.
  */
-int TimeSelector::minutes() const
+Duration TimeSelector::period() const
 {
-	return mSelect->isChecked() ? mPeriod->minutes() : 0;
+	return mSelect->isChecked() ? mPeriod->period() : Duration(0);
 }
 
 /******************************************************************************
@@ -119,13 +121,13 @@ int TimeSelector::minutes() const
 *  The time unit combo-box is initialised to 'defaultUnits', but if 'dateOnly'
 *  is true, it will never be initialised to hours/minutes.
 */
-void TimeSelector::setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits)
+void TimeSelector::setPeriod(const Duration& period, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-	mSelect->setChecked(minutes);
-	mPeriod->setEnabled(minutes);
+	mSelect->setChecked(period);
+	mPeriod->setEnabled(period);
 	if (mLabel)
-		mLabel->setEnabled(minutes);
-	mPeriod->setMinutes(minutes, dateOnly, defaultUnits);
+		mLabel->setEnabled(period);
+	mPeriod->setPeriod(period, dateOnly, defaultUnits);
 }
 
 /******************************************************************************
@@ -147,14 +149,14 @@ void TimeSelector::selectToggled(bool on)
 	if (on)
 		mPeriod->setFocus();
 	emit toggled(on);
-	emit valueChanged(minutes());
+	emit valueChanged(period());
 }
 
 /******************************************************************************
 *  Called when the period value changes.
 */
-void TimeSelector::periodChanged(int minutes)
+void TimeSelector::periodChanged(const KCal::Duration& period)
 {
 	if (mSelect->isChecked())
-		emit valueChanged(minutes);
+		emit valueChanged(period);
 }

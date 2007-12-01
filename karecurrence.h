@@ -1,7 +1,7 @@
 /*
  *  karecurrence.h  -  recurrence with special yearly February 29th handling
  *  Program:  kalarm
- *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define KARECURRENCE_H
 
 #include <kcal/recurrence.h>
+#include <kcal/duration.h>
 
 #include "preferences.h"
 class DateTime;
@@ -63,8 +64,8 @@ class KARecurrence : public KCal::Recurrence
 		bool        recursOn(const QDate&, const KDateTime::Spec&) const;
 		KDateTime   getNextDateTime(const KDateTime& preDateTime) const;
 		KDateTime   getPreviousDateTime(const KDateTime& afterDateTime) const;
-		int         longestInterval() const;
-		int         regularInterval() const;
+		KCal::Duration longestInterval() const;
+		KCal::Duration regularInterval() const;
 		Type        type() const;
 		static Type type(const KCal::RecurrenceRule*);
 		static bool dailyType(const KCal::RecurrenceRule*);

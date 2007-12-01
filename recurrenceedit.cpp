@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -492,11 +492,11 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 * Return the sub-repetition count within the recurrence, i.e. the number of
 * repetitions after the main recurrence.
 */
-int RecurrenceEdit::subRepeatCount(int* subRepeatInterval) const
+int RecurrenceEdit::subRepeatCount(Duration* subRepeatInterval) const
 {
 	int count = (mRuleButtonType >= SUBDAILY) ? mSubRepetition->count() : 0;
 	if (subRepeatInterval)
-		*subRepeatInterval = count ? mSubRepetition->interval() : 0;
+		*subRepeatInterval = count ? mSubRepetition->interval() : Duration(0);
 	return count;
 }
 
@@ -521,7 +521,7 @@ void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
 		{
 			KAEvent event;
 			updateEvent(event, false);
-			maxDuration = event.longestRecurrenceInterval() - reminderMinutes - 1;
+			maxDuration = event.longestRecurrenceInterval().asSeconds()/60 - reminderMinutes - 1;
 			break;
 		}
 	}
