@@ -118,6 +118,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 
 	connect(mAlarmType, SIGNAL(activated(int)), SLOT(alarmTypeSelected()));
 	QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
+
+	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(archiveDaysChanged(int)));
 }
 
 /******************************************************************************
@@ -374,9 +376,10 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 		default:  break;
 	}
 	mActionSetDefault->setText(text);
-	bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<AlarmResource::Type>(type)));
+	bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<AlarmResource::Type>(type))  &&  resource->standardResource());
 	mActionSetDefault->setChecked(active && writable && standard);
-	mActionSetDefault->setEnabled(active && writable && !standard);
+	bool allowChange = (type == AlarmResource::ARCHIVED  &&  !Preferences::archivedKeepDays());
+	mActionSetDefault->setEnabled(active && writable && (!standard || allowChange));
 	mContextMenu->popup(mListView->viewport()->mapToGlobal(viewportPos));
 }
 
@@ -401,6 +404,22 @@ void ResourceSelector::saveResource()
 }
 
 /******************************************************************************
+* Called when the length of time archived alarms are to be stored changes.
+* If expired alarms are now to be stored, set any single archived alarm
+* resource to be the default.
+*/
+void ResourceSelector::archiveDaysChanged(int days)
+{
+	if (days)
+	{
+		AlarmResources* resources = AlarmResources::instance();
+		AlarmResource* std = resources->getStandardResource(AlarmResource::ARCHIVED);
+		if (std  &&  !std->standardResource())
+			resources->setStandardResource(std);
+	}
+}
+
+/******************************************************************************
 * Called from the context menu to set the selected resource as the default
 * for its alarm type. The resource is automatically made active.
 */
@@ -409,8 +428,13 @@ void ResourceSelector::setStandard()
 	AlarmResource* resource = currentResource();
 	if (resource)
 	{
-		resource->setEnabled(true);
-		mCalendar->setStandardResource(resource);
+		if (mActionSetDefault->isChecked())
+		{
+			resource->setEnabled(true);
+			mCalendar->setStandardResource(resource);
+		}
+		else
+			resource->setStandardResource(false);
 	}
 }
 

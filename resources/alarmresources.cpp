@@ -246,7 +246,7 @@ AlarmResource* AlarmResources::getStandardResource(AlarmResource::Type type)
 			std = r;
 		}
 	}
-	if (std  &&  !mPassiveClient)
+	if (std  &&  type == AlarmResource::ACTIVE  &&  !mPassiveClient)
 		setStandardResource(std);   // mark it as the standard resource
 	return std;
 }
