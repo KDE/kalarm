@@ -216,38 +216,39 @@ AlarmResource* AlarmResources::getStandardResource(AlarmResource::Type type)
 			AlarmResource* std = mManager->standardResource();
 			if (std  &&  std->standardResource()  &&  std->alarmType() == AlarmResource::ACTIVE  &&  !std->readOnly())
 				return std;
-			// There's no nominated default active alarm resource.
-			// If there's only one read/write active alarm resource, use it.
-			std = 0;
-			for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
-			{
-				AlarmResource* r = *it;
-				if (r->alarmType() == AlarmResource::ACTIVE  &&  !r->readOnly())
-				{
-					if (std)
-						return 0;   // there's more than one candidate
-					std = r;
-				}
-			}
-			if (std)
-				setStandardResource(std);   // mark it as the standard resource
-			return std;
+			break;
 		}
 		case AlarmResource::ARCHIVED:
 		case AlarmResource::TEMPLATE:
 			if (mActiveOnly)
 				return 0;
+			for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
+			{
+				AlarmResource* r = *it;
+				if (r->alarmType() == type  &&  r->standardResource())
+					return r;
+			}
 			break;
 		default:
 			return 0;
 	}
+
+	// There's no nominated default alarm resource of the right type.
+	// If there's only one read/write alarm resource, use it.
+	AlarmResource* std = 0;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 	{
 		AlarmResource* r = *it;
-		if (r->alarmType() == type  &&  r->standardResource())
-			return r;
+		if (!r->readOnly()  &&  r->alarmType() == type)
+		{
+			if (std)
+				return 0;   // there's more than one candidate
+			std = r;
+		}
 	}
-	return 0;
+	if (std  &&  !mPassiveClient)
+		setStandardResource(std);   // mark it as the standard resource
+	return std;
 }
 
 void AlarmResources::setStandardResource(AlarmResource* resource)
