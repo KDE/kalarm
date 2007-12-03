@@ -20,6 +20,7 @@
 
 #include "kalarm.h"
 
+#include <QAction>
 #include <QGroupBox>
 #include <QLabel>
 #include <QTreeView>
