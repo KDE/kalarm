@@ -639,7 +639,7 @@ bool AlarmCalendar::save()
 *
 * Purge a list of archived events from the calendar.
 */
-void AlarmCalendar::purgeEvents(Event::List events)
+void AlarmCalendar::purgeEvents(const Event::List& events)
 {
 	for (int i = 0, end = events.count();  i < end;  ++i)
 		mCalendar->deleteEvent(events[i]);

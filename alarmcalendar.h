@@ -67,7 +67,7 @@ class AlarmCalendar : public QObject
 		KCal::Event*          updateEvent(const KAEvent&);
 		bool                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();
-		void                  purgeEvents(KCal::Event::List);
+		void                  purgeEvents(const KCal::Event::List&);
 		bool                  isOpen() const         { return mOpen; }
 		bool                  isEmpty() const;
 		QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
