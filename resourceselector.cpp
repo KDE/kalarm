@@ -293,7 +293,7 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	mActionSave        = new KAction(KIcon("document-save"), i18nc("@action", "&Save"), this);
 	actions->addAction(QLatin1String("resSave"), mActionSave);
 	connect(mActionSave, SIGNAL(triggered(bool)), SLOT(saveResource()));
-	mActionShowDetails = new KAction(KIcon("document-properties"), i18nc("@action", "Show &Details"), this);
+	mActionShowDetails = new KAction(KIcon("help-about"), i18nc("@action", "Show &Details"), this);
 	actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
 	connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
 	mActionSetColour   = new KAction(KIcon("color-picker"), i18nc("@action", "Set &Color"), this);
@@ -302,7 +302,7 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	mActionClearColour   = new KAction(i18nc("@action", "Clear C&olor"), this);
 	actions->addAction(QLatin1String("resClearColour"), mActionClearColour);
 	connect(mActionClearColour, SIGNAL(triggered(bool)), SLOT(clearColour()));
-	mActionEdit        = new KAction(KIcon("edit"), i18nc("@action", "&Edit..."), this);
+	mActionEdit        = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
 	actions->addAction(QLatin1String("resEdit"), mActionEdit);
 	connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
 	mActionRemove      = new KAction(KIcon("edit-delete"), i18nc("@action", "&Remove"), this);
