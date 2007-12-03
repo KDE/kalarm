@@ -387,7 +387,7 @@ void MainWindow::initActions()
 	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-	mActionModify = new KAction(KIcon("object-edit"), i18nc("@action", "&Edit..."), this);
+	mActionModify = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
 	actions->addAction(QLatin1String("modify"), mActionModify);
 	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
@@ -407,7 +407,7 @@ void MainWindow::initActions()
 	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
-	mActionView = new KAction(KIcon("document-properties"), i18nc("@action", "&View"), this);
+	mActionView = new KAction(KIcon("help-about"), i18nc("@action", "&View"), this);
 	actions->addAction(QLatin1String("view"), mActionView);
 	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
 	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
