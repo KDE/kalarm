@@ -1249,7 +1249,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 * Called when the status of a resource has changed.
 * Enable or disable actions appropriately.
 */
-void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Change change)
+void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)
 {
 	// Find whether there are any writable resources
 	AlarmResources* resources = AlarmResources::instance();
