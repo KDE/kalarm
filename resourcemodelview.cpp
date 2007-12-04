@@ -51,7 +51,6 @@ ResourceModel::ResourceModel(QObject* parent)
 {
 	refresh();
 	AlarmResources* resources = AlarmResources::instance();
-	connect(resources, SIGNAL(signalResourceAdded(AlarmResource*)), SLOT(addResource(AlarmResource*)));
 	connect(resources, SIGNAL(signalResourceModified(AlarmResource*)), SLOT(updateResource(AlarmResource*)));
 	connect(resources, SIGNAL(standardResourceChange(AlarmResource::Type)), SLOT(slotStandardChanged(AlarmResource::Type)));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
@@ -292,6 +291,9 @@ void ResourceModel::slotStatusChanged(AlarmResource* resource, AlarmResources::C
 {
 	switch (change)
 	{
+		case AlarmResources::Added:
+			addResource(resource);
+			break;
 		case AlarmResources::Enabled:
 		case AlarmResources::ReadOnly:
 		case AlarmResources::Colour:

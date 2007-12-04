@@ -413,12 +413,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
     /** Signal that the Resource has been modified. */
     void signalResourceModified(AlarmResource*);
 
-    /** Signal that an Incidence has been inserted to the Resource. */
-    void signalResourceAdded(AlarmResource*);
-
-    /** Signal that an Incidence has been removed from the Resource. */
-    void signalResourceDeleted(AlarmResource*);
-
     /** Signal an error message. */
     void signalErrorMessage(const QString& err);
 
