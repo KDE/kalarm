@@ -1,6 +1,6 @@
 KAlarm
 
-=== Version 1.9.90 ===
+=== Version 1.9.10 ===
 New facility to use multiple alarm calendar resources.
 Add facility to select time zone for alarm times.
 Handle summer/winter time changes correctly.
