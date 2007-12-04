@@ -58,7 +58,7 @@ using namespace KCal;
 
 QString AlarmCalendar::icalProductId()
 {
-	return QString::fromLatin1("-//K Desktop Environment//NONSGML " KALARM_NAME " %1//EN").arg(KAlarm::currentCalendarVersionString());
+	return QString::fromLatin1("-//K Desktop Environment//NONSGML " KALARM_NAME " " KALARM_VERSION "//EN");
 }
 
 static const QString displayCalendarName = QLatin1String("displaying.ics");
