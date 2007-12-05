@@ -136,43 +136,43 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	mMiscPage = new MiscPrefTab;
 	mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab", "General"));
 	mMiscPageItem->setHeader(i18nc("@title", "General"));
-	mMiscPageItem->setIcon(KIcon(DesktopIcon("misc")));
+	mMiscPageItem->setIcon(KIcon(DesktopIcon("preferences-other")));
 	addPage(mMiscPageItem);
 
 	mTimePage = new TimePrefTab;
 	mTimePageItem = new KPageWidgetItem(mTimePage, i18nc("@title:tab", "Time & Date"));
 	mTimePageItem->setHeader(i18nc("@title", "Time and Date"));
-	mTimePageItem->setIcon(KIcon(DesktopIcon("clock")));
+	mTimePageItem->setIcon(KIcon(DesktopIcon("preferences-system-time")));
 	addPage(mTimePageItem);
 
 	mStorePage = new StorePrefTab;
 	mStorePageItem = new KPageWidgetItem(mStorePage, i18nc("@title:tab", "Storage"));
 	mStorePageItem->setHeader(i18nc("@title", "Alarm Storage"));
-	mStorePageItem->setIcon(KIcon(DesktopIcon("document-open")));
+	mStorePageItem->setIcon(KIcon(DesktopIcon("system-file-manager")));
 	addPage(mStorePageItem);
 
 	mEmailPage = new EmailPrefTab;
 	mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab", "Email"));
 	mEmailPageItem->setHeader(i18nc("@title", "Email Alarm Settings"));
-	mEmailPageItem->setIcon(KIcon(DesktopIcon("mail")));
+	mEmailPageItem->setIcon(KIcon(DesktopIcon("internet-mail")));
 	addPage(mEmailPageItem);
 
 	mViewPage = new ViewPrefTab;
 	mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
 	mViewPageItem->setHeader(i18nc("@title", "View Settings"));
-	mViewPageItem->setIcon(KIcon(DesktopIcon("view-choose")));
+	mViewPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-theme")));
 	addPage(mViewPageItem);
 
 	mFontColourPage = new FontColourPrefTab;
 	mFontColourPageItem = new KPageWidgetItem(mFontColourPage, i18nc("@title:tab", "Font & Color"));
 	mFontColourPageItem->setHeader(i18nc("@title", "Default Font and Color"));
-	mFontColourPageItem->setIcon(KIcon(DesktopIcon("colorize")));
+	mFontColourPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-color")));
 	addPage(mFontColourPageItem);
 
 	mEditPage = new EditPrefTab;
 	mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
 	mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
-	mEditPageItem->setIcon(KIcon(DesktopIcon("edit")));
+	mEditPageItem->setIcon(KIcon(DesktopIcon("document-properties")));
 	addPage(mEditPageItem);
 
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
