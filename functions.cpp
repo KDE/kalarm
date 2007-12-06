@@ -130,7 +130,7 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
 {
-	return new TemplateMenuAction(KIcon(QLatin1String("new_from_template")), label, actions, name);
+	return new TemplateMenuAction(KIcon(QLatin1String("document-new-from-template")), label, actions, name);
 }
 
 /******************************************************************************
