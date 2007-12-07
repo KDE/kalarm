@@ -193,10 +193,7 @@ bool Daemon::registerWith(bool reregister)
 	if (reregister)
 		s.registerChange(appname, !disabledIfStopped);
 	else
-	{
-		QTime sod = Preferences::startOfDay();
 		s.registerApp(appname, kapp->aboutData()->programName(), QCString(NOTIFY_DCOP_OBJECT), AlarmCalendar::activeCalendar()->urlString(), !disabledIfStopped);
-	}
 	if (!s.ok())
 	{
 		kdError(5950) << "Daemon::registerWith(" << reregister << "): DCOP error" << endl;
@@ -222,6 +219,7 @@ void Daemon::registrationResult(bool reregister, int result, int version)
 	if (version  &&  version != DAEMON_VERSION_NUM)
 	{
 		failed = true;
+		kdError(5950) << "Daemon::registrationResult(" << reregister << "): kalarmd reports incompatible version " << version << endl;
 		errmsg = i18n("Cannot enable alarms.\nInstallation or configuration error: Alarm Daemon (%1) version is incompatible.")
 		              .arg(QString::fromLatin1(DAEMON_APP_NAME));
 	}
