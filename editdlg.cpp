@@ -857,7 +857,7 @@ bool EditAlarmDlg::validate()
 		if (reminder  &&  !mReminder->isOnceOnly())
 		{
 			mRecurrenceEdit->updateEvent(recurEvent, false);
-			longestRecurInterval = recurEvent.longestRecurrenceInterval().asSeconds();
+			longestRecurInterval = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
 			if (longestRecurInterval  &&  reminder >= longestRecurInterval)
 			{
 				mTabs->setCurrentIndex(mMainPageIndex);
