@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ void KAlarmPrefDlg::display()
 	else
 	{
 #ifdef Q_WS_X11
-		KWin::WindowInfo info = KWin::windowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
+		KWin::WindowInfo info = KWin::windowInfo(mInstance->winId(), static_cast<unsigned long>(NET::WMGeometry | NET::WMDesktop));
 		KWin::setCurrentDesktop(info.desktop());
 #endif
 		mInstance->showNormal();   // un-minimise it if necessary
@@ -387,6 +387,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mXtermType->hide();
 	QString whatsThis = i18n("The parameter is a command line, e.g. 'xterm -e'", "Check to execute command alarms in a terminal window by '%1'");
 	int index = 0;
+	mXtermFirst = -1;
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
@@ -396,6 +397,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 		QRadioButton* radio = new QRadioButton(args[0], group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->insert(radio, mXtermCount);
+		if (mXtermFirst < 0)
+			mXtermFirst = mXtermCount;   // note the id of the first button
 		cmd.replace("%t", kapp->aboutData()->programName());
 		cmd.replace("%c", "<command>");
 		cmd.replace("%w", "<command; sleep>");
@@ -412,6 +415,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->insert(radio, mXtermCount);
+	if (mXtermFirst < 0)
+		mXtermFirst = mXtermCount;   // note the id of the first button
 	mXtermCommand = new QLineEdit(box);
 	QWhatsThis::add(box,
 	      i18n("Enter the full command line needed to execute a command in your chosen terminal window. "
@@ -434,7 +439,7 @@ void MiscPrefTab::restore()
 	mStartOfDay->setValue(Preferences::mStartOfDay);
 	setExpiredControls(Preferences::mExpiredKeepDays);
 	QString xtermCmd = Preferences::cmdXTermCommand();
-	int id = 0;
+	int id = mXtermFirst;
 	if (!xtermCmd.isEmpty())
 	{
 		for ( ;  id < mXtermCount;  ++id)
@@ -505,7 +510,7 @@ void MiscPrefTab::setDefaults()
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
 	mStartOfDay->setValue(Preferences::default_startOfDay);
 	setExpiredControls(Preferences::default_expiredKeepDays);
-	mXtermType->setButton(0);
+	mXtermType->setButton(mXtermFirst);
 	mXtermCommand->setEnabled(false);
 	slotDisableIfStoppedToggled(true);
 }

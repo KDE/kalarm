@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.4.21 --- 21 November 2007 ===
+=== Version 1.4.21 --- 11 December 2007 ===
+Fix crash when saving preferences, if 'xterm' is not installed.
 Make the Menu key work in the alarm list.
 
 === Version 1.4.20 --- 18 November 2007 ===
