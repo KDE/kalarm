@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -377,6 +377,7 @@ MiscPrefTab::MiscPrefTab()
 
 	mXtermType = new ButtonGroup(group);
 	int index = 0;
+	mXtermFirst = -1;
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
@@ -386,6 +387,8 @@ MiscPrefTab::MiscPrefTab()
 		QRadioButton* radio = new QRadioButton(args[0], group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->addButton(radio, mXtermCount);
+		if (mXtermFirst < 0)
+			mXtermFirst = mXtermCount;   // note the id of the first button
 		cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());
 		cmd.replace("%c", "<command>");
 		cmd.replace("%w", "<command; sleep>");
@@ -404,6 +407,8 @@ MiscPrefTab::MiscPrefTab()
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->addButton(radio, mXtermCount);
+	if (mXtermFirst < 0)
+		mXtermFirst = mXtermCount;   // note the id of the first button
 	mXtermCommand = new QLineEdit(itemBox);
 	itemBox->setWhatsThis(
 	      i18nc("@info:whatsthis", "Enter the full command line needed to execute a command in your chosen terminal window. "
@@ -424,7 +429,7 @@ void MiscPrefTab::restore(bool defaults)
 	mAutostartTrayIcon->setChecked(Preferences::autostartTrayIcon());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	QString xtermCmd = Preferences::cmdXTermCommand();
-	int id = 0;
+	int id = mXtermFirst;
 	if (!xtermCmd.isEmpty())
 	{
 		for ( ;  id < mXtermCount;  ++id)
@@ -447,7 +452,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	{
 		QString cmd = mXtermCommand->text();
 		if (cmd.isEmpty())
-			xtermID = 0;       // 'Other' is only acceptable if it's non-blank
+			xtermID = -1;       // 'Other' is only acceptable if it's non-blank
 		else
 		{
 			QStringList args = KShell::splitArgs(cmd);
@@ -460,6 +465,11 @@ void MiscPrefTab::apply(bool syncToDisc)
 					return;
 			}
 		}
+	}
+	if (xtermID < 0)
+	{
+		xtermID = mXtermFirst;
+		mXtermType->setButton(mXtermFirst);
 	}
 
 	bool systray = mRunInSystemTray->isChecked();
