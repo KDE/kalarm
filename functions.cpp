@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -895,9 +895,16 @@ void editNewTemplate(const KAEvent& preset, QWidget* parent)
 
 /******************************************************************************
 * Open the Edit Alarm dialog to edit the specified alarm.
+* If the alarm is read-only or archived, the dialog is opened read-only.
 */
-void editAlarm(KAEvent& event, QWidget* parent)
+void editAlarm(const KCal::Event* kcalEvent, QWidget* parent)
 {
+	KAEvent event(kcalEvent);
+	if (event.expired()  ||  !AlarmResources::instance()->resource(kcalEvent)->writable(kcalEvent))
+	{
+		viewAlarm(event, parent);
+		return;
+	}
 	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
 	if (editDlg->exec() == QDialog::Accepted)
 	{
@@ -927,6 +934,7 @@ void editAlarm(KAEvent& event, QWidget* parent)
 
 /******************************************************************************
 * Display the alarm edit dialog to edit a specified alarm.
+* An error occurs if the alarm is read-only or expired.
 */
 bool editAlarm(const QString& eventID, QWidget* parent)
 {
@@ -952,8 +960,7 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 			kError(5950) << "KAlarm::editAlarm(" << eventID << "): event not active or template";
 			return false;
 	}
-	KAEvent event(kcalEvent);
-	editAlarm(event, parent);
+	editAlarm(kcalEvent, parent);
 	return true;
 }
 

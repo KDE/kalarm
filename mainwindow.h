@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -105,7 +105,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotModify();
 		void           slotDelete();
 		void           slotReactivate();
-		void           slotView();
 		void           slotEnable();
 		void           slotToggleTrayIcon();
 		void           slotResetDaemon();
@@ -172,7 +171,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		KAction*             mActionCreateTemplate;
 		KAction*             mActionCopy;
 		KAction*             mActionModify;
-		KAction*             mActionView;
 		KAction*             mActionDelete;
 		KAction*             mActionReactivate;
 		KAction*             mActionEnable;

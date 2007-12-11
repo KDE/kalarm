@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -127,11 +127,7 @@ bool AlarmListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 		QModelIndex source = static_cast<QAbstractProxyModel*>(model)->mapToSource(index);
 		KCal::Event* kcalEvent = static_cast<KCal::Event*>(source.internalPointer());
 kDebug()<<"kcalEvent="<<(void*)kcalEvent;
-		KAEvent event(kcalEvent);
-		if (event.expired()  ||  !AlarmResources::instance()->resource(kcalEvent)->writable(kcalEvent))
-			KAlarm::viewAlarm(event, view);
-		else
-			KAlarm::editAlarm(event, view);
+		KAlarm::editAlarm(kcalEvent, view);   // edit alarm (view-only mode if archived or read-only)
 	}
 	return false;   // indicate that the event has not been handled
 }	
