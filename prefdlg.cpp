@@ -462,7 +462,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	{
 		QString cmd = mXtermCommand->text();
 		if (cmd.isEmpty())
-			xtermID = 0;       // 'Other' is only acceptable if it's non-blank
+			xtermID = -1;       // 'Other' is only acceptable if it's non-blank
 		else
 		{
 			QStringList args = KShell::splitArgs(cmd);
@@ -476,6 +476,12 @@ void MiscPrefTab::apply(bool syncToDisc)
 			}
 		}
 	}
+	if (xtermID < 0)
+	{
+		xtermID = mXtermFirst;
+		mXtermType->setButton(mXtermFirst);
+	}
+
 	bool systray = mRunInSystemTray->isChecked();
 	Preferences::mRunInSystemTray        = systray;
 	Preferences::mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
