@@ -198,6 +198,9 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	if (mReadOnly)
 		caption = event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
 		                           : i18nc("@title:window", "View Alarm");
+#ifdef __GNUC__
+#warning Improve captions when string freeze ends
+#endif
 	else
 		caption = type_caption(newAlarm);
 	setCaption(caption);
