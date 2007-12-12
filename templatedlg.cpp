@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -173,10 +173,7 @@ void TemplateDlg::slotEdit()
 {
 	Event* kcalEvent = mListView->selectedEvent();
 	if (kcalEvent)
-	{
-		KAEvent event(kcalEvent);
-		KAlarm::editTemplate(event, mListView);
-	}
+		KAlarm::editTemplate(kcalEvent, mListView);
 }
 
 /******************************************************************************

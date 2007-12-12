@@ -966,9 +966,19 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 
 /******************************************************************************
 * Open the Edit Alarm dialog to edit the specified template.
+* If the template is read-only, the dialog is opened read-only.
 */
-void editTemplate(KAEvent& event, QWidget* parent)
+void editTemplate(const KCal::Event* kcalEvent, QWidget* parent)
 {
+	KAEvent event(kcalEvent);
+	if (!AlarmResources::instance()->resource(kcalEvent)->writable(kcalEvent))
+	{
+		// The template is read-only, so make the dialogue read-only
+		EditAlarmDlg* editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
+		editDlg->exec();
+		delete editDlg;
+		return;
+	}
 	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
 	if (editDlg->exec() == QDialog::Accepted)
 	{

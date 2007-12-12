@@ -86,7 +86,7 @@ void                editAlarm(const KCal::Event*, QWidget* parent = 0);
 void                viewAlarm(const KAEvent& event, QWidget* parent = 0);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewTemplate(const KAEvent& preset, QWidget* parent = 0);
-void                editTemplate(KAEvent&, QWidget* parent = 0);
+void                editTemplate(const KCal::Event*, QWidget* parent = 0);
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 /** Returns a list of all alarm templates.
