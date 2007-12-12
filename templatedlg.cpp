@@ -211,10 +211,23 @@ void TemplateDlg::slotDelete()
 */
 void TemplateDlg::slotSelectionChanged()
 {
-	int count = mListView->selectionModel()->selectedRows().count();
+	KCal::Event::List events = mListView->selectedEvents();
+	int count = events.count();
+	bool readOnly = false;
+	AlarmResources* resources = AlarmResources::instance();
+	for (int i = 0;  i < count;  ++i)
+	{
+		const KCal::Event* kcalEvent = events[i];
+		AlarmResource* resource = resources->resource(kcalEvent);
+		if (!resource  ||  !resource->writable(kcalEvent))
+		{
+			readOnly = true;
+			break;
+		}
+	}
 	mEditButton->setEnabled(count == 1);
 	mCopyButton->setEnabled(count == 1);
-	mDeleteButton->setEnabled(count);
+	mDeleteButton->setEnabled(count && !readOnly);
 }
 
 /******************************************************************************
