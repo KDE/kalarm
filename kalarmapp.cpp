@@ -1249,9 +1249,9 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				bool reschedule = false;
 				if (event.workTimeOnly()  &&  !alarm.deferred())
 				{
-					// The alarm is restricted to working hours (apart from reminders and
-					// deferrals). This needs to be re-evaluated every time it triggers,
-					// since working hours could change.
+					// The alarm is restricted to working hours (apart from deferrals).
+					// This needs to be re-evaluated every time it triggers, since
+					// working hours could change.
 					if (alarm.dateTime().isDateOnly())
 					{
 						KDateTime dt(nextDT);
