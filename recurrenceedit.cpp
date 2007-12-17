@@ -911,12 +911,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		endTime = mEndTimeEdit->time();
 	}
 
-	// Set up repetition within the recurrence
-	int count = mSubRepetition->count();
-	if (mRuleButtonType < SUBDAILY)
-		count = 0;
-	event.setRepetition(mSubRepetition->interval(), count);
-
 	// Set up the recurrence according to the type selected
 	QAbstractButton* button = mRuleButtonGroup->checkedButton();
 	event.setRepeatAtLogin(button == mAtLoginButton);
@@ -986,6 +980,13 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		return;    // an error occurred setting up the recurrence
 	if (adjustStart)
 		event.setFirstRecurrence();
+
+	// Set up repetition within the recurrence
+	// N.B. This requires the main recurrence to be set up first.
+	int count = mSubRepetition->count();
+	if (mRuleButtonType < SUBDAILY)
+		count = 0;
+	event.setRepetition(mSubRepetition->interval(), count);
 
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);
