@@ -244,12 +244,13 @@ void RepetitionDlg::set(const Duration& interval, int count, bool dateOnly, int 
 		mTimeSelector->setMaximum(maxhm, maxdw);
 		mDuration->setMaximum(maxhm, maxdw);
 	}
+	// Set the units - needed later if the control is unchecked initially.
+	TimePeriod::Units units = mDateOnly ? TimePeriod::Days : TimePeriod::HoursMinutes;
+	mTimeSelector->setPeriod(inter, mDateOnly, units);
 	if (!mMaxDuration  ||  !count)
 		mTimeSelector->setChecked(false);
 	else
 	{
-		TimePeriod::Units units = mDateOnly ? TimePeriod::Days : TimePeriod::HoursMinutes;
-		mTimeSelector->setPeriod(inter, mDateOnly, units);
 		bool on = mTimeSelector->isChecked();
 		repetitionToggled(on);    // enable/disable controls
 		if (on)
