@@ -348,10 +348,10 @@ void TimePeriod::slotDaysChanged(int)
 /******************************************************************************
 *  Called when the value of the time spin box changes.
 */
-void TimePeriod::slotTimeChanged(int value)
+void TimePeriod::slotTimeChanged(int)
 {
 	if (mHourMinuteRaised)
-		emit valueChanged(value);
+		emit valueChanged(period());
 }
 
 /******************************************************************************
