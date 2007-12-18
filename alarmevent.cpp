@@ -2835,7 +2835,7 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 
 /******************************************************************************
 *  Initialise the event's sub-repetition.
-*  The repetition length is adjusted if necessary to fit any recurrence interval.
+*  The repetition length is adjusted if necessary to fit the recurrence interval.
 *  Reply = false if a non-daily interval was specified for a date-only recurrence.
 */
 bool KAEvent::setRepetition(const Duration& interval, int count)
@@ -2846,7 +2846,7 @@ bool KAEvent::setRepetition(const Duration& interval, int count)
 	mNextRepeat     = 0;
 	if (interval.value() > 0  &&  count > 0  &&  !mRepeatAtLogin)
 	{
-		Q_ASSERT(checkRecur() == KARecurrence::NO_RECUR);
+		Q_ASSERT(checkRecur() != KARecurrence::NO_RECUR);
 		if (!interval.isDaily()  &&  mStartDateTime.isDateOnly())
 			return false;    // interval must be in units of days for date-only alarms
 		Duration longestInterval = mRecurrence->longestInterval();
