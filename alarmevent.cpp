@@ -2829,8 +2829,11 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 	else
 		mRecurrence = 0;
 
-	// Adjust sub-repetition values to fit the recurrence
-	setRepetition(mRepeatInterval, mRepeatCount);
+	// Adjust sub-repetition values to fit the recurrence.
+	// N.B. Need to make a copy of mRepeatInterval because it's passed to
+	// setRepetition() as a reference, and setRepetition() sets it to zero
+	// before using the parameter value.
+	setRepetition(Duration(mRepeatInterval), mRepeatCount);
 }
 
 /******************************************************************************
