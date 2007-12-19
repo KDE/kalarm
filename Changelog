@@ -20,7 +20,8 @@ Use kconf_update to convert old config file settings.
 Change numeric codes in config file to strings for long-term maintainability.
 Rename Defaults section options in config file.
 
-=== Version 1.4.21 --- 21 November 2007 ===
+=== Version 1.4.21 --- 19 December 2007 ===
+Prevent multiple identical error messages being displayed for the same alarm.
 Make the Menu key work in the alarm list.
 
 === Version 1.4.20 --- 18 November 2007 ===
