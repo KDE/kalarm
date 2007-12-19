@@ -94,7 +94,7 @@ class KAAlarmEventBase
 	protected:
 		enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_AUDIO, T_EMAIL };
 
-		KAAlarmEventBase() : mLateCancel(0), mAutoClose(false), mBeep(false), mRepeatAtLogin(false),
+		KAAlarmEventBase() : mRepeatCount(0), mLateCancel(0), mAutoClose(false), mBeep(false), mRepeatAtLogin(false),
 		                     mDisplaying(false), mEmailBcc(false), mConfirmAck(false) { }
 		KAAlarmEventBase(const KAAlarmEventBase& rhs)             { copy(rhs); }
 		KAAlarmEventBase& operator=(const KAAlarmEventBase& rhs)  { copy(rhs);  return *this; }
