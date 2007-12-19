@@ -719,6 +719,7 @@ void MainWindow::slotShowTime()
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
 		config.writeEntry(SHOW_TIME_KEY, mShowTime);
+		config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
 	}
 }
 
@@ -735,6 +736,7 @@ void MainWindow::slotShowTimeTo()
 	{
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+		config.writeEntry(SHOW_TIME_KEY, mShowTime);
 		config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
 	}
 }
