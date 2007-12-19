@@ -123,8 +123,16 @@ class MWMimeSourceFactory : public QMimeSourceFactory
 // Basic flags for the window
 static const Qt::WFlags WFLAGS = Qt::WStyle_StaysOnTop | Qt::WDestructiveClose;
 
+// Error message bit masks
+enum {
+	ErrMsg_Speak     = 0x01,
+	ErrMsg_AudioFile = 0x02,
+	ErrMsg_Volume    = 0x04
+};
+
 
 QValueList<MessageWin*> MessageWin::mWindowList;
+QMap<QString, unsigned> MessageWin::mErrorMessages;
 
 
 /******************************************************************************
@@ -261,6 +269,7 @@ MessageWin::~MessageWin()
 	stopPlay();
 	delete mWinModule;
 	mWinModule = 0;
+	mErrorMessages.remove(mEventID);
 	mWindowList.remove(this);
 	if (!mRecreating)
 	{
@@ -808,7 +817,11 @@ void MessageWin::slotSpeak()
 		if (kapp->startServiceByDesktopName("kttsd", QStringList(), &error))
 		{
 			kdDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd: " << error << endl;
-			KMessageBox::detailedError(0, i18n("Unable to speak message"), error);
+			if (!haveErrorMessage(ErrMsg_Speak))
+			{
+				KMessageBox::detailedError(0, i18n("Unable to speak message"), error);
+				clearErrorMessage(ErrMsg_Speak);
+			}
 			return;
 		}
 	}
@@ -818,7 +831,11 @@ void MessageWin::slotSpeak()
 	if (!client->send("kttsd", "KSpeech", "sayMessage(QString,QString)", data))
 	{
 		kdDebug(5950) << "MessageWin::slotSpeak(): sayMessage() DCOP error" << endl;
-		KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP Call sayMessage failed"));
+		if (!haveErrorMessage(ErrMsg_Speak))
+		{
+			KMessageBox::detailedError(0, i18n("Unable to speak message"), i18n("DCOP Call sayMessage failed"));
+			clearErrorMessage(ErrMsg_Speak);
+		}
 	}
 }
 
@@ -836,7 +853,11 @@ void MessageWin::slotPlayAudio()
 	||  !KIO::NetAccess::download(url, mLocalAudioFile, mmw))
 	{
 		kdError(5950) << "MessageWin::playAudio(): Open failure: " << mAudioFile << endl;
-		KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile));
+		if (!haveErrorMessage(ErrMsg_AudioFile))
+		{
+			KMessageBox::error(this, i18n("Cannot open audio file:\n%1").arg(mAudioFile));
+			clearErrorMessage(ErrMsg_AudioFile);
+		}
 		return;
 	}
 	if (!mArtsDispatcher)
@@ -855,9 +876,13 @@ void MessageWin::slotPlayAudio()
 		{
 			// Output error message now that everything else has been done.
 			// (Outputting it earlier would delay things until it is acknowledged.)
-			KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)").arg(mKMixError),
-			                         QString::null, QString::fromLatin1("KMixError"));
 			kdWarning(5950) << "Unable to set master volume (KMix: " << mKMixError << ")\n";
+			if (!haveErrorMessage(ErrMsg_Volume))
+			{
+				KMessageBox::information(this, i18n("Unable to set master volume\n(Error accessing KMix:\n%1)").arg(mKMixError),
+				                         QString::null, QString::fromLatin1("KMixError"));
+				clearErrorMessage(ErrMsg_Volume);
+			}
 		}
 #endif
 	}
@@ -1586,6 +1611,31 @@ void MessageWin::slotDefer()
 void MessageWin::displayMainWindow()
 {
 	KAlarm::displayMainWindowSelected(mEventID);
+}
+
+/******************************************************************************
+* Check whether the specified error message is already displayed for this
+* alarm, and note that it will now be displayed.
+* Reply = true if message is already displayed.
+*/
+bool MessageWin::haveErrorMessage(unsigned msg) const
+{
+	if (!mErrorMessages.contains(mEventID))
+		mErrorMessages.insert(mEventID, 0);
+	bool result = (mErrorMessages[mEventID] & msg);
+	mErrorMessages[mEventID] |= msg;
+	return result;
+}
+
+void MessageWin::clearErrorMessage(unsigned msg) const
+{
+	if (mErrorMessages.contains(mEventID))
+	{
+		if (mErrorMessages[mEventID] == msg)
+			mErrorMessages.remove(mEventID);
+		else
+			mErrorMessages[mEventID] &= ~msg;
+	}
 }
 
 
