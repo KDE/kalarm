@@ -525,9 +525,6 @@ void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
 			break;
 		}
 	}
-#ifdef __GNUC__
-#warning This needs to adjust interval and count if maxDuration is less
-#endif
 	mSubRepetition->initialise(mSubRepetition->interval(), mSubRepetition->count(), dateOnly, maxDuration);
 	mSubRepetition->setEnabled(mRuleButtonType >= SUBDAILY && maxDuration);
 }
