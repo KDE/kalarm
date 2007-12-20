@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -183,8 +183,6 @@ class KAlarmApp : public KUniqueApplication
 		bool                  mRefreshExpiredAlarms; // need to refresh the expired alarms display
 		bool                  mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
 		bool                  mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
-		bool                  mPrefsShowTime;       // Preferences setting for show alarm times in alarm list
-		bool                  mPrefsShowTimeTo;     // Preferences setting for show time-to-alarms in alarm list
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }

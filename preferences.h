@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,9 +69,6 @@ class Preferences : public QObject
 		static void              setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
 		static bool              modalMessages()                  { return mModalMessages; }
 		static int               messageButtonDelay()             { return mMessageButtonDelay; }
-		static bool              showExpiredAlarms()              { return mShowExpiredAlarms; }
-		static bool              showAlarmTime()                  { return mShowAlarmTime; }
-		static bool              showTimeToAlarm()                { return mShowTimeToAlarm; }
 		static int               tooltipAlarmCount()              { return mTooltipAlarmCount; }
 		static bool              showTooltipAlarmTime()           { return mShowTooltipAlarmTime; }
 		static bool              showTooltipTimeToAlarm()         { return mShowTooltipTimeToAlarm; }
@@ -128,9 +125,6 @@ class Preferences : public QObject
 		static const bool                       default_confirmAlarmDeletion;
 		static const bool                       default_modalMessages;
 		static const int                        default_messageButtonDelay;
-		static const bool                       default_showExpiredAlarms;
-		static const bool                       default_showAlarmTime;
-		static const bool                       default_showTimeToAlarm;
 		static const int                        default_tooltipAlarmCount;
 		static const bool                       default_showTooltipAlarmTime;
 		static const bool                       default_showTooltipTimeToAlarm;
@@ -202,9 +196,6 @@ class Preferences : public QObject
 		static bool                mAutostartTrayIcon;
 		static bool                mModalMessages;
 		static int                 mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
-		static bool                mShowExpiredAlarms;
-		static bool                mShowAlarmTime;
-		static bool                mShowTimeToAlarm;
 		static int                 mTooltipAlarmCount;
 		static bool                mShowTooltipAlarmTime;
 		static bool                mShowTooltipTimeToAlarm;

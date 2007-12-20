@@ -1,9 +1,11 @@
 KAlarm
 
 === Version 1.4.21 --- 19 December 2007 ===
-Fix crash when saving preferences, if 'xterm' is not installed.
-Prevent multiple identical error messages being displayed for the same alarm.
+Remember last used main window show/hide options instead of setting them in
+    Preferences dialogue.
 Make the Menu key work in the alarm list.
+Fix crash when saving preferences, if 'xterm' is not installed in the system.
+Prevent multiple identical error messages being displayed for the same alarm.
 
 === Version 1.4.20 --- 18 November 2007 ===
 Fix deferral of non-recurring alarms not working.

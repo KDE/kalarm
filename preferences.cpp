@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,9 +55,6 @@ const bool                       Preferences::default_autostartTrayIcon       = 
 const bool                       Preferences::default_confirmAlarmDeletion    = true;
 const bool                       Preferences::default_modalMessages           = true;
 const int                        Preferences::default_messageButtonDelay      = 0;     // (seconds)
-const bool                       Preferences::default_showExpiredAlarms       = false;
-const bool                       Preferences::default_showAlarmTime           = true;
-const bool                       Preferences::default_showTimeToAlarm         = false;
 const int                        Preferences::default_tooltipAlarmCount       = 5;
 const bool                       Preferences::default_showTooltipAlarmTime    = true;
 const bool                       Preferences::default_showTooltipTimeToAlarm  = true;
@@ -105,9 +102,6 @@ bool                       Preferences::mAutostartTrayIcon;
 KARecurrence::Feb29Type    Preferences::mDefaultFeb29Type;
 bool                       Preferences::mModalMessages;
 int                        Preferences::mMessageButtonDelay;
-bool                       Preferences::mShowExpiredAlarms;
-bool                       Preferences::mShowAlarmTime;
-bool                       Preferences::mShowTimeToAlarm;
 int                        Preferences::mTooltipAlarmCount;
 bool                       Preferences::mShowTooltipAlarmTime;
 bool                       Preferences::mShowTooltipTimeToAlarm;
@@ -160,9 +154,6 @@ static const QString AUTOSTART_TRAY           = QString::fromLatin1("AutostartTr
 static const QString FEB29_RECUR_TYPE         = QString::fromLatin1("Feb29Recur");
 static const QString MODAL_MESSAGES           = QString::fromLatin1("ModalMessages");
 static const QString MESSAGE_BUTTON_DELAY     = QString::fromLatin1("MessageButtonDelay");
-static const QString SHOW_EXPIRED_ALARMS      = QString::fromLatin1("ShowExpiredAlarms");
-static const QString SHOW_ALARM_TIME          = QString::fromLatin1("ShowAlarmTime");
-static const QString SHOW_TIME_TO_ALARM       = QString::fromLatin1("ShowTimeToAlarm");
 static const QString TOOLTIP_ALARM_COUNT      = QString::fromLatin1("TooltipAlarmCount");
 static const QString TOOLTIP_ALARM_TIME       = QString::fromLatin1("ShowTooltipAlarmTime");
 static const QString TOOLTIP_TIME_TO_ALARM    = QString::fromLatin1("ShowTooltipTimeToAlarm");
@@ -287,9 +278,6 @@ void Preferences::read()
 		mMessageButtonDelay = 10;    // prevent windows being unusable for a long time
 	if (mMessageButtonDelay < -1)
 		mMessageButtonDelay = -1;
-	mShowExpiredAlarms        = config->readBoolEntry(SHOW_EXPIRED_ALARMS, default_showExpiredAlarms);
-	mShowTimeToAlarm          = config->readBoolEntry(SHOW_TIME_TO_ALARM, default_showTimeToAlarm);
-	mShowAlarmTime            = !mShowTimeToAlarm ? true : config->readBoolEntry(SHOW_ALARM_TIME, default_showAlarmTime);
 	mTooltipAlarmCount        = static_cast<int>(config->readUnsignedNumEntry(TOOLTIP_ALARM_COUNT, default_tooltipAlarmCount));
 	if (mTooltipAlarmCount < 1)
 		mTooltipAlarmCount = 1;
@@ -382,9 +370,6 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(AUTOSTART_TRAY, mAutostartTrayIcon);
 	config->writeEntry(MODAL_MESSAGES, mModalMessages);
 	config->writeEntry(MESSAGE_BUTTON_DELAY, mMessageButtonDelay);
-	config->writeEntry(SHOW_EXPIRED_ALARMS, mShowExpiredAlarms);
-	config->writeEntry(SHOW_ALARM_TIME, mShowAlarmTime);
-	config->writeEntry(SHOW_TIME_TO_ALARM, mShowTimeToAlarm);
 	config->writeEntry(TOOLTIP_ALARM_COUNT, mTooltipAlarmCount);
 	config->writeEntry(TOOLTIP_ALARM_TIME, mShowTooltipAlarmTime);
 	config->writeEntry(TOOLTIP_TIME_TO_ALARM, mShowTooltipTimeToAlarm);
@@ -556,16 +541,40 @@ void Preferences::convertOldPrefs()
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	int version = KAlarm::getVersionNumber(config->readEntry(VERSION_NUM));
-	if (version >= KAlarm::Version(1,4,6))
+	if (version >= KAlarm::Version(1,4,21))
 		return;     // config format is up to date
 
-	// Convert KAlarm 1.4.5 preferences
-	static const QString DEF_SOUND = QString::fromLatin1("DefSound");
-	config->setGroup(DEFAULTS_SECTION);
-	bool sound = config->readBoolEntry(DEF_SOUND, false);
-	if (!sound)
-		config->writeEntry(DEF_SOUND_TYPE, SoundPicker::NONE);
-	config->deleteEntry(DEF_SOUND);
+	if (version <= KAlarm::Version(1,4,20))
+	{
+		// Convert KAlarm 1.4.20 preferences
+		static const QString VIEW_SECTION = QString::fromLatin1("View");
+		static const QString SHOW_ARCHIVED_ALARMS = QString::fromLatin1("ShowArchivedAlarms");
+		static const QString SHOW_EXPIRED_ALARMS  = QString::fromLatin1("ShowExpiredAlarms");
+		static const QString SHOW_ALARM_TIME      = QString::fromLatin1("ShowAlarmTime");
+		static const QString SHOW_TIME_TO_ALARM   = QString::fromLatin1("ShowTimeToAlarm");
+		config->setGroup(GENERAL_SECTION);
+		bool showExpired = config->readBoolEntry(SHOW_EXPIRED_ALARMS, false);
+		bool showTime    = config->readBoolEntry(SHOW_ALARM_TIME, true);
+		bool showTimeTo  = config->readBoolEntry(SHOW_TIME_TO_ALARM, false);
+		config->deleteEntry(SHOW_EXPIRED_ALARMS);
+		config->deleteEntry(SHOW_ALARM_TIME);
+		config->deleteEntry(SHOW_TIME_TO_ALARM);
+		config->setGroup(VIEW_SECTION);
+		config->writeEntry(SHOW_ARCHIVED_ALARMS, showExpired);
+		config->writeEntry(SHOW_ALARM_TIME, showTime);
+		config->writeEntry(SHOW_TIME_TO_ALARM, showTimeTo);
+	}
+
+	if (version <= KAlarm::Version(1,4,5))
+	{
+		// Convert KAlarm 1.4.5 preferences
+		static const QString DEF_SOUND = QString::fromLatin1("DefSound");
+		config->setGroup(DEFAULTS_SECTION);
+		bool sound = config->readBoolEntry(DEF_SOUND, false);
+		if (!sound)
+			config->writeEntry(DEF_SOUND_TYPE, SoundPicker::NONE);
+		config->deleteEntry(DEF_SOUND);
+	}
 
 	if (version < KAlarm::Version(1,3,0))
 	{
