@@ -582,7 +582,7 @@ void MessageWin::initView()
 		layout->addStretch();
 		topLayout->addLayout(layout);
 		QLabel* label = new QLabel(topWidget);
-		label->setPixmap(DesktopIcon("error"));
+		label->setPixmap(DesktopIcon("dialog-error"));
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignRight);
 		QVBoxLayout* vlayout = new QVBoxLayout();
@@ -661,7 +661,7 @@ void MessageWin::initView()
 	if (mKMailSerialNumber)
 	{
 		// KMail button
-		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), KIconLoader::MainToolbar);
+		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
 		mKMailButton = new QPushButton(topWidget);
 		mKMailButton->setIcon(pixmap);
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
