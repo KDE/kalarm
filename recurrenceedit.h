@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -25,6 +25,7 @@
 #define RECURRENCEEDIT_H
 
 #include <QFrame>
+#include <kcal/duration.h>
 
 #include "datetime.h"
 
@@ -71,7 +72,7 @@ class RecurrenceEdit : public QFrame
 		QWidget*      checkData(const KDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }
-		int           subRepeatCount(int* subRepeatInterval = 0) const;
+		int           subRepeatCount(KCal::Duration* subRepeatInterval = 0) const;
 		void          setSubRepetition(int reminderMinutes, bool dateOnly);
 		void          setStartDate(const QDate&, const QDate& today);
 		void          setDefaultEndDate(const QDate&);
@@ -171,7 +172,7 @@ class RecurrenceEdit : public QFrame
 		int               mSavedRecurCount;          // recurrence repeat count
 		KDateTime         mSavedEndDateTime;         // end date/time
 		QList<QDate>      mSavedExceptionDates;      // exception dates
-		int               mSavedRepeatInterval;      // sub-repetition interval (via mSubRepetition button)
+		KCal::Duration    mSavedRepeatInterval;      // sub-repetition interval (via mSubRepetition button)
 		int               mSavedRepeatCount;         // sub-repetition count (via mSubRepetition button)
 		bool              mSavedWorkTimeOnly;        // only during working hours
 };

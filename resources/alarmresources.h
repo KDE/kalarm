@@ -1,7 +1,7 @@
 /*
  *  alarmresources.h  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *  Based on calendarresources.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -262,7 +262,8 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 
        @param incidence is a pointer to the Incidence that will be changing.
     */
-    virtual bool beginChange(KCal::Incidence* incidence, QWidget* promptParent = 0);
+    bool beginChange(KCal::Incidence* incidence, QWidget* promptParent);
+    virtual bool beginChange(KCal::Incidence* incidence)   { return beginChange(incidence, 0); }
 
     /**
        Flag that a change to a Calendar Incidence has completed.
@@ -406,15 +407,11 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 
 		static void setDebugArea(int area)   { AlarmResource::setDebugArea(area); }
 
+		using QObject::event;   // prevent warning about hidden virtual method
+
   signals:
     /** Signal that the Resource has been modified. */
     void signalResourceModified(AlarmResource*);
-
-    /** Signal that an Incidence has been inserted to the Resource. */
-    void signalResourceAdded(AlarmResource*);
-
-    /** Signal that an Incidence has been removed from the Resource. */
-    void signalResourceDeleted(AlarmResource*);
 
     /** Signal an error message. */
     void signalErrorMessage(const QString& err);
@@ -518,8 +515,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		bool        mAskDestination;  // true to prompt user which resource to store new events in
 		bool        mShowProgress;    // emit download progress signals
 		bool        mOpen;
-
-
 };
 
 #endif

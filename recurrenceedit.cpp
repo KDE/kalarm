@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2007 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -492,11 +492,11 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 * Return the sub-repetition count within the recurrence, i.e. the number of
 * repetitions after the main recurrence.
 */
-int RecurrenceEdit::subRepeatCount(int* subRepeatInterval) const
+int RecurrenceEdit::subRepeatCount(Duration* subRepeatInterval) const
 {
 	int count = (mRuleButtonType >= SUBDAILY) ? mSubRepetition->count() : 0;
 	if (subRepeatInterval)
-		*subRepeatInterval = count ? mSubRepetition->interval() : 0;
+		*subRepeatInterval = count ? mSubRepetition->interval() : Duration(0);
 	return count;
 }
 
@@ -521,13 +521,10 @@ void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
 		{
 			KAEvent event;
 			updateEvent(event, false);
-			maxDuration = event.longestRecurrenceInterval() - reminderMinutes - 1;
+			maxDuration = event.longestRecurrenceInterval().asSeconds()/60 - reminderMinutes - 1;
 			break;
 		}
 	}
-#ifdef __GNUC__
-#warning This needs to adjust interval and count if maxDuration is less
-#endif
 	mSubRepetition->initialise(mSubRepetition->interval(), mSubRepetition->count(), dateOnly, maxDuration);
 	mSubRepetition->setEnabled(mRuleButtonType >= SUBDAILY && maxDuration);
 }
@@ -911,12 +908,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		endTime = mEndTimeEdit->time();
 	}
 
-	// Set up repetition within the recurrence
-	int count = mSubRepetition->count();
-	if (mRuleButtonType < SUBDAILY)
-		count = 0;
-	event.setRepetition(mSubRepetition->interval(), count);
-
 	// Set up the recurrence according to the type selected
 	QAbstractButton* button = mRuleButtonGroup->checkedButton();
 	event.setRepeatAtLogin(button == mAtLoginButton);
@@ -986,6 +977,13 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		return;    // an error occurred setting up the recurrence
 	if (adjustStart)
 		event.setFirstRecurrence();
+
+	// Set up repetition within the recurrence
+	// N.B. This requires the main recurrence to be set up first.
+	int count = mSubRepetition->count();
+	if (mRuleButtonType < SUBDAILY)
+		count = 0;
+	event.setRepetition(mSubRepetition->interval(), count);
 
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);

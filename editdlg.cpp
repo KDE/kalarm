@@ -1,7 +1,7 @@
 /*
 *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
 *  Program:  kalarm
-*  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+*  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -198,6 +198,9 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	if (mReadOnly)
 		caption = event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
 		                           : i18nc("@title:window", "View Alarm");
+#ifdef __GNUC__
+#warning Improve captions when string freeze ends
+#endif
 	else
 		caption = type_caption(newAlarm);
 	setCaption(caption);
@@ -857,7 +860,7 @@ bool EditAlarmDlg::validate()
 		if (reminder  &&  !mReminder->isOnceOnly())
 		{
 			mRecurrenceEdit->updateEvent(recurEvent, false);
-			longestRecurInterval = recurEvent.longestRecurrenceInterval();
+			longestRecurInterval = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
 			if (longestRecurInterval  &&  reminder >= longestRecurInterval)
 			{
 				mTabs->setCurrentIndex(mMainPageIndex);
@@ -874,13 +877,13 @@ bool EditAlarmDlg::validate()
 				mRecurrenceEdit->updateEvent(recurEvent, false);
 				longestRecurInterval = recurEvent.longestRecurrenceInterval();
 			}
-			if (recurEvent.repeatCount() * recurEvent.repeatInterval() >= longestRecurInterval - reminder)
+			if (recurEvent.repeatInterval().asSeconds() * recurEvent.repeatCount() >= longestRecurInterval - reminder*60)
 			{
 				KMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
 				return false;
 			}
-			if (recurEvent.repeatInterval() % 1440
+			if (!recurEvent.repeatInterval().isDaily()
 			&&  (mTemplate && mTemplateAnyTime->isChecked()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
 			{
 				KMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
@@ -974,7 +977,7 @@ void EditAlarmDlg::slotEditDeferral()
 	if (!mTimeWidget)
 		return;
 	bool limit = true;
-	int repeatInterval;
+	Duration repeatInterval;
 	int repeatCount = mRecurrenceEdit->subRepeatCount(&repeatInterval);
 	DateTime start = mTimeWidget->getDateTime(0, !repeatCount, !mExpiredRecurrence);
 	if (!start.isValid())
@@ -989,14 +992,15 @@ void EditAlarmDlg::slotEditDeferral()
 		if (repeatCount  &&  start < now)
 		{
 			// Sub-repetition - find the time of the next one
-			repeatInterval *= 60;
-			int repetition = (start.secsTo(now) + repeatInterval - 1) / repeatInterval;
+			int repetition = repeatInterval.isDaily()
+			               ? (start.secsTo(now) + repeatInterval - 1) / repeatInterval
+			               : (start.secsTo(now) + repeatInterval.asSeconds() - 1) / repeatInterval.asSeconds();
 			if (repetition > repeatCount)
 			{
 				mTimeWidget->getDateTime();    // output the appropriate error message
 				return;
 			}
-			start = start.addSecs(repetition * repeatInterval);
+			start = (repeatInterval * repetition).end(start.kDateTime());
 		}
 	}
 

@@ -1,7 +1,7 @@
 /*
  *  dbushandler.h  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2001,2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2002,2004-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #define DBUSHANDLER_H
 
 #include <QWidget>
+#include <kcal/duration.h>
 
 #include "datetime.h"
 #include "kalarmiface.h"
@@ -80,19 +81,19 @@ class DBusHandler : public QObject, public KAlarmIface
 	static bool scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
 	                            const QString& bgColor, const QString& fgColor, const QString& fontStr,
 	                            const KUrl& audioFile, int reminderMins, const KARecurrence&,
-	                            int subRepeatInterval = 0, int subRepeatCount = 0);
+	                            const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
 	static bool scheduleFile(const KUrl& file, const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
 	                         const KUrl& audioFile, int reminderMins, const KARecurrence&,
-	                         int subRepeatInterval = 0, int subRepeatCount = 0);
+	                         const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
 	static bool scheduleCommand(const QString& commandLine, const KDateTime& start, int lateCancel, unsigned flags,
-	                            const KARecurrence&, int subRepeatInterval = 0, int subRepeatCount = 0);
+	                            const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
 	static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                          const QString& attachments, const KDateTime& start, int lateCancel, unsigned flags,
-	                          const KARecurrence&, int subRepeatInterval = 0, int subRepeatCount = 0);
+	                          const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
 	static KDateTime convertDateTime(const QString& dateTime, const KDateTime& = KDateTime());
 	static unsigned  convertStartFlags(const KDateTime& start, unsigned flags);
 	static QColor    convertBgColour(const QString& bgColor);
-	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence, int& subRepeatInterval);
+	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence, int subRepeatInterval, KCal::Duration& subRepeatDuration);
 	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, int recurCount);
 	static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
 	static bool      convertRecurrence(KARecurrence&, const KDateTime& start, int recurType, int recurInterval, int recurCount, const KDateTime& end);

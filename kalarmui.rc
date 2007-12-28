@@ -6,7 +6,6 @@
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />
-  <Action name="view" />
   <Separator />
   <Action name="edit_undo" />
   <Action name="edit_redo" />
@@ -38,7 +37,6 @@
    <Action name="modify" />
    <Action name="delete" />
    <Action name="undelete" />
-   <Action name="view" />
    <Action name="disable" />
    <Action name="createTemplate" />
    <Separator/>
@@ -61,7 +59,6 @@
   <Action name="modify" />
   <Action name="delete" />
   <Action name="undelete" />
-  <Action name="view" />
   <Action name="disable" />
   <Action name="createTemplate" />
  </Menu>

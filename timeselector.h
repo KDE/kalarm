@@ -1,7 +1,7 @@
 /*
  *  timeselector.h  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,8 +36,8 @@ class TimeSelector : public QFrame
 		             const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent);
 		bool         isChecked() const;
 		void         setChecked(bool on);
-		int          minutes() const;
-		void         setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits);
+		KCal::Duration period() const;
+		void         setPeriod(const KCal::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
 		void         setReadOnly(bool);
 		void         setDateOnly(bool dateOnly = true);
 		void         setMaximum(int hourmin, int days);
@@ -45,11 +45,11 @@ class TimeSelector : public QFrame
 
 	signals:
 		void         toggled(bool);             // selection checkbox has been toggled
-		void         valueChanged(int minutes); // value has changed
+		void         valueChanged(const KCal::Duration&); // value has changed
 
 	protected slots:
 		void         selectToggled(bool);
-		void         periodChanged(int minutes);
+		void         periodChanged(const KCal::Duration&);
 
 	private:
 		CheckBox*    mSelect;

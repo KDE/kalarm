@@ -1,7 +1,7 @@
 /*
  *  eventlistview.h  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,17 +53,19 @@ class EventListView : public QTreeView
 		virtual void      slotFindPrev()       { findNext(false); }
 
 	signals:
-		void              rightButtonClicked(const QPoint& globalPos);
+		void              contextMenuRequested(const QPoint& globalPos);
 		void              findActive(bool);
 
 	protected:
 		virtual bool      viewportEvent(QEvent*);
-		virtual void      mouseReleaseEvent(QMouseEvent*);
+		virtual void      contextMenuEvent(QContextMenuEvent*);
 
 	private:
 		void              findNext(bool forward);
 
 		Find*             mFind;
+
+		using QObject::event;   // prevent "hidden" warning
 };
 
 #endif // EVENTLISTVIEW_H

@@ -1,7 +1,7 @@
 /*
  *  resourceremote.h  -  KAlarm remote alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *  Based on resourceremote.h in kresources,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -78,6 +78,7 @@ class KALARM_EXPORT KAResourceRemote : public AlarmResource
 	protected:
 		virtual bool doLoad(bool syncCache);
 		virtual bool doSave(bool syncCache);
+		virtual bool doSave(bool syncCache, KCal::Incidence* i)  { return AlarmResource::doSave(syncCache, i); }
 		virtual void enableResource(bool enable);
 
 	private slots:
@@ -87,6 +88,10 @@ class KALARM_EXPORT KAResourceRemote : public AlarmResource
 
 	private:
 		void init();
+		// Inherited virtual methods which are not used by derived classes
+		using ResourceCalendar::doLoad;
+		virtual bool doSave() { return false; }
+		virtual bool doSave(KCal::Incidence*) { return false; }
 
 		KUrl                  mDownloadUrl;
 		KUrl                  mUploadUrl;

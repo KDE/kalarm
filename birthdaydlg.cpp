@@ -20,6 +20,7 @@
 
 #include "kalarm.h"
 
+#include <QAction>
 #include <QGroupBox>
 #include <QLabel>
 #include <QTreeView>
@@ -35,6 +36,7 @@
 #include <kactioncollection.h>
 #include <khbox.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 
 #include "alarmcalendar.h"
 #include "birthdaymodel.h"
@@ -211,7 +213,13 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	KActionCollection* actions = new KActionCollection(this);
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
 	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
-	actions->associateWidget(mListView);
+	actions->addAssociatedWidget(mListView);
+    foreach (QAction* action, actions->actions())
+#if QT_VERSION < KDE_MAKE_VERSION(4,4,0)
+        action->setShortcutContext(Qt::WidgetShortcut); // remove after Qt4.4 becomes mandatory
+#else
+        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+#endif
 
 	enableButtonOk(false);     // only enable OK button when something is selected
 }

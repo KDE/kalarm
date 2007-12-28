@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "editdlg.h"
 #include <kfile.h>
 
+namespace KCal { class Event; }
 class QWidget;
 class KActionCollection;
 class QAction;
@@ -81,11 +82,11 @@ void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewAlarm(KAEvent::Action, QWidget* parent = 0, const AlarmText* = 0);
 void                editNewAlarm(const KAEvent& preset, QWidget* parent = 0);
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
-void                editAlarm(KAEvent&, QWidget* parent = 0);
+void                editAlarm(const KCal::Event*, QWidget* parent = 0);
 void                viewAlarm(const KAEvent& event, QWidget* parent = 0);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewTemplate(const KAEvent& preset, QWidget* parent = 0);
-void                editTemplate(KAEvent&, QWidget* parent = 0);
+void                editTemplate(const KCal::Event*, QWidget* parent = 0);
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 /** Returns a list of all alarm templates.

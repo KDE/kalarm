@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "timespinbox.h"
 #include "timeperiod.moc"
 
+using namespace KCal;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -125,7 +126,7 @@ void TimePeriod::setFocusOnCount()
 */
 void TimePeriod::setMaximum(int hourmin, int days)
 {
-	int oldmins = minutes();
+	Duration oldmins = period();
 	if (hourmin > 0)
 	{
 		if (hourmin > maxMinutes)
@@ -135,27 +136,31 @@ void TimePeriod::setMaximum(int hourmin, int days)
 	mMaxDays = (days >= 0) ? days : 0;
 	adjustDayWeekShown();
 	setUnitRange();
-	int mins = minutes();
+	Duration mins = period();
 	if (mins != oldmins)
 		emit valueChanged(mins);
 }
 
 /******************************************************************************
- * Get the specified number of minutes.
+ * Get the specified time period.
  * Reply = 0 if error.
  */
-int TimePeriod::minutes() const
+Duration TimePeriod::period() const
 {
-	int factor = 0;
+	int factor = 1;
 	switch (mUnitsCombo->currentIndex() + mDateOnlyOffset)
 	{
 		case HoursMinutes:
-			return mTimeSpinBox->value();
-		case Minutes:  factor = 1;  break;
-		case Days:     factor = 24*60;  break;
-		case Weeks:    factor = 7*24*60;  break;
+			return Duration(mTimeSpinBox->value() * 60, Duration::Seconds);
+		case Minutes:
+			return Duration(mSpinBox->value() * 60, Duration::Seconds);
+		case Weeks:
+			factor = 7;
+			// fall through to DAYS
+		case Days:
+			return Duration(mSpinBox->value() * factor, Duration::Days);
 	}
-	return mSpinBox->value() * factor;
+	return 0;
 }
 
 /******************************************************************************
@@ -163,26 +168,29 @@ int TimePeriod::minutes() const
 *  The time unit combo-box is initialised to 'defaultUnits', but if 'dateOnly'
 *  is true, it will never be initialised to minutes or hours/minutes.
 */
-void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUnits)
+void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-	int oldmins = minutes();
+	Duration oldinterval = period();
 	if (!dateOnly  &&  mNoHourMinute)
 		dateOnly = true;
 	int item;
-	if (mins)
+	if (perod)
 	{
-		int count = mins;
-		if (mins % (24*60))
-			item = (defaultUnits == Minutes) ? Minutes : HoursMinutes;
-		else if (mins % (7*24*60))
+		int count = perod.value();
+		if (perod.isDaily())
 		{
-			item = Days;
-			count = mins / (24*60);
+			if (count % 7)
+				item = Days;
+			else
+			{
+				item = Weeks;
+				count /= 7;
+			}
 		}
 		else
 		{
-			item = Weeks;
-			count = mins / (7*24*60);
+			count /= 60;   // minutes
+			item = (defaultUnits == Minutes) ? Minutes : HoursMinutes;
 		}
 		if (item < mDateOnlyOffset)
 			item = mDateOnlyOffset;
@@ -193,7 +201,7 @@ void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUn
 			mTimeSpinBox->setValue(count);
 		else
 			mSpinBox->setValue(count);
-		item = setDateOnly(mins, dateOnly, false);
+		item = setDateOnly(perod, dateOnly, false);
 	}
 	else
 	{
@@ -204,24 +212,24 @@ void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUn
 			item = mMaxUnitShown;
 		mUnitsCombo->setCurrentIndex(item - mDateOnlyOffset);
 		if (dateOnly && !mDateOnlyOffset  ||  !dateOnly && mDateOnlyOffset)
-			item = setDateOnly(mins, dateOnly, false);
+			item = setDateOnly(perod, dateOnly, false);
 	}
 	showHourMin(item == HoursMinutes  &&  !mNoHourMinute);
 
-	int newmins = minutes();
-	if (newmins != oldmins)
-		emit valueChanged(newmins);
+	Duration newinterval = period();
+	if (newinterval != oldinterval)
+		emit valueChanged(newinterval);
 }
 
 /******************************************************************************
 *  Enable/disable hours/minutes units (if hours/minutes were permitted in the
 *  constructor).
 */
-TimePeriod::Units TimePeriod::setDateOnly(int mins, bool dateOnly, bool signal)
+TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, bool signal)
 {
-	int oldmins = 0;
+	Duration oldinterval = 0;
 	if (signal)
-		oldmins = minutes();
+		oldinterval = period();
 	int index = mUnitsCombo->currentIndex();
 	Units units = static_cast<Units>(index + mDateOnlyOffset);
 	if (!mNoHourMinute)
@@ -252,7 +260,7 @@ TimePeriod::Units TimePeriod::setDateOnly(int mins, bool dateOnly, bool signal)
 				// Set units to days and round up the warning period
 				units = Days;
 				mUnitsCombo->setCurrentIndex(Days - mDateOnlyOffset);
-				mSpinBox->setValue((mins + 1439) / 1440);
+				mSpinBox->setValue(perod.asDays());
 			}
 			showHourMin(false);
 		}
@@ -260,9 +268,9 @@ TimePeriod::Units TimePeriod::setDateOnly(int mins, bool dateOnly, bool signal)
 
 	if (signal)
 	{
-		int newmins = minutes();
-		if (newmins != oldmins)
-			emit valueChanged(newmins);
+		Duration newinterval = period();
+		if (newinterval != oldinterval)
+			emit valueChanged(newinterval);
 	}
 	return units;
 }
@@ -325,7 +333,7 @@ void TimePeriod::slotUnitsSelected(int index)
 {
 	setUnitRange();
 	showHourMin(index + mDateOnlyOffset == HoursMinutes);
-	emit valueChanged(minutes());
+	emit valueChanged(period());
 }
 
 /******************************************************************************
@@ -334,16 +342,16 @@ void TimePeriod::slotUnitsSelected(int index)
 void TimePeriod::slotDaysChanged(int)
 {
 	if (!mHourMinuteRaised)
-		emit valueChanged(minutes());
+		emit valueChanged(period());
 }
 
 /******************************************************************************
 *  Called when the value of the time spin box changes.
 */
-void TimePeriod::slotTimeChanged(int value)
+void TimePeriod::slotTimeChanged(int)
 {
 	if (mHourMinuteRaised)
-		emit valueChanged(value);
+		emit valueChanged(period());
 }
 
 /******************************************************************************

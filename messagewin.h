@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 /** @file messagewin.h - displays an alarm message */
 
 #include <QList>
+#include <QMap>
 
 #include "mainwindowbase.h"
 #include "alarmevent.h"
@@ -105,9 +106,12 @@ class MessageWin : public MainWindowBase
 		void                setDeferralLimit(const KAEvent&);
 		void                alarmShowing(KAEvent&, const KCal::Event* = 0);
 		bool                retrieveEvent(KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
+		bool                haveErrorMessage(unsigned msg) const;
+		void                clearErrorMessage(unsigned msg) const;
 		static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
 
 		static QList<MessageWin*> mWindowList;  // list of existing message windows
+		static QMap<QString, unsigned> mErrorMessages;  // error messages currently displayed, by event ID
 		// Properties needed by readProperties()
 		QString             mMessage;
 		QFont               mFont;

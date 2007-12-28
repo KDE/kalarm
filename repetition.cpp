@@ -1,7 +1,7 @@
 /*
  *  repetition.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@
 #include "timeselector.h"
 #include "repetition.moc"
 
+using namespace KCal;
+
 
 /*=============================================================================
 = Class RepetitionButton
@@ -55,7 +57,7 @@ RepetitionButton::RepetitionButton(const QString& caption, bool waitForInitialis
 	connect(this, SIGNAL(clicked()), SLOT(slotPressed()));
 }
 
-void RepetitionButton::set(int interval, int count)
+void RepetitionButton::set(const Duration& interval, int count)
 {
 	mInterval = interval;
 	mCount    = count;
@@ -65,7 +67,7 @@ void RepetitionButton::set(int interval, int count)
 /******************************************************************************
 *  Set the data for the dialog.
 */
-void RepetitionButton::set(int interval, int count, bool dateOnly, int maxDuration)
+void RepetitionButton::set(const Duration& interval, int count, bool dateOnly, int maxDuration)
 {
 	mInterval    = interval;
 	mCount       = count;
@@ -94,7 +96,7 @@ void RepetitionButton::activate(bool waitForInitialisation)
 *  Set the data for the dialog and display it.
 *  To be called only after needsInitialisation() has been emitted.
 */
-void RepetitionButton::initialise(int interval, int count, bool dateOnly, int maxDuration)
+void RepetitionButton::initialise(const Duration& interval, int count, bool dateOnly, int maxDuration)
 {
 	mInterval    = interval;
 	mCount       = count;
@@ -167,7 +169,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	                  i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
 	                  true, page);
 	mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
-	connect(mTimeSelector, SIGNAL(valueChanged(int)), SLOT(intervalChanged(int)));
+	connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(intervalChanged(const KCal::Duration&)));
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
 	topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
@@ -207,7 +209,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	layout->addWidget(mDurationButton);
 	mDuration = new TimePeriod(true, mButtonBox);
 	mDuration->setFixedSize(mDuration->sizeHint());
-	connect(mDuration, SIGNAL(valueChanged(int)), SLOT(durationChanged(int)));
+	connect(mDuration, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(durationChanged(const KCal::Duration&)));
 	mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
 	layout->addWidget(mDuration);
 	mDurationButton->setFocusWidget(mDuration);
@@ -221,12 +223,13 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 /******************************************************************************
 *  Set the state of all controls to reflect the data in the specified alarm.
 */
-void RepetitionDlg::set(int interval, int count, bool dateOnly, int maxDuration)
+void RepetitionDlg::set(const Duration& interval, int count, bool dateOnly, int maxDuration)
 {
+	Duration inter = interval;
 	if (!interval)
 		count = 0;
 	else if (!count)
-		interval = 0;
+		inter = 0;
 	if (dateOnly != mDateOnly)
 	{
 		mDateOnly = dateOnly;
@@ -241,18 +244,19 @@ void RepetitionDlg::set(int interval, int count, bool dateOnly, int maxDuration)
 		mTimeSelector->setMaximum(maxhm, maxdw);
 		mDuration->setMaximum(maxhm, maxdw);
 	}
+	// Set the units - needed later if the control is unchecked initially.
+	TimePeriod::Units units = mDateOnly ? TimePeriod::Days : TimePeriod::HoursMinutes;
+	mTimeSelector->setPeriod(inter, mDateOnly, units);
 	if (!mMaxDuration  ||  !count)
 		mTimeSelector->setChecked(false);
 	else
 	{
-		TimePeriod::Units units = mDateOnly ? TimePeriod::Days : TimePeriod::HoursMinutes;
-		mTimeSelector->setMinutes(interval, mDateOnly, units);
 		bool on = mTimeSelector->isChecked();
 		repetitionToggled(on);    // enable/disable controls
 		if (on)
-			intervalChanged(interval);    // ensure mCount range is set
+			intervalChanged(inter);    // ensure mCount range is set
 		mCount->setValue(count);
-		mDuration->setMinutes(count * interval, mDateOnly, units);
+		mDuration->setPeriod(inter * count, mDateOnly, units);
 		mCountButton->setChecked(true);
 	}
 	mTimeSelector->setEnabled(mMaxDuration);
@@ -274,9 +278,9 @@ void RepetitionDlg::setReadOnly(bool ro)
 /******************************************************************************
 *  Get the period between repetitions in minutes.
 */
-int RepetitionDlg::interval() const
+Duration RepetitionDlg::interval() const
 {
-	return mTimeSelector->minutes();
+	return mTimeSelector->period();
 }
 
 /******************************************************************************
@@ -284,13 +288,13 @@ int RepetitionDlg::interval() const
 */
 int RepetitionDlg::count() const
 {
-	int interval = mTimeSelector->minutes();
+	Duration interval = mTimeSelector->period();
 	if (interval)
 	{
 		if (mCountButton->isChecked())
 			return mCount->value();
 		if (mDurationButton->isChecked())
-			return mDuration->minutes() / interval;
+			return mDuration->period().asSeconds() / interval.asSeconds();
 	}
 	return 0;    // no repetition
 }
@@ -299,15 +303,15 @@ int RepetitionDlg::count() const
 *  Called when the time interval widget has changed value.
 *  Adjust the maximum repetition count accordingly.
 */
-void RepetitionDlg::intervalChanged(int minutes)
+void RepetitionDlg::intervalChanged(const KCal::Duration& interval)
 {
 	if (mTimeSelector->isChecked())
 	{
-		mCount->setRange(1, (mMaxDuration >= 0 ? mMaxDuration / minutes : MAX_COUNT));
+		mCount->setRange(1, (mMaxDuration >= 0 ? mMaxDuration / (interval.asSeconds()/60) : MAX_COUNT));
 		if (mCountButton->isChecked())
 			countChanged(mCount->value());
 		else
-			durationChanged(mDuration->minutes());
+			durationChanged(mDuration->period());
 	}
 }
 
@@ -317,12 +321,12 @@ void RepetitionDlg::intervalChanged(int minutes)
 */
 void RepetitionDlg::countChanged(int count)
 {
-	int interval = mTimeSelector->minutes();
+	Duration interval = mTimeSelector->period();
 	if (interval)
 	{
 		bool blocked = mDuration->signalsBlocked();
 		mDuration->blockSignals(true);
-		mDuration->setMinutes(count * interval, mDateOnly,
+		mDuration->setPeriod(interval * count, mDateOnly,
 		                      (mDateOnly ? TimePeriod::Days : TimePeriod::HoursMinutes));
 		mDuration->blockSignals(blocked);
 	}
@@ -332,14 +336,14 @@ void RepetitionDlg::countChanged(int count)
 *  Called when the duration widget has changed value.
 *  Adjust the count accordingly.
 */
-void RepetitionDlg::durationChanged(int minutes)
+void RepetitionDlg::durationChanged(const KCal::Duration& duration)
 {
-	int interval = mTimeSelector->minutes();
+	Duration interval = mTimeSelector->period();
 	if (interval)
 	{
 		bool blocked = mCount->signalsBlocked();
 		mCount->blockSignals(true);
-		mCount->setValue(minutes / interval);
+		mCount->setValue(duration.asSeconds() / interval.asSeconds());
 		mCount->blockSignals(blocked);
 	}
 }

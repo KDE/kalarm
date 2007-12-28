@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.h  -  KAlarm local directory alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocaldir.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -81,6 +81,10 @@ class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
 		void         init();
 		bool         loadFile(const QString& fileName, const QString& id, FixFunc& prompt);
 		bool         deleteIncidenceFile(KCal::Incidence *incidence);
+		// Inherited virtual methods which are not used by derived classes
+		using ResourceCalendar::doLoad;
+		virtual bool doSave() { return false; }
+		virtual bool doSave(KCal::Incidence*) { return false; }
 
 		KUrl        mURL;
 		KUrl        mNewURL;    // new directory to be applied by applyReconfig()

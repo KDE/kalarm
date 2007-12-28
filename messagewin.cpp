@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -144,8 +144,15 @@ static const Qt::WFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
 static const Qt::WFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
 static const Qt::WidgetAttribute WidgetFlags  = Qt::WA_DeleteOnClose;
 
+// Error message bit masks
+enum {
+	ErrMsg_Speak     = 0x01,
+	ErrMsg_AudioFile = 0x02
+};
+
 
 QList<MessageWin*> MessageWin::mWindowList;
+QMap<QString, unsigned> MessageWin::mErrorMessages;
 
 
 /******************************************************************************
@@ -311,6 +318,7 @@ MessageWin::~MessageWin()
 {
 	kDebug(5950) << "MessageWin::~MessageWin(" << mEventID << ")";
 	stopPlay();
+	mErrorMessages.remove(mEventID);
 	mWindowList.removeAll(this);
 	if (!mRecreating)
 	{
@@ -574,7 +582,7 @@ void MessageWin::initView()
 		layout->addStretch();
 		topLayout->addLayout(layout);
 		QLabel* label = new QLabel(topWidget);
-		label->setPixmap(DesktopIcon("error"));
+		label->setPixmap(DesktopIcon("dialog-error"));
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignRight);
 		QVBoxLayout* vlayout = new QVBoxLayout();
@@ -653,7 +661,7 @@ void MessageWin::initView()
 	if (mKMailSerialNumber)
 	{
 		// KMail button
-		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("kmail"), KIconLoader::MainToolbar);
+		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
 		mKMailButton = new QPushButton(topWidget);
 		mKMailButton->setIcon(pixmap);
 		mKMailButton->setFixedSize(mKMailButton->sizeHint());
@@ -1064,7 +1072,11 @@ void MessageWin::slotSpeak()
 		if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
 		{
 			kDebug(5950) << "MessageWin::slotSpeak(): failed to start kttsd:" << error;
-			KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), error);
+			if (!haveErrorMessage(ErrMsg_Speak))
+			{
+				KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), error);
+				clearErrorMessage(ErrMsg_Speak);
+			}
 			return;
 		}
 	}
@@ -1074,7 +1086,11 @@ void MessageWin::slotSpeak()
 	if (reply.type() == QDBusMessage::ErrorMessage)
 	{
 		kDebug(5950) << "MessageWin::slotSpeak(): sayMessage() D-Bus error";
-		KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call sayMessage failed"));
+		if (!haveErrorMessage(ErrMsg_Speak))
+		{
+			KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call sayMessage failed"));
+			clearErrorMessage(ErrMsg_Speak);
+		}
 	}
 }
 
@@ -1095,7 +1111,11 @@ void MessageWin::slotPlayAudio()
 		delete mAudioObject;
 		mAudioObject = 0;
 		kError(5950) << "MessageWin::playAudio(): Open failure:" << audioFile;
-		KMessageBox::error(this, i18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile));
+		if (!haveErrorMessage(ErrMsg_AudioFile))
+		{
+			KMessageBox::error(this, i18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile));
+			clearErrorMessage(ErrMsg_AudioFile);
+		}
 		return;
 	}
 	QCoreApplication::processEvents();
@@ -1636,4 +1656,29 @@ void MessageWin::slotDefer()
 void MessageWin::displayMainWindow()
 {
 	KAlarm::displayMainWindowSelected(mEventID);
+}
+
+/******************************************************************************
+* Check whether the specified error message is already displayed for this
+* alarm, and note that it will now be displayed.
+* Reply = true if message is already displayed.
+*/
+bool MessageWin::haveErrorMessage(unsigned msg) const
+{
+	if (!mErrorMessages.contains(mEventID))
+		mErrorMessages.insert(mEventID, 0);
+	bool result = (mErrorMessages[mEventID] & msg);
+	mErrorMessages[mEventID] |= msg;
+	return result;
+}
+
+void MessageWin::clearErrorMessage(unsigned msg) const
+{
+	if (mErrorMessages.contains(mEventID))
+	{
+		if (mErrorMessages[mEventID] == msg)
+			mErrorMessages.remove(mEventID);
+		else
+			mErrorMessages[mEventID] &= ~msg;
+	}
 }

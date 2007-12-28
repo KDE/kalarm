@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -181,7 +181,7 @@ MainWindow::MainWindow(bool restored)
 	mListView->setItemDelegate(mListDelegate);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
 	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotDoubleClicked(const QModelIndex&)));
-	connect(mListView, SIGNAL(rightButtonClicked(const QPoint&)), SLOT(slotRightButtonClicked(const QPoint&)));
+	connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
 	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
@@ -387,7 +387,7 @@ void MainWindow::initActions()
 	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
 	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-	mActionModify = new KAction(KIcon("edit"), i18nc("@action", "&Edit..."), this);
+	mActionModify = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
 	actions->addAction(QLatin1String("modify"), mActionModify);
 	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
 	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
@@ -406,11 +406,6 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("disable"), mActionEnable);
 	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
-
-	mActionView = new KAction(KIcon("zoom-original"), i18nc("@action", "&View"), this);
-	actions->addAction(QLatin1String("view"), mActionView);
-	mActionView->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_W));
-	connect(mActionView, SIGNAL(triggered(bool)), SLOT(slotView()));
 
 	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
 	actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
@@ -523,7 +518,6 @@ void MainWindow::initActions()
 	mActionModify->setEnabled(false);
 	mActionDelete->setEnabled(false);
 	mActionReactivate->setEnabled(false);
-	mActionView->setEnabled(false);
 	mActionEnable->setEnabled(false);
 	mActionCreateTemplate->setEnabled(false);
 
@@ -629,21 +623,7 @@ void MainWindow::slotModify()
 {
 	Event* kcalEvent = mListView->selectedEvent();
 	if (kcalEvent)
-	{
-		KAEvent event(kcalEvent);
-		KAlarm::editAlarm(event, this);
-	}
-}
-
-/******************************************************************************
-*  Called when the View button is clicked to view the currently highlighted
-*  alarm in the list.
-*/
-void MainWindow::slotView()
-{
-	Event* kcalEvent = mListView->selectedEvent();
-	if (kcalEvent)
-		KAlarm::viewAlarm(KAEvent(kcalEvent), this);
+		KAlarm::editAlarm(kcalEvent, this);   // edit alarm (view-only mode if archived or read-only)
 }
 
 /******************************************************************************
@@ -739,6 +719,7 @@ void MainWindow::slotShowTime()
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
 		config.writeEntry(SHOW_TIME_KEY, mShowTime);
+		config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
 	}
 }
 
@@ -755,6 +736,7 @@ void MainWindow::slotShowTimeTo()
 	{
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+		config.writeEntry(SHOW_TIME_KEY, mShowTime);
 		config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
 	}
 }
@@ -1249,7 +1231,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 * Called when the status of a resource has changed.
 * Enable or disable actions appropriately.
 */
-void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Change change)
+void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)
 {
 	// Find whether there are any writable resources
 	AlarmResources* resources = AlarmResources::instance();
@@ -1285,7 +1267,6 @@ void MainWindow::slotSelection()
 	// Find whether there are any writable resources
 	bool active = mActionNew->isEnabled();
 
-	Event* selEvent = (count == 1) ? events[0] : 0;
 	bool readOnly = false;
 	bool allArchived = true;
 	bool enableReactivate = true;
@@ -1324,8 +1305,7 @@ void MainWindow::slotSelection()
 	kDebug(5950) << "MainWindow::slotSelection(true)";
 	mActionCreateTemplate->setEnabled((count == 1) && (resources->activeCount(AlarmResource::TEMPLATE, true) > 0));
 	mActionCopy->setEnabled(active && count == 1);
-	mActionModify->setEnabled(active && !readOnly && selEvent && !KAEvent(selEvent).expired());
-	mActionView->setEnabled(count == 1);
+	mActionModify->setEnabled(count == 1);
 	mActionDelete->setEnabled(!readOnly && (active || allArchived));
 	mActionReactivate->setEnabled(active && enableReactivate);
 	mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));
@@ -1334,12 +1314,12 @@ void MainWindow::slotSelection()
 }
 
 /******************************************************************************
-*  Called when the mouse right button is clicked on the ListView.
+*  Called when a context menu is requested in the ListView.
 *  Displays a context menu to modify or delete the selected item.
 */
-void MainWindow::slotRightButtonClicked(const QPoint& globalPos)
+void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
-	kDebug(5950) << "MainWindow::slotRightButtonClicked()";
+	kDebug(5950) << "MainWindow::slotContextMenuRequested()";
 	if (mContextMenu)
 		mContextMenu->popup(globalPos);
 }
@@ -1352,7 +1332,6 @@ void MainWindow::selectionCleared()
 	mActionCreateTemplate->setEnabled(false);
 	mActionCopy->setEnabled(false);
 	mActionModify->setEnabled(false);
-	mActionView->setEnabled(false);
 	mActionDelete->setEnabled(false);
 	mActionReactivate->setEnabled(false);
 	mActionEnable->setEnabled(false);
@@ -1369,8 +1348,6 @@ void MainWindow::slotDoubleClicked(const QModelIndex& index)
 	{
 		if (mActionModify->isEnabled())
 			slotModify();
-		else if (mActionView->isEnabled())
-			slotView();
 	}
 }
 

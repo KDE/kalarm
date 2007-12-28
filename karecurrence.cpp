@@ -1,7 +1,7 @@
 /*
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
  *  Program:  kalarm
- *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -690,22 +690,22 @@ int KARecurrence::combineDurations(const RecurrenceRule* rrule1, const Recurrenc
 }
 
 /******************************************************************************
- * Return the longest interval (in minutes) between recurrences.
+ * Return the longest interval between recurrences.
  * Reply = 0 if it never recurs.
  */
-int KARecurrence::longestInterval() const
+Duration KARecurrence::longestInterval() const
 {
 	int freq = frequency();
 	switch (type())
 	{
 		case MINUTELY:
-			return freq;
+			return Duration(freq * 60, Duration::Seconds);
 
 		case DAILY:
 		{
 			QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
 			if (days.isEmpty())
-				return freq * 1440;
+				return Duration(freq, Duration::Days);
 
 			// After applying the frequency, the specified days of the week
 			// further restrict when the recurrence occurs.
@@ -735,13 +735,15 @@ int KARecurrence::longestInterval() const
 				int wrap = freq*7 - last + first;
 				if (wrap > maxgap)
 					maxgap = wrap;
-				return maxgap * 1440;
+				return Duration(maxgap, Duration::Days);
 			}
 			else
 			{
 				// It will recur on the same day of the week every time.
 				// Ensure that the day is a day which is not excluded.
-				return ds[startDate().dayOfWeek() - 1] ? freq * 1440 : 0;
+				if (ds[startDate().dayOfWeek() - 1])
+				       return Duration(freq, Duration::Days);
+				break;
 			}
 		}
 		case WEEKLY:
@@ -767,14 +769,14 @@ int KARecurrence::longestInterval() const
 				break;    // no days recur
 			int span = last - first;
 			if (freq > 1)
-				return (freq*7 - span) * 1440;
+				return Duration(freq*7 - span, Duration::Days);
 			if (7 - span > maxgap)
-				return (7 - span) * 1440;
-			return maxgap * 1440;
+				return Duration(7 - span, Duration::Days);
+			return Duration(maxgap, Duration::Days);
 		}
 		case MONTHLY_DAY:
 		case MONTHLY_POS:
-			return freq * 1440 * 31;
+			return Duration(freq * 31, Duration::Days);
 
 		case ANNUAL_DATE:
 		case ANNUAL_POS:
@@ -803,10 +805,10 @@ int KARecurrence::longestInterval() const
 				}
 				int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
 				if (freq > 1)
-					return (freq*365 - span) * 1440;
+					return Duration(freq*365 - span, Duration::Days);
 				if (365 - span > maxgap)
-					return (365 - span) * 1440;
-				return maxgap * 1440;
+					return Duration(365 - span, Duration::Days);
+				return Duration(maxgap, Duration::Days);
 			}
 			// fall through to rYearlyDay
 		}
@@ -817,22 +819,22 @@ int KARecurrence::longestInterval() const
 }
 
 /******************************************************************************
-* Return the interval in minutes between recurrences, if the interval between
-* successive occurrences does not vary.
+* Return the interval between recurrences, if the interval between  successive
+* occurrences does not vary.
 * Reply = 0 if recurrence does not occur at fixed intervals.
 */
-int KARecurrence::regularInterval() const
+Duration KARecurrence::regularInterval() const
 {
 	int freq = frequency();
 	switch (type())
 	{
 		case MINUTELY:
-			return freq;
+			return Duration(freq * 60, Duration::Seconds);
 		case DAILY:
 		{
 			QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
 			if (days.isEmpty())
-				return freq * 24*60;
+				return Duration(freq, Duration::Days);
 			// After applying the frequency, the specified days of the week
 			// further restrict when the recurrence occurs.
 			// Find which days occur, and count the number of days which occur.
@@ -844,23 +846,25 @@ int KARecurrence::regularInterval() const
 			{
 				// It will recur on the same day of the week every time.
 				// Check whether that day is in the list of included days.
-				return ds[startDate().dayOfWeek() - 1] ? freq * 24*60 : 0;
+				if (ds[startDate().dayOfWeek() - 1])
+				       return Duration(freq, Duration::Days);
+				break;
 			}
 			int n = 0;   // number of days which occur
 			for (int i = 0;  i < 7;  ++i)
 				if (ds[i])
 					++n;
 			if (n == 7)
-				return freq * 24*60;   // every day is included
+				return Duration(freq, Duration::Days);   // every day is included
 			if (n == 1)
-				return freq * 7 * 24*60;   // only one day of the week is included
-			return 0;
+				return Duration(freq * 7, Duration::Days);   // only one day of the week is included
+			break;
 		}
 		case WEEKLY:
 		{
 			QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
 			if (days.isEmpty())
-				return freq * 7*24*60;
+				return Duration(freq * 7, Duration::Days);
 			// The specified days of the week occur every week in which the
 			// recurrence occurs.
 			// Find which days occur, and count the number of days which occur.
@@ -873,14 +877,19 @@ int KARecurrence::regularInterval() const
 				if (ds[i])
 					++n;
 			if (n == 7)
-				return (freq == 1) ? 24*60 : 0;  // every day is included
+			{
+				if (freq == 1)
+					return Duration(freq, Duration::Days);  // every day is included
+				break;
+			}
 			if (n == 1)
-				return freq * 7*24*60;   // only one day of the week is included
-			return 0;
+				return Duration(freq * 7, Duration::Days);   // only one day of the week is included
+			break;
 		}
 		default:
-			return 0;
+			break;
 	}
+	return 0;
 }
 
 /******************************************************************************

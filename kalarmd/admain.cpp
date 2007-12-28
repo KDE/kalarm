@@ -1,7 +1,7 @@
 /*
  *  admain.cpp  -  kalarmd main program
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright © 2001,2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004,2005,2007 by David Jarvie <djarvie@kde.org>
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (c) 1997-1999 Preston Brown <pbrown@kde.org>
  *
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
 	                     DAEMON_VERSION, ki18n("KAlarm Alarm Daemon"), KAboutData::License_GPL,
 	                     ki18n("Copyright 1997-1999 Preston Brown\nCopyright 2000-2001 Cornelius Schumacher\nCopyright 2001,2004-2007 David Jarvie"), KLocalizedString(),
 	                     "http://www.astrojar.org.uk/kalarm");
-	aboutData.addAuthor(ki18n("David Jarvie"), ki18n("Maintainer"), "software@astrojar.org.uk");
+	aboutData.addAuthor(ki18n("David Jarvie"), ki18n("Maintainer"), "djarvie@kde.org");
 	aboutData.addAuthor(ki18n("Cornelius Schumacher"), ki18n("Author"), "schumacher@kde.org");
 	aboutData.addAuthor(ki18n("Preston Brown"), ki18n("Original Author"), "pbrown@kde.org");
 	aboutData.setOrganizationDomain("kalarm.kde.org");

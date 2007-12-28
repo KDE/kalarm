@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,43 +136,43 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	mMiscPage = new MiscPrefTab;
 	mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab", "General"));
 	mMiscPageItem->setHeader(i18nc("@title", "General"));
-	mMiscPageItem->setIcon(KIcon(DesktopIcon("misc")));
+	mMiscPageItem->setIcon(KIcon(DesktopIcon("preferences-other")));
 	addPage(mMiscPageItem);
 
 	mTimePage = new TimePrefTab;
 	mTimePageItem = new KPageWidgetItem(mTimePage, i18nc("@title:tab", "Time & Date"));
 	mTimePageItem->setHeader(i18nc("@title", "Time and Date"));
-	mTimePageItem->setIcon(KIcon(DesktopIcon("clock")));
+	mTimePageItem->setIcon(KIcon(DesktopIcon("preferences-system-time")));
 	addPage(mTimePageItem);
 
 	mStorePage = new StorePrefTab;
 	mStorePageItem = new KPageWidgetItem(mStorePage, i18nc("@title:tab", "Storage"));
 	mStorePageItem->setHeader(i18nc("@title", "Alarm Storage"));
-	mStorePageItem->setIcon(KIcon(DesktopIcon("document-open")));
+	mStorePageItem->setIcon(KIcon(DesktopIcon("system-file-manager")));
 	addPage(mStorePageItem);
 
 	mEmailPage = new EmailPrefTab;
 	mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab", "Email"));
 	mEmailPageItem->setHeader(i18nc("@title", "Email Alarm Settings"));
-	mEmailPageItem->setIcon(KIcon(DesktopIcon("mail")));
+	mEmailPageItem->setIcon(KIcon(DesktopIcon("internet-mail")));
 	addPage(mEmailPageItem);
 
 	mViewPage = new ViewPrefTab;
 	mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
 	mViewPageItem->setHeader(i18nc("@title", "View Settings"));
-	mViewPageItem->setIcon(KIcon(DesktopIcon("view-choose")));
+	mViewPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-theme")));
 	addPage(mViewPageItem);
 
 	mFontColourPage = new FontColourPrefTab;
 	mFontColourPageItem = new KPageWidgetItem(mFontColourPage, i18nc("@title:tab", "Font & Color"));
 	mFontColourPageItem->setHeader(i18nc("@title", "Default Font and Color"));
-	mFontColourPageItem->setIcon(KIcon(DesktopIcon("colorize")));
+	mFontColourPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-color")));
 	addPage(mFontColourPageItem);
 
 	mEditPage = new EditPrefTab;
 	mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
 	mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
-	mEditPageItem->setIcon(KIcon(DesktopIcon("edit")));
+	mEditPageItem->setIcon(KIcon(DesktopIcon("document-properties")));
 	addPage(mEditPageItem);
 
 	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
@@ -377,6 +377,7 @@ MiscPrefTab::MiscPrefTab()
 
 	mXtermType = new ButtonGroup(group);
 	int index = 0;
+	mXtermFirst = -1;
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
@@ -386,6 +387,8 @@ MiscPrefTab::MiscPrefTab()
 		QRadioButton* radio = new QRadioButton(args[0], group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->addButton(radio, mXtermCount);
+		if (mXtermFirst < 0)
+			mXtermFirst = mXtermCount;   // note the id of the first button
 		cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());
 		cmd.replace("%c", "<command>");
 		cmd.replace("%w", "<command; sleep>");
@@ -404,6 +407,8 @@ MiscPrefTab::MiscPrefTab()
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->addButton(radio, mXtermCount);
+	if (mXtermFirst < 0)
+		mXtermFirst = mXtermCount;   // note the id of the first button
 	mXtermCommand = new QLineEdit(itemBox);
 	itemBox->setWhatsThis(
 	      i18nc("@info:whatsthis", "Enter the full command line needed to execute a command in your chosen terminal window. "
@@ -424,7 +429,7 @@ void MiscPrefTab::restore(bool defaults)
 	mAutostartTrayIcon->setChecked(Preferences::autostartTrayIcon());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	QString xtermCmd = Preferences::cmdXTermCommand();
-	int id = 0;
+	int id = mXtermFirst;
 	if (!xtermCmd.isEmpty())
 	{
 		for ( ;  id < mXtermCount;  ++id)
@@ -447,7 +452,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	{
 		QString cmd = mXtermCommand->text();
 		if (cmd.isEmpty())
-			xtermID = 0;       // 'Other' is only acceptable if it's non-blank
+			xtermID = -1;       // 'Other' is only acceptable if it's non-blank
 		else
 		{
 			QStringList args = KShell::splitArgs(cmd);
@@ -460,6 +465,11 @@ void MiscPrefTab::apply(bool syncToDisc)
 					return;
 			}
 		}
+	}
+	if (xtermID < 0)
+	{
+		xtermID = mXtermFirst;
+		mXtermType->setButton(mXtermFirst);
 	}
 
 	bool systray = mRunInSystemTray->isChecked();

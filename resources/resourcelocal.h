@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.h  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocal.h in libkcal,
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -63,6 +63,7 @@ class KALARM_EXPORT KAResourceLocal : public AlarmResource
 	protected:
 		virtual bool doLoad(bool syncCache);
 		virtual bool doSave(bool syncCache);
+		virtual bool doSave(bool syncCache, KCal::Incidence* i)  { return AlarmResource::doSave(syncCache, i); }
 		QDateTime    readLastModified();
 		virtual void enableResource(bool enable);
 
@@ -72,6 +73,9 @@ class KALARM_EXPORT KAResourceLocal : public AlarmResource
 	private:
 		void  init();
 		bool  loadFile();
+		// Inherited virtual methods which should not be used by derived classes.
+		using ResourceCalendar::doLoad;
+		using ResourceCalendar::doSave;
 
 		KUrl        mURL;
 		KUrl        mNewURL;    // new file name to be applied by applyReconfig()

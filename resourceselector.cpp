@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -118,6 +118,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 
 	connect(mAlarmType, SIGNAL(activated(int)), SLOT(alarmTypeSelected()));
 	QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
+
+	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(archiveDaysChanged(int)));
 }
 
 /******************************************************************************
@@ -174,7 +176,7 @@ void ResourceSelector::addResource()
 	ResourceConfigDialog dlg(this, resource);
 	if (dlg.exec())
 	{
-		resource->setActive(true);
+		resource->setEnabled(true);
 		resource->setTimeSpec(Preferences::timeZone());
 		manager->add(resource);
 		manager->writeConfig();
@@ -291,7 +293,7 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	mActionSave        = new KAction(KIcon("document-save"), i18nc("@action", "&Save"), this);
 	actions->addAction(QLatin1String("resSave"), mActionSave);
 	connect(mActionSave, SIGNAL(triggered(bool)), SLOT(saveResource()));
-	mActionShowDetails = new KAction(KIcon("document-properties"), i18nc("@action", "Show &Details"), this);
+	mActionShowDetails = new KAction(KIcon("help-about"), i18nc("@action", "Show &Details"), this);
 	actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
 	connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
 	mActionSetColour   = new KAction(KIcon("color-picker"), i18nc("@action", "Set &Color"), this);
@@ -300,7 +302,7 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	mActionClearColour   = new KAction(i18nc("@action", "Clear C&olor"), this);
 	actions->addAction(QLatin1String("resClearColour"), mActionClearColour);
 	connect(mActionClearColour, SIGNAL(triggered(bool)), SLOT(clearColour()));
-	mActionEdit        = new KAction(KIcon("edit"), i18nc("@action", "&Edit..."), this);
+	mActionEdit        = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
 	actions->addAction(QLatin1String("resEdit"), mActionEdit);
 	connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
 	mActionRemove      = new KAction(KIcon("edit-delete"), i18nc("@action", "&Remove"), this);
@@ -333,11 +335,14 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 	bool writable = false;
 	int type = -1;
 	AlarmResource* resource = 0;
-	QModelIndex index = mListView->indexAt(viewportPos);
-	if (index.isValid())
-		resource = static_cast<ResourceFilterModel*>(mListView->model())->resource(index);
-	else
-		mListView->clearSelection();
+	if (mListView->selectionModel()->hasSelection())
+	{
+		QModelIndex index = mListView->indexAt(viewportPos);
+		if (index.isValid())
+			resource = static_cast<ResourceFilterModel*>(mListView->model())->resource(index);
+		else
+			mListView->clearSelection();
+	}
 	if (resource)
 	{
 		active   = resource->isEnabled();
@@ -371,9 +376,10 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 		default:  break;
 	}
 	mActionSetDefault->setText(text);
-	bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<AlarmResource::Type>(type)));
+	bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<AlarmResource::Type>(type))  &&  resource->standardResource());
 	mActionSetDefault->setChecked(active && writable && standard);
-	mActionSetDefault->setEnabled(active && writable && !standard);
+	bool allowChange = (type == AlarmResource::ARCHIVED  &&  !Preferences::archivedKeepDays());
+	mActionSetDefault->setEnabled(active && writable && (!standard || allowChange));
 	mContextMenu->popup(mListView->viewport()->mapToGlobal(viewportPos));
 }
 
@@ -398,6 +404,22 @@ void ResourceSelector::saveResource()
 }
 
 /******************************************************************************
+* Called when the length of time archived alarms are to be stored changes.
+* If expired alarms are now to be stored, set any single archived alarm
+* resource to be the default.
+*/
+void ResourceSelector::archiveDaysChanged(int days)
+{
+	if (days)
+	{
+		AlarmResources* resources = AlarmResources::instance();
+		AlarmResource* std = resources->getStandardResource(AlarmResource::ARCHIVED);
+		if (std  &&  !std->standardResource())
+			resources->setStandardResource(std);
+	}
+}
+
+/******************************************************************************
 * Called from the context menu to set the selected resource as the default
 * for its alarm type. The resource is automatically made active.
 */
@@ -406,8 +428,13 @@ void ResourceSelector::setStandard()
 	AlarmResource* resource = currentResource();
 	if (resource)
 	{
-		resource->setEnabled(true);
-		mCalendar->setStandardResource(resource);
+		if (mActionSetDefault->isChecked())
+		{
+			resource->setEnabled(true);
+			mCalendar->setStandardResource(resource);
+		}
+		else
+			resource->setStandardResource(false);
 	}
 }
 

@@ -50,6 +50,7 @@
 #include <kstandarddirs.h>
 #include <kstandardaction.h>
 #include <kstandardguiitem.h>
+#include <kiconeffect.h>
 #include <kconfig.h>
 #include <kdebug.h>
 
@@ -73,9 +74,15 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	kDebug(5950) << "TrayWindow::TrayWindow()";
 	// Set up GUI icons
 	mIconEnabled  = loadIcon("kalarm");
-	mIconDisabled = loadIcon("kalarm_disabled");
-	if (mIconEnabled.isNull() || mIconDisabled.isNull())
+	if (mIconEnabled.isNull())
 		KMessageBox::sorry(parent, i18nc("@info", "Cannot load system tray icon."));
+	else
+	{
+		KIconLoader loader;
+		QImage iconDisabled = mIconEnabled.pixmap(loader.currentSize(KIconLoader::Panel)).toImage();
+		KIconEffect::toGray(iconDisabled, 1.0);
+		mIconDisabled = QIcon(QPixmap::fromImage(iconDisabled));
+	}
 #ifdef __GNUC__
 #warning How to implement drag-and-drop?
 #endif

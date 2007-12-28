@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -173,10 +173,7 @@ void TemplateDlg::slotEdit()
 {
 	Event* kcalEvent = mListView->selectedEvent();
 	if (kcalEvent)
-	{
-		KAEvent event(kcalEvent);
-		KAlarm::editTemplate(event, mListView);
-	}
+		KAlarm::editTemplate(kcalEvent, mListView);
 }
 
 /******************************************************************************
@@ -214,10 +211,23 @@ void TemplateDlg::slotDelete()
 */
 void TemplateDlg::slotSelectionChanged()
 {
-	int count = mListView->selectionModel()->selectedRows().count();
+	KCal::Event::List events = mListView->selectedEvents();
+	int count = events.count();
+	bool readOnly = false;
+	AlarmResources* resources = AlarmResources::instance();
+	for (int i = 0;  i < count;  ++i)
+	{
+		const KCal::Event* kcalEvent = events[i];
+		AlarmResource* resource = resources->resource(kcalEvent);
+		if (!resource  ||  !resource->writable(kcalEvent))
+		{
+			readOnly = true;
+			break;
+		}
+	}
 	mEditButton->setEnabled(count == 1);
 	mCopyButton->setEnabled(count == 1);
-	mDeleteButton->setEnabled(count);
+	mDeleteButton->setEnabled(count && !readOnly);
 }
 
 /******************************************************************************

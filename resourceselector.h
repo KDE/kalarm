@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  alarm calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -74,6 +74,7 @@ class ResourceSelector : public QFrame
 	void  clearColour();
 	void  importCalendar();
 	void  showInfo();
+	void  archiveDaysChanged(int days);
 
     private:
 	AlarmResource* currentResource() const;
