@@ -481,7 +481,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		void slotReadOnlyChanged(AlarmResource*);
 		void slotLocationChanged(AlarmResource* r)    { slotResourceStatusChanged(r, Location); }
 		void slotColourChanged(AlarmResource* r)      { slotResourceStatusChanged(r, Colour); }
-		void slotResLoaded(AlarmResource*);
 		void slotResourceLoaded(AlarmResource*);
 		void slotResourceSaved(AlarmResource*);
 		void slotResourceDownloading(AlarmResource*, unsigned long percent);

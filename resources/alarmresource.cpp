@@ -1,7 +1,7 @@
 /*
  *  alarmresource.cpp  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -273,14 +273,6 @@ void AlarmResource::setColour(const QColor& colour)
 		mColour = colour;
 		emit colourChanged(this);
 	}
-}
-
-bool AlarmResource::load(CacheAction action)
-{
-	if (!ResourceCached::load(action))
-		return false;
-	emit resLoaded(this);    // special signal to AlarmResources
-	return true;
 }
 
 bool AlarmResource::saveAndClose(CacheAction action, Incidence* incidence)

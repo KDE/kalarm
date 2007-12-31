@@ -468,18 +468,6 @@ bool AlarmResources::load(AlarmResource* resource, ResourceCached::CacheAction a
 	return resource->load(action);
 }
 
-// Called whenever a resource has loaded, to register its events.
-void AlarmResources::slotResLoaded(AlarmResource* resource)
-{
-	Incidence::List incidences = resource->rawIncidences();
-	for (int i = 0, end = incidences.count();  i < end;  ++i)
-	{
-		incidences[i]->registerObserver(this);
-		notifyIncidenceAdded(incidences[i]);
-	}
-	emit calendarChanged();
-}
-
 // Called whenever a remote resource download has completed.
 void AlarmResources::slotCacheDownloaded(AlarmResource* resource)
 {
@@ -748,7 +736,6 @@ void AlarmResources::connectResource(AlarmResource* resource)
 	connect(resource, SIGNAL(colourChanged(AlarmResource*)), SLOT(slotColourChanged(AlarmResource*)));
 	connect(resource, SIGNAL(invalidate(AlarmResource*)), SLOT(slotResourceInvalidated(AlarmResource*)));
 	connect(resource, SIGNAL(loaded(AlarmResource*)), SLOT(slotResourceLoaded(AlarmResource*)));
-	connect(resource, SIGNAL(resLoaded(AlarmResource*)), SLOT(slotResLoaded(AlarmResource*)));
 	connect(resource, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
 #if 0
 	connect(resource, SIGNAL(downloading(AlarmResource*, unsigned long)),
@@ -770,6 +757,12 @@ void AlarmResources::slotResourceInvalidated(AlarmResource* resource)
 void AlarmResources::slotResourceLoaded(AlarmResource* resource)
 {
 	remap(resource);
+	Incidence::List incidences = resource->rawIncidences();
+	for (int i = 0, end = incidences.count();  i < end;  ++i)
+	{
+		incidences[i]->registerObserver(this);
+		notifyIncidenceAdded(incidences[i]);
+	}
 	emit resourceLoaded(resource, resource->isActive());
 }
 
