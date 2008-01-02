@@ -40,7 +40,7 @@
 #include <QDir>
 #include <QRegExp>
 #include <QDesktopWidget>
-#include <QtDBus>
+#include <QtDBus/QtDBus>
 
 #include <kconfiggroup.h>
 #include <kaction.h>

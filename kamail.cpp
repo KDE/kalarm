@@ -38,7 +38,7 @@
 #include <QRegExp>
 #include <QByteArray>
 #include <QTextStream>
-#include <QtDBus>
+#include <QtDBus/QtDBus>
 
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
