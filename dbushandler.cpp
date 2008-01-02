@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 
-#include <QtDBus>
+#include <QtDBus/QtDBus>
 #include <kdebug.h>
 #include <kcal/duration.h>
 

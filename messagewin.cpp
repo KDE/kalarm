@@ -24,7 +24,7 @@
 #include <string.h>
 
 #include <QScrollBar>
-#include <QtDBus>
+#include <QtDBus/QtDBus>
 #include <QFile>
 #include <QFileInfo>
 #include <QPushButton>
