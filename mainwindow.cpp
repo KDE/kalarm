@@ -1023,8 +1023,7 @@ void MainWindow::initUndoMenu(KPopupMenu* menu, Undo::Type type)
 		QString actText = Undo::actionText(type, id);
 		QString descrip = Undo::description(type, id);
 		QString text = descrip.isEmpty()
-//		             ? i18n("Undo/Redo [action]", "%1 %2").arg(action).arg(actText)
-		             ? QString("%1 %2").arg(action).arg(actText)
+		             ? i18n("Undo/Redo [action]", "%1 %2").arg(action).arg(actText)
 		             : i18n("Undo [action]: message", "%1 %2: %3").arg(action).arg(actText).arg(descrip);
 		menu->insertItem(text, id);
 	}
