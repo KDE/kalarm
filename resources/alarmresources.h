@@ -1,7 +1,7 @@
 /*
  *  alarmresources.h  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on calendarresources.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -145,20 +145,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
     virtual void close();
 
     /**
-       Save this Calendar.
-       If the save is successful, the Ticket is deleted.  Otherwise, the
-       caller must release the Ticket with releaseSaveTicket() to abandon
-       the save operation or call save() to try the save again.
-
-       @param ticket is a pointer to the Ticket object.
-       @param incidence is a pointer to the Incidence object.
-       If incidence is null, save the entire Calendar (all Resources)
-       else only the specified Incidence is saved.
-       @return true if the save was successful; false otherwise.
-    */
-    virtual bool save(Ticket* ticket, KCal::Incidence* incidence = 0);
-
-    /**
        Sync changes in memory to persistant storage.
     */
     virtual bool save();
@@ -226,24 +212,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		 */
 		AlarmResource* destination(KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false, bool* cancelled = 0);
 
-    /**
-       Request ticket for saving the Calendar.  If a ticket is returned the
-       Calendar is locked for write access until save() or releaseSaveTicket()
-       is called.
-
-       @param resource is a pointer to the AlarmResource object.
-       @return a pointer to a Ticket object indicating that the Calendar
-       is locked for write access; otherwise a null pointer.
-    */
-    Ticket* requestSaveTicket(AlarmResource* resource);
-
-    /**
-       Release the save Ticket. The Calendar is unlocked without saving.
-
-       @param ticket is a pointer to a Ticket object.
-    */
-    virtual void releaseSaveTicket(Ticket* ticket);
-
 		/**
 		   Called when a resource is added to the managed collection.
 		   Overrides KRES::ManagerObserver<AlarmResource>::resourceAdded().
@@ -256,21 +224,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		virtual void resourceAdded(AlarmResource* resource);
 
 // Incidence Specific Methods //
-
-    /**
-       Flag that a change to a Calendar Incidence is starting.
-
-       @param incidence is a pointer to the Incidence that will be changing.
-    */
-    bool beginChange(KCal::Incidence* incidence, QWidget* promptParent);
-    virtual bool beginChange(KCal::Incidence* incidence)   { return beginChange(incidence, 0); }
-
-    /**
-       Flag that a change to a Calendar Incidence has completed.
-
-       @param incidence is a pointer to the Incidence that was changed.
-    */
-    virtual bool endChange(KCal::Incidence* incidence);
 
 		// Event Specific Methods //
 

@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -259,14 +259,13 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 		event.setSaveDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
 	}
 	AlarmCalendar* cal = AlarmCalendar::resources();
+	// Note that archived resources are automatically saved after changes are made
 	KCal::Event* kcalEvent = cal->addEvent(event, 0, false, resource);
 	if (!kcalEvent)
 	{
 		event = oldEvent;     // failed to add to calendar - revert event to its original state
 		return false;
 	}
-	if (!cal->save())
-		return false;
 
 	// Update window lists
 	if (!archiving)
@@ -462,9 +461,6 @@ UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgPare
 			}
 			if (archive  &&  event.toBeArchived())
 				addArchivedEvent(event);     // this changes the event ID to an archived ID
-#ifdef __GNUC__
-#warning Prevent calendar being saved for each addArchivedEvent()
-#endif
 		}
 		if (!cal->deleteEvent(id, false))   // don't save calendar after deleting
 		{
