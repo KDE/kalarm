@@ -1,7 +1,7 @@
 /*
 *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
 *  Program:  kalarm
-*  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+*  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -196,11 +196,9 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
 	QString caption;
 	if (mReadOnly)
-		caption = event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
-		                           : i18nc("@title:window", "View Alarm");
-#ifdef __GNUC__
-#warning Improve captions when string freeze ends
-#endif
+		caption = mTemplate ? i18nc("@title:window", "Alarm Template [read-only]")
+		        : event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
+		                           : i18nc("@title:window", "Alarm [read-only]");
 	else
 		caption = type_caption(newAlarm);
 	setCaption(caption);
