@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -248,7 +248,7 @@ bool TrayWindow::event(QEvent* e)
 	if (Daemon::monitoringAlarms())
 		text = i18nc("@info:tooltip", "%1%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	else
-		text = i18nc("@info:tooltip", "%1 - disabled%2", KGlobal::mainComponent().aboutData()->programName(), altext);
+		text = i18nc("@info:tooltip 'KAlarm - disabled' %2 = list of alarms due soon", "%1 - disabled%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	kDebug(5950) << "TrayWindow::event():" << text;
 	QToolTip::showText(he->globalPos(), text);
 	return true;

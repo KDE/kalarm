@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -65,13 +65,13 @@ using namespace KCal;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString RecurrenceEdit::i18n_combo_NoRecur()        { return i18nc("@item:inlistbox", "No Recurrence"); }
-QString RecurrenceEdit::i18n_combo_AtLogin()        { return i18nc("@item:inlistbox", "At Login"); }
-QString RecurrenceEdit::i18n_combo_HourlyMinutely() { return i18nc("@item:inlistbox", "Hourly/Minutely"); }
-QString RecurrenceEdit::i18n_combo_Daily()          { return i18nc("@item:inlistbox", "Daily"); }
-QString RecurrenceEdit::i18n_combo_Weekly()         { return i18nc("@item:inlistbox", "Weekly"); }
-QString RecurrenceEdit::i18n_combo_Monthly()        { return i18nc("@item:inlistbox", "Monthly"); }
-QString RecurrenceEdit::i18n_combo_Yearly()         { return i18nc("@item:inlistbox", "Yearly"); }
+QString RecurrenceEdit::i18n_combo_NoRecur()        { return i18nc("@item:inlistbox Recurrence type", "No Recurrence"); }
+QString RecurrenceEdit::i18n_combo_AtLogin()        { return i18nc("@item:inlistbox Recurrence type", "At Login"); }
+QString RecurrenceEdit::i18n_combo_HourlyMinutely() { return i18nc("@item:inlistbox Recurrence type", "Hourly/Minutely"); }
+QString RecurrenceEdit::i18n_combo_Daily()          { return i18nc("@item:inlistbox Recurrence type", "Daily"); }
+QString RecurrenceEdit::i18n_combo_Weekly()         { return i18nc("@item:inlistbox Recurrence type", "Weekly"); }
+QString RecurrenceEdit::i18n_combo_Monthly()        { return i18nc("@item:inlistbox Recurrence type", "Monthly"); }
+QString RecurrenceEdit::i18n_combo_Yearly()         { return i18nc("@item:inlistbox Recurrence type", "Yearly"); }
 
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
@@ -1129,7 +1129,7 @@ bool Rule::stateChanged() const
 =============================================================================*/
 
 SubDailyRule::SubDailyRule(bool readOnly, QWidget* parent)
-	: Rule(i18nc("@label", "hours:minutes"),
+	: Rule(i18nc("@label Time units for user-entered numbers", "hours:minutes"),
 	       i18nc("@info:whatsthis", "Enter the number of hours and minutes between repetitions of the alarm"),
 	       true, readOnly, parent)
 { }
@@ -1259,7 +1259,7 @@ bool DayWeekRule::stateChanged() const
 =============================================================================*/
 
 DailyRule::DailyRule(bool readOnly, QWidget* parent)
-	: DayWeekRule(i18nc("@label", "day(s)"),
+	: DayWeekRule(i18nc("@label Time unit for user-entered number", "day(s)"),
 	              i18nc("@info:whatsthis", "Enter the number of days between repetitions of the alarm"),
 	              i18nc("@info:whatsthis", "Select the days of the week on which the alarm is allowed to occur"),
 	              readOnly, parent)
@@ -1272,7 +1272,7 @@ DailyRule::DailyRule(bool readOnly, QWidget* parent)
 =============================================================================*/
 
 WeeklyRule::WeeklyRule(bool readOnly, QWidget* parent)
-	: DayWeekRule(i18nc("@label", "week(s)"),
+	: DayWeekRule(i18nc("@label Time unit for user-entered number", "week(s)"),
 	              i18nc("@info:whatsthis", "Enter the number of weeks between repetitions of the alarm"),
 	              i18nc("@info:whatsthis", "Select the days of the week on which to repeat the alarm"),
 	              readOnly, parent)
@@ -1482,7 +1482,7 @@ bool MonthYearRule::stateChanged() const
 =============================================================================*/
 
 MonthlyRule::MonthlyRule(bool readOnly, QWidget* parent)
-	: MonthYearRule(i18nc("@label", "month(s)"),
+	: MonthYearRule(i18nc("@label Time unit for user-entered number", "month(s)"),
 	       i18nc("@info:whatsthis", "Enter the number of months between repetitions of the alarm"),
 	       false, readOnly, parent)
 { }
@@ -1494,7 +1494,7 @@ MonthlyRule::MonthlyRule(bool readOnly, QWidget* parent)
 =============================================================================*/
 
 YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
-	: MonthYearRule(i18nc("@label", "year(s)"),
+	: MonthYearRule(i18nc("@label Time unit for user-entered number", "year(s)"),
 	       i18nc("@info:whatsthis", "Enter the number of years between repetitions of the alarm"),
 	       true, readOnly, parent)
 {

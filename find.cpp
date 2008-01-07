@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,12 +109,12 @@ void Find::display()
 		grid->setColumnStretch(1, 1);
 
 		// Live & archived alarm selection
-		mLive = new QCheckBox(i18nc("@option:check", "Active"), group);
+		mLive = new QCheckBox(i18nc("@option:check Alarm type", "Active"), group);
 		mLive->setFixedSize(mLive->sizeHint());
 		mLive->setWhatsThis(i18nc("@info:whatsthis", "Check to include active alarms in the search."));
 		grid->addWidget(mLive, 1, 0, Qt::AlignLeft);
 
-		mArchived = new QCheckBox(i18nc("@option:check", "Archived"), group);
+		mArchived = new QCheckBox(i18nc("@option:check Alarm type", "Archived"), group);
 		mArchived->setFixedSize(mArchived->sizeHint());
 		mArchived->setWhatsThis(i18nc("@info:whatsthis", "Check to include archived alarms in the search. "
 		                             "This option is only available if archived alarms are currently being displayed."));
@@ -124,22 +124,22 @@ void Find::display()
 		grid->addWidget(mActiveArchivedSep, 2, 0, 1, 3);
 
 		// Alarm actions
-		mMessageType = new QCheckBox(i18nc("@option:check", "Text"), group);
+		mMessageType = new QCheckBox(i18nc("@option:check Alarm action = text display", "Text"), group);
 		mMessageType->setFixedSize(mMessageType->sizeHint());
 		mMessageType->setWhatsThis(i18nc("@info:whatsthis", "Check to include text message alarms in the search."));
 		grid->addWidget(mMessageType, 3, 0);
 
-		mFileType = new QCheckBox(i18nc("@option:check", "File"), group);
+		mFileType = new QCheckBox(i18nc("@option:check Alarm action = file display", "File"), group);
 		mFileType->setFixedSize(mFileType->sizeHint());
 		mFileType->setWhatsThis(i18nc("@info:whatsthis", "Check to include file alarms in the search."));
 		grid->addWidget(mFileType, 3, 2);
 
-		mCommandType = new QCheckBox(i18nc("@option:check", "Command"), group);
+		mCommandType = new QCheckBox(i18nc("@option:check Alarm action", "Command"), group);
 		mCommandType->setFixedSize(mCommandType->sizeHint());
 		mCommandType->setWhatsThis(i18nc("@info:whatsthis", "Check to include command alarms in the search."));
 		grid->addWidget(mCommandType, 4, 0);
 
-		mEmailType = new QCheckBox(i18nc("@option:check", "Email"), group);
+		mEmailType = new QCheckBox(i18nc("@option:check Alarm action", "Email"), group);
 		mEmailType->setFixedSize(mEmailType->sizeHint());
 		mEmailType->setWhatsThis(i18nc("@info:whatsthis", "Check to include email alarms in the search."));
 		grid->addWidget(mEmailType, 4, 2);

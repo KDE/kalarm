@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -134,8 +134,8 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	//setIconListAllVisible(true);
 
 	mMiscPage = new MiscPrefTab;
-	mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab", "General"));
-	mMiscPageItem->setHeader(i18nc("@title", "General"));
+	mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab General preferences", "General"));
+	mMiscPageItem->setHeader(i18nc("@title General preferences", "General"));
 	mMiscPageItem->setIcon(KIcon(DesktopIcon("preferences-other")));
 	addPage(mMiscPageItem);
 
@@ -152,7 +152,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	addPage(mStorePageItem);
 
 	mEmailPage = new EmailPrefTab;
-	mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab", "Email"));
+	mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab Email preferences", "Email"));
 	mEmailPageItem->setHeader(i18nc("@title", "Email Alarm Settings"));
 	mEmailPageItem->setIcon(KIcon(DesktopIcon("internet-mail")));
 	addPage(mEmailPageItem);
@@ -403,7 +403,7 @@ MiscPrefTab::MiscPrefTab()
 	itemBox = new KHBox(group);
 	itemBox->setMargin(0);
 	grid->addWidget(itemBox, row + 1, 0, 1, 3, Qt::AlignLeft);
-	QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "Other:"), itemBox);
+	QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), itemBox);
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->addButton(radio, mXtermCount);
@@ -761,7 +761,7 @@ StorePrefTab::StorePrefTab()
 	mPurgeAfter->setMinimum(1);
 	mPurgeAfter->setSingleShiftStep(10);
 	mPurgeAfter->setMinimumSize(mPurgeAfter->sizeHint());
-	mPurgeAfterLabel = new QLabel(i18nc("@label", "days"), box);
+	mPurgeAfterLabel = new QLabel(i18nc("@label Time unit for user-entered number", "days"), box);
 	mPurgeAfterLabel->setMinimumSize(mPurgeAfterLabel->sizeHint());
 	mPurgeAfterLabel->setBuddy(mPurgeAfter);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Uncheck to store archived alarms indefinitely. Check to enter how long archived alarms should be stored."));
@@ -1188,7 +1188,7 @@ EditPrefTab::EditPrefTab()
 	mReminderUnits = new KComboBox(box);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Minutes"), TimePeriod::Minutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Hours/Minutes"), TimePeriod::HoursMinutes);
-	mReminderUnits->addItem(i18nc("@item:inlistbox", "Days"), TimePeriod::Days);
+	mReminderUnits->addItem(i18nc("@item:inlistbox Time unit option", "Days"), TimePeriod::Days);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Weeks"), TimePeriod::Weeks);
 	mReminderUnits->setFixedSize(mReminderUnits->sizeHint());
 	label->setBuddy(mReminderUnits);
@@ -1199,7 +1199,7 @@ EditPrefTab::EditPrefTab()
 	mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 
 	// SOUND
-	QGroupBox* bbox = new QGroupBox(i18nc("@title:group", "Sound"), this);
+	QGroupBox* bbox = new QGroupBox(i18nc("@title:group Audio options group", "Sound"), this);
 	vlayout = new QVBoxLayout(bbox);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
