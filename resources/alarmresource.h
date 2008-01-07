@@ -1,7 +1,7 @@
 /*
  *  alarmresource.h  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		 *  @return true if loading succeeded at least partially, false if it failed
 		 *          completely
 		 */
-		virtual bool load(CacheAction);
+		bool load(CacheAction a)  { return KCal::ResourceCached::load(a); }
 
 		/** Return whether the resource has fully loaded. */
 		bool     isLoaded() const                { return mLoaded; }
@@ -181,9 +181,6 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		 *  successfully or not.
 		 *  This signal is always emitted after a resource is loaded. */
 		void loaded(AlarmResource*);
-		/** Signal that loading of the resource been successfully initiated
-		 *  (successfully completed in the case of local resources). */
-		void resLoaded(AlarmResource*);
 		/** Emitted after attempting to save the resource, whether successfully or not.
 		 *  Not emitted if no attempt was made to save it (e.g. if the resource
 		 *  is closed or read-only or there is nothing to save, or if save()
@@ -218,6 +215,8 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		static KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc);
 
 	private:
+		void        init();
+
 		static int  mDebugArea;       // area for kDebug() output
 		static bool mNoGui;           // application has no GUI, so don't display messages
 

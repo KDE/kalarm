@@ -1,7 +1,7 @@
 /*
  *  alarmresource.cpp  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ using namespace KCal;
 
 
 void              (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
-KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc) = 0;
+KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc) = 0;
 int                 AlarmResource::mDebugArea = 0;
 bool                AlarmResource::mNoGui = false;
 
@@ -54,7 +54,7 @@ AlarmResource::AlarmResource()
 {
 	// Prevent individual events being set read-only when loading a read-only resource
 	setNoReadOnlyOnLoad(true);
-	enableChangeNotification();
+	init();
 }
 
 AlarmResource::AlarmResource(const KConfigGroup& group)
@@ -85,7 +85,7 @@ AlarmResource::AlarmResource(const KConfigGroup& group)
 			break;
 	}
 	mColour = group.readEntry("Color", QColor());
-	enableChangeNotification();
+	init();
 }
 
 AlarmResource::AlarmResource(Type type)
@@ -99,7 +99,23 @@ AlarmResource::AlarmResource(Type type)
 	  mLoaded(false),
 	  mLoading(false)
 {
+	init();
+}
+
+void AlarmResource::init()
+{
 	enableChangeNotification();
+	if (mType == ARCHIVED)
+	{
+		// Prevent unnecessary multiple saves of archived alarm resources.
+		// When multiple alarms are deleted as a group, the archive
+		// resource would be saved once for each alarm. Ironically, setting
+		// the resource to be automatically saved will prevent this, since
+		// automatic saving delays for a second after each change before
+		// actually saving the resource, thereby ensuring that they are
+		// saved as a group.
+		setSavePolicy(SaveAlways);
+	}
 }
 
 AlarmResource::~AlarmResource()
@@ -273,14 +289,6 @@ void AlarmResource::setColour(const QColor& colour)
 		mColour = colour;
 		emit colourChanged(this);
 	}
-}
-
-bool AlarmResource::load(CacheAction action)
-{
-	if (!ResourceCached::load(action))
-		return false;
-	emit resLoaded(this);    // special signal to AlarmResources
-	return true;
 }
 
 bool AlarmResource::saveAndClose(CacheAction action, Incidence* incidence)

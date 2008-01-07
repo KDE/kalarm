@@ -1,7 +1,7 @@
 /*
  *  alarmresources.cpp  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -468,18 +468,6 @@ bool AlarmResources::load(AlarmResource* resource, ResourceCached::CacheAction a
 	return resource->load(action);
 }
 
-// Called whenever a resource has loaded, to register its events.
-void AlarmResources::slotResLoaded(AlarmResource* resource)
-{
-	Incidence::List incidences = resource->rawIncidences();
-	for (int i = 0, end = incidences.count();  i < end;  ++i)
-	{
-		incidences[i]->registerObserver(this);
-		notifyIncidenceAdded(incidences[i]);
-	}
-	emit calendarChanged();
-}
-
 // Called whenever a remote resource download has completed.
 void AlarmResources::slotCacheDownloaded(AlarmResource* resource)
 {
@@ -589,13 +577,11 @@ bool AlarmResources::addEvent(Event* event, AlarmResource* resource)
 	}
 	AlarmResource* oldResource = mResourceMap.contains(event) ? mResourceMap[event] : 0;
 	mResourceMap[event] = resource;
-	if (validRes  &&  beginChange(event)  &&  resource->addIncidence(event))
+	if (validRes  &&  resource->addIncidence(event))
 	{
-		//mResourceMap[event] = resource;
 		event->registerObserver(this);
 		notifyIncidenceAdded(event);
 		setModified(true);
-		endChange(event);
 		return true;
 	}
 	if (oldResource)
@@ -614,13 +600,12 @@ AlarmResources::Result AlarmResources::addEvent(Event* event, QWidget* promptPar
 	if (resource)
 	{
 		mResourceMap[event] = resource;
-		if (beginChange(event)  &&  resource->addIncidence(event))
+		if (resource->addIncidence(event))
 		{
 			event->registerObserver(this);
 			notifyIncidenceAdded(event);
 			mResourceMap[event] = resource;
 			setModified(true);
-			endChange(event);
 			return Success;
 		}
 		mResourceMap.remove(event);
@@ -748,7 +733,6 @@ void AlarmResources::connectResource(AlarmResource* resource)
 	connect(resource, SIGNAL(colourChanged(AlarmResource*)), SLOT(slotColourChanged(AlarmResource*)));
 	connect(resource, SIGNAL(invalidate(AlarmResource*)), SLOT(slotResourceInvalidated(AlarmResource*)));
 	connect(resource, SIGNAL(loaded(AlarmResource*)), SLOT(slotResourceLoaded(AlarmResource*)));
-	connect(resource, SIGNAL(resLoaded(AlarmResource*)), SLOT(slotResLoaded(AlarmResource*)));
 	connect(resource, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
 #if 0
 	connect(resource, SIGNAL(downloading(AlarmResource*, unsigned long)),
@@ -770,6 +754,12 @@ void AlarmResources::slotResourceInvalidated(AlarmResource* resource)
 void AlarmResources::slotResourceLoaded(AlarmResource* resource)
 {
 	remap(resource);
+	Incidence::List incidences = resource->rawIncidences();
+	for (int i = 0, end = incidences.count();  i < end;  ++i)
+	{
+		incidences[i]->registerObserver(this);
+		notifyIncidenceAdded(incidences[i]);
+	}
 	emit resourceLoaded(resource, resource->isActive());
 }
 
@@ -881,110 +871,4 @@ void AlarmResources::doSetTimeSpec(const KDateTime::Spec& timeSpec)
 	AlarmResourceManager::Iterator i1;
 	for (i1 = mManager->begin(); i1 != mManager->end(); ++i1)
 		(*i1)->setTimeSpec(timeSpec);
-}
-
-AlarmResources::Ticket* AlarmResources::requestSaveTicket(AlarmResource* resource)
-{
-  kDebug(KARES_DEBUG) << "AlarmResources::requestSaveTicket()";
-
-  KABC::Lock* lock = resource->lock();
-  if (lock  &&  lock->lock())
-    return new Ticket(resource);
-  return 0;
-}
-
-bool AlarmResources::save(Ticket *ticket, Incidence *incidence)
-{
-  kDebug(KARES_DEBUG) << "AlarmResources::save(Ticket *)";
-
-  if (!ticket || !ticket->resource())
-    return false;
-
-  kDebug(KARES_DEBUG) << "tick" << ticket->resource()->resourceName();
-
-    // @TODO: Check if the resource was changed at all. If not, don't save.
-  if (ticket->resource()->save(incidence)) {
-    releaseSaveTicket(ticket);
-    return true;
-  }
-
-  return false;
-}
-
-void AlarmResources::releaseSaveTicket(Ticket *ticket)
-{
-  ticket->resource()->lock()->unlock();
-  delete ticket;
-}
-
-bool AlarmResources::beginChange(Incidence* incidence, QWidget* promptParent)
-{
-  kDebug(KARES_DEBUG) << "AlarmResources::beginChange()";
-
-  AlarmResource* r = resource(incidence);
-  if (!r) {
-    r = destination(incidence, promptParent);
-    if (!r) {
-      kError(KARES_DEBUG) << "Unable to get destination resource";
-      return false;
-    }
-    mResourceMap[ incidence ] = r;
-  }
-
-  int count = incrementChangeCount(r);
-  if (count == 1) {
-    Ticket *ticket = requestSaveTicket(r);
-    if (!ticket) {
-      kDebug(KARES_DEBUG) << "AlarmResources::beginChange(): unable to get ticket.";
-      decrementChangeCount(r);
-      return false;
-    } else {
-      mTickets[ r ] = ticket;
-    }
-  }
-
-  return true;
-}
-
-bool AlarmResources::endChange(Incidence* incidence)
-{
-  kDebug(KARES_DEBUG) << "AlarmResources::endChange()";
-
-  AlarmResource* r = resource(incidence);
-  if (!r)
-    return false;
-
-  if (!decrementChangeCount(r))
-  {
-    if (!save(mTickets[r], incidence))
-      return false;
-    mTickets.remove(r);
-  }
-  return true;
-}
-
-int AlarmResources::incrementChangeCount(AlarmResource* r)
-{
-  if (!mChangeCounts.contains(r))
-    mChangeCounts.insert(r, 0);
-  int count = mChangeCounts[r];
-  ++count;
-  mChangeCounts[r] = count;
-  return count;
-}
-
-int AlarmResources::decrementChangeCount(AlarmResource* r)
-{
-  if (!mChangeCounts.contains(r)) {
-    kError(KARES_DEBUG) << "No change count for resource";
-    return 0;
-  }
-  int count = mChangeCounts[r];
-  --count;
-  if (count < 0) {
-    kError(KARES_DEBUG) << "Can't decrement change count. It already is 0.";
-    count = 0;
-  }
-  mChangeCounts[r] = count;
-  return count;
 }

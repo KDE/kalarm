@@ -26,7 +26,7 @@
 
 #include <QTimer>
 #include <QByteArray>
-#include <QtDBus>
+#include <QtDBus/QtDBus>
 #include <QProcess>
 #include <kapplication.h>
 #include <kstandarddirs.h>
