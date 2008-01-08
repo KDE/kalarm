@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,10 +34,10 @@ using namespace KCal;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString TimePeriod::i18n_minutes()      { return i18nc("@item:inlistbox", "minutes"); }
-QString TimePeriod::i18n_hours_mins()   { return i18nc("@item:inlistbox", "hours/minutes"); }
-QString TimePeriod::i18n_days()         { return i18nc("@item:inlistbox", "days"); }
-QString TimePeriod::i18n_weeks()        { return i18nc("@item:inlistbox", "weeks"); }
+QString TimePeriod::i18n_minutes()      { return i18nc("@item:inlistbox Time units", "minutes"); }
+QString TimePeriod::i18n_hours_mins()   { return i18nc("@item:inlistbox Time units", "hours/minutes"); }
+QString TimePeriod::i18n_days()         { return i18nc("@item:inlistbox Time units", "days"); }
+QString TimePeriod::i18n_weeks()        { return i18nc("@item:inlistbox Time units", "weeks"); }
 
 static const int maxMinutes = 1000*60-1;   // absolute maximum value for hours:minutes = 999H59M
 

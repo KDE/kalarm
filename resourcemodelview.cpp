@@ -1,7 +1,7 @@
 /*
  *  resourcemodelview.cpp  -  model/view classes for alarm resource lists
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -113,19 +113,19 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 			if (inactive  &&  resource->readOnly())
 				return i18nc("@info:tooltip",
 				             "%1"
-				             "<br/>%2: <filename>%3</filename>"
-				             "<br/>%4, %5",
+				             "<nl/>%2: <filename>%3</filename>"
+				             "<nl/>%4, %5",
 				             name, type, resource->displayLocation(), disabled, readonly);
 			if (inactive  ||  resource->readOnly())
 				return i18nc("@info:tooltip",
 				             "%1"
-				             "<br/>%2: <filename>%3</filename>"
-				             "<br/>%4",
+				             "<nl/>%2: <filename>%3</filename>"
+				             "<nl/>%4",
 				             name, type, resource->displayLocation(),
 				             (inactive ? disabled : readonly));
 			return i18nc("@info:tooltip",
 			             "%1"
-			             "<br/>%2: <filename>%3</filename>",
+			             "<nl/>%2: <filename>%3</filename>",
 			             name, type, resource->displayLocation());
 		}
 		default:
@@ -494,7 +494,7 @@ bool ResourceView::viewportEvent(QEvent* e)
 			int i = toolTip.indexOf('@');
 			if (i > 0)
 			{
-				int j = toolTip.indexOf("<br", i + 1);
+				int j = toolTip.indexOf("<nl", i + 1);
 				int k = toolTip.indexOf('@', j);
 				QString name = toolTip.mid(i + 1, j - i - 1);
 				value = model()->data(index, Qt::FontRole);

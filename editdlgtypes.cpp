@@ -1,7 +1,7 @@
 /*
 *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
 *  Program:  kalarm
-*  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+*  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -1254,10 +1254,10 @@ void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
 {
 	QString msg;
 	if (mEmailBcc->isChecked())
-		msg = i18nc("@info", "Email sent to:<br/>%1<br/>Bcc: <email>%2</email>",
-		            mEmailAddresses.join("<br/>"), Preferences::emailBccAddress());
+		msg = i18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
+		            mEmailAddresses.join("<nl/>"), Preferences::emailBccAddress());
 	else
-		msg = i18nc("@info", "Email sent to:<br/>%1", mEmailAddresses.join("<br/>"));
+		msg = i18nc("@info", "Email sent to:<nl/>%1", mEmailAddresses.join("<nl/>"));
 	KMessageBox::information(this, msg);
 }
 

@@ -1,7 +1,7 @@
 /*
  *  daemon.cpp  -  interface with alarm daemon
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -249,7 +249,7 @@ void Daemon::registrationResult(bool reregister, int result, int version)
 	if (version  &&  version != DAEMON_VERSION_NUM)
 	{
 		failed = true;
-		errmsg = i18nc("@info", "Cannot enable alarms.<br />Installation or configuration error: "
+		errmsg = i18nc("@info", "Cannot enable alarms.<nl/>Installation or configuration error: "
 		               "<application>Alarm Daemon</application> (<command>%1</command>) version is incompatible.",
 		               QLatin1String(DAEMON_APP_NAME));
 	}
@@ -264,7 +264,7 @@ void Daemon::registrationResult(bool reregister, int result, int version)
 				// find the KAlarm executable so won't be able to restart KAlarm if
 				// KAlarm exits.
 				kError(5950) << "Daemon::registrationResult(" << reregister << "): registerApp D-Bus call:" << KGlobal::mainComponent().aboutData()->appName() << " not found";
-				KMessageBox::error(0, i18nc("@info", "Alarms will be disabled if you stop <application>KAlarm</application>.<br />"
+				KMessageBox::error(0, i18nc("@info", "Alarms will be disabled if you stop <application>KAlarm</application>.<nl/>"
 				                           "(Installation or configuration error: <command>%1</command> cannot locate <command>%2</command> executable.)",
 				                            QLatin1String(DAEMON_APP_NAME),
 				                            KGlobal::mainComponent().aboutData()->appName()));
@@ -277,7 +277,7 @@ void Daemon::registrationResult(bool reregister, int result, int version)
 				failed = true;
 				if (!reregister)
 				{
-					errmsg = i18nc("@info", "Cannot enable alarms:<br />"
+					errmsg = i18nc("@info", "Cannot enable alarms:<nl/>"
 					               "Failed to register with <application>Alarm Daemon</application> (<command>%1</command>)"
 					               "(Possible installation or configuration error)",
 					               QLatin1String(DAEMON_APP_NAME));
@@ -343,7 +343,7 @@ void Daemon::checkIfStarted()
 	if (err)
 	{
 		kError(5950) << "Daemon::checkIfStarted(): failed to start daemon";
-		KMessageBox::error(0, i18nc("@info", "Cannot enable alarms:<br />Failed to start <application>Alarm Daemon</application> (<command>%1</command>)", QLatin1String(DAEMON_APP_NAME)));
+		KMessageBox::error(0, i18nc("@info", "Cannot enable alarms:<nl/>Failed to start <application>Alarm Daemon</application> (<command>%1</command>)", QLatin1String(DAEMON_APP_NAME)));
 	}
 }
 

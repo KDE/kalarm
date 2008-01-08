@@ -1102,7 +1102,7 @@ QString runKMail(bool minimise)
 	QString dbusService = KMAIL_DBUS_SERVICE;
 	QString errmsg;
 	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DBUS_WINDOW) : QString()), dbusService, errmsg))
-		return i18nc("@info", "Unable to start <application>KMail</application><br />(<message>%1</message>)", errmsg);
+		return i18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
 	return QString();
 }
 
@@ -1391,13 +1391,13 @@ QString weekDayName(int day, const KLocale* locale)
 {
 	switch (day)
 	{
-		case 1: return ki18nc("Name of the weekday", "Monday").toString(locale);
-		case 2: return ki18nc("Name of the weekday", "Tuesday").toString(locale);
-		case 3: return ki18nc("Name of the weekday", "Wednesday").toString(locale);
-		case 4: return ki18nc("Name of the weekday", "Thursday").toString(locale);
-		case 5: return ki18nc("Name of the weekday", "Friday").toString(locale);
-		case 6: return ki18nc("Name of the weekday", "Saturday").toString(locale);
-		case 7: return ki18nc("Name of the weekday", "Sunday").toString(locale);
+		case 1: return ki18nc("@option Name of the weekday", "Monday").toString(locale);
+		case 2: return ki18nc("@option Name of the weekday", "Tuesday").toString(locale);
+		case 3: return ki18nc("@option Name of the weekday", "Wednesday").toString(locale);
+		case 4: return ki18nc("@option Name of the weekday", "Thursday").toString(locale);
+		case 5: return ki18nc("@option Name of the weekday", "Friday").toString(locale);
+		case 6: return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
+		case 7: return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
 	}
 	return QString();
 }

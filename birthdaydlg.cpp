@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -131,7 +131,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
 	mListView->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>Select birthdays to set alarms for.<br />"
+	      "<para>Select birthdays to set alarms for.<nl/>"
 	      "This list shows all birthdays in <application>KAddressBook</application> except those for which alarms already exist.</para>"
 	      "<para>You can select multiple birthdays at one time by dragging the mouse over the list, "
 	      "or by clicking the mouse while pressing Ctrl or Shift.</para>"));

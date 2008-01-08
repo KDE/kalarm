@@ -326,11 +326,11 @@ QString AlarmResource::infoText() const
 	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain Parameter in 'Default resource: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default resource: Yes/No'", "No");
 	return i18nc("@info",
 	    "<title>%1</title>"
-	    "<para>Resource type: %2<br />"
-	    "Contents: %3<br />"
-	    "%4: <filename>%5</filename><br />"
-	    "Permissions: %6<br />"
-	    "Status: %7<br />"
+	    "<para>Resource type: %2<nl/>"
+	    "Contents: %3<nl/>"
+	    "%4: <filename>%5</filename><nl/>"
+	    "Permissions: %6<nl/>"
+	    "Status: %7<nl/>"
 	    "Default resource: %8</para>",
 	    resourceName(), factory->typeName(type()), atype, displayType(), displayLocation(), perms, enabled, std);
 }

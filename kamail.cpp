@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -121,14 +121,14 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		if (identity.isNull())
 		{
 			kError(5950) << "KAMail::send(): identity" << jobdata.event.emailFromId() << "not found";
-			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
+			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
 		jobdata.from = identity.fullEmailAddr();
 		if (jobdata.from.isEmpty())
 		{
 			kError(5950) << "KAMail::send(): identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
-			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<br />Email identity <resource>%1</resource> has no email address", identity.identityName()));
+			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
 			return -1;
 		}
 	}
