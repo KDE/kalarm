@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,8 @@
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QLineEdit>
 
+#include <klineedit.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -55,7 +55,7 @@ FontColourButton::FontColourButton(QWidget* parent)
 	layout->addWidget(mButton);
 
 	// Font and colour sample display
-	mSample = new QLineEdit(this);
+	mSample = new KLineEdit(this);
 	mSample->setMinimumHeight(qMax(mSample->fontMetrics().lineSpacing(), mButton->height()*3/2));
 	mSample->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
 	mSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));

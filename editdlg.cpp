@@ -25,7 +25,6 @@
 #include <QStyle>
 #include <QGroupBox>
 #include <QPushButton>
-#include <QTabWidget>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -38,6 +37,7 @@
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
+#include <ktabwidget.h>
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>
@@ -217,13 +217,13 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setSpacing(spacingHint());
 		QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"), box);
 		label->setFixedSize(label->sizeHint());
-		mTemplateName = new QLineEdit(box);
+		mTemplateName = new KLineEdit(box);
 		mTemplateName->setReadOnly(mReadOnly);
 		label->setBuddy(mTemplateName);
 		box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
 	}
-	mTabs = new QTabWidget(mainWidget);
+	mTabs = new KTabWidget(mainWidget);
 //	mTabs->setMargin(marginHint());
 
 	KVBox* mainPageBox = new KVBox;

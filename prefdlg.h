@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,9 +30,9 @@ class QCheckBox;
 class QAbstractButton;
 class QRadioButton;
 class QPushButton;
-class QLineEdit;
 class QLabel;
 class KTimeZone;
+class KLineEdit;
 class KComboBox;
 class KColorCombo;
 class FontColourChooser;
@@ -138,7 +138,7 @@ class MiscPrefTab : public PrefsTabBase
 		QCheckBox*    mAutostartTrayIcon;
 		QCheckBox*    mConfirmAlarmDeletion;
 		ButtonGroup*  mXtermType;
-		QLineEdit*    mXtermCommand;
+		KLineEdit*    mXtermCommand;
 		int           mXtermFirst;              // id of first terminal window radio button
 		int           mXtermCount;              // number of terminal window types
 };
@@ -214,7 +214,7 @@ class EmailPrefTab : public PrefsTabBase
 	private:
 		void         setEmailAddress(Preferences::MailFrom, const QString& address);
 		void         setEmailBccAddress(bool useControlCentre, const QString& address);
-		QString      validateAddr(ButtonGroup*, QLineEdit* addr, const QString& msg);
+		QString      validateAddr(ButtonGroup*, KLineEdit* addr, const QString& msg);
 
 		ButtonGroup* mEmailClient;
 		RadioButton* mKMailButton;
@@ -223,11 +223,11 @@ class EmailPrefTab : public PrefsTabBase
 		RadioButton* mFromAddrButton;
 		RadioButton* mFromCCentreButton;
 		RadioButton* mFromKMailButton;
-		QLineEdit*   mEmailAddress;
+		KLineEdit*   mEmailAddress;
 		ButtonGroup* mBccAddressGroup;
 		RadioButton* mBccAddrButton;
 		RadioButton* mBccCCentreButton;
-		QLineEdit*   mEmailBccAddress;
+		KLineEdit*   mEmailBccAddress;
 		QCheckBox*   mEmailQueuedNotify;
 		QCheckBox*   mEmailCopyToKMail;
 		bool         mAddressChanged;
@@ -259,7 +259,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mEmailBcc;
 		KComboBox*      mSound;
 		QLabel*         mSoundFileLabel;
-		QLineEdit*      mSoundFile;
+		KLineEdit*      mSoundFile;
 		QPushButton*    mSoundFileBrowse;
 		QCheckBox*      mSoundRepeat;
 		QCheckBox*      mCopyToKOrganizer;
@@ -295,7 +295,7 @@ class ViewPrefTab : public PrefsTabBase
 		SpinBox*     mTooltipMaxAlarmCount;
 		QCheckBox*   mTooltipShowTime;
 		QCheckBox*   mTooltipShowTimeTo;
-		QLineEdit*   mTooltipTimeToPrefix;
+		KLineEdit*   mTooltipTimeToPrefix;
 		QLabel*      mTooltipTimeToPrefixLabel;
 		QCheckBox*   mModalMessages;
 		SpinBox*     mDaemonTrayCheckInterval;
