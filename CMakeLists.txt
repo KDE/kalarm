@@ -7,7 +7,6 @@ include_directories(
 ) 
 
 add_subdirectory( kalarmd ) 
-add_subdirectory( lib ) 
 add_subdirectory( resources ) 
 add_subdirectory( pixmaps ) 
 
