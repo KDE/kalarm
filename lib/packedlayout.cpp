@@ -1,7 +1,7 @@
 /*
  *  packedlayout.cpp  -  layout to pack items into rows
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kalarm.h"
-
+#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "packedlayout.h"
 
 
