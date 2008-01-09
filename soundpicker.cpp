@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type 
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
-QString SoundPicker::i18n_label_Sound()   { return i18nc("@label:listbox", "Sound:"); }
+QString SoundPicker::i18n_label_Sound()   { return i18nc("@label:listbox Listbox providing audio options", "Sound:"); }
 QString SoundPicker::i18n_combo_None()    { return i18nc("@item:inlistbox No sound", "None"); }
 QString SoundPicker::i18n_combo_Beep()    { return i18nc("@item:inlistbox", "Beep"); }
 QString SoundPicker::i18n_combo_Speak()   { return i18nc("@item:inlistbox", "Speak"); }
