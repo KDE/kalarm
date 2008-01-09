@@ -142,7 +142,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 				break;
 			case Preferences::MAIL_FROM_CONTROL_CENTRE:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
-				                                "<para>Please set it in the KDE Control Center or in the <application>KAlarm</application> Preferences dialog.</para>"));
+				                                "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 			case Preferences::MAIL_FROM_ADDR:
 			default:
@@ -543,7 +543,7 @@ uint KAMail::identityUoid(const QString& identityUoidOrName)
 }
 
 /******************************************************************************
-*  Fetch the user's email address configured in the KDE Control Centre.
+*  Fetch the user's email address configured in the KDE System Settings.
 */
 QString KAMail::controlCentreAddress()
 {
