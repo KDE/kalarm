@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Author: David Jarvie <software@astrojar.org.uk> -->
+<!-- Author: David Jarvie <djarvie@kde.org> -->
 <kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
@@ -151,8 +151,8 @@
       <label context="@label">Email client</label>
       <whatsthis context="@info:whatsthis"><para>How to send email when an email alarm is triggered.<list><item>KMail: The email is sent automatically via <application>KMail</application>. <application>KMail</application> is started first if necessary.</item><item>Sendmail: The email is sent automatically. This option will only work if your system is configured to use <application>sendmail</application> or a sendmail compatible mail transport agent.</item></list></para></whatsthis>
       <choices name="MailClient">
-	      <choice name="sendmail"><label>Sendmail</label></choice>
-	      <choice name="kmail"><label>KMail</label></choice>
+	      <choice name="sendmail"><label context="@option">Sendmail</label></choice>
+	      <choice name="kmail"><label context="@option">KMail</label></choice>
       </choices>
       <default>kmail</default>
     </entry>
@@ -251,12 +251,12 @@
       <default>false</default>
     </entry>
     <entry name="DefaultSoundType" key="SoundType" type="Enum">
-      <label context="@label">Sound</label>
+      <label context="@label Label for audio options">Sound</label>
       <whatsthis context="@info:whatsthis">Default sound type in the alarm edit dialog.</whatsthis>
       <choices name="SoundType" prefix="Sound_">
         <choice name="None"/>
         <choice name="Beep"/>
-        <choice name="File"><label>Play File</label></choice>
+        <choice name="File"><label context="@option">Play File</label></choice>
         <choice name="Speak"/>
       </choices>
       <default>None</default>
@@ -286,9 +286,9 @@
       <label context="@label">Command output</label>
       <whatsthis context="@info:whatsthis">Default setting in the alarm edit dialog for where to send command alarm output.</whatsthis>
       <choices name="CmdLogType" prefix="Log_">
-        <choice name="Discard"><label>Discard Output</label></choice>
-        <choice name="File"><label>Log To File</label></choice>
-        <choice name="Terminal"><label>Execute in terminal window</label></choice>
+        <choice name="Discard"><label context="@option">Discard Output</label></choice>
+        <choice name="File"><label context="@option">Log To File</label></choice>
+        <choice name="Terminal"><label context="@option">Execute in terminal window</label></choice>
       </choices>
       <default>Discard</default>
     </entry>
@@ -305,9 +305,9 @@
       <label context="@label">Recurrence period</label>
       <whatsthis context="@info:whatsthis">The default setting for the recurrence rule in the alarm edit dialog.</whatsthis>
       <choices name="RecurType" prefix="Recur_">
-        <choice name="None"><label>No recurrence</label></choice>
-        <choice name="Login"><label>At login</label></choice>
-        <choice name="SubDaily"><label>Hourly/minutely</label></choice>
+        <choice name="None"><label context="@option">No recurrence</label></choice>
+        <choice name="Login"><label context="@option">At login</label></choice>
+        <choice name="SubDaily"><label context="@option">Hourly/minutely</label></choice>
         <choice name="Daily"/>
         <choice name="Weekly"/>
         <choice name="Monthly"/>
@@ -319,9 +319,9 @@
       <label context="@label">In non-leap years, repeat yearly February 29th alarms on:</label>
       <whatsthis context="@info:whatsthis">For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.<note>The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</note></whatsthis>
       <choices name="Feb29Type" prefix="Feb29_">
-        <choice name="Feb28"><label>February 28th</label></choice>
-        <choice name="Mar1"><label>March 1st</label></choice>
-        <choice name="None"><label>Do not repeat</label></choice>
+        <choice name="Feb28"><label context="@option">February 28th</label></choice>
+        <choice name="Mar1"><label context="@option">March 1st</label></choice>
+        <choice name="None"><label context="@option">Do not repeat</label></choice>
       </choices>
       <default>Mar1</default>
       <emit signal="feb29TypeChanged"/>
@@ -331,7 +331,7 @@
       <whatsthis context="@info:whatsthis">Default reminder time units in the alarm edit dialog.</whatsthis>
        <choices name="TimePeriod::Units">
         <choice name="Minutes"></choice>
-        <choice name="HoursMinutes"><label>Hours/Minutes</label></choice>
+        <choice name="HoursMinutes"><label context="@option">Hours/Minutes</label></choice>
         <choice name="Days"/>
         <choice name="Weeks"/>
       </choices>
