@@ -107,7 +107,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* 
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
-	kDebug(5950) << "EditDisplayAlarmDlg::EditDisplayAlarmDlg(new)";
+	kDebug(5950) << "new";
 	init(0, newAlarm);
 }
 
@@ -118,7 +118,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bo
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
-	kDebug(5950) << "EditDisplayAlarmDlg::EditDisplayAlarmDlg(event.id())";
+	kDebug(5950) << "event.id()";
 	init(&event, newAlarm);
 }
 
@@ -672,7 +672,7 @@ QString EditCommandAlarmDlg::i18n_chk_ExecInTermWindow()   { return i18nc("@opti
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::COMMAND, parent, getResource)
 {
-	kDebug(5950) << "EditCommandAlarmDlg::EditCommandAlarmDlg(new)";
+	kDebug(5950) << "new";
 	init(0, newAlarm);
 }
 
@@ -680,7 +680,7 @@ EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent& event, bo
                                          GetResourceType getResource, bool readOnly)
 	: EditAlarmDlg(Template, event, parent, getResource, readOnly)
 {
-	kDebug(5950) << "EditCommandAlarmDlg::EditCommandAlarmDlg(event.id())";
+	kDebug(5950) << "event.id()";
 	init(&event, newAlarm);
 }
 
@@ -951,7 +951,7 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* pare
 	: EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource),
 	  mEmailRemoveButton(0)
 {
-	kDebug(5950) << "EditEmailAlarmDlg::EditEmailAlarmDlg(new)";
+	kDebug(5950) << "new";
 	init(0, newAlarm);
 }
 
@@ -960,7 +960,7 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent& event, bool n
 	: EditAlarmDlg(Template, event, parent, getResource, readOnly),
 	  mEmailRemoveButton(0)
 {
-	kDebug(5950) << "EditEmailAlarmDlg::EditEmailAlarmDlg(event.id())";
+	kDebug(5950) << "event.id()";
 	init(&event, newAlarm);
 }
 

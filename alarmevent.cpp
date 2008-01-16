@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -835,7 +835,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 		else if (data.type == KAAlarm::DISPLAYING__ALARM)
 			data.displayingFlags = REPEAT_AT_LOGIN;
 	}
-//kDebug(5950)<<"ReadAlarm(): text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
+//kDebug(5950)<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
 }
 
 /******************************************************************************
@@ -1033,7 +1033,7 @@ DateTime KAEvent::displayDateTime() const
 
 	// The alarm is restricted to working hours. Find the next
 	// occurrence during working hours.
-	kDebug(5950) << "KAEvent::displayDateTime(): working hours only, next=" << dt.kDateTime().dateTime();
+	kDebug(5950) << "working hours only, next=" << dt.kDateTime().dateTime();
 
 	QBitArray workDays = Preferences::workDays();
 	for (int i = 0;  ;  ++i)
@@ -2356,7 +2356,7 @@ bool KAEvent::setDisplaying(const KAEvent& event, KAAlarm::Type alarmType, const
 	  || alarmType == KAAlarm::DEFERRED_ALARM
 	  || alarmType == KAAlarm::AT_LOGIN_ALARM))
 	{
-//kDebug(5950)<<"KAEvent::setDisplaying("<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
+//kDebug(5950)<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
 		KAAlarm al = event.alarm(alarmType);
 		if (al.valid())
 		{
@@ -3294,7 +3294,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	if (version >= calVersion())
 		return false;
 
-	kDebug(5950) << "KAEvent::convertKCalEvents(): adjusting version" << version;
+	kDebug(5950) << "adjusting version" << version;
 	bool pre_0_7    = (version < KAlarm::Version(0,7,0));
 	bool pre_0_9    = (version < KAlarm::Version(0,9,0));
 	bool pre_0_9_2  = (version < KAlarm::Version(0,9,2));

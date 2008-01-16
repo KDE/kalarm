@@ -120,14 +120,14 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		identity = mIdentityManager->identityForUoid(jobdata.event.emailFromId());
 		if (identity.isNull())
 		{
-			kError(5950) << "KAMail::send(): identity" << jobdata.event.emailFromId() << "not found";
+			kError(5950) << "identity" << jobdata.event.emailFromId() << "not found";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
 		jobdata.from = identity.fullEmailAddr();
 		if (jobdata.from.isEmpty())
 		{
-			kError(5950) << "KAMail::send(): identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
+			kError(5950) << "identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
 			return -1;
 		}
@@ -153,7 +153,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		return -1;
 	}
 	jobdata.bcc  = (jobdata.event.emailBcc() ? Preferences::emailBccAddress() : QString());
-	kDebug(5950) << "KAlarmApp::sendEmail(): To:" << jobdata.event.emailAddresses(",")
+	kDebug(5950) << "To:" << jobdata.event.emailAddresses(",")
 	              << endl << "Subject:" << jobdata.event.emailSubject();
 
 	if (Preferences::emailClient() == Preferences::sendmail)
@@ -202,7 +202,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		FILE* fd = popen(command.toLocal8Bit(), "w");
 		if (!fd)
 		{
-			kError(5950) << "KAMail::send(): Unable to open a pipe to" << command;
+			kError(5950) << "Unable to open a pipe to" << command;
 			errmsgs = errors();
 			return -1;
 		}
@@ -228,7 +228,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		MailTransport::Transport* transport = manager->transportByName(identity.transport(), true);
 		if (!transport)
 		{
-			kError(5950) << "KAMail::send(): no mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
+			kError(5950) << "no mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
 			return -1;
 		}
@@ -236,7 +236,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
 		if (!mailjob)
 		{
-			kError(5950) << "KAMail::send(): failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
+			kError(5950) << "failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
 			return -1;
 		}
@@ -274,13 +274,13 @@ void KAMail::slotEmailSent(KJob* job)
 	JobData jobdata;
 	if (job->error())
 	{
-		kError(5950) << "KAMail::slotEmailSent(): failed:" << job->error();
+		kError(5950) << "failed:" << job->error();
 		errmsgs = errors(job->errorString(), SEND_ERROR);
 	}
 	if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != mJobs.head())
 	{
 		// The queue has been corrupted, so we can't locate the job's data
-		kError(5950) << "KAMail::slotEmailSent(): wrong job at head of queue: wiping queue";
+		kError(5950) << "wrong job at head of queue: wiping queue";
 		mJobs.clear();
 		mJobData.clear();
 		if (!errmsgs.isEmpty())
@@ -325,7 +325,7 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 		KTemporaryFile tmpFile;
 		if (!tmpFile.open())
 		{
-			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Unable to open a temporary mail file";
+			kError(5950) << folder << ": Unable to open a temporary mail file";
 			return QString("");
 		}
 		QTextStream stream(&tmpFile);
@@ -333,7 +333,7 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 		stream.flush();
 		if (tmpFile.error() != QFile::NoError)
 		{
-			kError(5950) << "KAMail::addToKMailFolder(" << folder << "): Error" << tmpFile.errorString() << " writing to temporary mail file";
+			kError(5950) << folder << ": Error" << tmpFile.errorString() << " writing to temporary mail file";
 			return QString("");
 		}
 
@@ -341,14 +341,14 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 		org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
 		QDBusReply<int> reply = kmail.dbusAddMessage(QString::fromLatin1(folder), tmpFile.fileName(), QString());
 		if (!reply.isValid())
-			kError(5950) << "KAMail::addToKMailFolder(): D-Bus call failed:" << reply.error().message();
+			kError(5950) << "D-Bus call failed:" << reply.error().message();
 		else if (reply.value() <= 0)
-			kError(5950) << "KAMail::addToKMailFolder(): D-Bus call returned error code =" << reply.value();
+			kError(5950) << "D-Bus call returned error code =" << reply.value();
 		else
 			return QString();    // success
 		err = i18nc("@info", "Error calling <application>KMail</application>");
 	}
-	kError(5950) << "KAMail::addToKMailFolder(" << folder << "):" << err;
+	kError(5950) << folder << ":" << err;
 	return err;
 }
 
@@ -423,12 +423,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			url.cleanPath();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
-				kError(5950) << "KAMail::appendBodyAttachments(): not found:" << attachment;
+				kError(5950) << "not found:" << attachment;
 				return i18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
 			}
 			KFileItem fi(uds, url);
 			if (fi.isDir()  ||  !fi.isReadable()) {
-				kError(5950) << "KAMail::appendBodyAttachments(): not file/not readable:" << attachment;
+				kError(5950) << "not file/not readable:" << attachment;
 				return attachError;
 			}
 
@@ -449,12 +449,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			// Read the file contents
 			QString tmpFile;
 			if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
-				kError(5950) << "KAMail::appendBodyAttachments(): load failure:" << attachment;
+				kError(5950) << "load failure:" << attachment;
 				return attachError;
 			}
 			QFile file(tmpFile);
 			if (!file.open(QIODevice::ReadOnly)) {
-				kDebug(5950) << "KAMail::appendBodyAttachments() tmp load error:" << attachment;
+				kDebug(5950) << "tmp load error:" << attachment;
 				return attachError;
 			}
 			qint64 size = file.size();
@@ -462,7 +462,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			file.close();
 			bool atterror = false;
 			if (contents.size() < size) {
-				kDebug(5950) << "KAMail::appendBodyAttachments() read error:" << attachment;
+				kDebug(5950) << "read error:" << attachment;
 				atterror = true;
 			}
 			else if (text)
@@ -835,7 +835,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 	QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("getDecodedBodyPart"), args);
 	if (!reply.isValid())
 	{
-		kError(5950) << "KAMail::getMailBody(): D-Bus call failed:" << reply.error().message();
+		kError(5950) << "D-Bus call failed:" << reply.error().message();
 		return QString();
 	}
 	return reply.value();

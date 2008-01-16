@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.cpp -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,10 +75,10 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
 		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
 		version057_UTC = isUTC(localFile);
-		kDebug(5950) << "CalendarCompat::fix(): KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") << "UTC)";
+		kDebug(5950) << "KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") << "UTC)";
 	}
 	else
-		kDebug(5950) << "CalendarCompat::fix(): KAlarm version" << version;
+		kDebug(5950) << "KAlarm version" << version;
 
 	// Convert events to current KAlarm format for if the calendar is saved
 	KAEvent::convertKCalEvents(calendar, version, version057_UTC);

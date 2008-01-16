@@ -95,7 +95,7 @@ QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:chec
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWidget* parent, GetResourceType getResource)
 {
-	kDebug(5950) << "EditAlarmDlg::create()";
+	kDebug(5950);
 	switch (type)
 	{
 		case DISPLAY:  return new EditDisplayAlarmDlg(Template, newAlarm, parent, getResource);
@@ -1110,7 +1110,6 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 */
 void EditAlarmDlg::slotRecurFrequencyChange()
 {
-kDebug()<<"slotRecurFrequencyChange()"<<endl;
 	slotSetSubRepetition();
 	KAEvent event;
 	mRecurrenceEdit->updateEvent(event, false);
