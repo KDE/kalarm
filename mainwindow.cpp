@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ MainWindow::MainWindow(bool restored)
 	  mHiddenTrayParent(false),
 	  mShown(false)
 {
-	kDebug(5950) << "MainWindow::MainWindow()";
+	kDebug(5950);
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MainWin");    // used by LikeBack
@@ -201,7 +201,7 @@ MainWindow::MainWindow(bool restored)
 
 MainWindow::~MainWindow()
 {
-	kDebug(5950) << "MainWindow::~MainWindow()";
+	kDebug(5950);
 	mWindowList.removeAt(mWindowList.indexOf(this));
 	if (theApp()->trayWindow())
 	{
@@ -540,7 +540,7 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 */
 void MainWindow::refresh()
 {
-	kDebug(5950) << "MainWindow::refresh()";
+	kDebug(5950);
 	EventListModel::alarms()->reload();
 }
 
@@ -550,7 +550,7 @@ void MainWindow::refresh()
 */
 void MainWindow::updateKeepArchived(int days)
 {
-	kDebug(5950) << "MainWindow::updateKeepArchived(" << (bool)days << ")";
+	kDebug(5950) << (bool)days;
 	if (mShowArchived  &&  !days)
 		slotShowArchived();   // toggle Show Archived option setting
 	mActionShowArchived->setEnabled(days);
@@ -1126,7 +1126,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	KCal::CalendarLocal calendar(Preferences::timeZone(true));
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
-	kDebug(5950) << "MainWindow::executeDropEvent():" << fmts;
+	kDebug(5950) << fmts;
 #endif
 
 	/* The order of the tests below matters, since some dropped objects
@@ -1136,7 +1136,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	if (!(bytes = data->data("message/rfc822")).isEmpty())
 	{
 		// Email message(s). Ignore all but the first.
-		kDebug(5950) << "MainWindow::executeDropEvent(email)";
+		kDebug(5950) << "email";
 		KMime::Content content;
 		content.setContent(bytes);
 		content.parse();
@@ -1161,7 +1161,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	}
 	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
 	{
-		kDebug(5950) << "MainWindow::executeDropEvent(URL)";
+		kDebug(5950) << "URL";
 		action = KAEvent::FILE;
 		alarmText.setText(files[0].prettyUrl());
 	}
@@ -1169,7 +1169,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	{
 		mailList = KPIM::MailList::fromMimeData(data);
 		// KMail message(s). Ignore all but the first.
-		kDebug(5950) << "MainWindow::executeDropEvent(KMail_list)";
+		kDebug(5950) << "KMail_list";
 		if (mailList.isEmpty())
 			return;
 		KPIM::MailSummary& summary = mailList[0];
@@ -1183,7 +1183,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (KCal::ICalDrag::fromMimeData(data, &calendar))
 	{
 		// iCalendar - ignore all but the first event
-		kDebug(5950) << "MainWindow::executeDropEvent(iCalendar)";
+		kDebug(5950) << "iCalendar";
 		KCal::Event::List events = calendar.rawEvents();
 		if (!events.isEmpty())
 		{
@@ -1195,7 +1195,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (data->hasText())
 	{
 		QString text = data->text();
-		kDebug(5950) << "MainWindow::executeDropEvent(text)";
+		kDebug(5950) << "text";
 		alarmText.setText(text);
 	}
 	else
@@ -1302,7 +1302,7 @@ void MainWindow::slotSelection()
 		}
 	}
 
-	kDebug(5950) << "MainWindow::slotSelection(true)";
+	kDebug(5950) << "true";
 	mActionCreateTemplate->setEnabled((count == 1) && (resources->activeCount(AlarmResource::TEMPLATE, true) > 0));
 	mActionCopy->setEnabled(active && count == 1);
 	mActionModify->setEnabled(count == 1);
@@ -1319,7 +1319,7 @@ void MainWindow::slotSelection()
 */
 void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
-	kDebug(5950) << "MainWindow::slotContextMenuRequested()";
+	kDebug(5950);
 	if (mContextMenu)
 		mContextMenu->popup(globalPos);
 }
@@ -1343,7 +1343,7 @@ void MainWindow::selectionCleared()
 */
 void MainWindow::slotDoubleClicked(const QModelIndex& index)
 {
-	kDebug(5950) << "MainWindow::slotDoubleClicked()";
+	kDebug(5950);
 	if (index.isValid())
 	{
 		if (mActionModify->isEnabled())

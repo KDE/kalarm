@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -333,7 +333,7 @@ void Undo::removeRedos(const QString& eventID)
 	for (int i = 0;  i < mRedoList.count();  )
 	{
 		UndoItem* item = mRedoList[i];
-//kDebug(5950)<<"removeRedos():"<<item->eventID()<<" (looking for"<<id<<")";
+//kDebug(5950)<<item->eventID()<<" (looking for"<<id<<")";
 		if (item->operation() == UndoItem::MULTI)
 		{
 			if (item->deleteID(id))

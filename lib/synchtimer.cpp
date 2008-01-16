@@ -1,7 +1,7 @@
 /*
  *  synchtimer.cpp  -  timers which synchronize to time boundaries
  *  Program:  kalarm
- *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -111,7 +111,7 @@ MinuteTimer* MinuteTimer::instance()
 */
 void MinuteTimer::slotTimer()
 {
-	kDebug(5950) << "MinuteTimer::slotTimer()";
+	kDebug(5950);
 	int interval = 62 - QTime::currentTime().second();
 	mTimer->start(interval * 1000);     // execute a single shot
 }
@@ -215,7 +215,7 @@ void DailyTimer::start()
 		next = QDateTime(now.date().addDays(1), mTime);
 	uint interval = next.toTime_t() - now.toTime_t();
 	mTimer->start(interval * 1000);    // execute a single shot
-	kDebug(5950) << "DailyTimer::start(at" << mTime.hour() << ":" << mTime.minute() << "): interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
+	kDebug(5950) << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
 
 /******************************************************************************
@@ -232,5 +232,5 @@ void DailyTimer::slotTimer()
 	QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
 	uint interval = next.toTime_t() - now.toTime_t();
 	mTimer->start(interval * 1000);    // execute a single shot
-	kDebug(5950) << "DailyTimer::slotTimer(at" << mTime.hour() << ":" << mTime.minute() << "): interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
+	kDebug(5950) << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }

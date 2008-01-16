@@ -1,7 +1,7 @@
 /*
  *  alarmdaemon.cpp  -  alarm daemon control routines
  *  Program:  KAlarm's alarm daemon (kalarmd)
- *  Copyright © 2001,2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2004-2008 by David Jarvie <djarvie@kde.org>
  *  Based on the original, (c) 1998, 1999 Preston Brown
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -88,7 +88,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 #endif
 	  mEnabled(true)
 {
-	kDebug(5900) << "AlarmDaemon::AlarmDaemon()";
+	kDebug(5900);
 	QDBusConnection::sessionBus().registerObject(DAEMON_DBUS_OBJECT, this, QDBusConnection::ExportScriptableSlots);
 	AlarmDaemon::readConfig();
 	enableAutoStart(true);    // switch autostart on whenever the program is run
@@ -130,7 +130,7 @@ AlarmDaemon::AlarmDaemon(bool autostart, QObject *parent)
 		autostart = group.readEntry("AutostartTray", false);
 		if (autostart)
 		{
-			kDebug(5900) << "AlarmDaemon::AlarmDaemon(): wait to autostart KAlarm";
+			kDebug(5900) << "Wait to autostart KAlarm";
 			QTimer::singleShot(KALARM_AUTOSTART_TIMEOUT * 1000, this, SLOT(autostartKAlarm()));
 		}
 	}
@@ -154,7 +154,7 @@ AlarmDaemon::~AlarmDaemon()
 */
 void AlarmDaemon::quit()
 {
-	kDebug(5900) << "AlarmDaemon::quit()";
+	kDebug(5900);
 	exit(0);
 }
 
@@ -174,7 +174,7 @@ QDBusInterface* AlarmDaemon::kalarmNotifyDBus()
 		mDBusNotify = new QDBusInterface(KALARM_DBUS_SERVICE, NOTIFY_DBUS_OBJECT, NOTIFY_DBUS_INTERFACE);
 		if (!mDBusNotify->isValid())
 		{
-			kError(5900) << "AlarmDaemon: KAlarm D-Bus notification interface not available:" << mDBusNotify->lastError().message();
+			kError(5900) << "KAlarm D-Bus notification interface not available:" << mDBusNotify->lastError().message();
 			delete mDBusNotify;
 			mDBusNotify = 0;
 		}
@@ -191,7 +191,7 @@ bool AlarmDaemon::checkDBusResult(const char* funcname)
 	QDBusError err = mDBusNotify->lastError();
 	if (!err.isValid())
 		return true;    // no error
-	kError(5900) << "AlarmDaemon:" << funcname << "() D-Bus call failed:" << err.message();
+	kError(5900) << funcname << "() D-Bus call failed:" << err.message();
 	return false;
 }
 
@@ -203,10 +203,10 @@ void AlarmDaemon::autostartKAlarm()
 #ifdef AUTOSTART_KALARM
 	if (mAlarmTimer)
 	{
-		kDebug(5900) << "AlarmDaemon::autostartKAlarm(): KAlarm already registered";
+		kDebug(5900) << "KAlarm already registered";
 		return;    // KAlarm has already registered with us
 	}
-	kDebug(5900) << "AlarmDaemon::autostartKAlarm(): starting KAlarm";
+	kDebug(5900) << "Starting KAlarm";
 	QStringList args;
 	args << QLatin1String("--tray");
 	KToolInvocation::kdeinitExec(QLatin1String("kalarm"), args);
@@ -245,7 +245,7 @@ void AlarmDaemon::startMonitoring()
 */
 void AlarmDaemon::enable(bool enable)
 {
-	kDebug(5900) << "AlarmDaemon::enable()";
+	kDebug(5900);
 	mEnabled = enable;
 	notifyCalStatus();    // notify KAlarm
 }
@@ -261,7 +261,7 @@ void AlarmDaemon::resourceActive(const QString& id, bool active)
 	AlarmResource* resource = AlarmResources::instance()->resourceWithId(id);
 	if (resource  &&  active != resource->isActive())
 	{
-		kDebug(5900) << "AlarmDaemon::resourceActive(" << id << "," << active << ")";
+		kDebug(5900) << id << "," << active;
 		resource->setEnabled(active);
 		if (active)
 			reloadResource(resource, true);
@@ -275,7 +275,7 @@ void AlarmDaemon::resourceLocation(const QString& id, const QString& locn, const
 	AlarmResource* resource = AlarmResources::instance()->resourceWithId(id);
 	if (resource)
 	{
-		kDebug(5900) << "AlarmDaemon::resourceLocation(" << id << "," << locn << ")";
+		kDebug(5900) << id << "," << locn;
 		resource->setLocation(locn, locn2);
 	}
 }
@@ -296,7 +296,7 @@ void AlarmDaemon::reloadResource(const QString& id, bool check, bool reset)
 	if (id.isEmpty())
 	{
 		// Reload all resources
-		kDebug(5900) << "AlarmDaemon::reloadResource(ALL)";
+		kDebug(5900) << "ALL";
 		if (reset)
 			clearEventsHandled();
 		// Don't call reload() since that saves the calendar
@@ -304,12 +304,12 @@ void AlarmDaemon::reloadResource(const QString& id, bool check, bool reset)
 	}
 	else
 	{
-		kDebug(5900) << "AlarmDaemon::reloadResource(" << id << ")";
+		kDebug(5900) << id;
 		AlarmResource* resource = resources->resourceWithId(id);
 		if (resource  &&  resource->isActive())
 			reloadResource(resource, reset);
 		else
-			kError(5900) << "AlarmDaemon::reloadResource(" << id << "): active resource not found";
+			kError(5900) << id << ": active resource not found";
 	}
 }
 
@@ -319,7 +319,7 @@ void AlarmDaemon::reloadResource(const QString& id, bool check, bool reset)
 */
 void AlarmDaemon::reloadResource(AlarmResource* resource, bool reset)
 {
-	kDebug(5900) << "AlarmDaemon::reloadResource()";
+	kDebug(5900);
 	if (reset)
 		clearEventsHandled(resource);
 	// Don't call reload() since that saves the calendar.
@@ -338,7 +338,7 @@ void AlarmDaemon::cacheDownloaded(AlarmResource* resource)
 	{
 		kalarmNotifyDBus()->call("cacheDownloaded", resource->identifier());
 		checkDBusResult("cacheDownloaded");
-		kDebug(5900) << "AlarmDaemon::cacheDownloaded(" << resource->identifier() << ")";
+		kDebug(5900) << resource->identifier();
 	}
 }
 
@@ -368,7 +368,7 @@ void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 	if (kapp->dcopClient()->senderId() != mClientName)
 		return;
 #endif
-	kDebug(5900) << "AlarmDaemon::eventHandled()" << (reload ?": reload" :"");
+	kDebug(5900) << (reload ? ": reload" : "");
 	setEventHandled(eventID);
 	if (reload)
 	{
@@ -387,7 +387,7 @@ void AlarmDaemon::eventHandled(const QString& eventID, bool reload)
 */
 void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient)
 {
-	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << "," << serviceName << "," <<  dbusObject << "," << startClient << ")";
+	kDebug(5900) << appName << "," << serviceName << "," <<  dbusObject << "," << startClient;
 	registerApp(appName, serviceName, dbusObject, startClient, true);
 }
 
@@ -400,7 +400,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 */
 void AlarmDaemon::registerChange(const QString& appName, const QString& serviceName, bool startClient)
 {
-	kDebug(5900) << "AlarmDaemon::registerChange(" << serviceName << "," << startClient << ")";
+	kDebug(5900) << serviceName << "," << startClient;
 	if (serviceName == mClientName)
 		registerApp(appName, mClientName, mClientDBusObj, startClient, false);
 }
@@ -414,7 +414,7 @@ void AlarmDaemon::registerChange(const QString& appName, const QString& serviceN
 */
 void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName, const QString& dbusObject, bool startClient, bool init)
 {
-	kDebug(5900) << "AlarmDaemon::registerApp(" << appName << "," << serviceName << "," <<  dbusObject << "," << startClient << ")";
+	kDebug(5900) << appName << "," << serviceName << "," <<  dbusObject << "," << startClient;
 	KAlarmd::RegisterResult result = KAlarmd::SUCCESS;
 	if (serviceName.isEmpty())
 		result = KAlarmd::FAILURE;
@@ -423,7 +423,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 		QString exe = KStandardDirs::findExe(appName);
 		if (exe.isNull())
 		{
-			kError(5900) << "AlarmDaemon::registerApp(): '" << appName << "' not found";
+			kError(5900) << appName << "not found";
 			result = KAlarmd::NOT_FOUND;
 		}
 		mClientExe = exe;
@@ -454,7 +454,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 		kalarmNotifyDBus()->call("registered", false, result, DAEMON_VERSION_NUM);
 		checkDBusResult("registered");
 	}
-	kDebug(5900) << "AlarmDaemon::registerApp() ->" << result;
+	kDebug(5900) << "->" << result;
 }
 
 /******************************************************************************
@@ -462,7 +462,7 @@ void AlarmDaemon::registerApp(const QString& appName, const QString& serviceName
 */
 void AlarmDaemon::enableAutoStart(bool on, bool sync)
 {
-	kDebug(5900) << "AlarmDaemon::enableAutoStart(" << on << ")";
+	kDebug(5900) << on;
 	KSharedConfig::Ptr config = KGlobal::config();
 	config->reparseConfiguration();
 	KConfigGroup group(config, DAEMON_AUTOSTART_SECTION);
@@ -478,7 +478,7 @@ void AlarmDaemon::enableAutoStart(bool on, bool sync)
 */
 void AlarmDaemon::checkAlarmsSlot()
 {
-	kDebug(5901) << "AlarmDaemon::checkAlarmsSlot()";
+	kDebug(5901);
 	if (mAlarmTimerSyncing)
 	{
 		// We've synched to the minute boundary. Now set timer to the check interval.
@@ -507,13 +507,13 @@ void AlarmDaemon::checkAlarmsSlot()
 */
 void AlarmDaemon::checkAlarms()
 {
-	kDebug(5901) << "AlarmDaemon::checkAlarms()";
+	kDebug(5901);
 	AlarmResources* resources = AlarmResources::instance();
 	if (!mEnabled  ||  !resources->loadedState(AlarmResource::ACTIVE))
 		return;
 
 	KDateTime now = KDateTime::currentUtcDateTime();
-	kDebug(5901) << "  To:" << now;
+	kDebug(5901) << "To:" << now;
 	QList<KCal::Alarm*> alarms = resources->alarmsTo(now);
 	if (alarms.isEmpty())
 		return;
@@ -529,7 +529,7 @@ void AlarmDaemon::checkAlarms()
 			continue;   // either not an event, or the event has already been processed
 		eventsDone += event;
 		const QString& eventID = event->uid();
-		kDebug(5901) << "AlarmDaemon::checkAlarms(): event" << eventID;
+		kDebug(5901) << "event" << eventID;
 
 		// Check which of the alarms for this event are due.
 		// The times in 'alarmtimes' corresponding to due alarms are set.
@@ -637,7 +637,7 @@ void AlarmDaemon::checkAlarms()
 */
 void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, const QList<KDateTime>& alarmtimes)
 {
-	kDebug(5900) << "AlarmDaemon::notifyEvent(" << eventID << "): notification type=" << mClientStart;
+	kDebug(5900) << eventID << ": notification type=" << mClientStart;
 	QString id = QLatin1String("ad:") + eventID;    // prefix to indicate that the notification if from the daemon
 
 	// Check if the client application is running, and if so, whether it is ready
@@ -649,22 +649,22 @@ void AlarmDaemon::notifyEvent(const QString& eventID, const KCal::Event* event, 
 		if (!mClientStart)
 		{
 			if (registered)
-				kDebug(5900) << "AlarmDaemon::notifyEvent(): client not ready";
+				kDebug(5900) << "Client not ready";
 			else
-				kDebug(5900) << "AlarmDaemon::notifyEvent(): don't start client";
+				kDebug(5900) << "Don't start client";
 			return;
 		}
 
 		// Start KAlarm, using the command line to specify the alarm
 		if (mClientExe.isEmpty())
 		{
-			kDebug(5900) << "AlarmDaemon::notifyEvent(): '" << mClientName << "' not found";
+			kDebug(5900) << mClientName << "not found";
 			return;
 		}
 		QStringList args;
 		args << "--handleEvent" << id;
 		QProcess::startDetached(mClientExe, args);
-		kDebug(5900) << "AlarmDaemon::notifyEvent(): used command line";
+		kDebug(5900) << "Used command line";
 	}
 	else
 	{
@@ -725,7 +725,7 @@ void AlarmDaemon::notifyCalStatus()
 		bool unloaded = !AlarmResources::instance()->loadedState(AlarmResource::ACTIVE);   // if no resources are loaded
 		KAlarmd::CalendarStatus change = unloaded ? KAlarmd::CALENDAR_UNAVAILABLE
 		                               : mEnabled ? KAlarmd::CALENDAR_ENABLED : KAlarmd::CALENDAR_DISABLED;
-		kDebug(5900) << "AlarmDaemon::notifyCalStatus() sending:" << mClientName << " ->" << change;
+		kDebug(5900) << "sending:" << mClientName << " ->" << change;
 		if (kalarmNotifyDBus())
 		{
 			kalarmNotifyDBus()->call("alarmDaemonUpdate", change);
@@ -764,7 +764,7 @@ bool AlarmDaemon::eventHandled(const KCal::Event* event, const QList<KDateTime>&
 */
 void AlarmDaemon::setEventHandled(const QString& eventID)
 {
-	kDebug(5900) << "AlarmDaemon::setEventHandled(" << eventID << ")";
+	kDebug(5900) << eventID;
 	// Remove it from the pending list, and add it to the handled list
 	EventsMap::Iterator it = mEventsPending.find(eventID);
 	if (it != mEventsPending.end())
@@ -782,7 +782,7 @@ void AlarmDaemon::setEventPending(const KCal::Event* event, const QList<KDateTim
 {
 	if (event)
 	{
-		kDebug(5900) << "AlarmDaemon::setEventPending(" << event->uid() << ")";
+		kDebug(5900) << event->uid();
 		setEventInMap(mEventsPending, event->uid(), alarmtimes, event->revision());
 	}
 }
@@ -848,13 +848,13 @@ void AlarmDaemon::readConfig()
 	// Verify the configuration
 	mClientName.clear();
 	if (client.isEmpty()  ||  KStandardDirs::findExe(client).isNull())
-		kError(5900) << "AlarmDaemon::readConfig(): '" << client << "': client app not found";
+		kError(5900) << client << ": client app not found";
 	else if (mClientDBusObj.isEmpty())
-		kError(5900) << "AlarmDaemon::readConfig(): no D-Bus object specified for '" << client << "'";
+		kError(5900) << "No D-Bus object specified for '" << client << "'";
 	else
 	{
 		mClientName = client;
-		kDebug(5900) << "AlarmDaemon::readConfig(): client" << mClientName;
+		kDebug(5900) << "Client" << mClientName;
 	}
 
 	// Remove obsolete CheckInterval entry (if it exists)
@@ -870,7 +870,7 @@ void AlarmDaemon::readConfig()
 */
 void AlarmDaemon::readKAlarmConfig()
 {
-	kDebug(5900) << "AlarmDaemon::readKAlarmConfig()";
+	kDebug(5900);
 	KConfig config(KStandardDirs::locate("config", "kalarmrc"));
 	const KConfigGroup group = config.group("General");
 	QString zone = group.readEntry(TIMEZONE, QString());

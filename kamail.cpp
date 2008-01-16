@@ -120,14 +120,14 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		identity = mIdentityManager->identityForUoid(jobdata.event.emailFromId());
 		if (identity.isNull())
 		{
-			kError(5950) << "identity" << jobdata.event.emailFromId() << "not found";
+			kError(5950) << "Identity" << jobdata.event.emailFromId() << "not found";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
 		jobdata.from = identity.fullEmailAddr();
 		if (jobdata.from.isEmpty())
 		{
-			kError(5950) << "identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
+			kError(5950) << "Identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
 			return -1;
 		}
@@ -228,7 +228,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		MailTransport::Transport* transport = manager->transportByName(identity.transport(), true);
 		if (!transport)
 		{
-			kError(5950) << "no mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
+			kError(5950) << "No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
 			return -1;
 		}
@@ -236,7 +236,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
 		if (!mailjob)
 		{
-			kError(5950) << "failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
+			kError(5950) << "Failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
 			return -1;
 		}
@@ -274,13 +274,13 @@ void KAMail::slotEmailSent(KJob* job)
 	JobData jobdata;
 	if (job->error())
 	{
-		kError(5950) << "failed:" << job->error();
+		kError(5950) << "Failed:" << job->error();
 		errmsgs = errors(job->errorString(), SEND_ERROR);
 	}
 	if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != mJobs.head())
 	{
 		// The queue has been corrupted, so we can't locate the job's data
-		kError(5950) << "wrong job at head of queue: wiping queue";
+		kError(5950) << "Wrong job at head of queue: wiping queue";
 		mJobs.clear();
 		mJobData.clear();
 		if (!errmsgs.isEmpty())
@@ -423,12 +423,12 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			url.cleanPath();
 			KIO::UDSEntry uds;
 			if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
-				kError(5950) << "not found:" << attachment;
+				kError(5950) << "Not found:" << attachment;
 				return i18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
 			}
 			KFileItem fi(uds, url);
 			if (fi.isDir()  ||  !fi.isReadable()) {
-				kError(5950) << "not file/not readable:" << attachment;
+				kError(5950) << "Not file/not readable:" << attachment;
 				return attachError;
 			}
 
@@ -449,7 +449,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			// Read the file contents
 			QString tmpFile;
 			if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
-				kError(5950) << "load failure:" << attachment;
+				kError(5950) << "Load failure:" << attachment;
 				return attachError;
 			}
 			QFile file(tmpFile);
@@ -462,7 +462,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 			file.close();
 			bool atterror = false;
 			if (contents.size() < size) {
-				kDebug(5950) << "read error:" << attachment;
+				kDebug(5950) << "Read error:" << attachment;
 				atterror = true;
 			}
 			else if (text)
@@ -602,7 +602,7 @@ QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& lis
 {
 	if (!addr.displayName.isEmpty())
 	{
-		kDebug(5950) << "mailbox groups not allowed! Name: \"" << addr.displayName << "\"";
+		kDebug(5950) << "Mailbox groups not allowed! Name:" << addr.displayName;
 		return addr.displayName;
 	}
 	const QList<KMime::Types::Mailbox>& mblist = addr.mailboxList;

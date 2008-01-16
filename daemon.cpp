@@ -209,7 +209,7 @@ bool Daemon::registerWith(bool reregister)
 	}
 
 	bool disabledIfStopped = theApp()->alarmsDisabledIfStopped();
-	kDebug(5950) << (reregister ? "reregister" : "register:") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE");
+	kDebug(5950) << (reregister ? "Reregister" : "Register:") << (disabledIfStopped ? "NO_START" : "COMMAND_LINE");
 	bool result;
 	if (reregister)
 	{
@@ -313,7 +313,7 @@ void Daemon::registrationResult(bool reregister, int result, int version)
 		// The alarm daemon has loaded the calendar
 		setStatus(REGISTERED);
 		mRegisterFailMsg = false;
-		kDebug(5950) << "daemon startup complete";
+		kDebug(5950) << "Daemon startup complete";
 	}
 }
 
@@ -342,7 +342,7 @@ void Daemon::checkIfStarted()
 	mStartTimer = 0;
 	if (err)
 	{
-		kError(5950) << "failed to start daemon";
+		kError(5950) << "Failed to start daemon";
 		KMessageBox::error(0, i18nc("@info", "Cannot enable alarms:<nl/>Failed to start <application>Alarm Daemon</application> (<command>%1</command>)", QLatin1String(DAEMON_APP_NAME)));
 	}
 }
@@ -455,7 +455,7 @@ void Daemon::reloadResource(const QString& resourceID)
 	kDebug(5950) << resourceID;
 	daemonDBus()->reloadResource(resourceID);
 	if (!checkDBusResult("reloadResource"))
-		kError(5950) << "reloadResource(" << resourceID << ") D-Bus send failed";
+		kError(5950) << resourceID << ": D-Bus send failed";
 }
 
 /******************************************************************************

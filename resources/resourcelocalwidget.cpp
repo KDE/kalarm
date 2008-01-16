@@ -1,7 +1,7 @@
 /*
  *  resourcelocalwidget.cpp  -  configuration widget for a local file calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,17 +45,17 @@ ResourceLocalConfigWidget::ResourceLocalConfigWidget(QWidget* parent)
 
 void ResourceLocalConfigWidget::loadSettings(KRES::Resource* resource)
 {
-kDebug(KARES_DEBUG)<<"ResourceLocalConfigWidget::loadSettings("<<typeid(resource).name()<<")";
+kDebug(KARES_DEBUG)<<typeid(resource).name();
 //	KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
 	KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
 	if (!res)
-		kError(KARES_DEBUG) << "ResourceLocalConfigWidget::loadSettings(KAResourceLocal): cast failed";
+		kError(KARES_DEBUG) << "KAResourceLocal: cast failed";
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
 		mURL->setUrl(res->fileName());
 #ifndef NDEBUG
-		kDebug(KARES_DEBUG) << "ResourceLocalConfigWidget::loadSettings(): File" << mURL->url() << " type" << res->typeName();
+		kDebug(KARES_DEBUG) << "File" << mURL->url() << " type" << res->typeName();
 #endif
 	}
 }
@@ -65,7 +65,7 @@ void ResourceLocalConfigWidget::saveSettings(KRES::Resource* resource)
 //	KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
 	KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
 	if (!res)
-		kDebug(KARES_DEBUG) << "ResourceLocalConfigWidget::saveSettings(KAResourceLocal): cast failed";
+		kDebug(KARES_DEBUG) << "KAResourceLocal: cast failed";
 	else
 		res->setFileName(mURL->url());
 }

@@ -1033,7 +1033,7 @@ DateTime KAEvent::displayDateTime() const
 
 	// The alarm is restricted to working hours. Find the next
 	// occurrence during working hours.
-	kDebug(5950) << "working hours only, next=" << dt.kDateTime().dateTime();
+	kDebug(5950) << "Working hours only, next=" << dt.kDateTime().dateTime();
 
 	QBitArray workDays = Preferences::workDays();
 	for (int i = 0;  ;  ++i)
@@ -3294,7 +3294,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	if (version >= calVersion())
 		return false;
 
-	kDebug(5950) << "adjusting version" << version;
+	kDebug(5950) << "Adjusting version" << version;
 	bool pre_0_7    = (version < KAlarm::Version(0,7,0));
 	bool pre_0_9    = (version < KAlarm::Version(0,9,0));
 	bool pre_0_9_2  = (version < KAlarm::Version(0,9,2));

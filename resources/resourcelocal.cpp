@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.cpp  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocal.cpp in libkcal (updated to rev 645858),
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -100,7 +100,7 @@ void KAResourceLocal::applyReconfig()
 
 void KAResourceLocal::enableResource(bool enable)
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocal::enableResource(" << enable << "):" << mURL.path();
+	kDebug(KARES_DEBUG) << enable << ":" << mURL.path();
 	if (enable)
 	{
 		lock(mURL.path());
@@ -117,7 +117,7 @@ bool KAResourceLocal::doLoad(bool)
 {
 	if (!KStandardDirs::exists(mURL.path()))
 	{
-		kDebug(KARES_DEBUG) << "KAResourceLocal::doLoad(): File doesn't exist yet.";
+		kDebug(KARES_DEBUG) << "File doesn't exist yet.";
 		mLoaded = false;
 		emit invalidate(this);
 		calendar()->close();
@@ -142,12 +142,12 @@ bool KAResourceLocal::doLoad(bool)
 
 void KAResourceLocal::reload()
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocal::reload(" << mURL.path() << ")";
+	kDebug(KARES_DEBUG) << mURL.path();
 	if (!isOpen())
 		return;
 	if (mLastModified == readLastModified())
 	{
-		kDebug(KARES_DEBUG) << "KAResourceLocal::reload(): file not modified since last read.";
+		kDebug(KARES_DEBUG) << "File not modified since last read.";
 		return;
 	}
 	loadFile();
@@ -156,7 +156,7 @@ void KAResourceLocal::reload()
 
 bool KAResourceLocal::loadFile()
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocal::loadFile(" << mURL.path() << ")";
+	kDebug(KARES_DEBUG) << mURL.path();
 	mLoaded = false;
 	emit invalidate(this);
 	calendar()->close();
@@ -185,7 +185,7 @@ bool KAResourceLocal::doSave(bool)
 {
 	if (saveInhibited())
 		return true;
-	kDebug(KARES_DEBUG) << "KAResourceLocal::doSave(" << mURL.path() << ")";
+	kDebug(KARES_DEBUG) << mURL.path();
 	if (mCalIDFunction)
 		(*mCalIDFunction)(*calendar());    // write the application ID into the calendar
 	bool success = calendar()->save(mURL.path());
@@ -215,7 +215,7 @@ bool KAResourceLocal::setFileName(const KUrl& newURL)
 	}
 	if (newURL.path() == mURL.path()  ||  !newURL.isLocalFile())
 		return false;
-	kDebug(KARES_DEBUG) << "KAResourceLocal::setFileName(" << newURL.path() << ")";
+	kDebug(KARES_DEBUG) << newURL.path();
 	if (isOpen())
 		close();
 	bool active = isActive();

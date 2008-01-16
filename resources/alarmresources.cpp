@@ -105,7 +105,7 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly,
 
 AlarmResources::~AlarmResources()
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::~AlarmResources()";
+	kDebug(KARES_DEBUG);
 	close();
 	delete mManager;
 	theInstance.setObject(mInstance, (AlarmResources*)0);
@@ -156,7 +156,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 		KUrl url(fileName);
 		if (!url.isValid())
 		{
-			kError(KARES_DEBUG) << "AlarmResources::addDefaultResource():" << configKey << ": invalid name:" << fileName;
+			kError(KARES_DEBUG) << configKey << ": invalid name:" << fileName;
 			mConstructionError = i18nc("@info", "%1: invalid calendar file name: <filename>%2</filename>", configKey, fileName);
 			return 0;
 		}
@@ -164,7 +164,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 			resource = new KAResourceRemote(type, url);
 		else if (fileName == mReservedFile)
 		{
-			kError(KARES_DEBUG) << "AlarmResources::addDefaultResource():" << configKey << ": name not allowed:" << fileName;
+			kError(KARES_DEBUG) << configKey << ": name not allowed:" << fileName;
 			mConstructionError = i18nc("@info", "%1: file name not permitted: <filename>%2</filename>", configKey, fileName);
 			return 0;
 		}
@@ -188,7 +188,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 
 AlarmResources::Result AlarmResources::addEvent(Event* event, KCalEvent::Status type, QWidget* promptParent, bool noPrompt)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::addEvent(" << event->uid() << ")";
+	kDebug(KARES_DEBUG) << event->uid();
 	bool cancelled;
 	AlarmResource* resource = destination(type, promptParent, noPrompt, &cancelled);
 	if (!resource)
@@ -196,12 +196,12 @@ AlarmResources::Result AlarmResources::addEvent(Event* event, KCalEvent::Status 
 		delete event;
 		if (cancelled)
 			return Cancelled;
-		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource";
+		kDebug(KARES_DEBUG) << "No resource";
 		return Failed;
 	}
 	if (!addEvent(event, resource))
 	{
-		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): failed";
+		kDebug(KARES_DEBUG) << "Failed";
 		return Failed;    // event was deleted by addEvent()
 	}
 	return Success;
@@ -418,7 +418,7 @@ void AlarmResources::inhibitDefaultReload(bool active, bool inactive)
 
 void AlarmResources::load(ResourceCached::CacheAction action)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::load()";
+	kDebug(KARES_DEBUG);
 	if (!mManager->standardResource())
 		kDebug(KARES_DEBUG) << "Warning! No standard resource yet.";
 
@@ -505,7 +505,7 @@ bool AlarmResources::reload()
 
 void AlarmResources::close()
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::close()";
+	kDebug(KARES_DEBUG);
 	if (mOpen)
 	{
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
@@ -517,7 +517,7 @@ void AlarmResources::close()
 
 bool AlarmResources::save()
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::save()";
+	kDebug(KARES_DEBUG);
 	if (!mOpen)
 		return false;
 	bool saved = false;
@@ -528,7 +528,7 @@ bool AlarmResources::save()
 			if ((!mActiveOnly  ||  (*it)->alarmType() == AlarmResource::ACTIVE)
 			&&  (*it)->hasChanges())
 			{
-				kDebug(KARES_DEBUG) << "AlarmResources::save(): saving modified resource" << (*it)->identifier();
+				kDebug(KARES_DEBUG) << "Saving modified resource" << (*it)->identifier();
 				(*it)->save();
 				saved = true;
 			}
@@ -536,7 +536,7 @@ bool AlarmResources::save()
 		setModified(false);
 	}
 	if (!saved)
-		kDebug(KARES_DEBUG) << "AlarmResources::save(): no modified resources to save";
+		kDebug(KARES_DEBUG) << "No modified resources to save";
         return true;
 }
 
@@ -594,7 +594,7 @@ bool AlarmResources::addEvent(Event* event, AlarmResource* resource)
 
 AlarmResources::Result AlarmResources::addEvent(Event* event, QWidget* promptParent)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::addEvent" << this;
+	kDebug(KARES_DEBUG) << this;
 	bool cancelled;
 	AlarmResource* resource = destination(event, promptParent, &cancelled);
 	if (resource)
@@ -613,13 +613,13 @@ AlarmResources::Result AlarmResources::addEvent(Event* event, QWidget* promptPar
 	else if (cancelled)
 		return Cancelled;
 	else
-		kDebug(KARES_DEBUG) << "AlarmResources::addEvent(): no resource";
+		kDebug(KARES_DEBUG) << "No resource";
 	return Failed;
 }
 
 bool AlarmResources::deleteEvent(Event *event)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::deleteEvent(" << event->uid() << ")";
+	kDebug(KARES_DEBUG) << event->uid();
 	bool status = false;
 	ResourceMap::Iterator rit = mResourceMap.find(event);
 	if (rit != mResourceMap.end())
@@ -677,7 +677,7 @@ Event::List AlarmResources::rawEventsForDate(const QDate &date, const KDateTime:
 
 Event::List AlarmResources::rawEvents(const QDate& start, const QDate& end, const KDateTime::Spec& timespec, bool inclusive)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::rawEvents(start,end,inclusive)";
+	kDebug(KARES_DEBUG) << "(start,end,inclusive)";
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		appendEvents(result, (*it)->rawEvents(start, end, timespec, inclusive), *it);
@@ -686,7 +686,7 @@ Event::List AlarmResources::rawEvents(const QDate& start, const QDate& end, cons
 
 Event::List AlarmResources::rawEventsForDate(const KDateTime& dt)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::rawEventsForDate(dt)";
+	kDebug(KARES_DEBUG) << "(dt)";
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		appendEvents(result, (*it)->rawEventsForDate(dt), *it);
@@ -695,7 +695,7 @@ Event::List AlarmResources::rawEventsForDate(const KDateTime& dt)
 
 Event::List AlarmResources::rawEvents(EventSortField sortField, SortDirection sortDirection)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::rawEvents()";
+	kDebug(KARES_DEBUG);
 	Event::List result;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		appendEvents(result, (*it)->rawEvents(EventSortUnsorted), *it);
@@ -704,7 +704,7 @@ Event::List AlarmResources::rawEvents(EventSortField sortField, SortDirection so
 
 Event::List AlarmResources::rawEvents(AlarmResource* resource, EventSortField sortField, SortDirection sortDirection)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::rawEvents(resource)";
+	kDebug(KARES_DEBUG) << "(resource)";
 	Event::List result;
 	if (!resource->isActive())
 		return result;
@@ -723,7 +723,7 @@ void AlarmResources::appendEvents(Event::List& result, const Event::List& events
 // to initialise it and connect its signals.
 void AlarmResources::connectResource(AlarmResource* resource)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::connectResource(" << resource->resourceName() << ")";
+	kDebug(KARES_DEBUG) << resource->resourceName();
 	resource->inhibitDefaultReload((resource->alarmType() == AlarmResource::ACTIVE) ? mInhibitActiveReload : mInhibitInactiveReload);
 	resource->setInhibitSave(mInhibitSave);
 	resource->disconnect(this);   // just in case we're called twice
@@ -803,7 +803,7 @@ void AlarmResources::slotSaveError(ResourceCalendar* resource, const QString& er
 
 void AlarmResources::slotResourceStatusChanged(AlarmResource* resource, Change change)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::slotResourceStatusChanged(" << resource->resourceName() << ", " << (change == Enabled ? "Enabled)" : change == ReadOnly ? "ReadOnly)" : change == Location ? "Location)" : "Colour)");
+	kDebug(KARES_DEBUG) << resource->resourceName() << ", " << (change == Enabled ? "Enabled" : change == ReadOnly ? "ReadOnly" : change == Location ? "Location" : "Colour");
 	if (!resource->writable())
 	{
 		// The resource is no longer writable, so it can't be a standard resource
@@ -844,7 +844,7 @@ AlarmResource* AlarmResources::resource(const Incidence* incidence) const
 // Called by the resource manager when a resource is added to the collection
 void AlarmResources::resourceAdded(AlarmResource* resource)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::resourceAdded(" << resource->resourceName() << ")";
+	kDebug(KARES_DEBUG) << resource->resourceName();
 	connectResource(resource);
 	if (resource->isActive())
 		load(resource);
@@ -853,13 +853,13 @@ void AlarmResources::resourceAdded(AlarmResource* resource)
 
 void AlarmResources::resourceModified(AlarmResource* resource)
 {
-//  kDebug(KARES_DEBUG) << "AlarmResources::resourceModified(" << resource->resourceName() << ")";
+//  kDebug(KARES_DEBUG) << resource->resourceName();
 //  emit signalResourceModified(resource);
 }
 
 void AlarmResources::resourceDeleted(AlarmResource* resource)
 {
-	kDebug(KARES_DEBUG) << "AlarmResources::resourceDeleted()";
+	kDebug(KARES_DEBUG);
 	emit resourceStatusChanged(resource, Deleted);
 }
 

@@ -114,7 +114,7 @@ AlarmCalendar* AlarmCalendar::displayCalendarOpen()
 {
 	if (mDisplayCalendar->open())
 		return mDisplayCalendar;
-	kError(5950) << "open error";
+	kError(5950) << "Open error";
 	return 0;
 }
 
@@ -335,7 +335,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 			saveFilename = mICalUrl.path();
 		if (!static_cast<CalendarLocal*>(mCalendar)->save(saveFilename, new ICalFormat))
 		{
-			kError(5950) << "saving" << saveFilename << "failed.";
+			kError(5950) << "Saving" << saveFilename << "failed.";
 			KMessageBox::error(0, i18nc("@info", "Failed to save calendar to <filename>%1</filename>", mICalUrl.prettyUrl()));
 			return false;
 		}
@@ -508,7 +508,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	success = cal.load(filename);
 	if (!success)
 	{
-		kDebug(5950) << "error loading calendar '" << filename <<"'";
+		kDebug(5950) << "Error loading calendar '" << filename <<"'";
 		KMessageBox::error(parent, i18nc("@info", "Could not load calendar <filename>%1</filename>.", url.prettyUrl()));
 	}
 	else
@@ -749,7 +749,7 @@ Event* AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
 	bool noNewId = newId.isEmpty();
 	if (!noNewId  &&  oldEventId == newId)
 	{
-		kError(5950) << "same IDs";
+		kError(5950) << "Same IDs";
 		return 0;
 	}
 	if (!mOpen)

@@ -1,7 +1,7 @@
 /*
  *  resourceremotewidget.cpp  -  configuration widget for a remote file calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ void ResourceRemoteConfigWidget::loadSettings(KRES::Resource* resource)
 //	KAResourceRemote* res = dynamic_cast<KAResourceRemote*>(resource);
 	KAResourceRemote* res = static_cast<KAResourceRemote*>(resource);
 	if (!res)
-		kError(KARES_DEBUG) << "ResourceRemoteConfigWidget::loadSettings(KAResourceRemote): cast failed";
+		kError(KARES_DEBUG) << "KAResourceRemote: cast failed";
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
@@ -72,7 +72,7 @@ void ResourceRemoteConfigWidget::loadSettings(KRES::Resource* resource)
 		mReloadConfig->loadSettings(res);
 		mSaveConfig->loadSettings(res);
 #ifndef NDEBUG
-		kDebug(KARES_DEBUG) << "ResourceRemoteConfigWidget::loadSettings(): File" << mDownloadUrl->url() << " type" << res->typeName();
+		kDebug(KARES_DEBUG) << "File" << mDownloadUrl->url() << " type" << res->typeName();
 #endif
 	}
 }
@@ -82,7 +82,7 @@ void ResourceRemoteConfigWidget::saveSettings(KRES::Resource* resource)
 //	KAResourceRemote* res = dynamic_cast<KAResourceRemote*>(resource);
 	KAResourceRemote* res = static_cast<KAResourceRemote*>(resource);
 	if (!res)
-		kDebug(KARES_DEBUG) << "ResourceRemoteConfigWidget::saveSettings(KAResourceRemote): cast failed";
+		kDebug(KARES_DEBUG) << "KAResourceRemote: cast failed";
 	else
 	{
 		res->setUrls(mDownloadUrl->url(), mUploadUrl->url());

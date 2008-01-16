@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldirwidget.cpp  -  configuration widget for local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,12 +48,12 @@ void ResourceLocalDirConfigWidget::loadSettings(KRES::Resource* resource)
 //	KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
 	KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
 	if (!res)
-		kError(KARES_DEBUG) << "ResourceLocalDirConfigWidget::loadSettings(KAResourceLocalDir): cast failed";
+		kError(KARES_DEBUG) << "KAResourceLocalDir: cast failed";
 	else
 	{
 		ResourceConfigWidget::loadSettings(resource);
 		mURL->setUrl(res->dirName());
-		kDebug(KARES_DEBUG) << "ResourceLocalDirConfigWidget::loadSettings(): Directory" << mURL->url();
+		kDebug(KARES_DEBUG) << "Directory" << mURL->url();
 	}
 }
 
@@ -62,7 +62,7 @@ void ResourceLocalDirConfigWidget::saveSettings(KRES::Resource *resource)
 //	KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
 	KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
 	if (!res)
-		kDebug(KARES_DEBUG) << "ResourceLocalDirConfigWidget::saveSettings(KAResourceLocalDir): cast failed";
+		kDebug(KARES_DEBUG) << "KAResourceLocalDir: cast failed";
 	else
 		res->setDirName(mURL->url());
 }

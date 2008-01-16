@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocaldir.cpp in libkcal (updated to rev 645858),
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -106,7 +106,7 @@ void KAResourceLocalDir::applyReconfig()
 
 void KAResourceLocalDir::enableResource(bool enable)
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::enableResource(" << enable << "):" << mURL.path();
+	kDebug(KARES_DEBUG) << enable << ":" << mURL.path();
 	if (enable)
 	{
 		lock(mURL.path());
@@ -128,7 +128,7 @@ void KAResourceLocalDir::enableResource(bool enable)
 */
 bool KAResourceLocalDir::doLoad(bool syncCache)
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(" << mURL.path() << (syncCache ?"): load all" :"): load changes only");
+	kDebug(KARES_DEBUG) << mURL.path() << (syncCache ?": load all" :": load changes only");
 	if (!isActive()  ||  !isOpen())
 		return false;
 	ModifiedMap      oldLastModified;
@@ -157,7 +157,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	bool foundFile = false;
 	if (KStandardDirs::exists(dirName)  ||  KStandardDirs::exists(dirName + '/'))
 	{
-		kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): opening '" << dirName << "'";
+		kDebug(KARES_DEBUG) << "Opening" << dirName;
 		FixFunc prompt = PROMPT_PART;
 		QDir dir(dirName);
 		QStringList entries = dir.entryList(QDir::Files | QDir::Readable);
@@ -202,7 +202,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	}
 	else if (syncCache)
 	{
-		kDebug(KARES_DEBUG) << "KAResourceLocalDir::doLoad(): creating '" << dirName << "'";
+		kDebug(KARES_DEBUG) << "Creating" << dirName;
 
 		// Create the directory. Use 0775 to allow group-writable if the umask
 		// allows it (permissions will be 0775 & ~umask). This is desired e.g. for
@@ -254,7 +254,7 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, Fi
 	if (!calendar.load(fileName))
 	{
 		// Loading this file failed, but just assume that it's not a calendar file
-		kDebug(KARES_DEBUG) << "KAResourceLocalDir::loadFile(): '" << fileName << "' failed";
+		kDebug(KARES_DEBUG) << fileName << "failed";
 	}
 	else
 	{
@@ -273,14 +273,14 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, Fi
 			case KCalendar::ByEvent:
 				break;
 		}
-		kDebug(KARES_DEBUG) << "KAResourceLocalDir::loadFile(): '" << fileName << "': compatibility=" << compat;
+		kDebug(KARES_DEBUG) << fileName << ": compatibility=" << compat;
 		Event::List rawEvents = calendar.rawEvents();
 		for (int i = 0, end = rawEvents.count();  i < end;  ++i)
 		{
 			Event* ev = rawEvents[i];
 			if (ev->uid() != id)
 			{
-				kError(KARES_DEBUG) << "KAResourceLocalDir::loadFile(): wrong event ID (" << ev->uid() << ")";
+				kError(KARES_DEBUG) << "Wrong event ID (" << ev->uid();
 				continue;    // ignore any event with the wrong ID - it shouldn't be there!
 			}
 			Alarm::List alarms = ev->alarms();
@@ -301,7 +301,7 @@ bool KAResourceLocalDir::doSave(bool)
 {
 	if (saveInhibited())
 		return true;
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(" << mURL.path() << ")";
+	kDebug(KARES_DEBUG) << mURL.path();
 	bool success = true;
 	Incidence::List list = addedIncidences();
 	list += changedIncidences();
@@ -326,7 +326,7 @@ bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 		return true;
 	QString id = incidence->uid();
 	QString fileName = mURL.path() + '/' + id;
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::doSave(): '" << fileName << "'";
+	kDebug(KARES_DEBUG) << fileName;
 
 	CalendarLocal cal(calendar()->timeSpec());
 	cal.setCustomProperties(calendar()->customProperties());   // copy all VCALENDAR custom properties to each file
@@ -354,7 +354,7 @@ bool KAResourceLocalDir::addEvent(Event* event)
 
 bool KAResourceLocalDir::deleteEvent(Event* event)
 {
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::deleteEvent";
+	kDebug(KARES_DEBUG);
 	if (!deleteIncidenceFile(event))
 		return false;
 	// Remove event from added/changed lists, to avoid it being recreated in doSave()
@@ -390,7 +390,7 @@ bool KAResourceLocalDir::setDirName(const KUrl& newURL)
 	}
 	if (newURL.path() == mURL.path()  ||  !newURL.isLocalFile())
 		return false;
-	kDebug(KARES_DEBUG) << "KAResourceLocalDir::setDirName(" << newURL.path() << ")";
+	kDebug(KARES_DEBUG) << newURL.path();
 	if (isOpen())
 		close();
 	bool active = isActive();

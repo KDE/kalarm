@@ -1,7 +1,7 @@
 /*
  *  shellprocess.cpp  -  execute a shell process
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -77,12 +77,12 @@ bool ShellProcess::start(OpenMode openMode)
 */
 void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	kDebug(5950) << "ShellProcess::slotExited(" << exitCode << "," << exitStatus << ")";
+	kDebug(5950) << exitCode << "," << exitStatus;
 	mStdinQueue.clear();
 	mStatus = SUCCESS;
 	if (exitStatus != NormalExit)
 	{
-		kWarning(5950) << "ShellProcess::slotExited(" << mCommand << ")" << mShellName << ": crashed/killed";
+		kWarning(5950) << mCommand << ":" << mShellName << ": crashed/killed";
 		mStatus = DIED;
 	}
 	else
@@ -91,7 +91,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 		if (mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127)
 		||  mShellName == "ksh"  &&  exitCode == 127)
 		{
-			kWarning(5950) << "ShellProcess::slotExited(" << mCommand << ")" << mShellName << ": not found or not executable";
+			kWarning(5950) << mCommand << ":" << mShellName << ": not found or not executable";
 			mStatus = NOT_FOUND;
 		}
 	}

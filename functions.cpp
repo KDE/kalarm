@@ -195,7 +195,7 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 		resource = AlarmResources::instance()->destination(KCalEvent::ACTIVE, msgParent);
 		if (!resource)
 		{
-			kDebug(5950) << "no resource";
+			kDebug(5950) << "No resource";
 			status = UPDATE_FAILED;
 		}
 	}
@@ -560,7 +560,7 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 		resource = AlarmResources::instance()->destination(KCalEvent::ACTIVE, msgParent);
 	if (!resource)
 	{
-		kDebug(5950) << "no resource";
+		kDebug(5950) << "No resource";
 		status = UPDATE_FAILED;
 		warnErr = events.count();
 	}
@@ -938,7 +938,7 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 	const KCal::Event* kcalEvent = resources->event(eventID);
 	if (!kcalEvent)
 	{
-		kError(5950) << ": event ID not found:" << eventID;
+		kError(5950) << eventID << ": event ID not found";
 		return false;
 	}
 	AlarmResource* resource = resources->resource(kcalEvent);
@@ -1120,7 +1120,7 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 		// Program is not already running, so start it
 		if (KToolInvocation::startServiceByDesktopName(program, QString(), &errorMessage, &dbusService))
 		{
-			kError(5950) << "couldn't start" << program << " (" << errorMessage << ")";
+			kError(5950) << "Couldn't start" << program << " (" << errorMessage << ")";
 			return false;
 		}
 		if (!windowName.isEmpty())
