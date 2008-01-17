@@ -177,7 +177,7 @@ void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUn
 	{
 		int count = mins;
 		if (mins % (24*60))
-			item = (defaultUnits == MINUTES) ? MINUTES : HOURS_MINUTES;
+			item = (defaultUnits == MINUTES && count <= mSpinBox->maxValue()) ? MINUTES : HOURS_MINUTES;
 		else if (mins % (7*24*60))
 		{
 			item = DAYS;
