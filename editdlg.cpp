@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -441,7 +441,7 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 
 	// Text message edit box
 	mTextMessageEdit = new TextEdit(mDisplayAlarmsFrame);
-	mTextMessageEdit->setWordWrap(QTextEdit::NoWrap);
+	mTextMessageEdit->setWordWrap(KTextEdit::NoWrap);
 	QWhatsThis::add(mTextMessageEdit, i18n("Enter the text of the alarm message. It may be multi-line."));
 	frameLayout->addWidget(mTextMessageEdit);
 
@@ -2116,7 +2116,7 @@ bool EditAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 = Provides KDE 2 compatibility.
 =============================================================================*/
 TextEdit::TextEdit(QWidget* parent, const char* name)
-	: QTextEdit(parent, name)
+	: KTextEdit(parent, name)
 {
 	QSize tsize = sizeHint();
 	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
@@ -2127,5 +2127,5 @@ void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	if (KCal::ICalDrag::canDecode(e))
 		e->accept(false);   // don't accept "text/calendar" objects
-	QTextEdit::dragEnterEvent(e);
+	KTextEdit::dragEnterEvent(e);
 }
