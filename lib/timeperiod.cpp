@@ -190,7 +190,7 @@ void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Uni
 		else
 		{
 			count /= 60;   // minutes
-			item = (defaultUnits == Minutes) ? Minutes : HoursMinutes;
+			item = (defaultUnits == Minutes && count <= mSpinBox->maximum()) ? Minutes : HoursMinutes;
 		}
 		if (item < mDateOnlyOffset)
 			item = mDateOnlyOffset;
