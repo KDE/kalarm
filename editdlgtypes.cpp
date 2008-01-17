@@ -163,7 +163,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
 	// Text message edit box
 	mTextMessageEdit = new TextEdit(parent);
-	mTextMessageEdit->setLineWrapMode(QTextEdit::NoWrap);
+	mTextMessageEdit->setLineWrapMode(KTextEdit::NoWrap);
 	mTextMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the text of the alarm message. It may be multi-line."));
 	frameLayout->addWidget(mTextMessageEdit);
 
@@ -1439,7 +1439,7 @@ QSize CommandEdit::minimumSizeHint() const
 = A text edit field with a minimum height of 3 text lines.
 =============================================================================*/
 TextEdit::TextEdit(QWidget* parent)
-	: QTextEdit(parent)
+	: KTextEdit(parent)
 {
 	QSize tsize = sizeHint();
 	tsize.setHeight(fontMetrics().lineSpacing()*13/4 + 2*frameWidth());
@@ -1450,5 +1450,5 @@ void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	if (KCal::ICalDrag::canDecode(e->mimeData()))
 		e->ignore();   // don't accept "text/calendar" objects
-	QTextEdit::dragEnterEvent(e);
+	KTextEdit::dragEnterEvent(e);
 }
