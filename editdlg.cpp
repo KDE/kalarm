@@ -85,7 +85,7 @@ inline QString recurText(const KAEvent& event)
 		r = QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
 	else
 		r = event.recurrenceText();
-	return i18nc("@title:tab", "&Recurrence - [%1]", r);
+	return i18nc("@title:tab", "Recurrence - [%1]", r);
 }
 
 // Collect these widget labels together to ensure consistent wording and
@@ -228,7 +228,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 
 	KVBox* mainPageBox = new KVBox;
 	mainPageBox->setMargin(marginHint());
-	mTabs->addTab(mainPageBox, i18nc("@title:tab", "&Alarm"));
+	mTabs->addTab(mainPageBox, i18nc("@title:tab", "Alarm"));
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainPageBox);
 	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
