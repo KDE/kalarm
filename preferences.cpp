@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ static const QString DEF_CMD_LOG_TYPE         = QString::fromLatin1("DefCmdLogTy
 static const QString DEF_LOG_FILE             = QString::fromLatin1("DefLogFile");
 static const QString DEF_EMAIL_BCC            = QString::fromLatin1("DefEmailBcc");
 static const QString DEF_RECUR_PERIOD         = QString::fromLatin1("DefRecurPeriod");
-static const QString DEF_REMIND_UNITS         = QString::fromLatin1("DefRemindUnits");
+static const QString DEF_REMIND_UNITS         = QString::fromLatin1("RemindUnits");
 static const QString DEF_PRE_ACTION           = QString::fromLatin1("DefPreAction");
 static const QString DEF_POST_ACTION          = QString::fromLatin1("DefPostAction");
 
@@ -337,9 +337,11 @@ void Preferences::read()
 	                          ? default_defaultRecurPeriod : (RecurrenceEdit::RepeatType)recurPeriod;
 	QCString feb29            = config->readEntry(FEB29_RECUR_TYPE, defaultFeb29RecurType).local8Bit();
 	mDefaultFeb29Type         = (feb29 == "Mar1") ? KARecurrence::FEB29_MAR1 : (feb29 == "Feb28") ? KARecurrence::FEB29_FEB28 : KARecurrence::FEB29_FEB29;
-	int reminderUnits         = config->readNumEntry(DEF_REMIND_UNITS, default_defaultReminderUnits);
-	mDefaultReminderUnits     = (reminderUnits < TimePeriod::HOURS_MINUTES || reminderUnits > TimePeriod::WEEKS)
-	                          ? default_defaultReminderUnits : (TimePeriod::Units)reminderUnits;
+	QString remindUnits       = config->readEntry(DEF_REMIND_UNITS);
+	mDefaultReminderUnits     = (remindUnits == QString::fromLatin1("Minutes"))      ? TimePeriod::MINUTES
+	                          : (remindUnits == QString::fromLatin1("HoursMinutes")) ? TimePeriod::HOURS_MINUTES
+	                          : (remindUnits == QString::fromLatin1("Days"))         ? TimePeriod::DAYS
+	                          : (remindUnits == QString::fromLatin1("Weeks"))        ? TimePeriod::WEEKS : default_defaultReminderUnits;
 	mDefaultPreAction         = config->readEntry(DEF_PRE_ACTION, default_defaultPreAction);
 	mDefaultPostAction        = config->readEntry(DEF_POST_ACTION, default_defaultPostAction);
 	mInstance->emitPreferencesChanged();
@@ -401,7 +403,16 @@ void Preferences::save(bool syncToDisc)
 	config->writeEntry(DEF_EMAIL_BCC, mDefaultEmailBcc);
 	config->writeEntry(DEF_RECUR_PERIOD, mDefaultRecurPeriod);
 	config->writeEntry(FEB29_RECUR_TYPE, (mDefaultFeb29Type == KARecurrence::FEB29_MAR1 ? "Mar1" : mDefaultFeb29Type == KARecurrence::FEB29_FEB28 ? "Feb28" : "None"));
-	config->writeEntry(DEF_REMIND_UNITS, mDefaultReminderUnits);
+	QString value;
+	switch (mDefaultReminderUnits)
+	{
+		case TimePeriod::MINUTES:       value = QString::fromLatin1("Minutes");      break;
+		case TimePeriod::HOURS_MINUTES: value = QString::fromLatin1("HoursMinutes"); break;
+		case TimePeriod::DAYS:          value = QString::fromLatin1("Days");         break;
+		case TimePeriod::WEEKS:         value = QString::fromLatin1("Weeks");        break;
+		default:                        value = QString::null; break;
+	}
+	config->writeEntry(DEF_REMIND_UNITS, value);
 	config->writeEntry(DEF_PRE_ACTION, mDefaultPreAction);
 	config->writeEntry(DEF_POST_ACTION, mDefaultPostAction);
 
@@ -541,8 +552,21 @@ void Preferences::convertOldPrefs()
 	KConfig* config = KGlobal::config();
 	config->setGroup(GENERAL_SECTION);
 	int version = KAlarm::getVersionNumber(config->readEntry(VERSION_NUM));
-	if (version >= KAlarm::Version(1,4,21))
+	if (version >= KAlarm::Version(1,4,22))
 		return;     // config format is up to date
+
+	if (version <= KAlarm::Version(1,4,21))
+	{
+		// Convert KAlarm 1.4.21 preferences
+		static const QString OLD_REMIND_UNITS = QString::fromLatin1("DefRemindUnits");
+		config->setGroup(DEFAULTS_SECTION);
+		int intUnit     = config->readNumEntry(OLD_REMIND_UNITS, 0);
+		QString strUnit = (intUnit == 1) ? QString::fromLatin1("Days")
+		                : (intUnit == 2) ? QString::fromLatin1("Weeks")
+		                :                  QString::fromLatin1("HoursMinutes");
+		config->deleteEntry(OLD_REMIND_UNITS);
+		config->writeEntry(DEF_REMIND_UNITS, strUnit);
+	}
 
 	if (version <= KAlarm::Version(1,4,20))
 	{

@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright (C) 2003, 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2004,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,8 @@
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
+QString TimePeriod::i18n_minutes()      { return i18n("minutes"); }
+QString TimePeriod::i18n_Minutes()      { return i18n("Minutes"); }
 QString TimePeriod::i18n_hours_mins()   { return i18n("hours/minutes"); }
 QString TimePeriod::i18n_Hours_Mins()   { return i18n("Hours/Minutes"); }
 QString TimePeriod::i18n_days()         { return i18n("days"); }
@@ -41,7 +43,7 @@ QString TimePeriod::i18n_Days()         { return i18n("Days"); }
 QString TimePeriod::i18n_weeks()        { return i18n("weeks"); }
 QString TimePeriod::i18n_Weeks()        { return i18n("Weeks"); }
 
-static const int maxMinutes = 100*60-1;   // absolute maximum value for hours:minutes = 99H59M
+static const int maxMinutes = 1000*60-1;   // absolute maximum value for hours:minutes = 999H59M
 
 /*=============================================================================
 = Class TimePeriod
@@ -65,7 +67,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent, const char* name)
 	mSpinStack->addWidget(mSpinBox, 0);
 
 	mTimeSpinBox = new TimeSpinBox(0, 99999, mSpinStack);
-	mTimeSpinBox->setRange(1, maxMinutes);    // max 99H59M
+	mTimeSpinBox->setRange(1, maxMinutes);    // max 999H59M
 	connect(mTimeSpinBox, SIGNAL(valueChanged(int)), SLOT(slotTimeChanged(int)));
 	mSpinStack->addWidget(mTimeSpinBox, 1);
 
@@ -75,10 +77,11 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent, const char* name)
 
 	mUnitsCombo = new ComboBox(false, this);
 	if (mNoHourMinute)
-		mDateOnlyOffset = 1;
+		mDateOnlyOffset = 2;
 	else
 	{
 		mDateOnlyOffset = 0;
+		mUnitsCombo->insertItem(i18n_minutes());
 		mUnitsCombo->insertItem(i18n_hours_mins());
 	}
 	mUnitsCombo->insertItem(i18n_days());
@@ -147,22 +150,22 @@ void TimePeriod::setMaximum(int hourmin, int days)
  */
 int TimePeriod::minutes() const
 {
+	int factor = 0;
 	switch (mUnitsCombo->currentItem() + mDateOnlyOffset)
 	{
 		case HOURS_MINUTES:
 			return mTimeSpinBox->value();
-		case DAYS:
-			return mSpinBox->value() * 24*60;
-		case WEEKS:
-			return mSpinBox->value() * 7*24*60;
+		case MINUTES:  factor = 1;  break;
+		case DAYS:     factor = 24*60;  break;
+		case WEEKS:    factor = 7*24*60;  break;
 	}
-	return 0;
+	return mSpinBox->value() * factor;
 }
 
 /******************************************************************************
 *  Initialise the controls with a specified time period.
 *  The time unit combo-box is initialised to 'defaultUnits', but if 'dateOnly'
-*  is true, it will never be initialised to hours/minutes.
+*  is true, it will never be initialised to minutes or hours/minutes.
 */
 void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUnits)
 {
@@ -174,7 +177,7 @@ void TimePeriod::setMinutes(int mins, bool dateOnly, TimePeriod::Units defaultUn
 	{
 		int count = mins;
 		if (mins % (24*60))
-			item = HOURS_MINUTES;
+			item = (defaultUnits == MINUTES) ? MINUTES : HOURS_MINUTES;
 		else if (mins % (7*24*60))
 		{
 			item = DAYS;
@@ -230,21 +233,25 @@ TimePeriod::Units TimePeriod::setDateOnly(int mins, bool dateOnly, bool signal)
 		if (!dateOnly  &&  mDateOnlyOffset)
 		{
 			// Change from date-only to allow hours/minutes
-			mUnitsCombo->insertItem(i18n_hours_mins(), 0);
+			mUnitsCombo->insertItem(i18n_minutes(), 0);
+			mUnitsCombo->insertItem(i18n_hours_mins(), 1);
 			mDateOnlyOffset = 0;
 			adjustDayWeekShown();
-			mUnitsCombo->setCurrentItem(++index);
+			mUnitsCombo->setCurrentItem(index += 2);
 		}
 		else if (dateOnly  &&  !mDateOnlyOffset)
 		{
 			// Change from allowing hours/minutes to date-only
 			mUnitsCombo->removeItem(0);
-			mDateOnlyOffset = 1;
-			if (index)
-				--index;
+			mUnitsCombo->removeItem(0);
+			mDateOnlyOffset = 2;
+			if (index > 2)
+				index -= 2;
+			else
+				index = 0;
 			adjustDayWeekShown();
 			mUnitsCombo->setCurrentItem(index);
-			if (units == HOURS_MINUTES)
+			if (units == HOURS_MINUTES  ||  units == MINUTES)
 			{
 				// Set units to days and round up the warning period
 				units = DAYS;
@@ -304,6 +311,9 @@ void TimePeriod::setUnitRange()
 			// fall through to DAYS
 		case DAYS:
 			maxval = mMaxDays ? mMaxDays : 1;
+			break;
+		case MINUTES:
+			maxval = mTimeSpinBox->maxValue();
 			break;
 		case HOURS_MINUTES:
 		default:

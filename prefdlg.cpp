@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -928,6 +928,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QLabel* label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mReminderUnits = new QComboBox(box, "defWarnUnits");
+	mReminderUnits->insertItem(TimePeriod::i18n_Minutes(), TimePeriod::MINUTES);
 	mReminderUnits->insertItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
 	mReminderUnits->insertItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
 	mReminderUnits->insertItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
