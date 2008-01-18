@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -392,7 +392,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QCString         alMessage;
-				QCString         alFromID;
+				uint             alFromID;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QCString         alSubject;
@@ -428,7 +428,7 @@ int KAlarmApp::newInstance()
 					if (args->isSet("subject"))
 						alSubject = args->getOption("subject");
 					if (args->isSet("from-id"))
-						alFromID = args->getOption("from-id");
+						alFromID = KAMail::identityUoid(args->getOption("from-id"));
 					QCStringList params = args->getOptionList("mail");
 					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
@@ -1166,7 +1166,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
-                              const QString& mailFromID, const EmailAddressList& mailAddresses,
+                              uint mailFromID, const EmailAddressList& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << text << endl;

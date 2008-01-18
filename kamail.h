@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ class KAMail
 		static QString     convertAttachments(const QString& attachments, QStringList& list);
 		static KPIM::IdentityManager* identityManager();
 		static bool        identitiesExist();
+		static uint        identityUoid(const QString& identityUoidOrName);
 		static QString     controlCentreAddress();
 		static QString     getMailBody(Q_UINT32 serialNumber);
 		static QString     i18n_NeedFromEmailAddress();

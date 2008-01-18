@@ -809,7 +809,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mEmailSubjectEdit->setText(event->emailSubject());
 		mEmailBcc->setChecked(event->emailBcc());
 		if (mEmailFromList)
-			mEmailFromList->setCurrentIdentity(event->emailFromKMail());
+			mEmailFromList->setCurrentIdentity(event->emailFromId());
 	}
 	else
 	{
@@ -1239,9 +1239,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 		}
 		case KAEvent::EMAIL:
 		{
-			QString from;
-			if (mEmailFromList)
-				from = mEmailFromList->currentIdentityName();
+			uint from = mEmailFromList ? mEmailFromList->currentIdentity() : 0;
 			event.setEmail(from, mEmailAddresses, mEmailSubjectEdit->text(), mEmailAttachments);
 			break;
 		}
