@@ -3288,7 +3288,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	static const QString ARCHIVE_CATEGORIES        = QLatin1String("SAVE:");
 	static const QString LOG_CATEGORY              = QLatin1String("LOG:");
 
-	// KAlarm pre-1.9.9 properties
+	// KAlarm pre-1.4.22/1.9.9 properties
 	static const QByteArray KMAIL_ID_PROPERTY("KMAILID");    // X-KDE-KALARM-KMAILID property
 
 	if (version >= calVersion())
@@ -3303,6 +3303,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	bool pre_1_3_0  = (version < KAlarm::Version(1,3,0));
 	bool pre_1_3_1  = (version < KAlarm::Version(1,3,1));
 	bool pre_1_4_14 = (version < KAlarm::Version(1,4,14));
+	bool pre_1_4_22 = (version < KAlarm::Version(1,4,22));
 	bool pre_1_9_0  = (version < KAlarm::Version(1,9,0));
 	bool pre_1_9_2  = (version < KAlarm::Version(1,9,2));
 	bool pre_1_9_7  = (version < KAlarm::Version(1,9,7));
@@ -3738,10 +3739,10 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			}
 		}
 
-		if (pre_1_9_9)
+		if (pre_1_4_22  ||  pre_1_9_9 && !pre_1_9_0)
 		{
 			/*
-			 * It's a KAlarm pre-1.9.9 calendar file.
+			 * It's a KAlarm pre-1.4.22 or KAlarm 1.9 series pre-1.9.9 calendar file.
 			 * Convert email identity names to uoids.
 			 */
 			for (int i = 0, alend = alarms.count();  i < alend;  ++i)
