@@ -45,6 +45,7 @@
 
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
+#include <libemailfunctions/email.h>
 #include <libkcal/person.h>
 
 #include <kmime_header_parsing.h>
@@ -156,6 +157,8 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		                                         QString::fromLatin1("/sbin:/usr/sbin:/usr/lib"));
 		if (!command.isNull())
 		{
+			command += QString::fromLatin1(" -f ");
+			command += KPIM::getEmailAddress(from);
 			command += QString::fromLatin1(" -oi -t ");
 			textComplete = initHeaders(data, false);
 		}

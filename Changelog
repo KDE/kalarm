@@ -1,9 +1,10 @@
 KAlarm
 
-=== Version 1.4.22 --- 18 January 2008 ===
+=== Version 1.4.22 --- 20 January 2008 ===
 Add option to enter reminder times in minutes, in addition to hours/minutes.
 Store email unique IDs instead of names in email alarms to prevent problems if
     email IDs are renamed.
+Fix sendmail error on some systems by adding envelope sender address to emails.
 
 === Version 1.4.21 --- 19 December 2007 ===
 Remember last used main window show/hide options instead of setting them in
