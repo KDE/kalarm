@@ -54,6 +54,7 @@
 
 #include <kpimidentities/identitymanager.h>
 #include <kpimidentities/identity.h>
+#include <kpimutils/email.h>
 #include <mailtransport/transportmanager.h>
 #include <mailtransport/transport.h>
 #include <mailtransport/transportjob.h>
@@ -164,6 +165,8 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		                                         QLatin1String("/sbin:/usr/sbin:/usr/lib"));
 		if (!command.isNull())
 		{
+			command += QLatin1String(" -f ");
+			command += KPIMUtils::extractEmailAddress(jobdata.from);
 			command += QLatin1String(" -oi -t ");
 			textComplete = initHeaders(jobdata, false);
 		}
