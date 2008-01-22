@@ -494,8 +494,9 @@ bool ResourceView::viewportEvent(QEvent* e)
 			int i = toolTip.indexOf('@');
 			if (i > 0)
 			{
-				int j = toolTip.indexOf("<nl", i + 1);
+				int j = toolTip.indexOf(QRegExp("<(nl|br)", Qt::CaseInsensitive), i + 1);
 				int k = toolTip.indexOf('@', j);
+kDebug()<<"tooltip="<<toolTip<<"i="<<i<<", k="<<k;
 				QString name = toolTip.mid(i + 1, j - i - 1);
 				value = model()->data(index, Qt::FontRole);
 				QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
@@ -512,12 +513,13 @@ bool ResourceView::viewportEvent(QEvent* e)
 				{
 					// The whole of the resource name is already displayed,
 					// so omit it from the tooltip.
-					int k = toolTip.indexOf('@', j);
+if(k > 0) kDebug()<<"remove"<<i<<" for "<<k+1-i;
 					if (k > 0)
 						toolTip.remove(i, k + 1 - i);
 				}
 				else
 				{
+if(k > 0) kDebug()<<"remove"<<i<<", "<<k;
 					toolTip.remove(k, 1);
 					toolTip.remove(i, 1);
 				}
