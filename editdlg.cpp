@@ -460,24 +460,13 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	QWhatsThis::add(mFileBrowseButton, i18n("Select a text or image file to display."));
 	mFileRadio->init(mFileBrowseButton, mFileMessageEdit);
 
-	// Colour choice drop-down list
-	QBoxLayout* layout = new QHBoxLayout(frameLayout);
-	QHBox* box;
-	mBgColourChoose = createBgColourChooser(&box, mDisplayAlarmsFrame);
-	mBgColourChoose->setFixedSize(mBgColourChoose->sizeHint());
-	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
-	layout->addWidget(box);
-	layout->addSpacing(2*spacingHint());
-	layout->addStretch();
-
-	// Font and colour choice drop-down list
+	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(mDisplayAlarmsFrame);
-	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
-	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
-	layout->addWidget(mFontColourButton);
+	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height());
+	frameLayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
-	layout = new QHBoxLayout(frameLayout);
+	QHBoxLayout* layout = new QHBoxLayout(frameLayout);
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	layout->addWidget(mSoundPicker);
@@ -706,7 +695,6 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mFontColourButton->setFgColour(event->fgColour());
-		mBgColourChoose->setColour(event->bgColour());     // set colour before setting alarm type buttons
 		if (mTemplate)
 		{
 			// Editing a template
@@ -824,7 +812,6 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
-		mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		if (mTemplate)
 		{
@@ -893,7 +880,6 @@ void EditAlarmDlg::setReadOnly()
 	// Message alarm controls
 	mTextMessageEdit->setReadOnly(mReadOnly);
 	mFileMessageEdit->setReadOnly(mReadOnly);
-	mBgColourChoose->setReadOnly(mReadOnly);
 	mFontColourButton->setReadOnly(mReadOnly);
 	mSoundPicker->setReadOnly(mReadOnly);
 	mConfirmAck->setReadOnly(mReadOnly);
@@ -992,24 +978,6 @@ void EditAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
 }
 
 /******************************************************************************
- * Create a widget to choose the alarm message background colour.
- */
-ColourCombo* EditAlarmDlg::createBgColourChooser(QHBox** box, QWidget* parent, const char* name)
-{
-	*box = new QHBox(parent);   // this is to control the QWhatsThis text display area
-	QLabel* label = new QLabel(i18n("&Background color:"), *box);
-	label->setFixedSize(label->sizeHint());
-	ColourCombo* widget = new ColourCombo(*box, name);
-	QSize size = widget->sizeHint();
-	widget->setMinimumHeight(size.height() + 4);
-	QToolTip::add(widget, i18n("Message color"));
-	label->setBuddy(widget);
-	(*box)->setFixedHeight((*box)->sizeHint().height());
-	QWhatsThis::add(*box, i18n("Choose the background color for the alarm message."));
-	return widget;
-}
-
-/******************************************************************************
  * Create an "acknowledgement confirmation required" checkbox.
  */
 CheckBox* EditAlarmDlg::createConfirmAckCheckbox(QWidget* parent, const char* name)
@@ -1044,7 +1012,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedConfirmAck       = mConfirmAck->isChecked();
 	mSavedFont             = mFontColourButton->font();
 	mSavedFgColour         = mFontColourButton->fgColour();
-	mSavedBgColour         = mBgColourChoose->color();
+	mSavedBgColour         = mFontColourButton->bgColour();
 	mSavedReminder         = mReminder->minutes();
 	mSavedOnceOnly         = mReminder->isOnceOnly();
 	if (mSpecialActionsButton)
@@ -1115,7 +1083,7 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedConfirmAck != mConfirmAck->isChecked()
 		||  mSavedFont       != mFontColourButton->font()
 		||  mSavedFgColour   != mFontColourButton->fgColour()
-		||  mSavedBgColour   != mBgColourChoose->color()
+		||  mSavedBgColour   != mFontColourButton->bgColour()
 		||  mSavedReminder   != mReminder->minutes()
 		||  mSavedOnceOnly   != mReminder->isOnceOnly()
 		||  mSavedAutoClose  != mLateCancel->isAutoClose())
@@ -1217,7 +1185,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			dt = QDateTime(QDate(2000,1,1), mTemplateTime->time());
 	}
 	KAEvent::Action type = getAlarmType();
-	event.set(dt, text, mBgColourChoose->color(), mFontColourButton->fgColour(), mFontColourButton->font(),
+	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(), mFontColourButton->font(),
 	          type, (trial ? 0 : mLateCancel->minutes()), getAlarmFlags());
 	switch (type)
 	{
@@ -1929,24 +1897,6 @@ void EditAlarmDlg::slotTemplateTimeType(int)
 {
 	mTemplateTime->setEnabled(mTemplateUseTime->isOn());
 	mTemplateTimeAfter->setEnabled(mTemplateUseTimeAfter->isOn());
-}
-
-/******************************************************************************
-*  Called when the a new background colour has been selected using the colour
-*  combo box.
-*/
-void EditAlarmDlg::slotBgColourSelected(const QColor& colour)
-{
-	mFontColourButton->setBgColour(colour);
-}
-
-/******************************************************************************
-*  Called when the a new font and colour have been selected using the font &
-*  colour pushbutton.
-*/
-void EditAlarmDlg::slotFontColourSelected()
-{
-	mBgColourChoose->setColour(mFontColourButton->bgColour());
 }
 
 /******************************************************************************

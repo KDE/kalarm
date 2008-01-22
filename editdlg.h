@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialogue to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ class QTabWidget;
 class QVBox;
 class QHBox;
 class EmailIdCombo;
-class ColourCombo;
 class FontColourButton;
 class ButtonGroup;
 class TimeEdit;
@@ -69,8 +68,7 @@ class EditAlarmDlg : public KDialogBase
 		bool            getEvent(KAEvent&);
 		void            setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
-		static ColourCombo* createBgColourChooser(QHBox** box, QWidget* parent, const char* name = 0);
-		static CheckBox*    createConfirmAckCheckbox(QWidget* parent, const char* name = 0);
+		static CheckBox* createConfirmAckCheckbox(QWidget* parent, const char* name = 0);
 
 		static QString  i18n_ConfirmAck();         // plain text of 'Confirm acknowledgement' checkbox
 		static QString  i18n_k_ConfirmAck();       // text of 'Confirm acknowledgement' checkbox, with 'k' shortcut
@@ -105,8 +103,6 @@ class EditAlarmDlg : public KDialogBase
 		void            slotRecurFrequencyChange();
 		void            slotAlarmTypeChanged(int id);
 		void            slotEditDeferral();
-		void            slotFontColourSelected();
-		void            slotBgColourSelected(const QColor&);
 		void            openAddressBook();
 		void            slotAddAttachment();
 		void            slotRemoveAttachment();
@@ -166,7 +162,6 @@ class EditAlarmDlg : public KDialogBase
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
 		FontColourButton*   mFontColourButton;
-		ColourCombo*        mBgColourChoose;
 		SpecialActionsButton* mSpecialActionsButton;
 		Reminder*           mReminder;
 		bool                mReminderDeferral;
@@ -240,7 +235,7 @@ class EditAlarmDlg : public KDialogBase
 		int                 mSavedSoundFadeSeconds;// mSoundPicker fade time
 		bool                mSavedConfirmAck;     // mConfirmAck status
 		QFont               mSavedFont;           // mFontColourButton font
-		QColor              mSavedBgColour;       // mBgColourChoose selection
+		QColor              mSavedBgColour;       // mFontColourButton background colour
 		QColor              mSavedFgColour;       // mFontColourButton foreground colour
 		QString             mSavedPreAction;      // mSpecialActionsButton pre-alarm action
 		QString             mSavedPostAction;     // mSpecialActionsButton post-alarm action

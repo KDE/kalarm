@@ -2,6 +2,7 @@ KAlarm
 
 === Version 1.4.22 --- 22 January 2008 ===
 Add option to enter reminder times in minutes, in addition to hours/minutes.
+Replace alarm edit dialogue background colour selector with font/colour sample.
 Store email unique IDs instead of names in email alarms to prevent problems if
     email IDs are renamed.
 Fix error "Sender verify failed (in reply to RCPT TO command)" using sendmail

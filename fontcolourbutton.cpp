@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright (C) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,21 +28,65 @@
 #include <kdebug.h>
 
 #include "fontcolour.h"
+#include "pushbutton.h"
 #include "fontcolourbutton.moc"
 
 
 /*=============================================================================
 = Class FontColourButton
-= Font/colour selection buttong.
+= Font/colour selection button.
 =============================================================================*/
 
 FontColourButton::FontColourButton(QWidget* parent, const char* name)
-	: PushButton(i18n("Font && Co&lor..."), parent, name),
+	: QFrame(parent, name),
 	  mReadOnly(false)
 {
-	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
-	QWhatsThis::add(this,
+	setFrameStyle(NoFrame);
+	QHBoxLayout* layout = new QHBoxLayout(this, 0, KDialog::spacingHint());
+
+	mButton = new PushButton(i18n("Font && Co&lor..."), this);
+	mButton->setFixedSize(mButton->sizeHint());
+	connect(mButton, SIGNAL(clicked()), SLOT(slotButtonPressed()));
+	QWhatsThis::add(mButton,
 	      i18n("Choose the font, and foreground and background color, for the alarm message."));
+	layout->addWidget(mButton);
+
+	// Font and colour sample display
+	mSample = new QLineEdit(this);
+	mSample->setMinimumHeight(QMAX(mSample->fontMetrics().lineSpacing(), mButton->height()*3/2));
+	mSample->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
+	mSample->setText(i18n("The Quick Brown Fox Jumps Over The Lazy Dog"));
+	mSample->setCursorPosition(0);
+	mSample->setAlignment(Qt::AlignCenter);
+	QWhatsThis::add(mSample,
+	      i18n("This sample text illustrates the current font and color settings. "
+	           "You may edit it to test special characters."));
+	layout->addWidget(mSample);
+}
+
+void FontColourButton::setDefaultFont()
+{
+	mDefaultFont = true;
+	mSample->setFont(QFont());
+}
+
+void FontColourButton::setFont(const QFont& font)
+{
+	mDefaultFont = false;
+	mFont = font;
+	mSample->setFont(mFont);
+}
+
+void FontColourButton::setBgColour(const QColor& colour)
+{
+	mBgColour = colour;
+	mSample->setPaletteBackgroundColor(mBgColour);
+}
+
+void FontColourButton::setFgColour(const QColor& colour)
+{
+	mFgColour = colour;
+	mSample->setPaletteForegroundColor(mFgColour);
 }
 
 /******************************************************************************
@@ -58,8 +102,11 @@ void FontColourButton::slotButtonPressed()
 	{
 		mDefaultFont = dlg.defaultFont();
 		mFont        = dlg.font();
+		mSample->setFont(mFont);
 		mBgColour    = dlg.bgColour();
+		mSample->setPaletteBackgroundColor(mBgColour);
 		mFgColour    = dlg.fgColour();
+		mSample->setPaletteForegroundColor(mFgColour);
 		emit selected();
 	}
 }
