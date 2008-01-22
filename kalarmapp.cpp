@@ -392,7 +392,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QCString         alMessage;
-				uint             alFromID;
+				uint             alFromID = 0;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QCString         alSubject;
