@@ -478,7 +478,6 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 	kdDebug(5950) << "DcopHandlerOld::process(): " << func << endl;
 	enum
 	{
-		ERR            = 0,
 		OPERATION      = 0x0007,    // mask for main operation
 		  HANDLE       = 0x0001,
 		  CANCEL       = 0x0002,
