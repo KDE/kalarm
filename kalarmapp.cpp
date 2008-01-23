@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,7 +68,7 @@
 
 
 static bool convWakeTime(const QCString& timeParam, QDateTime&, bool& noTime);
-static bool convInterval(const QCString& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = true);
+static bool convInterval(const QCString& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -131,8 +131,6 @@ KAlarmApp::KAlarmApp()
 		DateTime::setStartOfDay(mStartOfDay);
 		mPrefsExpiredColour   = Preferences::expiredColour();
 		mPrefsExpiredKeepDays = Preferences::expiredKeepDays();
-		mPrefsShowTime        = Preferences::showAlarmTime();
-		mPrefsShowTimeTo      = Preferences::showTimeToAlarm();
 	}
 
 	// Check if the speech synthesis daemon is installed
@@ -394,7 +392,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QCString         alMessage;
-				QCString         alFromID;
+				uint             alFromID = 0;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QCString         alSubject;
@@ -430,7 +428,7 @@ int KAlarmApp::newInstance()
 					if (args->isSet("subject"))
 						alSubject = args->getOption("subject");
 					if (args->isSet("from-id"))
-						alFromID = args->getOption("from-id");
+						alFromID = KAMail::identityUoid(args->getOption("from-id"));
 					QCStringList params = args->getOptionList("mail");
 					for (QCStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{
@@ -625,29 +623,17 @@ int KAlarmApp::newInstance()
 						USAGE(i18n("%1 incompatible with %2").arg(opt).arg(QString::fromLatin1("--mail")))
 					KARecurrence::Type recurType;
 					QString optval = args->getOption(onceOnly ? "reminder-once" : "reminder");
-					bool ok = convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder"), recurType, reminderMinutes);
-					if (ok)
-					{
-						switch (recurType)
-						{
-							case KARecurrence::MINUTELY:
-								if (alarmNoTime)
-									USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(opt))
-								break;
-							case KARecurrence::DAILY:     reminderMinutes *= 1440;  break;
-							case KARecurrence::WEEKLY:    reminderMinutes *= 7*1440;  break;
-							default:   ok = false;  break;
-						}
-					}
-					if (!ok)
+					if (!convInterval(args->getOption(onceOnly ? "reminder-once" : "reminder"), recurType, reminderMinutes))
 						USAGE(i18n("Invalid %1 parameter").arg(opt))
+					if (recurType == KARecurrence::MINUTELY  &&  alarmNoTime)
+						USAGE(i18n("Invalid %1 parameter for date-only alarm").arg(opt))
 				}
 
 				int lateCancel = 0;
 				if (args->isSet("late-cancel"))
 				{
 					KARecurrence::Type recurType;
-					bool ok = convInterval(args->getOption("late-cancel"), recurType, lateCancel, false);
+					bool ok = convInterval(args->getOption("late-cancel"), recurType, lateCancel);
 					if (!ok  ||  lateCancel <= 0)
 						USAGE(i18n("Invalid %1 parameter").arg(QString::fromLatin1("late-cancel")))
 				}
@@ -1116,15 +1102,6 @@ void KAlarmApp::slotPreferencesChanged()
 	// In case the date for February 29th recurrences has changed
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
-	if (Preferences::showAlarmTime()   != mPrefsShowTime
-	||  Preferences::showTimeToAlarm() != mPrefsShowTimeTo)
-	{
-		// The default alarm list time columns selection has changed
-		MainWindow::updateTimeColumns(mPrefsShowTime, mPrefsShowTimeTo);
-		mPrefsShowTime   = Preferences::showAlarmTime();
-		mPrefsShowTimeTo = Preferences::showTimeToAlarm();
-	}
-
 	if (Preferences::expiredColour() != mPrefsExpiredColour)
 	{
 		// The expired alarms text colour has changed
@@ -1189,7 +1166,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
-                              const QString& mailFromID, const EmailAddressList& mailAddresses,
+                              uint mailFromID, const EmailAddressList& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
 	kdDebug(5950) << "KAlarmApp::scheduleEvent(): " << text << endl;
@@ -2106,8 +2083,10 @@ static bool convWakeTime(const QCString& timeParam, QDateTime& dateTime, bool& n
 }
 
 /******************************************************************************
-*  Convert a time interval command line parameter.
-*  Reply = true if successful.
+* Convert a time interval command line parameter.
+* 'timeInterval' receives the count for the recurType. If 'allowMonthYear' is
+* false, 'timeInterval' is converted to minutes.
+* Reply = true if successful.
 */
 static bool convInterval(const QCString& timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
 {
@@ -2159,6 +2138,21 @@ static bool convInterval(const QCString& timeParam, KARecurrence::Type& recurTyp
 	}
 	if (ok)
 		interval += timeString.toUInt(&ok);
+	if (!allowMonthYear)
+	{
+		// Convert time interval to minutes
+		switch (recurType)
+		{
+			case KARecurrence::WEEKLY:
+				interval *= 7;
+				// fall through to DAILY
+			case KARecurrence::DAILY:
+				interval *= 24*60;
+				break;
+			default:
+				break;
+		}
+	}
 	timeInterval = static_cast<int>(interval);
 	if (negative)
 		timeInterval = -timeInterval;

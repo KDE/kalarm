@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright (c) 2002-2004,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2004,2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,6 @@
 class QCheckBox;
 class KListView;
 class CheckBox;
-class ColourCombo;
 class FontColourButton;
 class SoundPicker;
 class SpecialActionsButton;
@@ -54,8 +53,6 @@ class BirthdayDlg : public KDialogBase
 	private slots:
 		void              slotSelectionChanged();
 		void              slotTextLostFocus();
-		void              slotFontColourSelected();
-		void              slotBgColourSelected(const QColor&);
 		void              updateSelectionList();
 
 	private:
@@ -68,7 +65,6 @@ class BirthdayDlg : public KDialogBase
 		Reminder*                mReminder;
 		SoundPicker*             mSoundPicker;
 		FontColourButton*        mFontColourButton;
-		ColourCombo*             mBgColourChoose;
 		CheckBox*                mConfirmAck;
 		LateCancelSelector*      mLateCancel;
 		SpecialActionsButton*    mSpecialActionsButton;

@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -61,7 +61,7 @@ class KAAlarmEventBase
 		QString            message() const             { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString::null; }
 		QString            fileName() const            { return (mActionType == T_FILE) ? mText : QString::null; }
 		QString            command() const             { return (mActionType == T_COMMAND) ? mText : QString::null; }
-		QString            emailFromKMail() const      { return mEmailFromKMail; }
+		uint               emailFromId() const         { return mEmailFromIdentity; }
 		const EmailAddressList& emailAddresses() const { return mEmailAddresses; }
 		QString            emailAddresses(const QString& sep) const  { return mEmailAddresses.join(sep); }
 		const QString&     emailSubject() const        { return mEmailSubject; }
@@ -105,7 +105,7 @@ class KAAlarmEventBase
 		QColor             mBgColour;         // background colour of alarm message
 		QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
 		QFont              mFont;             // font of alarm message (ignored if mDefaultFont true)
-		QString            mEmailFromKMail;   // KMail identity for email 'From' field, or empty
+		uint               mEmailFromIdentity;// KMail identity for email 'From' field, or empty
 		EmailAddressList   mEmailAddresses;   // ATTENDEE: addresses to send email to
 		QString            mEmailSubject;     // SUMMARY: subject line of email
 		QStringList        mEmailAttachments; // ATTACH: email attachment file names
@@ -330,11 +330,11 @@ class KAEvent : public KAAlarmEventBase
 		                            { set(dt, filename, bg, fg, f, FILE, lateCancel, flags); }
 		void               setCommand(const QDate&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
 		void               setCommand(const QDateTime&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
-		void               setEmail(const QDate&, const QString& from, const EmailAddressList&, const QString& subject,
+		void               setEmail(const QDate&, uint from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
-		void               setEmail(const QDateTime&, const QString& from, const EmailAddressList&, const QString& subject,
+		void               setEmail(const QDateTime&, uint from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
-		void               setEmail(const QString& from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
+		void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
 		void               setTemplate(const QString& name, int afterTime = -1)  { mTemplateName = name;  mTemplateAfterTime = afterTime;  mUpdated = true; }
 		void               setActions(const QString& pre, const QString& post)   { mPreAction = pre;  mPostAction = post;  mUpdated = true; }

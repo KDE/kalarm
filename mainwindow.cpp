@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,6 +71,12 @@ using namespace KCal;
 static const char* UI_FILE     = "kalarmui.rc";
 static const char* WINDOW_NAME = "MainWindow";
 
+static const QString VIEW_GROUP         = QString::fromLatin1("View");
+static const QString SHOW_TIME_KEY      = QString::fromLatin1("ShowAlarmTime");
+static const QString SHOW_TIME_TO_KEY   = QString::fromLatin1("ShowTimeToAlarm");
+static const QString SHOW_ARCHIVED_KEY  = QString::fromLatin1("ShowArchivedAlarms");
+static const QString SHOW_RESOURCES_KEY = QString::fromLatin1("ShowResources");
+
 static QString   undoText;
 static QString   undoTextStripped;
 static QString   undoIcon;
@@ -91,10 +97,8 @@ TemplateDlg*             MainWindow::mTemplateDlg = 0;
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString MainWindow::i18n_a_ShowAlarmTimes()    { return i18n("Show &Alarm Times"); }
-QString MainWindow::i18n_t_ShowAlarmTime()     { return i18n("Show alarm &time"); }
 QString MainWindow::i18n_m_ShowAlarmTime()     { return i18n("Show alarm ti&me"); }
 QString MainWindow::i18n_o_ShowTimeToAlarms()  { return i18n("Show Time t&o Alarms"); }
-QString MainWindow::i18n_n_ShowTimeToAlarm()   { return i18n("Show time u&ntil alarm"); }
 QString MainWindow::i18n_l_ShowTimeToAlarm()   { return i18n("Show time unti&l alarm"); }
 QString MainWindow::i18n_ShowExpiredAlarms()   { return i18n("Show Expired Alarms"); }
 QString MainWindow::i18n_e_ShowExpiredAlarms() { return i18n("Show &Expired Alarms"); }
@@ -116,21 +120,22 @@ MainWindow* MainWindow::create(bool restored)
 MainWindow::MainWindow(bool restored)
 	: MainWindowBase(0, "MainWin", WGroupLeader | WStyle_ContextHelp | WDestructiveClose),
 	  mMinuteTimerActive(false),
-	  mHiddenTrayParent(false),
-	  mShowExpired(Preferences::showExpiredAlarms()),
-	  mShowTime(Preferences::showAlarmTime()),
-	  mShowTimeTo(Preferences::showTimeToAlarm())
+	  mHiddenTrayParent(false)
 {
 	kdDebug(5950) << "MainWindow::MainWindow()\n";
 	setAutoSaveSettings(QString::fromLatin1(WINDOW_NAME));    // save window sizes etc.
 	setPlainCaption(kapp->aboutData()->programName());
+	KConfig* config = KGlobal::config();
+	config->setGroup(VIEW_GROUP);
+	mShowExpired = config->readBoolEntry(SHOW_ARCHIVED_KEY, false);
+	mShowTime    = config->readBoolEntry(SHOW_TIME_KEY, true);
+	mShowTimeTo  = config->readBoolEntry(SHOW_TIME_TO_KEY, false);
 	if (!restored)
 	{
 		QSize s;
 		if (KAlarm::readConfigWindowSize(WINDOW_NAME, s))
 			resize(s);
 	}
-	KConfig* config = KGlobal::config();
 	config->setGroup(QString::fromLatin1(WINDOW_NAME));
 	QValueList<int> order = config->readIntListEntry(QString::fromLatin1("ColumnOrder"));
 
@@ -146,6 +151,8 @@ MainWindow::MainWindow(bool restored)
 
 	connect(mListView, SIGNAL(itemDeleted()), SLOT(slotDeletion()));
 	connect(mListView, SIGNAL(selectionChanged()), SLOT(slotSelection()));
+	connect(mListView, SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
+	        SLOT(slotContextMenuRequested(QListViewItem*, const QPoint&, int)));
 	connect(mListView, SIGNAL(mouseButtonClicked(int, QListViewItem*, const QPoint&, int)),
 	        SLOT(slotMouseClicked(int, QListViewItem*, const QPoint&, int)));
 	connect(mListView, SIGNAL(executed(QListViewItem*)), SLOT(slotDoubleClicked(QListViewItem*)));
@@ -451,40 +458,6 @@ void MainWindow::updateExpired()
 				w->mListView->refresh();
 		}
 		w->mActionShowExpired->setEnabled(enableShowExpired);
-	}
-}
-
-/******************************************************************************
-* Called when the show-alarm-time or show-time-to-alarm setting changes in the
-* user preferences.
-* Update the alarm list in every main window instance to show the new default
-* columns. No change is made if a window isn't using the old settings.
-*/
-void MainWindow::updateTimeColumns(bool oldTime, bool oldTimeTo)
-{
-	kdDebug(5950) << "MainWindow::updateShowAlarmTimes()\n";
-	bool newTime   = Preferences::showAlarmTime();
-	bool newTimeTo = Preferences::showTimeToAlarm();
-	if (!newTime  &&  !newTimeTo)
-		newTime = true;     // at least one time column must be displayed
-	if (!oldTime  &&  !oldTimeTo)
-		oldTime = true;     // at least one time column must have been displayed
-	if (newTime != oldTime  ||  newTimeTo != oldTimeTo)
-	{
-		for (WindowList::Iterator it = mWindowList.begin();  it != mWindowList.end();  ++it)
-		{
-			MainWindow* w = *it;
-			if (w->mShowTime   == oldTime
-			&&  w->mShowTimeTo == oldTimeTo)
-			{
-				w->mShowTime   = newTime;
-				w->mShowTimeTo = newTimeTo;
-				w->mActionShowTime->setChecked(newTime);
-				w->mActionShowTimeTo->setChecked(newTimeTo);
-				w->mListView->selectTimeColumns(newTime, newTimeTo);
-			}
-		}
-		setUpdateTimer();
 	}
 }
 
@@ -817,7 +790,13 @@ void MainWindow::slotShowTime()
 	if (!mShowTime  &&  !mShowTimeTo)
 		slotShowTimeTo();    // at least one time column must be displayed
 	else
+	{
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		KConfig* config = KGlobal::config();
+		config->setGroup(VIEW_GROUP);
+		config->writeEntry(SHOW_TIME_KEY, mShowTime);
+		config->writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
+	}
 }
 
 /******************************************************************************
@@ -830,7 +809,13 @@ void MainWindow::slotShowTimeTo()
 	if (!mShowTimeTo  &&  !mShowTime)
 		slotShowTime();    // at least one time column must be displayed
 	else
+	{
 		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+		KConfig* config = KGlobal::config();
+		config->setGroup(VIEW_GROUP);
+		config->writeEntry(SHOW_TIME_KEY, mShowTime);
+		config->writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
+	}
 	setUpdateTimer();
 }
 
@@ -844,6 +829,9 @@ void MainWindow::slotShowExpired()
 	mActionShowExpired->setToolTip(mShowExpired ? i18n_HideExpiredAlarms() : i18n_ShowExpiredAlarms());
 	mListView->showExpired(mShowExpired);
 	mListView->refresh();
+	KConfig* config = KGlobal::config();
+	config->setGroup(VIEW_GROUP);
+	config->writeEntry(SHOW_ARCHIVED_KEY, mShowExpired);
 }
 
 /******************************************************************************
@@ -1035,8 +1023,7 @@ void MainWindow::initUndoMenu(KPopupMenu* menu, Undo::Type type)
 		QString actText = Undo::actionText(type, id);
 		QString descrip = Undo::description(type, id);
 		QString text = descrip.isEmpty()
-//		             ? i18n("Undo/Redo [action]", "%1 %2").arg(action).arg(actText)
-		             ? QString("%1 %2").arg(action).arg(actText)
+		             ? i18n("Undo/Redo [action]", "%1 %2").arg(action).arg(actText)
 		             : i18n("Undo [action]: message", "%1 %2: %3").arg(action).arg(actText).arg(descrip);
 		menu->insertItem(text, id);
 	}
@@ -1346,21 +1333,26 @@ void MainWindow::slotSelection()
 }
 
 /******************************************************************************
-*  Called when the mouse is clicked on the ListView.
-*  Deselects the current item and disables the actions if appropriate, or
-*  displays a context menu to modify or delete the selected item.
+* Called when a context menu is requested either by a mouse click or by a
+* key press.
+*/
+void MainWindow::slotContextMenuRequested(QListViewItem* item, const QPoint& pt, int)
+{
+	kdDebug(5950) << "MainWindow::slotContextMenuRequested()" << endl;
+	if (mContextMenu)
+		mContextMenu->popup(pt);
+}
+
+/******************************************************************************
+* Called when the mouse is clicked on the ListView.
+* Deselects the current item and disables the actions if appropriate.
+* Note that if a right button click is handled by slotContextMenuRequested().
 */
 void MainWindow::slotMouseClicked(int button, QListViewItem* item, const QPoint& pt, int)
 {
-	if (button == Qt::RightButton)
+	if (button != Qt::RightButton  &&  !item)
 	{
-		kdDebug(5950) << "MainWindow::slotMouseClicked(right)\n";
-		if (mContextMenu)
-			mContextMenu->popup(pt);
-	}
-	else if (!item)
-	{
-		kdDebug(5950) << "MainWindow::slotMouseClicked(left)\n";
+		kdDebug(5950) << "MainWindow::slotMouseClicked(left)" << endl;
 		mListView->clearSelection();
 		mActionCreateTemplate->setEnabled(false);
 		mActionCopy->setEnabled(false);

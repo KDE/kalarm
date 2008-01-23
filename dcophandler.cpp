@@ -1,7 +1,7 @@
 /*
  *  dcophandler.cpp  -  handler for DCOP calls by other applications
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,9 +23,6 @@
 #include <stdlib.h>
 
 #include <kdebug.h>
-
-#include <libkpimidentities/identitymanager.h>
-#include <libkpimidentities/identity.h>
 
 #include "alarmcalendar.h"
 #include "daemon.h"
@@ -284,9 +281,11 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
                                 const KARecurrence& recurrence, int repeatInterval, int repeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
+	uint senderId = 0;
 	if (!fromID.isEmpty())
 	{
-		if (KAMail::identityManager()->identityForName(fromID).isNull())
+		senderId = KAMail::identityUoid(fromID);
+		if (!senderId)
 		{
 			kdError(5950) << "DCOP call scheduleEmail(): unknown sender ID: " << fromID << endl;
 			return false;
@@ -312,7 +311,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount, fromID, addrs, subject, atts);
+	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount, senderId, addrs, subject, atts);
 }
 
 
@@ -479,7 +478,6 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 	kdDebug(5950) << "DcopHandlerOld::process(): " << func << endl;
 	enum
 	{
-		ERR            = 0,
 		OPERATION      = 0x0007,    // mask for main operation
 		  HANDLE       = 0x0001,
 		  CANCEL       = 0x0002,
@@ -754,7 +752,7 @@ bool DcopHandlerOld::process(const QCString& func, const QByteArray& data, QCStr
 				recurrence.set(rule);
 			}
 			return theApp()->scheduleEvent(action, text, dateTime, lateCancel, flags, bgColour, fgColour, font, audioFile,
-			                               audioVolume, reminderMinutes, recurrence, 0, 0, QString::null, mailAddresses, mailSubject, mailAttachments);
+			                               audioVolume, reminderMinutes, recurrence, 0, 0, 0, mailAddresses, mailSubject, mailAttachments);
 		}
 	}
 	return false;

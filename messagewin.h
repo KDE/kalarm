@@ -23,6 +23,8 @@
 
 /** @file messagewin.h - displays an alarm message */
 
+#include <qmap.h>
+
 #include "mainwindowbase.h"
 #include "alarmevent.h"
 
@@ -92,8 +94,11 @@ class MessageWin : public MainWindowBase
 		void                displayComplete();
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
+		bool                haveErrorMessage(unsigned msg) const;
+		void                clearErrorMessage(unsigned msg) const;
 
 		static QValueList<MessageWin*> mWindowList;  // list of existing message windows
+		static QMap<QString, unsigned> mErrorMessages;  // error messages currently displayed, by event ID
 		// Properties needed by readProperties()
 		QString             mMessage;
 		QFont               mFont;

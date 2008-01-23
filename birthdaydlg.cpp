@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -128,19 +128,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	QBoxLayout* groupLayout = new QVBoxLayout(group, marginHint(), spacingHint());
 	groupLayout->addSpacing(fontMetrics().lineSpacing()/2);
 
-	// Colour choice drop-down list
-	QBoxLayout* layout = new QHBoxLayout(groupLayout, 2*spacingHint());
-	QHBox* box;
-	mBgColourChoose = EditAlarmDlg::createBgColourChooser(&box, group);
-	connect(mBgColourChoose, SIGNAL(highlighted(const QColor&)), SLOT(slotBgColourSelected(const QColor&)));
-	layout->addWidget(box);
-	layout->addStretch();
-
-	// Font and colour choice drop-down list
+	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(group);
-	mFontColourButton->setFixedSize(mFontColourButton->sizeHint());
-	connect(mFontColourButton, SIGNAL(selected()), SLOT(slotFontColourSelected()));
-	layout->addWidget(mFontColourButton);
+	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
+	groupLayout->addWidget(mFontColourButton);
 
 	// Sound checkbox and file selector
 	mSoundPicker = new SoundPicker(group);
@@ -159,7 +150,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mReminder, 0, Qt::AlignAuto);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
+	QHBoxLayout* layout = new QHBoxLayout(groupLayout, 2*spacingHint());
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
 	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
 	layout->addWidget(mConfirmAck);
@@ -191,7 +182,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Set the values to their defaults
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(Preferences::defaultBgColour());
-	mBgColourChoose->setColour(Preferences::defaultBgColour());     // set colour before setting alarm type buttons
+	mFontColourButton->setFgColour(Preferences::defaultFgColour());     // set colour before setting alarm type buttons
 	mLateCancel->setMinutes(Preferences::defaultLateCancel(), true, TimePeriod::DAYS);
 	mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
@@ -316,7 +307,7 @@ QValueList<KAEvent> BirthdayDlg::events() const
 					date.setYMD(thisYear + 1, date.month(), date.day());
 				KAEvent event(date,
 				              mPrefix->text() + aItem->text(AddresseeItem::NAME) + mSuffix->text(),
-				              mBgColourChoose->color(), mFontColourButton->fgColour(),
+				              mFontColourButton->bgColour(), mFontColourButton->fgColour(),
 				              mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
 				              mFlags);
 				float fadeVolume;
@@ -392,24 +383,6 @@ void BirthdayDlg::slotTextLostFocus()
 		mSuffixText = suffix;
 		loadAddressBook();
 	}
-}
-
-/******************************************************************************
-*  Called when the a new background colour has been selected using the colour
-*  combo box.
-*/
-void BirthdayDlg::slotBgColourSelected(const QColor& colour)
-{
-	mFontColourButton->setBgColour(colour);
-}
-
-/******************************************************************************
-*  Called when the a new font and colour have been selected using the font &
-*  colour pushbutton.
-*/
-void BirthdayDlg::slotFontColourSelected()
-{
-	mBgColourChoose->setColour(mFontColourButton->bgColour());
 }
 
 

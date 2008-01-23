@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -140,6 +140,7 @@ class MiscPrefTab : public PrefsTabBase
 		TimeEdit*      mStartOfDay;
 		QButtonGroup*  mXtermType;
 		QLineEdit*     mXtermCommand;
+		int            mXtermFirst;              // id of first terminal window radio button
 		int            mXtermCount;              // number of terminal window types
 };
 
@@ -229,19 +230,14 @@ class ViewPrefTab : public PrefsTabBase
 		virtual void setDefaults();
 
 	private slots:
-		void         slotListTimeToggled(bool);
-		void         slotListTimeToToggled(bool);
 		void         slotTooltipAlarmsToggled(bool);
 		void         slotTooltipMaxToggled(bool);
 		void         slotTooltipTimeToggled(bool);
 		void         slotTooltipTimeToToggled(bool);
 
 	private:
-		void         setList(bool time, bool timeTo);
 		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
-		QCheckBox*     mListShowTime;
-		QCheckBox*     mListShowTimeTo;
 		QCheckBox*     mTooltipShowAlarms;
 		QCheckBox*     mTooltipMaxAlarms;
 		SpinBox*       mTooltipMaxAlarmCount;
@@ -250,7 +246,6 @@ class ViewPrefTab : public PrefsTabBase
 		QLineEdit*     mTooltipTimeToPrefix;
 		QLabel*        mTooltipTimeToPrefixLabel;
 		QCheckBox*     mModalMessages;
-		QCheckBox*     mShowExpiredAlarms;
 		SpinBox*       mDaemonTrayCheckInterval;
 };
 

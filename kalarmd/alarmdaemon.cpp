@@ -418,7 +418,7 @@ void AlarmDaemon::checkAlarms(ADCalendar* cal)
 			if (alarm->enabled())
 			{
 				QDateTime dt1;
-				if (recurs  &&  !alarm->hasTime())
+				if (!alarm->hasTime())
 				{
 					// Find the latest recurrence for the alarm.
 					// Need to do this for alarms with offsets in order to detect

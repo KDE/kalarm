@@ -1,5 +1,27 @@
 KAlarm
 
+=== Version 1.4.22 --- 22 January 2008 ===
+Add option to enter reminder times in minutes, in addition to hours/minutes.
+Replace alarm edit dialogue background colour selector with font/colour sample.
+Store email unique IDs instead of names in email alarms to prevent problems if
+    email IDs are renamed.
+Fix error "Sender verify failed (in reply to RCPT TO command)" using sendmail
+    on some systems, by adding envelope sender address to emails.
+Fix OpenSolaris build error.
+
+=== Version 1.4.21 --- 19 December 2007 ===
+Remember last used main window show/hide options instead of setting them in
+    Preferences dialogue.
+Make the Menu key work in the alarm list.
+Fix crash when saving preferences, if 'xterm' is not installed in the system.
+Prevent multiple identical error messages being displayed for the same alarm.
+
+=== Version 1.4.20 --- 18 November 2007 ===
+Fix deferral of non-recurring alarms not working.
+Fix loss of reminder details in archive when alarm has had a reminder deferred.
+Fix inability to reactivate deleted alarms which still have repetitions to go.
+Fix incorrect interpretation of --late-cancel weekly parameter on command line.
+
 === Version 1.4.19 --- 11 November 2007 ===
 Fix KAlarm hanging especially on startup, and freezing the system for a while.
 Fix next occurrence time set after editing alarm, when it's a sub-repetition.

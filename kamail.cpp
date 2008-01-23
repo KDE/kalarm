@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2005,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,6 +45,7 @@
 
 #include <libkpimidentities/identitymanager.h>
 #include <libkpimidentities/identity.h>
+#include <libemailfunctions/email.h>
 #include <libkcal/person.h>
 
 #include <kmime_header_parsing.h>
@@ -105,14 +106,23 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 {
 	QString err;
 	QString from;
-	if (event.emailFromKMail().isEmpty())
+	KPIM::Identity identity;
+	if (!event.emailFromId())
 		from = Preferences::emailAddress();
 	else
 	{
-		from = mIdentityManager->identityForName(event.emailFromKMail()).fullEmailAddr();
+		identity = mIdentityManager->identityForUoid(event.emailFromId());
+		if (identity.isNull())
+		{
+			kdError(5950) << "KAMail::send(): identity" << event.emailFromId() << "not found" << endl;
+			errmsgs = errors(i18n("Invalid 'From' email address.\nKMail identity '%1' not found.").arg(event.emailFromId()));
+			return false;
+		}
+		from = identity.fullEmailAddr();
 		if (from.isEmpty())
 		{
-			errmsgs = errors(i18n("Invalid 'From' email address.\nKMail identity '%1' not found.").arg(event.emailFromKMail()));
+			kdError(5950) << "KAMail::send(): identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address" << endl;
+			errmsgs = errors(i18n("Invalid 'From' email address.\nEmail identity '%1' has no email address").arg(identity.identityName()));
 			return false;
 		}
 	}
@@ -147,6 +157,8 @@ bool KAMail::send(const KAEvent& event, QStringList& errmsgs, bool allowNotify)
 		                                         QString::fromLatin1("/sbin:/usr/sbin:/usr/lib"));
 		if (!command.isNull())
 		{
+			command += QString::fromLatin1(" -f ");
+			command += KPIM::getEmailAddress(from);
 			command += QString::fromLatin1(" -oi -t ");
 			textComplete = initHeaders(data, false);
 		}
@@ -372,15 +384,17 @@ QString KAMail::initHeaders(const KAMailData& data, bool dateId)
 		time_t timenow = tod.tv_sec;
 		char buff[64];
 		strftime(buff, sizeof(buff), "Date: %a, %d %b %Y %H:%M:%S %z", localtime(&timenow));
+		QString from = data.from;
+		from.replace(QRegExp("^.*<"), QString::null).replace(QRegExp(">.*$"), QString::null);
 		message = QString::fromLatin1(buff);
-		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(timenow).arg(tod.tv_usec).arg(data.from);
+		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(timenow).arg(tod.tv_usec).arg(from);
 	}
 	message += QString::fromLatin1("From: ") + data.from;
 	message += QString::fromLatin1("\nTo: ") + data.event.emailAddresses(", ");
 	if (!data.bcc.isEmpty())
 		message += QString::fromLatin1("\nBcc: ") + data.bcc;
 	message += QString::fromLatin1("\nSubject: ") + data.event.emailSubject();
-	message += QString::fromLatin1("\nX-Mailer: %1" KALARM_VERSION).arg(kapp->aboutData()->programName());
+	message += QString::fromLatin1("\nX-Mailer: %1/" KALARM_VERSION).arg(kapp->aboutData()->programName());
 	return message;
 }
 
@@ -539,6 +553,29 @@ bool KAMail::identitiesExist()
 {
 	identityManager();    // create identity manager if not already done
 	return mIdentityManager->begin() != mIdentityManager->end();
+}
+ 
+/******************************************************************************
+*  Fetch the uoid of an email identity name or uoid string.
+*/
+uint KAMail::identityUoid(const QString& identityUoidOrName)
+{
+	bool ok;
+	uint id = identityUoidOrName.toUInt(&ok);
+	if (!ok  ||  identityManager()->identityForUoid(id).isNull())
+	{
+		identityManager();   // fetch it if not already done
+		for (KPIM::IdentityManager::ConstIterator it = mIdentityManager->begin();
+		     it != mIdentityManager->end();  ++it)
+		{
+			if ((*it).identityName() == identityUoidOrName)
+			{
+				id = (*it).uoid();
+				break;
+			}
+		}
+	}
+	return id;
 }
 
 /******************************************************************************

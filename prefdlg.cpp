@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,7 +107,7 @@ void KAlarmPrefDlg::display()
 	else
 	{
 #ifdef Q_WS_X11
-		KWin::WindowInfo info = KWin::windowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
+		KWin::WindowInfo info = KWin::windowInfo(mInstance->winId(), static_cast<unsigned long>(NET::WMGeometry | NET::WMDesktop));
 		KWin::setCurrentDesktop(info.desktop());
 #endif
 		mInstance->showNormal();   // un-minimise it if necessary
@@ -387,6 +387,7 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	mXtermType->hide();
 	QString whatsThis = i18n("The parameter is a command line, e.g. 'xterm -e'", "Check to execute command alarms in a terminal window by '%1'");
 	int index = 0;
+	mXtermFirst = -1;
 	for (mXtermCount = 0;  !xtermCommands[mXtermCount].isNull();  ++mXtermCount)
 	{
 		QString cmd = xtermCommands[mXtermCount];
@@ -396,6 +397,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 		QRadioButton* radio = new QRadioButton(args[0], group);
 		radio->setMinimumSize(radio->sizeHint());
 		mXtermType->insert(radio, mXtermCount);
+		if (mXtermFirst < 0)
+			mXtermFirst = mXtermCount;   // note the id of the first button
 		cmd.replace("%t", kapp->aboutData()->programName());
 		cmd.replace("%c", "<command>");
 		cmd.replace("%w", "<command; sleep>");
@@ -412,6 +415,8 @@ MiscPrefTab::MiscPrefTab(QVBox* frame)
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->insert(radio, mXtermCount);
+	if (mXtermFirst < 0)
+		mXtermFirst = mXtermCount;   // note the id of the first button
 	mXtermCommand = new QLineEdit(box);
 	QWhatsThis::add(box,
 	      i18n("Enter the full command line needed to execute a command in your chosen terminal window. "
@@ -434,7 +439,7 @@ void MiscPrefTab::restore()
 	mStartOfDay->setValue(Preferences::mStartOfDay);
 	setExpiredControls(Preferences::mExpiredKeepDays);
 	QString xtermCmd = Preferences::cmdXTermCommand();
-	int id = 0;
+	int id = mXtermFirst;
 	if (!xtermCmd.isEmpty())
 	{
 		for ( ;  id < mXtermCount;  ++id)
@@ -457,7 +462,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 	{
 		QString cmd = mXtermCommand->text();
 		if (cmd.isEmpty())
-			xtermID = 0;       // 'Other' is only acceptable if it's non-blank
+			xtermID = -1;       // 'Other' is only acceptable if it's non-blank
 		else
 		{
 			QStringList args = KShell::splitArgs(cmd);
@@ -471,6 +476,12 @@ void MiscPrefTab::apply(bool syncToDisc)
 			}
 		}
 	}
+	if (xtermID < 0)
+	{
+		xtermID = mXtermFirst;
+		mXtermType->setButton(mXtermFirst);
+	}
+
 	bool systray = mRunInSystemTray->isChecked();
 	Preferences::mRunInSystemTray        = systray;
 	Preferences::mDisableAlarmsIfStopped = mDisableAlarmsIfStopped->isChecked();
@@ -505,7 +516,7 @@ void MiscPrefTab::setDefaults()
 	mConfirmAlarmDeletion->setChecked(Preferences::default_confirmAlarmDeletion);
 	mStartOfDay->setValue(Preferences::default_startOfDay);
 	setExpiredControls(Preferences::default_expiredKeepDays);
-	mXtermType->setButton(0);
+	mXtermType->setButton(mXtermFirst);
 	mXtermCommand->setEnabled(false);
 	slotDisableIfStoppedToggled(true);
 }
@@ -602,10 +613,9 @@ EmailPrefTab::EmailPrefTab(QVBox* frame)
 	box->setFixedHeight(box->sizeHint().height());
 	QWhatsThis::add(box,
 	      i18n("Choose how to send email when an email alarm is triggered.\n"
-	           "KMail: The email is added to KMail's outbox if KMail is running. If not, "
-	           "a KMail composer window is displayed to enable you to send the email.\n"
+	           "KMail: The email is sent automatically via KMail. KMail is started first if necessary.\n"
 	           "Sendmail: The email is sent automatically. This option will only work if "
-	           "your system is configured to use 'sendmail' or a sendmail compatible mail transport agent."));
+	           "your system is configured to use sendmail or a sendmail compatible mail transport agent."));
 
 	box = new QHBox(mPage);   // this is to allow left adjustment
 	mEmailCopyToKMail = new QCheckBox(i18n("Co&py sent emails into KMail's %1 folder").arg(KAMail::i18n_sent_mail()), box);
@@ -918,6 +928,7 @@ EditPrefTab::EditPrefTab(QVBox* frame)
 	QLabel* label = new QLabel(i18n("Reminder &units:"), box);
 	label->setFixedSize(label->sizeHint());
 	mReminderUnits = new QComboBox(box, "defWarnUnits");
+	mReminderUnits->insertItem(TimePeriod::i18n_Minutes(), TimePeriod::MINUTES);
 	mReminderUnits->insertItem(TimePeriod::i18n_Hours_Mins(), TimePeriod::HOURS_MINUTES);
 	mReminderUnits->insertItem(TimePeriod::i18n_Days(), TimePeriod::DAYS);
 	mReminderUnits->insertItem(TimePeriod::i18n_Weeks(), TimePeriod::WEEKS);
@@ -1193,26 +1204,7 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
-	QGroupBox* group = new QGroupBox(i18n("Alarm List"), mPage);
-	QBoxLayout* layout = new QVBoxLayout(group, KDialog::marginHint(), KDialog::spacingHint());
-	layout->addSpacing(fontMetrics().lineSpacing()/2);
-
-	mListShowTime = new QCheckBox(MainWindow::i18n_t_ShowAlarmTime(), group, "listTime");
-	mListShowTime->setMinimumSize(mListShowTime->sizeHint());
-	connect(mListShowTime, SIGNAL(toggled(bool)), SLOT(slotListTimeToggled(bool)));
-	QWhatsThis::add(mListShowTime,
-	      i18n("Specify whether to show in the alarm list, the time at which each alarm is due"));
-	layout->addWidget(mListShowTime, 0, Qt::AlignAuto);
-
-	mListShowTimeTo = new QCheckBox(MainWindow::i18n_n_ShowTimeToAlarm(), group, "listTimeTo");
-	mListShowTimeTo->setMinimumSize(mListShowTimeTo->sizeHint());
-	connect(mListShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotListTimeToToggled(bool)));
-	QWhatsThis::add(mListShowTimeTo,
-	      i18n("Specify whether to show in the alarm list, how long until each alarm is due"));
-	layout->addWidget(mListShowTimeTo, 0, Qt::AlignAuto);
-	group->setMaximumHeight(group->sizeHint().height());
-
-	group = new QGroupBox(i18n("System Tray Tooltip"), mPage);
+	QGroupBox* group = new QGroupBox(i18n("System Tray Tooltip"), mPage);
 	QGridLayout* grid = new QGridLayout(group, 5, 3, KDialog::marginHint(), KDialog::spacingHint());
 	grid->setColStretch(2, 1);
 	grid->addColSpacing(0, indentWidth());
@@ -1273,11 +1265,6 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 	           "- If unchecked, the window does not interfere with your typing when "
 	           "it is displayed, but it has no title bar and cannot be moved or resized."));
 
-	mShowExpiredAlarms = new QCheckBox(MainWindow::i18n_e_ShowExpiredAlarms(), mPage, "showExpired");
-	mShowExpiredAlarms->setMinimumSize(mShowExpiredAlarms->sizeHint());
-	QWhatsThis::add(mShowExpiredAlarms,
-	      i18n("Specify whether to show expired alarms in the alarm list"));
-
 	QHBox* itemBox = new QHBox(mPage);   // this is to control the QWhatsThis text display area
 	box = new QHBox(itemBox);
 	box->setSpacing(KDialog::spacingHint());
@@ -1297,21 +1284,16 @@ ViewPrefTab::ViewPrefTab(QVBox* frame)
 
 void ViewPrefTab::restore()
 {
-	setList(Preferences::mShowAlarmTime,
-	        Preferences::mShowTimeToAlarm);
 	setTooltip(Preferences::mTooltipAlarmCount,
 	           Preferences::mShowTooltipAlarmTime,
 	           Preferences::mShowTooltipTimeToAlarm,
 	           Preferences::mTooltipTimeToPrefix);
 	mModalMessages->setChecked(Preferences::mModalMessages);
-	mShowExpiredAlarms->setChecked(Preferences::mShowExpiredAlarms);
 	mDaemonTrayCheckInterval->setValue(Preferences::mDaemonTrayCheckInterval);
 }
 
 void ViewPrefTab::apply(bool syncToDisc)
 {
-	Preferences::mShowAlarmTime           = mListShowTime->isChecked();
-	Preferences::mShowTimeToAlarm         = mListShowTimeTo->isChecked();
 	int n = mTooltipShowAlarms->isChecked() ? -1 : 0;
 	if (n  &&  mTooltipMaxAlarms->isChecked())
 		n = mTooltipMaxAlarmCount->value();
@@ -1320,39 +1302,18 @@ void ViewPrefTab::apply(bool syncToDisc)
 	Preferences::mShowTooltipTimeToAlarm  = mTooltipShowTimeTo->isChecked();
 	Preferences::mTooltipTimeToPrefix     = mTooltipTimeToPrefix->text();
 	Preferences::mModalMessages           = mModalMessages->isChecked();
-	Preferences::mShowExpiredAlarms       = mShowExpiredAlarms->isChecked();
 	Preferences::mDaemonTrayCheckInterval = mDaemonTrayCheckInterval->value();
 	PrefsTabBase::apply(syncToDisc);
 }
 
 void ViewPrefTab::setDefaults()
 {
-	setList(Preferences::default_showAlarmTime,
-	        Preferences::default_showTimeToAlarm);
 	setTooltip(Preferences::default_tooltipAlarmCount,
 	           Preferences::default_showTooltipAlarmTime,
 	           Preferences::default_showTooltipTimeToAlarm,
 	           Preferences::default_tooltipTimeToPrefix);
 	mModalMessages->setChecked(Preferences::default_modalMessages);
-	mShowExpiredAlarms->setChecked(Preferences::default_showExpiredAlarms);
 	mDaemonTrayCheckInterval->setValue(Preferences::default_daemonTrayCheckInterval);
-}
-
-void ViewPrefTab::setList(bool time, bool timeTo)
-{
-	if (!timeTo)
-		time = true;    // ensure that at least one option is ticked
-
-	// Set the states of the two checkboxes without calling signal
-	// handlers, since these could change the checkboxes' states.
-	mListShowTime->blockSignals(true);
-	mListShowTimeTo->blockSignals(true);
-
-	mListShowTime->setChecked(time);
-	mListShowTimeTo->setChecked(timeTo);
-
-	mListShowTime->blockSignals(false);
-	mListShowTimeTo->blockSignals(false);
 }
 
 void ViewPrefTab::setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix)
@@ -1380,18 +1341,6 @@ void ViewPrefTab::setTooltip(int maxAlarms, bool time, bool timeTo, const QStrin
 	// Enable/disable controls according to their states
 	slotTooltipTimeToToggled(timeTo);
 	slotTooltipAlarmsToggled(maxAlarms);
-}
-
-void ViewPrefTab::slotListTimeToggled(bool on)
-{
-	if (!on  &&  !mListShowTimeTo->isChecked())
-		mListShowTimeTo->setChecked(true);
-}
-
-void ViewPrefTab::slotListTimeToToggled(bool on)
-{
-	if (!on  &&  !mListShowTime->isChecked())
-		mListShowTime->setChecked(true);
 }
 
 void ViewPrefTab::slotTooltipAlarmsToggled(bool on)
