@@ -1,5 +1,7 @@
 project(kalarm)
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
+
 include_directories(
         ./ 
 	./lib 
