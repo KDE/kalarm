@@ -35,6 +35,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
@@ -1161,11 +1162,11 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	QGridLayout* dgrid = new QGridLayout(box);
 	dgrid->setMargin(0);
 	dgrid->setSpacing(KDialog::spacingHint());
-	const KLocale* locale = KGlobal::locale();
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayBox[i] = new CheckBox(KAlarm::weekDayName(day, locale), box);
+		mDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
 		mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
 		mDayBox[i]->setReadOnly(readOnly);
 		dgrid->addWidget(mDayBox[i], i%4, i/4, Qt::AlignLeft);
@@ -1354,11 +1355,11 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 
 	mDayOfWeekCombo = new ComboBox(box);
 	mDayOfWeekCombo->setEditable(false);
-	const KLocale* locale = KGlobal::locale();
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayOfWeekCombo->addItem(KAlarm::weekDayName(day, locale));
+		mDayOfWeekCombo->addItem(calendar->weekDayName(day));
 	}
 	mDayOfWeekCombo->setReadOnly(readOnly);
 	mDayOfWeekCombo->setWhatsThis(i18nc("@info:whatsthis", "Select the day of the week on which to repeat the alarm"));
@@ -1512,24 +1513,14 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	QGridLayout* grid = new QGridLayout(w);
 	grid->setMargin(0);
 	grid->setSpacing(KDialog::spacingHint());
-	const KLocale* locale = KGlobal::locale();
-	mMonthBox[0] = new CheckBox(ki18nc("@option:check Month of the year", "January").toString(locale), w);
-	mMonthBox[1] = new CheckBox(ki18nc("@option:check Month of the year", "February").toString(locale), w);
-	mMonthBox[2] = new CheckBox(ki18nc("@option:check Month of the year", "March").toString(locale), w);
-	mMonthBox[3] = new CheckBox(ki18nc("@option:check Month of the year", "April").toString(locale), w);
-	mMonthBox[4] = new CheckBox(ki18nc("@option:check Month of the year", "May").toString(locale), w);
-	mMonthBox[5] = new CheckBox(ki18nc("@option:check Month of the year", "June").toString(locale), w);
-	mMonthBox[6] = new CheckBox(ki18nc("@option:check Month of the year", "July").toString(locale), w);
-	mMonthBox[7] = new CheckBox(ki18nc("@option:check Month of the year", "August").toString(locale), w);
-	mMonthBox[8] = new CheckBox(ki18nc("@option:check Month of the year", "September").toString(locale), w);
-	mMonthBox[9] = new CheckBox(ki18nc("@option:check Month of the year", "October").toString(locale), w);
-	mMonthBox[10] = new CheckBox(ki18nc("@option:check Month of the year", "November").toString(locale), w);
-	mMonthBox[11] = new CheckBox(ki18nc("@option:check Month of the year", "December").toString(locale), w);
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+	int year = QDate::currentDate().year();
 	for (int i = 0;  i < 12;  ++i)
 	{
+		mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, year, KCalendarSystem::ShortName), w);
 		mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());
 		mMonthBox[i]->setReadOnly(readOnly);
-		grid->addWidget(mMonthBox[i], i%4, i/4, Qt::AlignLeft);
+		grid->addWidget(mMonthBox[i], i%3, i/3, Qt::AlignLeft);
 	}
 	connect(mMonthBox[1], SIGNAL(toggled(bool)), SLOT(enableFeb29()));
 	w->setFixedHeight(w->sizeHint().height());
