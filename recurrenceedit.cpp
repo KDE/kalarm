@@ -36,6 +36,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
@@ -62,8 +63,6 @@ using namespace KCal;
 
 #include "recurrenceedit.moc"
 #include "recurrenceeditprivate.moc"
-
-static QString weekDayName(int day, const KLocale*);
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -1132,11 +1131,11 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	// Save the first day of the week, just in case it changes while the dialog is open.
 	QWidget* box = new QWidget(this);   // this is to control the QWhatsThis text display area
 	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
-	const KLocale* locale = KGlobal::locale();
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayBox[i] = new CheckBox(weekDayName(day, locale), box);
+		mDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
 		mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
 		mDayBox[i]->setReadOnly(readOnly);
 		dgrid->addWidget(mDayBox[i], i%4, i/4, Qt::AlignAuto);
@@ -1326,11 +1325,11 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mPosButton->setFocusWidget(mWeekCombo);
 
 	mDayOfWeekCombo = new ComboBox(false, box);
-	const KLocale* locale = KGlobal::locale();
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayOfWeekCombo->insertItem(weekDayName(day, locale));
+		mDayOfWeekCombo->insertItem(calendar->weekDayName(day));
 	}
 	mDayOfWeekCombo->setReadOnly(readOnly);
 	QWhatsThis::add(mDayOfWeekCombo, i18n("Select the day of the week on which to repeat the alarm"));
@@ -1477,24 +1476,14 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent, const char* name)
 	QWidget* w = new QWidget(this);   // this is to control the QWhatsThis text display area
 	hlayout->addWidget(w, 1, Qt::AlignAuto);
 	QGridLayout* grid = new QGridLayout(w, 4, 3, 0, KDialog::spacingHint());
-	const KLocale* locale = KGlobal::locale();
-	mMonthBox[0] = new CheckBox(locale->translate("January"), w);
-	mMonthBox[1] = new CheckBox(locale->translate("February"), w);
-	mMonthBox[2] = new CheckBox(locale->translate("March"), w);
-	mMonthBox[3] = new CheckBox(locale->translate("April"), w);
-	mMonthBox[4] = new CheckBox(locale->translate("May"), w);
-	mMonthBox[5] = new CheckBox(locale->translate("June"), w);
-	mMonthBox[6] = new CheckBox(locale->translate("July"), w);
-	mMonthBox[7] = new CheckBox(locale->translate("August"), w);
-	mMonthBox[8] = new CheckBox(locale->translate("September"), w);
-	mMonthBox[9] = new CheckBox(locale->translate("October"), w);
-	mMonthBox[10] = new CheckBox(locale->translate("November"), w);
-	mMonthBox[11] = new CheckBox(locale->translate("December"), w);
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+	int year = QDate::currentDate().year();
 	for (int i = 0;  i < 12;  ++i)
 	{
+		mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, year, true), w);
 		mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());
 		mMonthBox[i]->setReadOnly(readOnly);
-		grid->addWidget(mMonthBox[i], i%4, i/4, Qt::AlignAuto);
+		grid->addWidget(mMonthBox[i], i%3, i/3, Qt::AlignAuto);
 	}
 	connect(mMonthBox[1], SIGNAL(toggled(bool)), SLOT(enableFeb29()));
 	w->setFixedHeight(w->sizeHint().height());
@@ -1658,19 +1647,4 @@ bool YearlyRule::stateChanged() const
 	return (MonthYearRule::stateChanged()
 	    ||  mSavedMonths    != months()
 	    ||  mSavedFeb29Type != feb29Type());
-}
-
-QString weekDayName(int day, const KLocale* locale)
-{
-	switch (day)
-	{
-		case 1: return locale->translate("Monday");
-		case 2: return locale->translate("Tuesday");
-		case 3: return locale->translate("Wednesday");
-		case 4: return locale->translate("Thursday");
-		case 5: return locale->translate("Friday");
-		case 6: return locale->translate("Saturday");
-		case 7: return locale->translate("Sunday");
-	}
-	return QString();
 }
