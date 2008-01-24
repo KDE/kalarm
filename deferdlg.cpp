@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialogue to defer an alarm
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -93,12 +93,10 @@ void DeferAlarmDlg::slotOk()
 		switch (limitType)
 		{
 			case KAEvent::LIMIT_REPETITION:
-				text = i18n("This refers to simple repetitions set up using the Simple Repetition dialog",
-				            "Cannot defer past the alarm's next repetition (currently %1)");
+				text = i18n("Cannot defer past the alarm's next sub-repetition (currently %1)");
 				break;
 			case KAEvent::LIMIT_RECURRENCE:
-				text = i18n("This refers to recurrences set up using the Recurrence tab",
-				            "Cannot defer past the alarm's next recurrence (currently %1)");
+				text = i18n("Cannot defer past the alarm's next recurrence (currently %1)");
 				break;
 			case KAEvent::LIMIT_REMINDER:
 				text = i18n("Cannot defer past the alarm's next reminder (currently %1)");

@@ -548,7 +548,7 @@ int KAlarmApp::newInstance()
 
 					if (haveRecurrence)
 					{
-						// There is a also a recurrence specified, so set up a simple repetition
+						// There is a also a recurrence specified, so set up a sub-repetition
 						int longestInterval = recurrence.longestInterval();
 						if (count * interval > longestInterval)
 							USAGE(i18n("Invalid %1 and %2 parameters: repetition is longer than %3 interval").arg(QString::fromLatin1("--interval")).arg(QString::fromLatin1("--repeat")).arg(QString::fromLatin1("--recurrence")));

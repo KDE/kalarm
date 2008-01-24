@@ -1,6 +1,7 @@
 KAlarm
 
-=== Version 1.4.22 --- 22 January 2008 ===
+=== Version 1.5.0 --- 23 January 2008 ===
+Replace simple repetitions with recurrence sub-repetitions, to save confusion.
 Add option to enter reminder times in minutes, in addition to hours/minutes.
 Replace alarm edit dialogue background colour selector with font/colour sample.
 Store email unique IDs instead of names in email alarms to prevent problems if

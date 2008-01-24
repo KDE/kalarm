@@ -76,7 +76,6 @@
 #include "radiobutton.h"
 #include "recurrenceedit.h"
 #include "reminder.h"
-#include "repetition.h"
 #include "shellprocess.h"
 #include "soundpicker.h"
 #include "specialactions.h"
@@ -128,10 +127,12 @@ class PickLogFileRadio : public PickFileRadio
 
 inline QString recurText(const KAEvent& event)
 {
+	QString r;
 	if (event.repeatCount())
-		return QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+		r = QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
 	else
-		return event.recurrenceText();
+		r = event.recurrenceText();
+	return i18n("&Recurrence - [%1]").arg(r);
 }
 
 // Collect these widget labels together to ensure consistent wording and
@@ -216,12 +217,13 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 	// Recurrence tab
 	QVBox* recurTab = new QVBox(mTabs);
 	mainPageBox->setSpacing(spacingHint());
-	mTabs->addTab(recurTab, i18n("&Recurrence"));
+	mTabs->addTab(recurTab, QString::null);
 	mRecurPageIndex = 1;
 	mRecurrenceEdit = new RecurrenceEdit(readOnly, recurTab, "recurPage");
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
 	connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
 	connect(mRecurrenceEdit, SIGNAL(frequencyChanged()), SLOT(slotRecurFrequencyChange()));
+	connect(mRecurrenceEdit, SIGNAL(repeatNeedsInitialisation()), SLOT(slotSetSubRepetition()));
 
 	// Alarm action
 
@@ -356,27 +358,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const QString& caption, QWidget* paren
 		connect(mTimeWidget, SIGNAL(anyTimeToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
 		topLayout->addWidget(mTimeWidget);
 	}
-
-	// Recurrence type display
-	layout = new QHBoxLayout(topLayout, 2*spacingHint());
-	QHBox* box = new QHBox(mainPage);   // this is to control the QWhatsThis text display area
-	box->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18n("Recurrence:"), box);
-	label->setFixedSize(label->sizeHint());
-	mRecurrenceText = new QLabel(box);
-	QWhatsThis::add(box,
-	      i18n("How often the alarm recurs.\nThe times shown are those configured in the Recurrence tab and in the Simple Repetition dialog."));
-	box->setFixedHeight(box->sizeHint().height());
-	layout->addWidget(box);
-	layout->addStretch();
-
-	// Simple repetition button
-	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), true, mainPage);
-	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
-	connect(mSimpleRepetition, SIGNAL(needsInitialisation()), SLOT(slotSetSimpleRepetition()));
-	connect(mSimpleRepetition, SIGNAL(changed()), SLOT(slotRecurFrequencyChange()));
-	QWhatsThis::add(mSimpleRepetition, i18n("Set up a simple, or additional, alarm repetition"));
-	layout->addWidget(mSimpleRepetition);
 
 	// Reminder
 	static const QString reminderText = i18n("Enter how long in advance of the main alarm to display a reminder alarm.");
@@ -778,9 +759,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReminder->enableOnceOnly(event->recurs());
 		if (mSpecialActionsButton)
 			mSpecialActionsButton->setActions(event->preAction(), event->postAction());
-		mSimpleRepetition->set(event->repeatInterval(), event->repeatCount());
-		mRecurrenceText->setText(recurText(*event));
 		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+		mTabs->setTabLabel(mTabs->page(mRecurPageIndex), recurText(*event));
 		SoundPicker::Type soundType = event->speak()                ? SoundPicker::SPEAK
 		                            : event->beep()                 ? SoundPicker::BEEP
 		                            : !event->audioFile().isEmpty() ? SoundPicker::PLAY_FILE
@@ -873,7 +853,6 @@ void EditAlarmDlg::setReadOnly()
 		mDeferChangeButton->hide();
 	else
 		mDeferChangeButton->show();
-	mSimpleRepetition->setReadOnly(mReadOnly);
 	if (mShowInKorganizer)
 		mShowInKorganizer->setReadOnly(mReadOnly);
 
@@ -1039,8 +1018,6 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	if (mShowInKorganizer)
 		mSavedShowInKorganizer = mShowInKorganizer->isChecked();
 	mSavedRecurrenceType   = mRecurrenceEdit->repeatType();
-	mSavedRepeatInterval   = mSimpleRepetition->interval();
-	mSavedRepeatCount      = mSimpleRepetition->count();
 }
 
 /******************************************************************************
@@ -1073,9 +1050,7 @@ bool EditAlarmDlg::stateChanged() const
 	||  mSavedLateCancel       != mLateCancel->minutes()
 	||  mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked()
 	||  textFileCommandMessage != mSavedTextFileCommandMessage
-	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType()
-	||  mSavedRepeatInterval   != mSimpleRepetition->interval()
-	||  mSavedRepeatCount      != mSimpleRepetition->count())
+	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType())
 		return true;
 	if (mMessageRadio->isOn()  ||  mFileRadio->isOn())
 	{
@@ -1220,8 +1195,6 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 	}
 	if (!trial)
 	{
-		if (mSimpleRepetition->count())
-			event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
 		if (mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
 		{
 			mRecurrenceEdit->updateEvent(event, !mTemplate);
@@ -1354,7 +1327,6 @@ void EditAlarmDlg::slotOk()
 	&&  mTabs->currentPageIndex() == mRecurPageIndex  &&  recurType == RecurrenceEdit::AT_LOGIN)
 		mTimeWidget->setDateTime(mRecurrenceEdit->endDateTime());
 	bool timedRecurrence = mRecurrenceEdit->isTimedRepeatType();    // does it recur other than at login?
-	bool repeated = mSimpleRepetition->count();
 	if (mTemplate)
 	{
 		// Check that the template name is not blank and is unique
@@ -1378,7 +1350,7 @@ void EditAlarmDlg::slotOk()
 	else
 	{
 		QWidget* errWidget;
-		mAlarmDateTime = mTimeWidget->getDateTime(0, !(timedRecurrence || repeated), false, &errWidget);
+		mAlarmDateTime = mTimeWidget->getDateTime(0, !timedRecurrence, false, &errWidget);
 		if (errWidget)
 		{
 			// It's more than just an existing deferral being changed, so the time matters
@@ -1424,58 +1396,44 @@ void EditAlarmDlg::slotOk()
 			return;
 		}
 	}
-	int longestRecurInterval = -1;
 	if (recurType != RecurrenceEdit::NO_RECUR)
 	{
+		KAEvent recurEvent;
+		int longestRecurInterval = -1;
 		int reminder = mReminder->minutes();
-		if (reminder)
+		if (reminder  &&  !mReminder->isOnceOnly())
 		{
-			KAEvent event;
-			mRecurrenceEdit->updateEvent(event, false);
-			if (!mReminder->isOnceOnly())
+			mRecurrenceEdit->updateEvent(recurEvent, false);
+			longestRecurInterval = recurEvent.longestRecurrenceInterval();
+			if (longestRecurInterval  &&  reminder >= longestRecurInterval)
 			{
-				longestRecurInterval = event.longestRecurrenceInterval();
-				if (longestRecurInterval  &&  reminder >= longestRecurInterval)
-				{
-					mTabs->setCurrentPage(mMainPageIndex);
-					mReminder->setFocusOnCount();
-					KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
-					                             ).arg(Reminder::i18n_first_recurrence_only()));
-					return;
-				}
+				mTabs->setCurrentPage(mMainPageIndex);
+				mReminder->setFocusOnCount();
+				KMessageBox::sorry(this, i18n("Reminder period must be less than the recurrence interval, unless '%1' is checked."
+				                             ).arg(Reminder::i18n_first_recurrence_only()));
+				return;
 			}
 		}
-	}
-	if (mSimpleRepetition->count())
-	{
-		switch (recurType)
+		if (mRecurrenceEdit->subRepeatCount())
 		{
-			case RecurrenceEdit::AT_LOGIN:    // alarm repeat not allowed
-				mSimpleRepetition->set(0, 0);
-				break;
-			default:          // repeat duration must be less than recurrence interval
-				if (longestRecurInterval < 0)
-				{
-					KAEvent event;
-					mRecurrenceEdit->updateEvent(event, false);
-					longestRecurInterval = event.longestRecurrenceInterval();
-				}
-				if (mSimpleRepetition->count() * mSimpleRepetition->interval() >= longestRecurInterval - mReminder->minutes())
-				{
-					KMessageBox::sorry(this, i18n("Simple alarm repetition duration must be less than the recurrence interval minus any reminder period"));
-					mSimpleRepetition->activate();   // display the alarm repetition dialog again
-					return;
-				}
-				// fall through to NO_RECUR
-			case RecurrenceEdit::NO_RECUR:    // no restriction on repeat duration
-				if (mSimpleRepetition->interval() % 1440
-				&&  (mTemplate && mTemplateAnyTime->isOn()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
-				{
-					KMessageBox::sorry(this, i18n("Simple alarm repetition period must be in units of days or weeks for a date-only alarm"));
-					mSimpleRepetition->activate();   // display the alarm repetition dialog again
-					return;
-				}
-				break;
+			if (longestRecurInterval < 0)
+			{
+				mRecurrenceEdit->updateEvent(recurEvent, false);
+				longestRecurInterval = recurEvent.longestRecurrenceInterval();
+			}
+			if (recurEvent.repeatInterval() * recurEvent.repeatCount() >= longestRecurInterval - reminder)
+			{
+				KMessageBox::sorry(this, i18n("The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
+				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
+				return;
+			}
+			if (recurEvent.repeatInterval() % 1440
+			&&  (mTemplate && mTemplateAnyTime->isOn()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
+			{
+				KMessageBox::sorry(this, i18n("For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
+				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
+				return;
+			}
 		}
 	}
 	if (checkText(mAlarmMessage))
@@ -1547,7 +1505,8 @@ void EditAlarmDlg::slotEditDeferral()
 	if (!mTimeWidget)
 		return;
 	bool limit = true;
-	int repeatCount = mSimpleRepetition->count();
+	int repeatInterval;
+	int repeatCount = mRecurrenceEdit->subRepeatCount(&repeatInterval);
 	DateTime start = mTimeWidget->getDateTime(0, !repeatCount, !mExpiredRecurrence);
 	if (!start.isValid())
 	{
@@ -1560,15 +1519,15 @@ void EditAlarmDlg::slotEditDeferral()
 	{
 		if (repeatCount  &&  start < now)
 		{
-			// Simple repetition - find the time of the next one
-			int interval = mSimpleRepetition->interval() * 60;
-			int repetition = (start.secsTo(now) + interval - 1) / interval;
+			// Sub-repetition - find the time of the next one
+			repeatInterval *= 60;
+			int repetition = (start.secsTo(now) + repeatInterval - 1) / repeatInterval;
 			if (repetition > repeatCount)
 			{
 				mTimeWidget->getDateTime();    // output the appropriate error message
 				return;
 			}
-			start = start.addSecs(repetition * interval);
+			start = start.addSecs(repetition * repeatInterval);
 		}
 	}
 
@@ -1673,43 +1632,30 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 }
 
 /******************************************************************************
-*  Called when the recurrence frequency selection changes, or the simple
+*  Called when the recurrence frequency selection changes, or the sub-
 *  repetition interval changes.
 *  Updates the recurrence frequency text.
 */
 void EditAlarmDlg::slotRecurFrequencyChange()
 {
+	slotSetSubRepetition();
 	KAEvent event;
 	mRecurrenceEdit->updateEvent(event, false);
-	event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
-	mRecurrenceText->setText(recurText(event));
+	mTabs->setTabLabel(mTabs->page(mRecurPageIndex), recurText(event));
 }
 
 /******************************************************************************
-*  Called when the Simple Repetition button has been pressed to display the
-*  alarm repetition dialog.
+*  Called when the Repetition within Recurrence button has been pressed to
+*  display the sub-repetition dialog.
 *  Alarm repetition has the following restrictions:
 *  1) Not allowed for a repeat-at-login alarm
 *  2) For a date-only alarm, the repeat interval must be a whole number of days.
 *  3) The overall repeat duration must be less than the recurrence interval.
 */
-void EditAlarmDlg::slotSetSimpleRepetition()
+void EditAlarmDlg::slotSetSubRepetition()
 {
 	bool dateOnly = mTemplate ? mTemplateAnyTime->isOn() : mTimeWidget->anyTime();
-	int maxDuration;
-	switch (mRecurrenceEdit->repeatType())
-	{
-		case RecurrenceEdit::NO_RECUR:  maxDuration = -1;  break;  // no restriction on repeat duration
-		case RecurrenceEdit::AT_LOGIN:  maxDuration = 0;  break;   // alarm repeat not allowed
-		default:          // repeat duration must be less than recurrence interval
-		{
-			KAEvent event;
-			mRecurrenceEdit->updateEvent(event, false);
-			maxDuration = event.longestRecurrenceInterval() - mReminder->minutes() - 1;
-			break;
-		}
-	}
-	mSimpleRepetition->initialise(mSimpleRepetition->interval(), mSimpleRepetition->count(), dateOnly, maxDuration);
+	mRecurrenceEdit->setSubRepetition(mReminder->minutes(), dateOnly);
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -53,6 +53,7 @@
 #include "karecurrence.h"
 #include "preferences.h"
 #include "radiobutton.h"
+#include "repetition.h"
 #include "spinbox.h"
 #include "timeedit.h"
 #include "timespinbox.h"
@@ -246,7 +247,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mEndDateButton = new RadioButton(i18n("End &by:"), mRangeButtonGroup);
 	mEndDateButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEndDateButton,
-	      i18n("Repeat the alarm until the date/time specified"));
+	      i18n("Repeat the alarm until the date/time specified.\n\n"
+	           "Note: This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence."));
 	mEndDateEdit = new DateEdit(mRangeButtonGroup);
 	mEndDateEdit->setFixedSize(mEndDateEdit->sizeHint());
 	mEndDateEdit->setReadOnly(mReadOnly);
@@ -333,6 +335,15 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 		      i18n("Remove the currently highlighted item from the exceptions list"));
 		layout->addWidget(mDeleteExceptionButton);
 	}
+
+	// Sub-repetition button
+	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), true, this);
+	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
+	mSubRepetition->setReadOnly(mReadOnly);
+	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
+	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
+	QWhatsThis::add(mSubRepetition, i18n("Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
+	topLayout->addWidget(mSubRepetition);
 
 	mNoEmitTypeChanged = false;
 }
@@ -433,6 +444,7 @@ void RecurrenceEdit::periodClicked(int id)
 			mRepeatCountButton->setEnabled(!atLogin);
 		}
 		rangeTypeClicked();
+		mSubRepetition->setEnabled(!(none || atLogin));
 		if (!mNoEmitTypeChanged)
 			emit typeChanged(mRuleButtonType);
 	}
@@ -467,6 +479,55 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 	else
 		mRuleButtonGroup->selected()->setFocus();
 	emit shown();
+}
+ 
+ /******************************************************************************
+* Return the sub-repetition count within the recurrence, i.e. the number of
+* repetitions after the main recurrence.
+*/
+int RecurrenceEdit::subRepeatCount(int* subRepeatInterval) const
+{
+	int count = (mRuleButtonType >= SUBDAILY) ? mSubRepetition->count() : 0;
+	if (subRepeatInterval)
+		*subRepeatInterval = count ? mSubRepetition->interval() : 0;
+	return count;
+}
+
+/******************************************************************************
+*  Called when the Sub-Repetition button has been pressed to display the
+*  sub-repetition dialog.
+*  Alarm repetition has the following restrictions:
+*  1) Not allowed for a repeat-at-login alarm
+*  2) For a date-only alarm, the repeat interval must be a whole number of days.
+*  3) The overall repeat duration must be less than the recurrence interval.
+*/
+void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
+{
+	int maxDuration;
+	switch (mRuleButtonType)
+	{
+		case RecurrenceEdit::NO_RECUR:
+		case RecurrenceEdit::AT_LOGIN:   // alarm repeat not allowed
+			maxDuration = 0;
+			break;
+		default:          // repeat duration must be less than recurrence interval
+		{
+			KAEvent event;
+			updateEvent(event, false);
+			maxDuration = event.longestRecurrenceInterval() - reminderMinutes - 1;
+			break;
+		}
+	}
+	mSubRepetition->initialise(mSubRepetition->interval(), mSubRepetition->count(), dateOnly, maxDuration);
+	mSubRepetition->setEnabled(mRuleButtonType >= SUBDAILY && maxDuration);
+}
+
+/******************************************************************************
+* Activate the sub-repetition dialog.
+*/
+void RecurrenceEdit::activateSubRepetition()
+{
+	mSubRepetition->activate();
 }
 
 /******************************************************************************
@@ -806,6 +867,9 @@ void RecurrenceEdit::set(const KAEvent& event)
 		mExceptionDateList->insertItem(KGlobal::locale()->formatDate(*it));
 	enableExceptionButtons();
 
+	// Get repetition within recurrence
+	mSubRepetition->set(event.repeatInterval(), event.repeatCount());
+
 	rangeTypeClicked();
 
 	saveState();
@@ -903,8 +967,16 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	if (adjustStart)
 		event.setFirstRecurrence();
 
+	// Set up repetition within the recurrence.
+	// N.B. This requires the main recurrence to be set up first.
+	int count = mSubRepetition->count();
+	if (mRuleButtonType < SUBDAILY)
+		count = 0;
+	event.setRepetition(mSubRepetition->interval(), count);
+
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);
+
 	event.setUpdated();
 }
 
@@ -918,10 +990,12 @@ void RecurrenceEdit::saveState()
 		mRule->saveState();
 	mSavedRangeButton = mRangeButtonGroup->selected();
 	if (mSavedRangeButton == mRepeatCountButton)
-		mSavedRepeatCount = mRepeatCountEntry->value();
+		mSavedRecurCount = mRepeatCountEntry->value();
 	else if (mSavedRangeButton == mEndDateButton)
 		mSavedEndDateTime.set(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mEndAnyTimeCheckBox->isChecked());
 	mSavedExceptionDates = mExceptionDates;
+	mSavedRepeatInterval = mSubRepetition->interval();
+	mSavedRepeatCount    = mSubRepetition->count();
 }
 
 /******************************************************************************
@@ -934,12 +1008,14 @@ bool RecurrenceEdit::stateChanged() const
 	||  mRule  &&  mRule->stateChanged())
 		return true;
 	if (mSavedRangeButton == mRepeatCountButton
-	&&  mSavedRepeatCount != mRepeatCountEntry->value())
+	&&  mSavedRecurCount  != mRepeatCountEntry->value())
 		return true;
 	if (mSavedRangeButton == mEndDateButton
 	&&  mSavedEndDateTime != DateTime(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mEndAnyTimeCheckBox->isChecked()))
 		return true;
-	if (mSavedExceptionDates != mExceptionDates)
+	if (mSavedExceptionDates != mExceptionDates
+	||  mSavedRepeatInterval != mSubRepetition->interval()
+	||  mSavedRepeatCount    != mSubRepetition->count())
 		return true;
 	return false;
 }
