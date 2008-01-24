@@ -23,6 +23,7 @@
 #include <qlayout.h>
 #include <qwhatsthis.h>
 
+#include <kdebug.h>
 #include <kdialog.h>
 #include <klocale.h>
 
