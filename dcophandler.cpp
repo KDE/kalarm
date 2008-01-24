@@ -65,13 +65,13 @@ bool DcopHandler::triggerEvent(const QString& url,const QString& eventId)
 bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
                                   const KURL& audioFile, int reminderMins, const QString& recurrence,
-                                  int repeatInterval, int repeatCount)
+                                  int subRepeatInterval, int subRepeatCount)
 {
 	DateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur, repeatInterval, repeatCount);
+	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, audioFile, reminderMins, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DcopHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
@@ -100,13 +100,13 @@ bool DcopHandler::scheduleMessage(const QString& message, const QString& startDa
 
 bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
                                const KURL& audioFile, int reminderMins, const QString& recurrence,
-                               int repeatInterval, int repeatCount)
+                               int subRepeatInterval, int subRepeatCount)
 {
 	DateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur, repeatInterval, repeatCount);
+	return scheduleFile(file, start, lateCancel, flags, bgColor, audioFile, reminderMins, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, int lateCancel, unsigned flags, const QString& bgColor,
@@ -130,13 +130,13 @@ bool DcopHandler::scheduleFile(const KURL& file, const QString& startDateTime, i
 }
 
 bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
-                                  const QString& recurrence, int repeatInterval, int repeatCount)
+                                  const QString& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	DateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleCommand(commandLine, start, lateCancel, flags, recur, repeatInterval, repeatCount);
+	return scheduleCommand(commandLine, start, lateCancel, flags, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& startDateTime, int lateCancel, unsigned flags,
@@ -163,13 +163,13 @@ bool DcopHandler::scheduleCommand(const QString& commandLine, const QString& sta
 
 bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                 const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
-                                const QString& recurrence, int repeatInterval, int repeatCount)
+                                const QString& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	DateTime start;
 	KARecurrence recur;
-	if (!convertRecurrence(start, recur, startDateTime, recurrence))
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval))
 		return false;
-	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, repeatInterval, repeatCount);
+	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, subRepeatInterval, subRepeatCount);
 }
 
 bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
@@ -211,7 +211,7 @@ bool DcopHandler::editNew(const QString& templateName)
 bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                   const KURL& audioFile, int reminderMins, const KARecurrence& recurrence,
-                                  int repeatInterval, int repeatCount)
+                                  int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	QColor bg = convertBgColour(bgColor);
@@ -241,7 +241,7 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 		}
 	}
 	return theApp()->scheduleEvent(KAEvent::MESSAGE, message, start.dateTime(), lateCancel, kaEventFlags, bg, fg, font,
-	                               audioFile.url(), -1, reminderMins, recurrence, repeatInterval, repeatCount);
+	                               audioFile.url(), -1, reminderMins, recurrence, subRepeatInterval, subRepeatCount);
 }
 
 /******************************************************************************
@@ -250,14 +250,14 @@ bool DcopHandler::scheduleMessage(const QString& message, const DateTime& start,
 bool DcopHandler::scheduleFile(const KURL& file,
                                const DateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                const KURL& audioFile, int reminderMins, const KARecurrence& recurrence,
-                               int repeatInterval, int repeatCount)
+                               int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	QColor bg = convertBgColour(bgColor);
 	if (!bg.isValid())
 		return false;
 	return theApp()->scheduleEvent(KAEvent::FILE, file.url(), start.dateTime(), lateCancel, kaEventFlags, bg, Qt::black, QFont(),
-	                               audioFile.url(), -1, reminderMins, recurrence, repeatInterval, repeatCount);
+	                               audioFile.url(), -1, reminderMins, recurrence, subRepeatInterval, subRepeatCount);
 }
 
 /******************************************************************************
@@ -265,11 +265,11 @@ bool DcopHandler::scheduleFile(const KURL& file,
 */
 bool DcopHandler::scheduleCommand(const QString& commandLine,
                                   const DateTime& start, int lateCancel, unsigned flags,
-                                  const KARecurrence& recurrence, int repeatInterval, int repeatCount)
+                                  const KARecurrence& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount);
+	                               QString::null, -1, 0, recurrence, subRepeatInterval, subRepeatCount);
 }
 
 /******************************************************************************
@@ -278,7 +278,7 @@ bool DcopHandler::scheduleCommand(const QString& commandLine,
 bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
                                 const QString& message, const QString& attachments,
                                 const DateTime& start, int lateCancel, unsigned flags,
-                                const KARecurrence& recurrence, int repeatInterval, int repeatCount)
+                                const KARecurrence& recurrence, int subRepeatInterval, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	uint senderId = 0;
@@ -311,7 +311,7 @@ bool DcopHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 		return false;
 	}
 	return theApp()->scheduleEvent(KAEvent::EMAIL, message, start.dateTime(), lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
-	                               QString::null, -1, 0, recurrence, repeatInterval, repeatCount, senderId, addrs, subject, atts);
+	                               QString::null, -1, 0, recurrence, subRepeatInterval, subRepeatCount, senderId, addrs, subject, atts);
 }
 
 
@@ -387,12 +387,20 @@ QColor DcopHandler::convertBgColour(const QString& bgColor)
 }
 
 bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, 
-                                    const QString& startDateTime, const QString& icalRecurrence)
+                                    const QString& startDateTime, const QString& icalRecurrence,
+                                    int& subRepeatInterval)
 {
 	start = convertStartDateTime(startDateTime);
 	if (!start.isValid())
 		return false;
-	return recurrence.set(icalRecurrence);
+	if (!recurrence.set(icalRecurrence))
+		return false;
+	if (subRepeatInterval  &&  recurrence.type() == KARecurrence::NO_RECUR)
+	{
+		subRepeatInterval = 0;
+		kdWarning(5950) << "DCOP call: no recurrence specified, so sub-repetition ignored" << endl;
+	}
+	return true;
 }
 
 bool DcopHandler::convertRecurrence(DateTime& start, KARecurrence& recurrence, const QString& startDateTime,
@@ -450,7 +458,7 @@ bool DcopHandler::convertRecurrence(KARecurrence& recurrence, const DateTime& st
 		case YEARLY:    type = KARecurrence::ANNUAL_DATE;  break;
 			break;
 		default:
-			kdError(5950) << "DCOP call: invalid repeat type: " << recurType << endl;
+			kdError(5950) << "DCOP call: invalid recurrence type: " << recurType << endl;
 			return false;
 	}
 	recurrence.set(type, recurInterval, recurCount, start, end);

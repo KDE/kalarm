@@ -44,8 +44,8 @@ const QCString APPNAME("KALARM");
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
-QString KAEvent::calVersionString()  { return QString::fromLatin1("1.4.14"); }
-int     KAEvent::calVersion()        { return KAlarm::Version(1,4,14); }
+QString KAEvent::calVersionString()  { return QString::fromLatin1("1.5.0"); }
+int     KAEvent::calVersion()        { return KAlarm::Version(1,5,0); }
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -527,6 +527,8 @@ void KAEvent::set(const Event& event)
 		if (nextRepeat <= mRepeatCount)
 			mNextRepeat = nextRepeat;
 	}
+	else
+		checkRepetition();
 
 	if (mMainExpired  &&  deferralOffset.asSeconds()  &&  checkRecur() != KARecurrence::NO_RECUR)
 	{
@@ -801,9 +803,16 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mFgColour               = fg;
 	mFont                   = font;
 	mAlarmCount             = 1;
-	mLateCancel             = lateCancel;     // do this before set(flags)
-	mDeferral               = NO_DEFERRAL;    // do this before set(flags)
-	set(flags);
+	mLateCancel             = lateCancel;     // do this before setting flags
+	mDeferral               = NO_DEFERRAL;    // do this before setting flags
+
+	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
+	mStartDateTime.setDateOnly(flags & ANY_TIME);
+	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
+	mCommandXterm           = flags & EXEC_IN_XTERM;
+	mCopyToKOrganizer       = flags & COPY_KORGANIZER;
+	mEnabled                = !(flags & DISABLED);
+
 	mKMailSerialNumber      = 0;
 	mReminderMinutes        = 0;
 	mArchiveReminderMinutes = 0;
@@ -901,27 +910,6 @@ void KAEvent::setReminder(int minutes, bool onceOnly)
 }
 
 /******************************************************************************
- * Reinitialise the start date/time by adjusting its date part, and setting
- * the next scheduled alarm to the new start date/time.
- */
-void KAEvent::adjustStartDate(const QDate& d)
-{
-	if (mStartDateTime.isDateOnly())
-	{
-		mStartDateTime = d;
-		if (mRecurrence)
-			mRecurrence->setStartDate(d);
-	}
-	else
-	{
-		mStartDateTime.set(d, mStartDateTime.time());
-		if (mRecurrence)
-			mRecurrence->setStartDateTime(mStartDateTime.dateTime());
-	}
-	mNextMainDateTime = mStartDateTime;
-}
-
-/******************************************************************************
  * Return the time of the next scheduled occurrence of the event.
  * Reminders and deferred reminders can optionally be ignored.
  */
@@ -1001,17 +989,6 @@ KAEvent::Status KAEvent::uidStatus(const QString& uid)
 	if (uid.find(KORGANIZER_UID) > 0)
 		return KORGANIZER;
 	return ACTIVE;
-}
-
-void KAEvent::set(int flags)
-{
-	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
-	mStartDateTime.setDateOnly(flags & ANY_TIME);
-	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
-	mCommandXterm     = flags & EXEC_IN_XTERM;
-	mCopyToKOrganizer = flags & COPY_KORGANIZER;
-	mEnabled          = !(flags & DISABLED);
-	mUpdated          = true;
 }
 
 int KAEvent::flags() const
@@ -1867,7 +1844,7 @@ void KAEvent::reinstateFromDisplaying(const KAEvent& dispEvent)
 
 /******************************************************************************
  * Determine whether the event will occur after the specified date/time.
- * If 'includeRepetitions' is true and the alarm has a simple repetition, it
+ * If 'includeRepetitions' is true and the alarm has a sub-repetition, it
  * returns true if any repetitions occur after the specified date/time.
  */
 bool KAEvent::occursAfter(const QDateTime& preDateTime, bool includeRepetitions) const
@@ -1938,13 +1915,13 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 
 	if (type != NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != IGNORE_REPETITION)
 	{
-		// The next occurrence is a simple repetition
+		// The next occurrence is a sub-repetition
 		int repetition = result.secsTo(preDateTime) / repeatSecs + 1;
 		DateTime repeatDT = result.addSecs(repetition * repeatSecs);
 		if (recurs)
 		{
 			// We've found a recurrence before the specified date/time, which has
-			// a simple repetition after the date/time.
+			// a sub-repetition after the date/time.
 			// However, if the intervals between recurrences vary, we could possibly
 			// have missed a later recurrence, which fits the criterion, so check again.
 			DateTime dt;
@@ -1955,7 +1932,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 				result = dt;
 				if (includeRepetitions == RETURN_REPETITION  &&  result <= preDateTime)
 				{
-					// The next occurrence is a simple repetition
+					// The next occurrence is a sub-repetition
 					int repetition = result.secsTo(preDateTime) / repeatSecs + 1;
 					result = result.addSecs(repetition * repeatSecs);
 					type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
@@ -1965,7 +1942,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 		}
 		if (includeRepetitions == RETURN_REPETITION)
 		{
-			// The next occurrence is a simple repetition
+			// The next occurrence is a sub-repetition
 			result = repeatDT;
 			type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 		}
@@ -1976,7 +1953,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const QDateTime& preDateTime, DateTim
 /******************************************************************************
  * Get the date/time of the last previous occurrence of the event, before the
  * specified date/time.
- * If 'includeRepetitions' is true and the alarm has a simple repetition, the
+ * If 'includeRepetitions' is true and the alarm has a sub-repetition, the
  * last previous repetition is returned if appropriate.
  * 'result' = date/time of previous occurrence, or invalid date/time if none.
  */
@@ -2039,7 +2016,7 @@ KAEvent::OccurType KAEvent::previousOccurrence(const QDateTime& afterDateTime, D
  * Set the date/time of the event to the next scheduled occurrence after the
  * specified date/time, provided that this is later than its current date/time.
  * Any reminder alarm is adjusted accordingly.
- * If the alarm has a simple repetition, and a repetition of a previous
+ * If the alarm has a sub-repetition, and a repetition of a previous
  * recurrence occurs after the specified date/time, that repetition is set as
  * the next occurrence.
  */
@@ -2094,7 +2071,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const QDateTime& preDateTime)
 		int secs = dt.dateTime().secsTo(preDateTime);
 		if (secs >= 0)
 		{
-			// The next occurrence is a simple repetition.
+			// The next occurrence is a sub-repetition.
 			type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 			mNextRepeat = (secs / (60 * mRepeatInterval)) + 1;
 			// Repetitions can't have a reminder, so remove any.
@@ -2260,12 +2237,12 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 	else
 		mRecurrence = 0;
 
-	// Adjust simple repetition values to fit the recurrence
+	// Adjust sub-repetition values to fit the recurrence
 	setRepetition(mRepeatInterval, mRepeatCount);
 }
 
 /******************************************************************************
-*  Initialise the event's simple repetition.
+*  Initialise the event's sub-repetition.
 *  The repetition length is adjusted if necessary to fit any recurrence interval.
 *  Reply = false if a non-daily interval was specified for a date-only recurrence.
 */
@@ -2277,6 +2254,7 @@ bool KAEvent::setRepetition(int interval, int count)
 	mNextRepeat     = 0;
 	if (interval > 0  &&  count > 0  &&  !mRepeatAtLogin)
 	{
+		Q_ASSERT(checkRecur() != KARecurrence::NO_RECUR);
 		if (interval % 1440  &&  mStartDateTime.isDateOnly())
 			return false;    // interval must be in units of days for date-only alarms
 		if (checkRecur() != KARecurrence::NO_RECUR)
@@ -2534,6 +2512,18 @@ int KAEvent::recurInterval() const
 	return 0;
 }
 
+/******************************************************************************
+* Validate the event's alarm sub-repetition data, correcting any
+* inconsistencies (which should never occur!).
+*/
+void KAEvent::checkRepetition() const
+{
+	if (mRepeatCount  &&  !mRepeatInterval)
+		const_cast<KAEvent*>(this)->mRepeatCount = 0;
+	if (!mRepeatCount  &&  mRepeatInterval)
+		const_cast<KAEvent*>(this)->mRepeatInterval = 0;
+}
+
 #if 0
 /******************************************************************************
  * Convert a QValueList<WDayPos> to QValueList<MonthPos>.
@@ -2717,8 +2707,8 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 	bool pre_1_3_0 = (version < KAlarm::Version(1,3,0));
 	bool pre_1_3_1 = (version < KAlarm::Version(1,3,1));
 	bool pre_1_4_14 = (version < KAlarm::Version(1,4,14));
-	bool pre_1_4_22 = (version < KAlarm::Version(1,4,22));
-	Q_ASSERT(calVersion() == KAlarm::Version(1,4,14));
+	bool pre_1_5_0 = (version < KAlarm::Version(1,5,0));
+	Q_ASSERT(calVersion() == KAlarm::Version(1,5,0));
 
 	QDateTime dt0(QDate(1970,1,1), QTime(0,0,0));
 	QTime startOfDay = Preferences::startOfDay();
@@ -3082,11 +3072,12 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 			}
 		}
 		
-		if (pre_1_4_22)
+		if (pre_1_5_0)
 		{
 			/*
-			 * It's a KAlarm pre-1.4.22 calendar file.
+			 * It's a KAlarm pre-1.5.0 calendar file.
 			 * Convert email identity names to uoids.
+			 * Convert simple repetitions without a recurrence, to a recurrence.
 			 */
 			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
 			{
@@ -3099,8 +3090,69 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 					alarm->setCustomProperty(APPNAME, EMAIL_ID_PROPERTY, QString::number(id));
 				alarm->removeCustomProperty(APPNAME, KMAIL_ID_PROPERTY);
 			}
+			convertRepetition(event);
 		}
 	}
+}
+
+/******************************************************************************
+* If the calendar was written by a pre-1.4.22 version of KAlarm, or another
+* program, convert simple repetitions in events without a recurrence, to a
+* recurrence.
+* Reply = true if any conversions were done.
+*/
+void KAEvent::convertRepetitions(KCal::CalendarLocal& calendar)
+{
+
+	Event::List events = calendar.rawEvents();
+	for (Event::List::ConstIterator ev = events.begin();  ev != events.end();  ++ev)
+		convertRepetition(*ev);
+}
+
+/******************************************************************************
+* Convert simple repetitions in an event without a recurrence, to a
+* recurrence. Repetitions which are an exact multiple of 24 hours are converted
+* to daily recurrences; else they are converted to minutely recurrences. Note
+* that daily and minutely recurrences produce different results when they span
+* a daylight saving time change.
+* Reply = true if any conversions were done.
+*/
+bool KAEvent::convertRepetition(KCal::Event* event)
+{
+	Alarm::List alarms = event->alarms();
+	if (alarms.isEmpty())
+		return false;
+	Recurrence* recur = event->recurrence();   // guaranteed to return non-null
+	if (!recur->doesRecur())
+		return false;
+	bool converted = false;
+	bool readOnly = event->isReadOnly();
+	for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
+	{
+		Alarm* alarm = *alit;
+		if (alarm->repeatCount() > 0  &&  alarm->snoozeTime() > 0)
+		{
+			if (!converted)
+			{
+				if (readOnly)
+					event->setReadOnly(false);
+				if (alarm->snoozeTime() % (24*3600))
+					recur->setMinutely(alarm->snoozeTime());
+				else
+					recur->setDaily(alarm->snoozeTime() / (24*3600));
+				recur->setDuration(alarm->repeatCount() + 1);
+				converted = true;
+			}
+			alarm->setRepeatCount(0);
+			alarm->setSnoozeTime(0);
+		}
+	}
+	if (converted)
+	{
+		if (readOnly)
+			event->setReadOnly(true);
+	}
+	return converted;
 }
 
 #ifndef NDEBUG

@@ -172,12 +172,12 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	layout->addWidget(mLateCancel);
 	layout->addStretch();
 
-	// Simple repetition button
-	mSimpleRepetition = new RepetitionButton(i18n("Simple Repetition"), false, group);
-	mSimpleRepetition->setFixedSize(mSimpleRepetition->sizeHint());
-	mSimpleRepetition->set(0, 0, true, 364*24*60);
-	QWhatsThis::add(mSimpleRepetition, i18n("Set up an additional alarm repetition"));
-	layout->addWidget(mSimpleRepetition);
+	// Sub-repetition button
+	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), false, group);
+	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
+	mSubRepetition->set(0, 0, true, 364*24*60);
+	QWhatsThis::add(mSubRepetition, i18n("Set up an additional alarm repetition"));
+	layout->addWidget(mSubRepetition);
 
 	// Set the values to their defaults
 	mFontColourButton->setDefaultFont();
@@ -317,7 +317,7 @@ QValueList<KAEvent> BirthdayDlg::events() const
 				QValueList<int> months;
 				months.append(date.month());
 				event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
-				event.setRepetition(mSimpleRepetition->interval(), mSimpleRepetition->count());
+				event.setRepetition(mSubRepetition->interval(), mSubRepetition->count());
 				event.setNextOccurrence(todayNoon);
 				if (reminder)
 					event.setReminder(reminder, false);

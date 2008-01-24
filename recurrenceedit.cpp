@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -36,6 +36,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kcalendarsystem.h>
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
@@ -53,6 +54,7 @@
 #include "karecurrence.h"
 #include "preferences.h"
 #include "radiobutton.h"
+#include "repetition.h"
 #include "spinbox.h"
 #include "timeedit.h"
 #include "timespinbox.h"
@@ -61,8 +63,6 @@ using namespace KCal;
 
 #include "recurrenceedit.moc"
 #include "recurrenceeditprivate.moc"
-
-static QString weekDayName(int day, const KLocale*);
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -246,7 +246,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mEndDateButton = new RadioButton(i18n("End &by:"), mRangeButtonGroup);
 	mEndDateButton->setReadOnly(mReadOnly);
 	QWhatsThis::add(mEndDateButton,
-	      i18n("Repeat the alarm until the date/time specified"));
+	      i18n("Repeat the alarm until the date/time specified.\n\n"
+	           "Note: This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence."));
 	mEndDateEdit = new DateEdit(mRangeButtonGroup);
 	mEndDateEdit->setFixedSize(mEndDateEdit->sizeHint());
 	mEndDateEdit->setReadOnly(mReadOnly);
@@ -333,6 +334,15 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 		      i18n("Remove the currently highlighted item from the exceptions list"));
 		layout->addWidget(mDeleteExceptionButton);
 	}
+
+	// Sub-repetition button
+	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), true, this);
+	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
+	mSubRepetition->setReadOnly(mReadOnly);
+	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
+	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
+	QWhatsThis::add(mSubRepetition, i18n("Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
+	topLayout->addWidget(mSubRepetition);
 
 	mNoEmitTypeChanged = false;
 }
@@ -433,6 +443,7 @@ void RecurrenceEdit::periodClicked(int id)
 			mRepeatCountButton->setEnabled(!atLogin);
 		}
 		rangeTypeClicked();
+		mSubRepetition->setEnabled(!(none || atLogin));
 		if (!mNoEmitTypeChanged)
 			emit typeChanged(mRuleButtonType);
 	}
@@ -467,6 +478,55 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 	else
 		mRuleButtonGroup->selected()->setFocus();
 	emit shown();
+}
+ 
+ /******************************************************************************
+* Return the sub-repetition count within the recurrence, i.e. the number of
+* repetitions after the main recurrence.
+*/
+int RecurrenceEdit::subRepeatCount(int* subRepeatInterval) const
+{
+	int count = (mRuleButtonType >= SUBDAILY) ? mSubRepetition->count() : 0;
+	if (subRepeatInterval)
+		*subRepeatInterval = count ? mSubRepetition->interval() : 0;
+	return count;
+}
+
+/******************************************************************************
+*  Called when the Sub-Repetition button has been pressed to display the
+*  sub-repetition dialog.
+*  Alarm repetition has the following restrictions:
+*  1) Not allowed for a repeat-at-login alarm
+*  2) For a date-only alarm, the repeat interval must be a whole number of days.
+*  3) The overall repeat duration must be less than the recurrence interval.
+*/
+void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
+{
+	int maxDuration;
+	switch (mRuleButtonType)
+	{
+		case RecurrenceEdit::NO_RECUR:
+		case RecurrenceEdit::AT_LOGIN:   // alarm repeat not allowed
+			maxDuration = 0;
+			break;
+		default:          // repeat duration must be less than recurrence interval
+		{
+			KAEvent event;
+			updateEvent(event, false);
+			maxDuration = event.longestRecurrenceInterval() - reminderMinutes - 1;
+			break;
+		}
+	}
+	mSubRepetition->initialise(mSubRepetition->interval(), mSubRepetition->count(), dateOnly, maxDuration);
+	mSubRepetition->setEnabled(mRuleButtonType >= SUBDAILY && maxDuration);
+}
+
+/******************************************************************************
+* Activate the sub-repetition dialog.
+*/
+void RecurrenceEdit::activateSubRepetition()
+{
+	mSubRepetition->activate();
 }
 
 /******************************************************************************
@@ -806,6 +866,9 @@ void RecurrenceEdit::set(const KAEvent& event)
 		mExceptionDateList->insertItem(KGlobal::locale()->formatDate(*it));
 	enableExceptionButtons();
 
+	// Get repetition within recurrence
+	mSubRepetition->set(event.repeatInterval(), event.repeatCount());
+
 	rangeTypeClicked();
 
 	saveState();
@@ -903,8 +966,16 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	if (adjustStart)
 		event.setFirstRecurrence();
 
+	// Set up repetition within the recurrence.
+	// N.B. This requires the main recurrence to be set up first.
+	int count = mSubRepetition->count();
+	if (mRuleButtonType < SUBDAILY)
+		count = 0;
+	event.setRepetition(mSubRepetition->interval(), count);
+
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);
+
 	event.setUpdated();
 }
 
@@ -918,10 +989,12 @@ void RecurrenceEdit::saveState()
 		mRule->saveState();
 	mSavedRangeButton = mRangeButtonGroup->selected();
 	if (mSavedRangeButton == mRepeatCountButton)
-		mSavedRepeatCount = mRepeatCountEntry->value();
+		mSavedRecurCount = mRepeatCountEntry->value();
 	else if (mSavedRangeButton == mEndDateButton)
 		mSavedEndDateTime.set(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mEndAnyTimeCheckBox->isChecked());
 	mSavedExceptionDates = mExceptionDates;
+	mSavedRepeatInterval = mSubRepetition->interval();
+	mSavedRepeatCount    = mSubRepetition->count();
 }
 
 /******************************************************************************
@@ -934,12 +1007,14 @@ bool RecurrenceEdit::stateChanged() const
 	||  mRule  &&  mRule->stateChanged())
 		return true;
 	if (mSavedRangeButton == mRepeatCountButton
-	&&  mSavedRepeatCount != mRepeatCountEntry->value())
+	&&  mSavedRecurCount  != mRepeatCountEntry->value())
 		return true;
 	if (mSavedRangeButton == mEndDateButton
 	&&  mSavedEndDateTime != DateTime(QDateTime(mEndDateEdit->date(), mEndTimeEdit->time()), mEndAnyTimeCheckBox->isChecked()))
 		return true;
-	if (mSavedExceptionDates != mExceptionDates)
+	if (mSavedExceptionDates != mExceptionDates
+	||  mSavedRepeatInterval != mSubRepetition->interval()
+	||  mSavedRepeatCount    != mSubRepetition->count())
 		return true;
 	return false;
 }
@@ -1056,11 +1131,11 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
 	// Save the first day of the week, just in case it changes while the dialog is open.
 	QWidget* box = new QWidget(this);   // this is to control the QWhatsThis text display area
 	QGridLayout* dgrid = new QGridLayout(box, 4, 2, 0, KDialog::spacingHint());
-	const KLocale* locale = KGlobal::locale();
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayBox[i] = new CheckBox(weekDayName(day, locale), box);
+		mDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
 		mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
 		mDayBox[i]->setReadOnly(readOnly);
 		dgrid->addWidget(mDayBox[i], i%4, i/4, Qt::AlignAuto);
@@ -1250,11 +1325,11 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 	mPosButton->setFocusWidget(mWeekCombo);
 
 	mDayOfWeekCombo = new ComboBox(false, box);
-	const KLocale* locale = KGlobal::locale();
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
 	for (int i = 0;  i < 7;  ++i)
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
-		mDayOfWeekCombo->insertItem(weekDayName(day, locale));
+		mDayOfWeekCombo->insertItem(calendar->weekDayName(day));
 	}
 	mDayOfWeekCombo->setReadOnly(readOnly);
 	QWhatsThis::add(mDayOfWeekCombo, i18n("Select the day of the week on which to repeat the alarm"));
@@ -1401,24 +1476,14 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent, const char* name)
 	QWidget* w = new QWidget(this);   // this is to control the QWhatsThis text display area
 	hlayout->addWidget(w, 1, Qt::AlignAuto);
 	QGridLayout* grid = new QGridLayout(w, 4, 3, 0, KDialog::spacingHint());
-	const KLocale* locale = KGlobal::locale();
-	mMonthBox[0] = new CheckBox(locale->translate("January"), w);
-	mMonthBox[1] = new CheckBox(locale->translate("February"), w);
-	mMonthBox[2] = new CheckBox(locale->translate("March"), w);
-	mMonthBox[3] = new CheckBox(locale->translate("April"), w);
-	mMonthBox[4] = new CheckBox(locale->translate("May"), w);
-	mMonthBox[5] = new CheckBox(locale->translate("June"), w);
-	mMonthBox[6] = new CheckBox(locale->translate("July"), w);
-	mMonthBox[7] = new CheckBox(locale->translate("August"), w);
-	mMonthBox[8] = new CheckBox(locale->translate("September"), w);
-	mMonthBox[9] = new CheckBox(locale->translate("October"), w);
-	mMonthBox[10] = new CheckBox(locale->translate("November"), w);
-	mMonthBox[11] = new CheckBox(locale->translate("December"), w);
+	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+	int year = QDate::currentDate().year();
 	for (int i = 0;  i < 12;  ++i)
 	{
+		mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, year, true), w);
 		mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());
 		mMonthBox[i]->setReadOnly(readOnly);
-		grid->addWidget(mMonthBox[i], i%4, i/4, Qt::AlignAuto);
+		grid->addWidget(mMonthBox[i], i%3, i/3, Qt::AlignAuto);
 	}
 	connect(mMonthBox[1], SIGNAL(toggled(bool)), SLOT(enableFeb29()));
 	w->setFixedHeight(w->sizeHint().height());
@@ -1582,19 +1647,4 @@ bool YearlyRule::stateChanged() const
 	return (MonthYearRule::stateChanged()
 	    ||  mSavedMonths    != months()
 	    ||  mSavedFeb29Type != feb29Type());
-}
-
-QString weekDayName(int day, const KLocale* locale)
-{
-	switch (day)
-	{
-		case 1: return locale->translate("Monday");
-		case 2: return locale->translate("Tuesday");
-		case 3: return locale->translate("Wednesday");
-		case 4: return locale->translate("Thursday");
-		case 5: return locale->translate("Friday");
-		case 6: return locale->translate("Saturday");
-		case 7: return locale->translate("Sunday");
-	}
-	return QString();
 }

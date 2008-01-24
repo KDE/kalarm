@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2005,2008 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -42,6 +42,7 @@ class RadioButton;
 class DateEdit;
 class TimeEdit;
 class ButtonGroup;
+class RepetitionButton;
 class KAEvent;
 class Rule;
 class NoRule;
@@ -71,11 +72,14 @@ class RecurrenceEdit : public QFrame
 		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }
+		int           subRepeatCount(int* subRepeatInterval = 0) const;
+		void          setSubRepetition(int reminderMinutes, bool dateOnly);
 		void          setStartDate(const QDate&, const QDate& today);
 		void          setDefaultEndDate(const QDate&);
 		void          setEndDateTime(const DateTime&);
 		DateTime      endDateTime() const;
 		bool          stateChanged() const;
+		void          activateSubRepetition();
 
 		static QString i18n_Norecur();           // text of 'No recurrence' selection, lower case
 		static QString i18n_NoRecur();           // text of 'No Recurrence' selection, initial capitals
@@ -99,6 +103,7 @@ class RecurrenceEdit : public QFrame
 		void          shown();
 		void          typeChanged(int recurType);   // returns a RepeatType value
 		void          frequencyChanged();
+		void          repeatNeedsInitialisation();
 
 	protected:
 		virtual void  showEvent(QShowEvent*);
@@ -169,15 +174,18 @@ class RecurrenceEdit : public QFrame
 
 		// Current start date and time
 		QDateTime         mCurrStartDateTime;
+		RepetitionButton* mSubRepetition;
 		bool              mNoEmitTypeChanged;        // suppress typeChanged() signal
 		bool              mReadOnly;
 
 		// Initial state of non-rule controls
 		QButton*          mSavedRuleButton;          // which rule button was selected
 		QButton*          mSavedRangeButton;         // which range button was selected
-		int               mSavedRepeatCount;         // repeat count
+		int               mSavedRecurCount;          // recurrence repeat count
 		DateTime          mSavedEndDateTime;         // end date/time
 		QValueList<QDate> mSavedExceptionDates;      // exception dates
+		int               mSavedRepeatInterval;      // sub-repetition interval (via mSubRepetition button)
+		int               mSavedRepeatCount;         // sub-repetition count (via mSubRepetition button)
 };
 
 #endif // RECURRENCEEDIT_H
