@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -225,13 +225,12 @@ void KAEvent::set(const Event& event)
 	mArchiveReminderMinutes = 0;
 	mDeferDefaultMinutes    = 0;
 	mLateCancel             = 0;
-	mRepeatInterval         = 0;
-	mRepeatCount            = 0;
 	mKMailSerialNumber      = 0;
 	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
 	mFgColour               = QColor(0, 0, 0);          // and black foreground
 	mDefaultFont            = true;
 	mEnabled                = true;
+	clearRecur();
 	bool ok;
 	bool dateOnly = false;
 	const QStringList cats = event.categories();
@@ -351,7 +350,6 @@ void KAEvent::set(const Event& event)
 	mFadeVolume        = -1;
 	mFadeSeconds       = 0;
 	mReminderMinutes   = 0;
-	mNextRepeat        = 0;
 	mEmailFromIdentity = 0;
 	mText              = "";
 	mAudioFile         = "";
@@ -360,7 +358,6 @@ void KAEvent::set(const Event& event)
 	mEmailSubject      = "";
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
-	clearRecur();
 
 	// Extract data from all the event's alarms and index the alarms by sequence number
 	AlarmMap alarmMap;
@@ -817,9 +814,6 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mReminderMinutes        = 0;
 	mArchiveReminderMinutes = 0;
 	mDeferDefaultMinutes    = 0;
-	mRepeatInterval         = 0;
-	mRepeatCount            = 0;
-	mNextRepeat             = 0;
 	mArchiveRepeatAtLogin   = false;
 	mReminderOnceOnly       = false;
 	mDisplaying             = false;
@@ -2450,16 +2444,19 @@ bool KAEvent::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count
  */
 void KAEvent::clearRecur()
 {
-	mUpdated = true;
 	delete mRecurrence;
-	mRecurrence = 0;
+	mRecurrence     = 0;
+	mRepeatInterval = 0;
+	mRepeatCount    = 0;
+	mNextRepeat     = 0;
+	mUpdated        = true;
 }
 
 /******************************************************************************
- * Validate the event's recurrence and alarm repetition data, correcting any
- * inconsistencies (which should never occur!).
- * Reply = true if a recurrence (as opposed to a login repetition) exists.
- */
+* Validate the event's recurrence data, correcting any inconsistencies (which
+* should never occur!).
+* Reply = true if a recurrence (as opposed to a login repetition) exists.
+*/
 KARecurrence::Type KAEvent::checkRecur() const
 {
 	if (mRecurrence)
@@ -2477,10 +2474,7 @@ KARecurrence::Type KAEvent::checkRecur() const
 				return type;
 			default:
 				if (mRecurrence)
-				{
-					delete mRecurrence;     // this shouldn't exist!!
-					const_cast<KAEvent*>(this)->mRecurrence = 0;
-				}
+					const_cast<KAEvent*>(this)->clearRecur();  // recurrence shouldn't exist!!
 				break;
 		}
 	}
