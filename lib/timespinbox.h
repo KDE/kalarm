@@ -1,7 +1,7 @@
 /*
  *  timespinbox.h  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,7 +76,11 @@ class TimeSpinBox : public SpinBox2
 		/** Sets the maximum value which can be held in the spin box.
 		 *  @param minutes The maximum value expressed in minutes.
 		 */
-		void            setMaxValue(int minutes)     { SpinBox2::setMaxValue(minutes); }
+		virtual void    setMinValue(int minutes);
+		/** Sets the maximum value which can be held in the spin box.
+		 *  @param minutes The maximum value expressed in minutes.
+		 */
+		virtual void    setMaxValue(int minutes)     { SpinBox2::setMaxValue(minutes); }
 		/** Sets the maximum value which can be held in the spin box. */
 		void            setMaxValue(const QTime& t)  { SpinBox2::setMaxValue(t.hour()*60 + t.minute()); }
 		/** Returns the maximum value which can be held in the spin box. */

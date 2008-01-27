@@ -1,7 +1,7 @@
 /*
  *  timespinbox.cpp  -  time spinbox widget
  *  Program:  kalarm
- *  Copyright © 2001-2004,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2004,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -214,6 +214,15 @@ void TimeSpinBox::setValid(bool valid)
 		setSpecialValueText(QString::fromLatin1("**:**"));
 		SpinBox2::setValue(mMinimumValue - 1);
 	}
+}
+
+/******************************************************************************
+* Set the spin box's minimum value.
+*/
+void TimeSpinBox::setMinValue(int minutes)
+{
+        mMinimumValue = minutes;
+        SpinBox2::setMinValue(mMinimumValue - (mInvalid ? 1 : 0));
 }
 
 /******************************************************************************
