@@ -1,7 +1,7 @@
 /*
  *  repetition.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ void RepetitionButton::activate(bool waitForInitialisation)
 */
 void RepetitionButton::initialise(const Duration& interval, int count, bool dateOnly, int maxDuration)
 {
-	mInterval    = interval;
+	mInterval    = (maxDuration > 0 && interval.asSeconds()/60 > maxDuration) ? Duration(60) : interval;
 	mCount       = count;
 	mMaxDuration = maxDuration;
 	mDateOnly    = dateOnly;
@@ -305,7 +305,7 @@ int RepetitionDlg::count() const
 */
 void RepetitionDlg::intervalChanged(const KCal::Duration& interval)
 {
-	if (mTimeSelector->isChecked())
+	if (mTimeSelector->isChecked()  &&  interval.asSeconds() > 0)
 	{
 		mCount->setRange(1, (mMaxDuration >= 0 ? mMaxDuration / (interval.asSeconds()/60) : MAX_COUNT));
 		if (mCountButton->isChecked())
