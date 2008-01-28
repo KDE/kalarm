@@ -96,7 +96,7 @@ void RepetitionButton::activate(bool waitForInitialisation)
 */
 void RepetitionButton::initialise(int interval, int count, bool dateOnly, int maxDuration)
 {
-	mInterval    = interval;
+	mInterval    = (maxDuration > 0 && interval > maxDuration) ? 1 : interval;
 	mCount       = count;
 	mMaxDuration = maxDuration;
 	mDateOnly    = dateOnly;
@@ -294,7 +294,7 @@ int RepetitionDlg::count() const
 */
 void RepetitionDlg::intervalChanged(int minutes)
 {
-	if (mTimeSelector->isChecked())
+	if (mTimeSelector->isChecked()  &&  minutes > 0)
 	{
 		mCount->setRange(1, (mMaxDuration >= 0 ? mMaxDuration / minutes : MAX_COUNT));
 		if (mCountButton->isOn())
