@@ -6,4 +6,12 @@ The following bugs are known to exist in KAlarm:
 -- Bug 79247: Summer/winter time changes (daylight savings time changes), are
    not handled well. KAlarm needs to use time zones in scheduling alarms instead
    of a simple local time which it currently uses. This requires improved
-   timezone handling in kdelibs and libkcal.
+   timezone handling in kdelibs and libkcal. This is fixed in KAlarm version 1.9.
+
+The following bugs appear to be KAlarm bugs but are actually due to other software:
+
+-- System tray icon has an opaque background (KDE bug 122988)
+   In the system tray, the KAlarm icon sometimes does not have a transparent
+   background, but instead displays inside an opaque square set to the KDE window
+   background colour. This is due to a bug in the QtCurve style, and can be fixed
+   by choosing a different style.

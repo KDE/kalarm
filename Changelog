@@ -4,11 +4,13 @@ KAlarm Change Log
 - Replace simple repetitions with recurrence sub-repetitions, to save confusion.
 - Add option to enter reminder times in minutes, in addition to hours/minutes.
 - Replace alarm edit dialogue background colour selector with font/colour sample.
+- Rearrange yearly recurrence controls to reduce alarm edit dialogue height.
 - Store email unique IDs instead of names in email alarms to prevent problems if
   email IDs are renamed.
+
+=== Version 1.4.22 --- 27 January 2008 ===
 - Fix error "Sender verify failed (in reply to RCPT TO command)" using sendmail
   on some systems, by adding envelope sender address to emails.
-- Fix minimum value set in sub-repetition dialogue after recurrence type change.
 - Fix OpenSolaris build error.
 
 === Version 1.4.21 --- 19 December 2007 ===
