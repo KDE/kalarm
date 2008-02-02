@@ -183,7 +183,7 @@ MainWindow::MainWindow(bool restored)
 	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotDoubleClicked(const QModelIndex&)));
 	connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
-	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
+	                   SLOT(slotResourceStatusChanged()));
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
 	initActions();
 
@@ -197,6 +197,7 @@ MainWindow::MainWindow(bool restored)
 		else if (theApp()->trayWindow())
 			theApp()->trayWindow()->setAssocMainWindow(this);    // associate this window with the system tray icon
 	}
+	slotResourceStatusChanged();   // initialise action states now that window is registered
 }
 
 MainWindow::~MainWindow()
@@ -1231,7 +1232,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 * Called when the status of a resource has changed.
 * Enable or disable actions appropriately.
 */
-void MainWindow::slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)
+void MainWindow::slotResourceStatusChanged()
 {
 	// Find whether there are any writable resources
 	AlarmResources* resources = AlarmResources::instance();

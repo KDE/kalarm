@@ -116,6 +116,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
+	slotResourceStatusChanged();   // initialise action states
 }
 
 TrayWindow::~TrayWindow()
