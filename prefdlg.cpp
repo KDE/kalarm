@@ -400,20 +400,26 @@ MiscPrefTab::MiscPrefTab()
 		++index;
 	}
 
-	itemBox = new KHBox(group);
-	itemBox->setMargin(0);
-	grid->addWidget(itemBox, row + 1, 0, 1, 3, Qt::AlignLeft);
-	QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), itemBox);
+	// QHBox used here doesn't allow the KLineEdit to expand!?
+	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout->setSpacing(KDialog::spacingHint());
+	grid->addItem(hlayout, row + 1, 0, 1, 3);
+	QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), group);
+	hlayout->addWidget(radio);
 	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->addButton(radio, mXtermCount);
 	if (mXtermFirst < 0)
 		mXtermFirst = mXtermCount;   // note the id of the first button
-	mXtermCommand = new KLineEdit(itemBox);
-	itemBox->setWhatsThis(
+	mXtermCommand = new KLineEdit(group);
+	mXtermCommand->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+	hlayout->addWidget(mXtermCommand);
+	QString wt = 
 	      i18nc("@info:whatsthis", "Enter the full command line needed to execute a command in your chosen terminal window. "
 	           "By default the alarm's command string will be appended to what you enter here. "
-	           "See the <application>KAlarm</application> Handbook for details of special codes to tailor the command line."));
+	           "See the <application>KAlarm</application> Handbook for details of special codes to tailor the command line.");
+	radio->setWhatsThis(wt);
+	mXtermCommand->setWhatsThis(wt);
 
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
