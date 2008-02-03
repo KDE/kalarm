@@ -1,7 +1,7 @@
 /*
  *  resourceconfigdialog.cpp  -  KAlarm resource configuration dialog
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on configdialog.cpp in kdelibs/kresources,
  *  Copyright (c) 2002 Tobias Koenig <tokoe@kde.org>
  *  Copyright (c) 2002 Jan-Pascal van Best <janpascal@vanbest.org>
@@ -65,7 +65,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
   gbLayout->addWidget( mName, 0, 1 );
 
   mReadOnly = new QCheckBox(i18nc("@option:check", "Read-only"), generalGroupBox );
-  gbLayout->addWidget( mReadOnly, 1, 0 );
+  gbLayout->addWidget( mReadOnly, 1, 0, 1, 2 );
 
   mName->setText( mResource->resourceName() );
   mReadOnly->setChecked( mResource->readOnly() );
