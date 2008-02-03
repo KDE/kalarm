@@ -403,7 +403,7 @@ MiscPrefTab::MiscPrefTab()
 	// QHBox used here doesn't allow the KLineEdit to expand!?
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setSpacing(KDialog::spacingHint());
-	grid->addItem(hlayout, row + 1, 0, 1, 3);
+	grid->addLayout(hlayout, row + 1, 0, 1, 3, Qt::AlignLeft);
 	QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), group);
 	hlayout->addWidget(radio);
 	radio->setFixedSize(radio->sizeHint());
