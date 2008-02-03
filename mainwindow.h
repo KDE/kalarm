@@ -68,7 +68,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void               selectEvent(const QString& eventID);
 
 		static void        refresh();
-		static void        executeDragEnterEvent(QDragEnterEvent*);
+		static void        executeDragEnterEvent(QDragEnterEvent*, QWidget* recipient);
 		static void        executeDropEvent(MainWindow*, QDropEvent*);
 		static void        closeAll();
 		static MainWindow* toggleWindow(MainWindow*);

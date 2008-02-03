@@ -1075,26 +1075,22 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 */
 void MainWindow::dragEnterEvent(QDragEnterEvent* e)
 {
-	executeDragEnterEvent(e);
+	executeDragEnterEvent(e, this);
 }
 
 /******************************************************************************
 *  Called when the drag cursor enters a main or system tray window, to accept
 *  or reject the dragged object.
 */
-void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
+void MainWindow::executeDragEnterEvent(QDragEnterEvent* e, QWidget* recipient)
 {
-#if 0
 	const QMimeData* data = e->mimeData();
-	bool accept = KCal::ICalDrag::canDecode(data) ? !AlarmListView::dragging()   // don't accept "text/calendar" objects from KAlarm
+	bool accept = KCal::ICalDrag::canDecode(data) ? (e->source()->window() != recipient)   // don't accept "text/calendar" objects from this window
 	                                           :    data->hasText()
 	                                             || KUrl::List::canDecode(data)
 	                                             || KPIM::MailList::canDecode(data);
 	if (accept)
-		e->accept();
-	else
-		e->ignore();
-#endif
+		e->acceptProposedAction();
 }
 
 /******************************************************************************
@@ -1118,6 +1114,7 @@ static QString getMailHeader(const char* header, KMime::Content& content)
 */
 void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
+	kDebug() << "Formats:" << e->mimeData()->formats();
 	const QMimeData* data = e->mimeData();
 	KAEvent::Action action = KAEvent::MESSAGE;
 	QByteArray      bytes;

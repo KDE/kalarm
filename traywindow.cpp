@@ -219,7 +219,7 @@ void TrayWindow::slotActivated(QSystemTrayIcon::ActivationReason reason)
 */
 void TrayWindow::dragEnterEvent(QDragEnterEvent* e)
 {
-	MainWindow::executeDragEnterEvent(e);
+	MainWindow::executeDragEnterEvent(e, 0);
 }
 
 /******************************************************************************
