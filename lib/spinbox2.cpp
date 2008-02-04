@@ -55,11 +55,6 @@ SpinBox2::SpinBox2(QWidget* parent)
 	: QFrame(parent),
 	  mReverseWithLayout(true)
 {
-QPalette pal = palette();
-pal.setColor(backgroundRole(), Qt::red);
-pal.setColor(QPalette::Button, Qt::red);
-pal.setColor(QPalette::Base, Qt::red);
-setPalette(pal);
 	mUpdown2Frame = new QFrame(this);
 	mSpinboxFrame = new QFrame(this);
 	mUpdown2 = new ExtraSpinBox(mUpdown2Frame);
