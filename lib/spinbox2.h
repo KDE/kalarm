@@ -1,7 +1,7 @@
 /*
  *  spinbox2.h  -  spin box with extra pair of spin buttons
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -248,6 +248,7 @@ class SpinBox2 : public QFrame
 		mutable int      wUpdown2;        // width of second spin widget
 		mutable int      xUpdown2;        // x offset of visible area in 'mUpdown2'
 		mutable int      xSpinbox;        // x offset of visible area in 'mSpinbox'
+		mutable int      wPadding;        // width of margin beside spin widget
 		mutable int      wGap;            // gap between mUpdown2Frame and mSpinboxFrame
 
 	protected slots:

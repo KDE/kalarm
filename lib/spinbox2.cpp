@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,6 +55,11 @@ SpinBox2::SpinBox2(QWidget* parent)
 	: QFrame(parent),
 	  mReverseWithLayout(true)
 {
+QPalette pal = palette();
+pal.setColor(backgroundRole(), Qt::red);
+pal.setColor(QPalette::Button, Qt::red);
+pal.setColor(QPalette::Base, Qt::red);
+setPalette(pal);
 	mUpdown2Frame = new QFrame(this);
 	mSpinboxFrame = new QFrame(this);
 	mUpdown2 = new ExtraSpinBox(mUpdown2Frame);
@@ -269,10 +274,20 @@ void SpinBox2::arrange()
 {
 	getMetrics();
 	QRect arrowRect = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
+	QRect r(-xUpdown2, 0, mUpdown2->width(), height());
+	if (mRightToLeft)
+		arrowRect.setLeft(arrowRect.left() - wPadding);
+	else
+	{
+		r.setLeft(r.left() + wPadding);
+		arrowRect.setWidth(arrowRect.width() - wPadding);
+	}
 	mUpdown2Frame->setGeometry(arrowRect);
-	mUpdown2->setGeometry(-xUpdown2, 0, mUpdown2->width(), height());
-	mSpinboxFrame->setGeometry(style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height())));
+	mUpdown2->setGeometry(r);
+	r = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height()));
+	mSpinboxFrame->setGeometry(r);
 	mSpinbox->setGeometry(-xSpinbox, 0, mSpinboxFrame->width() + xSpinbox, height());
+	//kDebug(5950) << "arrowRect="<<arrowRect<<", mUpdown2Frame="<<mUpdown2Frame->geometry()<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
 	mSpinMirror->resize(wUpdown2, mUpdown2->height());
 	mSpinMirror->setGeometry(arrowRect);
 //mSpinMirror->setGeometry(QStyle::visualRect(QRect(0, 11, wUpdown2, height()), this));
@@ -291,11 +306,24 @@ void SpinBox2::getMetrics() const
 	rect      |= mUpdown2->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 	if (style()->inherits("PlastikStyle"))
 		rect.setLeft(rect.left() - 1);    // Plastik excludes left border from spin widget rectangle
-	xUpdown2 = mRightToLeft ? 0 : rect.left();
-	wUpdown2 = mUpdown2->width() - rect.left();
 	mSpinbox->initStyleOption(option);
-	xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
+	if (mRightToLeft)
+	{
+		wPadding = rect.left();
+		xUpdown2 = 0;
+		wUpdown2 = rect.right();
+		rect = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
+		xSpinbox = 0;
+	}
+	else
+	{
+		xUpdown2 = rect.left();
+		wUpdown2 = mUpdown2->width() - rect.left();
+		wPadding = mSpinbox->width() - rect.right();
+		xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
+	}
 	wGap = 0;
+	//kDebug(5950) << "rect="<<rect<<", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", xSpinbox="<<xSpinbox<<", wPadding"<<wPadding;
 
 	// Make style-specific adjustments for a better appearance
 	if (style()->inherits("QMotifPlusStyle"))
