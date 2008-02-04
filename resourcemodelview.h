@@ -1,7 +1,7 @@
 /*
  *  resourcemodelview.h  -  model/view classes for alarm resource lists
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,6 +54,7 @@ class ResourceModel : public QAbstractListModel
 		void             addResource(AlarmResource*);
 		void             updateResource(AlarmResource*);
 		void             slotStandardChanged(AlarmResource::Type);
+		void             slotLoaded(AlarmResource*, bool active);
 		void             slotStatusChanged(AlarmResource*, AlarmResources::Change);
 
 	private:

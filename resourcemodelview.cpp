@@ -54,6 +54,7 @@ ResourceModel::ResourceModel(QObject* parent)
 	connect(resources, SIGNAL(signalResourceModified(AlarmResource*)), SLOT(updateResource(AlarmResource*)));
 	connect(resources, SIGNAL(standardResourceChange(AlarmResource::Type)), SLOT(slotStandardChanged(AlarmResource::Type)));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
+	connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(slotLoaded(AlarmResource*, bool)));
 }
 
 int ResourceModel::rowCount(const QModelIndex& parent) const
@@ -282,6 +283,16 @@ void ResourceModel::slotStandardChanged(AlarmResource::Type type)
 			emit dataChanged(ix, ix);
 		}
 	}
+}
+
+/******************************************************************************
+* Called when a resource has completed loading.
+* Check in case its status has changed.
+*/
+void ResourceModel::slotLoaded(AlarmResource* resource, bool active)
+{
+	if (active)
+		updateResource(resource);
 }
 
 /******************************************************************************

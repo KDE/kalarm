@@ -167,23 +167,27 @@ void AlarmResource::applyReconfig()
 */
 void AlarmResource::checkCompatibility(const QString& filename)
 {
+	bool oldReadOnly = readOnly();
 	mCompatibility = KCalendar::Incompatible;   // assume the worst
-	if (!mFixFunction)
-		return;
-	// Check whether the version is compatible (and convert it if desired)
-	mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT);
-	if (mCompatibility == KCalendar::Converted)
+	if (mFixFunction)
 	{
-		// Set mCompatibility first to ensure that readOnly() returns
-		// the correct value and that save() therefore works.
-		mCompatibility = KCalendar::Current;
-		save();
+		// Check whether the version is compatible (and convert it if desired)
+		mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT);
+		if (mCompatibility == KCalendar::Converted)
+		{
+			// Set mCompatibility first to ensure that readOnly() returns
+			// the correct value and that save() therefore works.
+			mCompatibility = KCalendar::Current;
+			save();
+		}
+		if (mCompatibility != KCalendar::Current  &&  mCompatibility != KCalendar::ByEvent)
+		{
+			// It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
+			kDebug(KARES_DEBUG) << resourceName() << ": opened read-only (not current KAlarm format)";
+		}
 	}
-	if (mCompatibility != KCalendar::Current  &&  mCompatibility != KCalendar::ByEvent)
-	{
-		// It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
-		kDebug(KARES_DEBUG) << resourceName() << ": opened read-only (not current KAlarm format)";
-	}
+	if (readOnly() != oldReadOnly)
+		emit readOnlyChanged(this);   // the effective read-only status has changed
 }
 
 /******************************************************************************

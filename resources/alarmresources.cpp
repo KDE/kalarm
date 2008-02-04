@@ -777,12 +777,6 @@ void AlarmResources::slotResourceDownloading(AlarmResource* resource, unsigned l
 #endif
 }
 
-void AlarmResources::slotReadOnlyChanged(AlarmResource* resource)
-{
-	if (resource->isActive())
-		slotResourceStatusChanged(resource, ReadOnly);    // (this saves resource's new configuration)
-}
-
 void AlarmResources::slotResourceChanged(ResourceCalendar* resource)
 {
 	if (resource->isActive())
