@@ -873,7 +873,7 @@ bool EditAlarmDlg::validate()
 			if (longestRecurInterval < 0)
 			{
 				mRecurrenceEdit->updateEvent(recurEvent, false);
-				longestRecurInterval = recurEvent.longestRecurrenceInterval();
+				longestRecurInterval = recurEvent.longestRecurrenceInterval().asSeconds();
 			}
 			if (recurEvent.repeatInterval().asSeconds() * recurEvent.repeatCount() >= longestRecurInterval - reminder*60)
 			{
