@@ -3,7 +3,6 @@
 Encoding=UTF-8
 Name=KAlarm
 Name[af]=K-alarm
-Name[bg]=Аларма
 Name[cy]=KLarwm
 Name[eo]=Alarmilo
 Name[hi]=के-अलार्म
@@ -23,7 +22,7 @@ Icon=kalarm
 DocPath=kalarm/index.html
 GenericName=Personal Alarm Scheduler
 GenericName[af]=Persoonlike alarm skeduleerder
-GenericName[bg]=Настройки на аларма
+GenericName[bg]=Аларма
 GenericName[bs]=Lični alarm
 GenericName[ca]=Planificador d'alarmes personals
 GenericName[cs]=Osobní plánovač alarmů
