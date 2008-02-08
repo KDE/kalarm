@@ -96,13 +96,17 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler )
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.notify.xml daemon_p.h NotificationHandler )
 qt4_add_dbus_interfaces(kalarm_bin_SRCS kalarmd/org.kde.kalarm.kalarmd.Daemon.xml )
-qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/org.kde.kmail.kmail.xml )
+if (KMAIL_SUPPORTED)
+   qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/org.kde.kmail.kmail.xml )
+endif (KMAIL_SUPPORTED)
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
 if (UNIX)
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
-add_dependencies(kalarm_bin kmail_xml)
+if (KMAIL_SUPPORTED)
+   add_dependencies(kalarm_bin kmail_xml)
+endif (KMAIL_SUPPORTED)
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
