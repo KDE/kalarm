@@ -168,6 +168,16 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 	mMonthlyButtonId  = mRuleButtonGroup->id(mMonthlyButton);
 	mYearlyButtonId   = mRuleButtonGroup->id(mYearlyButton);
 
+	// Sub-repetition button
+	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), true, ruleFrame);
+	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
+	mSubRepetition->setReadOnly(mReadOnly);
+	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
+	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
+	QWhatsThis::add(mSubRepetition, i18n("Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
+	lay->addSpacing(KDialog::spacingHint());
+	lay->addWidget(mSubRepetition);
+
 	lay = new QVBoxLayout(layout);
 
 	lay->addStretch();
@@ -334,15 +344,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent, const char* name)
 		      i18n("Remove the currently highlighted item from the exceptions list"));
 		layout->addWidget(mDeleteExceptionButton);
 	}
-
-	// Sub-repetition button
-	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), true, this);
-	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
-	mSubRepetition->setReadOnly(mReadOnly);
-	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
-	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
-	QWhatsThis::add(mSubRepetition, i18n("Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
-	topLayout->addWidget(mSubRepetition);
 
 	mNoEmitTypeChanged = false;
 }
@@ -1468,7 +1469,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent, const char* name)
 {
 	// Set up the month selection widgets
 	QBoxLayout* hlayout = new QHBoxLayout(layout(), KDialog::spacingHint());
-	QLabel* label = new QLabel(i18n("first week of January", "of:"), this);
+	QLabel* label = new QLabel(i18n("List of months to select", "Months:"), this);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label, 0, Qt::AlignAuto | Qt::AlignTop);
 

@@ -1,7 +1,7 @@
 /*
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -784,31 +784,29 @@ int KARecurrence::longestInterval() const
 			const QValueList<int> months = yearMonths();  // month list is sorted
 			if (months.isEmpty())
 				break;    // no months recur
-			if (months.count() > 1)
+			if (months.count() == 1)
+				return freq * 1440 * 365;
+			int first = -1;
+			int last  = -1;
+			int maxgap = 0;
+			for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
 			{
-				int first = -1;
-				int last  = -1;
-				int maxgap = 0;
-				for (QValueListConstIterator<int> it = months.begin();  it != months.end();  ++it)
+				if (first < 0)
+					first = *it;
+				else
 				{
-					if (first < 0)
-						first = *it;
-					else
-					{
-						int span = QDate(2001, last, 1).daysTo(QDate(2001, *it, 1));
-						if (span > maxgap)
-							maxgap = span;
-					}
-					last = *it;
+					int span = QDate(2001, last, 1).daysTo(QDate(2001, *it, 1));
+					if (span > maxgap)
+						maxgap = span;
 				}
-				int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
-				if (freq > 1)
-					return (freq*365 - span) * 1440;
-				if (365 - span > maxgap)
-					return (365 - span) * 1440;
-				return maxgap * 1440;
+				last = *it;
 			}
-			// fall through to rYearlyDay
+			int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
+			if (freq > 1)
+				return (freq*365 - span) * 1440;
+			if (365 - span > maxgap)
+				return (365 - span) * 1440;
+			return maxgap * 1440;
 		}
 		default:
 			break;
