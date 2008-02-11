@@ -54,3 +54,4 @@ Icon=kalarmd
 Type=Application
 Terminal=false
 X-DBUS-StartupType=Unique
+NoDisplay=true
