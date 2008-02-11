@@ -23,7 +23,6 @@
 
 #include "functions.h"
 #include "kalarmapp.h"
-#include "kmailinterface.h"
 #include "mainwindow.h"
 #include "preferences.h"
 
@@ -62,9 +61,12 @@
 
 #include <kmime/kmime_header_parsing.h>
 
+#ifdef KMAIL_SUPPORTED
+#include "kmailinterface.h"
 
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
 static const char* KMAIL_DBUS_PATH    = "/KMail";
+#endif
 
 
 namespace HeaderParsing
@@ -137,10 +139,12 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 	{
 		switch (Preferences::emailFrom())
 		{
+#ifdef KMAIL_SUPPORTED
 			case Preferences::MAIL_FROM_KMAIL:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default email identity found)</para>"
 				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
+#endif
 			case Preferences::MAIL_FROM_CONTROL_CENTRE:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
 				                                "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Preferences dialog.</para>"));
@@ -212,6 +216,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		fwrite(textComplete.toLocal8Bit(), textComplete.length(), 1, fd);
 		pclose(fd);
 
+#ifdef KMAIL_SUPPORTED
 		if (Preferences::emailCopyToKMail())
 		{
 			// Create a copy of the sent email in KMail's 'Sent-mail' folder
@@ -219,6 +224,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			if (!err.isNull())
 				errmsgs = errors(err, COPY_ERROR);    // not a fatal error - continue
 		}
+#endif
 
 		if (jobdata.allowNotify)
 			notifyQueued(jobdata.event);
@@ -307,6 +313,7 @@ void KAMail::slotEmailSent(KJob* job)
 	}
 }
 
+#ifdef KMAIL_SUPPORTED
 /******************************************************************************
 * Add the message to a KMail folder.
 * Reply = reason for failure (which may be the empty string)
@@ -354,6 +361,7 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 	kError(5950) << folder << ":" << err;
 	return err;
 }
+#endif // KMAIL_SUPPORTED
 
 /******************************************************************************
 * Create the headers part of the email.
@@ -824,6 +832,7 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 	return errs;
 }
 
+#ifdef KMAIL_SUPPORTED
 /******************************************************************************
 *  Get the body of an email from KMail, given its serial number.
 */
@@ -843,6 +852,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 	}
 	return reply.value();
 }
+#endif
 
 /*=============================================================================
 =  HeaderParsing :  modified and additional functions.

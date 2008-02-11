@@ -73,7 +73,6 @@
 #include "editdlg.h"
 #include "functions.h"
 #include "kalarmapp.h"
-#include "kmailinterface.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "shellprocess.h"
@@ -86,8 +85,11 @@ static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
 static const char* KTTDS_DBUS_PATH      = "/KSpeech";
 static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech";
 
+#ifdef KMAIL_SUPPORTED
+#include "kmailinterface.h"
 static const char* KMAIL_DBUS_SERVICE   = "org.kde.kmail";
 static const char* KMAIL_DBUS_PATH      = "/KMail";
+#endif
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -176,7 +178,11 @@ MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, int flags)
 	  mDefaultDeferMinutes(event.deferDefaultMinutes()),
 	  mAlarmType(alarm.type()),
 	  mAction(event.action()),
+#ifdef KMAIL_SUPPORTED
 	  mKMailSerialNumber(event.kmailSerialNumber()),
+#else
+	  mKMailSerialNumber(0),
+#endif
 	  mRestoreHeight(0),
 	  mAudioRepeat(event.repeatSound()),
 	  mConfirmAck(event.confirmAck()),
@@ -1470,6 +1476,7 @@ void MessageWin::slotOk()
 	close();
 }
 
+#ifdef KMAIL_SUPPORTED
 /******************************************************************************
 *  Called when the KMail button is clicked.
 *  Tells KMail to display the email message displayed in this message window.
@@ -1492,6 +1499,7 @@ void MessageWin::slotShowKMailMessage()
 	else if (!reply.value())
 		KMessageBox::sorry(this, i18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }
+#endif
 
 /******************************************************************************
 *  Called when the Edit... button is clicked.

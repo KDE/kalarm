@@ -66,7 +66,9 @@ class KAMail : public QObject
 		static bool        identitiesExist();
 		static uint        identityUoid(const QString& identityUoidOrName);
 		static QString     controlCentreAddress();
+#ifdef KMAIL_SUPPORTED
 		static QString     getMailBody(quint32 serialNumber);
+#endif
 		static QString     i18n_NeedFromEmailAddress();
 		static QString     i18n_sent_mail();
 
@@ -77,7 +79,9 @@ class KAMail : public QObject
 		KAMail() {}
 		static KAMail*     instance();
 		static QString     appendBodyAttachments(QString& message, const KAEvent&);
+#ifdef KMAIL_SUPPORTED
 		static QString     addToKMailFolder(const JobData&, const char* folder, bool checkKmailRunning);
+#endif
 		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		enum ErrType { SEND_FAIL, SEND_ERROR, COPY_ERROR };

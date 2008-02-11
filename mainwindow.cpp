@@ -1163,6 +1163,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		action = KAEvent::FILE;
 		alarmText.setText(files[0].prettyUrl());
 	}
+#ifdef KMAIL_SUPPORTED
 	else if (KPIM::MailList::canDecode(data))
 	{
 		mailList = KPIM::MailList::fromMimeData(data);
@@ -1178,6 +1179,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   KGlobal::locale()->formatDateTime(dt), summary.subject(),
 		                   body, summary.serialNumber());
 	}
+#endif
 	else if (KCal::ICalDrag::fromMimeData(data, &calendar))
 	{
 		// iCalendar - ignore all but the first event

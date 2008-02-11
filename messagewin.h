@@ -86,7 +86,9 @@ class MessageWin : public MainWindowBase
 		void                slotDefer();
 		void                checkDeferralLimit();
 		void                displayMainWindow();
+#ifdef KMAIL_SUPPORTED
 		void                slotShowKMailMessage();
+#endif
 		void                slotSpeak();
 		void                slotPlayAudio();
 		void                checkAudioPlay();
