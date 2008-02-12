@@ -1752,7 +1752,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 		}
 		else
 			heading = QLatin1String("\n******* KAlarm *******\n");
-		QFile logfile(QFile::encodeName(event.logFile()));
+		QFile logfile(event.logFile());
 		if (logfile.open(QIODevice::Append | QIODevice::Text))
 		{
 			QTextStream out(&logfile);
