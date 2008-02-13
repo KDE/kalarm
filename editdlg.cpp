@@ -875,7 +875,8 @@ bool EditAlarmDlg::validate()
 				mRecurrenceEdit->updateEvent(recurEvent, false);
 				longestRecurInterval = recurEvent.longestRecurrenceInterval().asSeconds();
 			}
-			if (recurEvent.repeatInterval().asSeconds() * recurEvent.repeatCount() >= longestRecurInterval - reminder*60)
+			if (longestRecurInterval > 0
+			&&  recurEvent.repeatInterval().asSeconds()/60 * recurEvent.repeatCount() >= longestRecurInterval/60 - reminder)
 			{
 				KMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
