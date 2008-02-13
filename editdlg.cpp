@@ -1403,7 +1403,6 @@ void EditAlarmDlg::slotOk()
 		int reminder = mReminder->minutes();
 		if (reminder  &&  !mReminder->isOnceOnly())
 		{
-			getEvent(recurEvent);     // this may adjust mAlarmDateTime
 			mRecurrenceEdit->updateEvent(recurEvent, false);
 			longestRecurInterval = recurEvent.longestRecurrenceInterval();
 			if (longestRecurInterval  &&  reminder >= longestRecurInterval)
@@ -1419,11 +1418,11 @@ void EditAlarmDlg::slotOk()
 		{
 			if (longestRecurInterval < 0)
 			{
-				getEvent(recurEvent);     // this may adjust mAlarmDateTime
 				mRecurrenceEdit->updateEvent(recurEvent, false);
 				longestRecurInterval = recurEvent.longestRecurrenceInterval();
 			}
-			if (recurEvent.repeatInterval() * recurEvent.repeatCount() >= longestRecurInterval - reminder)
+			if (longestRecurInterval > 0
+			&&  recurEvent.repeatInterval() * recurEvent.repeatCount() >= longestRecurInterval - reminder)
 			{
 				KMessageBox::sorry(this, i18n("The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
