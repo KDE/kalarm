@@ -1403,6 +1403,7 @@ void EditAlarmDlg::slotOk()
 		int reminder = mReminder->minutes();
 		if (reminder  &&  !mReminder->isOnceOnly())
 		{
+			getEvent(recurEvent);     // this may adjust mAlarmDateTime
 			mRecurrenceEdit->updateEvent(recurEvent, false);
 			longestRecurInterval = recurEvent.longestRecurrenceInterval();
 			if (longestRecurInterval  &&  reminder >= longestRecurInterval)
@@ -1418,6 +1419,7 @@ void EditAlarmDlg::slotOk()
 		{
 			if (longestRecurInterval < 0)
 			{
+				getEvent(recurEvent);     // this may adjust mAlarmDateTime
 				mRecurrenceEdit->updateEvent(recurEvent, false);
 				longestRecurInterval = recurEvent.longestRecurrenceInterval();
 			}
