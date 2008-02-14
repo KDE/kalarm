@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 1.5.1 --- 7 February 2008 ===
+=== Version 1.5.1 (KDE 3.5.9) --- 13 February 2008 ===
 - Fix inability to set up sub-repetitions for simple yearly recurrences.
+- Prevent repetition duration error message when saving alarm which never recurs.
 
 === Version 1.5.0 --- 27 January 2008 ===
 - Replace simple repetitions with recurrence sub-repetitions, to save confusion.
