@@ -98,8 +98,10 @@ void RepetitionButton::activate(bool waitForInitialisation)
 */
 void RepetitionButton::initialise(const Duration& interval, int count, bool dateOnly, int maxDuration)
 {
-	mInterval    = (maxDuration > 0 && interval.asSeconds()/60 > maxDuration) ? Duration(60) : interval;
+	if (maxDuration > 0  &&  interval.asSeconds()/60 > maxDuration)
+		count = 0;
 	mCount       = count;
+	mInterval    = interval;
 	mMaxDuration = maxDuration;
 	mDateOnly    = dateOnly;
 	if (mDialog)
