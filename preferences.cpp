@@ -118,6 +118,7 @@ void Preferences::setTimeZone(const KTimeZone& tz)
 
 void Preferences::timeZoneChange(const QString& zone)
 {
+	Q_UNUSED(zone);
 	emit mInstance->timeZoneChanged(timeZone(false));
 }
 
