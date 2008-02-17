@@ -832,7 +832,7 @@ bool EditAlarmDlg::validate()
 					KMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
 					return false;
 				}
-				if (event.workTimeOnly()  &&  !event.displayDateTime().isValid())
+				if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::DISPLAY_TRIGGER).isValid())
 				{
 					if (KMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
 					    != KMessageBox::Continue)
@@ -853,13 +853,13 @@ bool EditAlarmDlg::validate()
 	if (recurType != RecurrenceEdit::NO_RECUR)
 	{
 		KAEvent recurEvent;
-		int longestRecurInterval = -1;
+		int longestRecurMinutes = -1;
 		int reminder = mReminder ? mReminder->minutes() : 0;
 		if (reminder  &&  !mReminder->isOnceOnly())
 		{
 			mRecurrenceEdit->updateEvent(recurEvent, false);
-			longestRecurInterval = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
-			if (longestRecurInterval  &&  reminder >= longestRecurInterval)
+			longestRecurMinutes = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
+			if (longestRecurMinutes  &&  reminder >= longestRecurMinutes)
 			{
 				mTabs->setCurrentIndex(mMainPageIndex);
 				mReminder->setFocusOnCount();
@@ -870,13 +870,13 @@ bool EditAlarmDlg::validate()
 		}
 		if (mRecurrenceEdit->subRepeatCount())
 		{
-			if (longestRecurInterval < 0)
+			if (longestRecurMinutes < 0)
 			{
 				mRecurrenceEdit->updateEvent(recurEvent, false);
-				longestRecurInterval = recurEvent.longestRecurrenceInterval().asSeconds();
+				longestRecurMinutes = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
 			}
-			if (longestRecurInterval > 0
-			&&  recurEvent.repeatInterval().asSeconds()/60 * recurEvent.repeatCount() >= longestRecurInterval/60 - reminder)
+			if (longestRecurMinutes > 0
+			&&  recurEvent.repeatInterval().asSeconds()/60 * recurEvent.repeatCount() >= longestRecurMinutes - reminder)
 			{
 				KMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again

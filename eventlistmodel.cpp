@@ -147,12 +147,12 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					break;
 				case Qt::DisplayRole:
 				{
-					DateTime due = event.expired() ? event.startDateTime() : event.displayDateTime();
+					DateTime due = event.expired() ? event.startDateTime() : event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
 					return alarmTimeText(due);
 				}
 				case SortRole:
 				{
-					DateTime due = event.expired() ? event.startDateTime() : event.displayDateTime();
+					DateTime due = event.expired() ? event.startDateTime() : event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
 					return due.isValid() ? due.effectiveKDateTime().toUtc().dateTime()
 					                     : QDateTime(QDate(9999,12,31), QTime(0,0,0));
 				}
@@ -169,13 +169,13 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 				case Qt::DisplayRole:
 					if (event.expired())
 						return QString();
-					return timeToAlarmText(event.displayDateTime());
+					return timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
 				case SortRole:
 				{
 					if (event.expired())
 						return -1;
 					KDateTime now = KDateTime::currentUtcDateTime();
-					DateTime due = event.displayDateTime();
+					DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
 					if (due.isDateOnly())
 						return now.date().daysTo(due.date()) * 1440;
 					return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;

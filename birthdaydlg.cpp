@@ -260,7 +260,7 @@ QList<KAEvent> BirthdayDlg::events() const
 			      mPrefix->text() + data->name + mSuffix->text(),
 			      mFontColourButton->bgColour(), mFontColourButton->fgColour(),
 			      mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
-			      mFlags);
+			      mFlags, true);
 		float fadeVolume;
 		int   fadeSecs;
 		float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
@@ -275,6 +275,7 @@ QList<KAEvent> BirthdayDlg::events() const
 		if (mSpecialActionsButton)
 			event.setActions(mSpecialActionsButton->preAction(),
 					 mSpecialActionsButton->postAction());
+		event.endChanges();
 		list.append(event);
 	}
 	return list;

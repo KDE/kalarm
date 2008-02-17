@@ -106,6 +106,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 
 	// Recurrence period radio buttons
 	QVBoxLayout* vlayout = new QVBoxLayout();
+	vlayout->setSpacing(0);
 	vlayout->setMargin(0);
 	hlayout->addLayout(vlayout);
 	mRuleButtonGroup = new ButtonGroup(recurGroup);
@@ -162,6 +163,17 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mRuleButtonGroup->addButton(mYearlyButton);
 	vlayout->addWidget(mYearlyButton);
 	vlayout->addStretch();    // top-adjust the interval radio buttons
+
+	// Sub-repetition button
+	mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), true, recurGroup);
+	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
+	mSubRepetition->setReadOnly(mReadOnly);
+	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
+	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
+	mSubRepetition->setWhatsThis(i18nc("@info:whatsthis",
+	                                   "Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
+	vlayout->addSpacing(KDialog::spacingHint());
+	vlayout->addWidget(mSubRepetition);
 
 	// Vertical divider line
 	vlayout = new QVBoxLayout();
@@ -341,16 +353,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mWorkTimeOnly->setReadOnly(mReadOnly);
 	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis", "<para>Only execute the alarm during working hours.</para><para>You can specify working hours in the Preferences dialog.</para>"));
 	vlayout->addWidget(mWorkTimeOnly);
-
-	// Sub-repetition button
-	mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), true, this);
-	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
-	mSubRepetition->setReadOnly(mReadOnly);
-	connect(mSubRepetition, SIGNAL(needsInitialisation()), SIGNAL(repeatNeedsInitialisation()));
-	connect(mSubRepetition, SIGNAL(changed()), SIGNAL(frequencyChanged()));
-	mSubRepetition->setWhatsThis(i18nc("@info:whatsthis",
-	                                   "Set up a repetition within the recurrence, to trigger the alarm multiple times each time the recurrence is due."));
-	topLayout->addWidget(mSubRepetition);
 
 	mNoEmitTypeChanged = false;
 }
@@ -910,6 +912,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	}
 
 	// Set up the recurrence according to the type selected
+	event.startChanges();
 	QAbstractButton* button = mRuleButtonGroup->checkedButton();
 	event.setRepeatAtLogin(button == mAtLoginButton);
 	int frequency = mRule ? mRule->frequency() : 0;
@@ -972,10 +975,14 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	else
 	{
 		event.setNoRecur();
+		event.endChanges();
 		return;
 	}
 	if (!event.recurs())
+	{
+		event.endChanges();
 		return;    // an error occurred setting up the recurrence
+	}
 	if (adjustStart)
 		event.setFirstRecurrence();
 
@@ -991,6 +998,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	event.setWorkTimeOnly(mWorkTimeOnly->isChecked());
 
 	event.setUpdated();
+	event.endChanges();
 }
 
 /******************************************************************************
@@ -1503,7 +1511,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	layout()->addLayout(hlayout);
-	QLabel* label = new QLabel(i18nc("@label first week of January", "of:"), this);
+	QLabel* label = new QLabel(i18nc("@label List of months to select", "Months:"), this);
 	label->setFixedSize(label->sizeHint());
 	hlayout->addWidget(label, 0, Qt::AlignLeft | Qt::AlignTop);
 

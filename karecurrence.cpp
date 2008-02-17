@@ -709,7 +709,7 @@ Duration KARecurrence::longestInterval() const
 
 			// After applying the frequency, the specified days of the week
 			// further restrict when the recurrence occurs.
-			// So the maximum interval will be greater than the frequency.
+			// So the maximum interval may be greater than the frequency.
 			bool ds[7] = { false, false, false, false, false, false, false };
 			for (int i = 0, end = days.count();  i < end;  ++i)
 				if (days[i].pos() == 0)

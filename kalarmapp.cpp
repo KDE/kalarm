@@ -1144,7 +1144,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	if (!dateTime.isDateOnly())
 		alarmTime.setTime(QTime(alarmTime.time().hour(), alarmTime.time().minute(), 0));
 
-	KAEvent event(alarmTime, text, bg, fg, font, action, lateCancel, flags);
+	KAEvent event(alarmTime, text, bg, fg, font, action, lateCancel, flags, true);
 	if (reminderMinutes)
 	{
 		bool onceOnly = (reminderMinutes < 0);
@@ -1157,6 +1157,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 	event.setRecurrence(recurrence);
 	event.setFirstRecurrence();
 	event.setRepetition(repeatInterval, repeatCount - 1);
+	event.endChanges();
 	if (alarmTime <= now)
 	{
 		// Alarm is due for display already.
@@ -1430,6 +1431,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 {
 	kDebug(5950);
 	bool update = false;
+	event.startChanges();
 	if (alarm.reminder()  ||  alarm.deferred())
 	{
 		// It's an advance warning alarm or an extra deferred alarm, so delete it
@@ -1479,6 +1481,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 			update = true;
 		}
 	}
+	event.endChanges();
 	if (update)
 	{
 		event.cancelCancelledDeferral();

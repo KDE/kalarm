@@ -176,6 +176,10 @@ void KAEvent::copy(const KAEvent& event)
 	mSaveDateTime            = event.mSaveDateTime;
 	mAtLoginDateTime         = event.mAtLoginDateTime;
 	mDeferralTime            = event.mDeferralTime;
+	mAllTrigger              = event.mAllTrigger;
+	mMainTrigger             = event.mMainTrigger;
+	mAllWorkTrigger          = event.mAllWorkTrigger;
+	mMainWorkTrigger         = event.mMainWorkTrigger;
 	mDisplayingTime          = event.mDisplayingTime;
 	mDisplayingFlags         = event.mDisplayingFlags;
 	mReminderMinutes         = event.mReminderMinutes;
@@ -201,21 +205,25 @@ void KAEvent::copy(const KAEvent& event)
 	mDisplayingEdit          = event.mDisplayingEdit;
 	mEnabled                 = event.mEnabled;
 	mUpdated                 = event.mUpdated;
+	mChangeCount             = 0;
+	mChanged                 = false;
 	delete mRecurrence;
 	if (event.mRecurrence)
 		mRecurrence = new KARecurrence(*event.mRecurrence);
 	else
 		mRecurrence = 0;
+	if (event.mChanged)
+		calcTriggerTimes();
 }
 
 /******************************************************************************
- * Initialise the KAEvent from a KCal::Event.
- */
+* Initialise the KAEvent from a KCal::Event.
+*/
 void KAEvent::set(const Event* event)
 {
+	startChanges();
 	// Extract status from the event
 	mEventID                = event->uid();
-	mCategory               = KCalEvent::status(event, &mResourceId);
 	mRevision               = event->revision();
 	mTemplateName.clear();
 	mLogFile.clear();
@@ -239,6 +247,8 @@ void KAEvent::set(const Event* event)
 	mDeferDefaultMinutes    = 0;
 	mLateCancel             = 0;
 	mKMailSerialNumber      = 0;
+	mChangeCount            = 0;
+	mChanged                = false;
 	mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
 	mFgColour               = QColor(0, 0, 0);          // and black foreground
 	mDefaultFont            = true;
@@ -441,7 +451,7 @@ void KAEvent::set(const Event* event)
 				alTime.setDateOnly(mStartDateTime.isDateOnly());
 				if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime())
 				{
-					mRepeatInterval = data.alarm->snoozeTime().asSeconds() / 60;   // values may be adjusted in setRecurrence()
+					mRepeatInterval = data.alarm->snoozeTime();   // values may be adjusted in setRecurrence()
 					mRepeatCount    = data.alarm->repeatCount();
 					mNextRepeat     = data.nextRepeat;
 				}
@@ -610,6 +620,7 @@ void KAEvent::set(const Event* event)
 		if (setDeferralTime)
 			mNextMainDateTime = mDeferralTime;
 	}
+	endChanges();
 
 	mUpdated = false;
 }
@@ -839,7 +850,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 * Initialise the KAEvent with the specified parameters.
 */
 void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& bg, const QColor& fg,
-                  const QFont& font, Action action, int lateCancel, int flags)
+                  const QFont& font, Action action, int lateCancel, int flags, bool changesPending)
 {
 	clearRecur();
 	mStartDateTime = dateTime;
@@ -873,9 +884,22 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 	mFgColour               = fg;
 	mFont                   = font;
 	mAlarmCount             = 1;
-	mLateCancel             = lateCancel;     // do this before set(flags)
-	mDeferral               = NO_DEFERRAL;    // do this before set(flags)
-	set(flags);
+	mLateCancel             = lateCancel;     // do this before setting flags
+	mDeferral               = NO_DEFERRAL;    // do this before setting flags
+
+	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
+	mStartDateTime.setDateOnly(flags & ANY_TIME);
+	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
+	mCommandXterm           = flags & EXEC_IN_XTERM;
+	mCommandDisplay         = flags & DISPLAY_COMMAND;
+	mCopyToKOrganizer       = flags & COPY_KORGANIZER;
+	mWorkTimeOnly           = flags & WORK_TIME_ONLY;
+	mEnabled                = !(flags & DISABLED);
+	mSpeak                  = flags & SPEAK;
+	if (mSpeak)
+		mBeep           = false;
+
+	mUpdated = true;
 	mKMailSerialNumber      = 0;
 	mReminderMinutes        = 0;
 	mArchiveReminderMinutes = 0;
@@ -888,24 +912,27 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 	mDisplayingEdit         = false;
 	mArchive                = false;
 	mUpdated                = false;
+	mChangeCount            = changesPending ? 1 : 0;
+	mChanged                = true;
+	calcTriggerTimes();
 }
 
 /******************************************************************************
 * Initialise a command KAEvent.
 */
-void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel, int flags, const QString& logfile)
+void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel, int flags, const QString& logfile, bool changesPending)
 {
 	if (!logfile.isEmpty())
 		flags &= ~(EXEC_IN_XTERM | DISPLAY_COMMAND);
-	set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME);
+	set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME, changesPending);
 	mLogFile = logfile;
 }
 
-void KAEvent::setCommand(const KDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile)
+void KAEvent::setCommand(const KDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile, bool changesPending)
 {
 	if (!logfile.isEmpty())
 		flags &= ~(EXEC_IN_XTERM | DISPLAY_COMMAND);
-	set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags);
+	set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags, changesPending);
 	mLogFile = logfile;
 }
 
@@ -920,9 +947,9 @@ void KAEvent::setLogFile(const QString& logfile)
 * Initialise an email KAEvent.
 */
 void KAEvent::setEmail(const QDate& d, uint from, const EmailAddressList& addresses, const QString& subject,
-			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
+                       const QString& message, const QStringList& attachments, int lateCancel, int flags, bool changesPending)
 {
-	set(d, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags | ANY_TIME);
+	set(d, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags | ANY_TIME, changesPending);
 	mEmailFromIdentity = from;
 	mEmailAddresses    = addresses;
 	mEmailSubject      = subject;
@@ -930,9 +957,9 @@ void KAEvent::setEmail(const QDate& d, uint from, const EmailAddressList& addres
 }
 
 void KAEvent::setEmail(const KDateTime& dt, uint from, const EmailAddressList& addresses, const QString& subject,
-			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
+                       const QString& message, const QStringList& attachments, int lateCancel, int flags, bool changesPending)
 {
-	set(dt, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags);
+	set(dt, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags, changesPending);
 	mEmailFromIdentity = from;
 	mEmailAddresses    = addresses;
 	mEmailSubject      = subject;
@@ -987,6 +1014,9 @@ void KAEvent::setTemplate(const QString& name, int afterTime)
 	mTemplateName = name;
 	mTemplateAfterTime = afterTime;
 	mUpdated = true;
+	// Templates don't need trigger times to be calculated
+	mChangeCount = 0;
+	calcTriggerTimes();
 }
 
 void KAEvent::setReminder(int minutes, bool onceOnly)
@@ -994,54 +1024,134 @@ void KAEvent::setReminder(int minutes, bool onceOnly)
 	set_reminder(minutes);
 	mReminderOnceOnly = onceOnly;
 	mUpdated          = true;
+	calcTriggerTimes();
+}
+
+DateTime KAEvent::nextTrigger(TriggerType type) const
+{
+	switch (type)
+	{
+		case ALL_TRIGGER:       return mAllTrigger;
+		case MAIN_TRIGGER:      return mMainTrigger;
+		case ALL_WORK_TRIGGER:  return mAllWorkTrigger;
+		case WORK_TRIGGER:      return mMainWorkTrigger;
+		case DISPLAY_TRIGGER:   return mWorkTimeOnly ? mMainWorkTrigger : mMainTrigger;
+		default:                return DateTime();
+	}
 }
 
 /******************************************************************************
-* Reinitialise the start date/time by adjusting its date part, and setting
-* the next scheduled alarm to the new start date/time.
+* Indicate that changes to the instance are complete.
+* Recalculate the trigger times if any changes have occurred.
 */
-void KAEvent::adjustStartDate(const QDate& d)
+void KAEvent::endChanges()
 {
-	mStartDateTime.setDate(d);
-	if (mRecurrence)
-		mRecurrence->setStartDateTime(mStartDateTime.kDateTime());
-	mNextMainDateTime = mStartDateTime;
+	if (mChangeCount > 0)
+		--mChangeCount;
+	if (!mChangeCount  &&  mChanged)
+		calcTriggerTimes();
 }
 
 /******************************************************************************
-* Return the time of the next scheduled occurrence of the event, for display
-* purposes.
+* Calculate the next trigger times of the alarm.
+* This should only be called when changes have actually occurred which might
+* affect the trigger times.
+* mMainTrigger is set to the next scheduled recurrence/sub-repetition, or the
+*              deferral time if a deferral is pending.
+* mAllTrigger is the same as mMainTrigger, but takes account of reminders.
+* mMainWorkTrigger is set to the next scheduled recurrence/sub-repetition
+*                  which occurs in working hours, if working-time-only is set.
+* mAllWorkTrigger is the same as mMainWorkTrigger, but takes account of reminders.
 */
-DateTime KAEvent::displayDateTime() const
+void KAEvent::calcTriggerTimes() const
 {
-	bool deferred = (mDeferral > 0  &&  mDeferral != REMINDER_DEFERRAL);
-	if (deferred  &&  mMainExpired)
-		return mDeferralTime;
-	DateTime dt = mainDateTime(true);   // time of next recurrence or sub-repetition
-	if (deferred  &&  mDeferralTime < dt)
-		return mDeferralTime;
-	if (!mWorkTimeOnly
-	||  (!mRepeatCount || !mRepeatInterval) && checkRecur() == KARecurrence::NO_RECUR
-	||  KAlarm::isWorkingTime(dt.kDateTime()))
-		return dt;
+	if (mChangeCount)
+	{
+		mChanged = true;   // note that changes have actually occurred
+		return;
+	}
+	mChanged = false;
+	if (!mTemplateName.isEmpty()  ||  mRepeatAtLogin)
+		mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KDateTime();
+	else if (mDeferral > 0  &&  mDeferral != REMINDER_DEFERRAL)
+	{
+		// For a deferred alarm, working time setting is ignored
+		mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = mDeferralTime;
+	}
+	else
+	{
+		mMainTrigger = mainDateTime(true);   // next recurrence or sub-repetition
+		// N.B. mReminderMinutes is only set when the reminder is pending -
+		// it is cleared once the reminder has triggered.
+		mAllTrigger = (mDeferral == REMINDER_DEFERRAL) ? mDeferralTime : mMainTrigger.addMins(-mReminderMinutes);
+		// It's not deferred.
+		// If only-during-working-time is set and it recurs, it won't actually trigger
+		// unless it falls during working hours.
+		if (!mWorkTimeOnly
+		||  (!mRepeatCount || !mRepeatInterval) && checkRecur() == KARecurrence::NO_RECUR
+		||  KAlarm::isWorkingTime(mMainTrigger.kDateTime()))
+		{
+			mMainWorkTrigger = mMainTrigger;
+			mAllWorkTrigger = mAllTrigger;
+		}
+		else
+		{
+			// The alarm is restricted to working hours.
+			// Finding the next occurrence during working hours can sometimes take a long time,
+			// so mark the next actual trigger as invalid until the calculation completes.
+			calcNextWorkingTime();
+		}
+	}
+}
 
-	// The alarm is restricted to working hours. Find the next
-	// occurrence during working hours.
-	kDebug(5950) << "Working hours only, next=" << dt.kDateTime().dateTime();
+/******************************************************************************
+* Return the time of the next scheduled occurrence of the event during working
+* hours, for an alarm which is restricted to working hours.
+* On entry, mMainTrigger must be set to the next recurrence or repetition
+* (as returned by mainDateTime(true) ).
+*/
+void KAEvent::calcNextWorkingTime() const
+{
+	kDebug(5950) << "next=" << mMainTrigger.kDateTime().dateTime();
+	mMainWorkTrigger = mAllWorkTrigger = DateTime();
 
 	QBitArray workDays = Preferences::workDays();
 	for (int i = 0;  ;  ++i)
 	{
 		if (i >= 7)
-			return KDateTime();   // no working days are defined
+			return;   // no working days are defined
 		if (workDays.testBit(i))
 			break;
 	}
 	QTime workStart = Preferences::workDayStart();
 	QTime workEnd   = Preferences::workDayEnd();
 	KARecurrence::Type recurType = checkRecur();
-	KDateTime kdt = dt.effectiveKDateTime();
+	KDateTime kdt = mMainTrigger.effectiveKDateTime();
 	checkRepetition();   // ensure data consistency
+	int reminder = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
+	// Check if it always falls on the same day(s) of the week.
+	RecurrenceRule* rrule = mRecurrence->defaultRRuleConst();
+	if (!rrule)
+		return;   // no recurrence rule!
+	unsigned allDaysMask = 0x7F;  // mask bits for all days of week
+	bool noWorkPos = false;  // true if no recurrence day position is working day
+	QList<RecurrenceRule::WDayPos> pos = rrule->byDays();
+	int nDayPos = pos.count();  // number of day positions
+	if (nDayPos)
+	{
+		noWorkPos = true;
+		allDaysMask = 0;
+		for (int i = 0;  i < nDayPos;  ++i)
+		{
+			int day = pos[i].day() - 1;  // Monday = 0
+			if (workDays.testBit(day))
+				noWorkPos = false;   // found a working day occurrence
+			allDaysMask |= 1 << day;
+		}
+		if (noWorkPos  &&  !mRepeatCount)
+			return;   // never occurs on a working day
+	}
+	DateTime newdt;
 
 	if (mStartDateTime.isDateOnly())
 	{
@@ -1050,19 +1160,21 @@ DateTime KAEvent::displayDateTime() const
 		int repeatFreq = mRepeatInterval.asDays();
 		bool weeklyRepeat = mRepeatCount && !(repeatFreq % 7);
 		Duration interval = mRecurrence->regularInterval();
-		if (interval  &&  !(interval.asDays() % 7))
+		if (interval  &&  !(interval.asDays() % 7)
+		||  nDayPos == 1)
 		{
 			// It recurs on the same day each week
 			if (!mRepeatCount || weeklyRepeat)
-				return KDateTime();   // any repetitions are also weekly
+				return;   // any repetitions are also weekly
 
 			// It's a weekly recurrence with a non-weekly sub-repetition.
 			// Check one cycle of repetitions for the next one that lands
 			// on a working day.
-			DateTime newdt;
-			previousOccurrence(dt.kDateTime().addDays(1), newdt, false);
+			KDateTime dt(mMainTrigger.kDateTime().addDays(1));
+			dt.setTime(QTime(0,0,0));
+			previousOccurrence(dt, newdt, false);
 			if (!newdt.isValid())
-				return KDateTime();   // this should never happen
+				return;   // this should never happen
 			kdt = newdt.effectiveKDateTime();
 			int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
 			for (int repeatNum = mNextRepeat + 1;  ;  ++repeatNum)
@@ -1075,7 +1187,11 @@ DateTime KAEvent::displayDateTime() const
 				{
 					nextOccurrence(newdt.kDateTime(), newdt, IGNORE_REPETITION);
 					if (workDays.testBit(day))
-						return newdt.kDateTime();
+					{
+						mMainWorkTrigger = newdt;
+						mAllWorkTrigger  = mMainWorkTrigger.addMins(-reminder);
+						return;
+					}
 					kdt = newdt.effectiveKDateTime();
 				}
 				else
@@ -1085,11 +1201,12 @@ DateTime KAEvent::displayDateTime() const
 					{
 						kdt = kdt.addDays(inc);
 						kdt.setDateOnly(true);
-						return kdt;
+						mMainWorkTrigger = mAllWorkTrigger = kdt;
+						return;
 					}
 				}
 			}
-			return KDateTime();
+			return;
 		}
 		if (!mRepeatCount  ||  weeklyRepeat)
 		{
@@ -1099,32 +1216,34 @@ DateTime KAEvent::displayDateTime() const
 			unsigned days = 0;
 			for ( ; ; )
 			{
-				DateTime newdt;
 				kdt.setTime(QTime(23,59,59));
 				nextOccurrence(kdt, newdt, IGNORE_REPETITION);
 				if (!newdt.isValid())
-					return KDateTime();
+					return;
 				kdt = newdt.effectiveKDateTime();
 				int day = kdt.date().dayOfWeek() - 1;
 				if (workDays.testBit(day))
 					break;   // found a working day occurrence
 				// Prevent indefinite looping (which should never happen anyway)
-				if (days == 0x7F)
-					return KDateTime();  // found a recurrence on every day of the week!?!
+				if (days == allDaysMask)
+					return;  // found a recurrence on every possible day of the week!?!
 				days |= 1 << day;
 			}
 			kdt.setDateOnly(true);
-			return kdt;
+			mMainWorkTrigger = kdt;
+			mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
+			return;
 		}
 
 		// It's a date-only alarm which recurs on different days of the week,
 		// as does the sub-repetition.
 		// Find the previous recurrence (as opposed to sub-repetition)
-		DateTime newdt;
 		unsigned days = 1 << (kdt.date().dayOfWeek() - 1);
-		previousOccurrence(dt.kDateTime().addDays(1), newdt, false);
+		KDateTime dt(mMainTrigger.kDateTime().addDays(1));
+		dt.setTime(QTime(0,0,0));
+		previousOccurrence(dt, newdt, false);
 		if (!newdt.isValid())
-			return KDateTime();   // this should never happen
+			return;   // this should never happen
 		kdt = newdt.effectiveKDateTime();
 		int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
 		for (int repeatNum = mNextRepeat;  ;  repeatNum = 0)
@@ -1136,28 +1255,33 @@ DateTime KAEvent::displayDateTime() const
 				{
 					kdt = kdt.addDays(inc);
 					kdt.setDateOnly(true);
-					return kdt;
+					mMainWorkTrigger = mAllWorkTrigger = kdt;
+					return;
 				}
-				if (days == 0x7F)
-					return KDateTime();  // found an occurrence on every day of the week!?!
+				if (days == allDaysMask)
+					return;  // found an occurrence on every possible day of the week!?!
 				days |= 1 << day;
 			}
 			nextOccurrence(kdt, newdt, IGNORE_REPETITION);
 			if (!newdt.isValid())
-				return KDateTime();
+				return;
 			kdt = newdt.effectiveKDateTime();
 			day = kdt.date().dayOfWeek() - 1;
 			if (workDays.testBit(day))
 			{
 				kdt.setDateOnly(true);
-				return kdt;
+				mMainWorkTrigger = kdt;
+				mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
+				return;
 			}
-			if (days == 0x7F)
-				return KDateTime();  // found an occurrence on every day of the week!?!
+			if (days == allDaysMask)
+				return;  // found an occurrence on every possible day of the week!?!
 			days |= 1 << day;
 		}
-		return KDateTime();
+		return;
 	}
+
+	// It's a date-time alarm.
 
 	/* Check whether the recurrence or sub-repetition occurs at the same time
 	 * every day. Note that because of seasonal time changes, a recurrence
@@ -1175,48 +1299,46 @@ DateTime KAEvent::displayDateTime() const
 		// The alarm always occurs at the same time of day.
 		// Check whether it can ever occur during working hours.
 		if (!mayOccurDailyDuringWork(kdt))
-			return KDateTime();   // never occurs during working hours
+			return;   // never occurs during working hours
 
 		// Find the next working day it occurs on
+		bool repetition = false;
 		unsigned days = 0;
 		for ( ; ; )
 		{
-			DateTime newdt;
 			OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
 			if (!newdt.isValid())
-				return KDateTime();
+				return;
+			repetition = (type & OCCURRENCE_REPEAT);
 			kdt = newdt.effectiveKDateTime();
 			int day = kdt.date().dayOfWeek() - 1;
 			if (workDays.testBit(day))
 				break;   // found a working day occurrence
 			// Prevent indefinite looping (which should never happen anyway)
-			if (!(type & OCCURRENCE_REPEAT))
+			if (!repetition)
 			{
-				if (days == 0x7F)
-					return KDateTime();  // found a recurrence on every day of the week!?!
+				if (days == allDaysMask)
+					return;  // found a recurrence on every possible day of the week!?!
 				days |= 1 << day;
 			}
 		}
-		dt.setDate(kdt.date());
-		return dt;
+		mMainWorkTrigger = mMainTrigger;
+		mMainWorkTrigger.setDate(kdt.date());
+		mAllWorkTrigger = repetition ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+		return;
 	}
 
 	// The alarm occurs at different times of day.
-	int recurFreq = 0;
-	int recurCount = 0;
-	KDateTime recurEnd;
-	if (recurTimeVaries)
-	{
-		recurFreq = mRecurrence->frequency() * 60;
-		recurCount = mRecurrence->duration();
-		if (recurCount >= 0)
-			recurEnd = mRecurrence->endDateTime();
-	}
 	// We may need to check for a full annual cycle of seasonal time changes, in
 	// case it only occurs during working hours after a time change.
 	KTimeZone tz = kdt.timeZone();
-	if (!tz.isValid())
-		return DateTime();
+	if (tz.isValid()  &&  tz.type() == "KSystemTimeZone")
+	{
+		// It's a system time zone, so fetch full transition information
+		KTimeZone ktz = KSystemTimeZones::readZone(tz.name());
+		if (ktz.isValid())
+			tz = ktz;
+	}
 	QList<KTimeZone::Transition> tzTransitions = tz.transitions();
 
 	if (recurTimeVaries)
@@ -1229,235 +1351,239 @@ DateTime KAEvent::displayDateTime() const
 		 * recurrence interval, since KAlarm offers no facility to regularly miss
 		 * recurrences. (But exception dates/times need to be taken into account.)
 		 */
-		if (!mRepeatCount)
+		KDateTime kdtRecur;
+		int repeatFreq, repeatNum;
+		if (mRepeatCount)
+		{
+			// It's a repetition inside a recurrence, each of which occurs
+			// at different times of day (bearing in mind that the repetition
+			// may occur at daily intervals after each recurrence).
+			// Find the previous recurrence (as opposed to sub-repetition)
+			repeatFreq = mRepeatInterval.asSeconds();
+			previousOccurrence(kdt.addSecs(1), newdt, false);
+			if (!newdt.isValid())
+				return;   // this should never happen
+			kdtRecur = newdt.effectiveKDateTime();
+			repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
+			kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+		}
+		else
 		{
 			// There is no sub-repetition.
 			// (N.B. Sub-repetitions can't exist without a recurrence.)
-			QTime firstTime = kdt.time();
-			int firstOffset = kdt.utcOffset();
-			int originalOffset = firstOffset;
-			QDate date = kdt.date();
-			int day = date.dayOfWeek() - 1;   // Monday = 0
-			int firstDay = day;
-			int limit = 3;
-			for (int n = 0;  n < 7*24*60;  ++n)
-			{
-#ifdef __GNUC__
-#warning Take account of exception dates
-#endif
-				kdt = kdt.addSecs(recurFreq);
-				if (recurCount >= 0  &&  kdt > recurEnd)
-					return KDateTime();   // reached end of recurrence
-				date = kdt.date();
-				day = date.dayOfWeek();
-				QTime t = kdt.time();
-				if (t >= workStart  &&  t < workEnd)
-				{
-					if (workDays.testBit(day))
-						return kdt;
-				}
-				if (kdt.utcOffset() != firstOffset)
-				{
-					// We've just gone past a seasonal time change.
-					// Start the iteration again.
-					firstOffset = kdt.utcOffset();
-					firstTime = kdt.time();
-					firstDay = day;
-					n = 0;
-					if (firstOffset == originalOffset  &&  --limit <= 0)
-						return KDateTime();   // prevent infinite looping
-				}
-				else if (t == firstTime  &&  day == firstDay)
-				{
-					// We've wrapped round to the starting day and time.
-					// Check if after the next seasonal time change the
-					// alarm occurs inside working hours.
-					int i = tz.transitionIndex(kdt.toUtc().dateTime()) + 1;
-					if (i >= tzTransitions.count())
-						return KDateTime();
-					DateTime newdt;
-					previousOccurrence(KDateTime(tzTransitions[i].time(), KDateTime::UTC), newdt, IGNORE_REPETITION);
-					kdt = newdt.effectiveKDateTime();
-					n = 0;
-				}
-			}
-			return KDateTime();   // too many iterations
+			// Check until the original time wraps round, but ensure that
+			// if there are seasonal time changes, that all other subsequent
+			// time offsets within the next year are checked.
+			// This does not guarantee to find the next working time,
+			// particularly if there are exceptions, but it's a
+			// reasonable try.
+			kdtRecur = kdt;
 		}
-
-		// It's a repetition inside a recurrence, each of which occurs
-		// at different times of day.
-		// Find the previous recurrence (as opposed to sub-repetition)
-		int repeatFreq = mRepeatInterval.asSeconds();
-		DateTime newdt;
-		previousOccurrence(kdt.addSecs(1), newdt, false);
-		if (!newdt.isValid())
-			return KDateTime();   // this should never happen
-		KDateTime kdtRecur = newdt.effectiveKDateTime();
-		QDate dateRecur = kdtRecur.date();
-		int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
-		int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
-		kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
-
-		// Use the previous recurrence as a base for checking whether
-		// our tests have wrapped round to the same time/day of week.
 		QTime firstTime = kdtRecur.time();
 		int firstOffset = kdtRecur.utcOffset();
-		int originalOffset = firstOffset;
+		int currentOffset = firstOffset;
+		int dayRecur = kdtRecur.date().dayOfWeek() - 1;   // Monday = 0
 		int firstDay = dayRecur;
-		bool lastRecurrence = false;
+		QDate finalDate;
 		bool subdaily = (repeatFreq < 24*3600);
-		int limit = 3;
+//		int period = mRecurrence->frequency() % (24*60);  // it is by definition a MINUTELY recurrence
+//		int limit = (24*60 + period - 1) / period;  // number of times until recurrence wraps round
+		int transitionIndex = -1;
 		for (int n = 0;  n < 7*24*60;  ++n)
 		{
-			// Check the sub-repetitions for this recurrence
-			for ( ; ; )
+			if (mRepeatCount)
 			{
-				// Find the repeat count to the next start of the working day
-				int inc = subdaily ? nextWorkRepetition(kdt) : 1;
-				repeatNum += inc;
-				if (repeatNum > mRepeatCount)
-					break;
-				kdt = kdt.addSecs(inc * repeatFreq);
-				QTime t = kdt.time();
-				if (t >= workStart  &&  t < workEnd)
+				// Check the sub-repetitions for this recurrence
+				for ( ; ; )
 				{
-					if (workDays.testBit(kdt.date().dayOfWeek() - 1))
-						return kdt;
+					// Find the repeat count to the next start of the working day
+					int inc = subdaily ? nextWorkRepetition(kdt) : 1;
+					repeatNum += inc;
+					if (repeatNum > mRepeatCount)
+						break;
+					kdt = kdt.addSecs(inc * repeatFreq);
+					QTime t = kdt.time();
+					if (t >= workStart  &&  t < workEnd)
+					{
+						if (workDays.testBit(kdt.date().dayOfWeek() - 1))
+						{
+							mMainWorkTrigger = mAllWorkTrigger = kdt;
+							return;
+						}
+					}
 				}
+				repeatNum = 0;
 			}
-			repeatNum = 0;
-
-			// Check the next recurrence
-			if (lastRecurrence)
-				return KDateTime();
-#ifdef __GNUC__
-#warning Take account of exception dates
-#endif
-			kdtRecur = kdtRecur.addSecs(recurFreq);
-			if (recurCount >= 0  &&  kdtRecur > recurEnd)
-				return KDateTime();   // reached end of recurrence
-			dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
-			dateRecur = kdtRecur.date();
+			nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
+			if (!newdt.isValid())
+				return;
+			kdtRecur = newdt.effectiveKDateTime();
+			dayRecur = kdtRecur.date().dayOfWeek() - 1;   // Monday = 0
 			QTime t = kdtRecur.time();
 			if (t >= workStart  &&  t < workEnd)
 			{
 				if (workDays.testBit(dayRecur))
-					return kdtRecur;
+				{
+					mMainWorkTrigger = kdtRecur;
+					mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
+					return;
+				}
 			}
-			if (t == firstTime  &&  dayRecur == firstDay)
+			if (kdtRecur.utcOffset() != currentOffset)
+				currentOffset = kdtRecur.utcOffset();
+			if (t == firstTime  &&  dayRecur == firstDay  &&  currentOffset == firstOffset)
 			{
-				if (kdtRecur.utcOffset() == firstOffset)
-#ifdef __GNUC__
-#warning Check if it will occur during working hours after seasonal time change
-#endif
-					lastRecurrence = true;
-				else
-					firstOffset = kdtRecur.utcOffset();
+				// We've wrapped round to the starting day and time.
+				// If there are seasonal time changes, check for up
+				// to the next year in other time offsets in case the
+				// alarm occurs inside working hours then.
+				if (!finalDate.isValid())
+					finalDate = kdtRecur.date();
+				int i = tz.transitionIndex(kdtRecur.toUtc().dateTime());
+				if (i < 0)
+					return;
+				if (i > transitionIndex)
+					transitionIndex = i;
+				if (++transitionIndex >= static_cast<int>(tzTransitions.count()))
+					return;
+				previousOccurrence(KDateTime(tzTransitions[transitionIndex].time(), KDateTime::UTC), newdt, IGNORE_REPETITION);
+				kdtRecur = newdt.effectiveKDateTime();
+				if (finalDate.daysTo(kdtRecur.date()) > 365)
+					return;
+				firstTime = kdtRecur.time();
+				firstOffset = kdtRecur.utcOffset();
+				currentOffset = firstOffset;
+				firstDay = kdtRecur.date().dayOfWeek() - 1;
 			}
 			kdt = kdtRecur;
 		}
-		return KDateTime();   // too many iterations - can't really happen
+//kDebug(5950)<<"-----exit loop: count="<<limit<<endl;
+		return;   // too many iterations
 	}
 
 	if (repeatTimeVaries)
 	{
 		/* There's a sub-repetition which occurs at different times of
 		 * day, inside a recurrence which occurs at the same time of day.
-		 * of the week. We potentially need to check recurrences starting
-		 * on each day Then, it is still possible that a working time
-		 * sub-repetition could occur immediately after a seasonal time change.
+		 * We potentially need to check recurrences starting on each day.
+		 * Then, it is still possible that a working time sub-repetition
+		 * could occur immediately after a seasonal time change.
 		 */
 		// Find the previous recurrence (as opposed to sub-repetition)
 		int repeatFreq = mRepeatInterval.asSeconds();
-		DateTime newdt;
 		previousOccurrence(kdt.addSecs(1), newdt, false);
 		if (!newdt.isValid())
-			return KDateTime();   // this should never happen
+			return;   // this should never happen
 		KDateTime kdtRecur = newdt.effectiveKDateTime();
-		QDate dateRecur = kdtRecur.date();
 		bool recurDuringWork = (kdtRecur.time() >= workStart  &&  kdtRecur.time() < workEnd);
-		int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
-		int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
-		kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
-
-		// Find the next recurrence, which sets the limit on possible sub-repetitions.
-		// Note that for a monthly recurrence, for example, a sub-repetition could
-		// be defined which is longer than the recurrence interval in short months.
-		// In these cases, the sub-repetition is truncated by the following
-		// recurrence.
-		nextOccurrence(kdt, newdt, IGNORE_REPETITION);
-		KDateTime kdtNextRecur = newdt.effectiveKDateTime();
 
 		// Use the previous recurrence as a base for checking whether
 		// our tests have wrapped round to the same time/day of week.
-		int repeatsDuringWork = 0;  // 0=unknown, 1=does, -1=never
-		int repeatsToCheck = mRepeatCount;
 		bool subdaily = (repeatFreq < 24*3600);
 		unsigned days = 0;
-		for ( ; ; )
+		bool checkTimeChangeOnly = false;
+		int transitionIndex = -1;
+		for (int limit = 10;  --limit >= 0;  )
 		{
-			// Check the sub-repetitions for this recurrence
-			if (repeatsDuringWork >= 0)
+			// Check the next seasonal time change (for an arbitrary 10 times,
+			// even though that might not guarantee the correct result)
+			QDate dateRecur = kdtRecur.date();
+			int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
+			int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
+			kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+
+			// Find the next recurrence, which sets the limit on possible sub-repetitions.
+			// Note that for a monthly recurrence, for example, a sub-repetition could
+			// be defined which is longer than the recurrence interval in short months.
+			// In these cases, the sub-repetition is truncated by the following
+			// recurrence.
+			nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
+			KDateTime kdtNextRecur = newdt.effectiveKDateTime();
+
+			int repeatsToCheck = mRepeatCount;
+			int repeatsDuringWork = 0;  // 0=unknown, 1=does, -1=never
+			for ( ; ; )
 			{
-				for ( ; ; )
+				// Check the sub-repetitions for this recurrence
+				if (repeatsDuringWork >= 0)
 				{
-					// Find the repeat count to the next start of the working day
-					int inc = subdaily ? nextWorkRepetition(kdt) : 1;
-					repeatNum += inc;
-					bool pastEnd = (repeatNum > mRepeatCount);
-					if (pastEnd)
-						inc -= repeatNum - mRepeatCount;
-					repeatsToCheck -= inc;
-					kdt = kdt.addSecs(inc * repeatFreq);
-					if (kdtNextRecur.isValid()  &&  kdt >= kdtNextRecur)
+					for ( ; ; )
 					{
-						// This sub-repetition is past the next recurrence,
-						// so start the check again from the next recurrence.
-						repeatsToCheck = mRepeatCount;
-						break;
-					}
-					if (pastEnd)
-						break;
-					QTime t = kdt.time();
-					if (t >= workStart  &&  t < workEnd)
-					{
-						if (workDays.testBit(kdt.date().dayOfWeek() - 1))
-							return kdt;
-						repeatsDuringWork = 1;
-					}
-					else if (!repeatsDuringWork  &&  repeatsToCheck <= 0)
-					{
-						// Sub-repetitions never occur during working hours
-#ifdef __GNUC__
-#warning Check if it will occur during working hours after seasonal time change
-#endif
-						if (!recurDuringWork)
-							return KDateTime();
-						repeatsDuringWork = -1;
-						break;
+						// Find the repeat count to the next start of the working day
+						int inc = subdaily ? nextWorkRepetition(kdt) : 1;
+						repeatNum += inc;
+						bool pastEnd = (repeatNum > mRepeatCount);
+						if (pastEnd)
+							inc -= repeatNum - mRepeatCount;
+						repeatsToCheck -= inc;
+						kdt = kdt.addSecs(inc * repeatFreq);
+						if (kdtNextRecur.isValid()  &&  kdt >= kdtNextRecur)
+						{
+							// This sub-repetition is past the next recurrence,
+							// so start the check again from the next recurrence.
+							repeatsToCheck = mRepeatCount;
+							break;
+						}
+						if (pastEnd)
+							break;
+						QTime t = kdt.time();
+						if (t >= workStart  &&  t < workEnd)
+						{
+							if (workDays.testBit(kdt.date().dayOfWeek() - 1))
+							{
+								mMainWorkTrigger = mAllWorkTrigger = kdt;
+								return;
+							}
+							repeatsDuringWork = 1;
+						}
+						else if (!repeatsDuringWork  &&  repeatsToCheck <= 0)
+						{
+							// Sub-repetitions never occur during working hours
+							repeatsDuringWork = -1;
+							break;
+						}
 					}
 				}
-			}
-			repeatNum = 0;
+				repeatNum = 0;
+				if (repeatsDuringWork < 0  &&  !recurDuringWork)
+					break;   // it never occurs during working hours
 
-			// Check the next recurrence
-			if (!kdtNextRecur.isValid())
-				return KDateTime();
-			kdtRecur = kdtNextRecur;
-			nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
-			kdtNextRecur = newdt.effectiveKDateTime();
-			dateRecur = kdtRecur.date();
-			dayRecur = dateRecur.dayOfWeek() - 1;
-			if (recurDuringWork  &&  workDays.testBit(dayRecur))
-				return kdtRecur;
-			if (days == 0x7F)
-				return KDateTime();  // found a recurrence on every day of the week!?!
-			days |= 1 << dayRecur;
-			kdt = kdtRecur;
+				// Check the next recurrence
+				if (!kdtNextRecur.isValid())
+					return;
+				if (checkTimeChangeOnly  ||  days == allDaysMask)
+					break;  // found a recurrence on every possible day of the week!?!
+				kdtRecur = kdtNextRecur;
+				nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
+				kdtNextRecur = newdt.effectiveKDateTime();
+				dateRecur = kdtRecur.date();
+				dayRecur = dateRecur.dayOfWeek() - 1;
+				if (recurDuringWork  &&  workDays.testBit(dayRecur))
+				{
+					mMainWorkTrigger = kdtRecur;
+					mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
+					return;
+				}
+				days |= 1 << dayRecur;
+				kdt = kdtRecur;
+			}
+
+			// Find the next recurrence before a seasonal time change,
+			// and ensure the time change is after the last one processed.
+			checkTimeChangeOnly = true;
+			int i = tz.transitionIndex(kdtRecur.toUtc().dateTime());
+			if (i < 0)
+				return;
+			if (i > transitionIndex)
+				transitionIndex = i;
+			if (++transitionIndex >= static_cast<int>(tzTransitions.count()))
+				return;
+			kdt = KDateTime(tzTransitions[transitionIndex].time(), KDateTime::UTC);
+			previousOccurrence(kdt, newdt, IGNORE_REPETITION);
+			kdtRecur = newdt.effectiveKDateTime();
 		}
-		return KDateTime();  // not found - give up
+		return;  // not found - give up
 	}
-	return KDateTime();
 }
 
 /******************************************************************************
@@ -1480,7 +1606,7 @@ int KAEvent::nextWorkRepetition(const KDateTime& pre) const
 				return mRepeatCount + 1;  // should never happen
 			if (Preferences::workDays().testBit((preDay + n) % 7))
 			{
-				nextWork.addDays(n);
+				nextWork = nextWork.addDays(n);
 				nextWork.setTime(workStart);
 				break;
 			}
@@ -1521,22 +1647,6 @@ bool KAEvent::mayOccurDailyDuringWork(const KDateTime& kdt) const
 		}
 	}
 	return true;
-}
-
-void KAEvent::set(int flags)
-{
-	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
-	mStartDateTime.setDateOnly(flags & ANY_TIME);
-	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
-	mCommandXterm     = flags & EXEC_IN_XTERM;
-	mCommandDisplay   = flags & DISPLAY_COMMAND;
-	mCopyToKOrganizer = flags & COPY_KORGANIZER;
-	mWorkTimeOnly     = flags & WORK_TIME_ONLY;
-	mEnabled          = !(flags & DISABLED);
-	mSpeak            = flags & SPEAK;
-	if (mSpeak)
-		mBeep = false;
-	mUpdated = true;
 }
 
 int KAEvent::flags() const
@@ -1874,7 +1984,7 @@ Alarm* KAEvent::initKCalAlarm(Event* event, int startOffsetSecs, const QStringLi
 			setProcedureAlarm(alarm, mPostAction);
 			break;
 		case KAAlarm::MAIN_ALARM:
-			alarm->setSnoozeTime(mRepeatInterval * 60);
+			alarm->setSnoozeTime(mRepeatInterval);
 			alarm->setRepeatCount(mRepeatCount);
 			if (mRepeatCount)
 				alarm->setCustomProperty(KCalendar::APPNAME, NEXT_REPEAT_PROPERTY,
@@ -2111,6 +2221,7 @@ void KAEvent::removeExpiredAlarm(KAAlarm::Type type)
 			break;
 		case KAAlarm::REMINDER_ALARM:
 			// Remove any reminder alarm, but keep a note of it for archiving purposes
+			// and for restoration after the next recurrence.
 			set_archiveReminder();
 			break;
 		case KAAlarm::DEFERRED_REMINDER_ALARM:
@@ -2132,7 +2243,10 @@ void KAEvent::removeExpiredAlarm(KAAlarm::Type type)
 			break;
 	}
 	if (mAlarmCount != count)
+	{
 		mUpdated = true;
+		calcTriggerTimes();
+	}
 }
 
 /******************************************************************************
@@ -2144,6 +2258,7 @@ void KAEvent::removeExpiredAlarm(KAAlarm::Type type)
  */
 bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurrence)
 {
+	startChanges();   // prevent multiple trigger time evaluation here
 	bool result = false;
 	bool setNextRepetition = false;
 	bool checkRepetition = false;
@@ -2156,16 +2271,24 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 			{
 				set_deferral(REMINDER_DEFERRAL);   // defer reminder alarm
 				mDeferralTime = dateTime;
+				mChanged = true;
 			}
 			else
 			{
 				// Deferring past the main alarm time, so adjust any existing deferral
 				if (mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL)
+				{
 					set_deferral(NO_DEFERRAL);
+					mChanged = true;
+				}
 			}
 			// Remove any reminder alarm, but keep a note of it for archiving purposes
+			// and for restoration after the next recurrence.
 			if (mReminderMinutes)
+			{
 				set_archiveReminder();
+				mChanged = true;
+			}
 		}
 		if (mDeferral != REMINDER_DEFERRAL)
 		{
@@ -2176,6 +2299,7 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 				set_deferral(NORMAL_DEFERRAL);
 				mDeferralTime = dateTime;
 				result = true;
+				mChanged = true;
 				setNextRepetition = true;
 			}
 			else
@@ -2183,6 +2307,7 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 				// Main alarm has now expired
 				mNextMainDateTime = mDeferralTime = dateTime;
 				set_deferral(NORMAL_DEFERRAL);
+				mChanged = true;
 				if (!mMainExpired)
 				{
 					// Mark the alarm as expired now
@@ -2210,10 +2335,12 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 			mDeferralTime = dateTime;
 			checkRepetition = true;
 		}
+		mChanged = true;
 	}
 	else
 	{
 		mDeferralTime = dateTime;
+		mChanged = true;
 		if (mDeferral <= 0)
 			set_deferral(NORMAL_DEFERRAL);
 		if (adjustRecurrence)
@@ -2247,8 +2374,10 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 			mNextRepeat = mNextMainDateTime.daysTo(mDeferralTime) / mRepeatInterval.asDays() + 1;
 		else
 			mNextRepeat = mNextMainDateTime.secsTo(mDeferralTime) / mRepeatInterval.asSeconds() + 1;
+		mChanged = true;
 	}
 	mUpdated = true;
+	endChanges();
 	return result;
 }
 
@@ -2271,6 +2400,7 @@ void KAEvent::cancelDefer()
 		else
 			set_deferral(CANCEL_DEFERRAL);
 		mUpdated = true;
+		calcTriggerTimes();
 	}
 }
 
@@ -2474,7 +2604,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 {
 	KDateTime pre = preDateTime;
 	if (includeRepetitions != IGNORE_REPETITION)
-	{
+	{                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
 		if (!mRepeatCount  ||  !mRepeatInterval)
 			includeRepetitions = IGNORE_REPETITION;
 		else
@@ -2497,7 +2627,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 	}
 
 	if (type != NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != IGNORE_REPETITION)
-	{
+	{                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
 		// The next occurrence is a sub-repetition
 		int repetition = mRepeatInterval.isDaily()
 		               ? result.daysTo(preDateTime) / mRepeatInterval.asDays() + 1
@@ -2508,7 +2638,7 @@ KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTim
 			// We've found a recurrence before the specified date/time, which has
 			// a sub-repetition after the date/time.
 			// However, if the intervals between recurrences vary, we could possibly
-			// have missed a later recurrence, which fits the criterion, so check again.
+			// have missed a later recurrence which fits the criterion, so check again.
 			DateTime dt;
 			OccurType newType = previousOccurrence(repeatDT.effectiveKDateTime(), dt, false);
 			if (dt > result)
@@ -2615,6 +2745,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
 
 	DateTime dt;
 	OccurType type;
+	bool changed = false;
 	if (pre < mNextMainDateTime.effectiveKDateTime())
 	{
 		dt = mNextMainDateTime;
@@ -2642,7 +2773,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
 			}
 			if (mDeferral == REMINDER_DEFERRAL)
 				set_deferral(NO_DEFERRAL);
-			mUpdated = true;
+			changed = true;
 		}
 	}
 	else
@@ -2662,14 +2793,19 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
 				set_archiveReminder();
 			if (mDeferral == REMINDER_DEFERRAL)
 				set_deferral(NO_DEFERRAL);
-			mUpdated = true;
+			changed = true;
 		}
 		else if (mNextRepeat)
 		{
 			// The next occurrence is the main occurrence, not a repetition
 			mNextRepeat = 0;
-			mUpdated = true;
+			changed = true;
 		}
+	}
+	if (changed)
+	{
+		mUpdated = true;
+		calcTriggerTimes();
 	}
 	return type;
 }
@@ -2745,6 +2881,9 @@ QString KAEvent::repetitionText(bool brief) const
 {
 	if (mRepeatCount)
 	{
+#ifdef __GNUC__
+#warning Get 24 hours displayed with daily repetition
+#endif
 		if (!mRepeatInterval.isDaily())
 		{
 			int minutes = mRepeatInterval.asSeconds() / 60;
@@ -2791,6 +2930,7 @@ void KAEvent::setFirstRecurrence()
 		return;           // it already recurs on the start date
 
 	// Set the frequency to 1 to find the first possible occurrence
+	bool changed = false;
 	int frequency = mRecurrence->frequency();
 	mRecurrence->setFrequency(1);
 	DateTime next;
@@ -2801,9 +2941,11 @@ void KAEvent::setFirstRecurrence()
 	{
 		mRecurrence->setStartDateTime(next.effectiveKDateTime());
 		mStartDateTime = mNextMainDateTime = next;
-		mUpdated = true;
+		mUpdated = changed = true;
 	}
 	mRecurrence->setFrequency(frequency);    // restore the frequency
+	if (changed)
+		calcTriggerTimes();
 }
 
 /******************************************************************************
@@ -2812,6 +2954,7 @@ void KAEvent::setFirstRecurrence()
 */
 void KAEvent::setRecurrence(const KARecurrence& recurrence)
 {
+	startChanges();   // prevent multiple trigger time evaluation here
 	mUpdated = true;
 	delete mRecurrence;
 	if (recurrence.recurs())
@@ -2819,15 +2962,21 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 		mRecurrence = new KARecurrence(recurrence);
 		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
 		mRecurrence->setAllDay(mStartDateTime.isDateOnly());
+		mChanged = true;
 	}
 	else
+	{
+		mChanged = mRecurrence;
 		mRecurrence = 0;
+	}
 
 	// Adjust sub-repetition values to fit the recurrence.
 	// N.B. Need to make a copy of mRepeatInterval because it's passed to
 	// setRepetition() as a reference, and setRepetition() sets it to zero
 	// before using the parameter value.
 	setRepetition(Duration(mRepeatInterval), mRepeatCount);
+
+	endChanges();
 }
 
 /******************************************************************************
@@ -2855,6 +3004,7 @@ bool KAEvent::setRepetition(const Duration& interval, int count)
 		}
 		mRepeatInterval = interval;
 		mRepeatCount    = count;
+		calcTriggerTimes();
 	}
 	return true;
 }
@@ -2871,7 +3021,9 @@ bool KAEvent::setRepetition(const Duration& interval, int count)
  */
 bool KAEvent::setRecurMinutely(int freq, int count, const KDateTime& end)
 {
-	return setRecur(RecurrenceRule::rMinutely, freq, count, end);
+	bool success = setRecur(RecurrenceRule::rMinutely, freq, count, end);
+	calcTriggerTimes();
+	return success;
 }
 
 /******************************************************************************
@@ -2887,17 +3039,20 @@ bool KAEvent::setRecurMinutely(int freq, int count, const KDateTime& end)
  */
 bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rDaily, freq, count, end))
-		return false;
-	int n = 0;
-	for (int i = 0;  i < 7;  ++i)
+	bool success = setRecur(RecurrenceRule::rDaily, freq, count, end);
+	if (success)
 	{
-		if (days.testBit(i))
-			++n;
+		int n = 0;
+		for (int i = 0;  i < 7;  ++i)
+		{
+			if (days.testBit(i))
+				++n;
+		}
+		if (n < 7)
+			mRecurrence->addWeeklyDays(days);
 	}
-	if (n < 7)
-		mRecurrence->addWeeklyDays(days);
-	return true;
+	calcTriggerTimes();
+	return success;
 }
 
 /******************************************************************************
@@ -2913,10 +3068,11 @@ bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QD
  */
 bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rWeekly, freq, count, end))
-		return false;
-	mRecurrence->addWeeklyDays(days);
-	return true;
+	bool success = setRecur(RecurrenceRule::rWeekly, freq, count, end);
+	if (success)
+		mRecurrence->addWeeklyDays(days);
+	calcTriggerTimes();
+	return success;
 }
 
 /******************************************************************************
@@ -2932,11 +3088,14 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
  */
 bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
-		return false;
-	for (int i = 0, end = days.count();  i < end;  ++i)
-		mRecurrence->addMonthlyDate(days[i]);
-	return true;
+	bool success = setRecur(RecurrenceRule::rMonthly, freq, count, end);
+	if (success)
+	{
+		for (int i = 0, end = days.count();  i < end;  ++i)
+			mRecurrence->addMonthlyDate(days[i]);
+	}
+	calcTriggerTimes();
+	return success;
 }
 
 /******************************************************************************
@@ -2953,11 +3112,14 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count,
  */
 bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rMonthly, freq, count, end))
-		return false;
-	for (int i = 0, end = posns.count();  i < end;  ++i)
-		mRecurrence->addMonthlyPos(posns[i].weeknum, posns[i].days);
-	return true;
+	bool success = setRecur(RecurrenceRule::rMonthly, freq, count, end);
+	if (success)
+	{
+		for (int i = 0, end = posns.count();  i < end;  ++i)
+			mRecurrence->addMonthlyPos(posns[i].weeknum, posns[i].days);
+	}
+	calcTriggerTimes();
+	return success;
 }
 
 /******************************************************************************
@@ -2976,13 +3138,16 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int c
  */
 bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, Preferences::Feb29Type feb29, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rYearly, freq, count, end, feb29))
-		return false;
-	for (int i = 0, end = months.count();  i < end;  ++i)
-		mRecurrence->addYearlyMonth(months[i]);
-	if (day)
-		mRecurrence->addMonthlyDate(day);
-	return true;
+	bool success = setRecur(RecurrenceRule::rYearly, freq, count, end, feb29);
+	if (success)
+	{
+		for (int i = 0, end = months.count();  i < end;  ++i)
+			mRecurrence->addYearlyMonth(months[i]);
+		if (day)
+			mRecurrence->addMonthlyDate(day);
+	}
+	calcTriggerTimes();
+	return success;
 }
 
 /******************************************************************************
@@ -3000,15 +3165,18 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, 
  */
 bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const QList<int>& months, int count, const QDate& end)
 {
-	if (!setRecur(RecurrenceRule::rYearly, freq, count, end))
-		return false;
-	int i = 0;
-	int iend;
-	for (iend = months.count();  i < iend;  ++i)
-		mRecurrence->addYearlyMonth(months[i]);
-	for (i = 0, iend = posns.count();  i < iend;  ++i)
-		mRecurrence->addYearlyPos(posns[i].weeknum, posns[i].days);
-	return true;
+	bool success = setRecur(RecurrenceRule::rYearly, freq, count, end);
+	if (success)
+	{
+		int i = 0;
+		int iend;
+		for (iend = months.count();  i < iend;  ++i)
+			mRecurrence->addYearlyMonth(months[i]);
+		for (i = 0, iend = posns.count();  i < iend;  ++i)
+			mRecurrence->addYearlyPos(posns[i].weeknum, posns[i].days);
+	}
+	calcTriggerTimes();
+	return success;
 }
 
 /******************************************************************************
@@ -3078,7 +3246,7 @@ KARecurrence::Type KAEvent::checkRecur() const
 				return type;
 			default:
 				if (mRecurrence)
-					const_cast<KAEvent*>(this)->clearRecur();  // recurrence shouldn't exist!!
+					const_cast<KAEvent*>(this)->clearRecur();  // this shouldn't exist!!
 				break;
 		}
 	}
@@ -3124,7 +3292,7 @@ void KAEvent::checkRepetition() const
 
 #if 0
 /******************************************************************************
- * Convert a QValueList<WDayPos> to QValueList<MonthPos>.
+ * Convert a QList<WDayPos> to QList<MonthPos>.
  */
 QList<KAEvent::MonthPos> KAEvent::convRecurPos(const QList<KCal::RecurrenceRule::WDayPos>& wdaypos)
 {
@@ -3269,17 +3437,18 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	// KAlarm pre-1.3.1 XTERM category
 	static const QString EXEC_IN_XTERM_CAT  = QLatin1String("XTERM");
 
-	// KAlarm pre-2.0.0 categories
+	// KAlarm pre-1.9.0 categories
 	static const QString DATE_ONLY_CATEGORY        = QLatin1String("DATE");
 	static const QString EMAIL_BCC_CATEGORY        = QLatin1String("BCC");
 	static const QString CONFIRM_ACK_CATEGORY      = QLatin1String("ACKCONF");
+	static const QString KORGANIZER_CATEGORY       = QLatin1String("KORG");
+	static const QString DEFER_CATEGORY            = QLatin1String("DEFER;");
+	static const QString ARCHIVE_CATEGORY          = QLatin1String("SAVE");
+	static const QString ARCHIVE_CATEGORIES        = QLatin1String("SAVE:");
 	static const QString LATE_CANCEL_CATEGORY      = QLatin1String("LATECANCEL;");
 	static const QString AUTO_CLOSE_CATEGORY       = QLatin1String("LATECLOSE;");
 	static const QString TEMPL_AFTER_TIME_CATEGORY = QLatin1String("TMPLAFTTIME;");
 	static const QString KMAIL_SERNUM_CATEGORY     = QLatin1String("KMAIL:");
-	static const QString KORGANIZER_CATEGORY       = QLatin1String("KORG");
-	static const QString ARCHIVE_CATEGORY          = QLatin1String("SAVE");
-	static const QString ARCHIVE_CATEGORIES        = QLatin1String("SAVE:");
 	static const QString LOG_CATEGORY              = QLatin1String("LOG:");
 
 	// KAlarm pre-1.5.0/1.9.9 properties
@@ -3585,7 +3754,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 		if (pre_1_9_0)
 		{
 			/*
-			 * It's a KAlarm pre-2.0 calendar file.
+			 * It's a KAlarm pre-1.9 calendar file.
 			 * Add the X-KDE-KALARM-STATUS custom property.
 			 * Convert KAlarm categories to custom fields.
 			 */
@@ -3601,6 +3770,8 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					flags += EMAIL_BCC_FLAG;
 				else if (cat == KORGANIZER_CATEGORY)
 					flags += KORGANIZER_FLAG;
+				else if (cat.startsWith(DEFER_CATEGORY))
+					(flags += DEFER_FLAG) += cat.mid(DEFER_CATEGORY.length());
 				else if (cat.startsWith(TEMPL_AFTER_TIME_CATEGORY))
 					(flags += TEMPL_AFTER_TIME_FLAG) += cat.mid(TEMPL_AFTER_TIME_CATEGORY.length());
 				else if (cat.startsWith(LATE_CANCEL_CATEGORY))
@@ -3770,6 +3941,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 	return converted;
 }
 
+#if 0
 /******************************************************************************
 * If the calendar was written by a pre-1.9.10 version of KAlarm, or another
 * program, convert simple repetitions in events without a recurrence, to a
@@ -3788,6 +3960,7 @@ bool KAEvent::convertRepetitions(KCal::CalendarLocal& calendar)
 	}
 	return converted;
 }
+#endif
 
 /******************************************************************************
 * Convert simple repetitions in an event without a recurrence, to a
@@ -3850,26 +4023,26 @@ void KAEvent::dumpDebug() const
 	}
 	if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
 	{
-		kDebug(5950) << "-- mSpeak:" << (mSpeak ?"true" :"false");
+		kDebug(5950) << "-- mSpeak:" << (mSpeak ? "true" : "false");
 		kDebug(5950) << "-- mAudioFile:" << mAudioFile;
 		kDebug(5950) << "-- mPreAction:" << mPreAction;
 		kDebug(5950) << "-- mPostAction:" << mPostAction;
 	}
 	else if (mActionType == T_COMMAND)
 	{
-		kDebug(5950) << "-- mCommandXterm:" << (mCommandXterm ?"true" :"false");
-		kDebug(5950) << "-- mCommandDisplay:" << (mCommandDisplay ?"true" :"false");
+		kDebug(5950) << "-- mCommandXterm:" << (mCommandXterm ? "true" : "false");
+		kDebug(5950) << "-- mCommandDisplay:" << (mCommandDisplay ? "true" : "false");
 		kDebug(5950) << "-- mLogFile:" << mLogFile;
 	}
 	kDebug(5950) << "-- mKMailSerialNumber:" << mKMailSerialNumber;
-	kDebug(5950) << "-- mCopyToKOrganizer:" << (mCopyToKOrganizer ?"true" :"false");
-	kDebug(5950) << "-- mWorkTimeOnly:" << (mWorkTimeOnly ?"true" :"false");
+	kDebug(5950) << "-- mCopyToKOrganizer:" << (mCopyToKOrganizer ? "true" : "false");
+	kDebug(5950) << "-- mWorkTimeOnly:" << (mWorkTimeOnly ? "true" : "false");
 	kDebug(5950) << "-- mStartDateTime:" << mStartDateTime.toString();
 	kDebug(5950) << "-- mSaveDateTime:" << mSaveDateTime;
 	if (mRepeatAtLogin)
 		kDebug(5950) << "-- mAtLoginDateTime:" << mAtLoginDateTime;
-	kDebug(5950) << "-- mArchiveRepeatAtLogin:" << (mArchiveRepeatAtLogin ?"true" :"false");
-	kDebug(5950) << "-- mEnabled:" << (mEnabled ?"true" :"false");
+	kDebug(5950) << "-- mArchiveRepeatAtLogin:" << (mArchiveRepeatAtLogin ? "true" : "false");
+	kDebug(5950) << "-- mEnabled:" << (mEnabled ? "true" : "false");
 	if (mReminderMinutes)
 		kDebug(5950) << "-- mReminderMinutes:" << mReminderMinutes;
 	if (mArchiveReminderMinutes)
@@ -3878,12 +4051,16 @@ void KAEvent::dumpDebug() const
 		kDebug(5950) << "-- mReminderOnceOnly:" << mReminderOnceOnly;
 	else if (mDeferral > 0)
 	{
-		kDebug(5950) << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ?"normal" :"reminder");
+		kDebug(5950) << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
 		kDebug(5950) << "-- mDeferralTime:" << mDeferralTime.toString();
 	}
 	else if (mDeferral == CANCEL_DEFERRAL)
 		kDebug(5950) << "-- mDeferral:cancel:";
 	kDebug(5950) << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
+	kDebug(5950) << "-- mAllTrigger:" << mAllTrigger.toString();
+	kDebug(5950) << "-- mMainTrigger:" << mMainTrigger.toString();
+	kDebug(5950) << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
+	kDebug(5950) << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
 	if (mDisplaying)
 	{
 		kDebug(5950) << "-- mDisplayingTime:" << mDisplayingTime.toString();
@@ -3892,9 +4069,9 @@ void KAEvent::dumpDebug() const
 		kDebug(5950) << "-- mDisplayingEdit:" << mDisplayingEdit;
 	}
 	kDebug(5950) << "-- mRevision:" << mRevision;
-	kDebug(5950) << "-- mRecurrence:" << (mRecurrence ?"true" :"false");
+	kDebug(5950) << "-- mRecurrence:" << (mRecurrence ? "true" : "false");
 	kDebug(5950) << "-- mAlarmCount:" << mAlarmCount;
-	kDebug(5950) << "-- mMainExpired:" << (mMainExpired ?"true" :"false");
+	kDebug(5950) << "-- mMainExpired:" << (mMainExpired ? "true" : "false");
 	kDebug(5950) << "KAEvent dump end";
 }
 #endif
@@ -3941,8 +4118,8 @@ void KAAlarm::dumpDebug() const
 		default:                             altype = "INVALID";  break;
 	}
 	kDebug(5950) << "-- mType:" << altype;
-	kDebug(5950) << "-- mRecurs:" << (mRecurs ?"true" :"false");
-	kDebug(5950) << "-- mDeferred:" << (mDeferred ?"true" :"false");
+	kDebug(5950) << "-- mRecurs:" << (mRecurs ? "true" : "false");
+	kDebug(5950) << "-- mDeferred:" << (mDeferred ? "true" : "false");
 	kDebug(5950) << "KAAlarm dump end";
 }
 
@@ -4035,10 +4212,10 @@ QFont KAAlarmEventBase::font() const
 void KAAlarmEventBase::dumpDebug() const
 {
 	kDebug(5950) << "-- mEventID:" << mEventID;
-	kDebug(5950) << "-- mActionType:" << (mActionType == T_MESSAGE ?"MESSAGE" : mActionType == T_FILE ?"FILE" : mActionType == T_COMMAND ?"COMMAND" : mActionType == T_EMAIL ?"EMAIL" : mActionType == T_AUDIO ?"AUDIO" :"??");
+	kDebug(5950) << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??");
 	kDebug(5950) << "-- mText:" << mText;
 	if (mActionType == T_COMMAND)
-		kDebug(5950) << "-- mCommandScript:" << (mCommandScript ?"true" :"false");
+		kDebug(5950) << "-- mCommandScript:" << (mCommandScript ? "true" : "false");
 	kDebug(5950) << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
 	if (mActionType == T_EMAIL)
 	{
@@ -4046,14 +4223,14 @@ void KAAlarmEventBase::dumpDebug() const
 		kDebug(5950) << "--         Addresses:" << mEmailAddresses.join(",");
 		kDebug(5950) << "--         Subject:" << mEmailSubject;
 		kDebug(5950) << "--         Attachments:" << mEmailAttachments.join(",");
-		kDebug(5950) << "--         Bcc:" << (mEmailBcc ?"true" :"false");
+		kDebug(5950) << "--         Bcc:" << (mEmailBcc ? "true" : "false");
 	}
 	kDebug(5950) << "-- mBgColour:" << mBgColour.name();
 	kDebug(5950) << "-- mFgColour:" << mFgColour.name();
-	kDebug(5950) << "-- mDefaultFont:" << (mDefaultFont ?"true" :"false");
+	kDebug(5950) << "-- mDefaultFont:" << (mDefaultFont ? "true" : "false");
 	if (!mDefaultFont)
 		kDebug(5950) << "-- mFont:" << mFont.toString();
-	kDebug(5950) << "-- mBeep:" << (mBeep ?"true" :"false");
+	kDebug(5950) << "-- mBeep:" << (mBeep ? "true" : "false");
 	if (mActionType == T_AUDIO)
 	{
 		if (mSoundVolume >= 0)
@@ -4069,19 +4246,19 @@ void KAAlarmEventBase::dumpDebug() const
 		}
 		else
 			kDebug(5950) << "-- mSoundVolume:-:";
-		kDebug(5950) << "-- mRepeatSound:" << (mRepeatSound ?"true" :"false");
+		kDebug(5950) << "-- mRepeatSound:" << (mRepeatSound ? "true" : "false");
 	}
-	kDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ?"true" :"false");
-	kDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ?"true" :"false");
+	kDebug(5950) << "-- mConfirmAck:" << (mConfirmAck ? "true" : "false");
+	kDebug(5950) << "-- mRepeatAtLogin:" << (mRepeatAtLogin ? "true" : "false");
 	kDebug(5950) << "-- mRepeatCount:" << mRepeatCount;
 	if (mRepeatInterval.isDaily())
 		kDebug(5950) << "-- mRepeatInterval:" << mRepeatInterval.asDays() << "days";
 	else
 		kDebug(5950) << "-- mRepeatInterval:" << mRepeatInterval.asSeconds()/60 << "minutes";
 	kDebug(5950) << "-- mNextRepeat:" << mNextRepeat;
-	kDebug(5950) << "-- mDisplaying:" << (mDisplaying ?"true" :"false");
+	kDebug(5950) << "-- mDisplaying:" << (mDisplaying ? "true" : "false");
 	kDebug(5950) << "-- mLateCancel:" << mLateCancel;
-	kDebug(5950) << "-- mAutoClose:" << (mAutoClose ?"true" :"false");
+	kDebug(5950) << "-- mAutoClose:" << (mAutoClose ? "true" : "false");
 }
 #endif
 

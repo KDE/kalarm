@@ -278,7 +278,7 @@ QString TrayWindow::tooltipAlarmText() const
 		if (event.enabled()  &&  !event.expired()  &&  event.action() == KAEvent::MESSAGE)
 		{
 			TipItem item;
-			QDateTime dateTime = event.displayDateTime().effectiveKDateTime().toLocalZone().dateTime();
+			QDateTime dateTime = event.nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().dateTime();
 			if (dateTime > tomorrow.dateTime())
 				continue;   // ignore alarms after tomorrow at the current clock time
 			item.dateTime = dateTime;
