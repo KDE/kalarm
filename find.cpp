@@ -231,7 +231,7 @@ void Find::slotFind()
 	{
 		mFind->setPattern(mDialog->pattern());
 		mFind->setOptions(options);
-		findNext(true, true, false);
+		findNext(true, false);
 	}
 	else
 	{
@@ -256,7 +256,7 @@ void Find::slotFind()
 
 		// Execute the search
 		mFound = false;
-		findNext(true, false, fromCurrent);
+		findNext(true, fromCurrent);
 		if (mFind)
 			emit active(true);
 	}
@@ -267,7 +267,7 @@ void Find::slotFind()
 *  If 'fromCurrent' is true, the search starts with the current search item;
 *  otherwise, it starts from the next item.
 */
-void Find::findNext(bool forward, bool sort, bool fromCurrent)
+void Find::findNext(bool forward, bool fromCurrent)
 {
 	QModelIndex index;
 	if (!mNoCurrentItem)
