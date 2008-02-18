@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 	}
 
 	// This is the first time through
-	kDebug(5950) << "initialising";
+	kDebug() << "initialising";
 	KAlarmApp* app = KAlarmApp::getInstance();
 	app->restoreSession();
 	return app->exec();

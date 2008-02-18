@@ -136,7 +136,7 @@ MainWindow::MainWindow(bool restored)
 	  mHiddenTrayParent(false),
 	  mShown(false)
 {
-	kDebug(5950);
+	kDebug();
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MainWin");    // used by LikeBack
@@ -202,7 +202,7 @@ MainWindow::MainWindow(bool restored)
 
 MainWindow::~MainWindow()
 {
-	kDebug(5950);
+	kDebug();
 	mWindowList.removeAt(mWindowList.indexOf(this));
 	if (theApp()->trayWindow())
 	{
@@ -541,7 +541,7 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 */
 void MainWindow::refresh()
 {
-	kDebug(5950);
+	kDebug();
 	EventListModel::alarms()->reload();
 }
 
@@ -551,7 +551,7 @@ void MainWindow::refresh()
 */
 void MainWindow::updateKeepArchived(int days)
 {
-	kDebug(5950) << (bool)days;
+	kDebug() << (bool)days;
 	if (mShowArchived  &&  !days)
 		slotShowArchived();   // toggle Show Archived option setting
 	mActionShowArchived->setEnabled(days);
@@ -1124,7 +1124,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	KCal::CalendarLocal calendar(Preferences::timeZone(true));
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
-	kDebug(5950) << fmts;
+	kDebug() << fmts;
 #endif
 
 	/* The order of the tests below matters, since some dropped objects
@@ -1134,7 +1134,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	if (!(bytes = data->data("message/rfc822")).isEmpty())
 	{
 		// Email message(s). Ignore all but the first.
-		kDebug(5950) << "email";
+		kDebug() << "email";
 		KMime::Content content;
 		content.setContent(bytes);
 		content.parse();
@@ -1159,7 +1159,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	}
 	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
 	{
-		kDebug(5950) << "URL";
+		kDebug() << "URL";
 		action = KAEvent::FILE;
 		alarmText.setText(files[0].prettyUrl());
 	}
@@ -1168,7 +1168,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	{
 		mailList = KPIM::MailList::fromMimeData(data);
 		// KMail message(s). Ignore all but the first.
-		kDebug(5950) << "KMail_list";
+		kDebug() << "KMail_list";
 		if (mailList.isEmpty())
 			return;
 		KPIM::MailSummary& summary = mailList[0];
@@ -1183,7 +1183,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (KCal::ICalDrag::fromMimeData(data, &calendar))
 	{
 		// iCalendar - ignore all but the first event
-		kDebug(5950) << "iCalendar";
+		kDebug() << "iCalendar";
 		KCal::Event::List events = calendar.rawEvents();
 		if (!events.isEmpty())
 		{
@@ -1195,7 +1195,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (data->hasText())
 	{
 		QString text = data->text();
-		kDebug(5950) << "text";
+		kDebug() << "text";
 		alarmText.setText(text);
 	}
 	else
@@ -1302,7 +1302,7 @@ void MainWindow::slotSelection()
 		}
 	}
 
-	kDebug(5950) << "true";
+	kDebug() << "true";
 	mActionCreateTemplate->setEnabled((count == 1) && (resources->activeCount(AlarmResource::TEMPLATE, true) > 0));
 	mActionCopy->setEnabled(active && count == 1);
 	mActionModify->setEnabled(count == 1);
@@ -1319,7 +1319,7 @@ void MainWindow::slotSelection()
 */
 void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
-	kDebug(5950);
+	kDebug();
 	if (mContextMenu)
 		mContextMenu->popup(globalPos);
 }
@@ -1343,7 +1343,7 @@ void MainWindow::selectionCleared()
 */
 void MainWindow::slotDoubleClicked(const QModelIndex& index)
 {
-	kDebug(5950);
+	kDebug();
 	if (index.isValid())
 	{
 		if (mActionModify->isEnabled())

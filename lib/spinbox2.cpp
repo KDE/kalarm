@@ -282,7 +282,7 @@ void SpinBox2::arrange()
 	r = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height()));
 	mSpinboxFrame->setGeometry(r);
 	mSpinbox->setGeometry(-xSpinbox, 0, mSpinboxFrame->width() + xSpinbox, height());
-	//kDebug(5950) << "arrowRect="<<arrowRect<<", mUpdown2Frame="<<mUpdown2Frame->geometry()<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
+	//kDebug() << "arrowRect="<<arrowRect<<", mUpdown2Frame="<<mUpdown2Frame->geometry()<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
 	mSpinMirror->resize(wUpdown2, mUpdown2->height());
 	mSpinMirror->setGeometry(arrowRect);
 //mSpinMirror->setGeometry(QStyle::visualRect(QRect(0, 11, wUpdown2, height()), this));
@@ -318,7 +318,7 @@ void SpinBox2::getMetrics() const
 		xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
 	}
 	wGap = 0;
-	//kDebug(5950) << "rect="<<rect<<", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", xSpinbox="<<xSpinbox<<", wPadding"<<wPadding;
+	//kDebug() << "rect="<<rect<<", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", xSpinbox="<<xSpinbox<<", wPadding"<<wPadding;
 
 	// Make style-specific adjustments for a better appearance
 	if (style()->inherits("QMotifPlusStyle"))

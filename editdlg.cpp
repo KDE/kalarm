@@ -95,7 +95,7 @@ QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:chec
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWidget* parent, GetResourceType getResource)
 {
-	kDebug(5950);
+	kDebug();
 	switch (type)
 	{
 		case DISPLAY:  return new EditDisplayAlarmDlg(Template, newAlarm, parent, getResource);

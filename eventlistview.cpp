@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -92,7 +92,7 @@ KCal::Event* EventListView::selectedEvent() const
 	QModelIndexList list = selectionModel()->selectedRows();
 	if (list.count() != 1)
 		return 0;
-kDebug()<<"SelectedEvent() count="<<list.count();
+kDebug(0)<<"SelectedEvent() count="<<list.count();
 	const QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(list[0].model());
 	QModelIndex source = proxy->mapToSource(list[0]);
 	return static_cast<KCal::Event*>(source.internalPointer());

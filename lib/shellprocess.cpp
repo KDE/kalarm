@@ -77,7 +77,7 @@ bool ShellProcess::start(OpenMode openMode)
 */
 void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	kDebug(5950) << exitCode << "," << exitStatus;
+	kDebug() << exitCode << "," << exitStatus;
 	mStdinQueue.clear();
 	mStatus = SUCCESS;
 	if (exitStatus != NormalExit)

@@ -86,7 +86,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	  mNoEmitTypeChanged(true),
 	  mReadOnly(readOnly)
 {
-	kDebug(5950);
+	kDebug();
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(KDialog::spacingHint());

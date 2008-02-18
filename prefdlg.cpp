@@ -197,7 +197,7 @@ void KAlarmPrefDlg::slotHelp()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotApply()
 {
-	kDebug(5950);
+	kDebug();
 	QString errmsg = mEmailPage->validate();
 	if (!errmsg.isEmpty())
 	{
@@ -230,7 +230,7 @@ void KAlarmPrefDlg::slotApply()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
-	kDebug(5950);
+	kDebug();
 	mValid = true;
 	slotApply();
 	if (mValid)
@@ -240,7 +240,7 @@ void KAlarmPrefDlg::slotOk()
 // Discard the current preferences and close the dialog
 void KAlarmPrefDlg::slotCancel()
 {
-	kDebug(5950);
+	kDebug();
 	restore(false);
 	KDialog::reject();
 }
@@ -248,7 +248,7 @@ void KAlarmPrefDlg::slotCancel()
 // Discard the current preferences and use the present ones
 void KAlarmPrefDlg::restore(bool defaults)
 {
-	kDebug(5950) << (defaults ? "defaults" : "");
+	kDebug() << (defaults ? "defaults" : "");
 	if (defaults)
 		Preferences::self()->useDefaults(true);
 	mFontColourPage->restore(defaults);

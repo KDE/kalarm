@@ -80,7 +80,7 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 	// We need to store the list so that when deletions occur, the deleted alarm's
 	// position in the list can be determined.
 	mEvents = AlarmCalendar::resources()->events(mStatus);
-for(int x=0; x<mEvents.count(); ++x)kDebug()<<"Event"<<(void*)mEvents[x];
+for(int x=0; x<mEvents.count(); ++x)kDebug(0)<<"Event"<<(void*)mEvents[x];
 	if (!mTextIcon)
 	{
 		mTextIcon    = new QPixmap(SmallIcon("dialog-information"));
@@ -340,7 +340,7 @@ void EventListModel::slotUpdateTimeTo()
 */
 void EventListModel::slotUpdateArchivedColour(const QColor&)
 {
-	kDebug(5950);
+	kDebug();
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -367,7 +367,7 @@ void EventListModel::slotUpdateArchivedColour(const QColor&)
 */
 void EventListModel::slotUpdateDisabledColour(const QColor&)
 {
-	kDebug(5950);
+	kDebug();
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -396,7 +396,7 @@ void EventListModel::slotUpdateDisabledColour(const QColor&)
 */
 void EventListModel::slotUpdateWorkingHours()
 {
-	kDebug(5950);
+	kDebug();
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
@@ -431,19 +431,19 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 	switch (change)
 	{
 		case AlarmResources::Added:
-			kDebug(5950) << "Added";
+			kDebug() << "Added";
 			added = true;
 			break;
 		case AlarmResources::Deleted:
-			kDebug(5950) << "Deleted";
+			kDebug() << "Deleted";
 			removeResource(resource);
 			return;
 		case AlarmResources::Invalidated:
-			kDebug(5950) << "Invalidated";
+			kDebug() << "Invalidated";
 			removeResource(resource);
 			return;
 		case AlarmResources::Location:
-			kDebug(5950) << "Location";
+			kDebug() << "Location";
 			removeResource(resource);
 			added = true;
 			break;
@@ -455,7 +455,7 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 			break;
 		case AlarmResources::Colour:
 		{
-			kDebug(5950) << "Colour";
+			kDebug() << "Colour";
 			AlarmResources* resources = AlarmResources::instance();
 			int firstRow = -1;
 			for (int row = 0, end = mEvents.count();  row < end;  ++row)
@@ -509,7 +509,7 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 */
 void EventListModel::removeResource(AlarmResource* resource)
 {
-	kDebug(5950);
+	kDebug();
 	AlarmResources* resources = AlarmResources::instance();
 	int lastRow = -1;
 	for (int row = mEvents.count();  --row >= 0; )
