@@ -52,3 +52,4 @@ Icon=kalarmd
 Type=Application
 Terminal=false
 X-DCOP-ServiceType=Unique
+NoDisplay=true
