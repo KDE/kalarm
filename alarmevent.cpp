@@ -620,6 +620,7 @@ void KAEvent::set(const Event* event)
 		if (setDeferralTime)
 			mNextMainDateTime = mDeferralTime;
 	}
+	mChanged = true;
 	endChanges();
 
 	mUpdated = false;
