@@ -93,11 +93,9 @@ static const char* SHOW_RESOURCES_KEY = "ShowResources";
 
 static QString   undoText;
 static QString   undoTextStripped;
-static QIcon     undoIcon;
 static KShortcut undoShortcut;
 static QString   redoText;
 static QString   redoTextStripped;
-static QIcon     redoIcon;
 static KShortcut redoShortcut;
 
 
@@ -449,13 +447,11 @@ void MainWindow::initActions()
 	{
 		// Get standard texts, etc., for Undo and Redo actions
 		QAction * act = KStandardAction::undo(this, 0, actions);
-//		undoIcon         = act->icon();
 		undoShortcut     = KShortcut(act->shortcuts());
 		undoText         = act->text();
 		undoTextStripped = KAlarm::stripAccel(undoText);
 		delete act;
 		act = KStandardAction::redo(this, 0, actions);
-//		redoIcon         = act->icon();
 		redoShortcut     = KShortcut(act->shortcuts());
 		redoText         = act->text();
 		redoTextStripped = KAlarm::stripAccel(redoText);
