@@ -1,7 +1,7 @@
 /*
  *  spinbox2private.h  -  private classes for SpinBox2
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@
 #define SPINBOX2PRIVATE_H
 
 #include <QPixmap>
-//Added by qt3to4:
-#include <q3canvas.h>
+#include <QGraphicsView>
 #include "spinbox.h"
 
 class QMouseEvent;
@@ -62,7 +61,7 @@ class ExtraSpinBox : public SpinBox
 * Mirroring in this way allows styles with rounded corners to display correctly.
 =============================================================================*/
 
-class SpinMirror : public Q3CanvasView
+class SpinMirror : public QGraphicsView
 {
 		Q_OBJECT
 	public:

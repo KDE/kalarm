@@ -43,7 +43,7 @@
  *  the spin widgets so as to keep the normal lighting/shading on either side.
  */
 static const char* mirrorStyles[] = {
-	"PlastikStyle",
+	"QCleanlooksStyle", "OxygenStyle", "PlastikStyle", "QPlastiqueStyle",
 	0     // list terminator
 };
 static bool mirrorStyle(const QStyle*);
@@ -283,10 +283,14 @@ void SpinBox2::arrange()
 	mSpinboxFrame->setGeometry(r);
 	mSpinbox->setGeometry(-xSpinbox, 0, mSpinboxFrame->width() + xSpinbox, height());
 	//kDebug() << "arrowRect="<<arrowRect<<", mUpdown2Frame="<<mUpdown2Frame->geometry()<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
-	mSpinMirror->resize(wUpdown2, mUpdown2->height());
-	mSpinMirror->setGeometry(arrowRect);
+	if (mSpinMirror->isVisible())
+	{
+		mSpinMirror->resize(wUpdown2, mUpdown2->height());
+		mSpinMirror->setGeometry(arrowRect);
 //mSpinMirror->setGeometry(QStyle::visualRect(QRect(0, 11, wUpdown2, height()), this));
-	mSpinMirror->setNormalButtons(QPixmap::grabWidget(mUpdown2Frame, 0, 0));
+//???The following line causes infinite recursion
+//		mSpinMirror->setNormalButtons(QPixmap::grabWidget(mUpdown2Frame, 0, 0));
+	}
 }
 
 /******************************************************************************
@@ -422,12 +426,12 @@ void ExtraSpinBox::paintEvent(QPaintEvent* e)
 =============================================================================*/
 
 SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent)
-	: Q3CanvasView(new Q3Canvas, parent),
+	: QGraphicsView(new QGraphicsScene, parent),
 	  mSpinbox(spinbox),
 	  mReadOnly(false)
 {
-	setVScrollBarMode(Q3ScrollView::AlwaysOff);
-	setHScrollBarMode(Q3ScrollView::AlwaysOff);
+	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setFrameStyle(QFrame::NoFrame);
 }
 
@@ -439,18 +443,18 @@ void SpinMirror::setNormalButtons(const QPixmap& px)
 
 void SpinMirror::redraw(const QPixmap& px)
 {
-	Q3Canvas* c = canvas();
-	c->setBackgroundPixmap(px);
-	c->setAllChanged();
+	QGraphicsScene* c = scene();
+	c->setBackgroundBrush(px);
+//	c->setAllChanged();
 	c->update();
 }
 
 void SpinMirror::resize(int w, int h)
 {
-	canvas()->resize(w, h);
-	Q3CanvasView::resize(w, h);
-	resizeContents(w, h);
-	setWorldMatrix(QMatrix(-1, 0, 0, 1, w - 1, 0));  // mirror left to right
+	scene()->setSceneRect(0, 0, w, h);
+	QGraphicsView::resize(w, h);
+//	resizeContents(w, h);
+	setMatrix(QMatrix(-1, 0, 0, 1, w - 1, 0));  // mirror left to right
 }
 
 /******************************************************************************
@@ -460,7 +464,8 @@ void SpinMirror::contentsMouseEvent(QMouseEvent* e)
 {
 	if (!mReadOnly)
 	{
-		QPoint pt = contentsToViewport(e->pos());
+//		QPoint pt = contentsToViewport(e->pos());
+		QPoint pt = e->pos();
 		pt.setX(pt.x() + mSpinbox->upRect().left());
 		QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->buttons(), e->modifiers()));
 
