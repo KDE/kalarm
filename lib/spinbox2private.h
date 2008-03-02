@@ -40,16 +40,16 @@ class ExtraSpinBox : public SpinBox
 		Q_OBJECT
 	public:
 		explicit ExtraSpinBox(QWidget* parent)
-		             : SpinBox(parent), mNewStylePending(false) { }
+		             : SpinBox(parent), mInhibitPaintSignal(0) { }
 		ExtraSpinBox(int minValue, int maxValue, QWidget* parent)
-		             : SpinBox(minValue, maxValue, parent), mNewStylePending(false) { }
+		             : SpinBox(minValue, maxValue, parent), mInhibitPaintSignal(0) { }
+		void         inhibitPaintSignal(int i)  { mInhibitPaintSignal = i; }
 	signals:
-		void         styleUpdated();
+		void         painted();
 	protected:
 		virtual void paintEvent(QPaintEvent*);
-		virtual void styleChange(QStyle&)    { mNewStylePending = true; }
 	private:
-		bool         mNewStylePending;  // style has changed, but not yet repainted
+		int          mInhibitPaintSignal;
 };
 
 
@@ -65,27 +65,27 @@ class SpinMirror : public QGraphicsView
 {
 		Q_OBJECT
 	public:
-		explicit SpinMirror(SpinBox*, QWidget* parent = 0);
+		explicit SpinMirror(ExtraSpinBox*, QWidget* parent = 0);
 		void         setReadOnly(bool ro)        { mReadOnly = ro; }
 		bool         isReadOnly() const          { return mReadOnly; }
-		void         setNormalButtons(const QPixmap&);
-		void         redraw(const QPixmap&);
-
-	public slots:
-		virtual void resize(int w, int h);
+		void         setButtons(QWidget*);
+		void         setFrame(QSpinBox*);
+		void         setButtonPos(const QPoint&);
 
 	protected:
-		virtual void contentsMousePressEvent(QMouseEvent* e)        { contentsMouseEvent(e); }
-		virtual void contentsMouseReleaseEvent(QMouseEvent* e)      { contentsMouseEvent(e); }
-		virtual void contentsMouseMoveEvent(QMouseEvent* e)         { contentsMouseEvent(e); }
-		virtual void contentsMouseDoubleClickEvent(QMouseEvent* e)  { contentsMouseEvent(e); }
+		virtual void resizeEvent(QResizeEvent*);
+		virtual void mousePressEvent(QMouseEvent* e)        { mouseEvent(e); }
+		virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
+		virtual void mouseMoveEvent(QMouseEvent* e)         { mouseEvent(e); }
+		virtual void mouseDoubleClickEvent(QMouseEvent* e)  { mouseEvent(e); }
 
 	private:
-		void         contentsMouseEvent(QMouseEvent*);
+		void         mouseEvent(QMouseEvent*);
 
-		SpinBox*     mSpinbox;        // spinbox whose spin buttons are being mirrored
-		QPixmap      mNormalButtons;  // image of spin buttons in unpressed state
-		bool         mReadOnly;       // value cannot be changed
+		ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
+		QGraphicsPixmapItem* mButtons;    // image of spin butttons
+		QGraphicsRectItem*   mBackground; // background blank to hide spinbox contentz
+		bool                 mReadOnly;   // value cannot be changed
 };
 
 #endif // SPINBOX2PRIVATE_H

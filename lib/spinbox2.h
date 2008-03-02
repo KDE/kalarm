@@ -240,7 +240,7 @@ class SpinBox2 : public QFrame
 	protected:
 		virtual QString     textFromValue(int v) const    { return mSpinbox->textFromVal(v); }
 		virtual int         valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
-		virtual void        resizeEvent(QResizeEvent*)    { arrange(); }
+		virtual void        paintEvent(QPaintEvent*);
 		virtual void        showEvent(QShowEvent*);
 		virtual void        styleChange(QStyle&);
 		virtual void        getMetrics() const;
@@ -256,11 +256,16 @@ class SpinBox2 : public QFrame
 		virtual void        stepPage(int);
 
 	private slots:
-		void                updateMirror();
+		void                updateMirrorButtons();
+		void                updateMirrorFrame();
+		void                paintTimer();
 
 	private:
 		void                init();
 		void                arrange();
+		void                updateMirror();
+		void                spinboxResized(QResizeEvent*);
+		void                setUpdown2Size();
 		int                 whichButton(QObject* spinWidget, const QPoint&);
 		void                setShiftStepping(bool on);
 
@@ -282,6 +287,8 @@ class SpinBox2 : public QFrame
 				virtual int     shiftStepAdjustment(int oldValue, int shiftStep);
 				virtual QValidator::State validate(QString& text, int& pos) const
 				                                            { return owner->validate(text, pos); }
+			protected:
+				virtual void    resizeEvent(QResizeEvent* e) { owner->spinboxResized(e); SpinBox::resizeEvent(e); }
 			private:
 				SpinBox2* owner;   // owner SpinBox2
 		};
@@ -301,6 +308,7 @@ class SpinBox2 : public QFrame
 		int              mPageStep;           // left button increment
 		int              mPageShiftStep;      // left button increment with shift pressed
 		bool             mReverseWithLayout;  // reverse button positions if reverse layout (default = true)
+		bool             mUseMirror;          // current style requires mirrorred buttons
 
 	friend class MainSpinBox;
 };
