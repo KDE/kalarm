@@ -25,7 +25,6 @@
 #include <QMouseEvent>
 #include <QStyleOptionSpinBox>
 #include <QGraphicsPixmapItem>
-#include <QGraphicsProxyWidget>
 #include <QTimer>
 #include <QFrame>
 #include <QBrush>
