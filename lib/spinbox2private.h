@@ -65,14 +65,15 @@ class SpinMirror : public QGraphicsView
 {
 		Q_OBJECT
 	public:
-		explicit SpinMirror(ExtraSpinBox*, QWidget* parent = 0);
+		explicit SpinMirror(ExtraSpinBox*, SpinBox*, QWidget* parent = 0);
 		void         setReadOnly(bool ro)        { mReadOnly = ro; }
 		bool         isReadOnly() const          { return mReadOnly; }
-		void         setButtons(QWidget*);
-		void         setFrame(QSpinBox*);
+		void         setButtons();
+		void         setFrame();
 		void         setButtonPos(const QPoint&);
 
 	protected:
+		virtual bool event(QEvent*);
 		virtual void resizeEvent(QResizeEvent*);
 		virtual void mousePressEvent(QMouseEvent* e)        { mouseEvent(e); }
 		virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
@@ -83,6 +84,7 @@ class SpinMirror : public QGraphicsView
 		void         mouseEvent(QMouseEvent*);
 
 		ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
+		SpinBox*             mMainSpinbox;
 		QGraphicsPixmapItem* mButtons;    // image of spin butttons
 		QGraphicsRectItem*   mBackground; // background blank to hide spinbox contentz
 		bool                 mReadOnly;   // value cannot be changed
