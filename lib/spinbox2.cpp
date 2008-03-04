@@ -40,17 +40,6 @@
 #include "spinbox2private.moc"
 
 
-/*  List of styles which need to display the extra pair of spin buttons as a
- *  left-to-right mirror image. This is only necessary when, for example, the
- *  corners of widgets are rounded. For most styles, it is better not to mirror
- *  the spin widgets so as to keep the normal lighting/shading on either side.
- */
-static const char* mirrorStyles[] = {
-	"QCleanlooksStyle", "OxygenStyle", "PlastikStyle", "QPlastiqueStyle",
-	0     // list terminator
-};
-static bool mirrorStyle(const QStyle*);
-
 static inline QPixmap grabWidget(QWidget* w, QRect r = QRect())
 {
 	QPixmap p(r.isEmpty() ? w->size() : r.size());
@@ -97,10 +86,6 @@ void SpinBox2::init()
 	setFocusProxy(mSpinbox);
 	mUpdown2->setFocusPolicy(Qt::NoFocus);
 	mSpinMirror = new SpinMirror(mUpdown2, mSpinbox, this);
-	mUseMirror = mirrorStyle(style());
-mUseMirror = true;
-	if (!mUseMirror)
-		mSpinMirror->hide();    // hide mirrored spin buttons when they are inappropriate
 	connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
 	connect(mSpinbox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
 	connect(mSpinbox, SIGNAL(valueChanged(const QString&)), SIGNAL(valueChanged(const QString&)));
@@ -259,14 +244,7 @@ QSize SpinBox2::minimumSizeHint() const
 
 void SpinBox2::styleChange(QStyle&)
 {
-	mUseMirror = mirrorStyle(style());
-	if (mUseMirror)
-	{
-		mSpinMirror->show();    // show rounded corners with Plastik etc.
-		mSpinMirror->setFrame();
-	}
-	else
-		mSpinMirror->hide();    // keep normal shading with other styles
+	mSpinMirror->setFrame();
 	setUpdown2Size();   // set the new size of the second pair of spin buttons
 	arrange();
 }
@@ -337,13 +315,10 @@ void SpinBox2::arrange()
 	mSpinboxFrame->setGeometry(r);
 	mSpinbox->setGeometry(-xSpinbox, 0, mSpinboxFrame->width() + xSpinbox, height());
 	kDebug() << "arrowRect="<<arrowRect<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
-	if (mUseMirror)
-	{
-		mSpinMirror->resize(wUpdown2, mUpdown2->height());
-		mSpinMirror->setGeometry(arrowRect);
-//mSpinMirror->setGeometry(QStyle::visualRect(QRect(0, 11, wUpdown2, height()), this));
-		mSpinMirror->setButtons();
-	}
+
+	mSpinMirror->resize(wUpdown2, mUpdown2->height());
+	mSpinMirror->setGeometry(arrowRect);
+	mSpinMirror->setButtons();
 }
 
 /******************************************************************************
@@ -359,53 +334,20 @@ void SpinBox2::getMetrics() const
 	              | udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 	if (style()->inherits("PlastikStyle"))
 		butRect.setLeft(butRect.left() - 1);    // Plastik excludes left border from spin widget rectangle
-	if (mUseMirror)
+	xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
+	xUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).right() + 1;
+	QRect r = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame);
+	wUpdown2 = r.width() - xUpdown2;
+	wPadding = wGap = 0;
+	if (mRightToLeft)
 	{
-		// It's a style which needs a mirror image of the spin buttons
-		// for the left-hand pair of buttons.
-		xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
-		xUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).right() + 1;
-		QRect r = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame);
-		wUpdown2 = r.width() - xUpdown2;
-		wPadding = wGap = 0;
-		if (mRightToLeft)
-		{
-			xSpinbox = 0;
-			wUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left() - r.left();
-			mSpinMirror->setButtonPos(QPoint(wUpdown2 - (butRect.left() - r.left() + butRect.width()), butRect.top()));
-		}
-		else
-			mSpinMirror->setButtonPos(QPoint(r.right() - butRect.right(), butRect.top()));
-		kDebug() << ", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", xSpinbox="<<xSpinbox<<", wPadding"<<wPadding;
+		xSpinbox = 0;
+		wUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left() - r.left();
+		mSpinMirror->setButtonPos(QPoint(wUpdown2 - (butRect.left() - r.left() + butRect.width()), butRect.top()));
 	}
 	else
-	{
-		mSpinbox->initStyleOption(option);
-		if (mRightToLeft)
-		{
-			wPadding = butRect.left();
-			xUpdown2 = 0;
-			wUpdown2 = butRect.right();
-			xSpinbox = 0;
-		}
-		else
-		{
-			xUpdown2 = butRect.left();
-			wUpdown2 = mUpdown2->width() - butRect.left();
-			wPadding = mSpinbox->width() - butRect.right();
-			xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
-		}
-		wGap = 0;
-		kDebug() << "butRect="<<butRect<<", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", xSpinbox="<<xSpinbox<<", wPadding"<<wPadding;
-		kDebug()<<"up="<<mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp)<<", down="<<mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown)<<", edit="<<mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField)<<", frame="<<mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame);
-
-		// Make style-specific adjustments for a better appearance
-		if (style()->inherits("QMotifPlusStyle"))
-		{
-			xSpinbox = 0;      // show the edit control left border
-			wGap = 2;          // leave a space to the right of the left-hand pair of spin buttons
-		}
-	}
+		mSpinMirror->setButtonPos(QPoint(r.right() - butRect.right(), butRect.top()));
+	kDebug() << ", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", xSpinbox="<<xSpinbox<<", wPadding"<<wPadding;
 }
 
 /******************************************************************************
@@ -546,8 +488,10 @@ kDebug()<<r;
 	{
 		p = grabWidget(mMainSpinbox, QRect(r.left() + 2, r.bottom() - 2, 1, 1));
 		mBackground->setRect(r.left(), r.top() + 2, width() - r.left() - 1, r.height() - 4);
+mBackground->setRect(r.left(), r.top(), width()-r.left(),r.height());
 	}
 	QColor colour(p.toImage().pixel(0, 0));
+//colour=Qt::green;
 	mBackground->setBrush(QBrush(colour));
 	mBackground->setPen(QPen(colour));
 }
@@ -565,6 +509,9 @@ r.setWidth(r.width() + 1);
 kDebug()<<"Updown="<<r<<", x="<<x;
 	mSpinbox->inhibitPaintSignal(2);
 	mButtons->setPixmap(grabWidget(mSpinbox, r));
+//QPixmap p(r.size());
+//p.fill(Qt::red);
+//mButtons->setPixmap(p);
 }
 
 void SpinMirror::setButtonPos(const QPoint& pos)
@@ -617,21 +564,4 @@ kDebug()<<he->pos();
 			break;
 	}
 	return QGraphicsView::event(e);
-}
-
-
-/*=============================================================================
-= Local functions
-=============================================================================*/
-
-/******************************************************************************
-* Determine whether the extra pair of spin buttons needs to be mirrored
-* left-to-right in the specified style.
-*/
-static bool mirrorStyle(const QStyle* style)
-{
-	for (const char** s = mirrorStyles;  *s;  ++s)
-		if (style->inherits(*s))
-			return true;
-	return false;
 }

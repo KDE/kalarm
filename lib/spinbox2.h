@@ -308,7 +308,6 @@ virtual bool event(QEvent*);
 		int              mPageStep;           // left button increment
 		int              mPageShiftStep;      // left button increment with shift pressed
 		bool             mReverseWithLayout;  // reverse button positions if reverse layout (default = true)
-		bool             mUseMirror;          // current style requires mirrorred buttons
 
 	friend class MainSpinBox;
 };
