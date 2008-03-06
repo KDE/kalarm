@@ -28,12 +28,12 @@
 #include <QTimer>
 #include <QFrame>
 #include <QBrush>
-
 #include <QStyle>
 #include <QObject>
 #include <QApplication>
 #include <QPixmap>
 #include <QMatrix>
+
 #include <kdebug.h>
 
 #include "spinbox2.moc"
@@ -86,6 +86,8 @@ void SpinBox2::init()
 	setFocusProxy(mSpinbox);
 	mUpdown2->setFocusPolicy(Qt::NoFocus);
 	mSpinMirror = new SpinMirror(mUpdown2, mSpinbox, this);
+	mSpinbox->installEventFilter(this);
+	mUpdown2->installEventFilter(this);
 	connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
 	connect(mSpinbox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
 	connect(mSpinbox, SIGNAL(valueChanged(const QString&)), SIGNAL(valueChanged(const QString&)));
@@ -299,6 +301,66 @@ void SpinBox2::updateMirror()
 	mSpinMirror->setFrame();
 }
 
+bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
+{
+	bool updateButtons = false;
+	if (obj == mSpinbox)
+	{
+//kDebug()<<"activated="<<
+if (e->type() != QEvent::Paint) kDebug()<<e->type();
+		switch (e->type())
+		{
+			case QEvent::Enter:
+			case QEvent::Leave:
+				QApplication::postEvent(mUpdown2, new QEvent(e->type()));
+				updateButtons = true;
+				break;
+			case QEvent::HoverEnter:
+			{
+				QHoverEvent* he = (QHoverEvent*)e;
+				QApplication::postEvent(mUpdown2, new QHoverEvent(e->type(), QPoint(1, he->pos().y()), he->oldPos()));
+				updateButtons = true;
+				break;
+			}
+			case QEvent::HoverLeave:
+			{
+				QHoverEvent* he = (QHoverEvent*)e;
+				QApplication::postEvent(mUpdown2, new QHoverEvent(e->type(), he->pos(), QPoint(1, he->oldPos().y())));
+				updateButtons = true;
+				break;
+			}
+			case QEvent::FocusIn:
+			case QEvent::FocusOut:
+			{
+				QFocusEvent* fe = (QFocusEvent*)e;
+				QApplication::postEvent(mUpdown2, new QFocusEvent(e->type(), fe->reason()));
+				updateButtons = true;
+				break;
+			}
+			default:
+				break;
+		}
+	}
+	else if (obj == mUpdown2)
+	{
+		switch (e->type())
+		{
+			case QEvent::Enter:
+			case QEvent::Leave:
+			case QEvent::HoverEnter:
+			case QEvent::HoverLeave:
+			case QEvent::EnabledChange:
+				updateButtons = true;
+				break;
+			default:
+				break;
+		}
+	}
+	if (updateButtons)
+		QTimer::singleShot(0, this, SLOT(updateMirrorButtons()));
+	return false;
+}
+
 /******************************************************************************
 * Set the positions and sizes of all the child widgets. 
 */
@@ -416,12 +478,6 @@ int SpinBox2::MainSpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
 	return SpinBox::shiftStepAdjustment(oldValue, shiftStep);
 }
 
-bool SpinBox2::MainSpinBox::event(QEvent* e)
-{
-//kDebug()<<QString::number(windowFlags(), 16)<<", type="<<e->type();
-return SpinBox::event(e);
-}
-
 
 /*=============================================================================
 = Class ExtraSpinBox
@@ -429,13 +485,10 @@ return SpinBox::event(e);
 
 /******************************************************************************
 * Repaint the widget.
-* If it's the first time since a style change, tell the parent SpinBox2 to
-* update the SpinMirror with the new unpressed button image. We make the
-* presumably reasonable assumption that when a style change occurs, the spin
-* buttons are unpressed.
 */
 void ExtraSpinBox::paintEvent(QPaintEvent* e)
 {
+kDebug()<<"paintEvent(): "<<mInhibitPaintSignal;
 	SpinBox::paintEvent(e);
 	if (!mInhibitPaintSignal)
 		emit painted();
@@ -458,7 +511,7 @@ SpinMirror::SpinMirror(ExtraSpinBox* spinbox, SpinBox* mainspin, QWidget* parent
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setFrameStyle(QFrame::NoFrame);
-	mBackground = scene()->addRect(QRectF());
+	setMouseTracking(mSpinbox->hasMouseTracking());
 	mButtons = scene()->addPixmap(QPixmap());
 	mButtons->setZValue(1);
 	mButtons->setAcceptedMouseButtons(Qt::LeftButton);
@@ -466,49 +519,50 @@ SpinMirror::SpinMirror(ExtraSpinBox* spinbox, SpinBox* mainspin, QWidget* parent
 
 void SpinMirror::setFrame()
 {
-	// Paint the left hand frame of the main spinbox
+	// Paint the left hand frame of the main spinbox.
+	// Use the part to the left of the edit field, plus a slice at
+	// the left of the edit field stretched for the rest of the width.
+	// This avoids possibly grabbing text and displaying it in the
+	// spin button area.
 	QGraphicsScene* c = scene();
-	bool rtl = QApplication::isRightToLeft();
-	QRect r = rect();
-	if (rtl)
-		r.moveLeft(mMainSpinbox->width() - width());
-kDebug()<<r;
-	c->setBackgroundBrush(grabWidget(mMainSpinbox, r));
-	// Blank out any edit field contents which were painted
 	QStyleOptionSpinBox option;
 	option.initFrom(mMainSpinbox);
-	r = mMainSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
-	QPixmap p;
+	QRect r = mMainSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
+	QPixmap p(grabWidget(mMainSpinbox, QRect(r.left() + 2, 0, 1, height())).scaled(size()));
+	bool rtl = QApplication::isRightToLeft();
+	QPoint end(0, 0);
+	QRect endr = rect();
+	endr.setWidth(r.left() + 2);
 	if (rtl)
 	{
-		p = grabWidget(mMainSpinbox, QRect(r.right() - 2, r.bottom() - 2, 1, 1));
-		mBackground->setRect(0, r.top() + 2, width() - (mMainSpinbox->width() - r.right()), r.height() - 4);
+		end = QPoint(width() - endr.width(), 0);
+		endr.moveLeft(mMainSpinbox->width() - endr.width());
 	}
-	else
-	{
-		p = grabWidget(mMainSpinbox, QRect(r.left() + 2, r.bottom() - 2, 1, 1));
-		mBackground->setRect(r.left(), r.top() + 2, width() - r.left() - 1, r.height() - 4);
-mBackground->setRect(r.left(), r.top(), width()-r.left(),r.height());
-	}
-	QColor colour(p.toImage().pixel(0, 0));
-//colour=Qt::green;
-	mBackground->setBrush(QBrush(colour));
-	mBackground->setPen(QPen(colour));
+	mMainSpinbox->render(&p, end, endr, QWidget::DrawWindowBackground | QWidget::DrawChildren | QWidget::IgnoreMask);
+	c->setBackgroundBrush(p);
+kDebug()<<size()<<", pixmap="<<p.size();
 }
 
 void SpinMirror::setButtons()
 {
+kDebug();
 	mSpinbox->inhibitPaintSignal(2);
 	QStyleOptionSpinBox option;
 	mSpinbox->initStyleOption(option);
 	QStyle* st = mSpinbox->style();
-	int x = st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).right() + 1;
 	QRect r = st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp)
 	        | st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
-r.setWidth(r.width() + 1);
-kDebug()<<"Updown="<<r<<", x="<<x;
-	mSpinbox->inhibitPaintSignal(2);
+kDebug()<<r;
+	if (st->inherits("OxygenStyle"))
+	{
+		// They also don't use all their height, so shorten them to 
+		// allow frame highlighting to work properly.
+		r.setTop(r.top() + 1);
+		r.setHeight(r.height() - 2);
+	}
+	mSpinbox->inhibitPaintSignal(1);
 	mButtons->setPixmap(grabWidget(mSpinbox, r));
+	mSpinbox->inhibitPaintSignal(0);
 //QPixmap p(r.size());
 //p.fill(Qt::red);
 //mButtons->setPixmap(p);
@@ -516,8 +570,16 @@ kDebug()<<"Updown="<<r<<", x="<<x;
 
 void SpinMirror::setButtonPos(const QPoint& pos)
 {
-kDebug()<<pos;
-	mButtons->setPos(pos.x(), pos.y());
+	int x = pos.x();
+	int y = pos.y();
+	if (style()->inherits("OxygenStyle"))
+	{
+		// Oxygen spin buttons don't use all their height. Prevent
+		// the top overlapping the frame highlighting. Their height
+		// is shortened in setButton() above.
+		++y;
+	}
+	mButtons->setPos(x, y);
 }
 
 void SpinMirror::resizeEvent(QResizeEvent* e)
@@ -527,7 +589,8 @@ void SpinMirror::resizeEvent(QResizeEvent* e)
 }
 
 /******************************************************************************
-* Pass on all mouse events to the spinbox which we're covering up.
+* Pass on to the extra spinbox all mouse events which occur over the spin
+* button area.
 */
 void SpinMirror::mouseEvent(QMouseEvent* e)
 {
@@ -542,24 +605,41 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
 		pt = QPoint(ptf.x(), ptf.y());
 		pt.setX(ptf.x() + r.left());
 		pt.setY(ptf.y() + r.top());
-		QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->buttons(), e->modifiers()));
 	}
+	else
+		pt = QPoint(0, 0);  // allow auto-repeat to stop
+	QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->buttons(), e->modifiers()));
 }
 
+/******************************************************************************
+* Pass on to the main spinbox events which are needed to activate mouseover and
+* other graphic effects when the mouse cursor enters and leaves the widget.
+*/
 bool SpinMirror::event(QEvent* e)
 {
-//kDebug()<<QString::number(windowFlags(), 16)<<", type="<<e->type();
+kDebug()<<e->type();
 	switch (e->type())
 	{
-		case QEvent::HoverEnter:
+		case QEvent::Leave:
+			if (mMainSpinbox->rect().contains(mMainSpinbox->mapFromGlobal(QCursor::pos())))
+				break;
+			// fall through to QEvent::Enter
+		case QEvent::Enter:
+			QApplication::postEvent(mMainSpinbox, new QEvent(e->type()));
+			break;
 		case QEvent::HoverLeave:
-		case QEvent::HoverMove:
+			if (mMainSpinbox->rect().contains(mMainSpinbox->mapFromGlobal(QCursor::pos())))
+				break;
+			// fall through to QEvent::HoverEnter
+		case QEvent::HoverEnter:
 		{
 			QHoverEvent* he = (QHoverEvent*)e;
-kDebug()<<he->pos();
 			QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->pos(), he->oldPos()));
 			break;
 		}
+		case QEvent::FocusIn:
+			mMainSpinbox->setFocus();
+			break;
 		default:
 			break;
 	}

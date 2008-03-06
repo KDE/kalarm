@@ -264,6 +264,7 @@ class SpinBox2 : public QFrame
 		void                init();
 		void                arrange();
 		void                updateMirror();
+		bool                eventFilter(QObject*, QEvent*);
 		void                spinboxResized(QResizeEvent*);
 		void                setUpdown2Size();
 		int                 whichButton(QObject* spinWidget, const QPoint&);
@@ -289,7 +290,6 @@ class SpinBox2 : public QFrame
 				                                            { return owner->validate(text, pos); }
 			protected:
 				virtual void    resizeEvent(QResizeEvent* e) { owner->spinboxResized(e); SpinBox::resizeEvent(e); }
-virtual bool event(QEvent*);
 			private:
 				SpinBox2* owner;   // owner SpinBox2
 		};

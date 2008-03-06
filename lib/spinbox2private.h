@@ -79,14 +79,12 @@ class SpinMirror : public QGraphicsView
 		virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
 		virtual void mouseMoveEvent(QMouseEvent* e)         { mouseEvent(e); }
 		virtual void mouseDoubleClickEvent(QMouseEvent* e)  { mouseEvent(e); }
-
 	private:
 		void         mouseEvent(QMouseEvent*);
 
 		ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
 		SpinBox*             mMainSpinbox;
 		QGraphicsPixmapItem* mButtons;    // image of spin butttons
-		QGraphicsRectItem*   mBackground; // background blank to hide spinbox contentz
 		bool                 mReadOnly;   // value cannot be changed
 };
 
