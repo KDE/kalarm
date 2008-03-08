@@ -232,7 +232,7 @@ QSize SpinBox2::sizeHint() const
 {
 	getMetrics();
 	QSize size = mSpinbox->sizeHint();
-	size.setWidth(size.width() - xSpinbox + wUpdown2 + wGap);
+	size.setWidth(size.width() - wSpinboxHide + wUpdown2);
 	return size;
 }
 
@@ -240,15 +240,15 @@ QSize SpinBox2::minimumSizeHint() const
 {
 	getMetrics();
 	QSize size = mSpinbox->minimumSizeHint();
-	size.setWidth(size.width() - xSpinbox + wUpdown2 + wGap);
+	size.setWidth(size.width() - wSpinboxHide + wUpdown2);
 	return size;
 }
 
 void SpinBox2::styleChange(QStyle&)
 {
-	mSpinMirror->setFrame();
 	setUpdown2Size();   // set the new size of the second pair of spin buttons
 	arrange();
+	mSpinMirror->setFrame();
 }
 
 void SpinBox2::paintEvent(QPaintEvent* e)
@@ -307,7 +307,7 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
 	if (obj == mSpinbox)
 	{
 //kDebug()<<"activated="<<
-if (e->type() != QEvent::Paint) kDebug()<<e->type();
+//if (e->type() != QEvent::Paint) kDebug()<<e->type();
 		switch (e->type())
 		{
 			case QEvent::Enter:
@@ -369,13 +369,12 @@ void SpinBox2::arrange()
 	getMetrics();
 	mUpdown2->move(-mUpdown2->width(), 0);   // keep completely hidden
 	QRect arrowRect = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(0, 0, wUpdown2, height()));
+//	QRect r = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2, 0, width() - wUpdown2, height()));
+	QRect r(wUpdown2, 0, width() - wUpdown2, height());
 	if (mRightToLeft)
-		arrowRect.setLeft(arrowRect.left() - wPadding);
-	else
-		arrowRect.setWidth(arrowRect.width() - wPadding);
-	QRect r = style()->visualRect((mRightToLeft ? Qt::RightToLeft : Qt::LeftToRight), rect(), QRect(wUpdown2 + wGap, 0, width() - wUpdown2 - wGap, height()));
+		r.moveLeft(0);
 	mSpinboxFrame->setGeometry(r);
-	mSpinbox->setGeometry(-xSpinbox, 0, mSpinboxFrame->width() + xSpinbox, height());
+	mSpinbox->setGeometry(mRightToLeft ? 0 : -wSpinboxHide, 0, mSpinboxFrame->width() + wSpinboxHide, height());
 	kDebug() << "arrowRect="<<arrowRect<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
 
 	mSpinMirror->resize(wUpdown2, mUpdown2->height());
@@ -396,20 +395,19 @@ void SpinBox2::getMetrics() const
 	              | udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
 	if (style()->inherits("PlastikStyle"))
 		butRect.setLeft(butRect.left() - 1);    // Plastik excludes left border from spin widget rectangle
-	xSpinbox = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left();
+	QRect r = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
+	wSpinboxHide = mRightToLeft ? mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame).right() - r.right() : r.left();
 	xUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).right() + 1;
-	QRect r = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame);
+	r = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame);
 	wUpdown2 = r.width() - xUpdown2;
-	wPadding = wGap = 0;
 	if (mRightToLeft)
 	{
-		xSpinbox = 0;
 		wUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left() - r.left();
 		mSpinMirror->setButtonPos(QPoint(wUpdown2 - (butRect.left() - r.left() + butRect.width()), butRect.top()));
 	}
 	else
 		mSpinMirror->setButtonPos(QPoint(r.right() - butRect.right(), butRect.top()));
-	kDebug() << ", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", xSpinbox="<<xSpinbox<<", wPadding"<<wPadding;
+	kDebug() << ", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", wSpinboxHide="<<wSpinboxHide<<", frame right="<<r.right() - butRect.right();
 }
 
 /******************************************************************************
@@ -488,7 +486,7 @@ int SpinBox2::MainSpinBox::shiftStepAdjustment(int oldValue, int shiftStep)
 */
 void ExtraSpinBox::paintEvent(QPaintEvent* e)
 {
-kDebug()<<"paintEvent(): "<<mInhibitPaintSignal;
+//kDebug()<<"paintEvent(): "<<mInhibitPaintSignal;
 	SpinBox::paintEvent(e);
 	if (!mInhibitPaintSignal)
 		emit painted();
@@ -528,31 +526,31 @@ void SpinMirror::setFrame()
 	QStyleOptionSpinBox option;
 	option.initFrom(mMainSpinbox);
 	QRect r = mMainSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
-	QPixmap p(grabWidget(mMainSpinbox, QRect(r.left() + 2, 0, 1, height())).scaled(size()));
 	bool rtl = QApplication::isRightToLeft();
-	QPoint end(0, 0);
+	int x = rtl ? r.right() - 2 : r.left() + 2;
+	QPixmap p(grabWidget(mMainSpinbox, QRect(x, 0, 1, height())).scaled(size()));
 	QRect endr = rect();
-	endr.setWidth(r.left() + 2);
 	if (rtl)
 	{
-		end = QPoint(width() - endr.width(), 0);
-		endr.moveLeft(mMainSpinbox->width() - endr.width());
+		int mr = mMainSpinbox->width() - 1;
+		endr.setWidth(mr - r.right() + 2);
+		endr.moveRight(mr);
 	}
-	mMainSpinbox->render(&p, end, endr, QWidget::DrawWindowBackground | QWidget::DrawChildren | QWidget::IgnoreMask);
+	else
+		endr.setWidth(r.left() + 2);
+	x = rtl ? width() - endr.width() : 0;
+	mMainSpinbox->render(&p, QPoint(x, 0), endr, QWidget::DrawWindowBackground | QWidget::DrawChildren | QWidget::IgnoreMask);
 	c->setBackgroundBrush(p);
-kDebug()<<size()<<", pixmap="<<p.size();
 }
 
 void SpinMirror::setButtons()
 {
-kDebug();
 	mSpinbox->inhibitPaintSignal(2);
 	QStyleOptionSpinBox option;
 	mSpinbox->initStyleOption(option);
 	QStyle* st = mSpinbox->style();
 	QRect r = st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp)
 	        | st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
-kDebug()<<r;
 	if (st->inherits("OxygenStyle"))
 	{
 		// They also don't use all their height, so shorten them to 
@@ -563,9 +561,6 @@ kDebug()<<r;
 	mSpinbox->inhibitPaintSignal(1);
 	mButtons->setPixmap(grabWidget(mSpinbox, r));
 	mSpinbox->inhibitPaintSignal(0);
-//QPixmap p(r.size());
-//p.fill(Qt::red);
-//mButtons->setPixmap(p);
 }
 
 void SpinMirror::setButtonPos(const QPoint& pos)
@@ -617,7 +612,7 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
 */
 bool SpinMirror::event(QEvent* e)
 {
-kDebug()<<e->type();
+//kDebug()<<e->type();
 	switch (e->type())
 	{
 		case QEvent::Leave:

@@ -247,9 +247,7 @@ class SpinBox2 : public QFrame
 
 		mutable int      wUpdown2;        // width of second spin widget
 		mutable int      xUpdown2;        // x offset of visible area in 'mUpdown2'
-		mutable int      xSpinbox;        // x offset of visible area in 'mSpinbox'
-		mutable int      wPadding;        // width of margin beside spin widget
-		mutable int      wGap;            // gap between mUpdown2Frame and mSpinboxFrame
+		mutable int      wSpinboxHide;    // width at left of 'mSpinbox' hidden by second spin widget
 
 	protected slots:
 		virtual void        valueChange();
