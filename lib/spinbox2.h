@@ -247,6 +247,7 @@ class SpinBox2 : public QFrame
 
 		mutable int      wUpdown2;        // width of second spin widget
 		mutable int      wSpinboxHide;    // width at left of 'mSpinbox' hidden by second spin widget
+		mutable QPoint   mButtonPos;      // position of buttons inside mirror widget
 
 	protected slots:
 		virtual void     valueChange();

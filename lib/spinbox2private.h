@@ -75,17 +75,20 @@ class SpinMirror : public QGraphicsView
 	protected:
 		virtual bool event(QEvent*);
 		virtual void resizeEvent(QResizeEvent*);
+		virtual void styleChange(QStyle&);
 		virtual void mousePressEvent(QMouseEvent* e)        { mouseEvent(e); }
 		virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
 		virtual void mouseMoveEvent(QMouseEvent* e)         { mouseEvent(e); }
 		virtual void mouseDoubleClickEvent(QMouseEvent* e)  { mouseEvent(e); }
 	private:
 		void         mouseEvent(QMouseEvent*);
+		void         setMirroredState(bool clear = false);
 
 		ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
 		SpinBox*             mMainSpinbox;
 		QGraphicsPixmapItem* mButtons;    // image of spin butttons
 		bool                 mReadOnly;   // value cannot be changed
+		bool                 mMirrored;   // mirror left-to-right
 };
 
 #endif // SPINBOX2PRIVATE_H
