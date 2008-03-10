@@ -177,12 +177,12 @@ void TimeSpinBox::setValid(bool valid)
 		if (value() < mMinimumValue)
 			SpinBox2::setValue(mMinimumValue);
 		setSpecialValueText(QString());
-		setMinimum(mMinimumValue);
+		SpinBox2::setMinimum(mMinimumValue);
 	}
 	else if (!valid  &&  !mInvalid)
 	{
 		mInvalid = true;
-		setMinimum(mMinimumValue - 1);
+		SpinBox2::setMinimum(mMinimumValue - 1);
 		setSpecialValueText(QLatin1String("**:**"));
 		SpinBox2::setValue(mMinimumValue - 1);
 	}
@@ -193,8 +193,8 @@ void TimeSpinBox::setValid(bool valid)
 */
 void TimeSpinBox::setMinimum(int minutes)
 {
-        mMinimumValue = minutes;
-        SpinBox2::setMinimum(mMinimumValue - (mInvalid ? 1 : 0));
+	mMinimumValue = minutes;
+	SpinBox2::setMinimum(mMinimumValue - (mInvalid ? 1 : 0));
 }
 
 /******************************************************************************
@@ -214,7 +214,7 @@ void TimeSpinBox::setValue(int minutes)
 			{
 				mInvalid = false;
 				setSpecialValueText(QString());
-				setMinimum(mMinimumValue);
+				SpinBox2::setMinimum(mMinimumValue);
 			}
 			SpinBox2::setValue(minutes);
 			mEnteredSetValue = false;
