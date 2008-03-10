@@ -72,201 +72,200 @@ class SpinBox2 : public QFrame
 		/** Sets whether the spin box can be changed by the user.
 		 *  @param readOnly True to set the widget read-only, false to set it read-write.
 		 */
-		virtual void        setReadOnly(bool readOnly);
+		virtual void     setReadOnly(bool readOnly);
 		/** Returns true if the widget is read only. */
-		bool                isReadOnly() const          { return mSpinbox->isReadOnly(); }
+		bool             isReadOnly() const          { return mSpinbox->isReadOnly(); }
 		/** Sets whether the spin box value text should be selected when its value is stepped. */
-		void                setSelectOnStep(bool sel)   { mSpinbox->setSelectOnStep(sel); }
+		void             setSelectOnStep(bool sel)   { mSpinbox->setSelectOnStep(sel); }
 		/** Sets whether the spin button pairs should be reversed for a right-to-left language.
 		 *  The default is for them to be reversed.
 		 */
-		void                setReverseWithLayout(bool reverse);
+		void             setReverseWithLayout(bool reverse);
 		/** Returns whether the spin button pairs will be reversed for a right-to-left language. */
-		bool                reverseButtons() const      { return mRightToLeft  &&  !mReverseWithLayout; }
+		bool             reverseButtons() const      { return mRightToLeft  &&  !mReverseWithLayout; }
 
 		/** Returns the spin box's text, including any prefix() and suffix(). */
-		QString             text() const                { return mSpinbox->text(); }
+		QString          text() const                { return mSpinbox->text(); }
 		/** Returns the prefix for the spin box's text. */
-		QString             prefix() const              { return mSpinbox->prefix(); }
+		QString          prefix() const              { return mSpinbox->prefix(); }
 		/** Returns the suffix for the spin box's text. */
-		QString             suffix() const              { return mSpinbox->suffix(); }
+		QString          suffix() const              { return mSpinbox->suffix(); }
 		/** Sets the prefix which is prepended to the start of the displayed text. */
-		void                setPrefix(const QString& text)  { mSpinbox->setPrefix(text); }
+		void             setPrefix(const QString& text)  { mSpinbox->setPrefix(text); }
 		/** Sets the suffix which is prepended to the start of the displayed text. */
-		void                setSuffix(const QString& text)  { mSpinbox->setSuffix(text); }
+		void             setSuffix(const QString& text)  { mSpinbox->setSuffix(text); }
 		/** Returns the spin box's text with no prefix(), suffix() or leading or trailing whitespace. */
-		QString             cleanText() const           { return mSpinbox->cleanText(); }
+		QString          cleanText() const           { return mSpinbox->cleanText(); }
 
 		/** Sets the special-value text which, if non-null, is displayed instead of a numeric
 		 *  value when the current value is equal to minimum().
 		 */
-		void                setSpecialValueText(const QString& text)  { mSpinbox->setSpecialValueText(text); }
+		void             setSpecialValueText(const QString& text)  { mSpinbox->setSpecialValueText(text); }
 		/** Returns the special-value text which, if non-null, is displayed instead of a numeric
 		 *  value when the current value is equal to minimum().
 		 */
-		QString             specialValueText() const    { return mSpinbox->specialValueText(); }
+		QString          specialValueText() const    { return mSpinbox->specialValueText(); }
 
 		/** Sets whether it is possible to step the value from the highest value to the
 		 *  lowest value and vice versa.
 		 */
-		void                setWrapping(bool on);
+		void             setWrapping(bool on);
 		/** Returns whether it is possible to step the value from the highest value to the
 		 *  lowest value and vice versa.
 		 */
-		bool                wrapping() const            { return mSpinbox->wrapping(); }
+		bool             wrapping() const            { return mSpinbox->wrapping(); }
 
 		/** Set the text alignment of the widget */
-		void                setAlignment(Qt::Alignment a) { mSpinbox->setAlignment(a); }
+		void             setAlignment(Qt::Alignment a) { mSpinbox->setAlignment(a); }
 		/** Sets the button symbols to use (arrows or plus/minus). */
-		void                setButtonSymbols(QSpinBox::ButtonSymbols);
+		void             setButtonSymbols(QSpinBox::ButtonSymbols);
 		/** Returns the button symbols currently in use (arrows or plus/minus). */
 		QSpinBox::ButtonSymbols buttonSymbols() const   { return mSpinbox->buttonSymbols(); }
 
 		/** Determine whether the current input is valid. */
 		virtual QValidator::State validate(QString&, int& /*pos*/) const  { return QValidator::Acceptable; }
 
-		virtual QSize       sizeHint() const;
-		virtual QSize       minimumSizeHint() const;
+		virtual QSize    sizeHint() const;
+		virtual QSize    minimumSizeHint() const;
 
 		/** Returns the minimum value of the spin box. */
-		int                 minimum() const             { return mMinValue; }
+		int              minimum() const             { return mMinValue; }
 		/** Returns the maximum value of the spin box. */
-		int                 maximum() const             { return mMaxValue; }
+		int              maximum() const             { return mMaxValue; }
 		/** Sets the minimum value of the spin box. */
-		void                setMinimum(int val);
+		void             setMinimum(int val);
 		/** Sets the maximum value of the spin box. */
-		void                setMaximum(int val);
+		void             setMaximum(int val);
 		/** Sets the minimum and maximum values of the spin box. */
-		void                setRange(int minValue, int maxValue)   { setMinimum(minValue);  setMaximum(maxValue); }
+		void             setRange(int minValue, int maxValue)   { setMinimum(minValue);  setMaximum(maxValue); }
 		/** Returns the current value of the spin box. */
-		int                 value() const               { return mSpinbox->value(); }
+		int              value() const               { return mSpinbox->value(); }
 		/** Returns the specified value clamped to the range of the spin box. */
-		int                 bound(int val) const;
+		int              bound(int val) const;
 
 		/** Returns the geometry of the right-hand "up" button. */
-		QRect               upRect() const              { return mSpinbox->upRect(); }
+		QRect            upRect() const              { return mSpinbox->upRect(); }
 		/** Returns the geometry of the right-hand "down" button. */
-		QRect               downRect() const            { return mSpinbox->downRect(); }
+		QRect            downRect() const            { return mSpinbox->downRect(); }
 		/** Returns the geometry of the left-hand "up" button. */
-		QRect               up2Rect() const;
+		QRect            up2Rect() const;
 		/** Returns the geometry of the left-hand "down" button. */
-		QRect               down2Rect() const;
+		QRect            down2Rect() const;
 
 		/** Returns the unshifted step increment for the right-hand spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a right-hand
 		 *  spin button is clicked without the shift key being pressed.
 		 */
-		int                 singleStep() const          { return mSingleStep; }
+		int              singleStep() const          { return mSingleStep; }
 		/** Returns the shifted step increment for the right-hand spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a right-hand
 		 *  spin button is clicked while the shift key is pressed.
 		 */
-		int                 singleShiftStep() const     { return mSingleShiftStep; }
+		int              singleShiftStep() const     { return mSingleShiftStep; }
 		/** Returns the unshifted step increment for the left-hand spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a left-hand
 		 *  spin button is clicked without the shift key being pressed.
 		 */
-		int                 pageStep() const            { return mPageStep; }
+		int              pageStep() const            { return mPageStep; }
 		/** Returns the shifted step increment for the left-hand spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a left-hand
 		 *  spin button is clicked while the shift key is pressed.
 		 */
-		int                 pageShiftStep() const       { return mPageShiftStep; }
+		int              pageShiftStep() const       { return mPageShiftStep; }
 		/** Sets the unshifted step increment for the right-hand spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a right-hand
 		 *  spin button is clicked without the shift key being pressed.
 		 */
-		void                setSingleStep(int step);
+		void             setSingleStep(int step);
 		/** Sets the unshifted step increments for the two pairs of spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a spin button
 		 *  is clicked without the shift key being pressed.
 		 *  @param line The step increment for the right-hand spin buttons.
 		 *  @param page The step increment for the left-hand spin buttons.
 		 */
-		void                setSteps(int line, int page);
+		void             setSteps(int line, int page);
 		/** Sets the shifted step increments for the two pairs of spin buttons,
 		 *  i.e. the amount by which the spin box value changes when a spin button
 		 *  is clicked while the shift key is pressed.
 		 *  @param line The shift step increment for the right-hand spin buttons.
 		 *  @param page The shift step increment for the left-hand spin buttons.
 		 */
-		void                setShiftSteps(int line, int page);
+		void             setShiftSteps(int line, int page);
 
 		/** Increments the current value by adding the unshifted step increment for
 		 *  the left-hand spin buttons.
 		 */
-		void                addPage()                   { addValue(mPageStep); }
+		void             addPage()                   { addValue(mPageStep); }
 		/** Decrements the current value by subtracting the unshifted step increment for
 		 *  the left-hand spin buttons.
 		 */
-		void                subtractPage()              { addValue(-mPageStep); }
+		void             subtractPage()              { addValue(-mPageStep); }
 		/** Increments the current value by adding the unshifted step increment for
 		 *  the right-hand spin buttons.
 		 */
-		void                addSingle()                 { addValue(mSingleStep); }
+		void             addSingle()                 { addValue(mSingleStep); }
 		/** Decrements the current value by subtracting the unshifted step increment for
 		 *  the right-hand spin buttons.
 		 */
-		void                subtractSingle()            { addValue(-mSingleStep); }
+		void             subtractSingle()            { addValue(-mSingleStep); }
 		/** Adjusts the current value by adding @p change. */
-		void                addValue(int change)        { mSpinbox->addValue(change); }
+		void             addValue(int change)        { mSpinbox->addValue(change); }
 		/** Increments the current value by adding the unshifted increment for
 		 *  the right-hand spin buttons.
 		 */
-		virtual void        stepBy(int increment)       { addValue(increment); }
+		virtual void     stepBy(int increment)       { addValue(increment); }
 
 	public slots:
 		/** Sets the current value to @p val. */
-		void                setValue(int val)           { mSpinbox->setValue(val); }
+		void             setValue(int val)           { mSpinbox->setValue(val); }
 		/** Increments the current value by adding the unshifted step increment for
 		 *  the left-hand spin buttons.
 		 */
-		virtual void        pageUp()                    { addValue(mPageStep); }
+		virtual void     pageUp()                    { addValue(mPageStep); }
 		/** Decrements the current value by subtracting the unshifted step increment for
 		 *  the left-hand spin buttons.
 		 */
-		virtual void        pageDown()                  { addValue(-mPageStep); }
+		virtual void     pageDown()                  { addValue(-mPageStep); }
 		/** Selects all the text in the spin box's editor. */
-		void                selectAll()                 { mSpinbox->selectAll(); }
+		void             selectAll()                 { mSpinbox->selectAll(); }
 		/** Sets whether the widget is enabled. */
-		virtual void        setEnabled(bool enabled);
+		virtual void     setEnabled(bool enabled);
 
 	signals:
 		/** Signal which is emitted whenever the value of the spin box changes. */
-		void                valueChanged(int value);
+		void             valueChanged(int value);
 		/** Signal which is emitted whenever the value of the spin box changes. */
-		void                valueChanged(const QString& valueText);
+		void             valueChanged(const QString& valueText);
 
 	protected:
-		virtual QString     textFromValue(int v) const    { return mSpinbox->textFromVal(v); }
-		virtual int         valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
-		virtual void        paintEvent(QPaintEvent*);
-		virtual void        showEvent(QShowEvent*);
-		virtual void        styleChange(QStyle&);
-		virtual void        getMetrics() const;
+		virtual QString  textFromValue(int v) const    { return mSpinbox->textFromVal(v); }
+		virtual int      valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
+		virtual void     paintEvent(QPaintEvent*);
+		virtual void     showEvent(QShowEvent*);
+		virtual void     styleChange(QStyle&);
+		virtual void     getMetrics() const;
 
 		mutable int      wUpdown2;        // width of second spin widget
-		mutable int      xUpdown2;        // x offset of visible area in 'mUpdown2'
 		mutable int      wSpinboxHide;    // width at left of 'mSpinbox' hidden by second spin widget
 
 	protected slots:
-		virtual void        valueChange();
-		virtual void        stepPage(int);
+		virtual void     valueChange();
+		virtual void     stepPage(int);
 
 	private slots:
-		void                updateMirrorButtons();
-		void                updateMirrorFrame();
-		void                paintTimer();
+		void             updateMirrorButtons();
+		void             updateMirrorFrame();
+		void             paintTimer();
 
 	private:
-		void                init();
-		void                arrange();
-		void                updateMirror();
-		bool                eventFilter(QObject*, QEvent*);
-		void                spinboxResized(QResizeEvent*);
-		void                setUpdown2Size();
-		int                 whichButton(QObject* spinWidget, const QPoint&);
-		void                setShiftStepping(bool on);
+		void             init();
+		void             arrange();
+		void             updateMirror();
+		bool             eventFilter(QObject*, QEvent*);
+		void             spinboxResized(QResizeEvent*);
+		void             setUpdown2Size();
+		int              whichButton(QObject* spinWidget, const QPoint&);
+		void             setShiftStepping(bool on);
 
 		// Visible spin box class.
 		// Declared here to allow use of mSpinBox in inline methods.

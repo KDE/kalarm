@@ -397,9 +397,9 @@ void SpinBox2::getMetrics() const
 		butRect.setLeft(butRect.left() - 1);    // Plastik excludes left border from spin widget rectangle
 	QRect r = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
 	wSpinboxHide = mRightToLeft ? mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame).right() - r.right() : r.left();
-	xUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).right() + 1;
+	int x = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).right() + 1;
 	r = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame);
-	wUpdown2 = r.width() - xUpdown2;
+	wUpdown2 = r.width() - x;
 	if (mRightToLeft)
 	{
 		wUpdown2 = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField).left() - r.left();
@@ -407,7 +407,7 @@ void SpinBox2::getMetrics() const
 	}
 	else
 		mSpinMirror->setButtonPos(QPoint(r.right() - butRect.right(), butRect.top()));
-	kDebug() << ", xUpdown2="<<xUpdown2<<", wUpdown2="<<wUpdown2<<", wSpinboxHide="<<wSpinboxHide<<", frame right="<<r.right() - butRect.right();
+	kDebug() << ", x="<<x<<", wUpdown2="<<wUpdown2<<", wSpinboxHide="<<wSpinboxHide<<", frame right="<<r.right() - butRect.right();
 }
 
 /******************************************************************************
