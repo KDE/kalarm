@@ -115,7 +115,7 @@ void KAlarmPrefDlg::display()
 		KWindowInfo info = KWindowSystem::windowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
 		KWindowSystem::setCurrentDesktop(info.desktop());
 #endif
-		mInstance->showNormal();   // un-minimize it if necessary
+		mInstance->setWindowState(mInstance->windowState() & ~Qt::WindowMinimized); // un-minimize it if necessary
 		mInstance->raise();
 		mInstance->activateWindow();
 	}

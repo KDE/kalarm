@@ -1375,7 +1375,7 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
 		{
 			// The window is hidden, so display it
 			win->hide();        // in case it's on a different desktop
-			win->showNormal();
+			win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
 			win->raise();
 			win->activateWindow();
 			return win;
