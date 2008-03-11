@@ -138,9 +138,9 @@ class SpinBox2 : public QFrame
 		/** Returns the maximum value of the spin box. */
 		int                 maxValue() const            { return mMaxValue; }
 		/** Sets the minimum value of the spin box. */
-		void                setMinValue(int val);
+		virtual void        setMinValue(int val);
 		/** Sets the maximum value of the spin box. */
-		void                setMaxValue(int val);
+		virtual void        setMaxValue(int val);
 		/** Sets the minimum and maximum values of the spin box. */
 		void                setRange(int minValue, int maxValue)   { setMinValue(minValue);  setMaxValue(maxValue); }
 		/** Returns the current value of the spin box. */

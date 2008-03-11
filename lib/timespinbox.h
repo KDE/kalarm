@@ -117,7 +117,7 @@ class TimeSpinBox : public SpinBox2
 	private:
 		class TimeValidator;
 		TimeValidator*  mValidator;
-		int             mMinimumValue;
+		int             mMinimumValue;       // real minimum value, excluding special value for "**:**"
 		bool            m12Hour;             // use 12-hour clock
 		bool            mPm;                 // use PM for manually entered values (with 12-hour clock)
 		bool            mInvalid;            // value is currently invalid (asterisks)
