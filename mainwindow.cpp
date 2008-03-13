@@ -132,7 +132,8 @@ MainWindow::MainWindow(bool restored)
 	: MainWindowBase(0, Qt::WindowContextHelpButtonHint),
 	  mResourcesWidth(-1),
 	  mHiddenTrayParent(false),
-	  mShown(false)
+	  mShown(false),
+	  mResizing(false)
 {
 	kDebug();
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -156,14 +157,12 @@ MainWindow::MainWindow(bool restored)
 
 	mSplitter = new QSplitter(Qt::Horizontal, this);
 	mSplitter->setChildrenCollapsible(false);
+	mSplitter->installEventFilter(this);
 	setCentralWidget(mSplitter);
 
 	// Create the calendar resource selector widget
 	AlarmResources* resources = AlarmResources::instance();
 	mResourceSelector = new ResourceSelector(resources, mSplitter);
-#ifdef __GNUC__
-#warning Prevent resources being resized when window is resized
-#endif
 	mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
 	mSplitter->setStretchFactor(1, 1);
 	connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
@@ -279,6 +278,31 @@ void MainWindow::closeAll()
 }
 
 /******************************************************************************
+* Intercept events for the splitter widget.
+*/
+bool MainWindow::eventFilter(QObject* obj, QEvent* e)
+{
+	if (obj == mSplitter)
+	{
+		switch (e->type())
+		{
+			case QEvent::Resize:
+				// Don't change resources size while WINDOW is being resized.
+				// Resize event always occurs before Paint.
+				mResizing = true;
+				break;
+			case QEvent::Paint:
+				// Allow resources to be resized again
+				mResizing = false;
+				break;
+			default:
+				break;
+		}
+	}
+	return false;
+}
+
+/******************************************************************************
 *  Called when the window's size has changed (before it is painted).
 *  Sets the last column in the list view to extend at least to the right hand
 *  edge of the list view.
@@ -288,18 +312,18 @@ void MainWindow::resizeEvent(QResizeEvent* re)
 {
 	// Save the window's new size only if it's the first main window
 	MainWindowBase::resizeEvent(re);
-/*	if (mResourcesWidth > 0)
+	if (mResourcesWidth > 0)
 	{
 		QList<int> widths;
 		widths.append(mResourcesWidth);
 		widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
 		mSplitter->setSizes(widths);
-	}*/
+	}
 }
 
 void MainWindow::resourcesResized()
 {
-	if (!mShown)
+	if (!mShown  ||  mResizing)
 		return;
 	QList<int> widths = mSplitter->sizes();
 	if (widths.count() > 1)

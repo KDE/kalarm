@@ -66,6 +66,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
 		bool               showingArchived() const      { return mShowArchived; }
 		void               selectEvent(const QString& eventID);
+		virtual bool       eventFilter(QObject*, QEvent*);
 
 		static void        refresh();
 		static void        executeDragEnterEvent(QDragEnterEvent*, QWidget* recipient);
@@ -195,6 +196,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		bool                 mShown;               // true once the window has been displayed
 		bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
 		bool                 mMenuError;           // error occurred creating menus: need to show error message
+		bool                 mResizing;            // window resize is in progress
 };
 
 #endif // MAINWINDOW_H
