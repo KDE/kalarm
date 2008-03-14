@@ -18,10 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
+#include <qglobal.h>
+#include <kde_file.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -180,11 +179,11 @@ const QByteArray& ShellProcess::shellPath()
 	{
 		// Get the path to the shell
 		mShellPath = "/bin/sh";
-		QByteArray envshell = QByteArray(getenv("SHELL")).trimmed();
+		QByteArray envshell = qgetenv("SHELL").trimmed();
 		if (!envshell.isEmpty())
 		{
 			struct stat fileinfo;
-			if (stat(envshell.data(), &fileinfo) != -1  // ensure file exists
+			if (KDE_stat(envshell.data(), &fileinfo) != -1  // ensure file exists
 			&&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
 			&&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
 			&&  !S_ISBLK(fileinfo.st_mode)              // and it's not a block device
