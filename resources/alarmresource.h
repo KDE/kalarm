@@ -96,7 +96,7 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 
 		/** Return whether the resource can be written to now,
 		 *  i.e. it's active, read-write and in the current KAlarm format. */
-		bool     writable() const;
+		bool     writable() const                { return isActive() && !readOnly(); }
 
 		/** Return whether the event can be written to now, i.e. the resource is
 		 *  active and read-write, and the event is in the current KAlarm format. */

@@ -217,12 +217,6 @@ KCalendar::Status AlarmResource::compatibility(const Event* event) const
 	return it.value();
 }
 
-bool AlarmResource::writable() const
-{
-	return isActive()  &&  !KCal::ResourceCached::readOnly()
-	   &&  (mCompatibility == KCalendar::Current || mCompatibility == KCalendar::ByEvent);
-}
-
 bool AlarmResource::writable(const Event* event) const
 {
 	return isActive()  &&  !KCal::ResourceCached::readOnly()
