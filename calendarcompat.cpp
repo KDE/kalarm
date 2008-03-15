@@ -27,6 +27,7 @@
 #include "preferences.h"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QTextStream>
 
 #include <kapplication.h>
@@ -62,7 +63,7 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 {
 	bool version057_UTC = false;
 	QString subVersion, versionString;
-	int version = readKAlarmVersion(calendar, subVersion, versionString);
+	int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
 	if (!version)
 		return KCalendar::Current;     // calendar is in current KAlarm format
 	if (version < 0  ||  version > KAlarm::Version())
@@ -113,7 +114,7 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 *       = -1 if it was created by KAlarm pre-0.3.5, or another program
 *       = version number if created by another KAlarm version.
 */
-int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, QString& subVersion, QString& versionString)
+int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
 {
 	subVersion.clear();
 	versionString = calendar.customProperty(KCalendar::APPNAME, VERSION_PROPERTY);
@@ -122,6 +123,14 @@ int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, QString& su
 		// Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.
 		// If another application has written to the file, this may not be present.
 		const QString prodid = calendar.productId();
+		if (prodid.isEmpty())
+		{
+			// Check whether the calendar file is empty, in which case
+			// it can be written to freely.
+			QFileInfo fi(localFile);
+			if (!fi.size())
+				return 0;
+		}
 
 		// Find the KAlarm identifier
 		QString progname = QLatin1String(" KAlarm ");
