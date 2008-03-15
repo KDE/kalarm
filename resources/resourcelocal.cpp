@@ -98,6 +98,11 @@ void KAResourceLocal::applyReconfig()
 	}
 }
 
+bool KAResourceLocal::readOnly() const
+{
+	return mFileReadOnly || AlarmResource::readOnly();
+}
+
 void KAResourceLocal::enableResource(bool enable)
 {
 	kDebug(KARES_DEBUG) << enable << ":" << mURL.path();
@@ -130,6 +135,7 @@ bool KAResourceLocal::doLoad(bool)
 			mLoading = false;
 			return false;
 		}
+		mFileReadOnly = false;
 		setCompatibility(KCalendar::Current);
 		mLoading = false;
 		mLoaded = true;
@@ -148,6 +154,8 @@ void KAResourceLocal::reload()
 	if (mLastModified == readLastModified())
 	{
 		kDebug(KARES_DEBUG) << "File not modified since last read.";
+		QFileInfo fi(mURL.path());
+		mFileReadOnly = !fi.isWritable();
 		return;
 	}
 	loadFile();
@@ -173,6 +181,8 @@ bool KAResourceLocal::loadFile()
 		return false;
 	}
 	mLastModified = readLastModified();
+	QFileInfo fi(mURL.path());
+	mFileReadOnly = !fi.isWritable();
 	checkCompatibility(fileName());
 	mLoading = false;
 	mLoaded = true;

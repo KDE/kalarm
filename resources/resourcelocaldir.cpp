@@ -2,7 +2,7 @@
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
  *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
- *  Based on resourcelocaldir.cpp in libkcal (updated to rev 765072),
+ *  Based on resourcelocaldir.cpp in libkcal (updated to rev 779953),
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -63,11 +63,11 @@ void KAResourceLocalDir::init()
 {
 	setType("dir");   // set resource type
 
-	connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(slotReload()));
-	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(slotReload()));
-	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(slotReload()));
-
+	connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(slotUpdated(const QString&)));
+	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(slotUpdated(const QString&)));
+	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(slotUpdated(const QString&)));
 	mDirWatch.addDir(mURL.path(), KDirWatch::WatchFiles);
+
 	enableResource(isActive());
 
 	// Initially load all files in the directory, then just load changes
@@ -104,6 +104,20 @@ void KAResourceLocalDir::applyReconfig()
 	}
 }
 
+bool KAResourceLocalDir::readOnly() const
+{
+	return mDirReadOnly || AlarmResource::readOnly();
+}
+
+void KAResourceLocalDir::setReadOnly(bool ro)
+{
+	// Re-evaluate the directory's read-only status (since KDirWatch
+	// doesn't pick up permissions changes on the directory itself).
+	QFileInfo dirInfo(mURL.path());
+	mDirReadOnly = !dirInfo.isWritable();
+	AlarmResource::setReadOnly(ro);
+}
+
 void KAResourceLocalDir::enableResource(bool enable)
 {
 	kDebug(KARES_DEBUG) << enable << ":" << mURL.path();
@@ -119,6 +133,19 @@ void KAResourceLocalDir::enableResource(bool enable)
 	}
 }
 
+bool KAResourceLocalDir::doOpen()
+{
+	QFileInfo dirInfo(mURL.path());
+	return dirInfo.isDir()  &&  dirInfo.isReadable();
+}
+
+void KAResourceLocalDir::slotUpdated(const QString& filepath)
+{
+#ifdef __GNUC__
+#warning Only reload the individual file which has changed
+#endif
+	doLoad(false);
+}
 /******************************************************************************
 * Load the files in the local directory, and add their events to our calendar.
 * If 'syncCache' is true, all files are loaded; if false, only changed files
@@ -159,6 +186,10 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	{
 		kDebug(KARES_DEBUG) << "Opening" << dirName;
 		FixFunc prompt = PROMPT_PART;
+		QFileInfo dirInfo(dirName);
+		if (!(dirInfo.isDir()  &&  dirInfo.isReadable()))
+			return false;
+		mDirReadOnly = !dirInfo.isWritable();
 		QDir dir(dirName);
 		QStringList entries = dir.entryList(QDir::Files | QDir::Readable);
 		for (int i = 0, end = entries.count();  i < end;  ++i)
@@ -208,6 +239,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 		// allows it (permissions will be 0775 & ~umask). This is desired e.g. for
 		// group-shared directories!
 		success = KStandardDirs::makeDir(dirName, 0775);
+		mDirReadOnly = false;
 	}
 
 	if (!syncCache)
@@ -249,6 +281,9 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 */
 bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, FixFunc& prompt)
 {
+#ifdef __GNUC__
+#warning Set event read-only if file is not writable
+#endif
 	bool success = false;
 	CalendarLocal calendar(this->calendar()->timeSpec());
 	if (!calendar.load(fileName))

@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.h  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocal.h in libkcal,
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -52,6 +52,7 @@ class KALARM_EXPORT KAResourceLocal : public AlarmResource
 		virtual QString     displayLocation() const;
 		virtual QStringList location() const   { return QStringList(fileName()); }
 		virtual bool        setLocation(const QString& fileName, const QString& = QString());
+		virtual bool readOnly() const;
 		virtual void writeConfig(KConfigGroup&);
 		virtual void startReconfig();
 		virtual void applyReconfig();
@@ -81,6 +82,7 @@ class KALARM_EXPORT KAResourceLocal : public AlarmResource
 		KUrl        mNewURL;    // new file name to be applied by applyReconfig()
 		KDirWatch   mDirWatch;
 		QDateTime   mLastModified;
+		bool        mFileReadOnly;  // calendar file is a read-only file
 };
 
 #endif

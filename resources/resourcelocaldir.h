@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.h  -  KAlarm local directory alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocaldir.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -55,6 +55,8 @@ class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
 		virtual QString     displayLocation() const;
 		virtual QStringList location() const   { return QStringList(dirName()); }
 		virtual bool        setLocation(const QString& dirName, const QString& = QString());
+		virtual bool readOnly() const;
+		virtual void setReadOnly(bool);
 		virtual bool addEvent(KCal::Event*);
 		virtual bool deleteEvent(KCal::Event*);
 		virtual void writeConfig(KConfigGroup&);
@@ -66,6 +68,7 @@ class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
 		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
 
 	protected:
+		virtual bool doOpen();
 		/** Load the resource. If 'syncCache' is true, all files in the directory
 		 *  are reloaded. If 'syncCache' is false, only changed files are reloaded. */
 		virtual bool doLoad(bool syncCache);
@@ -75,7 +78,7 @@ class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
 		virtual void enableResource(bool enable);
 
 	private slots:
-		void         slotReload()   { doLoad(false); }
+		void         slotUpdated(const QString& filepath);
 
 	private:
 		void         init();
@@ -91,6 +94,7 @@ class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
 		KDirWatch   mDirWatch;
 		typedef QMap<QString, QDateTime> ModifiedMap;
 		ModifiedMap mLastModified;
+		bool        mDirReadOnly;  // directory is read-only
 };
 
 #endif
