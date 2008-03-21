@@ -24,4 +24,4 @@ install(TARGETS kalarmd  DESTINATION ${BIN_INSTALL_DIR} )
 
 install( FILES kalarmd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES kalarmd.autostart.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR})
-install( FILES org.kde.kalarm.kalarmd.Daemon.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
+install( FILES org.kde.kalarm.kalarmd.Daemon.xml DESTINATION ${KDE4_DBUS_INTERFACES_DIR})
