@@ -37,13 +37,15 @@ using namespace KCal;
 
 
 KAResourceLocal::KAResourceLocal()
-	: AlarmResource()
+	: AlarmResource(),
+	  mFileReadOnly(false)
 {
 	init();
 }
 
 KAResourceLocal::KAResourceLocal(const KConfigGroup& group)
-	: AlarmResource(group)
+	: AlarmResource(group),
+	  mFileReadOnly(false)
 {
 	mURL = KUrl(group.readPathEntry("CalendarURL", QString()));
 	init();
@@ -51,7 +53,8 @@ KAResourceLocal::KAResourceLocal(const KConfigGroup& group)
 
 KAResourceLocal::KAResourceLocal(Type type, const QString& fileName)
 	: AlarmResource(type),
-	  mURL(KUrl::fromPath(fileName))
+	  mURL(KUrl::fromPath(fileName)),
+	  mFileReadOnly(false)
 {
 	init();
 }

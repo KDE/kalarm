@@ -40,13 +40,15 @@ static QDateTime readLastModified(const QString& filePath);
 
 
 KAResourceLocalDir::KAResourceLocalDir()
-	: AlarmResource()
+	: AlarmResource(),
+	  mDirReadOnly(false)
 {
 	init();
 }
 
 KAResourceLocalDir::KAResourceLocalDir(const KConfigGroup& group)
-	: AlarmResource(group)
+	: AlarmResource(group),
+	  mDirReadOnly(false)
 {
 	mURL = KUrl(group.readPathEntry("CalendarURL", QString()));
 	init();
@@ -54,7 +56,8 @@ KAResourceLocalDir::KAResourceLocalDir(const KConfigGroup& group)
 
 KAResourceLocalDir::KAResourceLocalDir(Type type, const QString& dirName)
 	: AlarmResource(type),
-	  mURL(KUrl::fromPath(dirName))
+	  mURL(KUrl::fromPath(dirName)),
+	  mDirReadOnly(false)
 {
 	init();
 }
