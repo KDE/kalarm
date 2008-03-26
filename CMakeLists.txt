@@ -102,7 +102,9 @@ endif (KMAIL_SUPPORTED)
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
-if (UNIX)
+#if (UNIX)
+# todo: move to Oxygen icon
+kde4_add_app_icon(kalarm_bin_SRCS "ox*-app-kalarm.png")
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 if (KMAIL_SUPPORTED)
    add_dependencies(kalarm_bin kmail_xml)
@@ -114,7 +116,7 @@ kdepim4_link_unique_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${
 
 
 install(TARGETS kalarm_bin DESTINATION ${BIN_INSTALL_DIR} )
-endif (UNIX)
+#endif (UNIX)
 
 ########### install files ###############
 

@@ -12,6 +12,7 @@ set(kalarmd_SRCS
 
 qt4_add_dbus_adaptor( kalarmd_SRCS org.kde.kalarm.kalarmd.Daemon.xml alarmdaemon.h AlarmDaemon )
 
+kde4_add_app_icon(kalarmd_SRCS "../ox*-app-kalarm.png")
 
 kde4_add_executable(kalarmd ${kalarmd_SRCS})
 
