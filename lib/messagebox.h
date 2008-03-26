@@ -24,6 +24,9 @@
 #include <kstandardguiitem.h>
 #include <kmessagebox.h>
 
+#ifdef MessageBox
+#undef MessageBox // conflicting Windows macro
+#endif
 
 /**
  *  @short Enhanced KMessageBox.

@@ -35,11 +35,19 @@
 
 static int maxCount = 12;
 
+#ifdef DELETE
+#undef DELETE // conflicting Windows macro
+#endif
 
 class UndoItem
 {
 	public:
-		enum Operation { ADD, EDIT, DELETE, REACTIVATE, DEACTIVATE, MULTI };
+		enum Operation { ADD, 
+    EDIT, 
+    DELETE, 
+    REACTIVATE, 
+    DEACTIVATE, 
+    MULTI };
 		UndoItem();           // needed by QList
 		virtual ~UndoItem();
 		virtual Operation operation() const = 0;
