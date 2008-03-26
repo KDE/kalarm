@@ -43,6 +43,7 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 	public:
 		/** Type of alarms held in this calendar resource. */
 		enum Type {
+			INVALID  = 0,
 			ACTIVE   = 0x01,    // active alarms
 			ARCHIVED = 0x02,    // archived alarms
 			TEMPLATE = 0x04     // alarm templates

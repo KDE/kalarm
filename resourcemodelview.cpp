@@ -94,6 +94,7 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 				case AlarmResource::ACTIVE:    return resource->readOnly() ? Qt::darkGray : Qt::black;
 				case AlarmResource::ARCHIVED:  return resource->readOnly() ? Qt::green : Qt::darkGreen;
 				case AlarmResource::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
+				default:  break;
 			}
 			break;
 		case Qt::FontRole:
@@ -322,7 +323,8 @@ void ResourceModel::slotStatusChanged(AlarmResource* resource, AlarmResources::C
 =============================================================================*/
 
 ResourceFilterModel::ResourceFilterModel(QAbstractItemModel* baseModel, QObject* parent)
-	: QSortFilterProxyModel(parent)
+	: QSortFilterProxyModel(parent),
+	  mResourceType(AlarmResource::INVALID)
 {
 	setSourceModel(baseModel);
 }

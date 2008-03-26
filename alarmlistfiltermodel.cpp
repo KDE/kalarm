@@ -1,7 +1,7 @@
 /*
  *  alarmlistfiltermodel.cpp  -  proxy model class for lists of alarms
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,11 @@
 
 // AlarmListFilterModel provides sorting and filtering for the alarm list model.
 
+
+AlarmListFilterModel::AlarmListFilterModel(EventListModel* baseModel, QObject* parent)
+	: EventListFilterModel(baseModel, parent),
+	  mStatusFilter(KCalEvent::EMPTY)
+{}
 
 void AlarmListFilterModel::setStatusFilter(KCalEvent::Status type)
 {
