@@ -94,7 +94,8 @@ class KAAlarmEventBase
 	protected:
 		enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_AUDIO, T_EMAIL };
 
-		KAAlarmEventBase() : mRepeatCount(0), mLateCancel(0), mAutoClose(false), mBeep(false), mRepeatAtLogin(false),
+		KAAlarmEventBase() : mRepeatCount(0), mRepeatInterval(0), mNextRepeat(0), mLateCancel(0),
+		                     mAutoClose(false), mBeep(false), mRepeatAtLogin(false),
 		                     mDisplaying(false), mEmailBcc(false), mConfirmAck(false) { }
 		KAAlarmEventBase(const KAAlarmEventBase& rhs)             { copy(rhs); }
 		KAAlarmEventBase& operator=(const KAAlarmEventBase& rhs)  { copy(rhs);  return *this; }
@@ -301,7 +302,8 @@ class KAEvent : public KAAlarmEventBase
 			DISPLAY_TRIGGER    // next trigger time for display purposes (i.e. excluding reminders)
 		};
 
-		KAEvent()          : mRevision(0), mRecurrence(0), mAlarmCount(0), mChangeCount(0), mChanged(false) { }
+		KAEvent()          : mReminderMinutes(0), mRevision(0), mRecurrence(0), mAlarmCount(0),
+		                     mDeferral(NO_DEFERRAL), mChangeCount(0), mChanged(false) { }
 		KAEvent(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags, bool changesPending = false)
 		                                        : mRecurrence(0) { set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending); }
 		explicit KAEvent(const KCal::Event* e)  : mRecurrence(0) { set(e); }

@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  Copyright © 2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -62,6 +62,7 @@ void SpinBox::init()
 	mShiftMinBound   = false;
 	mShiftMaxBound   = false;
 	mSelectOnStep    = true;
+	mUpDownOnly      = false;
 	mReadOnly        = false;
 	mSuppressSignals = false;
 	mEdited          = false;
