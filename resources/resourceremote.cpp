@@ -200,7 +200,6 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 			disableChangeNotification();
 			loadFromCache();
 			enableChangeNotification();
-			emit resourceChanged(this);
 		}
 
 		mDownloadJob = 0;
@@ -217,6 +216,8 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 	mLoading = false;
 	lock()->unlock();
 	emit loaded(this);
+	if (job  &&  !err)
+		emit resourceChanged(this);
 }
 
 void KAResourceRemote::cancelDownload(bool disable)
