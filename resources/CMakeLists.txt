@@ -5,13 +5,10 @@ set(kalarm_resources_LIB_SRCS
 	alarmresources.cpp 
 	kcalendar.cpp 
 	resourcelocal.cpp 
-	resourcelocal_plugin.cpp 
 	resourcelocalwidget.cpp 
 	resourcelocaldir.cpp 
-	resourcelocaldir_plugin.cpp 
 	resourcelocaldirwidget.cpp 
 	resourceremote.cpp 
-	resourceremote_plugin.cpp 
 	resourceremotewidget.cpp 
 	resourcewidget.cpp 
 )
