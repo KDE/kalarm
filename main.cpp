@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 	KAboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm"), KALARM_VERSION,
 		ki18n("Personal alarm message, command and email scheduler for KDE"),
 		KAboutData::License_GPL,
-		ki18n("Copyright 2001-2007, David Jarvie"), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");
+		ki18n("Copyright 2001-2008, David Jarvie"), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");
 	aboutData.addAuthor(ki18n("David Jarvie"), KLocalizedString(), "djarvie@kde.org");
         aboutData.setOrganizationDomain("kde.org");
 
