@@ -303,7 +303,7 @@ class KAEvent : public KAAlarmEventBase
 		};
 
 		KAEvent()          : mReminderMinutes(0), mRevision(0), mRecurrence(0), mAlarmCount(0),
-		                     mDeferral(NO_DEFERRAL), mChangeCount(0), mChanged(false) { }
+		                     mDeferral(NO_DEFERRAL), mChangeCount(0), mChanged(false), mWorkTimeOnly(false) { }
 		KAEvent(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags, bool changesPending = false)
 		                                        : mRecurrence(0) { set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending); }
 		explicit KAEvent(const KCal::Event* e)  : mRecurrence(0) { set(e); }
