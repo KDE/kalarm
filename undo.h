@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 
 #include <QList>
 #include <QStringList>
+#include "autodeletelist.h"
 
 class KAEvent;
 class AlarmResource;
@@ -79,7 +80,7 @@ class Undo : public QObject
 		static void        emitChanged();
 
 		// Types for use by UndoItem class and its descendants
-		typedef QList<UndoItem*>  List;
+		typedef AutoDeleteList<UndoItem> List;
 
 	signals:
 		void               changed(const QString& undo, const QString& redo);

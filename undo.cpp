@@ -42,12 +42,7 @@ static int maxCount = 12;
 class UndoItem
 {
 	public:
-		enum Operation { ADD, 
-    EDIT, 
-    DELETE, 
-    REACTIVATE, 
-    DEACTIVATE, 
-    MULTI };
+		enum Operation { ADD, EDIT, DELETE, REACTIVATE, DEACTIVATE, MULTI };
 		UndoItem();           // needed by QList
 		virtual ~UndoItem();
 		virtual Operation operation() const = 0;
@@ -88,23 +83,25 @@ class UndoItem
 class UndoMultiBase : public UndoItem
 {
 	public:
-		UndoMultiBase(Undo::Type t, const QString& name) : UndoItem(t, name) { }
-		UndoMultiBase(Undo::Type t, Undo::List& undos, const QString& name) : UndoItem(t, name), mUndos(undos) { }
-		~UndoMultiBase();
-		const Undo::List& undos() const         { return mUndos; }
+		UndoMultiBase(Undo::Type t, const QString& name)
+		        : UndoItem(t, name), mUndos(new Undo::List) { }
+		UndoMultiBase(Undo::Type t, Undo::List* undos, const QString& name)
+		        : UndoItem(t, name), mUndos(undos) { }
+		~UndoMultiBase()  { delete mUndos; }
+		const Undo::List* undos() const         { return mUndos; }
 	protected:
-		Undo::List  mUndos;    // this list must always have >= 2 entries
+		Undo::List* mUndos;    // this list must always have >= 2 entries
 };
 
 template <class T> class UndoMulti : public UndoMultiBase
 {
 	public:
 		UndoMulti(Undo::Type, const Undo::EventList&, const QString& name);
-		UndoMulti(Undo::Type t, Undo::List& undos, const QString& name)  : UndoMultiBase(t, undos, name) { }
+		UndoMulti(Undo::Type t, Undo::List* undos, const QString& name)  : UndoMultiBase(t, undos, name) { }
 		virtual Operation operation() const     { return MULTI; }
 		virtual UndoItem* restore();
 		virtual bool      deleteID(const QString& id);
-		virtual UndoItem* createRedo(Undo::List&) = 0;
+		virtual UndoItem* createRedo(Undo::List*) = 0;
 };
 
 class UndoAdd : public UndoItem
@@ -204,10 +201,10 @@ class UndoAdds : public UndoMulti<UndoAdd>
 	public:
 		UndoAdds(Undo::Type t, const Undo::EventList& events, const QString& name = QString())
 		                  : UndoMulti<UndoAdd>(t, events, name) { }   // UNDO only
-		UndoAdds(Undo::Type t, Undo::List& undos, const QString& name)
+		UndoAdds(Undo::Type t, Undo::List* undos, const QString& name)
 		                  : UndoMulti<UndoAdd>(t, undos, name) { }
 		virtual QString   defaultActionText() const;
-		virtual UndoItem* createRedo(Undo::List&);
+		virtual UndoItem* createRedo(Undo::List*);
 };
 
 class UndoDeletes : public UndoMulti<UndoDelete>
@@ -215,10 +212,10 @@ class UndoDeletes : public UndoMulti<UndoDelete>
 	public:
 		UndoDeletes(Undo::Type t, const Undo::EventList& events, const QString& name = QString())
 		                  : UndoMulti<UndoDelete>(t, events, name) { }   // UNDO only
-		UndoDeletes(Undo::Type t, Undo::List& undos, const QString& name)
+		UndoDeletes(Undo::Type t, Undo::List* undos, const QString& name)
 		                  : UndoMulti<UndoDelete>(t, undos, name) { }
 		virtual QString   defaultActionText() const;
-		virtual UndoItem* createRedo(Undo::List&);
+		virtual UndoItem* createRedo(Undo::List*);
 };
 
 class UndoReactivates : public UndoMulti<UndoReactivate>
@@ -226,10 +223,10 @@ class UndoReactivates : public UndoMulti<UndoReactivate>
 	public:
 		UndoReactivates(Undo::Type t, const Undo::EventList& events, const QString& name = QString())
 		                  : UndoMulti<UndoReactivate>(t, events, name) { }   // UNDO only
-		UndoReactivates(Undo::Type t, Undo::List& undos, const QString& name)
+		UndoReactivates(Undo::Type t, Undo::List* undos, const QString& name)
 		                  : UndoMulti<UndoReactivate>(t, undos, name) { }
 		virtual QString   defaultActionText() const;
-		virtual UndoItem* createRedo(Undo::List&);
+		virtual UndoItem* createRedo(Undo::List*);
 };
 
 Undo*       Undo::mInstance = 0;
@@ -511,10 +508,10 @@ QList<int> Undo::ids(Undo::Type type)
 		{
 			// If any item in a multi-undo is disqualified, omit the whole multi-undo
 			QStringList newIDs;
-			const Undo::List& undos = ((UndoMultiBase*)item)->undos();
-			for (int u = 0, uend = undos.count();  u  < uend;  ++u)
+			const Undo::List* undos = ((UndoMultiBase*)item)->undos();
+			for (int u = 0, uend = undos->count();  u  < uend;  ++u)
 			{
-				QString evid = undos[u]->eventID();
+				QString evid = (*undos)[u]->eventID();
 				if (ignoreIDs.contains(evid))
 					omit = true;
 				else if (omit)
@@ -667,13 +664,7 @@ UndoMulti<T>::UndoMulti(Undo::Type type, const Undo::EventList& events, const QS
 	: UndoMultiBase(type, name)    // UNDO only
 {
 	for (int i = 0, end = events.count();  i < end;  ++i)
-		mUndos.append(new T(Undo::NONE, events[i]));
-}
-
-UndoMultiBase::~UndoMultiBase()
-{
-	for (int i = 0, end = mUndos.count();  i < end;  ++i)
-		delete mUndos[i];
+		mUndos->append(new T(Undo::NONE, events[i]));
 }
 
 /******************************************************************************
@@ -685,15 +676,18 @@ UndoMultiBase::~UndoMultiBase()
 template <class T>
 UndoItem* UndoMulti<T>::restore()
 {
-	Undo::List newUndos;
-	for (int i = 0, end = mUndos.count();  i < end;  ++i)
+	Undo::List* newUndos = new Undo::List;
+	for (int i = 0, end = mUndos->count();  i < end;  ++i)
 	{
-		UndoItem* undo = mUndos[i]->restore();
+		UndoItem* undo = (*mUndos)[i]->restore();
 		if (undo)
-			newUndos.append(undo);
+			newUndos->append(undo);
 	}
-	if (newUndos.isEmpty())
+	if (newUndos->isEmpty())
+	{
+		delete newUndos;
 		return 0;
+	}
 
 	// Create a redo item to delete the alarm again
 	return createRedo(newUndos);
@@ -709,14 +703,14 @@ UndoItem* UndoMulti<T>::restore()
 template <class T>
 bool UndoMulti<T>::deleteID(const QString& id)
 {
-	for (int i = 0, end = mUndos.count();  i < end;  ++i)
+	for (int i = 0, end = mUndos->count();  i < end;  ++i)
 	{
-		UndoItem* item = mUndos[i];
+		UndoItem* item = (*mUndos)[i];
 		if (item->eventID() == id)
 		{
 			// Found a matching entry - remove it
-			mUndos.removeAt(i);
-			if (mUndos.count() == 1)
+			mUndos->removeAt(i);
+			if (mUndos->count() == 1)
 			{
 				// There is only one entry left after removal.
 				// Replace 'this' multi instance with the remaining single entry.
@@ -849,7 +843,7 @@ QString UndoAdd::defaultActionText() const
 /******************************************************************************
 *  Create a redo item to add the alarms again.
 */
-UndoItem* UndoAdds::createRedo(Undo::List& undos)
+UndoItem* UndoAdds::createRedo(Undo::List* undos)
 {
 	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
 	return new UndoAdds(t, undos, mName);
@@ -1084,7 +1078,7 @@ QString UndoDelete::defaultActionText() const
 /******************************************************************************
 *  Create a redo item to delete the alarms again.
 */
-UndoItem* UndoDeletes::createRedo(Undo::List& undos)
+UndoItem* UndoDeletes::createRedo(Undo::List* undos)
 {
 	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
 	return new UndoDeletes(t, undos, mName);
@@ -1095,11 +1089,11 @@ UndoItem* UndoDeletes::createRedo(Undo::List& undos)
 */
 QString UndoDeletes::defaultActionText() const
 {
-	if (mUndos.isEmpty())
+	if (mUndos->isEmpty())
 		return QString();
-	for (int i = 0, end = mUndos.count();  i < end;  ++i)
+	for (int i = 0, end = mUndos->count();  i < end;  ++i)
 	{
-		switch (mUndos[i]->calendar())
+		switch ((*mUndos)[i]->calendar())
 		{
 			case KCalEvent::ACTIVE:
 				return i18nc("@info/plain", "Delete multiple alarms");
@@ -1210,7 +1204,7 @@ QString UndoDeactivate::defaultActionText() const
 /******************************************************************************
 *  Create a redo item to reactivate the alarms again.
 */
-UndoItem* UndoReactivates::createRedo(Undo::List& undos)
+UndoItem* UndoReactivates::createRedo(Undo::List* undos)
 {
 	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
 	return new UndoReactivates(t, undos, mName);
