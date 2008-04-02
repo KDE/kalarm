@@ -214,8 +214,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
 	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
 	actions->addAssociatedWidget(mListView);
-    foreach (QAction* action, actions->actions())
-        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+	foreach (QAction* action, actions->actions())
+		action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
 	enableButtonOk(false);     // only enable OK button when something is selected
 }

@@ -59,12 +59,12 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	: KDialog(parent)
 {
 	QWidget* topWidget = new QWidget(this);
-        setMainWidget(topWidget);
-        setButtons(Close);
-        setDefaultButton(Ok);
-        setModal(false);
-        setCaption(i18nc("@title:window", "Alarm Templates"));
-        showButtonSeparator(true);
+	setMainWidget(topWidget);
+	setButtons(Close);
+	setDefaultButton(Ok);
+	setModal(false);
+	setCaption(i18nc("@title:window", "Alarm Templates"));
+	showButtonSeparator(true);
 	QBoxLayout* topLayout = new QHBoxLayout(topWidget);
 	topLayout->setMargin(0);
 	topLayout->setSpacing(spacingHint());

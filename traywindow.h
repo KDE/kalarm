@@ -58,7 +58,7 @@ class TrayWindow : public KSystemTrayIcon
 		virtual bool event(QEvent*);
 
 	private slots:
-                void         slotActivated(QSystemTrayIcon::ActivationReason reason);
+		void         slotActivated(QSystemTrayIcon::ActivationReason reason);
 		void         slotNewAlarm(EditAlarmDlg::Type);
 		void         slotNewFromTemplate(const KAEvent*);
 		void         slotPreferences();

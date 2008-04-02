@@ -52,9 +52,9 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 //		enum MessageType { TEXT, FILE, COMMAND };
 
 		EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
-                             GetResourceType = RES_PROMPT);
+		             GetResourceType = RES_PROMPT);
 		EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
-                             GetResourceType = RES_PROMPT, bool readOnly = false);
+		             GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
 		virtual Reminder*   createReminder(QWidget* parent);
@@ -131,9 +131,9 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 		Q_OBJECT
 	public:
 		EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
-                             GetResourceType = RES_PROMPT);
+		                    GetResourceType = RES_PROMPT);
 		EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
-                             GetResourceType = RES_PROMPT, bool readOnly = false);
+		                    GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
 		static QString  i18n_chk_EnterScript();        // text of 'Enter a script' checkbox
@@ -178,9 +178,9 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		Q_OBJECT
 	public:
 		EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
-                             GetResourceType = RES_PROMPT);
+		                  GetResourceType = RES_PROMPT);
 		EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
-                             GetResourceType = RES_PROMPT, bool readOnly = false);
+		                  GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
 		static QString  i18n_chk_CopyEmailToSelf();    // text of 'Copy email to self' checkbox

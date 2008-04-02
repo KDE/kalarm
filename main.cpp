@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 		KAboutData::License_GPL,
 		ki18n("Copyright 2001-2008, David Jarvie"), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");
 	aboutData.addAuthor(ki18n("David Jarvie"), KLocalizedString(), "djarvie@kde.org");
-        aboutData.setOrganizationDomain("kde.org");
+	aboutData.setOrganizationDomain("kde.org");
 
 	KCmdLineArgs::init(argc, argv, &aboutData);
 

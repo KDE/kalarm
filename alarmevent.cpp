@@ -599,7 +599,7 @@ void KAEvent::set(const Event* event)
 	else
 		checkRepetition();
 
-        if (mMainExpired  &&  deferralOffset  &&  checkRecur() != KARecurrence::NO_RECUR)
+	if (mMainExpired  &&  deferralOffset  &&  checkRecur() != KARecurrence::NO_RECUR)
 	{
 		// Adjust the deferral time for an expired recurrence, since the
 		// offset is relative to the first actual occurrence.
