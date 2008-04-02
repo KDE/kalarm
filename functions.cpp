@@ -82,7 +82,7 @@ const QString KORGANIZER_UID    = QString::fromLatin1("-korg");
 const char*   ALARM_OPTS_FILE        = "alarmopts";
 const char*   DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
-bool sendToKOrganizer(const KAEvent&);
+bool sendToKOrganizer(const KAEvent*);
 bool deleteFromKOrganizer(const QString& eventID);
 bool runKOrganizer();
 QString uidKOrganizer(const QString& eventID);
@@ -154,21 +154,28 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParen
 	{
 		// Save the event details in the calendar file, and get the new event ID
 		AlarmCalendar* cal = AlarmCalendar::resources();
-		KCal::Event* kcalEvent = cal->addEvent(event, msgParent, (options & USE_EVENT_ID), resource, (options & NO_RESOURCE_PROMPT), &cancelled);
-		if (!kcalEvent)
+		KAEvent* newev = new KAEvent(event);
+		if (!cal->addEvent(newev, msgParent, (options & USE_EVENT_ID), resource, (options & NO_RESOURCE_PROMPT), &cancelled))
+		{
+			delete newev;
 			status = UPDATE_FAILED;
-		else if (!cal->save())
-			status = SAVE_FAILED;
-		else if (status == UPDATE_OK)
+		}
+		else
+		{
+			event = *newev;   // update event ID etc.
+			if (!cal->save())
+				status = SAVE_FAILED;
+		}
+		if (status == UPDATE_OK)
 		{
 			if ((options & ALLOW_KORG_UPDATE)  &&  event.copyToKOrganizer())
 			{
-				if (!sendToKOrganizer(event))    // tell KOrganizer to show the event
+				if (!sendToKOrganizer(newev))    // tell KOrganizer to show the event
 					status = UPDATE_KORG_ERR;
 			}
 
 			// Update the window lists
-			EventListModel::alarms()->addEvent(kcalEvent);
+			EventListModel::alarms()->addEvent(newev);
 		}
 	}
 
@@ -209,17 +216,18 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			// Save the event details in the calendar file, and get the new event ID
-			KAEvent& event = events[i];
-			KCal::Event* kcalEvent = cal->addEvent(event, msgParent, false, resource);
-			if (!kcalEvent)
+			KAEvent* newev = new KAEvent(events[i]);
+			if (!cal->addEvent(newev, msgParent, false, resource))
 			{
+				delete newev;
 				status = UPDATE_ERROR;
 				++warnErr;
 				continue;
 			}
-			if (allowKOrgUpdate  &&  event.copyToKOrganizer())
+			events[i] = *newev;   // update event ID etc.
+			if (allowKOrgUpdate  &&  newev->copyToKOrganizer())
 			{
-				if (!sendToKOrganizer(event))    // tell KOrganizer to show the event
+				if (!sendToKOrganizer(newev))    // tell KOrganizer to show the event
 				{
 					++warnKOrg;
 					if (status == UPDATE_OK)
@@ -228,8 +236,8 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 			}
 
 			// Update the window lists, but not yet which item is selected
-			EventListModel::alarms()->addEvent(kcalEvent);
-//			selectID = event.id();
+			EventListModel::alarms()->addEvent(newev);
+//			selectID = newev->id();
 		}
 		if (warnErr == events.count())
 			status = UPDATE_FAILED;
@@ -252,29 +260,29 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 {
 	kDebug() << event.id();
-	KAEvent oldEvent = event;     // so that we can reinstate the event if there's an error
 	bool archiving = (event.category() == KCalEvent::ACTIVE);
+	if (archiving  &&  !Preferences::archivedKeepDays())
+		return false;   // expired alarms aren't being kept
+	KAEvent* newev = new KAEvent(event);
 	if (archiving)
 	{
-		if (!Preferences::archivedKeepDays())
-			return false;   // expired alarms aren't being kept
-		event.setCategory(KCalEvent::ARCHIVED);    // this changes the event ID
-		event.setSaveDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
+		newev->setCategory(KCalEvent::ARCHIVED);    // this changes the event ID
+		newev->setSaveDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
 	}
 	AlarmCalendar* cal = AlarmCalendar::resources();
 	// Note that archived resources are automatically saved after changes are made
-	KCal::Event* kcalEvent = cal->addEvent(event, 0, false, resource);
-	if (!kcalEvent)
+	if (!cal->addEvent(newev, 0, false, resource))
 	{
-		event = oldEvent;     // failed to add to calendar - revert event to its original state
+		delete newev;     // failed to add to calendar - leave event in its original state
 		return false;
 	}
+	event = *newev;   // update event ID etc.
 
 	// Update window lists
 	if (!archiving)
-		EventListModel::alarms()->addEvent(kcalEvent);
+		EventListModel::alarms()->addEvent(newev);
 	else
-		EventListModel::alarms()->updateEvent(kcalEvent);
+		EventListModel::alarms()->updateEvent(newev);
 	return true;
 }
 
@@ -290,19 +298,26 @@ UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgPa
 	UpdateStatus status = UPDATE_OK;
 
 	// Add the template to the calendar file
+	KAEvent* newev = new KAEvent(event);
 	AlarmCalendar* cal = AlarmCalendar::resources();
-	KCal::Event* kcalEvent = cal->addEvent(event, msgParent, false, resource);
-	if (!kcalEvent)
+	if (!cal->addEvent(newev, msgParent, false, resource))
+	{
+		delete newev;
 		status = UPDATE_FAILED;
-	else if (!cal->save())
-		status = SAVE_FAILED;
+	}
 	else
 	{
-		cal->emitEmptyStatus();
+		event = *newev;   // update event ID etc.
+		if (!cal->save())
+			status = SAVE_FAILED;
+		else
+		{
+			cal->emitEmptyStatus();
 
-		// Update the window lists
-		EventListModel::templates()->addEvent(kcalEvent);
-		return UPDATE_OK;
+			// Update the window lists
+			EventListModel::templates()->addEvent(newev);
+			return UPDATE_OK;
+		}
 	}
 
 	if (msgParent)
@@ -315,7 +330,7 @@ UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgPa
 * window instance.
 * The new event must have a different event ID from the old one.
 */
-UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, QWidget* msgParent, bool showKOrgErr)
+UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent, bool showKOrgErr)
 {
 	kDebug() << oldEvent.id();
 
@@ -335,28 +350,37 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, QWidget* ms
 			// deleted it since KAlarm asked KOrganizer to set it up.
 			deleteFromKOrganizer(oldId);
 		}
+		// Delete from the window lists to prevent the event's invalid
+		// pointer being accessed.
+		EventListModel::alarms()->removeEvent(oldId);
 
 		// Update the event in the calendar file, and get the new event ID
+		KAEvent* newev = new KAEvent(newEvent);
 		AlarmCalendar* cal = AlarmCalendar::resources();
-		KCal::Event* oldKcalEvent = cal->event(oldId);
-		KCal::Event* kcalEvent = cal->modifyEvent(oldId, const_cast<KAEvent&>(newEvent));
-		if (!kcalEvent)
-			status = UPDATE_FAILED;
-		else if (!cal->save())
-			status = SAVE_FAILED;
-		else if (status == UPDATE_OK)
+		if (!cal->modifyEvent(oldId, newev))
 		{
-			if (newEvent.copyToKOrganizer())
+			delete newev;
+			status = UPDATE_FAILED;
+		}
+		else
+		{
+			newEvent = *newev;
+			if (!cal->save())
+				status = SAVE_FAILED;
+			if (status == UPDATE_OK)
 			{
-				if (!sendToKOrganizer(newEvent))    // tell KOrganizer to show the new event
-					status = UPDATE_KORG_ERR;
+				if (newev->copyToKOrganizer())
+				{
+					if (!sendToKOrganizer(newev))    // tell KOrganizer to show the new event
+						status = UPDATE_KORG_ERR;
+				}
+
+				// Remove "Don't show error messages again" for the old alarm
+				setDontShowErrors(oldId);
+
+				// Update the window lists
+				EventListModel::alarms()->addEvent(newev);
 			}
-
-			// Remove "Don't show error messages again" for the old alarm
-			setDontShowErrors(oldId);
-
-			// Update the window lists
-			EventListModel::alarms()->updateEvent(oldKcalEvent, kcalEvent);
 		}
 	}
 
@@ -384,7 +408,7 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 		if (incRevision)
 			event.incrementRevision();    // ensure alarm daemon sees the event has changed
 		AlarmCalendar* cal = AlarmCalendar::resources();
-		KCal::Event* kcalEvent = cal->updateEvent(event);
+		KAEvent* newEvent = cal->updateEvent(event);
 		if (!cal->save())
 		{
 			if (msgParent)
@@ -393,7 +417,7 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 		}
 
 		// Update the window lists
-		EventListModel::alarms()->updateEvent(kcalEvent);
+		EventListModel::alarms()->updateEvent(newEvent);
 	}
 	return UPDATE_OK;
 }
@@ -403,18 +427,23 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 * If 'selectionView' is non-null, the selection highlight is moved to the
 * updated event in that listView instance.
 */
-UpdateStatus updateTemplate(const KAEvent& event, QWidget* msgParent)
+UpdateStatus updateTemplate(KAEvent& event, QWidget* msgParent)
 {
 	AlarmCalendar* cal = AlarmCalendar::resources();
-	KCal::Event* kcalEvent = cal->updateEvent(event);
-	if (!cal->save())
+	KAEvent* newEvent = cal->updateEvent(event);
+	UpdateStatus status = UPDATE_OK;
+	if (!newEvent)
+		status = UPDATE_FAILED;
+	else if (!cal->save())
+		status = SAVE_FAILED;
+	if (status != UPDATE_OK)
 	{
 		if (msgParent)
 			displayUpdateError(msgParent, SAVE_FAILED, ERR_TEMPLATE, 1);
-		return SAVE_FAILED;
+		return status;
 	}
 
-	EventListModel::templates()->updateEvent(kcalEvent);
+	EventListModel::templates()->updateEvent(newEvent);
 	return UPDATE_OK;
 }
 
@@ -424,12 +453,12 @@ UpdateStatus updateTemplate(const KAEvent& event, QWidget* msgParent)
 */
 UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool showKOrgErr)
 {
-	QList<KAEvent> events;
-	events += event;
+	KAEvent::List events;
+	events += &event;
 	return deleteEvents(events, archive, msgParent, showKOrgErr);
 }
 
-UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgParent, bool showKOrgErr)
+UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParent, bool showKOrgErr)
 {
 	kDebug() << events.count();
 	if (events.isEmpty())
@@ -441,16 +470,16 @@ UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgPare
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		// Save the event details in the calendar file, and get the new event ID
-		KAEvent& event = events[i];
-		QString id = event.id();
+		KAEvent* event = events[i];
+		QString id = event->id();
 
 		// Update the window lists
 		EventListModel::alarms()->removeEvent(id);
 
 		// Delete the event from the calendar file
-		if (event.category() != KCalEvent::ARCHIVED)
+		if (event->category() != KCalEvent::ARCHIVED)
 		{
-			if (event.copyToKOrganizer())
+			if (event->copyToKOrganizer())
 			{
 				// The event was shown in KOrganizer, so tell KOrganizer to
 				// delete it. But ignore errors, because the user could have
@@ -462,8 +491,8 @@ UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgPare
 						status = UPDATE_KORG_ERR;
 				}
 			}
-			if (archive  &&  event.toBeArchived())
-				addArchivedEvent(event);     // this changes the event ID to an archived ID
+			if (archive  &&  event->toBeArchived())
+				addArchivedEvent(*event);     // this changes the event ID to an archived ID
 		}
 		if (!cal->deleteEvent(id, false))   // don't save calendar after deleting
 		{
@@ -545,12 +574,12 @@ void deleteDisplayEvent(const QString& eventID)
 UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
 {
 	QStringList ids;
-	QList<KAEvent> events;
-	events += event;
+	KAEvent::List events;
+	events += &event;
 	return reactivateEvents(events, ids, resource, msgParent, showKOrgErr);
 }
 
-UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
+UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
 {
 	kDebug() << events.count();
 	ineligibleIDs.clear();
@@ -576,35 +605,35 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			// Delete the event from the archived resource
-			KAEvent& event = events[i];
-			if (event.category() != KCalEvent::ARCHIVED
-			||  !event.occursAfter(now, true))
+			KAEvent* event = events[i];
+			if (event->category() != KCalEvent::ARCHIVED
+			||  !event->occursAfter(now, true))
 			{
-				ineligibleIDs += event.id();
+				ineligibleIDs += event->id();
 				continue;
 			}
 			++count;
 
-			KAEvent oldEvent = event;    // so that we can reinstate the event if there's an error
-			QString oldid = event.id();
-			event.setCategory(KCalEvent::ACTIVE);    // this changes the event ID
-			if (event.recurs()  ||  event.repeatCount())
-				event.setNextOccurrence(now);   // skip any recurrences in the past
-			event.setArchive();    // ensure that it gets re-archived if it is deleted
+			KAEvent* newev = new KAEvent(*event);
+			QString oldid = event->id();
+			newev->setCategory(KCalEvent::ACTIVE);    // this changes the event ID
+			if (newev->recurs()  ||  newev->repeatCount())
+				newev->setNextOccurrence(now);   // skip any recurrences in the past
+			newev->setArchive();    // ensure that it gets re-archived if it is deleted
 
 			// Save the event details in the calendar file.
 			// This converts the event ID.
-			KCal::Event* kcalEvent = cal->addEvent(event, msgParent, true, resource);
-			if (!kcalEvent)
+			if (!cal->addEvent(newev, msgParent, true, resource))
 			{
-				event = oldEvent;     // failed to add to calendar - revert event to its original state
+				delete newev;
 				status = UPDATE_ERROR;
 				++warnErr;
 				continue;
 			}
-			if (event.copyToKOrganizer())
+			*event = *newev;
+			if (newev->copyToKOrganizer())
 			{
-				if (!sendToKOrganizer(event))    // tell KOrganizer to show the event
+				if (!sendToKOrganizer(newev))    // tell KOrganizer to show the event
 				{
 					++warnKOrg;
 					if (status == UPDATE_OK)
@@ -613,8 +642,8 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 			}
 
 			// Update the window lists
-			EventListModel::alarms()->updateEvent(cal->event(oldid), kcalEvent);
-//			selectID = event.id();
+			EventListModel::alarms()->updateEvent(oldid, newev);
+//			selectID = newev->id();
 
 			if (cal->event(oldid)    // no error if event doesn't exist in archived resource
 			&&  !cal->deleteEvent(oldid, false))   // don't save calendar after deleting
@@ -642,7 +671,7 @@ UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs
 * Enable or disable alarms in the calendar file and in every main window instance.
 * The new events will have the same event IDs as the old ones.
 */
-UpdateStatus enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParent)
+UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent)
 {
 	kDebug() << events.count();
 	if (events.isEmpty())
@@ -651,23 +680,23 @@ UpdateStatus enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParen
 	AlarmCalendar* cal = AlarmCalendar::resources();
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		KAEvent& event = events[i];
-		if (enable != event.enabled())
+		KAEvent* event = events[i];
+		if (enable != event->enabled())
 		{
-			event.setEnabled(enable);
+			event->setEnabled(enable);
 
 			// Update the event in the calendar file
-			KCal::Event* kcalEvent = cal->updateEvent(event);
+			KAEvent* newev = cal->updateEvent(event);
 
 			// If we're disabling a display alarm, close any message window
-			if (!enable  &&  event.displayAction())
+			if (!enable  &&  event->displayAction())
 			{
-				MessageWin* win = MessageWin::findEvent(event.id());
+				MessageWin* win = MessageWin::findEvent(event->id());
 				delete win;
 			}
 
 			// Update the window lists
-			EventListModel::alarms()->updateEvent(kcalEvent);
+			EventListModel::alarms()->updateEvent(newev);
 		}
 	}
 
@@ -695,16 +724,18 @@ void purgeArchive(int purgeDays)
 	AlarmResource* resource = AlarmResources::instance()->getStandardResource(AlarmResource::ARCHIVED);
 	if (!resource)
 		return;
-	KCal::Event::List evnts = resource->rawEvents();
-	for (int i = 0;  i < evnts.count();  )
+	KAEvent::List events = AlarmCalendar::resources()->events(resource);
+	for (int i = 0;  i < events.count();  )
 	{
-		if (purgeDays  &&  evnts[i]->created().date() >= cutoff)
-			evnts.removeAt(i);
+		KAEvent* event = events[i];
+		KCal::Incidence* kcalIncidence = resource->incidence(event->id());
+		if (purgeDays  &&  kcalIncidence  &&  kcalIncidence->created().date() >= cutoff)
+			events.removeAt(i);
 		else
-			EventListModel::alarms()->removeEvent(evnts[i++]);   // update the window lists
+			EventListModel::alarms()->removeEvent(events[i++]);   // update the window lists
 	}
-	if (!evnts.isEmpty())
-		AlarmCalendar::resources()->purgeEvents(evnts);   // delete the events and save the calendar
+	if (!events.isEmpty())
+		AlarmCalendar::resources()->purgeEvents(events);   // delete the events and save the calendar
 }
 
 /******************************************************************************
@@ -809,7 +840,7 @@ void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text
 * Execute a New Alarm dialog, optionally either presetting it to the supplied
 * event, or setting the action and text.
 */
-void editNewAlarm(const KAEvent& preset, QWidget* parent)
+void editNewAlarm(const KAEvent* preset, QWidget* parent)
 {
 	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, preset, true, parent);
 	doEditNewAlarm(editDlg);
@@ -828,8 +859,16 @@ void doEditNewAlarm(EditAlarmDlg* editDlg)
 		editDlg->getEvent(event, resource);
 
 		// Add the alarm to the displayed lists and to the calendar file
-		if (addEvent(event, resource, editDlg) == UPDATE_KORG_ERR)
-			displayKOrgUpdateError(editDlg, ERR_ADD, 1);
+		switch (addEvent(event, resource, editDlg))
+		{
+			case UPDATE_FAILED:
+				return;
+			case UPDATE_KORG_ERR:
+				displayKOrgUpdateError(editDlg, ERR_ADD, 1);
+				break;
+			default:
+				break;
+		}
 		Undo::saveAdd(event, resource);
 
 		outputAlarmWarnings(editDlg, &event);
@@ -843,8 +882,8 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
 {
 	if (!templateName.isEmpty())
 	{
-		KAEvent templateEvent = AlarmCalendar::resources()->templateEvent(templateName);
-		if (templateEvent.valid())
+		KAEvent* templateEvent = AlarmCalendar::resources()->templateEvent(templateName);
+		if (templateEvent->valid())
 		{
 			editNewAlarm(templateEvent, parent);
 			return true;
@@ -876,7 +915,7 @@ void editNewTemplate(EditAlarmDlg::Type type, QWidget* parent)
 /******************************************************************************
 * Create a new template, based on an existing event or template.
 */
-void editNewTemplate(const KAEvent& preset, QWidget* parent)
+void editNewTemplate(const KAEvent* preset, QWidget* parent)
 {
 	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, preset, true, parent);
 	if (editDlg->exec() == QDialog::Accepted)
@@ -896,10 +935,9 @@ void editNewTemplate(const KAEvent& preset, QWidget* parent)
 * Open the Edit Alarm dialog to edit the specified alarm.
 * If the alarm is read-only or archived, the dialog is opened read-only.
 */
-void editAlarm(const KCal::Event* kcalEvent, QWidget* parent)
+void editAlarm(KAEvent* event, QWidget* parent)
 {
-	KAEvent event(kcalEvent);
-	if (event.expired()  ||  !AlarmResources::instance()->resource(kcalEvent)->writable(kcalEvent))
+	if (event->expired()  ||  AlarmCalendar::resources()->eventReadOnly(event->id()))
 	{
 		viewAlarm(event, parent);
 		return;
@@ -912,7 +950,7 @@ void editAlarm(const KCal::Event* kcalEvent, QWidget* parent)
 		bool changeDeferral = !editDlg->getEvent(newEvent, resource);
 
 		// Update the event in the displays and in the calendar file
-		Undo::Event undo(event, resource);
+		Undo::Event undo(*event, resource);
 		if (changeDeferral)
 		{
 			// The only change has been to an existing deferral
@@ -921,7 +959,7 @@ void editAlarm(const KCal::Event* kcalEvent, QWidget* parent)
 		}
 		else
 		{
-			if (modifyEvent(event, newEvent, editDlg) == UPDATE_KORG_ERR)
+			if (modifyEvent(*event, newEvent, editDlg) == UPDATE_KORG_ERR)
 				displayKOrgUpdateError(editDlg, ERR_MODIFY, 1);
 		}
 		Undo::saveEdit(undo, newEvent);
@@ -937,20 +975,18 @@ void editAlarm(const KCal::Event* kcalEvent, QWidget* parent)
 */
 bool editAlarm(const QString& eventID, QWidget* parent)
 {
-	AlarmResources* resources = AlarmResources::instance();
-	const KCal::Event* kcalEvent = resources->event(eventID);
-	if (!kcalEvent)
+	KAEvent* event = AlarmCalendar::resources()->event(eventID);
+	if (!event)
 	{
 		kError() << eventID << ": event ID not found";
 		return false;
 	}
-	AlarmResource* resource = resources->resource(kcalEvent);
-	if (!resource  ||  !resource->writable(kcalEvent))
+	if (AlarmCalendar::resources()->eventReadOnly(eventID))
 	{
 		kError() << eventID << ": read-only";
 		return false;
 	}
-	switch (KCalEvent::status(kcalEvent))
+	switch (event->category())
 	{
 		case KCalEvent::ACTIVE:
 		case KCalEvent::TEMPLATE:
@@ -959,7 +995,7 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 			kError() << eventID << ": event not active or template";
 			return false;
 	}
-	editAlarm(kcalEvent, parent);
+	editAlarm(event, parent);
 	return true;
 }
 
@@ -967,10 +1003,9 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 * Open the Edit Alarm dialog to edit the specified template.
 * If the template is read-only, the dialog is opened read-only.
 */
-void editTemplate(const KCal::Event* kcalEvent, QWidget* parent)
+void editTemplate(KAEvent* event, QWidget* parent)
 {
-	KAEvent event(kcalEvent);
-	if (!AlarmResources::instance()->resource(kcalEvent)->writable(kcalEvent))
+	if (AlarmCalendar::resources()->eventReadOnly(event->id()))
 	{
 		// The template is read-only, so make the dialogue read-only
 		EditAlarmDlg* editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
@@ -984,11 +1019,11 @@ void editTemplate(const KCal::Event* kcalEvent, QWidget* parent)
 		KAEvent newEvent;
 		AlarmResource* resource;
 		editDlg->getEvent(newEvent, resource);
-		QString id = event.id();
+		QString id = event->id();
 		newEvent.setEventID(id);
 
 		// Update the event in the displays and in the calendar file
-		Undo::Event undo(event, resource);
+		Undo::Event undo(*event, resource);
 		updateTemplate(newEvent, editDlg);
 		Undo::saveEdit(undo, newEvent);
 	}
@@ -998,7 +1033,7 @@ void editTemplate(const KCal::Event* kcalEvent, QWidget* parent)
 /******************************************************************************
 * Open the Edit Alarm dialog to view the specified alarm (read-only).
 */
-void viewAlarm(const KAEvent& event, QWidget* parent)
+void viewAlarm(const KAEvent* event, QWidget* parent)
 {
 	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
 	editDlg->exec();
@@ -1009,16 +1044,15 @@ void viewAlarm(const KAEvent& event, QWidget* parent)
 * Returns a list of all alarm templates.
 * If shell commands are disabled, command alarm templates are omitted.
 */
-QList<KAEvent> templateList()
+KAEvent::List templateList()
 {
-	QList<KAEvent> templates;
+	KAEvent::List templates;
 	bool includeCmdAlarms = ShellProcess::authorised();
-	KCal::Event::List events = AlarmCalendar::resources()->events(KCalEvent::TEMPLATE);
+	KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::TEMPLATE);
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		KCal::Event* kcalEvent = events[i];
-		KAEvent event(kcalEvent);
-		if (includeCmdAlarms  ||  event.action() != KAEvent::COMMAND)
+		KAEvent* event = events[i];
+		if (includeCmdAlarms  ||  event->action() != KAEvent::COMMAND)
 			templates.append(event);
 	}
 	return templates;
@@ -1075,15 +1109,13 @@ void resetDaemonIfQueued()
 		AlarmCalendar::resources()->reload();
 
 		// Close any message windows for alarms which are now disabled
-		KAEvent event;
-		KCal::Event::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
+		KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
-			KCal::Event* kcalEvent = events[i];
-			event.set(kcalEvent);
-			if (!event.enabled()  &&  event.displayAction())
+			KAEvent* event = events[i];
+			if (!event->enabled()  &&  event->displayAction())
 			{
-				MessageWin* win = MessageWin::findEvent(event.id());
+				MessageWin* win = MessageWin::findEvent(event->id());
 				delete win;
 			}
 		}
@@ -1506,29 +1538,29 @@ namespace {
 *  It will be held by KOrganizer as a simple event, without alarms - KAlarm
 *  is still responsible for alarming.
 */
-bool sendToKOrganizer(const KAEvent& event)
+bool sendToKOrganizer(const KAEvent* event)
 {
 	KCal::Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(event);
 	// Change the event ID to avoid duplicating the same unique ID as the original event
-	QString uid = uidKOrganizer(event.id());
+	QString uid = uidKOrganizer(event->id());
 	kcalEvent->setUid(uid);
 	kcalEvent->clearAlarms();
 	QString userEmail;
-	switch (event.action())
+	switch (event->action())
 	{
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:
 		case KAEvent::COMMAND:
-			kcalEvent->setSummary(event.cleanText());
+			kcalEvent->setSummary(event->cleanText());
 			userEmail = Preferences::emailAddress();
 			break;
 		case KAEvent::EMAIL:
 		{
-			QString from = event.emailFromId()
-			             ? KAMail::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
+			QString from = event->emailFromId()
+			             ? KAMail::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
 			             : Preferences::emailAddress();
 			AlarmText atext;
-			atext.setEmail(event.emailAddresses(", "), from, QString(), QString(), event.emailSubject(), QString());
+			atext.setEmail(event->emailAddresses(", "), from, QString(), QString(), event->emailSubject(), QString());
 			kcalEvent->setSummary(atext.displayText());
 			userEmail = from;
 			break;

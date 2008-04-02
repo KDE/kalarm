@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -80,19 +80,19 @@ QString             browseFile(const QString& caption, QString& defaultDir, cons
 bool                editNewAlarm(const QString& templateName, QWidget* parent = 0);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewAlarm(KAEvent::Action, QWidget* parent = 0, const AlarmText* = 0);
-void                editNewAlarm(const KAEvent& preset, QWidget* parent = 0);
+void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
-void                editAlarm(const KCal::Event*, QWidget* parent = 0);
-void                viewAlarm(const KAEvent& event, QWidget* parent = 0);
+void                editAlarm(KAEvent*, QWidget* parent = 0);
+void                viewAlarm(const KAEvent*, QWidget* parent = 0);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
-void                editNewTemplate(const KAEvent& preset, QWidget* parent = 0);
-void                editTemplate(const KCal::Event*, QWidget* parent = 0);
+void                editNewTemplate(const KAEvent* preset, QWidget* parent = 0);
+void                editTemplate(KAEvent*, QWidget* parent = 0);
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */
-QList<KAEvent>      templateList();
+KAEvent::List       templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                resetDaemon();
 void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
@@ -114,18 +114,18 @@ UpdateStatus        addEvent(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 
 UpdateStatus        addEvents(QList<KAEvent>&, QWidget* msgParent = 0, bool allowKOrgUpdate = true, bool showKOrgErr = true);
 bool                addArchivedEvent(KAEvent&, AlarmResource* = 0);
 UpdateStatus        addTemplate(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0);
-UpdateStatus        modifyEvent(KAEvent& oldEvent, const KAEvent& newEvent, QWidget* msgParent = 0, bool showKOrgErr = true);
+UpdateStatus        modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        updateEvent(KAEvent&, QWidget* msgParent = 0, bool archiveOnDelete = true, bool incRevision = true);
-UpdateStatus        updateTemplate(const KAEvent&, QWidget* msgParent = 0);
+UpdateStatus        updateTemplate(KAEvent&, QWidget* msgParent = 0);
 UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
-UpdateStatus        deleteEvents(QList<KAEvent>&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
+UpdateStatus        deleteEvents(KAEvent::List&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteTemplates(const QStringList& eventIDs, QWidget* msgParent = 0);
 inline UpdateStatus deleteTemplate(const QString& eventID, QWidget* msgParent = 0)
 			{ return deleteTemplates(QStringList(eventID), msgParent); }
 void                deleteDisplayEvent(const QString& eventID);
 UpdateStatus        reactivateEvent(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
-UpdateStatus        reactivateEvents(QList<KAEvent>&, QStringList& ineligibleIDs, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
-UpdateStatus        enableEvents(QList<KAEvent>&, bool enable, QWidget* msgParent = 0);
+UpdateStatus        reactivateEvents(KAEvent::List&, QStringList& ineligibleIDs, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
+UpdateStatus        enableEvents(KAEvent::List&, bool enable, QWidget* msgParent = 0);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAlarms);

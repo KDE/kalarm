@@ -285,7 +285,7 @@ void Undo::saveAdds(const Undo::EventList& events, const QString& name)
 
 void Undo::saveEdit(const Undo::Event& oldEvent, const KAEvent& newEvent)
 {
-	new UndoEdit(UNDO, oldEvent.event, newEvent.id(), oldEvent.resource, oldEvent.dontShowErrors, AlarmText::summary(newEvent));
+	new UndoEdit(UNDO, oldEvent.event, newEvent.id(), oldEvent.resource, oldEvent.dontShowErrors, AlarmText::summary(&newEvent));
 	removeRedos(oldEvent.event.id());    // remove any redos which are made invalid by this edit
 	emitChanged();
 }
@@ -625,7 +625,7 @@ UndoItem::~UndoItem()
 */
 QString UndoItem::description(const KAEvent& event) const
 {
-	return (mCalendar == KCalEvent::TEMPLATE) ? event.templateName() : AlarmText::summary(event);
+	return (mCalendar == KCalEvent::TEMPLATE) ? event.templateName() : AlarmText::summary(&event);
 }
 
 /******************************************************************************
@@ -768,14 +768,14 @@ UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, AlarmResource* resource,
 UndoItem* UndoAdd::doRestore(bool setArchive)
 {
 	// Retrieve the current state of the alarm
-	kDebug() << "UndoAdd::doRestore(" << mEventID << ")";
-	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mEventID);
-	if (!kcalEvent)
+	kDebug() << mEventID;
+	const KAEvent* ev = AlarmCalendar::getEvent(mEventID);
+	if (!ev)
 	{
 		mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
 		return 0;
 	}
-	KAEvent event(kcalEvent); 
+	KAEvent event(*ev); 
 
 	// Create a redo item to recreate the alarm.
 	// Do it now, since 'event' gets modified by KAlarm::deleteEvent()
@@ -887,15 +887,15 @@ UndoEdit::~UndoEdit()
 */
 UndoItem* UndoEdit::restore()
 {
-	kDebug() << "UndoEdit::restore(" << mNewEventID << ")";
+	kDebug() << mNewEventID;
 	// Retrieve the current state of the alarm
-	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mNewEventID);
-	if (!kcalEvent)
+	const KAEvent* event = AlarmCalendar::getEvent(mNewEventID);
+	if (!event)
 	{
 		mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
 		return 0;
 	}
-	KAEvent newEvent(kcalEvent); 
+	KAEvent newEvent(*event); 
 
 	// Create a redo item to restore the edit
 	Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
@@ -986,7 +986,7 @@ UndoDelete::~UndoDelete()
 */
 UndoItem* UndoDelete::restore()
 {
-	kDebug() << "UndoDelete::restore(" << mEvent->id() << ")";
+	kDebug() << mEvent->id();
 	// Restore the original event
 	switch (calendar())
 	{
@@ -1121,7 +1121,7 @@ QString UndoDeletes::defaultActionText() const
 */
 UndoItem* UndoReactivate::restore()
 {
-	kDebug() << "UndoReactivate::restore()";
+	kDebug();
 	// Validate the alarm's calendar
 	switch (calendar())
 	{
@@ -1164,7 +1164,7 @@ QString UndoReactivate::defaultActionText() const
 */
 UndoItem* UndoDeactivate::restore()
 {
-	kDebug() << "UndoDeactivate::restore()";
+	kDebug();
 	// Validate the alarm's calendar
 	switch (calendar())
 	{

@@ -61,7 +61,7 @@ class EditAlarmDlg : public KDialog
 
 		static EditAlarmDlg* create(bool Template, Type, bool newAlarm, QWidget* parent = 0,
                                             GetResourceType = RES_PROMPT);
-		static EditAlarmDlg* create(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = 0,
+		static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
                                             GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual ~EditAlarmDlg();
 		bool            getEvent(KAEvent&, AlarmResource*&);
@@ -72,7 +72,7 @@ class EditAlarmDlg : public KDialog
 	protected:
 		EditAlarmDlg(bool Template, KAEvent::Action, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT);
-		EditAlarmDlg(bool Template, const KAEvent&, QWidget* parent = 0,
+		EditAlarmDlg(bool Template, const KAEvent*, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT, bool readOnly = false);
 		void            init(const KAEvent* event, bool newAlarm);
 		virtual void    resizeEvent(QResizeEvent*);

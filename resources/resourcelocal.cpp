@@ -130,6 +130,7 @@ bool KAResourceLocal::doLoad(bool)
 		emit invalidate(this);
 		calendar()->close();
 		clearChanges();
+		updateCustomEvents(false);   // calendar is now empty
 		if (!isActive())
 			return false;
 		mLoading = true;
@@ -173,7 +174,10 @@ bool KAResourceLocal::loadFile()
 	calendar()->close();
 	clearChanges();
 	if (!isActive())
+	{
+		updateCustomEvents(false);   // calendar is now empty
 		return false;
+	}
 	mLoading = true;
 	disableChangeNotification();
 	bool success = calendar()->load(mURL.path());
@@ -181,6 +185,7 @@ bool KAResourceLocal::loadFile()
 	if (!success)
 	{
 		mLoading = false;
+		updateCustomEvents();
 		return false;
 	}
 	mLastModified = readLastModified();
@@ -188,6 +193,7 @@ bool KAResourceLocal::loadFile()
 	mFileReadOnly = !fi.isWritable();
 	checkCompatibility(fileName());
 	mLoading = false;
+	updateCustomEvents();
 	mLoaded = true;
 	setReloaded(true);   // the resource has now been loaded at least once
 	emit loaded(this);

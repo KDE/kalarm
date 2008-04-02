@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ class MessageWin : public MainWindowBase
 		};
 
 		MessageWin();     // for session management restoration only
-		MessageWin(const KAEvent&, const KAAlarm&, int flags);
+		MessageWin(const KAEvent*, const KAAlarm&, int flags);
 		~MessageWin();
 		void                repeat(const KAAlarm&);
 		void                setRecreating()        { mRecreating = true; }
@@ -100,7 +100,7 @@ class MessageWin : public MainWindowBase
 		void                readProcessOutput(ShellProcess*);
 
 	private:
-		MessageWin(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
+		MessageWin(const KAEvent*, const DateTime& alarmDateTime, const QStringList& errmsgs,
 		           const QString& dontShowAgain);
 		void                initView();
 		void                displayComplete();

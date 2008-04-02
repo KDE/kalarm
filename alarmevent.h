@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -233,6 +233,7 @@ class KAAlarm : public KAAlarmEventBase
 class KAEvent : public KAAlarmEventBase
 {
 	public:
+		typedef QList<KAEvent*> List;
 		enum            // flags for use in DCOP calls, etc.
 		{
 			BEEP            = 0x02,    // sound audible beep when alarm is displayed

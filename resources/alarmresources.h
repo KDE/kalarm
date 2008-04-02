@@ -98,6 +98,11 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		/** Set a function to write the application ID into a calendar. */
 		void setCalIDFunction(void (*f)(CalendarLocal&))
 		                              { AlarmResource::setCalIDFunction(f); }
+		/** Set a function to create KAlarm event instances.
+		 *  When the function is called, the CalendarLocal parameter is
+		 *  set to null to indicate that the resource is about to be reloaded. */
+		void setCustomEventFunction(void (*f)(AlarmResource*, CalendarLocal*))
+		                              { AlarmResource::setCustomEventFunction(f); }
 		/** Set a function to fix the calendar once it has been loaded. */
 		void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc))
 		                              { AlarmResource::setFixFunction(f); }

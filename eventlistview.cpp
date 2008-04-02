@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,12 +48,12 @@ EventListView::EventListView(QWidget* parent)
 /******************************************************************************
 * Return the event referred to by an index.
 */
-KCal::Event* EventListView::event(const QModelIndex& index) const
+KAEvent* EventListView::event(const QModelIndex& index) const
 {
 	return eventFilterModel()->event(index);
 }
 
-KCal::Event* EventListView::event(int row) const
+KAEvent* EventListView::event(int row) const
 {
 	return eventFilterModel()->event(row);
 }
@@ -87,7 +87,7 @@ QModelIndex EventListView::selectedIndex() const
 * Return the single selected event.
 * Reply = null if no items are selected, or if multiple items are selected.
 */
-KCal::Event* EventListView::selectedEvent() const
+KAEvent* EventListView::selectedEvent() const
 {
 	QModelIndexList list = selectionModel()->selectedRows();
 	if (list.count() != 1)
@@ -95,15 +95,15 @@ KCal::Event* EventListView::selectedEvent() const
 kDebug(0)<<"SelectedEvent() count="<<list.count();
 	const QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(list[0].model());
 	QModelIndex source = proxy->mapToSource(list[0]);
-	return static_cast<KCal::Event*>(source.internalPointer());
+	return static_cast<KAEvent*>(source.internalPointer());
 }
 
 /******************************************************************************
 * Return the selected events.
 */
-KCal::Event::List EventListView::selectedEvents() const
+KAEvent::List EventListView::selectedEvents() const
 {
-	KCal::Event::List elist;
+	KAEvent::List elist;
 	QModelIndexList ilist = selectionModel()->selectedRows();
 	int count = ilist.count();
 	if (count)
@@ -112,7 +112,7 @@ KCal::Event::List EventListView::selectedEvents() const
 		for (int i = 0;  i < count;  ++i)
 		{
 			QModelIndex source = proxy->mapToSource(ilist[i]);
-			elist += static_cast<KCal::Event*>(source.internalPointer());
+			elist += static_cast<KAEvent*>(source.internalPointer());
 		}
 	}
 	return elist;

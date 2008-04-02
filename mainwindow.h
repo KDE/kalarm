@@ -100,7 +100,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 
 	private slots:
 		void           slotNew(EditAlarmDlg::Type);
-		void           slotNewFromTemplate(const KAEvent&);
+		void           slotNewFromTemplate(const KAEvent*);
 		void           slotNewTemplate();
 		void           slotCopy();
 		void           slotModify();

@@ -41,7 +41,8 @@ KAResourceRemote::KAResourceRemote()
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(true),
-	  mUseCacheFile(true)
+	  mUseCacheFile(true),
+	  mRemoteReadOnly(false)
 {
 	init();
 }
@@ -51,7 +52,8 @@ KAResourceRemote::KAResourceRemote(const KConfigGroup& group)
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(true),
-	  mUseCacheFile(true)
+	  mUseCacheFile(true),
+	  mRemoteReadOnly(false)
 {
 	mDownloadUrl = KUrl(group.readEntry("DownloadUrl"));
 	mUploadUrl = KUrl(group.readEntry("UploadUrl"));
@@ -66,7 +68,8 @@ KAResourceRemote::KAResourceRemote(Type type, const KUrl& downloadUrl, const KUr
 	  mDownloadJob(0),
 	  mUploadJob(0),
 	  mShowProgress(false),
-	  mUseCacheFile(false)
+	  mUseCacheFile(false),
+	  mRemoteReadOnly(false)
 {
 	init();
 }
@@ -111,6 +114,11 @@ void KAResourceRemote::applyReconfig()
 	}
 }
 
+bool KAResourceRemote::readOnly() const
+{
+	return mRemoteReadOnly || AlarmResource::readOnly();
+}
+
 void KAResourceRemote::enableResource(bool enable)
 {
 	if (!enable)
@@ -131,7 +139,10 @@ bool KAResourceRemote::doLoad(bool syncCache)
 	calendar()->close();
 	clearChanges();
 	if (!isActive())
+	{
+		updateCustomEvents(false);   // calendar is now empty
 		return false;
+	}
 	mLoading = true;
 
 	if (mUseCacheFile  ||  !syncCache)
@@ -149,7 +160,10 @@ bool KAResourceRemote::doLoad(bool syncCache)
 		slotLoadJobResult(0);
 	}
 	else if (!lock()->lock())
+	{
 		kDebug(KARES_DEBUG) << mDownloadUrl.prettyUrl() << ": cache file is locked - something else must be loading the file";
+		updateCustomEvents();
+	}
 	else
 	{
 		kDebug(KARES_DEBUG) << mDownloadUrl.prettyUrl() << ": downloading...";
@@ -215,6 +229,7 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 	}
 	mLoading = false;
 	lock()->unlock();
+	updateCustomEvents();
 	emit loaded(this);
 	if (job  &&  !err)
 		emit resourceChanged(this);
@@ -233,6 +248,7 @@ void KAResourceRemote::cancelDownload(bool disable)
 #endif
 		mLoading = false;
 		lock()->unlock();
+		updateCustomEvents();
 		emit loaded(this);
 	}
 }

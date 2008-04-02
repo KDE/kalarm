@@ -36,6 +36,7 @@ using namespace KCal;
 
 
 void              (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
+void              (*AlarmResource::mCustomEventFunction)(AlarmResource*, CalendarLocal*) = 0;
 KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc) = 0;
 int                 AlarmResource::mDebugArea = 0;
 bool                AlarmResource::mNoGui = false;
@@ -215,6 +216,15 @@ KCalendar::Status AlarmResource::compatibility(const Event* event) const
 	if (it == mCompatibilityMap.end())
 		return KCalendar::Incompatible;    // event not found!?! - assume the worst
 	return it.value();
+}
+
+/******************************************************************************
+* If a function is defined to update KAlarm event instances, call it.
+*/
+void AlarmResource::updateCustomEvents(bool useCalendar)
+{
+	if (mCustomEventFunction)
+		(*mCustomEventFunction)(this, useCalendar ? calendar() : 0);
 }
 
 bool AlarmResource::writable(const Event* event) const

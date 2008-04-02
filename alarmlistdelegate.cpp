@@ -125,8 +125,8 @@ bool AlarmListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 	if (index.isValid())
 	{
 		QModelIndex source = static_cast<QAbstractProxyModel*>(model)->mapToSource(index);
-		KCal::Event* kcalEvent = static_cast<KCal::Event*>(source.internalPointer());
-		KAlarm::editAlarm(kcalEvent, view);   // edit alarm (view-only mode if archived or read-only)
+		KAEvent* event = static_cast<KAEvent*>(source.internalPointer());
+		KAlarm::editAlarm(event, view);   // edit alarm (view-only mode if archived or read-only)
 	}
 	return false;   // indicate that the event has not been handled
 }	

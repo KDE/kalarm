@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 
 		EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT);
-		EditDisplayAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = 0,
+		EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
@@ -132,7 +132,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 	public:
 		EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT);
-		EditCommandAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = 0,
+		EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
@@ -179,7 +179,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 	public:
 		EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT);
-		EditEmailAlarmDlg(bool Template, const KAEvent&, bool newAlarm, QWidget* parent = 0,
+		EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
                              GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 

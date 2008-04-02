@@ -179,12 +179,12 @@ void Find::display()
 	int rowCount = mListView->model()->rowCount();
 	for (int row = 0;  row < rowCount;  ++row)
 	{
-		const KAEvent event(mListView->event(row));
-		if (event.expired())
+		const KAEvent* event = mListView->event(row);
+		if (event->expired())
 			archived = true;
 		else
 			live = true;
-		switch (event.action())
+		switch (event->action())
 		{
 			case KAEvent::MESSAGE:  text    = true;  break;
 			case KAEvent::FILE:     file    = true;  break;
@@ -248,7 +248,7 @@ void Find::slotFind()
 			QModelIndex index = mListView->selectionModel()->currentIndex();
 			if (index.isValid())
 			{
-				mStartID       = mListView->event(index)->uid();
+				mStartID       = mListView->event(index)->id();
 				mNoCurrentItem = false;
 				fromCurrent    = true;
 			}
@@ -279,53 +279,53 @@ void Find::findNext(bool forward, bool fromCurrent)
 	bool found = false;
 	for ( ;  index.isValid();  index = nextItem(index, forward))
 	{
-		const KAEvent event(mListView->event(index));
-		if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event.id())
+		const KAEvent* event = mListView->event(index);
+		if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event->id())
 			break;    // we've wrapped round and reached the starting alarm again
 		fromCurrent = false;
-		bool live = !event.expired();
+		bool live = !event->expired();
 		if (live  &&  !(mOptions & FIND_LIVE)
 		||  !live  &&  !(mOptions & FIND_ARCHIVED))
 			continue;     // we're not searching this type of alarm
-		switch (event.action())
+		switch (event->action())
 		{
 			case KAEvent::MESSAGE:
 				if (!(mOptions & FIND_MESSAGE))
 					break;
-				mFind->setData(event.cleanText());
+				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
 			case KAEvent::FILE:
 				if (!(mOptions & FIND_FILE))
 					break;
-				mFind->setData(event.cleanText());
+				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
 			case KAEvent::COMMAND:
 				if (!(mOptions & FIND_COMMAND))
 					break;
-				mFind->setData(event.cleanText());
+				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
 			case KAEvent::EMAIL:
 				if (!(mOptions & FIND_EMAIL))
 					break;
-				mFind->setData(event.emailAddresses(", "));
+				mFind->setData(event->emailAddresses(", "));
 				found = (mFind->find() == KFind::Match);
 				if (found)
 					break;
-				mFind->setData(event.emailSubject());
+				mFind->setData(event->emailSubject());
 				found = (mFind->find() == KFind::Match);
 				if (found)
 					break;
-				mFind->setData(event.emailAttachments().join(", "));
+				mFind->setData(event->emailAttachments().join(", "));
 				found = (mFind->find() == KFind::Match);
 				if (found)
 					break;
-				mFind->setData(event.cleanText());
+				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 		}

@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialog to defer an alarm
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,12 +82,9 @@ void DeferAlarmDlg::slotOk()
 	if (!mLimitEventID.isEmpty())
 	{
 		// Get the event being deferred
-		const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mLimitEventID);
-		if (kcalEvent)
-		{
-			KAEvent event(kcalEvent);
-			endTime = event.deferralLimit(&limitType);
-		}
+		const KAEvent* event = AlarmCalendar::getEvent(mLimitEventID);
+		if (event)
+			endTime = event->deferralLimit(&limitType);
 	}
 	else
 	{
@@ -158,14 +155,8 @@ void DeferAlarmDlg::setLimit(const DateTime& limit)
 DateTime DeferAlarmDlg::setLimit(const QString& eventID)
 {
 	mLimitEventID = eventID;
-	const KCal::Event* kcalEvent = AlarmCalendar::getEvent(mLimitEventID);
-	if (kcalEvent)
-	{
-		KAEvent event(kcalEvent);
-		mLimitDateTime = event.deferralLimit();
-	}
-	else
-		mLimitDateTime = DateTime();
+	const KAEvent* event = AlarmCalendar::getEvent(mLimitEventID);
+	mLimitDateTime = event ? event->deferralLimit() : DateTime();
 	mTimeWidget->setMaxDateTime(mLimitDateTime);
 	return mLimitDateTime;
 }

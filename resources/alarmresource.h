@@ -151,6 +151,10 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 
 		/** Set a function to write the application ID into a calendar. */
 		static void setCalIDFunction(void (*f)(CalendarLocal&))    { mCalIDFunction = f; }
+		/** Set a function to create KAlarm event instances.
+		 *  When the function is called, the CalendarLocal parameter is
+		 *  set to null to indicate that the resource is about to be reloaded. */
+		static void setCustomEventFunction(void (*f)(AlarmResource*, CalendarLocal*))   { mCustomEventFunction = f; }
 		/** Set a function to fix the calendar once it has been loaded. */
 		static void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, FixFunc))
 		                                         { mFixFunction = f; }
@@ -209,6 +213,7 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 		void              setCompatibility(KCalendar::Status c)    { mCompatibility = c; }
 		void              checkCompatibility(const QString&);
 		KCalendar::Status checkCompatibility(KCal::CalendarLocal&, const QString& filename, FixFunc);
+		void              updateCustomEvents(bool useCalendar = true);
 		virtual void      enableResource(bool enable) = 0;
 		void              lock(const QString& path);
 
@@ -220,6 +225,7 @@ class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
 
 		static int  mDebugArea;       // area for kDebug() output
 		static bool mNoGui;           // application has no GUI, so don't display messages
+		static void              (*mCustomEventFunction)(AlarmResource*, CalendarLocal*);
 
 		KABC::Lock* mLock;
 		Type        mType;            // type of alarm held in this resource

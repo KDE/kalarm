@@ -102,7 +102,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
-	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
+	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
 	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));
 
 	// Replace the default handler for the Quit context menu item
@@ -158,7 +158,7 @@ void TrayWindow::slotNewAlarm(EditAlarmDlg::Type type)
 /******************************************************************************
 *  Called when the "New Alarm" menu item is selected to edit a new alarm.
 */
-void TrayWindow::slotNewFromTemplate(const KAEvent& event)
+void TrayWindow::slotNewFromTemplate(const KAEvent* event)
 {
 	KAlarm::editNewAlarm(event);
 }
@@ -270,15 +270,14 @@ QString TrayWindow::tooltipAlarmText() const
 	// Get today's and tomorrow's alarms, sorted in time order
 	int i, iend;
 	QList<TipItem> items;
-	KCal::Event::List events = AlarmCalendar::resources()->eventsWithAlarms(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, KCalEvent::ACTIVE);
+	KAEvent::List events = AlarmCalendar::resources()->events(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, KCalEvent::ACTIVE);
 	for (i = 0, iend = events.count();  i < iend;  ++i)
 	{
-		KCal::Event* kcalEvent = events[i];
-		event.set(kcalEvent);
-		if (event.enabled()  &&  !event.expired()  &&  event.action() == KAEvent::MESSAGE)
+		KAEvent* event = events[i];
+		if (event->enabled()  &&  !event->expired()  &&  event->action() == KAEvent::MESSAGE)
 		{
 			TipItem item;
-			QDateTime dateTime = event.nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().dateTime();
+			QDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().dateTime();
 			if (dateTime > tomorrow.dateTime())
 				continue;   // ignore alarms after tomorrow at the current clock time
 			item.dateTime = dateTime;

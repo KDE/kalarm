@@ -105,13 +105,13 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWid
 	return 0;
 }
 
-EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
+EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                    GetResourceType getResource, bool readOnly)
 {
-	switch (event.action())
+	switch (event->action())
 	{
 		case KAEvent::COMMAND:
-			if (!event.commandDisplay())
+			if (!event->commandDisplay())
 				return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 			// fall through to MESSAGE
 		case KAEvent::MESSAGE:
@@ -149,10 +149,10 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 	init(0, getResource);
 }
 
-EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent& event, QWidget* parent,
+EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
 	: KDialog(parent),
-	  mAlarmType(event.action()),
+	  mAlarmType(event->action()),
 	  mMainPageShown(false),
 	  mRecurPageShown(false),
 	  mRecurSetDefaultEndDate(true),
@@ -167,7 +167,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent& event, QWidget* parent,
 	  mReadOnly(readOnly),
 	  mSavedEvent(0)
 {
-	init(&event, getResource);
+	init(event, getResource);
 }
 
 void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
@@ -788,7 +788,7 @@ bool EditAlarmDlg::validate()
 			errmsg = i18nc("@info", "You must enter a name for the alarm template");
 		else if (name != mSavedTemplateName)
 		{
-			if (AlarmCalendar::resources()->templateEvent(name).valid())
+			if (AlarmCalendar::resources()->templateEvent(name)->valid())
 				errmsg = i18nc("@info", "Template name is already in use");
 		}
 		if (!errmsg.isEmpty())
@@ -901,7 +901,7 @@ bool EditAlarmDlg::validate()
 	{
 		if (!mResourceEventId.isEmpty())
 		{
-			mResource = AlarmResources::instance()->resourceForIncidence(mResourceEventId);
+			mResource = AlarmCalendar::resources()->resourceForEvent(mResourceEventId);
 			AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
 			if (mResource->alarmType() != type)
 				mResource = 0;   // event may have expired while dialog was open
@@ -958,14 +958,7 @@ void EditAlarmDlg::slotDefault()
 {
 	TemplatePickDlg dlg(this);
 	if (dlg.exec() == QDialog::Accepted)
-	{
-		const Event* kcalEvent = dlg.selectedTemplate();
-		if (kcalEvent)
-		{
-			KAEvent event(kcalEvent);
-			initValues(&event);
-		}
-	}
+		initValues(dlg.selectedTemplate());
 }
 
 /******************************************************************************

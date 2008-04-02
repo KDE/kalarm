@@ -399,7 +399,7 @@ void MainWindow::initActions()
 	connect(mActionNew, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
 
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
-	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent&)), SLOT(slotNewFromTemplate(const KAEvent&)));
+	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
 
 	mActionCreateTemplate = new KAction(i18nc("@action", "Create Tem&plate..."), this);
 	actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
@@ -603,7 +603,7 @@ void MainWindow::slotNew(EditAlarmDlg::Type type)
 *  Called when a template is selected from the New From Template popup menu.
 *  Executes a New Alarm dialog, preset from the selected template.
 */
-void MainWindow::slotNewFromTemplate(const KAEvent& tmplate)
+void MainWindow::slotNewFromTemplate(const KAEvent* tmplate)
 {
 	KAlarm::editNewAlarm(tmplate, mListView);
 }
@@ -614,12 +614,9 @@ void MainWindow::slotNewFromTemplate(const KAEvent& tmplate)
 */
 void MainWindow::slotNewTemplate()
 {
-	Event* kcalEvent = mListView->selectedEvent();
-	if (kcalEvent)
-	{
-		KAEvent event(kcalEvent);
+	KAEvent* event = mListView->selectedEvent();
+	if (event)
 		KAlarm::editNewTemplate(event, this);
-	}
 }
 
 /******************************************************************************
@@ -628,12 +625,9 @@ void MainWindow::slotNewTemplate()
 */
 void MainWindow::slotCopy()
 {
-	Event* kcalEvent = mListView->selectedEvent();
-	if (kcalEvent)
-	{
-		KAEvent event(kcalEvent);
+	KAEvent* event = mListView->selectedEvent();
+	if (event)
 		KAlarm::editNewAlarm(event, this);
-	}
 }
 
 /******************************************************************************
@@ -642,9 +636,9 @@ void MainWindow::slotCopy()
 */
 void MainWindow::slotModify()
 {
-	Event* kcalEvent = mListView->selectedEvent();
-	if (kcalEvent)
-		KAlarm::editAlarm(kcalEvent, this);   // edit alarm (view-only mode if archived or read-only)
+	KAEvent* event = mListView->selectedEvent();
+	if (event)
+		KAlarm::editAlarm(event, this);   // edit alarm (view-only mode if archived or read-only)
 }
 
 /******************************************************************************
@@ -653,17 +647,17 @@ void MainWindow::slotModify()
 */
 void MainWindow::slotDelete()
 {
-	Event::List events = mListView->selectedEvents();
+	KAEvent::List events = mListView->selectedEvents();
 	// Copy the events to be deleted, in case any are deleted by being
 	// triggered while the confirmation prompt is displayed.
-	QList<KAEvent> eventCopies;
+	KAEvent::List eventCopies;
 	Undo::EventList undos;
-	AlarmResources* resources = AlarmResources::instance();
+	AlarmCalendar* resources = AlarmCalendar::resources();
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		const KAEvent event(events[i]);
+		KAEvent* event = events[i];
 		eventCopies.append(event);
-		undos.append(event, resources->resourceForIncidence(event.id()));
+		undos.append(*event, resources->resourceForEvent(event->id()));
 	}
 	if (Preferences::confirmAlarmDeletion())
 	{
@@ -690,24 +684,24 @@ void MainWindow::slotDelete()
 void MainWindow::slotReactivate()
 {
 	int i, end;
-	Event::List events = mListView->selectedEvents();
+	KAEvent::List events = mListView->selectedEvents();
 	mListView->clearSelection();
 
 	// Add the alarms to the displayed lists and to the calendar file
-	QList<KAEvent> eventCopies;
+	KAEvent::List eventCopies;
 	Undo::EventList undos;
 	QStringList ineligibleIDs;
-	AlarmResources* resources = AlarmResources::instance();
+	AlarmCalendar* resources = AlarmCalendar::resources();
 	for (i = 0, end = events.count();  i < end;  ++i)
-		eventCopies.append(KAEvent(events[i]));
+		eventCopies.append(events[i]);
 	KAlarm::reactivateEvents(eventCopies, ineligibleIDs, 0, this);
 
 	// Create the undo list, excluding ineligible events
 	for (i = 0, end = eventCopies.count();  i < end;  ++i)
 	{
-		QString id = eventCopies[i].id();
+		QString id = eventCopies[i]->id();
 		if (!ineligibleIDs.contains(id))
-			undos.append(eventCopies[i], resources->resourceForIncidence(id));
+			undos.append(*eventCopies[i], resources->resourceForEvent(id));
 	}
 	Undo::saveReactivates(undos);
 }
@@ -719,10 +713,10 @@ void MainWindow::slotReactivate()
 void MainWindow::slotEnable()
 {
 	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
-	Event::List events = mListView->selectedEvents();
-	QList<KAEvent> eventCopies;
+	KAEvent::List events = mListView->selectedEvents();
+	KAEvent::List eventCopies;
 	for (int i = 0, end = events.count();  i < end;  ++i)
-		eventCopies += KAEvent(events[i]);
+		eventCopies += events[i];
 	KAlarm::enableEvents(eventCopies, enable, this);
 }
 
@@ -802,9 +796,9 @@ void MainWindow::slotBirthdays()
 			KAlarm::UpdateStatus status = KAlarm::addEvents(events, &dlg, true, true);
 
 			Undo::EventList undos;
-			AlarmResources* resources = AlarmResources::instance();
+			AlarmCalendar* resources = AlarmCalendar::resources();
 			for (int i = 0, end = events.count();  i < end;  ++i)
-				undos.append(events[i], resources->resourceForIncidence(events[i].id()));
+				undos.append(events[i], resources->resourceForEvent(events[i].id()));
 			Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
 			if (status != KAlarm::UPDATE_FAILED)
@@ -1208,7 +1202,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		if (!events.isEmpty())
 		{
 			KAEvent ev(events[0]);
-			KAlarm::editNewAlarm(ev, win);
+			KAlarm::editNewAlarm(&ev, win);
 		}
 		return;
 	}
@@ -1276,7 +1270,7 @@ void MainWindow::slotResourceStatusChanged()
 void MainWindow::slotSelection()
 {
 	// Find which events have been selected
-	Event::List events = mListView->selectedEvents();
+	KAEvent::List events = mListView->selectedEvents();
 	int count = events.count();
 	if (!count)
 	{
@@ -1293,20 +1287,18 @@ void MainWindow::slotSelection()
 	bool enableEnableDisable = true;
 	bool enableEnable = false;
 	bool enableDisable = false;
-	AlarmResources* resources = AlarmResources::instance();
+	AlarmCalendar* resources = AlarmCalendar::resources();
 	KDateTime now = KDateTime::currentUtcDateTime();
 	for (int i = 0;  i < count;  ++i)
 	{
-		const Event* kcalEvent = events[i];
-		const KAEvent event(kcalEvent);
-		bool expired = event.expired();
+		KAEvent* event = events[i];
+		bool expired = event->expired();
 		if (!expired)
 			allArchived = false;
-		AlarmResource* resource = resources->resource(kcalEvent);
-		if (!resource  ||  !resource->writable(kcalEvent))
+		if (resources->eventReadOnly(event->id()))
 			readOnly = true;
 		if (enableReactivate
-		&&  (!expired  ||  !event.occursAfter(now, true)))
+		&&  (!expired  ||  !event->occursAfter(now, true)))
 			enableReactivate = false;
 		if (enableEnableDisable)
 		{
@@ -1314,16 +1306,16 @@ void MainWindow::slotSelection()
 				enableEnableDisable = enableEnable = enableDisable = false;
 			else
 			{
-				if (!enableEnable  &&  !event.enabled())
+				if (!enableEnable  &&  !event->enabled())
 					enableEnable = true;
-				if (!enableDisable  &&  event.enabled())
+				if (!enableDisable  &&  event->enabled())
 					enableDisable = true;
 			}
 		}
 	}
 
 	kDebug() << "true";
-	mActionCreateTemplate->setEnabled((count == 1) && (resources->activeCount(AlarmResource::TEMPLATE, true) > 0));
+	mActionCreateTemplate->setEnabled((count == 1) && (AlarmResources::instance()->activeCount(AlarmResource::TEMPLATE, true) > 0));
 	mActionCopy->setEnabled(active && count == 1);
 	mActionModify->setEnabled(count == 1);
 	mActionDelete->setEnabled(!readOnly && (active || allArchived));

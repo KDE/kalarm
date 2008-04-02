@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,10 +49,10 @@ void TemplateMenuAction::slotInitMenu()
 	KMenu* m = menu();
 	m->clear();
 	mOriginalTexts.clear();
-	QList<KAEvent> templates = KAlarm::templateList();
+	KAEvent::List templates = KAlarm::templateList();
 	for (int i = 0, end = templates.count();  i < end;  ++i)
 	{
-		QString name = templates[i].templateName();
+		QString name = templates[i]->templateName();
 		QAction* act = m->addAction(name);
 		mOriginalTexts[act] = name;   // keep original text, since action text has shortcuts added
 	}
@@ -67,6 +67,6 @@ void TemplateMenuAction::slotSelected(QAction* action)
 	QMap<QAction*, QString>::const_iterator it = mOriginalTexts.find(action);
 	if (it == mOriginalTexts.end()  ||  it.value().isEmpty())
 		return;
-	KAEvent templ = AlarmCalendar::resources()->templateEvent(it.value());
+	KAEvent* templ = AlarmCalendar::resources()->templateEvent(it.value());
 	emit selected(templ);
 }

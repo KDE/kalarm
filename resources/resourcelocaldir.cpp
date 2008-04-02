@@ -265,6 +265,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	}
 	mLoading = false;
 	enableChangeNotification();
+	updateCustomEvents();
 	if (success)
 	{
 		mLoaded = true;

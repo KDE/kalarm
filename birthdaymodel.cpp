@@ -1,7 +1,7 @@
 /*
  *  birthdaymodel.cpp  -  model class for birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -155,15 +155,14 @@ void BirthdayModel::refresh()
 	// Compile a list of all pending alarm messages which look like birthdays
 	QStringList messageList;
 	KAEvent event;
-	KCal::Event::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
+	KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		KCal::Event* kcalEvent = events[i];
-		event.set(kcalEvent);
-		if (event.action() == KAEvent::MESSAGE
-		&&  event.recurType() == KARecurrence::ANNUAL_DATE
-		&&  (mPrefix.isEmpty()  ||  event.message().startsWith(mPrefix)))
-			messageList.append(event.message());
+		KAEvent* event = events[i];
+		if (event->action() == KAEvent::MESSAGE
+		&&  event->recurType() == KARecurrence::ANNUAL_DATE
+		&&  (mPrefix.isEmpty()  ||  event->message().startsWith(mPrefix)))
+			messageList.append(event->message());
 	}
 
 	// Fetch all birthdays from the address book

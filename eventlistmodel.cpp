@@ -119,20 +119,19 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 	int column = index.column();
 	if (role == Qt::WhatsThisRole)
 		return whatsThisText(column);
-	KCal::Event* kcalEvent = static_cast<KCal::Event*>(index.internalPointer());
-	if (!kcalEvent)
+	KAEvent* event = static_cast<KAEvent*>(index.internalPointer());
+	if (!event)
 		return QVariant();
-	KAEvent event(static_cast<KCal::Event*>(index.internalPointer()));
 	switch (role)
 	{
 		case Qt::ForegroundRole:
-			if (!event.enabled())
+			if (!event->enabled())
 			       return Preferences::disabledColour();
-			if (event.expired())
+			if (event->expired())
 			       return Preferences::archivedColour();
 			break;   // use the default for normal active alarms
 		case StatusRole:
-			return event.category();
+			return event->category();
 		default:
 			break;
 	}
@@ -147,12 +146,12 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					break;
 				case Qt::DisplayRole:
 				{
-					DateTime due = event.expired() ? event.startDateTime() : event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+					DateTime due = event->expired() ? event->startDateTime() : event->nextTrigger(KAEvent::DISPLAY_TRIGGER);
 					return alarmTimeText(due);
 				}
 				case SortRole:
 				{
-					DateTime due = event.expired() ? event.startDateTime() : event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+					DateTime due = event->expired() ? event->startDateTime() : event->nextTrigger(KAEvent::DISPLAY_TRIGGER);
 					return due.isValid() ? due.effectiveKDateTime().toUtc().dateTime()
 					                     : QDateTime(QDate(9999,12,31), QTime(0,0,0));
 				}
@@ -167,15 +166,15 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					resourceColour = true;
 					break;
 				case Qt::DisplayRole:
-					if (event.expired())
+					if (event->expired())
 						return QString();
-					return timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+					return timeToAlarmText(event->nextTrigger(KAEvent::DISPLAY_TRIGGER));
 				case SortRole:
 				{
-					if (event.expired())
+					if (event->expired())
 						return -1;
 					KDateTime now = KDateTime::currentUtcDateTime();
-					DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+					DateTime due = event->nextTrigger(KAEvent::DISPLAY_TRIGGER);
 					if (due.isDateOnly())
 						return now.date().daysTo(due.date()) * 1440;
 					return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;
@@ -200,14 +199,14 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			switch (role)
 			{
 				case Qt::BackgroundRole:
-					if (event.action() == KAEvent::MESSAGE
-					||  event.action() == KAEvent::FILE
-					||  event.action() == KAEvent::COMMAND && event.commandDisplay())
-						return event.bgColour();
+					if (event->action() == KAEvent::MESSAGE
+					||  event->action() == KAEvent::FILE
+					||  event->action() == KAEvent::COMMAND && event->commandDisplay())
+						return event->bgColour();
 				case SortRole:
 				{
-					unsigned i = (event.action() == KAEvent::MESSAGE || event.action() == KAEvent::FILE)
-				           	? event.bgColour().rgb() : 0;
+					unsigned i = (event->action() == KAEvent::MESSAGE || event->action() == KAEvent::FILE)
+				           	? event->bgColour().rgb() : 0;
 					return QString("%1").arg(i, 6, 10, QLatin1Char('0'));
 				}
 			}
@@ -231,9 +230,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 #endif
 					return QString();
 				case ValueRole:
-					return static_cast<int>(event.action());
+					return static_cast<int>(event->action());
 				case SortRole:
-					return QString("%1").arg(event.action(), 2, 10, QLatin1Char('0'));
+					return QString("%1").arg(event->action(), 2, 10, QLatin1Char('0'));
 			}
 			break;
 		case TextColumn:
@@ -258,9 +257,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					resourceColour = true;
 					break;
 				case Qt::DisplayRole:
-					return event.templateName();
+					return event->templateName();
 				case SortRole:
-					return event.templateName().toUpper();
+					return event->templateName().toUpper();
 			}
 			break;
 		default:
@@ -269,7 +268,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 
 	if (resourceColour)
 	{
-		AlarmResource* resource = AlarmResources::instance()->resourceForIncidence(event.id());
+		AlarmResource* resource = AlarmResources::instance()->resourceForIncidence(event->id());
 		if (resource  &&  resource->colour().isValid())
 			return resource->colour();
 	}
@@ -344,7 +343,7 @@ void EventListModel::slotUpdateArchivedColour(const QColor&)
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
-		if (KCalEvent::status(mEvents[row]) == KCalEvent::ARCHIVED)
+		if (mEvents[row]->category() == KCalEvent::ARCHIVED)
 		{
 			// For efficiency, emit a single signal for each group
 			// of consecutive archived alarms, rather than a separate
@@ -371,7 +370,7 @@ void EventListModel::slotUpdateDisabledColour(const QColor&)
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
-		if (mEvents[row]->statusStr() == QLatin1String("DISABLED"))
+		if (!mEvents[row]->enabled())
 		{
 			// For efficiency, emit a single signal for each group
 			// of consecutive disabled alarms, rather than a separate
@@ -400,7 +399,7 @@ void EventListModel::slotUpdateWorkingHours()
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
-		if (KAEvent(mEvents[row]).workTimeOnly())
+		if (mEvents[row]->workTimeOnly())
 		{
 			// For efficiency, emit a single signal for each group
 			// of consecutive alarms to update, rather than a separate
@@ -456,11 +455,11 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 		case AlarmResources::Colour:
 		{
 			kDebug() << "Colour";
-			AlarmResources* resources = AlarmResources::instance();
+			AlarmCalendar* resources = AlarmCalendar::resources();
 			int firstRow = -1;
 			for (int row = 0, end = mEvents.count();  row < end;  ++row)
 			{
-				if (resources->resource(mEvents[row]) == resource)
+				if (resources->resourceForEvent(mEvents[row]->id()) == resource)
 				{
 					// For efficiency, emit a single signal for each group
 					// of consecutive alarms for the resource, rather than a separate
@@ -484,7 +483,7 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 
 	if (added)
 	{
-		KCal::Event::List list = AlarmCalendar::resources()->events(resource, mStatus);
+		KAEvent::List list = AlarmCalendar::resources()->events(resource, mStatus);
 		for (int i = list.count();  --i >= 0;  )
 		{
 			if (mEvents.indexOf(list[i]))
@@ -510,11 +509,11 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 void EventListModel::removeResource(AlarmResource* resource)
 {
 	kDebug();
-	AlarmResources* resources = AlarmResources::instance();
+	AlarmCalendar* resources = AlarmCalendar::resources();
 	int lastRow = -1;
 	for (int row = mEvents.count();  --row >= 0; )
 	{
-		AlarmResource* r = resources->resource(mEvents[row]);
+		AlarmResource* r = resources->resourceForEvent(mEvents[row]->id());
 		if (!r  ||  r == resource)
 		{
 			// For efficiency, delete each group of consecutive
@@ -553,7 +552,7 @@ void EventListModel::reload()
 		mEvents.clear();
 		endRemoveRows();
 	}
-	KCal::Event::List list = AlarmCalendar::resources()->events(mStatus);
+	KAEvent::List list = AlarmCalendar::resources()->events(mStatus);
 	if (!list.isEmpty())
 	{
 		beginInsertRows(QModelIndex(), 0, list.count() - 1);
@@ -569,7 +568,7 @@ QModelIndex EventListModel::eventIndex(const QString& eventId) const
 {
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
-		if (mEvents[row]->uid() == eventId)
+		if (mEvents[row]->id() == eventId)
 			return createIndex(row, 0, mEvents[row]);
 	}
 	return QModelIndex();
@@ -578,9 +577,9 @@ QModelIndex EventListModel::eventIndex(const QString& eventId) const
 /******************************************************************************
 * Return the index to a specified event.
 */
-QModelIndex EventListModel::eventIndex(const KCal::Event* event) const
+QModelIndex EventListModel::eventIndex(const KAEvent* event) const
 {
-	int row = mEvents.indexOf(const_cast<KCal::Event*>(event));
+	int row = mEvents.indexOf(const_cast<KAEvent*>(event));
 	if (row < 0)
 		return QModelIndex();
 	return createIndex(row, 0, mEvents[row]);
@@ -589,9 +588,9 @@ QModelIndex EventListModel::eventIndex(const KCal::Event* event) const
 /******************************************************************************
 * Add an event to the list.
 */
-void EventListModel::addEvent(KCal::Event* event)
+void EventListModel::addEvent(KAEvent* event)
 {
-	if (!(KAEvent(event).category() & mStatus))
+	if (!(event->category() & mStatus))
 		return;
 	int row = mEvents.count();
 	beginInsertRows(QModelIndex(), row, row);
@@ -602,11 +601,11 @@ void EventListModel::addEvent(KCal::Event* event)
 /******************************************************************************
 * Add an event to the list.
 */
-void EventListModel::addEvents(const KCal::Event::List& events)
+void EventListModel::addEvents(const KAEvent::List& events)
 {
-	KCal::Event::List evs;
+	KAEvent::List evs;
 	for (int i = 0, count = events.count();  i < count;  ++i)
-		if (KAEvent(events[i]).category() & mStatus)
+		if (events[i]->category() & mStatus)
 			evs += events[i];
 	int row = mEvents.count();
 	beginInsertRows(QModelIndex(), row, row + evs.count() - 1);
@@ -636,9 +635,9 @@ void EventListModel::updateEvent(int row)
 	emit dataChanged(index(row, 0), index(row, ColumnCount - 1));
 }
 
-void EventListModel::updateEvent(KCal::Event* oldEvent, KCal::Event* newEvent)
+void EventListModel::updateEvent(const QString& oldId, KAEvent* newEvent)
 {
-	int row = mEvents.indexOf(oldEvent);
+	int row = findEvent(oldId);
 	if (row < 0)
 		return;
 	mEvents[row] = newEvent;
@@ -652,7 +651,7 @@ int EventListModel::findEvent(const QString& eventId) const
 {
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
-		if (mEvents[row]->uid() == eventId)
+		if (mEvents[row]->id() == eventId)
 			return row;
 	}
 	return -1;
@@ -661,11 +660,11 @@ int EventListModel::findEvent(const QString& eventId) const
 /******************************************************************************
 * Return the event referred to by an index.
 */
-KCal::Event* EventListModel::event(const QModelIndex& index)
+KAEvent* EventListModel::event(const QModelIndex& index)
 {
 	if (!index.isValid())
 		return 0;
-	return static_cast<KCal::Event*>(index.internalPointer());
+	return static_cast<KAEvent*>(index.internalPointer());
 }
 
 /******************************************************************************
@@ -735,27 +734,27 @@ QString EventListModel::timeToAlarmText(const DateTime& dateTime) const
 /******************************************************************************
 * Return the repetition text.
 */
-QString EventListModel::repeatText(const KAEvent& event) const
+QString EventListModel::repeatText(const KAEvent* event) const
 {
-	QString repeatText = event.recurrenceText(true);
+	QString repeatText = event->recurrenceText(true);
 	if (repeatText.isEmpty())
-		repeatText = event.repetitionText(true);
+		repeatText = event->repetitionText(true);
 	return repeatText;
 }
 
 /******************************************************************************
 * Return a string for sorting the repetition column.
 */
-QString EventListModel::repeatOrder(const KAEvent& event) const
+QString EventListModel::repeatOrder(const KAEvent* event) const
 {
 	int repeatOrder = 0;
 	int repeatInterval = 0;
-	if (event.repeatAtLogin())
+	if (event->repeatAtLogin())
 		repeatOrder = 1;
 	else
 	{
-		repeatInterval = event.recurInterval();
-		switch (event.recurType())
+		repeatInterval = event->recurInterval();
+		switch (event->recurType())
 		{
 			case KARecurrence::MINUTELY:
 				repeatOrder = 2;
@@ -785,16 +784,16 @@ QString EventListModel::repeatOrder(const KAEvent& event) const
 /******************************************************************************
 *  Return the icon associated with the event's action.
 */
-QPixmap* EventListModel::eventIcon(const KAEvent& event) const
+QPixmap* EventListModel::eventIcon(const KAEvent* event) const
 {
-	switch (event.action())
+	switch (event->action())
 	{
 		case KAAlarm::FILE:
 			return mFileIcon;
 		case KAAlarm::EMAIL:
 			return mEmailIcon;
 		case KAAlarm::COMMAND:
-			if (!event.commandDisplay())
+			if (!event->commandDisplay())
 				return mCommandIcon;
 			// fall through to MESSAGE
 		case KAAlarm::MESSAGE:
@@ -845,12 +844,12 @@ EventListFilterModel::EventListFilterModel(EventListModel* baseModel, QObject* p
 /******************************************************************************
 * Return the event referred to by an index.
 */
-KCal::Event* EventListFilterModel::event(const QModelIndex& index) const
+KAEvent* EventListFilterModel::event(const QModelIndex& index) const
 {
 	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index));
 }
 
-KCal::Event* EventListFilterModel::event(int row) const
+KAEvent* EventListFilterModel::event(int row) const
 {
 	return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
 }

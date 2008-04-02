@@ -1,7 +1,7 @@
 /*
  *  resourceremote.h  -  KAlarm remote alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on resourceremote.h in kresources,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -61,6 +61,7 @@ class KALARM_EXPORT KAResourceRemote : public AlarmResource
 		virtual QString     displayLocation() const;
 		virtual QStringList location() const;
 		virtual bool        setLocation(const QString& downloadUrl, const QString& uploadUrl);
+		virtual bool readOnly() const;
 		virtual void showProgress(bool show)            { mShowProgress = show; }
 		virtual void writeConfig(KConfigGroup&);
 		virtual void startReconfig();
@@ -102,6 +103,7 @@ class KALARM_EXPORT KAResourceRemote : public AlarmResource
 		KUrl                  mNewUploadUrl;        // new upload URL to be applied by applyReconfig()
 		bool                  mShowProgress;        // emit download progress signals
 		bool                  mUseCacheFile;        // true to initially use cache until file can be downloaded
+		bool                  mRemoteReadOnly;      // the remote file is read-only
 };
 
 #endif

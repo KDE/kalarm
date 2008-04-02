@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 #include <QObject>
 #include <kurl.h>
 #include "alarmevent.h"
+#include "alarmresources.h"
 
 namespace KCal {
   class Calendar;
@@ -53,21 +54,26 @@ class AlarmCalendar : public QObject
 		void                  close();
 		void                  startUpdate();
 		bool                  endUpdate();
-		KCal::Event*          createKCalEvent(const KAEvent& e, bool original = false, bool cancelCancelledDefer = false) const
+		KCal::Event*          createKCalEvent(const KAEvent* e, bool original = false, bool cancelCancelledDefer = false) const
 		                                             { return createKCalEvent(e, QString(), original, cancelCancelledDefer); }
-		KCal::Event*          createKCalEvent(const KAEvent&, const QString& baseID, bool original = false, bool cancelCancelledDefer = false) const;
-		KCal::Event*          event(const QString& uniqueID);
-		KAEvent               templateEvent(const QString& templateName);
-		KCal::Event::List     events(KCalEvent::Status s = KCalEvent::EMPTY)   { return events(0, s); }
-		KCal::Event::List     events(AlarmResource*, KCalEvent::Status = KCalEvent::EMPTY);
-		KCal::Event::List     eventsWithAlarms(const KDateTime& from, const KDateTime& to, KCalEvent::Status);
+		KCal::Event*          createKCalEvent(const KAEvent*, const QString& baseID, bool original = false, bool cancelCancelledDefer = false) const;
+		KAEvent*              event(const QString& uniqueID);
+		KCal::Event*          kcalEvent(const QString& uniqueID);
+		KAEvent*              templateEvent(const QString& templateName);
+		KAEvent::List         events(KCalEvent::Status s = KCalEvent::EMPTY)   { return events(0, s); }
+		KAEvent::List         events(AlarmResource*, KCalEvent::Status = KCalEvent::EMPTY);
+		KAEvent::List         events(const KDateTime& from, const KDateTime& to, KCalEvent::Status);
+		KCal::Event::List     kcalEvents(KCalEvent::Status s = KCalEvent::EMPTY)   { return kcalEvents(0, s); }
+		KCal::Event::List     kcalEvents(AlarmResource*, KCalEvent::Status = KCalEvent::EMPTY);
 		bool                  eventReadOnly(const QString& uniqueID) const;
-		KCal::Event*          addEvent(KAEvent&, QWidget* promptParent = 0, bool useEventID = false, AlarmResource* = 0, bool noPrompt = false, bool* cancelled = 0);
-		KCal::Event*          modifyEvent(const QString& oldEventId, KAEvent& newEvent);
-		KCal::Event*          updateEvent(const KAEvent&);
+		AlarmResource*        resourceForEvent(const QString& eventID) const;
+		bool                  addEvent(KAEvent*, QWidget* promptParent = 0, bool useEventID = false, AlarmResource* = 0, bool noPrompt = false, bool* cancelled = 0);
+		bool                  modifyEvent(const QString& oldEventId, KAEvent* newEvent);
+		KAEvent*              updateEvent(const KAEvent&);
+		KAEvent*              updateEvent(const KAEvent*);
 		bool                  deleteEvent(const QString& eventID, bool save = false);
 		void                  emitEmptyStatus();
-		void                  purgeEvents(const KCal::Event::List&);
+		void                  purgeEvents(const KAEvent::List&);
 		bool                  isOpen() const         { return mOpen; }
 		bool                  isEmpty() const;
 		QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
@@ -80,7 +86,8 @@ class AlarmCalendar : public QObject
 		static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
 		static AlarmCalendar* displayCalendarOpen();
 		static bool           importAlarms(QWidget*, AlarmResource* = 0);
-		static const KCal::Event* getEvent(const QString& uniqueID);
+		static KAEvent*       getEvent(const QString& uniqueID);
+		static const KCal::Event* getKCalEvent(const QString& uniqueID);
 
 	public slots:
 		void                  slotDaemonRegistered(bool newStatus);
@@ -92,18 +99,29 @@ class AlarmCalendar : public QObject
 	private slots:
 		void                  slotCacheDownloaded(AlarmResource*);
 		void                  slotResourceLoaded(AlarmResource*, bool success);
+		void                  slotResourceChange(AlarmResource*, AlarmResources::Change);
 
 	private:
 		enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
+		typedef QMap<AlarmResource*, KAEvent::List> ResourceMap;  // resource = null for display calendar
+		typedef QMap<QString, KAEvent*> KAEventMap;  // indexed by event UID
 
 		AlarmCalendar();
 		AlarmCalendar(const QString& file, KCalEvent::Status);
 		bool                  saveCal(const QString& newFile = QString());
+		bool                  addEvent(AlarmResource*, KAEvent*);
+		KAEvent*              addEvent(AlarmResource*, const KCal::Event*);
+		KCalEvent::Status     deleteEventInternal(const QString& eventID);
+		void                  updateKAEvents(AlarmResource*, KCal::CalendarLocal*);
+		static void           updateResourceKAEvents(AlarmResource*, KCal::CalendarLocal*);
+		void                  removeKAEvents(AlarmResource*);
 
 		static AlarmCalendar* mResourcesCalendar;  // the calendar resources
 		static AlarmCalendar* mDisplayCalendar;    // the display calendar
 
 		KCal::Calendar*       mCalendar;           // AlarmResources or CalendarLocal
+		ResourceMap           mResourceMap;
+		KAEventMap            mEventMap;           // lookup of all events by UID
 		KUrl                  mUrl;                // URL of current calendar file
 		KUrl                  mICalUrl;            // URL of iCalendar file
 		QList<AlarmResource*> mDaemonReloads;      // resources which daemon should reload once KAlarm has loaded them

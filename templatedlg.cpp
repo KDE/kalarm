@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -157,12 +157,9 @@ void TemplateDlg::slotNew(EditAlarmDlg::Type type)
 */
 void TemplateDlg::slotCopy()
 {
-	Event* kcalEvent = mListView->selectedEvent();
-	if (kcalEvent)
-	{
-		KAEvent event(kcalEvent);
+	KAEvent* event = mListView->selectedEvent();
+	if (event)
 		KAlarm::editNewTemplate(event, mListView);
-	}
 }
 
 /******************************************************************************
@@ -171,9 +168,9 @@ void TemplateDlg::slotCopy()
 */
 void TemplateDlg::slotEdit()
 {
-	Event* kcalEvent = mListView->selectedEvent();
-	if (kcalEvent)
-		KAlarm::editTemplate(kcalEvent, mListView);
+	KAEvent* event = mListView->selectedEvent();
+	if (event)
+		KAlarm::editTemplate(event, mListView);
 }
 
 /******************************************************************************
@@ -182,7 +179,7 @@ void TemplateDlg::slotEdit()
 */
 void TemplateDlg::slotDelete()
 {
-	Event::List events = mListView->selectedEvents();
+	KAEvent::List events = mListView->selectedEvents();
 	int n = events.count();
 	if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm template?",
 	                                                  "Do you really want to delete the %1 selected alarm templates?", n),
@@ -193,12 +190,12 @@ void TemplateDlg::slotDelete()
 
 	QStringList eventIDs;
 	Undo::EventList undos;
-	AlarmResources* resources = AlarmResources::instance();
+	AlarmCalendar* resources = AlarmCalendar::resources();
 	for (int i = 0;  i < n;  ++i)
 	{
-		const KAEvent event(events[i]);
-		eventIDs.append(event.id());
-		undos.append(event, resources->resourceForIncidence(event.id()));
+		const KAEvent* event = events[i];
+		eventIDs.append(event->id());
+		undos.append(*event, resources->resourceForEvent(event->id()));
 	}
 	KAlarm::deleteTemplates(eventIDs, this);
 	Undo::saveDeletes(undos);
@@ -211,15 +208,14 @@ void TemplateDlg::slotDelete()
 */
 void TemplateDlg::slotSelectionChanged()
 {
-	KCal::Event::List events = mListView->selectedEvents();
+	AlarmCalendar* resources = AlarmCalendar::resources();
+	KAEvent::List events = mListView->selectedEvents();
 	int count = events.count();
 	bool readOnly = false;
-	AlarmResources* resources = AlarmResources::instance();
 	for (int i = 0;  i < count;  ++i)
 	{
-		const KCal::Event* kcalEvent = events[i];
-		AlarmResource* resource = resources->resource(kcalEvent);
-		if (!resource  ||  !resource->writable(kcalEvent))
+		const KAEvent* event = events[i];
+		if (resources->eventReadOnly(event->id()))
 		{
 			readOnly = true;
 			break;

@@ -111,7 +111,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* 
 	init(0, newAlarm);
 }
 
-EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
+EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
 	: EditAlarmDlg(Template, event, parent, getResource, readOnly),
 	  mSpecialActionsButton(0),
@@ -119,7 +119,7 @@ EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent& event, bo
 	  mReminderArchived(false)
 {
 	kDebug() << "Event.id()";
-	init(&event, newAlarm);
+	init(event, newAlarm);
 }
 
 /******************************************************************************
@@ -676,12 +676,12 @@ EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* 
 	init(0, newAlarm);
 }
 
-EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
+EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
 	: EditAlarmDlg(Template, event, parent, getResource, readOnly)
 {
 	kDebug() << "Event.id()";
-	init(&event, newAlarm);
+	init(event, newAlarm);
 }
 
 /******************************************************************************
@@ -955,13 +955,13 @@ EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* pare
 	init(0, newAlarm);
 }
 
-EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent& event, bool newAlarm, QWidget* parent,
+EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
 	: EditAlarmDlg(Template, event, parent, getResource, readOnly),
 	  mEmailRemoveButton(0)
 {
 	kDebug() << "Event.id()";
-	init(&event, newAlarm);
+	init(event, newAlarm);
 }
 
 /******************************************************************************
