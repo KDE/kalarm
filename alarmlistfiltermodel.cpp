@@ -39,7 +39,7 @@ void AlarmListFilterModel::setStatusFilter(KCalEvent::Status type)
 	if (type != mStatusFilter)
 	{
 		mStatusFilter = type;
-		filterChanged();
+		invalidateFilter();
 	}
 }
 
