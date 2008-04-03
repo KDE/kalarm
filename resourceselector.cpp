@@ -93,7 +93,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	mListView->setWhatsThis(i18nc("@info:whatsthis",
 	                              "List of available resources of the selected type. The checked state shows whether a resource "
 	                             "is enabled (checked) or disabled (unchecked). The default resource is shown in bold."));
-	topLayout->addWidget(mListView);
+	topLayout->addWidget(mListView, 1);
 	topLayout->addSpacing(KDialog::spacingHint());
 
 	PackedLayout* blayout = new PackedLayout(Qt::AlignHCenter);
