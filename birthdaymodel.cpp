@@ -136,7 +136,7 @@ void BirthdayModel::loadAddressBook()
 {
 	if (!mAddressBook)
 	{
-		sBook = KABC::StdAddressBook::self(true);
+		mAddressBook = KABC::StdAddressBook::self(true);
 		if (mAddressBook)
 			connect(mAddressBook, SIGNAL(addressBookChanged(AddressBook*)), SLOT(refresh()));
 	}
