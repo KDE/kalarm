@@ -43,6 +43,8 @@ EventListView::EventListView(QWidget* parent)
 	setSelectionMode(ExtendedSelection);
 	setSelectionBehavior(SelectRows);
 	setTextElideMode(Qt::ElideRight);
+	// Set default WhatsThis text to be displayed when no actual item is clicked on
+	setWhatsThis(i18nc("@info:whatsthis", "List of scheduled alarms"));
 }
 
 /******************************************************************************

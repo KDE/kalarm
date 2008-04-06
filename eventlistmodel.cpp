@@ -824,7 +824,7 @@ QString EventListModel::whatsThisText(int column) const
 		case TemplateNameColumn:
 			return i18nc("@info:whatsthis", "Name of the alarm template");
 		default:
-			return i18nc("@info:whatsthis", "List of scheduled alarms");
+			return QString();
 	}
 }
 
