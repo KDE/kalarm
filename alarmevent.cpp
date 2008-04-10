@@ -1072,7 +1072,7 @@ void KAEvent::calcTriggerTimes() const
 		return;
 	}
 	mChanged = false;
-	if (!mTemplateName.isEmpty()  ||  mRepeatAtLogin)
+	if (!mTemplateName.isEmpty())
 		mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KDateTime();
 	else if (mDeferral > 0  &&  mDeferral != REMINDER_DEFERRAL)
 	{
