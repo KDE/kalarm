@@ -683,25 +683,21 @@ void MainWindow::slotDelete()
 */
 void MainWindow::slotReactivate()
 {
-	int i, end;
 	KAEvent::List events = mListView->selectedEvents();
 	mListView->clearSelection();
 
 	// Add the alarms to the displayed lists and to the calendar file
-	KAEvent::List eventCopies;
 	Undo::EventList undos;
 	QStringList ineligibleIDs;
-	AlarmCalendar* resources = AlarmCalendar::resources();
-	for (i = 0, end = events.count();  i < end;  ++i)
-		eventCopies.append(events[i]);
-	KAlarm::reactivateEvents(eventCopies, ineligibleIDs, 0, this);
+	KAlarm::reactivateEvents(events, ineligibleIDs, 0, this);
 
 	// Create the undo list, excluding ineligible events
-	for (i = 0, end = eventCopies.count();  i < end;  ++i)
+	AlarmCalendar* resources = AlarmCalendar::resources();
+	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		QString id = eventCopies[i]->id();
+		QString id = events[i]->id();
 		if (!ineligibleIDs.contains(id))
-			undos.append(*eventCopies[i], resources->resourceForEvent(id));
+			undos.append(*events[i], resources->resourceForEvent(id));
 	}
 	Undo::saveReactivates(undos);
 }

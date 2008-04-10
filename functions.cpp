@@ -630,7 +630,6 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 				++warnErr;
 				continue;
 			}
-			*event = *newev;
 			if (newev->copyToKOrganizer())
 			{
 				if (!sendToKOrganizer(newev))    // tell KOrganizer to show the event
@@ -651,6 +650,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 				status = UPDATE_ERROR;
 				++warnErr;
 			}
+			events[i] = newev;
 		}
 
 		if (warnErr == count)
