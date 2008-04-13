@@ -452,7 +452,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 			if (event->isTemplate())
 			{
 				// Initialising from an alarm template: use current date
-				KDateTime now = KDateTime::currentUtcDateTime();
+				KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
 				int afterTime = event->templateAfterTime();
 				if (afterTime >= 0)
 				{
@@ -462,7 +462,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 				else
 				{
 					KDateTime dt = event->startDateTime().kDateTime();
-					now = now.toTimeSpec(dt);
+					dt.setTimeSpec(Preferences::timeZone());
 					QDate d = now.date();
 					if (!dt.isDateOnly()  &&  now.time() >= dt.time())
 						d = d.addDays(1);     // alarm time has already passed, so use tomorrow
