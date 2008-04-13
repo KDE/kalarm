@@ -529,17 +529,17 @@ UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 	AlarmCalendar* cal = AlarmCalendar::resources();
 	for (int i = 0, end = eventIDs.count();  i < end;  ++i)
 	{
-		// Delete the template from the calendar file
+		// Update the window lists
 		QString id = eventIDs[i];
+		EventListModel::templates()->removeEvent(id);
+
+		// Delete the template from the calendar file
 		AlarmCalendar* cal = AlarmCalendar::resources();
 		if (!cal->deleteEvent(id, false))    // don't save calendar after deleting
 		{
 			status = UPDATE_ERROR;
 			++warnErr;
 		}
-
-		// Update the window lists
-		EventListModel::templates()->removeEvent(id);
 	}
 
 	if (warnErr == eventIDs.count())
