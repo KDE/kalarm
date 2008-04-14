@@ -714,6 +714,7 @@ void MainWindow::slotEnable()
 	for (int i = 0, end = events.count();  i < end;  ++i)
 		eventCopies += events[i];
 	KAlarm::enableEvents(eventCopies, enable, this);
+	slotSelection();   // update Enable/Disable action text
 }
 
 /******************************************************************************
