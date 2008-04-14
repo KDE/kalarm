@@ -1451,7 +1451,8 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 		{
 			case KAEvent::NO_OCCURRENCE:
 				// All repetitions are finished, so cancel the event
-				cancelAlarm(event, alarm.type(), updateCalAndDisplay);
+				if (cancelAlarm(event, alarm.type(), updateCalAndDisplay))
+					return;
 				break;
 			default:
 				if (!(type & KAEvent::OCCURRENCE_REPEAT))
@@ -1491,8 +1492,9 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 /******************************************************************************
 * Delete the alarm. If it is the last alarm for its event, the event is removed
 * from the calendar file and from every main window instance.
+* Reply = true if event has been deleted.
 */
-void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool updateCalAndDisplay)
+bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool updateCalAndDisplay)
 {
 	kDebug();
 	event.cancelCancelledDeferral();
@@ -1505,9 +1507,13 @@ void KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 	}
 	event.removeExpiredAlarm(alarmType);
 	if (!event.alarmCount())
+	{
 		KAlarm::deleteEvent(event, false);
-	else if (updateCalAndDisplay)
+		return true;
+	}
+	if (updateCalAndDisplay)
 		KAlarm::updateEvent(event);    // update the window lists and calendar file
+	return false;
 }
 
 /******************************************************************************
