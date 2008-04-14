@@ -34,6 +34,7 @@ class OrgKdeKalarmKalarmdDaemonInterface;
 class AlarmEnableAction;
 class NotificationHandler;
 
+#undef REGISTERED
 
 class Daemon : public QObject
 {
