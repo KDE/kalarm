@@ -50,7 +50,6 @@
 #endif
 #include <kdebug.h>
 
-#include <kalarmd/kalarmd.h>
 #include <ktoolinvocation.h>
 
 #include "alarmcalendar.h"
