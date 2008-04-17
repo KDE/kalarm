@@ -260,6 +260,7 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 {
 	kDebug() << event.id();
+	QString oldid = event.id();
 	bool archiving = (event.category() == KCalEvent::ACTIVE);
 	if (archiving  &&  !Preferences::archivedKeepDays())
 		return false;   // expired alarms aren't being kept
@@ -279,10 +280,10 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 	event = *newev;   // update event ID etc.
 
 	// Update window lists
+	if (archiving)
+		archiving = EventListModel::alarms()->updateEvent(oldid, newev);
 	if (!archiving)
 		EventListModel::alarms()->addEvent(newev);
-	else
-		EventListModel::alarms()->updateEvent(newev);
 	return true;
 }
 
