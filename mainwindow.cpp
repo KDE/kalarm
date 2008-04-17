@@ -30,7 +30,6 @@
 #include "alarmresources.h"
 #include "alarmtext.h"
 #include "birthdaydlg.h"
-#include "daemon.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -124,7 +123,7 @@ QString MainWindow::i18n_tip_HideArchivedAlarms()  { return i18nc("@info:tooltip
 */
 MainWindow* MainWindow::create(bool restored)
 {
-	theApp()->checkCalendarDaemon();    // ensure calendar is open and daemon started
+	theApp()->checkCalendar();    // ensure calendar is open
 	return new MainWindow(restored);
 }
 
@@ -186,10 +185,10 @@ MainWindow::MainWindow(bool restored)
 
 	setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
 	mWindowList.append(this);
-	if (mWindowList.count() == 1  &&  Daemon::isDcopHandlerReady())
+	if (mWindowList.count() == 1)
 	{
-		// It's the first main window, and the DCOP handler is ready
-		if (theApp()->wantRunInSystemTray())
+		// It's the first main window
+		if (theApp()->wantShowInSystemTray())
 			theApp()->displayTrayIcon(true, this);     // create system tray icon for run-in-system-tray mode
 		else if (theApp()->trayWindow())
 			theApp()->trayWindow()->setAssocMainWindow(this);    // associate this window with the system tray icon
@@ -265,7 +264,7 @@ MainWindow* MainWindow::mainMainWindow()
 */
 bool MainWindow::isTrayParent() const
 {
-	return theApp()->wantRunInSystemTray()  &&  theApp()->trayMainWindow() == this;
+	return theApp()->wantShowInSystemTray()  &&  theApp()->trayMainWindow() == this;
 }
 
 /******************************************************************************
@@ -463,9 +462,9 @@ void MainWindow::initActions()
 
 	QAction* action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
 	actions->addAction(QLatin1String("refreshAlarms"), action);
-	connect(action, SIGNAL(triggered(bool)), SLOT(slotResetDaemon()));
+	connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
 
-	action = Daemon::createAlarmEnableAction(this);
+	action = KAlarm::createAlarmEnableAction(this);
 	actions->addAction(QLatin1String("alarmsEnable"), action);
 	if (undoText.isNull())
 	{
@@ -509,7 +508,6 @@ void MainWindow::initActions()
 	KMenu* resourceMenu = static_cast<KMenu*>(factory()->container("resourceContext", this));
 	mResourceSelector->setContextMenu(resourceMenu);
 	mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
-	connect(mActionsMenu, SIGNAL(aboutToShow()), SLOT(updateActionsMenu()));
 	connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
 	connect(mActionUndo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotUndoItem(QAction*)));
 	connect(mActionRedo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
@@ -517,7 +515,7 @@ void MainWindow::initActions()
 	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
 	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
 	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
-	Preferences::connect(SIGNAL(runInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
+	Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
 	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
 	// Set menu item states
@@ -543,8 +541,7 @@ void MainWindow::initActions()
 	mActionCreateTemplate->setEnabled(false);
 
 	Undo::emitChanged();     // set the Undo/Redo menu texts
-	Daemon::checkStatus();
-	Daemon::monitoringAlarms();
+//	Daemon::monitoringAlarms();
 }
 
 /******************************************************************************
@@ -886,17 +883,8 @@ void MainWindow::showErrorMessage(const QString& msg)
 */
 void MainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable() && !Preferences::runInSystemTray());
+	mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable() && !Preferences::showInSystemTray());
 	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
-}
-
-/******************************************************************************
-* Called when the Actions menu is about to be displayed.
-* Update the status of the Alarms Enabled menu item.
-*/
-void MainWindow::updateActionsMenu()
-{
-	Daemon::checkStatus();   // update the Alarms Enabled item status
 }
 
 /******************************************************************************
@@ -1011,11 +999,11 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
 }
 
 /******************************************************************************
-*  Called when the Reset Daemon menu item is selected.
+*  Called when the Refresh Alarms menu item is selected.
 */
-void MainWindow::slotResetDaemon()
+void MainWindow::slotRefreshAlarms()
 {
-	KAlarm::resetDaemon();
+	KAlarm::refreshAlarms();
 }
 
 /******************************************************************************

@@ -1,5 +1,4 @@
-/*
- *  functions.cpp  -  miscellaneous functions
+/* *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
  *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
@@ -26,7 +25,6 @@
 #include "eventlistmodel.h"
 #include "alarmlistview.h"
 #include "alarmresources.h"
-#include "daemon.h"
 #include "editdlg.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -44,6 +42,7 @@
 
 #include <kconfiggroup.h>
 #include <kaction.h>
+#include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -66,7 +65,7 @@
 
 namespace
 {
-bool          resetDaemonQueued = false;
+bool          refreshAlarmsQueued = false;
 QString       korganizerName    = "korganizer";
 QString       korgStartError;
 QDBusInterface* korgInterface = 0;
@@ -103,7 +102,7 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 	MainWindow* win = MainWindow::firstWindow();
 	if (!win)
 	{
-		if (theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
+		if (theApp()->checkCalendar())    // ensure calendar is open
 		{
 			win = MainWindow::create();
 			win->show();
@@ -129,6 +128,19 @@ MainWindow* displayMainWindowSelected(const QString& eventID)
 }
 
 /******************************************************************************
+* Create an "Alarms Enabled/Enable Alarms" action.
+*/
+KToggleAction* createAlarmEnableAction(QObject* parent)
+{
+	KToggleAction* action = new KToggleAction(i18nc("@action", "Enable &Alarms"), parent);
+	action->setChecked(theApp()->alarmsEnabled());
+	QObject::connect(action, SIGNAL(toggled(bool)), theApp(), SLOT(setAlarmsEnabled(bool)));
+	// The following line ensures that all instances are kept in the same state
+	QObject::connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), action, SLOT(setChecked(bool)));
+	return action;
+}
+
+/******************************************************************************
 * Create a New From Template QAction.
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
@@ -148,7 +160,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParen
 	kDebug() << event.id();
 	bool cancelled = false;
 	UpdateStatus status = UPDATE_OK;
-	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
+	if (!theApp()->checkCalendar())    // ensure calendar is open
 		status = UPDATE_FAILED;
 	else
 	{
@@ -198,7 +210,7 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 	int warnKOrg = 0;
 	UpdateStatus status = UPDATE_OK;
 	AlarmResource* resource;
-	if (!theApp()->checkCalendarDaemon())    // ensure calendar is open and daemon started
+	if (!theApp()->checkCalendar())    // ensure calendar is open
 		status = UPDATE_FAILED;
 	else
 	{
@@ -1071,26 +1083,25 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 		KMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
 		                                       "<para>%1</para><para>Please set it in the Preferences dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
 
-	if (!Daemon::monitoringAlarms())
+	if (!theApp()->alarmsEnabled())
 	{
 		if (KMessageBox::warningYesNo(parent, i18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
 		                              QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
 		                              QLatin1String("EditEnableAlarms"))
 		                == KMessageBox::Yes)
-			Daemon::setAlarmsEnabled();
+			theApp()->setAlarmsEnabled(true);
 	}
 }
 
 /******************************************************************************
-* Reset the alarm daemon and reload the calendar.
-* If the daemon is not already running, start it.
+* Reload the calendar.
 */
-void resetDaemon()
+void refreshAlarms()
 {
 	kDebug();
-	if (!resetDaemonQueued)
+	if (!refreshAlarmsQueued)
 	{
-		resetDaemonQueued = true;
+		refreshAlarmsQueued = true;
 		theApp()->processQueue();
 	}
 }
@@ -1099,12 +1110,11 @@ void resetDaemon()
 * This method must only be called from the main KAlarm queue processing loop,
 * to prevent asynchronous calendar operations interfering with one another.
 *
-* If resetDaemon() has been called, reset the alarm daemon and reload the calendars.
-* If the daemon is not already running, start it.
+* If refreshAlarms() has been called, reload the calendars.
 */
-void resetDaemonIfQueued()
+void refreshAlarmsIfQueued()
 {
-	if (resetDaemonQueued)
+	if (refreshAlarmsQueued)
 	{
 		kDebug();
 		AlarmCalendar::resources()->reload();
@@ -1122,9 +1132,7 @@ void resetDaemonIfQueued()
 		}
 
 		MainWindow::refresh();
-		if (!Daemon::reset())
-			Daemon::start();
-		resetDaemonQueued = false;
+		refreshAlarmsQueued = false;
 	}
 }
 

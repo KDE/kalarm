@@ -108,7 +108,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotReactivate();
 		void           slotEnable();
 		void           slotToggleTrayIcon();
-		void           slotResetDaemon();
+		void           slotRefreshAlarms();
 		void           slotImportAlarms();
 		void           slotBirthdays();
 		void           slotTemplates();
@@ -134,7 +134,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotUndoStatus(const QString&, const QString&);
 		void           slotFindActive(bool);
 		void           updateTrayIconAction();
-		void           updateActionsMenu();
 		void           slotToggleResourceSelector();
 		void           slotResourceStatusChanged();
 		void           resourcesResized();

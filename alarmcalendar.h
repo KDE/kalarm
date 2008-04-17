@@ -47,13 +47,15 @@ class AlarmCalendar : public QObject
 		KCalEvent::Status     type() const           { return (mCalType == RESOURCES) ? KCalEvent::EMPTY : mEventType; }
 		bool                  open();
 		int                   load();
-		void                  loadAndDaemonReload(AlarmResource*, QWidget* parent);
+		void                  loadResource(AlarmResource*, QWidget* parent);
 		bool                  reload();
 		void                  reloadFromCache(const QString& resourceID);
 		bool                  save();
 		void                  close();
 		void                  startUpdate();
 		bool                  endUpdate();
+		KAEvent*              earliestAlarm() const;
+		KAEvent::List         atLoginAlarms() const;
 		KCal::Event*          createKCalEvent(const KAEvent* e, bool original = false, bool cancelCancelledDefer = false) const
 		                                             { return createKCalEvent(e, QString(), original, cancelCancelledDefer); }
 		KCal::Event*          createKCalEvent(const KAEvent*, const QString& baseID, bool original = false, bool cancelCancelledDefer = false) const;
@@ -89,10 +91,8 @@ class AlarmCalendar : public QObject
 		static KAEvent*       getEvent(const QString& uniqueID);
 		static const KCal::Event* getKCalEvent(const QString& uniqueID);
 
-	public slots:
-		void                  slotDaemonRegistered(bool newStatus);
-
 	signals:
+		void                  earliestAlarmChanged();
 		void                  calendarSaved(AlarmCalendar*);
 		void                  emptyStatus(bool empty);
 
@@ -105,16 +105,19 @@ class AlarmCalendar : public QObject
 		enum CalType { RESOURCES, LOCAL_ICAL, LOCAL_VCAL };
 		typedef QMap<AlarmResource*, KAEvent::List> ResourceMap;  // resource = null for display calendar
 		typedef QMap<QString, KAEvent*> KAEventMap;  // indexed by event UID
+		typedef QMap<AlarmResource*, KAEvent*> EarliestMap;
 
 		AlarmCalendar();
 		AlarmCalendar(const QString& file, KCalEvent::Status);
 		bool                  saveCal(const QString& newFile = QString());
 		bool                  addEvent(AlarmResource*, KAEvent*);
 		KAEvent*              addEvent(AlarmResource*, const KCal::Event*);
+		void                  addNewEvent(AlarmResource*, KAEvent*);
 		KCalEvent::Status     deleteEventInternal(const QString& eventID);
 		void                  updateKAEvents(AlarmResource*, KCal::CalendarLocal*);
 		static void           updateResourceKAEvents(AlarmResource*, KCal::CalendarLocal*);
-		void                  removeKAEvents(AlarmResource*);
+		void                  removeKAEvents(AlarmResource*, bool closing = false);
+		void                  findEarliestAlarm(AlarmResource*);
 
 		static AlarmCalendar* mResourcesCalendar;  // the calendar resources
 		static AlarmCalendar* mDisplayCalendar;    // the display calendar
@@ -122,9 +125,9 @@ class AlarmCalendar : public QObject
 		KCal::Calendar*       mCalendar;           // AlarmResources or CalendarLocal
 		ResourceMap           mResourceMap;
 		KAEventMap            mEventMap;           // lookup of all events by UID
+		EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
 		KUrl                  mUrl;                // URL of current calendar file
 		KUrl                  mICalUrl;            // URL of iCalendar file
-		QList<AlarmResource*> mDaemonReloads;      // resources which daemon should reload once KAlarm has loaded them
 		typedef QMap<AlarmResource*, ProgressDialog*> ProgressDlgMap;
 		typedef QMap<AlarmResource*, QWidget*> ResourceWidgetMap;
 		ProgressDlgMap        mProgressDlgs;       // download progress dialogues

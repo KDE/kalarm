@@ -130,14 +130,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		void load(KCal::ResourceCached::CacheAction = KCal::ResourceCached::DefaultCache);
 		bool load(AlarmResource*, KCal::ResourceCached::CacheAction = KCal::ResourceCached::DefaultCache);
 
-		/** Reload cache for all resources which have not yet been reloaded. */
-		void loadIfNotReloaded();
-
-		/** Allow or inhibit cache update when calling load(DefaultCache). */
-		void inhibitDefaultReload(bool active, bool inactive);
-
-		/** Allow or inhibit saves, for all resources. */
-		void setInhibitSave(bool);
     /**
      * Reloads all incidences from all resources.
      * @return success or failure
@@ -466,9 +458,6 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		bool        mActiveOnly;      // only resource calendars containing ACTIVE alarms are to be opened
 		bool        mPassiveClient;   // true if client never initiates changes
 		bool        mNoGui;           // application has no GUI, so don't display messages
-		bool        mInhibitActiveReload;   // cache reload inhibited for default load, for active alarm resource
-		bool        mInhibitInactiveReload; // cache reload inhibited for default load, for archived/template resource
-		bool        mInhibitSave;     // resources save inhibited
 		bool        mAskDestination;  // true to prompt user which resource to store new events in
 		bool        mShowProgress;    // emit download progress signals
 		bool        mOpen;

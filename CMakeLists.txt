@@ -8,9 +8,9 @@ include_directories(
 	./resources 
 ) 
 
-add_subdirectory( kalarmd ) 
 add_subdirectory( resources ) 
 add_subdirectory( pixmaps ) 
+add_subdirectory( autostart ) 
 
 
 ########### next target ###############
@@ -49,7 +49,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    soundpicker.cpp 
    sounddlg.cpp 
    alarmcalendar.cpp 
-   daemon.cpp 
    undo.cpp 
    kalarmapp.cpp 
    mainwindowbase.cpp 
@@ -94,8 +93,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    resourceselector.cpp
 )
 qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler )
-qt4_add_dbus_adaptor( kalarm_bin_SRCS org.kde.kalarm.notify.xml daemon_p.h NotificationHandler )
-qt4_add_dbus_interfaces(kalarm_bin_SRCS kalarmd/org.kde.kalarm.kalarmd.Daemon.xml )
 if (KMAIL_SUPPORTED)
    qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/org.kde.kmail.kmail.xml )
 endif (KMAIL_SUPPORTED)

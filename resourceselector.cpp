@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -44,13 +44,14 @@
 #include <kdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
+#include <kaction.h>
+#include <ktoggleaction.h>
 #include <kcolordialog.h>
 
 #include <kcal/resourcecalendar.h>
 
 #include "alarmcalendar.h"
 #include "alarmresources.h"
-#include "daemon.h"
 #include "eventlistmodel.h"
 #include "packedlayout.h"
 #include "preferences.h"
@@ -390,7 +391,7 @@ void ResourceSelector::reloadResource()
 {
 	AlarmResource* resource = currentResource();
 	if (resource)
-		AlarmCalendar::resources()->loadAndDaemonReload(resource, this);
+		AlarmCalendar::resources()->loadResource(resource, this);
 }
 
 /******************************************************************************

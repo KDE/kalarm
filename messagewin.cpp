@@ -68,7 +68,6 @@
 #include <ktoolinvocation.h>
 
 #include "alarmcalendar.h"
-#include "daemon.h"
 #include "deferdlg.h"
 #include "editdlg.h"
 #include "functions.h"
@@ -1024,7 +1023,6 @@ void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 			return;
 		}
 	}
-	Daemon::eventHandled(event.id());
 }
 
 /******************************************************************************
@@ -1648,7 +1646,7 @@ void MessageWin::slotDefer()
 			event.setCategory(KCalEvent::ARCHIVED);
 			KAlarm::deleteEvent(event, false);
 		}
-		if (theApp()->wantRunInSystemTray())
+		if (theApp()->wantShowInSystemTray())
 		{
 			// Alarms are to be displayed only if the system tray icon is running,
 			// so start it if necessary so that the deferred alarm will be shown.

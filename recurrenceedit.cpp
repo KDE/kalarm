@@ -124,7 +124,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mAtLoginButton->setReadOnly(mReadOnly);
 	mAtLoginButton->setWhatsThis(i18nc("@info:whatsthis",
 	                                  "<para>Trigger the alarm at the specified date/time and at every login until then.</para>"
-	                                  "<para>Note that it will also be triggered any time the alarm daemon is restarted.</para>"));
+	                                  "<para>Note that it will also be triggered any time <application>KAlarm</application> is restarted.</para>"));
 	mRuleButtonGroup->addButton(mAtLoginButton);
 	vlayout->addWidget(mAtLoginButton);
 

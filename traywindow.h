@@ -52,7 +52,6 @@ class TrayWindow : public KSystemTrayIcon
 		void         deleted();
 
 	protected:
-		virtual void contextMenuAboutToShow(KMenu*);
 		virtual void dragEnterEvent(QDragEnterEvent*);
 		virtual void dropEvent(QDropEvent*);
 		virtual bool event(QEvent*);

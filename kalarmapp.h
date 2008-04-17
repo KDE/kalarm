@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,9 +47,9 @@ class KAlarmApp : public KUniqueApplication
 		~KAlarmApp();
 		virtual int        newInstance();
 		static KAlarmApp*  getInstance();
-		bool               checkCalendarDaemon()           { return initCheck(); }
-		bool               wantRunInSystemTray() const;
-		bool               alarmsDisabledIfStopped() const { return mDisableAlarmsIfStopped; }
+		bool               checkCalendar()                 { return initCheck(); }
+		bool               wantShowInSystemTray() const;
+		bool               alarmsEnabled() const           { return mAlarmsEnabled; }
 		bool               speechEnabled() const           { return mSpeechEnabled; }
 		bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
 		bool               restoreSession();
@@ -82,20 +82,24 @@ class KAlarmApp : public KUniqueApplication
 		                                 uint mailFromID = 0, const EmailAddressList& mailAddresses = EmailAddressList(),
 		                                 const QString& mailSubject = QString(),
 		                                 const QStringList& mailAttachments = QStringList());
-		bool               dbusHandleEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_HANDLE); }
 		bool               dbusTriggerEvent(const QString& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
 		bool               dbusDeleteEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
 	public slots:
 		void               processQueue();
+		void               setAlarmsEnabled(bool);
 		void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
 	signals:
 		void               trayIconToggled();
+		void               alarmEnabledToggled(bool);
 		void               execAlarmSuccess();
 	protected:
 		KAlarmApp();
 	private slots:
 		void               quitFatal();
-		void               slotPreferencesChanged();
+		void               checkNextDueAlarm();
+		void               slotShowInSystemTrayChanged();
+		void               changeStartOfDay();
+		void               slotFeb29TypeChanged(Preferences::Feb29Type);
 		void               setArchivePurgeDays();
 		void               slotPurge()                     { purge(mArchivedPurgeDays); }
 		void               slotCommandExited(ShellProcess*);
@@ -139,8 +143,8 @@ class KAlarmApp : public KUniqueApplication
 		bool               initCheck(bool calendarOnly = false);
 		void               quitIf(int exitCode, bool force = false);
 		bool               checkSystemTray();
-		void               changeStartOfDay();
-		void               setUpDcop();
+		void               startProcessQueue();
+		void               queueAlarmId(const QString& id);
 		bool               dbusHandleEvent(const QString& eventID, EventFunc);
 		bool               handleEvent(const QString& eventID, EventFunc);
 		void               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay);
@@ -154,9 +158,11 @@ class KAlarmApp : public KUniqueApplication
 		static int         mActiveCount;         // number of active instances without main windows
 		static int         mFatalError;          // a fatal error has occurred - just wait to exit
 		static QString     mFatalMessage;        // fatal error message to output
-		bool               mInitialised;         // initialisation complete: ready to handle DCOP calls
+		bool               mInitialised;         // initialisation complete: ready to process execution queue
+		bool               mLoginAlarmsDone;     // alarms repeated at login have been processed
 		DBusHandler*       mDBusHandler;         // the parent of the main DCOP receiver object
 		TrayWindow*        mTrayWindow;          // active system tray icon
+		QTimer*            mAlarmTimer;          // activates KAlarm when next alarm is due
 		QTime              mStartOfDay;          // start-of-day time currently in use
 		QColor             mPrefsArchivedColour; // archived alarms text colour
 		int                mArchivedPurgeDays;   // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
@@ -168,8 +174,8 @@ class KAlarmApp : public KUniqueApplication
 		bool               mProcessingQueue;     // a mDcopQueue entry is currently being processed
 		bool               mNoSystemTray;        // no system tray exists
 		bool               mSessionClosingDown;  // session manager is closing the application
-		bool               mOldRunInSystemTray;  // running continuously in system tray was selected
-		bool               mDisableAlarmsIfStopped; // disable alarms whenever KAlarm is not running
+		bool               mOldShowInSystemTray; // showing in system tray was selected
+		bool               mAlarmsEnabled;       // alarms are enabled
 		bool               mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
 		bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
 };

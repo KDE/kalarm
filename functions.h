@@ -34,6 +34,7 @@
 namespace KCal { class Event; }
 class QWidget;
 class KActionCollection;
+class KToggleAction;
 class QAction;
 class AlarmResource;
 class KAEvent;
@@ -89,13 +90,14 @@ void                editNewTemplate(const KAEvent* preset, QWidget* parent = 0);
 void                editTemplate(KAEvent*, QWidget* parent = 0);
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
+KToggleAction*      createAlarmEnableAction(QObject* parent);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */
 KAEvent::List       templateList();
 void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
-void                resetDaemon();
-void                resetDaemonIfQueued();    // must only be called from KAlarmApp::processQueue()
+void                refreshAlarms();
+void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
 QString             runKMail(bool minimise);
 bool                runProgram(const QString& program, const QString& windowName, QString& dbusService, QString& errorMessage);
 

@@ -46,7 +46,6 @@
 
 #include "alarmresources.h"
 #include "calendarcompat.h"
-#include "daemon.h"
 #include "eventlistmodel.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -158,7 +157,6 @@ AlarmCalendar::AlarmCalendar()
 	  mUpdateSave(false)
 {
 	AlarmResources* resources = AlarmResources::instance();
-	resources->inhibitDefaultReload(true, true);    // inhibit downloads of active alarm resources
 	resources->setCalIDFunction(&CalendarCompat::setID);
 	resources->setFixFunction(&CalendarCompat::fix);
 	resources->setCustomEventFunction(&updateResourceKAEvents);
@@ -393,7 +391,7 @@ void AlarmCalendar::close()
 		}
 	}
 	while (!mResourceMap.isEmpty())
-		removeKAEvents(mResourceMap.begin().key());
+		removeKAEvents(mResourceMap.begin().key(), true);
 	if (mCalendar)
 	{
 		mCalendar->close();
@@ -404,26 +402,20 @@ void AlarmCalendar::close()
 }
 
 /******************************************************************************
-* Load a resource and if it is local, tell the daemon to reload it.
-* If the resource is cached, the cache is refreshed and the DCOP signal
-* downloaded() will tell the daemon to reload it from cache, thus ensuring that
-* it is downloaded only once, by KAlarm.
+* Load a single resource. If the resource is cached, the cache is refreshed.
 */
-void AlarmCalendar::loadAndDaemonReload(AlarmResource* resource, QWidget*)
+void AlarmCalendar::loadResource(AlarmResource* resource, QWidget*)
 {
-	if (!resource->cached()  &&  !mDaemonReloads.contains(resource))
-		mDaemonReloads.append(resource);
 	if (!AlarmResources::instance()->load(resource, ResourceCached::SyncCache))
 		slotResourceLoaded(resource, false);
 }
 
 /******************************************************************************
 * Called when a remote resource cache has completed loading.
-* Tell the daemon to reload the resource.
 */
 void AlarmCalendar::slotCacheDownloaded(AlarmResource* resource)
 {
-	slotResourceLoaded(resource, false);   // false ensures that the daemon is told
+	slotResourceLoaded(resource, false);
 }
 
 /******************************************************************************
@@ -460,13 +452,16 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 		events += event;
 		mEventMap[kcalevent->uid()] = event;
 	}
+
+	// Now scan the list of alarms to find the earliest one to trigger
+	findEarliestAlarm(resource);
 }
 
 /******************************************************************************
 * Delete a resource and all its KAEvent instances from the lists.
 * Called after the resource is deleted or disabled, or the calendar is closed.
 */
-void AlarmCalendar::removeKAEvents(AlarmResource* resource)
+void AlarmCalendar::removeKAEvents(AlarmResource* resource, bool closing)
 {
 	ResourceMap::Iterator rit = mResourceMap.find(resource);
 	if (rit != mResourceMap.end())
@@ -480,6 +475,9 @@ void AlarmCalendar::removeKAEvents(AlarmResource* resource)
 		}
 		mResourceMap.erase(rit);
 	}
+	mEarliestAlarm.remove(resource);
+	if (!closing)
+		emit earliestAlarmChanged();
 }
 
 void AlarmCalendar::slotResourceChange(AlarmResource* resource, AlarmResources::Change change)
@@ -502,20 +500,9 @@ void AlarmCalendar::slotResourceChange(AlarmResource* resource, AlarmResources::
 
 /******************************************************************************
 * Called when a resource has completed loading.
-* Tell the daemon to reload the resource either if it is in the daemon-reload
-* list, or if loading failed and it is now inactive.
 */
 void AlarmCalendar::slotResourceLoaded(AlarmResource* resource, bool success)
 {
-	bool tellDaemon = !success;    // on failure, tell daemon that resource is now inactive
-	int i = mDaemonReloads.indexOf(resource);
-	if (i >= 0)
-	{
-		mDaemonReloads.removeAt(i);
-		tellDaemon = true;
-	}
-	if (tellDaemon)
-		Daemon::reloadResource(resource->identifier());
 }
 
 /******************************************************************************
@@ -529,22 +516,6 @@ void AlarmCalendar::reloadFromCache(const QString& resourceID)
 		AlarmResource* resource = static_cast<AlarmResources*>(mCalendar)->resourceWithId(resourceID);
 		if (resource)
 			resource->load(ResourceCached::NoSyncCache);    // reload from cache
-	}
-}
-
-/******************************************************************************
-* Called when the alarm daemon registration status changes.
-* If the daemon is running, leave downloading of remote active alarm resources
-* to it. If the daemon is not running, ensure that KAlarm does downloads.
-*/
-void AlarmCalendar::slotDaemonRegistered(bool newStatus)
-{
-	AlarmResources* resources = AlarmResources::instance();
-	resources->inhibitDefaultReload(true, newStatus);
-	if (!newStatus)
-	{
-		kDebug() << "(false): reload resources";
-		resources->loadIfNotReloaded();    // reload any resources which need to be downloaded
 	}
 }
 
@@ -740,40 +711,6 @@ void AlarmCalendar::purgeEvents(const KAEvent::List& events)
 }
 
 /******************************************************************************
-* Internal method to add an event to the calendar.
-* The calendar takes ownership of 'event'.
-* Reply = true if success
-*       = false if error because the event ID already exists.
-*/
-bool AlarmCalendar::addEvent(AlarmResource* resource, KAEvent* event)
-{
-	KAEventMap::Iterator it = mEventMap.find(event->id());
-	if (it != mEventMap.end())
-		return false;
-	// Create a new event
-	mResourceMap[resource] += event;
-	mEventMap[event->id()] = event;
-	return true;
-}
-
-/******************************************************************************
-* Internal method to add an event to the calendar.
-* Reply = event as stored in calendar
-*       = 0 if error because the event ID already exists.
-*/
-KAEvent* AlarmCalendar::addEvent(AlarmResource* resource, const Event* kcalEvent)
-{
-	KAEventMap::Iterator it = mEventMap.find(kcalEvent->uid());
-	if (it != mEventMap.end())
-		return 0;
-	// Create a new event
-	KAEvent* ev = new KAEvent(kcalEvent);
-	mResourceMap[resource] += ev;
-	mEventMap[kcalEvent->uid()] = ev;
-	return ev;
-}
-
-/******************************************************************************
 * Add the specified event to the calendar.
 * If it is an active event and 'useEventID' is false, a new event ID is
 * created. In all other cases, the event ID is taken from 'event' (if non-null).
@@ -871,6 +808,63 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 }
 
 /******************************************************************************
+* Internal method to add an event to the calendar.
+* The calendar takes ownership of 'event'.
+* Reply = true if success
+*       = false if error because the event ID already exists.
+*/
+bool AlarmCalendar::addEvent(AlarmResource* resource, KAEvent* event)
+{
+	KAEventMap::Iterator it = mEventMap.find(event->id());
+	if (it != mEventMap.end())
+		return false;
+	addNewEvent(resource, event);
+	return true;
+}
+
+/******************************************************************************
+* Internal method to add an event to the calendar.
+* Reply = event as stored in calendar
+*       = 0 if error because the event ID already exists.
+*/
+KAEvent* AlarmCalendar::addEvent(AlarmResource* resource, const Event* kcalEvent)
+{
+	KAEventMap::Iterator it = mEventMap.find(kcalEvent->uid());
+	if (it != mEventMap.end())
+		return 0;
+	// Create a new event
+	KAEvent* ev = new KAEvent(kcalEvent);
+	addNewEvent(resource, ev);
+	return ev;
+}
+
+/******************************************************************************
+* Internal method to add an already checked event to the calendar.
+*/
+void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
+{
+	mResourceMap[resource] += event;
+	mEventMap[event->id()] = event;
+	if (resource  &&  resource->alarmType() == AlarmResource::ACTIVE
+	&&  event->category() == KCalEvent::ACTIVE)
+	{
+		// Update the earliest alarm to trigger
+		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+		if (dt.isValid())
+		{
+			EarliestMap::Iterator eit = mEarliestAlarm.find(resource);
+			KAEvent* earliest = (eit != mEarliestAlarm.end()) ? eit.value() : 0;
+			if (!earliest
+			||  dt < earliest->nextTrigger(KAEvent::ALL_TRIGGER))
+			{
+				mEarliestAlarm[resource] = event;
+				emit earliestAlarmChanged();
+			}
+		}
+	}
+}
+
+/******************************************************************************
 * Modify the specified event in the calendar with its new contents.
 * The new event must have a different event ID from the old one.
 * It is assumed to be of the same event type as the old one (active, etc.)
@@ -926,10 +920,9 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent& evnt)
 }
 KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 {
-	bool active = (evnt->category() == KCalEvent::ACTIVE);
-	QString id = evnt->id();
 	if (mOpen)
 	{
+		QString id = evnt->id();
 		KAEvent* kaevnt = event(id);
 		Event* kcalEvent = mCalendar ? mCalendar->event(id) : 0;
 		if (kaevnt  &&  kcalEvent)
@@ -938,42 +931,19 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 			evnt->clearUpdated();
 			if (kaevnt != evnt)
 				*kaevnt = *evnt;   // update the event instance in our lists, keeping the same pointer
-			if (active)
-				Daemon::savingEvent(id);
+			for (EarliestMap::Iterator eit = mEarliestAlarm.begin();  eit != mEarliestAlarm.end();  ++eit)
+				if (eit.value() == kaevnt)
+				{
+					findEarliestAlarm(eit.key());
+					break;
+				}
 			return kaevnt;
 		}
 	}
-	if (active)
-		Daemon::eventHandled(id);
 	return 0;
 }
 
-/******************************************************************************
-* Internal method to delete the specified event from the calendar and lists.
-* Reply = event status, if it was found in the CalendarLocal
-*       = KCalEvent::EMPTY otherwise.
-*/
-KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
-{
-	Event* kcalEvent = mCalendar->event(eventID);
-	KAEventMap::Iterator it = mEventMap.find(eventID);
-	if (it != mEventMap.end())
-	{
-		KAEvent* ev = it.value();
-		mEventMap.erase(it);
-		AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
-		mResourceMap[resource].removeAll(ev);
-		delete ev;
-	}
-	KCalEvent::Status status = KCalEvent::EMPTY;
-	if (kcalEvent)
-	{
-		status = KCalEvent::status(kcalEvent);
-		mCalendar->deleteEvent(kcalEvent);
-	}
-	return status;
-}
-
+ 
 /******************************************************************************
 * Delete the specified event from the calendar, if it exists.
 * The calendar is then optionally saved.
@@ -985,16 +955,54 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 		KCalEvent::Status status = deleteEventInternal(eventID);
 		if (status != KCalEvent::EMPTY)
 		{
-			if (status == KCalEvent::ACTIVE)
-				Daemon::savingEvent(eventID);
 			if (saveit)
 				return save();
 			return true;
 		}
 	}
-	// Event not found. Tell daemon just in case it was an active event which was triggered.
-	Daemon::eventHandled(eventID);
 	return false;
+}
+
+/******************************************************************************
+* Internal method to delete the specified event from the calendar and lists.
+* Reply = event status, if it was found in the CalendarLocal
+*       = KCalEvent::EMPTY otherwise.
+*/
+KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
+{
+	AlarmResource* resource = 0;
+	Event* kcalEvent = mCalendar->event(eventID);
+	KAEventMap::Iterator it = mEventMap.find(eventID);
+	if (it != mEventMap.end())
+	{
+		KAEvent* ev = it.value();
+		mEventMap.erase(it);
+		resource = AlarmResources::instance()->resource(kcalEvent);
+		mResourceMap[resource].removeAll(ev);
+		bool recalc = (mEarliestAlarm[resource] == ev);
+		delete ev;
+		if (recalc)
+			findEarliestAlarm(resource);
+	}
+	else
+	{
+		for (EarliestMap::Iterator eit = mEarliestAlarm.begin();  eit != mEarliestAlarm.end();  ++eit)
+		{
+			KAEvent* event = eit.value();
+			if (event  &&  event->id() == eventID)
+			{
+				findEarliestAlarm(eit.key());
+				break;
+			}
+		}
+	}
+	KCalEvent::Status status = KCalEvent::EMPTY;
+	if (kcalEvent)
+	{
+		status = KCalEvent::status(kcalEvent);
+		mCalendar->deleteEvent(kcalEvent);
+	}
+	return status;
 }
 
 /******************************************************************************
@@ -1240,4 +1248,81 @@ bool AlarmCalendar::isEmpty() const
 			return false;
 	}
 	return true;
+}
+
+/******************************************************************************
+* Return a list of all active at-login alarms.
+*/
+KAEvent::List AlarmCalendar::atLoginAlarms() const
+{
+	KAEvent::List atlogins;
+	if (!mCalendar  ||  mCalType != RESOURCES)
+		return atlogins;
+	for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
+	{
+		AlarmResource* resource = rit.key();
+		if (!resource  ||  resource->alarmType() != AlarmResource::ACTIVE)
+			continue;
+		const KAEvent::List& events = rit.value();
+		for (int i = 0, end = events.count();  i < end;  ++i)
+		{
+			KAEvent* event = events[i];
+			if (event->category() == KCalEvent::ACTIVE  &&  event->repeatAtLogin())
+				atlogins += event;
+		}
+	}
+	return atlogins;
+}
+
+/******************************************************************************
+* Find and note the active alarm with the earliest trigger time for a resource.
+*/
+void AlarmCalendar::findEarliestAlarm(AlarmResource* resource)
+{
+	if (!mCalendar  ||  mCalType != RESOURCES
+	||  !resource  ||  resource->alarmType() != AlarmResource::ACTIVE)
+		return;
+	ResourceMap::ConstIterator rit = mResourceMap.find(resource);
+	if (rit == mResourceMap.end())
+		return;
+	const KAEvent::List& events = rit.value();
+	KAEvent* earliest = 0;
+	KDateTime earliestTime;
+	for (int i = 0, end = events.count();  i < end;  ++i)
+	{
+		KAEvent* event = events[i];
+		if (event->category() != KCalEvent::ACTIVE)
+			continue;
+		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+		if (dt.isValid()  &&  (!earliest || dt < earliestTime))
+		{
+			earliestTime = dt;
+			earliest = event;
+		}
+	}
+	mEarliestAlarm[resource] = earliest;
+	emit earliestAlarmChanged();
+}
+
+/******************************************************************************
+* Return the active alarm with the earliest trigger time.
+* Reply = 0 if none.
+*/
+KAEvent* AlarmCalendar::earliestAlarm() const
+{
+	KAEvent* earliest = 0;
+	KDateTime earliestTime;
+	for (EarliestMap::ConstIterator eit = mEarliestAlarm.constBegin();  eit != mEarliestAlarm.constEnd();  ++eit)
+	{
+		KAEvent* event = eit.value();
+		if (!event)
+			continue;
+		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+		if (dt.isValid()  &&  (!earliest || dt < earliestTime))
+		{
+			earliestTime = dt;
+			earliest = event;
+		}
+	}
+	return earliest;
 }

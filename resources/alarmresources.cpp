@@ -63,9 +63,6 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly,
 	  mActiveOnly(activeOnly),
 	  mPassiveClient(passiveClient),
 	  mNoGui(false),
-	  mInhibitActiveReload(false),
-	  mInhibitInactiveReload(false),
-	  mInhibitSave(false),
 	  mAskDestination(false),
 	  mShowProgress(false),
 	  mOpen(false)
@@ -403,19 +400,6 @@ bool AlarmResources::isLoading(AlarmResource::Type type) const
 	return false;
 }
 
-void AlarmResources::inhibitDefaultReload(bool active, bool inactive)
-{
-	mInhibitActiveReload   = active;
-	mInhibitInactiveReload = inactive;
-	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
-	{
-		AlarmResource* resource = *it;
-		bool inhibit = (resource->alarmType() == AlarmResource::ACTIVE)
-		             ? mInhibitActiveReload : mInhibitInactiveReload;
-		resource->inhibitDefaultReload(inhibit);
-	}
-}
-
 void AlarmResources::load(ResourceCached::CacheAction action)
 {
 	kDebug(KARES_DEBUG);
@@ -459,10 +443,7 @@ bool AlarmResources::load(AlarmResource* resource, ResourceCached::CacheAction a
 		case ResourceCached::NoSyncCache:
 			break;
 		default:
-			if (resource->alarmType() == AlarmResource::ACTIVE)
-				action = mInhibitActiveReload ? ResourceCached::NoSyncCache : ResourceCached::SyncCache;
-			else
-				action = mInhibitInactiveReload ? ResourceCached::NoSyncCache : ResourceCached::SyncCache;
+			action = ResourceCached::SyncCache;
 			break;
 	}
 	return resource->load(action);
@@ -473,16 +454,6 @@ void AlarmResources::slotCacheDownloaded(AlarmResource* resource)
 {
 	if (resource->isActive())
 		emit cacheDownloaded(resource);
-}
-
-void AlarmResources::loadIfNotReloaded()
-{
-	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
-	{
-		AlarmResource* res = *it;
-		if (!res->reloaded())
-			res->load(ResourceCached::DefaultCache);
-	}
 }
 
 void AlarmResources::remap(AlarmResource* resource)
@@ -548,13 +519,6 @@ bool AlarmResources::isSaving()
 			return true;
 	}
 	return false;
-}
-
-void AlarmResources::setInhibitSave(bool inhibit)
-{
-	mInhibitSave = inhibit;
-	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
-		(*it)->setInhibitSave(inhibit);;
 }
 
 void AlarmResources::showProgress(bool show)
@@ -724,8 +688,6 @@ void AlarmResources::appendEvents(Event::List& result, const Event::List& events
 void AlarmResources::connectResource(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG) << resource->resourceName();
-	resource->inhibitDefaultReload((resource->alarmType() == AlarmResource::ACTIVE) ? mInhibitActiveReload : mInhibitInactiveReload);
-	resource->setInhibitSave(mInhibitSave);
 	resource->disconnect(this);   // just in case we're called twice
 	connect(resource, SIGNAL(enabledChanged(AlarmResource*)), SLOT(slotActiveChanged(AlarmResource*)));
 	connect(resource, SIGNAL(readOnlyChanged(AlarmResource*)), SLOT(slotReadOnlyChanged(AlarmResource*)));

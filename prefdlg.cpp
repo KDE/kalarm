@@ -57,7 +57,6 @@
 #include "alarmresources.h"
 #include "alarmtimewidget.h"
 #include "buttongroup.h"
-#include "daemon.h"
 #include "editdlg.h"
 #include "editdlgtypes.h"
 #include "fontcolour.h"
@@ -293,68 +292,22 @@ MiscPrefTab::MiscPrefTab()
 	: PrefsTabBase()
 {
 	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"), this);
-	QButtonGroup* buttonGroup = new QButtonGroup(group);
-	QGridLayout* grid = new QGridLayout(group);
-	grid->setMargin(KDialog::marginHint());
-	grid->setSpacing(KDialog::spacingHint());
-	grid->setColumnStretch(2, 1);
-	grid->setColumnMinimumWidth(0, indentWidth());
-	grid->setColumnMinimumWidth(1, indentWidth());
+	QVBoxLayout* vlayout = new QVBoxLayout(group);
+	vlayout->setMargin(KDialog::marginHint());
+	vlayout->setSpacing(KDialog::spacingHint());
 
-	// Run-on-demand radio button
-	mRunOnDemand = new QRadioButton(i18nc("@option:radio", "Run only on demand"), group);
-	mRunOnDemand->setFixedSize(mRunOnDemand->sizeHint());
-	connect(mRunOnDemand, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
-	mRunOnDemand->setWhatsThis(
-	      i18nc("@info:whatsthis", "<para>Check to run <application>KAlarm</application> only when required.</para>"
-	           "<para><note label='Notes'></note></para><para>"
-	           "<list><item>Alarms are displayed even when <application>KAlarm</application> is not running, since alarm monitoring is done by the alarm daemon.</item>"
-	           "<item>With this option selected, the system tray icon can be displayed or hidden independently of <application>KAlarm</application>.</item></list></para>"));
-	buttonGroup->addButton(mRunOnDemand);
-	grid->addWidget(mRunOnDemand, 1, 0, 1, 3, Qt::AlignLeft);
-
-	// Run-in-system-tray radio button
-	mRunInSystemTray = new QRadioButton(i18nc("@option:radio", "Run continuously in system tray"), group);
-	mRunInSystemTray->setFixedSize(mRunInSystemTray->sizeHint());
-	connect(mRunInSystemTray, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
-	mRunInSystemTray->setWhatsThis(
-	      i18nc("@info:whatsthis", "<para>Check to run <application>KAlarm</application> continuously in the KDE system tray.</para>"
-	           "<para><note label='Notes'></note></para><para>"
-	           "<list><item>With this option selected, closing the system tray icon will quit <application>KAlarm</application>.</item>"
-	           "<item>You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon."
-	           " Running in the system tray simply provides easy access and a status indication.</item></list></para>"));
-	buttonGroup->addButton(mRunInSystemTray);
-	grid->addWidget(mRunInSystemTray, 2, 0, 1, 3, Qt::AlignLeft);
-
-	mDisableAlarmsIfStopped = new QCheckBox(i18nc("@option:check", "Disable alarms while not running"), group);
-	mDisableAlarmsIfStopped->setFixedSize(mDisableAlarmsIfStopped->sizeHint());
-	connect(mDisableAlarmsIfStopped, SIGNAL(toggled(bool)), SLOT(slotDisableIfStoppedToggled(bool)));
-	mDisableAlarmsIfStopped->setWhatsThis(
-	      i18nc("@info:whatsthis", "Check to disable alarms whenever <application>KAlarm</application> is not running. Alarms will only appear while the system tray icon is visible."));
-	grid->addWidget(mDisableAlarmsIfStopped, 3, 1, 1, 2, Qt::AlignLeft);
+	// Start at login
+	mAutoStart = new QCheckBox(i18nc("@option:check", "Start at login"), group);
+	connect(mAutoStart, SIGNAL(clicked()), SLOT(slotAutostartClicked()));
+	mAutoStart->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Automatically start <application>KAlarm</application> whenever you start KDE.</para>"
+	      "<para>This option should always be checked unless you intend to discontinue use of <application>KAlarm</application>.</para>"));
+	vlayout->addWidget(mAutoStart, 0, Qt::AlignLeft);
 
 	mQuitWarn = new QCheckBox(i18nc("@option:check", "Warn before quitting"), group);
-	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
+//	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	mQuitWarn->setWhatsThis(i18nc("@info:whatsthis", "Check to display a warning prompt before quitting <application>KAlarm</application>."));
-	grid->addWidget(mQuitWarn, 4, 2, Qt::AlignLeft);
-
-	mAutostartTrayIcon = new QCheckBox(i18nc("@option:check", "Autostart at login"), group);
-	mAutostartTrayIcon->setFixedSize(mAutostartTrayIcon->sizeHint());
-#ifdef AUTOSTART_BY_KALARMD
-	connect(mAutostartTrayIcon, SIGNAL(toggled(bool)), SLOT(slotAutostartToggled(bool)));
-#endif
-	mAutostartTrayIcon->setWhatsThis(i18nc("@info:whatsthis", "Check to run <application>KAlarm</application> whenever you start KDE."));
-	grid->addWidget(mAutostartTrayIcon, 5, 0, 1, 3, Qt::AlignLeft);
-
-	// Autostart alarm daemon
-	mAutostartDaemon = new QCheckBox(i18nc("@option:check", "Start alarm monitoring at login"), group);
-	mAutostartDaemon->setFixedSize(mAutostartDaemon->sizeHint());
-	connect(mAutostartDaemon, SIGNAL(clicked()), SLOT(slotAutostartDaemonClicked()));
-	mAutostartDaemon->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>Automatically start alarm monitoring whenever you start KDE, by running the alarm daemon (<command>%1</command>).</para>"
-	      "<para>This option should always be checked unless you intend to discontinue use of <application>KAlarm</application>.</para>",
-	      QLatin1String(DAEMON_APP_NAME)));
-	grid->addWidget(mAutostartDaemon, 6, 0, 1, 3, Qt::AlignLeft);
+	vlayout->addWidget(mQuitWarn, 0, Qt::AlignLeft);
 
 	group->setFixedHeight(group->sizeHint().height());
 
@@ -370,7 +323,7 @@ MiscPrefTab::MiscPrefTab()
 	// Terminal window to use for command alarms
 	group = new QGroupBox(i18nc("@title:group", "Terminal for Command Alarms"), this);
 	group->setWhatsThis(i18nc("@info:whatsthis", "Choose which application to use when a command alarm is executed in a terminal window"));
-	grid = new QGridLayout(group);
+	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
 	int row = 0;
@@ -406,7 +359,7 @@ MiscPrefTab::MiscPrefTab()
 	grid->addLayout(hlayout, row + 1, 0, 1, 3, Qt::AlignLeft);
 	QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), group);
 	hlayout->addWidget(radio);
-	radio->setFixedSize(radio->sizeHint());
+//	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->addButton(radio, mXtermCount);
 	if (mXtermFirst < 0)
@@ -426,13 +379,8 @@ MiscPrefTab::MiscPrefTab()
 
 void MiscPrefTab::restore(bool defaults)
 {
-	mAutostartDaemon->setChecked(defaults ? true : Daemon::autoStart());
-	bool systray = Preferences::runInSystemTray();
-	mRunInSystemTray->setChecked(systray);
-	mRunOnDemand->setChecked(!systray);
-	mDisableAlarmsIfStopped->setChecked(Preferences::disableAlarmsIfStopped());
+	mAutoStart->setChecked(Preferences::autoStart());
 	mQuitWarn->setChecked(Preferences::quitWarn());
-	mAutostartTrayIcon->setChecked(Preferences::autostartTrayIcon());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = mXtermFirst;
@@ -447,7 +395,6 @@ void MiscPrefTab::restore(bool defaults)
 	mXtermType->setButton(id);
 	mXtermCommand->setEnabled(id == mXtermCount);
 	mXtermCommand->setText(id == mXtermCount ? xtermCmd : "");
-	slotDisableIfStoppedToggled(true);
 }
 
 void MiscPrefTab::apply(bool syncToDisc)
@@ -478,28 +425,15 @@ void MiscPrefTab::apply(bool syncToDisc)
 		mXtermType->setButton(mXtermFirst);
 	}
 
-	bool systray = mRunInSystemTray->isChecked();
-	if (systray != Preferences::runInSystemTray())
-		Preferences::setRunInSystemTray(systray);
-	bool b = mDisableAlarmsIfStopped->isChecked();
-	if (b != Preferences::disableAlarmsIfStopped())
-		Preferences::setDisableAlarmsIfStopped(b);
 	if (mQuitWarn->isEnabled())
 	{
-		b = mQuitWarn->isChecked();
+		bool b = mQuitWarn->isChecked();
 		if (b != Preferences::quitWarn())
 			Preferences::setQuitWarn(b);
 	}
-	b = mAutostartTrayIcon->isChecked();
-	if (b != Preferences::autostartTrayIcon())
-		Preferences::setAutostartTrayIcon(b);
-#ifdef AUTOSTART_BY_KALARMD
-	bool newAutostartDaemon = mAutostartDaemon->isChecked() || Preferences::autostartTrayIcon();
-#else
-	bool newAutostartDaemon = mAutostartDaemon->isChecked();
-#endif
-	if (newAutostartDaemon != Daemon::autoStart())
-		Daemon::enableAutoStart(newAutostartDaemon);
+	bool b = mAutoStart->isChecked();
+	if (b != Preferences::autoStart())
+		Preferences::setAutoStart(b);
 	b = mConfirmAlarmDeletion->isChecked();
 	if (b != Preferences::confirmAlarmDeletion())
 		Preferences::setConfirmAlarmDeletion(b);
@@ -509,41 +443,14 @@ void MiscPrefTab::apply(bool syncToDisc)
 	PrefsTabBase::apply(syncToDisc);
 }
 
-void MiscPrefTab::slotAutostartDaemonClicked()
+void MiscPrefTab::slotAutostartClicked()
 {
-	if (!mAutostartDaemon->isChecked()
+	if (!mAutoStart->isChecked()
 	&&  KMessageBox::warningYesNo(this,
 		                      i18nc("@info", "You should not uncheck this option unless you intend to discontinue use of <application>KAlarm</application>"),
 		                      QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()
 		                     ) != KMessageBox::Yes)
-		mAutostartDaemon->setChecked(true);
-}
-
-void MiscPrefTab::slotRunModeToggled(bool)
-{
-	bool systray = mRunInSystemTray->isChecked();
-	mAutostartTrayIcon->setText(systray ? i18nc("@option:check", "Autostart at login") : i18nc("@option:check", "Autostart system tray icon at login"));
-	mAutostartTrayIcon->setWhatsThis((systray ? i18nc("@info:whatsthis", "Check to run <application>KAlarm</application> whenever you start KDE.")
-	                                          : i18nc("@info:whatsthis", "Check to display the system tray icon whenever you start KDE.")));
-	mDisableAlarmsIfStopped->setEnabled(systray);
-	slotDisableIfStoppedToggled(true);
-}
-
-/******************************************************************************
-* If autostart at login is selected, the daemon must be autostarted so that it
-* can autostart KAlarm, in which case disable the daemon autostart option.
-*/
-void MiscPrefTab::slotAutostartToggled(bool)
-{
-#ifdef AUTOSTART_BY_KALARMD
-	mAutostartDaemon->setEnabled(!mAutostartTrayIcon->isChecked());
-#endif
-}
-
-void MiscPrefTab::slotDisableIfStoppedToggled(bool)
-{
-	bool enable = mDisableAlarmsIfStopped->isEnabled()  &&  mDisableAlarmsIfStopped->isChecked();
-	mQuitWarn->setEnabled(enable);
+		mAutoStart->setChecked(true);
 }
 
 void MiscPrefTab::slotOtherTerminalToggled(bool on)
@@ -591,7 +498,7 @@ TimePrefTab::TimePrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18nc("@label:spinbox", "Start of day for date-only alarms:"), box);
 	mStartOfDay = new TimeEdit(box);
-	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
+//	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	label->setBuddy(mStartOfDay);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>The earliest time of day at which a date-only alarm will be triggered.</para>"
@@ -615,7 +522,7 @@ TimePrefTab::TimePrefTab()
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
 		mWorkDays[i] = new QCheckBox(KAlarm::weekDayName(day, locale), daybox);
-		mWorkDays[i]->setFixedSize(mWorkDays[i]->sizeHint());
+//		mWorkDays[i]->setFixedSize(mWorkDays[i]->sizeHint());
 		wgrid->addWidget(mWorkDays[i], i/4, i%4, Qt::AlignLeft);
 	}
 	daybox->setFixedHeight(daybox->sizeHint().height());
@@ -629,7 +536,7 @@ TimePrefTab::TimePrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* startLabel = new QLabel(i18nc("@label:spinbox", "Daily start time:"), box);
 	mWorkStart = new TimeEdit(box);
-	mWorkStart->setFixedSize(mWorkStart->sizeHint());
+//	mWorkStart->setFixedSize(mWorkStart->sizeHint());
 	startLabel->setBuddy(mWorkStart);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the start time of the working day.</para>"
@@ -644,7 +551,7 @@ TimePrefTab::TimePrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* endLabel = new QLabel(i18nc("@label:spinbox", "Daily end time:"), box);
 	mWorkEnd = new TimeEdit(box);
-	mWorkEnd->setFixedSize(mWorkEnd->sizeHint());
+//	mWorkEnd->setFixedSize(mWorkEnd->sizeHint());
 	endLabel->setBuddy(mWorkEnd);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the end time of the working day.</para>"
@@ -732,12 +639,12 @@ StorePrefTab::StorePrefTab()
 
 	mDefaultResource = new QRadioButton(i18nc("@option:radio", "Store in default resource"), group);
 	bgroup->addButton(mDefaultResource);
-	mDefaultResource->setFixedSize(mDefaultResource->sizeHint());
+//	mDefaultResource->setFixedSize(mDefaultResource->sizeHint());
 	mDefaultResource->setWhatsThis(i18nc("@info:whatsthis", "Add all new alarms and alarm templates to the default resources, without prompting."));
 	layout->addWidget(mDefaultResource, 0, Qt::AlignLeft);
 	mAskResource = new QRadioButton(i18nc("@option:radio", "Prompt for which resource to store in"), group);
 	bgroup->addButton(mAskResource);
-	mAskResource->setFixedSize(mAskResource->sizeHint());
+//	mAskResource->setFixedSize(mAskResource->sizeHint());
 	mAskResource->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.</para>"
 	      "<para>Note that archived alarms are always stored in the default archived alarm resource.</para>"));
@@ -751,7 +658,7 @@ StorePrefTab::StorePrefTab()
 	grid->setColumnStretch(1, 1);
 	grid->setColumnMinimumWidth(0, indentWidth());
 	mKeepArchived = new QCheckBox(i18nc("@option:check", "Keep alarms after expiry"), group);
-	mKeepArchived->setFixedSize(mKeepArchived->sizeHint());
+//	mKeepArchived->setFixedSize(mKeepArchived->sizeHint());
 	connect(mKeepArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
 	mKeepArchived->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to archive alarms after expiry or deletion (except deleted alarms which were never triggered)."));
@@ -879,7 +786,7 @@ EmailPrefTab::EmailPrefTab()
 	box = new KHBox(this);   // this is to allow left adjustment
 	box->setMargin(0);
 	mEmailCopyToKMail = new QCheckBox(i18nc("@option:check", "Copy sent emails into <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()), box);
-	mEmailCopyToKMail->setFixedSize(mEmailCopyToKMail->sizeHint());
+//	mEmailCopyToKMail->setFixedSize(mEmailCopyToKMail->sizeHint());
 	mEmailCopyToKMail->setWhatsThis(i18nc("@info:whatsthis", "After sending an email, store a copy in <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
@@ -893,7 +800,7 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'From' email address controls ...
 	label = new Label(i18nc("@label 'From' email address", "From:"), group);
-	label->setFixedSize(label->sizeHint());
+//	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mFromAddressGroup = new ButtonGroup(group);
 	connect(mFromAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotFromAddrChanged(QAbstractButton*)));
@@ -901,7 +808,7 @@ EmailPrefTab::EmailPrefTab()
 	// Line edit to enter a 'From' email address
 	mFromAddrButton = new RadioButton(group);
 	mFromAddressGroup->addButton(mFromAddrButton, Preferences::MAIL_FROM_ADDR);
-	mFromAddrButton->setFixedSize(mFromAddrButton->sizeHint());
+//	mFromAddrButton->setFixedSize(mFromAddrButton->sizeHint());
 	label->setBuddy(mFromAddrButton);
 	grid->addWidget(mFromAddrButton, 1, 1);
 	mEmailAddress = new KLineEdit(group);
@@ -914,7 +821,7 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'From' email address to be taken from Control Centre
 	mFromCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from Control Center"), group);
-	mFromCCentreButton->setFixedSize(mFromCCentreButton->sizeHint());
+//	mFromCCentreButton->setFixedSize(mFromCCentreButton->sizeHint());
 	mFromAddressGroup->addButton(mFromCCentreButton, Preferences::MAIL_FROM_CONTROL_CENTRE);
 	mFromCCentreButton->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
@@ -922,7 +829,7 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'From' email address to be picked from KMail's identities when the email alarm is configured
 	mFromKMailButton = new RadioButton(i18nc("@option:radio", "Use <application>KMail</application> identities"), group);
-	mFromKMailButton->setFixedSize(mFromKMailButton->sizeHint());
+//	mFromKMailButton->setFixedSize(mFromKMailButton->sizeHint());
 	mFromAddressGroup->addButton(mFromKMailButton, Preferences::MAIL_FROM_KMAIL);
 	mFromKMailButton->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to use <application>KMail</application>'s email identities to identify you as the sender when sending email alarms. "
@@ -933,14 +840,14 @@ EmailPrefTab::EmailPrefTab()
 	// 'Bcc' email address controls ...
 	grid->setRowMinimumHeight(4, KDialog::spacingHint());
 	label = new Label(i18nc("@label 'Bcc' email address", "Bcc:"), group);
-	label->setFixedSize(label->sizeHint());
+//	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 5, 0);
 	mBccAddressGroup = new ButtonGroup(group);
 	connect(mBccAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotBccAddrChanged(QAbstractButton*)));
 
 	// Line edit to enter a 'Bcc' email address
 	mBccAddrButton = new RadioButton(group);
-	mBccAddrButton->setFixedSize(mBccAddrButton->sizeHint());
+//	mBccAddrButton->setFixedSize(mBccAddrButton->sizeHint());
 	mBccAddressGroup->addButton(mBccAddrButton, Preferences::MAIL_FROM_ADDR);
 	label->setBuddy(mBccAddrButton);
 	grid->addWidget(mBccAddrButton, 5, 1);
@@ -954,7 +861,7 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'Bcc' email address to be taken from Control Centre
 	mBccCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from Control Center"), group);
-	mBccCCentreButton->setFixedSize(mBccCCentreButton->sizeHint());
+//	mBccCCentreButton->setFixedSize(mBccCCentreButton->sizeHint());
 	mBccAddressGroup->addButton(mBccCCentreButton, Preferences::MAIL_FROM_CONTROL_CENTRE);
 	mBccCCentreButton->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
@@ -965,7 +872,7 @@ EmailPrefTab::EmailPrefTab()
 	box = new KHBox(this);   // this is to allow left adjustment
 	box->setMargin(0);
 	mEmailQueuedNotify = new QCheckBox(i18nc("@option:check", "Notify when remote emails are queued"), box);
-	mEmailQueuedNotify->setFixedSize(mEmailQueuedNotify->sizeHint());
+//	mEmailQueuedNotify->setFixedSize(mEmailQueuedNotify->sizeHint());
 	mEmailQueuedNotify->setWhatsThis(
 	      i18nc("@info:whatsthis", "Display a notification message whenever an email alarm has queued an email for sending to a remote system. "
 	           "This could be useful if, for example, you have a dial-up connection, so that you can then ensure that the email is actually transmitted."));
@@ -1190,7 +1097,7 @@ EditPrefTab::EditPrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	vlayout->addWidget(box);
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Reminder units:"), box);
-	label->setFixedSize(label->sizeHint());
+//	label->setFixedSize(label->sizeHint());
 	mReminderUnits = new KComboBox(box);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Minutes"), TimePeriod::Minutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Hours/Minutes"), TimePeriod::HoursMinutes);
@@ -1234,7 +1141,7 @@ EditPrefTab::EditPrefTab()
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mSoundFileLabel = new QLabel(i18nc("@label:textbox", "Sound file:"), box);
-	mSoundFileLabel->setFixedSize(mSoundFileLabel->sizeHint());
+//	mSoundFileLabel->setFixedSize(mSoundFileLabel->sizeHint());
 	mSoundFile = new KLineEdit(box);
 	mSoundFileLabel->setBuddy(mSoundFile);
 	mSoundFileBrowse = new QPushButton(box);
@@ -1299,7 +1206,7 @@ EditPrefTab::EditPrefTab()
 	itemBox->setMargin(0);
 	itemBox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18nc("@label:listbox", "Recurrence:"), itemBox);
-	label->setFixedSize(label->sizeHint());
+//	label->setFixedSize(label->sizeHint());
 	mRecurPeriod = new KComboBox(itemBox);
 	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_NoRecur());
 	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_AtLogin());
@@ -1496,6 +1403,18 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab()
 	: PrefsTabBase()
 {
+	// Run-in-system-tray radio button
+	KHBox* box = new KHBox(this);   // this is to allow left adjustment
+	box->setMargin(0);
+	mShowInSystemTray = new QCheckBox(i18nc("@option:check", "Show in system tray"), box);
+//	mShowInSystemTray->setFixedSize(mShowInSystemTray->sizeHint());
+	connect(mShowInSystemTray, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
+	mShowInSystemTray->setWhatsThis(
+	      i18nc("@info:whatsthis", "<para>Check to show <application>KAlarm</application>'s icon in the system tray."
+	           " Showing it in the system tray provides easy access and a status indication.</para>"));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+
 	QGroupBox* group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"), this);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
@@ -1511,7 +1430,7 @@ ViewPrefTab::ViewPrefTab()
 	      i18nc("@info:whatsthis", "Specify whether to include in the system tray tooltip, a summary of alarms due in the next 24 hours."));
 	grid->addWidget(mTooltipShowAlarms, 0, 0, 1, 3, Qt::AlignLeft);
 
-	KHBox* box = new KHBox(group);
+	box = new KHBox(group);
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mTooltipMaxAlarms = new QCheckBox(i18nc("@option:check", "Maximum number of alarms to show:"), box);
@@ -1541,7 +1460,7 @@ ViewPrefTab::ViewPrefTab()
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mTooltipTimeToPrefixLabel = new QLabel(i18nc("@label:textbox", "Prefix:"), box);
-	mTooltipTimeToPrefixLabel->setFixedSize(mTooltipTimeToPrefixLabel->sizeHint());
+//	mTooltipTimeToPrefixLabel->setFixedSize(mTooltipTimeToPrefixLabel->sizeHint());
 	mTooltipTimeToPrefix = new KLineEdit(box);
 	mTooltipTimeToPrefixLabel->setBuddy(mTooltipTimeToPrefix);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip."));
@@ -1557,21 +1476,6 @@ ViewPrefTab::ViewPrefTab()
 	      "<item>If unchecked, the window does not interfere with your typing when "
 	      "it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>"));
 
-	KHBox* itemBox = new KHBox(this);   // this is to control the QWhatsThis text display area
-	itemBox->setMargin(0);
-	box = new KHBox(itemBox);
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
-	QLabel* label = new QLabel(i18nc("@label:spinbox", "System tray icon update interval:"), box);
-	mDaemonTrayCheckInterval = new SpinBox(1, 9999, box);
-	mDaemonTrayCheckInterval->setSingleShiftStep(10);
-	mDaemonTrayCheckInterval->setMinimumSize(mDaemonTrayCheckInterval->sizeHint());
-	label->setBuddy(mDaemonTrayCheckInterval);
-	label = new QLabel(i18nc("@label", "seconds"), box);
-	box->setWhatsThis(i18nc("@info:whatsthis", "How often to update the system tray icon to indicate whether or not the Alarm Daemon is monitoring alarms."));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
-	itemBox->setFixedHeight(box->sizeHint().height());
-
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
 
@@ -1581,8 +1485,8 @@ void ViewPrefTab::restore(bool)
 	           Preferences::showTooltipAlarmTime(),
 	           Preferences::showTooltipTimeToAlarm(),
 	           Preferences::tooltipTimeToPrefix());
+	mShowInSystemTray->setChecked(Preferences::showInSystemTray());
 	mModalMessages->setChecked(Preferences::modalMessages());
-	mDaemonTrayCheckInterval->setValue(Preferences::daemonTrayCheckInterval());
 }
 
 void ViewPrefTab::apply(bool syncToDisc)
@@ -1601,12 +1505,12 @@ void ViewPrefTab::apply(bool syncToDisc)
 	QString text = mTooltipTimeToPrefix->text();
 	if (text != Preferences::tooltipTimeToPrefix())
 		Preferences::setTooltipTimeToPrefix(text);
+	b = mShowInSystemTray->isChecked();
+	if (b != Preferences::showInSystemTray())
+		Preferences::setShowInSystemTray(b);
 	b = mModalMessages->isChecked();
 	if (b != Preferences::modalMessages())
 		Preferences::setModalMessages(b);
-	int i = mDaemonTrayCheckInterval->value();
-	if (i != Preferences::daemonTrayCheckInterval())
-		Preferences::setDaemonTrayCheckInterval(i);
 	PrefsTabBase::apply(syncToDisc);
 }
 

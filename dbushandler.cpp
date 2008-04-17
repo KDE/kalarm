@@ -27,7 +27,6 @@
 #include <kcal/duration.h>
 
 #include "alarmcalendar.h"
-#include "daemon.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"

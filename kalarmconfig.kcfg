@@ -14,11 +14,8 @@
 
   <signal name="messageColoursChanged">
   </signal>
-  <signal name="runInSystemTrayChanged">
-    <argument type="Bool">RunInSystemTray</argument>
-  </signal>
-  <signal name="disableAlarmsIfStoppedChanged">
-    <argument type="Bool">DisableAlarmsIfStopped</argument>
+  <signal name="showInSystemTrayChanged">
+    <argument type="Bool">ShowInSystemTray</argument>
   </signal>
   <signal name="base_TimeZoneChanged">
     <argument type="String">Base_TimeZone</argument>
@@ -30,9 +27,6 @@
     <argument type="DateTime">Base_WorkDayStart</argument>
     <argument type="DateTime">Base_WorkDayEnd</argument>
     <argument type="Int">Base_WorkDays</argument>
-  </signal>
-  <signal name="daemonTrayCheckIntervalChanged">
-    <argument type="Int">DaemonTrayCheckInterval</argument>
   </signal>
   <signal name="disabledColourChanged">
     <argument type="Color">DisabledColour</argument>
@@ -77,22 +71,16 @@
       <whatsthis context="@info:whatsthis">Default font for displaying alarm messages.</whatsthis>
       <default code="true">QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold)</default>
     </entry>
-    <entry name="RunInSystemTray" type="Bool">
-      <label context="@label">Run continuously in system tray</label>
-      <whatsthis context="@info:whatsthis"><para>Check to run <application>KAlarm</application> continuously in the KDE system tray.</para><para><note label='Notes'></note></para><para><list><item>With this option selected, closing the system tray icon will quit <application>KAlarm</application>.</item><item>You do not need to select this option in order for alarms to be displayed, since alarm monitoring is done by the alarm daemon. Running in the system tray simply provides easy access and a status indication.</item></list></para></whatsthis>
+    <entry name="ShowInSystemTray" type="Bool">
+      <label context="@label">Show in system tray</label>
+      <whatsthis context="@info:whatsthis"><para>Check to show <application>KAlarm</application>'s icon in the system tray. Showing it in the system tray provides easy access and a status indication.</para></whatsthis>
       <default>true</default>
-      <emit signal="runInSystemTrayChanged"/>
+      <emit signal="showInSystemTrayChanged"/>
     </entry>
-    <entry name="DisableAlarmsIfStopped" type="Bool">
-      <label context="@label">Disable alarms while not running</label>
-      <whatsthis context="@info:whatsthis">Check to disable alarms whenever <application>KAlarm</application> is not running. Alarms will only appear while the system tray icon is visible.</whatsthis>
-      <default>true</default>
-      <emit signal="disableAlarmsIfStoppedChanged"/>
-    </entry>
-    <entry name="AutostartTrayIcon" key="AutostartTray" type="Bool">
-      <label context="@label">Autostart at login</label>
-      <whatsthis context="@info:whatsthis">Whether to start KAlarm in the system tray at login.</whatsthis>
-      <default>true</default>
+    <entry name="AutoStart" key="AutoStart" type="Bool">
+      <label context="@label">Start at login</label>
+      <whatsthis context="@info:whatsthis"><para>Automatically start <application>KAlarm</application> whenever you start KDE.</para><para>This option should always be checked unless you intend to discontinue use of <application>KAlarm</application>.</para></whatsthis>
+      <default>false</default>
     </entry>
     <entry name="AskResource" type="Bool">
       <label context="@label">Prompt for which resource to store in</label>
@@ -139,13 +127,6 @@
       <label context="@label">Time-to-alarm prefix in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip.</whatsthis>
       <default code="true">QLatin1String("+")</default>
-    </entry>
-    <entry name="DaemonTrayCheckInterval" type="Int">
-      <label context="@label">System tray icon update interval</label>
-      <whatsthis context="@info:whatsthis">Interval in seconds between system tray icon updates to indicate whether or not the Alarm Daemon is monitoring alarms.</whatsthis>
-      <default>10</default>
-      <min>1</min>
-      <emit signal="daemonTrayCheckIntervalChanged"/>
     </entry>
     <entry name="EmailClient" key="EmailClient" type="Enum">
       <label context="@label">Email client</label>

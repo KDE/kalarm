@@ -202,8 +202,6 @@ bool KAResourceLocal::loadFile()
 
 bool KAResourceLocal::doSave(bool)
 {
-	if (saveInhibited())
-		return true;
 	kDebug(KARES_DEBUG) << mURL.path();
 	if (mCalIDFunction)
 		(*mCalIDFunction)(*calendar());    // write the application ID into the calendar

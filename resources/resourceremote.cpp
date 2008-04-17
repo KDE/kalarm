@@ -255,8 +255,6 @@ void KAResourceRemote::cancelDownload(bool disable)
 
 bool KAResourceRemote::doSave(bool syncCache)
 {
-	if (saveInhibited())
-		return true;
 	kDebug(KARES_DEBUG) << mUploadUrl.prettyUrl();
 	if (readOnly()  ||  !hasChanges())
 		return true;

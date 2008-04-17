@@ -119,23 +119,14 @@ class MiscPrefTab : public PrefsTabBase
 		virtual void apply(bool syncToDisc);
 
 	private slots:
-		void         slotAutostartDaemonClicked();
-		void         slotRunModeToggled(bool);
-		void         slotDisableIfStoppedToggled(bool);
+		void         slotAutostartClicked();
 		void         slotOtherTerminalToggled(bool);
-//#ifdef AUTOSTART_BY_KALARMD
-		void         slotAutostartToggled(bool);
-//#endif
 
 	private:
 		void         setTimeZone(const KTimeZone&);
 
-		QCheckBox*    mAutostartDaemon;
-		QRadioButton* mRunInSystemTray;
-		QRadioButton* mRunOnDemand;
-		QCheckBox*    mDisableAlarmsIfStopped;
+		QCheckBox*    mAutoStart;
 		QCheckBox*    mQuitWarn;
-		QCheckBox*    mAutostartTrayIcon;
 		QCheckBox*    mConfirmAlarmDeletion;
 		ButtonGroup*  mXtermType;
 		KLineEdit*    mXtermCommand;
@@ -290,6 +281,7 @@ class ViewPrefTab : public PrefsTabBase
 	private:
 		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
+		QCheckBox*   mShowInSystemTray;
 		QCheckBox*   mTooltipShowAlarms;
 		QCheckBox*   mTooltipMaxAlarms;
 		SpinBox*     mTooltipMaxAlarmCount;
@@ -298,7 +290,6 @@ class ViewPrefTab : public PrefsTabBase
 		KLineEdit*   mTooltipTimeToPrefix;
 		QLabel*      mTooltipTimeToPrefixLabel;
 		QCheckBox*   mModalMessages;
-		SpinBox*     mDaemonTrayCheckInterval;
 };
 
 

@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	QString whatsThis = i18nc("@info:whatsthis",
 	                          "<para>If checked, the alarm will be canceled if it cannot be triggered within the "
 	                         "specified period after its scheduled time. Possible reasons for not triggering "
-	                         "include your being logged off, X not running, or the alarm daemon not running.</para>"
+	                         "include your being logged off, X not running, or <application>KAlarm</application> not running.</para>"
 	                         "<para>If unchecked, the alarm will be triggered at the first opportunity after "
 	                         "its scheduled time, regardless of how late it is.</para>");
 

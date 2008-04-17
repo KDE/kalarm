@@ -95,10 +95,8 @@ int main(int argc, char *argv[])
 	options.add("reminder-once <period>", ki18n("Display reminder once, before first alarm recurrence"));
 	options.add("r");
 	options.add("repeat <count>", ki18n("Number of times to repeat alarm (including initial occasion)"));
-	options.add("reset", ki18n("Reset the alarm scheduling daemon"));
 	options.add("s");
 	options.add("speak", ki18n("Speak the message when it is displayed"));
-	options.add("stop", ki18n("Stop the alarm scheduling daemon"));
 	options.add("S");
 	options.add("subject", ki18n("Email subject line"));
 	options.add("t");

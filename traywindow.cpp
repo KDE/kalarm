@@ -25,7 +25,6 @@
 #include "alarmlistview.h"
 #include "alarmresources.h"
 #include "alarmtext.h"
-#include "daemon.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -42,6 +41,7 @@
 #include <QList>
 
 #include <kactioncollection.h>
+#include <ktoggleaction.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <kaboutdata.h>
@@ -68,7 +68,7 @@ struct TipItem
 =============================================================================*/
 
 TrayWindow::TrayWindow(MainWindow* parent)
-	: KSystemTrayIcon((theApp()->wantRunInSystemTray() ? parent : 0)),
+	: KSystemTrayIcon((theApp()->wantShowInSystemTray() ? parent : 0)),
 	  mAssocMainWindow(parent)
 {
 	kDebug();
@@ -90,10 +90,10 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 	// Set up the context menu
 	KActionCollection* actions = actionCollection();
-	KAction* a = Daemon::createAlarmEnableAction(this);
+	KAction* a = KAlarm::createAlarmEnableAction(this);
 	actions->addAction(QLatin1String("tAlarmsEnable"), a);
 	contextMenu()->addAction(a);
-	connect(a, SIGNAL(switched(bool)), SLOT(setEnabledStatus(bool)));
+	connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(setEnabledStatus(bool)));
 
 	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
 	actions->addAction(QLatin1String("tNew"), mActionNew);
@@ -111,8 +111,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	KStandardAction::quit(this, SLOT(slotQuit()), actions);
 
 	// Set icon to correspond with the alarms enabled menu status
-	Daemon::checkStatus();
-	setEnabledStatus(Daemon::monitoringAlarms());
+	setEnabledStatus(theApp()->alarmsEnabled());
 
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
@@ -124,15 +123,6 @@ TrayWindow::~TrayWindow()
 	kDebug();
 	theApp()->removeWindow(this);
 	emit deleted();
-}
-
-/******************************************************************************
-* Called just before the context menu is displayed.
-* Update the Alarms Enabled item status.
-*/
-void TrayWindow::contextMenuAboutToShow(KMenu*)
-{
-	Daemon::checkStatus();
 }
 
 /******************************************************************************
@@ -199,7 +189,7 @@ void TrayWindow::slotActivated(QSystemTrayIcon::ActivationReason reason)
 	if (reason == QSystemTrayIcon::Trigger)
 	{
 		// Left click: display/hide the first main window
-		if (!theApp()->wantRunInSystemTray())
+		if (!theApp()->wantShowInSystemTray())
 			mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
 		else if (mAssocMainWindow  &&  mAssocMainWindow->isVisible())
 		{
@@ -242,14 +232,15 @@ bool TrayWindow::event(QEvent* e)
 	if (e->type() != QEvent::ToolTip)
 		return KSystemTrayIcon::event(e);
 	QHelpEvent* he = (QHelpEvent*)e;
+	bool enabled = theApp()->alarmsEnabled();
 	QString altext;
-	if (Preferences::tooltipAlarmCount())
+	if (enabled  &&  Preferences::tooltipAlarmCount())
 		altext = tooltipAlarmText();
 	QString text;
-	if (Daemon::monitoringAlarms())
+	if (enabled)
 		text = i18nc("@info:tooltip", "%1%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	else
-		text = i18nc("@info:tooltip 'KAlarm - disabled' %2 = list of alarms due soon", "%1 - disabled%2", KGlobal::mainComponent().aboutData()->programName(), altext);
+		text = i18nc("@info:tooltip 'KAlarm - disabled'", "%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
 	kDebug() << text;
 	QToolTip::showText(he->globalPos(), text);
 	return true;

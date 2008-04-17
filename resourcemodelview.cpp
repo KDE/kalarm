@@ -161,10 +161,7 @@ bool ResourceModel::setData(const QModelIndex& index, const QVariant& value, int
 	AlarmResources* resources = AlarmResources::instance();
 	if (active)
 	{
-		// Enable the resource.
-		// The new setting needs to be written before calling load(), since
-		// load completion triggers daemon notification, and the daemon
-		// needs to see when it is triggered what the new resource status is.
+		// Enable the resource
 		resource->setActive(true);     // enable it now so that load() will work
 		saveChange = resources->load(resource);
 		resource->setActive(false);    // reset so that setEnabled() will work
@@ -175,11 +172,7 @@ bool ResourceModel::setData(const QModelIndex& index, const QVariant& value, int
 		saveChange = resource->saveAndClose();   // close resource after it is saved
 	}
 	if (saveChange)
-	{
-		// Save the change and notify the alarm daemon
 		resource->setEnabled(active);
-//		Daemon::reloadResource(resource->identifier());
-	}
 	emit dataChanged(index, index);
 	return true;
 }

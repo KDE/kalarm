@@ -25,7 +25,6 @@
 #include "eventlistmodel.h"
 #include "alarmlistview.h"
 #include "editdlg.h"
-#include "daemon.h"
 #include "dbushandler.h"
 #include "functions.h"
 #include "kamail.h"
@@ -68,15 +67,15 @@ static bool convWakeTime(const QByteArray& timeParam, KDateTime&, const KDateTim
 static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 
 /******************************************************************************
- * Find the maximum number of seconds late which a late-cancel alarm is allowed
- * to be. This is calculated as the alarm daemon's check interval, plus a few
- * seconds leeway to cater for any timing irregularities.
- */
+* Find the maximum number of seconds late which a late-cancel alarm is allowed
+* to be. This is calculated as the late cancel interval, plus a few seconds
+* leeway to cater for any timing irregularities.
+*/
 static inline int maxLateness(int lateCancel)
 {
 	static const int LATENESS_LEEWAY = 5;
 	int lc = (lateCancel >= 1) ? (lateCancel - 1)*60 : 0;
-	return Daemon::maxTimeSinceCheck() + LATENESS_LEEWAY + lc;
+	return LATENESS_LEEWAY + lc;
 }
 
 
@@ -87,36 +86,47 @@ QString     KAlarmApp::mFatalMessage;
 
 
 /******************************************************************************
- * Construct the application.
- */
+* Construct the application.
+*/
 KAlarmApp::KAlarmApp()
 	: KUniqueApplication(),
 	  mInitialised(false),
+	  mLoginAlarmsDone(false),
 	  mDBusHandler(new DBusHandler()),
 	  mTrayWindow(0),
+	  mAlarmTimer(new QTimer(this)),
 	  mArchivedPurgeDays(-1),      // default to not purging
 	  mPurgeDaysQueued(-1),
 	  mPendingQuit(false),
 	  mProcessingQueue(false),
 	  mSessionClosingDown(false),
+	  mAlarmsEnabled(true),
 	  mSpeechEnabled(false)
 {
+	mAlarmTimer->setSingleShot(true);
+	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
+
 	Preferences::self()->readConfig();
-	Preferences::connect(SIGNAL(preferencesChanged()), this, SLOT(slotPreferencesChanged()));
+	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&, const QTime&)), this, SLOT(changeStartOfDay()));
+	Preferences::connect(SIGNAL(feb29TypeChanged(Preferences::Feb29Type)), this, SLOT(slotFeb29TypeChanged(Preferences::Feb29Type)));
+	Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(slotShowInSystemTrayChanged()));
 	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
+	Preferences::setAutoStart(true);
+	Preferences::self()->writeConfig();
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	if (AlarmCalendar::initialiseCalendars())
 	{
+		connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
+
 		KConfigGroup config(KGlobal::config(), "General");
-		mNoSystemTray           = config.readEntry("NoSystemTray", false);
-		mOldRunInSystemTray     = wantRunInSystemTray();
-		mDisableAlarmsIfStopped = mOldRunInSystemTray && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
-		mStartOfDay             = Preferences::startOfDay();
+		mNoSystemTray        = config.readEntry("NoSystemTray", false);
+		mOldShowInSystemTray = wantShowInSystemTray();
+		mStartOfDay          = Preferences::startOfDay();
 		if (Preferences::hasStartOfDayChanged())
 			mStartOfDay.setHMS(100,0,0);    // start of day time has changed: flag it as invalid
 		DateTime::setStartOfDay(mStartOfDay);
-		mPrefsArchivedColour   = Preferences::archivedColour();
+		mPrefsArchivedColour = Preferences::archivedColour();
 	}
 
 	// Check if the speech synthesis daemon is installed
@@ -155,12 +165,6 @@ KAlarmApp* KAlarmApp::getInstance()
 
 		if (mFatalError)
 			theInstance->quitFatal();
-		else
-		{
-			// This is here instead of in the constructor to avoid recursion
-			Daemon::initialise();    // calendars must be initialised before calling this
-			Daemon::connectRegistered(AlarmCalendar::resources(), SLOT(slotDaemonRegistered(bool)));
-		}
 	}
 	return theInstance;
 }
@@ -181,7 +185,7 @@ bool KAlarmApp::restoreSession()
 	// Process is being restored by session management.
 	kDebug() << "Restoring";
 	++mActiveCount;
-	if (!initCheck(true))     // open the calendar file (needed for main windows)
+	if (!initCheck(true))     // open the calendar file (needed for main windows), don't process queue yet
 	{
 		--mActiveCount;
 		quitIf(1, true);    // error opening the main calendar - quit
@@ -210,12 +214,10 @@ bool KAlarmApp::restoreSession()
 				delete win;
 		}
 	}
-	initCheck();           // register with the alarm daemon
+	startProcessQueue();      // start processing the execution queue
 
-	// Try to display the system tray icon if it is configured to be autostarted,
-	// or if we're in run-in-system-tray mode.
-	if (Preferences::autostartTrayIcon()
-	||  MainWindow::count()  &&  wantRunInSystemTray())
+	// Try to display the system tray icon if it is configured to be shown
+	if (MainWindow::count()  &&  wantShowInSystemTray())
 	{
 		displayTrayIcon(true, trayParent);
 		// Occasionally for no obvious reason, the main main window is
@@ -252,36 +254,9 @@ int KAlarmApp::newInstance()
 
 		// Use a 'do' loop which is executed only once to allow easy error exits.
 		// Errors use 'break' to skip to the end of the function.
-
-		// Note that DCOP handling is only set up once the command line parameters
-		// have been checked, since we mustn't register with the alarm daemon only
-		// to quit immediately afterwards.
 		do
 		{
 			#define USAGE(message)  { usage = message; break; }
-			if (args->isSet("stop"))
-			{
-				// Stop the alarm daemon
-				kDebug() << "--stop";
-				args->clear();         // free up memory
-				if (!Daemon::stop())
-				{
-					exitCode = 1;
-					break;
-				}
-				dontRedisplay = true;  // exit program if no other instances running
-			}
-			else
-			if (args->isSet("reset"))
-			{
-				// Reset the alarm daemon, if it's running.
-				// (If it's not running, it will reset automatically when it eventually starts.)
-				kDebug() << "--reset";
-				args->clear();         // free up memory
-				Daemon::reset();
-				dontRedisplay = true;  // exit program if no other instances running
-			}
-			else
 			if (args->isSet("tray"))
 			{
 				// Display only the system tray icon
@@ -292,7 +267,7 @@ int KAlarmApp::newInstance()
 					exitCode = 1;
 					break;
 				}
-				if (!initCheck())   // open the calendar, register with daemon
+				if (!initCheck())   // open the calendar, start processing execution queue
 				{
 					exitCode = 1;
 					break;
@@ -316,20 +291,14 @@ int KAlarmApp::newInstance()
 				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;   option = "cancelEvent";   ++count; }
 				if (count > 1)
 					USAGE(i18nc("@info:shell", "<icode>%1</icode>, <icode>%2</icode>, <icode>%3</icode> mutually exclusive", QLatin1String("--handleEvent"), QLatin1String("--triggerEvent"), QLatin1String("--cancelEvent")));
-				if (!initCheck(true))   // open the calendar, don't register with daemon yet
+				if (!initCheck(true))   // open the calendar, don't start processing execution queue yet
 				{
 					exitCode = 1;
 					break;
 				}
 				QString eventID = args->getOption(option);
 				args->clear();      // free up memory
-				if (eventID.startsWith(QLatin1String("ad:")))
-				{
-					// It's a notification from the alarm daemon
-					eventID = eventID.mid(3);
-					Daemon::queueEvent(eventID);
-				}
-				setUpDcop();        // start processing DCOP calls
+				startProcessQueue();        // start processing the execution queue
 				if (!handleEvent(eventID, function))
 				{
 					exitCode = 1;
@@ -798,7 +767,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 		}
 		if (!mDcopQueue.isEmpty()  ||  !mCommandProcesses.isEmpty())
 		{
-			// Don't quit yet if there are outstanding actions on the DCOP queue
+			// Don't quit yet if there are outstanding actions on the execution queue
 			mPendingQuit = true;
 			mPendingQuitCode = exitCode;
 			return;
@@ -818,8 +787,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 void KAlarmApp::doQuit(QWidget* parent)
 {
 	kDebug();
-	if (mDisableAlarmsIfStopped
-	&&  MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
+	if (MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
 	                                      i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
 	                                      QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
 	                                     ) != KMessageBox::Yes)
@@ -876,16 +844,74 @@ void KAlarmApp::quitFatal()
 }
 
 /******************************************************************************
+* Called by the alarm timer when the next alarm is due.
+* Also called when the execution queue has finished processing to check for the
+* next alarm.
+*/
+void KAlarmApp::checkNextDueAlarm()
+{
+	if (!mAlarmsEnabled)
+		return;
+	// Find the first alarm due
+	KAEvent* nextEvent = AlarmCalendar::resources()->earliestAlarm();
+	if (!nextEvent)
+		return;   // there are no alarms pending
+	KDateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+	qint64 interval = KDateTime::currentDateTime(Preferences::timeZone()).secsTo_long(nextDt);
+	if (interval <= 0)
+	{
+		// Queue the alarm
+		queueAlarmId(nextEvent->id());
+		QTimer::singleShot(0, this, SLOT(processQueue()));
+	}
+	else
+	{
+		// No alarm is due yet, so set timer to wake us when it's due.
+		// Check for integer overflow before setting timer.
+		interval *= 1000;
+		if (interval > INT_MAX)
+			interval = INT_MAX;
+		mAlarmTimer->start(static_cast<int>(interval));
+	}
+}
+
+/******************************************************************************
+* Called by the alarm timer when the next alarm is due.
+* Also called when the execution queue has finished processing to check for the
+* next alarm.
+*/
+void KAlarmApp::queueAlarmId(const QString& id)
+{
+	for (int i = 0, end = mDcopQueue.count();  i < end;  ++i)
+	{
+		if (mDcopQueue[i].function == EVENT_HANDLE  &&  mDcopQueue[i].eventId == id)
+			return;  // the alarm is already queued
+	}
+	mDcopQueue.enqueue(DcopQEntry(EVENT_HANDLE, id));
+}
+
+/******************************************************************************
+* Start processing the execution queue.
+*/
+void KAlarmApp::startProcessQueue()
+{
+	if (!mInitialised)
+	{
+		mInitialised = true;
+		QTimer::singleShot(0, this, SLOT(processQueue()));    // process anything already queued
+	}
+}
+
+/******************************************************************************
 * The main processing loop for KAlarm.
 * All KAlarm operations involving opening or updating calendar files are called
 * from this loop to ensure that only one operation is active at any one time.
 * This precaution is necessary because KAlarm's activities are mostly
-* asynchronous, being in response to DCOP calls from the alarm daemon (or other
-* programs) or timer events, any of which can be received in the middle of
-* performing another operation. If a calendar file is opened or updated while
-* another calendar operation is in progress, the program has been observed to
-* hang, or the first calendar call has failed with data loss - clearly
-* unacceptable!!
+* asynchronous, being in response to D-Bus calls from other programs or timer
+* events, any of which can be received in the middle of performing another
+* operation. If a calendar file is opened or updated while another calendar
+* operation is in progress, the program has been observed to hang, or the first
+* calendar call has failed with data loss - clearly unacceptable!!
 */
 void KAlarmApp::processQueue()
 {
@@ -894,10 +920,19 @@ void KAlarmApp::processQueue()
 		kDebug();
 		mProcessingQueue = true;
 
-		// Reset the alarm daemon if it's been queued
-		KAlarm::resetDaemonIfQueued();
+		// Refresh alarms if that's been queued
+		KAlarm::refreshAlarmsIfQueued();
 
-		// Process DCOP calls
+		if (!mLoginAlarmsDone  &&  mAlarmsEnabled)
+		{
+			// Queue all at-login alarms once only, at program start-up
+			KAEvent::List events = AlarmCalendar::resources()->atLoginAlarms();
+			for (int i = 0, end = events.count();  i < end;  ++i)
+				queueAlarmId(events[i]->id());
+			mLoginAlarmsDone = true;
+		}
+
+		// Process queued events
 		while (!mDcopQueue.isEmpty())
 		{
 			DcopQEntry& entry = mDcopQueue.head();
@@ -933,6 +968,9 @@ void KAlarmApp::processQueue()
 			quitIf(mPendingQuitCode);
 
 		mProcessingQueue = false;
+
+		// Schedule the application to be woken when the next alarm is due
+		checkNextDueAlarm();
 	}
 }
 
@@ -957,7 +995,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 		{
 			if (!KSystemTrayIcon::isSystemTrayAvailable())
 				return false;
-			if (!MainWindow::count()  &&  wantRunInSystemTray())
+			if (!MainWindow::count()  &&  wantShowInSystemTray())
 			{
 				creating = true;    // prevent main window constructor from creating an additional tray icon
 				parent = MainWindow::create();
@@ -981,9 +1019,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 }
 
 /******************************************************************************
-*  Check whether the system tray icon has been housed in the system tray.
-*  If the system tray doesn't exist, tell the alarm daemon to notify us of
-*  alarms regardless of whether we're running.
+* Check whether the system tray icon has been housed in the system tray.
 */
 bool KAlarmApp::checkSystemTray()
 {
@@ -994,17 +1030,14 @@ bool KAlarmApp::checkSystemTray()
 		kDebug() << "changed ->" << mNoSystemTray;
 		mNoSystemTray = !mNoSystemTray;
 
-		// Store the new setting in the config file, so that if KAlarm exits and is then
-		// next activated by the daemon to display a message, it will register with the
-		// daemon with the correct NOTIFY type. If that happened when there was no system
-		// tray and alarms are disabled when KAlarm is not running, registering with
-		// NO_START_NOTIFY could result in alarms never being seen.
+		// Store the new setting in the config file, so that if KAlarm exits it will
+		// restart with the correct default.
 		KConfigGroup config(KGlobal::config(), "General");
 		config.writeEntry("NoSystemTray", mNoSystemTray);
 		config.sync();
 
-		// Update other settings and reregister with the alarm daemon
-		slotPreferencesChanged();
+		// Update other settings
+		slotShowInSystemTrayChanged();
 	}
 	return !mNoSystemTray;
 }
@@ -1018,20 +1051,21 @@ MainWindow* KAlarmApp::trayMainWindow() const
 }
 
 /******************************************************************************
-*  Called when KAlarm preferences have changed.
+* Called when the show-in-system-tray preference setting has changed, to show
+* or hide the system tray icon.
 */
-void KAlarmApp::slotPreferencesChanged()
+void KAlarmApp::slotShowInSystemTrayChanged()
 {
-	bool newRunInSysTray = wantRunInSystemTray();
-	if (newRunInSysTray != mOldRunInSystemTray)
+	bool newShowInSysTray = wantShowInSystemTray();
+	if (newShowInSysTray != mOldShowInSystemTray)
 	{
 		// The system tray run mode has changed
 		++mActiveCount;         // prevent the application from quitting
 		MainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : 0;
 		delete mTrayWindow;     // remove the system tray icon if it is currently shown
 		mTrayWindow = 0;
-		mOldRunInSystemTray = newRunInSysTray;
-		if (!newRunInSysTray)
+		mOldShowInSystemTray = newShowInSysTray;
+		if (!newShowInSysTray)
 		{
 			if (win  &&  win->isHidden())
 				delete win;
@@ -1039,25 +1073,11 @@ void KAlarmApp::slotPreferencesChanged()
 		displayTrayIcon(true);
 		--mActiveCount;
 	}
-
-	bool newDisableIfStopped = wantRunInSystemTray() && !mNoSystemTray && Preferences::disableAlarmsIfStopped();
-	if (newDisableIfStopped != mDisableAlarmsIfStopped)
-	{
-		mDisableAlarmsIfStopped = newDisableIfStopped;    // N.B. this setting is used by Daemon::reregister()
-		Preferences::setQuitWarn(true);   // since mode has changed, re-allow warning messages on Quit
-		Daemon::reregister();             // re-register with the alarm daemon
-	}
-
-	// Change alarm times for date-only alarms if the start of day time has changed
-	if (Preferences::startOfDay() != mStartOfDay)
-		changeStartOfDay();
-
-	// In case the date for February 29th recurrences has changed
-	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 }
 
 /******************************************************************************
-*  Change alarm times for date-only alarms after the start of day time has changed.
+* Called when the start-of-day time preference setting has changed.
+* Change alarm times for date-only alarms.
 */
 void KAlarmApp::changeStartOfDay()
 {
@@ -1071,11 +1091,20 @@ void KAlarmApp::changeStartOfDay()
 }
 
 /******************************************************************************
+* Called when the date for February 29th recurrences has changed in the
+* preferences settings.
+*/
+void KAlarmApp::slotFeb29TypeChanged(Preferences::Feb29Type type)
+{
+	KARecurrence::setDefaultFeb29Type(type);
+}
+
+/******************************************************************************
 * Return whether the program is configured to be running in the system tray.
 */
-bool KAlarmApp::wantRunInSystemTray() const
+bool KAlarmApp::wantShowInSystemTray() const
 {
-	return Preferences::runInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable();
+	return Preferences::showInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable();
 }
 
 /******************************************************************************
@@ -1119,6 +1148,22 @@ void KAlarmApp::purge(int daysToKeep)
 
 	// Do the purge once any other current operations are completed
 	processQueue();
+}
+
+
+/******************************************************************************
+* Enable or disable alarm monitoring.
+*/
+void KAlarmApp::setAlarmsEnabled(bool enabled)
+{
+	if (enabled != mAlarmsEnabled)
+	{
+		mAlarmsEnabled = enabled;
+		emit alarmEnabledToggled(enabled);
+		if (enabled  &&  !mProcessingQueue)
+			checkNextDueAlarm();
+
+	}
 }
 
 /******************************************************************************
@@ -1181,8 +1226,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
 }
 
 /******************************************************************************
-* Called in response to a DCOP notification by the alarm daemon that an event
-* should be handled, i.e. displayed or cancelled.
+* Called in response to a D-Bus request to trigger or cancel an event.
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
@@ -1205,17 +1249,16 @@ bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
 */
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
-	kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER":function==EVENT_CANCEL?"CANCEL":function==EVENT_HANDLE?"HANDLE":"?");
 	KAEvent* event = AlarmCalendar::resources()->event(eventID);
 	if (!event)
 	{
 		kWarning() << "Event ID not found:" << eventID;
-		Daemon::eventHandled(eventID);
 		return false;
 	}
 	switch (function)
 	{
 		case EVENT_CANCEL:
+			kDebug() << eventID << ", CANCEL";
 			KAlarm::deleteEvent(*event, true);
 			break;
 
@@ -1223,6 +1266,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_HANDLE:     // handle it if it's due
 		{
 			KDateTime now = KDateTime::currentUtcDateTime();
+			kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << now.date() << " " << now.time();
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
 			KAAlarm alarmToExecute;
@@ -1266,13 +1310,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				if (!reschedule  &&  alarm.repeatAtLogin())
 				{
 					// Alarm is to be displayed at every login.
-					// Check if the alarm has only just been set up.
-					// (The alarm daemon will immediately notify that it is due
-					//  since it is set up with a time in the past.)
 					kDebug() << "REPEAT_AT_LOGIN";
-					if (secs < maxLateness(1))
-						continue;
-
 					// Check if the main alarm is already being displayed.
 					// (We don't want to display both at the same time.)
 					if (alarmToExecute.valid())
@@ -1397,10 +1435,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				if (updateCalAndDisplay)
 					KAlarm::updateEvent(*event);     // update the window lists and calendar file
 				else if (function != EVENT_TRIGGER)
-				{
 					kDebug() << "No action";
-					Daemon::eventHandled(eventID);
-				}
 			}
 			break;
 		}
@@ -1525,9 +1560,10 @@ bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 */
 void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule, bool allowDefer, bool noPreAction)
 {
-	if (!event.enabled())
+	if (!mAlarmsEnabled  ||  !event.enabled())
 	{
-		// The event is disabled.
+		// The event (or all events) is disabled
+		kDebug() << event.id() << ": disabled";
 		if (reschedule)
 			rescheduleAlarm(event, alarm, true);
 		return 0;
@@ -1904,33 +1940,19 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 }
 
 /******************************************************************************
-* Set up remaining DCOP handlers and start processing DCOP calls.
-*/
-void KAlarmApp::setUpDcop()
-{
-	if (!mInitialised)
-	{
-		mInitialised = true;      // we're now ready to handle DCOP calls
-		Daemon::createDcopHandler();
-		QTimer::singleShot(0, this, SLOT(processQueue()));    // process anything already queued
-	}
-}
-
-/******************************************************************************
-* If this is the first time through, open the calendar file, optionally start
-* the alarm daemon and register with it, and set up the DCOP handler.
+* If this is the first time through, open the calendar file, and start
+* processing the execution queue.
 */
 bool KAlarmApp::initCheck(bool calendarOnly)
 {
 	static bool firstTime = true;
-	bool startdaemon;
 	if (firstTime)
 	{
 		if (!mStartOfDay.isValid())
 			changeStartOfDay();     // start of day time has changed, so adjust date-only alarms
 
-		/* Need to open the display calendar now, since otherwise if the daemon
-		 * immediately notifies display alarms, they will often be processed while
+		/* Need to open the display calendar now, since otherwise if display
+		 * alarms are immediately due, they will often be processed while
 		 * MessageWin::redisplayAlarms() is executing open() (but before open()
 		 * completes), which causes problems!!
 		 */
@@ -1939,18 +1961,11 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		AlarmCalendar::resources()->open();
 		setArchivePurgeDays();
 
-		startdaemon = true;
 		firstTime = false;
 	}
-	else
-		startdaemon = !Daemon::isRegistered();
 
 	if (!calendarOnly)
-	{
-		setUpDcop();      // start processing DCOP calls
-		if (startdaemon)
-			Daemon::start();  // make sure the alarm daemon is running
-	}
+		startProcessQueue();      // start processing the execution queue
 	return true;
 }
 

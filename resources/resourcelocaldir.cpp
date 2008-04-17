@@ -193,8 +193,9 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 		if (!(dirInfo.isDir()  &&  dirInfo.isReadable()))
 			return false;
 		mDirReadOnly = !dirInfo.isWritable();
-		QDir dir(dirName);
+		QDir dir(dirName, QString(), QDir::Unsorted, QDir::Files | QDir::Readable);
 		QStringList entries = dir.entryList(QDir::Files | QDir::Readable);
+		QStringList writable = dir.entryList(QDir::Files | QDir::Writable);
 		for (int i = 0, end = entries.count();  i < end;  ++i)
 		{
 			// Check the next file in the directory
@@ -228,7 +229,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 			}
 			// Load the file and check whether it's the current KAlarm format.
 			// If not, only prompt the user once whether to convert it.
-			if (loadFile(fileName, id, prompt))
+			if (loadFile(fileName, id, !writable.contains(id), prompt))
 				success = true;
 		}
 		if (!foundFile)
@@ -283,11 +284,8 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 * containing alarms, is ignored.
 * Reply = true if the calendar loaded successfully (even if empty).
 */
-bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, FixFunc& prompt)
+bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, bool readOnly, FixFunc& prompt)
 {
-#ifdef __GNUC__
-#warning Set event read-only if file is not writable
-#endif
 	bool success = false;
 	CalendarLocal calendar(this->calendar()->timeSpec());
 	if (!calendar.load(fileName))
@@ -326,6 +324,8 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, Fi
 			if (!alarms.isEmpty())
 			{
 				Event* event = ev->clone();
+				if (readOnly)
+					event->setReadOnly(true);
 				this->calendar()->addEvent(event);
 				mCompatibilityMap[event] = compat;
 			}
@@ -338,8 +338,6 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, Fi
 
 bool KAResourceLocalDir::doSave(bool)
 {
-	if (saveInhibited())
-		return true;
 	kDebug(KARES_DEBUG) << mURL.path();
 	bool success = true;
 	Incidence::List list = addedIncidences();
@@ -361,8 +359,6 @@ bool KAResourceLocalDir::doSave(bool)
 
 bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 {
-	if (saveInhibited())
-		return true;
 	QString id = incidence->uid();
 	QString fileName = mURL.path() + '/' + id;
 	kDebug(KARES_DEBUG) << fileName;

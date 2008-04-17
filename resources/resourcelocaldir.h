@@ -82,7 +82,7 @@ class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
 
 	private:
 		void         init();
-		bool         loadFile(const QString& fileName, const QString& id, FixFunc& prompt);
+		bool         loadFile(const QString& fileName, const QString& id, bool readOnly, FixFunc& prompt);
 		bool         deleteIncidenceFile(KCal::Incidence *incidence);
 		// Inherited virtual methods which are not used by derived classes
 		using ResourceCalendar::doLoad;
