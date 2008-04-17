@@ -1,7 +1,7 @@
 /*
  *  shellprocess.h  -  execute a process through the shell
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,6 +81,8 @@ class ShellProcess : public KProcess
 		bool            start(OpenMode = ReadWrite);
 		/** Returns the current status of the shell process. */
 		Status          status() const       { return mStatus; }
+		/** Returns the shell exit code. Only valid if status() == SUCCESS or NOT_FOUND. */
+		int             exitCode() const     { return mExitCode; }
 		/** Returns whether the command was run successfully.
 		 *  @return True if the command has been run and appears to have exited successfully.
 		 */
@@ -137,6 +139,7 @@ class ShellProcess : public KProcess
 		QString            mCommand;      // copy of command to be executed
 		QQueue<QByteArray> mStdinQueue;   // queued strings to send to STDIN
 		qint64             mStdinBytes;   // bytes still to be written from first queued string
+		int                mExitCode;     // shell exit value (if mStatus == SUCCESS or NOT_FOUND)
 		Status             mStatus;       // current execution status
 		bool               mStdinExit;    // exit once STDIN queue has been written
 };

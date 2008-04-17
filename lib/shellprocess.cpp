@@ -79,6 +79,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 	kDebug() << exitCode << "," << exitStatus;
 	mStdinQueue.clear();
 	mStatus = SUCCESS;
+	mExitCode = exitCode;
 	if (exitStatus != NormalExit)
 	{
 		kWarning(5950) << mCommand << ":" << mShellName << ": crashed/killed";
