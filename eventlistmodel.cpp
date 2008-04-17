@@ -90,7 +90,11 @@ for(int x=0; x<mEvents.count(); ++x)kDebug(0)<<"Event"<<(void*)mEvents[x];
 		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
 	}
 	MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
-	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
+	AlarmResources* resources = AlarmResources::instance();
+	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
+	                   SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
+	connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)),
+	                   SLOT(slotResourceLoaded(AlarmResource*, bool)));
 }
 
 int EventListModel::rowCount(const QModelIndex& parent) const
@@ -422,6 +426,15 @@ void EventListModel::slotUpdateWorkingHours()
 }
 
 /******************************************************************************
+* Called when loading of a resource is complete.
+*/
+void EventListModel::slotResourceLoaded(AlarmResource* resource, bool active)
+{
+	if (active)
+		slotResourceStatusChanged(resource, AlarmResources::Added);
+}
+
+/******************************************************************************
 * Called when a resource status has changed.
 */
 void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmResources::Change change)
@@ -486,7 +499,7 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 		KAEvent::List list = AlarmCalendar::resources()->events(resource, mStatus);
 		for (int i = list.count();  --i >= 0;  )
 		{
-			if (mEvents.indexOf(list[i]))
+			if (mEvents.indexOf(list[i]) >= 0)
 				list.removeAt(i);    // avoid creating duplicate entries
 		}
 		if (!list.isEmpty())
@@ -628,20 +641,22 @@ void EventListModel::removeEvent(int row)
 /******************************************************************************
 * Notify that an event in the list has been updated.
 */
-void EventListModel::updateEvent(int row)
+bool EventListModel::updateEvent(int row)
 {
 	if (row < 0)
-		return;
+		return false;
 	emit dataChanged(index(row, 0), index(row, ColumnCount - 1));
+	return true;
 }
 
-void EventListModel::updateEvent(const QString& oldId, KAEvent* newEvent)
+bool EventListModel::updateEvent(const QString& oldId, KAEvent* newEvent)
 {
 	int row = findEvent(oldId);
 	if (row < 0)
-		return;
+		return false;
 	mEvents[row] = newEvent;
 	emit dataChanged(index(row, 0), index(row, ColumnCount - 1));
+	return true;
 }
 
 /******************************************************************************

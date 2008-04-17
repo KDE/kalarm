@@ -67,9 +67,9 @@ class EventListModel : public QAbstractTableModel
 		QModelIndex           eventIndex(const QString& eventId) const;
 		void                  addEvent(KAEvent*);
 		void                  addEvents(const KAEvent::List&);
-		void                  updateEvent(KAEvent* event)           { updateEvent(mEvents.indexOf(event)); }
-		void                  updateEvent(const QString& eventId)   { updateEvent(findEvent(eventId)); }
-		void                  updateEvent(const QString& oldId, KAEvent* newEvent);
+		bool                  updateEvent(KAEvent* event)           { return updateEvent(mEvents.indexOf(event)); }
+		bool                  updateEvent(const QString& eventId)   { return updateEvent(findEvent(eventId)); }
+		bool                  updateEvent(const QString& oldId, KAEvent* newEvent);
 		void                  removeEvent(const KAEvent* event)     { removeEvent(mEvents.indexOf(const_cast<KAEvent*>(event))); }
 		void                  removeEvent(const QString& eventId)   { removeEvent(findEvent(eventId)); }
 		void                  removeResource(AlarmResource*);
@@ -83,11 +83,12 @@ class EventListModel : public QAbstractTableModel
 		void     slotUpdateArchivedColour(const QColor&);
 		void     slotUpdateDisabledColour(const QColor&);
 		void     slotUpdateWorkingHours();
+		void     slotResourceLoaded(AlarmResource*, bool active);
 		void     slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 
 	private:
 		explicit EventListModel(KCalEvent::Status, QObject* parent = 0);
-		void     updateEvent(int row);
+		bool     updateEvent(int row);
 		void     removeEvent(int row);
 		int      findEvent(const QString& eventId) const;
 		QString  alarmTimeText(const DateTime&) const;
