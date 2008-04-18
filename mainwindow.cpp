@@ -253,7 +253,7 @@ bool MainWindow::isTrayParent() const
 */
 void MainWindow::closeAll()
 {
-	while (mWindowList.first())
+	while (!mWindowList.isEmpty())
 		delete mWindowList.first();    // N.B. the destructor removes the window from the list
 }
 
