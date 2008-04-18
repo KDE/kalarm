@@ -41,6 +41,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <iostream>
+#include <climits>
 
 #include <QObject>
 #include <QTimer>
