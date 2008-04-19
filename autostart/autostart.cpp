@@ -1,5 +1,5 @@
 /*
- *  autostart.cpp - autostart an application when session restoration is complete
+ *  autostart.cpp - autostart KAlarm when session restoration is complete
  *  Program:  kalarmautostart
  *  Copyright © 2001,2008 by David Jarvie <djarvie@kde.org>
  *
@@ -42,7 +42,7 @@ static const int AUTOSTART_DELAY = 30;
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarmAutostart"),
+	KAboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm Autostart"),
 		PROGRAM_VERSION, ki18n("KAlarm autostart at login"), KAboutData::License_GPL,
 		ki18n("Copyright 2001,2008 David Jarvie"), KLocalizedString(),
 		"http://www.astrojar.org.uk/kalarm");
@@ -65,8 +65,8 @@ AutostartApp::AutostartApp()
 	: KApplication(false)       // initialise as non-GUI application
 {
 	// Login session is starting up - need to wait for it to complete
-	// in order to prevent the daemon starting clients before they are
-	// restored by the session (where applicable).
+	// in order to avoid starting the client before it is restored by
+	// the session (where applicable).
 	QTimer::singleShot(AUTOSTART_DELAY * 1000, this, SLOT(slotAutostart()));
 }
 
@@ -74,7 +74,7 @@ void AutostartApp::slotAutostart()
 {
 	QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KALARM_DBUS_SERVICE);
 	if (reply.isValid()  &&  reply.value())
-		kDebug(5900) << "KAlarm already registered";
+		kDebug(5900) << "KAlarm already running";
 	else
 	{
 		KCmdLineArgs* args = KCmdLineArgs::parsedArgs();

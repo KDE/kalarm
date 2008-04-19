@@ -1,5 +1,5 @@
 /*
- *  autostart.h - autostart an application when session restoration is complete
+ *  autostart.h - autostart KAlarm when session restoration is complete
  *  Program:  kalarmautostart
  *  Copyright © 2001,2008 by David Jarvie <djarvie@kde.org>
  *
@@ -27,7 +27,7 @@ class AutostartApp : public KApplication
 		Q_OBJECT
 	public:
 		AutostartApp();
-		~AutostartApp()  { }
+		~AutostartApp()  {}
 	private slots:
 		void slotAutostart();
 };
