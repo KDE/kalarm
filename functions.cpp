@@ -291,11 +291,13 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 	}
 	event = *newev;   // update event ID etc.
 
-	// Update window lists
+	// Update window lists.
+	// Note: updateEvent() is not used here since that doesn't trigger refiltering
+	// of the alarm list, resulting in the archived event still remaining visible
+	// even if archived events are supposed to be hidden.
 	if (archiving)
-		archiving = EventListModel::alarms()->updateEvent(oldid, newev);
-	if (!archiving)
-		EventListModel::alarms()->addEvent(newev);
+		EventListModel::alarms()->removeEvent(oldid);
+	EventListModel::alarms()->addEvent(newev);
 	return true;
 }
 
