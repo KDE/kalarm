@@ -296,7 +296,10 @@ void KARecurrence::fix()
 
 	// Remove surplus rules
 	for ( ;  rr != rrulelist.end();  ++rr)
+	{
 		removeRRule(*rr);
+		delete *rr;
+	}
 
 	QDate end;
 	int count;
