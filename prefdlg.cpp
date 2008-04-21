@@ -24,10 +24,12 @@
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QPushButton>
+#include <QSpinBox>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QStyle>
 
 #include <kvbox.h>
 #include <kglobal.h>
@@ -272,7 +274,12 @@ PrefsTabBase::PrefsTabBase()
 	setMargin(0);
 	setSpacing(KDialog::spacingHint());
 	if (!mIndentWidth)
-		mIndentWidth = 3 * KDialog::spacingHint();
+	{
+		QRadioButton radio(this);
+		QStyleOptionButton opt;
+		opt.initFrom(&radio);
+		mIndentWidth = style()->subElementRect(QStyle::SE_RadioButtonIndicator, &opt).width();
+	}
 }
 
 void PrefsTabBase::apply(bool syncToDisc)
@@ -1467,13 +1474,52 @@ ViewPrefTab::ViewPrefTab()
 	grid->addWidget(box, 4, 2, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
-	mModalMessages = new QCheckBox(i18nc("@option:check", "Message windows have a title bar and take keyboard focus"), this);
+	group = new QGroupBox(i18nc("@title:group", "Alarm Message Windows"), this);
+	grid = new QGridLayout(group);
+	grid->setMargin(KDialog::marginHint());
+	grid->setSpacing(KDialog::spacingHint());
+	grid->setColumnStretch(1, 1);
+	grid->setColumnMinimumWidth(0, indentWidth());
+	mWindowPosition = new ButtonGroup(group);
+	connect(mWindowPosition, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotWindowPosChanged(QAbstractButton*)));
+
+	QString whatsthis = i18nc("@info:whatsthis",
+	      "<para>Choose how to reduce the chance of alarm messages being accidentally acknowledged:"
+	      "<list><item>Position alarm message windows as far as possible from the current mouse cursor location, or</item>"
+	      "<item>Position alarm message windows in the center of the screen, but disable buttons for a short time after the window is displayed.</item></list></para>");
+	QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "Position windows far from mouse cursor"), group);
+	mWindowPosition->addButton(radio, 0);
+	radio->setWhatsThis(whatsthis);
+	grid->addWidget(radio, 0, 0, 1, 2, Qt::AlignLeft);
+	radio = new QRadioButton(i18nc("@option:radio", "Center windows, delay activating window buttons"), group);
+	mWindowPosition->addButton(radio, 1);
+	radio->setWhatsThis(whatsthis);
+	grid->addWidget(radio, 1, 0, 1, 2, Qt::AlignLeft);
+
+	KHBox* itemBox = new KHBox(group);
+	itemBox->setMargin(0);
+	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	mWindowButtonDelayLabel = new QLabel(i18nc("@label:spinbox", "Button activation delay (seconds):"), box);
+	mWindowButtonDelay = new QSpinBox(box);
+	mWindowButtonDelay->setRange(1, 10);
+	mWindowButtonDelayLabel->setBuddy(mWindowButtonDelay);
+	box->setWhatsThis(i18nc("@info:whatsthis",
+	                        "Enter how long its buttons should remain disabled after the alarm message window is shown."));
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	grid->addWidget(itemBox, 2, 1, Qt::AlignLeft);
+
+	grid->setRowMinimumHeight(3, KDialog::spacingHint());
+
+	mModalMessages = new QCheckBox(i18nc("@option:check", "Message windows have a title bar and take keyboard focus"), group);
 	mModalMessages->setMinimumSize(mModalMessages->sizeHint());
 	mModalMessages->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Specify the characteristics of alarm message windows:"
 	      "<list><item>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.</item>"
 	      "<item>If unchecked, the window does not interfere with your typing when "
 	      "it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>"));
+	grid->addWidget(mModalMessages, 4, 0, 1, 2, Qt::AlignLeft);
 
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
@@ -1485,6 +1531,8 @@ void ViewPrefTab::restore(bool)
 	           Preferences::showTooltipTimeToAlarm(),
 	           Preferences::tooltipTimeToPrefix());
 	mShowInSystemTray->setChecked(Preferences::showInSystemTray());
+	mWindowPosition->setButton(Preferences::messageButtonDelay() ? 1 : 0);
+	mWindowButtonDelay->setValue(Preferences::messageButtonDelay());
 	mModalMessages->setChecked(Preferences::modalMessages());
 }
 
@@ -1507,6 +1555,11 @@ void ViewPrefTab::apply(bool syncToDisc)
 	b = mShowInSystemTray->isChecked();
 	if (b != Preferences::showInSystemTray())
 		Preferences::setShowInSystemTray(b);
+	n = mWindowPosition->selectedId();
+	if (n)
+		n = mWindowButtonDelay->value();
+	if (n != Preferences::messageButtonDelay())
+		Preferences::setMessageButtonDelay(n);
 	b = mModalMessages->isChecked();
 	if (b != Preferences::modalMessages())
 		Preferences::setModalMessages(b);
@@ -1569,4 +1622,11 @@ void ViewPrefTab::slotTooltipTimeToToggled(bool on)
 	on = on && mTooltipShowTimeTo->isEnabled();
 	mTooltipTimeToPrefix->setEnabled(on);
 	mTooltipTimeToPrefixLabel->setEnabled(on);
+}
+
+void ViewPrefTab::slotWindowPosChanged(QAbstractButton* button)
+{
+	bool enable = mWindowPosition->id(button);
+	mWindowButtonDelay->setEnabled(enable);
+	mWindowButtonDelayLabel->setEnabled(enable);
 }

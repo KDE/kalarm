@@ -1298,8 +1298,19 @@ void MessageWin::showEvent(QShowEvent* se)
 			KAlarm::readConfigWindowSize("FileMessage", s);
 		resize(s);
 
+		QRect desk = desktopWorkArea();
+		QRect frame = frameGeometry();
+
 		mButtonDelay = Preferences::messageButtonDelay() * 1000;
-		if (!mButtonDelay)
+		if (mButtonDelay)
+		{
+			// Position the window in the middle of the screen, and
+			// delay enabling the buttons.
+			mPositioning = true;
+			move((desk.width() - frame.width())/2, (desk.height() - frame.height())/2);
+			execComplete = false;
+		}
+		else
 		{
 			/* Try to ensure that the window can't accidentally be acknowledged
 			 * by the user clicking the mouse just as it appears.
@@ -1312,9 +1323,7 @@ void MessageWin::showEvent(QShowEvent* se)
 			 *      See the Qt documentation on window geometry for more details.
 			 */
 			// PROBLEM: The frame size is not known yet!
-			QRect desk = desktopWorkArea();
 			QPoint cursor = QCursor::pos();
-			QRect frame = frameGeometry();
 			QRect rect  = geometry();
 			// Find the offsets from the outside of the frame to the edges of the OK button
 			QRect button(mOkButton->mapToParent(QPoint(0, 0)), mOkButton->mapToParent(mOkButton->rect().bottomRight()));

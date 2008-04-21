@@ -31,6 +31,7 @@ class QAbstractButton;
 class QRadioButton;
 class QPushButton;
 class QLabel;
+class QSpinBox;
 class KTimeZone;
 class KLineEdit;
 class KComboBox;
@@ -277,6 +278,7 @@ class ViewPrefTab : public PrefsTabBase
 		void         slotTooltipMaxToggled(bool);
 		void         slotTooltipTimeToggled(bool);
 		void         slotTooltipTimeToToggled(bool);
+		void         slotWindowPosChanged(QAbstractButton*);
 
 	private:
 		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
@@ -289,6 +291,9 @@ class ViewPrefTab : public PrefsTabBase
 		QCheckBox*   mTooltipShowTimeTo;
 		KLineEdit*   mTooltipTimeToPrefix;
 		QLabel*      mTooltipTimeToPrefixLabel;
+		ButtonGroup* mWindowPosition;
+		QSpinBox*    mWindowButtonDelay;
+		QLabel*      mWindowButtonDelayLabel;
 		QCheckBox*   mModalMessages;
 };
 
