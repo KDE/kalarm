@@ -883,7 +883,7 @@ void MainWindow::showErrorMessage(const QString& msg)
 */
 void MainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable() && !Preferences::showInSystemTray());
+	mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable());
 	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 
@@ -1056,17 +1056,28 @@ void MainWindow::slotQuit()
 */
 void MainWindow::closeEvent(QCloseEvent* ce)
 {
-	if (!theApp()->sessionClosingDown()  &&  isTrayParent())
+	if (!theApp()->sessionClosingDown())
 	{
 		// The user (not the session manager) wants to close the window.
-		// It's the parent window of the system tray icon, so just hide
-		// it to prevent the system tray icon closing.
-		hide();
-		theApp()->quitIf();
-		ce->ignore();
+		if (isTrayParent())
+		{
+			// It's the parent window of the system tray icon, so just hide
+			// it to prevent the system tray icon closing.
+			hide();
+			theApp()->quitIf();
+			ce->ignore();
+			return;
+		}
+		else if (!theApp()->trayIconDisplayed()  &&  count() == 1)
+		{
+			// There is no system tray icon, and this is the last main
+			// window, so closing it will quit the application.
+			theApp()->doQuit(this);
+			ce->ignore();
+			return;
+		}
 	}
-	else
-		ce->accept();
+	ce->accept();
 }
 
 /******************************************************************************
