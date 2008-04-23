@@ -1,6 +1,7 @@
 KAlarm Change Log
 
-=== Version 1.5.3 --- 10 March 2008 ===
+=== Version 1.5.3 --- 23 April 2008 ===
+- Fix recurrence count being lost when using alarm templates.
 - Prevent invalid negative values appearing in 'Time from now' edit field.
 
 === Version 1.5.2 --- 13 February 2008 ===

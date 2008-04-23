@@ -66,7 +66,7 @@ class RecurrenceEdit : public QFrame
 		/** Set widgets to default values */
 		void          setDefaults(const QDateTime& from);
 		/** Initialise according to a specified event */
-		void          set(const KAEvent&);
+		void          set(const KAEvent&, bool keepDuration);
 		/** Write recurrence settings into an event */
 		void          updateEvent(KAEvent&, bool adjustStart);
 		QWidget*      checkData(const QDateTime& startDateTime, QString& errorMessage) const;
