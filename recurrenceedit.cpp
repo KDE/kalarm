@@ -745,9 +745,11 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 }
 
 /******************************************************************************
- * Set the state of all controls to reflect the data in the specified event.
- */
-void RecurrenceEdit::set(const KAEvent& event)
+* Set the state of all controls to reflect the data in the specified event.
+* Set 'keepDuration' true to prevent the recurrence count being adjusted to the
+* remaining number of recurrences.
+*/
+void RecurrenceEdit::set(const KAEvent& event, bool keepDuration)
 {
 	setDefaults(event.mainDateTime().kDateTime());
 	if (event.repeatAtLogin())
@@ -853,7 +855,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	{
 		mRepeatCountButton->setChecked(true);
 		int repeatCount;
-		if (event.expired())
+		if (keepDuration  ||  event.expired())
 			repeatCount = duration;
 		else if (event.mainExpired())
 		{

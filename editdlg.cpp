@@ -491,7 +491,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		if (mShowInKorganizer)
 			mShowInKorganizer->setChecked(event->copyToKOrganizer());
 		type_initValues(event);
-		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+		mRecurrenceEdit->set(*event, (mTemplate || event->isTemplate()));   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mTabs->setTabText(mRecurPageIndex, recurText(*event));
 	}
 	else
