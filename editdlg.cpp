@@ -717,7 +717,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			else
 			{
 				mExpiredRecurrence = recurs && event->mainExpired();
-				mTimeWidget->setDateTime(!event->mainExpired() ? event->mainDateTime()
+				mTimeWidget->setDateTime(event->uidStatus() == KAEvent::EXPIRED ? event->startDateTime()
+				                         : !event->mainExpired() ? event->mainDateTime()
 				                         : recurs ? DateTime() : event->deferDateTime());
 			}
 		}
