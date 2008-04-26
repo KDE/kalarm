@@ -41,20 +41,33 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 }
 
 /******************************************************************************
-*  Called when the New From Template action is clicked.
-*  Creates a popup menu listing all alarm templates.
+* Called when the New From Template action is clicked.
+* Creates a popup menu listing all alarm templates, in sorted name order.
 */
 void TemplateMenuAction::slotInitMenu()
 {
 	KMenu* m = menu();
 	m->clear();
 	mOriginalTexts.clear();
+
+	// Compile a sorted list of template names
+	int i, end;
+	QStringList sorted;
 	KAEvent::List templates = KAlarm::templateList();
-	for (int i = 0, end = templates.count();  i < end;  ++i)
+	for (i = 0, end = templates.count();  i < end;  ++i)
 	{
 		QString name = templates[i]->templateName();
-		QAction* act = m->addAction(name);
-		mOriginalTexts[act] = name;   // keep original text, since action text has shortcuts added
+		int j = 0;
+		for (int jend = sorted.count();
+		     j < jend  &&  QString::localeAwareCompare(name, sorted[j]) > 0;
+		     ++j);
+		sorted.insert(j, name);
+	}
+
+	for (i = 0, end = sorted.count();  i < end;  ++i)
+	{
+		QAction* act = m->addAction(sorted[i]);
+		mOriginalTexts[act] = sorted[i];   // keep original text, since action text has shortcuts added
 	}
 }
 
