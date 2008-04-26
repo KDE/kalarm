@@ -6,6 +6,7 @@ KAlarm Change Log
 - Prevent invalid negative values appearing in 'Time from now' edit field.
 - Fix time shown in alarm edit dialogue for archived recurring alarm which was
   deferred after its last recurrence.
+- Fix recurrence count shown in alarm edit dialogue once alarm has triggered.
 
 === Version 1.5.2 --- 13 February 2008 ===
 - Prevent repetition duration error message when saving alarm which never recurs.
