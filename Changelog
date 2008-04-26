@@ -1,6 +1,7 @@
 KAlarm Change Log
 
-=== Version 1.5.3 --- 24 April 2008 ===
+=== Version 1.5.3 --- 26 April 2008 ===
+- In New From Template menu, show list of template names in sorted order.
 - Fix recurrence count being lost when using alarm templates.
 - Prevent invalid negative values appearing in 'Time from now' edit field.
 - Fix time shown in alarm edit dialogue for archived recurring alarm which was
