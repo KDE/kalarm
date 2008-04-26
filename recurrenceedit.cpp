@@ -854,17 +854,7 @@ void RecurrenceEdit::set(const KAEvent& event, bool keepDuration)
 	else if (duration)
 	{
 		mRepeatCountButton->setChecked(true);
-		int repeatCount;
-		if (keepDuration  ||  event.expired())
-			repeatCount = duration;
-		else if (event.mainExpired())
-		{
-			mRepeatCountEntry->setMinimum(0);
-			repeatCount = 0;
-		}
-		else
-			repeatCount = duration - recurrence->durationTo(KDateTime::currentDateTime(recurrence->startDateTime().timeSpec()));
-		mRepeatCountEntry->setValue(repeatCount);
+		mRepeatCountEntry->setValue(duration);
 	}
 	else
 	{
