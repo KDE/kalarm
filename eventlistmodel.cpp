@@ -71,6 +71,14 @@ EventListModel* EventListModel::templates()
 	return mTemplateInstance;
 }
 
+EventListModel::~EventListModel()
+{
+	if (this == mAlarmInstance)
+		mAlarmInstance = 0;
+	else if (this == mTemplateInstance)
+		mTemplateInstance = 0;
+}
+
 EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 	: QAbstractTableModel(parent),
 	  mStatus(status)

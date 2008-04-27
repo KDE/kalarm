@@ -200,6 +200,11 @@ MainWindow::~MainWindow()
 {
 	kDebug();
 	mWindowList.removeAt(mWindowList.indexOf(this));
+	if (mWindowList.isEmpty())
+	{
+		delete EventListModel::alarms();
+		delete EventListModel::templates();
+	}
 	if (theApp()->trayWindow())
 	{
 		if (isTrayParent())
