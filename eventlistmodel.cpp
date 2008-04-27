@@ -603,7 +603,7 @@ QModelIndex EventListModel::eventIndex(const KAEvent* event) const
 */
 void EventListModel::addEvent(KAEvent* event)
 {
-	if (!(event->category() & mStatus))
+	if (!(event->category() & mStatus)  ||  mEvents.contains(event))
 		return;
 	int row = mEvents.count();
 	beginInsertRows(QModelIndex(), row, row);
