@@ -118,7 +118,7 @@ install(TARGETS kalarm_bin DESTINATION ${BIN_INSTALL_DIR} )
 ########### install files ###############
 
 install( FILES kalarm.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
-install( FILES kalarm.tray.desktop  DESTINATION ${AUTOSTART_INSTALL_DIR} )
+install( FILES kalarm.autostart.desktop DESTINATION ${AUTOSTART_INSTALL_DIR} )
 install( FILES kalarmconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 install( FILES kalarmui.rc DESTINATION ${DATA_INSTALL_DIR}/kalarm )
 install( FILES org.kde.kalarm.kalarm.xml DESTINATION ${KDE4_DBUS_INTERFACES_DIR} )
