@@ -29,7 +29,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
-#include <klocale.h>
 #include <kdebug.h>
 
 // Number of seconds to wait before autostarting KAlarm.
