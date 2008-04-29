@@ -297,7 +297,7 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	mActionShowDetails = new KAction(KIcon("help-about"), i18nc("@action", "Show &Details"), this);
 	actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
 	connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
-	mActionSetColour   = new KAction(KIcon("color-picker"), i18nc("@action", "Set &Color"), this);
+	mActionSetColour   = new KAction(KIcon("color-picker"), i18nc("@action", "Set &Color..."), this);
 	actions->addAction(QLatin1String("resSetColour"), mActionSetColour);
 	connect(mActionSetColour, SIGNAL(triggered(bool)), SLOT(setColour()));
 	mActionClearColour   = new KAction(i18nc("@action", "Clear C&olor"), this);
