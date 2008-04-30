@@ -311,7 +311,6 @@ MiscPrefTab::MiscPrefTab()
 	vlayout->addWidget(mAutoStart, 0, Qt::AlignLeft);
 
 	mQuitWarn = new QCheckBox(i18nc("@option:check", "Warn before quitting"), group);
-//	mQuitWarn->setFixedSize(mQuitWarn->sizeHint());
 	mQuitWarn->setWhatsThis(i18nc("@info:whatsthis", "Check to display a warning prompt before quitting <application>KAlarm</application>."));
 	vlayout->addWidget(mQuitWarn, 0, Qt::AlignLeft);
 
@@ -365,7 +364,6 @@ MiscPrefTab::MiscPrefTab()
 	grid->addLayout(hlayout, row + 1, 0, 1, 3, Qt::AlignLeft);
 	QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), group);
 	hlayout->addWidget(radio);
-//	radio->setFixedSize(radio->sizeHint());
 	connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
 	mXtermType->addButton(radio, mXtermCount);
 	if (mXtermFirst < 0)
@@ -504,7 +502,6 @@ TimePrefTab::TimePrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18nc("@label:spinbox", "Start of day for date-only alarms:"), box);
 	mStartOfDay = new TimeEdit(box);
-//	mStartOfDay->setFixedSize(mStartOfDay->sizeHint());
 	label->setBuddy(mStartOfDay);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>The earliest time of day at which a date-only alarm will be triggered.</para>"
@@ -528,7 +525,6 @@ TimePrefTab::TimePrefTab()
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
 		mWorkDays[i] = new QCheckBox(KAlarm::weekDayName(day, locale), daybox);
-//		mWorkDays[i]->setFixedSize(mWorkDays[i]->sizeHint());
 		wgrid->addWidget(mWorkDays[i], i/4, i%4, Qt::AlignLeft);
 	}
 	daybox->setFixedHeight(daybox->sizeHint().height());
@@ -542,7 +538,6 @@ TimePrefTab::TimePrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* startLabel = new QLabel(i18nc("@label:spinbox", "Daily start time:"), box);
 	mWorkStart = new TimeEdit(box);
-//	mWorkStart->setFixedSize(mWorkStart->sizeHint());
 	startLabel->setBuddy(mWorkStart);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the start time of the working day.</para>"
@@ -557,7 +552,6 @@ TimePrefTab::TimePrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* endLabel = new QLabel(i18nc("@label:spinbox", "Daily end time:"), box);
 	mWorkEnd = new TimeEdit(box);
-//	mWorkEnd->setFixedSize(mWorkEnd->sizeHint());
 	endLabel->setBuddy(mWorkEnd);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the end time of the working day.</para>"
@@ -645,12 +639,10 @@ StorePrefTab::StorePrefTab()
 
 	mDefaultResource = new QRadioButton(i18nc("@option:radio", "Store in default resource"), group);
 	bgroup->addButton(mDefaultResource);
-//	mDefaultResource->setFixedSize(mDefaultResource->sizeHint());
 	mDefaultResource->setWhatsThis(i18nc("@info:whatsthis", "Add all new alarms and alarm templates to the default resources, without prompting."));
 	layout->addWidget(mDefaultResource, 0, Qt::AlignLeft);
 	mAskResource = new QRadioButton(i18nc("@option:radio", "Prompt for which resource to store in"), group);
 	bgroup->addButton(mAskResource);
-//	mAskResource->setFixedSize(mAskResource->sizeHint());
 	mAskResource->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.</para>"
 	      "<para>Note that archived alarms are always stored in the default archived alarm resource.</para>"));
@@ -664,7 +656,6 @@ StorePrefTab::StorePrefTab()
 	grid->setColumnStretch(1, 1);
 	grid->setColumnMinimumWidth(0, indentWidth());
 	mKeepArchived = new QCheckBox(i18nc("@option:check", "Keep alarms after expiry"), group);
-//	mKeepArchived->setFixedSize(mKeepArchived->sizeHint());
 	connect(mKeepArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
 	mKeepArchived->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to archive alarms after expiry or deletion (except deleted alarms which were never triggered)."));
@@ -792,8 +783,16 @@ EmailPrefTab::EmailPrefTab()
 	box = new KHBox(this);   // this is to allow left adjustment
 	box->setMargin(0);
 	mEmailCopyToKMail = new QCheckBox(i18nc("@option:check", "Copy sent emails into <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()), box);
-//	mEmailCopyToKMail->setFixedSize(mEmailCopyToKMail->sizeHint());
 	mEmailCopyToKMail->setWhatsThis(i18nc("@info:whatsthis", "After sending an email, store a copy in <application>KMail</application>'s <resource>%1</resource> folder", KAMail::i18n_sent_mail()));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+	box->setFixedHeight(box->sizeHint().height());
+
+	box = new KHBox(this);   // this is to allow left adjustment
+	box->setMargin(0);
+	mEmailQueuedNotify = new QCheckBox(i18nc("@option:check", "Notify when remote emails are queued"), box);
+	mEmailQueuedNotify->setWhatsThis(
+	      i18nc("@info:whatsthis", "Display a notification message whenever an email alarm has queued an email for sending to a remote system. "
+	           "This could be useful if, for example, you have a dial-up connection, so that you can then ensure that the email is actually transmitted."));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
@@ -802,11 +801,10 @@ EmailPrefTab::EmailPrefTab()
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
-	grid->setColumnStretch(1, 1);
+	grid->setColumnStretch(2, 1);
 
 	// 'From' email address controls ...
 	label = new Label(i18nc("@label 'From' email address", "From:"), group);
-//	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 1, 0);
 	mFromAddressGroup = new ButtonGroup(group);
 	connect(mFromAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotFromAddrChanged(QAbstractButton*)));
@@ -814,7 +812,6 @@ EmailPrefTab::EmailPrefTab()
 	// Line edit to enter a 'From' email address
 	mFromAddrButton = new RadioButton(group);
 	mFromAddressGroup->addButton(mFromAddrButton, Preferences::MAIL_FROM_ADDR);
-//	mFromAddrButton->setFixedSize(mFromAddrButton->sizeHint());
 	label->setBuddy(mFromAddrButton);
 	grid->addWidget(mFromAddrButton, 1, 1);
 	mEmailAddress = new KLineEdit(group);
@@ -827,7 +824,6 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'From' email address to be taken from Control Centre
 	mFromCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from Control Center"), group);
-//	mFromCCentreButton->setFixedSize(mFromCCentreButton->sizeHint());
 	mFromAddressGroup->addButton(mFromCCentreButton, Preferences::MAIL_FROM_CONTROL_CENTRE);
 	mFromCCentreButton->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
@@ -835,7 +831,6 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'From' email address to be picked from KMail's identities when the email alarm is configured
 	mFromKMailButton = new RadioButton(i18nc("@option:radio", "Use <application>KMail</application> identities"), group);
-//	mFromKMailButton->setFixedSize(mFromKMailButton->sizeHint());
 	mFromAddressGroup->addButton(mFromKMailButton, Preferences::MAIL_FROM_KMAIL);
 	mFromKMailButton->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to use <application>KMail</application>'s email identities to identify you as the sender when sending email alarms. "
@@ -846,14 +841,12 @@ EmailPrefTab::EmailPrefTab()
 	// 'Bcc' email address controls ...
 	grid->setRowMinimumHeight(4, KDialog::spacingHint());
 	label = new Label(i18nc("@label 'Bcc' email address", "Bcc:"), group);
-//	label->setFixedSize(label->sizeHint());
 	grid->addWidget(label, 5, 0);
 	mBccAddressGroup = new ButtonGroup(group);
 	connect(mBccAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotBccAddrChanged(QAbstractButton*)));
 
 	// Line edit to enter a 'Bcc' email address
 	mBccAddrButton = new RadioButton(group);
-//	mBccAddrButton->setFixedSize(mBccAddrButton->sizeHint());
 	mBccAddressGroup->addButton(mBccAddrButton, Preferences::MAIL_FROM_ADDR);
 	label->setBuddy(mBccAddrButton);
 	grid->addWidget(mBccAddrButton, 5, 1);
@@ -867,23 +860,12 @@ EmailPrefTab::EmailPrefTab()
 
 	// 'Bcc' email address to be taken from Control Centre
 	mBccCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from Control Center"), group);
-//	mBccCCentreButton->setFixedSize(mBccCCentreButton->sizeHint());
 	mBccAddressGroup->addButton(mBccCCentreButton, Preferences::MAIL_FROM_CONTROL_CENTRE);
 	mBccCCentreButton->setWhatsThis(
 	      i18nc("@info:whatsthis", "Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
 	grid->addWidget(mBccCCentreButton, 6, 1, 1, 2, Qt::AlignLeft);
 
 	group->setFixedHeight(group->sizeHint().height());
-
-	box = new KHBox(this);   // this is to allow left adjustment
-	box->setMargin(0);
-	mEmailQueuedNotify = new QCheckBox(i18nc("@option:check", "Notify when remote emails are queued"), box);
-//	mEmailQueuedNotify->setFixedSize(mEmailQueuedNotify->sizeHint());
-	mEmailQueuedNotify->setWhatsThis(
-	      i18nc("@info:whatsthis", "Display a notification message whenever an email alarm has queued an email for sending to a remote system. "
-	           "This could be useful if, for example, you have a dial-up connection, so that you can then ensure that the email is actually transmitted."));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-	box->setFixedHeight(box->sizeHint().height());
 
 	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
 }
@@ -1103,7 +1085,6 @@ EditPrefTab::EditPrefTab()
 	box->setSpacing(KDialog::spacingHint());
 	vlayout->addWidget(box);
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Reminder units:"), box);
-//	label->setFixedSize(label->sizeHint());
 	mReminderUnits = new KComboBox(box);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Minutes"), TimePeriod::Minutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Hours/Minutes"), TimePeriod::HoursMinutes);
@@ -1147,7 +1128,6 @@ EditPrefTab::EditPrefTab()
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mSoundFileLabel = new QLabel(i18nc("@label:textbox", "Sound file:"), box);
-//	mSoundFileLabel->setFixedSize(mSoundFileLabel->sizeHint());
 	mSoundFile = new KLineEdit(box);
 	mSoundFileLabel->setBuddy(mSoundFile);
 	mSoundFileBrowse = new QPushButton(box);
@@ -1212,7 +1192,6 @@ EditPrefTab::EditPrefTab()
 	itemBox->setMargin(0);
 	itemBox->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18nc("@label:listbox", "Recurrence:"), itemBox);
-//	label->setFixedSize(label->sizeHint());
 	mRecurPeriod = new KComboBox(itemBox);
 	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_NoRecur());
 	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_AtLogin());
@@ -1413,8 +1392,6 @@ ViewPrefTab::ViewPrefTab()
 	KHBox* box = new KHBox(this);   // this is to allow left adjustment
 	box->setMargin(0);
 	mShowInSystemTray = new QCheckBox(i18nc("@option:check", "Show in system tray"), box);
-//	mShowInSystemTray->setFixedSize(mShowInSystemTray->sizeHint());
-	connect(mShowInSystemTray, SIGNAL(toggled(bool)), SLOT(slotRunModeToggled(bool)));
 	mShowInSystemTray->setWhatsThis(
 	      i18nc("@info:whatsthis", "<para>Check to show <application>KAlarm</application>'s icon in the system tray."
 	           " Showing it in the system tray provides easy access and a status indication.</para>"));
@@ -1466,7 +1443,6 @@ ViewPrefTab::ViewPrefTab()
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	mTooltipTimeToPrefixLabel = new QLabel(i18nc("@label:textbox", "Prefix:"), box);
-//	mTooltipTimeToPrefixLabel->setFixedSize(mTooltipTimeToPrefixLabel->sizeHint());
 	mTooltipTimeToPrefix = new KLineEdit(box);
 	mTooltipTimeToPrefixLabel->setBuddy(mTooltipTimeToPrefix);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip."));
