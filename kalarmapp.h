@@ -94,12 +94,14 @@ class KAlarmApp : public KUniqueApplication
 		void               execAlarmSuccess();
 	protected:
 		KAlarmApp();
+	private:
+		typedef Preferences::Feb29Type Feb29Type;   // allow it to be used in SIGNAL mechanism
 	private slots:
 		void               quitFatal();
 		void               checkNextDueAlarm();
 		void               slotShowInSystemTrayChanged();
 		void               changeStartOfDay();
-		void               slotFeb29TypeChanged(Preferences::Feb29Type);
+		void               slotFeb29TypeChanged(Feb29Type);
 		void               setArchivePurgeDays();
 		void               slotPurge()                     { purge(mArchivedPurgeDays); }
 		void               slotCommandExited(ShellProcess*);

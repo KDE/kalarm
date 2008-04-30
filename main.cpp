@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
 	options.add("file <url>", ki18n("File to display"));
 	options.add("F");
 	options.add("from-id <ID>", ki18n("KMail identity to use as sender of email"));
-	options.add("handleEvent <eventID>", ki18n("Trigger or cancel alarm with the specified event ID"));
 	options.add("i");
 	options.add("interval <period>", ki18n("Interval between alarm repetitions"));
 	options.add("k");

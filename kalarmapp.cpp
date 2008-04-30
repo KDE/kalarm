@@ -104,16 +104,17 @@ KAlarmApp::KAlarmApp()
 	  mAlarmsEnabled(true),
 	  mSpeechEnabled(false)
 {
+	kDebug();
 	mAlarmTimer->setSingleShot(true);
 	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
 
 	Preferences::self()->readConfig();
-	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&, const QTime&)), this, SLOT(changeStartOfDay()));
-	Preferences::connect(SIGNAL(feb29TypeChanged(Preferences::Feb29Type)), this, SLOT(slotFeb29TypeChanged(Preferences::Feb29Type)));
-	Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(slotShowInSystemTrayChanged()));
-	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
 	Preferences::setAutoStart(true);
 	Preferences::self()->writeConfig();
+	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&, const QTime&)), this, SLOT(changeStartOfDay()));
+	Preferences::connect(SIGNAL(feb29TypeChanged(Feb29Type)), this, SLOT(slotFeb29TypeChanged(Feb29Type)));
+	Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(slotShowInSystemTrayChanged()));
+	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
 	if (AlarmCalendar::initialiseCalendars())
@@ -280,18 +281,17 @@ int KAlarmApp::newInstance()
 				}
 			}
 			else
-			if (args->isSet("handleEvent")  ||  args->isSet("triggerEvent")  ||  args->isSet("cancelEvent"))
+			if (args->isSet("triggerEvent")  ||  args->isSet("cancelEvent"))
 			{
 				// Display or delete the event with the specified event ID
 				kDebug() << "Handle event";
 				EventFunc function = EVENT_HANDLE;
 				int count = 0;
 				const char* option = 0;
-				if (args->isSet("handleEvent"))   { function = EVENT_HANDLE;   option = "handleEvent";   ++count; }
 				if (args->isSet("triggerEvent"))  { function = EVENT_TRIGGER;  option = "triggerEvent";  ++count; }
 				if (args->isSet("cancelEvent"))   { function = EVENT_CANCEL;   option = "cancelEvent";   ++count; }
 				if (count > 1)
-					USAGE(i18nc("@info:shell", "<icode>%1</icode>, <icode>%2</icode>, <icode>%3</icode> mutually exclusive", QLatin1String("--handleEvent"), QLatin1String("--triggerEvent"), QLatin1String("--cancelEvent")));
+					USAGE(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", QLatin1String("--triggerEvent"), QLatin1String("--cancelEvent")));
 				if (!initCheck(true))   // open the calendar, don't start processing execution queue yet
 				{
 					exitCode = 1;
@@ -863,6 +863,7 @@ void KAlarmApp::checkNextDueAlarm()
 	{
 		// Queue the alarm
 		queueAlarmId(nextEvent->id());
+		kDebug() << nextEvent->id() << ": due now";
 		QTimer::singleShot(0, this, SLOT(processQueue()));
 	}
 	else
@@ -872,6 +873,7 @@ void KAlarmApp::checkNextDueAlarm()
 		interval *= 1000;
 		if (interval > INT_MAX)
 			interval = INT_MAX;
+		kDebug() << nextEvent->id() << "wait" << interval/1000 << "seconds";
 		mAlarmTimer->start(static_cast<int>(interval));
 	}
 }
@@ -896,6 +898,7 @@ void KAlarmApp::queueAlarmId(const QString& id)
 */
 void KAlarmApp::startProcessQueue()
 {
+	kDebug();
 	if (!mInitialised)
 	{
 		mInitialised = true;
