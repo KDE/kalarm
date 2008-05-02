@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright (C) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,8 +41,8 @@ TemplateMenuAction::TemplateMenuAction(const QString& label, const QString& icon
 }
 
 /******************************************************************************
-*  Called when the New From Template action is clicked.
-*  Creates a popup menu listing all alarm templates.
+* Called when the New From Template action is clicked.
+* Creates a popup menu listing all alarm templates, in sorted name order.
 */
 void TemplateMenuAction::slotInitMenu()
 {
@@ -50,12 +50,18 @@ void TemplateMenuAction::slotInitMenu()
 	menu->clear();
 	mOriginalTexts.clear();
 	QValueList<KAEvent> templates = KAlarm::templateList();
-	for (QValueList<KAEvent>::Iterator it = templates.begin();  it != templates.end();  ++it)
+	for (QValueList<KAEvent>::ConstIterator it = templates.constBegin();  it != templates.constEnd();  ++it)
 	{
 		QString name = (*it).templateName();
-		menu->insertItem(name);
-		mOriginalTexts += name;
+		// Insert the template in sorted order
+		QStringList::Iterator tit;
+		for (tit = mOriginalTexts.begin();
+		     tit != mOriginalTexts.end()  &&  QString::localeAwareCompare(name, *tit) > 0;
+		     ++tit);
+		mOriginalTexts.insert(tit, name);
 	}
+	for (QStringList::ConstIterator tit = mOriginalTexts.constBegin();  tit != mOriginalTexts.constEnd();  ++tit)
+		menu->insertItem(*tit);
 }
 
 /******************************************************************************

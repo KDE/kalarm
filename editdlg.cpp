@@ -717,8 +717,8 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			else
 			{
 				mExpiredRecurrence = recurs && event->mainExpired();
-				mTimeWidget->setDateTime(!event->mainExpired() ? event->mainDateTime()
-				                         : recurs ? DateTime() : event->deferDateTime());
+				mTimeWidget->setDateTime(recurs || event->uidStatus() == KAEvent::EXPIRED ? event->startDateTime()
+				                         : event->mainExpired() ? event->deferDateTime() : event->mainDateTime());
 			}
 		}
 
@@ -759,7 +759,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mReminder->enableOnceOnly(event->recurs());
 		if (mSpecialActionsButton)
 			mSpecialActionsButton->setActions(event->preAction(), event->postAction());
-		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+		mRecurrenceEdit->set(*event, (mTemplate || event->isTemplate()));   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mTabs->setTabLabel(mTabs->page(mRecurPageIndex), recurText(*event));
 		SoundPicker::Type soundType = event->speak()                ? SoundPicker::SPEAK
 		                            : event->beep()                 ? SoundPicker::BEEP

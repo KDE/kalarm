@@ -233,7 +233,7 @@ PrefsTabBase::PrefsTabBase(QVBox* frame)
 	  mPage(frame)
 {
 	if (!mIndentWidth)
-		mIndentWidth = 3 * KDialog::spacingHint();
+		mIndentWidth = style().subRect(QStyle::SR_RadioButtonIndicator, this).width();
 }
 
 void PrefsTabBase::apply(bool syncToDisc)
