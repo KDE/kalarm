@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility 
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006,2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -211,6 +211,7 @@ void Find::slotFind()
 {
 	if (!mDialog)
 		return;
+	mFound = false;
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
 	mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
 	mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
@@ -228,47 +229,45 @@ void Find::slotFind()
 
 	// Supply KFind with only those options which relate to the text within alarms
 	long options = mOptions & (KFindDialog::WholeWordsOnly | KFindDialog::CaseSensitive | KFindDialog::RegularExpression);
+	bool newFind = !mFind;
 	if (mFind)
 	{
+		mFind->resetCounts();
 		mFind->setPattern(mDialog->pattern());
 		mFind->setOptions(options);
-		delete mDialog;    // automatically set to 0
-		findNext(true, true, false);
 	}
 	else
 	{
 #ifdef MODAL_FIND
 		mFind = new KFind(mDialog->pattern(), options, mListView);
+		mDialog->deleteLater();    // automatically set to 0
 #else
 		mFind = new KFind(mDialog->pattern(), options, mListView, mDialog);
 #endif
 		connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
-		delete mDialog;                  // close the Find dialogue. Automatically set to 0.
 		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
-
-		// Set the starting point for the search
-		mListView->sort();     // ensure the whole list is sorted, not just the visible items
-		mStartID       = QString::null;
-		mNoCurrentItem = true;
-		bool fromCurrent = false;
-		EventListViewItemBase* item = 0;
-		if (mOptions & KFindDialog::FromCursor)
-		{
-			item = mListView->currentItem();
-			if (item)
-			{
-				mStartID       = item->event().id();
-				mNoCurrentItem = false;
-				fromCurrent    = true;
-			}
-		}
-
-		// Execute the search
-		mFound = false;
-		findNext(true, false, fromCurrent);
-		if (mFind)
-			emit active(true);
 	}
+
+	// Set the starting point for the search
+	mStartID       = QString::null;
+	mNoCurrentItem = true;
+	bool fromCurrent = false;
+	EventListViewItemBase* item = 0;
+	if (mOptions & KFindDialog::FromCursor)
+	{
+		item = mListView->currentItem();
+		if (item)
+		{
+			mStartID       = item->event().id();
+			mNoCurrentItem = false;
+			fromCurrent    = true;
+		}
+	}
+
+	// Execute the search
+	findNext(true, true, fromCurrent);
+	if (mFind  &&  newFind)
+		emit active(true);
 }
 
 /******************************************************************************
