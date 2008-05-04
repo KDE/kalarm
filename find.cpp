@@ -93,7 +93,6 @@ void Find::display()
 		mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
 		mDialog->setModal(false);
 		mDialog->setObjectName("FindDlg");
-		mDialog->setAttribute(Qt::WA_DeleteOnClose);
 		mDialog->setHasSelection(false);
 		QWidget* kalarmWidgets = mDialog->findExtension();
 
@@ -210,6 +209,7 @@ void Find::slotFind()
 {
 	if (!mDialog)
 		return;
+	mFound = false;
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
 	mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
 	mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
@@ -227,39 +227,39 @@ void Find::slotFind()
 
 	// Supply KFind with only those options which relate to the text within alarms
 	long options = mOptions & (KFind::WholeWordsOnly | KFind::CaseSensitive | KFind::RegularExpression);
+	bool newFind = !mFind;
 	if (mFind)
 	{
+		mFind->resetCounts();
 		mFind->setPattern(mDialog->pattern());
 		mFind->setOptions(options);
-		findNext(true, false);
 	}
 	else
 	{
 		mFind = new KFind(mDialog->pattern(), options, mListView, mDialog);
 		connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
 		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
-
-		// Set the starting point for the search
-		mStartID.clear();
-		mNoCurrentItem = true;
-		bool fromCurrent = false;
-		if (mOptions & KFind::FromCursor)
-		{
-			QModelIndex index = mListView->selectionModel()->currentIndex();
-			if (index.isValid())
-			{
-				mStartID       = mListView->event(index)->id();
-				mNoCurrentItem = false;
-				fromCurrent    = true;
-			}
-		}
-
-		// Execute the search
-		mFound = false;
-		findNext(true, fromCurrent);
-		if (mFind)
-			emit active(true);
 	}
+
+	// Set the starting point for the search
+	mStartID.clear();
+	mNoCurrentItem = true;
+	bool fromCurrent = false;
+	if (mOptions & KFind::FromCursor)
+	{
+		QModelIndex index = mListView->selectionModel()->currentIndex();
+		if (index.isValid())
+		{
+			mStartID       = mListView->event(index)->id();
+			mNoCurrentItem = false;
+			fromCurrent    = true;
+		}
+	}
+
+	// Execute the search
+	findNext(true, fromCurrent);
+	if (mFind  &&  newFind)
+		emit active(true);
 }
 
 /******************************************************************************
