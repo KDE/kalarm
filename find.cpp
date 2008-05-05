@@ -40,6 +40,7 @@
 #include "preferences.h"
 #include "find.moc"
 
+#warning Search for text, then '29', then '2', reverts to text
 // KAlarm-specific options for Find dialog
 enum {
 	FIND_LIVE     = KFind::MinimumUserOption,
@@ -52,6 +53,22 @@ enum {
 static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
 
 
+class FindDlg : public KFindDialog
+{
+	public:
+		FindDlg(QWidget* parent, long options = 0, const QStringList& findStrings = QStringList(), bool hasSelection = false)
+		       : KFindDialog(parent, options, findStrings, hasSelection) {}
+	protected slots:
+		void slotButtonClicked(int button)
+		{
+			if (button == Ok)
+				emit okClicked();
+			else
+				KFindDialog::slotButtonClicked(button);
+		}
+};
+
+
 Find::Find(EventListView* parent)
 	: QObject(parent),
 	  mListView(parent),
@@ -59,6 +76,7 @@ Find::Find(EventListView* parent)
 	  mFind(0),
 	  mOptions(0)
 {
+	connect(mListView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)), SLOT(slotSelectionChanged()));
 }
 
 Find::~Find()
@@ -66,6 +84,12 @@ Find::~Find()
 	delete mDialog;    // automatically set to 0
 	delete mFind;
 	mFind = 0;
+}
+
+void Find::slotSelectionChanged()
+{
+	if (mDialog)
+		mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
 }
 
 /******************************************************************************
@@ -90,7 +114,7 @@ void Find::display()
 	}
 	else
 	{
-		mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
+		mDialog = new FindDlg(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
 		mDialog->setModal(false);
 		mDialog->setObjectName("FindDlg");
 		mDialog->setHasSelection(false);
