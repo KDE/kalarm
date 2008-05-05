@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility 
  *  Program:  kalarm
- *  Copyright © 2005,2006,2008 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -211,7 +211,6 @@ void Find::slotFind()
 {
 	if (!mDialog)
 		return;
-	mFound = false;
 	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
 	mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
 	mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
@@ -230,19 +229,21 @@ void Find::slotFind()
 	// Supply KFind with only those options which relate to the text within alarms
 	long options = mOptions & (KFindDialog::WholeWordsOnly | KFindDialog::CaseSensitive | KFindDialog::RegularExpression);
 	bool newFind = !mFind;
+	bool newPattern = (mDialog->pattern() != mLastPattern);
+	mLastPattern = mDialog->pattern();
 	if (mFind)
 	{
 		mFind->resetCounts();
-		mFind->setPattern(mDialog->pattern());
+		mFind->setPattern(mLastPattern);
 		mFind->setOptions(options);
 	}
 	else
 	{
 #ifdef MODAL_FIND
-		mFind = new KFind(mDialog->pattern(), options, mListView);
+		mFind = new KFind(mLastPattern, options, mListView);
 		mDialog->deleteLater();    // automatically set to 0
 #else
-		mFind = new KFind(mDialog->pattern(), options, mListView, mDialog);
+		mFind = new KFind(mLastPattern, options, mListView, mDialog);
 #endif
 		connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
 		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
@@ -250,22 +251,25 @@ void Find::slotFind()
 
 	// Set the starting point for the search
 	mStartID       = QString::null;
-	mNoCurrentItem = true;
-	bool fromCurrent = false;
-	EventListViewItemBase* item = 0;
-	if (mOptions & KFindDialog::FromCursor)
+	mNoCurrentItem = newPattern;
+	bool checkEnd = false;
+	if (newPattern)
 	{
-		item = mListView->currentItem();
-		if (item)
+		mFound = false;
+		if (mOptions & KFindDialog::FromCursor)
 		{
-			mStartID       = item->event().id();
-			mNoCurrentItem = false;
-			fromCurrent    = true;
+			EventListViewItemBase* item = mListView->currentItem();
+			if (item)
+			{
+				mStartID       = item->event().id();
+				mNoCurrentItem = false;
+				checkEnd = true;
+			}
 		}
 	}
 
 	// Execute the search
-	findNext(true, true, fromCurrent);
+	findNext(true, true, checkEnd, false);
 	if (mFind  &&  newFind)
 		emit active(true);
 }
@@ -275,7 +279,7 @@ void Find::slotFind()
 *  If 'fromCurrent' is true, the search starts with the current search item;
 *  otherwise, it starts from the next item.
 */
-void Find::findNext(bool forward, bool sort, bool fromCurrent)
+void Find::findNext(bool forward, bool sort, bool checkEnd, bool fromCurrent)
 {
 	if (sort)
 		mListView->sort();    // ensure the whole list is sorted, not just the visible items
@@ -286,11 +290,12 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 
 	// Search successive alarms until a match is found or the end is reached
 	bool found = false;
-	for ( ;  item;  item = nextItem(item, forward))
+	bool last = false;
+	for ( ;  item && !last;  item = nextItem(item, forward))
 	{
 		const KAEvent& event = item->event();
 		if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event.id())
-			break;    // we've wrapped round and reached the starting alarm again
+			last = true;    // we've wrapped round and reached the starting alarm again
 		fromCurrent = false;
 		bool live = !event.expired();
 		if (live  &&  !(mOptions & FIND_LIVE)
@@ -356,12 +361,13 @@ void Find::findNext(bool forward, bool sort, bool fromCurrent)
 	else
 	{
 		// No match was found
-		if (mFound)
+		if (mFound  ||  checkEnd)
 		{
 			QString msg = forward ? i18n("End of alarm list reached.\nContinue from the beginning?")
 			                      : i18n("Beginning of alarm list reached.\nContinue from the end?");
 			if (KMessageBox::questionYesNo(mListView, msg, QString::null, KStdGuiItem::cont(), KStdGuiItem::cancel()) == KMessageBox::Yes)
 			{
+				mNoCurrentItem = true;
 				findNext(forward, false);
 				return;
 			}
