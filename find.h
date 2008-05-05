@@ -1,7 +1,7 @@
 /*
  *  find.h  -  search facility 
  *  Program:  kalarm
- *  Copyright © 2005,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ class Find : public QObject
 		void         slotKFindDestroyed()       { emit active(false); }
 
 	private:
-		void         findNext(bool forward, bool sort, bool fromCurrent = false);
+		void         findNext(bool forward, bool sort, bool checkEnd = false, bool fromCurrent = false);
 		EventListViewItemBase* nextItem(EventListViewItemBase*, bool forward) const;
 
 		EventListViewBase* mListView;        // parent list view
@@ -64,6 +64,7 @@ class Find : public QObject
 		QCheckBox*         mEmailType;
 		KFind*             mFind;
 		QStringList        mHistory;         // list of history items for Find dialog
+		QString            mLastPattern;     // pattern used in last search
 		QString            mStartID;         // ID of first alarm searched if 'from cursor' was selected
 		long               mOptions;         // OR of find dialog options
 		bool               mNoCurrentItem;   // there is no current item for the purposes of searching
