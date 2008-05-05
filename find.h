@@ -40,7 +40,7 @@ class Find : public QObject
 		explicit Find(EventListView* parent);
 		~Find();
 		void        display();
-		void        findNext(bool forward)     { findNext(forward, false); }
+		void        findNext(bool forward)     { findNext(forward, false, false); }
 
 	signals:
 		void        active(bool);
@@ -50,7 +50,7 @@ class Find : public QObject
 		void        slotKFindDestroyed()       { emit active(false); }
 
 	private:
-		void        findNext(bool forward, bool fromCurrent);
+		void        findNext(bool forward, bool checkEnd, bool fromCurrent);
 		QModelIndex nextItem(const QModelIndex&, bool forward) const;
 
 		EventListView* mListView;        // parent list view
@@ -64,6 +64,7 @@ class Find : public QObject
 		QCheckBox*         mEmailType;
 		KFind*             mFind;
 		QStringList        mHistory;         // list of history items for Find dialog
+		QString            mLastPattern;     // pattern used in last search
 		QString            mStartID;         // ID of first alarm searched if 'from cursor' was selected
 		long               mOptions;         // OR of find dialog options
 		bool               mNoCurrentItem;   // there is no current item for the purposes of searching
