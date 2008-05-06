@@ -40,7 +40,9 @@
 #include "preferences.h"
 #include "find.moc"
 
+#ifdef __GNUC__
 #warning Search for text, then '29', then '2', reverts to text
+#endif
 // KAlarm-specific options for Find dialog
 enum {
 	FIND_LIVE     = KFind::MinimumUserOption,
