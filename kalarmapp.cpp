@@ -1871,7 +1871,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 			if (proc->status() != ShellProcess::SUCCESS)
 			{
 				QString errmsg = proc->errorMessage();
-				kWarning() << pd->event->cleanText() << ":" << errmsg;
+				kWarning() << pd->event->cleanText() << ":" << errmsg.remove(QRegExp("</?html>"));;
 				if (pd->messageBoxParent)
 				{
 					// Close the existing informational KMessageBox for this process
