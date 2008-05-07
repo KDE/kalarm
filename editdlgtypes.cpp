@@ -459,7 +459,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 	event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
 	if (!trial)
 		event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
-	if (mSpecialActionsButton  &&  mSpecialActionsButton->isVisible())
+	if (mSpecialActionsButton  &&  mSpecialActionsButton->isEnabled())
 		event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
 }
 
