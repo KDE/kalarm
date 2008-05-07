@@ -693,9 +693,10 @@ void StorePrefTab::restore(bool defaults)
 {
 	mCheckKeepChanges = defaults;
 	mAskResource->setChecked(Preferences::askResource());
-	setArchivedControls(Preferences::archivedKeepDays());
+	int keepDays = Preferences::archivedKeepDays();
 	if (!defaults)
-		mOldKeepArchived = mKeepArchived->isChecked();
+		mOldKeepArchived = keepDays;
+	setArchivedControls(keepDays);
 	mCheckKeepChanges = true;
 }
 
