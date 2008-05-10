@@ -92,6 +92,8 @@ static const QByteArray EMAIL_ID_PROPERTY("EMAILID");         // X-KDE-KALARM-EM
 // - Audio alarm properties
 static const QByteArray VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
+// - Command alarm properties
+static const QByteArray CANCEL_ON_ERROR_PROPERTY("ERRCANCEL");// X-KDE-KALARM-ERRCANCEL property
 
 // Event status strings
 static const QString DISABLED_STATUS            = QLatin1String("DISABLED");
@@ -121,6 +123,7 @@ struct AlarmData
 	bool                   reminderOnceOnly;
 	bool                   isEmailText;
 	bool                   commandScript;
+	bool                   cancelOnPreActErr;
 };
 typedef QMap<KAAlarm::SubType, AlarmData> AlarmMap;
 
@@ -190,6 +193,7 @@ void KAEvent::copy(const KAEvent& event)
 	mDeferral                = event.mDeferral;
 	mLogFile                 = event.mLogFile;
 	mCategory                = event.mCategory;
+	mCancelOnPreActErr       = event.mCancelOnPreActErr;
 	mCommandXterm            = event.mCommandXterm;
 	mCommandDisplay          = event.mCommandDisplay;
 	mSpeak                   = event.mSpeak;
@@ -414,6 +418,7 @@ void KAEvent::set(const Event* event)
 	mDisplaying        = false;
 	mRepeatSound       = false;
 	mCommandScript     = false;
+	mCancelOnPreActErr = false;
 	mDeferral          = NO_DEFERRAL;
 	mSoundVolume       = -1;
 	mFadeVolume        = -1;
@@ -503,7 +508,8 @@ void KAEvent::set(const Event* event)
 				mRepeatSound = (!mBeep && !mSpeak)  &&  (data.alarm->repeatCount() < 0);
 				break;
 			case KAAlarm::PRE_ACTION__ALARM:
-				mPreAction = data.cleanText;
+				mPreAction         = data.cleanText;
+				mCancelOnPreActErr = data.cancelOnPreActErr;
 				break;
 			case KAAlarm::POST_ACTION__ALARM:
 				mPostAction = data.cleanText;
@@ -703,6 +709,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 	switch (alarm->type())
 	{
 		case Alarm::Procedure:
+		{
 			data.action        = T_COMMAND;
 			data.cleanText     = alarm->programFile();
 			data.commandScript = data.cleanText.isEmpty();   // blank command indicates a script
@@ -712,8 +719,10 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 					data.cleanText += ' ';
 				data.cleanText += alarm->programArguments();
 			}
+			data.cancelOnPreActErr = !alarm->customProperty(KCalendar::APPNAME, CANCEL_ON_ERROR_PROPERTY).isNull();
 			if (!cmdDisplay)
 				break;
+		}
 			// fall through to Display
 		case Alarm::Display:
 		{
@@ -912,6 +921,7 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 	mDisplayingDefer        = false;
 	mDisplayingEdit         = false;
 	mArchive                = false;
+	mCancelOnPreActErr      = false;
 	mUpdated                = false;
 	mChangeCount            = changesPending ? 1 : 0;
 	mChanged                = true;
@@ -1980,6 +1990,8 @@ Alarm* KAEvent::initKCalAlarm(Event* event, int startOffsetSecs, const QStringLi
 			break;
 		case KAAlarm::PRE_ACTION_ALARM:
 			setProcedureAlarm(alarm, mPreAction);
+			if (mCancelOnPreActErr)
+				alarm->setCustomProperty(KCalendar::APPNAME, CANCEL_ON_ERROR_PROPERTY, QLatin1String("Y"));
 			break;
 		case KAAlarm::POST_ACTION_ALARM:
 			setProcedureAlarm(alarm, mPostAction);
@@ -4024,26 +4036,27 @@ void KAEvent::dumpDebug() const
 	}
 	if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
 	{
-		kDebug() << "-- mSpeak:" << (mSpeak ? "true" : "false");
+		kDebug() << "-- mSpeak:" << mSpeak;
 		kDebug() << "-- mAudioFile:" << mAudioFile;
 		kDebug() << "-- mPreAction:" << mPreAction;
+		kDebug() << "-- mCancelOnPreActErr:" << mCancelOnPreActErr;
 		kDebug() << "-- mPostAction:" << mPostAction;
 	}
 	else if (mActionType == T_COMMAND)
 	{
-		kDebug() << "-- mCommandXterm:" << (mCommandXterm ? "true" : "false");
-		kDebug() << "-- mCommandDisplay:" << (mCommandDisplay ? "true" : "false");
+		kDebug() << "-- mCommandXterm:" << mCommandXterm;
+		kDebug() << "-- mCommandDisplay:" << mCommandDisplay;
 		kDebug() << "-- mLogFile:" << mLogFile;
 	}
 	kDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
-	kDebug() << "-- mCopyToKOrganizer:" << (mCopyToKOrganizer ? "true" : "false");
-	kDebug() << "-- mWorkTimeOnly:" << (mWorkTimeOnly ? "true" : "false");
+	kDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
+	kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
 	kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
 	kDebug() << "-- mSaveDateTime:" << mSaveDateTime;
 	if (mRepeatAtLogin)
 		kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
-	kDebug() << "-- mArchiveRepeatAtLogin:" << (mArchiveRepeatAtLogin ? "true" : "false");
-	kDebug() << "-- mEnabled:" << (mEnabled ? "true" : "false");
+	kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
+	kDebug() << "-- mEnabled:" << mEnabled;
 	if (mReminderMinutes)
 		kDebug() << "-- mReminderMinutes:" << mReminderMinutes;
 	if (mArchiveReminderMinutes)
@@ -4072,7 +4085,7 @@ void KAEvent::dumpDebug() const
 	kDebug() << "-- mRevision:" << mRevision;
 	kDebug() << "-- mRecurrence:" << (mRecurrence ? "true" : "false");
 	kDebug() << "-- mAlarmCount:" << mAlarmCount;
-	kDebug() << "-- mMainExpired:" << (mMainExpired ? "true" : "false");
+	kDebug() << "-- mMainExpired:" << mMainExpired;
 	kDebug() << "KAEvent dump end";
 }
 #endif

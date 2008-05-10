@@ -332,7 +332,8 @@ class KAEvent : public KAAlarmEventBase
 		void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
 		void               setTemplate(const QString& name, int afterTime = -1);
-		void               setActions(const QString& pre, const QString& post)   { mPreAction = pre;  mPostAction = post;  mUpdated = true; }
+		void               setActions(const QString& pre, const QString& post, bool cancelOnError)
+		                                                                    { mPreAction = pre;  mPostAction = post;  mCancelOnPreActErr = cancelOnError;  mUpdated = true; }
 		OccurType          setNextOccurrence(const KDateTime& preDateTime);
 		void               setFirstRecurrence();
 		void               setCategory(KCalEvent::Status);
@@ -410,6 +411,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               repeatSound() const            { return mRepeatSound  &&  !mAudioFile.isEmpty(); }
 		const QString&     preAction() const              { return mPreAction; }
 		const QString&     postAction() const             { return mPostAction; }
+		bool               cancelOnPreActionError() const { return mCancelOnPreActErr; }
 		bool               recurs() const                 { return checkRecur() != KARecurrence::NO_RECUR; }
 		KARecurrence::Type recurType() const              { return checkRecur(); }
 		KARecurrence*      recurrence() const             { return mRecurrence; }
@@ -517,6 +519,7 @@ class KAEvent : public KAAlarmEventBase
 		mutable bool       mChanged;          // true if need to recalculate trigger times while mChangeCount > 0
 		QString            mLogFile;          // alarm output is to be logged to this URL
 		KCalEvent::Status  mCategory;         // event category (active, archived, template, ...)
+		bool               mCancelOnPreActErr;// cancel alarm if pre-alarm action fails
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mCommandDisplay;   // command output is to be displayed in an alarm window
 		bool               mSpeak;            // whether to speak the message when the alarm is displayed

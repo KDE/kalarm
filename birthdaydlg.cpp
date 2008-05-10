@@ -177,7 +177,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
-		mSpecialActionsButton = new SpecialActionsButton(group);
+		mSpecialActionsButton = new SpecialActionsButton(false, group);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 		hlayout->addWidget(mSpecialActionsButton);
 	}
@@ -208,7 +208,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 	                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	if (mSpecialActionsButton)
-		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
+		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), false);
 
 	KActionCollection* actions = new KActionCollection(this);
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
@@ -270,7 +270,8 @@ QList<KAEvent> BirthdayDlg::events() const
 			event.setReminder(reminder, false);
 		if (mSpecialActionsButton)
 			event.setActions(mSpecialActionsButton->preAction(),
-					 mSpecialActionsButton->postAction());
+					 mSpecialActionsButton->postAction(),
+			                 mSpecialActionsButton->cancelOnError());
 		event.endChanges();
 		list.append(event);
 	}

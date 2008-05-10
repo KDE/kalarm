@@ -322,6 +322,11 @@
       <label context="@label">Pre-alarm action</label>
       <whatsthis context="@info:whatsthis">Default command to execute before displaying alarms.</whatsthis>
     </entry>
+    <entry name="DefaultCancelOnPreActionError" key="PreActionErrCancel" type="Bool">
+      <label context="@label">Cancel alarm on pre-alarm action error</label>
+      <whatsthis context="@info:whatsthis">Default setting for whether to cancel the alarm if the pre-alarm action command fails.</whatsthis>
+      <default>false</default>
+    </entry>
     <entry name="DefaultPostAction" key="PostAction" type="String">
       <label context="@label">Post-alarm action</label>
       <whatsthis context="@info:whatsthis">Default command to execute after alarm message windows are closed.</whatsthis>

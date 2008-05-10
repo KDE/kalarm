@@ -123,6 +123,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		int                 mSavedReminder;         // mReminder value
 		bool                mSavedAutoClose;        // mLateCancel->isAutoClose() value
 		bool                mSavedOnceOnly;         // mReminder once-only status
+		bool                mSavedPreActionCancel;  // mSpecialActionsButton cancel on pre-alarm action error
 };
 
 

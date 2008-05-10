@@ -525,7 +525,7 @@ TimePrefTab::TimePrefTab()
 	{
 		int day = KAlarm::localeDayInWeek_to_weekDay(i);
 		mWorkDays[i] = new QCheckBox(KAlarm::weekDayName(day, locale), daybox);
-		wgrid->addWidget(mWorkDays[i], i/4, i%4, Qt::AlignLeft);
+		wgrid->addWidget(mWorkDays[i], i/3, i%3, Qt::AlignLeft);
 	}
 	daybox->setFixedHeight(daybox->sizeHint().height());
 	daybox->setWhatsThis(i18nc("@info:whatsthis", "Check the days in the week which are work days"));
@@ -1096,7 +1096,7 @@ EditPrefTab::EditPrefTab()
 	box->setWhatsThis(i18nc("@info:whatsthis", "The default units for the reminder in the alarm edit dialog."));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
-	mSpecialActionsButton = new SpecialActionsButton(box);
+	mSpecialActionsButton = new SpecialActionsButton(true, box);
 	mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 
 	// SOUND
@@ -1250,7 +1250,7 @@ void EditPrefTab::restore(bool)
 		case TimePeriod::Minutes:      index = 0; break;
 	}
 	mReminderUnits->setCurrentIndex(index);
-	mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
+	mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), Preferences::defaultCancelOnPreActionError());
 	mSound->setCurrentIndex(soundIndex(Preferences::defaultSoundType()));
 	mSoundFile->setText(Preferences::defaultSoundFile());
 	mSoundRepeat->setChecked(Preferences::defaultSoundRepeat());
@@ -1296,6 +1296,9 @@ void EditPrefTab::apply(bool syncToDisc)
 	QString text = mSpecialActionsButton->preAction();
 	if (text != Preferences::defaultPreAction())
 		Preferences::setDefaultPreAction(text);
+	b = mSpecialActionsButton->cancelOnError();
+	if (b != Preferences::defaultCancelOnPreActionError())
+		Preferences::setDefaultCancelOnPreActionError(b);
 	text = mSpecialActionsButton->postAction();
 	if (text != Preferences::defaultPostAction())
 		Preferences::setDefaultPostAction(text);

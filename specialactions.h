@@ -1,7 +1,7 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (c) 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright (c) 2004-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,16 +27,18 @@
 
 class QResizeEvent;
 class KLineEdit;
+class CheckBox;
 
 
 class SpecialActionsButton : public QPushButton
 {
 		Q_OBJECT
 	public:
-		explicit SpecialActionsButton(QWidget* parent = 0);
-		void           setActions(const QString& pre, const QString& post);
+		explicit SpecialActionsButton(bool enableCancelOnError, QWidget* parent = 0);
+		void           setActions(const QString& pre, const QString& post, bool cancelOnError);
 		const QString& preAction() const      { return mPreAction; }
 		const QString& postAction() const     { return mPostAction; }
+		bool           cancelOnError() const  { return mCancelOnError; }
 		virtual void   setReadOnly(bool ro)   { mReadOnly = ro; }
 		virtual bool   isReadOnly() const     { return mReadOnly; }
 
@@ -49,6 +51,8 @@ class SpecialActionsButton : public QPushButton
 	private:
 		QString  mPreAction;
 		QString  mPostAction;
+		bool     mCancelOnError;
+		bool     mEnableCancel;
 		bool     mReadOnly;
 };
 
@@ -58,16 +62,22 @@ class SpecialActions : public QWidget
 {
 		Q_OBJECT
 	public:
-		explicit SpecialActions(QWidget* parent = 0);
-		void         setActions(const QString& pre, const QString& post);
+		explicit SpecialActions(bool enableCancelOnError, QWidget* parent = 0);
+		void         setActions(const QString& pre, const QString& post, bool cancelOnError);
 		QString      preAction() const;
 		QString      postAction() const;
+		bool         cancelOnError() const;
 		void         setReadOnly(bool);
 		bool         isReadOnly() const    { return mReadOnly; }
+
+	private slots:
+		void         slotPreActionChanged(const QString& text);
 
 	private:
 		KLineEdit*   mPreAction;
 		KLineEdit*   mPostAction;
+		CheckBox*    mCancelOnError;
+		bool         mEnableCancel;
 		bool         mReadOnly;
 };
 
@@ -78,9 +88,10 @@ class SpecialActionsDlg : public KDialog
 		Q_OBJECT
 	public:
 		SpecialActionsDlg(const QString& preAction, const QString& postAction,
-		                  QWidget* parent = 0);
+		                  bool cancelOnError, bool enableCancelOnError, QWidget* parent = 0);
 		QString      preAction() const     { return mActions->preAction(); }
 		QString      postAction() const    { return mActions->postAction(); }
+		bool         cancelOnError() const { return mActions->cancelOnError(); }
 		void         setReadOnly(bool ro)  { mActions->setReadOnly(ro); }
 		bool         isReadOnly() const    { return mActions->isReadOnly(); }
 

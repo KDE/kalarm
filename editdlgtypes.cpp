@@ -206,7 +206,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
-		mSpecialActionsButton = new SpecialActionsButton(parent);
+		mSpecialActionsButton = new SpecialActionsButton(false, parent);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 		hlayout->addWidget(mSpecialActionsButton);
 	}
@@ -275,7 +275,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		reminder()->setOnceOnly(event->reminderOnceOnly());
 		reminder()->enableOnceOnly(recurs);
 		if (mSpecialActionsButton)
-			mSpecialActionsButton->setActions(event->preAction(), event->postAction());
+			mSpecialActionsButton->setActions(event->preAction(), event->postAction(), event->cancelOnPreActionError());
 		Preferences::SoundType soundType = event->speak()                ? Preferences::Sound_Speak
 		                                 : event->beep()                 ? Preferences::Sound_Beep
 		                                 : !event->audioFile().isEmpty() ? Preferences::Sound_File
@@ -301,7 +301,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		reminder()->setMinutes(0, false);
 		reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
 		if (mSpecialActionsButton)
-			mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction());
+			mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), false);
 		mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	}
@@ -384,8 +384,9 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 	mSavedAutoClose   = lateCancel()->isAutoClose();
 	if (mSpecialActionsButton)
 	{
-		mSavedPreAction  = mSpecialActionsButton->preAction();
-		mSavedPostAction = mSpecialActionsButton->postAction();
+		mSavedPreAction       = mSpecialActionsButton->preAction();
+		mSavedPostAction      = mSpecialActionsButton->postAction();
+		mSavedPreActionCancel = mSpecialActionsButton->cancelOnError();
 	}
 }
 
@@ -410,8 +411,9 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 		return true;
 	if (mSpecialActionsButton)
 	{
-		if (mSavedPreAction  != mSpecialActionsButton->preAction()
-		||  mSavedPostAction != mSpecialActionsButton->postAction())
+		if (mSavedPreAction       != mSpecialActionsButton->preAction()
+		||  mSavedPostAction      != mSpecialActionsButton->postAction()
+		||  mSavedPreActionCancel != mSpecialActionsButton->cancelOnError())
 			return true;
 	}
 	if (mSavedSoundType == Preferences::Sound_File)
@@ -460,7 +462,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 	if (!trial)
 		event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
 	if (mSpecialActionsButton  &&  mSpecialActionsButton->isEnabled())
-		event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction());
+		event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction(), mSpecialActionsButton->cancelOnError());
 }
 
 /******************************************************************************

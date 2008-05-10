@@ -898,9 +898,9 @@ void KAlarmApp::queueAlarmId(const QString& id)
 */
 void KAlarmApp::startProcessQueue()
 {
-	kDebug();
 	if (!mInitialised)
 	{
+		kDebug();
 		mInitialised = true;
 		QTimer::singleShot(0, this, SLOT(processQueue()));    // process anything already queued
 	}
@@ -1613,7 +1613,16 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
 				if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
 					return result;     // display the message after the command completes
-				// Error executing command - display the message even though it failed
+				// Error executing command
+				if (event.cancelOnPreActionError())
+				{
+					// Cancel the rest of the alarm execution
+					kDebug() << event.id() << ": pre-action failed: cancelled";
+					if (reschedule)
+						rescheduleAlarm(event, alarm, true);
+					return 0;
+				}
+				// Display the message even though it failed
 			}
 			if (!event.enabled())
 				delete win;        // event is disabled - close its window
@@ -1868,6 +1877,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 		if (pd->process == proc)
 		{
 			// Found the command. Check its exit status.
+			bool executeAlarm = pd->preAction();
 			if (proc->status() != ShellProcess::SUCCESS)
 			{
 				QString errmsg = proc->errorMessage();
@@ -1887,8 +1897,11 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 				}
 				else
 					commandErrorMsg(proc, *pd->event, pd->alarm, pd->flags);
+
+				if (executeAlarm  &&  pd->event->cancelOnPreActionError())
+					executeAlarm = false;
 			}
-			if (pd->preAction())
+			if (executeAlarm)
 				execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
 			mCommandProcesses.removeAt(i);
 			delete pd;

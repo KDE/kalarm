@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright © 2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,15 +21,18 @@
 #include "kalarm.h"
 
 #include <QLabel>
+#include <QGroupBox>
 #include <QVBoxLayout>
 #include <QResizeEvent>
 
 #include <klineedit.h>
+#include <khbox.h>
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <kdebug.h>
 
+#include "checkbox.h"
 #include "functions.h"
 #include "shellprocess.h"
 #include "specialactions.moc"
@@ -40,8 +43,9 @@
 = Button to display the Special Alarm Actions dialog.
 =============================================================================*/
 
-SpecialActionsButton::SpecialActionsButton(QWidget* parent)
+SpecialActionsButton::SpecialActionsButton(bool enableCancelOnError, QWidget* parent)
 	: QPushButton(i18nc("@action:button", "Special Actions..."), parent),
+	  mEnableCancel(enableCancelOnError),
 	  mReadOnly(false)
 {
 	setCheckable(true);
@@ -54,10 +58,11 @@ SpecialActionsButton::SpecialActionsButton(QWidget* parent)
 *  Set the pre- and post-alarm actions.
 *  The button's pressed state is set to reflect whether any actions are set.
 */
-void SpecialActionsButton::setActions(const QString& pre, const QString& post)
+void SpecialActionsButton::setActions(const QString& pre, const QString& post, bool cancelOnError)
 {
-	mPreAction  = pre;
-	mPostAction = post;
+	mPreAction     = pre;
+	mPostAction    = post;
+	mCancelOnError = cancelOnError;
 	setChecked(!mPreAction.isEmpty() || !mPostAction.isEmpty());
 }
 
@@ -67,12 +72,13 @@ void SpecialActionsButton::setActions(const QString& pre, const QString& post)
 */
 void SpecialActionsButton::slotButtonPressed()
 {
-	SpecialActionsDlg dlg(mPreAction, mPostAction, this);
+	SpecialActionsDlg dlg(mPreAction, mPostAction, mCancelOnError, this);
 	dlg.setReadOnly(mReadOnly);
 	if (dlg.exec() == QDialog::Accepted)
 	{
-		mPreAction  = dlg.preAction();
-		mPostAction = dlg.postAction();
+		mPreAction     = dlg.preAction();
+		mPostAction    = dlg.postAction();
+		mCancelOnError = dlg.cancelOnError();
 		emit selected();
 	}
 	setChecked(!mPreAction.isEmpty() || !mPostAction.isEmpty());
@@ -88,7 +94,7 @@ static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";
 
 
 SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& postAction,
-                                     QWidget* parent)
+                                     bool cancelOnError, bool enableCancelOnError, QWidget* parent)
 	: KDialog(parent )
 {
 	setCaption(i18nc("@title:window", "Special Alarm Actions"));
@@ -102,8 +108,8 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
 	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
 
-	mActions = new SpecialActions(page);
-	mActions->setActions(preAction, postAction);
+	mActions = new SpecialActions(enableCancelOnError, page);
+	mActions->setActions(preAction, postAction, cancelOnError);
 	layout->addWidget(mActions);
 	layout->addSpacing(spacingHint());
 
@@ -139,8 +145,9 @@ void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 = Pre- and post-alarm actions widget.
 =============================================================================*/
 
-SpecialActions::SpecialActions(QWidget* parent)
+SpecialActions::SpecialActions(bool enableCancelOnError, QWidget* parent)
 	: QWidget(parent),
+	  mEnableCancel(enableCancelOnError),
 	  mReadOnly(false)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
@@ -148,37 +155,59 @@ SpecialActions::SpecialActions(QWidget* parent)
 	topLayout->setSpacing(KDialog::spacingHint());
 
 	// Pre-alarm action
-	QLabel* label = new QLabel(i18nc("@label:textbox", "Pre-alarm action:"), this);
-	label->setFixedSize(label->sizeHint());
-	topLayout->addWidget(label, 0, Qt::AlignLeft);
+	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Pre-Alarm Action"), this);
+	topLayout->addWidget(group);
+	QVBoxLayout* vlayout = new QVBoxLayout(group);
+	vlayout->setMargin(KDialog::marginHint());
+	vlayout->setSpacing(KDialog::spacingHint());
 
-	mPreAction = new KLineEdit(this);
+	KHBox* box = new KHBox(group);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	vlayout->addWidget(box);
+	QLabel* label = new QLabel(i18nc("@label:textbox", "Command:"), box);
+	mPreAction = new KLineEdit(box);
 	label->setBuddy(mPreAction);
-	mPreAction->setWhatsThis(i18nc("@info:whatsthis",
-	                              "<para>Enter a shell command to execute before the alarm is displayed.</para>"
-	                              "<para>Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.</para>"
-	                              "<para><note>KAlarm will wait for the command to complete before displaying the alarm.</note></para>"));
-	topLayout->addWidget(mPreAction);
-	topLayout->addSpacing(KDialog::spacingHint());
+	connect(mPreAction, SIGNAL(textChanged(const QString&)), SLOT(slotPreActionChanged(const QString&)));
+	box->setWhatsThis(i18nc("@info:whatsthis",
+	                        "<para>Enter a shell command to execute before the alarm is displayed.</para>"
+	                        "<para>Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.</para>"
+	                        "<para><note>KAlarm will wait for the command to complete before displaying the alarm.</note></para>"));
+	box->setStretchFactor(mPreAction, 1);
+
+	// Cancel if error in pre-alarm action
+	mCancelOnError = new CheckBox(i18nc("@option:check", "Cancel alarm on error"), group);
+	mCancelOnError->setWhatsThis(i18nc("@info:whatsthis", "Cancel the alarm if the pre-alarm command fails, i.e. do not display the alarm or execute any post-alarm action command."));
+	vlayout->addWidget(mCancelOnError, 0, Qt::AlignLeft);
 
 	// Post-alarm action
-	label = new QLabel(i18nc("@label:textbox", "Post-alarm action:"), this);
-	label->setFixedSize(label->sizeHint());
-	topLayout->addWidget(label, 0, Qt::AlignLeft);
+	group = new QGroupBox(i18nc("@title:group", "Post-Alarm Action"), this);
+	topLayout->addWidget(group);
+	vlayout = new QVBoxLayout(group);
+	vlayout->setMargin(KDialog::marginHint());
+	vlayout->setSpacing(KDialog::spacingHint());
 
-	mPostAction = new KLineEdit(this);
+	box = new KHBox(group);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	vlayout->addWidget(box);
+	label = new QLabel(i18nc("@label:textbox", "Command:"), box);
+	mPostAction = new KLineEdit(box);
 	label->setBuddy(mPostAction);
-	mPostAction->setWhatsThis(i18nc("@info:whatsthis",
-	                               "<para>Enter a shell command to execute after the alarm window is closed.</para>"
-	                               "<para>Note that it is not executed after closing a reminder window. If you defer "
-	                               "the alarm, it is not executed until the alarm is finally acknowledged or closed.</para>"));
-	topLayout->addWidget(mPostAction);
+	box->setWhatsThis(i18nc("@info:whatsthis",
+	                        "<para>Enter a shell command to execute after the alarm window is closed.</para>"
+	                        "<para>Note that it is not executed after closing a reminder window. If you defer "
+	                        "the alarm, it is not executed until the alarm is finally acknowledged or closed.</para>"));
+	box->setStretchFactor(mPostAction, 1);
+
+	mCancelOnError->setEnabled(enableCancelOnError);
 }
 
-void SpecialActions::setActions(const QString& pre, const QString& post)
+void SpecialActions::setActions(const QString& pre, const QString& post, bool cancelOnError)
 {
 	mPreAction->setText(pre);
 	mPostAction->setText(post);
+	mCancelOnError->setChecked(cancelOnError);
 }
 
 QString SpecialActions::preAction() const
@@ -191,9 +220,21 @@ QString SpecialActions::postAction() const
 	return mPostAction->text();
 }
 
+bool SpecialActions::cancelOnError() const
+{
+	return mCancelOnError->isChecked();
+}
+
 void SpecialActions::setReadOnly(bool ro)
 {
 	mReadOnly = ro;
 	mPreAction->setReadOnly(mReadOnly);
 	mPostAction->setReadOnly(mReadOnly);
+	mCancelOnError->setReadOnly(mReadOnly);
+}
+
+void SpecialActions::slotPreActionChanged(const QString& text)
+{
+	if (!mEnableCancel)
+		mCancelOnError->setEnabled(!text.isEmpty());
 }
