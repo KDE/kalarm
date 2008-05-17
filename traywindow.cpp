@@ -68,7 +68,7 @@ struct TipItem
 =============================================================================*/
 
 TrayWindow::TrayWindow(MainWindow* parent)
-	: KSystemTrayIcon((theApp()->wantShowInSystemTray() ? parent : 0)),
+	: KSystemTrayIcon(parent),
 	  mAssocMainWindow(parent)
 {
 	kDebug();
