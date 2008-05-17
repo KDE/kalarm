@@ -155,15 +155,18 @@ QString ShellProcess::errorMessage() const
 	switch (mStatus)
 	{
 		case UNAUTHORISED:
-			return i18nc("@info", "Failed to execute command (shell access not authorized):");
+			return i18nc("@info", "Failed to execute command (shell access not authorized)");
 		case START_FAIL:
 		case NOT_FOUND:
-			return i18nc("@info", "Failed to execute command:");
+			return i18nc("@info", "Failed to execute command");
 		case DIED:
-			return i18nc("@info", "Command execution error:");
+			return i18nc("@info", "Command execution error");
+		case SUCCESS:
+			if (mExitCode)
+				return i18nc("@info", "Command exit code: %1", mExitCode);
+			// Fall through to INACTIVE
 		case INACTIVE:
 		case RUNNING:
-		case SUCCESS:
 		default:
 			return QString();
 	}

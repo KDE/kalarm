@@ -421,6 +421,7 @@ void AlarmCalendar::slotCacheDownloaded(AlarmResource* resource)
 /******************************************************************************
 * Create a KAEvent instance corresponding to each KCal::Event in a resource.
 * Called after the resource has completed loading.
+* The event list is simply cleared if 'cal' is null.
 */
 void AlarmCalendar::updateResourceKAEvents(AlarmResource* resource, KCal::CalendarLocal* cal)
 {
@@ -488,10 +489,9 @@ void AlarmCalendar::slotResourceChange(AlarmResource* resource, AlarmResources::
 			if (!resource->isActive())
 				removeKAEvents(resource);
 			break;
+		case AlarmResources::Invalidated:
 		case AlarmResources::Deleted:
 			removeKAEvents(resource);
-			break;
-		case AlarmResources::Invalidated:
 			break;
 		default:
 			break;
@@ -1291,7 +1291,8 @@ void AlarmCalendar::findEarliestAlarm(AlarmResource* resource)
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (event->category() != KCalEvent::ACTIVE)
+		if (event->category() != KCalEvent::ACTIVE
+		||  mPendingAlarms.contains(event->id()))
 			continue;
 		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
 		if (dt.isValid()  &&  (!earliest || dt < earliestTime))
@@ -1325,4 +1326,29 @@ KAEvent* AlarmCalendar::earliestAlarm() const
 		}
 	}
 	return earliest;
+}
+
+/******************************************************************************
+* Note that an alarm which has triggered is now being processed. While pending,
+* it will be ignored for the purposes of finding the earliest trigger time.
+*/
+void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
+{
+	QString id = event->id();
+	bool wasPending = mPendingAlarms.contains(id);
+	kDebug() << id << "," << pending << "(was" << wasPending << ")";
+	if (pending)
+	{
+		if (wasPending)
+			return;
+		mPendingAlarms.append(id);
+	}
+	else
+	{
+		if (!wasPending)
+			return;
+		mPendingAlarms.removeAll(id);
+	}
+	// Now update the earliest alarm to trigger for its resource
+	findEarliestAlarm(AlarmResources::instance()->resourceForIncidence(id));
 }

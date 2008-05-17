@@ -72,7 +72,7 @@ void SpecialActionsButton::setActions(const QString& pre, const QString& post, b
 */
 void SpecialActionsButton::slotButtonPressed()
 {
-	SpecialActionsDlg dlg(mPreAction, mPostAction, mCancelOnError, this);
+	SpecialActionsDlg dlg(mPreAction, mPostAction, mCancelOnError, mEnableCancel, this);
 	dlg.setReadOnly(mReadOnly);
 	if (dlg.exec() == QDialog::Accepted)
 	{
@@ -95,8 +95,11 @@ static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";
 
 SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& postAction,
                                      bool cancelOnError, bool enableCancelOnError, QWidget* parent)
-	: KDialog(parent )
+	: KDialog(parent)
 {
+#ifdef __GNUC__
+#warning Dialogue appears below edit dialogue when Edit button in alarm message window is clicked
+#endif
 	setCaption(i18nc("@title:window", "Special Alarm Actions"));
 	setButtons(Ok|Cancel);
 	setDefaultButton(Ok);

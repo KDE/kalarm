@@ -55,6 +55,7 @@ class AlarmCalendar : public QObject
 		void                  startUpdate();
 		bool                  endUpdate();
 		KAEvent*              earliestAlarm() const;
+		void                  setAlarmPending(KAEvent*, bool pending = true);
 		KAEvent::List         atLoginAlarms() const;
 		KCal::Event*          createKCalEvent(const KAEvent* e, bool original = false, bool cancelCancelledDefer = false) const
 		                                             { return createKCalEvent(e, QString(), original, cancelCancelledDefer); }
@@ -126,6 +127,7 @@ class AlarmCalendar : public QObject
 		ResourceMap           mResourceMap;
 		KAEventMap            mEventMap;           // lookup of all events by UID
 		EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
+		QList<QString>        mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
 		KUrl                  mUrl;                // URL of current calendar file
 		KUrl                  mICalUrl;            // URL of iCalendar file
 		typedef QMap<AlarmResource*, ProgressDialog*> ProgressDlgMap;

@@ -301,7 +301,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		reminder()->setMinutes(0, false);
 		reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
 		if (mSpecialActionsButton)
-			mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), false);
+			mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), Preferences::defaultCancelOnPreActionError());
 		mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	}

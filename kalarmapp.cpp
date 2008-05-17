@@ -1270,7 +1270,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_HANDLE:     // handle it if it's due
 		{
 			KDateTime now = KDateTime::currentUtcDateTime();
-			kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << now.date() << " " << now.time();
+			kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString("yyyy-MM-dd hh:mm"));
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
 			KAAlarm alarmToExecute;
@@ -1612,7 +1612,10 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				kDebug() << "Pre-DISPLAY command:" << command;
 				int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
 				if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
+				{
+					AlarmCalendar::resources()->setAlarmPending(&event);
 					return result;     // display the message after the command completes
+				}
 				// Error executing command
 				if (event.cancelOnPreActionError())
 				{
@@ -1878,8 +1881,15 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 		{
 			// Found the command. Check its exit status.
 			bool executeAlarm = pd->preAction();
-			if (proc->status() != ShellProcess::SUCCESS)
+			ShellProcess::Status status = proc->status();
+			if (status == ShellProcess::SUCCESS  &&  !proc->exitCode())
+				kDebug() << "SUCCESS";
+			else
 			{
+				if (status == ShellProcess::SUCCESS  ||  status == ShellProcess::NOT_FOUND)
+					kDebug() << "exit status =" << status << ", exit code =" << proc->exitCode();
+				else
+					kDebug() << "exit status =" << status;
 				QString errmsg = proc->errorMessage();
 				kWarning() << pd->event->cleanText() << ":" << errmsg.remove(QRegExp("</?html>"));;
 				if (pd->messageBoxParent)
@@ -1899,8 +1909,15 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 					commandErrorMsg(proc, *pd->event, pd->alarm, pd->flags);
 
 				if (executeAlarm  &&  pd->event->cancelOnPreActionError())
+				{
+					kDebug() << pd->event->id() << ": pre-action failed: cancelled";
+					if (pd->reschedule())
+						rescheduleAlarm(*pd->event, *pd->alarm, true);
 					executeAlarm = false;
+				}
 			}
+			if (pd->preAction())
+				AlarmCalendar::resources()->setAlarmPending(pd->event, false);
 			if (executeAlarm)
 				execAlarm(*pd->event, *pd->alarm, pd->reschedule(), pd->allowDefer(), true);
 			mCommandProcesses.removeAt(i);

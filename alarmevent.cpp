@@ -709,7 +709,6 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 	switch (alarm->type())
 	{
 		case Alarm::Procedure:
-		{
 			data.action        = T_COMMAND;
 			data.cleanText     = alarm->programFile();
 			data.commandScript = data.cleanText.isEmpty();   // blank command indicates a script
@@ -722,7 +721,6 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
 			data.cancelOnPreActErr = !alarm->customProperty(KCalendar::APPNAME, CANCEL_ON_ERROR_PROPERTY).isNull();
 			if (!cmdDisplay)
 				break;
-		}
 			// fall through to Display
 		case Alarm::Display:
 		{
