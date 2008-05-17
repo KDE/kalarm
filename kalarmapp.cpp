@@ -1069,12 +1069,13 @@ void KAlarmApp::slotShowInSystemTrayChanged()
 		delete mTrayWindow;     // remove the system tray icon if it is currently shown
 		mTrayWindow = 0;
 		mOldShowInSystemTray = newShowInSysTray;
-		if (!newShowInSysTray)
+		if (newShowInSysTray)
+			displayTrayIcon(true);
+		else
 		{
 			if (win  &&  win->isHidden())
 				delete win;
 		}
-		displayTrayIcon(true);
 		--mActiveCount;
 	}
 }
