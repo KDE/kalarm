@@ -1621,9 +1621,9 @@ void MessageWin::slotDefer()
 		{
 			// The event still exists in the active calendar
 			KAEvent newev(*event);
-			bool repeat = newev.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
+			newev.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			newev.setDeferDefaultMinutes(delayMins);
-			KAlarm::updateEvent(newev, mDeferDlg, true, !repeat);
+			KAlarm::updateEvent(newev, mDeferDlg, true);
 			if (newev.deferred())
 				mNoPostAction = true;
 		}

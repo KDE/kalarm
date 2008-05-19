@@ -411,7 +411,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 * The event is not updated in KOrganizer, since this function is called when an
 * existing alarm is rescheduled (due to recurrence or deferral).
 */
-UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete, bool incRevision)
+UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete)
 {
 	kDebug() << event.id();
 
@@ -420,8 +420,6 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 	else
 	{
 		// Update the event in the calendar file.
-		if (incRevision)
-			event.incrementRevision();    // ensure alarm daemon sees the event has changed
 		AlarmCalendar* cal = AlarmCalendar::resources();
 		KAEvent* newEvent = cal->updateEvent(event);
 		if (!cal->save())
@@ -969,7 +967,7 @@ void editAlarm(KAEvent* event, QWidget* parent)
 		if (changeDeferral)
 		{
 			// The only change has been to an existing deferral
-			if (updateEvent(newEvent, editDlg, true, false) != UPDATE_OK)   // keep the same event ID
+			if (updateEvent(newEvent, editDlg, true) != UPDATE_OK)   // keep the same event ID
 				return;   // failed to save event
 		}
 		else

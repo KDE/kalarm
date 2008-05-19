@@ -117,7 +117,7 @@ UpdateStatus        addEvents(QList<KAEvent>&, QWidget* msgParent = 0, bool allo
 bool                addArchivedEvent(KAEvent&, AlarmResource* = 0);
 UpdateStatus        addTemplate(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0);
 UpdateStatus        modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent = 0, bool showKOrgErr = true);
-UpdateStatus        updateEvent(KAEvent&, QWidget* msgParent = 0, bool archiveOnDelete = true, bool incRevision = true);
+UpdateStatus        updateEvent(KAEvent&, QWidget* msgParent = 0, bool archiveOnDelete = true);
 UpdateStatus        updateTemplate(KAEvent&, QWidget* msgParent = 0);
 UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteEvents(KAEvent::List&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
