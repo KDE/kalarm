@@ -66,6 +66,8 @@ void KAResourceLocalDir::init()
 {
 	setType("dir");   // set resource type
 
+	//setSavePolicy(SaveDelayed);  // unnecessary for KAlarm, and would override base class setting
+
 	connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(slotUpdated(const QString&)));
 	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(slotUpdated(const QString&)));
 	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(slotUpdated(const QString&)));

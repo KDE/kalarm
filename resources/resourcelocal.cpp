@@ -2,7 +2,7 @@
  *  resourcelocal.cpp  -  KAlarm local calendar resource
  *  Program:  kalarm
  *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
- *  Based on resourcelocal.cpp in libkcal (updated to rev 645858),
+ *  Based on resourcelocal.cpp in libkcal (updated to rev 765072),
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -62,6 +62,8 @@ KAResourceLocal::KAResourceLocal(Type type, const QString& fileName)
 void KAResourceLocal::init()
 {
 	setType("file");   // set resource type
+
+	//setSavePolicy(SaveDelayed);  // unnecessary for KAlarm, and would override base class setting
 
 	connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(reload()));
 	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(reload()));
