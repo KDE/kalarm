@@ -18,6 +18,7 @@ Icon=kalarm
 Type=Application
 X-DocPath=kalarm/index.html
 Comment=KAlarm autostart at login
+Comment[de]=Autostart von KAlarm bei der Anmeldung
 Comment[el]=Αυτόματη εκκίνηση KAlarm κατά τη σύνδεση
 Comment[ga]=Tosaigh KAlarm go huathoibríoch ag am logála isteach
 Comment[km]=ចាប់ផ្ដើម KAlarm ដោយ​ស្វ័យប្រវត្តិ​នៅពេល​ចូល
