@@ -156,7 +156,10 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 void FontColourDlg::slotOk()
 {
 	if (mReadOnly)
+	{
 		reject();
+		return;
+	}
 	mDefaultFont = mChooser->defaultFont();
 	mFont        = mChooser->font();
 	mBgColour    = mChooser->bgColour();
