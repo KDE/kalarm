@@ -392,13 +392,15 @@ void AlarmCalendar::close()
 	}
 	while (!mResourceMap.isEmpty())
 		removeKAEvents(mResourceMap.begin().key(), true);
+	// Flag as closed now to prevent removeKAEvents() doing silly things
+	// when it's called again
+	mOpen = false;
 	if (mCalendar)
 	{
 		mCalendar->close();
 		delete mCalendar;
 		mCalendar = 0;
 	}
-	mOpen = false;
 }
 
 /******************************************************************************
@@ -477,7 +479,8 @@ void AlarmCalendar::removeKAEvents(AlarmResource* resource, bool closing)
 		mResourceMap.erase(rit);
 	}
 	mEarliestAlarm.remove(resource);
-	if (!closing)
+	// Emit signal only if we're not in the process of closing the calendar
+	if (!closing  &&  mOpen)
 		emit earliestAlarmChanged();
 }
 
