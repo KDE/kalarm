@@ -351,15 +351,9 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 	if (mSpecialActionsButton)
 		mSpecialActionsButton->setReadOnly(readOnly);
 	if (readOnly)
-	{
 		mFileBrowseButton->hide();
-		mFontColourButton->hide();
-	}
 	else
-	{
 		mFileBrowseButton->show();
-		mFontColourButton->show();
-	}
 	EditAlarmDlg::setReadOnly(readOnly);
 }
 
