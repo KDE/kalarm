@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -142,7 +142,10 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 void FontColourDlg::slotOk()
 {
 	if (mReadOnly)
+	{
 		reject();
+		return;
+	}
 	mDefaultFont = mChooser->defaultFont();
 	mFont        = mChooser->font();
 	mBgColour    = mChooser->bgColour();

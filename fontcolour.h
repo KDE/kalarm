@@ -1,7 +1,7 @@
 /*
  *  fontcolour.h  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright © 2001,2003 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001,2003,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,6 +57,7 @@ public:
 	void              setSampleText(const QString& text);
 	bool              isReadOnly() const     { return mReadOnly; }
 	void              setReadOnly(bool);
+	virtual bool      eventFilter(QObject*, QEvent*);
 
 private slots:
 	void              setSampleColour();
