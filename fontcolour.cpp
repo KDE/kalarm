@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright (C) 2001 - 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2003,2005,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,7 +55,7 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		page = new QGroupBox(frameLabel, this);
 		topLayout->addWidget(page);
 		topLayout = new QVBoxLayout(page, KDialog::marginHint(), KDialog::spacingHint());
-		topLayout->addSpacing(fontMetrics().lineSpacing()/2);
+		topLayout->addSpacing(fontMetrics().height() - KDialog::marginHint() + KDialog::spacingHint());
 	}
 	if (fg)
 	{
@@ -120,6 +120,10 @@ FontColourChooser::FontColourChooser(QWidget *parent, const char *name,
 		mDefaultFont = 0;
 
 	mFontChooser = new KFontChooser(page, name, onlyFixed, fontList, false, visibleListSize);
+	mFontChooser->installEventFilter(this);   // for read-only mode
+	const QObjectList* kids = mFontChooser->queryList();
+	for (QObjectList::ConstIterator it = kids->constBegin();  it != kids->constEnd();  ++it)
+		(*it)->installEventFilter(this);
 	topLayout->addWidget(mFontChooser);
 
 	slotDefaultFontToggled(false);
@@ -210,6 +214,25 @@ void FontColourChooser::setReadOnly(bool ro)
 		mBgColourButton->setReadOnly(ro);
 		mDefaultFont->setReadOnly(ro);
 	}
+}
+
+bool FontColourChooser::eventFilter(QObject*, QEvent* e)
+{
+	if (mReadOnly)
+	{
+		switch (e->type())
+		{
+			case QEvent::MouseButtonPress:
+			case QEvent::MouseButtonRelease:
+			case QEvent::MouseButtonDblClick:
+			case QEvent::KeyPress:
+			case QEvent::KeyRelease:
+				return true;   // prevent the event being handled
+			default:
+				break;
+		}
+	}
+	return false;
 }
 
 void FontColourChooser::slotDefaultFontToggled(bool on)
