@@ -1,7 +1,7 @@
 /*
  *  fontcolour.cpp  -  font and colour chooser widget
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <kfontchooser.h>
 #include <kfontdialog.h>
 #include <kcolordialog.h>
 #include <khbox.h>
@@ -129,6 +130,10 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 		mDefaultFont = 0;
 
 	mFontChooser = new KFontChooser(page, KFontChooser::DisplayFrame, fontList, visibleListSize);
+	mFontChooser->installEventFilter(this);   // for read-only mode
+	QList<QWidget*> kids = mFontChooser->findChildren<QWidget*>();
+	for (int i = 0, end = kids.count();  i < end;  ++i)
+		kids[i]->installEventFilter(this);
 	topLayout->addWidget(mFontChooser);
 
 	slotDefaultFontToggled(false);
@@ -219,6 +224,26 @@ void FontColourChooser::setReadOnly(bool ro)
 		mBgColourButton->setReadOnly(ro);
 		mDefaultFont->setReadOnly(ro);
 	}
+}
+
+bool FontColourChooser::eventFilter(QObject*, QEvent* e)
+{
+	if (mReadOnly)
+	{
+		switch (e->type())
+		{
+			case QEvent::MouseMove:
+			case QEvent::MouseButtonPress:
+			case QEvent::MouseButtonRelease:
+			case QEvent::MouseButtonDblClick:
+			case QEvent::KeyPress:
+			case QEvent::KeyRelease:
+				return true;   // prevent the event being handled
+			default:
+				break;
+		}
+	}
+	return false;
 }
 
 void FontColourChooser::slotDefaultFontToggled(bool on)
