@@ -1,12 +1,37 @@
 # KDE Config File
 [Desktop Entry]
 Name=KAlarm
+Name[af]=K-alarm
+Name[bg]=Аларма
+Name[cy]=KLarwm
+Name[eo]=Alarmilo
+Name[mk]=КАларм
+Name[ne]=केडीई संसूचक
+Name[pa]=ਕੇ-ਅਲਾਰਮ
+Name[pl]=Alarm
+Name[sv]=Kalarm
+Name[ta]=Kஅலாரம்
+Name[x-test]=xxKAlarmxx
+Name[zh_TW]=KAlarm 鬧鐘
 Exec=kalarmautostart kalarm --tray
 Icon=kalarm
 Type=Application
 X-DocPath=kalarm/index.html
 Comment=KAlarm autostart at login
 Comment[de]=Autostart von KAlarm bei der Anmeldung
+Comment[el]=Αυτόματη εκκίνηση KAlarm κατά τη σύνδεση
+Comment[ga]=Tosaigh KAlarm go huathoibríoch ag am logála isteach
+Comment[km]=ចាប់ផ្ដើម KAlarm ដោយ​ស្វ័យប្រវត្តិ​នៅពេល​ចូល
+Comment[lv]=KAlarm automātiska palaišana pieslēdzoties
+Comment[nds]=KAlarm bi't Anmellen automaatsch starten
+Comment[pl]=Automatyczne uruchamianie KAlarmu po zalogowaniu
+Comment[pt]=Arranque automático do KAlarm no início
+Comment[pt_BR]=Iniciar automaticamente o KAlarm na inicialização
+Comment[sv]=Automatisk start av Kalarm vid inloggning
+Comment[tr]=Açılışta KAlarm servisini başlat
+Comment[uk]=Автозапуск після входу KAlarm
+Comment[x-test]=xxKAlarm autostart at loginxx
+Comment[zh_TW]=KAlarm 登入時自動啟動
 Terminal=false
 X-KDE-autostart-phase=2
 X-KDE-autostart-condition=kalarmrc:General:AutoStart:false
