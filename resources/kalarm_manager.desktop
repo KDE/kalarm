@@ -1,35 +1,7 @@
 # KDE Config File
 [Desktop Entry]
 Name=Alarms
-Name[bg]=Аларми
-Name[ca]=Alarmes
 Name[de]=Erinnerungen
-Name[el]=Ειδοποιήσεις
-Name[es]=Alarmas
-Name[et]=Häired
-Name[fi]=Hälytykset
-Name[fr]=Alarmes
-Name[ga]=Aláraim
-Name[it]=Promemoria
-Name[ja]=アラーム
-Name[kk]=Ескертулер
-Name[km]=ជូន​ដំណឹង
-Name[ko]=알람
-Name[lv]=Atgādinājumi
-Name[nb]=Varslinger
-Name[ne]=संसूचक
-Name[nl]=Herinneringen
-Name[oc]=Alarmas
-Name[pa]=ਅਲਾਰਮ
-Name[pl]=Alarmy
-Name[pt]=Alarmes
-Name[pt_BR]=Alarmes
-Name[sv]=Alarm
-Name[tr]=Alarmlar
-Name[uk]=Нагадування
-Name[x-test]=xxAlarmsxx
-Name[zh_CN]=提醒事项
-Name[zh_TW]=鬧鐘
 Type=Service
 X-KDE-ServiceTypes=KResources/Manager
 X-KDE-ResourceFamily=alarms
