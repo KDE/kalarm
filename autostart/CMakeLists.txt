@@ -12,4 +12,4 @@ kde4_add_executable(kalarmautostart ${kalarmautostart_SRCS})
 
 target_link_libraries(kalarmautostart ${KDE4_KDEUI_LIBS} )
 
-install(TARGETS kalarmautostart  DESTINATION ${BIN_INSTALL_DIR} )
+install(TARGETS kalarmautostart  ${INSTALL_TARGETS_DEFAULT_ARGS} )
