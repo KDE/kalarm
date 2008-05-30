@@ -452,6 +452,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 			continue;    // ignore events without alarms
 
 		KAEvent* event = new KAEvent(kcalevent);
+		event->setResource(resource);
 		events += event;
 		mEventMap[kcalevent->uid()] = event;
 	}

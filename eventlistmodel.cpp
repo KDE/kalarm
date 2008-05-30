@@ -451,19 +451,19 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 	switch (change)
 	{
 		case AlarmResources::Added:
-			kDebug() << "Added";
+			kDebug() << resource->resourceName() << "Added";
 			added = true;
 			break;
 		case AlarmResources::Deleted:
-			kDebug() << "Deleted";
+			kDebug() << resource->resourceName() << "Deleted";
 			removeResource(resource);
 			return;
 		case AlarmResources::Invalidated:
-			kDebug() << "Invalidated";
+			kDebug() << resource->resourceName() << "Invalidated";
 			removeResource(resource);
 			return;
 		case AlarmResources::Location:
-			kDebug() << "Location";
+			kDebug() << resource->resourceName() << "Location";
 			removeResource(resource);
 			added = true;
 			break;
@@ -480,7 +480,7 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 			int firstRow = -1;
 			for (int row = 0, end = mEvents.count();  row < end;  ++row)
 			{
-				if (resources->resourceForEvent(mEvents[row]->id()) == resource)
+				if (mEvents[row]->resource() == resource)
 				{
 					// For efficiency, emit a single signal for each group
 					// of consecutive alarms for the resource, rather than a separate
@@ -534,7 +534,7 @@ void EventListModel::removeResource(AlarmResource* resource)
 	int lastRow = -1;
 	for (int row = mEvents.count();  --row >= 0; )
 	{
-		AlarmResource* r = resources->resourceForEvent(mEvents[row]->id());
+		AlarmResource* r = mEvents[row]->resource();
 		if (!r  ||  r == resource)
 		{
 			// For efficiency, delete each group of consecutive

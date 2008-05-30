@@ -37,6 +37,7 @@ namespace KCal { class CalendarLocal; }
 #include "kcalendar.h"
 #include "preferences.h"
 
+class AlarmResource;
 class KARecurrence;
 struct AlarmData;
 
@@ -330,6 +331,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setEmail(const KDateTime&, uint from, const EmailAddressList&, const QString& subject,
 		                            const QString& message, const QStringList& attachments, int lateCancel, int flags, bool changesPending = false);
 		void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
+		void               setResource(AlarmResource* r)                    { mResource = r; }
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
 		void               setTemplate(const QString& name, int afterTime = -1);
 		void               setActions(const QString& pre, const QString& post, bool cancelOnError)
@@ -430,6 +432,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               mainExpired() const            { return mMainExpired; }
 		bool               expired() const                { return (mDisplaying && mMainExpired)  ||  mCategory == KCalEvent::ARCHIVED; }
 		KCalEvent::Status  category() const               { return mCategory; }
+		AlarmResource*     resource() const               { return mResource; }
 		QString            resourceID() const             { return mResourceId; }
 
 		struct MonthPos
@@ -492,6 +495,7 @@ class KAEvent : public KAAlarmEventBase
 		inline void        set_archiveReminder();
 
 		QString            mTemplateName;     // alarm template's name, or null if normal event
+		AlarmResource*     mResource;         // resource which owns the event
 		QString            mResourceId;       // saved resource ID (not the resource the event is in)
 		QString            mAudioFile;        // ATTACH: audio file to play
 		QString            mPreAction;        // command to execute before alarm is displayed
