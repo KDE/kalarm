@@ -64,6 +64,13 @@ using namespace KCal;
 #include "recurrenceeditprivate.moc"
 
 
+class ListWidget : public QListWidget
+{
+	public:
+		explicit ListWidget(QWidget* parent) : QListWidget(parent) {}
+		virtual QSize sizeHint() const  { return minimumSizeHint(); }
+};
+
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
 QString RecurrenceEdit::i18n_combo_NoRecur()        { return i18nc("@item:inlistbox Recurrence type", "No Recurrence"); }
@@ -302,8 +309,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	vlayout->setMargin(0);
 	hlayout->addLayout(vlayout);
 
-	mExceptionDateList = new QListWidget(mExceptionGroup);
-	mExceptionDateList->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+	mExceptionDateList = new ListWidget(mExceptionGroup);
 	connect(mExceptionDateList, SIGNAL(currentRowChanged(int)), SLOT(enableExceptionButtons()));
 	mExceptionDateList->setWhatsThis(i18nc("@info:whatsthis", "The list of exceptions, i.e. dates/times excluded from the recurrence"));
 	vlayout->addWidget(mExceptionDateList);
