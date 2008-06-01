@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <software@astrojar.org.uk>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -111,7 +111,6 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 
 	// Date edit box
 	mDateEdit = new DateEdit(topWidget);
-	mDateEdit->setFixedSize(mDateEdit->sizeHint());
 	connect(mDateEdit, SIGNAL(dateEntered(const QDate&)), SLOT(dateTimeChanged()));
 	mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the date to schedule the alarm.</para>"

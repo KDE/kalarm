@@ -268,7 +268,6 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	            "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
 	mRangeButtonGroup->addButton(mEndDateButton);
 	mEndDateEdit = new DateEdit(mRangeButtonBox);
-	mEndDateEdit->setFixedSize(mEndDateEdit->sizeHint());
 	mEndDateEdit->setReadOnly(mReadOnly);
 	static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
 	mEndDateEdit->setWhatsThis(i18nc("@info:whatsthis",
@@ -326,11 +325,11 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		vlayout->setMargin(0);
 		hlayout->addLayout(vlayout);
 		mExceptionDateEdit = new DateEdit(mExceptionGroup);
-		mExceptionDateEdit->setFixedSize(mExceptionDateEdit->sizeHint());
 		mExceptionDateEdit->setDate(QDate::currentDate());
-		mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter a date to insert in the exceptions list. "
-		                                      "Use in conjunction with the Add or Change button below."));
-		vlayout->addWidget(mExceptionDateEdit);
+		mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
+		      "Enter a date to insert in the exceptions list. "
+		      "Use in conjunction with the Add or Change button below."));
+		vlayout->addWidget(mExceptionDateEdit, 0, Qt::AlignLeft);
 
 		hlayout = new QHBoxLayout();
 		hlayout->setMargin(0);
@@ -344,7 +343,8 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		mChangeExceptionButton = new QPushButton(i18nc("@action:button", "Change"), mExceptionGroup);
 		mChangeExceptionButton->setFixedSize(mChangeExceptionButton->sizeHint());
 		connect(mChangeExceptionButton, SIGNAL(clicked()), SLOT(changeException()));
-		mChangeExceptionButton->setWhatsThis(i18nc("@info:whatsthis", "Replace the currently highlighted item in the exceptions list with the date entered above"));
+		mChangeExceptionButton->setWhatsThis(i18nc("@info:whatsthis",
+		      "Replace the currently highlighted item in the exceptions list with the date entered above"));
 		hlayout->addWidget(mChangeExceptionButton);
 
 		mDeleteExceptionButton = new QPushButton(i18nc("@action:button", "Delete"), mExceptionGroup);
@@ -357,7 +357,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mWorkTimeOnly = new CheckBox(i18nc("@option:check", "Only during working hours"), mExceptionGroup);
 	mWorkTimeOnly->setFixedSize(mWorkTimeOnly->sizeHint());
 	mWorkTimeOnly->setReadOnly(mReadOnly);
-	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis", "<para>Only execute the alarm during working hours.</para><para>You can specify working hours in the Preferences dialog.</para>"));
+	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Only execute the alarm during working hours.</para>"
+	      "<para>You can specify working hours in the Preferences dialog.</para>"));
 	vlayout->addWidget(mWorkTimeOnly);
 
 	mNoEmitTypeChanged = false;
