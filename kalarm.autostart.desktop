@@ -31,6 +31,7 @@ Comment[sv]=Automatisk start av Kalarm vid inloggning
 Comment[tr]=Açılışta KAlarm servisini başlat
 Comment[uk]=Автозапуск після входу KAlarm
 Comment[x-test]=xxKAlarm autostart at loginxx
+Comment[zh_CN]=登录时自动启动 KAlarm
 Comment[zh_TW]=KAlarm 登入時自動啟動
 Terminal=false
 X-KDE-autostart-phase=2
