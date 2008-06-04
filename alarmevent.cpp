@@ -171,6 +171,7 @@ void KAEvent::copy(const KAEvent& event)
 {
 	KAAlarmEventBase::copy(event);
 	mTemplateName            = event.mTemplateName;
+	mResource                = event.mResource;
 	mResourceId              = event.mResourceId;
 	mAudioFile               = event.mAudioFile;
 	mPreAction               = event.mPreAction;
@@ -247,6 +248,7 @@ void KAEvent::set(const Event* event)
 	mArchiveRepeatAtLogin   = false;
 	mDisplayingDefer        = false;
 	mDisplayingEdit         = false;
+	mResource               = 0;
 	mArchiveReminderMinutes = 0;
 	mDeferDefaultMinutes    = 0;
 	mLateCancel             = 0;
@@ -881,6 +883,7 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 	mResourceId.clear();
 	mPreAction.clear();
 	mPostAction.clear();
+	mResource               = 0;
 	mText                   = (mActionType == T_COMMAND) ? text.trimmed() : text;
 	mCategory               = KCalEvent::ACTIVE;
 	mAudioFile              = "";
@@ -4032,6 +4035,8 @@ void KAEvent::dumpDebug() const
 		kDebug() << "-- mTemplateName:" << mTemplateName;
 		kDebug() << "-- mTemplateAfterTime:" << mTemplateAfterTime;
 	}
+	if (mResource)
+		kDebug() << "-- mResource:" << mResource->resourceName();
 	if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
 	{
 		kDebug() << "-- mSpeak:" << mSpeak;

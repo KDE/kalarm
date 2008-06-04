@@ -1,4 +1,4 @@
-/* *  functions.cpp  -  miscellaneous functions
+/*  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
  *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
@@ -70,13 +70,14 @@ QString       korganizerName    = "korganizer";
 QString       korgStartError;
 QDBusInterface* korgInterface = 0;
 
-const char*   KORG_DBUS_WINDOW  = "MainWindow_1";
-const char*   KMAIL_DBUS_WINDOW = "kmail_mainwindow1";
-const char*   KMAIL_DBUS_SERVICE = "org.kde.kmail";
-const char*   KORG_DBUS_SERVICE = "org.kde.korganizer";
-const char*   KORG_DBUS_IFACE   = "org.kde.korganizer.Korganizer";
-const char*   KORG_DBUS_OBJECT  = "/";    // D-Bus object path of KOrganizer's notification interface
-const QString KORGANIZER_UID    = QString::fromLatin1("-korg");
+const char*   KMAIL_DBUS_SERVICE      = "org.kde.kmail";
+//const char*   KMAIL_DBUS_IFACE        = "org.kde.kmail.kmail";
+const char*   KMAIL_DBUS_WINDOW_PATH  = "/kmail/kmail_mainwindow_1";
+const char*   KORG_DBUS_SERVICE       = "org.kde.korganizer";
+const char*   KORG_DBUS_IFACE         = "org.kde.korganizer.Korganizer";
+const char*   KORG_DBUS_PATH          = "/";    // D-Bus object path of KOrganizer's notification interface
+const char*   KORG_DBUS_WINDOW_PATH   = "/korganizer/MainWindow_1";
+const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
 
 const char*   ALARM_OPTS_FILE        = "alarmopts";
 const char*   DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
@@ -1145,18 +1146,19 @@ QString runKMail(bool minimise)
 {
 	QString dbusService = KMAIL_DBUS_SERVICE;
 	QString errmsg;
-	if (!runProgram(QLatin1String("kmail"), (minimise ? QLatin1String(KMAIL_DBUS_WINDOW) : QString()), dbusService, errmsg))
+	if (!runProgram(QLatin1String("kmail"), dbusService, (minimise ? QLatin1String(KMAIL_DBUS_WINDOW_PATH) : QString()), errmsg))
 		return i18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
 	return QString();
 }
 
 /******************************************************************************
 *  Start another program for D-Bus access if it isn't already running.
-*  If 'windowName' is not empty, the program's window of that name is iconised.
+*  If 'dbusWindowPath' is not empty, the program's window with that D-Bus path
+*  name is iconised.
 *  On exit, 'errorMessage' contains an error message if failure.
 *  Reply = true if the program is now running.
 */
-bool runProgram(const QString& program, const QString& windowName, QString& dbusService, QString& errorMessage)
+bool runProgram(const QString& program, QString& dbusService, const QString& dbusWindowPath, QString& errorMessage)
 {
 	QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(dbusService);
 	if (!reply.isValid()  ||  !reply.value())
@@ -1167,21 +1169,23 @@ bool runProgram(const QString& program, const QString& windowName, QString& dbus
 			kError() << "Couldn't start" << program << " (" << errorMessage << ")";
 			return false;
 		}
-		if (!windowName.isEmpty())
+		if (!dbusWindowPath.isEmpty())
 		{
 			// Minimise its window - don't use hide() since this would remove all
 			// trace of it from the panel if it is not configured to be docked in
 			// the system tray.
-//kapp->dcopClient()->send(dcopName, windowName, "minimize()", QString());
 #ifdef __GNUC__
-#warning Minimise window
+#warning Make minimise window work
 #endif
 //Call D-Bus app/MainWin showMinimized()???
-//			QDBusInterface iface(dbusService, DBUS_OBJECT, DBUS_IFACE);
-			QDBusInterface iface(dbusService, QString(), QString());
-			QDBusError err = iface.callWithArgumentList(QDBus::NoBlock, QLatin1String("minimize"), QList<QVariant>());
+#if 0
+//			QDBusInterface iface(dbusService, DBUS_PATH, DBUS_IFACE);
+//			QDBusInterface iface(dbusService, dbusWindowPath);
+			QDBusInterface iface(dbusService, "/kmail_mainwindow_1", "com.trolltech.Qt.QWidget");
+			QDBusError err = iface.callWithArgumentList(QDBus::NoBlock, QLatin1String("showMinimized"), QList<QVariant>());
 			if (err.isValid())
-				kError() << program << ": minimize D-Bus call failed:" << err.message();
+				kError() << program << ": showMinimized D-Bus call failed:" << err.message();
+#endif
 		}
 	}
 	errorMessage.clear();
@@ -1634,7 +1638,7 @@ bool deleteFromKOrganizer(const QString& eventID)
 bool runKOrganizer()
 {
 	QString dbusService = KORG_DBUS_SERVICE;
-	if (!KAlarm::runProgram(QLatin1String("korganizer"), KORG_DBUS_WINDOW, dbusService, korgStartError))
+	if (!KAlarm::runProgram(QLatin1String("korganizer"), dbusService, KORG_DBUS_WINDOW_PATH, korgStartError))
 		return false;
 	if (korgInterface  &&  !korgInterface->isValid())
 	{
@@ -1642,7 +1646,7 @@ bool runKOrganizer()
 		korgInterface = 0;
 	}
 	if (!korgInterface)
-		korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, KORG_DBUS_OBJECT, KORG_DBUS_IFACE);
+		korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, KORG_DBUS_PATH, KORG_DBUS_IFACE);
 	return true;
 }
 

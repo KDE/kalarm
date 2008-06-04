@@ -178,6 +178,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	}
 	else
 	{
+emit invalidate(this);  // necessary until load changes only is fixed
 		oldLastModified = mLastModified;
 		oldCompatibilityMap = mCompatibilityMap;
 		changes = changedIncidences();
@@ -210,9 +211,14 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 			if (!syncCache)
 			{
 				// Only load new or changed events
+#ifdef __GNUC__
+#warning All events are actually loaded, not just new or changed
+#endif
+				clearChange(id);
 				Event* ev = calendar()->event(id);
 				if (ev  &&  changes.indexOf(ev) < 0)
 				{
+kDebug(KARES_DEBUG) << "Loading" << id;
 					ModifiedMap::ConstIterator mit = oldLastModified.find(id);
 					if (mit != oldLastModified.end()  &&  mit.value() == readLastModified(fileName))
 					{

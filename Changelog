@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 1.9.10 ===
+=== Version 2.0.0 beta4 ===
 - New facility to use multiple alarm calendar resources.
 - Add facility to select time zone for alarm times.
 - Handle summer/winter time changes correctly.
@@ -9,6 +9,10 @@ KAlarm Change Log
 - Provide "Don't show again for this alarm" option for command error messages.
 - Alarm edit dialogue layout improvements.
 - Choose new alarm/template type from menu instead of in alarm edit dialogue.
+- Add option to show alarm windows in centre of screen, with buttons initially
+  disabled to prevent accidental acknowledgement.
+- Remove alarm daemon (kalarmd) and do alarm monitoring in KAlarm itself.
+- Remove --handleEvent command line option.
 - Use custom properties instead of CATEGORIES in calendar events for KAlarm data.
 - Don't discard non-KAlarm custom event properties when editing alarms.
 - Add check for compatible daemon version when KAlarm registers with it.

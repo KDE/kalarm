@@ -45,6 +45,7 @@ class TextEdit : public KTextEdit
 		Q_OBJECT
 	public:
 		explicit TextEdit(QWidget* parent);
+		virtual QSize sizeHint() const  { return minimumSizeHint(); }
 	protected:
 		virtual void dragEnterEvent(QDragEnterEvent*);
 };
