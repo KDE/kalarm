@@ -82,7 +82,6 @@ class AlarmTimeWidget : public QFrame
 		ButtonGroup*     mButtonGroup;
 		RadioButton*     mAtTimeRadio;
 		RadioButton*     mAfterTimeRadio;
-                QLabel*          mDurationUnits;
 		CheckBox*        mAnyTimeCheckBox;
 		DateEdit*        mDateEdit;
 		TimeEdit*        mTimeEdit;

@@ -146,7 +146,6 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 
 	// 'Time from now' radio button/label
 	mAfterTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer for time interval:") : i18nc("@option:radio", "Time from now:")), topWidget);
-        mDurationUnits = new QLabel(i18n("HH:MM"));
 	mAfterTimeRadio->setFixedSize(mAfterTimeRadio->sizeHint());
 	mAfterTimeRadio->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "Reschedule the alarm for the specified time interval after now.")
 	                                         : i18nc("@info:whatsthis", "Schedule the alarm after the specified time interval from now."));
@@ -183,7 +182,6 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 		grid->addWidget(mAtTimeRadio, 0, 0, Qt::AlignLeft);
 		grid->addWidget(mDateEdit, 0, 1, Qt::AlignLeft);
 		grid->addWidget(timeBox, 0, 2, Qt::AlignLeft);
-		grid->addWidget(mDurationUnits, 2, 2, Qt::AlignLeft);
 		grid->setRowStretch(1, 1);
 		grid->addWidget(mAfterTimeRadio, 2, 0, Qt::AlignLeft);
 		grid->addWidget(mDelayTimeEdit, 2, 1, Qt::AlignLeft);
