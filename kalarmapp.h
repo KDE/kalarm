@@ -161,6 +161,7 @@ class KAlarmApp : public KUniqueApplication
 		static int         mFatalError;          // a fatal error has occurred - just wait to exit
 		static QString     mFatalMessage;        // fatal error message to output
 		bool               mInitialised;         // initialisation complete: ready to process execution queue
+		bool               mQuitting;            // a forced quit is in progress
 		bool               mLoginAlarmsDone;     // alarms repeated at login have been processed
 		DBusHandler*       mDBusHandler;         // the parent of the main DCOP receiver object
 		TrayWindow*        mTrayWindow;          // active system tray icon
