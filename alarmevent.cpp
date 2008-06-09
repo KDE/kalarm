@@ -2980,7 +2980,8 @@ void KAEvent::setRecurrence(const KARecurrence& recurrence)
 	}
 	else
 	{
-		mChanged = mRecurrence;
+		if (mRecurrence)
+			mChanged = true;
 		mRecurrence = 0;
 	}
 
