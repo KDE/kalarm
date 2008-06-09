@@ -92,6 +92,7 @@ QString     KAlarmApp::mFatalMessage;
 KAlarmApp::KAlarmApp()
 	: KUniqueApplication(),
 	  mInitialised(false),
+	  mQuitting(false),
 	  mLoginAlarmsDone(false),
 	  mDBusHandler(new DBusHandler()),
 	  mTrayWindow(0),
@@ -743,11 +744,14 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	if (force)
 	{
 		// Quit regardless, except for message windows
+		mQuitting = true;
 		MainWindow::closeAll();
 		displayTrayIcon(false);
 		if (MessageWin::instanceCount())
 			return;
 	}
+	else if (mQuitting)
+		return;   // MainWindow::closeAll() causes quitIf() to be called again
 	else
 	{
 		// Quit only if there are no more "instances" running
@@ -777,6 +781,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 
 	// This was the last/only running "instance" of the program, so exit completely.
 	kDebug() << exitCode << ": quitting";
+	AlarmCalendar::terminateCalendars();
 	exit(exitCode);
 }
 
