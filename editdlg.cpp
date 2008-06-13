@@ -513,7 +513,6 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
 	}
-	mLateCancel->setFixedSize(mLateCancel->sizeHint());   // do this after type_initValues()
 
 	if (!deferGroupVisible)
 		mDeferGroup->hide();

@@ -59,46 +59,43 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 		topLayout->setMargin(KDialog::marginHint());
 		topLayout->setSpacing(KDialog::spacingHint());
 	}
+	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout->setMargin(0);
+	topLayout->addLayout(hlayout);
+	QVBoxLayout* colourLayout = new QVBoxLayout();
+	colourLayout->setMargin(0);
+	hlayout->addLayout(colourLayout);
 	if (fg)
 	{
-		QHBoxLayout* layout = new QHBoxLayout();
-		layout->setMargin(0);
-		topLayout->addLayout(layout);
 		KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
 		box->setMargin(0);
-		box->setSpacing(KDialog::spacingHint());
-		layout->addWidget(box);
+		box->setSpacing(KDialog::spacingHint()/2);
+		colourLayout->addWidget(box);
 
 		QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
-		label->setMinimumSize(label->sizeHint());
+		box->setStretchFactor(new QWidget(box), 0);
 		mFgColourButton = new ColourCombo(box);
-		mFgColourButton->setMinimumSize(mFgColourButton->sizeHint());
 		connect(mFgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 		label->setBuddy(mFgColourButton);
 		box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message foreground color"));
-		layout->addStretch();
 	}
 
-	QHBoxLayout* layout = new QHBoxLayout();
-	layout->setMargin(0);
-	topLayout->addLayout(layout);
 	KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
 	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
-	layout->addWidget(box);
+	box->setSpacing(KDialog::spacingHint()/2);
+	colourLayout->addWidget(box);
 
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
-	label->setMinimumSize(label->sizeHint());
+	box->setStretchFactor(new QWidget(box), 0);
 	mBgColourButton = new ColourCombo(box);
-	mBgColourButton->setMinimumSize(mBgColourButton->sizeHint());
 	connect(mBgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
 	label->setBuddy(mBgColourButton);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message background color"));
-	layout->addStretch();
+	hlayout->addStretch();
 
 	if (editColours)
 	{
-		layout = new QHBoxLayout();
+		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setMargin(0);
 		topLayout->addLayout(layout);
 		QPushButton* button = new QPushButton(i18nc("@action:button", "Add Color..."), page);
@@ -116,7 +113,7 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 
 	if (defaultFont)
 	{
-		layout = new QHBoxLayout();
+		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setMargin(0);
 		topLayout->addLayout(layout);
 		mDefaultFont = new CheckBox(i18nc("@option:check", "Use default font"), page);

@@ -60,31 +60,28 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	topLayout->addWidget(mStack, 0, Qt::AlignLeft);
 	mCheckboxFrame = new QFrame();
 	mStack->addWidget(mCheckboxFrame);
-	QVBoxLayout* vlayout = new QVBoxLayout(mCheckboxFrame);
-	vlayout->setMargin(0);
+	QHBoxLayout* hlayout = new QHBoxLayout(mCheckboxFrame);
+	hlayout->setMargin(0);
 	mCheckbox = new CheckBox(i18n_chk_CancelIfLate(), mCheckboxFrame);
-	mCheckbox->setFixedSize(mCheckbox->sizeHint());
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
 	mCheckbox->setWhatsThis(whatsThis);
-	vlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
+	hlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
 
 	mTimeSelectorFrame = new QFrame();
 	mStack->addWidget(mTimeSelectorFrame);
-	vlayout = new QVBoxLayout(mTimeSelectorFrame);
-	vlayout->setMargin(0);
+	hlayout = new QHBoxLayout(mTimeSelectorFrame);
+	hlayout->setMargin(0);
 	mTimeSelector = new TimeSelector(i18nc("@option:check Cancel if late by 10 minutes", "Cancel if late by"), QString(),
 	                                 whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-	vlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
-	mStack->setFixedHeight(qMax(mCheckbox->height(), mTimeSelector->sizeHint().height()));
+	hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->addSpacing(3*KDialog::spacingHint());
 	topLayout->addLayout(hlayout);
 	mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
-	mAutoClose->setFixedSize(mAutoClose->sizeHint());
 	mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
 	hlayout->addWidget(mAutoClose);
 	hlayout->addStretch();
