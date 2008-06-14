@@ -280,6 +280,8 @@ PrefsTabBase::PrefsTabBase()
 		opt.initFrom(&radio);
 		mIndentWidth = style()->subElementRect(QStyle::SE_RadioButtonIndicator, &opt).width();
 	}
+	mTopLayout = qobject_cast<QVBoxLayout*>(layout());
+	Q_ASSERT(mTopLayout);
 }
 
 void PrefsTabBase::apply(bool syncToDisc)
@@ -378,11 +380,12 @@ MiscPrefTab::MiscPrefTab()
 	radio->setWhatsThis(wt);
 	mXtermCommand->setWhatsThis(wt);
 
-	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+	topLayout()->addStretch();    // top adjust the widgets
 }
 
 void MiscPrefTab::restore(bool defaults)
 {
+	Q_UNUSED(defaults);
 	mAutoStart->setChecked(Preferences::autoStart());
 	mQuitWarn->setChecked(Preferences::quitWarn());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
@@ -562,7 +565,7 @@ TimePrefTab::TimePrefTab()
 	startLabel->setFixedWidth(w);
 	endLabel->setFixedWidth(w);
 
-	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+	topLayout()->addStretch();    // top adjust the widgets
 }
 
 void TimePrefTab::restore(bool)
@@ -686,7 +689,7 @@ StorePrefTab::StorePrefTab()
 	grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
-	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+	topLayout()->addStretch();    // top adjust the widgets
 }
 
 void StorePrefTab::restore(bool defaults)
@@ -868,7 +871,7 @@ EmailPrefTab::EmailPrefTab()
 
 	group->setFixedHeight(group->sizeHint().height());
 
-	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+	topLayout()->addStretch();    // top adjust the widgets
 }
 
 void EmailPrefTab::restore(bool defaults)
@@ -985,45 +988,34 @@ FontColourPrefTab::FontColourPrefTab()
 {
 	mFontChooser = new FontColourChooser(this, QStringList(), i18nc("@title:group", "Message Font && Color"), true, false);
 
-	KHBox* layoutBox = new KHBox(this);
-	layoutBox->setMargin(0);
-	KHBox* box = new KHBox(layoutBox);    // to group widgets for QWhatsThis text
+	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout->setMargin(0);
+	topLayout()->addLayout(hlayout);
+	QVBoxLayout* colourLayout = new QVBoxLayout();
+	colourLayout->setMargin(0);
+	hlayout->addLayout(colourLayout);
+
+	KHBox* box = new KHBox(this);    // to group widgets for QWhatsThis text
 	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
+	box->setSpacing(KDialog::spacingHint()/2);
+	colourLayout->addWidget(box);
 	QLabel* label1 = new QLabel(i18nc("@label:listbox", "Disabled alarm color:"), box);
-//	label1->setMinimumSize(label1->sizeHint());
-	box->setStretchFactor(new QWidget(box), 1);
+	box->setStretchFactor(new QWidget(box), 0);
 	mDisabledColour = new KColorCombo(box);
-	mDisabledColour->setMinimumSize(mDisabledColour->sizeHint());
 	label1->setBuddy(mDisabledColour);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for disabled alarms."));
-	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
-	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
 
-	layoutBox = new KHBox(this);
-	layoutBox->setMargin(0);
-	box = new KHBox(layoutBox);    // to group widgets for QWhatsThis text
+	box = new KHBox(this);    // to group widgets for QWhatsThis text
 	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
+	box->setSpacing(KDialog::spacingHint()/2);
+	colourLayout->addWidget(box);
 	QLabel* label2 = new QLabel(i18nc("@label:listbox", "Archived alarm color:"), box);
-//	label2->setMinimumSize(label2->sizeHint());
-	box->setStretchFactor(new QWidget(box), 1);
+	box->setStretchFactor(new QWidget(box), 0);
 	mArchivedColour = new KColorCombo(box);
-	mArchivedColour->setMinimumSize(mArchivedColour->sizeHint());
 	label2->setBuddy(mArchivedColour);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for archived alarms."));
-	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
-	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
 
-	// Line up the two sets of colour controls
-	QSize size = label1->sizeHint();
-	QSize size2 = label2->sizeHint();
-	if (size2.width() > size.width())
-		size.setWidth(size2.width());
-	label1->setFixedSize(size);
-	label2->setFixedSize(size);
-
-	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+	hlayout->addStretch();
 }
 
 void FontColourPrefTab::restore(bool)
@@ -1233,7 +1225,7 @@ EditPrefTab::EditPrefTab()
 	      "For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years."
 	      "<note>The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</note>"));
 
-	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+	topLayout()->addStretch();    // top adjust the widgets
 }
 
 void EditPrefTab::restore(bool)
@@ -1501,7 +1493,7 @@ ViewPrefTab::ViewPrefTab()
 	      "it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>"));
 	grid->addWidget(mModalMessages, 4, 0, 1, 2, Qt::AlignLeft);
 
-	this->setStretchFactor(new QWidget(this), 1);    // top adjust the widgets
+	topLayout()->addStretch();    // top adjust the widgets
 }
 
 void ViewPrefTab::restore(bool)
