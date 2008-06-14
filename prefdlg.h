@@ -102,10 +102,12 @@ class PrefsTabBase : public KVBox
 		void         setPreferences();
 		virtual void restore(bool defaults) = 0;
 		virtual void apply(bool syncToDisc) = 0;
-		static int   indentWidth()    { return mIndentWidth; }
+		QVBoxLayout* topLayout() const  { return mTopLayout; }
+		static int   indentWidth()      { return mIndentWidth; }
 
 	private:
 		static int   mIndentWidth;       // indent width for checkboxes etc.
+		QVBoxLayout* mTopLayout;
 };
 
 
