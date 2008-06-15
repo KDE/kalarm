@@ -1237,7 +1237,7 @@ void KAEvent::calcNextWorkingTime() const
 				if (workDays.testBit(day))
 					break;   // found a working day occurrence
 				// Prevent indefinite looping (which should never happen anyway)
-				if (days == allDaysMask)
+				if ((days & allDaysMask) == allDaysMask)
 					return;  // found a recurrence on every possible day of the week!?!
 				days |= 1 << day;
 			}
@@ -1270,7 +1270,7 @@ void KAEvent::calcNextWorkingTime() const
 					mMainWorkTrigger = mAllWorkTrigger = kdt;
 					return;
 				}
-				if (days == allDaysMask)
+				if ((days & allDaysMask) == allDaysMask)
 					return;  // found an occurrence on every possible day of the week!?!
 				days |= 1 << day;
 			}
@@ -1286,7 +1286,7 @@ void KAEvent::calcNextWorkingTime() const
 				mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
 				return;
 			}
-			if (days == allDaysMask)
+			if ((days & allDaysMask) == allDaysMask)
 				return;  // found an occurrence on every possible day of the week!?!
 			days |= 1 << day;
 		}
@@ -1329,7 +1329,7 @@ void KAEvent::calcNextWorkingTime() const
 			// Prevent indefinite looping (which should never happen anyway)
 			if (!repetition)
 			{
-				if (days == allDaysMask)
+				if ((days & allDaysMask) == allDaysMask)
 					return;  // found a recurrence on every possible day of the week!?!
 				days |= 1 << day;
 			}
@@ -1563,7 +1563,7 @@ void KAEvent::calcNextWorkingTime() const
 				// Check the next recurrence
 				if (!kdtNextRecur.isValid())
 					return;
-				if (checkTimeChangeOnly  ||  days == allDaysMask)
+				if (checkTimeChangeOnly  ||  (days & allDaysMask) == allDaysMask)
 					break;  // found a recurrence on every possible day of the week!?!
 				kdtRecur = kdtNextRecur;
 				nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
