@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright © 2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -114,7 +114,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	QGroupBox* group = new QGroupBox(i18n("Volume"), page);
 	layout->addWidget(group);
 	QGridLayout* grid = new QGridLayout(group, 4, 3, marginHint(), spacingHint());
-	grid->addRowSpacing(0, fontMetrics().lineSpacing()/2);
+	grid->addRowSpacing(0, fontMetrics().height() - marginHint() + spacingHint());
 	grid->setColStretch(2, 1);
 	int indentWidth = 3 * KDialog::spacingHint();
 	grid->addColSpacing(0, indentWidth);
@@ -306,7 +306,6 @@ void SoundDlg::playSound()
 	connect(mPlayTimer, SIGNAL(timeout()), SLOT(checkAudioPlay()));
 	mArtsDispatcher = new KArtsDispatcher;
 	mPlayStarted = false;
-	mAudioFileStart = QTime::currentTime();
 	KArtsServer aserver;
 	Arts::SoundServerV2 sserver = aserver.server();
 	KDE::PlayObjectFactory factory(sserver);
