@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -822,53 +822,11 @@ void KAEvent::set(const QDateTime& dateTime, const QString& text, const QColor& 
 	mUpdated                = false;
 }
 
-/******************************************************************************
- * Initialise a command KAEvent.
- */
-void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel, int flags, const QString& logfile)
-{
-	if (!logfile.isEmpty())
-		flags &= ~EXEC_IN_XTERM;
-	set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME);
-	mLogFile = logfile;
-}
-
-void KAEvent::setCommand(const QDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile)
-{
-	if (!logfile.isEmpty())
-		flags &= ~EXEC_IN_XTERM;
-	set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags);
-	mLogFile = logfile;
-}
-
 void KAEvent::setLogFile(const QString& logfile)
 {
 	mLogFile = logfile;
 	if (!logfile.isEmpty())
 		mCommandXterm = false;
-}
-
-/******************************************************************************
- * Initialise an email KAEvent.
- */
-void KAEvent::setEmail(const QDate& d, uint from, const EmailAddressList& addresses, const QString& subject,
-			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
-{
-	set(d, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags | ANY_TIME);
-	mEmailFromIdentity = from;
-	mEmailAddresses    = addresses;
-	mEmailSubject      = subject;
-	mEmailAttachments  = attachments;
-}
-
-void KAEvent::setEmail(const QDateTime& dt, uint from, const EmailAddressList& addresses, const QString& subject,
-			    const QString& message, const QStringList& attachments, int lateCancel, int flags)
-{
-	set(dt, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags);
-	mEmailFromIdentity = from;
-	mEmailAddresses    = addresses;
-	mEmailSubject      = subject;
-	mEmailAttachments  = attachments;
 }
 
 void KAEvent::setEmail(uint from, const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
