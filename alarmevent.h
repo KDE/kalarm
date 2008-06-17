@@ -313,23 +313,7 @@ class KAEvent : public KAAlarmEventBase
 		~KAEvent()         { delete mRecurrence; }
 		KAEvent&           operator=(const KAEvent& e)       { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event*);
-		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags, bool changesPending = false)
-		                            { set(d, message, bg, fg, f, action, lateCancel, flags | ANY_TIME, changesPending); }
 		void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags, bool changesPending = false);
-		void               setMessage(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags, bool changesPending = false)
-		                            { set(d, message, bg, fg, f, MESSAGE, lateCancel, flags | ANY_TIME, changesPending); }
-		void               setMessage(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags, bool changesPending = false)
-		                            { set(dt, message, bg, fg, f, MESSAGE, lateCancel, flags, changesPending); }
-		void               setFileName(const QDate& d, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags, bool changesPending = false)
-		                            { set(d, filename, bg, fg, f, FILE, lateCancel, flags | ANY_TIME, changesPending); }
-		void               setFileName(const KDateTime& dt, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags, bool changesPending = false)
-		                            { set(dt, filename, bg, fg, f, FILE, lateCancel, flags, changesPending); }
-		void               setCommand(const QDate&, const QString& command, int lateCancel, int flags, const QString& logfile = QString(), bool changesPending = false);
-		void               setCommand(const KDateTime&, const QString& command, int lateCancel, int flags, const QString& logfile = QString(), bool changesPending = false);
-		void               setEmail(const QDate&, uint from, const EmailAddressList&, const QString& subject,
-		                            const QString& message, const QStringList& attachments, int lateCancel, int flags, bool changesPending = false);
-		void               setEmail(const KDateTime&, uint from, const EmailAddressList&, const QString& subject,
-		                            const QString& message, const QStringList& attachments, int lateCancel, int flags, bool changesPending = false);
 		void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setResource(AlarmResource* r)                    { mResource = r; }
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
