@@ -88,7 +88,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	QGroupBox* textGroup = new QGroupBox(2, Qt::Horizontal, i18n("Alarm Text"), topWidget);
 	topLayout->addWidget(textGroup);
 	QLabel* label = new QLabel(i18n("Pre&fix:"), textGroup);
-	label->setFixedSize(label->sizeHint());
 	mPrefix = new BLineEdit(mPrefixText, textGroup);
 	mPrefix->setMinimumSize(mPrefix->sizeHint());
 	label->setBuddy(mPrefix);
@@ -98,7 +97,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	           "including any necessary trailing spaces."));
 
 	label = new QLabel(i18n("S&uffix:"), textGroup);
-	label->setFixedSize(label->sizeHint());
 	mSuffix = new BLineEdit(mSuffixText, textGroup);
 	mSuffix->setMinimumSize(mSuffix->sizeHint());
 	label->setBuddy(mSuffix);
@@ -152,7 +150,6 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Acknowledgement confirmation required - default = no confirmation
 	QHBoxLayout* layout = new QHBoxLayout(groupLayout, 2*spacingHint());
 	mConfirmAck = EditAlarmDlg::createConfirmAckCheckbox(group);
-	mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
 	layout->addWidget(mConfirmAck);
 	layout->addSpacing(2*spacingHint());
 	layout->addStretch();
@@ -161,20 +158,17 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	{
 		// Special actions button
 		mSpecialActionsButton = new SpecialActionsButton(i18n("Special Actions..."), group);
-		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 		layout->addWidget(mSpecialActionsButton);
 	}
 
 	// Late display checkbox - default = allow late display
 	layout = new QHBoxLayout(groupLayout, 2*spacingHint());
 	mLateCancel = new LateCancelSelector(false, group);
-	mLateCancel->setFixedSize(mLateCancel->sizeHint());
 	layout->addWidget(mLateCancel);
 	layout->addStretch();
 
 	// Sub-repetition button
 	mSubRepetition = new RepetitionButton(i18n("Sub-Repetition"), false, group);
-	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
 	mSubRepetition->set(0, 0, true, 364*24*60);
 	QWhatsThis::add(mSubRepetition, i18n("Set up an additional alarm repetition"));
 	layout->addWidget(mSubRepetition);

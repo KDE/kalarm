@@ -59,26 +59,22 @@ TemplateDlg::TemplateDlg(QWidget* parent, const char* name)
 
 	layout = new QVBoxLayout(topLayout);
 	QPushButton* button = new QPushButton(i18n("&New..."), topWidget);
-	button->setFixedSize(button->sizeHint());
 	connect(button, SIGNAL(clicked()), SLOT(slotNew()));
 	QWhatsThis::add(button, i18n("Create a new alarm template"));
 	layout->addWidget(button);
 
 	mEditButton = new QPushButton(i18n("&Edit..."), topWidget);
-	mEditButton->setFixedSize(mEditButton->sizeHint());
 	connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
 	QWhatsThis::add(mEditButton, i18n("Edit the currently highlighted alarm template"));
 	layout->addWidget(mEditButton);
 
 	mCopyButton = new QPushButton(i18n("Co&py"), topWidget);
-	mCopyButton->setFixedSize(mCopyButton->sizeHint());
 	connect(mCopyButton, SIGNAL(clicked()), SLOT(slotCopy()));
 	QWhatsThis::add(mCopyButton,
 	      i18n("Create a new alarm template based on a copy of the currently highlighted template"));
 	layout->addWidget(mCopyButton);
 
 	mDeleteButton = new QPushButton(i18n("&Delete"), topWidget);
-	mDeleteButton->setFixedSize(mDeleteButton->sizeHint());
 	connect(mDeleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
 	QWhatsThis::add(mDeleteButton, i18n("Delete the currently highlighted alarm template"));
 	layout->addWidget(mDeleteButton);
