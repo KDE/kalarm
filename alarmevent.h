@@ -317,23 +317,7 @@ class KAEvent : public KAAlarmEventBase
 		~KAEvent()         { delete mRecurrence; }
 		KAEvent&           operator=(const KAEvent& e)       { if (&e != this) copy(e);  return *this; }
 		void               set(const KCal::Event&);
-		void               set(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags)
-		                            { set(d, message, bg, fg, f, action, lateCancel, flags | ANY_TIME); }
 		void               set(const QDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags);
-		void               setMessage(const QDate& d, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
-		                            { set(d, message, bg, fg, f, MESSAGE, lateCancel, flags | ANY_TIME); }
-		void               setMessage(const QDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
-		                            { set(dt, message, bg, fg, f, MESSAGE, lateCancel, flags); }
-		void               setFileName(const QDate& d, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
-		                            { set(d, filename, bg, fg, f, FILE, lateCancel, flags | ANY_TIME); }
-		void               setFileName(const QDateTime& dt, const QString& filename, const QColor& bg, const QColor& fg, const QFont& f, int lateCancel, int flags)
-		                            { set(dt, filename, bg, fg, f, FILE, lateCancel, flags); }
-		void               setCommand(const QDate&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
-		void               setCommand(const QDateTime&, const QString& command, int lateCancel, int flags, const QString& logfile = QString::null);
-		void               setEmail(const QDate&, uint from, const EmailAddressList&, const QString& subject,
-		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
-		void               setEmail(const QDateTime&, uint from, const EmailAddressList&, const QString& subject,
-		                            const QString& message, const QStringList& attachments, int lateCancel, int flags);
 		void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 		void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
 		void               setTemplate(const QString& name, int afterTime = -1)  { mTemplateName = name;  mTemplateAfterTime = afterTime;  mUpdated = true; }
