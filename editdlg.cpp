@@ -984,7 +984,7 @@ void EditAlarmDlg::slotEditDeferral()
 		{
 			// Sub-repetition - find the time of the next one
 			int repetition = repeatInterval.isDaily()
-			               ? (start.secsTo(now) + repeatInterval - 1) / repeatInterval
+			               ? (start.daysTo(now) + repeatInterval.asDays() - 1) / repeatInterval.asDays()
 			               : (start.secsTo(now) + repeatInterval.asSeconds() - 1) / repeatInterval.asSeconds();
 			if (repetition > repeatCount)
 			{

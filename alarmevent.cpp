@@ -929,53 +929,11 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 	calcTriggerTimes();
 }
 
-/******************************************************************************
-* Initialise a command KAEvent.
-*/
-void KAEvent::setCommand(const QDate& d, const QString& command, int lateCancel, int flags, const QString& logfile, bool changesPending)
-{
-	if (!logfile.isEmpty())
-		flags &= ~(EXEC_IN_XTERM | DISPLAY_COMMAND);
-	set(d, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags | ANY_TIME, changesPending);
-	mLogFile = logfile;
-}
-
-void KAEvent::setCommand(const KDateTime& dt, const QString& command, int lateCancel, int flags, const QString& logfile, bool changesPending)
-{
-	if (!logfile.isEmpty())
-		flags &= ~(EXEC_IN_XTERM | DISPLAY_COMMAND);
-	set(dt, command, QColor(), QColor(), QFont(), COMMAND, lateCancel, flags, changesPending);
-	mLogFile = logfile;
-}
-
 void KAEvent::setLogFile(const QString& logfile)
 {
 	mLogFile = logfile;
 	if (!logfile.isEmpty())
 		mCommandDisplay = mCommandXterm = false;
-}
-
-/******************************************************************************
-* Initialise an email KAEvent.
-*/
-void KAEvent::setEmail(const QDate& d, uint from, const EmailAddressList& addresses, const QString& subject,
-                       const QString& message, const QStringList& attachments, int lateCancel, int flags, bool changesPending)
-{
-	set(d, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags | ANY_TIME, changesPending);
-	mEmailFromIdentity = from;
-	mEmailAddresses    = addresses;
-	mEmailSubject      = subject;
-	mEmailAttachments  = attachments;
-}
-
-void KAEvent::setEmail(const KDateTime& dt, uint from, const EmailAddressList& addresses, const QString& subject,
-                       const QString& message, const QStringList& attachments, int lateCancel, int flags, bool changesPending)
-{
-	set(dt, message, QColor(), QColor(), QFont(), EMAIL, lateCancel, flags, changesPending);
-	mEmailFromIdentity = from;
-	mEmailAddresses    = addresses;
-	mEmailSubject      = subject;
-	mEmailAttachments  = attachments;
 }
 
 void KAEvent::setEmail(uint from, const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
@@ -4005,7 +3963,7 @@ bool KAEvent::convertRepetition(KCal::Event* event)
 				event->startUpdates();   // prevent multiple update notifications
 				if (readOnly)
 					event->setReadOnly(false);
-				if (alarm->snoozeTime() % (24*3600))
+				if (alarm->snoozeTime().asSeconds() % (24*3600))
 					recur->setMinutely(alarm->snoozeTime());
 				else
 					recur->setDaily(alarm->snoozeTime() / (24*3600));
