@@ -3963,7 +3963,7 @@ bool KAEvent::convertRepetition(KCal::Event* event)
 				event->startUpdates();   // prevent multiple update notifications
 				if (readOnly)
 					event->setReadOnly(false);
-				if (alarm->snoozeTime().asSeconds() % (24*3600))
+				if ((alarm->snoozeTime().asSeconds() % (24*3600)) != 0)
 					recur->setMinutely(alarm->snoozeTime());
 				else
 					recur->setDaily(alarm->snoozeTime() / (24*3600));
