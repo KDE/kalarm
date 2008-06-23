@@ -41,7 +41,7 @@ static const int AUTOSTART_DELAY = 30;
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm Autostart"),
+	KAboutData aboutData(PROGRAM_NAME, "kalarm", ki18n("KAlarm Autostart"),
 		PROGRAM_VERSION, ki18n("KAlarm autostart at login"), KAboutData::License_GPL,
 		ki18n("Copyright 2001,2008 David Jarvie"), KLocalizedString(),
 		"http://www.astrojar.org.uk/kalarm");
