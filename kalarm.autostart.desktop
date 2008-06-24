@@ -19,6 +19,7 @@ Type=Application
 X-DocPath=kalarm/index.html
 Comment=KAlarm autostart at login
 Comment[ca]=Inici automàtic del KAlarm en connectar-se
+Comment[da]=Autostart KAlarm ved login
 Comment[de]=Autostart von KAlarm bei der Anmeldung
 Comment[el]=Αυτόματη εκκίνηση KAlarm κατά τη σύνδεση
 Comment[et]=KAlarmi automaatne käivitamine sisselogimisel
