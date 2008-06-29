@@ -52,8 +52,9 @@
 #include <kstandardshortcut.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
-#include <kdebug.h>
+#include <kwindowsystem.h>
 #include <kicon.h>
+#include <kdebug.h>
 
 #include <kcal/event.h>
 #include <kcal/icalformat.h>
@@ -1295,6 +1296,18 @@ void writeConfigWindowSize(const char* window, const QSize& size, int splitterWi
 }
 
 /******************************************************************************
+* Return the size of the usable area of the desktop.
+*/
+QRect desktopWorkArea()
+{
+#ifdef Q_WS_X11
+	return KWindowSystem::workArea();
+#else
+	return qApp->desktop()->availableGeometry();
+#endif
+}
+
+/******************************************************************************
 * Return the current KAlarm version number.
 */
 int Version()
@@ -1417,7 +1430,7 @@ bool isWorkingTime(const KDateTime& dt)
 	if (!Preferences::workDays().testBit(dt.date().dayOfWeek() - 1))
 		return false;
 	return dt.isDateOnly()
-	   ||  dt.time() >= Preferences::workDayStart()  &&  dt.time() < Preferences::workDayEnd();
+	   ||  (dt.time() >= Preferences::workDayStart()  &&  dt.time() < Preferences::workDayEnd());
 }
 
 /******************************************************************************

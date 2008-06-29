@@ -32,8 +32,9 @@ class QShowEvent;
 class QResizeEvent;
 class QAbstractButton;
 class QGroupBox;
-class QTabWidget;
+class QScrollArea;
 class QVBoxLayout;
+class KTabWidget;
 class KLineEdit;
 class AlarmResource;
 class ButtonGroup;
@@ -66,6 +67,7 @@ class EditAlarmDlg : public KDialog
 		virtual ~EditAlarmDlg();
 		bool            getEvent(KAEvent&, AlarmResource*&);
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText()) = 0;
+		virtual QSize   minimumSizeHint() const;
 
 		static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
@@ -124,7 +126,7 @@ class EditAlarmDlg : public KDialog
 	protected:
 		KAEvent::Action     mAlarmType;           // actual alarm type
 	private:
-		QTabWidget*         mTabs;                // the tabs in the dialog
+		KTabWidget*         mTabs;                // the tabs in the dialog
 		int                 mMainPageIndex;
 		int                 mRecurPageIndex;
 		bool                mMainPageShown;            // true once the main tab has been displayed
