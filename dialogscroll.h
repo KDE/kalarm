@@ -21,6 +21,8 @@
 #ifndef DIALOGSCROLL_H
 #define DIALOGSCROLL_H
 
+#include "kalarm.h"
+
 #include <QScrollArea>
 #include <QList>
 
@@ -38,17 +40,18 @@ class DialogScroll : public QScrollArea
 		~DialogScroll();
 		virtual QSize sizeHint() const  { return minimumSizeHint(); }
 		virtual QSize minimumSizeHint() const;
-		static QSize  initMinimumHeight(T*, QWidget* tabs);
+		static int    heightReduction() { return mHeightReduction; }
+		static QSize  initMinimumHeight(T*);
 		static void   setSized()        { mSized = true; }
 		static bool   sized()           { return mSized; }
 	private:
 		static QList<DialogScroll<T>*> mTabs;
 		static int    mMinHeight;
+		static int    mHeightReduction;
 		static bool   mSized;
 };
 
 
-#include "kalarm.h"
 #include "dialogscroll.h"
 #include "functions.h"
 #include <kdialog.h>
@@ -56,12 +59,10 @@ class DialogScroll : public QScrollArea
 
 namespace KAlarm { QRect desktopWorkArea(); }
 
-template <class T>
-QList<DialogScroll<T>*> DialogScroll<T>::mTabs;
-template <class T>
-int  DialogScroll<T>::mMinHeight = -1;
-template <class T>
-bool DialogScroll<T>::mSized = false;
+template <class T> QList<DialogScroll<T>*> DialogScroll<T>::mTabs;
+template <class T> int  DialogScroll<T>::mHeightReduction = 0;
+template <class T> int  DialogScroll<T>::mMinHeight = -1;
+template <class T> bool DialogScroll<T>::mSized = false;
 
 template <class T>
 DialogScroll<T>::DialogScroll(QWidget* parent)
@@ -98,7 +99,7 @@ QSize DialogScroll<T>::minimumSizeHint() const
 * are made scrollable.
 */
 template <class T>
-QSize DialogScroll<T>::initMinimumHeight(T* dlg, QWidget* tabs)
+QSize DialogScroll<T>::initMinimumHeight(T* dlg)
 {
 	if (mSized)
 		return QSize();
@@ -128,6 +129,7 @@ QSize DialogScroll<T>::initMinimumHeight(T* dlg, QWidget* tabs)
 	int y = s.height() + decoration - desk;
 	if (y > 0)
 	{
+		mHeightReduction = y;
 		mMinHeight = maxHeight - y;
 		if (mMinHeight > 0)
 		{
@@ -138,7 +140,12 @@ QSize DialogScroll<T>::initMinimumHeight(T* dlg, QWidget* tabs)
 			}
 		}
 		mSized = true;
-		tabs->setMinimumHeight(tabs->minimumSizeHint().height());
+		mTabs[0]->parentWidget()->resize(mTabs[0]->parentWidget()->sizeHint());
+		for (QWidget* w = mTabs[0]->parentWidget();  w && w != dlg;  w = w->parentWidget())
+		{
+			w->setMinimumHeight(qMin(w->minimumSizeHint().height(), w->sizeHint().height()));
+			w->resize(w->minimumSize());
+		}
 		s = dlg->KDialog::minimumSizeHint();
 		dlg->setMinimumHeight(s.height());
 	}
