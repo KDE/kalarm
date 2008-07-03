@@ -32,7 +32,6 @@ class QShowEvent;
 class QResizeEvent;
 class QAbstractButton;
 class QGroupBox;
-class QScrollArea;
 class QVBoxLayout;
 class KTabWidget;
 class KLineEdit;
