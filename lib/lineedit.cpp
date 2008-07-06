@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright © 2003-2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,8 +100,8 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 	else
 		ok = (data->hasText()
 		   || KUrl::List::canDecode(data)
-		   || mType != Url && KPIM::MailList::canDecode(data)
-		   || mType == Emails && KPIM::KVCardDrag::canDecode(data));
+		   || (mType != Url && KPIM::MailList::canDecode(data))
+		   || (mType == Emails && KPIM::KVCardDrag::canDecode(data)));
 	if (ok)
 		e->accept(rect());
 	else

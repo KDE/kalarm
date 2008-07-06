@@ -88,8 +88,8 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 	else
 	{
 		// Some shells report if the command couldn't be found, or is not executable
-		if (mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127)
-		||  mShellName == "ksh"  &&  exitCode == 127)
+		if ((mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127))
+		||  (mShellName == "ksh"  &&  exitCode == 127))
 		{
 			kWarning(5950) << mCommand << ":" << mShellName << ": not found or not executable";
 			mStatus = NOT_FOUND;

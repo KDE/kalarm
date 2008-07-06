@@ -211,7 +211,7 @@ void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Uni
 		else if (item > mMaxUnitShown)
 			item = mMaxUnitShown;
 		mUnitsCombo->setCurrentIndex(item - mDateOnlyOffset);
-		if (dateOnly && !mDateOnlyOffset  ||  !dateOnly && mDateOnlyOffset)
+		if ((dateOnly && !mDateOnlyOffset)  ||  (!dateOnly && mDateOnlyOffset))
 			item = setDateOnly(perod, dateOnly, false);
 	}
 	showHourMin(item == HoursMinutes  &&  !mNoHourMinute);

@@ -1,7 +1,7 @@
 /*
  *  spinbox.cpp  -  spin box with read-only option and shift-click step value
  *  Program:  kalarm
- *  Copyright © 2002,2004-2008 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -319,7 +319,7 @@ bool SpinBox::keyEvent(QKeyEvent* e)
 		if (mReadOnly)
 			return true;   // discard the event
 		bool shift = (state & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-		if (!shift && mShiftMouse  ||  shift && !mShiftMouse)
+		if ((!shift && mShiftMouse)  ||  (shift && !mShiftMouse))
 		{
 			// The effective shift state has changed.
 			// Set normal or shift stepping as appropriate.
