@@ -64,7 +64,6 @@
 #include <kdebug.h>
 #include <kshell.h>
 
-static bool convWakeTime(const QByteArray& timeParam, KDateTime&, const KDateTime& defaultDt = KDateTime());
 static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 
 /******************************************************************************
@@ -470,7 +469,7 @@ int KAlarmApp::newInstance()
 				if (args->isSet("time"))
 				{
 					QByteArray dateTime = args->getOption("time").toLocal8Bit();
-					if (!convWakeTime(dateTime, alarmTime))
+					if (!KAlarm::convTimeString(dateTime, alarmTime))
 						USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter", QLatin1String("--time")))
 				}
 				else
@@ -507,9 +506,9 @@ int KAlarmApp::newInstance()
 						QByteArray dateTime = args->getOption("until").toLocal8Bit();
 						bool ok;
 						if (args->isSet("time"))
-							ok = convWakeTime(dateTime, endTime, alarmTime);
+							ok = KAlarm::convTimeString(dateTime, endTime, alarmTime);
 						else
-							ok = convWakeTime(dateTime, endTime);
+							ok = KAlarm::convTimeString(dateTime, endTime);
 						if (!ok)
 							USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter", QLatin1String("--until")))
 						if (alarmTime.isDateOnly()  &&  !endTime.isDateOnly())
@@ -2007,124 +2006,6 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 	if (!calendarOnly)
 		startProcessQueue();      // start processing the execution queue
 	return true;
-}
-
-/******************************************************************************
-*  Convert the --time parameter string into a local date/time or date value.
-*  The parameter is in the form [[[yyyy-]mm-]dd-]hh:mm or yyyy-mm-dd.
-*  Reply = true if successful.
-*/
-static bool convWakeTime(const QByteArray& timeParam, KDateTime& dateTime, const KDateTime& defaultDt)
-{
-#define MAX_DT_LEN 19
-	int i = timeParam.indexOf(' ');
-	if (i > MAX_DT_LEN)
-		return false;
-	QString zone = (i >= 0) ? QString::fromLatin1(timeParam.mid(i)) : QString();
-	char timeStr[MAX_DT_LEN+1];
-	strcpy(timeStr, timeParam.left(i >= 0 ? i : MAX_DT_LEN));
-	int dt[5] = { -1, -1, -1, -1, -1 };
-	char* s;
-	char* end;
-	bool noTime;
-	// Get the minute value
-	if ((s = strchr(timeStr, ':')) == 0)
-		noTime = true;
-	else
-	{
-		noTime = false;
-		*s++ = 0;
-		dt[4] = strtoul(s, &end, 10);
-		if (end == s  ||  *end  ||  dt[4] >= 60)
-			return false;
-		// Get the hour value
-		if ((s = strrchr(timeStr, '-')) == 0)
-			s = timeStr;
-		else
-			*s++ = 0;
-		dt[3] = strtoul(s, &end, 10);
-		if (end == s  ||  *end  ||  dt[3] >= 24)
-			return false;
-	}
-	bool noDate = true;
-	if (s != timeStr)
-	{
-		noDate = false;
-		// Get the day value
-		if ((s = strrchr(timeStr, '-')) == 0)
-			s = timeStr;
-		else
-			*s++ = 0;
-		dt[2] = strtoul(s, &end, 10);
-		if (end == s  ||  *end  ||  dt[2] == 0  ||  dt[2] > 31)
-			return false;
-		if (s != timeStr)
-		{
-			// Get the month value
-			if ((s = strrchr(timeStr, '-')) == 0)
-				s = timeStr;
-			else
-				*s++ = 0;
-			dt[1] = strtoul(s, &end, 10);
-			if (end == s  ||  *end  ||  dt[1] == 0  ||  dt[1] > 12)
-				return false;
-			if (s != timeStr)
-			{
-				// Get the year value
-				dt[0] = strtoul(timeStr, &end, 10);
-				if (end == timeStr  ||  *end)
-					return false;
-			}
-		}
-	}
-
-	QDate date(dt[0], dt[1], dt[2]);
-	QTime time(0, 0, 0);
-	if (noTime)
-	{
-		// No time was specified, so the full date must have been specified
-		if (dt[0] < 0  ||  !date.isValid())
-			return false;
-		dateTime = KAlarm::applyTimeZone(zone, date, time, false, defaultDt);
-	}
-	else
-	{
-		// Compile the values into a date/time structure
-		time.setHMS(dt[3], dt[4], 0);
-		if (dt[0] < 0)
-		{
-			// Some or all of the date was omitted.
-			// Use the default date/time if provided.
-			if (defaultDt.isValid())
-			{
-				dt[0] = defaultDt.date().year();
-				date.setYMD(dt[0],
-				            (dt[1] < 0 ? defaultDt.date().month() : dt[1]),
-				            (dt[2] < 0 ? defaultDt.date().day() : dt[2]));
-			}
-			else
-				date.setYMD(2000, 1, 1);  // temporary substitute for date
-		}
-		dateTime = KAlarm::applyTimeZone(zone, date, time, true, defaultDt);
-		if (!dateTime.isValid())
-			return false;
-		if (dt[0] < 0)
-		{
-			// Some or all of the date was omitted.
-			// Use the current date in the specified time zone as default.
-			KDateTime now = KDateTime::currentDateTime(dateTime.timeSpec());
-			date = dateTime.date();
-			date.setYMD(now.date().year(),
-			            (dt[1] < 0 ? now.date().month() : dt[1]),
-			            (dt[2] < 0 ? now.date().day() : dt[2]));
-			if (!date.isValid())
-				return false;
-			if (noDate  &&  time < now.time())
-				date = date.addDays(1);
-			dateTime.setDate(date);
-		}
-	}
-	return dateTime.isValid();
 }
 
 /******************************************************************************
