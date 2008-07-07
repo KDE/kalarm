@@ -60,7 +60,7 @@ void TemplateMenuAction::slotInitMenu()
 		int j = 0;
 		for (int jend = sorted.count();
 		     j < jend  &&  QString::localeAwareCompare(name, sorted[j]) > 0;
-		     ++j);
+		     ++j) ;
 		sorted.insert(j, name);
 	}
 

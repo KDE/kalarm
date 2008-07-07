@@ -759,7 +759,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 			return;
 		int mwcount = MainWindow::count();
 		MainWindow* mw = mwcount ? MainWindow::firstWindow() : 0;
-		if (mwcount > 1  ||  mwcount && (!mw->isHidden() || !mw->isTrayParent()))
+		if (mwcount > 1  ||  (mwcount && (!mw->isHidden()) || !mw->isTrayParent()))
 			return;
 		// There are no windows left except perhaps a main window which is a hidden tray icon parent
 		if (mTrayWindow)
@@ -1354,7 +1354,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									if (now >= limit)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
-										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs())
+										||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
 											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											reschedule = true;
@@ -1386,7 +1386,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 									if (next.effectiveKDateTime().secsTo(now) > maxlate)
 									{
 										if (type == KAEvent::LAST_RECURRENCE
-										||  type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs())
+										||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
 											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											reschedule = true;
@@ -1635,7 +1635,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			if (!event.enabled())
 				delete win;        // event is disabled - close its window
 			else if (!win
-			     ||  !win->hasDefer() && !alarm.repeatAtLogin()
+			     ||  (!win->hasDefer() && !alarm.repeatAtLogin())
 			     ||  replaceReminder)
 			{
 				// Either there isn't already a message for this event,

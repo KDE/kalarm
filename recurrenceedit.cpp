@@ -471,8 +471,8 @@ void RecurrenceEdit::periodClicked(QAbstractButton* button)
 void RecurrenceEdit::slotAnyTimeToggled(bool on)
 {
 	QAbstractButton* button = mRuleButtonGroup->checkedButton();
-	mEndTimeEdit->setEnabled(button == mAtLoginButton && !on
-	                     ||  button == mSubDailyButton && mEndDateButton->isChecked());
+	mEndTimeEdit->setEnabled((button == mAtLoginButton && !on)
+	                     ||  (button == mSubDailyButton && mEndDateButton->isChecked()));
 }
 
 /******************************************************************************
@@ -483,7 +483,7 @@ void RecurrenceEdit::rangeTypeClicked()
 	bool endDate = mEndDateButton->isChecked();
 	mEndDateEdit->setEnabled(endDate);
 	mEndTimeEdit->setEnabled(endDate
-	                         &&  (mAtLoginButton->isChecked() && !mEndAnyTimeCheckBox->isChecked()
+	                         &&  ((mAtLoginButton->isChecked() && !mEndAnyTimeCheckBox->isChecked())
 	                              ||  mSubDailyButton->isChecked()));
 	bool repeatCount = mRepeatCountButton->isChecked();
 	mRepeatCountEntry->setEnabled(repeatCount);
@@ -1030,7 +1030,7 @@ bool RecurrenceEdit::stateChanged() const
 {
 	if (mSavedRuleButton  != mRuleButtonGroup->checkedButton()
 	||  mSavedRangeButton != mRangeButtonGroup->checkedButton()
-	||  mRule  &&  mRule->stateChanged())
+	||  (mRule  &&  mRule->stateChanged()))
 		return true;
 	if (mSavedRangeButton == mRepeatCountButton
 	&&  mSavedRecurCount  != mRepeatCountEntry->value())

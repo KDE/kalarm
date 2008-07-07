@@ -1078,7 +1078,7 @@ KAEvent* AlarmCalendar::templateEvent(const QString& templateName)
 KAEvent::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Status type)
 {
 	KAEvent::List list;
-	if (!mCalendar  ||  resource && mCalType != RESOURCES)
+	if (!mCalendar  ||  (resource && mCalType != RESOURCES))
 		return list;
 	if (resource)
 	{
@@ -1117,14 +1117,14 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Status t
 Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KCalEvent::Status type)
 {
 	Event::List list;
-	if (!mCalendar  ||  resource && mCalType != RESOURCES)
+	if (!mCalendar  ||  (resource && mCalType != RESOURCES))
 		return list;
 	list = resource ? AlarmResources::instance()->rawEvents(resource) : mCalendar->rawEvents();
 	for (int i = 0;  i < list.count();  )
 	{
 		Event* event = list[i];
 		if (event->alarms().isEmpty()
-		||  type != KCalEvent::EMPTY  &&  !(type & KCalEvent::status(event)))
+		||  (type != KCalEvent::EMPTY  &&  !(type & KCalEvent::status(event))))
 			list.removeAt(i);
 		else
 			++i;

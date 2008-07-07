@@ -213,7 +213,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 				case Qt::BackgroundRole:
 					if (event->action() == KAEvent::MESSAGE
 					||  event->action() == KAEvent::FILE
-					||  event->action() == KAEvent::COMMAND && event->commandDisplay())
+					||  (event->action() == KAEvent::COMMAND && event->commandDisplay()))
 						return event->bgColour();
 				case SortRole:
 				{

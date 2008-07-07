@@ -111,8 +111,8 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 	if (count < -1)
 		return false;
 	bool dateOnly = start.isDateOnly();
-	if (!count  &&  (!dateOnly && !end.isValid()
-	              || dateOnly && !end.date().isValid()))
+	if (!count  &&  ((!dateOnly && !end.isValid())
+	              || (dateOnly && !end.date().isValid())))
 		return false;
 	switch (recurType)
 	{
@@ -136,7 +136,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 		setEndDateTime(end);
 	KDateTime startdt = start;
 	if (recurType == RecurrenceRule::rYearly
-	&&  feb29Type == Preferences::Feb29_Feb28  ||  feb29Type == Preferences::Feb29_Mar1)
+	&&  (feb29Type == Preferences::Feb29_Feb28  ||  feb29Type == Preferences::Feb29_Mar1))
 	{
 		int year = startdt.date().year();
 		if (!QDate::isLeapYear(year)
@@ -255,7 +255,7 @@ void KARecurrence::fix()
 					{
 						// This is the second rule.
 						// Ensure that it can be combined with the first one.
-						if (day == days[0]  ||  day == -1 && days[0] == 60
+						if (day == days[0]  ||  (day == -1 && days[0] == 60)
 						||  rrule->frequency() != rrules[0]->frequency()
 						||  rrule->startDt()   != rrules[0]->startDt())
 							break;
