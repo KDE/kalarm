@@ -118,8 +118,8 @@ QSize DialogScroll<T>::initMinimumHeight(T* dlg)
 	if (!decoration)
 	{
 		// On X11 at least, the window decoration height may not be
-		// available, so assume an arbitrary 20 pixels.
-		decoration = 20;
+		// available, so use a guess of 25 pixels.
+		decoration = 25;
 	}
 	int desk = KAlarm::desktopWorkArea().height();
 	// There is no stored size, or the deferral group is visible.
