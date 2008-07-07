@@ -276,7 +276,7 @@ void AlarmResource::setReadOnly(bool ronly)
 	}
 	if (ronly != oldRCronly)
 		ResourceCached::setReadOnly(ronly);
-	if ((ronly || mCompatibility != KCalendar::Current && mCompatibility != KCalendar::ByEvent) != oldronly)
+	if ((ronly || (mCompatibility != KCalendar::Current && mCompatibility != KCalendar::ByEvent)) != oldronly)
 		emit readOnlyChanged(this);   // the effective read-only status has changed
 }
 
