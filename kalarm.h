@@ -23,13 +23,11 @@
 
 #undef QT3_SUPPORT
 
-#define KALARM_VERSION "2.0.0beta4"
+#define KALARM_VERSION "2.0.0"
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
 
 #include <kdeversion.h>
-
-#define AUTOSTART_BY_KALARMD    // temporary fix for autostart before session restoration
 
 #endif // KALARM_H
 

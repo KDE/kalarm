@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 2.0.0 beta4 ===
+=== Version 2.0.0 --- 7 July 2008 ===
 - New facility to use multiple alarm calendar resources.
 - Add facility to select time zone for alarm times.
 - Handle summer/winter time changes correctly.
@@ -20,6 +20,7 @@ KAlarm Change Log
 - Use kconf_update to convert old config file settings.
 - Change numeric codes in config file to strings for long-term maintainability.
 - Rename Defaults section options in config file.
+- Fix detection of yearly February 29th recurrences on Feb 28th or Mar 1st.
 
 === Version 1.5.3 --- 16 June 2008 ===
 - In New From Template menu, show list of template names in sorted order.
