@@ -759,7 +759,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 			return;
 		int mwcount = MainWindow::count();
 		MainWindow* mw = mwcount ? MainWindow::firstWindow() : 0;
-		if (mwcount > 1  ||  (mwcount && (!mw->isHidden()) || !mw->isTrayParent()))
+		if (mwcount > 1  ||  (mwcount && (!mw->isHidden() || !mw->isTrayParent())))
 			return;
 		// There are no windows left except perhaps a main window which is a hidden tray icon parent
 		if (mTrayWindow)
