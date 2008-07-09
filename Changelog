@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 1.5.4 --- 9 July 2008 ===
+- Expand font selection control when dialogue is expanded.
+
 === Version 1.5.3 --- 22 May 2008 ===
 - In New From Template menu, show list of template names in sorted order.
 - Fix recurrence count being lost when using alarm templates.

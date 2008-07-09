@@ -712,7 +712,7 @@ int KARecurrence::longestInterval() const
 				return freq * 1440;
 
 			// It recurs only on certain days of the week, so the maximum interval
-			// will be greater than the frequency.
+			// may be greater than the frequency.
 			bool ds[7] = { false, false, false, false, false, false, false };
 			for (QValueList<RecurrenceRule::WDayPos>::ConstIterator it = days.begin();  it != days.end();  ++it)
 				if ((*it).pos() == 0)

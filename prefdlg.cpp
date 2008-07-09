@@ -823,44 +823,32 @@ FontColourPrefTab::FontColourPrefTab(QVBox* frame)
 	: PrefsTabBase(frame)
 {
 	mFontChooser = new FontColourChooser(mPage, 0, false, QStringList(), i18n("Message Font && Color"), true, false);
+	mPage->setStretchFactor(mFontChooser, 1);
 
-	QHBox* layoutBox = new QHBox(mPage);
+	QFrame* layoutBox = new QFrame(mPage);
+	QHBoxLayout* hlayout = new QHBoxLayout(layoutBox);
+	QVBoxLayout* colourLayout = new QVBoxLayout(hlayout, KDialog::spacingHint());
+	hlayout->addStretch();
+
 	QHBox* box = new QHBox(layoutBox);    // to group widgets for QWhatsThis text
-	box->setSpacing(KDialog::spacingHint());
+	box->setSpacing(KDialog::spacingHint()/2);
+	colourLayout->addWidget(box);
 	QLabel* label1 = new QLabel(i18n("Di&sabled alarm color:"), box);
-//	label1->setMinimumSize(label1->sizeHint());
 	box->setStretchFactor(new QWidget(box), 1);
 	mDisabledColour = new KColorCombo(box);
-	mDisabledColour->setMinimumSize(mDisabledColour->sizeHint());
 	label1->setBuddy(mDisabledColour);
 	QWhatsThis::add(box,
 	      i18n("Choose the text color in the alarm list for disabled alarms."));
-	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
-	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
 
-	layoutBox = new QHBox(mPage);
 	box = new QHBox(layoutBox);    // to group widgets for QWhatsThis text
-	box->setSpacing(KDialog::spacingHint());
+	box->setSpacing(KDialog::spacingHint()/2);
+	colourLayout->addWidget(box);
 	QLabel* label2 = new QLabel(i18n("E&xpired alarm color:"), box);
-//	label2->setMinimumSize(label2->sizeHint());
 	box->setStretchFactor(new QWidget(box), 1);
 	mExpiredColour = new KColorCombo(box);
-	mExpiredColour->setMinimumSize(mExpiredColour->sizeHint());
 	label2->setBuddy(mExpiredColour);
 	QWhatsThis::add(box,
 	      i18n("Choose the text color in the alarm list for expired alarms."));
-	layoutBox->setStretchFactor(new QWidget(layoutBox), 1);    // left adjust the controls
-	layoutBox->setFixedHeight(layoutBox->sizeHint().height());
-
-	// Line up the two sets of colour controls
-	QSize size = label1->sizeHint();
-	QSize size2 = label2->sizeHint();
-	if (size2.width() > size.width())
-		size.setWidth(size2.width());
-	label1->setFixedSize(size);
-	label2->setFixedSize(size);
-
-	mPage->setStretchFactor(new QWidget(mPage), 1);    // top adjust the widgets
 }
 
 void FontColourPrefTab::restore()
