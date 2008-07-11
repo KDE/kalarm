@@ -176,7 +176,6 @@ MainWindow::MainWindow(bool restored)
 	mListDelegate = new AlarmListDelegate(mListView);
 	mListView->setItemDelegate(mListDelegate);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
-	connect(mListView, SIGNAL(activated(const QModelIndex&)), SLOT(slotDoubleClicked(const QModelIndex&)));
 	connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
 	                   SLOT(slotResourceStatusChanged()));
@@ -1348,20 +1347,6 @@ void MainWindow::selectionCleared()
 	mActionDelete->setEnabled(false);
 	mActionReactivate->setEnabled(false);
 	mActionEnable->setEnabled(false);
-}
-
-/******************************************************************************
-*  Called when the mouse is double clicked on the ListView.
-*  Displays the Edit Alarm dialog for the clicked item.
-*/
-void MainWindow::slotDoubleClicked(const QModelIndex& index)
-{
-	kDebug();
-	if (index.isValid())
-	{
-		if (mActionModify->isEnabled())
-			slotModify();
-	}
 }
 
 /******************************************************************************

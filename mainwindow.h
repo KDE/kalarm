@@ -120,7 +120,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotQuit();
 		void           slotSelection();
 		void           slotContextMenuRequested(const QPoint& globalPos);
-		void           slotDoubleClicked(const QModelIndex&);
 		void           slotShowTime();
 		void           slotShowTimeTo();
 		void           slotShowArchived();
