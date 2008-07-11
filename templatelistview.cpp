@@ -1,7 +1,7 @@
 /*
  *  templatelistview.cpp  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include <QApplication>
 
 #include "eventlistmodel.h"
+#include "functions.h"
 #include "templatelistfiltermodel.h"
 #include "templatelistview.moc"
 
@@ -52,4 +53,10 @@ void TemplateListView::dataChanged(const QModelIndex& topLeft, const QModelIndex
 		if (col != header()->resizeMode(col) == QHeaderView::ResizeToContents)
 			resizeColumnToContents(col);
 	}*/
+}
+
+
+void TemplateListDelegate::edit(KAEvent* event, EventListView* view)
+{
+	KAlarm::editTemplate(event, static_cast<TemplateListView*>(view));
 }

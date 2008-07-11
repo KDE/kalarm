@@ -185,3 +185,40 @@ void EventListView::contextMenuEvent(QContextMenuEvent* e)
 {
 	emit contextMenuRequested(e->globalPos());
 }
+
+
+bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const QStyleOptionViewItem&, const QModelIndex& index)
+{
+	// Don't invoke the editor unless it's either a double click or,
+	// if KDE is in single click mode and it's a left button release
+	// with no other buttons pressed and no keyboard modifiers.
+	switch (e->type())
+	{
+		case QEvent::MouseButtonPress:
+		case QEvent::MouseMove:
+			return false;
+		case QEvent::MouseButtonDblClick:
+			break;
+		case QEvent::MouseButtonRelease:
+		{
+			if (!KGlobalSettings::singleClick())
+				return false;
+			QMouseEvent* me = static_cast<QMouseEvent*>(e);
+			if (me->button() != Qt::LeftButton  ||  me->buttons()
+			||  me->modifiers() != Qt::NoModifier)
+				return false;
+			break;
+		}
+		default:
+			break;
+	}
+	if (index.isValid())
+	{
+		kDebug();
+		QModelIndex source = static_cast<QAbstractProxyModel*>(model)->mapToSource(index);
+		KAEvent* event = static_cast<KAEvent*>(source.internalPointer());
+		edit(event, static_cast<EventListView*>(parent()));
+		return true;
+	}
+	return false;   // indicate that the event has not been handled
+}	

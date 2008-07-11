@@ -173,8 +173,7 @@ MainWindow::MainWindow(bool restored)
 	mListView->setModel(mListFilterModel);
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 	mListView->sortByColumn(mShowTime ? EventListModel::TimeColumn : EventListModel::TimeToColumn, Qt::AscendingOrder);
-	mListDelegate = new AlarmListDelegate(mListView);
-	mListView->setItemDelegate(mListDelegate);
+	mListView->setItemDelegate(new AlarmListDelegate(mListView));
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
 	connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
