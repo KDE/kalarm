@@ -102,15 +102,20 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
 
 bool AlarmListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const QStyleOptionViewItem&, const QModelIndex& index)
 {
-	// Don't invoke the editor unless it's a left button release,
+	// Don't invoke the editor unless it's either a double click or,
+	// if KDE is in single click mode and it's a left button release
 	// with no other buttons pressed and no keyboard modifiers.
 	switch (e->type())
 	{
 		case QEvent::MouseButtonPress:
 		case QEvent::MouseMove:
 			return false;
+		case QEvent::MouseButtonDblClick:
+			break;
 		case QEvent::MouseButtonRelease:
 		{
+			if (!KGlobalSettings::singleClick())
+				return false;
 			QMouseEvent* me = static_cast<QMouseEvent*>(e);
 			if (me->button() != Qt::LeftButton  ||  me->buttons()
 			||  me->modifiers() != Qt::NoModifier)
@@ -127,6 +132,7 @@ bool AlarmListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 		QModelIndex source = static_cast<QAbstractProxyModel*>(model)->mapToSource(index);
 		KAEvent* event = static_cast<KAEvent*>(source.internalPointer());
 		KAlarm::editAlarm(event, view);   // edit alarm (view-only mode if archived or read-only)
+		return true;
 	}
 	return false;   // indicate that the event has not been handled
 }	
