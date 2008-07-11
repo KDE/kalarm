@@ -79,6 +79,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
 	mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
 	mListView->setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
+	mListView->setItemDelegate(new TemplateListDelegate(mListView));
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
 	layout->addWidget(mListView);
 

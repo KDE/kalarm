@@ -34,11 +34,6 @@
 #include "alarmlistdelegate.moc"
 
 
-AlarmListDelegate::AlarmListDelegate(AlarmListView* parent)
-	: QItemDelegate(parent)
-{
-}
-
 void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
 	if (index.isValid()  &&  index.column() == EventListModel::TimeColumn)
@@ -100,39 +95,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
 	return QItemDelegate::sizeHint(option, index);
 }
 
-bool AlarmListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const QStyleOptionViewItem&, const QModelIndex& index)
+void AlarmListDelegate::edit(KAEvent* event, EventListView* view)
 {
-	// Don't invoke the editor unless it's either a double click or,
-	// if KDE is in single click mode and it's a left button release
-	// with no other buttons pressed and no keyboard modifiers.
-	switch (e->type())
-	{
-		case QEvent::MouseButtonPress:
-		case QEvent::MouseMove:
-			return false;
-		case QEvent::MouseButtonDblClick:
-			break;
-		case QEvent::MouseButtonRelease:
-		{
-			if (!KGlobalSettings::singleClick())
-				return false;
-			QMouseEvent* me = static_cast<QMouseEvent*>(e);
-			if (me->button() != Qt::LeftButton  ||  me->buttons()
-			||  me->modifiers() != Qt::NoModifier)
-				return false;
-			break;
-		}
-		default:
-			break;
-	}
-	kDebug();
-	AlarmListView* view = static_cast<AlarmListView*>(parent());
-	if (index.isValid())
-	{
-		QModelIndex source = static_cast<QAbstractProxyModel*>(model)->mapToSource(index);
-		KAEvent* event = static_cast<KAEvent*>(source.internalPointer());
-		KAlarm::editAlarm(event, view);   // edit alarm (view-only mode if archived or read-only)
-		return true;
-	}
-	return false;   // indicate that the event has not been handled
+	KAlarm::editAlarm(event, static_cast<AlarmListView*>(view));   // edit alarm (view-only mode if archived or read-only)
 }	

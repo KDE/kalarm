@@ -24,6 +24,7 @@
 #include "kalarm.h"
 
 #include <QTreeView>
+#include <QItemDelegate>
 
 #include <kcal/event.h>
 
@@ -66,6 +67,16 @@ class EventListView : public QTreeView
 		Find*             mFind;
 
 		using QObject::event;   // prevent "hidden" warning
+};
+
+class EventListDelegate : public QItemDelegate
+{
+		Q_OBJECT
+	public:
+		explicit EventListDelegate(EventListView* parent = 0) : QItemDelegate(parent) {}
+		virtual QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const  { return 0; }
+		virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
+		virtual void edit(KAEvent*, EventListView*) = 0;
 };
 
 #endif // EVENTLISTVIEW_H

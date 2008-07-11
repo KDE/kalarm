@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.h  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,20 +23,18 @@
 
 #include "kalarm.h"
 
-#include <QItemDelegate>
-
-class AlarmListView;
+#include "alarmlistview.h"
 
 
-class AlarmListDelegate : public QItemDelegate
+class AlarmListDelegate : public EventListDelegate
 {
 		Q_OBJECT
 	public:
-		explicit AlarmListDelegate(AlarmListView* parent = 0);
-		virtual QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const  { return 0; }
+		explicit AlarmListDelegate(AlarmListView* parent = 0)
+		           : EventListDelegate(parent) {}
 		virtual void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
 		virtual QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const;
-		virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
+		virtual void edit(KAEvent*, EventListView*);
 };
 
 #endif
