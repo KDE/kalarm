@@ -47,6 +47,8 @@ class EventListView : public QTreeView
 		QModelIndex       selectedIndex() const;
 		KAEvent*          selectedEvent() const;
 		KAEvent::List     selectedEvents() const;
+		void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
+		bool              editOnSingleClick() const    { return mEditOnSingleClick; }
 
 	public slots:
 		virtual void      slotFind();
@@ -65,6 +67,7 @@ class EventListView : public QTreeView
 		void              findNext(bool forward);
 
 		Find*             mFind;
+		bool              mEditOnSingleClick;
 
 		using QObject::event;   // prevent "hidden" warning
 };

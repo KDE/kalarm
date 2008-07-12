@@ -33,6 +33,7 @@
 TemplateListView::TemplateListView(QWidget* parent)
 	: EventListView(parent)
 {
+	setEditOnSingleClick(false);
 	setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
 }
 

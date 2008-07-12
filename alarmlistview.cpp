@@ -1,7 +1,7 @@
 /*
  *  alarmlistview.cpp  -  widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,6 +35,7 @@ AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
 	: EventListView(parent),
 	  mConfigGroup(configGroup)
 {
+	setEditOnSingleClick(true);
 	connect(header(), SIGNAL(sectionMoved(int, int, int)), SLOT(sectionMoved()));
 }
 
