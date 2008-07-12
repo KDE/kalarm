@@ -77,6 +77,7 @@
 using namespace KCal;
 
 static const char EDIT_DIALOG_NAME[] = "EditDialog";
+static const char TEMPLATE_DIALOG_NAME[] = "EditTemplateDialog";
 static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 
 inline QString recurText(const KAEvent& event)
@@ -138,6 +139,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 	  mRecurSetDefaultEndDate(true),
 	  mTemplateName(0),
 	  mDeferGroup(0),
+	  mDeferChangeButton(0),
 	  mTimeWidget(0),
 	  mShowInKorganizer(0),
 	  mResource(0),
@@ -159,6 +161,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, QWidget* parent,
 	  mRecurSetDefaultEndDate(true),
 	  mTemplateName(0),
 	  mDeferGroup(0),
+	  mDeferChangeButton(0),
 	  mTimeWidget(0),
 	  mShowInKorganizer(0),
 	  mResource(0),
@@ -258,26 +261,29 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 
 	type_init(actionBox, layout);
 
-	// Deferred date/time: visible only for a deferred recurring event.
-	mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred Alarm"), mainPage);
-	topLayout->addWidget(mDeferGroup);
-	QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup);
-	hlayout->setMargin(marginHint());
-	hlayout->setSpacing(spacingHint());
-	QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
-	label->setFixedSize(label->sizeHint());
-	hlayout->addWidget(label);
-	mDeferTimeLabel = new QLabel(mDeferGroup);
-	hlayout->addWidget(mDeferTimeLabel);
+	if (!mTemplate)
+	{
+		// Deferred date/time: visible only for a deferred recurring event.
+		mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred Alarm"), mainPage);
+		topLayout->addWidget(mDeferGroup);
+		QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup);
+		hlayout->setMargin(marginHint());
+		hlayout->setSpacing(spacingHint());
+		QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
+		label->setFixedSize(label->sizeHint());
+		hlayout->addWidget(label);
+		mDeferTimeLabel = new QLabel(mDeferGroup);
+		hlayout->addWidget(mDeferTimeLabel);
 
-	mDeferChangeButton = new QPushButton(i18nc("@action:button", "Change..."), mDeferGroup);
-	mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
-	connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
-	mDeferChangeButton->setWhatsThis(i18nc("@info:whatsthis", "Change the alarm's deferred time, or cancel the deferral"));
-	hlayout->addWidget(mDeferChangeButton);
-//??	mDeferGroup->addSpace(0);
+		mDeferChangeButton = new QPushButton(i18nc("@action:button", "Change..."), mDeferGroup);
+		mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
+		connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
+		mDeferChangeButton->setWhatsThis(i18nc("@info:whatsthis", "Change the alarm's deferred time, or cancel the deferral"));
+		hlayout->addWidget(mDeferChangeButton);
+//??		mDeferGroup->addSpace(0);
+	}
 
-	hlayout = new QHBoxLayout();
+	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	topLayout->addLayout(hlayout);
 
@@ -516,7 +522,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		slotRecurFrequencyChange();      // update the Recurrence text
 	}
 
-	if (!deferGroupVisible)
+	if (!deferGroupVisible  &&  mDeferGroup)
 		mDeferGroup->hide();
 
 	bool empty = AlarmCalendar::resources()->events(KCalEvent::TEMPLATE).isEmpty();
@@ -533,10 +539,13 @@ void EditAlarmDlg::setReadOnly(bool readOnly)
 	if (mTimeWidget)
 		mTimeWidget->setReadOnly(readOnly);
 	mLateCancel->setReadOnly(readOnly);
-	if (readOnly)
-		mDeferChangeButton->hide();
-	else
-		mDeferChangeButton->show();
+	if (mDeferChangeButton)
+	{
+		if (readOnly)
+			mDeferChangeButton->hide();
+		else
+			mDeferChangeButton->show();
+	}
 	if (mShowInKorganizer)
 		mShowInKorganizer->setReadOnly(readOnly);
 }
@@ -721,11 +730,12 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 	KDialog::showEvent(se);
 	if (!mDeferGroupHeight)
 	{
-		mDeferGroupHeight = mDeferGroup->height() + spacingHint();
+		if (mDeferGroup)
+			mDeferGroupHeight = mDeferGroup->height() + spacingHint();
 		QSize s;
-		if (KAlarm::readConfigWindowSize(EDIT_DIALOG_NAME, s))
+		if (KAlarm::readConfigWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s))
 		{
-			bool defer = !mDeferGroup->isHidden();
+			bool defer = mDeferGroup && !mDeferGroup->isHidden();
 			s.setHeight(s.height() + (defer ? mDeferGroupHeight : 0));
 			if (!defer)
 				DialogScroll<EditAlarmDlg>::setSized();
@@ -758,8 +768,8 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 	if (isVisible())
 	{
 		QSize s = re->size();
-		s.setHeight(s.height() - (mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
-		KAlarm::writeConfigWindowSize(EDIT_DIALOG_NAME, s);
+		s.setHeight(s.height() - (!mDeferGroup || mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
+		KAlarm::writeConfigWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s);
 	}
 	KDialog::resizeEvent(re);
 }
