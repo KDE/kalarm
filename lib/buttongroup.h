@@ -1,7 +1,7 @@
 /*
  *  buttongroup.h  -  QButtonGroup with an extra signal, and button IDs
  *  Program:  kalarm
- *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004,2005,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ class QAbstractButton;
  *  It allows buttons to have associated ID numbers, which can be used to access the
  *  buttons.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class ButtonGroup : public QButtonGroup
 {
@@ -59,19 +59,19 @@ class ButtonGroup : public QButtonGroup
 		 */
 		void         addButton(QAbstractButton* button, int id);
 		/** Returns the identifier of the specified button.
-		 *  @param ID, or -1 if the button was not found
+		 *  @return ID, or -1 if the button was not found
 		 */
 		int          id(QAbstractButton* button) const;
 		/** Returns the button with the specified identifier @p id.
-		 *  @param button, or 0 if the button was not found
+		 *  @return button, or 0 if the button was not found
 		 */
 		QAbstractButton* find(int id) const;
 		/** Returns the id of the selected button.
-		 *  @param button if exactly one is selected, or -1 otherwise
+		 *  @return button if exactly one is selected, or -1 otherwise
 		 */
 		int          selectedId() const;
 		/** Checks the button with the specified ID.
-		 *  @param Button ID
+		 *  @param id Button ID
 		 */
 		void         setButton(int id);
 	signals:
