@@ -461,6 +461,7 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		bool        mAskDestination;  // true to prompt user which resource to store new events in
 		bool        mShowProgress;    // emit download progress signals
 		bool        mOpen;
+		bool        mClosing;         // close() is in progress
 };
 
 #endif

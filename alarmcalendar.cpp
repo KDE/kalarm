@@ -29,7 +29,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <k3staticdeleter.h>
 #include <kconfig.h>
 #include <kaboutdata.h>
 #include <kio/netaccess.h>
@@ -61,8 +60,6 @@ QString AlarmCalendar::icalProductId()
 }
 
 static const QString displayCalendarName = QLatin1String("displaying.ics");
-static K3StaticDeleter<AlarmCalendar> resourceCalendarDeleter;   // ensure that the calendar destructor is called
-static K3StaticDeleter<AlarmCalendar> displayCalendarDeleter;    // ensure that the calendar destructor is called
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = 0;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = 0;
@@ -91,8 +88,8 @@ bool AlarmCalendar::initialiseCalendars()
 	}
 	resources->setAskDestinationPolicy(Preferences::askResource());
 	resources->showProgress(true);
-	resourceCalendarDeleter.setObject(mResourcesCalendar, new AlarmCalendar());
-	displayCalendarDeleter.setObject(mDisplayCalendar, new AlarmCalendar(displayCal, KCalEvent::DISPLAYING));
+	mResourcesCalendar = new AlarmCalendar();
+	mDisplayCalendar = new AlarmCalendar(displayCal, KCalEvent::DISPLAYING);
 	CalFormat::setApplication(QLatin1String(KALARM_NAME), icalProductId());
 	return true;
 }
@@ -102,8 +99,10 @@ bool AlarmCalendar::initialiseCalendars()
 */
 void AlarmCalendar::terminateCalendars()
 {
-	resourceCalendarDeleter.destructObject();
-	displayCalendarDeleter.destructObject();
+	delete mResourcesCalendar;
+	mResourcesCalendar = 0;
+	delete mDisplayCalendar;
+	mDisplayCalendar = 0;
 }
 
 /******************************************************************************
@@ -293,6 +292,7 @@ int AlarmCalendar::load()
 			calendar->close();
 			delete mCalendar;
 			mCalendar = 0;
+			mOpen = false;
 			return -1;
 		}
 		if (!mLocalFile.isEmpty())
@@ -397,8 +397,7 @@ void AlarmCalendar::close()
 	mOpen = false;
 	if (mCalendar)
 	{
-		if (mCalType != RESOURCES)
-			mCalendar->close();
+		mCalendar->close();
 		delete mCalendar;
 		mCalendar = 0;
 	}
