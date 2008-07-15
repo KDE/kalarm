@@ -16,7 +16,6 @@ KAlarm Change Log
 - Remove --handleEvent command line option.
 - Use custom properties instead of CATEGORIES in calendar events for KAlarm data.
 - Don't discard non-KAlarm custom event properties when editing alarms.
-- Add check for compatible daemon version when KAlarm registers with it.
 - Use kconf_update to convert old config file settings.
 - Change numeric codes in config file to strings for long-term maintainability.
 - Rename Defaults section options in config file.
