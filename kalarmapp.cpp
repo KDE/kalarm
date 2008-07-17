@@ -108,6 +108,7 @@ KAlarmApp::KAlarmApp()
 	mAlarmTimer->setSingleShot(true);
 	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
 
+	setQuitOnLastWindowClosed(false);
 	Preferences::self()->readConfig();
 	Preferences::setAutoStart(true);
 	Preferences::self()->writeConfig();
