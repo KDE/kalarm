@@ -397,7 +397,8 @@ void AlarmCalendar::close()
 	mOpen = false;
 	if (mCalendar)
 	{
-		mCalendar->close();
+		if (mCalType != RESOURCES)
+			mCalendar->close();
 		delete mCalendar;
 		mCalendar = 0;
 	}
