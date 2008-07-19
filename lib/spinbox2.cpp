@@ -464,8 +464,8 @@ void SpinBox2::stepPage(int step)
 		}
 		int adjust = mSpinbox->shiftStepAdjustment(oldValue, step);
 		if (adjust == -step
-		&&  (step > 0  &&  oldValue + step >= mSpinbox->maximum()
-		  || step < 0  &&  oldValue + step <= mSpinbox->minimum()))
+		&&  ((step > 0  &&  oldValue + step >= mSpinbox->maximum())
+		  || (step < 0  &&  oldValue + step <= mSpinbox->minimum())))
 			adjust = 0;    // allow stepping to the minimum or maximum value
 		mSpinbox->addValue(adjust + step);
 	}

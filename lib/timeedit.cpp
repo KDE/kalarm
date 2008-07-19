@@ -1,7 +1,7 @@
 /*
  *  timeedit.cpp  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ bool TimeEdit::isValid() const
 void TimeEdit::setValid(bool valid)
 {
 	bool oldValid = mSpinBox->isValid();
-	if (valid  &&  !oldValid
-	||  !valid  &&  oldValid)
+	if ((valid  &&  !oldValid)
+	||  (!valid  &&  oldValid))
 	{
 		mSpinBox->setValid(valid);
 		if (mAmPm)
