@@ -362,7 +362,7 @@ class KAEvent : public KAAlarmEventBase
 		KAAlarm            convertDisplayingAlarm() const;
 		bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool original = false, bool cancelCancelledDefer = false) const;
 		Action             action() const                 { return (Action)mActionType; }
-		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE || mActionType == T_COMMAND && mCommandDisplay; }
+		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE || (mActionType == T_COMMAND && mCommandDisplay); }
 		const QString&     id() const                     { return mEventID; }
 		bool               valid() const                  { return mAlarmCount  &&  (mAlarmCount != 1 || !mRepeatAtLogin); }
 		int                alarmCount() const             { return mAlarmCount; }
@@ -389,7 +389,7 @@ class KAEvent : public KAAlarmEventBase
 		unsigned long      kmailSerialNumber() const      { return mKMailSerialNumber; }
 		bool               copyToKOrganizer() const       { return mCopyToKOrganizer; }
 		bool               workTimeOnly() const           { return mWorkTimeOnly; }
-		bool               speak() const                  { return (mActionType == T_MESSAGE  ||  mActionType == T_COMMAND && mCommandDisplay) && mSpeak; }
+		bool               speak() const                  { return (mActionType == T_MESSAGE  ||  (mActionType == T_COMMAND && mCommandDisplay)) && mSpeak; }
 		const QString&     audioFile() const              { return mAudioFile; }
 		float              soundVolume() const            { return !mAudioFile.isEmpty() ? mSoundVolume : -1; }
 		float              fadeVolume() const             { return !mAudioFile.isEmpty() && mSoundVolume >= 0 && mFadeSeconds ? mFadeVolume : -1; }
