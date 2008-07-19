@@ -121,7 +121,7 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 	}
 
 	if (param)
-		*param = QString();
+		param->clear();
 	if (!event)
 		return EMPTY;
 	Alarm::List alarms = event->alarms();
