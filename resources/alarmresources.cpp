@@ -475,9 +475,9 @@ bool AlarmResources::reload()
 
 void AlarmResources::close()
 {
-	kDebug(KARES_DEBUG);
 	if (mOpen  &&  !mClosing)
 	{
+		kDebug(KARES_DEBUG);
 		mClosing = true;
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 			(*it)->close();
