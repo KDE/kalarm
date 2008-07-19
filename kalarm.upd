@@ -50,3 +50,8 @@ RemoveKey=DisableAlarmsIfStopped
 RemoveKey=DaemonTrayCheckInterval
 Key=AutostartTray,AutoStart
 Key=RunInSystemTray,ShowInSystemTray
+
+# KAlarm version 2.0.0
+Id=2.0.0
+File=kalarmrc
+RemoveGroup=EditDialog
