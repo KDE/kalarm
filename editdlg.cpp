@@ -54,6 +54,7 @@
 #include "checkbox.h"
 #include "colourcombo.h"
 #include "deferdlg.h"
+#include "dialogscroll.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "latecancel.h"
@@ -224,23 +225,24 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setFixedHeight(box->sizeHint().height());
 	}
 	mTabs = new KTabWidget(mainWidget);
-//	mTabs->setMargin(marginHint());
 
-	KVBox* mainPageBox = new KVBox;
-	mainPageBox->setMargin(marginHint());
-	mTabs->addTab(mainPageBox, i18nc("@title:tab", "Alarm"));
+	DialogScroll<EditAlarmDlg>* mainScroll = new DialogScroll<EditAlarmDlg>();
+	mTabs->addTab(mainScroll, i18nc("@title:tab", "Alarm"));
 	mMainPageIndex = 0;
-	PageFrame* mainPage = new PageFrame(mainPageBox);
+	PageFrame* mainPage = new PageFrame(mainScroll);
+	mainScroll->setWidget(mainPage);   // mainPage becomes the child of mainScroll
 	connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
 	QVBoxLayout* topLayout = new QVBoxLayout(mainPage);
-	topLayout->setMargin(0);
+	topLayout->setMargin(marginHint());
 	topLayout->setSpacing(spacingHint());
 
 	// Recurrence tab
-	KVBox* recurTab = new KVBox;
-	recurTab->setMargin(marginHint());
-	mTabs->addTab(recurTab, QString());
+	DialogScroll<EditAlarmDlg>* recurScroll = new DialogScroll<EditAlarmDlg>();
+	mTabs->addTab(recurScroll, QString());
 	mRecurPageIndex = 1;
+	KVBox* recurTab = new KVBox();
+	recurTab->setMargin(marginHint());
+	recurScroll->setWidget(recurTab);   // recurTab becomes the child of recurScroll
 	mRecurrenceEdit = new RecurrenceEdit(mReadOnly, recurTab);
 	connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
 	connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
@@ -583,8 +585,8 @@ bool EditAlarmDlg::stateChanged() const
 	{
 		if (mSavedTemplateName     != mTemplateName->text()
 		||  mSavedTemplateTimeType != mTemplateTimeGroup->checkedButton()
-		||  mTemplateUseTime->isChecked()  &&  mSavedTemplateTime != mTemplateTime->time()
-		||  mTemplateUseTimeAfter->isChecked()  &&  mSavedTemplateAfterTime != mTemplateTimeAfter->value())
+		||  (mTemplateUseTime->isChecked()  &&  mSavedTemplateTime != mTemplateTime->time())
+		||  (mTemplateUseTimeAfter->isChecked()  &&  mSavedTemplateAfterTime != mTemplateTimeAfter->value()))
 			return true;
 	}
 	else
@@ -594,7 +596,7 @@ bool EditAlarmDlg::stateChanged() const
 			return true;
 	}
 	if (mSavedLateCancel       != mLateCancel->minutes()
-	||  mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked()
+	||  (mShowInKorganizer && mSavedShowInKorganizer != mShowInKorganizer->isChecked())
 	||  textFileCommandMessage != mSavedTextFileCommandMessage
 	||  mSavedRecurrenceType   != mRecurrenceEdit->repeatType())
 		return true;
@@ -662,8 +664,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			mRecurrenceEdit->updateEvent(event, !mTemplate);
 			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 			bool dateOnly = mAlarmDateTime.isDateOnly();
-			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
-			||  !dateOnly  &&  mAlarmDateTime.kDateTime() < now)
+			if ((dateOnly  &&  mAlarmDateTime.date() < now.date())
+			||  (!dateOnly  &&  mAlarmDateTime.kDateTime() < now))
 			{
 				// A timed recurrence has an entered start date which has
 				// already expired, so we must adjust the next repetition.
@@ -716,18 +718,34 @@ int EditAlarmDlg::getAlarmFlags() const
 */
 void EditAlarmDlg::showEvent(QShowEvent* se)
 {
+	KDialog::showEvent(se);
 	if (!mDeferGroupHeight)
 	{
 		mDeferGroupHeight = mDeferGroup->height() + spacingHint();
 		QSize s;
 		if (KAlarm::readConfigWindowSize(EDIT_DIALOG_NAME, s))
-			s.setHeight(s.height() + (mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
-		else
-			s = minimumSize();
-		resize(s);
+		{
+			bool defer = !mDeferGroup->isHidden();
+			s.setHeight(s.height() + (defer ? mDeferGroupHeight : 0));
+			if (!defer)
+				DialogScroll<EditAlarmDlg>::setSized();
+			resize(s);
+		}
 	}
 	KWindowSystem::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
-	KDialog::showEvent(se);
+}
+
+/******************************************************************************
+* Return the minimum size for the dialog.
+* If the minimum size would be too high to fit the desktop, the tab contents
+* are made scrollable.
+*/
+QSize EditAlarmDlg::minimumSizeHint() const
+{
+	QSize s = DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this), mTabs);
+	if (s.isValid())
+		return s;
+	return KDialog::minimumSizeHint();
 }
 
 /******************************************************************************
@@ -821,8 +839,8 @@ bool EditAlarmDlg::validate()
 			getEvent(event, r);     // this may adjust mAlarmDateTime
 			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 			bool dateOnly = mAlarmDateTime.isDateOnly();
-			if (dateOnly  &&  mAlarmDateTime.date() < now.date()
-			||  !dateOnly  &&  mAlarmDateTime.kDateTime() < now)
+			if ((dateOnly  &&  mAlarmDateTime.date() < now.date())
+			||  (!dateOnly  &&  mAlarmDateTime.kDateTime() < now))
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
@@ -882,7 +900,7 @@ bool EditAlarmDlg::validate()
 				return false;
 			}
 			if (!recurEvent.repeatInterval().isDaily()
-			&&  (mTemplate && mTemplateAnyTime->isChecked()  ||  !mTemplate && mAlarmDateTime.isDateOnly()))
+			&&  (mTemplate && mTemplateAnyTime->isChecked()  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
 			{
 				KMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again

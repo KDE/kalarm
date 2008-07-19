@@ -65,6 +65,7 @@ enum UpdateError { ERR_ADD, ERR_MODIFY, ERR_DELETE, ERR_REACTIVATE, ERR_TEMPLATE
 MainWindow*         displayMainWindowSelected(const QString& eventID = QString());
 bool                readConfigWindowSize(const char* window, QSize&, int* splitterWidth = 0);
 void                writeConfigWindowSize(const char* window, const QSize&, int splitterWidth = -1);
+QRect               desktopWorkArea();
 /** Check from its mime type whether a file appears to be a text or image file.
  *  If a text file, its type is distinguished.
  */

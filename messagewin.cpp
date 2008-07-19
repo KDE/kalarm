@@ -131,15 +131,6 @@ class MessageText : public KTextEdit
 };
 
 
-static QRect desktopWorkArea()
-{
-#ifdef Q_WS_X11
-	return KWindowSystem::workArea();
-#else
-	return qApp->desktop()->availableGeometry();
-#endif
-}
-
 // Basic flags for the window
 static const Qt::WFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
 static const Qt::WFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
@@ -373,7 +364,7 @@ void MessageWin::initView()
 		{
 			bool showZone = false;
 			if (mDateTime.timeType() == KDateTime::UTC
-			||  mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone())
+			||  (mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone()))
 			{
 				// Display time zone abbreviation if it's different from the local
 				// zone. Note that the iCalendar time zone might represent the local
@@ -484,7 +475,7 @@ void MessageWin::initView()
 				topLayout->addSpacing(vspace);
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
-				if (text->sizeHint().width() >= desktopWorkArea().width()*2/3)
+				if (text->sizeHint().width() >= KAlarm::desktopWorkArea().width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 				{
@@ -1268,7 +1259,7 @@ QSize MessageWin::sizeHint() const
 	}
 
 	// Limit the size to fit inside the working area of the desktop
-	QSize desktop  = desktopWorkArea().size();
+	QSize desktop  = KAlarm::desktopWorkArea().size();
 	QSize frameThickness = frameGeometry().size() - geometry().size();  // title bar & window frame
 	return desired.boundedTo(desktop - frameThickness);
 }
@@ -1298,7 +1289,7 @@ void MessageWin::showEvent(QShowEvent* se)
 			KAlarm::readConfigWindowSize("FileMessage", s);
 		resize(s);
 
-		QRect desk = desktopWorkArea();
+		QRect desk = KAlarm::desktopWorkArea();
 		QRect frame = frameGeometry();
 
 		mButtonDelay = Preferences::messageButtonDelay() * 1000;
