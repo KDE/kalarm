@@ -1164,7 +1164,7 @@ bool EditEmailAlarmDlg::type_stateChanged() const
 	QStringList emailAttach;
 	for (int i = 0, end = mEmailAttachList->count();  i < end;  ++i)
 		emailAttach += mEmailAttachList->itemText(i);
-	if (mEmailFromList  &&  mSavedEmailFrom != mEmailFromList->currentIdentityName()
+	if ((mEmailFromList  &&  mSavedEmailFrom != mEmailFromList->currentIdentityName())
 	||  mSavedEmailTo      != mEmailToEdit->text()
 	||  mSavedEmailSubject != mEmailSubjectEdit->text()
 	||  mSavedEmailAttach  != emailAttach

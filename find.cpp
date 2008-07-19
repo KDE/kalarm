@@ -316,8 +316,8 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 			last = true;    // we've wrapped round and reached the starting alarm again
 		fromCurrent = false;
 		bool live = !event->expired();
-		if (live  &&  !(mOptions & FIND_LIVE)
-		||  !live  &&  !(mOptions & FIND_ARCHIVED))
+		if ((live  &&  !(mOptions & FIND_LIVE))
+		||  (!live  &&  !(mOptions & FIND_ARCHIVED)))
 			continue;     // we're not searching this type of alarm
 		switch (event->action())
 		{

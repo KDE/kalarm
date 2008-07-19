@@ -1058,7 +1058,7 @@ void KAEvent::calcTriggerTimes() const
 		// If only-during-working-time is set and it recurs, it won't actually trigger
 		// unless it falls during working hours.
 		if (!mWorkTimeOnly
-		||  (!mRepeatCount || !mRepeatInterval) && checkRecur() == KARecurrence::NO_RECUR
+		||  (!mRepeatCount || (!mRepeatInterval && checkRecur() == KARecurrence::NO_RECUR))
 		||  KAlarm::isWorkingTime(mMainTrigger.kDateTime()))
 		{
 			mMainWorkTrigger = mMainTrigger;
@@ -1130,7 +1130,7 @@ void KAEvent::calcNextWorkingTime() const
 		int repeatFreq = mRepeatInterval.asDays();
 		bool weeklyRepeat = mRepeatCount && !(repeatFreq % 7);
 		Duration interval = mRecurrence->regularInterval();
-		if (interval  &&  !(interval.asDays() % 7)
+		if ((interval  &&  !(interval.asDays() % 7))
 		||  nDayPos == 1)
 		{
 			// It recurs on the same day each week
@@ -1602,7 +1602,7 @@ bool KAEvent::mayOccurDailyDuringWork(const KDateTime& kdt) const
 	if (interval  &&  interval.isDaily()  &&  !(interval.asDays() % 7))
 	{
 		// It recurs weekly
-		if (!mRepeatCount  ||  mRepeatInterval.isDaily() && !(mRepeatInterval.asDays() % 7))
+		if (!mRepeatCount  ||  (mRepeatInterval.isDaily() && !(mRepeatInterval.asDays() % 7)))
 			return false;   // any repetitions are also weekly
 		// Repetitions are daily. Check if any occur on working days
 		// by checking the first recurrence and up to 6 repetitions.
@@ -1643,8 +1643,8 @@ int KAEvent::flags() const
 bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool cancelCancelledDefer) const
 {
 	if (!ev
-	||  checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid()
-	||  !mAlarmCount  &&  (!original || !mMainExpired))
+	||  (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
+	||  (!mAlarmCount  &&  (!original || !mMainExpired)))
 		return false;
 
 	ev->startUpdates();   // prevent multiple update notifications
@@ -1779,7 +1779,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 	}
 
 	// Add subsidiary alarms
-	if (mRepeatAtLogin  ||  mArchiveRepeatAtLogin && original)
+	if (mRepeatAtLogin  ||  (mArchiveRepeatAtLogin && original))
 	{
 		DateTime dtl;
 		if (mArchiveRepeatAtLogin)
@@ -1797,7 +1797,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 			ancillaryType = 1;
 		}
 	}
-	if (mReminderMinutes  ||  mArchiveReminderMinutes && original)
+	if (mReminderMinutes  ||  (mArchiveReminderMinutes && original))
 	{
 		int minutes = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
 		initKCalAlarm(ev, -minutes * 60, QStringList(mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE));
@@ -1807,7 +1807,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 			ancillaryType = 2;
 		}
 	}
-	if (mDeferral > 0  ||  mDeferral == CANCEL_DEFERRAL && !cancelCancelledDefer)
+	if (mDeferral > 0  ||  (mDeferral == CANCEL_DEFERRAL && !cancelCancelledDefer))
 	{
 		DateTime nextDateTime = mNextMainDateTime;
 		if (mMainExpired)
@@ -3785,7 +3785,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 		event->setCategories(cats);
 
 
-		if ((pre_1_4_14  ||  pre_1_9_7 && !pre_1_9_0)
+		if ((pre_1_4_14  ||  (pre_1_9_7 && !pre_1_9_0))
 		&&  event->recurrence()  &&  event->recurrence()->recurs())
 		{
 			/*
@@ -3877,7 +3877,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			}
 		}
 
-		if (pre_1_5_0  ||  pre_1_9_9 && !pre_1_9_0)
+		if (pre_1_5_0  ||  (pre_1_9_9 && !pre_1_9_0))
 		{
 			/*
 			 * It's a KAlarm pre-1.5.0 or KAlarm 1.9 series pre-1.9.9 calendar file.

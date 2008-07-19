@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -529,7 +529,7 @@ void AlarmTimeWidget::updateTimes()
 			{
 				// The current date has reached or has passed the maximum date
 				if (now.date() > mMaxDateTime.date()
-				||  !mAnyTime && now.time() > mTimeEdit->maxTime())
+				||  (!mAnyTime && now.time() > mTimeEdit->maxTime()))
 				{
 					mPastMax = true;
 					emit pastMax();

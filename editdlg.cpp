@@ -900,7 +900,7 @@ bool EditAlarmDlg::validate()
 				return false;
 			}
 			if (!recurEvent.repeatInterval().isDaily()
-			&&  (mTemplate && mTemplateAnyTime->isChecked()  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
+			&&  ((mTemplate && mTemplateAnyTime->isChecked())  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
 			{
 				KMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
