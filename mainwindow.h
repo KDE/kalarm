@@ -157,7 +157,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 
 		AlarmListFilterModel* mListFilterModel;
 		AlarmListView*       mListView;
-		AlarmListDelegate*   mListDelegate;
 		ResourceSelector*    mResourceSelector;    // resource selector widget
 		QSplitter*           mSplitter;            // splits window into list and resource selector
 		AlarmResources*      mAlarmResources;      // calendar resources to use for this window
