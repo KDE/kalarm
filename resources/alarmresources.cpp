@@ -20,7 +20,6 @@
 
 #include "kalarm.h"
 
-#include <k3staticdeleter.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -40,8 +39,6 @@
 
 using namespace KCal;
 
-static K3StaticDeleter<AlarmResources> theInstance;
-
 AlarmResources* AlarmResources::mInstance = 0;
 QString         AlarmResources::mReservedFile;
 QString         AlarmResources::mConstructionError;
@@ -54,7 +51,7 @@ AlarmResources* AlarmResources::create(const KDateTime::Spec& timeSpec, bool act
 	if (!mConstructionError.isEmpty())
 		delete cal;
 	else
-		theInstance.setObject(mInstance, cal);
+		mInstance = cal;
 	return mInstance;
 }
 
@@ -65,7 +62,8 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly,
 	  mNoGui(false),
 	  mAskDestination(false),
 	  mShowProgress(false),
-	  mOpen(false)
+	  mOpen(false),
+	  mClosing(false)
 {
 	mManager = new AlarmResourceManager(QString::fromLatin1("alarms"));
 	mManager->addObserver(this);
@@ -105,7 +103,8 @@ AlarmResources::~AlarmResources()
 	kDebug(KARES_DEBUG);
 	close();
 	delete mManager;
-	theInstance.setObject(mInstance, (AlarmResources*)0);
+	mManager = 0;
+	mInstance = 0;
 }
 
 void AlarmResources::setNoGui(bool noGui)
@@ -477,12 +476,14 @@ bool AlarmResources::reload()
 void AlarmResources::close()
 {
 	kDebug(KARES_DEBUG);
-	if (mOpen)
+	if (mOpen  &&  !mClosing)
 	{
+		mClosing = true;
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 			(*it)->close();
 		setModified(false);
 		mOpen = false;
+		mClosing = false;
 	}
 }
 
