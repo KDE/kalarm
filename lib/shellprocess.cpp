@@ -186,7 +186,7 @@ const QByteArray& ShellProcess::shellPath()
 		QByteArray envshell = qgetenv("SHELL").trimmed();
 		if (!envshell.isEmpty())
 		{
-			struct stat fileinfo;
+			KDE_struct_stat fileinfo;
 			if (KDE_stat(envshell.data(), &fileinfo) != -1  // ensure file exists
 			&&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
 			&&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
