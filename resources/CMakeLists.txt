@@ -18,7 +18,11 @@ kde4_add_library(kalarm_resources SHARED ${kalarm_resources_LIB_SRCS})
 
 target_link_libraries(kalarm_resources ${KDE4_KIO_LIBS} ${KDE4_KRESOURCES_LIBS} ${KDE4_KABC_LIBS} ${KDE4_KCAL_LIBS})
 
-set_target_properties(kalarm_resources PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+set_target_properties(kalarm_resources PROPERTIES 
+   VERSION ${GENERIC_LIB_VERSION} 
+   SOVERSION ${GENERIC_LIB_SOVERSION} 
+   ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kresources"
+)
 install(TARGETS kalarm_resources DESTINATION ${LIB_INSTALL_DIR})
 
 install(FILES kalarm_manager.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kresources)
