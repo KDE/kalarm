@@ -178,7 +178,8 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	// File browse button
 	mFileBrowseButton = new QPushButton(mFileBox);
 	mFileBrowseButton->setIcon(SmallIcon("document-open"));
-	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
+	int size = mFileBrowseButton->sizeHint().height();
+	mFileBrowseButton->setFixedSize(size, size);
 	mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a text or image file to display."));
 	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
@@ -728,7 +729,8 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	// The file browser dialog is activated by the PickLogFileRadio class.
 	QPushButton* browseButton = new QPushButton(box);
 	browseButton->setIcon(SmallIcon("document-open"));
-	browseButton->setFixedSize(browseButton->sizeHint());
+	int size = browseButton->sizeHint().height();
+	browseButton->setFixedSize(size, size);
 	browseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
 	browseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a log file."));
 
@@ -1009,7 +1011,8 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
 	mEmailAddressButton = new QPushButton(parent);
 	mEmailAddressButton->setIcon(SmallIcon("help-contents"));
-	mEmailAddressButton->setFixedSize(mEmailAddressButton->sizeHint());
+	int size = mEmailAddressButton->sizeHint().height();
+	mEmailAddressButton->setFixedSize(size, size);
 	connect(mEmailAddressButton, SIGNAL(clicked()), SLOT(openAddressBook()));
 	mEmailAddressButton->setToolTip(i18nc("@info:tooltip", "Open address book"));
 	mEmailAddressButton->setWhatsThis(i18nc("@info:whatsthis", "Select email addresses from your address book."));

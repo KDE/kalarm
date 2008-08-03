@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright © 2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,7 +76,6 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	layout->addWidget(box);
 	mFilePlay = new QPushButton(box);
 	mFilePlay->setIcon(SmallIcon("media-playback-start"));
-	mFilePlay->setFixedSize(mFilePlay->sizeHint());
 	connect(mFilePlay, SIGNAL(clicked()), SLOT(playSound()));
 	mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
 	mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));
@@ -89,10 +88,14 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	// File browse button
 	mFileBrowseButton = new PushButton(box);
 	mFileBrowseButton->setIcon(SmallIcon("document-open"));
-	mFileBrowseButton->setFixedSize(mFileBrowseButton->sizeHint());
 	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
 	mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
 	mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a sound file to play."));
+
+	int size = qMax(mFilePlay->sizeHint().height(), mFileBrowseButton->sizeHint().height());
+	mFilePlay->setFixedSize(size, size);
+	mFileBrowseButton->setFixedSize(size, size);
+
 
 	// Sound repetition checkbox
 	mRepeatCheckbox = new CheckBox(i18n_chk_Repeat(), page);

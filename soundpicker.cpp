@@ -59,7 +59,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 {
 	QHBoxLayout* soundLayout = new QHBoxLayout(this);
 	soundLayout->setMargin(0);
-	soundLayout->setSpacing(2*KDialog::spacingHint());
+	soundLayout->setSpacing(KDialog::spacingHint());
 	mTypeBox = new KHBox(this);    // this is to control the QWhatsThis text display area
 	mTypeBox->setMargin(0);
 	mTypeBox->setSpacing(KDialog::spacingHint());
@@ -90,7 +90,8 @@ SoundPicker::SoundPicker(QWidget* parent)
 	// Sound file picker button
 	mFilePicker = new PushButton(this);
 	mFilePicker->setIcon(SmallIcon("audio-x-generic"));
-	mFilePicker->setFixedSize(mFilePicker->sizeHint());
+	int size = mFilePicker->sizeHint().height();
+	mFilePicker->setFixedSize(size, size);
 	connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
 	mFilePicker->setToolTip(i18nc("@info:tooltip", "Configure sound file"));
 	mFilePicker->setWhatsThis(i18nc("@info:whatsthis", "Configure a sound file to play when the alarm is displayed."));
