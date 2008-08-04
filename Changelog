@@ -1,6 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.0.1 --- 17 July 2008 ===
+=== Version 2.0.2 --- 4 August 2008 ===
+- Set KDE sound files directory as default for picking sound files.
+- Fix width of buttons containing only an icon.
+
+=== Version 2.0.1 (KDE 4.1) --- 17 July 2008 ===
 - Double click in template dialogue list activates template edit dialogue.
 - Fix KAlarm quitting on closing message window when no main window visible.
 - Fix KAlarm crashing when quitting.

@@ -317,7 +317,7 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
 	if (defaultDir.isEmpty())
 	{
 		if (kdeSoundDir.isNull())
-			kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", "KDE_Notify.wav");
+			kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", "KDE-Sys-Warning.ogg");
 		defaultDir = kdeSoundDir;
 	}
 	QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(" ");
