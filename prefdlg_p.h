@@ -161,7 +161,7 @@ class EmailPrefTab : public PrefsTabBase
 
 	private:
 		void         setEmailAddress(Preferences::MailFrom, const QString& address);
-		void         setEmailBccAddress(bool useControlCentre, const QString& address);
+		void         setEmailBccAddress(bool useSystemSettings, const QString& address);
 		QString      validateAddr(ButtonGroup*, KLineEdit* addr, const QString& msg);
 
 		ButtonGroup* mEmailClient;
