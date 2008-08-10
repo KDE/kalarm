@@ -3,10 +3,15 @@
 
 use strict;
 
+my @lines;
 while (<>)
 {
 	chomp;
-	if (/^(Email(From|BccAddress)=)ControlCenter$/) {
-		print "$1=SystemSettings\n";
+	if (/^(EmailFrom|EmailBccAddress)=\@ControlCenter$/) {
+		push @lines, "$1=\@SystemSettings\n";
 	}
+}
+if (@lines) {
+	print "[General]\n";
+	print @lines;
 }
