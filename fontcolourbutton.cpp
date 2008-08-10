@@ -28,6 +28,7 @@
 #include <kdebug.h>
 
 #include "fontcolour.h"
+#include "preferences.h"
 #include "pushbutton.h"
 #include "fontcolourbutton.moc"
 
@@ -70,7 +71,7 @@ FontColourButton::FontColourButton(QWidget* parent)
 void FontColourButton::setDefaultFont()
 {
 	mDefaultFont = true;
-	mSample->setFont(QFont());
+	mSample->setFont(Preferences::messageFont());
 }
 
 void FontColourButton::setFont(const QFont& font)
