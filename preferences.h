@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ class Preferences : public PreferencesBase
 {
 		Q_OBJECT
 	public:
-		enum MailFrom   { MAIL_FROM_KMAIL, MAIL_FROM_CONTROL_CENTRE, MAIL_FROM_ADDR };
+		enum MailFrom   { MAIL_FROM_KMAIL, MAIL_FROM_SYS_SETTINGS, MAIL_FROM_ADDR };
 
 		static Preferences*     self();
 		static void             connect(const char* signal, const QObject* receiver, const char* member);
@@ -72,8 +72,8 @@ class Preferences : public PreferencesBase
 		static void             setEmailAddress(MailFrom, const QString& address);
 		static MailFrom         emailBccFrom();
 		static QString          emailBccAddress();
-		static void             setEmailBccAddress(bool useControlCentre, const QString& address);
-		static bool             emailBccUseControlCentre();
+		static void             setEmailBccAddress(bool useSystemSettings, const QString& address);
+		static bool             emailBccUseSystemSettings();
 		static QString          cmdXTermCommand();
 		static void             setCmdXTermCommand(const QString& cmd);
 		static float            defaultSoundVolume()             { int vol = self()->mBase_DefaultSoundVolume; return (vol < 0) ? -1 : static_cast<float>(vol) / 100; }

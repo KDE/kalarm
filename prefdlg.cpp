@@ -878,11 +878,11 @@ EmailPrefTab::EmailPrefTab()
 	mFromAddrButton->setFocusWidget(mEmailAddress);
 	grid->addWidget(mEmailAddress, 1, 2);
 
-	// 'From' email address to be taken from Control Centre
-	mFromCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from Control Center"), group);
-	mFromAddressGroup->addButton(mFromCCentreButton, Preferences::MAIL_FROM_CONTROL_CENTRE);
+	// 'From' email address to be taken from System Settings
+	mFromCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from System Settings"), group);
+	mFromAddressGroup->addButton(mFromCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
 	mFromCCentreButton->setWhatsThis(
-	      i18nc("@info:whatsthis", "Check to use the email address set in the KDE Control Center, to identify you as the sender when sending email alarms."));
+	      i18nc("@info:whatsthis", "Check to use the email address set in KDE System Settings, to identify you as the sender when sending email alarms."));
 	grid->addWidget(mFromCCentreButton, 2, 1, 1, 2, Qt::AlignLeft);
 
 	// 'From' email address to be picked from KMail's identities when the email alarm is configured
@@ -914,11 +914,11 @@ EmailPrefTab::EmailPrefTab()
 	mBccAddrButton->setFocusWidget(mEmailBccAddress);
 	grid->addWidget(mEmailBccAddress, 5, 2);
 
-	// 'Bcc' email address to be taken from Control Centre
-	mBccCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from Control Center"), group);
-	mBccAddressGroup->addButton(mBccCCentreButton, Preferences::MAIL_FROM_CONTROL_CENTRE);
+	// 'Bcc' email address to be taken from System Settings
+	mBccCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from System Settings"), group);
+	mBccAddressGroup->addButton(mBccCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
 	mBccCCentreButton->setWhatsThis(
-	      i18nc("@info:whatsthis", "Check to use the email address set in the KDE Control Center, for blind copying email alarms to yourself."));
+	      i18nc("@info:whatsthis", "Check to use the email address set in KDE System Settings, for blind copying email alarms to yourself."));
 	grid->addWidget(mBccCCentreButton, 6, 1, 1, 2, Qt::AlignLeft);
 
 	group->setFixedHeight(group->sizeHint().height());
@@ -931,7 +931,7 @@ void EmailPrefTab::restore(bool defaults)
 	mEmailClient->setButton(Preferences::emailClient());
 	mEmailCopyToKMail->setChecked(Preferences::emailCopyToKMail());
 	setEmailAddress(Preferences::emailFrom(), Preferences::emailAddress());
-	setEmailBccAddress((Preferences::emailBccFrom() == Preferences::MAIL_FROM_CONTROL_CENTRE), Preferences::emailBccAddress());
+	setEmailBccAddress((Preferences::emailBccFrom() == Preferences::MAIL_FROM_SYS_SETTINGS), Preferences::emailBccAddress());
 	mEmailQueuedNotify->setChecked(Preferences::emailQueuedNotify());
 	if (!defaults)
 		mAddressChanged = mBccAddressChanged = false;
@@ -951,7 +951,7 @@ void EmailPrefTab::apply(bool syncToDisc)
 	||  text != Preferences::emailAddress())
 		Preferences::setEmailAddress(static_cast<Preferences::MailFrom>(from), text);
 	b = (mBccAddressGroup->checkedButton() == mBccCCentreButton);
-	Preferences::MailFrom bfrom = b ? Preferences::MAIL_FROM_CONTROL_CENTRE : Preferences::MAIL_FROM_ADDR;;
+	Preferences::MailFrom bfrom = b ? Preferences::MAIL_FROM_SYS_SETTINGS : Preferences::MAIL_FROM_ADDR;;
 	text = mEmailBccAddress->text().trimmed();
 	if (bfrom != Preferences::emailBccFrom()  ||  text != Preferences::emailBccAddress())
 		Preferences::setEmailBccAddress(b, text);
@@ -967,10 +967,10 @@ void EmailPrefTab::setEmailAddress(Preferences::MailFrom from, const QString& ad
 	mEmailAddress->setText(from == Preferences::MAIL_FROM_ADDR ? address.trimmed() : QString());
 }
 
-void EmailPrefTab::setEmailBccAddress(bool useControlCentre, const QString& address)
+void EmailPrefTab::setEmailBccAddress(bool useSystemSettings, const QString& address)
 {
-	mBccAddressGroup->setButton(useControlCentre ? Preferences::MAIL_FROM_CONTROL_CENTRE : Preferences::MAIL_FROM_ADDR);
-	mEmailBccAddress->setText(useControlCentre ? QString() : address.trimmed());
+	mBccAddressGroup->setButton(useSystemSettings ? Preferences::MAIL_FROM_SYS_SETTINGS : Preferences::MAIL_FROM_ADDR);
+	mEmailBccAddress->setText(useSystemSettings ? QString() : address.trimmed());
 }
 
 void EmailPrefTab::slotEmailClientChanged(QAbstractButton* button)
@@ -1012,10 +1012,10 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
 	QString errmsg = i18nc("@info", "<para>%1</para><para>Are you sure you want to save your changes?</para>", msg);
 	switch (group->selectedId())
 	{
-		case Preferences::MAIL_FROM_CONTROL_CENTRE:
+		case Preferences::MAIL_FROM_SYS_SETTINGS:
 			if (!KAMail::controlCentreAddress().isEmpty())
 				return QString();
-			errmsg = i18nc("@info", "No email address is currently set in the KDE Control Center. %1", errmsg);
+			errmsg = i18nc("@info", "No email address is currently set in KDE System Settings. %1", errmsg);
 			break;
 		case Preferences::MAIL_FROM_KMAIL:
 			if (KAMail::identitiesExist())
