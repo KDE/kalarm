@@ -1,6 +1,7 @@
 KAlarm Change Log
 
-=== Version 1.5.4 --- 9 July 2008 ===
+=== Version 1.5.4 --- 10 August 2008 ===
+- Display default font correctly in alarm edit dialogue sample text.
 - Expand font selection control when dialogue is expanded.
 
 === Version 1.5.3 --- 22 May 2008 ===
