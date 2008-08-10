@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,8 +47,8 @@ static const char* GENERAL_SECTION  = "General";
 static const char* TEMP = "Temp";
 
 // Values for EmailFrom entry
-static const QString FROM_CONTROL_CENTRE = QLatin1String("@ControlCenter");
-static const QString FROM_KMAIL          = QLatin1String("@KMail");
+static const QString FROM_SYS_SETTINGS = QLatin1String("@SystemSettings");
+static const QString FROM_KMAIL        = QLatin1String("@KMail");
 
 // Config file entry names for notification messages
 const char* Preferences::QUIT_WARN              = "QuitWarn";
@@ -218,8 +218,8 @@ Preferences::MailFrom Preferences::emailFrom()
 	QString from = self()->mBase_EmailFrom;
 	if (from == FROM_KMAIL)
 		return MAIL_FROM_KMAIL;
-	if (from == FROM_CONTROL_CENTRE)
-		return MAIL_FROM_CONTROL_CENTRE;
+	if (from == FROM_SYS_SETTINGS)
+		return MAIL_FROM_SYS_SETTINGS;
 	return MAIL_FROM_ADDR;
 }
 
@@ -231,7 +231,7 @@ QString Preferences::emailAddress()
 	QString from = self()->mBase_EmailFrom;
 	if (from == FROM_KMAIL)
 		return KAMail::identityManager()->defaultIdentity().fullEmailAddr();
-	if (from == FROM_CONTROL_CENTRE)
+	if (from == FROM_SYS_SETTINGS)
 		return KAMail::controlCentreAddress();
 	return from;
 }
@@ -241,9 +241,9 @@ void Preferences::setEmailAddress(Preferences::MailFrom from, const QString& add
 	QString out;
 	switch (from)
 	{
-		case MAIL_FROM_KMAIL:          out = FROM_KMAIL; break;
-		case MAIL_FROM_CONTROL_CENTRE: out = FROM_CONTROL_CENTRE; break;
-		case MAIL_FROM_ADDR:           out = address; break;
+		case MAIL_FROM_KMAIL:        out = FROM_KMAIL; break;
+		case MAIL_FROM_SYS_SETTINGS: out = FROM_SYS_SETTINGS; break;
+		case MAIL_FROM_ADDR:         out = address; break;
 		default:  return;
 	}
 	self()->setBase_EmailFrom(out);
@@ -252,29 +252,29 @@ void Preferences::setEmailAddress(Preferences::MailFrom from, const QString& add
 Preferences::MailFrom Preferences::emailBccFrom()
 {
 	QString from = self()->mBase_EmailBccAddress;
-	if (from == FROM_CONTROL_CENTRE)
-		return MAIL_FROM_CONTROL_CENTRE;
+	if (from == FROM_SYS_SETTINGS)
+		return MAIL_FROM_SYS_SETTINGS;
 	return MAIL_FROM_ADDR;
 }
 
 QString Preferences::emailBccAddress()
 {
 	QString from = self()->mBase_EmailBccAddress;
-	if (from == FROM_CONTROL_CENTRE)
+	if (from == FROM_SYS_SETTINGS)
 		return KAMail::controlCentreAddress();
 	return from;
 }
 
-bool Preferences::emailBccUseControlCentre()
+bool Preferences::emailBccUseSystemSettings()
 {
-	return self()->mBase_EmailBccAddress == FROM_CONTROL_CENTRE;
+	return self()->mBase_EmailBccAddress == FROM_SYS_SETTINGS;
 }
 
-void Preferences::setEmailBccAddress(bool useControlCentre, const QString& address)
+void Preferences::setEmailBccAddress(bool useSystemSettings, const QString& address)
 {
 	QString out;
-	if (useControlCentre)
-		out = FROM_CONTROL_CENTRE;
+	if (useSystemSettings)
+		out = FROM_SYS_SETTINGS;
 	else
 		out = address;
 	self()->setBase_EmailBccAddress(out);

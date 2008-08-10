@@ -145,7 +145,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
 #endif
-			case Preferences::MAIL_FROM_CONTROL_CENTRE:
+			case Preferences::MAIL_FROM_SYS_SETTINGS:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
 				                                "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Preferences dialog.</para>"));
 				break;
