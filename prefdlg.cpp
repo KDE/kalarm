@@ -54,6 +54,8 @@
 #include <kdebug.h>
 
 #include <ktoolinvocation.h>
+#include <libkholidays/kholidays.h>
+using namespace LibKHolidays;
 
 #include "alarmcalendar.h"
 #include "alarmresources.h"
@@ -63,6 +65,7 @@
 #include "editdlgtypes.h"
 #include "fontcolour.h"
 #include "functions.h"
+#include "itembox.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "label.h"
@@ -320,6 +323,7 @@ void KAlarmPrefDlg::resizeEvent(QResizeEvent* re)
 int PrefsTabBase::mIndentWidth = 0;
 
 PrefsTabBase::PrefsTabBase()
+	: mLabelsAligned(false)
 {
 	mTopWidget = new KVBox(this);
 	mTopWidget->setMargin(0);
@@ -342,6 +346,35 @@ void PrefsTabBase::apply(bool syncToDisc)
 		Preferences::self()->writeConfig();
 }
 
+void PrefsTabBase::addAlignedLabel(QLabel* label)
+{
+	mLabels += label;
+}
+
+void PrefsTabBase::showEvent(QShowEvent*)
+{
+	if (!mLabelsAligned)
+	{
+		int wid = 0;
+		int i;
+		int end = mLabels.count();
+		QList<int> xpos;
+		for (i = 0;  i < end;  ++i)
+		{
+			int x = mLabels[i]->mapTo(this, QPoint(0, 0)).x();
+			xpos += x;
+			int w = x + mLabels[i]->sizeHint().width();
+			if (w > wid)
+				wid = w;
+		}
+		for (i = 0;  i < end;  ++i)
+		{
+			mLabels[i]->setFixedWidth(wid - xpos[i]);
+			mLabels[i]->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+		}
+		mLabelsAligned = true;
+	}
+}
 
 
 /*=============================================================================
@@ -526,12 +559,13 @@ TimePrefTab::TimePrefTab()
 	: PrefsTabBase()
 {
 	// Default time zone
-	KHBox* itemBox = new KHBox(topWidget());
+	ItemBox* itemBox = new ItemBox(topWidget());
 	itemBox->setMargin(0);
 	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"), box);
+	addAlignedLabel(label);
 #if 1
 	mTimeZone = new TimeZoneCombo(box);
 	mTimeZone->setMaxVisibleItems(15);
@@ -546,24 +580,60 @@ TimePrefTab::TimePrefTab()
 	                        "Select the time zone which <application>KAlarm</application> should use "
 	                        "as its default for displaying and entering dates and times."));
 	label->setBuddy(mTimeZone);
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->leftAlign();
 	itemBox->setFixedHeight(box->sizeHint().height());
 
+	// Holiday region
+	itemBox = new ItemBox(topWidget());
+	itemBox->setMargin(0);
+	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18nc("@label:listbox", "Holiday region:"), box);
+	addAlignedLabel(label);
+	mHolidays = new KComboBox(box);
+	mHolidays->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
+	itemBox->leftAlign();
+	label->setBuddy(mHolidays);
+	box->setWhatsThis(i18nc("@info:whatsthis",
+	                        "Select which holiday region to use"));
+	QStringList holidays;
+	QStringList countryList = KHolidays::locations();
+	foreach (const QString& country, countryList)
+	{
+		QString countryFile = KStandardDirs::locate("locale", "l10n/" + country + "/entry.desktop");
+		QString regionName;  // name to display
+		if (!countryFile.isEmpty())
+		{
+			KConfig config(countryFile, KConfig::SimpleConfig);
+			KConfigGroup cfg(&config, "KCM Locale");
+			regionName = cfg.readEntry("Name");
+		}
+		if (regionName.isEmpty())
+			regionName = country;   // default to file name
+
+		holidays << regionName;
+		mHolidayNames[regionName] = country; // store region for saving to config file
+	}
+	qSort(holidays.begin(), holidays.end(), caseInsensitiveLessThan);
+	holidays.push_front(i18nc("@item:inlistbox Do not use holidays", "(None)"));
+	mHolidays->addItems(holidays);
+
 	// Start-of-day time
-	itemBox = new KHBox(topWidget());
+	itemBox = new ItemBox(topWidget());
 	itemBox->setMargin(0);
 	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18nc("@label:spinbox", "Start of day for date-only alarms:"), box);
+	addAlignedLabel(label);
 	mStartOfDay = new TimeEdit(box);
 	label->setBuddy(mStartOfDay);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>The earliest time of day at which a date-only alarm will be triggered.</para>"
 	      "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->leftAlign();
 	itemBox->setFixedHeight(box->sizeHint().height());
-
 
 	// Working hours
 	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Working Hours"), topWidget());
@@ -585,37 +655,36 @@ TimePrefTab::TimePrefTab()
 	daybox->setFixedHeight(daybox->sizeHint().height());
 	daybox->setWhatsThis(i18nc("@info:whatsthis", "Check the days in the week which are work days"));
 
-	itemBox = new KHBox(group);
+	itemBox = new ItemBox(group);
 	itemBox->setMargin(0);
 	layout->addWidget(itemBox);
 	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* startLabel = new QLabel(i18nc("@label:spinbox", "Daily start time:"), box);
+	label = new QLabel(i18nc("@label:spinbox", "Daily start time:"), box);
+	addAlignedLabel(label);
 	mWorkStart = new TimeEdit(box);
-	startLabel->setBuddy(mWorkStart);
+	label->setBuddy(mWorkStart);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the start time of the working day.</para>"
 	      "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->leftAlign();
 
-	itemBox = new KHBox(group);
+	itemBox = new ItemBox(group);
 	itemBox->setMargin(0);
 	layout->addWidget(itemBox);
 	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
 	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
-	QLabel* endLabel = new QLabel(i18nc("@label:spinbox", "Daily end time:"), box);
+	label = new QLabel(i18nc("@label:spinbox", "Daily end time:"), box);
+	addAlignedLabel(label);
 	mWorkEnd = new TimeEdit(box);
-	endLabel->setBuddy(mWorkEnd);
+	label->setBuddy(mWorkEnd);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the end time of the working day.</para>"
 	      "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
-	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->leftAlign();
 	box->setFixedHeight(box->sizeHint().height());
-	int w = qMax(startLabel->sizeHint().width(), endLabel->sizeHint().width());
-	startLabel->setFixedWidth(w);
-	endLabel->setFixedWidth(w);
 
 	topLayout()->addStretch();    // top adjust the widgets
 }
@@ -638,11 +707,24 @@ void TimePrefTab::restore(bool)
 	}
 	mTimeZone->setCurrentIndex(tzindex);
 #endif
+	QString region;
+	QString hol = Preferences::holidayRegion();
+	for (QMap<QString, QString>::const_iterator it = mHolidayNames.constBegin();  it != mHolidayNames.constEnd();  ++it)
+	{
+		if (it.value() == hol)
+		{
+			region = it.key();
+			break;
+		}
+	}
+	int i;
+	for (i = mHolidays->count();  --i > 0 && mHolidays->itemText(i) != region; ) ;
+	mHolidays->setCurrentIndex(i);
 	mStartOfDay->setValue(Preferences::startOfDay());
 	mWorkStart->setValue(Preferences::workDayStart());
 	mWorkEnd->setValue(Preferences::workDayEnd());
 	QBitArray days = Preferences::workDays();
-	for (int i = 0;  i < 7;  ++i)
+	for (i = 0;  i < 7;  ++i)
 	{
 		bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
 		mWorkDays[i]->setChecked(x);
@@ -660,6 +742,9 @@ void TimePrefTab::apply(bool syncToDisc)
 	if (tz.isValid()  &&  tz != Preferences::timeZone())
 		Preferences::setTimeZone(tz);
 #endif
+	QString hol = mHolidays->currentIndex() ? mHolidayNames[mHolidays->currentText()] : QString();
+	if (hol != Preferences::holidayRegion())
+		Preferences::setHolidayRegion(hol);
 	int t = mStartOfDay->value();
 	QTime sodt(t/60, t%60, 0);
 	if (sodt != Preferences::startOfDay())

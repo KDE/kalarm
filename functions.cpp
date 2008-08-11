@@ -1800,4 +1800,12 @@ QString uidKOrganizer(const QString& id)
 	return result.insert(i, KORGANIZER_UID);
 }
 
+/******************************************************************************
+* Case insensitive comparison for use by qSort().
+*/
+bool caseInsensitiveLessThan(const QString& s1, const QString& s2)
+{
+	return s1.toLower() < s2.toLower();
+}
+
 } // namespace

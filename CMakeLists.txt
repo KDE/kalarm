@@ -22,6 +22,7 @@ set(libkalarm_SRCS
 	lib/combobox.cpp 
 	lib/dateedit.cpp 
 	lib/datetime.cpp 
+	lib/itembox.cpp
 	lib/label.cpp 
 	lib/messagebox.cpp 
 	lib/packedlayout.cpp 
@@ -109,7 +110,7 @@ endif (KMAIL_SUPPORTED)
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-kdepim4_link_unique_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDE4_KPIMIDENTITIES_LIBS} ${KDE4_MAILTRANSPORT_LIBS} ${KDE4_PHONON_LIBS} kdepim)
+kdepim4_link_unique_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDE4_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDE4_KPIMIDENTITIES_LIBS} ${KDE4_MAILTRANSPORT_LIBS} ${KDE4_PHONON_LIBS} kdepim kholidays)
 
 
 install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS} )

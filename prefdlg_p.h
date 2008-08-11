@@ -54,14 +54,20 @@ class PrefsTabBase : public DialogScroll<KAlarmPrefDlg>
 		void         setPreferences();
 		virtual void restore(bool defaults) = 0;
 		virtual void apply(bool syncToDisc) = 0;
+		void         addAlignedLabel(QLabel*);
 		KVBox*       topWidget() const  { return mTopWidget; }
 		QVBoxLayout* topLayout() const  { return mTopLayout; }
 		static int   indentWidth()      { return mIndentWidth; }
+
+	protected:
+		virtual void showEvent(QShowEvent*);
 
 	private:
 		static int   mIndentWidth;       // indent width for checkboxes etc.
 		KVBox*       mTopWidget;
 		QVBoxLayout* mTopLayout;
+		QList<QLabel*> mLabels;          // labels to right-align
+		bool           mLabelsAligned;   // labels have been aligned
 };
 
 
@@ -106,6 +112,8 @@ class TimePrefTab : public PrefsTabBase
 		void         setWorkDays(const QBitArray& days);
 
 		TimeZoneCombo* mTimeZone;
+		KComboBox*    mHolidays;
+		QMap<QString, QString> mHolidayNames;
 		TimeEdit*     mStartOfDay;
 		QCheckBox*    mWorkDays[7];
 		TimeEdit*     mWorkStart;

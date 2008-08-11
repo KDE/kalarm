@@ -156,4 +156,6 @@ inline int          localeDayInWeek_to_weekDay(int index)  { return (index + loc
 
 } // namespace KAlarm
 
+bool caseInsensitiveLessThan(const QString& s1, const QString& s2);
+
 #endif // FUNCTIONS_H
