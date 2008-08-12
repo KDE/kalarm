@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright (c) 2003-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,25 +21,25 @@
 #ifndef FONTCOLOURBUTTON_H
 #define FONTCOLOURBUTTON_H
 
+#include <pushbutton.h>
+#include <kdialog.h>
 #include <QFont>
 #include <QColor>
-#include <QFrame>
-#include <kdialog.h>
 
 class QLineEdit;
 class FontColourChooser;
 class PushButton;
 
 
-class FontColourButton : public QFrame
+class FontColourButton : public PushButton
 {
 		Q_OBJECT
 	public:
-		FontColourButton(QWidget* parent = 0);
+		explicit FontColourButton(QWidget* parent = 0);
 		void          setDefaultFont();
 		void          setFont(const QFont&);
-		void          setBgColour(const QColor&);
-		void          setFgColour(const QColor&);
+		void          setBgColour(const QColor& c) { mBgColour = c; }
+		void          setFgColour(const QColor& c) { mFgColour = c; }
 		bool          defaultFont() const    { return mDefaultFont; }
 		QFont         font() const           { return mFont; }
 		QColor        bgColour() const       { return mBgColour; }
@@ -48,16 +48,14 @@ class FontColourButton : public QFrame
 		virtual bool  isReadOnly() const     { return mReadOnly; }
 
 	signals:
-		void          selected();
+		void          selected(const QColor& fg, const QColor& bg);
 
 	protected slots:
 		void          slotButtonPressed();
 
 	private:
-		PushButton* mButton;
 		QColor      mBgColour, mFgColour;
 		QFont       mFont;
-		QLineEdit*  mSample;
 		bool        mDefaultFont;
 		bool        mReadOnly;
 };
