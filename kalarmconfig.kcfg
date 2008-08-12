@@ -20,8 +20,8 @@
   <signal name="base_TimeZoneChanged">
     <argument type="String">Base_TimeZone</argument>
   </signal>
-  <signal name="holidayRegionChanged">
-    <argument type="String">HolidayRegion</argument>
+  <signal name="base_HolidayRegionChanged">
+    <argument type="String">Base_HolidayRegion</argument>
   </signal>
   <signal name="base_StartOfDayChanged">
     <argument type="DateTime">Base_StartOfDay</argument>
@@ -54,10 +54,10 @@
       <whatsthis context="@info:whatsthis">Select the time zone which <application>KAlarm</application> should use as its default for displaying and entering dates and times.</whatsthis>
       <emit signal="base_TimeZoneChanged"/>
     </entry>
-    <entry name="HolidayRegion" type="String">
+    <entry name="Base_HolidayRegion" key="HolidayRegion" type="String">
       <label context="@label">Holiday region</label>
       <whatsthis context="@info:whatsthis">Select the holiday region to use.</whatsthis>
-      <emit signal="holidayRegionChanged"/>
+      <emit signal="base_HolidayRegionChanged"/>
     </entry>
     <entry name="Base_MessageColours" key="MessageColours" type="StringList">
       <label context="@label">Color selection list</label>

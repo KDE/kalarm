@@ -27,7 +27,10 @@
 #include <QColor>
 #include <QFont>
 #include <QDateTime>
+
 class KTimeZone;
+namespace LibKHolidays { class KHolidays; }
+using LibKHolidays::KHolidays;
 
 #include "colourlist.h"
 #include "kalarmconfig.h"
@@ -46,6 +49,8 @@ class Preferences : public PreferencesBase
 		// Access to settings
 		static KTimeZone        timeZone(bool reload = false);
 		static void             setTimeZone(const KTimeZone&);
+		static const KHolidays& holidays();
+		static void             setHolidayRegion(const QString& regionCode);
 		static ColourList       messageColours();
 		static void             setMessageColours(const ColourList&);
 		static QColor           defaultFgColour()                { return Qt::black; }
@@ -87,11 +92,13 @@ class Preferences : public PreferencesBase
 
 	signals:
 		void  timeZoneChanged(const KTimeZone& newTz);
+		void  holidaysChanged(const KHolidays& newHolidays);
 		void  startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
 		void  workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
 	private slots:
 		void  timeZoneChange(const QString&);
+		void  holidaysChange(const QString& regionCode);
 		void  startDayChange(const QDateTime&);
 		void  workTimeChange(const QDateTime&, const QDateTime&, int days);
 
@@ -103,6 +110,7 @@ class Preferences : public PreferencesBase
 
 		static Preferences*     mInstance;
 		static KTimeZone        mSystemTimeZone;
+		static KHolidays*       mHolidays;
 
 		// All the following members are accessed by the Preferences dialog classes
 		ColourList              mMessageColours;

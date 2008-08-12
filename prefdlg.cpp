@@ -708,13 +708,16 @@ void TimePrefTab::restore(bool)
 	mTimeZone->setCurrentIndex(tzindex);
 #endif
 	QString region;
-	QString hol = Preferences::holidayRegion();
-	for (QMap<QString, QString>::const_iterator it = mHolidayNames.constBegin();  it != mHolidayNames.constEnd();  ++it)
+	QString hol = Preferences::holidays().location();
+	if (!hol.isEmpty())
 	{
-		if (it.value() == hol)
+		for (QMap<QString, QString>::const_iterator it = mHolidayNames.constBegin();  it != mHolidayNames.constEnd();  ++it)
 		{
-			region = it.key();
-			break;
+			if (it.value() == hol)
+			{
+				region = it.key();
+				break;
+			}
 		}
 	}
 	int i;
@@ -743,7 +746,7 @@ void TimePrefTab::apply(bool syncToDisc)
 		Preferences::setTimeZone(tz);
 #endif
 	QString hol = mHolidays->currentIndex() ? mHolidayNames[mHolidays->currentText()] : QString();
-	if (hol != Preferences::holidayRegion())
+	if (hol != Preferences::holidays().location())
 		Preferences::setHolidayRegion(hol);
 	int t = mStartOfDay->value();
 	QTime sodt(t/60, t%60, 0);

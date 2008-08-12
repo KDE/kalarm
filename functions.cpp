@@ -61,6 +61,7 @@
 #include <kpimidentities/identitymanager.h>
 #include <kpimidentities/identity.h>
 #include <kcal/person.h>
+#include <libkholidays/kholidays.h>
 #include <ktoolinvocation.h>
 
 
@@ -1427,7 +1428,8 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 */
 bool isWorkingTime(const KDateTime& dt)
 {
-	if (!Preferences::workDays().testBit(dt.date().dayOfWeek() - 1))
+	if (!Preferences::workDays().testBit(dt.date().dayOfWeek() - 1)
+	||  (Preferences::holidays().isHoliday(dt.date())))
 		return false;
 	return dt.isDateOnly()
 	   ||  (dt.time() >= Preferences::workDayStart()  &&  dt.time() < Preferences::workDayEnd());

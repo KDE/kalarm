@@ -33,6 +33,7 @@
 
 #include <kpimidentities/identity.h>
 #include <kpimidentities/identitymanager.h>
+#include <libkholidays/kholidays.h>
 
 #include "functions.h"
 #include "kamail.h"
@@ -63,6 +64,7 @@ static QString translateXTermPath(const QString& cmdline, bool write);
 
 Preferences* Preferences::mInstance = 0;
 KTimeZone    Preferences::mSystemTimeZone;
+KHolidays*   Preferences::mHolidays = 0;   // always non-null after Preferences initialisation
 QTime        Preferences::mOldStartOfDay(0, 0, 0);
 bool         Preferences::mStartOfDayChanged = false;
 
@@ -87,6 +89,7 @@ Preferences::Preferences()
 {
 	QObject::connect(this, SIGNAL(base_StartOfDayChanged(const QDateTime&)), SLOT(startDayChange(const QDateTime&)));
 	QObject::connect(this, SIGNAL(base_TimeZoneChanged(const QString&)), SLOT(timeZoneChange(const QString&)));
+	QObject::connect(this, SIGNAL(base_HolidayRegionChanged(const QString&)), SLOT(holidaysChange(const QString&)));
 }
 
 /******************************************************************************
@@ -120,6 +123,28 @@ void Preferences::timeZoneChange(const QString& zone)
 {
 	Q_UNUSED(zone);
 	emit mInstance->timeZoneChanged(timeZone(false));
+}
+
+const KHolidays& Preferences::holidays()
+{
+	QString regionCode = self()->mBase_HolidayRegion;
+	if (!mHolidays  ||  mHolidays->location() != regionCode)
+	{
+		delete mHolidays;
+		mHolidays = new KHolidays(regionCode);
+	}
+	return *mHolidays;
+}
+
+void Preferences::setHolidayRegion(const QString& regionCode)
+{
+	self()->setBase_HolidayRegion(regionCode);
+}
+
+void Preferences::holidaysChange(const QString& regionCode)
+{
+	Q_UNUSED(regionCode);
+	emit mInstance->holidaysChanged(holidays());
 }
 
 ColourList Preferences::messageColours()
