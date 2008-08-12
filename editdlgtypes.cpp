@@ -189,11 +189,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	frameLayout->addWidget(mCmdEdit);
 	connect(mCmdEdit, SIGNAL(scriptToggled(bool)), SLOT(slotCmdScriptToggled(bool)));
 
-	// Font and colour choice button and sample text
-	mFontColourButton = new FontColourButton(parent);
-	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
-	frameLayout->addWidget(mFontColourButton);
-
 	// Sound checkbox and file selector
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
@@ -204,9 +199,19 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	hlayout->addSpacing(2*spacingHint());
 	hlayout->addStretch();
 
+	// Font and colour choice button and sample text
+	mFontColourButton = new FontColourButton(parent);
+	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
+	hlayout->addWidget(mFontColourButton);
+	connect(mFontColourButton, SIGNAL(selected()), SLOT(setColours()));
+
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
+		hlayout = new QHBoxLayout();
+		hlayout->setMargin(0);
+		frameLayout->addLayout(hlayout);
+		hlayout->addStretch();
 		mSpecialActionsButton = new SpecialActionsButton(false, parent);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 		hlayout->addWidget(mSpecialActionsButton);
@@ -259,6 +264,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mFontColourButton->setFgColour(event->fgColour());
+		setColours(event->bgColour(), event->fgColour());
 		mConfirmAck->setChecked(event->confirmAck());
 		bool recurs = event->recurs();
 		int reminderMins = event->reminder();
@@ -298,6 +304,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
+		setColours(Preferences::defaultBgColour(), Preferences::defaultFgColour());
 		mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 		reminder()->setMinutes(0, false);
 		reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
@@ -306,7 +313,28 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 		                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	}
+}
 
+/******************************************************************************
+* Called when the font/color button has been clicked.
+* Set the colors in the message text entry control.
+*/
+void EditDisplayAlarmDlg::setColours()
+{
+	setColours(mFontColourButton->bgColour(), mFontColourButton->fgColour());
+}
+void EditDisplayAlarmDlg::setColours(const QColor& bgColour, const QColor& fgColour)
+{
+	QPalette pal = mTextMessageEdit->palette();
+	pal.setColor(mTextMessageEdit->backgroundRole(), bgColour);
+	mTextMessageEdit->setPalette(pal);
+	pal = mTextMessageEdit->viewport()->palette();
+	pal.setColor(mTextMessageEdit->viewport()->backgroundRole(), bgColour);
+	mTextMessageEdit->viewport()->setPalette(pal);
+	QTextCursor cursor = mTextMessageEdit->textCursor();
+	mTextMessageEdit->selectAll();
+	mTextMessageEdit->setTextColor(fgColour);
+	mTextMessageEdit->setTextCursor(cursor);
 }
 
 /******************************************************************************
