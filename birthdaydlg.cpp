@@ -143,15 +143,21 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->setMargin(marginHint());
 	groupLayout->setSpacing(spacingHint());
 
+	// Sound checkbox and file selector
+	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout->setMargin(0);
+	groupLayout->addLayout(hlayout);
+	mSoundPicker = new SoundPicker(group);
+	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
+	hlayout->addWidget(mSoundPicker);
+	hlayout->addSpacing(2*spacingHint());
+	hlayout->addStretch();
+
 	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(group);
 	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
-	groupLayout->addWidget(mFontColourButton);
-
-	// Sound checkbox and file selector
-	mSoundPicker = new SoundPicker(group);
-	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	groupLayout->addWidget(mSoundPicker, 0, Qt::AlignLeft);
+	hlayout->addWidget(mFontColourButton);
+	connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(setColours(const QColor&, const QColor&)));
 
 	// How much advance warning to give
 	mReminder = new Reminder(i18nc("@info:whatsthis", "Check to display a reminder in advance of the birthday."),
@@ -164,7 +170,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	groupLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	hlayout->setSpacing(2*spacingHint());
 	groupLayout->addLayout(hlayout);
@@ -200,6 +206,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	hlayout->addWidget(mSubRepetition);
 
 	// Set the values to their defaults
+	setColours(Preferences::defaultFgColour(), Preferences::defaultBgColour());
 	mFontColourButton->setDefaultFont();
 	mFontColourButton->setBgColour(Preferences::defaultBgColour());
 	mFontColourButton->setFgColour(Preferences::defaultFgColour());
@@ -304,6 +311,19 @@ void BirthdayDlg::slotOk()
 void BirthdayDlg::slotSelectionChanged()
 {
 	enableButtonOk(mListView->selectionModel()->hasSelection());
+}
+
+/******************************************************************************
+* Called when the font/color button has been clicked.
+* Set the colors in the message text entry control.
+*/
+void BirthdayDlg::setColours(const QColor& fgColour, const QColor& bgColour)
+{
+	QPalette pal = mPrefix->palette();
+	pal.setColor(mPrefix->backgroundRole(), bgColour);
+	pal.setColor(mPrefix->foregroundRole(), fgColour);
+	mPrefix->setPalette(pal);
+	mSuffix->setPalette(pal);
 }
 
 /******************************************************************************

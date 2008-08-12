@@ -203,7 +203,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFontColourButton = new FontColourButton(parent);
 	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
 	hlayout->addWidget(mFontColourButton);
-	connect(mFontColourButton, SIGNAL(selected()), SLOT(setColours()));
+	connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(setColours(const QColor&, const QColor&)));
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
@@ -264,7 +264,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mFontColourButton->setFgColour(event->fgColour());
-		setColours(event->bgColour(), event->fgColour());
+		setColours(event->fgColour(), event->bgColour());
 		mConfirmAck->setChecked(event->confirmAck());
 		bool recurs = event->recurs();
 		int reminderMins = event->reminder();
@@ -304,7 +304,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
-		setColours(Preferences::defaultBgColour(), Preferences::defaultFgColour());
+		setColours(Preferences::defaultFgColour(), Preferences::defaultBgColour());
 		mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 		reminder()->setMinutes(0, false);
 		reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
@@ -319,11 +319,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 * Called when the font/color button has been clicked.
 * Set the colors in the message text entry control.
 */
-void EditDisplayAlarmDlg::setColours()
-{
-	setColours(mFontColourButton->bgColour(), mFontColourButton->fgColour());
-}
-void EditDisplayAlarmDlg::setColours(const QColor& bgColour, const QColor& fgColour)
+void EditDisplayAlarmDlg::setColours(const QColor& fgColour, const QColor& bgColour)
 {
 	QPalette pal = mTextMessageEdit->palette();
 	pal.setColor(mTextMessageEdit->backgroundRole(), bgColour);

@@ -48,7 +48,7 @@ class FontColourButton : public PushButton
 		virtual bool  isReadOnly() const     { return mReadOnly; }
 
 	signals:
-		void          selected();
+		void          selected(const QColor& fg, const QColor& bg);
 
 	protected slots:
 		void          slotButtonPressed();

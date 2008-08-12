@@ -80,11 +80,10 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		void            slotAlarmTypeChanged(int index);
 		void            slotPickFile();
 		void            slotCmdScriptToggled(bool);
-		void            setColours();
+		void            setColours(const QColor& fg, const QColor& bg);
 
 	private:
 		void            setSoundPicker();
-		void            setColours(const QColor& bgColour, const QColor& fgColour);
 
 		// Display alarm options
 		ComboBox*           mTypeCombo;
