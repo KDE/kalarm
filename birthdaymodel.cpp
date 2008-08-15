@@ -43,9 +43,40 @@ BirthdayModel* BirthdayModel::instance(QObject* parent)
 	return mInstance;
 }
 
+void BirthdayModel::close()
+{
+	if (mAddressBook)
+	{
+		KABC::StdAddressBook::close();
+		mAddressBook = 0;
+	}
+	if (mInstance)
+	{
+		delete mInstance;
+		mInstance = 0;
+	}
+}
+
 BirthdayModel::BirthdayModel(QObject* parent)
 	: QAbstractTableModel(parent)
 {
+}
+
+BirthdayModel::~BirthdayModel()
+{
+	int count = mData.count();
+	if (count)
+	{
+		beginRemoveRows(QModelIndex(), 0, count - 1);
+		for (int row = 0;  row < count;  ++row)
+		{
+			delete mData[row];
+			mData.removeAt(row);     // alarm exists, so remove from selection list
+		}
+		endRemoveRows();
+	}
+	if (this == mInstance)
+		mInstance = 0;
 }
 
 void BirthdayModel::setPrefixSuffix(const QString& prefix, const QString& suffix)

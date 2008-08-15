@@ -24,6 +24,7 @@
 #include "alarmcalendar.h"
 #include "eventlistmodel.h"
 #include "alarmlistview.h"
+#include "birthdaymodel.h"
 #include "editdlg.h"
 #include "dbushandler.h"
 #include "functions.h"
@@ -782,6 +783,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	// This was the last/only running "instance" of the program, so exit completely.
 	kDebug() << exitCode << ": quitting";
 	AlarmCalendar::terminateCalendars();
+	BirthdayModel::close();
 	exit(exitCode);
 }
 
