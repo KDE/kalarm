@@ -21,14 +21,12 @@
 #ifndef FONTCOLOURBUTTON_H
 #define FONTCOLOURBUTTON_H
 
-#include <pushbutton.h>
+#include "pushbutton.h"
 #include <kdialog.h>
 #include <QFont>
 #include <QColor>
 
-class QLineEdit;
 class FontColourChooser;
-class PushButton;
 
 
 class FontColourButton : public PushButton
