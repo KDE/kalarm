@@ -1,7 +1,7 @@
 /*
  *  birthdaymodel.h  -  model class for birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +47,8 @@ class BirthdayModel : public QAbstractTableModel
 		};
 
 		static BirthdayModel* instance(QObject* parent = 0);
+		static void         close();
+		~BirthdayModel();
 		void                setPrefixSuffix(const QString& prefix, const QString& suffix);
 		virtual int         rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual int         columnCount(const QModelIndex& parent = QModelIndex()) const;
