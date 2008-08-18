@@ -446,8 +446,18 @@ void EditAlarmDlg::initDisplayAlarms(QWidget* parent)
 	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height());
 	frameLayout->addWidget(mFontColourButton);
 
+	QHBoxLayout* layout = new QHBoxLayout(frameLayout, 0, 0);
+	mBgColourBox = new QHBox(mDisplayAlarmsFrame);
+	mBgColourBox->setSpacing(spacingHint());
+	layout->addWidget(mBgColourBox);
+	layout->addStretch();
+	QLabel* label = new QLabel(i18n("&Background color:"), mBgColourBox);
+	mBgColourButton = new ColourCombo(mBgColourBox);
+	label->setBuddy(mBgColourButton);
+	QWhatsThis::add(mBgColourBox, i18n("Select the alarm message background color"));
+
 	// Sound checkbox and file selector
-	QHBoxLayout* layout = new QHBoxLayout(frameLayout);
+	layout = new QHBoxLayout(frameLayout);
 	mSoundPicker = new SoundPicker(mDisplayAlarmsFrame);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
 	layout->addWidget(mSoundPicker);
@@ -676,6 +686,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mFontColourButton->setFgColour(event->fgColour());
+		mBgColourButton->setColour(event->bgColour());
 		if (mTemplate)
 		{
 			// Editing a template
@@ -792,6 +803,7 @@ void EditAlarmDlg::initialise(const KAEvent* event)
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
+		mBgColourButton->setColour(Preferences::defaultBgColour());
 		QDateTime defaultTime = QDateTime::currentDateTime().addSecs(60);
 		if (mTemplate)
 		{
@@ -860,6 +872,7 @@ void EditAlarmDlg::setReadOnly()
 	mTextMessageEdit->setReadOnly(mReadOnly);
 	mFileMessageEdit->setReadOnly(mReadOnly);
 	mFontColourButton->setReadOnly(mReadOnly);
+	mBgColourButton->setReadOnly(mReadOnly);
 	mSoundPicker->setReadOnly(mReadOnly);
 	mConfirmAck->setReadOnly(mReadOnly);
 	mReminder->setReadOnly(mReadOnly);
@@ -991,7 +1004,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	mSavedConfirmAck       = mConfirmAck->isChecked();
 	mSavedFont             = mFontColourButton->font();
 	mSavedFgColour         = mFontColourButton->fgColour();
-	mSavedBgColour         = mFontColourButton->bgColour();
+	mSavedBgColour         = mFileRadio->isOn() ? mBgColourButton->colour() : mFontColourButton->bgColour();
 	mSavedReminder         = mReminder->minutes();
 	mSavedOnceOnly         = mReminder->isOnceOnly();
 	if (mSpecialActionsButton)
@@ -1058,7 +1071,7 @@ bool EditAlarmDlg::stateChanged() const
 		||  mSavedConfirmAck != mConfirmAck->isChecked()
 		||  mSavedFont       != mFontColourButton->font()
 		||  mSavedFgColour   != mFontColourButton->fgColour()
-		||  mSavedBgColour   != mFontColourButton->bgColour()
+		||  mSavedBgColour   != (mFileRadio->isOn() ? mBgColourButton->colour() : mFontColourButton->bgColour())
 		||  mSavedReminder   != mReminder->minutes()
 		||  mSavedOnceOnly   != mReminder->isOnceOnly()
 		||  mSavedAutoClose  != mLateCancel->isAutoClose())
@@ -1160,7 +1173,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			dt = QDateTime(QDate(2000,1,1), mTemplateTime->time());
 	}
 	KAEvent::Action type = getAlarmType();
-	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(), mFontColourButton->font(),
+	event.set(dt, text, (mFileRadio->isOn() ? mBgColourButton->colour() : mFontColourButton->bgColour()),
+	          mFontColourButton->fgColour(), mFontColourButton->font(),
 	          type, (trial ? 0 : mLateCancel->minutes()), getAlarmFlags());
 	switch (type)
 	{
@@ -1759,6 +1773,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 		mFilePadding->hide();
 		mTextMessageEdit->show();
 		mFontColourButton->show();
+		mBgColourBox->hide();
 		mSoundPicker->showSpeak(true);
 		mDisplayAlarmsFrame->show();
 		mCommandFrame->hide();
@@ -1775,6 +1790,7 @@ void EditAlarmDlg::slotAlarmTypeChanged(int)
 		mFileBox->show();
 		mFilePadding->show();
 		mFontColourButton->hide();
+		mBgColourBox->show();
 		mSoundPicker->showSpeak(false);
 		mDisplayAlarmsFrame->show();
 		mCommandFrame->hide();

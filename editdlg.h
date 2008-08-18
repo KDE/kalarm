@@ -39,6 +39,7 @@ class QVBox;
 class QHBox;
 class EmailIdCombo;
 class FontColourButton;
+class ColourCombo;
 class ButtonGroup;
 class TimeEdit;
 class RadioButton;
@@ -160,7 +161,9 @@ class EditAlarmDlg : public KDialogBase
 		QHBox*              mFilePadding;
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
-		FontColourButton*   mFontColourButton;
+		FontColourButton*   mFontColourButton;   // for text display option
+		ColourCombo*        mBgColourButton;     // for file display option
+		QHBox*              mBgColourBox;
 		SpecialActionsButton* mSpecialActionsButton;
 		Reminder*           mReminder;
 		bool                mReminderDeferral;
