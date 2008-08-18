@@ -49,6 +49,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
+#include "birthdaydlg.h"
 #include "editdlg.h"
 #include "daemon.h"
 #include "dcophandler.h"
@@ -806,6 +807,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 
 	// This was the last/only running "instance" of the program, so exit completely.
 	kdDebug(5950) << "KAlarmApp::quitIf(" << exitCode << "): quitting" << endl;
+	BirthdayDlg::close();
 	exit(exitCode);
 }
 
