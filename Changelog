@@ -1,7 +1,10 @@
 KAlarm Change Log
 
-=== Version 1.5.4 --- 9 July 2008 ===
+=== Version 1.5.4 --- 18 August 2008 ===
+- Show background colour selector for file display alarms.
+- Display default font correctly in alarm edit dialogue sample text.
 - Expand font selection control when dialogue is expanded.
+- Fix potential crash when KAlarm quits, if birthday dialogue was opened.
 
 === Version 1.5.3 --- 22 May 2008 ===
 - In New From Template menu, show list of template names in sorted order.

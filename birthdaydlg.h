@@ -46,6 +46,7 @@ class BirthdayDlg : public KDialogBase
 	public:
 		BirthdayDlg(QWidget* parent = 0);
 		QValueList<KAEvent> events() const;
+		static void close();
 
 	protected slots:
 		virtual void      slotOk();

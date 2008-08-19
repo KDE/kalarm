@@ -212,6 +212,18 @@ void BirthdayDlg::loadAddressBook()
 }
 
 /******************************************************************************
+* Close the address book.This is called at program termination.
+*/
+void BirthdayDlg::close()
+{
+	if (mAddressBook)
+	{
+		KABC::StdAddressBook::close();
+		mAddressBook = 0;
+	}
+}
+
+/******************************************************************************
 * Initialise or update the birthday selection list by fetching all birthdays
 * from the address book and displaying those which do not already have alarms.
 */
