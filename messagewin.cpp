@@ -184,6 +184,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mKMailButton(0),
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
@@ -259,6 +260,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mKMailButton(0),
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
@@ -289,6 +291,7 @@ MessageWin::MessageWin()
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
+	  mKMailButton(0),
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
@@ -647,7 +650,6 @@ void MessageWin::initView()
 		QPixmap pixmap = MainBarIcon("media-playback-stop");
 		mSilenceButton = new QPushButton(topWidget);
 		mSilenceButton->setIcon(pixmap);
-		mSilenceButton->setFixedSize(mSilenceButton->sizeHint());
 		connect(mSilenceButton, SIGNAL(clicked()), SLOT(stopPlay()));
 		grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
 		mSilenceButton->setToolTip(i18nc("@info:tooltip", "Stop sound"));
@@ -663,24 +665,31 @@ void MessageWin::initView()
 		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
 		mKMailButton = new QPushButton(topWidget);
 		mKMailButton->setIcon(pixmap);
-		mKMailButton->setFixedSize(mKMailButton->sizeHint());
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
 		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
 		mKMailButton->setToolTip(i18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
 		mKMailButton->setWhatsThis(i18nc("@info:whatsthis", "Locate and highlight this email in <application>KMail</application>"));
 	}
-	else
-		mKMailButton = 0;
 
 	// KAlarm button
 	QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
 	mKAlarmButton = new QPushButton(topWidget);
 	mKAlarmButton->setIcon(pixmap);
-	mKAlarmButton->setFixedSize(mKAlarmButton->sizeHint());
 	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
 	mKAlarmButton->setToolTip(i18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
 	mKAlarmButton->setWhatsThis(i18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
+
+	int butsize = mKAlarmButton->sizeHint().height();
+	if (mSilenceButton)
+		butsize = qMax(butsize, mSilenceButton->sizeHint().height());
+	if (mKMailButton)
+		butsize = qMax(butsize, mKMailButton->sizeHint().height());
+	mKAlarmButton->setFixedSize(butsize, butsize);
+	if (mSilenceButton)
+		mSilenceButton->setFixedSize(butsize, butsize);
+	if (mKMailButton)
+		mKMailButton->setFixedSize(butsize, butsize);
 
 	// Disable all buttons initially, to prevent accidental clicking on if they happen to be
 	// under the mouse just as the window appears.
