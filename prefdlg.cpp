@@ -1177,7 +1177,8 @@ EditPrefTab::EditPrefTab()
 	mSoundFileLabel->setBuddy(mSoundFile);
 	mSoundFileBrowse = new QPushButton(box);
 	mSoundFileBrowse->setIcon(KIcon(SmallIcon("document-open")));
-	mSoundFileBrowse->setFixedSize(mSoundFileBrowse->sizeHint());
+	int size = mSoundFileBrowse->sizeHint().height();
+	mSoundFileBrowse->setFixedSize(size, size);
 	connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
 	mSoundFileBrowse->setToolTip(i18nc("@info:tooltip", "Choose a sound file"));
 	box->setWhatsThis(i18nc("@info:whatsthis", "Enter the default sound file to use in the alarm edit dialog."));
