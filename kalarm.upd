@@ -57,6 +57,8 @@ File=kalarmrc
 RemoveGroup=EditDialog
 
 # Convert pre-2.0.2 email options
+Id=2.0.2
+File=kalarmrc
 Group=General
 Options=overwrite
 Script=kalarm-2.0.2-general.pl
