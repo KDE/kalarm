@@ -1,6 +1,7 @@
 KAlarm Change Log
 
-=== Version 2.0.2 --- 4 August 2008 ===
+=== Version 2.0.2 --- 13 August 2008 ===
+- Show alarm text entry fields in the current alarm message colours.
 - Set KDE sound files directory as default for picking sound files.
 - Fix width of buttons containing only an icon.
 - Change Control Center references to System Settings.
