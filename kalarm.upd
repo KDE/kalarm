@@ -55,3 +55,8 @@ Key=RunInSystemTray,ShowInSystemTray
 Id=2.0.0
 File=kalarmrc
 RemoveGroup=EditDialog
+
+# Convert pre-2.0.2 email options
+Group=General
+Options=overwrite
+Script=kalarm-2.0.2-general.pl
