@@ -28,6 +28,7 @@
 #include "editdlg.h"
 
 class QAbstractButton;
+class QHBoxLayout;
 class KComboBox;
 class KHBox;
 class EmailIdCombo;
@@ -91,11 +92,16 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		KHBox*              mFilePadding;
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
-		FontColourButton*   mFontColourButton;
+		FontColourButton*   mFontColourButton;   // for text display option
+		ColourCombo*        mBgColourButton;     // for file display option
+		KHBox*              mBgColourBox;
 		SpecialActionsButton* mSpecialActionsButton;
+		QHBoxLayout*        mSpecialActionsLayout1;  // for text display option
+		QHBoxLayout*        mSpecialActionsLayout2;  // for file display option
 		unsigned long       mKMailSerialNumber;  // if email text, message's KMail serial number, else 0
 		bool                mReminderDeferral;
 		bool                mReminderArchived;
+		bool                mSpecialActionsInLayout1;
 		// Text message alarm widgets
 		TextEdit*           mTextMessageEdit;    // text message edit box
 		// Text file alarm widgets
