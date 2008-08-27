@@ -1,12 +1,13 @@
 KAlarm Change Log
 
-=== Version 2.0.2 --- 26 August 2008 ===
+=== Version 2.0.2 (KDE 4.1.1) --- 27 August 2008 ===
 - Show alarm text entry fields in the current alarm message colours.
 - Show background colour selector for file display alarms.
 - Set KDE sound files directory as default for picking sound files.
 - Fix width of buttons containing only an icon.
 - Change Control Center references to System Settings.
 - Fix crash when birthday dialogue is opened more than once.
+- Prevent quitting when main window is closed but system tray icon is visible.
 
 === Version 2.0.1 (KDE 4.1) --- 17 July 2008 ===
 - Double click in template dialogue list activates template edit dialogue.
