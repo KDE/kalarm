@@ -197,6 +197,7 @@ MainWindow::MainWindow(bool restored)
 MainWindow::~MainWindow()
 {
 	kDebug();
+	bool trayParent = isTrayParent();   // must call before removing from window list
 	mWindowList.removeAt(mWindowList.indexOf(this));
 	if (mWindowList.isEmpty())
 	{
@@ -205,7 +206,7 @@ MainWindow::~MainWindow()
 	}
 	if (theApp()->trayWindow())
 	{
-		if (isTrayParent())
+		if (trayParent)
 			delete theApp()->trayWindow();
 		else
 			theApp()->trayWindow()->removeWindow(this);
@@ -263,11 +264,16 @@ MainWindow* MainWindow::mainMainWindow()
 }
 
 /******************************************************************************
-* Check whether this main window is the parent of the system tray icon.
+* Check whether this main window is effectively the parent of the system tray icon.
 */
 bool MainWindow::isTrayParent() const
 {
-	return theApp()->wantShowInSystemTray()  &&  theApp()->trayMainWindow() == this;
+	TrayWindow* tray = theApp()->trayWindow();
+	if (!tray  ||  !KSystemTrayIcon::isSystemTrayAvailable())
+		return false;
+	if (tray->assocMainWindow() == this)
+		return true;
+	return mWindowList.count() == 1;
 }
 
 /******************************************************************************
