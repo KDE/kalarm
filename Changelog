@@ -6,6 +6,7 @@ KAlarm Change Log
 - Set KDE sound files directory as default for picking sound files.
 - Fix width of buttons containing only an icon.
 - Change Control Center references to System Settings.
+- Fix formatting of file display alarms for non-HTML text files.
 - Fix crash when birthday dialogue is opened more than once.
 - Prevent quitting when main window is closed but system tray icon is visible.
 
