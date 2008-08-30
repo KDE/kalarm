@@ -667,7 +667,7 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 			}
 			if (!err)
 			{
-				switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimetype()))
+				switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimeTypePtr()))
 				{
 					case KAlarm::TextFormatted:
 					case KAlarm::TextPlain:
