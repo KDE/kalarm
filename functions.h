@@ -30,6 +30,7 @@
 #include "alarmevent.h"
 #include "editdlg.h"
 #include <kfile.h>
+#include <kmimetype.h>
 
 namespace KCal { class Event; }
 class QWidget;
@@ -69,7 +70,7 @@ QRect               desktopWorkArea();
 /** Check from its mime type whether a file appears to be a text or image file.
  *  If a text file, its type is distinguished.
  */
-FileType            fileType(const QString& mimetype);
+FileType            fileType(const KMimeType::Ptr& mimetype);
 /** Return current KAlarm version number */
 int                 Version();
 inline int          Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }

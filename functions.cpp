@@ -1364,33 +1364,16 @@ int getVersionNumber(const QString& version, QString* subVersion)
 * If a text file, its type is distinguished.
 * Reply = file type.
 */
-FileType fileType(const QString& mimetype)
+FileType fileType(const KMimeType::Ptr& mimetype)
 {
-	static const char* applicationTypes[] = {
-		"x-shellscript", "x-nawk", "x-awk", "x-perl", "x-python",
-		"x-desktop", "x-troff", 0 };
-	static const char* formattedTextTypes[] = {
-		"html", "xml", 0 };
-
-	if (mimetype.startsWith(QLatin1String("image/")))
-		return Image;
-	int slash = mimetype.indexOf(QLatin1Char('/'));
-	if (slash < 0)
-		return Unknown;
-	QByteArray type = mimetype.mid(slash + 1).toLatin1();
-	if (mimetype.startsWith(QLatin1String("application")))
-	{
-		for (int i = 0;  applicationTypes[i];  ++i)
-			if (!strcmp(type, applicationTypes[i]))
-				return TextApplication;
-	}
-	else if (mimetype.startsWith(QLatin1String("text")))
-	{
-		for (int i = 0;  formattedTextTypes[i];  ++i)
-			if (!strcmp(type, formattedTextTypes[i]))
-				return TextFormatted;
+	if (mimetype->is("text/html"))
+		return TextFormatted;
+	if (mimetype->is("application/x-executable"))
+		return TextApplication;
+	if (mimetype->is("text/plain"))
 		return TextPlain;
-	}
+	if (mimetype->name().startsWith(QLatin1String("image/")))
+		return Image;
 	return Unknown;
 }
 
