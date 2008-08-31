@@ -80,6 +80,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		void            slotAlarmTypeChanged(int index);
 		void            slotPickFile();
 		void            slotCmdScriptToggled(bool);
+		void            setColours(const QColor& fg, const QColor& bg);
 
 	private:
 		void            setSoundPicker();
