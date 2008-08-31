@@ -189,32 +189,47 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	frameLayout->addWidget(mCmdEdit);
 	connect(mCmdEdit, SIGNAL(scriptToggled(bool)), SLOT(slotCmdScriptToggled(bool)));
 
-	// Sound checkbox and file selector
+	// Background colour for file display alarms
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	frameLayout->addLayout(hlayout);
+	mBgColourBox = new KHBox(parent);
+	mBgColourBox->setMargin(0);
+	mBgColourBox->setSpacing(KDialog::spacingHint());
+	hlayout->addWidget(mBgColourBox);
+	hlayout->addStretch();
+	label = new QLabel(i18nc("@label:listbox", "Background color:"), mBgColourBox);
+	mBgColourButton = new ColourCombo(mBgColourBox);
+	label->setBuddy(mBgColourButton);
+	mBgColourBox->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message background color"));
+
+	// Sound checkbox and file selector
+	mSpecialActionsLayout1 = new QHBoxLayout();
+	mSpecialActionsLayout1->setMargin(0);
+	frameLayout->addLayout(mSpecialActionsLayout1);
 	mSoundPicker = new SoundPicker(parent);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
-	hlayout->addWidget(mSoundPicker);
-	hlayout->addSpacing(2*spacingHint());
-	hlayout->addStretch();
+	mSpecialActionsLayout1->addWidget(mSoundPicker);
+	mSpecialActionsLayout1->addSpacing(2*spacingHint());
+	mSpecialActionsLayout1->addStretch();
 
 	// Font and colour choice button and sample text
 	mFontColourButton = new FontColourButton(parent);
 	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
-	hlayout->addWidget(mFontColourButton);
+	mSpecialActionsLayout1->addWidget(mFontColourButton);
 	connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(setColours(const QColor&, const QColor&)));
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
-		hlayout = new QHBoxLayout();
-		hlayout->setMargin(0);
-		frameLayout->addLayout(hlayout);
-		hlayout->addStretch();
+		mSpecialActionsLayout2 = new QHBoxLayout();
+		mSpecialActionsLayout2->setMargin(0);
+		frameLayout->addLayout(mSpecialActionsLayout2);
+		mSpecialActionsLayout2->addStretch();
 		mSpecialActionsButton = new SpecialActionsButton(false, parent);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
-		hlayout->addWidget(mSpecialActionsButton);
+		mSpecialActionsLayout2->addWidget(mSpecialActionsButton);
+		mSpecialActionsInLayout1 = false;
 	}
 
 	// Top-adjust the controls
@@ -264,6 +279,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 			mFontColourButton->setFont(event->font());
 		mFontColourButton->setBgColour(event->bgColour());
 		mFontColourButton->setFgColour(event->fgColour());
+		mBgColourButton->setColour(event->bgColour());
 		setColours(event->fgColour(), event->bgColour());
 		mConfirmAck->setChecked(event->confirmAck());
 		bool recurs = event->recurs();
@@ -304,6 +320,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mFontColourButton->setDefaultFont();
 		mFontColourButton->setBgColour(Preferences::defaultBgColour());
 		mFontColourButton->setFgColour(Preferences::defaultFgColour());
+		mBgColourButton->setColour(Preferences::defaultBgColour());
 		setColours(Preferences::defaultFgColour(), Preferences::defaultBgColour());
 		mConfirmAck->setChecked(Preferences::defaultConfirmAck());
 		reminder()->setMinutes(0, false);
@@ -370,6 +387,7 @@ void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
 	mFileMessageEdit->setReadOnly(readOnly);
 	mCmdEdit->setReadOnly(readOnly);
 	mFontColourButton->setReadOnly(readOnly);
+	mBgColourButton->setReadOnly(readOnly);
 	mSoundPicker->setReadOnly(readOnly);
 	mConfirmAck->setReadOnly(readOnly);
 	reminder()->setReadOnly(readOnly);
@@ -397,7 +415,7 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
 	mSavedConfirmAck  = mConfirmAck->isChecked();
 	mSavedFont        = mFontColourButton->font();
 	mSavedFgColour    = mFontColourButton->fgColour();
-	mSavedBgColour    = mFontColourButton->bgColour();
+	mSavedBgColour    = (mTypeCombo->currentIndex() == tFILE) ? mBgColourButton->colour() : mFontColourButton->bgColour();
 	mSavedReminder    = reminder()->minutes();
 	mSavedOnceOnly    = reminder()->isOnceOnly();
 	mSavedAutoClose   = lateCancel()->isAutoClose();
@@ -423,7 +441,7 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 	||  mSavedConfirmAck != mConfirmAck->isChecked()
 	||  mSavedFont       != mFontColourButton->font()
 	||  mSavedFgColour   != mFontColourButton->fgColour()
-	||  mSavedBgColour   != mFontColourButton->bgColour()
+	||  mSavedBgColour   != (mTypeCombo->currentIndex() == tFILE ? mBgColourButton->colour() : mFontColourButton->bgColour())
 	||  mSavedReminder   != reminder()->minutes()
 	||  mSavedOnceOnly   != reminder()->isOnceOnly()
 	||  mSavedAutoClose  != lateCancel()->isAutoClose())
@@ -467,8 +485,9 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 		default:
 		case tTEXT:     type = KAEvent::MESSAGE; break;
 	}
-	event.set(dt, text, mFontColourButton->bgColour(), mFontColourButton->fgColour(),
-	          mFontColourButton->font(), type, lateCancel, getAlarmFlags());
+	event.set(dt, text, (mTypeCombo->currentIndex() == tFILE ? mBgColourButton->colour() : mFontColourButton->bgColour()),
+	          mFontColourButton->fgColour(), mFontColourButton->font(),
+	          type, lateCancel, getAlarmFlags());
 	if (type == KAEvent::MESSAGE)
 	{
 		if (AlarmText::checkIfEmail(text))
@@ -516,9 +535,18 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mCmdEdit->hide();
 			mTextMessageEdit->show();
 			mFontColourButton->show();
+			mBgColourBox->hide();
 			mSoundPicker->showSpeak(true);
 			if (mSpecialActionsButton)
+			{
+				if (mSpecialActionsInLayout1)
+				{
+					mSpecialActionsLayout1->removeWidget(mSpecialActionsButton);
+					mSpecialActionsLayout2->addWidget(mSpecialActionsButton);
+					mSpecialActionsInLayout1 = false;
+				}
 				mSpecialActionsButton->show();
+			}
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the alarm message now"));
 			focus = mTextMessageEdit;
 			break;
@@ -528,9 +556,18 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mFilePadding->show();
 			mCmdEdit->hide();
 			mFontColourButton->hide();
+			mBgColourBox->show();
 			mSoundPicker->showSpeak(false);
 			if (mSpecialActionsButton)
+			{
+				if (!mSpecialActionsInLayout1)
+				{
+					mSpecialActionsLayout2->removeWidget(mSpecialActionsButton);
+					mSpecialActionsLayout1->addWidget(mSpecialActionsButton);
+					mSpecialActionsInLayout1 = true;
+				}
 				mSpecialActionsButton->show();
+			}
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the file now"));
 			mFileMessageEdit->setNoSelect();
 			focus = mFileMessageEdit;
@@ -541,6 +578,7 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			slotCmdScriptToggled(mCmdEdit->isScript());  // show/hide mFilePadding
 			mCmdEdit->show();
 			mFontColourButton->show();
+			mBgColourBox->hide();
 			mSoundPicker->showSpeak(true);
 			if (mSpecialActionsButton)
 				mSpecialActionsButton->hide();
