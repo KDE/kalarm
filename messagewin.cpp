@@ -427,12 +427,9 @@ void MessageWin::initView()
 						KMimeType::Ptr mime = KMimeType::findByUrl(url);
 						if (mime->is("application/octet-stream"))
 							mime = KMimeType::findByFileContent(tmpFile);
-						switch (KAlarm::fileType(mime->name()))
+						switch (KAlarm::fileType(mime))
 						{
 							case KAlarm::Image:
-#ifdef __GNUC__
-#warning Check that HTML links and link paths work
-#endif
 								view->setHtml("<img source=\"" + tmpFile + "\">");
 								break;
 							case KAlarm::TextFormatted:
