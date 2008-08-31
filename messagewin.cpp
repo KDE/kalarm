@@ -424,16 +424,32 @@ void MessageWin::initView()
 					{
 						opened = true;
 						KTextBrowser* view = new KTextBrowser(topWidget);
-						bool imageType = (KAlarm::fileType(KMimeType::findByPath(tmpFile)->name()) == KAlarm::Image);
+						KMimeType::Ptr mime = KMimeType::findByUrl(url);
+						if (mime->is("application/octet-stream"))
+							mime = KMimeType::findByFileContent(tmpFile);
+						switch (KAlarm::fileType(mime->name()))
+						{
+							case KAlarm::Image:
 #ifdef __GNUC__
 #warning Check that HTML links and link paths work
 #endif
-						if (imageType)
-							view->setHtml("<img source=\"" + tmpFile + "\">");
-						else
-						{
-							// If not an image, assume a text file
-							view->QTextBrowser::setSource(tmpFile);   //krazy:exclude=qclasses
+								view->setHtml("<img source=\"" + tmpFile + "\">");
+								break;
+							case KAlarm::TextFormatted:
+								view->QTextBrowser::setSource(tmpFile);   //krazy:exclude=qclasses
+								break;
+							default:
+							{
+								// Assume a plain text file
+								if (qfile.open(QIODevice::ReadOnly))
+								{
+									QTextStream str(&qfile);
+
+									view->setPlainText(str.readAll());
+									qfile.close();
+								}
+								break;
+							}
 						}
 						view->setMinimumSize(view->sizeHint());
 						topLayout->addWidget(view);
