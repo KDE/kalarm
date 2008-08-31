@@ -189,9 +189,7 @@ void TrayWindow::slotActivated(QSystemTrayIcon::ActivationReason reason)
 	if (reason == QSystemTrayIcon::Trigger)
 	{
 		// Left click: display/hide the first main window
-		if (!theApp()->wantShowInSystemTray())
-			mAssocMainWindow = MainWindow::toggleWindow(mAssocMainWindow);
-		else if (mAssocMainWindow  &&  mAssocMainWindow->isVisible())
+		if (mAssocMainWindow  &&  mAssocMainWindow->isVisible())
 		{
 			mAssocMainWindow->raise();
 			mAssocMainWindow->activateWindow();
