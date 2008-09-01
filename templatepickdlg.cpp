@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialogue to choose an alarm template
  *  Program:  kalarm
- *  Copyright (C) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent, const char* name)
 	mTemplateList->setSelectionMode(QListView::Single);
 	mTemplateList->refresh();      // populate the template list
 	connect(mTemplateList, SIGNAL(selectionChanged()), SLOT(slotSelectionChanged()));
-	connect(mTemplateList, SIGNAL(executed(QListViewItem*)), SLOT(slotOk()));
+	// Require a real double click (even if KDE is in single-click mode) to accept the selection
+	connect(mTemplateList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), SLOT(slotOk()));
 	topLayout->addWidget(mTemplateList);
 
 	slotSelectionChanged();        // enable or disable the OK button

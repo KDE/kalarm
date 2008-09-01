@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 1.5.4 --- 18 August 2008 ===
+=== Version 1.5.5 --- 1 September 2008 ===
+- Require a real double click to accept the selected template in pick list.
+
+=== Version 1.5.4 (KDE 3.5.10) --- 18 August 2008 ===
 - Show background colour selector for file display alarms.
 - Display default font correctly in alarm edit dialogue sample text.
 - Expand font selection control when dialogue is expanded.
