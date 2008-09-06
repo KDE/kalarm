@@ -33,8 +33,8 @@ class KComboBox;
 class KHBox;
 class EmailIdCombo;
 class CheckBox;
-class ColourCombo;
 class ComboBox;
+class ColourButton;
 class FontColourButton;
 class ButtonGroup;
 class RadioButton;
@@ -93,7 +93,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		SoundPicker*        mSoundPicker;
 		CheckBox*           mConfirmAck;
 		FontColourButton*   mFontColourButton;   // for text display option
-		ColourCombo*        mBgColourButton;     // for file display option
+		ColourButton*       mBgColourButton;     // for file display option
 		KHBox*              mBgColourBox;
 		SpecialActionsButton* mSpecialActionsButton;
 		QHBoxLayout*        mSpecialActionsLayout1;  // for text display option
