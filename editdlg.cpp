@@ -20,6 +20,32 @@
 
 #include "kalarm.h"
 
+#include "alarmcalendar.h"
+#include "alarmresources.h"
+#include "alarmtimewidget.h"
+#include "buttongroup.h"
+#include "checkbox.h"
+#include "deferdlg.h"
+#include "dialogscroll.h"
+#include "functions.h"
+#include "kalarmapp.h"
+#include "latecancel.h"
+#include "lineedit.h"
+#include "mainwindow.h"
+#include "packedlayout.h"
+#include "preferences.h"
+#include "radiobutton.h"
+#include "recurrenceedit.h"
+#include "reminder.h"
+#include "shellprocess.h"
+#include "spinbox.h"
+#include "templatepickdlg.h"
+#include "timeedit.h"
+#include "timespinbox.h"
+#include "editdlg.moc"
+#include "editdlgprivate.moc"
+#include "editdlgtypes.h"
+
 #include <QLabel>
 #include <QDir>
 #include <QStyle>
@@ -46,33 +72,6 @@
 #include <libkdepim/maillistdrag.h>
 #include <libkdepim/kvcarddrag.h>
 #include <kcal/icaldrag.h>
-
-#include "alarmcalendar.h"
-#include "alarmresources.h"
-#include "alarmtimewidget.h"
-#include "buttongroup.h"
-#include "checkbox.h"
-#include "colourcombo.h"
-#include "deferdlg.h"
-#include "dialogscroll.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "latecancel.h"
-#include "lineedit.h"
-#include "mainwindow.h"
-#include "packedlayout.h"
-#include "preferences.h"
-#include "radiobutton.h"
-#include "recurrenceedit.h"
-#include "reminder.h"
-#include "shellprocess.h"
-#include "spinbox.h"
-#include "templatepickdlg.h"
-#include "timeedit.h"
-#include "timespinbox.h"
-#include "editdlg.moc"
-#include "editdlgprivate.moc"
-#include "editdlgtypes.h"
 
 using namespace KCal;
 
