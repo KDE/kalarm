@@ -34,6 +34,7 @@
 #include <kpimidentities/identity.h>
 #include <kpimidentities/identitymanager.h>
 #include <libkholidays/kholidays.h>
+using namespace LibKHolidays;
 
 #include "functions.h"
 #include "kamail.h"
