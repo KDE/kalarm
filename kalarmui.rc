@@ -77,5 +77,4 @@
   <Action name="resAdd" />
   <Action name="resImport" />
  </Menu>
- <ActionProperties/>
 </kpartgui>
