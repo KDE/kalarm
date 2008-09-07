@@ -48,7 +48,7 @@ class ColourButton : public KColorButton
 		void         setColour(const QColor& c)  { setColor(c); }
 		/** Returns true if the widget is read only. */
 		bool         isReadOnly() const          { return mReadOnly; }
-		/** Sets whether the combo box can be changed by the user.
+		/** Sets whether the button can be changed by the user.
 		 *  @param readOnly True to set the widget read-only, false to set it read-write.
 		 */
 		virtual void setReadOnly(bool readOnly);
