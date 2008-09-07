@@ -1,7 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.0.3 --- 1 September 2008 ===
+=== Version 2.0.3 --- 7 September 2008 ===
 - Double click accepts selected template in pick list.
+- Replace colour combo boxes by buttons which display standard KDE colour picker.
+- Make text in edit alarm dialogue change colour when foreground colour changed.
 
 === Version 2.0.2 (KDE 4.1.1) --- 27 August 2008 ===
 - Show alarm text entry fields in the current alarm message colours.

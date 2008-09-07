@@ -340,10 +340,13 @@ void EditDisplayAlarmDlg::setColours(const QColor& fgColour, const QColor& bgCol
 {
 	QPalette pal = mTextMessageEdit->palette();
 	pal.setColor(mTextMessageEdit->backgroundRole(), bgColour);
+	pal.setColor(QPalette::Text, fgColour);
 	mTextMessageEdit->setPalette(pal);
 	pal = mTextMessageEdit->viewport()->palette();
 	pal.setColor(mTextMessageEdit->viewport()->backgroundRole(), bgColour);
+	pal.setColor(QPalette::Text, fgColour);
 	mTextMessageEdit->viewport()->setPalette(pal);
+	// Change the color of existing text
 	QTextCursor cursor = mTextMessageEdit->textCursor();
 	mTextMessageEdit->selectAll();
 	mTextMessageEdit->setTextColor(fgColour);
