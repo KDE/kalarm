@@ -35,8 +35,8 @@ class KTimeZone;
 class KLineEdit;
 class KVBox;
 class KComboBox;
-class KColorCombo;
 class FontColourChooser;
+class ColourButton;
 class ButtonGroup;
 class RadioButton;
 class TimeEdit;
@@ -274,8 +274,8 @@ class FontColourPrefTab : public PrefsTabBase
 
 	private:
 		FontColourChooser* mFontChooser;
-		KColorCombo*       mDisabledColour;
-		KColorCombo*       mArchivedColour;
+		ColourButton*      mDisabledColour;
+		ColourButton*      mArchivedColour;
 };
 
 #endif // PREFDLG_P_H

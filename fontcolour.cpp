@@ -33,18 +33,15 @@
 
 #include "kalarmapp.h"
 #include "preferences.h"
-#include "colourcombo.h"
+#include "colourbutton.h"
 #include "checkbox.h"
 #include "fontcolour.moc"
 
 
 FontColourChooser::FontColourChooser(QWidget *parent,
-          const QStringList &fontList, const QString& frameLabel, bool editColours,
-          bool fg, bool defaultFont, int visibleListSize)
+          const QStringList &fontList, const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)
 	: QWidget(parent),
 	  mFgColourButton(0),
-	  mRemoveColourButton(0),
-	  mColourList(Preferences::messageColours()),
 	  mReadOnly(false)
 {
 	QVBoxLayout* topLayout = new QVBoxLayout(this);
@@ -74,8 +71,8 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 
 		QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
 		box->setStretchFactor(new QWidget(box), 0);
-		mFgColourButton = new ColourCombo(box);
-		connect(mFgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
+		mFgColourButton = new ColourButton(box);
+		connect(mFgColourButton, SIGNAL(changed(const QColor&)), SLOT(setSampleColour()));
 		label->setBuddy(mFgColourButton);
 		box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message foreground color"));
 	}
@@ -87,29 +84,11 @@ FontColourChooser::FontColourChooser(QWidget *parent,
 
 	QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
 	box->setStretchFactor(new QWidget(box), 0);
-	mBgColourButton = new ColourCombo(box);
-	connect(mBgColourButton, SIGNAL(activated(const QString&)), SLOT(setSampleColour()));
+	mBgColourButton = new ColourButton(box);
+	connect(mBgColourButton, SIGNAL(changed(const QColor&)), SLOT(setSampleColour()));
 	label->setBuddy(mBgColourButton);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message background color"));
 	hlayout->addStretch();
-
-	if (editColours)
-	{
-		QHBoxLayout* layout = new QHBoxLayout();
-		layout->setMargin(0);
-		topLayout->addLayout(layout);
-		QPushButton* button = new QPushButton(i18nc("@action:button", "Add Color..."), page);
-		button->setFixedSize(button->sizeHint());
-		connect(button, SIGNAL(clicked()), SLOT(slotAddColour()));
-		button->setWhatsThis(i18nc("@info:whatsthis", "Choose a new color to add to the color selection list."));
-		layout->addWidget(button);
-
-		mRemoveColourButton = new QPushButton(i18nc("@action:button", "Remove Color"), page);
-		mRemoveColourButton->setFixedSize(mRemoveColourButton->sizeHint());
-		connect(mRemoveColourButton, SIGNAL(clicked()), SLOT(slotRemoveColour()));
-		mRemoveColourButton->setWhatsThis(i18nc("@info:whatsthis", "Remove the color currently shown in the background color chooser, from the color selection list."));
-		layout->addWidget(mRemoveColourButton);
-	}
 
 	if (defaultFont)
 	{
@@ -171,8 +150,6 @@ void FontColourChooser::setSampleColour()
 	mFontChooser->setBackgroundColor(bg);
 	QColor fg = fgColour();
 	mFontChooser->setColor(fg);
-	if (mRemoveColourButton)
-		mRemoveColourButton->setEnabled(!mBgColourButton->isCustomColor());   // no deletion of custom colour
 }
 
 QColor FontColourChooser::bgColour() const
@@ -247,30 +224,3 @@ void FontColourChooser::slotDefaultFontToggled(bool on)
 {
 	mFontChooser->setEnabled(!on);
 }
-
-void FontColourChooser::setColours(const ColourList& colours)
-{
-	mColourList = colours;
-	mBgColourButton->setColours(mColourList);
-	mFontChooser->setBackgroundColor(mBgColourButton->color());
-}
-
-void FontColourChooser::slotAddColour()
-{
-	QColor colour;
-	if (KColorDialog::getColor(colour, this) == QDialog::Accepted)
-	{
-		mColourList.insert(colour);
-		mBgColourButton->setColours(mColourList);
-	}
-}
-
-void FontColourChooser::slotRemoveColour()
-{
-	if (!mBgColourButton->isCustomColor())
-	{
-		mColourList.remove(mBgColourButton->color());
-		mBgColourButton->setColours(mColourList);
-	}
-}
-

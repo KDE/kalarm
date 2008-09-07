@@ -148,27 +148,6 @@ void Preferences::holidaysChange(const QString& regionCode)
 	emit mInstance->holidaysChanged(holidays());
 }
 
-ColourList Preferences::messageColours()
-{
-	Preferences* prefs = self();
-	ColourList colours;
-	for (int i = 0, end = prefs->mBase_MessageColours.count();  i < end;  ++i)
-	{
-		QColor c = prefs->mBase_MessageColours[i];
-		if (c.isValid())
-			colours << c;
-	}
-	return colours;
-}
-
-void Preferences::setMessageColours(const ColourList& colours)
-{
-	QStringList out;
-	for (int i = 0, end = colours.count();  i < end;  ++i)
-		out << QColor(colours[i]).name();
-	self()->setBase_MessageColours(out);
-}
-
 static const int SODxor = 0x82451630;
 inline int Preferences::startOfDayCheck(const QTime& t)
 {

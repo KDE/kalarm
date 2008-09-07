@@ -17,8 +17,7 @@ add_subdirectory( autostart )
 set(libkalarm_SRCS
 	lib/buttongroup.cpp 
 	lib/checkbox.cpp 
-	lib/colourcombo.cpp 
-	lib/colourlist.cpp 
+	lib/colourbutton.cpp 
 	lib/combobox.cpp 
 	lib/dateedit.cpp 
 	lib/datetime.cpp 

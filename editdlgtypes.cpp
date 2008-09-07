@@ -24,7 +24,7 @@
 
 #include "buttongroup.h"
 #include "checkbox.h"
-#include "colourcombo.h"
+#include "colourbutton.h"
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
 #include "functions.h"
@@ -199,7 +199,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	hlayout->addWidget(mBgColourBox);
 	hlayout->addStretch();
 	label = new QLabel(i18nc("@label:listbox", "Background color:"), mBgColourBox);
-	mBgColourButton = new ColourCombo(mBgColourBox);
+	mBgColourButton = new ColourButton(mBgColourBox);
 	label->setBuddy(mBgColourButton);
 	mBgColourBox->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message background color"));
 

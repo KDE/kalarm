@@ -94,7 +94,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 	QVBoxLayout* layout = new QVBoxLayout(page);
 	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
-	mChooser = new FontColourChooser(page, QStringList(), QString(), false, true, true);
+	mChooser = new FontColourChooser(page, QStringList(), QString(), true, true);
 	mChooser->setBgColour(bgColour);
 	mChooser->setFgColour(fgColour);
 	if (defaultFont)

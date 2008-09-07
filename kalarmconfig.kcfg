@@ -12,8 +12,6 @@
   <include>kglobalsettings.h</include>
   <include>"timeperiod.h"</include>
 
-  <signal name="messageColoursChanged">
-  </signal>
   <signal name="showInSystemTrayChanged">
     <argument type="Bool">ShowInSystemTray</argument>
   </signal>
@@ -59,15 +57,10 @@
       <whatsthis context="@info:whatsthis">Select the holiday region to use.</whatsthis>
       <emit signal="base_HolidayRegionChanged"/>
     </entry>
-    <entry name="Base_MessageColours" key="MessageColours" type="StringList">
-      <label context="@label">Color selection list</label>
-      <whatsthis context="@info:whatsthis">Comma separated list of color codes presented as choice for alarm messages.</whatsthis>
-      <code>
-        QStringList defaultColours;
-        defaultColours &lt;&lt; QColor(Qt::red).name() &lt;&lt; QColor(Qt::green).name() &lt;&lt; QColor(Qt::blue).name() &lt;&lt; QColor(Qt::cyan).name() &lt;&lt; QColor(Qt::magenta).name() &lt;&lt; QColor(Qt::yellow).name() &lt;&lt; QColor(Qt::white).name() &lt;&lt; QColor(Qt::lightGray).name() &lt;&lt; QColor(Qt::black).name();
-      </code>
-      <default code="true">defaultColours</default>
-      <emit signal="messageColoursChanged"/>
+    <entry name="DefaultFgColour" key="MessageForegroundColour" type="Color">
+      <label context="@label">Foreground color</label>
+      <whatsthis context="@info:whatsthis">Default foreground color for alarm message windows.</whatsthis>
+      <default code="true">Qt::black</default>
     </entry>
     <entry name="DefaultBgColour" key="MessageBackgroundColour" type="Color">
       <label context="@label">Background color</label>
