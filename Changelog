@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.0.3 --- 1 September 2008 ===
+- Double click accepts selected template in pick list.
+
 === Version 2.0.2 (KDE 4.1.1) --- 27 August 2008 ===
 - Show alarm text entry fields in the current alarm message colours.
 - Show background colour selector for file display alarms.
