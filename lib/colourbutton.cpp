@@ -3,9 +3,6 @@
  *  Program:  kalarm
  *  Copyright © 2008 by David Jarvie <djarvie@kde.org>
  *
- *  Some code taken from kdelibs/kdeui/kcolorcombo.cpp in the KDE libraries:
- *  Copyright (C) 1997 Martin Jones (mjones@kde.org)
- *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
