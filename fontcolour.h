@@ -24,12 +24,11 @@
 #include <QWidget>
 #include <QStringList>
 #include <kdeversion.h>
-#include "colourlist.h"
 
 class QPushButton;
 class KFontChooser;
 class CheckBox;
-class ColourCombo;
+class ColourButton;
 
 
 class FontColourChooser : public QWidget
@@ -39,7 +38,7 @@ public:
 	explicit FontColourChooser(QWidget* parent = 0,
 	       const QStringList& fontList = QStringList(),
 	       const QString& frameLabel = i18n("Requested font"),
-	       bool editColours = false, bool fg = true, bool defaultFont = false,
+	       bool fg = true, bool defaultFont = false,
 	       int visibleListSize = 8);
 
 	void              setDefaultFont();
@@ -48,10 +47,8 @@ public:
 	QFont             font() const;
 	QColor            fgColour() const;
 	QColor            bgColour() const;
-	const ColourList& colours() const   { return mColourList; }
 	void              setFgColour(const QColor&);
 	void              setBgColour(const QColor&);
-	void              setColours(const ColourList&);
 	QString           sampleText() const;
 	void              setSampleText(const QString& text);
 	bool              isReadOnly() const     { return mReadOnly; }
@@ -61,16 +58,12 @@ public:
 private slots:
 	void              setSampleColour();
 	void              slotDefaultFontToggled(bool);
-	void              slotAddColour();
-	void              slotRemoveColour();
 
 private:
-	ColourCombo*     mFgColourButton;       // or null
-	ColourCombo*     mBgColourButton;
-	QPushButton*     mRemoveColourButton;
+	ColourButton*    mFgColourButton;       // or null
+	ColourButton*    mBgColourButton;
 	KFontChooser*    mFontChooser;
 	CheckBox*        mDefaultFont;          // or null
-	ColourList       mColourList;
 	bool             mReadOnly;
 };
 

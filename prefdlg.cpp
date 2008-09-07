@@ -43,7 +43,6 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
-#include <kcolorcombo.h>
 #include <KStandardGuiItem>
 #include <ksystemtimezone.h>
 #include <kicon.h>
@@ -59,6 +58,7 @@
 #include "alarmresources.h"
 #include "alarmtimewidget.h"
 #include "buttongroup.h"
+#include "colourbutton.h"
 #include "editdlg.h"
 #include "editdlgtypes.h"
 #include "fontcolour.h"
@@ -1038,7 +1038,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
 FontColourPrefTab::FontColourPrefTab()
 	: PrefsTabBase()
 {
-	mFontChooser = new FontColourChooser(topWidget(), QStringList(), i18nc("@title:group", "Message Font && Color"), true, false);
+	mFontChooser = new FontColourChooser(topWidget(), QStringList(), i18nc("@title:group", "Message Font && Color"), false);
 
 	QHBoxLayout* hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
@@ -1053,7 +1053,7 @@ FontColourPrefTab::FontColourPrefTab()
 	colourLayout->addWidget(box);
 	QLabel* label1 = new QLabel(i18nc("@label:listbox", "Disabled alarm color:"), box);
 	box->setStretchFactor(new QWidget(box), 0);
-	mDisabledColour = new KColorCombo(box);
+	mDisabledColour = new ColourButton(box);
 	label1->setBuddy(mDisabledColour);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for disabled alarms."));
 
@@ -1063,7 +1063,7 @@ FontColourPrefTab::FontColourPrefTab()
 	colourLayout->addWidget(box);
 	QLabel* label2 = new QLabel(i18nc("@label:listbox", "Archived alarm color:"), box);
 	box->setStretchFactor(new QWidget(box), 0);
-	mArchivedColour = new KColorCombo(box);
+	mArchivedColour = new ColourButton(box);
 	label2->setBuddy(mArchivedColour);
 	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for archived alarms."));
 
@@ -1073,7 +1073,6 @@ FontColourPrefTab::FontColourPrefTab()
 void FontColourPrefTab::restore(bool)
 {
 	mFontChooser->setBgColour(Preferences::defaultBgColour());
-	mFontChooser->setColours(Preferences::messageColours());
 	mFontChooser->setFont(Preferences::messageFont());
 	mDisabledColour->setColor(Preferences::disabledColour());
 	mArchivedColour->setColor(Preferences::archivedColour());
@@ -1084,9 +1083,6 @@ void FontColourPrefTab::apply(bool syncToDisc)
 	QColor colour = mFontChooser->bgColour();
 	if (colour != Preferences::defaultBgColour())
 		Preferences::setDefaultBgColour(colour);
-	ColourList clist = mFontChooser->colours();
-	if (clist != Preferences::messageColours())
-		Preferences::setMessageColours(clist);
 	QFont font = mFontChooser->font();
 	if (font != Preferences::messageFont())
 		Preferences::setMessageFont(font);

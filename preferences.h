@@ -29,7 +29,6 @@
 #include <QDateTime>
 class KTimeZone;
 
-#include "colourlist.h"
 #include "kalarmconfig.h"
 
 
@@ -46,8 +45,6 @@ class Preferences : public PreferencesBase
 		// Access to settings
 		static KTimeZone        timeZone(bool reload = false);
 		static void             setTimeZone(const KTimeZone&);
-		static ColourList       messageColours();
-		static void             setMessageColours(const ColourList&);
 		static QColor           defaultFgColour()                { return Qt::black; }
 		static QTime            startOfDay()                     { return self()->mBase_StartOfDay.time(); }
 		static void             setStartOfDay(const QTime&);
@@ -105,7 +102,6 @@ class Preferences : public PreferencesBase
 		static KTimeZone        mSystemTimeZone;
 
 		// All the following members are accessed by the Preferences dialog classes
-		ColourList              mMessageColours;
 		static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
 		static QTime            mOldStartOfDay;       // previous start-of-day time
 		static bool             mStartOfDayChanged;   // start-of-day check value doesn't tally with new StartOfDay
