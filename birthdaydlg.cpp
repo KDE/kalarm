@@ -20,6 +20,21 @@
 
 #include "kalarm.h"
 
+#include "alarmcalendar.h"
+#include "birthdaymodel.h"
+#include "checkbox.h"
+#include "editdlgtypes.h"
+#include "fontcolourbutton.h"
+#include "kalarmapp.h"
+#include "latecancel.h"
+#include "preferences.h"
+#include "reminder.h"
+#include "repetition.h"
+#include "shellprocess.h"
+#include "soundpicker.h"
+#include "specialactions.h"
+#include "birthdaydlg.moc"
+
 #include <QAction>
 #include <QGroupBox>
 #include <QLabel>
@@ -37,22 +52,6 @@
 #include <khbox.h>
 #include <kdebug.h>
 #include <kdeversion.h>
-
-#include "alarmcalendar.h"
-#include "birthdaymodel.h"
-#include "checkbox.h"
-#include "colourcombo.h"
-#include "editdlgtypes.h"
-#include "fontcolourbutton.h"
-#include "kalarmapp.h"
-#include "latecancel.h"
-#include "preferences.h"
-#include "reminder.h"
-#include "repetition.h"
-#include "shellprocess.h"
-#include "soundpicker.h"
-#include "specialactions.h"
-#include "birthdaydlg.moc"
 
 using namespace KCal;
 
