@@ -38,8 +38,7 @@ public:
 	explicit FontColourChooser(QWidget* parent = 0,
 	       const QStringList& fontList = QStringList(),
 	       const QString& frameLabel = i18n("Requested font"),
-	       bool fg = true, bool defaultFont = false,
-	       int visibleListSize = 8);
+	       bool fg = true, bool defaultFont = false, int visibleListSize = 8);
 
 	void              setDefaultFont();
 	void              setFont(const QFont&, bool onlyFixed = false);

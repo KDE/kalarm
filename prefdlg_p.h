@@ -222,6 +222,7 @@ class EditPrefTab : public PrefsTabBase
 		QCheckBox*      mLateCancel;
 		KComboBox*      mRecurPeriod;
 		ButtonGroup*    mFeb29;
+		FontColourChooser* mFontChooser;
 
 		static int soundIndex(Preferences::SoundType);
 };
@@ -247,35 +248,20 @@ class ViewPrefTab : public PrefsTabBase
 	private:
 		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
-		QCheckBox*   mShowInSystemTray;
-		QCheckBox*   mTooltipShowAlarms;
-		QCheckBox*   mTooltipMaxAlarms;
-		SpinBox*     mTooltipMaxAlarmCount;
-		QCheckBox*   mTooltipShowTime;
-		QCheckBox*   mTooltipShowTimeTo;
-		KLineEdit*   mTooltipTimeToPrefix;
-		QLabel*      mTooltipTimeToPrefixLabel;
-		ButtonGroup* mWindowPosition;
-		QSpinBox*    mWindowButtonDelay;
-		QLabel*      mWindowButtonDelayLabel;
-		QCheckBox*   mModalMessages;
-};
-
-
-// Font & Colour tab of the Preferences dialog
-class FontColourPrefTab : public PrefsTabBase
-{
-		Q_OBJECT
-	public:
-		FontColourPrefTab();
-
-		virtual void restore(bool defaults);
-		virtual void apply(bool syncToDisc);
-
-	private:
-		FontColourChooser* mFontChooser;
-		ColourButton*      mDisabledColour;
-		ColourButton*      mArchivedColour;
+		ColourButton* mDisabledColour;
+		ColourButton* mArchivedColour;
+		QCheckBox*    mShowInSystemTray;
+		QCheckBox*    mTooltipShowAlarms;
+		QCheckBox*    mTooltipMaxAlarms;
+		SpinBox*      mTooltipMaxAlarmCount;
+		QCheckBox*    mTooltipShowTime;
+		QCheckBox*    mTooltipShowTimeTo;
+		KLineEdit*    mTooltipTimeToPrefix;
+		QLabel*       mTooltipTimeToPrefixLabel;
+		ButtonGroup*  mWindowPosition;
+		QSpinBox*     mWindowButtonDelay;
+		QLabel*       mWindowButtonDelayLabel;
+		QCheckBox*    mModalMessages;
 };
 
 #endif // PREFDLG_P_H

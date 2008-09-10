@@ -43,6 +43,7 @@
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
+#include <ktabwidget.h>
 #include <KStandardGuiItem>
 #include <ksystemtimezone.h>
 #include <kicon.h>
@@ -182,12 +183,6 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	mViewPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-theme")));
 	addPage(mViewPageItem);
 
-	mFontColourPage = new FontColourPrefTab;
-	mFontColourPageItem = new KPageWidgetItem(mFontColourPage, i18nc("@title:tab", "Font & Color"));
-	mFontColourPageItem->setHeader(i18nc("@title", "Default Font and Color"));
-	mFontColourPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-color")));
-	addPage(mFontColourPageItem);
-
 	mEditPage = new EditPrefTab;
 	mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
 	mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
@@ -236,7 +231,6 @@ void KAlarmPrefDlg::slotApply()
 		return;
 	}
 	mValid = true;
-	mFontColourPage->apply(false);
 	mEmailPage->apply(false);
 	mViewPage->apply(false);
 	mEditPage->apply(false);
@@ -270,7 +264,6 @@ void KAlarmPrefDlg::restore(bool defaults)
 	kDebug() << (defaults ? "defaults" : "");
 	if (defaults)
 		Preferences::self()->useDefaults(true);
-	mFontColourPage->restore(defaults);
 	mEmailPage->restore(defaults);
 	mViewPage->restore(defaults);
 	mEditPage->restore(defaults);
@@ -1120,75 +1113,6 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
 
 
 /*=============================================================================
-= Class FontColourPrefTab
-=============================================================================*/
-
-FontColourPrefTab::FontColourPrefTab()
-	: PrefsTabBase()
-{
-	mFontChooser = new FontColourChooser(topWidget(), QStringList(), i18nc("@title:group", "Message Font && Color"), true);
-
-	QHBoxLayout* hlayout = new QHBoxLayout();
-	hlayout->setMargin(0);
-	topLayout()->addLayout(hlayout);
-	QVBoxLayout* colourLayout = new QVBoxLayout();
-	colourLayout->setMargin(0);
-	hlayout->addLayout(colourLayout);
-
-	KHBox* box = new KHBox(topWidget());    // to group widgets for QWhatsThis text
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint()/2);
-	colourLayout->addWidget(box);
-	QLabel* label1 = new QLabel(i18nc("@label:listbox", "Disabled alarm color:"), box);
-	box->setStretchFactor(new QWidget(box), 0);
-	mDisabledColour = new ColourButton(box);
-	label1->setBuddy(mDisabledColour);
-	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for disabled alarms."));
-
-	box = new KHBox(topWidget());    // to group widgets for QWhatsThis text
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint()/2);
-	colourLayout->addWidget(box);
-	QLabel* label2 = new QLabel(i18nc("@label:listbox", "Archived alarm color:"), box);
-	box->setStretchFactor(new QWidget(box), 0);
-	mArchivedColour = new ColourButton(box);
-	label2->setBuddy(mArchivedColour);
-	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for archived alarms."));
-
-	hlayout->addStretch();
-}
-
-void FontColourPrefTab::restore(bool)
-{
-	mFontChooser->setFgColour(Preferences::defaultFgColour());
-	mFontChooser->setBgColour(Preferences::defaultBgColour());
-	mFontChooser->setFont(Preferences::messageFont());
-	mDisabledColour->setColor(Preferences::disabledColour());
-	mArchivedColour->setColor(Preferences::archivedColour());
-}
-
-void FontColourPrefTab::apply(bool syncToDisc)
-{
-	QColor colour = mFontChooser->fgColour();
-	if (colour != Preferences::defaultFgColour())
-		Preferences::setDefaultFgColour(colour);
-	colour = mFontChooser->bgColour();
-	if (colour != Preferences::defaultBgColour())
-		Preferences::setDefaultBgColour(colour);
-	QFont font = mFontChooser->font();
-	if (font != Preferences::messageFont())
-		Preferences::setMessageFont(font);
-	colour = mDisabledColour->color();
-	if (colour != Preferences::disabledColour())
-		Preferences::setDisabledColour(colour);
-	colour = mArchivedColour->color();
-	if (colour != Preferences::archivedColour())
-		Preferences::setArchivedColour(colour);
-	PrefsTabBase::apply(syncToDisc);
-}
-
-
-/*=============================================================================
 = Class EditPrefTab
 =============================================================================*/
 
@@ -1197,8 +1121,88 @@ EditPrefTab::EditPrefTab()
 {
 #define DEFSETTING "The default setting for <interface>%1</interface> in the alarm edit dialog."
 
+	KTabWidget* tabs = new KTabWidget(topWidget());
+	KVBox* topGeneral = new KVBox();
+	topGeneral->setMargin(KDialog::marginHint()/2);
+	topGeneral->setSpacing(KDialog::spacingHint());
+	tabs->addTab(topGeneral, i18nc("@title:tab", "General"));
+	KVBox* topTypes = new KVBox();
+	topTypes->setMargin(KDialog::marginHint()/2);
+	topTypes->setSpacing(KDialog::spacingHint());
+	tabs->addTab(topTypes, i18nc("@title:tab", "Alarm Types"));
+	KVBox* topFontColour = new KVBox();
+	topFontColour->setMargin(KDialog::marginHint()/2);
+	topFontColour->setSpacing(KDialog::spacingHint());
+	tabs->addTab(topFontColour, i18nc("@title:tab", "Font & Color"));
+
+	// MISCELLANEOUS
+	// Show in KOrganizer
+	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_chk_ShowInKOrganizer(), topGeneral);
+	mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
+	mCopyToKOrganizer->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditAlarmDlg::i18n_chk_ShowInKOrganizer()));
+
+	// Late cancellation
+	KHBox* box = new KHBox(topGeneral);
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	mLateCancel = new QCheckBox(LateCancelSelector::i18n_chk_CancelIfLate(), box);
+	mLateCancel->setMinimumSize(mLateCancel->sizeHint());
+	mLateCancel->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, LateCancelSelector::i18n_chk_CancelIfLate()));
+	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
+
+	// Recurrence
+	QFrame* iBox = new QFrame(topGeneral);   // this is to control the QWhatsThis text display area
+	QHBoxLayout* hlayout = new QHBoxLayout(iBox);
+	hlayout->setSpacing(KDialog::spacingHint());
+	QLabel* label = new QLabel(i18nc("@label:listbox", "Recurrence:"), iBox);
+	hlayout->addWidget(label);
+	mRecurPeriod = new KComboBox(iBox);
+	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_NoRecur());
+	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_AtLogin());
+	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_HourlyMinutely());
+	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Daily());
+	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Weekly());
+	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Monthly());
+	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Yearly());
+	mRecurPeriod->setFixedSize(mRecurPeriod->sizeHint());
+	hlayout->addWidget(mRecurPeriod);
+	label->setBuddy(mRecurPeriod);
+	iBox->setWhatsThis(i18nc("@info:whatsthis", "The default setting for the recurrence rule in the alarm edit dialog."));
+	hlayout->addStretch();    // left adjust the control
+
+	// How to handle February 29th in yearly recurrences
+	KVBox* vbox = new KVBox(topGeneral);   // this is to control the QWhatsThis text display area
+	vbox->setMargin(0);
+	vbox->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18nc("@label", "In non-leap years, repeat yearly February 29th alarms on:"), vbox);
+	label->setAlignment(Qt::AlignLeft);
+	label->setWordWrap(true);
+	KHBox* itemBox = new KHBox(vbox);
+//	itemBox->setMargin(0);
+	itemBox->setSpacing(2*KDialog::spacingHint());
+	mFeb29 = new ButtonGroup(itemBox);
+	QWidget* widget = new QWidget(itemBox);
+	widget->setFixedWidth(3*KDialog::spacingHint());
+	QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "February 2&8th"), itemBox);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->addButton(radio, Preferences::Feb29_Feb28);
+	radio = new QRadioButton(i18nc("@option:radio", "March &1st"), itemBox);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->addButton(radio, Preferences::Feb29_Mar1);
+	radio = new QRadioButton(i18nc("@option:radio", "Do not repeat"), itemBox);
+	radio->setMinimumSize(radio->sizeHint());
+	mFeb29->addButton(radio, Preferences::Feb29_None);
+	itemBox->setFixedHeight(itemBox->sizeHint().height());
+	vbox->setWhatsThis(i18nc("@info:whatsthis",
+	      "For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years."
+	      "<note>The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</note>"));
+
+	QVBoxLayout* lay = qobject_cast<QVBoxLayout*>(topGeneral->layout());
+	if (lay)
+		lay->addStretch();    // top adjust the widgets
+
 	// DISPLAY ALARMS
-	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Display Alarms"), topWidget());
+	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Display Alarms"), topTypes);
 	QVBoxLayout* vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1213,11 +1217,11 @@ EditPrefTab::EditPrefTab()
 	mAutoClose->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, LateCancelSelector::i18n_chk_AutoCloseWin()));
 	vlayout->addWidget(mAutoClose, 0, Qt::AlignLeft);
 
-	KHBox* box = new KHBox(group);
-	box->setMargin(0);
+	box = new KHBox(group);
+//	box->setMargin(0);
 	box->setSpacing(KDialog::spacingHint());
 	vlayout->addWidget(box);
-	QLabel* label = new QLabel(i18nc("@label:listbox", "Reminder units:"), box);
+	label = new QLabel(i18nc("@label:listbox", "Reminder units:"), box);
 	mReminderUnits = new KComboBox(box);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Minutes"), TimePeriod::Minutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Hours/Minutes"), TimePeriod::HoursMinutes);
@@ -1232,12 +1236,12 @@ EditPrefTab::EditPrefTab()
 	mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
 
 	// SOUND
-	QGroupBox* bbox = new QGroupBox(i18nc("@title:group Audio options group", "Sound"), topWidget());
+	QGroupBox* bbox = new QGroupBox(i18nc("@title:group Audio options group", "Sound"), topTypes);
 	vlayout = new QVBoxLayout(bbox);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
 
-	QHBoxLayout* hlayout = new QHBoxLayout();
+	hlayout = new QHBoxLayout();
 	hlayout->setMargin(0);
 	vlayout->addLayout(hlayout);
 	mSound = new KComboBox(bbox);
@@ -1275,7 +1279,7 @@ EditPrefTab::EditPrefTab()
 	bbox->setFixedHeight(bbox->sizeHint().height());
 
 	// COMMAND ALARMS
-	group = new QGroupBox(i18nc("@title:group", "Command Alarms"), topWidget());
+	group = new QGroupBox(i18nc("@title:group", "Command Alarms"), topTypes);
 	vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1295,7 +1299,7 @@ EditPrefTab::EditPrefTab()
 	hlayout->addWidget(mCmdXterm);
 
 	// EMAIL ALARMS
-	group = new QGroupBox(i18nc("@title:group", "Email Alarms"), topWidget());
+	group = new QGroupBox(i18nc("@title:group", "Email Alarms"), topTypes);
 	vlayout = new QVBoxLayout(group);
 	vlayout->setMargin(KDialog::marginHint());
 	vlayout->setSpacing(KDialog::spacingHint());
@@ -1306,67 +1310,12 @@ EditPrefTab::EditPrefTab()
 	mEmailBcc->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()));
 	vlayout->addWidget(mEmailBcc, 0, Qt::AlignLeft);
 
-	// MISCELLANEOUS
-	// Show in KOrganizer
-	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_chk_ShowInKOrganizer(), topWidget());
-	mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
-	mCopyToKOrganizer->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditAlarmDlg::i18n_chk_ShowInKOrganizer()));
+	lay = qobject_cast<QVBoxLayout*>(topTypes->layout());
+	if (lay)
+		lay->addStretch();    // top adjust the widgets
 
-	// Late cancellation
-	box = new KHBox(topWidget());
-	box->setMargin(0);
-	box->setSpacing(KDialog::spacingHint());
-	mLateCancel = new QCheckBox(LateCancelSelector::i18n_chk_CancelIfLate(), box);
-	mLateCancel->setMinimumSize(mLateCancel->sizeHint());
-	mLateCancel->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, LateCancelSelector::i18n_chk_CancelIfLate()));
-	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
-
-	// Recurrence
-	KHBox* itemBox = new KHBox(box);   // this is to control the QWhatsThis text display area
-	itemBox->setMargin(0);
-	itemBox->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18nc("@label:listbox", "Recurrence:"), itemBox);
-	mRecurPeriod = new KComboBox(itemBox);
-	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_NoRecur());
-	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_AtLogin());
-	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_HourlyMinutely());
-	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Daily());
-	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Weekly());
-	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Monthly());
-	mRecurPeriod->addItem(RecurrenceEdit::i18n_combo_Yearly());
-	mRecurPeriod->setFixedSize(mRecurPeriod->sizeHint());
-	label->setBuddy(mRecurPeriod);
-	itemBox->setWhatsThis(i18nc("@info:whatsthis", "The default setting for the recurrence rule in the alarm edit dialog."));
-	box->setFixedHeight(itemBox->sizeHint().height());
-
-	// How to handle February 29th in yearly recurrences
-	KVBox* vbox = new KVBox(topWidget());   // this is to control the QWhatsThis text display area
-	vbox->setMargin(0);
-	vbox->setSpacing(KDialog::spacingHint());
-	label = new QLabel(i18nc("@label", "In non-leap years, repeat yearly February 29th alarms on:"), vbox);
-	label->setAlignment(Qt::AlignLeft);
-	label->setWordWrap(true);
-	itemBox = new KHBox(vbox);
-	itemBox->setMargin(0);
-	itemBox->setSpacing(2*KDialog::spacingHint());
-	mFeb29 = new ButtonGroup(itemBox);
-	QWidget* widget = new QWidget(itemBox);
-	widget->setFixedWidth(3*KDialog::spacingHint());
-	QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "February 2&8th"), itemBox);
-	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->addButton(radio, Preferences::Feb29_Feb28);
-	radio = new QRadioButton(i18nc("@option:radio", "March &1st"), itemBox);
-	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->addButton(radio, Preferences::Feb29_Mar1);
-	radio = new QRadioButton(i18nc("@option:radio", "Do not repeat"), itemBox);
-	radio->setMinimumSize(radio->sizeHint());
-	mFeb29->addButton(radio, Preferences::Feb29_None);
-	itemBox->setFixedHeight(itemBox->sizeHint().height());
-	vbox->setWhatsThis(i18nc("@info:whatsthis",
-	      "For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years."
-	      "<note>The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</note>"));
-
-	topLayout()->addStretch();    // top adjust the widgets
+	// FONT / COLOUR TAB
+	mFontChooser = new FontColourChooser(topFontColour, QStringList(), i18nc("@title:group", "Message Font && Color"), true);
 }
 
 void EditPrefTab::restore(bool)
@@ -1405,6 +1354,9 @@ void EditPrefTab::restore(bool)
 	}
 	mRecurPeriod->setCurrentIndex(index);
 	mFeb29->setButton(Preferences::defaultFeb29Type());
+	mFontChooser->setFgColour(Preferences::defaultFgColour());
+	mFontChooser->setBgColour(Preferences::defaultBgColour());
+	mFontChooser->setFont(Preferences::messageFont());
 }
 
 void EditPrefTab::apply(bool syncToDisc)
@@ -1484,6 +1436,15 @@ void EditPrefTab::apply(bool syncToDisc)
 	int feb29 = mFeb29->selectedId();
 	if (feb29 >= 0  &&  static_cast<Preferences::Feb29Type>(feb29) != Preferences::defaultFeb29Type())
 		Preferences::setDefaultFeb29Type(static_cast<Preferences::Feb29Type>(feb29));
+	QColor colour = mFontChooser->fgColour();
+	if (colour != Preferences::defaultFgColour())
+		Preferences::setDefaultFgColour(colour);
+	colour = mFontChooser->bgColour();
+	if (colour != Preferences::defaultBgColour())
+		Preferences::setDefaultBgColour(colour);
+	QFont font = mFontChooser->font();
+	if (font != Preferences::messageFont())
+		Preferences::setMessageFont(font);
 	PrefsTabBase::apply(syncToDisc);
 }
 
@@ -1525,8 +1486,18 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab()
 	: PrefsTabBase()
 {
+	KTabWidget* tabs = new KTabWidget(topWidget());
+	KVBox* topGeneral = new KVBox();
+	topGeneral->setMargin(KDialog::marginHint()/2);
+	topGeneral->setSpacing(KDialog::spacingHint());
+	tabs->addTab(topGeneral, i18nc("@title:tab", "General"));
+	KVBox* topWindows = new KVBox();
+	topWindows->setMargin(KDialog::marginHint()/2);
+	topWindows->setSpacing(KDialog::spacingHint());
+	tabs->addTab(topWindows, i18nc("@title:tab", "Alarm Windows"));
+
 	// Run-in-system-tray radio button
-	KHBox* box = new KHBox(topWidget());   // this is to allow left adjustment
+	KHBox* box = new KHBox(topGeneral);   // this is to allow left adjustment
 	box->setMargin(0);
 	mShowInSystemTray = new QCheckBox(i18nc("@option:check", "Show in system tray"), box);
 	mShowInSystemTray->setWhatsThis(
@@ -1535,7 +1506,7 @@ ViewPrefTab::ViewPrefTab()
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 	box->setFixedHeight(box->sizeHint().height());
 
-	QGroupBox* group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"), topWidget());
+	QGroupBox* group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"), topGeneral);
 	QGridLayout* grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
@@ -1587,7 +1558,39 @@ ViewPrefTab::ViewPrefTab()
 	grid->addWidget(box, 4, 2, Qt::AlignLeft);
 	group->setMaximumHeight(group->sizeHint().height());
 
-	group = new QGroupBox(i18nc("@title:group", "Alarm Message Windows"), topWidget());
+	group = new QGroupBox(i18nc("@title:group", "Alarm List"), topGeneral);
+	QHBoxLayout* hlayout = new QHBoxLayout(group);
+	hlayout->setMargin(KDialog::marginHint());
+	QVBoxLayout* colourLayout = new QVBoxLayout();
+	colourLayout->setMargin(0);
+	hlayout->addLayout(colourLayout);
+
+	box = new KHBox(group);    // to group widgets for QWhatsThis text
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint()/2);
+	colourLayout->addWidget(box);
+	QLabel* label1 = new QLabel(i18nc("@label:listbox", "Disabled alarm color:"), box);
+	box->setStretchFactor(new QWidget(box), 0);
+	mDisabledColour = new ColourButton(box);
+	label1->setBuddy(mDisabledColour);
+	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for disabled alarms."));
+
+	box = new KHBox(group);    // to group widgets for QWhatsThis text
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint()/2);
+	colourLayout->addWidget(box);
+	QLabel* label2 = new QLabel(i18nc("@label:listbox", "Archived alarm color:"), box);
+	box->setStretchFactor(new QWidget(box), 0);
+	mArchivedColour = new ColourButton(box);
+	label2->setBuddy(mArchivedColour);
+	box->setWhatsThis(i18nc("@info:whatsthis", "Choose the text color in the alarm list for archived alarms."));
+	hlayout->addStretch();
+
+	QVBoxLayout* lay = qobject_cast<QVBoxLayout*>(topGeneral->layout());
+	if (lay)
+		lay->addStretch();    // top adjust the widgets
+
+	group = new QGroupBox(i18nc("@title:group", "Alarm Message Windows"), topWindows);
 	grid = new QGridLayout(group);
 	grid->setMargin(KDialog::marginHint());
 	grid->setSpacing(KDialog::spacingHint());
@@ -1634,11 +1637,15 @@ ViewPrefTab::ViewPrefTab()
 	      "it is displayed, but it has no title bar and cannot be moved or resized.</item></list></para>"));
 	grid->addWidget(mModalMessages, 4, 0, 1, 2, Qt::AlignLeft);
 
-	topLayout()->addStretch();    // top adjust the widgets
+	lay = qobject_cast<QVBoxLayout*>(topWindows->layout());
+	if (lay)
+		lay->addStretch();    // top adjust the widgets
 }
 
 void ViewPrefTab::restore(bool)
 {
+	mDisabledColour->setColor(Preferences::disabledColour());
+	mArchivedColour->setColor(Preferences::archivedColour());
 	setTooltip(Preferences::tooltipAlarmCount(),
 	           Preferences::showTooltipAlarmTime(),
 	           Preferences::showTooltipTimeToAlarm(),
@@ -1651,6 +1658,12 @@ void ViewPrefTab::restore(bool)
 
 void ViewPrefTab::apply(bool syncToDisc)
 {
+	QColor colour = mDisabledColour->color();
+	if (colour != Preferences::disabledColour())
+		Preferences::setDisabledColour(colour);
+	colour = mArchivedColour->color();
+	if (colour != Preferences::archivedColour())
+		Preferences::setArchivedColour(colour);
 	int n = mTooltipShowAlarms->isChecked() ? -1 : 0;
 	if (n  &&  mTooltipMaxAlarms->isChecked())
 		n = mTooltipMaxAlarmCount->value();
