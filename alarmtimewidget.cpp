@@ -33,6 +33,7 @@
 #include "dateedit.h"
 #include "datetime.h"
 #include "preferences.h"
+#include "pushbutton.h"
 #include "radiobutton.h"
 #include "synchtimer.h"
 #include "timeedit.h"
@@ -55,28 +56,28 @@ QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 /******************************************************************************
 * Construct a widget with a group box and title.
 */
-AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent, QWidget* custom)
+AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent)
 	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	init(mode, custom, groupBoxTitle);
+	init(mode, groupBoxTitle);
 }
 
 /******************************************************************************
 * Construct a widget without a group box or title.
 */
-AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent, QWidget* custom)
+AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
 	  mMinMaxTimeSet(false)
 {
-	init(mode, custom);
+	init(mode);
 }
 
-void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
+void AlarmTimeWidget::init(int mode, const QString& title)
 {
 	static const QString recurText = i18nc("@info/plain",
 	                                       "If a recurrence is configured, the start date/time will be adjusted "
@@ -185,32 +186,32 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 		grid->setRowStretch(1, 1);
 		grid->addWidget(mAfterTimeRadio, 2, 0, Qt::AlignLeft);
 		grid->addWidget(mDelayTimeEdit, 2, 1, Qt::AlignLeft);
-		if (custom)
-		{
-			custom->setParent(this);
-			grid->addWidget(custom, 2, 2, Qt::AlignRight);
-		}
-		grid->setColumnStretch(3, 1);
-		topLayout->addStretch();
-	}
 
-	if (!mDeferring)
-	{
+		// Time zone selection push button
+		mTimeZoneButton = new PushButton(i18nc("@action:button", "Time Zone..."), topWidget);
+		connect(mTimeZoneButton, SIGNAL(clicked()), SLOT(showTimeZoneSelector()));
+		mTimeZoneButton->setWhatsThis(i18nc("@info:whatsthis",
+		      "Choose a time zone for this alarm which is different from the default time zone set in KAlarm's configuration dialog."));
+		grid->addWidget(mTimeZoneButton, 2, 2, 1, 2, Qt::AlignRight);
+
+		grid->setColumnStretch(2, 1);
+		topLayout->addStretch();
+
 		QHBoxLayout* layout = new QHBoxLayout();
 		topLayout->addLayout(layout);
 		layout->setSpacing(2*KDialog::spacingHint());
 
 		// Time zone selector
-		KHBox* box = new KHBox(topWidget);   // this is to control the QWhatsThis text display area
-		box->setMargin(0);
-		box->setSpacing(KDialog::spacingHint());
-		QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"), box);
-		mTimeZone = new TimeZoneCombo(box);
+		mTimeZoneBox = new KHBox(topWidget);   // this is to control the QWhatsThis text display area
+		mTimeZoneBox->setMargin(0);
+		mTimeZoneBox->setSpacing(KDialog::spacingHint());
+		QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"), mTimeZoneBox);
+		mTimeZone = new TimeZoneCombo(mTimeZoneBox);
 		mTimeZone->setMaxVisibleItems(15);
 		connect(mTimeZone, SIGNAL(activated(int)), SLOT(slotTimeZoneChanged()));
-		box->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));
+		mTimeZoneBox->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));
 		label->setBuddy(mTimeZone);
-		layout->addWidget(box);
+		layout->addWidget(mTimeZoneBox);
 
 		// Time zone checkbox
 		mNoTimeZone = new CheckBox(i18nc("@option:check", "Ignore time zone"), topWidget);
@@ -222,6 +223,10 @@ void AlarmTimeWidget::init(int mode, QWidget* custom, const QString& title)
 		                                "occur at unexpected times after daylight saving time shifts.</para>"));
 		layout->addWidget(mNoTimeZone);
 		layout->addStretch();
+
+		// Initially show only the time zone button, not time zone selector
+		mTimeZoneBox->hide();
+		mNoTimeZone->hide();
 	}
 
 	// Initialise the radio button statuses
@@ -245,6 +250,7 @@ void AlarmTimeWidget::setReadOnly(bool ro)
 	mAfterTimeRadio->setReadOnly(ro);
 	if (!mDeferring)
 	{
+		mTimeZoneButton->setReadOnly(ro);
 		mTimeZone->setReadOnly(ro);
 		mNoTimeZone->setReadOnly(ro);
 	}
@@ -594,6 +600,12 @@ void AlarmTimeWidget::slotTimeZoneChanged()
 		KTimeZone tz = mTimeZone->timeZone();
 		mTimeSpec = tz.isValid() ? KDateTime::Spec(tz) : KDateTime::LocalZone;
 	}
+	if (!mTimeZoneBox->isVisible()  &&  mTimeSpec != Preferences::timeZone())
+	{
+		// The current time zone is not the default one, so
+		// show the time zone selection controls
+		showTimeZoneSelector();
+	}
 	mMinDateTime = mMinDateTime.toTimeSpec(mTimeSpec);
 	mMaxDateTime = mMaxDateTime.toTimeSpec(mTimeSpec);
 	updateTimes();
@@ -606,6 +618,17 @@ void AlarmTimeWidget::slotTimeZoneToggled(bool on)
 {
 	mTimeZone->setEnabled(!on);
 	slotTimeZoneChanged();
+}
+
+/******************************************************************************
+* Called after the mTimeZoneButton button has been clicked.
+* Show the time zone selection controls, and hide the button.
+*/
+void AlarmTimeWidget::showTimeZoneSelector()
+{
+	mTimeZoneButton->hide();
+	mTimeZoneBox->show();
+	mNoTimeZone->show();
 }
 
 /******************************************************************************

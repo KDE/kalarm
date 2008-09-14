@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,9 +25,11 @@
 #include "datetime.h"
 
 class QAbstractButton;
+class KHBox;
 class ButtonGroup;
 class RadioButton;
 class CheckBox;
+class PushButton;
 class DateEdit;
 class TimeEdit;
 class TimeSpinBox;
@@ -42,8 +44,8 @@ class AlarmTimeWidget : public QFrame
 			AT_TIME,     // "At ..."
 			DEFER_TIME   // "Defer to ..."
 		};
-		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0, QWidget* custom = 0);
-		explicit AlarmTimeWidget(int mode, QWidget* parent = 0, QWidget* custom = 0);
+		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0);
+		explicit AlarmTimeWidget(int mode, QWidget* parent = 0);
 		KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void             setDateTime(const DateTime&);
 		void             setMinDateTimeIsCurrent();
@@ -64,7 +66,7 @@ class AlarmTimeWidget : public QFrame
 		void             dateOnlyToggled(bool anyTime);
 		void             pastMax();
 
-	protected slots:
+	private slots:
 		void             updateTimes();
 		void             slotButtonSet(QAbstractButton*);
 		void             dateTimeChanged();
@@ -72,9 +74,10 @@ class AlarmTimeWidget : public QFrame
 		void             slotAnyTimeToggled(bool);
 		void             slotTimeZoneChanged();
 		void             slotTimeZoneToggled(bool);
+		void             showTimeZoneSelector();
 
 	private:
-		void             init(int mode, QWidget* custom, const QString& groupBoxTitle = QString());
+		void             init(int mode, const QString& groupBoxTitle = QString());
 		void             setAnyTime();
 		void             setMaxDelayTime(const KDateTime& now);
 		void             setMaxMinTimeIf(const KDateTime& now);
@@ -86,6 +89,8 @@ class AlarmTimeWidget : public QFrame
 		DateEdit*        mDateEdit;
 		TimeEdit*        mTimeEdit;
 		TimeSpinBox*     mDelayTimeEdit;
+		PushButton*      mTimeZoneButton;
+		KHBox*           mTimeZoneBox;      // contains label and time zone combo box
 		CheckBox*        mNoTimeZone;
 		TimeZoneCombo*   mTimeZone;
 		KDateTime        mMinDateTime;      // earliest allowed date/time
