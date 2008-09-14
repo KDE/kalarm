@@ -146,7 +146,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setObjectName("PrefDlg");    // used by LikeBack
-	setCaption(i18nc("@title:window", "Preferences"));
+	setCaption(i18nc("@title:window", "Configure"));
 	setButtons(Help | Default | Ok | Apply | Cancel);
 	setDefaultButton(Ok);
 	setFaceType(List);
