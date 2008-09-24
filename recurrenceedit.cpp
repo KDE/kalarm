@@ -354,12 +354,12 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		hlayout->addWidget(mDeleteExceptionButton);
 	}
 
-	mWorkTimeOnly = new CheckBox(i18nc("@option:check", "Only during working hours"), mExceptionGroup);
+	mWorkTimeOnly = new CheckBox(i18nc("@option:check", "Only during working time"), mExceptionGroup);
 	mWorkTimeOnly->setFixedSize(mWorkTimeOnly->sizeHint());
 	mWorkTimeOnly->setReadOnly(mReadOnly);
 	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>Only execute the alarm during working hours.</para>"
-	      "<para>You can specify working hours in the Preferences dialog.</para>"));
+	      "<para>Only execute the alarm during working hours, on working days.</para>"
+	      "<para>You can specify working days and hours in the Configuration dialog.</para>"));
 	vlayout->addWidget(mWorkTimeOnly);
 
 	mNoEmitTypeChanged = false;
