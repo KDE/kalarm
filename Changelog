@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.0.4 (KDE 4.1.2)--- 24 September 2008 ===
+- Add work-time-only parameter for D-Bus calls to create new alarms.
+
 === Version 2.0.3 --- 7 September 2008 ===
 - Double click accepts selected template in pick list.
 - Replace colour combo boxes by buttons which display standard KDE colour picker.
