@@ -215,12 +215,15 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					||  event->action() == KAEvent::FILE
 					||  (event->action() == KAEvent::COMMAND && event->commandDisplay()))
 						return event->bgColour();
+					break;
 				case SortRole:
 				{
 					unsigned i = (event->action() == KAEvent::MESSAGE || event->action() == KAEvent::FILE)
 				           	? event->bgColour().rgb() : 0;
 					return QString("%1").arg(i, 6, 10, QLatin1Char('0'));
 				}
+				default:
+					break;
 			}
 			break;
 		case TypeColumn:
