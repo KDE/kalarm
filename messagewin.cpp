@@ -424,6 +424,13 @@ void MessageWin::initView()
 					{
 						opened = true;
 						KTextBrowser* view = new KTextBrowser(topWidget);
+						view->setFrameStyle(QFrame::NoFrame);
+						view->setWordWrapMode(QTextOption::NoWrap);
+						QPalette pal = view->viewport()->palette();
+						pal.setColor(view->viewport()->backgroundRole(), mBgColour);
+						view->viewport()->setPalette(pal);
+						view->setTextColor(mFgColour);
+						view->setCurrentFont(mFont);
 						KMimeType::Ptr mime = KMimeType::findByUrl(url);
 						if (mime->is("application/octet-stream"))
 							mime = KMimeType::findByFileContent(tmpFile);
