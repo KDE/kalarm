@@ -3,6 +3,7 @@ KAlarm Change Log
 === Version 2.0.5 --- 27 September 2008 ===
 - Fix very high CPU usage by KAlarm when there are alarms with sub-repetitions,
   or deferrals, with periods greater than 1 week. Fix requires kdepimlibs 4.1.3.
+- Don't wrap lines in file display alarm message windows.
 
 === Version 2.0.4 (KDE 4.1.2)--- 24 September 2008 ===
 - Add work-time-only parameter for D-Bus calls to create new alarms.
