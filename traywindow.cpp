@@ -283,8 +283,8 @@ QString TrayWindow::tooltipAlarmText() const
 				if (mins < 0)
 					mins = 0;
 				char minutes[3] = "00";
-				minutes[0] = (mins%60) / 10 + '0';
-				minutes[1] = (mins%60) % 10 + '0';
+				minutes[0] = static_cast<char>((mins%60) / 10 + '0');
+				minutes[1] = static_cast<char>((mins%60) % 10 + '0');
 				if (Preferences::showTooltipAlarmTime())
 					item.text += i18nc("@info/plain prefix + hours:minutes", "(%1%2:%3)", prefix, mins/60, minutes);
 				else
