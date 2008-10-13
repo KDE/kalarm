@@ -1511,11 +1511,6 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 				// The event is due by now and repetitions still remain, so rewrite the event
 				if (updateCalAndDisplay)
 					update = true;
-				else
-				{
-					event.cancelCancelledDeferral();
-					event.setUpdated();    // note that the calendar file needs to be updated
-				}
 				break;
 			case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
 				// The first occurrence is still due?!?, so don't do anything
@@ -1530,10 +1525,7 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	}
 	event.endChanges();
 	if (update)
-	{
-		event.cancelCancelledDeferral();
 		KAlarm::updateEvent(event);     // update the window lists and calendar file
-	}
 }
 
 /******************************************************************************
@@ -1544,7 +1536,6 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool updateCalAndDisplay)
 {
 	kDebug();
-	event.cancelCancelledDeferral();
 	if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
 		// The event is being deleted. Save it in the archived resources first.
@@ -1990,6 +1981,7 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 	static bool firstTime = true;
 	if (firstTime)
 	{
+		kDebug() << "first time";
 		if (!mStartOfDay.isValid())
 			changeStartOfDay();     // start of day time has changed, so adjust date-only alarms
 

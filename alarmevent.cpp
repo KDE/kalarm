@@ -623,8 +623,6 @@ void KAEvent::set(const Event* event)
 	}
 	if (mDeferral)
 	{
-		if (mNextMainDateTime == mDeferralTime)
-			mDeferral = CANCEL_DEFERRAL;     // it's a cancelled deferral
 		if (setDeferralTime)
 			mNextMainDateTime = mDeferralTime;
 	}
@@ -1640,7 +1638,7 @@ int KAEvent::flags() const
  * value instead of its next occurrence, and the expired main alarm is
  * reinstated.
  */
-bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool cancelCancelledDefer) const
+bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 {
 	if (!ev
 	||  (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
@@ -1807,7 +1805,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original, bool canc
 			ancillaryType = 2;
 		}
 	}
-	if (mDeferral > 0  ||  (mDeferral == CANCEL_DEFERRAL && !cancelCancelledDefer))
+	if (mDeferral > 0)
 	{
 		DateTime nextDateTime = mNextMainDateTime;
 		if (mMainExpired)
@@ -2234,7 +2232,6 @@ bool KAEvent::defer(const DateTime& dateTime, bool reminder, bool adjustRecurren
 	bool result = false;
 	bool setNextRepetition = false;
 	bool checkRepetition = false;
-	cancelCancelledDeferral();
 	if (checkRecur() == KARecurrence::NO_RECUR)
 	{
 		if (mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
@@ -2360,31 +2357,10 @@ void KAEvent::cancelDefer()
 {
 	if (mDeferral > 0)
 	{
-		// Set the deferral time to be the same as the next recurrence/repetition.
-		// This prevents an immediate retriggering of the alarm.
-		if (mMainExpired
-		||  nextOccurrence(KDateTime::currentUtcDateTime(), mDeferralTime, RETURN_REPETITION) == NO_OCCURRENCE)
-		{
-			// The main alarm has expired, so simply delete the deferral
-			mDeferralTime = DateTime();
-			set_deferral(NO_DEFERRAL);
-		}
-		else
-			set_deferral(CANCEL_DEFERRAL);
-		mUpdated = true;
-		calcTriggerTimes();
-	}
-}
-
-/******************************************************************************
- * Cancel any cancelled deferral alarm.
- */
-void KAEvent::cancelCancelledDeferral()
-{
-	if (mDeferral == CANCEL_DEFERRAL)
-	{
 		mDeferralTime = DateTime();
 		set_deferral(NO_DEFERRAL);
+		mUpdated = true;
+		calcTriggerTimes();
 	}
 }
 
@@ -4030,8 +4006,6 @@ void KAEvent::dumpDebug() const
 		kDebug() << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
 		kDebug() << "-- mDeferralTime:" << mDeferralTime.toString();
 	}
-	else if (mDeferral == CANCEL_DEFERRAL)
-		kDebug() << "-- mDeferral:cancel:";
 	kDebug() << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
 	kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
 	kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();

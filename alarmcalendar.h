@@ -57,9 +57,9 @@ class AlarmCalendar : public QObject
 		KAEvent*              earliestAlarm() const;
 		void                  setAlarmPending(KAEvent*, bool pending = true);
 		KAEvent::List         atLoginAlarms() const;
-		KCal::Event*          createKCalEvent(const KAEvent* e, bool original = false, bool cancelCancelledDefer = false) const
-		                                             { return createKCalEvent(e, QString(), original, cancelCancelledDefer); }
-		KCal::Event*          createKCalEvent(const KAEvent*, const QString& baseID, bool original = false, bool cancelCancelledDefer = false) const;
+		KCal::Event*          createKCalEvent(const KAEvent* e, bool original = false) const
+		                                             { return createKCalEvent(e, QString(), original); }
+		KCal::Event*          createKCalEvent(const KAEvent*, const QString& baseID, bool original = false) const;
 		KAEvent*              event(const QString& uniqueID);
 		KCal::Event*          kcalEvent(const QString& uniqueID);
 		KAEvent*              templateEvent(const QString& templateName);
