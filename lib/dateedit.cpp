@@ -61,11 +61,13 @@ void DateEdit::newDateEntered(const QDate& newDate)
 		{
 			pastLimitMessage(mMinDate, mMinDateErrString,
 					 i18n("Date cannot be earlier than %1"));
+			setDate(mMinDate);
 		}
 		else if (mMaxDate.isValid()  &&  newDate > mMaxDate)
 		{
 			pastLimitMessage(mMaxDate, mMaxDateErrString,
 					 i18n("Date cannot be later than %1"));
+			setDate(mMaxDate);
 		}
 	}
 }

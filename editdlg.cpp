@@ -1522,7 +1522,8 @@ void EditAlarmDlg::slotEditDeferral()
 	bool limit = true;
 	int repeatInterval;
 	int repeatCount = mRecurrenceEdit->subRepeatCount(&repeatInterval);
-	DateTime start = mTimeWidget->getDateTime(0, !repeatCount, !mExpiredRecurrence);
+	DateTime start = mSavedEvent->recurs() ? (mExpiredRecurrence ? DateTime() : mSavedEvent->mainDateTime())
+	               : mTimeWidget->getDateTime(0, !repeatCount, !mExpiredRecurrence);
 	if (!start.isValid())
 	{
 		if (!mExpiredRecurrence)

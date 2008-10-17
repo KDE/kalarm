@@ -1,7 +1,9 @@
 KAlarm Change Log
 
-=== Version 1.5.5 --- 1 September 2008 ===
+=== Version 1.5.5 --- 13 October 2008 ===
 - Require a real double click to accept the selected template in pick list.
+- Fix inability to change or cancel alarm deferral times.
+- Prevent defer dialogue date being set outside the allowed range.
 
 === Version 1.5.4 (KDE 3.5.10) --- 18 August 2008 ===
 - Show background colour selector for file display alarms.
