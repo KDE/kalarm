@@ -1123,7 +1123,7 @@ void MainWindow::dropEvent(QDropEvent* e)
 
 static QString getMailHeader(const char* header, KMime::Content& content)
 {
-	KMime::Headers::Base* hd = content.getHeaderByType(header);
+	KMime::Headers::Base* hd = content.headerByType(header);
 	return hd ? hd->asUnicodeString() : QString();
 }
 
