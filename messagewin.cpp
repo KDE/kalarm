@@ -347,24 +347,9 @@ void MessageWin::initView()
 
 	if (mDateTime.isValid())
 	{
-		// Show the alarm date/time, together with an "Advance reminder" text where appropriate
-		QFrame* frame = 0;
-		QVBoxLayout* layout = topLayout;
-		if (reminder)
-		{
-			frame = new QFrame(topWidget);
-			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
-			frame->setPalette(labelPalette);
-			frame->setAutoFillBackground(true);
-			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
-			layout = new QVBoxLayout(frame);
-			topLayout->setMargin(leading + frame->frameWidth());
-			topLayout->setSpacing(leading);
-		}
-
-		// Alarm date/time.
-		// Display time zone if not local time zone.
-		QLabel* label = new QLabel(frame ? frame : topWidget);
+		// Show the alarm date/time, together with an advance reminder text where appropriate
+		// Alarm date/time: display time zone if not local time zone.
+		QLabel* label = new QLabel(topWidget);
 		QString tm;
 		if (mDateTime.isDateOnly())
 			tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
@@ -386,24 +371,23 @@ void MessageWin::initView()
 			tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
 		}
 		label->setText(tm);
-		if (!frame)
-		{
-			label->setFrameStyle(QFrame::Box | QFrame::Raised);
-			label->setPalette(labelPalette);
-			label->setAutoFillBackground(true);
-		}
-		label->setFixedSize(label->sizeHint());
-		layout->addWidget(label, 0, Qt::AlignHCenter);
+		label->setFrameStyle(QFrame::Box | QFrame::Raised);
+		label->setPalette(labelPalette);
+		label->setAutoFillBackground(true);
+		topLayout->addWidget(label, 0, Qt::AlignHCenter);
 		label->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
 
-		if (frame)
+		// Reminder
+		if (reminder)
 		{
-			label = new QLabel(frame);
-			label->setText(i18nc("@info", "Reminder"));
-			label->setFixedSize(label->sizeHint());
-			layout->addWidget(label, 0, Qt::AlignHCenter);
-			frame->setFixedSize(frame->sizeHint());
+			QString s = i18nc("@info", "Reminder");
+			QRegExp re("^(<[^>]+>)*");
+			re.indexIn(s);
+			s.insert(re.matchedLength(), label->text() + "<br/>");
+			label->setText(s);
+			label->setAlignment(Qt::AlignHCenter);
 		}
+		label->setFixedSize(label->sizeHint());
 	}
 
 	if (!mErrorWindow)
