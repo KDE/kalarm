@@ -342,6 +342,9 @@ void MessageWin::initView()
 	topLayout->setMargin(KDialog::marginHint());
 	topLayout->setSpacing(KDialog::spacingHint());
 
+	QPalette labelPalette = palette();
+	labelPalette.setColor(backgroundRole(), labelPalette.color(QPalette::Window));
+
 	if (mDateTime.isValid())
 	{
 		// Show the alarm date/time, together with an "Advance reminder" text where appropriate
@@ -351,6 +354,8 @@ void MessageWin::initView()
 		{
 			frame = new QFrame(topWidget);
 			frame->setFrameStyle(QFrame::Box | QFrame::Raised);
+			frame->setPalette(labelPalette);
+			frame->setAutoFillBackground(true);
 			topLayout->addWidget(frame, 0, Qt::AlignHCenter);
 			layout = new QVBoxLayout(frame);
 			topLayout->setMargin(leading + frame->frameWidth());
@@ -382,7 +387,11 @@ void MessageWin::initView()
 		}
 		label->setText(tm);
 		if (!frame)
+		{
 			label->setFrameStyle(QFrame::Box | QFrame::Raised);
+			label->setPalette(labelPalette);
+			label->setAutoFillBackground(true);
+		}
 		label->setFixedSize(label->sizeHint());
 		layout->addWidget(label, 0, Qt::AlignHCenter);
 		label->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
@@ -407,6 +416,8 @@ void MessageWin::initView()
 				// Display the file name
 				QLabel* label = new QLabel(mMessage, topWidget);
 				label->setFrameStyle(QFrame::Box | QFrame::Raised);
+				label->setPalette(labelPalette);
+				label->setAutoFillBackground(true);
 				label->setFixedSize(label->sizeHint());
 				label->setWhatsThis(i18nc("@info:whatsthis", "The file whose contents are displayed below"));
 				topLayout->addWidget(label, 0, Qt::AlignHCenter);
@@ -534,6 +545,8 @@ void MessageWin::initView()
 			mRemainingText = new QLabel(topWidget);
 			mRemainingText->setFrameStyle(QFrame::Box | QFrame::Raised);
 			mRemainingText->setMargin(leading);
+			mRemainingText->setPalette(labelPalette);
+			mRemainingText->setAutoFillBackground(true);
 			if (mDateTime.isDateOnly()  ||  QDate::currentDate().daysTo(mDateTime.date()) > 0)
 			{
 				setRemainingTextDay();
@@ -592,7 +605,7 @@ void MessageWin::initView()
 	if (!mErrorMsgs.count())
 	{
 		topWidget->setAutoFillBackground(true);
-		QPalette palette;
+		QPalette palette = topWidget->palette();
 		palette.setColor(topWidget->backgroundRole(), mBgColour);
 		topWidget->setPalette(palette);
 	}
