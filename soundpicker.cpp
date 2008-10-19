@@ -156,7 +156,7 @@ void SoundPicker::showSpeak(bool show)
 Preferences::SoundType SoundPicker::sound() const
 {
 	int current = mTypeCombo->currentIndex();
-	for (QMap<Preferences::SoundType, int>::const_iterator it = indexes.constBegin();  it != indexes.constEnd();  ++it)
+	for (QMap<Preferences::SoundType, int>::ConstIterator it = indexes.constBegin();  it != indexes.constEnd();  ++it)
 		if (it.value() == current)
 			return it.key();
 	return Preferences::Sound_None;
@@ -224,7 +224,7 @@ void SoundPicker::set(Preferences::SoundType type, const QString& f, float volum
 void SoundPicker::slotTypeSelected(int id)
 {
 	Preferences::SoundType newType = Preferences::Sound_None;
-	for (QMap<Preferences::SoundType, int>::const_iterator it = indexes.constBegin();  it != indexes.constEnd();  ++it)
+	for (QMap<Preferences::SoundType, int>::ConstIterator it = indexes.constBegin();  it != indexes.constEnd();  ++it)
 	{
 		if (it.value() == id)
 		{

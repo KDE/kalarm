@@ -876,8 +876,8 @@ void RecurrenceEdit::set(const KAEvent& event, bool keepDuration)
 	mExceptionDates = event.recurrence()->exDates();
 	qSort(mExceptionDates);
 	mExceptionDateList->clear();
-	for (DateList::ConstIterator it = mExceptionDates.begin();  it != mExceptionDates.end();  ++it)
-		new QListWidgetItem(KGlobal::locale()->formatDate(*it), mExceptionDateList);
+	for (int i = 0, iend = mExceptionDates.count();  i < iend;  ++i)
+		new QListWidgetItem(KGlobal::locale()->formatDate(mExceptionDates[i]), mExceptionDateList);
 	enableExceptionButtons();
 	mWorkTimeOnly->setChecked(event.workTimeOnly());
 

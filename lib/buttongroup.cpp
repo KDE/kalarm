@@ -1,7 +1,7 @@
 /*
  *  buttongroup.cpp  -  QButtonGroup with an extra signal
  *  Program:  kalarm
- *  Copyright (c) 2002, 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004,2005,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +53,7 @@ void ButtonGroup::addButton(QAbstractButton* button, int id)
  */
 int ButtonGroup::id(QAbstractButton* button) const
 {
-	for (QMap<int, QAbstractButton*>::ConstIterator it = mIds.begin();  it != mIds.end();  ++it)
+	for (QMap<int, QAbstractButton*>::ConstIterator it = mIds.constBegin();  it != mIds.constEnd();  ++it)
 		if (it.value() == button)
 			return it.key();
 	return -1;
@@ -65,7 +65,7 @@ int ButtonGroup::id(QAbstractButton* button) const
 QAbstractButton* ButtonGroup::find(int id) const
 {
 	QMap<int, QAbstractButton*>::ConstIterator it = mIds.find(id);
-	if (it == mIds.end())
+	if (it == mIds.constEnd())
 		return 0;
 	return it.value();
 }

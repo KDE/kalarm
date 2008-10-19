@@ -566,7 +566,7 @@ TimePrefTab::TimePrefTab()
 	mTimeZone = new KComboBox(box);
 	mTimeZone->setMaxVisibleItems(15);
 	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
-	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
+	for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != zones.constEnd();  ++it)
 		mTimeZone->addItem(it.key());
 #endif
 	box->setWhatsThis(i18nc("@info:whatsthis",
@@ -704,7 +704,7 @@ void TimePrefTab::restore(bool)
 	QString hol = Preferences::holidays().location();
 	if (!hol.isEmpty())
 	{
-		for (QMap<QString, QString>::const_iterator it = mHolidayNames.constBegin();  it != mHolidayNames.constEnd();  ++it)
+		for (QMap<QString, QString>::ConstIterator it = mHolidayNames.constBegin();  it != mHolidayNames.constEnd();  ++it)
 		{
 			if (it.value() == hol)
 			{

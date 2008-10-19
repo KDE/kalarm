@@ -220,7 +220,7 @@ emit invalidate(this);  // necessary until load changes only is fixed
 				{
 kDebug(KARES_DEBUG) << "Loading" << id;
 					ModifiedMap::ConstIterator mit = oldLastModified.find(id);
-					if (mit != oldLastModified.end()  &&  mit.value() == readLastModified(fileName))
+					if (mit != oldLastModified.constEnd()  &&  mit.value() == readLastModified(fileName))
 					{
 						// The file hasn't changed, and its event is unchanged
 						// in our calendar, so just transfer the event to the

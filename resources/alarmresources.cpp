@@ -795,7 +795,7 @@ AlarmResource* AlarmResources::resource(const Incidence* incidence) const
 	if (!incidence)
 		return 0;
 	ResourceMap::ConstIterator it = mResourceMap.find(const_cast<Incidence*>(incidence));
-	return (it != mResourceMap.end()) ? it.value() : 0;
+	return (it != mResourceMap.constEnd()) ? it.value() : 0;
 }
 
 // Called by the resource manager when a resource is added to the collection

@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.cpp  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,7 +59,7 @@ void NewAlarmAction::slotInitMenu()
 */
 void NewAlarmAction::slotSelected(QAction* action)
 {
-	QMap<QAction*, EditAlarmDlg::Type>::const_iterator it = mTypes.find(action);
-	if (it != mTypes.end())
+	QMap<QAction*, EditAlarmDlg::Type>::ConstIterator it = mTypes.find(action);
+	if (it != mTypes.constEnd())
 		emit selected(it.value());
 }

@@ -521,8 +521,8 @@ QList<int> Undo::ids(Undo::Type type)
 			}
 			if (omit)
 			{
-				for (QStringList::ConstIterator i = newIDs.begin();  i != newIDs.end();  ++i)
-					ignoreIDs.append(*i);
+				for (int i = 0, iend = newIDs.count();  i < iend;  ++i)
+					ignoreIDs.append(newIDs[i]);
 			}
 		}
 		else

@@ -134,13 +134,13 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 		// There's a X-KDE-KALARM-TYPE property.
 		// It consists of the event type, plus an optional parameter.
 		PropertyMap::ConstIterator it = properties.find(property);
-		if (it != properties.end())
+		if (it != properties.constEnd())
 			return it.value();
 		int i = property.indexOf(SC);
 		if (i < 0)
 			return EMPTY;
 		it = properties.find(property.left(i));
-		if (it == properties.end())
+		if (it == properties.constEnd())
 			return EMPTY;
 		if (param)
 			*param = property.mid(i + 1);

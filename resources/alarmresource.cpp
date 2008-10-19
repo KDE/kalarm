@@ -213,7 +213,7 @@ KCalendar::Status AlarmResource::compatibility(const Event* event) const
 	if (mCompatibility != KCalendar::ByEvent)
 		return mCompatibility;
 	CompatibilityMap::ConstIterator it = mCompatibilityMap.find(event);
-	if (it == mCompatibilityMap.end())
+	if (it == mCompatibilityMap.constEnd())
 		return KCalendar::Incompatible;    // event not found!?! - assume the worst
 	return it.value();
 }
@@ -370,9 +370,9 @@ void AlarmResource::kaCheckCalendar(CalendarLocal& cal)
 {
 	mTypes = EMPTY;
 	Event::List events = cal.rawEvents();
-	for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
+	for (int i = 0, iend = events.count();  i < iend;  ++i)
 	{
-		switch (KCalEvent::status(*it))
+		switch (KCalEvent::status(events[i]))
 		{
 			case KCalEvent::ACTIVE:    mTypes = static_cast<Type>(mTypes | ACTIVE);  break;
 			case KCalEvent::ARCHIVED:  mTypes = static_cast<Type>(mTypes | ARCHIVED);  break;

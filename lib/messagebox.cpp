@@ -1,7 +1,7 @@
 /*
  *  messagebox.cpp  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ KMessageBox::ButtonCode MessageBox::getContinueDefault(const QString& dontAskAga
 	if (!dontAskAgainName.isEmpty())
 	{
 		QMap<QString, ButtonCode>::ConstIterator it = mContinueDefaults.find(dontAskAgainName);
-		if (it != mContinueDefaults.end())
+		if (it != mContinueDefaults.constEnd())
 			defaultButton = it.value();
 	}
 	return defaultButton;

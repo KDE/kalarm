@@ -446,7 +446,7 @@ void KAEvent::set(const Event* event)
 	bool isEmailText = false;
 	bool setDeferralTime = false;
 	Duration deferralOffset;
-	for (AlarmMap::ConstIterator it = alarmMap.begin();  it != alarmMap.end();  ++it)
+	for (AlarmMap::ConstIterator it = alarmMap.constBegin();  it != alarmMap.constEnd();  ++it)
 	{
 		const AlarmData& data = it.value();
 		DateTime dateTime = data.alarm->hasStartOffset() ? data.alarm->startOffset().end(mNextMainDateTime.effectiveKDateTime()) : data.alarm->time();
@@ -677,11 +677,11 @@ void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 {
 	AlarmMap* alarmMap = (AlarmMap*)almap;
 	Alarm::List alarms = event->alarms();
-	for (Alarm::List::ConstIterator it = alarms.begin();  it != alarms.end();  ++it)
+	for (int i = 0, end = alarms.count();  i < end;  ++i)
 	{
 		// Parse the next alarm's text
 		AlarmData data;
-		readAlarm(*it, data, cmdDisplay);
+		readAlarm(alarms[i], data, cmdDisplay);
 		if (data.type != KAAlarm::INVALID__ALARM)
 			alarmMap->insert(data.type, data);
 	}
@@ -3283,9 +3283,9 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 {
 	bool changed = false;
 	QTime startOfDay = Preferences::startOfDay();
-	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
+	for (int ei = 0, eend = events.count();  ei < eend;  ++ei)
 	{
-		Event* event = *evit;
+		Event* event = events[ei];
 		QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
 		if (flags.indexOf(DATE_ONLY_FLAG) >= 0)
 		{
@@ -3297,10 +3297,10 @@ bool KAEvent::adjustStartOfDay(const Event::List& events)
 				event->setDtStart(KDateTime(event->dtStart().date(), startOfDay, Preferences::timeZone()));
 				Alarm::List alarms = event->alarms();
 				int deferralOffset = 0;
-				for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
+				for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
 				{
 					// Parse the next alarm's text
-					Alarm* alarm = *alit;
+					Alarm* alarm = alarms[ai];
 					AlarmData data;
 					readAlarm(alarm, data);
 					if (data.type & KAAlarm::TIMED_DEFERRAL_FLAG)
@@ -3430,9 +3430,9 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 
 	bool converted = false;
 	Event::List events = calendar.rawEvents();
-	for (Event::List::ConstIterator evit = events.begin();  evit != events.end();  ++evit)
+	for (int ei = 0, eend = events.count();  ei < eend;  ++ei)
 	{
-		Event* event = *evit;
+		Event* event = events[ei];
 		Alarm::List alarms = event->alarms();
 		if (alarms.isEmpty())
 			continue;    // KAlarm isn't interested in events without alarms
@@ -3465,9 +3465,9 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			 *   TYPE = TEXT or FILE or CMD
 			 *   TEXT = message text, file name/URL or command
 			 */
-			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
+			for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
 			{
-				Alarm* alarm = *alit;
+				Alarm* alarm = alarms[ai];
 				bool atLogin    = false;
 				bool deferral   = false;
 				bool lateCancel = false;
@@ -3593,19 +3593,18 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			}
 			event->setHasEndDate(false);
 
-			Alarm::List::ConstIterator alit;
-			for (alit = alarms.begin();  alit != alarms.end();  ++alit)
+			for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
 			{
-				Alarm* alarm = *alit;
+				Alarm* alarm = alarms[ai];
 				KDateTime dt = alarm->time();
 				alarm->setStartOffset(start.secsTo(dt));
 			}
 
 			if (!cats.isEmpty())
 			{
-				for (alit = alarms.begin();  alit != alarms.end();  ++alit)
+				for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
 				{
-					Alarm* alarm = *alit;
+					Alarm* alarm = alarms[ai];
 					if (alarm->type() == Alarm::Display)
 						alarm->setCustomProperty(KCalendar::APPNAME, FONT_COLOUR_PROPERTY,
 						                         QString::fromLatin1("%1;;").arg(cats[0]));
@@ -3627,8 +3626,8 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 					// Parse and order the alarms to know which one's date/time to use
 					AlarmMap alarmMap;
 					readAlarms(event, &alarmMap);
-					AlarmMap::ConstIterator it = alarmMap.begin();
-					if (it != alarmMap.end())
+					AlarmMap::ConstIterator it = alarmMap.constBegin();
+					if (it != alarmMap.constEnd())
 					{
 						dt = it.value().alarm->time();
 						break;
@@ -3659,9 +3658,9 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			 * It's a KAlarm pre-1.2.1 calendar file.
 			 * Convert email display alarms from translated to untranslated header prefixes.
 			 */
-			for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
+			for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
 			{
-				Alarm* alarm = *alit;
+				Alarm* alarm = alarms[ai];
 				if (alarm->type() == Alarm::Display)
 				{
 					QString oldtext = alarm->text();
@@ -3902,9 +3901,9 @@ bool KAEvent::convertRepetitions(KCal::CalendarLocal& calendar)
 
 	bool converted = false;
 	Event::List events = calendar.rawEvents();
-	for (Event::List::ConstIterator ev = events.begin();  ev != events.end();  ++ev)
+	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
-		if (convertRepetition(*ev))
+		if (convertRepetition(events[i]))
 			converted = true;
 	}
 	return converted;
@@ -3929,9 +3928,9 @@ bool KAEvent::convertRepetition(KCal::Event* event)
 		return false;
 	bool converted = false;
 	bool readOnly = event->isReadOnly();
-	for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
+	for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
 	{
-		Alarm* alarm = *alit;
+		Alarm* alarm = alarms[ai];
 		if (alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0)
 		{
 			if (!converted)

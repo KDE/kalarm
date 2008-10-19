@@ -819,8 +819,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 */
 bool AlarmCalendar::addEvent(AlarmResource* resource, KAEvent* event)
 {
-	KAEventMap::Iterator it = mEventMap.find(event->id());
-	if (it != mEventMap.end())
+	if (mEventMap.contains(event->id()))
 		return false;
 	addNewEvent(resource, event);
 	return true;
@@ -833,8 +832,7 @@ bool AlarmCalendar::addEvent(AlarmResource* resource, KAEvent* event)
 */
 KAEvent* AlarmCalendar::addEvent(AlarmResource* resource, const Event* kcalEvent)
 {
-	KAEventMap::Iterator it = mEventMap.find(kcalEvent->uid());
-	if (it != mEventMap.end())
+	if (mEventMap.contains(kcalEvent->uid()))
 		return 0;
 	// Create a new event
 	KAEvent* ev = new KAEvent(kcalEvent);
@@ -856,8 +854,8 @@ void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
 		if (dt.isValid())
 		{
-			EarliestMap::Iterator eit = mEarliestAlarm.find(resource);
-			KAEvent* earliest = (eit != mEarliestAlarm.end()) ? eit.value() : 0;
+			EarliestMap::ConstIterator eit = mEarliestAlarm.find(resource);
+			KAEvent* earliest = (eit != mEarliestAlarm.constEnd()) ? eit.value() : 0;
 			if (!earliest
 			||  dt < earliest->nextTrigger(KAEvent::ALL_TRIGGER))
 			{
@@ -1040,8 +1038,8 @@ KAEvent* AlarmCalendar::event(const QString& uniqueID)
 {
 	if (!mCalendar)
 		return 0;
-	KAEventMap::Iterator it = mEventMap.find(uniqueID);
-	if (it == mEventMap.end())
+	KAEventMap::ConstIterator it = mEventMap.find(uniqueID);
+	if (it == mEventMap.constEnd())
 		return 0;
 	return it.value();
 }
@@ -1082,10 +1080,10 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Status t
 		return list;
 	if (resource)
 	{
-		ResourceMap::Iterator rit = mResourceMap.find(resource);
-		if (rit == mResourceMap.end())
+		ResourceMap::ConstIterator rit = mResourceMap.find(resource);
+		if (rit == mResourceMap.constEnd())
 			return list;
-		KAEvent::List& events = rit.value();
+		const KAEvent::List events = rit.value();
 		if (type == KCalEvent::EMPTY)
 			return events;
 		for (int i = 0, end = events.count();  i < end;  ++i)
@@ -1094,9 +1092,9 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Status t
 	}
 	else
 	{
-		for (ResourceMap::Iterator rit = mResourceMap.begin();  rit != mResourceMap.end();  ++rit)
+		for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
 		{
-			KAEvent::List& events = rit.value();
+			const KAEvent::List events = rit.value();
 			if (type == KCalEvent::EMPTY)
 				list += events;
 			else
@@ -1287,7 +1285,7 @@ void AlarmCalendar::findEarliestAlarm(AlarmResource* resource)
 	||  !resource  ||  resource->alarmType() != AlarmResource::ACTIVE)
 		return;
 	ResourceMap::ConstIterator rit = mResourceMap.find(resource);
-	if (rit == mResourceMap.end())
+	if (rit == mResourceMap.constEnd())
 		return;
 	const KAEvent::List& events = rit.value();
 	KAEvent* earliest = 0;

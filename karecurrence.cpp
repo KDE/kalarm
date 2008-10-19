@@ -193,10 +193,11 @@ void KARecurrence::fix()
 	int days[2] = { 0, 0 };
 	RecurrenceRule* rrules[2];
 	RecurrenceRule::List rrulelist = rRules();
-	RecurrenceRule::List::ConstIterator rr = rrulelist.begin();
-	for (int i = 0;  i < 2  &&  rr != rrulelist.end();  ++i, ++rr)
+	int rri = 0;
+	int rrend = rrulelist.count();
+	for (int i = 0;  i < 2  &&  rri < rrend;  ++i, ++rri)
 	{
-		RecurrenceRule* rrule = *rr;
+		RecurrenceRule* rrule = rrulelist[rri];
 		rrules[i] = rrule;
 		bool stop = true;
 		int rtype = recurrenceType(rrule);
@@ -214,13 +215,13 @@ void KARecurrence::fix()
 			case rMonthlyPos:
 			case rYearlyPos:
 				if (!convert)
-					++rr;    // remove all rules except the first
+					++rri;    // remove all rules except the first
 				break;
 			case rOther:
 				if (dailyType(rrule))
 				{                        // it's a daily rule with BYDAYS
 					if (!convert)
-						++rr;    // remove all rules except the first
+						++rri;    // remove all rules except the first
 				}
 				break;
 			case rYearlyDay:
@@ -282,7 +283,7 @@ void KARecurrence::fix()
 					}
 				}
 				if (!convert)
-					++rr;
+					++rri;
 				break;
 			}
 			default:
@@ -293,8 +294,8 @@ void KARecurrence::fix()
 	}
 
 	// Remove surplus rules
-	for ( ;  rr != rrulelist.end();  ++rr)
-		deleteRRule(*rr);
+	for ( ;  rri < rrend;  ++rri)
+		deleteRRule(rrulelist[rri]);
 
 	QDate end;
 	int count;
@@ -604,12 +605,12 @@ bool KARecurrence::recursOn(const QDate& dt, const KDateTime::Spec& timeSpec) co
 	if (rDates().contains(dt))
 		return true;
 	RecurrenceRule::List rulelist = rRules();
-	for (RecurrenceRule::List::ConstIterator rr = rulelist.begin();  rr != rulelist.end();  ++rr)
-		if ((*rr)->recursOn(dt, timeSpec))
+	for (int rri = 0, rrend = rulelist.count();  rri < rrend;  ++rri)
+		if (rulelist[rri]->recursOn(dt, timeSpec))
 			return true;
 	DateTimeList dtlist = rDateTimes();
-	for (DateTimeList::ConstIterator rdt = dtlist.begin();  rdt != dtlist.end();  ++rdt)
-		if ((*rdt).date() == dt)
+	for (int dti = 0, dtend = dtlist.count();  dti < dtend;  ++dti)
+		if (dtlist[dti].date() == dt)
 			return true;
 	return false;
 }

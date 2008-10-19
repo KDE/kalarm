@@ -1,7 +1,7 @@
 /*
  *  timezonecombo.cpp  -  time zone selection combo box
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 	QString utc = KTimeZone::utc().name();
 	addItem(utc);   // put UTC at start of list
 	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
-	for (KTimeZones::ZoneMap::ConstIterator it = zones.begin();  it != zones.end();  ++it)
+	for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != zones.constEnd();  ++it)
 		if (it.key() != utc)
 			addItem(it.key());
 }
