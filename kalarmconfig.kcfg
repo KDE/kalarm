@@ -314,8 +314,6 @@
        <choices name="TimePeriod::Units">
         <choice name="Minutes"></choice>
         <choice name="HoursMinutes"><label context="@option">Hours/Minutes</label></choice>
-        <choice name="Days"/>
-        <choice name="Weeks"/>
       </choices>
       <default>HoursMinutes</default>
    </entry>

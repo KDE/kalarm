@@ -214,6 +214,7 @@ void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Uni
 		if ((dateOnly && !mDateOnlyOffset)  ||  (!dateOnly && mDateOnlyOffset))
 			item = setDateOnly(perod, dateOnly, false);
 	}
+	setUnitRange();
 	showHourMin(item == HoursMinutes  &&  !mNoHourMinute);
 
 	Duration newinterval = period();
@@ -326,6 +327,38 @@ void TimePeriod::setUnitRange()
 	mSpinBox->setRange(1, maxval);
 }
 
+/******************************************************************************
+* Set the time units selection.
+*/
+void TimePeriod::setUnits(Units units)
+{
+	Units oldUnits = static_cast<Units>(mUnitsCombo->currentIndex() + mDateOnlyOffset);
+	if (units == oldUnits)
+		return;
+	if (oldUnits == HoursMinutes  &&  units == Minutes)
+	{
+		if (mTimeSpinBox->value() > mSpinBox->maximum())
+			return;
+		mSpinBox->setValue(mTimeSpinBox->value());
+	}
+	else if (oldUnits == Minutes  &&  units == HoursMinutes)
+		mTimeSpinBox->setValue(mSpinBox->value());
+	if (units >= mDateOnlyOffset  &&  units <= mMaxUnitShown)
+	{
+		int item = units - mDateOnlyOffset;
+		mUnitsCombo->setCurrentIndex(item);
+		slotUnitsSelected(item);
+	}
+}
+
+/******************************************************************************
+* Return the current time units selection.
+*/
+TimePeriod::Units TimePeriod::units() const
+{
+	return static_cast<Units>(mUnitsCombo->currentIndex() + mDateOnlyOffset);
+}
+	
 /******************************************************************************
 *  Called when a new item is made current in the time units combo box.
 */

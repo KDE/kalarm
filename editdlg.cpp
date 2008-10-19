@@ -364,6 +364,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	{
 		mReminder->setFixedSize(mReminder->sizeHint());
 		topLayout->addWidget(mReminder, 0, Qt::AlignLeft);
+		connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), mReminder, SLOT(setDefaultUnits(const KDateTime&)));
 	}
 
 	// Late cancel selector - default = allow late display
@@ -520,6 +521,8 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		slotRecurFrequencyChange();      // update the Recurrence text
 	}
+	if (mReminder)
+		mReminder->setDefaultUnits(mTimeWidget->getDateTime(0, false, false));
 
 	if (!deferGroupVisible  &&  mDeferGroup)
 		mDeferGroup->hide();

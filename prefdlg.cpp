@@ -1225,11 +1225,9 @@ EditPrefTab::EditPrefTab()
 	mReminderUnits = new KComboBox(box);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Minutes"), TimePeriod::Minutes);
 	mReminderUnits->addItem(i18nc("@item:inlistbox", "Hours/Minutes"), TimePeriod::HoursMinutes);
-	mReminderUnits->addItem(i18nc("@item:inlistbox Time unit option", "Days"), TimePeriod::Days);
-	mReminderUnits->addItem(i18nc("@item:inlistbox", "Weeks"), TimePeriod::Weeks);
 	mReminderUnits->setFixedSize(mReminderUnits->sizeHint());
 	label->setBuddy(mReminderUnits);
-	box->setWhatsThis(i18nc("@info:whatsthis", "The default units for the reminder in the alarm edit dialog."));
+	box->setWhatsThis(i18nc("@info:whatsthis", "The default units for the reminder in the alarm edit dialog, for alarms due soon."));
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
 	mSpecialActionsButton = new SpecialActionsButton(true, box);

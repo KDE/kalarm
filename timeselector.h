@@ -1,7 +1,7 @@
 /*
  *  timeselector.h  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,10 @@ class TimeSelector : public QFrame
 		void         setChecked(bool on);
 		KCal::Duration period() const;
 		void         setPeriod(const KCal::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
+		TimePeriod::Units units() const   { return mPeriod->units(); }
+		void         setUnits(TimePeriod::Units units)  { mPeriod->setUnits(units); }
 		void         setReadOnly(bool);
+		bool         isDateOnly() const   { return mPeriod->isDateOnly(); }
 		void         setDateOnly(bool dateOnly = true);
 		void         setMaximum(int hourmin, int days);
 		void         setFocusOnCount();

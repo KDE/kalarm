@@ -1,7 +1,7 @@
 /*
  *  timeperiod.cpp  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,14 +75,23 @@ class TimePeriod : public KHBox
 		 *  @param readOnly True to set the widget read-only, false to set it read-write.
 		 */
 		virtual void  setReadOnly(bool readOnly);
+		/** Gets the currently selected time units. */
+		Units         units() const;
+		/** Sets the time units.
+		 *  Note that this changes the value.
+		 */
+		void          setUnits(Units units);
 		/** Gets the entered time period. */
 		KCal::Duration period() const;
 		/** Initialises the time period value.
-		 *  @param period The value of the time period to set.
+		 *  @param period The value of the time period to set. If zero, the time period
+		 *                is left unchanged.
 		 *  @param dateOnly True to restrict the units available in the combo box to days or weeks.
 		 *  @param defaultUnits The units to display initially in the combo box.
 		 */
 		void          setPeriod(const KCal::Duration& period, bool dateOnly, Units defaultUnits);
+		/** Returns true if minutes and hours/minutes units are disabled. */
+		bool          isDateOnly() const             { return mDateOnlyOffset; }
 		/** Enables or disables minutes and hours/minutes units in the combo box. To
 		 *  disable minutes and hours/minutes, set @p dateOnly true; to enable minutes
 		 *  and hours/minutes, set @p dateOnly false. But note that minutes and

@@ -63,6 +63,7 @@ class AlarmTimeWidget : public QFrame
 		static const int maxDelayTime;    // maximum time from now
 
 	signals:
+		void             changed(const KDateTime&);
 		void             dateOnlyToggled(bool anyTime);
 		void             pastMax();
 

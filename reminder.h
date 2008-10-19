@@ -1,7 +1,7 @@
 /*
  *  reminder.h  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include <QFrame>
 
+class KDateTime;
 class TimeSelector;
 class CheckBox;
 
@@ -46,7 +47,10 @@ class Reminder : public QFrame
 
 		static QString i18n_chk_FirstRecurrenceOnly();    // text of 'Reminder for first recurrence only' checkbox
 
-	protected slots:
+	public slots:
+		void           setDefaultUnits(const KDateTime&);
+
+	private slots:
 		void           slotReminderToggled(bool);
 
 	private:

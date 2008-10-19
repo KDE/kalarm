@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdialog.h>
+#include <kdatetime.h>
 #include <kdebug.h>
 #include <kcal/duration.h>
 
@@ -164,4 +165,31 @@ void Reminder::slotReminderToggled(bool on)
 {
 	if (mOnceOnly)
 		mOnceOnly->setEnabled(on && mOnceOnlyEnabled);
+}
+
+/******************************************************************************
+* Called when the start time relating to the reminder has changed.
+* Sets the default reminder time units appropriately, if no reminder time is
+* currently set.
+*/
+void Reminder::setDefaultUnits(const KDateTime& dt)
+{
+	if (mTime->isChecked())
+		return;   // don't change units if reminder is already set
+	TimePeriod::Units units;
+	TimePeriod::Units currentUnits = mTime->units();
+	if (KDateTime::currentDateTime(dt.timeSpec()).daysTo(dt) < 7)
+	{
+		if (currentUnits == TimePeriod::Minutes  ||  currentUnits == TimePeriod::HoursMinutes)
+			return;
+		units = (Preferences::defaultReminderUnits() == TimePeriod::Minutes)
+		      ? TimePeriod::Minutes : TimePeriod::HoursMinutes;
+	}
+	else
+	{
+		if (currentUnits == TimePeriod::Days  ||  currentUnits == TimePeriod::Weeks)
+			return;
+		units = TimePeriod::Days;
+	}
+	mTime->setUnits(units);
 }

@@ -583,8 +583,13 @@ void AlarmTimeWidget::slotButtonSet(QAbstractButton*)
 */
 void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 {
-	mTimeEdit->setEnabled((!mAnyTimeAllowed || !on) && mAtTimeRadio->isChecked());
+	on = (on && mAnyTimeAllowed);
+	mTimeEdit->setEnabled(!on && mAtTimeRadio->isChecked());
 	setAnyTime();
+	if (on)
+		emit changed(KDateTime(mDateEdit->date(), mTimeSpec));
+	else
+		emit changed(KDateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec));
 }
 
 /******************************************************************************
@@ -646,6 +651,10 @@ void AlarmTimeWidget::dateTimeChanged()
 	else
 		mDelayTimeEdit->setValue(minutes);
 	mDelayTimeEdit->blockSignals(blocked);
+	if (mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked())
+		emit changed(KDateTime(dt.date(), mTimeSpec));
+	else
+		emit changed(dt);
 }
 
 /******************************************************************************
@@ -665,5 +674,6 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
 		mDateEdit->setDate(dt.date());
 		mTimeEdit->blockSignals(blockedT);
 		mDateEdit->blockSignals(blockedD);
+		emit changed(KDateTime(dt.date(), dt.time(), mTimeSpec));
 	}
 }
