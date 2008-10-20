@@ -77,7 +77,7 @@ const char*   KMAIL_DBUS_SERVICE      = "org.kde.kmail";
 const char*   KMAIL_DBUS_WINDOW_PATH  = "/kmail/kmail_mainwindow_1";
 const char*   KORG_DBUS_SERVICE       = "org.kde.korganizer";
 const char*   KORG_DBUS_IFACE         = "org.kde.korganizer.Korganizer";
-const char*   KORG_DBUS_PATH          = "/";    // D-Bus object path of KOrganizer's notification interface
+const char*   KORG_DBUS_PATH          = "/Korganizer";    // D-Bus object path of KOrganizer's notification interface
 const char*   KORG_DBUS_WINDOW_PATH   = "/korganizer/MainWindow_1";
 const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
 
