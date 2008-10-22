@@ -6,6 +6,8 @@
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />
+  <Separator/>
+  <Action name="showResources" />
   <Separator />
   <Action name="edit_undo" />
   <Action name="edit_redo" />
