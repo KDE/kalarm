@@ -1,6 +1,7 @@
 KAlarm Change Log
 
-=== Version 2.0.6 --- 20 October 2008 ===
+=== Version 2.0.6 --- 22 October 2008 ===
+- Fix alarms not triggering correctly after laptop wakes from hibernation.
 - Fix inability to change or cancel alarm deferral times.
 - Don't wrap lines in file display alarm message windows.
 - Fix addition and deletion of alarms to KOrganizer.
