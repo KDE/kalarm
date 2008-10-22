@@ -1278,7 +1278,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 		case EVENT_HANDLE:     // handle it if it's due
 		{
 			KDateTime now = KDateTime::currentUtcDateTime();
-			kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString("yyyy-MM-dd hh:mm"));
+			kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString("yyyy-MM-dd hh:mm")) << "UTC";
 			bool updateCalAndDisplay = false;
 			bool alarmToExecuteValid = false;
 			KAAlarm alarmToExecute;
