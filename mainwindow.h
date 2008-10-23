@@ -184,7 +184,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		KMenu*               mContextMenu;
 		QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
 		int                  mResourcesWidth;      // width of resource selector widget
-		bool                 mMinuteTimerActive;   // minute timer is active
 		bool                 mHiddenTrayParent;    // on session restoration, hide this window
 		bool                 mShowResources;       // show resource selector
 		bool                 mShowArchived;        // include archived alarms in the displayed list
