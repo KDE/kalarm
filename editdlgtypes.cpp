@@ -312,6 +312,31 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 }
 
 /******************************************************************************
+* Called when the More/Less Options button is clicked.
+* Show/hide the optional options.
+*/
+void EditDisplayAlarmDlg::type_showOptions(bool more)
+{
+	if (mSpecialActionsButton)
+	{
+		if (more)
+		{
+			switch (mTypeCombo->currentIndex())
+			{
+				case tFILE:
+				case tTEXT:
+					mSpecialActionsButton->show();
+					break;
+				default:
+					break;
+			}
+		}
+		else
+			mSpecialActionsButton->hide();
+	}
+}
+
+/******************************************************************************
 * Called when the font/color button has been clicked.
 * Set the colors in the message text entry control.
 */
@@ -515,7 +540,7 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mCmdEdit->hide();
 			mTextMessageEdit->show();
 			mSoundPicker->showSpeak(true);
-			if (mSpecialActionsButton)
+			if (mSpecialActionsButton  &&  showingMore())
 				mSpecialActionsButton->show();
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the alarm message now"));
 			focus = mTextMessageEdit;
@@ -526,7 +551,7 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 			mFilePadding->show();
 			mCmdEdit->hide();
 			mSoundPicker->showSpeak(false);
-			if (mSpecialActionsButton)
+			if (mSpecialActionsButton  &&  showingMore())
 				mSpecialActionsButton->show();
 			setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the file now"));
 			mFileMessageEdit->setNoSelect();
@@ -723,22 +748,22 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
 	// What to do with command output
 
-	QGroupBox* cmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
-	frameLayout->addWidget(cmdOutputBox);
-	QVBoxLayout* vlayout = new QVBoxLayout(cmdOutputBox);
+	mCmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
+	frameLayout->addWidget(mCmdOutputBox);
+	QVBoxLayout* vlayout = new QVBoxLayout(mCmdOutputBox);
 	vlayout->setMargin(marginHint());
 	vlayout->setSpacing(spacingHint());
-	mCmdOutputGroup = new ButtonGroup(cmdOutputBox);
+	mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
 
 	// Execute in terminal window
-	mCmdExecInTerm = new RadioButton(i18n_radio_ExecInTermWindow(), cmdOutputBox);
+	mCmdExecInTerm = new RadioButton(i18n_radio_ExecInTermWindow(), mCmdOutputBox);
 	mCmdExecInTerm->setFixedSize(mCmdExecInTerm->sizeHint());
 	mCmdExecInTerm->setWhatsThis(i18nc("@info:whatsthis", "Check to execute the command in a terminal window"));
 	mCmdOutputGroup->addButton(mCmdExecInTerm, Preferences::Log_Terminal);
 	vlayout->addWidget(mCmdExecInTerm, 0, Qt::AlignLeft);
 
 	// Log file name edit box
-	KHBox* box = new KHBox(cmdOutputBox);
+	KHBox* box = new KHBox(mCmdOutputBox);
 	box->setMargin(0);
 	(new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
@@ -755,7 +780,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	browseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a log file."));
 
 	// Log output to file
-	mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18nc("@option:radio", "Log to file"), mCmdOutputGroup, cmdOutputBox);
+	mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18nc("@option:radio", "Log to file"), mCmdOutputGroup, mCmdOutputBox);
 	mCmdLogToFile->setFixedSize(mCmdLogToFile->sizeHint());
 	mCmdLogToFile->setWhatsThis(i18nc("@info:whatsthis", "Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
 	mCmdOutputGroup->addButton(mCmdLogToFile, Preferences::Log_File);
@@ -763,7 +788,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	vlayout->addWidget(box);
 
 	// Discard output
-	mCmdDiscardOutput = new RadioButton(i18nc("@option:radio", "Discard"), cmdOutputBox);
+	mCmdDiscardOutput = new RadioButton(i18nc("@option:radio", "Discard"), mCmdOutputBox);
 	mCmdDiscardOutput->setFixedSize(mCmdDiscardOutput->sizeHint());
 	mCmdDiscardOutput->setWhatsThis(i18nc("@info:whatsthis", "Check to discard command output."));
 	mCmdOutputGroup->addButton(mCmdDiscardOutput, Preferences::Log_Discard);
@@ -799,6 +824,18 @@ void EditCommandAlarmDlg::type_initValues(const KAEvent* event)
 		mCmdOutputGroup->setButton(Preferences::defaultCmdLogType());
 	}
 	slotCmdScriptToggled(mCmdEdit->isScript());
+}
+
+/******************************************************************************
+* Called when the More/Less Options button is clicked.
+* Show/hide the optional options.
+*/
+void EditCommandAlarmDlg::type_showOptions(bool more)
+{
+	if (more)
+		mCmdOutputBox->show();
+	else
+		mCmdOutputBox->hide();
 }
 
 /******************************************************************************

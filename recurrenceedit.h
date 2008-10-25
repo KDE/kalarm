@@ -80,6 +80,7 @@ class RecurrenceEdit : public QFrame
 		KDateTime     endDateTime() const;
 		bool          stateChanged() const;
 		void          activateSubRepetition();
+		void          showMoreOptions(bool);
 
 		static QString i18n_combo_NoRecur();           // text of 'No recurrence' selection
 		static QString i18n_combo_AtLogin();           // text of 'At login' selection

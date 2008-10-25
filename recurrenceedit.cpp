@@ -362,7 +362,19 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	      "<para>You can specify working days and hours in the Configuration dialog.</para>"));
 	vlayout->addWidget(mWorkTimeOnly);
 
+	topLayout->addStretch();
 	mNoEmitTypeChanged = false;
+}
+
+/******************************************************************************
+* Show or hide the exception controls.
+*/
+void RecurrenceEdit::showMoreOptions(bool more)
+{
+	if (more)
+		mExceptionGroup->show();
+	else
+		mExceptionGroup->hide();
 }
 
 /******************************************************************************

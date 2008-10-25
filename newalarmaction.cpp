@@ -30,7 +30,7 @@
 #include <kdebug.h>
 
 
-#define DISP_ICON QLatin1String("dialog-information")
+#define DISP_ICON QLatin1String("window-new")
 #define CMD_ICON  QLatin1String("system-run")
 #define MAIL_ICON QLatin1String("mail-message-new")
 #define DISP_KEY  QKeySequence(Qt::CTRL + Qt::Key_D)

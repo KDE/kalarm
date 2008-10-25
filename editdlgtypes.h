@@ -29,6 +29,7 @@
 
 class QAbstractButton;
 class QHBoxLayout;
+class QGroupBox;
 class KComboBox;
 class KHBox;
 class EmailIdCombo;
@@ -67,6 +68,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		virtual QString type_caption(bool newAlarm) const;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
 		virtual void    type_initValues(const KAEvent*);
+		virtual void    type_showOptions(bool more);
 		virtual void    setReadOnly(bool readOnly);
 		virtual void    saveState(const KAEvent*);
 		virtual bool    type_stateChanged() const;
@@ -147,6 +149,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 		virtual QString type_caption(bool newAlarm) const;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
 		virtual void    type_initValues(const KAEvent*);
+		virtual void    type_showOptions(bool more);
 		virtual void    setReadOnly(bool readOnly);
 		virtual void    saveState(const KAEvent*);
 		virtual bool    type_stateChanged() const;
@@ -162,6 +165,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 	private:
 		// Command alarm options
 		CommandEdit*        mCmdEdit;
+		QGroupBox*          mCmdOutputBox;
 		ButtonGroup*        mCmdOutputGroup;     // what to do with command output
 		RadioButton*        mCmdExecInTerm;
 		RadioButton*        mCmdLogToFile;
@@ -192,6 +196,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		virtual QString type_caption(bool newAlarm) const;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
 		virtual void    type_initValues(const KAEvent*);
+		virtual void    type_showOptions(bool)  {}
 		virtual void    setReadOnly(bool readOnly);
 		virtual void    saveState(const KAEvent*);
 		virtual bool    type_stateChanged() const;

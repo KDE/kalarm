@@ -77,6 +77,8 @@ using namespace KCal;
 
 static const char EDIT_DIALOG_NAME[] = "EditDialog";
 static const char TEMPLATE_DIALOG_NAME[] = "EditTemplateDialog";
+static const char EDIT_MORE_GROUP[] = "ShowOpts";
+static const char EDIT_MORE_KEY[]   = "EditMore";
 static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 
 inline QString recurText(const KAEvent& event)
@@ -205,11 +207,14 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	else
 		caption = type_caption(newAlarm);
 	setCaption(caption);
-	setButtons((mReadOnly ? Cancel|Try : mTemplate ? Ok|Cancel|Try : Ok|Cancel|Try|Default));
+	setButtons((mReadOnly ? Cancel|Try|Default : mTemplate ? Ok|Cancel|Try|Default : Ok|Cancel|Try|Help|Default));
 	setDefaultButton(mReadOnly ? Cancel : Ok);
-	setButtonText(Default, i18nc("@action:button", "Load Template..."));
+	setButtonText(Help, i18nc("@action:button", "Load Template..."));
+	setButtonIcon(Help, KIcon());
+	setButtonIcon(Default, KIcon());
 	connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
 	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
+	connect(this, SIGNAL(helpClicked()), SLOT(slotHelp()));
 	KVBox* mainWidget = new KVBox(this);
 	mainWidget->setMargin(0);
 	setMainWidget(mainWidget);
@@ -358,25 +363,33 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		topLayout->addWidget(mTimeWidget);
 	}
 
+	// Optional controls depending on More/Less Options button
+	mMoreOptions = new QFrame(mainPage);
+	mMoreOptions->setFrameStyle(QFrame::NoFrame);
+	topLayout->addWidget(mMoreOptions);
+	QVBoxLayout* moreLayout = new QVBoxLayout(mMoreOptions);
+	moreLayout->setMargin(0);
+	moreLayout->setSpacing(spacingHint());
+
 	// Reminder
-	mReminder = createReminder(mainPage);
+	mReminder = createReminder(mMoreOptions);
 	if (mReminder)
 	{
 		mReminder->setFixedSize(mReminder->sizeHint());
-		topLayout->addWidget(mReminder, 0, Qt::AlignLeft);
+		moreLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 		connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), mReminder, SLOT(setDefaultUnits(const KDateTime&)));
 	}
 
 	// Late cancel selector - default = allow late display
-	mLateCancel = new LateCancelSelector(true, mainPage);
-	topLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
+	mLateCancel = new LateCancelSelector(true, mMoreOptions);
+	moreLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
 	PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
 	playout->setSpacing(2*spacingHint());
-	topLayout->addLayout(playout);
+	moreLayout->addLayout(playout);
 
 	// Acknowledgement confirmation required - default = no confirmation
-	CheckBox* confirmAck = type_createConfirmAckCheckbox(mainPage);
+	CheckBox* confirmAck = type_createConfirmAckCheckbox(mMoreOptions);
 	if (confirmAck)
 	{
 		confirmAck->setFixedSize(confirmAck->sizeHint());
@@ -386,13 +399,17 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	if (theApp()->korganizerEnabled())
 	{
 		// Show in KOrganizer checkbox
-		mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mainPage);
+		mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mMoreOptions);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
 		mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
 		playout->addWidget(mShowInKorganizer);
 	}
 
 	setButtonWhatsThis(Ok, i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
+
+	// Hide optional controls
+	KConfigGroup config(KGlobal::config(), EDIT_MORE_GROUP);
+	showOptions(config.readEntry(EDIT_MORE_KEY, false));
 
 	// Initialise the state of all controls according to the specified event, if any
 	initValues(event);
@@ -528,7 +545,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		mDeferGroup->hide();
 
 	bool empty = AlarmCalendar::resources()->events(KCalEvent::TEMPLATE).isEmpty();
-	enableButton(Default, !empty);
+	enableButton(Help, !empty);   // Load Templates button
 }
 
 /******************************************************************************
@@ -983,11 +1000,45 @@ void EditAlarmDlg::slotTrySuccess()
 *  Called when the Load Template button is clicked.
 *  Prompt to select a template and initialise the dialog with its contents.
 */
-void EditAlarmDlg::slotDefault()
+void EditAlarmDlg::slotHelp()
 {
 	TemplatePickDlg dlg(this);
 	if (dlg.exec() == QDialog::Accepted)
 		initValues(dlg.selectedTemplate());
+}
+
+/******************************************************************************
+* Called when the More Options or Less Options buttons are clicked.
+* Show/hide the optional options and swap the More/Less buttons, and save the
+* new setting as the default from now on.
+*/
+void EditAlarmDlg::slotDefault()
+{
+	showOptions(!mShowingMore);
+	KConfigGroup config(KGlobal::config(), EDIT_MORE_GROUP);
+	config.writeEntry(EDIT_MORE_KEY, mShowingMore);
+}
+
+/******************************************************************************
+* Show/hide the optional options and swap the More/Less buttons.
+*/
+void EditAlarmDlg::showOptions(bool more)
+{
+	if (more)
+	{
+		mMoreOptions->show();
+		setButtonText(Default, i18nc("@action:button", "Less Options <<"));
+	}
+	else
+	{
+		mMoreOptions->hide();
+		setButtonText(Default, i18nc("@action:button", "More Options >>"));
+	}
+	if (mTimeWidget)
+		mTimeWidget->showMoreOptions(more);
+	type_showOptions(more);
+	mRecurrenceEdit->showMoreOptions(more);
+	mShowingMore = more;
 }
 
 /******************************************************************************

@@ -57,6 +57,7 @@ class AlarmTimeWidget : public QFrame
 		bool             anyTime() const               { return mAnyTime; }
 		void             enableAnyTime(bool enable);
 		void             selectTimeFromNow(int minutes = 0);
+		void             showMoreOptions(bool);
 		QSize            sizeHint() const              { return minimumSizeHint(); }
 
 		static QString   i18n_TimeAfterPeriod();

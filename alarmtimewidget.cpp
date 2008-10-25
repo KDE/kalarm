@@ -637,6 +637,20 @@ void AlarmTimeWidget::showTimeZoneSelector()
 }
 
 /******************************************************************************
+* Show or hide the time zone button.
+*/
+void AlarmTimeWidget::showMoreOptions(bool more)
+{
+	if (more)
+	{
+		if (!mTimeZoneBox->isVisible())
+			mTimeZoneButton->show();
+	}
+	else
+		mTimeZoneButton->hide();
+}
+
+/******************************************************************************
 * Called when the date or time edit box values have changed.
 * Updates the time delay edit box accordingly.
 */

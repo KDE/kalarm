@@ -32,6 +32,7 @@ class QShowEvent;
 class QResizeEvent;
 class QAbstractButton;
 class QGroupBox;
+class QFrame;
 class QVBoxLayout;
 class KTabWidget;
 class KLineEdit;
@@ -81,6 +82,7 @@ class EditAlarmDlg : public KDialog
 		virtual QString type_caption(bool newAlarm) const = 0;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
 		virtual void    type_initValues(const KAEvent*) = 0;
+		virtual void    type_showOptions(bool more) = 0;
 		virtual void    setReadOnly(bool readOnly) = 0;
 		virtual void    saveState(const KAEvent*) = 0;
 		virtual bool    type_stateChanged() const = 0;
@@ -96,12 +98,14 @@ class EditAlarmDlg : public KDialog
 		bool            isTemplate() const         { return mTemplate; }
 		bool            dateOnly() const;
 		bool            isTimedRecurrence() const;
+		bool            showingMore() const        { return mShowingMore; }
 		Reminder*       reminder() const           { return mReminder; }
 		LateCancelSelector* lateCancel() const     { return mLateCancel; }
 
 	protected slots:
 		virtual void    slotTry();
-		virtual void    slotDefault();   // Load Template
+		virtual void    slotHelp();      // Load Template
+		virtual void    slotDefault();   // More/Less Options
 		virtual void    slotButtonClicked(int button);
 	private slots:
 		void            slotRecurTypeChange(int repeatType);
@@ -121,6 +125,7 @@ class EditAlarmDlg : public KDialog
 		bool            validate();
 		void            setRecurTabTitle(const KAEvent* = 0);
 		virtual bool    stateChanged() const;
+		void            showOptions(bool more);
 
 	protected:
 		KAEvent::Action     mAlarmType;           // actual alarm type
@@ -150,6 +155,10 @@ class EditAlarmDlg : public KDialog
 		Reminder*           mReminder;           // null except for display alarms
 		CheckBox*           mShowInKorganizer;
 
+		QFrame*             mMoreOptions;        // contains options hidden by default
+		QPushButton*        mMoreButton;         // shows 'mMoreOptions'
+		QPushButton*        mLessButton;         // hides 'mMoreOptions'
+
 		RecurrenceEdit*     mRecurrenceEdit;
 
 		QString             mAlarmMessage;       // message text/file name/command/email message
@@ -165,6 +174,7 @@ class EditAlarmDlg : public KDialog
 		mutable bool        mOnlyDeferred;       // the only change made in the dialog was to the existing deferral
 		bool                mDesiredReadOnly;    // the specified read-only status of the dialog
 		bool                mReadOnly;           // the actual read-only status of the dialog
+		bool                mShowingMore;        // the More Options button has been clicked
 
 		// Initial state of all controls
 		KAEvent*            mSavedEvent;
