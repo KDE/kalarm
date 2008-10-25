@@ -100,6 +100,9 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 
 	private slots:
 		void           slotNew(EditAlarmDlg::Type);
+		void           slotNewDisplay()   { slotNew(EditAlarmDlg::DISPLAY); }
+		void           slotNewCommand()   { slotNew(EditAlarmDlg::COMMAND); }
+		void           slotNewEmail()     { slotNew(EditAlarmDlg::EMAIL); }
 		void           slotNewFromTemplate(const KAEvent*);
 		void           slotNewTemplate();
 		void           slotCopy();
@@ -165,6 +168,9 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		KAction*             mActionImportBirthdays;
 		KAction*             mActionTemplates;
 		NewAlarmAction*      mActionNew;
+		KAction*             mActionNewDisplay;
+		KAction*             mActionNewCommand;
+		KAction*             mActionNewEmail;
 		TemplateMenuAction*  mActionNewFromTemplate;
 		KAction*             mActionCreateTemplate;
 		KAction*             mActionCopy;

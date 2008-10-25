@@ -1,8 +1,11 @@
 <!DOCTYPE kpartgui>
 <kpartgui name="kalarm" version="195" >
  <ToolBar noMerge="1" name="mainToolBar" >
-  <Action name="new" />
+  <Action name="newDisplay" />
+  <Action name="newCommand" />
+  <Action name="newEmail" />
   <Action name="newFromTempl" />
+  <Separator/>
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />

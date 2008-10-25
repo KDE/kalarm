@@ -406,6 +406,18 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("new"), mActionNew);
 	connect(mActionNew, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
 
+	mActionNewDisplay = NewAlarmAction::newDisplayAlarmAction(this);
+	actions->addAction(QLatin1String("newDisplay"), mActionNewDisplay);
+	connect(mActionNewDisplay, SIGNAL(triggered(bool)), SLOT(slotNewDisplay()));
+
+	mActionNewCommand = NewAlarmAction::newCommandAlarmAction(this);
+	actions->addAction(QLatin1String("newCommand"), mActionNewCommand);
+	connect(mActionNewCommand, SIGNAL(triggered(bool)), SLOT(slotNewCommand()));
+
+	mActionNewEmail = NewAlarmAction::newEmailAlarmAction(this);
+	actions->addAction(QLatin1String("newEmail"), mActionNewEmail);
+	connect(mActionNewEmail, SIGNAL(triggered(bool)), SLOT(slotNewEmail()));
+
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
 
@@ -440,7 +452,6 @@ void MainWindow::initActions()
 
 	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
 	actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
-	mActionShowTime->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_M));
 	connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
 
 	mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
@@ -457,7 +468,7 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	mActionToggleResourceSel = new KToggleAction(KIcon("view_choose"), i18nc("@action", "Show &Resources"), this);
+	mActionToggleResourceSel = new KToggleAction(KIcon("view-choose"), i18nc("@action", "Show &Resources"), this);
 	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
