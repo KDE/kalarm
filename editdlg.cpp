@@ -326,7 +326,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "Date only"), templateTimeBox);
 		mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
 		mTemplateAnyTime->setReadOnly(mReadOnly);
-		mTemplateAnyTime->setWhatsThis(i18nc("@info:whatsthis", "Set the <interface>Date</interface> option for alarms based on this template."));
+		mTemplateAnyTime->setWhatsThis(i18nc("@info:whatsthis", "Set the <interface>Any time</interface> option for alarms based on this template."));
 		mTemplateTimeGroup->addButton(mTemplateAnyTime);
 		grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
