@@ -772,7 +772,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 		event->setEventID(id);
 		kcalEvent->setUid(id);
 	}
-	event->updateKCalEvent(kcalEvent, false, (type == KCalEvent::ARCHIVED), true);
+	event->updateKCalEvent(kcalEvent, false, (type == KCalEvent::ARCHIVED));
 	bool ok = false;
 	bool remove = false;
 	if (mCalType == RESOURCES)
@@ -892,7 +892,7 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
 	{
 		// Create a new KCal::Event, keeping any custom properties from the old event.
 		// Ensure it has a new ID.
-		Event* kcalEvent = createKCalEvent(newEvent, oldEventId, (mEventType == KCalEvent::ARCHIVED), true);
+		Event* kcalEvent = createKCalEvent(newEvent, oldEventId, (mEventType == KCalEvent::ARCHIVED));
 		if (noNewId)
 			kcalEvent->setUid(CalFormat::createUniqueId());
 		AlarmResources* resources = AlarmResources::instance();
@@ -1019,7 +1019,7 @@ KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
 * value instead of its next occurrence, and the expired main alarm is
 * reinstated.
 */
-Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID, bool original, bool cancelCancelledDefer) const
+Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID, bool original) const
 {
 	if (mCalType != RESOURCES)
 		kFatal() << "AlarmCalendar::createKCalEvent(KAEvent): invalid for display calendar";
@@ -1028,7 +1028,7 @@ Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID, 
 	QString id = baseID.isEmpty() ? ev->id() : baseID;
 	Event* calEvent = id.isEmpty() ? 0 : AlarmResources::instance()->event(id);
 	Event* newEvent = calEvent ? new Event(*calEvent) : new Event;
-	ev->updateKCalEvent(newEvent, false, original, cancelCancelledDefer);
+	ev->updateKCalEvent(newEvent, false, original);
 	newEvent->setUid(ev->id());
 	return newEvent;
 }

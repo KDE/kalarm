@@ -336,7 +336,6 @@ class KAEvent : public KAAlarmEventBase
 		void               setReminder(int minutes, bool onceOnly);
 		bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
 		void               cancelDefer();
-		void               cancelCancelledDeferral();
 		void               setDeferDefaultMinutes(int minutes)               { mDeferDefaultMinutes = minutes;  mUpdated = true; }
 		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QString& resourceID, const KDateTime&, bool showEdit, bool showDefer);
 		void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
@@ -360,7 +359,7 @@ class KAEvent : public KAAlarmEventBase
 		KAAlarm            nextAlarm(const KAAlarm& al) const  { return nextAlarm(al.type()); }
 		KAAlarm            nextAlarm(KAAlarm::Type) const;
 		KAAlarm            convertDisplayingAlarm() const;
-		bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool original = false, bool cancelCancelledDefer = false) const;
+		bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool original = false) const;
 		Action             action() const                 { return (Action)mActionType; }
 		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE || (mActionType == T_COMMAND && mCommandDisplay); }
 		const QString&     id() const                     { return mEventID; }
@@ -449,7 +448,6 @@ class KAEvent : public KAAlarmEventBase
 
 	private:
 		enum DeferType {
-			CANCEL_DEFERRAL = -1,   // there was a deferred alarm, but it has been cancelled
 			NO_DEFERRAL = 0,        // there is no deferred alarm
 			NORMAL_DEFERRAL,        // the main alarm, a recurrence or a repeat is deferred
 			REMINDER_DEFERRAL       // a reminder alarm is deferred
