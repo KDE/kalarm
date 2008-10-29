@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.0.6 --- 13 October 2008 ===
+=== Version 2.0.6 --- 20 October 2008 ===
 - Fix inability to change or cancel alarm deferral times.
 - Don't wrap lines in file display alarm message windows.
+- Fix addition and deletion of alarms to KOrganizer.
 
 === Version 2.0.5 --- 27 September 2008 ===
 - Fix very high CPU usage by KAlarm when there are alarms with sub-repetitions,
