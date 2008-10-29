@@ -424,6 +424,7 @@ void MessageWin::initView()
 					{
 						opened = true;
 						KTextBrowser* view = new KTextBrowser(topWidget);
+						view->setWordWrapMode(QTextOption::NoWrap);
 						KMimeType::Ptr mime = KMimeType::findByUrl(url);
 						if (mime->is("application/octet-stream"))
 							mime = KMimeType::findByFileContent(tmpFile);
