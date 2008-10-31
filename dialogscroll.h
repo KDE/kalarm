@@ -88,7 +88,7 @@ QSize DialogScroll<T>::minimumSizeHint() const
 	if (!widget())
 		return QSize();
 	QSize s = widget()->minimumSizeHint();
-	if (mMinHeight > 0)
+	if (mMinHeight > 0  &&  mMinHeight < s.height())
 		return QSize(s.width() + style()->pixelMetric(QStyle::PM_ScrollBarExtent), mMinHeight);
 	return s;
 }
