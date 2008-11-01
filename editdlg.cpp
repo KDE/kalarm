@@ -741,6 +741,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 			resize(s);
 		}
 	}
+	DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this));
 	KWindowSystem::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
 }
 
