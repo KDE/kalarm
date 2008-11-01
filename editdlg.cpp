@@ -58,6 +58,7 @@
 #include <QResizeEvent>
 #include <QShowEvent>
 #include <QStackedWidget>
+#include <QScrollBar>
 #include <QTimer>
 
 #include <kglobal.h>
@@ -1130,6 +1131,12 @@ void EditAlarmDlg::slotShowMainPage()
 		if (mTemplateName)
 			mTemplateName->setFocus();
 		mMainPageShown = true;
+	}
+	else
+	{
+		// Set scroll position to top, since it otherwise jumps randomly
+		DialogScroll<EditAlarmDlg>* main = static_cast<DialogScroll<EditAlarmDlg>*>(mTabs->widget(0));
+		main->verticalScrollBar()->setValue(0);
 	}
 	if (mTimeWidget)
 	{
