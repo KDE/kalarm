@@ -375,6 +375,7 @@ void RecurrenceEdit::showMoreOptions(bool more)
 		mExceptionGroup->show();
 	else
 		mExceptionGroup->hide();
+	updateGeometry();
 }
 
 /******************************************************************************

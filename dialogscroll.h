@@ -41,7 +41,7 @@ class DialogScroll : public QScrollArea
 		virtual QSize sizeHint() const  { return minimumSizeHint(); }
 		virtual QSize minimumSizeHint() const;
 		static int    heightReduction() { return mHeightReduction; }
-		static QSize  initMinimumHeight(T*);
+		static QSize  initMinimumHeight(T*, bool force = false);
 		static void   setSized()        { mSized = true; }
 		static bool   sized()           { return mSized; }
 	private:
@@ -99,8 +99,10 @@ QSize DialogScroll<T>::minimumSizeHint() const
 * are made scrollable.
 */
 template <class T>
-QSize DialogScroll<T>::initMinimumHeight(T* dlg)
+QSize DialogScroll<T>::initMinimumHeight(T* dlg, bool force)
 {
+	if (force)
+		mSized = false;
 	if (mSized)
 		return QSize();
 	int maxHeight = 0;
@@ -131,6 +133,7 @@ QSize DialogScroll<T>::initMinimumHeight(T* dlg)
 	{
 		mHeightReduction = y;
 		mMinHeight = maxHeight - y;
+		kDebug() << "Scrolling: min height=" << mMinHeight << ", reduction=" << mHeightReduction;
 		if (mMinHeight > 0)
 		{
 			for (int i = 0, end = mTabs.count();  i < end;  ++i)

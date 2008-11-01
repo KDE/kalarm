@@ -57,13 +57,14 @@
 #include <QDragEnterEvent>
 #include <QResizeEvent>
 #include <QShowEvent>
+#include <QStackedWidget>
+#include <QTimer>
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <ktabwidget.h>
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>
@@ -231,7 +232,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
 	}
-	mTabs = new KTabWidget(mainWidget);
+	mTabs = new TabWidget(mainWidget);
 
 	DialogScroll<EditAlarmDlg>* mainScroll = new DialogScroll<EditAlarmDlg>();
 	mTabs->addTab(mainScroll, i18nc("@title:tab", "Alarm"));
@@ -761,20 +762,28 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 			resize(s);
 		}
 	}
+	slotResize();
 	KWindowSystem::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
 }
 
 /******************************************************************************
-* Return the minimum size for the dialog.
-* If the minimum size would be too high to fit the desktop, the tab contents
-* are made scrollable.
+* Update the tab sizes (again) and if the resized dialog height is greater
+* than the minimum, resize it again. This is necessary because (a) resizing
+* tabs doesn't always work properly the first time, and (b) resizing to the
+* minimum size hint doesn't always work either.
 */
-QSize EditAlarmDlg::minimumSizeHint() const
+void EditAlarmDlg::slotResize()
 {
-	QSize s = DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this));
-	if (s.isValid())
-		return s;
-	return KDialog::minimumSizeHint();
+	mTabs->updateTabSizes();
+	DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this), true);
+	QSize s = minimumSizeHint();
+	if (height() > s.height())
+	{
+		// Resize to slightly greater than the minimum height.
+		// This is for some unkown reason necessary, since
+		// sometimes resizing to the minimum height fails.
+		resize(s.width(), s.height() + 2);
+	}
 }
 
 /******************************************************************************
@@ -1024,6 +1033,7 @@ void EditAlarmDlg::slotDefault()
 */
 void EditAlarmDlg::showOptions(bool more)
 {
+	kDebug() << (more ? "More" : "Less");
 	if (more)
 	{
 		mMoreOptions->show();
@@ -1039,6 +1049,16 @@ void EditAlarmDlg::showOptions(bool more)
 	type_showOptions(more);
 	mRecurrenceEdit->showMoreOptions(more);
 	mShowingMore = more;
+	if (more)
+	{
+		mTabs->updateTabSizes();
+		DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this), true);
+	}
+	else
+	{
+		resize(minimumSizeHint());
+		QTimer::singleShot(0, this, SLOT(slotResize()));
+	}
 }
 
 /******************************************************************************
@@ -1239,4 +1259,38 @@ bool EditAlarmDlg::isTimedRecurrence() const
 void EditAlarmDlg::showMainPage()
 {
 	mTabs->setCurrentIndex(mMainPageIndex);
+}
+
+
+/*=============================================================================
+=  Class TabWidget
+=  KTabWidget whose minimumSizeHint() reflects the minimum size hints of all
+=  its individual tabs.
+=============================================================================*/
+void TabWidget::updateTabSizes()
+{
+	QStackedWidget* stack = findChild<QStackedWidget*>();
+	if (!stack)
+		return;
+	stack->updateGeometry();
+	int ht = 0;
+	for (int i = 0, count = stack->count();  i < count;  ++i)
+		ht = qMax(ht, stack->widget(i)->minimumSizeHint().height());
+	QSize s(stack->minimumSizeHint().width(), ht);
+	stack->setMinimumSize(s);
+	stack->resize(s);
+}
+
+QSize TabWidget::minimumSizeHint() const
+{
+	QEvent e(QEvent::LayoutRequest);
+	const_cast<TabWidget*>(this)->event(&e);
+	QStackedWidget* stack = findChild<QStackedWidget*>();
+	if (!stack)
+		return KTabWidget::minimumSizeHint();
+	int ht = 0;
+	for (int i = 0, end = count();  i < end;  ++i)
+		ht = qMax(ht, widget(i)->minimumSizeHint().height());
+	QSize sz = KTabWidget::minimumSizeHint();
+	return QSize(sz.width(), ht + sz.height() - stack->minimumSizeHint().height());
 }
