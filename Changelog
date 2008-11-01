@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.0.6 --- 22 October 2008 ===
+=== Version 2.0.6 (KDE 4.1.3) --- 22 October 2008 ===
 - Fix alarms not triggering correctly after laptop wakes from hibernation.
 - Fix inability to change or cancel alarm deferral times.
+- Prevent defer dialogue date being set outside the allowed range.
 - Don't wrap lines in file display alarm message windows.
 - Fix addition and deletion of alarms to KOrganizer.
 
