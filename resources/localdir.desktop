@@ -34,6 +34,7 @@ Name[uk]=Нагадування в локальному каталозі
 Name[x-test]=xxAlarms in Local Directoryxx
 Name[zh_CN]=本地目录中的提醒事项
 Name[zh_TW]=本地目錄中的鬧鐘
+Comment=Provides access to an alarm calendar stored in a local directory, in which each calendar item is stored in a separate file
 X-KDE-Library=kalarm_localdir
 Type=Service
 X-KDE-ServiceTypes=KResources/Plugin
