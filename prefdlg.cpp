@@ -138,7 +138,8 @@ void KAlarmPrefDlg::display()
 }
 
 KAlarmPrefDlg::KAlarmPrefDlg()
-	: KPageDialog()
+	: KPageDialog(),
+	  mShown(false)
 {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setObjectName("PrefDlg");    // used by LikeBack
@@ -300,6 +301,21 @@ QSize KAlarmPrefDlg::minimumSizeHint() const
 		}
 	}
 	return KDialog::minimumSizeHint();
+}
+
+/******************************************************************************
+* Called when the dialog is displayed.
+* The first time through, sets the tabs to be scrollable if the dialog is too
+* high to fit the screen.
+*/
+void KAlarmPrefDlg::showEvent(QShowEvent* e)
+{
+	KPageDialog::showEvent(e);
+	if (!mShown)
+	{
+		DialogScroll<KAlarmPrefDlg>::initMinimumHeight(this);
+		mShown = true;
+	}
 }
 
 /******************************************************************************

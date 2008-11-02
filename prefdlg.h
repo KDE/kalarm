@@ -58,7 +58,8 @@ class KAlarmPrefDlg : public KPageDialog
 		KPageWidgetItem*   mFontColourPageItem;
 
 	protected:
-		virtual void  resizeEvent(QResizeEvent*);
+		virtual void resizeEvent(QResizeEvent*);
+		virtual void showEvent(QShowEvent*);
 
 	protected slots:
 		virtual void slotOk();
@@ -72,6 +73,7 @@ class KAlarmPrefDlg : public KPageDialog
 		void         restore(bool defaults);
 
 		static KAlarmPrefDlg* mInstance;
+		bool         mShown;    // dialog has already been shown
 		bool         mValid;
 };
 
