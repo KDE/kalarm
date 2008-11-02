@@ -23,7 +23,7 @@ set_target_properties(kalarm_resources PROPERTIES
    SOVERSION ${GENERIC_LIB_SOVERSION} 
    ${KDE4_DISABLE_PROPERTY_}LINK_INTERFACE_LIBRARIES "kresources"
 )
-install(TARGETS kalarm_resources DESTINATION ${LIB_INSTALL_DIR})
+install(TARGETS kalarm_resources ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES kalarm_manager.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kresources)
 
