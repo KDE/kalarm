@@ -37,6 +37,7 @@ Name[zh_CN]=远程文件中的提醒事项
 Name[zh_TW]=遠端檔案的鬧鐘
 Comment=Provides access to an alarm calendar in a remote file using KDE's network framework KIO
 Comment[el]=Προσφέρει πρόσβαση ημερολογίου ειδοποιήσεων σε ένα απομακρυσμένο αρχείου με τη χρήση του  συστήματος KIO του KDE
+Comment[gl]=Permite acceder a un calendario de alarmas dun ficheiro remoto empregando a infraestrutura de rede KIO do KDE
 Comment[nds]=Stellt mit dat In-/Utgaavmoduul vun KDE sien Nettwark-Rahmenwerk Togriep op en binnen en feern Datei wohrten Alarm-Kalenner praat.
 Comment[pt]=Oferece o acesso a um calendário de alarmes num ficheiro remoto, usando um KIO da plataforma de rede do KDE
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes em um arquivo remoto usando o KIO framework da rede do KDE

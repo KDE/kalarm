@@ -36,6 +36,7 @@ Name[zh_CN]=本地目录中的提醒事项
 Name[zh_TW]=本地目錄中的鬧鐘
 Comment=Provides access to an alarm calendar stored in a local directory, in which each calendar item is stored in a separate file
 Comment[el]=Προσφέρει πρόσβαση σε ημερολόγιο ειδοποιήσεων αποθηκευμένο σε έναν τοπικό κατάλογο,  στον οποίο κάθε αντικείμενο αποθηκεύεται σε ξεχωριστό αρχείο
+Comment[gl]=Permite acceder a un calendario de alarmas almacenado nun directorio local no que cada elemento do calendario se almacena nun ficheiro diferente
 Comment[nds]=Stellt Togriep op en binnen en lokalen Orner wohrten Alarm-Kalenner praat, binnen den elk Kalennerindrag as enkelte Datei sekert is.
 Comment[pt]=Oferece o acesso a um calendário de alarmes guardado numa pasta local; cada item do calendário é guardado num ficheiro em separado
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes armazenado em um único arquivo local, onde cada item do calendário é armazenado em um arquivo separado
