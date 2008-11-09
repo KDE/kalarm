@@ -650,17 +650,23 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
 	QPoint pt = e->pos();
 	QGraphicsItem* item = scene()->itemAt(pt);
 	if (item == mButtons)
-	{
-		QRect r = mSpinbox->upRect();
-		QPointF ptf = item->mapFromScene(pt.x(), pt.y());
-		pt = QPoint(ptf.x(), ptf.y());
-		pt.setX(ptf.x() + r.left());
-		pt.setY(ptf.y() + r.top());
-//kDebug()<<"buttons clicked at"<<pt<<", uprect="<<r;
-	}
+		pt = spinboxPoint(pt);
 	else
 		pt = QPoint(0, 0);  // allow auto-repeat to stop
 	QApplication::postEvent(mSpinbox, new QMouseEvent(e->type(), pt, e->button(), e->buttons(), e->modifiers()));
+}
+
+/******************************************************************************
+* Translate SpinMirror coordinates to those of the mirrored spinbox.
+*/
+QPoint SpinMirror::spinboxPoint(const QPoint& param) const
+{
+	QRect r = mSpinbox->upRect();
+	QPointF ptf = mButtons->mapFromScene(param.x(), param.y());
+	QPoint pt(ptf.x(), ptf.y());
+	pt.setX(ptf.x() + r.left());
+	pt.setY(ptf.y() + r.top());
+	return pt;
 }
 
 /******************************************************************************
@@ -670,6 +676,7 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
 bool SpinMirror::event(QEvent* e)
 {
 //kDebug()<<e->type();
+	QHoverEvent *he = 0;
 	switch (e->type())
 	{
 		case QEvent::Leave:
@@ -680,21 +687,31 @@ bool SpinMirror::event(QEvent* e)
 			QApplication::postEvent(mMainSpinbox, new QEvent(e->type()));
 			break;
 		case QEvent::HoverLeave:
+			he = (QHoverEvent*)e;
 			if (mMainSpinbox->rect().contains(mMainSpinbox->mapFromGlobal(QCursor::pos())))
 				break;
 			// fall through to QEvent::HoverEnter
 		case QEvent::HoverEnter:
 		{
-			QHoverEvent* he = (QHoverEvent*)e;
+			he = (QHoverEvent*)e;
 			QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->pos(), he->oldPos()));
 			break;
 		}
+		case QEvent::HoverMove:
+			he = (QHoverEvent*)e;
+			break;
 		case QEvent::FocusIn:
 			mMainSpinbox->setFocus();
 			break;
 		default:
 			break;
 	}
+
+	if (he) {
+		QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->pos()), spinboxPoint(he->oldPos())));
+		setButtons();
+	}
+
 	return QGraphicsView::event(e);
 }
 

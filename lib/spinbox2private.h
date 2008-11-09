@@ -83,6 +83,7 @@ class SpinMirror : public QGraphicsView
 	private:
 		void         mouseEvent(QMouseEvent*);
 		void         setMirroredState(bool clear = false);
+		QPoint       spinboxPoint(const QPoint&) const;
 
 		ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
 		SpinBox*             mMainSpinbox;
