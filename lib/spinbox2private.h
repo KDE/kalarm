@@ -80,6 +80,7 @@ class SpinMirror : public QGraphicsView
 		virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
 		virtual void mouseMoveEvent(QMouseEvent* e)         { mouseEvent(e); }
 		virtual void mouseDoubleClickEvent(QMouseEvent* e)  { mouseEvent(e); }
+		virtual void wheelEvent(QWheelEvent* e);
 	private:
 		void         mouseEvent(QMouseEvent*);
 		void         setMirroredState(bool clear = false);

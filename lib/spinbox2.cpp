@@ -657,6 +657,22 @@ void SpinMirror::mouseEvent(QMouseEvent* e)
 }
 
 /******************************************************************************
+* Pass on to the extra spinbox all wheel events which occur over the spin
+* button area.
+*/
+void SpinMirror::wheelEvent(QWheelEvent* e)
+{
+	if (mReadOnly)
+		return;
+	QPoint pt = e->pos();
+	QGraphicsItem* item = scene()->itemAt(pt);
+	if (item == mButtons) {
+		pt = spinboxPoint(pt);
+		QApplication::postEvent(mSpinbox, new QWheelEvent(pt, e->delta(), e->buttons(), e->modifiers()), e->orientation());
+	}
+}
+
+/******************************************************************************
 * Translate SpinMirror coordinates to those of the mirrored spinbox.
 */
 QPoint SpinMirror::spinboxPoint(const QPoint& param) const
