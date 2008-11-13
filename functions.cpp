@@ -1407,13 +1407,18 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 }
 
 /******************************************************************************
-* Check whether a date/time is during working hours.
+* Check whether a date/time is during working hours and/or holidays, depending
+* on the flags set for the specified event.
 */
-bool isWorkingTime(const KDateTime& dt)
+bool isWorkingTime(const KDateTime& dt, const KAEvent* event)
 {
-	if (!Preferences::workDays().testBit(dt.date().dayOfWeek() - 1)
-	||  (Preferences::holidays().isHoliday(dt.date())))
+	bool workOnly = event && event->workTimeOnly();
+	bool holidays = event && event->holidaysExcluded();
+	if ((workOnly  &&  !Preferences::workDays().testBit(dt.date().dayOfWeek() - 1))
+	||  (holidays  &&  Preferences::holidays().isHoliday(dt.date())))
 		return false;
+	if (!workOnly)
+		return true;
 	return dt.isDateOnly()
 	   ||  (dt.time() >= Preferences::workDayStart()  &&  dt.time() < Preferences::workDayEnd());
 }

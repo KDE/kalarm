@@ -158,6 +158,7 @@ class RecurrenceEdit : public QFrame
 		DateEdit*         mExceptionDateEdit;
 		QPushButton*      mChangeExceptionButton;
 		QPushButton*      mDeleteExceptionButton;
+		CheckBox*         mExcludeHolidays;
 		CheckBox*         mWorkTimeOnly;
 		QList<QDate>      mExceptionDates;
 
@@ -175,6 +176,7 @@ class RecurrenceEdit : public QFrame
 		QList<QDate>      mSavedExceptionDates;      // exception dates
 		KCal::Duration    mSavedRepeatInterval;      // sub-repetition interval (via mSubRepetition button)
 		int               mSavedRepeatCount;         // sub-repetition count (via mSubRepetition button)
+		bool              mSavedExclHolidays;        // exclude holidays
 		bool              mSavedWorkTimeOnly;        // only during working hours
 };
 

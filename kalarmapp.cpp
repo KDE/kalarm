@@ -1315,19 +1315,19 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					}
 				}
 				bool reschedule = false;
-				if (event->workTimeOnly()  &&  !alarm.deferred())
+				if ((event->workTimeOnly() || event->holidaysExcluded())  &&  !alarm.deferred())
 				{
-					// The alarm is restricted to working hours (apart from deferrals).
-					// This needs to be re-evaluated every time it triggers, since
-					// working hours could change.
+					// The alarm is restricted to working hours and/or non-holidays
+					// (apart from deferrals). This needs to be re-evaluated every
+					// time it triggers, since working hours could change.
 					if (alarm.dateTime().isDateOnly())
 					{
 						KDateTime dt(nextDT);
 						dt.setDateOnly(true);
-						reschedule = !KAlarm::isWorkingTime(dt);
+						reschedule = !KAlarm::isWorkingTime(dt, event);
 					}
 					else
-						reschedule = !KAlarm::isWorkingTime(nextDT);
+						reschedule = !KAlarm::isWorkingTime(nextDT, event);
 					if (reschedule)
 						kDebug() << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours";
 				}

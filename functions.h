@@ -139,7 +139,7 @@ QString             stripAccel(const QString&);
 bool                convTimeString(const QByteArray& tzString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
-bool                isWorkingTime(const KDateTime&);
+bool                isWorkingTime(const KDateTime&, const KAEvent*);
 int                 localeFirstDayOfWeek();
 QString             weekDayName(int day, const KLocale*);
 

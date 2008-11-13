@@ -335,27 +335,32 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		hlayout->setMargin(0);
 		vlayout->addLayout(hlayout);
 		QPushButton* button = new QPushButton(i18nc("@action:button", "Add"), mExceptionGroup);
-		button->setFixedSize(button->sizeHint());
 		connect(button, SIGNAL(clicked()), SLOT(addException()));
 		button->setWhatsThis(i18nc("@info:whatsthis", "Add the date entered above to the exceptions list"));
 		hlayout->addWidget(button);
 
 		mChangeExceptionButton = new QPushButton(i18nc("@action:button", "Change"), mExceptionGroup);
-		mChangeExceptionButton->setFixedSize(mChangeExceptionButton->sizeHint());
 		connect(mChangeExceptionButton, SIGNAL(clicked()), SLOT(changeException()));
 		mChangeExceptionButton->setWhatsThis(i18nc("@info:whatsthis",
 		      "Replace the currently highlighted item in the exceptions list with the date entered above"));
 		hlayout->addWidget(mChangeExceptionButton);
 
 		mDeleteExceptionButton = new QPushButton(i18nc("@action:button", "Delete"), mExceptionGroup);
-		mDeleteExceptionButton->setFixedSize(mDeleteExceptionButton->sizeHint());
 		connect(mDeleteExceptionButton, SIGNAL(clicked()), SLOT(deleteException()));
 		mDeleteExceptionButton->setWhatsThis(i18nc("@info:whatsthis", "Remove the currently highlighted item from the exceptions list"));
 		hlayout->addWidget(mDeleteExceptionButton);
 	}
 
+	vlayout->addStretch();
+
+	mExcludeHolidays = new CheckBox(i18nc("@option:check", "Exclude holidays"), mExceptionGroup);
+	mExcludeHolidays->setReadOnly(mReadOnly);
+	mExcludeHolidays->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Do not trigger the alarm on holidays.</para>"
+	      "<para>You can specify your holiday region in the Configuration dialog.</para>"));
+	vlayout->addWidget(mExcludeHolidays);
+
 	mWorkTimeOnly = new CheckBox(i18nc("@option:check", "Only during working time"), mExceptionGroup);
-	mWorkTimeOnly->setFixedSize(mWorkTimeOnly->sizeHint());
 	mWorkTimeOnly->setReadOnly(mReadOnly);
 	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Only execute the alarm during working hours, on working days.</para>"
@@ -892,6 +897,7 @@ void RecurrenceEdit::set(const KAEvent& event, bool keepDuration)
 	for (int i = 0, iend = mExceptionDates.count();  i < iend;  ++i)
 		new QListWidgetItem(KGlobal::locale()->formatDate(mExceptionDates[i]), mExceptionDateList);
 	enableExceptionButtons();
+	mExcludeHolidays->setChecked(event.holidaysExcluded());
 	mWorkTimeOnly->setChecked(event.workTimeOnly());
 
 	// Get repetition within recurrence
@@ -1009,6 +1015,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);
 	event.setWorkTimeOnly(mWorkTimeOnly->isChecked());
+	event.setExcludeHolidays(mExcludeHolidays->isChecked());
 
 	event.setUpdated();
 	event.endChanges();
@@ -1032,6 +1039,7 @@ void RecurrenceEdit::saveState()
 	}
 	mSavedExceptionDates = mExceptionDates;
 	mSavedWorkTimeOnly   = mWorkTimeOnly->isChecked();
+	mSavedExclHolidays   = mExcludeHolidays->isChecked();
 	mSavedRepeatInterval = mSubRepetition->interval();
 	mSavedRepeatCount    = mSubRepetition->count();
 }
@@ -1057,6 +1065,7 @@ bool RecurrenceEdit::stateChanged() const
 	}
 	if (mSavedExceptionDates != mExceptionDates
 	||  mSavedWorkTimeOnly   != mWorkTimeOnly->isChecked()
+	||  mSavedExclHolidays   != mExcludeHolidays->isChecked()
 	||  mSavedRepeatInterval != mSubRepetition->interval()
 	||  mSavedRepeatCount    != mSubRepetition->count())
 		return true;

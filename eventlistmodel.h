@@ -83,6 +83,7 @@ class EventListModel : public QAbstractTableModel
 		void     slotUpdateTimeTo();
 		void     slotUpdateArchivedColour(const QColor&);
 		void     slotUpdateDisabledColour(const QColor&);
+		void     slotUpdateHolidays();
 		void     slotUpdateWorkingHours();
 		void     slotResourceLoaded(AlarmResource*, bool active);
 		void     slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);

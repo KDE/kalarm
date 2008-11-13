@@ -39,8 +39,10 @@
 #include <kdebug.h>
 
 #include <kcal/calendarlocal.h>
+#include <libkholidays/kholidays.h>
 
 using namespace KCal;
+using namespace LibKHolidays;
 
 
 // KAlarm version which first used the current calendar/event format.
@@ -58,6 +60,7 @@ static const QString DATE_ONLY_FLAG        = QLatin1String("DATE");
 static const QString EMAIL_BCC_FLAG        = QLatin1String("BCC");
 static const QString CONFIRM_ACK_FLAG      = QLatin1String("ACKCONF");
 static const QString KORGANIZER_FLAG       = QLatin1String("KORG");
+static const QString EXCLUDE_HOLIDAYS_FLAG = QLatin1String("EXHOLIDAYS");
 static const QString WORK_TIME_ONLY_FLAG   = QLatin1String("WORKTIME");
 static const QString DEFER_FLAG            = QLatin1String("DEFER");
 static const QString LATE_CANCEL_FLAG      = QLatin1String("LATECANCEL");
@@ -200,6 +203,7 @@ void KAEvent::copy(const KAEvent& event)
 	mSpeak                   = event.mSpeak;
 	mKMailSerialNumber       = event.mKMailSerialNumber;
 	mCopyToKOrganizer        = event.mCopyToKOrganizer;
+	mExcludeHolidays         = event.mExcludeHolidays;
 	mWorkTimeOnly            = event.mWorkTimeOnly;
 	mReminderOnceOnly        = event.mReminderOnceOnly;
 	mMainExpired             = event.mMainExpired;
@@ -240,6 +244,7 @@ void KAEvent::set(const Event* event)
 	mCommandXterm           = false;
 	mCommandDisplay         = false;
 	mCopyToKOrganizer       = false;
+	mExcludeHolidays        = false;
 	mWorkTimeOnly           = false;
 	mConfirmAck             = false;
 	mArchive                = false;
@@ -293,6 +298,8 @@ void KAEvent::set(const Event* event)
 			mEmailBcc = true;
 		else if (flags[i] == KORGANIZER_FLAG)
 			mCopyToKOrganizer = true;
+		else if (flags[i] == EXCLUDE_HOLIDAYS_FLAG)
+			mExcludeHolidays = true;
 		else if (flags[i] == WORK_TIME_ONLY_FLAG)
 			mWorkTimeOnly = true;
 		else if (flags[i]== KMAIL_SERNUM_FLAG)
@@ -902,6 +909,7 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 	mCommandXterm           = flags & EXEC_IN_XTERM;
 	mCommandDisplay         = flags & DISPLAY_COMMAND;
 	mCopyToKOrganizer       = flags & COPY_KORGANIZER;
+	mExcludeHolidays        = flags & EXCL_HOLIDAYS;
 	mWorkTimeOnly           = flags & WORK_TIME_ONLY;
 	mEnabled                = !(flags & DISABLED);
 	mSpeak                  = flags & SPEAK;
@@ -1003,7 +1011,7 @@ DateTime KAEvent::nextTrigger(TriggerType type) const
 		case MAIN_TRIGGER:      return mMainTrigger;
 		case ALL_WORK_TRIGGER:  return mAllWorkTrigger;
 		case WORK_TRIGGER:      return mMainWorkTrigger;
-		case DISPLAY_TRIGGER:   return mWorkTimeOnly ? mMainWorkTrigger : mMainTrigger;
+		case DISPLAY_TRIGGER:   return (mWorkTimeOnly || mExcludeHolidays) ? mMainWorkTrigger : mMainTrigger;
 		default:                return DateTime();
 	}
 }
@@ -1040,7 +1048,10 @@ void KAEvent::calcTriggerTimes() const
 	}
 	mChanged = false;
 	if (!mTemplateName.isEmpty())
+	{
+		// It's a template
 		mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KDateTime();
+	}
 	else if (mDeferral > 0  &&  mDeferral != REMINDER_DEFERRAL)
 	{
 		// For a deferred alarm, working time setting is ignored
@@ -1055,19 +1066,72 @@ void KAEvent::calcTriggerTimes() const
 		// It's not deferred.
 		// If only-during-working-time is set and it recurs, it won't actually trigger
 		// unless it falls during working hours.
-		if (!mWorkTimeOnly
-		||  (!mRepeatCount || (!mRepeatInterval && checkRecur() == KARecurrence::NO_RECUR))
-		||  KAlarm::isWorkingTime(mMainTrigger.kDateTime()))
+		if ((!mWorkTimeOnly && !mExcludeHolidays)
+		||  ((!mRepeatCount || !mRepeatInterval) && checkRecur() == KARecurrence::NO_RECUR)
+		||  KAlarm::isWorkingTime(mMainTrigger.kDateTime(), this))
 		{
 			mMainWorkTrigger = mMainTrigger;
 			mAllWorkTrigger = mAllTrigger;
 		}
-		else
+		else if (mWorkTimeOnly)
 		{
 			// The alarm is restricted to working hours.
 			// Finding the next occurrence during working hours can sometimes take a long time,
 			// so mark the next actual trigger as invalid until the calculation completes.
-			calcNextWorkingTime();
+			if (!mExcludeHolidays)
+			{
+				// There are no holiday restrictions.
+				calcNextWorkingTime(mMainTrigger);
+			}
+			else
+			{
+				// Holidays are excluded.
+				const KHolidays& holidays = Preferences::holidays();
+				DateTime nextTrigger = mMainTrigger;
+				KDateTime kdt;
+				for (int i = 0;  i < 20;  ++i)
+				{
+					calcNextWorkingTime(nextTrigger);
+					if (!holidays.isHoliday(mMainWorkTrigger.date()))
+						return;   // found a non-holiday occurrence
+					kdt = mMainWorkTrigger.effectiveKDateTime();
+					kdt.setTime(QTime(23,59,59));
+					OccurType type = nextOccurrence(kdt, nextTrigger, RETURN_REPETITION);
+					if (!nextTrigger.isValid())
+						break;
+					if (KAlarm::isWorkingTime(nextTrigger.kDateTime(), this))
+					{
+						int reminder = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
+						mMainWorkTrigger = nextTrigger;
+						mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+						return;   // found a non-holiday occurrence
+					}
+				}
+				mMainWorkTrigger = mAllWorkTrigger = DateTime();
+			}
+		}
+		else if (mExcludeHolidays)
+		{
+			// Holidays are excluded.
+			const KHolidays& holidays = Preferences::holidays();
+			DateTime nextTrigger = mMainTrigger;
+			KDateTime kdt;
+			for (int i = 0;  i < 20;  ++i)
+			{
+				kdt = nextTrigger.effectiveKDateTime();
+				kdt.setTime(QTime(23,59,59));
+				OccurType type = nextOccurrence(kdt, nextTrigger, RETURN_REPETITION);
+				if (!nextTrigger.isValid())
+					break;
+				if (!holidays.isHoliday(nextTrigger.date()))
+				{
+					int reminder = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
+					mMainWorkTrigger = nextTrigger;
+					mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+					return;   // found a non-holiday occurrence
+				}
+			}
+			mMainWorkTrigger = mAllWorkTrigger = DateTime();
 		}
 	}
 }
@@ -1075,12 +1139,12 @@ void KAEvent::calcTriggerTimes() const
 /******************************************************************************
 * Return the time of the next scheduled occurrence of the event during working
 * hours, for an alarm which is restricted to working hours.
-* On entry, mMainTrigger must be set to the next recurrence or repetition
-* (as returned by mainDateTime(true) ).
+* On entry, 'nextTrigger' = the next recurrence or repetition (as returned by
+* mainDateTime(true) ).
 */
-void KAEvent::calcNextWorkingTime() const
+void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 {
-	kDebug() << "next=" << mMainTrigger.kDateTime().dateTime();
+	kDebug() << "next=" << nextTrigger.kDateTime().dateTime();
 	mMainWorkTrigger = mAllWorkTrigger = DateTime();
 
 	QBitArray workDays = Preferences::workDays();
@@ -1094,7 +1158,7 @@ void KAEvent::calcNextWorkingTime() const
 	QTime workStart = Preferences::workDayStart();
 	QTime workEnd   = Preferences::workDayEnd();
 	KARecurrence::Type recurType = checkRecur();
-	KDateTime kdt = mMainTrigger.effectiveKDateTime();
+	KDateTime kdt = nextTrigger.effectiveKDateTime();
 	checkRepetition();   // ensure data consistency
 	int reminder = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
 	// Check if it always falls on the same day(s) of the week.
@@ -1138,7 +1202,7 @@ void KAEvent::calcNextWorkingTime() const
 			// It's a weekly recurrence with a non-weekly sub-repetition.
 			// Check one cycle of repetitions for the next one that lands
 			// on a working day.
-			KDateTime dt(mMainTrigger.kDateTime().addDays(1));
+			KDateTime dt(nextTrigger.kDateTime().addDays(1));
 			dt.setTime(QTime(0,0,0));
 			previousOccurrence(dt, newdt, false);
 			if (!newdt.isValid())
@@ -1207,7 +1271,7 @@ void KAEvent::calcNextWorkingTime() const
 		// as does the sub-repetition.
 		// Find the previous recurrence (as opposed to sub-repetition)
 		unsigned days = 1 << (kdt.date().dayOfWeek() - 1);
-		KDateTime dt(mMainTrigger.kDateTime().addDays(1));
+		KDateTime dt(nextTrigger.kDateTime().addDays(1));
 		dt.setTime(QTime(0,0,0));
 		previousOccurrence(dt, newdt, false);
 		if (!newdt.isValid())
@@ -1290,7 +1354,7 @@ void KAEvent::calcNextWorkingTime() const
 				days |= 1 << day;
 			}
 		}
-		mMainWorkTrigger = mMainTrigger;
+		mMainWorkTrigger = nextTrigger;
 		mMainWorkTrigger.setDate(kdt.date());
 		mAllWorkTrigger = repetition ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
 		return;
@@ -1628,6 +1692,7 @@ int KAEvent::flags() const
 	     | (mCommandXterm               ? EXEC_IN_XTERM : 0)
 	     | (mCommandDisplay             ? DISPLAY_COMMAND : 0)
 	     | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
+	     | (mExcludeHolidays            ? EXCL_HOLIDAYS : 0)
 	     | (mWorkTimeOnly               ? WORK_TIME_ONLY : 0)
 	     | (mEnabled                    ? 0 : DISABLED);
 }
@@ -1679,6 +1744,8 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 		flags += EMAIL_BCC_FLAG;
 	if (mCopyToKOrganizer)
 		flags += KORGANIZER_FLAG;
+	if (mExcludeHolidays)
+		flags += EXCLUDE_HOLIDAYS_FLAG;
 	if (mWorkTimeOnly)
 		flags += WORK_TIME_ONLY_FLAG;
 	if (mLateCancel)
@@ -2662,7 +2729,7 @@ KAEvent::OccurType KAEvent::previousOccurrence(const KDateTime& afterDateTime, D
 		// Find the latest repetition which is before the specified time.
 		int repetition = mRepeatInterval.isDaily()
 		               ? result.effectiveKDateTime().daysTo(afterDateTime.addSecs(-1)) / mRepeatInterval.asDays()
-		               : (result.effectiveKDateTime().secsTo_long(afterDateTime) - 1) / mRepeatInterval.asSeconds();
+		               : static_cast<int>((result.effectiveKDateTime().secsTo_long(afterDateTime) - 1) / mRepeatInterval.asSeconds());
 		if (repetition > 0)
 		{
 			result = (mRepeatInterval * qMin(repetition, mRepeatCount)).end(result.kDateTime());
@@ -2735,7 +2802,7 @@ KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
 			type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 			mNextRepeat = mRepeatInterval.isDaily()
 			            ? dt.effectiveKDateTime().daysTo(preDateTime) / mRepeatInterval.asDays() + 1
-			            : dt.effectiveKDateTime().secsTo_long(preDateTime) / mRepeatInterval.asSeconds() + 1;
+			            : static_cast<int>(dt.effectiveKDateTime().secsTo_long(preDateTime) / mRepeatInterval.asSeconds()) + 1;
 			// Repetitions can't have a reminder, so remove any.
 			if (mReminderMinutes)
 				set_archiveReminder();
@@ -3987,6 +4054,7 @@ void KAEvent::dumpDebug() const
 	}
 	kDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
 	kDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
+	kDebug() << "-- mExcludeHolidays:" << mExcludeHolidays;
 	kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
 	kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
 	kDebug() << "-- mSaveDateTime:" << mSaveDateTime;

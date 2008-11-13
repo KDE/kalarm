@@ -43,7 +43,8 @@ class KAlarmIface
 	 *  @li EXEC_IN_XTERM   - execute the command alarm in a terminal window.
 	 *  @li EMAIL_BCC       - send a blind copy the email to the user.
 	 *  @li SHOW_IN_KORG    - show the alarm as an event in KOrganizer
-	 *  @li WORK_TIME_ONLY  - do not trigger the alarm outside working hours
+	 *  @li EXCL_HOLIDAYS   - do not trigger the alarm on holidays
+	 *  @li WORK_TIME_ONLY  - do not trigger the alarm outside working hours (or on holidays)
 	 *  @li DISABLED        - set the alarm status to disabled.
 	 */
 	enum Flags
@@ -60,6 +61,7 @@ class KAlarmIface
 		SPEAK           = 0x200,   // speak the alarm message when it is displayed
 		SHOW_IN_KORG    = 0x400,   // show the alarm as an event in KOrganizer
 		DISPLAY_COMMAND = 0x800,   // display command output in alarm window
+		EXCL_HOLIDAYS   = 0x1000,  // don't trigger alarm on holidays
 		WORK_TIME_ONLY  = 0x2000   // trigger only during working hours
 	};
 	/** Values for the @p repeatType parameter of "scheduleXxxx()" D-Bus calls.

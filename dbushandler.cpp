@@ -411,6 +411,7 @@ unsigned DBusHandler::convertStartFlags(const KDateTime& start, unsigned flags)
 	if (flags & SCRIPT)          kaEventFlags |= KAEvent::SCRIPT;
 	if (flags & EXEC_IN_XTERM)   kaEventFlags |= KAEvent::EXEC_IN_XTERM;
 	if (flags & SHOW_IN_KORG)    kaEventFlags |= KAEvent::COPY_KORGANIZER;
+	if (flags & EXCL_HOLIDAYS)   kaEventFlags |= KAEvent::EXCL_HOLIDAYS;
 	if (flags & WORK_TIME_ONLY)  kaEventFlags |= KAEvent::WORK_TIME_ONLY;
 	if (flags & DISABLED)        kaEventFlags |= KAEvent::DISABLED;
 	if (start.isDateOnly())      kaEventFlags |= KAEvent::ANY_TIME;

@@ -59,6 +59,7 @@ EventListModel* EventListModel::alarms()
 		mAlarmInstance = new EventListModel(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
 		Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateArchivedColour(const QColor&)));
 		Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateDisabledColour(const QColor&)));
+		Preferences::connect(SIGNAL(holidaysChanged(const LibKHolidays::KHolidays&)), mAlarmInstance, SLOT(slotUpdateHolidays()));
 		Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), mAlarmInstance, SLOT(slotUpdateWorkingHours()));
 	}
 	return mAlarmInstance;
@@ -404,6 +405,40 @@ void EventListModel::slotUpdateDisabledColour(const QColor&)
 }
 
 /******************************************************************************
+* Called when the definition of holidays has changed.
+* Update the next trigger time for all alarms which are set to recur only on
+* non-holidays.
+*/
+void EventListModel::slotUpdateHolidays()
+{
+	kDebug();
+	int firstRow = -1;
+	for (int row = 0, end = mEvents.count();  row < end;  ++row)
+	{
+		if (mEvents[row]->holidaysExcluded())
+		{
+			mEvents[row]->updateHolidays();
+			// For efficiency, emit a single signal for each group
+			// of consecutive alarms to update, rather than a separate
+			// signal for each alarm.
+			if (firstRow < 0)
+				firstRow = row;
+		}
+		else if (firstRow >= 0)
+		{
+			emit dataChanged(index(firstRow, TimeColumn), index(row - 1, TimeColumn));
+			emit dataChanged(index(firstRow, TimeToColumn), index(row - 1, TimeToColumn));
+			firstRow = -1;
+		}
+	}
+	if (firstRow >= 0)
+	{
+		emit dataChanged(index(firstRow, TimeColumn), index(mEvents.count() - 1, TimeColumn));
+		emit dataChanged(index(firstRow, TimeToColumn), index(mEvents.count() - 1, TimeToColumn));
+	}
+}
+
+/******************************************************************************
 * Called when the definition of working hours has changed.
 * Update the next trigger time for all alarms which are set to recur only
 * during working hours.
@@ -416,6 +451,7 @@ void EventListModel::slotUpdateWorkingHours()
 	{
 		if (mEvents[row]->workTimeOnly())
 		{
+			mEvents[row]->updateWorkHours();
 			// For efficiency, emit a single signal for each group
 			// of consecutive alarms to update, rather than a separate
 			// signal for each alarm.
@@ -479,7 +515,6 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 		case AlarmResources::Colour:
 		{
 			kDebug() << "Colour";
-			AlarmCalendar* resources = AlarmCalendar::resources();
 			int firstRow = -1;
 			for (int row = 0, end = mEvents.count();  row < end;  ++row)
 			{
@@ -533,7 +568,6 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 void EventListModel::removeResource(AlarmResource* resource)
 {
 	kDebug();
-	AlarmCalendar* resources = AlarmCalendar::resources();
 	int lastRow = -1;
 	for (int row = mEvents.count();  --row >= 0; )
 	{

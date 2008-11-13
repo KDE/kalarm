@@ -250,16 +250,17 @@ class KAEvent : public KAAlarmEventBase
 			EXEC_IN_XTERM   = 0x800,   // execute command in terminal window
 			SPEAK           = 0x1000,  // speak the message when the alarm is displayed
 			COPY_KORGANIZER = 0x2000,  // KOrganizer should hold a copy of the event
-			WORK_TIME_ONLY  = 0x4000,  // trigger alarm only during working hours
-			DISPLAY_COMMAND = 0x8000,  // display command output in alarm window
+			EXCL_HOLIDAYS   = 0x4000,  // don't trigger alarm on holidays
+			WORK_TIME_ONLY  = 0x8000,  // trigger alarm only during working hours
+			DISPLAY_COMMAND = 0x10000, // display command output in alarm window
 			// The following are read-only internal values
-			REMINDER        = 0x10000,
-			DEFERRAL        = 0x20000,
-			TIMED_FLAG      = 0x40000,
+			REMINDER        = 0x100000,
+			DEFERRAL        = 0x200000,
+			TIMED_FLAG      = 0x400000,
 			DATE_DEFERRAL   = DEFERRAL,
 			TIME_DEFERRAL   = DEFERRAL | TIMED_FLAG,
-			DISPLAYING_     = 0x80000,
-			READ_ONLY_FLAGS = 0xF0000   // mask for all read-only internal values
+			DISPLAYING_     = 0x800000,
+			READ_ONLY_FLAGS = 0xF00000  // mask for all read-only internal values
 		};
 		enum Action
 		{
@@ -297,15 +298,15 @@ class KAEvent : public KAAlarmEventBase
 		};
 		enum TriggerType    // alarm trigger type
 		{
-			ALL_TRIGGER,       // next trigger, including reminders, ignoring working hours
-			MAIN_TRIGGER,      // next trigger, excluding reminders, ignoring working hours
+			ALL_TRIGGER,       // next trigger, including reminders, ignoring working hours & holidays
+			MAIN_TRIGGER,      // next trigger, excluding reminders, ignoring working hours & holidays
 			WORK_TRIGGER,      // next main working time trigger, excluding reminders
 			ALL_WORK_TRIGGER,  // next actual working time trigger, including reminders
 			DISPLAY_TRIGGER    // next trigger time for display purposes (i.e. excluding reminders)
 		};
 
 		KAEvent()          : mReminderMinutes(0), mRevision(0), mRecurrence(0), mAlarmCount(0),
-		                     mDeferral(NO_DEFERRAL), mChangeCount(0), mChanged(false), mWorkTimeOnly(false) { }
+		                     mDeferral(NO_DEFERRAL), mChangeCount(0), mChanged(false), mExcludeHolidays(false), mWorkTimeOnly(false) { }
 		KAEvent(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action action, int lateCancel, int flags, bool changesPending = false)
 		                                        : mRecurrence(0) { set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending); }
 		explicit KAEvent(const KCal::Event* e)  : mRecurrence(0) { set(e); }
@@ -330,6 +331,7 @@ class KAEvent : public KAAlarmEventBase
 		void               setLateCancel(int lc)                             { mLateCancel = lc;  mUpdated = true; }
 		void               setAutoClose(bool ac)                             { mAutoClose = ac;  mUpdated = true; }
 		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
+		void               setExcludeHolidays(bool ex)                       { mExcludeHolidays = ex;  mUpdated = true; }
 		void               setWorkTimeOnly(bool wto)                         { mWorkTimeOnly = wto; }
 		void               setKMailSerialNumber(unsigned long n)             { mKMailSerialNumber = n; }
 		void               setLogFile(const QString& logfile);
@@ -347,6 +349,7 @@ class KAEvent : public KAAlarmEventBase
 		void               clearUpdated() const                              { mUpdated = false; }
 		void               clearResourceID()                                 { mResourceId.clear(); }
 		void               updateWorkHours() const                           { if (mWorkTimeOnly) calcTriggerTimes(); }
+		void               updateHolidays() const                            { if (mExcludeHolidays) calcTriggerTimes(); }
 		void               removeExpiredAlarm(KAAlarm::Type);
 		void               incrementRevision()                               { ++mRevision;  mUpdated = true; }
 
@@ -387,6 +390,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               commandDisplay() const         { return mCommandDisplay; }
 		unsigned long      kmailSerialNumber() const      { return mKMailSerialNumber; }
 		bool               copyToKOrganizer() const       { return mCopyToKOrganizer; }
+		bool               holidaysExcluded() const       { return mExcludeHolidays; }
 		bool               workTimeOnly() const           { return mWorkTimeOnly; }
 		bool               speak() const                  { return (mActionType == T_MESSAGE  ||  (mActionType == T_COMMAND && mCommandDisplay)) && mSpeak; }
 		const QString&     audioFile() const              { return mAudioFile; }
@@ -464,7 +468,7 @@ class KAEvent : public KAAlarmEventBase
 		OccurType          previousRecurrence(const KDateTime& afterDateTime, DateTime& result) const;
 		int                nextWorkRepetition(const KDateTime& pre) const;
 		void               calcTriggerTimes() const;
-		void               calcNextWorkingTime() const;
+		void               calcNextWorkingTime(const DateTime& nextTrigger) const;
 		DateTime           nextWorkingTime() const;
 		static bool        convertRepetition(KCal::Event*);
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
@@ -510,6 +514,7 @@ class KAEvent : public KAAlarmEventBase
 		bool               mCommandDisplay;   // command output is to be displayed in an alarm window
 		bool               mSpeak;            // whether to speak the message when the alarm is displayed
 		bool               mCopyToKOrganizer; // KOrganizer should hold a copy of the event
+		bool               mExcludeHolidays;  // don't trigger alarms on holidays
 		bool               mWorkTimeOnly;     // trigger alarm only during working hours
 		bool               mReminderOnceOnly; // the reminder is output only for the first recurrence
 		bool               mMainExpired;      // main alarm has expired (in which case a deferral alarm will exist)
