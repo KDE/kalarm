@@ -60,7 +60,7 @@ class KAlarmIface
 		SPEAK           = 0x200,   // speak the alarm message when it is displayed
 		SHOW_IN_KORG    = 0x400,   // show the alarm as an event in KOrganizer
 		DISPLAY_COMMAND = 0x800,   // display command output in alarm window
-		WORK_TIME_ONLY  = 0x3000   // trigger only during working hours
+		WORK_TIME_ONLY  = 0x2000   // trigger only during working hours
 	};
 	/** Values for the @p repeatType parameter of "scheduleXxxx()" D-Bus calls.
 	 *  @li MINUTELY - the repeat interval is measured in minutes.
