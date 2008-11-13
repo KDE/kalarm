@@ -45,6 +45,7 @@ class DialogScroll : public QScrollArea
 		static void   setSized()        { mSized = true; }
 		static bool   sized()           { return mSized; }
 	private:
+		static QSize  maxMinimumSizeHint();
 		static QList<DialogScroll<T>*> mTabs;
 		static int    mMinHeight;
 		static int    mHeightReduction;
@@ -82,15 +83,40 @@ DialogScroll<T>::~DialogScroll()
 	mTabs.removeAll(this);
 }
 
+/******************************************************************************
+* Return the minimum size for the tab, adjusted if necessary to a height that
+* fits the screen.
+* In order to make the QStackedWidget containing the tabs take the correct
+* size, the value returned is actually the minimum size of the largest tab.
+* Otherwise, only the currently visible tab would be taken into account with
+* the result that the dialog would initially be displayed too small.
+*/
 template <class T>
 QSize DialogScroll<T>::minimumSizeHint() const
 {
-	if (!widget())
-		return QSize();
-	QSize s = widget()->minimumSizeHint();
+	QSize s = maxMinimumSizeHint();
 	if (mMinHeight > 0  &&  mMinHeight < s.height())
 		return QSize(s.width() + style()->pixelMetric(QStyle::PM_ScrollBarExtent), mMinHeight);
 	return s;
+}
+
+/******************************************************************************
+* Return the maximum minimum size for any instance.
+*/
+template <class T>
+QSize DialogScroll<T>::maxMinimumSizeHint()
+{
+	QSize sz;
+	for (int i = 0, end = mTabs.count();  i < end;  ++i)
+	{
+		if (!mTabs[i]->widget())
+			return QSize();
+		QSize s = mTabs[i]->widget()->minimumSizeHint();
+		if (!s.isValid())
+			return QSize();
+		sz = sz.expandedTo(s);
+	}
+	return sz;
 }
 
 /******************************************************************************
@@ -103,17 +129,10 @@ QSize DialogScroll<T>::initMinimumHeight(T* dlg)
 {
 	if (mSized)
 		return QSize();
-	int maxHeight = 0;
-	for (int i = 0, end = mTabs.count();  i < end;  ++i)
-	{
-		if (!mTabs[i]->widget())
-			return QSize();
-		QSize s = mTabs[i]->widget()->minimumSizeHint();
-		if (!s.isValid())
-			return QSize();
-		if (s.height() > maxHeight)
-			maxHeight = s.height();
-	}
+	QSize s = maxMinimumSizeHint();
+	if (s.isEmpty())
+		return QSize();
+	int maxHeight = s.height();
 	int decoration = dlg->frameGeometry().height() - dlg->geometry().height();
 	if (!decoration)
 	{
@@ -125,12 +144,13 @@ QSize DialogScroll<T>::initMinimumHeight(T* dlg)
 	// There is no stored size, or the deferral group is visible.
 	// Allow the tab contents to be scrolled vertically if that is necessary
 	// to avoid the dialog exceeding the screen height.
-	QSize s = dlg->KDialog::minimumSizeHint();
+	s = dlg->KDialog::minimumSizeHint();
 	int y = s.height() + decoration - desk;
 	if (y > 0)
 	{
 		mHeightReduction = y;
 		mMinHeight = maxHeight - y;
+		kDebug() << "Scrolling: min height=" << mMinHeight << ", reduction=" << mHeightReduction;
 		if (mMinHeight > 0)
 		{
 			for (int i = 0, end = mTabs.count();  i < end;  ++i)
