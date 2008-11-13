@@ -83,7 +83,7 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	                                       "If a recurrence is configured, the start date/time will be adjusted "
 	                                       "to the first recurrence on or after the entered date/time."); 
 	static const QString tzText = i18nc("@info/plain",
-	                                    "This uses KAlarm's default time zone, set in the Preferences dialog.");
+	                                    "This uses KAlarm's default time zone, set in the Configuration dialog.");
 
 	QWidget* topWidget;
 	if (title.isEmpty())

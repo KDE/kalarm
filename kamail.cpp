@@ -142,17 +142,17 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 #ifdef KMAIL_SUPPORTED
 			case Preferences::MAIL_FROM_KMAIL:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default email identity found)</para>"
-				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Preferences dialog.</para>"));
+				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Configuration dialog.</para>"));
 				break;
 #endif
 			case Preferences::MAIL_FROM_SYS_SETTINGS:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
-				                                "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Preferences dialog.</para>"));
+				                                "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Configuration dialog.</para>"));
 				break;
 			case Preferences::MAIL_FROM_ADDR:
 			default:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
-				                                "<para>Please set it in the <application>KAlarm</application> Preferences dialog.</para>"));
+				                                "<para>Please set it in the <application>KAlarm</application> Configuration dialog.</para>"));
 				break;
 		}
 		return -1;

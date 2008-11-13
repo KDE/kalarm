@@ -1083,7 +1083,7 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 	if (event  &&  event->action() == KAEvent::EMAIL
 	&&  Preferences::emailAddress().isEmpty())
 		KMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
-		                                       "<para>%1</para><para>Please set it in the Preferences dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
+		                                       "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
 
 	if (!theApp()->alarmsEnabled())
 	{
