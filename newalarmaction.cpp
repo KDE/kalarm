@@ -41,11 +41,14 @@
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
 	: KActionMenu(KIcon("document-new"), label, parent)
 {
-	QAction* act = menu()->addAction(KIcon(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@item:inmenu", "Display Alarm")), 0, 0, DISP_KEY);
+	QAction* act = menu()->addAction(KIcon(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@item:inmenu", "Display Alarm")));
+	act->setShortcut(DISP_KEY);
 	mTypes[act] = EditAlarmDlg::DISPLAY;
-	mCommandAction = menu()->addAction(KIcon(CMD_ICON), (templates ? i18nc("@item:inmenu", "&Command Alarm Template") : i18nc("@item:inmenu", "Command Alarm")), 0, 0, CMD_KEY);
+	mCommandAction = menu()->addAction(KIcon(CMD_ICON), (templates ? i18nc("@item:inmenu", "&Command Alarm Template") : i18nc("@item:inmenu", "Command Alarm")));
+	mCommandAction->setShortcut(CMD_KEY);
 	mTypes[mCommandAction] = EditAlarmDlg::COMMAND;
-	act = menu()->addAction(KIcon(MAIL_ICON), (templates ? i18nc("@item:inmenu", "&Email Alarm Template") : i18nc("@item:inmenu", "Email Alarm")), 0, 0, MAIL_KEY);
+	act = menu()->addAction(KIcon(MAIL_ICON), (templates ? i18nc("@item:inmenu", "&Email Alarm Template") : i18nc("@item:inmenu", "Email Alarm")));
+	act->setShortcut(MAIL_KEY);
 	mTypes[act] = EditAlarmDlg::EMAIL;
 	setDelayed(false);
 	connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
