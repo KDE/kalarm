@@ -51,7 +51,6 @@
 #include <kactioncollection.h>
 #include <khbox.h>
 #include <kdebug.h>
-#include <kdeversion.h>
 
 using namespace KCal;
 

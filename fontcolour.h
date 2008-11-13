@@ -23,7 +23,6 @@
 
 #include <QWidget>
 #include <QStringList>
-#include <kdeversion.h>
 
 class QPushButton;
 class KFontChooser;

@@ -20,7 +20,6 @@
 
 #include "kalarm.h"
 #include <QCloseEvent>
-#include <kdeversion.h>
 #include "kalarmapp.h"
 #include "mainwindowbase.moc"
 
