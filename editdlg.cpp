@@ -58,7 +58,6 @@
 #include <QResizeEvent>
 #include <QShowEvent>
 #include <QStackedWidget>
-#include <QScrollBar>
 #include <QTimer>
 
 #include <kglobal.h>
