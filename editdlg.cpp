@@ -56,6 +56,7 @@
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
 #include <QResizeEvent>
+#include <QScrollBar>
 #include <QShowEvent>
 
 #include <kglobal.h>
@@ -727,6 +728,7 @@ int EditAlarmDlg::getAlarmFlags() const
 void EditAlarmDlg::showEvent(QShowEvent* se)
 {
 	KDialog::showEvent(se);
+	DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this));
 	if (!mDeferGroupHeight)
 	{
 		if (mDeferGroup)
@@ -741,7 +743,6 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 			resize(s);
 		}
 	}
-	DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this));
 	KWindowSystem::setOnDesktop(winId(), mDesktop);    // ensure it displays on the desktop expected by the user
 }
 
@@ -765,7 +766,7 @@ QSize EditAlarmDlg::minimumSizeHint() const
 */
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
-	if (isVisible())
+	if (isVisible() && mDeferGroupHeight)
 	{
 		QSize s = re->size();
 		s.setHeight(s.height() - (!mDeferGroup || mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
@@ -1057,6 +1058,12 @@ void EditAlarmDlg::slotShowMainPage()
 		if (mTemplateName)
 			mTemplateName->setFocus();
 		mMainPageShown = true;
+	}
+	else
+	{
+		// Set scroll position to top, since it otherwise jumps randomly
+		DialogScroll<EditAlarmDlg>* main = static_cast<DialogScroll<EditAlarmDlg>*>(mTabs->widget(0));
+		main->verticalScrollBar()->setValue(0);
 	}
 	if (mTimeWidget)
 	{
