@@ -1,5 +1,5 @@
 /*
- *  spinbox2private.h  -  private classes for SpinBox2
+ *  spinbox2_p.h  -  private classes for SpinBox2
  *  Program:  kalarm
  *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef SPINBOX2PRIVATE_H
-#define SPINBOX2PRIVATE_H
+#ifndef SPINBOX2_P_H
+#define SPINBOX2_P_H
 
 #include <QPixmap>
 #include <QGraphicsView>
@@ -80,7 +80,7 @@ class SpinMirror : public QGraphicsView
 		virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
 		virtual void mouseMoveEvent(QMouseEvent* e)         { mouseEvent(e); }
 		virtual void mouseDoubleClickEvent(QMouseEvent* e)  { mouseEvent(e); }
-		virtual void wheelEvent(QWheelEvent* e);
+		virtual void wheelEvent(QWheelEvent*);
 	private:
 		void         mouseEvent(QMouseEvent*);
 		void         setMirroredState(bool clear = false);
@@ -93,4 +93,4 @@ class SpinMirror : public QGraphicsView
 		bool                 mMirrored;   // mirror left-to-right
 };
 
-#endif // SPINBOX2PRIVATE_H
+#endif // SPINBOX2_P_H

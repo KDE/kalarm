@@ -37,7 +37,7 @@
 #include <kdebug.h>
 
 #include "spinbox2.moc"
-#include "spinbox2private.moc"
+#include "spinbox2_p.moc"
 
 /* List of styles which look better using spin buttons mirrored left-to-right.
  * This is needed for some styles which use rounded corners.
@@ -666,7 +666,8 @@ void SpinMirror::wheelEvent(QWheelEvent* e)
 		return;
 	QPoint pt = e->pos();
 	QGraphicsItem* item = scene()->itemAt(pt);
-	if (item == mButtons) {
+	if (item == mButtons)
+	{
 		pt = spinboxPoint(pt);
 		QApplication::postEvent(mSpinbox, new QWheelEvent(pt, e->delta(), e->buttons(), e->modifiers()), e->orientation());
 	}
@@ -708,11 +709,9 @@ bool SpinMirror::event(QEvent* e)
 				break;
 			// fall through to QEvent::HoverEnter
 		case QEvent::HoverEnter:
-		{
 			he = (QHoverEvent*)e;
 			QApplication::postEvent(mMainSpinbox, new QHoverEvent(e->type(), he->pos(), he->oldPos()));
 			break;
-		}
 		case QEvent::HoverMove:
 			he = (QHoverEvent*)e;
 			break;
@@ -723,7 +722,8 @@ bool SpinMirror::event(QEvent* e)
 			break;
 	}
 
-	if (he) {
+	if (he)
+	{
 		QApplication::postEvent(mSpinbox, new QHoverEvent(e->type(), spinboxPoint(he->pos()), spinboxPoint(he->oldPos())));
 		setButtons();
 	}

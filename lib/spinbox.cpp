@@ -81,7 +81,7 @@ void SpinBox::setReadOnly(bool ro)
 		mReadOnly = ro;
 		lineEdit()->setReadOnly(ro);
 		if (ro)
-			setShiftStepping(false);
+			setShiftStepping(false, mCurrentButton);
 	}
 }
 
@@ -191,30 +191,47 @@ bool SpinBox::eventFilter(QObject* obj, QEvent* e)
 {
 	if (obj == lineEdit())
 	{
-		if (e->type() == QEvent::KeyPress)
+		int step = 0;
+		switch (e->type())
 		{
-			// Up and down arrow keys step the value
-			QKeyEvent* ke = (QKeyEvent*)e;
-			int key = ke->key();
-			if (key == Qt::Key_Up  ||  key == Qt::Key_Down)
+			case QEvent::KeyPress:
 			{
-				if (mReadOnly)
-					return true;    // discard up/down arrow keys
-				int step;
-				if ((ke->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
-				{
-					// Shift stepping
-					int val = value();
-					if (key == Qt::Key_Up)
-						step = mLineShiftStep - val % mLineShiftStep;
-					else
-						step = - ((val + mLineShiftStep - 1) % mLineShiftStep + 1);
-				}
-				else
-					step = (key == Qt::Key_Up) ? mLineStep : -mLineStep;
-				addValue(step, false);
-				return true;
+				// Up and down arrow keys step the value
+				QKeyEvent* ke = (QKeyEvent*)e;
+				int key = ke->key();
+				if (key == Qt::Key_Up)
+					step = 1;
+				else if (key == Qt::Key_Down)
+					step = -1;
+				break;
 			}
+			case QEvent::Wheel:
+			{
+				QWheelEvent* we = (QWheelEvent*)e;
+				step = (we->delta() > 0) ? 1 : -1;
+				break;
+			}
+			default:
+				break;
+		}
+		if (step)
+		{
+			if (mReadOnly)
+				return true;    // discard up/down arrow keys
+			QInputEvent* ie = (QInputEvent*)e;
+			if ((ie->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier)
+			{
+				// Shift stepping
+				int val = value();
+				if (step > 0)
+					step = mLineShiftStep - val % mLineShiftStep;
+				else
+					step = - ((val + mLineShiftStep - 1) % mLineShiftStep + 1);
+			}
+			else
+				step = (step > 0) ? mLineStep : -mLineStep;
+			addValue(step, false);
+			return true;
 		}
 	}
 	return QSpinBox::eventFilter(obj, e);
@@ -256,7 +273,7 @@ bool SpinBox::clickEvent(QMouseEvent* e)
 			return true;
 		}
 		bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-		if (setShiftStepping(shift))
+		if (setShiftStepping(shift, mCurrentButton))
 		{
 			e->accept();
 			return true;     // hide the event from the spin widget
@@ -265,10 +282,23 @@ bool SpinBox::clickEvent(QMouseEvent* e)
 	return false;
 }
 
+void SpinBox::wheelEvent(QWheelEvent* e)
+{
+	if (mReadOnly)
+		return;   // discard the event
+	bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
+	if (setShiftStepping(shift, (e->delta() > 0 ? UP : DOWN)))
+	{
+		e->accept();
+		return;     // hide the event from the spin widget
+	}
+	QSpinBox::wheelEvent(e);
+}
+
 void SpinBox::mouseReleaseEvent(QMouseEvent* e)
 {
 	if (e->button() == Qt::LeftButton  &&  mShiftMouse)
-		setShiftStepping(false);    // cancel shift stepping
+		setShiftStepping(false, mCurrentButton);    // cancel shift stepping
 	QSpinBox::mouseReleaseEvent(e);
 }
 
@@ -286,7 +316,7 @@ void SpinBox::mouseMoveEvent(QMouseEvent* e)
 			// Set normal or shift stepping as appropriate.
 			mCurrentButton = newButton;
 			bool shift = (e->modifiers() & (Qt::ShiftModifier | Qt::AltModifier)) == Qt::ShiftModifier;
-			if (setShiftStepping(shift))
+			if (setShiftStepping(shift, mCurrentButton))
 			{
 				e->accept();
 				return;     // hide the event from the spin widget
@@ -323,7 +353,7 @@ bool SpinBox::keyEvent(QKeyEvent* e)
 		{
 			// The effective shift state has changed.
 			// Set normal or shift stepping as appropriate.
-			if (setShiftStepping(shift))
+			if (setShiftStepping(shift, mCurrentButton))
 			{
 				e->accept();
 				return true;     // hide the event from the spin widget
@@ -336,9 +366,9 @@ bool SpinBox::keyEvent(QKeyEvent* e)
 /******************************************************************************
 * Set spin widget stepping to the normal or shift increment.
 */
-bool SpinBox::setShiftStepping(bool shift)
+bool SpinBox::setShiftStepping(bool shift, int currentButton)
 {
-	if (mCurrentButton == NO_BUTTON)
+	if (currentButton == NO_BUTTON)
 		shift = false;
 	if (shift  &&  !mShiftMouse)
 	{
@@ -348,7 +378,7 @@ bool SpinBox::setShiftStepping(bool shift)
 		 * step by the shift amount.
 		 */
 		int val = value();
-		int step = (mCurrentButton == UP) ? mLineShiftStep : (mCurrentButton == DOWN) ? -mLineShiftStep : 0;
+		int step = (currentButton == UP) ? mLineShiftStep : (currentButton == DOWN) ? -mLineShiftStep : 0;
 		int adjust = shiftStepAdjustment(val, step);
 		mShiftMouse = true;
 		if (adjust)
