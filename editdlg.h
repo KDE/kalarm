@@ -35,7 +35,7 @@ class QGroupBox;
 class QFrame;
 class QVBoxLayout;
 class KLineEdit;
-class TabWidget;
+class KTabWidget;
 class AlarmResource;
 class ButtonGroup;
 class TimeEdit;
@@ -46,6 +46,7 @@ class AlarmTimeWidget;
 class RecurrenceEdit;
 class Reminder;
 class ShellProcess;
+class StackedScrollGroup;
 class TimeSpinBox;
 
 
@@ -131,7 +132,8 @@ class EditAlarmDlg : public KDialog
 	protected:
 		KAEvent::Action     mAlarmType;           // actual alarm type
 	private:
-		TabWidget*          mTabs;                // the tabs in the dialog
+		KTabWidget*         mTabs;                // the tabs in the dialog
+		StackedScrollGroup* mTabScrollGroup;
 		int                 mMainPageIndex;
 		int                 mRecurPageIndex;
 		bool                mMainPageShown;            // true once the main tab has been displayed

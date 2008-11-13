@@ -41,16 +41,6 @@ class PageFrame : public QFrame
 		void             shown();
 };
 
-class TabWidget : public KTabWidget
-{
-		Q_OBJECT
-	public:
-		explicit TabWidget(QWidget* parent) : KTabWidget(parent) {}
-		void updateTabSizes();
-		virtual QSize sizeHint() const         { return minimumSizeHint(); }
-		virtual QSize minimumSizeHint() const;//  { return minimumSize().isEmpty() ? KTabWidget::minimumSizeHint() : minimumSize(); }
-};
-
 class TextEdit : public KTextEdit
 {
 		Q_OBJECT

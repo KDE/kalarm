@@ -30,6 +30,7 @@ class ViewPrefTab;
 class StorePrefTab;
 class TimePrefTab;
 class MiscPrefTab;
+class StackedScrollGroup;
 
 
 // The Preferences dialog
@@ -58,6 +59,7 @@ class KAlarmPrefDlg : public KPageDialog
 		KPageWidgetItem*   mFontColourPageItem;
 
 	protected:
+		virtual void  showEvent(QShowEvent*);
 		virtual void  resizeEvent(QResizeEvent*);
 
 	protected slots:
@@ -72,6 +74,8 @@ class KAlarmPrefDlg : public KPageDialog
 		void         restore(bool defaults);
 
 		static KAlarmPrefDlg* mInstance;
+		StackedScrollGroup*   mTabScrollGroup;
+		bool         mShown;
 		bool         mValid;
 };
 

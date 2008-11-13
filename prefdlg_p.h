@@ -21,9 +21,9 @@
 #ifndef PREFDLG_P_H
 #define PREFDLG_P_H
 
-#include "dialogscroll.h"
 #include "preferences.h"
 #include "prefdlg.h"
+#include "stackedwidgets.h"
 
 class QCheckBox;
 class QAbstractButton;
@@ -46,10 +46,10 @@ class TimeZoneCombo;
 
 
 // Base class for each tab in the Preferences dialog
-class PrefsTabBase : public DialogScroll<KAlarmPrefDlg>
+class PrefsTabBase : public StackedScrollWidget
 {
 	public:
-		PrefsTabBase();
+		PrefsTabBase(StackedScrollGroup*);
 
 		void         setPreferences();
 		virtual void restore(bool defaults) = 0;
@@ -76,7 +76,7 @@ class MiscPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		MiscPrefTab();
+		MiscPrefTab(StackedScrollGroup*);
 
 		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
@@ -103,7 +103,7 @@ class TimePrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		TimePrefTab();
+		TimePrefTab(StackedScrollGroup*);
 
 		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
@@ -126,7 +126,7 @@ class StorePrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		StorePrefTab();
+		StorePrefTab(StackedScrollGroup*);
 
 		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);
@@ -155,7 +155,7 @@ class EmailPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EmailPrefTab();
+		EmailPrefTab(StackedScrollGroup*);
 
 		QString      validate();
 		virtual void restore(bool defaults);
@@ -196,7 +196,7 @@ class EditPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		EditPrefTab();
+		EditPrefTab(StackedScrollGroup*);
 
 		QString      validate();
 		virtual void restore(bool defaults);
@@ -233,7 +233,7 @@ class ViewPrefTab : public PrefsTabBase
 {
 		Q_OBJECT
 	public:
-		ViewPrefTab();
+		ViewPrefTab(StackedScrollGroup*);
 
 		virtual void restore(bool defaults);
 		virtual void apply(bool syncToDisc);

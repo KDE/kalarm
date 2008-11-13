@@ -20,6 +20,35 @@
 
 #include "kalarm.h"
 
+#include "alarmcalendar.h"
+#include "alarmresources.h"
+#include "alarmtimewidget.h"
+#include "buttongroup.h"
+#include "colourbutton.h"
+#include "editdlg.h"
+#include "editdlgtypes.h"
+#include "fontcolour.h"
+#include "functions.h"
+#include "itembox.h"
+#include "kalarmapp.h"
+#include "kamail.h"
+#include "label.h"
+#include "latecancel.h"
+#include "mainwindow.h"
+#include "preferences.h"
+#include "radiobutton.h"
+#include "recurrenceedit.h"
+#include "sounddlg.h"
+#include "soundpicker.h"
+#include "specialactions.h"
+#include "stackedwidgets.h"
+#include "timeedit.h"
+#include "timespinbox.h"
+#include "timezonecombo.h"
+#include "traywindow.h"
+#include "prefdlg_p.moc"
+#include "prefdlg.moc"
+
 #include <QLabel>
 #include <QCheckBox>
 #include <QRadioButton>
@@ -31,6 +60,7 @@
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QResizeEvent>
+#include <QTimer>
 
 #include <kvbox.h>
 #include <kglobal.h>
@@ -56,34 +86,6 @@
 #include <ktoolinvocation.h>
 #include <libkholidays/kholidays.h>
 using namespace LibKHolidays;
-
-#include "alarmcalendar.h"
-#include "alarmresources.h"
-#include "alarmtimewidget.h"
-#include "buttongroup.h"
-#include "colourbutton.h"
-#include "editdlg.h"
-#include "editdlgtypes.h"
-#include "fontcolour.h"
-#include "functions.h"
-#include "itembox.h"
-#include "kalarmapp.h"
-#include "kamail.h"
-#include "label.h"
-#include "latecancel.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "radiobutton.h"
-#include "recurrenceedit.h"
-#include "sounddlg.h"
-#include "soundpicker.h"
-#include "specialactions.h"
-#include "timeedit.h"
-#include "timespinbox.h"
-#include "timezonecombo.h"
-#include "traywindow.h"
-#include "prefdlg_p.moc"
-#include "prefdlg.moc"
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";
 
@@ -115,15 +117,6 @@ void KAlarmPrefDlg::display()
 	if (!mInstance)
 	{
 		mInstance = new KAlarmPrefDlg;
-		if (DialogScroll<KAlarmPrefDlg>::heightReduction())
-		{
-			// Evaluating the scroll size and then displaying the dialog
-			// doesn't adjust the dialog size to fit the minimum height of
-			// the pages. The only way to size the dialog correctly seems
-			// to be to delete the dialog and create it a second time!?!
-			delete mInstance;
-			mInstance = new KAlarmPrefDlg;
-		}
 		QSize s;
 		if (KAlarm::readConfigWindowSize(PREF_DIALOG_NAME, s))
 			mInstance->resize(s);
@@ -142,7 +135,8 @@ void KAlarmPrefDlg::display()
 }
 
 KAlarmPrefDlg::KAlarmPrefDlg()
-	: KPageDialog()
+	: KPageDialog(),
+	  mShown(false)
 {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setObjectName("PrefDlg");    // used by LikeBack
@@ -151,39 +145,39 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 	setDefaultButton(Ok);
 	setFaceType(List);
 	showButtonSeparator(true);
-	//setIconListAllVisible(true);
+	mTabScrollGroup = new StackedScrollGroup(this, this);
 
-	mMiscPage = new MiscPrefTab;
+	mMiscPage = new MiscPrefTab(mTabScrollGroup);
 	mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab General preferences", "General"));
 	mMiscPageItem->setHeader(i18nc("@title General preferences", "General"));
 	mMiscPageItem->setIcon(KIcon(DesktopIcon("preferences-other")));
 	addPage(mMiscPageItem);
 
-	mTimePage = new TimePrefTab;
+	mTimePage = new TimePrefTab(mTabScrollGroup);
 	mTimePageItem = new KPageWidgetItem(mTimePage, i18nc("@title:tab", "Time & Date"));
 	mTimePageItem->setHeader(i18nc("@title", "Time and Date"));
 	mTimePageItem->setIcon(KIcon(DesktopIcon("preferences-system-time")));
 	addPage(mTimePageItem);
 
-	mStorePage = new StorePrefTab;
+	mStorePage = new StorePrefTab(mTabScrollGroup);
 	mStorePageItem = new KPageWidgetItem(mStorePage, i18nc("@title:tab", "Storage"));
 	mStorePageItem->setHeader(i18nc("@title", "Alarm Storage"));
 	mStorePageItem->setIcon(KIcon(DesktopIcon("system-file-manager")));
 	addPage(mStorePageItem);
 
-	mEmailPage = new EmailPrefTab;
+	mEmailPage = new EmailPrefTab(mTabScrollGroup);
 	mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab Email preferences", "Email"));
 	mEmailPageItem->setHeader(i18nc("@title", "Email Alarm Settings"));
 	mEmailPageItem->setIcon(KIcon(DesktopIcon("internet-mail")));
 	addPage(mEmailPageItem);
 
-	mViewPage = new ViewPrefTab;
+	mViewPage = new ViewPrefTab(mTabScrollGroup);
 	mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
 	mViewPageItem->setHeader(i18nc("@title", "View Settings"));
 	mViewPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-theme")));
 	addPage(mViewPageItem);
 
-	mEditPage = new EditPrefTab;
+	mEditPage = new EditPrefTab(mTabScrollGroup);
 	mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
 	mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
 	mEditPageItem->setIcon(KIcon(DesktopIcon("document-properties")));
@@ -281,21 +275,30 @@ void KAlarmPrefDlg::restore(bool defaults)
 */
 QSize KAlarmPrefDlg::minimumSizeHint() const
 {
-	if (!DialogScroll<KAlarmPrefDlg>::sized())
+	if (!mTabScrollGroup->sized())
 	{
-		KAlarmPrefDlg* thisvar = const_cast<KAlarmPrefDlg*>(this);
-		QSize s = DialogScroll<KAlarmPrefDlg>::initMinimumHeight(thisvar);
+		QSize s = mTabScrollGroup->adjustSize();
 		if (s.isValid())
 		{
-			if (DialogScroll<KAlarmPrefDlg>::heightReduction())
+			if (mTabScrollGroup->heightReduction())
 			{
-				s = QSize(s.width(), s.height() - DialogScroll<KAlarmPrefDlg>::heightReduction());
-				thisvar->resize(s);
+				s = QSize(s.width(), s.height() - mTabScrollGroup->heightReduction());
+				const_cast<KAlarmPrefDlg*>(this)->resize(s);
 			}
 			return s;
 		}
 	}
 	return KDialog::minimumSizeHint();
+}
+
+void KAlarmPrefDlg::showEvent(QShowEvent* e)
+{
+	KDialog::showEvent(e);
+	if (!mShown)
+	{
+		mTabScrollGroup->adjustSize(true);
+		mShown = true;
+	}
 }
 
 /******************************************************************************
@@ -315,8 +318,9 @@ void KAlarmPrefDlg::resizeEvent(QResizeEvent* re)
 =============================================================================*/
 int PrefsTabBase::mIndentWidth = 0;
 
-PrefsTabBase::PrefsTabBase()
-	: mLabelsAligned(false)
+PrefsTabBase::PrefsTabBase(StackedScrollGroup* scrollGroup)
+	: StackedScrollWidget(scrollGroup),
+	  mLabelsAligned(false)
 {
 	mTopWidget = new KVBox(this);
 	mTopWidget->setMargin(0);
@@ -374,8 +378,8 @@ void PrefsTabBase::showEvent(QShowEvent*)
 = Class MiscPrefTab
 =============================================================================*/
 
-MiscPrefTab::MiscPrefTab()
-	: PrefsTabBase()
+MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
+	: PrefsTabBase(scrollGroup)
 {
 	QGroupBox* group = new QGroupBox(i18nc("@title:group", "Run Mode"), topWidget());
 	QVBoxLayout* vlayout = new QVBoxLayout(group);
@@ -548,8 +552,8 @@ void MiscPrefTab::slotOtherTerminalToggled(bool on)
 = Class TimePrefTab
 =============================================================================*/
 
-TimePrefTab::TimePrefTab()
-	: PrefsTabBase()
+TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
+	: PrefsTabBase(scrollGroup)
 {
 	// Default time zone
 	ItemBox* itemBox = new ItemBox(topWidget());
@@ -762,8 +766,8 @@ void TimePrefTab::apply(bool syncToDisc)
 = Class StorePrefTab
 =============================================================================*/
 
-StorePrefTab::StorePrefTab()
-	: PrefsTabBase(),
+StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
+	: PrefsTabBase(scrollGroup),
 	  mCheckKeepChanges(false)
 {
 	// Which resource to save to
@@ -890,8 +894,8 @@ void StorePrefTab::slotClearArchived()
 = Class EmailPrefTab
 =============================================================================*/
 
-EmailPrefTab::EmailPrefTab()
-	: PrefsTabBase(),
+EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
+	: PrefsTabBase(scrollGroup),
 	  mAddressChanged(false),
 	  mBccAddressChanged(false)
 {
@@ -1116,21 +1120,22 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
 = Class EditPrefTab
 =============================================================================*/
 
-EditPrefTab::EditPrefTab()
-	: PrefsTabBase()
+EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
+	: PrefsTabBase(scrollGroup)
 {
 #define DEFSETTING "The default setting for <interface>%1</interface> in the alarm edit dialog."
 
 	KTabWidget* tabs = new KTabWidget(topWidget());
-	KVBox* topGeneral = new KVBox();
+	StackedGroupT<KVBox>* tabgroup = new StackedGroupT<KVBox>(tabs);
+	StackedWidgetT<KVBox>* topGeneral = new StackedWidgetT<KVBox>(tabgroup);
 	topGeneral->setMargin(KDialog::marginHint()/2);
 	topGeneral->setSpacing(KDialog::spacingHint());
 	tabs->addTab(topGeneral, i18nc("@title:tab", "General"));
-	KVBox* topTypes = new KVBox();
+	StackedWidgetT<KVBox>* topTypes = new StackedWidgetT<KVBox>(tabgroup);
 	topTypes->setMargin(KDialog::marginHint()/2);
 	topTypes->setSpacing(KDialog::spacingHint());
 	tabs->addTab(topTypes, i18nc("@title:tab", "Alarm Types"));
-	KVBox* topFontColour = new KVBox();
+	StackedWidgetT<KVBox>* topFontColour = new StackedWidgetT<KVBox>(tabgroup);
 	topFontColour->setMargin(KDialog::marginHint()/2);
 	topFontColour->setSpacing(KDialog::spacingHint());
 	tabs->addTab(topFontColour, i18nc("@title:tab", "Font & Color"));
@@ -1481,8 +1486,8 @@ QString EditPrefTab::validate()
 = Class ViewPrefTab
 =============================================================================*/
 
-ViewPrefTab::ViewPrefTab()
-	: PrefsTabBase()
+ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
+	: PrefsTabBase(scrollGroup)
 {
 	KTabWidget* tabs = new KTabWidget(topWidget());
 	KVBox* topGeneral = new KVBox();

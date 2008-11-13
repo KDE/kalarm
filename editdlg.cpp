@@ -26,7 +26,6 @@
 #include "buttongroup.h"
 #include "checkbox.h"
 #include "deferdlg.h"
-#include "dialogscroll.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "latecancel.h"
@@ -39,6 +38,7 @@
 #include "reminder.h"
 #include "shellprocess.h"
 #include "spinbox.h"
+#include "stackedwidgets.h"
 #include "templatepickdlg.h"
 #include "timeedit.h"
 #include "timespinbox.h"
@@ -233,9 +233,10 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
 	}
-	mTabs = new TabWidget(mainWidget);
+	mTabs = new KTabWidget(mainWidget);
+	mTabScrollGroup = new StackedScrollGroup(this, mTabs);
 
-	DialogScroll<EditAlarmDlg>* mainScroll = new DialogScroll<EditAlarmDlg>();
+	StackedScrollWidget* mainScroll = new StackedScrollWidget(mTabScrollGroup);
 	mTabs->addTab(mainScroll, i18nc("@title:tab", "Alarm"));
 	mMainPageIndex = 0;
 	PageFrame* mainPage = new PageFrame(mainScroll);
@@ -246,7 +247,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	topLayout->setSpacing(spacingHint());
 
 	// Recurrence tab
-	DialogScroll<EditAlarmDlg>* recurScroll = new DialogScroll<EditAlarmDlg>();
+	StackedScrollWidget* recurScroll = new StackedScrollWidget(mTabScrollGroup);
 	mTabs->addTab(recurScroll, QString());
 	mRecurPageIndex = 1;
 	KVBox* recurTab = new KVBox();
@@ -759,7 +760,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 			bool defer = mDeferGroup && !mDeferGroup->isHidden();
 			s.setHeight(s.height() + (defer ? mDeferGroupHeight : 0));
 			if (!defer)
-				DialogScroll<EditAlarmDlg>::setSized();
+				mTabScrollGroup->setSized();
 			resize(s);
 		}
 	}
@@ -775,9 +776,8 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 */
 void EditAlarmDlg::slotResize()
 {
-	mTabs->updateTabSizes();
-	DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this), true);
-	QSize s = minimumSizeHint();
+	QSize s = mTabScrollGroup->adjustSize(true);
+	s = minimumSizeHint();
 	if (height() > s.height())
 	{
 		// Resize to slightly greater than the minimum height.
@@ -794,7 +794,7 @@ void EditAlarmDlg::slotResize()
 */
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
-	if (isVisible())
+	if (isVisible() && mDeferGroupHeight)
 	{
 		QSize s = re->size();
 		s.setHeight(s.height() - (!mDeferGroup || mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
@@ -1050,16 +1050,7 @@ void EditAlarmDlg::showOptions(bool more)
 	type_showOptions(more);
 	mRecurrenceEdit->showMoreOptions(more);
 	mShowingMore = more;
-	if (more)
-	{
-		mTabs->updateTabSizes();
-		DialogScroll<EditAlarmDlg>::initMinimumHeight(const_cast<EditAlarmDlg*>(this), true);
-	}
-	else
-	{
-		resize(minimumSizeHint());
-		QTimer::singleShot(0, this, SLOT(slotResize()));
-	}
+	QTimer::singleShot(0, this, SLOT(slotResize()));
 }
 
 /******************************************************************************
@@ -1135,7 +1126,7 @@ void EditAlarmDlg::slotShowMainPage()
 	else
 	{
 		// Set scroll position to top, since it otherwise jumps randomly
-		DialogScroll<EditAlarmDlg>* main = static_cast<DialogScroll<EditAlarmDlg>*>(mTabs->widget(0));
+		StackedScrollWidget* main = static_cast<StackedScrollWidget*>(mTabs->widget(0));
 		main->verticalScrollBar()->setValue(0);
 	}
 	if (mTimeWidget)
@@ -1266,38 +1257,4 @@ bool EditAlarmDlg::isTimedRecurrence() const
 void EditAlarmDlg::showMainPage()
 {
 	mTabs->setCurrentIndex(mMainPageIndex);
-}
-
-
-/*=============================================================================
-=  Class TabWidget
-=  KTabWidget whose minimumSizeHint() reflects the minimum size hints of all
-=  its individual tabs.
-=============================================================================*/
-void TabWidget::updateTabSizes()
-{
-	QStackedWidget* stack = findChild<QStackedWidget*>();
-	if (!stack)
-		return;
-	stack->updateGeometry();
-	int ht = 0;
-	for (int i = 0, count = stack->count();  i < count;  ++i)
-		ht = qMax(ht, stack->widget(i)->minimumSizeHint().height());
-	QSize s(stack->minimumSizeHint().width(), ht);
-	stack->setMinimumSize(s);
-	stack->resize(s);
-}
-
-QSize TabWidget::minimumSizeHint() const
-{
-	QEvent e(QEvent::LayoutRequest);
-	const_cast<TabWidget*>(this)->event(&e);
-	QStackedWidget* stack = findChild<QStackedWidget*>();
-	if (!stack)
-		return KTabWidget::minimumSizeHint();
-	int ht = 0;
-	for (int i = 0, end = count();  i < end;  ++i)
-		ht = qMax(ht, widget(i)->minimumSizeHint().height());
-	QSize sz = KTabWidget::minimumSizeHint();
-	return QSize(sz.width(), ht + sz.height() - stack->minimumSizeHint().height());
 }

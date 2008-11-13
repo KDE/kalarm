@@ -52,7 +52,6 @@
 #include <kstandardshortcut.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
-#include <kwindowsystem.h>
 #include <kicon.h>
 #include <kdebug.h>
 
@@ -1294,18 +1293,6 @@ void writeConfigWindowSize(const char* window, const QSize& size, int splitterWi
 	if (splitterWidth >= 0)
 		config.writeEntry(QString::fromLatin1("Splitter %1").arg(desktop->width()), splitterWidth);
 	config.sync();
-}
-
-/******************************************************************************
-* Return the size of the usable area of the desktop.
-*/
-QRect desktopWorkArea()
-{
-#ifdef Q_WS_X11
-	return KWindowSystem::workArea();
-#else
-	return qApp->desktop()->availableGeometry();
-#endif
 }
 
 /******************************************************************************

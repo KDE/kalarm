@@ -21,6 +21,7 @@ set(libkalarm_SRCS
 	lib/combobox.cpp 
 	lib/dateedit.cpp 
 	lib/datetime.cpp 
+	lib/desktop.cpp
 	lib/itembox.cpp
 	lib/label.cpp 
 	lib/messagebox.cpp 
@@ -35,6 +36,7 @@ set(libkalarm_SRCS
 	lib/slider.cpp 
 	lib/spinbox.cpp 
 	lib/spinbox2.cpp 
+	lib/stackedwidgets.cpp
 	lib/lineedit.cpp 
 	lib/synchtimer.cpp
 )

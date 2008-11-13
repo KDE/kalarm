@@ -20,6 +20,18 @@
 
 #include "kalarm.h"
 
+#include "alarmcalendar.h"
+#include "deferdlg.h"
+#include "desktop.h"
+#include "editdlg.h"
+#include "functions.h"
+#include "kalarmapp.h"
+#include "mainwindow.h"
+#include "preferences.h"
+#include "shellprocess.h"
+#include "synchtimer.h"
+#include "messagewin.moc"
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -66,17 +78,6 @@
 #include <phonon/volumefadereffect.h>
 #include <kdebug.h>
 #include <ktoolinvocation.h>
-
-#include "alarmcalendar.h"
-#include "deferdlg.h"
-#include "editdlg.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "shellprocess.h"
-#include "synchtimer.h"
-#include "messagewin.moc"
 
 using namespace KCal;
 
