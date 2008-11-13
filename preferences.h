@@ -24,8 +24,6 @@
 #include "kalarm.h"
 
 #include <QObject>
-#include <QColor>
-#include <QFont>
 #include <QDateTime>
 class KTimeZone;
 namespace LibKHolidays { class KHolidays; }
