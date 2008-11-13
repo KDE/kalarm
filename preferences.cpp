@@ -91,6 +91,7 @@ Preferences::Preferences()
 	QObject::connect(this, SIGNAL(base_StartOfDayChanged(const QDateTime&)), SLOT(startDayChange(const QDateTime&)));
 	QObject::connect(this, SIGNAL(base_TimeZoneChanged(const QString&)), SLOT(timeZoneChange(const QString&)));
 	QObject::connect(this, SIGNAL(base_HolidayRegionChanged(const QString&)), SLOT(holidaysChange(const QString&)));
+	QObject::connect(this, SIGNAL(base_WorkTimeChanged(const QDateTime&, const QDateTime&, int)), SLOT(workTimeChange(const QDateTime&, const QDateTime&, int)));
 }
 
 /******************************************************************************
@@ -211,7 +212,7 @@ void Preferences::setWorkDays(const QBitArray& dayBits)
 
 void Preferences::workTimeChange(const QDateTime& start, const QDateTime& end, int days)
 {
-	QBitArray dayBits;
+	QBitArray dayBits(7);
 	for (int i = 0;  i < 7;  ++i)
 		if (days & (1 << i))
 			dayBits.setBit(i);
