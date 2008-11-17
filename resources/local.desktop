@@ -43,6 +43,7 @@ Comment[pt]=Oferece o acesso a um calendário de alarmes guardado num único fic
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes armazenado em um único arquivo local
 Comment[sv]=Ger tillgång till en alarmkalender lagrad i en enda lokal fil
 Comment[uk]=Надає доступ до календаря нагадувань, який зберігається у окремому локальному файлі
+Comment[x-test]=xxProvides access to an alarm calendar stored in a single local filexx
 Comment[zh_TW]=提供存取儲存在本地檔案中的鬧鐘行事曆的功能
 X-KDE-Library=kalarm_local
 Type=Service
