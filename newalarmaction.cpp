@@ -90,7 +90,7 @@ void NewAlarmAction::slotInitMenu()
 */
 void NewAlarmAction::slotSelected(QAction* action)
 {
-	QMap<QAction*, EditAlarmDlg::Type>::ConstIterator it = mTypes.find(action);
+	QMap<QAction*, EditAlarmDlg::Type>::ConstIterator it = mTypes.constFind(action);
 	if (it != mTypes.constEnd())
 		emit selected(it.value());
 }

@@ -47,7 +47,7 @@ KMessageBox::ButtonCode MessageBox::getContinueDefault(const QString& dontAskAga
 	ButtonCode defaultButton = Continue;
 	if (!dontAskAgainName.isEmpty())
 	{
-		QMap<QString, ButtonCode>::ConstIterator it = mContinueDefaults.find(dontAskAgainName);
+		QMap<QString, ButtonCode>::ConstIterator it = mContinueDefaults.constFind(dontAskAgainName);
 		if (it != mContinueDefaults.constEnd())
 			defaultButton = it.value();
 	}
