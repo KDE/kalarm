@@ -128,18 +128,18 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 	if (alarms.isEmpty())
 		return EMPTY;
 
-	QString property = event->customProperty(KCalendar::APPNAME, STATUS_PROPERTY);
+	const QString property = event->customProperty(KCalendar::APPNAME, STATUS_PROPERTY);
 	if (!property.isEmpty())
 	{
 		// There's a X-KDE-KALARM-TYPE property.
 		// It consists of the event type, plus an optional parameter.
-		PropertyMap::ConstIterator it = properties.find(property);
+		PropertyMap::ConstIterator it = properties.constFind(property);
 		if (it != properties.constEnd())
 			return it.value();
 		int i = property.indexOf(SC);
 		if (i < 0)
 			return EMPTY;
-		it = properties.find(property.left(i));
+		it = properties.constFind(property.left(i));
 		if (it == properties.constEnd())
 			return EMPTY;
 		if (param)

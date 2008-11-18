@@ -219,7 +219,7 @@ emit invalidate(this);  // necessary until load changes only is fixed
 				if (ev  &&  changes.indexOf(ev) < 0)
 				{
 kDebug(KARES_DEBUG) << "Loading" << id;
-					ModifiedMap::ConstIterator mit = oldLastModified.find(id);
+					ModifiedMap::ConstIterator mit = oldLastModified.constFind(id);
 					if (mit != oldLastModified.constEnd()  &&  mit.value() == readLastModified(fileName))
 					{
 						// The file hasn't changed, and its event is unchanged
