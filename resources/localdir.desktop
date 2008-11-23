@@ -39,6 +39,7 @@ Comment[el]=Προσφέρει πρόσβαση σε ημερολόγιο ειδ
 Comment[gl]=Permite acceder a un calendario de alarmas almacenado nun directorio local no que cada elemento do calendario se almacena nun ficheiro diferente
 Comment[nb]=Gir tilgang til en varslingskalender lagret i en lokal mappe, der hver  kalenderoppføring er lagret i en separat fil
 Comment[nds]=Stellt Togriep op en binnen en lokalen Orner wohrten Alarm-Kalenner praat, binnen den elk Kalennerindrag as enkelte Datei sekert is.
+Comment[nn]=Gjev tilgang til alarmkalendrar lagra i ei lokal mappe, der kvart kalenderelement vert lagra i ei eiga fil.
 Comment[pt]=Oferece o acesso a um calendário de alarmes guardado numa pasta local; cada item do calendário é guardado num ficheiro em separado
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes armazenado em um único arquivo local, onde cada item do calendário é armazenado em um arquivo separado
 Comment[sv]=Ger tillgång till en alarmkalender lagrad i en lokal katalog, där varje kalenderobjekt är lagrat i en separat fil
