@@ -36,6 +36,7 @@ Name[x-test]=xxAlarms in Remote Filexx
 Name[zh_CN]=远程文件中的提醒事项
 Name[zh_TW]=遠端檔案的鬧鐘
 Comment=Provides access to an alarm calendar in a remote file using KDE's network framework KIO
+Comment[ca]=Proporciona l'accés a un calendari d'alarmes en un fitxer remot usant la infraestructura KIO de xarxa del KDE
 Comment[el]=Προσφέρει πρόσβαση ημερολογίου ειδοποιήσεων σε ένα απομακρυσμένο αρχείου με τη χρήση του  συστήματος KIO του KDE
 Comment[gl]=Permite acceder a un calendario de alarmas dun ficheiro remoto empregando a infraestrutura de rede KIO do KDE
 Comment[ja]=KDE のネットワークフレームワーク KIO を使って、リモートファイルに保存されているアラームカレンダーへのアクセスを提供します
