@@ -91,7 +91,7 @@ static const char PREF_DIALOG_NAME[] = "PrefDialog";
 // %W = temporary command file to execute in terminal, with 'sleep 86400' appended
 static QString xtermCommands[] = {
 	QLatin1String("xterm -sb -hold -title %t -e %c"),
-	QLatin1String("konsole --noclose -T %t -e ${SHELL:-sh} -c %c"),
+	QLatin1String("konsole --noclose -p tabtitle=%t -e ${SHELL:-sh} -c %c"),
 	QLatin1String("gnome-terminal -t %t -e %W"),
 	QLatin1String("eterm --pause -T %t -e %C"),    // some systems use eterm...
 	QLatin1String("Eterm --pause -T %t -e %C"),    // while some use Eterm
