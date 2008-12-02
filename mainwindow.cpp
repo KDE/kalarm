@@ -396,6 +396,7 @@ void MainWindow::hideEvent(QHideEvent* he)
 */
 void MainWindow::initActions()
 {
+	KShortcut dummy;
 	KActionCollection* actions = actionCollection();
 
 	mActionTemplates = new KAction(i18nc("@action", "&Templates..."), this);
@@ -408,14 +409,17 @@ void MainWindow::initActions()
 
 	mActionNewDisplay = NewAlarmAction::newDisplayAlarmAction(this);
 	actions->addAction(QLatin1String("newDisplay"), mActionNewDisplay);
+	mActionNewDisplay->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 	connect(mActionNewDisplay, SIGNAL(triggered(bool)), SLOT(slotNewDisplay()));
 
 	mActionNewCommand = NewAlarmAction::newCommandAlarmAction(this);
 	actions->addAction(QLatin1String("newCommand"), mActionNewCommand);
+	mActionNewCommand->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 	connect(mActionNewCommand, SIGNAL(triggered(bool)), SLOT(slotNewCommand()));
 
 	mActionNewEmail = NewAlarmAction::newEmailAlarmAction(this);
 	actions->addAction(QLatin1String("newEmail"), mActionNewEmail);
+	mActionNewEmail->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 	connect(mActionNewEmail, SIGNAL(triggered(bool)), SLOT(slotNewEmail()));
 
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
@@ -522,6 +526,8 @@ void MainWindow::initActions()
 	mResourceSelector->initActions(actions);
 	setStandardToolBarMenuEnabled(true);
 	createGUI(UI_FILE);
+	// Load menu and toolbar settings
+	applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 
 	mContextMenu = static_cast<KMenu*>(factory()->container("listContext", this));
 	mActionsMenu = static_cast<KMenu*>(factory()->container("actions", this));
