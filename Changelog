@@ -1,6 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.1.0 --- 13 November 2008 ===
+=== Version 2.1.1 --- 2 December 2008 ===
+- Allow global shortcuts for New Alarm actions.
+- Fix toolbar configuration being lost after quitting KAlarm.
+
+=== Version 2.1.0 (KDE 4.2.0 beta1) --- 13 November 2008 ===
 - Add option to exclude holidays from recurring alarms.
 - Provide More/Less Options button in edit alarm dialogue.
 - Improve Configuration dialogue layout, split pages into tabs.
