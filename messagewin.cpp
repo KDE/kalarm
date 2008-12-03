@@ -112,10 +112,7 @@ class MessageText : public KTextEdit
 		int scrollBarWidth() const      { return verticalScrollBar()->width(); }
 		void setBackgroundColour(const QColor& c)
 		{
-			QPalette pal = palette();
-			pal.setColor(backgroundRole(), c);
-			setPalette(pal);
-			pal = viewport()->palette();
+			QPalette pal = viewport()->palette();
 			pal.setColor(viewport()->backgroundRole(), c);
 			viewport()->setPalette(pal);
 		}
