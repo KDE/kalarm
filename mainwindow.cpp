@@ -511,6 +511,8 @@ void MainWindow::initActions()
 	mResourceSelector->initActions(actions);
 	setStandardToolBarMenuEnabled(true);
 	createGUI(UI_FILE);
+	// Load menu and toolbar settings
+	applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 
 	mContextMenu = static_cast<KMenu*>(factory()->container("listContext", this));
 	mActionsMenu = static_cast<KMenu*>(factory()->container("actions", this));
