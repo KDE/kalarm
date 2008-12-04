@@ -1626,36 +1626,6 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 	return result;
 }
 
-/******************************************************************************
-*  Return the supplied string with any accelerator code stripped out.
-*/
-QString stripAccel(const QString& text)
-{
-	int len = text.length();
-	QString out(text.unicode(), len);
-	QChar *corig = (QChar*)out.unicode();
-	QChar *cout  = corig;
-	QChar *cin   = cout;
-	while (len)
-	{
-		if (*cin == QLatin1Char('&'))
-		{
-			++cin;
-			--len;
-			if (!len)
-				break;
-		}
-		*cout = *cin;
-		++cout;
-		++cin;
-		--len;
-	}
-	int newlen = cout - corig;
-	if (newlen != out.length())
-		out.truncate(newlen);
-	return out;
-}
-
 } // namespace KAlarm
 
 

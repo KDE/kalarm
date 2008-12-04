@@ -496,12 +496,12 @@ void MainWindow::initActions()
 		QAction * act = KStandardAction::undo(this, 0, actions);
 		undoShortcut     = KShortcut(act->shortcuts());
 		undoText         = act->text();
-		undoTextStripped = KAlarm::stripAccel(undoText);
+		undoTextStripped = KGlobal::locale()->removeAcceleratorMarker(undoText);
 		delete act;
 		act = KStandardAction::redo(this, 0, actions);
 		redoShortcut     = KShortcut(act->shortcuts());
 		redoText         = act->text();
-		redoTextStripped = KAlarm::stripAccel(redoText);
+		redoTextStripped = KGlobal::locale()->removeAcceleratorMarker(redoText);
 		delete act;
 	}
 	mActionUndo = new KToolBarPopupAction(KIcon("edit-undo"), undoText, this);
@@ -927,7 +927,7 @@ void MainWindow::slotFindActive(bool active)
 */
 void MainWindow::slotUndo()
 {
-	Undo::undo(this, KAlarm::stripAccel(mActionUndo->text()));
+	Undo::undo(this, KGlobal::locale()->removeAcceleratorMarker(mActionUndo->text()));
 }
 
 /******************************************************************************
@@ -935,7 +935,7 @@ void MainWindow::slotUndo()
 */
 void MainWindow::slotRedo()
 {
-	Undo::redo(this, KAlarm::stripAccel(mActionRedo->text()));
+	Undo::redo(this, KGlobal::locale()->removeAcceleratorMarker(mActionRedo->text()));
 }
 
 /******************************************************************************
