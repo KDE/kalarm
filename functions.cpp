@@ -44,6 +44,7 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+#include <kdbusservicestarter.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -76,16 +77,18 @@ const char*   KMAIL_DBUS_SERVICE      = "org.kde.kmail";
 const char*   KMAIL_DBUS_WINDOW_PATH  = "/kmail/kmail_mainwindow_1";
 const char*   KORG_DBUS_SERVICE       = "org.kde.korganizer";
 const char*   KORG_DBUS_IFACE         = "org.kde.korganizer.Korganizer";
-const char*   KORG_DBUS_PATH          = "/Korganizer";    // D-Bus object path of KOrganizer's notification interface
+// D-Bus object path of KOrganizer's notification interface
+#define       KORG_DBUS_PATH            "/Korganizer"
+#define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
 const char*   KORG_DBUS_WINDOW_PATH   = "/korganizer/MainWindow_1";
 const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
 
 const char*   ALARM_OPTS_FILE        = "alarmopts";
 const char*   DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
-bool sendToKOrganizer(const KAEvent*);
-bool deleteFromKOrganizer(const QString& eventID);
-bool runKOrganizer();
+KAlarm::UpdateStatus sendToKOrganizer(const KAEvent*);
+KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID);
+KAlarm::UpdateStatus runKOrganizer();
 QString uidKOrganizer(const QString& eventID);
 }
 
@@ -184,8 +187,9 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* resource, QWidget* msgParen
 		{
 			if ((options & ALLOW_KORG_UPDATE)  &&  event.copyToKOrganizer())
 			{
-				if (!sendToKOrganizer(newev))    // tell KOrganizer to show the event
-					status = UPDATE_KORG_ERR;
+				UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the event
+				if (st > status)
+					status = st;
 			}
 
 			// Update the window lists
@@ -241,11 +245,12 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 			events[i] = *newev;   // update event ID etc.
 			if (allowKOrgUpdate  &&  newev->copyToKOrganizer())
 			{
-				if (!sendToKOrganizer(newev))    // tell KOrganizer to show the event
+				UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the event
+				if (st != UPDATE_OK)
 				{
 					++warnKOrg;
-					if (status == UPDATE_OK)
-						status = UPDATE_KORG_ERR;
+					if (st > status)
+						status = st;
 				}
 			}
 
@@ -388,8 +393,9 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 			{
 				if (newev->copyToKOrganizer())
 				{
-					if (!sendToKOrganizer(newev))    // tell KOrganizer to show the new event
-						status = UPDATE_KORG_ERR;
+					UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the new event
+					if (st > status)
+						status = st;
 				}
 
 				// Remove "Don't show error messages again" for the old alarm
@@ -499,11 +505,12 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
 				// The event was shown in KOrganizer, so tell KOrganizer to
 				// delete it. But ignore errors, because the user could have
 				// manually deleted it from KOrganizer since it was set up.
-				if (!deleteFromKOrganizer(id))
+				UpdateStatus st = deleteFromKOrganizer(id);
+				if (st != UPDATE_OK)
 				{
 					++warnKOrg;
-					if (status == UPDATE_OK)
-						status = UPDATE_KORG_ERR;
+					if (st > status)
+						status = st;
 				}
 			}
 			if (archive  &&  event->toBeArchived())
@@ -647,11 +654,12 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 			}
 			if (newev->copyToKOrganizer())
 			{
-				if (!sendToKOrganizer(newev))    // tell KOrganizer to show the event
+				UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the event
+				if (st != UPDATE_OK)
 				{
 					++warnKOrg;
-					if (status == UPDATE_OK)
-						status = UPDATE_KORG_ERR;
+					if (st > status)
+						status = st;
 				}
 			}
 
@@ -784,13 +792,13 @@ void displayUpdateError(QWidget* parent, UpdateStatus status, UpdateError code, 
 		KMessageBox::error(parent, errmsg);
 	}
 	else if (showKOrgError)
-		displayKOrgUpdateError(parent, code, nKOrgAlarms);
+		displayKOrgUpdateError(parent, code, status, nKOrgAlarms);
 }
 
 /******************************************************************************
 * Display an error message corresponding to a specified alarm update error code.
 */
-void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
+void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateStatus korgError, int nAlarms)
 {
 	QString errmsg;
 	switch (code)
@@ -810,7 +818,15 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, int nAlarms)
 		case ERR_TEMPLATE:
 			return;
 	}
-	KMessageBox::error(parent, errmsg);
+	QString msg;
+/*TODO: uncomment after string freeze is lifted
+	if (korgError == UPDATE_KORG_ERRSTART)
+		msg = i18nc("@info", "<para>%1</para><para>(KOrganizer not fully started)</para>", errmsg);
+	else if (korgError == UPDATE_KORG_ERR)
+		msg = i18nc("@info", "<para>%1</para><para>(Error communicating with KOrganizer)</para>", errmsg);
+	else*/
+		msg = errmsg;
+	KMessageBox::error(parent, msg);
 }
 
 /******************************************************************************
@@ -874,12 +890,15 @@ void doEditNewAlarm(EditAlarmDlg* editDlg)
 		editDlg->getEvent(event, resource);
 
 		// Add the alarm to the displayed lists and to the calendar file
-		switch (addEvent(event, resource, editDlg))
+		UpdateStatus status = addEvent(event, resource, editDlg);
+		switch (status)
 		{
 			case UPDATE_FAILED:
 				return;
 			case UPDATE_KORG_ERR:
-				displayKOrgUpdateError(editDlg, ERR_ADD, 1);
+			case UPDATE_KORG_ERRSTART:
+			case UPDATE_KORG_FUNCERR:
+				displayKOrgUpdateError(editDlg, ERR_ADD, status, 1);
 				break;
 			default:
 				break;
@@ -974,8 +993,9 @@ void editAlarm(KAEvent* event, QWidget* parent)
 		}
 		else
 		{
-			if (modifyEvent(*event, newEvent, editDlg) == UPDATE_KORG_ERR)
-				displayKOrgUpdateError(editDlg, ERR_MODIFY, 1);
+			UpdateStatus status = modifyEvent(*event, newEvent, editDlg);
+			if (status != UPDATE_OK  &&  status <= UPDATE_KORG_ERR)
+				displayKOrgUpdateError(editDlg, ERR_MODIFY, status, 1);
 		}
 		Undo::saveEdit(undo, newEvent);
 
@@ -1636,7 +1656,7 @@ namespace {
 *  It will be held by KOrganizer as a simple event, without alarms - KAlarm
 *  is still responsible for alarming.
 */
-bool sendToKOrganizer(const KAEvent* event)
+KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 {
 	KCal::Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(event);
 	// Change the event ID to avoid duplicating the same unique ID as the original event
@@ -1673,66 +1693,106 @@ bool sendToKOrganizer(const KAEvent* event)
 	delete kcalEvent;
 
 	// Send the event to KOrganizer
-	if (!runKOrganizer())     // start KOrganizer if it isn't already running, and create its D-Bus interface
-		return false;
+	KAlarm::UpdateStatus st = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
+	if (st != KAlarm::UPDATE_OK)
+		return st;
 	QList<QVariant> args;
 	args << iCal;
 	QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("addIncidence"), args);
 	if (!reply.isValid())
 	{
+		if (reply.error().type() == QDBusError::UnknownObject)
+		{
+			kError()<<"addIncidence() D-Bus error: still starting";
+			return KAlarm::UPDATE_KORG_ERRSTART;
+		}
 		kError() << "addIncidence(" << uid << ") D-Bus call failed:" << reply.error().message();
-		return false;
+		return KAlarm::UPDATE_KORG_ERR;
 	}
 	if (!reply.value())
 	{
 		kError() << "addIncidence(" << uid << ") D-Bus call returned false";
-		return false;
+		return KAlarm::UPDATE_KORG_FUNCERR;
 	}
 	kDebug() << uid << ": success";
-	return true;
+	return KAlarm::UPDATE_OK;
 }
 
 /******************************************************************************
 *  Tell KOrganizer to delete an event from its calendar.
 */
-bool deleteFromKOrganizer(const QString& eventID)
+KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
 {
-	if (!runKOrganizer())     // start KOrganizer if it isn't already running, and create its D-Bus interface
-		return false;
+	KAlarm::UpdateStatus st = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
+	if (st != KAlarm::UPDATE_OK)
+		return st;
 	QString newID = uidKOrganizer(eventID);
 	QList<QVariant> args;
 	args << newID << true;
 	QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("deleteIncidence"), args);
 	if (!reply.isValid())
 	{
+		if (reply.error().type() == QDBusError::UnknownObject)
+		{
+			kError()<<"deleteIncidence() D-Bus error: still starting";
+			return KAlarm::UPDATE_KORG_ERRSTART;
+		}
 		kError() << "deleteIncidence(" << newID << ") D-Bus call failed:" << reply.error().message();
-		return false;
+		return KAlarm::UPDATE_KORG_ERR;
 	}
 	if (!reply.value())
 	{
 		kError() << "deleteIncidence(" << newID << ") D-Bus call returned false";
-		return false;
+		return KAlarm::UPDATE_KORG_FUNCERR;
 	}
 	kDebug() << newID << ": success";
-	return true;
+	return KAlarm::UPDATE_OK;
 }
 
 /******************************************************************************
 *  Start KOrganizer if not already running, and create its D-Bus interface.
 */
-bool runKOrganizer()
+KAlarm::UpdateStatus runKOrganizer()
 {
-	QString dbusService = KORG_DBUS_SERVICE;
-	if (!KAlarm::runProgram(QLatin1String("korganizer"), dbusService, KORG_DBUS_WINDOW_PATH, korgStartError))
-		return false;
-	if (korgInterface  &&  !korgInterface->isValid())
+	QString error, dbusService;
+	int result = KDBusServiceStarter::self()->findServiceFor("DBUS/Organizer", QString(), &error, &dbusService);
+	if (result)
+	{
+		kWarning() << "Unable to start DBUS/Organizer:" << dbusService << error;
+		return KAlarm::UPDATE_KORG_ERR;
+	}
+	// If Kontact is running, there is be a load() method which needs to be called
+	// to load KOrganizer into Kontact. But if KOrganizer is running independently,
+	// the load() method doesn't exist.
+	QDBusInterface iface(KORG_DBUS_SERVICE, KORG_DBUS_LOAD_PATH, "org.kde.KUniqueApplication");
+	if (!iface.isValid())
+	{
+		kWarning() << "Unable to access "KORG_DBUS_LOAD_PATH" D-Bus interface:" << iface.lastError().message();
+		return KAlarm::UPDATE_KORG_ERR;
+	}
+	QDBusReply<bool> reply = iface.call("load");
+	if ((!reply.isValid() || !reply.value())
+	&&  iface.lastError().type() != QDBusError::UnknownMethod)
+	{
+		kWarning() << "Loading KOrganizer failed:" << iface.lastError().message();
+		return KAlarm::UPDATE_KORG_ERR;
+	}
+
+	// KOrganizer has been started, but it may not have the necessary
+	// D-Bus interface available yet.
+	if (!korgInterface  ||  !korgInterface->isValid())
 	{
 		delete korgInterface;
-		korgInterface = 0;
-	}
-	if (!korgInterface)
 		korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, KORG_DBUS_PATH, KORG_DBUS_IFACE);
-	return true;
+		if (!korgInterface->isValid())
+		{
+			kWarning() << "Unable to access "KORG_DBUS_PATH" D-Bus interface:" << korgInterface->lastError().message();
+			delete korgInterface;
+			korgInterface = 0;
+			return KAlarm::UPDATE_KORG_ERRSTART;
+		}
+	}
+	return KAlarm::UPDATE_OK;
 }
 
 /******************************************************************************

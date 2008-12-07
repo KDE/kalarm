@@ -49,14 +49,17 @@ namespace KAlarm
 /** Return codes from fileType() */
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
 /** Return codes from calendar update functions.
- *  The codes are ordered as far as possible by severity.
+ *  The codes are ordered by severity, so...
+ *  DO NOT CHANGE THE ORDER OF THESE VALUES!
  */
 enum UpdateStatus {
-	UPDATE_OK,          // update succeeded
-	UPDATE_KORG_ERR,    // update succeeded, but KOrganizer update failed
-	UPDATE_ERROR,       // update failed partially
-	UPDATE_FAILED,      // update failed completely
-	SAVE_FAILED         // calendar was updated in memory, but save failed
+	UPDATE_OK,            // update succeeded
+	UPDATE_KORG_FUNCERR,  // update succeeded, but KOrganizer reported an error updating
+	UPDATE_KORG_ERRSTART, // update succeeded, but KOrganizer update failed (KOrganizer not fully started)
+	UPDATE_KORG_ERR,      // update succeeded, but KOrganizer update failed
+	UPDATE_ERROR,         // update failed partially
+	UPDATE_FAILED,        // update failed completely
+	SAVE_FAILED           // calendar was updated in memory, but save failed
 };
 /** Error codes supplied as parameter to displayUpdateError() */
 enum UpdateError { ERR_ADD, ERR_MODIFY, ERR_DELETE, ERR_REACTIVATE, ERR_TEMPLATE };
@@ -131,7 +134,7 @@ UpdateStatus        reactivateEvents(KAEvent::List&, QStringList& ineligibleIDs,
 UpdateStatus        enableEvents(KAEvent::List&, bool enable, QWidget* msgParent = 0);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
-void                displayKOrgUpdateError(QWidget* parent, UpdateError, int nAlarms);
+void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateStatus korgError, int nAlarms);
 
 bool                convTimeString(const QByteArray& tzString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,

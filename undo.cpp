@@ -66,6 +66,7 @@ class UndoItem
 		static int        mLastId;
 		static Error      mRestoreError;         // error code valid only if restore() returns 0
 		static Warning    mRestoreWarning;       // warning code set by restore()
+		static KAlarm::UpdateStatus mRestoreWarningKorg; // KOrganizer error status set by restore()
 		static int        mRestoreWarningCount;  // item count for mRestoreWarning (to allow i18n messages to work correctly)
 
 	protected:
@@ -367,6 +368,7 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 {
 	UndoItem::mRestoreError   = UndoItem::ERR_NONE;
 	UndoItem::mRestoreWarning = UndoItem::WARN_NONE;
+	UndoItem::mRestoreWarningKorg = KAlarm::UPDATE_OK;
 	UndoItem::mRestoreWarningCount = 0;
 	List& list = (type == UNDO) ? mUndoList : mRedoList;
 	if (i < list.count()  &&  list[i]->type() == type)
@@ -391,7 +393,7 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
 				default:
 					return true;
 			}
-			KAlarm::displayKOrgUpdateError(parent, errcode, UndoItem::mRestoreWarningCount);
+			KAlarm::displayKOrgUpdateError(parent, errcode, UndoItem::mRestoreWarningKorg, UndoItem::mRestoreWarningCount);
 			return true;
 		}
 		case UndoItem::ERR_NOT_FOUND:  err = i18nc("@info/plain", "Alarm not found");  break;
@@ -587,10 +589,11 @@ int Undo::findItem(int id, Undo::Type type)
 =  Class: UndoItem
 =  A single undo action.
 =============================================================================*/
-int               UndoItem::mLastId = 0;
-UndoItem::Error   UndoItem::mRestoreError;
-UndoItem::Warning UndoItem::mRestoreWarning;
-int               UndoItem::mRestoreWarningCount;
+int                  UndoItem::mLastId = 0;
+UndoItem::Error      UndoItem::mRestoreError;
+UndoItem::Warning    UndoItem::mRestoreWarning;
+KAlarm::UpdateStatus UndoItem::mRestoreWarningKorg;
+int                  UndoItem::mRestoreWarningCount;
 
 /******************************************************************************
 *  Constructor.
@@ -784,24 +787,31 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 	switch (calendar())
 	{
 		case KCalEvent::ACTIVE:
+		{
 			if (setArchive)
 				event.setArchive();
 			// Archive it if it has already triggered
-			switch (KAlarm::deleteEvent(event, true))
+			KAlarm::UpdateStatus status = KAlarm::deleteEvent(event, true);
+			switch (status)
 			{
 				case KAlarm::UPDATE_ERROR:
 				case KAlarm::UPDATE_FAILED:
 				case KAlarm::SAVE_FAILED:
 					mRestoreError = ERR_CREATE;
 					break;
+				case KAlarm::UPDATE_KORG_FUNCERR:
+				case KAlarm::UPDATE_KORG_ERRSTART:
 				case KAlarm::UPDATE_KORG_ERR:
 					mRestoreWarning = WARN_KORG_DELETE;
 					++mRestoreWarningCount;
+					if (status > mRestoreWarningKorg)
+						mRestoreWarningKorg = status;
 					break;
 				default:
 					break;
 			}
 			break;
+		}
 		case KCalEvent::TEMPLATE:
 			if (KAlarm::deleteTemplate(event.id()) != KAlarm::UPDATE_OK)
 				mRestoreError = ERR_TEMPLATE;
@@ -904,22 +914,29 @@ UndoItem* UndoEdit::restore()
 	switch (calendar())
 	{
 		case KCalEvent::ACTIVE:
-			switch (KAlarm::modifyEvent(newEvent, *mOldEvent))
+		{
+			KAlarm::UpdateStatus status = KAlarm::modifyEvent(newEvent, *mOldEvent);
+			switch (status)
 			{
 				case KAlarm::UPDATE_ERROR:
 				case KAlarm::UPDATE_FAILED:
 				case KAlarm::SAVE_FAILED:
 					mRestoreError = ERR_CREATE;
 					break;
+				case KAlarm::UPDATE_KORG_FUNCERR:
+				case KAlarm::UPDATE_KORG_ERRSTART:
 				case KAlarm::UPDATE_KORG_ERR:
 					mRestoreWarning = WARN_KORG_MODIFY;
 					++mRestoreWarningCount;
+					if (status > mRestoreWarningKorg)
+						mRestoreWarningKorg = status;
 					// fall through to default
 				default:
 					KAlarm::setDontShowErrors(mOldEvent->id(), mDontShowErrors);
 					break;
 			}
 			break;
+		}
 		case KCalEvent::TEMPLATE:
 			if (KAlarm::updateTemplate(*mOldEvent) != KAlarm::UPDATE_OK)
 				mRestoreError = ERR_TEMPLATE;
@@ -995,11 +1012,16 @@ UndoItem* UndoDelete::restore()
 			{
 				// It was archived when it was deleted
 				mEvent->setCategory(KCalEvent::ARCHIVED);
-				switch (KAlarm::reactivateEvent(*mEvent, mResource))
+				KAlarm::UpdateStatus status = KAlarm::reactivateEvent(*mEvent, mResource);
+				switch (status)
 				{
+					case KAlarm::UPDATE_KORG_FUNCERR:
+					case KAlarm::UPDATE_KORG_ERRSTART:
 					case KAlarm::UPDATE_KORG_ERR:
 						mRestoreWarning = WARN_KORG_ADD;
 						++mRestoreWarningCount;
+						if (status > mRestoreWarningKorg)
+							mRestoreWarningKorg = status;
 						break;
 					case KAlarm::UPDATE_ERROR:
 					case KAlarm::UPDATE_FAILED:
@@ -1012,11 +1034,16 @@ UndoItem* UndoDelete::restore()
 			}
 			else
 			{
-				switch (KAlarm::addEvent(*mEvent, mResource, 0, true))
+				KAlarm::UpdateStatus status = KAlarm::addEvent(*mEvent, mResource, 0, true);
+				switch (status)
 				{
+					case KAlarm::UPDATE_KORG_FUNCERR:
+					case KAlarm::UPDATE_KORG_ERRSTART:
 					case KAlarm::UPDATE_KORG_ERR:
 						mRestoreWarning = WARN_KORG_ADD;
 						++mRestoreWarningCount;
+						if (status > mRestoreWarningKorg)
+							mRestoreWarningKorg = status;
 						break;
 					case KAlarm::UPDATE_ERROR:
 					case KAlarm::UPDATE_FAILED:

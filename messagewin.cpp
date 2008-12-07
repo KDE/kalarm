@@ -1556,8 +1556,8 @@ void MessageWin::slotEdit()
 			Undo::saveAdd(event, resource);
 		}
 
-		if (status == KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(editDlg, KAlarm::ERR_MODIFY, 1);
+		if (status != KAlarm::UPDATE_OK  &&  status <= KAlarm::UPDATE_KORG_ERR)
+			KAlarm::displayKOrgUpdateError(editDlg, KAlarm::ERR_MODIFY, status, 1);
 		KAlarm::outputAlarmWarnings(editDlg, &event);
 
 		// Close the alarm window
