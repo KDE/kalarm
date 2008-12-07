@@ -44,6 +44,7 @@
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+#include <kdbusservicestarter.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -76,7 +77,9 @@ const char*   KMAIL_DBUS_SERVICE      = "org.kde.kmail";
 const char*   KMAIL_DBUS_WINDOW_PATH  = "/kmail/kmail_mainwindow_1";
 const char*   KORG_DBUS_SERVICE       = "org.kde.korganizer";
 const char*   KORG_DBUS_IFACE         = "org.kde.korganizer.Korganizer";
-const char*   KORG_DBUS_PATH          = "/Korganizer";    // D-Bus object path of KOrganizer's notification interface
+// D-Bus object path of KOrganizer's notification interface
+#define       KORG_DBUS_PATH            "/Korganizer"
+#define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
 const char*   KORG_DBUS_WINDOW_PATH   = "/korganizer/MainWindow_1";
 const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
 
@@ -1754,20 +1757,48 @@ bool deleteFromKOrganizer(const QString& eventID)
 }
 
 /******************************************************************************
-*  Start KOrganizer if not already running, and create its D-Bus interface.
+* Start KOrganizer if not already running, and create its D-Bus interface.
 */
 bool runKOrganizer()
 {
-	QString dbusService = KORG_DBUS_SERVICE;
-	if (!KAlarm::runProgram(QLatin1String("korganizer"), dbusService, KORG_DBUS_WINDOW_PATH, korgStartError))
+	QString error, dbusService;
+	int result = KDBusServiceStarter::self()->findServiceFor("DBUS/Organizer", QString(), &error, &dbusService);
+	if (result)
+	{
+		kWarning() << "Unable to start DBUS/Organizer:" << dbusService << error;
 		return false;
-	if (korgInterface  &&  !korgInterface->isValid())
+	}
+	// If Kontact is running, there is be a load() method which needs to be called
+	// to load KOrganizer into Kontact. But if KOrganizer is running independently,
+	// the load() method doesn't exist.
+	QDBusInterface iface(KORG_DBUS_SERVICE, KORG_DBUS_LOAD_PATH, "org.kde.KUniqueApplication");
+	if (!iface.isValid())
+	{
+		kWarning() << "Unable to access "KORG_DBUS_LOAD_PATH" D-Bus interface:" << iface.lastError().message();
+		return false;
+	}
+	QDBusReply<bool> reply = iface.call("load");
+	if ((!reply.isValid() || !reply.value())
+	&&  iface.lastError().type() != QDBusError::UnknownMethod)
+	{
+		kWarning() << "Loading KOrganizer failed:" << iface.lastError().message();
+		return false;
+	}
+
+	// KOrganizer has been started, but it may not have the necessary
+	// D-Bus interface available yet.
+	if (!korgInterface  ||  !korgInterface->isValid())
 	{
 		delete korgInterface;
-		korgInterface = 0;
-	}
-	if (!korgInterface)
 		korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, KORG_DBUS_PATH, KORG_DBUS_IFACE);
+		if (!korgInterface->isValid())
+		{
+			kWarning() << "Unable to access "KORG_DBUS_PATH" D-Bus interface:" << korgInterface->lastError().message();
+			delete korgInterface;
+			korgInterface = 0;
+			return false;
+		}
+	}
 	return true;
 }
 
