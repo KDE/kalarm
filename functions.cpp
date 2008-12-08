@@ -1652,9 +1652,9 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 namespace {
 
 /******************************************************************************
-*  Tell KOrganizer to put an alarm in its calendar.
-*  It will be held by KOrganizer as a simple event, without alarms - KAlarm
-*  is still responsible for alarming.
+* Tell KOrganizer to put an alarm in its calendar.
+* It will be held by KOrganizer as a simple event, without alarms - KAlarm
+* is still responsible for alarming.
 */
 KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 {
@@ -1711,7 +1711,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 	}
 	if (!reply.value())
 	{
-		kError() << "addIncidence(" << uid << ") D-Bus call returned false";
+		kDebug() << "addIncidence(" << uid << ") D-Bus call returned false";
 		return KAlarm::UPDATE_KORG_FUNCERR;
 	}
 	kDebug() << uid << ": success";
@@ -1719,7 +1719,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 }
 
 /******************************************************************************
-*  Tell KOrganizer to delete an event from its calendar.
+* Tell KOrganizer to delete an event from its calendar.
 */
 KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
 {
@@ -1742,7 +1742,7 @@ KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
 	}
 	if (!reply.value())
 	{
-		kError() << "deleteIncidence(" << newID << ") D-Bus call returned false";
+		kDebug() << "deleteIncidence(" << newID << ") D-Bus call returned false";
 		return KAlarm::UPDATE_KORG_FUNCERR;
 	}
 	kDebug() << newID << ": success";
@@ -1750,7 +1750,7 @@ KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
 }
 
 /******************************************************************************
-*  Start KOrganizer if not already running, and create its D-Bus interface.
+* Start KOrganizer if not already running, and create its D-Bus interface.
 */
 KAlarm::UpdateStatus runKOrganizer()
 {
