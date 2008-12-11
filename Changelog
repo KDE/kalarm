@@ -1,7 +1,9 @@
 KAlarm Change Log
 
-=== Version 1.5.5 --- 13 October 2008 ===
+=== Version 1.5.5 --- 10 December 2008 ===
 - Require a real double click to accept the selected template in pick list.
+- Fix failure to update alarms in KOrganizer when Kontact is running but
+  Kontact's calendar component is not loaded.
 - Fix inability to change or cancel alarm deferral times.
 - Prevent defer dialogue date being set outside the allowed range.
 

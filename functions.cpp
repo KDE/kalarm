@@ -47,6 +47,8 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <dcopclient.h>
+#include <dcopref.h>
+#include <kdcopservicestarter.h>
 #include <kdebug.h>
 
 #include <libkcal/event.h>
@@ -61,13 +63,13 @@ namespace
 bool        resetDaemonQueued = false;
 QCString    korganizerName = "korganizer";
 QString     korgStartError;
-const char* KORG_DCOP_OBJECT  = "KOrganizerIface";
+#define     KORG_DCOP_OBJECT    "KOrganizerIface"
 const char* KORG_DCOP_WINDOW  = "KOrganizer MainWindow";
 const char* KMAIL_DCOP_WINDOW = "kmail-mainwindow#1";
 
 bool sendToKOrganizer(const KAEvent&);
 bool deleteFromKOrganizer(const QString& eventID);
-inline bool runKOrganizer()   { return KAlarm::runProgram("korganizer", KORG_DCOP_WINDOW, korganizerName, korgStartError); }
+bool runKOrganizer();
 }
 
 
@@ -1021,6 +1023,41 @@ bool deleteFromKOrganizer(const QString& eventID)
 	}
 	kdError(5950) << "sendToKOrganizer(): KOrganizer deleteEvent(" << newID << ") dcop call failed\n";
 	return false;
+}
+
+/******************************************************************************
+* Start KOrganizer if not already running, and create its DCOP interface.
+*/
+bool runKOrganizer()
+{
+	QString error;
+	QCString dcopService;
+	int result = KDCOPServiceStarter::self()->findServiceFor("DCOP/Organizer", QString::null, QString::null, &error, &dcopService);
+	if (result)
+	{
+		kdDebug(5950) << "Unable to start DCOP/Organizer: " << dcopService << " " << error << endl;
+		return false;
+	}
+	// If Kontact is running, there is be a load() method which needs to be called
+	// to load KOrganizer into Kontact. But if KOrganizer is running independently,
+	// the load() method doesn't exist.
+	QCString dummy;
+	if (!kapp->dcopClient()->findObject(dcopService, KORG_DCOP_OBJECT, "", QByteArray(), dummy, dummy))
+	{
+		DCOPRef ref(dcopService, dcopService); // talk to the KUniqueApplication or its Kontact wrapper
+		DCOPReply reply = ref.call("load()");
+		if (!reply.isValid() || !(bool)reply)
+		{
+			kdWarning(5950) << "Error loading " << dcopService << endl;
+			return false;
+		}
+		if (!kapp->dcopClient()->findObject(dcopService, KORG_DCOP_OBJECT, "", QByteArray(), dummy, dummy))
+		{
+			kdWarning(5950) << "Unable to access KOrganizer's "KORG_DCOP_OBJECT" DCOP object" << endl;
+			return false;
+		}
+	}
+	return true;
 }
 
 } // namespace
