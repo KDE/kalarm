@@ -1,7 +1,7 @@
 /*
  *  spinbox.h  -  spin box with shift-click step value and read-only option
  *  Program:  kalarm
- *  Copyright © 2002-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2006,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ class SpinBox : public QSpinBox
 		void         init();
 		void         addValue(int change, bool current);
 		int          whichButton(const QPoint&);
-		bool         setShiftStepping(bool);
+		bool         setShiftStepping(bool, int currentButton);
 
 		enum { NO_BUTTON, UP, DOWN };
 

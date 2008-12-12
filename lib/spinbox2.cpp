@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright (c) 2001 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2005,2008 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,8 @@
 #include <qobjectlist.h>
 #include <qapplication.h>
 #include <qpixmap.h>
+#include <qcursor.h>
+#include <qtimer.h>
 #include <qwmatrix.h>
 
 #include "spinbox2.moc"
@@ -84,7 +86,7 @@ void SpinBox2::init()
 	mUpdown2->setSelectOnStep(false);    // always false
 	setFocusProxy(mSpinbox);
 	mUpdown2->setFocusPolicy(QWidget::NoFocus);
-	mSpinMirror = new SpinMirror(mUpdown2, this);
+	mSpinMirror = new SpinMirror(mUpdown2, mUpdown2Frame, this);
 	if (!mirrorStyle(style()))
 		mSpinMirror->hide();    // hide mirrored spin buttons when they are inappropriate
 	connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
@@ -322,8 +324,8 @@ void SpinBox2::stepPage(int step)
 		}
 		int adjust = mSpinbox->shiftStepAdjustment(oldValue, step);
 		if (adjust == -step
-		&&  (step > 0  &&  oldValue + step >= mSpinbox->maxValue()
-		  || step < 0  &&  oldValue + step <= mSpinbox->minValue()))
+		&&  ((step > 0  &&  oldValue + step >= mSpinbox->maxValue())
+		  || (step < 0  &&  oldValue + step <= mSpinbox->minValue())))
 			adjust = 0;    // allow stepping to the minimum or maximum value
 		mSpinbox->addValue(adjust + step);
 	}
@@ -389,9 +391,10 @@ void ExtraSpinBox::paintEvent(QPaintEvent* e)
 = Class SpinMirror
 =============================================================================*/
 
-SpinMirror::SpinMirror(SpinBox* spinbox, QWidget* parent, const char* name)
+SpinMirror::SpinMirror(SpinBox* spinbox, QFrame* spinFrame, QWidget* parent, const char* name)
 	: QCanvasView(new QCanvas, parent, name),
 	  mSpinbox(spinbox),
+	  mSpinFrame(spinFrame),
 	  mReadOnly(false)
 {
 	setVScrollBarMode(QScrollView::AlwaysOff);
@@ -409,6 +412,11 @@ void SpinMirror::setNormalButtons(const QPixmap& px)
 {
 	mNormalButtons = px;
 	redraw(mNormalButtons);
+}
+
+void SpinMirror::redraw()
+{
+	redraw(QPixmap::grabWidget(mSpinFrame, 0, 0));
 }
 
 void SpinMirror::redraw(const QPixmap& px)
@@ -432,16 +440,57 @@ void SpinMirror::resize(int w, int h)
 */
 void SpinMirror::contentsMouseEvent(QMouseEvent* e)
 {
-	if (!mReadOnly)
-	{
-		QPoint pt = contentsToViewport(e->pos());
-		pt.setX(pt.x() + mSpinbox->upRect().left());
-		QApplication::postEvent(mSpinWidget, new QMouseEvent(e->type(), pt, e->button(), e->state()));
+	if (mReadOnly)
+		return;
+	QPoint pt = contentsToViewport(e->pos());
+	pt.setX(pt.x() + mSpinbox->upRect().left());
+	QApplication::postEvent(mSpinWidget, new QMouseEvent(e->type(), pt, e->button(), e->state()));
 
-		// If the mouse button has been released, display unpressed spin buttons
-		if (e->type() == QEvent::MouseButtonRelease)
-			redraw(mNormalButtons);
+	// If the mouse button has been pressed or released, refresh the spin buttons
+	switch (e->type())
+	{
+		case QEvent::MouseButtonPress:
+		case QEvent::MouseButtonRelease:
+			QTimer::singleShot(0, this, SLOT(redraw()));
+			break;
+		default:
+			break;
 	}
+}
+
+/******************************************************************************
+* Pass on all mouse events to the spinbox which we're covering up.
+*/
+void SpinMirror::contentsWheelEvent(QWheelEvent* e)
+{
+	if (mReadOnly)
+		return;
+	QPoint pt = contentsToViewport(e->pos());
+	pt.setX(pt.x() + mSpinbox->upRect().left());
+	QApplication::postEvent(mSpinWidget, new QWheelEvent(pt, e->delta(), e->state(), e->orientation()));
+}
+
+/******************************************************************************
+* Pass on to the main spinbox events which are needed to activate mouseover and
+* other graphic effects when the mouse cursor enters and leaves the widget.
+*/
+bool SpinMirror::event(QEvent* e)
+{
+	switch (e->type())
+	{
+		case QEvent::Leave:
+		case QEvent::Enter:
+			QApplication::postEvent(mSpinWidget, new QEvent(e->type()));
+			QTimer::singleShot(0, this, SLOT(redraw()));
+			break;
+		case QEvent::FocusIn:
+			mSpinbox->setFocus();
+			QTimer::singleShot(0, this, SLOT(redraw()));
+			break;
+		default:
+			break;
+	}
+	return QCanvasView::event(e);
 }
 
 
