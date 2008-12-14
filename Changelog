@@ -1,5 +1,9 @@
 KAlarm Change Log
 
+=== Version 2.0.7 --- 7 December 2008 ===
+- Fix failure to update alarms in KOrganizer when Kontact is running.
+- Fix toolbar configuration being lost after quitting KAlarm.
+
 === Version 2.0.6 (KDE 4.1.3) --- 22 October 2008 ===
 - Fix alarms not triggering correctly after laptop wakes from hibernation.
 - Fix inability to change or cancel alarm deferral times.
