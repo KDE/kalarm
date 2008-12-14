@@ -1,6 +1,7 @@
 KAlarm Change Log
 
-=== Version 2.0.7 --- 7 December 2008 ===
+=== Version 2.0.7 --- 14 December 2008 ===
+- Fix crash if KAlarm is activated again while restoring from previous session.
 - Fix failure to update alarms in KOrganizer when Kontact is running.
 - Fix toolbar configuration being lost after quitting KAlarm.
 
