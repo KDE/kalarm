@@ -64,6 +64,10 @@ int main(int argc, char *argv[])
 AutostartApp::AutostartApp()
 	: KApplication(false)       // initialise as non-GUI application
 {
+	// Disable session management: there is no state to save, and
+	// disabling prevents a crash on logout before this app exits.
+	disableSessionManagement();
+
 	// Login session is starting up - need to wait for it to complete
 	// in order to avoid starting the client before it is restored by
 	// the session (where applicable).

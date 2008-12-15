@@ -5,6 +5,7 @@ KAlarm Change Log
 - Fix failure to update alarms in KOrganizer when Kontact is running but
   Kontact's calendar component is not loaded.
 - Fix crash if KAlarm is activated again while restoring from previous session.
+- Fix kalarmautostart crash on logout while kalarmautostart is still running.
 - Fix toolbar configuration being lost after quitting KAlarm.
 
 === Version 2.1.0 (KDE 4.2.0 beta1) --- 13 November 2008 ===
