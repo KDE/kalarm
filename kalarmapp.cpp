@@ -1036,7 +1036,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 		{
 			if (!KSystemTrayIcon::isSystemTrayAvailable())
 				return false;
-			if (!MainWindow::count()  &&  wantShowInSystemTray())
+			if (!MainWindow::count())
 			{
 				creating = true;    // prevent main window constructor from creating an additional tray icon
 				parent = MainWindow::create();
