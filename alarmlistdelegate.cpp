@@ -19,46 +19,57 @@
  */
 
 #include "kalarm.h"
-
-#include <QAbstractProxyModel>
-#include <QMouseEvent>
-#include <QApplication>
-
-#include <kdebug.h>
+#include "alarmlistdelegate.moc"
 
 #include "resources/kcalendar.h"
 #include "alarmlistview.h"
 #include "alarmresources.h"
 #include "eventlistmodel.h"
 #include "functions.h"
-#include "alarmlistdelegate.moc"
+
+#include <kcolorscheme.h>
+#include <kdebug.h>
+
+#include <QAbstractProxyModel>
+#include <QMouseEvent>
+#include <QApplication>
 
 
 void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-	if (index.isValid()  &&  index.column() == EventListModel::TimeColumn)
+	QStyleOptionViewItem opt = option;
+	if (index.isValid())
 	{
-		QString str = index.data(Qt::DisplayRole).toString();
-		// Need to pad out spacing to align times without leading zeroes
-		int i = str.indexOf(" ~");    // look for indicator that leading zeroes are omitted
-		if (i >= 0)
+		if (opt.state & QStyle::State_Selected
+		&&  !index.data(EventListModel::EnabledRole).toBool())
 		{
-			QStyleOptionViewItem opt = option;
-			QVariant value;
-			value = index.data(Qt::ForegroundRole);
-			if (value.isValid())
-				opt.palette.setColor(QPalette::Text, value.value<QColor>());
-			int digitWidth = opt.fontMetrics.width("0");
-			QString date = str.left(i + 1);
-			int w = opt.fontMetrics.width(date) + digitWidth;
-			drawDisplay(painter, opt, opt.rect, date);
-			QRect rect(opt.rect);
-			rect.setLeft(rect.left() + w);
-			drawDisplay(painter, opt, rect, str.mid(i + 2));
-			return;
+			// Make the text colour for selected disabled alarms
+			// distinguishable from enabled alarms.
+			KColorScheme::adjustForeground(opt.palette, KColorScheme::InactiveText, QPalette::HighlightedText, KColorScheme::Selection);
+		}
+		if (index.column() == EventListModel::TimeColumn)
+		{
+			QString str = index.data(Qt::DisplayRole).toString();
+			// Need to pad out spacing to align times without leading zeroes
+			int i = str.indexOf(" ~");    // look for indicator that leading zeroes are omitted
+			if (i >= 0)
+			{
+				QVariant value;
+				value = index.data(Qt::ForegroundRole);
+				if (value.isValid())
+					opt.palette.setColor(QPalette::Text, value.value<QColor>());
+				int digitWidth = opt.fontMetrics.width("0");
+				QString date = str.left(i + 1);
+				int w = opt.fontMetrics.width(date) + digitWidth;
+				drawDisplay(painter, opt, opt.rect, date);
+				QRect rect(opt.rect);
+				rect.setLeft(rect.left() + w);
+				drawDisplay(painter, opt, rect, str.mid(i + 2));
+				return;
+			}
 		}
 	}
-	QItemDelegate::paint(painter, option, index);
+	QItemDelegate::paint(painter, opt, index);
 }
 
 QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const

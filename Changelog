@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.1.1 --- 15 December 2008 ===
+=== Version 2.1.1 --- 16 December 2008 ===
 - Allow global shortcuts for New Alarm actions.
+- Distinguish disabled from enabled alarm colour when highlighted in alarm list.
 - Fix failure to update alarms in KOrganizer when Kontact is running but
   Kontact's calendar component is not loaded.
 - Fix crash if KAlarm is activated again while restoring from previous session.

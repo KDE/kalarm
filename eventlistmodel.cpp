@@ -145,6 +145,8 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			break;   // use the default for normal active alarms
 		case StatusRole:
 			return event->category();
+		case EnabledRole:
+			return event->enabled();
 		default:
 			break;
 	}

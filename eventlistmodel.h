@@ -50,7 +50,8 @@ class EventListModel : public QAbstractTableModel
 		enum {   // additional roles
 			StatusRole = Qt::UserRole,  // return ACTIVE/ARCHIVED
 			ValueRole,                  // return numeric value
-			SortRole                    // return the value to use for sorting
+			SortRole,                   // return the value to use for sorting
+			EnabledRole                 // return true for enabled alarm, false for disabled
 		};
 
 		static EventListModel* alarms();
