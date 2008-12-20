@@ -1,14 +1,16 @@
 KAlarm Change Log
 
-=== Version 2.1.1 --- 16 December 2008 ===
-- Allow global shortcuts for New Alarm actions.
+=== Version 2.1.2 --- 16 December 2008 ===
 - Distinguish disabled from enabled alarm colour when highlighted in alarm list.
-- Fix failure to update alarms in KOrganizer when Kontact is running but
-  Kontact's calendar component is not loaded.
 - Fix crash if KAlarm is activated again while restoring from previous session.
 - Fix kalarmautostart crash on logout while kalarmautostart is still running.
 - Fix click on system tray icon not showing main window if 'Show in system tray'
   configuration setting deselected.
+
+=== Version 2.1.1 (KDE 4.2.0 beta2) --- 8 December 2008 ===
+- Allow global shortcuts for New Alarm actions.
+- Fix failure to update alarms in KOrganizer when Kontact is running but
+  Kontact's calendar component is not loaded.
 - Fix toolbar configuration being lost after quitting KAlarm.
 
 === Version 2.1.0 (KDE 4.2.0 beta1) --- 13 November 2008 ===
