@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 	KCmdLineArgs::addCmdLineOptions(options);
 
 	AutostartApp app;
+	KGlobal::locale()->insertCatalog("kalarm");
 	return app.exec();
 }
 
