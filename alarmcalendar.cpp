@@ -82,8 +82,7 @@ bool AlarmCalendar::initialiseCalendars()
 	AlarmResources* resources = AlarmResources::create(Preferences::timeZone(true), false);
 	if (!resources)
 	{
-		if (!AlarmResources::creationError().isEmpty())
-			KAlarmApp::displayFatalError(AlarmResources::creationError());
+		KAlarmApp::displayFatalError(AlarmResources::creationError());
 		return false;
 	}
 	resources->setAskDestinationPolicy(Preferences::askResource());
