@@ -54,6 +54,7 @@ Comment[pt_BR]=Fornece acesso a um calendário de alarmes em um arquivo remoto u
 Comment[sv]=Ger tillgång till en alarmkalender i en fjärrfil med användning av KDE:s I/O-ramverk
 Comment[uk]=Надає доступ до календаря нагадувань, який зберігається у віддаленому файлі, за допомогою мережевих засобів KIO KDE
 Comment[x-test]=xxProvides access to an alarm calendar in a remote file using KDE's network framework KIOxx
+Comment[zh_CN]=通过 KDE 网络框架 KIO，提供对存储在一个远程文件中的提醒日历的访问支持
 Comment[zh_TW]=提供存取使用 KDE 網路架構 KIO 儲存在遠端檔案中的鬧鐘行事曆的功能
 X-KDE-Library=kalarm_remote
 Type=Service
