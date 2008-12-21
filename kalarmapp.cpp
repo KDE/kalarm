@@ -218,20 +218,26 @@ bool KAlarmApp::restoreSession()
 				delete win;
 		}
 	}
-	startProcessQueue();      // start processing the execution queue
 
 	// Try to display the system tray icon if it is configured to be shown
-	if (MainWindow::count()  &&  wantShowInSystemTray())
+	if (trayParent  ||  wantShowInSystemTray())
 	{
-		displayTrayIcon(true, trayParent);
-		// Occasionally for no obvious reason, the main main window is
-		// shown when it should be hidden, so hide it just to be sure.
-		if (trayParent)
-			trayParent->hide();
+		if (!MainWindow::count())
+			kWarning() << "no main window to be restored!?";
+		else
+		{
+			displayTrayIcon(true, trayParent);
+			// Occasionally for no obvious reason, the main main window is
+			// shown when it should be hidden, so hide it just to be sure.
+			if (trayParent)
+				trayParent->hide();
+		}
 	}
 
 	--mActiveCount;
 	quitIf(0);           // quit if no windows are open
+
+	startProcessQueue();      // start processing the execution queue
 	return true;
 }
 
@@ -724,8 +730,20 @@ int KAlarmApp::newInstance()
 			exitCode = 1;
 		}
 	}
+
+	// If this is the first time through, redisplay any alarm message windows
+	// from last time.
 	if (firstInstance  &&  !dontRedisplay  &&  !exitCode)
-		MessageWin::redisplayAlarms();
+	{
+		/* First time through, so redisplay alarm message windows from last time.
+		 * But it is possible for session restoration in some circumstances to
+		 * not create any windows, in which case the alarm calendars will have
+		 * been deleted - if so, don't try to do anything. (This has been known
+		 * to happen under the Xfce desktop.)
+		 */
+		if (AlarmCalendar::resources())
+			MessageWin::redisplayAlarms();
+	}
 
 	--mActiveCount;
 	firstInstance = false;
