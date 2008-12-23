@@ -31,7 +31,7 @@
 
 
 #define DISP_ICON QLatin1String("window-new")
-#define CMD_ICON  QLatin1String("system-run")
+#define CMD_ICON  QLatin1String("new-command-alarm")
 #define MAIL_ICON QLatin1String("mail-message-new")
 #define DISP_KEY  QKeySequence(Qt::CTRL + Qt::Key_D)
 #define CMD_KEY   QKeySequence(Qt::CTRL + Qt::Key_C)

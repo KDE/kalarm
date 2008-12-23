@@ -1,6 +1,7 @@
 KAlarm Change Log
 
-=== Version 2.1.2 --- 16 December 2008 ===
+=== Version 2.1.2 --- 20 December 2008 ===
+- New KAlarm icon.
 - Distinguish disabled from enabled alarm colour when highlighted in alarm list.
 - Fix crash if KAlarm is activated again while restoring from previous session.
 - Fix kalarmautostart crash on logout while kalarmautostart is still running.
