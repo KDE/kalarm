@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.1.2 --- 20 December 2008 ===
+=== Version 2.1.2 --- 27 December 2008 ===
 - New KAlarm icon.
 - Distinguish disabled from enabled alarm colour when highlighted in alarm list.
+- Ensure alarm windows show on top of full-screen windows.
 - Fix crash if KAlarm is activated again while restoring from previous session.
 - Fix kalarmautostart crash on logout while kalarmautostart is still running.
 - Fix click on system tray icon not showing main window if 'Show in system tray'

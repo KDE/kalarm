@@ -96,6 +96,8 @@ static const char* KMAIL_DBUS_PATH      = "/KMail";
 static const int proximityButtonDelay = 1000;    // (milliseconds)
 static const int proximityMultiple = 10;         // multiple of button height distance from cursor for proximity
 
+static bool wantModal();
+
 // A text label widget which can be scrolled and copied with the mouse
 class MessageText : public KTextEdit
 {
@@ -152,7 +154,7 @@ QMap<QString, unsigned> MessageWin::mErrorMessages;
 *  displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
-	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (Preferences::modalMessages() ? 0 : Qt::X11BypassWindowManagerHint))),
+	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (wantModal() ? 0 : Qt::X11BypassWindowManagerHint))),
 	  mMessage(event->cleanText()),
 	  mFont(event->font()),
 	  mBgColour(event->bgColour()),
@@ -719,8 +721,9 @@ void MessageWin::initView()
 
 	topLayout->activate();
 	setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
+	bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
+	unsigned long wstate = (modal ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	WId winid = winId();
-	unsigned long wstate = (Preferences::modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWindowSystem::setState(winid, wstate);
 	KWindowSystem::setOnAllDesktops(winid, true);
 }
@@ -1717,4 +1720,23 @@ void MessageWin::clearErrorMessage(unsigned msg) const
 		else
 			mErrorMessages[mEventID] &= ~msg;
 	}
+}
+
+
+/******************************************************************************
+* Check whether the message window should be modal, i.e. with title bar etc.
+* Normally this follows the Preferences setting, but if there is a full screen
+* window displayed, on X11 the message window has to bypass the window manager
+* in order to display on top of it (which has the side effect that it will have
+* no window decoration).
+*/
+bool wantModal()
+{
+	bool modal = Preferences::modalMessages();
+	if (modal)
+	{
+		KWindowInfo wi = KWindowSystem::windowInfo(KWindowSystem::activeWindow(), NET::WMState);
+		modal = !(wi.valid()  &&  wi.hasState(NET::FullScreen));
+	}
+	return modal;
 }
