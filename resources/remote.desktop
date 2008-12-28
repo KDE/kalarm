@@ -50,6 +50,7 @@ Comment[nb]=Gir tilgang til en varslingskalender i en fil på nettverket, ved br
 Comment[nds]=Stellt mit dat In-/Utgaavmoduul vun KDE sien Nettwark-Rahmenwerk Togriep op en binnen en feern Datei wohrten Alarm-Kalenner praat.
 Comment[nl]=Geeft toegang naar een herinneringagenda in een extern bestand gebruikmakend van KIO, een netwerkonderdeel van KDE
 Comment[nn]=Gjev tilgang til alarmkalendrar lagra i ei ekstern fil ved bruk av nettverksrammeverket KIO
+Comment[pl]=Zapewnia dostęp do kalendarza alarmów w pliku zdalnymp przy pomocy systemu sieciowego KDE - KIO
 Comment[pt]=Oferece o acesso a um calendário de alarmes num ficheiro remoto, usando um KIO da plataforma de rede do KDE
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes em um arquivo remoto usando o KIO framework da rede do KDE
 Comment[sv]=Ger tillgång till en alarmkalender i en fjärrfil med användning av KDE:s I/O-ramverk
