@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.0.7 --- 16 December 2008 ===
+=== Version 2.0.7 --- 27 December 2008 ===
 - Distinguish disabled from enabled alarm colour when highlighted in alarm list.
+- Ensure alarm windows show on top of full-screen windows.
 - Fix crash if KAlarm is activated again while restoring from previous session.
 - Fix kalarmautostart crash on logout while kalarmautostart is still running.
 - Fix failure to update alarms in KOrganizer when Kontact is running.
