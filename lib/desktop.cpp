@@ -23,8 +23,8 @@
 #include <kwindowsystem.h>
 #else
 #include <QApplication>
-#endif
 #include <QDesktopWidget>
+#endif
 
 namespace KAlarm {
 
