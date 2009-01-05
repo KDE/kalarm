@@ -24,6 +24,7 @@
 #else
 #include <QApplication>
 #endif
+#include <QDesktopWidget>
 
 namespace KAlarm {
 
