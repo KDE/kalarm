@@ -380,7 +380,8 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	{
 		mReminder->setFixedSize(mReminder->sizeHint());
 		moreLayout->addWidget(mReminder, 0, Qt::AlignLeft);
-		connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), mReminder, SLOT(setDefaultUnits(const KDateTime&)));
+		if (mTimeWidget)
+			connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), mReminder, SLOT(setDefaultUnits(const KDateTime&)));
 	}
 
 	// Late cancel selector - default = allow late display
