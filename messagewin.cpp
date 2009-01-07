@@ -981,6 +981,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 		resource  = 0;
 		showEdit  = true;
 		showDefer = true;
+		kDebug() << event.id() << ": success";
 	}
 	return true;
 }
@@ -999,6 +1000,7 @@ bool MessageWin::reinstateFromDisplaying(const Event* kcalEvent, KAEvent& event,
 	if (resource  &&  !resource->isOpen())
 		resource = 0;
 	event.clearResourceID();
+	kDebug() << event.id() << ": success";
 	return true;
 }
 
