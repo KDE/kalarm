@@ -5,6 +5,7 @@ KAlarm Change Log
   from the displaying calendar.
 - Ignore events in calendar without usable alarms (which prevents them getting
   stuck in the alarm list, and fixes high CPU usage).
+- Show error message when New Template selected but no writable resource exists.
 
 === Version 2.1.3 (KDE 4.2 RC1) --- 5 January 2009 ===
 - Fix invalid alarm remaining in calendar when pre-alarm action failure message

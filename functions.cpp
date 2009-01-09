@@ -1,6 +1,6 @@
 /*  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -86,6 +86,7 @@ const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
 const char*   ALARM_OPTS_FILE        = "alarmopts";
 const char*   DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
+void editNewTemplate(EditAlarmDlg::Type, const KAEvent* preset, QWidget* parent);
 KAlarm::UpdateStatus sendToKOrganizer(const KAEvent*);
 KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID);
 KAlarm::UpdateStatus runKOrganizer();
@@ -932,18 +933,7 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
 */
 void editNewTemplate(EditAlarmDlg::Type type, QWidget* parent)
 {
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, type, true, parent);
-	if (editDlg->exec() == QDialog::Accepted)
-	{
-		KAEvent event;
-		AlarmResource* resource;
-		editDlg->getEvent(event, resource);
-
-		// Add the template to the displayed lists and to the calendar file
-		addTemplate(event, resource, editDlg);
-		Undo::saveAdd(event, resource);
-	}
-	delete editDlg;
+	::editNewTemplate(type, 0, parent);
 }
 
 /******************************************************************************
@@ -951,7 +941,30 @@ void editNewTemplate(EditAlarmDlg::Type type, QWidget* parent)
 */
 void editNewTemplate(const KAEvent* preset, QWidget* parent)
 {
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, preset, true, parent);
+	::editNewTemplate(EditAlarmDlg::Type(0), preset, parent);
+}
+
+} // namespace KAlarm
+namespace
+{
+
+/******************************************************************************
+* Create a new template.
+* 'preset' is non-null to base it on an existing event or template; otherwise,
+* the alarm type is set to 'type'.
+*/
+void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* parent)
+{
+	if (!AlarmResources::instance()->activeCount(AlarmResource::TEMPLATE, true))
+	{
+		KMessageBox::sorry(parent, i18nc("@info", "You must select a resource to save the alarm in"));
+		return;
+	}
+	EditAlarmDlg* editDlg;
+	if (preset)
+		editDlg = EditAlarmDlg::create(true, preset, true, parent);
+	else
+		editDlg = EditAlarmDlg::create(true, type, true, parent);
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent event;
@@ -959,11 +972,15 @@ void editNewTemplate(const KAEvent* preset, QWidget* parent)
 		editDlg->getEvent(event, resource);
 
 		// Add the template to the displayed lists and to the calendar file
-		addTemplate(event, resource, editDlg);
+		KAlarm::addTemplate(event, resource, editDlg);
 		Undo::saveAdd(event, resource);
 	}
 	delete editDlg;
 }
+
+} // namespace
+namespace KAlarm
+{
 
 /******************************************************************************
 * Open the Edit Alarm dialog to edit the specified alarm.
