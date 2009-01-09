@@ -819,12 +819,11 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateStatus korg
 			return;
 	}
 	QString msg;
-/*TODO: uncomment after string freeze is lifted
 	if (korgError == UPDATE_KORG_ERRSTART)
 		msg = i18nc("@info", "<para>%1</para><para>(KOrganizer not fully started)</para>", errmsg);
 	else if (korgError == UPDATE_KORG_ERR)
 		msg = i18nc("@info", "<para>%1</para><para>(Error communicating with KOrganizer)</para>", errmsg);
-	else*/
+	else
 		msg = errmsg;
 	KMessageBox::error(parent, msg);
 }
