@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.cpp  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,39 +41,24 @@
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
 	: KActionMenu(KIcon("document-new"), label, parent)
 {
-	QAction* act = menu()->addAction(KIcon(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@item:inmenu", "Display Alarm")));
-	act->setShortcut(DISP_KEY);
-	mTypes[act] = EditAlarmDlg::DISPLAY;
-	mCommandAction = menu()->addAction(KIcon(CMD_ICON), (templates ? i18nc("@item:inmenu", "&Command Alarm Template") : i18nc("@item:inmenu", "Command Alarm")));
-	mCommandAction->setShortcut(CMD_KEY);
+	mDisplayAction = new KAction(KIcon(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
+	menu()->addAction(mDisplayAction);
+	mTypes[mDisplayAction] = EditAlarmDlg::DISPLAY;
+	mCommandAction = new KAction(KIcon(CMD_ICON), (templates ? i18nc("@item:inmenu", "&Command Alarm Template") : i18nc("@action", "New Command Alarm")), parent);
+	menu()->addAction(mCommandAction);
 	mTypes[mCommandAction] = EditAlarmDlg::COMMAND;
-	act = menu()->addAction(KIcon(MAIL_ICON), (templates ? i18nc("@item:inmenu", "&Email Alarm Template") : i18nc("@item:inmenu", "Email Alarm")));
-	act->setShortcut(MAIL_KEY);
-	mTypes[act] = EditAlarmDlg::EMAIL;
+	mEmailAction = new KAction(KIcon(MAIL_ICON), (templates ? i18nc("@item:inmenu", "&Email Alarm Template") : i18nc("@action", "New Email Alarm")), parent);
+	menu()->addAction(mEmailAction);
+	mTypes[mEmailAction] = EditAlarmDlg::EMAIL;
+	if (!templates)
+	{
+		mDisplayAction->setShortcut(DISP_KEY);
+		mCommandAction->setShortcut(CMD_KEY);
+		mEmailAction->setShortcut(MAIL_KEY);
+	}
 	setDelayed(false);
 	connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
 	connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
-}
-
-KAction* NewAlarmAction::newDisplayAlarmAction(QObject* parent)
-{
-	KAction* act = new KAction(KIcon(DISP_ICON), i18nc("@action", "New Display Alarm"), parent);
-	act->setShortcut(DISP_KEY);
-	return act;
-}
-
-KAction* NewAlarmAction::newCommandAlarmAction(QObject* parent)
-{
-	KAction* act = new KAction(KIcon(CMD_ICON), i18nc("@action", "New Command Alarm"), parent);
-	act->setShortcut(CMD_KEY);
-	return act;
-}
-
-KAction* NewAlarmAction::newEmailAlarmAction(QObject* parent)
-{
-	KAction* act = new KAction(KIcon(MAIL_ICON), i18nc("@action", "New Email Alarm"), parent);
-	act->setShortcut(MAIL_KEY);
-	return act;
 }
 
 /******************************************************************************
