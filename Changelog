@@ -1,12 +1,19 @@
 KAlarm Change Log
 
-=== Version 1.5.5 --- 11 December 2008 ===
+=== Version 1.5.5 --- 9 January 2009 ===
 - Require a real double click to accept the selected template in pick list.
 - Make mouse wheel work, and fix highlighting, for left-hand time spinbox
   buttons in Plastik style.
+- Ensure alarm windows show on top of full-screen windows.
 - Fix failure to update alarms in KOrganizer when Kontact is running but
   Kontact's calendar component is not loaded.
 - Fix inability to change or cancel alarm deferral times.
+- Fix invalid alarm remaining in calendar when pre-alarm action failure message
+  is acknowledged before the alarm is deferred.
+- Prevent corrupt alarms if deferral reinstates from archived alarm instead of
+  from the displaying calendar.
+- Ignore events in calendar without usable alarms, which prevents them getting
+  stuck in the alarm list).
 - Prevent defer dialogue date being set outside the allowed range.
 
 === Version 1.5.4 (KDE 3.5.10) --- 18 August 2008 ===

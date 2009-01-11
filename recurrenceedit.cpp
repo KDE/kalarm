@@ -1224,11 +1224,7 @@ bool DayWeekRule::stateChanged() const
 DailyRule::DailyRule(bool readOnly, QWidget* parent, const char* name)
 	: DayWeekRule(i18n("day(s)"),
 	              i18n("Enter the number of days between repetitions of the alarm"),
-#if KDE_IS_VERSION(3,9,0)
 	              i18n("Select the days of the week on which the alarm is allowed to occur"),
-#else
-	              i18n("Select the days of the week on which to repeat the alarm"),
-#endif
 	              readOnly, parent, name)
 { }
 

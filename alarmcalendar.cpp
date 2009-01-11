@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2006,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -506,8 +506,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent)
 		for (Event::List::ConstIterator it = events.begin();  it != events.end();  ++it)
 		{
 			const Event* event = *it;
-			if (event->alarms().isEmpty())
-				continue;    // ignore events without alarms
+			if (event->alarms().isEmpty()  ||  !KAEvent(*event).valid())
+				continue;    // ignore events without alarms, or usable alarms
 			KAEvent::Status type = KAEvent::uidStatus(event->uid());
 			switch (type)
 			{
@@ -821,7 +821,7 @@ KCal::Event* AlarmCalendar::event(const QString& uniqueID)
 }
 
 /******************************************************************************
-* Return all events in the calendar which contain alarms.
+* Return all events in the calendar which contain usable alarms.
 */
 KCal::Event::List AlarmCalendar::events()
 {
@@ -831,7 +831,8 @@ KCal::Event::List AlarmCalendar::events()
 	KCal::Event::List::Iterator it = list.begin();
 	while (it != list.end())
 	{
-		if ((*it)->alarms().isEmpty())
+		KCal::Event* event = *it;
+		if (event->alarms().isEmpty()  ||  !KAEvent(*event).valid())
 			it = list.remove(it);
 		else
 			++it;
@@ -846,10 +847,8 @@ Event::List AlarmCalendar::eventsWithAlarms(const QDateTime& from, const QDateTi
 {
 	kdDebug(5950) << "AlarmCalendar::eventsWithAlarms(" << from.toString() << " - " << to.toString() << ")\n";
 	Event::List evnts;
-	if (!mCalendar)
-		return evnts;
 	QDateTime dt;
-	Event::List allEvents = mCalendar->rawEvents();
+	Event::List allEvents = events();   // ignore events without usable alarms
 	for (Event::List::ConstIterator it = allEvents.begin();  it != allEvents.end();  ++it)
 	{
 		Event* e = *it;

@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -87,6 +87,8 @@ static const char* KMAIL_DCOP_OBJECT = "KMailIface";
 static const int proximityButtonDelay = 1000;    // (milliseconds)
 static const int proximityMultiple = 10;         // multiple of button height distance from cursor for proximity
 
+static bool wantModal();
+
 // A text label widget which can be scrolled and copied with the mouse
 class MessageText : public QTextEdit
 {
@@ -143,7 +145,7 @@ QMap<QString, unsigned> MessageWin::mErrorMessages;
 */
 MessageWin::MessageWin(const KAEvent& event, const KAAlarm& alarm, bool reschedule_event, bool allowDefer)
 	: MainWindowBase(0, "MessageWin", WFLAGS | Qt::WGroupLeader | Qt::WStyle_ContextHelp
-	                                         | (Preferences::modalMessages() ? 0 : Qt::WX11BypassWM)),
+	                                         | (wantModal() ? 0 : Qt::WX11BypassWM)),
 	  mMessage(event.cleanText()),
 	  mFont(event.font()),
 	  mBgColour(event.bgColour()),
@@ -598,8 +600,10 @@ void MessageWin::initView()
 	topLayout->activate();
 	setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
 
+	bool modal = !(getWFlags() & Qt::WX11BypassWM);
+
+	unsigned long wstate = (modal ? NET::Modal : 0) | NET::Sticky | NET::KeepAbove;
 	WId winid = winId();
-	unsigned long wstate = (Preferences::modalMessages() ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
 	KWin::setState(winid, wstate);
 	KWin::setOnAllDesktops(winid, true);
 }
@@ -871,7 +875,6 @@ void MessageWin::slotPlayAudio()
 		initAudio(true);
 		if (!mPlayObject->object().isNull())
 			checkAudioPlay();
-#if KDE_VERSION >= 308
 		if (!mUsingKMix  &&  mVolume >= 0)
 		{
 			// Output error message now that everything else has been done.
@@ -884,7 +887,6 @@ void MessageWin::slotPlayAudio()
 				clearErrorMessage(ErrMsg_Volume);
 			}
 		}
-#endif
 	}
 #endif
 }
@@ -1395,7 +1397,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
 	// Don't prompt or delete the alarm from the display calendar if the session is closing
-	if (!theApp()->sessionClosingDown())
+	if (!mErrorWindow  &&  !theApp()->sessionClosingDown())
 	{
 		if (mConfirmAck  &&  !mNoCloseConfirm)
 		{
@@ -1636,6 +1638,26 @@ void MessageWin::clearErrorMessage(unsigned msg) const
 		else
 			mErrorMessages[mEventID] &= ~msg;
 	}
+}
+
+
+/******************************************************************************
+* Check whether the message window should be modal, i.e. with title bar etc.
+* Normally this follows the Preferences setting, but if there is a full screen
+* window displayed, on X11 the message window has to bypass the window manager
+* in order to display on top of it (which has the side effect that it will have
+* no window decoration).
+*/
+bool wantModal()
+{
+	bool modal = Preferences::modalMessages();
+	if (modal)
+	{
+		KWinModule wm(0, KWinModule::INFO_DESKTOP);
+		KWin::WindowInfo wi = KWin::windowInfo(wm.activeWindow(), NET::WMState);
+		modal = !(wi.valid()  &&  wi.hasState(NET::FullScreen));
+	}
+	return modal;
 }
 
 
