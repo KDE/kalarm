@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.h  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 #include <QMap>
 #include <kactionmenu.h>
 #include "editdlg.h"
-class QAction;
+class KAction;
 
 class NewAlarmAction : public KActionMenu
 {
@@ -32,9 +32,9 @@ class NewAlarmAction : public KActionMenu
 	public:
 		NewAlarmAction(bool templates, const QString& label, QObject* parent);
 		virtual ~NewAlarmAction() {}
-		static KAction* newDisplayAlarmAction(QObject* parent);
-		static KAction* newCommandAlarmAction(QObject* parent);
-		static KAction* newEmailAlarmAction(QObject* parent);
+		KAction* displayAlarmAction() const  { return mDisplayAction; }
+		KAction* commandAlarmAction() const  { return mCommandAction; }
+		KAction* emailAlarmAction() const    { return mEmailAction; }
 
 	signals:
 		void   selected(EditAlarmDlg::Type);
@@ -44,7 +44,9 @@ class NewAlarmAction : public KActionMenu
 		void   slotInitMenu();
 
 	private:
-		QAction* mCommandAction;
+		KAction* mDisplayAction;
+		KAction* mCommandAction;
+		KAction* mEmailAction;
 		QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };
 

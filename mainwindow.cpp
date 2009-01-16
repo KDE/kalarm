@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -405,19 +405,18 @@ void MainWindow::initActions()
 
 	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
 	actions->addAction(QLatin1String("new"), mActionNew);
-	connect(mActionNew, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
 
-	mActionNewDisplay = NewAlarmAction::newDisplayAlarmAction(this);
+	mActionNewDisplay = mActionNew->displayAlarmAction();
 	actions->addAction(QLatin1String("newDisplay"), mActionNewDisplay);
 	mActionNewDisplay->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 	connect(mActionNewDisplay, SIGNAL(triggered(bool)), SLOT(slotNewDisplay()));
 
-	mActionNewCommand = NewAlarmAction::newCommandAlarmAction(this);
+	mActionNewCommand = mActionNew->commandAlarmAction();
 	actions->addAction(QLatin1String("newCommand"), mActionNewCommand);
 	mActionNewCommand->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 	connect(mActionNewCommand, SIGNAL(triggered(bool)), SLOT(slotNewCommand()));
 
-	mActionNewEmail = NewAlarmAction::newEmailAlarmAction(this);
+	mActionNewEmail = mActionNew->emailAlarmAction();
 	actions->addAction(QLatin1String("newEmail"), mActionNewEmail);
 	mActionNewEmail->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 	connect(mActionNewEmail, SIGNAL(triggered(bool)), SLOT(slotNewEmail()));
