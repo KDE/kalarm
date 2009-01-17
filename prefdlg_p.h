@@ -41,6 +41,7 @@ class ButtonGroup;
 class RadioButton;
 class TimeEdit;
 class SpinBox;
+class TimeSpinBox;
 class SpecialActionsButton;
 class TimeZoneCombo;
 
@@ -91,6 +92,7 @@ class MiscPrefTab : public PrefsTabBase
 		QCheckBox*    mAutoStart;
 		QCheckBox*    mQuitWarn;
 		QCheckBox*    mConfirmAlarmDeletion;
+		TimeSpinBox*  mDefaultDeferTime;
 		ButtonGroup*  mXtermType;
 		KLineEdit*    mXtermCommand;
 		int           mXtermFirst;              // id of first terminal window radio button

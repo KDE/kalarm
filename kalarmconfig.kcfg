@@ -83,6 +83,11 @@
       <whatsthis context="@info:whatsthis"><para>Automatically start <application>KAlarm</application> whenever you start KDE.</para><para>This option should always be checked unless you intend to discontinue use of <application>KAlarm</application>.</para></whatsthis>
       <default>false</default>
     </entry>
+    <entry name="DefaultDeferTime" key="DeferTime" type="Int">
+      <label context="@label">Default defer time interval</label>
+      <whatsthis context="@info:whatsthis">Enter the default time interval (in minutes) to defer alarms, used by the Defer Alarm dialog.</whatsthis>
+      <default>5</default>
+    </entry>
     <entry name="AskResource" type="Bool">
       <label context="@label">Prompt for which resource to store in</label>
       <whatsthis context="@info:whatsthis"><para>When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.</para><para>Note that archived alarms are always stored in the default archived alarm resource.</para></whatsthis>

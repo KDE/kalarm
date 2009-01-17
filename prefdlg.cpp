@@ -409,6 +409,19 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
 	itemBox->setFixedHeight(itemBox->sizeHint().height());
 
+	// Default alarm deferral time
+	itemBox = new KHBox(topWidget());   // this is to allow left adjustment
+	KHBox* box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setSpacing(KDialog::spacingHint());
+	QLabel* label = new QLabel(i18nc("@label:spinbox", "Default defer time interval:"), box);
+	mDefaultDeferTime = new TimeSpinBox(1, 5999, box);
+	mDefaultDeferTime->setMinimumSize(mDefaultDeferTime->sizeHint());
+	box->setWhatsThis(i18nc("@info:whatsthis",
+	      "Enter the default time interval (hours & minutes) to defer alarms, used by the Defer Alarm dialog."));
+	label->setBuddy(mDefaultDeferTime);
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(itemBox->sizeHint().height());
+
 	// Terminal window to use for command alarms
 	group = new QGroupBox(i18nc("@title:group", "Terminal for Command Alarms"), topWidget());
 	group->setWhatsThis(i18nc("@info:whatsthis", "Choose which application to use when a command alarm is executed in a terminal window"));
@@ -471,6 +484,7 @@ void MiscPrefTab::restore(bool defaults)
 	mAutoStart->setChecked(Preferences::autoStart());
 	mQuitWarn->setChecked(Preferences::quitWarn());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
+	mDefaultDeferTime->setValue(Preferences::defaultDeferTime());
 	QString xtermCmd = Preferences::cmdXTermCommand();
 	int id = mXtermFirst;
 	if (!xtermCmd.isEmpty())
@@ -526,6 +540,9 @@ void MiscPrefTab::apply(bool syncToDisc)
 	b = mConfirmAlarmDeletion->isChecked();
 	if (b != Preferences::confirmAlarmDeletion())
 		Preferences::setConfirmAlarmDeletion(b);
+	int i = mDefaultDeferTime->value();
+	if (i != Preferences::defaultDeferTime())
+		Preferences::setDefaultDeferTime(i);
 	QString text = (xtermID < mXtermCount) ? xtermCommands[xtermID] : mXtermCommand->text();
 	if (text != Preferences::cmdXTermCommand())
 		Preferences::setCmdXTermCommand(text);
