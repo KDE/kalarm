@@ -1184,12 +1184,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   getMailHeader("Subject", content),
 				   body, sernum);
 	}
-	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
-	{
-		kDebug() << "URL";
-		action = KAEvent::FILE;
-		alarmText.setText(files[0].prettyUrl());
-	}
 #ifdef KMAIL_SUPPORTED
 	else if (KPIM::MailList::canDecode(data))
 	{
@@ -1209,15 +1203,74 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 #endif
 	else if (KCal::ICalDrag::fromMimeData(data, &calendar))
 	{
-		// iCalendar - ignore all but the first event
+		// iCalendar - If events are included, use the first event
 		kDebug() << "iCalendar";
 		KCal::Event::List events = calendar.rawEvents();
 		if (!events.isEmpty())
 		{
 			KAEvent ev(events[0]);
 			KAlarm::editNewAlarm(&ev, win);
+			return;
 		}
+		// If todos are included, use the first todo
+		KCal::Todo::List todos = calendar.rawTodos();
+		if (!todos.isEmpty())
+		{
+			KCal::Todo* todo = todos[0];
+			QString text;
+			bool summ = !todo->summary().isEmpty();
+			bool desc = !todo->description().isEmpty();
+			bool locn = !todo->location().isEmpty();
+			bool due  = todo->hasStartDate() && todo->hasDueDate() && todo->dtStart() != todo->dtDue(true);
+			bool titles = locn || due || (summ && desc);
+			if (summ && titles)
+				text = i18nc("@info/plain Todo calendar item's title field", "Title:") + '\t';
+			text += todo->summary() + '\n';
+			if (locn)
+				text += i18nc("@info/plain Todo calendar item's location field", "Location:") + '\t' + todo->location() + '\n';
+			KDateTime start;
+			if (todo->hasStartDate()  ||  todo->recurs())
+			{
+				start = todo->dtStart();
+				if (due)
+				{
+					QDateTime dt = todo->dtDue(true).dateTime();
+					text += i18nc("@info/plain Todo calendar item's due date/time", "Due:") + '\t';
+					if (todo->allDay())
+						text += KGlobal::locale()->formatDate(dt.date(), KLocale::ShortDate);
+					else
+						text += KGlobal::locale()->formatDateTime(dt);
+					text += '\n';
+				}
+			}
+			else if (todo->hasDueDate())
+				start = todo->dtDue(true);
+			if (desc)
+			{
+				if (!text.isEmpty())
+					text += '\n';
+				text += todo->description();
+			}
+			int flags = KAEvent::DEFAULT_FONT;
+			if (start.isDateOnly())
+				flags |= KAEvent::ANY_TIME;
+			KAEvent ev(start, text, Preferences::defaultBgColour(), Preferences::defaultFgColour(),
+			           QFont(), KAEvent::MESSAGE, 0, flags, true);
+			if (todo->recurs())
+			{
+				ev.setRecurrence(*todo->recurrence());
+				ev.setNextOccurrence(KDateTime::currentUtcDateTime());
+			}
+			ev.endChanges();
+			KAlarm::editNewAlarm(&ev, win);
+ 		}
 		return;
+	}
+	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
+	{
+		kDebug() << "URL";
+		action = KAEvent::FILE;
+		alarmText.setText(files[0].prettyUrl());
 	}
 	else if (data->hasText())
 	{
