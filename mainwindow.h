@@ -1,7 +1,7 @@
 /*
  *  mainwindow.h  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		virtual bool       eventFilter(QObject*, QEvent*);
 
 		static void        refresh();
-		static void        executeDragEnterEvent(QDragEnterEvent*, QWidget* recipient);
+		static void        executeDragEnterEvent(QDragEnterEvent*);
 		static void        executeDropEvent(MainWindow*, QDropEvent*);
 		static void        closeAll();
 		static MainWindow* toggleWindow(MainWindow*);
@@ -93,7 +93,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		virtual void   showEvent(QShowEvent*);
 		virtual void   hideEvent(QHideEvent*);
 		virtual void   closeEvent(QCloseEvent*);
-		virtual void   dragEnterEvent(QDragEnterEvent*);
+		virtual void   dragEnterEvent(QDragEnterEvent* e)  { executeDragEnterEvent(e); }
 		virtual void   dropEvent(QDropEvent*);
 		virtual void   saveProperties(KConfigGroup&);
 		virtual void   readProperties(const KConfigGroup&);

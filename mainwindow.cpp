@@ -1106,21 +1106,13 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 }
 
 /******************************************************************************
-*  Called when the drag cursor enters the window.
-*/
-void MainWindow::dragEnterEvent(QDragEnterEvent* e)
-{
-	executeDragEnterEvent(e, this);
-}
-
-/******************************************************************************
 *  Called when the drag cursor enters a main or system tray window, to accept
 *  or reject the dragged object.
 */
-void MainWindow::executeDragEnterEvent(QDragEnterEvent* e, QWidget* recipient)
+void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
 	const QMimeData* data = e->mimeData();
-	bool accept = KCal::ICalDrag::canDecode(data) ? (e->source()->window() != recipient)   // don't accept "text/calendar" objects from this window
+	bool accept = KCal::ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
 	                                           :    data->hasText()
 	                                             || KUrl::List::canDecode(data)
 	                                             || KPIM::MailList::canDecode(data);

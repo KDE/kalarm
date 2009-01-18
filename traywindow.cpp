@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -207,7 +207,7 @@ void TrayWindow::slotActivated(QSystemTrayIcon::ActivationReason reason)
 */
 void TrayWindow::dragEnterEvent(QDragEnterEvent* e)
 {
-	MainWindow::executeDragEnterEvent(e, 0);
+	MainWindow::executeDragEnterEvent(e);
 }
 
 /******************************************************************************
