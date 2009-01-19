@@ -49,8 +49,8 @@ class TemplateListFilterModel : public EventListFilterModel
 		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
 
 	private:
-		EventListModel::Type mTypesEnabled;  // hide types not in this mask
-		EventListModel::Type mTypeFilter;    // disable types not in this mask
+		EventListModel::Type mTypesEnabled;  // disable types not in this mask
+		EventListModel::Type mTypeFilter;    // hide types not in this mask
 };
 
 #endif // TEMPLATELISTFILTERMODEL_H
