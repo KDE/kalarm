@@ -56,7 +56,7 @@ bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&
 	if (mTypeFilter == EventListModel::ALL)
 		return true;
 	int type;
-	switch (static_cast<KAEvent::Action>(sourceModel()->data(sourceIndex, EventListModel::ValueRole).toInt()))
+	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
 	{
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;

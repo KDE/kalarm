@@ -27,6 +27,7 @@
 #include "eventlistmodel.h"
 #include "functions.h"
 #include "newalarmaction.h"
+#include "shellprocess.h"
 #include "templatelistfiltermodel.h"
 #include "templatelistview.h"
 #include "undo.h"
@@ -73,6 +74,8 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	layout->setMargin(0);
 	topLayout->addLayout(layout);
 	mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
+	if (!ShellProcess::authorised())
+		mListFilterModel->setTypeFilter(static_cast<EventListModel::Type>(EventListModel::ALL & ~EventListModel::COMMAND));
 	mListView = new TemplateListView(topWidget);
 	mListView->setModel(mListFilterModel);
 	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
