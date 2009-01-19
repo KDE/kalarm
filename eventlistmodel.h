@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.h  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,6 +42,13 @@ class EventListModel : public QAbstractTableModel
 {
 		Q_OBJECT
 	public:
+		enum Type
+		{
+			DISPLAY = 0x01,
+			COMMAND = 0x02,
+			EMAIL   = 0x04,
+			ALL     = DISPLAY | COMMAND | EMAIL
+		};
 		enum {   // data columns
 			TimeColumn, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
 			TemplateNameColumn,
@@ -75,6 +82,7 @@ class EventListModel : public QAbstractTableModel
 		void                  removeEvent(const KAEvent* event)     { removeEvent(mEvents.indexOf(const_cast<KAEvent*>(event))); }
 		void                  removeEvent(const QString& eventId)   { removeEvent(findEvent(eventId)); }
 		void                  removeResource(AlarmResource*);
+		KAEvent*              event(int row) const;
 		static KAEvent*       event(const QModelIndex&);
 
 	public slots:

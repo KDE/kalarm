@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.cpp  -  dialog to choose an alarm template
  *  Program:  kalarm
- *  Copyright © 2004,2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2006-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
 
-TemplatePickDlg::TemplatePickDlg(QWidget* parent)
+TemplatePickDlg::TemplatePickDlg(EventListModel::Type type, QWidget* parent)
 	: KDialog(parent)
 {
 	QWidget* topWidget = new QWidget(this);
@@ -49,9 +49,15 @@ TemplatePickDlg::TemplatePickDlg(QWidget* parent)
 	topLayout->setSpacing(spacingHint());
 
 	// Display the list of templates, but exclude command alarms if in kiosk mode.
-	bool includeCmdAlarms = ShellProcess::authorised();
+	EventListModel::Type shown = EventListModel::ALL;
+	if (!ShellProcess::authorised())
+	{
+		type = static_cast<EventListModel::Type>(type & ~EventListModel::COMMAND);
+		shown = static_cast<EventListModel::Type>(shown & ~EventListModel::COMMAND);
+	}
 	mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
-	mListFilterModel->setTypeFilter(!includeCmdAlarms);
+	mListFilterModel->setTypesEnabled(type);
+	mListFilterModel->setTypeFilter(shown);
 	mListView = new TemplateListView(topWidget);
 	mListView->setModel(mListFilterModel);
 	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
@@ -83,7 +89,10 @@ const KAEvent* TemplatePickDlg::selectedTemplate() const
 */
 void TemplatePickDlg::slotSelectionChanged()
 {
-	enableButtonOk(!mListView->selectionModel()->selectedRows().isEmpty());
+	bool enable = !mListView->selectionModel()->selectedRows().isEmpty();
+	if (enable)
+		enable = mListView->model()->flags(mListView->selectedIndex()) & Qt::ItemIsEnabled;
+	enableButtonOk(enable);
 }
 
 /******************************************************************************

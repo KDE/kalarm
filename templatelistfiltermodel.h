@@ -1,7 +1,7 @@
 /*
  *  templatelistfiltermodel.h  -  proxy model class for lists of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,17 +35,22 @@ class TemplateListFilterModel : public EventListFilterModel
 		};
 
 		explicit TemplateListFilterModel(EventListModel* baseModel, QObject* parent = 0)
-		               : EventListFilterModel(baseModel, parent) {}
-		void setTypeFilter(bool excludeCommandAlarms);
+		               : EventListFilterModel(baseModel, parent),
+			         mTypesEnabled(EventListModel::ALL),
+			         mTypeFilter(EventListModel::ALL) {}
+		void setTypeFilter(EventListModel::Type);
+		void setTypesEnabled(EventListModel::Type);
 		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
 		virtual QModelIndex mapToSource(const QModelIndex& proxyIndex) const;
+		virtual Qt::ItemFlags flags(const QModelIndex&) const;
 
 	protected:
 		virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
 
 	private:
-		bool mCmdFilter;
+		EventListModel::Type mTypesEnabled;  // hide types not in this mask
+		EventListModel::Type mTypeFilter;    // disable types not in this mask
 };
 
 #endif // TEMPLATELISTFILTERMODEL_H

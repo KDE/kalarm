@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.cpp  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -717,6 +717,16 @@ int EventListModel::findEvent(const QString& eventId) const
 			return row;
 	}
 	return -1;
+}
+
+/******************************************************************************
+* Return the event for a given row.
+*/
+KAEvent* EventListModel::event(int row) const
+{
+	if (row < 0  ||  row >= mEvents.count())
+		return 0;
+	return mEvents[row];
 }
 
 /******************************************************************************

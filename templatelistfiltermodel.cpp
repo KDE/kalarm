@@ -1,7 +1,7 @@
 /*
  *  templatelistfiltermodel.cpp  -  proxy model class for lists of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,11 +30,20 @@
 // TemplateListFilterModel provides sorting and filtering for the alarm list model.
 
 
-void TemplateListFilterModel::setTypeFilter(bool excludeCommandAlarms)
+void TemplateListFilterModel::setTypeFilter(EventListModel::Type type)
 {
-	if (excludeCommandAlarms != mCmdFilter)
+	if (type != mTypeFilter)
 	{
-		mCmdFilter = excludeCommandAlarms;
+		mTypeFilter = type;
+		filterChanged();
+	}
+}
+
+void TemplateListFilterModel::setTypesEnabled(EventListModel::Type type)
+{
+	if (type != mTypesEnabled)
+	{
+		mTypesEnabled = type;
 		filterChanged();
 	}
 }
@@ -44,9 +53,18 @@ bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&
 	QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0);
 	if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KCalEvent::TEMPLATE)
 		return false;
-	if (!mCmdFilter)
+	if (mTypeFilter == EventListModel::ALL)
 		return true;
-	return sourceModel()->data(sourceIndex, EventListModel::ValueRole).toInt() != KAEvent::COMMAND;
+	int type;
+	switch (static_cast<KAEvent::Action>(sourceModel()->data(sourceIndex, EventListModel::ValueRole).toInt()))
+	{
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
+		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
+		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
+		default:                type = EventListModel::ALL;  break;
+	}
+	return type & mTypeFilter;
 }
 
 bool TemplateListFilterModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
@@ -88,4 +106,24 @@ QModelIndex TemplateListFilterModel::mapToSource(const QModelIndex& proxyIndex) 
 			return QModelIndex();
 	}
 	return EventListFilterModel::mapToSource(proxyIndex);
+}
+
+Qt::ItemFlags TemplateListFilterModel::flags(const QModelIndex& index) const
+{
+	QModelIndex sourceIndex = mapToSource(index);
+	Qt::ItemFlags f = sourceModel()->flags(sourceIndex);
+	if (mTypesEnabled == EventListModel::ALL)
+		return f;
+	int type;
+	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
+	{
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
+		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
+		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
+		default:                type = EventListModel::ALL;  break;
+	}
+	if (!(type & mTypesEnabled))
+		f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+	return f;
 }

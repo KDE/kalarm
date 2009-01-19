@@ -1016,7 +1016,17 @@ void EditAlarmDlg::slotTrySuccess()
 */
 void EditAlarmDlg::slotHelp()
 {
-	TemplatePickDlg dlg(this);
+	EventListModel::Type type;
+	switch (mAlarmType)
+	{
+		case KAEvent::FILE:
+		case KAEvent::MESSAGE:  type = EventListModel::DISPLAY;  break;
+		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
+		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
+		default:
+			return;
+	}
+	TemplatePickDlg dlg(type, this);
 	if (dlg.exec() == QDialog::Accepted)
 		initValues(dlg.selectedTemplate());
 }
