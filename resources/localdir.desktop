@@ -42,6 +42,7 @@ Comment[ca]=Proporciona l'accés a un calendari d'alarmes emmagatzemat en un dir
 Comment[da]=Giver adgang til en alarmkalender lagret i en lokal mappe, hvori hvert enkelt kalenderelement lagres i en seperat fil
 Comment[de]=Ermöglicht den Zugriff auf einen Erinnerungen-Kalender in einem lokalen Ordner, in dem jeder Kalender-Eintrag als separate Datei gespeichert ist.
 Comment[el]=Προσφέρει πρόσβαση σε ημερολόγιο ειδοποιήσεων αποθηκευμένο σε έναν τοπικό κατάλογο,  στον οποίο κάθε αντικείμενο αποθηκεύεται σε ξεχωριστό αρχείο
+Comment[es]=Provee acceso a un calendario de alarmas almacenado en un directorio local, en el cual cada elemento del calendario es almacenado en un archivo separado
 Comment[et]=Võimaldab kasutada kohalikku kataloogi salvestatud häirete kalendrit, kus iga kalender on salvestatud eraldi faili
 Comment[fr]=Fourni l'accès aux alarmes de calendrier stockées dans un dossier ; chaque entrée du calendrier étant stockée dans un fichier distinct
 Comment[gl]=Permite acceder a un calendario de alarmas almacenado nun directorio local no que cada elemento do calendario se almacena nun ficheiro diferente
