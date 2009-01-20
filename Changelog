@@ -1,6 +1,17 @@
 KAlarm Change Log
 
-=== Version 2.0.7 --- 5 January 2009 ===
+=== Version 2.1.4 --- 9 January 2009 ===
+- Prevent corrupt alarms if deferral reinstates from archived alarm instead of
+  from the displaying calendar.
+- Ignore events in calendar without usable alarms (which prevents them getting
+  stuck in the alarm list, and fixes high CPU usage).
+
+=== Version 2.1.3 (KDE 4.2 RC1) --- 5 January 2009 ===
+- Fix invalid alarm remaining in calendar when pre-alarm action failure message
+  is acknowledged before the alarm is deferred.
+
+=== Version 2.1.2 --- 27 December 2008 ===
+- New KAlarm icon.
 - Distinguish disabled from enabled alarm colour when highlighted in alarm list.
 - Ensure alarm windows show on top of full-screen windows.
 - Fix crash if KAlarm is activated again while restoring from previous session.
@@ -8,9 +19,26 @@ KAlarm Change Log
 - Fix failure to update alarms in KOrganizer when Kontact is running.
 - Fix click on system tray icon not showing main window if 'Show in system tray'
   configuration setting deselected.
+=======
+
+=== Version 2.1.1 (KDE 4.2 beta2) --- 8 December 2008 ===
+- Allow global shortcuts for New Alarm actions.
+- Fix failure to update alarms in KOrganizer when Kontact is running but
+  Kontact's calendar component is not loaded.
 - Fix toolbar configuration being lost after quitting KAlarm.
 - Fix invalid alarm remaining in calendar when pre-alarm action failure message
   is acknowledged before the alarm is deferred.
+
+=======
+=== Version 2.1.0 (KDE 4.2 beta1) --- 13 November 2008 ===
+- Add option to exclude holidays from recurring alarms.
+- Provide More/Less Options button in edit alarm dialogue.
+- Improve Configuration dialogue layout, split pages into tabs.
+- Show separate toolbar buttons for new display, command and email alarms.
+- Show 'Time Zone' button instead of time zone selection controls when using
+  default time zone.
+- Set file display alarm font & colour in same way as for text display alarms.
+- Set default reminder time units according to how long until alarm is due.
 
 === Version 2.0.6 (KDE 4.1.3) --- 22 October 2008 ===
 - Fix alarms not triggering correctly after laptop wakes from hibernation.

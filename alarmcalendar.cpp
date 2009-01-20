@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -451,6 +451,12 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 			continue;    // ignore events without alarms
 
 		KAEvent* event = new KAEvent(kcalevent);
+		if (!event->valid())
+		{
+			kWarning() << "Ignoring unusable event" << kcalevent->uid();
+			delete event;
+			continue;    // ignore events without usable alarms
+		}
 		event->setResource(resource);
 		events += event;
 		mEventMap[kcalevent->uid()] = event;
@@ -591,8 +597,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			const Event* event = events[i];
-			if (event->alarms().isEmpty())
-				continue;    // ignore events without alarms
+			if (event->alarms().isEmpty()  ||  !KAEvent(event).valid())
+				continue;    // ignore events without alarms, or usable alarms
 			KCalEvent::Status type = KCalEvent::status(event);
 			if (type == KCalEvent::TEMPLATE)
 			{
@@ -1110,7 +1116,7 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Status t
 }
 
 /******************************************************************************
-* Return all events in the calendar which contain alarms.
+* Return all events in the calendar which contain usable alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
 Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KCalEvent::Status type)
@@ -1123,7 +1129,8 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KCalEvent::Status
 	{
 		Event* event = list[i];
 		if (event->alarms().isEmpty()
-		||  (type != KCalEvent::EMPTY  &&  !(type & KCalEvent::status(event))))
+		||  (type != KCalEvent::EMPTY  &&  !(type & KCalEvent::status(event)))
+		||  !KAEvent(event).valid())
 			list.removeAt(i);
 		else
 			++i;
