@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1468,7 +1468,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
 	// Don't prompt or delete the alarm from the display calendar if the session is closing
-	if (!theApp()->sessionClosingDown())
+	if (!mErrorWindow  &&  !theApp()->sessionClosingDown())
 	{
 		if (mConfirmAck  &&  !mNoCloseConfirm)
 		{
