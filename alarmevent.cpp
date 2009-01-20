@@ -1,7 +1,7 @@
 /*
  *  alarmevent.cpp  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -152,8 +152,10 @@ inline void KAEvent::set_deferral(DeferType type)
 
 inline void KAEvent::set_reminder(int minutes)
 {
-	if (!mReminderMinutes)
+	if (minutes  ||  !mReminderMinutes)
 		++mAlarmCount;
+	else if (!minutes  &&  mReminderMinutes)
+		--mAlarmCount;
 	mReminderMinutes        = minutes;
 	mArchiveReminderMinutes = 0;
 }
@@ -989,10 +991,13 @@ void KAEvent::setTemplate(const QString& name, int afterTime)
 
 void KAEvent::setReminder(int minutes, bool onceOnly)
 {
-	set_reminder(minutes);
-	mReminderOnceOnly = onceOnly;
-	mUpdated          = true;
-	calcTriggerTimes();
+	if (minutes != mReminderMinutes)
+	{
+		set_reminder(minutes);
+		mReminderOnceOnly = onceOnly;
+		mUpdated          = true;
+		calcTriggerTimes();
+	}
 }
 
 DateTime KAEvent::nextTrigger(TriggerType type) const
