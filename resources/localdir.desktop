@@ -58,6 +58,7 @@ Comment[nn]=Gjev tilgang til alarmkalendrar lagra i ei lokal mappe, der kvart ka
 Comment[pl]=Zapewnia dostęp do kalendarza alarmów przechowywanego w lokalnym katalogu, w którym każdy element kalendarza jest zapisany w osobnym pliku
 Comment[pt]=Oferece o acesso a um calendário de alarmes guardado numa pasta local; cada item do calendário é guardado num ficheiro em separado
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes armazenado em um único arquivo local, onde cada item do calendário é armazenado em um arquivo separado
+Comment[sl]=Omogoča dostop do koledarja z alarmi, ki so shranjeni v krajevni mapi, kjer je vsak alarm shranjen v ločeni datoteki
 Comment[sv]=Ger tillgång till en alarmkalender lagrad i en lokal katalog, där varje kalenderobjekt är lagrat i en separat fil
 Comment[uk]=Надає доступ до календаря нагадувань, який зберігається у локальному каталозі, де кожен запис календаря зберігається у окремому файлі
 Comment[x-test]=xxProvides access to an alarm calendar stored in a local directory, in which each calendar item is stored in a separate filexx
