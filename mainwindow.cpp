@@ -1184,12 +1184,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   getMailHeader("Subject", content),
 				   body, sernum);
 	}
-	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
-	{
-		kDebug() << "URL";
-		action = KAEvent::FILE;
-		alarmText.setText(files[0].prettyUrl());
-	}
 #ifdef KMAIL_SUPPORTED
 	else if (KPIM::MailList::canDecode(data))
 	{
@@ -1218,6 +1212,12 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 			KAlarm::editNewAlarm(&ev, win);
 		}
 		return;
+	}
+	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
+	{
+		kDebug() << "URL";
+		action = KAEvent::FILE;
+		alarmText.setText(files[0].prettyUrl());
 	}
 	else if (data->hasText())
 	{
