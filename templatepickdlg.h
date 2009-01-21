@@ -20,6 +20,7 @@
 #ifndef TEMPLATEPICKDLG_H
 #define TEMPLATEPICKDLG_H
 
+#include "eventlistmodel.h"
 #include <kdialog.h>
 
 class QResizeEvent;
@@ -32,7 +33,7 @@ class TemplatePickDlg : public KDialog
 {
 		Q_OBJECT
 	public:
-		explicit TemplatePickDlg(QWidget* parent = 0);
+		explicit TemplatePickDlg(EventListModel::Type, QWidget* parent = 0);
 		const KAEvent* selectedTemplate() const;
 	protected:
 		virtual void   resizeEvent(QResizeEvent*);

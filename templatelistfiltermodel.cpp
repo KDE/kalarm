@@ -1,7 +1,7 @@
 /*
  *  templatelistfiltermodel.cpp  -  proxy model class for lists of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,11 +30,11 @@
 // TemplateListFilterModel provides sorting and filtering for the alarm list model.
 
 
-void TemplateListFilterModel::setTypeFilter(bool excludeCommandAlarms)
+void TemplateListFilterModel::setTypeFilter(EventListModel::Type type)
 {
-	if (excludeCommandAlarms != mCmdFilter)
+	if (type != mFilter)
 	{
-		mCmdFilter = excludeCommandAlarms;
+		mFilter = type;
 		filterChanged();
 	}
 }
@@ -44,9 +44,9 @@ bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&
 	QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0);
 	if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KCalEvent::TEMPLATE)
 		return false;
-	if (!mCmdFilter)
+	if (mFilter == EventListModel::ALL)
 		return true;
-	return sourceModel()->data(sourceIndex, EventListModel::ValueRole).toInt() != KAEvent::COMMAND;
+	return sourceModel()->data(sourceIndex, EventListModel::ValueRole).toInt() & mFilter;
 }
 
 bool TemplateListFilterModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
