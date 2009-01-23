@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1038,6 +1038,9 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 				return false;
 			if (!MainWindow::count())
 			{
+				// We have to have at least one main window to act
+				// as parent to the system tray icon (even if the
+				// window is hidden).
 				creating = true;    // prevent main window constructor from creating an additional tray icon
 				parent = MainWindow::create();
 				creating = false;
@@ -1656,9 +1659,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				}
 				// Display the message even though it failed
 			}
-			if (!event.enabled())
-				delete win;        // event is disabled - close its window
-			else if (!win
+			if (!win
 			     ||  (!win->hasDefer() && !alarm.repeatAtLogin())
 			     ||  replaceReminder)
 			{
