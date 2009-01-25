@@ -228,9 +228,20 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 void MessageWin::showError(const KAEvent& event, const DateTime& alarmDateTime,
                            const QStringList& errmsgs, const QString& dontShowAgain)
 {
-	if (dontShowAgain.isEmpty()
-	||  !KAlarm::dontShowErrors(event.id(), dontShowAgain))
-		(new MessageWin(&event, alarmDateTime, errmsgs, dontShowAgain))->show();
+	if (!dontShowAgain.isEmpty()
+	&&  KAlarm::dontShowErrors(event.id(), dontShowAgain))
+		return;
+
+	// Don't pile up duplicate error messages for the same alarm
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+	{
+		MessageWin* w = mWindowList[i];
+		if (w->mErrorWindow  &&  w->mEventID == event.id()
+		&&  w->mErrorMsgs == errmsgs  &&  w->mDontShowAgain == dontShowAgain)
+			return;
+	}
+
+	(new MessageWin(&event, alarmDateTime, errmsgs, dontShowAgain))->show();
 }
 
 /******************************************************************************
