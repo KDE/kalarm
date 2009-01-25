@@ -61,6 +61,7 @@ Comment[pt]=Oferece o acesso a um calendário de alarmes num ficheiro remoto, us
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes em um arquivo remoto usando o KIO framework da rede do KDE
 Comment[sl]=Z uporabo KDE-jevega omrežnega ogrodja KIO omogoča dostop do koledarja z alarmi, ki je shranjen v oddaljeni datoteki
 Comment[sv]=Ger tillgång till en alarmkalender i en fjärrfil med användning av KDE:s I/O-ramverk
+Comment[tr]=KDE'nin ağ çatısı KIO'yu kullanarak uzak bir dosyadaki bir alarm takvimine erişim sağlar
 Comment[uk]=Надає доступ до календаря нагадувань, який зберігається у віддаленому файлі, за допомогою мережевих засобів KIO KDE
 Comment[x-test]=xxProvides access to an alarm calendar in a remote file using KDE's network framework KIOxx
 Comment[zh_CN]=通过 KDE 网络框架 KIO，提供对存储在一个远程文件中的提醒日历的访问支持

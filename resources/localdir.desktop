@@ -60,6 +60,7 @@ Comment[pt]=Oferece o acesso a um calendário de alarmes guardado numa pasta loc
 Comment[pt_BR]=Fornece acesso a um calendário de alarmes armazenado em um único arquivo local, onde cada item do calendário é armazenado em um arquivo separado
 Comment[sl]=Omogoča dostop do koledarja z alarmi, ki so shranjeni v krajevni mapi, kjer je vsak alarm shranjen v ločeni datoteki
 Comment[sv]=Ger tillgång till en alarmkalender lagrad i en lokal katalog, där varje kalenderobjekt är lagrat i en separat fil
+Comment[tr]=Her takvim öğesinin ayrı bir dosyada depolandığı yerel bir dizinde depolanmış bir alarm takvimine erişim sağlar
 Comment[uk]=Надає доступ до календаря нагадувань, який зберігається у локальному каталозі, де кожен запис календаря зберігається у окремому файлі
 Comment[x-test]=xxProvides access to an alarm calendar stored in a local directory, in which each calendar item is stored in a separate filexx
 Comment[zh_CN]=提供对存储在一个本地目录中的提醒日历的访问支持，每个日历项目都存储在各自独立的文件内
