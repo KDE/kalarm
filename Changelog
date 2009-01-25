@@ -1,6 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.1.4 --- 18 January 2009 ===
+=== Version 2.1.5 --- 25 January 2009 ===
+- Disable inapplicable alarm types in alarm edit dialogue Load Template list.
+- Prevent multiple identical error messages being displayed for the same alarm.
+
+=== Version 2.1.4 (KDE 4.2) --- 18 January 2009 ===
 - Prevent corrupt alarms if deferral reinstates from archived alarm instead of
   from the displaying calendar.
 - Ignore events in calendar without usable alarms (which prevents them getting
