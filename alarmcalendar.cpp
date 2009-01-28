@@ -443,6 +443,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 	if (!cal)
 		return;
 
+	KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
 	Event::List kcalevents = cal->rawEvents();
 	for (i = 0, end = kcalevents.count();  i < end;  ++i)
 	{
@@ -460,6 +461,13 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 		event->setResource(resource);
 		events += event;
 		mEventMap[kcalevent->uid()] = event;
+
+		// Set any command execution error flags for the alarm.
+		// These are stored in the KAlarm config file, not the alarm
+		// calendar, since they are specific to the user's local system.
+		QString cmdErr = config.readEntry(event->id());
+		if (!cmdErr.isEmpty())
+			event->setCommandError(cmdErr);
 	}
 
 	// Now scan the list of alarms to find the earliest one to trigger
@@ -1008,6 +1016,14 @@ KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
 	{
 		status = KCalEvent::status(kcalEvent);
 		mCalendar->deleteEvent(kcalEvent);
+	}
+
+	// Delete any command execution error flags for the alarm.
+	KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
+	if (config.hasKey(eventID))
+	{
+	        config.deleteEntry(eventID);
+		config.sync();
 	}
 	return status;
 }

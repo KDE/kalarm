@@ -135,21 +135,6 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 	KAEvent* event = static_cast<KAEvent*>(index.internalPointer());
 	if (!event)
 		return QVariant();
-	switch (role)
-	{
-		case Qt::ForegroundRole:
-			if (!event->enabled())
-			       return Preferences::disabledColour();
-			if (event->expired())
-			       return Preferences::archivedColour();
-			break;   // use the default for normal active alarms
-		case StatusRole:
-			return event->category();
-		case EnabledRole:
-			return event->enabled();
-		default:
-			break;
-	}
 	bool resourceColour = false;
 	switch (column)
 	{
@@ -219,6 +204,21 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					||  (event->action() == KAEvent::COMMAND && event->commandDisplay()))
 						return event->bgColour();
 					break;
+				case Qt::ForegroundRole:
+					if (event->commandError() != KAEvent::CMD_NO_ERROR)
+					{
+						QColor colour = Qt::red;
+						int r, g, b;
+						event->bgColour().getRgb(&r, &g, &b);
+						if (r > 128  &&  g <= 128  &&  b <= 128)
+							colour = Qt::white;
+						return colour;
+					}
+					break;
+				case Qt::DisplayRole:
+					if (event->commandError() != KAEvent::CMD_NO_ERROR)
+						return QString::fromLatin1("!");
+					break;
 				case SortRole:
 				{
 					unsigned i = (event->action() == KAEvent::MESSAGE || event->action() == KAEvent::FILE)
@@ -280,6 +280,39 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					return event->templateName().toUpper();
 			}
 			break;
+		default:
+			break;
+	}
+
+	switch (role)
+	{
+		case Qt::ForegroundRole:
+			if (!event->enabled())
+			       return Preferences::disabledColour();
+			if (event->expired())
+			       return Preferences::archivedColour();
+			break;   // use the default for normal active alarms
+		case Qt::ToolTipRole:
+			// Show the last command execution error message
+			switch (event->commandError())
+			{
+				case KAEvent::CMD_ERROR:
+					return i18nc("@info:tooltip", "Command execution failed");
+				case KAEvent::CMD_ERROR_PRE:
+					return i18nc("@info:tooltip", "Pre-alarm action execution failed");
+				case KAEvent::CMD_ERROR_POST:
+					return i18nc("@info:tooltip", "Post-alarm action execution failed");
+				case KAEvent::CMD_ERROR_PRE_POST:
+					return i18nc("@info:tooltip", "Pre- and post-alarm action execution failed");
+				default:
+				case KAEvent::CMD_NO_ERROR:
+					break;
+			}
+			break;
+		case StatusRole:
+			return event->category();
+		case EnabledRole:
+			return event->enabled();
 		default:
 			break;
 	}
@@ -471,6 +504,20 @@ void EventListModel::slotUpdateWorkingHours()
 	{
 		emit dataChanged(index(firstRow, TimeColumn), index(mEvents.count() - 1, TimeColumn));
 		emit dataChanged(index(firstRow, TimeToColumn), index(mEvents.count() - 1, TimeToColumn));
+	}
+}
+
+/******************************************************************************
+* Called when the command error status of an alarm has changed.
+* Update the visual command error indication.
+*/
+void EventListModel::updateCommandError(const QString& eventId)
+{
+	int row = findEvent(eventId);
+	if (row >= 0)
+	{
+		QModelIndex ix = index(row, ColourColumn);
+		emit dataChanged(ix, ix);
 	}
 }
 

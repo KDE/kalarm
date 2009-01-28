@@ -1,7 +1,7 @@
 /*
  *  alarmevent.h  -  represents calendar alarms and events
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -304,6 +304,14 @@ class KAEvent : public KAAlarmEventBase
 			ALL_WORK_TRIGGER,  // next actual working time trigger, including reminders
 			DISPLAY_TRIGGER    // next trigger time for display purposes (i.e. excluding reminders)
 		};
+		enum CmdErrType     // command execution error type for last time the alarm was triggered
+		{
+			CMD_NO_ERROR   = 0,      // no error
+			CMD_ERROR      = 0x01,   // command alarm execution failed
+			CMD_ERROR_PRE  = 0x02,   // pre-alarm command execution failed
+			CMD_ERROR_POST = 0x04,   // post-alarm command execution failed
+			CMD_ERROR_PRE_POST = CMD_ERROR_PRE | CMD_ERROR_POST
+		};
 
 		KAEvent()          : mReminderMinutes(0), mRevision(0), mRecurrence(0), mAlarmCount(0),
 		                     mDeferral(NO_DEFERRAL), mChangeCount(0), mChanged(false), mExcludeHolidays(false), mWorkTimeOnly(false) { }
@@ -341,6 +349,8 @@ class KAEvent : public KAAlarmEventBase
 		void               setDeferDefaultMinutes(int minutes)               { mDeferDefaultMinutes = minutes;  mUpdated = true; }
 		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QString& resourceID, const KDateTime&, bool showEdit, bool showDefer);
 		void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
+		void               setCommandError(const QString& configString);
+		void               setCommandError(CmdErrType) const;
 		void               setArchive()                                      { mArchive = true;  mUpdated = true; }
 		void               setEnabled(bool enable)                           { mEnabled = enable;  mUpdated = true; }
 		void               startChanges()                                    { ++mChangeCount; }
@@ -413,6 +423,8 @@ class KAEvent : public KAAlarmEventBase
 		OccurType          previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
 		int                flags() const;
 		bool               deferred() const               { return mDeferral > 0; }
+		CmdErrType         commandError() const           { return mCommandError; }
+		static QString     commandErrorConfigGroup()      { return mCmdErrConfigGroup; }
 		bool               toBeArchived() const           { return mArchive; }
 		bool               enabled() const                { return mEnabled; }
 		bool               updated() const                { return mUpdated; }
@@ -480,6 +492,7 @@ class KAEvent : public KAAlarmEventBase
 		inline void        set_reminder(int minutes);
 		inline void        set_archiveReminder();
 
+		static QString     mCmdErrConfigGroup;// config file group for command error recording
 		QString            mTemplateName;     // alarm template's name, or null if normal event
 		AlarmResource*     mResource;         // resource which owns the event
 		QString            mResourceId;       // saved resource ID (not the resource the event is in)
@@ -509,6 +522,7 @@ class KAEvent : public KAAlarmEventBase
 		mutable bool       mChanged;          // true if need to recalculate trigger times while mChangeCount > 0
 		QString            mLogFile;          // alarm output is to be logged to this URL
 		KCalEvent::Status  mCategory;         // event category (active, archived, template, ...)
+		mutable CmdErrType mCommandError;     // command execution error last time the alarm triggered
 		bool               mCancelOnPreActErr;// cancel alarm if pre-alarm action fails
 		bool               mCommandXterm;     // command alarm is to be executed in a terminal window
 		bool               mCommandDisplay;   // command output is to be displayed in an alarm window

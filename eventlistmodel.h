@@ -84,6 +84,7 @@ class EventListModel : public QAbstractTableModel
 		void                  removeResource(AlarmResource*);
 		KAEvent*              event(int row) const;
 		static KAEvent*       event(const QModelIndex&);
+		void                  updateCommandError(const QString& eventId);
 
 	public slots:
 		void                  reload();

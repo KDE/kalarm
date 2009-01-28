@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -159,17 +159,21 @@ bool EventListView::viewportEvent(QEvent* e)
 			int i = toolTip.indexOf('\n');
 			if (i < 0)
 			{
-				// Single line tooltip. Only display it if the text column
-				// is truncated in the view display.
-				value = model()->data(index, Qt::FontRole);
-				QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
-				int textWidth = fm.boundingRect(toolTip).width() + 1;
-				const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-				QRect rect = visualRect(index);
-				int left = columnViewportPosition(index.column()) + margin;
-				int right = left + textWidth;
-				if (left >= 0  &&  right <= width() - 2*frameWidth())
-					toolTip.clear();    // prevent any tooltip showing
+				EventListFilterModel* m = qobject_cast<EventListFilterModel*>(model());
+				if (!m  ||  m->event(index)->commandError() == KAEvent::CMD_NO_ERROR)
+				{
+					// Single line tooltip. Only display it if the text column
+					// is truncated in the view display.
+					value = model()->data(index, Qt::FontRole);
+					QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
+					int textWidth = fm.boundingRect(toolTip).width() + 1;
+					const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+					QRect rect = visualRect(index);
+					int left = columnViewportPosition(index.column()) + margin;
+					int right = left + textWidth;
+					if (left >= 0  &&  right <= width() - 2*frameWidth())
+						toolTip.clear();    // prevent any tooltip showing
+				}
 			}
 			QToolTip::showText(he->globalPos(), toolTip, this);
 			return true;

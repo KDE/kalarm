@@ -495,8 +495,9 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
 		KAEvent* event = events[i];
 		QString id = event->id();
 
-		// Update the window lists
+		// Update the window lists and clear stored command errors
 		EventListModel::alarms()->removeEvent(id);
+		event->setCommandError(KAEvent::CMD_NO_ERROR);
 
 		// Delete the event from the calendar file
 		if (event->category() != KCalEvent::ARCHIVED)

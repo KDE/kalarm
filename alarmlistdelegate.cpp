@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,26 +47,43 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 			// distinguishable from enabled alarms.
 			KColorScheme::adjustForeground(opt.palette, KColorScheme::InactiveText, QPalette::HighlightedText, KColorScheme::Selection);
 		}
-		if (index.column() == EventListModel::TimeColumn)
+		switch (index.column())
 		{
-			QString str = index.data(Qt::DisplayRole).toString();
-			// Need to pad out spacing to align times without leading zeroes
-			int i = str.indexOf(" ~");    // look for indicator that leading zeroes are omitted
-			if (i >= 0)
+			case EventListModel::TimeColumn:
 			{
-				QVariant value;
-				value = index.data(Qt::ForegroundRole);
-				if (value.isValid())
-					opt.palette.setColor(QPalette::Text, value.value<QColor>());
-				int digitWidth = opt.fontMetrics.width("0");
-				QString date = str.left(i + 1);
-				int w = opt.fontMetrics.width(date) + digitWidth;
-				drawDisplay(painter, opt, opt.rect, date);
-				QRect rect(opt.rect);
-				rect.setLeft(rect.left() + w);
-				drawDisplay(painter, opt, rect, str.mid(i + 2));
-				return;
+				QString str = index.data(Qt::DisplayRole).toString();
+				// Need to pad out spacing to align times without leading zeroes
+				int i = str.indexOf(" ~");    // look for indicator that leading zeroes are omitted
+				if (i >= 0)
+				{
+					QVariant value;
+					value = index.data(Qt::ForegroundRole);
+					if (value.isValid())
+						opt.palette.setColor(QPalette::Text, value.value<QColor>());
+					int digitWidth = opt.fontMetrics.width("0");
+					QString date = str.left(i + 1);
+					int w = opt.fontMetrics.width(date) + digitWidth;
+					drawDisplay(painter, opt, opt.rect, date);
+					QRect rect(opt.rect);
+					rect.setLeft(rect.left() + w);
+					drawDisplay(painter, opt, rect, str.mid(i + 2));
+					return;
+				}
+				break;
 			}
+			case EventListModel::ColourColumn:
+			{
+				const KAEvent* event = static_cast<const EventListFilterModel*>(index.model())->event(index);
+				if (event  &&  event->commandError() != KAEvent::CMD_NO_ERROR)
+				{
+					opt.font.setBold(true);
+					opt.font.setStyleHint(QFont::Serif);
+					opt.font.setPixelSize(opt.rect.height() - 2);
+				}
+				break;
+			}
+			default:
+				break;
 		}
 	}
 	QItemDelegate::paint(painter, opt, index);

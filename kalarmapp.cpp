@@ -66,6 +66,8 @@
 #include <kshell.h>
 
 static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
+static void setEventCommandError(const KAEvent&, KAEvent::CmdErrType);
+static void clearEventCommandError(const KAEvent&, KAEvent::CmdErrType);
 
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
@@ -1493,11 +1495,16 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 */
 void KAlarmApp::alarmCompleted(const KAEvent& event)
 {
-	if (!event.postAction().isEmpty()  &&  ShellProcess::authorised())
+	if (!event.postAction().isEmpty())
 	{
-		QString command = event.postAction();
-		kDebug() << event.id() << ":" << command;
-		doShellCommand(command, event, 0, ProcData::POST_ACTION);
+		if (!ShellProcess::authorised())
+			setEventCommandError(event, KAEvent::CMD_ERROR_POST);
+		else
+		{
+			QString command = event.postAction();
+			kDebug() << event.id() << ":" << command;
+			doShellCommand(command, event, 0, ProcData::POST_ACTION);
+		}
 	}
 }
 
@@ -1607,6 +1614,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 
 	void* result = (void*)1;
 	event.setArchive();
+
 	KAAlarm::Action action = alarm.action();
 	if (action == KAAlarm::COMMAND && event.commandDisplay())
 		action = KAAlarm::MESSAGE;
@@ -1624,40 +1632,45 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			if (alarm.action() != KAAlarm::COMMAND
 			&&  !reminder  &&  !event.deferred()
 			&&  (replaceReminder || !win)  &&  !noPreAction
-			&&  !event.preAction().isEmpty()  &&  ShellProcess::authorised())
+			&&  !event.preAction().isEmpty())
 			{
 				// It's not a reminder or a deferred alarm, and there is no message window
 				// (other than a reminder window) currently displayed for this alarm,
 				// and we need to execute a command before displaying the new window.
-				// Check whether the command is already being executed for this alarm.
-				for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
+				if (!ShellProcess::authorised())
+					setEventCommandError(event, KAEvent::CMD_ERROR_PRE);
+				else
 				{
-					ProcData* pd = mCommandProcesses[i];
-					if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
+					// Check whether the command is already being executed for this alarm.
+					for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
 					{
-						kDebug() << "Already executing pre-DISPLAY command";
-						return pd->process;   // already executing - don't duplicate the action
+						ProcData* pd = mCommandProcesses[i];
+						if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
+						{
+							kDebug() << "Already executing pre-DISPLAY command";
+							return pd->process;   // already executing - don't duplicate the action
+						}
 					}
-				}
 
-				QString command = event.preAction();
-				kDebug() << "Pre-DISPLAY command:" << command;
-				int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
-				if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
-				{
-					AlarmCalendar::resources()->setAlarmPending(&event);
-					return result;     // display the message after the command completes
+					QString command = event.preAction();
+					kDebug() << "Pre-DISPLAY command:" << command;
+					int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
+					if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
+					{
+						AlarmCalendar::resources()->setAlarmPending(&event);
+						return result;     // display the message after the command completes
+					}
+					// Error executing command
+					if (event.cancelOnPreActionError())
+					{
+						// Cancel the rest of the alarm execution
+						kDebug() << event.id() << ": pre-action failed: cancelled";
+						if (reschedule)
+							rescheduleAlarm(event, alarm, true);
+						return 0;
+					}
+					// Display the message even though it failed
 				}
-				// Error executing command
-				if (event.cancelOnPreActionError())
-				{
-					// Cancel the rest of the alarm execution
-					kDebug() << event.id() << ": pre-action failed: cancelled";
-					if (reschedule)
-						rescheduleAlarm(event, alarm, true);
-					return 0;
-				}
-				// Display the message even though it failed
 			}
 			if (!win
 			     ||  (!win->hasDefer() && !alarm.repeatAtLogin())
@@ -1681,9 +1694,14 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			break;
 		}
 		case KAAlarm::COMMAND:
-			result = execCommandAlarm(event, alarm);
-			if (reschedule)
-				rescheduleAlarm(event, alarm, true);
+			if (!ShellProcess::authorised())
+				setEventCommandError(event, KAEvent::CMD_ERROR);
+			else
+			{
+				result = execCommandAlarm(event, alarm);
+				if (reschedule)
+					rescheduleAlarm(event, alarm, true);
+			}
 			break;
 		case KAAlarm::EMAIL:
 		{
@@ -1748,7 +1766,10 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
 		kDebug() << "Script";
 		QString tmpfile = createTempScriptFile(command, false, event, alarm);
 		if (tmpfile.isEmpty())
+		{
+			setEventCommandError(event, KAEvent::CMD_ERROR);
 			return 0;
+		}
 		return doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE), receiver, slot);
 	}
 	else
@@ -1763,6 +1784,8 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
 * If the PRE_ACTION bit of 'flags' is set, the alarm will be executed via
 * execAlarm() once the command completes, the execAlarm() parameters being
 * derived from the remaining bits in 'flags'.
+* 'flags' must contain the bit PRE_ACTION or POST_ACTION if and only if it is
+* a pre- or post-alarm action respectively.
 * To connect to the output ready signals of the process, specify a slot to be
 * called by supplying 'receiver' and 'slot' parameters.
 */
@@ -1775,104 +1798,127 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	if (flags & ProcData::EXEC_IN_XTERM)
 	{
 		// Execute the command in a terminal window.
-		cmd = Preferences::cmdXTermCommand();
-		cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());     // set the terminal window title
-		if (cmd.indexOf("%C") >= 0)
-		{
-			// Execute the command from a temporary script file
-			if (flags & ProcData::TEMP_FILE)
-				cmd.replace("%C", command);    // the command is already calling a temporary file
-			else
-			{
-				tmpXtermFile = createTempScriptFile(command, true, event, *alarm);
-				if (tmpXtermFile.isEmpty())
-					return 0;
-				cmd.replace("%C", tmpXtermFile);    // %C indicates where to insert the command
-			}
-		}
-		else if (cmd.indexOf("%W") >= 0)
-		{
-			// Execute the command from a temporary script file,
-			// with a sleep after the command is executed
-			tmpXtermFile = createTempScriptFile(command + QLatin1String("\nsleep 86400\n"), true, event, *alarm);
-			if (tmpXtermFile.isEmpty())
-				return 0;
-			cmd.replace("%W", tmpXtermFile);    // %w indicates where to insert the command
-		}
-		else if (cmd.indexOf("%w") >= 0)
-		{
-			// Append a sleep to the command.
-			// Quote the command in case it contains characters such as [>|;].
-			QString exec = KShell::quoteArg(command + QLatin1String("; sleep 86400"));
-			cmd.replace("%w", exec);    // %w indicates where to insert the command string
-		}
-		else
-		{
-			// Set the command to execute.
-			// Put it in quotes in case it contains characters such as [>|;].
-			QString exec = KShell::quoteArg(command);
-			if (cmd.indexOf("%c") >= 0)
-				cmd.replace("%c", exec);    // %c indicates where to insert the command string
-			else
-				cmd.append(exec);           // otherwise, simply append the command string
-		}
+		cmd = composeXTermCommand(command, event, alarm, flags, tmpXtermFile);
 	}
 	else
 	{
 		cmd = command;
 		mode = QIODevice::ReadWrite;
 	}
-	ShellProcess* proc = new ShellProcess(cmd);
-	proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
-	connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
-	if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slot)
+
+	ProcData* pd = 0;
+	ShellProcess* proc = 0;
+	if (!cmd.isEmpty())
 	{
-		connect(proc, SIGNAL(receivedStdout(ShellProcess*)), receiver, slot);
-		connect(proc, SIGNAL(receivedStderr(ShellProcess*)), receiver, slot);
-	}
-	if (mode == QIODevice::ReadWrite  &&  !event.logFile().isEmpty())
-	{
-		// Output is to be appended to a log file.
-		// Set up a logging process to write the command's output to.
-		QString heading;
-		if (alarm  &&  alarm->dateTime().isValid())
+		proc = new ShellProcess(cmd);
+		proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
+		connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
+		if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slot)
 		{
-			QString dateTime = alarm->dateTime().formatLocale();
-			heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
+			connect(proc, SIGNAL(receivedStdout(ShellProcess*)), receiver, slot);
+			connect(proc, SIGNAL(receivedStderr(ShellProcess*)), receiver, slot);
 		}
-		else
-			heading = QLatin1String("\n******* KAlarm *******\n");
-		QFile logfile(event.logFile());
-		if (logfile.open(QIODevice::Append | QIODevice::Text))
+		if (mode == QIODevice::ReadWrite  &&  !event.logFile().isEmpty())
 		{
-			QTextStream out(&logfile);
-			out << heading;
-			logfile.close();
+			// Output is to be appended to a log file.
+			// Set up a logging process to write the command's output to.
+			QString heading;
+			if (alarm  &&  alarm->dateTime().isValid())
+			{
+				QString dateTime = alarm->dateTime().formatLocale();
+				heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
+			}
+			else
+				heading = QLatin1String("\n******* KAlarm *******\n");
+			QFile logfile(event.logFile());
+			if (logfile.open(QIODevice::Append | QIODevice::Text))
+			{
+				QTextStream out(&logfile);
+				out << heading;
+				logfile.close();
+			}
+			proc->setStandardOutputFile(event.logFile(), QIODevice::Append);
 		}
-		proc->setStandardOutputFile(event.logFile(), QIODevice::Append);
+		pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
+		if (flags & ProcData::TEMP_FILE)
+			pd->tempFiles += command;
+		if (!tmpXtermFile.isEmpty())
+			pd->tempFiles += tmpXtermFile;
+		mCommandProcesses.append(pd);
+		if (proc->start(mode))
+			return proc;
 	}
-	ProcData* pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : 0), flags);
-	if (flags & ProcData::TEMP_FILE)
-		pd->tempFiles += command;
-	if (!tmpXtermFile.isEmpty())
-		pd->tempFiles += tmpXtermFile;
-	mCommandProcesses.append(pd);
-	if (proc->start(mode))
-		return proc;
 
 	// Error executing command - report it
-	kError() << "Command failed to start";
+	kWarning() << "Command failed to start";
 	commandErrorMsg(proc, event, alarm, flags);
-	mCommandProcesses.removeAt(mCommandProcesses.indexOf(pd));
-	delete pd;
+	if (pd)
+	{
+		mCommandProcesses.removeAt(mCommandProcesses.indexOf(pd));
+		delete pd;
+	}
 	return 0;
+}
+
+/******************************************************************************
+* Compose a command line to execute the given command in a terminal window.
+* 'tempScriptFile' receives the name of a temporary script file which is
+* invoked by the command line, if applicable.
+* Reply = command line, or empty string if error.
+*/
+QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, QString& tempScriptFile) const
+{
+	kDebug() << command << "," << event.id();
+	tempScriptFile.clear();
+	QString cmd = Preferences::cmdXTermCommand();
+	cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());     // set the terminal window title
+	if (cmd.indexOf("%C") >= 0)
+	{
+		// Execute the command from a temporary script file
+		if (flags & ProcData::TEMP_FILE)
+			cmd.replace("%C", command);    // the command is already calling a temporary file
+		else
+		{
+			tempScriptFile = createTempScriptFile(command, true, event, *alarm);
+			if (tempScriptFile.isEmpty())
+				return QString();
+			cmd.replace("%C", tempScriptFile);    // %C indicates where to insert the command
+		}
+	}
+	else if (cmd.indexOf("%W") >= 0)
+	{
+		// Execute the command from a temporary script file,
+		// with a sleep after the command is executed
+		tempScriptFile = createTempScriptFile(command + QLatin1String("\nsleep 86400\n"), true, event, *alarm);
+		if (tempScriptFile.isEmpty())
+			return QString();
+		cmd.replace("%W", tempScriptFile);    // %w indicates where to insert the command
+	}
+	else if (cmd.indexOf("%w") >= 0)
+	{
+		// Append a sleep to the command.
+		// Quote the command in case it contains characters such as [>|;].
+		QString exec = KShell::quoteArg(command + QLatin1String("; sleep 86400"));
+		cmd.replace("%w", exec);    // %w indicates where to insert the command string
+	}
+	else
+	{
+		// Set the command to execute.
+		// Put it in quotes in case it contains characters such as [>|;].
+		QString exec = KShell::quoteArg(command);
+		if (cmd.indexOf("%c") >= 0)
+			cmd.replace("%c", exec);    // %c indicates where to insert the command string
+		else
+			cmd.append(exec);           // otherwise, simply append the command string
+	}
+	return cmd;
 }
 
 /******************************************************************************
 * Create a temporary script file containing the specified command string.
 * Reply = path of temporary file, or null string if error.
 */
-QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell, const KAEvent& event, const KAAlarm& alarm)
+QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell, const KAEvent& event, const KAAlarm& alarm) const
 {
 	KTemporaryFile tmpFile;
 	tmpFile.setAutoRemove(false);     // don't delete file when it is destructed
@@ -1913,21 +1959,28 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 			bool executeAlarm = pd->preAction();
 			ShellProcess::Status status = proc->status();
 			if (status == ShellProcess::SUCCESS  &&  !proc->exitCode())
-				kDebug() << "SUCCESS";
+			{
+				kDebug() << pd->event->id() << ": SUCCESS";
+				clearEventCommandError(*pd->event, pd->preAction() ? KAEvent::CMD_ERROR_PRE
+				                                 : pd->postAction() ? KAEvent::CMD_ERROR_POST
+				                                 : KAEvent::CMD_ERROR);
+			}
 			else
 			{
-				if (status == ShellProcess::SUCCESS  ||  status == ShellProcess::NOT_FOUND)
-					kDebug() << "exit status =" << status << ", exit code =" << proc->exitCode();
-				else
-					kDebug() << "exit status =" << status;
 				QString errmsg = proc->errorMessage();
-				kWarning() << pd->event->cleanText() << ":" << errmsg.remove(QRegExp("</?html>"));;
+				if (status == ShellProcess::SUCCESS  ||  status == ShellProcess::NOT_FOUND)
+					kWarning() << pd->event->id() << ":" << errmsg << "exit status =" << status << ", code =" << proc->exitCode();
+				else
+					kWarning() << pd->event->id() << ":" << errmsg << "exit status =" << status;
 				if (pd->messageBoxParent)
 				{
 					// Close the existing informational KMessageBox for this process
 					QList<KDialog*> dialogs = pd->messageBoxParent->findChildren<KDialog*>();
 					if (!dialogs.isEmpty())
 					    delete dialogs[0];
+					setEventCommandError(*pd->event, pd->preAction() ? KAEvent::CMD_ERROR_PRE
+					                               : pd->postAction() ? KAEvent::CMD_ERROR_POST
+					                               : KAEvent::CMD_ERROR);
 					if (!pd->tempFile())
 					{
 						errmsg += '\n';
@@ -1962,28 +2015,43 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 }
 
 /******************************************************************************
-* Output an error message for a shell command.
+* Output an error message for a shell command, and record the alarm's error status.
 */
 void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, const KAAlarm* alarm, int flags)
 {
+	KAEvent::CmdErrType cmderr;
 	QStringList errmsgs;
 	QString dontShowAgain;
 	if (flags & ProcData::PRE_ACTION)
 	{
 		errmsgs += i18nc("@info", "Pre-alarm action:");
 		dontShowAgain = QLatin1String("Pre");
+		cmderr = KAEvent::CMD_ERROR_PRE;
 	}
 	else if (flags & ProcData::POST_ACTION)
 	{
 		errmsgs += i18nc("@info", "Post-alarm action:");
 		dontShowAgain = QLatin1String("Post");
+		cmderr = (event.commandError() == KAEvent::CMD_ERROR_PRE)
+		       ? KAEvent::CMD_ERROR_PRE_POST : KAEvent::CMD_ERROR_POST;
 	}
 	else
+	{
 		dontShowAgain = QLatin1String("Exec");
-	errmsgs += proc->errorMessage();
-	if (!(flags & ProcData::TEMP_FILE))
-		errmsgs += proc->command();
-	MessageWin::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain + QString::number(proc->status()));
+		cmderr = KAEvent::CMD_ERROR;
+	}
+
+	// Record the alarm's error status
+        setEventCommandError(event, cmderr);
+	// Display an error message
+	if (proc)
+	{
+		errmsgs += proc->errorMessage();
+		if (!(flags & ProcData::TEMP_FILE))
+			errmsgs += proc->command();
+		dontShowAgain += QString::number(proc->status());
+	}
+	MessageWin::showError(event, (alarm ? alarm->dateTime() : DateTime()), errmsgs, dontShowAgain);
 }
 
 /******************************************************************************
@@ -2109,6 +2177,30 @@ static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurT
 	if (negative)
 		timeInterval = -timeInterval;
 	return ok;
+}
+
+void setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
+{
+	if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
+		err = KAEvent::CMD_ERROR_PRE_POST;
+	event.setCommandError(err);
+	KAEvent* ev = AlarmCalendar::resources()->event(event.id());
+	if (ev  &&  ev->commandError() != err)
+		ev->setCommandError(err);
+	EventListModel::alarms()->updateCommandError(event.id());
+}
+
+void clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
+{
+	KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
+	event.setCommandError(newerr);
+	KAEvent* ev = AlarmCalendar::resources()->event(event.id());
+	if (ev)
+	{
+		newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);
+		ev->setCommandError(newerr);
+	}
+	EventListModel::alarms()->updateCommandError(event.id());
 }
 
 

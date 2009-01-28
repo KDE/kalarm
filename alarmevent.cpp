@@ -105,6 +105,12 @@ static const QString DISABLED_STATUS            = QLatin1String("DISABLED");
 static const QString DISP_DEFER = QLatin1String("DEFER");
 static const QString DISP_EDIT  = QLatin1String("EDIT");
 
+// Command error strings
+QString KAEvent::mCmdErrConfigGroup = QLatin1String("CommandErrors");
+static const QString CMD_ERROR_VALUE      = QLatin1String("MAIN");
+static const QString CMD_ERROR_PRE_VALUE  = QLatin1String("PRE");
+static const QString CMD_ERROR_POST_VALUE = QLatin1String("POST");
+
 static const QString SC = QLatin1String(";");
 
 struct AlarmData
@@ -199,6 +205,7 @@ void KAEvent::copy(const KAEvent& event)
 	mDeferral                = event.mDeferral;
 	mLogFile                 = event.mLogFile;
 	mCategory                = event.mCategory;
+	mCommandError            = event.mCommandError;
 	mCancelOnPreActErr       = event.mCancelOnPreActErr;
 	mCommandXterm            = event.mCommandXterm;
 	mCommandDisplay          = event.mCommandDisplay;
@@ -266,6 +273,7 @@ void KAEvent::set(const Event* event)
 	mFgColour               = QColor(0, 0, 0);          // and black foreground
 	mDefaultFont            = true;
 	mEnabled                = true;
+	mCommandError           = CMD_NO_ERROR;
 	clearRecur();
 	QString param;
 	mCategory               = KCalEvent::status(event, &param);
@@ -932,6 +940,7 @@ void KAEvent::set(const KDateTime& dateTime, const QString& text, const QColor& 
 	mArchive                = false;
 	mCancelOnPreActErr      = false;
 	mUpdated                = false;
+	mCommandError           = CMD_NO_ERROR;
 	mChangeCount            = changesPending ? 1 : 0;
 	mChanged                = true;
 	calcTriggerTimes();
@@ -2479,6 +2488,56 @@ DateTime KAEvent::deferralLimit(KAEvent::DeferLimitType* limitType) const
 	if (limitType)
 		*limitType = ltype;
 	return endTime;
+}
+
+/******************************************************************************
+* Initialise the command last error status of the alarm from the config file.
+*/
+void KAEvent::setCommandError(const QString& configString)
+{
+	mCommandError = CMD_NO_ERROR;
+	const QStringList errs = configString.split(',');
+	if (errs.indexOf(CMD_ERROR_VALUE) >= 0)
+		mCommandError = CMD_ERROR;
+	else
+	{
+		if (errs.indexOf(CMD_ERROR_PRE_VALUE) >= 0)
+			mCommandError = CMD_ERROR_PRE;
+		if (errs.indexOf(CMD_ERROR_POST_VALUE) >= 0)
+			mCommandError = static_cast<CmdErrType>(mCommandError | CMD_ERROR_POST);
+	}
+}
+
+/******************************************************************************
+* Set the command last error status.
+* The status is written to the config file.
+*/
+void KAEvent::setCommandError(CmdErrType error) const
+{
+	kDebug() << mEventID << "," << error;
+	if (error == mCommandError)
+		return;
+	mCommandError = error;
+	KConfigGroup config(KGlobal::config(), mCmdErrConfigGroup);
+	if (mCommandError == CMD_NO_ERROR)
+		config.deleteEntry(mEventID);
+	else
+	{
+		QString errtext;
+		switch (mCommandError)
+		{
+			case CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
+			case CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
+			case CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
+			case CMD_ERROR_PRE_POST:
+				errtext = CMD_ERROR_PRE_VALUE + ',' + CMD_ERROR_POST_VALUE;
+				break;
+			default:
+				break;
+		}
+		config.writeEntry(mEventID, errtext);
+	}
+	config.sync();
 }
 
 /******************************************************************************
@@ -4079,6 +4138,7 @@ void KAEvent::dumpDebug() const
 		kDebug() << "-- mDeferralTime:" << mDeferralTime.toString();
 	}
 	kDebug() << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
+	kDebug() << "-- mCommandError:" << mCommandError;
 	kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
 	kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
 	kDebug() << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();

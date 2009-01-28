@@ -173,6 +173,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 #else
 	  mKMailSerialNumber(0),
 #endif
+	  mCommandError(event->commandError()),
 	  mRestoreHeight(0),
 	  mAudioRepeat(event->repeatSound()),
 	  mConfirmAck(event->confirmAck()),
@@ -258,6 +259,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mAlarmType(KAAlarm::MAIN_ALARM),
 	  mAction(event->action()),
 	  mKMailSerialNumber(0),
+	  mCommandError(KAEvent::CMD_NO_ERROR),
 	  mErrorMsgs(errmsgs),
 	  mDontShowAgain(dontShowAgain),
 	  mRestoreHeight(0),
@@ -851,6 +853,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
 		config.writeEntry("NoDefer", mNoDefer);
 		config.writeEntry("NoPostAction", mNoPostAction);
 		config.writeEntry("KMailSerial", static_cast<qulonglong>(mKMailSerialNumber));
+		config.writeEntry("CmdErr", static_cast<int>(mCommandError));
 		config.writeEntry("DontShowAgain", mDontShowAgain);
 	}
 	else
@@ -904,6 +907,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	mNoDefer             = config.readEntry("NoDefer", false);
 	mNoPostAction        = config.readEntry("NoPostAction", true);
 	mKMailSerialNumber   = static_cast<unsigned long>(config.readEntry("KMailSerial", QVariant(QVariant::ULongLong)).toULongLong());
+	mCommandError        = KAEvent::CmdErrType(config.readEntry("CmdErr", static_cast<int>(KAEvent::CMD_NO_ERROR)));
 	mDontShowAgain       = config.readEntry("DontShowAgain", QString());
 	mShowEdit            = false;
 	mResource            = 0;
@@ -1677,11 +1681,14 @@ void MessageWin::slotDefer()
 			}
 			event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
+			event.setCommandError(mCommandError);
 			// Add the event back into the calendar file, retaining its ID
-			// and not updating KOrganizer
+			// and not updating KOrganizer.
 			KAlarm::addEvent(event, resource, mDeferDlg, KAlarm::USE_EVENT_ID);
 			if (event.deferred())
 				mNoPostAction = true;
+			// Finally delete it from the archived calendar now that it has
+			// been reactivated.
 			event.setCategory(KCalEvent::ARCHIVED);
 			KAlarm::deleteEvent(event, false);
 		}
