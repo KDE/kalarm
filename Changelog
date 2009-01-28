@@ -1,5 +1,21 @@
 KAlarm Change Log
 
+=== Version 2.2.0 pre --- 25 January 2009 ===
+- Provide facility to export alarms to a new calendar file.
+- Show command execution error indication for alarms in main window alarm list.
+- Add configuration setting for default deferral time in Defer Alarm dialogue.
+- Accept drag and drop of Todo entries to create a new alarm.
+
+=== Version 2.1.4 (KDE 4.2) --- 18 January 2009 ===
+- Prevent corrupt alarms if deferral reinstates from archived alarm instead of
+  from the displaying calendar.
+- Ignore events in calendar without usable alarms (which prevents them getting
+  stuck in the alarm list, and fixes high CPU usage).
+- Show error message when New Template selected but no writable resource exists.
+- Fix crash when iCalendar item is dragged and dropped onto KAlarm.
+- Make New Alarm shortcuts work.
+- Fix alarms not being saved if created by drag-and-drop but not edited further.
+
 === Version 2.1.3 --- 5 January 2009 ===
 - Fix invalid alarm remaining in calendar when pre-alarm action failure message
   is acknowledged before the alarm is deferred.
