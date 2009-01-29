@@ -39,7 +39,7 @@
 #include <kdebug.h>
 
 #include <kcal/calendarlocal.h>
-#include <libkholidays/kholidays.h>
+#include <kholidays/kholidays.h>
 
 using namespace KCal;
 using namespace LibKHolidays;

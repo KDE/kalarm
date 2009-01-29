@@ -84,7 +84,7 @@
 #include <kdebug.h>
 
 #include <ktoolinvocation.h>
-#include <libkholidays/kholidays.h>
+#include <kholidays/kholidays.h>
 using namespace LibKHolidays;
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";

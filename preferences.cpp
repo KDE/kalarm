@@ -33,7 +33,7 @@
 
 #include <kpimidentities/identity.h>
 #include <kpimidentities/identitymanager.h>
-#include <libkholidays/kholidays.h>
+#include <kholidays/kholidays.h>
 using namespace LibKHolidays;
 
 #include "functions.h"
