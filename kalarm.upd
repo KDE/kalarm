@@ -62,3 +62,10 @@ File=kalarmrc
 Group=General
 Options=overwrite
 Script=kalarm-2.0.2-general.pl
+
+# Convert KDE3 konsole -T command parameter
+Id=2.1.5
+File=kalarmrc
+Group=General
+Options=overwrite
+Script=kalarm-2.1.5-general.pl
