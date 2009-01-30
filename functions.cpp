@@ -61,7 +61,7 @@
 #include <kpimidentities/identitymanager.h>
 #include <kpimidentities/identity.h>
 #include <kcal/person.h>
-#include <kholidays/kholidays.h>
+#include <kholidays/holidays.h>
 #include <ktoolinvocation.h>
 
 

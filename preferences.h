@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QDateTime>
 class KTimeZone;
-namespace KHolidays { class KHolidayRegion; }
+namespace KHolidays { class HolidayRegion; }
 
 #include "kalarmconfig.h"
 
@@ -44,7 +44,7 @@ class Preferences : public PreferencesBase
 		// Access to settings
 		static KTimeZone        timeZone(bool reload = false);
 		static void             setTimeZone(const KTimeZone&);
-		static const KHolidays::KHolidayRegion& holidays();
+		static const KHolidays::HolidayRegion& holidays();
 		static void             setHolidayRegion(const QString& regionCode);
 		static QTime            startOfDay()                     { return self()->mBase_StartOfDay.time(); }
 		static void             setStartOfDay(const QTime&);
@@ -84,7 +84,7 @@ class Preferences : public PreferencesBase
 
 	signals:
 		void  timeZoneChanged(const KTimeZone& newTz);
-		void  holidaysChanged(const KHolidays::KHolidayRegion& newHolidays);
+		void  holidaysChanged(const KHolidays::HolidayRegion& newHolidays);
 		void  startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
 		void  workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
@@ -102,7 +102,7 @@ class Preferences : public PreferencesBase
 
 		static Preferences*     mInstance;
 		static KTimeZone        mSystemTimeZone;
-		static KHolidays::KHolidayRegion* mHolidays;
+		static KHolidays::HolidayRegion* mHolidays;
 
 		// All the following members are accessed by the Preferences dialog classes
 		static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter

@@ -59,7 +59,7 @@ EventListModel* EventListModel::alarms()
 		mAlarmInstance = new EventListModel(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
 		Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateArchivedColour(const QColor&)));
 		Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateDisabledColour(const QColor&)));
-		Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::KHolidayRegion&)), mAlarmInstance, SLOT(slotUpdateHolidays()));
+		Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::HolidayRegion&)), mAlarmInstance, SLOT(slotUpdateHolidays()));
 		Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), mAlarmInstance, SLOT(slotUpdateWorkingHours()));
 	}
 	return mAlarmInstance;
