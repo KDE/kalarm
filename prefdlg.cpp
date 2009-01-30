@@ -85,7 +85,7 @@
 
 #include <ktoolinvocation.h>
 #include <kholidays/kholidays.h>
-using namespace LibKHolidays;
+using namespace KHolidays;
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";
 
@@ -612,7 +612,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	                        "Select which holiday region to use"));
 	QStringList holidays;
-	QStringList countryList = KHolidays::locations();
+	QStringList countryList = KHolidayRegion::locations();
 	foreach (const QString& country, countryList)
 	{
 		QString countryFile = KStandardDirs::locate("locale", "l10n/" + country + "/entry.desktop");

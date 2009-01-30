@@ -42,7 +42,7 @@
 #include <kholidays/kholidays.h>
 
 using namespace KCal;
-using namespace LibKHolidays;
+using namespace KHolidays;
 
 
 // KAlarm version which first used the current calendar/event format.
@@ -1100,7 +1100,7 @@ void KAEvent::calcTriggerTimes() const
 			else
 			{
 				// Holidays are excluded.
-				const KHolidays& holidays = Preferences::holidays();
+				const KHolidayRegion& holidays = Preferences::holidays();
 				DateTime nextTrigger = mMainTrigger;
 				KDateTime kdt;
 				for (int i = 0;  i < 20;  ++i)
@@ -1127,7 +1127,7 @@ void KAEvent::calcTriggerTimes() const
 		else if (mExcludeHolidays)
 		{
 			// Holidays are excluded.
-			const KHolidays& holidays = Preferences::holidays();
+			const KHolidayRegion& holidays = Preferences::holidays();
 			DateTime nextTrigger = mMainTrigger;
 			KDateTime kdt;
 			for (int i = 0;  i < 20;  ++i)

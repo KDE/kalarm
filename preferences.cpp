@@ -34,7 +34,7 @@
 #include <kpimidentities/identity.h>
 #include <kpimidentities/identitymanager.h>
 #include <kholidays/kholidays.h>
-using namespace LibKHolidays;
+using namespace KHolidays;
 
 #include "functions.h"
 #include "kamail.h"
@@ -65,7 +65,7 @@ static QString translateXTermPath(const QString& cmdline, bool write);
 
 Preferences* Preferences::mInstance = 0;
 KTimeZone    Preferences::mSystemTimeZone;
-KHolidays*   Preferences::mHolidays = 0;   // always non-null after Preferences initialisation
+KHolidayRegion* Preferences::mHolidays = 0;   // always non-null after Preferences initialisation
 QTime        Preferences::mOldStartOfDay(0, 0, 0);
 bool         Preferences::mStartOfDayChanged = false;
 
@@ -127,13 +127,13 @@ void Preferences::timeZoneChange(const QString& zone)
 	emit mInstance->timeZoneChanged(timeZone(false));
 }
 
-const KHolidays& Preferences::holidays()
+const KHolidayRegion& Preferences::holidays()
 {
 	QString regionCode = self()->mBase_HolidayRegion;
 	if (!mHolidays  ||  mHolidays->location() != regionCode)
 	{
 		delete mHolidays;
-		mHolidays = new KHolidays(regionCode);
+		mHolidays = new KHolidayRegion(regionCode);
 	}
 	return *mHolidays;
 }
