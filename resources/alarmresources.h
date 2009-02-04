@@ -1,7 +1,7 @@
 /*
  *  alarmresources.h  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *  Based on calendarresources.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -56,8 +56,11 @@ class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::Manager
 		};
 
 		/** Create the alarm calendar resources instance.
-		 *  @return The alarm calendar resources instance, or 0 if either a reserved
-		 *          file name was used or it has already been created.
+		 *  If the alarm calendar resources instance has already been created,
+		 *  the existing instance is returned regardless of parameters passed.
+		 *  @return The alarm calendar resources instance, or 0 if a reserved
+		 *          file name was used (in which case, use creationError() to
+		 *          fetch the error message).
 		 */
 		static AlarmResources* create(const KDateTime::Spec& timeSpec, bool activeOnly = false, bool passiveClient = false);
 		static QString creationError()   { return mConstructionError; }
