@@ -1,7 +1,7 @@
 /*
  *  alarmresources.cpp  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,13 +45,14 @@ QString         AlarmResources::mConstructionError;
 
 AlarmResources* AlarmResources::create(const KDateTime::Spec& timeSpec, bool activeOnly, bool passiveClient)
 {
-	if (mInstance)
-		return 0;
-	AlarmResources* cal = new AlarmResources(timeSpec, activeOnly, passiveClient);
-	if (!mConstructionError.isEmpty())
-		delete cal;
-	else
-		mInstance = cal;
+	if (!mInstance)
+	{
+		AlarmResources* cal = new AlarmResources(timeSpec, activeOnly, passiveClient);
+		if (!mConstructionError.isEmpty())
+			delete cal;
+		else
+			mInstance = cal;
+	}
 	return mInstance;
 }
 
