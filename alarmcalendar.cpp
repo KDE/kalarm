@@ -985,6 +985,10 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 */
 KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
 {
+	// Make a copy of the ID QString since the supplied reference might be
+	// destructed when the event is deleted.
+	const QString id = eventID;
+
 	AlarmResource* resource = 0;
 	Event* kcalEvent = mCalendar->event(eventID);
 	KAEventMap::Iterator it = mEventMap.find(eventID);
@@ -1020,9 +1024,9 @@ KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
 
 	// Delete any command execution error flags for the alarm.
 	KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
-	if (config.hasKey(eventID))
+	if (config.hasKey(id))
 	{
-	        config.deleteEntry(eventID);
+	        config.deleteEntry(id);
 		config.sync();
 	}
 	return status;
