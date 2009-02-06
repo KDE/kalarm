@@ -137,10 +137,9 @@ QString AlarmText::displayText() const
 			}
 			break;
 		default:
-			text = mBody;
 			break;
 	}
-	return text;
+	return !text.isEmpty() ? text : mBody;
 }
 
 /******************************************************************************
