@@ -89,7 +89,7 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 	// We need to store the list so that when deletions occur, the deleted alarm's
 	// position in the list can be determined.
 	mEvents = AlarmCalendar::resources()->events(mStatus);
-for(int x=0; x<mEvents.count(); ++x)kDebug(0)<<"Event"<<(void*)mEvents[x];
+//for(int x=0; x<mEvents.count(); ++x)kDebug(0)<<"Resource"<<(void*)mEvents[x]->resource()<<"Event"<<(void*)mEvents[x];
 	if (!mTextIcon)
 	{
 		mTextIcon    = new QPixmap(SmallIcon("dialog-information"));
@@ -528,6 +528,17 @@ void EventListModel::slotResourceLoaded(AlarmResource* resource, bool active)
 {
 	if (active)
 		slotResourceStatusChanged(resource, AlarmResources::Added);
+}
+
+/******************************************************************************
+* Static method called when a resource status has changed.
+*/
+void EventListModel::resourceStatusChanged(AlarmResource* resource, AlarmResources::Change change)
+{
+	if (mAlarmInstance)
+		mAlarmInstance->slotResourceStatusChanged(resource, change);
+	if (mTemplateInstance)
+		mTemplateInstance->slotResourceStatusChanged(resource, change);
 }
 
 /******************************************************************************

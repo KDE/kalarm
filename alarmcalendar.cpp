@@ -503,16 +503,22 @@ void AlarmCalendar::slotResourceChange(AlarmResource* resource, AlarmResources::
 	switch (change)
 	{
 		case AlarmResources::Enabled:
-			if (!resource->isActive())
-				removeKAEvents(resource);
+			if (resource->isActive())
+				return;
+			kDebug() << "Enabled (inactive)";
 			break;
 		case AlarmResources::Invalidated:
+			kDebug() << "Invalidated";
+			break;
 		case AlarmResources::Deleted:
-			removeKAEvents(resource);
+			kDebug() << "Deleted";
 			break;
 		default:
-			break;
+			return;
 	}
+	// Ensure the data model is notified before deleting the KAEvent instances
+	EventListModel::resourceStatusChanged(resource, change);
+	removeKAEvents(resource);
 }
 
 /******************************************************************************
