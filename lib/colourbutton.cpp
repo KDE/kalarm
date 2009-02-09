@@ -18,10 +18,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kalarm.h"
+#include "colourbutton.moc"
+
 #include <QMouseEvent>
 #include <QKeyEvent>
-
-#include "colourbutton.h"
 
 
 ColourButton::ColourButton(QWidget* parent)

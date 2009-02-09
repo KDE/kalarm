@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.h  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2005,2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2005,2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,12 +20,11 @@
 #ifndef BIRTHDAYDLG_H
 #define BIRTHDAYDLG_H
 
-#include <QLineEdit>
-#include <QList>
+#include "alarmevent.h"
 
 #include <kdialog.h>
-
-#include "alarmevent.h"
+#include <klineedit.h>
+#include <QList>
 
 class QFocusEvent;
 class QTreeView;
@@ -73,12 +72,12 @@ class BirthdayDlg : public KDialog
 };
 
 
-class BLineEdit : public QLineEdit
+class BLineEdit : public KLineEdit
 {
 		Q_OBJECT
 	public:
-		explicit BLineEdit(QWidget* parent = 0)                       : QLineEdit(parent) { }
-		explicit BLineEdit(const QString& text, QWidget* parent = 0)  : QLineEdit(text, parent) { }
+		explicit BLineEdit(QWidget* parent = 0)                       : KLineEdit(parent) { }
+		explicit BLineEdit(const QString& text, QWidget* parent = 0)  : KLineEdit(text, parent) { }
 	signals:
 		void         focusLost();
 	protected:

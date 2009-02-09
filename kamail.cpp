@@ -445,7 +445,7 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 
 			// Check if the attachment is a text file
 			QString mimeType = fi.mimetype();
-			bool text = mimeType.startsWith("text/");
+			bool text = mimeType.startsWith(QLatin1String("text/"));
 			if (!text)
 			{
 				for (int i = 0;  !text && textMimeTypes[i];  ++i)
