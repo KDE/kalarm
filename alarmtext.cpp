@@ -213,6 +213,7 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 */
 QString AlarmText::todoTitle(const QString& text)
 {
+	setUpTranslations();
 	QStringList lines = text.split('\n', QString::SkipEmptyParts);
 	int n;
 	for (n = 0;  n < lines.count() && lines[n].contains('\t');  ++n) ;
