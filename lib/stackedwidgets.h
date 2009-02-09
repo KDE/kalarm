@@ -102,7 +102,7 @@ class StackedScrollGroup;
 class StackedScrollWidget : public StackedWidgetT<QScrollArea>
 {
 	public:
-		StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = 0);
+		explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = 0);
 		QWidget* widget() const  { return viewport()->findChild<QWidget*>(); }
 };
 

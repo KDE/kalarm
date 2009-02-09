@@ -785,7 +785,7 @@ void EditAlarmDlg::slotResize()
 	if (height() > s.height())
 	{
 		// Resize to slightly greater than the minimum height.
-		// This is for some unkown reason necessary, since
+		// This is for some unknown reason necessary, since
 		// sometimes resizing to the minimum height fails.
 		resize(s.width(), s.height() + 2);
 	}
