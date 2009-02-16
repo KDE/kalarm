@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.cpp -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -181,18 +181,21 @@ bool CalendarCompat::isUTC(const QString& localFile)
 	file.close();
 
 	// Extract the CREATED property for the first VEVENT from the calendar
+	const QByteArray BEGIN_VCALENDAR("BEGIN:VCALENDAR");
+	const QByteArray BEGIN_VEVENT("BEGIN:VEVENT");
+	const QByteArray CREATED("CREATED:");
 	QList<QByteArray> lines = text.split('\n');
 	for (int i = 0, end = lines.count();  i < end;  ++i)
 	{
-		if (lines[i].startsWith("BEGIN:VCALENDAR"))
+		if (lines[i].startsWith(BEGIN_VCALENDAR))
 		{
 			while (++i < end)
 			{
-				if (lines[i].startsWith("BEGIN:VEVENT"))
+				if (lines[i].startsWith(BEGIN_VEVENT))
 				{
 					while (++i < end)
 					{
-						if (lines[i].startsWith("CREATED:"))
+						if (lines[i].startsWith(CREATED))
 							return lines[i].endsWith('Z');
 					}
 				}
