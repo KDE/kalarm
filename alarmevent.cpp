@@ -21,18 +21,11 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "alarmevent.h"
 
-#include "alarmcalendar.h"
+#include "alarmresource.h"
 #include "alarmtext.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "preferences.h"
-
-#include <stdlib.h>
-#include <time.h>
-#include <ctype.h>
-#include <QColor>
-#include <QRegExp>
-#include <QByteArray>
 
 #include <ksystemtimezone.h>
 #include <klocale.h>
