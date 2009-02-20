@@ -1,4 +1,5 @@
-/*  functions.cpp  -  miscellaneous functions
+/*
+ *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
  *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
@@ -26,6 +27,7 @@
 #include "alarmlistview.h"
 #include "alarmresources.h"
 #include "editdlg.h"
+#include "identities.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
@@ -1692,7 +1694,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 		case KAEvent::EMAIL:
 		{
 			QString from = event->emailFromId()
-			             ? KAMail::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
+			             ? Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
 			             : Preferences::emailAddress();
 			AlarmText atext;
 			atext.setEmail(event->emailAddresses(", "), from, QString(), QString(), event->emailSubject(), QString());

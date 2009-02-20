@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "editdlgtypes.h"
 #include "fontcolour.h"
 #include "functions.h"
+#include "identities.h"
 #include "itembox.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -1120,7 +1121,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
 			errmsg = i18nc("@info", "No email address is currently set in KDE System Settings. %1", errmsg);
 			break;
 		case Preferences::MAIL_FROM_KMAIL:
-			if (KAMail::identitiesExist())
+			if (Identities::identitiesExist())
 				return QString();
 			errmsg = i18nc("@info", "No <application>KMail</application> identities currently exist. %1", errmsg);
 			break;

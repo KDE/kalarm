@@ -1,7 +1,7 @@
 /*
  *  dbushandler.cpp  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 #include "alarmcalendar.h"
 #include "functions.h"
+#include "identities.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "karecurrence.h"
@@ -303,7 +304,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	uint senderId = 0;
 	if (!fromID.isEmpty())
 	{
-		senderId = KAMail::identityUoid(fromID);
+		senderId = Identities::identityUoid(fromID);
 		if (!senderId)
 		{
 			kError() << "D-Bus call scheduleEmail(): unknown sender ID:" << fromID;

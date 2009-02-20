@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 #include "kamail.h"
 
 #include "functions.h"
+#include "identities.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
@@ -89,20 +90,12 @@ QString KAMail::i18n_sent_mail()
 KAMail*                              KAMail::mInstance = 0;   // used only to enable signals/slots to work
 QQueue<MailTransport::TransportJob*> KAMail::mJobs;
 QQueue<KAMail::JobData>              KAMail::mJobData;
-KPIMIdentities::IdentityManager*     KAMail::mIdentityManager = 0;
 
 KAMail* KAMail::instance()
 {
 	if (!mInstance)
 		mInstance = new KAMail();
 	return mInstance;
-}
-
-KPIMIdentities::IdentityManager* KAMail::identityManager()
-{
-	if (!mIdentityManager)
-		mIdentityManager = new KPIMIdentities::IdentityManager(true);   // create a read-only kmail identity manager
-	return mIdentityManager;
 }
 
 
@@ -120,7 +113,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		jobdata.from = Preferences::emailAddress();
 	else
 	{
-		identity = mIdentityManager->identityForUoid(jobdata.event.emailFromId());
+		identity = Identities::identityManager()->identityForUoid(jobdata.event.emailFromId());
 		if (identity.isNull())
 		{
 			kError() << "Identity" << jobdata.event.emailFromId() << "not found";
@@ -519,38 +512,6 @@ void KAMail::notifyQueued(const KAEvent& event)
 			}
 		}
 	}
-}
-
-/******************************************************************************
-*  Return whether any email identities exist.
-*/
-bool KAMail::identitiesExist()
-{
-	identityManager();    // create identity manager if not already done
-	return mIdentityManager->begin() != mIdentityManager->end();
-}
-
-/******************************************************************************
-*  Fetch the uoid of an email identity name or uoid string.
-*/
-uint KAMail::identityUoid(const QString& identityUoidOrName)
-{
-	bool ok;
-	uint id = identityUoidOrName.toUInt(&ok);
-	if (!ok  ||  identityManager()->identityForUoid(id).isNull())
-	{
-		identityManager();   // fetch it if not already done
-		for (KPIMIdentities::IdentityManager::ConstIterator it = mIdentityManager->begin();
-		     it != mIdentityManager->end();  ++it)
-		{
-			if ((*it).identityName() == identityUoidOrName)
-			{
-				id = (*it).uoid();
-				break;
-			}
-		}
-	}
-	return id;
 }
 
 /******************************************************************************

@@ -24,6 +24,7 @@
 #include "alarmresource.h"
 #include "alarmtext.h"
 #include "functions.h"
+#include "identities.h"
 #include "kalarmapp.h"
 #include "preferences.h"
 
@@ -3988,7 +3989,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 				QString name = alarm->customProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);
 				if (name.isEmpty())
 					continue;
-				uint id = KAMail::identityUoid(name);
+				uint id = Identities::identityUoid(name);
 				if (id)
 					alarm->setCustomProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(id));
 				alarm->removeCustomProperty(KCalendar::APPNAME, KMAIL_ID_PROPERTY);

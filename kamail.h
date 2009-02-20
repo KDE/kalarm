@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,6 @@ class KUrl;
 class KJob;
 class DateTime;
 class EmailAddressList;
-namespace KPIMIdentities { class IdentityManager; }
 namespace MailTransport  { class TransportJob; }
 namespace KMime { namespace Types { struct Address; } }
 
@@ -62,9 +61,6 @@ class KAMail : public QObject
 		static bool        checkAttachment(const KUrl&);
 		static QString     convertAddresses(const QString& addresses, EmailAddressList&);
 		static QString     convertAttachments(const QString& attachments, QStringList& list);
-		static KPIMIdentities::IdentityManager* identityManager();
-		static bool        identitiesExist();
-		static uint        identityUoid(const QString& identityUoidOrName);
 		static QString     controlCentreAddress();
 #ifdef KMAIL_SUPPORTED
 		static QString     getMailBody(quint32 serialNumber);
@@ -90,7 +86,6 @@ class KAMail : public QObject
 		static KAMail*     mInstance;
 		static QQueue<MailTransport::TransportJob*> mJobs;
 		static QQueue<JobData>                      mJobData;
-		static KPIMIdentities::IdentityManager* mIdentityManager;     // KMail identity manager
 };
 
 #endif // KAMAIL_H

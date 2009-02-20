@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
 using namespace KHolidays;
 
 #include "functions.h"
+#include "identities.h"
 #include "kamail.h"
 #include "messagebox.h"
 #include "preferences.moc"
@@ -236,7 +237,7 @@ QString Preferences::emailAddress()
 {
 	QString from = self()->mBase_EmailFrom;
 	if (from == FROM_KMAIL)
-		return KAMail::identityManager()->defaultIdentity().fullEmailAddr();
+		return Identities::identityManager()->defaultIdentity().fullEmailAddr();
 	if (from == FROM_SYS_SETTINGS)
 		return KAMail::controlCentreAddress();
 	return from;

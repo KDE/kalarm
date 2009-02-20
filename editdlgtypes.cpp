@@ -1,22 +1,22 @@
 /*
-*  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
-*  Program:  kalarm
-*  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
-*
-*  This program is free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  This program is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-*  GNU General Public License for more details.
-*
-*  You should have received a copy of the GNU General Public License along
-*  with this program; if not, write to the Free Software Foundation, Inc.,
-*  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
+ *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
+ *  Program:  kalarm
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
 
 #include "kalarm.h"
 #include "editdlgtypes.moc"
@@ -28,6 +28,7 @@
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
 #include "functions.h"
+#include "identities.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "latecancel.h"
@@ -1048,7 +1049,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 		label->setFixedSize(label->sizeHint());
 		grid->addWidget(label, 0, 0);
 
-		mEmailFromList = new EmailIdCombo(KAMail::identityManager(), parent);
+		mEmailFromList = new EmailIdCombo(Identities::identityManager(), parent);
 		mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
 		label->setBuddy(mEmailFromList);
 		mEmailFromList->setWhatsThis(i18nc("@info:whatsthis", "Your email identity, used to identify you as the sender when sending email alarms."));

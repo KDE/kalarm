@@ -8,4 +8,4 @@ GlobalEnums=false
 UseEnumTypes=true
 ItemAccessors=true
 SetUserTexts=true
-SourceIncludeFiles=\"kamail.h\"
+SourceIncludeFiles=\"identities.h\"

@@ -28,6 +28,7 @@
 #include "editdlg.h"
 #include "dbushandler.h"
 #include "functions.h"
+#include "identities.h"
 #include "kamail.h"
 #include "karecurrence.h"
 #include "mainwindow.h"
@@ -416,7 +417,7 @@ int KAlarmApp::newInstance()
 					if (args->isSet("subject"))
 						alSubject = args->getOption("subject");
 					if (args->isSet("from-id"))
-						alFromID = KAMail::identityUoid(args->getOption("from-id"));
+						alFromID = Identities::identityUoid(args->getOption("from-id"));
 					QStringList params = args->getOptionList("mail");
 					for (QStringList::Iterator i = params.begin();  i != params.end();  ++i)
 					{

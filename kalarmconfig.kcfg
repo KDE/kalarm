@@ -151,7 +151,7 @@
     <entry name="Base_EmailFrom" key="EmailFrom" type="String">
       <label context="@label">'From' email address</label>
       <whatsthis context="@info:whatsthis">Your email address, used to identify you as the sender when sending email alarms. Enter "@SystemSettings" to use the email address set in System Settings, "@KMail" to allow choice of KMail identities, or enter the actual email address otherwise.</whatsthis>
-      <default code="true">KAMail::identitiesExist() ? QLatin1String("@KMail") : QLatin1String("@SystemSettings")</default>
+      <default code="true">Identities::identitiesExist() ? QLatin1String("@KMail") : QLatin1String("@SystemSettings")</default>
     </entry>
     <entry name="Base_EmailBccAddress" key="EmailBccAddress" type="String">
       <label context="@label">'Bcc' email address</label>
