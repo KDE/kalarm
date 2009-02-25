@@ -1649,6 +1649,7 @@ void MessageWin::slotDefer()
 		if (event)
 		{
 			// The event still exists in the active calendar
+			kDebug() << "Deferring event" << mEventID;
 			KAEvent newev(*event);
 			newev.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			newev.setDeferDefaultMinutes(delayMins);
@@ -1674,6 +1675,7 @@ void MessageWin::slotDefer()
 				mEditButton->setEnabled(false);
 				return;
 			}
+			kDebug() << "Deferring retrieved event" << mEventID;
 			event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
 			event.setDeferDefaultMinutes(delayMins);
 			// Add the event back into the calendar file, retaining its ID
