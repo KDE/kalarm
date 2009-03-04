@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.1.5 --- 7 February 2009 ===
+=== Version 2.1.6 --- 4 March 2009 ===
+Fix crash when KAlarm quits.
+
+=== Version 2.1.5 (KDE 4.2.1) --- 7 February 2009 ===
 - Disable inapplicable alarm types in alarm edit dialogue Load Template list.
 - Prevent multiple identical error messages being displayed for the same alarm.
 - Fix possible crash on alarm refresh, or removal or disabling of a resource.
