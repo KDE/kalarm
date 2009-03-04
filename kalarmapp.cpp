@@ -1024,7 +1024,6 @@ void KAlarmApp::processQueue()
 void KAlarmApp::removeWindow(TrayWindow*)
 {
 	mTrayWindow = 0;
-	quitIf();
 }
 
 /******************************************************************************
