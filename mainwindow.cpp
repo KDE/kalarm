@@ -51,6 +51,7 @@
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QCloseEvent>
+#include <QTimer>
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
@@ -1073,6 +1074,17 @@ void MainWindow::slotNewToolbarConfig()
 */
 void MainWindow::slotQuit()
 {
+	// Quit once the menu has been processed. Deleting the window while
+	// still processing the menu implies deleting the menu while it's still
+	// being processed, leading to possible crashes.
+	QTimer::singleShot(0, this, SLOT(slotDoQuit()));
+}
+
+/******************************************************************************
+* Called by the timer after the Quit context menu item is selected.
+*/
+void MainWindow::slotDoQuit()
+{
 	theApp()->doQuit(this);
 }
 
@@ -1097,7 +1109,9 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 		{
 			// There is no system tray icon, and this is the last main
 			// window, so closing it will quit the application.
-			theApp()->doQuit(this);
+			// Quit once the close event has been processed. Deleting the
+			// window while still processing the event handler can cause a crash.
+			QTimer::singleShot(0, this, SLOT(slotDoQuit()));
 			ce->ignore();
 			return;
 		}

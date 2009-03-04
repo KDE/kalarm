@@ -39,6 +39,7 @@
 #include <QToolTip>
 #include <QMouseEvent>
 #include <QList>
+#include <QTimer>
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -165,6 +166,17 @@ void TrayWindow::slotPreferences()
 * Called when the Quit context menu item is selected.
 */
 void TrayWindow::slotQuit()
+{
+	// Quit once the context menu has been processed. Deleting the tray
+	// icon while still processing the menu implies deleting the menu
+	// while it's still being processed, leading to possible crashes.
+	QTimer::singleShot(0, this, SLOT(slotDoQuit()));
+}
+
+/******************************************************************************
+* Called by the timer after the Quit context menu item is selected.
+*/
+void TrayWindow::slotDoQuit()
 {
 	theApp()->doQuit(parentWidget());
 }
