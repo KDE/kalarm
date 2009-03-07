@@ -109,7 +109,10 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	// Replace the default handler for the Quit context menu item
 	const char* quitName = KStandardAction::name(KStandardAction::Quit);
 	delete actions->action(quitName);
-	KStandardAction::quit(this, SLOT(slotQuit()), actions);
+	// Quit only once the event loop is called; otherwise, the parent tray icon
+	// will be deleted while still processing the action, resulting in a crash.
+	a = KStandardAction::quit(0, 0, actions);
+	connect(a, SIGNAL(triggered(bool)), SLOT(slotQuit()), Qt::QueuedConnection);
 
 	// Set icon to correspond with the alarms enabled menu status
 	setEnabledStatus(theApp()->alarmsEnabled());
@@ -164,19 +167,11 @@ void TrayWindow::slotPreferences()
 
 /******************************************************************************
 * Called when the Quit context menu item is selected.
+* Note that this must be called by the event loop, not directly from the menu
+* item, since otherwise the tray icon will be deleted while still processing
+* the menu, resulting in a crash.
 */
 void TrayWindow::slotQuit()
-{
-	// Quit once the context menu has been processed. Deleting the tray
-	// icon while still processing the menu implies deleting the menu
-	// while it's still being processed, leading to possible crashes.
-	QTimer::singleShot(0, this, SLOT(slotDoQuit()));
-}
-
-/******************************************************************************
-* Called by the timer after the Quit context menu item is selected.
-*/
-void TrayWindow::slotDoQuit()
 {
 	theApp()->doQuit(parentWidget());
 }
