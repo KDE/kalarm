@@ -45,9 +45,6 @@ class TrayWindow : public KSystemTrayIcon
 		MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }
 		void         setAssocMainWindow(MainWindow* win)   { mAssocMainWindow = win; }
 
-	public slots:
-		void         slotQuit();
-
 	signals:
 		void         deleted();
 
@@ -63,7 +60,7 @@ class TrayWindow : public KSystemTrayIcon
 		void         slotPreferences();
 		void         setEnabledStatus(bool status);
 		void         slotResourceStatusChanged();
-		void         slotDoQuit();
+		void         slotQuit();
 
 	private:
 		QString      tooltipAlarmText() const;

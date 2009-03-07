@@ -519,7 +519,10 @@ void MainWindow::initActions()
 	mActionFindPrev = KStandardAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
 	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
-	KStandardAction::quit(this, SLOT(slotQuit()), actions);
+	// Quit only once the event loop is called; otherwise, the parent window will
+	// be deleted while still processing the action, resulting in a crash.
+	KAction* act = KStandardAction::quit(0, 0, actions);
+	connect(act, SIGNAL(triggered(bool)), SLOT(slotQuit()), Qt::QueuedConnection);
 	KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
 	KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
 	KStandardAction::preferences(this, SLOT(slotPreferences()), actions);
@@ -1070,20 +1073,12 @@ void MainWindow::slotNewToolbarConfig()
 }
 
 /******************************************************************************
-*  Called when the Quit menu item is selected.
+* Called when the Quit menu item is selected.
+* Note that this must be called by the event loop, not directly from the menu
+* item, since otherwise the window will be deleted while still processing the
+* menu, resulting in a crash.
 */
 void MainWindow::slotQuit()
-{
-	// Quit once the menu has been processed. Deleting the window while
-	// still processing the menu implies deleting the menu while it's still
-	// being processed, leading to possible crashes.
-	QTimer::singleShot(0, this, SLOT(slotDoQuit()));
-}
-
-/******************************************************************************
-* Called by the timer after the Quit context menu item is selected.
-*/
-void MainWindow::slotDoQuit()
 {
 	theApp()->doQuit(this);
 }
