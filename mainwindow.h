@@ -113,6 +113,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotToggleTrayIcon();
 		void           slotRefreshAlarms();
 		void           slotImportAlarms();
+		void           slotExportAlarms();
 		void           slotBirthdays();
 		void           slotTemplates();
 		void           slotTemplatesEnd();
@@ -166,6 +167,8 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		AlarmResources*      mAlarmResources;      // calendar resources to use for this window
 		KToggleAction*       mActionToggleResourceSel;
 		KAction*             mActionImportAlarms;
+		KAction*             mActionExportAlarms;
+		KAction*             mActionExport;
 		KAction*             mActionImportBirthdays;
 		KAction*             mActionTemplates;
 		NewAlarmAction*      mActionNew;

@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -318,6 +318,9 @@ void ResourceSelector::initActions(KActionCollection* actions)
 	mActionImport      = new KAction(i18nc("@action", "Im&port..."), this);
 	actions->addAction(QLatin1String("resImport"), mActionImport);
 	connect(mActionImport, SIGNAL(triggered(bool)), SLOT(importCalendar()));
+	mActionExport      = new KAction(i18nc("@action", "E&xport..."), this);
+	actions->addAction(QLatin1String("resExport"), mActionExport);
+	connect(mActionExport, SIGNAL(triggered(bool)), SLOT(exportCalendar()));
 }
 
 void ResourceSelector::setContextMenu(KMenu* menu)
@@ -368,6 +371,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 	mActionEdit->setEnabled(resource);
 	mActionRemove->setEnabled(resource);
 	mActionImport->setEnabled(active && writable);
+	mActionExport->setEnabled(active);
 	QString text;
 	switch (type)
 	{
@@ -446,6 +450,17 @@ void ResourceSelector::setStandard()
 void ResourceSelector::importCalendar()
 {
 	AlarmCalendar::importAlarms(this, currentResource());
+}
+
+/******************************************************************************
+* Called from the context menu to copy the selected resource's alarms to an
+* external calendar.
+*/
+void ResourceSelector::exportCalendar()
+{
+	AlarmResource* resource = currentResource();
+	if (resource)
+		AlarmCalendar::exportAlarms(AlarmCalendar::resources()->events(resource), this);
 }
 
 /******************************************************************************

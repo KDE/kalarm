@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui>
-<kpartgui name="kalarm" version="195" >
+<kpartgui name="kalarm" version="220" >
  <ToolBar noMerge="1" name="mainToolBar" >
   <Action name="newDisplay" />
   <Action name="newCommand" />
@@ -11,10 +11,10 @@
   <Action name="delete" />
   <Separator/>
   <Action name="showResources" />
-  <Separator />
+  <Separator/>
   <Action name="edit_undo" />
   <Action name="edit_redo" />
-  <Separator />
+  <Separator/>
   <Action name="edit_find"/>
  </ToolBar>
  <MenuBar>
@@ -23,6 +23,7 @@
    <Action name="templates" />
    <Action name="importAlarms" />
    <Action name="importBirthdays" />
+   <Action name="exportAlarms" />
   </Menu>
   <Menu name="view" >
    <text>&amp;View</text>
@@ -44,6 +45,7 @@
    <Action name="delete" />
    <Action name="undelete" />
    <Action name="disable" />
+   <Separator/>
    <Action name="createTemplate" />
    <Separator/>
    <Action name="alarmsEnable" />
@@ -61,12 +63,15 @@
  <Menu name="listContext" >
   <Action name="new" />
   <Action name="newFromTempl" />
+  <Separator/>
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />
   <Action name="undelete" />
   <Action name="disable" />
+  <Separator/>
   <Action name="createTemplate" />
+  <Action name="export" />
  </Menu>
  <Menu name="resourceContext" >
   <Action name="resReload" />
@@ -82,5 +87,6 @@
   <Separator/>
   <Action name="resAdd" />
   <Action name="resImport" />
+  <Action name="resExport" />
  </Menu>
 </kpartgui>

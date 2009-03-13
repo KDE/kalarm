@@ -488,6 +488,14 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
 	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
+	mActionExportAlarms = new KAction(i18nc("@action", "E&xport Selected Alarms..."), this);
+	actions->addAction(QLatin1String("exportAlarms"), mActionExportAlarms);
+	connect(mActionExportAlarms, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
+
+	mActionExport = new KAction(i18nc("@action", "E&xport..."), this);
+	actions->addAction(QLatin1String("export"), mActionExport);
+	connect(mActionExport, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
+
 	QAction* action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
 	actions->addAction(QLatin1String("refreshAlarms"), action);
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
@@ -572,6 +580,7 @@ void MainWindow::initActions()
 	mActionReactivate->setEnabled(false);
 	mActionEnable->setEnabled(false);
 	mActionCreateTemplate->setEnabled(false);
+	mActionExport->setEnabled(false);
 
 	Undo::emitChanged();     // set the Undo/Redo menu texts
 //	Daemon::monitoringAlarms();
@@ -813,6 +822,17 @@ void MainWindow::slotSpreadWindowsShortcut()
 void MainWindow::slotImportAlarms()
 {
 	AlarmCalendar::importAlarms(this);
+}
+
+/******************************************************************************
+* Called when the Export Alarms menu item is selected, to export the selected
+* alarms to an external calendar.
+*/
+void MainWindow::slotExportAlarms()
+{
+	KAEvent::List events = mListView->selectedEvents();
+	if (!events.isEmpty())
+		AlarmCalendar::exportAlarms(events, this);
 }
 
 /******************************************************************************
@@ -1373,6 +1393,8 @@ void MainWindow::slotSelection()
 
 	kDebug() << "true";
 	mActionCreateTemplate->setEnabled((count == 1) && (AlarmResources::instance()->activeCount(AlarmResource::TEMPLATE, true) > 0));
+	mActionExportAlarms->setEnabled(true);
+	mActionExport->setEnabled(true);
 	mActionCopy->setEnabled(active && count == 1);
 	mActionModify->setEnabled(count == 1);
 	mActionDelete->setEnabled(!readOnly && (active || allArchived));
@@ -1399,6 +1421,8 @@ void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 void MainWindow::selectionCleared()
 {
 	mActionCreateTemplate->setEnabled(false);
+	mActionExportAlarms->setEnabled(false);
+	mActionExport->setEnabled(false);
 	mActionCopy->setEnabled(false);
 	mActionModify->setEnabled(false);
 	mActionDelete->setEnabled(false);

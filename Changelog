@@ -1,10 +1,19 @@
 KAlarm Change Log
 
-=== Version 2.2.0 pre --- 25 January 2009 ===
+=== Version 2.2.0 pre --- 13 March 2009 ===
 - Provide facility to export alarms to a new calendar file.
+- Provide option to spread alarm and error messages over screen.
 - Show command execution error indication for alarms in main window alarm list.
 - Add configuration setting for default deferral time in Defer Alarm dialogue.
 - Accept drag and drop of Todo entries to create a new alarm.
+
+=== Version 2.1.6 --- 4 March 2009 ===
+Fix crash when KAlarm quits.
+
+=== Version 2.1.5 (KDE 4.2.1) --- 7 February 2009 ===
+- Disable inapplicable alarm types in alarm edit dialogue Load Template list.
+- Prevent multiple identical command error messages being shown for an alarm.
+- Fix possible crash on alarm refresh, or removal or disabling of a resource.
 
 === Version 2.1.4 (KDE 4.2) --- 18 January 2009 ===
 - Prevent corrupt alarms if deferral reinstates from archived alarm instead of

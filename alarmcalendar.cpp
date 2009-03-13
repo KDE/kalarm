@@ -19,13 +19,23 @@
  */
 
 #include "kalarm.h"
-#include <unistd.h>
-#include <time.h>
+#include "alarmcalendar.moc"
 
-#include <QFile>
-#include <QTextStream>
-#include <QRegExp>
+#include "alarmresources.h"
+#include "calendarcompat.h"
+#include "eventlistmodel.h"
+#include "filedialog.h"
+#include "functions.h"
+#include "kalarmapp.h"
+#include "mainwindow.h"
+#include "preferences.h"
 
+#include <kcal/calendarlocal.h>
+#include <kcal/vcaldrag.h>
+#include <kcal/vcalformat.h>
+#include <kcal/icalformat.h>
+
+#include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
@@ -37,20 +47,12 @@
 #include <kfiledialog.h>
 #include <kdebug.h>
 
-#include <kcal/calendarlocal.h>
-#include <kcal/vcaldrag.h>
-#include <kcal/vcalformat.h>
-#include <kcal/icalformat.h>
-#include <kglobal.h>
+#include <QFile>
+#include <QTextStream>
+#include <QRegExp>
 
-#include "alarmresources.h"
-#include "calendarcompat.h"
-#include "eventlistmodel.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "mainwindow.h"
-#include "preferences.h"
-#include "alarmcalendar.moc"
+#include <unistd.h>
+#include <time.h>
 
 using namespace KCal;
 
@@ -678,6 +680,91 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	}
 	if (!local)
 		KIO::NetAccess::removeTempFile(filename);
+	return success;
+}
+
+/******************************************************************************
+* Export all selected alarms to an external calendar.
+* The alarms are given new unique event IDs.
+* Parameters: parent = parent widget for error message boxes
+* Reply = true if all alarms in the calendar were successfully imported
+*       = false if any alarms failed to be imported.
+*/
+bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
+{
+	bool append;
+#warning Append option?
+append = false;
+	QString file = FileDialog::getSaveFileName(KUrl("kfiledialog:///exportalarms"),
+	                                           QString::fromLatin1("*.ics|%1").arg(i18nc("@info/plain", "Calendar Files")),
+	                                           parent, i18nc("@title:window", "Choose Export Calendar"),
+	                                           &append);
+	if (file.isEmpty())
+	    return false;
+	KUrl url;
+	url.setPath(file);
+	if (!url.isValid())
+	{
+		kDebug() << "Invalid URL";
+		return false;
+	}
+	kDebug() << url.prettyUrl();
+
+	CalendarLocal calendar(Preferences::timeZone(true));
+	if (append  &&  !calendar.load(file))
+	{
+		KIO::UDSEntry uds;
+		KIO::NetAccess::stat(url, uds, parent);
+		KFileItem fi(uds, url);
+		if (fi.size())
+		{
+			kError() << "Error loading calendar file" << file << "for append";
+			KMessageBox::error(0, i18nc("@info", "Error loading calendar to append to:<nl/><filename>%1</filename>", url.prettyUrl()));
+			return false;
+		}
+	}
+	CalendarCompat::setID(calendar);
+
+	// Add the alarms to the calendar
+	bool ok = true;
+	bool some = false;
+	for (int i = 0, end = events.count();  i < end;  ++i)
+	{
+		KAEvent* event = events[i];
+		Event* kcalEvent = new Event;
+		KCalEvent::Status type = event->category();
+		QString id = KCalEvent::uid(kcalEvent->uid(), type);
+		kcalEvent->setUid(id);
+		event->updateKCalEvent(kcalEvent, false, (type == KCalEvent::ARCHIVED));
+		if (calendar.addEvent(kcalEvent))
+			some = true;
+		else
+			ok = false;
+	}
+
+	// Save the calendar to file
+	bool success = true;
+	KTemporaryFile* tempFile = 0;
+	bool local = url.isLocalFile();
+	if (!local)
+	{
+		tempFile = new KTemporaryFile;
+		file = tempFile->fileName();
+	}
+	if (!calendar.save(file, new ICalFormat))
+	{
+		kError() << file << ": failed";
+		KMessageBox::error(0, i18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
+		success = false;
+	}
+	else if (!local  &&  !KIO::NetAccess::upload(file, url, parent))
+	{
+		kError() << file << ": upload failed";
+		KMessageBox::error(0, i18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
+		success = false;
+	}
+	calendar.close();
+	delete tempFile;
 	return success;
 }
 

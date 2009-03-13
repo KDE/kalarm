@@ -22,6 +22,7 @@ set(libkalarm_SRCS
 	lib/dateedit.cpp 
 	lib/datetime.cpp 
 	lib/desktop.cpp
+	lib/filedialog.cpp
 	lib/identities.cpp
 	lib/itembox.cpp
 	lib/label.cpp 

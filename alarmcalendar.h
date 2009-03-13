@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -89,6 +89,7 @@ class AlarmCalendar : public QObject
 		static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
 		static AlarmCalendar* displayCalendarOpen();
 		static bool           importAlarms(QWidget*, AlarmResource* = 0);
+		static bool           exportAlarms(const KAEvent::List&, QWidget* parent);
 		static KAEvent*       getEvent(const QString& uniqueID);
 		static const KCal::Event* getKCalEvent(const QString& uniqueID);
 
