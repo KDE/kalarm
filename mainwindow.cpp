@@ -476,6 +476,10 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
+	mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
+	actions->addAction(QLatin1String("spread"), mActionSpreadWindows);
+	mActionSpreadWindows->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+
 	mActionImportAlarms = new KAction(i18nc("@action", "Import &Alarms..."), this);
 	actions->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
 	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
@@ -791,6 +795,15 @@ void MainWindow::slotShowArchived()
 	mListView->reset();
 	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
 	config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);
+}
+
+/******************************************************************************
+* Called when the Spread Windows global shortcut is selected, to spread alarm
+* windows so that they are all visible.
+*/
+void MainWindow::slotSpreadWindowsShortcut()
+{
+	mActionSpreadWindows->trigger();
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -95,6 +95,7 @@ void                editTemplate(KAEvent*, QWidget* parent = 0);
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 KToggleAction*      createAlarmEnableAction(QObject* parent);
+KToggleAction*      createSpreadWindowsAction(QObject* parent);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.
  */

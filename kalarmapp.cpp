@@ -1214,6 +1214,24 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
 }
 
 /******************************************************************************
+* Spread or collect alarm message and error message windows.
+*/
+void KAlarmApp::spreadWindows(bool spread)
+{
+	spread = MessageWin::spread(spread);
+	emit spreadWindowsToggled(spread);
+}
+
+/******************************************************************************
+* Called when the spread status of message windows changes.
+* Set the 'spread windows' action state.
+*/
+void KAlarmApp::setSpreadWindowsState(bool spread)
+{
+	emit spreadWindowsToggled(spread);
+}
+
+/******************************************************************************
 * Called to schedule a new alarm, either in response to a DCOP notification or
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.

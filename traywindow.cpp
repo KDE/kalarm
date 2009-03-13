@@ -104,6 +104,9 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
+	a = KAlarm::createSpreadWindowsAction(this);
+	actions->addAction(QLatin1String("tSpread"), a);
+	contextMenu()->addAction(a);
 	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));
 
 	// Replace the default handler for the Quit context menu item

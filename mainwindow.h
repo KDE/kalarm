@@ -126,6 +126,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotShowTime();
 		void           slotShowTimeTo();
 		void           slotShowArchived();
+		void           slotSpreadWindowsShortcut();
 		void           updateKeepArchived(int days);
 		void           slotUndo();
 		void           slotUndoItem(QAction* id);
@@ -186,6 +187,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		KToggleAction*       mActionShowTime;
 		KToggleAction*       mActionShowTimeTo;
 		KToggleAction*       mActionShowArchived;
+		KToggleAction*       mActionSpreadWindows;
 		KMenu*               mActionsMenu;
 		KMenu*               mContextMenu;
 		QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance

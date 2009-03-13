@@ -1061,6 +1061,80 @@ void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 }
 
 /******************************************************************************
+* Spread alarm windows over the screen so that they are all visible, or pile
+* them on top of each other again.
+* Reply = true if windows are now scattered, false if piled up.
+*/
+bool MessageWin::spread(bool scatter)
+{
+	if (mWindowList.count() <= 1)
+		return false;
+
+	QRect desk = KAlarm::desktopWorkArea();   // get the usable area of the desktop
+	if (scatter == isSpread(desk.topLeft()))
+		return scatter;
+
+	if (scatter)
+	{
+		// Usually there won't be many windows, so a crude
+		// scattering algorithm should suffice.
+		int x = desk.left();
+		int y = desk.top();
+		int ynext = y;
+		for (int errmsgs = 0;  errmsgs < 2;  ++errmsgs)
+		{
+			// Display alarm messages first, then error messages, since most
+			// error messages tend to be the same height.
+			for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+			{
+				MessageWin* w = mWindowList[i];
+				if ((!errmsgs && w->mErrorWindow)
+				||  (errmsgs && !w->mErrorWindow))
+					continue;
+				QSize sz = w->frameGeometry().size();
+				if (x + sz.width() > desk.right())
+				{
+					x = desk.left();
+					y = ynext;
+				}
+				int ytmp = y;
+				if (y + sz.height() > desk.bottom())
+				{
+					ytmp = desk.bottom() - sz.height();
+					if (ytmp < desk.top())
+						ytmp = desk.top();
+				}
+				w->move(x, ytmp);
+				x += sz.width();
+				if (ytmp + sz.height() > ynext)
+					ynext = ytmp + sz.height();
+			}
+		}
+	}
+	else
+	{
+		// Move all windows to the top left corner
+		for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+			mWindowList[i]->move(desk.topLeft());
+	}
+	return scatter;
+}
+
+/******************************************************************************
+* Check whether message windows are all piled up, or are spread out.
+* Reply = true if windows are currently spread, false if piled up.
+*/
+bool MessageWin::isSpread(const QPoint& topLeft)
+{
+	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+	{
+		if (mWindowList[i]->pos() != topLeft)
+			return true;
+	}
+	return false;
+}
+
+/******************************************************************************
 *  Returns the existing message window (if any) which is displaying the event
 *  with the specified ID.
 */
@@ -1407,6 +1481,7 @@ void MessageWin::showEvent(QShowEvent* se)
 void MessageWin::moveEvent(QMoveEvent* e)
 {
 	MainWindowBase::moveEvent(e);
+	theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea().topLeft()));
 	if (mPositioning)
 	{
 		// The window has just been initially positioned

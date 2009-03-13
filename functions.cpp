@@ -149,6 +149,18 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 }
 
 /******************************************************************************
+* Create a "Spread Windows" action.
+*/
+KToggleAction* createSpreadWindowsAction(QObject* parent)
+{
+	KToggleAction* action = new KToggleAction(i18nc("@action", "Spread Windows"), parent);
+	QObject::connect(action, SIGNAL(triggered(bool)), theApp(), SLOT(spreadWindows(bool)));
+	// The following line ensures that all instances are kept in the same state
+	QObject::connect(theApp(), SIGNAL(spreadWindowsToggled(bool)), action, SLOT(setChecked(bool)));
+	return action;
+}
+
+/******************************************************************************
 * Create a New From Template QAction.
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)

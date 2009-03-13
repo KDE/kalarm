@@ -71,6 +71,7 @@ class MessageWin : public MainWindowBase
 		static void         redisplayAlarms();
 		static void         showError(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
 		                              const QString& dontShowAgain = QString());
+		static bool         spread(bool scatter);
 
 	protected:
 		virtual void        showEvent(QShowEvent*);
@@ -111,6 +112,7 @@ class MessageWin : public MainWindowBase
 		bool                haveErrorMessage(unsigned msg) const;
 		void                clearErrorMessage(unsigned msg) const;
 		static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
+		static bool         isSpread(const QPoint& topLeft);
 
 		static QList<MessageWin*> mWindowList;  // list of existing message windows
 		static QMap<QString, unsigned> mErrorMessages;  // error messages currently displayed, by event ID
