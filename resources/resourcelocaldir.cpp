@@ -1,8 +1,8 @@
 /*
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
- *  Based on resourcelocaldir.cpp in libkcal (updated to rev 779953),
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Based on resourcelocaldir.cpp in libkcal (updated to rev 779953, 938673),
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -218,7 +218,6 @@ emit invalidate(this);  // necessary until load changes only is fixed
 				Event* ev = calendar()->event(id);
 				if (ev  &&  changes.indexOf(ev) < 0)
 				{
-kDebug(KARES_DEBUG) << "Loading" << id;
 					ModifiedMap::ConstIterator mit = oldLastModified.constFind(id);
 					if (mit != oldLastModified.constEnd()  &&  mit.value() == readLastModified(fileName))
 					{
@@ -367,6 +366,12 @@ bool KAResourceLocalDir::doSave(bool)
 
 bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 {
+	if (mDeletedIncidences.contains(incidence))
+	{
+		mDeletedIncidences.removeAll(incidence);
+		return true;
+	}
+
 	QString id = incidence->uid();
 	QString fileName = mURL.path() + '/' + id;
 	kDebug(KARES_DEBUG) << fileName;
@@ -404,6 +409,8 @@ bool KAResourceLocalDir::deleteEvent(Event* event)
 	clearChange(event);
 	disableChangeNotification();    // don't record this deletion as pending
 	bool success = calendar()->deleteEvent(event);
+	if (success)
+		mDeletedIncidences.append(event);
 	enableChangeNotification();
 	return success;
 }

@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.h  -  KAlarm local directory alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocaldir.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -25,11 +25,12 @@
 
 /* @file resourcelocaldir.h - KAlarm local directory alarm calendar resource */
 
-#include <QMap>
+#include "alarmresource.h"
+
 #include <kurl.h>
 #include <kdirwatch.h>
-
-#include "alarmresource.h"
+#include <QMap>
+#include <QList>
 
 namespace KCal {
     class Incidence;
@@ -94,6 +95,7 @@ class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
 		KDirWatch   mDirWatch;
 		typedef QMap<QString, QDateTime> ModifiedMap;
 		ModifiedMap mLastModified;
+		QList<KCal::Incidence*> mDeletedIncidences;
 		bool        mDirReadOnly;  // directory is read-only
 };
 
