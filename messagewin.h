@@ -97,7 +97,7 @@ class MessageWin : public MainWindowBase
 		void                enableButtons();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
-		void                setMaxSize();
+		void                frameDrawn();
 		void                readProcessOutput(ShellProcess*);
 
 	private:

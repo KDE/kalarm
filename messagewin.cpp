@@ -1466,12 +1466,11 @@ void MessageWin::showEvent(QShowEvent* se)
 		}
 		if (execComplete)
 			displayComplete();    // play audio, etc.
-		if (mAction == KAEvent::MESSAGE)
-		{
-			// Set the window size once the frame size is known
-			QTimer::singleShot(0, this, SLOT(setMaxSize()));
-		}
 	}
+
+	// Set the window size etc. once the frame size is known
+	QTimer::singleShot(0, this, SLOT(frameDrawn()));
+
 	mShown = true;
 }
 
@@ -1491,13 +1490,19 @@ void MessageWin::moveEvent(QMoveEvent* e)
 }
 
 /******************************************************************************
-*  Reset the iniital window size if it exceeds the working area of the desktop.
+* Called after (hopefully) the window frame size is known.
+* Reset the initial window size if it exceeds the working area of the desktop.
+* Set the 'spread windows' menu item status.
 */
-void MessageWin::setMaxSize()
+void MessageWin::frameDrawn()
 {
-	QSize s = sizeHint();
-	if (width() > s.width()  ||  height() > s.height())
-		resize(s);
+	if (!mErrorWindow  &&  mAction == KAEvent::MESSAGE)
+	{
+		QSize s = sizeHint();
+		if (width() > s.width()  ||  height() > s.height())
+			resize(s);
+	}
+	theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea().topLeft()));
 }
 
 /******************************************************************************
