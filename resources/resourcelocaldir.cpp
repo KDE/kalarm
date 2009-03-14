@@ -2,7 +2,7 @@
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
  *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
- *  Based on resourcelocaldir.cpp in libkcal (updated to rev 779953, 938673),
+ *  Based on resourcelocaldir.cpp in libkcal (updated to rev 779953,938673,938806),
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -149,6 +149,9 @@ void KAResourceLocalDir::slotUpdated(const QString& filepath)
 #ifdef __GNUC__
 #warning Only reload the individual file which has changed
 #endif
+	if (filepath.contains(QRegExp("(~|\\.new|\\.tmp)$"))
+	||  filepath.startsWith(mURL.path() + "/qt_temp."))
+		return;   // ignore backup or temporary file
 	doLoad(false);
 }
 /******************************************************************************
@@ -203,8 +206,9 @@ emit invalidate(this);  // necessary until load changes only is fixed
 		{
 			// Check the next file in the directory
 			QString id = entries[i];
-			if (id.endsWith('~'))   // backup file, ignore it
-				continue;
+			if (id.contains(QRegExp("(~|\\.new|\\.tmp)$"))
+			||  id.startsWith("qt_temp."))
+				continue;   // ignore backup or temporary file
 			QString fileName = dirName + '/' + id;
 			foundFile = true;
 
@@ -218,7 +222,6 @@ emit invalidate(this);  // necessary until load changes only is fixed
 				Event* ev = calendar()->event(id);
 				if (ev  &&  changes.indexOf(ev) < 0)
 				{
-kDebug(KARES_DEBUG) << "Loading" << id;
 					ModifiedMap::ConstIterator mit = oldLastModified.constFind(id);
 					if (mit != oldLastModified.constEnd()  &&  mit.value() == readLastModified(fileName))
 					{
