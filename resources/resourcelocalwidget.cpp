@@ -40,6 +40,7 @@ ResourceLocalConfigWidget::ResourceLocalConfigWidget(QWidget* parent)
 	QLabel* label = new QLabel(i18nc("@label:textbox", "Location:"), this);
 	layout->addWidget(label, 1, 0);
 	mURL = new KUrlRequester(this);
+	mURL->setFilter(QString::fromLatin1("*.vcs *.ics|%1").arg(i18nc("@info/plain", "Calendar Files")));
 	layout->addWidget(mURL, 1, 1);
 }
 
