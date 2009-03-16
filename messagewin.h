@@ -62,7 +62,7 @@ class MessageWin : public MainWindowBase
 		void                setRecreating()        { mRecreating = true; }
 		const DateTime&     dateTime()             { return mDateTime; }
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
-		bool                hasDefer() const       { return !!mDeferButton; }
+		bool                hasDefer() const       { return mDeferButton; }
 		bool                isValid() const        { return !mInvalid; }
 		virtual void        show();
 		virtual QSize       sizeHint() const;

@@ -1150,7 +1150,7 @@ void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
 		// Set the values to their defaults
 		mEmailBcc->setChecked(Preferences::defaultEmailBcc());
 	}
-	bool enable = !!mEmailAttachList->count();
+	bool enable = mEmailAttachList->count();
 	mEmailAttachList->setEnabled(enable);
 	if (mEmailRemoveButton)
 		mEmailRemoveButton->setEnabled(enable);
