@@ -1,7 +1,7 @@
 /*
  *  spinbox2.cpp  -  spin box with extra pair of spin buttons (for Qt 3)
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -527,12 +527,13 @@ void ExtraSpinBox::paintEvent(QPaintEvent* e)
 =============================================================================*/
 
 SpinMirror::SpinMirror(ExtraSpinBox* spinbox, SpinBox* mainspin, QWidget* parent)
-	: QGraphicsView(new QGraphicsScene, parent),
+	: QGraphicsView(parent),
 	  mSpinbox(spinbox),
 	  mMainSpinbox(mainspin),
 	  mReadOnly(false),
 	  mMirrored(false)
 {
+	setScene(new QGraphicsScene(this));
 	setAttribute(Qt::WA_Hover);
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
