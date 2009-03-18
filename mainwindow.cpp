@@ -168,7 +168,7 @@ MainWindow::MainWindow(bool restored)
 	connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
 
 	// Create the alarm list widget
-	mListFilterModel = new AlarmListFilterModel(EventListModel::alarms());
+	mListFilterModel = new AlarmListFilterModel(EventListModel::alarms(), this);
 	mListFilterModel->setStatusFilter(mShowArchived ? static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED) : KCalEvent::ACTIVE);
 	mListView = new AlarmListView(WINDOW_NAME, mSplitter);
 	mListView->setModel(mListFilterModel);
