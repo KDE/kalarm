@@ -150,6 +150,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 	  mTemplate(Template),
 	  mDesiredReadOnly(false),
 	  mReadOnly(false),
+	  mShowingMore(true),
 	  mSavedEvent(0)
 {
 	init(0, getResource);
@@ -172,6 +173,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, QWidget* parent,
 	  mTemplate(Template),
 	  mDesiredReadOnly(readOnly),
 	  mReadOnly(readOnly),
+	  mShowingMore(true),
 	  mSavedEvent(0)
 {
 	init(event, getResource);
