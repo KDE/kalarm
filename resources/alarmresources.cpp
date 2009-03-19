@@ -458,9 +458,13 @@ void AlarmResources::slotCacheDownloaded(AlarmResource* resource)
 
 void AlarmResources::remap(AlarmResource* resource)
 {
-	for (ResourceMap::Iterator it = mResourceMap.begin();  it != mResourceMap.end();  ++it)
+	for (ResourceMap::Iterator it = mResourceMap.begin();  it != mResourceMap.end();  )
+	{
 		if (it.value() == resource)
-			mResourceMap.erase(it);
+			it = mResourceMap.erase(it);
+		else
+			++it;
+	}
 	Event::List events = resource->rawEvents();
 	for (int i = 0, end = events.count();  i < end;  ++i)
 		mResourceMap[events[i]] = resource;
