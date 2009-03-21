@@ -693,8 +693,6 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 {
 	bool append;
-#warning Append option?
-append = false;
 	QString file = FileDialog::getSaveFileName(KUrl("kfiledialog:///exportalarms"),
 	                                           QString::fromLatin1("*.ics|%1").arg(i18nc("@info/plain", "Calendar Files")),
 	                                           parent, i18nc("@title:window", "Choose Export Calendar"),
