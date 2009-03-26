@@ -207,7 +207,7 @@ emit invalidate(this);  // necessary until load changes only is fixed
 			// Check the next file in the directory
 			QString id = entries[i];
 			if (id.contains(QRegExp("(~|\\.new|\\.tmp)$"))
-			||  id.startsWith("qt_temp."))
+			||  id.startsWith(QLatin1String("qt_temp.")))
 				continue;   // ignore backup or temporary file
 			QString fileName = dirName + '/' + id;
 			foundFile = true;
