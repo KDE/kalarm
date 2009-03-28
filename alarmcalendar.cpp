@@ -1037,12 +1037,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 			evnt->clearUpdated();
 			if (kaevnt != evnt)
 				*kaevnt = *evnt;   // update the event instance in our lists, keeping the same pointer
-			for (EarliestMap::Iterator eit = mEarliestAlarm.begin();  eit != mEarliestAlarm.end();  ++eit)
-				if (eit.value() == kaevnt)
-				{
-					findEarliestAlarm(eit.key());
-					break;
-				}
+			findEarliestAlarm(AlarmResources::instance()->resource(kcalEvent));
 			return kaevnt;
 		}
 	}

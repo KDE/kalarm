@@ -20,7 +20,7 @@
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 
-#include "filedialog.h"
+#include "filedialog.moc"
 #include <kabstractfilewidget.h>
 #include <klocale.h>
 #include <krecentdocument.h>
