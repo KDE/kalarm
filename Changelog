@@ -4,7 +4,8 @@ KAlarm Change Log
 Fix recurring alarms being missed when deferred to earlier than next due alarm,
   when next due alarm is earlier than the next recurrence.
 
-=== Version 2.1.6 (KDE 4.2.2) --- 4 March 2009 ===
+=== Version 2.1.6 (KDE 4.2.2) --- 18 March 2009 ===
+Fix memory leaks.
 Fix crash when KAlarm quits.
 
 === Version 2.1.5 (KDE 4.2.1) --- 7 February 2009 ===
