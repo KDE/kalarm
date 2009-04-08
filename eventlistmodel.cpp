@@ -95,7 +95,7 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 		mTextIcon    = new QPixmap(SmallIcon("dialog-information"));
 		mFileIcon    = new QPixmap(SmallIcon("document-open"));
 		mCommandIcon = new QPixmap(SmallIcon("system-run"));
-		mEmailIcon   = new QPixmap(SmallIcon("mail-message-new"));
+		mEmailIcon   = new QPixmap(SmallIcon("mail-message-unread"));
 		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
 	}
 	MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
