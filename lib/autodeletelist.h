@@ -1,7 +1,7 @@
 /*
  *  autodeletelist.h  -  pointer list with auto-delete on destruction
  *  Program:  kalarm
- *  Copyright © 2008 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2008,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,8 +36,10 @@ class AutoDeleteList : public QList<T*>
 		AutoDeleteList() : QList<T*>() {}
 		~AutoDeleteList()
 		{
-			for (int i = 0, end = QList<T*>::count();  i < end;  ++i)
-				delete QList<T*>::operator[](i);
+			// Remove from list first before deleting the pointer, in
+			// case the pointer's destructor removes it from the list.
+			while (!this->isEmpty())
+				delete this->takeFirst();
 		}
 	private:
 		// Prevent copying since that would create two owners of the pointers
