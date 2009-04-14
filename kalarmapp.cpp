@@ -764,6 +764,7 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 	{
 		// Quit regardless, except for message windows
 		mQuitting = true;
+		EventListModel::alarms()->clear();  // prevent view updates during window destruction
 		MainWindow::closeAll();
 		displayTrayIcon(false);
 		if (MessageWin::instanceCount())
