@@ -64,6 +64,7 @@ class EventListModel : public QAbstractTableModel
 		static EventListModel* alarms();
 		static EventListModel* templates();
 		~EventListModel();
+		void                  clear();
 		virtual int           rowCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual int           columnCount(const QModelIndex& parent = QModelIndex()) const;
 		virtual QModelIndex   index(int row, int column = 0, const QModelIndex& parent = QModelIndex()) const;

@@ -106,6 +106,21 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 	                   SLOT(slotResourceLoaded(AlarmResource*, bool)));
 }
 
+/******************************************************************************
+* Clear all events from a model.
+*/
+void EventListModel::clear()
+{
+	kDebug();
+	int count = mEvents.count();
+	if (count)
+	{
+		beginRemoveRows(QModelIndex(), 0, count - 1);
+		mEvents.clear();
+		endRemoveRows();
+	}
+}
+
 int EventListModel::rowCount(const QModelIndex& parent) const
 {
 	if (parent.isValid())
