@@ -360,7 +360,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QString          alMessage;
-				uint             alFromID;
+				uint             alFromID = 0;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QString          alSubject;
@@ -884,7 +884,9 @@ void KAlarmApp::checkNextDueAlarm()
 	if (!nextEvent)
 		return;   // there are no alarms pending
 	KDateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
-	qint64 interval = KDateTime::currentDateTime(Preferences::timeZone()).secsTo_long(nextDt);
+	KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
+	qint64 interval = now.secsTo_long(nextDt);
+	kDebug() << "now:" << qPrintable(now.toString("%Y-%m-%d %H:%M %:Z")) << ", next:" << qPrintable(nextDt.toString("%Y-%m-%d %H:%M %:Z")) << ", due:" << interval;
 	if (interval <= 0)
 	{
 		// Queue the alarm
