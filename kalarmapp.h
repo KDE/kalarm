@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ class DBusHandler;
 class MainWindow;
 class TrayWindow;
 class ShellProcess;
+class OrgKdeKSpeechInterface;
 
 
 class KAlarmApp : public KUniqueApplication
@@ -51,6 +52,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               wantShowInSystemTray() const;
 		bool               alarmsEnabled() const           { return mAlarmsEnabled; }
 		bool               speechEnabled() const           { return mSpeechEnabled; }
+		OrgKdeKSpeechInterface* kspeechInterface(QString& error) const;
 		bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
 		bool               restoreSession();
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
@@ -105,6 +107,8 @@ class KAlarmApp : public KUniqueApplication
 		void               setArchivePurgeDays();
 		void               slotPurge()                     { purge(mArchivedPurgeDays); }
 		void               slotCommandExited(ShellProcess*);
+		void               slotDBusServiceUnregistered(const QString& serviceName);
+
 	private:
 		enum EventFunc
 		{
@@ -172,6 +176,7 @@ class KAlarmApp : public KUniqueApplication
 		int                mPurgeDaysQueued;     // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
 		QList<ProcData*>   mCommandProcesses;    // currently active command alarm processes
 		QQueue<DcopQEntry> mDcopQueue;           // DCOP command queue
+		mutable OrgKdeKSpeechInterface* mKSpeech;// KSpeech D-Bus interface object
 		int                mPendingQuitCode;     // exit code for a pending quit
 		bool               mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
 		bool               mProcessingQueue;     // a mDcopQueue entry is currently being processed

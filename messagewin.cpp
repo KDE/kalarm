@@ -72,6 +72,7 @@
 #include <kio/netaccess.h>
 #include <knotification.h>
 #include <kpushbutton.h>
+#include <kspeechinterface.h>
 #include <phonon/mediaobject.h>
 #include <phonon/path.h>
 #include <phonon/audiooutput.h>
@@ -80,10 +81,6 @@
 #include <ktoolinvocation.h>
 
 using namespace KCal;
-
-static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
-static const char* KTTDS_DBUS_PATH      = "/KSpeech";
-static const char* KTTSD_DBUS_INTERFACE = "org.kde.KSpeech";
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
@@ -1104,31 +1101,23 @@ void MessageWin::playAudio()
 
 void MessageWin::slotSpeak()
 {
-	QDBusConnection client = QDBusConnection::sessionBus();
-	if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
+	QString error;
+	OrgKdeKSpeechInterface* kspeech = theApp()->kspeechInterface(error);
+	if (!kspeech)
 	{
-		// kttsd is not running, so start it
-		QString error;
-		if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
+		if (!haveErrorMessage(ErrMsg_Speak))
 		{
-			kDebug() << "Failed to start kttsd:" << error;
-			if (!haveErrorMessage(ErrMsg_Speak))
-			{
-				KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), error);
-				clearErrorMessage(ErrMsg_Speak);
-			}
-			return;
+			KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), error);
+			clearErrorMessage(ErrMsg_Speak);
 		}
+		return;
 	}
-	// FIXME: this would be a lot cleaner just using kttsd's dbus stub.
-	QDBusInterface kttsdDBus(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, KTTSD_DBUS_INTERFACE );
-	QDBusMessage reply = kttsdDBus.call(QLatin1String("sayMessage"), mMessage, QString());
-	if (reply.type() == QDBusMessage::ErrorMessage)
+	if (!kspeech->say(mMessage, 0))
 	{
 		kDebug() << "SayMessage() D-Bus error";
 		if (!haveErrorMessage(ErrMsg_Speak))
 		{
-			KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call sayMessage failed"));
+			KMessageBox::detailedError(0, i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call say() failed"));
 			clearErrorMessage(ErrMsg_Speak);
 		}
 	}
