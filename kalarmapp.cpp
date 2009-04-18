@@ -40,18 +40,6 @@
 #include "startdaytimer.h"
 #include "traywindow.h"
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <iostream>
-#include <climits>
-
-#include <QObject>
-#include <QTimer>
-#include <QRegExp>
-#include <QFile>
-#include <QByteArray>
-#include <QTextStream>
-
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -62,9 +50,28 @@
 #include <kglobal.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
+#include <kspeechinterface.h>
+#include <kspeech.h>
+#include <ktoolinvocation.h>
 #include <netwm.h>
 #include <kdebug.h>
 #include <kshell.h>
+
+#include <QObject>
+#include <QTimer>
+#include <QRegExp>
+#include <QFile>
+#include <QByteArray>
+#include <QTextStream>
+#include <QtDBus/QtDBus>
+
+#include <stdlib.h>
+#include <ctype.h>
+#include <iostream>
+#include <climits>
+
+static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
+static const char* KTTDS_DBUS_PATH     = "/KSpeech";
 
 static bool convInterval(const QByteArray& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 static void setEventCommandError(const KAEvent&, KAEvent::CmdErrType);
@@ -102,6 +109,7 @@ KAlarmApp::KAlarmApp()
 	  mAlarmTimer(new QTimer(this)),
 	  mArchivedPurgeDays(-1),      // default to not purging
 	  mPurgeDaysQueued(-1),
+	  mKSpeech(0),
 	  mPendingQuit(false),
 	  mProcessingQueue(false),
 	  mSessionClosingDown(false),
@@ -122,6 +130,8 @@ KAlarmApp::KAlarmApp()
 	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
 	KARecurrence::setDefaultFeb29Type(Preferences::defaultFeb29Type());
 
+	connect(QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
+	        SLOT(slotDBusServiceUnregistered(const QString&)));
 	if (AlarmCalendar::initialiseCalendars())
 	{
 		connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
@@ -363,7 +373,7 @@ int KAlarmApp::newInstance()
 				// Display a message or file, execute a command, or send an email
 				KAEvent::Action action = KAEvent::MESSAGE;
 				QString          alMessage;
-				uint             alFromID;
+				uint             alFromID = 0;
 				EmailAddressList alAddresses;
 				QStringList      alAttachments;
 				QString          alSubject;
@@ -2089,6 +2099,49 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 			pd->messageBoxParent = parent;
 			break;
 		}
+	}
+}
+
+/******************************************************************************
+* Return a D-Bus interface object for KSpeech.
+* The KTTSD D-Bus service is started if necessary.
+* If the service cannot be started, 'error' is set to an error text.
+*/
+OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
+{
+	error.clear();
+	QDBusConnection client = QDBusConnection::sessionBus();
+	if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
+	{
+		// kttsd is not running, so start it
+		delete mKSpeech;
+		mKSpeech = 0;
+		if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
+		{
+			kDebug() << "Failed to start kttsd:" << error;
+			return 0;
+		}
+	}
+	if (!mKSpeech)
+	{
+		mKSpeech = new OrgKdeKSpeechInterface(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, QDBusConnection::sessionBus());
+		mKSpeech->setParent(theApp());
+		mKSpeech->setApplicationName(KGlobal::mainComponent().aboutData()->programName());
+		mKSpeech->setDefaultPriority(KSpeech::jpMessage);
+	}
+	return mKSpeech;
+}
+
+/******************************************************************************
+* Called when a D-Bus service unregisters.
+* If it's the KTTSD service, delete the KSpeech interface object.
+*/
+void KAlarmApp::slotDBusServiceUnregistered(const QString& serviceName)
+{
+	if (serviceName == KTTSD_DBUS_SERVICE)
+	{
+		delete mKSpeech;
+		mKSpeech = 0;
 	}
 }
 
