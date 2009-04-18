@@ -1389,7 +1389,8 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 		 * recurrences. (But exception dates/times need to be taken into account.)
 		 */
 		KDateTime kdtRecur;
-		int repeatFreq, repeatNum;
+		int repeatFreq = 0;
+		int repeatNum = 0;
 		if (mRepeatCount)
 		{
 			// It's a repetition inside a recurrence, each of which occurs
