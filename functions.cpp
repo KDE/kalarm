@@ -860,6 +860,8 @@ void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text
 		case KAEvent::EMAIL:
 			type = EditAlarmDlg::EMAIL;
 			break;
+		default:
+			return;
 	}
 	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, type, true, parent);
 	if (setAction  ||  text)
