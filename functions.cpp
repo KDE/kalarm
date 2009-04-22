@@ -759,7 +759,7 @@ void purgeArchive(int purgeDays)
 	if (purgeDays < 0)
 		return;
 	kDebug() << purgeDays;
-	QDate cutoff = QDate::currentDate().addDays(-purgeDays);
+	QDate cutoff = KDateTime::currentLocalDate().addDays(-purgeDays);
 	AlarmResource* resource = AlarmResources::instance()->getStandardResource(AlarmResource::ARCHIVED);
 	if (!resource)
 		return;
@@ -1494,22 +1494,22 @@ QString weekDayName(int day, const KLocale* locale)
 /******************************************************************************
 * Convert a date/time specification string into a local date/time or date value.
 * Parameters:
-*   tzString  = in the form [[[yyyy-]mm-]dd-]hh:mm [TZ] or yyyy-mm-dd [TZ].
+*   timeString  = in the form [[[yyyy-]mm-]dd-]hh:mm [TZ] or yyyy-mm-dd [TZ].
 *   dateTime  = receives converted date/time value.
-*   defaultDt = default date/time used for missing parts of tzString, or null
+*   defaultDt = default date/time used for missing parts of timeString, or null
 *               to use current date/time.
-*   allowTZ   = whether to allow a time zone specifier in tzString.
+*   allowTZ   = whether to allow a time zone specifier in timeString.
 * Reply = true if successful.
 */
-bool convTimeString(const QByteArray& tzString, KDateTime& dateTime, const KDateTime& defaultDt, bool allowTZ)
+bool convTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt, bool allowTZ)
 {
 #define MAX_DT_LEN 19
-	int i = tzString.indexOf(' ');
+	int i = timeString.indexOf(' ');
 	if (i > MAX_DT_LEN  ||  (i >= 0 && !allowTZ))
 		return false;
-	QString zone = (i >= 0) ? QString::fromLatin1(tzString.mid(i)) : QString();
+	QString zone = (i >= 0) ? QString::fromLatin1(timeString.mid(i)) : QString();
 	char timeStr[MAX_DT_LEN+1];
-	strcpy(timeStr, tzString.left(i >= 0 ? i : MAX_DT_LEN));
+	strcpy(timeStr, timeString.left(i >= 0 ? i : MAX_DT_LEN));
 	int dt[5] = { -1, -1, -1, -1, -1 };
 	char* s;
 	char* end;
@@ -1629,15 +1629,7 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 	bool error = false;
 	KDateTime::Spec spec = KDateTime::LocalZone;
 	QString zone = tzstring.trimmed();
-	if (defaultDt.isValid())
-	{
-		// Time spec is supplied - time zone specifier is not allowed
-		if (!zone.isEmpty())
-			error = true;
-		else
-			spec = defaultDt.timeSpec();
-	}
-	else if (!zone.isEmpty())
+	if (!zone.isEmpty())
 	{
 		if (zone == QLatin1String("Clock"))
 			spec = KDateTime::ClockTime;
@@ -1651,6 +1643,8 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 				spec = tz;
 		}
 	}
+	else if (defaultDt.isValid())
+		spec = defaultDt.timeSpec();
 
 	KDateTime result;
 	if (!error)
@@ -1661,7 +1655,7 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 			if (defaultDt.isValid())
 			       result = KDateTime(defaultDt.date(), time, spec);
 			else if (spec == KDateTime::LocalZone  ||  spec == KDateTime::ClockTime)
-				result = KDateTime(QDate::currentDate(), time, spec);
+				result = KDateTime(KDateTime::currentLocalDate(), time, spec);
 		}
 		else if (haveTime)
 		{
@@ -1676,6 +1670,33 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 	}
 	return result;
 }
+ 
+#ifndef NDEBUG
+/******************************************************************************
+* Set up KAlarm test conditions based on environment variables.
+* KALARM_TIME: specifies current system time (format [[[yyyy-]mm-]dd-]hh:mm [TZ]).
+*/
+void setTestModeConditions()
+{
+	const char* newTime = ::getenv("KALARM_TIME");
+	if (newTime && newTime[0])
+		setSimulatedSystemTime(newTime);
+}
+
+/******************************************************************************
+* Set the simulated system time (format [[[yyyy-]mm-]dd-]hh:mm [TZ]).
+*/
+bool setSimulatedSystemTime(const QByteArray& timeString)
+{
+	KDateTime dt;
+	if (!convTimeString(timeString, dt, KDateTime::realCurrentLocalDateTime(), true))
+		return false;
+	KDateTime::setSimulatedSystemTime(dt);
+	KDateTime now = KDateTime::currentLocalDateTime();
+	kDebug() << "New time=" << qPrintable(KDateTime::currentLocalDateTime().dateTime().toString("yyyy-MM-dd hh:mm")) << KSystemTimeZones::local().name();
+	return true;
+}
+#endif
 
 } // namespace KAlarm
 

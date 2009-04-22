@@ -1392,8 +1392,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 		 * recurrences. (But exception dates/times need to be taken into account.)
 		 */
 		KDateTime kdtRecur;
-		int repeatFreq = 0;
-		int repeatNum = 0;
+		int repeatFreq, repeatNum;
 		if (mRepeatCount)
 		{
 			// It's a repetition inside a recurrence, each of which occurs
@@ -1861,7 +1860,7 @@ bool KAEvent::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 		else if (mAtLoginDateTime.isValid())
 			dtl = mAtLoginDateTime;
 		else if (mStartDateTime.isDateOnly())
-			dtl = DateTime(QDate::currentDate().addDays(-1), mStartDateTime.timeSpec());
+			dtl = DateTime(KDateTime::currentLocalDate().addDays(-1), mStartDateTime.timeSpec());
 		else
 			dtl = KDateTime::currentUtcDateTime();
 		initKCalAlarm(ev, dtl, QStringList(AT_LOGIN_TYPE));

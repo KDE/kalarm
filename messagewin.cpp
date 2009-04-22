@@ -541,7 +541,7 @@ void MessageWin::initView()
 			mRemainingText->setMargin(leading);
 			mRemainingText->setPalette(labelPalette);
 			mRemainingText->setAutoFillBackground(true);
-			if (mDateTime.isDateOnly()  ||  QDate::currentDate().daysTo(mDateTime.date()) > 0)
+			if (mDateTime.isDateOnly()  ||  KDateTime::currentLocalDate().daysTo(mDateTime.date()) > 0)
 			{
 				setRemainingTextDay();
 				MidnightTimer::connect(this, SLOT(setRemainingTextDay()));    // update every day
@@ -745,7 +745,7 @@ void MessageWin::initView()
 void MessageWin::setRemainingTextDay()
 {
 	QString text;
-	int days = QDate::currentDate().daysTo(mDateTime.date());
+	int days = KDateTime::currentLocalDate().daysTo(mDateTime.date());
 	if (days <= 0  &&  !mDateTime.isDateOnly())
 	{
 		// The alarm is due today, so start refreshing every minute
@@ -1325,7 +1325,7 @@ void MessageWin::show()
 	if (mCloseTime.isValid())
 	{
 		// Set a timer to auto-close the window
-		int delay = QDateTime::currentDateTime().secsTo(mCloseTime);
+		int delay = KDateTime::currentLocalDateTime().dateTime().secsTo(mCloseTime);
 		if (delay < 0)
 			delay = 0;
 		QTimer::singleShot(delay * 1000, this, SLOT(close()));
@@ -1683,14 +1683,14 @@ void MessageWin::checkDeferralLimit()
 {
 	if (!mDeferButton  ||  !mDeferLimit.isValid())
 		return;
-	int n = QDate::currentDate().daysTo(mDeferLimit.date());
+	int n = KDateTime::currentLocalDate().daysTo(mDeferLimit.date());
 	if (n > 0)
 		return;
 	MidnightTimer::disconnect(this, SLOT(checkDeferralLimit()));
 	if (n == 0)
 	{
 		// The deferral limit will be reached today
-		n = QTime::currentTime().secsTo(mDeferLimit.time());
+		n = KDateTime::currentLocalTime().secsTo(mDeferLimit.time());
 		if (n > 0)
 		{
 			QTimer::singleShot(n * 1000, this, SLOT(checkDeferralLimit()));

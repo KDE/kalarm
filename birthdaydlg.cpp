@@ -243,7 +243,7 @@ QList<KAEvent> BirthdayDlg::events() const
 	int count = indexes.count();
 	if (!count)
 		return list;
-	QDate today = QDate::currentDate();
+	QDate today = KDateTime::currentLocalDate();
 	KDateTime todayStart(today, KDateTime::ClockTime);
 	int thisYear = today.year();
 	int reminder = mReminder->minutes();

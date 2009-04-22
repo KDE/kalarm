@@ -137,7 +137,7 @@ void                purgeArchive(int purgeDays);    // must only be called from 
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateStatus korgError, int nAlarms);
 
-bool                convTimeString(const QByteArray& tzString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
+bool                convTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
 bool                isWorkingTime(const KDateTime&, const KAEvent*);
@@ -155,6 +155,11 @@ inline int          weekDay_to_localeDayInWeek(int weekDay)  { return (weekDay +
  * Standard day number = 1 (Mon) .. 7 (Sun)
  */
 inline int          localeDayInWeek_to_weekDay(int index)  { return (index + localeFirstDayOfWeek() - 1) % 7 + 1; }
+
+#ifndef NDEBUG
+void                setTestModeConditions();
+bool                setSimulatedSystemTime(const QByteArray& timeString);
+#endif
 
 } // namespace KAlarm
 

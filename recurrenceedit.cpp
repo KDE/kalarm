@@ -325,7 +325,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		vlayout->setMargin(0);
 		hlayout->addLayout(vlayout);
 		mExceptionDateEdit = new DateEdit(mExceptionGroup);
-		mExceptionDateEdit->setDate(QDate::currentDate());
+		mExceptionDateEdit->setDate(KDateTime::currentLocalDate());
 		mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
 		      "Enter a date to insert in the exceptions list. "
 		      "Use in conjunction with the Add or Change button below."));
@@ -1544,7 +1544,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
 	grid->setMargin(0);
 	grid->setSpacing(KDialog::spacingHint());
 	const KCalendarSystem* calendar = KGlobal::locale()->calendar();
-	int year = QDate::currentDate().year();
+	int year = KDateTime::currentLocalDate().year();
 	for (int i = 0;  i < 12;  ++i)
 	{
 		mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, year, KCalendarSystem::ShortName), w);

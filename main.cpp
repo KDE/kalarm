@@ -98,6 +98,9 @@ int main(int argc, char *argv[])
 	options.add("speak", ki18n("Speak the message when it is displayed"));
 	options.add("S");
 	options.add("subject", ki18n("Email subject line"));
+#ifndef NDEBUG
+	options.add("test-set-time <time>", ki18n("Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"));
+#endif
 	options.add("t");
 	options.add("time <time>", ki18n("Trigger alarm at time [[[yyyy-]mm-]dd-]hh:mm [TZ], or date yyyy-mm-dd [TZ]"));
 	options.add("tray", ki18n("Display system tray icon"));
