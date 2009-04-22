@@ -82,7 +82,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	topLayout->addWidget(mAlarmType);
 	// No spacing between combo box and listview.
 
-	ResourceModel* model = ResourceModel::instance(this);
+	ResourceModel* model = ResourceModel::instance();
 	ResourceFilterModel* filterModel = new ResourceFilterModel(model, this);
 	mListView = new ResourceView(this);
 	mListView->setModel(filterModel);

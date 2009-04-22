@@ -200,11 +200,13 @@ MainWindow::~MainWindow()
 	kDebug();
 	bool trayParent = isTrayParent();   // must call before removing from window list
 	mWindowList.removeAt(mWindowList.indexOf(this));
-	if (mWindowList.isEmpty())
-	{
-		delete EventListModel::alarms();
-		delete EventListModel::templates();
-	}
+
+	// Prevent view updates during window destruction
+	delete mResourceSelector;
+	mResourceSelector = 0;
+	delete mListView;
+	mListView = 0;
+
 	if (theApp()->trayWindow())
 	{
 		if (trayParent)
