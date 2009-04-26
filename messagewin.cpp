@@ -19,6 +19,8 @@
  */
 
 #include "kalarm.h"
+#include "messagewin_p.moc"
+#include "messagewin.moc"
 
 #include "alarmcalendar.h"
 #include "deferdlg.h"
@@ -30,29 +32,6 @@
 #include "preferences.h"
 #include "shellprocess.h"
 #include "synchtimer.h"
-#include "messagewin.moc"
-
-#include <stdlib.h>
-#include <string.h>
-
-#include <QScrollBar>
-#include <QtDBus/QtDBus>
-#include <QFile>
-#include <QFileInfo>
-#include <QPushButton>
-#include <QCheckBox>
-#include <QLabel>
-#include <QPalette>
-#include <QTimer>
-#include <QPixmap>
-#include <QByteArray>
-#include <QFrame>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QResizeEvent>
-#include <QCloseEvent>
-#include <QDesktopWidget>
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -74,11 +53,33 @@
 #include <kpushbutton.h>
 #include <kspeechinterface.h>
 #include <phonon/mediaobject.h>
-#include <phonon/path.h>
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>
 #include <kdebug.h>
 #include <ktoolinvocation.h>
+
+#include <QScrollBar>
+#include <QtDBus/QtDBus>
+#include <QFile>
+#include <QFileInfo>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QLabel>
+#include <QPalette>
+#include <QTimer>
+#include <QPixmap>
+#include <QByteArray>
+#include <QFrame>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QResizeEvent>
+#include <QCloseEvent>
+#include <QDesktopWidget>
+#include <QMutexLocker>
+
+#include <stdlib.h>
+#include <string.h>
 
 using namespace KCal;
 
@@ -176,7 +177,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mConfirmAck(event->confirmAck()),
 	  mNoDefer(true),
 	  mInvalid(false),
-	  mAudioObject(0),
+	  mAudioThread(0),
 	  mEvent(*event),
 	  mResource(AlarmCalendar::resources()->resourceForEvent(mEventID)),
 	  mEditButton(0),
@@ -264,7 +265,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mShowEdit(false),
 	  mNoDefer(true),
 	  mInvalid(false),
-	  mAudioObject(0),
+	  mAudioThread(0),
 	  mEvent(*event),
 	  mResource(0),
 	  mEditButton(0),
@@ -297,7 +298,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 */
 MessageWin::MessageWin()
 	: MainWindowBase(0, WFLAGS),
-	  mAudioObject(0),
+	  mAudioThread(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -326,7 +327,8 @@ MessageWin::MessageWin()
 MessageWin::~MessageWin()
 {
 	kDebug() << mEventID;
-	stopPlay();
+	if (mAudioThread)
+		mAudioThread->quit();
 	mErrorMessages.remove(mEventID);
 	mWindowList.removeAll(this);
 	if (!mRecreating)
@@ -677,7 +679,6 @@ void MessageWin::initView()
 		QPixmap pixmap = MainBarIcon("media-playback-stop");
 		mSilenceButton = new QPushButton(topWidget);
 		mSilenceButton->setIcon(pixmap);
-		connect(mSilenceButton, SIGNAL(clicked()), SLOT(stopPlay()));
 		grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
 		mSilenceButton->setToolTip(i18nc("@info:tooltip", "Stop sound"));
 		mSilenceButton->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
@@ -1162,9 +1163,14 @@ void MessageWin::playAudio()
 		if (!mVolume  &&  mFadeVolume <= 0)
 			return;    // ensure zero volume doesn't play anything
 		// An audio file is specified. Because initialising the sound system
-		// and loading the file may take some time, call it on a timer to
-		// allow the window to display first.
-		QTimer::singleShot(0, this, SLOT(slotPlayAudio()));
+		// and loading the file may take some time, call it in a separate
+		// thread to allow the window to display first.
+		mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeat);
+		connect(mAudioThread, SIGNAL(readyToPlay()), SLOT(playReady()));
+		connect(mAudioThread, SIGNAL(finished()), SLOT(playFinished()));
+		if (mSilenceButton)
+			connect(mSilenceButton, SIGNAL(clicked()), mAudioThread, SLOT(quit()));
+		mAudioThread->start();
 	}
 	else if (mSpeak)
 	{
@@ -1204,46 +1210,85 @@ void MessageWin::slotSpeak()
 }
 
 /******************************************************************************
-*  Play the audio file.
-*  Called asynchronously to avoid delaying the display of the message.
+* Called when the audio file is ready to start playing.
 */
-void MessageWin::slotPlayAudio()
+void MessageWin::playReady()
 {
+	mSilenceButton->setEnabled(true);
+}
+
+/******************************************************************************
+* Called when the audio file thread finishes.
+*/
+void MessageWin::playFinished()
+{
+	if (mSilenceButton)
+		mSilenceButton->setEnabled(false);
+	if (!mAudioThread->error().isEmpty())
+	{
+		if (!haveErrorMessage(ErrMsg_AudioFile))
+		{
+			KMessageBox::error(this, mAudioThread->error());
+			clearErrorMessage(ErrMsg_AudioFile);
+		}
+	}
+	mAudioThread->quit();
+}
+
+/******************************************************************************
+* Destructor for audio thread. Waits for thread completion and tidies up.
+* Note that this destructor is executed in the parent thread.
+*/
+AudioThread::~AudioThread()
+{
+	quit();   // stop playing and tidy up
+	wait();   // wait for run() to exit
+}
+
+/******************************************************************************
+* Kick off the thread to play the audio file.
+*/
+void AudioThread::run()
+{
+	mMutex.lock();
 	if (mAudioObject)
+	{
+		mMutex.unlock();
 		return;
-	mAudioObject = new Phonon::MediaObject(this);
-	QString audioFile = mAudioFile;
-	audioFile.replace(QRegExp("^file:/*"), "/");
+	}
+	QString audioFile = mFile;
+	mFile.replace(QRegExp("^file:/*"), "/");
 	Phonon::MediaSource source(audioFile);
 	if (source.type() == Phonon::MediaSource::Invalid)
 	{
-		delete mAudioObject;
-		mAudioObject = 0;
+		mError = i18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
+		mMutex.unlock();
 		kError() << "Open failure:" << audioFile;
-		if (!haveErrorMessage(ErrMsg_AudioFile))
-		{
-			KMessageBox::error(this, i18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile));
-			clearErrorMessage(ErrMsg_AudioFile);
-		}
 		return;
 	}
-	QCoreApplication::processEvents();
+	mAudioObject = new Phonon::MediaObject();
 	mAudioObject->setCurrentSource(source);
 	Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);
 	output->setVolume(mVolume);
-	Phonon::Path path = Phonon::createPath(mAudioObject, output);
+	mPath = Phonon::createPath(mAudioObject, output);
 	if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
 	{
 		Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(mAudioObject);
 		fader->setVolume(mFadeVolume);
 		fader->fadeIn(mFadeSeconds);
-		path.insertEffect(fader);
+		mPath.insertEffect(fader);
 	}
+	connect(mAudioObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), SLOT(playStateChanged(Phonon::State)));
 	connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()));
-	// First check that it exists, to avoid possible crashes if the filename is badly specified
 	mPlayedOnce = false;
-	mSilenceButton->setEnabled(true);
+	mMutex.unlock();
+	emit readyToPlay();
 	checkAudioPlay();
+
+	// Start an event loop.
+	// The function will exit once exit() or quit() is called.
+	exec();
+	stopPlay();
 }
 
 /******************************************************************************
@@ -1252,14 +1297,19 @@ void MessageWin::slotPlayAudio()
 *  If it is ready to play, start playing it (for the first time or repeated).
 *  If play has not yet completed, wait a bit longer.
 */
-void MessageWin::checkAudioPlay()
+void AudioThread::checkAudioPlay()
 {
+	mMutex.lock();
 	if (!mAudioObject)
+	{
+		mMutex.unlock();
 		return;
+	}
 	// The file has loaded and is ready to play, or play has completed
-	if (mPlayedOnce  &&  !mAudioRepeat)
+	if (mPlayedOnce  &&  !mRepeat)
 	{
 		// Play has completed
+		mMutex.unlock();
 		stopPlay();
 		return;
 	}
@@ -1268,22 +1318,55 @@ void MessageWin::checkAudioPlay()
 	// Start playing the file, either for the first time or again
 	kDebug() << "start";
 	mAudioObject->play();
+	mMutex.unlock();
 }
 
 /******************************************************************************
-*  Called when play completes, the Silence button is clicked, or the window is
-*  closed, to terminate audio access.
+* Called when the playback object changes state.
+* If an error has occurred, quit and return the error to the caller.
 */
-void MessageWin::stopPlay()
+void AudioThread::playStateChanged(Phonon::State newState)
 {
+	if (newState == Phonon::ErrorState)
+	{
+		QMutexLocker locker(&mMutex);
+		QString err = mAudioObject->errorString();
+		if (!err.isEmpty())
+		{
+			kError() << "Play failure:" << mFile << ":" << err;
+			mError = i18nc("@info", "Error playing audio file: <filename>%1</filename><br/><br/>%2", mFile, err);
+			exit(1);
+		}
+	}
+}
+
+/******************************************************************************
+* Called when play completes, the Silence button is clicked, or the window is
+* closed, to terminate audio access.
+*/
+void AudioThread::stopPlay()
+{
+	mMutex.lock();
 	if (mAudioObject)
 	{
 		mAudioObject->stop();
+		QList<Phonon::Effect*> effects = mPath.effects();
+		for (int i = 0;  i < effects.count();  ++i)
+		{
+			mPath.removeEffect(effects[i]);
+			delete effects[i];
+		}
 		delete mAudioObject;
 		mAudioObject = 0;
 	}
-	if (mSilenceButton)
-		mSilenceButton->setEnabled(false);
+	mMutex.unlock();
+	quit();   // exit the event loop, if it's still running
+}
+
+QString AudioThread::error() const
+{
+	QMutexLocker locker(&mMutex);
+	return mError;
 }
 
 /******************************************************************************

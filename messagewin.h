@@ -40,7 +40,7 @@ class QCheckBox;
 class QLabel;
 class DeferAlarmDlg;
 class ShellProcess;
-namespace Phonon { class MediaObject; }
+class AudioThread;
 
 /**
  * MessageWin: A window to display an alarm message
@@ -91,9 +91,8 @@ class MessageWin : public MainWindowBase
 		void                slotShowKMailMessage();
 #endif
 		void                slotSpeak();
-		void                slotPlayAudio();
-		void                checkAudioPlay();
-		void                stopPlay();
+		void                playReady();
+		void                playFinished();
 		void                enableButtons();
 		void                setRemainingTextDay();
 		void                setRemainingTextMinute();
@@ -141,8 +140,7 @@ class MessageWin : public MainWindowBase
 		bool                mNoDefer;         // don't display a Defer option
 		bool                mInvalid;         // restored window is invalid
 		// Sound file playing
-		Phonon::MediaObject* mAudioObject;
-		bool                mPlayedOnce;      // the sound file has started playing at least once
+		AudioThread*        mAudioThread;     // thread to play audio file
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		AlarmResource*      mResource;        // resource which the event comes/came from
