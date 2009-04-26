@@ -1,9 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.1.7 --- 22 April 2009 ===
+=== Version 2.1.7 --- 26 April 2009 ===
 - Fix recurring alarms being missed when deferred to earlier than next due alarm,
   when next due alarm is earlier than the next recurrence.
 - Fix speech mode not working when alarm messages are displayed.
+- Fix KAlarm hanging sometimes while trying to play an audio file.
 - Fix crash when KAlarm quits.
 - Fix memory leak with undo/redo.
 
