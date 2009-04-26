@@ -1255,7 +1255,6 @@ void AudioThread::playStateChanged(Phonon::State newState)
 		{
 			kError() << "Play failure:" << mFile << ":" << err;
 			mError = i18nc("@info", "Error playing audio file: <filename>%1</filename><br/><br/>%2", mFile, err);
-			mMutex.unlock();
 			exit(1);
 		}
 	}
