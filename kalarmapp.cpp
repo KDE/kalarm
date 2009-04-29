@@ -1451,7 +1451,8 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					{
 						// All recurrences are finished, so cancel the event
 						event->setArchive();
-						cancelAlarm(*event, alarm.type(), false);
+						if (cancelAlarm(*event, alarm.type(), false))
+							return true;   // event has been deleted
 						updateCalAndDisplay = true;
 						continue;
 					}
