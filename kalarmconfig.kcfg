@@ -338,10 +338,10 @@
   </group>
 
   <group name="Notification Messages">
-    <entry name="Base_QuitWarn" key="QuitWarn" type="String">
+    <entry name="Base_QuitWarn" key="QuitWarn" type="Bool">
       <label context="@label">Warn before quitting</label>
-      <whatsthis context="@info:whatsthis">Whether to display a warning prompt before quitting KAlarm. Enter "yes" to suppress prompt, blank to display prompt.</whatsthis>
-      <default code="true">QString()</default>
+      <whatsthis context="@info:whatsthis">Whether to suppress a warning prompt before quitting KAlarm.</whatsthis>
+      <default code="true">false</default>
     </entry>
     <entry name="Base_ConfirmAlarmDeletion" key="ConfirmAlarmDeletion" type="Bool">
       <label context="@label">Confirm alarm deletions</label>
