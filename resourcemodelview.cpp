@@ -1,7 +1,7 @@
 /*
  *  resourcemodelview.cpp  -  model/view classes for alarm resource lists
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -413,7 +413,7 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 			if (resource->alarmType() == AlarmResource::ACTIVE)
 			{
 				KMessageBox::sorry(static_cast<QWidget*>(parent()),
-				                   i18nc("@info", "You cannot disable your default active alarm resource."));
+				                   i18nc("@info", "You cannot disable your default active alarm calendar."));
 				return false;
 
 			}
@@ -422,12 +422,12 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 				// Only allow the archived alarms standard resource to be disabled if
 				// we're not saving archived alarms.
 				KMessageBox::sorry(static_cast<QWidget*>(parent()),
-				                   i18nc("@info", "You cannot disable your default archived alarm resource "
+				                   i18nc("@info", "You cannot disable your default archived alarm calendar "
 				                        "while expired alarms are configured to be kept."));
 				return false;
 			}
 			if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
-			                                       i18nc("@info", "Do you really want to disable your default resource?"))
+			                                       i18nc("@info", "Do you really want to disable your default calendar?"))
 			           == KMessageBox::Cancel)
 				return false;
 		}

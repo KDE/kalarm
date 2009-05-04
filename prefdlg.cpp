@@ -795,15 +795,15 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
 	layout->setMargin(KDialog::marginHint());
 	layout->setSpacing(KDialog::spacingHint());
 
-	mDefaultResource = new QRadioButton(i18nc("@option:radio", "Store in default resource"), group);
+	mDefaultResource = new QRadioButton(i18nc("@option:radio", "Store in default calendar"), group);
 	bgroup->addButton(mDefaultResource);
-	mDefaultResource->setWhatsThis(i18nc("@info:whatsthis", "Add all new alarms and alarm templates to the default resources, without prompting."));
+	mDefaultResource->setWhatsThis(i18nc("@info:whatsthis", "Add all new alarms and alarm templates to the default calendars, without prompting."));
 	layout->addWidget(mDefaultResource, 0, Qt::AlignLeft);
-	mAskResource = new QRadioButton(i18nc("@option:radio", "Prompt for which resource to store in"), group);
+	mAskResource = new QRadioButton(i18nc("@option:radio", "Prompt for which calendar to store in"), group);
 	bgroup->addButton(mAskResource);
 	mAskResource->setWhatsThis(i18nc("@info:whatsthis",
-	      "<para>When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.</para>"
-	      "<para>Note that archived alarms are always stored in the default archived alarm resource.</para>"));
+	      "<para>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.</para>"
+	      "<para>Note that archived alarms are always stored in the default archived alarm calendar.</para>"));
 	layout->addWidget(mAskResource, 0, Qt::AlignLeft);
 
 	// Archived alarms
@@ -840,7 +840,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
 	connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
 	mClearArchived->setWhatsThis((AlarmResources::instance()->activeCount(AlarmResource::ARCHIVED, false) <= 1)
 	        ? i18nc("@info:whatsthis", "Delete all existing archived alarms.")
-	        : i18nc("@info:whatsthis", "Delete all existing archived alarms (from the default archived alarm resource only)."));
+	        : i18nc("@info:whatsthis", "Delete all existing archived alarms (from the default archived alarm calendar only)."));
 	grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
 	group->setFixedHeight(group->sizeHint().height());
 
@@ -884,9 +884,9 @@ void StorePrefTab::slotArchivedToggled(bool)
 	&&  !AlarmResources::instance()->getStandardResource(AlarmResource::ARCHIVED))
 	{
 		KMessageBox::sorry(topWidget(),
-		     i18nc("@info", "<para>A default resource is required in order to archive alarms, but none is currently enabled.</para>"
-		          "<para>If you wish to keep expired alarms, please first use the resources view to select a default "
-		          "archived alarms resource.</para>"));
+		     i18nc("@info", "<para>A default calendar is required in order to archive alarms, but none is currently enabled.</para>"
+		          "<para>If you wish to keep expired alarms, please first use the calendars view to select a default "
+		          "archived alarms calendar.</para>"));
 		mKeepArchived->setChecked(false);
 		return;
 	}
@@ -901,7 +901,7 @@ void StorePrefTab::slotClearArchived()
 {
 	bool single = AlarmResources::instance()->activeCount(AlarmResource::ARCHIVED, false) <= 1;
 	if (KMessageBox::warningContinueCancel(topWidget(), single ? i18nc("@info", "Do you really want to delete all archived alarms?")
-	                                                    : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm resource?"))
+	                                                    : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm calendar?"))
 			!= KMessageBox::Continue)
 		return;
 	theApp()->purgeAll();

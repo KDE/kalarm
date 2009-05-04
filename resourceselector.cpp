@@ -70,7 +70,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	QBoxLayout* topLayout = new QVBoxLayout(this);
 	topLayout->setMargin(KDialog::spacingHint());   // use spacingHint for the margin
 
-	QLabel* label = new QLabel(i18nc("@title:group", "Resources"), this);
+	QLabel* label = new QLabel(i18nc("@title:group", "Calendars"), this);
 	topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
 	mAlarmType = new KComboBox(this);
@@ -78,7 +78,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	mAlarmType->addItem(i18nc("@item:inlistbox", "Archived Alarms"));
 	mAlarmType->addItem(i18nc("@item:inlistbox", "Alarm Templates"));
 	mAlarmType->setFixedHeight(mAlarmType->sizeHint().height());
-	mAlarmType->setWhatsThis(i18nc("@info:whatsthis", "Choose which type of data to show alarm resources for"));
+	mAlarmType->setWhatsThis(i18nc("@info:whatsthis", "Choose which type of data to show alarm calendars for"));
 	topLayout->addWidget(mAlarmType);
 	// No spacing between combo box and listview.
 
@@ -92,8 +92,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	mListView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(mListView, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(contextMenuRequested(const QPoint&)));
 	mListView->setWhatsThis(i18nc("@info:whatsthis",
-	                              "List of available resources of the selected type. The checked state shows whether a resource "
-	                             "is enabled (checked) or disabled (unchecked). The default resource is shown in bold."));
+	                              "List of available calendars of the selected type. The checked state shows whether a calendar "
+	                             "is enabled (checked) or disabled (unchecked). The default calendar is shown in bold."));
 	topLayout->addWidget(mListView, 1);
 	topLayout->addSpacing(KDialog::spacingHint());
 
@@ -108,9 +108,9 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	blayout->addWidget(mAddButton);
 	blayout->addWidget(mEditButton);
 	blayout->addWidget(mDeleteButton);
-	mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted resource"));
-	mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Remove the highlighted resource from the list.</para>"
-	                                 "<para>The resource itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));
+	mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted calendar"));
+	mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Remove the highlighted calendar from the list.</para>"
+	                                 "<para>The calendar itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));
 	mEditButton->setDisabled(true);
 	mDeleteButton->setDisabled(true);
 	connect(mAddButton, SIGNAL(clicked()), SLOT(addResource()));
@@ -135,15 +135,15 @@ void ResourceSelector::alarmTypeSelected()
 	{
 		case 0:
 			mCurrentAlarmType = AlarmResource::ACTIVE;
-			addTip = i18nc("@info:tooltip", "Add a new active alarm resource");
+			addTip = i18nc("@info:tooltip", "Add a new active alarm calendar");
 			break;
 		case 1:
 			mCurrentAlarmType = AlarmResource::ARCHIVED;
-			addTip = i18nc("@info:tooltip", "Add a new archived alarm resource");
+			addTip = i18nc("@info:tooltip", "Add a new archived alarm calendar");
 			break;
 		case 2:
 			mCurrentAlarmType = AlarmResource::TEMPLATE;
-			addTip = i18nc("@info:tooltip", "Add a new alarm template resource");
+			addTip = i18nc("@info:tooltip", "Add a new alarm template calendar");
 			break;
 	}
 	static_cast<ResourceFilterModel*>(mListView->model())->setFilter(mCurrentAlarmType);
@@ -159,18 +159,18 @@ void ResourceSelector::addResource()
 	AlarmResourceManager* manager = mCalendar->resourceManager();
 	QStringList descs = manager->resourceTypeDescriptions();
 	bool ok = false;
-	QString desc = KInputDialog::getItem(i18nc("@title:window", "Resource Configuration"),
-	                                     i18nc("@info", "Select storage type of new resource:"), descs, 0, false, &ok, this);
+	QString desc = KInputDialog::getItem(i18nc("@title:window", "Calendar Configuration"),
+	                                     i18nc("@info", "Select storage type of new calendar:"), descs, 0, false, &ok, this);
 	if (!ok  ||  descs.isEmpty())
 		return;
 	QString type = manager->resourceTypeNames()[descs.indexOf(desc)];
 	AlarmResource* resource = dynamic_cast<AlarmResource*>(manager->createResource(type));
 	if (!resource)
 	{
-		KMessageBox::error(this, i18nc("@info", "Unable to create resource of type <resource>%1</resource>.", type));
+		KMessageBox::error(this, i18nc("@info", "Unable to create calendar of type <resource>%1</resource>.", type));
 		return;
 	}
-	resource->setResourceName(i18nc("@info/plain", "%1 resource", type));
+	resource->setResourceName(i18nc("@info/plain", "%1 calendar", type));
 	resource->setAlarmType(mCurrentAlarmType);
 	resource->setActive(false);   // prevent setReadOnly() declaring it as unwritable before we've tried to load it
 
@@ -209,18 +209,18 @@ void ResourceSelector::editResource()
 			// A standard resource is being made read-only.
 			if (resource->alarmType() == AlarmResource::ACTIVE)
 			{
-				KMessageBox::sorry(this, i18nc("@info", "You cannot make your default active alarm resource read-only."));
+				KMessageBox::sorry(this, i18nc("@info", "You cannot make your default active alarm calendar read-only."));
 				resource->setReadOnly(false);
 			}
 			else if (resource->alarmType() == AlarmResource::ARCHIVED  &&  Preferences::archivedKeepDays())
 			{
 				// Only allow the archived alarms standard resource to be made read-only
 				// if we're not saving archived alarms.
-				KMessageBox::sorry(this, i18nc("@info", "You cannot make your default archived alarm resource "
+				KMessageBox::sorry(this, i18nc("@info", "You cannot make your default archived alarm calendar "
 				                              "read-only while expired alarms are configured to be kept."));
 				resource->setReadOnly(false);
 			}
-			else if (KMessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to make your default resource read-only?"))
+			else if (KMessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to make your default calendar read-only?"))
 			           == KMessageBox::Cancel)
 			{
 				resource->setReadOnly(false);
@@ -243,20 +243,20 @@ void ResourceSelector::removeResource()
 		// It's the standard resource for its type.
 		if (resource->alarmType() == AlarmResource::ACTIVE)
 		{
-			KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm resource."));
+			KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
 			return;
 		}
 		if (resource->alarmType() == AlarmResource::ARCHIVED  &&  Preferences::archivedKeepDays())
 		{
 			// Only allow the archived alarms standard resource to be removed if
 			// we're not saving archived alarms.
-			KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm resource "
+			KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
 			                              "while expired alarms are configured to be kept."));
 			return;
 		}
 	}
-	QString text = std ? i18nc("@info", "Do you really want to remove your default resource (<resource>%1</resource>) from the list?", resource->resourceName())
-	                   : i18nc("@info", "Do you really want to remove the resource <resource>%1</resource> from the list?", resource->resourceName());
+	QString text = std ? i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", resource->resourceName())
+	                   : i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", resource->resourceName());
 	if (KMessageBox::warningContinueCancel(this, text, "", KStandardGuiItem::remove()) == KMessageBox::Cancel)
 		return;
 
@@ -288,7 +288,7 @@ void ResourceSelector::selectionChanged()
 */
 void ResourceSelector::initActions(KActionCollection* actions)
 {
-	mActionReload      = new KAction(KIcon("view-refresh"), i18nc("@action Reload resource", "Re&load"), this);
+	mActionReload      = new KAction(KIcon("view-refresh"), i18nc("@action Reload calendar", "Re&load"), this);
 	actions->addAction(QLatin1String("resReload"), mActionReload);
 	connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
 	mActionSave        = new KAction(KIcon("document-save"), i18nc("@action", "&Save"), this);

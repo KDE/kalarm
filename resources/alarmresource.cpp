@@ -1,7 +1,7 @@
 /*
  *  alarmresource.cpp  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -331,15 +331,15 @@ QString AlarmResource::infoText() const
 	}
 	QString perms = readOnly() ? i18nc("@info/plain", "Read-only") : i18nc("@info/plain", "Read-write");
 	QString enabled = isActive() ? i18nc("@info/plain", "Enabled") : i18nc("@info/plain", "Disabled");
-	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain Parameter in 'Default resource: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default resource: Yes/No'", "No");
+	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
 	return i18nc("@info",
 	    "<title>%1</title>"
-	    "<para>Resource type: %2<nl/>"
+	    "<para>Calendar type: %2<nl/>"
 	    "Contents: %3<nl/>"
 	    "%4: <filename>%5</filename><nl/>"
 	    "Permissions: %6<nl/>"
 	    "Status: %7<nl/>"
-	    "Default resource: %8</para>",
+	    "Default calendar: %8</para>",
 	    resourceName(), factory->typeName(type()), atype, displayType(), displayLocation(), perms, enabled, std);
 }
 

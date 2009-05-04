@@ -89,8 +89,8 @@
       <default>5</default>
     </entry>
     <entry name="AskResource" type="Bool">
-      <label context="@label">Prompt for which resource to store in</label>
-      <whatsthis context="@info:whatsthis"><para>When saving a new alarm or alarm template, prompt for which resource to store it in, if there is more than one active resource.</para><para>Note that archived alarms are always stored in the default archived alarm resource.</para></whatsthis>
+      <label context="@label">Prompt for which calendar to store in</label>
+      <whatsthis context="@info:whatsthis"><para>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.</para><para>Note that archived alarms are always stored in the default archived alarm calendar.</para></whatsthis>
       <default>true</default>
     </entry>
     <entry name="ModalMessages" type="Bool">

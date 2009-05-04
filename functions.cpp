@@ -973,7 +973,7 @@ void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* pa
 {
 	if (!AlarmResources::instance()->activeCount(AlarmResource::TEMPLATE, true))
 	{
-		KMessageBox::sorry(parent, i18nc("@info", "You must enable a template resource to save the template in"));
+		KMessageBox::sorry(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
 		return;
 	}
 	EditAlarmDlg* editDlg;

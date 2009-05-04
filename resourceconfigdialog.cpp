@@ -1,7 +1,7 @@
 /*
  *  resourceconfigdialog.cpp  -  KAlarm resource configuration dialog
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *  Based on configdialog.cpp in kdelibs/kresources,
  *  Copyright (c) 2002 Tobias Koenig <tokoe@kde.org>
  *  Copyright (c) 2002 Jan-Pascal van Best <janpascal@vanbest.org>
@@ -44,7 +44,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
 
   QFrame *main = new QFrame( this );
   setMainWidget( main );
-  setCaption(i18nc("@title:window", "Resource Configuration"));
+  setCaption(i18nc("@title:window", "Calendar Configuration"));
   setButtons( Ok|Cancel );
   setDefaultButton( Ok );
   setModal( true );
@@ -59,7 +59,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
 
   generalGroupBox->setTitle(i18nc("@title:group", "General Settings"));
 
-  gbLayout->addWidget(new QLabel(i18nc("@label:textbox Resource name", "Name:"), generalGroupBox ), 0, 0 );
+  gbLayout->addWidget(new QLabel(i18nc("@label:textbox Calendar name", "Name:"), generalGroupBox ), 0, 0 );
 
   mName = new KLineEdit();
   gbLayout->addWidget( mName, 0, 1 );
@@ -77,7 +77,7 @@ ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* reso
   resourceLayout->setSpacing( spacingHint() );
   resourceGroupBox->setLayout( resourceLayout );
 
-  resourceGroupBox->setTitle(i18nc("@title:group", "<resource>%1</resource> Resource Settings",
+  resourceGroupBox->setTitle(i18nc("@title:group", "<resource>%1</resource> Calendar Settings",
                                 factory->typeName( resource->type() ) ) );
   mainLayout->addWidget( resourceGroupBox );
 
@@ -119,7 +119,7 @@ void ResourceConfigDialog::setReadOnly( bool value )
 void ResourceConfigDialog::accept()
 {
   if ( mName->text().isEmpty() ) {
-    KMessageBox::sorry(this, i18nc("@info", "Please enter a resource name."));
+    KMessageBox::sorry(this, i18nc("@info", "Please enter a calendar name."));
     return;
   }
 

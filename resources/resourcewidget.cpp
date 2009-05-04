@@ -1,7 +1,7 @@
 /*
  *  resourcewidget.cpp  -  base class for resource configuration widgets
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,6 +50,6 @@ void ResourceConfigWidget::loadSettings(KRES::Resource* resource)
 */
 void ResourceConfigWidget::slotNotWritable(AlarmResource* resource)
 {
-	QString text = i18nc("@info", "Resource <resource>%1</resource> cannot be made writable since it either was not created by <application>KAlarm</application>, or was created by a newer version of <application>KAlarm</application>", resource->resourceName());
+	QString text = i18nc("@info", "Calendar <resource>%1</resource> cannot be made writable since it either was not created by <application>KAlarm</application>, or was created by a newer version of <application>KAlarm</application>", resource->resourceName());
 	KMessageBox::sorry(this, text);
 }

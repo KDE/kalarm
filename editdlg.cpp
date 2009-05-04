@@ -977,7 +977,7 @@ bool EditAlarmDlg::validate()
 		if (!mResource)
 		{
 			if (!cancelled)
-				KMessageBox::sorry(this, i18nc("@info", "You must select a resource to save the alarm in"));
+				KMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
 			return false;
 		}
 	}
