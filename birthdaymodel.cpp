@@ -1,7 +1,7 @@
 /*
  *  birthdaymodel.cpp  -  model class for birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,11 +68,8 @@ BirthdayModel::~BirthdayModel()
 	if (count)
 	{
 		beginRemoveRows(QModelIndex(), 0, count - 1);
-		for (int row = 0;  row < count;  ++row)
-		{
-			delete mData[row];
-			mData.removeAt(row);     // alarm exists, so remove from selection list
-		}
+		while (!mData.isEmpty())
+			delete mData.takeLast();   // alarm exists, so remove from selection list
 		endRemoveRows();
 	}
 	if (this == mInstance)
