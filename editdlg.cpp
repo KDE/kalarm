@@ -964,9 +964,12 @@ bool EditAlarmDlg::validate()
 		if (!mResourceEventId.isEmpty())
 		{
 			mResource = AlarmCalendar::resources()->resourceForEvent(mResourceEventId);
-			AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
-			if (mResource->alarmType() != type)
-				mResource = 0;   // event may have expired while dialog was open
+			if (mResource)
+			{
+				AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
+				if (mResource->alarmType() != type)
+					mResource = 0;   // event may have expired while dialog was open
+			}
 		}
 		bool cancelled = false;
 		if (!mResource  ||  !mResource->writable())

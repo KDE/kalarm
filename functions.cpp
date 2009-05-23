@@ -99,7 +99,7 @@ QString uidKOrganizer(const QString& eventID);
 namespace KAlarm
 {
 
-void doEditNewAlarm(EditAlarmDlg*);
+void doEditNewAlarm(EditAlarmDlg*, bool alreadyExecuted = false);
 
 
 /******************************************************************************
@@ -898,9 +898,9 @@ void editNewAlarm(const KAEvent* preset, QWidget* parent)
 /******************************************************************************
 * Common code for editNewAlarm() variants.
 */
-void doEditNewAlarm(EditAlarmDlg* editDlg)
+void doEditNewAlarm(EditAlarmDlg* editDlg, bool alreadyExecuted)
 {
-	if (editDlg->exec() == QDialog::Accepted)
+	if (alreadyExecuted  ||  editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent event;
 		AlarmResource* resource;
@@ -1009,9 +1009,17 @@ void editAlarm(KAEvent* event, QWidget* parent)
 		viewAlarm(event, parent);
 		return;
 	}
+	QString id = event->id();
 	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
 	if (editDlg->exec() == QDialog::Accepted)
 	{
+		if (!AlarmCalendar::resources()->event(id))
+		{
+			// Event has been deleted while the user was editing the alarm,
+			// so treat it as a new alarm.
+			doEditNewAlarm(editDlg, true);
+			return;
+		}
 		KAEvent newEvent;
 		AlarmResource* resource;
 		bool changeDeferral = !editDlg->getEvent(newEvent, resource);
