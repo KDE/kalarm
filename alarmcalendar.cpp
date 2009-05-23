@@ -391,8 +391,6 @@ void AlarmCalendar::close()
 			mLocalFile = "";
 		}
 	}
-	while (!mResourceMap.isEmpty())
-		removeKAEvents(mResourceMap.begin().key(), true);
 	// Flag as closed now to prevent removeKAEvents() doing silly things
 	// when it's called again
 	mOpen = false;
@@ -402,6 +400,9 @@ void AlarmCalendar::close()
 		delete mCalendar;
 		mCalendar = 0;
 	}
+	// Resource map should be empty, but just in case...
+	while (!mResourceMap.isEmpty())
+		removeKAEvents(mResourceMap.begin().key(), true);
 }
 
 /******************************************************************************
