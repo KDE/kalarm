@@ -112,9 +112,6 @@ QString MainWindow::i18n_a_ShowAlarmTimes()        { return i18nc("@action", "Sh
 QString MainWindow::i18n_chk_ShowAlarmTime()       { return i18nc("@option:check", "Show alarm time"); }
 QString MainWindow::i18n_o_ShowTimeToAlarms()      { return i18nc("@action", "Show Time t&o Alarms"); }
 QString MainWindow::i18n_chk_ShowTimeToAlarm()     { return i18nc("@option:check", "Show time until alarm"); }
-QString MainWindow::i18n_a_ShowArchivedAlarms()    { return i18nc("@action", "Show &Archived Alarms"); }
-QString MainWindow::i18n_tip_ShowArchivedAlarms()  { return i18nc("@info:tooltip", "Show Archived Alarms"); }
-QString MainWindow::i18n_tip_HideArchivedAlarms()  { return i18nc("@info:tooltip", "Hide Archived Alarms"); }
 
 
 /******************************************************************************
@@ -465,7 +462,7 @@ void MainWindow::initActions()
 	mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
 	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
-	mActionShowArchived = new KToggleAction(i18n_a_ShowArchivedAlarms(), this);
+	mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
 	actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
 	mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
@@ -474,7 +471,7 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
 	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	mActionToggleResourceSel = new KToggleAction(KIcon("view-choose"), i18nc("@action", "Show &Resources"), this);
+	mActionToggleResourceSel = new KToggleAction(KIcon("view-choose"), i18nc("@action", "Show &Calendars"), this);
 	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
 	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
@@ -801,7 +798,8 @@ void MainWindow::slotShowArchived()
 {
 	mShowArchived = !mShowArchived;
 	mActionShowArchived->setChecked(mShowArchived);
-	mActionShowArchived->setToolTip(mShowArchived ? i18n_tip_HideArchivedAlarms() : i18n_tip_ShowArchivedAlarms());
+	mActionShowArchived->setToolTip(mShowArchived ? i18nc("@info:tooltip", "Hide Archived Alarms")
+	                                              : i18nc("@info:tooltip", "Show Archived Alarms"));
 	mListFilterModel->setStatusFilter(mShowArchived ? static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED) : KCalEvent::ACTIVE);
 	mListView->reset();
 	KConfigGroup config(KGlobal::config(), VIEW_GROUP);

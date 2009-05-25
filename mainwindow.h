@@ -81,9 +81,6 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		static QString i18n_chk_ShowAlarmTime();      // text of 'Show alarm time' checkbox
 		static QString i18n_o_ShowTimeToAlarms();     // text of 'Show Time to Alarms' action, with 'O' shortcut
 		static QString i18n_chk_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox
-		static QString i18n_a_ShowArchivedAlarms();   // text of 'Show Archived Alarms' action, with 'A' shortcut
-		static QString i18n_tip_ShowArchivedAlarms(); // text of 'Show Archived Alarms' tooltip
-		static QString i18n_tip_HideArchivedAlarms(); // text of 'Hide Archived Alarms' tooltip
 
 	public slots:
 		virtual void   show();
