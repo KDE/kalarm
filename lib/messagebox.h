@@ -65,7 +65,7 @@ class MessageBox : public KMessageBox
 		 *  @param defaultButton The default button for the message box. Valid values are Continue or Cancel.
 		 *  @param text Message string
 		 *  @param caption Caption (window title) of the message box
-		 *  @param buttonContinue The text for the first button (default = i18n("Continue"))
+		 *  @param buttonContinue The text for the first button (default = "Continue")
 		 *  @param dontAskAgainName If specified, the message box will only be suppressed
 		 *    if the user chose Continue last time.
 		 */
@@ -77,7 +77,7 @@ class MessageBox : public KMessageBox
 		 *  @param parent Parent widget
 		 *  @param text Message string
 		 *  @param caption Caption (window title) of the message box
-		 *  @param buttonContinue The text for the first button (default = i18n("Continue"))
+		 *  @param buttonContinue The text for the first button (default = "Continue")
 		 *  @param dontAskAgainName If specified, (1) The message box will only be suppressed
 		 *    if the user chose Continue last time, and (2) The default button is that last set
 		 *    with either setContinueDefault() or warningContinueCancel() for the same
