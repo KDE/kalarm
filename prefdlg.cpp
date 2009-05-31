@@ -1141,7 +1141,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
 EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	: PrefsTabBase(scrollGroup)
 {
-#define DEFSETTING "The default setting for <interface>%1</interface> in the alarm edit dialog."
+	KLocalizedString defsetting = ki18nc("@info:whatsthis", "The default setting for <interface>%1</interface> in the alarm edit dialog.");
 
 	KTabWidget* tabs = new KTabWidget(topWidget());
 	StackedGroupT<KVBox>* tabgroup = new StackedGroupT<KVBox>(tabs);
@@ -1162,7 +1162,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	// Show in KOrganizer
 	mCopyToKOrganizer = new QCheckBox(EditAlarmDlg::i18n_chk_ShowInKOrganizer(), topGeneral);
 	mCopyToKOrganizer->setMinimumSize(mCopyToKOrganizer->sizeHint());
-	mCopyToKOrganizer->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditAlarmDlg::i18n_chk_ShowInKOrganizer()));
+	mCopyToKOrganizer->setWhatsThis(defsetting.subs(EditAlarmDlg::i18n_chk_ShowInKOrganizer()).toString());
 
 	// Late cancellation
 	KHBox* box = new KHBox(topGeneral);
@@ -1170,7 +1170,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	box->setSpacing(KDialog::spacingHint());
 	mLateCancel = new QCheckBox(LateCancelSelector::i18n_chk_CancelIfLate(), box);
 	mLateCancel->setMinimumSize(mLateCancel->sizeHint());
-	mLateCancel->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, LateCancelSelector::i18n_chk_CancelIfLate()));
+	mLateCancel->setWhatsThis(defsetting.subs(LateCancelSelector::i18n_chk_CancelIfLate()).toString());
 	box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
 
 	// Recurrence
@@ -1232,12 +1232,12 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 
 	mConfirmAck = new QCheckBox(EditDisplayAlarmDlg::i18n_chk_ConfirmAck(), group);
 	mConfirmAck->setMinimumSize(mConfirmAck->sizeHint());
-	mConfirmAck->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditDisplayAlarmDlg::i18n_chk_ConfirmAck()));
+	mConfirmAck->setWhatsThis(defsetting.subs(EditDisplayAlarmDlg::i18n_chk_ConfirmAck()).toString());
 	vlayout->addWidget(mConfirmAck, 0, Qt::AlignLeft);
 
 	mAutoClose = new QCheckBox(LateCancelSelector::i18n_chk_AutoCloseWinLC(), group);
 	mAutoClose->setMinimumSize(mAutoClose->sizeHint());
-	mAutoClose->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, LateCancelSelector::i18n_chk_AutoCloseWin()));
+	mAutoClose->setWhatsThis(defsetting.subs(LateCancelSelector::i18n_chk_AutoCloseWin()).toString());
 	vlayout->addWidget(mAutoClose, 0, Qt::AlignLeft);
 
 	box = new KHBox(group);
@@ -1272,7 +1272,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	if (theApp()->speechEnabled())
 		mSound->addItem(SoundPicker::i18n_combo_Speak());  // index 3
 	mSound->setMinimumSize(mSound->sizeHint());
-	mSound->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, SoundPicker::i18n_label_Sound()));
+	mSound->setWhatsThis(defsetting.subs(SoundPicker::i18n_label_Sound()).toString());
 	hlayout->addWidget(mSound);
 	hlayout->addStretch();
 
@@ -1310,13 +1310,13 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 
 	mCmdScript = new QCheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), group);
 	mCmdScript->setMinimumSize(mCmdScript->sizeHint());
-	mCmdScript->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditCommandAlarmDlg::i18n_chk_EnterScript()));
+	mCmdScript->setWhatsThis(defsetting.subs(EditCommandAlarmDlg::i18n_chk_EnterScript()).toString());
 	hlayout->addWidget(mCmdScript);
 	hlayout->addStretch();
 
 	mCmdXterm = new QCheckBox(EditCommandAlarmDlg::i18n_chk_ExecInTermWindow(), group);
 	mCmdXterm->setMinimumSize(mCmdXterm->sizeHint());
-	mCmdXterm->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditCommandAlarmDlg::i18n_radio_ExecInTermWindow()));
+	mCmdXterm->setWhatsThis(defsetting.subs(EditCommandAlarmDlg::i18n_radio_ExecInTermWindow()).toString());
 	hlayout->addWidget(mCmdXterm);
 
 	// EMAIL ALARMS
@@ -1328,7 +1328,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	// BCC email to sender
 	mEmailBcc = new QCheckBox(EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf(), group);
 	mEmailBcc->setMinimumSize(mEmailBcc->sizeHint());
-	mEmailBcc->setWhatsThis(i18nc("@info:whatsthis", DEFSETTING, EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()));
+	mEmailBcc->setWhatsThis(defsetting.subs(EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()).toString());
 	vlayout->addWidget(mEmailBcc, 0, Qt::AlignLeft);
 
 	lay = qobject_cast<QVBoxLayout*>(topTypes->layout());
