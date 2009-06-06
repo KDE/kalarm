@@ -1,18 +1,39 @@
 KAlarm Change Log
 
-=== Version 2.2.0 pre --- 13 March 2009 ===
+=== Version 2.2.1 --- 25 May 2009 ===
+- Include new handbook translation: Ukrainian.
+
+=== Version 2.2.0 --- 29 April 2009 ===
 - Provide facility to export alarms to a new calendar file.
 - Provide option to spread alarm and error messages over screen.
 - Show command execution error indication for alarms in main window alarm list.
 - Add configuration setting for default deferral time in Defer Alarm dialogue.
 - Accept drag and drop of Todo entries to create a new alarm.
 
-=== Version 2.1.6 --- 4 March 2009 ===
-Fix crash when KAlarm quits.
+=== Version 2.1.8 (KDE 4.2.4) --- 25 May 2009 ===
+- Fix crash on exit from birthday import dialogue.
+- Fix crash when an alarm is open for edit when its last occurrence triggers,
+  and the edit is then saved.
+- Fix another possible crash when KAlarm quits.
+- Don't show time in alarm list for date-only alarms without time zone (e.g.
+  those created by Import Birthdays).
+
+=== Version 2.1.7 (KDE 4.2.3) --- 29 April 2009 ===
+- Fix recurring alarms being missed when deferred to earlier than next due alarm,
+  when next due alarm is earlier than the next recurrence.
+- Fix crash at startup if a non-recurring cancel-if-late alarm has been missed.
+- Fix speech mode not working when alarm messages are displayed.
+- Fix KAlarm hanging sometimes while trying to play an audio file.
+- Fix crash when KAlarm quits.
+- Fix memory leak with undo/redo.
+
+=== Version 2.1.6 (KDE 4.2.2) --- 18 March 2009 ===
+- Fix memory leaks.
+- Fix crash when KAlarm quits.
 
 === Version 2.1.5 (KDE 4.2.1) --- 7 February 2009 ===
 - Disable inapplicable alarm types in alarm edit dialogue Load Template list.
-- Prevent multiple identical command error messages being shown for an alarm.
+- Prevent multiple identical error messages being displayed for the same alarm.
 - Fix possible crash on alarm refresh, or removal or disabling of a resource.
 
 === Version 2.1.4 (KDE 4.2) --- 18 January 2009 ===
@@ -25,7 +46,7 @@ Fix crash when KAlarm quits.
 - Make New Alarm shortcuts work.
 - Fix alarms not being saved if created by drag-and-drop but not edited further.
 
-=== Version 2.1.3 --- 5 January 2009 ===
+=== Version 2.1.3 (KDE 4.2 RC1) --- 5 January 2009 ===
 - Fix invalid alarm remaining in calendar when pre-alarm action failure message
   is acknowledged before the alarm is deferred.
 
@@ -38,13 +59,13 @@ Fix crash when KAlarm quits.
 - Fix click on system tray icon not showing main window if 'Show in system tray'
   configuration setting deselected.
 
-=== Version 2.1.1 (KDE 4.2.0 beta2) --- 8 December 2008 ===
+=== Version 2.1.1 (KDE 4.2 beta2) --- 8 December 2008 ===
 - Allow global shortcuts for New Alarm actions.
 - Fix failure to update alarms in KOrganizer when Kontact is running but
   Kontact's calendar component is not loaded.
 - Fix toolbar configuration being lost after quitting KAlarm.
 
-=== Version 2.1.0 (KDE 4.2.0 beta1) --- 13 November 2008 ===
+=== Version 2.1.0 (KDE 4.2 beta1) --- 13 November 2008 ===
 - Add option to exclude holidays from recurring alarms.
 - Provide More/Less Options button in edit alarm dialogue.
 - Improve Configuration dialogue layout, split pages into tabs.
