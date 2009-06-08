@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.2.2 --- 8 June 2009 ===
+Fix email alarms sending multiple mails, when sent by KMail.
+
 === Version 2.2.1 --- 25 May 2009 ===
 - Include new handbook translation: Ukrainian.
 
