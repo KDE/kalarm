@@ -1,7 +1,7 @@
 /*
  *  resourceremote.cpp  -  KAlarm remote alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *  Based on resourceremote.cpp in kresources (updated to rev 721447),
  *  Copyright (c) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -84,9 +84,17 @@ KAResourceRemote::~KAResourceRemote()
 {
 	if (isOpen())
 		close();
+}
+
+void KAResourceRemote::doClose()
+{
 	cancelDownload();
 	if (mUploadJob)
+	{
 		mUploadJob->kill();
+		mUploadJob = 0;
+	}
+	AlarmResource::doClose();
 }
 
 void KAResourceRemote::writeConfig(KConfigGroup& group)
@@ -189,7 +197,7 @@ void KAResourceRemote::slotPercent(KJob*, unsigned long percent)
 #endif
 }
 
-void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
+void KAResourceRemote::slotLoadJobResult(KJob* job)
 {
 	bool err = false;
 	if (job)
@@ -200,9 +208,12 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 		if (job->error())
 		{
 			if (hasGui())
-				job->ui()->showErrorMessage();
-			else
-				kError(KARES_DEBUG) << "Resource" << identifier() << " download error:" << job->errorString();
+			{
+				KIO::FileCopyJob* j = qobject_cast<KIO::FileCopyJob*>(job);
+				if (j)
+					j->ui()->showErrorMessage();
+			}
+			kError(KARES_DEBUG) << "Resource" << identifier() << " download error:" << job->errorString();
 			setEnabled(false);
 			err = true;
 		}
@@ -216,11 +227,11 @@ void KAResourceRemote::slotLoadJobResult(KIO::Job* job)
 			enableChangeNotification();
 		}
 
-		mDownloadJob = 0;
 #if 0
 		emit downloading(this, (unsigned long)-1);
 #endif
 	}
+	mDownloadJob = 0;
 
 	if (!err)
 	{
@@ -281,14 +292,17 @@ bool KAResourceRemote::doSave(bool syncCache)
 	return true;
 }
 
-void KAResourceRemote::slotSaveJobResult(KIO::Job* job)
+void KAResourceRemote::slotSaveJobResult(KJob* job)
 {
 	if (job->error())
 	{
 		if (hasGui())
-			job->ui()->showErrorMessage();
-		else
-			kError(KARES_DEBUG) << "Resource" << identifier() << " upload error:" << job->errorString();
+		{
+			KIO::FileCopyJob* j = qobject_cast<KIO::FileCopyJob*>(job);
+			if (j)
+				j->ui()->showErrorMessage();
+		}
+		kError(KARES_DEBUG) << "Resource" << identifier() << " upload error:" << job->errorString();
 	}
 	else
 	{
