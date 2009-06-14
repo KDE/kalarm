@@ -1,8 +1,11 @@
 KAlarm Change Log
 
+=== Version 2.2.3 --- 14 June 2009 ===
+- Fix crash when more than one alarm with audio is displayed simultaneously.
+
 === Version 2.2.2 --- 10 June 2009 ===
-Fix email alarms sending multiple mails, when sent by KMail.
-Fix crash when closing remote calendars.
+- Fix email alarms sending multiple mails, when sent by KMail.
+- Fix crash when closing remote calendars.
 
 === Version 2.2.1 --- 25 May 2009 ===
 - Include new handbook translation: Ukrainian.

@@ -25,6 +25,7 @@
 
 #include <QList>
 #include <QMap>
+#include <QPointer>
 
 #include "mainwindowbase.h"
 #include "alarmevent.h"
@@ -91,6 +92,8 @@ class MessageWin : public MainWindowBase
 		void                slotShowKMailMessage();
 #endif
 		void                slotSpeak();
+		void                audioTerminating();
+		void                startAudio();
 		void                playReady();
 		void                playFinished();
 		void                enableButtons();
@@ -115,6 +118,9 @@ class MessageWin : public MainWindowBase
 
 		static QList<MessageWin*> mWindowList;  // list of existing message windows
 		static QMap<QString, unsigned> mErrorMessages;  // error messages currently displayed, by event ID
+		// Sound file playing
+		static QPointer<AudioThread> mAudioThread;     // thread to play audio file
+		static MessageWin*           mAudioOwner;      // window which owns mAudioThread
 		// Properties needed by readProperties()
 		QString             mMessage;
 		QFont               mFont;
@@ -139,8 +145,6 @@ class MessageWin : public MainWindowBase
 		bool                mShowEdit;        // display the Edit button
 		bool                mNoDefer;         // don't display a Defer option
 		bool                mInvalid;         // restored window is invalid
-		// Sound file playing
-		AudioThread*        mAudioThread;     // thread to play audio file
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		AlarmResource*      mResource;        // resource which the event comes/came from
