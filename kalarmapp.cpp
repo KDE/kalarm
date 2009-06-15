@@ -117,6 +117,9 @@ KAlarmApp::KAlarmApp()
 	  mSpeechEnabled(false)
 {
 	kDebug();
+#ifndef NDEBUG
+	KAlarm::setTestModeConditions();
+#endif
 	mAlarmTimer->setSingleShot(true);
 	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
 

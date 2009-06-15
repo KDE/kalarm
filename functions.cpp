@@ -41,6 +41,7 @@
 #include <QRegExp>
 #include <QDesktopWidget>
 #include <QtDBus/QtDBus>
+#include <qglobal.h>
 
 #include <kconfiggroup.h>
 #include <kaction.h>
@@ -1688,8 +1689,9 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 */
 void setTestModeConditions()
 {
-	const char* newTime = ::getenv("KALARM_TIME");
-	if (newTime && newTime[0])
+	const QByteArray newTime = qgetenv("KALARM_TIME");
+kDebug()<<"KALARM_TIME="<<newTime;
+	if (!newTime.isEmpty())
 		setSimulatedSystemTime(newTime);
 }
 
