@@ -23,6 +23,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"
+#include "autoqpointer.h"
 #include "eventlistmodel.h"
 #include "alarmlistview.h"
 #include "alarmresources.h"
@@ -1434,7 +1435,10 @@ FileType fileType(const KMimeType::Ptr& mimetype)
 *                   the user's home directory will be used. Updated to the
 *                   directory containing the selected file, if a file is chosen.
 * @param mode OR of KFile::Mode values, e.g. ExistingOnly, LocalOnly.
-* Reply = URL selected. If none is selected, URL.isEmpty() is true.
+* Reply = URL selected.
+*       = empty, non-null string if no file was selected.
+*       = null string if dialogue was deleted while visible (indicating that
+*         the parent widget was probably also deleted).
 */
 QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
                    const QString& filter, KFile::Modes mode, QWidget* parent)
@@ -1442,15 +1446,20 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 	QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
 	                   : !defaultDir.isEmpty()  ? defaultDir
 	                   :                          QDir::homePath();
-	KFileDialog fileDlg(initialDir, filter, parent);
-	fileDlg.setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
-	fileDlg.setMode(KFile::File | mode);
-	fileDlg.setCaption(caption);
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of parent, and on return from this function).
+	AutoQPointer<KFileDialog> fileDlg = new KFileDialog(initialDir, filter, parent);
+	fileDlg->setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
+	fileDlg->setMode(KFile::File | mode);
+	fileDlg->setCaption(caption);
 	if (!initialFile.isEmpty())
-		fileDlg.setSelection(initialFile);
-	if (fileDlg.exec() != QDialog::Accepted)
-		return QString();
-	KUrl url = fileDlg.selectedUrl();
+		fileDlg->setSelection(initialFile);
+	if (fileDlg->exec() != QDialog::Accepted)
+		return fileDlg ? QString("") : QString();
+	KUrl url = fileDlg->selectedUrl();
+	if (url.isEmpty())
+		return QString("");
 	defaultDir = url.path();
 	return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
 }
@@ -1690,7 +1699,6 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 void setTestModeConditions()
 {
 	const QByteArray newTime = qgetenv("KALARM_TIME");
-kDebug()<<"KALARM_TIME="<<newTime;
 	if (!newTime.isEmpty())
 		setSimulatedSystemTime(newTime);
 }

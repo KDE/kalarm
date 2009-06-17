@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,18 +19,19 @@
  */
 
 #include "kalarm.h"
+#include "fontcolourbutton.moc"
 
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include "autoqpointer.h"
+#include "fontcolour.h"
+#include "preferences.h"
+#include "pushbutton.h"
 
 #include <klineedit.h>
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "fontcolour.h"
-#include "preferences.h"
-#include "pushbutton.h"
-#include "fontcolourbutton.moc"
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 
 /*=============================================================================
@@ -63,15 +64,18 @@ void FontColourButton::setFont(const QFont& font)
 */
 void FontColourButton::slotButtonPressed()
 {
-	FontColourDlg dlg(mBgColour, mFgColour, mFont, mDefaultFont,
-	                  i18nc("@title:window", "Choose Alarm Font & Color"), this);
-	dlg.setReadOnly(mReadOnly);
-	if (dlg.exec() == QDialog::Accepted)
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+        // deletion of FontColourButton, and on return from this function).
+	AutoQPointer<FontColourDlg> dlg = new FontColourDlg(mBgColour, mFgColour, mFont, mDefaultFont,
+	                                         i18nc("@title:window", "Choose Alarm Font & Color"), this);
+	dlg->setReadOnly(mReadOnly);
+	if (dlg->exec() == QDialog::Accepted)
 	{
-		mDefaultFont = dlg.defaultFont();
-		mFont        = dlg.font();
-		mBgColour    = dlg.bgColour();
-		mFgColour    = dlg.fgColour();
+		mDefaultFont = dlg->defaultFont();
+		mFont        = dlg->font();
+		mBgColour    = dlg->bgColour();
+		mFgColour    = dlg->fgColour();
 		emit selected(mFgColour, mBgColour);
 	}
 }

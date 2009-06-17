@@ -1,7 +1,7 @@
 /*
  *  specialactions.cpp  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,11 +19,12 @@
  */
 
 #include "kalarm.h"
+#include "specialactions.moc"
 
-#include <QLabel>
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <QResizeEvent>
+#include "autoqpointer.h"
+#include "checkbox.h"
+#include "functions.h"
+#include "shellprocess.h"
 
 #include <klineedit.h>
 #include <khbox.h>
@@ -32,10 +33,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "checkbox.h"
-#include "functions.h"
-#include "shellprocess.h"
-#include "specialactions.moc"
+#include <QLabel>
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QResizeEvent>
 
 
 /*=============================================================================
@@ -72,16 +73,20 @@ void SpecialActionsButton::setActions(const QString& pre, const QString& post, b
 */
 void SpecialActionsButton::slotButtonPressed()
 {
-	SpecialActionsDlg dlg(mPreAction, mPostAction, mCancelOnError, mEnableCancel, this);
-	dlg.setReadOnly(mReadOnly);
-	if (dlg.exec() == QDialog::Accepted)
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of SpecialActionsButton, and on return from this function).
+	AutoQPointer<SpecialActionsDlg> dlg = new SpecialActionsDlg(mPreAction, mPostAction, mCancelOnError, mEnableCancel, this);
+	dlg->setReadOnly(mReadOnly);
+	if (dlg->exec() == QDialog::Accepted)
 	{
-		mPreAction     = dlg.preAction();
-		mPostAction    = dlg.postAction();
-		mCancelOnError = dlg.cancelOnError();
+		mPreAction     = dlg->preAction();
+		mPostAction    = dlg->postAction();
+		mCancelOnError = dlg->cancelOnError();
 		emit selected();
 	}
-	setChecked(!mPreAction.isEmpty() || !mPostAction.isEmpty());
+        if (dlg)
+	        setChecked(!mPreAction.isEmpty() || !mPostAction.isEmpty());
 }
 
 

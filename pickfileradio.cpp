@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.cpp  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright © 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,15 +19,15 @@
  */
 
 #include "kalarm.h"
-
-#include <QPushButton>
-#include <QTimer>
-
-#include <kdebug.h>
+#include "pickfileradio.moc"
 
 #include "buttongroup.h"
 #include "lineedit.h"
-#include "pickfileradio.moc"
+
+#include <kdebug.h>
+
+#include <QPushButton>
+#include <QTimer>
 
 
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)
@@ -147,16 +147,23 @@ bool PickFileRadio::pickFileIfNone()
 		mFile = mEdit->text();
 	if (!mFile.isEmpty())
 		return true;
-	slotPickFile();
-	return !mFile.isEmpty();
+	return !slotPickFile().isEmpty();
 }
 
 /******************************************************************************
 * Called when the file picker button is clicked.
+* Reply = mFile, or null string if dialogue, and 'this', was deleted.
 */
-void PickFileRadio::slotPickFile()
+QString PickFileRadio::slotPickFile()
 {
-	mFile = pickFile();
+	// To avoid crashes on application quit, we need to check whether the
+	// dialogue, and hence this PickFileRadio, was deleted while active,
+	// before accessing class members.
+	QString file = pickFile();
+	if (file.isNull())
+		return file;   // 'this' is probably invalid now
+	if (!file.isEmpty())
+		mFile = file;
 	if (mEdit)
 		mEdit->setText(mFile);
 	if (mFile.isEmpty())
@@ -166,6 +173,7 @@ void PickFileRadio::slotPickFile()
 		mRevertButton = true;   // prevent picker dialog popping up twice
 		QTimer::singleShot(0, this, SLOT(setLastButton()));
 	}
+	return mFile;
 }
 
 /******************************************************************************

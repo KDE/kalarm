@@ -23,16 +23,18 @@
  */
 
 #include "kalarm.h"
+#include "resourceselector.moc"
 
-#include <QLayout>
-#include <QLabel>
-#include <QPushButton>
+#include "alarmcalendar.h"
+#include "alarmresources.h"
+#include "autoqpointer.h"
+#include "eventlistmodel.h"
+#include "packedlayout.h"
+#include "preferences.h"
+#include "resourceconfigdialog.h"
+#include "resourcemodelview.h"
 
-#include <QTimer>
-#include <QPainter>
-#include <QFont>
-#include <QResizeEvent>
-#include <QApplication>
+#include <kcal/resourcecalendar.h>
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -48,16 +50,14 @@
 #include <ktoggleaction.h>
 #include <kcolordialog.h>
 
-#include <kcal/resourcecalendar.h>
-
-#include "alarmcalendar.h"
-#include "alarmresources.h"
-#include "eventlistmodel.h"
-#include "packedlayout.h"
-#include "preferences.h"
-#include "resourceconfigdialog.h"
-#include "resourcemodelview.h"
-#include "resourceselector.moc"
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QTimer>
+#include <QPainter>
+#include <QFont>
+#include <QResizeEvent>
+#include <QApplication>
 
 using namespace KCal;
 
@@ -174,8 +174,11 @@ void ResourceSelector::addResource()
 	resource->setAlarmType(mCurrentAlarmType);
 	resource->setActive(false);   // prevent setReadOnly() declaring it as unwritable before we've tried to load it
 
-	ResourceConfigDialog dlg(this, resource);
-	if (dlg.exec())
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of ResourceSelector, and on return from this function).
+	AutoQPointer<ResourceConfigDialog> dlg = new ResourceConfigDialog(this, resource);
+	if (dlg->exec())
 	{
 		resource->setEnabled(true);
 		resource->setTimeSpec(Preferences::timeZone());
@@ -199,8 +202,11 @@ void ResourceSelector::editResource()
 	if (!resource)
 		return;
 	bool readOnly = resource->readOnly();
-	ResourceConfigDialog dlg(this, resource);
-	if (dlg.exec())
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of ResourceSelector, and on return from this function).
+	AutoQPointer<ResourceConfigDialog> dlg = new ResourceConfigDialog(this, resource);
+	if (dlg->exec())
 	{
 		// Act on any changed settings.
 		// Read-only is handled automatically by AlarmResource::setReadOnly().

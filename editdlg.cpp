@@ -19,10 +19,14 @@
  */
 
 #include "kalarm.h"
+#include "editdlg.moc"
+#include "editdlgprivate.moc"
+#include "editdlgtypes.h"
 
 #include "alarmcalendar.h"
 #include "alarmresources.h"
 #include "alarmtimewidget.h"
+#include "autoqpointer.h"
 #include "buttongroup.h"
 #include "checkbox.h"
 #include "deferdlg.h"
@@ -42,9 +46,6 @@
 #include "templatepickdlg.h"
 #include "timeedit.h"
 #include "timespinbox.h"
-#include "editdlg.moc"
-#include "editdlgprivate.moc"
-#include "editdlgtypes.h"
 
 #include <QLabel>
 #include <QDir>
@@ -1031,9 +1032,12 @@ void EditAlarmDlg::slotHelp()
 		default:
 			return;
 	}
-	TemplatePickDlg dlg(type, this);
-	if (dlg.exec() == QDialog::Accepted)
-		initValues(dlg.selectedTemplate());
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of EditAlarmDlg, and on return from this function).
+	AutoQPointer<TemplatePickDlg> dlg = new TemplatePickDlg(type, this);
+	if (dlg->exec() == QDialog::Accepted)
+		initValues(dlg->selectedTemplate());
 }
 
 /******************************************************************************
@@ -1109,8 +1113,11 @@ void EditAlarmDlg::slotEditDeferral()
 	}
 
 	bool deferred = mDeferDateTime.isValid();
-	DeferAlarmDlg deferDlg((deferred ? mDeferDateTime : DateTime(now.addSecs(60))), deferred, this);
-	deferDlg.setObjectName("EditDeferDlg");    // used by LikeBack
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of EditAlarmDlg, and on return from this function).
+	AutoQPointer<DeferAlarmDlg> deferDlg = new DeferAlarmDlg((deferred ? mDeferDateTime : DateTime(now.addSecs(60))), deferred, this);
+	deferDlg->setObjectName("EditDeferDlg");    // used by LikeBack
 	if (limit)
 	{
 		// Don't allow deferral past the next recurrence
@@ -1121,11 +1128,11 @@ void EditAlarmDlg::slotEditDeferral()
 			if (KDateTime::currentUtcDateTime() < remindTime)
 				start = remindTime;
 		}
-		deferDlg.setLimit(start.addSecs(-60));
+		deferDlg->setLimit(start.addSecs(-60));
 	}
-	if (deferDlg.exec() == QDialog::Accepted)
+	if (deferDlg->exec() == QDialog::Accepted)
 	{
-		mDeferDateTime = deferDlg.getDateTime();
+		mDeferDateTime = deferDlg->getDateTime();
 		mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString());
 	}
 }

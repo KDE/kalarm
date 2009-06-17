@@ -1,7 +1,7 @@
 /*
  *  pickfileradio.h  -  radio button with an associated file picker
  *  Program:  kalarm
- *  Copyright (c) 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ class LineEdit;
  *  enabling and disabling of the browse button and edit box when the enable state of
  *  the radio button is changed, and when the radio button selection changes.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class PickFileRadio : public RadioButton
 {
@@ -102,7 +102,7 @@ class PickFileRadio : public RadioButton
 
 	private slots:
 		void          slotSelectionChanged(QAbstractButton*);
-		void          slotPickFile();
+		QString       slotPickFile();
 		void          setLastButton();
 
 	private:

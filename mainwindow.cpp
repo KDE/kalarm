@@ -25,6 +25,7 @@
 #include "alarmevent.h"
 #include "alarmlistdelegate.h"
 #include "alarmlistfiltermodel.h"
+#include "autoqpointer.h"
 #include "eventlistmodel.h"
 #include "alarmlistview.h"
 #include "alarmresources.h"
@@ -841,15 +842,18 @@ void MainWindow::slotExportAlarms()
 */
 void MainWindow::slotBirthdays()
 {
-	BirthdayDlg dlg(this);
-	if (dlg.exec() == QDialog::Accepted)
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of MainWindow, and on return from this function).
+	AutoQPointer<BirthdayDlg> dlg = new BirthdayDlg(this);
+	if (dlg->exec() == QDialog::Accepted)
 	{
-		QList<KAEvent> events = dlg.events();
+		QList<KAEvent> events = dlg->events();
 		if (!events.isEmpty())
 		{
 			mListView->clearSelection();
 			// Add alarm to the displayed lists and to the calendar file
-			KAlarm::UpdateStatus status = KAlarm::addEvents(events, &dlg, true, true);
+			KAlarm::UpdateStatus status = KAlarm::addEvents(events, dlg, true, true);
 
 			Undo::EventList undos;
 			AlarmCalendar* resources = AlarmCalendar::resources();
@@ -858,7 +862,7 @@ void MainWindow::slotBirthdays()
 			Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
 			if (status != KAlarm::UPDATE_FAILED)
-				KAlarm::outputAlarmWarnings(&dlg);
+				KAlarm::outputAlarmWarnings(dlg);
 		}
 	}
 }

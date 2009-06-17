@@ -19,12 +19,14 @@
  */
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
-
 #include "filedialog.moc"
+#include "autoqpointer.h"
+
 #include <kabstractfilewidget.h>
 #include <klocale.h>
 #include <krecentdocument.h>
 #include <kdebug.h>
+
 #include <QCheckBox>
 
 
@@ -35,31 +37,37 @@ QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWid
 {
 	bool defaultDir = dir.isEmpty();
 	bool specialDir = !defaultDir && dir.protocol() == "kfiledialog";
-	FileDialog dlg(specialDir ? dir : KUrl(), filter, parent);
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of parent, and on return from this function).
+	AutoQPointer<FileDialog> dlg = new FileDialog(specialDir ? dir : KUrl(), filter, parent);
 	if (!specialDir && !defaultDir)
 	{
 		if (!dir.isLocalFile())
 			kWarning() << "FileDialog::getSaveFileName called with non-local start dir " << dir;
-		dlg.setSelection(dir.path());  // may also be a filename
+		dlg->setSelection(dir.path());  // may also be a filename
 	}
-	dlg.setOperationMode(Saving);
-	dlg.setMode(KFile::File | KFile::LocalOnly);
-	dlg.setConfirmOverwrite(true);
+	dlg->setOperationMode(Saving);
+	dlg->setMode(KFile::File | KFile::LocalOnly);
+	dlg->setConfirmOverwrite(true);
 	if (!caption.isEmpty())
-		dlg.setCaption(caption);
+		dlg->setCaption(caption);
 	mAppendCheck = 0;
 	if (append)
 	{
 		// Show an 'append' option in the dialogue.
 		// Note that the dialogue will take ownership of the QCheckBox.
 		mAppendCheck = new QCheckBox(i18nc("@option:check", "Append to existing file"), 0);
-		connect(mAppendCheck, SIGNAL(toggled(bool)), &dlg, SLOT(appendToggled(bool)));
-		dlg.fileWidget()->setCustomWidget(mAppendCheck);
+		connect(mAppendCheck, SIGNAL(toggled(bool)), dlg, SLOT(appendToggled(bool)));
+		dlg->fileWidget()->setCustomWidget(mAppendCheck);
 		*append = false;
 	}
-	dlg.exec();
+	dlg->setWindowModality(Qt::WindowModal);
+	dlg->exec();
+	if (!dlg)
+		return QString();   // dialogue was deleted
 
-	QString filename = dlg.selectedFile();
+	QString filename = dlg->selectedFile();
 	if (!filename.isEmpty())
 	{
 		if (append)
