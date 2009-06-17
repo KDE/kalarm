@@ -582,7 +582,8 @@ void EditDisplayAlarmDlg::slotPickFile()
 	static QString defaultDir;   // default directory for file browse button
 	QString file = KAlarm::browseFile(i18nc("@title:window", "Choose Text or Image File to Display"),
 	                                  defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
-	mFileMessageEdit->setText(file);
+	if (!file.isEmpty())
+		mFileMessageEdit->setText(file);
 }
 
 /******************************************************************************
