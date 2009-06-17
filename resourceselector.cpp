@@ -178,7 +178,7 @@ void ResourceSelector::addResource()
 	// the dialogue is still open. It prevents double deletion (both on
 	// deletion of ResourceSelector, and on return from this function).
 	AutoQPointer<ResourceConfigDialog> dlg = new ResourceConfigDialog(this, resource);
-	if (dlg->exec())
+	if (dlg->exec() == QDialog::Accepted)
 	{
 		resource->setEnabled(true);
 		resource->setTimeSpec(Preferences::timeZone());
@@ -206,7 +206,7 @@ void ResourceSelector::editResource()
 	// the dialogue is still open. It prevents double deletion (both on
 	// deletion of ResourceSelector, and on return from this function).
 	AutoQPointer<ResourceConfigDialog> dlg = new ResourceConfigDialog(this, resource);
-	if (dlg->exec())
+	if (dlg->exec() == QDialog::Accepted)
 	{
 		// Act on any changed settings.
 		// Read-only is handled automatically by AlarmResource::setReadOnly().
