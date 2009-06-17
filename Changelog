@@ -1,5 +1,9 @@
 KAlarm Change Log
 
+=== Version 2.2.4 --- 17 June 2009 ===
+- Alarm edit: keep existing display file name if file select dialogue cancelled.
+- Guard against crashes if KAlarm quits while a modal dialogue is open.
+
 === Version 2.2.3 --- 14 June 2009 ===
 - Fix crash when more than one alarm with audio is displayed simultaneously.
 
