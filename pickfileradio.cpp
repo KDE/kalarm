@@ -163,9 +163,11 @@ QString PickFileRadio::slotPickFile()
 	if (file.isNull())
 		return file;   // 'this' is probably invalid now
 	if (!file.isEmpty())
+	{
 		mFile = file;
-	if (mEdit)
-		mEdit->setText(mFile);
+		if (mEdit)
+			mEdit->setText(mFile);
+	}
 	if (mFile.isEmpty())
 	{
 		// No file is selected, so revert to the previous radio button selection.
