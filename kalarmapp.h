@@ -56,7 +56,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
 		bool               restoreSession();
 		bool               sessionClosingDown() const      { return mSessionClosingDown; }
-		void               quitIf()                        { quitIf(0); }
+		bool               quitIf()                        { return quitIf(0); }
 		void               doQuit(QWidget* parent);
 		static void        displayFatalError(const QString& message);
 		void               addWindow(TrayWindow* w)        { mTrayWindow = w; }
@@ -149,7 +149,7 @@ class KAlarmApp : public KUniqueApplication
 		};
 
 		bool               initCheck(bool calendarOnly = false);
-		void               quitIf(int exitCode, bool force = false);
+		bool               quitIf(int exitCode, bool force = false);
 		bool               checkSystemTray();
 		void               startProcessQueue();
 		void               queueAlarmId(const QString& id);

@@ -773,8 +773,9 @@ int KAlarmApp::newInstance()
 
 /******************************************************************************
 * Quit the program, optionally only if there are no more "instances" running.
+* Reply = true if program exited.
 */
-void KAlarmApp::quitIf(int exitCode, bool force)
+bool KAlarmApp::quitIf(int exitCode, bool force)
 {
 	if (force)
 	{
@@ -783,42 +784,46 @@ void KAlarmApp::quitIf(int exitCode, bool force)
 		MainWindow::closeAll();
 		displayTrayIcon(false);
 		if (MessageWin::instanceCount())
-			return;
+			return false;
 	}
 	else if (mQuitting)
-		return;   // MainWindow::closeAll() causes quitIf() to be called again
+		return false;   // MainWindow::closeAll() causes quitIf() to be called again
 	else
 	{
 		// Quit only if there are no more "instances" running
 		mPendingQuit = false;
 		if (mActiveCount > 0  ||  MessageWin::instanceCount())
-			return;
+			return false;
 		int mwcount = MainWindow::count();
 		MainWindow* mw = mwcount ? MainWindow::firstWindow() : 0;
 		if (mwcount > 1  ||  (mwcount && (!mw->isHidden() || !mw->isTrayParent())))
-			return;
+			return false;
 		// There are no windows left except perhaps a main window which is a hidden tray icon parent
 		if (mTrayWindow)
 		{
 			// There is a system tray icon.
 			// Don't exit unless the system tray doesn't seem to exist.
 			if (checkSystemTray())
-				return;
+				return false;
 		}
 		if (!mDcopQueue.isEmpty()  ||  !mCommandProcesses.isEmpty())
 		{
 			// Don't quit yet if there are outstanding actions on the execution queue
 			mPendingQuit = true;
 			mPendingQuitCode = exitCode;
-			return;
+			return false;
 		}
 	}
 
 	// This was the last/only running "instance" of the program, so exit completely.
 	kDebug() << exitCode << ": quitting";
+	delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
+	mAlarmTimer = 0;
+	mInitialised = false;   // prevent processQueue() from running
 	AlarmCalendar::terminateCalendars();
 	BirthdayModel::close();
 	exit(exitCode);
+	return true;    // sometimes we actually get to here, despite calling exit()
 }
 
 /******************************************************************************
@@ -1024,7 +1029,10 @@ void KAlarmApp::processQueue()
 
 		// Now that the queue has been processed, quit if a quit was queued
 		if (mPendingQuit)
-			quitIf(mPendingQuitCode);
+		{
+			if (quitIf(mPendingQuitCode))
+				return;  // quitIf() can sometimes return, despite calling exit()
+		}
 
 		mProcessingQueue = false;
 
