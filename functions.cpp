@@ -851,9 +851,11 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateStatus korg
 */
 void editNewAlarm(EditAlarmDlg::Type type, QWidget* parent)
 {
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, type, true, parent);
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of parent, and on return from this function).
+	AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, type, true, parent);
 	doEditNewAlarm(editDlg);
-	delete editDlg;
 }
 
 /******************************************************************************
@@ -879,11 +881,13 @@ void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text
 		default:
 			return;
 	}
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, type, true, parent);
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of parent, and on return from this function).
+	AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, type, true, parent);
 	if (setAction  ||  text)
 		editDlg->setAction(action, *text);
 	doEditNewAlarm(editDlg);
-	delete editDlg;
 }
 
 /******************************************************************************
@@ -892,9 +896,11 @@ void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text
 */
 void editNewAlarm(const KAEvent* preset, QWidget* parent)
 {
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, preset, true, parent);
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of parent, and on return from this function).
+	AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, preset, true, parent);
 	doEditNewAlarm(editDlg);
-	delete editDlg;
 }
 
 /******************************************************************************
@@ -978,7 +984,10 @@ void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* pa
 		KMessageBox::sorry(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
 		return;
 	}
-	EditAlarmDlg* editDlg;
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of parent, and on return from this function).
+	AutoQPointer<EditAlarmDlg> editDlg;
 	if (preset)
 		editDlg = EditAlarmDlg::create(true, preset, true, parent);
 	else
@@ -993,7 +1002,6 @@ void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* pa
 		KAlarm::addTemplate(event, resource, editDlg);
 		Undo::saveAdd(event, resource);
 	}
-	delete editDlg;
 }
 
 } // namespace
@@ -1012,7 +1020,10 @@ void editAlarm(KAEvent* event, QWidget* parent)
 		return;
 	}
 	QString id = event->id();
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
+	// Use AutoQPointer to guard against crash on application exit while
+	// the dialogue is still open. It prevents double deletion (both on
+	// deletion of parent, and on return from this function).
+	AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		if (!AlarmCalendar::resources()->event(id))
@@ -1044,7 +1055,6 @@ void editAlarm(KAEvent* event, QWidget* parent)
 
 		outputAlarmWarnings(editDlg, &newEvent);
 	}
-	delete editDlg;
 }
 
 /******************************************************************************
@@ -1085,13 +1095,18 @@ void editTemplate(KAEvent* event, QWidget* parent)
 {
 	if (AlarmCalendar::resources()->eventReadOnly(event->id()))
 	{
-		// The template is read-only, so make the dialogue read-only
-		EditAlarmDlg* editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
+		// The template is read-only, so make the dialogue read-only.
+                // Use AutoQPointer to guard against crash on application exit while
+                // the dialogue is still open. It prevents double deletion (both on
+                // deletion of parent, and on return from this function).
+                AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
 		editDlg->exec();
-		delete editDlg;
 		return;
 	}
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
+        // Use AutoQPointer to guard against crash on application exit while
+        // the dialogue is still open. It prevents double deletion (both on
+        // deletion of parent, and on return from this function).
+        AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(true, event, false, parent, EditAlarmDlg::RES_USE_EVENT_ID);
 	if (editDlg->exec() == QDialog::Accepted)
 	{
 		KAEvent newEvent;
@@ -1105,7 +1120,6 @@ void editTemplate(KAEvent* event, QWidget* parent)
 		updateTemplate(newEvent, editDlg);
 		Undo::saveEdit(undo, newEvent);
 	}
-	delete editDlg;
 }
 
 /******************************************************************************
@@ -1113,9 +1127,11 @@ void editTemplate(KAEvent* event, QWidget* parent)
 */
 void viewAlarm(const KAEvent* event, QWidget* parent)
 {
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
+        // Use AutoQPointer to guard against crash on application exit while
+        // the dialogue is still open. It prevents double deletion (both on
+        // deletion of parent, and on return from this function).
+        AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, event, false, parent, EditAlarmDlg::RES_PROMPT, true);
 	editDlg->exec();
-	delete editDlg;
 }
 
 /******************************************************************************
