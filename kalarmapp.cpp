@@ -627,6 +627,8 @@ int KAlarmApp::newInstance()
 						USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter", opt))
 					if (recurType == KARecurrence::MINUTELY  &&  alarmTime.isDateOnly())
 						USAGE(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", opt))
+					if (onceOnly)
+						reminderMinutes = -reminderMinutes;
 				}
 
 				int lateCancel = 0;
