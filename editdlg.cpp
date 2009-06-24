@@ -876,8 +876,40 @@ bool EditAlarmDlg::validate()
 	}
 	if (!type_validate(false))
 		return false;
+
 	if (!mTemplate)
 	{
+		if (mChanged  &&  mRecurrenceEdit->repeatType() != RecurrenceEdit::NO_RECUR)
+		{
+			// Check whether the start date/time must be adjusted
+			// to match the recurrence specification.
+			DateTime dt = mAlarmDateTime;   // setEvent() changes mAlarmDateTime
+			KAEvent event;
+			setEvent(event, mAlarmMessage, false);
+			mAlarmDateTime = dt;   // restore
+		        KDateTime pre = dt.effectiveKDateTime();
+			bool dateOnly = dt.isDateOnly();
+			if (dateOnly)
+				pre = pre.addDays(-1);
+			else
+				pre = pre.addSecs(-1);
+			DateTime next;
+			event.nextOccurrence(pre, next, KAEvent::IGNORE_REPETITION);
+			if (next != dt)
+			{
+				QString prompt = dateOnly ? i18nc("@info The parameter is a date value",
+				                                  "The start date does not match the alarm's recurrence pattern, "
+				                                  "so it will be adjusted to the date of the next recurrence (%1).",
+				                                  KGlobal::locale()->formatDate(next.date(), KLocale::ShortDate))
+				                          : i18nc("@info The parameter is a date/time value",
+				                                  "The start date/time does not match the alarm's recurrence pattern, "
+				                                  "so it will be adjusted to the date/time of the next recurrence (%1).",
+				                                  KGlobal::locale()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
+				if (KMessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
+					return false;
+			}
+		}
+
 		if (timedRecurrence)
 		{
 			KAEvent event;
