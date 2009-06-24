@@ -983,8 +983,13 @@ void EditCommandAlarmDlg::slotCmdScriptToggled(bool on)
 */
 bool EditCommandAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
-	Q_UNUSED(showErrorMessage);
 	result = mCmdEdit->text();
+	if (result.isEmpty())
+	{
+		if (showErrorMessage)
+			KMessageBox::sorry(const_cast<EditCommandAlarmDlg*>(this), i18nc("@info", "Please enter a command or script to execute"));
+		return false;
+	}
 	return true;
 }
 
