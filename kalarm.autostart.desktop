@@ -20,6 +20,7 @@ X-DocPath=kalarm/index.html
 Comment=KAlarm autostart at login
 Comment[bg]=Автоматично стартиране на KAlarm при влизане
 Comment[ca]=Inici automàtic del KAlarm en connectar-se
+Comment[cs]=Automatické spouštění alarmovacího démona při startu
 Comment[da]=Autostart KAlarm ved login
 Comment[de]=Autostart von KAlarm bei der Anmeldung
 Comment[el]=Αυτόματη εκκίνηση KAlarm κατά τη σύνδεση
