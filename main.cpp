@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 	options.add("s");
 	options.add("speak", ki18n("Speak the message when it is displayed"));
 	options.add("S");
-	options.add("subject", ki18n("Email subject line"));
+	options.add("subject <text>", ki18n("Email subject line"));
 #ifndef NDEBUG
 	options.add("test-set-time <time>", ki18n("Simulate system time [[[yyyy-]mm-]dd-]hh:mm [TZ] (debug mode)"));
 #endif
