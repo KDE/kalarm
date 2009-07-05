@@ -92,6 +92,7 @@ void                viewAlarm(const KAEvent*, QWidget* parent = 0);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewTemplate(const KAEvent* preset, QWidget* parent = 0);
 void                editTemplate(KAEvent*, QWidget* parent = 0);
+void                execNewAlarmDlg(EditAlarmDlg*, bool alreadyExecuted = false);
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 KToggleAction*      createAlarmEnableAction(QObject* parent);

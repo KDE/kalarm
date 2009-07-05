@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -768,6 +768,16 @@ void RecurrenceEdit::setRuleDefaults(const QDate& fromDate)
 		mMonthlyRule->setDefaultValues(day, dayOfWeek);
 	if (!mYearlyShown)
 		mYearlyRule->setDefaultValues(day, dayOfWeek, month);
+}
+
+/******************************************************************************
+* Initialise the recurrence to select repeat-at-login.
+* This function and set() are mutually exclusive: call one or the other, not both.
+*/
+void RecurrenceEdit::setRepeatAtLogin()
+{
+	mAtLoginButton->setChecked(true);
+	mEndDateButton->setChecked(true);
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -67,6 +67,8 @@ class RecurrenceEdit : public QFrame
 		void          setDefaults(const KDateTime& from);
 		/** Initialise according to a specified event */
 		void          set(const KAEvent&, bool keepDuration);
+		/** Initialise with repeat-at-login selected, instead of calling set(). */
+		void          setRepeatAtLogin();
 		/** Write recurrence settings into an event */
 		void          updateEvent(KAEvent&, bool adjustStart);
 		QWidget*      checkData(const KDateTime& startDateTime, QString& errorMessage) const;

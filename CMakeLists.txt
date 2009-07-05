@@ -95,6 +95,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    resourceconfigdialog.cpp
    resourcemodelview.cpp
    resourceselector.cpp
+   commandoptions.cpp
 )
 qt4_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
 if (KMAIL_SUPPORTED)

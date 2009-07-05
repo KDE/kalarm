@@ -386,6 +386,41 @@ void EditDisplayAlarmDlg::setAction(KAEvent::Action action, const AlarmText& ala
 }
 
 /******************************************************************************
+* Initialise various values in the New Alarm dialogue.
+*/
+void EditDisplayAlarmDlg::setBgColour(const QColor& colour)
+{
+	mFontColourButton->setBgColour(colour);
+	setColours(mFontColourButton->fgColour(), colour);
+}
+void EditDisplayAlarmDlg::setFgColour(const QColor& colour)
+{
+	mFontColourButton->setFgColour(colour);
+	setColours(colour, mFontColourButton->bgColour());
+}
+void EditDisplayAlarmDlg::setConfirmAck(bool confirm)
+{
+	mConfirmAck->setChecked(confirm);
+}
+void EditDisplayAlarmDlg::setAutoClose(bool close)
+{
+	lateCancel()->setAutoClose(close);
+}
+void EditDisplayAlarmDlg::setAudio(Preferences::SoundType type, const QString& file, float volume, bool repeat)
+{
+	mSoundPicker->set(type, file, volume, -1, 0, repeat);
+}
+void EditDisplayAlarmDlg::setReminder(int minutes)
+{
+	bool onceOnly = (minutes < 0);
+	if (onceOnly)
+		minutes = -minutes;
+	reminder()->setMinutes(minutes, dateOnly());
+	reminder()->setOnceOnly(onceOnly);
+	reminder()->enableOnceOnly(isTimedRecurrence());
+}
+
+/******************************************************************************
 * Set the read-only status of all non-template controls.
 */
 void EditDisplayAlarmDlg::setReadOnly(bool readOnly)
@@ -1156,6 +1191,14 @@ void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
 		// Set the values to their defaults
 		mEmailBcc->setChecked(Preferences::defaultEmailBcc());
 	}
+	attachmentEnable();
+}
+
+/******************************************************************************
+* Enable/disable controls depending on whether any attachments are entered.
+*/
+void EditEmailAlarmDlg::attachmentEnable()
+{
 	bool enable = mEmailAttachList->count();
 	mEmailAttachList->setEnabled(enable);
 	if (mEmailRemoveButton)
@@ -1176,6 +1219,29 @@ void EditEmailAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarm
 	}
 	else
 		mEmailMessageEdit->setPlainText(alarmText.displayText());
+}
+
+/******************************************************************************
+* Initialise various values in the New Alarm dialogue.
+*/
+void EditEmailAlarmDlg::setEmailFields(uint fromID, const EmailAddressList& addresses,
+                                       const QString& subject, const QStringList& attachments)
+{
+	if (fromID)
+		mEmailFromList->setCurrentIdentity(fromID);
+	if (!addresses.isEmpty())
+		mEmailToEdit->setText(addresses.join(", "));
+	if (!subject.isEmpty())
+		mEmailSubjectEdit->setText(subject);
+	if (!attachments.isEmpty())
+	{
+		mEmailAttachList->addItems(attachments);
+		attachmentEnable();
+	}
+}
+void EditEmailAlarmDlg::setBcc(bool bcc)
+{
+	mEmailBcc->setChecked(bcc);
 }
 
 /******************************************************************************

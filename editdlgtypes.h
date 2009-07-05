@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,10 +57,20 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		             GetResourceType = RES_PROMPT);
 		EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT, bool readOnly = false);
-		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
-		virtual Reminder*   createReminder(QWidget* parent);
-		static CheckBox*    createConfirmAckCheckbox(QWidget* parent);
+		// Methods to initialise values in the New Alarm dialogue.
+		// N.B. setTime() must be called first to set the date-only characteristic,
+		//      followed by setRecurrence().
+		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
+		void            setBgColour(const QColor&);
+		void            setFgColour(const QColor&);
+		void            setConfirmAck(bool);
+		void            setAutoClose(bool);
+		void            setAudio(Preferences::SoundType, const QString& file = QString(), float volume = -1, bool repeat = false);
+		void            setReminder(int minutes);   // minutes < 0 for once only option
+
+		virtual Reminder* createReminder(QWidget* parent);
+		static CheckBox*  createConfirmAckCheckbox(QWidget* parent);
 
 		static QString  i18n_chk_ConfirmAck();    // text of 'Confirm acknowledgement' checkbox
 
@@ -139,6 +149,10 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 		                    GetResourceType = RES_PROMPT);
 		EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                    GetResourceType = RES_PROMPT, bool readOnly = false);
+
+		// Methods to initialise values in the New Alarm dialogue.
+		// N.B. setTime() must be called first to set the date-only characteristic,
+		//      followed by setRecurrence().
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
 
 		static QString  i18n_chk_EnterScript();        // text of 'Enter a script' checkbox
@@ -188,7 +202,14 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		                  GetResourceType = RES_PROMPT);
 		EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                  GetResourceType = RES_PROMPT, bool readOnly = false);
+
+		// Methods to initialise values in the New Alarm dialogue.
+		// N.B. setTime() must be called first to set the date-only characteristic,
+		//      followed by setRecurrence().
 		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
+		void            setEmailFields(uint fromID, const EmailAddressList&, const QString& subject,
+		                               const QStringList& attachments);
+		void            setBcc(bool);
 
 		static QString  i18n_chk_CopyEmailToSelf();    // text of 'Copy email to self' checkbox
 
@@ -212,6 +233,8 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		void            slotRemoveAttachment();
 
 	private:
+		void            attachmentEnable();
+
 		// Email alarm options
 		EmailIdCombo*       mEmailFromList;
 		LineEdit*           mEmailToEdit;

@@ -47,6 +47,21 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 
+#include <libkdepim/maillistdrag.h>
+#include <libkdepim/kvcarddrag.h>
+#include <kcal/period.h>
+#include <kcal/icaldrag.h>
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kfiledialog.h>
+#include <kmessagebox.h>
+#include <khbox.h>
+#include <kvbox.h>
+#include <kwindowsystem.h>
+#include <kdebug.h>
+
 #include <QLabel>
 #include <QDir>
 #include <QStyle>
@@ -61,20 +76,6 @@
 #include <QStackedWidget>
 #include <QScrollBar>
 #include <QTimer>
-
-#include <kglobal.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kfiledialog.h>
-#include <kmessagebox.h>
-#include <khbox.h>
-#include <kvbox.h>
-#include <kwindowsystem.h>
-#include <kdebug.h>
-
-#include <libkdepim/maillistdrag.h>
-#include <libkdepim/kvcarddrag.h>
-#include <kcal/icaldrag.h>
 
 using namespace KCal;
 
@@ -556,6 +557,35 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 
 	bool empty = AlarmCalendar::resources()->events(KCalEvent::TEMPLATE).isEmpty();
 	enableButton(Help, !empty);   // Load Templates button
+}
+
+/******************************************************************************
+* Initialise various values in the New Alarm dialogue.
+*/
+void EditAlarmDlg::setTime(const DateTime& start)
+{
+	mTimeWidget->setDateTime(start);
+}
+void EditAlarmDlg::setRecurrence(const KARecurrence& recur, int subRepeatInterval, int subRepeatCount)
+{
+	KAEvent event;
+	event.setTime(mTimeWidget->getDateTime(0, false, false));
+	event.setRecurrence(recur);
+	event.setRepetition(subRepeatInterval, subRepeatCount - 1);
+	mRecurrenceEdit->set(event, false);
+}
+void EditAlarmDlg::setRepeatAtLogin()
+{
+	mRecurrenceEdit->setRepeatAtLogin();
+}
+void EditAlarmDlg::setLateCancel(int minutes)
+{
+	mLateCancel->setMinutes(minutes, mTimeWidget->getDateTime(0, false, false).isDateOnly(),
+	                        TimePeriod::HoursMinutes);
+}
+void EditAlarmDlg::setShowInKOrganizer(bool show)
+{
+	mShowInKorganizer->setChecked(show);
 }
 
 /******************************************************************************
