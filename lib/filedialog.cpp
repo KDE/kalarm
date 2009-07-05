@@ -45,7 +45,7 @@ QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWid
 	{
 		if (!dir.isLocalFile())
 			kWarning() << "FileDialog::getSaveFileName called with non-local start dir " << dir;
-		dlg->setSelection(dir.path());  // may also be a filename
+		dlg->setSelection(dir.isLocalFile() ? dir.toLocalFile() : dir.path());  // may also be a filename
 	}
 	dlg->setOperationMode(Saving);
 	dlg->setMode(KFile::File | KFile::LocalOnly);

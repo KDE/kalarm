@@ -69,7 +69,7 @@ void KAResourceLocal::init()
 	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(reload()));
 	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(reload()));
 
-	mDirWatch.addFile(mURL.path());
+	mDirWatch.addFile(mURL.toLocalFile());
 	enableResource(isActive());
 }
 
@@ -110,10 +110,10 @@ bool KAResourceLocal::readOnly() const
 
 void KAResourceLocal::enableResource(bool enable)
 {
-	kDebug(KARES_DEBUG) << enable << ":" << mURL.path();
+	kDebug(KARES_DEBUG) << enable << ":" << mURL.toLocalFile();
 	if (enable)
 	{
-		lock(mURL.path());
+		lock(mURL.toLocalFile());
 		mDirWatch.startScan();
 	}
 	else
@@ -125,7 +125,7 @@ void KAResourceLocal::enableResource(bool enable)
 
 bool KAResourceLocal::doLoad(bool)
 {
-	if (!KStandardDirs::exists(mURL.path()))
+	if (!KStandardDirs::exists(mURL.toLocalFile()))
 	{
 		kDebug(KARES_DEBUG) << "File doesn't exist yet.";
 		mLoaded = false;
@@ -154,13 +154,13 @@ bool KAResourceLocal::doLoad(bool)
 
 void KAResourceLocal::reload()
 {
-	kDebug(KARES_DEBUG) << mURL.path();
+	kDebug(KARES_DEBUG) << mURL.toLocalFile();
 	if (!isOpen())
 		return;
 	if (mLastModified == readLastModified())
 	{
 		kDebug(KARES_DEBUG) << "File not modified since last read.";
-		QFileInfo fi(mURL.path());
+		QFileInfo fi(mURL.toLocalFile());
 		mFileReadOnly = !fi.isWritable();
 		return;
 	}
@@ -170,7 +170,7 @@ void KAResourceLocal::reload()
 
 bool KAResourceLocal::loadFile()
 {
-	kDebug(KARES_DEBUG) << mURL.path();
+	kDebug(KARES_DEBUG) << mURL.toLocalFile();
 	mLoaded = false;
 	emit invalidate(this);
 	calendar()->close();
@@ -182,7 +182,7 @@ bool KAResourceLocal::loadFile()
 	}
 	mLoading = true;
 	disableChangeNotification();
-	bool success = calendar()->load(mURL.path());
+	bool success = calendar()->load(mURL.toLocalFile());
 	enableChangeNotification();
 	if (!success)
 	{
@@ -191,7 +191,7 @@ bool KAResourceLocal::loadFile()
 		return false;
 	}
 	mLastModified = readLastModified();
-	QFileInfo fi(mURL.path());
+	QFileInfo fi(mURL.toLocalFile());
 	mFileReadOnly = !fi.isWritable();
 	checkCompatibility(fileName());
 	mLoading = false;
@@ -204,10 +204,10 @@ bool KAResourceLocal::loadFile()
 
 bool KAResourceLocal::doSave(bool)
 {
-	kDebug(KARES_DEBUG) << mURL.path();
+	kDebug(KARES_DEBUG) << mURL.toLocalFile();
 	if (mCalIDFunction)
 		(*mCalIDFunction)(*calendar());    // write the application ID into the calendar
-	bool success = calendar()->save(mURL.path());
+	bool success = calendar()->save(mURL.toLocalFile());
 	clearChanges();
 	mLastModified = readLastModified();
 	emit resourceSaved(this);
@@ -216,13 +216,13 @@ bool KAResourceLocal::doSave(bool)
 
 QDateTime KAResourceLocal::readLastModified()
 {
-	QFileInfo fi(mURL.path());
+	QFileInfo fi(mURL.toLocalFile());
 	return fi.lastModified();
 }
 
 QString KAResourceLocal::fileName() const
 {
-	return mURL.path();
+	return mURL.toLocalFile();
 }
 
 bool KAResourceLocal::setFileName(const KUrl& newURL)
@@ -232,17 +232,17 @@ bool KAResourceLocal::setFileName(const KUrl& newURL)
 		mNewURL = newURL;
 		return true;
 	}
-	if (newURL.path() == mURL.path()  ||  !newURL.isLocalFile())
+	if ( !newURL.isLocalFile() || newURL.toLocalFile() == mURL.toLocalFile() )
 		return false;
-	kDebug(KARES_DEBUG) << newURL.path();
+	kDebug(KARES_DEBUG) << newURL.toLocalFile();
 	if (isOpen())
 		close();
 	bool active = isActive();
 	if (active)
 		enableResource(false);
-	mDirWatch.removeFile(mURL.path());
+	mDirWatch.removeFile(mURL.toLocalFile());
 	mURL = newURL;
-	mDirWatch.addFile(mURL.path());
+	mDirWatch.addFile(mURL.toLocalFile());
 	if (active)
 		enableResource(true);
 	// Trigger loading the new resource, and ensure that the new configuration is saved
@@ -258,7 +258,7 @@ bool KAResourceLocal::setLocation(const QString& fileName, const QString&)
 
 QString KAResourceLocal::displayLocation() const
 {
-	return mURL.path();
+	return mURL.toLocalFile();
 }
 
 QString KAResourceLocal::displayType() const

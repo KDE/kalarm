@@ -1473,7 +1473,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 	KUrl url = fileDlg->selectedUrl();
 	if (url.isEmpty())
 		return QString("");
-	defaultDir = url.path();
+	defaultDir = url.isLocalFile() ? url.toLocalFile() : url.path();
 	return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
 }
 
@@ -1703,7 +1703,7 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
 	}
 	return result;
 }
- 
+
 #ifndef NDEBUG
 /******************************************************************************
 * Set up KAlarm test conditions based on environment variables.

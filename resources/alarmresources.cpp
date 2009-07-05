@@ -166,7 +166,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 			return 0;
 		}
 		else
-			resource = new KAResourceLocal(type, url.path());
+			resource = new KAResourceLocal(type, url.toLocalFile());
 	}
 	if (!resource)
 	{
