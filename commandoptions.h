@@ -30,11 +30,17 @@
 #include <QStringList>
 class KCmdLineArgs;
 
+#ifdef ERROR
+#undef ERROR
+#endif
+
 class CommandOptions
 {
 	public:
 		enum Command
 		{
+		    // FIXME change ERROR to something less generic,
+		    // as it's defined as a preprocessor symbol (at least on Windows)
 			ERROR,            // error in command line options
 			NONE,             // no command
 			TRAY,             // --tray
