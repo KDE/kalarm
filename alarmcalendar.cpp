@@ -228,7 +228,7 @@ bool AlarmCalendar::open()
 			// The calendar file doesn't yet exist, or it's zero length, so create a new one
 			bool created = false;
 			if (mICalUrl.isLocalFile())
-				created = saveCal(mICalUrl.path());
+				created = saveCal(mICalUrl.toLocalFile());
 			else
 			{
 				KTemporaryFile tmpFile;
@@ -347,7 +347,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		kDebug() << "\"" << newFile << "\"," << mEventType;
 		QString saveFilename = newFile.isNull() ? mLocalFile : newFile;
 		if (mCalType == LOCAL_VCAL  &&  newFile.isNull()  &&  mUrl.isLocalFile())
-			saveFilename = mICalUrl.path();
+			saveFilename = mICalUrl.toLocalFile();
 		if (!static_cast<CalendarLocal*>(mCalendar)->save(saveFilename, new ICalFormat))
 		{
 			kError() << "Saving" << saveFilename << "failed.";
@@ -573,7 +573,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	bool local = url.isLocalFile();
 	if (local)
 	{
-		filename = url.path();
+		filename = url.toLocalFile();
 		if (!KStandardDirs::exists(filename))
 		{
 			kDebug() << "File '" << url.prettyUrl() <<"' not found";
@@ -1045,7 +1045,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 	return 0;
 }
 
- 
+
 /******************************************************************************
 * Delete the specified event from the calendar, if it exists.
 * The calendar is then optionally saved.

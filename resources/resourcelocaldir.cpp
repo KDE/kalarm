@@ -71,7 +71,7 @@ void KAResourceLocalDir::init()
 	connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(slotUpdated(const QString&)));
 	connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(slotUpdated(const QString&)));
 	connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(slotUpdated(const QString&)));
-	mDirWatch.addDir(mURL.path(), KDirWatch::WatchFiles);
+	mDirWatch.addDir(mURL.toLocalFile(), KDirWatch::WatchFiles);
 
 	enableResource(isActive());
 
@@ -118,17 +118,17 @@ void KAResourceLocalDir::setReadOnly(bool ro)
 {
 	// Re-evaluate the directory's read-only status (since KDirWatch
 	// doesn't pick up permissions changes on the directory itself).
-	QFileInfo dirInfo(mURL.path());
+	QFileInfo dirInfo(mURL.toLocalFile());
 	mDirReadOnly = !dirInfo.isWritable();
 	AlarmResource::setReadOnly(ro);
 }
 
 void KAResourceLocalDir::enableResource(bool enable)
 {
-	kDebug(KARES_DEBUG) << enable << ":" << mURL.path();
+	kDebug(KARES_DEBUG) << enable << ":" << mURL.toLocalFile();
 	if (enable)
 	{
-		lock(mURL.path());
+		lock(mURL.toLocalFile());
 		mDirWatch.startScan();
 	}
 	else
@@ -140,7 +140,7 @@ void KAResourceLocalDir::enableResource(bool enable)
 
 bool KAResourceLocalDir::doOpen()
 {
-	QFileInfo dirInfo(mURL.path());
+	QFileInfo dirInfo(mURL.toLocalFile());
 	return dirInfo.isDir()  &&  dirInfo.isReadable();
 }
 
@@ -150,7 +150,7 @@ void KAResourceLocalDir::slotUpdated(const QString& filepath)
 #warning Only reload the individual file which has changed
 #endif
 	if (filepath.contains(QRegExp("(~|\\.new|\\.tmp)$"))
-	||  filepath.startsWith(mURL.path() + "/qt_temp."))
+	||  filepath.startsWith(mURL.toLocalFile() + "/qt_temp."))
 		return;   // ignore backup or temporary file
 	doLoad(false);
 }
@@ -163,7 +163,7 @@ void KAResourceLocalDir::slotUpdated(const QString& filepath)
 */
 bool KAResourceLocalDir::doLoad(bool syncCache)
 {
-	kDebug(KARES_DEBUG) << mURL.path() << (syncCache ?": load all" :": load changes only");
+	kDebug(KARES_DEBUG) << mURL.toLocalFile() << (syncCache ?": load all" :": load changes only");
 	if (!isActive()  ||  !isOpen())
 		return false;
 	ModifiedMap      oldLastModified;
@@ -188,7 +188,7 @@ emit invalidate(this);  // necessary until load changes only is fixed
 	}
 	mLastModified.clear();
 	mCompatibilityMap.clear();
-	QString dirName = mURL.path();
+	QString dirName = mURL.toLocalFile();
 	bool success = false;
 	bool foundFile = false;
 	if (KStandardDirs::exists(dirName)  ||  KStandardDirs::exists(dirName + '/'))
@@ -349,7 +349,7 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, bo
 
 bool KAResourceLocalDir::doSave(bool)
 {
-	kDebug(KARES_DEBUG) << mURL.path();
+	kDebug(KARES_DEBUG) << mURL.toLocalFile();
 	bool success = true;
 	Incidence::List list = addedIncidences();
 	list += changedIncidences();
@@ -377,7 +377,7 @@ bool KAResourceLocalDir::doSave(bool, Incidence* incidence)
 	}
 
 	QString id = incidence->uid();
-	QString fileName = mURL.path() + '/' + id;
+	QString fileName = mURL.toLocalFile() + '/' + id;
 	kDebug(KARES_DEBUG) << fileName;
 
 	CalendarLocal cal(calendar()->timeSpec());
@@ -421,7 +421,7 @@ bool KAResourceLocalDir::deleteEvent(Event* event)
 
 bool KAResourceLocalDir::deleteIncidenceFile(Incidence* incidence)
 {
-	QFile file(mURL.path() + '/' + incidence->uid());
+	QFile file(mURL.toLocalFile() + '/' + incidence->uid());
 	if (!file.exists())
 		return true;
 	mDirWatch.stopScan();
@@ -432,7 +432,7 @@ bool KAResourceLocalDir::deleteIncidenceFile(Incidence* incidence)
 
 QString KAResourceLocalDir::dirName() const
 {
-	return mURL.path();
+	return mURL.toLocalFile();
 }
 
 bool KAResourceLocalDir::setDirName(const KUrl& newURL)
@@ -442,17 +442,17 @@ bool KAResourceLocalDir::setDirName(const KUrl& newURL)
 		mNewURL = newURL;
 		return true;
 	}
-	if (newURL.path() == mURL.path()  ||  !newURL.isLocalFile())
+	if (!newURL.isLocalFile() || newURL.toLocalFile() == mURL.toLocalFile())
 		return false;
-	kDebug(KARES_DEBUG) << newURL.path();
+	kDebug(KARES_DEBUG) << newURL.toLocalFile();
 	if (isOpen())
 		close();
 	bool active = isActive();
 	if (active)
 		enableResource(false);
-	mDirWatch.removeDir(mURL.path());
+	mDirWatch.removeDir(mURL.toLocalFile());
 	mURL = newURL;
-	mDirWatch.addDir(mURL.path(), KDirWatch::WatchFiles);
+	mDirWatch.addDir(mURL.toLocalFile(), KDirWatch::WatchFiles);
 	if (active)
 		enableResource(true);
 	// Trigger loading the new resource, and ensure that the new configuration is saved
@@ -468,7 +468,7 @@ bool KAResourceLocalDir::setLocation(const QString& dirName, const QString&)
 
 QString KAResourceLocalDir::displayLocation() const
 {
-	return mURL.path();
+	return mURL.toLocalFile();
 }
 
 QString KAResourceLocalDir::displayType() const
