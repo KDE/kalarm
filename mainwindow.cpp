@@ -178,6 +178,7 @@ MainWindow::MainWindow(bool restored)
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
 	                   SLOT(slotResourceStatusChanged()));
 	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
+	mListView->installEventFilter(this);
 	initActions();
 
 	setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
@@ -304,6 +305,25 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 				// Allow resources to be resized again
 				mResizing = false;
 				break;
+			default:
+				break;
+		}
+	}
+	else if (obj == mListView)
+	{
+		switch (e->type())
+		{
+			case QEvent::KeyPress:
+			{
+				QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+				if (ke->key() == Qt::Key_Delete  &&  ke->modifiers() == Qt::ShiftModifier)
+				{
+					// Prevent Shift-Delete being processed by EventListDelegate
+					mActionDeleteForce->trigger();
+					return true;
+				}
+				break;
+			}
 			default:
 				break;
 		}
@@ -441,8 +461,14 @@ void MainWindow::initActions()
 
 	mActionDelete = new KAction(KIcon("edit-delete"), i18nc("@action", "&Delete"), this);
 	actions->addAction(QLatin1String("delete"), mActionDelete);
-	mActionDelete->setShortcut(QKeySequence(Qt::Key_Delete));
-	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDelete()));
+	mActionDelete->setShortcut(QKeySequence::Delete);
+	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
+
+	// Set up Shift-Delete as a shortcut to delete without confirmation
+	mActionDeleteForce = new KAction(this);
+	actions->addAction(QLatin1String("delete-force"), mActionDeleteForce);
+	mActionDeleteForce->setShortcut(QKeySequence::Delete + Qt::SHIFT);
+	connect(mActionDeleteForce, SIGNAL(triggered(bool)), SLOT(slotDeleteForce()));
 
 	mActionReactivate = new KAction(i18nc("@action", "Reac&tivate"), this);
 	actions->addAction(QLatin1String("undelete"), mActionReactivate);
@@ -684,7 +710,7 @@ void MainWindow::slotModify()
 *  Called when the Delete button is clicked to delete the currently highlighted
 *  alarms in the list.
 */
-void MainWindow::slotDelete()
+void MainWindow::slotDelete(bool force)
 {
 	KAEvent::List events = mListView->selectedEvents();
 	// Copy the events to be deleted, in case any are deleted by being
@@ -698,7 +724,7 @@ void MainWindow::slotDelete()
 		eventCopies.append(event);
 		undos.append(*event, resources->resourceForEvent(event->id()));
 	}
-	if (Preferences::confirmAlarmDeletion())
+	if (!force  &&  Preferences::confirmAlarmDeletion())
 	{
 		int n = events.count();
 		if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",

@@ -104,7 +104,8 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotNewTemplate();
 		void           slotCopy();
 		void           slotModify();
-		void           slotDelete();
+		void           slotDeleteIf()     { slotDelete(false); }
+		void           slotDeleteForce()  { slotDelete(true); }
 		void           slotReactivate();
 		void           slotEnable();
 		void           slotToggleTrayIcon();
@@ -150,6 +151,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           selectionCleared();
 		void           setEnableText(bool enable);
 		void           initUndoMenu(QMenu*, Undo::Type);
+		void           slotDelete(bool force);
 		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
@@ -177,6 +179,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		KAction*             mActionCopy;
 		KAction*             mActionModify;
 		KAction*             mActionDelete;
+		KAction*             mActionDeleteForce;
 		KAction*             mActionReactivate;
 		KAction*             mActionEnable;
 		KAction*             mActionFindNext;
