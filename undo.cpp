@@ -352,7 +352,6 @@ void Undo::removeRedos(const QString& eventID)
 		{
 			if (item->operation() == UndoItem::EDIT)
 				id = item->oldEventID();   // continue looking for its post-edit ID
-			item->setType(NONE);    // prevent the destructor removing it from the list
 			delete item;   // N.B. 'delete' removes the object from the list
 		}
 		else
