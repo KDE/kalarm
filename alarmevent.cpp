@@ -1011,6 +1011,11 @@ void KAEvent::setReminder(int minutes, bool onceOnly)
 	}
 }
 
+QFont KAEvent::font() const
+{
+	return mDefaultFont ? Preferences::messageFont() : mFont;
+}
+
 DateTime KAEvent::nextTrigger(TriggerType type) const
 {
 	switch (type)
@@ -1694,7 +1699,7 @@ int KAEvent::flags() const
 {
 	if (mSpeak)
 		const_cast<KAEvent*>(this)->mBeep = false;
-	return KAAlarmEventBase::flags()
+	return baseFlags()
 	     | (mStartDateTime.isDateOnly() ? ANY_TIME : 0)
 	     | (mDeferral > 0               ? DEFERRAL : 0)
 	     | (mSpeak                      ? SPEAK : 0)
@@ -4089,7 +4094,7 @@ void KAEvent::dumpDebug() const
 {
 	kDebug() << "KAEvent dump:";
 	kDebug() << "-- mCategory:" << mCategory;
-	KAAlarmEventBase::dumpDebug();
+	baseDumpDebug();
 	if (!mTemplateName.isEmpty())
 	{
 		kDebug() << "-- mTemplateName:" << mTemplateName;
@@ -4168,7 +4173,7 @@ KAAlarm::KAAlarm(const KAAlarm& alarm)
 
 int KAAlarm::flags() const
 {
-	return KAAlarmEventBase::flags()
+	return baseFlags()
 	     | (mDeferred ? KAEvent::DEFERRAL : 0);
 
 }
@@ -4177,7 +4182,7 @@ int KAAlarm::flags() const
 void KAAlarm::dumpDebug() const
 {
 	kDebug() << "KAAlarm dump:";
-	KAAlarmEventBase::dumpDebug();
+	baseDumpDebug();
 	const char* altype = 0;
 	switch (mType)
 	{
@@ -4267,7 +4272,7 @@ void KAAlarmEventBase::set(int flags)
 	mCommandScript = flags & KAEvent::SCRIPT;
 }
 
-int KAAlarmEventBase::flags() const
+int KAAlarmEventBase::baseFlags() const
 {
 	return (mBeep            ? KAEvent::BEEP : 0)
 	     | (mRepeatSound     ? KAEvent::REPEAT_SOUND : 0)
@@ -4280,13 +4285,8 @@ int KAAlarmEventBase::flags() const
 	     | (mCommandScript   ? KAEvent::SCRIPT : 0);
 }
 
-QFont KAAlarmEventBase::font() const
-{
-	return mDefaultFont ? Preferences::messageFont() : mFont;
-}
-
 #ifndef NDEBUG
-void KAAlarmEventBase::dumpDebug() const
+void KAAlarmEventBase::baseDumpDebug() const
 {
 	kDebug() << "-- mEventID:" << mEventID;
 	kDebug() << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??");

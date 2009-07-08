@@ -61,36 +61,8 @@ class KAAlarmEventBase
 {
 	public:
 		~KAAlarmEventBase()  { }
-		const QString&     cleanText() const           { return mText; }
-		QString            message() const             { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString(); }
-		QString            fileName() const            { return (mActionType == T_FILE) ? mText : QString(); }
-		QString            command() const             { return (mActionType == T_COMMAND) ? mText : QString(); }
-		uint               emailFromId() const         { return mEmailFromIdentity; }
-		const EmailAddressList& emailAddresses() const { return mEmailAddresses; }
-		QString            emailAddresses(const QString& sep) const  { return mEmailAddresses.join(sep); }
-		const QString&     emailSubject() const        { return mEmailSubject; }
-		const QStringList& emailAttachments() const    { return mEmailAttachments; }
-		QString            emailAttachments(const QString& sep) const  { return mEmailAttachments.join(sep); }
-		bool               emailBcc() const            { return mEmailBcc; }
-		const QColor&      bgColour() const            { return mBgColour; }
-		const QColor&      fgColour() const            { return mFgColour; }
-		bool               defaultFont() const         { return mDefaultFont; }
-		QFont              font() const;
 		int                lateCancel() const          { return mLateCancel; }
-		bool               autoClose() const           { return mAutoClose; }
-		bool               commandScript() const       { return mCommandScript; }
-		bool               confirmAck() const          { return mConfirmAck; }
 		bool               repeatAtLogin() const       { return mRepeatAtLogin; }
-		int                repeatCount() const         { return mRepeatCount; }
-		KCal::Duration     repeatInterval() const      { return mRepeatInterval; }
-		bool               displaying() const          { return mDisplaying; }
-		bool               beep() const                { return mBeep; }
-		int                flags() const;
-#ifdef NDEBUG
-		void               dumpDebug() const  { }
-#else
-		void               dumpDebug() const;
-#endif
 
 	protected:
 		enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_AUDIO, T_EMAIL };
@@ -102,6 +74,12 @@ class KAAlarmEventBase
 		KAAlarmEventBase& operator=(const KAAlarmEventBase& rhs)  { copy(rhs);  return *this; }
 		void               copy(const KAAlarmEventBase&);
 		void               set(int flags);
+		int                baseFlags() const;
+#ifdef NDEBUG
+		void               baseDumpDebug() const  { }
+#else
+		void               baseDumpDebug() const;
+#endif
 
 		QString            mEventID;          // UID: KCal::Event unique ID
 		QString            mText;             // message text, file URL, command, email body [or audio file for KAAlarm]
@@ -363,6 +341,28 @@ class KAEvent : public KAAlarmEventBase
 		void               removeExpiredAlarm(KAAlarm::Type);
 		void               incrementRevision()                               { ++mRevision;  mUpdated = true; }
 
+		const QString&     cleanText() const              { return mText; }
+		QString            message() const                { return (mActionType == T_MESSAGE || mActionType == T_EMAIL) ? mText : QString(); }
+		QString            fileName() const               { return (mActionType == T_FILE) ? mText : QString(); }
+		QString            command() const                { return (mActionType == T_COMMAND) ? mText : QString(); }
+		uint               emailFromId() const            { return mEmailFromIdentity; }
+		const EmailAddressList& emailAddresses() const    { return mEmailAddresses; }
+		QString            emailAddresses(const QString& sep) const  { return mEmailAddresses.join(sep); }
+		const QString&     emailSubject() const           { return mEmailSubject; }
+		const QStringList& emailAttachments() const       { return mEmailAttachments; }
+		QString            emailAttachments(const QString& sep) const  { return mEmailAttachments.join(sep); }
+		bool               emailBcc() const               { return mEmailBcc; }
+		const QColor&      bgColour() const               { return mBgColour; }
+		const QColor&      fgColour() const               { return mFgColour; }
+		bool               defaultFont() const            { return mDefaultFont; }
+		QFont              font() const;
+		bool               autoClose() const              { return mAutoClose; }
+		bool               commandScript() const          { return mCommandScript; }
+		bool               confirmAck() const             { return mConfirmAck; }
+		int                repeatCount() const            { return mRepeatCount; }
+		KCal::Duration     repeatInterval() const         { return mRepeatInterval; }
+		bool               displaying() const             { return mDisplaying; }
+		bool               beep() const                   { return mBeep; }
 		bool               isTemplate() const             { return !mTemplateName.isEmpty(); }
 		const QString&     templateName() const           { return mTemplateName; }
 		bool               usingDefaultTime() const       { return mTemplateAfterTime == 0; }
