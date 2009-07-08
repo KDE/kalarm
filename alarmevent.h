@@ -477,7 +477,6 @@ class KAEvent : public KAAlarmEventBase
 		KARecurrence::Type checkRecur() const;
 		void               checkRepetition() const;
 		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result) const;
-		OccurType          previousRecurrence(const KDateTime& afterDateTime, DateTime& result) const;
 		int                nextWorkRepetition(const KDateTime& pre) const;
 		void               calcTriggerTimes() const;
 		void               calcNextWorkingTime(const DateTime& nextTrigger) const;
