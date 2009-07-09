@@ -108,6 +108,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWid
 		case DISPLAY:  return new EditDisplayAlarmDlg(Template, newAlarm, parent, getResource);
 		case COMMAND:  return new EditCommandAlarmDlg(Template, newAlarm, parent, getResource);
 		case EMAIL:    return new EditEmailAlarmDlg(Template, newAlarm, parent, getResource);
+		default:  break;
 	}
 	return 0;
 }
