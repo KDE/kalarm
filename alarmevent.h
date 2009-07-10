@@ -48,7 +48,7 @@ class KAEvent : public KAEventData::Observer
 			COPY_KORGANIZER = KAEventData::COPY_KORGANIZER,  // KOrganizer should hold a copy of the event
 			EXCL_HOLIDAYS   = KAEventData::EXCL_HOLIDAYS,  // don't trigger alarm on holidays
 			WORK_TIME_ONLY  = KAEventData::WORK_TIME_ONLY,  // trigger alarm only during working hours
-			DISPLAY_COMMAND = KAEventData::DISPLAY_COMMAND, // display command output in alarm window
+			DISPLAY_COMMAND = KAEventData::DISPLAY_COMMAND // display command output in alarm window
 		};
 		enum TriggerType    // alarm trigger type
 		{
