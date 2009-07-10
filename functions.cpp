@@ -50,7 +50,6 @@
 #include <kactioncollection.h>
 #include <kdbusservicestarter.h>
 #include <kglobal.h>
-#include <klocale.h>
 #include <kstandarddirs.h>
 #include <ksystemtimezone.h>
 #include <KStandardGuiItem>
@@ -858,21 +857,21 @@ void editNewAlarm(EditAlarmDlg::Type type, QWidget* parent)
 /******************************************************************************
 * Execute a New Alarm dialog for the specified alarm type.
 */
-void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text)
+void editNewAlarm(KAEventData::Action action, QWidget* parent, const AlarmText* text)
 {
 	bool setAction = false;
 	EditAlarmDlg::Type type;
 	switch (action)
 	{
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:
+		case KAEventData::MESSAGE:
+		case KAEventData::FILE:
 			type = EditAlarmDlg::DISPLAY;
 			setAction = true;
 			break;
-		case KAEvent::COMMAND:
+		case KAEventData::COMMAND:
 			type = EditAlarmDlg::COMMAND;
 			break;
-		case KAEvent::EMAIL:
+		case KAEventData::EMAIL:
 			type = EditAlarmDlg::EMAIL;
 			break;
 		default:
@@ -1110,7 +1109,7 @@ void editTemplate(KAEvent* event, QWidget* parent)
 		AlarmResource* resource;
 		editDlg->getEvent(newEvent, resource);
 		QString id = event->id();
-		newEvent.setEventID(id);
+		newEvent.setEventId(id);
 
 		// Update the event in the displays and in the calendar file
 		Undo::Event undo(*event, resource);
@@ -1143,7 +1142,7 @@ KAEvent::List templateList()
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (includeCmdAlarms  ||  event->action() != KAEvent::COMMAND)
+		if (includeCmdAlarms  ||  event->action() != KAEventData::COMMAND)
 			templates.append(event);
 	}
 	return templates;
@@ -1156,7 +1155,7 @@ KAEvent::List templateList()
 */
 void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
-	if (event  &&  event->action() == KAEvent::EMAIL
+	if (event  &&  event->action() == KAEventData::EMAIL
 	&&  Preferences::emailAddress().isEmpty())
 		KMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
 		                                       "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
@@ -1372,57 +1371,6 @@ void writeConfigWindowSize(const char* window, const QSize& size, int splitterWi
 }
 
 /******************************************************************************
-* Return the current KAlarm version number.
-*/
-int Version()
-{
-	static int version = 0;
-	if (!version)
-		version = getVersionNumber(KALARM_VERSION);
-	return version;
-}
-
-/******************************************************************************
-* Convert the supplied KAlarm version string to a version number.
-* Reply = version number (double digit for each of major, minor & issue number,
-*         e.g. 010203 for 1.2.3
-*       = 0 if invalid version string.
-*/
-int getVersionNumber(const QString& version, QString* subVersion)
-{
-	// N.B. Remember to change  Version(int major, int minor, int rev)
-	//      if the representation returned by this method changes.
-	if (subVersion)
-		subVersion->clear();
-	int count = version.count(QChar('.')) + 1;
-	if (count < 2)
-		return 0;
-	bool ok;
-	unsigned vernum = version.section('.', 0, 0).toUInt(&ok) * 10000;  // major version
-	if (!ok)
-		return 0;
-	unsigned v = version.section('.', 1, 1).toUInt(&ok);               // minor version
-	if (!ok)
-		return 0;
-	vernum += (v < 99 ? v : 99) * 100;
-	if (count >= 3)
-	{
-		// Issue number: allow other characters to follow the last digit
-		QString issue = version.section('.', 2);
-		int n = issue.length();
-		if (!n  ||  !issue[0].isDigit())
-			return 0;
-		int i;
-		for (i = 0;  i < n && issue[i].isDigit();  ++i) ;
-		if (subVersion)
-			*subVersion = issue.mid(i);
-		v = issue.left(i).toUInt();   // issue number
-		vernum += (v < 99 ? v : 99);
-	}
-	return vernum;
-}
-
-/******************************************************************************
 * Check from its mime type whether a file appears to be a text or image file.
 * If a text file, its type is distinguished.
 * Reply = file type.
@@ -1492,36 +1440,6 @@ bool isWorkingTime(const KDateTime& dt, const KAEvent* event)
 		return true;
 	return dt.isDateOnly()
 	   ||  (dt.time() >= Preferences::workDayStart()  &&  dt.time() < Preferences::workDayEnd());
-}
-
-/******************************************************************************
-*  Return the first day of the week for the user's locale.
-*  Reply = 1 (Mon) .. 7 (Sun).
-*/
-int localeFirstDayOfWeek()
-{
-	static int firstDay = 0;
-	if (!firstDay)
-		firstDay = KGlobal::locale()->weekStartDay();
-	return firstDay;
-}
-
-/******************************************************************************
-* Return the week day name (Monday = 1).
-*/
-QString weekDayName(int day, const KLocale* locale)
-{
-	switch (day)
-	{
-		case 1: return ki18nc("@option Name of the weekday", "Monday").toString(locale);
-		case 2: return ki18nc("@option Name of the weekday", "Tuesday").toString(locale);
-		case 3: return ki18nc("@option Name of the weekday", "Wednesday").toString(locale);
-		case 4: return ki18nc("@option Name of the weekday", "Thursday").toString(locale);
-		case 5: return ki18nc("@option Name of the weekday", "Friday").toString(locale);
-		case 6: return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
-		case 7: return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
-	}
-	return QString();
 }
 
 /******************************************************************************
@@ -1751,13 +1669,13 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 	QString userEmail;
 	switch (event->action())
 	{
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:
-		case KAEvent::COMMAND:
+		case KAEventData::MESSAGE:
+		case KAEventData::FILE:
+		case KAEventData::COMMAND:
 			kcalEvent->setSummary(event->cleanText());
 			userEmail = Preferences::emailAddress();
 			break;
-		case KAEvent::EMAIL:
+		case KAEventData::EMAIL:
 		{
 			QString from = event->emailFromId()
 			             ? Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()

@@ -1215,7 +1215,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
 	kDebug() << "Formats:" << e->mimeData()->formats();
 	const QMimeData* data = e->mimeData();
-	KAEvent::Action action = KAEvent::MESSAGE;
+	KAEventData::Action action = KAEventData::MESSAGE;
 	QByteArray      bytes;
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
@@ -1297,7 +1297,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		if (start.isDateOnly())
 			flags |= KAEvent::ANY_TIME;
 		KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
-		           QFont(), KAEvent::MESSAGE, 0, flags, true);
+		           QFont(), KAEventData::MESSAGE, 0, flags, true);
 		if (todo->recurs())
 		{
 			ev.setRecurrence(*todo->recurrence());
@@ -1310,7 +1310,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
 	{
 		kDebug() << "URL";
-		action = KAEvent::FILE;
+		action = KAEventData::FILE;
 		alarmText.setText(files[0].prettyUrl());
 	}
 	else if (data->hasText())
@@ -1324,7 +1324,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 
 	if (!alarmText.isEmpty())
 	{
-		if (action == KAEvent::MESSAGE
+		if (action == KAEventData::MESSAGE
 		&&  (alarmText.isEmail() || alarmText.isScript()))
 		{
 			// If the alarm text could be interpreted as an email or command script,
@@ -1342,7 +1342,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 				return;   // user didn't press OK
 			int i = types.indexOf(type);
 			if (i == 1)
-				action = alarmText.isEmail() ? KAEvent::EMAIL : KAEvent::COMMAND;
+				action = alarmText.isEmail() ? KAEventData::EMAIL : KAEventData::COMMAND;
 		}
 		KAlarm::editNewAlarm(action, win, &alarmText);
 	}

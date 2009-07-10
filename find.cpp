@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -211,10 +211,10 @@ void Find::display()
 			live = true;
 		switch (event->action())
 		{
-			case KAEvent::MESSAGE:  text    = true;  break;
-			case KAEvent::FILE:     file    = true;  break;
-			case KAEvent::COMMAND:  command = true;  break;
-			case KAEvent::EMAIL:    email   = true;  break;
+			case KAEventData::MESSAGE:  text    = true;  break;
+			case KAEventData::FILE:     file    = true;  break;
+			case KAEventData::COMMAND:  command = true;  break;
+			case KAEventData::EMAIL:    email   = true;  break;
 		}
 	}
 	mLive->setEnabled(live);
@@ -321,28 +321,28 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 			continue;     // we're not searching this type of alarm
 		switch (event->action())
 		{
-			case KAEvent::MESSAGE:
+			case KAEventData::MESSAGE:
 				if (!(mOptions & FIND_MESSAGE))
 					break;
 				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
-			case KAEvent::FILE:
+			case KAEventData::FILE:
 				if (!(mOptions & FIND_FILE))
 					break;
 				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
-			case KAEvent::COMMAND:
+			case KAEventData::COMMAND:
 				if (!(mOptions & FIND_COMMAND))
 					break;
 				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
-			case KAEvent::EMAIL:
+			case KAEventData::EMAIL:
 				if (!(mOptions & FIND_EMAIL))
 					break;
 				mFind->setData(event->emailAddresses(", "));

@@ -134,7 +134,7 @@ class MessageWin : public MainWindowBase
 		int                 mFadeSeconds;
 		int                 mDefaultDeferMinutes;
 		KAAlarm::Type       mAlarmType;
-		KAEvent::Action     mAction;
+		KAEventData::Action mAction;
 		unsigned long       mKMailSerialNumber; // if email text, message's KMail serial number, else 0
 		KAEvent::CmdErrType mCommandError;
 		QStringList         mErrorMsgs;

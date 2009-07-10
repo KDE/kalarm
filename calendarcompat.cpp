@@ -49,7 +49,7 @@ static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION
 */
 void CalendarCompat::setID(KCal::CalendarLocal& calendar)
 {
-	calendar.setCustomProperty(KCalendar::APPNAME, VERSION_PROPERTY, KAlarm::currentCalendarVersionString());
+	calendar.setCustomProperty(KCalendar::APPNAME, VERSION_PROPERTY, KAEventData::currentCalendarVersionString());
 }
 
 /******************************************************************************
@@ -82,7 +82,7 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 		kDebug() << "KAlarm version" << version;
 
 	// Convert events to current KAlarm format for if the calendar is saved
-	KAEvent::convertKCalEvents(calendar, version, version057_UTC);
+	KAEventData::convertKCalEvents(calendar, version, version057_UTC, Preferences::startOfDay());
 	if (!resource)
 		return KCalendar::Current;    // update non-shared calendars regardless
 	if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)
@@ -155,10 +155,10 @@ int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, const QStri
 			return -1;    // missing version string
 		versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
 	}
-	if (versionString == KAlarm::currentCalendarVersionString())
+	if (versionString == KAEventData::currentCalendarVersionString())
 		return 0;      // the calendar is in the current KAlarm format
 	int ver = KAlarm::getVersionNumber(versionString, &subVersion);
-	if (ver >= KAlarm::currentCalendarVersion()  &&  ver <= KAlarm::Version())
+	if (ver >= KAEventData::currentCalendarVersion()  &&  ver <= KAlarm::Version())
 		return 0;      // the calendar is in the current KAlarm format
 	return KAlarm::getVersionNumber(versionString, &subVersion);
 }

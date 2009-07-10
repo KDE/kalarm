@@ -73,18 +73,11 @@ void                writeConfigWindowSize(const char* window, const QSize&, int 
  *  If a text file, its type is distinguished.
  */
 FileType            fileType(const KMimeType::Ptr& mimetype);
-/** Return current KAlarm version number */
-int                 Version();
-inline int          Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }
-int                 getVersionNumber(const QString& version, QString* subVersion = 0);
-/** Return which version of KAlarm was the first to use the current calendar/event format */
-inline int          currentCalendarVersion()        { return KAEvent::calVersion(); }
-inline QString      currentCalendarVersionString()  { return KAEvent::calVersionString(); }
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
                                const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = 0);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
-void                editNewAlarm(KAEvent::Action, QWidget* parent = 0, const AlarmText* = 0);
+void                editNewAlarm(KAEventData::Action, QWidget* parent = 0, const AlarmText* = 0);
 void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent*, QWidget* parent = 0);
@@ -142,20 +135,6 @@ bool                convTimeString(const QByteArray& timeString, KDateTime& date
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
 bool                isWorkingTime(const KDateTime&, const KAEvent*);
-int                 localeFirstDayOfWeek();
-QString             weekDayName(int day, const KLocale*);
-
-/* Given a standard KDE day number, return the day number in the week for the user's locale.
- * Standard day number = 1 (Mon) .. 7 (Sun)
- * Locale day number in week = 0 .. 6
- */
-inline int          weekDay_to_localeDayInWeek(int weekDay)  { return (weekDay + 7 - localeFirstDayOfWeek()) % 7; }
-
-/* Given a day number in the week for the user's locale, return the standard KDE day number.
- * 'index' = 0 .. 6
- * Standard day number = 1 (Mon) .. 7 (Sun)
- */
-inline int          localeDayInWeek_to_weekDay(int index)  { return (index + localeFirstDayOfWeek() - 1) % 7 + 1; }
 
 #ifndef NDEBUG
 void                setTestModeConditions();

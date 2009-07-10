@@ -187,7 +187,7 @@ void BirthdayModel::refresh()
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (event->action() == KAEvent::MESSAGE
+		if (event->action() == KAEventData::MESSAGE
 		&&  event->recurType() == KARecurrence::ANNUAL_DATE
 		&&  (mPrefix.isEmpty()  ||  event->message().startsWith(mPrefix)))
 			messageList.append(event->message());

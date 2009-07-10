@@ -347,8 +347,8 @@ void AlarmText::setUpTranslations()
 */
 QString AlarmText::summary(const KAEvent* event, int maxLines, bool* truncated)
 {
-	QString text = (event->action() == KAEvent::EMAIL) ? event->emailSubject() : event->cleanText();
-	if (event->action() == KAEvent::MESSAGE)
+	QString text = (event->action() == KAEventData::EMAIL) ? event->emailSubject() : event->cleanText();
+	if (event->action() == KAEventData::MESSAGE)
 	{
 		// If the message is the text of an email, return its headers or just subject line
 		QString subject = emailHeaders(text, (maxLines <= 1));
