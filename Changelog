@@ -1,5 +1,9 @@
 KAlarm Change Log
 
+=== Version 2.2.5 --- 10 July 2009 ===
+- Fix alarms not triggering when reminder is erroneously AFTER the main alarm.
+- Fix crash when deleting an alarm which has an entry in the 'redo' list.
+
 === Version 2.2.4 --- 23 June 2009 ===
 - Alarm edit: keep existing display file name if file select dialogue cancelled.
 - Guard against crashes if KAlarm quits while a modal dialogue is open.
