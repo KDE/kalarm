@@ -3,6 +3,7 @@ project(kalarm)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 
 include_directories(
+${CMAKE_CURRENT_BINARY_DIR}
         ./ 
 	./lib 
 	./resources 
@@ -26,6 +27,7 @@ set(libkalarm_SRCS
 	lib/identities.cpp
 	lib/itembox.cpp
 	lib/label.cpp 
+	lib/locale.cpp
 	lib/messagebox.cpp 
 	lib/packedlayout.cpp 
 	lib/pushbutton.cpp 
@@ -47,6 +49,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    birthdaymodel.cpp
    main.cpp 
+   kaeventdata.cpp
    alarmevent.cpp 
    editdlg.cpp 
    editdlgtypes.cpp

@@ -108,6 +108,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWid
 		case DISPLAY:  return new EditDisplayAlarmDlg(Template, newAlarm, parent, getResource);
 		case COMMAND:  return new EditCommandAlarmDlg(Template, newAlarm, parent, getResource);
 		case EMAIL:    return new EditEmailAlarmDlg(Template, newAlarm, parent, getResource);
+		default:  break;
 	}
 	return 0;
 }
@@ -117,13 +118,13 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 {
 	switch (event->action())
 	{
-		case KAEvent::COMMAND:
+		case KAEventData::COMMAND:
 			if (!event->commandDisplay())
 				return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 			// fall through to MESSAGE
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:     return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-		case KAEvent::EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEventData::MESSAGE:
+		case KAEventData::FILE:     return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEventData::EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 	}
 	return 0;
 }
@@ -136,7 +137,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 *            = false to edit/create an alarm.
 *   event   != to initialise the dialog to show the specified event's data.
 */
-EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* parent, GetResourceType getResource)
+EditAlarmDlg::EditAlarmDlg(bool Template, KAEventData::Action action, QWidget* parent, GetResourceType getResource)
 	: KDialog(parent),
 	  mAlarmType(action),
 	  mMainPageShown(false),
@@ -514,7 +515,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 			}
 		}
 
-		KAEvent::Action action = event->action();
+		KAEventData::Action action = event->action();
 		AlarmText altext;
 		if (event->commandScript())
 			altext.setScript(event->cleanText());
@@ -924,7 +925,7 @@ bool EditAlarmDlg::validate()
 			else
 				pre = pre.addSecs(-1);
 			DateTime next;
-			event.nextOccurrence(pre, next, KAEvent::IGNORE_REPETITION);
+			event.nextOccurrence(pre, next, KAEventData::IGNORE_REPETITION);
 			if (next != dt)
 			{
 				QString prompt = dateOnly ? i18nc("@info The parameter is a date value",
@@ -952,7 +953,7 @@ bool EditAlarmDlg::validate()
 			{
 				// A timed recurrence has an entered start date which
 				// has already expired, so we must adjust it.
-				if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
+				if (event.nextOccurrence(now, mAlarmDateTime, KAEventData::ALLOW_FOR_REPETITION) == KAEventData::NO_OCCURRENCE)
 				{
 					KMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
 					return false;
@@ -1087,10 +1088,10 @@ void EditAlarmDlg::slotHelp()
 	EventListModel::Type type;
 	switch (mAlarmType)
 	{
-		case KAEvent::FILE:
-		case KAEvent::MESSAGE:  type = EventListModel::DISPLAY;  break;
-		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
-		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
+		case KAEventData::FILE:
+		case KAEventData::MESSAGE:  type = EventListModel::DISPLAY;  break;
+		case KAEventData::COMMAND:  type = EventListModel::COMMAND;  break;
+		case KAEventData::EMAIL:    type = EventListModel::EMAIL;  break;
 		default:
 			return;
 	}

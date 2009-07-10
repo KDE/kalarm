@@ -74,14 +74,14 @@ CommandOptions::CommandOptions()
 	if (checkCommand("file", NEW))
 	{
 		mEditType      = EditAlarmDlg::DISPLAY;
-		mEditAction    = KAEvent::FILE;
+		mEditAction    = KAEventData::FILE;
 		mEditActionSet = true;
 		mText          = mArgs->getOption(mCommandName);
 	}
 	if (checkCommand("exec-display", NEW))
 	{
 		mEditType      = EditAlarmDlg::DISPLAY;
-		mEditAction    = KAEvent::COMMAND;
+		mEditAction    = KAEventData::COMMAND;
 		mEditActionSet = true;
 		mFlags        |= KAEvent::DISPLAY_COMMAND;
 		mText          = mArgs->getOption(mCommandName);
@@ -95,7 +95,7 @@ CommandOptions::CommandOptions()
 	if (checkCommand("exec", NEW))
 	{
 		mEditType      = EditAlarmDlg::COMMAND;
-		mEditAction    = KAEvent::COMMAND;
+		mEditAction    = KAEventData::COMMAND;
 		mEditActionSet = true;
 		mText          = mArgs->getOption(mCommandName);
 		int n = mArgs->count();
@@ -108,15 +108,15 @@ CommandOptions::CommandOptions()
 	if (checkCommand("mail", NEW))
 	{
 		mEditType      = EditAlarmDlg::EMAIL;
-		mEditAction    = KAEvent::EMAIL;
+		mEditAction    = KAEventData::EMAIL;
 		mEditActionSet = true;
 	}
 	if (checkCommand("edit-new-display", EDIT_NEW, EditAlarmDlg::DISPLAY))
 	{
 		mEditType = EditAlarmDlg::DISPLAY;
-		if (!mEditActionSet  ||  (mEditAction != KAEvent::COMMAND && mEditAction != KAEvent::FILE))
+		if (!mEditActionSet  ||  (mEditAction != KAEventData::COMMAND && mEditAction != KAEventData::FILE))
 		{
-			mEditAction    = KAEvent::MESSAGE;
+			mEditAction    = KAEventData::MESSAGE;
 			mEditActionSet = true;
 		}
 		if (mArgs->count())
@@ -125,13 +125,13 @@ CommandOptions::CommandOptions()
 	if (checkCommand("edit-new-command", EDIT_NEW))
 	{
 		mEditType      = EditAlarmDlg::COMMAND;
-		mEditAction    = KAEvent::COMMAND;
+		mEditAction    = KAEventData::COMMAND;
 		mEditActionSet = true;
 	}
 	if (checkCommand("edit-new-email", EDIT_NEW, EditAlarmDlg::EMAIL))
 	{
 		mEditType      = EditAlarmDlg::EMAIL;
-		mEditAction    = KAEvent::EMAIL;
+		mEditAction    = KAEventData::EMAIL;
 		mEditActionSet = true;
 	}
 	if (mError.isEmpty()  &&  mCommand == NONE  &&  mArgs->count())
@@ -140,12 +140,12 @@ CommandOptions::CommandOptions()
 		mCommand       = NEW;
 		mCommandName.clear();
 		mEditType      = EditAlarmDlg::DISPLAY;
-		mEditAction    = KAEvent::MESSAGE;
+		mEditAction    = KAEventData::MESSAGE;
 		mEditActionSet = true;
 		if (mArgs->count())
 			mText = mArgs->arg(0);
 	}
-	if (mEditAction == KAEvent::EMAIL)
+	if (mEditAction == KAEventData::EMAIL)
 	{
 		if (mArgs->isSet("subject"))
 			mSubject = mArgs->getOption("subject");

@@ -29,5 +29,16 @@
 
 #include <kdeversion.h>
 
+class QString;
+namespace KAlarm
+{
+/** Return current KAlarm version number as an integer. */
+int        Version();
+/** Return a specified version as an integer. */
+inline int Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }
+/** Convert a version string to an integer. */
+int        getVersionNumber(const QString& version, QString* subVersion = 0);
+}
+
 #endif // KALARM_H
 

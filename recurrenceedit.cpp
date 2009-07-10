@@ -22,6 +22,34 @@
  */
 
 #include "kalarm.h"
+#include "recurrenceedit.moc"
+#include "recurrenceeditprivate.moc"
+
+#include "alarmevent.h"
+#include "alarmtimewidget.h"
+#include "checkbox.h"
+#include "combobox.h"
+#include "dateedit.h"
+#include "kalarmapp.h"
+#include "karecurrence.h"
+#include "locale.h"
+#include "preferences.h"
+#include "radiobutton.h"
+#include "repetition.h"
+#include "spinbox.h"
+#include "timeedit.h"
+#include "timespinbox.h"
+#include "buttongroup.h"
+
+#include <kcal/event.h>
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kcalendarsystem.h>
+#include <kiconloader.h>
+#include <kdialog.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <QPushButton>
 #include <QLabel>
@@ -33,35 +61,7 @@
 #include <QVBoxLayout>
 #include <QtAlgorithms>
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kcalendarsystem.h>
-#include <kiconloader.h>
-#include <kdialog.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-
-#include <kcal/event.h>
-
-#include "alarmevent.h"
-#include "alarmtimewidget.h"
-#include "checkbox.h"
-#include "combobox.h"
-#include "dateedit.h"
-#include "functions.h"
-#include "kalarmapp.h"
-#include "karecurrence.h"
-#include "preferences.h"
-#include "radiobutton.h"
-#include "repetition.h"
-#include "spinbox.h"
-#include "timeedit.h"
-#include "timespinbox.h"
-#include "buttongroup.h"
 using namespace KCal;
-
-#include "recurrenceedit.moc"
-#include "recurrenceeditprivate.moc"
 
 
 class ListWidget : public QListWidget
@@ -963,11 +963,11 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		if (mMonthlyRule->type() == MonthlyRule::POS)
 		{
 			// It's by position
-			KAEvent::MonthPos pos;
+			KAEventData::MonthPos pos;
 			pos.days.fill(false);
 			pos.days.setBit(mMonthlyRule->dayOfWeek() - 1);
 			pos.weeknum = mMonthlyRule->week();
-			QList<KAEvent::MonthPos> poses;
+			QList<KAEventData::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
 		}
@@ -986,11 +986,11 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		if (mYearlyRule->type() == YearlyRule::POS)
 		{
 			// It's by position
-			KAEvent::MonthPos pos;
+			KAEventData::MonthPos pos;
 			pos.days.fill(false);
 			pos.days.setBit(mYearlyRule->dayOfWeek() - 1);
 			pos.weeknum = mYearlyRule->week();
-			QList<KAEvent::MonthPos> poses;
+			QList<KAEventData::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
 		}
@@ -1595,7 +1595,7 @@ void YearlyRule::setDefaultValues(int dayOfMonth, int dayOfWeek, int month)
 	--month;
 	for (int i = 0;  i < 12;  ++i)
 		mMonthBox[i]->setChecked(i == month);
-	setFeb29Type(Preferences::defaultFeb29Type());
+	setFeb29Type(KARecurrence::defaultFeb29Type());
 	daySelected(dayOfMonth);     // enable/disable month checkboxes as appropriate
 }
 
@@ -1630,32 +1630,32 @@ void YearlyRule::setMonths(const QList<int>& mnths)
 /******************************************************************************
  * Return the date for February 29th alarms in non-leap years.
  */
-Preferences::Feb29Type YearlyRule::feb29Type() const
+KARecurrence::Feb29Type YearlyRule::feb29Type() const
 {
 	if (mFeb29Combo->isEnabled())
 	{
 		switch (mFeb29Combo->currentIndex())
 		{
-			case 1:   return Preferences::Feb29_Mar1;
-			case 2:   return Preferences::Feb29_Feb28;
+			case 1:   return KARecurrence::Feb29_Mar1;
+			case 2:   return KARecurrence::Feb29_Feb28;
 			default:  break;
 		}
 	}
-	return Preferences::Feb29_None;
+	return KARecurrence::Feb29_None;
 }
 
 /******************************************************************************
  * Set the date for February 29th alarms to trigger in non-leap years.
  */
-void YearlyRule::setFeb29Type(Preferences::Feb29Type type)
+void YearlyRule::setFeb29Type(KARecurrence::Feb29Type type)
 {
 	int index;
 	switch (type)
 	{
 		default:
-		case Preferences::Feb29_None:  index = 0;  break;
-		case Preferences::Feb29_Mar1:  index = 1;  break;
-		case Preferences::Feb29_Feb28: index = 2;  break;
+		case KARecurrence::Feb29_None:  index = 0;  break;
+		case KARecurrence::Feb29_Mar1:  index = 1;  break;
+		case KARecurrence::Feb29_Feb28: index = 2;  break;
 	}
 	mFeb29Combo->setCurrentIndex(index);
 }

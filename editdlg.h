@@ -74,7 +74,7 @@ class EditAlarmDlg : public KDialog
 		void            setTime(const DateTime&);    // must be called first to set date-only value
 		void            setRecurrence(const KARecurrence&, int subRepeatInterval, int subRepeatCount);
 		void            setRepeatAtLogin();
-		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText()) = 0;
+		virtual void    setAction(KAEventData::Action, const AlarmText& = AlarmText()) = 0;
 		void            setLateCancel(int minutes);
 		void            setShowInKOrganizer(bool);
 
@@ -83,7 +83,7 @@ class EditAlarmDlg : public KDialog
 		static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
 	protected:
-		EditAlarmDlg(bool Template, KAEvent::Action, QWidget* parent = 0,
+		EditAlarmDlg(bool Template, KAEventData::Action, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT);
 		EditAlarmDlg(bool Template, const KAEvent*, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT, bool readOnly = false);
@@ -140,7 +140,7 @@ class EditAlarmDlg : public KDialog
 		void            showOptions(bool more);
 
 	protected:
-		KAEvent::Action     mAlarmType;           // actual alarm type
+		KAEventData::Action mAlarmType;           // actual alarm type
 	private:
 		KTabWidget*         mTabs;                // the tabs in the dialog
 		StackedScrollGroup* mTabScrollGroup;

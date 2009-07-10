@@ -61,7 +61,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		// Methods to initialise values in the New Alarm dialogue.
 		// N.B. setTime() must be called first to set the date-only characteristic,
 		//      followed by setRecurrence().
-		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
+		virtual void    setAction(KAEventData::Action, const AlarmText& = AlarmText());
 		void            setBgColour(const QColor&);
 		void            setFgColour(const QColor&);
 		void            setConfirmAck(bool);
@@ -153,7 +153,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 		// Methods to initialise values in the New Alarm dialogue.
 		// N.B. setTime() must be called first to set the date-only characteristic,
 		//      followed by setRecurrence().
-		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
+		virtual void    setAction(KAEventData::Action, const AlarmText& = AlarmText());
 
 		static QString  i18n_chk_EnterScript();        // text of 'Enter a script' checkbox
 		static QString  i18n_radio_ExecInTermWindow(); // text of 'Execute in terminal window' radio button
@@ -206,7 +206,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		// Methods to initialise values in the New Alarm dialogue.
 		// N.B. setTime() must be called first to set the date-only characteristic,
 		//      followed by setRecurrence().
-		virtual void    setAction(KAEvent::Action, const AlarmText& = AlarmText());
+		virtual void    setAction(KAEventData::Action, const AlarmText& = AlarmText());
 		void            setEmailFields(uint fromID, const EmailAddressList&, const QString& subject,
 		                               const QStringList& attachments);
 		void            setBcc(bool);

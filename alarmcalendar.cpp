@@ -863,7 +863,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 		if (id.isEmpty())
 			useEventID = false;
 		if (!useEventID)
-			event->setEventID(kcalEvent->uid());
+			event->setEventId(kcalEvent->uid());
 	}
 	else
 	{
@@ -874,7 +874,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 	if (useEventID)
 	{
 		id = KCalEvent::uid(id, type);
-		event->setEventID(id);
+		event->setEventId(id);
 		kcalEvent->setUid(id);
 	}
 	event->updateKCalEvent(kcalEvent, false, (type == KCalEvent::ARCHIVED));
@@ -1003,7 +1003,7 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
 		if (!resources->addEvent(kcalEvent, resource))
 			return false;    // kcalEvent has been deleted by AlarmResources::addEvent()
 		if (noNewId)
-			newEvent->setEventID(kcalEvent->uid());
+			newEvent->setEventId(kcalEvent->uid());
 		addEvent(resource, newEvent);
 	}
 	else

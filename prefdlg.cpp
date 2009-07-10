@@ -35,6 +35,7 @@
 #include "kamail.h"
 #include "label.h"
 #include "latecancel.h"
+#include "locale.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "radiobutton.h"

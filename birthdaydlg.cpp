@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -260,7 +260,7 @@ QList<KAEvent> BirthdayDlg::events() const
 		KAEvent event(KDateTime(date, KDateTime::ClockTime),
 			      mPrefix->text() + data->name + mSuffix->text(),
 			      mFontColourButton->bgColour(), mFontColourButton->fgColour(),
-			      mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
+			      mFontColourButton->font(), KAEventData::MESSAGE, mLateCancel->minutes(),
 			      mFlags, true);
 		float fadeVolume;
 		int   fadeSecs;
@@ -268,7 +268,7 @@ QList<KAEvent> BirthdayDlg::events() const
 		event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
 		QList<int> months;
 		months.append(date.month());
-		event.setRecurAnnualByDate(1, months, 0, Preferences::defaultFeb29Type(), -1, QDate());
+		event.setRecurAnnualByDate(1, months, 0, KARecurrence::defaultFeb29Type(), -1, QDate());
 		event.setRepetition(mSubRepetition->interval(), mSubRepetition->count());
 		event.setNextOccurrence(todayStart);
 		if (reminder)

@@ -52,28 +52,28 @@ class CommandOptions
 			NEW               // --file, --exec-display, --exec, --mail, message
 		};
 		CommandOptions();
-		Command            command() const           { return mCommand; }
-		QString            eventId() const           { return mEventId; }
-		QString            templateName() const      { return mTemplateName; }
-		EditAlarmDlg::Type editType() const          { return mEditType; }
-		KAEvent::Action    editAction() const        { return mEditAction; }
-		QString            text() const              { return mText; }
-		KDateTime          alarmTime() const         { return mAlarmTime; }
-		KARecurrence*      recurrence() const        { return mRecurrence; }
-		int                subRepeatCount() const    { return mRepeatCount; }
-		int                subRepeatInterval() const { return mRepeatInterval; }
-		int                lateCancel() const        { return mLateCancel; }
-		QColor             bgColour() const          { return mBgColour; }
-		QColor             fgColour() const          { return mFgColour; }
-		int                reminderMinutes() const   { return mReminderMinutes; }
-		QString            audioFile() const         { return mAudioFile; }
-		float              audioVolume() const       { return mAudioVolume; }
-		EmailAddressList   addressees() const        { return mAddressees; }
-		QStringList        attachments() const       { return mAttachments; }
-		QString            subject() const           { return mSubject; }
-		uint               fromID() const            { return mFromID; }
-		int                flags() const             { return mFlags; }
-		static void        printError(const QString& errmsg);
+		Command             command() const           { return mCommand; }
+		QString             eventId() const           { return mEventId; }
+		QString             templateName() const      { return mTemplateName; }
+		EditAlarmDlg::Type  editType() const          { return mEditType; }
+		KAEventData::Action editAction() const        { return mEditAction; }
+		QString             text() const              { return mText; }
+		KDateTime           alarmTime() const         { return mAlarmTime; }
+		KARecurrence*       recurrence() const        { return mRecurrence; }
+		int                 subRepeatCount() const    { return mRepeatCount; }
+		int                 subRepeatInterval() const { return mRepeatInterval; }
+		int                 lateCancel() const        { return mLateCancel; }
+		QColor              bgColour() const          { return mBgColour; }
+		QColor              fgColour() const          { return mFgColour; }
+		int                 reminderMinutes() const   { return mReminderMinutes; }
+		QString             audioFile() const         { return mAudioFile; }
+		float               audioVolume() const       { return mAudioVolume; }
+		EmailAddressList    addressees() const        { return mAddressees; }
+		QStringList         attachments() const       { return mAttachments; }
+		QString             subject() const           { return mSubject; }
+		uint                fromID() const            { return mFromID; }
+		int                 flags() const             { return mFlags; }
+		static void         printError(const QString& errmsg);
 
 	private:
 		bool        checkCommand(const QByteArray& command, Command, EditAlarmDlg::Type = EditAlarmDlg::NO_TYPE);
@@ -83,31 +83,31 @@ class CommandOptions
 		void        setErrorIncompatible(const QByteArray& opt1, const QByteArray& opt2);
 		void        checkEditType(EditAlarmDlg::Type, const QByteArray& opt);
 
-		KCmdLineArgs*      mArgs;
-		QString            mError;          // error message
-		Command            mCommand;        // the selected command
-		QByteArray         mCommandName;    // option string for the selected command
-		QString            mEventId;        // TRIGGER_EVENT, CANCEL_EVENT, EDIT: event ID
-		QString            mTemplateName;   // EDIT_NEW_PRESET: template name
-		EditAlarmDlg::Type mEditType;       // NEW, EDIT_NEW_*: alarm edit type
-		KAEvent::Action    mEditAction;     // NEW: alarm edit sub-type
-		bool               mEditActionSet;  // NEW: mEditAction is valid
-		QString            mText;           // NEW: alarm text
-		KDateTime          mAlarmTime;      // NEW: alarm time
-		KARecurrence*      mRecurrence;     // NEW: recurrence
-		int                mRepeatCount;    // NEW: sub-repetition count
-		int                mRepeatInterval; // NEW: sub-repetition interval
-		int                mLateCancel;     // NEW: late-cancellation interval
-		QColor             mBgColour;       // NEW: background colour
-		QColor             mFgColour;       // NEW: foreground colour
-		int                mReminderMinutes;// NEW: reminder period, < 0 if once only reminder
-		QString            mAudioFile;      // NEW: audio file path
-		float              mAudioVolume;    // NEW: audio file volume
-		EmailAddressList   mAddressees;     // NEW: email addressees
-		QStringList        mAttachments;    // NEW: email attachment file names
-		QString            mSubject;        // NEW: email subject
-		uint               mFromID;         // NEW: email sender ID
-		int                mFlags;          // NEW: event flags
+		KCmdLineArgs*       mArgs;
+		QString             mError;          // error message
+		Command             mCommand;        // the selected command
+		QByteArray          mCommandName;    // option string for the selected command
+		QString             mEventId;        // TRIGGER_EVENT, CANCEL_EVENT, EDIT: event ID
+		QString             mTemplateName;   // EDIT_NEW_PRESET: template name
+		EditAlarmDlg::Type  mEditType;       // NEW, EDIT_NEW_*: alarm edit type
+		KAEventData::Action mEditAction;     // NEW: alarm edit sub-type
+		bool                mEditActionSet;  // NEW: mEditAction is valid
+		QString             mText;           // NEW: alarm text
+		KDateTime           mAlarmTime;      // NEW: alarm time
+		KARecurrence*       mRecurrence;     // NEW: recurrence
+		int                 mRepeatCount;    // NEW: sub-repetition count
+		int                 mRepeatInterval; // NEW: sub-repetition interval
+		int                 mLateCancel;     // NEW: late-cancellation interval
+		QColor              mBgColour;       // NEW: background colour
+		QColor              mFgColour;       // NEW: foreground colour
+		int                 mReminderMinutes;// NEW: reminder period, < 0 if once only reminder
+		QString             mAudioFile;      // NEW: audio file path
+		float               mAudioVolume;    // NEW: audio file volume
+		EmailAddressList    mAddressees;     // NEW: email addressees
+		QStringList         mAttachments;    // NEW: email attachment file names
+		QString             mSubject;        // NEW: email subject
+		uint                mFromID;         // NEW: email sender ID
+		int                 mFlags;          // NEW: event flags
 };
 
 #endif // COMMANDOPTIONS_H

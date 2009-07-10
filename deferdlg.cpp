@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialog to defer an alarm
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -77,7 +77,7 @@ void DeferAlarmDlg::slotOk()
 	mAlarmDateTime = mTimeWidget->getDateTime(&mDeferMinutes);
 	if (!mAlarmDateTime.isValid())
 		return;
-	KAEvent::DeferLimitType limitType;
+	KAEventData::DeferLimitType limitType;
 	DateTime endTime;
 	if (!mLimitEventID.isEmpty())
 	{
@@ -89,30 +89,30 @@ void DeferAlarmDlg::slotOk()
 	else
 	{
 		endTime = mLimitDateTime;
-		limitType = mLimitDateTime.isValid() ? KAEvent::LIMIT_MAIN : KAEvent::LIMIT_NONE;
+		limitType = mLimitDateTime.isValid() ? KAEventData::LIMIT_MAIN : KAEventData::LIMIT_NONE;
 	}
 	if (endTime.isValid()  &&  mAlarmDateTime > endTime)
 	{
 		QString text;
 		switch (limitType)
 		{
-			case KAEvent::LIMIT_REPETITION:
+			case KAEventData::LIMIT_REPETITION:
 				text = i18nc("@info", "Cannot defer past the alarm's next sub-repetition (currently %1)",
 				             endTime.formatLocale());
 				break;
-			case KAEvent::LIMIT_RECURRENCE:
+			case KAEventData::LIMIT_RECURRENCE:
 				text = i18nc("@info", "Cannot defer past the alarm's next recurrence (currently %1)",
 				             endTime.formatLocale());
 				break;
-			case KAEvent::LIMIT_REMINDER:
+			case KAEventData::LIMIT_REMINDER:
 				text = i18nc("@info", "Cannot defer past the alarm's next reminder (currently %1)",
 				            endTime.formatLocale());
 				break;
-			case KAEvent::LIMIT_MAIN:
+			case KAEventData::LIMIT_MAIN:
 				text = i18nc("@info", "Cannot defer reminder past the main alarm time (%1)",
 				            endTime.formatLocale());
 				break;
-			case KAEvent::LIMIT_NONE:
+			case KAEventData::LIMIT_NONE:
 				break;   // can't happen with a valid endTime
 		}
 		KMessageBox::sorry(this, text);

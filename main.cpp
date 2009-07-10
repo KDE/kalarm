@@ -125,3 +125,59 @@ int main(int argc, char *argv[])
 	app->restoreSession();
 	return app->exec();
 }
+
+namespace KAlarm
+{
+
+/******************************************************************************
+* Return the current KAlarm version number.
+*/
+int Version()
+{
+	static int version = 0;
+	if (!version)
+		version = getVersionNumber(KALARM_VERSION);
+	return version;
+}
+
+/******************************************************************************
+* Convert the supplied KAlarm version string to a version number.
+* Reply = version number (double digit for each of major, minor & issue number,
+*         e.g. 010203 for 1.2.3
+*       = 0 if invalid version string.
+*/
+int getVersionNumber(const QString& version, QString* subVersion)
+{
+	// N.B. Remember to change  Version(int major, int minor, int rev)
+	//      if the representation returned by this method changes.
+	if (subVersion)
+		subVersion->clear();
+	int count = version.count(QChar('.')) + 1;
+	if (count < 2)
+		return 0;
+	bool ok;
+	unsigned vernum = version.section('.', 0, 0).toUInt(&ok) * 10000;  // major version
+	if (!ok)
+		return 0;
+	unsigned v = version.section('.', 1, 1).toUInt(&ok);               // minor version
+	if (!ok)
+		return 0;
+	vernum += (v < 99 ? v : 99) * 100;
+	if (count >= 3)
+	{
+		// Issue number: allow other characters to follow the last digit
+		QString issue = version.section('.', 2);
+		int n = issue.length();
+		if (!n  ||  !issue[0].isDigit())
+			return 0;
+		int i;
+		for (i = 0;  i < n && issue[i].isDigit();  ++i) ;
+		if (subVersion)
+			*subVersion = issue.mid(i);
+		v = issue.left(i).toUInt();   // issue number
+		vernum += (v < 99 ? v : 99);
+	}
+	return vernum;
+}
+
+} // namespace KAlarm

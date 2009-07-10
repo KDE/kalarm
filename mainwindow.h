@@ -152,7 +152,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           setEnableText(bool enable);
 		void           initUndoMenu(QMenu*, Undo::Type);
 		void           slotDelete(bool force);
-		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
+		static KAEventData::Action  getDropAction(QDropEvent*, QString& text);
 		static void    setUpdateTimer();
 		static void    enableTemplateMenuItem(bool);
 
