@@ -155,6 +155,8 @@ inline void KAEvent::set_deferral(DeferType type)
 
 inline void KAEvent::set_reminder(int minutes)
 {
+	if (minutes < 0)
+		return;   // reminders currently must be BEFORE the main alarm
 	if (minutes  ||  !mReminderMinutes)
 		++mAlarmCount;
 	else if (!minutes  &&  mReminderMinutes)
@@ -482,7 +484,9 @@ void KAEvent::set(const Event* event)
 			case KAAlarm::REMINDER__ALARM:
 				// N.B. there can be a start offset but no valid date/time (e.g. in template)
 				mReminderMinutes = -(data.alarm->startOffset().asSeconds() / 60);
-				if (mReminderMinutes)
+				if (mReminderMinutes < 0)
+					mReminderMinutes = 0;   // reminders currently must be BEFORE the main alarm
+				else if (mReminderMinutes)
 					mArchiveReminderMinutes = 0;
 				break;
 			case KAAlarm::DEFERRED_REMINDER_DATE__ALARM:
@@ -4007,6 +4011,17 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool
 			if (convertRepetition(event))
 				converted = true;
 		}
+
+#if 0
+		if (pre_2_3_0)
+		{
+			/*
+			* It's a KAlarm pre-2.3.0 calendar file.
+			* Reminder periods could not be negative, so convert to 0.
+			*/
+			//TODO
+		}
+#endif
 
 		if (readOnly)
 			event->setReadOnly(true);
