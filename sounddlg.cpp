@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog
  *  Program:  kalarm
- *  Copyright © 2005-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -206,6 +206,16 @@ void SoundDlg::setReadOnly(bool readOnly)
 		mFadeTime->setReadOnly(readOnly);
 		mFadeSlider->setReadOnly(readOnly);
 		mReadOnly = readOnly;
+		if (readOnly)
+		{
+			setButtons(Cancel);
+			setDefaultButton(Cancel);
+		}
+		else
+		{
+			setButtons(Ok|Cancel);
+			setDefaultButton(Ok);
+		}
 	}
 }
 

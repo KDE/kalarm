@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,8 +107,9 @@ SoundPicker::SoundPicker(QWidget* parent)
 */
 void SoundPicker::setReadOnly(bool readOnly)
 {
+	// Don't set the sound file picker read-only since it still needs to
+	// display the read-only SoundDlg.
 	mTypeCombo->setReadOnly(readOnly);
-	mFilePicker->setReadOnly(readOnly);
 	mReadOnly = readOnly;
 }
 
