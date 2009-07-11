@@ -445,7 +445,7 @@ CommandOptions::CommandOptions()
 	if (!mError.isEmpty())
 	{
 		printError(mError);
-		mCommand = ERROR;
+		mCommand = CMD_ERROR;
 	}
 }
 
