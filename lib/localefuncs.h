@@ -1,5 +1,5 @@
 /*
- *  locale.h  -  miscellaneous locale functions
+ *  localefuncs.h  -  miscellaneous locale functions
  *  Program:  kalarm
  *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
  *

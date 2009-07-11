@@ -1,5 +1,5 @@
 /*
- *  locale.cpp  -  miscellaneous locale functions
+ *  localefuncs.cpp  -  miscellaneous locale functions
  *  Program:  kalarm
  *  Copyright © 2003-2009 by David Jarvie <djarvie@kde.org>
  *
@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
-#include "locale.h"
+#include "localefuncs.h"
 
 #include <kglobal.h>
 #include <klocale.h>
