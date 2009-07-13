@@ -413,7 +413,7 @@ int KAlarmApp::newInstance()
 					(MainWindow::create())->show();
 				break;
 
-			case CommandOptions::ERROR:
+			case CommandOptions::CMD_ERROR:
 				exitCode = 1;
 				break;
 		}

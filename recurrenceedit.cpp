@@ -32,7 +32,7 @@
 #include "dateedit.h"
 #include "kalarmapp.h"
 #include "karecurrence.h"
-#include "locale.h"
+#include "localefuncs.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "repetition.h"
