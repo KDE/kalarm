@@ -67,6 +67,9 @@ class CommandOptions
 		QString             subject() const           { return mSubject; }
 		uint                fromID() const            { return mFromID; }
 		int                 flags() const             { return mFlags; }
+#ifndef NDEBUG
+		KDateTime           simulationTime() const    { return mSimulationTime; }
+#endif
 		static void         printError(const QString& errmsg);
 
 	private:
@@ -102,6 +105,9 @@ class CommandOptions
 		QString             mSubject;        // NEW: email subject
 		uint                mFromID;         // NEW: email sender ID
 		int                 mFlags;          // NEW: event flags
+#ifndef NDEBUG
+		KDateTime           mSimulationTime; // system time to be simulated, or invalid if none
+#endif
 };
 
 #endif // COMMANDOPTIONS_H

@@ -52,6 +52,14 @@ CommandOptions::CommandOptions()
 	  mFlags(KAEvent::DEFAULT_FONT)
 {
 	mArgs = KCmdLineArgs::parsedArgs();
+#ifndef NDEBUG
+	if (mArgs->isSet("test-set-time"))
+	{
+		QString time = mArgs->getOption("test-set-time");
+		if (!KAlarm::convertTimeString(time.toLatin1(), mSimulationTime, KDateTime::realCurrentLocalDateTime(), true))
+			setErrorParameter("--test-set-time");
+	}
+#endif
 	if (checkCommand("tray", TRAY))
 	{
 	}
@@ -217,7 +225,7 @@ CommandOptions::CommandOptions()
 			if (mArgs->isSet("time"))
 			{
 				QByteArray dateTime = mArgs->getOption("time").toLocal8Bit();
-				if (!KAlarm::convTimeString(dateTime, mAlarmTime))
+				if (!KAlarm::convertTimeString(dateTime, mAlarmTime))
 					setErrorParameter("--time");
 			}
 			else
@@ -256,9 +264,9 @@ CommandOptions::CommandOptions()
 					QByteArray dateTime = mArgs->getOption("until").toLocal8Bit();
 					bool ok;
 					if (mArgs->isSet("time"))
-						ok = KAlarm::convTimeString(dateTime, endTime, mAlarmTime);
+						ok = KAlarm::convertTimeString(dateTime, endTime, mAlarmTime);
 					else
-						ok = KAlarm::convTimeString(dateTime, endTime);
+						ok = KAlarm::convertTimeString(dateTime, endTime);
 					if (!ok)
 						setErrorParameter("--until");
 					else if (mAlarmTime.isDateOnly()  &&  !endTime.isDateOnly())
