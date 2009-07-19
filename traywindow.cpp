@@ -301,7 +301,7 @@ QString TrayWindow::tooltipAlarmText() const
 					item.text += i18nc("@info/plain prefix + hours:minutes", "%1%2:%3", prefix, mins/60, minutes);
 				item.text += QLatin1Char(' ');
 			}
-			item.text += AlarmText::summary(event);
+			item.text += AlarmText::summary(event->eventData());
 
 			// Insert the item into the list in time-sorted order
 			int it = 0;

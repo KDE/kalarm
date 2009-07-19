@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -286,7 +286,7 @@ void Undo::saveAdds(const Undo::EventList& events, const QString& name)
 
 void Undo::saveEdit(const Undo::Event& oldEvent, const KAEvent& newEvent)
 {
-	new UndoEdit(UNDO, oldEvent.event, newEvent.id(), oldEvent.resource, oldEvent.dontShowErrors, AlarmText::summary(&newEvent));
+	new UndoEdit(UNDO, oldEvent.event, newEvent.id(), oldEvent.resource, oldEvent.dontShowErrors, AlarmText::summary(newEvent.eventData()));
 	removeRedos(oldEvent.event.id());    // remove any redos which are made invalid by this edit
 	emitChanged();
 }
@@ -627,7 +627,7 @@ UndoItem::~UndoItem()
 */
 QString UndoItem::description(const KAEvent& event) const
 {
-	return (mCalendar == KCalEvent::TEMPLATE) ? event.templateName() : AlarmText::summary(&event);
+	return (mCalendar == KCalEvent::TEMPLATE) ? event.templateName() : AlarmText::summary(event.eventData());
 }
 
 /******************************************************************************
