@@ -261,9 +261,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					break;
 				case Qt::DisplayRole:
 				case SortRole:
-					return AlarmText::summary(event, 1);
+					return AlarmText::summary(event->eventData(), 1);
 				case Qt::ToolTipRole:
-					return AlarmText::summary(event);
+					return AlarmText::summary(event->eventData());
 				default:
 					break;
 			}

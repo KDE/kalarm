@@ -21,7 +21,7 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "alarmtext.h"
 
-#include "alarmevent.h"
+#include "kaeventdata.h"
 
 #include <kcal/todo.h>
 #include <klocale.h>
@@ -345,7 +345,7 @@ void AlarmText::setUpTranslations()
 *  If 'truncated' is non-null, it will be set true if the text returned has been
 *  truncated, other than to strip a trailing newline.
 */
-QString AlarmText::summary(const KAEvent* event, int maxLines, bool* truncated)
+QString AlarmText::summary(const KAEventData* event, int maxLines, bool* truncated)
 {
 	QString text = (event->action() == KAEventData::EMAIL) ? event->emailSubject() : event->cleanText();
 	if (event->action() == KAEventData::MESSAGE)

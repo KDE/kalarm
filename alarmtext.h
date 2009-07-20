@@ -23,7 +23,7 @@
 
 #include <QString>
 class QStringList;
-class KAEvent;
+class KAEventData;
 namespace KCal { class Todo; }
 
 
@@ -54,7 +54,7 @@ class AlarmText
 		bool           isScript() const           { return mType == Script; }
 		bool           isTodo() const             { return mType == Todo; }
 		unsigned long  kmailSerialNumber() const  { return mKMailSerialNum; }
-		static QString summary(const KAEvent*, int maxLines = 1, bool* truncated = 0);
+		static QString summary(const KAEventData*, int maxLines = 1, bool* truncated = 0);
 		static bool    checkIfEmail(const QString&);
 		static QString emailHeaders(const QString&, bool subjectOnly);
 		static QString fromCalendarText(const QString&, bool& email);

@@ -131,14 +131,14 @@ void                purgeArchive(int purgeDays);    // must only be called from 
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateStatus korgError, int nAlarms);
 
-bool                convTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
+bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
 bool                isWorkingTime(const KDateTime&, const KAEvent*);
 
 #ifndef NDEBUG
 void                setTestModeConditions();
-bool                setSimulatedSystemTime(const QByteArray& timeString);
+void                setSimulatedSystemTime(const KDateTime&);
 #endif
 
 } // namespace KAlarm

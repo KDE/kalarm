@@ -275,7 +275,11 @@ int KAlarmApp::newInstance()
 	bool dontRedisplay = false;
 	if (!firstInstance || !isSessionRestored())
 	{
-		CommandOptions options;
+		CommandOptions options;   // fetch and parse command line options
+#ifndef NDEBUG
+		if (options.simulationTime().isValid())
+			KAlarm::setSimulatedSystemTime(options.simulationTime());
+#endif
 		CommandOptions::Command command = options.command();
 		switch (command)
 		{
@@ -407,6 +411,10 @@ int KAlarmApp::newInstance()
 
 			case CommandOptions::NONE:
 				// No arguments - run interactively & display the main window
+#ifndef NDEBUG
+				if (options.simulationTime().isValid()  &&  !firstInstance)
+					break;   // simulating time: don't open main window if already running
+#endif
 				if (!initCheck())
 					exitCode = 1;
 				else
