@@ -1639,12 +1639,11 @@ void setTestModeConditions()
 }
 
 /******************************************************************************
-* Set the simulated system time (format [[[yyyy-]mm-]dd-]hh:mm [TZ]).
+* Set the simulated system time.
 */
 void setSimulatedSystemTime(const KDateTime& dt)
 {
 	KDateTime::setSimulatedSystemTime(dt);
-	KDateTime now = KDateTime::currentLocalDateTime();
 	kDebug() << "New time =" << KDateTime::currentLocalDateTime().toString("%Y-%m-%d %H:%M %:Z");
 }
 #endif
