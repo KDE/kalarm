@@ -66,7 +66,7 @@ class RecurrenceEdit : public QFrame
 		/** Set widgets to default values */
 		void          setDefaults(const KDateTime& from);
 		/** Initialise according to a specified event */
-		void          set(const KAEvent&, bool keepDuration);
+		void          set(const KAEvent&);
 		/** Initialise with repeat-at-login selected, instead of calling set(). */
 		void          setRepeatAtLogin();
 		/** Write recurrence settings into an event */

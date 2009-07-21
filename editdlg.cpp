@@ -528,7 +528,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		if (mShowInKorganizer)
 			mShowInKorganizer->setChecked(event->copyToKOrganizer());
 		type_initValues(event);
-		mRecurrenceEdit->set(*event, (mTemplate || event->isTemplate()));   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
+		mRecurrenceEdit->set(*event);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
 		mTabs->setTabText(mRecurPageIndex, recurText(*event));
 	}
 	else
@@ -573,7 +573,7 @@ void EditAlarmDlg::setRecurrence(const KARecurrence& recur, int subRepeatInterva
 	event.setTime(mTimeWidget->getDateTime(0, false, false));
 	event.setRecurrence(recur);
 	event.setRepetition(subRepeatInterval, subRepeatCount - 1);
-	mRecurrenceEdit->set(event, false);
+	mRecurrenceEdit->set(event);
 }
 void EditAlarmDlg::setRepeatAtLogin()
 {
