@@ -1644,7 +1644,7 @@ void setTestModeConditions()
 void setSimulatedSystemTime(const KDateTime& dt)
 {
 	KDateTime::setSimulatedSystemTime(dt);
-	kDebug() << "New time =" << KDateTime::currentLocalDateTime().toString("%Y-%m-%d %H:%M %:Z");
+	kDebug() << "New time =" << qPrintable(KDateTime::currentLocalDateTime().toString("%Y-%m-%d %H:%M %:Z"));
 }
 #endif
 
