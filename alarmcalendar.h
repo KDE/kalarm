@@ -99,6 +99,7 @@ class AlarmCalendar : public QObject
 		void                  emptyStatus(bool empty);
 
 	private slots:
+		void                  setAskResource(bool ask);
 		void                  slotCacheDownloaded(AlarmResource*);
 		void                  slotResourceLoaded(AlarmResource*, bool success);
 		void                  slotResourceChange(AlarmResource*, AlarmResources::Change);
