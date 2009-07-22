@@ -442,7 +442,7 @@ CommandOptions::CommandOptions()
 			if (mArgs->isSet("volume"))
 				mError += QLatin1String("--volume ");
 			if (!mError.isEmpty())
-				mError += i18nc("@info:shell", ": option(s) only valid with a message or <icode>%1</icode> or <icode>%2</icode>", QLatin1String("--file"), QLatin1String("--exec"));
+				mError += i18nc("@info:shell", ": option(s) only valid with an appropriate action option or message");
 			break;
 		default:
 			break;
