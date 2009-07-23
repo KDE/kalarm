@@ -1,7 +1,7 @@
 /*
  *  timezonecombo.cpp  -  time zone selection combo box
  *  Program:  kalarm
- *  Copyright © 2006,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006,2008,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,38 +18,38 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <ksystemtimezone.h>
 #include "timezonecombo.moc"
+#include <ksystemtimezone.h>
+#include <kglobal.h>
+#include <klocale.h>
 
 
 TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 	: ComboBox(parent)
 {
+	KGlobal::locale()->insertCatalog( "timezones4" ); // for time zone translations
 	QString utc = KTimeZone::utc().name();
 	addItem(utc);   // put UTC at start of list
+	mZoneNames << utc;
 	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
 	for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != zones.constEnd();  ++it)
 		if (it.key() != utc)
-			addItem(it.key());
+		{
+			mZoneNames << it.key();
+			addItem(i18n(it.key().toUtf8()).replace('_', ' '));
+		}
 }
 
 KTimeZone TimeZoneCombo::timeZone() const
 {
-	return KSystemTimeZones::zone(currentText());
+	return KSystemTimeZones::zone(mZoneNames[currentIndex()]);
 }
 
 void TimeZoneCombo::setTimeZone(const KTimeZone& tz)
 {
 	if (!tz.isValid())
 		return;
-	QString zone = tz.name();
-	int limit = count();
-	for (int index = 0;  index < limit;  ++index)
-	{
-		if (itemText(index) == zone)
-		{
-			setCurrentIndex(index);
-			break;
-		}
-	}
+	int index = mZoneNames.indexOf(tz.name());
+	if (index >= 0)
+		setCurrentIndex(index);
 }
