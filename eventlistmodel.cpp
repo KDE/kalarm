@@ -970,6 +970,7 @@ EventListFilterModel::EventListFilterModel(EventListModel* baseModel, QObject* p
 {
 	setSourceModel(baseModel);
 	setSortRole(EventListModel::SortRole);
+	setDynamicSortFilter(true);
 }
 
 /******************************************************************************
