@@ -1157,7 +1157,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	StackedWidgetT<KVBox>* topFontColour = new StackedWidgetT<KVBox>(tabgroup);
 	topFontColour->setMargin(KDialog::marginHint()/2);
 	topFontColour->setSpacing(KDialog::spacingHint());
-	tabs->addTab(topFontColour, i18nc("@title:tab", "Font & Color"));
+	tabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 
 	// MISCELLANEOUS
 	// Show in KOrganizer
