@@ -64,11 +64,12 @@ const bool  default_confirmAlarmDeletion = true;
 static QString translateXTermPath(const QString& cmdline, bool write);
 
 
-Preferences* Preferences::mInstance = 0;
-KTimeZone    Preferences::mSystemTimeZone;
+Preferences*   Preferences::mInstance = 0;
+bool           Preferences::mUsingDefaults = false;
+KTimeZone      Preferences::mSystemTimeZone;
 HolidayRegion* Preferences::mHolidays = 0;   // always non-null after Preferences initialisation
-QTime        Preferences::mOldStartOfDay(0, 0, 0);
-bool         Preferences::mStartOfDayChanged = false;
+QTime          Preferences::mOldStartOfDay(0, 0, 0);
+bool           Preferences::mStartOfDayChanged = false;
 
 
 Preferences* Preferences::self()

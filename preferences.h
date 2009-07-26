@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,13 +56,13 @@ class Preferences : public PreferencesBase
 		static void             setWorkDayStart(const QTime& t)  { self()->setBase_WorkDayStart(QDateTime(QDate(1900,1,1), t)); }
 		static void             setWorkDayEnd(const QTime& t)    { self()->setBase_WorkDayEnd(QDateTime(QDate(1900,1,1), t)); }
 		static void             setWorkDays(const QBitArray&);
-		static bool             quitWarn()                       { return notifying(QUIT_WARN); }
+		static bool             quitWarn()                       { return mUsingDefaults ? self()->base_QuitWarn() : notifying(QUIT_WARN); }
 		static void             setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
-		static bool             confirmAlarmDeletion()           { return notifying(CONFIRM_ALARM_DELETION); }
+		static bool             confirmAlarmDeletion()           { return mUsingDefaults ? self()->base_ConfirmAlarmDeletion() : notifying(CONFIRM_ALARM_DELETION); }
 		static void             setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
 		static bool             emailCopyToKMail()               { return self()->mBase_EmailCopyToKMail  &&  self()->mEmailClient == sendmail; }
 		static void             setEmailCopyToKMail(bool yes)    { self()->setBase_EmailCopyToKMail(yes); }
-		static bool             emailQueuedNotify()              { return notifying(EMAIL_QUEUED_NOTIFY); }
+		static bool             emailQueuedNotify()              { return mUsingDefaults ? self()->base_EmailQueuedNotify() : notifying(EMAIL_QUEUED_NOTIFY); }
 		static void             setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
 		static MailFrom         emailFrom();
 		static QString          emailAddress();
@@ -81,6 +81,7 @@ class Preferences : public PreferencesBase
 		static const char*      CONFIRM_ALARM_DELETION;
 		static const char*      EMAIL_QUEUED_NOTIFY;
 
+		virtual bool useDefaults(bool def)   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
 
 	signals:
 		void  timeZoneChanged(const KTimeZone& newTz);
@@ -101,6 +102,7 @@ class Preferences : public PreferencesBase
 		static bool             notifying(const QString& messageID);
 
 		static Preferences*     mInstance;
+		static bool             mUsingDefaults;
 		static KTimeZone        mSystemTimeZone;
 		static KHolidays::HolidayRegion* mHolidays;
 
