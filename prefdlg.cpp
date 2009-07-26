@@ -254,6 +254,25 @@ void KAlarmPrefDlg::slotCancel()
 	KDialog::reject();
 }
 
+// Reset all controls to the application defaults
+void KAlarmPrefDlg::slotDefault()
+{
+	switch (KMessageBox::questionYesNoCancel(this, i18nc("@info", "Reset all tabs to their default values, or only restore the current tab?"),
+	                                         QString(),
+	                                         KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
+						 KGuiItem(i18nc("@action:button Reset the CURRENT tab", "C&urrent"))))
+	{
+		case KMessageBox::Yes:
+			restore(true);   // restore all tabs
+			break;
+		case KMessageBox::No:
+			static_cast<PrefsTabBase*>(currentPage()->widget())->restore(true);
+			break;
+		default:
+			break;
+	}
+}
+
 // Discard the current preferences and use the present ones
 void KAlarmPrefDlg::restore(bool defaults)
 {
@@ -482,8 +501,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 
 void MiscPrefTab::restore(bool defaults)
 {
-	Q_UNUSED(defaults);
-	mAutoStart->setChecked(Preferences::autoStart());
+	mAutoStart->setChecked(defaults ? true : Preferences::autoStart());
 	mQuitWarn->setChecked(Preferences::quitWarn());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	mDefaultDeferTime->setValue(Preferences::defaultDeferTime());
