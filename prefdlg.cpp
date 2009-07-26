@@ -257,7 +257,7 @@ void KAlarmPrefDlg::slotCancel()
 // Reset all controls to the application defaults
 void KAlarmPrefDlg::slotDefault()
 {
-	switch (KMessageBox::questionYesNoCancel(this, i18nc("@info", "Reset all tabs to their default values, or only restore the current tab?"),
+	switch (KMessageBox::questionYesNoCancel(this, i18nc("@info", "Reset all tabs to their default values, or only reset the current tab?"),
 	                                         QString(),
 	                                         KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
 						 KGuiItem(i18nc("@action:button Reset the CURRENT tab", "C&urrent"))))
@@ -266,7 +266,9 @@ void KAlarmPrefDlg::slotDefault()
 			restore(true);   // restore all tabs
 			break;
 		case KMessageBox::No:
+			Preferences::self()->useDefaults(true);
 			static_cast<PrefsTabBase*>(currentPage()->widget())->restore(true);
+			Preferences::self()->useDefaults(false);
 			break;
 		default:
 			break;
