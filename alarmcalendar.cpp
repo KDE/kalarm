@@ -163,6 +163,7 @@ AlarmCalendar::AlarmCalendar()
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceChange(AlarmResource*, AlarmResources::Change)));
 	connect(resources, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
 	connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(slotResourceLoaded(AlarmResource*, bool)));
+	Preferences::connect(SIGNAL(askResourceChanged(bool)), this, SLOT(setAskResource(bool)));
 }
 
 /******************************************************************************
@@ -420,6 +421,14 @@ void AlarmCalendar::loadResource(AlarmResource* resource, QWidget*)
 void AlarmCalendar::slotCacheDownloaded(AlarmResource* resource)
 {
 	slotResourceLoaded(resource, false);
+}
+
+/******************************************************************************
+* Update whether to prompt for the resource to store new alarms in.
+*/
+void AlarmCalendar::setAskResource(bool ask)
+{
+	AlarmResources::instance()->setAskDestinationPolicy(ask);
 }
 
 /******************************************************************************

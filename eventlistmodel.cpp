@@ -203,10 +203,15 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					||  event->action() == KAEventData::FILE
 					||  (event->action() == KAEventData::COMMAND && event->commandDisplay()))
 						return event->bgColour();
+					if (event->action() == KAEventData::COMMAND
+					&&  event->commandError() != KAEvent::CMD_NO_ERROR)
+						return Qt::red;
 					break;
 				case Qt::ForegroundRole:
 					if (event->commandError() != KAEvent::CMD_NO_ERROR)
 					{
+						if (event->action() == KAEventData::COMMAND && !event->commandDisplay())
+							return Qt::white;
 						QColor colour = Qt::red;
 						int r, g, b;
 						event->bgColour().getRgb(&r, &g, &b);
@@ -970,6 +975,7 @@ EventListFilterModel::EventListFilterModel(EventListModel* baseModel, QObject* p
 {
 	setSourceModel(baseModel);
 	setSortRole(EventListModel::SortRole);
+	setDynamicSortFilter(true);
 }
 
 /******************************************************************************

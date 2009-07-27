@@ -16,6 +16,9 @@
   <signal name="showInSystemTrayChanged">
     <argument type="Bool">ShowInSystemTray</argument>
   </signal>
+  <signal name="askResourceChanged">
+    <argument type="Bool">AskResource</argument>
+  </signal>
   <signal name="base_TimeZoneChanged">
     <argument type="String">Base_TimeZone</argument>
   </signal>
@@ -93,6 +96,7 @@
       <label context="@label">Prompt for which calendar to store in</label>
       <whatsthis context="@info:whatsthis">&lt;para>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.&lt;/para>&lt;para>Note that archived alarms are always stored in the default archived alarm calendar.&lt;/para></whatsthis>
       <default>true</default>
+      <emit signal="askResourceChanged"/>
     </entry>
     <entry name="ModalMessages" type="Bool">
       <label context="@label">Message windows have a title bar and take keyboard focus</label>
@@ -342,7 +346,7 @@
     <entry name="Base_QuitWarn" key="QuitWarn" type="Bool">
       <label context="@label">Warn before quitting</label>
       <whatsthis context="@info:whatsthis">Whether to suppress a warning prompt before quitting KAlarm.</whatsthis>
-      <default code="true">false</default>
+      <default>true</default>
     </entry>
     <entry name="Base_ConfirmAlarmDeletion" key="ConfirmAlarmDeletion" type="Bool">
       <label context="@label">Confirm alarm deletions</label>

@@ -782,10 +782,8 @@ void RecurrenceEdit::setRepeatAtLogin()
 
 /******************************************************************************
 * Set the state of all controls to reflect the data in the specified event.
-* Set 'keepDuration' true to prevent the recurrence count being adjusted to the
-* remaining number of recurrences.
 */
-void RecurrenceEdit::set(const KAEvent& event, bool keepDuration)
+void RecurrenceEdit::set(const KAEvent& event)
 {
 	setDefaults(event.mainDateTime().kDateTime());
 	if (event.repeatAtLogin())

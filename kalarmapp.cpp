@@ -27,7 +27,6 @@
 #include "birthdaymodel.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
-#include "editdlg.h"
 #include "editdlgtypes.h"
 #include "eventlistmodel.h"
 #include "functions.h"

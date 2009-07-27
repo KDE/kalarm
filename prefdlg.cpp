@@ -254,6 +254,27 @@ void KAlarmPrefDlg::slotCancel()
 	KDialog::reject();
 }
 
+// Reset all controls to the application defaults
+void KAlarmPrefDlg::slotDefault()
+{
+	switch (KMessageBox::questionYesNoCancel(this, i18nc("@info", "Reset all tabs to their default values, or only reset the current tab?"),
+	                                         QString(),
+	                                         KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
+						 KGuiItem(i18nc("@action:button Reset the CURRENT tab", "C&urrent"))))
+	{
+		case KMessageBox::Yes:
+			restore(true);   // restore all tabs
+			break;
+		case KMessageBox::No:
+			Preferences::self()->useDefaults(true);
+			static_cast<PrefsTabBase*>(currentPage()->widget())->restore(true);
+			Preferences::self()->useDefaults(false);
+			break;
+		default:
+			break;
+	}
+}
+
 // Discard the current preferences and use the present ones
 void KAlarmPrefDlg::restore(bool defaults)
 {
@@ -482,8 +503,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 
 void MiscPrefTab::restore(bool defaults)
 {
-	Q_UNUSED(defaults);
-	mAutoStart->setChecked(Preferences::autoStart());
+	mAutoStart->setChecked(defaults ? true : Preferences::autoStart());
 	mQuitWarn->setChecked(Preferences::quitWarn());
 	mConfirmAlarmDeletion->setChecked(Preferences::confirmAlarmDeletion());
 	mDefaultDeferTime->setValue(Preferences::defaultDeferTime());
@@ -1157,7 +1177,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	StackedWidgetT<KVBox>* topFontColour = new StackedWidgetT<KVBox>(tabgroup);
 	topFontColour->setMargin(KDialog::marginHint()/2);
 	topFontColour->setSpacing(KDialog::spacingHint());
-	tabs->addTab(topFontColour, i18nc("@title:tab", "Font & Color"));
+	tabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 
 	// MISCELLANEOUS
 	// Show in KOrganizer
