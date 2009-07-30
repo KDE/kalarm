@@ -28,7 +28,6 @@
 #include "editdlg.h"
 
 class QAbstractButton;
-class QHBoxLayout;
 class QGroupBox;
 class KComboBox;
 class KHBox;

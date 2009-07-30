@@ -30,7 +30,6 @@ class QEvent;
 class QDragEnterEvent;
 class QDropEvent;
 class KAction;
-class KMenu;
 class KAEvent;
 class MainWindow;
 class NewAlarmAction;
