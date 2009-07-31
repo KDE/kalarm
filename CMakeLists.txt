@@ -26,8 +26,8 @@ set(libkalarm_SRCS
 	lib/filedialog.cpp
 	lib/identities.cpp
 	lib/itembox.cpp
+	lib/kalocale.cpp
 	lib/label.cpp 
-	lib/localefuncs.cpp
 	lib/messagebox.cpp 
 	lib/packedlayout.cpp 
 	lib/pushbutton.cpp 
