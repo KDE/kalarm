@@ -150,13 +150,11 @@ KAlarmApp::KAlarmApp()
 
 	// Check if the speech synthesis daemon is installed
 	mSpeechEnabled = (KServiceTypeTrader::self()->query("DBUS/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
-	if (!mSpeechEnabled)
-		kDebug() << "Speech synthesis disabled (KTTSD not found)";
+	if (!mSpeechEnabled) { kDebug() << "Speech synthesis disabled (KTTSD not found)"; }
 	// Check if KOrganizer is installed
 	QString korg = QLatin1String("korganizer");
 	mKOrganizerEnabled = !KStandardDirs::locate("exe", korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
-	if (!mKOrganizerEnabled)
-		kDebug() << "KOrganizer options disabled (KOrganizer not found)";
+	if (!mKOrganizerEnabled) { kDebug() << "KOrganizer options disabled (KOrganizer not found)"; }
 }
 
 /******************************************************************************
@@ -1079,8 +1077,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					}
 					else
 						reschedule = !KAlarm::isWorkingTime(nextDT, event);
-					if (reschedule)
-						kDebug() << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours";
+					if (reschedule) { kDebug() << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours"; }
 				}
 				if (!reschedule  &&  alarm.repeatAtLogin())
 				{
@@ -1210,8 +1207,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 				}
 				if (updateCalAndDisplay)
 					KAlarm::updateEvent(*event);     // update the window lists and calendar file
-				else if (function != EVENT_TRIGGER)
-					kDebug() << "No action";
+				else if (function != EVENT_TRIGGER) { kDebug() << "No action"; }
 			}
 			break;
 		}
