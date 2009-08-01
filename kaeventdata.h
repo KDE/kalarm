@@ -472,7 +472,7 @@ public:
 		DateTime           mDisplayingTime;   // date/time shown in the alarm currently being displayed
 		int                mDisplayingFlags;  // type of alarm which is currently being displayed
 		int                mReminderMinutes;  // how long in advance reminder is to be, or 0 if none
-		int                mArchiveReminderMinutes;  // original reminder period if now expired, or 0 if none
+		int                mArchiveReminderMinutes; // original reminder period if now expired, or for restoration after next recurrence, or 0 if none
 		int                mDeferDefaultMinutes; // default number of minutes for deferral dialog, or 0 to select time control
 		int                mRevision;         // SEQUENCE: revision number of the original alarm, or 0
 		KARecurrence*      mRecurrence;       // RECUR: recurrence specification, or 0 if none
