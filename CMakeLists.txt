@@ -1,6 +1,9 @@
 project(kalarm)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
+if(KMAIL_SUPPORTED)
+  add_definitions(-DKMAIL_SUPPORTED)
+endif(KMAIL_SUPPORTED)
 
 include_directories(
 ${CMAKE_CURRENT_BINARY_DIR}
