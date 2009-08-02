@@ -63,7 +63,7 @@ struct StaticStrings
 	// Old KAlarm format identifiers
 	const QString TEMPLATE_UID;
 };
-K_GLOBAL_STATIC(StaticStrings, staticStrings);
+K_GLOBAL_STATIC(StaticStrings, staticStrings)
 
 typedef QMap<QString, KCalEvent::Status> PropertyMap;
 static PropertyMap properties;
