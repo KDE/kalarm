@@ -30,7 +30,6 @@
 
 class KUrl;
 class KJob;
-class DateTime;
 class EmailAddressList;
 namespace MailTransport  { class TransportJob; }
 namespace KMime { namespace Types { struct Address; } }

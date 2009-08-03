@@ -25,7 +25,6 @@
 #include <QStringList>
 #include <klocale.h>
 
-class QPushButton;
 class KFontChooser;
 class CheckBox;
 class ColourButton;

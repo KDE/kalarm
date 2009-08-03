@@ -1,6 +1,9 @@
 project(kalarm)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
+if(KMAIL_SUPPORTED)
+  add_definitions(-DKMAIL_SUPPORTED)
+endif(KMAIL_SUPPORTED)
 
 include_directories(
 ${CMAKE_CURRENT_BINARY_DIR}
@@ -26,8 +29,8 @@ set(libkalarm_SRCS
 	lib/filedialog.cpp
 	lib/identities.cpp
 	lib/itembox.cpp
+	lib/kalocale.cpp
 	lib/label.cpp 
-	lib/localefuncs.cpp
 	lib/messagebox.cpp 
 	lib/packedlayout.cpp 
 	lib/pushbutton.cpp 

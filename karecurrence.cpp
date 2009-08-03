@@ -22,7 +22,7 @@
 #include "karecurrence.h"
 
 #include "datetime.h"
-#include "localefuncs.h"
+#include "kalocale.h"
 
 #include <QBitArray>
 #include <kdebug.h>

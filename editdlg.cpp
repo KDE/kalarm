@@ -220,8 +220,8 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	setButtonIcon(Help, KIcon());
 	setButtonIcon(Default, KIcon());
 	connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
-	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
-	connect(this, SIGNAL(helpClicked()), SLOT(slotHelp()));
+	connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));  // More/Less Options button
+	connect(this, SIGNAL(helpClicked()), SLOT(slotHelp()));  // Load Template button
 	KVBox* mainWidget = new KVBox(this);
 	mainWidget->setMargin(0);
 	setMainWidget(mainWidget);
@@ -928,11 +928,11 @@ bool EditAlarmDlg::validate()
 			event.nextOccurrence(pre, next, KAEventData::IGNORE_REPETITION);
 			if (next != dt)
 			{
-				QString prompt = dateOnly ? i18nc("@info The parameter is a date value",
+				QString prompt = dateOnly ? i18nc("@info", "The parameter is a date value",
 				                                  "The start date does not match the alarm's recurrence pattern, "
 				                                  "so it will be adjusted to the date of the next recurrence (%1).",
 				                                  KGlobal::locale()->formatDate(next.date(), KLocale::ShortDate))
-				                          : i18nc("@info The parameter is a date/time value",
+				                          : i18nc("@info", "The parameter is a date/time value",
 				                                  "The start date/time does not match the alarm's recurrence pattern, "
 				                                  "so it will be adjusted to the date/time of the next recurrence (%1).",
 				                                  KGlobal::locale()->formatDateTime(next.kDateTime(), KLocale::ShortDate));

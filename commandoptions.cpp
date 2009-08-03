@@ -245,7 +245,7 @@ CommandOptions::CommandOptions()
 			if (mArgs->isSet("interval"))
 			{
 				// Repeat count is specified
-				int count;
+				int count = 0;
 				KDateTime endTime;
 				if (mArgs->isSet("login"))
 					setErrorIncompatible("--login", "--interval");

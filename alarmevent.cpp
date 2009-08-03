@@ -843,8 +843,7 @@ void KAEvent::dumpDebug() const
 {
 	kDebug() << "KAEvent dump:";
 	mEventData->dumpDebug();
-	if (mResource)
-		kDebug() << "-- mResource:" << mResource->resourceName();
+	if (mResource) { kDebug() << "-- mResource:" << mResource->resourceName(); }
 	kDebug() << "-- mCommandError:" << mCommandError;
 	kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
 	kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
