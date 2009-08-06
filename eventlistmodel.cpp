@@ -29,7 +29,6 @@
 
 #include "resources/alarmresource.h"
 #include "resources/alarmresources.h"
-#include "resources/kcalendar.h"
 #include "alarmcalendar.h"
 #include "alarmtext.h"
 #include "preferences.h"

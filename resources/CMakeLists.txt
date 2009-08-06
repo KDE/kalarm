@@ -1,9 +1,12 @@
+include_directories(
+	../cal
+)
 
 ########### next target ###############
 set(kalarm_resources_LIB_SRCS
+	../cal/kcalendar.cpp
 	alarmresource.cpp 
 	alarmresources.cpp 
-	kcalendar.cpp 
 	resourcelocal.cpp 
 	resourcelocalwidget.cpp 
 	resourcelocaldir.cpp 

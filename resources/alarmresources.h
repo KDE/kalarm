@@ -28,6 +28,7 @@
 #include <kresources/manager.h>
 
 #include "alarmresource.h"
+#include "kalarm_resources_export.h"
 #include "kcalendar.h"
 
 class KConfigGroup;
@@ -37,7 +38,7 @@ using KCal::ResourceCalendar;
 
 
 /** Provides access to all alarm calendar resources. */
-class KALARM_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<AlarmResource>
+class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRES::ManagerObserver<AlarmResource>
 {
 		Q_OBJECT
 	public:

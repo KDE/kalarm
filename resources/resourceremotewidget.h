@@ -24,6 +24,7 @@
 /* @file resourceremotewidget.h - configuration widget for remote file calendar resource */
 
 #include "resourcewidget.h"
+#include "kalarm_resources_export.h"
 
 class KUrlRequester;
 namespace KRES { class Resource; }
@@ -36,7 +37,7 @@ namespace KCal {
   Configuration widget for remote file alarm calendar resource.
   @see KAResourceRemote
 */
-class KALARM_EXPORT ResourceRemoteConfigWidget : public ResourceConfigWidget
+class KALARM_RESOURCES_EXPORT ResourceRemoteConfigWidget : public ResourceConfigWidget
 {
 		Q_OBJECT
 	public:

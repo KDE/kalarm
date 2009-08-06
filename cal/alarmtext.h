@@ -21,13 +21,16 @@
 #ifndef ALARMTEXT_H
 #define ALARMTEXT_H
 
+#include "kalarm_cal_export.h"
+
 #include <QString>
+
 class QStringList;
 class KAEventData;
 namespace KCal { class Todo; }
 
 
-class AlarmText
+class KALARM_CAL_EXPORT AlarmText
 {
 	public:
 		AlarmText(const QString& text = QString())  { setText(text); }

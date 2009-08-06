@@ -21,15 +21,17 @@
 #ifndef IDENTITIES_H
 #define IDENTITIES_H
 
+#include "kalarm_cal_export.h"
+
 #include <QString>
 
 namespace KPIMIdentities { class IdentityManager; }
 
 namespace Identities
 {
-	KPIMIdentities::IdentityManager* identityManager();
-	bool identitiesExist();
-	uint identityUoid(const QString& identityUoidOrName);
+	KALARM_CAL_EXPORT KPIMIdentities::IdentityManager* identityManager();
+	KALARM_CAL_EXPORT bool identitiesExist();
+	KALARM_CAL_EXPORT uint identityUoid(const QString& identityUoidOrName);
 }
 
 #endif // IDENTITIES_H

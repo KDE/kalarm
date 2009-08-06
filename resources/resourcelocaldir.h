@@ -38,7 +38,7 @@ namespace KCal {
 
 
 /** A KAlarm calendar resource stored in a directory as one file per alarm. */
-class KALARM_EXPORT KAResourceLocalDir : public AlarmResource
+class KALARM_RESOURCES_EXPORT KAResourceLocalDir : public AlarmResource
 {
 		Q_OBJECT
 	public:

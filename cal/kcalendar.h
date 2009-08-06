@@ -21,7 +21,7 @@
 #ifndef KCALENDAR_H
 #define KCALENDAR_H
 
-#include "kalarm_export.h"
+#include "kalarm_cal_export.h"
 #include <QString>
 
 namespace KCal {
@@ -29,7 +29,7 @@ namespace KCal {
   class Alarm;
 }
 
-class KALARM_EXPORT KCalendar
+class KALARM_CAL_EXPORT KCalendar
 {
 	public:
 		static QByteArray APPNAME;
@@ -43,7 +43,7 @@ class KALARM_EXPORT KCalendar
 		};
 };
 
-class KALARM_EXPORT KCalEvent
+class KALARM_CAL_EXPORT KCalEvent
 {
 	public:
 		/** The category of an event, indicated by the middle part of its UID. */

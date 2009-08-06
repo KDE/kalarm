@@ -21,7 +21,7 @@
 #ifndef KAEVENTDATA_H
 #define KAEVENTDATA_H
 
-/**  @file alarmevent.h - represents calendar alarms and events */
+#include "kalarm_cal_export.h"
 
 #include <QColor>
 #include <QFont>
@@ -42,7 +42,7 @@ struct AlarmData;
 
 
 typedef KCal::Person  EmailAddress;
-class EmailAddressList : public QList<KCal::Person>
+class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
 {
 	public:
 		EmailAddressList() : QList<KCal::Person>() { }
@@ -56,7 +56,7 @@ class EmailAddressList : public QList<KCal::Person>
 
 
 // Base class containing data common to KAAlarm and KAEventData
-class KAAlarmEventBase
+class KALARM_CAL_EXPORT KAAlarmEventBase
 {
 	public:
 		~KAAlarmEventBase()  { }
@@ -101,7 +101,7 @@ class KAAlarmEventBase
 
 // KAAlarm corresponds to a single KCal::Alarm instance.
 // A KAEventData may contain multiple KAAlarm's.
-class KAAlarm : public KAAlarmEventBase
+class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
 {
 	public:
 		// Define the basic KAAlarm action types
@@ -189,7 +189,7 @@ class KAAlarm : public KAAlarmEventBase
 
 
 /** KAEventData corresponds to a KCal::Event instance */
-class KAEventData : public KAAlarmEventBase
+class KALARM_CAL_EXPORT KAEventData : public KAAlarmEventBase
 {
 	public:
 		class Observer

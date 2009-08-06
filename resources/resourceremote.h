@@ -25,11 +25,10 @@
 
 /* @file resourceremote.h - KAlarm remote alarm calendar resource */
 
-#include <kurl.h>
+#include "alarmresource.h"
 
 #include <kcal/incidence.h>
-
-#include "alarmresource.h"
+#include <kurl.h>
 
 class KJob;
 
@@ -42,7 +41,7 @@ namespace KCal { class CalendarLocal; }
 
 
 /** A KAlarm calendar resource stored as a remote file. */
-class KALARM_EXPORT KAResourceRemote : public AlarmResource
+class KALARM_RESOURCES_EXPORT KAResourceRemote : public AlarmResource
 {
 		Q_OBJECT
 	public:
