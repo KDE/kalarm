@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.h  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocal.h in libkcal,
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -26,16 +26,16 @@
 
 /* @file resourcelocal.h - KAlarm local calendar resource */
 
-#include <QDateTime>
+#include "alarmresource.h"
 
 #include <kurl.h>
 #include <kdirwatch.h>
 
-#include "alarmresource.h"
+#include <QDateTime>
 
 
 /** A KAlarm calendar resource stored as a local file. */
-class KALARM_EXPORT KAResourceLocal : public AlarmResource
+class KALARM_RESOURCES_EXPORT KAResourceLocal : public AlarmResource
 {
 		Q_OBJECT
 	public:

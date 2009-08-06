@@ -22,7 +22,7 @@
 #include "templatelistfiltermodel.h"
 
 #include "alarmevent.h"
-#include "resources/kcalendar.h"
+#include "kcalendar.h"
 
 #include <kdebug.h>
 

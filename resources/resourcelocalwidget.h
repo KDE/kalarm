@@ -24,6 +24,7 @@
 /* @file resourcelocalwidget.h - configuration widget for local file calendar resource */
 
 #include "resourcewidget.h"
+#include "kalarm_resources_export.h"
 
 class KUrlRequester;
 
@@ -31,7 +32,7 @@ class KUrlRequester;
   Configuration widget for local file alarm calendar resource.
   @see KAResourceLocal
 */
-class KALARM_EXPORT ResourceLocalConfigWidget : public ResourceConfigWidget
+class KALARM_RESOURCES_EXPORT ResourceLocalConfigWidget : public ResourceConfigWidget
 {
 		Q_OBJECT
 	public:

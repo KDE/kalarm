@@ -17,24 +17,24 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef KALARM_EXPORT_H
-#define KALARM_EXPORT_H
+#ifndef KALARM_CAL_EXPORT_H
+#define KALARM_CAL_EXPORT_H
 
 /* needed for KDE_EXPORT and KDE_IMPORT macros */
 #include <kdemacros.h>
 
-#ifndef KALARM_EXPORT
-# if defined(MAKE_KALARM_RESOURCES_LIB)
+#ifndef KALARM_CAL_EXPORT
+# if defined(MAKE_KALARM_CALENDAR_LIB)
    /* We are building this library */
-#  define KALARM_EXPORT KDE_EXPORT
+#  define KALARM_CAL_EXPORT KDE_EXPORT
 # else
    /* We are using this library */
-#  define KALARM_EXPORT KDE_IMPORT
+#  define KALARM_CAL_EXPORT KDE_IMPORT
 # endif
 #endif
 
-# ifndef KALARM_EXPORT_DEPRECATED
-#  define KALARM_EXPORT_DEPRECATED KDE_DEPRECATED KALARM_EXPORT
+# ifndef KALARM_CAL_EXPORT_DEPRECATED
+#  define KALARM_CAL_EXPORT_DEPRECATED KDE_DEPRECATED KALARM_CAL_EXPORT
 # endif
 
 #endif

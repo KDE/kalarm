@@ -21,13 +21,15 @@
 #ifndef KARECURRENCE_H
 #define KARECURRENCE_H
 
+#include "kalarm_cal_export.h"
+
 #include <kcal/recurrence.h>
 #include <kcal/duration.h>
 
 class DateTime;
 
 
-class KARecurrence : public KCal::Recurrence
+class KALARM_CAL_EXPORT KARecurrence : public KCal::Recurrence
 {
 	public:
 		/** The recurrence's period type.

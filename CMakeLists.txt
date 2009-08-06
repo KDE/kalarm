@@ -8,10 +8,12 @@ endif(KMAIL_SUPPORTED)
 include_directories(
 ${CMAKE_CURRENT_BINARY_DIR}
         ./ 
+	./cal
 	./lib 
 	./resources 
 ) 
 
+add_subdirectory( cal ) 
 add_subdirectory( resources ) 
 add_subdirectory( pixmaps ) 
 add_subdirectory( autostart ) 
@@ -27,7 +29,6 @@ set(libkalarm_SRCS
 	lib/datetime.cpp 
 	lib/desktop.cpp
 	lib/filedialog.cpp
-	lib/identities.cpp
 	lib/itembox.cpp
 	lib/kalocale.cpp
 	lib/label.cpp 
@@ -52,7 +53,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    birthdaymodel.cpp
    main.cpp 
-   kaeventdata.cpp
    alarmevent.cpp 
    editdlg.cpp 
    editdlgtypes.cpp
@@ -69,7 +69,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    traywindow.cpp 
    dbushandler.cpp 
    recurrenceedit.cpp 
-   karecurrence.cpp 
    deferdlg.cpp 
    functions.cpp 
    fontcolour.cpp 
@@ -92,7 +91,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    timeselector.cpp 
    latecancel.cpp 
    repetition.cpp 
-   alarmtext.cpp 
    emailidcombo.cpp 
    find.cpp 
    pickfileradio.cpp 
@@ -121,7 +119,7 @@ endif (KMAIL_SUPPORTED)
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-target_link_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_MAILTRANSPORT_LIBS} ${KDEPIMLIBS_KHOLIDAYS_LIBS} ${KDE4_PHONON_LIBS} kdepim)
+target_link_libraries(kalarm_bin ${KDE4_KUTILS_LIBS} kalarm_resources kalarm_calendar ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_MAILTRANSPORT_LIBS} ${KDEPIMLIBS_KHOLIDAYS_LIBS} ${KDE4_PHONON_LIBS} kdepim)
 
 
 install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS} )

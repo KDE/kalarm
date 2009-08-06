@@ -1,7 +1,7 @@
 /*
  *  alarmresource.h  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,12 +23,14 @@
 
 /* @file alarmresource.h - base class for a KAlarm alarm calendar resource */
 
-#include <sys/stat.h>
+#include "kalarm_resources_export.h"
+#include "kcalendar.h"
 
+#include <kcal/resourcecached.h>
 #include <QMap>
 #include <QByteArray>
-#include <kcal/resourcecached.h>
-#include "kcalendar.h"
+
+#include <sys/stat.h>
 
 using KCal::CalendarLocal;
 
@@ -37,7 +39,7 @@ using KCal::CalendarLocal;
 
 
 /** Base class for a KAlarm alarm calendar resource. */
-class KALARM_EXPORT AlarmResource : public KCal::ResourceCached
+class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 {
 		Q_OBJECT
 	public:

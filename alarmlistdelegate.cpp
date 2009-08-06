@@ -21,7 +21,7 @@
 #include "kalarm.h"
 #include "alarmlistdelegate.moc"
 
-#include "resources/kcalendar.h"
+#include "kcalendar.h"
 #include "alarmlistview.h"
 #include "alarmresources.h"
 #include "eventlistmodel.h"
