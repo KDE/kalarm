@@ -182,11 +182,11 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			if (!jobdata.bcc.isEmpty())
 			{
 				command += QLatin1String(" -b ");
-				command += KShell::quoteArg(jobdata.bcc);
+				command += KPIMUtils::extractEmailAddress(jobdata.bcc);
 			}
 
 			command += ' ';
-			command += jobdata.event.emailAddresses(" "); // locally provided, okay
+			command += jobdata.event.emailPureAddresses(" "); // locally provided, okay
 		}
 
 		// Add the body and attachments to the message.
@@ -250,10 +250,10 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			errmsgs = errors(err);
 			return -1;
 		}
-		mailjob->setSender(jobdata.from);
-		mailjob->setTo(QStringList(jobdata.event.emailAddresses()));
+		mailjob->setSender(KPIMUtils::extractEmailAddress(jobdata.from));
+		mailjob->setTo(jobdata.event.emailPureAddresses());
 		if (!jobdata.bcc.isEmpty())
-			mailjob->setBcc(QStringList(jobdata.bcc));
+			mailjob->setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
 		mailjob->setData(message.toLocal8Bit());
 		mJobs.enqueue(mailjob);
 		mJobData.enqueue(jobdata);
