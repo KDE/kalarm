@@ -1382,11 +1382,14 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
 {
 	QString msg;
+	QString to = mEmailAddresses.join("<nl/>");
+	to.replace('<', "&lt;");
+	to.replace('>', "&gt;");
 	if (mEmailBcc->isChecked())
-		msg = i18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
-		            mEmailAddresses.join("<nl/>"), Preferences::emailBccAddress());
+		msg = "<qt>" + i18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
+		            to, Preferences::emailBccAddress()) + "</qt>";
 	else
-		msg = i18nc("@info", "Email sent to:<nl/>%1", mEmailAddresses.join("<nl/>"));
+		msg = "<qt>" + i18nc("@info", "Email sent to:<nl/>%1", to) + "</qt>";
 	KMessageBox::information(this, msg);
 }
 
