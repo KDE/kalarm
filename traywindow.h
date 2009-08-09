@@ -30,6 +30,7 @@ class QEvent;
 class QDragEnterEvent;
 class QDropEvent;
 class KAction;
+class KToggleAction;
 class KAEvent;
 class MainWindow;
 class NewAlarmAction;
@@ -58,6 +59,7 @@ class TrayWindow : public KSystemTrayIcon
 		void         slotNewFromTemplate(const KAEvent*);
 		void         slotPreferences();
 		void         setEnabledStatus(bool status);
+		void         slotHaveDisabledAlarms(bool disabled);
 		void         slotResourceStatusChanged();
 		void         slotQuit();
 
@@ -65,9 +67,13 @@ class TrayWindow : public KSystemTrayIcon
 		QString      tooltipAlarmText() const;
 
 		MainWindow*     mAssocMainWindow;     // main window associated with this, or null
-		QIcon           mIconEnabled, mIconDisabled;
+		QIcon           mIconEnabled;         // normal status icon
+		QIcon           mIconDisabled;        // icon indicating all alarms disabled
+		QIcon           mIconSomeDisabled;    // icon indicating individual alarms disabled
+		KToggleAction*  mActionEnabled;
 		NewAlarmAction* mActionNew;
 		KAction*        mActionNewFromTemplate;
+		bool            mHaveDisabledAlarms;  // some individually disabled alarms exist
 };
 
 #endif // TRAYWINDOW_H
