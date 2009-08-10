@@ -3749,6 +3749,35 @@ QString EmailAddressList::address(int index) const
 	return result;
 }
 
+/******************************************************************************
+* Return a list of the pure email addresses, excluding names.
+*/
+QStringList EmailAddressList::pureAddresses() const
+{
+	QStringList list;
+	for (int p = 0, end = count();  p < end;  ++p)
+		list += at(p).email();
+	return list;
+}
+
+/******************************************************************************
+* Return a list of the pure email addresses, excluding names, as a string.
+*/
+QString EmailAddressList::pureAddresses(const QString& separator) const
+{
+	QString result;
+	bool first = true;
+	for (int p = 0, end = count();  p < end;  ++p)
+	{
+		if (first)
+			first = false;
+		else
+			result += separator;
+		result += at(p).email();
+	}
+	return result;
+}
+
 
 /*=============================================================================
 = Static functions

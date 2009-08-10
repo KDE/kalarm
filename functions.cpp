@@ -724,6 +724,7 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
 
 			// Update the event in the calendar file
 			KAEvent* newev = cal->updateEvent(event);
+			cal->disabledChanged(newev);
 
 			// If we're disabling a display alarm, close any message window
 			if (!enable  &&  event->displayAction())

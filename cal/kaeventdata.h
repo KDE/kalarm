@@ -49,9 +49,11 @@ class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
 		EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
 		EmailAddressList& operator=(const QList<KCal::Person>&);
 		operator QStringList() const;
-		QString join(const QString& separator) const;
+		QString     join(const QString& separator) const;
+		QStringList pureAddresses() const;
+		QString     pureAddresses(const QString& separator) const;
 	private:
-		QString address(int index) const;
+		QString     address(int index) const;
 };
 
 
@@ -322,6 +324,8 @@ public:
 		uint               emailFromId() const            { return mEmailFromIdentity; }
 		const EmailAddressList& emailAddresses() const    { return mEmailAddresses; }
 		QString            emailAddresses(const QString& sep) const  { return mEmailAddresses.join(sep); }
+		QStringList        emailPureAddresses() const     { return mEmailAddresses.pureAddresses(); }
+		QString            emailPureAddresses(const QString& sep) const  { return mEmailAddresses.pureAddresses(sep); }
 		const QString&     emailSubject() const           { return mEmailSubject; }
 		const QStringList& emailAttachments() const       { return mEmailAttachments; }
 		bool               emailBcc() const               { return mEmailBcc; }

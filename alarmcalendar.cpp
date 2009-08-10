@@ -154,7 +154,8 @@ AlarmCalendar::AlarmCalendar()
 	  mEventType(KCalEvent::EMPTY),
 	  mOpen(false),
 	  mUpdateCount(0),
-	  mUpdateSave(false)
+	  mUpdateSave(false),
+	  mHaveDisabledAlarms(false)
 {
 	AlarmResources* resources = AlarmResources::instance();
 	resources->setCalIDFunction(&CalendarCompat::setID);
@@ -174,7 +175,8 @@ AlarmCalendar::AlarmCalendar(const QString& path, KCalEvent::Status type)
 	  mEventType(type),
 	  mOpen(false),
 	  mUpdateCount(0),
-	  mUpdateSave(false)
+	  mUpdateSave(false),
+	  mHaveDisabledAlarms(false)
 {
 	switch (type)
 	{
@@ -484,6 +486,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 
 	// Now scan the list of alarms to find the earliest one to trigger
 	findEarliestAlarm(resource);
+	checkForDisabledAlarms();
 }
 
 /******************************************************************************
@@ -507,7 +510,11 @@ void AlarmCalendar::removeKAEvents(AlarmResource* resource, bool closing)
 	mEarliestAlarm.remove(resource);
 	// Emit signal only if we're not in the process of closing the calendar
 	if (!closing  &&  mOpen)
+	{
 		emit earliestAlarmChanged();
+		if (mHaveDisabledAlarms)
+			checkForDisabledAlarms();
+	}
 }
 
 void AlarmCalendar::slotResourceChange(AlarmResource* resource, AlarmResources::Change change)
@@ -614,6 +621,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 		KCalendar::Status caltype = CalendarCompat::fix(cal, filename);
 		KCalEvent::Status wantedType = resource ? resource->kcalEventType() : KCalEvent::EMPTY;
 		bool saveRes = false;
+		bool enabled = true;
 		AlarmResources* resources = AlarmResources::instance();
 		AlarmResource* activeRes   = 0;
 		AlarmResource* archivedRes = 0;
@@ -676,6 +684,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 				KAEvent* ev = mResourcesCalendar->addEvent(*res, newev);
 				if (type != KCalEvent::TEMPLATE)
 					newEvents += ev;
+				if (type == KCalEvent::ACTIVE  &&  !ev->enabled())
+					enabled = false;
 			}
 			else
 				success = false;
@@ -686,6 +696,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 		{
 			resources->save();
 			EventListModel::alarms()->addEvents(newEvents);
+			if (!enabled)
+				mResourcesCalendar->checkForDisabledAlarms(true, enabled);
 		}
 	}
 	if (!local)
@@ -825,6 +837,8 @@ void AlarmCalendar::purgeEvents(const KAEvent::List& events)
 {
 	for (int i = 0, end = events.count();  i < end;  ++i)
 		deleteEventInternal(events[i]->id());
+	if (mHaveDisabledAlarms)
+		checkForDisabledAlarms();
 	saveCal();
 }
 
@@ -898,6 +912,8 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 			ok = AlarmResources::instance()->addEvent(kcalEvent, resource);
 			kcalEvent = 0;  // if there was an error, kcalEvent is deleted by AlarmResources::addEvent()
 			remove = !ok;
+			if (ok  &&  type == KCalEvent::ACTIVE  &&  !event->enabled())
+				checkForDisabledAlarms(true, false);
 		}
 	}
 	else
@@ -1020,7 +1036,7 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
 		if (!addEvent(newEvent, 0, true))
 			return false;
 	}
-	deleteEvent(oldEventId);
+	deleteEvent(oldEventId);   // this calls checkForDisabledAlarms()
 	return true;
 }
 
@@ -1045,9 +1061,12 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 		{
 			evnt->updateKCalEvent(kcalEvent);
 			evnt->clearUpdated();
+			bool oldEnabled = kaevnt->enabled();
 			if (kaevnt != evnt)
 				*kaevnt = *evnt;   // update the event instance in our lists, keeping the same pointer
 			findEarliestAlarm(AlarmResources::instance()->resource(kcalEvent));
+			if (mCalType == RESOURCES  &&  evnt->category() == KCalEvent::ACTIVE)
+				checkForDisabledAlarms(oldEnabled, evnt->enabled());
 			return kaevnt;
 		}
 	}
@@ -1064,6 +1083,8 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 	if (mOpen)
 	{
 		KCalEvent::Status status = deleteEventInternal(eventID);
+		if (mHaveDisabledAlarms)
+			checkForDisabledAlarms();
 		if (status != KCalEvent::EMPTY)
 		{
 			if (saveit)
@@ -1372,6 +1393,60 @@ bool AlarmCalendar::isEmpty() const
 			return false;
 	}
 	return true;
+}
+
+/******************************************************************************
+* Called when an alarm's enabled status has changed.
+*/
+void AlarmCalendar::disabledChanged(const KAEvent* event)
+{
+	if (event->category() == KCalEvent::ACTIVE)
+	{
+		bool status = event->enabled();
+		checkForDisabledAlarms(!status, status);
+	}
+}
+
+/******************************************************************************
+* Check whether there are any individual disabled alarms, following an alarm
+* creation or modification. Must only be called for an ACTIVE alarm.
+*/
+void AlarmCalendar::checkForDisabledAlarms(bool oldEnabled, bool newEnabled)
+{
+	if (mCalType == RESOURCES  &&  newEnabled != oldEnabled)
+	{
+		if (newEnabled  &&  mHaveDisabledAlarms)
+			checkForDisabledAlarms();
+		else if (!newEnabled  &&  !mHaveDisabledAlarms)
+		{
+			mHaveDisabledAlarms = true;
+			emit haveDisabledAlarmsChanged(true);
+		}
+	}
+}
+
+/******************************************************************************
+* Check whether there are any individual disabled alarms.
+*/
+void AlarmCalendar::checkForDisabledAlarms()
+{
+	if (mCalType != RESOURCES)
+		return;
+	bool disabled = false;
+	KAEvent::List eventlist = events(KCalEvent::ACTIVE);
+	for (int i = 0, end = eventlist.count();  i < end;  ++i)
+	{
+		if (!eventlist[i]->enabled())
+		{
+			disabled = true;
+			break;
+		}
+	}
+	if (disabled != mHaveDisabledAlarms)
+	{
+		mHaveDisabledAlarms = disabled;
+		emit haveDisabledAlarmsChanged(disabled);
+	}
 }
 
 /******************************************************************************

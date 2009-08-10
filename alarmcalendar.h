@@ -56,6 +56,8 @@ class AlarmCalendar : public QObject
 		bool                  endUpdate();
 		KAEvent*              earliestAlarm() const;
 		void                  setAlarmPending(KAEvent*, bool pending = true);
+		bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
+		void                  disabledChanged(const KAEvent*);
 		KAEvent::List         atLoginAlarms() const;
 		KCal::Event*          createKCalEvent(const KAEvent* e, bool original = false) const
 		                                             { return createKCalEvent(e, QString(), original); }
@@ -95,6 +97,7 @@ class AlarmCalendar : public QObject
 
 	signals:
 		void                  earliestAlarmChanged();
+		void                  haveDisabledAlarmsChanged(bool haveDisabled);
 		void                  calendarSaved(AlarmCalendar*);
 		void                  emptyStatus(bool empty);
 
@@ -121,6 +124,8 @@ class AlarmCalendar : public QObject
 		static void           updateResourceKAEvents(AlarmResource*, KCal::CalendarLocal*);
 		void                  removeKAEvents(AlarmResource*, bool closing = false);
 		void                  findEarliestAlarm(AlarmResource*);
+		void                  checkForDisabledAlarms();
+		void                  checkForDisabledAlarms(bool oldEnabled, bool newEnabled);
 
 		static AlarmCalendar* mResourcesCalendar;  // the calendar resources
 		static AlarmCalendar* mDisplayCalendar;    // the display calendar
@@ -142,6 +147,7 @@ class AlarmCalendar : public QObject
 		bool                  mOpen;               // true if the calendar file is open
 		int                   mUpdateCount;        // nesting level of group of calendar update calls
 		bool                  mUpdateSave;         // save() was called while mUpdateCount > 0
+		bool                  mHaveDisabledAlarms; // there is at least one individually disabled alarm
 
 		using QObject::event;   // prevent "hidden" warning
 };

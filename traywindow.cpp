@@ -70,7 +70,8 @@ struct TipItem
 
 TrayWindow::TrayWindow(MainWindow* parent)
 	: KSystemTrayIcon(parent),
-	  mAssocMainWindow(parent)
+	  mAssocMainWindow(parent),
+	  mHaveDisabledAlarms(false)
 {
 	kDebug();
 	// Set up GUI icons
@@ -79,10 +80,18 @@ TrayWindow::TrayWindow(MainWindow* parent)
 		KMessageBox::sorry(parent, i18nc("@info", "Cannot load system tray icon."));
 	else
 	{
-		KIconLoader loader;
-		QImage iconDisabled = mIconEnabled.pixmap(loader.currentSize(KIconLoader::Panel)).toImage();
+		// Create the all alarms disabled icon, by converting the normal icon to grey
+		KIconLoader* loader = KIconLoader::global();
+		QImage icon = mIconEnabled.pixmap(loader->currentSize(KIconLoader::Panel)).toImage();
+		QImage iconDisabled = icon;
 		KIconEffect::toGray(iconDisabled, 1.0);
 		mIconDisabled = QIcon(QPixmap::fromImage(iconDisabled));
+
+		// Create the partially disabled icon, by overlaying the normal icon
+		// with a disabled indication
+		QImage disabled = loader->loadIcon("partdisabled", KIconLoader::Panel, icon.width(), KIconLoader::DefaultState, QStringList("emblems")).toImage();
+		KIconEffect::overlay(icon, disabled);
+		mIconSomeDisabled = QIcon(QPixmap::fromImage(icon));
 	}
 #ifdef __GNUC__
 #warning How to implement drag-and-drop?
@@ -91,9 +100,9 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 	// Set up the context menu
 	KActionCollection* actions = actionCollection();
-	KAction* a = KAlarm::createAlarmEnableAction(this);
-	actions->addAction(QLatin1String("tAlarmsEnable"), a);
-	contextMenu()->addAction(a);
+	mActionEnabled = KAlarm::createAlarmEnableAction(this);
+	actions->addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
+	contextMenu()->addAction(mActionEnabled);
 	connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(setEnabledStatus(bool)));
 
 	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
@@ -104,7 +113,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
-	a = KAlarm::createSpreadWindowsAction(this);
+	KAction* a = KAlarm::createSpreadWindowsAction(this);
 	actions->addAction(QLatin1String("tSpread"), a);
 	contextMenu()->addAction(a);
 	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));
@@ -121,8 +130,10 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	setEnabledStatus(theApp()->alarmsEnabled());
 
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
+	connect(AlarmCalendar::resources(), SIGNAL(haveDisabledAlarmsChanged(bool)), SLOT(slotHaveDisabledAlarms(bool)));
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
 	slotResourceStatusChanged();   // initialise action states
+	slotHaveDisabledAlarms(AlarmCalendar::resources()->haveDisabledAlarms());
 }
 
 TrayWindow::~TrayWindow()
@@ -186,7 +197,19 @@ void TrayWindow::slotQuit()
 void TrayWindow::setEnabledStatus(bool status)
 {
 	kDebug() << (int)status;
-	setIcon(status ? mIconEnabled : mIconDisabled);
+	setIcon(status ? (mHaveDisabledAlarms ? mIconSomeDisabled : mIconEnabled) : mIconDisabled);
+}
+
+/******************************************************************************
+* Called when individual alarms are enabled or disabled.
+* Set the enabled icon to show or hide a disabled indication.
+*/
+void TrayWindow::slotHaveDisabledAlarms(bool haveDisabled)
+{
+	kDebug() << haveDisabled;
+	mHaveDisabledAlarms = haveDisabled;
+	if (mActionEnabled->isChecked())
+		setIcon(haveDisabled ? mIconSomeDisabled : mIconEnabled);
 }
 
 /******************************************************************************
@@ -245,10 +268,12 @@ bool TrayWindow::event(QEvent* e)
 	if (enabled  &&  Preferences::tooltipAlarmCount())
 		altext = tooltipAlarmText();
 	QString text;
-	if (enabled)
-		text = i18nc("@info:tooltip", "%1%2", KGlobal::mainComponent().aboutData()->programName(), altext);
-	else
+	if (!enabled)
 		text = i18nc("@info:tooltip 'KAlarm - disabled'", "%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
+	else if (mHaveDisabledAlarms)
+		text = i18nc("@info:tooltip Brief: some alarms are disabled", "%1<br/>(Some alarms disabled)%2", KGlobal::mainComponent().aboutData()->programName(), altext);
+	else
+		text = i18nc("@info:tooltip", "%1%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	kDebug() << text;
 	QToolTip::showText(he->globalPos(), text);
 	return true;

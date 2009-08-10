@@ -128,6 +128,8 @@ class KAEvent : public KAEventData::Observer
 		uint               emailFromId() const                 { return mEventData->emailFromId(); }
 		const EmailAddressList& emailAddresses() const         { return mEventData->emailAddresses(); }
 		QString            emailAddresses(const QString& sep) const  { return mEventData->emailAddresses().join(sep); }
+		QStringList        emailPureAddresses() const          { return mEventData->emailPureAddresses(); }
+		QString            emailPureAddresses(const QString& sep) const  { return mEventData->emailPureAddresses(sep); }
 		const QString&     emailSubject() const                { return mEventData->emailSubject(); }
 		const QStringList& emailAttachments() const            { return mEventData->emailAttachments(); }
 		QString            emailAttachments(const QString& sep) const  { return mEventData->emailAttachments().join(sep); }
