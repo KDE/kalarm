@@ -98,7 +98,6 @@ void                outputAlarmWarnings(QWidget* parent, const KAEvent* = 0);
 void                refreshAlarms();
 void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
 QString             runKMail(bool minimise);
-bool                runProgram(const QString& program, QString& dbusService, const QString& dbusWindowPath, QString& errorMessage);
 
 QStringList         dontShowErrors(const QString& eventId);
 bool                dontShowErrors(const QString& eventId, const QString& tag);

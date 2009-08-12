@@ -20,6 +20,7 @@
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "functions.h"
+#include "functions_p.h"
 
 #include "alarmcalendar.h"
 #include "alarmevent.h"
@@ -37,6 +38,14 @@
 #include "shellprocess.h"
 #include "templatelistview.h"
 #include "templatemenuaction.h"
+
+#ifdef Q_WS_X11
+#include <kwindowsystem.h>
+#include <kxmessages.h>
+#include <kstartupinfo.h>
+#include <netwm.h>
+#include <QX11Info>
+#endif
 
 #include <QDir>
 #include <QRegExp>
@@ -77,13 +86,13 @@ QDBusInterface* korgInterface = 0;
 
 const char*   KMAIL_DBUS_SERVICE      = "org.kde.kmail";
 //const char*   KMAIL_DBUS_IFACE        = "org.kde.kmail.kmail";
-const char*   KMAIL_DBUS_WINDOW_PATH  = "/kmail/kmail_mainwindow_1";
+//const char*   KMAIL_DBUS_WINDOW_PATH  = "/kmail/kmail_mainwindow_1";
 const char*   KORG_DBUS_SERVICE       = "org.kde.korganizer";
 const char*   KORG_DBUS_IFACE         = "org.kde.korganizer.Korganizer";
 // D-Bus object path of KOrganizer's notification interface
 #define       KORG_DBUS_PATH            "/Korganizer"
 #define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
-const char*   KORG_DBUS_WINDOW_PATH   = "/korganizer/MainWindow_1";
+//const char*   KORG_DBUS_WINDOW_PATH   = "/korganizer/MainWindow_1";
 const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
 
 const char*   ALARM_OPTS_FILE        = "alarmopts";
@@ -99,6 +108,9 @@ QString uidKOrganizer(const QString& eventID);
 
 namespace KAlarm
 {
+
+Private* Private::mInstance = 0;
+
 
 /******************************************************************************
 *  Display a main window with the specified event selected.
@@ -1215,59 +1227,114 @@ void refreshAlarmsIfQueued()
 }
 
 /******************************************************************************
-*  Start KMail if it isn't already running, and optionally iconise it.
+*  Start KMail if it isn't already running, optionally minimised.
 *  Reply = reason for failure to run KMail (which may be the empty string)
 *        = null string if success.
 */
 QString runKMail(bool minimise)
 {
-	QString dbusService = KMAIL_DBUS_SERVICE;
-	QString errmsg;
-	if (!runProgram(QLatin1String("kmail"), dbusService, (minimise ? QLatin1String(KMAIL_DBUS_WINDOW_PATH) : QString()), errmsg))
-		return i18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
+	QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KMAIL_DBUS_SERVICE);
+	if (!reply.isValid()  ||  !reply.value())
+	{
+		// Program is not already running, so start it
+		QString errmsg;
+		if (minimise  &&  Private::startKMailMinimised())
+			return QString();
+		if (KToolInvocation::startServiceByDesktopName(QLatin1String("kmail"), QString(), &errmsg))
+		{
+			kError() << "Couldn't start KMail (" << errmsg << ")";
+			return i18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
+		}
+	}
 	return QString();
 }
 
 /******************************************************************************
-*  Start another program for D-Bus access if it isn't already running.
-*  If 'dbusWindowPath' is not empty, the program's window with that D-Bus path
-*  name is iconised.
-*  On exit, 'errorMessage' contains an error message if failure.
-*  Reply = true if the program is now running.
+* Start KMail, minimised.
+* This code is taken from kstart in kdebase.
 */
-bool runProgram(const QString& program, QString& dbusService, const QString& dbusWindowPath, QString& errorMessage)
+bool Private::startKMailMinimised()
 {
-	QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(dbusService);
-	if (!reply.isValid()  ||  !reply.value())
+#ifdef Q_WS_X11
+	NETRootInfo i(QX11Info::display(), NET::Supported);
+	if (i.isSupported(NET::WM2KDETemporaryRules))
 	{
-		// Program is not already running, so start it
-		if (KToolInvocation::startServiceByDesktopName(program, QString(), &errorMessage, &dbusService))
-		{
-			kError() << "Couldn't start" << program << " (" << errorMessage << ")";
-			return false;
-		}
-		if (!dbusWindowPath.isEmpty())
-		{
-			// Minimise its window - don't use hide() since this would remove all
-			// trace of it from the panel if it is not configured to be docked in
-			// the system tray.
-#ifdef __GNUC__
-#warning Make minimise window work
-#endif
-//Call D-Bus app/MainWin showMinimized()???
-#if 0
-//			QDBusInterface iface(dbusService, DBUS_PATH, DBUS_IFACE);
-//			QDBusInterface iface(dbusService, dbusWindowPath);
-			QDBusInterface iface(dbusService, "/kmail_mainwindow_1", "com.trolltech.Qt.QWidget");
-			QDBusError err = iface.callWithArgumentList(QDBus::NoBlock, QLatin1String("showMinimized"), QList<QVariant>());
-			if (err.isValid())
-				kError() << program << ": showMinimized D-Bus call failed:" << err.message();
-#endif
-		}
+		kDebug() << "using rules";
+		KXMessages msg;
+		QString message = "wmclass=kmail\nwmclassmatch=1\n"  // 1 = exact match
+		                  "wmclasscomplete=false\n"
+		                  "minimize=true\nminimizerule=3\n"
+		                  "type=" + QString().setNum(NET::Normal) + "\ntyperule=2";
+		msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1, false);
+		qApp->flush();
 	}
-	errorMessage.clear();
+	else
+	{
+		// Connect to window add to get the NEW windows
+		kDebug() << "connecting to window add";
+		connect(KWindowSystem::self(), SIGNAL(windowAdded(WId)), instance(), SLOT(windowAdded(WId)));
+	}
+	// Propagate the app startup notification info to the started app.
+	// We are not using KApplication, so the env remained set.
+	KStartupInfoId id = KStartupInfo::currentStartupIdEnv();
+	KProcess* proc = new KProcess;
+	(*proc) << "kmail";
+	int pid = proc->startDetached();
+	if (!pid)
+	{
+		KStartupInfo::sendFinish(id); // failed to start
+		return false;
+	}
+	KStartupInfoData data;
+	data.addPid(pid);
+	data.setName("kmail");
+	data.setBin("kmail");
+	KStartupInfo::sendChange(id, data);
 	return true;
+#else
+	return false;
+#endif
 }
+
+#ifdef Q_WS_X11
+/******************************************************************************
+* Called when a window is created, to minimise it.
+* This code is taken from kstart in kdebase.
+*/
+void Private::windowAdded(WId w)
+{
+	static const int SUPPORTED_TYPES = NET::NormalMask | NET::DesktopMask | NET::DockMask
+	                                 | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
+	                                 | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
+kDebug();
+	KWindowInfo kwinfo = KWindowSystem::windowInfo(w, NET::WMWindowType | NET::WMName);
+	if (kwinfo.windowType(SUPPORTED_TYPES) == NET::TopMenu
+	||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Toolbar
+	||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Desktop)
+		return;   // always ignore these window types
+
+kDebug()<<"1";
+	QX11Info qxinfo;
+	XWithdrawWindow(QX11Info::display(), w, qxinfo.screen());
+	QApplication::flush();
+
+	NETWinInfo info(QX11Info::display(), w, QX11Info::appRootWindow(), NET::WMState);
+	XWMHints* hints = XGetWMHints(QX11Info::display(), w);
+	if (hints)
+	{
+		hints->flags |= StateHint;
+		hints->initial_state = IconicState;
+		XSetWMHints(QX11Info::display(), w, hints);
+		XFree(hints);
+	}
+	info.setWindowType(NET::Normal);
+
+	XSync(QX11Info::display(), False);
+	XMapWindow(QX11Info::display(), w);
+	XSync(QX11Info::display(), False);
+	QApplication::flush();
+}
+#endif
 
 /******************************************************************************
 * The "Don't show again" option for error messages is personal to the user on a
