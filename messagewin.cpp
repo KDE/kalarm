@@ -33,6 +33,8 @@
 #include "shellprocess.h"
 #include "synchtimer.h"
 
+#include "kspeechinterface.h"
+
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <kstandardguiitem.h>
@@ -51,7 +53,6 @@
 #include <kio/netaccess.h>
 #include <knotification.h>
 #include <kpushbutton.h>
-#include <kspeechinterface.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>

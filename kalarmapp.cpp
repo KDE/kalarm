@@ -41,6 +41,8 @@
 #include "startdaytimer.h"
 #include "traywindow.h"
 
+#include "kspeechinterface.h"
+
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
@@ -50,7 +52,6 @@
 #include <kglobal.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
-#include <kspeechinterface.h>
 #include <kspeech.h>
 #include <ktoolinvocation.h>
 #include <netwm.h>
