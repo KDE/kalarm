@@ -724,7 +724,9 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 			break;
 		}
 		case tCOMMAND:
-			result = mCmdEdit->text();
+			result = mCmdEdit->text(const_cast<EditDisplayAlarmDlg*>(this), showErrorMessage);
+			if (result.isEmpty())
+				return false;
 			break;
 	}
 	return true;
@@ -1018,13 +1020,9 @@ void EditCommandAlarmDlg::slotCmdScriptToggled(bool on)
 */
 bool EditCommandAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
-	result = mCmdEdit->text();
+	result = mCmdEdit->text(const_cast<EditCommandAlarmDlg*>(this), showErrorMessage);
 	if (result.isEmpty())
-	{
-		if (showErrorMessage)
-			KMessageBox::sorry(const_cast<EditCommandAlarmDlg*>(this), i18nc("@info", "Please enter a command or script to execute"));
 		return false;
-	}
 	return true;
 }
 
@@ -1518,6 +1516,19 @@ QString CommandEdit::text() const
 	else
 		result = mCommandEdit->text();
 	return result.trimmed();
+}
+
+/******************************************************************************
+* Return the alarm text.
+* If 'showErrorMessage' is true and the text is empty, an error message is
+* displayed.
+*/
+QString CommandEdit::text(EditAlarmDlg* dlg, bool showErrorMessage) const
+{
+	QString result = text();
+	if (showErrorMessage  &&  result.isEmpty())
+		KMessageBox::sorry(dlg, i18nc("@info", "Please enter a command or script to execute"));
+	return result;
 }
 
 /******************************************************************************

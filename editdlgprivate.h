@@ -1,7 +1,7 @@
 /*
  *  editdlgprivate.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -60,6 +60,7 @@ class CommandEdit : public QWidget
 		bool      isScript() const;
 		void      setScript(bool);
 		QString   text() const;
+		QString   text(EditAlarmDlg*, bool showErrorMessage) const;
 		void      setText(const AlarmText&);
 		void      setReadOnly(bool);
 		virtual QSize minimumSizeHint() const;
