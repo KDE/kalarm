@@ -153,6 +153,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mTypeCombo->setFixedSize(mTypeCombo->sizeHint());
 	mTypeCombo->setCurrentIndex(-1);    // ensure slotAlarmTypeChanged() is called when index is set
 	connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotAlarmTypeChanged(int)));
+	connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(contentsChanged()));
 	label->setBuddy(mTypeCombo);
 	box->setWhatsThis(i18nc("@info:whatsthis", "<para>Select what the alarm should display:"
 	      "<list><item><interface>%1</interface>: the alarm will display the text message you type in.</item>"
@@ -166,6 +167,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mTextMessageEdit = new TextEdit(parent);
 	mTextMessageEdit->setLineWrapMode(KTextEdit::NoWrap);
 	mTextMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the text of the alarm message. It may be multi-line."));
+	connect(mTextMessageEdit, SIGNAL(textChanged()), SLOT(contentsChanged()));
 	frameLayout->addWidget(mTextMessageEdit);
 
 	// File name edit box
@@ -175,6 +177,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
 	mFileMessageEdit->setAcceptDrops(true);
 	mFileMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a text or image file to display."));
+	connect(mFileMessageEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
 
 	// File browse button
 	mFileBrowseButton = new QPushButton(mFileBox);
@@ -187,8 +190,9 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
 	// Command type checkbox and edit box
 	mCmdEdit = new CommandEdit(parent);
-	frameLayout->addWidget(mCmdEdit);
 	connect(mCmdEdit, SIGNAL(scriptToggled(bool)), SLOT(slotCmdScriptToggled(bool)));
+	connect(mCmdEdit, SIGNAL(changed()), SLOT(contentsChanged()));
+	frameLayout->addWidget(mCmdEdit);
 
 	// Sound checkbox and file selector
 	QHBoxLayout* hlayout = new QHBoxLayout();
@@ -196,6 +200,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	frameLayout->addLayout(hlayout);
 	mSoundPicker = new SoundPicker(parent);
 	mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
+	connect(mSoundPicker, SIGNAL(changed()), SLOT(contentsChanged()));
 	hlayout->addWidget(mSoundPicker);
 	hlayout->addSpacing(2*spacingHint());
 	hlayout->addStretch();
@@ -205,12 +210,14 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
 	hlayout->addWidget(mFontColourButton);
 	connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(setColours(const QColor&, const QColor&)));
+	connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(contentsChanged()));
 
 	if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
 	{
 		// Special actions button
 		mSpecialActionsButton = new SpecialActionsButton(false, parent);
 		mSpecialActionsButton->setFixedSize(mSpecialActionsButton->sizeHint());
+		connect(mSpecialActionsButton, SIGNAL(selected()), SLOT(contentsChanged()));
 		frameLayout->addWidget(mSpecialActionsButton, 0, Qt::AlignRight);
 	}
 
@@ -618,7 +625,10 @@ void EditDisplayAlarmDlg::slotPickFile()
 	QString file = KAlarm::browseFile(i18nc("@title:window", "Choose Text or Image File to Display"),
 	                                  defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
 	if (!file.isEmpty())
+	{
 		mFileMessageEdit->setText(file);
+		contentsChanged();
+	}
 }
 
 /******************************************************************************
@@ -783,6 +793,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
 	mCmdEdit = new CommandEdit(parent);
 	connect(mCmdEdit, SIGNAL(scriptToggled(bool)), SLOT(slotCmdScriptToggled(bool)));
+	connect(mCmdEdit, SIGNAL(changed()), SLOT(contentsChanged()));
 	frameLayout->addWidget(mCmdEdit);
 
 	// What to do with command output
@@ -793,6 +804,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	vlayout->setMargin(marginHint());
 	vlayout->setSpacing(spacingHint());
 	mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
+	connect(mCmdOutputGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(contentsChanged()));
 
 	// Execute in terminal window
 	mCmdExecInTerm = new RadioButton(i18n_radio_ExecInTermWindow(), mCmdOutputBox);
@@ -808,6 +820,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
 	mCmdLogFileEdit->setAcceptDrops(true);
 	mCmdLogFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or path of the log file."));
+	connect(mCmdLogFileEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
 
 	// Log file browse button.
 	// The file browser dialog is activated by the PickLogFileRadio class.
@@ -822,6 +835,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mCmdLogToFile = new PickLogFileRadio(browseButton, mCmdLogFileEdit, i18nc("@option:radio", "Log to file"), mCmdOutputGroup, mCmdOutputBox);
 	mCmdLogToFile->setFixedSize(mCmdLogToFile->sizeHint());
 	mCmdLogToFile->setWhatsThis(i18nc("@info:whatsthis", "Check to log the command output to a local file. The output will be appended to any existing contents of the file."));
+	connect(mCmdLogToFile, SIGNAL(fileChanged()), SLOT(contentsChanged()));
 	mCmdOutputGroup->addButton(mCmdLogToFile, Preferences::Log_File);
 	vlayout->addWidget(mCmdLogToFile, 0, Qt::AlignLeft);
 	vlayout->addWidget(box);
@@ -1092,6 +1106,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 		mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
 		label->setBuddy(mEmailFromList);
 		mEmailFromList->setWhatsThis(i18nc("@info:whatsthis", "Your email identity, used to identify you as the sender when sending email alarms."));
+		connect(mEmailFromList, SIGNAL(identityChanged(uint)), SLOT(contentsChanged()));
 		grid->addWidget(mEmailFromList, 0, 1, 1, 2);
 	}
 
@@ -1104,6 +1119,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
 	mEmailToEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the addresses of the email recipients. Separate multiple addresses by "
 	                                "commas or semicolons."));
+	connect(mEmailToEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
 	grid->addWidget(mEmailToEdit, 1, 1);
 
 	mEmailAddressButton = new QPushButton(parent);
@@ -1124,11 +1140,13 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mEmailSubjectEdit->setMinimumSize(mEmailSubjectEdit->sizeHint());
 	label->setBuddy(mEmailSubjectEdit);
 	mEmailSubjectEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the email subject."));
+	connect(mEmailSubjectEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
 	grid->addWidget(mEmailSubjectEdit, 2, 1, 1, 2);
 
 	// Email body
 	mEmailMessageEdit = new TextEdit(parent);
 	mEmailMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the email message."));
+	connect(mEmailMessageEdit, SIGNAL(textChanged()), SLOT(contentsChanged()));
 	frameLayout->addWidget(mEmailMessageEdit);
 
 	// Email attachments
@@ -1166,6 +1184,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 	mEmailBcc = new CheckBox(i18n_chk_CopyEmailToSelf(), parent);
 	mEmailBcc->setFixedSize(mEmailBcc->sizeHint());
 	mEmailBcc->setWhatsThis(i18nc("@info:whatsthis", "If checked, the email will be blind copied to you."));
+	connect(mEmailBcc, SIGNAL(toggled(bool)), SLOT(contentsChanged()));
 	grid->addWidget(mEmailBcc, 1, 0, 1, 2, Qt::AlignLeft);
 }
 
@@ -1420,6 +1439,7 @@ void EditEmailAlarmDlg::slotAddAttachment()
 		mEmailAttachList->setCurrentIndex(mEmailAttachList->count() - 1);   // select the new item
 		mEmailRemoveButton->setEnabled(true);
 		mEmailAttachList->setEnabled(true);
+		contentsChanged();
 	}
 }
 
@@ -1438,6 +1458,7 @@ void EditEmailAlarmDlg::slotRemoveAttachment()
 		mEmailRemoveButton->setEnabled(false);
 		mEmailAttachList->setEnabled(false);
 	}
+	contentsChanged();
 }
 
 /******************************************************************************
@@ -1463,16 +1484,19 @@ CommandEdit::CommandEdit(QWidget* parent)
 	vlayout->setSpacing(KDialog::spacingHint());
 	mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
 	mTypeScript->setFixedSize(mTypeScript->sizeHint());
-	connect(mTypeScript, SIGNAL(toggled(bool)), SLOT(slotCmdScriptToggled(bool)));
 	mTypeScript->setWhatsThis(i18nc("@info:whatsthis", "Check to enter the contents of a script instead of a shell command line"));
+	connect(mTypeScript, SIGNAL(toggled(bool)), SLOT(slotCmdScriptToggled(bool)));
+	connect(mTypeScript, SIGNAL(toggled(bool)), SIGNAL(changed()));
 	vlayout->addWidget(mTypeScript, 0, Qt::AlignLeft);
 
 	mCommandEdit = new LineEdit(LineEdit::Url, this);
 	mCommandEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter a shell command to execute."));
+	connect(mCommandEdit, SIGNAL(textChanged(const QString&)), SIGNAL(changed()));
 	vlayout->addWidget(mCommandEdit);
 
 	mScriptEdit = new TextEdit(this);
 	mScriptEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the contents of a script to execute"));
+	connect(mScriptEdit, SIGNAL(textChanged()), SIGNAL(changed()));
 	vlayout->addWidget(mScriptEdit);
 
 	slotCmdScriptToggled(mTypeScript->isChecked());

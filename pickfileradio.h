@@ -100,6 +100,9 @@ class PickFileRadio : public RadioButton
 		 */
 		virtual void    setEnabled(bool);
 
+	signals:
+		void          fileChanged();   // emitted whenever the selected file changes
+
 	private slots:
 		void          slotSelectionChanged(QAbstractButton*);
 		QString       slotPickFile();

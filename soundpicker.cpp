@@ -84,6 +84,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 	mSpeakShowing = !theApp()->speechEnabled();
 	showSpeak(!mSpeakShowing);            // index Speak (only displayed if appropriate)
 	connect(mTypeCombo, SIGNAL(activated(int)), SLOT(slotTypeSelected(int)));
+	connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()));
 	label->setBuddy(mTypeCombo);
 	soundLayout->addWidget(mTypeBox);
 
@@ -259,6 +260,7 @@ void SoundPicker::slotTypeSelected(int id)
 */
 void SoundPicker::slotPickFile()
 {
+	KUrl oldfile = mFile;
 	KUrl file = mFile;
 	SoundDlg dlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18nc("@title:window", "Sound File"), this);
 	dlg.setReadOnly(mReadOnly);
@@ -295,6 +297,8 @@ void SoundPicker::slotPickFile()
 	}
 	else
 		mTypeCombo->setToolTip(mFile.prettyUrl());
+	if (accepted  ||  mFile != oldfile)
+		emit changed();
 }
 
 /******************************************************************************

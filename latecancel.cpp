@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,6 +64,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	hlayout->setMargin(0);
 	mCheckbox = new CheckBox(i18n_chk_CancelIfLate(), mCheckboxFrame);
 	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
+	connect(mCheckbox, SIGNAL(toggled(bool)), SIGNAL(changed()));
 	mCheckbox->setWhatsThis(whatsThis);
 	hlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
 
@@ -75,6 +76,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	                                 whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
+	connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
 	hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
 	hlayout = new QHBoxLayout();
@@ -82,6 +84,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	hlayout->addSpacing(3*KDialog::spacingHint());
 	topLayout->addLayout(hlayout);
 	mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
+	connect(mAutoClose, SIGNAL(toggled(bool)), SIGNAL(changed()));
 	mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
 	hlayout->addWidget(mAutoClose);
 	hlayout->addStretch();

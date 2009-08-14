@@ -62,6 +62,7 @@ class Rule : public NoRule
 		virtual bool     stateChanged() const;
 	signals:
 		void             frequencyChanged();
+		void             changed();          // emitted whenever any control changes
 	private:
 		QWidget*         mSpinBox;
 		SpinBox*         mIntSpinBox;

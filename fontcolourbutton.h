@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.h  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,7 @@ class FontColourButton : public PushButton
 		virtual bool  isReadOnly() const     { return mReadOnly; }
 
 	signals:
+		/** Signal emitted whenever a font or colour has been selected. */
 		void          selected(const QColor& fg, const QColor& bg);
 
 	protected slots:

@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002,2004-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2004-2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -105,6 +105,8 @@ class SoundPicker : public QFrame
 		static QString i18n_combo_Speak();  // text of Speak combo box item
 		static QString i18n_combo_File();   // text of File combo box item
 
+	signals:
+		void           changed();     // emitted when any contents change
 
 	private slots:
 		void           slotTypeSelected(int id);

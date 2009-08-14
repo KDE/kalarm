@@ -1,7 +1,7 @@
 /*
  *  latecancel.h  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,6 +46,9 @@ class LateCancelSelector : public QFrame
 		static QString  i18n_chk_CancelIfLate();     // text of 'Cancel if late' checkbox
 		static QString  i18n_chk_AutoCloseWin();     // text of 'Auto-close window after this time' checkbox
 		static QString  i18n_chk_AutoCloseWinLC();   // text of 'Auto-close window after late-cancellation time' checkbox
+
+	signals:
+		void            changed();          // emitted whenever any change occurs
 
 	private slots:
 		void            slotToggled(bool);

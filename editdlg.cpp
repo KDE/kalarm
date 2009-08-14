@@ -56,6 +56,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
+#include <kpushbutton.h>
 #include <kmessagebox.h>
 #include <khbox.h>
 #include <kvbox.h>
@@ -234,6 +235,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		label->setFixedSize(label->sizeHint());
 		mTemplateName = new KLineEdit(box);
 		mTemplateName->setReadOnly(mReadOnly);
+		connect(mTemplateName, SIGNAL(userTextChanged(const QString&)), SLOT(contentsChanged()));
 		label->setBuddy(mTemplateName);
 		box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
 		box->setFixedHeight(box->sizeHint().height());
@@ -263,6 +265,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
 	connect(mRecurrenceEdit, SIGNAL(frequencyChanged()), SLOT(slotRecurFrequencyChange()));
 	connect(mRecurrenceEdit, SIGNAL(repeatNeedsInitialisation()), SLOT(slotSetSubRepetition()));
+	connect(mRecurrenceEdit, SIGNAL(contentsChanged()), SLOT(contentsChanged()));
 
 	// Controls specific to the alarm type
 	QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
@@ -309,6 +312,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		grid->setSpacing(spacingHint());
 		mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
 		connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTemplateTimeType(QAbstractButton*)));
+		connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(contentsChanged()));
 
 		mTemplateDefaultTime = new RadioButton(i18nc("@option:radio", "Default time"), templateTimeBox);
 		mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
@@ -357,6 +361,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mTemplateTimeAfter->setValue(1439);
 		mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
 		mTemplateTimeAfter->setReadOnly(mReadOnly);
+		connect(mTemplateTimeAfter, SIGNAL(valueChanged(int)), SLOT(contentsChanged()));
 		mTemplateTimeAfter->setWhatsThis(i18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
 		                                       AlarmTimeWidget::i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
 		box->setFixedHeight(box->sizeHint().height());
@@ -368,6 +373,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	{
 		mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
 		connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
+		connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), SLOT(contentsChanged()));
 		topLayout->addWidget(mTimeWidget);
 	}
 
@@ -384,6 +390,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	if (mReminder)
 	{
 		mReminder->setFixedSize(mReminder->sizeHint());
+		connect(mReminder, SIGNAL(changed()), SLOT(contentsChanged()));
 		moreLayout->addWidget(mReminder, 0, Qt::AlignLeft);
 		if (mTimeWidget)
 			connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), mReminder, SLOT(setDefaultUnits(const KDateTime&)));
@@ -391,6 +398,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 
 	// Late cancel selector - default = allow late display
 	mLateCancel = new LateCancelSelector(true, mMoreOptions);
+	connect(mLateCancel, SIGNAL(changed()), SLOT(contentsChanged()));
 	moreLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
 	PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
@@ -402,6 +410,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	if (confirmAck)
 	{
 		confirmAck->setFixedSize(confirmAck->sizeHint());
+		connect(confirmAck, SIGNAL(toggled(bool)), SLOT(contentsChanged()));
 		playout->addWidget(confirmAck);
 	}
 
@@ -410,6 +419,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		// Show in KOrganizer checkbox
 		mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mMoreOptions);
 		mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
+		connect(mShowInKorganizer, SIGNAL(toggled(bool)), SLOT(contentsChanged()));
 		mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
 		playout->addWidget(mShowInKorganizer);
 	}
@@ -429,6 +439,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	{
 		// Save the initial state of all controls so that we can later tell if they have changed
 		saveState((event && (mTemplate || !event->isTemplate())) ? event : 0);
+		contentsChanged();    // enable/disable OK button
 	}
 
 	// Note the current desktop so that the dialog can be shown on it.
@@ -680,6 +691,19 @@ bool EditAlarmDlg::stateChanged() const
 }
 
 /******************************************************************************
+* Called whenever any of the controls changes state.
+* Enable or disable the OK button depending on whether any controls have a
+* different state from their initial state.
+*/
+void EditAlarmDlg::contentsChanged()
+{
+	// Don't do anything if it's a new alarm or we're still initialising
+	// (i.e. mSavedEvent null).
+	if (mSavedEvent  &&  button(Ok))
+		button(Ok)->setEnabled(stateChanged());
+}
+
+/******************************************************************************
 * Get the currently entered dialog data.
 * The data is returned in the supplied KAEvent instance.
 * Reply = false if the only change has been to an existing deferral.
@@ -928,11 +952,11 @@ bool EditAlarmDlg::validate()
 			event.nextOccurrence(pre, next, KAEventData::IGNORE_REPETITION);
 			if (next != dt)
 			{
-				QString prompt = dateOnly ? i18nc("@info", "The parameter is a date value",
+				QString prompt = dateOnly ? i18nc("@info The parameter is a date value",
 				                                  "The start date does not match the alarm's recurrence pattern, "
 				                                  "so it will be adjusted to the date of the next recurrence (%1).",
 				                                  KGlobal::locale()->formatDate(next.date(), KLocale::ShortDate))
-				                          : i18nc("@info", "The parameter is a date/time value",
+				                          : i18nc("@info The parameter is a date/time value",
 				                                  "The start date/time does not match the alarm's recurrence pattern, "
 				                                  "so it will be adjusted to the date/time of the next recurrence (%1).",
 				                                  KGlobal::locale()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
@@ -1197,6 +1221,7 @@ void EditAlarmDlg::slotEditDeferral()
 	{
 		mDeferDateTime = deferDlg->getDateTime();
 		mDeferTimeLabel->setText(mDeferDateTime.isValid() ? mDeferDateTime.formatLocale() : QString());
+		contentsChanged();
 	}
 }
 

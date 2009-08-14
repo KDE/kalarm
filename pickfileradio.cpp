@@ -33,18 +33,12 @@
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)
 	: RadioButton(text, parent),
 	  mGroup(group),
-	  mEdit(edit),
-	  mButton(button),
+	  mEdit(0),
 	  mLastButton(0),
 	  mRevertButton(false)
 {
 	Q_ASSERT(parent);
-	Q_ASSERT(button);
-	mButton->setEnabled(false);
-	connect(mButton, SIGNAL(clicked()), SLOT(slotPickFile()));
-	if (mEdit)
-		mEdit->setEnabled(false);
-	connect(mGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotSelectionChanged(QAbstractButton*)));
+	init(button, edit);
 }
 
 PickFileRadio::PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
@@ -61,12 +55,17 @@ PickFileRadio::PickFileRadio(const QString& text, ButtonGroup* group, QWidget* p
 void PickFileRadio::init(QPushButton* button, LineEdit* edit)
 {
 	Q_ASSERT(button);
+	if (mEdit)
+		mEdit->disconnect(this);
 	mEdit   = edit;
 	mButton = button;
 	mButton->setEnabled(false);
 	connect(mButton, SIGNAL(clicked()), SLOT(slotPickFile()));
 	if (mEdit)
+	{
 		mEdit->setEnabled(false);
+		connect(mEdit, SIGNAL(textChanged(const QString&)), SIGNAL(fileChanged()));
+	}
 	connect(mGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotSelectionChanged(QAbstractButton*)));
 	setReadOnly(RadioButton::isReadOnly());
 }

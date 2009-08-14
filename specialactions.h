@@ -1,7 +1,7 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright (c) 2004-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ class SpecialActionsButton : public QPushButton
 		virtual bool   isReadOnly() const     { return mReadOnly; }
 
 	signals:
+		/** Signal emitted whenever the widget has been changed. */
 		void           selected();
 
 	protected slots:

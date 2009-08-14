@@ -68,6 +68,7 @@ class CommandEdit : public QWidget
 
 	signals:
 		void      scriptToggled(bool);
+		void      changed();        // emitted when any changes occur
 
 	private slots:
 		void      slotCmdScriptToggled(bool);

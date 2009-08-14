@@ -118,6 +118,8 @@ class EditAlarmDlg : public KDialog
 		virtual void    slotHelp();      // Load Template
 		virtual void    slotDefault();   // More/Less Options
 		virtual void    slotButtonClicked(int button);
+		void            contentsChanged();
+
 	private slots:
 		void            slotRecurTypeChange(int repeatType);
 		void            slotRecurFrequencyChange();

@@ -100,6 +100,7 @@ class RecurrenceEdit : public QFrame
 		void          typeChanged(int recurType);   // returns a RepeatType value
 		void          frequencyChanged();
 		void          repeatNeedsInitialisation();
+		void          contentsChanged();
 
 	protected:
 		virtual void  showEvent(QShowEvent*);
