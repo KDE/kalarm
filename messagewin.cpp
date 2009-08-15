@@ -1303,13 +1303,14 @@ void AudioThread::run()
 	mAudioObject->setCurrentSource(source);
 	Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);
 	mPath = Phonon::createPath(mAudioObject, output);
-	output->setVolume(mVolume);
+	float maxvol = qMax(mVolume, mFadeVolume);
+	output->setVolume(maxvol);
 	if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
 	{
 		Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(mAudioObject);
+		fader->setVolume(mFadeVolume / maxvol);
+		fader->fadeTo(mVolume / maxvol, mFadeSeconds * 1000);
 		mPath.insertEffect(fader);
-		fader->setVolume(mFadeVolume);
-		fader->fadeTo(mVolume, mFadeSeconds * 1000);
 	}
 	connect(mAudioObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), SLOT(playStateChanged(Phonon::State)), Qt::DirectConnection);
 	connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()), Qt::DirectConnection);
