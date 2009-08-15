@@ -336,6 +336,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		mTemplateTime->setWhatsThis(i18nc("@info:whatsthis",
 		      "<para>Enter the start time for alarms based on this template.</para><para>%1</para>",
 		      TimeSpinBox::shiftWhatsThis()));
+		connect(mTemplateTime, SIGNAL(valueChanged(int)), SLOT(contentsChanged()));
 		box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
 		box->setFixedHeight(box->sizeHint().height());
 		grid->addWidget(box, 0, 1, Qt::AlignLeft);
@@ -644,6 +645,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
 	if (mShowInKorganizer)
 		mSavedShowInKorganizer = mShowInKorganizer->isChecked();
 	mSavedRecurrenceType   = mRecurrenceEdit->repeatType();
+	mSavedDeferTime        = mDeferDateTime.kDateTime();
 }
 
 /******************************************************************************
@@ -700,7 +702,7 @@ void EditAlarmDlg::contentsChanged()
 	// Don't do anything if it's a new alarm or we're still initialising
 	// (i.e. mSavedEvent null).
 	if (mSavedEvent  &&  button(Ok))
-		button(Ok)->setEnabled(stateChanged());
+		button(Ok)->setEnabled(stateChanged() || mDeferDateTime.kDateTime() != mSavedDeferTime);
 }
 
 /******************************************************************************

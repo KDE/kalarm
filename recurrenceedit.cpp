@@ -370,7 +370,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mExcludeHolidays->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Do not trigger the alarm on holidays.</para>"
 	      "<para>You can specify your holiday region in the Configuration dialog.</para>"));
-	connect(mExcludeHolidays, SIGNAL(stateChanged(int)), SIGNAL(contentsChanged()));
+	connect(mExcludeHolidays, SIGNAL(toggled(bool)), SIGNAL(contentsChanged()));
 	vlayout->addWidget(mExcludeHolidays);
 
 	mWorkTimeOnly = new CheckBox(i18nc("@option:check", "Only during working time"), mExceptionGroup);
@@ -378,7 +378,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	mWorkTimeOnly->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Only execute the alarm during working hours, on working days.</para>"
 	      "<para>You can specify working days and hours in the Configuration dialog.</para>"));
-	connect(mWorkTimeOnly, SIGNAL(stateChanged(int)), SIGNAL(contentsChanged()));
+	connect(mWorkTimeOnly, SIGNAL(toggled(bool)), SIGNAL(contentsChanged()));
 	vlayout->addWidget(mWorkTimeOnly);
 
 	topLayout->addStretch();

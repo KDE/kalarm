@@ -199,6 +199,7 @@ class EditAlarmDlg : public KDialog
 		int                 mSavedTemplateAfterTime;// mTemplateAfterTime value
 		QString             mSavedTextFileCommandMessage;  // mTextMessageEdit/mFileMessageEdit/mCmdCommandEdit/mEmailMessageEdit value
 		KDateTime           mSavedDateTime;         // mTimeWidget value
+		KDateTime           mSavedDeferTime;        // mDeferDateTime value
 		int                 mSavedRecurrenceType;   // RecurrenceEdit::RepeatType value
 		int                 mSavedLateCancel;       // mLateCancel value
 		bool                mSavedShowInKorganizer; // mShowInKorganizer status
