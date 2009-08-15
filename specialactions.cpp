@@ -102,9 +102,6 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
                                      bool cancelOnError, bool enableCancelOnError, QWidget* parent)
 	: KDialog(parent)
 {
-#ifdef __GNUC__
-#warning Dialogue appears below edit dialogue when Edit button in alarm message window is clicked
-#endif
 	setCaption(i18nc("@title:window", "Special Alarm Actions"));
 	setButtons(Ok|Cancel);
 	setDefaultButton(Ok);
