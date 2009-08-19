@@ -1512,9 +1512,11 @@ void MessageWin::showEvent(QShowEvent* se)
 	if (mShown)
 		return;
 	if (mErrorWindow  ||  mAlarmType == KAAlarm::INVALID_ALARM)
+	{
 		// Don't bother repositioning error messages,
 		// and invalid alarms should be deleted anyway.
 		enableButtons();
+	}
 	else
 	{
 		/* Set the window size.
