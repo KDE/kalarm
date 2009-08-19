@@ -953,6 +953,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 void MessageWin::redisplayAlarms()
 {
 	AlarmCalendar* cal = AlarmCalendar::displayCalendar();
+kDebug();
 	if (cal->isOpen())
 	{
 		KAEvent event;
@@ -965,8 +966,13 @@ void MessageWin::redisplayAlarms()
 			if (!findEvent(event.id()))
 			{
 				// This event should be displayed, but currently isn't being
-				kDebug() << event.id();
 				KAAlarm alarm = event.convertDisplayingAlarm();
+				if (alarm.type() == KAAlarm::INVALID_ALARM)
+				{
+					kError() << "Invalid alarm: id=" << event.id();
+					continue;
+				}
+				kDebug() << event.id();
 				bool login = alarm.repeatAtLogin();
 				int flags = NO_RESCHEDULE | (login ? NO_DEFER : 0) | NO_INIT_VIEW;
 				MessageWin* win = new MessageWin(&event, alarm, flags);
@@ -1503,10 +1509,12 @@ QSize MessageWin::sizeHint() const
 void MessageWin::showEvent(QShowEvent* se)
 {
 	MainWindowBase::showEvent(se);
-	if (mShown  ||  mAlarmType == KAAlarm::INVALID_ALARM)
+	if (mShown)
 		return;
-	if (mErrorWindow)
-		enableButtons();    // don't bother repositioning error messages
+	if (mErrorWindow  ||  mAlarmType == KAAlarm::INVALID_ALARM)
+		// Don't bother repositioning error messages,
+		// and invalid alarms should be deleted anyway.
+		enableButtons();
 	else
 	{
 		/* Set the window size.
