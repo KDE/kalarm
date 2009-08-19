@@ -818,6 +818,8 @@ void MessageWin::saveProperties(KConfigGroup& config)
 	{
 		config.writeEntry("EventID", mEventID);
 		config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
+		if (mAlarmType == KAAlarm::INVALID_ALARM)
+			kError() << "Invalid alarm: id=" << mEventID << ", alarm count=" << mEvent.alarmCount();
 		config.writeEntry("Message", mMessage);
 		config.writeEntry("Type", static_cast<int>(mAction));
 		config.writeEntry("Font", mFont);
@@ -871,6 +873,11 @@ void MessageWin::readProperties(const KConfigGroup& config)
 	mInvalid             = config.readEntry("Invalid", false);
 	mEventID             = config.readEntry("EventID");
 	mAlarmType           = static_cast<KAAlarm::Type>(config.readEntry("AlarmType", 0));
+	if (mAlarmType == KAAlarm::INVALID_ALARM)
+	{
+		mInvalid = true;
+		kError() << "Invalid alarm: id=" << mEventID;
+	}
 	mMessage             = config.readEntry("Message");
 	mAction              = static_cast<KAEventData::Action>(config.readEntry("Type", 0));
 	mFont                = config.readEntry("Font", QFont());
@@ -1496,7 +1503,7 @@ QSize MessageWin::sizeHint() const
 void MessageWin::showEvent(QShowEvent* se)
 {
 	MainWindowBase::showEvent(se);
-	if (mShown)
+	if (mShown  ||  mAlarmType == KAAlarm::INVALID_ALARM)
 		return;
 	if (mErrorWindow)
 		enableButtons();    // don't bother repositioning error messages

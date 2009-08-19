@@ -5,10 +5,11 @@
       xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
 
-  <include>qfont.h</include>
-  <include>qcolor.h</include>
+  <include>QFont</include>
+  <include>QColor</include>
   <include>qnamespace.h</include>
-  <include>kglobalsettings.h</include>
+  <include>KGlobalSettings</include>
+  <include>KColorScheme</include>
   <include>"timeperiod.h"</include>
 
   <kcfgfile name="kalarmrc"/>
@@ -64,12 +65,12 @@
     <entry name="DefaultFgColour" key="MessageForegroundColour" type="Color">
       <label context="@label">Foreground color</label>
       <whatsthis context="@info:whatsthis">Default foreground color for alarm message windows.</whatsthis>
-      <default code="true">Qt::black</default>
+      <default code="true">KColorScheme(QPalette::Active).foreground().color()</default>
     </entry>
     <entry name="DefaultBgColour" key="MessageBackgroundColour" type="Color">
       <label context="@label">Background color</label>
       <whatsthis context="@info:whatsthis">Default background color for alarm message windows.</whatsthis>
-      <default code="true">Qt::red</default>
+      <default code="true">KColorScheme(QPalette::Active).background(KColorScheme::NegativeBackground).color()</default>
     </entry>
     <entry name="MessageFont" type="Font">
       <label context="@label">Message font</label>
@@ -199,13 +200,13 @@
     <entry name="DisabledColour" type="Color">
       <label context="@label">Disabled alarm color</label>
       <whatsthis context="@info:whatsthis">Choose the text color in the alarm list for disabled alarms.</whatsthis>
-      <default code="true">Qt::lightGray</default>
+      <default code="true">KColorScheme(QPalette::Disabled).foreground(KColorScheme::InactiveText).color()</default>
       <emit signal="disabledColourChanged"/>
     </entry>
     <entry name="ArchivedColour" key="ExpiredColour" type="Color">
       <label context="@label">Archived alarm color</label>
       <whatsthis context="@info:whatsthis">Choose the text color in the alarm list for archived alarms.</whatsthis>
-      <default code="true">Qt::darkRed</default>
+      <default code="true">KColorScheme(QPalette::Active).foreground(KColorScheme::VisitedText).color()</default>
       <emit signal="archivedColourChanged"/>
     </entry>
     <entry name="ArchivedKeepDays" key="ExpiredKeepDays" type="Int">
