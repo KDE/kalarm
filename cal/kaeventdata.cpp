@@ -1940,36 +1940,6 @@ bool KAEventData::setDisplaying(const KAEventData& event, KAAlarm::Type alarmTyp
 }
 
 /******************************************************************************
-* Return the original alarm which the displaying alarm refers to.
-*/
-KAAlarm KAEventData::convertDisplayingAlarm() const
-{
-	KAAlarm al;
-	if (mDisplaying)
-	{
-		al = alarm(KAAlarm::DISPLAYING_ALARM);
-		if (mDisplayingFlags & REPEAT_AT_LOGIN)
-		{
-			al.mRepeatAtLogin = true;
-			al.mType = KAAlarm::AT_LOGIN__ALARM;
-		}
-		else if (mDisplayingFlags & DEFERRAL)
-		{
-			al.mDeferred = true;
-			al.mType = (mDisplayingFlags == (REMINDER | DATE_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_DATE__ALARM
-			         : (mDisplayingFlags == (REMINDER | TIME_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_TIME__ALARM
-			         : (mDisplayingFlags == DATE_DEFERRAL) ? KAAlarm::DEFERRED_DATE__ALARM
-			         : KAAlarm::DEFERRED_TIME__ALARM;
-		}
-		else if (mDisplayingFlags & REMINDER)
-			al.mType = KAAlarm::REMINDER__ALARM;
-		else
-			al.mType = KAAlarm::MAIN__ALARM;
-	}
-	return al;
-}
-
-/******************************************************************************
 * Reinstate the original event from the 'displaying' event.
 */
 void KAEventData::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
@@ -1986,6 +1956,35 @@ void KAEventData::reinstateFromDisplaying(const Event* kcalEvent, QString& resou
 		--mAlarmCount;
 		mUpdated = true;
 	}
+}
+
+/******************************************************************************
+* Return the original alarm which the displaying alarm refers to.
+* Note that the caller is responsible for ensuring that the event was a
+* displaying event, since this is normally called after
+* reinstateFromDisplaying(), which clears mDisplaying.
+*/
+KAAlarm KAEventData::convertDisplayingAlarm() const
+{
+	KAAlarm al = alarm(KAAlarm::DISPLAYING_ALARM);
+	if (mDisplayingFlags & REPEAT_AT_LOGIN)
+	{
+		al.mRepeatAtLogin = true;
+		al.mType = KAAlarm::AT_LOGIN__ALARM;
+	}
+	else if (mDisplayingFlags & DEFERRAL)
+	{
+		al.mDeferred = true;
+		al.mType = (mDisplayingFlags == (REMINDER | DATE_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_DATE__ALARM
+			 : (mDisplayingFlags == (REMINDER | TIME_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_TIME__ALARM
+			 : (mDisplayingFlags == DATE_DEFERRAL) ? KAAlarm::DEFERRED_DATE__ALARM
+			 : KAAlarm::DEFERRED_TIME__ALARM;
+	}
+	else if (mDisplayingFlags & REMINDER)
+		al.mType = KAAlarm::REMINDER__ALARM;
+	else
+		al.mType = KAAlarm::MAIN__ALARM;
+	return al;
 }
 
 /******************************************************************************
