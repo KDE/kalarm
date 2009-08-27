@@ -1,0 +1,7 @@
+[Misc]
+Name=KAlarm Event Serializer
+Comment=An Akonadi serializer plugin for KAlarm events
+
+[Plugin]
+Type=application/x-vnd.akonadi.kalarm-calendar
+X-KDE-Library=akonadi_serializer_kcal

@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=KAlarm Calendar File
+Comment=Loads data from a KAlarm calendar file
+Type=AkonadiResource
+Exec=akonadi_kalarm_resource
+Icon=kalarm
+
+X-Akonadi-MimeTypes=application/x-vnd.akonadi.kalarm-calendar,application/x-vnd.akonadi.kalarm-calendar.active,application/x-vnd.akonadi.kalarm-calendar.archived,application/x-vnd.akonadi.kalarm-calendar.template
+X-Akonadi-Capabilities=Resource
+X-Akonadi-Identifier=akonadi_kalarm_resource
