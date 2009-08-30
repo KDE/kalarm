@@ -1296,13 +1296,13 @@ bool Private::startKMailMinimised()
 #endif
 }
 
-#ifdef Q_WS_X11
 /******************************************************************************
 * Called when a window is created, to minimise it.
 * This code is taken from kstart in kdebase.
 */
 void Private::windowAdded(WId w)
 {
+#ifdef Q_WS_X11
 	static const int SUPPORTED_TYPES = NET::NormalMask | NET::DesktopMask | NET::DockMask
 	                                 | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
 	                                 | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
@@ -1333,8 +1333,8 @@ kDebug()<<"1";
 	XMapWindow(QX11Info::display(), w);
 	XSync(QX11Info::display(), False);
 	QApplication::flush();
-}
 #endif
+}
 
 /******************************************************************************
 * The "Don't show again" option for error messages is personal to the user on a
