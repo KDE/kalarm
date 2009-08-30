@@ -22,6 +22,7 @@
 #define FUNCTIONS_P_H
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
+#include <kwindowsystem.h>
 #include <QObject>
 
 namespace KAlarm
