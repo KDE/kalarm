@@ -47,6 +47,8 @@ inline int weekDay_to_localeDayInWeek(int weekDay)  { return (weekDay + 7 - loca
  */
 inline int localeDayInWeek_to_weekDay(int index)  { return (index + localeFirstDayOfWeek() - 1) % 7 + 1; }
 
+uint defaultWorkDays();
+
 } // namespace KAlarm
 
 #endif // LOCALE_H
