@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -120,6 +120,7 @@ class TimePrefTab : public PrefsTabBase
 		QCheckBox*    mWorkDays[7];
 		TimeEdit*     mWorkStart;
 		TimeEdit*     mWorkEnd;
+		TimeSpinBox*  mKOrgEventDuration;
 };
 
 
