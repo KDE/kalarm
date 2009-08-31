@@ -22,9 +22,7 @@
 #define FUNCTIONS_P_H
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
-#ifdef Q_WS_X11
 #include <kwindowsystem.h>
-#endif
 #include <QObject>
 
 namespace KAlarm
@@ -45,9 +43,7 @@ class Private : public QObject
 	}
 
     public slots:
-#ifdef Q_WS_X11
 	void windowAdded(WId);
-#endif
 
     private:
 	static Private* mInstance;
