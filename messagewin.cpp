@@ -953,7 +953,6 @@ void MessageWin::readProperties(const KConfigGroup& config)
 void MessageWin::redisplayAlarms()
 {
 	AlarmCalendar* cal = AlarmCalendar::displayCalendar();
-kDebug();
 	if (cal->isOpen())
 	{
 		KAEvent event;

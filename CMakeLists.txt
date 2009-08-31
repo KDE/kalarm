@@ -14,6 +14,7 @@ ${CMAKE_CURRENT_BINARY_DIR}
 ) 
 
 add_subdirectory( cal ) 
+add_subdirectory( akonadi ) 
 add_subdirectory( resources ) 
 add_subdirectory( appicons ) 
 add_subdirectory( pixmaps ) 

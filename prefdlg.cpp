@@ -722,6 +722,29 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 	itemBox->leftAlign();
 	box->setFixedHeight(box->sizeHint().height());
 
+	// KOrganizer event duration
+	group = new QGroupBox(i18nc("@title:group", "KOrganizer"), topWidget());
+	layout = new QVBoxLayout(group);
+	layout->setMargin(KDialog::marginHint());
+	layout->setSpacing(KDialog::spacingHint());
+
+	itemBox = new ItemBox(group);
+	itemBox->setMargin(0);
+	layout->addWidget(itemBox);
+	box = new KHBox(itemBox);   // this is to control the QWhatsThis text display area
+	box->setMargin(0);
+	box->setSpacing(KDialog::spacingHint());
+	label = new QLabel(i18nc("@label:spinbox", "KOrganizer event duration:"), box);
+	addAlignedLabel(label);
+	mKOrgEventDuration = new TimeSpinBox(1, 5999, box);
+	mKOrgEventDuration->setMinimumSize(mKOrgEventDuration->sizeHint());
+	box->setWhatsThis(i18nc("@info:whatsthis",
+	      "<para>Enter the event duration in hours and minutes, for alarms which are copied to KOrganizer.</para>"
+	      "<para>%1</para>", TimeSpinBox::shiftWhatsThis()));
+	label->setBuddy(mKOrgEventDuration);
+	itemBox->setStretchFactor(new QWidget(itemBox), 1);    // left adjust the controls
+	itemBox->setFixedHeight(itemBox->sizeHint().height());
+
 	topLayout()->addStretch();    // top adjust the widgets
 }
 
@@ -768,6 +791,7 @@ void TimePrefTab::restore(bool)
 		bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
 		mWorkDays[i]->setChecked(x);
 	}
+	mKOrgEventDuration->setValue(Preferences::kOrgEventDuration());
 }
 
 void TimePrefTab::apply(bool syncToDisc)
@@ -797,6 +821,10 @@ void TimePrefTab::apply(bool syncToDisc)
 		if (mWorkDays[i]->isChecked())
 			workDays.setBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1, 1);
 	Preferences::setWorkDays(workDays);
+	Preferences::setKOrgEventDuration(mKOrgEventDuration->value());
+	t = mKOrgEventDuration->value();
+	if (t != Preferences::kOrgEventDuration())
+		Preferences::setKOrgEventDuration(t);
 	PrefsTabBase::apply(syncToDisc);
 }
 

@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=KAlarm Calendar File
+Name[uk]=Файл календаря KAlarm
+Name[x-test]=xxKAlarm Calendar Filexx
+Name[zh_TW]=KAlarm 行事曆檔案
+Comment=Loads data from a KAlarm calendar file
+Comment[uk]=Завантажує дані з файла календаря KAlarm
+Comment[x-test]=xxLoads data from a KAlarm calendar filexx
+Comment[zh_TW]=從 KAlarm 行事曆檔載入資料
+Type=AkonadiResource
+Exec=akonadi_kalarm_resource
+Icon=kalarm
+
+X-Akonadi-MimeTypes=application/x-vnd.akonadi.kalarm-calendar,application/x-vnd.akonadi.kalarm-calendar.active,application/x-vnd.akonadi.kalarm-calendar.archived,application/x-vnd.akonadi.kalarm-calendar.template
+X-Akonadi-Capabilities=Resource
+X-Akonadi-Identifier=akonadi_kalarm_resource

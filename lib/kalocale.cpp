@@ -59,4 +59,25 @@ QString weekDayName(int day, const KLocale* locale)
 	return QString();
 }
 
+/******************************************************************************
+* Return the default work days in the week, as a bit mask.
+* They are determined by the start and end work days in system settings.
+*/
+uint defaultWorkDays()
+{
+	KLocale* locale = KGlobal::locale();
+	int end = locale->workingWeekEndDay() - 1;
+	uint days = 0;
+	for (int day = locale->workingWeekStartDay() - 1;  ; )
+	{
+		days |= 1 << day;
+		if (day == end)
+			break;
+		++day;
+		if (day >= 7)
+			day = 0;
+	}
+	return days;
+}
+
 } // namespace KAlarm

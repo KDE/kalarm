@@ -73,6 +73,7 @@
 #include <kpimidentities/identitymanager.h>
 #include <kpimidentities/identity.h>
 #include <kcal/person.h>
+#include <kcal/duration.h>
 #include <kholidays/holidays.h>
 #include <ktoolinvocation.h>
 
@@ -1755,6 +1756,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 		}
 	}
 	kcalEvent->setOrganizer(KCal::Person(QString(), userEmail));
+	kcalEvent->setDuration(KCal::Duration(Preferences::kOrgEventDuration() * 60, KCal::Duration::Seconds));
 
 	// Translate the event into string format
 	KCal::ICalFormat format;

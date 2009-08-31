@@ -11,6 +11,7 @@
   <include>KGlobalSettings</include>
   <include>KColorScheme</include>
   <include>"timeperiod.h"</include>
+  <include>"kalocale.h"</include>
 
   <kcfgfile name="kalarmrc"/>
 
@@ -194,7 +195,7 @@
     <entry name="Base_WorkDays" key="WorkDays" type="UInt">
       <label context="@label">Working days</label>
       <whatsthis context="@info:whatsthis">OR'ed bits indicating which days of the week are work days, 1 = Monday ... 64 = Sunday.</whatsthis>
-      <default>31</default>
+      <default code="true">KAlarm::defaultWorkDays()</default>
       <emit signal="base_WorkTimeChanged"/>
     </entry>
     <entry name="DisabledColour" type="Color">
@@ -219,6 +220,11 @@
       <default>7</default>
       <min>-1</min>
       <emit signal="archivedKeepDaysChanged"/>
+    </entry>
+    <entry name="KOrgEventDuration" type="Int">
+      <label context="@label">KOrganizer event duration</label>
+      <whatsthis context="@info:whatsthis">Enter the event duration in minutes, for alarms which are copied to KOrganizer.</whatsthis>
+      <default>60</default>
     </entry>
   </group>
   <group name="Defaults">
