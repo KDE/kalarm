@@ -1,12 +1,16 @@
 [Misc]
 Name=KAlarm Event Serializer
 Name[nds]=KAlarm-Begeefnis-Reegmoduul
+Name[pt]=Serializador de Eventos do KAlarm
+Name[pt_BR]=Serializador de eventos do KAlarm
 Name[sv]=Kalarm händelseserialisering
 Name[uk]=Серіалізатор подій KAlarm
 Name[x-test]=xxKAlarm Event Serializerxx
 Name[zh_TW]=KAlarm 事件序列器
 Comment=An Akonadi serializer plugin for KAlarm events
 Comment[nds]=Akonadi-Inreegmoduul för KAlarm-Begeefnissen
+Comment[pt]=Um 'plugin' de serialização do Akonadi para os eventos do KAlarm
+Comment[pt_BR]=Um plug-in de serialização do Akonadi para eventos do KAlarm
 Comment[sv]=Ett insticksprogram till Akonadi för serialisering av Kalarm händelser
 Comment[uk]=Втулок серіалізації Akonadi для подій KAlarm
 Comment[x-test]=xxAn Akonadi serializer plugin for KAlarm eventsxx
