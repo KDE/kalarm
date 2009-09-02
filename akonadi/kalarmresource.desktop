@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KAlarm Calendar File
 Name[nds]=KAlarm-Kalennerdatei
+Name[pt]=Ficheiro de Calendário do KAlarm
 Name[pt_BR]=Arquivo de calendário do KAlarm
 Name[sv]=Kalarm kalenderfil
 Name[uk]=Файл календаря KAlarm
@@ -8,6 +9,7 @@ Name[x-test]=xxKAlarm Calendar Filexx
 Name[zh_TW]=KAlarm 行事曆檔案
 Comment=Loads data from a KAlarm calendar file
 Comment[nds]=Laadt Daten ut en KAlarm-Kalennerdatei
+Comment[pt]=Carrega os dados de um ficheiro de calendário do KAlarm
 Comment[pt_BR]=Carrega os dados de um arquivo de calendário do KAlarm
 Comment[sv]=Laddar data från en Kalarm kalenderfil
 Comment[uk]=Завантажує дані з файла календаря KAlarm
