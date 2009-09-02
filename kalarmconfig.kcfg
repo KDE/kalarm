@@ -224,7 +224,7 @@
     <entry name="KOrgEventDuration" type="Int">
       <label context="@label">KOrganizer event duration</label>
       <whatsthis context="@info:whatsthis">Enter the event duration in minutes, for alarms which are copied to KOrganizer.</whatsthis>
-      <default>60</default>
+      <default>0</default>
     </entry>
   </group>
   <group name="Defaults">
