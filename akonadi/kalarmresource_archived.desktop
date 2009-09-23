@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=KAlarm Archived Alarms
+Comment=Loads data from a KAlarm archived alarm calendar file
+Type=AkonadiResource
+Exec=akonadi_kalarm_resource
+Icon=kalarm
+X-Akonadi-MimeTypes=application/x-vnd.kde.alarms.archived
+X-Akonadi-Capabilities=Resource
+X-Akonadi-Identifier=akonadi_kalarm_archived_resource

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=KAlarm Templates
+Comment=Loads data from a KAlarm alarm template file
+Type=AkonadiResource
+Exec=akonadi_kalarm_resource
+Icon=kalarm
+X-Akonadi-MimeTypes=application/x-vnd.kde.alarms.template
+X-Akonadi-Capabilities=Resource
+X-Akonadi-Identifier=akonadi_kalarm_template_resource

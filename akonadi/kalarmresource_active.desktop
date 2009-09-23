@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=KAlarm Active Alarms
+Comment=Loads data from a KAlarm active alarm calendar file
+Type=AkonadiResource
+Exec=akonadi_kalarm_resource
+Icon=kalarm
+X-Akonadi-MimeTypes=application/x-vnd.kde.alarms.active
+X-Akonadi-Capabilities=Resource
+X-Akonadi-Identifier=akonadi_kalarm_active_resource

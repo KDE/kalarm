@@ -44,9 +44,16 @@ KAlarmResource::KAlarmResource(const QString& id)
       mMimeVisitor(new KAlarmMimeTypeVisitor())
 {
     QStringList mimeTypes;
-    mimeTypes << QLatin1String("application/x-vnd.kde.alarms")
-              << MIME_ACTIVE << MIME_ARCHIVED << MIME_TEMPLATE;
-    initialise(mimeTypes, "office-calendar"); //?????
+    if (id.contains("_active"))
+        mimeTypes << MIME_ACTIVE;
+    else if (id.contains("_archived"))
+        mimeTypes << MIME_ARCHIVED;
+    else if (id.contains("_template"))
+        mimeTypes << MIME_TEMPLATE;
+    else
+        mimeTypes << QLatin1String("application/x-vnd.kde.alarms")
+                  << MIME_ACTIVE << MIME_ARCHIVED << MIME_TEMPLATE;
+    initialise(mimeTypes, "kalarm");
 }
 
 KAlarmResource::~KAlarmResource()
