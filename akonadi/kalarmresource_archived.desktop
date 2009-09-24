@@ -1,6 +1,14 @@
 [Desktop Entry]
 Name=KAlarm Archived Alarms
+Name[nds]=Aflopen KAlarm-Alarms
+Name[pt]=Alarmes Arquivados do KAlarm
+Name[sv]=Arkiverade alarm i Kalarm
+Name[uk]=Застарілі нагадування KAlarm
 Comment=Loads data from a KAlarm archived alarm calendar file
+Comment[nds]=Laadt Daten ut en KAlarm-Kalennerdatei för aflopen Alarms
+Comment[pt]=Carrega os dados de um ficheiro de calendário de alarmes arquivados do KAlarm
+Comment[sv]=Laddar data från en Kalarm-kalenderfil med arkiverade alarm
+Comment[uk]=Завантажує дані з файла календаря застарілих нагадувань KAlarm
 Type=AkonadiResource
 Exec=akonadi_kalarm_resource
 Icon=kalarm
