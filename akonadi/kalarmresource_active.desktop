@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=KAlarm Active Alarms
+Name[nds]=Aktiev KAlarm-Alarms
+Name[pt]=Alarmes Activos do KAlarm
+Name[pt_BR]=Alarmes ativos do KAlarm
+Name[sv]=Aktiva alarm i Kalarm
+Name[uk]=Задіяні нагадування KAlarm
 Comment=Loads data from a KAlarm active alarm calendar file
+Comment[nds]=Laadt Daten ut en KAlarm-Kalennerdatei för aktiev Alarms
+Comment[pt]=Carrega os dados de um ficheiro de calendário de alarmes activos do KAlarm
+Comment[sv]=Laddar data från en Kalarm-kalenderfil med aktiva alarm
+Comment[uk]=Завантажує дані з файла календаря задіяних нагадувань KAlarm
 Type=AkonadiResource
 Exec=akonadi_kalarm_resource
 Icon=kalarm

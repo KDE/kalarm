@@ -1,6 +1,15 @@
 [Desktop Entry]
 Name=KAlarm Templates
+Name[nds]=KAlarm-Vörlagen
+Name[pt]=Modelos do KAlarm
+Name[pt_BR]=Modelos do KAlarm
+Name[sv]=Mallar i Kalarm
+Name[uk]=Шаблони KAlarm
 Comment=Loads data from a KAlarm alarm template file
+Comment[nds]=Laadt Daten ut en KAlarm-Alarmvörlagendatei
+Comment[pt]=Carrega os dados de um ficheiro-modelo de alarmes do KAlarm
+Comment[sv]=Laddar data från en Kalarm-fil med alarmmallar
+Comment[uk]=Завантажує дані з файла шаблонів нагадувань KAlarm
 Type=AkonadiResource
 Exec=akonadi_kalarm_resource
 Icon=kalarm

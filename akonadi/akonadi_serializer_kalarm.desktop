@@ -18,12 +18,12 @@ Comment[nb]=Et Akonadi serialiserer-programtillegg for KAlarm-hendelser
 Comment[nds]=Akonadi-Inreegmoduul för KAlarm-Begeefnissen
 Comment[pt]=Um 'plugin' de serialização do Akonadi para os eventos do KAlarm
 Comment[pt_BR]=Um plug-in de serialização do Akonadi para eventos do KAlarm
-Comment[sv]=Ett insticksprogram till Akonadi för serialisering av Kalarm händelser
+Comment[sv]=Ett insticksprogram till Akonadi för serialisering av Kalarm-händelser
 Comment[tr]=KAlarm olayları için bir Akonadi sıralandırıcısı
 Comment[uk]=Втулок серіалізації Akonadi для подій KAlarm
 Comment[x-test]=xxAn Akonadi serializer plugin for KAlarm eventsxx
 Comment[zh_TW]=KAlarm 事件使用的 Akonadi 序列器外掛程式
 
 [Plugin]
-Type=application/x-vnd.akonadi.kalarm-calendar
+Type=application/x-vnd.kde.alarms
 X-KDE-Library=akonadi_serializer_kcal

@@ -99,7 +99,9 @@ void KAlarmResource::itemAdded(const Akonadi::Item&  item, const Akonadi::Collec
         return;
     EventPtr e = item.payload<EventPtr>();
     KCal::Event* kcalEvent = new KCal::Event;
+#ifdef __GNUC__
 #warning Should updateKCalEvent() third parameter be true for archived events?
+#endif
     e->updateKCalEvent(kcalEvent, false, false);
     calendar()->addIncidence(kcalEvent);
 
@@ -130,7 +132,9 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         }
         else
         {
+#ifdef __GNUC__
 #warning Should updateKCalEvent() third parameter be true for archived events?
+#endif
             payload->updateKCalEvent(static_cast<KCal::Event*>(incidence), false, false);
             calendar()->setModified(true);
         }
@@ -139,7 +143,9 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     {
         // not in the calendar yet, should not happen -> add it
         KCal::Event* kcalEvent = new KCal::Event;
+#ifdef __GNUC__
 #warning Should updateKCalEvent() third parameter be true for archived events?
+#endif
         payload->updateKCalEvent(kcalEvent, false, false);
         calendar()->addIncidence(kcalEvent);
     }
