@@ -25,5 +25,5 @@ Comment[x-test]=xxAn Akonadi serializer plugin for KAlarm eventsxx
 Comment[zh_TW]=KAlarm 事件使用的 Akonadi 序列器外掛程式
 
 [Plugin]
-Type=application/x-vnd.kde.alarms
-X-KDE-Library=akonadi_serializer_kcal
+Type=application/x-vnd.kde.alarms,application/x-vnd.kde.alarms.active,application/x-vnd.kde.alarms.archived,application/x-vnd.kde.alarms.template
+X-KDE-Library=akonadi_serializer_kalarm

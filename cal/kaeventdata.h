@@ -431,8 +431,9 @@ public:
 #else
 		void               dumpDebug() const;
 #endif
+		static QByteArray  icalProductId();
 		static int         currentCalendarVersion();
-		static QString     currentCalendarVersionString();
+		static QByteArray  currentCalendarVersionString();
 		static bool        adjustStartOfDay(const KCal::Event::List&, const QTime& startOfDay, const KTimeZone& timeZone);
 		static bool        convertKCalEvents(KCal::CalendarLocal&, int version, bool adjustSummerTime, const QTime& startOfDay);
 //		static bool        convertRepetitions(KCal::CalendarLocal&);

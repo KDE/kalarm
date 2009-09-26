@@ -56,11 +56,6 @@
 
 using namespace KCal;
 
-QString AlarmCalendar::icalProductId()
-{
-	return QString::fromLatin1("-//K Desktop Environment//NONSGML " KALARM_NAME " " KALARM_VERSION "//EN");
-}
-
 static const QString displayCalendarName = QLatin1String("displaying.ics");
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = 0;
@@ -91,7 +86,7 @@ bool AlarmCalendar::initialiseCalendars()
 	resources->showProgress(true);
 	mResourcesCalendar = new AlarmCalendar();
 	mDisplayCalendar = new AlarmCalendar(displayCal, KCalEvent::DISPLAYING);
-	CalFormat::setApplication(QLatin1String(KALARM_NAME), icalProductId());
+	CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KAEventData::icalProductId()));
 	return true;
 }
 

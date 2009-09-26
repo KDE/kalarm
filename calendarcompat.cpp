@@ -49,7 +49,7 @@ static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION
 */
 void CalendarCompat::setID(KCal::CalendarLocal& calendar)
 {
-	calendar.setCustomProperty(KCalendar::APPNAME, VERSION_PROPERTY, KAEventData::currentCalendarVersionString());
+	calendar.setCustomProperty(KCalendar::APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEventData::currentCalendarVersionString()));
 }
 
 /******************************************************************************

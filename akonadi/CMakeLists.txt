@@ -46,8 +46,18 @@ qt4_add_dbus_adaptor(kalarmresource_SRCS
 
 kde4_add_executable(akonadi_kalarm_resource RUN_UNINSTALLED ${kalarmresource_SRCS})
 
-target_link_libraries(akonadi_kalarm_resource akonadi-kcal ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KIO_LIBS} kalarm_calendar)
+target_link_libraries(akonadi_kalarm_resource akonadi-kcal kalarm_calendar ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KIO_LIBS})
 
 install(TARGETS akonadi_kalarm_resource ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+########### next target ###############
+
+set(akonadi_serializer_kalarm_SRCS
+    akonadi_serializer_kalarm.cpp
+)
+
+kde4_add_plugin(akonadi_serializer_kalarm ${akonadi_serializer_kalarm_SRCS})
+target_link_libraries(akonadi_serializer_kalarm kalarm_calendar ${KDEPIMLIBS_KCAL_LIBS} ${KDEPIMLIBS_AKONADI_LIBS} ${KDE4_KDECORE_LIBS})
+install(TARGETS akonadi_serializer_kalarm DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES akonadi_serializer_kalarm.desktop DESTINATION ${DATA_INSTALL_DIR}/akonadi/plugins/serializer)
