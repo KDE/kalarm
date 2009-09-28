@@ -35,8 +35,13 @@ using namespace KCal;
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEventData::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
-QString KAEventData::currentCalendarVersionString()  { return QString::fromLatin1("1.9.10"); }
-int     KAEventData::currentCalendarVersion()        { return KAlarm::Version(1,9,10); }
+QByteArray KAEventData::currentCalendarVersionString()  { return QByteArray("1.9.10"); }
+int        KAEventData::currentCalendarVersion()        { return KAlarm::Version(1,9,10); }
+
+QByteArray KAEventData::icalProductId()
+{
+	return QByteArray("-//K Desktop Environment//NONSGML " KALARM_NAME " " KALARM_VERSION "//EN");
+}
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.

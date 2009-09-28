@@ -109,6 +109,9 @@ if (KMAIL_SUPPORTED)
 endif (KMAIL_SUPPORTED)
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
+kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
+qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmresourcesettings KAlarmResourceSettings)
+
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
 #if (UNIX)

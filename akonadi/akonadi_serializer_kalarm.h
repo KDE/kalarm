@@ -1,5 +1,5 @@
 /*
- *  kalarmeventvisitor.h  -  Checks whether Incidences are Events
+ *  akonadi_serializer_kalarm.h  -  Akonadi resource serializer for KAlarm
  *  Program:  kalarm
  *  Copyright © 2009 by David Jarvie <djarvie@kde.org>
  *
@@ -17,32 +17,31 @@
  *  along with this library; see the file COPYING.LIB.  If not, write to the
  *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  02110-1301, USA.
-*/
+ */
 
-#ifndef KALARMMIMETYPEVISITOR_H
-#define KALARMMIMETYPEVISITOR_H
+#ifndef AKONADI_SERIALIZER_KALARM_H
+#define AKONADI_SERIALIZER_KALARM_H
 
-#include <kcal/incidence.h>
+#include <QtCore/QObject>
 
-class KAlarmMimeTypeVisitor : public KCal::IncidenceBase::Visitor
+#include <akonadi/itemserializerplugin.h>
+#include <kcal/icalformat.h>
+
+class KAEventData;
+
+class SerializerPluginKAlarm : public QObject, public Akonadi::ItemSerializerPlugin
 {
-public:
-    KAlarmMimeTypeVisitor()  {}
+    Q_OBJECT
+    Q_INTERFACES(Akonadi::ItemSerializerPlugin)
 
-    /** Returns true if it is an Event. */
-    virtual bool visit(KCal::Event* event)  { return event; }
+  public:
+    bool deserialize(Akonadi::Item& item, const QByteArray& label, QIODevice& data, int version);
+    void serialize(const Akonadi::Item& item, const QByteArray& label, QIODevice& data, int& version);
 
-    /** Returns false because it is not an Event. */
-    virtual bool visit(KCal::Todo*)  { return false; }
+  private:
+    QString mimeType(const KAEventData*);
 
-    /** Returns false because it is not an Event. */
-    virtual bool visit(KCal::Journal*)  { return false; }
-
-    /** Returns false because it is not an Event. */
-    virtual bool visit(KCal::FreeBusy*)  { return false; }
-
-    /** Determines whether an Incidence is an Event. */
-    bool isEvent(KCal::Incidence* i)  { return i->accept(*this); }
+    KCal::ICalFormat mFormat;
 };
 
-#endif
+#endif // AKONADI_SERIALIZER_KALARM_H

@@ -84,7 +84,6 @@ class AlarmCalendar : public QObject
 		QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
 		QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.url(); }
 
-		static QString        icalProductId();
 		static bool           initialiseCalendars();
 		static void           terminateCalendars();
 		static AlarmCalendar* resources()            { return mResourcesCalendar; }
