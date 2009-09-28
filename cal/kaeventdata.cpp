@@ -1195,11 +1195,10 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 		(flags += (mAutoClose ? AUTO_CLOSE_FLAG : LATE_CANCEL_FLAG)) += QString::number(mLateCancel);
 	if (mDeferDefaultMinutes)
 	{
-		flags += DEFER_FLAG;
 		QString param = QString::number(mDeferDefaultMinutes);
 		if (mDeferDefaultDateOnly)
 			param += 'D';
-		flags += param;
+		(flags += DEFER_FLAG) += param;
 	}
 	if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0)
 		(flags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
