@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 /******************************************************************************
 * Construct a widget with a group box and title.
 */
-AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent)
+AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, Mode mode, QWidget* parent)
 	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
@@ -68,7 +68,7 @@ AlarmTimeWidget::AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget
 /******************************************************************************
 * Construct a widget without a group box or title.
 */
-AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
+AlarmTimeWidget::AlarmTimeWidget(Mode mode, QWidget* parent)
 	: QFrame(parent),
 	  mMinDateTimeIsNow(false),
 	  mPastMax(false),
@@ -77,7 +77,7 @@ AlarmTimeWidget::AlarmTimeWidget(int mode, QWidget* parent)
 	init(mode);
 }
 
-void AlarmTimeWidget::init(int mode, const QString& title)
+void AlarmTimeWidget::init(Mode mode, const QString& title)
 {
 	static const QString recurText = i18nc("@info/plain",
 	                                       "If a recurrence is configured, the start date/time will be adjusted "
@@ -130,7 +130,7 @@ void AlarmTimeWidget::init(int mode, const QString& title)
 	      "<para>%2</para>", (mDeferring ? tzText : recurText), TimeSpinBox::shiftWhatsThis()));
 
 	mAnyTime = -1;    // current status is uninitialised
-	if (mDeferring)
+	if (mode == DEFER_TIME)
 	{
 		mAnyTimeAllowed = false;
 		mAnyTimeCheckBox = 0;

@@ -54,7 +54,7 @@ static const QString CONFIRM_ACK_FLAG      = QLatin1String("ACKCONF");
 static const QString KORGANIZER_FLAG       = QLatin1String("KORG");
 static const QString EXCLUDE_HOLIDAYS_FLAG = QLatin1String("EXHOLIDAYS");
 static const QString WORK_TIME_ONLY_FLAG   = QLatin1String("WORKTIME");
-static const QString DEFER_FLAG            = QLatin1String("DEFER");
+static const QString DEFER_FLAG            = QLatin1String("DEFER");   // default defer interval for this alarm
 static const QString LATE_CANCEL_FLAG      = QLatin1String("LATECANCEL");
 static const QString AUTO_CLOSE_FLAG       = QLatin1String("LATECLOSE");
 static const QString TEMPL_AFTER_TIME_FLAG = QLatin1String("TMPLAFTTIME");
@@ -232,6 +232,7 @@ void KAEventData::copy(const KAEventData& event)
 	mReminderMinutes         = event.mReminderMinutes;
 	mArchiveReminderMinutes  = event.mArchiveReminderMinutes;
 	mDeferDefaultMinutes     = event.mDeferDefaultMinutes;
+	mDeferDefaultDateOnly    = event.mDeferDefaultDateOnly;
 	mRevision                = event.mRevision;
 	mAlarmCount              = event.mAlarmCount;
 	mDeferral                = event.mDeferral;
@@ -305,6 +306,7 @@ void KAEventData::set(const Event* event)
 	mArchiveRepeatAtLogin   = false;
 	mDisplayingDefer        = false;
 	mDisplayingEdit         = false;
+	mDeferDefaultDateOnly   = false;
 	mArchiveReminderMinutes = 0;
 	mDeferDefaultMinutes    = 0;
 	mLateCancel             = 0;
@@ -363,7 +365,13 @@ void KAEventData::set(const Event* event)
 		}
 		else if (flags[i] == DEFER_FLAG)
 		{
-			int n = static_cast<int>(flags[i + 1].toUInt(&ok));
+			QString mins = flags[i + 1];
+			if (mins.endsWith('D'))
+			{
+				mDeferDefaultDateOnly = true;
+				mins.truncate(mins.length() - 1);
+			}
+			int n = static_cast<int>(mins.toUInt(&ok));
 			if (!ok)
 				continue;
 			mDeferDefaultMinutes = n;
@@ -978,6 +986,7 @@ void KAEventData::set(const KDateTime& dateTime, const QString& text, const QCol
 	mReminderMinutes        = 0;
 	mArchiveReminderMinutes = 0;
 	mDeferDefaultMinutes    = 0;
+	mDeferDefaultDateOnly   = false;
 	mArchiveRepeatAtLogin   = false;
 	mReminderOnceOnly       = false;
 	mDisplaying             = false;
@@ -1185,7 +1194,13 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 	if (mLateCancel)
 		(flags += (mAutoClose ? AUTO_CLOSE_FLAG : LATE_CANCEL_FLAG)) += QString::number(mLateCancel);
 	if (mDeferDefaultMinutes)
-		(flags += DEFER_FLAG) += QString::number(mDeferDefaultMinutes);
+	{
+		flags += DEFER_FLAG;
+		QString param = QString::number(mDeferDefaultMinutes);
+		if (mDeferDefaultDateOnly)
+			param += 'D';
+		flags += param;
+	}
 	if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0)
 		(flags += TEMPL_AFTER_TIME_FLAG) += QString::number(mTemplateAfterTime);
 	if (mKMailSerialNumber)
@@ -3527,6 +3542,8 @@ void KAEventData::dumpDebug() const
 		kDebug() << "-- mDeferralTime:" << mDeferralTime.toString();
 	}
 	kDebug() << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
+	if (mDeferDefaultMinutes)
+		kDebug() << "-- mDeferDefaultDateOnly:" << mDeferDefaultDateOnly;
 	if (mDisplaying)
 	{
 		kDebug() << "-- mDisplayingTime:" << mDisplayingTime.toString();

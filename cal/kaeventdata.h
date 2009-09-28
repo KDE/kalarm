@@ -300,7 +300,8 @@ public:
 		void               setReminder(int minutes, bool onceOnly);
 		bool               defer(const DateTime&, bool reminder, const QTime& startOfDay, bool adjustRecurrence = false);
 		void               cancelDefer();
-		void               setDeferDefaultMinutes(int minutes)               { mDeferDefaultMinutes = minutes;  mUpdated = true; }
+		void               setDeferDefaultMinutes(int minutes, bool dateOnly = false)
+ 		                                                                     { mDeferDefaultMinutes = minutes;  mDeferDefaultDateOnly = dateOnly;  mUpdated = true; }
 		bool               setDisplaying(const KAEventData&, KAAlarm::Type, const QString& resourceID, const KDateTime&, bool showEdit, bool showDefer);
 		void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
 		void               setArchive()                                      { mArchive = true;  mUpdated = true; }
@@ -371,6 +372,7 @@ public:
 		DateTime           deferDateTime() const          { return mDeferralTime; }
 		DateTime           deferralLimit(const QTime& startOfDay, DeferLimitType* = 0) const;
 		int                deferDefaultMinutes() const    { return mDeferDefaultMinutes; }
+		bool               deferDefaultDateOnly() const   { return mDeferDefaultDateOnly; }
 		const QString&     messageFileOrCommand() const   { return mText; }
 		QString            logFile() const                { return mLogFile; }
 		bool               commandXterm() const           { return mCommandXterm; }
@@ -479,6 +481,7 @@ public:
 		int                mReminderMinutes;  // how long in advance reminder is to be, or 0 if none
 		int                mArchiveReminderMinutes; // original reminder period if now expired, or for restoration after next recurrence, or 0 if none
 		int                mDeferDefaultMinutes; // default number of minutes for deferral dialog, or 0 to select time control
+		bool               mDeferDefaultDateOnly;// select date-only by default in deferral dialog
 		int                mRevision;         // SEQUENCE: revision number of the original alarm, or 0
 		KARecurrence*      mRecurrence;       // RECUR: recurrence specification, or 0 if none
 		int                mAlarmCount;       // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying

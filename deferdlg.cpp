@@ -39,7 +39,7 @@
 #include "deferdlg.moc"
 
 
-DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool cancelButton, QWidget* parent)
+DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent)
 	: KDialog(parent)
 {
 	setWindowModality(Qt::WindowModal);
@@ -57,7 +57,7 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool cancelButton, QWidg
 	layout->setMargin(0);
 	layout->setSpacing(spacingHint());
 
-	mTimeWidget = new AlarmTimeWidget(AlarmTimeWidget::DEFER_TIME, page);
+	mTimeWidget = new AlarmTimeWidget((anyTimeOption ? AlarmTimeWidget::DEFER_ANY_TIME : AlarmTimeWidget::DEFER_TIME), page);
 	mTimeWidget->setDateTime(initialDT);
 	mTimeWidget->setMinDateTimeIsCurrent();
 	connect(mTimeWidget, SIGNAL(pastMax()), SLOT(slotPastLimit()));
