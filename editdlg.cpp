@@ -1205,7 +1205,8 @@ void EditAlarmDlg::slotEditDeferral()
 	// Use AutoQPointer to guard against crash on application exit while
 	// the dialogue is still open. It prevents double deletion (both on
 	// deletion of EditAlarmDlg, and on return from this function).
-	AutoQPointer<DeferAlarmDlg> deferDlg = new DeferAlarmDlg((deferred ? mDeferDateTime : DateTime(now.addSecs(60).toTimeSpec(start.timeSpec()))), deferred, this);
+	AutoQPointer<DeferAlarmDlg> deferDlg = new DeferAlarmDlg((deferred ? mDeferDateTime : DateTime(now.addSecs(60).toTimeSpec(start.timeSpec()))),
+	                                                         start.isDateOnly(), deferred, this);
 	deferDlg->setObjectName("EditDeferDlg");    // used by LikeBack
 	if (limit)
 	{

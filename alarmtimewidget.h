@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.h  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,12 +40,13 @@ class AlarmTimeWidget : public QFrame
 {
 		Q_OBJECT
 	public:
-		enum {       // 'mode' values for constructor
-			AT_TIME,     // "At ..."
-			DEFER_TIME   // "Defer to ..."
+		enum Mode {       // 'mode' values for constructor
+			AT_TIME        = 0x01,  // "At ..."
+			DEFER_TIME     = 0x02,  // "Defer to ..."
+			DEFER_ANY_TIME = DEFER_TIME | 0x04  // "Defer to ..." with 'any time' option
 		};
-		AlarmTimeWidget(const QString& groupBoxTitle, int mode, QWidget* parent = 0);
-		explicit AlarmTimeWidget(int mode, QWidget* parent = 0);
+		AlarmTimeWidget(const QString& groupBoxTitle, Mode, QWidget* parent = 0);
+		explicit AlarmTimeWidget(Mode, QWidget* parent = 0);
 		KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
 		void             setDateTime(const DateTime&);
 		void             setMinDateTimeIsCurrent();
@@ -79,7 +80,7 @@ class AlarmTimeWidget : public QFrame
 		void             showTimeZoneSelector();
 
 	private:
-		void             init(int mode, const QString& groupBoxTitle = QString());
+		void             init(Mode, const QString& groupBoxTitle = QString());
 		void             setAnyTime();
 		void             setMaxDelayTime(const KDateTime& now);
 		void             setMaxMinTimeIf(const KDateTime& now);

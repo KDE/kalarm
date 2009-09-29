@@ -102,7 +102,8 @@ class KAEvent : public KAEventData::Observer
 		bool               defer(const DateTime& dt, bool reminder, bool adjustRecurrence = false)
 		                                                       { return mEventData->defer(dt, reminder, Preferences::startOfDay(), adjustRecurrence); }
 		void               cancelDefer()                       { mEventData->cancelDefer(); }
-		void               setDeferDefaultMinutes(int minutes) { mEventData->setDeferDefaultMinutes(minutes); }
+		void               setDeferDefaultMinutes(int minutes, bool dateOnly = false)
+		                                                       { mEventData->setDeferDefaultMinutes(minutes, dateOnly); }
 		bool               setDisplaying(const KAEvent&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
 		void               reinstateFromDisplaying(const KCal::Event* e, QString& resourceID, bool& showEdit, bool& showDefer)
 		                                                       { mEventData->reinstateFromDisplaying(e, resourceID, showEdit, showDefer); }
@@ -177,6 +178,7 @@ class KAEvent : public KAEventData::Observer
 		DateTime           deferralLimit(KAEventData::DeferLimitType* t = 0) const
 		                                                  { return mEventData->deferralLimit(Preferences::startOfDay(), t); }
 		int                deferDefaultMinutes() const    { return mEventData->deferDefaultMinutes(); }
+		bool               deferDefaultDateOnly() const   { return mEventData->deferDefaultDateOnly(); }
 		const QString&     messageFileOrCommand() const   { return mEventData->messageFileOrCommand(); }
 		QString            logFile() const                { return mEventData->logFile(); }
 		bool               commandXterm() const           { return mEventData->commandXterm(); }

@@ -1840,7 +1840,7 @@ void MessageWin::checkDeferralLimit()
 */
 void MessageWin::slotDefer()
 {
-	mDeferDlg = new DeferAlarmDlg(KDateTime::currentDateTime(Preferences::timeZone()).addSecs(60), false, this);
+	mDeferDlg = new DeferAlarmDlg(KDateTime::currentDateTime(Preferences::timeZone()).addSecs(60), mDateTime.isDateOnly(), false, this);
 	mDeferDlg->setObjectName("DeferDlg");    // used by LikeBack
 	mDeferDlg->setDeferMinutes(mDefaultDeferMinutes > 0 ? mDefaultDeferMinutes : Preferences::defaultDeferTime());
 	mDeferDlg->setLimit(mEventID);
