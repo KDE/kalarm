@@ -44,7 +44,7 @@ qt4_add_dbus_adaptor(kalarmresource_SRCS
   ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml settings.h Settings
 )
 
-kde4_add_executable(akonadi_kalarm_resource RUN_UNINSTALLED ${kalarmresource_SRCS})
+kde4_add_executable(akonadi_kalarm_resource ${kalarmresource_SRCS})
 
 target_link_libraries(akonadi_kalarm_resource akonadi-kcal kalarm_calendar ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KIO_LIBS})
 
