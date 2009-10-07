@@ -428,6 +428,7 @@ public:
 		bool               setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
 		bool               setRecurAnnualByPos(int freq, const QList<MonthPos>& pos, const QList<int>& months, int count, const QDate& end);
 //		static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
+		void               adjustRecurrenceStartOfDay();
 #ifdef NDEBUG
 		void               dumpDebug() const  { }
 #else

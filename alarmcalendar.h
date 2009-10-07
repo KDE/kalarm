@@ -83,6 +83,7 @@ class AlarmCalendar : public QObject
 		bool                  isEmpty() const;
 		QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
 		QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.url(); }
+		void                  adjustStartOfDay();
 
 		static bool           initialiseCalendars();
 		static void           terminateCalendars();
