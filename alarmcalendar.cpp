@@ -1546,3 +1546,22 @@ void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
 	// Now update the earliest alarm to trigger for its resource
 	findEarliestAlarm(AlarmResources::instance()->resourceForIncidence(id));
 }
+
+/******************************************************************************
+* Called when the user changes the start-of-day time.
+* Adjust the start times of all date-only alarms' recurrences.
+*/
+void AlarmCalendar::adjustStartOfDay()
+{
+	if (!mCalendar)
+		return;
+	for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
+	{
+		const KAEvent::List events = rit.value();
+		for (int i = 0, end = events.count();  i < end;  ++i)
+		{
+			if (events[i]->startDateTime().isDateOnly()  &&  events[i]->recurs())
+				events[i]->adjustRecurrenceStartOfDay();
+		}
+	}
+}

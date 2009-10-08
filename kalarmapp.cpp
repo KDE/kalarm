@@ -835,6 +835,7 @@ void KAlarmApp::changeStartOfDay()
 	AlarmCalendar* cal = AlarmCalendar::resources();
 	if (KAEventData::adjustStartOfDay(cal->kcalEvents(KCalEvent::ACTIVE), Preferences::startOfDay(), Preferences::timeZone()))
 		cal->save();
+	AlarmCalendar::resources()->adjustStartOfDay();
 	Preferences::updateStartOfDayCheck(sod);  // now that calendar is updated, set OK flag in config file
 	mStartOfDay = sod;
 }

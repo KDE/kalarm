@@ -2025,7 +2025,7 @@ bool KAEventData::occursAfter(const KDateTime& preDateTime, const QTime& startOf
 	if (mStartDateTime.isDateOnly())
 	{
 		QDate pre = preDateTime.date();
-		if (preDateTime.time() < startOfDay)
+		if (preDateTime.toTimeSpec(mStartDateTime.timeSpec()).time() < startOfDay)
 			pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
 		if (pre < dt.date())
 			return true;
@@ -2141,7 +2141,7 @@ KAEventData::OccurType KAEventData::previousOccurrence(const KDateTime& afterDat
 	else
 	{
 		KDateTime recurStart = mRecurrence->startDateTime();
-		KDateTime after = afterDateTime;
+		KDateTime after = afterDateTime.toTimeSpec(mStartDateTime.timeSpec());
 		if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > startOfDay)
 			after = after.addDays(1);    // today's recurrence (if today recurs) has passed
 		KDateTime dt = mRecurrence->getPreviousDateTime(after);
@@ -2266,7 +2266,7 @@ KAEventData::OccurType KAEventData::setNextOccurrence(const KDateTime& preDateTi
 KAEventData::OccurType KAEventData::nextRecurrence(const KDateTime& preDateTime, DateTime& result, const QTime& startOfDay) const
 {
 	KDateTime recurStart = mRecurrence->startDateTime();
-	KDateTime pre = preDateTime;
+	KDateTime pre = preDateTime.toTimeSpec(mStartDateTime.timeSpec());
 	if (mStartDateTime.isDateOnly()  &&  !pre.isDateOnly()  &&  pre.time() < startOfDay)
 	{
 		pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
@@ -2426,6 +2426,16 @@ void KAEventData::setRecurrence(const KARecurrence& recurrence)
 	setRepetition(Duration(mRepeatInterval), mRepeatCount);
 
 	endChanges();
+}
+
+/******************************************************************************
+* Called when the user changes the start-of-day time.
+* Adjust the start time of a date-only alarm's recurrence.
+*/
+void KAEventData::adjustRecurrenceStartOfDay()
+{
+	if (mRecurrence)
+		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
 }
 
 /******************************************************************************
