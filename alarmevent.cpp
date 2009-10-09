@@ -142,11 +142,10 @@ DateTime KAEvent::nextTrigger(TriggerType type) const
 void KAEvent::eventUpdated(const KAEventData* event)
 {
 	if (event != mEventData)
-		kFatal() << "Wrong event data: have="<<mEventData<<", event="<<event;
-kDebug();
-	if (!event->templateName().isEmpty())
+		kFatal(5950) << "Wrong event data: have=" << mEventData << ", event=" << event;
+	if (event->category() == KCalEvent::ARCHIVED  ||  !event->templateName().isEmpty())
 	{
-		// It's a template
+		// It's a template or archived
 		mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KDateTime();
 	}
 	else if (event->deferred()  &&  !event->reminderDeferral())
