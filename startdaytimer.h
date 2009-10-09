@@ -1,7 +1,7 @@
 /*
  *  startdaytimer.h  -  timer triggered at the user-defined start-of-day time
  *  Program:  kalarm
- *  Copyright © 2004,2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@
  *  start-of-day time (set in KAlarm's Preferences dialog).
  *  It automatically adjusts to any changes in the start-of-day time.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class StartOfDayTimer : public DailyTimer
 {
@@ -56,7 +56,7 @@ class StartOfDayTimer : public DailyTimer
 		static StartOfDayTimer* instance();
 
 	private slots:
-		void        startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
+		void startOfDayChanged();
 
 	private:
 		static StartOfDayTimer* mInstance;    // exists solely to receive signals

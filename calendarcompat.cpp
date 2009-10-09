@@ -82,7 +82,7 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 		kDebug() << "KAlarm version" << version;
 
 	// Convert events to current KAlarm format for if the calendar is saved
-	KAEventData::convertKCalEvents(calendar, version, version057_UTC, Preferences::startOfDay());
+	KAEventData::convertKCalEvents(calendar, version, version057_UTC, Preferences::startOfDay(), Preferences::timeZone());
 	if (!resource)
 		return KCalendar::Current;    // update non-shared calendars regardless
 	if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)

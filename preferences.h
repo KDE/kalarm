@@ -48,8 +48,6 @@ class Preferences : public PreferencesBase
 		static void             setHolidayRegion(const QString& regionCode);
 		static QTime            startOfDay()                     { return self()->mBase_StartOfDay.time(); }
 		static void             setStartOfDay(const QTime&);
-		static void             updateStartOfDayCheck(const QTime&);
-		static bool             hasStartOfDayChanged()           { return mStartOfDayChanged; }
 		static QTime            workDayStart()                   { return self()->mBase_WorkDayStart.time(); }
 		static QTime            workDayEnd()                     { return self()->mBase_WorkDayEnd.time(); }
 		static QBitArray        workDays();
@@ -86,7 +84,7 @@ class Preferences : public PreferencesBase
 	signals:
 		void  timeZoneChanged(const KTimeZone& newTz);
 		void  holidaysChanged(const KHolidays::HolidayRegion& newHolidays);
-		void  startOfDayChanged(const QTime& newStartOfDay, const QTime& oldStartOfDay);
+		void  startOfDayChanged(const QTime& newStartOfDay);
 		void  workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
 	private slots:
@@ -108,8 +106,6 @@ class Preferences : public PreferencesBase
 
 		// All the following members are accessed by the Preferences dialog classes
 		static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
-		static QTime            mOldStartOfDay;       // previous start-of-day time
-		static bool             mStartOfDayChanged;   // start-of-day check value doesn't tally with new StartOfDay
 };
 
 #endif // PREFERENCES_H
