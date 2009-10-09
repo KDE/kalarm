@@ -2387,10 +2387,10 @@ void KAEventData::setFirstRecurrence(const QTime& startOfDay)
 	DateTime next;
 	nextRecurrence(mNextMainDateTime.effectiveKDateTime(), next, startOfDay);
 	if (!next.isValid())
-		mRecurrence->setStartDateTime(recurStart);   // reinstate the old value
+		mRecurrence->setStartDateTime(recurStart, mStartDateTime.isDateOnly());   // reinstate the old value
 	else
 	{
-		mRecurrence->setStartDateTime(next.effectiveKDateTime());
+		mRecurrence->setStartDateTime(next.effectiveKDateTime(), next.isDateOnly());
 		mStartDateTime = mNextMainDateTime = next;
 		mUpdated = changed = true;
 	}
@@ -2411,8 +2411,7 @@ void KAEventData::setRecurrence(const KARecurrence& recurrence)
 	if (recurrence.recurs())
 	{
 		mRecurrence = new KARecurrence(recurrence);
-		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
-		mRecurrence->setAllDay(mStartDateTime.isDateOnly());
+		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime(), mStartDateTime.isDateOnly());
 		mChanged = true;
 	}
 	else
@@ -2438,7 +2437,7 @@ void KAEventData::setRecurrence(const KARecurrence& recurrence)
 void KAEventData::adjustRecurrenceStartOfDay()
 {
 	if (mRecurrence)
-		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime());
+		mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime(), mStartDateTime.isDateOnly());
 }
 
 /******************************************************************************

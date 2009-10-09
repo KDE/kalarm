@@ -154,7 +154,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 		}
 		mFeb29Type = feb29Type;
 	}
-	setStartDateTime(startdt);   // sets recurrence all-day if date-only
+	KCal::Recurrence::setStartDateTime(startdt);   // sets recurrence all-day if date-only
 	return true;
 }
 
