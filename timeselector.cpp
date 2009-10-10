@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,9 +63,9 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 	if (!postfix.isEmpty())
 	{
 		mLabel = new QLabel(postfix, box);
-		box->setWhatsThis(valueWhatsThis);
 		mLabel->setEnabled(false);
 	}
+	box->setWhatsThis(valueWhatsThis);
 	layout->addStretch();
 }
 
