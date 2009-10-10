@@ -426,10 +426,9 @@ void KAEventData::set(const Event* event)
 			if (interval && count)
 			{
 				if (interval % (24*60))
-					mRepeatInterval = Duration(interval * 60, Duration::Seconds);
+					mRepetition.set(Duration(interval * 60, Duration::Seconds), count);
 				else
-					mRepeatInterval = Duration(interval / (24*60), Duration::Days);
-				mRepeatCount = count;
+					mRepetition.set(Duration(interval / (24*60), Duration::Days), count);
 			}
 		}
 	}
@@ -471,8 +470,8 @@ void KAEventData::set(const Event* event)
 	}
 	mNextMainDateTime = readDateTime(event, dateOnly, mStartDateTime);
 	mSaveDateTime = event->created();
-	if (dateOnly  &&  !mRepeatInterval.isDaily())
-		mRepeatInterval = Duration(mRepeatInterval.asDays(), Duration::Days);
+	if (dateOnly  &&  !mRepetition.isDaily())
+		mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
 	if (category() == KCalEvent::TEMPLATE)
 		mTemplateName = event->summary();
 	if (event->statusStr() == DISABLED_STATUS)
@@ -524,9 +523,8 @@ void KAEventData::set(const Event* event)
 				alTime.setDateOnly(mStartDateTime.isDateOnly());
 				if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime())
 				{
-					mRepeatInterval = data.alarm->snoozeTime();   // values may be adjusted in setRecurrence()
-					mRepeatCount    = data.alarm->repeatCount();
-					mNextRepeat     = data.nextRepeat;
+					mRepetition.set(data.alarm->snoozeTime(), data.alarm->repeatCount());   // values may be adjusted in setRecurrence()
+					mNextRepeat = data.nextRepeat;
 				}
 				break;
 			case KAAlarm::AT_LOGIN__ALARM:
@@ -669,11 +667,9 @@ void KAEventData::set(const Event* event)
 	{
 		int nextRepeat = mNextRepeat;    // setRecurrence() clears mNextRepeat
 		setRecurrence(*recur);
-		if (nextRepeat <= mRepeatCount)
+		if (nextRepeat <= mRepetition.count())
 			mNextRepeat = nextRepeat;
 	}
-	else
-		checkRepetition();
 
 	if (mMainExpired  &&  deferralOffset  &&  checkRecur() != KARecurrence::NO_RECUR)
 	{
@@ -1286,11 +1282,11 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 		ancillaryOffset = 0;
 		ancillaryType = dtMain.isValid() ? 2 : 0;
 	}
-	else if (mRepeatCount  &&  mRepeatInterval)
+	else if (mRepetition)
 	{
 		// Alarm repetition is normally held in the main alarm, but since
 		// the main alarm has expired, store in a custom property.
-		QString param = QString("%1:%2").arg(mRepeatInterval.asSeconds() / 60).arg(mRepeatCount);
+		QString param = QString("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
 		ev->setCustomProperty(KCalendar::APPNAME, REPEAT_PROPERTY, param);
 	}
 
@@ -1472,9 +1468,9 @@ Alarm* KAEventData::initKCalAlarm(Event* event, int startOffsetSecs, const QStri
 			setProcedureAlarm(alarm, mPostAction);
 			break;
 		case KAAlarm::MAIN_ALARM:
-			alarm->setSnoozeTime(mRepeatInterval);
-			alarm->setRepeatCount(mRepeatCount);
-			if (mRepeatCount)
+			alarm->setSnoozeTime(mRepetition.interval());
+			alarm->setRepeatCount(mRepetition.count());
+			if (mRepetition)
 				alarm->setCustomProperty(KCalendar::APPNAME, NEXT_REPEAT_PROPERTY,
 				                         QString::number(mNextRepeat));
 			// fall through to INVALID_ALARM
@@ -1541,8 +1537,6 @@ KAAlarm KAEventData::alarm(KAAlarm::Type type) const
 		al.mFgColour       = mFgColour;
 		al.mFont           = mFont;
 		al.mUseDefaultFont = mUseDefaultFont;
-		al.mRepeatCount    = 0;
-		al.mRepeatInterval = 0;
 		al.mRepeatAtLogin  = false;
 		al.mDeferred       = false;
 		al.mLateCancel     = mLateCancel;
@@ -1555,8 +1549,7 @@ KAAlarm KAEventData::alarm(KAAlarm::Type type) const
 				{
 					al.mType             = KAAlarm::MAIN__ALARM;
 					al.mNextMainDateTime = mNextMainDateTime;
-					al.mRepeatCount      = mRepeatCount;
-					al.mRepeatInterval   = mRepeatInterval;
+					al.mRepetition       = mRepetition;
 					al.mNextRepeat       = mNextRepeat;
 				}
 				break;
@@ -1765,7 +1758,7 @@ bool KAEventData::defer(const DateTime& dateTime, bool reminder, const QTime& st
 		if (mDeferral != REMINDER_DEFERRAL)
 		{
 			// We're deferring the main alarm, not a reminder
-			if (mRepeatCount && mRepeatInterval  &&  dateTime < mainEndRepeatTime())
+			if (mRepetition  &&  dateTime < mainEndRepeatTime())
 			{
 				// The alarm is repeated, and we're deferring to a time before the last repetition
 				set_deferral(NORMAL_DEFERRAL);
@@ -1829,23 +1822,21 @@ bool KAEventData::defer(const DateTime& dateTime, bool reminder, const QTime& st
 				}
 			}
 			else
-				setNextRepetition = (mRepeatCount && mRepeatInterval);
+				setNextRepetition = mRepetition;
 		}
 		else
 			checkRepetition = true;
 	}
 	if (checkRepetition)
-		setNextRepetition = (mRepeatCount && mRepeatInterval  &&  mDeferralTime < mainEndRepeatTime());
+		setNextRepetition = (mRepetition  &&  mDeferralTime < mainEndRepeatTime());
 	if (setNextRepetition)
 	{
 		// The alarm is repeated, and we're deferring to a time before the last repetition.
 		// Set the next scheduled repetition to the one after the deferral.
 		if (mNextMainDateTime >= mDeferralTime)
 			mNextRepeat = 0;
-		else if (mRepeatInterval.isDaily())
-			mNextRepeat = mNextMainDateTime.daysTo(mDeferralTime) / mRepeatInterval.asDays() + 1;
 		else
-			mNextRepeat = mNextMainDateTime.secsTo(mDeferralTime) / mRepeatInterval.asSeconds() + 1;
+			mNextRepeat = mRepetition.nextRepeatCount(mNextMainDateTime.kDateTime(), mDeferralTime.kDateTime());
 		mChanged = true;
 	}
 	mUpdated = true;
@@ -1875,7 +1866,7 @@ DateTime KAEventData::deferralLimit(const QTime& startOfDay, KAEventData::DeferL
 	DeferLimitType ltype;
 	DateTime endTime;
 	bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
-	if (recurs  ||  mRepeatCount)
+	if (recurs  ||  mRepetition)
 	{
 		// It's a repeated alarm. Don't allow it to be deferred past its
 		// next occurrence or repetition.
@@ -2036,9 +2027,9 @@ bool KAEventData::occursAfter(const KDateTime& preDateTime, const QTime& startOf
 	else if (preDateTime < dt)
 		return true;
 
-	if (includeRepetitions  &&  mRepeatCount)
+	if (includeRepetitions  &&  mRepetition)
 	{
-		if (preDateTime < (mRepeatInterval * mRepeatCount).end(dt))
+		if (preDateTime < mRepetition.duration().end(dt))
 			return true;
 	}
 	return false;
@@ -2056,10 +2047,10 @@ KAEventData::OccurType KAEventData::nextOccurrence(const KDateTime& preDateTime,
 	KDateTime pre = preDateTime;
 	if (includeRepetitions != IGNORE_REPETITION)
 	{                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
-		if (!mRepeatCount  ||  !mRepeatInterval)
+		if (!mRepetition)
 			includeRepetitions = IGNORE_REPETITION;
 		else
-			pre = (mRepeatInterval * -mRepeatCount).end(preDateTime);
+			pre = mRepetition.duration(-mRepetition.count()).end(preDateTime);
 	}
 
 	OccurType type;
@@ -2080,10 +2071,8 @@ KAEventData::OccurType KAEventData::nextOccurrence(const KDateTime& preDateTime,
 	if (type != NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != IGNORE_REPETITION)
 	{                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
 		// The next occurrence is a sub-repetition
-		int repetition = mRepeatInterval.isDaily()
-		               ? result.daysTo(preDateTime) / mRepeatInterval.asDays() + 1
-		               : result.secsTo(preDateTime) / mRepeatInterval.asSeconds() + 1;
-		DateTime repeatDT = (mRepeatInterval * repetition).end(result.kDateTime());
+		int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
+		DateTime repeatDT = mRepetition.duration(repetition).end(result.kDateTime());
 		if (recurs)
 		{
 			// We've found a recurrence before the specified date/time, which has
@@ -2099,10 +2088,8 @@ KAEventData::OccurType KAEventData::nextOccurrence(const KDateTime& preDateTime,
 				if (includeRepetitions == RETURN_REPETITION  &&  result <= preDateTime)
 				{
 					// The next occurrence is a sub-repetition
-					int repetition = mRepeatInterval.isDaily()
-					               ? result.daysTo(preDateTime) / mRepeatInterval.asDays() + 1
-					               : result.secsTo(preDateTime) / mRepeatInterval.asSeconds() + 1;
-					result = (mRepeatInterval * repetition).end(result.kDateTime());
+					int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
+					result = mRepetition.duration(repetition).end(result.kDateTime());
 					type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 				}
 				return type;
@@ -2160,15 +2147,13 @@ KAEventData::OccurType KAEventData::previousOccurrence(const KDateTime& afterDat
 			type = LAST_RECURRENCE;
 	}
 
-	if (includeRepetitions  &&  mRepeatCount)
+	if (includeRepetitions  &&  mRepetition)
 	{
 		// Find the latest repetition which is before the specified time.
-		int repetition = mRepeatInterval.isDaily()
-		               ? result.effectiveKDateTime().daysTo(afterDateTime.addSecs(-1)) / mRepeatInterval.asDays()
-		               : static_cast<int>((result.effectiveKDateTime().secsTo_long(afterDateTime) - 1) / mRepeatInterval.asSeconds());
+		int repetition = mRepetition.previousRepeatCount(result.effectiveKDateTime(), afterDateTime);
 		if (repetition > 0)
 		{
-			result = (mRepeatInterval * qMin(repetition, mRepeatCount)).end(result.kDateTime());
+			result = mRepetition.duration(qMin(repetition, mRepetition.count())).end(result.kDateTime());
 			return static_cast<OccurType>(type | OCCURRENCE_REPEAT);
 		}
 	}
@@ -2191,8 +2176,8 @@ KAEventData::OccurType KAEventData::setNextOccurrence(const KDateTime& preDateTi
 	// If there are repetitions, adjust the comparison date/time so that
 	// we find the earliest recurrence which has a repetition falling after
 	// the specified preDateTime.
-	if (mRepeatCount  &&  mRepeatInterval)
-		pre = (mRepeatInterval * -mRepeatCount).end(preDateTime);
+	if (mRepetition)
+		pre = mRepetition.duration(-mRepetition.count()).end(preDateTime);
 
 	DateTime dt;
 	OccurType type;
@@ -2230,15 +2215,13 @@ KAEventData::OccurType KAEventData::setNextOccurrence(const KDateTime& preDateTi
 	else
 		return NO_OCCURRENCE;
 
-	if (mRepeatCount  &&  mRepeatInterval)
+	if (mRepetition)
 	{
 		if (dt <= preDateTime)
 		{
 			// The next occurrence is a sub-repetition.
 			type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
-			mNextRepeat = mRepeatInterval.isDaily()
-			            ? dt.effectiveKDateTime().daysTo(preDateTime) / mRepeatInterval.asDays() + 1
-			            : static_cast<int>(dt.effectiveKDateTime().secsTo_long(preDateTime) / mRepeatInterval.asSeconds()) + 1;
+			mNextRepeat = mRepetition.nextRepeatCount(dt.effectiveKDateTime(), preDateTime);
 			// Repetitions can't have a reminder, so remove any.
 			if (mReminderMinutes)
 				set_archiveReminder();
@@ -2330,14 +2313,14 @@ QString KAEventData::recurrenceText(bool brief) const
  */
 QString KAEventData::repetitionText(bool brief) const
 {
-	if (mRepeatCount)
+	if (mRepetition)
 	{
 #ifdef __GNUC__
 #warning Get 24 hours displayed with daily repetition
 #endif
-		if (!mRepeatInterval.isDaily())
+		if (!mRepetition.isDaily())
 		{
-			int minutes = mRepeatInterval.asSeconds() / 60;
+			int minutes = mRepetition.intervalMinutes();
 			if (minutes < 60)
 				return i18ncp("@info/plain", "1 Minute", "%1 Minutes", minutes);
 			if (minutes % 60 == 0)
@@ -2345,7 +2328,7 @@ QString KAEventData::repetitionText(bool brief) const
 			QString mins;
 			return i18nc("@info/plain Hours and minutes", "%1h %2m", minutes/60, mins.sprintf("%02d", minutes%60));
 		}
-		int days = mRepeatInterval.asDays();
+		int days = mRepetition.intervalDays();
 		if (days % 7)
 			return i18ncp("@info/plain", "1 Day", "%1 Days", days);
 		return i18ncp("@info/plain", "1 Week", "%1 Weeks", days / 7);
@@ -2422,10 +2405,7 @@ void KAEventData::setRecurrence(const KARecurrence& recurrence)
 	}
 
 	// Adjust sub-repetition values to fit the recurrence.
-	// N.B. Need to make a copy of mRepeatInterval because it's passed to
-	// setRepetition() as a reference, and setRepetition() sets it to zero
-	// before using the parameter value.
-	setRepetition(Duration(mRepeatInterval), mRepeatCount);
+	setRepetition(mRepetition);
 
 	endChanges();
 }
@@ -2445,28 +2425,34 @@ void KAEventData::adjustRecurrenceStartOfDay()
 *  The repetition length is adjusted if necessary to fit the recurrence interval.
 *  Reply = false if a non-daily interval was specified for a date-only recurrence.
 */
-bool KAEventData::setRepetition(const Duration& interval, int count)
+bool KAEventData::setRepetition(const Repetition& repetition)
 {
-	mUpdated        = true;
-	mRepeatInterval = 0;
-	mRepeatCount    = 0;
-	mNextRepeat     = 0;
-	if (interval.value() > 0  &&  count > 0  &&  !mRepeatAtLogin)
+	// Don't set mRepetition to zero here, in case the 'repetition' parameter
+	// passed in is a reference to mRepetition.
+	mUpdated    = true;
+	mNextRepeat = 0;
+	if (repetition  &&  !mRepeatAtLogin)
 	{
 		Q_ASSERT(checkRecur() != KARecurrence::NO_RECUR);
-		if (!interval.isDaily()  &&  mStartDateTime.isDateOnly())
-			return false;    // interval must be in units of days for date-only alarms
-		Duration longestInterval = mRecurrence->longestInterval();
-		if (interval * count >= longestInterval)
+		if (!repetition.isDaily()  &&  mStartDateTime.isDateOnly())
 		{
-			count = mStartDateTime.isDateOnly()
-			      ? (longestInterval.asDays() - 1) / interval.asDays()
-			      : (longestInterval.asSeconds() - 1) / interval.asSeconds();
+			mRepetition.set(0, 0);
+			return false;    // interval must be in units of days for date-only alarms
 		}
-		mRepeatInterval = interval;
-		mRepeatCount    = count;
+		Duration longestInterval = mRecurrence->longestInterval();
+		if (repetition.duration() >= longestInterval)
+		{
+			int count = mStartDateTime.isDateOnly()
+			          ? (longestInterval.asDays() - 1) / repetition.intervalDays()
+			          : (longestInterval.asSeconds() - 1) / repetition.intervalSeconds();
+			mRepetition.set(repetition.interval(), count);
+		}
+		else
+			mRepetition = repetition;
 		notifyChanges();
 	}
+	else
+		mRepetition.set(0, 0);
 	return true;
 }
 
@@ -2678,11 +2664,10 @@ bool KAEventData::setRecur(RecurrenceRule::PeriodType recurType, int freq, int c
 void KAEventData::clearRecur()
 {
 	delete mRecurrence;
-	mRecurrence     = 0;
-	mRepeatInterval = 0;
-	mRepeatCount    = 0;
-	mNextRepeat     = 0;
-	mUpdated        = true;
+	mRecurrence = 0;
+	mRepetition.set(0, 0);
+	mNextRepeat = 0;
+	mUpdated    = true;
 }
 
 /******************************************************************************
@@ -2737,18 +2722,6 @@ int KAEventData::recurInterval() const
 		}
 	}
 	return 0;
-}
-
-/******************************************************************************
-* Validate the event's alarm sub-repetition data, correcting any
-* inconsistencies (which should never occur!).
-*/
-void KAEventData::checkRepetition() const
-{
-	if (mRepeatCount  &&  !mRepeatInterval)
-		const_cast<KAEventData*>(this)->mRepeatCount = 0;
-	if (!mRepeatCount  &&  mRepeatInterval)
-		const_cast<KAEventData*>(this)->mRepeatInterval = 0;
 }
 
 #if 0
@@ -3653,8 +3626,7 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 	mFont              = rhs.mFont;
 	mActionType        = rhs.mActionType;
 	mCommandScript     = rhs.mCommandScript;
-	mRepeatCount       = rhs.mRepeatCount;
-	mRepeatInterval    = rhs.mRepeatInterval;
+	mRepetition        = rhs.mRepetition;
 	mNextRepeat        = rhs.mNextRepeat;
 	mRepeatAtLogin     = rhs.mRepeatAtLogin;
 	mLateCancel        = rhs.mLateCancel;
@@ -3693,11 +3665,12 @@ void KAAlarmEventBase::baseDumpDebug() const
 	if (!mUseDefaultFont)
 		kDebug() << "-- mFont:" << mFont.toString();
 	kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
-	kDebug() << "-- mRepeatCount:" << mRepeatCount;
-	if (mRepeatInterval.isDaily())
-		kDebug() << "-- mRepeatInterval:" << mRepeatInterval.asDays() << "days";
+        if (!mRepetition)
+	        kDebug() << "-- mRepetition: 0";
+        else if (mRepetition.isDaily())
+		kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalDays() << "days";
 	else
-		kDebug() << "-- mRepeatInterval:" << mRepeatInterval.asSeconds()/60 << "minutes";
+		kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";
 	kDebug() << "-- mNextRepeat:" << mNextRepeat;
 	kDebug() << "-- mLateCancel:" << mLateCancel;
 	kDebug() << "-- mAutoClose:" << mAutoClose;

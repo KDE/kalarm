@@ -163,7 +163,7 @@ void KAEvent::eventUpdated(const KAEventData* event)
 		// If only-during-working-time is set and it recurs, it won't actually trigger
 		// unless it falls during working hours.
 		if ((!event->workTimeOnly() && !event->holidaysExcluded())
-		||  ((!event->repeatCount() || !event->repeatInterval()) && event->checkRecur() == KARecurrence::NO_RECUR)
+		||  (!event->repetition()  &&  event->checkRecur() == KARecurrence::NO_RECUR)
 		||  KAlarm::isWorkingTime(mMainTrigger.kDateTime(), this))
 		{
 			mMainWorkTrigger = mMainTrigger;
@@ -255,7 +255,6 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 	QTime workEnd   = Preferences::workDayEnd();
 	KARecurrence::Type recurType = mEventData->checkRecur();
 	KDateTime kdt = nextTrigger.effectiveKDateTime();
-	mEventData->checkRepetition();   // ensure data consistency
 	int reminder = mEventData->reminder() ? mEventData->reminder() : mEventData->reminderArchived();
 	// Check if it always falls on the same day(s) of the week.
 	RecurrenceRule* rrule = mEventData->recurrence()->defaultRRuleConst();
@@ -276,7 +275,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 				noWorkPos = false;   // found a working day occurrence
 			allDaysMask |= 1 << day;
 		}
-		if (noWorkPos  &&  !mEventData->repeatCount())
+		if (noWorkPos  &&  !mEventData->repetition())
 			return;   // never occurs on a working day
 	}
 	DateTime newdt;
@@ -285,14 +284,14 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 	{
 		// It's a date-only alarm.
 		// Sub-repetitions also have to be date-only.
-		int repeatFreq = mEventData->repeatInterval().asDays();
-		bool weeklyRepeat = mEventData->repeatCount() && !(repeatFreq % 7);
+		int repeatFreq = mEventData->repetition().intervalDays();
+		bool weeklyRepeat = mEventData->repetition() && !(repeatFreq % 7);
 		Duration interval = mEventData->recurrence()->regularInterval();
 		if ((interval  &&  !(interval.asDays() % 7))
 		||  nDayPos == 1)
 		{
 			// It recurs on the same day each week
-			if (!mEventData->repeatCount() || weeklyRepeat)
+			if (!mEventData->repetition() || weeklyRepeat)
 				return;   // any repetitions are also weekly
 
 			// It's a weekly recurrence with a non-weekly sub-repetition.
@@ -307,7 +306,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 			int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
 			for (int repeatNum = mEventData->nextRepetition() + 1;  ;  ++repeatNum)
 			{
-				if (repeatNum > mEventData->repeatCount())
+				if (repeatNum > mEventData->repetition().count())
 					repeatNum = 0;
 				if (repeatNum == mEventData->nextRepetition())
 					break;
@@ -336,7 +335,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 			}
 			return;
 		}
-		if (!mEventData->repeatCount()  ||  weeklyRepeat)
+		if (!mEventData->repetition()  ||  weeklyRepeat)
 		{
 			// It's a date-only alarm with either no sub-repetition or a
 			// sub-repetition which always falls on the same day of the week
@@ -376,7 +375,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 		int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
 		for (int repeatNum = mEventData->nextRepetition();  ;  repeatNum = 0)
 		{
-			while (++repeatNum <= mEventData->repeatCount())
+			while (++repeatNum <= mEventData->repetition().count())
 			{
 				int inc = repeatFreq * repeatNum;
 				if (workDays.testBit((day + inc) % 7))
@@ -420,7 +419,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 	 * format because this only allows their interval to be recorded in seconds.
 	 */
 	bool recurTimeVaries = (recurType == KARecurrence::MINUTELY);
-	bool repeatTimeVaries = (mEventData->repeatCount()  &&  !mEventData->repeatInterval().isDaily());
+	bool repeatTimeVaries = (mEventData->repetition()  &&  !mEventData->repetition().isDaily());
 
 	if (!recurTimeVaries  &&  !repeatTimeVaries)
 	{
@@ -482,13 +481,13 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 		KDateTime kdtRecur;
 		int repeatFreq = 0;
 		int repeatNum = 0;
-		if (mEventData->repeatCount())
+		if (mEventData->repetition())
 		{
 			// It's a repetition inside a recurrence, each of which occurs
 			// at different times of day (bearing in mind that the repetition
 			// may occur at daily intervals after each recurrence).
 			// Find the previous recurrence (as opposed to sub-repetition)
-			repeatFreq = mEventData->repeatInterval().asSeconds();
+			repeatFreq = mEventData->repetition().intervalSeconds();
 			previousOccurrence(kdt.addSecs(1), newdt, false);
 			if (!newdt.isValid())
 				return;   // this should never happen
@@ -520,7 +519,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 		int transitionIndex = -1;
 		for (int n = 0;  n < 7*24*60;  ++n)
 		{
-			if (mEventData->repeatCount())
+			if (mEventData->repetition())
 			{
 				// Check the sub-repetitions for this recurrence
 				for ( ; ; )
@@ -528,7 +527,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 					// Find the repeat count to the next start of the working day
 					int inc = subdaily ? nextWorkRepetition(kdt) : 1;
 					repeatNum += inc;
-					if (repeatNum > mEventData->repeatCount())
+					if (repeatNum > mEventData->repetition().count())
 						break;
 					kdt = kdt.addSecs(inc * repeatFreq);
 					QTime t = kdt.time();
@@ -599,7 +598,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 		 * could occur immediately after a seasonal time change.
 		 */
 		// Find the previous recurrence (as opposed to sub-repetition)
-		int repeatFreq = mEventData->repeatInterval().asSeconds();
+		int repeatFreq = mEventData->repetition().intervalSeconds();
 		previousOccurrence(kdt.addSecs(1), newdt, false);
 		if (!newdt.isValid())
 			return;   // this should never happen
@@ -629,7 +628,7 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 			nextOccurrence(kdtRecur, newdt, KAEventData::IGNORE_REPETITION);
 			KDateTime kdtNextRecur = newdt.effectiveKDateTime();
 
-			int repeatsToCheck = mEventData->repeatCount();
+			int repeatsToCheck = mEventData->repetition().count();
 			int repeatsDuringWork = 0;  // 0=unknown, 1=does, -1=never
 			for ( ; ; )
 			{
@@ -641,16 +640,16 @@ void KAEvent::calcNextWorkingTime(const DateTime& nextTrigger) const
 						// Find the repeat count to the next start of the working day
 						int inc = subdaily ? nextWorkRepetition(kdt) : 1;
 						repeatNum += inc;
-						bool pastEnd = (repeatNum > mEventData->repeatCount());
+						bool pastEnd = (repeatNum > mEventData->repetition().count());
 						if (pastEnd)
-							inc -= repeatNum - mEventData->repeatCount();
+							inc -= repeatNum - mEventData->repetition().count();
 						repeatsToCheck -= inc;
 						kdt = kdt.addSecs(inc * repeatFreq);
 						if (kdtNextRecur.isValid()  &&  kdt >= kdtNextRecur)
 						{
 							// This sub-repetition is past the next recurrence,
 							// so start the check again from the next recurrence.
-							repeatsToCheck = mEventData->repeatCount();
+							repeatsToCheck = mEventData->repetition().count();
 							break;
 						}
 						if (pastEnd)
@@ -732,7 +731,7 @@ int KAEvent::nextWorkRepetition(const KDateTime& pre) const
 		for (int n = 1;  ;  ++n)
 		{
 			if (n >= 7)
-				return mEventData->repeatCount() + 1;  // should never happen
+				return mEventData->repetition().count() + 1;  // should never happen
 			if (Preferences::workDays().testBit((preDay + n) % 7))
 			{
 				nextWork = nextWork.addDays(n);
@@ -741,7 +740,7 @@ int KAEvent::nextWorkRepetition(const KDateTime& pre) const
 			}
 		}
 	}
-	return (pre.secsTo(nextWork) - 1) / mEventData->repeatInterval().asSeconds() + 1;
+	return (pre.secsTo(nextWork) - 1) / mEventData->repetition().intervalSeconds() + 1;
 }
 
 /******************************************************************************
@@ -761,14 +760,14 @@ bool KAEvent::mayOccurDailyDuringWork(const KDateTime& kdt) const
 	if (interval  &&  interval.isDaily()  &&  !(interval.asDays() % 7))
 	{
 		// It recurs weekly
-		if (!mEventData->repeatCount()  ||  (mEventData->repeatInterval().isDaily() && !(mEventData->repeatInterval().asDays() % 7)))
+		if (!mEventData->repetition()  ||  (mEventData->repetition().isDaily() && !(mEventData->repetition().intervalDays() % 7)))
 			return false;   // any repetitions are also weekly
 		// Repetitions are daily. Check if any occur on working days
 		// by checking the first recurrence and up to 6 repetitions.
 		QBitArray workDays = Preferences::workDays();
 		int day = mEventData->recurrence()->startDateTime().date().dayOfWeek() - 1;   // Monday = 0
-		int repeatDays = mEventData->repeatInterval().asDays();
-		int maxRepeat = (mEventData->repeatCount() < 6) ? mEventData->repeatCount() : 6;
+		int repeatDays = mEventData->repetition().intervalDays();
+		int maxRepeat = (mEventData->repetition().count() < 6) ? mEventData->repetition().count() : 6;
 		for (int i = 0;  !workDays.testBit(day);  ++i, day = (day + repeatDays) % 7)
 		{
 			if (i >= maxRepeat)

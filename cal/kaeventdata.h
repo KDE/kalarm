@@ -23,19 +23,19 @@
 
 #include "kalarm_cal_export.h"
 
+#include "datetime.h"
+#include "karecurrence.h"
+#include "kcalendar.h"
+#include "repetition.h"
+
+#include <kcal/person.h>
+#include <kcal/event.h>
+
 #include <QColor>
 #include <QFont>
 #include <QList>
 
-#include <kcal/person.h>
-#include <kcal/event.h>
-#include <kcal/duration.h>
 namespace KCal { class CalendarLocal; }
-
-#include "datetime.h"
-#include "karecurrence.h"
-#include "kcalendar.h"
-
 class AlarmResource;
 class KARecurrence;
 struct AlarmData;
@@ -68,8 +68,7 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
 	protected:
 		enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_AUDIO, T_EMAIL };
 
-		KAAlarmEventBase() : mRepeatCount(0), mRepeatInterval(0), mNextRepeat(0), mLateCancel(0),
-		                     mAutoClose(false), mRepeatAtLogin(false)  {}
+		KAAlarmEventBase() : mNextRepeat(0), mLateCancel(0), mAutoClose(false), mRepeatAtLogin(false)  {}
 		KAAlarmEventBase(const KAAlarmEventBase& rhs)             { copy(rhs); }
 		KAAlarmEventBase& operator=(const KAAlarmEventBase& rhs)  { copy(rhs);  return *this; }
 		void               copy(const KAAlarmEventBase&);
@@ -88,8 +87,7 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
 		QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
 		QFont              mFont;             // font of alarm message (ignored if mUseDefaultFont true)
 		Type               mActionType;       // alarm action type
-		int                mRepeatCount;      // sub-repetition count (excluding the first time)
-		KCal::Duration     mRepeatInterval;   // sub-repetition interval
+		Repetition         mRepetition;       // sub-repetition count and interval
 		int                mNextRepeat;       // repetition count of next due sub-repetition
 		int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
 		bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
@@ -165,8 +163,8 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
 		SubType            subType() const              { return mType; }
 		const QString&     eventId() const              { return mEventID; }
 		DateTime           dateTime(bool withRepeats = false) const
-		                                                { return (withRepeats && mNextRepeat && mRepeatInterval)
-		                                                    ? (mRepeatInterval * mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
+		                                                { return (withRepeats && mNextRepeat && mRepetition)
+		                                                    ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
 		QDate              date() const                 { return mNextMainDateTime.date(); }
 		QTime              time() const                 { return mNextMainDateTime.effectiveTime(); }
 		bool               reminder() const             { return mType == REMINDER__ALARM; }
@@ -337,8 +335,7 @@ public:
 		bool               autoClose() const              { return mAutoClose; }
 		bool               confirmAck() const             { return mConfirmAck; }
 		bool               commandScript() const          { return mCommandScript; }
-		int                repeatCount() const            { return mRepeatCount; }
-		KCal::Duration     repeatInterval() const         { return mRepeatInterval; }
+		const Repetition&  repetition() const             { return mRepetition; }
 		int                nextRepetition() const         { return mNextRepeat; }
 		bool               displaying() const             { return mDisplaying; }
 		bool               beep() const                   { return mBeep; }
@@ -359,12 +356,11 @@ public:
 		int                alarmCount() const             { return mAlarmCount; }
 		const DateTime&    startDateTime() const          { return mStartDateTime; }
 		DateTime           mainDateTime(bool withRepeats = false) const
-		                                                  { return (withRepeats && mNextRepeat && mRepeatInterval)
-		                                                    ? (mRepeatInterval * mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
+		                                                  { return (withRepeats && mNextRepeat && mRepetition)
+		                                                    ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
 		QDate              mainDate() const               { return mNextMainDateTime.date(); }
 		QTime              mainTime() const               { return mNextMainDateTime.effectiveTime(); }
-		DateTime           mainEndRepeatTime() const      { return (mRepeatCount > 0 && mRepeatInterval)
-		                                                    ? (mRepeatInterval * mRepeatCount).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
+		DateTime           mainEndRepeatTime() const      { return mRepetition ? mRepetition.duration().end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
 		int                reminder() const               { return mReminderMinutes; }
 		bool               reminderOnceOnly() const       { return mReminderOnceOnly; }
 		bool               reminderDeferral() const       { return mDeferral == REMINDER_DEFERRAL; }
@@ -417,7 +413,7 @@ public:
 			int        weeknum;     // week in month, or < 0 to count from end of month
 			QBitArray  days;        // days in week
 		};
-		bool               setRepetition(const KCal::Duration&, int count);
+		bool               setRepetition(const Repetition&);
 		void               setNoRecur()                   { clearRecur(); notifyChanges(); }
 		void               setRecurrence(const KARecurrence&);
 		bool               setRecurMinutely(int freq, int count, const KDateTime& end);
@@ -440,7 +436,6 @@ public:
 		static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime, const QTime& startOfDay, const KTimeZone&);
 //		static bool        convertRepetitions(KCal::CalendarLocal&);
 		KARecurrence::Type checkRecur() const;
-		void               checkRepetition() const;
 
 	private:
 		enum DeferType {

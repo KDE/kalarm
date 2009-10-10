@@ -29,7 +29,7 @@
 #include "latecancel.h"
 #include "preferences.h"
 #include "reminder.h"
-#include "repetition.h"
+#include "repetitionbutton.h"
 #include "shellprocess.h"
 #include "soundpicker.h"
 #include "specialactions.h"
@@ -199,7 +199,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	// Sub-repetition button
 	mSubRepetition = new RepetitionButton(i18nc("@action:button", "Sub-Repetition"), false, group);
 	mSubRepetition->setFixedSize(mSubRepetition->sizeHint());
-	mSubRepetition->set(0, 0, true, 364*24*60);
+	mSubRepetition->set(Repetition(), true, 364*24*60);
 	mSubRepetition->setWhatsThis(i18nc("@info:whatsthis", "Set up an additional alarm repetition"));
 	hlayout->addWidget(mSubRepetition);
 
@@ -269,7 +269,7 @@ QList<KAEvent> BirthdayDlg::events() const
 		QList<int> months;
 		months.append(date.month());
 		event.setRecurAnnualByDate(1, months, 0, KARecurrence::defaultFeb29Type(), -1, QDate());
-		event.setRepetition(mSubRepetition->interval(), mSubRepetition->count());
+		event.setRepetition(mSubRepetition->repetition());
 		event.setNextOccurrence(todayStart);
 		if (reminder)
 			event.setReminder(reminder, false);

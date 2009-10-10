@@ -144,8 +144,7 @@ class KAEvent : public KAEventData::Observer
 		bool               commandScript() const               { return mEventData->commandScript(); }
 		bool               confirmAck() const                  { return mEventData->confirmAck(); }
 		bool               repeatAtLogin() const               { return mEventData->repeatAtLogin(); }
-		int                repeatCount() const                 { return mEventData->repeatCount(); }
-		KCal::Duration     repeatInterval() const              { return mEventData->repeatInterval(); }
+		Repetition         repetition() const                  { return mEventData->repetition(); }
 		bool               beep() const                        { return mEventData->beep(); }
 		bool               isTemplate() const                  { return mEventData->isTemplate(); }
 		const QString&     templateName() const                { return mEventData->templateName(); }
@@ -223,7 +222,7 @@ class KAEvent : public KAEventData::Observer
 		CmdErrType         commandError() const           { return mCommandError; }
 		static QString     commandErrorConfigGroup()      { return mCmdErrConfigGroup; }
 
-		bool               setRepetition(const KCal::Duration& d, int count)  { return mEventData->setRepetition(d, count); }
+		bool               setRepetition(const Repetition& r)  { return mEventData->setRepetition(r); }
 		void               setNoRecur()                   { mEventData->setNoRecur(); }
 		void               setRecurrence(const KARecurrence& r)  { mEventData->setRecurrence(r); }
 		bool               setRecurMinutely(int freq, int count, const KDateTime& end)

@@ -666,7 +666,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 			KAEvent* newev = new KAEvent(*event);
 			QString oldid = event->id();
 			newev->setCategory(KCalEvent::ACTIVE);    // this changes the event ID
-			if (newev->recurs()  ||  newev->repeatCount())
+			if (newev->recurs()  ||  newev->repetition())
 				newev->setNextOccurrence(now);   // skip any recurrences in the past
 			newev->setArchive();    // ensure that it gets re-archived if it is deleted
 

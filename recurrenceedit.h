@@ -28,6 +28,7 @@
 #include <kcal/duration.h>
 
 #include "datetime.h"
+#include "repetition.h"
 
 class QShowEvent;
 class QStackedWidget;
@@ -74,7 +75,7 @@ class RecurrenceEdit : public QFrame
 		QWidget*      checkData(const KDateTime& startDateTime, QString& errorMessage) const;
 		RepeatType    repeatType() const                    { return mRuleButtonType; }
 		bool          isTimedRepeatType() const             { return mRuleButtonType >= SUBDAILY; }
-		int           subRepeatCount(KCal::Duration* subRepeatInterval = 0) const;
+		Repetition    subRepetition() const;
 		void          setSubRepetition(int reminderMinutes, bool dateOnly);
 		void          setStartDate(const QDate&, const QDate& today);
 		void          setDefaultEndDate(const QDate&);
@@ -177,8 +178,7 @@ class RecurrenceEdit : public QFrame
 		int               mSavedRecurCount;          // recurrence repeat count
 		KDateTime         mSavedEndDateTime;         // end date/time
 		QList<QDate>      mSavedExceptionDates;      // exception dates
-		KCal::Duration    mSavedRepeatInterval;      // sub-repetition interval (via mSubRepetition button)
-		int               mSavedRepeatCount;         // sub-repetition count (via mSubRepetition button)
+		Repetition        mSavedRepetition;          // sub-repetition interval & count (via mSubRepetition button)
 		bool              mSavedExclHolidays;        // exclude holidays
 		bool              mSavedWorkTimeOnly;        // only during working hours
 };
