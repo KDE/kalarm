@@ -70,10 +70,10 @@ class KALARM_CAL_EXPORT Repetition
 		}
 	}
 
-	operator bool() const                   { return mCount; }
-	bool operator!() const                  { return !mCount; }
-	bool operator==(const Repetition& r)    { return mInterval == r.mInterval && mCount == r.mCount; }
-	bool operator!=(const Repetition& r)    { return mInterval != r.mInterval || mCount != r.mCount; }
+	operator bool() const                       { return mCount; }
+	bool operator!() const                      { return !mCount; }
+	bool operator==(const Repetition& r) const  { return mInterval == r.mInterval && mCount == r.mCount; }
+	bool operator!=(const Repetition& r) const  { return mInterval != r.mInterval || mCount != r.mCount; }
 
 	/** Return the number of repetitions. */
 	int count() const     { return mCount; }
