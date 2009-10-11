@@ -10,7 +10,6 @@ set(kalarm_calendar_LIB_SRCS
 	identities.cpp
 	kaeventdata.cpp
 	../lib/datetime.cpp
-	../lib/kalocale.cpp
 )
 
 kde4_add_library(kalarm_calendar SHARED ${kalarm_calendar_LIB_SRCS})
