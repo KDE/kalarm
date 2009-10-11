@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Archived Alarms
+Name[en_GB]=KAlarm Archived Alarms
 Name[gl]=Alarmas arquivadas do KAlarm
 Name[nb]=KAlarm arkiverte varslinger
 Name[nds]=Aflopen KAlarm-Alarms
@@ -9,6 +10,7 @@ Name[sv]=Arkiverade alarm i Kalarm
 Name[uk]=Застарілі нагадування KAlarm
 Name[x-test]=xxKAlarm Archived Alarmsxx
 Comment=Loads data from a KAlarm archived alarm calendar file
+Comment[en_GB]=Loads data from a KAlarm archived alarm calendar file
 Comment[gl]=Carrega datos desde un ficheiro de calendario de alarmas arquivadas do KAlarm
 Comment[nb]=Laster data fra en KAlarm kalenderfil med arkiverte varslinger
 Comment[nds]=Laadt Daten ut en KAlarm-Kalennerdatei för aflopen Alarms

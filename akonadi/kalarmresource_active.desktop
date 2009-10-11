@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Active Alarms
+Name[en_GB]=KAlarm Active Alarms
 Name[gl]=Alarmas activas do KAlarm
 Name[nb]=KAlarm aktive varslinger
 Name[nds]=Aktiev KAlarm-Alarms
@@ -9,6 +10,7 @@ Name[sv]=Aktiva alarm i Kalarm
 Name[uk]=Задіяні нагадування KAlarm
 Name[x-test]=xxKAlarm Active Alarmsxx
 Comment=Loads data from a KAlarm active alarm calendar file
+Comment[en_GB]=Loads data from a KAlarm active alarm calendar file
 Comment[gl]=Carrega datos desde un ficheiro de calendario de alarmas activas do KAlarm
 Comment[nb]=Laster data fra en KAlarm kalenderfil med aktive varslinger
 Comment[nds]=Laadt Daten ut en KAlarm-Kalennerdatei för aktiev Alarms

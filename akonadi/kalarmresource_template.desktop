@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Templates
+Name[en_GB]=KAlarm Templates
 Name[gl]=Modelos do KAlarm
 Name[nb]=KAlarm-maler
 Name[nds]=KAlarm-Vörlagen
@@ -9,6 +10,7 @@ Name[sv]=Mallar i Kalarm
 Name[uk]=Шаблони KAlarm
 Name[x-test]=xxKAlarm Templatesxx
 Comment=Loads data from a KAlarm alarm template file
+Comment[en_GB]=Loads data from a KAlarm alarm template file
 Comment[gl]=Carrega datos desde un ficheiro de de modelos de alarma do KAlarm
 Comment[nb]=Laster data fra en KAlarm kalenderfil med varslingsmaler
 Comment[nds]=Laadt Daten ut en KAlarm-Alarmvörlagendatei
