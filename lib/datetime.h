@@ -1,7 +1,7 @@
 /*
  *  datetime.h  -  date/time with start-of-day time for date-only values 
  *  Program:  kalarm
- *  Copyright © 2003,2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003,2005-2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
  *  DateTime is very similar to the KDateTime class. The time assumed for date-only values
  *  is the start-of-day time set by setStartOfDay().
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
 */
 class DateTime
 {
@@ -83,6 +83,10 @@ class DateTime
 		 *  by setStartOfDay().
 		 */
 		KDateTime effectiveKDateTime() const;
+		/** Returns the date and time of the value as written in the calendar.
+		 *  If the value is date-only, the time part returned is 00:00.
+		 */
+		KDateTime calendarKDateTime() const;
 		/** Returns the time zone of the value. */
 		KTimeZone timeZone() const      { return mDateTime.timeZone(); }
 		/** Returns the time specification of the value. */

@@ -173,7 +173,6 @@ class KAlarmApp : public KUniqueApplication
 		DBusHandler*       mDBusHandler;         // the parent of the main DCOP receiver object
 		TrayWindow*        mTrayWindow;          // active system tray icon
 		QTimer*            mAlarmTimer;          // activates KAlarm when next alarm is due
-		QTime              mStartOfDay;          // start-of-day time currently in use
 		QColor             mPrefsArchivedColour; // archived alarms text colour
 		int                mArchivedPurgeDays;   // how long to keep archived alarms, 0 = don't keep, -1 = keep indefinitely
 		int                mPurgeDaysQueued;     // >= 0 to purge the archive calendar from KAlarmApp::processLoop()

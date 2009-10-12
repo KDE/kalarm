@@ -1,7 +1,7 @@
 /*
  *  startdaytimer.cpp  -  timer triggered at the user-defined start-of-day time
  *  Program:  kalarm
- *  Copyright (C) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ StartOfDayTimer* StartOfDayTimer::mInstance = 0;
 StartOfDayTimer::StartOfDayTimer()
 	: DailyTimer(Preferences::startOfDay(), false)
 {
-	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&, const QTime&)), this, SLOT(startOfDayChanged(const QTime&, const QTime&)));
+	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(startOfDayChanged()));
 }
 
 StartOfDayTimer* StartOfDayTimer::instance()
@@ -43,7 +43,7 @@ StartOfDayTimer* StartOfDayTimer::instance()
 * Called when the start-of-day time has changed.
 * The timer is adjusted and if appropriate timer events are triggered now.
 */
-void StartOfDayTimer::startOfDayChanged(const QTime&, const QTime&)
+void StartOfDayTimer::startOfDayChanged()
 {
 	changeTime(Preferences::startOfDay(), true);
 }

@@ -63,9 +63,17 @@ Group=General
 Options=overwrite
 Script=kalarm-2.0.2-general.pl
 
+# KAlarm version 2.1.5
 # Convert KDE3 konsole -T command parameter
 Id=2.1.5
 File=kalarmrc
 Group=General
 Options=overwrite
 Script=kalarm-2.1.5-general.pl
+
+# KAlarm version 2.3.2
+# Remove obsolete key
+Id=2.3.2
+File=kalarmrc
+Group=General
+RemoveKey=Sod

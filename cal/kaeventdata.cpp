@@ -35,8 +35,8 @@ using namespace KCal;
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEventData::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
-QByteArray KAEventData::currentCalendarVersionString()  { return QByteArray("1.9.10"); }
-int        KAEventData::currentCalendarVersion()        { return KAlarm::Version(1,9,10); }
+QByteArray KAEventData::currentCalendarVersionString()  { return QByteArray("2.2.9"); }
+int        KAEventData::currentCalendarVersion()        { return KAlarm::Version(2,2,9); }
 
 QByteArray KAEventData::icalProductId()
 {
@@ -1250,14 +1250,17 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 
 	/* Always set DTSTART as date/time, and use the category "DATE" to indicate
 	 * a date-only event, instead of calling setAllDay(). This is necessary to
-	 * allow the alarm to float within the 24-hour period defined by the
-	 * start-of-day time rather than midnight to midnight.
+	 * allow a time zone to be specified for a date-only event. Also, KAlarm
+	 * allows the alarm to float within the 24-hour period defined by the
+	 * start-of-day time (which is user-dependent and therefore can't be
+	 * written into the calendar) rather than midnight to midnight, and there
+	 * is no RFC2445 conformant way to specify this. 
 	 * RFC2445 states that alarm trigger times specified in absolute terms
 	 * (rather than relative to DTSTART or DTEND) can only be specified as a
 	 * UTC DATE-TIME value. So always use a time relative to DTSTART instead of
 	 * an absolute time.
 	 */
-	ev->setDtStart(mStartDateTime.effectiveKDateTime());
+	ev->setDtStart(mStartDateTime.calendarKDateTime());
 	ev->setAllDay(false);
 	ev->setHasEndDate(false);
 
@@ -1296,7 +1299,7 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 	{
 		DateTime dtl;
 		if (mArchiveRepeatAtLogin)
-			dtl = mStartDateTime.effectiveKDateTime().addDays(-1);
+			dtl = mStartDateTime.calendarKDateTime().addDays(-1);
 		else if (mAtLoginDateTime.isValid())
 			dtl = mAtLoginDateTime;
 		else if (mStartDateTime.isDateOnly())
@@ -1343,12 +1346,12 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 		QStringList list;
 		if (mDeferralTime.isDateOnly())
 		{
-			startOffset = nextDateTime.secsTo(mDeferralTime.effectiveKDateTime());
+			startOffset = nextDateTime.secsTo(mDeferralTime.calendarKDateTime());
 			list += DATE_DEFERRAL_TYPE;
 		}
 		else
 		{
-			startOffset = nextDateTime.effectiveKDateTime().secsTo(mDeferralTime.effectiveKDateTime());
+			startOffset = nextDateTime.calendarKDateTime().secsTo(mDeferralTime.calendarKDateTime());
 			list += TIME_DEFERRAL_TYPE;
 		}
 		if (mDeferral == REMINDER_DEFERRAL)
@@ -1427,7 +1430,7 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 Alarm* KAEventData::initKCalAlarm(Event* event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
 {
 	int startOffset = dt.isDateOnly() ? mStartDateTime.secsTo(dt)
-	                                  : mStartDateTime.effectiveKDateTime().secsTo(dt.effectiveKDateTime());
+	                                  : mStartDateTime.calendarKDateTime().secsTo(dt.calendarKDateTime());
 	return initKCalAlarm(event, startOffset, types, type);
 }
 
@@ -2784,95 +2787,13 @@ QList<KAEventData::MonthPos> KAEventData::convRecurPos(const QList<KCal::Recurre
 #endif
 
 /******************************************************************************
- * Adjust the time at which date-only events will occur for each of the events
- * in a list. Events for which both date and time are specified are left
- * unchanged.
- * Reply = true if any events have been updated.
- */
-bool KAEventData::adjustStartOfDay(const Event::List& events, const QTime& startOfDay, const KTimeZone& timeZone)
-{
-	bool changed = false;
-	for (int ei = 0, eend = events.count();  ei < eend;  ++ei)
-	{
-		Event* event = events[ei];
-		QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
-		if (flags.indexOf(DATE_ONLY_FLAG) >= 0)
-		{
-			// It's an untimed event, so fix it
-			QTime oldTime = event->dtStart().time();
-			int adjustment = oldTime.secsTo(startOfDay);
-			if (adjustment)
-			{
-				event->setDtStart(KDateTime(event->dtStart().date(), startOfDay, timeZone));
-				Alarm::List alarms = event->alarms();
-				int deferralOffset = 0;
-				for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
-				{
-					// Parse the next alarm's text
-					Alarm* alarm = alarms[ai];
-					AlarmData data;
-					readAlarm(alarm, data);
-					if (data.type & KAAlarm::TIMED_DEFERRAL_FLAG)
-					{
-						// Timed deferral alarm, so adjust the offset
-						deferralOffset = alarm->startOffset().asSeconds();
-						alarm->setStartOffset(deferralOffset - adjustment);
-					}
-					else if (data.type == KAAlarm::AUDIO__ALARM
-					&&       alarm->startOffset().asSeconds() == deferralOffset)
-					{
-						// Audio alarm is set for the same time as the deferral alarm
-						alarm->setStartOffset(deferralOffset - adjustment);
-					}
-				}
-				changed = true;
-			}
-		}
-		else
-		{
-			// It's a timed event. Fix any untimed alarms.
-			int deferralOffset = 0;
-			int newDeferralOffset = 0;
-			DateTime start;
-			KDateTime nextMainDateTime = readDateTime(event, false, start).kDateTime();
-			AlarmMap alarmMap;
-			readAlarms(event, &alarmMap);
-			for (AlarmMap::Iterator it = alarmMap.begin();  it != alarmMap.end();  ++it)
-			{
-				const AlarmData& data = it.value();
-				if (!data.alarm->hasStartOffset())
-					continue;
-				if ((data.type & KAAlarm::DEFERRED_ALARM)
-				&&  !(data.type & KAAlarm::TIMED_DEFERRAL_FLAG))
-				{
-					// Date-only deferral alarm, so adjust its time
-					KDateTime altime = data.alarm->startOffset().end(nextMainDateTime);
-					altime.setTime(startOfDay);
-					deferralOffset = data.alarm->startOffset().asSeconds();
-					newDeferralOffset = event->dtStart().secsTo(altime);
-					const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
-					changed = true;
-				}
-				else if (data.type == KAAlarm::AUDIO__ALARM
-				&&       data.alarm->startOffset().asSeconds() == deferralOffset)
-				{
-					// Audio alarm is set for the same time as the deferral alarm
-					const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
-					changed = true;
-				}
-			}
-		}
-	}
-	return changed;
-}
-
-/******************************************************************************
  * If the calendar was written by a previous version of KAlarm, do any
  * necessary format conversions on the events to ensure that when the calendar
  * is saved, no information is lost or corrupted.
  * Reply = true if any conversions were done.
  */
-bool KAEventData::convertKCalEvents(KCal::CalendarLocal& calendar, int version, bool adjustSummerTime, const QTime& startOfDay)
+bool KAEventData::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersion,
+                                    bool adjustSummerTime, const QTime& startOfDay, const KTimeZone& timeZone)
 {
 	// KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
 	static const QChar   SEPARATOR        = QLatin1Char(';');
@@ -2912,25 +2833,28 @@ bool KAEventData::convertKCalEvents(KCal::CalendarLocal& calendar, int version, 
 	// KAlarm pre-1.5.0/1.9.9 properties
 	static const QByteArray KMAIL_ID_PROPERTY("KMAILID");    // X-KDE-KALARM-KMAILID property
 
-	if (version >= currentCalendarVersion())
+	if (calendarVersion >= currentCalendarVersion())
 		return false;
 
-	kDebug() << "Adjusting version" << version;
-	bool pre_0_7    = (version < KAlarm::Version(0,7,0));
-	bool pre_0_9    = (version < KAlarm::Version(0,9,0));
-	bool pre_0_9_2  = (version < KAlarm::Version(0,9,2));
-	bool pre_1_1_1  = (version < KAlarm::Version(1,1,1));
-	bool pre_1_2_1  = (version < KAlarm::Version(1,2,1));
-	bool pre_1_3_0  = (version < KAlarm::Version(1,3,0));
-	bool pre_1_3_1  = (version < KAlarm::Version(1,3,1));
-	bool pre_1_4_14 = (version < KAlarm::Version(1,4,14));
-	bool pre_1_5_0  = (version < KAlarm::Version(1,5,0));
-	bool pre_1_9_0  = (version < KAlarm::Version(1,9,0));
-	bool pre_1_9_2  = (version < KAlarm::Version(1,9,2));
-	bool pre_1_9_7  = (version < KAlarm::Version(1,9,7));
-	bool pre_1_9_9  = (version < KAlarm::Version(1,9,9));
-	bool pre_1_9_10 = (version < KAlarm::Version(1,9,10));
-	Q_ASSERT(currentCalendarVersion() == KAlarm::Version(1,9,10));
+	kDebug() << "Adjusting version" << calendarVersion;
+	bool pre_0_7    = (calendarVersion < KAlarm::Version(0,7,0));
+	bool pre_0_9    = (calendarVersion < KAlarm::Version(0,9,0));
+	bool pre_0_9_2  = (calendarVersion < KAlarm::Version(0,9,2));
+	bool pre_1_1_1  = (calendarVersion < KAlarm::Version(1,1,1));
+	bool pre_1_2_1  = (calendarVersion < KAlarm::Version(1,2,1));
+	bool pre_1_3_0  = (calendarVersion < KAlarm::Version(1,3,0));
+	bool pre_1_3_1  = (calendarVersion < KAlarm::Version(1,3,1));
+	bool pre_1_4_14 = (calendarVersion < KAlarm::Version(1,4,14));
+	bool pre_1_5_0  = (calendarVersion < KAlarm::Version(1,5,0));
+	bool pre_1_9_0  = (calendarVersion < KAlarm::Version(1,9,0));
+	bool pre_1_9_2  = (calendarVersion < KAlarm::Version(1,9,2));
+	bool pre_1_9_7  = (calendarVersion < KAlarm::Version(1,9,7));
+	bool pre_1_9_9  = (calendarVersion < KAlarm::Version(1,9,9));
+	bool pre_1_9_10 = (calendarVersion < KAlarm::Version(1,9,10));
+	bool pre_2_2_9  = (calendarVersion < KAlarm::Version(2,2,9));
+	bool pre_2_3_0  = (calendarVersion < KAlarm::Version(2,3,0));
+	bool pre_2_3_2  = (calendarVersion < KAlarm::Version(2,3,2));
+	Q_ASSERT(currentCalendarVersion() == KAlarm::Version(2,2,9));
 
 	KTimeZone localZone;
 	if (pre_1_9_2)
@@ -3401,11 +3325,99 @@ bool KAEventData::convertKCalEvents(KCal::CalendarLocal& calendar, int version, 
 		}
 #endif
 
+		if (pre_2_2_9  ||  (pre_2_3_2 && !pre_2_3_0))
+		{
+			/*
+			 * It's a KAlarm pre-2.2.9 or KAlarm 2.3 series pre-2.3.2 calendar file.
+			 * Set the time in the calendar for all date-only alarms to 00:00.
+			 */
+			if (convertStartOfDay(event, timeZone))
+				converted = true;
+		}
+
 		if (readOnly)
 			event->setReadOnly(true);
 		event->endUpdates();     // finally issue an update notification
 	}
 	return converted;
+}
+
+/******************************************************************************
+* Set the time for a date-only event to 00:00.
+* Reply = true if the event was updated.
+*/
+bool KAEventData::convertStartOfDay(Event* event, const KTimeZone& timeZone)
+{
+	bool changed = false;
+	QTime midnight(0, 0);
+	QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
+	if (flags.indexOf(DATE_ONLY_FLAG) >= 0)
+	{
+		// It's an untimed event, so fix it
+		QTime oldTime = event->dtStart().time();
+		int adjustment = oldTime.secsTo(midnight);
+		if (adjustment)
+		{
+			event->setDtStart(KDateTime(event->dtStart().date(), midnight, timeZone));
+			Alarm::List alarms = event->alarms();
+			int deferralOffset = 0;
+			for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
+			{
+				// Parse the next alarm's text
+				Alarm* alarm = alarms[ai];
+				AlarmData data;
+				readAlarm(alarm, data);
+				if (data.type & KAAlarm::TIMED_DEFERRAL_FLAG)
+				{
+					// Timed deferral alarm, so adjust the offset
+					deferralOffset = alarm->startOffset().asSeconds();
+					alarm->setStartOffset(deferralOffset - adjustment);
+				}
+				else if (data.type == KAAlarm::AUDIO__ALARM
+				&&       alarm->startOffset().asSeconds() == deferralOffset)
+				{
+					// Audio alarm is set for the same time as the deferral alarm
+					alarm->setStartOffset(deferralOffset - adjustment);
+				}
+			}
+			changed = true;
+		}
+	}
+	else
+	{
+		// It's a timed event. Fix any untimed alarms.
+		int deferralOffset = 0;
+		int newDeferralOffset = 0;
+		DateTime start;
+		KDateTime nextMainDateTime = readDateTime(event, false, start).kDateTime();
+		AlarmMap alarmMap;
+		readAlarms(event, &alarmMap);
+		for (AlarmMap::Iterator it = alarmMap.begin();  it != alarmMap.end();  ++it)
+		{
+			const AlarmData& data = it.value();
+			if (!data.alarm->hasStartOffset())
+				continue;
+			if ((data.type & KAAlarm::DEFERRED_ALARM)
+			&&  !(data.type & KAAlarm::TIMED_DEFERRAL_FLAG))
+			{
+				// Date-only deferral alarm, so adjust its time
+				KDateTime altime = data.alarm->startOffset().end(nextMainDateTime);
+				altime.setTime(midnight);
+				deferralOffset = data.alarm->startOffset().asSeconds();
+				newDeferralOffset = event->dtStart().secsTo(altime);
+				const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
+				changed = true;
+			}
+			else if (data.type == KAAlarm::AUDIO__ALARM
+			&&       data.alarm->startOffset().asSeconds() == deferralOffset)
+			{
+				// Audio alarm is set for the same time as the deferral alarm
+				const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
+				changed = true;
+			}
+		}
+	}
+	return changed;
 }
 
 #if 0

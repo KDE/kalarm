@@ -68,8 +68,6 @@ Preferences*   Preferences::mInstance = 0;
 bool           Preferences::mUsingDefaults = false;
 KTimeZone      Preferences::mSystemTimeZone;
 HolidayRegion* Preferences::mHolidays = 0;   // always non-null after Preferences initialisation
-QTime          Preferences::mOldStartOfDay(0, 0, 0);
-bool           Preferences::mStartOfDayChanged = false;
 
 
 Preferences* Preferences::self()
@@ -151,47 +149,19 @@ void Preferences::holidaysChange(const QString& regionCode)
 	emit mInstance->holidaysChanged(holidays());
 }
 
-static const int SODxor = 0x82451630;
-inline int Preferences::startOfDayCheck(const QTime& t)
-{
-	// Combine with a 'random' constant to prevent 'clever' people fiddling the
-	// value, and thereby screwing things up.
-	return QTime().msecsTo(t) ^ SODxor;
-}
-
 void Preferences::setStartOfDay(const QTime& t)
 {
-	self()->setBase_StartOfDay(QDateTime(QDate(1900,1,1), t));
-	// Combine with a 'random' constant to prevent 'clever' people fiddling the
-	// value, and thereby screwing things up.
-	updateStartOfDayCheck(t);
-	if (t != mOldStartOfDay)
+	if (t != self()->mBase_StartOfDay.time())
 	{
-		emit mInstance->startOfDayChanged(t, mOldStartOfDay);
-		mOldStartOfDay = t;
+		self()->setBase_StartOfDay(QDateTime(QDate(1900,1,1), t));
+		emit mInstance->startOfDayChanged(t);
 	}
 }
 
 // Called when the start of day value has changed in the config file
 void Preferences::startDayChange(const QDateTime& dt)
 {
-	int SOD = sod();
-	if (SOD)
-		mOldStartOfDay = QTime(0,0).addMSecs(SOD ^ SODxor);
-	QTime t = dt.time();
-	mStartOfDayChanged = (t != mOldStartOfDay);
-	if (mStartOfDayChanged)
-	{
-		emit mInstance->startOfDayChanged(t, mOldStartOfDay);
-		mOldStartOfDay = t;
-	}
-}
-
-void Preferences::updateStartOfDayCheck(const QTime& t)
-{
-	self()->setSod(startOfDayCheck(t));
-	self()->writeConfig();
-	mStartOfDayChanged = false;
+	emit mInstance->startOfDayChanged(dt.time());
 }
 
 QBitArray Preferences::workDays()

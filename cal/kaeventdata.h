@@ -437,8 +437,7 @@ public:
 		static QByteArray  icalProductId();
 		static int         currentCalendarVersion();
 		static QByteArray  currentCalendarVersionString();
-		static bool        adjustStartOfDay(const KCal::Event::List&, const QTime& startOfDay, const KTimeZone& timeZone);
-		static bool        convertKCalEvents(KCal::CalendarLocal&, int version, bool adjustSummerTime, const QTime& startOfDay);
+		static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime, const QTime& startOfDay, const KTimeZone&);
 //		static bool        convertRepetitions(KCal::CalendarLocal&);
 		KARecurrence::Type checkRecur() const;
 		void               checkRepetition() const;
@@ -456,6 +455,7 @@ public:
 		void               clearRecur();
 		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result, const QTime& startOfDay) const;
 		void               notifyChanges() const;
+		static bool        convertStartOfDay(KCal::Event*, const KTimeZone&);
 		static bool        convertRepetition(KCal::Event*);
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
