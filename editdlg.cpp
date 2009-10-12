@@ -89,7 +89,7 @@ static const int  maxDelayTime = 99*60 + 59;    // < 100 hours
 inline QString recurText(const KAEvent& event)
 {
 	QString r;
-	if (event.repeatCount())
+	if (event.repetition())
 		r = QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
 	else
 		r = event.recurrenceText();
@@ -473,7 +473,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 		if (mTemplate)
 			mTemplateName->setText(event->templateName());
 		bool recurs = event->recurs();
-		if ((recurs || event->repeatCount())  &&  !mTemplate  &&  event->deferred())
+		if ((recurs || event->repetition())  &&  !mTemplate  &&  event->deferred())
 		{
 			deferGroupVisible = true;
 			mDeferDateTime = event->deferDateTime();
@@ -584,7 +584,7 @@ void EditAlarmDlg::setRecurrence(const KARecurrence& recur, int subRepeatInterva
 	KAEvent event;
 	event.setTime(mTimeWidget->getDateTime(0, false, false));
 	event.setRecurrence(recur);
-	event.setRepetition(subRepeatInterval, subRepeatCount - 1);
+	event.setRepetition(Repetition(subRepeatInterval, subRepeatCount - 1));
 	mRecurrenceEdit->set(event);
 }
 void EditAlarmDlg::setRepeatAtLogin()
@@ -1020,7 +1020,7 @@ bool EditAlarmDlg::validate()
 				return false;
 			}
 		}
-		if (mRecurrenceEdit->subRepeatCount())
+		if (mRecurrenceEdit->subRepetition())
 		{
 			if (longestRecurMinutes < 0)
 			{
@@ -1028,13 +1028,13 @@ bool EditAlarmDlg::validate()
 				longestRecurMinutes = recurEvent.longestRecurrenceInterval().asSeconds() / 60;
 			}
 			if (longestRecurMinutes > 0
-			&&  recurEvent.repeatInterval().asSeconds()/60 * recurEvent.repeatCount() >= longestRecurMinutes - reminder)
+			&&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminder)
 			{
 				KMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
 				mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
 				return false;
 			}
-			if (!recurEvent.repeatInterval().isDaily()
+			if (!recurEvent.repetition().isDaily()
 			&&  ((mTemplate && mTemplateAnyTime->isChecked())  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
 			{
 				KMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
@@ -1173,10 +1173,9 @@ void EditAlarmDlg::slotEditDeferral()
 	if (!mTimeWidget)
 		return;
 	bool limit = true;
-	Duration repeatInterval;
-	int repeatCount = mRecurrenceEdit->subRepeatCount(&repeatInterval);
+	Repetition repetition = mRecurrenceEdit->subRepetition();
 	DateTime start = mSavedEvent->recurs() ? (mExpiredRecurrence ? DateTime() : mSavedEvent->mainDateTime())
-	               : mTimeWidget->getDateTime(0, !repeatCount, !mExpiredRecurrence);
+	               : mTimeWidget->getDateTime(0, !repetition, !mExpiredRecurrence);
 	if (!start.isValid())
 	{
 		if (!mExpiredRecurrence)
@@ -1186,18 +1185,18 @@ void EditAlarmDlg::slotEditDeferral()
 	KDateTime now = KDateTime::currentUtcDateTime();
 	if (limit)
 	{
-		if (repeatCount  &&  start < now)
+		if (repetition  &&  start < now)
 		{
 			// Sub-repetition - find the time of the next one
-			int repetition = repeatInterval.isDaily()
-			               ? (start.daysTo(now) + repeatInterval.asDays() - 1) / repeatInterval.asDays()
-			               : (start.secsTo(now) + repeatInterval.asSeconds() - 1) / repeatInterval.asSeconds();
-			if (repetition > repeatCount)
+			int repeatNum = repetition.isDaily()
+			               ? (start.daysTo(now) + repetition.intervalDays() - 1) / repetition.intervalDays()
+			               : (start.secsTo(now) + repetition.intervalSeconds() - 1) / repetition.intervalSeconds();
+			if (repeatNum > repetition.count())
 			{
 				mTimeWidget->getDateTime();    // output the appropriate error message
 				return;
 			}
-			start = (repeatInterval * repetition).end(start.kDateTime());
+			start = repetition.duration(repeatNum).end(start.kDateTime());
 		}
 	}
 

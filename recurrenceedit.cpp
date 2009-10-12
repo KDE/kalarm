@@ -35,7 +35,7 @@
 #include "karecurrence.h"
 #include "preferences.h"
 #include "radiobutton.h"
-#include "repetition.h"
+#include "repetitionbutton.h"
 #include "spinbox.h"
 #include "timeedit.h"
 #include "timespinbox.h"
@@ -532,15 +532,12 @@ void RecurrenceEdit::showEvent(QShowEvent*)
 }
 
 /******************************************************************************
-* Return the sub-repetition count within the recurrence, i.e. the number of
-* repetitions after the main recurrence.
+* Return the sub-repetition interval and count within the recurrence, i.e. the
+* number of repetitions after the main recurrence.
 */
-int RecurrenceEdit::subRepeatCount(Duration* subRepeatInterval) const
+Repetition RecurrenceEdit::subRepetition() const
 {
-	int count = (mRuleButtonType >= SUBDAILY) ? mSubRepetition->count() : 0;
-	if (subRepeatInterval)
-		*subRepeatInterval = count ? mSubRepetition->interval() : Duration(0);
-	return count;
+	return (mRuleButtonType >= SUBDAILY) ? mSubRepetition->repetition() : Repetition();
 }
 
 /******************************************************************************
@@ -568,7 +565,7 @@ void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
 			break;
 		}
 	}
-	mSubRepetition->initialise(mSubRepetition->interval(), mSubRepetition->count(), dateOnly, maxDuration);
+	mSubRepetition->initialise(mSubRepetition->repetition(), dateOnly, maxDuration);
 	mSubRepetition->setEnabled(mRuleButtonType >= SUBDAILY && maxDuration);
 }
 
@@ -926,7 +923,7 @@ void RecurrenceEdit::set(const KAEvent& event)
 	mWorkTimeOnly->setChecked(event.workTimeOnly());
 
 	// Get repetition within recurrence
-	mSubRepetition->set(event.repeatInterval(), event.repeatCount());
+	mSubRepetition->set(event.repetition());
 
 	rangeTypeClicked();
 
@@ -1032,10 +1029,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 
 	// Set up repetition within the recurrence
 	// N.B. This requires the main recurrence to be set up first.
-	int count = mSubRepetition->count();
-	if (mRuleButtonType < SUBDAILY)
-		count = 0;
-	event.setRepetition(mSubRepetition->interval(), count);
+	event.setRepetition((mRuleButtonType < SUBDAILY) ? Repetition() : mSubRepetition->repetition());
 
 	// Set up exceptions
 	event.recurrence()->setExDates(mExceptionDates);
@@ -1065,8 +1059,7 @@ void RecurrenceEdit::saveState()
 	mSavedExceptionDates = mExceptionDates;
 	mSavedWorkTimeOnly   = mWorkTimeOnly->isChecked();
 	mSavedExclHolidays   = mExcludeHolidays->isChecked();
-	mSavedRepeatInterval = mSubRepetition->interval();
-	mSavedRepeatCount    = mSubRepetition->count();
+	mSavedRepetition     = mSubRepetition->repetition();
 }
 
 /******************************************************************************
@@ -1091,8 +1084,7 @@ bool RecurrenceEdit::stateChanged() const
 	if (mSavedExceptionDates != mExceptionDates
 	||  mSavedWorkTimeOnly   != mWorkTimeOnly->isChecked()
 	||  mSavedExclHolidays   != mExcludeHolidays->isChecked()
-	||  mSavedRepeatInterval != mSubRepetition->interval()
-	||  mSavedRepeatCount    != mSubRepetition->count())
+	||  mSavedRepetition     != mSubRepetition->repetition())
 		return true;
 	return false;
 }

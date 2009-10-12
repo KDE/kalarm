@@ -89,7 +89,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    kamail.cpp 
    timeselector.cpp 
    latecancel.cpp 
-   repetition.cpp 
+   repetitionbutton.cpp 
    emailidcombo.cpp 
    find.cpp 
    pickfileradio.cpp 

@@ -66,6 +66,8 @@ class KALARM_CAL_EXPORT KARecurrence : public KCal::Recurrence
 		                        { return init(t, freq, count, f29, start, end); }
 		void        fix();
 		void        writeRecurrence(KCal::Recurrence&) const;
+		void        setStartDateTime(const KDateTime& dt, bool dateOnly)
+					{ KCal::Recurrence::setStartDateTime(dt);  if (dateOnly) KCal::Recurrence::setAllDay(true); }
 		KDateTime   endDateTime() const;
 		QDate       endDate() const;
 		bool        recursOn(const QDate&, const KDateTime::Spec&) const;
@@ -81,6 +83,9 @@ class KALARM_CAL_EXPORT KARecurrence : public KCal::Recurrence
 		static void setDefaultFeb29Type(Feb29Type t)    { mDefaultFeb29 = t; }
 
 	private:
+		/** Prevent public use: KARecurrence::setStartDateTime() handles all-day setting. */
+		void        setAllDay(bool);
+
 		bool        set(Type, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
 		bool        init(KCal::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
 		int         combineDurations(const KCal::RecurrenceRule*, const KCal::RecurrenceRule*, QDate& end) const;

@@ -22,12 +22,13 @@
 #include "karecurrence.h"
 
 #include "datetime.h"
-#include "kalocale.h"
-
-#include <QBitArray>
-#include <kdebug.h>
 
 #include <kcal/icalformat.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdebug.h>
+
+#include <QBitArray>
 
 
 using namespace KCal;
@@ -154,7 +155,7 @@ bool KARecurrence::init(RecurrenceRule::PeriodType recurType, int freq, int coun
 		}
 		mFeb29Type = feb29Type;
 	}
-	setStartDateTime(startdt);   // sets recurrence all-day if date-only
+	Recurrence::setStartDateTime(startdt);   // sets recurrence all-day if date-only
 	return true;
 }
 
@@ -489,7 +490,6 @@ void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
 						 * is not lost should the user later change the recurrence count.
 						 */
 						KDateTime end = endDateTime();
-kDebug(0)<<"29th recurrence: count="<<count<<", end date="<<end.toString();
 						int count1 = rrule1->durationTo(end)
 						             - (rrule1->recursOn(startDate(), startDateTime().timeSpec()) ? 0 : 1);
 						if (count1 > 0)
@@ -755,9 +755,14 @@ Duration KARecurrence::longestInterval() const
 			int first = -1;
 			int last  = -1;
 			int maxgap = 1;
+			// Use the user's definition of the week, starting at the
+			// day of the week specified by the user's locale.
+			int weekStart = KGlobal::locale()->weekStartDay() - 1;  // zero-based
 			for (int i = 0;  i < 7;  ++i)
 			{
-				if (ds.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1))
+				// Get the standard KDE day-of-week number (zero-based)
+				// for the day-of-week number in the user's locale.
+				if (ds.testBit((i + weekStart) % 7))
 				{
 					if (first < 0)
 						first = i;

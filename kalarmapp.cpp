@@ -968,7 +968,7 @@ bool KAlarmApp::scheduleEvent(KAEventData::Action action, const QString& text, c
 		event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
 	event.setRecurrence(recurrence);
 	event.setFirstRecurrence();
-	event.setRepetition(repeatInterval, repeatCount - 1);
+	event.setRepetition(Repetition(repeatInterval, repeatCount - 1));
 	event.endChanges();
 	if (alarmTime <= now)
 	{
