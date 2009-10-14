@@ -108,7 +108,7 @@ void RepetitionButton::initialise(const Repetition& repetition, bool dateOnly, i
 }
 
 /******************************************************************************
-* Display the simple alarm repetition dialog.
+* Display the alarm sub-repetition dialog.
 * Alarm repetition has the following restrictions:
 * 1) Not allowed for a repeat-at-login alarm
 * 2) For a date-only alarm, the repeat interval must be a whole number of days.

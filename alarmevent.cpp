@@ -166,6 +166,8 @@ void KAEvent::eventUpdated(const KAEventData* event)
 		||  (!event->repetition()  &&  event->checkRecur() == KARecurrence::NO_RECUR)
 		||  KAlarm::isWorkingTime(mMainTrigger.kDateTime(), this))
 		{
+			// It only occurs once, or it complies with any working hours/holiday
+			// restrictions.
 			mMainWorkTrigger = mMainTrigger;
 			mAllWorkTrigger = mAllTrigger;
 		}
