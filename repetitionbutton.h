@@ -74,16 +74,16 @@ class RepetitionDlg : public KDialog
 		Q_OBJECT
 	public:
 		RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = 0);
-		void           setReadOnly(bool);
-		void           set(const Repetition&, bool dateOnly = false, int maxDuration = -1);
-		Repetition     repetition() const;   // get the repetition interval and count
+		void       setReadOnly(bool);
+		void       set(const Repetition&, bool dateOnly = false, int maxDuration = -1);
+		Repetition repetition() const;   // get the repetition interval and count
 
 	private slots:
-		void           typeClicked();
-		void           intervalChanged(const KCal::Duration&);
-		void           countChanged(int);
-		void           durationChanged(const KCal::Duration&);
-		void           repetitionToggled(bool);
+		void       typeClicked();
+		void       intervalChanged(const KCal::Duration&);
+		void       countChanged(int);
+		void       durationChanged(const KCal::Duration&);
+		void       repetitionToggled(bool);
 
 	private:
 		TimeSelector*  mTimeSelector;

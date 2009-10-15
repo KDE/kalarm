@@ -24,11 +24,10 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
-#include <QFrame>
-#include <kcal/duration.h>
-
 #include "datetime.h"
 #include "repetition.h"
+
+#include <QFrame>
 
 class QShowEvent;
 class QStackedWidget;
