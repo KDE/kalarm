@@ -201,6 +201,11 @@ bool KAlarmApp::restoreSession()
 	// Process is being restored by session management.
 	kDebug() << "Restoring";
 	++mActiveCount;
+	// Create the session config object now.
+	// This is necessary since if initCheck() below causes calendars to be updated,
+	// the session config created after that points to an invalid file, resulting
+	// in no windows being restored followed by a later crash.
+	kapp->sessionConfig();
 	if (!initCheck(true))     // open the calendar file (needed for main windows), don't process queue yet
 	{
 		--mActiveCount;
