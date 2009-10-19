@@ -465,7 +465,7 @@ void MainWindow::initActions()
 	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
 
 	// Set up Shift-Delete as a shortcut to delete without confirmation
-	mActionDeleteForce = new KAction(this);
+	mActionDeleteForce = new KAction(i18nc("@action", "Delete Without Confirmation"), this);
 	actions->addAction(QLatin1String("delete-force"), mActionDeleteForce);
 	mActionDeleteForce->setShortcut(QKeySequence::Delete + Qt::SHIFT);
 	connect(mActionDeleteForce, SIGNAL(triggered(bool)), SLOT(slotDeleteForce()));
