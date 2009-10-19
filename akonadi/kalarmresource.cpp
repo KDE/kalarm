@@ -68,13 +68,13 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     const KCal::Event* kcalEvent = calendar()->event(rid);
     if (!kcalEvent)
     {
-        emit error(i18n("Event with uid '%1' not found!", rid));
+        emit error(i18n("Event with uid '%1' not found.", rid));
         return false;
     }
 
     if (kcalEvent->alarms().isEmpty())
     {
-	emit error(i18n("Event with uid '%1' contains no usable alarms!", rid));
+	emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
         return false;
     }
 
@@ -82,7 +82,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     QString mime = mimeType(event);
     if (mime.isEmpty())
     {
-        emit error(i18n("Event with uid '%1' contains no usable alarms!", rid));
+        emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
         delete event;
         return false;
     }
