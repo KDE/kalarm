@@ -1328,7 +1328,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 	mSoundRepeat = new QCheckBox(i18nc("@option:check", "Repeat sound file"), bbox);
 	mSoundRepeat->setMinimumSize(mSoundRepeat->sizeHint());
 	mSoundRepeat->setWhatsThis(
-	      i18nc("@info:whatsthis sound file 'Repeat' checkbox", "The default setting for sound file <interface>%1</interface> in the alarm edit dialog.", SoundDlg::i18n_chk_Repeat()));
+	      i18nc("@info:whatsthis sound file 'Repeat' checkbox", "The default setting for sound file <interface>%1</interface> in the alarm edit dialog.", SoundWidget::i18n_chk_Repeat()));
 	hlayout->addWidget(mSoundRepeat);
 
 	box = new KHBox(bbox);   // this is to control the QWhatsThis text display area

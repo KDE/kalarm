@@ -47,7 +47,8 @@ class EventListModel : public QAbstractTableModel
 			DISPLAY = 0x01,
 			COMMAND = 0x02,
 			EMAIL   = 0x04,
-			ALL     = DISPLAY | COMMAND | EMAIL
+			AUDIO   = 0x08,
+			ALL     = DISPLAY | COMMAND | EMAIL | AUDIO
 		};
 		enum {   // data columns
 			TimeColumn, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
@@ -117,6 +118,7 @@ class EventListModel : public QAbstractTableModel
 		static QPixmap* mFileIcon;
 		static QPixmap* mCommandIcon;
 		static QPixmap* mEmailIcon;
+		static QPixmap* mAudioIcon;
 		static QSize    mIconSize;      // maximum size of any icon
 		static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 

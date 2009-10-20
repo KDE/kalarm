@@ -43,6 +43,7 @@ class SpecialActionsButton;
 class CommandEdit;
 class LineEdit;
 class TextEdit;
+class SoundWidget;
 
 
 class EditDisplayAlarmDlg : public EditAlarmDlg
@@ -254,6 +255,47 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		QString             mSavedEmailSubject;     // mEmailSubjectEdit value
 		QStringList         mSavedEmailAttach;      // mEmailAttachList values
 		bool                mSavedEmailBcc;         // mEmailBcc status
+};
+
+
+class EditAudioAlarmDlg : public EditAlarmDlg
+{
+		Q_OBJECT
+	public:
+		EditAudioAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
+		             GetResourceType = RES_PROMPT);
+		EditAudioAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
+		             GetResourceType = RES_PROMPT, bool readOnly = false);
+
+		// Methods to initialise values in the New Alarm dialogue.
+		// N.B. setTime() must be called first to set the date-only characteristic,
+		//      followed by setRecurrence().
+		virtual void    setAction(KAEventData::Action, const AlarmText& = AlarmText());
+		void            setAudio(const QString& file, float volume = -1);
+
+	protected:
+		virtual QString type_caption(bool newAlarm) const;
+		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
+		virtual void    type_initValues(const KAEvent*);
+		virtual void    type_showOptions(bool)  {}
+		virtual void    setReadOnly(bool readOnly);
+		virtual void    saveState(const KAEvent*);
+		virtual bool    type_stateChanged() const;
+		virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
+		virtual int     getAlarmFlags() const;
+		virtual bool    type_validate(bool trial) { Q_UNUSED(trial); return true; }
+		virtual void    type_trySuccessMessage(ShellProcess*, const QString&)  {}
+		virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
+
+		// Audio alarm options
+		SoundWidget*        mSoundConfig;
+		KHBox*              mPadding;          // allow top-adjustment of controls
+
+		// Initial state of all controls
+		KUrl                mSavedFile;        // mSoundPicker sound file
+		float               mSavedVolume;      // mSoundPicker volume
+		float               mSavedFadeVolume;  // mSoundPicker fade volume
+		int                 mSavedFadeSeconds; // mSoundPicker fade time
 };
 
 #endif // EDITDLGTYPES_H

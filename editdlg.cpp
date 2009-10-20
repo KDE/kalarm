@@ -109,6 +109,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWid
 		case DISPLAY:  return new EditDisplayAlarmDlg(Template, newAlarm, parent, getResource);
 		case COMMAND:  return new EditCommandAlarmDlg(Template, newAlarm, parent, getResource);
 		case EMAIL:    return new EditEmailAlarmDlg(Template, newAlarm, parent, getResource);
+		case AUDIO:    return new EditAudioAlarmDlg(Template, newAlarm, parent, getResource);
 		default:  break;
 	}
 	return 0;
@@ -126,6 +127,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 		case KAEventData::MESSAGE:
 		case KAEventData::FILE:     return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 		case KAEventData::EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEventData::AUDIO:    return new EditAudioAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
 	}
 	return 0;
 }
@@ -1094,6 +1096,7 @@ void EditAlarmDlg::slotTry()
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc  &&  proc != (void*)-1)
 			type_trySuccessMessage((ShellProcess*)proc, text);
+#warning Kill Audio alarm when edit window is closed
 	}
 }
 
@@ -1118,6 +1121,7 @@ void EditAlarmDlg::slotHelp()
 		case KAEventData::MESSAGE:  type = EventListModel::DISPLAY;  break;
 		case KAEventData::COMMAND:  type = EventListModel::COMMAND;  break;
 		case KAEventData::EMAIL:    type = EventListModel::EMAIL;  break;
+		case KAEventData::AUDIO:    type = EventListModel::AUDIO;  break;
 		default:
 			return;
 	}

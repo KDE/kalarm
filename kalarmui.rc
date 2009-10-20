@@ -4,6 +4,7 @@
   <Action name="newDisplay" />
   <Action name="newCommand" />
   <Action name="newEmail" />
+  <Action name="newAudio" />
   <Action name="newFromTempl" />
   <Separator/>
   <Action name="copy" />
@@ -50,6 +51,8 @@
    <Separator/>
    <Action name="alarmsEnable" />
    <Action name="refreshAlarms" />
+   <Separator/>
+   <Action name="stopAudio" />
   </Menu>
   <Menu noMerge="1" name="settings" >
    <text>&amp;Settings</text>

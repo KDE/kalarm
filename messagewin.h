@@ -53,7 +53,8 @@ class MessageWin : public MainWindowBase
 		enum {                // flags for constructor
 			NO_RESCHEDULE = 0x01,    // don't reschedule the event once it has displayed
 			NO_DEFER      = 0x02,    // don't display the Defer button
-			NO_INIT_VIEW  = 0x04     // for internal MessageWin use only
+			ALWAYS_HIDE   = 0x04,    // never show the window (e.g. for audio-only alarms)
+			NO_INIT_VIEW  = 0x08     // for internal MessageWin use only
 		};
 
 		MessageWin();     // for session management restoration only
@@ -70,6 +71,8 @@ class MessageWin : public MainWindowBase
 		static int          instanceCount()        { return mWindowList.count(); }
 		static MessageWin*  findEvent(const QString& eventID);
 		static void         redisplayAlarms();
+		static void         stopAudio();
+		static bool         isAudioPlaying();
 		static void         showError(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
 		                              const QString& dontShowAgain = QString());
 		static bool         spread(bool scatter);
@@ -159,9 +162,10 @@ class MessageWin : public MainWindowBase
 		QCheckBox*          mDontShowAgainCheck;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
-		int                 mFlags;
+		int                 mFlags;           // event flags
 		int                 mLateCancel;
 		int                 mButtonDelay;     // delay (ms) after window is shown before buttons are enabled
+		bool                mAlwaysHide;      // the window should never be displayed
 		bool                mErrorWindow;     // the window is simply an error message
 		bool                mNoPostAction;    // don't execute any post-alarm action
 		bool                mRecreating;      // window is about to be deleted and immediately recreated

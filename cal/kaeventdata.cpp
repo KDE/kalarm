@@ -492,11 +492,11 @@ void KAEventData::set(const Event* event)
 	mFadeSeconds       = 0;
 	mReminderMinutes   = 0;
 	mEmailFromIdentity = 0;
-	mText              = "";
-	mAudioFile         = "";
-	mPreAction         = "";
-	mPostAction        = "";
-	mEmailSubject      = "";
+	mText.clear();
+	mAudioFile.clear();
+	mPreAction.clear();
+	mPostAction.clear();
+	mEmailSubject.clear();
 	mEmailAddresses.clear();
 	mEmailAttachments.clear();
 
@@ -526,6 +526,17 @@ void KAEventData::set(const Event* event)
 					mRepetition.set(data.alarm->snoozeTime(), data.alarm->repeatCount());   // values may be adjusted in setRecurrence()
 					mNextRepeat = data.nextRepeat;
 				}
+				if (data.action != T_AUDIO)
+					break;
+				// Fall through to AUDIO__ALARM
+			case KAAlarm::AUDIO__ALARM:
+				mAudioFile   = data.cleanText;
+				mSpeak       = data.speak  &&  mAudioFile.isEmpty();
+				mBeep        = !mSpeak  &&  mAudioFile.isEmpty();
+				mSoundVolume = (!mBeep && !mSpeak) ? data.soundVolume : -1;
+				mFadeVolume  = (mSoundVolume >= 0  &&  data.fadeSeconds > 0) ? data.fadeVolume : -1;
+				mFadeSeconds = (mFadeVolume >= 0) ? data.fadeSeconds : 0;
+				mRepeatSound = (!mBeep && !mSpeak)  &&  (data.alarm->repeatCount() < 0);
 				break;
 			case KAAlarm::AT_LOGIN__ALARM:
 				mRepeatAtLogin   = true;
@@ -566,15 +577,6 @@ void KAEventData::set(const Event* event)
 				alTime = mDisplayingTime;
 				break;
 			}
-			case KAAlarm::AUDIO__ALARM:
-				mAudioFile   = data.cleanText;
-				mSpeak       = data.speak  &&  mAudioFile.isEmpty();
-				mBeep        = !mSpeak  &&  mAudioFile.isEmpty();
-				mSoundVolume = (!mBeep && !mSpeak) ? data.soundVolume : -1;
-				mFadeVolume  = (mSoundVolume >= 0  &&  data.fadeSeconds > 0) ? data.fadeVolume : -1;
-				mFadeSeconds = (mFadeVolume >= 0) ? data.fadeSeconds : 0;
-				mRepeatSound = (!mBeep && !mSpeak)  &&  (data.alarm->repeatCount() < 0);
-				break;
 			case KAAlarm::PRE_ACTION__ALARM:
 				mPreAction         = data.cleanText;
 				mCancelOnPreActErr = data.cancelOnPreActErr;
@@ -639,6 +641,9 @@ void KAEventData::set(const Event* event)
 							mEmailAddresses    = data.alarm->mailAddresses();
 							mEmailSubject      = data.alarm->mailSubject();
 							mEmailAttachments  = data.alarm->mailAttachments();
+							break;
+						case T_AUDIO:
+							// Already handled above
 							break;
 						default:
 							break;
@@ -741,11 +746,25 @@ void KAEventData::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 {
 	AlarmMap* alarmMap = (AlarmMap*)almap;
 	Alarm::List alarms = event->alarms();
+
+	// Check if it's an audio event with no display alarm
+	bool audioOnly = false;
+	for (int i = 0, end = alarms.count();  i < end;  ++i)
+	{
+		if (alarms[i]->type() == Alarm::Display)
+		{
+			audioOnly = false;
+			break;
+		}
+		if (alarms[i]->type() == Alarm::Audio)
+			audioOnly = true;
+	}
+
 	for (int i = 0, end = alarms.count();  i < end;  ++i)
 	{
 		// Parse the next alarm's text
 		AlarmData data;
-		readAlarm(alarms[i], data, cmdDisplay);
+		readAlarm(alarms[i], data, audioOnly, cmdDisplay);
 		if (data.type != KAAlarm::INVALID__ALARM)
 			alarmMap->insert(data.type, data);
 	}
@@ -753,9 +772,10 @@ void KAEventData::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 
 /******************************************************************************
 * Parse a KCal::Alarm.
+* If 'audioMain' is true, the event contains an audio alarm but no display alarm.
 * Reply = alarm ID (sequence number)
 */
-void KAEventData::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay)
+void KAEventData::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
 {
 	// Parse the next alarm's text
 	data.alarm           = alarm;
@@ -827,11 +847,9 @@ void KAEventData::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay
 		{
 			data.action      = T_AUDIO;
 			data.cleanText   = alarm->audioFile();
-			data.type        = KAAlarm::AUDIO__ALARM;
 			data.soundVolume = -1;
 			data.fadeVolume  = -1;
 			data.fadeSeconds = 0;
-			data.speak       = !alarm->customProperty(KCalendar::APPNAME, SPEAK_PROPERTY).isNull();
 			QString property = alarm->customProperty(KCalendar::APPNAME, VOLUME_PROPERTY);
 			if (!property.isEmpty())
 			{
@@ -854,7 +872,13 @@ void KAEventData::readAlarm(const Alarm* alarm, AlarmData& data, bool cmdDisplay
 					}
 				}
 			}
-			return;
+			if (!audioMain)
+			{
+				data.type  = KAAlarm::AUDIO__ALARM;
+				data.speak = !alarm->customProperty(KCalendar::APPNAME, SPEAK_PROPERTY).isNull();
+				return;
+			}
+			break;
 		}
 		case Alarm::Invalid:
 			data.type = KAAlarm::INVALID__ALARM;
@@ -934,6 +958,7 @@ void KAEventData::set(const KDateTime& dateTime, const QString& text, const QCol
 		case FILE:
 		case COMMAND:
 		case EMAIL:
+		case AUDIO:
 			mActionType = (KAAlarmEventBase::Type)action;
 			break;
 		default:
@@ -945,9 +970,10 @@ void KAEventData::set(const KDateTime& dateTime, const QString& text, const QCol
 	mResourceId.clear();
 	mPreAction.clear();
 	mPostAction.clear();
-	mText                   = (mActionType == T_COMMAND) ? text.trimmed() : text;
+	mText                   = (mActionType == T_COMMAND) ? text.trimmed()
+	                        : (mActionType == T_AUDIO) ? QString() : text;
 	mCategory               = KCalEvent::ACTIVE;
-	mAudioFile              = "";
+	mAudioFile              = (mActionType == T_AUDIO) ? text : QString();
 	mSoundVolume            = -1;
 	mFadeVolume             = -1;
 	mTemplateAfterTime      = -1;
@@ -972,8 +998,8 @@ void KAEventData::set(const KDateTime& dateTime, const QString& text, const QCol
 	mEnabled                = !(flags & DISABLED);
 	mDisplaying             = flags & DISPLAYING_;
 	mRepeatSound            = flags & REPEAT_SOUND;
-	mBeep                   = flags & BEEP;
-	mSpeak                  = flags & SPEAK;
+	mBeep                   = (flags & BEEP) && action != AUDIO;
+	mSpeak                  = (flags & SPEAK) && action != AUDIO;
 	if (mSpeak)
 		mBeep           = false;
 
@@ -1262,7 +1288,7 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 
 	DateTime dtMain = original ? mStartDateTime : mNextMainDateTime;
 	int      ancillaryType = 0;   // 0 = invalid, 1 = time, 2 = offset
-	DateTime ancillaryTime;       // time for ancillary alarms (audio, pre-action, etc)
+	DateTime ancillaryTime;       // time for ancillary alarms (pre-action, extra audio, etc)
 	int      ancillaryOffset = 0; // start offset for ancillary alarms
 	if (!mMainExpired  ||  original)
 	{
@@ -1382,7 +1408,7 @@ bool KAEventData::updateKCalEvent(Event* ev, bool checkUid, bool original) const
 			ancillaryType = 1;
 		}
 	}
-	if (mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())
+	if ((mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())  &&  mActionType != T_AUDIO)
 	{
 		// A sound is specified
 		if (ancillaryType == 2)
@@ -1445,7 +1471,7 @@ Alarm* KAEventData::initKCalAlarm(Event* event, int startOffsetSecs, const QStri
 	switch (type)
 	{
 		case KAAlarm::AUDIO_ALARM:
-			alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
+			setAudioAlarm(alarm);
 			if (mSpeak)
 				alarm->setCustomProperty(KCalendar::APPNAME, SPEAK_PROPERTY, QLatin1String("Y"));
 			if (mRepeatSound)
@@ -1453,11 +1479,6 @@ Alarm* KAEventData::initKCalAlarm(Event* event, int startOffsetSecs, const QStri
 				alarm->setRepeatCount(-1);
 				alarm->setSnoozeTime(0);
 			}
-			if (!mAudioFile.isEmpty()  &&  mSoundVolume >= 0)
-				alarm->setCustomProperty(KCalendar::APPNAME, VOLUME_PROPERTY,
-				              QString::fromLatin1("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2))
-				                                             .arg(QString::number(mFadeVolume, 'f', 2))
-				                                             .arg(mFadeSeconds));
 			break;
 		case KAAlarm::PRE_ACTION_ALARM:
 			setProcedureAlarm(alarm, mPreAction);
@@ -1499,6 +1520,7 @@ Alarm* KAEventData::initKCalAlarm(Event* event, int startOffsetSecs, const QStri
 						alarm->setCustomProperty(KCalendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(mEmailFromIdentity));
 					break;
 				case T_AUDIO:
+					setAudioAlarm(alarm);
 					break;
 			}
 			if (display)
@@ -1519,6 +1541,19 @@ Alarm* KAEventData::initKCalAlarm(Event* event, int startOffsetSecs, const QStri
 	if (alltypes.count() > 0)
 		alarm->setCustomProperty(KCalendar::APPNAME, TYPE_PROPERTY, alltypes.join(","));
 	return alarm;
+}
+
+/******************************************************************************
+* Set the specified alarm to be an audio alarm with the given file name.
+*/
+void KAEventData::setAudioAlarm(Alarm* alarm) const
+{
+	alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
+	if (!mAudioFile.isEmpty()  &&  mSoundVolume >= 0)
+		alarm->setCustomProperty(KCalendar::APPNAME, VOLUME_PROPERTY,
+		              QString::fromLatin1("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2))
+		                                             .arg(QString::number(mFadeVolume, 'f', 2))
+		                                             .arg(mFadeSeconds));
 }
 
 /******************************************************************************
@@ -2929,7 +2964,7 @@ bool KAEventData::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarV
 						setProcedureAlarm(alarm, txt);
 						break;
 					case T_EMAIL:     // email alarms were introduced in KAlarm 0.9
-					case T_AUDIO:     // never occurs in this context
+					case T_AUDIO:     // audio alarms (with no display) were introduced in KAlarm 2.3.2
 						break;
 				}
 				if (atLogin)
@@ -3331,25 +3366,25 @@ bool KAEventData::convertStartOfDay(Event* event, const KTimeZone& timeZone)
 		if (adjustment)
 		{
 			event->setDtStart(KDateTime(event->dtStart().date(), midnight, timeZone));
-			Alarm::List alarms = event->alarms();
 			int deferralOffset = 0;
-			for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
+			AlarmMap alarmMap;
+			readAlarms(event, &alarmMap);
+			for (AlarmMap::ConstIterator it = alarmMap.constBegin();  it != alarmMap.constEnd();  ++it)
 			{
-				// Parse the next alarm's text
-				Alarm* alarm = alarms[ai];
-				AlarmData data;
-				readAlarm(alarm, data);
+				const AlarmData& data = it.value();
+				if (!data.alarm->hasStartOffset())
+					continue;
 				if (data.type & KAAlarm::TIMED_DEFERRAL_FLAG)
 				{
 					// Timed deferral alarm, so adjust the offset
-					deferralOffset = alarm->startOffset().asSeconds();
-					alarm->setStartOffset(deferralOffset - adjustment);
+					deferralOffset = data.alarm->startOffset().asSeconds();
+					const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
 				}
 				else if (data.type == KAAlarm::AUDIO__ALARM
-				&&       alarm->startOffset().asSeconds() == deferralOffset)
+				&&       data.alarm->startOffset().asSeconds() == deferralOffset)
 				{
 					// Audio alarm is set for the same time as the deferral alarm
-					alarm->setStartOffset(deferralOffset - adjustment);
+					const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
 				}
 			}
 			changed = true;
@@ -3364,7 +3399,7 @@ bool KAEventData::convertStartOfDay(Event* event, const KTimeZone& timeZone)
 		KDateTime nextMainDateTime = readDateTime(event, false, start).kDateTime();
 		AlarmMap alarmMap;
 		readAlarms(event, &alarmMap);
-		for (AlarmMap::Iterator it = alarmMap.begin();  it != alarmMap.end();  ++it)
+		for (AlarmMap::ConstIterator it = alarmMap.constBegin();  it != alarmMap.constEnd();  ++it)
 		{
 			const AlarmData& data = it.value();
 			if (!data.alarm->hasStartOffset())
@@ -3486,7 +3521,7 @@ void KAEventData::dumpDebug() const
 		kDebug() << "-- mCommandDisplay:" << mCommandDisplay;
 		kDebug() << "-- mLogFile:" << mLogFile;
 	}
-	if (mActionType == T_EMAIL)
+	else if (mActionType == T_EMAIL)
 	{
 		kDebug() << "-- mEmail: FromKMail:" << mEmailFromIdentity;
 		kDebug() << "--         Addresses:" << mEmailAddresses.join(",");
@@ -3494,8 +3529,10 @@ void KAEventData::dumpDebug() const
 		kDebug() << "--         Attachments:" << mEmailAttachments.join(",");
 		kDebug() << "--         Bcc:" << mEmailBcc;
 	}
+	else if (mActionType == T_AUDIO)
+		kDebug() << "-- mAudioFile:" << mAudioFile;
 	kDebug() << "-- mBeep:" << mBeep;
-	if (mActionType == T_AUDIO)
+	if (mActionType == T_AUDIO  ||  !mAudioFile.isEmpty())
 	{
 		if (mSoundVolume >= 0)
 		{

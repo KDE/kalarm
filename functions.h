@@ -34,9 +34,10 @@
 
 namespace KCal { class Event; }
 class QWidget;
+class QAction;
+class KAction;
 class KActionCollection;
 class KToggleAction;
-class QAction;
 class AlarmResource;
 class KAEvent;
 class MainWindow;
@@ -73,6 +74,19 @@ void                writeConfigWindowSize(const char* window, const QSize&, int 
  *  If a text file, its type is distinguished.
  */
 FileType            fileType(const KMimeType::Ptr& mimetype);
+/** Check that a file exists and is a plain readable file, optionally a text/image file.
+ *  Display a Continue/Cancel error message if 'errmsgParent' non-null.
+ */
+enum FileErr {
+	FileErr_None = 0,
+	FileErr_Blank,           // generic blank error
+	FileErr_Nonexistent, FileErr_Directory, FileErr_Unreadable, FileErr_NotTextImage,
+	FileErr_BlankDisplay,    // blank error to use for file to display
+	FileErr_BlankPlay        // blank error to use for file to play
+};
+FileErr             checkFileExists(QString& filename, KUrl&);
+bool                showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QWidget* errmsgParent);
+
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
                                const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = 0);
@@ -89,6 +103,7 @@ void                execNewAlarmDlg(EditAlarmDlg*, bool alreadyExecuted = false)
 /** Create a "New From Template" QAction */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 KToggleAction*      createAlarmEnableAction(QObject* parent);
+KAction*            createStopPlayAction(QObject* parent);
 KToggleAction*      createSpreadWindowsAction(QObject* parent);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.

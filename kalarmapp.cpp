@@ -382,6 +382,14 @@ int KAlarmApp::newInstance()
 								dlg->setBcc(true);
 							break;
 						}
+						case EditAlarmDlg::AUDIO:
+						{
+							// EditAlarmDlg::create() always returns EditAudioAlarmDlg for type = DISPLAY
+							EditAudioAlarmDlg* dlg = qobject_cast<EditAudioAlarmDlg*>(editDlg);
+							if (!options.audioFile().isEmpty()  ||  options.audioVolume() >= 0)
+								dlg->setAudio(options.audioFile(), options.audioVolume());
+							break;
+						}
 						case EditAlarmDlg::NO_TYPE:
 							break;
 					}
@@ -1450,6 +1458,24 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				rescheduleAlarm(event, alarm, true);
 			break;
 		}
+		case KAAlarm::AUDIO:
+		{
+			// Play the sound, provided that the same event
+			// isn't already playing
+			MessageWin* win = MessageWin::findEvent(event.id());
+			if (!win)
+			{
+				// There isn't already a message for this event.
+				int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | MessageWin::ALWAYS_HIDE;
+				new MessageWin(&event, alarm, flags);
+			}
+			else
+			{
+				// There's an existing message window: replay the sound
+				win->repeat(alarm);    // N.B. this reschedules the alarm
+			}
+			break;
+		}
 		default:
 			return 0;
 	}
@@ -1866,6 +1892,23 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 		startProcessQueue();      // start processing the execution queue
 	return true;
 }
+
+/******************************************************************************
+* Called when an audio thread starts or stops.
+*/
+void KAlarmApp::notifyAudioPlaying(bool playing)
+{
+	emit audioPlaying(playing);
+}
+
+/******************************************************************************
+* Stop audio play.
+*/
+void KAlarmApp::stopAudio()
+{
+	MessageWin::stopAudio();
+}
+
 
 void setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
 {

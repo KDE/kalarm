@@ -194,6 +194,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mDeferDlg(0),
 	  mFlags(event->flags()),
 	  mLateCancel(event->lateCancel()),
+	  mAlwaysHide(flags & ALWAYS_HIDE),
 	  mErrorWindow(false),
 	  mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM),
 	  mRecreating(false),
@@ -209,7 +210,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
 	setWindowModality(Qt::WindowModal);
 	setObjectName("MessageWin");    // used by LikeBack
-	if (!(flags & NO_INIT_VIEW))
+	if (!(flags & (NO_INIT_VIEW | ALWAYS_HIDE)))
 	{
 		bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventID);
 		mShowEdit = !mEventID.isEmpty()  &&  !readonly;
@@ -222,6 +223,11 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	mWindowList.append(this);
 	if (event->autoClose())
 		mCloseTime = alarm.dateTime().effectiveDateTime().addSecs(event->lateCancel() * 60);
+	if (mAlwaysHide)
+	{
+		hide();
+		displayComplete();    // play audio, etc.
+	}
 }
 
 /******************************************************************************
@@ -279,6 +285,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
+	  mAlwaysHide(false),
 	  mErrorWindow(true),
 	  mNoPostAction(true),
 	  mRecreating(false),
@@ -309,6 +316,7 @@ MessageWin::MessageWin()
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
 	  mDeferDlg(0),
+	  mAlwaysHide(false),
 	  mErrorWindow(false),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
@@ -814,7 +822,7 @@ void MessageWin::readProcessOutput(ShellProcess* proc)
 */
 void MessageWin::saveProperties(KConfigGroup& config)
 {
-	if (mShown  &&  !mErrorWindow)
+	if (mShown  &&  !mErrorWindow  &&  !mAlwaysHide)
 	{
 		config.writeEntry("EventID", mEventID);
 		config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
@@ -1051,24 +1059,25 @@ void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 			kError() << "Alarm type not found:" << event.id() << ":" << mAlarmType;
 		else
 		{
-			// Copy the alarm to the displaying calendar in case of a crash, etc.
-			AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
-			KAEvent* dispEvent = new KAEvent;
-			dispEvent->setDisplaying(event, mAlarmType, (resource ? resource->identifier() : QString()),
-			                        mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
-			AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
-			if (cal)
+			if (!mAlwaysHide)
 			{
-				cal->deleteEvent(dispEvent->id());   // in case it already exists
-				if (!cal->addEvent(dispEvent))
+				// Copy the alarm to the displaying calendar in case of a crash, etc.
+				AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
+				KAEvent* dispEvent = new KAEvent;
+				dispEvent->setDisplaying(event, mAlarmType, (resource ? resource->identifier() : QString()),
+							mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
+				AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
+				if (cal)
+				{
+					cal->deleteEvent(dispEvent->id());   // in case it already exists
+					if (!cal->addEvent(dispEvent))
+						delete dispEvent;
+					cal->save();
+				}
+				else
 					delete dispEvent;
-				cal->save();
 			}
-			else
-				delete dispEvent;
-
 			theApp()->rescheduleAlarm(event, alarm);
-			return;
 		}
 	}
 }
@@ -1232,6 +1241,7 @@ void MessageWin::startAudio()
 	else
 	{
 		kDebug() << QThread::currentThread();
+		theApp()->notifyAudioPlaying(true);
 		mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeat);
 		mAudioOwner = this;
 		connect(mAudioThread, SIGNAL(readyToPlay()), SLOT(playReady()));
@@ -1240,6 +1250,23 @@ void MessageWin::startAudio()
 			connect(mSilenceButton, SIGNAL(clicked()), mAudioThread, SLOT(quit()));
 		mAudioThread->start();
 	}
+}
+
+/******************************************************************************
+* Return whether audio playback is currently active.
+*/
+bool MessageWin::isAudioPlaying()
+{
+	return mAudioThread;
+}
+
+/******************************************************************************
+* Stop audio playback.
+*/
+void MessageWin::stopAudio()
+{
+	if (mAudioThread)
+		mAudioThread->quit();
 }
 
 /******************************************************************************
@@ -1256,7 +1283,8 @@ void MessageWin::audioTerminating()
 */
 void MessageWin::playReady()
 {
-	mSilenceButton->setEnabled(true);
+	if (mSilenceButton)
+		mSilenceButton->setEnabled(true);
 }
 
 /******************************************************************************
@@ -1274,8 +1302,11 @@ void MessageWin::playFinished()
 			clearErrorMessage(ErrMsg_AudioFile);
 		}
 	}
+	theApp()->notifyAudioPlaying(false);
 	delete mAudioThread;
 	mAudioOwner = 0;
+	if (mAlwaysHide)
+		close();
 }
 
 /******************************************************************************
@@ -1432,13 +1463,18 @@ void MessageWin::repeat(const KAAlarm& alarm)
 	if (event)
 	{
 		mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
-		if (!mDeferDlg  ||  Preferences::modalMessages())
-		{
-			raise();
+		if (mAlwaysHide)
 			playAudio();
+		else
+		{
+			if (!mDeferDlg  ||  Preferences::modalMessages())
+			{
+				raise();
+				playAudio();
+			}
+			mDeferButton->setEnabled(true);
+			setDeferralLimit(*event);    // ensure that button is disabled when alarm can't be deferred any more
 		}
-		mDeferButton->setEnabled(true);
-		setDeferralLimit(*event);    // ensure that button is disabled when alarm can't be deferred any more
 		alarmShowing(*event);
 	}
 }
@@ -1637,11 +1673,14 @@ void MessageWin::displayComplete()
 	if (mRescheduleEvent)
 		alarmShowing(mEvent);
 
-	// Enable the window's buttons either now or after the configured delay
-	if (mButtonDelay > 0)
-		QTimer::singleShot(mButtonDelay, this, SLOT(enableButtons()));
-	else
-		enableButtons();
+	if (!mAlwaysHide)
+	{
+		// Enable the window's buttons either now or after the configured delay
+		if (mButtonDelay > 0)
+			QTimer::singleShot(mButtonDelay, this, SLOT(enableButtons()));
+		else
+			enableButtons();
+	}
 }
 
 /******************************************************************************

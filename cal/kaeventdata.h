@@ -66,7 +66,7 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
 		bool               repeatAtLogin() const       { return mRepeatAtLogin; }
 
 	protected:
-		enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_AUDIO, T_EMAIL };
+		enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_EMAIL, T_AUDIO };
 
 		KAAlarmEventBase() : mNextRepeat(0), mLateCancel(0), mAutoClose(false), mRepeatAtLogin(false)  {}
 		KAAlarmEventBase(const KAAlarmEventBase& rhs)             { copy(rhs); }
@@ -149,7 +149,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
 			AT_LOGIN__ALARM               = AT_LOGIN_ALARM,
 			DISPLAYING__ALARM             = DISPLAYING_ALARM,
 			// The following values are for internal KAEventData use only
-			AUDIO__ALARM                  = AUDIO_ALARM,
+			AUDIO__ALARM                  = AUDIO_ALARM,   // audio alarm for main display alarm
 			PRE_ACTION__ALARM             = PRE_ACTION_ALARM,
 			POST_ACTION__ALARM            = POST_ACTION_ALARM
 		};
@@ -234,7 +234,8 @@ class KALARM_CAL_EXPORT KAEventData : public KAAlarmEventBase
 			MESSAGE = T_MESSAGE,
 			FILE    = T_FILE,
 			COMMAND = T_COMMAND,
-			EMAIL   = T_EMAIL
+			EMAIL   = T_EMAIL,
+			AUDIO   = T_AUDIO
 		};
 		enum OccurType     // what type of occurrence is due
 		{
@@ -449,6 +450,7 @@ public:
 		bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
 		void               clearRecur();
 		OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result, const QTime& startOfDay) const;
+		void               setAudioAlarm(KCal::Alarm*) const;
 		void               notifyChanges() const;
 		static bool        convertStartOfDay(KCal::Event*, const KTimeZone&);
 		static bool        convertRepetition(KCal::Event*);
@@ -456,7 +458,7 @@ public:
 		KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 		static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
 		static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
-		static void        readAlarm(const KCal::Alarm*, AlarmData&, bool cmdDisplay = false);
+		static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
 		inline void        set_deferral(DeferType);
 		inline void        set_reminder(int minutes);
 		inline void        set_archiveReminder();

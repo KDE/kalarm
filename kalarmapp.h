@@ -75,6 +75,7 @@ class KAlarmApp : public KUniqueApplication
 		bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
 		void               purgeAll()             { purge(0); }
 		void               commandMessage(ShellProcess*, QWidget* parent);
+		void               notifyAudioPlaying(bool playing);
 		void               setSpreadWindowsState(bool spread);
 		// Methods called indirectly by the DCOP interface
 		bool               scheduleEvent(KAEventData::Action, const QString& text, const KDateTime&,
@@ -90,11 +91,13 @@ class KAlarmApp : public KUniqueApplication
 	public slots:
 		void               processQueue();
 		void               setAlarmsEnabled(bool);
+		void               stopAudio();
 		void               spreadWindows(bool);
 		void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
 	signals:
 		void               trayIconToggled();
 		void               alarmEnabledToggled(bool);
+		void               audioPlaying(bool);
 		void               spreadWindowsToggled(bool);
 		void               execAlarmSuccess();
 	protected:

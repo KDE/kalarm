@@ -47,6 +47,7 @@ QPixmap* EventListModel::mTextIcon = 0;
 QPixmap* EventListModel::mFileIcon = 0;
 QPixmap* EventListModel::mCommandIcon = 0;
 QPixmap* EventListModel::mEmailIcon = 0;
+QPixmap* EventListModel::mAudioIcon = 0;
 QSize    EventListModel::mIconSize;
 int      EventListModel::mTimeHourPos = -2;
 
@@ -95,7 +96,8 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 		mFileIcon    = new QPixmap(SmallIcon("document-open"));
 		mCommandIcon = new QPixmap(SmallIcon("system-run"));
 		mEmailIcon   = new QPixmap(SmallIcon("mail-message-unread"));
-		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size());
+		mAudioIcon   = new QPixmap(SmallIcon("audio-x-generic"));
+		mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size()).expandedTo(mAudioIcon->size());
 	}
 	MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
 	AlarmResources* resources = AlarmResources::instance();
@@ -927,6 +929,8 @@ QPixmap* EventListModel::eventIcon(const KAEvent* event) const
 			return mFileIcon;
 		case KAAlarm::EMAIL:
 			return mEmailIcon;
+		case KAAlarm::AUDIO:
+			return mAudioIcon;
 		case KAAlarm::COMMAND:
 			if (!event->commandDisplay())
 				return mCommandIcon;

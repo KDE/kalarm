@@ -442,6 +442,11 @@ void MainWindow::initActions()
 	mActionNewEmail->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 	connect(mActionNewEmail, SIGNAL(triggered(bool)), SLOT(slotNewEmail()));
 
+	mActionNewAudio = mActionNew->audioAlarmAction();
+	actions->addAction(QLatin1String("newAudio"), mActionNewAudio);
+	mActionNewAudio->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+	connect(mActionNewAudio, SIGNAL(triggered(bool)), SLOT(slotNewAudio()));
+
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
 
@@ -479,6 +484,10 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("disable"), mActionEnable);
 	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
 	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
+
+	KAction* action = KAlarm::createStopPlayAction(this);
+	actions->addAction(QLatin1String("stopAudio"), action);
+	action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 
 	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
 	actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
@@ -522,7 +531,7 @@ void MainWindow::initActions()
 	actions->addAction(QLatin1String("export"), mActionExport);
 	connect(mActionExport, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
 
-	QAction* action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
+	action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
 	actions->addAction(QLatin1String("refreshAlarms"), action);
 	connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
 

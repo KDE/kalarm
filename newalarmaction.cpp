@@ -30,12 +30,14 @@
 #include <kdebug.h>
 
 
-#define DISP_ICON QLatin1String("window-new")
-#define CMD_ICON  QLatin1String("new-command-alarm")
-#define MAIL_ICON QLatin1String("mail-message-new")
-#define DISP_KEY  QKeySequence(Qt::CTRL + Qt::Key_D)
-#define CMD_KEY   QKeySequence(Qt::CTRL + Qt::Key_C)
-#define MAIL_KEY  QKeySequence(Qt::CTRL + Qt::Key_M)
+#define DISP_ICON  QLatin1String("window-new")
+#define CMD_ICON   QLatin1String("new-command-alarm")
+#define MAIL_ICON  QLatin1String("mail-message-new")
+#define AUDIO_ICON QLatin1String("new-audio-alarm")
+#define DISP_KEY   QKeySequence(Qt::CTRL + Qt::Key_D)
+#define CMD_KEY    QKeySequence(Qt::CTRL + Qt::Key_C)
+#define MAIL_KEY   QKeySequence(Qt::CTRL + Qt::Key_M)
+#define AUDIO_KEY  QKeySequence(Qt::CTRL + Qt::Key_U)
 
 
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
@@ -50,11 +52,15 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
 	mEmailAction = new KAction(KIcon(MAIL_ICON), (templates ? i18nc("@item:inmenu", "&Email Alarm Template") : i18nc("@action", "New Email Alarm")), parent);
 	menu()->addAction(mEmailAction);
 	mTypes[mEmailAction] = EditAlarmDlg::EMAIL;
+	mAudioAction = new KAction(KIcon(AUDIO_ICON), (templates ? i18nc("@item:inmenu", "&Audio Alarm Template") : i18nc("@action", "New Audio Alarm")), parent);
+	menu()->addAction(mAudioAction);
+	mTypes[mAudioAction] = EditAlarmDlg::AUDIO;
 	if (!templates)
 	{
 		mDisplayAction->setShortcut(DISP_KEY);
 		mCommandAction->setShortcut(CMD_KEY);
 		mEmailAction->setShortcut(MAIL_KEY);
+		mAudioAction->setShortcut(AUDIO_KEY);
 	}
 	setDelayed(false);
 	connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));

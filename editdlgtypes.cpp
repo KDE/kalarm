@@ -40,6 +40,7 @@
 #include "reminder.h"
 #include "shellprocess.h"
 #include "soundpicker.h"
+#include "sounddlg.h"
 #include "specialactions.h"
 #include "templatepickdlg.h"
 #include "timespinbox.h"
@@ -657,45 +658,9 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 		case tFILE:
 		{
 			QString alarmtext = mFileMessageEdit->text().trimmed();
-			// Convert any relative file path to absolute
-			// (using home directory as the default)
-			enum Err { NONE = 0, BLANK, NONEXISTENT, DIRECTORY, UNREADABLE, NOT_TEXT_IMAGE };
-			Err err = NONE;
 			KUrl url;
-			int i = alarmtext.indexOf(QLatin1Char('/'));
-			if (i > 0  &&  alarmtext[i - 1] == QLatin1Char(':'))
-			{
-				url = alarmtext;
-				url.cleanPath();
-				alarmtext = url.prettyUrl();
-				KIO::UDSEntry uds;
-				if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
-					err = NONEXISTENT;
-				else
-				{
-					KFileItem fi(uds, url);
-					if (fi.isDir())             err = DIRECTORY;
-					else if (!fi.isReadable())  err = UNREADABLE;
-				}
-			}
-			else if (alarmtext.isEmpty())
-				err = BLANK;    // blank file name
-			else
-			{
-				// It's a local file - convert to absolute path & check validity
-				QFileInfo info(alarmtext);
-				QDir::setCurrent(QDir::homePath());
-				alarmtext = info.absoluteFilePath();
-				url.setPath(alarmtext);
-				alarmtext = QLatin1String("file:") + alarmtext;
-				if (!err)
-				{
-					if      (info.isDir())        err = DIRECTORY;
-					else if (!info.exists())      err = NONEXISTENT;
-					else if (!info.isReadable())  err = UNREADABLE;
-				}
-			}
-			if (!err)
+			KAlarm::FileErr err = KAlarm::checkFileExists(alarmtext, url);
+			if (err == KAlarm::FileErr_None)
 			{
 				switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimeTypePtr()))
 				{
@@ -705,29 +670,14 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
 					case KAlarm::Image:
 						break;
 					default:
-						err = NOT_TEXT_IMAGE;
+						err = KAlarm::FileErr_NotTextImage;
 						break;
 				}
 			}
-			if (err  &&  showErrorMessage)
+			if (err != KAlarm::FileErr_None  &&  showErrorMessage)
 			{
 				mFileMessageEdit->setFocus();
-				QString errmsg;
-				switch (err)
-				{
-					case BLANK:
-						KMessageBox::sorry(const_cast<EditDisplayAlarmDlg*>(this), i18nc("@info", "Please select a file to display"));
-						return false;
-					case NONEXISTENT:     errmsg = i18nc("@info", "<filename>%1</filename> not found", alarmtext);  break;
-					case DIRECTORY:       errmsg = i18nc("@info", "<filename>%1</filename> is a folder", alarmtext);  break;
-					case UNREADABLE:      errmsg = i18nc("@info", "<filename>%1</filename> is not readable", alarmtext);  break;
-					case NOT_TEXT_IMAGE:  errmsg = i18nc("@info", "<filename>%1</filename> appears not to be a text or image file", alarmtext);  break;
-					case NONE:
-					default:
-						break;
-				}
-				if (KMessageBox::warningContinueCancel(const_cast<EditDisplayAlarmDlg*>(this), errmsg)
-				    == KMessageBox::Cancel)
+				if (!KAlarm::showFileErrMessage(alarmtext, err, KAlarm::FileErr_BlankDisplay, const_cast<EditDisplayAlarmDlg*>(this)))
 					return false;
 			}
 			result = alarmtext;
@@ -1469,6 +1419,166 @@ bool EditEmailAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 	Q_UNUSED(showErrorMessage);
 	result = mEmailMessageEdit->toPlainText();
 	return true;
+}
+
+
+/*=============================================================================
+= Class EditAudioAlarmDlg
+= Dialog to edit display alarms.
+=============================================================================*/
+
+/******************************************************************************
+* Constructor.
+* Parameters:
+*   Template = true to edit/create an alarm template
+*            = false to edit/create an alarm.
+*   event   != to initialise the dialog to show the specified event's data.
+*/
+EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
+	: EditAlarmDlg(Template, KAEventData::AUDIO, parent, getResource)
+{
+	kDebug() << "New";
+	init(0, newAlarm);
+}
+
+EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
+                                         GetResourceType getResource, bool readOnly)
+	: EditAlarmDlg(Template, event, parent, getResource, readOnly)
+{
+	kDebug() << "Event.id()";
+	init(event, newAlarm);
+}
+
+/******************************************************************************
+* Return the window caption.
+*/
+QString EditAudioAlarmDlg::type_caption(bool newAlarm) const
+{
+	return isTemplate() ? (newAlarm ? i18nc("@title:window", "New Audio Alarm Template") : i18nc("@title:window", "Edit Audio Alarm Template"))
+	                    : (newAlarm ? i18nc("@title:window", "New Audio Alarm") : i18nc("@title:window", "Edit Audio Alarm"));
+}
+
+/******************************************************************************
+* Set up the dialog controls common to display alarms.
+*/
+void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
+{
+	// File name edit box
+	mSoundConfig = new SoundWidget(false, false, parent);
+	connect(mSoundConfig, SIGNAL(changed()), SLOT(contentsChanged()));
+	frameLayout->addWidget(mSoundConfig);
+
+	// Top-adjust the controls
+	mPadding = new KHBox(parent);
+	mPadding->setMargin(0);
+	frameLayout->addWidget(mPadding);
+	frameLayout->setStretchFactor(mPadding, 1);
+}
+
+/******************************************************************************
+* Initialise the dialog controls from the specified event.
+*/
+void EditAudioAlarmDlg::type_initValues(const KAEvent* event)
+{
+	if (event)
+	{
+		mSoundConfig->set(event->audioFile(), event->soundVolume(), event->fadeVolume(), event->fadeSeconds(), false);
+	}
+	else
+	{
+		// Set the values to their defaults
+		mSoundConfig->set(Preferences::defaultSoundFile(), Preferences::defaultSoundVolume(), -1, 0, false);
+	}
+}
+
+/******************************************************************************
+* Initialise various values in the New Alarm dialogue.
+*/
+void EditAudioAlarmDlg::setAudio(const QString& file, float volume)
+{
+	mSoundConfig->set(file, volume, -1, 0, false);
+}
+
+/******************************************************************************
+* Set the dialog's action and the action's text.
+*/
+void EditAudioAlarmDlg::setAction(KAEventData::Action action, const AlarmText&)
+{
+	Q_ASSERT(action == KAEventData::AUDIO);
+}
+
+/******************************************************************************
+* Set the read-only status of all non-template controls.
+*/
+void EditAudioAlarmDlg::setReadOnly(bool readOnly)
+{
+	mSoundConfig->setReadOnly(readOnly);
+	EditAlarmDlg::setReadOnly(readOnly);
+}
+
+/******************************************************************************
+* Save the state of all controls.
+*/
+void EditAudioAlarmDlg::saveState(const KAEvent* event)
+{
+	EditAlarmDlg::saveState(event);
+	mSavedFile = mSoundConfig->file();
+	mSoundConfig->getVolume(mSavedVolume, mSavedFadeVolume, mSavedFadeSeconds);
+}
+
+/******************************************************************************
+* Check whether any of the controls has changed state since the dialog was
+* first displayed.
+* Reply = true if any controls have changed, or if it's a new event.
+*       = false if no controls have changed.
+*/
+bool EditAudioAlarmDlg::type_stateChanged() const
+{
+        if (mSavedFile != mSoundConfig->file())
+                return true;
+        if (!mSavedFile.isEmpty())
+        {
+                float volume, fadeVolume;
+                int   fadeSecs;
+		mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
+                if (mSavedVolume      != volume
+                ||  mSavedFadeVolume  != fadeVolume
+                ||  mSavedFadeSeconds != fadeSecs)
+                        return true;
+	}
+	return false;
+}
+
+/******************************************************************************
+* Extract the data in the dialog specific to the alarm type and set up a
+* KAEvent from it.
+*/
+void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
+{
+	Q_UNUSED(text);
+	Q_UNUSED(trial);
+	event.set(dt, QString(), QColor(), QColor(), QFont(), KAEventData::AUDIO, lateCancel, getAlarmFlags());
+	float volume, fadeVolume;
+	int   fadeSecs;
+	mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
+	event.setAudioFile(mSoundConfig->file().prettyUrl(), volume, fadeVolume, fadeSecs);
+}
+
+/******************************************************************************
+* Get the currently specified alarm flag bits.
+*/
+int EditAudioAlarmDlg::getAlarmFlags() const
+{
+	return EditAlarmDlg::getAlarmFlags();
+}
+
+/******************************************************************************
+* Check whether the file name is valid.
+*/
+bool EditAudioAlarmDlg::checkText(QString& result, bool showErrorMessage) const
+{
+	result = mSoundConfig->file().prettyUrl();
+	return !result.isEmpty();
 }
 
 

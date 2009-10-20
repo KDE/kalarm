@@ -66,6 +66,8 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kicon.h>
+#include <kio/netaccess.h>
+#include <kfileitem.h>
 #include <kdebug.h>
 
 #include <kcal/event.h>
@@ -160,6 +162,19 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 }
 
 /******************************************************************************
+* Create a "Stop Play" action.
+*/
+KAction* createStopPlayAction(QObject* parent)
+{
+	KAction* action = new KAction(KIcon("media-playback-stop"), i18nc("@action", "Stop Play"), parent);
+	action->setEnabled(MessageWin::isAudioPlaying());
+	QObject::connect(action, SIGNAL(triggered(bool)), theApp(), SLOT(stopAudio()));
+	// The following line ensures that all instances are kept in the same state
+	QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), action, SLOT(setEnabled(bool)));
+	return action;
+}
+
+/******************************************************************************
 * Create a "Spread Windows" action.
 */
 KToggleAction* createSpreadWindowsAction(QObject* parent)
@@ -172,7 +187,7 @@ KToggleAction* createSpreadWindowsAction(QObject* parent)
 }
 
 /******************************************************************************
-* Create a New From Template QAction.
+* Create a New From Template action.
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
 {
@@ -1307,14 +1322,12 @@ void Private::windowAdded(WId w)
 	static const int SUPPORTED_TYPES = NET::NormalMask | NET::DesktopMask | NET::DockMask
 	                                 | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
 	                                 | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
-kDebug();
 	KWindowInfo kwinfo = KWindowSystem::windowInfo(w, NET::WMWindowType | NET::WMName);
 	if (kwinfo.windowType(SUPPORTED_TYPES) == NET::TopMenu
 	||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Toolbar
 	||  kwinfo.windowType(SUPPORTED_TYPES) == NET::Desktop)
 		return;   // always ignore these window types
 
-kDebug()<<"1";
 	QX11Info qxinfo;
 	XWithdrawWindow(QX11Info::display(), w, qxinfo.screen());
 	QApplication::flush();
@@ -1455,6 +1468,96 @@ FileType fileType(const KMimeType::Ptr& mimetype)
 	if (mimetype->name().startsWith(QLatin1String("image/")))
 		return Image;
 	return Unknown;
+}
+
+/******************************************************************************
+* Check that a file exists and is a plain readable file.
+* Updates 'filename' and 'url'.
+*/
+FileErr checkFileExists(QString& filename, KUrl& url)
+{
+	url = KUrl();
+	FileErr err = FileErr_None;
+	// Convert any relative file path to absolute
+	// (using home directory as the default)
+	int i = filename.indexOf(QLatin1Char('/'));
+	if (i > 0  &&  filename[i - 1] == QLatin1Char(':'))
+	{
+		url = filename;
+		url.cleanPath();
+		filename = url.prettyUrl();
+		KIO::UDSEntry uds;
+		if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
+			err = FileErr_Nonexistent;
+		else
+		{
+			KFileItem fi(uds, url);
+			if (fi.isDir())             err = FileErr_Directory;
+			else if (!fi.isReadable())  err = FileErr_Unreadable;
+		}
+	}
+	else if (filename.isEmpty())
+		err = FileErr_Blank;    // blank file name
+	else
+	{
+		// It's a local file - convert to absolute path & check validity
+		QFileInfo info(filename);
+		QDir::setCurrent(QDir::homePath());
+		filename = info.absoluteFilePath();
+		url.setPath(filename);
+		filename = QLatin1String("file:") + filename;
+		if (err == FileErr_None)
+		{
+			if      (info.isDir())        err = FileErr_Directory;
+			else if (!info.exists())      err = FileErr_Nonexistent;
+			else if (!info.isReadable())  err = FileErr_Unreadable;
+		}
+	}
+	return err;
+}
+
+/******************************************************************************
+* Display an error message appropriate to 'err'.
+* Display a Continue/Cancel error message if 'errmsgParent' non-null.
+* Reply = true to continue, false to cancel.
+*/
+bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError, QWidget* errmsgParent)
+{
+	if (err != FileErr_None)
+	{
+		// If file is a local file, remove "file://" from name
+		QString file = filename;
+		QRegExp f("^file://*");
+		if (f.indexIn(file) >= 0)
+			file = file.mid(f.matchedLength() - 1);
+
+		QString errmsg;
+		switch (err)
+		{
+			case FileErr_Blank:
+				if (blankError == FileErr_BlankDisplay)
+					errmsg = i18nc("@info", "Please select a file to display");
+				else if (blankError == FileErr_BlankPlay)
+					errmsg = i18nc("@info", "Please select a file to play");
+				else
+					kFatal() << "Program error";
+				KMessageBox::sorry(errmsgParent, errmsg);
+				return false;
+			case FileErr_Directory:
+				KMessageBox::sorry(errmsgParent, i18nc("@info", "<filename>%1</filename> is a folder", file));
+				return false;
+			case FileErr_Nonexistent:   errmsg = i18nc("@info", "<filename>%1</filename> not found", file);  break;
+			case FileErr_Unreadable:    errmsg = i18nc("@info", "<filename>%1</filename> is not readable", file);  break;
+			case FileErr_NotTextImage:  errmsg = i18nc("@info", "<filename>%1</filename> appears not to be a text or image file", file);  break;
+			case FileErr_None:
+			default:
+				break;
+		}
+		if (KMessageBox::warningContinueCancel(errmsgParent, errmsg)
+		    == KMessageBox::Cancel)
+			return false;
+	}
+	return true;
 }
 
 /******************************************************************************
@@ -1754,6 +1857,9 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 			userEmail = from;
 			break;
 		}
+		case KAEventData::AUDIO:
+			kcalEvent->setSummary(event->audioFile());
+			break;
 	}
 	kcalEvent->setOrganizer(KCal::Person(QString(), userEmail));
 	kcalEvent->setDuration(KCal::Duration(Preferences::kOrgEventDuration() * 60, KCal::Duration::Seconds));

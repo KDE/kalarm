@@ -104,6 +104,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	actions->addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
 	contextMenu()->addAction(mActionEnabled);
 	connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(setEnabledStatus(bool)));
+	contextMenu()->addSeparator();
 
 	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
 	actions->addAction(QLatin1String("tNew"), mActionNew);
@@ -113,7 +114,14 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New Alarm From &Template"), actions, QLatin1String("tNewFromTempl"));
 	contextMenu()->addAction(mActionNewFromTemplate);
 	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
-	KAction* a = KAlarm::createSpreadWindowsAction(this);
+	contextMenu()->addSeparator();
+
+	KAction* a = KAlarm::createStopPlayAction(this);
+	actions->addAction(QLatin1String("tStopPlay"), a);
+	contextMenu()->addAction(a);
+	QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), a, SLOT(setVisible(bool)));
+
+	a = KAlarm::createSpreadWindowsAction(this);
 	actions->addAction(QLatin1String("tSpread"), a);
 	contextMenu()->addAction(a);
 	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));

@@ -54,7 +54,7 @@ class EditAlarmDlg : public KDialog
 {
 		Q_OBJECT
 	public:
-		enum Type { NO_TYPE, DISPLAY, COMMAND, EMAIL };
+		enum Type { NO_TYPE, DISPLAY, COMMAND, EMAIL, AUDIO };
 		enum GetResourceType {
 			RES_PROMPT,        // prompt for resource
 			RES_USE_EVENT_ID,  // use resource containing event, or prompt if not found

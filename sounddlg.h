@@ -1,7 +1,7 @@
 /*
- *  sounddlg.h  -  sound file selection and configuration dialog
+ *  sounddlg.h  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright (c) 2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2005-2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,27 +38,28 @@ class Slider;
 class LineEdit;
 
 
-class SoundDlg : public KDialog
+class SoundWidget : public QWidget
 {
 		Q_OBJECT
 	public:
-		SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
-		         const QString& caption, QWidget* parent);
-		~SoundDlg();
+		SoundWidget(bool showPlay, bool showRepeat, QWidget* parent);
+		~SoundWidget();
+		void           set(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat);
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
-		KUrl           getFile() const       { return mUrl; }
-		bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const;
+		KUrl           file() const;
+		bool           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
 		QString        defaultDir() const    { return mDefaultDir; }
+		bool           validate() const;
 
 		static QString i18n_chk_Repeat();      // text of Repeat checkbox
+
+	signals:
+		void           changed();      // emitted whenever any contents change
 
 	protected:
 		virtual void   showEvent(QShowEvent*);
 		virtual void   resizeEvent(QResizeEvent*);
-
-	protected slots:
-		virtual void   slotOk();
 
 	private slots:
 		void           slotPickFile();
@@ -68,8 +69,6 @@ class SoundDlg : public KDialog
 		void           playFinished();
 
 	private:
-		bool           checkFile();
-
 		QPushButton*   mFilePlay;
 		LineEdit*      mFileEdit;
 		PushButton*    mFileBrowseButton;
@@ -82,8 +81,35 @@ class SoundDlg : public KDialog
 		KHBox*         mFadeVolumeBox;
 		Slider*        mFadeSlider;
 		QString        mDefaultDir;     // current default directory for mFileEdit
-		KUrl           mUrl;
+		mutable KUrl         mUrl;
+		mutable QString      mValidatedFile;
 		Phonon::MediaObject* mPlayer;
+		bool                 mReadOnly;
+		mutable bool         mValidatedValue;
+};
+
+
+class SoundDlg : public KDialog
+{
+		Q_OBJECT
+	public:
+		SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
+		         const QString& caption, QWidget* parent);
+		void           setReadOnly(bool);
+		bool           isReadOnly() const    { return mReadOnly; }
+		KUrl           getFile() const       { return mSoundWidget->file(); }
+		bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const
+		                                     { return mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
+		QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
+
+	protected:
+		virtual void   resizeEvent(QResizeEvent*);
+
+	protected slots:
+		virtual void   slotOk();
+
+	private:
+		SoundWidget*   mSoundWidget;
 		bool           mReadOnly;
 };
 

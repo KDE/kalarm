@@ -35,6 +35,7 @@ class NewAlarmAction : public KActionMenu
 		KAction* displayAlarmAction() const  { return mDisplayAction; }
 		KAction* commandAlarmAction() const  { return mCommandAction; }
 		KAction* emailAlarmAction() const    { return mEmailAction; }
+		KAction* audioAlarmAction() const    { return mAudioAction; }
 
 	signals:
 		void   selected(EditAlarmDlg::Type);
@@ -47,6 +48,7 @@ class NewAlarmAction : public KActionMenu
 		KAction* mDisplayAction;
 		KAction* mCommandAction;
 		KAction* mEmailAction;
+		KAction* mAudioAction;
 		QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };
 

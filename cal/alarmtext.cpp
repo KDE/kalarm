@@ -347,28 +347,43 @@ void AlarmText::setUpTranslations()
 */
 QString AlarmText::summary(const KAEventData* event, int maxLines, bool* truncated)
 {
-	QString text = (event->action() == KAEventData::EMAIL) ? event->emailSubject() : event->cleanText();
-	if (event->action() == KAEventData::MESSAGE)
+	QString text;
+	switch (event->action())
 	{
-		// If the message is the text of an email, return its headers or just subject line
-		QString subject = emailHeaders(text, (maxLines <= 1));
-		if (!subject.isNull())
+		case KAEventData::AUDIO:
+			text = event->audioFile();
+			break;
+		case KAEventData::EMAIL:
+			text = event->emailSubject();
+			break;
+		case KAEventData::FILE:
+		case KAEventData::COMMAND:
+			text = event->cleanText();
+			break;
+		case KAEventData::MESSAGE:
 		{
-			if (truncated)
-				*truncated = true;
-			return subject;
-		}
-		if (maxLines == 1)
-		{
-			// If the message is the text of a todo, return either the
-			// title/description or the whole text.
-			subject = todoTitle(text);
-			if (!subject.isEmpty())
+			text = event->cleanText();
+			// If the message is the text of an email, return its headers or just subject line
+			QString subject = emailHeaders(text, (maxLines <= 1));
+			if (!subject.isNull())
 			{
 				if (truncated)
 					*truncated = true;
 				return subject;
 			}
+			if (maxLines == 1)
+			{
+				// If the message is the text of a todo, return either the
+				// title/description or the whole text.
+				subject = todoTitle(text);
+				if (!subject.isEmpty())
+				{
+					if (truncated)
+						*truncated = true;
+					return subject;
+				}
+			}
+			break;
 		}
 	}
 	if (truncated)

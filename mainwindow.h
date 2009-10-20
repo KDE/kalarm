@@ -98,6 +98,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotNewDisplay()   { slotNew(EditAlarmDlg::DISPLAY); }
 		void           slotNewCommand()   { slotNew(EditAlarmDlg::COMMAND); }
 		void           slotNewEmail()     { slotNew(EditAlarmDlg::EMAIL); }
+		void           slotNewAudio()     { slotNew(EditAlarmDlg::AUDIO); }
 		void           slotNewFromTemplate(const KAEvent*);
 		void           slotNewTemplate();
 		void           slotCopy();
@@ -172,6 +173,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		KAction*             mActionNewDisplay;
 		KAction*             mActionNewCommand;
 		KAction*             mActionNewEmail;
+		KAction*             mActionNewAudio;
 		TemplateMenuAction*  mActionNewFromTemplate;
 		KAction*             mActionCreateTemplate;
 		KAction*             mActionCopy;
