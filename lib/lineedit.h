@@ -1,7 +1,7 @@
 /*
  *  lineedit.h  -  line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright (c) 2003 - 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2003-2005,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -71,6 +71,10 @@ class LineEdit : public KLineEdit
 		 *  @param parent The parent object of this widget.
 		 */
 		explicit LineEdit(QWidget* parent = 0);
+		/** Return the entered text.
+		 *  If the type is Url, tilde expansion is performed.
+		 */
+		QString      text() const;
 		/** Prevents the line edit's contents being selected when the widget receives focus. */
 		void         setNoSelect()   { mNoSelect = true; }
 		/** Sets whether the cursor should be set at the beginning or end of the text when

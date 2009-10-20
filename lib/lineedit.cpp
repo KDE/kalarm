@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright © 2003-2005 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,21 +19,21 @@
  */
 
 #include "kalarm.h"
+#include "lineedit.moc"
+
+#include <libkdepim/maillistdrag.h>
+#include <libkdepim/kvcarddrag.h>
+#include <kcal/icaldrag.h>
+
+#include <kurl.h>
+#include <kurlcompletion.h>
+#include <kshell.h>
 
 #include <QRegExp>
 #include <QMimeData>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QFocusEvent>
-
-#include <kurl.h>
-#include <kurlcompletion.h>
-
-#include <libkdepim/maillistdrag.h>
-#include <libkdepim/kvcarddrag.h>
-#include <kcal/icaldrag.h>
-
-#include "lineedit.moc"
 
 
 /*=============================================================================
@@ -83,6 +83,13 @@ void LineEdit::focusInEvent(QFocusEvent* e)
 	QFocusEvent newe(QEvent::FocusIn, (mNoSelect ? Qt::OtherFocusReason : e->reason()));
 	KLineEdit::focusInEvent(&newe);
 	mNoSelect = false;
+}
+
+QString LineEdit::text() const
+{
+	if (mType == Url)
+		return KShell::tildeExpand(QLineEdit::text());
+	return QLineEdit::text();
 }
 
 void LineEdit::setText(const QString& text)
