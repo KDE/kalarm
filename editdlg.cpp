@@ -1096,7 +1096,9 @@ void EditAlarmDlg::slotTry()
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc  &&  proc != (void*)-1)
 			type_trySuccessMessage((ShellProcess*)proc, text);
+#ifdef __GNUC__
 #warning Kill Audio alarm when edit window is closed
+#endif
 	}
 }
 
