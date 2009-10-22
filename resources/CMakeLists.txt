@@ -35,7 +35,7 @@ set(kalarm_local_PART_SRCS resourcelocal_plugin.cpp )
 
 kde4_add_plugin(kalarm_local ${kalarm_local_PART_SRCS})
 
-target_link_libraries(kalarm_local ${KDE4_KDECORE_LIBS} kalarm_resources )
+target_link_libraries(kalarm_local ${KDE4_KDECORE_LIBS} ${KDE4_KCAL_LIBS} ${QT_QTGUI_LIBRARY} kalarm_resources )
 
 install(TARGETS kalarm_local  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -48,7 +48,7 @@ set(kalarm_localdir_PART_SRCS resourcelocaldir_plugin.cpp )
 
 kde4_add_plugin(kalarm_localdir ${kalarm_localdir_PART_SRCS})
 
-target_link_libraries(kalarm_localdir ${KDE4_KDECORE_LIBS} kalarm_resources )
+target_link_libraries(kalarm_localdir ${KDE4_KDECORE_LIBS} ${KDE4_KCAL_LIBS} ${QT_QTGUI_LIBRARY} kalarm_resources )
 
 install(TARGETS kalarm_localdir  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -61,7 +61,7 @@ set(kalarm_remote_PART_SRCS resourceremote_plugin.cpp )
 
 kde4_add_plugin(kalarm_remote ${kalarm_remote_PART_SRCS})
 
-target_link_libraries(kalarm_remote ${KDE4_KDECORE_LIBS} kalarm_resources )
+target_link_libraries(kalarm_remote ${KDE4_KDECORE_LIBS} ${KDE4_KCAL_LIBS} ${QT_QTGUI_LIBRARY} kalarm_resources )
 
 install(TARGETS kalarm_remote  DESTINATION ${PLUGIN_INSTALL_DIR})
 
