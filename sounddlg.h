@@ -85,7 +85,6 @@ class SoundWidget : public QWidget
 		mutable QString      mValidatedFile;
 		Phonon::MediaObject* mPlayer;
 		bool                 mReadOnly;
-		mutable bool         mValidatedValue;
 };
 
 
@@ -106,7 +105,7 @@ class SoundDlg : public KDialog
 		virtual void   resizeEvent(QResizeEvent*);
 
 	protected slots:
-		virtual void   slotOk();
+		virtual void   slotButtonClicked(int button);
 
 	private:
 		SoundWidget*   mSoundWidget;

@@ -64,7 +64,6 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
 	setCaption(caption);
 	setButtons(Ok|Cancel);
 	setDefaultButton(Ok);
-	connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
 
 	// Restore the dialog size from last time
 	QSize s;
@@ -111,13 +110,17 @@ void SoundDlg::resizeEvent(QResizeEvent* re)
 /******************************************************************************
 * Called when the OK button is clicked.
 */
-void SoundDlg::slotOk()
+void SoundDlg::slotButtonClicked(int button)
 {
-	if (mReadOnly)
-		reject();
-	if (!mSoundWidget->validate())
-		return;
-	accept();
+	if (button == Ok)
+	{
+		if (mReadOnly)
+			reject();
+		else if (mSoundWidget->validate())
+			accept();
+	}
+	else
+		KDialog::slotButtonClicked(button);
 }
 
 
@@ -131,8 +134,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 	  mFilePlay(0),
 	  mRepeatCheckbox(0),
 	  mPlayer(0),
-	  mReadOnly(false),
-	  mValidatedValue(false)
+	  mReadOnly(false)
 {
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
@@ -395,12 +397,11 @@ bool SoundWidget::validate() const
 {
 	QString file = mFileEdit->text();
 	if (file == mValidatedFile  &&  !file.isEmpty())
-		return mValidatedValue;
-	mValidatedFile  = file;
-	mValidatedValue = false;
+		return true;
+	mValidatedFile = file;
 	KAlarm::FileErr err = KAlarm::checkFileExists(file, mUrl);
 	if (err == KAlarm::FileErr_None)
-		return (mValidatedValue = true);
+		return true;
 	if (err == KAlarm::FileErr_Nonexistent)
 	{
 		mUrl = KUrl(file);
@@ -420,20 +421,35 @@ bool SoundWidget::validate() const
 					{
 						mUrl.setPath(soundDirs[i]);
 						mUrl.addPath(file);
-						if (KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, const_cast<SoundWidget*>(this)))
-							return (mValidatedValue = true);
+						QString f = mUrl.toLocalFile();
+						err = KAlarm::checkFileExists(f, mUrl);
+						if (err == KAlarm::FileErr_None)
+							return true;
+						if (err != KAlarm::FileErr_Nonexistent)
+						{
+							file = f;   // for inclusion in error message
+							break;
+						}
 					}
 				}
 			}
-			mUrl.setPath(QDir::homePath());
-			mUrl.addPath(file);
-			if (KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, const_cast<SoundWidget*>(this)))
-				return (mValidatedValue = true);
+			if (err == KAlarm::FileErr_Nonexistent)
+			{
+				mUrl.setPath(QDir::homePath());
+				mUrl.addPath(file);
+				QString f = mUrl.toLocalFile();
+				err = KAlarm::checkFileExists(f, mUrl);
+				if (err == KAlarm::FileErr_None)
+					return true;
+				if (err != KAlarm::FileErr_Nonexistent)
+					file = f;   // for inclusion in error message
+			}
 		}
 	}
 	mFileEdit->setFocus();
 	if (KAlarm::showFileErrMessage(file, err, KAlarm::FileErr_BlankPlay, const_cast<SoundWidget*>(this)))
-		return (mValidatedValue = true);
+		return true;
+	mValidatedFile.clear();
 	mUrl.clear();
 	return false;
 }
