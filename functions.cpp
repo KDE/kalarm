@@ -1472,7 +1472,8 @@ FileType fileType(const KMimeType::Ptr& mimetype)
 
 /******************************************************************************
 * Check that a file exists and is a plain readable file.
-* Updates 'filename' and 'url'.
+* Updates 'filename' and 'url' even if an error occurs, since 'filename' may
+* be needed subsequently by showFileErrMessage().
 */
 FileErr checkFileExists(QString& filename, KUrl& url)
 {
@@ -1506,12 +1507,9 @@ FileErr checkFileExists(QString& filename, KUrl& url)
 		filename = info.absoluteFilePath();
 		url.setPath(filename);
 		filename = QLatin1String("file:") + filename;
-		if (err == FileErr_None)
-		{
-			if      (info.isDir())        err = FileErr_Directory;
-			else if (!info.exists())      err = FileErr_Nonexistent;
-			else if (!info.isReadable())  err = FileErr_Unreadable;
-		}
+		if      (info.isDir())        err = FileErr_Directory;
+		else if (!info.exists())      err = FileErr_Nonexistent;
+		else if (!info.isReadable())  err = FileErr_Unreadable;
 	}
 	return err;
 }
