@@ -47,10 +47,11 @@ class SoundWidget : public QWidget
 		void           set(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat);
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
-		KUrl           file() const;
+		QString        fileName() const;
+		KUrl           file(bool showErrorMessage = true) const;
 		bool           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
 		QString        defaultDir() const    { return mDefaultDir; }
-		bool           validate() const;
+		bool           validate(bool showErrorMessage) const;
 
 		static QString i18n_chk_Repeat();      // text of Repeat checkbox
 

@@ -384,7 +384,7 @@ int KAlarmApp::newInstance()
 						}
 						case EditAlarmDlg::AUDIO:
 						{
-							// EditAlarmDlg::create() always returns EditAudioAlarmDlg for type = DISPLAY
+							// EditAlarmDlg::create() always returns EditAudioAlarmDlg for type = AUDIO
 							EditAudioAlarmDlg* dlg = qobject_cast<EditAudioAlarmDlg*>(editDlg);
 							if (!options.audioFile().isEmpty()  ||  options.audioVolume() >= 0)
 								dlg->setAudio(options.audioFile(), options.audioVolume());

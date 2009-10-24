@@ -50,9 +50,10 @@ enum {
 	FIND_MESSAGE  = KFind::MinimumUserOption << 2,
 	FIND_FILE     = KFind::MinimumUserOption << 3,
 	FIND_COMMAND  = KFind::MinimumUserOption << 4,
-	FIND_EMAIL    = KFind::MinimumUserOption << 5
+	FIND_EMAIL    = KFind::MinimumUserOption << 5,
+	FIND_AUDIO    = KFind::MinimumUserOption << 6
 };
-static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
+static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
 
 
 class FindDlg : public KFindDialog
@@ -101,7 +102,7 @@ void Find::display()
 {
 	if (!mOptions)
 		// Set defaults the first time the Find dialog is activated
-		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL;
+		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
 	bool noArchived = !Preferences::archivedKeepDays();
 	bool showArchived = qobject_cast<AlarmListView*>(mListView)
 	                    && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KCalEvent::ARCHIVED);
@@ -169,6 +170,11 @@ void Find::display()
 		mEmailType->setWhatsThis(i18nc("@info:whatsthis", "Check to include email alarms in the search."));
 		grid->addWidget(mEmailType, 4, 2);
 
+		mAudioType = new QCheckBox(i18nc("@option:check Alarm action", "Audio"), group);
+		mAudioType->setFixedSize(mAudioType->sizeHint());
+		mAudioType->setWhatsThis(i18nc("@info:whatsthis", "Check to include audio alarms in the search."));
+		grid->addWidget(mAudioType, 5, 0);
+
 		// Set defaults
 		mLive->setChecked(mOptions & FIND_LIVE);
 		mArchived->setChecked(mOptions & FIND_ARCHIVED);
@@ -176,6 +182,7 @@ void Find::display()
 		mFileType->setChecked(mOptions & FIND_FILE);
 		mCommandType->setChecked(mOptions & FIND_COMMAND);
 		mEmailType->setChecked(mOptions & FIND_EMAIL);
+		mAudioType->setChecked(mOptions & FIND_AUDIO);
 
 		connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
 	}
@@ -201,6 +208,7 @@ void Find::display()
 	bool file     = false;
 	bool command  = false;
 	bool email    = false;
+	bool audio    = false;
 	int rowCount = mListView->model()->rowCount();
 	for (int row = 0;  row < rowCount;  ++row)
 	{
@@ -215,6 +223,7 @@ void Find::display()
 			case KAEventData::FILE:     file    = true;  break;
 			case KAEventData::COMMAND:  command = true;  break;
 			case KAEventData::EMAIL:    email   = true;  break;
+			case KAEventData::AUDIO:    audio   = true;  break;
 		}
 	}
 	mLive->setEnabled(live);
@@ -223,6 +232,7 @@ void Find::display()
 	mFileType->setEnabled(file);
 	mCommandType->setEnabled(command);
 	mEmailType->setEnabled(email);
+	mAudioType->setEnabled(audio);
 
 	mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
 	mDialog->show();
@@ -242,9 +252,10 @@ void Find::slotFind()
 	         |  (mMessageType->isEnabled() && mMessageType->isChecked() ? FIND_MESSAGE : 0)
 	         |  (mFileType->isEnabled()    && mFileType->isChecked()    ? FIND_FILE : 0)
 	         |  (mCommandType->isEnabled() && mCommandType->isChecked() ? FIND_COMMAND : 0)
-	         |  (mEmailType->isEnabled()   && mEmailType->isChecked()   ? FIND_EMAIL : 0);
+	         |  (mEmailType->isEnabled()   && mEmailType->isChecked()   ? FIND_EMAIL : 0)
+	         |  (mAudioType->isEnabled()   && mAudioType->isChecked()   ? FIND_AUDIO : 0);
 	if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
-	||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL)))
+	||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO)))
 	{
 		KMessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
 		return;
@@ -358,6 +369,13 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 				if (found)
 					break;
 				mFind->setData(event->cleanText());
+				found = (mFind->find() == KFind::Match);
+				break;
+
+			case KAEventData::AUDIO:
+				if (!(mOptions & FIND_AUDIO))
+					break;
+				mFind->setData(event->audioFile());
 				found = (mFind->find() == KFind::Match);
 				break;
 		}

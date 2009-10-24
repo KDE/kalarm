@@ -116,7 +116,7 @@ void SoundDlg::slotButtonClicked(int button)
 	{
 		if (mReadOnly)
 			reject();
-		else if (mSoundWidget->validate())
+		else if (mSoundWidget->validate(true))
 			accept();
 	}
 	else
@@ -301,11 +301,19 @@ void SoundWidget::setReadOnly(bool readOnly)
 }
 
 /******************************************************************************
+* Return the file name typed in the edit field.
+*/
+QString SoundWidget::fileName() const
+{
+	return mFileEdit->text();
+}
+
+/******************************************************************************
 * Validate the entered file and return it.
 */
-KUrl SoundWidget::file() const
+KUrl SoundWidget::file(bool showErrorMessage) const
 {
-	validate();
+	validate(showErrorMessage);
 	return mUrl;
 }
 
@@ -368,7 +376,7 @@ void SoundWidget::playSound()
 		playFinished();
 		return;
 	}
-	if (!validate())
+	if (!validate(true))
 		return;
 	mPlayer = Phonon::createPlayer(Phonon::MusicCategory, mUrl);
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
@@ -393,7 +401,7 @@ void SoundWidget::playFinished()
 /******************************************************************************
 * Check whether the specified sound file exists.
 */
-bool SoundWidget::validate() const
+bool SoundWidget::validate(bool showErrorMessage) const
 {
 	QString file = mFileEdit->text();
 	if (file == mValidatedFile  &&  !file.isEmpty())
@@ -447,7 +455,8 @@ bool SoundWidget::validate() const
 		}
 	}
 	mFileEdit->setFocus();
-	if (KAlarm::showFileErrMessage(file, err, KAlarm::FileErr_BlankPlay, const_cast<SoundWidget*>(this)))
+	if (showErrorMessage
+	&&  KAlarm::showFileErrMessage(file, err, KAlarm::FileErr_BlankPlay, const_cast<SoundWidget*>(this)))
 		return true;
 	mValidatedFile.clear();
 	mUrl.clear();

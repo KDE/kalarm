@@ -1479,12 +1479,16 @@ FileErr checkFileExists(QString& filename, KUrl& url)
 {
 	url = KUrl();
 	FileErr err = FileErr_None;
+	QString file = filename;
+	QRegExp f("^file://*");
+	if (f.indexIn(file) >= 0)
+		file = file.mid(f.matchedLength() - 1);
 	// Convert any relative file path to absolute
 	// (using home directory as the default)
-	int i = filename.indexOf(QLatin1Char('/'));
-	if (i > 0  &&  filename[i - 1] == QLatin1Char(':'))
+	int i = file.indexOf(QLatin1Char('/'));
+	if (i > 0  &&  file[i - 1] == QLatin1Char(':'))
 	{
-		url = filename;
+		url = file;
 		url.cleanPath();
 		filename = url.prettyUrl();
 		KIO::UDSEntry uds;
@@ -1497,16 +1501,16 @@ FileErr checkFileExists(QString& filename, KUrl& url)
 			else if (!fi.isReadable())  err = FileErr_Unreadable;
 		}
 	}
-	else if (filename.isEmpty())
+	else if (file.isEmpty())
 		err = FileErr_Blank;    // blank file name
 	else
 	{
 		// It's a local file - convert to absolute path & check validity
-		QFileInfo info(filename);
+		QFileInfo info(file);
 		QDir::setCurrent(QDir::homePath());
-		filename = info.absoluteFilePath();
-		url.setPath(filename);
-		filename = QLatin1String("file:") + filename;
+		file = info.absoluteFilePath();
+		url.setPath(file);
+		filename = QLatin1String("file:") + file;
 		if      (info.isDir())        err = FileErr_Directory;
 		else if (!info.exists())      err = FileErr_Nonexistent;
 		else if (!info.isReadable())  err = FileErr_Unreadable;
