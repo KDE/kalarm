@@ -627,7 +627,7 @@ void EditDisplayAlarmDlg::slotPickFile()
 	                                  defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
 	if (!file.isEmpty())
 	{
-		mFileMessageEdit->setText(file);
+		mFileMessageEdit->setText(KAlarm::fileOrUrl(file));
 		contentsChanged();
 	}
 }
@@ -1577,7 +1577,7 @@ int EditAudioAlarmDlg::getAlarmFlags() const
 */
 bool EditAudioAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
-	result = mSoundConfig->file(showErrorMessage).prettyUrl();
+	result = mSoundConfig->file(showErrorMessage).pathOrUrl();
 	return !result.isEmpty();
 }
 
@@ -1636,7 +1636,7 @@ void CommandEdit::setText(const AlarmText& alarmText)
 	if (script)
 		mScriptEdit->setPlainText(text);
 	else
-		mCommandEdit->setText(text);
+		mCommandEdit->setText(KAlarm::fileOrUrl(text));
 }
 
 /******************************************************************************

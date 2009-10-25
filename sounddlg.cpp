@@ -269,7 +269,8 @@ SoundWidget::~SoundWidget()
 void SoundWidget::set(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat)
 {
 	// Initialise the control values
-	mFileEdit->setText(file);
+	QString f = KAlarm::fileOrUrl(file);
+	mFileEdit->setText(f);
 	if (mRepeatCheckbox)
 		mRepeatCheckbox->setChecked(repeat);
 	mVolumeCheckbox->setChecked(volume >= 0);
@@ -362,7 +363,7 @@ void SoundWidget::slotPickFile()
 {
 	QString url = SoundPicker::browseFile(mDefaultDir, mFileEdit->text());
 	if (!url.isEmpty())
-		mFileEdit->setText(url);
+		mFileEdit->setText(KAlarm::fileOrUrl(url));
 }
 
 /******************************************************************************

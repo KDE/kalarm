@@ -1480,7 +1480,7 @@ FileErr checkFileExists(QString& filename, KUrl& url)
 	url = KUrl();
 	FileErr err = FileErr_None;
 	QString file = filename;
-	QRegExp f("^file://*");
+	QRegExp f("^file:/+");
 	if (f.indexIn(file) >= 0)
 		file = file.mid(f.matchedLength() - 1);
 	// Convert any relative file path to absolute
@@ -1508,9 +1508,8 @@ FileErr checkFileExists(QString& filename, KUrl& url)
 		// It's a local file - convert to absolute path & check validity
 		QFileInfo info(file);
 		QDir::setCurrent(QDir::homePath());
-		file = info.absoluteFilePath();
-		url.setPath(file);
-		filename = QLatin1String("file:") + file;
+		filename = info.absoluteFilePath();
+		url.setPath(filename);
 		if      (info.isDir())        err = FileErr_Directory;
 		else if (!info.exists())      err = FileErr_Nonexistent;
 		else if (!info.isReadable())  err = FileErr_Unreadable;
@@ -1529,7 +1528,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 	{
 		// If file is a local file, remove "file://" from name
 		QString file = filename;
-		QRegExp f("^file://*");
+		QRegExp f("^file:/+");
 		if (f.indexIn(file) >= 0)
 			file = file.mid(f.matchedLength() - 1);
 
@@ -1560,6 +1559,15 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 			return false;
 	}
 	return true;
+}
+
+/******************************************************************************
+* If a url string is a local file, strip off the 'file:/' prefix.
+*/
+QString fileOrUrl(const QString& url)
+{
+	static const QRegExp localfile("^file:/+");
+	return (localfile.indexIn(url) >= 0) ? url.mid(localfile.matchedLength() - 1) : url;
 }
 
 /******************************************************************************

@@ -1333,7 +1333,7 @@ void AudioThread::run()
 	}
 	kDebug() << QThread::currentThread() << mFile;
 	QString audioFile = mFile;
-	mFile.replace(QRegExp("^file:/*"), "/");
+	mFile = KAlarm::fileOrUrl(mFile);
 	Phonon::MediaSource source(audioFile);
 	if (source.type() == Phonon::MediaSource::Invalid)
 	{
