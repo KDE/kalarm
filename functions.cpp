@@ -1564,7 +1564,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 /******************************************************************************
 * If a url string is a local file, strip off the 'file:/' prefix.
 */
-QString fileOrUrl(const QString& url)
+QString pathOrUrl(const QString& url)
 {
 	static const QRegExp localfile("^file:/+");
 	return (localfile.indexIn(url) >= 0) ? url.mid(localfile.matchedLength() - 1) : url;

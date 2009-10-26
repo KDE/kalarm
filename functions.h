@@ -88,7 +88,7 @@ FileErr             checkFileExists(QString& filename, KUrl&);
 bool                showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QWidget* errmsgParent);
 
 /** If a url string is a local file, strip off the 'file:/' prefix. */
-QString             fileOrUrl(const QString& url);
+QString             pathOrUrl(const QString& url);
 
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
                                const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);

@@ -627,7 +627,7 @@ void EditDisplayAlarmDlg::slotPickFile()
 	                                  defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
 	if (!file.isEmpty())
 	{
-		mFileMessageEdit->setText(KAlarm::fileOrUrl(file));
+		mFileMessageEdit->setText(KAlarm::pathOrUrl(file));
 		contentsChanged();
 	}
 }
@@ -1636,7 +1636,7 @@ void CommandEdit::setText(const AlarmText& alarmText)
 	if (script)
 		mScriptEdit->setPlainText(text);
 	else
-		mCommandEdit->setText(KAlarm::fileOrUrl(text));
+		mCommandEdit->setText(KAlarm::pathOrUrl(text));
 }
 
 /******************************************************************************
