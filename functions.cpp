@@ -191,7 +191,10 @@ KToggleAction* createSpreadWindowsAction(QObject* parent)
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
 {
-	return new TemplateMenuAction(KIcon(QLatin1String("document-new-from-template")), label, actions, name);
+	TemplateMenuAction* action = new TemplateMenuAction(KIcon(QLatin1String("document-new-from-template")), label, actions, name);
+	QObject::connect(EventListModel::templates(), SIGNAL(nonEmptyStatus(bool)), action, SLOT(setEnabled(bool)));
+	action->setEnabled(!EventListModel::templates()->emptyStatus());
+	return action;
 }
 
 /******************************************************************************
@@ -375,8 +378,6 @@ UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgPa
 			status = SAVE_FAILED;
 		else
 		{
-			cal->emitEmptyStatus();
-
 			// Update the window lists
 			EventListModel::templates()->addEvent(newev);
 			return UPDATE_OK;
@@ -613,7 +614,6 @@ UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 		status = SAVE_FAILED;
 		warnErr = eventIDs.count();
 	}
-	cal->emitEmptyStatus();
 	if (status != UPDATE_OK  &&  msgParent)
 		displayUpdateError(msgParent, status, ERR_TEMPLATE, warnErr);
 	return status;

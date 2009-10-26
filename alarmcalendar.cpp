@@ -1365,32 +1365,6 @@ AlarmResource* AlarmCalendar::resourceForEvent(const QString& eventID) const
 }
 
 /******************************************************************************
-* Emit a signal to indicate whether the calendar is empty.
-*/
-void AlarmCalendar::emitEmptyStatus()
-{
-	emit emptyStatus(isEmpty());
-}
-
-/******************************************************************************
-* Return whether the calendar contains any events with alarms.
-*/
-bool AlarmCalendar::isEmpty() const
-{
-	if (!mCalendar)
-		return true;
-	Event::List list = mCalendar->rawEvents();
-	if (list.isEmpty())
-		return true;
-	for (int i = 0, end = list.count();  i < end;  ++i)
-	{
-		if (!list[i]->alarms().isEmpty())
-			return false;
-	}
-	return true;
-}
-
-/******************************************************************************
 * Called when an alarm's enabled status has changed.
 */
 void AlarmCalendar::disabledChanged(const KAEvent* event)

@@ -77,10 +77,8 @@ class AlarmCalendar : public QObject
 		KAEvent*              updateEvent(const KAEvent&);
 		KAEvent*              updateEvent(const KAEvent*);
 		bool                  deleteEvent(const QString& eventID, bool save = false);
-		void                  emitEmptyStatus();
 		void                  purgeEvents(const KAEvent::List&);
 		bool                  isOpen() const         { return mOpen; }
-		bool                  isEmpty() const;
 		QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
 		QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.url(); }
 		void                  adjustStartOfDay();
@@ -99,7 +97,6 @@ class AlarmCalendar : public QObject
 		void                  earliestAlarmChanged();
 		void                  haveDisabledAlarmsChanged(bool haveDisabled);
 		void                  calendarSaved(AlarmCalendar*);
-		void                  emptyStatus(bool empty);
 
 	private slots:
 		void                  setAskResource(bool ask);
