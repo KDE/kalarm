@@ -32,6 +32,21 @@
    <Action name="importBirthdays" />
    <Action name="exportAlarms" />
   </Menu>
+  <Menu noMerge="1" name="edit" >
+   <text>&amp;Edit</text>
+   <Action name="edit_undo" />
+   <Action name="edit_redo" />
+   <Separator/>
+   <Action name="modify" />
+   <Action name="delete" />
+   <Separator/>
+   <Action name="edit_select_all" />
+   <Action name="edit_deselect" />
+   <Separator/>
+   <Action name="edit_find" />
+   <Action name="edit_find_next" />
+   <Action name="edit_find_prev" />
+  </Menu>
   <Menu name="view" >
    <text>&amp;View</text>
    <Action name="showAlarmTimes" />
@@ -47,8 +62,6 @@
   </Menu>
   <Menu name="actions" >
    <text>&amp;Actions</text>
-   <Action name="modify" />
-   <Action name="delete" />
    <Action name="undelete" />
    <Action name="disable" />
    <Separator/>
@@ -72,6 +85,7 @@
   <Action name="copy" />
   <Action name="modify" />
   <Action name="delete" />
+  <Separator/>
   <Action name="undelete" />
   <Action name="disable" />
   <Separator/>

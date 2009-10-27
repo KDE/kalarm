@@ -1373,7 +1373,7 @@ void MainWindow::slotResourceStatusChanged()
 		w->mActionImportAlarms->setEnabled(active || templat);
 		w->mActionImportBirthdays->setEnabled(active);
 		w->mActionNew->setEnabled(active);
-		w->mActionNewFromTemplate->setEnabled(active);
+		w->mActionNewFromTemplate->setEnabled(active && !EventListModel::templates()->emptyStatus());
 		w->mActionCreateTemplate->setEnabled(templat);
 		w->slotSelection();
 	}

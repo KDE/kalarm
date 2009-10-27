@@ -627,7 +627,7 @@ void EditDisplayAlarmDlg::slotPickFile()
 	                                  defaultDir, mFileMessageEdit->text(), QString(), KFile::ExistingOnly, this);
 	if (!file.isEmpty())
 	{
-		mFileMessageEdit->setText(file);
+		mFileMessageEdit->setText(KAlarm::pathOrUrl(file));
 		contentsChanged();
 	}
 }
@@ -1424,7 +1424,7 @@ bool EditEmailAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 
 /*=============================================================================
 = Class EditAudioAlarmDlg
-= Dialog to edit display alarms.
+= Dialog to edit audio alarms with no display window.
 =============================================================================*/
 
 /******************************************************************************
@@ -1442,7 +1442,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, bool newAlarm, QWidget* pare
 }
 
 EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
-                                         GetResourceType getResource, bool readOnly)
+                                     GetResourceType getResource, bool readOnly)
 	: EditAlarmDlg(Template, event, parent, getResource, readOnly)
 {
 	kDebug() << "Event.id()";
@@ -1522,7 +1522,7 @@ void EditAudioAlarmDlg::setReadOnly(bool readOnly)
 void EditAudioAlarmDlg::saveState(const KAEvent* event)
 {
 	EditAlarmDlg::saveState(event);
-	mSavedFile = mSoundConfig->file();
+	mSavedFile = mSoundConfig->fileName();
 	mSoundConfig->getVolume(mSavedVolume, mSavedFadeVolume, mSavedFadeSeconds);
 }
 
@@ -1534,7 +1534,7 @@ void EditAudioAlarmDlg::saveState(const KAEvent* event)
 */
 bool EditAudioAlarmDlg::type_stateChanged() const
 {
-        if (mSavedFile != mSoundConfig->file())
+        if (mSavedFile != mSoundConfig->fileName())
                 return true;
         if (!mSavedFile.isEmpty())
         {
@@ -1561,7 +1561,7 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
 	float volume, fadeVolume;
 	int   fadeSecs;
 	mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
-	event.setAudioFile(mSoundConfig->file().prettyUrl(), volume, fadeVolume, fadeSecs);
+	event.setAudioFile(mSoundConfig->file(false).prettyUrl(), volume, fadeVolume, fadeSecs);
 }
 
 /******************************************************************************
@@ -1577,7 +1577,7 @@ int EditAudioAlarmDlg::getAlarmFlags() const
 */
 bool EditAudioAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
-	result = mSoundConfig->file().prettyUrl();
+	result = mSoundConfig->file(showErrorMessage).pathOrUrl();
 	return !result.isEmpty();
 }
 
@@ -1636,7 +1636,7 @@ void CommandEdit::setText(const AlarmText& alarmText)
 	if (script)
 		mScriptEdit->setPlainText(text);
 	else
-		mCommandEdit->setText(text);
+		mCommandEdit->setText(KAlarm::pathOrUrl(text));
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  find.h  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,6 +63,7 @@ class Find : public QObject
 		QCheckBox*         mFileType;
 		QCheckBox*         mCommandType;
 		QCheckBox*         mEmailType;
+		QCheckBox*         mAudioType;
 		KFind*             mFind;
 		QStringList        mHistory;         // list of history items for Find dialog
 		QString            mLastPattern;     // pattern used in last search

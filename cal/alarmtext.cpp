@@ -347,17 +347,24 @@ void AlarmText::setUpTranslations()
 */
 QString AlarmText::summary(const KAEventData* event, int maxLines, bool* truncated)
 {
+	static const QRegExp localfile("^file:/+");
 	QString text;
 	switch (event->action())
 	{
 		case KAEventData::AUDIO:
 			text = event->audioFile();
+			if (localfile.indexIn(text) >= 0)
+				text = text.mid(localfile.matchedLength() - 1);
 			break;
 		case KAEventData::EMAIL:
 			text = event->emailSubject();
 			break;
-		case KAEventData::FILE:
 		case KAEventData::COMMAND:
+			text = event->cleanText();
+			if (localfile.indexIn(text) >= 0)
+				text = text.mid(localfile.matchedLength() - 1);
+			break;
+		case KAEventData::FILE:
 			text = event->cleanText();
 			break;
 		case KAEventData::MESSAGE:

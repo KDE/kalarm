@@ -292,10 +292,10 @@ class EditAudioAlarmDlg : public EditAlarmDlg
 		KHBox*              mPadding;          // allow top-adjustment of controls
 
 		// Initial state of all controls
-		KUrl                mSavedFile;        // mSoundPicker sound file
-		float               mSavedVolume;      // mSoundPicker volume
-		float               mSavedFadeVolume;  // mSoundPicker fade volume
-		int                 mSavedFadeSeconds; // mSoundPicker fade time
+		QString             mSavedFile;        // sound file
+		float               mSavedVolume;      // volume
+		float               mSavedFadeVolume;  // fade volume
+		int                 mSavedFadeSeconds; // fade time
 };
 
 #endif // EDITDLGTYPES_H

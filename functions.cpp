@@ -191,7 +191,10 @@ KToggleAction* createSpreadWindowsAction(QObject* parent)
 */
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
 {
-	return new TemplateMenuAction(KIcon(QLatin1String("document-new-from-template")), label, actions, name);
+	TemplateMenuAction* action = new TemplateMenuAction(KIcon(QLatin1String("document-new-from-template")), label, actions, name);
+	QObject::connect(EventListModel::templates(), SIGNAL(nonEmptyStatus(bool)), action, SLOT(setEnabled(bool)));
+	action->setEnabled(!EventListModel::templates()->emptyStatus());
+	return action;
 }
 
 /******************************************************************************
@@ -375,8 +378,6 @@ UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgPa
 			status = SAVE_FAILED;
 		else
 		{
-			cal->emitEmptyStatus();
-
 			// Update the window lists
 			EventListModel::templates()->addEvent(newev);
 			return UPDATE_OK;
@@ -613,7 +614,6 @@ UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 		status = SAVE_FAILED;
 		warnErr = eventIDs.count();
 	}
-	cal->emitEmptyStatus();
 	if (status != UPDATE_OK  &&  msgParent)
 		displayUpdateError(msgParent, status, ERR_TEMPLATE, warnErr);
 	return status;
@@ -1479,12 +1479,16 @@ FileErr checkFileExists(QString& filename, KUrl& url)
 {
 	url = KUrl();
 	FileErr err = FileErr_None;
+	QString file = filename;
+	QRegExp f("^file:/+");
+	if (f.indexIn(file) >= 0)
+		file = file.mid(f.matchedLength() - 1);
 	// Convert any relative file path to absolute
 	// (using home directory as the default)
-	int i = filename.indexOf(QLatin1Char('/'));
-	if (i > 0  &&  filename[i - 1] == QLatin1Char(':'))
+	int i = file.indexOf(QLatin1Char('/'));
+	if (i > 0  &&  file[i - 1] == QLatin1Char(':'))
 	{
-		url = filename;
+		url = file;
 		url.cleanPath();
 		filename = url.prettyUrl();
 		KIO::UDSEntry uds;
@@ -1497,16 +1501,15 @@ FileErr checkFileExists(QString& filename, KUrl& url)
 			else if (!fi.isReadable())  err = FileErr_Unreadable;
 		}
 	}
-	else if (filename.isEmpty())
+	else if (file.isEmpty())
 		err = FileErr_Blank;    // blank file name
 	else
 	{
 		// It's a local file - convert to absolute path & check validity
-		QFileInfo info(filename);
+		QFileInfo info(file);
 		QDir::setCurrent(QDir::homePath());
 		filename = info.absoluteFilePath();
 		url.setPath(filename);
-		filename = QLatin1String("file:") + filename;
 		if      (info.isDir())        err = FileErr_Directory;
 		else if (!info.exists())      err = FileErr_Nonexistent;
 		else if (!info.isReadable())  err = FileErr_Unreadable;
@@ -1525,7 +1528,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 	{
 		// If file is a local file, remove "file://" from name
 		QString file = filename;
-		QRegExp f("^file://*");
+		QRegExp f("^file:/+");
 		if (f.indexIn(file) >= 0)
 			file = file.mid(f.matchedLength() - 1);
 
@@ -1556,6 +1559,15 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 			return false;
 	}
 	return true;
+}
+
+/******************************************************************************
+* If a url string is a local file, strip off the 'file:/' prefix.
+*/
+QString pathOrUrl(const QString& url)
+{
+	static const QRegExp localfile("^file:/+");
+	return (localfile.indexIn(url) >= 0) ? url.mid(localfile.matchedLength() - 1) : url;
 }
 
 /******************************************************************************

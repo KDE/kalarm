@@ -87,6 +87,9 @@ enum FileErr {
 FileErr             checkFileExists(QString& filename, KUrl&);
 bool                showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QWidget* errmsgParent);
 
+/** If a url string is a local file, strip off the 'file:/' prefix. */
+QString             pathOrUrl(const QString& url);
+
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
                                const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = 0);
