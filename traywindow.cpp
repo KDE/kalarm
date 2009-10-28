@@ -160,7 +160,7 @@ void TrayWindow::slotResourceStatusChanged()
 	// Find whether there are any writable active alarm resources
 	bool active = AlarmResources::instance()->activeCount(AlarmResource::ACTIVE, true);
 	mActionNew->setEnabled(active);
-	mActionNewFromTemplate->setEnabled(active && !EventListModel::templates()->emptyStatus());
+	mActionNewFromTemplate->setEnabled(active && EventListModel::templates()->haveEvents());
 }
 
 /******************************************************************************

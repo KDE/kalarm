@@ -192,8 +192,8 @@ KToggleAction* createSpreadWindowsAction(QObject* parent)
 TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
 {
 	TemplateMenuAction* action = new TemplateMenuAction(KIcon(QLatin1String("document-new-from-template")), label, actions, name);
-	QObject::connect(EventListModel::templates(), SIGNAL(nonEmptyStatus(bool)), action, SLOT(setEnabled(bool)));
-	action->setEnabled(!EventListModel::templates()->emptyStatus());
+	QObject::connect(EventListModel::templates(), SIGNAL(haveEventsStatus(bool)), action, SLOT(setEnabled(bool)));
+	action->setEnabled(EventListModel::templates()->haveEvents());
 	return action;
 }
 
