@@ -197,6 +197,39 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur);
 }
 
+bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent, const QString& startDateTime, int lateCancel,
+                                unsigned flags, const QString& recurrence, int subRepeatInterval, int subRepeatCount)
+{
+	KDateTime start;
+	KARecurrence recur;
+	KCal::Duration subRepeatDuration;
+	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval, subRepeatDuration))
+		return false;
+	return scheduleAudio(audioUrl, volumePercent, start, lateCancel, flags, recur, subRepeatDuration, subRepeatCount);
+}
+
+bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent, const QString& startDateTime, int lateCancel,
+                                unsigned flags, int recurType, int recurInterval, int recurCount)
+{
+	KDateTime start = convertDateTime(startDateTime);
+	if (!start.isValid())
+		return false;
+	KARecurrence recur;
+	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, recurCount))
+		return false;
+	return scheduleAudio(audioUrl, volumePercent, start, lateCancel, flags, recur);
+}
+
+bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent, const QString& startDateTime, int lateCancel,
+                                unsigned flags, int recurType, int recurInterval, const QString& endDateTime)
+{
+	KDateTime start;
+	KARecurrence recur;
+	if (!convertRecurrence(start, recur, startDateTime, recurType, recurInterval, endDateTime))
+		return false;
+	return scheduleAudio(audioUrl, volumePercent, start, lateCancel, flags, recur);
+}
+
 bool DBusHandler::edit(const QString& eventID)
 {
 	return KAlarm::editAlarm(eventID);
@@ -210,6 +243,7 @@ bool DBusHandler::editNew(int type)
 		case DISPLAY:  dlgtype = EditAlarmDlg::DISPLAY;  break;
 		case COMMAND:  dlgtype = EditAlarmDlg::COMMAND;  break;
 		case EMAIL:    dlgtype = EditAlarmDlg::EMAIL;  break;
+		case AUDIO:    dlgtype = EditAlarmDlg::AUDIO;  break;
 		default:
 			kError() << "D-Bus call: invalid alarm type:" << type;
 			return false;
@@ -332,6 +366,19 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 	}
 	return theApp()->scheduleEvent(KAEventData::EMAIL, message, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
 	                               QString(), -1, 0, recurrence, subRepeatDuration, subRepeatCount, senderId, addrs, subject, atts);
+}
+
+/******************************************************************************
+* Schedule a audio alarm, after converting the parameters from strings.
+*/
+bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent,
+                                const KDateTime& start, int lateCancel, unsigned flags,
+                                const KARecurrence& recurrence, const KCal::Duration& subRepeatDuration, int subRepeatCount)
+{
+	unsigned kaEventFlags = convertStartFlags(start, flags);
+	float volume = (volumePercent >= 0) ? volumePercent / 100.0f : -1;
+	return theApp()->scheduleEvent(KAEventData::AUDIO, QString(), start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
+	                               audioUrl, volume, 0, recurrence, subRepeatDuration, subRepeatCount);
 }
 
 

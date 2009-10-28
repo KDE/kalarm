@@ -1,7 +1,7 @@
 /*
  *  dbushandler.h  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2001,2002,2004-2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001,2002,2004-2007,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -73,6 +73,12 @@ class DBusHandler : public QObject, public KAlarmIface
 	Q_SCRIPTABLE bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                                const QString& attachments, const QString& startDateTime, int lateCancel, unsigned flags,
 	                                int recurType, int recurInterval, const QString& endDateTime);
+	Q_SCRIPTABLE bool scheduleAudio(const QString& audioUrl, int volumePercent, const QString& startDateTime, int lateCancel,
+	                                unsigned flags, const QString& recurrence, int subRepeatInterval, int subRepeatCount);
+	Q_SCRIPTABLE bool scheduleAudio(const QString& audioUrl, int volumePercent, const QString& startDateTime, int lateCancel,
+	                                unsigned flags, int recurType, int recurInterval, int recurCount);
+	Q_SCRIPTABLE bool scheduleAudio(const QString& audioUrl, int volumePercent, const QString& startDateTime, int lateCancel,
+	                                unsigned flags, int recurType, int recurInterval, const QString& endDateTime);
 	Q_SCRIPTABLE bool edit(const QString& eventID);
 	Q_SCRIPTABLE bool editNew(int type);
 	Q_SCRIPTABLE bool editNew(const QString& templateName);
@@ -89,6 +95,8 @@ class DBusHandler : public QObject, public KAlarmIface
 	                            const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
 	static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
 	                          const QString& attachments, const KDateTime& start, int lateCancel, unsigned flags,
+	                          const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
+	static bool scheduleAudio(const QString& audioUrl, int volumePercent, const KDateTime& start, int lateCancel, unsigned flags,
 	                          const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
 	static KDateTime convertDateTime(const QString& dateTime, const KDateTime& = KDateTime());
 	static unsigned  convertStartFlags(const KDateTime& start, unsigned flags);

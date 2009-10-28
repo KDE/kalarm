@@ -50,6 +50,7 @@ class SoundWidget : public QWidget
 		QString        fileName() const;
 		KUrl           file(bool showErrorMessage = true) const;
 		bool           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
+		bool           getRepeat() const;
 		QString        defaultDir() const    { return mDefaultDir; }
 		bool           validate(bool showErrorMessage) const;
 

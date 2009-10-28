@@ -340,6 +340,15 @@ bool SoundWidget::getVolume(float& volume, float& fadeVolume, int& fadeSeconds) 
 }
 
 /******************************************************************************
+* Return the entered repetition setting.
+* Reply = whether to repeat or not.
+*/
+bool SoundWidget::getRepeat() const
+{
+	return mRepeatCheckbox && mRepeatCheckbox->isChecked();
+}
+
+/******************************************************************************
 * Called when the dialog's size has changed.
 * Records the new size in the config file.
 */

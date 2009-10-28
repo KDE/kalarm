@@ -296,6 +296,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
 		float               mSavedVolume;      // volume
 		float               mSavedFadeVolume;  // fade volume
 		int                 mSavedFadeSeconds; // fade time
+		bool                mSavedRepeat;      // repeat sound file
 };
 
 #endif // EDITDLGTYPES_H

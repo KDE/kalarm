@@ -1464,7 +1464,7 @@ QString EditAudioAlarmDlg::type_caption(bool newAlarm) const
 void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
 	// File name edit box
-	mSoundConfig = new SoundWidget(false, false, parent);
+	mSoundConfig = new SoundWidget(false, true, parent);
 	connect(mSoundConfig, SIGNAL(changed()), SLOT(contentsChanged()));
 	frameLayout->addWidget(mSoundConfig);
 
@@ -1482,7 +1482,8 @@ void EditAudioAlarmDlg::type_initValues(const KAEvent* event)
 {
 	if (event)
 	{
-		mSoundConfig->set(event->audioFile(), event->soundVolume(), event->fadeVolume(), event->fadeSeconds(), false);
+		mSoundConfig->set(event->audioFile(), event->soundVolume(), event->fadeVolume(), event->fadeSeconds(),
+		                  (event->flags() & KAEvent::REPEAT_SOUND));
 	}
 	else
 	{
@@ -1522,8 +1523,8 @@ void EditAudioAlarmDlg::setReadOnly(bool readOnly)
 void EditAudioAlarmDlg::saveState(const KAEvent* event)
 {
 	EditAlarmDlg::saveState(event);
-	mSavedFile = mSoundConfig->fileName();
-	mSoundConfig->getVolume(mSavedVolume, mSavedFadeVolume, mSavedFadeSeconds);
+	mSavedFile   = mSoundConfig->fileName();
+	mSavedRepeat = mSoundConfig->getVolume(mSavedVolume, mSavedFadeVolume, mSavedFadeSeconds);
 }
 
 /******************************************************************************
@@ -1540,8 +1541,8 @@ bool EditAudioAlarmDlg::type_stateChanged() const
         {
                 float volume, fadeVolume;
                 int   fadeSecs;
-		mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
-                if (mSavedVolume      != volume
+		if (mSavedRepeat      != mSoundConfig->getVolume(volume, fadeVolume, fadeSecs)
+                ||  mSavedVolume      != volume
                 ||  mSavedFadeVolume  != fadeVolume
                 ||  mSavedFadeSeconds != fadeSecs)
                         return true;
@@ -1569,7 +1570,8 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
 */
 int EditAudioAlarmDlg::getAlarmFlags() const
 {
-	return EditAlarmDlg::getAlarmFlags();
+	return EditAlarmDlg::getAlarmFlags()
+	     | (mSoundConfig->getRepeat() ? KAEvent::REPEAT_SOUND : 0);
 }
 
 /******************************************************************************

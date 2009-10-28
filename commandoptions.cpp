@@ -142,16 +142,33 @@ CommandOptions::CommandOptions()
 		mEditAction    = KAEventData::EMAIL;
 		mEditActionSet = true;
 	}
-	if (mError.isEmpty()  &&  mCommand == NONE  &&  mArgs->count())
+	if (checkCommand("edit-new-audio", EDIT_NEW, EditAlarmDlg::AUDIO))
 	{
-		kDebug() << "Message";
-		mCommand       = NEW;
-		mCommandName   = "message";
-		mEditType      = EditAlarmDlg::DISPLAY;
-		mEditAction    = KAEventData::MESSAGE;
+		mEditType      = EditAlarmDlg::AUDIO;
+		mEditAction    = KAEventData::AUDIO;
 		mEditActionSet = true;
-		if (mArgs->count())
-			mText = mArgs->arg(0);
+	}
+	if (mError.isEmpty()  &&  mCommand == NONE)
+	{
+		if (!mArgs->count())
+		{
+			if (checkCommand("play", NEW) || checkCommand("play-repeat", NEW))
+			{
+				mEditType      = EditAlarmDlg::AUDIO;
+				mEditAction    = KAEventData::AUDIO;
+				mEditActionSet = true;
+			}
+		}
+		else
+		{
+			kDebug() << "Message";
+			mCommand       = NEW;
+			mCommandName   = "message";
+			mEditType      = EditAlarmDlg::DISPLAY;
+			mEditAction    = KAEventData::MESSAGE;
+			mEditActionSet = true;
+			mText          = mArgs->arg(0);
+		}
 	}
 	if (mEditAction == KAEventData::EMAIL)
 	{
@@ -178,9 +195,9 @@ CommandOptions::CommandOptions()
 	// correct main command options.
 	checkEditType(EditAlarmDlg::DISPLAY, "color");
 	checkEditType(EditAlarmDlg::DISPLAY, "colorfg");
-	checkEditType(EditAlarmDlg::DISPLAY, "play");
-	checkEditType(EditAlarmDlg::DISPLAY, "play-repeat");
-	checkEditType(EditAlarmDlg::DISPLAY, "volume");
+	checkEditType(EditAlarmDlg::DISPLAY, EditAlarmDlg::AUDIO, "play");
+	checkEditType(EditAlarmDlg::DISPLAY, EditAlarmDlg::AUDIO, "play-repeat");
+	checkEditType(EditAlarmDlg::DISPLAY, EditAlarmDlg::AUDIO, "volume");
 	checkEditType(EditAlarmDlg::DISPLAY, "speak");
 	checkEditType(EditAlarmDlg::DISPLAY, "beep");
 	checkEditType(EditAlarmDlg::DISPLAY, "reminder");
@@ -512,10 +529,10 @@ void CommandOptions::setErrorIncompatible(const QByteArray& opt1, const QByteArr
 	setError(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", QString::fromLatin1(o1), QString::fromLatin1(o2)));
 }
 
-void CommandOptions::checkEditType(EditAlarmDlg::Type type, const QByteArray& optName)
+void CommandOptions::checkEditType(EditAlarmDlg::Type type1, EditAlarmDlg::Type type2, const QByteArray& optName)
 {
 	if (mArgs->isSet(optName)  &&  mCommand != NONE
-	&&  ((mCommand != NEW && mCommand != EDIT_NEW)  ||  mEditType != type))
+	&&  ((mCommand != NEW && mCommand != EDIT_NEW)  ||  (mEditType != type1 && (type2 == EditAlarmDlg::NO_TYPE || mEditType != type2))))
 		setErrorIncompatible(optName, mCommandName);
 }
 
