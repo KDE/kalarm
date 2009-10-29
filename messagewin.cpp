@@ -95,8 +95,6 @@ static const char* KMAIL_DBUS_PATH      = "/KMail";
 static const int proximityButtonDelay = 1000;    // (milliseconds)
 static const int proximityMultiple = 10;         // multiple of button height distance from cursor for proximity
 
-static bool wantModal();
-
 // A text label widget which can be scrolled and copied with the mouse
 class MessageText : public KTextEdit
 {
@@ -158,7 +156,7 @@ MessageWin*           MessageWin::mAudioOwner = 0;
 *  displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
-	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (wantModal() ? 0 : Qt::X11BypassWindowManagerHint))),
+	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (getWorkAreaAndModal() ? 0 : Qt::X11BypassWindowManagerHint))),
 	  mMessage(event->cleanText()),
 	  mFont(event->font()),
 	  mBgColour(event->bgColour()),
@@ -299,6 +297,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
 	setWindowModality(Qt::WindowModal);
 	setObjectName("ErrorWin");    // used by LikeBack
+        getWorkAreaAndModal();
 	initView();
 	mWindowList.append(this);
 }
@@ -329,6 +328,7 @@ MessageWin::MessageWin()
 	setAttribute(WidgetFlags);
 	setWindowModality(Qt::WindowModal);
 	setObjectName("RestoredMsgWin");    // used by LikeBack
+        getWorkAreaAndModal();
 	mWindowList.append(this);
 }
 
@@ -516,7 +516,7 @@ void MessageWin::initView()
 				topLayout->addSpacing(vspace);
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
-				if (text->sizeHint().width() >= KAlarm::desktopWorkArea().width()*2/3)
+				if (text->sizeHint().width() >= mDesktopArea.width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 				{
@@ -1991,14 +1991,51 @@ void MessageWin::clearErrorMessage(unsigned msg) const
 * window displayed, on X11 the message window has to bypass the window manager
 * in order to display on top of it (which has the side effect that it will have
 * no window decoration).
+*
+* Also find the usable area of the desktop (excluding panel etc.), on the
+* appropriate screen if there are multiple screens.
 */
-bool wantModal()
+bool MessageWin::getWorkAreaAndModal()
 {
+	mDesktopArea = KAlarm::desktopWorkArea();
 	bool modal = Preferences::modalMessages();
 	if (modal)
 	{
-		KWindowInfo wi = KWindowSystem::windowInfo(KWindowSystem::activeWindow(), NET::WMState);
-		modal = !(wi.valid()  &&  wi.hasState(NET::FullScreen));
+		WId activeId = KWindowSystem::activeWindow();
+		KWindowInfo wi = KWindowSystem::windowInfo(activeId, NET::WMState);
+		if (wi.valid()  &&  wi.hasState(NET::FullScreen))
+		{
+			// There is a full screen window.
+			// Check whether it only covers one screen in a multi-screen setup.
+			modal = false;
+			QDesktopWidget* desktop = qApp->desktop();
+			int numScreens = desktop->numScreens();
+			if (numScreens > 1)
+			{
+				// There are multiple screens
+				QRect winRect = wi.frameGeometry();
+				int screen = desktop->screenNumber(MainWindow::mainMainWindow());  // KAlarm's screen
+				if (!winRect.intersects(desktop->screenGeometry(screen)))
+					modal = true;   // full screen window isn't on KAlarm's screen
+				else
+				{
+					for (int s = 0;  s < numScreens;  ++s)
+					{
+						if (s != screen
+						&&  !winRect.intersects(desktop->screenGeometry(s)))
+						{
+							// The full screen window isn't on this screen
+							screen = s;
+							modal = true;
+							break;
+						}
+					}
+					if (!modal)
+						return modal;
+				}
+				mDesktopArea = desktop->availableGeometry(screen);
+			}
+		}
 	}
 	return modal;
 }
