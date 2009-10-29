@@ -57,8 +57,6 @@
    <Action name="showResources" />
    <Separator/>
    <Action name="spread" />
-   <Separator/>
-   <Action name="refreshAlarms" />
   </Menu>
   <Menu name="actions" >
    <text>&amp;Actions</text>
@@ -66,6 +64,7 @@
    <Action name="disable" />
    <Separator/>
    <Action name="alarmsEnable" />
+   <Action name="refreshAlarms" />
    <Separator/>
    <Action name="stopAudio" />
   </Menu>
