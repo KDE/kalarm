@@ -89,7 +89,7 @@ EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
 	// We need to store the list so that when deletions occur, the deleted alarm's
 	// position in the list can be determined.
 	mEvents = AlarmCalendar::resources()->events(mStatus);
-	mEmpty  = mEvents.isEmpty();
+	mHaveEvents = !mEvents.isEmpty();
 //for(int x=0; x<mEvents.count(); ++x)kDebug(0)<<"Resource"<<(void*)mEvents[x]->resource()<<"Event"<<(void*)mEvents[x];
 	if (!mTextIcon)
 	{
@@ -621,8 +621,8 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
 			beginInsertRows(QModelIndex(), row, row + list.count() - 1);
 			mEvents += list;
 			endInsertRows();
-			if (mEmpty)
-				updateEmptyStatus(false);
+			if (!mHaveEvents)
+				updateHaveEvents(true);
 		}
 	}
 }
@@ -665,8 +665,8 @@ void EventListModel::removeResource(AlarmResource* resource)
 			mEvents.removeAt(lastRow--);
 		endRemoveRows();
 	}
-	if (!mEmpty  &&  mEvents.isEmpty())
-		updateEmptyStatus(true);
+	if (mHaveEvents  &&  mEvents.isEmpty())
+		updateHaveEvents(false);
 }
 
 /******************************************************************************
@@ -688,8 +688,8 @@ void EventListModel::reload()
 		mEvents = list;
 		endInsertRows();
 	}
-	if (mEmpty != mEvents.isEmpty())
-		updateEmptyStatus(!mEmpty);
+	if (mHaveEvents == mEvents.isEmpty())
+		updateHaveEvents(!mHaveEvents);
 }
 
 /******************************************************************************
@@ -727,8 +727,8 @@ void EventListModel::addEvent(KAEvent* event)
 	beginInsertRows(QModelIndex(), row, row);
 	mEvents += event;
 	endInsertRows();
-	if (mEmpty)
-		updateEmptyStatus(false);
+	if (!mHaveEvents)
+		updateHaveEvents(true);
 }
 
 /******************************************************************************
@@ -744,8 +744,8 @@ void EventListModel::addEvents(const KAEvent::List& events)
 	beginInsertRows(QModelIndex(), row, row + evs.count() - 1);
 	mEvents += evs;
 	endInsertRows();
-	if (mEmpty)
-		updateEmptyStatus(false);
+	if (!mHaveEvents)
+		updateHaveEvents(true);
 }
 
 /******************************************************************************
@@ -758,8 +758,8 @@ void EventListModel::removeEvent(int row)
 	beginRemoveRows(QModelIndex(), row, row);
 	mEvents.removeAt(row);
 	endRemoveRows();
-	if (!mEmpty  &&  mEvents.isEmpty())
-		updateEmptyStatus(true);
+	if (mHaveEvents  &&  mEvents.isEmpty())
+		updateHaveEvents(false);
 }
 
 /******************************************************************************

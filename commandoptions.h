@@ -78,7 +78,9 @@ class CommandOptions
 		void        setErrorRequires(const char* opt, const char* opt2, const char* opt3 = 0);
 		void        setErrorParameter(const char* opt);
 		void        setErrorIncompatible(const QByteArray& opt1, const QByteArray& opt2);
-		void        checkEditType(EditAlarmDlg::Type, const QByteArray& opt);
+		void        checkEditType(EditAlarmDlg::Type type, const QByteArray& opt)
+		                          { checkEditType(type, EditAlarmDlg::NO_TYPE, opt); }
+		void        checkEditType(EditAlarmDlg::Type, EditAlarmDlg::Type, const QByteArray& opt);
 
 		KCmdLineArgs*       mArgs;
 		QString             mError;          // error message

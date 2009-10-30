@@ -1,7 +1,7 @@
 /*
  *  kalarmiface.h  -  D-Bus interface to KAlarm
  *  Program:  kalarm
- *  Copyright © 2004-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -88,7 +88,8 @@ class KAlarmIface
 	{
 		DISPLAY = 1,    // display alarm
 		COMMAND = 2,    // command alarm
-		EMAIL   = 3     // email alarm
+		EMAIL   = 3,    // email alarm
+		AUDIO   = 4     // audio alarm
 	};
 };
 

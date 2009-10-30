@@ -79,6 +79,7 @@ static const QString DATE_DEFERRAL_TYPE         = QLatin1String("DATE_DEFERRAL")
 static const QString DISPLAYING_TYPE            = QLatin1String("DISPLAYING");   // used only in displaying calendar
 static const QString PRE_ACTION_TYPE            = QLatin1String("PRE");
 static const QString POST_ACTION_TYPE           = QLatin1String("POST");
+static const QString SOUND_REPEAT_TYPE          = QLatin1String("SOUNDREPEAT");
 static const QByteArray NEXT_REPEAT_PROPERTY("NEXTREPEAT");   // X-KDE-KALARM-NEXTREPEAT property
 // - Display alarm properties
 static const QByteArray FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
@@ -119,6 +120,7 @@ struct AlarmData
 	bool                   isEmailText;
 	bool                   commandScript;
 	bool                   cancelOnPreActErr;
+	bool                   repeatSound;
 };
 typedef QMap<KAAlarm::SubType, AlarmData> AlarmMap;
 
@@ -643,7 +645,8 @@ void KAEventData::set(const Event* event)
 							mEmailAttachments  = data.alarm->mailAttachments();
 							break;
 						case T_AUDIO:
-							// Already handled above
+							// Already mostly handled above
+							mRepeatSound = data.repeatSound;
 							break;
 						default:
 							break;
@@ -890,6 +893,7 @@ void KAEventData::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain,
 	bool deferral         = false;
 	bool dateDeferral     = false;
 	data.reminderOnceOnly = false;
+	data.repeatSound      = false;
 	data.type = KAAlarm::MAIN__ALARM;
 	QString property = alarm->customProperty(KCalendar::APPNAME, TYPE_PROPERTY);
 	QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
@@ -914,6 +918,8 @@ void KAEventData::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain,
 			data.type = KAAlarm::PRE_ACTION__ALARM;
 		else if (type == POST_ACTION_TYPE  &&  data.action == T_COMMAND)
 			data.type = KAAlarm::POST_ACTION__ALARM;
+		else if (type == SOUND_REPEAT_TYPE  &&  data.action == T_AUDIO)
+			data.repeatSound = true;
 	}
 
 	if (reminder)
@@ -1521,6 +1527,8 @@ Alarm* KAEventData::initKCalAlarm(Event* event, int startOffsetSecs, const QStri
 					break;
 				case T_AUDIO:
 					setAudioAlarm(alarm);
+					if (mRepeatSound)
+						alltypes += SOUND_REPEAT_TYPE;
 					break;
 			}
 			if (display)

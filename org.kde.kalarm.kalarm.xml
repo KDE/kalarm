@@ -165,6 +165,39 @@
       <arg name="recurInterval" type="i" direction="in"/>
       <arg name="endDateTime" type="s" direction="in"/>
     </method>
+    <method name="scheduleAudio">
+      <arg type="b" direction="out"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="volumePercent" type="i" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurrence" type="s" direction="in"/>
+      <arg name="subRepeatInterval" type="i" direction="in"/>
+      <arg name="subRepeatCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleAudio">
+      <arg type="b" direction="out"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="volumePercent" type="i" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="recurCount" type="i" direction="in"/>
+    </method>
+    <method name="scheduleAudio">
+      <arg type="b" direction="out"/>
+      <arg name="audioFile" type="s" direction="in"/>
+      <arg name="volumePercent" type="i" direction="in"/>
+      <arg name="startDateTime" type="s" direction="in"/>
+      <arg name="lateCancel" type="i" direction="in"/>
+      <arg name="flags" type="u" direction="in"/>
+      <arg name="recurType" type="i" direction="in"/>
+      <arg name="recurInterval" type="i" direction="in"/>
+      <arg name="endDateTime" type="s" direction="in"/>
+    </method>
     <method name="edit">
       <arg type="b" direction="out"/>
       <arg name="eventID" type="s" direction="in"/>

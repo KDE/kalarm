@@ -110,6 +110,7 @@ class MessageWin : public MainWindowBase
 		           const QString& dontShowAgain);
 		void                initView();
 		void                displayComplete();
+                bool                getWorkAreaAndModal();
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
 		void                alarmShowing(KAEvent&, const KCal::Event* = 0);
@@ -162,6 +163,7 @@ class MessageWin : public MainWindowBase
 		QCheckBox*          mDontShowAgainCheck;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
+                QRect               mDesktopArea;     // usable area of desktop (excluding panel etc.)
 		int                 mFlags;           // event flags
 		int                 mLateCancel;
 		int                 mButtonDelay;     // delay (ms) after window is shown before buttons are enabled
