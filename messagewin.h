@@ -163,10 +163,10 @@ class MessageWin : public MainWindowBase
 		QCheckBox*          mDontShowAgainCheck;
 		DeferAlarmDlg*      mDeferDlg;
 		QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
-                QRect               mDesktopArea;     // usable area of desktop (excluding panel etc.)
 		int                 mFlags;           // event flags
 		int                 mLateCancel;
 		int                 mButtonDelay;     // delay (ms) after window is shown before buttons are enabled
+		int                 mScreenNumber;    // screen to display on, or -1 for default
 		bool                mAlwaysHide;      // the window should never be displayed
 		bool                mErrorWindow;     // the window is simply an error message
 		bool                mNoPostAction;    // don't execute any post-alarm action
