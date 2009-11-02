@@ -1,7 +1,7 @@
 /*
  *  desktop.h  -  desktop functions
  *  Program:  kalarm
- *  Copyright © 2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 namespace KAlarm {
 
-QRect desktopWorkArea();
+QRect desktopWorkArea(int screen = -1);
 
 } // namespace KAlarm
 

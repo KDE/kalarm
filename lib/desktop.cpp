@@ -1,7 +1,7 @@
 /*
  *  desktop.cpp  -  desktop functions
  *  Program:  kalarm
- *  Copyright © 2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2008,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,23 +21,23 @@
 #include "desktop.h"
 #ifdef Q_WS_X11
 #include <kwindowsystem.h>
-#else
+#endif
 #include <QApplication>
 #include <QDesktopWidget>
-#endif
 
 namespace KAlarm {
 
 /******************************************************************************
-* Return the size of the usable area of the desktop.
+* Return the size of the usable area of the desktop, optionally for a specific
+* screen in a multi-head setup.
 */
-QRect desktopWorkArea()
+QRect desktopWorkArea(int screen)
 {
 #ifdef Q_WS_X11
-	return KWindowSystem::workArea();
-#else
-	return qApp->desktop()->availableGeometry();
+	if (screen < 0)
+		return KWindowSystem::workArea();
 #endif
+	return qApp->desktop()->availableGeometry(screen);
 }
 
 } // namespace KAlarm

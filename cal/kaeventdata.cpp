@@ -736,6 +736,8 @@ DateTime KAEventData::readDateTime(const Event* event, bool dateOnly, DateTime& 
 					next.setTime(t);
 				}
 			}
+			if (next < start)
+				next = start;   // ensure next recurrence time is valid
 		}
 	}
 	return next;

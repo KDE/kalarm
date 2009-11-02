@@ -516,7 +516,7 @@ void MessageWin::initView()
 				topLayout->addSpacing(vspace);
 				topLayout->addStretch();
 				// Don't include any horizontal margins if message is 2/3 screen width
-				if (text->sizeHint().width() >= mDesktopArea.width()*2/3)
+				if (text->sizeHint().width() >= KAlarm::desktopWorkArea(mScreenNumber).width()*2/3)
 					topLayout->addWidget(text, 1, Qt::AlignHCenter);
 				else
 				{
@@ -1531,7 +1531,7 @@ QSize MessageWin::sizeHint() const
 	}
 
 	// Limit the size to fit inside the working area of the desktop
-	QSize desktop  = KAlarm::desktopWorkArea().size();
+	QSize desktop  = KAlarm::desktopWorkArea(mScreenNumber).size();
 	QSize frameThickness = frameGeometry().size() - geometry().size();  // title bar & window frame
 	return desired.boundedTo(desktop - frameThickness);
 }
@@ -1565,7 +1565,7 @@ void MessageWin::showEvent(QShowEvent* se)
 			KAlarm::readConfigWindowSize("FileMessage", s);
 		resize(s);
 
-		QRect desk = KAlarm::desktopWorkArea();
+		QRect desk = KAlarm::desktopWorkArea(mScreenNumber);
 		QRect frame = frameGeometry();
 
 		mButtonDelay = Preferences::messageButtonDelay() * 1000;
@@ -1638,7 +1638,7 @@ void MessageWin::showEvent(QShowEvent* se)
 void MessageWin::moveEvent(QMoveEvent* e)
 {
 	MainWindowBase::moveEvent(e);
-	theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea().topLeft()));
+	theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea(mScreenNumber).topLeft()));
 	if (mPositioning)
 	{
 		// The window has just been initially positioned
@@ -1660,7 +1660,7 @@ void MessageWin::frameDrawn()
 		if (width() > s.width()  ||  height() > s.height())
 			resize(s);
 	}
-	theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea().topLeft()));
+	theApp()->setSpreadWindowsState(isSpread(KAlarm::desktopWorkArea(mScreenNumber).topLeft()));
 }
 
 /******************************************************************************
@@ -1997,7 +1997,7 @@ void MessageWin::clearErrorMessage(unsigned msg) const
 */
 bool MessageWin::getWorkAreaAndModal()
 {
-	mDesktopArea = KAlarm::desktopWorkArea();
+	mScreenNumber = -1;
 	bool modal = Preferences::modalMessages();
 	if (modal)
 	{
@@ -2014,26 +2014,23 @@ bool MessageWin::getWorkAreaAndModal()
 			{
 				// There are multiple screens
 				QRect winRect = wi.frameGeometry();
-				int screen = desktop->screenNumber(MainWindow::mainMainWindow());  // KAlarm's screen
-				if (!winRect.intersects(desktop->screenGeometry(screen)))
+				mScreenNumber = desktop->screenNumber(MainWindow::mainMainWindow());  // KAlarm's screen
+				if (!winRect.intersects(desktop->screenGeometry(mScreenNumber)))
 					modal = true;   // full screen window isn't on KAlarm's screen
 				else
 				{
 					for (int s = 0;  s < numScreens;  ++s)
 					{
-						if (s != screen
+						if (s != mScreenNumber
 						&&  !winRect.intersects(desktop->screenGeometry(s)))
 						{
 							// The full screen window isn't on this screen
-							screen = s;
+							mScreenNumber = s;
 							modal = true;
 							break;
 						}
 					}
-					if (!modal)
-						return modal;
 				}
-				mDesktopArea = desktop->availableGeometry(screen);
 			}
 		}
 	}
