@@ -108,7 +108,7 @@ void KAlarmResource::itemAdded(const Akonadi::Item&  item, const Akonadi::Collec
 
     Item it(item);
     it.setRemoteId(kcalEvent->uid());
-    fileDirty();
+    scheduleWrite();
     changeCommitted(it);
 }
 
@@ -150,7 +150,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         payload->updateKCalEvent(kcalEvent, false, false);
         calendar()->addIncidence(kcalEvent);
     }
-    fileDirty();
+    scheduleWrite();
     changeCommitted(item);
 }
 
