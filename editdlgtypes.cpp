@@ -1488,7 +1488,7 @@ void EditAudioAlarmDlg::type_initValues(const KAEvent* event)
 	else
 	{
 		// Set the values to their defaults
-		mSoundConfig->set(Preferences::defaultSoundFile(), Preferences::defaultSoundVolume(), -1, 0, false);
+		mSoundConfig->set(Preferences::defaultSoundFile(), Preferences::defaultSoundVolume());
 	}
 }
 
@@ -1497,15 +1497,16 @@ void EditAudioAlarmDlg::type_initValues(const KAEvent* event)
 */
 void EditAudioAlarmDlg::setAudio(const QString& file, float volume)
 {
-	mSoundConfig->set(file, volume, -1, 0, false);
+	mSoundConfig->set(file, volume);
 }
 
 /******************************************************************************
 * Set the dialog's action and the action's text.
 */
-void EditAudioAlarmDlg::setAction(KAEventData::Action action, const AlarmText&)
+void EditAudioAlarmDlg::setAction(KAEventData::Action action, const AlarmText& alarmText)
 {
 	Q_ASSERT(action == KAEventData::AUDIO);
+	mSoundConfig->set(alarmText.displayText(), Preferences::defaultSoundVolume());
 }
 
 /******************************************************************************

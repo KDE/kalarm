@@ -140,6 +140,13 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 	layout->setMargin(0);
 	layout->setSpacing(KDialog::spacingHint());
 
+	QLabel* label = 0;
+	if (!showPlay)
+	{
+		label = new QLabel(i18nc("@label", "Sound file:"), this);
+		layout->addWidget(label);
+	}
+
 	KHBox* box = new KHBox(this);
 	box->setMargin(0);
 	layout->addWidget(box);
@@ -158,6 +165,8 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 	mFileEdit = new LineEdit(LineEdit::Url, box);
 	mFileEdit->setAcceptDrops(true);
 	mFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a sound file to play."));
+	if (label)
+		label->setBuddy(mFileEdit);
 	connect(mFileEdit, SIGNAL(textChanged(const QString&)), SIGNAL(changed()));
 
 	// File browse button
@@ -228,7 +237,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 	mFadeBox->setMargin(0);
 	mFadeBox->setSpacing(KDialog::spacingHint());
 	grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
-	QLabel* label = new QLabel(i18nc("@label:spinbox Time period over which to fade the sound", "Fade time:"), mFadeBox);
+	label = new QLabel(i18nc("@label:spinbox Time period over which to fade the sound", "Fade time:"), mFadeBox);
 	label->setFixedSize(label->sizeHint());
 	mFadeTime = new SpinBox(1, 999, mFadeBox);
 	mFadeTime->setSingleShiftStep(10);

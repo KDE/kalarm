@@ -903,6 +903,9 @@ void editNewAlarm(KAEventData::Action action, QWidget* parent, const AlarmText* 
 		case KAEventData::EMAIL:
 			type = EditAlarmDlg::EMAIL;
 			break;
+		case KAEventData::AUDIO:
+			type = EditAlarmDlg::AUDIO;
+			break;
 		default:
 			return;
 	}
