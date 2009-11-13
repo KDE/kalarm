@@ -13,10 +13,6 @@
       <label>Do not change the actual backend data.</label>
       <default>false</default>
     </entry>
-    <entry name="AutosaveInterval" type="UInt">
-      <label>Autosave interval time (in minutes).</label>
-      <default>5</default>
-    </entry>
     <entry name="MonitorFile" type="Bool">
       <label>Monitor file for changes.</label>
       <default>true</default>
