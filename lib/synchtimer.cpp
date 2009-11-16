@@ -1,7 +1,7 @@
 /*
  *  synchtimer.cpp  -  timers which synchronize to time boundaries
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,7 +68,9 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 		mTimer->disconnect(receiver, member);
 		if (member)
 		{
-			mConnections.removeAt(mConnections.indexOf(Connection(receiver, member)));
+			int i = mConnections.indexOf(Connection(receiver, member));
+			if (i >= 0)
+				mConnections.removeAt(i);
 		}
 		else
 		{
