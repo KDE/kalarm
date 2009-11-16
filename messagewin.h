@@ -64,7 +64,10 @@ class MessageWin : public MainWindowBase
 		void                setRecreating()        { mRecreating = true; }
 		const DateTime&     dateTime()             { return mDateTime; }
 		KAAlarm::Type       alarmType() const      { return mAlarmType; }
-		bool                hasDefer() const       { return mDeferButton; }
+		bool                hasDefer() const;
+		void                showDefer();
+		void                cancelReminder(const KAEvent&, const KAAlarm&);
+		void                showDateTime(const KAEvent&, const KAAlarm&);
 		bool                isValid() const        { return !mInvalid; }
 		virtual void        show();
 		virtual QSize       sizeHint() const;
@@ -109,6 +112,7 @@ class MessageWin : public MainWindowBase
 		MessageWin(const KAEvent*, const DateTime& alarmDateTime, const QStringList& errmsgs,
 		           const QString& dontShowAgain);
 		void                initView();
+		QString             dateTimeToDisplay();
 		void                displayComplete();
                 bool                getWorkAreaAndModal();
 		void                playAudio();
@@ -152,6 +156,7 @@ class MessageWin : public MainWindowBase
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
 		AlarmResource*      mResource;        // resource which the event comes/came from
+		QLabel*             mTimeLabel;       // trigger time label
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
 		KPushButton*        mOkButton;
 		QPushButton*        mEditButton;

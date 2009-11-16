@@ -193,6 +193,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mInvalid(false),
 	  mEvent(*event),
 	  mResource(AlarmCalendar::resources()->resourceForEvent(mEventID)),
+	  mTimeLabel(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -286,6 +287,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mInvalid(false),
 	  mEvent(*event),
 	  mResource(0),
+	  mTimeLabel(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -318,6 +320,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 */
 MessageWin::MessageWin()
 	: MainWindowBase(0, WFLAGS),
+	  mTimeLabel(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -378,50 +381,31 @@ void MessageWin::initView()
 	QPalette labelPalette = palette();
 	labelPalette.setColor(backgroundRole(), labelPalette.color(QPalette::Window));
 
+	// Show the alarm date/time, together with an advance reminder text where appropriate
+	// Alarm date/time: display time zone if not local time zone.
+	mTimeLabel = new QLabel(topWidget);
+	mTimeLabel->setText(dateTimeToDisplay());
+	mTimeLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+	mTimeLabel->setPalette(labelPalette);
+	mTimeLabel->setAutoFillBackground(true);
+	topLayout->addWidget(mTimeLabel, 0, Qt::AlignHCenter);
+	mTimeLabel->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
+
 	if (mDateTime.isValid())
 	{
-		// Show the alarm date/time, together with an advance reminder text where appropriate
-		// Alarm date/time: display time zone if not local time zone.
-		QLabel* label = new QLabel(topWidget);
-		QString tm;
-		if (mDateTime.isDateOnly())
-			tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
-		else
-		{
-			bool showZone = false;
-			if (mDateTime.timeType() == KDateTime::UTC
-			||  (mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone()))
-			{
-				// Display time zone abbreviation if it's different from the local
-				// zone. Note that the iCalendar time zone might represent the local
-				// time zone in a slightly different way from the system time zone,
-				// so the zone comparison above might not produce the desired result.
-				QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
-				KDateTime local = mDateTime.kDateTime();
-				local.setTimeSpec(KDateTime::Spec::LocalZone());
-				showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
-			}
-			tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
-		}
-		label->setText(tm);
-		label->setFrameStyle(QFrame::Box | QFrame::Raised);
-		label->setPalette(labelPalette);
-		label->setAutoFillBackground(true);
-		topLayout->addWidget(label, 0, Qt::AlignHCenter);
-		label->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
-
 		// Reminder
 		if (reminder)
 		{
 			QString s = i18nc("@info", "Reminder");
 			QRegExp re("^(<[^>]+>)*");
 			re.indexIn(s);
-			s.insert(re.matchedLength(), label->text() + "<br/>");
-			label->setText(s);
-			label->setAlignment(Qt::AlignHCenter);
+			s.insert(re.matchedLength(), mTimeLabel->text() + "<br/>");
+			mTimeLabel->setText(s);
+			mTimeLabel->setAlignment(Qt::AlignHCenter);
 		}
-		label->setFixedSize(label->sizeHint());
 	}
+	else
+		mTimeLabel->hide();
 
 	if (!mErrorWindow)
 	{
@@ -680,19 +664,18 @@ void MessageWin::initView()
 		mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the alarm."));
 	}
 
-	if (!mNoDefer)
-	{
-		// Defer button
-		mDeferButton = new QPushButton(i18nc("@action:button", "&Defer..."), topWidget);
-		mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
-		mDeferButton->setFixedSize(mDeferButton->sizeHint());
-		connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
-		grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
-		mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
-		                                "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
+	// Defer button
+	mDeferButton = new QPushButton(i18nc("@action:button", "&Defer..."), topWidget);
+	mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
+	mDeferButton->setFixedSize(mDeferButton->sizeHint());
+	connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
+	grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
+	mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
+	                                "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
 
-		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
-	}
+	setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
+	if (mNoDefer)
+		mDeferButton->hide();
 
 	if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
 	{
@@ -743,7 +726,7 @@ void MessageWin::initView()
 	// Disable all buttons initially, to prevent accidental clicking on if they happen to be
 	// under the mouse just as the window appears.
 	mOkButton->setEnabled(false);
-	if (mDeferButton)
+	if (mDeferButton->isVisible())
 		mDeferButton->setEnabled(false);
 	if (mEditButton)
 		mEditButton->setEnabled(false);
@@ -758,6 +741,84 @@ void MessageWin::initView()
 	WId winid = winId();
 	KWindowSystem::setState(winid, wstate);
 	KWindowSystem::setOnAllDesktops(winid, true);
+}
+
+bool MessageWin::hasDefer() const
+{
+	return mDeferButton->isVisible();
+}
+
+/******************************************************************************
+* Show the Defer button when it was previously hidden.
+*/
+void MessageWin::showDefer()
+{
+	mNoDefer = false;
+	mDeferButton->show();
+	resize(sizeHint());
+}
+
+/******************************************************************************
+* Convert a reminder window into a normal alarm window.
+*/
+void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
+{
+	mDateTime = alarm.dateTime(true);
+	mNoPostAction = false;
+	mAlarmType = alarm.type();
+	if (event.autoClose())
+		mCloseTime = alarm.dateTime().effectiveDateTime().addSecs(event.lateCancel() * 60);
+	setCaption(i18nc("@title:window", "Message"));
+	mTimeLabel->setText(dateTimeToDisplay());
+	mRemainingText->hide();
+	MidnightTimer::disconnect(this, SLOT(setRemainingTextDay()));
+	MinuteTimer::disconnect(this, SLOT(setRemainingTextMinute()));
+	resize(sizeHint());
+}
+
+/******************************************************************************
+* Show the alarm's trigger time.
+* This is assumed to have previously been hidden.
+*/
+void MessageWin::showDateTime(const KAEvent& event, const KAAlarm& alarm)
+{
+	mDateTime = (alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime(true) : alarm.dateTime(true);
+	if (mDateTime.isValid())
+	{
+		mTimeLabel->setText(dateTimeToDisplay());
+		mTimeLabel->show();
+	}
+}
+
+/******************************************************************************
+* Get the trigger time to display.
+*/
+QString MessageWin::dateTimeToDisplay()
+{
+	QString tm;
+	if (mDateTime.isValid())
+	{
+		if (mDateTime.isDateOnly())
+			tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
+		else
+		{
+			bool showZone = false;
+			if (mDateTime.timeType() == KDateTime::UTC
+			||  (mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone()))
+			{
+				// Display time zone abbreviation if it's different from the local
+				// zone. Note that the iCalendar time zone might represent the local
+				// time zone in a slightly different way from the system time zone,
+				// so the zone comparison above might not produce the desired result.
+				QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
+				KDateTime local = mDateTime.kDateTime();
+				local.setTimeSpec(KDateTime::Spec::LocalZone());
+				showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
+			}
+			tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
+		}
+	}
+	return tm;
 }
 
 /******************************************************************************
@@ -1706,7 +1767,7 @@ void MessageWin::enableButtons()
 {
 	mOkButton->setEnabled(true);
 	mKAlarmButton->setEnabled(true);
-	if (mDeferButton  &&  !mDisableDeferral)
+	if (mDeferButton->isVisible()  &&  !mDisableDeferral)
 		mDeferButton->setEnabled(true);
 	if (mEditButton)
 		mEditButton->setEnabled(true);
@@ -1849,7 +1910,7 @@ void MessageWin::slotEdit()
 */
 void MessageWin::setDeferralLimit(const KAEvent& event)
 {
-	if (mDeferButton)
+	if (mDeferButton->isVisible())
 	{
 		mDeferLimit = event.deferralLimit().effectiveDateTime();
 		MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
@@ -1869,7 +1930,7 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 */
 void MessageWin::checkDeferralLimit()
 {
-	if (!mDeferButton  ||  !mDeferLimit.isValid())
+	if (!mDeferButton->isVisible()  ||  !mDeferLimit.isValid())
 		return;
 	int n = KDateTime::currentLocalDate().daysTo(mDeferLimit.date());
 	if (n > 0)
