@@ -773,6 +773,9 @@ void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
 	mRemainingText->hide();
 	MidnightTimer::disconnect(this, SLOT(setRemainingTextDay()));
 	MinuteTimer::disconnect(this, SLOT(setRemainingTextMinute()));
+	setMinimumHeight(0);
+	centralWidget()->layout()->activate();
+	setMinimumHeight(sizeHint().height());
 	resize(sizeHint());
 }
 
