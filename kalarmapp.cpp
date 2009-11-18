@@ -1414,7 +1414,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			}
 			else if (replaceReminder)
 			{
-				// The caption needs to be changed from "Reminder" to "Message".
+				// The caption needs to be changed from "Reminder" to "Message"
 				win->cancelReminder(event, alarm);
 			}
 			else if (!win->hasDefer() && !alarm.repeatAtLogin())
@@ -1426,6 +1426,10 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				win->showDateTime(event, alarm);
 			}
 			else
+			{
+				// Use the existing message window
+			}
+			if (win)
 			{
 				// Raise the existing message window and replay any sound
 				win->repeat(alarm);    // N.B. this reschedules the alarm
