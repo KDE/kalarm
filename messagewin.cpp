@@ -58,6 +58,10 @@
 #include <phonon/volumefadereffect.h>
 #include <kdebug.h>
 #include <ktoolinvocation.h>
+#ifdef Q_WS_X11
+#include <netwm.h>
+#include <QX11Info>
+#endif
 
 #include <QScrollBar>
 #include <QtDBus/QtDBus>
@@ -83,6 +87,12 @@
 #include <string.h>
 
 using namespace KCal;
+
+#ifdef Q_WS_X11
+enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
+static FullScreenType haveFullScreenWindow(int screen);
+static FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<FullScreenType>& screenTypes);
+#endif
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
@@ -156,7 +166,7 @@ MessageWin*           MessageWin::mAudioOwner = 0;
 *  displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
-	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | (getWorkAreaAndModal() ? 0 : Qt::X11BypassWindowManagerHint))),
+	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? 0 : Qt::X11BypassWindowManagerHint))),
 	  mMessage(event->cleanText()),
 	  mFont(event->font()),
 	  mBgColour(event->bgColour()),
@@ -183,6 +193,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mInvalid(false),
 	  mEvent(*event),
 	  mResource(AlarmCalendar::resources()->resourceForEvent(mEventID)),
+	  mTimeLabel(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -276,6 +287,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mInvalid(false),
 	  mEvent(*event),
 	  mResource(0),
+	  mTimeLabel(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -308,6 +320,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 */
 MessageWin::MessageWin()
 	: MainWindowBase(0, WFLAGS),
+	  mTimeLabel(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -368,50 +381,31 @@ void MessageWin::initView()
 	QPalette labelPalette = palette();
 	labelPalette.setColor(backgroundRole(), labelPalette.color(QPalette::Window));
 
+	// Show the alarm date/time, together with an advance reminder text where appropriate
+	// Alarm date/time: display time zone if not local time zone.
+	mTimeLabel = new QLabel(topWidget);
+	mTimeLabel->setText(dateTimeToDisplay());
+	mTimeLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+	mTimeLabel->setPalette(labelPalette);
+	mTimeLabel->setAutoFillBackground(true);
+	topLayout->addWidget(mTimeLabel, 0, Qt::AlignHCenter);
+	mTimeLabel->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
+
 	if (mDateTime.isValid())
 	{
-		// Show the alarm date/time, together with an advance reminder text where appropriate
-		// Alarm date/time: display time zone if not local time zone.
-		QLabel* label = new QLabel(topWidget);
-		QString tm;
-		if (mDateTime.isDateOnly())
-			tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
-		else
-		{
-			bool showZone = false;
-			if (mDateTime.timeType() == KDateTime::UTC
-			||  (mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone()))
-			{
-				// Display time zone abbreviation if it's different from the local
-				// zone. Note that the iCalendar time zone might represent the local
-				// time zone in a slightly different way from the system time zone,
-				// so the zone comparison above might not produce the desired result.
-				QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
-				KDateTime local = mDateTime.kDateTime();
-				local.setTimeSpec(KDateTime::Spec::LocalZone());
-				showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
-			}
-			tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
-		}
-		label->setText(tm);
-		label->setFrameStyle(QFrame::Box | QFrame::Raised);
-		label->setPalette(labelPalette);
-		label->setAutoFillBackground(true);
-		topLayout->addWidget(label, 0, Qt::AlignHCenter);
-		label->setWhatsThis(i18nc("@info:whatsthis", "The scheduled date/time for the message (as opposed to the actual time of display)."));
-
 		// Reminder
 		if (reminder)
 		{
 			QString s = i18nc("@info", "Reminder");
 			QRegExp re("^(<[^>]+>)*");
 			re.indexIn(s);
-			s.insert(re.matchedLength(), label->text() + "<br/>");
-			label->setText(s);
-			label->setAlignment(Qt::AlignHCenter);
+			s.insert(re.matchedLength(), mTimeLabel->text() + "<br/>");
+			mTimeLabel->setText(s);
+			mTimeLabel->setAlignment(Qt::AlignHCenter);
 		}
-		label->setFixedSize(label->sizeHint());
 	}
+	else
+		mTimeLabel->hide();
 
 	if (!mErrorWindow)
 	{
@@ -670,19 +664,18 @@ void MessageWin::initView()
 		mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the alarm."));
 	}
 
-	if (!mNoDefer)
-	{
-		// Defer button
-		mDeferButton = new QPushButton(i18nc("@action:button", "&Defer..."), topWidget);
-		mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
-		mDeferButton->setFixedSize(mDeferButton->sizeHint());
-		connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
-		grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
-		mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
-		                                "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
+	// Defer button
+	mDeferButton = new QPushButton(i18nc("@action:button", "&Defer..."), topWidget);
+	mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
+	mDeferButton->setFixedSize(mDeferButton->sizeHint());
+	connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
+	grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
+	mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
+	                                "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
 
-		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
-	}
+	setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
+	if (mNoDefer)
+		mDeferButton->hide();
 
 	if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
 	{
@@ -733,7 +726,7 @@ void MessageWin::initView()
 	// Disable all buttons initially, to prevent accidental clicking on if they happen to be
 	// under the mouse just as the window appears.
 	mOkButton->setEnabled(false);
-	if (mDeferButton)
+	if (mDeferButton->isVisible())
 		mDeferButton->setEnabled(false);
 	if (mEditButton)
 		mEditButton->setEnabled(false);
@@ -748,6 +741,87 @@ void MessageWin::initView()
 	WId winid = winId();
 	KWindowSystem::setState(winid, wstate);
 	KWindowSystem::setOnAllDesktops(winid, true);
+}
+
+bool MessageWin::hasDefer() const
+{
+	return mDeferButton->isVisible();
+}
+
+/******************************************************************************
+* Show the Defer button when it was previously hidden.
+*/
+void MessageWin::showDefer()
+{
+	mNoDefer = false;
+	mDeferButton->show();
+	resize(sizeHint());
+}
+
+/******************************************************************************
+* Convert a reminder window into a normal alarm window.
+*/
+void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
+{
+	mDateTime = alarm.dateTime(true);
+	mNoPostAction = false;
+	mAlarmType = alarm.type();
+	if (event.autoClose())
+		mCloseTime = alarm.dateTime().effectiveDateTime().addSecs(event.lateCancel() * 60);
+	setCaption(i18nc("@title:window", "Message"));
+	mTimeLabel->setText(dateTimeToDisplay());
+	mRemainingText->hide();
+	MidnightTimer::disconnect(this, SLOT(setRemainingTextDay()));
+	MinuteTimer::disconnect(this, SLOT(setRemainingTextMinute()));
+	setMinimumHeight(0);
+	centralWidget()->layout()->activate();
+	setMinimumHeight(sizeHint().height());
+	resize(sizeHint());
+}
+
+/******************************************************************************
+* Show the alarm's trigger time.
+* This is assumed to have previously been hidden.
+*/
+void MessageWin::showDateTime(const KAEvent& event, const KAAlarm& alarm)
+{
+	mDateTime = (alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime(true) : alarm.dateTime(true);
+	if (mDateTime.isValid())
+	{
+		mTimeLabel->setText(dateTimeToDisplay());
+		mTimeLabel->show();
+	}
+}
+
+/******************************************************************************
+* Get the trigger time to display.
+*/
+QString MessageWin::dateTimeToDisplay()
+{
+	QString tm;
+	if (mDateTime.isValid())
+	{
+		if (mDateTime.isDateOnly())
+			tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
+		else
+		{
+			bool showZone = false;
+			if (mDateTime.timeType() == KDateTime::UTC
+			||  (mDateTime.timeType() == KDateTime::TimeZone && !mDateTime.isLocalZone()))
+			{
+				// Display time zone abbreviation if it's different from the local
+				// zone. Note that the iCalendar time zone might represent the local
+				// time zone in a slightly different way from the system time zone,
+				// so the zone comparison above might not produce the desired result.
+				QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
+				KDateTime local = mDateTime.kDateTime();
+				local.setTimeSpec(KDateTime::Spec::LocalZone());
+				showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
+			}
+			tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
+		}
+	}
+	return tm;
 }
 
 /******************************************************************************
@@ -1316,8 +1390,14 @@ void MessageWin::playFinished()
 AudioThread::~AudioThread()
 {
 	kDebug();
-	quit();   // stop playing and tidy up
-	wait();   // wait for run() to exit
+	quit();       // stop playing and tidy up
+	wait(3000);   // wait for run() to exit (timeout 3 seconds)
+	if (!isFinished())
+	{
+		// Something has gone wrong - forcibly kill the thread
+		terminate();
+		wait();
+	}
 }
 
 /******************************************************************************
@@ -1690,7 +1770,7 @@ void MessageWin::enableButtons()
 {
 	mOkButton->setEnabled(true);
 	mKAlarmButton->setEnabled(true);
-	if (mDeferButton  &&  !mDisableDeferral)
+	if (mDeferButton->isVisible()  &&  !mDisableDeferral)
 		mDeferButton->setEnabled(true);
 	if (mEditButton)
 		mEditButton->setEnabled(true);
@@ -1788,8 +1868,8 @@ void MessageWin::slotShowKMailMessage()
 #endif
 
 /******************************************************************************
-*  Called when the Edit... button is clicked.
-*  Displays the alarm edit dialog.
+* Called when the Edit... button is clicked.
+* Displays the alarm edit dialog.
 */
 void MessageWin::slotEdit()
 {
@@ -1833,7 +1913,7 @@ void MessageWin::slotEdit()
 */
 void MessageWin::setDeferralLimit(const KAEvent& event)
 {
-	if (mDeferButton)
+	if (mDeferButton->isVisible())
 	{
 		mDeferLimit = event.deferralLimit().effectiveDateTime();
 		MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
@@ -1853,7 +1933,7 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 */
 void MessageWin::checkDeferralLimit()
 {
-	if (!mDeferButton  ||  !mDeferLimit.isValid())
+	if (!mDeferButton->isVisible()  ||  !mDeferLimit.isValid())
 		return;
 	int n = KDateTime::currentLocalDate().daysTo(mDeferLimit.date());
 	if (n > 0)
@@ -1999,40 +2079,174 @@ bool MessageWin::getWorkAreaAndModal()
 {
 	mScreenNumber = -1;
 	bool modal = Preferences::modalMessages();
+#ifdef Q_WS_X11
+	QDesktopWidget* desktop = qApp->desktop();
+	int numScreens = desktop->numScreens();
+	if (numScreens > 1)
+	{
+		// There are multiple screens.
+		// Check for any full screen windows, even if they are not the active
+		// window, and try not to show the alarm message their screens.
+		mScreenNumber = desktop->screenNumber(MainWindow::mainMainWindow());  // default = KAlarm's screen
+		if (desktop->isVirtualDesktop())
+		{
+			// The screens form a single virtual desktop.
+			// Xinerama, for example, uses this scheme.
+			QVector<FullScreenType> screenTypes(numScreens);
+			QVector<QRect> screenRects(numScreens);
+			for (int s = 0;  s < numScreens;  ++s)
+				screenRects[s] = desktop->screenGeometry(s);
+			FullScreenType full = findFullScreenWindows(screenRects, screenTypes);
+			if (full == NoFullScreen  ||  screenTypes[mScreenNumber] == NoFullScreen)
+				return modal;
+			for (int s = 0;  s < numScreens;  ++s)
+			{
+				if (screenTypes[s] == NoFullScreen)
+
+				{
+					// There is no full screen window on this screen
+					mScreenNumber = s;
+					return modal;
+				}
+			}
+			// All screens contain a full screen window: use one without
+			// an active full screen window.
+			for (int s = 0;  s < numScreens;  ++s)
+			{
+				if (screenTypes[s] == FullScreen)
+				{
+					mScreenNumber = s;
+					return modal;
+				}
+			}
+		}
+		else
+		{
+			// The screens are completely separate from each other.
+			int inactiveScreen = -1;
+			FullScreenType full = haveFullScreenWindow(mScreenNumber);
+kDebug()<<"full="<<full<<", screen="<<mScreenNumber;
+			if (full == NoFullScreen)
+				return modal;   // KAlarm's screen doesn't contain a full screen window
+			if (full == FullScreen)
+				inactiveScreen = mScreenNumber;
+			for (int s = 0;  s < numScreens;  ++s)
+			{
+				if (s != mScreenNumber)
+				{
+					full = haveFullScreenWindow(s);
+					if (full == NoFullScreen)
+					{
+						// There is no full screen window on this screen
+						mScreenNumber = s;
+						return modal;
+					}
+					if (full == FullScreen  &&  inactiveScreen < 0)
+						inactiveScreen = s;
+				}
+			}
+			if (inactiveScreen >= 0)
+			{
+				// All screens contain a full screen window: use one without
+				// an active full screen window.
+				mScreenNumber = inactiveScreen;
+				return modal;
+			}
+		}
+		return false;  // can't logically get here, since there can only be one active window...
+	}
+#endif
 	if (modal)
 	{
 		WId activeId = KWindowSystem::activeWindow();
 		KWindowInfo wi = KWindowSystem::windowInfo(activeId, NET::WMState);
 		if (wi.valid()  &&  wi.hasState(NET::FullScreen))
-		{
-			// There is a full screen window.
-			// Check whether it only covers one screen in a multi-screen setup.
-			modal = false;
-			QDesktopWidget* desktop = qApp->desktop();
-			int numScreens = desktop->numScreens();
-			if (numScreens > 1)
-			{
-				// There are multiple screens
-				QRect winRect = wi.frameGeometry();
-				mScreenNumber = desktop->screenNumber(MainWindow::mainMainWindow());  // KAlarm's screen
-				if (!winRect.intersects(desktop->screenGeometry(mScreenNumber)))
-					modal = true;   // full screen window isn't on KAlarm's screen
-				else
-				{
-					for (int s = 0;  s < numScreens;  ++s)
-					{
-						if (s != mScreenNumber
-						&&  !winRect.intersects(desktop->screenGeometry(s)))
-						{
-							// The full screen window isn't on this screen
-							mScreenNumber = s;
-							modal = true;
-							break;
-						}
-					}
-				}
-			}
-		}
+			return false;    // the active window is full screen.
 	}
 	return modal;
 }
+
+#ifdef Q_WS_X11
+/******************************************************************************
+* In a multi-screen setup (not a single virtual desktop), find whether the
+* specified screen has a full screen window on it.
+*/
+FullScreenType haveFullScreenWindow(int screen)
+{
+    FullScreenType type = NoFullScreen;
+    Display* display = QX11Info::display();
+    NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, screen);
+    Window rootWindow     = rootInfo.rootWindow();
+    Window activeWindow   = rootInfo.activeWindow();
+    const Window* windows = rootInfo.clientList();
+    int windowCount       = rootInfo.clientListCount();
+kDebug()<<"Screen"<<screen<<": Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(screen);
+NETRect geom;
+NETRect frame;
+    for (int w = 0;  w < windowCount;  ++w)
+    {
+        NETWinInfo winInfo(display, windows[w], rootWindow, NET::WMState|NET::WMGeometry);
+winInfo.kdeGeometry(frame, geom);
+QRect fr(frame.pos.x, frame.pos.y, frame.size.width, frame.size.height);
+QRect gm(geom.pos.x, geom.pos.y, geom.size.width, geom.size.height);
+        if (winInfo.state() & NET::FullScreen)
+        {
+kDebug()<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<gm<<", frame="<<fr;
+            type = FullScreen;
+            if (windows[w] == activeWindow)
+                return FullScreenActive;
+        }
+//else { kDebug()<<"Found normal: "<<windows[w]<<", geom="<<gm<<", frame="<<fr; }
+    }
+    return type;
+}
+
+/******************************************************************************
+* In a multi-screen setup (single virtual desktop, e.g. Xinerama), find which
+* screens have full screen windows on them.
+*/
+FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<FullScreenType>& screenTypes)
+{
+    FullScreenType result = NoFullScreen;
+    screenTypes.fill(NoFullScreen);
+    Display* display = QX11Info::display();
+    NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, 0);
+    Window rootWindow     = rootInfo.rootWindow();
+    Window activeWindow   = rootInfo.activeWindow();
+    const Window* windows = rootInfo.clientList();
+    int windowCount       = rootInfo.clientListCount();
+kDebug()<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(0);
+    NETRect netgeom;
+    NETRect netframe;
+    for (int w = 0;  w < windowCount;  ++w)
+    {
+        NETWinInfo winInfo(display, windows[w], rootWindow, NET::WMState | NET::WMGeometry);
+        if (winInfo.state() & NET::FullScreen)
+        {
+	    // Found a full screen window - find which screen it's on
+            bool active = (windows[w] == activeWindow);
+            winInfo.kdeGeometry(netframe, netgeom);
+            QRect winRect(netgeom.pos.x, netgeom.pos.y, netgeom.size.width, netgeom.size.height);
+kDebug()<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
+	    for (int s = 0, count = screenRects.count();  s < count;  ++s)
+	    {
+		if (screenRects[s].contains(winRect))
+		{
+kDebug()<<"FULL SCREEN on screen"<<s<<", active="<<active;
+		    if (active)
+		        screenTypes[s] = result = FullScreenActive;
+		    else
+		    {
+			if (screenTypes[s] == NoFullScreen)
+		            screenTypes[s] = FullScreen;
+			if (result == NoFullScreen)
+			    result = FullScreen;
+		    }
+		    break;
+		}
+	    }
+        }
+    }
+    return result;
+}
+#endif

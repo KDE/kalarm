@@ -210,7 +210,7 @@ bool KAlarmApp::restoreSession()
 	{
 		--mActiveCount;
 		quitIf(1, true);    // error opening the main calendar - quit
-		return true;
+		return false;
 	}
 	MainWindow* trayParent = 0;
 	for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
@@ -252,7 +252,8 @@ bool KAlarmApp::restoreSession()
 	}
 
 	--mActiveCount;
-	quitIf(0);           // quit if no windows are open
+	if (quitIf(0))           // quit if no windows are open
+		return false;    // quitIf() can sometimes return, despite calling exit()
 
 	startProcessQueue();      // start processing the execution queue
 	return true;
@@ -1404,19 +1405,25 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 					// Display the message even though it failed
 				}
 			}
-			if (!win
-			     ||  (!win->hasDefer() && !alarm.repeatAtLogin())
-			     ||  replaceReminder)
+
+			if (!win)
 			{
-				// Either there isn't already a message for this event,
-				// or there is a repeat-at-login message with no Defer
-				// button, which needs to be replaced with a new message,
-				// or the caption needs to be changed from "Reminder" to "Message".
-				if (win)
-					win->setRecreating();    // prevent post-alarm actions
-				delete win;
+				// There isn't already a message for this event
 				int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | (allowDefer ? 0 : MessageWin::NO_DEFER);
 				(new MessageWin(&event, alarm, flags))->show();
+			}
+			else if (replaceReminder)
+			{
+				// The caption needs to be changed from "Reminder" to "Message".
+				win->cancelReminder(event, alarm);
+			}
+			else if (!win->hasDefer() && !alarm.repeatAtLogin())
+			{
+				// It's a repeat-at-login message with no Defer button,
+				// which has now reached its final trigger time and needs
+				// to be replaced with a new message.
+				win->showDefer();
+				win->showDateTime(event, alarm);
 			}
 			else
 			{

@@ -11,7 +11,13 @@ ${CMAKE_CURRENT_BINARY_DIR}
 ) 
 
 add_subdirectory( cal ) 
-add_subdirectory( akonadi ) 
+
+# Kalarm depend on kdepim/akonadi/ which is impossible for packagers.
+# the Akonadi resource for Kalarm won't be available in KDE 4.4
+if( BUILD_akonadi )
+  add_subdirectory( akonadi )
+endif( BUILD_akonadi )
+
 add_subdirectory( resources ) 
 add_subdirectory( appicons ) 
 add_subdirectory( pixmaps ) 
@@ -106,8 +112,10 @@ if (KMAIL_SUPPORTED)
 endif (KMAIL_SUPPORTED)
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
-kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmresourcesettings KAlarmResourceSettings)
+if( BUILD_akonadi )
+  kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
+  qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmresourcesettings KAlarmResourceSettings)
+endif( BUILD_akonadi )
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
