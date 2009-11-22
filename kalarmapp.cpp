@@ -24,7 +24,6 @@
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
 #include "autoqpointer.h"
-#include "birthdaymodel.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
@@ -511,7 +510,6 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 	mAlarmTimer = 0;
 	mInitialised = false;   // prevent processQueue() from running
 	AlarmCalendar::terminateCalendars();
-	BirthdayModel::close();
 	exit(exitCode);
 	return true;    // sometimes we actually get to here, despite calling exit()
 }
