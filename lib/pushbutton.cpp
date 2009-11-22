@@ -1,7 +1,7 @@
 /*
  *  pushbutton.cpp  -  push button with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2002, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2005,2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,25 +25,36 @@
 
 
 PushButton::PushButton(QWidget* parent)
-	: QPushButton(parent),
+	: KPushButton(parent),
 	  mFocusPolicy(focusPolicy()),
-	  mReadOnly(false)
+	  mReadOnly(false),
+	  mNoHighlight(false)
+{ }
+
+PushButton::PushButton(const KGuiItem& text, QWidget* parent)
+	: KPushButton(text, parent),
+	  mFocusPolicy(focusPolicy()),
+	  mReadOnly(false),
+	  mNoHighlight(false)
 { }
 
 PushButton::PushButton(const QString& text, QWidget* parent)
-	: QPushButton(text, parent),
+	: KPushButton(text, parent),
 	  mFocusPolicy(focusPolicy()),
-	  mReadOnly(false)
+	  mReadOnly(false),
+	  mNoHighlight(false)
 { }
 
-PushButton::PushButton(const QIcon& icon, const QString& text, QWidget* parent)
-	: QPushButton(icon, text, parent),
+PushButton::PushButton(const KIcon& icon, const QString& text, QWidget* parent)
+	: KPushButton(icon, text, parent),
 	  mFocusPolicy(focusPolicy()),
-	  mReadOnly(false)
+	  mReadOnly(false),
+	  mNoHighlight(false)
 { }
 
-void PushButton::setReadOnly(bool ro)
+void PushButton::setReadOnly(bool ro, bool noHighlight)
 {
+	mNoHighlight = noHighlight;
 	if ((int)ro != (int)mReadOnly)
 	{
 		mReadOnly = ro;
@@ -61,7 +72,7 @@ void PushButton::mousePressEvent(QMouseEvent* e)
 		if (e->button() == Qt::LeftButton)
 			return;
 	}
-	QPushButton::mousePressEvent(e);
+	KPushButton::mousePressEvent(e);
 }
 
 void PushButton::mouseReleaseEvent(QMouseEvent* e)
@@ -72,13 +83,13 @@ void PushButton::mouseReleaseEvent(QMouseEvent* e)
 		if (e->button() == Qt::LeftButton)
 			return;
 	}
-	QPushButton::mouseReleaseEvent(e);
+	KPushButton::mouseReleaseEvent(e);
 }
 
 void PushButton::mouseMoveEvent(QMouseEvent* e)
 {
 	if (!mReadOnly)
-		QPushButton::mouseMoveEvent(e);
+		KPushButton::mouseMoveEvent(e);
 }
 
 void PushButton::keyPressEvent(QKeyEvent* e)
@@ -95,11 +106,22 @@ void PushButton::keyPressEvent(QKeyEvent* e)
 			default:
 				return;
 		}
-	QPushButton::keyPressEvent(e);
+	KPushButton::keyPressEvent(e);
 }
 
 void PushButton::keyReleaseEvent(QKeyEvent* e)
 {
 	if (!mReadOnly)
-		QPushButton::keyReleaseEvent(e);
+		KPushButton::keyReleaseEvent(e);
+}
+
+bool PushButton::event(QEvent* e)
+{
+	if (mReadOnly  &&  mNoHighlight)
+	{
+		// Don't highlight the button on mouse hover
+		if (e->type() == QEvent::HoverEnter)
+			return true;
+	}
+	return KPushButton::event(e);
 }
