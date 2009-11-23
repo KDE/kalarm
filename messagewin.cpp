@@ -1495,7 +1495,7 @@ void AudioThread::playStateChanged(Phonon::State newState)
 		if (!err.isEmpty())
 		{
 			kError() << "Play failure:" << mFile << ":" << err;
-			mError = i18nc("@info", "Error playing audio file: <filename>%1</filename><br/><br/>%2", mFile, err);
+			mError = i18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
 			exit(1);
 		}
 	}

@@ -1321,7 +1321,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		kDebug() << "URL";
 		// Try to find the mime type of the file, without downloading a remote file
 		KMimeType::Ptr mimeType = KMimeType::findByUrl(files[0]);
-		action = mimeType->name().startsWith("audio/") ? KAEventData::AUDIO : KAEventData::FILE;
+		action = mimeType->name().startsWith(QLatin1String("audio/")) ? KAEventData::AUDIO : KAEventData::FILE;
 		alarmText.setText(files[0].prettyUrl());
 	}
 	else if (data->hasText())
