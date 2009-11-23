@@ -994,6 +994,8 @@ void KAEventData::set(const KDateTime& dateTime, const QString& text, const QCol
 	mDeferral               = NO_DEFERRAL;    // do this before setting flags
 
 	KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
+	if (mRepeatAtLogin)                       // do this after setting flags
+		++mAlarmCount;
 	mStartDateTime.setDateOnly(flags & ANY_TIME);
 	set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
 	mConfirmAck             = flags & CONFIRM_ACK;
@@ -1089,6 +1091,26 @@ void KAEventData::setTemplate(const QString& name, int afterTime)
 	// Templates don't need trigger times to be calculated
 	mChangeCount = 0;
 	notifyChanges();
+}
+
+/******************************************************************************
+* Set or clear repeat-at-login.
+*/
+void KAEventData::setRepeatAtLogin(bool rl)
+{
+	if (rl  &&  !mRepeatAtLogin)
+		++mAlarmCount;
+	else if (!rl  &&  mRepeatAtLogin)
+		--mAlarmCount;
+	mRepeatAtLogin = rl;
+	if (mRepeatAtLogin)
+	{
+		setReminder(0, false);
+		mLateCancel = 0;
+		mAutoClose = false;
+		mCopyToKOrganizer = false;
+	}
+	mUpdated = true;
 }
 
 void KAEventData::setReminder(int minutes, bool onceOnly)
@@ -3506,7 +3528,7 @@ bool KAEventData::convertRepetition(KCal::Event* event)
 	return converted;
 }
 
-#ifndef NDEBUG
+#ifndef KDE_NO_DEBUG_OUTPUT
 void KAEventData::dumpDebug() const
 {
 	kDebug() << "KAEventData dump:";
@@ -3613,7 +3635,7 @@ KAAlarm::KAAlarm(const KAAlarm& alarm)
 	  mDeferred(alarm.mDeferred)
 { }
 
-#ifndef NDEBUG
+#ifndef KDE_NO_DEBUG_OUTPUT
 void KAAlarm::dumpDebug() const
 {
 	kDebug() << "KAAlarm dump:";
@@ -3697,7 +3719,7 @@ int KAAlarmEventBase::baseFlags() const
 	     | (mCommandScript  ? KAEventData::SCRIPT : 0);
 }
 
-#ifndef NDEBUG
+#ifndef KDE_NO_DEBUG_OUTPUT
 void KAAlarmEventBase::baseDumpDebug() const
 {
 	kDebug() << "-- mEventID:" << mEventID;

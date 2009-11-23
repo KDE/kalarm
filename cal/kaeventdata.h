@@ -74,7 +74,7 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
 		void               copy(const KAAlarmEventBase&);
 		void               set(int flags);
 		int                baseFlags() const;
-#ifdef NDEBUG
+#ifdef KDE_NO_DEBUG_OUTPUT
 		void               baseDumpDebug() const  { }
 #else
 		void               baseDumpDebug() const;
@@ -171,7 +171,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
 		bool               deferred() const             { return mDeferred; }
 		void               setTime(const DateTime& dt)  { mNextMainDateTime = dt; }
 		void               setTime(const KDateTime& dt) { mNextMainDateTime = dt; }
-#ifdef NDEBUG
+#ifdef KDE_NO_DEBUG_OUTPUT
 		void               dumpDebug() const  { }
 		static const char* debugType(Type)   { return ""; }
 #else
@@ -291,7 +291,7 @@ public:
 		void               setSaveDateTime(const KDateTime& dt)              { mSaveDateTime = dt;  mUpdated = true; }
 		void               setLateCancel(int lc)                             { mLateCancel = lc;  mUpdated = true; }
 		void               setAutoClose(bool ac)                             { mAutoClose = ac;  mUpdated = true; }
-		void               setRepeatAtLogin(bool rl)                         { mRepeatAtLogin = rl;  mUpdated = true; }
+		void               setRepeatAtLogin(bool rl);
 		void               setExcludeHolidays(bool ex)                       { mExcludeHolidays = ex;  mUpdated = true; }
 		void               setWorkTimeOnly(bool wto)                         { mWorkTimeOnly = wto; }
 		void               setKMailSerialNumber(unsigned long n)             { mKMailSerialNumber = n; }
@@ -426,7 +426,7 @@ public:
 		bool               setRecurAnnualByPos(int freq, const QList<MonthPos>& pos, const QList<int>& months, int count, const QDate& end);
 //		static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
 		void               adjustRecurrenceStartOfDay();
-#ifdef NDEBUG
+#ifdef KDE_NO_DEBUG_OUTPUT
 		void               dumpDebug() const  { }
 #else
 		void               dumpDebug() const;
