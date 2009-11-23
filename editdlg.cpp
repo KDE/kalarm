@@ -752,7 +752,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 			dt = KDateTime(QDate(2000,1,1), mTemplateTime->time());
 	}
 
-	type_setEvent(event, dt, text, (trial ? 0 : mLateCancel->minutes()), trial);
+	int lateCancel = (trial || !mLateCancel->isEnabled()) ? 0 : mLateCancel->minutes();
+	type_setEvent(event, dt, text, lateCancel, trial);
 
 	if (!trial)
 	{
@@ -803,8 +804,8 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 */
 int EditAlarmDlg::getAlarmFlags() const
 {
-	return (mShowInKorganizer && mShowInKorganizer->isChecked()                  ? KAEvent::COPY_KORGANIZER : 0)
-	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN            ? KAEvent::REPEAT_AT_LOGIN : 0)
+	return (mShowInKorganizer && mShowInKorganizer->isEnabled() && mShowInKorganizer->isChecked() ? KAEvent::COPY_KORGANIZER : 0)
+	     | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN                 ? KAEvent::REPEAT_AT_LOGIN : 0)
 	     | ((mTemplate ? mTemplateAnyTime->isChecked() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0);
 }
 
