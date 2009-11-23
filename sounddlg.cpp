@@ -171,7 +171,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 
 	// File browse button
 	mFileBrowseButton = new PushButton(box);
-	mFileBrowseButton->setIcon(SmallIcon("document-open"));
+	mFileBrowseButton->setIcon(KIcon(SmallIcon("document-open")));
 	int size = mFileBrowseButton->sizeHint().height();
 	mFileBrowseButton->setFixedSize(size, size);
 	connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));

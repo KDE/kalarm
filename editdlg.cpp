@@ -835,6 +835,15 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 }
 
 /******************************************************************************
+* Called when the dialog is closed.
+*/
+void EditAlarmDlg::closeEvent(QCloseEvent* ce)
+{
+	emit rejected();
+	KDialog::closeEvent(ce);
+}
+
+/******************************************************************************
 * Update the tab sizes (again) and if the resized dialog height is greater
 * than the minimum, resize it again. This is necessary because (a) resizing
 * tabs doesn't always work properly the first time, and (b) resizing to the

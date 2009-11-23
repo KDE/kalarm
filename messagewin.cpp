@@ -23,6 +23,7 @@
 #include "messagewin.moc"
 
 #include "alarmcalendar.h"
+#include "autoqpointer.h"
 #include "deferdlg.h"
 #include "desktop.h"
 #include "editdlg.h"
@@ -30,6 +31,7 @@
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
+#include "pushbutton.h"
 #include "shellprocess.h"
 #include "synchtimer.h"
 
@@ -67,7 +69,6 @@
 #include <QtDBus/QtDBus>
 #include <QFile>
 #include <QFileInfo>
-#include <QPushButton>
 #include <QCheckBox>
 #include <QLabel>
 #include <QPalette>
@@ -200,6 +201,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mKMailButton(0),
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
+	  mEditDlg(0),
 	  mDeferDlg(0),
 	  mFlags(event->flags()),
 	  mLateCancel(event->lateCancel()),
@@ -294,6 +296,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mKMailButton(0),
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
+	  mEditDlg(0),
 	  mDeferDlg(0),
 	  mAlwaysHide(false),
 	  mErrorWindow(true),
@@ -327,6 +330,7 @@ MessageWin::MessageWin()
 	  mKMailButton(0),
 	  mCommandText(0),
 	  mDontShowAgainCheck(0),
+	  mEditDlg(0),
 	  mDeferDlg(0),
 	  mAlwaysHide(false),
 	  mErrorWindow(false),
@@ -644,7 +648,7 @@ void MessageWin::initView()
 	int gridIndex = 1;
 
 	// Close button
-	mOkButton = new KPushButton(KStandardGuiItem::close(), topWidget);
+	mOkButton = new PushButton(KStandardGuiItem::close(), topWidget);
 	// Prevent accidental acknowledgement of the message if the user is typing when the window appears
 	mOkButton->clearFocus();
 	mOkButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
@@ -656,7 +660,7 @@ void MessageWin::initView()
 	if (mShowEdit)
 	{
 		// Edit button
-		mEditButton = new QPushButton(i18nc("@action:button", "&Edit..."), topWidget);
+		mEditButton = new PushButton(i18nc("@action:button", "&Edit..."), topWidget);
 		mEditButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 		mEditButton->setFixedSize(mEditButton->sizeHint());
 		connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
@@ -665,7 +669,7 @@ void MessageWin::initView()
 	}
 
 	// Defer button
-	mDeferButton = new QPushButton(i18nc("@action:button", "&Defer..."), topWidget);
+	mDeferButton = new PushButton(i18nc("@action:button", "&Defer..."), topWidget);
 	mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
 	mDeferButton->setFixedSize(mDeferButton->sizeHint());
 	connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
@@ -681,8 +685,8 @@ void MessageWin::initView()
 	{
 		// Silence button to stop sound repetition
 		QPixmap pixmap = MainBarIcon("media-playback-stop");
-		mSilenceButton = new QPushButton(topWidget);
-		mSilenceButton->setIcon(pixmap);
+		mSilenceButton = new PushButton(topWidget);
+		mSilenceButton->setIcon(KIcon(pixmap));
 		grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
 		mSilenceButton->setToolTip(i18nc("@info:tooltip", "Stop sound"));
 		mSilenceButton->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
@@ -695,8 +699,8 @@ void MessageWin::initView()
 	{
 		// KMail button
 		QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
-		mKMailButton = new QPushButton(topWidget);
-		mKMailButton->setIcon(pixmap);
+		mKMailButton = new PushButton(topWidget);
+		mKMailButton->setIcon(KIcon(pixmap));
 		connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
 		grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
 		mKMailButton->setToolTip(i18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
@@ -705,8 +709,8 @@ void MessageWin::initView()
 
 	// KAlarm button
 	QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
-	mKAlarmButton = new QPushButton(topWidget);
-	mKAlarmButton->setIcon(pixmap);
+	mKAlarmButton = new PushButton(topWidget);
+	mKAlarmButton->setIcon(KIcon(pixmap));
 	connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
 	grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
 	mKAlarmButton->setToolTip(i18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
@@ -1870,42 +1874,103 @@ void MessageWin::slotShowKMailMessage()
 /******************************************************************************
 * Called when the Edit... button is clicked.
 * Displays the alarm edit dialog.
+*
+* NOTE: The alarm edit dialog is made a child of the main window, not this
+*       window, so that if this window closes before the dialog (e.g. on
+*       auto-close), KAlarm doesn't crash. The dialog is set non-modal so that
+*       the main window is unaffected, but modal mode is simulated so that
+*       this window is inactive while the dialog is open.
 */
 void MessageWin::slotEdit()
 {
-	EditAlarmDlg* editDlg = EditAlarmDlg::create(false, &mEvent, false, this, EditAlarmDlg::RES_IGNORE);
-	if (editDlg->exec() == QDialog::Accepted)
+	AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, &mEvent, false, MainWindow::mainMainWindow(), EditAlarmDlg::RES_IGNORE);
+	KWindowSystem::setMainWindow(editDlg, winId());
+	KWindowSystem::setOnAllDesktops(editDlg->winId(), false);
+	mEditDlg = editDlg;
+	setButtonsReadOnly(true);
+	connect(editDlg, SIGNAL(accepted()), SLOT(editCloseOk()));
+	connect(editDlg, SIGNAL(rejected()), SLOT(editCloseCancel()));
+	connect(KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)), SLOT(activeWindowChanged(WId)));
+
+	// Save values in case this window is closed by the time the dialog exits
+	KAEvent event = mEvent;
+	AlarmResource* resource = mResource;
+
+	editDlg->show();
+	QEventLoop eventloop;
+	eventloop.exec(QEventLoop::DialogExec);
+	if (editDlg  &&  editDlg->result() == QDialog::Accepted)
 	{
-		KAEvent event;
-		AlarmResource* resource;
-		editDlg->getEvent(event, resource);
-		resource = mResource;
+		KAEvent newEvent;
+		AlarmResource* res;
+		editDlg->getEvent(newEvent, res);
 
 		// Update the displayed lists and the calendar file
 		KAlarm::UpdateStatus status;
-		if (AlarmCalendar::resources()->event(mEventID))
+		if (AlarmCalendar::resources()->event(event.id()))
 		{
 			// The old alarm hasn't expired yet, so replace it
-			Undo::Event undo(mEvent, resource);
-			status = KAlarm::modifyEvent(mEvent, event, editDlg);
-			Undo::saveEdit(undo, event);
+			Undo::Event undo(event, resource);
+			status = KAlarm::modifyEvent(event, newEvent, editDlg);
+			Undo::saveEdit(undo, newEvent);
 		}
 		else
 		{
 			// The old event has expired, so simply create a new one
-			status = KAlarm::addEvent(event, resource, editDlg);
-			Undo::saveAdd(event, resource);
+			status = KAlarm::addEvent(newEvent, resource, editDlg);
+			Undo::saveAdd(newEvent, resource);
 		}
 
 		if (status != KAlarm::UPDATE_OK  &&  status <= KAlarm::UPDATE_KORG_ERR)
 			KAlarm::displayKOrgUpdateError(editDlg, KAlarm::ERR_MODIFY, status, 1);
-		KAlarm::outputAlarmWarnings(editDlg, &event);
-
-		// Close the alarm window
-		mNoCloseConfirm = true;   // allow window to close without confirmation prompt
-		close();
+		KAlarm::outputAlarmWarnings(editDlg, &newEvent);
 	}
-	delete editDlg;
+}
+
+/******************************************************************************
+* Called when OK is clicked in the alarm edit dialog invoked by the Edit button.
+* Closes the window.
+*/
+void MessageWin::editCloseOk()
+{
+	mEditDlg = 0;
+	mNoCloseConfirm = true;   // allow window to close without confirmation prompt
+	close();
+}
+
+/******************************************************************************
+* Called when Cancel is clicked in the alarm edit dialog invoked by the Edit button.
+*/
+void MessageWin::editCloseCancel()
+{
+	mEditDlg = 0;
+	setButtonsReadOnly(false);
+}
+
+/******************************************************************************
+* Called when the active window has changed. If this window has become the
+* active window and there is an alarm edit dialog, simulate a modal dialog by
+* making the alarm edit dialog the active window instead.
+*/
+void MessageWin::activeWindowChanged(WId win)
+{
+	if (mEditDlg  &&  win == winId())
+		KWindowSystem::activateWindow(mEditDlg->winId());
+}
+
+/******************************************************************************
+* Set or clear the read-only state of the dialog buttons.
+*/
+void MessageWin::setButtonsReadOnly(bool ro)
+{
+	mOkButton->setReadOnly(ro, true);
+	mDeferButton->setReadOnly(ro, true);
+	mEditButton->setReadOnly(ro, true);
+	if (mSilenceButton)
+		mSilenceButton->setReadOnly(ro, true);
+	if (mKMailButton)
+		mKMailButton->setReadOnly(ro, true);
+	mKAlarmButton->setReadOnly(ro, true);
 }
 
 /******************************************************************************

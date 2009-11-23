@@ -90,6 +90,7 @@ class EditAlarmDlg : public KDialog
 		void            init(const KAEvent* event, bool newAlarm);
 		virtual void    resizeEvent(QResizeEvent*);
 		virtual void    showEvent(QShowEvent*);
+		virtual void    closeEvent(QCloseEvent*);
 		virtual QString type_caption(bool newAlarm) const = 0;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
 		virtual void    type_initValues(const KAEvent*) = 0;
