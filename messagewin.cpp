@@ -1183,7 +1183,7 @@ void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 */
 bool MessageWin::spread(bool scatter)
 {
-	if (mWindowList.count() <= 1)
+	if (instanceCount(true) <= 1)    // ignore always-hidden windows
 		return false;
 
 	QRect desk = KAlarm::desktopWorkArea();   // get the usable area of the desktop
