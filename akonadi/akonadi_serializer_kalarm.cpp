@@ -90,7 +90,7 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     head += KAEventData::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";
     head += KAEventData::currentCalendarVersionString();
-    head += "\n";
+    head += '\n';
     data.write(head);
     data.write(mFormat.toString(kcalEvent).toUtf8());
     data.write("\nEND:VCALENDAR");

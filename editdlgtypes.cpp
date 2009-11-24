@@ -546,7 +546,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 	int   fadeSecs;
 	float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
 	event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
-	if (!trial)
+	if (!trial  &&  reminder()->isEnabled())
 		event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
 	if (mSpecialActionsButton  &&  mSpecialActionsButton->isEnabled())
 		event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction(), mSpecialActionsButton->cancelOnError());

@@ -240,7 +240,7 @@ class KAEvent : public KAEventData::Observer
 		bool               setRecurAnnualByPos(int freq, const QList<KAEventData::MonthPos>& pos, const QList<int>& months, int count, const QDate& end)
 	       	                                        { return mEventData->setRecurAnnualByPos(freq, pos, months, count, end); }
 		void               adjustRecurrenceStartOfDay()  { mEventData->adjustRecurrenceStartOfDay(); }
-#ifdef NDEBUG
+#ifdef KDE_NO_DEBUG_OUTPUT
 		void               dumpDebug() const  { }
 #else
 		void               dumpDebug() const;
