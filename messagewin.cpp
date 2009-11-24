@@ -159,7 +159,6 @@ QMap<QString, unsigned> MessageWin::mErrorMessages;
 QPointer<AudioThread> MessageWin::mAudioThread;
 MessageWin*           MessageWin::mAudioOwner = 0;
 
-
 /******************************************************************************
 *  Construct the message window for the specified alarm.
 *  Other alarms in the supplied event may have been updated by the caller, so
@@ -745,6 +744,23 @@ void MessageWin::initView()
 	WId winid = winId();
 	KWindowSystem::setState(winid, wstate);
 	KWindowSystem::setOnAllDesktops(winid, true);
+}
+
+/******************************************************************************
+* Return the number of message windows, optionally excluding always-hidden ones.
+*/
+int MessageWin::instanceCount(bool excludeAlwaysHidden)
+{
+	int count = mWindowList.count();
+	if (excludeAlwaysHidden)
+	{
+		foreach (MessageWin* win, mWindowList)
+		{
+			if (win->mAlwaysHide)
+				--count;
+		}
+	}
+	return count;
 }
 
 bool MessageWin::hasDefer() const
@@ -1343,6 +1359,7 @@ bool MessageWin::isAudioPlaying()
 */
 void MessageWin::stopAudio()
 {
+	kDebug();
 	if (mAudioThread)
 		mAudioThread->quit();
 }
