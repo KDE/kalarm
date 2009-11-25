@@ -8,6 +8,7 @@ ${CMAKE_CURRENT_BINARY_DIR}
 	./cal
 	./lib 
 	./resources 
+        ${Boost_INCLUDE_DIR}
 ) 
 
 add_subdirectory( cal ) 
