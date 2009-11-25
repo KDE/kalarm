@@ -53,7 +53,7 @@
 #include <khbox.h>
 #include <kdebug.h>
 #include <akonadi/entitymimetypefiltermodel.h>
-#include <kdescendantsproxymodel.h>
+#include "kdescendantsproxymodel_p.h"
 
 using namespace KCal;
 
