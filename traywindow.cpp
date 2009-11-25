@@ -279,7 +279,7 @@ bool TrayWindow::event(QEvent* e)
 	if (!enabled)
 		text = i18nc("@info:tooltip 'KAlarm - disabled'", "%1 - disabled", KGlobal::mainComponent().aboutData()->programName());
 	else if (mHaveDisabledAlarms)
-		text = i18nc("@info:tooltip Brief: some alarms are disabled", "%1<br/>(Some alarms disabled)%2", KGlobal::mainComponent().aboutData()->programName(), altext);
+		text = i18nc("@info:tooltip Brief: some alarms are disabled", "%1<nl/>(Some alarms disabled)%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	else
 		text = i18nc("@info:tooltip", "%1%2", KGlobal::mainComponent().aboutData()->programName(), altext);
 	kDebug() << text;

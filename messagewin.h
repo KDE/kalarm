@@ -70,9 +70,10 @@ class MessageWin : public MainWindowBase
 		void                cancelReminder(const KAEvent&, const KAAlarm&);
 		void                showDateTime(const KAEvent&, const KAAlarm&);
 		bool                isValid() const        { return !mInvalid; }
+		bool                alwaysHidden() const   { return mAlwaysHide; }
 		virtual void        show();
 		virtual QSize       sizeHint() const;
-		static int          instanceCount()        { return mWindowList.count(); }
+		static int          instanceCount(bool excludeAlwaysHidden = false);
 		static MessageWin*  findEvent(const QString& eventID);
 		static void         redisplayAlarms();
 		static void         stopAudio();

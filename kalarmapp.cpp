@@ -472,7 +472,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 		mQuitting = true;
 		MainWindow::closeAll();
 		displayTrayIcon(false);
-		if (MessageWin::instanceCount())
+		if (MessageWin::instanceCount(true))    // ignore always-hidden windows (e.g. audio alarms)
 			return false;
 	}
 	else if (mQuitting)
@@ -506,6 +506,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 
 	// This was the last/only running "instance" of the program, so exit completely.
 	kDebug() << exitCode << ": quitting";
+	MessageWin::stopAudio();
 	delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
 	mAlarmTimer = 0;
 	mInitialised = false;   // prevent processQueue() from running
@@ -1368,6 +1369,9 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 				// It's not a reminder or a deferred alarm, and there is no message window
 				// (other than a reminder window) currently displayed for this alarm,
 				// and we need to execute a command before displaying the new window.
+				//
+				// NOTE: The pre-action is not executed for a recurring alarm if an
+				// alarm message window for a previous occurrence is still visible.
 				if (!ShellProcess::authorised())
 					setEventCommandError(event, KAEvent::CMD_ERROR_PRE);
 				else
