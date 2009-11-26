@@ -807,6 +807,12 @@ void AlarmResources::resourceDeleted(AlarmResource* resource)
 	emit resourceStatusChanged(resource, Deleted);
 }
 
+void AlarmResources::resourceModified(AlarmResource* /*resource*/)
+{
+	kDebug(KARES_DEBUG);
+//	emit resourceStatusChanged(resource, Modified);
+}
+
 /******************************************************************************
 * Set the time zone for all resources.
 */

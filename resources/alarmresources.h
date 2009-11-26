@@ -386,6 +386,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 
 	protected:
 		void connectResource(AlarmResource*);
+                void resourceModified(AlarmResource*);
 		void resourceDeleted(AlarmResource*);
 
 		/**
