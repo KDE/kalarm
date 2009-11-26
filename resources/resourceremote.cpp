@@ -192,6 +192,7 @@ bool KAResourceRemote::doLoad(bool syncCache)
 
 void KAResourceRemote::slotPercent(KJob*, unsigned long percent)
 {
+	Q_UNUSED(percent);
 #if 0
 	emit downloading(this, percent);
 #endif
