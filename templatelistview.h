@@ -34,9 +34,6 @@ class TemplateListView : public EventListView
 	public:
 		explicit TemplateListView(QWidget* parent = 0);
 		virtual void setModel(QAbstractItemModel*);
-
-	protected slots:
-		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
 };
 
 class TemplateListDelegate : public EventListDelegate
