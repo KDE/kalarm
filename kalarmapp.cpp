@@ -506,7 +506,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 
 	// This was the last/only running "instance" of the program, so exit completely.
 	kDebug() << exitCode << ": quitting";
-	MessageWin::stopAudio();
+	MessageWin::stopAudio(true);
 	delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
 	mAlarmTimer = 0;
 	mInitialised = false;   // prevent processQueue() from running

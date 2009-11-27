@@ -1357,11 +1357,11 @@ bool MessageWin::isAudioPlaying()
 /******************************************************************************
 * Stop audio playback.
 */
-void MessageWin::stopAudio()
+void MessageWin::stopAudio(bool wait)
 {
 	kDebug();
 	if (mAudioThread)
-		mAudioThread->quit();
+		mAudioThread->stop();
 }
 
 /******************************************************************************
@@ -1411,13 +1411,23 @@ void MessageWin::playFinished()
 AudioThread::~AudioThread()
 {
 	kDebug();
+	stop(true);   // stop playing and tidy up (timeout 3 seconds)
+}
+
+/******************************************************************************
+* Quits the thread and waits for thread completion and tidies up.
+*/
+void AudioThread::stop(bool waiT)
+{
+	kDebug();
 	quit();       // stop playing and tidy up
 	wait(3000);   // wait for run() to exit (timeout 3 seconds)
 	if (!isFinished())
 	{
 		// Something has gone wrong - forcibly kill the thread
 		terminate();
-		wait();
+		if (waiT)
+			wait();
 	}
 }
 

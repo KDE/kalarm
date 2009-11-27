@@ -76,7 +76,7 @@ class MessageWin : public MainWindowBase
 		static int          instanceCount(bool excludeAlwaysHidden = false);
 		static MessageWin*  findEvent(const QString& eventID);
 		static void         redisplayAlarms();
-		static void         stopAudio();
+		static void         stopAudio(bool wait = false);
 		static bool         isAudioPlaying();
 		static void         showError(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
 		                              const QString& dontShowAgain = QString());
