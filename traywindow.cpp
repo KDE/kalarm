@@ -124,6 +124,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	a = KAlarm::createSpreadWindowsAction(this);
 	actions->addAction(QLatin1String("tSpread"), a);
 	contextMenu()->addAction(a);
+	contextMenu()->addSeparator();
 	contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));
 
 	// Replace the default handler for the Quit context menu item
