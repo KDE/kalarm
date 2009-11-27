@@ -386,7 +386,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 
 	protected:
 		void connectResource(AlarmResource*);
-		void resourceModified(AlarmResource*);
+                void resourceModified(AlarmResource*);
 		void resourceDeleted(AlarmResource*);
 
 		/**
@@ -437,7 +437,6 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		void slotColourChanged(AlarmResource* r)      { slotResourceStatusChanged(r, Colour); }
 		void slotResourceLoaded(AlarmResource*);
 		void slotResourceSaved(AlarmResource*);
-		void slotResourceDownloading(AlarmResource*, unsigned long percent);
 		void slotCacheDownloaded(AlarmResource*);
 		void slotResourceChanged(ResourceCalendar*);
 		void slotResourceInvalidated(AlarmResource*);

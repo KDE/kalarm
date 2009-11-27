@@ -47,16 +47,6 @@ void TemplateListView::setModel(QAbstractItemModel* model)
 	header()->resizeSection(TemplateListFilterModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
 }
 
-void TemplateListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
-{
-/*	for (int col = topLeft.column();  col < bottomRight.column();  ++col)
-	{
-		if (col != header()->resizeMode(col) == QHeaderView::ResizeToContents)
-			resizeColumnToContents(col);
-	}*/
-}
-
-
 void TemplateListDelegate::edit(KAEvent* event, EventListView* view)
 {
 	KAlarm::editTemplate(event, static_cast<TemplateListView*>(view));

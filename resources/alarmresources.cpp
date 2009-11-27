@@ -702,10 +702,6 @@ void AlarmResources::connectResource(AlarmResource* resource)
 	connect(resource, SIGNAL(invalidate(AlarmResource*)), SLOT(slotResourceInvalidated(AlarmResource*)));
 	connect(resource, SIGNAL(loaded(AlarmResource*)), SLOT(slotResourceLoaded(AlarmResource*)));
 	connect(resource, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
-#if 0
-	connect(resource, SIGNAL(downloading(AlarmResource*, unsigned long)),
-	                  SLOT(slotResourceDownloading(AlarmResource*, unsigned long)));
-#endif
 	connect(resource, SIGNAL(resourceSaved(AlarmResource*)), SLOT(slotResourceSaved(AlarmResource*)));
 	connect(resource, SIGNAL(resourceChanged(ResourceCalendar*)), SLOT(slotResourceChanged(ResourceCalendar*)));
 	connect(resource, SIGNAL(resourceLoadError(ResourceCalendar*, const QString&)),
@@ -735,14 +731,6 @@ void AlarmResources::slotResourceSaved(AlarmResource* resource)
 {
 	if (resource->isActive())
 		emit resourceSaved(resource);
-}
-
-void AlarmResources::slotResourceDownloading(AlarmResource* resource, unsigned long percent)
-{
-#if 0
-	if (resource->isActive())
-		emit downloading(resource, percent);
-#endif
 }
 
 void AlarmResources::slotResourceChanged(ResourceCalendar* resource)
@@ -813,16 +801,16 @@ void AlarmResources::resourceAdded(AlarmResource* resource)
 	emit resourceStatusChanged(resource, Added);
 }
 
-void AlarmResources::resourceModified(AlarmResource* resource)
-{
-//  kDebug(KARES_DEBUG) << resource->resourceName();
-//  emit signalResourceModified(resource);
-}
-
 void AlarmResources::resourceDeleted(AlarmResource* resource)
 {
 	kDebug(KARES_DEBUG);
 	emit resourceStatusChanged(resource, Deleted);
+}
+
+void AlarmResources::resourceModified(AlarmResource* /*resource*/)
+{
+	kDebug(KARES_DEBUG);
+//	emit resourceStatusChanged(resource, Modified);
 }
 
 /******************************************************************************
