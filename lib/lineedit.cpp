@@ -88,8 +88,8 @@ void LineEdit::focusInEvent(QFocusEvent* e)
 QString LineEdit::text() const
 {
 	if (mType == Url)
-		return KShell::tildeExpand(QLineEdit::text());
-	return QLineEdit::text();
+		return KShell::tildeExpand(KLineEdit::text());
+	return KLineEdit::text();
 }
 
 void LineEdit::setText(const QString& text)
