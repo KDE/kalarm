@@ -42,6 +42,7 @@ class AudioThread : public QThread
 			  mAudioObject(0)
 		{}
 		~AudioThread();
+		void    stop(bool wait = false);
 		QString error() const;
 
 	signals:

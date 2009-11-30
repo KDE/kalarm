@@ -385,9 +385,9 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		void resourceStatusChanged(AlarmResource*, AlarmResources::Change);
 
 	protected:
-		void connectResource(AlarmResource*);
-                void resourceModified(AlarmResource*);
-		void resourceDeleted(AlarmResource*);
+		virtual void connectResource(AlarmResource*);
+		virtual void resourceModified(AlarmResource*)  {}
+		virtual void resourceDeleted(AlarmResource*);
 
 		/**
 		   Let CalendarResource subclasses set the time specification
