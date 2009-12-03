@@ -18,17 +18,17 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef BIRTHDAYMODEL_H
+#define BIRTHDAYMODEL_H
+
 #include <libkdepim/contactstreemodel.h>
 
 #include <QtGui/QSortFilterProxyModel>
 
-#ifndef BIRTHDAYMODEL_H
-#define BIRTHDAYMODEL_H
-
 namespace Akonadi
 {
-  class ChangeRecorder;
-  class Session;
+    class ChangeRecorder;
+    class Session;
 }
 
 /**
@@ -39,37 +39,37 @@ namespace Akonadi
  */
 class BirthdayModel : public Akonadi::ContactsTreeModel
 {
-  public:
-    /**
-     * Destroys the global contact model.
-     */
-    ~BirthdayModel();
+    public:
+	/**
+	 * Destroys the global contact model.
+	 */
+	~BirthdayModel();
 
-    /**
-     * Returns the global contact model instance.
-     */
-    static BirthdayModel* instance();
+	/**
+	 * Returns the global contact model instance.
+	 */
+	static BirthdayModel* instance();
 
   private:
-    BirthdayModel(Akonadi::Session *session, Akonadi::ChangeRecorder *recorder);
+	BirthdayModel(Akonadi::Session* session, Akonadi::ChangeRecorder* recorder);
 
-    static BirthdayModel *mInstance;
+	static BirthdayModel *mInstance;
 };
 
 class BirthdaySortModel : public QSortFilterProxyModel
 {
-	public:
-		BirthdaySortModel(QObject* parent = 0);
+    public:
+        BirthdaySortModel(QObject* parent = 0);
 
-    void setPrefixSuffix(const QString &prefix, const QString &suffix);
+        void setPrefixSuffix(const QString& prefix, const QString& suffix);
 
-  protected:
-    virtual bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
+    protected:
+        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
-  private:
-    QStringList mContactsWithAlarm;
-    QString mPrefix;
-    QString mSuffix;
+    private:
+        QStringList mContactsWithAlarm;
+        QString mPrefix;
+        QString mSuffix;
 };
 
 #endif

@@ -56,7 +56,7 @@ class BirthdayDlg : public KDialog
 		void           setColours(const QColor& fg, const QColor& bg);
 
 	private:
-    BirthdaySortModel*    mBirthdaySortModel;
+		BirthdaySortModel*    mBirthdaySortModel;
 		QTreeView*            mListView;
 		BLineEdit*            mPrefix;
 		BLineEdit*            mSuffix;

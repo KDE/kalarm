@@ -32,10 +32,10 @@
 
 BirthdayModel* BirthdayModel::mInstance = 0;
 
-BirthdayModel::BirthdayModel(Akonadi::Session *session, Akonadi::ChangeRecorder *recorder)
-  : Akonadi::ContactsTreeModel(session, recorder)
+BirthdayModel::BirthdayModel(Akonadi::Session* session, Akonadi::ChangeRecorder* recorder)
+    : Akonadi::ContactsTreeModel(session, recorder)
 {
-  setColumns(Columns() << FullName << Birthday);
+    setColumns(Columns() << FullName << Birthday);
 }
 
 BirthdayModel::~BirthdayModel()
@@ -44,63 +44,63 @@ BirthdayModel::~BirthdayModel()
 
 BirthdayModel* BirthdayModel::instance()
 {
-  if (!mInstance) {
-    Akonadi::Session *session = new Akonadi::Session("KAlarm::BirthdayModelSession");
+    if (!mInstance)
+    {
+        Akonadi::Session* session = new Akonadi::Session("KAlarm::BirthdayModelSession");
 
-    Akonadi::ItemFetchScope scope;
-    scope.fetchFullPayload(true);
-    scope.fetchAttribute<Akonadi::EntityDisplayAttribute>();
+        Akonadi::ItemFetchScope scope;
+        scope.fetchFullPayload(true);
+        scope.fetchAttribute<Akonadi::EntityDisplayAttribute>();
 
-    Akonadi::ChangeRecorder *recorder = new Akonadi::ChangeRecorder;
-    recorder->fetchCollection(true);
-    recorder->setItemFetchScope(scope);
-    recorder->setCollectionMonitored(Akonadi::Collection::root());
-    recorder->setMimeTypeMonitored(KABC::Addressee::mimeType(), true);
+        Akonadi::ChangeRecorder* recorder = new Akonadi::ChangeRecorder;
+        recorder->fetchCollection(true);
+        recorder->setItemFetchScope(scope);
+        recorder->setCollectionMonitored(Akonadi::Collection::root());
+        recorder->setMimeTypeMonitored(KABC::Addressee::mimeType(), true);
 
-    mInstance = new BirthdayModel(session, recorder);
-  }
+        mInstance = new BirthdayModel(session, recorder);
+    }
 
-  return mInstance;
+    return mInstance;
 }
 
 BirthdaySortModel::BirthdaySortModel(QObject* parent)
-  : QSortFilterProxyModel(parent)
+    : QSortFilterProxyModel(parent)
 {
 }
 
-void BirthdaySortModel::setPrefixSuffix(const QString &prefix, const QString &suffix)
+void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& suffix)
 {
-  mContactsWithAlarm.clear();
-  mPrefix = prefix;
-  mSuffix = suffix;
+    mContactsWithAlarm.clear();
+    mPrefix = prefix;
+    mSuffix = suffix;
 
-  KAEvent event;
-  const KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
-  for (int i = 0, end = events.count();  i < end;  ++i)
-  {
-    KAEvent* event = events[i];
-    if (event->action() == KAEventData::MESSAGE
-    &&  event->recurType() == KARecurrence::ANNUAL_DATE
-    &&  (prefix.isEmpty()  ||  event->message().startsWith(prefix)))
-      mContactsWithAlarm.append(event->message());
-  }
+    KAEvent event;
+    const KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
+    for (int i = 0, end = events.count();  i < end;  ++i)
+    {
+        KAEvent* event = events[i];
+        if (event->action() == KAEventData::MESSAGE
+        &&  event->recurType() == KARecurrence::ANNUAL_DATE
+        &&  (prefix.isEmpty()  ||  event->message().startsWith(prefix)))
+            mContactsWithAlarm.append(event->message());
+    }
 
-  invalidateFilter();
+    invalidateFilter();
 }
 
-bool BirthdaySortModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
+bool BirthdaySortModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
-  const QModelIndex nameIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-  const QModelIndex birthdayIndex = sourceModel()->index(sourceRow, 1, sourceParent);
+    const QModelIndex nameIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+    const QModelIndex birthdayIndex = sourceModel()->index(sourceRow, 1, sourceParent);
 
-  // if the birthday is invalid, the second column is empty
-  if (birthdayIndex.data(Qt::DisplayRole).toString().isEmpty())
-    return false;
+    // If the birthday is invalid, the second column is empty
+    if (birthdayIndex.data(Qt::DisplayRole).toString().isEmpty())
+        return false;
 
+    const QString text = mPrefix + nameIndex.data(Qt::DisplayRole).toString() + mSuffix;
+    if (mContactsWithAlarm.contains(text))
+        return false;
 
-  const QString text = mPrefix + nameIndex.data(Qt::DisplayRole).toString() + mSuffix;
-  if (mContactsWithAlarm.contains(text))
-    return false;
-
-  return true;
+    return true;
 }
