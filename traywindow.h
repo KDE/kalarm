@@ -21,10 +21,10 @@
 #ifndef TRAYWINDOW_H
 #define TRAYWINDOW_H
 
-#include <QIcon>
-#include <ksystemtrayicon.h>
-#include "alarmevent.h"
 #include "editdlg.h"
+#include "kaevent.h"
+#include <ksystemtrayicon.h>
+#include <QIcon>
 
 class QEvent;
 class QDragEnterEvent;

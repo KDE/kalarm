@@ -59,7 +59,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    birthdaymodel.cpp
    main.cpp 
-   alarmevent.cpp 
+   kaevent.cpp 
    editdlg.cpp 
    editdlgtypes.cpp
    soundpicker.cpp 

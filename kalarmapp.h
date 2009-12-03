@@ -32,7 +32,7 @@ class KDateTime;
 #include <kurl.h>
 namespace KCal { class Event; }
 
-#include "alarmevent.h"
+#include "kaevent.h"
 #include "kamail.h"
 class DBusHandler;
 class MainWindow;

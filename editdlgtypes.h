@@ -23,9 +23,9 @@
 
 #include <kurl.h>
 
-#include "alarmevent.h"
 #include "alarmtext.h"
 #include "editdlg.h"
+#include "kaevent.h"
 
 class QAbstractButton;
 class QGroupBox;

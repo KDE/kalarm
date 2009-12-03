@@ -26,7 +26,7 @@
 #include <QStringList>
 #include <QQueue>
 
-#include "alarmevent.h"
+#include "kaevent.h"
 
 class KUrl;
 class KJob;

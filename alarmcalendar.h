@@ -23,8 +23,8 @@
 
 #include <QObject>
 #include <kurl.h>
-#include "alarmevent.h"
 #include "alarmresources.h"
+#include "kaevent.h"
 
 namespace KCal {
   class Calendar;

@@ -21,7 +21,7 @@
 #include "birthdaymodel.h"
 
 #include "alarmcalendar.h"
-#include "alarmevent.h"
+#include "kaevent.h"
 
 #include <akonadi/changerecorder.h>
 #include <akonadi/entitydisplayattribute.h>

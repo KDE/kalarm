@@ -26,8 +26,8 @@
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include "alarmcalendar.h"
-#include "alarmevent.h"
 #include "functions.h"
+#include "kaevent.h"
 #include "templatemenuaction.moc"
 
 

@@ -21,9 +21,9 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "calendarcompat.h"
 
-#include "alarmevent.h"
 #include "alarmresource.h"
 #include "functions.h"
+#include "kaevent.h"
 #include "preferences.h"
 
 #include <QFile>

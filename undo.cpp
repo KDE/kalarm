@@ -19,19 +19,19 @@
  */
 
 #include "kalarm.h"
+#include "undo.h"
 
-#include <QObject>
+#include "alarmcalendar.h"
+#include "alarmtext.h"
+#include "functions.h"
+#include "kaevent.h"
 
 #include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include "alarmcalendar.h"
-#include "alarmevent.h"
-#include "alarmtext.h"
-#include "functions.h"
-#include "undo.moc"
+#include <QObject>
 
 static int maxCount = 12;
 
