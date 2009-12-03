@@ -74,7 +74,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
 
     if (kcalEvent->alarms().isEmpty())
     {
-	emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
+        emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
         return false;
     }
 
@@ -160,13 +160,13 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
     Item::List items;
     foreach (Event* kcalEvent, events)
     {
-	if (kcalEvent->alarms().isEmpty())
-		continue;    // ignore events without alarms
+        if (kcalEvent->alarms().isEmpty())
+            continue;    // ignore events without alarms
 
         KAEventData* event = new KAEventData(0, kcalEvent);
         QString mime = mimeType(event);
         if (mime.isEmpty())
-           continue;   // event has no usable alarms
+            continue;   // event has no usable alarms
 
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
