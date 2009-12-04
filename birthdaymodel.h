@@ -40,6 +40,11 @@ namespace Akonadi
 class BirthdayModel : public Akonadi::ContactsTreeModel
 {
     public:
+	enum {   // data columns
+	    NameColumn, DateColumn,
+	    ColumnCount
+	};
+
 	/**
 	 * Destroys the global contact model.
 	 */
@@ -49,6 +54,10 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
 	 * Returns the global contact model instance.
 	 */
 	static BirthdayModel* instance();
+
+        virtual QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const;
+        virtual QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const
+                                    { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
 
   private:
 	BirthdayModel(Akonadi::Session* session, Akonadi::ChangeRecorder* recorder);
@@ -73,3 +82,5 @@ class BirthdaySortModel : public QSortFilterProxyModel
 };
 
 #endif
+
+// vim: et sw=4:
