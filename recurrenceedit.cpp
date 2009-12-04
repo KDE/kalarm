@@ -25,11 +25,11 @@
 #include "recurrenceedit.moc"
 #include "recurrenceeditprivate.moc"
 
-#include "alarmevent.h"
 #include "alarmtimewidget.h"
 #include "checkbox.h"
 #include "combobox.h"
 #include "dateedit.h"
+#include "kaevent.h"
 #include "kalarmapp.h"
 #include "kalocale.h"
 #include "karecurrence.h"

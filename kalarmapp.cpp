@@ -1080,10 +1080,10 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					{
 						KDateTime dt(nextDT);
 						dt.setDateOnly(true);
-						reschedule = !KAlarm::isWorkingTime(dt, event);
+						reschedule = !KAlarm::isWorkingTime(dt, event->eventData());
 					}
 					else
-						reschedule = !KAlarm::isWorkingTime(nextDT, event);
+						reschedule = !KAlarm::isWorkingTime(nextDT, event->eventData());
 					if (reschedule) { kDebug() << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours"; }
 				}
 				if (!reschedule  &&  alarm.repeatAtLogin())

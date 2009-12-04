@@ -21,8 +21,8 @@
 #ifndef COMMANDOPTIONS_H
 #define COMMANDOPTIONS_H
 
-#include "alarmevent.h"
 #include "editdlg.h"
+#include "kaevent.h"
 #include "karecurrence.h"
 #include <KDateTime>
 #include <QByteArray>

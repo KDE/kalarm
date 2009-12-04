@@ -33,10 +33,10 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include "alarmevent.h"
 #include "alarmlistfiltermodel.h"
 #include "alarmlistview.h"
 #include "eventlistview.h"
+#include "kaevent.h"
 #include "preferences.h"
 #include "find.moc"
 

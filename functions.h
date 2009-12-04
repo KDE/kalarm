@@ -27,8 +27,8 @@
 #include <QString>
 #include <QList>
 
-#include "alarmevent.h"
 #include "editdlg.h"
+#include "kaevent.h"
 #include <kfile.h>
 #include <kmimetype.h>
 
@@ -151,7 +151,7 @@ void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateS
 bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
-bool                isWorkingTime(const KDateTime&, const KAEvent*);
+bool                isWorkingTime(const KDateTime&, const KAEventData*);
 
 #ifndef NDEBUG
 void                setTestModeConditions();

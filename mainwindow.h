@@ -28,9 +28,9 @@
 
 #include <kcal/calendar.h>
 
-#include "alarmevent.h"
 #include "alarmresources.h"
 #include "editdlg.h"
+#include "kaevent.h"
 #include "mainwindowbase.h"
 #include "undo.h"
 

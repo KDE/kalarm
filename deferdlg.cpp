@@ -31,10 +31,10 @@
 #include <kcal/recurrence.h>
 
 #include "alarmcalendar.h"
-#include "alarmevent.h"
 #include "alarmtimewidget.h"
 #include "datetime.h"
 #include "functions.h"
+#include "kaevent.h"
 #include "kalarmapp.h"
 #include "deferdlg.moc"
 

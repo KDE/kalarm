@@ -29,8 +29,8 @@
 #include <QSize>
 
 #include "kcalendar.h"
-#include "alarmevent.h"
 #include "alarmresources.h"
+#include "kaevent.h"
 
 class QPixmap;
 namespace KCal { class Event; }

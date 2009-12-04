@@ -23,13 +23,13 @@
 #include "functions_p.h"
 
 #include "alarmcalendar.h"
-#include "alarmevent.h"
 #include "autoqpointer.h"
 #include "eventlistmodel.h"
 #include "alarmlistview.h"
 #include "alarmresources.h"
 #include "editdlg.h"
 #include "identities.h"
+#include "kaevent.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
@@ -1614,7 +1614,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 * Check whether a date/time is during working hours and/or holidays, depending
 * on the flags set for the specified event.
 */
-bool isWorkingTime(const KDateTime& dt, const KAEvent* event)
+bool isWorkingTime(const KDateTime& dt, const KAEventData* event)
 {
 	bool workOnly = event && event->workTimeOnly();
 	bool holidays = event && event->holidaysExcluded();

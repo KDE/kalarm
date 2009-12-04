@@ -20,7 +20,7 @@
 #ifndef BIRTHDAYDLG_H
 #define BIRTHDAYDLG_H
 
-#include "alarmevent.h"
+#include "kaevent.h"
 
 #include <kdialog.h>
 #include <klineedit.h>
@@ -56,7 +56,7 @@ class BirthdayDlg : public KDialog
 		void           setColours(const QColor& fg, const QColor& bg);
 
 	private:
-    BirthdaySortModel*    mBirthdaySortModel;
+		BirthdaySortModel*    mBirthdaySortModel;
 		QTreeView*            mListView;
 		BLineEdit*            mPrefix;
 		BLineEdit*            mSuffix;

@@ -22,7 +22,6 @@
 #include "mainwindow.moc"
 
 #include "alarmcalendar.h"
-#include "alarmevent.h"
 #include "alarmlistdelegate.h"
 #include "alarmlistfiltermodel.h"
 #include "autoqpointer.h"
@@ -32,6 +31,7 @@
 #include "alarmtext.h"
 #include "birthdaydlg.h"
 #include "functions.h"
+#include "kaevent.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "newalarmaction.h"

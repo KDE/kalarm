@@ -28,8 +28,8 @@
 #include <QPointer>
 
 #include "autoqpointer.h"
+#include "kaevent.h"
 #include "mainwindowbase.h"
-#include "alarmevent.h"
 
 class QShowEvent;
 class QMoveEvent;

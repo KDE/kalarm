@@ -13,10 +13,11 @@ ${CMAKE_CURRENT_BINARY_DIR}
 
 add_subdirectory( cal ) 
 
-# Kalarm depend on kdepim/akonadi/ which is impossible for packagers.
-# the Akonadi resource for Kalarm won't be available in KDE 4.4
+# KAlarm depends on kdepim/akonadi/ which is impossible for packagers.
+# The Akonadi resource for KAlarm won't be available in KDE 4.4
 if( BUILD_akonadi )
-  add_subdirectory( akonadi )
+# Disable for KDE 4.4 since it doesn't work yet
+#  add_subdirectory( akonadi )
 endif( BUILD_akonadi )
 
 add_subdirectory( resources ) 
@@ -59,7 +60,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    birthdaymodel.cpp
    main.cpp 
-   alarmevent.cpp 
+   kaevent.cpp 
    editdlg.cpp 
    editdlgtypes.cpp
    soundpicker.cpp 

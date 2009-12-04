@@ -23,9 +23,9 @@
 
 #include <kdialog.h>
 
-#include "alarmevent.h"
 #include "alarmtext.h"
 #include "datetime.h"
+#include "kaevent.h"
 
 class QLabel;
 class QShowEvent;
