@@ -34,7 +34,7 @@
 #include <kiconloader.h>
 #include <khbox.h>
 #include <kio/netaccess.h>
-#include <Phonon/MediaObject>
+#include <phonon/mediaobject.h>
 #include <kdebug.h>
 
 #include <QLabel>
