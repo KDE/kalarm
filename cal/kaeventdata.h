@@ -434,6 +434,7 @@ public:
 		static QByteArray  icalProductId();
 		static int         currentCalendarVersion();
 		static QByteArray  currentCalendarVersionString();
+		static void        setStartOfDay(const QTime& startOfDay);
 		static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime, const QTime& startOfDay, const KTimeZone&);
 //		static bool        convertRepetitions(KCal::CalendarLocal&);
 		KARecurrence::Type checkRecur() const;

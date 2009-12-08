@@ -135,6 +135,7 @@ KAlarmApp::KAlarmApp()
 
 	connect(QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
 	        SLOT(slotDBusServiceUnregistered(const QString&)));
+	KAEventData::setStartOfDay(Preferences::startOfDay());
 	if (AlarmCalendar::initialiseCalendars())
 	{
 		connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
@@ -841,6 +842,7 @@ void KAlarmApp::slotShowInSystemTrayChanged()
 void KAlarmApp::changeStartOfDay()
 {
 	DateTime::setStartOfDay(Preferences::startOfDay());
+	KAEventData::setStartOfDay(Preferences::startOfDay());
 	AlarmCalendar::resources()->adjustStartOfDay();
 }
 
