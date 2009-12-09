@@ -1,5 +1,6 @@
 [Misc]
 Name=KAlarm Event Serializer
+Name[ca]=Serialitzador d'esdeveniments de KAlarm
 Name[en_GB]=KAlarm Event Serialiser
 Name[es]=Serializador de eventos de KAlarm
 Name[et]=KAlarmi sündmuste jadasti
@@ -17,6 +18,7 @@ Name[uk]=Серіалізатор подій KAlarm
 Name[x-test]=xxKAlarm Event Serializerxx
 Name[zh_TW]=KAlarm 事件序列器
 Comment=An Akonadi serializer plugin for KAlarm events
+Comment[ca]=Un connector de serialització de l'Akonadi pels esdeveniments del KAlarm
 Comment[en_GB]=An Akonadi serialiser plugin for KAlarm events
 Comment[es]=Un complemento serializador de Akonadi para eventos de KAlarm
 Comment[et]=Akonadi KAlarmi sündmuste jadastamisplugin

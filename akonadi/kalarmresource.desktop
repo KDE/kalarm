@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Calendar File
+Name[ca]=Fitxer de calendari del KAlarm
 Name[en_GB]=KAlarm Calendar File
 Name[es]=Archivo de calendario de KAlarm
 Name[et]=KAlarmi kalendrifail
@@ -17,6 +18,7 @@ Name[uk]=Файл календаря KAlarm
 Name[x-test]=xxKAlarm Calendar Filexx
 Name[zh_TW]=KAlarm 行事曆檔案
 Comment=Loads data from a KAlarm calendar file
+Comment[ca]=Carrega dades des d'un fitxer de calendari del KAlarm
 Comment[en_GB]=Loads data from a KAlarm calendar file
 Comment[es]=Carga datos de un archivo de calendario de KAlarm
 Comment[et]=Andmete laadimine KAlarmi kalendrifailist
