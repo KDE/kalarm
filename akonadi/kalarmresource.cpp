@@ -44,6 +44,9 @@ KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id, i18nc("Filedialog filter for *.ics *.ical", "KAlarm Calendar File")),
       mMimeVisitor(new KAlarmMimeTypeVisitor())
 {
+    // Set a default start-of-day time for date-only alarms.
+    KAEventData::setStartOfDay(QTime(0,0,0));
+
     QStringList mimeTypes;
     if (id.contains("_active"))
         mimeTypes << MIME_ACTIVE;

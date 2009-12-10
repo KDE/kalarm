@@ -2,6 +2,7 @@
 [Desktop Entry]
 Name=KAlarm
 Name[af]=K-alarm
+Name[ar]=برنامج المنبه KAlarm
 Name[be]=KAlarm
 Name[bg]=Аларма
 Name[br]=KAlarm
@@ -64,6 +65,7 @@ Icon=kalarm
 Type=Application
 X-DocPath=kalarm/index.html
 Comment=KAlarm autostart at login
+Comment[ar]=تشغيل آلي لبرنامج المنبه KAlarm عند الولوج
 Comment[bg]=Автоматично стартиране на KAlarm при влизане
 Comment[ca]=Inici automàtic del KAlarm en connectar-se
 Comment[cs]=Automatické spouštění alarmovacího démona při startu

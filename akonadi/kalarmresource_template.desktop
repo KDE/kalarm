@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Templates
+Name[ca]=Plantilles del KAlarm
 Name[en_GB]=KAlarm Templates
 Name[es]=Plantillas de KAlarm
 Name[et]=KAlarmi mallid
@@ -15,6 +16,7 @@ Name[uk]=Шаблони KAlarm
 Name[x-test]=xxKAlarm Templatesxx
 Name[zh_TW]=KAlarm 樣本
 Comment=Loads data from a KAlarm alarm template file
+Comment[ca]=Carrega dades des d'un fitxer de plantilla d'alarma del KAlarm
 Comment[en_GB]=Loads data from a KAlarm alarm template file
 Comment[es]=Carga datos de un archivo de plantillas de alarmas de KAlarm
 Comment[et]=Andmete laadimine KAlarmi häiremallide failist

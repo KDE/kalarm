@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Archived Alarms
+Name[ca]=Alarmes expirades del KAlarm
 Name[en_GB]=KAlarm Archived Alarms
 Name[es]=Alarmas archivadas de KAlarm
 Name[et]=KAlarmi aegunud häired
@@ -16,6 +17,7 @@ Name[uk]=Застарілі нагадування KAlarm
 Name[x-test]=xxKAlarm Archived Alarmsxx
 Name[zh_TW]=KAlarm 已歸檔鬧鐘
 Comment=Loads data from a KAlarm archived alarm calendar file
+Comment[ca]=Carrega dades des d'un fitxer de calendari d'alarmes expirades del KAlarm
 Comment[en_GB]=Loads data from a KAlarm archived alarm calendar file
 Comment[es]=Carga datos de un archivo de calendario de alarmas archivadas de KAlarm
 Comment[et]=Andmete laadimine KAlarmi aegunud häirete kalendrifailist

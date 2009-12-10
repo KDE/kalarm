@@ -137,13 +137,13 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mListView->setModel(mBirthdaySortModel);
 	mListView->setRootIsDecorated(false);    // don't show expander icons
 	mListView->setSortingEnabled(true);
-	mListView->sortByColumn(0);
+	mListView->sortByColumn(BirthdayModel::NameColumn);
 	mListView->setAllColumnsShowFocus(true);
 	mListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	mListView->setSelectionBehavior(QAbstractItemView::SelectRows);
 	mListView->setTextElideMode(Qt::ElideRight);
-	mListView->header()->setResizeMode(0, QHeaderView::Stretch);
-	mListView->header()->setResizeMode(1, QHeaderView::ResizeToContents);
+	mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
+	mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
 	mListView->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Select birthdays to set alarms for.<nl/>"
@@ -338,7 +338,7 @@ void BirthdayDlg::setColours(const QColor& fgColour, const QColor& bgColour)
 */
 void BirthdayDlg::resizeViewColumns()
 {
-	mListView->resizeColumnToContents(1);
+	mListView->resizeColumnToContents(BirthdayModel::DateColumn);
 }
 
 /******************************************************************************

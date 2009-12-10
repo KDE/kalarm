@@ -2826,6 +2826,14 @@ QList<KAEventData::MonthPos> KAEventData::convRecurPos(const QList<KCal::Recurre
 #endif
 
 /******************************************************************************
+* Set the start-of-day time for date-only alarms.
+*/
+void KAEventData::setStartOfDay(const QTime& startOfDay)
+{
+	DateTime::setStartOfDay(startOfDay);
+}
+
+/******************************************************************************
  * If the calendar was written by a previous version of KAlarm, do any
  * necessary format conversions on the events to ensure that when the calendar
  * is saved, no information is lost or corrupted.

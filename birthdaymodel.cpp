@@ -2,6 +2,7 @@
  *  birthdaymodel.cpp  -  model class for birthdays from address book
  *  Program:  kalarm
  *  Copyright © 2009 by Tobias Koenig <tokoe@kde.org>
+ *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,6 +65,18 @@ BirthdayModel* BirthdayModel::instance()
     return mInstance;
 }
 
+QVariant BirthdayModel::entityData(const Akonadi::Item& item, int column, int role) const
+{
+    if (columns().at(column) == Birthday  &&  role == Qt::DisplayRole)
+    {
+        QDate date = Akonadi::ContactsTreeModel::entityData(item, column, DateRole).toDate();
+        if (date.isValid())
+            return KGlobal::locale()->formatDate(date, KLocale::ShortDate);
+    }
+    return Akonadi::ContactsTreeModel::entityData(item, column, role);
+}
+
+
 BirthdaySortModel::BirthdaySortModel(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
@@ -104,3 +117,5 @@ bool BirthdaySortModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourc
 
     return true;
 }
+
+// vim: et sw=4:
