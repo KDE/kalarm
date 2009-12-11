@@ -2427,7 +2427,7 @@ KARecurrence::Type KAEvent::checkRecur() const
 		KARecurrence::Type type = mRecurrence->type();
 		switch (type)
 		{
-			case KARecurrence::MINUTELY:     // hourly		
+			case KARecurrence::MINUTELY:     // hourly
 			case KARecurrence::DAILY:        // daily
 			case KARecurrence::WEEKLY:       // weekly on multiple days of week
 			case KARecurrence::MONTHLY_DAY:  // monthly on multiple dates in month
@@ -2776,7 +2776,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 				if (types.count() > 0)
 					alarm->setCustomProperty(APPNAME, TYPE_PROPERTY, types.join(","));
 
-				if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime() > 0)
+				if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0)
 				{
 					// It's a KAlarm pre-0.7 calendar file.
 					// Minutely recurrences were stored differently.
@@ -3028,7 +3028,7 @@ void KAEvent::convertKCalEvents(KCal::Calendar& calendar, int version, bool adju
 				}
 			}
 		}
-		
+
 		if (pre_1_5_0)
 		{
 			/*
@@ -3087,7 +3087,7 @@ bool KAEvent::convertRepetition(KCal::Event* event)
 	for (Alarm::List::ConstIterator alit = alarms.begin();  alit != alarms.end();  ++alit)
 	{
 		Alarm* alarm = *alit;
-		if (alarm->repeatCount() > 0  &&  alarm->snoozeTime() > 0)
+		if (alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0)
 		{
 			if (!converted)
 			{
