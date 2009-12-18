@@ -26,23 +26,25 @@
 
 class KAlarmMimeTypeVisitor : public KCal::IncidenceBase::Visitor
 {
-public:
-    KAlarmMimeTypeVisitor()  {}
+    public:
+        KAlarmMimeTypeVisitor()  {}
 
-    /** Returns true if it is an Event. */
-    virtual bool visit(KCal::Event* event)  { return event; }
+        /** Returns true if it is an Event. */
+        virtual bool visit(KCal::Event* event)  { return event; }
 
-    /** Returns false because it is not an Event. */
-    virtual bool visit(KCal::Todo*)  { return false; }
+        /** Returns false because it is not an Event. */
+        virtual bool visit(KCal::Todo*)  { return false; }
 
-    /** Returns false because it is not an Event. */
-    virtual bool visit(KCal::Journal*)  { return false; }
+        /** Returns false because it is not an Event. */
+        virtual bool visit(KCal::Journal*)  { return false; }
 
-    /** Returns false because it is not an Event. */
-    virtual bool visit(KCal::FreeBusy*)  { return false; }
+        /** Returns false because it is not an Event. */
+        virtual bool visit(KCal::FreeBusy*)  { return false; }
 
-    /** Determines whether an Incidence is an Event. */
-    bool isEvent(KCal::Incidence* i)  { return i->accept(*this); }
+        /** Determines whether an Incidence is an Event. */
+        bool isEvent(KCal::Incidence* i)  { return i->accept(*this); }
 };
 
 #endif
+
+// vim: et sw=4:

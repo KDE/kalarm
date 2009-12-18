@@ -115,3 +115,5 @@ QString SerializerPluginKAlarm::mimeType(const KAEventData* event)
 Q_EXPORT_PLUGIN2(akonadi_serializer_kalarm, SerializerPluginKAlarm)
 
 #include "akonadi_serializer_kalarm.moc"
+
+// vim: et sw=4:
