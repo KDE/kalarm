@@ -198,3 +198,5 @@ QString KAlarmResource::mimeType(const KAEventData* event)
 AKONADI_RESOURCE_MAIN(KAlarmResource)
 
 #include "kalarmresource.moc"
+
+// vim: et sw=4:

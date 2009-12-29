@@ -44,7 +44,9 @@ class KAlarmResource : public ICalResourceBase
         virtual void itemChanged(const Akonadi::Item&, const QSet<QByteArray>& parts);
 
     private:
-	KAlarmMimeTypeVisitor* mMimeVisitor;
+        KAlarmMimeTypeVisitor* mMimeVisitor;
 };
 
 #endif
+
+// vim: et sw=4:

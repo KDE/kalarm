@@ -31,17 +31,19 @@ class KAEventData;
 
 class SerializerPluginKAlarm : public QObject, public Akonadi::ItemSerializerPlugin
 {
-    Q_OBJECT
-    Q_INTERFACES(Akonadi::ItemSerializerPlugin)
+        Q_OBJECT
+        Q_INTERFACES(Akonadi::ItemSerializerPlugin)
 
-  public:
-    bool deserialize(Akonadi::Item& item, const QByteArray& label, QIODevice& data, int version);
-    void serialize(const Akonadi::Item& item, const QByteArray& label, QIODevice& data, int& version);
+    public:
+        bool deserialize(Akonadi::Item& item, const QByteArray& label, QIODevice& data, int version);
+        void serialize(const Akonadi::Item& item, const QByteArray& label, QIODevice& data, int& version);
 
-  private:
-    QString mimeType(const KAEventData*);
+    private:
+        QString mimeType(const KAEventData*);
 
-    KCal::ICalFormat mFormat;
+        KCal::ICalFormat mFormat;
 };
 
 #endif // AKONADI_SERIALIZER_KALARM_H
+
+// vim: et sw=4:
