@@ -60,7 +60,7 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
                                     { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
 
   private:
-	BirthdayModel(Akonadi::Session* session, Akonadi::ChangeRecorder* recorder);
+	BirthdayModel(Akonadi::ChangeRecorder* recorder);
 
 	static BirthdayModel *mInstance;
 };
