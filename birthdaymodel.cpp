@@ -33,8 +33,8 @@
 
 BirthdayModel* BirthdayModel::mInstance = 0;
 
-BirthdayModel::BirthdayModel(Akonadi::Session* session, Akonadi::ChangeRecorder* recorder)
-    : Akonadi::ContactsTreeModel(session, recorder)
+BirthdayModel::BirthdayModel(Akonadi::ChangeRecorder* recorder)
+    : Akonadi::ContactsTreeModel(recorder)
 {
     setColumns(Columns() << FullName << Birthday);
 }
@@ -54,12 +54,13 @@ BirthdayModel* BirthdayModel::instance()
         scope.fetchAttribute<Akonadi::EntityDisplayAttribute>();
 
         Akonadi::ChangeRecorder* recorder = new Akonadi::ChangeRecorder;
+        recorder->setSession( session );
         recorder->fetchCollection(true);
         recorder->setItemFetchScope(scope);
         recorder->setCollectionMonitored(Akonadi::Collection::root());
         recorder->setMimeTypeMonitored(KABC::Addressee::mimeType(), true);
 
-        mInstance = new BirthdayModel(session, recorder);
+        mInstance = new BirthdayModel(recorder);
     }
 
     return mInstance;
