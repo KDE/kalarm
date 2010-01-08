@@ -19,6 +19,7 @@ Name[sv]=Kalarm händelseserialisering
 Name[tr]=KAlarm Olay Sıralandırıcı
 Name[uk]=Серіалізатор подій KAlarm
 Name[x-test]=xxKAlarm Event Serializerxx
+Name[zh_CN]=KAlarm 事件序列器
 Name[zh_TW]=KAlarm 事件序列器
 Comment=An Akonadi serializer plugin for KAlarm events
 Comment[ca]=Un connector de serialització de l'Akonadi pels esdeveniments del KAlarm
@@ -40,6 +41,7 @@ Comment[sv]=Ett insticksprogram till Akonadi för serialisering av Kalarm-hände
 Comment[tr]=KAlarm olayları için bir Akonadi sıralandırıcısı
 Comment[uk]=Додаток серіалізації Akonadi для подій KAlarm
 Comment[x-test]=xxAn Akonadi serializer plugin for KAlarm eventsxx
+Comment[zh_CN]=用于操作 KAlarm 事件的 Akonadi 序列插件
 Comment[zh_TW]=KAlarm 事件使用的 Akonadi 序列器外掛程式
 
 [Plugin]
