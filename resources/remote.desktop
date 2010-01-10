@@ -4,6 +4,7 @@ Name[ar]=التنبيهات في ملف بعيد
 Name[be]=Каляндар у аддаленым файле
 Name[bg]=Аларми в отдалечен файл
 Name[ca]=Alarmes en un fitxer remot
+Name[ca@valencia]=Alarmes en un fitxer remot
 Name[cs]=Alarmy ve vzdáleném souboru
 Name[da]=Alarmer i ekstern fil
 Name[de]=Erinnerungen in Datei auf Fremdrechner
@@ -45,6 +46,7 @@ Name[zh_TW]=遠端檔案的鬧鐘
 Comment=Provides access to an alarm calendar in a remote file using KDE's network framework KIO
 Comment[ar]=يوفر وصول لمنبه التقويم في ملف بعيد بإستخدام إطار شبكة كدي KIO
 Comment[ca]=Proporciona l'accés a un calendari d'alarmes en un fitxer remot usant la infraestructura KIO de xarxa del KDE
+Comment[ca@valencia]=Proporciona l'accés a un calendari d'alarmes en un fitxer remot usant la infraestructura KIO de xarxa del KDE
 Comment[da]=Giver adgang til en alarm-kalender i en ekstern fil der bruger KDE's netværks-framework KIO
 Comment[de]=Ermöglicht den Zugriff auf einen entfernten Erinnerungen-Kalender über KDEs Netzwerk-Zugriffsystem KIO.
 Comment[el]=Προσφέρει πρόσβαση ημερολογίου ειδοποιήσεων σε ένα απομακρυσμένο αρχείου με τη χρήση του  συστήματος KIO του KDE
