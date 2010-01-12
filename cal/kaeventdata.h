@@ -1,7 +1,7 @@
 /*
  *  kaeventdata.h  -  represents calendar alarm and event data
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 #include "kcalendar.h"
 #include "repetition.h"
 
+#include <akonadi/entity.h>
 #include <kcal/person.h>
 #include <kcal/event.h>
 
@@ -287,6 +288,7 @@ public:
 		void               setCategory(KCalEvent::Status);
 		void               setUid(KCalEvent::Status s)                       { mEventID = KCalEvent::uid(mEventID, s);  mUpdated = true; }
 		void               setEventId(const QString& id)                     { mEventID = id;  mUpdated = true; }
+		void               setItemId(Akonadi::Entity::Id id)                 { mItemId = id; }
 		void               setTime(const KDateTime& dt)                      { mNextMainDateTime = dt;  mUpdated = true; }
 		void               setSaveDateTime(const KDateTime& dt)              { mSaveDateTime = dt;  mUpdated = true; }
 		void               setLateCancel(int lc)                             { mLateCancel = lc;  mUpdated = true; }
@@ -353,6 +355,7 @@ public:
 		Action             action() const                 { return (Action)mActionType; }
 		bool               displayAction() const          { return mActionType == T_MESSAGE || mActionType == T_FILE || (mActionType == T_COMMAND && mCommandDisplay); }
 		const QString&     id() const                     { return mEventID; }
+		Akonadi::Entity::Id itemId() const                { return mItemId; }
 		bool               valid() const                  { return mAlarmCount  &&  (mAlarmCount != 1 || !mRepeatAtLogin); }
 		int                alarmCount() const             { return mAlarmCount; }
 		const DateTime&    startDateTime() const          { return mStartDateTime; }
@@ -466,6 +469,7 @@ public:
 
 		QList<Observer*>   mObservers;        // objects to notify when the event is updated
 		QString            mTemplateName;     // alarm template's name, or null if normal event
+		Akonadi::Entity::Id mItemId;          // Akonadi::Item ID for this event
 		AlarmResource*     mResource;         // resource which owns the event
 		QString            mResourceId;       // saved resource ID (not the resource the event is in)
 		QString            mAudioFile;        // ATTACH: audio file to play

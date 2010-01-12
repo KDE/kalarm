@@ -1,8 +1,6 @@
 ########### definitions copied from akonadi/ ###############
-set(AKONADI_SHARED_RESOURCES
-  ${CMAKE_SOURCE_DIR}/akonadi/resources/shared
-)
-set(AKONADI_ICAL_RESOURCE ${CMAKE_SOURCE_DIR}/akonadi/resources/ical)
+set(AKONADI_SHARED_RESOURCES ${CMAKE_SOURCE_DIR}/runtime/resources/shared)
+set(AKONADI_ICAL_RESOURCE ${CMAKE_SOURCE_DIR}/runtime/resources/ical)
 
 set( AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
   ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp

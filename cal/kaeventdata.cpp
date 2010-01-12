@@ -1,7 +1,7 @@
 /*
  *  kaeventdata.cpp  -  represents calendar alarm and event data
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -168,7 +168,8 @@ inline void KAEventData::set_archiveReminder()
 }
 
 KAEventData::KAEventData(Observer* obs)
-	: mReminderMinutes(0),
+	: mItemId(-1),
+	  mReminderMinutes(0),
 	  mRevision(0),
 	  mRecurrence(0),
 	  mAlarmCount(0),
@@ -221,6 +222,7 @@ void KAEventData::copy(const KAEventData& event)
 {
 	KAAlarmEventBase::copy(event);
 	mTemplateName            = event.mTemplateName;
+	mItemId                  = event.mItemId;
 	mResourceId              = event.mResourceId;
 	mAudioFile               = event.mAudioFile;
 	mPreAction               = event.mPreAction;
@@ -287,6 +289,7 @@ void KAEventData::set(const Event* event)
 {
 	startChanges();
 	// Extract status from the event
+	mItemId                 = -1;
 	mEventID                = event->uid();
 	mRevision               = event->revision();
 	mTemplateName.clear();

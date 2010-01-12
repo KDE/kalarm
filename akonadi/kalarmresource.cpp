@@ -1,7 +1,7 @@
 /*
  *  kalarmresource.cpp  -  Akonadi resource for KAlarm
  *  Program:  kalarm
- *  Copyright © 2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -82,6 +82,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     }
 
     KAEventData* event = new KAEventData(0, kcalEvent);
+    event->setItemId(item.id());
     QString mime = mimeType(event);
     if (mime.isEmpty())
     {
@@ -97,7 +98,11 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     return true;
 }
 
-void KAlarmResource::itemAdded(const Akonadi::Item&  item, const Akonadi::Collection&)
+/******************************************************************************
+* Called when an item has been added to the collection.
+* Store the event in the calendar.
+*/
+void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collection&)
 {
     if (!checkItemAddedChanged<EventPtr>(item, CheckForAdded))
         return;
@@ -115,6 +120,10 @@ void KAlarmResource::itemAdded(const Akonadi::Item&  item, const Akonadi::Collec
     changeCommitted(it);
 }
 
+/******************************************************************************
+* Called when an item has been changed.
+* Store the changed event in the calendar, and delete the original event.
+*/
 void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArray>& parts)
 {
     Q_UNUSED(parts)
@@ -170,9 +179,10 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
         QString mime = mimeType(event);
         if (mime.isEmpty())
             continue;   // event has no usable alarms
-
+ 
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
+        event->setItemId(item.id());
         item.setPayload(EventPtr(event));
         items << item;
     }
