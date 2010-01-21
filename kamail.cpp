@@ -40,7 +40,6 @@
 
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
-#include <kshell.h>
 #include <klocale.h>
 #include <kaboutdata.h>
 #include <kfileitem.h>
@@ -61,10 +60,6 @@
 #include <QTextCodec>
 #include <QtDBus/QtDBus>
 
-#include <stdlib.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <sys/time.h>
 #include <pwd.h>
 
 #ifdef KMAIL_SUPPORTED
@@ -78,12 +73,9 @@ namespace HeaderParsing
 {
 bool parseAddress( const char* & scursor, const char * const send,
                    KMime::Types::Address & result, bool isCRLF=false );
-bool parseAddressList( const char* & scursor, const char * const send,
-                       QList<KMime::Types::Address> & result, bool isCRLF=false );
 }
 
-static void initHeaders(KMime::Message&, KAMail::JobData&, bool dateId);
-
+static void initHeaders(KMime::Message&, KAMail::JobData&);
 static KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
 static QByteArray autoDetectCharset(const QString& text);
 static const QTextCodec* codecForName(const QByteArray& str);
@@ -161,121 +153,69 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 	kDebug() << "To:" << jobdata.event.emailAddresses(",")
 	              << endl << "Subject:" << jobdata.event.emailSubject();
 
+	MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
+	MailTransport::Transport* transport = 0;
 	if (Preferences::emailClient() == Preferences::sendmail)
 	{
-		// Use sendmail to send the message
-		KMime::Message message;
-		QString command = KStandardDirs::findExe(QLatin1String("sendmail"),
-		                                         QLatin1String("/sbin:/usr/sbin:/usr/lib"));
-		if (!command.isNull())
+		kDebug() << "Sending via sendmail";
+		transport = manager->transportByName(QLatin1String("sendmail"), false);
+		if (!transport)
 		{
-			kDebug() << "Sending via sendmail";
-			command += QLatin1String(" -f ");
-			command += KPIMUtils::extractEmailAddress(jobdata.from);
-			command += QLatin1String(" -oi -t ");
-			initHeaders(message, jobdata, false);
+			QString command = KStandardDirs::findExe(QLatin1String("sendmail"),
+			                                         QLatin1String("/sbin:/usr/sbin:/usr/lib"));
+			transport = manager->createTransport();
+			transport->setName(QLatin1String("sendmail"));
+			transport->setType(MailTransport::Transport::EnumType::Sendmail);
+			transport->setHost(command);
+			transport->setRequiresAuthentication(false);
+			transport->setStorePassword(false);
+			manager->addTransport(transport);
+			transport->writeConfig();
+			kDebug() << "Creating sendmail transport, id=" << transport->id();
 		}
-		else
-		{
-			kDebug() << "Sending via mail";
-			command = KStandardDirs::findExe(QLatin1String("mail"));
-			if (command.isNull())
-			{
-				errmsgs = errors(i18nc("@info", "<command>%1</command> not found", QLatin1String("sendmail"))); // give up
-				return -1;
-			}
-
-			command += QLatin1String(" -s ");
-			command += KShell::quoteArg(jobdata.event.emailSubject());
-
-			if (!jobdata.bcc.isEmpty())
-			{
-				command += QLatin1String(" -b ");
-				command += KPIMUtils::extractEmailAddress(jobdata.bcc);
-			}
-
-			command += ' ';
-			command += jobdata.event.emailPureAddresses(" "); // locally provided, okay
-		}
-
-		// Add the body and attachments to the message.
-		// (Sendmail requires attachments to have already been included in the message.)
-		err = appendBodyAttachments(message, jobdata);
-		if (!err.isNull())
-		{
-			errmsgs = errors(err);
-			return -1;
-		}
-
-		// Execute the send command
-		FILE* fd = popen(command.toLocal8Bit(), "w");
-		if (!fd)
-		{
-			kError() << "Unable to open a pipe to" << command;
-			errmsgs = errors();
-			return -1;
-		}
-		QByteArray text = message.encodedContent();
-		fwrite(text, text.length(), 1, fd);
-		pclose(fd);
-
-#ifdef KMAIL_SUPPORTED
-		if (Preferences::emailCopyToKMail())
-		{
-			// Create a copy of the sent email in KMail's 'Sent-mail' folder
-			err = addToKMailFolder(jobdata, "sent-mail", true);
-			if (!err.isNull())
-				errmsgs = errors(err, COPY_ERROR);    // not a fatal error - continue
-		}
-#endif
-
-		if (jobdata.allowNotify)
-			notifyQueued(jobdata.event);
-		return 1;
 	}
 	else
 	{
-		// Use KDE to send the message
 		kDebug() << "Sending via KDE";
-		MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
-		MailTransport::Transport* transport = manager->transportByName(identity.transport(), true);
+		transport = manager->transportByName(identity.transport(), true);
 		if (!transport)
 		{
 			kError() << "No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
 			errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
 			return -1;
 		}
-		int transportId = transport->id();
-		MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
-		if (!mailjob)
-		{
-			kError() << "Failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
-			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
-			return -1;
-		}
-		KMime::Message message;
-		initHeaders(message, jobdata, true);
-		err = appendBodyAttachments(message, jobdata);
-		if (!err.isNull())
-		{
-			errmsgs = errors(err);
-			return -1;
-		}
-		mailjob->setSender(KPIMUtils::extractEmailAddress(jobdata.from));
-		mailjob->setTo(jobdata.event.emailPureAddresses());
-		if (!jobdata.bcc.isEmpty())
-			mailjob->setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
-		mailjob->setData(message.encodedContent());
-		mJobs.enqueue(mailjob);
-		mJobData.enqueue(jobdata);
-		if (mJobs.count() == 1)
-		{
-			// There are no jobs already active or queued, so send now
-			connect(mailjob, SIGNAL(result(KJob*)), instance(), SLOT(slotEmailSent(KJob*)));
-			mailjob->start();
-		}
-		return 0;
 	}
+	int transportId = transport->id();
+	MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
+	if (!mailjob)
+	{
+		kError() << "Failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
+		errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
+		return -1;
+	}
+	KMime::Message message;
+	initHeaders(message, jobdata);
+	err = appendBodyAttachments(message, jobdata);
+	if (!err.isNull())
+	{
+		kError() << "Error compiling message:" << err;
+		errmsgs = errors(err);
+		return -1;
+	}
+	mailjob->setSender(KPIMUtils::extractEmailAddress(jobdata.from));
+	mailjob->setTo(jobdata.event.emailPureAddresses());
+	if (!jobdata.bcc.isEmpty())
+		mailjob->setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
+	mailjob->setData(message.encodedContent());
+	mJobs.enqueue(mailjob);
+	mJobData.enqueue(jobdata);
+	if (mJobs.count() == 1)
+	{
+		// There are no jobs already active or queued, so send now
+		connect(mailjob, SIGNAL(result(KJob*)), instance(), SLOT(slotEmailSent(KJob*)));
+		mailjob->start();
+	}
+	return 0;
 }
 
 /******************************************************************************
@@ -283,13 +223,16 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 */
 void KAMail::slotEmailSent(KJob* job)
 {
+	bool fail = false;
+	bool copyerr = false;
 	QStringList errmsgs;
-	JobData jobdata;
 	if (job->error())
 	{
-		kError() << "Failed:" << job->error();
+		kError() << "Failed:" << job->errorString();
 		errmsgs = errors(job->errorString(), SEND_ERROR);
+		fail = true;
 	}
+	JobData jobdata;
 	if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != mJobs.head())
 	{
 		// The queue has been corrupted, so we can't locate the job's data
@@ -306,9 +249,27 @@ void KAMail::slotEmailSent(KJob* job)
 	}
 	mJobs.dequeue();
 	jobdata = mJobData.dequeue();
+
+#ifdef KMAIL_SUPPORTED
+	if (Preferences::emailClient() == Preferences::sendmail
+	&&  Preferences::emailCopyToKMail())
+	{
+		// Create a copy of the sent email in KMail's 'sent-mail' folder,
+		// or if there was a send error, in KMail's 'outbox' folder.
+		QString err = addToKMailFolder(jobdata, (fail ? "outbox" : "sent-mail"), true);
+		if (!err.isNull())
+		{
+			kWarning() << "Error copying to KMail:" << err;
+			errmsgs << errors(err, COPY_ERROR);    // not a fatal error - continue
+			if (!fail)
+				copyerr = true;
+		}
+	}
+#endif
+
 	if (jobdata.allowNotify)
 		notifyQueued(jobdata.event);
-	theApp()->emailSent(jobdata, errmsgs);
+	theApp()->emailSent(jobdata, errmsgs, copyerr);
 	if (!mJobs.isEmpty())
 	{
 		// Send the next queued email
@@ -331,7 +292,7 @@ QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKm
 	if (err.isNull())
 	{
 		KMime::Message message;
-		initHeaders(message, data, true);
+		initHeaders(message, data);
 		err = appendBodyAttachments(message, data);
 		if (!err.isNull())
 			return err;
@@ -343,14 +304,15 @@ QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKm
 			kError() << folder << ": Unable to open a temporary mail file";
 			return QString("");
 		}
-		QTextStream stream(&tmpFile);
-		stream << message.encodedContent();
-		stream.flush();
+		tmpFile.setTextModeEnabled(true);
+		tmpFile.write(message.encodedContent());
 		if (tmpFile.error() != QFile::NoError)
 		{
 			kError() << folder << ": Error" << tmpFile.errorString() << " writing to temporary mail file";
+			tmpFile.close();
 			return QString("");
 		}
+		tmpFile.close();
 
 		// Notify KMail of the message in the temporary file
 		org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
@@ -371,14 +333,11 @@ QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKm
 /******************************************************************************
 * Create the headers part of the email.
 */
-void initHeaders(KMime::Message& message, KAMail::JobData& data, bool dateId)
+void initHeaders(KMime::Message& message, KAMail::JobData& data)
 {
-	if (dateId)
-	{
-		KMime::Headers::Date* date = new KMime::Headers::Date;
-		date->setDateTime(KDateTime::currentDateTime(Preferences::timeZone()));
-		message.setHeader(date);
-	}
+	KMime::Headers::Date* date = new KMime::Headers::Date;
+	date->setDateTime(KDateTime::currentDateTime(Preferences::timeZone()));
+	message.setHeader(date);
 
 	KMime::Headers::From* from = new KMime::Headers::From;
 	from->fromUnicodeString(data.from, autoDetectCharset(data.from));
@@ -727,7 +686,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 #endif
 
 //-----------------------------------------------------------------------------
-// Based on KMMsgBase::autoDetectCharset().
+// Based on KMail KMMsgBase::autoDetectCharset().
 QByteArray autoDetectCharset(const QString& text)
 {
     static QList<QByteArray> charsets;
@@ -765,7 +724,7 @@ QByteArray autoDetectCharset(const QString& text)
 }
 
 //-----------------------------------------------------------------------------
-// Based on KMMsgBase::codecForName().
+// Based on KMail KMMsgBase::codecForName().
 const QTextCodec* codecForName(const QByteArray& str)
 {
     if (str.isEmpty())
@@ -776,7 +735,10 @@ const QTextCodec* codecForName(const QByteArray& str)
 }
 
 /******************************************************************************
-* Parse a string containing multiple addresses, separated by comma or semicolon.
+* Parse a string containing multiple addresses, separated by comma or semicolon,
+* while retaining Unicode name parts.
+* Note that this only needs to parse strings input into KAlarm, so it only
+* needs to accept the common syntax for email addresses, not obsolete syntax.
 */
 KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem)
 {
@@ -948,7 +910,7 @@ bool parseUserName( const char* & scursor, const char * const send,
 *  the original scursor on error return.
 */
 bool parseAddress( const char* & scursor, const char * const send,
-		   Address & result, bool isCRLF ) {
+                   Address & result, bool isCRLF ) {
   // address       := mailbox / group
 
   eatCFWS( scursor, send, isCRLF );
@@ -992,33 +954,6 @@ bool parseAddress( const char* & scursor, const char * const send,
   }
 
   result = maybeAddress;
-  return true;
-}
-
-/******************************************************************************
-*  Modified function.
-*  Allow either ',' or ';' to be used as an email address separator.
-*/
-bool parseAddressList( const char* & scursor, const char * const send,
-		       QList<Address> & result, bool isCRLF ) {
-  while ( scursor != send ) {
-    eatCFWS( scursor, send, isCRLF );
-    // end of header: this is OK.
-    if ( scursor == send ) return true;
-    // empty entry: ignore:
-    if ( *scursor == ',' || *scursor == ';' ) { scursor++; continue; }   // KAlarm: allow ';' as address separator
-
-    // parse one entry
-    Address maybeAddress;
-    if ( !parseAddress( scursor, send, maybeAddress, isCRLF ) ) return false;
-    result.append( maybeAddress );
-
-    eatCFWS( scursor, send, isCRLF );
-    // end of header: this is OK.
-    if ( scursor == send ) return true;
-    // comma separating entries: eat it.
-    if ( *scursor == ',' || *scursor == ';' ) scursor++;   // KAlarm: allow ';' as address separator
-  }
   return true;
 }
 

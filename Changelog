@@ -1,7 +1,7 @@
 KAlarm Change Log
 
-=== Version 2.4.2 --- 20 January 2010 ===
-- Fix non-Latin characters being illegible in emails (when sent via KMail only).
+=== Version 2.4.2 --- 21 January 2010 ===
+- Fix non-Latin characters being illegible in emails.
 
 === Version 2.4.1 (KDE 4.4.0 RC1) --- 8 December 2009 ===
 - Fix date-only recurring alarms triggering repeatedly at high frequency.
