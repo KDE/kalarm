@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,10 @@ class KUrl;
 class KJob;
 class EmailAddressList;
 namespace MailTransport  { class TransportJob; }
-namespace KMime { namespace Types { struct Address; } }
+namespace KMime {
+	namespace Types { struct Address; }
+	class Message;
+}
 
 
 class KAMail : public QObject
@@ -48,7 +51,7 @@ class KAMail : public QObject
 			      : event(e), alarm(a), reschedule(resched), allowNotify(notify), queued(false) {}
 			KAEvent  event;
 			KAAlarm  alarm;
-			QString  from, bcc;
+			QString  from, bcc, subject;
 			bool     reschedule;
 			bool     allowNotify;
 			bool     queued;
@@ -73,11 +76,10 @@ class KAMail : public QObject
 	private:
 		KAMail() {}
 		static KAMail*     instance();
-		static QString     appendBodyAttachments(QString& message, const KAEvent&);
+		static QString     appendBodyAttachments(KMime::Message& message, JobData&);
 #ifdef KMAIL_SUPPORTED
-		static QString     addToKMailFolder(const JobData&, const char* folder, bool checkKmailRunning);
+		static QString     addToKMailFolder(JobData&, const char* folder, bool checkKmailRunning);
 #endif
-		static QString     convertAddress(KMime::Types::Address, EmailAddressList&);
 		static void        notifyQueued(const KAEvent&);
 		enum ErrType { SEND_FAIL, SEND_ERROR, COPY_ERROR };
 		static QStringList errors(const QString& error = QString(), ErrType = SEND_FAIL);

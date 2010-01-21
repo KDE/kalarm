@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,18 +27,16 @@
 #include "mainwindow.h"
 #include "preferences.h"
 
-#include <stdlib.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <pwd.h>
-
-#include <QFile>
-#include <QList>
-#include <QRegExp>
-#include <QByteArray>
-#include <QTextStream>
-#include <QtDBus/QtDBus>
+#include <kpimidentities/identitymanager.h>
+#include <kpimidentities/identity.h>
+#include <kpimutils/email.h>
+#include <mailtransport/transportmanager.h>
+#include <mailtransport/transport.h>
+#include <mailtransport/transportjob.h>
+#include <kcal/person.h>
+#include <kmime/kmime_header_parsing.h>
+#include <kmime/kmime_headers.h>
+#include <kmime/kmime_message.h>
 
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
@@ -49,18 +47,25 @@
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 #include <kemailsettings.h>
-#include <kdebug.h>
 #include <k3resolver.h>
+#include <kcodecs.h>
+#include <kcharsets.h>
+#include <kascii.h>
+#include <kdebug.h>
 
-#include <kpimidentities/identitymanager.h>
-#include <kpimidentities/identity.h>
-#include <kpimutils/email.h>
-#include <mailtransport/transportmanager.h>
-#include <mailtransport/transport.h>
-#include <mailtransport/transportjob.h>
-#include <kcal/person.h>
+#include <QFile>
+#include <QList>
+#include <QRegExp>
+#include <QByteArray>
+#include <QTextStream>
+#include <QTextCodec>
+#include <QtDBus/QtDBus>
 
-#include <kmime/kmime_header_parsing.h>
+#include <stdlib.h>
+#include <time.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <pwd.h>
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
@@ -68,7 +73,6 @@
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
 static const char* KMAIL_DBUS_PATH    = "/KMail";
 #endif
-
 
 namespace HeaderParsing
 {
@@ -78,8 +82,11 @@ bool parseAddressList( const char* & scursor, const char * const send,
                        QList<KMime::Types::Address> & result, bool isCRLF=false );
 }
 
+static void initHeaders(KMime::Message&, KAMail::JobData&, bool dateId);
 
-static QString initHeaders(const KAMail::JobData&, bool dateId);
+static KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
+static QByteArray autoDetectCharset(const QString& text);
+static const QTextCodec* codecForName(const QByteArray& str);
 
 QString KAMail::i18n_NeedFromEmailAddress()
 { return i18nc("@info/plain", "A 'From' email address must be configured in order to execute email alarms."); }
@@ -157,18 +164,20 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 	if (Preferences::emailClient() == Preferences::sendmail)
 	{
 		// Use sendmail to send the message
-		QString textComplete;
+		KMime::Message message;
 		QString command = KStandardDirs::findExe(QLatin1String("sendmail"),
 		                                         QLatin1String("/sbin:/usr/sbin:/usr/lib"));
 		if (!command.isNull())
 		{
+			kDebug() << "Sending via sendmail";
 			command += QLatin1String(" -f ");
 			command += KPIMUtils::extractEmailAddress(jobdata.from);
 			command += QLatin1String(" -oi -t ");
-			textComplete = initHeaders(jobdata, false);
+			initHeaders(message, jobdata, false);
 		}
 		else
 		{
+			kDebug() << "Sending via mail";
 			command = KStandardDirs::findExe(QLatin1String("mail"));
 			if (command.isNull())
 			{
@@ -191,7 +200,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 
 		// Add the body and attachments to the message.
 		// (Sendmail requires attachments to have already been included in the message.)
-		err = appendBodyAttachments(textComplete, jobdata.event);
+		err = appendBodyAttachments(message, jobdata);
 		if (!err.isNull())
 		{
 			errmsgs = errors(err);
@@ -206,7 +215,8 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			errmsgs = errors();
 			return -1;
 		}
-		fwrite(textComplete.toLocal8Bit(), textComplete.length(), 1, fd);
+		QByteArray text = message.encodedContent();
+		fwrite(text, text.length(), 1, fd);
 		pclose(fd);
 
 #ifdef KMAIL_SUPPORTED
@@ -226,6 +236,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 	else
 	{
 		// Use KDE to send the message
+		kDebug() << "Sending via KDE";
 		MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
 		MailTransport::Transport* transport = manager->transportByName(identity.transport(), true);
 		if (!transport)
@@ -242,9 +253,9 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
 			return -1;
 		}
-		QString message = initHeaders(jobdata, true);
-		message += jobdata.event.message();
-		err = appendBodyAttachments(message, jobdata.event);
+		KMime::Message message;
+		initHeaders(message, jobdata, true);
+		err = appendBodyAttachments(message, jobdata);
 		if (!err.isNull())
 		{
 			errmsgs = errors(err);
@@ -254,7 +265,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		mailjob->setTo(jobdata.event.emailPureAddresses());
 		if (!jobdata.bcc.isEmpty())
 			mailjob->setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
-		mailjob->setData(message.toLocal8Bit());
+		mailjob->setData(message.encodedContent());
 		mJobs.enqueue(mailjob);
 		mJobData.enqueue(jobdata);
 		if (mJobs.count() == 1)
@@ -312,15 +323,16 @@ void KAMail::slotEmailSent(KJob* job)
 * Reply = reason for failure (which may be the empty string)
 *       = null string if success.
 */
-QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool checkKmailRunning)
+QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKmailRunning)
 {
 	QString err;
 	if (checkKmailRunning)
 		err = KAlarm::runKMail(true);
 	if (err.isNull())
 	{
-		QString message = initHeaders(data, true);
-		err = appendBodyAttachments(message, data.event);
+		KMime::Message message;
+		initHeaders(message, data, true);
+		err = appendBodyAttachments(message, data);
 		if (!err.isNull())
 			return err;
 
@@ -332,7 +344,7 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 			return QString("");
 		}
 		QTextStream stream(&tmpFile);
-		stream << message;
+		stream << message.encodedContent();
 		stream.flush();
 		if (tmpFile.error() != QFile::NoError)
 		{
@@ -359,63 +371,77 @@ QString KAMail::addToKMailFolder(const JobData& data, const char* folder, bool c
 /******************************************************************************
 * Create the headers part of the email.
 */
-QString initHeaders(const KAMail::JobData& data, bool dateId)
+void initHeaders(KMime::Message& message, KAMail::JobData& data, bool dateId)
 {
-	QString message;
 	if (dateId)
 	{
-		KDateTime now = KDateTime::currentUtcDateTime();
-		QString from = data.from;
-		from.remove(QRegExp("^.*<")).remove(QRegExp(">.*$"));
-		message = QLatin1String("Date: ");
-		message += now.toTimeSpec(Preferences::timeZone()).toString(KDateTime::RFCDateDay);
-		message += QString::fromLatin1("\nMessage-Id: <%1.%2.%3>\n").arg(now.toTime_t()).arg(now.time().msec()).arg(from);
+		KMime::Headers::Date* date = new KMime::Headers::Date;
+		date->setDateTime(KDateTime::currentDateTime(Preferences::timeZone()));
+		message.setHeader(date);
 	}
-	message += QLatin1String("From: ") + data.from;
-	message += QLatin1String("\nTo: ") + data.event.emailAddresses(", ");
+
+	KMime::Headers::From* from = new KMime::Headers::From;
+	from->fromUnicodeString(data.from, autoDetectCharset(data.from));
+	message.setHeader(from);
+
+	KMime::Headers::To* to = new KMime::Headers::To;
+	EmailAddressList toList = data.event.emailAddresses();
+	for (int i = 0, count = toList.count();  i < count;  ++i)
+		to->addAddress(toList[i].email().toLatin1(), toList[i].name());
+	message.setHeader(to);
+
 	if (!data.bcc.isEmpty())
-		message += QLatin1String("\nBcc: ") + data.bcc;
-	message += QLatin1String("\nSubject: ") + data.event.emailSubject();
-	message += QString::fromLatin1("\nX-Mailer: %1/" KALARM_VERSION).arg(KGlobal::mainComponent().aboutData()->programName());
-	return message;
+	{
+		KMime::Headers::Bcc* bcc = new KMime::Headers::Bcc;
+		bcc->fromUnicodeString(data.bcc, autoDetectCharset(data.bcc));
+		message.setHeader(bcc);
+	}
+
+	KMime::Headers::Subject* subject = new KMime::Headers::Subject;
+	QString str = data.event.emailSubject();
+	subject->fromUnicodeString(str, autoDetectCharset(str));
+	message.setHeader(subject);
+
+	KMime::Headers::UserAgent* agent = new KMime::Headers::UserAgent;
+	agent->fromUnicodeString(KGlobal::mainComponent().aboutData()->programName() + "/" KALARM_VERSION, "us-ascii");
+	message.setHeader(agent);
+
+	KMime::Headers::MessageID* id = new KMime::Headers::MessageID;
+	id->generate(data.from.mid(data.from.indexOf('@') + 1).toLatin1());
+	message.setHeader(id);
 }
 
 /******************************************************************************
 * Append the body and attachments to the email text.
 * Reply = reason for error
-*       = 0 if successful.
+*       = empty string if successful.
 */
-QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
+QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 {
-	static const char* textMimeTypes[] = {
-		"application/x-sh", "application/x-csh", "application/x-shellscript",
-		"application/x-nawk", "application/x-gawk", "application/x-awk",
-		"application/x-perl", "application/x-desktop",
-		0
-	};
-	QStringList attachments = event.emailAttachments();
+	QStringList attachments = data.event.emailAttachments();
 	if (!attachments.count())
 	{
 		// There are no attachments, so simply append the message body
-		message += "\n\n";
-		message += event.message();
+		message.contentType()->setMimeType("text/plain");
+		message.contentType()->setCharset("utf-8");
+		message.fromUnicodeString(data.event.message());
+		message.assemble();
 	}
 	else
 	{
 		// There are attachments, so the message must be in MIME format
-		// Create a boundary string
-		time_t timenow;
-		time(&timenow);
-		QString boundary;
-		boundary.sprintf("------------_%lu_-%lx=", 2*timenow, timenow);
-		message += QLatin1String("\nMIME-Version: 1.0");
-		message += QString::fromLatin1("\nContent-Type: multipart/mixed;\n  boundary=\"%1\"\n").arg(boundary);
+        	message.contentType()->setMimeType("multipart/mixed");
+		message.contentType()->setBoundary(KMime::multiPartBoundary());
 
-		if (!event.message().isEmpty())
+		if (!data.event.message().isEmpty())
 		{
 			// There is a message body
-			message += QString::fromLatin1("\n--%1\nContent-Type: text/plain\nContent-Transfer-Encoding: 8bit\n\n").arg(boundary);
-			message += event.message();
+			KMime::Content* content = new KMime::Content();
+			content->contentType()->setMimeType("text/plain");
+			content->contentType()->setCharset("utf-8");
+			content->fromUnicodeString(data.event.message());
+			content->assemble();
+			message.addContent(content);
 		}
 
 		// Append each attachment in turn
@@ -436,20 +462,6 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 				return attachError;
 			}
 
-			// Check if the attachment is a text file
-			QString mimeType = fi.mimetype();
-			bool text = mimeType.startsWith(QLatin1String("text/"));
-			if (!text)
-			{
-				for (int i = 0;  !text && textMimeTypes[i];  ++i)
-					text = (mimeType == textMimeTypes[i]);
-			}
-
-			message += QString::fromLatin1("\n--%1").arg(boundary);
-			message += QString::fromLatin1("\nContent-Type: %2; name=\"%3\"").arg(mimeType).arg(fi.text());
-			message += QString::fromLatin1("\nContent-Transfer-Encoding: %1").arg(QLatin1String(text ? "8bit" : "BASE64"));
-			message += QString::fromLatin1("\nContent-Disposition: attachment; filename=\"%4\"\n\n").arg(fi.text());
-
 			// Read the file contents
 			QString tmpFile;
 			if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
@@ -469,20 +481,30 @@ QString KAMail::appendBodyAttachments(QString& message, const KAEvent& event)
 				kDebug() << "Read error:" << attachment;
 				atterror = true;
 			}
-			else if (text)
-			{
-				// Text attachment doesn't need conversion
-				message += QString::fromLatin1(contents);
-			}
-			else
-			{
-				// Convert the attachment to BASE64 encoding
-				message += QString::fromLatin1(contents.toBase64());
-			}
+
+			QByteArray coded = KCodecs::base64Encode(contents, true);
+			KMime::Content* content = new KMime::Content();
+			content = new KMime::Content();
+			content->setBody(coded + "\n\n");
+
+			// Set the content type
+			KMimeType::Ptr type = KMimeType::findByUrl(url);
+			KMime::Headers::ContentType* ctype = new KMime::Headers::ContentType(content);
+			ctype->fromUnicodeString(type->name(), autoDetectCharset(type->name()));
+			ctype->setName(attachment, "local");
+			content->setHeader(ctype);
+
+			// Set the encoding
+			KMime::Headers::ContentTransferEncoding* cte = new KMime::Headers::ContentTransferEncoding(content);
+			cte->setEncoding(KMime::Headers::CEbase64);
+			cte->setDecoded(false);
+			content->setHeader(cte);
+			content->assemble();
+			message.addContent(content);
 			if (atterror)
 				return attachError;
 		}
-		message += QString::fromLatin1("\n--%1--\n.\n").arg(boundary);
+		message.assemble();
 	}
 	return QString();
 }
@@ -531,89 +553,14 @@ QString KAMail::controlCentreAddress()
 QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 {
 	list.clear();
-	QByteArray addrs = items.toLocal8Bit();
-	const char* ad = static_cast<const char*>(addrs);
-
-	// parse an address-list
-	QList<KMime::Types::Address> maybeAddressList;
-	if (!HeaderParsing::parseAddressList(ad, ad + addrs.length(), maybeAddressList))
-		return QString::fromLocal8Bit(ad);    // return the address in error
-
-	// extract the mailboxes and complain if there are groups
-	for (int i = 0, end = maybeAddressList.count();  i < end;  ++i)
-	{
-		QString bad = convertAddress(maybeAddressList[i], list);
-		if (!bad.isEmpty())
-			return bad;
-	}
+	QString invalidItem;
+	KMime::Types::Mailbox::List mailboxes = parseAddresses(items, invalidItem);
+	if (!invalidItem.isEmpty())
+		return invalidItem;
+	for (int i = 0, count = mailboxes.count();  i < count;  ++i)
+		list += KCal::Person(mailboxes[i].name(), QString::fromLatin1(mailboxes[i].address()));
 	return QString();
 }
-
-#if 0
-/******************************************************************************
-*  Parse an email address, optionally containing display name, entered by the
-*  user, and append it to the specified list.
-*  Reply = the invalid item if error, else empty string.
-*/
-QString KAMail::convertAddress(const QString& item, EmailAddressList& list)
-{
-	QByteArray addr = item.toLocal8Bit();
-	const char* ad = static_cast<const char*>(addr);
-	KMime::Types::Address maybeAddress;
-	if (!HeaderParsing::parseAddress(ad, ad + addr.length(), maybeAddress))
-		return item;     // error
-	return convertAddress(maybeAddress, list);
-}
-#endif
-
-/******************************************************************************
-*  Convert a single KMime::Types address to a KCal::Person instance and append
-*  it to the specified list.
-*/
-QString KAMail::convertAddress(KMime::Types::Address addr, EmailAddressList& list)
-{
-	if (!addr.displayName.isEmpty())
-	{
-		kDebug() << "Mailbox groups not allowed! Name:" << addr.displayName;
-		return addr.displayName;
-	}
-	const QList<KMime::Types::Mailbox>& mblist = addr.mailboxList;
-	for (int i = 0, end = mblist.count();  i < end;  ++i)
-	{
-		QString addrPart = mblist[i].addrSpec().localPart;
-		if (!mblist[i].addrSpec().domain.isEmpty())
-		{
-			addrPart += QLatin1Char('@');
-			addrPart += mblist[i].addrSpec().domain;
-		}
-		list += KCal::Person(mblist[i].name(), addrPart);
-	}
-	return QString();
-}
-
-/*
-QString KAMail::convertAddresses(const QString& items, QStringList& list)
-{
-	EmailAddressList addrs;
-	QString item = convertAddresses(items, addrs);
-	if (!item.isEmpty())
-		return item;
-	for (EmailAddressList::Iterator ad = addrs.begin();  ad != addrs.end();  ++ad)
-	{
-		item = (*ad).fullName().toLocal8Bit();
-		switch (checkAddress(item))
-		{
-			case 1:      // OK
-				list += item;
-				break;
-			case 0:      // null address
-				break;
-			case -1:     // invalid address
-				return item;
-		}
-	}
-	return QString();
-}*/
 
 /******************************************************************************
 *  Check the validity of an email address.
@@ -699,43 +646,6 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 	return QString();
 }
 
-#if 0
-/******************************************************************************
-*  Convert a comma or semicolon delimited list of attachments into a
-*  KUrl::List. The items are checked for validity.
-*  Reply = the invalid item if error, else empty string.
-*/
-QString KAMail::convertAttachments(const QString& items, KUrl::List& list)
-{
-	KUrl url;
-	list.clear();
-	QByteArray addrs = items.toLocal8Bit();
-	int length = items.length();
-	for (int next = 0;  next < length;  )
-	{
-		// Find the first delimiter character (, or ;)
-		int i = items.indexOf(QLatin1Char(','), next);
-		if (i < 0)
-			i = items.length();
-		int sc = items.indexOf(QLatin1Char(';'), next);
-		if (sc < 0)
-			sc = items.length();
-		if (sc < i)
-			i = sc;
-		QString item = items.mid(next, i - next);
-		switch (checkAttachment(item, &url))
-		{
-			case 1:   list += url;  break;
-			case 0:   break;          // empty attachment name
-			case -1:
-			default:  return item;    // error
-		}
-		next = i + 1;
-	}
-	return QString();
-}
-#endif
-
 /******************************************************************************
 *  Check for the existence of the attachment file.
 *  If non-null, '*url' receives the KUrl of the attachment.
@@ -786,6 +696,7 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 		case SEND_ERROR:  error1 = i18nc("@info", "Error sending email");  break;
 		case COPY_ERROR:  error1 = i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());  break;
 	}
+kDebug()<<err<<","<<error1;
 	if (err.isEmpty())
 		return QStringList(error1);
 	QStringList errs(QString::fromLatin1("%1:").arg(error1));
@@ -815,10 +726,179 @@ QString KAMail::getMailBody(quint32 serialNumber)
 }
 #endif
 
+//-----------------------------------------------------------------------------
+// Based on KMMsgBase::autoDetectCharset().
+QByteArray autoDetectCharset(const QString& text)
+{
+    static QList<QByteArray> charsets;
+    if (charsets.isEmpty())
+        charsets << "us-ascii" << "iso-8859-1" << "locale" << "utf-8";
+
+    for (int i = 0, count = charsets.count();  i < count;  ++i)
+    {
+        QByteArray encoding = charsets[i];
+        if (encoding == "locale")
+        {
+            encoding = QTextCodec::codecForName(KGlobal::locale()->encoding())->name();
+            kAsciiToLower(encoding.data());
+        }
+        if (text.isEmpty())
+            return encoding;
+        if (encoding == "us-ascii")
+        {
+            if (KMime::isUsAscii(text))
+                return encoding;
+        }
+        else
+        {
+            const QTextCodec *codec = codecForName(encoding);
+            if (!codec)
+                kDebug() <<"Auto-Charset: Something is wrong and I can not get a codec. [" << encoding <<"]";
+            else
+            {
+                 if (codec->canEncode(text))
+                     return encoding;
+            }
+        }
+    }
+    return 0;
+}
+
+//-----------------------------------------------------------------------------
+// Based on KMMsgBase::codecForName().
+const QTextCodec* codecForName(const QByteArray& str)
+{
+    if (str.isEmpty())
+        return 0;
+    QByteArray codec = str;
+    kAsciiToLower(codec.data());
+    return KGlobal::charsets()->codecForName(codec);
+}
+
+/******************************************************************************
+* Parse a string containing multiple addresses, separated by comma or semicolon.
+*/
+KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem)
+{
+    KMime::Types::Mailbox::List list;
+    int state     = 0;
+    int start     = 0;  // start of this item
+    int endName   = 0;  // character after end of name
+    int startAddr = 0;  // start of address
+    int endAddr   = 0;  // character after end of address
+    char lastch = '\0';
+    bool ended    = false;   // found the end of the item
+    for (int i = 0, count = text.length();  i <= count;  ++i)
+    {
+        if (i == count)
+            ended = true;
+        else
+        {
+            char ch = text[i].toLatin1();
+            switch (state)
+            {
+                case 0:   // looking for start of item
+                    if (ch == ' ' || ch == '\t')
+                        continue;
+                    start = i;
+                    state = (ch == '"') ? 10 : 1;
+                    break;
+                case 1:   // looking for start of address, or end of item
+                    switch (ch)
+                    {
+                        case '<':
+                            startAddr = i + 1;
+                            state = 2;
+                            break;
+                        case ',':
+                        case ';':
+                            ended = true;
+                            break;
+                        case '"':
+                            lastch = ch;
+                            state = 0x10;
+                            break;
+                        case ' ':
+                            break;
+                        default:
+                            endName = i + 1;
+                            break;
+                    }
+                    break;
+                case 2:   // looking for '>' at end of address
+                    if (ch == '>')
+                    {
+                        endAddr = i;
+                        state = 3;
+                    }
+                    break;
+                case 3:   // looking for item separator
+                    if (ch == ','  ||  ch == ';')
+                        ended = true;
+                    else if (ch != ' ')
+                    {
+                        invalidItem = text.mid(start);
+                        return KMime::Types::Mailbox::List();
+                    }
+                    break;
+                case 10:   // looking for closing quote
+                    if (ch == '"'  &&  lastch != '\\')
+                    {
+                        ++start;   // remove opening quote from name
+                        endName = i;
+                        state = 11;
+                    }
+                    lastch = ch;
+                    break;
+                case 11:   // looking for '<'
+                    if (ch == '<')
+                    {
+                        startAddr = i + 1;
+                        state = 2;
+                    }
+                    break;
+            }
+        }
+        if (ended)
+        {
+            // Found the end of the item - add it to the list
+            if (!startAddr)
+            {
+                startAddr = start;
+                endAddr   = endName;
+                endName   = 0;
+            }
+            QString addr = text.mid(startAddr, endAddr - startAddr);
+            KMime::Types::Mailbox mbox;
+            mbox.fromUnicodeString(addr);
+            if (mbox.address().isEmpty())
+            {
+                invalidItem = text.mid(start, endAddr - start);
+                return KMime::Types::Mailbox::List();
+            }
+            if (endName)
+            {
+                int len = endName - start;
+                QString name = text.mid(start, endName - start);
+                if (name[0] == '"'  &&  name[len - 1] == '"')
+                    name = name.mid(1, len - 2);
+                mbox.setName(name);
+            }
+            list.append(mbox);
+
+            endName = startAddr = endAddr = 0;
+            start = i + 1;
+            state = 0;
+            ended = false;
+        }
+    }
+    return list;
+}
+
 /*=============================================================================
 =  HeaderParsing :  modified and additional functions.
 =  The following functions are modified from, or additional to, those in
-=  libkdenetwork kmime_header_parsing.cpp.
+=  libkmime kmime_header_parsing.cpp.
 =============================================================================*/
 
 namespace HeaderParsing
@@ -872,7 +952,8 @@ bool parseAddress( const char* & scursor, const char * const send,
   // address       := mailbox / group
 
   eatCFWS( scursor, send, isCRLF );
-  if ( scursor == send ) return false;
+  if ( scursor == send )
+    return false;
 
   // first try if it's a single mailbox:
   Mailbox maybeMailbox;
