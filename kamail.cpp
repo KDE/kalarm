@@ -505,19 +505,19 @@ QString KAMail::controlCentreAddress()
 }
 
 /******************************************************************************
-*  Parse a list of email addresses, optionally containing display names,
-*  entered by the user.
-*  Reply = the invalid item if error, else empty string.
+* Parse a list of email addresses, optionally containing display names,
+* entered by the user.
+* Reply = the invalid item if error, else empty string.
 */
 QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 {
 	list.clear();
 	QString invalidItem;
-	KMime::Types::Mailbox::List mailboxes = parseAddresses(items, invalidItem);
+	const KMime::Types::Mailbox::List mailboxes = parseAddresses(items, invalidItem);
 	if (!invalidItem.isEmpty())
 		return invalidItem;
 	for (int i = 0, count = mailboxes.count();  i < count;  ++i)
-		list += KCal::Person(mailboxes[i].name(), QString::fromLatin1(mailboxes[i].address()));
+		list += KCal::Person(mailboxes[i].name(), mailboxes[i].addrSpec().asString());
 	return QString();
 }
 
@@ -775,10 +775,6 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
                         case ',':
                         case ';':
                             ended = true;
-                            break;
-                        case '"':
-                            lastch = ch;
-                            state = 0x10;
                             break;
                         case ' ':
                             break;
