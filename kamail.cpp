@@ -119,13 +119,13 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
-		jobdata.from = identity.fullEmailAddr();
-		if (jobdata.from.isEmpty())
+		if (identity.emailAddr().isEmpty())
 		{
 			kError() << "Identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
 			return -1;
 		}
+		jobdata.from = identity.fullEmailAddr();
 	}
 	if (jobdata.from.isEmpty())
 	{
@@ -655,7 +655,6 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 		case SEND_ERROR:  error1 = i18nc("@info", "Error sending email");  break;
 		case COPY_ERROR:  error1 = i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());  break;
 	}
-kDebug()<<err<<","<<error1;
 	if (err.isEmpty())
 		return QStringList(error1);
 	QStringList errs(QString::fromLatin1("%1:").arg(error1));
