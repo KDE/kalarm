@@ -1,7 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.4.1 --- 8 December 2009 ===
-- Fix date-only alarms triggering repeatedly at high frequency.
+=== Version 2.4.2 --- 21 January 2010 ===
+- Fix non-ASCII characters being corrupted in emails sent by KAlarm.
+
+=== Version 2.4.1 (KDE 4.4.0 RC1) --- 8 December 2009 ===
+- Fix date-only recurring alarms triggering repeatedly at high frequency.
 
 === Version 2.4.0 --- 24 November 2009 ===
 - New audio alarm option, without displaying alarm window.
