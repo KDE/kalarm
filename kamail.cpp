@@ -286,6 +286,7 @@ void KAMail::slotEmailSent(KJob* job)
 */
 QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKmailRunning)
 {
+#if 0 // TODO: port to Akonadi
 	QString err;
 	if (checkKmailRunning)
 		err = KAlarm::runKMail(true);
@@ -327,6 +328,9 @@ QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKm
 	}
 	kError() << folder << ":" << err;
 	return err;
+#else
+  kWarning() << "Disabled code - port to Akonadi";
+#endif
 }
 #endif // KMAIL_SUPPORTED
 
