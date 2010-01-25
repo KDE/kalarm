@@ -736,7 +736,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 	box->setSpacing(KDialog::spacingHint());
 	label = new QLabel(i18nc("@label:spinbox", "KOrganizer event duration:"), box);
 	addAlignedLabel(label);
-	mKOrgEventDuration = new TimeSpinBox(1, 5999, box);
+	mKOrgEventDuration = new TimeSpinBox(0, 5999, box);
 	mKOrgEventDuration->setMinimumSize(mKOrgEventDuration->sizeHint());
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the event duration in hours and minutes, for alarms which are copied to KOrganizer.</para>"
