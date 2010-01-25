@@ -330,6 +330,7 @@ QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKm
 	return err;
 #else
   kWarning() << "Disabled code - port to Akonadi";
+  return QString();
 #endif
 }
 #endif // KMAIL_SUPPORTED
