@@ -1505,10 +1505,8 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
 	if (!errmsgs.isEmpty())
 	{
 		// Some error occurred, although the email may have been sent successfully
-		if (copyerr)
-			kDebug() << "Copy error:" << errmsgs[1];
-		else
-			kDebug() << "Failed:" << errmsgs[1];
+		if (errmsgs.count() > 1)
+			kDebug() << (copyerr ? "Copy error:" : "Failed:") << errmsgs[1];
 		MessageWin::showError(data.event, data.alarm.dateTime(), errmsgs);
 	}
 	else if (data.queued)
