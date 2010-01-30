@@ -158,7 +158,16 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 	if (Preferences::emailClient() == Preferences::sendmail)
 	{
 		kDebug() << "Sending via sendmail";
-		transport = manager->transportByName(QLatin1String("sendmail"), false);
+		const QList<MailTransport::Transport*> transports = manager->transports();
+		for (int i = 0, count = transports.count();  i < count;  ++i)
+		{
+			if (transports[i]->type() == MailTransport::Transport::EnumType::Sendmail)
+			{
+				// Use the first sendmail transport found
+				transport = transports[i];
+				break;
+			}
+		}
 		if (!transport)
 		{
 			QString command = KStandardDirs::findExe(QLatin1String("sendmail"),
@@ -185,8 +194,8 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			return -1;
 		}
 	}
-	int transportId = transport->id();
-	MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
+	kDebug() << "Using transport" << transport->name() << ", id=" << transport->id();
+	MailTransport::TransportJob* mailjob = manager->createTransportJob(transport->id());
 	if (!mailjob)
 	{
 		kError() << "Failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
