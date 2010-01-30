@@ -119,13 +119,13 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
-		jobdata.from = identity.fullEmailAddr();
-		if (jobdata.from.isEmpty())
+		if (identity.emailAddr().isEmpty())
 		{
 			kError() << "Identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
 			return -1;
 		}
+		jobdata.from = identity.fullEmailAddr();
 	}
 	if (jobdata.from.isEmpty())
 	{
@@ -158,7 +158,16 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 	if (Preferences::emailClient() == Preferences::sendmail)
 	{
 		kDebug() << "Sending via sendmail";
-		transport = manager->transportByName(QLatin1String("sendmail"), false);
+		const QList<MailTransport::Transport*> transports = manager->transports();
+		for (int i = 0, count = transports.count();  i < count;  ++i)
+		{
+			if (transports[i]->type() == MailTransport::Transport::EnumType::Sendmail)
+			{
+				// Use the first sendmail transport found
+				transport = transports[i];
+				break;
+			}
+		}
 		if (!transport)
 		{
 			QString command = KStandardDirs::findExe(QLatin1String("sendmail"),
@@ -185,8 +194,8 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			return -1;
 		}
 	}
-	int transportId = transport->id();
-	MailTransport::TransportJob* mailjob = manager->createTransportJob(transportId);
+	kDebug() << "Using transport" << transport->name() << ", id=" << transport->id();
+	MailTransport::TransportJob* mailjob = manager->createTransportJob(transport->id());
 	if (!mailjob)
 	{
 		kError() << "Failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
@@ -660,7 +669,6 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 		case SEND_ERROR:  error1 = i18nc("@info", "Error sending email");  break;
 		case COPY_ERROR:  error1 = i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());  break;
 	}
-kDebug()<<err<<","<<error1;
 	if (err.isEmpty())
 		return QStringList(error1);
 	QStringList errs(QString::fromLatin1("%1:").arg(error1));
