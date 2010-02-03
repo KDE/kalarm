@@ -31,7 +31,7 @@
 class KUrl;
 class KJob;
 class EmailAddressList;
-namespace MailTransport  { class TransportJob; }
+namespace MailTransport  { class MessageQueueJob; }
 namespace KMime {
 	namespace Types { struct Address; }
 	class Message;
@@ -77,16 +77,13 @@ class KAMail : public QObject
 		KAMail() {}
 		static KAMail*     instance();
 		static QString     appendBodyAttachments(KMime::Message& message, JobData&);
-#ifdef KMAIL_SUPPORTED
-		static QString     addToKMailFolder(JobData&, const char* folder, bool checkKmailRunning);
-#endif
 		static void        notifyQueued(const KAEvent&);
-		enum ErrType { SEND_FAIL, SEND_ERROR, COPY_ERROR };
+		enum ErrType { SEND_FAIL, SEND_ERROR };
 		static QStringList errors(const QString& error = QString(), ErrType = SEND_FAIL);
 
 		static KAMail*     mInstance;
-		static QQueue<MailTransport::TransportJob*> mJobs;
-		static QQueue<JobData>                      mJobData;
+		static QQueue<MailTransport::MessageQueueJob*> mJobs;
+		static QQueue<JobData>                         mJobData;
 };
 
 #endif // KAMAIL_H

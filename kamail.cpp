@@ -32,7 +32,7 @@
 #include <kpimutils/email.h>
 #include <mailtransport/transportmanager.h>
 #include <mailtransport/transport.h>
-#include <mailtransport/transportjob.h>
+#include <mailtransport/messagequeuejob.h>
 #include <kcal/person.h>
 #include <kmime/kmime_header_parsing.h>
 #include <kmime/kmime_headers.h>
@@ -66,7 +66,7 @@
 #include "kmailinterface.h"
 
 static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
-static const char* KMAIL_DBUS_PATH    = "/KMail";
+//static const char* KMAIL_DBUS_PATH    = "/KMail";
 #endif
 
 namespace HeaderParsing
@@ -87,8 +87,8 @@ QString KAMail::i18n_sent_mail()
 { return i18nc("@info/plain KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
 KAMail*                              KAMail::mInstance = 0;   // used only to enable signals/slots to work
-QQueue<MailTransport::TransportJob*> KAMail::mJobs;
-QQueue<KAMail::JobData>              KAMail::mJobData;
+QQueue<MailTransport::MessageQueueJob*> KAMail::mJobs;
+QQueue<KAMail::JobData>                 KAMail::mJobData;
 
 KAMail* KAMail::instance()
 {
@@ -131,12 +131,10 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 	{
 		switch (Preferences::emailFrom())
 		{
-#ifdef KMAIL_SUPPORTED
 			case Preferences::MAIL_FROM_KMAIL:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default email identity found)</para>"
 				                                "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Configuration dialog.</para>"));
 				break;
-#endif
 			case Preferences::MAIL_FROM_SYS_SETTINGS:
 				errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
 				                                "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Configuration dialog.</para>"));
@@ -195,27 +193,28 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 		}
 	}
 	kDebug() << "Using transport" << transport->name() << ", id=" << transport->id();
-	MailTransport::TransportJob* mailjob = manager->createTransportJob(transport->id());
-	if (!mailjob)
-	{
-		kError() << "Failed to create mail transport job for identity" << identity.identityName() << "uoid" << identity.uoid();
-		errmsgs = errors(i18nc("@info", "Unable to create mail transport job"));
-		return -1;
-	}
-	KMime::Message message;
-	initHeaders(message, jobdata);
-	err = appendBodyAttachments(message, jobdata);
+
+	KMime::Message::Ptr message = KMime::Message::Ptr(new KMime::Message);
+	initHeaders(*message, jobdata);
+	err = appendBodyAttachments(*message, jobdata);
 	if (!err.isNull())
 	{
 		kError() << "Error compiling message:" << err;
 		errmsgs = errors(err);
 		return -1;
 	}
-	mailjob->setSender(KPIMUtils::extractEmailAddress(jobdata.from));
-	mailjob->setTo(jobdata.event.emailPureAddresses());
+
+        MailTransport::MessageQueueJob* mailjob = new MailTransport::MessageQueueJob(kapp);
+        mailjob->setMessage(message);
+        mailjob->transportAttribute().setTransportId(transport->id());
+        mailjob->addressAttribute().setFrom(jobdata.from);
+        mailjob->addressAttribute().setTo(static_cast<QStringList>(jobdata.event.emailAddresses()));
 	if (!jobdata.bcc.isEmpty())
-		mailjob->setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
-	mailjob->setData(message.encodedContent());
+        	mailjob->addressAttribute().setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
+        MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
+                         (Preferences::emailClient() == Preferences::kmail || Preferences::emailCopyToKMail())
+                         ? MailTransport::SentBehaviourAttribute::MoveToDefaultSentCollection : MailTransport::SentBehaviourAttribute::Delete;
+        mailjob->sentBehaviourAttribute().setSentBehaviour(sentAction);
 	mJobs.enqueue(mailjob);
 	mJobData.enqueue(jobdata);
 	if (mJobs.count() == 1)
@@ -258,24 +257,6 @@ void KAMail::slotEmailSent(KJob* job)
 	}
 	mJobs.dequeue();
 	jobdata = mJobData.dequeue();
-
-#ifdef KMAIL_SUPPORTED
-	if (Preferences::emailClient() == Preferences::sendmail
-	&&  Preferences::emailCopyToKMail())
-	{
-		// Create a copy of the sent email in KMail's 'sent-mail' folder,
-		// or if there was a send error, in KMail's 'outbox' folder.
-		QString err = addToKMailFolder(jobdata, (fail ? "outbox" : "sent-mail"), true);
-		if (!err.isNull())
-		{
-			kWarning() << "Error copying to KMail:" << err;
-			errmsgs << errors(err, COPY_ERROR);    // not a fatal error - continue
-			if (!fail)
-				copyerr = true;
-		}
-	}
-#endif
-
 	if (jobdata.allowNotify)
 		notifyQueued(jobdata.event);
 	theApp()->emailSent(jobdata, errmsgs, copyerr);
@@ -286,63 +267,6 @@ void KAMail::slotEmailSent(KJob* job)
 		mJobs.head()->start();
 	}
 }
-
-#ifdef KMAIL_SUPPORTED
-/******************************************************************************
-* Add the message to a KMail folder.
-* Reply = reason for failure (which may be the empty string)
-*       = null string if success.
-*/
-QString KAMail::addToKMailFolder(JobData& data, const char* folder, bool checkKmailRunning)
-{
-#if 0 // TODO: port to Akonadi
-	QString err;
-	if (checkKmailRunning)
-		err = KAlarm::runKMail(true);
-	if (err.isNull())
-	{
-		KMime::Message message;
-		initHeaders(message, data);
-		err = appendBodyAttachments(message, data);
-		if (!err.isNull())
-			return err;
-
-		// Write to a temporary file for feeding to KMail
-		KTemporaryFile tmpFile;
-		if (!tmpFile.open())
-		{
-			kError() << folder << ": Unable to open a temporary mail file";
-			return QString("");
-		}
-		tmpFile.setTextModeEnabled(true);
-		tmpFile.write(message.encodedContent());
-		if (tmpFile.error() != QFile::NoError)
-		{
-			kError() << folder << ": Error" << tmpFile.errorString() << " writing to temporary mail file";
-			tmpFile.close();
-			return QString("");
-		}
-		tmpFile.close();
-
-		// Notify KMail of the message in the temporary file
-		org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
-		QDBusReply<int> reply = kmail.dbusAddMessage(QString::fromLatin1(folder), tmpFile.fileName(), QString());
-		if (!reply.isValid())
-			kError() << "D-Bus call failed:" << reply.error().message();
-		else if (reply.value() <= 0)
-			kError() << "D-Bus call returned error code =" << reply.value();
-		else
-			return QString();    // success
-		err = i18nc("@info", "Error calling <application>KMail</application>");
-	}
-	kError() << folder << ":" << err;
-	return err;
-#else
-  kWarning() << "Disabled code - port to Akonadi";
-  return QString();
-#endif
-}
-#endif // KMAIL_SUPPORTED
 
 /******************************************************************************
 * Create the headers part of the email.
@@ -667,7 +591,6 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 	{
 		case SEND_FAIL:  error1 = i18nc("@info", "Failed to send email");  break;
 		case SEND_ERROR:  error1 = i18nc("@info", "Error sending email");  break;
-		case COPY_ERROR:  error1 = i18nc("@info", "Error copying sent email to <application>KMail</application> <resource>%1</resource> folder", i18n_sent_mail());  break;
 	}
 	if (err.isEmpty())
 		return QStringList(error1);
