@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -846,6 +846,7 @@ void EditCommandAlarmDlg::type_showOptions(bool more)
 */
 void EditCommandAlarmDlg::setAction(KAEventData::Action action, const AlarmText& alarmText)
 {
+	Q_UNUSED(action);
 	Q_ASSERT(action == KAEventData::COMMAND);
 	mCmdEdit->setText(alarmText);
 }
@@ -1177,6 +1178,7 @@ void EditEmailAlarmDlg::attachmentEnable()
 */
 void EditEmailAlarmDlg::setAction(KAEventData::Action action, const AlarmText& alarmText)
 {
+	Q_UNUSED(action);
 	Q_ASSERT(action == KAEventData::EMAIL);
 	if (alarmText.isEmail())
 	{
@@ -1505,6 +1507,7 @@ void EditAudioAlarmDlg::setAudio(const QString& file, float volume)
 */
 void EditAudioAlarmDlg::setAction(KAEventData::Action action, const AlarmText& alarmText)
 {
+	Q_UNUSED(action);
 	Q_ASSERT(action == KAEventData::AUDIO);
 	mSoundConfig->set(alarmText.displayText(), Preferences::defaultSoundVolume());
 }
