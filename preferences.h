@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ class Preferences : public PreferencesBase
 		static void             connect(const char* signal, const QObject* receiver, const char* member);
 
 		// Access to settings
+		static void             setAskAutoStart(bool yes);
 		static KTimeZone        timeZone(bool reload = false);
 		static void             setTimeZone(const KTimeZone&);
 		static const KHolidays::HolidayRegion& holidays();
@@ -76,6 +77,7 @@ class Preferences : public PreferencesBase
 
 		// Config file entry names for notification messages
 		static const char*      QUIT_WARN;
+		static const char*      ASK_AUTO_START;
 		static const char*      CONFIRM_ALARM_DELETION;
 		static const char*      EMAIL_QUEUED_NOTIFY;
 

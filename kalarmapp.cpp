@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -124,9 +124,12 @@ KAlarmApp::KAlarmApp()
 	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
 
 	setQuitOnLastWindowClosed(false);
-	Preferences::self()->readConfig();
-	Preferences::setAutoStart(true);
-	Preferences::self()->writeConfig();
+	if (!Preferences::noAutoStart())
+	{
+		Preferences::self()->readConfig();
+		Preferences::setAutoStart(true);
+		Preferences::self()->writeConfig();
+	}
 	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(changeStartOfDay()));
 	Preferences::connect(SIGNAL(feb29TypeChanged(Feb29Type)), this, SLOT(slotFeb29TypeChanged(Feb29Type)));
 	Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(slotShowInSystemTrayChanged()));
@@ -529,6 +532,27 @@ void KAlarmApp::doQuit(QWidget* parent)
 	                                      QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
 	                                     ) != KMessageBox::Yes)
 		return;
+	if (!Preferences::autoStart())
+	{
+		switch (KMessageBox::questionYesNoCancel(parent,
+		                                         i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
+		                                                        "(Note that alarms will be disabled if KAlarm is not started.)"),
+		                                         QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
+		                                         KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START))
+		{
+			case KMessageBox::Yes:
+				Preferences::setAutoStart(true);
+				Preferences::setNoAutoStart(false);
+				break;
+			case KMessageBox::No:
+				Preferences::setNoAutoStart(true);
+				break;
+			case KMessageBox::Cancel:
+			default:
+				return;
+		}
+		Preferences::self()->writeConfig();
+	}
 	quitIf(0, true);
 }
 

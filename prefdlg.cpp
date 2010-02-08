@@ -558,7 +558,12 @@ void MiscPrefTab::apply(bool syncToDisc)
 	}
 	bool b = mAutoStart->isChecked();
 	if (b != Preferences::autoStart())
+	{
 		Preferences::setAutoStart(b);
+		Preferences::setAskAutoStart(true);  // cancel any start-at-login prompt suppression
+		if (b)
+			Preferences::setNoAutoStart(false);
+	}
 	b = mConfirmAlarmDeletion->isChecked();
 	if (b != Preferences::confirmAlarmDeletion())
 		Preferences::setConfirmAlarmDeletion(b);

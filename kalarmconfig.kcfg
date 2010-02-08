@@ -89,6 +89,10 @@
       <whatsthis context="@info:whatsthis">&lt;para>Automatically start &lt;application>KAlarm&lt;/application> whenever you start KDE.&lt;/para>&lt;para>This option should always be checked unless you intend to discontinue use of &lt;application>KAlarm&lt;/application>.&lt;/para></whatsthis>
       <default>false</default>
     </entry>
+    <entry name="NoAutoStart" key="NoAutoStart" type="Bool" hidden="true">
+      <label context="@label">Suppress autostart at login</label>
+      <default>false</default>
+    </entry>
     <entry name="DefaultDeferTime" key="DeferTime" type="Int">
       <label context="@label">Default defer time interval</label>
       <whatsthis context="@info:whatsthis">Enter the default time interval (in minutes) to defer alarms, used by the Defer Alarm dialog.</whatsthis>

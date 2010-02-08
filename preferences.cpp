@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ static const QString FROM_KMAIL        = QLatin1String("@KMail");
 
 // Config file entry names for notification messages
 const char* Preferences::QUIT_WARN              = "QuitWarn";
+const char* Preferences::ASK_AUTO_START         = "AskAutoStart";
 const char* Preferences::CONFIRM_ALARM_DELETION = "ConfirmAlarmDeletion";
 const char* Preferences::EMAIL_QUEUED_NOTIFY    = "EmailQueuedNotify";
 const bool  default_quitWarn             = true;
@@ -92,6 +93,11 @@ Preferences::Preferences()
 	QObject::connect(this, SIGNAL(base_TimeZoneChanged(const QString&)), SLOT(timeZoneChange(const QString&)));
 	QObject::connect(this, SIGNAL(base_HolidayRegionChanged(const QString&)), SLOT(holidaysChange(const QString&)));
 	QObject::connect(this, SIGNAL(base_WorkTimeChanged(const QDateTime&, const QDateTime&, int)), SLOT(workTimeChange(const QDateTime&, const QDateTime&, int)));
+}
+
+void Preferences::setAskAutoStart(bool yes)
+{
+	MessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
 }
 
 /******************************************************************************
