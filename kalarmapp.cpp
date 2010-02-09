@@ -124,9 +124,9 @@ KAlarmApp::KAlarmApp()
 	connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
 
 	setQuitOnLastWindowClosed(false);
+	Preferences::self()->readConfig();
 	if (!Preferences::noAutoStart())
 	{
-		Preferences::self()->readConfig();
 		Preferences::setAutoStart(true);
 		Preferences::self()->writeConfig();
 	}
@@ -209,6 +209,14 @@ bool KAlarmApp::restoreSession()
 	// the session config created after that points to an invalid file, resulting
 	// in no windows being restored followed by a later crash.
 	kapp->sessionConfig();
+
+	// When KAlarm is session restored, automatically set start-at-login to true.
+	Preferences::self()->readConfig();
+	Preferences::setAutoStart(true);
+	Preferences::setNoAutoStart(false);
+	Preferences::setAskAutoStart(true);  // cancel any start-at-login prompt suppression
+	Preferences::self()->writeConfig();
+
 	if (!initCheck(true))     // open the calendar file (needed for main windows), don't process queue yet
 	{
 		--mActiveCount;
@@ -534,11 +542,16 @@ void KAlarmApp::doQuit(QWidget* parent)
 		return;
 	if (!Preferences::autoStart())
 	{
-		switch (KMessageBox::questionYesNoCancel(parent,
-		                                         i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
-		                                                        "(Note that alarms will be disabled if KAlarm is not started.)"),
-		                                         QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
-		                                         KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START))
+		int option = KMessageBox::No;
+		if (!Preferences::autoStartChangedByUser())
+		{
+			option = KMessageBox::questionYesNoCancel(parent,
+		                                 i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
+		                                                "(Note that alarms will be disabled if KAlarm is not started.)"),
+		                                 QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
+		                                 KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START);
+		}
+		switch (option)
 		{
 			case KMessageBox::Yes:
 				Preferences::setAutoStart(true);

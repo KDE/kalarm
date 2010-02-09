@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -563,6 +563,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 		Preferences::setAskAutoStart(true);  // cancel any start-at-login prompt suppression
 		if (b)
 			Preferences::setNoAutoStart(false);
+		Preferences::setAutoStartChangedByUser(true);  // prevent prompting the user on quit, about start-at-login
 	}
 	b = mConfirmAlarmDeletion->isChecked();
 	if (b != Preferences::confirmAlarmDeletion())

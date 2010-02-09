@@ -40,6 +40,8 @@ class Preferences : public PreferencesBase
 
 		static Preferences*     self();
 		static void             connect(const char* signal, const QObject* receiver, const char* member);
+		static bool             autoStartChangedByUser()         { return mAutoStartChangedByUser; }
+		static void             setAutoStartChangedByUser(bool c){ mAutoStartChangedByUser = c; }
 
 		// Access to settings
 		static void             setAskAutoStart(bool yes);
@@ -108,6 +110,9 @@ class Preferences : public PreferencesBase
 
 		// All the following members are accessed by the Preferences dialog classes
 		static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter
+
+		// Change tracking
+		static bool             mAutoStartChangedByUser; // AutoStart has been changed by the user
 };
 
 #endif // PREFERENCES_H

@@ -69,6 +69,8 @@ Preferences*   Preferences::mInstance = 0;
 bool           Preferences::mUsingDefaults = false;
 KTimeZone      Preferences::mSystemTimeZone;
 HolidayRegion* Preferences::mHolidays = 0;   // always non-null after Preferences initialisation
+// Change tracking
+bool           Preferences::mAutoStartChangedByUser = false;
 
 
 Preferences* Preferences::self()
