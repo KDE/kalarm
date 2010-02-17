@@ -53,6 +53,7 @@ Comment[el]=Προσφέρει πρόσβαση σε ημερολόγιο ειδ
 Comment[en_GB]=Provides access to an alarm calendar stored in a local directory, in which each calendar item is stored in a separate file
 Comment[es]=Provee acceso a un calendario de alarmas almacenado en un directorio local, en el cual cada elemento del calendario es almacenado en un archivo separado
 Comment[et]=Võimaldab kasutada kohalikku kataloogi salvestatud häirete kalendrit, kus iga kalender on salvestatud eraldi faili
+Comment[fi]=Tarjoaa pääsyn paikalliseen kansioon tallennettuun hälytyskalenteriin, jossa jokainen kalenteritietue on erillinen tiedosto
 Comment[fr]=Fourni l'accès aux alarmes de calendrier stockées dans un dossier ; chaque entrée du calendrier étant stockée dans un fichier distinct
 Comment[gl]=Permite acceder a un calendario de alarmas almacenado nun directorio local no que cada elemento do calendario se almacena nun ficheiro diferente
 Comment[hu]=Helyi mappában tárolt emlékeztetőkhöz biztosít hozzáférést (minden bejegyzés külön fájlban található)
