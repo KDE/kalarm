@@ -1,7 +1,7 @@
 /*
  *  resourcemodelview.cpp  -  model/view classes for alarm resource lists
  *  Program:  kalarm
- *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -445,6 +445,7 @@ void ResourceView::setModel(QAbstractItemModel* model)
 {
 	model->setData(QModelIndex(), viewOptions().font, Qt::FontRole);
 	QListView::setModel(model);
+	setItemDelegate(new ResourceDelegate(this));
 }
 
 /******************************************************************************

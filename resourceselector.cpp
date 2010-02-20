@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -86,8 +86,6 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	ResourceFilterModel* filterModel = new ResourceFilterModel(model, this);
 	mListView = new ResourceView(this);
 	mListView->setModel(filterModel);
-	ResourceDelegate* delegate = new ResourceDelegate(mListView);
-	mListView->setItemDelegate(delegate);
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(selectionChanged()));
 	mListView->setContextMenuPolicy(Qt::CustomContextMenu);
 	connect(mListView, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(contextMenuRequested(const QPoint&)));
