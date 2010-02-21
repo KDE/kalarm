@@ -1,7 +1,7 @@
 /*
  *  alarmresource.cpp  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ using namespace KCal;
 
 void              (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
 void              (*AlarmResource::mCustomEventFunction)(AlarmResource*, CalendarLocal*) = 0;
-KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc) = 0;
+KCalendar::Status (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType) = 0;
 int                 AlarmResource::mDebugArea = 0;
 bool                AlarmResource::mNoGui = false;
 
@@ -48,6 +48,7 @@ AlarmResource::AlarmResource()
 	  mType(static_cast<Type>(0)),    // invalid
 	  mStandard(false),
 	  mCloseAfterSave(false),
+	  mWrongAlarmType(false),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
@@ -64,6 +65,7 @@ AlarmResource::AlarmResource(const KConfigGroup& group)
 	  mType(static_cast<Type>(0)),    // invalid
 	  mStandard(false),
 	  mCloseAfterSave(false),
+	  mWrongAlarmType(false),
 	  mCompatibility(KCalendar::Incompatible),
 	  mReconfiguring(0),
 	  mLoaded(false),
@@ -168,12 +170,15 @@ void AlarmResource::applyReconfig()
 */
 void AlarmResource::checkCompatibility(const QString& filename)
 {
+	bool wrongType = false;
 	bool oldReadOnly = readOnly();
 	mCompatibility = KCalendar::Incompatible;   // assume the worst
 	if (mFixFunction)
 	{
 		// Check whether the version is compatible (and convert it if desired)
-		mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT);
+		mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT, &wrongType);
+		if (wrongType)
+			kDebug(KARES_DEBUG) << resourceName() << ": contains wrong alarm type(s)";
 		if (mCompatibility == KCalendar::Converted)
 		{
 			// Set mCompatibility first to ensure that readOnly() returns
@@ -187,6 +192,7 @@ void AlarmResource::checkCompatibility(const QString& filename)
 			kDebug(KARES_DEBUG) << resourceName() << ": opened read-only (not current KAlarm format)";
 		}
 	}
+	setWrongAlarmType(wrongType);
 	if (readOnly() != oldReadOnly)
 		emit readOnlyChanged(this);   // the effective read-only status has changed
 }
@@ -195,13 +201,15 @@ void AlarmResource::checkCompatibility(const QString& filename)
 * If a function is defined to convert alarms to the current format, call it to
 * convert an individual file within the overall resource.
 */
-KCalendar::Status AlarmResource::checkCompatibility(CalendarLocal& calendar, const QString& filename, FixFunc conv)
+KCalendar::Status AlarmResource::checkCompatibility(CalendarLocal& calendar, const QString& filename, FixFunc conv, bool* wrongType)
 {
+	if (wrongType)
+		*wrongType = false;
 	KCalendar::Status compat = KCalendar::Incompatible;   // assume the worst
 	if (mFixFunction)
 	{
 		// Check whether the version is compatible (and convert it if desired)
-		compat = (*mFixFunction)(calendar, filename, this, conv);
+		compat = (*mFixFunction)(calendar, filename, this, conv, wrongType);
 		if (compat == KCalendar::Converted)
 			calendar.save(filename);
 	}
@@ -219,11 +227,27 @@ KCalendar::Status AlarmResource::compatibility(const Event* event) const
 }
 
 /******************************************************************************
+* Set whether the resource contains only the wrong alarm types.
+* If the wrong types, disable the resource.
+*/
+void AlarmResource::setWrongAlarmType(bool wrongType, bool emitSignal)
+{
+	if (wrongType != mWrongAlarmType)
+	{
+		mWrongAlarmType = wrongType;
+		if (emitSignal)
+			emit wrongAlarmTypeChanged(this);
+		if (mWrongAlarmType)
+			setEnabled(false);
+	}
+}
+
+/******************************************************************************
 * If a function is defined to update KAlarm event instances, call it.
 */
 void AlarmResource::updateCustomEvents(bool useCalendar)
 {
-	if (mCustomEventFunction)
+	if (mCustomEventFunction  &&  isEnabled())
 		(*mCustomEventFunction)(this, useCalendar ? calendar() : 0);
 }
 
@@ -282,6 +306,8 @@ void AlarmResource::setReadOnly(bool ronly)
 
 void AlarmResource::setEnabled(bool enable)
 {
+	if (mWrongAlarmType)
+		enable = false;
 	if (isActive() != enable)
 	{
 		setActive(enable);
@@ -330,7 +356,7 @@ QString AlarmResource::infoText() const
 		default:        break;
 	}
 	QString perms = readOnly() ? i18nc("@info/plain", "Read-only") : i18nc("@info/plain", "Read-write");
-	QString enabled = isActive() ? i18nc("@info/plain", "Enabled") : i18nc("@info/plain", "Disabled");
+	QString enabled = isEnabled() ? i18nc("@info/plain", "Enabled") : mWrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
 	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
 	return i18nc("@info",
 	    "<title>%1</title>"
@@ -352,6 +378,35 @@ void AlarmResource::lock(const QString& path)
 		mLock = new KABC::LockNull(true);
 	else
 		mLock = new KABC::Lock(path);
+}
+
+/******************************************************************************
+* Check whether the alarm types in a calendar correspond with the resource's
+* alarm type.
+* Reply = true if at least 1 alarm is the right type.
+*/
+bool AlarmResource::checkAlarmTypes(KCal::CalendarLocal& calendar) const
+{
+	KCalEvent::Status type = kcalEventType();
+	if (type != KCalEvent::EMPTY)
+	{
+		bool have = false;
+		bool other = false;
+		const Event::List events = calendar.rawEvents();
+		for (int i = 0, iend = events.count();  i < iend;  ++i)
+		{
+			KCalEvent::Status s = KCalEvent::status(events[i]);
+			if (type == s)
+				have = true;
+			else
+				other = true;
+			if (have && other)
+				break;
+		}
+		if (!have  &&  other)
+			return false;   // contains only wrong alarm types
+	}
+	return true;
 }
 
 KCalEvent::Status AlarmResource::kcalEventType() const

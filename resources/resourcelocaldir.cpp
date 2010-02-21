@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocaldir.cpp in libkcal (updated to rev 779953,938673,938806),
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -177,6 +177,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	{
 		emit invalidate(this);
 		calendar()->close();
+		setWrongAlarmType(false, false);
 		clearChanges();
 	}
 	else
@@ -197,7 +198,10 @@ emit invalidate(this);  // necessary until load changes only is fixed
 		FixFunc prompt = PROMPT_PART;
 		QFileInfo dirInfo(dirName);
 		if (!(dirInfo.isDir()  &&  dirInfo.isReadable()))
+		{
+			setWrongAlarmType(false, false);
 			return false;
+		}
 		mDirReadOnly = !dirInfo.isWritable();
 		QDir dir(dirName, QString(), QDir::Unsorted, QDir::Files | QDir::Readable);
 		QStringList entries = dir.entryList(QDir::Files | QDir::Readable);
@@ -263,6 +267,7 @@ emit invalidate(this);  // necessary until load changes only is fixed
 		{
 			emit invalidate(this);
 			calendar()->close();
+			setWrongAlarmType(false, false);
 		}
 		else
 		{
@@ -275,6 +280,9 @@ emit invalidate(this);  // necessary until load changes only is fixed
 			}
 		}
 	}
+
+	setWrongAlarmType(!checkAlarmTypes(*calendar()));   // check if it contains only wrong alarm types
+
 	mLoading = false;
 	enableChangeNotification();
 	updateCustomEvents();

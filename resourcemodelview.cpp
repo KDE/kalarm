@@ -110,7 +110,7 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 			QString name = '@' + resource->resourceName();   // insert markers for stripping out name
 			QString type = '@' + resource->displayType();
 			bool inactive = !resource->isActive();
-			QString disabled = i18nc("@info/plain", "Disabled");
+			QString disabled = resource->isWrongAlarmType() ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
 			QString readonly = i18nc("@info/plain", "Read-only");
 			if (inactive  &&  resource->readOnly())
 				return i18nc("@info:tooltip",

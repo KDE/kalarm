@@ -1,7 +1,7 @@
 /*
  *  alarmresources.h  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *  Based on calendarresources.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -42,7 +42,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 {
 		Q_OBJECT
 	public:
-		enum Change { Added, Deleted, Invalidated, Enabled, ReadOnly, Location, Colour };
+		enum Change { Added, Deleted, Invalidated, Enabled, ReadOnly, WrongType, Location, Colour };
 		// Return code when the user can cancel an operation
 		enum Result { Success, Cancelled, Failed };
 
@@ -108,7 +108,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		void setCustomEventFunction(void (*f)(AlarmResource*, CalendarLocal*))
 		                              { AlarmResource::setCustomEventFunction(f); }
 		/** Set a function to fix the calendar once it has been loaded. */
-		void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc))
+		void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType))
 		                              { AlarmResource::setFixFunction(f); }
 
 		/** Add an event to the resource calendar.
@@ -433,6 +433,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 	private slots:
 		void slotActiveChanged(AlarmResource* r)      { slotResourceStatusChanged(r, Enabled); }
 		void slotReadOnlyChanged(AlarmResource* r)    { slotResourceStatusChanged(r, ReadOnly); }
+		void slotWrongTypeChanged(AlarmResource* r)   { slotResourceStatusChanged(r, WrongType); }
 		void slotLocationChanged(AlarmResource* r)    { slotResourceStatusChanged(r, Location); }
 		void slotColourChanged(AlarmResource* r)      { slotResourceStatusChanged(r, Colour); }
 		void slotResourceLoaded(AlarmResource*);

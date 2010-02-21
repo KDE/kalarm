@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.cpp  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2008,2010 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocal.cpp in libkcal (updated to rev 765072),
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -131,6 +131,7 @@ bool KAResourceLocal::doLoad(bool)
 		mLoaded = false;
 		emit invalidate(this);
 		calendar()->close();
+		setWrongAlarmType(false, false);
 		clearChanges();
 		updateCustomEvents(false);   // calendar is now empty
 		if (!isActive())
@@ -174,6 +175,7 @@ bool KAResourceLocal::loadFile()
 	mLoaded = false;
 	emit invalidate(this);
 	calendar()->close();
+	setWrongAlarmType(false, false);
 	clearChanges();
 	if (!isActive())
 	{

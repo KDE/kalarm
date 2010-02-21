@@ -1,7 +1,7 @@
 /*
  *  alarmresources.cpp  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -697,6 +697,7 @@ void AlarmResources::connectResource(AlarmResource* resource)
 	resource->disconnect(this);   // just in case we're called twice
 	connect(resource, SIGNAL(enabledChanged(AlarmResource*)), SLOT(slotActiveChanged(AlarmResource*)));
 	connect(resource, SIGNAL(readOnlyChanged(AlarmResource*)), SLOT(slotReadOnlyChanged(AlarmResource*)));
+	connect(resource, SIGNAL(wrongAlarmTypeChanged(AlarmResource*)), SLOT(slotWrongTypeChanged(AlarmResource*)));
 	connect(resource, SIGNAL(locationChanged(AlarmResource*)), SLOT(slotLocationChanged(AlarmResource*)));
 	connect(resource, SIGNAL(colourChanged(AlarmResource*)), SLOT(slotColourChanged(AlarmResource*)));
 	connect(resource, SIGNAL(invalidate(AlarmResource*)), SLOT(slotResourceInvalidated(AlarmResource*)));
@@ -761,7 +762,7 @@ void AlarmResources::slotSaveError(ResourceCalendar* resource, const QString& er
 
 void AlarmResources::slotResourceStatusChanged(AlarmResource* resource, Change change)
 {
-	kDebug(KARES_DEBUG) << resource->resourceName() << ", " << (change == Enabled ? "Enabled" : change == ReadOnly ? "ReadOnly" : change == Location ? "Location" : "Colour");
+	kDebug(KARES_DEBUG) << resource->resourceName() << ", " << (change == Added ? "Added" : change == Enabled ? "Enabled" : change == ReadOnly ? "ReadOnly" : change == WrongType ? "WrongType" : change == Location ? "Location" : "Colour");
 	if (!resource->writable())
 	{
 		// The resource is no longer writable, so it can't be a standard resource

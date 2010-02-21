@@ -1,7 +1,7 @@
 /*
  *  alarmresource.h  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,6 +70,15 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		/** Set the type of alarms which the resource can contain. */
 		void     setAlarmType(Type type)         { mType = type; }
 
+		/** Return whether the resource contains only alarms of the wrong type. */
+		bool     isWrongAlarmType() const        { return mWrongAlarmType; }
+
+		/** Check whether the alarm types in a calendar correspond with
+		 *  the resource's alarm type.
+		 *  Reply = true if at least 1 alarm is the right type.
+		 */
+		bool checkAlarmTypes(KCal::CalendarLocal&) const;
+
 		/** Set whether the application has a GUI. This determines whether error or
 		 *  progress messages are displayed. */
 		static void setNoGui(bool noGui)         { mNoGui = noGui; }
@@ -95,11 +104,11 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		void     setStandardResource(bool std)   { mStandard = std; }
 
 		void     setEnabled(bool enable);
-		bool     isEnabled() const               { return isActive(); }
+		bool     isEnabled() const               { return !mWrongAlarmType && isActive(); }
 
 		/** Return whether the resource can be written to now,
 		 *  i.e. it's active, read-write and in the current KAlarm format. */
-		bool     writable() const                { return isActive() && !readOnly(); }
+		bool     writable() const                { return isEnabled() && !readOnly(); }
 
 		/** Return whether the event can be written to now, i.e. the resource is
 		 *  active and read-write, and the event is in the current KAlarm format. */
@@ -158,7 +167,7 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		 *  set to null to indicate that the resource is about to be reloaded. */
 		static void setCustomEventFunction(void (*f)(AlarmResource*, CalendarLocal*))   { mCustomEventFunction = f; }
 		/** Set a function to fix the calendar once it has been loaded. */
-		static void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, FixFunc))
+		static void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, FixFunc, bool* wrongType))
 		                                         { mFixFunction = f; }
 		/** Return whether the resource is in a different format from the
 		 *  current KAlarm format, in which case it cannot be written to.
@@ -200,6 +209,8 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		void cacheDownloaded(AlarmResource*);
 		/** Signal that the resource's read-only status has changed. */
 		void readOnlyChanged(AlarmResource*);
+		/** Signal that the resource's wrong alarm type status has changed. */
+		void wrongAlarmTypeChanged(AlarmResource*);
 		/** Signal that the resource's active status has changed. */
 		void enabledChanged(AlarmResource*);
 		/** Signal that the resource's location has changed. */
@@ -214,13 +225,14 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		bool              closeAfterSave() const    { return mCloseAfterSave; }
 		void              setCompatibility(KCalendar::Status c)    { mCompatibility = c; }
 		void              checkCompatibility(const QString&);
-		KCalendar::Status checkCompatibility(KCal::CalendarLocal&, const QString& filename, FixFunc);
+		KCalendar::Status checkCompatibility(KCal::CalendarLocal&, const QString& filename, FixFunc, bool* wrongType = 0);
+		void              setWrongAlarmType(bool wrongType, bool emitSignal = true);
 		void              updateCustomEvents(bool useCalendar = true);
 		virtual void      enableResource(bool enable) = 0;
 		void              lock(const QString& path);
 
 		static void              (*mCalIDFunction)(CalendarLocal&);
-		static KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc);
+		static KCalendar::Status (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc, bool* wrongType);
 
 	private:
 		void        init();
@@ -236,6 +248,7 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)
 		bool        mOldReadOnly;     // old read-only status (when startReconfig() called)
 		bool        mCloseAfterSave;  // resource is to be closed once save() is complete
+		bool        mWrongAlarmType;  // calendar contains only alarms of the wrong type
 		KCalendar::Status mCompatibility; // whether resource is in compatible format
 	protected:
 		typedef QMap<const KCal::Event*, KCalendar::Status>  CompatibilityMap;
