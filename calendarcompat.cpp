@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.cpp -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -57,34 +57,46 @@ void CalendarCompat::setID(KCal::CalendarLocal& calendar)
 * necessary conversions to the current format. If it is a resource calendar,
 * the user is prompted whether to save the conversions. For a local calendar
 * file, any conversions will only be saved if changes are made later.
+* If the calendar only contains the wrong alarm types, 'wrongType' is set true.
 * Reply = true if the calendar file is now in the current format.
 */
-KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource, AlarmResource::FixFunc conv)
+KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource,
+                                      AlarmResource::FixFunc conv, bool* wrongType)
 {
+	if (wrongType)
+		*wrongType = false;
 	bool version057_UTC = false;
 	QString subVersion, versionString;
 	int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
-	if (!version)
-		return KCalendar::Current;     // calendar is in current KAlarm format
 	if (version < 0  ||  version > KAlarm::Version())
 		return KCalendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
 
-	// Calendar was created by an earlier version of KAlarm.
-	// Convert it to the current format, and prompt the user whether to update the calendar file.
-	if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
+	if (version)
 	{
-		// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
-		// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
-		version057_UTC = isUTC(localFile);
-		kDebug() << "KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") << "UTC)";
-	}
-	else
-		kDebug() << "KAlarm version" << version;
+		// Calendar was created by an earlier version of KAlarm.
+		// Convert it to the current format.
+		if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
+		{
+			// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
+			// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
+			version057_UTC = isUTC(localFile);
+			kDebug() << "KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") << "UTC)";
+		}
+		else
+			kDebug() << "KAlarm version" << version;
 
-	// Convert events to current KAlarm format for if the calendar is saved
-	KAEventData::convertKCalEvents(calendar, version, version057_UTC, Preferences::startOfDay(), Preferences::timeZone());
+		// Convert events to current KAlarm format for if the calendar is saved
+		KAEventData::convertKCalEvents(calendar, version, version057_UTC, Preferences::startOfDay(), Preferences::timeZone());
+	}
 	if (!resource)
 		return KCalendar::Current;    // update non-shared calendars regardless
+
+	// Check whether the alarm types in the calendar correspond with the resource's alarm type
+	if (wrongType)
+		*wrongType = !resource->checkAlarmTypes(calendar);
+
+	if (!version)
+		return KCalendar::Current;     // calendar is in current KAlarm format
 	if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)
 		return KCalendar::Convertible;
 	// Update the calendar file now if the user wants it to be read-write
