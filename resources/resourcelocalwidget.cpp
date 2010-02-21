@@ -1,7 +1,7 @@
 /*
  *  resourcelocalwidget.cpp  -  configuration widget for a local file calendar resource
  *  Program:  kalarm
- *  Copyright © 2006,2008 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2008,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #include <kurlrequester.h>
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include "resourcelocal.h"
@@ -68,5 +69,12 @@ void ResourceLocalConfigWidget::saveSettings(KRES::Resource* resource)
 	if (!res)
 		kDebug(KARES_DEBUG) << "KAResourceLocal: cast failed";
 	else
+	{
 		res->setFileName(mURL->url());
+		if (mURL->url().isEmpty())
+		{
+			KMessageBox::information(this, i18nc("@info", "No location specified.  The calendar will be invalid."));
+			resource->setReadOnly(true);
+		}
+	}
 }
