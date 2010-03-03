@@ -64,6 +64,12 @@ KAlarmResource::~KAlarmResource()
 {
 }
 
+/******************************************************************************
+* Retrieve an event from the calendar, whose uid and Akonadi id are given by
+* 'item' (item.remoteId() and item.id() respectively).
+* Set the event into a new item's payload, and signal its retrieval by calling
+* itemRetrieved(newitem).
+*/
 bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteArray>& parts)
 {
     Q_UNUSED(parts);
@@ -166,6 +172,11 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     changeCommitted(item);
 }
 
+/******************************************************************************
+* Retrieve all events from the calendar, and set each into a new item's
+* payload. The Akonadi id for each item will be a new one.
+* Signal the retrieval of the items by calling itemsRetrieved(items).
+*/
 void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
 {
     Event::List events = calendar()->events();
@@ -178,7 +189,10 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
         KAEventData* event = new KAEventData(0, kcalEvent);
         QString mime = mimeType(event);
         if (mime.isEmpty())
+        {
+            delete event;
             continue;   // event has no usable alarms
+        }
  
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
