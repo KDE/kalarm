@@ -31,8 +31,6 @@
 #include "preferences.h"
 
 #include <kcal/calendarlocal.h>
-#include <kcal/vcaldrag.h>
-#include <kcal/vcalformat.h>
 #include <kcal/icalformat.h>
 
 #include <kglobal.h>
@@ -44,15 +42,7 @@
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <ktemporaryfile.h>
-#include <kfiledialog.h>
 #include <kdebug.h>
-
-#include <QFile>
-#include <QTextStream>
-#include <QRegExp>
-
-#include <unistd.h>
-#include <time.h>
 
 using namespace KCal;
 
