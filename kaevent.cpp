@@ -82,7 +82,8 @@ KAEvent::Private::Private(const KCal::Event* e)
 }
 
 KAEvent::Private::Private(const KAEvent::Private& e)
-    : QSharedData(e)
+    : KAEventData::Observer(e),
+      QSharedData(e)
 {
     copy(e, false);
     mEventData = new KAEventData(this, *e.mEventData);
