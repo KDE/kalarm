@@ -759,13 +759,19 @@ void KAEventData::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 	bool audioOnly = false;
 	for (int i = 0, end = alarms.count();  i < end;  ++i)
 	{
-		if (alarms[i]->type() == Alarm::Display)
+		switch (alarms[i]->type())
 		{
-			audioOnly = false;
-			break;
+			case Alarm::Display:
+			case Alarm::Procedure:
+				audioOnly = false;
+				i = end;   // exit from the 'for' loop
+				break;
+			case Alarm::Audio:
+				audioOnly = true;
+				break;
+			default:
+				break;
 		}
-		if (alarms[i]->type() == Alarm::Audio)
-			audioOnly = true;
 	}
 
 	for (int i = 0, end = alarms.count();  i < end;  ++i)
