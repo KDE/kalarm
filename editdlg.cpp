@@ -48,7 +48,6 @@
 #include "timespinbox.h"
 
 #include <libkdepim/maillistdrag.h>
-#include <libkdepim/kvcarddrag.h>
 #include <kcal/period.h>
 #include <kcal/icaldrag.h>
 
