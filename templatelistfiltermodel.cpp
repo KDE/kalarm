@@ -58,12 +58,12 @@ bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&
 	int type;
 	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
 	{
-#warning AUDIO case missing
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
 		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
 		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
-		default:                    type = EventListModel::ALL;  break;
+		case KAEvent::AUDIO:    type = EventListModel::AUDIO;  break;
+		default:                type = EventListModel::ALL;  break;
 	}
 	return type & mTypeFilter;
 }
@@ -118,11 +118,11 @@ Qt::ItemFlags TemplateListFilterModel::flags(const QModelIndex& index) const
 	int type;
 	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
 	{
-#warning AUDIO case missing
 		case KAEvent::MESSAGE:
 		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
 		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
 		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
+		case KAEvent::AUDIO:    type = EventListModel::AUDIO;  break;
 		default:                type = EventListModel::ALL;  break;
 	}
 	if (!(type & mTypesEnabled))
