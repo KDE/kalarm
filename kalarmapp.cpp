@@ -131,14 +131,20 @@ KAlarmApp::KAlarmApp()
 		Preferences::self()->writeConfig();
 	}
 	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(changeStartOfDay()));
+	Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), this, SLOT(slotWorkTimeChanged(const QTime&, const QTime&, const QBitArray&)));
+	Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::HolidayRegion&)), this, SLOT(slotHolidaysChanged(const KHolidays::HolidayRegion&)));
 	Preferences::connect(SIGNAL(feb29TypeChanged(Feb29Type)), this, SLOT(slotFeb29TypeChanged(Feb29Type)));
 	Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(slotShowInSystemTrayChanged()));
 	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
+	Preferences::connect(SIGNAL(messageFontChanged(const QFont&)), this, SLOT(slotMessageFontChanged(const QFont&)));
 	slotFeb29TypeChanged(Preferences::defaultFeb29Type());
 
 	connect(QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
 	        SLOT(slotDBusServiceUnregistered(const QString&)));
-	KAEventData::setStartOfDay(Preferences::startOfDay());
+	KAEvent::setStartOfDay(Preferences::startOfDay());
+	KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd());
+	KAEvent::setHolidays(Preferences::holidays());
+	KAEvent::setDefaultFont(Preferences::messageFont());
 	if (AlarmCalendar::initialiseCalendars())
 	{
 		connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
@@ -879,8 +885,35 @@ void KAlarmApp::slotShowInSystemTrayChanged()
 void KAlarmApp::changeStartOfDay()
 {
 	DateTime::setStartOfDay(Preferences::startOfDay());
-	KAEventData::setStartOfDay(Preferences::startOfDay());
+	KAEvent::setStartOfDay(Preferences::startOfDay());
 	AlarmCalendar::resources()->adjustStartOfDay();
+}
+
+/******************************************************************************
+* Called when the default alarm message font preference setting has changed.
+* Notify KAEvent.
+*/
+void KAlarmApp::slotMessageFontChanged(const QFont& font)
+{
+	KAEvent::setDefaultFont(font);
+}
+
+/******************************************************************************
+* Called when the working time preference settings have changed.
+* Notify KAEvent.
+*/
+void KAlarmApp::slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days)
+{
+	KAEvent::setWorkTime(days, start, end);
+}
+
+/******************************************************************************
+* Called when the holiday region preference setting has changed.
+* Notify KAEvent.
+*/
+void KAlarmApp::slotHolidaysChanged(const KHolidays::HolidayRegion& holidays)
+{
+	KAEvent::setHolidays(holidays);
 }
 
 /******************************************************************************
@@ -990,7 +1023,7 @@ void KAlarmApp::setSpreadWindowsState(bool spread)
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(KAEventData::Action action, const QString& text, const KDateTime& dateTime,
+bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const KDateTime& dateTime,
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
@@ -1032,7 +1065,7 @@ bool KAlarmApp::scheduleEvent(KAEventData::Action action, const QString& text, c
 			execAlarm(event, event.firstAlarm(), false);
 		// If it's a recurring alarm, reschedule it for its next occurrence
 		if (!event.recurs()
-		||  event.setNextOccurrence(now) == KAEventData::NO_OCCURRENCE)
+		||  event.setNextOccurrence(now) == KAEvent::NO_OCCURRENCE)
 			return true;
 		// It has recurrences in the future
 	}
@@ -1119,10 +1152,10 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 					{
 						KDateTime dt(nextDT);
 						dt.setDateOnly(true);
-						reschedule = !KAlarm::isWorkingTime(dt, event->eventData());
+						reschedule = !event->isWorkingTime(dt);
 					}
 					else
-						reschedule = !KAlarm::isWorkingTime(nextDT, event->eventData());
+						reschedule = !event->isWorkingTime(nextDT);
 					if (reschedule) { kDebug() << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours"; }
 				}
 				if (!reschedule  &&  alarm.repeatAtLogin())
@@ -1152,24 +1185,24 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 							// It's too late to display the scheduled occurrence.
 							// Find the last previous occurrence of the alarm.
 							DateTime next;
-							KAEventData::OccurType type = event->previousOccurrence(now, next, true);
-							switch (type & ~KAEventData::OCCURRENCE_REPEAT)
+							KAEvent::OccurType type = event->previousOccurrence(now, next, true);
+							switch (type & ~KAEvent::OCCURRENCE_REPEAT)
 							{
-								case KAEventData::FIRST_OR_ONLY_OCCURRENCE:
-								case KAEventData::RECURRENCE_DATE:
-								case KAEventData::RECURRENCE_DATE_TIME:
-								case KAEventData::LAST_RECURRENCE:
+								case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
+								case KAEvent::RECURRENCE_DATE:
+								case KAEvent::RECURRENCE_DATE_TIME:
+								case KAEvent::LAST_RECURRENCE:
 									limit.setDate(next.date().addDays(maxlate + 1));
 									if (now >= limit)
 									{
-										if (type == KAEventData::LAST_RECURRENCE
-										||  (type == KAEventData::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
+										if (type == KAEvent::LAST_RECURRENCE
+										||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
 											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											reschedule = true;
 									}
 									break;
-								case KAEventData::NO_OCCURRENCE:
+								case KAEvent::NO_OCCURRENCE:
 								default:
 									reschedule = true;
 									break;
@@ -1185,23 +1218,23 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 							// It's over the maximum interval late.
 							// Find the most recent occurrence of the alarm.
 							DateTime next;
-							KAEventData::OccurType type = event->previousOccurrence(now, next, true);
-							switch (type & ~KAEventData::OCCURRENCE_REPEAT)
+							KAEvent::OccurType type = event->previousOccurrence(now, next, true);
+							switch (type & ~KAEvent::OCCURRENCE_REPEAT)
 							{
-								case KAEventData::FIRST_OR_ONLY_OCCURRENCE:
-								case KAEventData::RECURRENCE_DATE:
-								case KAEventData::RECURRENCE_DATE_TIME:
-								case KAEventData::LAST_RECURRENCE:
+								case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
+								case KAEvent::RECURRENCE_DATE:
+								case KAEvent::RECURRENCE_DATE_TIME:
+								case KAEvent::LAST_RECURRENCE:
 									if (next.effectiveKDateTime().secsTo(now) > maxlate)
 									{
-										if (type == KAEventData::LAST_RECURRENCE
-										||  (type == KAEventData::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
+										if (type == KAEvent::LAST_RECURRENCE
+										||  (type == KAEvent::FIRST_OR_ONLY_OCCURRENCE && !event->recurs()))
 											cancel = true;   // last occurrence (and there are no repetitions)
 										else
 											reschedule = true;
 									}
 									break;
-								case KAEventData::NO_OCCURRENCE:
+								case KAEvent::NO_OCCURRENCE:
 								default:
 									reschedule = true;
 									break;
@@ -1304,26 +1337,26 @@ void KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	else
 	{
 		// Reschedule the alarm for its next occurrence.
-		KAEventData::OccurType type = event.setNextOccurrence(KDateTime::currentUtcDateTime());
+		KAEvent::OccurType type = event.setNextOccurrence(KDateTime::currentUtcDateTime());
 		switch (type)
 		{
-			case KAEventData::NO_OCCURRENCE:
+			case KAEvent::NO_OCCURRENCE:
 				// All repetitions are finished, so cancel the event
 				if (cancelAlarm(event, alarm.type(), updateCalAndDisplay))
 					return;
 				break;
 			default:
-				if (!(type & KAEventData::OCCURRENCE_REPEAT))
+				if (!(type & KAEvent::OCCURRENCE_REPEAT))
 					break;
 				// Next occurrence is a repeat, so fall through to recurrence handling
-			case KAEventData::RECURRENCE_DATE:
-			case KAEventData::RECURRENCE_DATE_TIME:
-			case KAEventData::LAST_RECURRENCE:
+			case KAEvent::RECURRENCE_DATE:
+			case KAEvent::RECURRENCE_DATE_TIME:
+			case KAEvent::LAST_RECURRENCE:
 				// The event is due by now and repetitions still remain, so rewrite the event
 				if (updateCalAndDisplay)
 					update = true;
 				break;
-			case KAEventData::FIRST_OR_ONLY_OCCURRENCE:
+			case KAEvent::FIRST_OR_ONLY_OCCURRENCE:
 				// The first occurrence is still due?!?, so don't do anything
 				break;
 		}

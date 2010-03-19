@@ -1,7 +1,7 @@
 /*
  *  kalarmresource.h  -  Akonadi resource for KAlarm
  *  Program:  kalarm
- *  Copyright © 2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -25,7 +25,7 @@
 #include <icalresourcebase.h>
 
 class KAlarmMimeTypeVisitor;
-class KAEventData;
+class KAEvent;
 
 class KAlarmResource : public ICalResourceBase
 {
@@ -33,7 +33,7 @@ class KAlarmResource : public ICalResourceBase
     public:
         KAlarmResource(const QString& id);
         virtual ~KAlarmResource();
-        static QString mimeType(const KAEventData*);
+        static QString mimeType(const KAEvent*);
 
     protected Q_SLOTS:
         void doRetrieveItems(const Akonadi::Collection&);

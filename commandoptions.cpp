@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,14 +82,14 @@ CommandOptions::CommandOptions()
 	if (checkCommand("file", NEW))
 	{
 		mEditType      = EditAlarmDlg::DISPLAY;
-		mEditAction    = KAEventData::FILE;
+		mEditAction    = KAEvent::FILE;
 		mEditActionSet = true;
 		mText          = mArgs->getOption(mCommandName);
 	}
 	if (checkCommand("exec-display", NEW))
 	{
 		mEditType      = EditAlarmDlg::DISPLAY;
-		mEditAction    = KAEventData::COMMAND;
+		mEditAction    = KAEvent::COMMAND;
 		mEditActionSet = true;
 		mFlags        |= KAEvent::DISPLAY_COMMAND;
 		mText          = mArgs->getOption(mCommandName);
@@ -103,7 +103,7 @@ CommandOptions::CommandOptions()
 	if (checkCommand("exec", NEW))
 	{
 		mEditType      = EditAlarmDlg::COMMAND;
-		mEditAction    = KAEventData::COMMAND;
+		mEditAction    = KAEvent::COMMAND;
 		mEditActionSet = true;
 		mText          = mArgs->getOption(mCommandName);
 		int n = mArgs->count();
@@ -116,15 +116,15 @@ CommandOptions::CommandOptions()
 	if (checkCommand("mail", NEW))
 	{
 		mEditType      = EditAlarmDlg::EMAIL;
-		mEditAction    = KAEventData::EMAIL;
+		mEditAction    = KAEvent::EMAIL;
 		mEditActionSet = true;
 	}
 	if (checkCommand("edit-new-display", EDIT_NEW, EditAlarmDlg::DISPLAY))
 	{
 		mEditType = EditAlarmDlg::DISPLAY;
-		if (!mEditActionSet  ||  (mEditAction != KAEventData::COMMAND && mEditAction != KAEventData::FILE))
+		if (!mEditActionSet  ||  (mEditAction != KAEvent::COMMAND && mEditAction != KAEvent::FILE))
 		{
-			mEditAction    = KAEventData::MESSAGE;
+			mEditAction    = KAEvent::MESSAGE;
 			mEditActionSet = true;
 		}
 		if (mArgs->count())
@@ -133,19 +133,19 @@ CommandOptions::CommandOptions()
 	if (checkCommand("edit-new-command", EDIT_NEW))
 	{
 		mEditType      = EditAlarmDlg::COMMAND;
-		mEditAction    = KAEventData::COMMAND;
+		mEditAction    = KAEvent::COMMAND;
 		mEditActionSet = true;
 	}
 	if (checkCommand("edit-new-email", EDIT_NEW, EditAlarmDlg::EMAIL))
 	{
 		mEditType      = EditAlarmDlg::EMAIL;
-		mEditAction    = KAEventData::EMAIL;
+		mEditAction    = KAEvent::EMAIL;
 		mEditActionSet = true;
 	}
 	if (checkCommand("edit-new-audio", EDIT_NEW, EditAlarmDlg::AUDIO))
 	{
 		mEditType      = EditAlarmDlg::AUDIO;
-		mEditAction    = KAEventData::AUDIO;
+		mEditAction    = KAEvent::AUDIO;
 		mEditActionSet = true;
 	}
 	if (mError.isEmpty()  &&  mCommand == NONE)
@@ -155,7 +155,7 @@ CommandOptions::CommandOptions()
 			if (checkCommand("play", NEW) || checkCommand("play-repeat", NEW))
 			{
 				mEditType      = EditAlarmDlg::AUDIO;
-				mEditAction    = KAEventData::AUDIO;
+				mEditAction    = KAEvent::AUDIO;
 				mEditActionSet = true;
 			}
 		}
@@ -165,12 +165,12 @@ CommandOptions::CommandOptions()
 			mCommand       = NEW;
 			mCommandName   = "message";
 			mEditType      = EditAlarmDlg::DISPLAY;
-			mEditAction    = KAEventData::MESSAGE;
+			mEditAction    = KAEvent::MESSAGE;
 			mEditActionSet = true;
 			mText          = mArgs->arg(0);
 		}
 	}
-	if (mEditAction == KAEventData::EMAIL)
+	if (mEditAction == KAEvent::EMAIL)
 	{
 		if (mArgs->isSet("subject"))
 			mSubject = mArgs->getOption("subject");

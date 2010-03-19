@@ -1,7 +1,7 @@
 /*
  *  commandoptions.h  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ class CommandOptions
 		QString             eventId() const           { return mEventId; }
 		QString             templateName() const      { return mTemplateName; }
 		EditAlarmDlg::Type  editType() const          { return mEditType; }
-		KAEventData::Action editAction() const        { return mEditAction; }
+		KAEvent::Action     editAction() const        { return mEditAction; }
 		QString             text() const              { return mText; }
 		KDateTime           alarmTime() const         { return mAlarmTime; }
 		KARecurrence*       recurrence() const        { return mRecurrence; }
@@ -89,7 +89,7 @@ class CommandOptions
 		QString             mEventId;        // TRIGGER_EVENT, CANCEL_EVENT, EDIT: event ID
 		QString             mTemplateName;   // EDIT_NEW_PRESET: template name
 		EditAlarmDlg::Type  mEditType;       // NEW, EDIT_NEW_*: alarm edit type
-		KAEventData::Action mEditAction;     // NEW: alarm edit sub-type
+		KAEvent::Action     mEditAction;     // NEW: alarm edit sub-type
 		bool                mEditActionSet;  // NEW: mEditAction is valid
 		QString             mText;           // NEW: alarm text
 		KDateTime           mAlarmTime;      // NEW: alarm time

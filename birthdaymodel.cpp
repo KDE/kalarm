@@ -2,7 +2,7 @@
  *  birthdaymodel.cpp  -  model class for birthdays from address book
  *  Program:  kalarm
  *  Copyright © 2009 by Tobias Koenig <tokoe@kde.org>
- *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& su
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         KAEvent* event = events[i];
-        if (event->action() == KAEventData::MESSAGE
+        if (event->action() == KAEvent::MESSAGE
         &&  event->recurType() == KARecurrence::ANNUAL_DATE
         &&  (prefix.isEmpty()  ||  event->message().startsWith(prefix)))
             mContactsWithAlarm.append(event->message());

@@ -1,7 +1,7 @@
 /*
  *  akonadi_serializer_kalarm.h  -  Akonadi resource serializer for KAlarm
  *  Program:  kalarm
- *  Copyright © 2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -27,7 +27,7 @@
 #include <akonadi/itemserializerplugin.h>
 #include <kcal/icalformat.h>
 
-class KAEventData;
+class KAEvent;
 
 class SerializerPluginKAlarm : public QObject, public Akonadi::ItemSerializerPlugin
 {
@@ -39,7 +39,7 @@ class SerializerPluginKAlarm : public QObject, public Akonadi::ItemSerializerPlu
         void serialize(const Akonadi::Item& item, const QByteArray& label, QIODevice& data, int& version);
 
     private:
-        QString mimeType(const KAEventData*);
+        QString mimeType(const KAEvent*);
 
         KCal::ICalFormat mFormat;
 };

@@ -1,7 +1,7 @@
 /*
  *  find.cpp  -  search facility
  *  Program:  kalarm
- *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -216,11 +216,11 @@ void Find::display()
 			live = true;
 		switch (event->action())
 		{
-			case KAEventData::MESSAGE:  text    = true;  break;
-			case KAEventData::FILE:     file    = true;  break;
-			case KAEventData::COMMAND:  command = true;  break;
-			case KAEventData::EMAIL:    email   = true;  break;
-			case KAEventData::AUDIO:    audio   = true;  break;
+			case KAEvent::MESSAGE:  text    = true;  break;
+			case KAEvent::FILE:     file    = true;  break;
+			case KAEvent::COMMAND:  command = true;  break;
+			case KAEvent::EMAIL:    email   = true;  break;
+			case KAEvent::AUDIO:    audio   = true;  break;
 		}
 	}
 	mLive->setEnabled(live);
@@ -329,28 +329,28 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 			continue;     // we're not searching this type of alarm
 		switch (event->action())
 		{
-			case KAEventData::MESSAGE:
+			case KAEvent::MESSAGE:
 				if (!(mOptions & FIND_MESSAGE))
 					break;
 				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
-			case KAEventData::FILE:
+			case KAEvent::FILE:
 				if (!(mOptions & FIND_FILE))
 					break;
 				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
-			case KAEventData::COMMAND:
+			case KAEvent::COMMAND:
 				if (!(mOptions & FIND_COMMAND))
 					break;
 				mFind->setData(event->cleanText());
 				found = (mFind->find() == KFind::Match);
 				break;
 
-			case KAEventData::EMAIL:
+			case KAEvent::EMAIL:
 				if (!(mOptions & FIND_EMAIL))
 					break;
 				mFind->setData(event->emailAddresses(", "));
@@ -369,7 +369,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 				found = (mFind->find() == KFind::Match);
 				break;
 
-			case KAEventData::AUDIO:
+			case KAEvent::AUDIO:
 				if (!(mOptions & FIND_AUDIO))
 					break;
 				mFind->setData(event->audioFile());

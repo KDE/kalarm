@@ -35,6 +35,9 @@
     <argument type="DateTime">Base_WorkDayEnd</argument>
     <argument type="Int">Base_WorkDays</argument>
   </signal>
+  <signal name="messageFontChanged">
+    <argument type="Font">MessageFont</argument>
+  </signal>
   <signal name="disabledColourChanged">
     <argument type="Color">DisabledColour</argument>
   </signal>
@@ -77,6 +80,7 @@
       <label context="@label">Message font</label>
       <whatsthis context="@info:whatsthis">Default font for displaying alarm messages.</whatsthis>
       <default code="true">QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold)</default>
+      <emit signal="messageFontChanged"/>
     </entry>
     <entry name="ShowInSystemTray" type="Bool">
       <label context="@label">Show in system tray</label>

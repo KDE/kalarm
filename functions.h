@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -94,7 +94,7 @@ QString             browseFile(const QString& caption, QString& defaultDir, cons
                                const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = 0);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
-void                editNewAlarm(KAEventData::Action, QWidget* parent = 0, const AlarmText* = 0);
+void                editNewAlarm(KAEvent::Action, QWidget* parent = 0, const AlarmText* = 0);
 void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent*, QWidget* parent = 0);
@@ -151,7 +151,6 @@ void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateS
 bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
-bool                isWorkingTime(const KDateTime&, const KAEventData*);
 
 #ifndef NDEBUG
 void                setTestModeConditions();

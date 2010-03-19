@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ namespace KCal { class Event; }
 
 #include "kaevent.h"
 #include "kamail.h"
+#include "preferences.h"
 class DBusHandler;
 class MainWindow;
 class TrayWindow;
@@ -78,7 +79,7 @@ class KAlarmApp : public KUniqueApplication
 		void               notifyAudioPlaying(bool playing);
 		void               setSpreadWindowsState(bool spread);
 		// Methods called indirectly by the DCOP interface
-		bool               scheduleEvent(KAEventData::Action, const QString& text, const KDateTime&,
+		bool               scheduleEvent(KAEvent::Action, const QString& text, const KDateTime&,
 		                                 int lateCancel, int flags, const QColor& bg, const QColor& fg,
 		                                 const QFont&, const QString& audioFile, float audioVolume,
 		                                 int reminderMinutes, const KARecurrence& recurrence,
@@ -109,7 +110,10 @@ class KAlarmApp : public KUniqueApplication
 		void               checkNextDueAlarm();
 		void               slotShowInSystemTrayChanged();
 		void               changeStartOfDay();
+		void               slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days);
+		void               slotHolidaysChanged(const KHolidays::HolidayRegion&);
 		void               slotFeb29TypeChanged(Feb29Type);
+		void               slotMessageFontChanged(const QFont&);
 		void               setArchivePurgeDays();
 		void               slotPurge()                     { purge(mArchivedPurgeDays); }
 		void               slotCommandExited(ShellProcess*);

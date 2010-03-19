@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -975,11 +975,11 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		if (mMonthlyRule->type() == MonthlyRule::POS)
 		{
 			// It's by position
-			KAEventData::MonthPos pos;
+			KAEvent::MonthPos pos;
 			pos.days.fill(false);
 			pos.days.setBit(mMonthlyRule->dayOfWeek() - 1);
 			pos.weeknum = mMonthlyRule->week();
-			QList<KAEventData::MonthPos> poses;
+			QList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
 		}
@@ -998,11 +998,11 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
 		if (mYearlyRule->type() == YearlyRule::POS)
 		{
 			// It's by position
-			KAEventData::MonthPos pos;
+			KAEvent::MonthPos pos;
 			pos.days.fill(false);
 			pos.days.setBit(mYearlyRule->dayOfWeek() - 1);
 			pos.weeknum = mYearlyRule->week();
-			QList<KAEventData::MonthPos> poses;
+			QList<KAEvent::MonthPos> poses;
 			poses.append(pos);
 			event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
 		}

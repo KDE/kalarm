@@ -1,7 +1,7 @@
 /*
  *  akonadi_serializer_kalarm.cpp  -  Akonadi resource serializer for KAlarm
  *  Program:  kalarm
- *  Copyright © 2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -21,7 +21,7 @@
 
 #include "akonadi_serializer_kalarm.h"
 #include "kalarmmimetypevisitor.h"
-#include "kaeventdata.h"
+#include "kaevent.h"
 
 #include <QtCore/qplugin.h>
 
@@ -33,7 +33,7 @@ static QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
 static QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
 static QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
 
-typedef boost::shared_ptr<KAEventData> EventPtr;
+typedef boost::shared_ptr<KAEvent> EventPtr;
 
 using namespace Akonadi;
 
@@ -59,7 +59,7 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
         data.seek(0);
         return false;
     }
-    KAEventData* event = new KAEventData(0, static_cast<KCal::Event*>(i));
+    KAEvent* event = new KAEvent(static_cast<KCal::Event*>(i));
     QString mime = mimeType(event);
     if (mime.isEmpty())
     {
@@ -87,16 +87,16 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
 #endif
     e->updateKCalEvent(kcalEvent, false, false);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
-    head += KAEventData::icalProductId();
+    head += KAEvent::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";
-    head += KAEventData::currentCalendarVersionString();
+    head += KAEvent::currentCalendarVersionString();
     head += '\n';
     data.write(head);
     data.write(mFormat.toString(kcalEvent).toUtf8());
     data.write("\nEND:VCALENDAR");
 }
 
-QString SerializerPluginKAlarm::mimeType(const KAEventData* event)
+QString SerializerPluginKAlarm::mimeType(const KAEvent* event)
 {
     if (event->valid())
     {

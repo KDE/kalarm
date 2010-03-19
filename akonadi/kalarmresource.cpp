@@ -21,7 +21,7 @@
 
 #include "kalarmresource.h"
 #include "kalarmmimetypevisitor.h"
-#include "kaeventdata.h"
+#include "kaevent.h"
 
 #include <kcal/calendarlocal.h>
 #include <kcal/incidence.h>
@@ -38,14 +38,14 @@ static QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
 using namespace Akonadi;
 using namespace KCal;
 
-typedef boost::shared_ptr<KAEventData> EventPtr;
+typedef boost::shared_ptr<KAEvent> EventPtr;
 
 KAlarmResource::KAlarmResource(const QString& id)
-    : ICalResourceBase(id, i18nc("Filedialog filter for *.ics *.ical", "KAlarm Calendar File")),
+    : ICalResourceBase(id),
       mMimeVisitor(new KAlarmMimeTypeVisitor())
 {
     // Set a default start-of-day time for date-only alarms.
-    KAEventData::setStartOfDay(QTime(0,0,0));
+    KAEvent::setStartOfDay(QTime(0,0,0));
 
     QStringList mimeTypes;
     if (id.contains("_active"))
@@ -87,8 +87,10 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
         return false;
     }
 
-    KAEventData* event = new KAEventData(0, kcalEvent);
+    KAEvent* event = new KAEvent(kcalEvent);
+#if 0
     event->setItemId(item.id());
+#endif
     QString mime = mimeType(event);
     if (mime.isEmpty())
     {
@@ -175,7 +177,8 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
 /******************************************************************************
 * Retrieve all events from the calendar, and set each into a new item's
 * payload. The Akonadi id for each item will be a new one.
-* Signal the retrieval of the items by calling itemsRetrieved(items).
+* Signal the retrieval of the items by calling itemsRetrieved(items), which
+* updates Akonadi with the new item list, based on each item's remoteId().
 */
 void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
 {
@@ -186,7 +189,7 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
         if (kcalEvent->alarms().isEmpty())
             continue;    // ignore events without alarms
 
-        KAEventData* event = new KAEventData(0, kcalEvent);
+        KAEvent* event = new KAEvent(kcalEvent);
         QString mime = mimeType(event);
         if (mime.isEmpty())
         {
@@ -196,14 +199,14 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
  
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
-        event->setItemId(item.id());
+//        event->setItemId(item.id());
         item.setPayload(EventPtr(event));
         items << item;
     }
     itemsRetrieved(items);
 }
 
-QString KAlarmResource::mimeType(const KAEventData* event)
+QString KAlarmResource::mimeType(const KAEvent* event)
 {
     if (event->valid())
     {

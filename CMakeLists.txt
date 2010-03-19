@@ -4,13 +4,15 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 include_directories(
-${CMAKE_CURRENT_BINARY_DIR}
-        ./ 
-	./cal
-	./lib 
-	./resources 
+	${CMAKE_CURRENT_BINARY_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/ 
+	${CMAKE_CURRENT_SOURCE_DIR}/cal
+	${CMAKE_CURRENT_SOURCE_DIR}/lib 
+	${CMAKE_CURRENT_SOURCE_DIR}/resources 
         ${Boost_INCLUDE_DIR}
 ) 
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 add_subdirectory( cal ) 
 
@@ -61,7 +63,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
    birthdaydlg.cpp 
    birthdaymodel.cpp
    main.cpp 
-   kaevent.cpp 
    editdlg.cpp 
    editdlgtypes.cpp
    soundpicker.cpp 

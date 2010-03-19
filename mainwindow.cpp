@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1224,7 +1224,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
 	kDebug() << "Formats:" << e->mimeData()->formats();
 	const QMimeData* data = e->mimeData();
-	KAEventData::Action action = KAEventData::MESSAGE;
+	KAEvent::Action action = KAEvent::MESSAGE;
 	QByteArray      bytes;
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
@@ -1306,7 +1306,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		if (start.isDateOnly())
 			flags |= KAEvent::ANY_TIME;
 		KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
-		           QFont(), KAEventData::MESSAGE, 0, flags, true);
+		           QFont(), KAEvent::MESSAGE, 0, flags, true);
 		if (todo->recurs())
 		{
 			ev.setRecurrence(*todo->recurrence());
@@ -1321,7 +1321,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		kDebug() << "URL";
 		// Try to find the mime type of the file, without downloading a remote file
 		KMimeType::Ptr mimeType = KMimeType::findByUrl(files[0]);
-		action = mimeType->name().startsWith(QLatin1String("audio/")) ? KAEventData::AUDIO : KAEventData::FILE;
+		action = mimeType->name().startsWith(QLatin1String("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
 		alarmText.setText(files[0].prettyUrl());
 	}
 	else if (data->hasText())
@@ -1335,7 +1335,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 
 	if (!alarmText.isEmpty())
 	{
-		if (action == KAEventData::MESSAGE
+		if (action == KAEvent::MESSAGE
 		&&  (alarmText.isEmail() || alarmText.isScript()))
 		{
 			// If the alarm text could be interpreted as an email or command script,
@@ -1353,7 +1353,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 				return;   // user didn't press OK
 			int i = types.indexOf(type);
 			if (i == 1)
-				action = alarmText.isEmail() ? KAEventData::EMAIL : KAEventData::COMMAND;
+				action = alarmText.isEmail() ? KAEvent::EMAIL : KAEvent::COMMAND;
 		}
 		KAlarm::editNewAlarm(action, win, &alarmText);
 	}

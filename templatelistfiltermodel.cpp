@@ -1,7 +1,7 @@
 /*
  *  templatelistfiltermodel.cpp  -  proxy model class for lists of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,10 +58,11 @@ bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&
 	int type;
 	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
 	{
-		case KAEventData::MESSAGE:
-		case KAEventData::FILE:     type = EventListModel::DISPLAY;  break;
-		case KAEventData::COMMAND:  type = EventListModel::COMMAND;  break;
-		case KAEventData::EMAIL:    type = EventListModel::EMAIL;  break;
+#warning AUDIO case missing
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
+		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
+		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
 		default:                    type = EventListModel::ALL;  break;
 	}
 	return type & mTypeFilter;
@@ -117,11 +118,12 @@ Qt::ItemFlags TemplateListFilterModel::flags(const QModelIndex& index) const
 	int type;
 	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
 	{
-		case KAEventData::MESSAGE:
-		case KAEventData::FILE:     type = EventListModel::DISPLAY;  break;
-		case KAEventData::COMMAND:  type = EventListModel::COMMAND;  break;
-		case KAEventData::EMAIL:    type = EventListModel::EMAIL;  break;
-		default:                    type = EventListModel::ALL;  break;
+#warning AUDIO case missing
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
+		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
+		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
+		default:                type = EventListModel::ALL;  break;
 	}
 	if (!(type & mTypesEnabled))
 		f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));

@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -886,24 +886,24 @@ void editNewAlarm(EditAlarmDlg::Type type, QWidget* parent)
 /******************************************************************************
 * Execute a New Alarm dialog for the specified alarm type.
 */
-void editNewAlarm(KAEventData::Action action, QWidget* parent, const AlarmText* text)
+void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text)
 {
 	bool setAction = false;
 	EditAlarmDlg::Type type;
 	switch (action)
 	{
-		case KAEventData::MESSAGE:
-		case KAEventData::FILE:
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:
 			type = EditAlarmDlg::DISPLAY;
 			setAction = true;
 			break;
-		case KAEventData::COMMAND:
+		case KAEvent::COMMAND:
 			type = EditAlarmDlg::COMMAND;
 			break;
-		case KAEventData::EMAIL:
+		case KAEvent::EMAIL:
 			type = EditAlarmDlg::EMAIL;
 			break;
-		case KAEventData::AUDIO:
+		case KAEvent::AUDIO:
 			type = EditAlarmDlg::AUDIO;
 			break;
 		default:
@@ -1174,7 +1174,7 @@ KAEvent::List templateList()
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (includeCmdAlarms  ||  event->action() != KAEventData::COMMAND)
+		if (includeCmdAlarms  ||  event->action() != KAEvent::COMMAND)
 			templates.append(event);
 	}
 	return templates;
@@ -1187,7 +1187,7 @@ KAEvent::List templateList()
 */
 void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
-	if (event  &&  event->action() == KAEventData::EMAIL
+	if (event  &&  event->action() == KAEvent::EMAIL
 	&&  Preferences::emailAddress().isEmpty())
 		KMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
 		                                       "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
@@ -1611,23 +1611,6 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 }
 
 /******************************************************************************
-* Check whether a date/time is during working hours and/or holidays, depending
-* on the flags set for the specified event.
-*/
-bool isWorkingTime(const KDateTime& dt, const KAEventData* event)
-{
-	bool workOnly = event && event->workTimeOnly();
-	bool holidays = event && event->holidaysExcluded();
-	if ((workOnly  &&  !Preferences::workDays().testBit(dt.date().dayOfWeek() - 1))
-	||  (holidays  &&  Preferences::holidays().isHoliday(dt.date())))
-		return false;
-	if (!workOnly)
-		return true;
-	return dt.isDateOnly()
-	   ||  (dt.time() >= Preferences::workDayStart()  &&  dt.time() < Preferences::workDayEnd());
-}
-
-/******************************************************************************
 * Convert a date/time specification string into a local date/time or date value.
 * Parameters:
 *   timeString  = in the form [[[yyyy-]mm-]dd-]hh:mm [TZ] or yyyy-mm-dd [TZ].
@@ -1853,13 +1836,13 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 	QString userEmail;
 	switch (event->action())
 	{
-		case KAEventData::MESSAGE:
-		case KAEventData::FILE:
-		case KAEventData::COMMAND:
+		case KAEvent::MESSAGE:
+		case KAEvent::FILE:
+		case KAEvent::COMMAND:
 			kcalEvent->setSummary(event->cleanText());
 			userEmail = Preferences::emailAddress();
 			break;
-		case KAEventData::EMAIL:
+		case KAEvent::EMAIL:
 		{
 			QString from = event->emailFromId()
 			             ? Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
@@ -1870,7 +1853,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 			userEmail = from;
 			break;
 		}
-		case KAEventData::AUDIO:
+		case KAEvent::AUDIO:
 			kcalEvent->setSummary(event->audioFile());
 			break;
 	}

@@ -201,18 +201,18 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			switch (role)
 			{
 				case Qt::BackgroundRole:
-					if (event->action() == KAEventData::MESSAGE
-					||  event->action() == KAEventData::FILE
-					||  (event->action() == KAEventData::COMMAND && event->commandDisplay()))
+					if (event->action() == KAEvent::MESSAGE
+					||  event->action() == KAEvent::FILE
+					||  (event->action() == KAEvent::COMMAND && event->commandDisplay()))
 						return event->bgColour();
-					if (event->action() == KAEventData::COMMAND
+					if (event->action() == KAEvent::COMMAND
 					&&  event->commandError() != KAEvent::CMD_NO_ERROR)
 						return Qt::red;
 					break;
 				case Qt::ForegroundRole:
 					if (event->commandError() != KAEvent::CMD_NO_ERROR)
 					{
-						if (event->action() == KAEventData::COMMAND && !event->commandDisplay())
+						if (event->action() == KAEvent::COMMAND && !event->commandDisplay())
 							return Qt::white;
 						QColor colour = Qt::red;
 						int r, g, b;
@@ -228,7 +228,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					break;
 				case SortRole:
 				{
-					unsigned i = (event->action() == KAEventData::MESSAGE || event->action() == KAEventData::FILE)
+					unsigned i = (event->action() == KAEvent::MESSAGE || event->action() == KAEvent::FILE)
 				           	? event->bgColour().rgb() : 0;
 					return QString("%1").arg(i, 6, 10, QLatin1Char('0'));
 				}
@@ -268,9 +268,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					break;
 				case Qt::DisplayRole:
 				case SortRole:
-					return AlarmText::summary(event->eventData(), 1);
+					return AlarmText::summary(*event, 1);
 				case Qt::ToolTipRole:
-					return AlarmText::summary(event->eventData());
+					return AlarmText::summary(*event);
 				default:
 					break;
 			}

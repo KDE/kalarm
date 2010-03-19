@@ -415,7 +415,7 @@ void MessageWin::initView()
 		// It's a normal alarm message window
 		switch (mAction)
 		{
-			case KAEventData::FILE:
+			case KAEvent::FILE:
 			{
 				// Display the file name
 				QLabel* label = new QLabel(mMessage, topWidget);
@@ -491,7 +491,7 @@ void MessageWin::initView()
 				}
 				break;
 			}
-			case KAEventData::MESSAGE:
+			case KAEvent::MESSAGE:
 			{
 				// Message label
 				// Using MessageText instead of QLabel allows scrolling and mouse copying
@@ -527,7 +527,7 @@ void MessageWin::initView()
 					topLayout->addStretch();
 				break;
 			}
-			case KAEventData::COMMAND:
+			case KAEvent::COMMAND:
 			{
 				mCommandText = new MessageText(topWidget);
 				mCommandText->setBackgroundColour(mBgColour);
@@ -538,7 +538,7 @@ void MessageWin::initView()
 				theApp()->execCommandAlarm(mEvent, mEvent.alarm(mAlarmType), this, SLOT(readProcessOutput(ShellProcess*)));
 				break;
 			}
-			case KAEventData::EMAIL:
+			case KAEvent::EMAIL:
 			default:
 				break;
 		}
@@ -571,7 +571,7 @@ void MessageWin::initView()
 		// It's an error message
 		switch (mAction)
 		{
-			case KAEventData::EMAIL:
+			case KAEvent::EMAIL:
 			{
 				// Display the email addresses and subject.
 				QFrame* frame = new QFrame(topWidget);
@@ -597,9 +597,9 @@ void MessageWin::initView()
 				grid->addWidget(label, 1, 1, Qt::AlignLeft);
 				break;
 			}
-			case KAEventData::COMMAND:
-			case KAEventData::FILE:
-			case KAEventData::MESSAGE:
+			case KAEvent::COMMAND:
+			case KAEvent::FILE:
+			case KAEvent::MESSAGE:
 			default:
 				// Just display the error message strings
 				break;
@@ -981,7 +981,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 		kError() << "Invalid alarm: id=" << mEventID;
 	}
 	mMessage             = config.readEntry("Message");
-	mAction              = static_cast<KAEventData::Action>(config.readEntry("Type", 0));
+	mAction              = static_cast<KAEvent::Action>(config.readEntry("Type", 0));
 	mFont                = config.readEntry("Font", QFont());
 	mBgColour            = config.readEntry("BgColour", QColor(Qt::white));
 	mFgColour            = config.readEntry("FgColour", QColor(Qt::black));
@@ -1621,10 +1621,10 @@ QSize MessageWin::sizeHint() const
 	QSize desired;
 	switch (mAction)
 	{
-		case KAEventData::MESSAGE:
+		case KAEvent::MESSAGE:
 			desired = MainWindowBase::sizeHint();
 			break;
-		case KAEventData::COMMAND:
+		case KAEvent::COMMAND:
 			if (mShown)
 			{
 				// For command output, expand the window to accommodate the text
@@ -1672,7 +1672,7 @@ void MessageWin::showEvent(QShowEvent* se)
 		 */
 		bool execComplete = true;
 		QSize s = sizeHint();     // fit the window round the message
-		if (mAction == KAEventData::FILE  &&  !mErrorMsgs.count())
+		if (mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
 			KAlarm::readConfigWindowSize("FileMessage", s);
 		resize(s);
 
@@ -1765,7 +1765,7 @@ void MessageWin::moveEvent(QMoveEvent* e)
 */
 void MessageWin::frameDrawn()
 {
-	if (!mErrorWindow  &&  mAction == KAEventData::MESSAGE)
+	if (!mErrorWindow  &&  mAction == KAEvent::MESSAGE)
 	{
 		QSize s = sizeHint();
 		if (width() > s.width()  ||  height() > s.height())
@@ -1828,7 +1828,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 	}
 	else
 	{
-		if (mShown  &&  mAction == KAEventData::FILE  &&  !mErrorMsgs.count())
+		if (mShown  &&  mAction == KAEvent::FILE  &&  !mErrorMsgs.count())
 			KAlarm::writeConfigWindowSize("FileMessage", re->size());
 		MainWindowBase::resizeEvent(re);
 	}
