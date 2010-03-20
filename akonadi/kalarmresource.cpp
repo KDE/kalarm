@@ -140,7 +140,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     EventPtr payload = item.payload<EventPtr>();
     if (item.remoteId() != payload->id())
     {
-        cancelTask(i18n("Item ID %1 differs from payload ID %2.").arg(item.remoteId()).arg(payload->id()));
+        cancelTask(i18n("Item ID %1 differs from payload ID %2.",item.remoteId(),payload->id()));
         return;
     }
     KCal::Incidence* incidence = calendar()->incidence(item.remoteId());
