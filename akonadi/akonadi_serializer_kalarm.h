@@ -39,7 +39,7 @@ class SerializerPluginKAlarm : public QObject, public Akonadi::ItemSerializerPlu
         void serialize(const Akonadi::Item& item, const QByteArray& label, QIODevice& data, int& version);
 
     private:
-        QString mimeType(const KAEvent*);
+        QString mimeType(const KAEvent&);
 
         KCal::ICalFormat mFormat;
 };

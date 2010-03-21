@@ -31,7 +31,9 @@ using namespace KHolidays;
 
 #include <ksystemtimezone.h>
 #include <klocale.h>
+#ifndef USE_AKONADI
 #include <kconfiggroup.h>
+#endif
 #include <kdebug.h>
 
 using namespace KCal;
@@ -104,7 +106,9 @@ static const QString DISP_DEFER = QLatin1String("DEFER");
 static const QString DISP_EDIT  = QLatin1String("EDIT");
 
 // Command error strings
+#ifndef USE_AKONADI
 QString KAEvent::Private::mCmdErrConfigGroup = QLatin1String("CommandErrors");
+#endif
 static const QString CMD_ERROR_VALUE      = QLatin1String("MAIN");
 static const QString CMD_ERROR_PRE_VALUE  = QLatin1String("PRE");
 static const QString CMD_ERROR_POST_VALUE = QLatin1String("POST");
@@ -192,6 +196,9 @@ KAEvent::KAEvent()
 KAEvent::Private::Private()
     : mResource(0),
       mCommandError(CMD_NO_ERROR),
+#ifdef USE_AKONADI
+      mItemId(-1),
+#endif
       mReminderMinutes(0),
       mRevision(0),
       mRecurrence(0),
@@ -247,13 +254,16 @@ KAEvent::Private::Private(const KAEvent::Private& e)
 */
 void KAEvent::Private::copy(const KAEvent::Private& event)
 {
-    mResource        = event.mResource;
-    mAllTrigger      = event.mAllTrigger;
-    mMainTrigger     = event.mMainTrigger;
-    mAllWorkTrigger  = event.mAllWorkTrigger;
-    mMainWorkTrigger = event.mMainWorkTrigger;
-    mCommandError    = event.mCommandError;
     KAAlarmEventBase::copy(event);
+    mResource                = event.mResource;
+    mAllTrigger              = event.mAllTrigger;
+    mMainTrigger             = event.mMainTrigger;
+    mAllWorkTrigger          = event.mAllWorkTrigger;
+    mMainWorkTrigger         = event.mMainWorkTrigger;
+    mCommandError            = event.mCommandError;
+#ifdef USE_AKONADI
+    mItemId                  = event.mItemId;
+#endif
     mTemplateName            = event.mTemplateName;
     mResourceId              = event.mResourceId;
     mAudioFile               = event.mAudioFile;
@@ -323,6 +333,9 @@ void KAEvent::Private::set(const Event* event)
     // Extract status from the event
     mCommandError           = CMD_NO_ERROR;
     mResource               = 0;
+#ifdef USE_AKONADI
+    mItemId                 = -1;
+#endif
     mEventID                = event->uid();
     mRevision               = event->revision();
     mTemplateName.clear();
@@ -2680,34 +2693,39 @@ void KAEvent::Private::setCommandError(const QString& configString)
 
 /******************************************************************************
 * Set the command last error status.
-* The status is written to the config file.
+* If 'writeConfig' is true, the status is written to the config file.
 */
-void KAEvent::Private::setCommandError(CmdErrType error) const
+void KAEvent::Private::setCommandError(CmdErrType error, bool writeConfig) const
 {
     kDebug() << mEventID << "," << error;
     if (error == mCommandError)
         return;
     mCommandError = error;
-    KConfigGroup config(KGlobal::config(), mCmdErrConfigGroup);
-    if (mCommandError == CMD_NO_ERROR)
-        config.deleteEntry(mEventID);
-    else
+    if (writeConfig)
     {
-        QString errtext;
-        switch (mCommandError)
+#ifndef USE_AKONADI
+        KConfigGroup config(KGlobal::config(), mCmdErrConfigGroup);
+        if (mCommandError == CMD_NO_ERROR)
+            config.deleteEntry(mEventID);
+        else
         {
-            case CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
-            case CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
-            case CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
-            case CMD_ERROR_PRE_POST:
-                errtext = CMD_ERROR_PRE_VALUE + ',' + CMD_ERROR_POST_VALUE;
-                break;
-            default:
-                break;
+            QString errtext;
+            switch (mCommandError)
+            {
+                case CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
+                case CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
+                case CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
+                case CMD_ERROR_PRE_POST:
+                    errtext = CMD_ERROR_PRE_VALUE + ',' + CMD_ERROR_POST_VALUE;
+                    break;
+                default:
+                    break;
+            }
+            config.writeEntry(mEventID, errtext);
         }
-        config.writeEntry(mEventID, errtext);
+        config.sync();
+#endif
     }
-    config.sync();
 }
 
 /******************************************************************************

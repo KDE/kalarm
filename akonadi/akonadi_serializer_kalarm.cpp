@@ -27,13 +27,10 @@
 
 #include <akonadi/item.h>
 #include <kdebug.h>
-#include <boost/shared_ptr.hpp>
 
 static QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
 static QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
 static QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
-
-typedef boost::shared_ptr<KAEvent> EventPtr;
 
 using namespace Akonadi;
 
@@ -59,18 +56,17 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
         data.seek(0);
         return false;
     }
-    KAEvent* event = new KAEvent(static_cast<KCal::Event*>(i));
+    KAEvent event(static_cast<KCal::Event*>(i));
     QString mime = mimeType(event);
     if (mime.isEmpty())
     {
         kWarning(5263) << "Event with uid" << i->uid() << "contains no usable alarms!";
-        delete event;
         data.seek(0);
         return false;
     }
 
     item.setMimeType(mime);
-    item.setPayload<EventPtr>(EventPtr(event));
+    item.setPayload<KAEvent>(event);
     return true;
 }
 
@@ -78,14 +74,14 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
 {
     Q_UNUSED(version);
 
-    if (label != Item::FullPayload || !item.hasPayload<EventPtr>())
+    if (label != Item::FullPayload || !item.hasPayload<KAEvent>())
         return;
-    EventPtr e = item.payload<EventPtr>();
+    KAEvent e = item.payload<KAEvent>();
     KCal::Event* kcalEvent = new KCal::Event;
 #ifdef __GNUC__
 #warning Should updateKCalEvent() third parameter be true for archived events?
 #endif
-    e->updateKCalEvent(kcalEvent, false, false);
+    e.updateKCalEvent(kcalEvent, false, false);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
     head += KAEvent::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";
@@ -96,11 +92,11 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     data.write("\nEND:VCALENDAR");
 }
 
-QString SerializerPluginKAlarm::mimeType(const KAEvent* event)
+QString SerializerPluginKAlarm::mimeType(const KAEvent& event)
 {
-    if (event->valid())
+    if (event.valid())
     {
-        switch (event->category())
+        switch (event.category())
         {
             case KCalEvent::ACTIVE:    return MIME_ACTIVE;
             case KCalEvent::ARCHIVED:  return MIME_ARCHIVED;

@@ -33,7 +33,7 @@ class KAlarmResource : public ICalResourceBase
     public:
         KAlarmResource(const QString& id);
         virtual ~KAlarmResource();
-        static QString mimeType(const KAEvent*);
+        static QString mimeType(const KAEvent&);
 
     protected Q_SLOTS:
         void doRetrieveItems(const Akonadi::Collection&);

@@ -28,6 +28,9 @@
 #include "kcalendar.h"
 #include "repetition.h"
 
+#ifdef USE_AKONADI
+#include <akonadi/entity.h>
+#endif
 #include <kcal/person.h>
 
 #include <QColor>
@@ -294,6 +297,9 @@ class KALARM_CAL_EXPORT KAEvent
         void               setCategory(KCalEvent::Status s)        { d->setCategory(s); }
         void               setUid(KCalEvent::Status s)             { d->mEventID = KCalEvent::uid(d->mEventID, s);  d->mUpdated = true; }
         void               setEventId(const QString& id)           { d->mEventID = id;  d->mUpdated = true; }
+#ifdef USE_AKONADI
+        void               setItemId(Akonadi::Entity::Id id)       { d->mItemId = id; }
+#endif
         void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt;  d->mUpdated = true; }
         void               setSaveDateTime(const KDateTime& dt)    { d->mSaveDateTime = dt;  d->mUpdated = true; }
         void               setLateCancel(int lc)                   { d->mLateCancel = lc;  d->mUpdated = true; }
@@ -314,7 +320,8 @@ class KALARM_CAL_EXPORT KAEvent
         void               reinstateFromDisplaying(const KCal::Event* e, QString& resourceID, bool& showEdit, bool& showDefer)
                                                                    { d->reinstateFromDisplaying(e, resourceID, showEdit, showDefer); }
         void               setCommandError(const QString& configString) { d->setCommandError(configString); }
-        void               setCommandError(CmdErrType t) const     { d->setCommandError(t); }
+        void               setCommandError(CmdErrType t, bool writeConfig = true) const
+                                                                   { d->setCommandError(t, writeConfig); }
         void               setArchive()                            { d->mArchive = true;  d->mUpdated = true; }
         void               setEnabled(bool enable)                 { d->mEnabled = enable;  d->mUpdated = true; }
         void               startChanges()                          { d->startChanges(); }
@@ -365,6 +372,9 @@ class KALARM_CAL_EXPORT KAEvent
         Action             action() const                 { return (Action)d->mActionType; }
         bool               displayAction() const          { return d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_FILE || (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay); }
         const QString&     id() const                     { return d->mEventID; }
+#ifdef USE_AKONADI
+        Akonadi::Entity::Id itemId() const                { return d->mItemId; }
+#endif
         bool               valid() const                  { return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin); }
         int                alarmCount() const             { return d->mAlarmCount; }
         const DateTime&    startDateTime() const          { return d->mStartDateTime; }
@@ -501,7 +511,7 @@ class KALARM_CAL_EXPORT KAEvent
                 bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
                 void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
                 void               setCommandError(const QString& configString);
-                void               setCommandError(CmdErrType) const;
+                void               setCommandError(CmdErrType, bool writeConfig) const;
                 void               startChanges()                 { ++mChangeCount; }
                 void               endChanges();
                 void               removeExpiredAlarm(KAAlarm::Type);
@@ -559,6 +569,9 @@ class KALARM_CAL_EXPORT KAEvent
                 mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
                 mutable CmdErrType mCommandError;      // command execution error last time the alarm triggered
 
+#ifdef USE_AKONADI
+                Akonadi::Entity::Id mItemId;           // Akonadi::Item ID for this event
+#endif
                 QString            mTemplateName;      // alarm template's name, or null if normal event
                 QString            mResourceId;        // saved resource ID (not the resource the event is in)
                 QString            mAudioFile;         // ATTACH: audio file to play
