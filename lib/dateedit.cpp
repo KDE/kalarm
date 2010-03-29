@@ -18,7 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QMouseEvent>
+#include <QtCore/QDate>
+#include <QtGui/QMouseEvent>
+
 #include <kglobal.h>
 #include <klocale.h>
 #include <kmessagebox.h>
