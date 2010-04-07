@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -397,6 +397,7 @@ void SoundWidget::playSound()
 	if (!validate(true))
 		return;
 	mPlayer = Phonon::createPlayer(Phonon::MusicCategory, mUrl);
+	mPlayer->setParent(this);
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
 	mFilePlay->setIcon(SmallIcon("media-playback-stop"));   // change the play button to a stop button
 	mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));

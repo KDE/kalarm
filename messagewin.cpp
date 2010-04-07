@@ -1453,18 +1453,22 @@ void AudioThread::run()
 		kError() << "Open failure:" << audioFile;
 		return;
 	}
-	mAudioObject = new Phonon::MediaObject();
+	mAudioObject = new Phonon::MediaObject(this);
 	mAudioObject->setCurrentSource(source);
 	Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);
 	mPath = Phonon::createPath(mAudioObject, output);
-	float maxvol = qMax(mVolume, mFadeVolume);
-	output->setVolume(maxvol);
-	if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
+	if (mVolume >= 0  ||  mFadeVolume >= 0)
 	{
-		Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(mAudioObject);
-		fader->setVolume(mFadeVolume / maxvol);
-		fader->fadeTo(mVolume / maxvol, mFadeSeconds * 1000);
-		mPath.insertEffect(fader);
+		float vol = (mVolume >= 0) ? mVolume : output->volume();
+		float maxvol = qMax(vol, mFadeVolume);
+		output->setVolume(maxvol);
+		if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
+		{
+			Phonon::VolumeFaderEffect* fader = new Phonon::VolumeFaderEffect(mAudioObject);
+			fader->setVolume(mFadeVolume / maxvol);
+			fader->fadeTo(mVolume / maxvol, mFadeSeconds * 1000);
+			mPath.insertEffect(fader);
+		}
 	}
 	connect(mAudioObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), SLOT(playStateChanged(Phonon::State)), Qt::DirectConnection);
 	connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()), Qt::DirectConnection);
