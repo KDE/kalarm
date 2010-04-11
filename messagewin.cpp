@@ -1455,6 +1455,7 @@ void AudioThread::run()
 	}
 	mAudioObject = new Phonon::MediaObject(this);
 	mAudioObject->setCurrentSource(source);
+	mAudioObject->setTransitionTime(100);   // workaround to prevent clipping of end of files in Xine backend
 	Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::NotificationCategory, mAudioObject);
 	mPath = Phonon::createPath(mAudioObject, output);
 	if (mVolume >= 0  ||  mFadeVolume >= 0)
