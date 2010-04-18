@@ -20,6 +20,8 @@
 #ifndef DATETIME_H
 #define DATETIME_H
 
+#include "kalarm_cal_export.h"
+
 #include <kdatetime.h>
 
 
@@ -33,7 +35,7 @@
  *
  *  @author David Jarvie <djarvie@kde.org>
 */
-class DateTime
+class KALARM_CAL_EXPORT DateTime
 {
 	public:
 		/** Default constructor.

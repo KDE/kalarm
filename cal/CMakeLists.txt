@@ -1,7 +1,3 @@
-include_directories(
-	../lib
-)
-
 ########### next target ###############
 set(kalarm_calendar_LIB_SRCS
 	kcalendar.cpp
@@ -9,7 +5,7 @@ set(kalarm_calendar_LIB_SRCS
 	alarmtext.cpp
 	identities.cpp
 	kaevent.cpp
-	../lib/datetime.cpp
+	datetime.cpp
 )
 
 kde4_add_library(kalarm_calendar SHARED ${kalarm_calendar_LIB_SRCS})
