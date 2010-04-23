@@ -78,10 +78,7 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
         return;
     KAEvent e = item.payload<KAEvent>();
     KCal::Event* kcalEvent = new KCal::Event;
-#ifdef __GNUC__
-#warning Should updateKCalEvent() third parameter be true for archived events?
-#endif
-    e.updateKCalEvent(kcalEvent, false, false);
+    e.updateKCalEvent(kcalEvent, false);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
     head += KAEvent::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";

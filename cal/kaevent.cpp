@@ -1897,15 +1897,18 @@ int KAEvent::Private::flags() const
 
 /******************************************************************************
  * Update an existing KCal::Event with the KAEvent::Private data.
- * If 'original' is true, the event start date/time is adjusted to its original
- * value instead of its next occurrence, and the expired main alarm is
- * reinstated.
+ * If 'checkUid' is true and the event has an ID, the function verifies that it
+ * is the same as the KCal::Event's uid.
  */
-bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool original) const
+bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
 {
+    // If it's an archived event, the event start date/time will be adjusted to its original
+    // value instead of its next occurrence, and the expired main alarm will be reinstated.
+    bool archived = (mCategory == KCalEvent::ARCHIVED);
+
     if (!ev
     ||  (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
-    ||  (!mAlarmCount  &&  (!original || !mMainExpired)))
+    ||  (!mAlarmCount  &&  (!archived || !mMainExpired)))
         return false;
 
     ev->startUpdates();   // prevent multiple update notifications
@@ -1968,7 +1971,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool original) 
         ev->setCustomProperty(KCalendar::APPNAME, LOG_PROPERTY, displayURL);
     else if (!mLogFile.isEmpty())
         ev->setCustomProperty(KCalendar::APPNAME, LOG_PROPERTY, mLogFile);
-    if (mArchive  &&  !original)
+    if (mArchive  &&  !archived)
     {
         QStringList params;
         if (mArchiveReminderMinutes)
@@ -2019,18 +2022,18 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool original) 
     ev->setAllDay(false);
     ev->setHasEndDate(false);
 
-    DateTime dtMain = original ? mStartDateTime : mNextMainDateTime;
+    DateTime dtMain = archived ? mStartDateTime : mNextMainDateTime;
     int      ancillaryType = 0;   // 0 = invalid, 1 = time, 2 = offset
     DateTime ancillaryTime;       // time for ancillary alarms (pre-action, extra audio, etc)
     int      ancillaryOffset = 0; // start offset for ancillary alarms
-    if (!mMainExpired  ||  original)
+    if (!mMainExpired  ||  archived)
     {
         /* The alarm offset must always be zero for the main alarm. To determine
          * which recurrence is due, the property X-KDE-KALARM_NEXTRECUR is used.
          * If the alarm offset was non-zero, exception dates and rules would not
          * work since they apply to the event time, not the alarm time.
          */
-        if (!original  &&  checkRecur() != KARecurrence::NO_RECUR)
+        if (!archived  &&  checkRecur() != KARecurrence::NO_RECUR)
         {
             QDateTime dt = mNextMainDateTime.kDateTime().toTimeSpec(mStartDateTime.timeSpec()).dateTime();
             ev->setCustomProperty(KCalendar::APPNAME, NEXT_RECUR_PROPERTY,
@@ -2050,7 +2053,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool original) 
     }
 
     // Add subsidiary alarms
-    if (mRepeatAtLogin  ||  (mArchiveRepeatAtLogin && original))
+    if (mRepeatAtLogin  ||  (mArchiveRepeatAtLogin && archived))
     {
         DateTime dtl;
         if (mArchiveRepeatAtLogin)
@@ -2068,7 +2071,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool original) 
             ancillaryType = 1;
         }
     }
-    if (mReminderMinutes  ||  (mArchiveReminderMinutes && original))
+    if (mReminderMinutes  ||  (mArchiveReminderMinutes && archived))
     {
         int minutes = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
         initKCalAlarm(ev, -minutes * 60, QStringList(mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE));
@@ -2085,7 +2088,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool original) 
         {
             if (checkRecur() == KARecurrence::NO_RECUR)
                 nextDateTime = mStartDateTime;
-            else if (!original)
+            else if (!archived)
             {
                 // It's a deferral of an expired recurrence.
                 // Need to ensure that the alarm offset is to an occurrence

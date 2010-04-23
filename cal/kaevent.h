@@ -367,8 +367,8 @@ class KALARM_CAL_EXPORT KAEvent
         KAAlarm            nextAlarm(const KAAlarm& al) const  { return d->nextAlarm(al.type()); }
         KAAlarm            nextAlarm(KAAlarm::Type t) const    { return d->nextAlarm(t); }
         KAAlarm            convertDisplayingAlarm() const;
-        bool               updateKCalEvent(KCal::Event* e, bool checkUid = true, bool original = false) const
-                                                          { return d->updateKCalEvent(e, checkUid, original); }
+        bool               updateKCalEvent(KCal::Event* e, bool checkUid = true) const
+                                                          { return d->updateKCalEvent(e, checkUid); }
         Action             action() const                 { return (Action)d->mActionType; }
         bool               displayAction() const          { return d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_FILE || (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay); }
         const QString&     id() const                     { return d->mEventID; }
@@ -422,7 +422,9 @@ class KALARM_CAL_EXPORT KAEvent
         QString            resourceId() const             { return d->mResourceId; }
         AlarmResource*     resource() const               { return d->mResource; }
         CmdErrType         commandError() const           { return d->mCommandError; }
+#ifndef USE_AKONADI
         static QString     commandErrorConfigGroup()      { return Private::mCmdErrConfigGroup; }
+#endif
 
         bool               isWorkingTime(const KDateTime& dt) const  { return d->isWorkingTime(dt); }
 
@@ -518,7 +520,7 @@ class KALARM_CAL_EXPORT KAEvent
                 KAAlarm            alarm(KAAlarm::Type) const;
                 KAAlarm            firstAlarm() const;
                 KAAlarm            nextAlarm(KAAlarm::Type) const;
-                bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool original = false) const;
+                bool               updateKCalEvent(KCal::Event*, bool checkUid = true) const;
                 DateTime           mainDateTime(bool withRepeats = false) const
                                                           { return (withRepeats && mNextRepeat && mRepetition)
                                                             ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
@@ -556,7 +558,9 @@ class KALARM_CAL_EXPORT KAEvent
                 inline void        set_archiveReminder();
 
             public:
+#ifndef USE_AKONADI
                 static QString     mCmdErrConfigGroup; // config file group for command error recording
+#endif
                 static QFont       mDefaultFont;       // default alarm message font
                 static const KHolidays::HolidayRegion* mHolidays;  // holiday region to use
                 static QBitArray   mWorkDays;          // working days of the week

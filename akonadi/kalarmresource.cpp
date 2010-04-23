@@ -20,8 +20,11 @@
  */
 
 #include "kalarmresource.h"
+#include "eventattribute.h"
 #include "kalarmmimetypevisitor.h"
 #include "kaevent.h"
+
+#include <akonadi/attributefactory.h>
 
 #include <kcal/calendarlocal.h>
 #include <kcal/incidence.h>
@@ -55,6 +58,8 @@ KAlarmResource::KAlarmResource(const QString& id)
         mimeTypes << QLatin1String("application/x-vnd.kde.alarms")
                   << MIME_ACTIVE << MIME_ARCHIVED << MIME_TEMPLATE;
     initialise(mimeTypes, "kalarm");
+
+    AttributeFactory::registerAttribute<EventAttribute>();
 }
 
 KAlarmResource::~KAlarmResource()
@@ -85,13 +90,15 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     }
 
     KAEvent event(kcalEvent);
-    event.setItemId(item.id());
     QString mime = mimeType(event);
     if (mime.isEmpty())
     {
         emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
         return false;
     }
+    event.setItemId(item.id());
+    if (item.hasAttribute<EventAttribute>())
+        event.setCommandError(item.attribute<EventAttribute>()->commandError(), false);
 
     Item i = item;
     i.setMimeType(mime);
@@ -108,12 +115,9 @@ void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collect
 {
     if (!checkItemAddedChanged<KAEvent>(item, CheckForAdded))
         return;
-    KAEvent e = item.payload<KAEvent>();
+    KAEvent event = item.payload<KAEvent>();
     KCal::Event* kcalEvent = new KCal::Event;
-#ifdef __GNUC__
-#warning Should updateKCalEvent() third parameter be true for archived events?
-#endif
-    e.updateKCalEvent(kcalEvent, false, false);
+    event.updateKCalEvent(kcalEvent, false);
     calendar()->addIncidence(kcalEvent);
 
     Item it(item);
@@ -131,10 +135,10 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     Q_UNUSED(parts)
     if (!checkItemAddedChanged<KAEvent>(item, CheckForChanged))
         return;
-    KAEvent payload = item.payload<KAEvent>();
-    if (item.remoteId() != payload.id())
+    KAEvent event = item.payload<KAEvent>();
+    if (item.remoteId() != event.id())
     {
-        cancelTask(i18n("Item ID %1 differs from payload ID %2.", item.remoteId(), payload.id()));
+        cancelTask(i18n("Item ID %1 differs from payload ID %2.", item.remoteId(), event.id()));
         return;
     }
     KCal::Incidence* incidence = calendar()->incidence(item.remoteId());
@@ -147,10 +151,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         }
         else
         {
-#ifdef __GNUC__
-#warning Should updateKCalEvent() third parameter be true for archived events?
-#endif
-            payload.updateKCalEvent(static_cast<KCal::Event*>(incidence), false, false);
+            event.updateKCalEvent(static_cast<KCal::Event*>(incidence), false);
             calendar()->setModified(true);
         }
     }
@@ -158,10 +159,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     {
         // not in the calendar yet, should not happen -> add it
         KCal::Event* kcalEvent = new KCal::Event;
-#ifdef __GNUC__
-#warning Should updateKCalEvent() third parameter be true for archived events?
-#endif
-        payload.updateKCalEvent(kcalEvent, false, false);
+        event.updateKCalEvent(kcalEvent, false);
         calendar()->addIncidence(kcalEvent);
     }
     scheduleWrite();
@@ -191,6 +189,9 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
         item.setPayload(event);
+#ifdef __GNUC__
+#warning Check that commandError value is retained (in EventAttribute)
+#endif
         items << item;
     }
     itemsRetrieved(items);

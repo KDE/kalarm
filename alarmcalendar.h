@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,9 +59,9 @@ class AlarmCalendar : public QObject
 		bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
 		void                  disabledChanged(const KAEvent*);
 		KAEvent::List         atLoginAlarms() const;
-		KCal::Event*          createKCalEvent(const KAEvent* e, bool original = false) const
-		                                             { return createKCalEvent(e, QString(), original); }
-		KCal::Event*          createKCalEvent(const KAEvent*, const QString& baseID, bool original = false) const;
+		KCal::Event*          createKCalEvent(const KAEvent* e) const
+		                                             { return createKCalEvent(e, QString()); }
+		KCal::Event*          createKCalEvent(const KAEvent*, const QString& baseID) const;
 		KAEvent*              event(const QString& uniqueID);
 		KCal::Event*          kcalEvent(const QString& uniqueID);
 		KAEvent*              templateEvent(const QString& templateName);

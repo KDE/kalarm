@@ -740,7 +740,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 		KCalEvent::Status type = event->category();
 		QString id = KCalEvent::uid(kcalEvent->uid(), type);
 		kcalEvent->setUid(id);
-		event->updateKCalEvent(kcalEvent, false, (type == KCalEvent::ARCHIVED));
+		event->updateKCalEvent(kcalEvent, false);
 		if (calendar.addEvent(kcalEvent))
 			some = true;
 		else
@@ -885,7 +885,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 		event->setEventId(id);
 		kcalEvent->setUid(id);
 	}
-	event->updateKCalEvent(kcalEvent, false, (type == KCalEvent::ARCHIVED));
+	event->updateKCalEvent(kcalEvent, false);
 	bool ok = false;
 	bool remove = false;
 	if (mCalType == RESOURCES)
@@ -1005,7 +1005,7 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
 	{
 		// Create a new KCal::Event, keeping any custom properties from the old event.
 		// Ensure it has a new ID.
-		Event* kcalEvent = createKCalEvent(newEvent, oldEventId, (mEventType == KCalEvent::ARCHIVED));
+		Event* kcalEvent = createKCalEvent(newEvent, oldEventId);
 		if (noNewId)
 			kcalEvent->setUid(CalFormat::createUniqueId());
 		AlarmResources* resources = AlarmResources::instance();
@@ -1140,11 +1140,11 @@ KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
 * The caller takes ownership of the returned KCal::Event. Note that the ID of
 * the returned KCal::Event may be the same as an existing calendar event, so
 * be careful not to end up duplicating IDs.
-* If 'original' is true, the event start date/time is adjusted to its original
-* value instead of its next occurrence, and the expired main alarm is
+* If it's an archived alarm, the event start date/time is adjusted to its
+* original value instead of its next occurrence, and the expired main alarm is
 * reinstated.
 */
-Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID, bool original) const
+Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID) const
 {
 	if (mCalType != RESOURCES)
 		kFatal() << "AlarmCalendar::createKCalEvent(KAEvent): invalid for display calendar";
@@ -1153,7 +1153,7 @@ Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID, 
 	QString id = baseID.isEmpty() ? ev->id() : baseID;
 	Event* calEvent = id.isEmpty() ? 0 : AlarmResources::instance()->event(id);
 	Event* newEvent = calEvent ? new Event(*calEvent) : new Event;
-	ev->updateKCalEvent(newEvent, false, original);
+	ev->updateKCalEvent(newEvent, false);
 	newEvent->setUid(ev->id());
 	return newEvent;
 }

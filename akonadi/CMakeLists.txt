@@ -7,9 +7,15 @@ set( AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
   ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
 )
 
+if (KDEPIM_MOBILE_UI)
 set( AKONADI_SINGLEFILERESOURCE_SHARED_UI
-  ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog.ui
+  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog_mobile.ui
 )
+else (KDEPIM_MOBILE_UI)
+set( AKONADI_SINGLEFILERESOURCE_SHARED_UI
+  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog_desktop.ui
+)
+endif (KDEPIM_MOBILE_UI)
 ########### end definitions copied from akonadi/ ###############
 
 include_directories(
@@ -31,6 +37,7 @@ set( kalarmresource_SRCS
   ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
   ${AKONADI_ICAL_RESOURCE}/icalresourcebase.cpp
   kalarmresource.cpp
+  eventattribute.cpp
 )
 
 install(FILES kalarmresource.desktop kalarmresource_active.desktop kalarmresource_archived.desktop kalarmresource_template.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents")
