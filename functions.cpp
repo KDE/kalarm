@@ -746,7 +746,8 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (enable != event->enabled())
+		if (event->category() == KCalEvent::ACTIVE
+		&&  enable != event->enabled())
 		{
 			event->setEnabled(enable);
 
