@@ -37,7 +37,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#ifndef USE_AKONADI
 #include <kconfig.h>
+#endif
 #include <kaboutdata.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
@@ -463,10 +465,10 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 		events += event;
 		mEventMap[kcalevent->uid()] = event;
 
+#ifndef USE_AKONADI
 		// Set any command execution error flags for the alarm.
 		// These are stored in the KAlarm config file, not the alarm
 		// calendar, since they are specific to the user's local system.
-#ifndef USE_AKONADI
 		QString cmdErr = config.readEntry(event->id());
 		if (!cmdErr.isEmpty())
 			event->setCommandError(cmdErr);
@@ -1128,8 +1130,8 @@ KCalEvent::Status AlarmCalendar::deleteEventInternal(const QString& eventID)
 		mCalendar->deleteEvent(kcalEvent);
 	}
 
-	// Delete any command execution error flags for the alarm.
 #ifndef USE_AKONADI
+	// Delete any command execution error flags for the alarm.
 	KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
 	if (config.hasKey(id))
 	{
