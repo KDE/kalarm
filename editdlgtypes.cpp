@@ -54,13 +54,13 @@
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
 
+#include <akonadi/contact/emailaddressselectiondialog.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <kmessagebox.h>
 #include <khbox.h>
-#include <kabc/addresseedialog.h>
 #include <kdebug.h>
 
 #include <kcal/icaldrag.h>
@@ -1367,10 +1367,14 @@ void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
 */
 void EditEmailAlarmDlg::openAddressBook()
 {
-	KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
-	if (a.isEmpty())
+	Akonadi::EmailAddressSelectionDialog dlg(this);
+	if (!dlg.exec())
 		return;
-	Person person(a.realName(), a.preferredEmail());
+
+	Akonadi::EmailAddressSelectionView::Selection::List selections = dlg.selectedAddresses();
+	if (selections.isEmpty())
+		return;
+	Person person(selections.first().name(), selections.first().email());
 	QString addrs = mEmailToEdit->text().trimmed();
 	if (!addrs.isEmpty())
 		addrs += ", ";
