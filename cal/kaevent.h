@@ -164,7 +164,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
         KAAlarm(const KAAlarm&);
         ~KAAlarm()  { }
         Action             action() const               { return (Action)mActionType; }
-        bool               valid() const                { return mType != INVALID__ALARM; }
+        bool               isValid() const              { return mType != INVALID__ALARM; }
         Type               type() const                 { return static_cast<Type>(mType & ~TIMED_DEFERRAL_FLAG); }
         SubType            subType() const              { return mType; }
         const QString&     eventId() const              { return mEventID; }
@@ -375,7 +375,7 @@ class KALARM_CAL_EXPORT KAEvent
 #ifdef USE_AKONADI
         Akonadi::Entity::Id itemId() const                { return d->mItemId; }
 #endif
-        bool               valid() const                  { return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin); }
+        bool               isValid() const                { return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin); }
         int                alarmCount() const             { return d->mAlarmCount; }
         const DateTime&    startDateTime() const          { return d->mStartDateTime; }
         DateTime           mainDateTime(bool withRepeats = false) const

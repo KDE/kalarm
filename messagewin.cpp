@@ -1149,7 +1149,7 @@ void MessageWin::alarmShowing(KAEvent& event, const KCal::Event* kcalEvent)
 	else
 	{
 		KAAlarm alarm = event.alarm(mAlarmType);
-		if (!alarm.valid())
+		if (!alarm.isValid())
 			kError() << "Alarm type not found:" << event.id() << ":" << mAlarmType;
 		else
 		{

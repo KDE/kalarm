@@ -455,7 +455,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 			continue;    // ignore events without alarms
 
 		KAEvent* event = new KAEvent(kcalevent);
-		if (!event->valid())
+		if (!event->isValid())
 		{
 			kWarning() << "Ignoring unusable event" << kcalevent->uid();
 			delete event;
@@ -622,7 +622,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			const Event* event = events[i];
-			if (event->alarms().isEmpty()  ||  !KAEvent(event).valid())
+			if (event->alarms().isEmpty()  ||  !KAEvent(event).isValid())
 				continue;    // ignore events without alarms, or usable alarms
 			KCalEvent::Status type = KCalEvent::status(event);
 			if (type == KCalEvent::TEMPLATE)
@@ -1258,7 +1258,7 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KCalEvent::Status
 		Event* event = list[i];
 		if (event->alarms().isEmpty()
 		||  (type != KCalEvent::EMPTY  &&  !(type & KCalEvent::status(event)))
-		||  !KAEvent(event).valid())
+		||  !KAEvent(event).isValid())
 			list.removeAt(i);
 		else
 			++i;

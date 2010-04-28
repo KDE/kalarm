@@ -399,7 +399,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 	kDebug() << oldEvent.id();
 
 	UpdateStatus status = UPDATE_OK;
-	if (!newEvent.valid())
+	if (!newEvent.isValid())
 	{
 		deleteEvent(oldEvent, true);
 		status = UPDATE_FAILED;
@@ -465,7 +465,7 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 {
 	kDebug() << event.id();
 
-	if (!event.valid())
+	if (!event.isValid())
 		deleteEvent(event, archiveOnDelete);
 	else
 	{
@@ -971,7 +971,7 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
 	if (!templateName.isEmpty())
 	{
 		KAEvent* templateEvent = AlarmCalendar::resources()->templateEvent(templateName);
-		if (templateEvent->valid())
+		if (templateEvent->isValid())
 		{
 			editNewAlarm(templateEvent, parent);
 			return true;

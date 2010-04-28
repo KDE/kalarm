@@ -91,7 +91,7 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
 
 QString SerializerPluginKAlarm::mimeType(const KAEvent& event)
 {
-    if (event.valid())
+    if (event.isValid())
     {
         switch (event.category())
         {

@@ -199,7 +199,7 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
 
 QString KAlarmResource::mimeType(const KAEvent& event)
 {
-    if (event.valid())
+    if (event.isValid())
     {
         switch (event.category())
         {
