@@ -2,11 +2,14 @@ project(kalarm)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 
-#set(BUILD_akonadi TRUE)
+# KAlarm depends on kdepim/akonadi/ which is impossible for packagers.
+# Akonadi for KAlarm doesn't work yet.
+set(BUILD_akonadi FALSE)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 if(BUILD_akonadi)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -DUSE_AKONADI")
+else(BUILD_akonadi)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 endif(BUILD_akonadi)
 
 
@@ -21,14 +24,9 @@ include_directories(
 ) 
 
 add_subdirectory( cal ) 
-
-# KAlarm depends on kdepim/akonadi/ which is impossible for packagers.
-# The Akonadi resource for KAlarm won't be available in KDE 4.4
 if(BUILD_akonadi)
-# Disable for KDE 4.4 since it doesn't work yet
   add_subdirectory( akonadi )
 endif(BUILD_akonadi)
-
 add_subdirectory( resources ) 
 add_subdirectory( appicons ) 
 add_subdirectory( pixmaps ) 
