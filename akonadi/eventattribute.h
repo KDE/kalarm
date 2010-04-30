@@ -21,8 +21,6 @@
 #ifndef EVENT_ATTRIBUTE_H
 #define EVENT_ATTRIBUTE_H
 
-#include "kalarm.h"
-
 #include "kaevent.h"
 
 #include <akonadi/attribute.h>
