@@ -56,7 +56,6 @@
 #include <netwm.h>
 #include <kdebug.h>
 #include <kshell.h>
-#include <ksystemtrayicon.h>
 
 #include <QObject>
 #include <QTimer>
@@ -788,7 +787,6 @@ void KAlarmApp::removeWindow(TrayWindow*)
 */
 bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 {
-	kDebug();
 	static bool creating = false;
 	if (show)
 	{
@@ -807,6 +805,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 			}
 			mTrayWindow = new TrayWindow(parent ? parent : MainWindow::firstWindow());
 			connect(mTrayWindow, SIGNAL(deleted()), SIGNAL(trayIconToggled()));
+			mTrayWindow->show();
 			emit trayIconToggled();
 
 			if (!checkSystemTray())
