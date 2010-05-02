@@ -65,9 +65,9 @@ class AlarmCalendar : public QObject
 		KAEvent*              event(const QString& uniqueID);
 		KCal::Event*          kcalEvent(const QString& uniqueID);
 		KAEvent*              templateEvent(const QString& templateName);
-		KAEvent::List         events(KCalEvent::Status s = KCalEvent::EMPTY)   { return events(0, s); }
-		KAEvent::List         events(AlarmResource*, KCalEvent::Status = KCalEvent::EMPTY);
-		KAEvent::List         events(const KDateTime& from, const KDateTime& to, KCalEvent::Status);
+		KAEvent::List         events(KCalEvent::Statuses s = KCalEvent::EMPTY)   { return events(0, s); }
+		KAEvent::List         events(AlarmResource*, KCalEvent::Statuses = KCalEvent::EMPTY);
+		KAEvent::List         events(const KDateTime& from, const KDateTime& to, KCalEvent::Statuses);
 		KCal::Event::List     kcalEvents(KCalEvent::Status s = KCalEvent::EMPTY)   { return kcalEvents(0, s); }
 		KCal::Event::List     kcalEvents(AlarmResource*, KCalEvent::Status = KCalEvent::EMPTY);
 		bool                  eventReadOnly(const QString& uniqueID) const;

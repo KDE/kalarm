@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.h  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -105,7 +105,7 @@ class EventListModel : public QAbstractTableModel
 		void     slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 
 	private:
-		explicit EventListModel(KCalEvent::Status, QObject* parent = 0);
+		explicit EventListModel(KCalEvent::Statuses, QObject* parent = 0);
 		bool     updateEvent(int row);
 		void     removeEvent(int row);
 		int      findEvent(const QString& eventId) const;
@@ -128,7 +128,7 @@ class EventListModel : public QAbstractTableModel
 		static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
 		KAEvent::List       mEvents;
-		KCalEvent::Status   mStatus;    // types of events contained in this model
+		KCalEvent::Statuses mStatus;    // types of events contained in this model
 		bool                mHaveEvents;// there are events in this model
 
 		using QObject::event;   // prevent "hidden" warning

@@ -1,7 +1,7 @@
 /*
  *  kcalendar.h  -  kcal library calendar and event categorisation
  *  Program:  kalarm
- *  Copyright © 2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006,2007,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -31,34 +31,40 @@ namespace KCal {
 
 class KALARM_CAL_EXPORT KCalendar
 {
-	public:
-		static QByteArray APPNAME;
-		/** Compatibility of resource calendar format. */
-		enum Status {
-			Current,       // in current KAlarm format
-			Converted,     // in current KAlarm format, but not yet saved
-			Convertible,   // in an older KAlarm format
-			Incompatible,  // not written by KAlarm, or in a newer KAlarm version
-			ByEvent        // individual events have their own compatibility status
-		};
+    public:
+        static QByteArray APPNAME;
+        /** Compatibility of resource calendar format. */
+        enum Status
+        {
+            Current,       // in current KAlarm format
+            Converted,     // in current KAlarm format, but not yet saved
+            Convertible,   // in an older KAlarm format
+            Incompatible,  // not written by KAlarm, or in a newer KAlarm version
+            ByEvent        // individual events have their own compatibility status
+        };
 };
 
 class KALARM_CAL_EXPORT KCalEvent
 {
-	public:
-		/** The category of an event, indicated by the middle part of its UID. */
-		enum Status
-		{
-			EMPTY      = 0,       // the event has no alarms
-			ACTIVE     = 0x01,    // the event is currently active
-			ARCHIVED   = 0x02,    // the event is archived
-			TEMPLATE   = 0x04,    // the event is an alarm template
-			DISPLAYING = 0x08     // the event is currently being displayed
-		};
+    public:
+        /** The category of an event, indicated by the middle part of its UID. */
+        enum Status
+        {
+            EMPTY      = 0,       // the event has no alarms
+            ACTIVE     = 0x01,    // the event is currently active
+            ARCHIVED   = 0x02,    // the event is archived
+            TEMPLATE   = 0x04,    // the event is an alarm template
+            DISPLAYING = 0x08     // the event is currently being displayed
+        };
+        Q_DECLARE_FLAGS(Statuses, Status);
 
-		static QString uid(const QString& id, Status);
-		static Status  status(const KCal::Event*, QString* param = 0);
-		static void    setStatus(KCal::Event*, Status, const QString& param = QString());
+        static QString uid(const QString& id, Status);
+        static Status  status(const KCal::Event*, QString* param = 0);
+        static void    setStatus(KCal::Event*, Status, const QString& param = QString());
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KCalEvent::Statuses);
+
 #endif
+
+// vim: et sw=4:

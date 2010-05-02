@@ -1208,7 +1208,7 @@ KAEvent* AlarmCalendar::templateEvent(const QString& templateName)
 * Return all events in the calendar which contain alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-KAEvent::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Status type)
+KAEvent::List AlarmCalendar::events(AlarmResource* resource, KCalEvent::Statuses type)
 {
 	KAEvent::List list;
 	if (!mCalendar  ||  (resource && mCalType != RESOURCES))
@@ -1270,7 +1270,7 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KCalEvent::Status
 * Return all events which have alarms falling within the specified time range.
 * 'type' is the OR'ed desired event types.
 */
-KAEvent::List AlarmCalendar::events(const KDateTime& from, const KDateTime& to, KCalEvent::Status type)
+KAEvent::List AlarmCalendar::events(const KDateTime& from, const KDateTime& to, KCalEvent::Statuses type)
 {
 	kDebug() << from << "-" << to;
 	KAEvent::List evnts;

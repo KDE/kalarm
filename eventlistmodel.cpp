@@ -56,7 +56,7 @@ EventListModel* EventListModel::alarms()
 {
 	if (!mAlarmInstance)
 	{
-		mAlarmInstance = new EventListModel(static_cast<KCalEvent::Status>(KCalEvent::ACTIVE | KCalEvent::ARCHIVED));
+		mAlarmInstance = new EventListModel(KCalEvent::ACTIVE | KCalEvent::ARCHIVED);
 		Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateArchivedColour(const QColor&)));
 		Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateDisabledColour(const QColor&)));
 		Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::HolidayRegion&)), mAlarmInstance, SLOT(slotUpdateHolidays()));
@@ -80,7 +80,7 @@ EventListModel::~EventListModel()
 		mTemplateInstance = 0;
 }
 
-EventListModel::EventListModel(KCalEvent::Status status, QObject* parent)
+EventListModel::EventListModel(KCalEvent::Statuses status, QObject* parent)
 	: QAbstractTableModel(parent),
 	  mStatus(status)
 {

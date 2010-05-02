@@ -1,7 +1,7 @@
 /*
  *  alarmlistfiltermodel.h  -  proxy model class for lists of alarms
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2007,2008,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ class AlarmListFilterModel : public EventListFilterModel
 		enum { ColumnCount = 6 };
 
 		explicit AlarmListFilterModel(EventListModel* baseModel, QObject* parent = 0);
-		void                setStatusFilter(KCalEvent::Status);
-		KCalEvent::Status   statusFilter() const   { return mStatusFilter; }
+		void                setStatusFilter(KCalEvent::Statuses);
+		KCalEvent::Statuses statusFilter() const   { return mStatusFilter; }
 		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
 
 	protected:
@@ -42,7 +42,7 @@ class AlarmListFilterModel : public EventListFilterModel
 		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
 
 	private:
-		KCalEvent::Status mStatusFilter;
+		KCalEvent::Statuses mStatusFilter;
 };
 
 #endif // ALARMLISTFILTERMODEL_H
