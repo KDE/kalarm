@@ -22,7 +22,7 @@
 #include "lineedit.moc"
 
 #include <libkdepim/maillistdrag.h>
-#include <libkdepim/kvcarddrag.h>
+#include <kabc/vcarddrag.h>
 #include <kcal/icaldrag.h>
 
 #include <kurl.h>
@@ -108,7 +108,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 		ok = (data->hasText()
 		   || KUrl::List::canDecode(data)
 		   || (mType != Url && KPIM::MailList::canDecode(data))
-		   || (mType == Emails && KPIM::KVCardDrag::canDecode(data)));
+		   || (mType == Emails && KABC::VCardDrag::canDecode(data)));
 	if (ok)
 		e->accept(rect());
 	else
@@ -138,7 +138,7 @@ void LineEdit::dropEvent(QDropEvent* e)
 	}
 	// This must come before KUrl
 	else if (mType == Emails
-	&&  KPIM::KVCardDrag::canDecode(data)  &&  KPIM::KVCardDrag::fromMimeData(data, addrList))
+	&&  KABC::VCardDrag::canDecode(data)  &&  KABC::VCardDrag::fromMimeData(data, addrList))
 	{
 		// KAddressBook entries
 		for (KABC::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
