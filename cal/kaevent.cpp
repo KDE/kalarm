@@ -263,6 +263,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mCommandError            = event.mCommandError;
 #ifdef USE_AKONADI
     mItemId                  = event.mItemId;
+    mCustomProperties        = event.mCustomProperties;
 #endif
     mTemplateName            = event.mTemplateName;
     mResourceId              = event.mResourceId;
@@ -388,6 +389,19 @@ void KAEvent::Private::set(const Event* event)
             }
         }
     }
+#ifdef USE_AKONADI
+    // Store the non-KAlarm custom properties of the event
+    QByteArray kalarmKey = "X-KDE-" + KCalendar::APPNAME + '-';
+    mCustomProperties = event->customProperties();
+    for (QMap<QByteArray, QString>::Iterator it = mCustomProperties.begin();  it != mCustomProperties.end(); )
+    {
+        if (it.key().startsWith(kalarmKey))
+            it = mCustomProperties.erase(it);
+        else
+            ++it;
+    }
+#endif
+
     bool ok;
     bool dateOnly = false;
     QStringList flags = event->customProperty(KCalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
@@ -1899,8 +1913,15 @@ int KAEvent::Private::flags() const
  * Update an existing KCal::Event with the KAEvent::Private data.
  * If 'checkUid' is true and the event has an ID, the function verifies that it
  * is the same as the KCal::Event's uid.
+ * If 'setCustomProperties' is true, all the KCal::Event's existing custom
+ * properties are cleared and replaced with the KAEvent's custom properties. If
+ * false, the KCal::Event's non-KAlarm custom properties are left untouched.
  */
+#ifdef USE_AKONADI
+bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool setCustomProperties) const
+#else
 bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
+#endif
 {
     // If it's an archived event, the event start date/time will be adjusted to its original
     // value instead of its next occurrence, and the expired main alarm will be reinstated.
@@ -1920,6 +1941,10 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
     // Set up event-specific data
 
     // Set up custom properties.
+#ifdef USE_AKONADI
+    if (setCustomProperties)
+        ev->setCustomProperties(mCustomProperties);
+#endif
     ev->removeCustomProperty(KCalendar::APPNAME, FLAGS_PROPERTY);
     ev->removeCustomProperty(KCalendar::APPNAME, NEXT_RECUR_PROPERTY);
     ev->removeCustomProperty(KCalendar::APPNAME, REPEAT_PROPERTY);

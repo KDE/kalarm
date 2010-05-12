@@ -367,8 +367,13 @@ class KALARM_CAL_EXPORT KAEvent
         KAAlarm            nextAlarm(const KAAlarm& al) const  { return d->nextAlarm(al.type()); }
         KAAlarm            nextAlarm(KAAlarm::Type t) const    { return d->nextAlarm(t); }
         KAAlarm            convertDisplayingAlarm() const;
+#ifdef USE_AKONADI
+        bool               updateKCalEvent(KCal::Event* e, bool checkUid = true, bool setCustomProperties = true) const
+                                                          { return d->updateKCalEvent(e, checkUid, setCustomProperties); }
+#else
         bool               updateKCalEvent(KCal::Event* e, bool checkUid = true) const
                                                           { return d->updateKCalEvent(e, checkUid); }
+#endif
         Action             action() const                 { return (Action)d->mActionType; }
         bool               displayAction() const          { return d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_FILE || (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay); }
         const QString&     id() const                     { return d->mEventID; }
@@ -520,7 +525,11 @@ class KALARM_CAL_EXPORT KAEvent
                 KAAlarm            alarm(KAAlarm::Type) const;
                 KAAlarm            firstAlarm() const;
                 KAAlarm            nextAlarm(KAAlarm::Type) const;
+#ifdef USE_AKONADI
+                bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool setCustomProperties = true) const;
+#else
                 bool               updateKCalEvent(KCal::Event*, bool checkUid = true) const;
+#endif
                 DateTime           mainDateTime(bool withRepeats = false) const
                                                           { return (withRepeats && mNextRepeat && mRepetition)
                                                             ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
@@ -575,6 +584,7 @@ class KALARM_CAL_EXPORT KAEvent
 
 #ifdef USE_AKONADI
                 Akonadi::Entity::Id mItemId;           // Akonadi::Item ID for this event
+                QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
 #endif
                 QString            mTemplateName;      // alarm template's name, or null if normal event
                 QString            mResourceId;        // saved resource ID (not the resource the event is in)

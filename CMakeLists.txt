@@ -7,10 +7,9 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 set(BUILD_akonadi FALSE)
 
 if(BUILD_akonadi)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -DUSE_AKONADI")
-else(BUILD_akonadi)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+  add_definitions(-DUSE_AKONADI)
 endif(BUILD_akonadi)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 
 include_directories(
