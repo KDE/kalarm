@@ -1375,7 +1375,7 @@ void EditEmailAlarmDlg::openAddressBook()
 	if (dlg->exec() != QDialog::Accepted)
 		return;
 
-	Akonadi::EmailAddressSelectionView::Selection::List selections = dlg->selectedAddresses();
+	Akonadi::EmailAddressSelection::List selections = dlg->selectedAddresses();
 	if (selections.isEmpty())
 		return;
 	Person person(selections.first().name(), selections.first().email());
