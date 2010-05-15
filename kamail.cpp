@@ -46,13 +46,13 @@
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>
 #include <kemailsettings.h>
-#include <k3resolver.h>
 #include <kcodecs.h>
 #include <kcharsets.h>
 #include <kascii.h>
 #include <kdebug.h>
 
 #include <QFile>
+#include <QHostInfo>
 #include <QList>
 #include <QRegExp>
 #include <QByteArray>
@@ -414,7 +414,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 {
 	KMime::Types::Address addr;
 	QString localhost = QLatin1String("localhost");
-	QString hostname  = KNetwork::KResolver::localHostName();
+	QString hostname  = QHostInfo::localHostName();
 	const EmailAddressList& addresses = event.emailAddresses();
 	for (int i = 0, end = addresses.count();  i < end;  ++i)
 	{
