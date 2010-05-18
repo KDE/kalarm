@@ -138,7 +138,7 @@ void Preferences::timeZoneChange(const QString& zone)
 const HolidayRegion& Preferences::holidays()
 {
 	QString regionCode = self()->mBase_HolidayRegion;
-	if (!mHolidays  ||  mHolidays->location() != regionCode)
+	if (!mHolidays  ||  mHolidays->regionCode() != regionCode)
 	{
 		delete mHolidays;
 		mHolidays = new HolidayRegion(regionCode);

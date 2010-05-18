@@ -639,27 +639,34 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 	label->setBuddy(mHolidays);
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	                        "Select which holiday region to use"));
-	QStringList holidays;
-	QStringList countryList = HolidayRegion::locations();
-	foreach (const QString& country, countryList)
-	{
-		QString countryFile = KStandardDirs::locate("locale", "l10n/" + country + "/entry.desktop");
-		QString regionName;  // name to display
-		if (!countryFile.isEmpty())
-		{
-			KConfig config(countryFile, KConfig::SimpleConfig);
-			KConfigGroup cfg(&config, "KCM Locale");
-			regionName = cfg.readEntry("Name");
-		}
-		if (regionName.isEmpty())
-			regionName = country;   // default to file name
 
-		holidays << regionName;
-		mHolidayNames[regionName] = country; // store region for saving to config file
-	}
-	qSort(holidays.begin(), holidays.end(), caseInsensitiveLessThan);
-	holidays.push_front(i18nc("@item:inlistbox Do not use holidays", "(None)"));
-	mHolidays->addItems(holidays);
+    QStringList regions = HolidayRegion::regions();
+    QMap<QString, QString> regionsMap;
+
+    foreach (const QString & regionCode, regions) {
+        QString name = HolidayRegion::name(regionCode);
+        QString languageName = KGlobal::locale()->languageCodeToName(HolidayRegion::languageCode(regionCode));
+        QString label;
+        if (languageName.isEmpty()) {
+            label = name;
+        } else {
+            label = i18nc("Holday region, region language", "%1 (%2)", name, languageName);
+        }
+        regionsMap.insert(label, regionCode);
+    }
+
+    mHolidays->addItem(i18nc("No holiday region", "None"), QString());
+    QMapIterator<QString, QString> i(regionsMap);
+    while (i.hasNext()) {
+        i.next();
+        mHolidays->addItem(i.key(), i.value());
+    }
+
+    if (Preferences::holidays().isValid()) {
+        mHolidays->setCurrentIndex(mHolidays->findData(Preferences::holidays().regionCode()));
+    } else {
+        mHolidays->setCurrentIndex(0);
+    }
 
 	// Start-of-day time
 	itemBox = new ItemBox(topWidget());
@@ -772,27 +779,12 @@ void TimePrefTab::restore(bool)
 	}
 	mTimeZone->setCurrentIndex(tzindex);
 #endif
-	QString region;
-	QString hol = Preferences::holidays().location();
-	if (!hol.isEmpty())
-	{
-		for (QMap<QString, QString>::ConstIterator it = mHolidayNames.constBegin();  it != mHolidayNames.constEnd();  ++it)
-		{
-			if (it.value() == hol)
-			{
-				region = it.key();
-				break;
-			}
-		}
-	}
-	int i;
-	for (i = mHolidays->count();  --i > 0 && mHolidays->itemText(i) != region; ) ;
-	mHolidays->setCurrentIndex(i);
+	mHolidays->setCurrentIndex(mHolidays->findData(Preferences::holidays().regionCode()));;
 	mStartOfDay->setValue(Preferences::startOfDay());
 	mWorkStart->setValue(Preferences::workDayStart());
 	mWorkEnd->setValue(Preferences::workDayEnd());
 	QBitArray days = Preferences::workDays();
-	for (i = 0;  i < 7;  ++i)
+	for (int i = 0;  i < 7;  ++i)
 	{
 		bool x = days.testBit(KAlarm::localeDayInWeek_to_weekDay(i) - 1);
 		mWorkDays[i]->setChecked(x);
@@ -811,8 +803,8 @@ void TimePrefTab::apply(bool syncToDisc)
 	if (tz.isValid()  &&  tz != Preferences::timeZone())
 		Preferences::setTimeZone(tz);
 #endif
-	QString hol = mHolidays->currentIndex() ? mHolidayNames[mHolidays->currentText()] : QString();
-	if (hol != Preferences::holidays().location())
+	QString hol = mHolidays->itemData(mHolidays->currentIndex()).toString();
+	if (hol != Preferences::holidays().regionCode())
 		Preferences::setHolidayRegion(hol);
 	int t = mStartOfDay->value();
 	QTime sodt(t/60, t%60, 0);
