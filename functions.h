@@ -98,6 +98,7 @@ void                editNewAlarm(KAEvent::Action, QWidget* parent = 0, const Ala
 void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent*, QWidget* parent = 0);
+void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, AlarmResource*);
 void                viewAlarm(const KAEvent*, QWidget* parent = 0);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewTemplate(const KAEvent* preset, QWidget* parent = 0);

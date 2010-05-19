@@ -1915,48 +1915,16 @@ void MessageWin::slotShowKMailMessage()
 */
 void MessageWin::slotEdit()
 {
-	AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, &mEvent, false, MainWindow::mainMainWindow(), EditAlarmDlg::RES_IGNORE);
-	KWindowSystem::setMainWindow(editDlg, winId());
-	KWindowSystem::setOnAllDesktops(editDlg->winId(), false);
-	mEditDlg = editDlg;
+	kDebug();
+	MainWindow* mainWin = MainWindow::mainMainWindow();
+	mEditDlg = EditAlarmDlg::create(false, &mEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
+	KWindowSystem::setMainWindow(mEditDlg, winId());
+	KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);
 	setButtonsReadOnly(true);
-	connect(editDlg, SIGNAL(accepted()), SLOT(editCloseOk()));
-	connect(editDlg, SIGNAL(rejected()), SLOT(editCloseCancel()));
+	connect(mEditDlg, SIGNAL(accepted()), SLOT(editCloseOk()));
+	connect(mEditDlg, SIGNAL(rejected()), SLOT(editCloseCancel()));
 	connect(KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)), SLOT(activeWindowChanged(WId)));
-
-	// Save values in case this window is closed by the time the dialog exits
-	KAEvent event = mEvent;
-	AlarmResource* resource = mResource;
-
-	editDlg->show();
-	QEventLoop eventloop;
-	eventloop.exec(QEventLoop::DialogExec);
-	if (editDlg  &&  editDlg->result() == QDialog::Accepted)
-	{
-		KAEvent newEvent;
-		AlarmResource* res;
-		editDlg->getEvent(newEvent, res);
-
-		// Update the displayed lists and the calendar file
-		KAlarm::UpdateStatus status;
-		if (AlarmCalendar::resources()->event(event.id()))
-		{
-			// The old alarm hasn't expired yet, so replace it
-			Undo::Event undo(event, resource);
-			status = KAlarm::modifyEvent(event, newEvent, editDlg);
-			Undo::saveEdit(undo, newEvent);
-		}
-		else
-		{
-			// The old event has expired, so simply create a new one
-			status = KAlarm::addEvent(newEvent, resource, editDlg);
-			Undo::saveAdd(newEvent, resource);
-		}
-
-		if (status != KAlarm::UPDATE_OK  &&  status <= KAlarm::UPDATE_KORG_ERR)
-			KAlarm::displayKOrgUpdateError(editDlg, KAlarm::ERR_MODIFY, status, 1);
-		KAlarm::outputAlarmWarnings(editDlg, &newEvent);
-	}
+	mainWin->editAlarm(mEditDlg, mEvent, mResource);
 }
 
 /******************************************************************************

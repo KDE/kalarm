@@ -1511,3 +1511,42 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
 	win->show();
 	return win;
 }
+
+/******************************************************************************
+* Called when the Edit button is clicked in an alarm message window.
+* This controls the alarm edit dialog created by the alarm window, and allows
+* it to remain unaffected by the alarm window closing.
+* See MessageWin::slotEdit() for more information.
+*/
+void MainWindow::editAlarm(EditAlarmDlg* dlg, const KAEvent& event, AlarmResource* resource)
+{
+	KAEvent ev = event;
+	ev.setResource(resource);
+	mEditAlarmMap[dlg] = ev;
+	connect(dlg, SIGNAL(accepted()), SLOT(editAlarmOk()));
+	dlg->show();
+#ifdef __GNUC__
+#warning Use AutoQPointer??
+#endif
+}
+
+/******************************************************************************
+* Called when OK is clicked in the alarm edit dialog shown by editAlarm().
+* Updates the event which has been edited.
+*/
+void MainWindow::editAlarmOk()
+{
+	EditAlarmDlg* dlg = qobject_cast<EditAlarmDlg*>(sender());
+	if (!dlg)
+		return;
+	QMap<EditAlarmDlg*, KAEvent>::Iterator it = mEditAlarmMap.find(dlg);
+	if (it == mEditAlarmMap.end())
+		return;
+	KAEvent event = it.value();
+	mEditAlarmMap.erase(it);
+	if (!event.isValid())
+		return;
+	if (dlg->result() != QDialog::Accepted)
+		return;
+	KAlarm::updateEditedAlarm(dlg, event, event.resource());
+}

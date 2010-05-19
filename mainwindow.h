@@ -64,6 +64,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
 		bool               showingArchived() const      { return mShowArchived; }
 		void               selectEvent(const QString& eventID);
+		void               editAlarm(EditAlarmDlg*, const KAEvent&, AlarmResource*);
 		virtual bool       eventFilter(QObject*, QEvent*);
 
 		static void        refresh();
@@ -139,6 +140,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotResourceStatusChanged();
 		void           resourcesResized();
 		void           showErrorMessage(const QString&);
+		void           editAlarmOk();
 
 	private:
 		typedef QList<MainWindow*> WindowList;
@@ -163,6 +165,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		ResourceSelector*    mResourceSelector;    // resource selector widget
 		QSplitter*           mSplitter;            // splits window into list and resource selector
 		AlarmResources*      mAlarmResources;      // calendar resources to use for this window
+		QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
 		KToggleAction*       mActionToggleResourceSel;
 		KAction*             mActionImportAlarms;
 		KAction*             mActionExportAlarms;
