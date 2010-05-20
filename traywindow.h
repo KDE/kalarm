@@ -1,7 +1,7 @@
 /*
  *  traywindow.h  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,6 +34,7 @@ class KToggleAction;
 class KAEvent;
 class MainWindow;
 class NewAlarmAction;
+class TemplateMenuAction;
 
 class TrayWindow : public KSystemTrayIcon
 {
@@ -72,7 +73,7 @@ class TrayWindow : public KSystemTrayIcon
 		QIcon           mIconSomeDisabled;    // icon indicating individual alarms disabled
 		KToggleAction*  mActionEnabled;
 		NewAlarmAction* mActionNew;
-		KAction*        mActionNewFromTemplate;
+		TemplateMenuAction* mActionNewFromTemplate;
 		bool            mHaveDisabledAlarms;  // some individually disabled alarms exist
 };
 
