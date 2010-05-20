@@ -1178,7 +1178,7 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 			// window, so closing it will quit the application.
 			// Quit once the close event has been processed. Deleting the
 			// window while still processing the event handler can cause a crash.
-			QTimer::singleShot(0, this, SLOT(slotDoQuit()));
+			QTimer::singleShot(0, this, SLOT(slotQuit()));
 			ce->ignore();
 			return;
 		}
