@@ -1273,8 +1273,8 @@ void MessageWin::playAudio()
 	if (mBeep)
 	{
 		// Beep using two methods, in case the sound card/speakers are switched off or not working
-		KNotification::beep();     // beep through the sound card & speakers
 		QApplication::beep();      // beep through the internal speaker
+		KNotification::beep();     // beep through the sound card & speakers
 	}
 	if (!mAudioFile.isEmpty())
 	{
