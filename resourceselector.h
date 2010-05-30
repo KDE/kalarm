@@ -77,6 +77,7 @@ class ResourceSelector : public QFrame
 	void  showInfo();
 	void  archiveDaysChanged(int days);
 	void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
+	void  reinstateAlarmTypeScrollBars();
 
     private:
 	AlarmResource* currentResource() const;

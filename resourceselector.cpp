@@ -146,9 +146,34 @@ void ResourceSelector::alarmTypeSelected()
 			addTip = i18nc("@info:tooltip", "Add a new alarm template calendar");
 			break;
 	}
+	// WORKAROUND: Switch scroll bars off to avoid crash (see explanation
+	// in reinstateAlarmTypeScrollBars() description).
+	mListView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	mListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	static_cast<ResourceFilterModel*>(mListView->model())->setFilter(mCurrentAlarmType);
 	mAddButton->setWhatsThis(addTip);
 	mAddButton->setToolTip(addTip);
+	// WORKAROUND: Switch scroll bars back on after allowing geometry to update ...
+	QTimer::singleShot(0, this, SLOT(reinstateAlarmTypeScrollBars()));
+}
+
+/******************************************************************************
+* WORKAROUND for crash due to presumed Qt bug.
+* Switch scroll bars off. This is to avoid a crash which can very occasionally
+* happen when changing from a list of calendars which requires vertical scroll
+* bars, to a list whose text is very slightly wider but which doesn't require
+* scroll bars at all. (The suspicion is that the width is such that it would
+* require horizontal scroll bars if the vertical scroll bars were still
+* present.) Presumably due to a Qt bug, this can result in a recursive call to
+* ResourceView::viewportEvent() with a Resize event.
+*
+* The crash only occurs if the ResourceSelector happens to have exactly (within
+* one pixel) the "right" width to create the crash.
+*/
+void ResourceSelector::reinstateAlarmTypeScrollBars()
+{
+	mListView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	mListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 /******************************************************************************
