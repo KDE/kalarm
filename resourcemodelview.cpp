@@ -327,7 +327,7 @@ void ResourceFilterModel::setFilter(AlarmResource::Type type)
 	if (type != mResourceType)
 	{
 		mResourceType = type;
-		filterChanged();
+		invalidateFilter();
 	}
 }
 
