@@ -35,7 +35,7 @@ void TemplateListFilterModel::setTypeFilter(EventListModel::Type type)
 	if (type != mTypeFilter)
 	{
 		mTypeFilter = type;
-		filterChanged();
+		invalidateFilter();
 	}
 }
 
@@ -44,7 +44,7 @@ void TemplateListFilterModel::setTypesEnabled(EventListModel::Type type)
 	if (type != mTypesEnabled)
 	{
 		mTypesEnabled = type;
-		filterChanged();
+		invalidateFilter();
 	}
 }
 
