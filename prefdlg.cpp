@@ -640,7 +640,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	                        "Select which holiday region to use"));
 
-    QStringList regions = HolidayRegion::regions();
+    QStringList regions = HolidayRegion::regionCodes();
     QMap<QString, QString> regionsMap;
 
     foreach (const QString & regionCode, regions) {
