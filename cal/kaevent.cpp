@@ -3626,8 +3626,7 @@ void KAEvent::setStartOfDay(const QTime& startOfDay)
  * is saved, no information is lost or corrupted.
  * Reply = true if any conversions were done.
  */
-bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersion,
-                                bool adjustSummerTime, const QTime& startOfDay)
+bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersion, bool adjustSummerTime)
 {
     // KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
     static const QChar   SEPARATOR        = QLatin1Char(';');
@@ -3854,7 +3853,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
             if (event->allDay())
             {
                 event->setAllDay(false);
-                start.setTime(startOfDay);
+                start.setTime(QTime(0, 0));
                 flags += DATE_ONLY_FLAG;
             }
             event->setHasEndDate(false);

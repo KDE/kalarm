@@ -472,7 +472,7 @@ class KALARM_CAL_EXPORT KAEvent
         static QByteArray  icalProductId();
         static int         currentCalendarVersion();
         static QByteArray  currentCalendarVersionString();
-        static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime, const QTime& startOfDay);
+        static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCal::CalendarLocal&);
 
         // Methods to set and get global defaults
