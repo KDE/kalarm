@@ -3627,7 +3627,7 @@ void KAEvent::setStartOfDay(const QTime& startOfDay)
  * Reply = true if any conversions were done.
  */
 bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersion,
-                                bool adjustSummerTime, const QTime& startOfDay, const KTimeZone& timeZone)
+                                bool adjustSummerTime, const QTime& startOfDay)
 {
     // KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
     static const QChar   SEPARATOR        = QLatin1Char(';');
@@ -4165,7 +4165,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
              * It's a KAlarm pre-2.2.9 or KAlarm 2.3 series pre-2.3.2 calendar file.
              * Set the time in the calendar for all date-only alarms to 00:00.
              */
-            if (convertStartOfDay(event, timeZone))
+            if (convertStartOfDay(event))
                 converted = true;
         }
 
@@ -4180,7 +4180,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
 * Set the time for a date-only event to 00:00.
 * Reply = true if the event was updated.
 */
-bool KAEvent::convertStartOfDay(Event* event, const KTimeZone& timeZone)
+bool KAEvent::convertStartOfDay(Event* event)
 {
     bool changed = false;
     QTime midnight(0, 0);
@@ -4188,11 +4188,11 @@ bool KAEvent::convertStartOfDay(Event* event, const KTimeZone& timeZone)
     if (flags.indexOf(DATE_ONLY_FLAG) >= 0)
     {
         // It's an untimed event, so fix it
-        QTime oldTime = event->dtStart().time();
-        int adjustment = oldTime.secsTo(midnight);
+        KDateTime oldDt = event->dtStart();
+        int adjustment = oldDt.time().secsTo(midnight);
         if (adjustment)
         {
-            event->setDtStart(KDateTime(event->dtStart().date(), midnight, timeZone));
+            event->setDtStart(KDateTime(oldDt.date(), midnight, oldDt.timeSpec()));
             int deferralOffset = 0;
             AlarmMap alarmMap;
             readAlarms(event, &alarmMap);
