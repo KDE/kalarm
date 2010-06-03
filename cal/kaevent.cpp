@@ -3164,9 +3164,6 @@ QString KAEvent::repetitionText(bool brief) const
 {
     if (d->mRepetition)
     {
-#ifdef __GNUC__
-#warning Get 24 hours displayed with daily repetition
-#endif
         if (!d->mRepetition.isDaily())
         {
             int minutes = d->mRepetition.intervalMinutes();
