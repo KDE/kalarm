@@ -1,7 +1,7 @@
 /*
- *  kalarm.h  -  global header file
+ *  version.h  -  program version functions
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2009-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,22 +18,22 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KALARM_H
-#define KALARM_H
+#ifndef VERSION_H
+#define VERSION_H
 
-#undef QT3_SUPPORT
+#include "kalarm_cal_export.h"
 
-#define KALARM_VERSION "2.5.2"
-#define KALARM_NAME "KAlarm"
-#define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
-
-#include <kdeversion.h>
+class QString;
 
 namespace KAlarm
 {
-/** Return current KAlarm version number as an integer. */
-int Version();
+
+/** Return a specified version as an integer. */
+inline int Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }
+
+/** Convert a version string to an integer. */
+KALARM_CAL_EXPORT int getVersionNumber(const QString& version, QString* subVersion = 0);
+
 }
 
-#endif // KALARM_H
-
+#endif // VERSION_H

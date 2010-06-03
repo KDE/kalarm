@@ -1,7 +1,7 @@
 /*
  *  kcalendar.h  -  kcal library calendar and event categorisation
  *  Program:  kalarm
- *  Copyright © 2006,2007,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2008,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,11 +22,13 @@
 #define KCALENDAR_H
 
 #include "kalarm_cal_export.h"
+#include <QByteArray>
 #include <QString>
 
 namespace KCal {
   class Event;
   class Alarm;
+  class CalendarLocal;
 }
 
 class KALARM_CAL_EXPORT KCalendar
@@ -42,6 +44,35 @@ class KALARM_CAL_EXPORT KCalendar
             Incompatible,  // not written by KAlarm, or in a newer KAlarm version
             ByEvent        // individual events have their own compatibility status
         };
+
+        /** Check the version of KAlarm which wrote a calendar file, and convert
+         *  it in memory to the current KAlarm format if possible. The storage 
+         *  file is not updated. The compability of the calendar format is
+         *  indicated by the return value.
+         *
+         *  @param calendar       calendar stored in @p localFile
+         *  @param localFile      full path of the calendar's file storage
+         *  @param versionString  receives calendar's KAlarm version as a string
+         *  @return 0 if the calendar is in the current KAlarm format;
+         *          >0 the older KAlarm version which wrote the calendar;
+         *          -1 calendar is not a KAlarm format or is an unknown KAlarm format
+         */
+        static int checkCompatibility(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
+
+        /** Set the program name and version for use in calendars. */
+        static void setProductId(const QByteArray& progName, const QByteArray& progVersion);
+
+        /** Return the product ID string for use in calendars.
+         *  setProductId() must have been called previously.
+         */
+        static QByteArray  icalProductId();
+
+    private:
+        static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
+        static void insertKAlarmCatalog();
+
+        static QByteArray mIcalProductId;
+        static bool mHaveKAlarmCatalog;
 };
 
 class KALARM_CAL_EXPORT KCalEvent

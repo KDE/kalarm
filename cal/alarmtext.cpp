@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "alarmtext.h"
 
 #include "kaevent.h"

@@ -1,7 +1,7 @@
 /*
  *  datetime.cpp  -  date/time with start-of-day time for date-only values 
  *  Program:  kalarm
- *  Copyright © 2003,2005-2007,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003,2005-2007,2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,7 +17,6 @@
  *  with this program; if not, write to the Free Software Foundation, Inc.,
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "datetime.h"
 
 #include <kglobal.h>

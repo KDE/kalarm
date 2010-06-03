@@ -65,29 +65,10 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 {
 	if (wrongType)
 		*wrongType = false;
-	bool version057_UTC = false;
-	QString subVersion, versionString;
-	int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
-	if (version < 0  ||  version > KAlarm::Version())
+	QString versionString;
+	int version = KCalendar::checkCompatibility(calendar, localFile, versionString);
+	if (version < 0)
 		return KCalendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
-
-	if (version)
-	{
-		// Calendar was created by an earlier version of KAlarm.
-		// Convert it to the current format.
-		if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
-		{
-			// KAlarm version 0.5.7 - check whether times are stored in UTC, in which
-			// case it is the KDE 3.0.0 version, which needs adjustment of summer times.
-			version057_UTC = isUTC(localFile);
-			kDebug() << "KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") << "UTC)";
-		}
-		else
-			kDebug() << "KAlarm version" << version;
-
-		// Convert events to current KAlarm format for if the calendar is saved
-		KAEvent::convertKCalEvents(calendar, version, version057_UTC);
-	}
 	if (!resource)
 		return KCalendar::Current;    // update non-shared calendars regardless
 
@@ -118,103 +99,3 @@ KCalendar::Status CalendarCompat::fix(KCal::CalendarLocal& calendar, const QStri
 	calendar.setCustomProperty(KCalendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
 	return KCalendar::Converted;
 }
-
-/******************************************************************************
-* Return the KAlarm version which wrote the calendar which has been loaded.
-* The format is, for example, 000507 for 0.5.7.
-* Reply = 0 if the calendar was created by the current version of KAlarm
-*       = -1 if it was created by KAlarm pre-0.3.5, or another program
-*       = version number if created by another KAlarm version.
-*/
-int CalendarCompat::readKAlarmVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
-{
-	subVersion.clear();
-	versionString = calendar.customProperty(KCalendar::APPNAME, VERSION_PROPERTY);
-	if (versionString.isEmpty())
-	{
-		// Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.
-		// If another application has written to the file, this may not be present.
-		const QString prodid = calendar.productId();
-		if (prodid.isEmpty())
-		{
-			// Check whether the calendar file is empty, in which case
-			// it can be written to freely.
-			QFileInfo fi(localFile);
-			if (!fi.size())
-				return 0;
-		}
-
-		// Find the KAlarm identifier
-		QString progname = QLatin1String(" KAlarm ");
-		int i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
-		if (i < 0)
-		{
-			// Older versions used KAlarm's translated name in the product ID, which
-			// could have created problems using a calendar in different locales.
-			progname = QString(" ") + KGlobal::mainComponent().aboutData()->programName() + ' ';
-			i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
-			if (i < 0)
-				return -1;    // calendar wasn't created by KAlarm
-		}
-
-		// Extract the KAlarm version string
-		versionString = prodid.mid(i + progname.length()).trimmed();
-		i = versionString.indexOf('/');
-		int j = versionString.indexOf(' ');
-		if (j >= 0  &&  j < i)
-			i = j;
-		if (i <= 0)
-			return -1;    // missing version string
-		versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
-	}
-	if (versionString == KAEvent::currentCalendarVersionString())
-		return 0;      // the calendar is in the current KAlarm format
-	int ver = KAlarm::getVersionNumber(versionString, &subVersion);
-	if (ver >= KAEvent::currentCalendarVersion()  &&  ver <= KAlarm::Version())
-		return 0;      // the calendar is in the current KAlarm format
-	return KAlarm::getVersionNumber(versionString, &subVersion);
-}
-
-/******************************************************************************
-* Check whether the calendar file has its times stored as UTC times,
-* indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
-* Reply = true if times are stored in UTC
-*       = false if the calendar is a vCalendar, times are not UTC, or any error occurred.
-*/
-bool CalendarCompat::isUTC(const QString& localFile)
-{
-	// Read the calendar file into a string
-	QFile file(localFile);
-	if (!file.open(QIODevice::ReadOnly))
-		return false;
-	QTextStream ts(&file);
-	ts.setCodec("ISO 8859-1");
-	QByteArray text = ts.readAll().toLocal8Bit();
-	file.close();
-
-	// Extract the CREATED property for the first VEVENT from the calendar
-	const QByteArray BEGIN_VCALENDAR("BEGIN:VCALENDAR");
-	const QByteArray BEGIN_VEVENT("BEGIN:VEVENT");
-	const QByteArray CREATED("CREATED:");
-	QList<QByteArray> lines = text.split('\n');
-	for (int i = 0, end = lines.count();  i < end;  ++i)
-	{
-		if (lines[i].startsWith(BEGIN_VCALENDAR))
-		{
-			while (++i < end)
-			{
-				if (lines[i].startsWith(BEGIN_VEVENT))
-				{
-					while (++i < end)
-					{
-						if (lines[i].startsWith(CREATED))
-							return lines[i].endsWith('Z');
-					}
-				}
-			}
-			break;
-		}
-	}
-	return false;
-}
-
