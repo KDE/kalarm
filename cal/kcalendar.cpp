@@ -1,7 +1,7 @@
 /*
  *  kcalendar.cpp  -  kcal library calendar and event functions
  *  Program:  kalarm
- *  Copyright © 2006,2007,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,21 +18,197 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "kcalendar.h"
 
+#include "kaevent.h"
+#include "version.h"
+
 #include <kglobal.h>
+#include <klocale.h>
 #include <kdebug.h>
 
 #include <kcal/event.h>
 #include <kcal/alarm.h>
+#include <kcal/calendarlocal.h>
 
 #include <QMap>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
 
 
 QByteArray KCalendar::APPNAME = "KALARM";
+static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 
 using namespace KCal;
+
+static bool isUTC(const QString& localFile);
+
+/*=============================================================================
+* Class: KCalendar
+*============================================================================*/
+
+QByteArray KCalendar::mIcalProductId;
+bool       KCalendar::mHaveKAlarmCatalog = false;
+
+void KCalendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
+{
+    mIcalProductId = QByteArray("-//K Desktop Environment//NONSGML " + progName + " " + progVersion + "//EN");
+}
+
+QByteArray KCalendar::icalProductId()
+{
+    return mIcalProductId.isEmpty() ? QByteArray("-//K Desktop Environment//NONSGML  //EN") : mIcalProductId;
+}
+
+/******************************************************************************
+* Check the version of KAlarm which wrote a calendar file, and convert it in
+* memory to the current KAlarm format if possible. The storage file is not
+* updated. The compability of the calendar format is indicated by the return
+* value.
+*/
+int KCalendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
+{
+    bool version057_UTC = false;
+    QString subVersion;
+    int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
+    if (!version)
+        return 0;     // calendar is in the current KAlarm format
+    if (version < 0  ||  version > KAEvent::currentCalendarVersion())
+        return -1;    // calendar was created by another program, or an unknown version of KAlarm
+
+    // Calendar was created by an earlier version of KAlarm.
+    // Convert it to the current format.
+    if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
+    {
+        // KAlarm version 0.5.7 - check whether times are stored in UTC, in which
+        // case it is the KDE 3.0.0 version, which needs adjustment of summer times.
+        version057_UTC = isUTC(localFile);
+        kDebug() << "KAlarm version 0.5.7 (" << (version057_UTC ?"" :"non-") << "UTC)";
+    }
+    else
+        kDebug() << "KAlarm version" << version;
+
+    // Convert events to current KAlarm format for when/if the calendar is saved
+    KAEvent::convertKCalEvents(calendar, version, version057_UTC);
+    return version;
+}
+
+/******************************************************************************
+* Return the KAlarm version which wrote the calendar which has been loaded.
+* The format is, for example, 000507 for 0.5.7.
+* Reply = 0 if the calendar was created by the current version of KAlarm
+*       = -1 if it was created by KAlarm pre-0.3.5, or another program
+*       = version number if created by another KAlarm version.
+*/
+int KCalendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
+{
+    subVersion.clear();
+    versionString = calendar.customProperty(APPNAME, VERSION_PROPERTY);
+    if (versionString.isEmpty())
+    {
+        // Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.
+        // If another application has written to the file, this may not be present.
+        const QString prodid = calendar.productId();
+        if (prodid.isEmpty())
+        {
+            // Check whether the calendar file is empty, in which case
+            // it can be written to freely.
+            QFileInfo fi(localFile);
+            if (!fi.size())
+                return 0;
+        }
+
+        // Find the KAlarm identifier
+        QString progname = QLatin1String(" KAlarm ");
+        int i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
+        if (i < 0)
+        {
+            // Older versions used KAlarm's translated name in the product ID, which
+            // could have created problems using a calendar in different locales.
+            insertKAlarmCatalog();
+            progname = QString(" ") + i18n("KAlarm") + ' ';
+            i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
+            if (i < 0)
+                return -1;    // calendar wasn't created by KAlarm
+        }
+
+        // Extract the KAlarm version string
+        versionString = prodid.mid(i + progname.length()).trimmed();
+        i = versionString.indexOf('/');
+        int j = versionString.indexOf(' ');
+        if (j >= 0  &&  j < i)
+            i = j;
+        if (i <= 0)
+            return -1;    // missing version string
+        versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
+    }
+    if (versionString == KAEvent::currentCalendarVersionString())
+        return 0;      // the calendar is in the current KAlarm format
+    int ver = KAlarm::getVersionNumber(versionString, &subVersion);
+    if (ver == KAEvent::currentCalendarVersion())
+        return 0;      // the calendar is in the current KAlarm format
+    return KAlarm::getVersionNumber(versionString, &subVersion);
+}
+
+/******************************************************************************
+* Access the KAlarm message translation catalog.
+*/
+void KCalendar::insertKAlarmCatalog()
+{
+    if (!mHaveKAlarmCatalog)
+    {
+        KGlobal::locale()->insertCatalog("kalarm");
+        mHaveKAlarmCatalog = true;
+    }
+}
+
+/******************************************************************************
+* Check whether the calendar file has its times stored as UTC times,
+* indicating that it was written by the KDE 3.0.0 version of KAlarm 0.5.7.
+* Reply = true if times are stored in UTC
+*       = false if the calendar is a vCalendar, times are not UTC, or any error occurred.
+*/
+bool isUTC(const QString& localFile)
+{
+    // Read the calendar file into a string
+    QFile file(localFile);
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
+    QTextStream ts(&file);
+    ts.setCodec("ISO 8859-1");
+    QByteArray text = ts.readAll().toLocal8Bit();
+    file.close();
+
+    // Extract the CREATED property for the first VEVENT from the calendar
+    const QByteArray BEGIN_VCALENDAR("BEGIN:VCALENDAR");
+    const QByteArray BEGIN_VEVENT("BEGIN:VEVENT");
+    const QByteArray CREATED("CREATED:");
+    QList<QByteArray> lines = text.split('\n');
+    for (int i = 0, end = lines.count();  i < end;  ++i)
+    {
+        if (lines[i].startsWith(BEGIN_VCALENDAR))
+        {
+            while (++i < end)
+            {
+                if (lines[i].startsWith(BEGIN_VEVENT))
+                {
+                    while (++i < end)
+                    {
+                        if (lines[i].startsWith(CREATED))
+                            return lines[i].endsWith('Z');
+                    }
+                }
+            }
+            break;
+        }
+    }
+    return false;
+}
+
+/*=============================================================================
+* Class: KCalEvent
+*============================================================================*/
 
 // Struct to contain static strings, to allow use of K_GLOBAL_STATIC
 // to delete them on program termination.
@@ -200,3 +376,5 @@ void KCalEvent::setStatus(KCal::Event* event, KCalEvent::Status status, const QS
 		text += ';' + param;
 	event->setCustomProperty(KCalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
+
+// vim: et sw=4:

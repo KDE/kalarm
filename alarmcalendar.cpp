@@ -78,7 +78,8 @@ bool AlarmCalendar::initialiseCalendars()
 	resources->showProgress(true);
 	mResourcesCalendar = new AlarmCalendar();
 	mDisplayCalendar = new AlarmCalendar(displayCal, KCalEvent::DISPLAYING);
-	CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KAEvent::icalProductId()));
+	KCalendar::setProductId(KALARM_NAME, KALARM_VERSION);
+	CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KCalendar::icalProductId()));
 	return true;
 }
 

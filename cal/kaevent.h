@@ -469,7 +469,6 @@ class KALARM_CAL_EXPORT KAEvent
 #else
         void               dumpDebug() const  { d->dumpDebug(); }
 #endif
-        static QByteArray  icalProductId();
         static int         currentCalendarVersion();
         static QByteArray  currentCalendarVersionString();
         static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);

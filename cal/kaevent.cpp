@@ -18,12 +18,12 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "kaevent.h"
 
 #include "alarmresource.h"
 #include "alarmtext.h"
 #include "identities.h"
+#include "version.h"
 
 #include <kcal/calendarlocal.h>
 #include <kholidays/holidays.h>
@@ -44,11 +44,6 @@ using namespace KHolidays;
 // The string version is the KAlarm version string used in the calendar file.
 QByteArray KAEvent::currentCalendarVersionString()  { return QByteArray("2.2.9"); }
 int        KAEvent::currentCalendarVersion()        { return KAlarm::Version(2,2,9); }
-
-QByteArray KAEvent::icalProductId()
-{
-    return QByteArray("-//K Desktop Environment//NONSGML " KALARM_NAME " " KALARM_VERSION "//EN");
-}
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
