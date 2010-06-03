@@ -8,6 +8,8 @@ set(BUILD_akonadi FALSE)
 
 if(BUILD_akonadi)
   add_definitions(-DUSE_AKONADI)
+else(BUILD_akonadi)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 endif(BUILD_akonadi)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
