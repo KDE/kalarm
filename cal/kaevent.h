@@ -472,7 +472,7 @@ class KALARM_CAL_EXPORT KAEvent
         static QByteArray  icalProductId();
         static int         currentCalendarVersion();
         static QByteArray  currentCalendarVersionString();
-        static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime, const QTime& startOfDay, const KTimeZone&);
+        static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCal::CalendarLocal&);
 
         // Methods to set and get global defaults
@@ -484,7 +484,7 @@ class KALARM_CAL_EXPORT KAEvent
 
     private:
         static bool        convertRepetition(KCal::Event*);
-        static bool        convertStartOfDay(KCal::Event*, const KTimeZone&);
+        static bool        convertStartOfDay(KCal::Event*);
         static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
         static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
         static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
