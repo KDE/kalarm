@@ -1923,6 +1923,7 @@ void MessageWin::slotEdit()
 	setButtonsReadOnly(true);
 	connect(mEditDlg, SIGNAL(accepted()), SLOT(editCloseOk()));
 	connect(mEditDlg, SIGNAL(rejected()), SLOT(editCloseCancel()));
+	connect(mEditDlg, SIGNAL(destroyed(QObject*)), SLOT(editCloseCancel()));
 	connect(KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)), SLOT(activeWindowChanged(WId)));
 	mainWin->editAlarm(mEditDlg, mEvent, mResource);
 }
@@ -1939,7 +1940,8 @@ void MessageWin::editCloseOk()
 }
 
 /******************************************************************************
-* Called when Cancel is clicked in the alarm edit dialog invoked by the Edit button.
+* Called when Cancel is clicked in the alarm edit dialog invoked by the Edit
+* button, or when the dialog is deleted.
 */
 void MessageWin::editCloseCancel()
 {

@@ -141,6 +141,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           resourcesResized();
 		void           showErrorMessage(const QString&);
 		void           editAlarmOk();
+		void           editAlarmDeleted(QObject*);
 
 	private:
 		typedef QList<MainWindow*> WindowList;
