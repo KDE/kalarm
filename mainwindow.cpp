@@ -1524,10 +1524,9 @@ void MainWindow::editAlarm(EditAlarmDlg* dlg, const KAEvent& event, AlarmResourc
 	ev.setResource(resource);
 	mEditAlarmMap[dlg] = ev;
 	connect(dlg, SIGNAL(accepted()), SLOT(editAlarmOk()));
+	connect(dlg, SIGNAL(destroyed(QObject*)), SLOT(editAlarmDeleted(QObject*)));
+	dlg->setAttribute(Qt::WA_DeleteOnClose, true);   // ensure no memory leaks
 	dlg->show();
-#ifdef __GNUC__
-#warning Use AutoQPointer??
-#endif
 }
 
 /******************************************************************************
@@ -1549,4 +1548,13 @@ void MainWindow::editAlarmOk()
 	if (dlg->result() != QDialog::Accepted)
 		return;
 	KAlarm::updateEditedAlarm(dlg, event, event.resource());
+}
+
+/******************************************************************************
+* Called when the alarm edit dialog shown by editAlarm() is deleted.
+* Removes the dialog from the pending list.
+*/
+void MainWindow::editAlarmDeleted(QObject* obj)
+{
+	mEditAlarmMap.remove(static_cast<EditAlarmDlg*>(obj));
 }
