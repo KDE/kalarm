@@ -172,7 +172,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
 	mLoading = true;
 	mLoaded = false;
 	disableChangeNotification();
-	setCompatibility(KCalendar::ByEvent);
+	setCompatibility(KACalendar::ByEvent);
 	if (syncCache)
 	{
 		emit invalidate(this);
@@ -314,19 +314,19 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, bo
 	}
 	else
 	{
-		KCalendar::Status compat = checkCompatibility(calendar, fileName, prompt);
+		KACalendar::Compat compat = checkCompatibility(calendar, fileName, prompt);
 		switch (compat)
 		{
-			case KCalendar::Converted:   // user elected to convert. Don't prompt again.
+			case KACalendar::Converted:   // user elected to convert. Don't prompt again.
 				prompt = CONVERT;
-				compat = KCalendar::Current;
+				compat = KACalendar::Current;
 				break;
-			case KCalendar::Convertible: // user elected not to convert. Don't prompt again.
+			case KACalendar::Convertible: // user elected not to convert. Don't prompt again.
 				prompt = NO_CONVERT;
 				break;
-			case KCalendar::Current:
-			case KCalendar::Incompatible:
-			case KCalendar::ByEvent:
+			case KACalendar::Current:
+			case KACalendar::Incompatible:
+			case KACalendar::ByEvent:
 				break;
 		}
 		kDebug(KARES_DEBUG) << fileName << ": compatibility=" << compat;
@@ -408,7 +408,7 @@ bool KAResourceLocalDir::addEvent(Event* event)
 {
 	if (!AlarmResource::addEvent(event))
 		return false;
-	mCompatibilityMap[event] = KCalendar::Current;
+	mCompatibilityMap[event] = KACalendar::Current;
 	return true;
 }
 

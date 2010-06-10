@@ -78,8 +78,8 @@ bool AlarmCalendar::initialiseCalendars()
 	resources->showProgress(true);
 	mResourcesCalendar = new AlarmCalendar();
 	mDisplayCalendar = new AlarmCalendar(displayCal, KCalEvent::DISPLAYING);
-	KCalendar::setProductId(KALARM_NAME, KALARM_VERSION);
-	CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KCalendar::icalProductId()));
+	KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
+	CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
 	return true;
 }
 
@@ -610,7 +610,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	}
 	else
 	{
-		KCalendar::Status caltype = CalendarCompat::fix(cal, filename);
+		KACalendar::Compat caltype = CalendarCompat::fix(cal, filename);
 		KCalEvent::Status wantedType = resource ? resource->kcalEventType() : KCalEvent::EMPTY;
 		bool saveRes = false;
 		bool enabled = true;
@@ -629,7 +629,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			if (type == KCalEvent::TEMPLATE)
 			{
 				// If we know the event was not created by KAlarm, don't treat it as a template
-				if (caltype == KCalendar::Incompatible)
+				if (caltype == KACalendar::Incompatible)
 					type = KCalEvent::ACTIVE;
 			}
 			AlarmResource** res;

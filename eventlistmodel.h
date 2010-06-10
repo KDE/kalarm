@@ -28,7 +28,7 @@
 #include <QList>
 #include <QSize>
 
-#include "kcalendar.h"
+#include "kacalendar.h"
 #include "alarmresources.h"
 #include "kaevent.h"
 
