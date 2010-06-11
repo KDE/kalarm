@@ -1,5 +1,5 @@
 /*
- *  kcalendar.cpp  -  kcal library calendar and event functions
+ *  kacalendar.cpp  -  KAlarm kcal library calendar and event functions
  *  Program:  kalarm
  *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
  *
@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kcalendar.h"
+#include "kacalendar.h"
 
 #include "kaevent.h"
 #include "version.h"
@@ -37,7 +37,7 @@
 #include <QTextStream>
 
 
-QByteArray KCalendar::APPNAME = "KALARM";
+QByteArray KACalendar::APPNAME = "KALARM";
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 
 using namespace KCal;
@@ -45,18 +45,18 @@ using namespace KCal;
 static bool isUTC(const QString& localFile);
 
 /*=============================================================================
-* Class: KCalendar
+* Class: KACalendar
 *============================================================================*/
 
-QByteArray KCalendar::mIcalProductId;
-bool       KCalendar::mHaveKAlarmCatalog = false;
+QByteArray KACalendar::mIcalProductId;
+bool       KACalendar::mHaveKAlarmCatalog = false;
 
-void KCalendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
+void KACalendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
 {
     mIcalProductId = QByteArray("-//K Desktop Environment//NONSGML " + progName + " " + progVersion + "//EN");
 }
 
-QByteArray KCalendar::icalProductId()
+QByteArray KACalendar::icalProductId()
 {
     return mIcalProductId.isEmpty() ? QByteArray("-//K Desktop Environment//NONSGML  //EN") : mIcalProductId;
 }
@@ -67,7 +67,7 @@ QByteArray KCalendar::icalProductId()
 * updated. The compability of the calendar format is indicated by the return
 * value.
 */
-int KCalendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
+int KACalendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
 {
     bool version057_UTC = false;
     QString subVersion;
@@ -101,7 +101,7 @@ int KCalendar::checkCompatibility(CalendarLocal& calendar, const QString& localF
 *       = -1 if it was created by KAlarm pre-0.3.5, or another program
 *       = version number if created by another KAlarm version.
 */
-int KCalendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
+int KACalendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
 {
     subVersion.clear();
     versionString = calendar.customProperty(APPNAME, VERSION_PROPERTY);
@@ -154,7 +154,7 @@ int KCalendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFi
 /******************************************************************************
 * Access the KAlarm message translation catalog.
 */
-void KCalendar::insertKAlarmCatalog()
+void KACalendar::insertKAlarmCatalog()
 {
     if (!mHaveKAlarmCatalog)
     {
@@ -321,7 +321,7 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 	if (alarms.isEmpty())
 		return EMPTY;
 
-	const QString property = event->customProperty(KCalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+	const QString property = event->customProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
 	if (!property.isEmpty())
 	{
 		// There's a X-KDE-KALARM-TYPE property.
@@ -369,12 +369,12 @@ void KCalEvent::setStatus(KCal::Event* event, KCalEvent::Status status, const QS
 		case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
 		case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
 		default:
-			event->removeCustomProperty(KCalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+			event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
 			return;
 	}
 	if (!param.isEmpty())
 		text += ';' + param;
-	event->setCustomProperty(KCalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
+	event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
 
 // vim: et sw=4:

@@ -1,5 +1,5 @@
 /*
- *  kcalendar.h  -  kcal library calendar and event categorisation
+ *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
  *  Program:  kalarm
  *  Copyright © 2005-2008,2010 by David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KCALENDAR_H
-#define KCALENDAR_H
+#ifndef KACALENDAR_H
+#define KACALENDAR_H
 
 #include "kalarm_cal_export.h"
 #include <QByteArray>
@@ -31,12 +31,12 @@ namespace KCal {
   class CalendarLocal;
 }
 
-class KALARM_CAL_EXPORT KCalendar
+class KALARM_CAL_EXPORT KACalendar
 {
     public:
         static QByteArray APPNAME;
         /** Compatibility of resource calendar format. */
-        enum Status
+        enum Compat
         {
             Current,       // in current KAlarm format
             Converted,     // in current KAlarm format, but not yet saved

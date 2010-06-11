@@ -1,6 +1,6 @@
 ########### next target ###############
 set(kalarm_calendar_LIB_SRCS
-	kcalendar.cpp
+	kacalendar.cpp
 	karecurrence.cpp
 	alarmtext.cpp
 	identities.cpp

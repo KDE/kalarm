@@ -24,7 +24,7 @@
 #include "kalarm.h"
 
 #include "eventlistmodel.h"
-#include "kcalendar.h"
+#include "kacalendar.h"
 
 
 class AlarmListFilterModel : public EventListFilterModel

@@ -22,7 +22,7 @@
 #include "templatelistfiltermodel.h"
 
 #include "kaevent.h"
-#include "kcalendar.h"
+#include "kacalendar.h"
 
 #include <kdebug.h>
 

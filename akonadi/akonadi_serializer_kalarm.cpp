@@ -80,7 +80,7 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     KCal::Event* kcalEvent = new KCal::Event;
     e.updateKCalEvent(kcalEvent, false);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
-    head += KAEvent::icalProductId();
+    head += KACalendar::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";
     head += KAEvent::currentCalendarVersionString();
     head += '\n';

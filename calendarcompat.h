@@ -24,7 +24,7 @@
 /* @file calendarcompat.h - compatibility for old calendar file formats */
 
 #include "alarmresource.h"
-#include "kcalendar.h"
+#include "kacalendar.h"
 
 namespace KCal { class CalendarLocal; }
 
@@ -32,9 +32,9 @@ namespace KCal { class CalendarLocal; }
 class CalendarCompat
 {
 	public:
-		static void              setID(KCal::CalendarLocal&);
-		static KCalendar::Status fix(KCal::CalendarLocal&, const QString& localFile,
-		                             AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
+		static void               setID(KCal::CalendarLocal&);
+		static KACalendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
+		                              AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
 
 	private:
 		static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);

@@ -20,6 +20,7 @@
  */
 
 #include "kalarmresource.h"
+#include "compatibilityattribute.h"
 #include "eventattribute.h"
 #include "kalarmmimetypevisitor.h"
 #include "kaevent.h"
@@ -42,7 +43,8 @@ using namespace KCal;
 
 KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
-      mMimeVisitor(new KAlarmMimeTypeVisitor())
+      mMimeVisitor(new KAlarmMimeTypeVisitor()),
+      mCompatibility(KACalendar::Incompatible)
 {
     // Set a default start-of-day time for date-only alarms.
     KAEvent::setStartOfDay(QTime(0,0,0));
@@ -60,10 +62,28 @@ KAlarmResource::KAlarmResource(const QString& id)
     initialise(mimeTypes, "kalarm");
 
     AttributeFactory::registerAttribute<EventAttribute>();
+    AttributeFactory::registerAttribute<CompatibilityAttribute>();
 }
 
 KAlarmResource::~KAlarmResource()
 {
+}
+
+/******************************************************************************
+* Reimplemented to read data from the given file.
+* The file is always local; loading from the network is done automatically if
+* needed.
+*/
+bool KAlarmResource::readFromFile(const QString& fileName)
+{
+    if (!ICalResourceBase::readFromFile(fileName))
+        return false;
+    QString versionString;
+    int version = KACalendar::checkCompatibility(*calendar(), fileName, versionString);
+    mCompatibility = (version < 0) ? KACalendar::Incompatible  // calendar is not in KAlarm format, or is in a future format
+                   : (version > 0) ? KACalendar::Convertible   // calendar is in an out of date format
+                   :                 KACalendar::Current;      // calendar is in the current format
+    return true;
 }
 
 /******************************************************************************
@@ -98,7 +118,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     }
     event.setItemId(item.id());
     if (item.hasAttribute<EventAttribute>())
-        event.setCommandError(item.attribute<EventAttribute>()->commandError(), false);
+        event.setCommandError(item.attribute<EventAttribute>()->commandError());
 
     Item i = item;
     i.setMimeType(mime);
@@ -115,6 +135,11 @@ void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collect
 {
     if (!checkItemAddedChanged<KAEvent>(item, CheckForAdded))
         return;
+    if (mCompatibility != KACalendar::Current)
+    {
+        cancelTask(i18nc("@info", "Calendar is not in current KAlarm format."));
+        return;
+    }
     KAEvent event = item.payload<KAEvent>();
     KCal::Event* kcalEvent = new KCal::Event;
     event.updateKCalEvent(kcalEvent, false);
@@ -135,6 +160,11 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     Q_UNUSED(parts)
     if (!checkItemAddedChanged<KAEvent>(item, CheckForChanged))
         return;
+    if (mCompatibility != KACalendar::Current)
+    {
+        cancelTask(i18nc("@info", "Calendar is not in current KAlarm format."));
+        return;
+    }
     KAEvent event = item.payload<KAEvent>();
     if (item.remoteId() != event.id())
     {
@@ -144,6 +174,11 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     KCal::Incidence* incidence = calendar()->incidence(item.remoteId());
     if (incidence)
     {
+        if (incidence->isReadOnly())
+        {
+            cancelTask(i18nc("@info", "Event with uid '%1' is read only", event.id()));
+            return;
+        }
         if (!mMimeVisitor->isEvent(incidence))
         {
             calendar()->deleteIncidence(incidence);   // it's not an Event
@@ -168,15 +203,25 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
 
 /******************************************************************************
 * Retrieve all events from the calendar, and set each into a new item's
-* payload. The Akonadi id for each item will be a new one.
+* payload. Items are identified by their remote IDs. The Akonadi ID is not
+* used.
 * Signal the retrieval of the items by calling itemsRetrieved(items), which
-* updates Akonadi with the new item list, based on each item's remoteId().
+* updates Akonadi with any changes to the items. itemsRetrieved() compares
+* the new and old items, matching them on the remoteId(). If the flags or
+* payload have changed, or the Item has any new Attributes, the Akonadi
+* storage is updated.
 */
-void KAlarmResource::doRetrieveItems(const Akonadi::Collection&)
+void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
 {
+    // Set the collection's compatibility status
+    Collection col = collection;
+    CompatibilityAttribute* attr = col.attribute<CompatibilityAttribute>(Collection::AddIfMissing);
+    attr->setCompatibility(mCompatibility);
+
+    // Retrieve events from the calendar
     Event::List events = calendar()->events();
     Item::List items;
-    foreach (Event* kcalEvent, events)
+    foreach (const Event* kcalEvent, events)
     {
         if (kcalEvent->alarms().isEmpty())
             continue;    // ignore events without alarms

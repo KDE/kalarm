@@ -29,7 +29,7 @@
 
 #include "alarmresource.h"
 #include "kalarm_resources_export.h"
-#include "kcalendar.h"
+#include "kacalendar.h"
 
 class KConfigGroup;
 namespace KCal { class Event; }
@@ -108,7 +108,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		void setCustomEventFunction(void (*f)(AlarmResource*, CalendarLocal*))
 		                              { AlarmResource::setCustomEventFunction(f); }
 		/** Set a function to fix the calendar once it has been loaded. */
-		void setFixFunction(KCalendar::Status (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType))
+		void setFixFunction(KACalendar::Compat (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType))
 		                              { AlarmResource::setFixFunction(f); }
 
 		/** Add an event to the resource calendar.

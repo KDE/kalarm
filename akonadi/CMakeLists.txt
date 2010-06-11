@@ -37,6 +37,7 @@ set( kalarmresource_SRCS
   ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
   ${AKONADI_ICAL_RESOURCE}/icalresourcebase.cpp
   kalarmresource.cpp
+  compatibilityattribute.cpp
   eventattribute.cpp
 )
 
