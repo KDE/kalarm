@@ -120,20 +120,6 @@ KAEvent* AlarmCalendar::getEvent(const QString& uniqueID)
 }
 
 /******************************************************************************
-* Find and return the event with the specified ID.
-* The calendar searched is determined by the calendar identifier in the ID.
-*/
-const KCal::Event* AlarmCalendar::getKCalEvent(const QString& uniqueID)
-{
-	if (uniqueID.isEmpty())
-		return 0;
-	const KCal::Event* event = mResourcesCalendar->kcalEvent(uniqueID);
-	if (!event)
-		event = mDisplayCalendar->kcalEvent(uniqueID);
-	return event;
-}
-
-/******************************************************************************
 * Constructor for the resources calendar.
 */
 AlarmCalendar::AlarmCalendar()
