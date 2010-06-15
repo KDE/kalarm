@@ -91,7 +91,6 @@ class AlarmCalendar : public QObject
 		static bool           importAlarms(QWidget*, AlarmResource* = 0);
 		static bool           exportAlarms(const KAEvent::List&, QWidget* parent);
 		static KAEvent*       getEvent(const QString& uniqueID);
-		static const KCal::Event* getKCalEvent(const QString& uniqueID);
 
 	signals:
 		void                  earliestAlarmChanged();

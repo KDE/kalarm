@@ -120,20 +120,6 @@ KAEvent* AlarmCalendar::getEvent(const QString& uniqueID)
 }
 
 /******************************************************************************
-* Find and return the event with the specified ID.
-* The calendar searched is determined by the calendar identifier in the ID.
-*/
-const KCal::Event* AlarmCalendar::getKCalEvent(const QString& uniqueID)
-{
-	if (uniqueID.isEmpty())
-		return 0;
-	const KCal::Event* event = mResourcesCalendar->kcalEvent(uniqueID);
-	if (!event)
-		event = mDisplayCalendar->kcalEvent(uniqueID);
-	return event;
-}
-
-/******************************************************************************
 * Constructor for the resources calendar.
 */
 AlarmCalendar::AlarmCalendar()
@@ -1034,7 +1020,7 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
 
 /******************************************************************************
 * Update the specified event in the calendar with its new contents.
-* The event retains the same ID.
+* The event retains the same ID. The event must be in the resource calendar.
 * Reply = event which has been updated
 *       = 0 if error.
 */
@@ -1044,23 +1030,22 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent& evnt)
 }
 KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 {
-	if (mOpen)
+	if (!mOpen  ||  mCalType != RESOURCES)
+		return 0;
+	QString id = evnt->id();
+	KAEvent* kaevnt = event(id);
+	Event* kcalEvent = mCalendar ? mCalendar->event(id) : 0;
+	if (kaevnt  &&  kcalEvent)
 	{
-		QString id = evnt->id();
-		KAEvent* kaevnt = event(id);
-		Event* kcalEvent = mCalendar ? mCalendar->event(id) : 0;
-		if (kaevnt  &&  kcalEvent)
-		{
-			evnt->updateKCalEvent(kcalEvent);
-			evnt->clearUpdated();
-			bool oldEnabled = kaevnt->enabled();
-			if (kaevnt != evnt)
-				*kaevnt = *evnt;   // update the event instance in our lists, keeping the same pointer
-			findEarliestAlarm(AlarmResources::instance()->resource(kcalEvent));
-			if (mCalType == RESOURCES  &&  evnt->category() == KCalEvent::ACTIVE)
-				checkForDisabledAlarms(oldEnabled, evnt->enabled());
-			return kaevnt;
-		}
+		evnt->updateKCalEvent(kcalEvent);
+		evnt->clearUpdated();
+		bool oldEnabled = kaevnt->enabled();
+		if (kaevnt != evnt)
+			*kaevnt = *evnt;   // update the event instance in our lists, keeping the same pointer
+		findEarliestAlarm(AlarmResources::instance()->resource(kcalEvent));
+		if (mCalType == RESOURCES  &&  evnt->category() == KCalEvent::ACTIVE)
+			checkForDisabledAlarms(oldEnabled, evnt->enabled());
+		return kaevnt;
 	}
 	return 0;
 }
