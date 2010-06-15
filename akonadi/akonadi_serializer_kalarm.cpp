@@ -95,9 +95,9 @@ QString SerializerPluginKAlarm::mimeType(const KAEvent& event)
     {
         switch (event.category())
         {
-            case KCalEvent::ACTIVE:    return MIME_ACTIVE;
-            case KCalEvent::ARCHIVED:  return MIME_ARCHIVED;
-            case KCalEvent::TEMPLATE:  return MIME_TEMPLATE;
+            case KACalEvent::ACTIVE:    return MIME_ACTIVE;
+            case KACalEvent::ARCHIVED:  return MIME_ARCHIVED;
+            case KACalEvent::TEMPLATE:  return MIME_TEMPLATE;
             default:
                 break;
         }

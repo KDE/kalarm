@@ -167,7 +167,7 @@ MainWindow::MainWindow(bool restored)
 
 	// Create the alarm list widget
 	mListFilterModel = new AlarmListFilterModel(EventListModel::alarms(), this);
-	mListFilterModel->setStatusFilter(mShowArchived ? KCalEvent::ACTIVE | KCalEvent::ARCHIVED : KCalEvent::ACTIVE);
+	mListFilterModel->setStatusFilter(mShowArchived ? KACalEvent::ACTIVE | KACalEvent::ARCHIVED : KACalEvent::ACTIVE);
 	mListView = new AlarmListView(WINDOW_NAME, mSplitter);
 	mListView->setModel(mListFilterModel);
 	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
@@ -836,7 +836,7 @@ void MainWindow::slotShowArchived()
 	mActionShowArchived->setChecked(mShowArchived);
 	mActionShowArchived->setToolTip(mShowArchived ? i18nc("@info:tooltip", "Hide Archived Alarms")
 	                                              : i18nc("@info:tooltip", "Show Archived Alarms"));
-	mListFilterModel->setStatusFilter(mShowArchived ? KCalEvent::ACTIVE | KCalEvent::ARCHIVED : KCalEvent::ACTIVE);
+	mListFilterModel->setStatusFilter(mShowArchived ? KACalEvent::ACTIVE | KACalEvent::ARCHIVED : KACalEvent::ACTIVE);
 	mListView->reset();
 	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
 	config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);

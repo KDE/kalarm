@@ -90,7 +90,7 @@ void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& su
     mSuffix = suffix;
 
     KAEvent event;
-    const KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
+    const KAEvent::List events = AlarmCalendar::resources()->events(KACalEvent::ACTIVE);
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         KAEvent* event = events[i];

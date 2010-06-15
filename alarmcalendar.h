@@ -44,7 +44,7 @@ class AlarmCalendar : public QObject
 	public:
 		virtual ~AlarmCalendar();
 		bool                  valid() const          { return (mCalType == RESOURCES) || mUrl.isValid(); }
-		KCalEvent::Status     type() const           { return (mCalType == RESOURCES) ? KCalEvent::EMPTY : mEventType; }
+		KACalEvent::Type      type() const           { return (mCalType == RESOURCES) ? KACalEvent::EMPTY : mEventType; }
 		bool                  open();
 		int                   load();
 		void                  loadResource(AlarmResource*, QWidget* parent);
@@ -65,11 +65,11 @@ class AlarmCalendar : public QObject
 		KAEvent*              event(const QString& uniqueID);
 		KCal::Event*          kcalEvent(const QString& uniqueID);
 		KAEvent*              templateEvent(const QString& templateName);
-		KAEvent::List         events(KCalEvent::Statuses s = KCalEvent::EMPTY)   { return events(0, s); }
-		KAEvent::List         events(AlarmResource*, KCalEvent::Statuses = KCalEvent::EMPTY);
-		KAEvent::List         events(const KDateTime& from, const KDateTime& to, KCalEvent::Statuses);
-		KCal::Event::List     kcalEvents(KCalEvent::Status s = KCalEvent::EMPTY)   { return kcalEvents(0, s); }
-		KCal::Event::List     kcalEvents(AlarmResource*, KCalEvent::Status = KCalEvent::EMPTY);
+		KAEvent::List         events(KACalEvent::Types s = KACalEvent::EMPTY)   { return events(0, s); }
+		KAEvent::List         events(AlarmResource*, KACalEvent::Types = KACalEvent::EMPTY);
+		KAEvent::List         events(const KDateTime& from, const KDateTime& to, KACalEvent::Types);
+		KCal::Event::List     kcalEvents(KACalEvent::Type s = KACalEvent::EMPTY)   { return kcalEvents(0, s); }
+		KCal::Event::List     kcalEvents(AlarmResource*, KACalEvent::Type = KACalEvent::EMPTY);
 		bool                  eventReadOnly(const QString& uniqueID) const;
 		AlarmResource*        resourceForEvent(const QString& eventID) const;
 		bool                  addEvent(KAEvent*, QWidget* promptParent = 0, bool useEventID = false, AlarmResource* = 0, bool noPrompt = false, bool* cancelled = 0);
@@ -110,12 +110,12 @@ class AlarmCalendar : public QObject
 		typedef QMap<AlarmResource*, KAEvent*> EarliestMap;
 
 		AlarmCalendar();
-		AlarmCalendar(const QString& file, KCalEvent::Status);
+		AlarmCalendar(const QString& file, KACalEvent::Type);
 		bool                  saveCal(const QString& newFile = QString());
 		bool                  addEvent(AlarmResource*, KAEvent*);
 		KAEvent*              addEvent(AlarmResource*, const KCal::Event*);
 		void                  addNewEvent(AlarmResource*, KAEvent*);
-		KCalEvent::Status     deleteEventInternal(const QString& eventID);
+		KACalEvent::Type      deleteEventInternal(const QString& eventID);
 		void                  updateKAEvents(AlarmResource*, KCal::CalendarLocal*);
 		static void           updateResourceKAEvents(AlarmResource*, KCal::CalendarLocal*);
 		void                  removeKAEvents(AlarmResource*, bool closing = false);
@@ -139,7 +139,7 @@ class AlarmCalendar : public QObject
 		ResourceWidgetMap     mProgressParents;    // parent widgets for download progress dialogues
 		QString               mLocalFile;          // calendar file, or local copy if it's a remote file
 		CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
-		KCalEvent::Status     mEventType;          // what type of events the calendar file is for
+		KACalEvent::Type      mEventType;          // what type of events the calendar file is for
 		bool                  mOpen;               // true if the calendar file is open
 		int                   mUpdateCount;        // nesting level of group of calendar update calls
 		bool                  mUpdateSave;         // save() was called while mUpdateCount > 0

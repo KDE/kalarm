@@ -241,31 +241,31 @@ struct StaticStrings
 };
 K_GLOBAL_STATIC(StaticStrings, staticStrings)
 
-typedef QMap<QString, KCalEvent::Status> PropertyMap;
+typedef QMap<QString, KACalEvent::Type> PropertyMap;
 static PropertyMap properties;
 
 
 /******************************************************************************
 * Convert a unique ID to indicate that the event is in a specified calendar file.
 */
-QString KCalEvent::uid(const QString& id, Status status)
+QString KACalEvent::uid(const QString& id, Type status)
 {
 	QString result = id;
-	Status oldStatus;
+	Type oldType;
 	int i, len;
 	if ((i = result.indexOf(staticStrings->ARCHIVED_UID)) > 0)
 	{
-		oldStatus = ARCHIVED;
+		oldType = ARCHIVED;
 		len = staticStrings->ARCHIVED_UID.length();
 	}
 	else if ((i = result.indexOf(staticStrings->DISPLAYING_UID)) > 0)
 	{
-		oldStatus = DISPLAYING;
+		oldType = DISPLAYING;
 		len = staticStrings->DISPLAYING_UID.length();
 	}
 	else
 	{
-		oldStatus = ACTIVE;
+		oldType = ACTIVE;
 		i = result.lastIndexOf('-');
 		len = 1;
 		if (i < 0)
@@ -276,7 +276,7 @@ QString KCalEvent::uid(const QString& id, Status status)
 		else
 			len = 1;
 	}
-	if (status != oldStatus  &&  i > 0)
+	if (status != oldType  &&  i > 0)
 	{
 		QString part;
 		switch (status)
@@ -302,7 +302,7 @@ QString KCalEvent::uid(const QString& id, Status status)
 * triggered. They will be archived once KAlarm tries to handle them.
 * Do not call this function for the displaying alarm calendar.
 */
-KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
+KACalEvent::Type KACalEvent::status(const KCal::Event* event, QString* param)
 {
 	// Set up a static quick lookup for type strings
 	if (properties.isEmpty())
@@ -357,7 +357,7 @@ KCalEvent::Status KCalEvent::status(const KCal::Event* event, QString* param)
 * If a parameter is supplied, it will be appended as a second parameter to the
 * custom property.
 */
-void KCalEvent::setStatus(KCal::Event* event, KCalEvent::Status status, const QString& param)
+void KACalEvent::setStatus(KCal::Event* event, KACalEvent::Type status, const QString& param)
 {
 	if (!event)
 		return;

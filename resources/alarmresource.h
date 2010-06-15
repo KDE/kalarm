@@ -65,7 +65,7 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		Type     alarmType() const               { return mType; }
 
 		/** Return which type of alarms the resource can contain. */
-		KCalEvent::Status kcalEventType() const;
+		KACalEvent::Type kcalEventType() const;
 
 		/** Set the type of alarms which the resource can contain. */
 		void     setAlarmType(Type type)         { mType = type; }

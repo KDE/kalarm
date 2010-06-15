@@ -51,7 +51,7 @@ void TemplateListFilterModel::setTypesEnabled(EventListModel::Type type)
 bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
 {
 	QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0);
-	if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KCalEvent::TEMPLATE)
+	if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KACalEvent::TEMPLATE)
 		return false;
 	if (mTypeFilter == EventListModel::ALL)
 		return true;
