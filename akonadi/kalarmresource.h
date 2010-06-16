@@ -34,7 +34,6 @@ class KAlarmResource : public ICalResourceBase
     public:
         KAlarmResource(const QString& id);
         virtual ~KAlarmResource();
-        static QString mimeType(const KAEvent&);
 
     protected Q_SLOTS:
         void doRetrieveItems(const Akonadi::Collection&);
@@ -46,8 +45,8 @@ class KAlarmResource : public ICalResourceBase
         virtual void itemChanged(const Akonadi::Item&, const QSet<QByteArray>& parts);
 
     private:
-        KAlarmMimeTypeVisitor* mMimeVisitor;
-        KACalendar::Compat mCompatibility;
+        KAlarmMimeTypeVisitor*   mMimeVisitor;
+        KAlarm::Calendar::Compat mCompatibility;
 };
 
 #endif

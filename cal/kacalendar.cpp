@@ -36,38 +36,38 @@
 #include <QFileInfo>
 #include <QTextStream>
 
+using namespace KCal;
 
-#ifdef USE_AKONADI
+
 namespace KAlarm
 {
+
+#ifdef USE_AKONADI
 const QLatin1String MIME_BASE("application/x-vnd.kde.alarms");
 const QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
 const QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
 const QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
-}
 #endif
 
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 
-using namespace KCal;
-
 static bool isUTC(const QString& localFile);
 
 /*=============================================================================
-* Class: KACalendar
+* Class: Calendar
 *============================================================================*/
 
-const QByteArray KACalendar::APPNAME("KALARM");
+const QByteArray Calendar::APPNAME("KALARM");
 
-QByteArray KACalendar::mIcalProductId;
-bool       KACalendar::mHaveKAlarmCatalog = false;
+QByteArray Calendar::mIcalProductId;
+bool       Calendar::mHaveKAlarmCatalog = false;
 
-void KACalendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
+void Calendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
 {
     mIcalProductId = QByteArray("-//K Desktop Environment//NONSGML " + progName + " " + progVersion + "//EN");
 }
 
-QByteArray KACalendar::icalProductId()
+QByteArray Calendar::icalProductId()
 {
     return mIcalProductId.isEmpty() ? QByteArray("-//K Desktop Environment//NONSGML  //EN") : mIcalProductId;
 }
@@ -78,7 +78,7 @@ QByteArray KACalendar::icalProductId()
 * updated. The compability of the calendar format is indicated by the return
 * value.
 */
-int KACalendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
+int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
 {
     bool version057_UTC = false;
     QString subVersion;
@@ -112,7 +112,7 @@ int KACalendar::checkCompatibility(CalendarLocal& calendar, const QString& local
 *       = -1 if it was created by KAlarm pre-0.3.5, or another program
 *       = version number if created by another KAlarm version.
 */
-int KACalendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
+int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
 {
     subVersion.clear();
     versionString = calendar.customProperty(APPNAME, VERSION_PROPERTY);
@@ -165,7 +165,7 @@ int KACalendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localF
 /******************************************************************************
 * Access the KAlarm message translation catalog.
 */
-void KACalendar::insertKAlarmCatalog()
+void Calendar::insertKAlarmCatalog()
 {
     if (!mHaveKAlarmCatalog)
     {
@@ -252,14 +252,14 @@ struct StaticStrings
 };
 K_GLOBAL_STATIC(StaticStrings, staticStrings)
 
-typedef QMap<QString, KACalEvent::Type> PropertyMap;
+typedef QMap<QString, CalEvent::Type> PropertyMap;
 static PropertyMap properties;
 
 
 /******************************************************************************
 * Convert a unique ID to indicate that the event is in a specified calendar file.
 */
-QString KACalEvent::uid(const QString& id, Type status)
+QString CalEvent::uid(const QString& id, Type status)
 {
 	QString result = id;
 	Type oldType;
@@ -313,7 +313,7 @@ QString KACalEvent::uid(const QString& id, Type status)
 * triggered. They will be archived once KAlarm tries to handle them.
 * Do not call this function for the displaying alarm calendar.
 */
-KACalEvent::Type KACalEvent::status(const KCal::Event* event, QString* param)
+CalEvent::Type CalEvent::status(const KCal::Event* event, QString* param)
 {
 	// Set up a static quick lookup for type strings
 	if (properties.isEmpty())
@@ -332,7 +332,7 @@ KACalEvent::Type KACalEvent::status(const KCal::Event* event, QString* param)
 	if (alarms.isEmpty())
 		return EMPTY;
 
-	const QString property = event->customProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+	const QString property = event->customProperty(Calendar::APPNAME, staticStrings->STATUS_PROPERTY);
 	if (!property.isEmpty())
 	{
 		// There's a X-KDE-KALARM-TYPE property.
@@ -368,7 +368,7 @@ KACalEvent::Type KACalEvent::status(const KCal::Event* event, QString* param)
 * If a parameter is supplied, it will be appended as a second parameter to the
 * custom property.
 */
-void KACalEvent::setStatus(KCal::Event* event, KACalEvent::Type status, const QString& param)
+void CalEvent::setStatus(KCal::Event* event, CalEvent::Type status, const QString& param)
 {
 	if (!event)
 		return;
@@ -380,16 +380,16 @@ void KACalEvent::setStatus(KCal::Event* event, KACalEvent::Type status, const QS
 		case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
 		case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
 		default:
-			event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+			event->removeCustomProperty(Calendar::APPNAME, staticStrings->STATUS_PROPERTY);
 			return;
 	}
 	if (!param.isEmpty())
 		text += ';' + param;
-	event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
+	event->setCustomProperty(Calendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
 
 #ifdef USE_AKONADI
-KACalEvent::Type KACalEvent::type(const QString& mimeType)
+CalEvent::Type CalEvent::type(const QString& mimeType)
 {
     if (mimeType == KAlarm::MIME_ACTIVE)
         return ACTIVE;
@@ -400,7 +400,7 @@ KACalEvent::Type KACalEvent::type(const QString& mimeType)
     return EMPTY;
 }
 
-KACalEvent::Types KACalEvent::types(const QStringList& mimeTypes)
+CalEvent::Types CalEvent::types(const QStringList& mimeTypes)
 {
     Types types = 0;
     foreach (const QString type, mimeTypes)
@@ -415,16 +415,18 @@ KACalEvent::Types KACalEvent::types(const QStringList& mimeTypes)
     return types;
 }
 
-QString KACalEvent::mimeType(KACalEvent::Type type)
+QString CalEvent::mimeType(CalEvent::Type type)
 {
     switch (type)
     {
         case ACTIVE:    return KAlarm::MIME_ACTIVE;
         case ARCHIVED:  return KAlarm::MIME_ARCHIVED;
         case TEMPLATE:  return KAlarm::MIME_TEMPLATE;
-        default:        return QString::null;
+        default:        return QString();
     }
 }
 #endif
+
+} // namespace KAlarm
 
 // vim: et sw=4:

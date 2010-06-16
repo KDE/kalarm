@@ -42,7 +42,7 @@ using KAlarm::EventAttribute;
 KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
       mMimeVisitor(new KAlarmMimeTypeVisitor()),
-      mCompatibility(KACalendar::Incompatible)
+      mCompatibility(KAlarm::Calendar::Incompatible)
 {
     // Set a default start-of-day time for date-only alarms.
     KAEvent::setStartOfDay(QTime(0,0,0));
@@ -77,10 +77,10 @@ bool KAlarmResource::readFromFile(const QString& fileName)
     if (!ICalResourceBase::readFromFile(fileName))
         return false;
     QString versionString;
-    int version = KACalendar::checkCompatibility(*calendar(), fileName, versionString);
-    mCompatibility = (version < 0) ? KACalendar::Incompatible  // calendar is not in KAlarm format, or is in a future format
-                   : (version > 0) ? KACalendar::Convertible   // calendar is in an out of date format
-                   :                 KACalendar::Current;      // calendar is in the current format
+    int version = KAlarm::Calendar::checkCompatibility(*calendar(), fileName, versionString);
+    mCompatibility = (version < 0) ? KAlarm::Calendar::Incompatible  // calendar is not in KAlarm format, or is in a future format
+                   : (version > 0) ? KAlarm::Calendar::Convertible   // calendar is in an out of date format
+                   :                 KAlarm::Calendar::Current;      // calendar is in the current format
     return true;
 }
 
@@ -108,7 +108,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     }
 
     KAEvent event(kcalEvent);
-    QString mime = mimeType(event);
+    QString mime = KAlarm::CalEvent::mimeType(event.category());
     if (mime.isEmpty())
     {
         emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
@@ -133,7 +133,7 @@ void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collect
 {
     if (!checkItemAddedChanged<KAEvent>(item, CheckForAdded))
         return;
-    if (mCompatibility != KACalendar::Current)
+    if (mCompatibility != KAlarm::Calendar::Current)
     {
         cancelTask(i18nc("@info", "Calendar is not in current KAlarm format."));
         return;
@@ -158,7 +158,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     Q_UNUSED(parts)
     if (!checkItemAddedChanged<KAEvent>(item, CheckForChanged))
         return;
-    if (mCompatibility != KACalendar::Current)
+    if (mCompatibility != KAlarm::Calendar::Current)
     {
         cancelTask(i18nc("@info", "Calendar is not in current KAlarm format."));
         return;
@@ -225,7 +225,7 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
             continue;    // ignore events without alarms
 
         KAEvent event(kcalEvent);
-        QString mime = mimeType(event);
+        QString mime = KAlarm::CalEvent::mimeType(event.category());
         if (mime.isEmpty())
             continue;   // event has no usable alarms
  
@@ -238,22 +238,6 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
         items << item;
     }
     itemsRetrieved(items);
-}
-
-QString KAlarmResource::mimeType(const KAEvent& event)
-{
-    if (event.isValid())
-    {
-        switch (event.category())
-        {
-            case KACalEvent::ACTIVE:    return KAlarm::MIME_ACTIVE;
-            case KACalEvent::ARCHIVED:  return KAlarm::MIME_ARCHIVED;
-            case KACalEvent::TEMPLATE:  return KAlarm::MIME_TEMPLATE;
-            default:
-                break;
-        }
-    }
-    return QString();
 }
 
 AKONADI_RESOURCE_MAIN(KAlarmResource)

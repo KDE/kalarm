@@ -294,8 +294,8 @@ class KALARM_CAL_EXPORT KAEvent
                                                                    { d->mPreAction = pre;  d->mPostAction = post;  d->mCancelOnPreActErr = cancelOnError;  d->mUpdated = true; }
         OccurType          setNextOccurrence(const KDateTime& preDateTime)  { return d->setNextOccurrence(preDateTime); }
         void               setFirstRecurrence()                    { d->setFirstRecurrence(); }
-        void               setCategory(KACalEvent::Type s)         { d->setCategory(s); }
-        void               setUid(KACalEvent::Type s)              { d->mEventID = KACalEvent::uid(d->mEventID, s);  d->mUpdated = true; }
+        void               setCategory(KAlarm::CalEvent::Type s)   { d->setCategory(s); }
+        void               setUid(KAlarm::CalEvent::Type s)        { d->mEventID = KAlarm::CalEvent::uid(d->mEventID, s);  d->mUpdated = true; }
         void               setEventId(const QString& id)           { d->mEventID = id;  d->mUpdated = true; }
 #ifdef USE_AKONADI
         void               setItemId(Akonadi::Entity::Id id)       { d->mItemId = id; }
@@ -427,8 +427,8 @@ class KALARM_CAL_EXPORT KAEvent
         bool               enabled() const                { return d->mEnabled; }
         bool               updated() const                { return d->mUpdated; }
         bool               mainExpired() const            { return d->mMainExpired; }
-        bool               expired() const                { return (d->mDisplaying && d->mMainExpired)  ||  d->mCategory == KACalEvent::ARCHIVED; }
-        KACalEvent::Type    category() const              { return d->mCategory; }
+        bool               expired() const                { return (d->mDisplaying && d->mMainExpired)  ||  d->mCategory == KAlarm::CalEvent::ARCHIVED; }
+        KAlarm::CalEvent::Type category() const           { return d->mCategory; }
         bool               displaying() const             { return d->mDisplaying; }
         QString            resourceId() const             { return d->mResourceId; }
         AlarmResource*     resource() const               { return d->mResource; }
@@ -515,7 +515,7 @@ class KALARM_CAL_EXPORT KAEvent
                 void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
                 OccurType          setNextOccurrence(const KDateTime& preDateTime);
                 void               setFirstRecurrence();
-                void               setCategory(KACalEvent::Type);
+                void               setCategory(KAlarm::CalEvent::Type);
                 void               setRepeatAtLogin(bool);
                 void               setReminder(int minutes, bool onceOnly);
                 bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
@@ -626,7 +626,7 @@ class KALARM_CAL_EXPORT KAEvent
                 float              mSoundVolume;       // volume for sound file, or < 0 for unspecified
                 float              mFadeVolume;        // initial volume for sound file, or < 0 for no fade
                 int                mFadeSeconds;       // fade time for sound file, or 0 if none
-                KACalEvent::Type   mCategory;          // event category (active, archived, template, ...)
+                KAlarm::CalEvent::Type mCategory;      // event category (active, archived, template, ...)
 #ifdef USE_AKONADI
                 bool               mReadOnly;          // event is read-only in its original calendar file
 #endif

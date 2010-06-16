@@ -39,33 +39,33 @@ void CollectionAttribute::setEnabled(bool enabled)
 {
     mEnabled = enabled;
     if (!enabled)
-        mStandard = KACalEvent::EMPTY;
+        mStandard = KAlarm::CalEvent::EMPTY;
 }
 
-bool CollectionAttribute::isStandard(KACalEvent::Type type) const
+bool CollectionAttribute::isStandard(KAlarm::CalEvent::Type type) const
 {
     switch (type)
     {
-        case KACalEvent::ACTIVE:
-        case KACalEvent::ARCHIVED:
-        case KACalEvent::TEMPLATE:
+        case KAlarm::CalEvent::ACTIVE:
+        case KAlarm::CalEvent::ARCHIVED:
+        case KAlarm::CalEvent::TEMPLATE:
             return mStandard & type;
         default:
             return false;
     }
 }
 
-void CollectionAttribute::setStandard(KACalEvent::Type type, bool standard)
+void CollectionAttribute::setStandard(KAlarm::CalEvent::Type type, bool standard)
 {
     switch (type)
     {
-        case KACalEvent::ACTIVE:
-        case KACalEvent::ARCHIVED:
-        case KACalEvent::TEMPLATE:
+        case KAlarm::CalEvent::ACTIVE:
+        case KAlarm::CalEvent::ARCHIVED:
+        case KAlarm::CalEvent::TEMPLATE:
             if (standard)
-                mStandard = static_cast<KACalEvent::Types>(mStandard | type);
+                mStandard = static_cast<KAlarm::CalEvent::Types>(mStandard | type);
             else
-                mStandard = static_cast<KACalEvent::Types>(mStandard & ~type);
+                mStandard = static_cast<KAlarm::CalEvent::Types>(mStandard & ~type);
             break;
         default:
             break;
@@ -90,12 +90,12 @@ QByteArray CollectionAttribute::serialized() const
 void CollectionAttribute::deserialize(const QByteArray& data)
 {
     // Set default values
-    mEnabled                   = false;
-    mStandard                  = KACalEvent::EMPTY;
-    KACalEvent::Types standard = mStandard;
-    mCompatibility             = KACalendar::Incompatible;
-    mBackgroundColour          = QColor();
-    QColor bgColour            = mBackgroundColour;
+    mEnabled                         = false;
+    mStandard                        = KAlarm::CalEvent::EMPTY;
+    KAlarm::CalEvent::Types standard = mStandard;
+    mCompatibility                   = KAlarm::Calendar::Incompatible;
+    mBackgroundColour                = QColor();
+    QColor bgColour                  = mBackgroundColour;
 
     bool ok;
     int c[4];
@@ -121,15 +121,15 @@ void CollectionAttribute::deserialize(const QByteArray& data)
             // fall through to '3'
         case 3:    // calendar format compatibility
             c[0] = items[2].toInt(&ok);
-            if (!ok  ||  (c[0] & ~(KACalendar::Incompatible | KACalendar::Current | KACalendar::Convertible)))
+            if (!ok  ||  (c[0] & ~(KAlarm::Calendar::Incompatible | KAlarm::Calendar::Current | KAlarm::Calendar::Convertible)))
                 return;
-            mCompatibility = static_cast<KACalendar::Compat>(c[0]);
+            mCompatibility = static_cast<KAlarm::Calendar::Compat>(c[0]);
             // fall through to '2'
         case 2:    // type(s) of alarms for which the collection is the standard collection
             c[0] = items[1].toInt(&ok);
-            if (!ok  ||  (c[0] & ~(KACalEvent::ACTIVE | KACalEvent::ARCHIVED | KACalEvent::TEMPLATE)))
+            if (!ok  ||  (c[0] & ~(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE)))
                 return;
-            standard = static_cast<KACalEvent::Type>(c[0]);
+            standard = static_cast<KAlarm::CalEvent::Type>(c[0]);
             // fall through to '1'
         case 1:    // whether the collection is enabled
             c[0] = items[0].toInt(&ok);
@@ -144,8 +144,8 @@ void CollectionAttribute::deserialize(const QByteArray& data)
             break;
     }
 
-    if (!mEnabled  ||  mCompatibility != KACalendar::Current)
-        mStandard = KACalEvent::EMPTY;
+    if (!mEnabled  ||  mCompatibility != KAlarm::Calendar::Current)
+        mStandard = KAlarm::CalEvent::EMPTY;
 }
 
 } // namespace KAlarm

@@ -40,8 +40,8 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
 {
     public:
         CollectionAttribute()
-                : mStandard(KACalEvent::EMPTY),
-                  mCompatibility(KACalendar::Incompatible),
+                : mStandard(KAlarm::CalEvent::EMPTY),
+                  mCompatibility(KAlarm::Calendar::Incompatible),
                   mEnabled(false) { }
 
         bool isEnabled() const   { return mEnabled; }
@@ -54,17 +54,17 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
 
         /** Return whether the collection is the standard collection for a specified
          *  mime type. */
-        bool isStandard(KACalEvent::Type) const;
+        bool isStandard(KAlarm::CalEvent::Type) const;
 
         /** Set or clear the collection as the standard collection for a specified
          *  mime type. */
-        void setStandard(KACalEvent::Type, bool standard);
+        void setStandard(KAlarm::CalEvent::Type, bool standard);
 
         /** Return which mime types the collection is standard for. */
-        KACalEvent::Types standard() const     { return mStandard; }
+        KAlarm::CalEvent::Types standard() const     { return mStandard; }
 
         /** Set which mime types the collection is the standard collection for. */
-        void setStandard(KACalEvent::Types t)  { mStandard = t; }
+        void setStandard(KAlarm::CalEvent::Types t)  { mStandard = t; }
 
         /** Return the background color to display this collection and its alarms,
          *  or invalid color if none is set.
@@ -75,10 +75,10 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         void   setBackgroundColor(const QColor& c)  { mBackgroundColour = c; }
 
         /** Return the compatibility status for the entity. */
-        KACalendar::Compat compatibility() const  { return mCompatibility; }
+        KAlarm::Calendar::Compat compatibility() const  { return mCompatibility; }
 
         /** Set the compatibility status for the entity. */
-        void setCompatibility(KACalendar::Compat c)  { mCompatibility = c; }
+        void setCompatibility(KAlarm::Calendar::Compat c)  { mCompatibility = c; }
 
         virtual QByteArray type() const    { return "KAlarm collection"; }
         virtual CollectionAttribute* clone() const;
@@ -88,10 +88,10 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
     private:
         CollectionAttribute(const CollectionAttribute&);
 
-        QColor              mBackgroundColour; // background color for collection and its alarms
-        KACalEvent::Types   mStandard;         // whether the collection is a standard collection
-        KACalendar::Compat  mCompatibility;    // calendar compatibility with current KAlarm format
-        bool                mEnabled;          // if false, this collection's alarms are ignored
+        QColor                   mBackgroundColour; // background color for collection and its alarms
+        KAlarm::CalEvent::Types  mStandard;         // whether the collection is a standard collection
+        KAlarm::Calendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
+        bool                     mEnabled;          // if false, this collection's alarms are ignored
 };
 
 } // namespace KAlarm

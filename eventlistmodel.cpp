@@ -56,7 +56,7 @@ EventListModel* EventListModel::alarms()
 {
 	if (!mAlarmInstance)
 	{
-		mAlarmInstance = new EventListModel(KACalEvent::ACTIVE | KACalEvent::ARCHIVED);
+		mAlarmInstance = new EventListModel(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED);
 		Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateArchivedColour(const QColor&)));
 		Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateDisabledColour(const QColor&)));
 		Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::HolidayRegion&)), mAlarmInstance, SLOT(slotUpdateHolidays()));
@@ -68,7 +68,7 @@ EventListModel* EventListModel::alarms()
 EventListModel* EventListModel::templates()
 {
 	if (!mTemplateInstance)
-		mTemplateInstance = new EventListModel(KACalEvent::TEMPLATE);
+		mTemplateInstance = new EventListModel(KAlarm::CalEvent::TEMPLATE);
 	return mTemplateInstance;
 }
 
@@ -80,7 +80,7 @@ EventListModel::~EventListModel()
 		mTemplateInstance = 0;
 }
 
-EventListModel::EventListModel(KACalEvent::Types status, QObject* parent)
+EventListModel::EventListModel(KAlarm::CalEvent::Types status, QObject* parent)
 	: QAbstractTableModel(parent),
 	  mStatus(status)
 {
@@ -401,7 +401,7 @@ void EventListModel::slotUpdateArchivedColour(const QColor&)
 	int firstRow = -1;
 	for (int row = 0, end = mEvents.count();  row < end;  ++row)
 	{
-		if (mEvents[row]->category() == KACalEvent::ARCHIVED)
+		if (mEvents[row]->category() == KAlarm::CalEvent::ARCHIVED)
 		{
 			// For efficiency, emit a single signal for each group
 			// of consecutive archived alarms, rather than a separate

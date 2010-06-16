@@ -31,17 +31,17 @@ namespace KCal {
   class CalendarLocal;
 }
 
-#ifdef USE_AKONADI
 namespace KAlarm
 {
-    extern const QLatin1String KALARM_CAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
-    extern const QLatin1String KALARM_CAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
-    extern const QLatin1String KALARM_CAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
-    extern const QLatin1String KALARM_CAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
-}
+
+#ifdef USE_AKONADI
+extern const QLatin1String KALARM_CAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
+extern const QLatin1String KALARM_CAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
+extern const QLatin1String KALARM_CAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
+extern const QLatin1String KALARM_CAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
 #endif
 
-class KALARM_CAL_EXPORT KACalendar
+class KALARM_CAL_EXPORT Calendar
 {
     public:
         /** Compatibility of resource calendar format. */
@@ -86,7 +86,7 @@ class KALARM_CAL_EXPORT KACalendar
         static bool mHaveKAlarmCatalog;
 };
 
-class KALARM_CAL_EXPORT KACalEvent
+class KALARM_CAL_EXPORT CalEvent
 {
     public:
         /** The category of an event, indicated by the middle part of its UID. */
@@ -114,7 +114,9 @@ class KALARM_CAL_EXPORT KACalEvent
 #endif
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KACalEvent::Types);
+Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types);
+
+} // namespace KAlarm
 
 #endif
 

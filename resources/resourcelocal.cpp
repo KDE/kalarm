@@ -143,7 +143,7 @@ bool KAResourceLocal::doLoad(bool)
 			return false;
 		}
 		mFileReadOnly = false;
-		setCompatibility(KACalendar::Current);
+		setCompatibility(KAlarm::Calendar::Current);
 		mLoading = false;
 		mLoaded = true;
 		setReloaded(true);   // the resource has now been loaded at least once
