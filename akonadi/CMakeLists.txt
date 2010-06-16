@@ -20,8 +20,8 @@ endif (KDEPIM_MOBILE_UI)
 
 include_directories(
     .
-    ${CMAKE_SOURCE_DIR}/kalarm
-    ${CMAKE_BINARY_DIR}/kalarm
+#    ${CMAKE_SOURCE_DIR}/kalarm
+#    ${CMAKE_BINARY_DIR}/kalarm
     ${CMAKE_SOURCE_DIR}/kalarm/cal
     ${AKONADI_ICAL_RESOURCE}
     ${AKONADI_SHARED_RESOURCES}
@@ -37,8 +37,6 @@ set( kalarmresource_SRCS
   ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
   ${AKONADI_ICAL_RESOURCE}/icalresourcebase.cpp
   kalarmresource.cpp
-  compatibilityattribute.cpp
-  eventattribute.cpp
 )
 
 install(FILES kalarmresource.desktop kalarmresource_active.desktop kalarmresource_archived.desktop kalarmresource_template.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents")
@@ -52,7 +50,7 @@ qt4_add_dbus_adaptor(kalarmresource_SRCS
 
 kde4_add_executable(akonadi_kalarm_resource ${kalarmresource_SRCS})
 
-target_link_libraries(akonadi_kalarm_resource akonadi-kcal kalarm_calendar ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(akonadi_kalarm_resource kalarm_calendar akonadi-kcal ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KIO_LIBS})
 
 install(TARGETS akonadi_kalarm_resource ${INSTALL_TARGETS_DEFAULT_ARGS})
 

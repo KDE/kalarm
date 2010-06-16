@@ -20,7 +20,7 @@
  */
 
 #include "kalarmresource.h"
-#include "compatibilityattribute.h"
+#include "collectionattribute.h"
 #include "eventattribute.h"
 #include "kalarmmimetypevisitor.h"
 #include "kaevent.h"
@@ -33,12 +33,10 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-static QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
-static QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
-static QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
-
 using namespace Akonadi;
 using namespace KCal;
+using KAlarm::CollectionAttribute;
+using KAlarm::EventAttribute;
 
 
 KAlarmResource::KAlarmResource(const QString& id)
@@ -51,18 +49,18 @@ KAlarmResource::KAlarmResource(const QString& id)
 
     QStringList mimeTypes;
     if (id.contains("_active"))
-        mimeTypes << MIME_ACTIVE;
+        mimeTypes << KAlarm::MIME_ACTIVE;
     else if (id.contains("_archived"))
-        mimeTypes << MIME_ARCHIVED;
+        mimeTypes << KAlarm::MIME_ARCHIVED;
     else if (id.contains("_template"))
-        mimeTypes << MIME_TEMPLATE;
+        mimeTypes << KAlarm::MIME_TEMPLATE;
     else
-        mimeTypes << QLatin1String("application/x-vnd.kde.alarms")
-                  << MIME_ACTIVE << MIME_ARCHIVED << MIME_TEMPLATE;
+        mimeTypes << KAlarm::MIME_BASE
+                  << KAlarm::MIME_ACTIVE << KAlarm::MIME_ARCHIVED << KAlarm::MIME_TEMPLATE;
     initialise(mimeTypes, "kalarm");
 
+    AttributeFactory::registerAttribute<CollectionAttribute>();
     AttributeFactory::registerAttribute<EventAttribute>();
-    AttributeFactory::registerAttribute<CompatibilityAttribute>();
 }
 
 KAlarmResource::~KAlarmResource()
@@ -215,7 +213,7 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
 {
     // Set the collection's compatibility status
     Collection col = collection;
-    CompatibilityAttribute* attr = col.attribute<CompatibilityAttribute>(Collection::AddIfMissing);
+    CollectionAttribute* attr = col.attribute<CollectionAttribute>(Collection::AddIfMissing);
     attr->setCompatibility(mCompatibility);
 
     // Retrieve events from the calendar
@@ -248,9 +246,9 @@ QString KAlarmResource::mimeType(const KAEvent& event)
     {
         switch (event.category())
         {
-            case KACalEvent::ACTIVE:    return MIME_ACTIVE;
-            case KACalEvent::ARCHIVED:  return MIME_ARCHIVED;
-            case KACalEvent::TEMPLATE:  return MIME_TEMPLATE;
+            case KACalEvent::ACTIVE:    return KAlarm::MIME_ACTIVE;
+            case KACalEvent::ARCHIVED:  return KAlarm::MIME_ARCHIVED;
+            case KACalEvent::TEMPLATE:  return KAlarm::MIME_TEMPLATE;
             default:
                 break;
         }

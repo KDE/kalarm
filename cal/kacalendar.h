@@ -31,10 +31,19 @@ namespace KCal {
   class CalendarLocal;
 }
 
+#ifdef USE_AKONADI
+namespace KAlarm
+{
+    extern const QLatin1String KALARM_CAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
+    extern const QLatin1String KALARM_CAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
+    extern const QLatin1String KALARM_CAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
+    extern const QLatin1String KALARM_CAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
+}
+#endif
+
 class KALARM_CAL_EXPORT KACalendar
 {
     public:
-        static QByteArray APPNAME;
         /** Compatibility of resource calendar format. */
         enum Compat
         {
@@ -67,6 +76,8 @@ class KALARM_CAL_EXPORT KACalendar
          */
         static QByteArray  icalProductId();
 
+        static const QByteArray APPNAME;           //!< The application name ("KALARM") used in calendar properties
+
     private:
         static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
         static void insertKAlarmCatalog();
@@ -92,6 +103,15 @@ class KALARM_CAL_EXPORT KACalEvent
         static QString uid(const QString& id, Type);
         static Type    status(const KCal::Event*, QString* param = 0);
         static void    setStatus(KCal::Event*, Type, const QString& param = QString());
+
+#ifdef USE_AKONADI
+        /** Return the alarm Type for a mime type string. */
+        static Type    type(const QString& mimeType);
+        /** Return the alarm Types for a list of mime type strings. */
+        static Types   types(const QStringList& mimeTypes);
+        /** Return the mime type string corresponding to an alarm Type. */
+        static QString mimeType(Type);
+#endif
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KACalEvent::Types);

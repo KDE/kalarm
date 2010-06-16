@@ -37,7 +37,16 @@
 #include <QTextStream>
 
 
-QByteArray KACalendar::APPNAME = "KALARM";
+#ifdef USE_AKONADI
+namespace KAlarm
+{
+const QLatin1String MIME_BASE("application/x-vnd.kde.alarms");
+const QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
+const QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
+const QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
+}
+#endif
+
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 
 using namespace KCal;
@@ -47,6 +56,8 @@ static bool isUTC(const QString& localFile);
 /*=============================================================================
 * Class: KACalendar
 *============================================================================*/
+
+const QByteArray KACalendar::APPNAME("KALARM");
 
 QByteArray KACalendar::mIcalProductId;
 bool       KACalendar::mHaveKAlarmCatalog = false;
@@ -376,5 +387,44 @@ void KACalEvent::setStatus(KCal::Event* event, KACalEvent::Type status, const QS
 		text += ';' + param;
 	event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
+
+#ifdef USE_AKONADI
+KACalEvent::Type KACalEvent::type(const QString& mimeType)
+{
+    if (mimeType == KAlarm::MIME_ACTIVE)
+        return ACTIVE;
+    if (mimeType == KAlarm::MIME_ARCHIVED)
+        return ARCHIVED;
+    if (mimeType == KAlarm::MIME_TEMPLATE)
+        return TEMPLATE;
+    return EMPTY;
+}
+
+KACalEvent::Types KACalEvent::types(const QStringList& mimeTypes)
+{
+    Types types = 0;
+    foreach (const QString type, mimeTypes)
+    {
+        if (type == KAlarm::MIME_ACTIVE)
+            types |= ACTIVE;
+        if (type == KAlarm::MIME_ARCHIVED)
+            types |= ARCHIVED;
+        if (type == KAlarm::MIME_TEMPLATE)
+            types |= TEMPLATE;
+    }
+    return types;
+}
+
+QString KACalEvent::mimeType(KACalEvent::Type type)
+{
+    switch (type)
+    {
+        case ACTIVE:    return KAlarm::MIME_ACTIVE;
+        case ARCHIVED:  return KAlarm::MIME_ARCHIVED;
+        case TEMPLATE:  return KAlarm::MIME_TEMPLATE;
+        default:        return QString::null;
+    }
+}
+#endif
 
 // vim: et sw=4:

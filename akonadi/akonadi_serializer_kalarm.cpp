@@ -20,6 +20,7 @@
  */
 
 #include "akonadi_serializer_kalarm.h"
+#include "kacalendar.h"
 #include "kalarmmimetypevisitor.h"
 #include "kaevent.h"
 
@@ -28,9 +29,6 @@
 #include <akonadi/item.h>
 #include <kdebug.h>
 
-static QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
-static QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
-static QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
 
 using namespace Akonadi;
 
@@ -95,9 +93,9 @@ QString SerializerPluginKAlarm::mimeType(const KAEvent& event)
     {
         switch (event.category())
         {
-            case KACalEvent::ACTIVE:    return MIME_ACTIVE;
-            case KACalEvent::ARCHIVED:  return MIME_ARCHIVED;
-            case KACalEvent::TEMPLATE:  return MIME_TEMPLATE;
+            case KACalEvent::ACTIVE:    return KAlarm::MIME_ACTIVE;
+            case KACalEvent::ARCHIVED:  return KAlarm::MIME_ARCHIVED;
+            case KACalEvent::TEMPLATE:  return KAlarm::MIME_TEMPLATE;
             default:
                 break;
         }
