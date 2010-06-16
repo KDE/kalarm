@@ -1094,17 +1094,17 @@ void MessageWin::redisplayAlarms()
 */
 bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& showEdit, bool& showDefer)
 {
-	const Event* kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
+	const Event* kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(KACalEvent::uid(mEventID, KACalEvent::DISPLAYING));
 	if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
 	{
 		// The event isn't in the displaying calendar.
 		// Try to retrieve it from the archive calendar.
-		KAEvent* ev = AlarmCalendar::resources()->event(KCalEvent::uid(mEventID, KCalEvent::ARCHIVED));
+		KAEvent* ev = AlarmCalendar::resources()->event(KACalEvent::uid(mEventID, KACalEvent::ARCHIVED));
 		if (!ev)
 			return false;
 		event = *ev;
 		event.setArchive();     // ensure that it gets re-archived if it's saved
-		event.setCategory(KCalEvent::ACTIVE);
+		event.setCategory(KACalEvent::ACTIVE);
 		if (mEventID != event.id())
 			kError() << "Wrong event ID";
 		event.setEventId(mEventID);
@@ -1862,7 +1862,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 		if (!mEventID.isNull())
 		{
 			// Delete from the display calendar
-			KAlarm::deleteDisplayEvent(KCalEvent::uid(mEventID, KCalEvent::DISPLAYING));
+			KAlarm::deleteDisplayEvent(KACalEvent::uid(mEventID, KACalEvent::DISPLAYING));
 		}
 	}
 	MainWindowBase::closeEvent(ce);
@@ -2079,7 +2079,7 @@ void MessageWin::slotDefer()
 				mNoPostAction = true;
 			// Finally delete it from the archived calendar now that it has
 			// been reactivated.
-			event.setCategory(KCalEvent::ARCHIVED);
+			event.setCategory(KACalEvent::ARCHIVED);
 			KAlarm::deleteEvent(event, false);
 		}
 		if (theApp()->wantShowInSystemTray())

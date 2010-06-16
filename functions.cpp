@@ -264,7 +264,7 @@ UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOr
 		status = UPDATE_FAILED;
 	else
 	{
-		resource = AlarmResources::instance()->destination(KCalEvent::ACTIVE, msgParent);
+		resource = AlarmResources::instance()->destination(KACalEvent::ACTIVE, msgParent);
 		if (!resource)
 		{
 			kDebug() << "No resource";
@@ -324,13 +324,13 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 {
 	kDebug() << event.id();
 	QString oldid = event.id();
-	bool archiving = (event.category() == KCalEvent::ACTIVE);
+	bool archiving = (event.category() == KACalEvent::ACTIVE);
 	if (archiving  &&  !Preferences::archivedKeepDays())
 		return false;   // expired alarms aren't being kept
 	KAEvent* newev = new KAEvent(event);
 	if (archiving)
 	{
-		newev->setCategory(KCalEvent::ARCHIVED);    // this changes the event ID
+		newev->setCategory(KACalEvent::ARCHIVED);    // this changes the event ID
 		newev->setSaveDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
 	}
 	AlarmCalendar* cal = AlarmCalendar::resources();
@@ -541,7 +541,7 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
 		event->setCommandError(KAEvent::CMD_NO_ERROR);
 
 		// Delete the event from the calendar file
-		if (event->category() != KCalEvent::ARCHIVED)
+		if (event->category() != KACalEvent::ARCHIVED)
 		{
 			if (event->copyToKOrganizer())
 			{
@@ -653,7 +653,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 	int warnKOrg = 0;
 	UpdateStatus status = UPDATE_OK;
 	if (!resource)
-		resource = AlarmResources::instance()->destination(KCalEvent::ACTIVE, msgParent);
+		resource = AlarmResources::instance()->destination(KACalEvent::ACTIVE, msgParent);
 	if (!resource)
 	{
 		kDebug() << "No resource";
@@ -670,7 +670,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 		{
 			// Delete the event from the archived resource
 			KAEvent* event = events[i];
-			if (event->category() != KCalEvent::ARCHIVED
+			if (event->category() != KACalEvent::ARCHIVED
 			||  !event->occursAfter(now, true))
 			{
 				ineligibleIDs += event->id();
@@ -680,7 +680,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 
 			KAEvent* newev = new KAEvent(*event);
 			QString oldid = event->id();
-			newev->setCategory(KCalEvent::ACTIVE);    // this changes the event ID
+			newev->setCategory(KACalEvent::ACTIVE);    // this changes the event ID
 			if (newev->recurs()  ||  newev->repetition())
 				newev->setNextOccurrence(now);   // skip any recurrences in the past
 			newev->setArchive();    // ensure that it gets re-archived if it is deleted
@@ -746,7 +746,7 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (event->category() == KCalEvent::ACTIVE
+		if (event->category() == KACalEvent::ACTIVE
 		&&  enable != event->enabled())
 		{
 			event->setEnabled(enable);
@@ -1105,8 +1105,8 @@ bool editAlarm(const QString& eventID, QWidget* parent)
 	}
 	switch (event->category())
 	{
-		case KCalEvent::ACTIVE:
-		case KCalEvent::TEMPLATE:
+		case KACalEvent::ACTIVE:
+		case KACalEvent::TEMPLATE:
 			break;
 		default:
 			kError() << eventID << ": event not active or template";
@@ -1206,7 +1206,7 @@ KAEvent::List templateList()
 {
 	KAEvent::List templates;
 	bool includeCmdAlarms = ShellProcess::authorised();
-	KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::TEMPLATE);
+	KAEvent::List events = AlarmCalendar::resources()->events(KACalEvent::TEMPLATE);
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
@@ -1265,7 +1265,7 @@ void refreshAlarmsIfQueued()
 		AlarmCalendar::resources()->reload();
 
 		// Close any message windows for alarms which are now disabled
-		KAEvent::List events = AlarmCalendar::resources()->events(KCalEvent::ACTIVE);
+		KAEvent::List events = AlarmCalendar::resources()->events(KACalEvent::ACTIVE);
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			KAEvent* event = events[i];

@@ -116,7 +116,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		 *  @return Success if success; otherwise the event is deleted, and
 		 *          Cancelled or Failed is returned.
 		 */
-		Result addEvent(KCal::Event*, KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false);
+		Result addEvent(KCal::Event*, KACalEvent::Type, QWidget* promptParent = 0, bool noPrompt = false);
 
 		/** Return whether all, some or none of the active resources are loaded.
 		 *  @return 0 if no resources are loaded,
@@ -211,7 +211,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		 *  @param cancelled If non-null: set to true if the user cancelled
 		 *             the prompt dialogue; set to false if any other error.
 		 */
-		AlarmResource* destination(KCalEvent::Status, QWidget* promptParent = 0, bool noPrompt = false, bool* cancelled = 0);
+		AlarmResource* destination(KACalEvent::Type, QWidget* promptParent = 0, bool noPrompt = false, bool* cancelled = 0);
 
 		/**
 		   Called when a resource is added to the managed collection.

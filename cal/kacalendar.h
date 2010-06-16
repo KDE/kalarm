@@ -75,11 +75,11 @@ class KALARM_CAL_EXPORT KACalendar
         static bool mHaveKAlarmCatalog;
 };
 
-class KALARM_CAL_EXPORT KCalEvent
+class KALARM_CAL_EXPORT KACalEvent
 {
     public:
         /** The category of an event, indicated by the middle part of its UID. */
-        enum Status
+        enum Type
         {
             EMPTY      = 0,       // the event has no alarms
             ACTIVE     = 0x01,    // the event is currently active
@@ -87,14 +87,14 @@ class KALARM_CAL_EXPORT KCalEvent
             TEMPLATE   = 0x04,    // the event is an alarm template
             DISPLAYING = 0x08     // the event is currently being displayed
         };
-        Q_DECLARE_FLAGS(Statuses, Status);
+        Q_DECLARE_FLAGS(Types, Type);
 
-        static QString uid(const QString& id, Status);
-        static Status  status(const KCal::Event*, QString* param = 0);
-        static void    setStatus(KCal::Event*, Status, const QString& param = QString());
+        static QString uid(const QString& id, Type);
+        static Type    status(const KCal::Event*, QString* param = 0);
+        static void    setStatus(KCal::Event*, Type, const QString& param = QString());
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KCalEvent::Statuses);
+Q_DECLARE_OPERATORS_FOR_FLAGS(KACalEvent::Types);
 
 #endif
 

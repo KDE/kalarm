@@ -375,8 +375,8 @@ void KAEvent::Private::set(const Event* event)
     mEnabled                = true;
     clearRecur();
     QString param;
-    mCategory               = KCalEvent::status(event, &param);
-    if (mCategory == KCalEvent::DISPLAYING)
+    mCategory               = KACalEvent::status(event, &param);
+    if (mCategory == KACalEvent::DISPLAYING)
     {
         // It's a displaying calendar event - set values specific to displaying alarms
         QStringList params = param.split(SC, QString::KeepEmptyParts);
@@ -541,7 +541,7 @@ void KAEvent::Private::set(const Event* event)
     mSaveDateTime = event->created();
     if (dateOnly  &&  !mRepetition.isDaily())
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
-    if (mCategory == KCalEvent::TEMPLATE)
+    if (mCategory == KACalEvent::TEMPLATE)
         mTemplateName = event->summary();
     if (event->statusStr() == DISABLED_STATUS)
         mEnabled = false;
@@ -1054,7 +1054,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mResource               = 0;
     mText                   = (mActionType == T_COMMAND) ? text.trimmed()
                             : (mActionType == T_AUDIO) ? QString() : text;
-    mCategory               = KCalEvent::ACTIVE;
+    mCategory               = KACalEvent::ACTIVE;
     mAudioFile              = (mActionType == T_AUDIO) ? text : QString();
     mSoundVolume            = -1;
     mFadeVolume             = -1;
@@ -1148,11 +1148,11 @@ void KAEvent::Private::setAudioFile(const QString& filename, float volume, float
 * If it is being set to archived, set the archived indication in the event ID;
 * otherwise, remove the archived indication from the event ID.
 */
-void KAEvent::Private::setCategory(KCalEvent::Status s)
+void KAEvent::Private::setCategory(KACalEvent::Type s)
 {
     if (s == mCategory)
         return;
-    mEventID = KCalEvent::uid(mEventID, s);
+    mEventID = KACalEvent::uid(mEventID, s);
     mCategory = s;
     mUpdated = true;
 }
@@ -1162,7 +1162,7 @@ void KAEvent::Private::setCategory(KCalEvent::Status s)
 */
 void KAEvent::setTemplate(const QString& name, int afterTime)
 {
-    d->setCategory(KCalEvent::TEMPLATE);
+    d->setCategory(KACalEvent::TEMPLATE);
     d->mTemplateName = name;
     d->mTemplateAfterTime = afterTime;
     d->mUpdated = true;
@@ -1251,7 +1251,7 @@ void KAEvent::Private::calcTriggerTimes() const
     return;
     }
     mChanged = false;
-    if (mCategory == KCalEvent::ARCHIVED  ||  !mTemplateName.isEmpty())
+    if (mCategory == KACalEvent::ARCHIVED  ||  !mTemplateName.isEmpty())
     {
         // It's a template or archived
         mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KDateTime();
@@ -1932,7 +1932,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
 {
     // If it's an archived event, the event start date/time will be adjusted to its original
     // value instead of its next occurrence, and the expired main alarm will be reinstated.
-    bool archived = (mCategory == KCalEvent::ARCHIVED);
+    bool archived = (mCategory == KACalEvent::ARCHIVED);
 
     if (!ev
     ||  (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
@@ -1963,7 +1963,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
     ev->removeCustomProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY);
 
     QString param;
-    if (mCategory == KCalEvent::DISPLAYING)
+    if (mCategory == KACalEvent::DISPLAYING)
     {
         param = mResourceId;
         if (mDisplayingDefer)
@@ -1971,7 +1971,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
         if (mDisplayingEdit)
             param += SC + DISP_EDIT;
     }
-    KCalEvent::setStatus(ev, mCategory, param);
+    KACalEvent::setStatus(ev, mCategory, param);
     QStringList flags;
     if (mStartDateTime.isDateOnly())
         flags += DATE_ONLY_FLAG;
@@ -2792,7 +2792,7 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
         {
             *this = event;
             // Change the event ID to avoid duplicating the same unique ID as the original event
-            setCategory(KCalEvent::DISPLAYING);
+            setCategory(KACalEvent::DISPLAYING);
             mResourceId      = resourceID;
             mDisplayingDefer = showDefer;
             mDisplayingEdit  = showEdit;
@@ -2825,7 +2825,7 @@ void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& 
     if (mDisplaying)
     {
         // Retrieve the original event's unique ID
-        setCategory(KCalEvent::ACTIVE);
+        setCategory(KACalEvent::ACTIVE);
         resourceID  = mResourceId;
         showDefer   = mDisplayingDefer;
         showEdit    = mDisplayingEdit;
@@ -3855,7 +3855,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
              * X-KDE-KALARM-FONTCOLOUR property.
              * Convert BEEP category into an audio alarm with no audio file.
              */
-            if (KCalEvent::status(event) == KCalEvent::ARCHIVED)
+            if (KACalEvent::status(event) == KACalEvent::ARCHIVED)
                 event->setCreated(event->dtEnd());
             KDateTime start = event->dtStart();
             if (event->allDay())
@@ -3979,7 +3979,7 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
              * Add the X-KDE-KALARM-STATUS custom property.
              * Convert KAlarm categories to custom fields.
              */
-            KCalEvent::setStatus(event, KCalEvent::status(event));
+            KACalEvent::setStatus(event, KACalEvent::status(event));
             for (int i = 0;  i < cats.count(); )
             {
                 QString cat = cats[i];

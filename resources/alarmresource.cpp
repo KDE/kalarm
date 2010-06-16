@@ -387,15 +387,15 @@ void AlarmResource::lock(const QString& path)
 */
 bool AlarmResource::checkAlarmTypes(KCal::CalendarLocal& calendar) const
 {
-	KCalEvent::Status type = kcalEventType();
-	if (type != KCalEvent::EMPTY)
+	KACalEvent::Type type = kcalEventType();
+	if (type != KACalEvent::EMPTY)
 	{
 		bool have = false;
 		bool other = false;
 		const Event::List events = calendar.rawEvents();
 		for (int i = 0, iend = events.count();  i < iend;  ++i)
 		{
-			KCalEvent::Status s = KCalEvent::status(events[i]);
+			KACalEvent::Type s = KACalEvent::status(events[i]);
 			if (type == s)
 				have = true;
 			else
@@ -409,14 +409,14 @@ bool AlarmResource::checkAlarmTypes(KCal::CalendarLocal& calendar) const
 	return true;
 }
 
-KCalEvent::Status AlarmResource::kcalEventType() const
+KACalEvent::Type AlarmResource::kcalEventType() const
 {
 	switch (mType)
 	{
-		case ACTIVE:    return KCalEvent::ACTIVE;
-		case ARCHIVED:  return KCalEvent::ARCHIVED;
-		case TEMPLATE:  return KCalEvent::TEMPLATE;
-		default:        return KCalEvent::EMPTY;
+		case ACTIVE:    return KACalEvent::ACTIVE;
+		case ARCHIVED:  return KACalEvent::ARCHIVED;
+		case TEMPLATE:  return KACalEvent::TEMPLATE;
+		default:        return KACalEvent::EMPTY;
 	}
 }
 
@@ -427,11 +427,11 @@ void AlarmResource::kaCheckCalendar(CalendarLocal& cal)
 	Event::List events = cal.rawEvents();
 	for (int i = 0, iend = events.count();  i < iend;  ++i)
 	{
-		switch (KCalEvent::status(events[i]))
+		switch (KACalEvent::status(events[i]))
 		{
-			case KCalEvent::ACTIVE:    mTypes = static_cast<Type>(mTypes | ACTIVE);  break;
-			case KCalEvent::ARCHIVED:  mTypes = static_cast<Type>(mTypes | ARCHIVED);  break;
-			case KCalEvent::TEMPLATE:  mTypes = static_cast<Type>(mTypes | TEMPLATE);  break;
+			case KACalEvent::ACTIVE:    mTypes = static_cast<Type>(mTypes | ACTIVE);  break;
+			case KACalEvent::ARCHIVED:  mTypes = static_cast<Type>(mTypes | ARCHIVED);  break;
+			case KACalEvent::TEMPLATE:  mTypes = static_cast<Type>(mTypes | TEMPLATE);  break;
 			default:   break;
 		}
 		if (mTypes == (ACTIVE | ARCHIVED | TEMPLATE))

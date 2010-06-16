@@ -303,7 +303,7 @@ QString TrayWindow::tooltipAlarmText() const
 	// Get today's and tomorrow's alarms, sorted in time order
 	int i, iend;
 	QList<TipItem> items;
-	KAEvent::List events = AlarmCalendar::resources()->events(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, KCalEvent::ACTIVE);
+	KAEvent::List events = AlarmCalendar::resources()->events(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, KACalEvent::ACTIVE);
 	for (i = 0, iend = events.count();  i < iend;  ++i)
 	{
 		KAEvent* event = events[i];

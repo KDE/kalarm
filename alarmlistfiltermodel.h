@@ -33,8 +33,8 @@ class AlarmListFilterModel : public EventListFilterModel
 		enum { ColumnCount = 6 };
 
 		explicit AlarmListFilterModel(EventListModel* baseModel, QObject* parent = 0);
-		void                setStatusFilter(KCalEvent::Statuses);
-		KCalEvent::Statuses statusFilter() const   { return mStatusFilter; }
+		void                setStatusFilter(KACalEvent::Types);
+		KACalEvent::Types   statusFilter() const   { return mStatusFilter; }
 		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
 
 	protected:
@@ -42,7 +42,7 @@ class AlarmListFilterModel : public EventListFilterModel
 		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
 
 	private:
-		KCalEvent::Statuses mStatusFilter;
+		KACalEvent::Types mStatusFilter;
 };
 
 #endif // ALARMLISTFILTERMODEL_H

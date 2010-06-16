@@ -102,7 +102,7 @@ void Find::display()
 		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
 	bool noArchived = !Preferences::archivedKeepDays();
 	bool showArchived = qobject_cast<AlarmListView*>(mListView)
-	                    && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KCalEvent::ARCHIVED);
+	                    && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KACalEvent::ARCHIVED);
 	if (noArchived  ||  !showArchived)      // these settings could change between activations
 		mOptions &= ~FIND_ARCHIVED;
 

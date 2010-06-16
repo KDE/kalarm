@@ -31,10 +31,10 @@
 
 AlarmListFilterModel::AlarmListFilterModel(EventListModel* baseModel, QObject* parent)
 	: EventListFilterModel(baseModel, parent),
-	  mStatusFilter(KCalEvent::EMPTY)
+	  mStatusFilter(KACalEvent::EMPTY)
 {}
 
-void AlarmListFilterModel::setStatusFilter(KCalEvent::Statuses type)
+void AlarmListFilterModel::setStatusFilter(KACalEvent::Types type)
 {
 	if (type != mStatusFilter)
 	{
