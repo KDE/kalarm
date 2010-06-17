@@ -56,8 +56,8 @@ class UndoItem
 		int                id() const            { return mId; }
 		Undo::Type         type() const          { return mType; }
 		void               setType(Undo::Type t) { mType = t; }
-		KACalEvent::Type   calendar() const      { return mCalendar; }
-		virtual void       setCalendar(KACalEvent::Type s) { mCalendar = s; }
+		KAlarm::CalEvent::Type calendar() const  { return mCalendar; }
+		virtual void       setCalendar(KAlarm::CalEvent::Type s) { mCalendar = s; }
 		virtual UndoItem*  restore() = 0;
 		virtual bool       deleteID(const QString& /*id*/)  { return false; }
 
@@ -71,14 +71,14 @@ class UndoItem
 
 	protected:
 		UndoItem(Undo::Type, const QString& name = QString());
-		static QString     addDeleteActionText(KACalEvent::Type, bool add);
+		static QString     addDeleteActionText(KAlarm::CalEvent::Type, bool add);
 		QString            description(const KAEvent&) const;
 		void               replaceWith(UndoItem* item)   { Undo::replace(this, item); }
 
 		QString            mName;      // specified action name (overrides default)
 		int                mId;        // unique identifier (only for mType = UNDO, REDO)
 		Undo::Type         mType;      // which list (if any) the object is in
-		KACalEvent::Type   mCalendar;
+		KAlarm::CalEvent::Type mCalendar;
 };
 
 class UndoMultiBase : public UndoItem
@@ -110,7 +110,7 @@ class UndoAdd : public UndoItem
 	public:
 		UndoAdd(Undo::Type, const Undo::Event&, const QString& name = QString());
 		UndoAdd(Undo::Type, const KAEvent&, AlarmResource*, const QString& name = QString());
-		UndoAdd(Undo::Type, const KAEvent&, AlarmResource*, const QString& name, KACalEvent::Type);
+		UndoAdd(Undo::Type, const KAEvent&, AlarmResource*, const QString& name, KAlarm::CalEvent::Type);
 		virtual Operation  operation() const     { return ADD; }
 		virtual QString    defaultActionText() const;
 		virtual QString    description() const   { return mDescription; }
@@ -175,9 +175,9 @@ class UndoReactivate : public UndoAdd
 {
 	public:
 		UndoReactivate(Undo::Type t, const Undo::Event& e, const QString& name = QString())
-		         : UndoAdd(t, e.event, e.resource, name, KACalEvent::ACTIVE) { }
+		         : UndoAdd(t, e.event, e.resource, name, KAlarm::CalEvent::ACTIVE) { }
 		UndoReactivate(Undo::Type t, const KAEvent& e, AlarmResource* r, const QString& name = QString())
-		         : UndoAdd(t, e, r, name, KACalEvent::ACTIVE) { }
+		         : UndoAdd(t, e, r, name, KAlarm::CalEvent::ACTIVE) { }
 		virtual Operation operation() const     { return REACTIVATE; }
 		virtual QString   defaultActionText() const;
 		virtual UndoItem* restore();
@@ -627,27 +627,27 @@ UndoItem::~UndoItem()
 */
 QString UndoItem::description(const KAEvent& event) const
 {
-	return (mCalendar == KACalEvent::TEMPLATE) ? event.templateName() : AlarmText::summary(event);
+	return (mCalendar == KAlarm::CalEvent::TEMPLATE) ? event.templateName() : AlarmText::summary(event);
 }
 
 /******************************************************************************
 *  Return the action description of an add or delete Undo/Redo item for displaying.
 */
-QString UndoItem::addDeleteActionText(KACalEvent::Type calendar, bool add)
+QString UndoItem::addDeleteActionText(KAlarm::CalEvent::Type calendar, bool add)
 {
 	switch (calendar)
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 			if (add)
 				return i18nc("@info/plain Action to create a new alarm", "New alarm");
 			else
 				return i18nc("@info/plain Action to delete an alarm", "Delete alarm");
-		case KACalEvent::TEMPLATE:
+		case KAlarm::CalEvent::TEMPLATE:
 			if (add)
 				return i18nc("@info/plain Action to create a new alarm template", "New template");
 			else
 				return i18nc("@info/plain Action to delete an alarm template", "Delete template");
-		case KACalEvent::ARCHIVED:
+		case KAlarm::CalEvent::ARCHIVED:
 			return i18nc("@info/plain", "Delete archived alarm");
 		default:
 			break;
@@ -753,10 +753,10 @@ UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, AlarmResource* resource,
 	mDescription = UndoItem::description(event);    // calendar must be set before calling this
 }
 
-UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, AlarmResource* resource, const QString& name, KACalEvent::Type cal)
+UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, AlarmResource* resource, const QString& name, KAlarm::CalEvent::Type cal)
 	: UndoItem(type, name),
 	  mResource(resource),
-	  mEventID(KACalEvent::uid(event.id(), cal))    // convert if old-style event ID
+	  mEventID(KAlarm::CalEvent::uid(event.id(), cal))    // convert if old-style event ID
 {
 	setCalendar(cal);
 	mDescription = UndoItem::description(event);    // calendar must be set before calling this
@@ -785,7 +785,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 
 	switch (calendar())
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 		{
 			if (setArchive)
 				event.setArchive();
@@ -811,11 +811,11 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 			}
 			break;
 		}
-		case KACalEvent::TEMPLATE:
+		case KAlarm::CalEvent::TEMPLATE:
 			if (KAlarm::deleteTemplate(event.id()) != KAlarm::UPDATE_OK)
 				mRestoreError = ERR_TEMPLATE;
 			break;
-		case KACalEvent::ARCHIVED:    // redoing the deletion of an archived alarm
+		case KAlarm::CalEvent::ARCHIVED:    // redoing the deletion of an archived alarm
 			KAlarm::deleteEvent(event);
 			break;
 		default:
@@ -912,7 +912,7 @@ UndoItem* UndoEdit::restore()
 
 	switch (calendar())
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 		{
 			KAlarm::UpdateStatus status = KAlarm::modifyEvent(newEvent, *mOldEvent);
 			switch (status)
@@ -936,11 +936,11 @@ UndoItem* UndoEdit::restore()
 			}
 			break;
 		}
-		case KACalEvent::TEMPLATE:
+		case KAlarm::CalEvent::TEMPLATE:
 			if (KAlarm::updateTemplate(*mOldEvent) != KAlarm::UPDATE_OK)
 				mRestoreError = ERR_TEMPLATE;
 			break;
-		case KACalEvent::ARCHIVED:    // editing of archived events is not allowed
+		case KAlarm::CalEvent::ARCHIVED:    // editing of archived events is not allowed
 		default:
 			delete undo;
 			mRestoreError = ERR_PROG;
@@ -956,9 +956,9 @@ QString UndoEdit::defaultActionText() const
 {
 	switch (calendar())
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 			return i18nc("@info/plain Action to edit an alarm", "Edit alarm");
-		case KACalEvent::TEMPLATE:
+		case KAlarm::CalEvent::TEMPLATE:
 			return i18nc("@info/plain Action to edit an alarm template", "Edit template");
 		default:
 			break;
@@ -1006,11 +1006,11 @@ UndoItem* UndoDelete::restore()
 	// Restore the original event
 	switch (calendar())
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 			if (mEvent->toBeArchived())
 			{
 				// It was archived when it was deleted
-				mEvent->setCategory(KACalEvent::ARCHIVED);
+				mEvent->setCategory(KAlarm::CalEvent::ARCHIVED);
 				KAlarm::UpdateStatus status = KAlarm::reactivateEvent(*mEvent, mResource);
 				switch (status)
 				{
@@ -1055,14 +1055,14 @@ UndoItem* UndoDelete::restore()
 			}
 			KAlarm::setDontShowErrors(mEvent->id(), mDontShowErrors);
 			break;
-		case KACalEvent::TEMPLATE:
+		case KAlarm::CalEvent::TEMPLATE:
 			if (KAlarm::addTemplate(*mEvent, mResource) != KAlarm::UPDATE_OK)
 			{
 				mRestoreError = ERR_CREATE;
 				return 0;
 			}
 			break;
-		case KACalEvent::ARCHIVED:
+		case KAlarm::CalEvent::ARCHIVED:
 			if (!KAlarm::addArchivedEvent(*mEvent, mResource))
 			{
 				mRestoreError = ERR_CREATE;
@@ -1121,11 +1121,11 @@ QString UndoDeletes::defaultActionText() const
 	{
 		switch ((*mUndos)[i]->calendar())
 		{
-			case KACalEvent::ACTIVE:
+			case KAlarm::CalEvent::ACTIVE:
 				return i18nc("@info/plain", "Delete multiple alarms");
-			case KACalEvent::TEMPLATE:
+			case KAlarm::CalEvent::TEMPLATE:
 				return i18nc("@info/plain", "Delete multiple templates");
-			case KACalEvent::ARCHIVED:
+			case KAlarm::CalEvent::ARCHIVED:
 				break;    // check if they are ALL archived
 			default:
 				return QString();
@@ -1151,7 +1151,7 @@ UndoItem* UndoReactivate::restore()
 	// Validate the alarm's calendar
 	switch (calendar())
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 			break;
 		default:
 			mRestoreError = ERR_PROG;
@@ -1194,7 +1194,7 @@ UndoItem* UndoDeactivate::restore()
 	// Validate the alarm's calendar
 	switch (calendar())
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 			break;
 		default:
 			mRestoreError = ERR_PROG;
@@ -1253,6 +1253,6 @@ Undo::Event::Event(const KAEvent& e, AlarmResource* r)
 	: event(e),
 	  resource(r)
 {
-	if (e.category() == KACalEvent::ACTIVE)
+	if (e.category() == KAlarm::CalEvent::ACTIVE)
 		dontShowErrors = KAlarm::dontShowErrors(e.id());
 }

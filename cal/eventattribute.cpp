@@ -1,5 +1,5 @@
 /*
- *  compatibilityattribute.cpp  -  attribute holding calendar format compatibility
+ *  eventattribute.cpp  -  per-user attributes for individual events
  *  Program:  kalarm
  *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
  *
@@ -18,22 +18,25 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "compatibilityattribute.h"
+#include "eventattribute.h"
 
 #include <QList>
+#include <QByteArray>
 
-
-CompatibilityAttribute* CompatibilityAttribute::clone() const
+namespace KAlarm
 {
-    return new CompatibilityAttribute(*this);
+
+EventAttribute* EventAttribute::clone() const
+{
+    return new EventAttribute(*this);
 }
 
-QByteArray CompatibilityAttribute::serialized() const
+QByteArray EventAttribute::serialized() const
 {
-    return QByteArray::number(mCompatibility);
+    return QByteArray::number(mCommandError);
 }
 
-void CompatibilityAttribute::deserialize(const QByteArray& data)
+void EventAttribute::deserialize(const QByteArray& data)
 {
     bool ok;
     int c[1];
@@ -42,14 +45,16 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
     {
         case 1:
             c[0] = items[0].toInt(&ok);
-            if (!ok  ||  (c[0] & ~(KACalendar::Incompatible | KACalendar::Current | KACalendar::Convertible)))
+            if (!ok  ||  (c[0] & ~(KAEvent::CMD_ERROR | KAEvent::CMD_ERROR_PRE | KAEvent::CMD_ERROR_POST)))
                 return;
-            mCompatibility = static_cast<KACalendar::Compat>(c[0]);
+            mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
             break;
 
         default:
             break;
     }
 }
+
+} // namespace KAlarm
 
 // vim: et sw=4:

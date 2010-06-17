@@ -523,7 +523,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 			else
 			{
 				mExpiredRecurrence = recurs && event->mainExpired();
-				mTimeWidget->setDateTime(recurs || event->category() == KACalEvent::ARCHIVED ? event->startDateTime()
+				mTimeWidget->setDateTime(recurs || event->category() == KAlarm::CalEvent::ARCHIVED ? event->startDateTime()
 				                         : event->mainExpired() ? event->deferDateTime() : event->mainDateTime());
 			}
 		}
@@ -569,7 +569,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
 	if (!deferGroupVisible  &&  mDeferGroup)
 		mDeferGroup->hide();
 
-	bool empty = AlarmCalendar::resources()->events(KACalEvent::TEMPLATE).isEmpty();
+	bool empty = AlarmCalendar::resources()->events(KAlarm::CalEvent::TEMPLATE).isEmpty();
 	enableButton(Help, !empty);   // Load Templates button
 }
 
@@ -1075,7 +1075,7 @@ bool EditAlarmDlg::validate()
 		bool cancelled = false;
 		if (!mResource  ||  !mResource->writable())
 		{
-			KACalEvent::Type type = mTemplate ? KACalEvent::TEMPLATE : KACalEvent::ACTIVE;
+			KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
 			mResource = AlarmResources::instance()->destination(type, this, false, &cancelled);
 		}
 		if (!mResource)

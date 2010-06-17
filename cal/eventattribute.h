@@ -25,13 +25,15 @@
 
 #include <akonadi/attribute.h>
 
+namespace KAlarm
+{
 
 /*=============================================================================
 = Class: EventAttribute
 = User-specific attributes for an Akonadi item (event).
 =============================================================================*/
 
-class EventAttribute : public Akonadi::Attribute
+class KALARM_CAL_EXPORT EventAttribute : public Akonadi::Attribute
 {
     public:
         EventAttribute()  : mCommandError(KAEvent::CMD_NO_ERROR) { }
@@ -53,6 +55,8 @@ class EventAttribute : public Akonadi::Attribute
 
         KAEvent::CmdErrType mCommandError;         // the last command execution error for the alarm
 };
+
+} // namespace KAlarm
 
 #endif // EVENT_ATTRIBUTE_H
 

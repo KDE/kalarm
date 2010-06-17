@@ -20,6 +20,7 @@
  */
 
 #include "akonadi_serializer_kalarm.h"
+#include "kacalendar.h"
 #include "kalarmmimetypevisitor.h"
 #include "kaevent.h"
 
@@ -28,9 +29,6 @@
 #include <akonadi/item.h>
 #include <kdebug.h>
 
-static QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
-static QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
-static QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
 
 using namespace Akonadi;
 
@@ -57,7 +55,7 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
         return false;
     }
     KAEvent event(static_cast<KCal::Event*>(i));
-    QString mime = mimeType(event);
+    QString mime = KAlarm::CalEvent::mimeType(event.category());
     if (mime.isEmpty())
     {
         kWarning(5263) << "Event with uid" << i->uid() << "contains no usable alarms!";
@@ -80,29 +78,13 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     KCal::Event* kcalEvent = new KCal::Event;
     e.updateKCalEvent(kcalEvent, false);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
-    head += KACalendar::icalProductId();
+    head += KAlarm::Calendar::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";
     head += KAEvent::currentCalendarVersionString();
     head += '\n';
     data.write(head);
     data.write(mFormat.toString(kcalEvent).toUtf8());
     data.write("\nEND:VCALENDAR");
-}
-
-QString SerializerPluginKAlarm::mimeType(const KAEvent& event)
-{
-    if (event.isValid())
-    {
-        switch (event.category())
-        {
-            case KACalEvent::ACTIVE:    return MIME_ACTIVE;
-            case KACalEvent::ARCHIVED:  return MIME_ARCHIVED;
-            case KACalEvent::TEMPLATE:  return MIME_TEMPLATE;
-            default:
-                break;
-        }
-    }
-    return QString();
 }
 
 Q_EXPORT_PLUGIN2(akonadi_serializer_kalarm, SerializerPluginKAlarm)

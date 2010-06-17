@@ -77,9 +77,9 @@ bool AlarmCalendar::initialiseCalendars()
 	resources->setAskDestinationPolicy(Preferences::askResource());
 	resources->showProgress(true);
 	mResourcesCalendar = new AlarmCalendar();
-	mDisplayCalendar = new AlarmCalendar(displayCal, KACalEvent::DISPLAYING);
-	KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
-	CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
+	mDisplayCalendar = new AlarmCalendar(displayCal, KAlarm::CalEvent::DISPLAYING);
+	KAlarm::Calendar::setProductId(KALARM_NAME, KALARM_VERSION);
+	CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KAlarm::Calendar::icalProductId()));
 	return true;
 }
 
@@ -125,7 +125,7 @@ KAEvent* AlarmCalendar::getEvent(const QString& uniqueID)
 AlarmCalendar::AlarmCalendar()
 	: mCalendar(0),
 	  mCalType(RESOURCES),
-	  mEventType(KACalEvent::EMPTY),
+	  mEventType(KAlarm::CalEvent::EMPTY),
 	  mOpen(false),
 	  mUpdateCount(0),
 	  mUpdateSave(false),
@@ -144,7 +144,7 @@ AlarmCalendar::AlarmCalendar()
 /******************************************************************************
 * Constructor for a calendar file.
 */
-AlarmCalendar::AlarmCalendar(const QString& path, KACalEvent::Type type)
+AlarmCalendar::AlarmCalendar(const QString& path, KAlarm::CalEvent::Type type)
 	: mCalendar(0),
 	  mEventType(type),
 	  mOpen(false),
@@ -154,10 +154,10 @@ AlarmCalendar::AlarmCalendar(const QString& path, KACalEvent::Type type)
 {
 	switch (type)
 	{
-		case KACalEvent::ACTIVE:
-		case KACalEvent::ARCHIVED:
-		case KACalEvent::TEMPLATE:
-		case KACalEvent::DISPLAYING:
+		case KAlarm::CalEvent::ACTIVE:
+		case KAlarm::CalEvent::ARCHIVED:
+		case KAlarm::CalEvent::TEMPLATE:
+		case KAlarm::CalEvent::DISPLAYING:
 			break;
 		default:
 			Q_ASSERT(false);   // invalid event type for a calendar
@@ -596,8 +596,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	}
 	else
 	{
-		KACalendar::Compat caltype = CalendarCompat::fix(cal, filename);
-		KACalEvent::Type wantedType = resource ? resource->kcalEventType() : KACalEvent::EMPTY;
+		KAlarm::Calendar::Compat caltype = CalendarCompat::fix(cal, filename);
+		KAlarm::CalEvent::Type wantedType = resource ? resource->kcalEventType() : KAlarm::CalEvent::EMPTY;
 		bool saveRes = false;
 		bool enabled = true;
 		AlarmResources* resources = AlarmResources::instance();
@@ -611,12 +611,12 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			const Event* event = events[i];
 			if (event->alarms().isEmpty()  ||  !KAEvent(event).isValid())
 				continue;    // ignore events without alarms, or usable alarms
-			KACalEvent::Type type = KACalEvent::status(event);
-			if (type == KACalEvent::TEMPLATE)
+			KAlarm::CalEvent::Type type = KAlarm::CalEvent::status(event);
+			if (type == KAlarm::CalEvent::TEMPLATE)
 			{
 				// If we know the event was not created by KAlarm, don't treat it as a template
-				if (caltype == KACalendar::Incompatible)
-					type = KACalEvent::ACTIVE;
+				if (caltype == KAlarm::Calendar::Incompatible)
+					type = KAlarm::CalEvent::ACTIVE;
 			}
 			AlarmResource** res;
 			if (resource)
@@ -629,9 +629,9 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			{
 				switch (type)
 				{
-					case KACalEvent::ACTIVE:    res = &activeRes;  break;
-					case KACalEvent::ARCHIVED:  res = &archivedRes;  break;
-					case KACalEvent::TEMPLATE:  res = &templateRes;  break;
+					case KAlarm::CalEvent::ACTIVE:    res = &activeRes;  break;
+					case KAlarm::CalEvent::ARCHIVED:  res = &archivedRes;  break;
+					case KAlarm::CalEvent::TEMPLATE:  res = &templateRes;  break;
 					default:  continue;
 				}
 				if (!*res)
@@ -642,7 +642,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 
 			// If there is a display alarm without display text, use the event
 			// summary text instead.
-			if (type == KACalEvent::ACTIVE  &&  !newev->summary().isEmpty())
+			if (type == KAlarm::CalEvent::ACTIVE  &&  !newev->summary().isEmpty())
 			{
 				const Alarm::List& alarms = newev->alarms();
 				for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
@@ -655,14 +655,14 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			}
 
 			// Give the event a new ID and add it to the resources
-			newev->setUid(KACalEvent::uid(CalFormat::createUniqueId(), type));
+			newev->setUid(KAlarm::CalEvent::uid(CalFormat::createUniqueId(), type));
 			if (resources->addEvent(newev, *res))
 			{
 				saveRes = true;
 				KAEvent* ev = mResourcesCalendar->addEvent(*res, newev);
-				if (type != KACalEvent::TEMPLATE)
+				if (type != KAlarm::CalEvent::TEMPLATE)
 					newEvents += ev;
-				if (type == KACalEvent::ACTIVE  &&  !ev->enabled())
+				if (type == KAlarm::CalEvent::ACTIVE  &&  !ev->enabled())
 					enabled = false;
 			}
 			else
@@ -730,8 +730,8 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 	{
 		KAEvent* event = events[i];
 		Event* kcalEvent = new Event;
-		KACalEvent::Type type = event->category();
-		QString id = KACalEvent::uid(kcalEvent->uid(), type);
+		KAlarm::CalEvent::Type type = event->category();
+		QString id = KAlarm::CalEvent::uid(kcalEvent->uid(), type);
 		kcalEvent->setUid(id);
 		event->updateKCalEvent(kcalEvent, false);
 		if (calendar.addEvent(kcalEvent))
@@ -840,15 +840,15 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 	if (!mOpen)
 		return false;
 	// Check that the event type is valid for the calendar
-	KACalEvent::Type type = event->category();
+	KAlarm::CalEvent::Type type = event->category();
 	if (type != mEventType)
 	{
 		switch (type)
 		{
-			case KACalEvent::ACTIVE:
-			case KACalEvent::ARCHIVED:
-			case KACalEvent::TEMPLATE:
-				if (mEventType == KACalEvent::EMPTY)
+			case KAlarm::CalEvent::ACTIVE:
+			case KAlarm::CalEvent::ARCHIVED:
+			case KAlarm::CalEvent::TEMPLATE:
+				if (mEventType == KAlarm::CalEvent::EMPTY)
 					break;
 				// fall through to default
 			default:
@@ -859,7 +859,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 	KAEvent oldEvent(*event);    // so that we can reinstate it if there's an error
 	QString id = event->id();
 	Event* kcalEvent = new Event;
-	if (type == KACalEvent::ACTIVE)
+	if (type == KAlarm::CalEvent::ACTIVE)
 	{
 		if (id.isEmpty())
 			useEventID = false;
@@ -874,7 +874,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 	}
 	if (useEventID)
 	{
-		id = KACalEvent::uid(id, type);
+		id = KAlarm::CalEvent::uid(id, type);
 		event->setEventId(id);
 		kcalEvent->setUid(id);
 	}
@@ -890,7 +890,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 			ok = AlarmResources::instance()->addEvent(kcalEvent, resource);
 			kcalEvent = 0;  // if there was an error, kcalEvent is deleted by AlarmResources::addEvent()
 			remove = !ok;
-			if (ok  &&  type == KACalEvent::ACTIVE  &&  !event->enabled())
+			if (ok  &&  type == KAlarm::CalEvent::ACTIVE  &&  !event->enabled())
 				checkForDisabledAlarms(true, false);
 		}
 	}
@@ -956,7 +956,7 @@ void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 	mResourceMap[resource] += event;
 	mEventMap[event->id()] = event;
 	if (resource  &&  resource->alarmType() == AlarmResource::ACTIVE
-	&&  event->category() == KACalEvent::ACTIVE)
+	&&  event->category() == KAlarm::CalEvent::ACTIVE)
 	{
 		// Update the earliest alarm to trigger
 		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
@@ -1043,7 +1043,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 		if (kaevnt != evnt)
 			*kaevnt = *evnt;   // update the event instance in our lists, keeping the same pointer
 		findEarliestAlarm(AlarmResources::instance()->resource(kcalEvent));
-		if (mCalType == RESOURCES  &&  evnt->category() == KACalEvent::ACTIVE)
+		if (mCalType == RESOURCES  &&  evnt->category() == KAlarm::CalEvent::ACTIVE)
 			checkForDisabledAlarms(oldEnabled, evnt->enabled());
 		return kaevnt;
 	}
@@ -1059,10 +1059,10 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 {
 	if (mOpen)
 	{
-		KACalEvent::Type status = deleteEventInternal(eventID);
+		KAlarm::CalEvent::Type status = deleteEventInternal(eventID);
 		if (mHaveDisabledAlarms)
 			checkForDisabledAlarms();
-		if (status != KACalEvent::EMPTY)
+		if (status != KAlarm::CalEvent::EMPTY)
 		{
 			if (saveit)
 				return save();
@@ -1075,9 +1075,9 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 /******************************************************************************
 * Internal method to delete the specified event from the calendar and lists.
 * Reply = event status, if it was found in the CalendarLocal
-*       = KACalEvent::EMPTY otherwise.
+*       = KAlarm::CalEvent::EMPTY otherwise.
 */
-KACalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID)
+KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID)
 {
 	// Make a copy of the ID QString since the supplied reference might be
 	// destructed when the event is deleted.
@@ -1109,10 +1109,10 @@ KACalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID)
 			}
 		}
 	}
-	KACalEvent::Type status = KACalEvent::EMPTY;
+	KAlarm::CalEvent::Type status = KAlarm::CalEvent::EMPTY;
 	if (kcalEvent)
 	{
-		status = KACalEvent::status(kcalEvent);
+		status = KAlarm::CalEvent::status(kcalEvent);
 		mCalendar->deleteEvent(kcalEvent);
 	}
 
@@ -1181,7 +1181,7 @@ KAEvent* AlarmCalendar::templateEvent(const QString& templateName)
 {
 	if (templateName.isEmpty())
 		return 0;
-	KAEvent::List eventlist = events(KACalEvent::TEMPLATE);
+	KAEvent::List eventlist = events(KAlarm::CalEvent::TEMPLATE);
 	for (int i = 0, end = eventlist.count();  i < end;  ++i)
 	{
 		if (eventlist[i]->templateName() == templateName)
@@ -1194,7 +1194,7 @@ KAEvent* AlarmCalendar::templateEvent(const QString& templateName)
 * Return all events in the calendar which contain alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-KAEvent::List AlarmCalendar::events(AlarmResource* resource, KACalEvent::Types type)
+KAEvent::List AlarmCalendar::events(AlarmResource* resource, KAlarm::CalEvent::Types type)
 {
 	KAEvent::List list;
 	if (!mCalendar  ||  (resource && mCalType != RESOURCES))
@@ -1205,7 +1205,7 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KACalEvent::Types t
 		if (rit == mResourceMap.constEnd())
 			return list;
 		const KAEvent::List events = rit.value();
-		if (type == KACalEvent::EMPTY)
+		if (type == KAlarm::CalEvent::EMPTY)
 			return events;
 		for (int i = 0, end = events.count();  i < end;  ++i)
 			if (type & events[i]->category())
@@ -1216,7 +1216,7 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KACalEvent::Types t
 		for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
 		{
 			const KAEvent::List events = rit.value();
-			if (type == KACalEvent::EMPTY)
+			if (type == KAlarm::CalEvent::EMPTY)
 				list += events;
 			else
 			{
@@ -1233,7 +1233,7 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KACalEvent::Types t
 * Return all events in the calendar which contain usable alarms.
 * Optionally the event type can be filtered, using an OR of event types.
 */
-Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KACalEvent::Type type)
+Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KAlarm::CalEvent::Type type)
 {
 	Event::List list;
 	if (!mCalendar  ||  (resource && mCalType != RESOURCES))
@@ -1243,7 +1243,7 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KACalEvent::Type 
 	{
 		Event* event = list[i];
 		if (event->alarms().isEmpty()
-		||  (type != KACalEvent::EMPTY  &&  !(type & KACalEvent::status(event)))
+		||  (type != KAlarm::CalEvent::EMPTY  &&  !(type & KAlarm::CalEvent::status(event)))
 		||  !KAEvent(event).isValid())
 			list.removeAt(i);
 		else
@@ -1256,7 +1256,7 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KACalEvent::Type 
 * Return all events which have alarms falling within the specified time range.
 * 'type' is the OR'ed desired event types.
 */
-KAEvent::List AlarmCalendar::events(const KDateTime& from, const KDateTime& to, KACalEvent::Types type)
+KAEvent::List AlarmCalendar::events(const KDateTime& from, const KDateTime& to, KAlarm::CalEvent::Types type)
 {
 	kDebug() << from << "-" << to;
 	KAEvent::List evnts;
@@ -1353,7 +1353,7 @@ AlarmResource* AlarmCalendar::resourceForEvent(const QString& eventID) const
 */
 void AlarmCalendar::disabledChanged(const KAEvent* event)
 {
-	if (event->category() == KACalEvent::ACTIVE)
+	if (event->category() == KAlarm::CalEvent::ACTIVE)
 	{
 		bool status = event->enabled();
 		checkForDisabledAlarms(!status, status);
@@ -1386,7 +1386,7 @@ void AlarmCalendar::checkForDisabledAlarms()
 	if (mCalType != RESOURCES)
 		return;
 	bool disabled = false;
-	KAEvent::List eventlist = events(KACalEvent::ACTIVE);
+	KAEvent::List eventlist = events(KAlarm::CalEvent::ACTIVE);
 	for (int i = 0, end = eventlist.count();  i < end;  ++i)
 	{
 		if (!eventlist[i]->enabled())
@@ -1419,7 +1419,7 @@ KAEvent::List AlarmCalendar::atLoginAlarms() const
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			KAEvent* event = events[i];
-			if (event->category() == KACalEvent::ACTIVE  &&  event->repeatAtLogin())
+			if (event->category() == KAlarm::CalEvent::ACTIVE  &&  event->repeatAtLogin())
 				atlogins += event;
 		}
 	}
@@ -1443,7 +1443,7 @@ void AlarmCalendar::findEarliestAlarm(AlarmResource* resource)
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (event->category() != KACalEvent::ACTIVE
+		if (event->category() != KAlarm::CalEvent::ACTIVE
 		||  mPendingAlarms.contains(event->id()))
 			continue;
 		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();

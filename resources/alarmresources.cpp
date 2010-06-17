@@ -183,7 +183,7 @@ AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, Al
 	return resource;
 }
 
-AlarmResources::Result AlarmResources::addEvent(Event* event, KACalEvent::Type type, QWidget* promptParent, bool noPrompt)
+AlarmResources::Result AlarmResources::addEvent(Event* event, KAlarm::CalEvent::Type type, QWidget* promptParent, bool noPrompt)
 {
 	kDebug(KARES_DEBUG) << event->uid();
 	bool cancelled;
@@ -298,11 +298,11 @@ int AlarmResources::activeCount(AlarmResource::Type type, bool writable)
 AlarmResource* AlarmResources::destination(Incidence* incidence, QWidget* promptParent, bool* cancelled)
 {
 	Event* event = dynamic_cast<Event*>(incidence);
-	KACalEvent::Type type = event ? KACalEvent::status(event) : KACalEvent::ACTIVE;
+	KAlarm::CalEvent::Type type = event ? KAlarm::CalEvent::status(event) : KAlarm::CalEvent::ACTIVE;
 	return destination(type, promptParent, false, cancelled);
 }
 
-AlarmResource* AlarmResources::destination(KACalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
+AlarmResource* AlarmResources::destination(KAlarm::CalEvent::Type type, QWidget* promptParent, bool noPrompt, bool* cancelled)
 {
 	if (cancelled)
 		*cancelled = false;
@@ -310,15 +310,15 @@ AlarmResource* AlarmResources::destination(KACalEvent::Type type, QWidget* promp
 	AlarmResource::Type calType;
 	switch (type)
 	{
-		case KACalEvent::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 			calType = AlarmResource::ACTIVE;
 			break;
-		case KACalEvent::TEMPLATE:
+		case KAlarm::CalEvent::TEMPLATE:
 			if (mActiveOnly)
 				return 0;
 			calType = AlarmResource::TEMPLATE;
 			break;
-		case KACalEvent::ARCHIVED:
+		case KAlarm::CalEvent::ARCHIVED:
 			if (mActiveOnly)
 				return 0;
 			// Archived alarms are always saved in the default resource
