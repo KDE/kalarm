@@ -234,7 +234,8 @@ class KALARM_CAL_EXPORT KAEvent
             ACT_COMMAND = 0x02,   // the alarm executes a command
             ACT_EMAIL   = 0x04,   // the alarm sends an email
             ACT_AUDIO   = 0x08,   // the alarm plays an audio file (without any display)
-            ACT_DISPLAY_COMMAND = ACT_DISPLAY | ACT_COMMAND   // the alarm displays command output
+            ACT_DISPLAY_COMMAND = ACT_DISPLAY | ACT_COMMAND,  // the alarm displays command output
+            ACT_ALL     = ACT_DISPLAY | ACT_COMMAND | ACT_EMAIL | ACT_AUDIO   // all types mask
         };
         enum Action
         {

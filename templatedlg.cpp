@@ -1,7 +1,7 @@
 /*
  *  templatedlg.cpp  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	topLayout->addLayout(layout);
 	mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
 	if (!ShellProcess::authorised())
-		mListFilterModel->setTypeFilter(static_cast<EventListModel::Type>(EventListModel::ALL & ~EventListModel::COMMAND));
+		mListFilterModel->setTypeFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
 	mListView = new TemplateListView(topWidget);
 	mListView->setModel(mListFilterModel);
 	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);

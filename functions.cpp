@@ -1893,7 +1893,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 		case KAEvent::ACT_AUDIO:
 			kcalEvent->setSummary(event->audioFile());
 			break;
-		case KAEvent::ACT_NONE:
+		default:
 			break;
 	}
 	kcalEvent->setOrganizer(KCal::Person(QString(), userEmail));
