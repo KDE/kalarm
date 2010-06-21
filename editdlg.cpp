@@ -117,16 +117,15 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWid
 EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                    GetResourceType getResource, bool readOnly)
 {
-	switch (event->action())
+	switch (event->actions())
 	{
-		case KAEvent::COMMAND:
-			if (!event->commandDisplay())
-				return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-			// fall through to MESSAGE
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:     return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-		case KAEvent::EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-		case KAEvent::AUDIO:    return new EditAudioAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_DISPLAY_COMMAND:
+		case KAEvent::ACT_DISPLAY:  return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_AUDIO:    return new EditAudioAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_NONE:
+			break;
 	}
 	return 0;
 }

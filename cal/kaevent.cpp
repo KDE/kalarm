@@ -1917,6 +1917,19 @@ int KAEvent::Private::flags() const
          | (mEnabled                    ? 0 : DISABLED);
 }
 
+KAEvent::Actions KAEvent::actions() const
+{
+    switch (d->mActionType)
+    {
+        case KAAlarmEventBase::T_MESSAGE:
+        case KAAlarmEventBase::T_FILE:     return ACT_DISPLAY;
+        case KAAlarmEventBase::T_COMMAND:  return d->mCommandDisplay ? ACT_DISPLAY_COMMAND : ACT_COMMAND;
+        case KAAlarmEventBase::T_EMAIL:    return ACT_EMAIL;
+        case KAAlarmEventBase::T_AUDIO:    return ACT_AUDIO;
+        default:                           return ACT_NONE;
+    }
+}
+
 /******************************************************************************
  * Update an existing KCal::Event with the KAEvent::Private data.
  * If 'checkUid' is true and the event has an ID, the function verifies that it

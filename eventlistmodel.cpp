@@ -201,18 +201,23 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 			switch (role)
 			{
 				case Qt::BackgroundRole:
-					if (event->action() == KAEvent::MESSAGE
-					||  event->action() == KAEvent::FILE
-					||  (event->action() == KAEvent::COMMAND && event->commandDisplay()))
-						return event->bgColour();
-					if (event->action() == KAEvent::COMMAND
-					&&  event->commandError() != KAEvent::CMD_NO_ERROR)
-						return Qt::red;
+					switch (event->actions())
+					{
+						case KAEvent::ACT_DISPLAY_COMMAND:
+						case KAEvent::ACT_DISPLAY:
+							return event->bgColour();
+						case KAEvent::ACT_COMMAND:
+							if (event->commandError() != KAEvent::CMD_NO_ERROR)
+								return Qt::red;
+							break;
+						default:
+							break;
+					}
 					break;
 				case Qt::ForegroundRole:
 					if (event->commandError() != KAEvent::CMD_NO_ERROR)
 					{
-						if (event->action() == KAEvent::COMMAND && !event->commandDisplay())
+						if (event->actions() == KAEvent::ACT_COMMAND)
 							return Qt::white;
 						QColor colour = Qt::red;
 						int r, g, b;
@@ -228,8 +233,8 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 					break;
 				case SortRole:
 				{
-					unsigned i = (event->action() == KAEvent::MESSAGE || event->action() == KAEvent::FILE)
-				           	? event->bgColour().rgb() : 0;
+					unsigned i = (event->actions() == KAEvent::ACT_DISPLAY)
+					           ? event->bgColour().rgb() : 0;
 					return QString("%1").arg(i, 6, 10, QLatin1Char('0'));
 				}
 				default:
@@ -937,19 +942,19 @@ QString EventListModel::repeatOrder(const KAEvent* event) const
 */
 QPixmap* EventListModel::eventIcon(const KAEvent* event) const
 {
-	switch (event->action())
+	switch (event->actions())
 	{
-		case KAAlarm::FILE:
-			return mFileIcon;
-		case KAAlarm::EMAIL:
+		case KAEvent::ACT_EMAIL:
 			return mEmailIcon;
-		case KAAlarm::AUDIO:
+		case KAEvent::ACT_AUDIO:
 			return mAudioIcon;
-		case KAAlarm::COMMAND:
-			if (!event->commandDisplay())
-				return mCommandIcon;
-			// fall through to MESSAGE
-		case KAAlarm::MESSAGE:
+		case KAEvent::ACT_COMMAND:
+			return mCommandIcon;
+		case KAEvent::ACT_DISPLAY:
+			if (event->action() == KAEvent::FILE)
+				return mFileIcon;
+			// fall through to ACT_DISPLAY_COMMAND
+		case KAEvent::ACT_DISPLAY_COMMAND:
 		default:
 			return mTextIcon;
 	}

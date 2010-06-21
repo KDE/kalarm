@@ -1210,7 +1210,7 @@ KAEvent::List templateList()
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-		if (includeCmdAlarms  ||  event->action() != KAEvent::COMMAND)
+		if (includeCmdAlarms  ||  !(event->actions() & KAEvent::ACT_COMMAND))
 			templates.append(event);
 	}
 	return templates;
@@ -1871,15 +1871,15 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 	kcalEvent->setUid(uid);
 	kcalEvent->clearAlarms();
 	QString userEmail;
-	switch (event->action())
+	switch (event->actions())
 	{
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:
-		case KAEvent::COMMAND:
+		case KAEvent::ACT_DISPLAY:
+		case KAEvent::ACT_COMMAND:
+		case KAEvent::ACT_DISPLAY_COMMAND:
 			kcalEvent->setSummary(event->cleanText());
 			userEmail = Preferences::emailAddress();
 			break;
-		case KAEvent::EMAIL:
+		case KAEvent::ACT_EMAIL:
 		{
 			QString from = event->emailFromId()
 			             ? Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
@@ -1890,8 +1890,10 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 			userEmail = from;
 			break;
 		}
-		case KAEvent::AUDIO:
+		case KAEvent::ACT_AUDIO:
 			kcalEvent->setSummary(event->audioFile());
+			break;
+		case KAEvent::ACT_NONE:
 			break;
 	}
 	kcalEvent->setOrganizer(KCal::Person(QString(), userEmail));
