@@ -117,16 +117,15 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWid
 EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                    GetResourceType getResource, bool readOnly)
 {
-	switch (event->action())
+	switch (event->actions())
 	{
-		case KAEvent::COMMAND:
-			if (!event->commandDisplay())
-				return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-			// fall through to MESSAGE
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:     return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-		case KAEvent::EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
-		case KAEvent::AUDIO:    return new EditAudioAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_DISPLAY_COMMAND:
+		case KAEvent::ACT_DISPLAY:  return new EditDisplayAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_EMAIL:    return new EditEmailAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		case KAEvent::ACT_AUDIO:    return new EditAudioAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
+		default:
+			break;
 	}
 	return 0;
 }
@@ -1122,14 +1121,14 @@ void EditAlarmDlg::slotTrySuccess()
 */
 void EditAlarmDlg::slotHelp()
 {
-	EventListModel::Type type;
+	KAEvent::Actions type;
 	switch (mAlarmType)
 	{
 		case KAEvent::FILE:
-		case KAEvent::MESSAGE:  type = EventListModel::DISPLAY;  break;
-		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
-		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
-		case KAEvent::AUDIO:    type = EventListModel::AUDIO;  break;
+		case KAEvent::MESSAGE:  type = KAEvent::ACT_DISPLAY;  break;
+		case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
+		case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
+		case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
 		default:
 			return;
 	}

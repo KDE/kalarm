@@ -30,7 +30,7 @@
 // TemplateListFilterModel provides sorting and filtering for the alarm list model.
 
 
-void TemplateListFilterModel::setTypeFilter(EventListModel::Type type)
+void TemplateListFilterModel::setTypeFilter(KAEvent::Actions type)
 {
 	if (type != mTypeFilter)
 	{
@@ -39,7 +39,7 @@ void TemplateListFilterModel::setTypeFilter(EventListModel::Type type)
 	}
 }
 
-void TemplateListFilterModel::setTypesEnabled(EventListModel::Type type)
+void TemplateListFilterModel::setTypesEnabled(KAEvent::Actions type)
 {
 	if (type != mTypesEnabled)
 	{
@@ -53,17 +53,17 @@ bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&
 	QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0);
 	if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KAlarm::CalEvent::TEMPLATE)
 		return false;
-	if (mTypeFilter == EventListModel::ALL)
+	if (mTypeFilter == KAEvent::ACT_ALL)
 		return true;
 	int type;
 	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
 	{
 		case KAEvent::MESSAGE:
-		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
-		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
-		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
-		case KAEvent::AUDIO:    type = EventListModel::AUDIO;  break;
-		default:                type = EventListModel::ALL;  break;
+		case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
+		case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
+		case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
+		case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
+		default:                type = KAEvent::ACT_ALL;  break;
 	}
 	return type & mTypeFilter;
 }
@@ -113,17 +113,17 @@ Qt::ItemFlags TemplateListFilterModel::flags(const QModelIndex& index) const
 {
 	QModelIndex sourceIndex = mapToSource(index);
 	Qt::ItemFlags f = sourceModel()->flags(sourceIndex);
-	if (mTypesEnabled == EventListModel::ALL)
+	if (mTypesEnabled == KAEvent::ACT_ALL)
 		return f;
 	int type;
 	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
 	{
 		case KAEvent::MESSAGE:
-		case KAEvent::FILE:     type = EventListModel::DISPLAY;  break;
-		case KAEvent::COMMAND:  type = EventListModel::COMMAND;  break;
-		case KAEvent::EMAIL:    type = EventListModel::EMAIL;  break;
-		case KAEvent::AUDIO:    type = EventListModel::AUDIO;  break;
-		default:                type = EventListModel::ALL;  break;
+		case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
+		case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
+		case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
+		case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
+		default:                type = KAEvent::ACT_ALL;  break;
 	}
 	if (!(type & mTypesEnabled))
 		f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));

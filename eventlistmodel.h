@@ -42,14 +42,6 @@ class EventListModel : public QAbstractTableModel
 {
 		Q_OBJECT
 	public:
-		enum Type
-		{
-			DISPLAY = 0x01,
-			COMMAND = 0x02,
-			EMAIL   = 0x04,
-			AUDIO   = 0x08,
-			ALL     = DISPLAY | COMMAND | EMAIL | AUDIO
-		};
 		enum {   // data columns
 			TimeColumn, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
 			TemplateNameColumn,

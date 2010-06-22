@@ -29,7 +29,8 @@
 #include "repetition.h"
 
 #ifdef USE_AKONADI
-#include <akonadi/entity.h>
+#include <akonadi/collection.h>
+#include <akonadi/item.h>
 #endif
 #include <kcal/person.h>
 
@@ -226,6 +227,16 @@ class KALARM_CAL_EXPORT KAEvent
             DISPLAYING_     = 0x800000,
             READ_ONLY_FLAGS = 0xF00000  // mask for all read-only internal values
         };
+        enum Actions     // The alarm's basic action type(s)
+        {
+            ACT_NONE    = 0,
+            ACT_DISPLAY = 0x01,   // the alarm displays something
+            ACT_COMMAND = 0x02,   // the alarm executes a command
+            ACT_EMAIL   = 0x04,   // the alarm sends an email
+            ACT_AUDIO   = 0x08,   // the alarm plays an audio file (without any display)
+            ACT_DISPLAY_COMMAND = ACT_DISPLAY | ACT_COMMAND,  // the alarm displays command output
+            ACT_ALL     = ACT_DISPLAY | ACT_COMMAND | ACT_EMAIL | ACT_AUDIO   // all types mask
+        };
         enum Action
         {
             MESSAGE = KAAlarmEventBase::T_MESSAGE,
@@ -298,7 +309,7 @@ class KALARM_CAL_EXPORT KAEvent
         void               setUid(KAlarm::CalEvent::Type s)        { d->mEventID = KAlarm::CalEvent::uid(d->mEventID, s);  d->mUpdated = true; }
         void               setEventId(const QString& id)           { d->mEventID = id;  d->mUpdated = true; }
 #ifdef USE_AKONADI
-        void               setItemId(Akonadi::Entity::Id id)       { d->mItemId = id; }
+        void               setItemId(Akonadi::Item::Id id)         { d->mItemId = id; }
         void               setReadOnly(bool ro)                    { if (ro != d->mReadOnly) { d->mReadOnly = ro; d->mUpdated = true; } }
 #endif
         void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt;  d->mUpdated = true; }
@@ -379,15 +390,17 @@ class KALARM_CAL_EXPORT KAEvent
         bool               updateKCalEvent(KCal::Event* e, bool checkUid = true) const
                                                           { return d->updateKCalEvent(e, checkUid); }
 #endif
+        Actions            actions() const;
         Action             action() const                 { return (Action)d->mActionType; }
         bool               displayAction() const          { return d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_FILE || (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay); }
         const QString&     id() const                     { return d->mEventID; }
 #ifdef USE_AKONADI
-        Akonadi::Entity::Id itemId() const                { return d->mItemId; }
+        Akonadi::Item::Id  itemId() const                 { return d->mItemId; }
         bool               isReadOnly() const             { return d->mReadOnly; }
 #endif
         bool               isValid() const                { return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin); }
         int                alarmCount() const             { return d->mAlarmCount; }
+        KDateTime          createdDateTime() const        { return d->mSaveDateTime; }
         const DateTime&    startDateTime() const          { return d->mStartDateTime; }
         DateTime           mainDateTime(bool withRepeats = false) const
                                                           { return d->mainDateTime(withRepeats); }
@@ -591,11 +604,11 @@ class KALARM_CAL_EXPORT KAEvent
                 mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
                 mutable CmdErrType mCommandError;      // command execution error last time the alarm triggered
 
-#ifdef USE_AKONADI
-                Akonadi::Entity::Id mItemId;           // Akonadi::Item ID for this event
-                QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
-#endif
                 QString            mTemplateName;      // alarm template's name, or null if normal event
+#ifdef USE_AKONADI
+                QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
+                Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
+#endif
                 QString            mResourceId;        // saved resource ID (not the resource the event is in)
                 QString            mAudioFile;         // ATTACH: audio file to play
                 QString            mPreAction;         // command to execute before alarm is displayed
