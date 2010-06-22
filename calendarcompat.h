@@ -35,10 +35,6 @@ class CalendarCompat
 		static void  setID(KCal::CalendarLocal&);
 		static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
 		                                    AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
-
-	private:
-		static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
-		static bool isUTC(const QString& localFile);
 };
 
 #endif // CALENDARCOMPAT_H
