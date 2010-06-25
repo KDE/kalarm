@@ -23,7 +23,7 @@
 
 #include "kalarm_cal_export.h"
 #include <QByteArray>
-#include <QString>
+#include <QStringList>
 
 namespace KCal {
   class Event;
@@ -111,6 +111,8 @@ class KALARM_CAL_EXPORT CalEvent
         static Types   types(const QStringList& mimeTypes);
         /** Return the mime type string corresponding to an alarm Type. */
         static QString mimeType(Type);
+        /** Return the mime type strings corresponding to alarm Types. */
+        static QStringList mimeTypes(Types);
 #endif
 };
 

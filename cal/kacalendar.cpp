@@ -425,6 +425,20 @@ QString CalEvent::mimeType(CalEvent::Type type)
         default:        return QString();
     }
 }
+
+QStringList CalEvent::mimeTypes(CalEvent::Types types)
+{
+    QStringList mimes;
+    for (int i = 1;  types;  i <<= 1)
+    {
+        if (types & i)
+        {
+            mimes += mimeType(CalEvent::Type(i));
+            types &= ~i;
+        }
+    }
+    return mimes;
+}
 #endif
 
 } // namespace KAlarm
