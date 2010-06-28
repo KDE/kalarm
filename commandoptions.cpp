@@ -170,7 +170,7 @@ CommandOptions::CommandOptions()
 			mText          = mArgs->arg(0);
 		}
 	}
-	if (mEditAction == KAEvent::EMAIL)
+	if (mEditActionSet  &&  mEditAction == KAEvent::EMAIL)
 	{
 		if (mArgs->isSet("subject"))
 			mSubject = mArgs->getOption("subject");
