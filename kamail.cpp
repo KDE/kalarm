@@ -119,7 +119,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
 			return -1;
 		}
-		if (identity.emailAddr().isEmpty())
+		if (identity.primaryEmailAddress().isEmpty())
 		{
 			kError() << "Identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
 			errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
