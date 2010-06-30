@@ -30,11 +30,11 @@
 #ifndef USE_AKONADI
 #include "alarmresources.h"
 #include "eventlistmodel.h"
+#include "resourcemodelview.h"
 #endif
 #include "packedlayout.h"
 #include "preferences.h"
 #include "resourceconfigdialog.h"
-#include "resourcemodelview.h"
 
 #ifdef USE_AKONADI
 #include <akonadi/agentmanager.h>
