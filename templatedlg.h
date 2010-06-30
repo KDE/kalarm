@@ -1,7 +1,7 @@
 /*
  *  templatedlg.h  -  dialog to create, edit and delete alarm templates
  *  Program:  kalarm
- *  Copyright © 2004,2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2006,2007,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,13 +20,17 @@
 #ifndef TEMPLATEDLG_H
 #define TEMPLATEDLG_H
 
-#include <kdialog.h>
 #include "editdlg.h"
+#include <kdialog.h>
 
 class QResizeEvent;
 class QPushButton;
 class NewAlarmAction;
+#ifdef USE_AKONADI
+class TemplateListModel;
+#else
 class TemplateListFilterModel;
+#endif
 class TemplateListView;
 
 
@@ -51,16 +55,20 @@ class TemplateDlg : public KDialog
 		void          slotSelectionChanged();
 
 	private:
-		TemplateDlg(QWidget* parent);
+		explicit TemplateDlg(QWidget* parent);
 
 		static TemplateDlg* mInstance;   // the current instance, to prevent multiple dialogues
 
+#ifdef USE_AKONADI
+		TemplateListModel* mListFilterModel;
+#else
 		TemplateListFilterModel* mListFilterModel;
-		TemplateListView*   mListView;
-		QPushButton*        mEditButton;
-		QPushButton*        mCopyButton;
-		QPushButton*        mDeleteButton;
-		NewAlarmAction*     mNewAction;
+#endif
+		TemplateListView*  mListView;
+		QPushButton*       mEditButton;
+		QPushButton*       mCopyButton;
+		QPushButton*       mDeleteButton;
+		NewAlarmAction*    mNewAction;
 };
 
 #endif // TEMPLATEDLG_H

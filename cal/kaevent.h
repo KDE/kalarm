@@ -43,7 +43,9 @@ namespace KCal {
     class Event;
 }
 namespace KHolidays { class HolidayRegion; }
+#ifndef USE_AKONADI
 class AlarmResource;
+#endif
 class AlarmData;
 
 
@@ -297,7 +299,9 @@ class KALARM_CAL_EXPORT KAEvent
         void               set(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action act, int lateCancel, int flags, bool changesPending = false)
                                                                    { d->set(dt, message, bg, fg, f, act, lateCancel, flags, changesPending); }
         void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
+#ifndef USE_AKONADI
         void               setResource(AlarmResource* r)           { d->mResource = r; }
+#endif
         void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds)
                                                                    { d->setAudioFile(filename, volume, fadeVolume, fadeSeconds); }
         void               setTemplate(const QString& name, int afterTime = -1);
@@ -327,13 +331,17 @@ class KALARM_CAL_EXPORT KAEvent
         void               cancelDefer()                           { d->cancelDefer(); }
         void               setDeferDefaultMinutes(int minutes, bool dateOnly = false)
                                                                    { d->mDeferDefaultMinutes = minutes;  d->mDeferDefaultDateOnly = dateOnly;  d->mUpdated = true; }
+#ifdef USE_AKONADI
+        bool               setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer)
+                                                                   { return d->setDisplaying(*e.d, t, colId, dt, showEdit, showDefer); }
+        void               reinstateFromDisplaying(const KCal::Event* e, Akonadi::Collection::Id colId, bool& showEdit, bool& showDefer)
+                                                                   { d->reinstateFromDisplaying(e, colId, showEdit, showDefer); }
+        void               setCommandError(CmdErrType t) const     { d->setCommandError(t); }
+#else
         bool               setDisplaying(const KAEvent& e, KAAlarm::Type t, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer)
                                                                    { return d->setDisplaying(*e.d, t, resourceID, dt, showEdit, showDefer); }
         void               reinstateFromDisplaying(const KCal::Event* e, QString& resourceID, bool& showEdit, bool& showDefer)
                                                                    { d->reinstateFromDisplaying(e, resourceID, showEdit, showDefer); }
-#ifdef USE_AKONADI
-        void               setCommandError(CmdErrType t) const     { d->setCommandError(t); }
-#else
         void               setCommandError(const QString& configString) { d->setCommandError(configString); }
         void               setCommandError(CmdErrType t, bool writeConfig = true) const
                                                                    { d->setCommandError(t, writeConfig); }
@@ -344,7 +352,11 @@ class KALARM_CAL_EXPORT KAEvent
         void               endChanges()                            { d->endChanges(); }
         void               setUpdated()                            { d->mUpdated = true; }
         void               clearUpdated() const                    { d->mUpdated = false; }
+#ifdef USE_AKONADI
+        void               clearCollectionId()                     { d->mCollectionId = -1; }
+#else
         void               clearResourceId()                       { d->mResourceId.clear(); }
+#endif
         void               updateWorkHours() const                 { if (d->mWorkTimeOnly) d->calcTriggerTimes(); }
         void               updateHolidays() const                  { if (d->mExcludeHolidays) d->calcTriggerTimes(); }
         void               removeExpiredAlarm(KAAlarm::Type t)     { d->removeExpiredAlarm(t); }
@@ -390,8 +402,8 @@ class KALARM_CAL_EXPORT KAEvent
         bool               updateKCalEvent(KCal::Event* e, bool checkUid = true) const
                                                           { return d->updateKCalEvent(e, checkUid); }
 #endif
-        Actions            actions() const;
         Action             action() const                 { return (Action)d->mActionType; }
+        Actions            actions() const;
         bool               displayAction() const          { return d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_FILE || (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay); }
         const QString&     id() const                     { return d->mEventID; }
 #ifdef USE_AKONADI
@@ -443,8 +455,12 @@ class KALARM_CAL_EXPORT KAEvent
         bool               expired() const                { return (d->mDisplaying && d->mMainExpired)  ||  d->mCategory == KAlarm::CalEvent::ARCHIVED; }
         KAlarm::CalEvent::Type category() const           { return d->mCategory; }
         bool               displaying() const             { return d->mDisplaying; }
+#ifdef USE_AKONADI
+        Akonadi::Collection::Id collectionId() const      { return d->mCollectionId; }
+#else
         QString            resourceId() const             { return d->mResourceId; }
         AlarmResource*     resource() const               { return d->mResource; }
+#endif
         CmdErrType         commandError() const           { return d->mCommandError; }
 #ifndef USE_AKONADI
         static QString     commandErrorConfigGroup()      { return Private::mCmdErrConfigGroup; }
@@ -492,6 +508,9 @@ class KALARM_CAL_EXPORT KAEvent
         static QByteArray  currentCalendarVersionString();
         static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCal::CalendarLocal&);
+#ifdef USE_AKONADI
+        static List        ptrList(QList<KAEvent>&);
+#endif
 
         // Methods to set and get global defaults
         static void setDefaultFont(const QFont& f)        { Private::mDefaultFont = f; }
@@ -533,11 +552,13 @@ class KALARM_CAL_EXPORT KAEvent
                 void               setReminder(int minutes, bool onceOnly);
                 bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
                 void               cancelDefer();
-                bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
-                void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
 #ifdef USE_AKONADI
+                bool               setDisplaying(const Private&, KAAlarm::Type, Akonadi::Collection::Id, const KDateTime& dt, bool showEdit, bool showDefer);
+                void               reinstateFromDisplaying(const KCal::Event*, Akonadi::Collection::Id, bool& showEdit, bool& showDefer);
                 void               setCommandError(CmdErrType t) const  { mCommandError = t; }
 #else
+                bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
+                void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
                 void               setCommandError(const QString& configString);
                 void               setCommandError(CmdErrType, bool writeConfig) const;
 #endif
@@ -597,7 +618,9 @@ class KALARM_CAL_EXPORT KAEvent
                 static QBitArray   mWorkDays;          // working days of the week
                 static QTime       mWorkDayStart;      // start time of the working day
                 static QTime       mWorkDayEnd;        // end time of the working day
+#ifndef USE_AKONADI
                 AlarmResource*     mResource;          // resource which owns the event (for convenience - not used by this class)
+#endif
                 mutable DateTime   mAllTrigger;        // next trigger time, including reminders, ignoring working hours
                 mutable DateTime   mMainTrigger;       // next trigger time, ignoring reminders and working hours
                 mutable DateTime   mAllWorkTrigger;    // next trigger time, taking account of reminders and working hours
@@ -608,8 +631,10 @@ class KALARM_CAL_EXPORT KAEvent
 #ifdef USE_AKONADI
                 QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
                 Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
-#endif
+                Akonadi::Collection::Id mCollectionId; // saved collection ID (not the collection the event is in)
+#else
                 QString            mResourceId;        // saved resource ID (not the resource the event is in)
+#endif
                 QString            mAudioFile;         // ATTACH: audio file to play
                 QString            mPreAction;         // command to execute before alarm is displayed
                 QString            mPostAction;        // command to execute after alarm window is closed

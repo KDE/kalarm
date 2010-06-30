@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,10 +25,15 @@
 
 #include "autodeletelist.h"
 #include "kaevent.h"
+#ifdef USE_AKONADI
+#include <akonadi/collection.h>
+#endif
 #include <QList>
 #include <QStringList>
 
+#ifndef USE_AKONADI
 class AlarmResource;
+#endif
 class UndoItem;
 
 
@@ -37,30 +42,50 @@ class Undo : public QObject
 		Q_OBJECT
 	public:
 		enum Type { NONE, UNDO, REDO };
-		// N.B. Event must be constructed before the action for which the
-		// undo is being created is carried out, since the don't-show-errors
-		// status is not contained within the KAEvent itself.
+		// N.B. The Event structure must be constructed before the action for
+		// which the undo is being created is carried out, since the
+		// don't-show-errors status is not contained within the KAEvent itself.
 		struct Event
 		{
 			Event() {}
+#ifdef USE_AKONADI
+			Event(const KAEvent&, Akonadi::Collection&);
+#else
 			Event(const KAEvent&, AlarmResource*);
+#endif
 			KAEvent        event;
+#ifdef USE_AKONADI
+			mutable Akonadi::Collection collection;
+#else
 			AlarmResource* resource;
+#endif
 			QStringList    dontShowErrors;
 		};
 		class EventList : public QList<Event>
 		{
 		public:
+#ifdef USE_AKONADI
+			void append(const KAEvent& e, Akonadi::Collection& c)  { QList<Event>::append(Event(e, c)); }
+#else
 			void append(const KAEvent& e, AlarmResource* r)  { QList<Event>::append(Event(e, r)); }
+#endif
 		};
 
 		static Undo*       instance();
+#ifdef USE_AKONADI
+		static void        saveAdd(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
+#else
 		static void        saveAdd(const KAEvent&, AlarmResource*, const QString& name = QString());
+#endif
 		static void        saveAdds(const EventList&, const QString& name = QString());
 		static void        saveEdit(const Event& oldEvent, const KAEvent& newEvent);
 		static void        saveDelete(const Event&, const QString& name = QString());
 		static void        saveDeletes(const EventList&, const QString& name = QString());
+#ifdef USE_AKONADI
+		static void        saveReactivate(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
+#else
 		static void        saveReactivate(const KAEvent&, AlarmResource*, const QString& name = QString());
+#endif
 		static void        saveReactivates(const EventList&, const QString& name = QString());
 		static bool        undo(QWidget* parent, const QString& action)
 		                                      { return undo(0, UNDO, parent, action); }

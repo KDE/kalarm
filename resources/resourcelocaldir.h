@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.h  -  KAlarm local directory alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocaldir.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -46,7 +46,7 @@ class KALARM_RESOURCES_EXPORT KAResourceLocalDir : public AlarmResource
 		/** Create resource from configuration information stored in a KConfig object. */
 		explicit KAResourceLocalDir(const KConfigGroup&);
 		/** Create resource for directory named @p dirName. */
-		KAResourceLocalDir(Type, const QString& dirName);
+		KAResourceLocalDir(KAlarm::CalEvent::Type, const QString& dirName);
 		virtual ~KAResourceLocalDir();
 
 		const KUrl&  url() const  { return mURL; }

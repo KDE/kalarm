@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.h  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocal.h in libkcal,
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -43,7 +43,7 @@ class KALARM_RESOURCES_EXPORT KAResourceLocal : public AlarmResource
 		/** Create resource from configuration information stored in a KConfig object. */
 		explicit KAResourceLocal(const KConfigGroup&);
 		/** Create resource for file named @a fileName. */
-		KAResourceLocal(Type, const QString& fileName);
+		KAResourceLocal(KAlarm::CalEvent::Type, const QString& fileName);
 		virtual ~KAResourceLocal();
 
 		QString      fileName() const;

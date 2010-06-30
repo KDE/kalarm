@@ -23,14 +23,19 @@
 
 /**  @file functions.h - miscellaneous functions */
 
+#include "editdlg.h"
+#include "kaevent.h"
+
+#ifdef USE_AKONADI
+#include <akonadi/collection.h>
+#include <akonadi/item.h>
+#endif
+#include <kfile.h>
+#include <kmimetype.h>
+
 #include <QSize>
 #include <QString>
 #include <QList>
-
-#include "editdlg.h"
-#include "kaevent.h"
-#include <kfile.h>
-#include <kmimetype.h>
 
 namespace KCal { class Event; }
 class QWidget;
@@ -67,7 +72,11 @@ enum UpdateError { ERR_ADD, ERR_MODIFY, ERR_DELETE, ERR_REACTIVATE, ERR_TEMPLATE
 
 
 /** Display a main window with the specified event selected */
-MainWindow*         displayMainWindowSelected(const QString& eventID = QString());
+#ifdef USE_AKONADI
+MainWindow*         displayMainWindowSelected(Akonadi::Item::Id = -1);
+#else
+MainWindow*         displayMainWindowSelected(const QString& eventId = QString());
+#endif
 bool                readConfigWindowSize(const char* window, QSize&, int* splitterWidth = 0);
 void                writeConfigWindowSize(const char* window, const QSize&, int splitterWidth = -1);
 /** Check from its mime type whether a file appears to be a text or image file.
@@ -98,7 +107,11 @@ void                editNewAlarm(KAEvent::Action, QWidget* parent = 0, const Ala
 void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
 bool                editAlarm(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent*, QWidget* parent = 0);
+#ifdef USE_AKONADI
+void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, Akonadi::Collection&);
+#else
 void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, AlarmResource*);
+#endif
 void                viewAlarm(const KAEvent*, QWidget* parent = 0);
 void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewTemplate(const KAEvent* preset, QWidget* parent = 0);
@@ -129,22 +142,44 @@ enum         // 'options' parameter values for addEvent(). May be OR'ed together
 	NO_RESOURCE_PROMPT = 0x02,   // don't prompt for resource
 	ALLOW_KORG_UPDATE  = 0x04    // allow change to be sent to KOrganizer
 };
+#ifdef USE_AKONADI
+UpdateStatus        addEvent(KAEvent&, Akonadi::Collection* = 0, QWidget* msgParent = 0, int options = ALLOW_KORG_UPDATE, bool showKOrgErr = true);
+#else
 UpdateStatus        addEvent(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0, int options = ALLOW_KORG_UPDATE, bool showKOrgErr = true);
+#endif
 UpdateStatus        addEvents(QList<KAEvent>&, QWidget* msgParent = 0, bool allowKOrgUpdate = true, bool showKOrgErr = true);
+#ifdef USE_AKONADI
+bool                addArchivedEvent(KAEvent&, Akonadi::Collection* = 0);
+UpdateStatus        addTemplate(KAEvent&, Akonadi::Collection* = 0, QWidget* msgParent = 0);
+#else
 bool                addArchivedEvent(KAEvent&, AlarmResource* = 0);
 UpdateStatus        addTemplate(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0);
+#endif
 UpdateStatus        modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        updateEvent(KAEvent&, QWidget* msgParent = 0, bool archiveOnDelete = true);
 UpdateStatus        updateTemplate(KAEvent&, QWidget* msgParent = 0);
 UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
+#ifdef USE_AKONADI
+UpdateStatus        deleteEvents(QList<KAEvent>&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
+UpdateStatus        deleteTemplates(const KAEvent::List& events, QWidget* msgParent = 0);
+inline UpdateStatus deleteTemplate(KAEvent& event, QWidget* msgParent = 0)
+			{ KAEvent::List e;  e += &event;  return deleteTemplates(e, msgParent); }
+#else
 UpdateStatus        deleteEvents(KAEvent::List&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteTemplates(const QStringList& eventIDs, QWidget* msgParent = 0);
 inline UpdateStatus deleteTemplate(const QString& eventID, QWidget* msgParent = 0)
 			{ return deleteTemplates(QStringList(eventID), msgParent); }
+#endif
 void                deleteDisplayEvent(const QString& eventID);
+#ifdef USE_AKONADI
+UpdateStatus        reactivateEvent(KAEvent&, Akonadi::Collection* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
+UpdateStatus        reactivateEvents(QList<KAEvent>&, QStringList& ineligibleIDs, Akonadi::Collection* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
+UpdateStatus        enableEvents(QList<KAEvent>&, bool enable, QWidget* msgParent = 0);
+#else
 UpdateStatus        reactivateEvent(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        reactivateEvents(KAEvent::List&, QStringList& ineligibleIDs, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        enableEvents(KAEvent::List&, bool enable, QWidget* msgParent = 0);
+#endif
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateStatus korgError, int nAlarms);
@@ -152,6 +187,10 @@ void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateS
 bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
+
+#ifdef USE_AKONADI
+Akonadi::Collection invalidCollection();  // for use as a non-const default parameter
+#endif
 
 #ifndef NDEBUG
 void                setTestModeConditions();

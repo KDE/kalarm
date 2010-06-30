@@ -19,11 +19,15 @@
  */
 
 #include "kalarm.h"
+#include "find.moc"
 
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QVBoxLayout>
-#include <QGridLayout>
+#ifndef USE_AKONADI
+#include "alarmlistfiltermodel.h"
+#endif
+#include "alarmlistview.h"
+#include "eventlistview.h"
+#include "kaevent.h"
+#include "preferences.h"
 
 #include <kfinddialog.h>
 #include <kfind.h>
@@ -33,12 +37,10 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include "alarmlistfiltermodel.h"
-#include "alarmlistview.h"
-#include "eventlistview.h"
-#include "kaevent.h"
-#include "preferences.h"
-#include "find.moc"
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
+#include <QGridLayout>
 
 // KAlarm-specific options for Find dialog
 enum {
@@ -102,7 +104,11 @@ void Find::display()
 		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
 	bool noArchived = !Preferences::archivedKeepDays();
 	bool showArchived = qobject_cast<AlarmListView*>(mListView)
+#ifdef USE_AKONADI
+	                    && (static_cast<AlarmListModel*>(mListView->model())->eventTypeFilter() & KAlarm::CalEvent::ARCHIVED);
+#else
 	                    && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KAlarm::CalEvent::ARCHIVED);
+#endif
 	if (noArchived  ||  !showArchived)      // these settings could change between activations
 		mOptions &= ~FIND_ARCHIVED;
 
@@ -209,7 +215,12 @@ void Find::display()
 	int rowCount = mListView->model()->rowCount();
 	for (int row = 0;  row < rowCount;  ++row)
 	{
+#ifdef USE_AKONADI
+		KAEvent viewEvent = mListView->event(row);
+		const KAEvent* event = &viewEvent;
+#else
 		const KAEvent* event = mListView->event(row);
+#endif
 		if (event->expired())
 			archived = true;
 		else
@@ -288,7 +299,11 @@ void Find::slotFind()
 			QModelIndex index = mListView->selectionModel()->currentIndex();
 			if (index.isValid())
 			{
+#ifdef USE_AKONADI
+				mStartID       = mListView->event(index).id();
+#else
 				mStartID       = mListView->event(index)->id();
+#endif
 				mNoCurrentItem = false;
 				checkEnd = true;
 			}
@@ -319,7 +334,12 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 	bool last = false;
 	for ( ;  index.isValid() && !last;  index = nextItem(index, forward))
 	{
+#ifdef USE_AKONADI
+		KAEvent viewEvent = mListView->event(index);
+		const KAEvent* event = &viewEvent;
+#else
 		const KAEvent* event = mListView->event(index);
+#endif
 		if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event->id())
 			last = true;    // we've wrapped round and reached the starting alarm again
 		fromCurrent = false;

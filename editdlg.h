@@ -21,11 +21,15 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
-#include <kdialog.h>
-
 #include "alarmtext.h"
 #include "datetime.h"
 #include "kaevent.h"
+
+#ifdef USE_AKONADI
+#include <akonadi/collection.h>
+#endif
+
+#include <kdialog.h>
 
 class QLabel;
 class QShowEvent;
@@ -36,7 +40,9 @@ class QFrame;
 class QVBoxLayout;
 class KLineEdit;
 class KTabWidget;
+#ifndef USE_AKONADI
 class AlarmResource;
+#endif
 class ButtonGroup;
 class TimeEdit;
 class RadioButton;
@@ -66,7 +72,11 @@ class EditAlarmDlg : public KDialog
 		static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                            GetResourceType = RES_PROMPT, bool readOnly = false);
 		virtual ~EditAlarmDlg();
+#ifdef USE_AKONADI
+		bool            getEvent(KAEvent&, Akonadi::Collection&);
+#else
 		bool            getEvent(KAEvent&, AlarmResource*&);
+#endif
 
 		// Methods to initialise values in the New Alarm dialogue.
 		// N.B. setTime() must be called first to set the date-only characteristic,
@@ -180,8 +190,13 @@ class EditAlarmDlg : public KDialog
 		QString             mAlarmMessage;       // message text/file name/command/email message
 		DateTime            mAlarmDateTime;
 		DateTime            mDeferDateTime;
+#ifdef USE_AKONADI
+		Akonadi::Item::Id   mCollectionItemId;   // if >=0, save alarm in collection containing this item ID
+		Akonadi::Collection mCollection;         // collection to save event into, or null
+#else
 		QString             mResourceEventId;    // if non-empty, save alarm in resource containing this event ID
 		AlarmResource*      mResource;           // resource to save event into, or null
+#endif
 		int                 mDeferGroupHeight;   // height added by deferred time widget
 		int                 mDesktop;            // desktop to display the dialog in
 		bool                mTemplate;           // editing an alarm template

@@ -1,5 +1,5 @@
 /*
- *  resourceselector.cpp  -  alarm calendar resource selection widget
+ *  resourceselector.h  -  alarm calendar resource selection widget
  *  Program:  kalarm
  *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
@@ -28,8 +28,12 @@
 #include <QModelIndex>
 #include <QFrame>
 #include <QSize>
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#else
 #include "alarmresource.h"
 #include "alarmresources.h"
+#endif
 
 class QPushButton;
 class QResizeEvent;
@@ -39,7 +43,12 @@ class KToggleAction;
 class KComboBox;
 class KMenu;
 class ResourceView;
+#ifdef USE_AKONADI
+class AkonadiModel;
+namespace Akonadi { class Collection; }
+#else
 using KCal::ResourceCalendar;
+#endif
 
 
 /**
@@ -49,8 +58,12 @@ class ResourceSelector : public QFrame
 {
 	Q_OBJECT
     public:
+#ifdef USE_AKONADI
+	explicit ResourceSelector(QWidget* parent = 0);
+#else
 	explicit ResourceSelector(AlarmResources*, QWidget* parent = 0);
 	AlarmResources* calendar() const    { return mCalendar; }
+#endif
 	void  initActions(KActionCollection*);
 	void  setContextMenu(KMenu*);
 
@@ -76,20 +89,30 @@ class ResourceSelector : public QFrame
 	void  exportCalendar();
 	void  showInfo();
 	void  archiveDaysChanged(int days);
+#ifdef USE_AKONADI
+	void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool);
+#else
 	void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
+#endif
 	void  reinstateAlarmTypeScrollBars();
 
     private:
-	AlarmResource* currentResource() const;
+	KAlarm::CalEvent::Type currentResourceType() const;
+#ifdef USE_AKONADI
+	Akonadi::Collection currentResource() const;
+
+	CollectionView* mListView;
+#else
+	AlarmResource*  currentResource() const;
 
 	AlarmResources* mCalendar;
-	KComboBox*      mAlarmType;
 	ResourceView*   mListView;
+#endif
+	KComboBox*      mAlarmType;
 	QPushButton*    mAddButton;
 	QPushButton*    mDeleteButton;
 	QPushButton*    mEditButton;
-	QList<AlarmResource*> mResourcesToClose;
-	AlarmResource::Type mCurrentAlarmType;
+	KAlarm::CalEvent::Type mCurrentAlarmType;
 	KMenu*          mContextMenu;
 	KAction*        mActionReload;
 	KAction*        mActionSave;

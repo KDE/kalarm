@@ -19,10 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "kaevent.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "birthdaymodel.h"
 
 #include "alarmcalendar.h"
-#include "kaevent.h"
 
 #include <akonadi/changerecorder.h>
 #include <akonadi/entitydisplayattribute.h>
@@ -30,6 +30,10 @@
 #include <akonadi/session.h>
 #include <kabc/addressee.h>
 #include <kcal/event.h>
+
+#include <kglobal.h>
+#include <klocale.h>
+
 
 BirthdayModel* BirthdayModel::mInstance = 0;
 

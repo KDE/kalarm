@@ -54,8 +54,8 @@ class Find : public QObject
 		void        findNext(bool forward, bool checkEnd, bool fromCurrent);
 		QModelIndex nextItem(const QModelIndex&, bool forward) const;
 
-		EventListView* mListView;        // parent list view
-		QPointer<FindDlg> mDialog;
+		EventListView*     mListView;        // parent list view
+		QPointer<FindDlg>  mDialog;
 		QCheckBox*         mArchived;
 		QCheckBox*         mLive;
 		KSeparator*        mActiveArchivedSep;

@@ -73,7 +73,7 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly,
 	mManager->readConfig(0);
 	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
 	{
-		if (!mActiveOnly  ||  (*it)->alarmType() == AlarmResource::ACTIVE)
+		if (!mActiveOnly  ||  (*it)->alarmType() == KAlarm::CalEvent::ACTIVE)
 			connectResource(*it);
 	}
 
@@ -81,13 +81,13 @@ AlarmResources::AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly,
 	{
 		KConfigGroup config(KGlobal::config(), "General");
 		AlarmResource* resource;
-		resource = addDefaultResource(config, AlarmResource::ACTIVE);
+		resource = addDefaultResource(config, KAlarm::CalEvent::ACTIVE);
 		setStandardResource(resource);
 		if (!mActiveOnly)
 		{
-			resource = addDefaultResource(config, AlarmResource::ARCHIVED);
+			resource = addDefaultResource(config, KAlarm::CalEvent::ARCHIVED);
 			setStandardResource(resource);
-			resource = addDefaultResource(config, AlarmResource::TEMPLATE);
+			resource = addDefaultResource(config, KAlarm::CalEvent::TEMPLATE);
 			setStandardResource(resource);
 		}
 
@@ -116,28 +116,28 @@ void AlarmResources::setNoGui(bool noGui)
 	AlarmResource::setNoGui(mNoGui);
 }
 
-AlarmResource* AlarmResources::addDefaultResource(AlarmResource::Type type)
+AlarmResource* AlarmResources::addDefaultResource(KAlarm::CalEvent::Type type)
 {
 	KConfigGroup config(KGlobal::config(), "General");
 	return addDefaultResource(config, type);
 }
 
-AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, AlarmResource::Type type)
+AlarmResource* AlarmResources::addDefaultResource(const KConfigGroup& config, KAlarm::CalEvent::Type type)
 {
 	QString configKey, defaultFile, title;
 	switch (type)
 	{
-		case AlarmResource::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 			configKey   = QString::fromLatin1("Calendar");
 			defaultFile = QString::fromLatin1("calendar.ics");
 			title       = i18nc("@info/plain", "Active Alarms");
 			break;
-		case AlarmResource::TEMPLATE:
+		case KAlarm::CalEvent::TEMPLATE:
 			configKey   = QString::fromLatin1("TemplateCalendar");
 			defaultFile = QString::fromLatin1("template.ics");
 			title       = i18nc("@info/plain", "Alarm Templates");
 			break;
-		case AlarmResource::ARCHIVED:
+		case KAlarm::CalEvent::ARCHIVED:
 			configKey   = QString::fromLatin1("ExpiredCalendar");
 			defaultFile = QString::fromLatin1("expired.ics");
 			title       = i18nc("@info/plain", "Archived Alarms");
@@ -204,19 +204,19 @@ AlarmResources::Result AlarmResources::addEvent(Event* event, KAlarm::CalEvent::
 	return Success;
 }
 
-AlarmResource* AlarmResources::getStandardResource(AlarmResource::Type type)
+AlarmResource* AlarmResources::getStandardResource(KAlarm::CalEvent::Type type)
 {
 	switch (type)
 	{
-		case AlarmResource::ACTIVE:
+		case KAlarm::CalEvent::ACTIVE:
 		{
 			AlarmResource* std = mManager->standardResource();
-			if (std  &&  std->standardResource()  &&  std->alarmType() == AlarmResource::ACTIVE  &&  !std->readOnly())
+			if (std  &&  std->standardResource()  &&  std->alarmType() == KAlarm::CalEvent::ACTIVE  &&  !std->readOnly())
 				return std;
 			break;
 		}
-		case AlarmResource::ARCHIVED:
-		case AlarmResource::TEMPLATE:
+		case KAlarm::CalEvent::ARCHIVED:
+		case KAlarm::CalEvent::TEMPLATE:
 			if (mActiveOnly)
 				return 0;
 			for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
@@ -243,7 +243,7 @@ AlarmResource* AlarmResources::getStandardResource(AlarmResource::Type type)
 			std = r;
 		}
 	}
-	if (std  &&  type == AlarmResource::ACTIVE  &&  !mPassiveClient)
+	if (std  &&  type == KAlarm::CalEvent::ACTIVE  &&  !mPassiveClient)
 		setStandardResource(std);   // mark it as the standard resource
 	return std;
 }
@@ -252,8 +252,8 @@ void AlarmResources::setStandardResource(AlarmResource* resource)
 {
 	if (resource->standardResource())
 		return;    // it's already the standard resource for its alarm type
-	AlarmResource::Type type = resource->alarmType();
-	bool active = (type == AlarmResource::ACTIVE);
+	KAlarm::CalEvent::Type type = resource->alarmType();
+	bool active = (type == KAlarm::CalEvent::ACTIVE);
 	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
 	{
 		AlarmResource* r = *it;
@@ -282,7 +282,7 @@ void AlarmResources::writeConfig()
 		mManager->writeConfig();
 }
 
-int AlarmResources::activeCount(AlarmResource::Type type, bool writable)
+int AlarmResources::activeCount(KAlarm::CalEvent::Type type, bool writable)
 {
 	int count = 0;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
@@ -307,33 +307,30 @@ AlarmResource* AlarmResources::destination(KAlarm::CalEvent::Type type, QWidget*
 	if (cancelled)
 		*cancelled = false;
 	AlarmResource* standard;
-	AlarmResource::Type calType;
 	switch (type)
 	{
 		case KAlarm::CalEvent::ACTIVE:
-			calType = AlarmResource::ACTIVE;
 			break;
 		case KAlarm::CalEvent::TEMPLATE:
 			if (mActiveOnly)
 				return 0;
-			calType = AlarmResource::TEMPLATE;
 			break;
 		case KAlarm::CalEvent::ARCHIVED:
 			if (mActiveOnly)
 				return 0;
 			// Archived alarms are always saved in the default resource
-			return getStandardResource(AlarmResource::ARCHIVED);
+			return getStandardResource(KAlarm::CalEvent::ARCHIVED);
 		default:
 			return 0;
 	}
-	standard = getStandardResource(calType);
+	standard = getStandardResource(type);
 	if (noPrompt  ||  (!mAskDestination  &&  standard))
 		return standard;
 	QList<KRES::Resource*> list;
 	for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 	{
 		AlarmResource* resource = *it;
-		if (!resource->readOnly()  &&  resource->alarmType() == calType)
+		if (!resource->readOnly()  &&  resource->alarmType() == type)
 		{
 			// Insert the standard resource at the beginning so as to be the default
 			if (resource == standard)
@@ -358,7 +355,7 @@ AlarmResource* AlarmResources::destination(KAlarm::CalEvent::Type type, QWidget*
 	}
 }
 
-int AlarmResources::loadedState(AlarmResource::Type type) const
+int AlarmResources::loadedState(KAlarm::CalEvent::Type type) const
 {
 	if (!mOpen)
 		return 0;
@@ -386,7 +383,7 @@ int AlarmResources::loadedState(AlarmResource::Type type) const
 	return !loaded ? 0 : notloaded ? 1 : 2;
 }
 
-bool AlarmResources::isLoading(AlarmResource::Type type) const
+bool AlarmResources::isLoading(KAlarm::CalEvent::Type type) const
 {
 	if (mOpen)
 	{
@@ -412,7 +409,7 @@ void AlarmResources::load(ResourceCached::CacheAction action)
 	for (AlarmResourceManager::Iterator it = mManager->begin();  it != mManager->end();  ++it)
 	{
 		AlarmResource* resource = *it;
-		if (!mActiveOnly  ||  resource->alarmType() == AlarmResource::ACTIVE)
+		if (!mActiveOnly  ||  resource->alarmType() == KAlarm::CalEvent::ACTIVE)
 		{
 			resource->setTimeSpec(timeSpec());
 			if (resource->isActive())
@@ -430,7 +427,7 @@ void AlarmResources::load(ResourceCached::CacheAction action)
 
 	// Ensure that if there is only one active alarm resource,
 	// it is marked as the standard resource.
-	getStandardResource(AlarmResource::ACTIVE);
+	getStandardResource(KAlarm::CalEvent::ACTIVE);
 
 	mOpen = true;
 }
@@ -502,7 +499,7 @@ bool AlarmResources::save()
 	{
 		for (AlarmResourceManager::ActiveIterator it = mManager->activeBegin();  it != mManager->activeEnd();  ++it)
 		{
-			if ((!mActiveOnly  ||  (*it)->alarmType() == AlarmResource::ACTIVE)
+			if ((!mActiveOnly  ||  (*it)->alarmType() == KAlarm::CalEvent::ACTIVE)
 			&&  (*it)->hasChanges())
 			{
 				kDebug(KARES_DEBUG) << "Saving modified resource" << (*it)->identifier();

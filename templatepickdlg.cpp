@@ -19,19 +19,23 @@
  */
 
 #include "kalarm.h"
+#include "templatepickdlg.moc"
 
-#include <QVBoxLayout>
-#include <QResizeEvent>
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#else
+#include "eventlistmodel.h"
+#include "templatelistfiltermodel.h"
+#endif
+#include "functions.h"
+#include "shellprocess.h"
+#include "templatelistview.h"
 
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "eventlistmodel.h"
-#include "functions.h"
-#include "shellprocess.h"
-#include "templatelistfiltermodel.h"
-#include "templatelistview.h"
-#include "templatepickdlg.moc"
+#include <QVBoxLayout>
+#include <QResizeEvent>
 
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
@@ -55,12 +59,22 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
 		type = static_cast<KAEvent::Actions>(type & ~KAEvent::ACT_COMMAND);
 		shown = static_cast<KAEvent::Actions>(shown & ~KAEvent::ACT_COMMAND);
 	}
+#ifdef USE_AKONADI
+	mListFilterModel = new TemplateListModel(this);
+	mListFilterModel->setAlarmActionsEnabled(type);
+	mListFilterModel->setAlarmActionFilter(shown);
+#else
 	mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
 	mListFilterModel->setTypesEnabled(type);
 	mListFilterModel->setTypeFilter(shown);
+#endif
 	mListView = new TemplateListView(topWidget);
 	mListView->setModel(mListFilterModel);
+#ifdef USE_AKONADI
+	mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
+#else
 	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
+#endif
 	mListView->setSelectionMode(QAbstractItemView::SingleSelection);
 	mListView->setWhatsThis(i18nc("@info:whatsthis", "Select a template to base the new alarm on."));
 	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
@@ -78,7 +92,11 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
 /******************************************************************************
 * Return the currently selected alarm template, or 0 if none.
 */
+#ifdef USE_AKONADI
+KAEvent TemplatePickDlg::selectedTemplate() const
+#else
 const KAEvent* TemplatePickDlg::selectedTemplate() const
+#endif
 {
 	return mListView->selectedEvent();
 }

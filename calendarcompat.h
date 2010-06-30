@@ -23,8 +23,12 @@
 
 /* @file calendarcompat.h - compatibility for old calendar file formats */
 
-#include "alarmresource.h"
 #include "kacalendar.h"
+#ifdef USE_AKONADI
+#include <akonadi/collection.h>
+#else
+#include "alarmresource.h"
+#endif
 
 namespace KCal { class CalendarLocal; }
 
@@ -33,8 +37,17 @@ class CalendarCompat
 {
 	public:
 		static void  setID(KCal::CalendarLocal&);
+#ifdef USE_AKONADI
+		/** Whether the fix function should convert old format KAlarm calendars. */
+		enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
+
+		static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
+		                                    const Akonadi::Collection& = Akonadi::Collection(),
+		                                    FixFunc = PROMPT, bool* wrongType = 0);
+#else
 		static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
 		                                    AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
+#endif
 };
 
 #endif // CALENDARCOMPAT_H

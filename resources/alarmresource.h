@@ -43,32 +43,22 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 {
 		Q_OBJECT
 	public:
-		/** Type of alarms held in this calendar resource. */
-		enum Type {
-			INVALID  = 0,
-			ACTIVE   = 0x01,    // active alarms
-			ARCHIVED = 0x02,    // archived alarms
-			TEMPLATE = 0x04     // alarm templates
-		};
 		/** Whether the fix function should convert old format KAlarm calendars. */
 		enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
 
 		AlarmResource();
 		explicit AlarmResource(const KConfigGroup&);
-		explicit AlarmResource(Type);
+		explicit AlarmResource(KAlarm::CalEvent::Type);
 		~AlarmResource();
 		virtual void writeConfig(KConfigGroup&);
 		virtual QString infoText() const;
 		KABC::Lock*  lock()                      { return mLock; }
 
 		/** Return which type of alarms the resource can contain. */
-		Type     alarmType() const               { return mType; }
-
-		/** Return which type of alarms the resource can contain. */
-		KAlarm::CalEvent::Type kcalEventType() const;
+		KAlarm::CalEvent::Type alarmType() const               { return mType; }
 
 		/** Set the type of alarms which the resource can contain. */
-		void     setAlarmType(Type type)         { mType = type; }
+		void     setAlarmType(KAlarm::CalEvent::Type type)     { mType = type; }
 
 		/** Return whether the resource contains only alarms of the wrong type. */
 		bool     isWrongAlarmType() const        { return mWrongAlarmType; }
@@ -242,7 +232,7 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 		static void              (*mCustomEventFunction)(AlarmResource*, CalendarLocal*);
 
 		KABC::Lock* mLock;
-		Type        mType;            // type of alarm held in this resource
+		KAlarm::CalEvent::Type mType; // type of alarm held in this resource
 		QColor      mColour;          // background colour for displaying this resource
 		bool        mStandard;        // this is the standard resource for this mWriteType
 		bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)

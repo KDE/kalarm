@@ -21,7 +21,11 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "calendarcompat.h"
 
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#else
 #include "alarmresource.h"
+#endif
 #include "functions.h"
 #include "kaevent.h"
 #include "preferences.h"
@@ -60,8 +64,13 @@ void CalendarCompat::setID(KCal::CalendarLocal& calendar)
 * If the calendar only contains the wrong alarm types, 'wrongType' is set true.
 * Reply = true if the calendar file is now in the current format.
 */
+#ifdef USE_AKONADI
+KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, const QString& localFile,
+                                      const Akonadi::Collection& collection, FixFunc conv, bool* wrongType)
+#else
 KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource,
                                       AlarmResource::FixFunc conv, bool* wrongType)
+#endif
 {
 	if (wrongType)
 		*wrongType = false;
@@ -69,25 +78,55 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 	int version = KAlarm::Calendar::checkCompatibility(calendar, localFile, versionString);
 	if (version < 0)
 		return KAlarm::Calendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
+#ifdef USE_AKONADI
+	if (!collection.isValid())
+#else
 	if (!resource)
+#endif
 		return KAlarm::Calendar::Current;    // update non-shared calendars regardless
 
 	// Check whether the alarm types in the calendar correspond with the resource's alarm type
 	if (wrongType)
+#ifdef USE_AKONADI
+		*wrongType = !AkonadiModel::checkAlarmTypes(collection, calendar);
+#else
 		*wrongType = !resource->checkAlarmTypes(calendar);
+#endif
 
 	if (!version)
 		return KAlarm::Calendar::Current;     // calendar is in current KAlarm format
+#ifdef USE_AKONADI
+	if (!CollectionControlModel::isWritable(collection)  ||  conv == NO_CONVERT)
+#else
 	if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)
+#endif
 		return KAlarm::Calendar::Convertible;
 	// Update the calendar file now if the user wants it to be read-write
+#ifdef USE_AKONADI
+	if (conv == PROMPT  ||  conv == PROMPT_PART)
+#else
 	if (conv == AlarmResource::PROMPT  ||  conv == AlarmResource::PROMPT_PART)
+#endif
 	{
+#ifdef USE_AKONADI
+		QString msg = (conv == PROMPT)
+#else
 		QString msg = (conv == AlarmResource::PROMPT)
+#endif
 		            ? i18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), and will be read-only unless "
-		                   "you choose to update it to the current format.", resource->resourceName(), versionString)
+		                   "you choose to update it to the current format.",
+#ifdef USE_AKONADI
+		                   collection.name(), versionString)
+#else
+		                   resource->resourceName(), versionString)
+#endif
 		            : i18nc("@info", "Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, and will be read-only unless "
-		                   "you choose to update them to the current format.", resource->resourceName());
+		                   "you choose to update them to the current format.",
+#ifdef USE_AKONADI
+		                   collection.name());
+#else
+		                   resource->resourceName());
+#endif
 		if (KMessageBox::warningYesNo(0,
 		      i18nc("@info", "<para>%1</para><para>"
 		           "<warning>Do not update the calendar if it is shared with other users who run an older version "

@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,9 +22,13 @@
 #include "alarmlistdelegate.moc"
 
 #include "kacalendar.h"
-#include "alarmlistview.h"
-#include "alarmresources.h"
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#define ITEM_LIST_MODEL AlarmListModel
+#else
 #include "eventlistmodel.h"
+#define ITEM_LIST_MODEL EventListModel
+#endif
 #include "functions.h"
 
 #include <kcolorscheme.h>
@@ -41,7 +45,11 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 	if (index.isValid())
 	{
 		if (opt.state & QStyle::State_Selected
+#ifdef USE_AKONADI
+		&&  !index.data(AkonadiModel::EnabledRole).toBool())
+#else
 		&&  !index.data(EventListModel::EnabledRole).toBool())
+#endif
 		{
 			// Make the text colour for selected disabled alarms
 			// distinguishable from enabled alarms.
@@ -49,7 +57,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 		}
 		switch (index.column())
 		{
-			case EventListModel::TimeColumn:
+			case ITEM_LIST_MODEL::TimeColumn:
 			{
 				QString str = index.data(Qt::DisplayRole).toString();
 				// Need to pad out spacing to align times without leading zeroes
@@ -71,10 +79,16 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
 				}
 				break;
 			}
-			case EventListModel::ColourColumn:
+			case ITEM_LIST_MODEL::ColourColumn:
 			{
+#ifdef USE_AKONADI
+#warning Check this
+				const KAEvent event = static_cast<const ItemListModel*>(index.model())->event(index);
+				if (event.isValid()  &&  event.commandError() != KAEvent::CMD_NO_ERROR)
+#else
 				const KAEvent* event = static_cast<const EventListFilterModel*>(index.model())->event(index);
 				if (event  &&  event->commandError() != KAEvent::CMD_NO_ERROR)
+#endif
 				{
 					opt.font.setBold(true);
 					opt.font.setStyleHint(QFont::Serif);
@@ -95,7 +109,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
 	{
 		switch (index.column())
 		{
-			case EventListModel::TimeColumn:
+			case ITEM_LIST_MODEL::TimeColumn:
 			{
 				int h = option.fontMetrics.lineSpacing();
 				const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
@@ -113,7 +127,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
 					w += option.fontMetrics.width(str);
 				return QSize(w, h);
 			}
-			case EventListModel::ColourColumn:
+			case ITEM_LIST_MODEL::ColourColumn:
 			{
 				int h = option.fontMetrics.lineSpacing();
 				return QSize(h * 3 / 4, h);

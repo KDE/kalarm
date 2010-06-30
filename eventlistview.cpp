@@ -19,19 +19,22 @@
  */
 
 #include "kalarm.h"
+#include "eventlistview.moc"
+
+#include "find.h"
+#ifndef USE_AKONADI
+#include "eventlistmodel.h"
+#include "templatelistfiltermodel.h"
+#endif
+
+#include <kglobalsettings.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
-
-#include <kglobalsettings.h>
-#include <kdebug.h>
-
-#include "eventlistmodel.h"
-#include "find.h"
-#include "templatelistfiltermodel.h"
-#include "eventlistview.moc"
 
 
 EventListView::EventListView(QWidget* parent)
@@ -51,6 +54,17 @@ EventListView::EventListView(QWidget* parent)
 /******************************************************************************
 * Return the event referred to by an index.
 */
+#ifdef USE_AKONADI
+KAEvent EventListView::event(const QModelIndex& index) const
+{
+	return itemModel()->event(index);
+}
+
+KAEvent EventListView::event(int row) const
+{
+	return itemModel()->event(itemModel()->index(row, 0));
+}
+#else
 KAEvent* EventListView::event(const QModelIndex& index) const
 {
 	return eventFilterModel()->event(index);
@@ -60,14 +74,22 @@ KAEvent* EventListView::event(int row) const
 {
 	return eventFilterModel()->event(row);
 }
+#endif
 
 /******************************************************************************
 * Select one event and make it the current item.
 */
+#ifdef USE_AKONADI
+void EventListView::select(Akonadi::Item::Id eventId)
+{
+	select(itemModel()->eventIndex(eventId));
+}
+#else
 void EventListView::select(const QString& eventId)
 {
 	select(eventModel()->eventIndex(eventId));
 }
+#endif
 
 void EventListView::select(const QModelIndex& index)
 {
@@ -90,6 +112,17 @@ QModelIndex EventListView::selectedIndex() const
 * Return the single selected event.
 * Reply = null if no items are selected, or if multiple items are selected.
 */
+#ifdef USE_AKONADI
+KAEvent EventListView::selectedEvent() const
+{
+	QModelIndexList list = selectionModel()->selectedRows();
+	if (list.count() != 1)
+		return KAEvent();
+kDebug(0)<<"SelectedEvent() count="<<list.count();
+	const ItemListModel* model = static_cast<const ItemListModel*>(list[0].model());
+	return model->event(list[0]);
+}
+#else
 KAEvent* EventListView::selectedEvent() const
 {
 	QModelIndexList list = selectionModel()->selectedRows();
@@ -100,23 +133,38 @@ kDebug(0)<<"SelectedEvent() count="<<list.count();
 	QModelIndex source = proxy->mapToSource(list[0]);
 	return static_cast<KAEvent*>(source.internalPointer());
 }
+#endif
 
 /******************************************************************************
 * Return the selected events.
 */
+#ifdef USE_AKONADI
+QList<KAEvent> EventListView::selectedEvents() const
+#else
 KAEvent::List EventListView::selectedEvents() const
+#endif
 {
+#ifdef USE_AKONADI
+	QList<KAEvent> elist;
+#else
 	KAEvent::List elist;
-	QModelIndexList ilist = selectionModel()->selectedRows();
-	int count = ilist.count();
+#endif
+	QModelIndexList ixlist = selectionModel()->selectedRows();
+	int count = ixlist.count();
 	if (count)
 	{
-		const QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(ilist[0].model());
+#ifdef USE_AKONADI
+		const ItemListModel* model = static_cast<const ItemListModel*>(ixlist[0].model());
+		for (int i = 0;  i < count;  ++i)
+			elist += model->event(ixlist[i]);
+#else
+		const QAbstractProxyModel* proxy = static_cast<const QAbstractProxyModel*>(ixlist[0].model());
 		for (int i = 0;  i < count;  ++i)
 		{
-			QModelIndex source = proxy->mapToSource(ilist[i]);
+			QModelIndex source = proxy->mapToSource(ixlist[i]);
 			elist += static_cast<KAEvent*>(source.internalPointer());
 		}
+#endif
 	}
 	return elist;
 }
@@ -145,8 +193,8 @@ void EventListView::findNext(bool forward)
 }
 
 /******************************************************************************
- * * Called when a ToolTip or WhatsThis event occurs.
- * */
+* Called when a ToolTip or WhatsThis event occurs.
+*/
 bool EventListView::viewportEvent(QEvent* e)
 {
 	if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
@@ -160,8 +208,13 @@ bool EventListView::viewportEvent(QEvent* e)
 			int i = toolTip.indexOf('\n');
 			if (i < 0)
 			{
+#ifdef USE_AKONADI
+				ItemListModel* m = qobject_cast<ItemListModel*>(model());
+				if (!m  ||  m->event(index).commandError() == KAEvent::CMD_NO_ERROR)
+#else
 				EventListFilterModel* m = qobject_cast<EventListFilterModel*>(model());
 				if (!m  ||  m->event(index)->commandError() == KAEvent::CMD_NO_ERROR)
+#endif
 				{
 					// Single line tooltip. Only display it if the text column
 					// is truncated in the view display.
@@ -221,10 +274,23 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 	if (index.isValid())
 	{
 		kDebug();
+#ifdef USE_AKONADI
+		ItemListModel* itemModel = qobject_cast<ItemListModel*>(model);
+#warning Check that this cast works
+		if (!itemModel)
+			kError() << "Invalid cast to ItemListModel*";
+		else
+		{
+			KAEvent event = itemModel->event(index);
+			edit(&event, static_cast<EventListView*>(parent()));
+			return true;
+		}
+#else
 		QModelIndex source = static_cast<QAbstractProxyModel*>(model)->mapToSource(index);
 		KAEvent* event = static_cast<KAEvent*>(source.internalPointer());
 		edit(event, static_cast<EventListView*>(parent()));
 		return true;
+#endif
 	}
 	return false;   // indicate that the event has not been handled
 }	
