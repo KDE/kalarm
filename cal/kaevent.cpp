@@ -20,7 +20,9 @@
 
 #include "kaevent.h"
 
+#ifndef USE_AKONADI
 #include "alarmresource.h"
+#endif
 #include "alarmtext.h"
 #include "identities.h"
 #include "version.h"
@@ -189,7 +191,10 @@ KAEvent::KAEvent()
 { }
 
 KAEvent::Private::Private()
-    : mResource(0),
+    :
+#ifndef USE_AKONADI
+      mResource(0),
+#endif
       mCommandError(CMD_NO_ERROR),
 #ifdef USE_AKONADI
       mItemId(-1),
@@ -254,18 +259,22 @@ KAEvent::Private::Private(const KAEvent::Private& e)
 void KAEvent::Private::copy(const KAEvent::Private& event)
 {
     KAAlarmEventBase::copy(event);
+#ifndef USE_AKONADI
     mResource                = event.mResource;
+#endif
     mAllTrigger              = event.mAllTrigger;
     mMainTrigger             = event.mMainTrigger;
     mAllWorkTrigger          = event.mAllWorkTrigger;
     mMainWorkTrigger         = event.mMainWorkTrigger;
     mCommandError            = event.mCommandError;
-#ifdef USE_AKONADI
-    mItemId                  = event.mItemId;
-    mCustomProperties        = event.mCustomProperties;
-#endif
     mTemplateName            = event.mTemplateName;
+#ifdef USE_AKONADI
+    mCustomProperties        = event.mCustomProperties;
+    mItemId                  = event.mItemId;
+    mCollectionId            = event.mCollectionId;
+#else
     mResourceId              = event.mResourceId;
+#endif
     mAudioFile               = event.mAudioFile;
     mPreAction               = event.mPreAction;
     mPostAction              = event.mPostAction;
@@ -335,15 +344,19 @@ void KAEvent::Private::set(const Event* event)
     startChanges();
     // Extract status from the event
     mCommandError           = CMD_NO_ERROR;
+#ifndef USE_AKONADI
     mResource               = 0;
-#ifdef USE_AKONADI
-    mItemId                 = -1;
 #endif
     mEventID                = event->uid();
     mRevision               = event->revision();
     mTemplateName.clear();
     mLogFile.clear();
+#ifdef USE_AKONADI
+    mItemId                 = -1;
+    mCollectionId           = -1;
+#else
     mResourceId.clear();
+#endif
     mTemplateAfterTime      = -1;
     mBeep                   = false;
     mSpeak                  = false;
@@ -376,6 +389,7 @@ void KAEvent::Private::set(const Event* event)
     mEnabled                = true;
     clearRecur();
     QString param;
+    bool ok;
     mCategory               = KAlarm::CalEvent::status(event, &param);
     if (mCategory == KAlarm::CalEvent::DISPLAYING)
     {
@@ -384,7 +398,13 @@ void KAEvent::Private::set(const Event* event)
         int n = params.count();
         if (n)
         {
+#ifdef USE_AKONADI
+            qlonglong id = params[0].toLongLong(&ok);
+            if (ok)
+                mCollectionId = id;
+#else
             mResourceId = params[0];
+#endif
             for (int i = 1;  i < n;  ++i)
             {
                 if (params[i] == DISP_DEFER)
@@ -407,7 +427,6 @@ void KAEvent::Private::set(const Event* event)
     }
 #endif
 
-    bool ok;
     bool dateOnly = false;
     QStringList flags = event->customProperty(KAlarm::Calendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
     flags += QString();    // to avoid having to check for end of list
@@ -1049,10 +1068,15 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     }
     mEventID.clear();
     mTemplateName.clear();
+#ifdef USE_AKONADI
+    mItemId                 = -1;
+    mCollectionId           = -1;
+#else
+    mResource               = 0;
     mResourceId.clear();
+#endif
     mPreAction.clear();
     mPostAction.clear();
-    mResource               = 0;
     mText                   = (mActionType == T_COMMAND) ? text.trimmed()
                             : (mActionType == T_AUDIO) ? QString() : text;
     mCategory               = KAlarm::CalEvent::ACTIVE;
@@ -1979,7 +2003,11 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
     QString param;
     if (mCategory == KAlarm::CalEvent::DISPLAYING)
     {
+#ifdef USE_AKONADI
+        param = QString::number(mCollectionId);
+#else
         param = mResourceId;
+#endif
         if (mDisplayingDefer)
             param += SC + DISP_DEFER;
         if (mDisplayingEdit)
@@ -2790,8 +2818,13 @@ void KAEvent::Private::setCommandError(CmdErrType error, bool writeConfig) const
 * saved in case their end time expires before the next login.
 * Reply = true if successful, false if alarm was not copied.
 */
+#ifdef USE_AKONADI
+bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Type alarmType, Akonadi::Collection::Id collectionId,
+                                     const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
+#else
 bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Type alarmType, const QString& resourceID,
                                      const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
+#endif
 {
     if (!mDisplaying
     &&  (alarmType == KAAlarm::MAIN_ALARM
@@ -2807,7 +2840,11 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
             *this = event;
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(KAlarm::CalEvent::DISPLAYING);
+#ifdef USE_AKONADI
+            mCollectionId    = collectionId;;
+#else
             mResourceId      = resourceID;
+#endif
             mDisplayingDefer = showDefer;
             mDisplayingEdit  = showEdit;
             mDisplaying      = true;
@@ -2833,17 +2870,25 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
 /******************************************************************************
 * Reinstate the original event from the 'displaying' event.
 */
+#ifdef USE_AKONADI
+void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, Akonadi::Collection::Id collectionId, bool& showEdit, bool& showDefer)
+#else
 void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
+#endif
 {
     set(kcalEvent);
     if (mDisplaying)
     {
         // Retrieve the original event's unique ID
         setCategory(KAlarm::CalEvent::ACTIVE);
-        resourceID  = mResourceId;
-        showDefer   = mDisplayingDefer;
-        showEdit    = mDisplayingEdit;
-        mDisplaying = false;
+#ifdef USE_AKONADI
+        collectionId = mCollectionId;
+#else
+        resourceID   = mResourceId;
+#endif
+        showDefer    = mDisplayingDefer;
+        showEdit     = mDisplayingEdit;
+        mDisplaying  = false;
         --mAlarmCount;
         mUpdated = true;
     }
@@ -4344,12 +4389,24 @@ bool KAEvent::convertRepetition(KCal::Event* event)
     return converted;
 }
 
+#ifdef USE_AKONADI
+KAEvent::List KAEvent::ptrList(QList<KAEvent>& objList)
+{
+    KAEvent::List ptrs;
+    for (int i = 0, count = objList.count();  i < count;  ++i)
+        ptrs += &objList[i];
+    return ptrs;
+}
+#endif
+
 
 #ifndef KDE_NO_DEBUG_OUTPUT
 void KAEvent::Private::dumpDebug() const
 {
     kDebug() << "KAEvent dump:";
+#ifndef USE_AKONADI
     if (mResource) { kDebug() << "-- mResource:" << mResource->resourceName(); }
+#endif
     kDebug() << "-- mCommandError:" << mCommandError;
     kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
     kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();

@@ -1,7 +1,7 @@
 /*
  *  templatelistview.cpp  -  widget showing list of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2008,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,15 +19,23 @@
  */
 
 #include "kalarm.h"
+#include "templatelistview.moc"
+
+#include "functions.h"
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#define TEMPLATE_LIST_MODEL TemplateListModel
+#else
+#include "eventlistmodel.h"
+#include "templatelistfiltermodel.h"
+#define TEMPLATE_LIST_MODEL TemplateListFilterModel
+#endif
+
+#include <klocale.h>
 
 #include <QHeaderView>
 #include <QMouseEvent>
 #include <QApplication>
-
-#include "eventlistmodel.h"
-#include "functions.h"
-#include "templatelistfiltermodel.h"
-#include "templatelistview.moc"
 
 
 TemplateListView::TemplateListView(QWidget* parent)
@@ -42,9 +50,13 @@ void TemplateListView::setModel(QAbstractItemModel* model)
 	EventListView::setModel(model);
 	header()->setMovable(false);
 	header()->setStretchLastSection(true);
-	header()->setResizeMode(TemplateListFilterModel::TypeColumn, QHeaderView::Fixed);
+	header()->setResizeMode(TEMPLATE_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
 	const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-	header()->resizeSection(TemplateListFilterModel::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
+#ifdef USE_AKONADI
+	header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, ItemListModel::iconWidth() + 2*margin + 2);
+#else
+	header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
+#endif
 }
 
 void TemplateListDelegate::edit(KAEvent* event, EventListView* view)

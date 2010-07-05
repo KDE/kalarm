@@ -23,16 +23,20 @@
 
 /** @file mainwindow.h - main application window */
 
-#include <QList>
-#include <QMap>
-
-#include <kcal/calendar.h>
-
+#ifdef USE_AKONADI
+#include <akonadi/item.h>
+#else
 #include "alarmresources.h"
+#endif
 #include "editdlg.h"
 #include "kaevent.h"
 #include "mainwindowbase.h"
 #include "undo.h"
+
+#include <kcal/calendar.h>
+
+#include <QList>
+#include <QMap>
 
 class QDragEnterEvent;
 class QHideEvent;
@@ -45,7 +49,11 @@ class QMenu;
 class KAction;
 class KToggleAction;
 class KToolBarPopupAction;
+#ifdef USE_AKONADI
+class AlarmListModel;
+#else
 class AlarmListFilterModel;
+#endif
 class AlarmListView;
 class NewAlarmAction;
 class TemplateDlg;
@@ -63,8 +71,13 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		bool               isTrayParent() const;
 		bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
 		bool               showingArchived() const      { return mShowArchived; }
+#ifdef USE_AKONADI
+		void               selectEvent(Akonadi::Item::Id);
+		void               editAlarm(EditAlarmDlg*, const KAEvent&);
+#else
 		void               selectEvent(const QString& eventID);
 		void               editAlarm(EditAlarmDlg*, const KAEvent&, AlarmResource*);
+#endif
 		virtual bool       eventFilter(QObject*, QEvent*);
 
 		static void        refresh();
@@ -137,7 +150,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		void           slotFindActive(bool);
 		void           updateTrayIconAction();
 		void           slotToggleResourceSelector();
-		void           slotResourceStatusChanged();
+		void           slotCalendarStatusChanged();
 		void           resourcesResized();
 		void           showErrorMessage(const QString&);
 		void           editAlarmOk();
@@ -161,11 +174,17 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 		static WindowList    mWindowList;   // active main windows
 		static TemplateDlg*  mTemplateDlg;  // the one and only template dialog
 
+#ifdef USE_AKONADI
+		AlarmListModel*      mListFilterModel;
+#else
 		AlarmListFilterModel* mListFilterModel;
+#endif
 		AlarmListView*       mListView;
 		ResourceSelector*    mResourceSelector;    // resource selector widget
 		QSplitter*           mSplitter;            // splits window into list and resource selector
+#ifndef USE_AKONADI
 		AlarmResources*      mAlarmResources;      // calendar resources to use for this window
+#endif
 		QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
 		KToggleAction*       mActionToggleResourceSel;
 		KAction*             mActionImportAlarms;

@@ -51,7 +51,7 @@ KAResourceLocal::KAResourceLocal(const KConfigGroup& group)
 	init();
 }
 
-KAResourceLocal::KAResourceLocal(Type type, const QString& fileName)
+KAResourceLocal::KAResourceLocal(KAlarm::CalEvent::Type type, const QString& fileName)
 	: AlarmResource(type),
 	  mURL(KUrl::fromPath(fileName)),
 	  mFileReadOnly(false)

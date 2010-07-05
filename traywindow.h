@@ -35,6 +35,9 @@ class KAEvent;
 class MainWindow;
 class NewAlarmAction;
 class TemplateMenuAction;
+#ifdef USE_AKONADI
+class AlarmListModel;
+#endif
 
 class TrayWindow : public KSystemTrayIcon
 {
@@ -61,7 +64,7 @@ class TrayWindow : public KSystemTrayIcon
 		void         slotPreferences();
 		void         setEnabledStatus(bool status);
 		void         slotHaveDisabledAlarms(bool disabled);
-		void         slotResourceStatusChanged();
+		void         slotCalendarStatusChanged();
 		void         slotQuit();
 
 	private:
@@ -74,6 +77,9 @@ class TrayWindow : public KSystemTrayIcon
 		KToggleAction*  mActionEnabled;
 		NewAlarmAction* mActionNew;
 		TemplateMenuAction* mActionNewFromTemplate;
+#ifdef USE_AKONADI
+		mutable AlarmListModel* mAlarmsModel; // active alarms sorted in time order
+#endif
 		bool            mHaveDisabledAlarms;  // some individually disabled alarms exist
 };
 

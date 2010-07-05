@@ -61,7 +61,7 @@ KAResourceRemote::KAResourceRemote(const KConfigGroup& group)
 	init();
 }
 
-KAResourceRemote::KAResourceRemote(Type type, const KUrl& downloadUrl, const KUrl& uploadUrl)
+KAResourceRemote::KAResourceRemote(KAlarm::CalEvent::Type type, const KUrl& downloadUrl, const KUrl& uploadUrl)
 	: AlarmResource(type),
 	  mDownloadUrl(downloadUrl),
 	  mUploadUrl(uploadUrl.isEmpty() ? mDownloadUrl : uploadUrl),

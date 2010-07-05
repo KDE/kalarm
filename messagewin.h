@@ -23,13 +23,16 @@
 
 /** @file messagewin.h - displays an alarm message */
 
-#include <QList>
-#include <QMap>
-#include <QPointer>
-
 #include "autoqpointer.h"
 #include "kaevent.h"
 #include "mainwindowbase.h"
+
+#include <akonadi/collection.h>
+#include <akonadi/item.h>
+
+#include <QList>
+#include <QMap>
+#include <QPointer>
 
 class QShowEvent;
 class QMoveEvent;
@@ -123,11 +126,19 @@ class MessageWin : public MainWindowBase
 		bool                getWorkAreaAndModal();
 		void                playAudio();
 		void                setDeferralLimit(const KAEvent&);
-		void                alarmShowing(KAEvent&, const KCal::Event* = 0);
+		void                alarmShowing(KAEvent&);
+#ifdef USE_AKONADI
+		bool                retrieveEvent(KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
+#else
 		bool                retrieveEvent(KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
+#endif
 		bool                haveErrorMessage(unsigned msg) const;
 		void                clearErrorMessage(unsigned msg) const;
+#ifdef USE_AKONADI
+		static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
+#else
 		static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
+#endif
 		static bool         isSpread(const QPoint& topLeft);
 
 		static QList<MessageWin*> mWindowList;  // list of existing message windows
@@ -141,6 +152,9 @@ class MessageWin : public MainWindowBase
 		QColor              mBgColour, mFgColour;
 		DateTime            mDateTime;        // date/time displayed in the message window
 		QDateTime           mCloseTime;       // local time at which window should be auto-closed
+#ifdef USE_AKONADI
+		Akonadi::Item::Id   mEventItemId;
+#endif
 		QString             mEventID;
 		QString             mAudioFile;
 		float               mVolume;
@@ -161,7 +175,11 @@ class MessageWin : public MainWindowBase
 		bool                mInvalid;         // restored window is invalid
 		// Miscellaneous
 		KAEvent             mEvent;           // the whole event, for updating the calendar file
+#ifdef USE_AKONADI
+		Akonadi::Collection mCollection;      // collection which the event comes/came from
+#else
 		AlarmResource*      mResource;        // resource which the event comes/came from
+#endif
 		QLabel*             mTimeLabel;       // trigger time label
 		QLabel*             mRemainingText;   // the remaining time (for a reminder window)
 		PushButton*         mOkButton;

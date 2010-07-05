@@ -24,7 +24,9 @@
 #include "editdlgtypes.h"
 
 #include "alarmcalendar.h"
+#ifndef USE_AKONADI
 #include "alarmresources.h"
+#endif
 #include "alarmtimewidget.h"
 #include "autoqpointer.h"
 #include "buttongroup.h"
@@ -149,7 +151,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 	  mDeferChangeButton(0),
 	  mTimeWidget(0),
 	  mShowInKorganizer(0),
+#ifndef USE_AKONADI
 	  mResource(0),
+#endif
 	  mDeferGroupHeight(0),
 	  mTemplate(Template),
 	  mDesiredReadOnly(false),
@@ -172,7 +176,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, QWidget* parent,
 	  mDeferChangeButton(0),
 	  mTimeWidget(0),
 	  mShowInKorganizer(0),
+#ifndef USE_AKONADI
 	  mResource(0),
+#endif
 	  mDeferGroupHeight(0),
 	  mTemplate(Template),
 	  mDesiredReadOnly(readOnly),
@@ -187,6 +193,22 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
 {
 	switch (getResource)
 	{
+#ifdef USE_AKONADI
+		case RES_USE_EVENT_ID:
+			if (event)
+			{
+				mCollectionItemId = event->itemId();
+				break;
+			}
+			// fall through to RES_PROMPT
+		case RES_PROMPT:
+			mCollectionItemId = -1;
+			break;
+		case RES_IGNORE:
+		default:
+			mCollectionItemId = -2;
+			break;
+#else
 		case RES_USE_EVENT_ID:
 			if (event)
 			{
@@ -199,8 +221,9 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
 			break;
 		case RES_IGNORE:
 		default:
-			mResourceEventId.clear();
+			mResourceEventId.clear();         // null
 			break;
+#endif
 	}
 }
 
@@ -710,9 +733,17 @@ void EditAlarmDlg::contentsChanged()
 * The data is returned in the supplied KAEvent instance.
 * Reply = false if the only change has been to an existing deferral.
 */
+#ifdef USE_AKONADI
+bool EditAlarmDlg::getEvent(KAEvent& event, Akonadi::Collection& collection)
+#else
 bool EditAlarmDlg::getEvent(KAEvent& event, AlarmResource*& resource)
+#endif
 {
+#ifdef USE_AKONADI
+	collection = mCollection;
+#else
 	resource = mResource;
+#endif
 	if (mChanged)
 	{
 		// It's a new event, or the edit controls have changed
@@ -980,8 +1011,13 @@ bool EditAlarmDlg::validate()
 		if (timedRecurrence)
 		{
 			KAEvent event;
+#ifdef USE_AKONADI
+			Akonadi::Collection c;
+			getEvent(event, c);     // this may adjust mAlarmDateTime
+#else
 			AlarmResource* r;
 			getEvent(event, r);     // this may adjust mAlarmDateTime
+#endif
 			KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
 			bool dateOnly = mAlarmDateTime.isDateOnly();
 			if ((dateOnly  &&  mAlarmDateTime.date() < now.date())
@@ -1056,6 +1092,36 @@ bool EditAlarmDlg::validate()
 	if (!checkText(mAlarmMessage))
 		return false;
 
+#ifdef USE_AKONADI
+	mCollection = Akonadi::Collection();
+	// An item ID = -2 indicates that the caller already
+	// knows which collection to use.
+	if (mCollectionItemId >= -1)
+	{
+		if (mCollectionItemId >= 0)
+		{
+			mCollection = AlarmCalendar::resources()->collectionForEvent(mCollectionItemId);
+			if (mCollection.isValid())
+			{
+				KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
+				if (!(AkonadiModel::instance()->types(mCollection) & type))
+					mCollection = Akonadi::Collection();   // event may have expired while dialog was open
+			}
+		}
+		bool cancelled = false;
+		if (!CollectionControlModel::isWritable(mCollection))
+		{
+			KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
+			mCollection = CollectionControlModel::destination(type, this, false, &cancelled);
+		}
+		if (!mCollection.isValid())
+		{
+			if (!cancelled)
+				KMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
+			return false;
+		}
+	}
+#else
 	mResource = 0;
 	// A null resource event ID indicates that the caller already
 	// knows which resource to use.
@@ -1066,7 +1132,7 @@ bool EditAlarmDlg::validate()
 			mResource = AlarmCalendar::resources()->resourceForEvent(mResourceEventId);
 			if (mResource)
 			{
-				AlarmResource::Type type = mTemplate ? AlarmResource::TEMPLATE : AlarmResource::ACTIVE;
+				KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
 				if (mResource->alarmType() != type)
 					mResource = 0;   // event may have expired while dialog was open
 			}
@@ -1084,6 +1150,7 @@ bool EditAlarmDlg::validate()
 			return false;
 		}
 	}
+#endif
 	return true;
 }
 
@@ -1137,7 +1204,14 @@ void EditAlarmDlg::slotHelp()
 	// deletion of EditAlarmDlg, and on return from this function).
 	AutoQPointer<TemplatePickDlg> dlg = new TemplatePickDlg(type, this);
 	if (dlg->exec() == QDialog::Accepted)
-		initValues(dlg->selectedTemplate());
+#ifdef USE_AKONADI
+	{
+		KAEvent event = dlg->selectedTemplate();
+		initValues(&event);
+	}
+#else
+	initValues(dlg->selectedTemplate());
+#endif
 }
 
 /******************************************************************************

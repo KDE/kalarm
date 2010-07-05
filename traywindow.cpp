@@ -23,7 +23,11 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#else
 #include "alarmresources.h"
+#endif
 #include "alarmtext.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -33,13 +37,6 @@
 #include "prefdlg.h"
 #include "preferences.h"
 #include "templatemenuaction.h"
-
-#include <stdlib.h>
-
-#include <QToolTip>
-#include <QMouseEvent>
-#include <QList>
-#include <QTimer>
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -54,6 +51,13 @@
 #include <kiconeffect.h>
 #include <kconfig.h>
 #include <kdebug.h>
+
+#include <QToolTip>
+#include <QMouseEvent>
+#include <QList>
+#include <QTimer>
+
+#include <stdlib.h>
 
 
 struct TipItem
@@ -71,6 +75,9 @@ struct TipItem
 TrayWindow::TrayWindow(MainWindow* parent)
 	: KSystemTrayIcon(parent),
 	  mAssocMainWindow(parent),
+#ifdef USE_AKONADI
+	  mAlarmsModel(0),
+#endif
 	  mHaveDisabledAlarms(false)
 {
 	kDebug();
@@ -138,10 +145,14 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	// Set icon to correspond with the alarms enabled menu status
 	setEnabledStatus(theApp()->alarmsEnabled());
 
-	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceStatusChanged()));
+#ifdef USE_AKONADI
+	connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)), SLOT(slotCalendarStatusChanged()));
+#else
+	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotCalendarStatusChanged()));
+#endif
 	connect(AlarmCalendar::resources(), SIGNAL(haveDisabledAlarmsChanged(bool)), SLOT(slotHaveDisabledAlarms(bool)));
 	connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), SLOT(slotActivated(QSystemTrayIcon::ActivationReason)));
-	slotResourceStatusChanged();   // initialise action states
+	slotCalendarStatusChanged();   // initialise action states
 	slotHaveDisabledAlarms(AlarmCalendar::resources()->haveDisabledAlarms());
 }
 
@@ -153,15 +164,20 @@ TrayWindow::~TrayWindow()
 }
 
 /******************************************************************************
-* Called when the status of a resource has changed.
+* Called when the status of a calendar has changed.
 * Enable or disable actions appropriately.
 */
-void TrayWindow::slotResourceStatusChanged()
+void TrayWindow::slotCalendarStatusChanged()
 {
-	// Find whether there are any writable active alarm resources
-	bool active = AlarmResources::instance()->activeCount(AlarmResource::ACTIVE, true);
-	mActionNew->setEnabled(active);
+	// Find whether there are any writable active alarm calendars
+#ifdef USE_AKONADI
+	bool active = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::ACTIVE, true).isEmpty();
+	mActionNewFromTemplate->setEnabled(active && TemplateListModel::all()->haveEvents());
+#else
+	bool active = AlarmResources::instance()->activeCount(KAlarm::CalEvent::ACTIVE, true);
 	mActionNewFromTemplate->setEnabled(active && EventListModel::templates()->haveEvents());
+#endif
+	mActionNew->setEnabled(active);
 }
 
 /******************************************************************************
@@ -303,16 +319,35 @@ QString TrayWindow::tooltipAlarmText() const
 	// Get today's and tomorrow's alarms, sorted in time order
 	int i, iend;
 	QList<TipItem> items;
+#ifdef USE_AKONADI
+	if (!mAlarmsModel)
+	{
+		mAlarmsModel = new AlarmListModel(const_cast<TrayWindow*>(this));
+		mAlarmsModel->setEventTypeFilter(KAlarm::CalEvent::ACTIVE);
+		mAlarmsModel->sort(AlarmListModel::TimeColumn);
+	}
+	for (i = 0, iend = mAlarmsModel->rowCount();  i < iend;  ++i)
+#else
 	KAEvent::List events = AlarmCalendar::resources()->events(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, KAlarm::CalEvent::ACTIVE);
 	for (i = 0, iend = events.count();  i < iend;  ++i)
+#endif
 	{
+#ifdef USE_AKONADI
+		KAEvent mevent = mAlarmsModel->event(i);
+		KAEvent* event = &mevent;
+#else
 		KAEvent* event = events[i];
+#endif
 		if (event->enabled()  &&  !event->expired()  &&  event->action() == KAEvent::MESSAGE)
 		{
 			TipItem item;
 			QDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().dateTime();
 			if (dateTime > tomorrow.dateTime())
+#ifdef USE_AKONADI
+				break;   // ignore alarms after tomorrow at the current clock time
+#else
 				continue;   // ignore alarms after tomorrow at the current clock time
+#endif
 			item.dateTime = dateTime;
 
 			// The alarm is due today, or early tomorrow

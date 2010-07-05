@@ -1,7 +1,7 @@
 /*
  *  eventlistview.h  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2008,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,13 +22,16 @@
 #define EVENTLISTVIEW_H
 
 #include "kalarm.h"
-
-#include <QTreeView>
-#include <QItemDelegate>
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#else
+#include "eventlistmodel.h"
+#endif
 
 #include <kcal/event.h>
 
-#include "eventlistmodel.h"
+#include <QTreeView>
+#include <QItemDelegate>
 
 class Find;
 
@@ -38,15 +41,27 @@ class EventListView : public QTreeView
 		Q_OBJECT
 	public:
 		explicit EventListView(QWidget* parent = 0);
+#ifdef USE_AKONADI
+		ItemListModel*    itemModel() const    { return static_cast<ItemListModel*>(model()); }
+		KAEvent           event(int row) const;
+		KAEvent           event(const QModelIndex&) const;
+		void              select(Akonadi::Item::Id);
+#else
 		EventListFilterModel* eventFilterModel() const   { return static_cast<EventListFilterModel*>(model()); }
 		EventListModel*   eventModel() const   { return static_cast<EventListModel*>(static_cast<QAbstractProxyModel*>(model())->sourceModel()); }
 		KAEvent*          event(int row) const;
 		KAEvent*          event(const QModelIndex&) const;
 		void              select(const QString& eventId);
+#endif
 		void              select(const QModelIndex&);
 		QModelIndex       selectedIndex() const;
+#ifdef USE_AKONADI
+		KAEvent           selectedEvent() const;
+		QList<KAEvent>    selectedEvents() const;
+#else
 		KAEvent*          selectedEvent() const;
 		KAEvent::List     selectedEvents() const;
+#endif
 		void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
 		bool              editOnSingleClick() const    { return mEditOnSingleClick; }
 

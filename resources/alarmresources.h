@@ -86,17 +86,17 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		/** Return the standard resource for the given alarm type.
 		 *  @return 0 if no standard resource is set.
 		 */
-		AlarmResource* getStandardResource(AlarmResource::Type);
+		AlarmResource* getStandardResource(KAlarm::CalEvent::Type);
 		/** Set the specified resource to be the standard resource for its alarm type,
 		 *  replacing any existing standard resource.
 		 */
 		void setStandardResource(AlarmResource*);
 
 		/** Add the standard KAlarm default resource for the given alarm type. */
-		AlarmResource* addDefaultResource(AlarmResource::Type);
+		AlarmResource* addDefaultResource(KAlarm::CalEvent::Type);
 
 		/** Return the number of active resources for a given alarm type. */
-		int activeCount(AlarmResource::Type, bool writable);
+		int activeCount(KAlarm::CalEvent::Type, bool writable);
 
 		void writeConfig();
 		/** Set a function to write the application ID into a calendar. */
@@ -123,8 +123,8 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 		 *          1 if some but not all active resources are loaded,
 		 *          2 if all active resources are loaded.
 		 */
-		int loadedState(AlarmResource::Type) const;
-		bool isLoading(AlarmResource::Type) const;
+		int loadedState(KAlarm::CalEvent::Type) const;
+		bool isLoading(KAlarm::CalEvent::Type) const;
 		void showProgress(bool);
 
 		/** Loads all incidences from the resources.  The resources must be added
@@ -371,7 +371,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
     void signalErrorMessage(const QString& err);
 
 		/** Signal that a different standard resource has been set for the given alarm type. */
-		void standardResourceChange(AlarmResource::Type);
+		void standardResourceChange(KAlarm::CalEvent::Type);
 
 		void resourceSaved(AlarmResource*);
 		/** Signal that a remote resource's cache has completed downloading. */
@@ -444,7 +444,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
 
 	private:
 		AlarmResources(const KDateTime::Spec& timeSpec, bool activeOnly, bool passiveClient);
-		AlarmResource* addDefaultResource(const KConfigGroup&, AlarmResource::Type);
+		AlarmResource* addDefaultResource(const KConfigGroup&, KAlarm::CalEvent::Type);
 		AlarmResource* destination(KCal::Incidence*, QWidget* promptParent, bool* cancelled = 0);
 		void  appendEvents(KCal::Event::List& result, const KCal::Event::List& events, AlarmResource*);
 		void  slotResourceStatusChanged(AlarmResource*, Change);

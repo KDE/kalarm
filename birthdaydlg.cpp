@@ -35,15 +35,9 @@
 #include "specialactions.h"
 #include "birthdaydlg.moc"
 
-#include <QAction>
-#include <QGroupBox>
-#include <QLabel>
-#include <QTreeView>
-#include <QHeaderView>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-
 #include <akonadi/control.h>
+#include <akonadi/entitymimetypefiltermodel.h>
+
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
@@ -51,9 +45,16 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <khbox.h>
+#include <kdescendantsproxymodel.h>
 #include <kdebug.h>
-#include <akonadi/entitymimetypefiltermodel.h>
-#include "kdescendantsproxymodel_p.h"
+
+#include <QAction>
+#include <QGroupBox>
+#include <QLabel>
+#include <QTreeView>
+#include <QHeaderView>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 using namespace KCal;
 

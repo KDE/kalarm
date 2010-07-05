@@ -27,7 +27,9 @@
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
+#ifndef USE_AKONADI
 #include "eventlistmodel.h"
+#endif
 #include "functions.h"
 #include "kamail.h"
 #include "karecurrence.h"
@@ -2001,7 +2003,11 @@ void setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
 	KAEvent* ev = AlarmCalendar::resources()->event(event.id());
 	if (ev  &&  ev->commandError() != err)
 		ev->setCommandError(err);
+#ifdef USE_AKONADI
+	AkonadiModel::instance()->updateCommandError(event);
+#else
 	EventListModel::alarms()->updateCommandError(event.id());
+#endif
 }
 
 void clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
@@ -2014,7 +2020,11 @@ void clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
 		newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);
 		ev->setCommandError(newerr);
 	}
+#ifdef USE_AKONADI
+	AkonadiModel::instance()->updateCommandError(event);
+#else
 	EventListModel::alarms()->updateCommandError(event.id());
+#endif
 }
 
 
