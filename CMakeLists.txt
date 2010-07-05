@@ -126,7 +126,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 if(BUILD_akonadi)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     akonadimodel.cpp
-    ${CMAKE_SOURCE_DIR}/akonadi/akonadi_next/kreparentingproxymodel.cpp
    )
 else(BUILD_akonadi)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}

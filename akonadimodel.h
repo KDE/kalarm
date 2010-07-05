@@ -54,8 +54,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             ColumnCount
         };
         enum {   // additional data roles
+            // Collection and Item roles
+            EnabledRole = UserRole,    // true for enabled alarm, false for disabled
             // Collection roles
-            AlarmTypeRole = UserRole,  // OR of event types which collection contains
+            AlarmTypeRole,             // OR of event types which collection contains
             IsStandardRole,            // OR of event types which collection is standard for
             // Item roles
             StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
@@ -63,7 +65,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             AlarmActionRole,           // KAEvent::Action
             ValueRole,                 // numeric value
             SortRole,                  // the value to use for sorting
-            EnabledRole,               // true for enabled alarm, false for disabled
             CommandErrorRole           // last command execution error for alarm (per user)
         };
 
@@ -165,7 +166,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         virtual int entityColumnCount(HeaderGroup) const;
 
     private slots:
-        void slotCollectionChanged(const Akonadi::Collection&);
+        void slotCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&);
         void slotCollectionRemoved(const Akonadi::Collection&);
         void slotUpdateTimeTo();
         void slotUpdateArchivedColour(const QColor&);
@@ -244,14 +245,10 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
 
 /*=============================================================================
 = Class: CollectionListModel
-= Proxy model converting the collection tree into a flat list.
+= Proxy model providing a checkable collection list.
 =============================================================================*/
-//From branches/work/akonadi-ports/kdepim/akonadi/akonadi_next/
-//#include <kdepim/akonadi/akonadi_next/recursivecollectionfilterproxymodel.h>
-//class CollectionListModel : public QAbstractProxyModel //Akonadi::RecursiveCollectionFilterProxyModel
-//From branches/work/akonadi-ports/kdepim/akonadi/akonadi_next/
-#include <akonadi/akonadi_next/kreparentingproxymodel.h>
-class CollectionListModel : public KReparentingProxyModel
+#include <kdescendantsproxymodel.h>
+class CollectionListModel : public KDescendantsProxyModel
 {
         Q_OBJECT
     public:
@@ -265,14 +262,38 @@ class CollectionListModel : public KReparentingProxyModel
 
 
 /*=============================================================================
+= Class: CollectionCheckListModel
+= Proxy model converting the collection tree into a flat list.
+=============================================================================*/
+#include <akonadi/akonadi_next/checkableitemproxymodel.h>
+class CollectionCheckListModel : public CheckableItemProxyModel
+{
+        Q_OBJECT
+    public:
+        explicit CollectionCheckListModel(QObject* parent = 0);
+        void setEventTypeFilter(KAlarm::CalEvent::Type t)  { static_cast<CollectionListModel*>(sourceModel())->setEventTypeFilter(t); }
+        void setFilterWritable(bool writable)     { static_cast<CollectionListModel*>(sourceModel())->setFilterWritable(writable); }
+        Akonadi::Collection collection(int row) const;
+        Akonadi::Collection collection(const QModelIndex&) const;
+
+    private slots:
+        void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
+        void slotRowsInserted(const QModelIndex& parent, int start, int end);
+
+    private:
+        QItemSelectionModel* mSelectionModel;
+};
+
+
+/*=============================================================================
 = Class: CollectionView
 Equivalent to ResourceView
 =============================================================================*/
 class CollectionView : public QListView
 {
     public:
-        explicit CollectionView(CollectionListModel*, QWidget* parent = 0);
-        CollectionListModel* collectionModel() const  { return static_cast<CollectionListModel*>(model()); }
+        explicit CollectionView(CollectionCheckListModel*, QWidget* parent = 0);
+        CollectionCheckListModel* collectionModel() const  { return static_cast<CollectionCheckListModel*>(model()); }
         Akonadi::Collection  collection(int row) const;
         Akonadi::Collection  collection(const QModelIndex&) const;
 
@@ -280,18 +301,6 @@ class CollectionView : public QListView
         virtual void setModel(QAbstractItemModel*);
         virtual void mouseReleaseEvent(QMouseEvent*);
         virtual bool viewportEvent(QEvent*);
-};
-
-
-/*=============================================================================
-= Class: CollectionDelegate
-Equivalent to ResourceDelegate
-=============================================================================*/
-class CollectionDelegate : public QItemDelegate
-{
-    public:
-        explicit CollectionDelegate(CollectionView* parent = 0)  : QItemDelegate(parent) {}
-        virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
 };
 
 

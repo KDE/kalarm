@@ -26,6 +26,7 @@
 #include "akonadimodel.moc"
 
 #include "alarmtext.h"
+#include "autoqpointer.h"
 #include "collectionattribute.h"
 #include "eventattribute.h"
 #include "kaevent.h"
@@ -41,6 +42,7 @@
 #include <akonadi/itemcreatejob.h>
 #include <akonadi/itemmodifyjob.h>
 #include <akonadi/itemdeletejob.h>
+#include <akonadi/itemfetchscope.h>
 #include <akonadi/session.h>
 #include <kcal/calendarlocal.h>
 
@@ -102,8 +104,10 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     monitor->setMimeTypeMonitored(KAlarm::MIME_ACTIVE);
     monitor->setMimeTypeMonitored(KAlarm::MIME_ARCHIVED);
     monitor->setMimeTypeMonitored(KAlarm::MIME_TEMPLATE);
+    monitor->itemFetchScope().fetchFullPayload();
 
     AttributeFactory::registerAttribute<CollectionAttribute>();
+    AttributeFactory::registerAttribute<EventAttribute>();
 
     if (!mTextIcon)
     {
@@ -118,7 +122,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 #ifdef __GNUC__
 #warning Only want to monitor collection properties, not content, when this becomes possible
 #endif
-    connect(monitor, SIGNAL(collectionChanged(const Akonadi::Collection&)), SLOT(slotCollectionChanged(const Akonadi::Collection&)));
+    connect(monitor, SIGNAL(collectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&)), SLOT(slotCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&)));
     connect(monitor, SIGNAL(collectionRemoved(const Akonadi::Collection&)), SLOT(slotCollectionRemoved(const Akonadi::Collection&)));
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
     Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), this, SLOT(slotUpdateArchivedColour(const QColor&)));
@@ -171,13 +175,10 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         {
             case Qt::DisplayRole:
                 return displayName(collection);
-            case Qt::CheckStateRole:
+            case EnabledRole:
                 if (collection.hasAttribute<CollectionAttribute>())
-{kDebug()<<"enabled="<<collection.attribute<CollectionAttribute>()->isEnabled();
-                    return collection.attribute<CollectionAttribute>()->isEnabled() ? Qt::Checked : Qt::Unchecked;
-}
-kDebug()<<"No attribute: disabled  Collection="<<collection;
-                return Qt::Unchecked;
+                    return collection.attribute<CollectionAttribute>()->isEnabled();
+                return false;
             case Qt::BackgroundRole:
             {
                 QColor colour = backgroundColor(collection);
@@ -226,6 +227,7 @@ kDebug()<<"No attribute: disabled  Collection="<<collection;
                 bool writable = (collection.rights() & writableRights) == writableRights;
                 QString disabled = i18nc("@info/plain", "Disabled");
                 QString readonly = i18nc("@info/plain", "Read-only");
+//if (!collection.hasAttribute<CollectionAttribute>()) { kDebug()<<"Tooltip: no collection attribute"; } else { kDebug()<<"Tooltip: enabled="<<collection.attribute<CollectionAttribute>()->isEnabled(); } //disabled="<<inactive;
                 if (inactive  &&  !writable)
                     return i18nc("@info:tooltip",
                                  "%1"
@@ -504,7 +506,6 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
     if (collection.isValid())
     {
         // This is a Collection row
-//        mErrorPrompt.clear();
         bool updateCollection = false;
         switch (role)
         {
@@ -513,20 +514,15 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 // This enables data(index, Qt::FontRole) to return bold when appropriate.
                 mFont = value.value<QFont>();
                 return true;
-            case Qt::CheckStateRole:
+            case EnabledRole:
             {
-                bool enabled = static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked;
+                bool enabled = value.toBool();
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
-kDebug()<<"Set:"<<enabled;
-if (attr) kDebug()<<"was="<<attr->isEnabled();
+if (attr) { kDebug()<<"Set:"<<enabled<<", was="<<attr->isEnabled(); } else { kDebug()<<"Set:"<<enabled<<", no attribute"; }
                 if (attr->isEnabled() == enabled)
                     return true;
-kDebug()<<"Setting  Collection="<<collection;
                 attr->setEnabled(enabled);
                 updateCollection = true;
-//                emit collectionStatusChanged(collection, Enabled, enabled);
-//                emit dataChanged(index, index);
-#warning Check that attribute changes are saved by Akonadi
                 break;
             }
             case IsStandardRole:
@@ -535,7 +531,6 @@ kDebug()<<"Setting  Collection="<<collection;
                     KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
                     collection.attribute<CollectionAttribute>()->setStandard(types);
                     updateCollection = true;
-//                    emit dataChanged(index, index);
                 }
                 break;
             default:
@@ -1324,7 +1319,20 @@ kDebug()<<"error="<<j->error();
 */
 void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
+kDebug()<<parent<<", start="<<start<<", end="<<end;
+    for (int row = start;  row <= end;  ++row)
+    {
+        const QModelIndex ix = index(start, 0, parent);
+        const Collection collection = ix.data(CollectionRole).value<Collection>();
+        if (collection.isValid())
+        {
+            QSet<QByteArray> attrs;
+            attrs += CollectionAttribute::name();
+            slotCollectionChanged(collection, attrs);
+        }
+    }
     EventList events = eventList(parent, start, end);
+kDebug()<<"event count="<<events.count();
     if (!events.isEmpty())
         emit eventsAdded(events);
 }
@@ -1349,6 +1357,7 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
     {
         QModelIndex ix = index(start, 0, parent);
         const Item item = ix.data(ItemRole).value<Item>();
+kDebug()<<"i="<<i<<", item valid="<<item.isValid()<<", has payload="<<item.hasPayload<KAEvent>();
         if (item.isValid()  &&  item.hasPayload<KAEvent>())
         {
             KAEvent event = item.payload<KAEvent>();
@@ -1363,9 +1372,10 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 * Called when a monitored collection's properties or content have changed.
 * Emits a signal if the writable property has changed.
 */
-void AkonadiModel::slotCollectionChanged(const Collection& collection)
+void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames)
 {
 kDebug();
+#warning Ensure collection rights is initialised at startup
     Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
     Collection::Rights newRights = collection.rights() & writableRights;
     if (newRights != oldRights)
@@ -1375,13 +1385,19 @@ kDebug()<<"rights changed";
         emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights));
     }
 
-    bool oldEnabled = mCollectionEnabled.value(collection.id(), false);
-    bool newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->isEnabled() : false;
-    if (newEnabled != oldEnabled)
+    if (attributeNames.contains(CollectionAttribute::name()))
     {
+        static bool first = true;
+        bool oldEnabled = mCollectionEnabled.value(collection.id(), false);
+        bool newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->isEnabled() : false;
+kDebug()<<"oldEnabled="<<oldEnabled<<", newEnabled="<<newEnabled;
+        if (first  ||  newEnabled != oldEnabled)
+        {
 kDebug()<<"enabled changed";
-        mCollectionEnabled[collection.id()] = newEnabled;
-        emit collectionStatusChanged(collection, Enabled, newEnabled);
+            first = false;
+            mCollectionEnabled[collection.id()] = newEnabled;
+            emit collectionStatusChanged(collection, Enabled, newEnabled);
+        }
     }
 }
 
@@ -1572,9 +1588,10 @@ Collection CollectionMimeTypeFilterModel::collection(const QModelIndex& index) c
 =============================================================================*/
 
 CollectionListModel::CollectionListModel(QObject* parent)
-    : KReparentingProxyModel(parent)
+    : KDescendantsProxyModel(parent)
 {
     setSourceModel(new CollectionMimeTypeFilterModel(AkonadiModel::instance(), this));
+    setDisplayAncestorData(false);
 }
 
 /******************************************************************************
@@ -1598,10 +1615,116 @@ bool CollectionListModel::isDescendantOf(const QModelIndex& ancestor, const QMod
 
 
 /*=============================================================================
+= Class: CollectionCheckListModel
+= Proxy model providing a checkable collection list.
+=============================================================================*/
+
+CollectionCheckListModel::CollectionCheckListModel(QObject* parent)
+    : CheckableItemProxyModel(parent)
+{
+    CollectionListModel* model = new CollectionListModel(this);
+    setSourceModel(model);
+    mSelectionModel = new QItemSelectionModel(model);
+    setSelectionModel(mSelectionModel);
+    connect(mSelectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+                             SLOT(selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(model, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+}
+
+/******************************************************************************
+* Return the collection for a given row.
+*/
+Collection CollectionCheckListModel::collection(int row) const
+{
+    return static_cast<CollectionListModel*>(sourceModel())->collection(mapToSource(index(row, 0)));
+}
+
+Collection CollectionCheckListModel::collection(const QModelIndex& index) const
+{
+    return static_cast<CollectionListModel*>(sourceModel())->collection(mapToSource(index));
+}
+
+/******************************************************************************
+* Called when rows have been inserted into the model.
+* Select or deselect them according to their enabled status.
+*/
+void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
+{
+    CollectionListModel* model = static_cast<CollectionListModel*>(sourceModel());
+    for (int row = start;  row <= end;  ++row)
+    {
+        const QModelIndex ix = mapToSource(index(start, 0, parent));
+        const Collection collection = model->collection(ix);
+        if (collection.isValid())
+        {
+            QItemSelectionModel::SelectionFlags sel = (collection.hasAttribute<CollectionAttribute>()
+                                                       &&  collection.attribute<CollectionAttribute>()->isEnabled())
+                                                    ? QItemSelectionModel::Select : QItemSelectionModel::Deselect;
+            mSelectionModel->select(ix, sel);
+        }
+    }
+}
+
+/******************************************************************************
+* Called when the user has ticked/unticked a collection to enable/disable it.
+*/
+void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
+{
+    const QModelIndexList sel = selected.indexes();
+    foreach (const QModelIndex& ix, sel)
+{
+        CollectionControlModel::setEnabled(static_cast<CollectionListModel*>(sourceModel())->collection(ix), true);
+kDebug()<<"Enabled";
+}
+    const QModelIndexList desel = deselected.indexes();
+    foreach (const QModelIndex& ix, desel)
+    {
+        // The collection is to be disabled.
+        // Check for eligibility.
+        const Collection collection = static_cast<CollectionListModel*>(sourceModel())->collection(ix);
+        if (!collection.isValid()  ||  !collection.hasAttribute<CollectionAttribute>())
+{kDebug()<<"No attribute";
+            continue;
+}
+        const CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
+        if (!attr->isEnabled())
+{kDebug()<<"Already disabled";
+            continue;
+}
+        if (attr->standard() != KAlarm::CalEvent::EMPTY)
+        {
+            // It's the standard collection for some alarm type.
+            if (attr->isStandard(KAlarm::CalEvent::ACTIVE))
+            {
+                KMessageBox::sorry(static_cast<QWidget*>(parent()),
+                                   i18nc("@info", "You cannot disable your default active alarm calendar."));
+                continue;
+            }
+            if (attr->isStandard(KAlarm::CalEvent::ARCHIVED)  &&  Preferences::archivedKeepDays())
+            {
+                // Only allow the archived alarms standard collection to be disabled if
+                // we're not saving expired alarms.
+                KMessageBox::sorry(static_cast<QWidget*>(parent()),
+                                   i18nc("@info", "You cannot disable your default archived alarm calendar "
+                                                  "while expired alarms are configured to be kept."));
+                continue;
+            }
+            if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
+                                                   i18nc("@info", "Do you really want to disable your default calendar?"))
+                       == KMessageBox::Cancel)
+                continue;
+        }
+        CollectionControlModel::setEnabled(collection, false);
+kDebug()<<"Disabled";
+    }
+}
+
+
+/*=============================================================================
 = Class: CollectionView
 = View displaying a list of collections.
 =============================================================================*/
-CollectionView::CollectionView(CollectionListModel* model, QWidget* parent)
+CollectionView::CollectionView(CollectionCheckListModel* model, QWidget* parent)
     : QListView(parent)
 {
     setModel(model);
@@ -1611,7 +1734,6 @@ void CollectionView::setModel(QAbstractItemModel* model)
 {
     model->setData(QModelIndex(), viewOptions().font, Qt::FontRole);
     QListView::setModel(model);
-    setItemDelegate(new CollectionDelegate(this));
 }
 
 /******************************************************************************
@@ -1619,12 +1741,12 @@ void CollectionView::setModel(QAbstractItemModel* model)
 */
 Collection CollectionView::collection(int row) const
 {
-    return static_cast<CollectionListModel*>(model())->collection(row);
+    return static_cast<CollectionCheckListModel*>(model())->collection(row);
 }
 
 Collection CollectionView::collection(const QModelIndex& index) const
 {
-    return static_cast<CollectionListModel*>(model())->collection(index);
+    return static_cast<CollectionCheckListModel*>(model())->collection(index);
 }
 
 /******************************************************************************
@@ -1689,86 +1811,6 @@ bool CollectionView::viewportEvent(QEvent* e)
 }
 
 
-#include <kmessagebox.h>
-/*=============================================================================
-= Class: CollectionDelegate
-=============================================================================*/
-
-/******************************************************************************
-* Process a change of state of the checkbox for a collection.
-* Enable or disable the collection after validating whether the change is
-* permissible.
-*/
-bool CollectionDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index)
-{
-kDebug()<<"Event type="<<event->type()<<", item enabled="<<(model->flags(index) & Qt::ItemIsEnabled);
-    if (!(model->flags(index) & Qt::ItemIsEnabled))
-        return false;
-    if (event->type() == QEvent::MouseButtonRelease
-    ||  event->type() == QEvent::MouseButtonDblClick)
-    {
-        const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-        QRect checkRect = QStyle::alignedRect(option.direction, Qt::AlignLeft | Qt::AlignVCenter,
-                                              check(option, option.rect, Qt::Checked).size(),
-                                              QRect(option.rect.x() + textMargin, option.rect.y(), option.rect.width(), option.rect.height()));
-        if (!checkRect.contains(static_cast<QMouseEvent*>(event)->pos()))
-            return false;
-        if (event->type() == QEvent::MouseButtonDblClick)
-            return true;    // ignore double clicks
-    }
-    else if (event->type() == QEvent::KeyPress)
-    {
-        if (static_cast<QKeyEvent*>(event)->key() != Qt::Key_Space
-        &&  static_cast<QKeyEvent*>(event)->key() != Qt::Key_Select)
-            return false;
-    }
-    else
-        return false;
-
-    const QVariant value = index.data(Qt::CheckStateRole);
-    if (!value.isValid())
-        return false;
-    const Qt::CheckState state = (static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked ? Qt::Unchecked : Qt::Checked);
-kDebug()<<"state="<<state<<", value="<<value.toInt()<<index;
-    if (state == Qt::Unchecked)
-    {
-        // The collection is to be disabled.
-        // Check for eligibility.
-        const Collection collection = index.data(AkonadiModel::CollectionRole).value<Collection>();
-        if (collection.isValid()  ||  !collection.hasAttribute<CollectionAttribute>())
-            return false;
-        const CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
-        if (!attr->isEnabled())
-            return false;
-        if (attr->standard() != KAlarm::CalEvent::EMPTY)
-        {
-            // It's the standard collection for some alarm type.
-            if (attr->isStandard(KAlarm::CalEvent::ACTIVE))
-            {
-                KMessageBox::sorry(static_cast<QWidget*>(parent()),
-                                   i18nc("@info", "You cannot disable your default active alarm calendar."));
-                return false;
-            }
-            if (attr->isStandard(KAlarm::CalEvent::ARCHIVED)  &&  Preferences::archivedKeepDays())
-            {
-                // Only allow the archived alarms standard collection to be disabled if
-                // we're not saving expired alarms.
-                KMessageBox::sorry(static_cast<QWidget*>(parent()),
-                                   i18nc("@info", "You cannot disable your default archived alarm calendar "
-                                                  "while expired alarms are configured to be kept."));
-                return false;
-            }
-            if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
-                                                   i18nc("@info", "Do you really want to disable your default calendar?"))
-                       == KMessageBox::Cancel)
-                return false;
-        }
-    }
-kDebug()<<"Set: state="<<state;
-    return model->setData(index, state, Qt::CheckStateRole);
-}
-
-
 /*=============================================================================
 = Class: CollectionControlModel
 = Proxy model to select which Collections will be enabled. Disabled Collections
@@ -1815,6 +1857,8 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                 addCollection(collection);
             else
                 removeCollection(collection);
+            AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
+            model->setData(model->collectionIndex(collection), value, AkonadiModel::EnabledRole);
         }
 #if 0
         QModelIndex ix = modelIndexForCollection(this, collection);
@@ -2016,9 +2060,7 @@ Collection CollectionControlModel::destination(KAlarm::CalEvent::Type type, QWid
             // Use AutoQPointer to guard against crash on application exit while
             // the dialogue is still open. It prevents double deletion (both on
             // deletion of ResourceSelector, and on return from this function).
-#warning Crashes here if no collections enabled
-//            AutoQPointer<CollectionDialog> dlg = new CollectionDialog(model, promptParent);
-            CollectionDialog* dlg = new CollectionDialog(model, promptParent);
+            AutoQPointer<CollectionDialog> dlg = new CollectionDialog(model, promptParent);
             dlg->setCaption(i18nc("@title:window", "Choose Calendar"));
             dlg->setDefaultCollection(standard);
             if (dlg->exec())
