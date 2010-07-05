@@ -97,12 +97,14 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     const KCal::Event* kcalEvent = calendar()->event(rid);
     if (!kcalEvent)
     {
+        kWarning() << "Event not found:" << rid;
         emit error(i18n("Event with uid '%1' not found.", rid));
         return false;
     }
 
     if (kcalEvent->alarms().isEmpty())
     {
+        kWarning() << "KCal::Event has no alarms:" << rid;
         emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
         return false;
     }
@@ -111,6 +113,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     QString mime = KAlarm::CalEvent::mimeType(event.category());
     if (mime.isEmpty())
     {
+        kWarning() << "KAEvent has no alarms:" << rid;
         emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
         return false;
     }
@@ -160,12 +163,14 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         return;
     if (mCompatibility != KAlarm::Calendar::Current)
     {
+        kWarning() << "Calendar not in current format";
         cancelTask(i18nc("@info", "Calendar is not in current KAlarm format."));
         return;
     }
     KAEvent event = item.payload<KAEvent>();
     if (item.remoteId() != event.id())
     {
+        kWarning() << "Item ID" << item.remoteId() << "differs from payload ID" << event.id();
         cancelTask(i18n("Item ID %1 differs from payload ID %2.", item.remoteId(), event.id()));
         return;
     }
@@ -174,6 +179,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     {
         if (incidence->isReadOnly())
         {
+            kWarning() << "Event is read only:" << event.id();
             cancelTask(i18nc("@info", "Event with uid '%1' is read only", event.id()));
             return;
         }
@@ -222,12 +228,18 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
     foreach (const Event* kcalEvent, events)
     {
         if (kcalEvent->alarms().isEmpty())
+        {
+            kWarning() << "KCal::Event has no alarms:" << kcalEvent->uid();
             continue;    // ignore events without alarms
+        }
 
         KAEvent event(kcalEvent);
         QString mime = KAlarm::CalEvent::mimeType(event.category());
         if (mime.isEmpty())
+        {
+            kWarning() << "KAEvent has no alarms:" << event.id();
             continue;   // event has no usable alarms
+        }
  
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
