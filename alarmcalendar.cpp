@@ -1491,8 +1491,7 @@ Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID) 
 	QString id = baseID.isEmpty() ? ev->id() : baseID;
 	Event* calEvent = id.isEmpty() ? 0 : AlarmResources::instance()->event(id);
 	Event* newEvent = calEvent ? new Event(*calEvent) : new Event;
-	ev->updateKCalEvent(newEvent, KAEvent::UID_IGNORE);
-	newEvent->setUid(ev->id());
+	ev->updateKCalEvent(newEvent, KAEvent::UID_SET);
 	return newEvent;
 }
 #endif
