@@ -143,7 +143,7 @@ void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collect
     }
     KAEvent event = item.payload<KAEvent>();
     KCal::Event* kcalEvent = new KCal::Event;
-    event.updateKCalEvent(kcalEvent, false);
+    event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     calendar()->addIncidence(kcalEvent);
 
     Item it(item);
@@ -190,7 +190,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         }
         else
         {
-            event.updateKCalEvent(static_cast<KCal::Event*>(incidence), false);
+            event.updateKCalEvent(static_cast<KCal::Event*>(incidence), KAEvent::UID_SET);
             calendar()->setModified(true);
         }
     }
@@ -198,7 +198,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     {
         // not in the calendar yet, should not happen -> add it
         KCal::Event* kcalEvent = new KCal::Event;
-        event.updateKCalEvent(kcalEvent, false);
+        event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
         calendar()->addIncidence(kcalEvent);
     }
     scheduleWrite();

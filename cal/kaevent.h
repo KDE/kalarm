@@ -290,6 +290,12 @@ class KALARM_CAL_EXPORT KAEvent
             CMD_ERROR_POST = 0x04,   // post-alarm command execution failed
             CMD_ERROR_PRE_POST = CMD_ERROR_PRE | CMD_ERROR_POST
         };
+        enum UidAction      // how to deal with event UID in updateKCalEvent()
+        {
+            UID_IGNORE,        // leave KCal::Event UID unchanged
+            UID_CHECK,         // verify that the KCal::Event UID is already the same as the KAEvent ID, if the latter is non-empty
+            UID_SET            // set the KCal::Event UID to the KAEvent ID
+        };
 
         KAEvent();
         KAEvent(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
@@ -396,11 +402,11 @@ class KALARM_CAL_EXPORT KAEvent
         KAAlarm            nextAlarm(KAAlarm::Type t) const    { return d->nextAlarm(t); }
         KAAlarm            convertDisplayingAlarm() const;
 #ifdef USE_AKONADI
-        bool               updateKCalEvent(KCal::Event* e, bool checkUid = true, bool setCustomProperties = true) const
-                                                          { return d->updateKCalEvent(e, checkUid, setCustomProperties); }
+        bool               updateKCalEvent(KCal::Event* e, UidAction u, bool setCustomProperties = true) const
+                                                          { return d->updateKCalEvent(e, u, setCustomProperties); }
 #else
-        bool               updateKCalEvent(KCal::Event* e, bool checkUid = true) const
-                                                          { return d->updateKCalEvent(e, checkUid); }
+        bool               updateKCalEvent(KCal::Event* e, UidAction u) const
+                                                          { return d->updateKCalEvent(e, u); }
 #endif
         Action             action() const                 { return (Action)d->mActionType; }
         Actions            actions() const;
@@ -569,9 +575,9 @@ class KALARM_CAL_EXPORT KAEvent
                 KAAlarm            firstAlarm() const;
                 KAAlarm            nextAlarm(KAAlarm::Type) const;
 #ifdef USE_AKONADI
-                bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool setCustomProperties = true) const;
+                bool               updateKCalEvent(KCal::Event*, UidAction, bool setCustomProperties = true) const;
 #else
-                bool               updateKCalEvent(KCal::Event*, bool checkUid = true) const;
+                bool               updateKCalEvent(KCal::Event*, UidAction) const;
 #endif
                 DateTime           mainDateTime(bool withRepeats = false) const
                                                           { return (withRepeats && mNextRepeat && mRepetition)

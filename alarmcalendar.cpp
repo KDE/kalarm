@@ -905,7 +905,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 		KAlarm::CalEvent::Type type = event->category();
 		QString id = KAlarm::CalEvent::uid(kcalEvent->uid(), type);
 		kcalEvent->setUid(id);
-		event->updateKCalEvent(kcalEvent, false);
+		event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
 		if (calendar.addEvent(kcalEvent))
 			some = true;
 		else
@@ -1078,7 +1078,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 	}
 	event->setEventId(id);
 #ifndef USE_AKONADI
-	event->updateKCalEvent(kcalEvent, false);
+	event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
 #endif
 	bool ok = false;
 	bool remove = false;
@@ -1111,7 +1111,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 	else
 	{
 #ifdef USE_AKONADI
-		event->updateKCalEvent(kcalEvent, false);
+		event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
 		key = -1;
 		if (addEvent(Collection(), event))
 #else
@@ -1322,7 +1322,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 	Event* kcalEvent = mCalendar ? mCalendar->event(id) : 0;
 	if (kaevnt  &&  kcalEvent)
 	{
-		evnt->updateKCalEvent(kcalEvent);
+		evnt->updateKCalEvent(kcalEvent, KAEvent::UID_CHECK);
 		evnt->clearUpdated();
 		bool oldEnabled = kaevnt->enabled();
 		if (kaevnt != evnt)
@@ -1491,7 +1491,7 @@ Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID) 
 	QString id = baseID.isEmpty() ? ev->id() : baseID;
 	Event* calEvent = id.isEmpty() ? 0 : AlarmResources::instance()->event(id);
 	Event* newEvent = calEvent ? new Event(*calEvent) : new Event;
-	ev->updateKCalEvent(newEvent, false);
+	ev->updateKCalEvent(newEvent, KAEvent::UID_IGNORE);
 	newEvent->setUid(ev->id());
 	return newEvent;
 }

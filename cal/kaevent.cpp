@@ -1956,16 +1956,14 @@ KAEvent::Actions KAEvent::actions() const
 
 /******************************************************************************
  * Update an existing KCal::Event with the KAEvent::Private data.
- * If 'checkUid' is true and the event has an ID, the function verifies that it
- * is the same as the KCal::Event's uid.
  * If 'setCustomProperties' is true, all the KCal::Event's existing custom
  * properties are cleared and replaced with the KAEvent's custom properties. If
  * false, the KCal::Event's non-KAlarm custom properties are left untouched.
  */
 #ifdef USE_AKONADI
-bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool setCustomProperties) const
+bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact, bool setCustomProperties) const
 #else
-bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
+bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
 #endif
 {
     // If it's an archived event, the event start date/time will be adjusted to its original
@@ -1973,13 +1971,15 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
     bool archived = (mCategory == KAlarm::CalEvent::ARCHIVED);
 
     if (!ev
-    ||  (checkUid  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
+    ||  (uidact == UID_CHECK  &&  !mEventID.isEmpty()  &&  mEventID != ev->uid())
     ||  (!mAlarmCount  &&  (!archived || !mMainExpired)))
         return false;
 
     ev->startUpdates();   // prevent multiple update notifications
     checkRecur();         // ensure recurrence/repetition data is consistent
     bool readOnly = ev->isReadOnly();
+    if (uidact == KAEvent::UID_SET)
+        ev->setUid(mEventID);
 #ifdef USE_AKONADI
     ev->setReadOnly(mReadOnly);
 #else

@@ -2123,7 +2123,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 {
 #ifdef USE_AKONADI
 	KCal::Event* kcalEvent = new KCal::Event;
-        event->updateKCalEvent(kcalEvent, false);
+        event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
 #else
 	KCal::Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(event);
 #endif
