@@ -23,7 +23,7 @@
 
 #include "editdlg.h"
 #include "kaevent.h"
-#include <ksystemtrayicon.h>
+#include <kstatusnotifieritem.h>
 #include <QIcon>
 
 class QEvent;
@@ -39,7 +39,7 @@ class TemplateMenuAction;
 class AlarmListModel;
 #endif
 
-class TrayWindow : public KSystemTrayIcon
+class TrayWindow : public KStatusNotifierItem
 {
 		Q_OBJECT
 	public:
@@ -52,13 +52,9 @@ class TrayWindow : public KSystemTrayIcon
 	signals:
 		void         deleted();
 
-	protected:
-		virtual void dragEnterEvent(QDragEnterEvent*);
-		virtual void dropEvent(QDropEvent*);
-		virtual bool event(QEvent*);
-
 	private slots:
-		void         slotActivated(QSystemTrayIcon::ActivationReason reason);
+		void         slotActivateRequested();
+		void         slotSecondaryActivateRequested();
 		void         slotNewAlarm(EditAlarmDlg::Type);
 		void         slotNewFromTemplate(const KAEvent*);
 		void         slotPreferences();
@@ -66,14 +62,13 @@ class TrayWindow : public KSystemTrayIcon
 		void         slotHaveDisabledAlarms(bool disabled);
 		void         slotCalendarStatusChanged();
 		void         slotQuit();
+		void         updateToolTip();
 
 	private:
 		QString      tooltipAlarmText() const;
+		void         updateIcon();
 
 		MainWindow*     mAssocMainWindow;     // main window associated with this, or null
-		QIcon           mIconEnabled;         // normal status icon
-		QIcon           mIconDisabled;        // icon indicating all alarms disabled
-		QIcon           mIconSomeDisabled;    // icon indicating individual alarms disabled
 		KToggleAction*  mActionEnabled;
 		NewAlarmAction* mActionNew;
 		TemplateMenuAction* mActionNewFromTemplate;
@@ -81,6 +76,7 @@ class TrayWindow : public KSystemTrayIcon
 		mutable AlarmListModel* mAlarmsModel; // active alarms sorted in time order
 #endif
 		bool            mHaveDisabledAlarms;  // some individually disabled alarms exist
+		QTimer*         mToolTipUpdateTimer;
 };
 
 #endif // TRAYWINDOW_H

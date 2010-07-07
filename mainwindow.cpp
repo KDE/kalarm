@@ -62,6 +62,7 @@
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kinputdialog.h>
+#include <ksystemtrayicon.h>
 
 #include <kstandardaction.h>
 #include <kiconloader.h>
@@ -1273,16 +1274,6 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 			// it to prevent the system tray icon closing.
 			hide();
 			theApp()->quitIf();
-			ce->ignore();
-			return;
-		}
-		else if (!theApp()->trayIconDisplayed()  &&  count() == 1)
-		{
-			// There is no system tray icon, and this is the last main
-			// window, so closing it will quit the application.
-			// Quit once the close event has been processed. Deleting the
-			// window while still processing the event handler can cause a crash.
-			QTimer::singleShot(0, this, SLOT(slotQuit()));
 			ce->ignore();
 			return;
 		}

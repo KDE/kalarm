@@ -50,6 +50,8 @@
   <signal name="feb29TypeChanged">
     <argument type="Enum">DefaultFeb29Type</argument>
   </signal>
+  <signal name="tooltipPreferencesChanged">
+  </signal>
 
   <group name="General">
     <entry name="Version" type="String" hidden="true">
@@ -133,21 +135,25 @@
       </whatsthis>
       <default>5</default>
       <min>-1</min>
+      <emit signal="tooltipPreferencesChanged"/>
     </entry>
     <entry name="ShowTooltipAlarmTime" type="Bool">
       <label context="@label">Show alarm times in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Specify whether to show in the system tray tooltip, the time at which each alarm is due.</whatsthis>
       <default>true</default>
+      <emit signal="tooltipPreferencesChanged"/>
     </entry>
     <entry name="ShowTooltipTimeToAlarm" type="Bool">
       <label context="@label">Show time to alarms in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Specify whether to show in the system tray tooltip, how long until each alarm is due.</whatsthis>
       <default>true</default>
+      <emit signal="tooltipPreferencesChanged"/>
     </entry>
     <entry name="TooltipTimeToPrefix" type="String">
       <label context="@label">Time-to-alarm prefix in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip.</whatsthis>
       <default code="true">QLatin1String("+")</default>
+      <emit signal="tooltipPreferencesChanged"/>
     </entry>
     <entry name="EmailClient" key="EmailClient" type="Enum">
       <label context="@label">Email client</label>
