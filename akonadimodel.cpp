@@ -1322,7 +1322,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
 kDebug()<<parent<<", start="<<start<<", end="<<end;
     for (int row = start;  row <= end;  ++row)
     {
-        const QModelIndex ix = index(start, 0, parent);
+        const QModelIndex ix = index(row, 0, parent);
         const Collection collection = ix.data(CollectionRole).value<Collection>();
         if (collection.isValid())
         {
@@ -1355,7 +1355,7 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
     EventList events;
     for (int i = start;  i <= end;  ++i)
     {
-        QModelIndex ix = index(start, 0, parent);
+        QModelIndex ix = index(row, 0, parent);
         const Item item = ix.data(ItemRole).value<Item>();
 kDebug()<<"i="<<i<<", item valid="<<item.isValid()<<", has payload="<<item.hasPayload<KAEvent>();
         if (item.isValid()  &&  item.hasPayload<KAEvent>())
@@ -1653,7 +1653,7 @@ void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int s
     CollectionListModel* model = static_cast<CollectionListModel*>(sourceModel());
     for (int row = start;  row <= end;  ++row)
     {
-        const QModelIndex ix = mapToSource(index(start, 0, parent));
+        const QModelIndex ix = mapToSource(index(row, 0, parent));
         const Collection collection = model->collection(ix);
         if (collection.isValid())
         {
