@@ -101,7 +101,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	// No spacing between combo box and listview.
 
 #ifdef USE_AKONADI
-	CollectionCheckListModel* model = new CollectionCheckListModel(this);
+	CollectionFilterCheckListModel* model = new CollectionFilterCheckListModel(this);
 	mListView = new CollectionView(model, this);
 #else
 	ResourceModel* model = ResourceModel::instance();

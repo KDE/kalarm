@@ -1,6 +1,5 @@
 #warning APIdox clarifications:
 // CachePolicy::syncOnDemand() - when is "necessary"?  "non-permantly"
-// Does CollectionFetchJob re-fetch data, or just fetch anything not already fetched?
 
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
@@ -23,7 +22,7 @@
  */
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
-#include "akonadimodel.moc"
+#include "akonadimodel.h"
 
 #include "alarmtext.h"
 #include "autoqpointer.h"
@@ -55,6 +54,7 @@
 #include <QHelpEvent>
 #include <QToolTip>
 #include <QTimer>
+#include <QObject>
 
 Q_DECLARE_METATYPE(KAEvent)
 
@@ -1292,7 +1292,6 @@ void AkonadiModel::itemJobDone(KJob* j)
 */
 void AkonadiModel::collectionJobDone(KJob* j)
 {
-kDebug()<<"error="<<j->error();
     Collection::Id id = -1;
     if (j->error())
     {
@@ -1308,7 +1307,6 @@ kDebug()<<"error="<<j->error();
             Q_ASSERT(0);
         kError() << errMsg << ":" << j->errorString();
 //        emit collectionDone(id, false);
-#warning 
         KMessageBox::error(0, i18nc("@info", "%1<nl/>%2", errMsg, j->errorString()));
 #warning No widget parent
     }
@@ -1319,7 +1317,6 @@ kDebug()<<"error="<<j->error();
 */
 void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
-kDebug()<<parent<<", start="<<start<<", end="<<end;
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = index(row, 0, parent);
@@ -1332,7 +1329,6 @@ kDebug()<<parent<<", start="<<start<<", end="<<end;
         }
     }
     EventList events = eventList(parent, start, end);
-kDebug()<<"event count="<<events.count();
     if (!events.isEmpty())
         emit eventsAdded(events);
 }
@@ -1353,11 +1349,11 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
 AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int start, int end)
 {
     EventList events;
-    for (int i = start;  i <= end;  ++i)
+    for (int row = start;  row <= end;  ++row)
     {
         QModelIndex ix = index(row, 0, parent);
         const Item item = ix.data(ItemRole).value<Item>();
-kDebug()<<"i="<<i<<", item valid="<<item.isValid()<<", has payload="<<item.hasPayload<KAEvent>();
+kDebug()<<"row="<<row<<", item valid="<<item.isValid()<<", has payload="<<item.hasPayload<KAEvent>();
         if (item.isValid()  &&  item.hasPayload<KAEvent>())
         {
             KAEvent event = item.payload<KAEvent>();
@@ -1390,10 +1386,9 @@ kDebug()<<"rights changed";
         static bool first = true;
         bool oldEnabled = mCollectionEnabled.value(collection.id(), false);
         bool newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->isEnabled() : false;
-kDebug()<<"oldEnabled="<<oldEnabled<<", newEnabled="<<newEnabled;
         if (first  ||  newEnabled != oldEnabled)
         {
-kDebug()<<"enabled changed";
+kDebug()<<"enabled changed ->"<<newEnabled;
             first = false;
             mCollectionEnabled[collection.id()] = newEnabled;
             emit collectionStatusChanged(collection, Enabled, newEnabled);
@@ -1523,17 +1518,35 @@ bool AkonadiModel::checkAlarmTypes(const Akonadi::Collection& collection, KCal::
 
 /*=============================================================================
 = Class: CollectionMimeTypeFilterModel
-= Proxy model containing all collections.
+= Proxy model to restrict its contents to Collections, not Items, containing
+= specified content mime types.
 =============================================================================*/
+class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
+{
+        Q_OBJECT
+    public:
+        explicit CollectionMimeTypeFilterModel(QObject* parent = 0);
+        void setEventTypeFilter(KAlarm::CalEvent::Type);
+        void setFilterWritable(bool writable);
+        Akonadi::Collection collection(int row) const;
+        Akonadi::Collection collection(const QModelIndex&) const;
 
-CollectionMimeTypeFilterModel::CollectionMimeTypeFilterModel(AkonadiModel* baseModel, QObject* parent)
+    protected:
+        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+
+    private:
+        QString mMimeType;     // collection content type contained in this model
+        bool    mWritableOnly; // only include writable collections in this model
+};
+
+CollectionMimeTypeFilterModel::CollectionMimeTypeFilterModel(QObject* parent)
     : EntityMimeTypeFilterModel(parent),
       mMimeType(),
       mWritableOnly(false)
 {
     addMimeTypeInclusionFilter(Collection::mimeType());
     setHeaderGroup(EntityTreeModel::CollectionTreeHeaders);
-    setSourceModel(baseModel);
+    setSourceModel(AkonadiModel::instance());
 }
 
 void CollectionMimeTypeFilterModel::setEventTypeFilter(KAlarm::CalEvent::Type type)
@@ -1561,8 +1574,9 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
         return false;
     if (!mWritableOnly  &&  mMimeType.isEmpty())
         return true;
-    QModelIndex ix = sourceModel()->index(sourceRow, 0, sourceParent);
-    Collection collection = static_cast<AkonadiModel*>(sourceModel())->data(ix, AkonadiModel::CollectionRole).value<Collection>();
+    AkonadiModel* model = AkonadiModel::instance();
+    QModelIndex ix = model->index(sourceRow, 0, sourceParent);
+    Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
     if (mWritableOnly  &&  collection.rights() == Collection::ReadOnly)
         return false;
     return mMimeType.isEmpty()  ||  collection.contentMimeTypes().contains(mMimeType);
@@ -1585,12 +1599,13 @@ Collection CollectionMimeTypeFilterModel::collection(const QModelIndex& index) c
 /*=============================================================================
 = Class: CollectionListModel
 = Proxy model converting the collection tree into a flat list.
+= The model may be restricted to specified content mime types.
 =============================================================================*/
 
 CollectionListModel::CollectionListModel(QObject* parent)
     : KDescendantsProxyModel(parent)
 {
-    setSourceModel(new CollectionMimeTypeFilterModel(AkonadiModel::instance(), this));
+    setSourceModel(new CollectionMimeTypeFilterModel(this));
     setDisplayAncestorData(false);
 }
 
@@ -1599,12 +1614,24 @@ CollectionListModel::CollectionListModel(QObject* parent)
 */
 Collection CollectionListModel::collection(int row) const
 {
+//    return AkonadiModel::instance()->data(mapToSource(index(row, 0)), EntityTreeModel::CollectionRole).value<Collection>();
     return data(index(row, 0), EntityTreeModel::CollectionRole).value<Collection>();
 }
 
 Collection CollectionListModel::collection(const QModelIndex& index) const
 {
+//    return AkonadiModel::instance()->data(mapToSource(index), EntityTreeModel::CollectionRole).value<Collection>();
     return data(index, EntityTreeModel::CollectionRole).value<Collection>();
+}
+
+void CollectionListModel::setEventTypeFilter(KAlarm::CalEvent::Type type)
+{
+    static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->setEventTypeFilter(type);
+}
+
+void CollectionListModel::setFilterWritable(bool writable)
+{
+    static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->setFilterWritable(writable);
 }
 
 bool CollectionListModel::isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const
@@ -1618,6 +1645,15 @@ bool CollectionListModel::isDescendantOf(const QModelIndex& ancestor, const QMod
 = Class: CollectionCheckListModel
 = Proxy model providing a checkable collection list.
 =============================================================================*/
+
+CollectionCheckListModel* CollectionCheckListModel::mInstance = 0;
+
+CollectionCheckListModel* CollectionCheckListModel::instance()
+{
+    if (!mInstance)
+        mInstance = new CollectionCheckListModel(qApp);
+    return mInstance;
+}
 
 CollectionCheckListModel::CollectionCheckListModel(QObject* parent)
     : CheckableItemProxyModel(parent)
@@ -1721,10 +1757,54 @@ kDebug()<<"Disabled";
 
 
 /*=============================================================================
+= Class: CollectionFilterCheckListModel
+= Proxy model providing a checkable collection list, filtered by mime type.
+=============================================================================*/
+CollectionFilterCheckListModel::CollectionFilterCheckListModel(QObject* parent)
+    : QSortFilterProxyModel(parent),
+      mMimeType()
+{
+    setSourceModel(CollectionCheckListModel::instance());
+}
+
+void CollectionFilterCheckListModel::setEventTypeFilter(KAlarm::CalEvent::Type type)
+{
+    QString mimeType = KAlarm::CalEvent::mimeType(type);
+    if (mimeType != mMimeType)
+    {
+        mMimeType = mimeType;
+        invalidateFilter();
+    }
+}
+
+/******************************************************************************
+* Return the collection for a given row.
+*/
+Collection CollectionFilterCheckListModel::collection(int row) const
+{
+    return CollectionCheckListModel::instance()->collection(mapToSource(index(row, 0)));
+}
+
+Collection CollectionFilterCheckListModel::collection(const QModelIndex& index) const
+{
+    return CollectionCheckListModel::instance()->collection(mapToSource(index));
+}
+
+bool CollectionFilterCheckListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+    if (mMimeType.isEmpty())
+        return true;
+    CollectionCheckListModel* model = CollectionCheckListModel::instance();
+    const Collection collection = model->collection(model->index(sourceRow, 0, sourceParent));
+    return collection.contentMimeTypes().contains(mMimeType);
+}
+
+
+/*=============================================================================
 = Class: CollectionView
 = View displaying a list of collections.
 =============================================================================*/
-CollectionView::CollectionView(CollectionCheckListModel* model, QWidget* parent)
+CollectionView::CollectionView(CollectionFilterCheckListModel* model, QWidget* parent)
     : QListView(parent)
 {
     setModel(model);
@@ -1741,12 +1821,12 @@ void CollectionView::setModel(QAbstractItemModel* model)
 */
 Collection CollectionView::collection(int row) const
 {
-    return static_cast<CollectionCheckListModel*>(model())->collection(row);
+    return static_cast<CollectionFilterCheckListModel*>(model())->collection(row);
 }
 
 Collection CollectionView::collection(const QModelIndex& index) const
 {
-    return static_cast<CollectionCheckListModel*>(model())->collection(index);
+    return static_cast<CollectionFilterCheckListModel*>(model())->collection(index);
 }
 
 /******************************************************************************
@@ -1827,14 +1907,41 @@ bool                    CollectionControlModel::mAskDestination = false;
 CollectionControlModel* CollectionControlModel::instance()
 {
     if (!mInstance)
-        mInstance = new CollectionControlModel(AkonadiModel::instance(), qApp);
+        mInstance = new CollectionControlModel(qApp);
     return mInstance;
 }
 
-CollectionControlModel::CollectionControlModel(AkonadiModel* baseModel, QObject* parent)
-    : FavoriteCollectionsModel(baseModel, KConfigGroup(KGlobal::config(), "Collections"), parent)
+CollectionControlModel::CollectionControlModel(QObject* parent)
+    : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KGlobal::config(), "Collections"), parent)
 {
-    connect(baseModel, SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)), SLOT(statusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)));
+    // Initialise the list of enabled collections
+    EntityMimeTypeFilterModel* filter = new EntityMimeTypeFilterModel(this);
+    filter->addMimeTypeInclusionFilter(Collection::mimeType());
+    filter->setSourceModel(AkonadiModel::instance());
+    Collection::List collections;
+    findEnabledCollections(filter, QModelIndex(), collections);
+    setCollections(collections);
+
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)),
+                                      SLOT(statusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)));
+}
+
+/******************************************************************************
+* Recursive function to check all collections' enabled status.
+*/
+void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterModel* filter, const QModelIndex& parent, Collection::List& collections) const
+{
+    AkonadiModel* model = AkonadiModel::instance();
+    for (int row = 0, count = filter->rowCount(parent);  row < count;  ++row)
+    {
+        const QModelIndex ix = filter->index(row, 0, parent);
+        const Collection collection = model->data(filter->mapToSource(ix), AkonadiModel::CollectionRole).value<Collection>();
+        if (collection.hasAttribute<CollectionAttribute>()
+        &&  collection.attribute<CollectionAttribute>()->isEnabled())
+            collections += collection;
+        if (filter->rowCount(ix) > 0)
+            findEnabledCollections(filter, ix, collections);
+    }
 }
 
 bool CollectionControlModel::isEnabled(const Collection& collection)
@@ -1854,7 +1961,15 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
         if (collection.isValid())
         {
             if (value)
+            {
+                const Collection::List cols = collections();
+                foreach (const Collection& c, cols)
+                {
+                    if (c.id() == collection.id())
+                        return;
+                }
                 addCollection(collection);
+            }
             else
                 removeCollection(collection);
             AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
@@ -2090,18 +2205,31 @@ Collection::List CollectionControlModel::enabledCollections(KAlarm::CalEvent::Ty
     return result;
 }
 
+/******************************************************************************
+* Return the data for a given role, for a specified item.
+*/
+QVariant CollectionControlModel::data(const QModelIndex& index, int role) const
+{
+    return sourceModel()->data(mapToSource(index), role);
+}
+
 
 /*=============================================================================
 = Class: ItemListModel
 = Filter proxy model containing all items (alarms/templates) of specified mime
 = types in enabled collections.
 =============================================================================*/
-
-ItemListModel::ItemListModel(CollectionControlModel* baseModel, KAlarm::CalEvent::Types allowed, QObject* parent)
+ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
     : EntityMimeTypeFilterModel(parent),
       mAllowedTypes(allowed)
 {
+    KSelectionProxyModel* selectionModel = new KSelectionProxyModel(CollectionControlModel::instance()->selectionModel(), this);
+    selectionModel->setSourceModel(AkonadiModel::instance());
+    selectionModel->setFilterBehavior(KSelectionProxyModel::ChildrenOfExactSelection);
+    setSourceModel(selectionModel);
+
     addMimeTypeExclusionFilter(Collection::mimeType());
+    setHeaderGroup(EntityTreeModel::ItemListHeaders);
     if (allowed)
     {
         QStringList mimeTypes = KAlarm::CalEvent::mimeTypes(allowed);
@@ -2109,19 +2237,42 @@ ItemListModel::ItemListModel(CollectionControlModel* baseModel, KAlarm::CalEvent
             addMimeTypeInclusionFilter(mime);
     }
     setHeaderGroup(EntityTreeModel::ItemListHeaders);
-    setSourceModel(baseModel);
     setSortRole(AkonadiModel::SortRole);
     setDynamicSortFilter(true);
 #warning SLOT not defined
-    connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(rowsInsertedRemoved()));
-    connect(this, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(rowsInsertedRemoved()));
+//    connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(rowsInsertedRemoved()));
+//    connect(this, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(rowsInsertedRemoved()));
 }
 
 int ItemListModel::columnCount(const QModelIndex& parent) const
 {
+#if 0
     if (parent.isValid())
         return 0;
+#endif
     return AkonadiModel::ColumnCount;
+}
+
+/******************************************************************************
+* Called when rows have been inserted into the model.
+*/
+void ItemListModel::rowsInsertedRemoved(const QModelIndex& parent, int start, int end)
+{
+kDebug()<<parent<<", start="<<start<<", end="<<end;
+    for (int row = start;  row <= end;  ++row)
+    {
+        const QModelIndex ix = mapToSource(index(row, 0, parent));
+        const Item item = sourceModel()->data(ix, AkonadiModel::ItemRole).value<Item>();
+        if (item.isValid())
+        {
+kDebug()<<"Valid item:"<<item.remoteId();
+        }
+else{        const Collection collection = data(ix, AkonadiModel::CollectionRole).value<Collection>();
+if (collection.isValid())
+{
+kDebug()<<"Got a collection!";
+} }
+    }
 }
 
 #if 0
@@ -2197,7 +2348,7 @@ bool ItemListModel::insertRows(int row, int count, const QModelIndex& parent)
 {
 #warning Might instead need to iterate over all collections to find item count
     int oldCount = rowCount();
-    bool result = Akonadi::EntityMimeTypeFilterModel::insertRows(row, count, parent);
+    bool result = EntityMimeTypeFilterModel::insertRows(row, count, parent);
     if (!oldCount  &&  count)
         emit haveEventsStatus(true);
     return result;
@@ -2208,7 +2359,7 @@ bool ItemListModel::insertRows(int row, int count, const QModelIndex& parent)
 */
 bool ItemListModel::removeRows(int row, int count, const QModelIndex& parent)
 {
-    bool result = Akonadi::EntityMimeTypeFilterModel::removeRows(row, count, parent);
+    bool result = EntityMimeTypeFilterModel::removeRows(row, count, parent);
     emit haveEventsStatus(haveEvents());
     return result;
 }
@@ -2222,6 +2373,11 @@ bool ItemListModel::haveEvents() const
     return rowCount();
 }
 
+bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+    return true;
+}
+
 
 /*=============================================================================
 = Class: AlarmListModel
@@ -2232,7 +2388,7 @@ Equivalent to AlarmListFilterModel
 AlarmListModel* AlarmListModel::mAllInstance = 0;
 
 AlarmListModel::AlarmListModel(QObject* parent)
-    : ItemListModel(CollectionControlModel::instance(), KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED, parent),
+    : ItemListModel(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED, parent),
       mFilterTypes(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED)
 {
 }
@@ -2299,7 +2455,7 @@ Equivalent to TemplateListFilterModel
 TemplateListModel* TemplateListModel::mAllInstance = 0;
 
 TemplateListModel::TemplateListModel(QObject* parent)
-    : ItemListModel(CollectionControlModel::instance(), KAlarm::CalEvent::TEMPLATE, parent),
+    : ItemListModel(KAlarm::CalEvent::TEMPLATE, parent),
       mActionsEnabled(KAEvent::ACT_ALL),
       mActionsFilter(KAEvent::ACT_ALL)
 {
@@ -2402,5 +2558,8 @@ Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
         f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     return f;
 }
+
+#include "akonadimodel.moc"
+#include "moc_akonadimodel.cpp"
 
 // vim: et sw=4:

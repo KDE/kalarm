@@ -220,32 +220,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
 
 /*=============================================================================
-= Class: CollectionMimeTypeFilterModel
-= Proxy model to restrict its contents to Collections, not Items, containing
-= specified content mime types.
-=============================================================================*/
-class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
-{
-        Q_OBJECT
-    public:
-        explicit CollectionMimeTypeFilterModel(AkonadiModel*, QObject* parent = 0);
-        void setEventTypeFilter(KAlarm::CalEvent::Type);
-        void setFilterWritable(bool writable);
-        Akonadi::Collection collection(int row) const;
-        Akonadi::Collection collection(const QModelIndex&) const;
-
-    protected:
-        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
-
-    private:
-        QString mMimeType;     // collection content type contained in this model
-        bool    mWritableOnly; // only include writable collections in this model
-};
-
-
-/*=============================================================================
 = Class: CollectionListModel
-= Proxy model providing a checkable collection list.
+= Proxy model converting the collection tree into a flat list.
+= The model may be restricted to specified content mime types.
 =============================================================================*/
 #include <kdescendantsproxymodel.h>
 class CollectionListModel : public KDescendantsProxyModel
@@ -253,8 +230,8 @@ class CollectionListModel : public KDescendantsProxyModel
         Q_OBJECT
     public:
         explicit CollectionListModel(QObject* parent = 0);
-        void setEventTypeFilter(KAlarm::CalEvent::Type t)  { static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->setEventTypeFilter(t); }
-        void setFilterWritable(bool writable)     { static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->setFilterWritable(writable); }
+        void setEventTypeFilter(KAlarm::CalEvent::Type);
+        void setFilterWritable(bool writable);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
         virtual bool isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const;
@@ -263,16 +240,14 @@ class CollectionListModel : public KDescendantsProxyModel
 
 /*=============================================================================
 = Class: CollectionCheckListModel
-= Proxy model converting the collection tree into a flat list.
+= Proxy model providing a checkable collection list.
 =============================================================================*/
 #include <akonadi/akonadi_next/checkableitemproxymodel.h>
 class CollectionCheckListModel : public CheckableItemProxyModel
 {
         Q_OBJECT
     public:
-        explicit CollectionCheckListModel(QObject* parent = 0);
-        void setEventTypeFilter(KAlarm::CalEvent::Type t)  { static_cast<CollectionListModel*>(sourceModel())->setEventTypeFilter(t); }
-        void setFilterWritable(bool writable)     { static_cast<CollectionListModel*>(sourceModel())->setFilterWritable(writable); }
+        static CollectionCheckListModel* instance();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
 
@@ -281,7 +256,31 @@ class CollectionCheckListModel : public CheckableItemProxyModel
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
 
     private:
+        explicit CollectionCheckListModel(QObject* parent = 0);
+
+        static CollectionCheckListModel* mInstance;
         QItemSelectionModel* mSelectionModel;
+};
+
+
+/*=============================================================================
+= Class: CollectionFilterCheckListModel
+= Proxy model providing a checkable collection list, filtered by mime type.
+=============================================================================*/
+class CollectionFilterCheckListModel : public QSortFilterProxyModel
+{
+        Q_OBJECT
+    public:
+        explicit CollectionFilterCheckListModel(QObject* parent = 0);
+        void setEventTypeFilter(KAlarm::CalEvent::Type);
+        Akonadi::Collection collection(int row) const;
+        Akonadi::Collection collection(const QModelIndex&) const;
+
+    protected:
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+
+    private:
+        QString mMimeType;     // collection content type contained in this model
 };
 
 
@@ -292,8 +291,8 @@ Equivalent to ResourceView
 class CollectionView : public QListView
 {
     public:
-        explicit CollectionView(CollectionCheckListModel*, QWidget* parent = 0);
-        CollectionCheckListModel* collectionModel() const  { return static_cast<CollectionCheckListModel*>(model()); }
+        explicit CollectionView(CollectionFilterCheckListModel*, QWidget* parent = 0);
+        CollectionFilterCheckListModel* collectionModel() const  { return static_cast<CollectionFilterCheckListModel*>(model()); }
         Akonadi::Collection  collection(int row) const;
         Akonadi::Collection  collection(const QModelIndex&) const;
 
@@ -375,11 +374,14 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Akonadi::Collection::List enabledCollections(KAlarm::CalEvent::Type, bool writable);
 
+        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+
     private slots:
         void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool value);
 
     private:
-        explicit CollectionControlModel(AkonadiModel*, QObject* parent = 0);
+        explicit CollectionControlModel(QObject* parent = 0);
+        void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, Akonadi::Collection::List&) const;
 
         static CollectionControlModel* mInstance;
         static bool mAskDestination;
@@ -398,7 +400,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         /** Constructor.
          *  @param allowed the alarm types (active/archived/template) included in this model
          */
-        ItemListModel(CollectionControlModel* baseModel, KAlarm::CalEvent::Types allowed, QObject* parent = 0);
+        ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent = 0);
 
         KAlarm::CalEvent::Types includedTypes() const  { return mAllowedTypes; }
         KAEvent      event(int row) const;
@@ -421,6 +423,12 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
          *  or when the last item is deleted from the model.
          */
         void         haveEventsStatus(bool have);
+
+    protected:
+        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+
+    private slots:
+        void rowsInsertedRemoved(const QModelIndex& parent, int start, int end);
 
     private:
         KAlarm::CalEvent::Types mAllowedTypes; // types of events allowed in this model
