@@ -3,29 +3,30 @@ project(kalarm)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 
 # KAlarm depends on kdepim/akonadi/ which is impossible for packagers.
-# Akonadi for KAlarm doesn't work yet.
-set(BUILD_akonadi FALSE)
+# Akonadi for KAlarm is still experimental.
+option(KALARM_USE_AKONADI "Build to use Akonadi" FALSE)
 
-if(BUILD_akonadi)
+if(KALARM_USE_AKONADI)
     add_definitions(-DUSE_AKONADI)
-else(BUILD_akonadi)
+else(KALARM_USE_AKONADI)
     add_definitions(-DWANT_DEPRECATED_KCAL_API)
     add_definitions(-DWANT_DEPRECATED_KABC_API)
     add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
-endif(BUILD_akonadi)
+endif(KALARM_USE_AKONADI)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 
-if(BUILD_akonadi)
+if(KALARM_USE_AKONADI)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/ 
     ${CMAKE_CURRENT_SOURCE_DIR}/cal
     ${CMAKE_CURRENT_SOURCE_DIR}/lib 
+    #${CMAKE_SOURCE_DIR}/runtime/resources/ical/alarms/cal
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
 )
-else(BUILD_akonadi)
+else(KALARM_USE_AKONADI)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/ 
@@ -35,14 +36,14 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
 ) 
-endif(BUILD_akonadi)
+endif(KALARM_USE_AKONADI)
 
 add_subdirectory(cal) 
-if(BUILD_akonadi)
+if(KALARM_USE_AKONADI)
     add_subdirectory(akonadi)
-else(BUILD_akonadi)
+else(KALARM_USE_AKONADI)
     add_subdirectory(resources) 
-endif(BUILD_akonadi)
+endif(KALARM_USE_AKONADI)
 add_subdirectory(appicons) 
 add_subdirectory(pixmaps) 
 add_subdirectory(autostart) 
@@ -123,11 +124,11 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     templatedlg.cpp 
     templatemenuaction.cpp 
 )
-if(BUILD_akonadi)
+if(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     akonadimodel.cpp
    )
-else(BUILD_akonadi)
+else(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     eventlistmodel.cpp
     alarmlistfiltermodel.cpp
@@ -135,7 +136,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     resourcemodelview.cpp
     templatelistfiltermodel.cpp
    )
-endif(BUILD_akonadi)
+endif(KALARM_USE_AKONADI)
 
 qt4_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
 if (KMAIL_SUPPORTED)
@@ -143,10 +144,10 @@ if (KMAIL_SUPPORTED)
 endif (KMAIL_SUPPORTED)
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
-if(BUILD_akonadi)
+if(KALARM_USE_AKONADI)
     kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
     qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmresourcesettings KAlarmResourceSettings)
-endif(BUILD_akonadi)
+endif(KALARM_USE_AKONADI)
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
@@ -159,11 +160,11 @@ endif (KMAIL_SUPPORTED)
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-if(BUILD_akonadi)
+if(KALARM_USE_AKONADI)
     target_link_libraries(kalarm_bin ${KDE4_KCMUTILS_LIBS} kalarm_calendar ${KDEPIMLIBS_KCAL_LIBS} akonadi_next ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_MAILTRANSPORT_LIBS} ${KDEPIMLIBS_AKONADI_KMIME_LIBRARY} ${KDEPIMLIBS_KHOLIDAYS_LIBS} ${KDE4_PHONON_LIBS} ${X11_X11_LIB} kdepim)
-else(BUILD_akonadi)
+else(KALARM_USE_AKONADI)
     target_link_libraries(kalarm_bin ${KDE4_KCMUTILS_LIBS} kalarm_resources kalarm_calendar ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_MAILTRANSPORT_LIBS} ${KDEPIMLIBS_AKONADI_KMIME_LIBRARY} ${KDEPIMLIBS_KHOLIDAYS_LIBS} ${KDE4_PHONON_LIBS} ${X11_X11_LIB} kdepim)
-endif(BUILD_akonadi)
+endif(KALARM_USE_AKONADI)
 
 install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 #endif (UNIX)
