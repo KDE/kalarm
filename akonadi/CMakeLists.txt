@@ -4,24 +4,25 @@ set(AKONADI_ICAL_RESOURCE ${CMAKE_SOURCE_DIR}/runtime/resources/ical)
 
 set( AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
   ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp
+  ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget.cpp
   ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
 )
 
 if (KDEPIM_MOBILE_UI)
 set( AKONADI_SINGLEFILERESOURCE_SHARED_UI
-  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog_mobile.ui
+  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_mobile.ui
+  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
 )
 else (KDEPIM_MOBILE_UI)
 set( AKONADI_SINGLEFILERESOURCE_SHARED_UI
-  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog_desktop.ui
+  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_desktop.ui
+  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
 )
 endif (KDEPIM_MOBILE_UI)
 ########### end definitions copied from akonadi/ ###############
 
 include_directories(
     .
-#    ${CMAKE_SOURCE_DIR}/kalarm
-#    ${CMAKE_BINARY_DIR}/kalarm
     ${CMAKE_SOURCE_DIR}/kalarm/cal
     ${AKONADI_ICAL_RESOURCE}
     ${AKONADI_SHARED_RESOURCES}
