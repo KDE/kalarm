@@ -21,6 +21,8 @@
 #ifndef COLLECTION_ATTRIBUTE_H
 #define COLLECTION_ATTRIBUTE_H
 
+#include "kalarm_cal_export.h"
+
 #include "kacalendar.h"
 
 #include <akonadi/attribute.h>
