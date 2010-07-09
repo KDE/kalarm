@@ -40,6 +40,11 @@ class KAlarmResource : public ICalResourceBase
         bool doRetrieveItem(const Akonadi::Item&, const QSet<QByteArray>& parts);
 
     protected:
+        /**
+         * Customize the configuration dialog before it is displayed.
+         */
+        virtual void customizeConfigDialog( Akonadi::SingleFileResourceConfigDialog<Settings>* dlg );
+
         virtual bool readFromFile(const QString& fileName);
         virtual void itemAdded(const Akonadi::Item&, const Akonadi::Collection&);
         virtual void itemChanged(const Akonadi::Item&, const QSet<QByteArray>& parts);

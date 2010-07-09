@@ -68,6 +68,15 @@ KAlarmResource::~KAlarmResource()
 }
 
 /******************************************************************************
+* Customize the configuration dialog before it is displayed.
+*/
+void KAlarmResource::customizeConfigDialog( SingleFileResourceConfigDialog<Settings>* dlg )
+{
+    ICalResourceBase::customizeConfigDialog( dlg );
+    dlg->setMonitorEnabled( false );
+}
+
+/******************************************************************************
 * Reimplemented to read data from the given file.
 * The file is always local; loading from the network is done automatically if
 * needed.
