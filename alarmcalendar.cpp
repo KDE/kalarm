@@ -975,7 +975,9 @@ bool AlarmCalendar::save()
 	}
 	else
 		return saveCal();
+#ifdef USE_AKONADI
 #warning How to group Akonadi updates?
+#endif
 }
 
 /******************************************************************************
