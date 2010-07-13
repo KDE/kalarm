@@ -23,7 +23,7 @@
 
 #undef QT3_SUPPORT
 
-#define KALARM_VERSION "2.5.2"
+#define KALARM_VERSION "2.5.3"
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
 
