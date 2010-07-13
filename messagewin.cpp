@@ -201,6 +201,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mResource(AlarmCalendar::resources()->resourceForEvent(mEventID)),
 #endif
 	  mTimeLabel(0),
+	  mRemainingText(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -305,6 +306,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mResource(0),
 #endif
 	  mTimeLabel(0),
+	  mRemainingText(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -339,6 +341,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 MessageWin::MessageWin()
 	: MainWindowBase(0, WFLAGS),
 	  mTimeLabel(0),
+	  mRemainingText(0),
 	  mEditButton(0),
 	  mDeferButton(0),
 	  mSilenceButton(0),
@@ -806,7 +809,8 @@ void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
 		mCloseTime = alarm.dateTime().effectiveDateTime().addSecs(event.lateCancel() * 60);
 	setCaption(i18nc("@title:window", "Message"));
 	mTimeLabel->setText(dateTimeToDisplay());
-	mRemainingText->hide();
+	if (mRemainingText)
+		mRemainingText->hide();
 	MidnightTimer::disconnect(this, SLOT(setRemainingTextDay()));
 	MinuteTimer::disconnect(this, SLOT(setRemainingTextMinute()));
 	setMinimumHeight(0);
