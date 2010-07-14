@@ -45,7 +45,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <khbox.h>
-#include <kdescendantsproxymodel_p.h>
+#include <kdescendantsproxymodel.h>
 #include <kdebug.h>
 
 #include <QAction>
