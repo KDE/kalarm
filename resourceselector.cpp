@@ -155,6 +155,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 /******************************************************************************
 * Return the Akonadi agent type for the currently selected alarm type.
 */
+#ifdef USE_AKONADI
 QString ResourceSelector::currentAgentType() const
 {
 	switch (mAlarmType->currentIndex())
@@ -165,6 +166,7 @@ QString ResourceSelector::currentAgentType() const
 	}
 	return QString();
 }
+#endif
 
 /******************************************************************************
 * Called when an alarm type has been selected.
