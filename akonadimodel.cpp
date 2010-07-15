@@ -1,5 +1,4 @@
-#warning APIdox clarifications:
-// CachePolicy::syncOnDemand() - when is "necessary"?  "non-permantly"
+#warning Read-only resource endlessly triggers alarm, disabling doesn't stop this
 
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
@@ -21,9 +20,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "akonadimodel.h"
 
+#include "kalarm.h"
 #include "alarmtext.h"
 #include "autoqpointer.h"
 #include "collectionattribute.h"
@@ -1279,7 +1278,7 @@ void AkonadiModel::itemJobDone(KJob* j)
             Q_ASSERT(0);
         kError() << errMsg << itemId << ":" << j->errorString();
         emit itemDone(itemId, false);
-        KMessageBox::error(0, i18nc("@info", "%1<nl/>%2", errMsg, j->errorString()));
+        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
 #warning No widget parent
     }
     else
@@ -1307,7 +1306,7 @@ void AkonadiModel::collectionJobDone(KJob* j)
             Q_ASSERT(0);
         kError() << errMsg << ":" << j->errorString();
 //        emit collectionDone(id, false);
-        KMessageBox::error(0, i18nc("@info", "%1<nl/>%2", errMsg, j->errorString()));
+        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
 #warning No widget parent
     }
 }
@@ -1401,6 +1400,7 @@ kDebug()<<"enabled changed ->"<<newEnabled;
 */
 void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 {
+    kDebug() << collection.id();
     mCollectionRights.remove(collection.id());
 }
 

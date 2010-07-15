@@ -22,9 +22,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kalarm.h"
 #include "resourceselector.moc"
 
+#include "kalarm.h"
 #include "alarmcalendar.h"
 #include "autoqpointer.h"
 #ifndef USE_AKONADI
@@ -152,10 +152,10 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(archiveDaysChanged(int)));
 }
 
+#ifdef USE_AKONADI
 /******************************************************************************
 * Return the Akonadi agent type for the currently selected alarm type.
 */
-#ifdef USE_AKONADI
 QString ResourceSelector::currentAgentType() const
 {
 	switch (mAlarmType->currentIndex())
@@ -241,7 +241,6 @@ void ResourceSelector::addResource()
 		job->configure(this);
 		connect(job, SIGNAL(result(KJob*)), SLOT(addJobDone(KJob*)));
 		job->start();
-#warning addResource() not implemented
 	}
 #else
 	AlarmResourceManager* manager = mCalendar->resourceManager();
@@ -292,7 +291,7 @@ void ResourceSelector::addJobDone(KJob* j)
     if (j->error())
     {
         kError() << "Failed to create new calendar resource:" << j->errorString();
-        KMessageBox::error(this, i18nc("@info", "%1<nl/>%2", i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
+        KMessageBox::error(this, i18nc("@info", "%1<nl/>(%2)", i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
     }
     else
     {
