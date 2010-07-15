@@ -38,6 +38,8 @@
 
 #ifdef USE_AKONADI
 #include <akonadi/agentmanager.h>
+#include <akonadi/agentinstancecreatejob.h>
+#include <akonadi/agenttype.h>
 #include <akonadi/collectionpropertiesdialog.h>
 #include <akonadi/entitydisplayattribute.h>
 #else
@@ -151,12 +153,26 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 }
 
 /******************************************************************************
+* Return the Akonadi agent type for the currently selected alarm type.
+*/
+QString ResourceSelector::currentAgentType() const
+{
+	switch (mAlarmType->currentIndex())
+	{
+		case 0:  return "akonadi_kalarm_active_resource";
+		case 1:  return "akonadi_kalarm_archived_resource";
+		case 2:  return "akonadi_kalarm_template_resource";
+	}
+	return QString();
+}
+
+/******************************************************************************
 * Called when an alarm type has been selected.
 * Filter the resource list to show resources of the selected alarm type, and
 * add appropriate whatsThis texts to the list and to the Add button.
 */
 void ResourceSelector::alarmTypeSelected()
-{ 
+{
 	QString addTip;
 	switch (mAlarmType->currentIndex())
 	{
@@ -213,7 +229,18 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 void ResourceSelector::addResource()
 {
 #ifdef USE_AKONADI
+	QString currentType = currentAgentType();
+	if (currentType.isEmpty())
+		return;
+	Akonadi::AgentType agentType = Akonadi::AgentManager::self()->type(currentType);
+	if (agentType.isValid())
+	{
+		Akonadi::AgentInstanceCreateJob *job = new Akonadi::AgentInstanceCreateJob(agentType, this);
+		job->configure(this);
+		connect(job, SIGNAL(result(KJob*)), SLOT(addJobDone(KJob*)));
+		job->start();
 #warning addResource() not implemented
+	}
 #else
 	AlarmResourceManager* manager = mCalendar->resourceManager();
 	QStringList descs = manager->resourceTypeDescriptions();
@@ -252,6 +279,27 @@ void ResourceSelector::addResource()
 	}
 #endif
 }
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Called when an agent creation job has completed.
+* Checks for any error.
+*/
+void ResourceSelector::addJobDone(KJob* j)
+{
+    if (j->error())
+    {
+        kError() << "Failed to create new calendar resource:" << j->errorString();
+        KMessageBox::error(this, i18nc("@info", "%1<nl/>%2", i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
+    }
+    else
+    {
+        //Akonadi::AgentInstanceCreateJob* job = static_cast<Akonadi::AgentInstanceCreateJob*>(j);
+        //job->instance().identifier();
+    }
+}
+#endif
+
 
 /******************************************************************************
 * Edit the currently selected resource.

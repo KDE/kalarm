@@ -90,6 +90,7 @@ class ResourceSelector : public QFrame
 	void  showInfo();
 	void  archiveDaysChanged(int days);
 #ifdef USE_AKONADI
+	void  addJobDone(KJob*);
 	void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool);
 #else
 	void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
@@ -99,6 +100,7 @@ class ResourceSelector : public QFrame
     private:
 	KAlarm::CalEvent::Type currentResourceType() const;
 #ifdef USE_AKONADI
+	QString             currentAgentType() const;
 	Akonadi::Collection currentResource() const;
 
 	CollectionView* mListView;

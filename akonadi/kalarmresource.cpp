@@ -70,10 +70,20 @@ KAlarmResource::~KAlarmResource()
 /******************************************************************************
 * Customize the configuration dialog before it is displayed.
 */
-void KAlarmResource::customizeConfigDialog( SingleFileResourceConfigDialog<Settings>* dlg )
+void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settings>* dlg)
 {
-    ICalResourceBase::customizeConfigDialog( dlg );
-    dlg->setMonitorEnabled( false );
+    ICalResourceBase::customizeConfigDialog(dlg);
+    dlg->setMonitorEnabled(false);
+    QString title;
+    if (identifier().contains("_active"))
+        title = i18nc("@title:window", "Select Active Alarm Calendar");
+    else if (identifier().contains("_archived"))
+        title = i18nc("@title:window", "Select Archived Alarm Calendar");
+    else if (identifier().contains("_template"))
+        title = i18nc("@title:window", "Select Alarm Template Calendar");
+    else
+        return;
+    dlg->setCaption(title);
 }
 
 /******************************************************************************
