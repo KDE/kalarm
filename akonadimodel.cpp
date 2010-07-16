@@ -1,4 +1,4 @@
-#warning Read-only resource endlessly triggers alarm, disabling doesn't stop this
+#warning Read-only resource endlessly triggers alarm, disabling does not stop this
 
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
