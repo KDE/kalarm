@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.5.3 --- 13 July 2010 ===
+=== Version 2.5.3 --- 19 July 2010 ===
 - Fix crash when a reminder alarm is being redisplayed.
+- Fix Sound File selection dialogue Play button not playing any sound.
 
 === Version 2.5.2 --- 3 June 2010 ===
 - Don't reactivate start-at-login without prompting, after user switches it off,
