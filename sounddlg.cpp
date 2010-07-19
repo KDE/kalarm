@@ -35,6 +35,7 @@
 #include <khbox.h>
 #include <kio/netaccess.h>
 #include <phonon/mediaobject.h>
+#include <phonon/audiooutput.h>
 #include <kdebug.h>
 
 #include <QLabel>
@@ -396,8 +397,16 @@ void SoundWidget::playSound()
 	}
 	if (!validate(true))
 		return;
+#if 0
+#warning Phonon::createPlayer() does not work
 	mPlayer = Phonon::createPlayer(Phonon::MusicCategory, mUrl);
 	mPlayer->setParent(this);
+#else
+	mPlayer = new Phonon::MediaObject(this);
+	Phonon::AudioOutput* output = new Phonon::AudioOutput(Phonon::MusicCategory, mPlayer);
+	mPlayer->setCurrentSource(mUrl);
+	Phonon::createPath(mPlayer, output);
+#endif
 	connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
 	mFilePlay->setIcon(SmallIcon("media-playback-stop"));   // change the play button to a stop button
 	mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
