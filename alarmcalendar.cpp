@@ -1503,7 +1503,7 @@ Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID) 
 */
 KAEvent* AlarmCalendar::event(const QString& uniqueID)
 {
-	if (!mCalendar)
+	if (!isValid())
 		return 0;
 	KAEventMap::ConstIterator it = mEventMap.constFind(uniqueID);
 	if (it == mEventMap.constEnd())
@@ -1513,9 +1513,13 @@ KAEvent* AlarmCalendar::event(const QString& uniqueID)
 
 /******************************************************************************
 * Return the event with the specified ID.
+* For the Akonadi version, this method is for the display calendar only.
 */
 Event* AlarmCalendar::kcalEvent(const QString& uniqueID)
 {
+#ifdef USE_AKONADI
+	Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
+#endif
 	return mCalendar ? mCalendar->event(uniqueID) : 0;
 }
 
@@ -1548,7 +1552,7 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KAlarm::CalEvent::T
 {
 	KAEvent::List list;
 #ifdef USE_AKONADI
-	if (!mCalendar  ||  (collection.isValid() && mCalType != RESOURCES))
+	if (mCalType != RESOURCES  &&  (!mCalendar || collection.isValid()))
 		return list;
 	if (collection.isValid())
 #else
@@ -1591,6 +1595,7 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KAlarm::CalEvent::T
 
 /******************************************************************************
 * Return all events in the calendar which contain usable alarms.
+* For the Akonadi version, this method is for the display calendar only.
 * Optionally the event type can be filtered, using an OR of event types.
 */
 #ifdef USE_AKONADI
@@ -1601,7 +1606,8 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KAlarm::CalEvent:
 {
 	Event::List list;
 #ifdef USE_AKONADI
-	if (!mCalendar  ||  mCalType == RESOURCES)
+	Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
+	if (!mCalendar)
 		return list;
 	list = mCalendar->rawEvents();
 #else
@@ -1631,7 +1637,7 @@ KAEvent::List AlarmCalendar::events(const KDateTime& from, const KDateTime& to, 
 {
 	kDebug() << from << "-" << to;
 	KAEvent::List evnts;
-	if (!mCalendar)
+	if (!isValid())
 		return evnts;
 	KDateTime dt;
 	AlarmResources* resources = AlarmResources::instance();
@@ -1697,11 +1703,12 @@ KAEvent::List AlarmCalendar::events(const KDateTime& from, const KDateTime& to, 
 
 /******************************************************************************
 * Return whether an event is read-only.
+* Display calendar events are always returned as read-only.
 */
 #ifdef USE_AKONADI
 bool AlarmCalendar::eventReadOnly(Item::Id id) const
 {
-	if (!mCalendar  ||  mCalType != RESOURCES)
+	if (mCalType != RESOURCES)
 		return true;
 	AkonadiModel* model = AkonadiModel::instance();
 	Collection collection = model->collectionForItem(id);
@@ -1731,7 +1738,7 @@ bool AlarmCalendar::eventReadOnly(const QString& uniqueID) const
 */
 Collection AlarmCalendar::collectionForEvent(Item::Id itemId) const
 {
-	if (!mCalendar  ||  mCalType != RESOURCES)
+	if (mCalType != RESOURCES)
 		return Collection();
 	return AkonadiModel::instance()->collectionForItem(itemId);
 }
@@ -1807,11 +1814,13 @@ void AlarmCalendar::checkForDisabledAlarms()
 KAEvent::List AlarmCalendar::atLoginAlarms() const
 {
 	KAEvent::List atlogins;
-	if (!mCalendar  ||  mCalType != RESOURCES)
-		return atlogins;
 #ifdef USE_AKONADI
+	if (mCalType != RESOURCES)
+		return atlogins;
 	AkonadiModel* model = AkonadiModel::instance();
 #endif
+	if (!mCalendar  ||  mCalType != RESOURCES)
+		return atlogins;
 	for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
 	{
 #ifdef USE_AKONADI
@@ -1841,7 +1850,7 @@ KAEvent::List AlarmCalendar::atLoginAlarms() const
 #ifdef USE_AKONADI
 void AlarmCalendar::findEarliestAlarm(const Collection& collection)
 {
-	if (!mCalendar  ||  mCalType != RESOURCES)
+	if (mCalType != RESOURCES)
 		return;
 	if (!collection.isValid()
 	||  !(AkonadiModel::types(collection) & KAlarm::CalEvent::ACTIVE))
@@ -1854,13 +1863,13 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
 void AlarmCalendar::findEarliestAlarm(AlarmResource* key)
 #endif
 {
-	if (!mCalendar  ||  mCalType != RESOURCES)
-		return;
 #ifdef USE_AKONADI
-	if (key < 0)
+	if (mCalType != RESOURCES
+	||  key == -1)
 		return;
 #else
-	if (!key  ||  key->alarmType() != KAlarm::CalEvent::ACTIVE)
+	if (!mCalendar  ||  mCalType != RESOURCES
+	||  !key  ||  key->alarmType() != KAlarm::CalEvent::ACTIVE)
 		return;
 #endif
 	ResourceMap::ConstIterator rit = mResourceMap.constFind(key);
@@ -1944,7 +1953,7 @@ void AlarmCalendar::setAlarmPending(KAEvent* event, bool pending)
 */
 void AlarmCalendar::adjustStartOfDay()
 {
-	if (!mCalendar)
+	if (!isValid())
 		return;
 	for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
 	{

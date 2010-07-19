@@ -77,7 +77,7 @@ class AlarmCalendar : public QObject
 		                                             { return createKCalEvent(e, QString()); }
 #endif
 		KAEvent*              event(const QString& uniqueID);
-		KCal::Event*          kcalEvent(const QString& uniqueID);
+		KCal::Event*          kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
 		KAEvent*              templateEvent(const QString& templateName);
 #ifdef USE_AKONADI
 		KAEvent::List         events(KAlarm::CalEvent::Types s = KAlarm::CalEvent::EMPTY)   { return events(Akonadi::Collection(), s); }
@@ -159,6 +159,7 @@ class AlarmCalendar : public QObject
 		AlarmCalendar(const QString& file, KAlarm::CalEvent::Type);
 		bool                  saveCal(const QString& newFile = QString());
 #ifdef USE_AKONADI
+		bool                  isValid() const   { return mCalType == RESOURCES || mCalendar; }
 		bool                  addEvent(const Akonadi::Collection&, KAEvent*);
 		void                  addNewEvent(const Akonadi::Collection&, KAEvent*);
 		KAlarm::CalEvent::Type deleteEventInternal(const KAEvent&, const Akonadi::Collection& = Akonadi::Collection());
@@ -168,6 +169,7 @@ class AlarmCalendar : public QObject
 		void                  findEarliestAlarm(const Akonadi::Collection&);
 		void                  findEarliestAlarm(Akonadi::Collection::Id);  //deprecated
 #else
+		bool                  isValid() const   { return mCalendar; }
 		bool                  addEvent(AlarmResource*, KAEvent*);
 		KAEvent*              addEvent(AlarmResource*, const KCal::Event*);
 		void                  addNewEvent(AlarmResource*, KAEvent*);
