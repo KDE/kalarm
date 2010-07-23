@@ -590,9 +590,6 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 	for (int i = 0, count = events.count();  i < count;  ++i)
 	{
 		if (mEventMap.contains(events[i].event.id()))
-#warning Update event in event map
-			;
-		else
 			deleteEventInternal(events[i].event, events[i].collection);
 	}
 }
