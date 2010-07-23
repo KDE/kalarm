@@ -31,9 +31,13 @@
 #include "preferences.h"
 #include "synchtimer.h"
 
+#include <akonadi/agentinstancecreatejob.h>
+#include <akonadi/agentmanager.h>
+#include <akonadi/agenttype.h>
 #include <akonadi/attributefactory.h>
 #include <akonadi/changerecorder.h>
 #include <akonadi/collectiondialog.h>
+#include <akonadi/collectiondeletejob.h>
 #include <akonadi/collectionmodifyjob.h>
 #include <akonadi/entitydisplayattribute.h>
 #include <akonadi/item.h>
@@ -131,6 +135,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+#warning When a calendar is disabled, its rows are not removed from the model, so no alarms deleted signal is emitted
     connect(monitor, SIGNAL(itemChanged(const Akonadi::Item&, const QSet<QByteArray>&)), SLOT(slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&)));
 }
 
@@ -538,7 +543,7 @@ if (attr) { kDebug()<<"Set:"<<enabled<<", was="<<attr->isEnabled(); } else { kDe
         if (updateCollection)
         {
             CollectionModifyJob* job = new CollectionModifyJob(collection, this);
-            connect(job, SIGNAL(result(KJob*)), this, SLOT(collectionJobDone(KJob*))); 
+            connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*))); 
             return true;
         }
     }
@@ -1013,6 +1018,107 @@ QString AkonadiModel::whatsThisText(int column) const
 }
 
 /******************************************************************************
+* Add a new collection. The user will be prompted to enter its configuration.
+*/
+AgentInstanceCreateJob* AkonadiModel::addCollection(KAlarm::CalEvent::Type type, QWidget* parent)
+{
+    QString resourceType;
+    switch (type)
+    {
+        case KAlarm::CalEvent::ACTIVE:    resourceType = "akonadi_kalarm_active_resource";  break;
+        case KAlarm::CalEvent::ARCHIVED:  resourceType = "akonadi_kalarm_archived_resource";  break;
+        case KAlarm::CalEvent::TEMPLATE:  resourceType = "akonadi_kalarm_template_resource";  break;
+        default:
+            return 0;
+    }
+    AgentType agentType = AgentManager::self()->type(resourceType);
+    if (!agentType.isValid())
+        return 0;
+    AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
+    job->configure(parent);    // cause the user to be prompted for configuration
+    connect(job, SIGNAL(result(KJob*)), SLOT(addCollectionJobDone(KJob*)));
+    job->start();
+    return job;
+}
+
+/******************************************************************************
+* Called when an agent creation job has completed.
+* Checks for any error.
+*/
+void AkonadiModel::addCollectionJobDone(KJob* j)
+{
+    AgentInstanceCreateJob* job = static_cast<AgentInstanceCreateJob*>(j);
+    if (j->error())
+    {
+        kError() << "Failed to create new calendar resource:" << j->errorString();
+        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
+        emit collectionAdded(job, false);
+    }
+    else
+    {
+#warning Can the collection be retrieved?
+        //job->instance().identifier();
+        emit collectionAdded(job, true);
+    }
+}
+
+/******************************************************************************
+* Remove a collection from Akonadi. The calendar file is not removed.
+*/
+bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
+{
+    if (!collection.isValid())
+        return false;
+    CollectionDeleteJob* job = new CollectionDeleteJob(collection);
+    connect(job, SIGNAL(result(KJob*)), SLOT(deleteCollectionJobDone(KJob*)));
+    mPendingCollections[job] = CollJobData(collection.id(), displayName(collection));
+    job->start();
+    return true;
+}
+
+/******************************************************************************
+* Called when a collection deletion job has completed.
+* Checks for any error.
+*/
+void AkonadiModel::deleteCollectionJobDone(KJob* j)
+{
+    QMap<KJob*, CollJobData>::iterator it = mPendingCollections.find(j);
+    CollJobData jobData;
+    if (it != mPendingCollections.end())
+    {
+        jobData = it.value();
+        mPendingCollections.erase(it);
+    }
+    if (j->error())
+    {
+        emit collectionDeleted(jobData.id, false);
+        QString errMsg = i18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
+        kError() << errMsg << ":" << j->errorString();
+        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+    }
+    else
+        emit collectionDeleted(jobData.id, true);
+}
+
+/******************************************************************************
+* Called when a collection modification job has completed.
+* Checks for any error.
+*/
+void AkonadiModel::modifyCollectionJobDone(KJob* j)
+{
+    Collection collection = static_cast<CollectionModifyJob*>(j)->collection();
+    if (j->error())
+    {
+        emit collectionModified(collection.id(), false);
+        QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
+        kError() << errMsg << ":" << j->errorString();
+        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+    }
+    else
+        emit collectionModified(collection.id(), true);
+}
+
+/******************************************************************************
 * Returns the index to a specified event.
 */
 QModelIndex AkonadiModel::eventIndex(const KAEvent& event)
@@ -1286,36 +1392,11 @@ void AkonadiModel::itemJobDone(KJob* j)
 }
 
 /******************************************************************************
-* Called when a collection job has completed.
-* Checks for any error.
-*/
-void AkonadiModel::collectionJobDone(KJob* j)
-{
-    Collection::Id id = -1;
-    if (j->error())
-    {
-        QString errMsg;
-        QByteArray jobClass = j->metaObject()->className();
-        if (jobClass == "Akonadi::CollectionModifyJob")
-        {
-            Collection c = static_cast<CollectionModifyJob*>(j)->collection();
-            id = c.id();
-            errMsg = i18nc("@info", "Could not update calendar <resource>%1</resource>.", displayName(c));
-        }
-        else
-            Q_ASSERT(0);
-        kError() << errMsg << ":" << j->errorString();
-//        emit collectionDone(id, false);
-        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
-#warning No widget parent
-    }
-}
-
-/******************************************************************************
 * Called when rows have been inserted into the model.
 */
 void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
+kDebug();
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = index(row, 0, parent);
@@ -1337,7 +1418,9 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
 */
 void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
+kDebug();
     EventList events = eventList(parent, start, end);
+kDebug()<<"Count="<<(end-start+1)<<", event count="<<events.count();
     if (!events.isEmpty())
         emit eventsToBeRemoved(events);
 }
@@ -2174,7 +2257,7 @@ Collection CollectionControlModel::destination(KAlarm::CalEvent::Type type, QWid
         {
             // Use AutoQPointer to guard against crash on application exit while
             // the dialogue is still open. It prevents double deletion (both on
-            // deletion of ResourceSelector, and on return from this function).
+            // deletion of 'promptParent', and on return from this function).
             AutoQPointer<CollectionDialog> dlg = new CollectionDialog(model, promptParent);
             dlg->setCaption(i18nc("@title:window", "Choose Calendar"));
             dlg->setDefaultCollection(standard);
@@ -2221,7 +2304,8 @@ QVariant CollectionControlModel::data(const QModelIndex& index, int role) const
 =============================================================================*/
 ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
     : EntityMimeTypeFilterModel(parent),
-      mAllowedTypes(allowed)
+      mAllowedTypes(allowed),
+      mHaveEvents(false)
 {
     KSelectionProxyModel* selectionModel = new KSelectionProxyModel(CollectionControlModel::instance()->selectionModel(), this);
     selectionModel->setSourceModel(AkonadiModel::instance());
@@ -2239,9 +2323,8 @@ ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
     setHeaderGroup(EntityTreeModel::ItemListHeaders);
     setSortRole(AkonadiModel::SortRole);
     setDynamicSortFilter(true);
-#warning SLOT not defined
-//    connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(rowsInsertedRemoved()));
-//    connect(this, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(rowsInsertedRemoved()));
+    connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted()));
+    connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsToBeRemoved()));
 }
 
 int ItemListModel::columnCount(const QModelIndex& parent) const
@@ -2256,22 +2339,25 @@ int ItemListModel::columnCount(const QModelIndex& parent) const
 /******************************************************************************
 * Called when rows have been inserted into the model.
 */
-void ItemListModel::rowsInsertedRemoved(const QModelIndex& parent, int start, int end)
+void ItemListModel::slotRowsInserted()
 {
-kDebug()<<parent<<", start="<<start<<", end="<<end;
-    for (int row = start;  row <= end;  ++row)
+    if (!mHaveEvents  &&  rowCount())
     {
-        const QModelIndex ix = mapToSource(index(row, 0, parent));
-        const Item item = sourceModel()->data(ix, AkonadiModel::ItemRole).value<Item>();
-        if (item.isValid())
-        {
-kDebug()<<"Valid item:"<<item.remoteId();
-        }
-else{        const Collection collection = data(ix, AkonadiModel::CollectionRole).value<Collection>();
-if (collection.isValid())
+        mHaveEvents = true;
+        emit haveEventsStatus(true);
+    }
+}
+
+/******************************************************************************
+* Called when rows have been deleted from the model.
+*/
+void ItemListModel::slotRowsToBeRemoved()
 {
-kDebug()<<"Got a collection!";
-} }
+kDebug();
+    if (mHaveEvents  &&  !rowCount())
+    {
+        mHaveEvents = false;
+        emit haveEventsStatus(false);
     }
 }
 
@@ -2339,29 +2425,6 @@ KAEvent ItemListModel::event(const QModelIndex& index) const
         return event;
     }
     return KAEvent();
-}
-
-/******************************************************************************
-* Insert rows into the model.
-*/
-bool ItemListModel::insertRows(int row, int count, const QModelIndex& parent)
-{
-#warning Might instead need to iterate over all collections to find item count
-    int oldCount = rowCount();
-    bool result = EntityMimeTypeFilterModel::insertRows(row, count, parent);
-    if (!oldCount  &&  count)
-        emit haveEventsStatus(true);
-    return result;
-}
-
-/******************************************************************************
-* Remove rows from the model.
-*/
-bool ItemListModel::removeRows(int row, int count, const QModelIndex& parent)
-{
-    bool result = EntityMimeTypeFilterModel::removeRows(row, count, parent);
-    emit haveEventsStatus(haveEvents());
-    return result;
 }
 
 /******************************************************************************

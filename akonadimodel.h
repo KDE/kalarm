@@ -35,6 +35,9 @@
 #include <QFlags>
 #include <QQueue>
 
+namespace Akonadi {
+    class AgentInstanceCreateJob;
+}
 namespace KCal { class CalendarLocal; }
 class QPixmap;
 class KJob;
@@ -79,27 +82,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         static AkonadiModel* instance();
 
-        /** Return the alarm with the specified unique identifier.
-         *  @return the event, or invalid event if no such event exists.
-         */
-        KAEvent event(Akonadi::Item::Id) const;
-        KAEvent event(const QModelIndex&) const;
-        using QObject::event;   // prevent warning about hidden virtual method
-
-        QModelIndex eventIndex(const KAEvent&);
-
-#if 0
-        /** Return all events in a collection, optionally of a specified type. */
-        KAEvent::List events(Akonadi::Collection&, KAlarm::CalEvent::Type = KAlarm::CalEvent::EMPTY) const;
-#endif
-
-        bool  addEvent(KAEvent&, Akonadi::Collection&);
-        bool  addEvents(const QList<KAEvent*>&, Akonadi::Collection&);
-        bool  updateEvent(KAEvent& event);
-        bool  updateEvent(Akonadi::Item::Id oldId, KAEvent& newEvent);
-        bool  deleteEvent(const KAEvent& event);
-        bool  deleteEvent(Akonadi::Item::Id itemId);
-
         /** Return the display name for a collection. */
         QString displayName(const Akonadi::Collection&) const;
         /** Return the storage type (file/directory/URL etc.) for a collection. */
@@ -124,6 +106,38 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         Akonadi::Collection collectionForItem(Akonadi::Item::Id) const;
         Akonadi::Collection collection(const KAEvent& e) const   { return collectionForItem(e.itemId()); }
 
+        /** Create a new collection after prompting the user for its configuration.
+         *  The signal collectionAdded() will be emitted once the collection is created.
+         *  @return creation job which was started, or null if error.
+         */
+        Akonadi::AgentInstanceCreateJob* addCollection(KAlarm::CalEvent::Type, QWidget* parent = 0);
+
+        /** Remove a collection from Akonadi. The calendar file is not removed.
+         *  @return true if a removal job has been scheduled.
+         */
+        bool removeCollection(const Akonadi::Collection&);
+
+        /** Return the alarm with the specified unique identifier.
+         *  @return the event, or invalid event if no such event exists.
+         */
+        KAEvent event(Akonadi::Item::Id) const;
+        KAEvent event(const QModelIndex&) const;
+        using QObject::event;   // prevent warning about hidden virtual method
+
+        QModelIndex eventIndex(const KAEvent&);
+
+#if 0
+        /** Return all events in a collection, optionally of a specified type. */
+        KAEvent::List events(Akonadi::Collection&, KAlarm::CalEvent::Type = KAlarm::CalEvent::EMPTY) const;
+#endif
+
+        bool  addEvent(KAEvent&, Akonadi::Collection&);
+        bool  addEvents(const QList<KAEvent*>&, Akonadi::Collection&);
+        bool  updateEvent(KAEvent& event);
+        bool  updateEvent(Akonadi::Item::Id oldId, KAEvent& newEvent);
+        bool  deleteEvent(const KAEvent& event);
+        bool  deleteEvent(Akonadi::Item::Id itemId);
+
         static KAlarm::CalEvent::Types types(const Akonadi::Collection&);
 
         /** Check whether the alarm types in a local calendar correspond with a
@@ -135,6 +149,11 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static QSize iconSize()  { return mIconSize; }
 
     signals:
+        /** Signal emitted when a collection creation job has completed.
+         *  Note that it may not yet have been added to the model.
+         */
+        void collectionAdded(Akonadi::AgentInstanceCreateJob*, bool success);
+
         /** Signal emitted when a collection's enabled or read-only status has changed. */
         void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool value = false);
 
@@ -147,12 +166,17 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Signal emitted when an event in the model has changed. */
         void eventChanged(const AkonadiModel::Event&);
 
-        /** Signal emitted when Akonadi has completed a collection creation, update
-         *  or deletion.
+        /** Signal emitted when Akonadi has completed a collection modification.
          *  @param id      Akonadi ID for the collection
          *  @param status  true if successful, false if error
          */
-        void collectionDone(Akonadi::Collection::Id, bool status = true);
+        void collectionModified(Akonadi::Collection::Id, bool status = true);
+
+        /** Signal emitted when Akonadi has completed a collection deletion.
+         *  @param id      Akonadi ID for the collection
+         *  @param status  true if successful, false if error
+         */
+        void collectionDeleted(Akonadi::Collection::Id, bool status = true);
 
         /** Signal emitted when Akonadi has completed an item creation, update
          *  or deletion.
@@ -177,8 +201,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
         void slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&);
         void slotEmitEventChanged();
+        void addCollectionJobDone(KJob*);
+        void modifyCollectionJobDone(KJob*);
+        void deleteCollectionJobDone(KJob*);
         void itemJobDone(KJob*);
-        void collectionJobDone(KJob*);
         
     private:
         struct CalData   // data per collection
@@ -187,6 +213,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             CalData(bool e, const QColor& c)  : colour(c), enabled(e) { }
             QColor colour;    // user selected color for the calendar
             bool   enabled;   // whether the collection is enabled
+        };
+        struct CollJobData   // collection data for jobs in progress
+        {
+            CollJobData() : id(-1) {}
+            CollJobData(Akonadi::Collection::Id i, const QString& d) : id(i), displayName(d) {}
+            Akonadi::Collection::Id id;
+            QString                 displayName;
         };
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
@@ -213,6 +246,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
         QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
         QMap<Akonadi::Collection::Id, bool> mCollectionEnabled;  // last enabled status of each collection
+        QMap<KJob*, CollJobData> mPendingCollections;  // pending collection creation/deletion jobs, with collection ID & name
         QMap<KJob*, Akonadi::Item::Id> mPendingItems;  // pending item creation/deletion jobs, with event ID
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
         QFont           mFont;
@@ -413,8 +447,6 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
 
         virtual int  columnCount(const QModelIndex& parent = QModelIndex()) const;
         virtual Qt::ItemFlags flags(const QModelIndex&) const;
-        virtual bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex());
-        virtual bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex());
 
         static int   iconWidth()  { return AkonadiModel::iconSize().width(); }
 
@@ -428,10 +460,12 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
     private slots:
-        void rowsInsertedRemoved(const QModelIndex& parent, int start, int end);
+        void slotRowsInserted();
+        void slotRowsToBeRemoved();
 
     private:
         KAlarm::CalEvent::Types mAllowedTypes; // types of events allowed in this model
+        bool                    mHaveEvents;   // there are events in this model
 };
 
 
