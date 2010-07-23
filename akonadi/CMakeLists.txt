@@ -1,29 +1,43 @@
-########### definitions copied from akonadi/ ###############
-set(AKONADI_SHARED_RESOURCES ${CMAKE_SOURCE_DIR}/runtime/resources/shared)
-set(AKONADI_ICAL_RESOURCE ${CMAKE_SOURCE_DIR}/runtime/resources/ical)
+# Set location of this directory:
+#   LOCAL_BUILD = TRUE if kdepim/kalarm/akonadi,
+#               = FALSE if kdepim/runtime/resources/ical/alarms
+set(LOCAL_BUILD TRUE)
+if (LOCAL_BUILD)
+    # Note that resource configuration dialogs don't appear if built with this option.
+    set(KALARM_CALENDAR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/kalarm/cal)
+    set(AKONADI_ICAL_RESOURCE ${CMAKE_SOURCE_DIR}/runtime/resources/ical)
 
-set( AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
-  ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp
-  ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget.cpp
-  ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
-)
+    ########### definitions copied from runtime/ ###############
+    set(AKONADI_SHARED_RESOURCES ${CMAKE_SOURCE_DIR}/runtime/resources/shared)
 
-if (KDEPIM_MOBILE_UI)
-set( AKONADI_SINGLEFILERESOURCE_SHARED_UI
-  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_mobile.ui
-  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
-)
-else (KDEPIM_MOBILE_UI)
-set( AKONADI_SINGLEFILERESOURCE_SHARED_UI
-  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_desktop.ui
-  ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
-)
-endif (KDEPIM_MOBILE_UI)
-########### end definitions copied from akonadi/ ###############
+    set(AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
+        ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp
+        ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget.cpp
+        ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
+    )
+
+    if (KDEPIM_MOBILE_UI)
+    set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
+        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_mobile.ui
+        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
+    )
+    else (KDEPIM_MOBILE_UI)
+    set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
+        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_desktop.ui
+        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
+    )
+    endif (KDEPIM_MOBILE_UI)
+    ########### end definitions copied from runtime/ ###############
+else (LOCAL_BUILD)
+    set(KALARM_CALENDAR_INCLUDE_DIR cal)
+    set(AKONADI_ICAL_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+
+    add_definitions(-DUSE_AKONADI)
+    add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
+endif (LOCAL_BUILD)
 
 include_directories(
-    .
-    ${CMAKE_SOURCE_DIR}/kalarm/cal
+    ${KALARM_CALENDAR_INCLUDE_DIR}
     ${AKONADI_ICAL_RESOURCE}
     ${AKONADI_SHARED_RESOURCES}
     ${QT_QTDBUS_INCLUDE_DIR}
@@ -34,10 +48,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 ########### next target ###############
 
-set( kalarmresource_SRCS
-  ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
-  ${AKONADI_ICAL_RESOURCE}/icalresourcebase.cpp
-  kalarmresource.cpp
+set(kalarmresource_SRCS
+    ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
+    ${AKONADI_ICAL_RESOURCE}/icalresourcebase.cpp
+    kalarmresource.cpp
 )
 
 install(FILES kalarmresource.desktop kalarmresource_active.desktop kalarmresource_archived.desktop kalarmresource_template.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents")
@@ -46,7 +60,7 @@ kde4_add_ui_files(kalarmresource_SRCS ${AKONADI_SINGLEFILERESOURCE_SHARED_UI})
 kde4_add_kcfg_files(kalarmresource_SRCS settings.kcfgc)
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
 qt4_add_dbus_adaptor(kalarmresource_SRCS
-  ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml settings.h Settings
+    ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml settings.h Settings
 )
 
 kde4_add_executable(akonadi_kalarm_resource ${kalarmresource_SRCS})
