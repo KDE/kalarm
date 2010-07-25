@@ -319,7 +319,7 @@ class KALARM_CAL_EXPORT KAEvent
         void               setUid(KAlarm::CalEvent::Type s)        { d->mEventID = KAlarm::CalEvent::uid(d->mEventID, s);  d->mUpdated = true; }
         void               setEventId(const QString& id)           { d->mEventID = id;  d->mUpdated = true; }
 #ifdef USE_AKONADI
-        void               setItemId(Akonadi::Item::Id id)         { d->mItemId = id; }
+        void               setItemId(Akonadi::Item::Id id) const   { d->mItemId = id; }
         void               setReadOnly(bool ro)                    { if (ro != d->mReadOnly) { d->mReadOnly = ro; d->mUpdated = true; } }
 #endif
         void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt;  d->mUpdated = true; }
@@ -636,7 +636,7 @@ class KALARM_CAL_EXPORT KAEvent
                 QString            mTemplateName;      // alarm template's name, or null if normal event
 #ifdef USE_AKONADI
                 QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
-                Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
+                mutable Akonadi::Item::Id mItemId;     // Akonadi::Item ID for this event
                 Akonadi::Collection::Id mCollectionId; // saved collection ID (not the collection the event is in)
 #else
                 QString            mResourceId;        // saved resource ID (not the resource the event is in)
