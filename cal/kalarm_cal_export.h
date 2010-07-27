@@ -24,7 +24,10 @@
 #include <kdemacros.h>
 
 #ifndef KALARM_CAL_EXPORT
-# if defined(MAKE_KALARM_CALENDAR_LIB)
+# if defined(KDEPIM_STATIC_LIBS)
+   /* No export/import for static libraries */
+#  define KALARM_CAL_EXPORT
+# elif defined(MAKE_KALARM_CALENDAR_LIB)
    /* We are building this library */
 #  define KALARM_CAL_EXPORT KDE_EXPORT
 # else

@@ -15,7 +15,7 @@ if(KALARM_USE_AKONADI)
     )
 endif(KALARM_USE_AKONADI)
 
-kde4_add_library(kalarm_calendar SHARED ${kalarm_calendar_LIB_SRCS})
+kde4_add_library(kalarm_calendar ${LIBRARY_TYPE} ${kalarm_calendar_LIB_SRCS})
 
 if(KALARM_USE_AKONADI)
   target_link_libraries(kalarm_calendar ${KDEPIMLIBS_AKONADI_LIBS} ${KDEPIMLIBS_KCAL_LIBS} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_KHOLIDAYS_LIBS})

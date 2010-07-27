@@ -16,7 +16,7 @@ set(kalarm_resources_LIB_SRCS
 )
 
 
-kde4_add_library(kalarm_resources SHARED ${kalarm_resources_LIB_SRCS})
+kde4_add_library(kalarm_resources ${LIBRARY_TYPE} ${kalarm_resources_LIB_SRCS})
 
 target_link_libraries(kalarm_resources ${KDE4_KIO_LIBS} ${KDEPIMLIBS_KRESOURCES_LIBS} ${KDEPIMLIBS_KABC_LIBS} ${KDEPIMLIBS_KCAL_LIBS} kalarm_calendar)
 target_link_libraries(kalarm_resources LINK_INTERFACE_LIBRARIES ${KDE4_KIO_LIBS} ${KDEPIMLIBS_KRESOURCES_LIBS} ${KDEPIMLIBS_KABC_LIBS} ${KDEPIMLIBS_KCAL_LIBS})
