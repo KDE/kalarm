@@ -97,6 +97,13 @@ void SoundDlg::setReadOnly(bool readOnly)
 	}
 }
 
+KUrl SoundDlg::getFile() const
+{
+	KUrl url;
+	mSoundWidget->file(url);
+	return url;
+}
+
 /******************************************************************************
 * Called when the dialog's size has changed.
 * Records the new size in the config file.
@@ -135,7 +142,8 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 	  mFilePlay(0),
 	  mRepeatCheckbox(0),
 	  mPlayer(0),
-	  mReadOnly(false)
+	  mReadOnly(false),
+	  mEmptyFileAllowed(false)
 {
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->setMargin(0);
@@ -321,10 +329,11 @@ QString SoundWidget::fileName() const
 /******************************************************************************
 * Validate the entered file and return it.
 */
-KUrl SoundWidget::file(bool showErrorMessage) const
+bool SoundWidget::file(KUrl& url, bool showErrorMessage) const
 {
-	validate(showErrorMessage);
-	return mUrl;
+	bool result = validate(showErrorMessage);
+	url = mUrl;
+	return result;
 }
 
 /******************************************************************************
@@ -435,6 +444,11 @@ bool SoundWidget::validate(bool showErrorMessage) const
 	if (file == mValidatedFile  &&  !file.isEmpty())
 		return true;
 	mValidatedFile = file;
+	if (file.isEmpty()  &&  mEmptyFileAllowed)
+	{
+		mUrl.clear();
+		return true;
+	}
 	KAlarm::FileErr err = KAlarm::checkFileExists(file, mUrl);
 	if (err == KAlarm::FileErr_None)
 		return true;
