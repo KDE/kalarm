@@ -55,7 +55,9 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
         delete i;
         return false;
     }
+kDebug(5950);
     KAEvent event(static_cast<KCal::Event*>(i));
+kDebug(5950)<<"1";
     delete i;
     QString mime = KAlarm::CalEvent::mimeType(event.category());
     if (mime.isEmpty())
@@ -66,7 +68,9 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
     }
 
     item.setMimeType(mime);
+kDebug(5950)<<"2";
     item.setPayload<KAEvent>(event);
+kDebug(5950)<<"end";
     return true;
 }
 
@@ -76,6 +80,7 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
 
     if (label != Item::FullPayload || !item.hasPayload<KAEvent>())
         return;
+kDebug(5950);
     KAEvent e = item.payload<KAEvent>();
     KCal::Event kcalEvent;
     e.updateKCalEvent(&kcalEvent, KAEvent::UID_SET);
@@ -87,6 +92,7 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     data.write(head);
     data.write(mFormat.toString(&kcalEvent).toUtf8());
     data.write("\nEND:VCALENDAR");
+kDebug(5950)<<"end";
 }
 
 Q_EXPORT_PLUGIN2(akonadi_serializer_kalarm, SerializerPluginKAlarm)

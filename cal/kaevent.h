@@ -301,6 +301,7 @@ class KALARM_CAL_EXPORT KAEvent
         KAEvent(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
                 const QFont& f, Action, int lateCancel, int flags, bool changesPending = false);
         explicit KAEvent(const KCal::Event*);
+        ~KAEvent();
         void               set(const KCal::Event* e)               { d->set(e); }
         void               set(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action act, int lateCancel, int flags, bool changesPending = false)
                                                                    { d->set(dt, message, bg, fg, f, act, lateCancel, flags, changesPending); }
@@ -546,7 +547,7 @@ class KALARM_CAL_EXPORT KAEvent
                         const QFont& f, Action, int lateCancel, int flags, bool changesPending = false);
                 explicit Private(const KCal::Event*);
                 Private(const Private&);
-                ~Private()         { delete mRecurrence; }
+                ~Private();//         { delete mRecurrence; }
                 Private&           operator=(const Private& e)       { if (&e != this) copy(e);  return *this; }
                 void               set(const KCal::Event*);
                 void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags, bool changesPending = false);

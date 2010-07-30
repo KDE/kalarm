@@ -186,9 +186,21 @@ inline void KAEvent::Private::set_archiveReminder()
     mReminderMinutes        = 0;
 }
 
+KAEvent::~KAEvent()
+{
+kDebug()<<this<<d;
+}
+KAEvent::Private::~Private()
+{
+kDebug()<<this;
+    delete mRecurrence;
+}
+
 KAEvent::KAEvent()
     : d(new Private)
-{ }
+{
+kDebug()<<this;
+}
 
 KAEvent::Private::Private()
     :
@@ -216,7 +228,9 @@ KAEvent::Private::Private()
       mExcludeHolidays(false),
       mWorkTimeOnly(false),
       mDisplaying(false)
-{ }
+{
+kDebug()<<this;
+}
 
 KAEvent::KAEvent(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f,
                  Action action, int lateCancel, int flags, bool changesPending)
@@ -249,6 +263,7 @@ KAEvent::Private::Private(const KAEvent::Private& e)
       QSharedData(e),
       mRecurrence(0)
 {
+kDebug()<<this;
     copy(e);
     calcTriggerTimes();
 }
@@ -879,6 +894,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
     data.alarm           = alarm;
     data.displayingFlags = 0;
     data.isEmailText     = false;
+    data.speak           = false;
     data.nextRepeat      = 0;
     if (alarm->repeatCount())
     {
@@ -1273,7 +1289,7 @@ void KAEvent::Private::calcTriggerTimes() const
     if (mChangeCount)
     {
         mChanged = true;   // note that changes have actually occurred
-    return;
+        return;
     }
     mChanged = false;
     if (mCategory == KAlarm::CalEvent::ARCHIVED  ||  !mTemplateName.isEmpty())

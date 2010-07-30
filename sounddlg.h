@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2007,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2007,2009-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,8 +47,9 @@ class SoundWidget : public QWidget
 		void           set(const QString& file, float volume, float fadeVolume = -1, int fadeSeconds = 0, bool repeat = false);
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
+		void           setAllowEmptyFile()   { mEmptyFileAllowed = true; }
 		QString        fileName() const;
-		KUrl           file(bool showErrorMessage = true) const;
+		bool           file(KUrl&, bool showErrorMessage = true) const;
 		bool           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
 		bool           getRepeat() const;
 		QString        defaultDir() const    { return mDefaultDir; }
@@ -87,6 +88,7 @@ class SoundWidget : public QWidget
 		mutable QString      mValidatedFile;
 		Phonon::MediaObject* mPlayer;
 		bool                 mReadOnly;
+		bool                 mEmptyFileAllowed;
 };
 
 
@@ -98,7 +100,7 @@ class SoundDlg : public KDialog
 		         const QString& caption, QWidget* parent);
 		void           setReadOnly(bool);
 		bool           isReadOnly() const    { return mReadOnly; }
-		KUrl           getFile() const       { return mSoundWidget->file(); }
+		KUrl           getFile() const;
 		bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const
 		                                     { return mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
 		QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
