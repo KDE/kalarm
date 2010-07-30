@@ -1860,6 +1860,9 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
 void AlarmCalendar::findEarliestAlarm(AlarmResource* key)
 #endif
 {
+	EarliestMap::Iterator eit = mEarliestAlarm.find(key);
+	if (eit != mEarliestAlarm.end())
+		eit.value() = 0;
 #ifdef USE_AKONADI
 	if (mCalType != RESOURCES
 	||  key == -1)
