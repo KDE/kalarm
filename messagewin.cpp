@@ -887,10 +887,11 @@ void MessageWin::setRemainingTextMinute()
 		text = i18ncp("@info", "in 1 minute's time", "in %1 minutes' time", (mins > 0 ? mins : 0));
 	else if (mins % 60 == 0)
 		text = i18ncp("@info", "in 1 hour's time", "in %1 hours' time", mins/60);
-	else if (mins % 60 == 1)
-		text = i18ncp("@info", "in 1 hour 1 minute's time", "in %1 hours 1 minute's time", mins/60);
 	else
-		text = i18ncp("@info", "in 1 hour %2 minutes' time", "in %1 hours %2 minutes' time", mins/60, mins%60);
+	{
+		QString hourText = i18ncp("@item:intext inserted into 'in ... %1 minute's time' below", "1 hour", "%1 hours", mins/60);
+		text = i18ncp("@info '%2' is the previous message '1 hour'/'%1 hours'", "in %2 1 minute's time", "in %2 %1 minutes' time", mins%60, hourText);
+	}
 	mRemainingText->setText(text);
 }
 
