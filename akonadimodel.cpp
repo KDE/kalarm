@@ -135,6 +135,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+#warning When a calendar is disabled, its rows are not removed from the model, so no alarms deleted signal is emitted
     connect(monitor, SIGNAL(itemChanged(const Akonadi::Item&, const QSet<QByteArray>&)), SLOT(slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&)));
 }
 
@@ -290,7 +291,6 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             if (role == Qt::WhatsThisRole)
                 return whatsThisText(column);
             KAEvent event = item.payload<KAEvent>();
-            event.setItemId(item.id());
             if (!event.isValid())
                 return QVariant();
             if (role == AlarmActionsRole)
@@ -798,7 +798,6 @@ static bool checkItem_isDisabled(const Item& item)
     if (item.hasPayload<KAEvent>())
     {
         KAEvent event = item.payload<KAEvent>();
-        event.setItemId(item.id());
         if (event.isValid())
             return !event.enabled();
     }
@@ -821,7 +820,6 @@ static bool checkItem_excludesHolidays(const Item& item)
     if (item.hasPayload<KAEvent>())
     {
         KAEvent event = item.payload<KAEvent>();
-        event.setItemId(item.id());
         if (event.isValid()  &&  event.holidaysExcluded())
         {
             event.updateHolidays();
@@ -848,7 +846,6 @@ static bool checkItem_workTimeOnly(const Item& item)
     if (item.hasPayload<KAEvent>())
     {
         KAEvent event = item.payload<KAEvent>();
-        event.setItemId(item.id());
         if (event.isValid()  &&  event.workTimeOnly())
         {
             event.updateWorkHours();
@@ -1159,7 +1156,6 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::T
             if (item.hasPayload<KAEvent>())
             {
                 KAEvent event = item.payload<KAEvent>();
-                event.setItemId(item.id());
                 if (event.isValid()  &&  event.category() == type)
                 {
                     if (item.hasAttribute<EventAttribute>())
@@ -1187,7 +1183,6 @@ KAEvent AkonadiModel::event(const QModelIndex& index) const
     if (item.isValid()  &&  item.hasPayload<KAEvent>())
     {
         KAEvent event = item.payload<KAEvent>();
-        event.setItemId(item.id());
         if (event.isValid()  &&  item.hasAttribute<EventAttribute>())
         {
             KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
@@ -1444,8 +1439,6 @@ kDebug()<<"row="<<row<<", item valid="<<item.isValid()<<", has payload="<<item.h
         if (item.isValid()  &&  item.hasPayload<KAEvent>())
         {
             KAEvent event = item.payload<KAEvent>();
-            event.setItemId(item.id());
-kDebug()<<"Item id="<<item.id()<<", event id="<<event.itemId();
             if (event.isValid())
                 events += Event(event, data(ix, ParentCollectionRole).value<Collection>());
         }
@@ -1481,21 +1474,6 @@ kDebug()<<"enabled changed ->"<<newEnabled;
             first = false;
             mCollectionEnabled[collection.id()] = newEnabled;
             emit collectionStatusChanged(collection, Enabled, newEnabled);
-
-            // Signal the addition or removal of any of the collection's events
-            // which are already in the model.
-            QModelIndex ix = modelIndexForCollection(this, collection);
-            if (ix.isValid()  &&  rowCount(ix))
-            {
-                EventList events = eventList(ix, 0, rowCount(ix) - 1);
-                if (!events.isEmpty())
-                {
-                    if (newEnabled)
-                        emit eventsAdded(events);
-                    else
-                        emit eventsToBeRemoved(events);
-                }
-            }
         }
     }
 }
@@ -1517,7 +1495,6 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
     if (!item.isValid()  ||  !item.hasPayload<KAEvent>())
         return;
     KAEvent event = item.payload<KAEvent>();
-    event.setItemId(item.id());
     if (!event.isValid())
         return;
     const QModelIndexList indexes = match(QModelIndex(), ItemIdRole, item.id(), 1, Qt::MatchExactly | Qt::MatchRecursive);
@@ -1562,14 +1539,6 @@ QModelIndex AkonadiModel::collectionIndex(const Collection& collection) const
 */
 Collection AkonadiModel::collectionById(Collection::Id id) const
 {
-Collection c = Collection(id);
-Collection r = Collection::root();
-if (c == c)
-kDebug()<<"c==c";
-if (r == r)
-kDebug()<<"r==r";
-if (c == r)
-kDebug()<<"c==r";
     QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (!ix.isValid())
         return Collection();
@@ -2102,7 +2071,6 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
 */
 bool CollectionControlModel::isWritable(const Akonadi::Collection& collection)
 {
-kDebug()<<"id="<<collection.id();
     if (!collection.hasAttribute<CollectionAttribute>()
     ||  collection.attribute<CollectionAttribute>()->compatibility() != KAlarm::Calendar::Current)
         return false;
@@ -2449,7 +2417,6 @@ KAEvent ItemListModel::event(const QModelIndex& index) const
     if (item.isValid()  &&  item.hasPayload<KAEvent>())
     {
         KAEvent event = item.payload<KAEvent>();
-        event.setItemId(item.id());
         if (event.isValid()  &&  item.hasAttribute<EventAttribute>())
         {
             KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
@@ -2465,8 +2432,13 @@ KAEvent ItemListModel::event(const QModelIndex& index) const
 */
 bool ItemListModel::haveEvents() const
 {
-#warning Check whether haveEvents() works correctly
+#warning Might instead need to iterate over all collections to find item count
     return rowCount();
+}
+
+bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+    return true;
 }
 
 
@@ -2590,8 +2562,6 @@ void TemplateListModel::setAlarmActionsEnabled(KAEvent::Actions types)
 
 bool TemplateListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
-    if (!ItemListModel::filterAcceptsRow(sourceRow, sourceParent))
-        return false;
     if (mActionsFilter == KAEvent::ACT_ALL)
         return true;
     QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
@@ -2607,7 +2577,6 @@ bool TemplateListModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) c
 
 QModelIndex TemplateListModel::mapFromSource(const QModelIndex& sourceIndex) const
 {
-#warning This function probably isn't needed (in common with mapToSource())
     int proxyColumn;
     switch (sourceIndex.column())
     {
@@ -2621,8 +2590,25 @@ QModelIndex TemplateListModel::mapFromSource(const QModelIndex& sourceIndex) con
             return QModelIndex();
     }
     QModelIndex ix = ItemListModel::mapFromSource(sourceIndex);
-kDebug()<<"source"<<sourceIndex<<" -> "<<index(ix.row(), proxyColumn, ix.parent());
     return index(ix.row(), proxyColumn, ix.parent());
+}
+
+QModelIndex TemplateListModel::mapToSource(const QModelIndex& proxyIndex) const
+{
+    int sourceColumn;
+    switch (proxyIndex.column())
+    {
+        case TypeColumn:
+            sourceColumn = AkonadiModel::TypeColumn;
+            break;
+        case TemplateNameColumn:
+            sourceColumn = AkonadiModel::TemplateNameColumn;
+            break;
+        default:
+            return QModelIndex();
+    }
+    QModelIndex ix = ItemListModel::index(proxyIndex.row(), sourceColumn, proxyIndex.parent());
+    return ItemListModel::mapToSource(ix);
 }
 
 Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
@@ -2636,26 +2622,7 @@ Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
     return f;
 }
 
-QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if (orientation == Qt::Horizontal  &&  role == Qt::DisplayRole)
-    {
-        switch (section)
-        {
-            case TypeColumn:
-                section = AkonadiModel::TypeColumn;
-                break;
-            case TemplateNameColumn:
-                section = AkonadiModel::TemplateNameColumn;
-                break;
-            default:
-                return QVariant();
-        }
-    }
-    return ItemListModel::headerData(section, orientation, role);
-}
-
 #include "akonadimodel.moc"
 #include "moc_akonadimodel.cpp"
 
-// vim: et sw=4 ts=4:
+// vim: et sw=4:

@@ -482,7 +482,6 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 	for (i = 0, end = events.count();  i < end;  ++i)
 	{
 		KAEvent* event = events[i];
-kDebug()<<"remove";
 		mEventMap.remove(event->id());
 		delete event;
 	}
@@ -510,7 +509,6 @@ kDebug()<<"remove";
 #ifndef USE_AKONADI
 		event->setResource(resource);
 #endif
-kDebug()<<"add:"<<event;
 		events += event;
 		mEventMap[kcalevent->uid()] = event;
 
@@ -551,7 +549,6 @@ void AlarmCalendar::removeKAEvents(AlarmResource* key, bool closing)
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			KAEvent* event = events[i];
-kDebug()<<"remove";
 			mEventMap.remove(event->id());
 			delete event;
 		}
@@ -1198,7 +1195,6 @@ void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 	AlarmResource* key = resource;
 #endif
 	mResourceMap[key] += event;
-kDebug()<<"add:"<<event;
 	mEventMap[event->id()] = event;
 #ifdef USE_AKONADI
 	if (collection.isValid()  &&  (AkonadiModel::types(collection) & KAlarm::CalEvent::ACTIVE)
@@ -1427,17 +1423,13 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 #endif
 		mResourceMap[key].removeAll(ev);
 		bool recalc = (mEarliestAlarm[key] == ev);
-kDebug()<<"remove";
 		delete ev;
 		if (recalc)
-		{
-			mEarliestAlarm[key] = 0;
 #ifdef USE_AKONADI
 			findEarliestAlarm(collection);
 #else
 			findEarliestAlarm(key);
 #endif
-		}
 	}
 	else
 	{
@@ -1717,11 +1709,9 @@ bool AlarmCalendar::eventReadOnly(Item::Id id) const
 		return true;
 	AkonadiModel* model = AkonadiModel::instance();
 	Collection collection = model->collectionForItem(id);
-kDebug()<<"Item id="<<id<<", Collection readonly="<<!CollectionControlModel::isWritable(collection);
 	if (!CollectionControlModel::isWritable(collection))
 		return true;
 	KAEvent event = model->event(id);
-kDebug()<<"event valid="<<event.isValid()<<", event readonly="<<event.isReadOnly();
 	return !event.isValid()  ||  event.isReadOnly();
 	//   ||  compatibility(event) != KAlarm::Calendar::Current;
 }

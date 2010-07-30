@@ -111,7 +111,6 @@ bool KAlarmResource::readFromFile(const QString& fileName)
 */
 bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteArray>& parts)
 {
-kDebug();
     Q_UNUSED(parts);
     const QString rid = item.remoteId();
     const KCal::Event* kcalEvent = calendar()->event(rid);
@@ -154,7 +153,6 @@ kDebug();
 */
 void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collection&)
 {
-kDebug();
     if (!checkItemAddedChanged<KAEvent>(item, CheckForAdded))
         return;
     if (mCompatibility != KAlarm::Calendar::Current)
@@ -179,7 +177,6 @@ kDebug();
 */
 void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArray>& parts)
 {
-kDebug();
     Q_UNUSED(parts)
     if (!checkItemAddedChanged<KAEvent>(item, CheckForChanged))
         return;
@@ -239,7 +236,6 @@ kDebug();
 */
 void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
 {
-kDebug();
     // Set the collection's compatibility status
     Collection col = collection;
     CollectionAttribute* attr = col.attribute<CollectionAttribute>(Collection::AddIfMissing);
@@ -273,7 +269,6 @@ kDebug();
         items << item;
     }
     itemsRetrieved(items);
-kDebug()<<"end";
 }
 
 AKONADI_RESOURCE_MAIN(KAlarmResource)
