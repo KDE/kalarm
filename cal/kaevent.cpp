@@ -879,6 +879,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
     data.alarm           = alarm;
     data.displayingFlags = 0;
     data.isEmailText     = false;
+    data.speak           = false;
     data.nextRepeat      = 0;
     if (alarm->repeatCount())
     {
@@ -1273,7 +1274,7 @@ void KAEvent::Private::calcTriggerTimes() const
     if (mChangeCount)
     {
         mChanged = true;   // note that changes have actually occurred
-    return;
+        return;
     }
     mChanged = false;
     if (mCategory == KAlarm::CalEvent::ARCHIVED  ||  !mTemplateName.isEmpty())
