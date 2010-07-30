@@ -66,7 +66,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 	QWidget* topWidget = new QWidget(this);
 	setMainWidget(topWidget);
 	setButtons(Close);
-	setDefaultButton(Ok);
+	setDefaultButton(Close);
 	setModal(false);
 	setCaption(i18nc("@title:window", "Alarm Templates"));
 	showButtonSeparator(true);
