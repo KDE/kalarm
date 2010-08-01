@@ -298,8 +298,8 @@ class KALARM_CAL_EXPORT KAEvent
                                                                    { d->set(dt, message, bg, fg, f, act, lateCancel, flags, changesPending); }
         void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
         void               setResource(AlarmResource* r)           { d->mResource = r; }
-        void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds)
-                                                                   { d->setAudioFile(filename, volume, fadeVolume, fadeSeconds); }
+        void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile = false)
+                                                                   { d->setAudioFile(filename, volume, fadeVolume, fadeSeconds, allowEmptyFile); }
         void               setTemplate(const QString& name, int afterTime = -1);
         void               setActions(const QString& pre, const QString& post, bool cancelOnError)
                                                                    { d->mPreAction = pre;  d->mPostAction = post;  d->mCancelOnPreActErr = cancelOnError;  d->mUpdated = true; }
@@ -427,10 +427,10 @@ class KALARM_CAL_EXPORT KAEvent
         bool               workTimeOnly() const           { return d->mWorkTimeOnly; }
         bool               speak() const                  { return (d->mActionType == KAAlarmEventBase::T_MESSAGE  ||  (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay)) && d->mSpeak; }
         const QString&     audioFile() const              { return d->mAudioFile; }
-        float              soundVolume() const            { return !d->mAudioFile.isEmpty() ? d->mSoundVolume : -1; }
-        float              fadeVolume() const             { return !d->mAudioFile.isEmpty() && d->mSoundVolume >= 0 && d->mFadeSeconds ? d->mFadeVolume : -1; }
-        int                fadeSeconds() const            { return !d->mAudioFile.isEmpty() && d->mSoundVolume >= 0 && d->mFadeVolume >= 0 ? d->mFadeSeconds : 0; }
-        bool               repeatSound() const            { return d->mRepeatSound  &&  !d->mAudioFile.isEmpty(); }
+        float              soundVolume() const            { return d->mSoundVolume; }
+        float              fadeVolume() const             { return d->mSoundVolume >= 0 && d->mFadeSeconds ? d->mFadeVolume : -1; }
+        int                fadeSeconds() const            { return d->mSoundVolume >= 0 && d->mFadeVolume >= 0 ? d->mFadeSeconds : 0; }
+        bool               repeatSound() const            { return d->mRepeatSound; }
         const QString&     preAction() const              { return d->mPreAction; }
         const QString&     postAction() const             { return d->mPostAction; }
         bool               cancelOnPreActionError() const { return d->mCancelOnPreActErr; }
@@ -525,7 +525,7 @@ class KALARM_CAL_EXPORT KAEvent
                 Private&           operator=(const Private& e)       { if (&e != this) copy(e);  return *this; }
                 void               set(const KCal::Event*);
                 void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags, bool changesPending = false);
-                void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds);
+                void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile);
                 OccurType          setNextOccurrence(const KDateTime& preDateTime);
                 void               setFirstRecurrence();
                 void               setCategory(KAlarm::CalEvent::Type);
