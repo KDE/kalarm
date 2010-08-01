@@ -1551,7 +1551,7 @@ bool EditAudioAlarmDlg::type_stateChanged() const
 {
         if (mSavedFile != mSoundConfig->fileName())
                 return true;
-        if (!mSavedFile.isEmpty())
+        if (!mSavedFile.isEmpty()  ||  isTemplate())
         {
                 float volume, fadeVolume;
                 int   fadeSecs;
@@ -1578,7 +1578,7 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
 	mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
 	KUrl url;
 	mSoundConfig->file(url, false);
-	event.setAudioFile(url.prettyUrl(), volume, fadeVolume, fadeSecs);
+	event.setAudioFile(url.prettyUrl(), volume, fadeVolume, fadeSecs, isTemplate());
 }
 
 /******************************************************************************
