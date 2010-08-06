@@ -65,6 +65,7 @@ KAlarmResource::KAlarmResource(const QString& id)
 
 KAlarmResource::~KAlarmResource()
 {
+    delete mMimeVisitor;
 }
 
 /******************************************************************************
