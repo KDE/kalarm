@@ -31,9 +31,7 @@ using namespace KHolidays;
 
 #include <ksystemtimezone.h>
 #include <klocale.h>
-#ifndef USE_AKONADI
 #include <kconfiggroup.h>
-#endif
 #include <kdebug.h>
 
 using namespace KCal;
@@ -101,9 +99,7 @@ static const QString DISP_DEFER = QLatin1String("DEFER");
 static const QString DISP_EDIT  = QLatin1String("EDIT");
 
 // Command error strings
-#ifndef USE_AKONADI
 QString KAEvent::Private::mCmdErrConfigGroup = QLatin1String("CommandErrors");
-#endif
 static const QString CMD_ERROR_VALUE      = QLatin1String("MAIN");
 static const QString CMD_ERROR_PRE_VALUE  = QLatin1String("PRE");
 static const QString CMD_ERROR_POST_VALUE = QLatin1String("POST");
@@ -191,9 +187,6 @@ KAEvent::KAEvent()
 KAEvent::Private::Private()
     : mResource(0),
       mCommandError(CMD_NO_ERROR),
-#ifdef USE_AKONADI
-      mItemId(-1),
-#endif
       mReminderMinutes(0),
       mRevision(0),
       mRecurrence(0),
@@ -202,9 +195,6 @@ KAEvent::Private::Private()
       mChangeCount(0),
       mChanged(false),
       mCategory(KAlarm::CalEvent::EMPTY),
-#ifdef USE_AKONADI
-      mReadOnly(false),
-#endif
       mConfirmAck(false),
       mEmailBcc(false),
       mBeep(false),
@@ -260,10 +250,6 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mAllWorkTrigger          = event.mAllWorkTrigger;
     mMainWorkTrigger         = event.mMainWorkTrigger;
     mCommandError            = event.mCommandError;
-#ifdef USE_AKONADI
-    mItemId                  = event.mItemId;
-    mCustomProperties        = event.mCustomProperties;
-#endif
     mTemplateName            = event.mTemplateName;
     mResourceId              = event.mResourceId;
     mAudioFile               = event.mAudioFile;
@@ -284,9 +270,6 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mDeferral                = event.mDeferral;
     mLogFile                 = event.mLogFile;
     mCategory                = event.mCategory;
-#ifdef USE_AKONADI
-    mReadOnly                = event.mReadOnly;
-#endif
     mCancelOnPreActErr       = event.mCancelOnPreActErr;
     mConfirmAck              = event.mConfirmAck;
     mCommandXterm            = event.mCommandXterm;
@@ -336,9 +319,6 @@ void KAEvent::Private::set(const Event* event)
     // Extract status from the event
     mCommandError           = CMD_NO_ERROR;
     mResource               = 0;
-#ifdef USE_AKONADI
-    mItemId                 = -1;
-#endif
     mEventID                = event->uid();
     mRevision               = event->revision();
     mTemplateName.clear();
@@ -369,9 +349,6 @@ void KAEvent::Private::set(const Event* event)
     mChanged                = false;
     mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
     mFgColour               = QColor(0, 0, 0);          // and black foreground
-#ifdef USE_AKONADI
-    mReadOnly               = event->isReadOnly();
-#endif
     mUseDefaultFont         = true;
     mEnabled                = true;
     clearRecur();
@@ -394,18 +371,6 @@ void KAEvent::Private::set(const Event* event)
             }
         }
     }
-#ifdef USE_AKONADI
-    // Store the non-KAlarm custom properties of the event
-    QByteArray kalarmKey = "X-KDE-" + KAlarm::Calendar::APPNAME + '-';
-    mCustomProperties = event->customProperties();
-    for (QMap<QByteArray, QString>::Iterator it = mCustomProperties.begin();  it != mCustomProperties.end(); )
-    {
-        if (it.key().startsWith(kalarmKey))
-            it = mCustomProperties.erase(it);
-        else
-            ++it;
-    }
-#endif
 
     bool ok;
     bool dateOnly = false;
@@ -1104,9 +1069,6 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mArchive                = false;
     mCancelOnPreActErr      = false;
     mUpdated                = false;
-#ifdef USE_AKONADI
-    mReadOnly               = false;
-#endif
     mCommandError           = CMD_NO_ERROR;
     mChangeCount            = changesPending ? 1 : 0;
     mChanged                = true;
@@ -1939,11 +1901,7 @@ KAEvent::Actions KAEvent::actions() const
  * properties are cleared and replaced with the KAEvent's custom properties. If
  * false, the KCal::Event's non-KAlarm custom properties are left untouched.
  */
-#ifdef USE_AKONADI
-bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid, bool setCustomProperties) const
-#else
 bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
-#endif
 {
     // If it's an archived event, the event start date/time will be adjusted to its original
     // value instead of its next occurrence, and the expired main alarm will be reinstated.
@@ -1957,20 +1915,12 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, bool checkUid) const
     ev->startUpdates();   // prevent multiple update notifications
     checkRecur();         // ensure recurrence/repetition data is consistent
     bool readOnly = ev->isReadOnly();
-#ifdef USE_AKONADI
-    ev->setReadOnly(mReadOnly);
-#else
     ev->setReadOnly(false);
-#endif
     ev->setTransparency(Event::Transparent);
 
     // Set up event-specific data
 
     // Set up custom properties.
-#ifdef USE_AKONADI
-    if (setCustomProperties)
-        ev->setCustomProperties(mCustomProperties);
-#endif
     ev->removeCustomProperty(KAlarm::Calendar::APPNAME, FLAGS_PROPERTY);
     ev->removeCustomProperty(KAlarm::Calendar::APPNAME, NEXT_RECUR_PROPERTY);
     ev->removeCustomProperty(KAlarm::Calendar::APPNAME, REPEAT_PROPERTY);
@@ -2727,7 +2677,6 @@ DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
     return endTime;
 }
 
-#ifndef USE_AKONADI
 /******************************************************************************
 * Initialise the command last error status of the alarm from the config file.
 */
@@ -2780,7 +2729,6 @@ void KAEvent::Private::setCommandError(CmdErrType error, bool writeConfig) const
         config.sync();
     }
 }
-#endif
 
 /******************************************************************************
 * Set the event to be a copy of the specified event, making the specified
@@ -4416,10 +4364,6 @@ void KAEvent::Private::dumpDebug() const
     kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
     kDebug() << "-- mConfirmAck:" << mConfirmAck;
     kDebug() << "-- mEnabled:" << mEnabled;
-#ifdef USE_AKONADI
-    kDebug() << "-- mItemId:" << mItemId;
-    kDebug() << "-- mReadOnly:" << mReadOnly;
-#endif
     if (mReminderMinutes)
         kDebug() << "-- mReminderMinutes:" << mReminderMinutes;
     if (mArchiveReminderMinutes)

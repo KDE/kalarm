@@ -42,13 +42,6 @@ using namespace KCal;
 namespace KAlarm
 {
 
-#ifdef USE_AKONADI
-const QLatin1String MIME_BASE("application/x-vnd.kde.alarms");
-const QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarms.active");
-const QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarms.archived");
-const QLatin1String MIME_TEMPLATE("application/x-vnd.kde.alarms.template");
-#endif
-
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 
 static bool isUTC(const QString& localFile);
@@ -387,59 +380,6 @@ void CalEvent::setStatus(KCal::Event* event, CalEvent::Type status, const QStrin
 		text += ';' + param;
 	event->setCustomProperty(Calendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
-
-#ifdef USE_AKONADI
-CalEvent::Type CalEvent::type(const QString& mimeType)
-{
-    if (mimeType == KAlarm::MIME_ACTIVE)
-        return ACTIVE;
-    if (mimeType == KAlarm::MIME_ARCHIVED)
-        return ARCHIVED;
-    if (mimeType == KAlarm::MIME_TEMPLATE)
-        return TEMPLATE;
-    return EMPTY;
-}
-
-CalEvent::Types CalEvent::types(const QStringList& mimeTypes)
-{
-    Types types = 0;
-    foreach (const QString& type, mimeTypes)
-    {
-        if (type == KAlarm::MIME_ACTIVE)
-            types |= ACTIVE;
-        if (type == KAlarm::MIME_ARCHIVED)
-            types |= ARCHIVED;
-        if (type == KAlarm::MIME_TEMPLATE)
-            types |= TEMPLATE;
-    }
-    return types;
-}
-
-QString CalEvent::mimeType(CalEvent::Type type)
-{
-    switch (type)
-    {
-        case ACTIVE:    return KAlarm::MIME_ACTIVE;
-        case ARCHIVED:  return KAlarm::MIME_ARCHIVED;
-        case TEMPLATE:  return KAlarm::MIME_TEMPLATE;
-        default:        return QString();
-    }
-}
-
-QStringList CalEvent::mimeTypes(CalEvent::Types types)
-{
-    QStringList mimes;
-    for (int i = 1;  types;  i <<= 1)
-    {
-        if (types & i)
-        {
-            mimes += mimeType(CalEvent::Type(i));
-            types &= ~i;
-        }
-    }
-    return mimes;
-}
-#endif
 
 } // namespace KAlarm
 

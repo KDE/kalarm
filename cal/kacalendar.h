@@ -34,13 +34,6 @@ namespace KCal {
 namespace KAlarm
 {
 
-#ifdef USE_AKONADI
-extern const QLatin1String KALARM_CAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
-extern const QLatin1String KALARM_CAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
-extern const QLatin1String KALARM_CAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
-extern const QLatin1String KALARM_CAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
-#endif
-
 class KALARM_CAL_EXPORT Calendar
 {
     public:
@@ -103,17 +96,6 @@ class KALARM_CAL_EXPORT CalEvent
         static QString uid(const QString& id, Type);
         static Type    status(const KCal::Event*, QString* param = 0);
         static void    setStatus(KCal::Event*, Type, const QString& param = QString());
-
-#ifdef USE_AKONADI
-        /** Return the alarm Type for a mime type string. */
-        static Type    type(const QString& mimeType);
-        /** Return the alarm Types for a list of mime type strings. */
-        static Types   types(const QStringList& mimeTypes);
-        /** Return the mime type string corresponding to an alarm Type. */
-        static QString mimeType(Type);
-        /** Return the mime type strings corresponding to alarm Types. */
-        static QStringList mimeTypes(Types);
-#endif
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types);

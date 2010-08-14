@@ -28,10 +28,6 @@
 #include "kacalendar.h"
 #include "repetition.h"
 
-#ifdef USE_AKONADI
-#include <akonadi/collection.h>
-#include <akonadi/item.h>
-#endif
 #include <kcal/person.h>
 
 #include <QColor>
@@ -308,10 +304,6 @@ class KALARM_CAL_EXPORT KAEvent
         void               setCategory(KAlarm::CalEvent::Type s)   { d->setCategory(s); }
         void               setUid(KAlarm::CalEvent::Type s)        { d->mEventID = KAlarm::CalEvent::uid(d->mEventID, s);  d->mUpdated = true; }
         void               setEventId(const QString& id)           { d->mEventID = id;  d->mUpdated = true; }
-#ifdef USE_AKONADI
-        void               setItemId(Akonadi::Item::Id id)         { d->mItemId = id; }
-        void               setReadOnly(bool ro)                    { if (ro != d->mReadOnly) { d->mReadOnly = ro; d->mUpdated = true; } }
-#endif
         void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt;  d->mUpdated = true; }
         void               setSaveDateTime(const KDateTime& dt)    { d->mSaveDateTime = dt;  d->mUpdated = true; }
         void               setLateCancel(int lc)                   { d->mLateCancel = lc;  d->mUpdated = true; }
@@ -331,13 +323,9 @@ class KALARM_CAL_EXPORT KAEvent
                                                                    { return d->setDisplaying(*e.d, t, resourceID, dt, showEdit, showDefer); }
         void               reinstateFromDisplaying(const KCal::Event* e, QString& resourceID, bool& showEdit, bool& showDefer)
                                                                    { d->reinstateFromDisplaying(e, resourceID, showEdit, showDefer); }
-#ifdef USE_AKONADI
-        void               setCommandError(CmdErrType t) const     { d->setCommandError(t); }
-#else
         void               setCommandError(const QString& configString) { d->setCommandError(configString); }
         void               setCommandError(CmdErrType t, bool writeConfig = true) const
                                                                    { d->setCommandError(t, writeConfig); }
-#endif
         void               setArchive()                            { d->mArchive = true;  d->mUpdated = true; }
         void               setEnabled(bool enable)                 { d->mEnabled = enable;  d->mUpdated = true; }
         void               startChanges()                          { d->startChanges(); }
@@ -383,21 +371,12 @@ class KALARM_CAL_EXPORT KAEvent
         KAAlarm            nextAlarm(const KAAlarm& al) const  { return d->nextAlarm(al.type()); }
         KAAlarm            nextAlarm(KAAlarm::Type t) const    { return d->nextAlarm(t); }
         KAAlarm            convertDisplayingAlarm() const;
-#ifdef USE_AKONADI
-        bool               updateKCalEvent(KCal::Event* e, bool checkUid = true, bool setCustomProperties = true) const
-                                                          { return d->updateKCalEvent(e, checkUid, setCustomProperties); }
-#else
         bool               updateKCalEvent(KCal::Event* e, bool checkUid = true) const
                                                           { return d->updateKCalEvent(e, checkUid); }
-#endif
         Actions            actions() const;
         Action             action() const                 { return (Action)d->mActionType; }
         bool               displayAction() const          { return d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_FILE || (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay); }
         const QString&     id() const                     { return d->mEventID; }
-#ifdef USE_AKONADI
-        Akonadi::Item::Id  itemId() const                 { return d->mItemId; }
-        bool               isReadOnly() const             { return d->mReadOnly; }
-#endif
         bool               isValid() const                { return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin); }
         int                alarmCount() const             { return d->mAlarmCount; }
         KDateTime          createdDateTime() const        { return d->mSaveDateTime; }
@@ -446,9 +425,7 @@ class KALARM_CAL_EXPORT KAEvent
         QString            resourceId() const             { return d->mResourceId; }
         AlarmResource*     resource() const               { return d->mResource; }
         CmdErrType         commandError() const           { return d->mCommandError; }
-#ifndef USE_AKONADI
         static QString     commandErrorConfigGroup()      { return Private::mCmdErrConfigGroup; }
-#endif
 
         bool               isWorkingTime(const KDateTime& dt) const  { return d->isWorkingTime(dt); }
 
@@ -535,23 +512,15 @@ class KALARM_CAL_EXPORT KAEvent
                 void               cancelDefer();
                 bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
                 void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
-#ifdef USE_AKONADI
-                void               setCommandError(CmdErrType t) const  { mCommandError = t; }
-#else
                 void               setCommandError(const QString& configString);
                 void               setCommandError(CmdErrType, bool writeConfig) const;
-#endif
                 void               startChanges()                 { ++mChangeCount; }
                 void               endChanges();
                 void               removeExpiredAlarm(KAAlarm::Type);
                 KAAlarm            alarm(KAAlarm::Type) const;
                 KAAlarm            firstAlarm() const;
                 KAAlarm            nextAlarm(KAAlarm::Type) const;
-#ifdef USE_AKONADI
-                bool               updateKCalEvent(KCal::Event*, bool checkUid = true, bool setCustomProperties = true) const;
-#else
                 bool               updateKCalEvent(KCal::Event*, bool checkUid = true) const;
-#endif
                 DateTime           mainDateTime(bool withRepeats = false) const
                                                           { return (withRepeats && mNextRepeat && mRepetition)
                                                             ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
@@ -589,9 +558,7 @@ class KALARM_CAL_EXPORT KAEvent
                 inline void        set_archiveReminder();
 
             public:
-#ifndef USE_AKONADI
                 static QString     mCmdErrConfigGroup; // config file group for command error recording
-#endif
                 static QFont       mDefaultFont;       // default alarm message font
                 static const KHolidays::HolidayRegion* mHolidays;  // holiday region to use
                 static QBitArray   mWorkDays;          // working days of the week
@@ -605,10 +572,6 @@ class KALARM_CAL_EXPORT KAEvent
                 mutable CmdErrType mCommandError;      // command execution error last time the alarm triggered
 
                 QString            mTemplateName;      // alarm template's name, or null if normal event
-#ifdef USE_AKONADI
-                QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
-                Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
-#endif
                 QString            mResourceId;        // saved resource ID (not the resource the event is in)
                 QString            mAudioFile;         // ATTACH: audio file to play
                 QString            mPreAction;         // command to execute before alarm is displayed
@@ -640,9 +603,6 @@ class KALARM_CAL_EXPORT KAEvent
                 float              mFadeVolume;        // initial volume for sound file, or < 0 for no fade
                 int                mFadeSeconds;       // fade time for sound file, or 0 if none
                 KAlarm::CalEvent::Type mCategory;      // event category (active, archived, template, ...)
-#ifdef USE_AKONADI
-                bool               mReadOnly;          // event is read-only in its original calendar file
-#endif
                 bool               mCancelOnPreActErr; // cancel alarm if pre-alarm action fails
                 bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
                 bool               mCommandXterm;      // command alarm is to be executed in a terminal window

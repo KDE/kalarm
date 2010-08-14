@@ -37,9 +37,7 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#ifndef USE_AKONADI
 #include <kconfig.h>
-#endif
 #include <kaboutdata.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
@@ -431,9 +429,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 	if (!cal)
 		return;
 
-#ifndef USE_AKONADI
 	KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
-#endif
 	Event::List kcalevents = cal->rawEvents();
 	for (i = 0, end = kcalevents.count();  i < end;  ++i)
 	{
@@ -452,14 +448,12 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 		events += event;
 		mEventMap[kcalevent->uid()] = event;
 
-#ifndef USE_AKONADI
 		// Set any command execution error flags for the alarm.
 		// These are stored in the KAlarm config file, not the alarm
 		// calendar, since they are specific to the user's local system.
 		QString cmdErr = config.readEntry(event->id());
 		if (!cmdErr.isEmpty())
 			event->setCommandError(cmdErr);
-#endif
 	}
 
 	// Now scan the list of alarms to find the earliest one to trigger
@@ -1116,7 +1110,6 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 		mCalendar->deleteEvent(kcalEvent);
 	}
 
-#ifndef USE_AKONADI
 	// Delete any command execution error flags for the alarm.
 	KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
 	if (config.hasKey(id))
@@ -1124,7 +1117,6 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 	        config.deleteEntry(id);
 		config.sync();
 	}
-#endif
 	return status;
 }
 
