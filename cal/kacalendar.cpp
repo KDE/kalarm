@@ -75,7 +75,7 @@ QByteArray Calendar::icalProductId()
 /******************************************************************************
 * Check the version of KAlarm which wrote a calendar file, and convert it in
 * memory to the current KAlarm format if possible. The storage file is not
-* updated. The compability of the calendar format is indicated by the return
+* updated. The compatibility of the calendar format is indicated by the return
 * value.
 */
 int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
@@ -403,7 +403,7 @@ CalEvent::Type CalEvent::type(const QString& mimeType)
 CalEvent::Types CalEvent::types(const QStringList& mimeTypes)
 {
     Types types = 0;
-    foreach (const QString type, mimeTypes)
+    foreach (const QString& type, mimeTypes)
     {
         if (type == KAlarm::MIME_ACTIVE)
             types |= ACTIVE;
