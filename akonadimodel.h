@@ -434,7 +434,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         /** Constructor.
          *  @param allowed the alarm types (active/archived/template) included in this model
          */
-        ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent = 0);
+        explicit ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent = 0);
 
         KAlarm::CalEvent::Types includedTypes() const  { return mAllowedTypes; }
         KAEvent      event(int row) const;

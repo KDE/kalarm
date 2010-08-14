@@ -56,7 +56,7 @@ class KALARM_CAL_EXPORT Calendar
 
         /** Check the version of KAlarm which wrote a calendar file, and convert
          *  it in memory to the current KAlarm format if possible. The storage 
-         *  file is not updated. The compability of the calendar format is
+         *  file is not updated. The compatibility of the calendar format is
          *  indicated by the return value.
          *
          *  @param calendar       calendar stored in @p localFile
