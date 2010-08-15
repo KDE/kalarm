@@ -646,7 +646,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 	{
 		QString name = HolidayRegion::name(regionCode);
 		QString languageName = KGlobal::locale()->languageCodeToName(HolidayRegion::languageCode(regionCode));
-		QString label = languageName.isEmpty() ? name : i18nc("Holiday region, region language", "%1 (%2)", name, languageName);
+		QString label = languageName.isEmpty() ? name : i18nc("Holday region, region language", "%1 (%2)", name, languageName);
 		regionsMap.insert(label, regionCode);
 	}
 
