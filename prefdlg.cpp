@@ -642,33 +642,22 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
 	box->setWhatsThis(i18nc("@info:whatsthis",
 	                        "Select which holiday region to use"));
 
-    QStringList regions = HolidayRegion::regionCodes();
-    QMap<QString, QString> regionsMap;
+	QStringList regions = HolidayRegion::regionCodes();
+	QMap<QString, QString> regionsMap;
+	foreach (const QString& regionCode, regions)
+	{
+		QString name = HolidayRegion::name(regionCode);
+		QString languageName = KGlobal::locale()->languageCodeToName(HolidayRegion::languageCode(regionCode));
+		QString label = languageName.isEmpty() ? name : i18nc("Holiday region, region language", "%1 (%2)", name, languageName);
+		regionsMap.insert(label, regionCode);
+	}
 
-    foreach (const QString & regionCode, regions) {
-        QString name = HolidayRegion::name(regionCode);
-        QString languageName = KGlobal::locale()->languageCodeToName(HolidayRegion::languageCode(regionCode));
-        QString label;
-        if (languageName.isEmpty()) {
-            label = name;
-        } else {
-            label = i18nc("Holday region, region language", "%1 (%2)", name, languageName);
-        }
-        regionsMap.insert(label, regionCode);
-    }
-
-    mHolidays->addItem(i18nc("No holiday region", "None"), QString());
-    QMapIterator<QString, QString> i(regionsMap);
-    while (i.hasNext()) {
-        i.next();
-        mHolidays->addItem(i.key(), i.value());
-    }
-
-    if (Preferences::holidays().isValid()) {
-        mHolidays->setCurrentIndex(mHolidays->findData(Preferences::holidays().regionCode()));
-    } else {
-        mHolidays->setCurrentIndex(0);
-    }
+	mHolidays->addItem(i18nc("No holiday region", "None"), QString());
+	for (QMapIterator<QString, QString> it(regionsMap);  it.hasNext();  )
+	{
+		it.next();
+		mHolidays->addItem(it.key(), it.value());
+	}
 
 	// Start-of-day time
 	itemBox = new ItemBox(topWidget());
@@ -781,7 +770,8 @@ void TimePrefTab::restore(bool)
 	}
 	mTimeZone->setCurrentIndex(tzindex);
 #endif
-	mHolidays->setCurrentIndex(mHolidays->findData(Preferences::holidays().regionCode()));;
+	int index = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
+	mHolidays->setCurrentIndex(index);
 	mStartOfDay->setValue(Preferences::startOfDay());
 	mWorkStart->setValue(Preferences::workDayStart());
 	mWorkEnd->setValue(Preferences::workDayEnd());
