@@ -2,19 +2,11 @@ project(kalarm)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 
-# KAlarm depends on kdepim/akonadi/ which is impossible for packagers.
-# Akonadi for KAlarm doesn't work yet.
-set(BUILD_akonadi FALSE)
-
-if(BUILD_akonadi)
-  add_definitions(-DUSE_AKONADI)
-else(BUILD_akonadi)
-  add_definitions(-DWANT_DEPRECATED_KCAL_API)
-  add_definitions(-DWANT_DEPRECATED_KABC_API)
-  add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
-endif(BUILD_akonadi)
+# This version of KAlarm still uses deprecated pre-Akonadi libraries.
+add_definitions(-DWANT_DEPRECATED_KCAL_API)
+add_definitions(-DWANT_DEPRECATED_KABC_API)
+add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
-
 
 include_directories(
 	${CMAKE_CURRENT_BINARY_DIR}
@@ -123,11 +115,6 @@ if (KMAIL_SUPPORTED)
 endif (KMAIL_SUPPORTED)
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
-if( BUILD_akonadi )
-  kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-  qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmresourcesettings KAlarmResourceSettings)
-endif( BUILD_akonadi )
-
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
 #if (UNIX)
@@ -139,11 +126,7 @@ endif (KMAIL_SUPPORTED)
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-if(BUILD_akonadi)
-  target_link_libraries(kalarm_bin ${KDE4_KCMUTILS_LIBS} kalarm_resources kalarm_calendar ${KDEPIMLIBS_KCAL_LIBS} akonadi_next ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_MAILTRANSPORT_LIBS} ${KDEPIMLIBS_AKONADI_LIBRARY} ${KDEPIMLIBS_AKONADI_KMIME_LIBRARY} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KDEPIMLIBS_KHOLIDAYS_LIBS} ${KDEPIMLIBS_KPIMUTILS_LIBS} ${KDE4_PHONON_LIBS} ${X11_X11_LIB} kdepim)
-else(BUILD_akonadi)
-  target_link_libraries(kalarm_bin ${KDE4_KCMUTILS_LIBS} kalarm_resources kalarm_calendar ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_MAILTRANSPORT_LIBS} ${KDEPIMLIBS_AKONADI_LIBRARY} ${KDEPIMLIBS_AKONADI_KMIME_LIBRARY} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KDEPIMLIBS_KHOLIDAYS_LIBS} ${KDEPIMLIBS_KPIMUTILS_LIBS} ${KDE4_PHONON_LIBS} ${X11_X11_LIB} kdepim)
-endif(BUILD_akonadi)
+target_link_libraries(kalarm_bin ${KDE4_KCMUTILS_LIBS} kalarm_resources kalarm_calendar ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KABC_LIBRARY} ${KDE4_KMIME_LIBRARY} ${KDEPIMLIBS_KPIMIDENTITIES_LIBS} ${KDEPIMLIBS_MAILTRANSPORT_LIBS} ${KDEPIMLIBS_AKONADI_LIBRARY} ${KDEPIMLIBS_AKONADI_KMIME_LIBRARY} ${KDEPIMLIBS_AKONADI_CONTACT_LIBS} ${KDEPIMLIBS_KHOLIDAYS_LIBS} ${KDEPIMLIBS_KPIMUTILS_LIBS} ${KDE4_PHONON_LIBS} ${X11_X11_LIB} kdepim)
 
 install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS} )
 #endif (UNIX)
