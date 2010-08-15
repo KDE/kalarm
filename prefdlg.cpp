@@ -770,8 +770,8 @@ void TimePrefTab::restore(bool)
 	}
 	mTimeZone->setCurrentIndex(tzindex);
 #endif
-	int index = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
-	mHolidays->setCurrentIndex(index);
+	int i = Preferences::holidays().isValid() ? mHolidays->findData(Preferences::holidays().regionCode()) : 0;
+	mHolidays->setCurrentIndex(i);
 	mStartOfDay->setValue(Preferences::startOfDay());
 	mWorkStart->setValue(Preferences::workDayStart());
 	mWorkEnd->setValue(Preferences::workDayEnd());
