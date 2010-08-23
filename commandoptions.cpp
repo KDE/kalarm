@@ -182,7 +182,12 @@ CommandOptions::CommandOptions()
 			QString addr = params[i];
 			if (!KAMail::checkAddress(addr))
 				setError(i18nc("@info:shell", "<icode>%1</icode>: invalid email address", QLatin1String("--mail")));
+#ifdef USE_AKONADI
+			KCalCore::Person::Ptr person(new KCalCore::Person(QString(), addr));
+			mAddressees += person;
+#else
 			mAddressees += KCal::Person(QString(), addr);
+#endif
 		}
 		params = mArgs->getOptionList("attach");
 		for (int i = 0, count = params.count();  i < count;  ++i)

@@ -22,14 +22,25 @@
 #define KACALENDAR_H
 
 #include "kalarm_cal_export.h"
+#ifdef USE_AKONADI
+#include "kcalcore_constptr.h"
+#include <kcalcore/filestorage.h>
+#include <kcalcore/event.h>
+#endif
 #include <QByteArray>
 #include <QStringList>
 
+#ifdef USE_AKONADI
+namespace KCalCore {
+  class Alarm;
+}
+#else
 namespace KCal {
   class Event;
   class Alarm;
   class CalendarLocal;
 }
+#endif
 
 namespace KAlarm
 {
@@ -66,7 +77,11 @@ class KALARM_CAL_EXPORT Calendar
          *          >0 the older KAlarm version which wrote the calendar;
          *          -1 calendar is not a KAlarm format or is an unknown KAlarm format
          */
+#ifdef USE_AKONADI
+        static int checkCompatibility(const KCalCore::FileStorage::Ptr&, QString& versionString);
+#else
         static int checkCompatibility(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
+#endif
 
         /** Set the program name and version for use in calendars. */
         static void setProductId(const QByteArray& progName, const QByteArray& progVersion);
@@ -79,7 +94,11 @@ class KALARM_CAL_EXPORT Calendar
         static const QByteArray APPNAME;           //!< The application name ("KALARM") used in calendar properties
 
     private:
+#ifdef USE_AKONADI
+        static int  readKAlarmVersion(const KCalCore::FileStorage::Ptr&, QString& subVersion, QString& versionString);
+#else
         static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
+#endif
         static void insertKAlarmCatalog();
 
         static QByteArray mIcalProductId;
@@ -101,10 +120,10 @@ class KALARM_CAL_EXPORT CalEvent
         Q_DECLARE_FLAGS(Types, Type);
 
         static QString uid(const QString& id, Type);
-        static Type    status(const KCal::Event*, QString* param = 0);
-        static void    setStatus(KCal::Event*, Type, const QString& param = QString());
-
 #ifdef USE_AKONADI
+        static Type    status(const KCalCore::ConstEventPtr&, QString* param = 0);
+        static void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
+
         /** Return the alarm Type for a mime type string. */
         static Type    type(const QString& mimeType);
         /** Return the alarm Types for a list of mime type strings. */
@@ -113,6 +132,9 @@ class KALARM_CAL_EXPORT CalEvent
         static QString mimeType(Type);
         /** Return the mime type strings corresponding to alarm Types. */
         static QStringList mimeTypes(Types);
+#else
+        static Type    status(const KCal::Event*, QString* param = 0);
+        static void    setStatus(KCal::Event*, Type, const QString& param = QString());
 #endif
 };
 

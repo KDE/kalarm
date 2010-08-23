@@ -1,7 +1,7 @@
 /*
  *  timeperiod.h  -  time period data entry widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007,2008,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,7 +30,11 @@
 #include "timespinbox.h"
 #include "timeperiod.moc"
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.

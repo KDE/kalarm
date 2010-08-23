@@ -43,12 +43,21 @@
 #include "templatelistview.h"
 #include "templatemenuaction.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/event.h>
+#include <kcalcore/icalformat.h>
+#include <kcalcore/person.h>
+#include <kcalcore/duration.h>
+using namespace KCalCore;
+#else
 #include <kcal/event.h>
 #include <kcal/icalformat.h>
-#include <kpimidentities/identitymanager.h>
-#include <kpimidentities/identity.h>
 #include <kcal/person.h>
 #include <kcal/duration.h>
+using namespace KCal;
+#endif
+#include <kpimidentities/identitymanager.h>
+#include <kpimidentities/identity.h>
 #include <kholidays/holidays.h>
 
 #include <kconfiggroup.h>
@@ -1000,7 +1009,7 @@ void purgeArchive(int purgeDays)
 	for (int i = 0;  i < events.count();  )
 	{
 		KAEvent* event = events[i];
-		KCal::Incidence* kcalIncidence = resource->incidence(event->id());
+		Incidence* kcalIncidence = resource->incidence(event->id());
 		if (purgeDays  &&  kcalIncidence  &&  kcalIncidence->created().date() >= cutoff)
 			events.removeAt(i);
 		else
@@ -2122,10 +2131,10 @@ namespace
 KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 {
 #ifdef USE_AKONADI
-	KCal::Event* kcalEvent = new KCal::Event;
+	Event::Ptr kcalEvent(new KCalCore::Event);
         event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
 #else
-	KCal::Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(event);
+	Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(event);
 #endif
 	// Change the event ID to avoid duplicating the same unique ID as the original event
 	QString uid = uidKOrganizer(event->id());
@@ -2157,14 +2166,21 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
 		default:
 			break;
 	}
+#ifdef USE_AKONADI
+	Person::Ptr person(new Person(QString(), userEmail));
+	kcalEvent->setOrganizer(person);
+#else
 	kcalEvent->setOrganizer(KCal::Person(QString(), userEmail));
-	kcalEvent->setDuration(KCal::Duration(Preferences::kOrgEventDuration() * 60, KCal::Duration::Seconds));
+#endif
+	kcalEvent->setDuration(Duration(Preferences::kOrgEventDuration() * 60, Duration::Seconds));
 
 	// Translate the event into string format
-	KCal::ICalFormat format;
+	ICalFormat format;
 	format.setTimeSpec(Preferences::timeZone(true));
 	QString iCal = format.toICalString(kcalEvent);
+#ifndef USE_AKONADI
 	delete kcalEvent;
+#endif
 
 	// Send the event to KOrganizer
 	KAlarm::UpdateStatus st = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface

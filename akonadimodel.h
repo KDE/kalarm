@@ -27,6 +27,7 @@
 #include <akonadi/entitymimetypefiltermodel.h>
 #include <akonadi/favoritecollectionsmodel.h>
 #include <akonadi/akonadi_next/kreparentingproxymodel.h>
+#include <kcalcore/calendar.h>
 #include <QListView>
 #include <QItemDelegate>
 #include <QColor>
@@ -38,7 +39,6 @@
 namespace Akonadi {
     class AgentInstanceCreateJob;
 }
-namespace KCal { class CalendarLocal; }
 class QPixmap;
 class KJob;
 class KAEvent;
@@ -144,7 +144,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *  Collection's mime types.
          *  @return true if at least one alarm is the right type.
          */
-        static bool checkAlarmTypes(const Akonadi::Collection&, KCal::CalendarLocal&);
+        static bool checkAlarmTypes(const Akonadi::Collection&, KCalCore::Calendar::Ptr&);
 
         static QSize iconSize()  { return mIconSize; }
 

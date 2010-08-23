@@ -51,10 +51,17 @@ static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION
 /******************************************************************************
 * Write the X-KDE-KALARM-VERSION custom property into the calendar.
 */
+#ifdef USE_AKONADI
+void CalendarCompat::setID(KCalCore::MemoryCalendar::Ptr& calendar)
+{
+	calendar->setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
+}
+#else
 void CalendarCompat::setID(KCal::CalendarLocal& calendar)
 {
 	calendar.setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
 }
+#endif
 
 /******************************************************************************
 * Find the version of KAlarm which wrote the calendar file, and do any
@@ -65,7 +72,7 @@ void CalendarCompat::setID(KCal::CalendarLocal& calendar)
 * Reply = true if the calendar file is now in the current format.
 */
 #ifdef USE_AKONADI
-KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, const QString& localFile,
+KAlarm::Calendar::Compat CalendarCompat::fix(const KCalCore::FileStorage::Ptr& fileStorage,
                                       const Akonadi::Collection& collection, FixFunc conv, bool* wrongType)
 #else
 KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource,
@@ -75,7 +82,11 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 	if (wrongType)
 		*wrongType = false;
 	QString versionString;
+#ifdef USE_AKONADI
+	int version = KAlarm::Calendar::checkCompatibility(fileStorage, versionString);
+#else
 	int version = KAlarm::Calendar::checkCompatibility(calendar, localFile, versionString);
+#endif
 	if (version < 0)
 		return KAlarm::Calendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
 #ifdef USE_AKONADI
@@ -86,10 +97,12 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 		return KAlarm::Calendar::Current;    // update non-shared calendars regardless
 
 	// Check whether the alarm types in the calendar correspond with the resource's alarm type
-	if (wrongType)
 #ifdef USE_AKONADI
+	KCalCore::Calendar::Ptr calendar = fileStorage->calendar();
+	if (wrongType)
 		*wrongType = !AkonadiModel::checkAlarmTypes(collection, calendar);
 #else
+	if (wrongType)
 		*wrongType = !resource->checkAlarmTypes(calendar);
 #endif
 
@@ -135,6 +148,10 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 		    != KMessageBox::Yes)
 			return KAlarm::Calendar::Convertible;
 	}
+#ifdef USE_AKONADI
+	calendar->setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
+#else
 	calendar.setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
+#endif
 	return KAlarm::Calendar::Converted;
 }

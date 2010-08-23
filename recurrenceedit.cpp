@@ -41,7 +41,13 @@
 #include "timespinbox.h"
 #include "buttongroup.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/event.h>
+using namespace KCalCore;
+#else
 #include <kcal/event.h>
+using namespace KCal;
+#endif
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -60,8 +66,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtAlgorithms>
-
-using namespace KCal;
 
 
 class ListWidget : public QListWidget

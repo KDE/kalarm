@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,11 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 
 
 /*=============================================================================
@@ -164,7 +168,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	                  i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
 	                  true, page);
 	mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
-	connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(intervalChanged(const KCal::Duration&)));
+	connect(mTimeSelector, SIGNAL(valueChanged(const Duration&)), SLOT(intervalChanged(const Duration&)));
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
 	topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
@@ -204,7 +208,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
 	layout->addWidget(mDurationButton);
 	mDuration = new TimePeriod(true, mButtonBox);
 	mDuration->setFixedSize(mDuration->sizeHint());
-	connect(mDuration, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(durationChanged(const KCal::Duration&)));
+	connect(mDuration, SIGNAL(valueChanged(const Duration&)), SLOT(durationChanged(const Duration&)));
 	mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
 	layout->addWidget(mDuration);
 	mDurationButton->setFocusWidget(mDuration);
@@ -286,7 +290,7 @@ Repetition RepetitionDlg::repetition() const
 * Called when the time interval widget has changed value.
 * Adjust the maximum repetition count accordingly.
 */
-void RepetitionDlg::intervalChanged(const KCal::Duration& interval)
+void RepetitionDlg::intervalChanged(const Duration& interval)
 {
 	if (mTimeSelector->isChecked()  &&  interval.asSeconds() > 0)
 	{
@@ -319,7 +323,7 @@ void RepetitionDlg::countChanged(int count)
 * Called when the duration widget has changed value.
 * Adjust the count accordingly.
 */
-void RepetitionDlg::durationChanged(const KCal::Duration& duration)
+void RepetitionDlg::durationChanged(const Duration& duration)
 {
 	Duration interval = mTimeSelector->period();
 	if (interval)

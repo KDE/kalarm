@@ -32,8 +32,13 @@
 #include "mainwindow.h"
 #include "preferences.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/memorycalendar.h>
+#include <kcalcore/icalformat.h>
+#else
 #include <kcal/calendarlocal.h>
 #include <kcal/icalformat.h>
+#endif
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -48,9 +53,11 @@
 #include <ktemporaryfile.h>
 #include <kdebug.h>
 
-using namespace KCal;
 #ifdef USE_AKONADI
 using namespace Akonadi;
+using namespace KCalCore;
+#else
+using namespace KCal;
 #endif
 
 static const QString displayCalendarName = QLatin1String("displaying.ics");
@@ -133,7 +140,10 @@ KAEvent* AlarmCalendar::getEvent(const QString& uniqueID)
 * Constructor for the resources calendar.
 */
 AlarmCalendar::AlarmCalendar()
-	: mCalendar(0),
+	:
+#ifndef USE_AKONADI
+	  mCalendar(0),
+#endif
 	  mCalType(RESOURCES),
 	  mEventType(KAlarm::CalEvent::EMPTY),
 	  mOpen(false),
@@ -163,7 +173,10 @@ AlarmCalendar::AlarmCalendar()
 * Constructor for a calendar file.
 */
 AlarmCalendar::AlarmCalendar(const QString& path, KAlarm::CalEvent::Type type)
-	: mCalendar(0),
+	:
+#ifndef USE_AKONADI
+	  mCalendar(0),
+#endif
 	  mEventType(type),
 	  mOpen(false),
 	  mUpdateCount(0),
@@ -216,8 +229,16 @@ bool AlarmCalendar::open()
 			return false;
 
 		kDebug() << mUrl.prettyUrl();
+#ifdef USE_AKONADI
+		if (!mCalendarStorage)
+		{
+			MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
+			mCalendarStorage = FileStorage::Ptr(new FileStorage(calendar));
+		}
+#else
 		if (!mCalendar)
 			mCalendar = new CalendarLocal(Preferences::timeZone(true));
+#endif
 
 		// Check for file's existence, assuming that it does exist when uncertain,
 		// to avoid overwriting it.
@@ -241,8 +262,13 @@ bool AlarmCalendar::open()
 	}
 	if (!mOpen)
 	{
+#ifdef USE_AKONADI
+		mCalendarStorage->calendar().clear();
+		mCalendarStorage.clear();
+#else
 		delete mCalendar;
 		mCalendar = 0;
+#endif
 	}
 	return mOpen;
 }
@@ -265,9 +291,14 @@ int AlarmCalendar::load()
 	}
 	else
 	{
+#ifdef USE_AKONADI
+		if (!mCalendarStorage)
+			return -2;
+#else
 		if (!mCalendar)
 			return -2;
 		CalendarLocal* calendar = static_cast<CalendarLocal*>(mCalendar);
+#endif
 
 		kDebug() << mUrl.prettyUrl();
 		QString tmpFile;
@@ -278,8 +309,14 @@ int AlarmCalendar::load()
 			return -1;
 		}
 		kDebug() << "--- Downloaded to" << tmpFile;
+#ifdef USE_AKONADI
+		mCalendarStorage->calendar()->setTimeSpec(Preferences::timeZone(true));
+		mCalendarStorage->setFileName(tmpFile);
+		if (!mCalendarStorage->load())
+#else
 		calendar->setTimeSpec(Preferences::timeZone(true));
 		if (!calendar->load(tmpFile))
+#endif
 		{
 			// Check if the file is zero length
 			KIO::NetAccess::removeTempFile(tmpFile);
@@ -291,19 +328,26 @@ int AlarmCalendar::load()
 			kError() << "Error loading calendar file '" << tmpFile <<"'";
 			KMessageBox::error(0, i18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mUrl.prettyUrl()));
 			// load() could have partially populated the calendar, so clear it out
+#ifdef USE_AKONADI
+			mCalendarStorage->calendar()->close();
+			mCalendarStorage->calendar().clear();
+			mCalendarStorage.clear();
+#else
 			calendar->close();
 			delete mCalendar;
 			mCalendar = 0;
+#endif
 			mOpen = false;
 			return -1;
 		}
 		if (!mLocalFile.isEmpty())
 			KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
 		mLocalFile = tmpFile;
-		CalendarCompat::fix(*calendar, mLocalFile);   // convert events to current KAlarm format for when calendar is saved
 #ifdef USE_AKONADI
-		updateKAEvents(Collection(), calendar);
+		CalendarCompat::fix(mCalendarStorage);   // convert events to current KAlarm format for when calendar is saved
+		updateKAEvents(Collection());
 #else
+		CalendarCompat::fix(*calendar, mLocalFile);   // convert events to current KAlarm format for when calendar is saved
 		updateKAEvents(0, calendar);
 #endif
 	}
@@ -319,10 +363,11 @@ bool AlarmCalendar::reload()
 #ifdef USE_AKONADI
 	if (mCalType == RESOURCES)
 		return true;
-#endif
+	if (!mCalendarStorage)
+		return false;
+#else
 	if (!mCalendar)
 		return false;
-#ifndef USE_AKONADI
 	if (mCalType == RESOURCES)
 	{
 		kDebug() << "RESOURCES";
@@ -346,10 +391,11 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 #ifdef USE_AKONADI
 	if (mCalType == RESOURCES)
 		return true;
-#endif
+	if (!mCalendarStorage)
+		return false;
+#else
 	if (!mCalendar)
 		return false;
-#ifndef USE_AKONADI
 	if (mCalType == RESOURCES)
 	{
 		kDebug() << "RESOURCES";
@@ -365,7 +411,13 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 		QString saveFilename = newFile.isNull() ? mLocalFile : newFile;
 		if (mCalType == LOCAL_VCAL  &&  newFile.isNull()  &&  mUrl.isLocalFile())
 			saveFilename = mICalUrl.toLocalFile();
+#ifdef USE_AKONADI
+		mCalendarStorage->setFileName(saveFilename);
+		mCalendarStorage->setSaveFormat(new ICalFormat);
+		if (!mCalendarStorage->save())
+#else
 		if (!static_cast<CalendarLocal*>(mCalendar)->save(saveFilename, new ICalFormat))
+#endif
 		{
 			kError() << "Saving" << saveFilename << "failed.";
 			KMessageBox::error(0, i18nc("@info", "Failed to save calendar to <filename>%1</filename>", mICalUrl.prettyUrl()));
@@ -411,12 +463,21 @@ void AlarmCalendar::close()
 	// Flag as closed now to prevent removeKAEvents() doing silly things
 	// when it's called again
 	mOpen = false;
+#ifdef USE_AKONADI
+	if (mCalendarStorage)
+	{
+		mCalendarStorage->calendar()->close();
+		mCalendarStorage->calendar().clear();
+		mCalendarStorage.clear();
+	}
+#else
 	if (mCalendar)
 	{
 		mCalendar->close();
 		delete mCalendar;
 		mCalendar = 0;
 	}
+#endif
 	// Resource map should be empty, but just in case...
 	while (!mResourceMap.isEmpty())
 		removeKAEvents(mResourceMap.begin().key(), true);
@@ -466,7 +527,7 @@ void AlarmCalendar::updateResourceKAEvents(AlarmResource* resource, KCal::Calend
 #endif
 
 #ifdef USE_AKONADI
-void AlarmCalendar::updateKAEvents(const Collection& collection, KCal::CalendarLocal* cal)
+void AlarmCalendar::updateKAEvents(const Collection& collection)
 #else
 void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal* cal)
 #endif
@@ -486,6 +547,9 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 		delete event;
 	}
 	events.clear();
+#ifdef USE_AKONADI
+	Calendar::Ptr cal = mCalendarStorage->calendar();
+#endif
 	if (!cal)
 		return;
 
@@ -495,7 +559,11 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 	Event::List kcalevents = cal->rawEvents();
 	for (i = 0, end = kcalevents.count();  i < end;  ++i)
 	{
+#ifdef USE_AKONADI
+		ConstEventPtr kcalevent = kcalevents[i];
+#else
 		const Event* kcalevent = kcalevents[i];
+#endif
 		if (kcalevent->alarms().isEmpty())
 			continue;    // ignore events without alarms
 
@@ -705,8 +773,14 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	}
 
 	// Read the calendar and add its alarms to the current calendars
+#ifdef USE_AKONADI
+	MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::timeZone(true)));
+	FileStorage::Ptr calStorage(new FileStorage(cal, filename));
+	success = calStorage->load();
+#else
 	CalendarLocal cal(Preferences::timeZone(true));
 	success = cal.load(filename);
+#endif
 	if (!success)
 	{
 		kDebug() << "Error loading calendar '" << filename <<"'";
@@ -714,11 +788,12 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 	}
 	else
 	{
-		KAlarm::Calendar::Compat caltype = CalendarCompat::fix(cal, filename);
 #ifdef USE_AKONADI
+		KAlarm::Calendar::Compat caltype = CalendarCompat::fix(calStorage);
 		KAlarm::CalEvent::Types wantedTypes = collection && collection->isValid() ? KAlarm::CalEvent::types(collection->contentMimeTypes()) : KAlarm::CalEvent::EMPTY;
 		Collection activeColl, archiveColl, templateColl;
 #else
+		KAlarm::Calendar::Compat caltype = CalendarCompat::fix(cal, filename);
 		KAlarm::CalEvent::Type wantedType = resource ? resource->alarmType() : KAlarm::CalEvent::EMPTY;
 		AlarmResources* resources = AlarmResources::instance();
 		AlarmResource* activeRes   = 0;
@@ -728,10 +803,18 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 		bool enabled = true;
 #endif
 		KAEvent::List newEvents;
+#ifdef USE_AKONADI
+		Event::List events = cal->rawEvents();
+#else
 		Event::List events = cal.rawEvents();
+#endif
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
+#ifdef USE_AKONADI
+			ConstEventPtr event = events[i];
+#else
 			const Event* event = events[i];
+#endif
 			if (event->alarms().isEmpty()  ||  !KAEvent(event).isValid())
 				continue;    // ignore events without alarms, or usable alarms
 			KAlarm::CalEvent::Type type = KAlarm::CalEvent::status(event);
@@ -762,27 +845,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 					*coll = CollectionControlModel::destination(type);
 			}
 
-			Event newev(*event);
-
-			// If there is a display alarm without display text, use the event
-			// summary text instead.
-			if (type == KAlarm::CalEvent::ACTIVE  &&  !newev.summary().isEmpty())
-			{
-				const Alarm::List& alarms = newev.alarms();
-				for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
-				{
-					Alarm* alarm = alarms[ai];
-					if (alarm->type() == Alarm::Display  &&  alarm->text().isEmpty())
-						alarm->setText(newev.summary());
-				}
-				newev.setSummary(QString());   // KAlarm only uses summary for template names
-			}
-
-			// Give the event a new ID and add it to the calendars
-			newev.setUid(KAlarm::CalEvent::uid(CalFormat::createUniqueId(), type));
-			KAEvent* newEvent = new KAEvent(&newev);
-			if (!AkonadiModel::instance()->addEvent(*newEvent, *coll))
-				success = false;
+			Event::Ptr newev(new Event(*event));
 #else
 			AlarmResource** res;
 			if (resource)
@@ -805,6 +868,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 			}
 
 			Event* newev = new Event(*event);
+#endif
 
 			// If there is a display alarm without display text, use the event
 			// summary text instead.
@@ -813,7 +877,11 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 				const Alarm::List& alarms = newev->alarms();
 				for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
 				{
+#ifdef USE_AKONADI
+					Alarm::Ptr alarm = alarms[ai];
+#else
 					Alarm* alarm = alarms[ai];
+#endif
 					if (alarm->type() == Alarm::Display  &&  alarm->text().isEmpty())
 						alarm->setText(newev->summary());
 				}
@@ -822,6 +890,11 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 
 			// Give the event a new ID and add it to the calendars
 			newev->setUid(KAlarm::CalEvent::uid(CalFormat::createUniqueId(), type));
+#ifdef USE_AKONADI
+			KAEvent* newEvent = new KAEvent(newev);
+			if (!AkonadiModel::instance()->addEvent(*newEvent, *coll))
+				success = false;
+#else
 			if (resources->addEvent(newev, *res))
 			{
 				saveRes = true;
@@ -877,8 +950,14 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 	}
 	kDebug() << url.prettyUrl();
 
+#ifdef USE_AKONADI
+	MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
+	FileStorage::Ptr calStorage(new FileStorage(calendar, file));
+	if (append  &&  !calStorage->load())
+#else
 	CalendarLocal calendar(Preferences::timeZone(true));
 	if (append  &&  !calendar.load(file))
+#endif
 	{
 		KIO::UDSEntry uds;
 		KIO::NetAccess::stat(url, uds, parent);
@@ -898,12 +977,20 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 	for (int i = 0, end = events.count();  i < end;  ++i)
 	{
 		const KAEvent* event = events[i];
+#ifdef USE_AKONADI
+		Event::Ptr kcalEvent(new Event);
+#else
 		Event* kcalEvent = new Event;
+#endif
 		KAlarm::CalEvent::Type type = event->category();
 		QString id = KAlarm::CalEvent::uid(kcalEvent->uid(), type);
 		kcalEvent->setUid(id);
 		event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
+#ifdef USE_AKONADI
+		if (calendar->addEvent(kcalEvent))
+#else
 		if (calendar.addEvent(kcalEvent))
+#endif
 			some = true;
 		else
 			ok = false;
@@ -918,7 +1005,13 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 		tempFile = new KTemporaryFile;
 		file = tempFile->fileName();
 	}
+#ifdef USE_AKONADI
+	calStorage->setFileName(file);
+	calStorage->setSaveFormat(new ICalFormat);
+	if (!calStorage->save())
+#else
 	if (!calendar.save(file, new ICalFormat))
+#endif
 	{
 		kError() << file << ": failed";
 		KMessageBox::error(0, i18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
@@ -930,7 +1023,11 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 		KMessageBox::error(0, i18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
 		success = false;
 	}
+#ifdef USE_AKONADI
+	calendar->close();
+#else
 	calendar.close();
+#endif
 	delete tempFile;
 	return success;
 }
@@ -1042,7 +1139,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 
 #ifdef USE_AKONADI
 	Collection::Id key = collection ? collection->id() : -1;
-	Event* kcalEvent = (mCalType == RESOURCES) ? (Event*)0 : new Event;
+	Event::Ptr kcalEvent((mCalType == RESOURCES) ? (Event*)0 : new Event);
 	KAEvent* event = new KAEvent(evnt);
 #else
 	AlarmResource* key = resource;
@@ -1118,7 +1215,11 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 		if (addEvent(0, event))
 #endif
 		{
+#ifdef USE_AKONADI
+			ok = mCalendarStorage->calendar()->addEvent(kcalEvent);
+#else
 			ok = mCalendar->addEvent(kcalEvent);
+#endif
 			remove = !ok;
 		}
 	}
@@ -1134,8 +1235,8 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 		delete event;
 #else
 		*event = oldEvent;
-#endif
 		delete kcalEvent;
+#endif
 		return false;
 	}
 	event->clearUpdated();
@@ -1410,7 +1511,13 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 	// destructed when the event is deleted.
 	const QString id = eventID;
 
+#ifdef USE_AKONADI
+	Event::Ptr kcalEvent;
+       	if (mCalendarStorage)
+	       kcalEvent = mCalendarStorage->calendar()->event(id);
+#else
 	Event* kcalEvent = mCalendar ? mCalendar->event(id) : 0;
+#endif
 	KAEventMap::Iterator it = mEventMap.find(id);
 	if (it != mEventMap.end())
 	{
@@ -1447,7 +1554,11 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 	if (kcalEvent)
 	{
 		status = KAlarm::CalEvent::status(kcalEvent);
+#ifdef USE_AKONADI
+		mCalendarStorage->calendar()->deleteEvent(kcalEvent);
+#else
 		mCalendar->deleteEvent(kcalEvent);
+#endif
 	}
 #ifdef USE_AKONADI
 	else
@@ -1512,13 +1623,20 @@ KAEvent* AlarmCalendar::event(const QString& uniqueID)
 * Return the event with the specified ID.
 * For the Akonadi version, this method is for the display calendar only.
 */
+#ifdef USE_AKONADI
+Event::Ptr AlarmCalendar::kcalEvent(const QString& uniqueID)
+{
+	Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
+	if (!mCalendarStorage)
+	       return Event::Ptr();
+	return mCalendarStorage->calendar()->event(uniqueID);
+}
+#else
 Event* AlarmCalendar::kcalEvent(const QString& uniqueID)
 {
-#ifdef USE_AKONADI
-	Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
-#endif
 	return mCalendar ? mCalendar->event(uniqueID) : 0;
 }
+#endif
 
 /******************************************************************************
 * Find the alarm template with the specified name.
@@ -1549,7 +1667,7 @@ KAEvent::List AlarmCalendar::events(AlarmResource* resource, KAlarm::CalEvent::T
 {
 	KAEvent::List list;
 #ifdef USE_AKONADI
-	if (mCalType != RESOURCES  &&  (!mCalendar || collection.isValid()))
+	if (mCalType != RESOURCES  &&  (!mCalendarStorage || collection.isValid()))
 		return list;
 	if (collection.isValid())
 #else
@@ -1604,9 +1722,9 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KAlarm::CalEvent:
 	Event::List list;
 #ifdef USE_AKONADI
 	Q_ASSERT(mCalType != RESOURCES);   // only allowed for display calendar
-	if (!mCalendar)
+	if (!mCalendarStorage)
 		return list;
-	list = mCalendar->rawEvents();
+	list = mCalendarStorage->calendar()->rawEvents();
 #else
 	if (!mCalendar  ||  (resource && mCalType != RESOURCES))
 		return list;
@@ -1614,7 +1732,11 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KAlarm::CalEvent:
 #endif
 	for (int i = 0;  i < list.count();  )
 	{
+#ifdef USE_AKONADI
+		Event::Ptr event = list[i];
+#else
 		Event* event = list[i];
+#endif
 		if (event->alarms().isEmpty()
 		||  (type != KAlarm::CalEvent::EMPTY  &&  !(type & KAlarm::CalEvent::status(event)))
 		||  !KAEvent(event).isValid())
@@ -1815,9 +1937,12 @@ KAEvent::List AlarmCalendar::atLoginAlarms() const
 	if (mCalType != RESOURCES)
 		return atlogins;
 	AkonadiModel* model = AkonadiModel::instance();
-#endif
+	if (!mCalendarStorage  ||  mCalType != RESOURCES)
+		return atlogins;
+#else
 	if (!mCalendar  ||  mCalType != RESOURCES)
 		return atlogins;
+#endif
 	for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
 	{
 #ifdef USE_AKONADI

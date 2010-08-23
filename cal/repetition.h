@@ -22,7 +22,11 @@
 #define REPETITION_H
 
 #include "kalarm_cal_export.h"
+#ifdef USE_AKONADI
+#include <kcalcore/duration.h>
+#else
 #include <kcal/duration.h>
+#endif
 #include <kdatetime.h>
 
 /**
@@ -36,7 +40,11 @@ class KALARM_CAL_EXPORT Repetition
 {
     public:
 	Repetition() : mInterval(0), mCount(0) {}
+#ifdef USE_AKONADI
+	Repetition(const KCalCore::Duration& interval, int count)
+#else
 	Repetition(const KCal::Duration& interval, int count)
+#endif
 		: mInterval(interval), mCount(count)
 	{
 		if ((!count && interval) || (count && !interval))
@@ -46,7 +54,11 @@ class KALARM_CAL_EXPORT Repetition
 		}
 	}
 
+#ifdef USE_AKONADI
+	void set(const KCalCore::Duration& interval, int count)
+#else
 	void set(const KCal::Duration& interval, int count)
+#endif
 	{
 		if (!count || !interval)
 		{
@@ -60,7 +72,11 @@ class KALARM_CAL_EXPORT Repetition
 		}
 	}
 
+#ifdef USE_AKONADI
+	void set(const KCalCore::Duration& interval)
+#else
 	void set(const KCal::Duration& interval)
+#endif
 	{
 		if (mCount)
 		{
@@ -78,6 +94,18 @@ class KALARM_CAL_EXPORT Repetition
 	/** Return the number of repetitions. */
 	int count() const     { return mCount; }
 
+#ifdef USE_AKONADI
+	/** Return the interval between repetitions. */
+	const KCalCore::Duration& interval() const  { return mInterval; }
+
+	/** Return the overall duration of the repetition. */
+	KCalCore::Duration duration() const  { return mInterval * mCount; }
+
+	/** Return the overall duration of a specified number of repetitions.
+	 *  @param count the number of repetitions to find the duration of.
+	 */
+	KCalCore::Duration duration(int count) const  { return mInterval * count; }
+#else
 	/** Return the interval between repetitions. */
 	const KCal::Duration& interval() const  { return mInterval; }
 
@@ -88,6 +116,7 @@ class KALARM_CAL_EXPORT Repetition
 	 *  @param count the number of repetitions to find the duration of.
 	 */
 	KCal::Duration duration(int count) const  { return mInterval * count; }
+#endif
 
 	/** Check whether the repetition interval is in terms of days (as opposed to minutes). */
 	bool isDaily() const          { return mInterval.isDaily(); }
@@ -128,7 +157,11 @@ class KALARM_CAL_EXPORT Repetition
 	}
 
     private:
+#ifdef USE_AKONADI
+	KCalCore::Duration mInterval;   // sub-repetition interval
+#else
 	KCal::Duration mInterval;   // sub-repetition interval
+#endif
 	int            mCount;      // sub-repetition count (excluding the first time)
 };
 

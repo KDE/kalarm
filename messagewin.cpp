@@ -87,7 +87,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 
 #ifdef Q_WS_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
@@ -1101,7 +1105,7 @@ void MessageWin::redisplayAlarms()
 #else
 		AlarmResource* resource;
 #endif
-		KCal::Event::List events = cal->kcalEvents();
+		Event::List events = cal->kcalEvents();
 		for (int i = 0, end = events.count();  i < end;  ++i)
 		{
 			bool showDefer, showEdit;
@@ -1149,7 +1153,11 @@ bool MessageWin::retrieveEvent(KAEvent& event, Akonadi::Collection& resource, bo
 bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& showEdit, bool& showDefer)
 #endif
 {
+#ifdef USE_AKONADI
+	ConstEventPtr kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(KAlarm::CalEvent::uid(mEventID, KAlarm::CalEvent::DISPLAYING));
+#else
 	const Event* kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(KAlarm::CalEvent::uid(mEventID, KAlarm::CalEvent::DISPLAYING));
+#endif
 	if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
 	{
 		// The event isn't in the displaying calendar.
@@ -1180,7 +1188,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 *  from the displaying calendar.
 */
 #ifdef USE_AKONADI
-bool MessageWin::reinstateFromDisplaying(const Event* kcalEvent, KAEvent& event, Akonadi::Collection& collection, bool& showEdit, bool& showDefer)
+bool MessageWin::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, KAEvent& event, Akonadi::Collection& collection, bool& showEdit, bool& showDefer)
 #else
 bool MessageWin::reinstateFromDisplaying(const Event* kcalEvent, KAEvent& event, AlarmResource*& resource, bool& showEdit, bool& showDefer)
 #endif

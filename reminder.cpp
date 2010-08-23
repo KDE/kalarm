@@ -1,7 +1,7 @@
 /*
  *  reminder.cpp  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +28,13 @@
 #include <kdialog.h>
 #include <kdatetime.h>
 #include <kdebug.h>
+#ifdef USE_AKONADI
+#include <kcalcore/duration.h>
+using namespace KCalCore;
+#else
 #include <kcal/duration.h>
+using namespace KCal;
+#endif
 
 #include "preferences.h"
 #include "checkbox.h"
@@ -55,7 +61,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
 	                         reminderWhatsThis, valueWhatsThis, allowHourMinute, this);
 	mTime->setFixedSize(mTime->sizeHint());
 	connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
-	connect(mTime, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
+	connect(mTime, SIGNAL(valueChanged(const Duration&)), SIGNAL(changed()));
 	topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 
 	if (showOnceOnly)
@@ -136,11 +142,11 @@ int Reminder::minutes() const
 */
 void Reminder::setMinutes(int minutes, bool dateOnly)
 {
-	KCal::Duration period;
+	Duration period;
 	if (minutes % (24*60))
-		period = KCal::Duration(minutes * 60, KCal::Duration::Seconds);
+		period = Duration(minutes * 60, Duration::Seconds);
 	else
-		period = KCal::Duration(minutes / (24*60), KCal::Duration::Days);
+		period = Duration(minutes / (24*60), Duration::Days);
 	mTime->setPeriod(period, dateOnly, Preferences::defaultReminderUnits());
 }
 

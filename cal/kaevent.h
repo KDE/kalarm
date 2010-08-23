@@ -29,33 +29,51 @@
 #include "repetition.h"
 
 #ifdef USE_AKONADI
+#include "kcalcore_constptr.h"
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
-#endif
+#include <kcalcore/alarm.h>
+#include <kcalcore/person.h>
+#include <kcalcore/calendar.h>
+#else
 #include <kcal/person.h>
+#endif
 
+#include <QBitArray>
 #include <QColor>
 #include <QFont>
 #include <QList>
+#include <QMetaType>
 
+namespace KHolidays { class HolidayRegion; }
+#ifndef USE_AKONADI
 namespace KCal {
     class CalendarLocal;
     class Event;
 }
-namespace KHolidays { class HolidayRegion; }
-#ifndef USE_AKONADI
 class AlarmResource;
 #endif
 class AlarmData;
 
 
+#ifdef USE_AKONADI
+typedef KCalCore::Person  EmailAddress;
+class KALARM_CAL_EXPORT EmailAddressList : public KCalCore::Person::List
+#else
 typedef KCal::Person  EmailAddress;
 class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
+#endif
 {
     public:
+#ifdef USE_AKONADI
+        EmailAddressList() : KCalCore::Person::List() { }
+        EmailAddressList(const KCalCore::Person::List& list)  { operator=(list); }
+        EmailAddressList& operator=(const KCalCore::Person::List&);
+#else
         EmailAddressList() : QList<KCal::Person>() { }
         EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
         EmailAddressList& operator=(const QList<KCal::Person>&);
+#endif
         operator QStringList() const;
         QString     join(const QString& separator) const;
         QStringList pureAddresses() const;
@@ -300,8 +318,14 @@ class KALARM_CAL_EXPORT KAEvent
         KAEvent();
         KAEvent(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
                 const QFont& f, Action, int lateCancel, int flags, bool changesPending = false);
+#ifdef USE_AKONADI
+//        explicit KAEvent(const QSharedPointer<const KCalCore::Event>&);
+        explicit KAEvent(const KCalCore::ConstEventPtr&);
+        void               set(const KCalCore::ConstEventPtr& e) { d->set(e); }
+#else
         explicit KAEvent(const KCal::Event*);
         void               set(const KCal::Event* e)               { d->set(e); }
+#endif
         void               set(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action act, int lateCancel, int flags, bool changesPending = false)
                                                                    { d->set(dt, message, bg, fg, f, act, lateCancel, flags, changesPending); }
         void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
@@ -340,7 +364,7 @@ class KALARM_CAL_EXPORT KAEvent
 #ifdef USE_AKONADI
         bool               setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer)
                                                                    { return d->setDisplaying(*e.d, t, colId, dt, showEdit, showDefer); }
-        void               reinstateFromDisplaying(const KCal::Event* e, Akonadi::Collection::Id colId, bool& showEdit, bool& showDefer)
+        void               reinstateFromDisplaying(const KCalCore::ConstEventPtr& e, Akonadi::Collection::Id colId, bool& showEdit, bool& showDefer)
                                                                    { d->reinstateFromDisplaying(e, colId, showEdit, showDefer); }
         void               setCommandError(CmdErrType t) const     { d->setCommandError(t); }
 #else
@@ -402,7 +426,7 @@ class KALARM_CAL_EXPORT KAEvent
         KAAlarm            nextAlarm(KAAlarm::Type t) const    { return d->nextAlarm(t); }
         KAAlarm            convertDisplayingAlarm() const;
 #ifdef USE_AKONADI
-        bool               updateKCalEvent(KCal::Event* e, UidAction u, bool setCustomProperties = true) const
+        bool               updateKCalEvent(const KCalCore::Event::Ptr& e, UidAction u, bool setCustomProperties = true) const
                                                           { return d->updateKCalEvent(e, u, setCustomProperties); }
 #else
         bool               updateKCalEvent(KCal::Event* e, UidAction u) const
@@ -485,7 +509,11 @@ class KALARM_CAL_EXPORT KAEvent
         KARecurrence::Type recurType() const              { return d->checkRecur(); }
         KARecurrence*      recurrence() const             { return d->mRecurrence; }
         int                recurInterval() const;    // recurrence period in units of the recurrence period type (minutes, days, etc)
+#ifdef USE_AKONADI
+        KCalCore::Duration longestRecurrenceInterval() const  { return d->mRecurrence ? d->mRecurrence->longestInterval() : KCalCore::Duration(0); }
+#else
         KCal::Duration     longestRecurrenceInterval() const  { return d->mRecurrence ? d->mRecurrence->longestInterval() : KCal::Duration(0); }
+#endif
         QString            recurrenceText(bool brief = false) const;
         QString            repetitionText(bool brief = false) const;
         bool               occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const
@@ -512,10 +540,13 @@ class KALARM_CAL_EXPORT KAEvent
 #endif
         static int         currentCalendarVersion();
         static QByteArray  currentCalendarVersionString();
+#ifdef USE_AKONADI
+        static bool        convertKCalEvents(const KCalCore::Calendar::Ptr&, int calendarVersion, bool adjustSummerTime);
+//        static bool        convertRepetitions(KCalCore::MemoryCalendar&);
+        static List        ptrList(QList<KAEvent>&);
+#else
         static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCal::CalendarLocal&);
-#ifdef USE_AKONADI
-        static List        ptrList(QList<KAEvent>&);
 #endif
 
         // Methods to set and get global defaults
@@ -526,11 +557,19 @@ class KALARM_CAL_EXPORT KAEvent
                                                           { Private::mWorkDays = days;  Private::mWorkDayStart = start;  Private::mWorkDayEnd = end; }
 
     private:
+#ifdef USE_AKONADI
+        static bool        convertRepetition(const KCalCore::Event::Ptr&);
+        static bool        convertStartOfDay(const KCalCore::Event::Ptr&);
+        static DateTime    readDateTime(const KCalCore::ConstEventPtr&, bool dateOnly, DateTime& start);
+        static void        readAlarms(const KCalCore::ConstEventPtr&, void* alarmMap, bool cmdDisplay = false);
+        static void        readAlarm(const KCalCore::ConstAlarmPtr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
+#else
         static bool        convertRepetition(KCal::Event*);
         static bool        convertStartOfDay(KCal::Event*);
         static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
         static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
         static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
+#endif
 
         class Private : public KAAlarmEventBase, public QSharedData
         {
@@ -544,11 +583,19 @@ class KALARM_CAL_EXPORT KAEvent
                 Private();
                 Private(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
                         const QFont& f, Action, int lateCancel, int flags, bool changesPending = false);
+#ifdef USE_AKONADI
+                explicit Private(const KCalCore::ConstEventPtr&);
+#else
                 explicit Private(const KCal::Event*);
+#endif
                 Private(const Private&);
                 ~Private()         { delete mRecurrence; }
                 Private&           operator=(const Private& e)       { if (&e != this) copy(e);  return *this; }
+#ifdef USE_AKONADI
+                void               set(const KCalCore::ConstEventPtr&);
+#else
                 void               set(const KCal::Event*);
+#endif
                 void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags, bool changesPending = false);
                 void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile);
                 OccurType          setNextOccurrence(const KDateTime& preDateTime);
@@ -560,7 +607,7 @@ class KALARM_CAL_EXPORT KAEvent
                 void               cancelDefer();
 #ifdef USE_AKONADI
                 bool               setDisplaying(const Private&, KAAlarm::Type, Akonadi::Collection::Id, const KDateTime& dt, bool showEdit, bool showDefer);
-                void               reinstateFromDisplaying(const KCal::Event*, Akonadi::Collection::Id, bool& showEdit, bool& showDefer);
+                void               reinstateFromDisplaying(const KCalCore::ConstEventPtr&, Akonadi::Collection::Id, bool& showEdit, bool& showDefer);
                 void               setCommandError(CmdErrType t) const  { mCommandError = t; }
 #else
                 bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
@@ -575,7 +622,7 @@ class KALARM_CAL_EXPORT KAEvent
                 KAAlarm            firstAlarm() const;
                 KAAlarm            nextAlarm(KAAlarm::Type) const;
 #ifdef USE_AKONADI
-                bool               updateKCalEvent(KCal::Event*, UidAction, bool setCustomProperties = true) const;
+                bool               updateKCalEvent(const KCalCore::Event::Ptr&, UidAction, bool setCustomProperties = true) const;
 #else
                 bool               updateKCalEvent(KCal::Event*, UidAction) const;
 #endif
@@ -591,8 +638,13 @@ class KALARM_CAL_EXPORT KAEvent
                 OccurType          nextOccurrence(const KDateTime& preDateTime, DateTime& result, OccurOption = IGNORE_REPETITION) const;
                 OccurType          previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
                 void               setRecurrence(const KARecurrence&);
+#ifdef USE_AKONADI
+                bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+                bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+#else
                 bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
                 bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+#endif
                 KARecurrence::Type checkRecur() const;
                 void               clearRecur();
                 void               calcTriggerTimes() const;
@@ -608,9 +660,15 @@ class KALARM_CAL_EXPORT KAEvent
                 void               calcNextWorkingTime(const DateTime& nextTrigger) const;
                 DateTime           nextWorkingTime() const;
                 OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result) const;
+#ifdef USE_AKONADI
+                void               setAudioAlarm(const KCalCore::Alarm::Ptr&) const;
+                KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr&, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+                KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr&, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+#else
                 void               setAudioAlarm(KCal::Alarm*) const;
                 KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
                 KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+#endif
                 inline void        set_deferral(DeferType);
                 inline void        set_reminder(int minutes);
                 inline void        set_archiveReminder();
@@ -698,6 +756,8 @@ class KALARM_CAL_EXPORT KAEvent
 
         QSharedDataPointer<class Private> d;
 };
+
+Q_DECLARE_METATYPE(KAEvent);
 
 #endif // KAEVENT_H
 

@@ -27,16 +27,26 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#ifdef USE_AKONADI
+#include <kcalcore/event.h>
+#include <kcalcore/alarm.h>
+#include <kcalcore/memorycalendar.h>
+#else
 #include <kcal/event.h>
 #include <kcal/alarm.h>
 #include <kcal/calendarlocal.h>
+#endif
 
 #include <QMap>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 
 
 namespace KAlarm
@@ -78,11 +88,19 @@ QByteArray Calendar::icalProductId()
 * updated. The compatibility of the calendar format is indicated by the return
 * value.
 */
+#ifdef USE_AKONADI
+int Calendar::checkCompatibility(const FileStorage::Ptr& fileStorage, QString& versionString)
+#else
 int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
+#endif
 {
     bool version057_UTC = false;
     QString subVersion;
+#ifdef USE_AKONADI
+    int version = readKAlarmVersion(fileStorage, subVersion, versionString);
+#else
     int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
+#endif
     if (!version)
         return 0;     // calendar is in the current KAlarm format
     if (version < 0  ||  version > KAEvent::currentCalendarVersion())
@@ -90,6 +108,9 @@ int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFi
 
     // Calendar was created by an earlier version of KAlarm.
     // Convert it to the current format.
+#ifdef USE_AKONADI
+    const QString localFile = fileStorage->fileName();
+#endif
     if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
     {
         // KAlarm version 0.5.7 - check whether times are stored in UTC, in which
@@ -101,7 +122,11 @@ int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFi
         kDebug() << "KAlarm version" << version;
 
     // Convert events to current KAlarm format for when/if the calendar is saved
+#ifdef USE_AKONADI
+    KAEvent::convertKCalEvents(fileStorage->calendar(), version, version057_UTC);
+#else
     KAEvent::convertKCalEvents(calendar, version, version057_UTC);
+#endif
     return version;
 }
 
@@ -112,20 +137,37 @@ int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFi
 *       = -1 if it was created by KAlarm pre-0.3.5, or another program
 *       = version number if created by another KAlarm version.
 */
+#ifdef USE_AKONADI
+int Calendar::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& subVersion, QString& versionString)
+#else
 int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
+#endif
 {
     subVersion.clear();
+#ifdef USE_AKONADI
+    KCalCore::Calendar::Ptr calendar = fileStorage->calendar();
+    versionString = calendar->customProperty(APPNAME, VERSION_PROPERTY);
+#else
     versionString = calendar.customProperty(APPNAME, VERSION_PROPERTY);
+#endif
     if (versionString.isEmpty())
     {
         // Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.
         // If another application has written to the file, this may not be present.
+#ifdef USE_AKONADI
+        const QString prodid = calendar->productId();
+#else
         const QString prodid = calendar.productId();
+#endif
         if (prodid.isEmpty())
         {
             // Check whether the calendar file is empty, in which case
             // it can be written to freely.
+#ifdef USE_AKONADI
+            QFileInfo fi(fileStorage->fileName());
+#else
             QFileInfo fi(localFile);
+#endif
             if (!fi.size())
                 return 0;
         }
@@ -313,7 +355,11 @@ QString CalEvent::uid(const QString& id, Type status)
 * triggered. They will be archived once KAlarm tries to handle them.
 * Do not call this function for the displaying alarm calendar.
 */
-CalEvent::Type CalEvent::status(const KCal::Event* event, QString* param)
+#ifdef USE_AKONADI
+CalEvent::Type CalEvent::status(const ConstEventPtr& event, QString* param)
+#else
+CalEvent::Type CalEvent::status(const Event* event, QString* param)
+#endif
 {
 	// Set up a static quick lookup for type strings
 	if (properties.isEmpty())
@@ -368,7 +414,11 @@ CalEvent::Type CalEvent::status(const KCal::Event* event, QString* param)
 * If a parameter is supplied, it will be appended as a second parameter to the
 * custom property.
 */
-void CalEvent::setStatus(KCal::Event* event, CalEvent::Type status, const QString& param)
+#ifdef USE_AKONADI
+void CalEvent::setStatus(const Event::Ptr& event, CalEvent::Type status, const QString& param)
+#else
+void CalEvent::setStatus(Event* event, CalEvent::Type status, const QString& param)
+#endif
 {
 	if (!event)
 		return;

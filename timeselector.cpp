@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +32,11 @@
 #include "checkbox.h"
 #include "timeselector.moc"
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
@@ -56,7 +60,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 	mPeriod = new TimePeriod(allowHourMinute, box);
 	mPeriod->setFixedSize(mPeriod->sizeHint());
 	mPeriod->setSelectOnStep(false);
-	connect(mPeriod, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(periodChanged(const KCal::Duration&)));
+	connect(mPeriod, SIGNAL(valueChanged(const Duration&)), SLOT(periodChanged(const Duration&)));
 	mSelect->setFocusWidget(mPeriod);
 	mPeriod->setEnabled(false);
 
@@ -155,7 +159,7 @@ void TimeSelector::selectToggled(bool on)
 /******************************************************************************
 *  Called when the period value changes.
 */
-void TimeSelector::periodChanged(const KCal::Duration& period)
+void TimeSelector::periodChanged(const Duration& period)
 {
 	if (mSelect->isChecked())
 		emit valueChanged(period);

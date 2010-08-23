@@ -27,7 +27,11 @@
 #include "identities.h"
 #include "version.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/memorycalendar.h>
+#else
 #include <kcal/calendarlocal.h>
+#endif
 #include <kholidays/holidays.h>
 using namespace KHolidays;
 
@@ -38,7 +42,11 @@ using namespace KHolidays;
 #endif
 #include <kdebug.h>
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 using namespace KHolidays;
 
 // KAlarm version which first used the current calendar/event format.
@@ -121,7 +129,11 @@ QTime                           KAEvent::Private::mWorkDayEnd(17, 0, 0);
 
 struct AlarmData
 {
+#ifdef USE_AKONADI
+    ConstAlarmPtr          alarm;
+#else
     const Alarm*           alarm;
+#endif
     QString                cleanText;       // text or audio file name
     uint                   emailFromId;
     QFont                  font;
@@ -143,7 +155,11 @@ struct AlarmData
 };
 typedef QMap<KAAlarm::SubType, AlarmData> AlarmMap;
 
+#ifdef USE_AKONADI
+static void setProcedureAlarm(const Alarm::Ptr&, const QString& commandLine);
+#else
 static void setProcedureAlarm(Alarm*, const QString& commandLine);
+#endif
 
 
 /*=============================================================================
@@ -232,12 +248,20 @@ KAEvent::Private::Private(const KDateTime& dt, const QString& message, const QCo
     calcTriggerTimes();
 }
 
-KAEvent::KAEvent(const KCal::Event* e)
+#ifdef USE_AKONADI
+KAEvent::KAEvent(const ConstEventPtr& e)
+#else
+KAEvent::KAEvent(const Event* e)
+#endif
     : d(new Private(e))
 {
 }
 
-KAEvent::Private::Private(const KCal::Event* e)
+#ifdef USE_AKONADI
+KAEvent::Private::Private(const ConstEventPtr& e)
+#else
+KAEvent::Private::Private(const Event* e)
+#endif
     : mRecurrence(0)
 {
     set(e);
@@ -339,7 +363,11 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
 /******************************************************************************
 * Initialise the KAEvent::Private from a KCal::Event.
 */
+#ifdef USE_AKONADI
+void KAEvent::Private::set(const ConstEventPtr& event)
+#else
 void KAEvent::Private::set(const Event* event)
+#endif
 {
     startChanges();
     // Extract status from the event
@@ -563,7 +591,11 @@ void KAEvent::Private::set(const Event* event)
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
     if (mCategory == KAlarm::CalEvent::TEMPLATE)
         mTemplateName = event->summary();
+#ifdef USE_AKONADI
+    if (event->customStatus() == DISABLED_STATUS)
+#else
     if (event->statusStr() == DISABLED_STATUS)
+#endif
         mEnabled = false;
 
     // Extract status from the event's alarms.
@@ -795,7 +827,11 @@ void KAEvent::Private::set(const Event* event)
 * Fetch the start and next date/time for a KCal::Event.
 * Reply = next main date/time.
 */
+#ifdef USE_AKONADI
+DateTime KAEvent::readDateTime(const ConstEventPtr& event, bool dateOnly, DateTime& start)
+#else
 DateTime KAEvent::readDateTime(const Event* event, bool dateOnly, DateTime& start)
+#endif
 {
     start = event->dtStart();
     if (dateOnly)
@@ -834,7 +870,11 @@ DateTime KAEvent::readDateTime(const Event* event, bool dateOnly, DateTime& star
 * Parse the alarms for a KCal::Event.
 * Reply = map of alarm data, indexed by KAAlarm::Type
 */
+#ifdef USE_AKONADI
+void KAEvent::readAlarms(const ConstEventPtr& event, void* almap, bool cmdDisplay)
+#else
 void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
+#endif
 {
     AlarmMap* alarmMap = (AlarmMap*)almap;
     Alarm::List alarms = event->alarms();
@@ -873,7 +913,11 @@ void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 * If 'audioMain' is true, the event contains an audio alarm but no display alarm.
 * Reply = alarm ID (sequence number)
 */
+#ifdef USE_AKONADI
+void KAEvent::readAlarm(const ConstAlarmPtr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
+#else
 void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
+#endif
 {
     // Parse the next alarm's text
     data.alarm           = alarm;
@@ -1962,7 +2006,7 @@ KAEvent::Actions KAEvent::actions() const
  * false, the KCal::Event's non-KAlarm custom properties are left untouched.
  */
 #ifdef USE_AKONADI
-bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact, bool setCustomProperties) const
+bool KAEvent::Private::updateKCalEvent(const Event::Ptr& ev, UidAction uidact, bool setCustomProperties) const
 #else
 bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
 #endif
@@ -2014,7 +2058,11 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
         if (mDisplayingEdit)
             param += SC + DISP_EDIT;
     }
+#ifdef USE_AKONADI
     KAlarm::CalEvent::setStatus(ev, mCategory, param);
+#else
+    KAlarm::CalEvent::setStatus(ev, mCategory, param);
+#endif
     QStringList flags;
     if (mStartDateTime.isDateOnly())
         flags += DATE_ONLY_FLAG;
@@ -2264,17 +2312,29 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
  * alarm action. If 'types' is non-null, it is appended to the X-KDE-KALARM-TYPE
  * property value list.
  */
+#ifdef USE_AKONADI
+Alarm::Ptr KAEvent::Private::initKCalAlarm(const Event::Ptr& event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
+#else
 Alarm* KAEvent::Private::initKCalAlarm(Event* event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
+#endif
 {
     int startOffset = dt.isDateOnly() ? mStartDateTime.secsTo(dt)
                                       : mStartDateTime.calendarKDateTime().secsTo(dt.calendarKDateTime());
     return initKCalAlarm(event, startOffset, types, type);
 }
 
+#ifdef USE_AKONADI
+Alarm::Ptr KAEvent::Private::initKCalAlarm(const Event::Ptr& event, int startOffsetSecs, const QStringList& types, KAAlarm::Type type) const
+#else
 Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const QStringList& types, KAAlarm::Type type) const
+#endif
 {
     QStringList alltypes;
+#ifdef USE_AKONADI
+    Alarm::Ptr alarm = event->newAlarm();
+#else
     Alarm* alarm = event->newAlarm();
+#endif
     alarm->setEnabled(true);
     if (type != KAAlarm::MAIN_ALARM)
     {
@@ -2363,7 +2423,11 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
 /******************************************************************************
 * Set the specified alarm to be an audio alarm with the given file name.
 */
+#ifdef USE_AKONADI
+void KAEvent::Private::setAudioAlarm(const Alarm::Ptr& alarm) const
+#else
 void KAEvent::Private::setAudioAlarm(Alarm* alarm) const
+#endif
 {
     alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
     if (mSoundVolume >= 0)
@@ -2872,7 +2936,7 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
 * Reinstate the original event from the 'displaying' event.
 */
 #ifdef USE_AKONADI
-void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, Akonadi::Collection::Id collectionId, bool& showEdit, bool& showDefer)
+void KAEvent::Private::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, Akonadi::Collection::Id collectionId, bool& showEdit, bool& showDefer)
 #else
 void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
 #endif
@@ -3694,7 +3758,11 @@ void KAEvent::setStartOfDay(const QTime& startOfDay)
  * is saved, no information is lost or corrupted.
  * Reply = true if any conversions were done.
  */
-bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersion, bool adjustSummerTime)
+#ifdef USE_AKONADI
+bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersion, bool adjustSummerTime)
+#else
+bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bool adjustSummerTime)
+#endif
 {
     // KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
     static const QChar   SEPARATOR        = QLatin1Char(';');
@@ -3762,10 +3830,18 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
         localZone = KSystemTimeZones::local();
 
     bool converted = false;
+#ifdef USE_AKONADI
+    Event::List events = calendar->rawEvents();
+#else
     Event::List events = calendar.rawEvents();
+#endif
     for (int ei = 0, eend = events.count();  ei < eend;  ++ei)
     {
+#ifdef USE_AKONADI
+        Event::Ptr event = events[ei];
+#else
         Event* event = events[ei];
+#endif
         Alarm::List alarms = event->alarms();
         if (alarms.isEmpty())
             continue;    // KAlarm isn't interested in events without alarms
@@ -3800,7 +3876,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
              */
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
             {
+#ifdef USE_AKONADI
+                Alarm::Ptr alarm = alarms[ai];
+#else
                 Alarm* alarm = alarms[ai];
+#endif
                 bool atLogin    = false;
                 bool deferral   = false;
                 bool lateCancel = false;
@@ -3928,7 +4008,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
 
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
             {
+#ifdef USE_AKONADI
+                Alarm::Ptr alarm = alarms[ai];
+#else
                 Alarm* alarm = alarms[ai];
+#endif
                 KDateTime dt = alarm->time();
                 alarm->setStartOffset(start.secsTo(dt));
             }
@@ -3937,7 +4021,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
             {
                 for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
                 {
+#ifdef USE_AKONADI
+                    Alarm::Ptr alarm = alarms[ai];
+#else
                     Alarm* alarm = alarms[ai];
+#endif
                     if (alarm->type() == Alarm::Display)
                         alarm->setCustomProperty(KAlarm::Calendar::APPNAME, FONT_COLOUR_PROPERTY,
                                                  QString::fromLatin1("%1;;").arg(cats[0]));
@@ -3951,7 +4039,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
                 {
                     cats.removeAt(i);
 
+#ifdef USE_AKONADI
+                    Alarm::Ptr alarm = event->newAlarm();
+#else
                     Alarm* alarm = event->newAlarm();
+#endif
                     alarm->setEnabled(true);
                     alarm->setAudioAlarm();
                     KDateTime dt = event->dtStart();    // default
@@ -3993,7 +4085,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
              */
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
             {
+#ifdef USE_AKONADI
+                Alarm::Ptr alarm = alarms[ai];
+#else
                 Alarm* alarm = alarms[ai];
+#endif
                 if (alarm->type() == Alarm::Display)
                 {
                     QString oldtext = alarm->text();
@@ -4113,7 +4209,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
             bool mainExpired = true;
             for (int i = 0, alend = alarms.count();  i < alend;  ++i)
             {
+#ifdef USE_AKONADI
+                Alarm::Ptr alarm = alarms[i];
+#else
                 Alarm* alarm = alarms[i];
+#endif
                 if (!alarm->hasStartOffset())
                     continue;
                 bool mainAlarm = true;
@@ -4165,7 +4265,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
                 // Convert deferred alarms
                 for (int i = 0, alend = alarms.count();  i < alend;  ++i)
                 {
+#ifdef USE_AKONADI
+                    Alarm::Ptr alarm = alarms[i];
+#else
                     Alarm* alarm = alarms[i];
+#endif
                     if (!alarm->hasStartOffset())
                         continue;
                     QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, TYPE_PROPERTY);
@@ -4193,7 +4297,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
              */
             for (int i = 0, alend = alarms.count();  i < alend;  ++i)
             {
+#ifdef USE_AKONADI
+                Alarm::Ptr alarm = alarms[i];
+#else
                 Alarm* alarm = alarms[i];
+#endif
                 QString name = alarm->customProperty(KAlarm::Calendar::APPNAME, KMAIL_ID_PROPERTY);
                 if (name.isEmpty())
                     continue;
@@ -4247,7 +4355,11 @@ bool KAEvent::convertKCalEvents(KCal::CalendarLocal& calendar, int calendarVersi
 * Set the time for a date-only event to 00:00.
 * Reply = true if the event was updated.
 */
+#ifdef USE_AKONADI
+bool KAEvent::convertStartOfDay(const Event::Ptr& event)
+#else
 bool KAEvent::convertStartOfDay(Event* event)
+#endif
 {
     bool changed = false;
     QTime midnight(0, 0);
@@ -4272,13 +4384,21 @@ bool KAEvent::convertStartOfDay(Event* event)
                 {
                     // Timed deferral alarm, so adjust the offset
                     deferralOffset = data.alarm->startOffset().asSeconds();
+#ifdef USE_AKONADI
+                    constCast<Alarm::Ptr>(data.alarm)->setStartOffset(deferralOffset - adjustment);
+#else
                     const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
+#endif
                 }
                 else if (data.type == KAAlarm::AUDIO__ALARM
                 &&       data.alarm->startOffset().asSeconds() == deferralOffset)
                 {
                     // Audio alarm is set for the same time as the deferral alarm
+#ifdef USE_AKONADI
+                    constCast<Alarm::Ptr>(data.alarm)->setStartOffset(deferralOffset - adjustment);
+#else
                     const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
+#endif
                 }
             }
             changed = true;
@@ -4306,14 +4426,22 @@ bool KAEvent::convertStartOfDay(Event* event)
                 altime.setTime(midnight);
                 deferralOffset = data.alarm->startOffset().asSeconds();
                 newDeferralOffset = event->dtStart().secsTo(altime);
+#ifdef USE_AKONADI
+                constCast<Alarm::Ptr>(data.alarm)->setStartOffset(newDeferralOffset);
+#else
                 const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
+#endif
                 changed = true;
             }
             else if (data.type == KAAlarm::AUDIO__ALARM
             &&       data.alarm->startOffset().asSeconds() == deferralOffset)
             {
                 // Audio alarm is set for the same time as the deferral alarm
+#ifdef USE_AKONADI
+                constCast<Alarm::Ptr>(data.alarm)->setStartOffset(newDeferralOffset);
+#else
                 const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
+#endif
                 changed = true;
             }
         }
@@ -4328,7 +4456,11 @@ bool KAEvent::convertStartOfDay(Event* event)
 * recurrence.
 * Reply = true if any conversions were done.
 */
-bool KAEvent::Private::convertRepetitions(KCal::CalendarLocal& calendar)
+#ifdef USE_AKONADI
+bool KAEvent::Private::convertRepetitions(MemoryCalendar& calendar)
+#else
+bool KAEvent::Private::convertRepetitions(CalendarLocal& calendar)
+#endif
 {
 
     bool converted = false;
@@ -4350,7 +4482,11 @@ bool KAEvent::Private::convertRepetitions(KCal::CalendarLocal& calendar)
 * a daylight saving time change.
 * Reply = true if any conversions were done.
 */
-bool KAEvent::convertRepetition(KCal::Event* event)
+#ifdef USE_AKONADI
+bool KAEvent::convertRepetition(const Event::Ptr& event)
+#else
+bool KAEvent::convertRepetition(Event* event)
+#endif
 {
     Alarm::List alarms = event->alarms();
     if (alarms.isEmpty())
@@ -4362,7 +4498,11 @@ bool KAEvent::convertRepetition(KCal::Event* event)
     bool readOnly = event->isReadOnly();
     for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
     {
+#ifdef USE_AKONADI
+        Alarm::Ptr alarm = alarms[ai];
+#else
         Alarm* alarm = alarms[ai];
+#endif
         if (alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0)
         {
             if (!converted)
@@ -4640,12 +4780,20 @@ void KAAlarmEventBase::baseDumpDebug() const
  * Sets the list of email addresses, removing any empty addresses.
  * Reply = false if empty addresses were found.
  */
+#ifdef USE_AKONADI
+EmailAddressList& EmailAddressList::operator=(const Person::List& addresses)
+#else
 EmailAddressList& EmailAddressList::operator=(const QList<Person>& addresses)
+#endif
 {
     clear();
     for (int p = 0, end = addresses.count();  p < end;  ++p)
     {
+#ifdef USE_AKONADI
+        if (!addresses[p]->email().isEmpty())
+#else
         if (!addresses[p].email().isEmpty())
+#endif
             append(addresses[p]);
     }
     return *this;
@@ -4690,8 +4838,13 @@ QString EmailAddressList::address(int index) const
         return QString();
     QString result;
     bool quote = false;
-    KCal::Person person = (*this)[index];
+#ifdef USE_AKONADI
+    Person::Ptr person = (*this)[index];
+    QString name = person->name();
+#else
+    Person person = (*this)[index];
     QString name = person.name();
+#endif
     if (!name.isEmpty())
     {
         // Need to enclose the name in quotes if it has any special characters
@@ -4706,12 +4859,20 @@ QString EmailAddressList::address(int index) const
                 break;
             }
         }
+#ifdef USE_AKONADI
+        result += (*this)[index]->name();
+#else
         result += (*this)[index].name();
+#endif
         result += (quote ? "\" <" : " <");
         quote = true;    // need angle brackets round email address
     }
 
+#ifdef USE_AKONADI
+    result += person->email();
+#else
     result += person.email();
+#endif
     if (quote)
         result += '>';
     return result;
@@ -4724,7 +4885,11 @@ QStringList EmailAddressList::pureAddresses() const
 {
     QStringList list;
     for (int p = 0, end = count();  p < end;  ++p)
+#ifdef USE_AKONADI
+        list += at(p)->email();
+#else
         list += at(p).email();
+#endif
     return list;
 }
 
@@ -4741,7 +4906,11 @@ QString EmailAddressList::pureAddresses(const QString& separator) const
             first = false;
         else
             result += separator;
+#ifdef USE_AKONADI
+        result += at(p)->email();
+#else
         result += at(p).email();
+#endif
     }
     return result;
 }
@@ -4756,7 +4925,11 @@ QString EmailAddressList::pureAddresses(const QString& separator) const
  * The command line is first split into its program file and arguments before
  * initialising the alarm.
  */
+#ifdef USE_AKONADI
+static void setProcedureAlarm(const Alarm::Ptr& alarm, const QString& commandLine)
+#else
 static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
+#endif
 {
     QString command;
     QString arguments;

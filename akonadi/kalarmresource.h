@@ -25,7 +25,6 @@
 #include "kacalendar.h"
 #include <icalresourcebase.h>
 
-class KAlarmMimeTypeVisitor;
 class KAEvent;
 
 class KAlarmResource : public ICalResourceBase
@@ -50,7 +49,6 @@ class KAlarmResource : public ICalResourceBase
         virtual void itemChanged(const Akonadi::Item&, const QSet<QByteArray>& parts);
 
     private:
-        KAlarmMimeTypeVisitor*   mMimeVisitor;
         KAlarm::Calendar::Compat mCompatibility;
 };
 

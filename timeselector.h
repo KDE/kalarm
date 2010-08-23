@@ -1,7 +1,7 @@
 /*
  *  timeselector.h  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2008,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -36,8 +36,13 @@ class TimeSelector : public QFrame
 		             const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent);
 		bool         isChecked() const;
 		void         setChecked(bool on);
+#ifdef USE_AKONADI
+		KCalCore::Duration period() const;
+		void         setPeriod(const KCalCore::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
+#else
 		KCal::Duration period() const;
 		void         setPeriod(const KCal::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
+#endif
 		TimePeriod::Units units() const   { return mPeriod->units(); }
 		void         setUnits(TimePeriod::Units units)  { mPeriod->setUnits(units); }
 		void         setReadOnly(bool);
@@ -48,11 +53,19 @@ class TimeSelector : public QFrame
 
 	signals:
 		void         toggled(bool);             // selection checkbox has been toggled
+#ifdef USE_AKONADI
+		void         valueChanged(const KCalCore::Duration&); // value has changed
+#else
 		void         valueChanged(const KCal::Duration&); // value has changed
+#endif
 
 	protected slots:
 		void         selectToggled(bool);
+#ifdef USE_AKONADI
+		void         periodChanged(const KCalCore::Duration&);
+#else
 		void         periodChanged(const KCal::Duration&);
+#endif
 
 	private:
 		CheckBox*    mSelect;

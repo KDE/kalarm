@@ -25,7 +25,7 @@
 #include <QtCore/QObject>
 
 #include <akonadi/itemserializerplugin.h>
-#include <kcal/icalformat.h>
+#include <kcalcore/icalformat.h>
 
 class KAEvent;
 
@@ -39,7 +39,7 @@ class SerializerPluginKAlarm : public QObject, public Akonadi::ItemSerializerPlu
         void serialize(const Akonadi::Item& item, const QByteArray& label, QIODevice& data, int& version);
 
     private:
-        KCal::ICalFormat mFormat;
+        KCalCore::ICalFormat mFormat;
 };
 
 #endif // AKONADI_SERIALIZER_KALARM_H

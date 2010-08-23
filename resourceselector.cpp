@@ -69,7 +69,11 @@
 #include <QResizeEvent>
 #include <QApplication>
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 #ifdef USE_AKONADI
 using Akonadi::Collection;
 using Akonadi::EntityDisplayAttribute;

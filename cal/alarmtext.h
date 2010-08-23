@@ -23,11 +23,15 @@
 
 #include "kalarm_cal_export.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/todo.h>
+#else
+namespace KCal { class Todo; }
+#endif
 #include <QString>
 
 class QStringList;
 class KAEvent;
-namespace KCal { class Todo; }
 
 
 class KALARM_CAL_EXPORT AlarmText
@@ -38,7 +42,11 @@ class KALARM_CAL_EXPORT AlarmText
 		void           setScript(const QString& text)   { setText(text);  mType = Script; }
 		void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
 		                        const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
+#ifdef USE_AKONADI
+		void           setTodo(const KCalCore::Todo::Ptr&);
+#else
 		void           setTodo(const KCal::Todo*);
+#endif
 		QString        displayText() const;
 		QString        calendarText() const;
 		QString        to() const                 { return mTo; }

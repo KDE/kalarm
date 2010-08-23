@@ -1,7 +1,7 @@
 /*
  *  latecancel.cpp  -  widget to specify cancellation if late
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,17 +19,24 @@
  */
 
 #include "kalarm.h"
+#include "latecancel.moc"
+
+#include "checkbox.h"
+
+#ifdef USE_AKONADI
+#include <kcalcore/duration.h>
+using namespace KCalCore;
+#else
+#include <kcal/duration.h>
+using namespace KCal;
+#endif
+
+#include <klocale.h>
+#include <kdialog.h>
 
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-
-#include <klocale.h>
-#include <kdialog.h>
-#include <kcal/duration.h>
-
-#include "checkbox.h"
-#include "latecancel.moc"
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -76,7 +83,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	                                 whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-	connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
+	connect(mTimeSelector, SIGNAL(valueChanged(const Duration&)), SIGNAL(changed()));
 	hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
 	hlayout = new QHBoxLayout();
@@ -115,11 +122,11 @@ int LateCancelSelector::minutes() const
 void LateCancelSelector::setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits)
 {
 	slotToggled(minutes);
-	KCal::Duration period;
+	Duration period;
 	if (minutes % (24*60))
-		period = KCal::Duration(minutes * 60, KCal::Duration::Seconds);
+		period = Duration(minutes * 60, Duration::Seconds);
 	else
-		period = KCal::Duration(minutes / (24*60), KCal::Duration::Days);
+		period = Duration(minutes / (24*60), Duration::Days);
 	mTimeSelector->setPeriod(period, dateOnly, defaultUnits);
 }
 

@@ -22,26 +22,23 @@
 #include "kalarmresource.h"
 #include "collectionattribute.h"
 #include "eventattribute.h"
-#include "kalarmmimetypevisitor.h"
 #include "kaevent.h"
 
 #include <akonadi/attributefactory.h>
 
-#include <kcal/calendarlocal.h>
-#include <kcal/incidence.h>
+#include <kcalcore/memorycalendar.h>
+#include <kcalcore/incidence.h>
 
 #include <klocale.h>
 #include <kdebug.h>
 
 using namespace Akonadi;
-using namespace KCal;
 using KAlarm::CollectionAttribute;
 using KAlarm::EventAttribute;
 
 
 KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
-      mMimeVisitor(new KAlarmMimeTypeVisitor()),
       mCompatibility(KAlarm::Calendar::Incompatible)
 {
     // Set a default start-of-day time for date-only alarms.
@@ -65,7 +62,6 @@ KAlarmResource::KAlarmResource(const QString& id)
 
 KAlarmResource::~KAlarmResource()
 {
-    delete mMimeVisitor;
 }
 
 /******************************************************************************
@@ -97,7 +93,7 @@ bool KAlarmResource::readFromFile(const QString& fileName)
     if (!ICalResourceBase::readFromFile(fileName))
         return false;
     QString versionString;
-    int version = KAlarm::Calendar::checkCompatibility(*calendar(), fileName, versionString);
+    int version = KAlarm::Calendar::checkCompatibility(fileStorage(), versionString);
     mCompatibility = (version < 0) ? KAlarm::Calendar::Incompatible  // calendar is not in KAlarm format, or is in a future format
                    : (version > 0) ? KAlarm::Calendar::Convertible   // calendar is in an out of date format
                    :                 KAlarm::Calendar::Current;      // calendar is in the current format
@@ -114,7 +110,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
 {
     Q_UNUSED(parts);
     const QString rid = item.remoteId();
-    const KCal::Event* kcalEvent = calendar()->event(rid);
+    const KCalCore::Event::Ptr kcalEvent = calendar()->event(rid);
     if (!kcalEvent)
     {
         kWarning() << "Event not found:" << rid;
@@ -124,7 +120,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
 
     if (kcalEvent->alarms().isEmpty())
     {
-        kWarning() << "KCal::Event has no alarms:" << rid;
+        kWarning() << "KCalCore::Event has no alarms:" << rid;
         emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
         return false;
     }
@@ -162,7 +158,7 @@ void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collect
         return;
     }
     KAEvent event = item.payload<KAEvent>();
-    KCal::Event* kcalEvent = new KCal::Event;
+    KCalCore::Event::Ptr kcalEvent(new KCalCore::Event);
     event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     calendar()->addIncidence(kcalEvent);
 
@@ -194,7 +190,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         cancelTask(i18n("Item ID %1 differs from payload ID %2.", item.remoteId(), event.id()));
         return;
     }
-    KCal::Incidence* incidence = calendar()->incidence(item.remoteId());
+    KCalCore::Incidence::Ptr incidence = calendar()->incidence(item.remoteId());
     if (incidence)
     {
         if (incidence->isReadOnly())
@@ -203,21 +199,22 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
             cancelTask(i18nc("@info", "Event with uid '%1' is read only", event.id()));
             return;
         }
-        if (!mMimeVisitor->isEvent(incidence))
+        if (incidence->type() == KCalCore::Incidence::TypeEvent)
         {
             calendar()->deleteIncidence(incidence);   // it's not an Event
-            incidence = 0;
+            incidence.clear();
         }
         else
         {
-            event.updateKCalEvent(static_cast<KCal::Event*>(incidence), KAEvent::UID_SET);
+            KCalCore::Event::Ptr ev(incidence.staticCast<KCalCore::Event>());
+            event.updateKCalEvent(ev, KAEvent::UID_SET);
             calendar()->setModified(true);
         }
     }
     if (!incidence)
     {
         // not in the calendar yet, should not happen -> add it
-        KCal::Event* kcalEvent = new KCal::Event;
+        KCalCore::Event::Ptr kcalEvent(new KCalCore::Event);
         event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
         calendar()->addIncidence(kcalEvent);
     }
@@ -243,13 +240,13 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
     attr->setCompatibility(mCompatibility);
 
     // Retrieve events from the calendar
-    Event::List events = calendar()->events();
+    KCalCore::Event::List events = calendar()->events();
     Item::List items;
-    foreach (const Event* kcalEvent, events)
+    foreach (const KCalCore::Event::Ptr& kcalEvent, events)
     {
         if (kcalEvent->alarms().isEmpty())
         {
-            kWarning() << "KCal::Event has no alarms:" << kcalEvent->uid();
+            kWarning() << "KCalCore::Event has no alarms:" << kcalEvent->uid();
             continue;    // ignore events without alarms
         }
 

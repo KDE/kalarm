@@ -30,16 +30,17 @@
 
 #ifdef USE_AKONADI
 #include <akonadi/collection.h>
-#include <kcal/event.h>
+#include <kcalcore/filestorage.h>
+#include <kcalcore/event.h>
 #endif
 #include <kurl.h>
 #include <QObject>
 
+#ifndef USE_AKONADI
 namespace KCal {
   class Calendar;
   class CalendarLocal;
 }
-#ifndef USE_AKONADI
 class AlarmResource;
 class ProgressDialog;
 #endif
@@ -72,12 +73,14 @@ class AlarmCalendar : public QObject
 		bool                  haveDisabledAlarms() const   { return mHaveDisabledAlarms; }
 		void                  disabledChanged(const KAEvent*);
 		KAEvent::List         atLoginAlarms() const;
-#ifndef USE_AKONADI
+#ifdef USE_AKONADI
+		KCalCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
+#else
 		KCal::Event*          createKCalEvent(const KAEvent* e) const
 		                                             { return createKCalEvent(e, QString()); }
+		KCal::Event*          kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
 #endif
 		KAEvent*              event(const QString& uniqueID);
-		KCal::Event*          kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
 		KAEvent*              templateEvent(const QString& templateName);
 #ifdef USE_AKONADI
 		KAEvent::List         events(KAlarm::CalEvent::Types s = KAlarm::CalEvent::EMPTY)   { return events(Akonadi::Collection(), s); }
@@ -88,7 +91,7 @@ class AlarmCalendar : public QObject
 		KAEvent::List         events(const KDateTime& from, const KDateTime& to, KAlarm::CalEvent::Types);
 #endif
 #ifdef USE_AKONADI
-		KCal::Event::List     kcalEvents(KAlarm::CalEvent::Type s = KAlarm::CalEvent::EMPTY);   // display calendar only
+		KCalCore::Event::List kcalEvents(KAlarm::CalEvent::Type s = KAlarm::CalEvent::EMPTY);   // display calendar only
 		bool                  eventReadOnly(Akonadi::Item::Id) const;
                 Akonadi::Collection   collectionForEvent(Akonadi::Item::Id) const;
 		bool                  addEvent(KAEvent&, QWidget* promptParent = 0, bool useEventID = false, Akonadi::Collection* = 0, bool noPrompt = false, bool* cancelled = 0);
@@ -159,12 +162,12 @@ class AlarmCalendar : public QObject
 		AlarmCalendar(const QString& file, KAlarm::CalEvent::Type);
 		bool                  saveCal(const QString& newFile = QString());
 #ifdef USE_AKONADI
-		bool                  isValid() const   { return mCalType == RESOURCES || mCalendar; }
+		bool                  isValid() const   { return mCalType == RESOURCES || mCalendarStorage; }
 		bool                  addEvent(const Akonadi::Collection&, KAEvent*);
 		void                  addNewEvent(const Akonadi::Collection&, KAEvent*);
 		KAlarm::CalEvent::Type deleteEventInternal(const KAEvent&, const Akonadi::Collection& = Akonadi::Collection());
 		KAlarm::CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(), const Akonadi::Collection& = Akonadi::Collection());
-		void                  updateKAEvents(const Akonadi::Collection&, KCal::CalendarLocal*);
+		void                  updateKAEvents(const Akonadi::Collection&);
 		void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false);
 		void                  findEarliestAlarm(const Akonadi::Collection&);
 		void                  findEarliestAlarm(Akonadi::Collection::Id);  //deprecated
@@ -186,7 +189,11 @@ class AlarmCalendar : public QObject
 		static AlarmCalendar* mResourcesCalendar;  // the calendar resources
 		static AlarmCalendar* mDisplayCalendar;    // the display calendar
 
+#ifdef USE_AKONADI
+		KCalCore::FileStorage::Ptr mCalendarStorage; // null pointer for Akonadi
+#else
 		KCal::Calendar*       mCalendar;           // AlarmResources or CalendarLocal, null for Akonadi
+#endif
 		ResourceMap           mResourceMap;
 		KAEventMap            mEventMap;           // lookup of all events by UID
 		EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource

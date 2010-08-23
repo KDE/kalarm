@@ -21,13 +21,12 @@
 
 #include "akonadi_serializer_kalarm.h"
 #include "kacalendar.h"
-#include "kalarmmimetypevisitor.h"
 #include "kaevent.h"
-
-#include <QtCore/qplugin.h>
 
 #include <akonadi/item.h>
 #include <kdebug.h>
+
+#include <QtCore/qplugin.h>
 
 
 using namespace Akonadi;
@@ -39,7 +38,7 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
     if (label != Item::FullPayload)
         return false;
 
-    KCal::Incidence* i = mFormat.fromString(QString::fromUtf8(data.readAll()));
+    KCalCore::Incidence::Ptr i = mFormat.fromString(QString::fromUtf8(data.readAll()));
     if (!i)
     {
         kWarning(5263) << "Failed to parse incidence!";
@@ -47,16 +46,13 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
         kWarning(5263) << QString::fromUtf8(data.readAll());
         return false;
     }
-    KAlarmMimeTypeVisitor mv;
-    if (!mv.isEvent(i))
+    if (i->type() != KCalCore::Incidence::TypeEvent)
     {
         kWarning(5263) << "Incidence with uid" << i->uid() << "is not an Event!";
         data.seek(0);
-        delete i;
         return false;
     }
-    KAEvent event(static_cast<KCal::Event*>(i));
-    delete i;
+    KAEvent event(i.staticCast<KCalCore::Event>());
     QString mime = KAlarm::CalEvent::mimeType(event.category());
     if (mime.isEmpty())
     {
@@ -77,15 +73,15 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     if (label != Item::FullPayload || !item.hasPayload<KAEvent>())
         return;
     KAEvent e = item.payload<KAEvent>();
-    KCal::Event kcalEvent;
-    e.updateKCalEvent(&kcalEvent, KAEvent::UID_SET);
+    KCalCore::Event::Ptr kcalEvent(new KCalCore::Event);
+    e.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
     head += KAlarm::Calendar::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";
     head += KAEvent::currentCalendarVersionString();
     head += '\n';
     data.write(head);
-    data.write(mFormat.toString(&kcalEvent).toUtf8());
+    data.write(mFormat.toString(kcalEvent.staticCast<KCalCore::Incidence>()).toUtf8());
     data.write("\nEND:VCALENDAR");
 }
 

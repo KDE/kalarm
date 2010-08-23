@@ -33,7 +33,11 @@
 #include <mailtransport/transportmanager.h>
 #include <mailtransport/transport.h>
 #include <mailtransport/messagequeuejob.h>
+#ifdef USE_AKONADI
+#include <kcalcore/person.h>
+#else
 #include <kcal/person.h>
+#endif
 #include <kmime/kmime_header_parsing.h>
 #include <kmime/kmime_headers.h>
 #include <kmime/kmime_message.h>
@@ -284,7 +288,11 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
 	KMime::Headers::To* to = new KMime::Headers::To;
 	EmailAddressList toList = data.event.emailAddresses();
 	for (int i = 0, count = toList.count();  i < count;  ++i)
+#ifdef USE_AKONADI
+		to->addAddress(toList[i]->email().toLatin1(), toList[i]->name());
+#else
 		to->addAddress(toList[i].email().toLatin1(), toList[i].name());
+#endif
 	message.setHeader(to);
 
 	if (!data.bcc.isEmpty())
@@ -418,7 +426,11 @@ void KAMail::notifyQueued(const KAEvent& event)
 	const EmailAddressList& addresses = event.emailAddresses();
 	for (int i = 0, end = addresses.count();  i < end;  ++i)
 	{
+#ifdef USE_AKONADI
+		QByteArray email = addresses[i]->email().toLocal8Bit();
+#else
 		QByteArray email = addresses[i].email().toLocal8Bit();
+#endif
 		const char* em = email;
 		if (!email.isEmpty()
 		&&  HeaderParsing::parseAddress(em, em + email.length(), addr))
@@ -455,7 +467,14 @@ QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
 	if (!invalidItem.isEmpty())
 		return invalidItem;
 	for (int i = 0, count = mailboxes.count();  i < count;  ++i)
+	{
+#ifdef USE_AKONADI
+		KCalCore::Person::Ptr person(new KCalCore::Person(mailboxes[i].name(), mailboxes[i].addrSpec().asString()));
+		list += person;
+#else
 		list += KCal::Person(mailboxes[i].name(), mailboxes[i].addrSpec().asString());
+#endif
+	}
 	return QString();
 }
 

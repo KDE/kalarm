@@ -46,15 +46,18 @@
 #include "templatepickdlg.h"
 #include "traywindow.h"
 
-#include <QHeaderView>
-#include <QSplitter>
-#include <QByteArray>
-#include <QDesktopWidget>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QResizeEvent>
-#include <QCloseEvent>
-#include <QTimer>
+#include <libkdepim/maillistdrag.h>
+#include <kmime/kmime_content.h>
+#ifdef USE_AKONADI
+#include <kcalcore/memorycalendar.h>
+#include <kcalutils/icaldrag.h>
+using namespace KCalCore;
+using namespace KCalUtils;
+#else
+#include <kcal/calendarlocal.h>
+#include <kcal/icaldrag.h>
+using namespace KCal;
+#endif
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
@@ -63,7 +66,6 @@
 #include <kactioncollection.h>
 #include <kinputdialog.h>
 #include <ksystemtrayicon.h>
-
 #include <kstandardaction.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
@@ -79,12 +81,16 @@
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
 #include <kicon.h>
-#include <libkdepim/maillistdrag.h>
-#include <kmime/kmime_content.h>
-#include <kcal/calendarlocal.h>
-#include <kcal/icaldrag.h>
 
-using namespace KCal;
+#include <QHeaderView>
+#include <QSplitter>
+#include <QByteArray>
+#include <QDesktopWidget>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QResizeEvent>
+#include <QCloseEvent>
+#include <QTimer>
 
 static const char* UI_FILE     = "kalarmui.rc";
 static const char* WINDOW_NAME = "MainWindow";
@@ -1288,7 +1294,7 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
 	const QMimeData* data = e->mimeData();
-	bool accept = KCal::ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
+	bool accept = ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
 	                                           :    data->hasText()
 	                                             || KUrl::List::canDecode(data)
 	                                             || KPIM::MailList::canDecode(data);
@@ -1324,7 +1330,11 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 	AlarmText       alarmText;
 	KPIM::MailList  mailList;
 	KUrl::List      files;
-	KCal::CalendarLocal calendar(Preferences::timeZone(true));
+#ifdef USE_AKONADI
+	MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
+#else
+	CalendarLocal calendar(Preferences::timeZone(true));
+#endif
 #ifndef NDEBUG
 	QString fmts = data->formats().join(", ");
 	kDebug() << fmts;
@@ -1377,11 +1387,19 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 		                   body, summary.serialNumber());
 	}
 #endif
-	else if (KCal::ICalDrag::fromMimeData(data, &calendar))
+#ifdef USE_AKONADI
+	else if (ICalDrag::fromMimeData(data, calendar))
+#else
+	else if (ICalDrag::fromMimeData(data, &calendar))
+#endif
 	{
 		// iCalendar - If events are included, use the first event
 		kDebug() << "iCalendar";
-		KCal::Event::List events = calendar.rawEvents();
+#ifdef USE_AKONADI
+		Event::List events = calendar->rawEvents();
+#else
+		Event::List events = calendar.rawEvents();
+#endif
 		if (!events.isEmpty())
 		{
 			KAEvent ev(events[0]);
@@ -1389,10 +1407,18 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 			return;
 		}
 		// If todos are included, use the first todo
-		KCal::Todo::List todos = calendar.rawTodos();
+#ifdef USE_AKONADI
+		Todo::List todos = calendar->rawTodos();
+#else
+		Todo::List todos = calendar.rawTodos();
+#endif
 		if (todos.isEmpty())
 			return;
-		KCal::Todo* todo = todos[0];
+#ifdef USE_AKONADI
+		Todo::Ptr todo = todos[0];
+#else
+		Todo* todo = todos[0];
+#endif
 		alarmText.setTodo(todo);
 		KDateTime start = todo->dtStart(true);
 		if (!start.isValid()  &&  todo->hasDueDate())

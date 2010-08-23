@@ -26,25 +26,27 @@
 #include "kacalendar.h"
 #ifdef USE_AKONADI
 #include <akonadi/collection.h>
+#include <kcalcore/memorycalendar.h>
+#include <kcalcore/filestorage.h>
 #else
 #include "alarmresource.h"
-#endif
-
 namespace KCal { class CalendarLocal; }
+#endif
 
 
 class CalendarCompat
 {
 	public:
-		static void  setID(KCal::CalendarLocal&);
 #ifdef USE_AKONADI
+		static void  setID(KCalCore::MemoryCalendar::Ptr&);
 		/** Whether the fix function should convert old format KAlarm calendars. */
 		enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
 
-		static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
+		static KAlarm::Calendar::Compat fix(const KCalCore::FileStorage::Ptr&, 
 		                                    const Akonadi::Collection& = Akonadi::Collection(),
 		                                    FixFunc = PROMPT, bool* wrongType = 0);
 #else
+		static void  setID(KCal::CalendarLocal&);
 		static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
 		                                    AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
 #endif

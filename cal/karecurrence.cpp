@@ -22,7 +22,11 @@
 
 #include "datetime.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/icalformat.h>
+#else
 #include <kcal/icalformat.h>
+#endif
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -30,7 +34,11 @@
 #include <QBitArray>
 
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
 using namespace KCal;
+#endif
 
 /*=============================================================================
 = Class KARecurrence
@@ -391,7 +399,7 @@ KDateTime KARecurrence::getPreviousDateTime(const KDateTime& afterDateTime) cons
 * Initialise a KCal::Recurrence to be the same as this instance.
 * Additional recurrence rules are created as necessary if it recurs on Feb 29th.
 */
-void KARecurrence::writeRecurrence(KCal::Recurrence& recur) const
+void KARecurrence::writeRecurrence(Recurrence& recur) const
 {
 	recur.clear();
 	recur.setStartDateTime(startDateTime());
