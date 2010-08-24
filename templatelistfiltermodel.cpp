@@ -34,8 +34,10 @@ void TemplateListFilterModel::setTypeFilter(KAEvent::Actions type)
 {
 	if (type != mTypeFilter)
 	{
+    layoutAboutToBeChanged();
 		mTypeFilter = type;
 		invalidateFilter();
+    layoutChanged();
 	}
 }
 
@@ -43,8 +45,10 @@ void TemplateListFilterModel::setTypesEnabled(KAEvent::Actions type)
 {
 	if (type != mTypesEnabled)
 	{
+    layoutAboutToBeChanged();
 		mTypesEnabled = type;
 		invalidateFilter();
+    layoutChanged();
 	}
 }
 

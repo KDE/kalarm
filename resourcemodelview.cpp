@@ -326,8 +326,10 @@ void ResourceFilterModel::setFilter(KAlarm::CalEvent::Type type)
 {
 	if (type != mResourceType)
 	{
+    layoutAboutToBeChanged();
 		mResourceType = type;
 		invalidateFilter();
+    layoutChanged();
 	}
 }
 

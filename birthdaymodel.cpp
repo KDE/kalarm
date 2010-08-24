@@ -89,6 +89,7 @@ BirthdaySortModel::BirthdaySortModel(QObject* parent)
 
 void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& suffix)
 {
+    layoutAboutToBeChanged();
     mContactsWithAlarm.clear();
     mPrefix = prefix;
     mSuffix = suffix;
@@ -105,6 +106,7 @@ void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& su
     }
 
     invalidateFilter();
+    layoutChanged();
 }
 
 bool BirthdaySortModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
