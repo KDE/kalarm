@@ -26,7 +26,7 @@
 #include <akonadi/entitytreemodel.h>
 #include <akonadi/entitymimetypefiltermodel.h>
 #include <akonadi/favoritecollectionsmodel.h>
-#include <akonadi/akonadi_next/kreparentingproxymodel.h>
+#include <akonadi_next/kreparentingproxymodel.h>
 #include <kcalcore/calendar.h>
 #include <QListView>
 #include <QItemDelegate>
@@ -276,8 +276,8 @@ class CollectionListModel : public KDescendantsProxyModel
 = Class: CollectionCheckListModel
 = Proxy model providing a checkable collection list.
 =============================================================================*/
-#include <akonadi/akonadi_next/checkableitemproxymodel.h>
-class CollectionCheckListModel : public CheckableItemProxyModel
+#include <akonadi_next/kcheckableproxymodel.h>
+class CollectionCheckListModel : public Future::KCheckableProxyModel
 {
         Q_OBJECT
     public:

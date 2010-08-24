@@ -1730,7 +1730,7 @@ CollectionCheckListModel* CollectionCheckListModel::instance()
 }
 
 CollectionCheckListModel::CollectionCheckListModel(QObject* parent)
-    : CheckableItemProxyModel(parent)
+    : Future::KCheckableProxyModel(parent)
 {
     CollectionListModel* model = new CollectionListModel(this);
     setSourceModel(model);
