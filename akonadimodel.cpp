@@ -1628,10 +1628,10 @@ void CollectionMimeTypeFilterModel::setEventTypeFilter(KAlarm::CalEvent::Type ty
     QString mimeType = KAlarm::CalEvent::mimeType(type);
     if (mimeType != mMimeType)
     {
-        layoutAboutToBeChanged();
+        emit layoutAboutToBeChanged();
         mMimeType = mimeType;
         invalidateFilter();
-        layoutChanged();
+        emit layoutChanged();
     }
 }
 
@@ -1639,10 +1639,10 @@ void CollectionMimeTypeFilterModel::setFilterWritable(bool writable)
 {
     if (writable != mWritableOnly)
     {
-        layoutAboutToBeChanged();
+        emit layoutAboutToBeChanged();
         mWritableOnly = writable;
         invalidateFilter();
-        layoutChanged();
+        emit layoutChanged();
     }
 }
 
@@ -1842,10 +1842,10 @@ void CollectionFilterCheckListModel::setEventTypeFilter(KAlarm::CalEvent::Type t
     QString mimeType = KAlarm::CalEvent::mimeType(type);
     if (mimeType != mMimeType)
     {
-        layoutAboutToBeChanged();
+        emit layoutAboutToBeChanged();
         mMimeType = mimeType;
         invalidateFilter();
-        layoutChanged();
+        emit layoutChanged();
     }
 }
 
@@ -2469,10 +2469,10 @@ void AlarmListModel::setEventTypeFilter(KAlarm::CalEvent::Types types)
     if (this != mAllInstance
     &&  types != mFilterTypes  &&  (types & includedTypes()) == types)
     {
-        layoutAboutToBeChanged();
+        emit layoutAboutToBeChanged();
         mFilterTypes = types;
         invalidateFilter();
-        layoutChanged();
+        emit layoutChanged();
     }
 }
 

@@ -38,10 +38,10 @@ void AlarmListFilterModel::setStatusFilter(KAlarm::CalEvent::Types type)
 {
 	if (type != mStatusFilter)
 	{
-    layoutAboutToBeChanged();
+    emit layoutAboutToBeChanged();
 		mStatusFilter = type;
 		invalidateFilter();
-    layoutChanged();
+    emit layoutChanged();
 	}
 }
 
