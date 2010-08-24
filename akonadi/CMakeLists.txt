@@ -29,11 +29,14 @@ if (LOCAL_BUILD)
     endif (KDEPIM_MOBILE_UI)
     ########### end definitions copied from runtime/ ###############
 else (LOCAL_BUILD)
+    set(KALARM_USE_AKONADI TRUE)
     set(KALARM_CALENDAR_INCLUDE_DIR cal)
     set(AKONADI_ICAL_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
     add_definitions(-DUSE_AKONADI)
     add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
+
+    add_subdirectory(cal)
 endif (LOCAL_BUILD)
 
 include_directories(
