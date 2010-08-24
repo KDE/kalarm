@@ -205,7 +205,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void modifyCollectionJobDone(KJob*);
         void deleteCollectionJobDone(KJob*);
         void itemJobDone(KJob*);
-        
+
     private:
         struct CalData   // data per collection
         {

@@ -541,7 +541,7 @@ if (attr) { kDebug()<<"Set enabled:"<<enabled<<", was="<<attr->isEnabled(); } el
         if (updateCollection)
         {
             CollectionModifyJob* job = new CollectionModifyJob(collection, this);
-            connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*))); 
+            connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
             return true;
         }
     }
@@ -589,7 +589,7 @@ if (attr) { kDebug()<<"Set enabled:"<<enabled<<", was="<<attr->isEnabled(); } el
             if (updateItem)
             {
                 ItemModifyJob* job = new ItemModifyJob(item, this);
-                connect(job, SIGNAL(result(KJob*)), this, SLOT(itemJobDone(KJob*))); 
+                connect(job, SIGNAL(result(KJob*)), this, SLOT(itemJobDone(KJob*)));
                 return true;
             }
         }
@@ -883,7 +883,7 @@ void AkonadiModel::setBackgroundColor(Collection& collection, const QColor& colo
     if (ix.isValid())
         signalDataChanged(&checkItem_true, 0, ColumnCount - 1, ix);
 }
- 
+
 /******************************************************************************
 * Return the background color for displaying the collection and its alarms.
 */
@@ -893,7 +893,7 @@ QColor AkonadiModel::backgroundColor(const Akonadi::Collection& collection) cons
         return QColor();
     return collection.attribute<CollectionAttribute>()->backgroundColor();
 }
- 
+
 /******************************************************************************
 * Return the display name for the collection.
 */
@@ -904,7 +904,7 @@ QString AkonadiModel::displayName(const Akonadi::Collection& collection) const
         name = collection.attribute<EntityDisplayAttribute>()->displayName();
     return name.isEmpty() ? collection.name() : name;
 }
- 
+
 /******************************************************************************
 * Return the storage type (file, directory, etc.) for the collection.
 */

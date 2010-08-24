@@ -19,9 +19,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 if(KALARM_USE_AKONADI)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/ 
+    ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/cal
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib 
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
     #${CMAKE_SOURCE_DIR}/runtime/resources/ical/alarms/cal
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
@@ -29,100 +29,100 @@ include_directories(
 else(KALARM_USE_AKONADI)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/ 
+    ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/cal
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib 
-    ${CMAKE_CURRENT_SOURCE_DIR}/resources 
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
-) 
+)
 endif(KALARM_USE_AKONADI)
 
-add_subdirectory(cal) 
+add_subdirectory(cal)
 if(KALARM_USE_AKONADI)
     add_subdirectory(akonadi)
 else(KALARM_USE_AKONADI)
-    add_subdirectory(resources) 
+    add_subdirectory(resources)
 endif(KALARM_USE_AKONADI)
-add_subdirectory(appicons) 
-add_subdirectory(pixmaps) 
-add_subdirectory(autostart) 
+add_subdirectory(appicons)
+add_subdirectory(pixmaps)
+add_subdirectory(autostart)
 
 
 ########### next target ###############
 set(libkalarm_SRCS
-    lib/buttongroup.cpp 
-    lib/checkbox.cpp 
-    lib/colourbutton.cpp 
-    lib/combobox.cpp 
-    lib/dateedit.cpp 
+    lib/buttongroup.cpp
+    lib/checkbox.cpp
+    lib/colourbutton.cpp
+    lib/combobox.cpp
+    lib/dateedit.cpp
     lib/desktop.cpp
     lib/filedialog.cpp
     lib/itembox.cpp
     lib/kalocale.cpp
-    lib/label.cpp 
-    lib/messagebox.cpp 
-    lib/packedlayout.cpp 
-    lib/pushbutton.cpp 
-    lib/radiobutton.cpp 
-    lib/timeedit.cpp 
-    lib/timespinbox.cpp 
-    lib/timeperiod.cpp 
+    lib/label.cpp
+    lib/messagebox.cpp
+    lib/packedlayout.cpp
+    lib/pushbutton.cpp
+    lib/radiobutton.cpp
+    lib/timeedit.cpp
+    lib/timespinbox.cpp
+    lib/timeperiod.cpp
     lib/timezonecombo.cpp
-    lib/shellprocess.cpp 
-    lib/slider.cpp 
-    lib/spinbox.cpp 
-    lib/spinbox2.cpp 
+    lib/shellprocess.cpp
+    lib/slider.cpp
+    lib/spinbox.cpp
+    lib/spinbox2.cpp
     lib/stackedwidgets.cpp
-    lib/lineedit.cpp 
+    lib/lineedit.cpp
     lib/synchtimer.cpp
 )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS}
-    birthdaydlg.cpp 
+    birthdaydlg.cpp
     birthdaymodel.cpp
-    main.cpp 
-    editdlg.cpp 
+    main.cpp
+    editdlg.cpp
     editdlgtypes.cpp
-    soundpicker.cpp 
-    sounddlg.cpp 
-    alarmcalendar.cpp 
-    undo.cpp 
-    kalarmapp.cpp 
-    mainwindowbase.cpp 
-    mainwindow.cpp 
-    messagewin.cpp 
-    preferences.cpp 
-    prefdlg.cpp 
-    traywindow.cpp 
-    dbushandler.cpp 
-    recurrenceedit.cpp 
-    deferdlg.cpp 
-    functions.cpp 
-    fontcolour.cpp 
-    fontcolourbutton.cpp 
-    alarmtimewidget.cpp 
-    specialactions.cpp 
-    reminder.cpp 
-    startdaytimer.cpp 
-    eventlistview.cpp 
+    soundpicker.cpp
+    sounddlg.cpp
+    alarmcalendar.cpp
+    undo.cpp
+    kalarmapp.cpp
+    mainwindowbase.cpp
+    mainwindow.cpp
+    messagewin.cpp
+    preferences.cpp
+    prefdlg.cpp
+    traywindow.cpp
+    dbushandler.cpp
+    recurrenceedit.cpp
+    deferdlg.cpp
+    functions.cpp
+    fontcolour.cpp
+    fontcolourbutton.cpp
+    alarmtimewidget.cpp
+    specialactions.cpp
+    reminder.cpp
+    startdaytimer.cpp
+    eventlistview.cpp
     alarmlistdelegate.cpp
-    alarmlistview.cpp 
-    templatelistview.cpp 
-    kamail.cpp 
-    timeselector.cpp 
-    latecancel.cpp 
-    repetitionbutton.cpp 
-    emailidcombo.cpp 
-    find.cpp 
-    pickfileradio.cpp 
+    alarmlistview.cpp
+    templatelistview.cpp
+    kamail.cpp
+    timeselector.cpp
+    latecancel.cpp
+    repetitionbutton.cpp
+    emailidcombo.cpp
+    find.cpp
+    pickfileradio.cpp
     newalarmaction.cpp
     calendarcompat.cpp
     commandoptions.cpp
     resourceselector.cpp
-    templatepickdlg.cpp 
-    templatedlg.cpp 
-    templatemenuaction.cpp 
+    templatepickdlg.cpp
+    templatedlg.cpp
+    templatemenuaction.cpp
 )
 if(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
