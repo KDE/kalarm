@@ -83,7 +83,11 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 	                                 whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
 	                                 allowHourMinute, mTimeSelectorFrame);
 	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-	connect(mTimeSelector, SIGNAL(valueChanged(const Duration&)), SIGNAL(changed()));
+#ifdef USE_AKONADI
+	connect(mTimeSelector, SIGNAL(valueChanged(const KCalCore::Duration&)), SIGNAL(changed()));
+#else
+	connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
+#endif
 	hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
 	hlayout = new QHBoxLayout();

@@ -61,7 +61,11 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
 	                         reminderWhatsThis, valueWhatsThis, allowHourMinute, this);
 	mTime->setFixedSize(mTime->sizeHint());
 	connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
-	connect(mTime, SIGNAL(valueChanged(const Duration&)), SIGNAL(changed()));
+#ifdef USE_AKONADI
+	connect(mTime, SIGNAL(valueChanged(const KCalCore::Duration&)), SIGNAL(changed()));
+#else
+	connect(mTime, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
+#endif
 	topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 
 	if (showOnceOnly)
