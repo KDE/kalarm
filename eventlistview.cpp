@@ -276,7 +276,9 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
 		kDebug();
 #ifdef USE_AKONADI
 		ItemListModel* itemModel = qobject_cast<ItemListModel*>(model);
+#ifdef __GNUC__
 #warning Check that this cast works
+#endif
 		if (!itemModel)
 			kError() << "Invalid cast to ItemListModel*";
 		else

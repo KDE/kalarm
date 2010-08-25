@@ -666,7 +666,9 @@ void MainWindow::refresh()
 {
 	kDebug();
 #ifdef USE_AKONADI
+#ifdef __GNUC__
 #warning Check what to do here
+#endif
 //        mListFilterModel->reload();
 #else
 	EventListModel::alarms()->reload();

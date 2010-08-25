@@ -152,7 +152,9 @@ AlarmCalendar::AlarmCalendar()
 	  mHaveDisabledAlarms(false)
 {
 #ifdef USE_AKONADI
+#ifdef __GNUC__
 #warning Move CalendarCompat into Akonadi resource?
+#endif
 	AkonadiModel* model = AkonadiModel::instance();
         connect(model, SIGNAL(eventsAdded(const AkonadiModel::EventList&)), SLOT(slotEventsAdded(const AkonadiModel::EventList&)));
         connect(model, SIGNAL(eventsToBeRemoved(const AkonadiModel::EventList&)), SLOT(slotEventsToBeRemoved(const AkonadiModel::EventList&)));
@@ -642,7 +644,9 @@ void AlarmCalendar::slotEventsAdded(const AkonadiModel::EventList& events)
 	for (int i = 0, count = events.count();  i < count;  ++i)
 	{
 		if (mEventMap.contains(events[i].event.id()))
+#ifdef __GNUC__
 #warning Update event in event map
+#endif
 			;
 		else
 			addNewEvent(events[i].collection, new KAEvent(events[i].event));
@@ -669,7 +673,9 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
 {
 	if (mEventMap.contains(event.event.id()))
+#ifdef __GNUC__
 #warning Update event in event map
+#endif
 		;
 	else
 		addNewEvent(event.collection, new KAEvent(event.event));
@@ -1070,7 +1076,9 @@ bool AlarmCalendar::save()
 	else
 		return saveCal();
 #ifdef USE_AKONADI
+#ifdef __GNUC__
 #warning How to group Akonadi updates?
+#endif
 #endif
 }
 

@@ -1,4 +1,6 @@
+#ifdef __GNUC__
 #warning Read-only resource endlessly triggers alarm, disabling does not stop this
+#endif
 
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
@@ -133,7 +135,9 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
+#ifdef __GNUC__
 #warning When a calendar is disabled, its rows are not removed from the model, so no alarms deleted signal is emitted
+#endif
     connect(monitor, SIGNAL(itemChanged(const Akonadi::Item&, const QSet<QByteArray>&)), SLOT(slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&)));
 }
 
@@ -555,7 +559,9 @@ if (attr) { kDebug()<<"Set enabled:"<<enabled<<", was="<<attr->isEnabled(); } el
             {
                 case Qt::EditRole:
                 {
+#ifdef __GNUC__
 #warning  ??? update event
+#endif
                     int row = index.row();
                     emit dataChanged(this->index(row, 0, index.parent()), this->index(row, ColumnCount - 1, index.parent()));
                     return true;
@@ -866,7 +872,9 @@ void AkonadiModel::slotUpdateWorkingHours()
 */
 void AkonadiModel::updateCommandError(const KAEvent& event)
 {
+#ifdef __GNUC__
 #warning ensure commandError is set when loading an alarm by Akonadi
+#endif
     QModelIndexList list = match(QModelIndex(), ItemIdRole, event.itemId(), 1, Qt::MatchExactly | Qt::MatchRecursive);
     if (!list.isEmpty())
         setData(list[0], QVariant(static_cast<int>(event.commandError())), CommandErrorRole);
@@ -1054,7 +1062,9 @@ void AkonadiModel::addCollectionJobDone(KJob* j)
     }
     else
     {
+#ifdef __GNUC__
 #warning Can the collection be retrieved?
+#endif
         //job->instance().identifier();
         emit collectionAdded(job, true);
     }
@@ -1306,7 +1316,9 @@ bool AkonadiModel::updateEvent(Akonadi::Entity::Id itemId, KAEvent& newEvent)
     mPendingItems[job] = itemId;
     job->start();
     return true;
+#ifdef __GNUC__
 #warning Ensure KAlarm event list is updated correctly before and after Akonadi update
+#endif
 }
 
 /******************************************************************************
@@ -1383,7 +1395,9 @@ void AkonadiModel::itemJobDone(KJob* j)
         kError() << errMsg << itemId << ":" << j->errorString();
         emit itemDone(itemId, false);
         KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+#ifdef __GNUC__
 #warning No widget parent
+#endif
     }
     else
         emit itemDone(itemId);
@@ -1446,7 +1460,9 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 */
 void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames)
 {
+#ifdef __GNUC__
 #warning Ensure collection rights is initialised at startup
+#endif
     Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
     Collection::Rights newRights = collection.rights() & writableRights;
     if (newRights != oldRights)
@@ -2421,7 +2437,9 @@ KAEvent ItemListModel::event(const QModelIndex& index) const
 */
 bool ItemListModel::haveEvents() const
 {
+#ifdef __GNUC__
 #warning Might instead need to iterate over all collections to find item count
+#endif
     return rowCount();
 }
 

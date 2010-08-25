@@ -268,7 +268,9 @@ void ResourceSelector::editResource()
 	Collection collection = currentResource();
 	if (collection.isValid())
 	{
+#ifdef __GNUC__
 #warning editResource() not implemented
+#endif
 		Akonadi::CollectionPropertiesDialog dlg(collection, this);
 		dlg.exec();
 	}
@@ -499,7 +501,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 void ResourceSelector::reloadResource()
 {
 #ifdef USE_AKONADI
+#ifdef __GNUC__
 #warning reloadResource() not implemented
+#endif
 #else
 	AlarmResource* resource = currentResource();
 	if (resource)
@@ -513,7 +517,9 @@ void ResourceSelector::reloadResource()
 void ResourceSelector::saveResource()
 {
 #ifdef USE_AKONADI
+#ifdef __GNUC__
 #warning saveResource() not implemented
+#endif
 #else
 	AlarmResource* resource = currentResource();
 	if (resource)
@@ -703,7 +709,9 @@ void ResourceSelector::showInfo()
 bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
 		QString enabled = CollectionControlModel::isEnabled(collection) ? i18nc("@info/plain", "Enabled") : wrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
 		QString std = CollectionControlModel::isStandard(collection, currentResourceType()) ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
+#ifdef __GNUC__
 #warning Calendar structure display not implemented
+#endif
 		QString text = name.isEmpty()
 		             ? i18nc("@info",
 		                     "<title>%1</title>"
