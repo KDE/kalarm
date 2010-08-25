@@ -1801,9 +1801,10 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
         if (attr->standard() != KAlarm::CalEvent::EMPTY)
         {
             // It's the standard collection for some alarm type.
+            QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
             if (attr->isStandard(KAlarm::CalEvent::ACTIVE))
             {
-                KMessageBox::sorry(static_cast<QWidget*>(QObject::parent()),
+                KMessageBox::sorry(messageParent,
                                    i18nc("@info", "You cannot disable your default active alarm calendar."));
                 continue;
             }
@@ -1811,12 +1812,12 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
             {
                 // Only allow the archived alarms standard collection to be disabled if
                 // we're not saving expired alarms.
-                KMessageBox::sorry(static_cast<QWidget*>(QObject::parent()),
+                KMessageBox::sorry(messageParent,
                                    i18nc("@info", "You cannot disable your default archived alarm calendar "
                                                   "while expired alarms are configured to be kept."));
                 continue;
             }
-            if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(QObject::parent()),
+            if (KMessageBox::warningContinueCancel(messageParent,
                                                    i18nc("@info", "Do you really want to disable your default calendar?"))
                        == KMessageBox::Cancel)
                 continue;
