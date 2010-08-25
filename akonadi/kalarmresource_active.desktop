@@ -66,6 +66,6 @@ Comment[zh_TW]=從 KAlarm 作用中鬧鐘行事曆檔載入資料
 Type=AkonadiResource
 Exec=akonadi_kalarm_resource
 Icon=kalarm
-X-Akonadi-MimeTypes=application/x-vnd.kde.alarms.active
+X-Akonadi-MimeTypes=application/x-vnd.kde.alarm.active
 X-Akonadi-Capabilities=Resource
 X-Akonadi-Identifier=akonadi_kalarm_active_resource

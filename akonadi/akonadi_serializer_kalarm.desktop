@@ -60,6 +60,6 @@ Comment[zh_CN]=用于操作 KAlarm 事件的 Akonadi 序列插件
 Comment[zh_TW]=KAlarm 事件使用的 Akonadi 序列器外掛程式
 
 [Plugin]
-Type=application/x-vnd.kde.alarms,application/x-vnd.kde.alarms.active,application/x-vnd.kde.alarms.archived,application/x-vnd.kde.alarms.template
+Type=application/x-vnd.kde.alarm,application/x-vnd.kde.alarm.active,application/x-vnd.kde.alarm.archived,application/x-vnd.kde.alarm.template
 X-Akonadi-Class=default;KAEvent;
 X-KDE-Library=akonadi_serializer_kalarm

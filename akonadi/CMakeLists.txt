@@ -8,6 +8,10 @@ if (LOCAL_BUILD)
     set(AKONADI_ICAL_RESOURCE ${CMAKE_SOURCE_DIR}/runtime/resources/ical)
 
     ########### definitions copied from runtime/ ###############
+    set(SHARED_MIME_INFO_MINIMUM_VERSION "0.30")
+    find_package(SharedMimeInfo)
+    macro_log_feature(SHARED_MIME_INFO_FOUND "SMI" "SharedMimeInfo" "http://freedesktop.org/wiki/Software/shared-mime-info" TRUE "0.30" "SharedMimeInfo is required.")
+
     set(AKONADI_SHARED_RESOURCES ${CMAKE_SOURCE_DIR}/runtime/resources/shared)
 
     set(AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
@@ -83,3 +87,9 @@ target_link_libraries(akonadi_serializer_kalarm kalarm_calendar ${KDEPIMLIBS_KCA
 install(TARGETS akonadi_serializer_kalarm DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES akonadi_serializer_kalarm.desktop DESTINATION ${DATA_INSTALL_DIR}/akonadi/plugins/serializer)
+
+############### Here we install some extra stuff  ###############
+
+## install the MIME type spec file for KAlarm specific MIME types
+install(FILES kalarm-mime.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
+update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})

@@ -68,6 +68,6 @@ Comment[zh_TW]=從 KAlarm 鬧鐘樣本檔載入資料
 Type=AkonadiResource
 Exec=akonadi_kalarm_resource
 Icon=kalarm
-X-Akonadi-MimeTypes=application/x-vnd.kde.alarms.template
+X-Akonadi-MimeTypes=application/x-vnd.kde.alarm.template
 X-Akonadi-Capabilities=Resource
 X-Akonadi-Identifier=akonadi_kalarm_template_resource
