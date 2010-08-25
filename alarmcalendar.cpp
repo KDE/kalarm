@@ -1740,7 +1740,7 @@ Event::List AlarmCalendar::kcalEvents(AlarmResource* resource, KAlarm::CalEvent:
 		if (event->alarms().isEmpty()
 		||  (type != KAlarm::CalEvent::EMPTY  &&  !(type & KAlarm::CalEvent::status(event)))
 		||  !KAEvent(event).isValid())
-			list.remove(i);
+			list.removeAt(i);
 		else
 			++i;
 	}
