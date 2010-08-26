@@ -1166,6 +1166,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::T
                 KAEvent event = item.payload<KAEvent>();
                 if (event.isValid()  &&  event.category() == type)
                 {
+                    event.setItemId(item.id());
                     if (item.hasAttribute<EventAttribute>())
                     {
                         KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
@@ -1193,6 +1194,7 @@ KAEvent AkonadiModel::event(const QModelIndex& index) const
         KAEvent event = item.payload<KAEvent>();
         if (event.isValid()  &&  item.hasAttribute<EventAttribute>())
         {
+            event.setItemId(item.id());
             KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
             event.setCommandError(err);
         }
@@ -1448,7 +1450,10 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
         {
             KAEvent event = item.payload<KAEvent>();
             if (event.isValid())
+            {
+                event.setItemId(item.id());
                 events += Event(event, data(ix, ParentCollectionRole).value<Collection>());
+            }
         }
     }
     return events;
@@ -1504,6 +1509,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
     KAEvent event = item.payload<KAEvent>();
     if (!event.isValid())
         return;
+    event.setItemId(item.id());
     const QModelIndexList indexes = match(QModelIndex(), ItemIdRole, item.id(), 1, Qt::MatchExactly | Qt::MatchRecursive);
     foreach (const QModelIndex& index, indexes)
     {
@@ -1560,7 +1566,7 @@ Collection AkonadiModel::collectionForItem(Item::Id id) const
     QModelIndexList list = match(QModelIndex(), ItemIdRole, id, 1, Qt::MatchExactly | Qt::MatchRecursive);
     if (list.isEmpty())
         return Collection();
-    return list[0].data(EntityTreeModel::CollectionRole).value<Collection>();
+    return list[0].data(EntityTreeModel::ParentCollectionRole).value<Collection>();
 }
 
 KAlarm::CalEvent::Types AkonadiModel::types(const Collection& collection)
@@ -2424,6 +2430,7 @@ KAEvent ItemListModel::event(const QModelIndex& index) const
         KAEvent event = item.payload<KAEvent>();
         if (event.isValid()  &&  item.hasAttribute<EventAttribute>())
         {
+            event.setItemId(item.id());
             KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
             event.setCommandError(err);
         }

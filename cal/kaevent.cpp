@@ -2906,6 +2906,7 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(KAlarm::CalEvent::DISPLAYING);
 #ifdef USE_AKONADI
+            mItemId          = -1;    // the display event doesn't have an associated Item
             mCollectionId    = collectionId;;
 #else
             mResourceId      = resourceID;
