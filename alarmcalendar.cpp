@@ -426,6 +426,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
 		delete event;
 	}
 	events.clear();
+	mEarliestAlarm[resource] = 0;
 	if (!cal)
 		return;
 
@@ -904,6 +905,8 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 			// Adding to mCalendar failed, so undo AlarmCalendar::addEvent()
 			mEventMap.remove(event->id());
 			mResourceMap[resource].removeAll(event);
+			if (mEarliestAlarm[resource] == event)
+				findEarliestAlarm(resource);
 		}
 		*event = oldEvent;
 		delete kcalEvent;
@@ -1086,9 +1089,8 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 		mEventMap.erase(it);
 		resource = AlarmResources::instance()->resource(kcalEvent);
 		mResourceMap[resource].removeAll(ev);
-		bool recalc = (mEarliestAlarm[resource] == ev);
 		delete ev;
-		if (recalc)
+		if (mEarliestAlarm[resource] == ev)
 			findEarliestAlarm(resource);
 	}
 	else
