@@ -284,6 +284,7 @@ class CollectionCheckListModel : public Future::KCheckableProxyModel
         static CollectionCheckListModel* instance();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
+        virtual bool setData(const QModelIndex&, const QVariant& value, int role);
 
     private slots:
         void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);

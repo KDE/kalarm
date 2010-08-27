@@ -535,6 +535,8 @@ if (attr) { kDebug()<<"Set enabled:"<<enabled<<", was="<<attr->isEnabled(); } el
                 if (collection.hasAttribute<CollectionAttribute>())
                 {
                     KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
+CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
+kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                     collection.attribute<CollectionAttribute>()->setStandard(types);
                     updateCollection = true;
                 }
@@ -1781,6 +1783,54 @@ Collection CollectionCheckListModel::collection(const QModelIndex& index) const
 }
 
 /******************************************************************************
+* Set model data for one index.
+* If the change is to disable a collection, check for eligibility and prevent
+* the change if necessary.
+*/
+bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant& value, int role)
+{
+    if (role == Qt::CheckStateRole  &&  static_cast<Qt::CheckState>(value.toInt()) != Qt::Checked)
+    {
+        // A collection is to be disabled.
+        const Collection collection = static_cast<CollectionListModel*>(sourceModel())->collection(index);
+        if (collection.isValid()  &&  collection.hasAttribute<CollectionAttribute>())
+        {
+            const CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
+            if (attr->isEnabled())
+            {
+                QString errmsg;
+                QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
+                if (attr->standard() != KAlarm::CalEvent::EMPTY)
+                {
+                    // It's the standard collection for some alarm type.
+                    if (attr->isStandard(KAlarm::CalEvent::ACTIVE))
+                    {
+                        errmsg = i18nc("@info", "You cannot disable your default active alarm calendar.");
+                    }
+                    else if (attr->isStandard(KAlarm::CalEvent::ARCHIVED)  &&  Preferences::archivedKeepDays())
+                    {
+                        // Only allow the archived alarms standard collection to be disabled if
+                        // we're not saving expired alarms.
+                        errmsg = i18nc("@info", "You cannot disable your default archived alarm calendar "
+                                                "while expired alarms are configured to be kept.");
+                    }
+                    else if (KMessageBox::warningContinueCancel(messageParent,
+                                                           i18nc("@info", "Do you really want to disable your default calendar?"))
+                               == KMessageBox::Cancel)
+                        return false;
+                }
+                if (!errmsg.isEmpty())
+                {
+                    KMessageBox::sorry(messageParent, errmsg);
+                    return false;
+                }
+            }
+        }
+    }
+    return Future::KCheckableProxyModel::setData(index, value, role);
+}
+
+/******************************************************************************
 * Called when rows have been inserted into the model.
 * Select or deselect them according to their enabled status.
 */
@@ -1811,41 +1861,7 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
         CollectionControlModel::setEnabled(static_cast<CollectionListModel*>(sourceModel())->collection(ix), true);
     const QModelIndexList desel = deselected.indexes();
     foreach (const QModelIndex& ix, desel)
-    {
-        // The collection is to be disabled.
-        // Check for eligibility.
-        const Collection collection = static_cast<CollectionListModel*>(sourceModel())->collection(ix);
-        if (!collection.isValid()  ||  !collection.hasAttribute<CollectionAttribute>())
-            continue;
-        const CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
-        if (!attr->isEnabled())
-            continue;
-        if (attr->standard() != KAlarm::CalEvent::EMPTY)
-        {
-            // It's the standard collection for some alarm type.
-            QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
-            if (attr->isStandard(KAlarm::CalEvent::ACTIVE))
-            {
-                KMessageBox::sorry(messageParent,
-                                   i18nc("@info", "You cannot disable your default active alarm calendar."));
-                continue;
-            }
-            if (attr->isStandard(KAlarm::CalEvent::ARCHIVED)  &&  Preferences::archivedKeepDays())
-            {
-                // Only allow the archived alarms standard collection to be disabled if
-                // we're not saving expired alarms.
-                KMessageBox::sorry(messageParent,
-                                   i18nc("@info", "You cannot disable your default archived alarm calendar "
-                                                  "while expired alarms are configured to be kept."));
-                continue;
-            }
-            if (KMessageBox::warningContinueCancel(messageParent,
-                                                   i18nc("@info", "Do you really want to disable your default calendar?"))
-                       == KMessageBox::Cancel)
-                continue;
-        }
-        CollectionControlModel::setEnabled(collection, false);
-    }
+        CollectionControlModel::setEnabled(static_cast<CollectionListModel*>(sourceModel())->collection(ix), false);
 }
 
 
