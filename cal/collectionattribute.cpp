@@ -27,6 +27,7 @@ namespace KAlarm
 
 CollectionAttribute::CollectionAttribute(const CollectionAttribute& rhs)
     : mBackgroundColour(rhs.mBackgroundColour),
+      mStandard(rhs.mStandard),
       mCompatibility(rhs.mCompatibility),
       mEnabled(rhs.mEnabled)
 {
