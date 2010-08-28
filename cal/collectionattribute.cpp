@@ -103,23 +103,23 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     int c[4];
     const QList<QByteArray> items = data.simplified().split(' ');
     int count = items.count();
+    int index = 0;
 kDebug(5950)<<"Size="<<count<<", data="<<data;
-    if (count >= 1)
+    if (count > index)
     {
         // 0: whether the collection is enabled
-        c[0] = items[0].toInt(&ok);
+        c[0] = items[index++].toInt(&ok);
         if (!ok)
         {
             kError() << "Invalid enabled:" << c[0];
             return;
         }
         mEnabled = c[0];
-kDebug()<<"Enabled ->"<<mEnabled;
     }
-    if (count >= 2)
+    if (count > index)
     {
         // 1: calendar format compatibility
-        c[0] = items[2].toInt(&ok);
+        c[0] = items[index++].toInt(&ok);
         if (!ok  ||  (c[0] & ~(KAlarm::Calendar::Incompatible | KAlarm::Calendar::Current | KAlarm::Calendar::Convertible)))
         {
             kError() << "Invalid compatibility:" << c[0];
@@ -127,10 +127,10 @@ kDebug()<<"Enabled ->"<<mEnabled;
         }
         mCompatibility = static_cast<KAlarm::Calendar::Compat>(c[0]);
     }
-    if (count >= 3)
+    if (count > index)
     {
         // 2: type(s) of alarms for which the collection is the standard collection
-        c[0] = items[1].toInt(&ok);
+        c[0] = items[index++].toInt(&ok);
         if (!ok  ||  (c[0] & ~(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE)))
         {
             kError() << "Invalid alarm types:" << c[0];
@@ -139,15 +139,15 @@ kDebug()<<"Enabled ->"<<mEnabled;
         if (mEnabled  &&  mCompatibility == KAlarm::Calendar::Current)
             mStandard = static_cast<KAlarm::CalEvent::Type>(c[0]);
     }
-    if (count >= 4)
+    if (count > index)
     {
         // 3: background color valid flag
-        c[0] = items[3].toInt(&ok);
+        c[0] = items[index++].toInt(&ok);
         if (!ok)
             return;
         if (c[0])
         {
-            if (count < 8)
+            if (count < index + 4)
             {
                 kError() << "Invalid number of background color elements";
                 return;
@@ -155,7 +155,7 @@ kDebug()<<"Enabled ->"<<mEnabled;
             // 4-7: background color elements
             for (int i = 0;  i < 4;  ++i)
             {
-                c[i] = items[i + 4].toInt(&ok);
+                c[i] = items[index++].toInt(&ok);
                 if (!ok)
                     return;
             }

@@ -30,7 +30,6 @@
 #ifdef USE_AKONADI
 #include <kcalcore/event.h>
 #include <kcalcore/alarm.h>
-#include <kcalcore/memorycalendar.h>
 #else
 #include <kcal/event.h>
 #include <kcal/alarm.h>
@@ -81,6 +80,21 @@ QByteArray Calendar::icalProductId()
 {
     return mIcalProductId.isEmpty() ? QByteArray("-//K Desktop Environment//NONSGML  //EN") : mIcalProductId;
 }
+
+/******************************************************************************
+* Set the X-KDE-KALARM-VERSION property in a calendar.
+*/
+#ifdef USE_AKONADI
+void Calendar::setKAlarmVersion(const MemoryCalendar::Ptr& calendar)
+{
+    calendar->setCustomProperty(APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
+}
+#else
+void Calendar::setKAlarmVersion(CalendarLocal& calendar)
+{
+    calendar.setCustomProperty(APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
+}
+#endif
 
 /******************************************************************************
 * Check the version of KAlarm which wrote a calendar file, and convert it in
@@ -150,6 +164,7 @@ int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFil
 #else
     versionString = calendar.customProperty(APPNAME, VERSION_PROPERTY);
 #endif
+    kDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
     if (versionString.isEmpty())
     {
         // Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.

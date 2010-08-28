@@ -22,9 +22,11 @@
 #include "kalarmresource.h"
 #include "collectionattribute.h"
 #include "eventattribute.h"
+#include "kacalendar.h"
 #include "kaevent.h"
 
 #include <akonadi/attributefactory.h>
+#include <akonadi/collectionmodifyjob.h>
 
 #include <kcalcore/memorycalendar.h>
 #include <kcalcore/incidence.h>
@@ -92,12 +94,31 @@ bool KAlarmResource::readFromFile(const QString& fileName)
 {
     if (!ICalResourceBase::readFromFile(fileName))
         return false;
+    if (calendar()->incidences().isEmpty())
+    {
+        // It's a new file. Set up the KAlarm custom property.
+        KAlarm::Calendar::setKAlarmVersion(calendar());
+    }
     QString versionString;
     int version = KAlarm::Calendar::checkCompatibility(fileStorage(), versionString);
     mCompatibility = (version < 0) ? KAlarm::Calendar::Incompatible  // calendar is not in KAlarm format, or is in a future format
                    : (version > 0) ? KAlarm::Calendar::Convertible   // calendar is in an out of date format
                    :                 KAlarm::Calendar::Current;      // calendar is in the current format
     return true;
+}
+
+/******************************************************************************
+* Reimplemented to write data to the given file.
+* The file is always local.
+*/
+bool KAlarmResource::writeToFile(const QString& fileName)
+{
+    if (calendar()->incidences().isEmpty())
+    {
+        // It's an empty file. Set up the KAlarm custom property.
+        KAlarm::Calendar::setKAlarmVersion(calendar());
+    }
+    return ICalResourceBase::writeToFile(fileName);
 }
 
 /******************************************************************************
@@ -238,6 +259,8 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
     Collection col = collection;
     CollectionAttribute* attr = col.attribute<CollectionAttribute>(Collection::AddIfMissing);
     attr->setCompatibility(mCompatibility);
+    CollectionModifyJob* job = new CollectionModifyJob(col, this);
+    connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
 
     // Retrieve events from the calendar
     KCalCore::Event::List events = calendar()->events();
@@ -267,6 +290,18 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
         items << item;
     }
     itemsRetrieved(items);
+}
+
+/******************************************************************************
+* Called when a collection modification job has completed, to report any error.
+*/
+void KAlarmResource::modifyCollectionJobDone(KJob* j)
+{
+    if (j->error())
+    {
+        Collection collection = static_cast<CollectionModifyJob*>(j)->collection();
+        kError() << "Error: collection id" << collection.id() << ":" << j->errorString();
+    }
 }
 
 AKONADI_RESOURCE_MAIN(KAlarmResource)

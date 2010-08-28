@@ -25,6 +25,7 @@
 #include "kacalendar.h"
 #include <icalresourcebase.h>
 
+class KJob;
 class KAEvent;
 
 class KAlarmResource : public ICalResourceBase
@@ -45,8 +46,12 @@ class KAlarmResource : public ICalResourceBase
         virtual void customizeConfigDialog( Akonadi::SingleFileResourceConfigDialog<Settings>* dlg );
 
         virtual bool readFromFile(const QString& fileName);
+        virtual bool writeToFile(const QString& fileName);
         virtual void itemAdded(const Akonadi::Item&, const Akonadi::Collection&);
         virtual void itemChanged(const Akonadi::Item&, const QSet<QByteArray>& parts);
+
+    private slots:
+        void modifyCollectionJobDone(KJob*);
 
     private:
         KAlarm::Calendar::Compat mCompatibility;
