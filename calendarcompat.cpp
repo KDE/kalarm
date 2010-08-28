@@ -133,13 +133,6 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 		    != KMessageBox::Yes)
 			return KAlarm::Calendar::Convertible;
 	}
-#ifdef __GNUC__
-#warning Should this use KAlarm::Calendar::setKAlarmVersion()?
-#endif
-#ifdef USE_AKONADI
-	calendar->setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
-#else
-	calendar.setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
-#endif
+	KAlarm::Calendar::setKAlarmVersion(calendar);
 	return KAlarm::Calendar::Converted;
 }

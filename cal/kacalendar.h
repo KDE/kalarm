@@ -25,7 +25,7 @@
 #ifdef USE_AKONADI
 #include "kcalcore_constptr.h"
 #include <kcalcore/filestorage.h>
-#include <kcalcore/memorycalendar.h>
+#include <kcalcore/calendar.h>
 #include <kcalcore/event.h>
 #endif
 #include <QByteArray>
@@ -86,7 +86,7 @@ class KALARM_CAL_EXPORT Calendar
 
         /** Set the KAlarm version custom property for a calendar. */
 #ifdef USE_AKONADI
-        static void setKAlarmVersion(const KCalCore::MemoryCalendar::Ptr&);
+        static void setKAlarmVersion(const KCalCore::Calendar::Ptr&);
 #else
         static void setKAlarmVersion(KCal::CalendarLocal&);
 #endif

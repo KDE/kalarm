@@ -85,7 +85,7 @@ QByteArray Calendar::icalProductId()
 * Set the X-KDE-KALARM-VERSION property in a calendar.
 */
 #ifdef USE_AKONADI
-void Calendar::setKAlarmVersion(const MemoryCalendar::Ptr& calendar)
+void Calendar::setKAlarmVersion(const KCalCore::Calendar::Ptr& calendar)
 {
     calendar->setCustomProperty(APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
 }
