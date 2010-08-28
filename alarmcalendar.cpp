@@ -161,7 +161,7 @@ AlarmCalendar::AlarmCalendar()
         connect(model, SIGNAL(eventChanged(const AkonadiModel::Event&)), SLOT(slotEventChanged(const AkonadiModel::Event&)));
 #else
 	AlarmResources* resources = AlarmResources::instance();
-	resources->setCalIDFunction(&CalendarCompat::setID);
+	resources->setCalIDFunction(&KAlarm::Calendar::setKAlarmVersion);
 	resources->setFixFunction(&CalendarCompat::fix);
 	resources->setCustomEventFunction(&updateResourceKAEvents);
 	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceChange(AlarmResource*, AlarmResources::Change)));
@@ -977,7 +977,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 			return false;
 		}
 	}
-	CalendarCompat::setID(calendar);
+	KAlarm::Calendar::setKAlarmVersion(calendar);
 
 	// Add the alarms to the calendar
 	bool ok = true;

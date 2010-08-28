@@ -40,28 +40,13 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
+#ifndef USE_AKONADI
 #include <kcal/calendarlocal.h>
-
-
 using namespace KCal;
+#endif
 
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 
-
-/******************************************************************************
-* Write the X-KDE-KALARM-VERSION custom property into the calendar.
-*/
-#ifdef USE_AKONADI
-void CalendarCompat::setID(KCalCore::MemoryCalendar::Ptr& calendar)
-{
-	calendar->setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
-}
-#else
-void CalendarCompat::setID(KCal::CalendarLocal& calendar)
-{
-	calendar.setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
-}
-#endif
 
 /******************************************************************************
 * Find the version of KAlarm which wrote the calendar file, and do any
@@ -148,6 +133,9 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 		    != KMessageBox::Yes)
 			return KAlarm::Calendar::Convertible;
 	}
+#ifdef __GNUC__
+#warning Should this use KAlarm::Calendar::setKAlarmVersion()?
+#endif
 #ifdef USE_AKONADI
 	calendar->setCustomProperty(KAlarm::Calendar::APPNAME, VERSION_PROPERTY, QLatin1String(KALARM_VERSION));
 #else

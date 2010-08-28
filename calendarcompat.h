@@ -38,7 +38,6 @@ class CalendarCompat
 {
 	public:
 #ifdef USE_AKONADI
-		static void  setID(KCalCore::MemoryCalendar::Ptr&);
 		/** Whether the fix function should convert old format KAlarm calendars. */
 		enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
 
@@ -46,7 +45,6 @@ class CalendarCompat
 		                                    const Akonadi::Collection& = Akonadi::Collection(),
 		                                    FixFunc = PROMPT, bool* wrongType = 0);
 #else
-		static void  setID(KCal::CalendarLocal&);
 		static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
 		                                    AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
 #endif
