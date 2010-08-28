@@ -2096,13 +2096,15 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
 
 /******************************************************************************
 * Return whether a collection is both enabled and fully writable.
+* Optionally, the enabled status can be ignored.
 */
-bool CollectionControlModel::isWritable(const Akonadi::Collection& collection)
+bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, bool ignoreEnabledStatus)
 {
     if (!collection.hasAttribute<CollectionAttribute>()
     ||  collection.attribute<CollectionAttribute>()->compatibility() != KAlarm::Calendar::Current)
         return false;
-    return isEnabled(collection)  &&  (collection.rights() & writableRights) == writableRights;
+    return (ignoreEnabledStatus || isEnabled(collection))
+       &&  (collection.rights() & writableRights) == writableRights;
 }
 
 /******************************************************************************

@@ -705,33 +705,38 @@ void ResourceSelector::showInfo()
 		QString calType = Akonadi::AgentManager::self()->instance(collection.resource()).type().name();
 		QString storage = AkonadiModel::instance()->storageType(collection);
 		QString location = collection.remoteId();
-		QString perms = CollectionControlModel::isWritable(collection) ? i18nc("@info/plain", "Read-write") : i18nc("@info/plain", "Read-only");
+		KUrl url(location);
+		if (url.isLocalFile())
+			location = url.path();
+		QString perms = CollectionControlModel::isWritable(collection, true)
+			      ? i18nc("@info/plain", "Read-write")
+			      : i18nc("@info/plain", "Read-only");
 bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
-		QString enabled = CollectionControlModel::isEnabled(collection) ? i18nc("@info/plain", "Enabled") : wrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
-		QString std = CollectionControlModel::isStandard(collection, currentResourceType()) ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
-#ifdef __GNUC__
-#warning Calendar structure display not implemented
-#endif
+		QString enabled = CollectionControlModel::isEnabled(collection)
+			        ? i18nc("@info/plain", "Enabled")
+				: wrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)")
+				: i18nc("@info/plain", "Disabled");
+		QString std = CollectionControlModel::isStandard(collection, currentResourceType())
+			    ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
+			    : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
 		QString text = name.isEmpty()
 		             ? i18nc("@info",
 		                     "<title>%1</title>"
-		                     "<para>Calendar type: %2<nl/>"
+		                     "Contents: %2<nl/>"
+		                     "%3: <filename>%4</filename><nl/>"
+		                     "Permissions: %5<nl/>"
+		                     "Status: %6<nl/>"
+		                     "Default calendar: %7</para>",
+		                     id, calType, storage, location, perms, enabled, std)
+		             : i18nc("@info",
+		                     "<title>%1</title>"
+		                     "<para>ID: %2<nl/>"
 		                     "Contents: %3<nl/>"
 		                     "%4: <filename>%5</filename><nl/>"
 		                     "Permissions: %6<nl/>"
 		                     "Status: %7<nl/>"
 		                     "Default calendar: %8</para>",
-		                     id, "calendar structure???", calType, storage, location, perms, enabled, std)
-		             : i18nc("@info",
-		                     "<title>%1</title>"
-		                     "<para>ID: %2<nl/>"
-		                     "Calendar type: %3<nl/>"
-		                     "Contents: %4<nl/>"
-		                     "%5: <filename>%6</filename><nl/>"
-		                     "Permissions: %7<nl/>"
-		                     "Status: %8<nl/>"
-		                     "Default calendar: %9</para>",
-		                     name, id, "calendar structure???", calType, storage, location, perms, enabled, std);
+		                     name, id, calType, storage, location, perms, enabled, std);
 		KMessageBox::information(this, text);
 	}
 #else

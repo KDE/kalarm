@@ -362,9 +362,11 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static void setEnabled(const Akonadi::Collection&, bool enabled);
 
         /** Return whether a collection is both enabled and fully writable,
-         *  i.e. with create/delete/change rights.
+         *  i.e. with create/delete/change rights and compatible with the current
+         *  KAlarm calendar format.
+         *  Optionally, the enabled status can be ignored.
          */
-        static bool isWritable(const Akonadi::Collection&);
+        static bool isWritable(const Akonadi::Collection&, bool ignoreEnabledStatus = false);
 
         /** Return the standard collection for a specified mime type.
          *  Reply = invalid collection if there is no standard collection.
