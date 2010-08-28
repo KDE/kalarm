@@ -161,10 +161,12 @@ int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFil
 #ifdef USE_AKONADI
     KCalCore::Calendar::Ptr calendar = fileStorage->calendar();
     versionString = calendar->customProperty(APPNAME, VERSION_PROPERTY);
+    kDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
+
 #else
     versionString = calendar.customProperty(APPNAME, VERSION_PROPERTY);
 #endif
-    kDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
+
     if (versionString.isEmpty())
     {
         // Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.
