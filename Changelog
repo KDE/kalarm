@@ -1,9 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.5.3 --- 26 August 2010 ===
+=== Version 2.5.3 --- 29 August 2010 ===
 - Fix crash when a reminder alarm is being redisplayed.
 - Fix possible crash: on alarm deletion, always update next alarm to trigger.
 - Fix Sound File selection dialogue Play button not playing any sound.
+- Always set one storage location radio button in configuration dialogue.
 - Fix inability to leave file name blank in audio alarm templates.
 
 === Version 2.5.2 --- 3 June 2010 ===
