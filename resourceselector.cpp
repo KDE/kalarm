@@ -737,12 +737,18 @@ bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
 		                     "Status: %7<nl/>"
 		                     "Default calendar: %8</para>",
 		                     name, id, calType, storage, location, perms, enabled, std);
-		KMessageBox::information(this, text);
+		// Display the collection information. Because the user requested
+		// the information, don't raise a KNotify event.
+		KMessageBox::information(this, text, QString(), QString(), 0);
 	}
 #else
 	AlarmResource* resource = currentResource();
 	if (resource)
-		KMessageBox::information(this, resource->infoText());
+	{
+		// Display the collection information. Because the user requested
+		// the information, don't raise a KNotify event.
+		KMessageBox::information(this, resource->infoText(), QString(), QString(), 0);
+	}
 #endif
 }
 
