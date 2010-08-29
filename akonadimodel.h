@@ -266,6 +266,7 @@ class CollectionListModel : public KDescendantsProxyModel
         explicit CollectionListModel(QObject* parent = 0);
         void setEventTypeFilter(KAlarm::CalEvent::Type);
         void setFilterWritable(bool writable);
+        void setFilterEnabled(bool enabled);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
         virtual bool isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const;

@@ -1626,6 +1626,7 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
         explicit CollectionMimeTypeFilterModel(QObject* parent = 0);
         void setEventTypeFilter(KAlarm::CalEvent::Type);
         void setFilterWritable(bool writable);
+        void setFilterEnabled(bool enabled);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
 
@@ -1635,6 +1636,7 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
     private:
         QString mMimeType;     // collection content type contained in this model
         bool    mWritableOnly; // only include writable collections in this model
+        bool    mEnabledOnly;  // only include enabled collections in this model
 };
 
 CollectionMimeTypeFilterModel::CollectionMimeTypeFilterModel(QObject* parent)
@@ -1670,6 +1672,17 @@ void CollectionMimeTypeFilterModel::setFilterWritable(bool writable)
     }
 }
 
+void CollectionMimeTypeFilterModel::setFilterEnabled(bool enabled)
+{
+    if (enabled != mEnabledOnly)
+    {
+        emit layoutAboutToBeChanged();
+        mEnabledOnly = enabled;
+        invalidateFilter();
+        emit layoutChanged();
+    }
+}
+
 bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
     if (!EntityMimeTypeFilterModel::filterAcceptsRow(sourceRow, sourceParent))
@@ -1681,7 +1694,15 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
     Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
     if (mWritableOnly  &&  collection.rights() == Collection::ReadOnly)
         return false;
-    return mMimeType.isEmpty()  ||  collection.contentMimeTypes().contains(mMimeType);
+    if (!mMimeType.isEmpty()  &&  !collection.contentMimeTypes().contains(mMimeType))
+        return false;
+    if (mEnabledOnly)
+    {
+        if (!collection.hasAttribute<CollectionAttribute>()
+        ||  !collection.attribute<CollectionAttribute>()->isEnabled())
+            return false;
+    }
+    return true;
 }
 
 /******************************************************************************
@@ -1734,6 +1755,11 @@ void CollectionListModel::setEventTypeFilter(KAlarm::CalEvent::Type type)
 void CollectionListModel::setFilterWritable(bool writable)
 {
     static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->setFilterWritable(writable);
+}
+
+void CollectionListModel::setFilterEnabled(bool enabled)
+{
+    static_cast<CollectionMimeTypeFilterModel*>(sourceModel())->setFilterEnabled(enabled);
 }
 
 bool CollectionListModel::isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const
@@ -2274,6 +2300,7 @@ Collection CollectionControlModel::destination(KAlarm::CalEvent::Type type, QWid
     // Prompt for which collection to use
     CollectionListModel* model = new CollectionListModel(promptParent);
     model->setFilterWritable(true);
+    model->setFilterEnabled(true);
     model->setEventTypeFilter(type);
     Collection col;
     switch (model->rowCount())
@@ -2291,6 +2318,7 @@ Collection CollectionControlModel::destination(KAlarm::CalEvent::Type type, QWid
             AutoQPointer<CollectionDialog> dlg = new CollectionDialog(model, promptParent);
             dlg->setCaption(i18nc("@title:window", "Choose Calendar"));
             dlg->setDefaultCollection(standard);
+            dlg->setMimeTypeFilter(QStringList(KAlarm::CalEvent::mimeType(type)));
             if (dlg->exec())
                 col = dlg->selectedCollection();
             if (!col.isValid()  &&  cancelled)
