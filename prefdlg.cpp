@@ -887,7 +887,10 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
 void StorePrefTab::restore(bool defaults)
 {
 	mCheckKeepChanges = defaults;
-	mAskResource->setChecked(Preferences::askResource());
+	if (Preferences::askResource())
+		mAskResource->setChecked(true);
+	else
+		mDefaultResource->setChecked(true);
 	int keepDays = Preferences::archivedKeepDays();
 	if (!defaults)
 		mOldKeepArchived = keepDays;
