@@ -1243,7 +1243,7 @@ void MainWindow::slotConfigureToolbar()
 {
 	saveMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 	KEditToolBar dlg(factory());
-	connect(&dlg, SIGNAL(newToolbarConfig()), this, SLOT(slotNewToolbarConfig()));
+	connect(&dlg, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
 	dlg.exec();
 }
 
