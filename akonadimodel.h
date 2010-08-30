@@ -258,7 +258,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 = Proxy model converting the collection tree into a flat list.
 = The model may be restricted to specified content mime types.
 =============================================================================*/
-#include <kdescendantsproxymodel.h>
+#include <libkdepim/kdescendantsproxymodel_p.h>
 class CollectionListModel : public KDescendantsProxyModel
 {
         Q_OBJECT
