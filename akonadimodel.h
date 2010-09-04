@@ -460,9 +460,6 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
          */
         void         haveEventsStatus(bool have);
 
-    protected:
-        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
-
     private slots:
         void slotRowsInserted();
         void slotRowsToBeRemoved();
@@ -504,7 +501,8 @@ class AlarmListModel : public ItemListModel
          */
         KAlarm::CalEvent::Types eventTypeFilter() const   { return mFilterTypes; }
 
-        virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
+        virtual int  columnCount(const QModelIndex& = QModelIndex()) const  { return ColumnCount; }
+        virtual QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
 
     protected:
         virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
@@ -549,8 +547,8 @@ class TemplateListModel : public ItemListModel
         /** Set which alarm types should be shown as disabled in the model. */
         KAEvent::Actions setAlarmActionsEnabled() const  { return mActionsEnabled; }
 
-        virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
-        virtual QModelIndex mapToSource(const QModelIndex& proxyIndex) const;
+        virtual int  columnCount(const QModelIndex& = QModelIndex()) const  { return ColumnCount; }
+        virtual QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
         virtual Qt::ItemFlags flags(const QModelIndex&) const;
 
     protected:

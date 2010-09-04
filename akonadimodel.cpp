@@ -515,6 +515,9 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
         bool updateCollection = false;
         switch (role)
         {
+#ifdef __GNUC__
+#warning Emit dataChanged() whenever any item is changed
+#endif
             case Qt::FontRole:
                 // Set the font used in all views.
                 // This enables data(index, Qt::FontRole) to return bold when appropriate.
@@ -1399,9 +1402,6 @@ void AkonadiModel::itemJobDone(KJob* j)
         kError() << errMsg << itemId << ":" << j->errorString();
         emit itemDone(itemId, false);
         KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
-#ifdef __GNUC__
-#warning No widget parent
-#endif
     }
     else
         emit itemDone(itemId);
@@ -2490,15 +2490,7 @@ KAEvent ItemListModel::event(const QModelIndex& index) const
 */
 bool ItemListModel::haveEvents() const
 {
-#ifdef __GNUC__
-#warning Might instead need to iterate over all collections to find item count
-#endif
     return rowCount();
-}
-
-bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
-{
-    return true;
 }
 
 
@@ -2563,11 +2555,14 @@ bool AlarmListModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) cons
     return (sourceCol != AkonadiModel::TemplateNameColumn);
 }
 
-QModelIndex AlarmListModel::mapFromSource(const QModelIndex& sourceIndex) const
+QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (sourceIndex.column() == AkonadiModel::TemplateNameColumn)
-        return QModelIndex();
-    return ItemListModel::mapFromSource(sourceIndex);
+    if (orientation == Qt::Horizontal)
+    {
+        if (section < 0  ||  section >= ColumnCount)
+            return QVariant();
+    }
+    return ItemListModel::headerData(section, orientation, role);
 }
 
 
@@ -2624,6 +2619,8 @@ void TemplateListModel::setAlarmActionsEnabled(KAEvent::Actions types)
 
 bool TemplateListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
+    if (!ItemListModel::filterAcceptsRow(sourceRow, sourceParent))
+        return false;
     if (mActionsFilter == KAEvent::ACT_ALL)
         return true;
     QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
@@ -2637,40 +2634,23 @@ bool TemplateListModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) c
        ||  sourceCol == AkonadiModel::TypeColumn;
 }
 
-QModelIndex TemplateListModel::mapFromSource(const QModelIndex& sourceIndex) const
+QVariant TemplateListModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    int proxyColumn;
-    switch (sourceIndex.column())
+    if (orientation == Qt::Horizontal)
     {
-        case AkonadiModel::TypeColumn:
-            proxyColumn = TypeColumn;
-            break;
-        case AkonadiModel::TemplateNameColumn:
-            proxyColumn = TemplateNameColumn;
-            break;
-        default:
-            return QModelIndex();
+        switch (section)
+        {
+            case TypeColumn:
+                section = AkonadiModel::TypeColumn;
+                break;
+            case TemplateNameColumn:
+                section = AkonadiModel::TemplateNameColumn;
+                break;
+            default:
+                return QVariant();
+        }
     }
-    QModelIndex ix = ItemListModel::mapFromSource(sourceIndex);
-    return index(ix.row(), proxyColumn, ix.parent());
-}
-
-QModelIndex TemplateListModel::mapToSource(const QModelIndex& proxyIndex) const
-{
-    int sourceColumn;
-    switch (proxyIndex.column())
-    {
-        case TypeColumn:
-            sourceColumn = AkonadiModel::TypeColumn;
-            break;
-        case TemplateNameColumn:
-            sourceColumn = AkonadiModel::TemplateNameColumn;
-            break;
-        default:
-            return QModelIndex();
-    }
-    QModelIndex ix = ItemListModel::index(proxyIndex.row(), sourceColumn, proxyIndex.parent());
-    return ItemListModel::mapToSource(ix);
+    return ItemListModel::headerData(section, orientation, role);
 }
 
 Qt::ItemFlags TemplateListModel::flags(const QModelIndex& index) const
