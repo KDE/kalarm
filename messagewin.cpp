@@ -1484,7 +1484,6 @@ void AudioThread::run()
 	mMutex.unlock();
 	emit readyToPlay();
 	checkAudioPlay();
-	mMutex.unlock();
 
 	// Start an event loop.
 	// The function will exit once exit() or quit() is called.
