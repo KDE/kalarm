@@ -164,7 +164,8 @@ class AlarmCalendar : public QObject
 #ifdef USE_AKONADI
 		bool                  isValid() const   { return mCalType == RESOURCES || mCalendarStorage; }
 		bool                  addEvent(const Akonadi::Collection&, KAEvent*);
-		void                  addNewEvent(const Akonadi::Collection&, KAEvent*);
+		void                  addNewEvent(const Akonadi::Collection&, KAEvent*, bool replace = false);
+		void                  updateEventInternal(const KAEvent&, const Akonadi::Collection&);
 		KAlarm::CalEvent::Type deleteEventInternal(const KAEvent&, const Akonadi::Collection& = Akonadi::Collection());
 		KAlarm::CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(), const Akonadi::Collection& = Akonadi::Collection());
 		void                  updateKAEvents(const Akonadi::Collection&);

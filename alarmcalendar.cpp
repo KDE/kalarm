@@ -152,9 +152,6 @@ AlarmCalendar::AlarmCalendar()
 	  mHaveDisabledAlarms(false)
 {
 #ifdef USE_AKONADI
-#ifdef __GNUC__
-#warning Move CalendarCompat into Akonadi resource?
-#endif
 	AkonadiModel* model = AkonadiModel::instance();
         connect(model, SIGNAL(eventsAdded(const AkonadiModel::EventList&)), SLOT(slotEventsAdded(const AkonadiModel::EventList&)));
         connect(model, SIGNAL(eventsToBeRemoved(const AkonadiModel::EventList&)), SLOT(slotEventsToBeRemoved(const AkonadiModel::EventList&)));
@@ -644,15 +641,19 @@ void AlarmCalendar::removeKAEvents(AlarmResource* key, bool closing)
 void AlarmCalendar::slotEventsAdded(const AkonadiModel::EventList& events)
 {
 	for (int i = 0, count = events.count();  i < count;  ++i)
-	{
-		if (mEventMap.contains(events[i].event.id()))
-#ifdef __GNUC__
-#warning Update event in event map
-#endif
-			;
-		else
-			addNewEvent(events[i].collection, new KAEvent(events[i].event));
-	}
+		slotEventChanged(events[i]);
+}
+
+/******************************************************************************
+* Called when an event has been changed in AkonadiModel.
+* Change the corresponding KAEvent instance held by AlarmCalendar.
+*/
+void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
+{
+	if (mEventMap.contains(event.event.id()))
+		updateEventInternal(event.event, event.collection);
+	else
+		addNewEvent(event.collection, new KAEvent(event.event));
 }
 
 /******************************************************************************
@@ -669,18 +670,38 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 }
 
 /******************************************************************************
-* Called when an event has been changed in AkonadiModel.
-* Change the corresponding KAEvent instance held by AlarmCalendar.
+* Update an event already held by AlarmCalendar.
 */
-void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
+void AlarmCalendar::updateEventInternal(const KAEvent& event, const Collection& collection)
 {
-	if (mEventMap.contains(event.event.id()))
+	KAEventMap::Iterator it = mEventMap.find(event.id());
+	if (it != mEventMap.end())
+	{
+		// The event ID already exists - remove the existing event first
+		// from all resources.
+		KAEvent* storedEvent = it.value();
 #ifdef __GNUC__
-#warning Update event in event map
+#warning This assumes the uniqueness of event IDs across all resources
 #endif
-		;
-	else
-		addNewEvent(event.collection, new KAEvent(event.event));
+		if (mResourceMap[collection.id()].contains(storedEvent)
+		&&  event.category() == storedEvent->category())
+		{
+			// The existing event is in the correct collection - update it in place
+			*storedEvent = event;
+			addNewEvent(collection, storedEvent, true);
+			return;
+		}
+		// First remove the event from other collections
+		mEventMap.erase(it);
+		for (ResourceMap::Iterator rit = mResourceMap.begin();  rit != mResourceMap.end();  ++rit)
+		{
+			rit.value().removeAll(storedEvent);
+			if (mEarliestAlarm[rit.key()] == storedEvent)
+				findEarliestAlarm(Collection(rit.key()));
+		}
+		delete storedEvent;
+	}
+	addNewEvent(collection, new KAEvent(event));
 }
 #else
 
@@ -1067,6 +1088,7 @@ bool AlarmCalendar::endUpdate()
 
 /******************************************************************************
 * Save the calendar, or flag it for saving if in a group of calendar update calls.
+* Note that this method has no effect for Akonadi calendars.
 */
 bool AlarmCalendar::save()
 {
@@ -1077,11 +1099,6 @@ bool AlarmCalendar::save()
 	}
 	else
 		return saveCal();
-#ifdef USE_AKONADI
-#ifdef __GNUC__
-#warning How to group Akonadi updates?
-#endif
-#endif
 }
 
 /******************************************************************************
@@ -1194,6 +1211,9 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 			col = *collection;
 		else
 			col = CollectionControlModel::destination(type, promptParent, noPrompt, cancelled);
+#ifdef __GNUC__
+#warning This adds event before its Akonadi ID is known
+#endif
 		if (col.isValid()  &&  addEvent(col, event))
 #else
 		if (!resource)
@@ -1293,21 +1313,27 @@ KAEvent* AlarmCalendar::addEvent(AlarmResource* resource, const Event* kcalEvent
 
 /******************************************************************************
 * Internal method to add an already checked event to the calendar.
+* mEventMap takes ownership of the KAEvent.
+* If 'replace' is true, an existing event is being updated (NOTE: its category()
+* must remain the same).
 */
 #ifdef USE_AKONADI
-void AlarmCalendar::addNewEvent(const Collection& collection, KAEvent* event)
+void AlarmCalendar::addNewEvent(const Collection& collection, KAEvent* event, bool replace)
 #else
 void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 #endif
 {
 #ifdef USE_AKONADI
 	Collection::Id key = collection.isValid() ? collection.id() : -1;
+	if (!replace)
+	{
 #else
 	AlarmResource* key = resource;
 #endif
-	mResourceMap[key] += event;
-	mEventMap[event->id()] = event;
+		mResourceMap[key] += event;
+		mEventMap[event->id()] = event;
 #ifdef USE_AKONADI
+	}
 	if (collection.isValid()  &&  (AkonadiModel::types(collection) & KAlarm::CalEvent::ACTIVE)
 	&&  event->category() == KAlarm::CalEvent::ACTIVE)
 #else
@@ -1316,13 +1342,14 @@ void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 #endif
 	{
 		// Update the earliest alarm to trigger
-		KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
-		if (dt.isValid())
+		KAEvent* earliest = mEarliestAlarm.value(key, (KAEvent*)0);
+		if (replace  &&  earliest == event)
+			findEarliestAlarm(key);
+		else
 		{
-			EarliestMap::ConstIterator eit = mEarliestAlarm.constFind(key);
-			KAEvent* earliest = (eit != mEarliestAlarm.constEnd()) ? eit.value() : 0;
-			if (!earliest
-			||  dt < earliest->nextTrigger(KAEvent::ALL_TRIGGER))
+			KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+			if (dt.isValid()
+			&&  (!earliest  ||  dt < earliest->nextTrigger(KAEvent::ALL_TRIGGER)))
 			{
 				mEarliestAlarm[key] = event;
 				emit earliestAlarmChanged();
