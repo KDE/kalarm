@@ -1343,7 +1343,8 @@ void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 	{
 		// Update the earliest alarm to trigger
 		KAEvent* earliest = mEarliestAlarm.value(key, (KAEvent*)0);
-		if (replace  &&  earliest == event)
+                //TODO_DJARVIE
+		if (/*replace  &&*/  earliest == event)
 			findEarliestAlarm(key);
 		else
 		{
