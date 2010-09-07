@@ -1343,10 +1343,11 @@ void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 	{
 		// Update the earliest alarm to trigger
 		KAEvent* earliest = mEarliestAlarm.value(key, (KAEvent*)0);
-                //TODO_DJARVIE
-		if (/*replace  &&*/  earliest == event)
+#ifdef USE_AKONADI
+		if (replace  &&  earliest == event)
 			findEarliestAlarm(key);
 		else
+#endif
 		{
 			KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
 			if (dt.isValid()
