@@ -395,6 +395,7 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 	AlarmCalendar* cal = AlarmCalendar::resources();
 #ifdef USE_AKONADI
 	KAEvent newevent(event);
+	newevent.setItemId(-1);    // invalidate the Akonadi item ID since it's a new item
 	KAEvent* const newev = &newevent;
 #else
 	KAEvent* newev = new KAEvent(event);

@@ -1386,9 +1386,8 @@ bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
 	if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
 	{
 		// The event is being deleted. Save it in the archived resources first.
-		QString id = event.id();    // save event ID since KAlarm::addArchivedEvent() changes it
-		KAlarm::addArchivedEvent(event);
-		event.setEventId(id);       // restore event ID
+		KAEvent ev(event);
+		KAlarm::addArchivedEvent(ev);
 	}
 	event.removeExpiredAlarm(alarmType);
 	if (!event.alarmCount())
