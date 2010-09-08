@@ -33,11 +33,15 @@ EventAttribute* EventAttribute::clone() const
 
 QByteArray EventAttribute::serialized() const
 {
+kDebug()<<QByteArray::number(mCommandError);
     return QByteArray::number(mCommandError);
 }
 
 void EventAttribute::deserialize(const QByteArray& data)
 {
+    // Set default values
+    mCommandError = KAEvent::CMD_NO_ERROR;
+
     bool ok;
     int c[1];
     const QList<QByteArray> items = data.simplified().split(' ');
@@ -48,6 +52,7 @@ void EventAttribute::deserialize(const QByteArray& data)
             if (!ok  ||  (c[0] & ~(KAEvent::CMD_ERROR | KAEvent::CMD_ERROR_PRE | KAEvent::CMD_ERROR_POST)))
                 return;
             mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
+kDebug()<<"command error="<<mCommandError;
             break;
 
         default:

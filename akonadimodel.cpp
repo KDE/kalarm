@@ -581,6 +581,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                         case KAEvent::CMD_ERROR_PRE:
                         case KAEvent::CMD_ERROR_POST:
                         case KAEvent::CMD_ERROR_PRE_POST:
+                        {
                             if (err == KAEvent::CMD_NO_ERROR  &&  !item.hasAttribute<EventAttribute>())
                                 return true;
                             EventAttribute* attr = item.attribute<EventAttribute>(Entity::AddIfMissing);
@@ -591,8 +592,11 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
 //                            int row = index.row();
 //                            emit dataChanged(this->index(row, 0, index.parent()), this->index(row, ColumnCount - 1, index.parent()));
                             break;
+                        }
+                        default:
+                            return false;
                     }
-                    return false;
+                    break;
                 }
                 default:
                     break;
