@@ -130,6 +130,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Return the alarm with the specified unique identifier.
          *  @return the event, or invalid event if no such event exists.
          */
+        KAEvent event(const Akonadi::Item&) const;
         KAEvent event(Akonadi::Item::Id) const;
         KAEvent event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method

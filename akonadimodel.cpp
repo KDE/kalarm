@@ -108,6 +108,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     monitor->setMimeTypeMonitored(KAlarm::MIME_ARCHIVED);
     monitor->setMimeTypeMonitored(KAlarm::MIME_TEMPLATE);
     monitor->itemFetchScope().fetchFullPayload();
+    monitor->itemFetchScope().fetchAttribute(EventAttribute().type());
 
     AttributeFactory::registerAttribute<CollectionAttribute>();
     AttributeFactory::registerAttribute<EventAttribute>();
@@ -292,7 +293,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             int column = index.column();
             if (role == Qt::WhatsThisRole)
                 return whatsThisText(column);
-            KAEvent event = item.payload<KAEvent>();
+            KAEvent event = this->event(item);
             if (!event.isValid())
                 return QVariant();
             if (role == AlarmActionsRole)
@@ -1193,19 +1194,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::T
 
 KAEvent AkonadiModel::event(const QModelIndex& index) const
 {
-    const Item item = index.data(ItemRole).value<Item>();
-    if (item.isValid()  &&  item.hasPayload<KAEvent>())
-    {
-        KAEvent event = item.payload<KAEvent>();
-        if (event.isValid()  &&  item.hasAttribute<EventAttribute>())
-        {
-            event.setItemId(item.id());
-            KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
-            event.setCommandError(err);
-        }
-        return event;
-    }
-    return KAEvent();
+    return event(index.data(ItemRole).value<Item>());
 }
 
 KAEvent AkonadiModel::event(Item::Id itemId) const
@@ -1214,6 +1203,25 @@ KAEvent AkonadiModel::event(Item::Id itemId) const
     if (!ix.isValid())
         return KAEvent();
     return event(ix);
+}
+
+KAEvent AkonadiModel::event(const Item& item) const
+{
+    if (item.isValid()  &&  item.hasPayload<KAEvent>())
+    {
+        KAEvent event = item.payload<KAEvent>();
+        if (event.isValid())
+        {
+            event.setItemId(item.id());
+            if (item.hasAttribute<EventAttribute>())
+            {
+                KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
+                event.setCommandError(err);
+            }
+        }
+        return event;
+    }
+    return KAEvent();
 }
 
 #if 0
@@ -1495,16 +1503,9 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
     for (int row = start;  row <= end;  ++row)
     {
         QModelIndex ix = index(row, 0, parent);
-        const Item item = ix.data(ItemRole).value<Item>();
-        if (item.isValid()  &&  item.hasPayload<KAEvent>())
-        {
-            KAEvent event = item.payload<KAEvent>();
-            if (event.isValid())
-            {
-                event.setItemId(item.id());
-                events += Event(event, data(ix, ParentCollectionRole).value<Collection>());
-            }
-        }
+        KAEvent evnt = event(ix.data(ItemRole).value<Item>());
+        if (evnt.isValid())
+            events += Event(evnt, data(ix, ParentCollectionRole).value<Collection>());
     }
     return events;
 }
@@ -1554,12 +1555,9 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 */
 void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
-    if (!item.isValid()  ||  !item.hasPayload<KAEvent>())
+    KAEvent evnt = event(item);
+    if (!evnt.isValid())
         return;
-    KAEvent event = item.payload<KAEvent>();
-    if (!event.isValid())
-        return;
-    event.setItemId(item.id());
     const QModelIndexList indexes = modelIndexesForItem(this, item);
     foreach (const QModelIndex& index, indexes)
     {
@@ -1567,7 +1565,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
         {
             // Wait to ensure that the base EntityTreeModel has processed the
             // itemChanged() signal first, before we emit eventChanged().
-            mPendingEventChanges.enqueue(Event(event, data(index, ParentCollectionRole).value<Collection>()));
+            mPendingEventChanges.enqueue(Event(evnt, data(index, ParentCollectionRole).value<Collection>()));
             QTimer::singleShot(0, this, SLOT(slotEmitEventChanged()));
             break;
         }
@@ -2574,22 +2572,7 @@ KAEvent ItemListModel::event(int row) const
 */
 KAEvent ItemListModel::event(const QModelIndex& index) const
 {
-    const Item item = index.data(EntityTreeModel::ItemRole).value<Item>();
-    if (item.isValid()  &&  item.hasPayload<KAEvent>())
-    {
-        KAEvent event = item.payload<KAEvent>();
-        if (event.isValid())
-        {
-            event.setItemId(item.id());
-            if (item.hasAttribute<EventAttribute>())
-            {
-                KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
-                event.setCommandError(err);
-            }
-        }
-        return event;
-    }
-    return KAEvent();
+    return static_cast<AkonadiModel*>(sourceModel())->event(mapToSource(index));
 }
 
 /******************************************************************************
