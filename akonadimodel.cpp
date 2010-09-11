@@ -881,9 +881,6 @@ void AkonadiModel::slotUpdateWorkingHours()
 */
 void AkonadiModel::updateCommandError(const KAEvent& event)
 {
-#ifdef __GNUC__
-#warning ensure commandError is set when loading an alarm by Akonadi
-#endif
     QModelIndex ix = itemIndex(event.itemId());
     if (ix.isValid())
         setData(ix, QVariant(static_cast<int>(event.commandError())), CommandErrorRole);
