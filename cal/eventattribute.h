@@ -47,7 +47,7 @@ class KALARM_CAL_EXPORT EventAttribute : public Akonadi::Attribute
         /** Set the last command execution error for the item. */
         void setCommandError(KAEvent::CmdErrType err)  { mCommandError = err; }
 
-        virtual QByteArray type() const    { return "item"; }
+        virtual QByteArray type() const    { return "KAlarmEvent"; }
         virtual EventAttribute* clone() const;
         virtual QByteArray serialized() const;
         virtual void deserialize(const QByteArray& data);
