@@ -2578,11 +2578,14 @@ KAEvent ItemListModel::event(const QModelIndex& index) const
     if (item.isValid()  &&  item.hasPayload<KAEvent>())
     {
         KAEvent event = item.payload<KAEvent>();
-        if (event.isValid()  &&  item.hasAttribute<EventAttribute>())
+        if (event.isValid())
         {
             event.setItemId(item.id());
-            KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
-            event.setCommandError(err);
+            if (item.hasAttribute<EventAttribute>())
+            {
+                KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
+                event.setCommandError(err);
+            }
         }
         return event;
     }
