@@ -99,6 +99,11 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
         virtual bool setData(const QModelIndex&, const QVariant& value, int role);
 
+        /** Refresh the specified collection instance with up to date data. */
+        bool refresh(Akonadi::Collection&);
+        /** Refresh the specified item instance with up to date data. */
+        bool refresh(Akonadi::Item&);
+
         QModelIndex         collectionIndex(Akonadi::Collection::Id id) const
                                         { return collectionIndex(Akonadi::Collection(id)); }
         QModelIndex         collectionIndex(const Akonadi::Collection&) const;
@@ -116,6 +121,11 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *  @return true if a removal job has been scheduled.
          */
         bool removeCollection(const Akonadi::Collection&);
+
+        QModelIndex         itemIndex(Akonadi::Item::Id id) const
+                                        { return itemIndex(Akonadi::Item(id)); }
+        QModelIndex         itemIndex(const Akonadi::Item&) const;
+        Akonadi::Item       itemById(Akonadi::Item::Id) const;
 
         /** Return the alarm with the specified unique identifier.
          *  @return the event, or invalid event if no such event exists.
@@ -226,6 +236,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QString   alarmTimeText(const DateTime&) const;
         QString   timeToAlarmText(const DateTime&) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
+        void      queueItemModifyJob(const Akonadi::Item&);
 #if 0
         void     getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::Type, KAEvent::List&) const;
 #endif
@@ -248,6 +259,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QMap<Akonadi::Collection::Id, bool> mCollectionEnabled;  // last enabled status of each collection
         QMap<KJob*, CollJobData> mPendingCollections;  // pending collection creation/deletion jobs, with collection ID & name
         QMap<KJob*, Akonadi::Item::Id> mPendingItems;  // pending item creation/deletion jobs, with event ID
+        QMap<Akonadi::Item::Id, Akonadi::Item::List> mItemModifyJobQueue;  // pending item modification jobs
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
         QFont           mFont;
 };

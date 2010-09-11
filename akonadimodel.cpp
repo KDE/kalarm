@@ -588,7 +588,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                             if (attr->commandError() == err)
                                 return true;
                             attr->setCommandError(err);
-                            updateItem = true;
+                            //updateItem = true;
 //                            int row = index.row();
 //                            emit dataChanged(this->index(row, 0, index.parent()), this->index(row, ColumnCount - 1, index.parent()));
                             break;
@@ -603,8 +603,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
             }
             if (updateItem)
             {
-                ItemModifyJob* job = new ItemModifyJob(item, this);
-                connect(job, SIGNAL(result(KJob*)), this, SLOT(itemJobDone(KJob*)));
+                queueItemModifyJob(item);
                 return true;
             }
         }
@@ -884,9 +883,9 @@ void AkonadiModel::updateCommandError(const KAEvent& event)
 #ifdef __GNUC__
 #warning ensure commandError is set when loading an alarm by Akonadi
 #endif
-    QModelIndexList list = match(QModelIndex(), ItemIdRole, event.itemId(), 1, Qt::MatchExactly | Qt::MatchRecursive);
-    if (!list.isEmpty())
-        setData(list[0], QVariant(static_cast<int>(event.commandError())), CommandErrorRole);
+    QModelIndex ix = itemIndex(event.itemId());
+    if (ix.isValid())
+        setData(ix, QVariant(static_cast<int>(event.commandError())), CommandErrorRole);
 }
 
 /******************************************************************************
@@ -1140,10 +1139,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
 */
 QModelIndex AkonadiModel::eventIndex(const KAEvent& event)
 {
-    QModelIndexList list = match(QModelIndex(), EntityTreeModel::ItemIdRole, event.itemId(), 1, Qt::MatchExactly | Qt::MatchRecursive);
-    if (list.isEmpty())
-        return QModelIndex();
-    return list[0];
+    return itemIndex(event.itemId());
 }
 
 #if 0
@@ -1197,7 +1193,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::T
 
 KAEvent AkonadiModel::event(const QModelIndex& index) const
 {
-    const Item item = index.data(EntityTreeModel::ItemRole).value<Item>();
+    const Item item = index.data(ItemRole).value<Item>();
     if (item.isValid()  &&  item.hasPayload<KAEvent>())
     {
         KAEvent event = item.payload<KAEvent>();
@@ -1214,10 +1210,10 @@ KAEvent AkonadiModel::event(const QModelIndex& index) const
 
 KAEvent AkonadiModel::event(Item::Id itemId) const
 {
-    QModelIndexList list = match(QModelIndex(), EntityTreeModel::ItemIdRole, itemId, 1, Qt::MatchExactly | Qt::MatchRecursive);
-    if (list.isEmpty())
+    QModelIndex ix = itemIndex(itemId);
+    if (!ix.isValid())
         return KAEvent();
-    return event(list.at(0));
+    return event(ix);
 }
 
 #if 0
@@ -1315,17 +1311,15 @@ bool AkonadiModel::updateEvent(KAEvent& event)
 }
 bool AkonadiModel::updateEvent(Akonadi::Entity::Id itemId, KAEvent& newEvent)
 {
-    QModelIndexList list = match(QModelIndex(), EntityTreeModel::ItemIdRole, itemId, 1, Qt::MatchExactly | Qt::MatchRecursive);
-    if (list.isEmpty())
+    QModelIndex ix = itemIndex(itemId);
+    if (!ix.isValid())
         return false;
-    Collection collection = list.at(0).data(EntityTreeModel::ParentCollectionRole).value<Collection>();
-    Item item = list.at(0).data(EntityTreeModel::ItemRole).value<Item>();
+    Collection collection = ix.data(ParentCollectionRole).value<Collection>();
+    Item item = ix.data(ItemRole).value<Item>();
     if (!setItemPayload(item, newEvent, collection))
         return false;
-    ItemModifyJob* job = new ItemModifyJob(item);
-    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
-    mPendingItems[job] = itemId;
-    job->start();
+    setData(ix, QVariant::fromValue(item), ItemRole);
+//    queueItemModifyJob(item);
     return true;
 #ifdef __GNUC__
 #warning Ensure KAlarm event list is updated correctly before and after Akonadi update
@@ -1367,15 +1361,43 @@ bool AkonadiModel::deleteEvent(const KAEvent& event)
 }
 bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
 {
-    QModelIndexList list = match(QModelIndex(), EntityTreeModel::ItemIdRole, itemId, 1, Qt::MatchExactly | Qt::MatchRecursive);
-    if (list.isEmpty())
+    QModelIndex ix = itemIndex(itemId);
+    if (!ix.isValid())
         return false;
-    Item item = list.at(0).data(EntityTreeModel::ItemRole).value<Item>();
+    Item item = ix.data(ItemRole).value<Item>();
     ItemDeleteJob* job = new ItemDeleteJob(item);
     connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
     mPendingItems[job] = itemId;
     job->start();
     return true;
+}
+
+/******************************************************************************
+* Queue an ItemModifyJob for execution. Ensure that only one job is
+* simultaneously active for any one Item.
+*
+* This is necessary because we can't call two ItemModifyJobs for the same Item
+* at the same time; otherwise Akonadi will detect a conflict and require manual
+* intervention to resolve it.
+*/
+void AkonadiModel::queueItemModifyJob(const Item& item)
+{
+    kDebug() << item.id();
+    QMap<Item::Id, Item::List>::Iterator it = mItemModifyJobQueue.find(item.id());
+    if (it != mItemModifyJobQueue.end())
+        it.value() << item;
+    else
+    {
+        Item::List items;
+        items << item;
+        Item current = itemById(item.id());    // fetch the up-to-date item
+        if (current.isValid())
+            items[0].setRevision(current.revision());
+        mItemModifyJobQueue[item.id()] = items;
+        ItemModifyJob* job = new ItemModifyJob(items[0]);
+        connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+        mPendingItems[job] = item.id();
+    }
 }
 
 /******************************************************************************
@@ -1391,10 +1413,11 @@ void AkonadiModel::itemJobDone(KJob* j)
         itemId = it.value();
         mPendingItems.erase(it);
     }
+    QByteArray jobClass = j->metaObject()->className();
+    kDebug() << jobClass;
     if (j->error())
     {
         QString errMsg;
-        QByteArray jobClass = j->metaObject()->className();
         if (jobClass == "Akonadi::ItemCreateJob")
             errMsg = i18nc("@info/plain", "Failed to create alarm.");
         else if (jobClass == "Akonadi::ItemModifyJob")
@@ -1409,6 +1432,27 @@ void AkonadiModel::itemJobDone(KJob* j)
     }
     else
         emit itemDone(itemId);
+
+    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
+    {
+        // It was an ItemModifyJob: execute the next job in the queue if one is waiting
+        QMap<Item::Id, Item::List>::iterator it = mItemModifyJobQueue.find(itemId);
+        if (it != mItemModifyJobQueue.end())
+        {
+            Item::List& items = it.value();
+            items.erase(items.begin());   // remove this job from the queue
+            if (!items.isEmpty())
+            {
+                // Queue the next job for the Item, after updating the Item's
+                // revision number to match that set by the job just completed.
+                ItemModifyJob* job = static_cast<ItemModifyJob*>(j);
+                items[0].setRevision(job->item().revision());
+                job = new ItemModifyJob(items[0]);
+                connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+                mPendingItems[job] = items[0].id();
+            }
+        }
+    }
 }
 
 /******************************************************************************
@@ -1516,7 +1560,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
     if (!event.isValid())
         return;
     event.setItemId(item.id());
-    const QModelIndexList indexes = match(QModelIndex(), ItemIdRole, item.id(), 1, Qt::MatchExactly | Qt::MatchRecursive);
+    const QModelIndexList indexes = modelIndexesForItem(this, item);
     foreach (const QModelIndex& index, indexes)
     {
         if (index.isValid())
@@ -1543,6 +1587,32 @@ void AkonadiModel::slotEmitEventChanged()
 }
 
 /******************************************************************************
+* Refresh the specified Collection with up to date data.
+* Return: true if successful, false if collection not found.
+*/
+bool AkonadiModel::refresh(Akonadi::Collection& collection)
+{
+    QModelIndex ix = modelIndexForCollection(this, collection);
+    if (!ix.isValid())
+        return false;
+    collection = ix.data(CollectionRole).value<Collection>();
+    return true;
+}
+
+/******************************************************************************
+* Refresh the specified Item with up to date data.
+* Return: true if successful, false if item not found.
+*/
+bool AkonadiModel::refresh(Akonadi::Item& item)
+{
+    const QModelIndexList ixs = modelIndexesForItem(this, item);
+    if (ixs.isEmpty()  ||  !ixs[0].isValid())
+        return false;
+    item = ixs[0].data(ItemRole).value<Item>();
+    return true;
+}
+
+/******************************************************************************
 * Find the QModelIndex of a collection.
 */
 QModelIndex AkonadiModel::collectionIndex(const Collection& collection) const
@@ -1554,14 +1624,36 @@ QModelIndex AkonadiModel::collectionIndex(const Collection& collection) const
 }
 
 /******************************************************************************
-* Find the collection with the specified Akonadi ID.
+* Return the up to date collection with the specified Akonadi ID.
 */
 Collection AkonadiModel::collectionById(Collection::Id id) const
 {
     QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (!ix.isValid())
         return Collection();
-    return ix.data(EntityTreeModel::CollectionRole).value<Collection>();
+    return ix.data(CollectionRole).value<Collection>();
+}
+
+/******************************************************************************
+* Find the QModelIndex of an item.
+*/
+QModelIndex AkonadiModel::itemIndex(const Item& item) const
+{
+    const QModelIndexList ixs = modelIndexesForItem(this, item);
+    if (ixs.isEmpty()  ||  !ixs[0].isValid())
+        return QModelIndex();
+    return ixs[0];
+}
+
+/******************************************************************************
+* Return the up to date item with the specified Akonadi ID.
+*/
+Item AkonadiModel::itemById(Item::Id id) const
+{
+    const QModelIndexList ixs = modelIndexesForItem(this, Item(id));
+    if (ixs.isEmpty()  ||  !ixs[0].isValid())
+        return Item();
+    return ixs[0].data(ItemRole).value<Item>();
 }
 
 /******************************************************************************
@@ -1569,10 +1661,10 @@ Collection AkonadiModel::collectionById(Collection::Id id) const
 */
 Collection AkonadiModel::collectionForItem(Item::Id id) const
 {
-    QModelIndexList list = match(QModelIndex(), ItemIdRole, id, 1, Qt::MatchExactly | Qt::MatchRecursive);
-    if (list.isEmpty())
+    QModelIndex ix = itemIndex(id);
+    if (!ix.isValid())
         return Collection();
-    return list[0].data(EntityTreeModel::ParentCollectionRole).value<Collection>();
+    return ix.data(ParentCollectionRole).value<Collection>();
 }
 
 KAlarm::CalEvent::Types AkonadiModel::types(const Collection& collection)
@@ -2124,11 +2216,13 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
 */
 bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, bool ignoreEnabledStatus)
 {
-    if (!collection.hasAttribute<CollectionAttribute>()
-    ||  collection.attribute<CollectionAttribute>()->compatibility() != KAlarm::Calendar::Current)
+    Collection col = collection;
+    AkonadiModel::instance()->refresh(col);    // update with latest data
+    if (!col.hasAttribute<CollectionAttribute>()
+    ||  col.attribute<CollectionAttribute>()->compatibility() != KAlarm::Calendar::Current)
         return false;
-    return (ignoreEnabledStatus || isEnabled(collection))
-       &&  (collection.rights() & writableRights) == writableRights;
+    return (ignoreEnabledStatus || isEnabled(col))
+       &&  (col.rights() & writableRights) == writableRights;
 }
 
 /******************************************************************************
@@ -2140,7 +2234,9 @@ Collection CollectionControlModel::getStandard(KAlarm::CalEvent::Type type)
     Collection::List cols = instance()->collections();
     for (int i = 0, count = cols.count();  i < count;  ++i)
     {
-        if (cols[i].contentMimeTypes().contains(mimeType)
+        AkonadiModel::instance()->refresh(cols[i]);    // update with latest data
+        if (cols[i].isValid()
+        &&  cols[i].contentMimeTypes().contains(mimeType)
         &&  cols[i].hasAttribute<CollectionAttribute>()
         &&  (cols[i].attribute<CollectionAttribute>()->standard() & type))
             return cols[i];
@@ -2156,6 +2252,7 @@ bool CollectionControlModel::isStandard(Akonadi::Collection& collection, KAlarm:
 {
     if (!instance()->collections().contains(collection))
         return false;
+    AkonadiModel::instance()->refresh(collection);    // update with latest data
     if (!collection.hasAttribute<CollectionAttribute>())
         return false;
     return collection.attribute<CollectionAttribute>()->isStandard(type);
@@ -2168,9 +2265,11 @@ KAlarm::CalEvent::Types CollectionControlModel::standardTypes(const Collection& 
 {
     if (!instance()->collections().contains(collection))
         return KAlarm::CalEvent::EMPTY;
-    if (!collection.hasAttribute<CollectionAttribute>())
+    Collection col = collection;
+    AkonadiModel::instance()->refresh(col);    // update with latest data
+    if (!col.hasAttribute<CollectionAttribute>())
         return KAlarm::CalEvent::EMPTY;
-    return collection.attribute<CollectionAttribute>()->standard();
+    return col.attribute<CollectionAttribute>()->standard();
 }
 
 /******************************************************************************
@@ -2181,6 +2280,7 @@ KAlarm::CalEvent::Types CollectionControlModel::standardTypes(const Collection& 
 void CollectionControlModel::setStandard(Akonadi::Collection& collection, KAlarm::CalEvent::Type type, bool standard)
 {
     AkonadiModel* model = AkonadiModel::instance();
+    model->refresh(collection);    // update with latest data
     if (standard)
     {
         // The collection is being set as standard.
@@ -2197,10 +2297,12 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, KAlarm
             KAlarm::CalEvent::Types types;
             if (cols[i] == collection)
             {
+                cols[i] = collection;    // update with latest data
                 types = ctypes | type;
             }
             else
             {
+                model->refresh(cols[i]);    // update with latest data
                 types = cols[i].hasAttribute<CollectionAttribute>()
                       ? cols[i].attribute<CollectionAttribute>()->standard() : KAlarm::CalEvent::EMPTY;
                 if (!(types & type))
@@ -2234,6 +2336,7 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, KAlarm
 void CollectionControlModel::setStandard(Akonadi::Collection& collection, KAlarm::CalEvent::Types types)
 {
     AkonadiModel* model = AkonadiModel::instance();
+    model->refresh(collection);    // update with latest data
     if (types)
     {
         // The collection is being set as standard for at least one mime type.
@@ -2250,10 +2353,12 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, KAlarm
             KAlarm::CalEvent::Types t;
             if (cols[i] == collection)
             {
+                cols[i] = collection;    // update with latest data
                 t = types;
             }
             else
             {
+                model->refresh(cols[i]);    // update with latest data
                 t = cols[i].hasAttribute<CollectionAttribute>()
                   ? cols[i].attribute<CollectionAttribute>()->standard() : KAlarm::CalEvent::EMPTY;
                 if (!(t & types))
@@ -2337,6 +2442,7 @@ Collection::List CollectionControlModel::enabledCollections(KAlarm::CalEvent::Ty
     Collection::List result;
     for (int i = 0, count = cols.count();  i < count;  ++i)
     {
+        AkonadiModel::instance()->refresh(cols[i]);    // update with latest data
         if (cols[i].contentMimeTypes().contains(mimeType)
         &&  (!writable || ((cols[i].rights() & writableRights) == writableRights)))
             result += cols[i];
