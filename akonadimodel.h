@@ -100,9 +100,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         virtual bool setData(const QModelIndex&, const QVariant& value, int role);
 
         /** Refresh the specified collection instance with up to date data. */
-        bool refresh(Akonadi::Collection&);
+        bool refresh(Akonadi::Collection&) const;
         /** Refresh the specified item instance with up to date data. */
-        bool refresh(Akonadi::Item&);
+        bool refresh(Akonadi::Item&) const;
 
         QModelIndex         collectionIndex(Akonadi::Collection::Id id) const
                                         { return collectionIndex(Akonadi::Collection(id)); }

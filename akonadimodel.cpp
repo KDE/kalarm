@@ -1,7 +1,3 @@
-#ifdef __GNUC__
-#warning Read-only resource endlessly triggers alarm, disabling does not stop this
-#endif
-
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
@@ -108,7 +104,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     monitor->setMimeTypeMonitored(KAlarm::MIME_ARCHIVED);
     monitor->setMimeTypeMonitored(KAlarm::MIME_TEMPLATE);
     monitor->itemFetchScope().fetchFullPayload();
-    monitor->itemFetchScope().fetchAttribute(EventAttribute().type());
+    monitor->itemFetchScope().fetchAttribute<EventAttribute>();
 
     AttributeFactory::registerAttribute<CollectionAttribute>();
     AttributeFactory::registerAttribute<EventAttribute>();
@@ -492,7 +488,9 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
 
             if (calendarColour)
             {
-                QColor colour = backgroundColor(item.parentCollection());
+                Collection parent = item.parentCollection();
+                refresh(parent);
+                QColor colour = backgroundColor(parent);
                 if (colour.isValid())
                     return colour;
             }
@@ -1402,6 +1400,7 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
         ItemModifyJob* job = new ItemModifyJob(items[0]);
         connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
         mPendingItems[job] = item.id();
+//kDebug()<<"Modify job queued for item"<<item.id()<<", revision="<<items[0].revision();
     }
 }
 
@@ -1455,6 +1454,7 @@ void AkonadiModel::itemJobDone(KJob* j)
                 job = new ItemModifyJob(items[0]);
                 connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
                 mPendingItems[job] = items[0].id();
+//kDebug()<<"Modify job queued for item"<<items[0].id()<<", revision="<<items[0].revision();
             }
         }
     }
@@ -1585,7 +1585,7 @@ void AkonadiModel::slotEmitEventChanged()
 * Refresh the specified Collection with up to date data.
 * Return: true if successful, false if collection not found.
 */
-bool AkonadiModel::refresh(Akonadi::Collection& collection)
+bool AkonadiModel::refresh(Akonadi::Collection& collection) const
 {
     QModelIndex ix = modelIndexForCollection(this, collection);
     if (!ix.isValid())
@@ -1598,7 +1598,7 @@ bool AkonadiModel::refresh(Akonadi::Collection& collection)
 * Refresh the specified Item with up to date data.
 * Return: true if successful, false if item not found.
 */
-bool AkonadiModel::refresh(Akonadi::Item& item)
+bool AkonadiModel::refresh(Akonadi::Item& item) const
 {
     const QModelIndexList ixs = modelIndexesForItem(this, item);
     if (ixs.isEmpty()  ||  !ixs[0].isValid())
