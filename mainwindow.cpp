@@ -787,28 +787,14 @@ void MainWindow::slotDelete(bool force)
 	QList<KAEvent> events = mListView->selectedEvents();
 #else
 	KAEvent::List events = mListView->selectedEvents();
-#endif
-	// Copy the events to be deleted, in case any are deleted by being
-	// triggered while the confirmation prompt is displayed.
-#ifdef USE_AKONADI
-	QList<KAEvent> eventCopies;
-#else
-	KAEvent::List eventCopies;
-#endif
-	Undo::EventList undos;
-	AlarmCalendar* resources = AlarmCalendar::resources();
+	// Save the IDs of the events to be deleted, in case any events are
+	// deleted by being triggered while the confirmation prompt is displayed
+	// (in which case their pointers will become invalid).
+	QStringList ids;
 	for (int i = 0, end = events.count();  i < end;  ++i)
-	{
-#ifdef USE_AKONADI
-		eventCopies.append(events[i]);
-		Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
-		undos.append(events[i], c);
-#else
-		KAEvent* event = events[i];
-		eventCopies.append(event);
-		undos.append(*event, resources->resourceForEvent(event->id()));
+		ids.append(events[i]->id());
 #endif
-	}
+
 	if (!force  &&  Preferences::confirmAlarmDeletion())
 	{
 		int n = events.count();
@@ -822,9 +808,41 @@ void MainWindow::slotDelete(bool force)
 			return;
 	}
 
-	// Delete the events from the calendar and displays
-	KAlarm::deleteEvents(eventCopies, true, this);
-	Undo::saveDeletes(undos);
+	// Remove any events which have just triggered, from the list to delete.
+	Undo::EventList undos;
+	AlarmCalendar* resources = AlarmCalendar::resources();
+#ifdef USE_AKONADI
+	for (QList<KAEvent>::Iterator eit = events.begin();  eit != events.end();  )
+	{
+		Akonadi::Collection c = resources->collectionForEvent((*eit).itemId());
+		if (!c.isValid())
+			eit = events.erase(eit);
+		else
+			undos.append(*eit++, c);
+	}
+#else
+#ifdef __GNUC__
+#warning Check no crash if alarms trigger while their delete confirmation is visible
+#endif
+	KAEvent::List::Iterator eit = events.begin();
+	for (int i = 0, end = ids.count();  i < end;  ++i)
+	{
+		AlarmResource* r = resources->resourceForEvent(ids[i]);
+		if (!r)
+			eit = events.erase(eit);
+		else
+			undos.append(*(*eit++), r);
+	}
+#endif
+
+	if (events.isEmpty())
+		kDebug() << "No alarms left to delete";
+	else
+	{
+		// Delete the events from the calendar and displays
+		KAlarm::deleteEvents(events, true, this);
+		Undo::saveDeletes(undos);
+	}
 }
 
 /******************************************************************************
