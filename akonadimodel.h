@@ -83,13 +83,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static AkonadiModel* instance();
 
         /** Return the display name for a collection. */
-        QString displayName(const Akonadi::Collection&) const;
+        QString displayName(Akonadi::Collection&) const;
         /** Return the storage type (file/directory/URL etc.) for a collection. */
         QString storageType(const Akonadi::Collection&) const;
         /** Set the background color for a collection and its alarms. */
         void setBackgroundColor(Akonadi::Collection&, const QColor&);
         /** Get the background color for a collection and its alarms. */
-        QColor backgroundColor(const Akonadi::Collection&) const;
+        QColor backgroundColor(Akonadi::Collection&) const;
 
         /** To be called when the command error status of an alarm has changed,
          *  to set in the Akonadi database and update the visual command error indications.
@@ -241,6 +241,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 #if 0
         void     getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::Type, KAEvent::List&) const;
 #endif
+        QString   displayName_p(const Akonadi::Collection&) const;
+        QColor    backgroundColor_p(const Akonadi::Collection&) const;
         QString   repeatText(const KAEvent&) const;
         QString   repeatOrder(const KAEvent&) const;
         QPixmap*  eventIcon(const KAEvent&) const;

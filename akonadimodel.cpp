@@ -63,7 +63,7 @@ using KAlarm::EventAttribute;
 
 static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
-static bool checkItem_true(const Item&) { return true; }
+//static bool checkItem_true(const Item&) { return true; }
 
 /*=============================================================================
 = Class: AkonadiModel
@@ -177,14 +177,14 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         switch (role)
         {
             case Qt::DisplayRole:
-                return displayName(collection);
+                return displayName_p(collection);
             case EnabledRole:
                 if (collection.hasAttribute<CollectionAttribute>())
                     return collection.attribute<CollectionAttribute>()->isEnabled();
                 return false;
             case Qt::BackgroundRole:
             {
-                QColor colour = backgroundColor(collection);
+                QColor colour = backgroundColor_p(collection);
                 if (colour.isValid())
                     return colour;
                 break;
@@ -221,7 +221,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             }
             case Qt::ToolTipRole:
             {
-                QString name = '@' + displayName(collection);   // insert markers for stripping out name
+                QString name = '@' + displayName_p(collection);   // insert markers for stripping out name
                 KUrl url = collection.remoteId();
                 QString type = '@' + storageType(collection);   // file/directory/URL etc.
                 QString locn = url.pathOrUrl();
@@ -403,6 +403,9 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 case TypeColumn:
                     switch (role)
                     {
+                        case Qt::BackgroundRole:
+                            calendarColour = true;
+                            break;
                         case Qt::DecorationRole:
                         {
                             QVariant v;
@@ -489,7 +492,6 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             if (calendarColour)
             {
                 Collection parent = item.parentCollection();
-                refresh(parent);
                 QColor colour = backgroundColor(parent);
                 if (colour.isValid())
                     return colour;
@@ -517,6 +519,16 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
 #ifdef __GNUC__
 #warning Emit dataChanged() whenever any item is changed
 #endif
+            case Qt::BackgroundRole:
+            {
+                QColor colour = value.value<QColor>();
+                CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                if (attr->backgroundColor() == colour)
+                    return true;
+                attr->setBackgroundColor(colour);
+                updateCollection = true;
+                break;
+            }
             case Qt::FontRole:
                 // Set the font used in all views.
                 // This enables data(index, Qt::FontRole) to return bold when appropriate.
@@ -889,17 +901,27 @@ void AkonadiModel::updateCommandError(const KAEvent& event)
 */
 void AkonadiModel::setBackgroundColor(Collection& collection, const QColor& colour)
 {
-    CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
-    attr->setBackgroundColor(colour);
     QModelIndex ix = modelIndexForCollection(this, collection);
     if (ix.isValid())
-        signalDataChanged(&checkItem_true, 0, ColumnCount - 1, ix);
+        setData(ix, QVariant(colour), Qt::BackgroundRole);
+}
+
+/******************************************************************************
+* Return the background color for displaying the collection and its alarms,
+* after updating the collection from the Akonadi database.
+*/
+QColor AkonadiModel::backgroundColor(Akonadi::Collection& collection) const
+{
+    if (!collection.isValid())
+        return QColor();
+    refresh(collection);
+    return backgroundColor_p(collection);
 }
 
 /******************************************************************************
 * Return the background color for displaying the collection and its alarms.
 */
-QColor AkonadiModel::backgroundColor(const Akonadi::Collection& collection) const
+QColor AkonadiModel::backgroundColor_p(const Akonadi::Collection& collection) const
 {
     if (!collection.isValid()  ||  !collection.hasAttribute<CollectionAttribute>())
         return QColor();
@@ -907,9 +929,21 @@ QColor AkonadiModel::backgroundColor(const Akonadi::Collection& collection) cons
 }
 
 /******************************************************************************
+* Return the display name for the collection, after updating the collection
+* from the Akonadi database.
+*/
+QString AkonadiModel::displayName(Akonadi::Collection& collection) const
+{
+    if (!collection.isValid())
+        return QString();
+    refresh(collection);
+    return displayName_p(collection);
+}
+
+/******************************************************************************
 * Return the display name for the collection.
 */
-QString AkonadiModel::displayName(const Akonadi::Collection& collection) const
+QString AkonadiModel::displayName_p(const Akonadi::Collection& collection) const
 {
     QString name;
     if (collection.isValid()  &&  collection.hasAttribute<EntityDisplayAttribute>())
@@ -1081,9 +1115,10 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
 {
     if (!collection.isValid())
         return false;
-    CollectionDeleteJob* job = new CollectionDeleteJob(collection);
+    Collection col = collection;
+    CollectionDeleteJob* job = new CollectionDeleteJob(col);
     connect(job, SIGNAL(result(KJob*)), SLOT(deleteCollectionJobDone(KJob*)));
-    mPendingCollections[job] = CollJobData(collection.id(), displayName(collection));
+    mPendingCollections[job] = CollJobData(col.id(), displayName(col));
     job->start();
     return true;
 }
