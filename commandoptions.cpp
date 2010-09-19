@@ -367,7 +367,7 @@ CommandOptions::CommandOptions()
 				if (mArgs->isSet("beep"))
 					setErrorIncompatible("--beep", "--speak");
 				else if (!theApp()->speechEnabled())
-					setError(i18nc("@info:shell", "<icode>%1</icode> requires speech synthesis to be configured using KTTSD", QLatin1String("--speak")));
+					setError(i18nc("@info:shell", "<icode>%1</icode> requires speech synthesis to be configured using Jovie", QLatin1String("--speak")));
 			}
 			bool onceOnly = mArgs->isSet("reminder-once");
 			if (mArgs->isSet("reminder")  ||  onceOnly)
