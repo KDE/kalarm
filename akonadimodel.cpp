@@ -163,6 +163,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         case AlarmActionRole:
         case EnabledRole:
         case CommandErrorRole:
+        case BaseColourRole:
         case AlarmTypeRole:
         case IsStandardRole:
             break;
@@ -182,6 +183,9 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 if (collection.hasAttribute<CollectionAttribute>())
                     return collection.attribute<CollectionAttribute>()->isEnabled();
                 return false;
+            case BaseColourRole:
+                role = Qt::BackgroundRole;
+                break;
             case Qt::BackgroundRole:
             {
                 QColor colour = backgroundColor_p(collection);
@@ -1848,7 +1852,8 @@ Collection CollectionMimeTypeFilterModel::collection(const QModelIndex& index) c
 =============================================================================*/
 
 CollectionListModel::CollectionListModel(QObject* parent)
-    : KDescendantsProxyModel(parent)
+    : KDescendantsProxyModel(parent),
+      mUseCollectionColour(true)
 {
     setSourceModel(new CollectionMimeTypeFilterModel(this));
     setDisplayAncestorData(false);
@@ -1888,6 +1893,23 @@ bool CollectionListModel::isDescendantOf(const QModelIndex& ancestor, const QMod
 {
     Q_UNUSED(descendant);
     return !ancestor.isValid();
+}
+
+/******************************************************************************
+* Return the data for a given role, for a specified item.
+*/
+QVariant CollectionListModel::data(const QModelIndex& index, int role) const
+{
+    switch (role)
+    {
+        case Qt::BackgroundRole:
+            if (!mUseCollectionColour)
+                role = AkonadiModel::BaseColourRole;
+            break;
+        default:
+            break;
+    }
+    return KDescendantsProxyModel::data(index, role);
 }
 
 
@@ -2435,6 +2457,7 @@ Collection CollectionControlModel::destination(KAlarm::CalEvent::Type type, QWid
     model->setFilterWritable(true);
     model->setFilterEnabled(true);
     model->setEventTypeFilter(type);
+    model->useCollectionColour(false);
     Collection col;
     switch (model->rowCount())
     {

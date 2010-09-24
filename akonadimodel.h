@@ -60,6 +60,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             // Collection and Item roles
             EnabledRole = UserRole,    // true for enabled alarm, false for disabled
             // Collection roles
+            BaseColourRole,            // background colour ignoring collection colour
             AlarmTypeRole,             // OR of event types which collection contains
             IsStandardRole,            // OR of event types which collection is standard for
             // Item roles
@@ -282,9 +283,14 @@ class CollectionListModel : public KDescendantsProxyModel
         void setEventTypeFilter(KAlarm::CalEvent::Type);
         void setFilterWritable(bool writable);
         void setFilterEnabled(bool enabled);
+        void useCollectionColour(bool use)   { mUseCollectionColour = use; }
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
         virtual bool isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const;
+        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+
+    private:
+        bool mUseCollectionColour;
 };
 
 
