@@ -285,7 +285,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
 	mEndDateEdit->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the last date to repeat the alarm.</para><para>%1</para>", tzText));
-	connect(mEndDateEdit, SIGNAL(dateChanged(const QDate&)), SIGNAL(contentsChanged()));
+	connect(mEndDateEdit, SIGNAL(dateEdited(const QDate&)), SIGNAL(contentsChanged()));
 	mEndDateButton->setFocusWidget(mEndDateEdit);
 	mEndTimeEdit = new TimeEdit(mRangeButtonBox);
 	mEndTimeEdit->setFixedSize(mEndTimeEdit->sizeHint());
