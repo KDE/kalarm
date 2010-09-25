@@ -694,7 +694,7 @@ void RecurrenceEdit::setStartDate(const QDate& start, const QDate& today)
 		}
 		else
 		{
-			const QString startString = i18nc("@info Date cannot be earlier than start date", "start date");
+			const QString startString = i18nc("@info", "Date cannot be earlier than start date");
 			mEndDateEdit->setMinDate(start, startString);
 			if (mExceptionDateEdit)
 				mExceptionDateEdit->setMinDate(start, startString);
