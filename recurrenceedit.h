@@ -29,6 +29,10 @@
 
 #include <QFrame>
 
+namespace KPIM {
+  class KDateEdit;
+}
+
 class QShowEvent;
 class QStackedWidget;
 class QGroupBox;
@@ -39,7 +43,6 @@ class QPushButton;
 class SpinBox;
 class CheckBox;
 class RadioButton;
-class DateEdit;
 class TimeEdit;
 class ButtonGroup;
 class RepetitionButton;
@@ -151,14 +154,14 @@ class RecurrenceEdit : public QFrame
 		SpinBox*          mRepeatCountEntry;
 		QLabel*           mRepeatCountLabel;
 		RadioButton*      mEndDateButton;
-		DateEdit*         mEndDateEdit;
+		KPIM::KDateEdit*  mEndDateEdit;
 		TimeEdit*         mEndTimeEdit;
 		CheckBox*         mEndAnyTimeCheckBox;
 
 		// Exceptions
 		QGroupBox*        mExceptionGroup;
 		QListWidget*      mExceptionDateList;
-		DateEdit*         mExceptionDateEdit;
+		KPIM::KDateEdit*  mExceptionDateEdit;
 		QPushButton*      mChangeExceptionButton;
 		QPushButton*      mDeleteExceptionButton;
 		CheckBox*         mExcludeHolidays;
