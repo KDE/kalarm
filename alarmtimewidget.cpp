@@ -20,17 +20,8 @@
 
 #include "kalarm.h"
 
-#include <QGroupBox>
-#include <QGridLayout>
-#include <QLabel>
-
-#include <kdialog.h>
-#include <kmessagebox.h>
-#include <klocale.h>
-
 #include "buttongroup.h"
 #include "checkbox.h"
-#include "dateedit.h"
 #include "datetime.h"
 #include "preferences.h"
 #include "pushbutton.h"
@@ -40,6 +31,16 @@
 #include "timespinbox.h"
 #include "timezonecombo.h"
 #include "alarmtimewidget.moc"
+
+#include <libkdepim/kdateedit.h>
+
+#include <kdialog.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+
+#include <QGroupBox>
+#include <QGridLayout>
+#include <QLabel>
 
 static const QTime time_23_59(23, 59);
 
@@ -111,7 +112,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 	mButtonGroup->addButton(mAtTimeRadio);
 
 	// Date edit box
-	mDateEdit = new DateEdit(topWidget);
+	mDateEdit = new KPIM::KDateEdit(topWidget);
 	connect(mDateEdit, SIGNAL(dateEntered(const QDate&)), SLOT(dateTimeChanged()));
 	mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
 	      "<para>Enter the date to schedule the alarm.</para>"
@@ -301,10 +302,10 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
 	else
 	{
 		bool dateOnly = mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked();
-		if (!mDateEdit->isValid()  ||  !mTimeEdit->isValid())
+		if (!mDateEdit->date().isValid()  ||  !mTimeEdit->isValid())
 		{
 			// The date and/or time is invalid
-			if (!mDateEdit->isValid())
+			if (!mDateEdit->date().isValid())
 			{
 				if (showErrorMessage)
 					KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid date"));
@@ -375,7 +376,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
 	else
 	{
 		mTimeEdit->setValid(false);
-		mDateEdit->setInvalid();
+		mDateEdit->setDate(QDate());
 		mDelayTimeEdit->setValid(false);
 	}
 	if (mAnyTimeCheckBox)
@@ -396,7 +397,7 @@ void AlarmTimeWidget::setMinDateTimeIsCurrent()
 	mMinDateTimeIsNow = true;
 	mMinDateTime = KDateTime();
 	KDateTime now = KDateTime::currentDateTime(mTimeSpec);
-	mDateEdit->setMinDate(now.date());
+	mDateEdit->setMinimumDate(now.date());
 	setMaxMinTimeIf(now);
 }
 
@@ -408,7 +409,7 @@ void AlarmTimeWidget::setMinDateTime(const KDateTime& dt)
 {
 	mMinDateTimeIsNow = false;
 	mMinDateTime = dt.toTimeSpec(mTimeSpec);
-	mDateEdit->setMinDate(mMinDateTime.date());
+	mDateEdit->setMinimumDate(mMinDateTime.date());
 	setMaxMinTimeIf(KDateTime::currentDateTime(mTimeSpec));
 }
 
@@ -423,7 +424,7 @@ void AlarmTimeWidget::setMaxDateTime(const DateTime& dt)
 		mMaxDateTime = dt.effectiveKDateTime().addSecs(24*3600 - 60).toTimeSpec(mTimeSpec);
 	else
 		mMaxDateTime = dt.kDateTime().toTimeSpec(mTimeSpec);
-	mDateEdit->setMaxDate(mMaxDateTime.date());
+	mDateEdit->setMaximumDate(mMaxDateTime.date());
 	KDateTime now = KDateTime::currentDateTime(mTimeSpec);
 	setMaxMinTimeIf(now);
 	setMaxDelayTime(now);
@@ -521,7 +522,7 @@ void AlarmTimeWidget::updateTimes()
 	{
 		// Make sure that the minimum date is updated when the day changes
 		now = KDateTime::currentDateTime(mTimeSpec);
-		mDateEdit->setMinDate(now.date());
+		mDateEdit->setMinimumDate(now.date());
 	}
 	if (mMaxDateTime.isValid())
 	{

@@ -23,7 +23,6 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include "dateedit.moc"
@@ -32,62 +31,12 @@
 DateEdit::DateEdit(QWidget* parent)
 	: KDateEdit(parent)
 {
-	connect(this, SIGNAL(dateEntered(const QDate&)), SLOT(newDateEntered(const QDate&)));
 }
 
-void DateEdit::setMinDate(const QDate& d, const QString& errorDate)
-{
-	mMinDate = d;
-	if (mMinDate.isValid()  &&  date().isValid()  &&  date() < mMinDate)
-		setDate(mMinDate);
-	mMinDateErrString = errorDate;
-}
-
-void DateEdit::setMaxDate(const QDate& d, const QString& errorDate)
-{
-	mMaxDate = d;
-	if (mMaxDate.isValid()  &&  date().isValid()  &&  date() > mMaxDate)
-		setDate(mMaxDate);
-	mMaxDateErrString = errorDate;
-}
 
 void DateEdit::setInvalid()
 {
 	setDate(QDate());
-}
-
-// Check a new date against any minimum or maximum date.
-void DateEdit::newDateEntered(const QDate& newDate)
-{
-	if (newDate.isValid())
-	{
-		if (mMinDate.isValid()  &&  newDate < mMinDate)
-		{
-			pastLimitMessage(mMinDate, mMinDateErrString,
-					 ki18nc("@info", "Date cannot be earlier than %1"));
-			setDate(mMinDate);
-		}
-		else if (mMaxDate.isValid()  &&  newDate > mMaxDate)
-		{
-			pastLimitMessage(mMaxDate, mMaxDateErrString,
-					 ki18nc("@info", "Date cannot be later than %1"));
-			setDate(mMaxDate);
-		}
-	}
-}
-
-void DateEdit::pastLimitMessage(const QDate& limit, const QString& error, const KLocalizedString& defaultError)
-{
-	QString errString = error;
-	if (errString.isNull())
-	{
-		if (limit == QDate::currentDate())
-			errString = i18nc("@info/plain", "today");
-		else
-			errString = KGlobal::locale()->formatDate(limit, KLocale::ShortDate);
-		errString = defaultError.subs(errString).toString();
-	}
-	KMessageBox::sorry(this, errString);
 }
 
 void DateEdit::mousePressEvent(QMouseEvent *e)

@@ -28,7 +28,6 @@
 #include "alarmtimewidget.h"
 #include "checkbox.h"
 #include "combobox.h"
-#include "dateedit.h"
 #include "kaevent.h"
 #include "kalarmapp.h"
 #include "kalocale.h"
@@ -48,6 +47,7 @@ using namespace KCalCore;
 #include <kcal/event.h>
 using namespace KCal;
 #endif
+#include <libkdepim/kdateedit.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -280,7 +280,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 	      i18nc("@info:whatsthis", "<para>Repeat the alarm until the date/time specified.</para>"
 	            "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
 	mRangeButtonGroup->addButton(mEndDateButton);
-	mEndDateEdit = new DateEdit(mRangeButtonBox);
+	mEndDateEdit = new KPIM::KDateEdit(mRangeButtonBox);
 	mEndDateEdit->setReadOnly(mReadOnly);
 	static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
 	mEndDateEdit->setWhatsThis(i18nc("@info:whatsthis",
@@ -340,7 +340,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 		vlayout = new QVBoxLayout();
 		vlayout->setMargin(0);
 		hlayout->addLayout(vlayout);
-		mExceptionDateEdit = new DateEdit(mExceptionGroup);
+		mExceptionDateEdit = new KPIM::KDateEdit(mExceptionGroup);
 		mExceptionDateEdit->setDate(KDateTime::currentLocalDate());
 		mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
 		      "Enter a date to insert in the exceptions list. "
@@ -597,7 +597,7 @@ void RecurrenceEdit::repeatCountChanged(int value)
  */
 void RecurrenceEdit::addException()
 {
-	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
+	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->date().isValid())
 		return;
 	QDate date = mExceptionDateEdit->date();
 	DateList::Iterator it;
@@ -627,7 +627,7 @@ void RecurrenceEdit::addException()
  */
 void RecurrenceEdit::changeException()
 {
-	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->isValid())
+	if (!mExceptionDateEdit  ||  !mExceptionDateEdit->date().isValid())
 		return;
 	QListWidgetItem* item = mExceptionDateList->currentItem();
 	if (item  &&  mExceptionDateList->isItemSelected(item))
@@ -688,16 +688,16 @@ void RecurrenceEdit::setStartDate(const QDate& start, const QDate& today)
 		setRuleDefaults(start);
 		if (start < today)
 		{
-			mEndDateEdit->setMinDate(today);
+			mEndDateEdit->setMinimumDate(today);
 			if (mExceptionDateEdit)
-				mExceptionDateEdit->setMinDate(today);
+				mExceptionDateEdit->setMinimumDate(today);
 		}
 		else
 		{
 			const QString startString = i18nc("@info", "Date cannot be earlier than start date");
-			mEndDateEdit->setMinDate(start, startString);
+			mEndDateEdit->setMinimumDate(start, startString);
 			if (mExceptionDateEdit)
-				mExceptionDateEdit->setMinDate(start, startString);
+				mExceptionDateEdit->setMinimumDate(start, startString);
 		}
 	}
 }
