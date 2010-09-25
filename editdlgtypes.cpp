@@ -46,16 +46,17 @@
 #include "templatepickdlg.h"
 #include "timespinbox.h"
 
-#include <QLabel>
-#include <QDir>
-#include <QStyle>
-#include <QGroupBox>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QDragEnterEvent>
-
 #include <akonadi/contact/emailaddressselectiondialog.h>
+#ifdef USE_AKONADI
+#include <kcalcore/person.h>
+#include <kcalutils/icaldrag.h>
+using namespace KCalCore;
+#else
+#include <kcal/person.h>
+#include <kcal/icaldrag.h>
+using namespace KCal;
+#endif
+
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
@@ -64,9 +65,14 @@
 #include <khbox.h>
 #include <kdebug.h>
 
-#include <kcal/icaldrag.h>
-
-using namespace KCal;
+#include <QLabel>
+#include <QDir>
+#include <QStyle>
+#include <QGroupBox>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QDragEnterEvent>
 
 enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 
@@ -1751,7 +1757,11 @@ TextEdit::TextEdit(QWidget* parent)
 
 void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
+#ifdef USE_AKONADI
+	if (KCalUtils::ICalDrag::canDecode(e->mimeData()))
+#else
 	if (KCal::ICalDrag::canDecode(e->mimeData()))
+#endif
 		e->ignore();   // don't accept "text/calendar" objects
 	KTextEdit::dragEnterEvent(e);
 }

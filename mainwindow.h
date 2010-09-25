@@ -33,7 +33,11 @@
 #include "mainwindowbase.h"
 #include "undo.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/calendar.h>
+#else
 #include <kcal/calendar.h>
+#endif
 
 #include <QList>
 #include <QMap>
@@ -61,7 +65,11 @@ class TemplateMenuAction;
 class ResourceSelector;
 
 
+#ifdef USE_AKONADI
+class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObserver
+#else
 class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserver
+#endif
 {
 		Q_OBJECT
 

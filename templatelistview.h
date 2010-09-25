@@ -25,8 +25,6 @@
 
 #include "eventlistview.h"
 
-#include <kcal/event.h>
-
 
 class TemplateListView : public EventListView
 {

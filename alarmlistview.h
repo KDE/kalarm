@@ -23,10 +23,9 @@
 
 #include "kalarm.h"
 
-#include <QByteArray>
-#include <kcal/event.h>
-
 #include "eventlistview.h"
+
+#include <QByteArray>
 
 
 class AlarmListView : public EventListView

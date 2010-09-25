@@ -20,12 +20,6 @@
 
 #include "kalarm.h"
 
-#include <stdlib.h>
-
-#include <QtDBus/QtDBus>
-#include <kdebug.h>
-#include <kcal/duration.h>
-
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "identities.h"
@@ -36,6 +30,20 @@
 #include "preferences.h"
 #include "dbushandler.moc"
 #include <kalarmadaptor.h>
+
+#ifdef USE_AKONADI
+#include <kcalcore/duration.h>
+using namespace KCalCore;
+#else
+#include <kcal/duration.h>
+using namespace KCal;
+#endif
+
+#include <kdebug.h>
+
+#include <QtDBus/QtDBus>
+
+#include <stdlib.h>
 static const char* REQUEST_DBUS_OBJECT = "/kalarm";   // D-Bus object path of KAlarm's request interface
 
 
@@ -68,7 +76,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const QString& startDa
 {
 	KDateTime start;
 	KARecurrence recur;
-	KCal::Duration subRepeatDuration;
+	Duration subRepeatDuration;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval, subRepeatDuration))
 		return false;
 	return scheduleMessage(message, start, lateCancel, flags, bgColor, fgColor, font, KUrl(audioUrl), reminderMins, recur, subRepeatDuration, subRepeatCount);
@@ -104,7 +112,7 @@ bool DBusHandler::scheduleFile(const QString& url, const QString& startDateTime,
 {
 	KDateTime start;
 	KARecurrence recur;
-	KCal::Duration subRepeatDuration;
+	Duration subRepeatDuration;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval, subRepeatDuration))
 		return false;
 	return scheduleFile(KUrl(url), start, lateCancel, flags, bgColor, KUrl(audioUrl), reminderMins, recur, subRepeatDuration, subRepeatCount);
@@ -135,7 +143,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine, const QString& sta
 {
 	KDateTime start;
 	KARecurrence recur;
-	KCal::Duration subRepeatDuration;
+	Duration subRepeatDuration;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval, subRepeatDuration))
 		return false;
 	return scheduleCommand(commandLine, start, lateCancel, flags, recur, subRepeatDuration, subRepeatCount);
@@ -169,7 +177,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 {
 	KDateTime start;
 	KARecurrence recur;
-	KCal::Duration subRepeatDuration;
+	Duration subRepeatDuration;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval, subRepeatDuration))
 		return false;
 	return scheduleEmail(fromID, addresses, subject, message, attachments, start, lateCancel, flags, recur, subRepeatDuration, subRepeatCount);
@@ -202,7 +210,7 @@ bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent, cons
 {
 	KDateTime start;
 	KARecurrence recur;
-	KCal::Duration subRepeatDuration;
+	Duration subRepeatDuration;
 	if (!convertRecurrence(start, recur, startDateTime, recurrence, subRepeatInterval, subRepeatDuration))
 		return false;
 	return scheduleAudio(audioUrl, volumePercent, start, lateCancel, flags, recur, subRepeatDuration, subRepeatCount);
@@ -264,7 +272,7 @@ bool DBusHandler::editNew(const QString& templateName)
 bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                   const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
-                                  const KCal::Duration& subRepeatDuration, int subRepeatCount)
+                                  const Duration& subRepeatDuration, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	KAEvent::Action action = (kaEventFlags & KAEvent::DISPLAY_COMMAND) ? KAEvent::COMMAND : KAEvent::MESSAGE;
@@ -304,7 +312,7 @@ bool DBusHandler::scheduleMessage(const QString& message, const KDateTime& start
 bool DBusHandler::scheduleFile(const KUrl& file,
                                const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                const KUrl& audioFile, int reminderMins, const KARecurrence& recurrence,
-                               const KCal::Duration& subRepeatDuration, int subRepeatCount)
+                               const Duration& subRepeatDuration, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	QColor bg = convertBgColour(bgColor);
@@ -319,7 +327,7 @@ bool DBusHandler::scheduleFile(const KUrl& file,
 */
 bool DBusHandler::scheduleCommand(const QString& commandLine,
                                   const KDateTime& start, int lateCancel, unsigned flags,
-                                  const KARecurrence& recurrence, const KCal::Duration& subRepeatDuration, int subRepeatCount)
+                                  const KARecurrence& recurrence, const Duration& subRepeatDuration, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	return theApp()->scheduleEvent(KAEvent::COMMAND, commandLine, start, lateCancel, kaEventFlags, Qt::black, Qt::black, QFont(),
@@ -332,7 +340,7 @@ bool DBusHandler::scheduleCommand(const QString& commandLine,
 bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject,
                                 const QString& message, const QString& attachments,
                                 const KDateTime& start, int lateCancel, unsigned flags,
-                                const KARecurrence& recurrence, const KCal::Duration& subRepeatDuration, int subRepeatCount)
+                                const KARecurrence& recurrence, const Duration& subRepeatDuration, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	uint senderId = 0;
@@ -373,7 +381,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
 */
 bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent,
                                 const KDateTime& start, int lateCancel, unsigned flags,
-                                const KARecurrence& recurrence, const KCal::Duration& subRepeatDuration, int subRepeatCount)
+                                const KARecurrence& recurrence, const Duration& subRepeatDuration, int subRepeatCount)
 {
 	unsigned kaEventFlags = convertStartFlags(start, flags);
 	float volume = (volumePercent >= 0) ? volumePercent / 100.0f : -1;
@@ -481,7 +489,7 @@ QColor DBusHandler::convertBgColour(const QString& bgColor)
 
 bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence, 
                                     const QString& startDateTime, const QString& icalRecurrence,
-				    int subRepeatInterval, KCal::Duration& subRepeatDuration)
+				    int subRepeatInterval, Duration& subRepeatDuration)
 {
 	start = convertDateTime(startDateTime);
 	if (!start.isValid())
@@ -494,9 +502,9 @@ bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence,
 		kWarning() << "D-Bus call: no recurrence specified, so sub-repetition ignored";
 	}
 	if (subRepeatInterval  &&  !(subRepeatInterval % (24*60)))
-		subRepeatDuration = KCal::Duration(subRepeatInterval / (24*60), KCal::Duration::Days);
+		subRepeatDuration = Duration(subRepeatInterval / (24*60), Duration::Days);
 	else
-		subRepeatDuration = KCal::Duration(subRepeatInterval * 60, KCal::Duration::Seconds);
+		subRepeatDuration = Duration(subRepeatInterval * 60, Duration::Seconds);
 	return true;
 }
 

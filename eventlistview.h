@@ -28,8 +28,6 @@
 #include "eventlistmodel.h"
 #endif
 
-#include <kcal/event.h>
-
 #include <QTreeView>
 #include <QItemDelegate>
 
