@@ -235,7 +235,8 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
 	mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
 	                  Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
 	if (mSpecialActionsButton)
-		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), Preferences::defaultCancelOnPreActionError());
+		mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
+		                                  Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
 
 	KActionCollection* actions = new KActionCollection(this);
 	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
@@ -289,7 +290,8 @@ QList<KAEvent> BirthdayDlg::events() const
 		if (mSpecialActionsButton)
 			event.setActions(mSpecialActionsButton->preAction(),
 					 mSpecialActionsButton->postAction(),
-			                 mSpecialActionsButton->cancelOnError());
+			                 mSpecialActionsButton->cancelOnError(),
+			                 mSpecialActionsButton->dontShowError());
 		event.endChanges();
 		list.append(event);
 	}

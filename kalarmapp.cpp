@@ -1859,6 +1859,8 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
 	QString dontShowAgain;
 	if (flags & ProcData::PRE_ACTION)
 	{
+		if (event.dontShowPreActionError())
+			return;   // don't notify user of any errors for the alarm
 		errmsgs += i18nc("@info", "Pre-alarm action:");
 		dontShowAgain = QLatin1String("Pre");
 		cmderr = KAEvent::CMD_ERROR_PRE;

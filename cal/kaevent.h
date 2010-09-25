@@ -335,8 +335,8 @@ class KALARM_CAL_EXPORT KAEvent
         void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile = false)
                                                                    { d->setAudioFile(filename, volume, fadeVolume, fadeSeconds, allowEmptyFile); }
         void               setTemplate(const QString& name, int afterTime = -1);
-        void               setActions(const QString& pre, const QString& post, bool cancelOnError)
-                                                                   { d->mPreAction = pre;  d->mPostAction = post;  d->mCancelOnPreActErr = cancelOnError;  d->mUpdated = true; }
+        void               setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError)
+                                                                   { d->mPreAction = pre;  d->mPostAction = post;  d->mCancelOnPreActErr = cancelOnError;  d->mDontShowPreActErr = dontShowError;  d->mUpdated = true; }
         OccurType          setNextOccurrence(const KDateTime& preDateTime)  { return d->setNextOccurrence(preDateTime); }
         void               setFirstRecurrence()                    { d->setFirstRecurrence(); }
         void               setCategory(KAlarm::CalEvent::Type s)   { d->setCategory(s); }
@@ -476,6 +476,7 @@ class KALARM_CAL_EXPORT KAEvent
         const QString&     preAction() const              { return d->mPreAction; }
         const QString&     postAction() const             { return d->mPostAction; }
         bool               cancelOnPreActionError() const { return d->mCancelOnPreActErr; }
+        bool               dontShowPreActionError() const { return d->mDontShowPreActErr; }
         int                flags() const                  { return d->flags(); }
         bool               deferred() const               { return d->mDeferral > 0; }
         bool               toBeArchived() const           { return d->mArchive; }
@@ -733,6 +734,7 @@ class KALARM_CAL_EXPORT KAEvent
                 bool               mReadOnly;          // event is read-only in its original calendar file
 #endif
                 bool               mCancelOnPreActErr; // cancel alarm if pre-alarm action fails
+                bool               mDontShowPreActErr; // don't notify error if pre-alarm action fails
                 bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
                 bool               mCommandXterm;      // command alarm is to be executed in a terminal window
                 bool               mCommandDisplay;    // command output is to be displayed in an alarm window

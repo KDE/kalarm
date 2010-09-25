@@ -1407,7 +1407,8 @@ void EditPrefTab::restore(bool)
 		case TimePeriod::Minutes:      index = 0; break;
 	}
 	mReminderUnits->setCurrentIndex(index);
-	mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), Preferences::defaultCancelOnPreActionError());
+	mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
+	                                  Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
 	mSound->setCurrentIndex(soundIndex(Preferences::defaultSoundType()));
 	mSoundFile->setText(Preferences::defaultSoundFile());
 	mSoundRepeat->setChecked(Preferences::defaultSoundRepeat());

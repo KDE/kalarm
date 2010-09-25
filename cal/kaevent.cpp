@@ -102,6 +102,7 @@ static const QByteArray VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VO
 static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
 // - Command alarm properties
 static const QByteArray CANCEL_ON_ERROR_PROPERTY("ERRCANCEL");// X-KDE-KALARM-ERRCANCEL property
+static const QByteArray DONT_SHOW_ERROR_PROPERTY("ERRNOSHOW");// X-KDE-KALARM-ERRNOSHOW property
 
 // Event status strings
 static const QString DISABLED_STATUS            = QLatin1String("DISABLED");
@@ -151,6 +152,7 @@ struct AlarmData
     bool                   isEmailText;
     bool                   commandScript;
     bool                   cancelOnPreActErr;
+    bool                   dontShowPreActErr;
     bool                   repeatSound;
 };
 typedef QMap<KAAlarm::SubType, AlarmData> AlarmMap;
@@ -321,6 +323,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mReadOnly                = event.mReadOnly;
 #endif
     mCancelOnPreActErr       = event.mCancelOnPreActErr;
+    mDontShowPreActErr       = event.mDontShowPreActErr;
     mConfirmAck              = event.mConfirmAck;
     mCommandXterm            = event.mCommandXterm;
     mCommandDisplay          = event.mCommandDisplay;
@@ -607,6 +610,7 @@ void KAEvent::Private::set(const Event* event)
     mRepeatSound       = false;
     mCommandScript     = false;
     mCancelOnPreActErr = false;
+    mDontShowPreActErr = false;
     mDeferral          = NO_DEFERRAL;
     mSoundVolume       = -1;
     mFadeVolume        = -1;
@@ -701,6 +705,7 @@ void KAEvent::Private::set(const Event* event)
             case KAAlarm::PRE_ACTION__ALARM:
                 mPreAction         = data.cleanText;
                 mCancelOnPreActErr = data.cancelOnPreActErr;
+                mDontShowPreActErr = data.dontShowPreActErr;
                 break;
             case KAAlarm::POST_ACTION__ALARM:
                 mPostAction = data.cleanText;
@@ -946,6 +951,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
                 data.cleanText += alarm->programArguments();
             }
             data.cancelOnPreActErr = !alarm->customProperty(KAlarm::Calendar::APPNAME, CANCEL_ON_ERROR_PROPERTY).isNull();
+            data.dontShowPreActErr = !alarm->customProperty(KAlarm::Calendar::APPNAME, DONT_SHOW_ERROR_PROPERTY).isNull();
             if (!cmdDisplay)
                 break;
             // fall through to Display
@@ -1171,6 +1177,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mDisplayingEdit         = false;
     mArchive                = false;
     mCancelOnPreActErr      = false;
+    mDontShowPreActErr      = false;
     mUpdated                = false;
 #ifdef USE_AKONADI
     mReadOnly               = false;
@@ -2359,6 +2366,8 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
             setProcedureAlarm(alarm, mPreAction);
             if (mCancelOnPreActErr)
                 alarm->setCustomProperty(KAlarm::Calendar::APPNAME, CANCEL_ON_ERROR_PROPERTY, QLatin1String("Y"));
+            if (mDontShowPreActErr)
+                alarm->setCustomProperty(KAlarm::Calendar::APPNAME, DONT_SHOW_ERROR_PROPERTY, QLatin1String("Y"));
             break;
         case KAAlarm::POST_ACTION_ALARM:
             setProcedureAlarm(alarm, mPostAction);
@@ -4567,6 +4576,7 @@ void KAEvent::Private::dumpDebug() const
         kDebug() << "-- mAudioFile:" << mAudioFile;
         kDebug() << "-- mPreAction:" << mPreAction;
         kDebug() << "-- mCancelOnPreActErr:" << mCancelOnPreActErr;
+        kDebug() << "-- mDontShowPreActErr:" << mDontShowPreActErr;
         kDebug() << "-- mPostAction:" << mPostAction;
     }
     else if (mActionType == T_COMMAND)
