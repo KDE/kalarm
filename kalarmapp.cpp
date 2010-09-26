@@ -59,6 +59,7 @@
 #include <kdebug.h>
 #include <kshell.h>
 #include <ksystemtrayicon.h>
+#include <ksystemtimezone.h>
 
 #include <QObject>
 #include <QTimer>
@@ -275,6 +276,9 @@ bool KAlarmApp::restoreSession()
 	if (quitIf(0))           // quit if no windows are open
 		return false;    // quitIf() can sometimes return, despite calling exit()
 
+	// Check whether the KDE time zone daemon is running (but don't hold up initialisation)
+	QTimer::singleShot(0, this, SLOT(checkKtimezoned()));
+
 	startProcessQueue();      // start processing the execution queue
 	return true;
 }
@@ -478,7 +482,27 @@ int KAlarmApp::newInstance()
 	// Executing 'return' doesn't work very well since the program continues to
 	// run if no windows were created.
 	quitIf(exitCode);
+
+	// Check whether the KDE time zone daemon is running (but don't hold up initialisation)
+	QTimer::singleShot(0, this, SLOT(checkKtimezoned()));
+
 	return exitCode;
+}
+
+void KAlarmApp::checkKtimezoned()
+{
+	// Check that the KDE time zone daemon is running
+	static bool done = false;
+	if (done)
+		return;
+	done = true;
+	if (!KSystemTimeZones::ktimezonedOk())
+	{	
+		kDebug() << "ktimezoned not running: using UTC only";
+		KMessageBox::information(MainWindow::mainMainWindow(),
+		                         i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
+					 QString(), QLatin1String("tzunavailable"));
+	}
 }
 
 /******************************************************************************

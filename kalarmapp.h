@@ -108,6 +108,7 @@ class KAlarmApp : public KUniqueApplication
 	private slots:
 		void               quitFatal();
 		void               checkNextDueAlarm();
+		void               checkKtimezoned();
 		void               slotShowInSystemTrayChanged();
 		void               changeStartOfDay();
 		void               slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days);
