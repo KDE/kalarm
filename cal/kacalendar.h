@@ -125,7 +125,7 @@ class KALARM_CAL_EXPORT CalEvent
             TEMPLATE   = 0x04,    // the event is an alarm template
             DISPLAYING = 0x08     // the event is currently being displayed
         };
-        Q_DECLARE_FLAGS(Types, Type);
+        Q_DECLARE_FLAGS(Types, Type)
 
         static QString uid(const QString& id, Type);
 #ifdef USE_AKONADI
