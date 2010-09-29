@@ -59,7 +59,6 @@ set(libkalarm_SRCS
     lib/checkbox.cpp
     lib/colourbutton.cpp
     lib/combobox.cpp
-    lib/dateedit.cpp
     lib/desktop.cpp
     lib/filedialog.cpp
     lib/itembox.cpp
