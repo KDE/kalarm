@@ -62,8 +62,9 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
   private:
 	BirthdayModel(Akonadi::ChangeRecorder* recorder);
 
-	static BirthdayModel *mInstance;
+	static BirthdayModel* mInstance;
 };
+
 
 class BirthdaySortModel : public QSortFilterProxyModel
 {
@@ -77,8 +78,8 @@ class BirthdaySortModel : public QSortFilterProxyModel
 
     private:
         QStringList mContactsWithAlarm;
-        QString mPrefix;
-        QString mSuffix;
+        QString     mPrefix;
+        QString     mSuffix;
 };
 
 #endif
