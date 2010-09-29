@@ -1460,6 +1460,9 @@ void EditPrefTab::apply(bool syncToDisc)
 	b = mSpecialActionsButton->cancelOnError();
 	if (b != Preferences::defaultCancelOnPreActionError())
 		Preferences::setDefaultCancelOnPreActionError(b);
+	b = mSpecialActionsButton->dontShowError();
+	if (b != Preferences::defaultDontShowPreActionError())
+		Preferences::setDefaultDontShowPreActionError(b);
 	text = mSpecialActionsButton->postAction();
 	if (text != Preferences::defaultPostAction())
 		Preferences::setDefaultPostAction(text);
