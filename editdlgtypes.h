@@ -54,8 +54,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 	public:
 //		enum MessageType { TEXT, FILE, COMMAND };
 
-		EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
-		             GetResourceType = RES_PROMPT);
+		EditDisplayAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT, bool readOnly = false);
 
@@ -76,7 +75,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 		static QString  i18n_chk_ConfirmAck();    // text of 'Confirm acknowledgement' checkbox
 
 	protected:
-		virtual QString type_caption(bool newAlarm) const;
+		virtual QString type_caption() const;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
 		virtual void    type_initValues(const KAEvent*);
 		virtual void    type_showOptions(bool more);
@@ -146,8 +145,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 {
 		Q_OBJECT
 	public:
-		EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
-		                    GetResourceType = RES_PROMPT);
+		EditCommandAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                    GetResourceType = RES_PROMPT, bool readOnly = false);
 
@@ -161,7 +159,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 		static QString  i18n_chk_ExecInTermWindow();   // text of 'Execute in terminal window' checkbox
 
 	protected:
-		virtual QString type_caption(bool newAlarm) const;
+		virtual QString type_caption() const;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
 		virtual void    type_initValues(const KAEvent*);
 		virtual void    type_showOptions(bool more);
@@ -199,8 +197,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 {
 		Q_OBJECT
 	public:
-		EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
-		                  GetResourceType = RES_PROMPT);
+		EditEmailAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                  GetResourceType = RES_PROMPT, bool readOnly = false);
 
@@ -215,7 +212,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 		static QString  i18n_chk_CopyEmailToSelf();    // text of 'Copy email to self' checkbox
 
 	protected:
-		virtual QString type_caption(bool newAlarm) const;
+		virtual QString type_caption() const;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
 		virtual void    type_initValues(const KAEvent*);
 		virtual void    type_showOptions(bool)  {}
@@ -264,8 +261,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
 {
 		Q_OBJECT
 	public:
-		EditAudioAlarmDlg(bool Template, bool newAlarm, QWidget* parent = 0,
-		             GetResourceType = RES_PROMPT);
+		EditAudioAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditAudioAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT, bool readOnly = false);
 
@@ -276,7 +272,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
 		void            setAudio(const QString& file, float volume = -1);
 
 	protected:
-		virtual QString type_caption(bool newAlarm) const;
+		virtual QString type_caption() const;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout);
 		virtual void    type_initValues(const KAEvent*);
 		virtual void    type_showOptions(bool)  {}

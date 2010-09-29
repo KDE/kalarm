@@ -100,15 +100,15 @@ inline QString recurText(const KAEvent& event)
 QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:check", "Show in KOrganizer"); }
 
 
-EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, bool newAlarm, QWidget* parent, GetResourceType getResource)
+EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, GetResourceType getResource)
 {
 	kDebug();
 	switch (type)
 	{
-		case DISPLAY:  return new EditDisplayAlarmDlg(Template, newAlarm, parent, getResource);
-		case COMMAND:  return new EditCommandAlarmDlg(Template, newAlarm, parent, getResource);
-		case EMAIL:    return new EditEmailAlarmDlg(Template, newAlarm, parent, getResource);
-		case AUDIO:    return new EditAudioAlarmDlg(Template, newAlarm, parent, getResource);
+		case DISPLAY:  return new EditDisplayAlarmDlg(Template, parent, getResource);
+		case COMMAND:  return new EditCommandAlarmDlg(Template, parent, getResource);
+		case EMAIL:    return new EditEmailAlarmDlg(Template, parent, getResource);
+		case AUDIO:    return new EditAudioAlarmDlg(Template, parent, getResource);
 		default:  break;
 	}
 	return 0;
@@ -154,6 +154,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 #endif
 	  mDeferGroupHeight(0),
 	  mTemplate(Template),
+	  mNewAlarm(true),
 	  mDesiredReadOnly(false),
 	  mReadOnly(false),
 	  mShowingMore(true),
@@ -162,7 +163,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 	init(0, getResource);
 }
 
-EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, QWidget* parent,
+EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
 	: KDialog(parent),
 	  mAlarmType(event->action()),
@@ -178,7 +179,9 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, QWidget* parent,
 	  mResource(0),
 #endif
 	  mDeferGroupHeight(0),
+	  mEventId(newAlarm ? QString() : event->id()),
 	  mTemplate(Template),
+	  mNewAlarm(newAlarm),
 	  mDesiredReadOnly(readOnly),
 	  mReadOnly(readOnly),
 	  mShowingMore(true),
@@ -225,7 +228,7 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
 	}
 }
 
-void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
+void EditAlarmDlg::init(const KAEvent* event)
 {
 	setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
 	QString caption;
@@ -234,7 +237,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 		        : event->expired() ? i18nc("@title:window", "Archived Alarm [read-only]")
 		                           : i18nc("@title:window", "Alarm [read-only]");
 	else
-		caption = type_caption(newAlarm);
+		caption = type_caption();
 	setCaption(caption);
 	setButtons((mReadOnly ? Cancel|Try|Default : mTemplate ? Ok|Cancel|Try|Default : Ok|Cancel|Try|Help|Default));
 	setDefaultButton(mReadOnly ? Cancel : Ok);
@@ -457,7 +460,7 @@ void EditAlarmDlg::init(const KAEvent* event, bool newAlarm)
 	if (mTemplateName)
 		mTemplateName->setFocus();
 
-	if (!newAlarm)
+	if (!mNewAlarm)
 	{
 		// Save the initial state of all controls so that we can later tell if they have changed
 		saveState((event && (mTemplate || !event->isTemplate())) ? event : 0);
@@ -1165,6 +1168,12 @@ void EditAlarmDlg::slotTry()
 			return;
 		KAEvent event;
 		setEvent(event, text, true);
+		if (!mNewAlarm  &&  !stateChanged())
+		{
+			// It's an existing alarm which hasn't been changed yet:
+			// enable KALARM_UID environment variable to be set.
+			event.setEventId(mEventId);
+		}
 		connect(theApp(), SIGNAL(execAlarmSuccess()), SLOT(slotTrySuccess()));
 		void* proc = theApp()->execAlarm(event, event.firstAlarm(), false, false);
 		if (proc  &&  proc != (void*)-1)

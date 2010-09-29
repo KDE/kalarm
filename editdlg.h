@@ -67,7 +67,7 @@ class EditAlarmDlg : public KDialog
 			RES_IGNORE         // don't get resource
 		};
 
-		static EditAlarmDlg* create(bool Template, Type, bool newAlarm, QWidget* parent = 0,
+		static EditAlarmDlg* create(bool Template, Type, QWidget* parent = 0,
 		                            GetResourceType = RES_PROMPT);
 		static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                            GetResourceType = RES_PROMPT, bool readOnly = false);
@@ -95,13 +95,13 @@ class EditAlarmDlg : public KDialog
 	protected:
 		EditAlarmDlg(bool Template, KAEvent::Action, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT);
-		EditAlarmDlg(bool Template, const KAEvent*, QWidget* parent = 0,
+		EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT, bool readOnly = false);
-		void            init(const KAEvent* event, bool newAlarm);
+		void            init(const KAEvent* event);
 		virtual void    resizeEvent(QResizeEvent*);
 		virtual void    showEvent(QShowEvent*);
 		virtual void    closeEvent(QCloseEvent*);
-		virtual QString type_caption(bool newAlarm) const = 0;
+		virtual QString type_caption() const = 0;
 		virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
 		virtual void    type_initValues(const KAEvent*) = 0;
 		virtual void    type_showOptions(bool more) = 0;
@@ -118,6 +118,7 @@ class EditAlarmDlg : public KDialog
 
 		void            showMainPage();
 		bool            isTemplate() const         { return mTemplate; }
+		bool            isNewAlarm() const         { return mNewAlarm; }
 		bool            dateOnly() const;
 		bool            isTimedRecurrence() const;
 		bool            showingMore() const        { return mShowingMore; }
@@ -199,7 +200,9 @@ class EditAlarmDlg : public KDialog
 #endif
 		int                 mDeferGroupHeight;   // height added by deferred time widget
 		int                 mDesktop;            // desktop to display the dialog in
+		QString             mEventId;            // UID of event being edited, or blank for new event
 		bool                mTemplate;           // editing an alarm template
+		bool                mNewAlarm;           // editing a new alarm
 		bool                mExpiredRecurrence;  // initially a recurrence which has expired
 		mutable bool        mChanged;            // controls other than deferral have changed since dialog was displayed
 		mutable bool        mOnlyDeferred;       // the only change made in the dialog was to the existing deferral

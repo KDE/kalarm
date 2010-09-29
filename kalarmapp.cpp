@@ -353,7 +353,7 @@ int KAlarmApp::newInstance()
 					// Use AutoQPointer to guard against crash on application exit while
 					// the dialogue is still open. It prevents double deletion (both on
 					// deletion of parent, and on return from this function).
-					AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, options.editType(), true);
+					AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, options.editType());
 					if (options.alarmTime().isValid())
 						editDlg->setTime(options.alarmTime());
 					if (options.recurrence())
@@ -1670,6 +1670,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 	if (!cmd.isEmpty())
 	{
 		proc = new ShellProcess(cmd);
+		proc->setEnv(QLatin1String("KALARM_UID"), event.id(), true);
 		proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
 		connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
 		if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slot)

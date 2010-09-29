@@ -110,34 +110,34 @@ QString EditDisplayAlarmDlg::i18n_chk_ConfirmAck()    { return i18nc("@option:ch
 *            = false to edit/create an alarm.
 *   event   != to initialise the dialog to show the specified event's data.
 */
-EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
+EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::MESSAGE, parent, getResource),
 	  mSpecialActionsButton(0),
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
 	kDebug() << "New";
-	init(0, newAlarm);
+	init(0);
 }
 
 EditDisplayAlarmDlg::EditDisplayAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
-	: EditAlarmDlg(Template, event, parent, getResource, readOnly),
+	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
 	  mSpecialActionsButton(0),
 	  mReminderDeferral(false),
 	  mReminderArchived(false)
 {
 	kDebug() << "Event.id()";
-	init(event, newAlarm);
+	init(event);
 }
 
 /******************************************************************************
 * Return the window caption.
 */
-QString EditDisplayAlarmDlg::type_caption(bool newAlarm) const
+QString EditDisplayAlarmDlg::type_caption() const
 {
-	return isTemplate() ? (newAlarm ? i18nc("@title:window", "New Display Alarm Template") : i18nc("@title:window", "Edit Display Alarm Template"))
-	                    : (newAlarm ? i18nc("@title:window", "New Display Alarm") : i18nc("@title:window", "Edit Display Alarm"));
+	return isTemplate() ? (isNewAlarm() ? i18nc("@title:window", "New Display Alarm Template") : i18nc("@title:window", "Edit Display Alarm Template"))
+	                    : (isNewAlarm() ? i18nc("@title:window", "New Display Alarm") : i18nc("@title:window", "Edit Display Alarm"));
 }
 
 /******************************************************************************
@@ -719,28 +719,28 @@ QString EditCommandAlarmDlg::i18n_chk_ExecInTermWindow()   { return i18nc("@opti
 *            = false to edit/create an alarm.
 *   event   != to initialise the dialog to show the specified event's data.
 */
-EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
+EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::COMMAND, parent, getResource)
 {
 	kDebug() << "New";
-	init(0, newAlarm);
+	init(0);
 }
 
 EditCommandAlarmDlg::EditCommandAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                          GetResourceType getResource, bool readOnly)
-	: EditAlarmDlg(Template, event, parent, getResource, readOnly)
+	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
 	kDebug() << "Event.id()";
-	init(event, newAlarm);
+	init(event);
 }
 
 /******************************************************************************
 * Return the window caption.
 */
-QString EditCommandAlarmDlg::type_caption(bool newAlarm) const
+QString EditCommandAlarmDlg::type_caption() const
 {
-	return isTemplate() ? (newAlarm ? i18nc("@title:window", "New Command Alarm Template") : i18nc("@title:window", "Edit Command Alarm Template"))
-	                    : (newAlarm ? i18nc("@title:window", "New Command Alarm") : i18nc("@title:window", "Edit Command Alarm"));
+	return isTemplate() ? (isNewAlarm() ? i18nc("@title:window", "New Command Alarm Template") : i18nc("@title:window", "Edit Command Alarm Template"))
+	                    : (isNewAlarm() ? i18nc("@title:window", "New Command Alarm") : i18nc("@title:window", "Edit Command Alarm"));
 }
 
 /******************************************************************************
@@ -1016,30 +1016,30 @@ QString EditEmailAlarmDlg::i18n_chk_CopyEmailToSelf()    { return i18nc("@option
 *            = false to edit/create an alarm.
 *   event   != to initialise the dialog to show the specified event's data.
 */
-EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
+EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::EMAIL, parent, getResource),
 	  mEmailRemoveButton(0)
 {
 	kDebug() << "New";
-	init(0, newAlarm);
+	init(0);
 }
 
 EditEmailAlarmDlg::EditEmailAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
-	: EditAlarmDlg(Template, event, parent, getResource, readOnly),
+	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
 	  mEmailRemoveButton(0)
 {
 	kDebug() << "Event.id()";
-	init(event, newAlarm);
+	init(event);
 }
 
 /******************************************************************************
 * Return the window caption.
 */
-QString EditEmailAlarmDlg::type_caption(bool newAlarm) const
+QString EditEmailAlarmDlg::type_caption() const
 {
-	return isTemplate() ? (newAlarm ? i18nc("@title:window", "New Email Alarm Template") : i18nc("@title:window", "Edit Email Alarm Template"))
-	                    : (newAlarm ? i18nc("@title:window", "New Email Alarm") : i18nc("@title:window", "Edit Email Alarm"));
+	return isTemplate() ? (isNewAlarm() ? i18nc("@title:window", "New Email Alarm Template") : i18nc("@title:window", "Edit Email Alarm Template"))
+	                    : (isNewAlarm() ? i18nc("@title:window", "New Email Alarm") : i18nc("@title:window", "Edit Email Alarm"));
 }
 
 /******************************************************************************
@@ -1452,28 +1452,28 @@ bool EditEmailAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 *            = false to edit/create an alarm.
 *   event   != to initialise the dialog to show the specified event's data.
 */
-EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, bool newAlarm, QWidget* parent, GetResourceType getResource)
+EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
 	: EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource)
 {
 	kDebug() << "New";
-	init(0, newAlarm);
+	init(0);
 }
 
 EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
-	: EditAlarmDlg(Template, event, parent, getResource, readOnly)
+	: EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
 {
 	kDebug() << "Event.id()";
-	init(event, newAlarm);
+	init(event);
 }
 
 /******************************************************************************
 * Return the window caption.
 */
-QString EditAudioAlarmDlg::type_caption(bool newAlarm) const
+QString EditAudioAlarmDlg::type_caption() const
 {
-	return isTemplate() ? (newAlarm ? i18nc("@title:window", "New Audio Alarm Template") : i18nc("@title:window", "Edit Audio Alarm Template"))
-	                    : (newAlarm ? i18nc("@title:window", "New Audio Alarm") : i18nc("@title:window", "Edit Audio Alarm"));
+	return isTemplate() ? (isNewAlarm() ? i18nc("@title:window", "New Audio Alarm Template") : i18nc("@title:window", "Edit Audio Alarm Template"))
+	                    : (isNewAlarm() ? i18nc("@title:window", "New Audio Alarm") : i18nc("@title:window", "Edit Audio Alarm"));
 }
 
 /******************************************************************************
