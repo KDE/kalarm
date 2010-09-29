@@ -55,6 +55,7 @@
 #include <kio/netaccess.h>
 #include <knotification.h>
 #include <kpushbutton.h>
+#include <ksqueezedtextlabel.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>
@@ -170,7 +171,7 @@ MessageWin*           MessageWin::mAudioOwner = 0;
 *  displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
-	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? 0 : Qt::X11BypassWindowManagerHint))),
+	: MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint))),
 	  mMessage(event->cleanText()),
 	  mFont(event->font()),
 	  mBgColour(event->bgColour()),
@@ -333,7 +334,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
 	setWindowModality(Qt::WindowModal);
 	setObjectName("ErrorWin");    // used by LikeBack
-        getWorkAreaAndModal();
+	getWorkAreaAndModal();
 	initView();
 	mWindowList.append(this);
 }
@@ -367,7 +368,7 @@ MessageWin::MessageWin()
 	setAttribute(WidgetFlags);
 	setWindowModality(Qt::WindowModal);
 	setObjectName("RestoredMsgWin");    // used by LikeBack
-        getWorkAreaAndModal();
+	getWorkAreaAndModal();
 	mWindowList.append(this);
 }
 
@@ -411,7 +412,7 @@ void MessageWin::initView()
 	// Alarm date/time: display time zone if not local time zone.
 	mTimeLabel = new QLabel(topWidget);
 	mTimeLabel->setText(dateTimeToDisplay());
-	mTimeLabel->setFrameStyle(QFrame::Box | QFrame::Raised);
+	mTimeLabel->setFrameStyle(QFrame::StyledPanel);
 	mTimeLabel->setPalette(labelPalette);
 	mTimeLabel->setAutoFillBackground(true);
 	topLayout->addWidget(mTimeLabel, 0, Qt::AlignHCenter);
@@ -441,11 +442,11 @@ void MessageWin::initView()
 			case KAEvent::FILE:
 			{
 				// Display the file name
-				QLabel* label = new QLabel(mMessage, topWidget);
-				label->setFrameStyle(QFrame::Box | QFrame::Raised);
+				KSqueezedTextLabel* label = new KSqueezedTextLabel(mMessage, topWidget);
+				label->setFrameStyle(QFrame::StyledPanel);
+				label->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
 				label->setPalette(labelPalette);
 				label->setAutoFillBackground(true);
-				label->setFixedSize(label->sizeHint());
 				label->setWhatsThis(i18nc("@info:whatsthis", "The file whose contents are displayed below"));
 				topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
