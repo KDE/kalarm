@@ -496,6 +496,7 @@ void KAlarmApp::checkKtimezoned()
 	if (done)
 		return;
 	done = true;
+#if KDE_IS_VERSION(4, 5, 70 )
 	if (!KSystemTimeZones::ktimezonedOk())
 	{	
 		kDebug() << "ktimezoned not running: using UTC only";
@@ -503,6 +504,7 @@ void KAlarmApp::checkKtimezoned()
 		                         i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
 					 QString(), QLatin1String("tzunavailable"));
 	}
+#endif
 }
 
 /******************************************************************************
