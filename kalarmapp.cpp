@@ -1461,8 +1461,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
 			// Find if we're changing a reminder message to the real message
 			bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
 			bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
-			if (alarm.action() != KAAlarm::COMMAND
-			&&  !reminder  &&  !event.deferred()
+			if (!reminder  &&  !event.deferred()
 			&&  (replaceReminder || !win)  &&  !noPreAction
 			&&  !event.preAction().isEmpty())
 			{
