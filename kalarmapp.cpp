@@ -496,8 +496,8 @@ void KAlarmApp::checkKtimezoned()
 	if (done)
 		return;
 	done = true;
-#if KDE_IS_VERSION(4, 5, 70 )
-	if (!KSystemTimeZones::ktimezonedOk())
+#if KDE_IS_VERSION(4,5,70)
+	if (!KSystemTimeZones::isTimeZoneDaemonAvailable())
 	{	
 		kDebug() << "ktimezoned not running: using UTC only";
 		KMessageBox::information(MainWindow::mainMainWindow(),
