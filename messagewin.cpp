@@ -219,6 +219,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 	  mLateCancel(event->lateCancel()),
 	  mAlwaysHide(flags & ALWAYS_HIDE),
 	  mErrorWindow(false),
+	  mInitialised(false),
 	  mNoPostAction(alarm.type() & KAAlarm::REMINDER_ALARM),
 	  mRecreating(false),
 	  mBeep(event->beep()),
@@ -322,6 +323,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 	  mDeferDlg(0),
 	  mAlwaysHide(false),
 	  mErrorWindow(true),
+	  mInitialised(false),
 	  mNoPostAction(true),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
@@ -357,6 +359,7 @@ MessageWin::MessageWin()
 	  mDeferDlg(0),
 	  mAlwaysHide(false),
 	  mErrorWindow(false),
+	  mInitialised(false),
 	  mRecreating(false),
 	  mRescheduleEvent(false),
 	  mShown(false),
@@ -768,6 +771,8 @@ void MessageWin::initView()
 	WId winid = winId();
 	KWindowSystem::setState(winid, wstate);
 	KWindowSystem::setOnAllDesktops(winid, true);
+
+	mInitialised = true;   // the window's widgets have been created
 }
 
 /******************************************************************************
@@ -789,7 +794,7 @@ int MessageWin::instanceCount(bool excludeAlwaysHidden)
 
 bool MessageWin::hasDefer() const
 {
-	return mDeferButton->isVisible();
+	return mDeferButton && mDeferButton->isVisible();
 }
 
 /******************************************************************************
@@ -797,9 +802,12 @@ bool MessageWin::hasDefer() const
 */
 void MessageWin::showDefer()
 {
-	mNoDefer = false;
-	mDeferButton->show();
-	resize(sizeHint());
+	if (mDeferButton)
+	{
+		mNoDefer = false;
+		mDeferButton->show();
+		resize(sizeHint());
+	}
 }
 
 /******************************************************************************
@@ -807,6 +815,8 @@ void MessageWin::showDefer()
 */
 void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
 {
+	if (!mInitialised)
+		return;
 	mDateTime = alarm.dateTime(true);
 	mNoPostAction = false;
 	mAlarmType = alarm.type();
@@ -830,6 +840,8 @@ void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
 */
 void MessageWin::showDateTime(const KAEvent& event, const KAAlarm& alarm)
 {
+	if (!mTimeLabel)
+		return;
 	mDateTime = (alarm.type() & KAAlarm::REMINDER_ALARM) ? event.mainDateTime(true) : alarm.dateTime(true);
 	if (mDateTime.isValid())
 	{
@@ -1347,11 +1359,14 @@ bool MessageWin::isSpread(const QPoint& topLeft)
 */
 MessageWin* MessageWin::findEvent(const QString& eventID)
 {
-	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+	if (!eventID.isEmpty())
 	{
-		MessageWin* w = mWindowList[i];
-		if (w->mEventID == eventID  &&  !w->mErrorWindow)
-			return w;
+		for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+		{
+			MessageWin* w = mWindowList[i];
+			if (w->mEventID == eventID  &&  !w->mErrorWindow)
+				return w;
+		}
 	}
 	return 0;
 }
@@ -1661,6 +1676,8 @@ QString AudioThread::error() const
 */
 void MessageWin::repeat(const KAAlarm& alarm)
 {
+	if (!mInitialised)
+		return;
 	if (mDeferDlg)
 	{
 		// Cancel any deferral dialog so that the user notices something's going on,

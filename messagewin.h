@@ -199,6 +199,7 @@ class MessageWin : public MainWindowBase
 		int                 mScreenNumber;    // screen to display on, or -1 for default
 		bool                mAlwaysHide;      // the window should never be displayed
 		bool                mErrorWindow;     // the window is simply an error message
+		bool                mInitialised;     // initView() has been called to create the window's widgets
 		bool                mNoPostAction;    // don't execute any post-alarm action
 		bool                mRecreating;      // window is about to be deleted and immediately recreated
 		bool                mBeep;
