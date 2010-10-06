@@ -25,7 +25,7 @@ set_target_properties(kalarm_resources PROPERTIES
    VERSION ${GENERIC_LIB_VERSION} 
    SOVERSION ${GENERIC_LIB_SOVERSION} 
 )
-install(TARGETS kalarm_resources ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kalarm_resources ${INSTALL_TARGETS_DEFAULT_ARGS} LIBRARY NAMELINK_SKIP)
 
 install(FILES kalarm_manager.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kresources)
 
