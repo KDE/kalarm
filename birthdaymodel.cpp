@@ -29,7 +29,6 @@
 #include <akonadi/itemfetchscope.h>
 #include <akonadi/session.h>
 #include <kabc/addressee.h>
-#include <kcal/event.h>
 
 #include <kglobal.h>
 #include <klocale.h>

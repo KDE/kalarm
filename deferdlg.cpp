@@ -19,16 +19,7 @@
  */
 
 #include "kalarm.h"
-
-#include <QVBoxLayout>
-
-#include <kglobal.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-
-#include <kcal/event.h>
-#include <kcal/recurrence.h>
+#include "deferdlg.moc"
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
@@ -36,7 +27,13 @@
 #include "functions.h"
 #include "kaevent.h"
 #include "kalarmapp.h"
-#include "deferdlg.moc"
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+
+#include <QVBoxLayout>
 
 
 DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent)
