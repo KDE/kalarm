@@ -394,8 +394,10 @@ class KALARM_CAL_EXPORT KAEvent
 
         const QString&     cleanText() const              { return d->mText; }
         QString            message() const                { return (d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_EMAIL) ? d->mText : QString(); }
+        QString            displayMessage() const         { return (d->mActionType == KAAlarmEventBase::T_MESSAGE) ? d->mText : QString(); }
         QString            fileName() const               { return (d->mActionType == KAAlarmEventBase::T_FILE) ? d->mText : QString(); }
         QString            command() const                { return (d->mActionType == KAAlarmEventBase::T_COMMAND) ? d->mText : QString(); }
+        QString            emailMessage() const           { return (d->mActionType == KAAlarmEventBase::T_EMAIL) ? d->mText : QString(); }
         uint               emailFromId() const            { return d->mEmailFromIdentity; }
         const EmailAddressList& emailAddresses() const    { return d->mEmailAddresses; }
         QString            emailAddresses(const QString& sep) const  { return d->mEmailAddresses.join(sep); }
@@ -403,7 +405,7 @@ class KALARM_CAL_EXPORT KAEvent
         QString            emailPureAddresses(const QString& sep) const  { return d->mEmailAddresses.pureAddresses(sep); }
         const QString&     emailSubject() const           { return d->mEmailSubject; }
         const QStringList& emailAttachments() const       { return d->mEmailAttachments; }
-            QString            emailAttachments(const QString& sep) const  { return d->mEmailAttachments.join(sep); }
+        QString            emailAttachments(const QString& sep) const  { return d->mEmailAttachments.join(sep); }
         bool               emailBcc() const               { return d->mEmailBcc; }
         const QColor&      bgColour() const               { return d->mBgColour; }
         const QColor&      fgColour() const               { return d->mFgColour; }
