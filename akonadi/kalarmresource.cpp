@@ -113,6 +113,9 @@ bool KAlarmResource::readFromFile(const QString& fileName)
 */
 bool KAlarmResource::writeToFile(const QString& fileName)
 {
+#ifdef __GNUC__
+#warning Crashes if not a local file
+#endif
     if (calendar()->incidences().isEmpty())
     {
         // It's an empty file. Set up the KAlarm custom property.
@@ -229,6 +232,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         {
             KCalCore::Event::Ptr ev(incidence.staticCast<KCalCore::Event>());
             event.updateKCalEvent(ev, KAEvent::UID_SET);
+kDebug()<<"KAEvent enabled="<<event.enabled();
             calendar()->setModified(true);
         }
     }

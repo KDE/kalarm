@@ -442,6 +442,7 @@ class KALARM_CAL_EXPORT KAEvent
         Akonadi::Item::Id  itemId() const                 { return d->mItemId; }
         bool               isReadOnly() const             { return d->mReadOnly; }
 #endif
+        int                revision() const               { return d->mRevision; }
         bool               isValid() const                { return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin); }
         int                alarmCount() const             { return d->mAlarmCount; }
         KDateTime          createdDateTime() const        { return d->mSaveDateTime; }
@@ -707,7 +708,7 @@ class KALARM_CAL_EXPORT KAEvent
                 QString            mPostAction;        // command to execute after alarm window is closed
                 DateTime           mStartDateTime;     // DTSTART and DTEND: start and end time for event
                 KDateTime          mSaveDateTime;      // CREATED: date event was created, or saved in archive calendar
-                KDateTime          mAtLoginDateTime;   // repeat-at-login time
+                KDateTime          mAtLoginDateTime;   // repeat-at-login end time
                 DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
                 DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
                 int                mDisplayingFlags;   // type of alarm which is currently being displayed

@@ -80,10 +80,11 @@ install(TARGETS akonadi_kalarm_resource ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(akonadi_serializer_kalarm_SRCS
     akonadi_serializer_kalarm.cpp
+    kaeventformatter.cpp
 )
 
 kde4_add_plugin(akonadi_serializer_kalarm ${akonadi_serializer_kalarm_SRCS})
-target_link_libraries(akonadi_serializer_kalarm kalarm_calendar ${KDEPIMLIBS_KCALCORE_LIBS} ${KDEPIMLIBS_AKONADI_LIBS} ${KDE4_KDECORE_LIBS})
+target_link_libraries(akonadi_serializer_kalarm kalarm_calendar ${KDEPIMLIBS_KCALCORE_LIBS} ${KDEPIMLIBS_KCALUTILS_LIBS} ${KDEPIMLIBS_AKONADI_LIBS} ${KDE4_KDECORE_LIBS})
 install(TARGETS akonadi_serializer_kalarm DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES akonadi_serializer_kalarm.desktop DESTINATION ${DATA_INSTALL_DIR}/akonadi/plugins/serializer)

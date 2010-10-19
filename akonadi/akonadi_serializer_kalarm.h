@@ -22,24 +22,37 @@
 #ifndef AKONADI_SERIALIZER_KALARM_H
 #define AKONADI_SERIALIZER_KALARM_H
 
-#include <QtCore/QObject>
+#include "kaeventformatter.h"
 
 #include <akonadi/itemserializerplugin.h>
+#include <akonadi/differencesalgorithminterface.h>
 #include <kcalcore/icalformat.h>
+
+#include <QtCore/QObject>
+
+namespace Akonadi { class AbstractDifferencesReporter; }
 
 class KAEvent;
 
-class SerializerPluginKAlarm : public QObject, public Akonadi::ItemSerializerPlugin
+class SerializerPluginKAlarm : public QObject,
+                               public Akonadi::ItemSerializerPlugin,
+                               public Akonadi::DifferencesAlgorithmInterface
 {
         Q_OBJECT
         Q_INTERFACES(Akonadi::ItemSerializerPlugin)
+        Q_INTERFACES(Akonadi::DifferencesAlgorithmInterface)
 
     public:
         bool deserialize(Akonadi::Item& item, const QByteArray& label, QIODevice& data, int version);
         void serialize(const Akonadi::Item& item, const QByteArray& label, QIODevice& data, int& version);
+        void compare(Akonadi::AbstractDifferencesReporter*, const Akonadi::Item& left, const Akonadi::Item& right);
 
     private:
+        void reportDifference(Akonadi::AbstractDifferencesReporter*, KAEventFormatter::Parameter);
+
         KCalCore::ICalFormat mFormat;
+        KAEventFormatter mValueL;
+        KAEventFormatter mValueR;
 };
 
 #endif // AKONADI_SERIALIZER_KALARM_H

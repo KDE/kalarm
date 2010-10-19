@@ -22,14 +22,19 @@
 #include "akonadi_serializer_kalarm.h"
 #include "kacalendar.h"
 #include "kaevent.h"
+#include "kaeventformatter.h"
 
 #include <akonadi/item.h>
+#include <akonadi/abstractdifferencesreporter.h>
+
+#include <klocale.h>
 #include <kdebug.h>
 
 #include <QtCore/qplugin.h>
 
 
 using namespace Akonadi;
+
 
 bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QIODevice& data, int version)
 {
@@ -83,6 +88,127 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     data.write(head);
     data.write(mFormat.toString(kcalEvent.staticCast<KCalCore::Incidence>()).toUtf8());
     data.write("\nEND:VCALENDAR");
+}
+
+void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, const Item& left, const Item& right)
+{
+    Q_ASSERT(reporter);
+    Q_ASSERT(left.hasPayload<KAEvent>());
+    Q_ASSERT(right.hasPayload<KAEvent>());
+
+    KAEvent eventL = left.payload<KAEvent>();
+    KAEvent eventR = right.payload<KAEvent>();
+    // Note that event attributes are not included, since they are not part of the payload
+    mValueL = KAEventFormatter(eventL, false);
+    mValueR = KAEventFormatter(eventR, false);
+
+    reporter->setLeftPropertyValueTitle(i18nc("@title:column", "Changed Alarm"));
+    reporter->setRightPropertyValueTitle(i18nc("@title:column", "Conflicting Alarm"));
+
+    if (eventL.id() != eventR.id())
+        reportDifference(reporter, KAEventFormatter::Id);
+    if (eventL.revision() != eventR.revision())
+        reportDifference(reporter, KAEventFormatter::Revision);
+    if (eventL.action() != eventR.action())
+        reportDifference(reporter, KAEventFormatter::AlarmType);
+    if (eventL.category() != eventR.category())
+        reportDifference(reporter, KAEventFormatter::AlarmCategory);
+    if (eventL.templateName() != eventR.templateName())
+        reportDifference(reporter, KAEventFormatter::TemplateName);
+    if (eventL.createdDateTime() != eventR.createdDateTime())
+        reportDifference(reporter, KAEventFormatter::CreatedTime);
+    if (eventL.startDateTime() != eventR.startDateTime())
+        reportDifference(reporter, KAEventFormatter::StartTime);
+    if (eventL.templateAfterTime() != eventR.templateAfterTime())
+        reportDifference(reporter, KAEventFormatter::TemplateAfterTime);
+    if (*eventL.recurrence() != *eventR.recurrence())
+        reportDifference(reporter, KAEventFormatter::Recurrence);
+    if (eventL.mainDateTime(true) != eventR.mainDateTime(true))
+        reportDifference(reporter, KAEventFormatter::NextRecurrence);
+    if (eventL.repetition().interval() != eventR.repetition().interval())
+        reportDifference(reporter, KAEventFormatter::RepeatInterval);
+    if (eventL.repetition().count() != eventR.repetition().count())
+        reportDifference(reporter, KAEventFormatter::RepeatCount);
+    if (eventL.holidaysExcluded() != eventR.holidaysExcluded())
+        reportDifference(reporter, KAEventFormatter::HolidaysExcluded);
+    if (eventL.workTimeOnly() != eventR.workTimeOnly())
+        reportDifference(reporter, KAEventFormatter::WorkTimeOnly);
+    if (eventL.reminder() != eventR.reminder())
+        reportDifference(reporter, KAEventFormatter::Reminder);
+    if (eventL.deferDateTime() != eventR.deferDateTime())
+        reportDifference(reporter, KAEventFormatter::DeferralTime);
+    if (eventL.deferDefaultMinutes() != eventR.deferDefaultMinutes())
+        reportDifference(reporter, KAEventFormatter::DeferDefault);
+    if (eventL.deferDefaultDateOnly() != eventR.deferDefaultDateOnly())
+        reportDifference(reporter, KAEventFormatter::DeferDefaultDate);
+    if (eventL.lateCancel() != eventR.lateCancel())
+        reportDifference(reporter, KAEventFormatter::LateCancel);
+    if (eventL.autoClose() != eventR.autoClose())
+        reportDifference(reporter, KAEventFormatter::AutoClose);
+    if (eventL.copyToKOrganizer() != eventR.copyToKOrganizer())
+        reportDifference(reporter, KAEventFormatter::CopyKOrganizer);
+    if (eventL.enabled() != eventR.enabled())
+        reportDifference(reporter, KAEventFormatter::Enabled);
+    if (eventL.toBeArchived() != eventR.toBeArchived())
+        reportDifference(reporter, KAEventFormatter::Archive);
+    if (eventL.message() != eventR.message())
+        reportDifference(reporter, KAEventFormatter::MessageText);
+    if (eventL.fileName() != eventR.fileName())
+        reportDifference(reporter, KAEventFormatter::MessageFile);
+    if (eventL.fgColour() != eventR.fgColour())
+        reportDifference(reporter, KAEventFormatter::FgColour);
+    if (eventL.bgColour() != eventR.bgColour())
+        reportDifference(reporter, KAEventFormatter::BgColour);
+    if (eventL.font() != eventR.font())
+        reportDifference(reporter, KAEventFormatter::Font);
+    if (eventL.preAction() != eventR.preAction())
+        reportDifference(reporter, KAEventFormatter::PreAction);
+    if (eventL.cancelOnPreActionError() != eventR.cancelOnPreActionError())
+        reportDifference(reporter, KAEventFormatter::PreActionCancel);
+    if (eventL.dontShowPreActionError() != eventR.dontShowPreActionError())
+        reportDifference(reporter, KAEventFormatter::PreActionNoError);
+    if (eventL.postAction() != eventR.postAction())
+        reportDifference(reporter, KAEventFormatter::PostAction);
+    if (eventL.confirmAck() != eventR.confirmAck())
+        reportDifference(reporter, KAEventFormatter::ConfirmAck);
+    if (eventL.kmailSerialNumber() != eventR.kmailSerialNumber())
+        reportDifference(reporter, KAEventFormatter::KMailSerial);
+    if (eventL.beep() != eventR.beep()
+    ||  eventL.speak() != eventR.speak()
+    ||  eventL.audioFile() != eventR.audioFile())
+        reportDifference(reporter, KAEventFormatter::Sound);
+    if (eventL.repeatSound() != eventR.repeatSound())
+        reportDifference(reporter, KAEventFormatter::SoundRepeat);
+    if (eventL.soundVolume() != eventR.soundVolume())
+        reportDifference(reporter, KAEventFormatter::SoundVolume);
+    if (eventL.fadeVolume() != eventR.fadeVolume())
+        reportDifference(reporter, KAEventFormatter::SoundFadeVolume);
+    if (eventL.fadeSeconds() != eventR.fadeSeconds())
+        reportDifference(reporter, KAEventFormatter::SoundFadeTime);
+    if (eventL.command() != eventR.command())
+        reportDifference(reporter, KAEventFormatter::Command);
+    if (eventL.logFile() != eventR.logFile())
+        reportDifference(reporter, KAEventFormatter::LogFile);
+    if (eventL.commandXterm() != eventR.commandXterm())
+        reportDifference(reporter, KAEventFormatter::CommandXTerm);
+    if (eventL.emailSubject() != eventR.emailSubject())
+        reportDifference(reporter, KAEventFormatter::EmailSubject);
+    if (eventL.emailFromId() != eventR.emailFromId())
+        reportDifference(reporter, KAEventFormatter::EmailFromId);
+    if (eventL.emailAddresses() != eventR.emailAddresses())
+        reportDifference(reporter, KAEventFormatter::EmailTo);
+    if (eventL.emailBcc() != eventR.emailBcc())
+        reportDifference(reporter, KAEventFormatter::EmailBcc);
+    if (eventL.emailMessage() != eventR.emailMessage())
+        reportDifference(reporter, KAEventFormatter::EmailBody);
+    if (eventL.emailAttachments() != eventR.emailAttachments())
+        reportDifference(reporter, KAEventFormatter::EmailAttachments);
+}
+
+void SerializerPluginKAlarm::reportDifference(AbstractDifferencesReporter* reporter, KAEventFormatter::Parameter id)
+{
+    if (mValueL.isApplicable(id)  ||  mValueR.isApplicable(id))
+        reporter->addProperty(AbstractDifferencesReporter::ConflictMode, KAEventFormatter::label(id), mValueL.value(id), mValueR.value(id));
 }
 
 Q_EXPORT_PLUGIN2(akonadi_serializer_kalarm, SerializerPluginKAlarm)
