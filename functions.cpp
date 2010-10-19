@@ -678,7 +678,10 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
 				}
 			}
 			if (archive  &&  event->toBeArchived())
-				addArchivedEvent(*event);     // this changes the event ID to an archived ID
+			{
+				KAEvent ev(*event);
+				addArchivedEvent(ev);     // this changes the event ID to an archived ID
+			}
 		}
 #ifdef USE_AKONADI
 		if (!cal->deleteEvent(*event, false))   // don't save calendar after deleting
@@ -953,19 +956,24 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
 
 			// Update the event in the calendar file
 			KAEvent* newev = cal->updateEvent(event);
-			cal->disabledChanged(newev);
-
-			// If we're disabling a display alarm, close any message window
-			if (!enable  &&  event->displayAction())
+			if (!newev)
+				kError() << "Error updating event in calendar:" << event->id();
+			else
 			{
-				MessageWin* win = MessageWin::findEvent(event->id());
-				delete win;
-			}
+				cal->disabledChanged(newev);
+
+				// If we're disabling a display alarm, close any message window
+				if (!enable  &&  event->displayAction())
+				{
+					MessageWin* win = MessageWin::findEvent(event->id());
+					delete win;
+				}
 
 #ifndef USE_AKONADI
-			// Update the window lists
-			EventListModel::alarms()->updateEvent(newev);
+				// Update the window lists
+				EventListModel::alarms()->updateEvent(newev);
 #endif
+			}
 		}
 	}
 
