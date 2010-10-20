@@ -4541,6 +4541,20 @@ bool KAEvent::convertRepetition(Event* event)
 }
 
 #ifdef USE_AKONADI
+/******************************************************************************
+* Return a KCal::Event's archive custom property value.
+* Note that a custom property value cannot be empty, so when there are no
+* flags in the archive value, it is set to "0" to make it valid.
+* Reply = true if the value exists and has significant content,
+*       = false if it doesn't exist, or it is "0".
+*/
+bool KAEvent::archivePropertyValue(const KCalCore::ConstEventPtr& event, QString& value)
+{
+    value = event->customProperty(KAlarm::Calendar::APPNAME, ARCHIVE_PROPERTY);
+    // A value of "0" is just a flag to make the value non-null
+    return !value.isEmpty() && value != QLatin1String("0");
+}
+
 KAEvent::List KAEvent::ptrList(QList<KAEvent>& objList)
 {
     KAEvent::List ptrs;

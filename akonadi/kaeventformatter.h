@@ -41,15 +41,13 @@ class KAEventFormatter
             CreatedTime,
             StartTime,
             TemplateAfterTime,
-            Recurs,
+            Recurs,             // does the event recur?
             Recurrence,
             NextRecurrence,     // next alarm time excluding repetitions, including reminder/deferral
+            SubRepetition,      // is there a sub-repetition?
             RepeatInterval,
             RepeatCount,
-            Reminder,
-            DeferralTime,
-            DeferDefault,
-            DeferDefaultDate,
+            NextRepetition,     // next repetition count
             LateCancel,
             AutoClose,
             WorkTimeOnly,
@@ -58,7 +56,7 @@ class KAEventFormatter
             Enabled,
             Archive,
 #ifdef __GNUC__
-#warning ReadOnly, custom properties, other archive properties (repeatAtLogin etc)
+#warning ReadOnly, custom properties
 #endif
             Revision,
         
@@ -78,6 +76,12 @@ class KAEventFormatter
             SoundVolume,
             SoundFadeVolume,
             SoundFadeTime,
+            Reminder,
+            ReminderOnce,
+            DeferralType,
+            DeferralTime,
+            DeferDefault,
+            DeferDefaultDate,
         
             Command,
             LogFile,

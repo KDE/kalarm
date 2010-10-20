@@ -19,6 +19,7 @@
  */
 
 #include "kaeventformatter.h"
+#include "kacalendar.h"
 #include "kaevent.h"
 #include "datetime.h"
 
@@ -32,6 +33,7 @@
 static QString trueFalse(bool value);
 static QString number(unsigned long n);
 static QString minutes(int n);
+static QString minutesHoursDays(int minutes);
 static QString dateTime(const KDateTime&);
 
 KAEventFormatter::KAEventFormatter(const KAEvent& e, bool falseForUnspecified)
@@ -45,51 +47,55 @@ QString KAEventFormatter::label(Parameter param)
 {
     switch (param)
     {
-        case Id:                return i18nc("@label", "ID");
+        case Id:                return i18nc("@label Unique identifier", "UID");
         case AlarmType:         return i18nc("@label", "Alarm type");
         case AlarmCategory:     return i18nc("@label", "Alarm status");
         case TemplateName:      return i18nc("@label", "Template name");
         case CreatedTime:       return i18nc("@label", "Creation time");
         case StartTime:         return i18nc("@label", "Start time");
-        case TemplateAfterTime: return i18nc("@label", "Template after time");
+        case TemplateAfterTime: return i18nc("@label Start delay configured in an alarm template", "Template after time");
         case Recurs:            return i18nc("@label", "Recurs");
         case Recurrence:        return i18nc("@label", "Recurrence");
-        case RepeatInterval:    return i18nc("@label", "Sub repetition interval");
-        case RepeatCount:       return i18nc("@label", "Sub repetition count");
+        case SubRepetition:     return i18nc("@label", "Sub-repetition");
+        case RepeatInterval:    return i18nc("@label", "Sub-repetition interval");
+        case RepeatCount:       return i18nc("@label", "Sub-repetition count");
+        case NextRepetition:    return i18nc("@label", "Next sub-repetition");
         case WorkTimeOnly:      return i18nc("@label", "Work time only");
         case HolidaysExcluded:  return i18nc("@label", "Holidays excluded");
         case NextRecurrence:    return i18nc("@label", "Next recurrence");
-        case Reminder:          return i18nc("@label", "Reminder");
-        case DeferralTime:      return i18nc("@label", "Deferral");
-        case DeferDefault:      return i18nc("@label", "Deferral default");
-        case DeferDefaultDate:  return i18nc("@label", "Deferral default date only");
         case LateCancel:        return i18nc("@label", "Late cancel");
-        case AutoClose:         return i18nc("@label", "Auto close");
+        case AutoClose:         return i18nc("@label Automatically close window", "Auto close");
         case CopyKOrganizer:    return i18nc("@label", "Copy to KOrganizer");
         case Enabled:           return i18nc("@label", "Enabled");
-        case Archive:           return i18nc("@label", "Archive");
+        case Archive:           return i18nc("@label Whether alarm should be archived", "Archive");
         case Revision:          return i18nc("@label", "Revision");
 
         case MessageText:       return i18nc("@label", "Message text");
-        case MessageFile:       return i18nc("@label", "Message file");
+        case MessageFile:       return i18nc("@label File to provide text for message", "Message file");
         case FgColour:          return i18nc("@label", "Foreground color");
         case BgColour:          return i18nc("@label", "Background color");
         case Font:              return i18nc("@label", "Font");
-        case PreAction:         return i18nc("@label", "Pre-alarm action");
+        case PreAction:         return i18nc("@label Shell command to execute before alarm", "Pre-alarm action");
         case PreActionCancel:   return i18nc("@label", "Pre-alarm action cancel");
         case PreActionNoError:  return i18nc("@label", "Pre-alarm action no error");
-        case PostAction:        return i18nc("@label", "Post-alarm action");
+        case PostAction:        return i18nc("@label Shell command to execute after alarm", "Post-alarm action");
         case ConfirmAck:        return i18nc("@label", "Confirm acknowledgement");
         case KMailSerial:       return i18nc("@label", "KMail serial number");
         case Sound:             return i18nc("@label Audio method", "Sound");
-        case SoundRepeat:       return i18nc("@label", "Sound repeat");
+        case SoundRepeat:       return i18nc("@label Whether audio should repeat", "Sound repeat");
         case SoundVolume:       return i18nc("@label", "Sound volume");
         case SoundFadeVolume:   return i18nc("@label", "Sound fade volume");
         case SoundFadeTime:     return i18nc("@label", "Sound fade time");
+        case Reminder:          return i18nc("@label Whether the alarm has a reminder", "Reminder");
+        case ReminderOnce:      return i18nc("@label Whether reminder is on first recurrence only", "Reminder once only");
+        case DeferralType:      return i18nc("@label Deferral type", "Deferral");
+        case DeferralTime:      return i18nc("@label", "Deferral time");
+        case DeferDefault:      return i18nc("@label Default deferral delay", "Deferral default");
+        case DeferDefaultDate:  return i18nc("@label Whether deferral time is date-only by default", "Deferral default date only");
 
         case Command:           return i18nc("@label A shell command", "Command");
         case LogFile:           return i18nc("@label", "Log file");
-        case CommandXTerm:      return i18nc("@label", "Command X-terminal");
+        case CommandXTerm:      return i18nc("@label Execute in terminal window", "Execute in terminal");
 
         case EmailSubject:      return i18nc("@label", "Email subject");
         case EmailFromId:       return i18nc("@label Email address", "Email sender ID");
@@ -111,7 +117,6 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case CreatedTime:
         case StartTime:
         case Recurs:
-        case Reminder:
         case LateCancel:
         case Enabled:
         case Archive:
@@ -123,11 +128,13 @@ bool KAEventFormatter::isApplicable(Parameter param) const
             return mEvent.isTemplate();
         case Recurrence:
         case RepeatCount:
+        case SubRepetition:
         case WorkTimeOnly:
         case HolidaysExcluded:
         case NextRecurrence:
             return mEvent.recurs();
         case RepeatInterval:
+        case NextRepetition:
             return mEvent.repetition();
         case AutoClose:
             return mEvent.lateCancel();
@@ -137,9 +144,6 @@ bool KAEventFormatter::isApplicable(Parameter param) const
             return mEvent.action() == KAEvent::MESSAGE;
         case MessageFile:
             return mEvent.action() == KAEvent::FILE;
-        case DeferralTime:
-        case DeferDefault:
-        case DeferDefaultDate:
         case FgColour:
         case BgColour:
         case Font:
@@ -147,7 +151,16 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case PostAction:
         case ConfirmAck:
         case KMailSerial:
+        case Reminder:
+        case DeferralType:
+        case DeferDefault:
             return mEvent.displayAction();
+        case ReminderOnce:
+            return mEvent.reminder() && mEvent.recurs();
+        case DeferralTime:
+            return mEvent.deferred();
+        case DeferDefaultDate:
+            return mEvent.deferDefaultMinutes() > 0;
         case PreActionCancel:
         case PreActionNoError:
             return !mEvent.preAction().isEmpty();
@@ -185,10 +198,10 @@ QString KAEventFormatter::value(Parameter param) const
         case AlarmType:
             switch (mEvent.action())
             {
-                case KAEvent::MESSAGE:  return i18nc("@info/plain Alarm type", "Text display");
-                case KAEvent::FILE:     return i18nc("@info/plain Alarm type", "File display");
+                case KAEvent::MESSAGE:  return i18nc("@info/plain Alarm type", "Display (text)");
+                case KAEvent::FILE:     return i18nc("@info/plain Alarm type", "Display (file)");
                 case KAEvent::COMMAND:  return mEvent.commandDisplay()
-                                             ? i18nc("@info/plain Alarm type", "Command display")
+                                             ? i18nc("@info/plain Alarm type", "Display (command)")
                                              : i18nc("@info/plain Alarm type", "Command");
                 case KAEvent::EMAIL:    return i18nc("@info/plain Alarm type", "Email");
                 case KAEvent::AUDIO:    return i18nc("@info/plain Alarm type", "Audio");
@@ -207,35 +220,42 @@ QString KAEventFormatter::value(Parameter param) const
         case TemplateName:      return mEvent.templateName();
         case CreatedTime:       return mEvent.createdDateTime().toUtc().toString("%Y-%m-%d %H:%M:%SZ");
         case StartTime:         return dateTime(mEvent.startDateTime().kDateTime());
-        case TemplateAfterTime: return (mEvent.templateAfterTime() >= 0) ? number(mEvent.templateAfterTime()) : mUnspecifiedValue;
+        case TemplateAfterTime: return (mEvent.templateAfterTime() >= 0) ? number(mEvent.templateAfterTime()) : trueFalse(false);
         case Recurs:            return trueFalse(mEvent.recurs());
         case Recurrence:
         {
             if (mEvent.repeatAtLogin())
                 return i18nc("@info/plain Repeat at login", "At login until %1", dateTime(mEvent.mainDateTime().kDateTime()));
-            KCalCore::Event event;
-            KCalCore::Event::Ptr eptr(&event);
+            KCalCore::Event::Ptr eptr(new KCalCore::Event);
             mEvent.updateKCalEvent(eptr, KAEvent::UID_SET);
             return KCalUtils::IncidenceFormatter::recurrenceString(eptr);
         }
         case NextRecurrence:    return dateTime(mEvent.mainDateTime().kDateTime());
+        case SubRepetition:     return trueFalse(mEvent.repetition());
         case RepeatInterval:    return mEvent.repetitionText(true);
-        case RepeatCount:       return number(mEvent.repetition().count());
+        case RepeatCount:       return mEvent.repetition() ? number(mEvent.repetition().count()) : QString();
+        case NextRepetition:    return mEvent.repetition() ? number(mEvent.nextRepetition()) : QString();
         case WorkTimeOnly:      return trueFalse(mEvent.workTimeOnly());
         case HolidaysExcluded:  return trueFalse(mEvent.holidaysExcluded());
-        case Reminder:          return mEvent.reminder() ? minutes(mEvent.reminder()) : mUnspecifiedValue;
-        case DeferralTime:      return dateTime(mEvent.deferDateTime().kDateTime());
-        case DeferDefault:      return minutes(mEvent.deferDefaultMinutes());
-        case DeferDefaultDate:  return trueFalse(mEvent.deferDefaultDateOnly());
-        case LateCancel:        return mEvent.lateCancel() ? minutes(mEvent.lateCancel()) : mUnspecifiedValue;
+        case LateCancel:        return mEvent.lateCancel() ? minutesHoursDays(mEvent.lateCancel()) : trueFalse(false);
         case AutoClose:         return trueFalse(mEvent.lateCancel() ? mEvent.autoClose() : false);
         case CopyKOrganizer:    return trueFalse(mEvent.copyToKOrganizer());
         case Enabled:           return trueFalse(mEvent.enabled());
-        case Archive:           return trueFalse(mEvent.toBeArchived());
+        case Archive:
+        {
+            if (!mEvent.toBeArchived())
+                return trueFalse(false);
+            KCalCore::Event::Ptr eptr(new KCalCore::Event);
+            mEvent.updateKCalEvent(eptr, KAEvent::UID_SET);
+            QString prop;
+            if (!KAEvent::archivePropertyValue(eptr, prop))
+                return trueFalse(true);
+            return prop;
+        }
         case Revision:          return number(mEvent.revision());
 
-        case MessageText:       return mEvent.cleanText();
-        case MessageFile:       return mEvent.cleanText();
+        case MessageText:       return (mEvent.action() == KAEvent::MESSAGE) ? mEvent.cleanText() : QString();
+        case MessageFile:       return (mEvent.action() == KAEvent::FILE) ? mEvent.cleanText() : QString();
         case FgColour:          return mEvent.fgColour().name();
         case BgColour:          return mEvent.bgColour().name();
         case Font:              return mEvent.useDefaultFont() ? i18nc("@info/plain Using default font", "Default") : mEvent.font().toString();
@@ -243,11 +263,17 @@ QString KAEventFormatter::value(Parameter param) const
         case PreActionNoError:  return trueFalse(mEvent.dontShowPreActionError());
         case PreAction:         return mEvent.preAction();
         case PostAction:        return mEvent.postAction();
+        case Reminder:          return mEvent.reminder() ? minutesHoursDays(mEvent.reminder()) : trueFalse(false);
+        case ReminderOnce:      return trueFalse(mEvent.reminderOnceOnly());
+        case DeferralType:      return mEvent.reminderDeferral() ? i18nc("@info/plain", "Reminder") : trueFalse(mEvent.deferred());
+        case DeferralTime:      return mEvent.deferred() ? dateTime(mEvent.deferDateTime().kDateTime()) : trueFalse(false);
+        case DeferDefault:      return (mEvent.deferDefaultMinutes() > 0) ? minutes(mEvent.deferDefaultMinutes()) : trueFalse(false);
+        case DeferDefaultDate:  return trueFalse(mEvent.deferDefaultDateOnly());
         case ConfirmAck:        return trueFalse(mEvent.confirmAck());
-        case KMailSerial:       return number(mEvent.kmailSerialNumber());
+        case KMailSerial:       return mEvent.kmailSerialNumber() ? number(mEvent.kmailSerialNumber()) : trueFalse(false);
         case Sound:             return !mEvent.audioFile().isEmpty() ? mEvent.audioFile()
                                      : mEvent.speak() ? i18nc("@info/plain", "Speak")
-                                     : mEvent.beep() ? i18nc("@info/plain", "Beep") : mUnspecifiedValue;
+                                     : mEvent.beep() ? i18nc("@info/plain", "Beep") : trueFalse(false);
         case SoundRepeat:       return trueFalse(mEvent.repeatSound());
         case SoundVolume:       return mEvent.soundVolume() >= 0
                                      ? i18nc("@info/plain Percentage", "%1%%", static_cast<int>(mEvent.soundVolume() * 100))
@@ -256,15 +282,15 @@ QString KAEventFormatter::value(Parameter param) const
                                      ? i18nc("@info/plain Percentage", "%1%%", static_cast<int>(mEvent.fadeVolume() * 100))
                                      : mUnspecifiedValue;
         case SoundFadeTime:     return mEvent.fadeSeconds()
-                                     ? i18nc("@info/plain", "%s seconds", mEvent.fadeSeconds())
+                                     ? i18nc("@info/plain", "%s Seconds", mEvent.fadeSeconds())
                                      : mUnspecifiedValue;
 
-        case Command:           return mEvent.cleanText();
+        case Command:           return (mEvent.action() == KAEvent::COMMAND) ? mEvent.cleanText() : QString();
         case LogFile:           return mEvent.logFile();
         case CommandXTerm:      return trueFalse(mEvent.commandXterm());
 
         case EmailSubject:      return mEvent.emailSubject();
-        case EmailFromId:       return number(mEvent.emailFromId());
+        case EmailFromId:       return (mEvent.action() == KAEvent::EMAIL) ? number(mEvent.emailFromId()) : QString();
         case EmailTo:           return mEvent.emailAddresses(", ");
         case EmailBcc:          return trueFalse(mEvent.emailBcc());
         case EmailBody:         return mEvent.emailMessage();
@@ -275,8 +301,8 @@ QString KAEventFormatter::value(Parameter param) const
 
 QString trueFalse(bool value)
 {
-    return value ? i18nc("@info/plain General purpose status indication: true or false", "true")
-                 : i18nc("@info/plain General purpose status indication: true or false", "false");
+    return value ? i18nc("@info/plain General purpose status indication: yes or no", "Yes")
+                 : i18nc("@info/plain General purpose status indication: yes or no", "No");
 }
 
 // Convert an integer to digits for the locale.
@@ -289,7 +315,7 @@ QString number(unsigned long n)
 
 QString minutes(int n)
 {
-    return i18ncp("@info/plain", "1 minute", "%1 minutes", n);
+    return i18ncp("@info/plain", "1 Minute", "%1 Minutes", n);
 }
 
 QString dateTime(const KDateTime& dt)
@@ -298,6 +324,16 @@ QString dateTime(const KDateTime& dt)
         return dt.toString("%Y-%m-%d %:Z");
     else
         return dt.toString("%Y-%m-%d %H:%M %:Z");
+}
+
+QString minutesHoursDays(int minutes)
+{
+    if (minutes % 60)
+        return i18ncp("@info/plain", "1 Minute", "%1 Minutes", minutes);
+    else if (minutes % 1440)
+        return i18ncp("@info/plain", "1 Hour", "%1 Hours", minutes/60);
+    else
+        return i18ncp("@info/plain", "1 Day", "%1 Days", minutes/1440);
 }
 
 // vim: et sw=4:

@@ -417,6 +417,7 @@ class KALARM_CAL_EXPORT KAEvent
         bool               confirmAck() const             { return d->mConfirmAck; }
         bool               repeatAtLogin() const          { return d->repeatAtLogin(); }
         const Repetition&  repetition() const             { return d->mRepetition; }
+        int                nextRepetition() const         { return d->mNextRepeat; }
         bool               beep() const                   { return d->mBeep; }
         bool               isTemplate() const             { return !d->mTemplateName.isEmpty(); }
         const QString&     templateName() const           { return d->mTemplateName; }
@@ -548,6 +549,7 @@ class KALARM_CAL_EXPORT KAEvent
         static bool        convertKCalEvents(const KCalCore::Calendar::Ptr&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCalCore::MemoryCalendar&);
         static List        ptrList(QList<KAEvent>&);
+        static bool        archivePropertyValue(const KCalCore::ConstEventPtr&, QString& value);
 #else
         static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCal::CalendarLocal&);
