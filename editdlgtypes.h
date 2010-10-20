@@ -54,7 +54,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 	public:
 //		enum MessageType { TEXT, FILE, COMMAND };
 
-		EditDisplayAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
+		explicit EditDisplayAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT, bool readOnly = false);
 
@@ -145,7 +145,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 {
 		Q_OBJECT
 	public:
-		EditCommandAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
+		explicit EditCommandAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                    GetResourceType = RES_PROMPT, bool readOnly = false);
 
@@ -197,7 +197,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 {
 		Q_OBJECT
 	public:
-		EditEmailAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
+		explicit EditEmailAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		                  GetResourceType = RES_PROMPT, bool readOnly = false);
 
@@ -261,7 +261,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
 {
 		Q_OBJECT
 	public:
-		EditAudioAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
+		explicit EditAudioAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
 		EditAudioAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
 		             GetResourceType = RES_PROMPT, bool readOnly = false);
 

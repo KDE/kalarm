@@ -526,10 +526,10 @@ void CommandOptions::setErrorParameter(const char* opt)
 void CommandOptions::setErrorIncompatible(const QByteArray& opt1, const QByteArray& opt2)
 {
 	QByteArray o1 = opt1;
-	if (!opt1.startsWith("--")  &&  opt1 != "message")
+	if (!opt1.startsWith("--")  &&  opt1 != "message")    //krazy:exclude=strings (it's a QByteArray)
 		o1.prepend("--");
 	QByteArray o2 = opt2;
-	if (!opt2.startsWith("--")  &&  opt2 != "message")
+	if (!opt2.startsWith("--")  &&  opt2 != "message")    //krazy:exclude=strings (it's a QByteArray)
 		o2.prepend("--");
 	setError(i18nc("@info:shell", "<icode>%1</icode> incompatible with <icode>%2</icode>", QString::fromLatin1(o1), QString::fromLatin1(o2)));
 }
