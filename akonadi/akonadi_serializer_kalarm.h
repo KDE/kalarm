@@ -53,6 +53,7 @@ class SerializerPluginKAlarm : public QObject,
         KCalCore::ICalFormat mFormat;
         KAEventFormatter mValueL;
         KAEventFormatter mValueR;
+        bool             mDifferent;
 };
 
 #endif // AKONADI_SERIALIZER_KALARM_H

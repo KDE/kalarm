@@ -101,6 +101,7 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
     // Note that event attributes are not included, since they are not part of the payload
     mValueL = KAEventFormatter(eventL, false);
     mValueR = KAEventFormatter(eventR, false);
+    mDifferent = false;
 
     reporter->setLeftPropertyValueTitle(i18nc("@title:column", "Changed Alarm"));
     reporter->setRightPropertyValueTitle(i18nc("@title:column", "Conflicting Alarm"));
@@ -125,22 +126,18 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
         reportDifference(reporter, KAEventFormatter::Recurrence);
     if (eventL.mainDateTime(true) != eventR.mainDateTime(true))
         reportDifference(reporter, KAEventFormatter::NextRecurrence);
+    if (eventL.repetition() != eventR.repetition())
+        reportDifference(reporter, KAEventFormatter::SubRepetition);
     if (eventL.repetition().interval() != eventR.repetition().interval())
         reportDifference(reporter, KAEventFormatter::RepeatInterval);
     if (eventL.repetition().count() != eventR.repetition().count())
         reportDifference(reporter, KAEventFormatter::RepeatCount);
+    if (eventL.nextRepetition() != eventR.nextRepetition())
+        reportDifference(reporter, KAEventFormatter::NextRepetition);
     if (eventL.holidaysExcluded() != eventR.holidaysExcluded())
         reportDifference(reporter, KAEventFormatter::HolidaysExcluded);
     if (eventL.workTimeOnly() != eventR.workTimeOnly())
         reportDifference(reporter, KAEventFormatter::WorkTimeOnly);
-    if (eventL.reminder() != eventR.reminder())
-        reportDifference(reporter, KAEventFormatter::Reminder);
-    if (eventL.deferDateTime() != eventR.deferDateTime())
-        reportDifference(reporter, KAEventFormatter::DeferralTime);
-    if (eventL.deferDefaultMinutes() != eventR.deferDefaultMinutes())
-        reportDifference(reporter, KAEventFormatter::DeferDefault);
-    if (eventL.deferDefaultDateOnly() != eventR.deferDefaultDateOnly())
-        reportDifference(reporter, KAEventFormatter::DeferDefaultDate);
     if (eventL.lateCancel() != eventR.lateCancel())
         reportDifference(reporter, KAEventFormatter::LateCancel);
     if (eventL.autoClose() != eventR.autoClose())
@@ -185,6 +182,18 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
         reportDifference(reporter, KAEventFormatter::SoundFadeVolume);
     if (eventL.fadeSeconds() != eventR.fadeSeconds())
         reportDifference(reporter, KAEventFormatter::SoundFadeTime);
+    if (eventL.reminder() != eventR.reminder())
+        reportDifference(reporter, KAEventFormatter::Reminder);
+    if (eventL.reminderOnceOnly() != eventR.reminderOnceOnly())
+        reportDifference(reporter, KAEventFormatter::ReminderOnce);
+    if (eventL.deferred() != eventR.deferred())
+        reportDifference(reporter, KAEventFormatter::DeferralType);
+    if (eventL.deferDateTime() != eventR.deferDateTime())
+        reportDifference(reporter, KAEventFormatter::DeferralTime);
+    if (eventL.deferDefaultMinutes() != eventR.deferDefaultMinutes())
+        reportDifference(reporter, KAEventFormatter::DeferDefault);
+    if (eventL.deferDefaultDateOnly() != eventR.deferDefaultDateOnly())
+        reportDifference(reporter, KAEventFormatter::DeferDefaultDate);
     if (eventL.command() != eventR.command())
         reportDifference(reporter, KAEventFormatter::Command);
     if (eventL.logFile() != eventR.logFile())
@@ -203,12 +212,20 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
         reportDifference(reporter, KAEventFormatter::EmailBody);
     if (eventL.emailAttachments() != eventR.emailAttachments())
         reportDifference(reporter, KAEventFormatter::EmailAttachments);
+
+    if (!mDifferent)
+    {
+        // No differences have been detected or reported
+    }
 }
 
 void SerializerPluginKAlarm::reportDifference(AbstractDifferencesReporter* reporter, KAEventFormatter::Parameter id)
 {
     if (mValueL.isApplicable(id)  ||  mValueR.isApplicable(id))
+    {
         reporter->addProperty(AbstractDifferencesReporter::ConflictMode, KAEventFormatter::label(id), mValueL.value(id), mValueR.value(id));
+        mDifferent = true;
+    }
 }
 
 Q_EXPORT_PLUGIN2(akonadi_serializer_kalarm, SerializerPluginKAlarm)
