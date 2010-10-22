@@ -282,7 +282,7 @@ QString KAEventFormatter::value(Parameter param) const
                                      ? i18nc("@info/plain Percentage", "%1%%", static_cast<int>(mEvent.fadeVolume() * 100))
                                      : mUnspecifiedValue;
         case SoundFadeTime:     return mEvent.fadeSeconds()
-                                     ? i18nc("@info/plain", "%s Seconds", mEvent.fadeSeconds())
+                                     ? i18ncp("@info/plain", "1 Second", "%s Seconds", mEvent.fadeSeconds())
                                      : mUnspecifiedValue;
 
         case Command:           return (mEvent.action() == KAEvent::COMMAND) ? mEvent.cleanText() : QString();
