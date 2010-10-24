@@ -22,7 +22,6 @@
 #include "alarmlistview.moc"
 
 #ifdef USE_AKONADI
-#include "akonadimodel.h"
 #define ALARM_LIST_MODEL AlarmListModel
 #else
 #include "eventlistmodel.h"

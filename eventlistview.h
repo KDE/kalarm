@@ -23,7 +23,7 @@
 
 #include "kalarm.h"
 #ifdef USE_AKONADI
-#include "akonadimodel.h"
+#include "itemlistmodel.h"
 #else
 #include "eventlistmodel.h"
 #endif

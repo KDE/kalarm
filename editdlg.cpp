@@ -24,7 +24,9 @@
 #include "editdlgtypes.h"
 
 #include "alarmcalendar.h"
-#ifndef USE_AKONADI
+#ifdef USE_AKONADI
+#include "collectionmodel.h"
+#else
 #include "alarmresources.h"
 #endif
 #include "alarmtimewidget.h"

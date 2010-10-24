@@ -25,15 +25,17 @@
 #ifndef RESOURCESELECTOR_H
 #define RESOURCESELECTOR_H
 
-#include <QModelIndex>
-#include <QFrame>
-#include <QSize>
 #ifdef USE_AKONADI
 #include "akonadimodel.h"
+#include "collectionmodel.h"
 #else
 #include "alarmresource.h"
 #include "alarmresources.h"
 #endif
+
+#include <QModelIndex>
+#include <QFrame>
+#include <QSize>
 
 class QPushButton;
 class QResizeEvent;

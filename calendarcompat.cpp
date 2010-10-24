@@ -23,6 +23,7 @@
 
 #ifdef USE_AKONADI
 #include "akonadimodel.h"
+#include "collectionmodel.h"
 #else
 #include "alarmresource.h"
 #endif
@@ -30,9 +31,10 @@
 #include "kaevent.h"
 #include "preferences.h"
 
-#include <QFile>
-#include <QFileInfo>
-#include <QTextStream>
+#ifndef USE_AKONADI
+#include <kcal/calendarlocal.h>
+using namespace KCal;
+#endif
 
 #include <kapplication.h>
 #include <kaboutdata.h>
@@ -40,10 +42,9 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#ifndef USE_AKONADI
-#include <kcal/calendarlocal.h>
-using namespace KCal;
-#endif
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
 
 static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION VCALENDAR property
 

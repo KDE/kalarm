@@ -23,7 +23,7 @@
 #include "functions_p.h"
 
 #ifdef USE_AKONADI
-#include "akonadimodel.h"
+#include "collectionmodel.h"
 #else
 #include "alarmresources.h"
 #include "eventlistmodel.h"

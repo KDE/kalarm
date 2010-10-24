@@ -130,6 +130,8 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 if(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     akonadimodel.cpp
+    collectionmodel.cpp
+    itemlistmodel.cpp
    )
 else(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}

@@ -21,9 +21,7 @@
 #include "kalarm.h"
 #include "templatepickdlg.moc"
 
-#ifdef USE_AKONADI
-#include "akonadimodel.h"
-#else
+#ifndef USE_AKONADI
 #include "eventlistmodel.h"
 #include "templatelistfiltermodel.h"
 #endif

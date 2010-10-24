@@ -23,7 +23,6 @@
 
 #include "functions.h"
 #ifdef USE_AKONADI
-#include "akonadimodel.h"
 #define TEMPLATE_LIST_MODEL TemplateListModel
 #else
 #include "eventlistmodel.h"
