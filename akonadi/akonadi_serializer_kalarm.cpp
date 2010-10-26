@@ -32,7 +32,6 @@
 
 #include <QtCore/qplugin.h>
 
-
 using namespace Akonadi;
 
 
@@ -90,6 +89,8 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     data.write("\nEND:VCALENDAR");
 }
 
+#include <kglobal.h>
+
 void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, const Item& left, const Item& right)
 {
     Q_ASSERT(reporter);
@@ -101,13 +102,11 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
     // Note that event attributes are not included, since they are not part of the payload
     mValueL = KAEventFormatter(eventL, false);
     mValueR = KAEventFormatter(eventR, false);
-    mDifferent = false;
 
     reporter->setLeftPropertyValueTitle(i18nc("@title:column", "Changed Alarm"));
     reporter->setRightPropertyValueTitle(i18nc("@title:column", "Conflicting Alarm"));
 
-    if (eventL.id() != eventR.id())
-        reportDifference(reporter, KAEventFormatter::Id);
+    reportDifference(reporter, KAEventFormatter::Id);
     if (eventL.revision() != eventR.revision())
         reportDifference(reporter, KAEventFormatter::Revision);
     if (eventL.action() != eventR.action())
@@ -213,19 +212,16 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
     if (eventL.emailAttachments() != eventR.emailAttachments())
         reportDifference(reporter, KAEventFormatter::EmailAttachments);
 
-    if (!mDifferent)
-    {
-        // No differences have been detected or reported
-    }
+    KLocale* locale = KGlobal::locale();
+    reporter->addProperty(AbstractDifferencesReporter::ConflictMode, i18nc("@label", "Item revision"),
+                          locale->convertDigits(QString::number(left.revision()), locale->digitSet()),
+                          locale->convertDigits(QString::number(right.revision()), locale->digitSet()));
 }
 
 void SerializerPluginKAlarm::reportDifference(AbstractDifferencesReporter* reporter, KAEventFormatter::Parameter id)
 {
     if (mValueL.isApplicable(id)  ||  mValueR.isApplicable(id))
-    {
         reporter->addProperty(AbstractDifferencesReporter::ConflictMode, KAEventFormatter::label(id), mValueL.value(id), mValueR.value(id));
-        mDifferent = true;
-    }
 }
 
 Q_EXPORT_PLUGIN2(akonadi_serializer_kalarm, SerializerPluginKAlarm)

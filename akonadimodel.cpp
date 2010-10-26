@@ -573,6 +573,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
 #endif
                     int row = index.row();
                     emit dataChanged(this->index(row, 0, index.parent()), this->index(row, ColumnCount - 1, index.parent()));
+kDebug()<<"Item: Qt::EditRole";
                     return true;
                 }
                 case CommandErrorRole:
@@ -595,6 +596,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                             updateItem = true;
 //                            int row = index.row();
 //                            emit dataChanged(this->index(row, 0, index.parent()), this->index(row, ColumnCount - 1, index.parent()));
+kDebug()<<"Item: CommandErrorRole";
                             break;
                         }
                         default:
@@ -603,6 +605,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                     break;
                 }
                 default:
+kDebug()<<"Item: passing to EntityTreeModel::setData("<<role<<")";
                     break;
             }
             if (updateItem)
@@ -1114,7 +1117,7 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
     Collection col = collection;
     CollectionDeleteJob* job = new CollectionDeleteJob(col);
     connect(job, SIGNAL(result(KJob*)), SLOT(deleteCollectionJobDone(KJob*)));
-    mPendingCollections[job] = CollJobData(col.id(), displayName(col));
+    mPendingCollectionJobs[job] = CollJobData(col.id(), displayName(col));
     job->start();
     return true;
 }
@@ -1125,12 +1128,12 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
 */
 void AkonadiModel::deleteCollectionJobDone(KJob* j)
 {
-    QMap<KJob*, CollJobData>::iterator it = mPendingCollections.find(j);
+    QMap<KJob*, CollJobData>::iterator it = mPendingCollectionJobs.find(j);
     CollJobData jobData;
-    if (it != mPendingCollections.end())
+    if (it != mPendingCollectionJobs.end())
     {
         jobData = it.value();
-        mPendingCollections.erase(it);
+        mPendingCollectionJobs.erase(it);
     }
     if (j->error())
     {
@@ -1252,19 +1255,6 @@ KAEvent AkonadiModel::event(const Item& item) const
 
 #if 0
 /******************************************************************************
-* Return all events in all calendars.
-*/
-QList<KAEvent*> AkonadiModel::events() const
-{
-    QList<KAEvent*> list;
-    Collection::List collections = mMonitor->collectionsMonitored();
-    foreach (const Collection& c, collections)
-    {
-        ???
-    }
-}
-
-/******************************************************************************
 * Add an event to the default or a user-selected Collection.
 */
 AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, KAlarm::CalEvent::Type type, QWidget* promptParent, bool noPrompt)
@@ -1325,9 +1315,10 @@ bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
     if (!setItemPayload(item, event, collection))
         return false;
     event.setItemId(item.id());
+kDebug()<<"-> item id="<<item.id();
     ItemCreateJob* job = new ItemCreateJob(item, collection);
     connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
-    mPendingItems[job] = item.id();
+    mPendingItemJobs[job] = item.id();
     job->start();
 kDebug()<<"...exiting";
     return true;
@@ -1348,16 +1339,17 @@ bool AkonadiModel::updateEvent(KAEvent& event)
 }
 bool AkonadiModel::updateEvent(Akonadi::Entity::Id itemId, KAEvent& newEvent)
 {
-kDebug();
+kDebug()<<"item id="<<itemId;
     QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;
     Collection collection = ix.data(ParentCollectionRole).value<Collection>();
     Item item = ix.data(ItemRole).value<Item>();
+kDebug()<<"item id="<<item.id()<<", revision="<<item.revision();
     if (!setItemPayload(item, newEvent, collection))
         return false;
-    setData(ix, QVariant::fromValue(item), ItemRole);
-//    queueItemModifyJob(item);
+//    setData(ix, QVariant::fromValue(item), ItemRole);
+    queueItemModifyJob(item);
     return true;
 #ifdef __GNUC__
 #warning Ensure KAlarm event list is updated correctly before and after Akonadi update
@@ -1405,7 +1397,7 @@ bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
     Item item = ix.data(ItemRole).value<Item>();
     ItemDeleteJob* job = new ItemDeleteJob(item);
     connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
-    mPendingItems[job] = itemId;
+    mPendingItemJobs[job] = itemId;
     job->start();
     return true;
 }
@@ -1428,29 +1420,40 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
     {
         Item::List items;
         items << item;
-        Item current = itemById(item.id());    // fetch the up-to-date item
-        if (current.isValid())
-            items[0].setRevision(current.revision());
-        mItemModifyJobQueue[item.id()] = items;
-        ItemModifyJob* job = new ItemModifyJob(items[0]);
-        connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
-        mPendingItems[job] = item.id();
-//kDebug()<<"Modify job queued for item"<<item.id()<<", revision="<<items[0].revision();
+        if (mItemsBeingCreated.contains(item.id()))
+            mItemModifyJobQueue[item.id()] = items;
+        else
+        {
+            Item newItem = items[0];
+            Item current = itemById(item.id());    // fetch the up-to-date item
+            if (current.isValid())
+                newItem.setRevision(current.revision());
+            items[0] = Item();      // mark the first queued item as now executing
+            mItemModifyJobQueue[item.id()] = items;
+            ItemModifyJob* job = new ItemModifyJob(newItem);
+            connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+            mPendingItemJobs[job] = item.id();
+kDebug()<<"Modify job queued for item"<<item.id()<<", revision="<<newItem.revision();
+        }
     }
 }
 
 /******************************************************************************
 * Called when an item job has completed.
 * Checks for any error.
+* Note that for an ItemModifyJob, the item revision number may not be updated
+* to the post-modification value. The next queued ItemModifyJob is therefore
+* not kicked off from here, but instead from the slot attached to the
+* itemChanged() signal, which has the revision updated.
 */
 void AkonadiModel::itemJobDone(KJob* j)
 {
-    QMap<KJob*, Entity::Id>::iterator it = mPendingItems.find(j);
+    QMap<KJob*, Entity::Id>::iterator it = mPendingItemJobs.find(j);
     Entity::Id itemId = -1;
-    if (it != mPendingItems.end())
+    if (it != mPendingItemJobs.end())
     {
         itemId = it.value();
-        mPendingItems.erase(it);
+        mPendingItemJobs.erase(it);
     }
     QByteArray jobClass = j->metaObject()->className();
     kDebug() << jobClass;
@@ -1470,28 +1473,61 @@ void AkonadiModel::itemJobDone(KJob* j)
         KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
+    {
+        if (jobClass == "Akonadi::ItemCreateJob")
+        {
+            // Prevent modification of the item until it is fully initialised
+            mItemsBeingCreated << static_cast<ItemCreateJob*>(j)->item().id();
+        }
         emit itemDone(itemId);
+    }
 
     if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
     {
-        // It was an ItemModifyJob: execute the next job in the queue if one is waiting
         QMap<Item::Id, Item::List>::iterator it = mItemModifyJobQueue.find(itemId);
         if (it != mItemModifyJobQueue.end())
         {
             Item::List& items = it.value();
-            items.erase(items.begin());   // remove this job from the queue
-            if (!items.isEmpty())
-            {
-                // Queue the next job for the Item, after updating the Item's
-                // revision number to match that set by the job just completed.
-                ItemModifyJob* job = static_cast<ItemModifyJob*>(j);
-                items[0].setRevision(job->item().revision());
-                job = new ItemModifyJob(items[0]);
-                connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
-                mPendingItems[job] = items[0].id();
-//kDebug()<<"Modify job queued for item"<<items[0].id()<<", revision="<<items[0].revision();
-            }
+            if (items.count() <= 1)
+                mItemModifyJobQueue.erase(it);   // there are no more jobs for the item
+            else
+                items.erase(items.begin());   // remove the newly completed job from the queue
         }
+    }
+}
+
+/******************************************************************************
+* Check whether there are any ItemModifyJobs waiting for a specified item, and
+* if so execute the first one provided its creation has completed. This
+* prevents clashes in Akonadi conflicts between simultaneous ItemModifyJobs for
+* the same item.
+*
+* Note that when an item is newly created (e.g. via addEvent()), the KAlarm
+* resource itemAdded() function creates an ItemModifyJob to give it a remote
+* ID. Until that job is complete, any other ItemModifyJob for the item will
+* cause a conflict.
+*/
+void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
+{
+    if (mItemsBeingCreated.contains(item.id()))
+{kDebug()<<"Still being created";
+        return;    // the item hasn't been fully initialised yet
+}
+    QMap<Item::Id, Item::List>::iterator it = mItemModifyJobQueue.find(item.id());
+    if (it == mItemModifyJobQueue.end())
+{kDebug()<<"No jobs queued";
+        return;    // there are no jobs queued for the item
+}
+    Item::List& items = it.value();
+    if (!items.isEmpty()  &&  items[0].isValid())
+    {
+        // Queue the next job for the Item, after updating the Item's
+        // revision number to match that set by the job just completed.
+        items[0].setRevision(item.revision());
+        ItemModifyJob* job = new ItemModifyJob(items[0]);
+        connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+        mPendingItemJobs[job] = items[0].id();
+kDebug()<<"Executing queued Modify job for item"<<items[0].id()<<", revision="<<items[0].revision();
     }
 }
 
@@ -1588,6 +1624,10 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 */
 void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
+kDebug()<<"item id="<<item.id()<<", revision="<<item.revision();
+    mItemsBeingCreated.removeAll(item.id());   // the new item has now been initialised
+    checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+
     KAEvent evnt = event(item);
     if (!evnt.isValid())
         return;

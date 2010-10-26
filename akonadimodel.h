@@ -234,6 +234,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QString   timeToAlarmText(const DateTime&) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void      queueItemModifyJob(const Akonadi::Item&);
+        void      checkQueuedItemModifyJob(const Akonadi::Item&);
 #if 0
         void     getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::Type, KAEvent::List&) const;
 #endif
@@ -256,9 +257,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
         QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
         QMap<Akonadi::Collection::Id, bool> mCollectionEnabled;  // last enabled status of each collection
-        QMap<KJob*, CollJobData> mPendingCollections;  // pending collection creation/deletion jobs, with collection ID & name
-        QMap<KJob*, Akonadi::Item::Id> mPendingItems;  // pending item creation/deletion jobs, with event ID
+        QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
+        QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
         QMap<Akonadi::Item::Id, Akonadi::Item::List> mItemModifyJobQueue;  // pending item modification jobs
+        QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
         QFont           mFont;
 };
