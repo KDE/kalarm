@@ -821,9 +821,6 @@ void MainWindow::slotDelete(bool force)
 			undos.append(*eit++, c);
 	}
 #else
-#ifdef __GNUC__
-#warning Check no crash if alarms trigger while their delete confirmation is visible
-#endif
 	for (int i = 0, end = ids.count();  i < end;  ++i)
 	{
 		AlarmResource* r = resources->resourceForEvent(ids[i]);
