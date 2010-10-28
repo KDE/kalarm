@@ -71,7 +71,8 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
 CollectionMimeTypeFilterModel::CollectionMimeTypeFilterModel(QObject* parent)
     : EntityMimeTypeFilterModel(parent),
       mMimeType(),
-      mWritableOnly(false)
+      mWritableOnly(false),
+      mEnabledOnly(false)
 {
     addMimeTypeInclusionFilter(Collection::mimeType());
     setHeaderGroup(EntityTreeModel::CollectionTreeHeaders);
@@ -553,11 +554,6 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
             AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
             model->setData(model->collectionIndex(collection), value, AkonadiModel::EnabledRole);
         }
-#if 0
-        QModelIndex ix = modelIndexForCollection(this, collection);
-        if (ix.isValid())
-            selectionModel()->select(mapFromSource(ix), (enabled ? QItemSelectionModel::Select : QItemSelectionModel::Deselect));
-#endif
     }
 }
 
