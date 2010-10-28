@@ -765,6 +765,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 #endif
 {
+	kDebug();
 	KUrl url = KFileDialog::getOpenUrl(KUrl("filedialog:///importalarms"),
 	                                   QString::fromLatin1("*.vcs *.ics|%1").arg(i18nc("@info/plain", "Calendar Files")), parent);
 	if (url.isEmpty())
@@ -1213,10 +1214,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 			col = *collection;
 		else
 			col = CollectionControlModel::destination(type, promptParent, noPrompt, cancelled);
-#ifdef __GNUC__
-#warning This adds event before its Akonadi ID is known
-#endif
-		if (col.isValid()  &&  addEvent(col, event))
+		if (col.isValid())
 #else
 		if (!resource)
 			resource = AlarmResources::instance()->destination(type, promptParent, noPrompt, cancelled);
@@ -1224,12 +1222,14 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 #endif
 		{
 #ifdef USE_AKONADI
+			// Don't add event to mEventMap yet - its Akonadi item id is not yet known
 			ok = AkonadiModel::instance()->addEvent(*event, col);
+			remove = ok;   // if success, delete the local event instance on exit
 #else
 			ok = AlarmResources::instance()->addEvent(kcalEvent, resource);
 			kcalEvent = 0;  // if there was an error, kcalEvent is deleted by AlarmResources::addEvent()
-#endif
 			remove = !ok;
+#endif
 			if (ok  &&  type == KAlarm::CalEvent::ACTIVE  &&  !event->enabled())
 				checkForDisabledAlarms(true, false);
 		}
@@ -1274,6 +1274,8 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 	event->clearUpdated();
 #ifdef USE_AKONADI
 	evnt = *event;
+	if (remove)
+		delete event;
 #endif
 	return true;
 }
