@@ -824,15 +824,15 @@ void MainWindow::slotDelete(bool force)
 #ifdef __GNUC__
 #warning Check no crash if alarms trigger while their delete confirmation is visible
 #endif
-	KAEvent::List::Iterator eit = events.begin();
 	for (int i = 0, end = ids.count();  i < end;  ++i)
 	{
 		AlarmResource* r = resources->resourceForEvent(ids[i]);
 		if (!r)
-			eit = events.erase(eit);
+			events[i] = 0;
 		else
-			undos.append(*(*eit++), r);
+			undos.append(*events[i], r);
 	}
+	events.removeAll((KAEvent*)0);
 #endif
 
 	if (events.isEmpty())
