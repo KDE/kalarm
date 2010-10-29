@@ -121,9 +121,6 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
-#ifdef __GNUC__
-#warning When a calendar is disabled, its rows are not removed from the model, so no alarms deleted signal is emitted
-#endif
     connect(monitor, SIGNAL(itemChanged(const Akonadi::Item&, const QSet<QByteArray>&)), SLOT(slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&)));
 }
 
@@ -502,6 +499,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
 {
     if (!index.isValid())
         return false;
+    // NOTE: need to emit dataChanged() whenever something is updated (except via a job).
     Collection collection = index.data(CollectionRole).value<Collection>();
     if (collection.isValid())
     {
@@ -509,15 +507,12 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
         bool updateCollection = false;
         switch (role)
         {
-#ifdef __GNUC__
-#warning Emit dataChanged() whenever any item is changed
-#endif
             case Qt::BackgroundRole:
             {
                 QColor colour = value.value<QColor>();
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->backgroundColor() == colour)
-                    return true;
+                    return true;   // no change
                 attr->setBackgroundColor(colour);
                 updateCollection = true;
                 break;
@@ -533,7 +528,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
 if (attr) { kDebug()<<"Set enabled:"<<enabled<<", was="<<attr->isEnabled(); } else { kDebug()<<"Set enabled:"<<enabled<<", no attribute"; }
                 if (attr->isEnabled() == enabled)
-                    return true;
+                    return true;   // no change
                 attr->setEnabled(enabled);
                 updateCollection = true;
                 break;
@@ -566,16 +561,6 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
             bool updateItem = false;
             switch (role)
             {
-                case Qt::EditRole:
-                {
-#ifdef __GNUC__
-#warning  ??? update event
-#endif
-                    int row = index.row();
-                    emit dataChanged(this->index(row, 0, index.parent()), this->index(row, ColumnCount - 1, index.parent()));
-kDebug()<<"Item: Qt::EditRole";
-                    return true;
-                }
                 case CommandErrorRole:
                 {
                     KAEvent::CmdErrType err = static_cast<KAEvent::CmdErrType>(value.toInt());
@@ -588,14 +573,12 @@ kDebug()<<"Item: Qt::EditRole";
                         case KAEvent::CMD_ERROR_PRE_POST:
                         {
                             if (err == KAEvent::CMD_NO_ERROR  &&  !item.hasAttribute<EventAttribute>())
-                                return true;
+                                return true;   // no change
                             EventAttribute* attr = item.attribute<EventAttribute>(Entity::AddIfMissing);
                             if (attr->commandError() == err)
-                                return true;
+                                return true;   // no change
                             attr->setCommandError(err);
                             updateItem = true;
-//                            int row = index.row();
-//                            emit dataChanged(this->index(row, 0, index.parent()), this->index(row, ColumnCount - 1, index.parent()));
 kDebug()<<"Item: CommandErrorRole";
                             break;
                         }
@@ -615,6 +598,7 @@ kDebug()<<"Item: passing to EntityTreeModel::setData("<<role<<")";
             }
         }
     }
+
     return EntityTreeModel::setData(index, value, role);
 }
 
@@ -1098,13 +1082,7 @@ void AkonadiModel::addCollectionJobDone(KJob* j)
         emit collectionAdded(job, false);
     }
     else
-    {
-#ifdef __GNUC__
-#warning Can the collection be retrieved?
-#endif
-        //job->instance().identifier();
         emit collectionAdded(job, true);
-    }
 }
 
 /******************************************************************************
@@ -1351,9 +1329,6 @@ kDebug()<<"item id="<<item.id()<<", revision="<<item.revision();
 //    setData(ix, QVariant::fromValue(item), ItemRole);
     queueItemModifyJob(item);
     return true;
-#ifdef __GNUC__
-#warning Ensure KAlarm event list is updated correctly before and after Akonadi update
-#endif
 }
 
 /******************************************************************************
