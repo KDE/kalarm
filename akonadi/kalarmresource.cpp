@@ -170,7 +170,8 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
 
 /******************************************************************************
 * Called when an item has been added to the collection.
-* Store the event in the calendar.
+* Store the event in the calendar, and set its Akonadi remote ID to the
+* KAEvent's UID.
 */
 void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collection&)
 {
@@ -288,9 +289,6 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
         item.setPayload(event);
-#ifdef __GNUC__
-#warning Check that commandError value is retained (in EventAttribute)
-#endif
         items << item;
     }
     itemsRetrieved(items);
