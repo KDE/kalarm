@@ -118,7 +118,7 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
     AkonadiModel* model = AkonadiModel::instance();
     QModelIndex ix = model->index(sourceRow, 0, sourceParent);
     Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
-    if (mWritableOnly  &&  collection.rights() == Collection::ReadOnly)
+    if (mWritableOnly  &&  (collection.rights() & writableRights) != writableRights)
         return false;
     if (!mMimeType.isEmpty()  &&  !collection.contentMimeTypes().contains(mMimeType))
         return false;
