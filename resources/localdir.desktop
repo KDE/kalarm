@@ -59,6 +59,7 @@ Comment[fi]=Tarjoaa pääsyn paikalliseen kansioon tallennettuun hälytyskalente
 Comment[fr]=Fournit l'accès aux alarmes de calendrier stockées dans un dossier ; chaque entrée du calendrier étant stockée dans un fichier distinct
 Comment[gl]=Permite acceder a un calendario de alarmas almacenado nun directorio local no que cada elemento do calendario se almacena nun ficheiro diferente
 Comment[hu]=Helyi mappában tárolt emlékeztetőkhöz biztosít hozzáférést (minden bejegyzés külön fájlban található)
+Comment[ia]=Il forni accesso a un calendario de alarma immagazinate in un directorio  local, in le qual cata elemento de calendario es immagazinate in un file separate
 Comment[it]=Consente l'accesso a dei promemoria memorizzati in una directory locale, in cui ogni voce di calendario è memorizzato in un file separato
 Comment[ja]=カレンダーアイテムがそれぞれ個別のファイルに保存されているローカルディレクトリのアラームカレンダーへのアクセスを提供します
 Comment[kk]=Әрбір күнтізбе оқиғасы бөлек файлда сақталған жергілікті қапшықтағы ескертулер күнтізбеге қатынау
