@@ -444,7 +444,7 @@ int KAlarmApp::newInstance()
 						exitCode = 1;
 					break;
 				}
-				// fall throudh to NONE
+				// fall through to NONE
 			case CommandOptions::NONE:
 				// No arguments - run interactively & display the main window
 #ifndef NDEBUG
@@ -454,7 +454,12 @@ int KAlarmApp::newInstance()
 				if (!initCheck())
 					exitCode = 1;
 				else
-					(MainWindow::create())->show();
+				{
+					MainWindow* win = MainWindow::create();
+					if (command == CommandOptions::TRAY)
+						win->setWindowState(win->windowState() | Qt::WindowMinimized);
+					win->show();
+				}
 				break;
 
 			case CommandOptions::CMD_ERROR:
