@@ -904,11 +904,23 @@ void KAlarmApp::slotShowInSystemTrayChanged()
 		mTrayWindow = 0;
 		mOldShowInSystemTray = newShowInSysTray;
 		if (newShowInSysTray)
+		{
+			// Show the system tray icon
 			displayTrayIcon(true);
+		}
 		else
 		{
+			// Stop showing the system tray icon
 			if (win  &&  win->isHidden())
-				win->show();
+			{
+				if (MainWindow::count() > 1)
+					delete win;
+				else
+				{
+					win->setWindowState(win->windowState() | Qt::WindowMinimized);
+					win->show();
+				}
+			}
 		}
 		--mActiveCount;
 	}
