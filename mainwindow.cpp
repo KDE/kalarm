@@ -667,7 +667,7 @@ void MainWindow::refresh()
 	kDebug();
 #ifdef USE_AKONADI
 #ifdef __GNUC__
-#warning Check what to do here
+#warning How to reload Akonadi data?
 #endif
 //        mListFilterModel->reload();
 #else
@@ -1561,7 +1561,7 @@ void MainWindow::slotSelection()
 	for (int i = 0;  i < count;  ++i)
 	{
 #ifdef USE_AKONADI
-		KAEvent* event = &events[i];
+		KAEvent* event = resources->event(events[i].id());   // get up-to-date status
 #else
 		KAEvent* event = events[i];
 #endif
