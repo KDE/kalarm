@@ -1,7 +1,7 @@
 /*
  *  lineedit.cpp  -  Line edit widget with extra drag and drop options
  *  Program:  kalarm
- *  Copyright © 2003-2005,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2009-2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,11 @@
 
 #include <libkdepim/maillistdrag.h>
 #include <kabc/vcarddrag.h>
+#ifdef USE_AKONADI
+#include <kcalutils/icaldrag.h>
+#else
 #include <kcal/icaldrag.h>
+#endif
 
 #include <kurl.h>
 #include <kurlcompletion.h>
@@ -102,7 +106,11 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
 	const QMimeData* data = e->mimeData();
 	bool ok;
+#ifdef USE_AKONADI
+	if (KCalUtils::ICalDrag::canDecode(data))
+#else
 	if (KCal::ICalDrag::canDecode(data))
+#endif
 		ok = false;   // don't accept "text/calendar" objects
 	else
 		ok = (data->hasText()
