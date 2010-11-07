@@ -579,7 +579,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                                 return true;   // no change
                             attr->setCommandError(err);
                             updateItem = true;
-kDebug()<<"Item: CommandErrorRole";
+kDebug()<<"Item:"<<item.id()<<"  CommandErrorRole ->"<<err;
                             break;
                         }
                         default:
@@ -1388,27 +1388,29 @@ bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
 void AkonadiModel::queueItemModifyJob(const Item& item)
 {
     kDebug() << item.id();
-    QMap<Item::Id, Item::List>::Iterator it = mItemModifyJobQueue.find(item.id());
+    QMap<Item::Id, Item>::Iterator it = mItemModifyJobQueue.find(item.id());
     if (it != mItemModifyJobQueue.end())
-        it.value() << item;
+    {
+        // A job is already queued for this item. Replace the queued item value with the new one.
+        it.value() = item;
+    }
     else
     {
-        Item::List items;
-        items << item;
+        // There is no job already queued for this item
         if (mItemsBeingCreated.contains(item.id()))
-            mItemModifyJobQueue[item.id()] = items;
+            mItemModifyJobQueue[item.id()] = item;   // wait for item initialisation to complete
         else
         {
-            Item newItem = items[0];
+            Item newItem = item;
             Item current = itemById(item.id());    // fetch the up-to-date item
             if (current.isValid())
                 newItem.setRevision(current.revision());
-            items[0] = Item();      // mark the first queued item as now executing
-            mItemModifyJobQueue[item.id()] = items;
+            mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
             ItemModifyJob* job = new ItemModifyJob(newItem);
+            job->disableRevisionCheck();
             connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
             mPendingItemJobs[job] = item.id();
-kDebug()<<"Modify job queued for item"<<item.id()<<", revision="<<newItem.revision();
+kDebug()<<"Modify job executing for item"<<item.id()<<", revision="<<newItem.revision();
         }
     }
 }
@@ -1445,6 +1447,13 @@ void AkonadiModel::itemJobDone(KJob* j)
             Q_ASSERT(0);
         kError() << errMsg << itemId << ":" << j->errorString();
         emit itemDone(itemId, false);
+
+        if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
+        {
+            // Execute the next queued job for this item
+            Item current = itemById(itemId);    // fetch the up-to-date item
+            checkQueuedItemModifyJob(current);
+        }
         KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
@@ -1457,18 +1466,15 @@ void AkonadiModel::itemJobDone(KJob* j)
         emit itemDone(itemId);
     }
 
-    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
+/*    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
     {
-        QMap<Item::Id, Item::List>::iterator it = mItemModifyJobQueue.find(itemId);
+        QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
         if (it != mItemModifyJobQueue.end())
         {
-            Item::List& items = it.value();
-            if (items.count() <= 1)
-                mItemModifyJobQueue.erase(it);   // there are no more jobs for the item
-            else
-                items.erase(items.begin());   // remove the newly completed job from the queue
+            if (!it.value().isValid())
+                mItemModifyJobQueue.erase(it);   // there are no more jobs queued for the item
         }
-    }
+    }*/
 }
 
 /******************************************************************************
@@ -1488,21 +1494,28 @@ void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
 {kDebug()<<"Still being created";
         return;    // the item hasn't been fully initialised yet
 }
-    QMap<Item::Id, Item::List>::iterator it = mItemModifyJobQueue.find(item.id());
+    QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
     if (it == mItemModifyJobQueue.end())
 {kDebug()<<"No jobs queued";
         return;    // there are no jobs queued for the item
 }
-    Item::List& items = it.value();
-    if (!items.isEmpty()  &&  items[0].isValid())
+    Item qitem = it.value();
+    if (!qitem.isValid())
+    {
+        // There is no further job queued for the item, so remove the item from the list
+        mItemModifyJobQueue.erase(it);
+    }
+    else
     {
         // Queue the next job for the Item, after updating the Item's
         // revision number to match that set by the job just completed.
-        items[0].setRevision(item.revision());
-        ItemModifyJob* job = new ItemModifyJob(items[0]);
+        qitem.setRevision(item.revision());
+        mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
+        ItemModifyJob* job = new ItemModifyJob(qitem);
+        job->disableRevisionCheck();
         connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
-        mPendingItemJobs[job] = items[0].id();
-kDebug()<<"Executing queued Modify job for item"<<items[0].id()<<", revision="<<items[0].revision();
+        mPendingItemJobs[job] = qitem.id();
+kDebug()<<"Executing queued Modify job for item"<<qitem.id()<<", revision="<<qitem.revision();
     }
 }
 
@@ -1559,9 +1572,6 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 */
 void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames)
 {
-#ifdef __GNUC__
-#warning Ensure collection rights is initialised at startup
-#endif
     Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
     Collection::Rights newRights = collection.rights() & writableRights;
     if (newRights != oldRights)

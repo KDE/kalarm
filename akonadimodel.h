@@ -259,7 +259,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QMap<Akonadi::Collection::Id, bool> mCollectionEnabled;  // last enabled status of each collection
         QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
         QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
-        QMap<Akonadi::Item::Id, Akonadi::Item::List> mItemModifyJobQueue;  // pending item modification jobs
+        QMap<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
         QFont           mFont;
