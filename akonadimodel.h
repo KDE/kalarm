@@ -118,6 +118,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          */
         bool removeCollection(const Akonadi::Collection&);
 
+        bool isCollectionBeingDeleted(Akonadi::Collection::Id) const;
+
         QModelIndex         itemIndex(Akonadi::Item::Id id) const
                                         { return itemIndex(Akonadi::Item(id)); }
         QModelIndex         itemIndex(const Akonadi::Item&) const;
@@ -261,6 +263,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
         QMap<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
+        QList<Akonadi::Collection::Id> mCollectionsDeleting;  // collections currently being removed
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
         QFont           mFont;
 };

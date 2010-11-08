@@ -552,7 +552,8 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
             else
                 removeCollection(collection);
             AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
-            model->setData(model->collectionIndex(collection), value, AkonadiModel::EnabledRole);
+            if (!model->isCollectionBeingDeleted(collection.id()))
+                model->setData(model->collectionIndex(collection), value, AkonadiModel::EnabledRole);
         }
     }
 }

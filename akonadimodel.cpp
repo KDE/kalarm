@@ -1092,12 +1092,22 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
 {
     if (!collection.isValid())
         return false;
+    kDebug() << collection.id();
     Collection col = collection;
+    mCollectionsDeleting << collection.id();
     CollectionDeleteJob* job = new CollectionDeleteJob(col);
     connect(job, SIGNAL(result(KJob*)), SLOT(deleteCollectionJobDone(KJob*)));
     mPendingCollectionJobs[job] = CollJobData(col.id(), displayName(col));
     job->start();
     return true;
+}
+
+/******************************************************************************
+* Return whether a collection is currently being deleted.
+*/
+bool AkonadiModel::isCollectionBeingDeleted(Collection::Id id) const
+{
+    return mCollectionsDeleting.contains(id);
 }
 
 /******************************************************************************
@@ -1366,9 +1376,12 @@ bool AkonadiModel::deleteEvent(const KAEvent& event)
 }
 bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
 {
+    kDebug() << itemId;
     QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;
+    if (mCollectionsDeleting.contains(ix.data(ParentCollectionRole).value<Collection>().id()))
+        return true;    // the event's collection is being deleted
     Item item = ix.data(ItemRole).value<Item>();
     ItemDeleteJob* job = new ItemDeleteJob(item);
     connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
@@ -1602,6 +1615,7 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 {
     kDebug() << collection.id();
     mCollectionRights.remove(collection.id());
+    mCollectionsDeleting.removeAll(collection.id());
 }
 
 /******************************************************************************
