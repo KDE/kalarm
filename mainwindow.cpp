@@ -1561,7 +1561,8 @@ void MainWindow::slotSelection()
 	for (int i = 0;  i < count;  ++i)
 	{
 #ifdef USE_AKONADI
-		KAEvent* event = resources->event(events[i].id());   // get up-to-date status
+		KAEvent* ev = resources->event(events[i].id());   // get up-to-date status
+		KAEvent* event = ev ? ev : &events[i];
 #else
 		KAEvent* event = events[i];
 #endif
