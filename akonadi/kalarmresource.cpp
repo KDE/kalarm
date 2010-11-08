@@ -24,7 +24,9 @@
 #include "eventattribute.h"
 #include "kacalendar.h"
 #include "kaevent.h"
+#include "settingsadaptor.h"
 
+#include <akonadi/agentfactory.h>
 #include <akonadi/attributefactory.h>
 #include <akonadi/collectionmodifyjob.h>
 
@@ -306,7 +308,7 @@ void KAlarmResource::modifyCollectionJobDone(KJob* j)
     }
 }
 
-AKONADI_RESOURCE_MAIN(KAlarmResource)
+AKONADI_AGENT_FACTORY(KAlarmResource, akonadi_kalarm_resource)
 
 #include "kalarmresource.moc"
 

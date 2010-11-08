@@ -31,6 +31,10 @@ if (LOCAL_BUILD)
         ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
     )
     endif (KDEPIM_MOBILE_UI)
+
+    if (RUNTIME_PLUGINS_STATIC)
+        set(SERIALIZER_TYPE STATIC)
+    endif (RUNTIME_PLUGINS_STATIC)
     ########### end definitions copied from runtime/ ###############
 else (LOCAL_BUILD)
     set(KALARM_USE_AKONADI TRUE)
@@ -70,11 +74,11 @@ qt4_add_dbus_adaptor(kalarmresource_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml settings.h Settings
 )
 
-kde4_add_executable(akonadi_kalarm_resource ${kalarmresource_SRCS})
+kde4_add_plugin(akonadi_kalarm_resource ${kalarmresource_SRCS})
 
 target_link_libraries(akonadi_kalarm_resource kalarm_calendar akonadi-kcal ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCALCORE_LIBS} ${KDE4_KIO_LIBS})
 
-install(TARGETS akonadi_kalarm_resource ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS akonadi_kalarm_resource DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -83,7 +87,7 @@ set(akonadi_serializer_kalarm_SRCS
     kaeventformatter.cpp
 )
 
-kde4_add_plugin(akonadi_serializer_kalarm ${akonadi_serializer_kalarm_SRCS})
+kde4_add_plugin(akonadi_serializer_kalarm ${SERIALIZER_TYPE} ${akonadi_serializer_kalarm_SRCS})
 target_link_libraries(akonadi_serializer_kalarm kalarm_calendar ${KDEPIMLIBS_KCALCORE_LIBS} ${KDEPIMLIBS_KCALUTILS_LIBS} ${KDEPIMLIBS_AKONADI_LIBS} ${KDE4_KDECORE_LIBS})
 install(TARGETS akonadi_serializer_kalarm DESTINATION ${PLUGIN_INSTALL_DIR})
 

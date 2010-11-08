@@ -70,3 +70,4 @@ Icon=kalarm
 X-Akonadi-MimeTypes=application/x-vnd.kde.alarm.archived
 X-Akonadi-Capabilities=Resource
 X-Akonadi-Identifier=akonadi_kalarm_archived_resource
+X-Akonadi-LaunchMethod=AgentServer
