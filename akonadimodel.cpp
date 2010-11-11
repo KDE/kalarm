@@ -1095,10 +1095,17 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
     kDebug() << collection.id();
     Collection col = collection;
     mCollectionsDeleting << collection.id();
+    // Note: CollectionDeleteJob deletes the backend storage also.
+    AgentManager* agentManager = AgentManager::self();
+    const AgentInstance instance = agentManager->instance(collection.resource());
+    if (instance.isValid())
+        agentManager->removeInstance(instance);
+#if 0
     CollectionDeleteJob* job = new CollectionDeleteJob(col);
     connect(job, SIGNAL(result(KJob*)), SLOT(deleteCollectionJobDone(KJob*)));
     mPendingCollectionJobs[job] = CollJobData(col.id(), displayName(col));
     job->start();
+#endif
     return true;
 }
 
@@ -1110,6 +1117,7 @@ bool AkonadiModel::isCollectionBeingDeleted(Collection::Id id) const
     return mCollectionsDeleting.contains(id);
 }
 
+#if 0
 /******************************************************************************
 * Called when a collection deletion job has completed.
 * Checks for any error.
@@ -1133,6 +1141,7 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
     else
         emit collectionDeleted(jobData.id, true);
 }
+#endif
 
 /******************************************************************************
 * Called when a collection modification job has completed.
@@ -1381,7 +1390,10 @@ bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
     if (!ix.isValid())
         return false;
     if (mCollectionsDeleting.contains(ix.data(ParentCollectionRole).value<Collection>().id()))
+    {
+        kDebug() << "Collection being deleted";
         return true;    // the event's collection is being deleted
+    }
     Item item = ix.data(ItemRole).value<Item>();
     ItemDeleteJob* job = new ItemDeleteJob(item);
     connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
@@ -1601,6 +1613,7 @@ kDebug()<<"COLLECTION ATTRIBUTE changed";
         bool newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->isEnabled() : false;
         if (first  ||  newEnabled != oldEnabled)
         {
+            kDebug() << "enabled ->" << newEnabled;
             first = false;
             mCollectionEnabled[collection.id()] = newEnabled;
             emit collectionStatusChanged(collection, Enabled, newEnabled);

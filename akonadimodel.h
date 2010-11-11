@@ -212,7 +212,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void slotEmitEventChanged();
         void addCollectionJobDone(KJob*);
         void modifyCollectionJobDone(KJob*);
-        void deleteCollectionJobDone(KJob*);
         void itemJobDone(KJob*);
 
     private:
