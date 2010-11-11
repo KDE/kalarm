@@ -158,6 +158,8 @@ AlarmCalendar::AlarmCalendar()
         connect(model, SIGNAL(eventsAdded(const AkonadiModel::EventList&)), SLOT(slotEventsAdded(const AkonadiModel::EventList&)));
         connect(model, SIGNAL(eventsToBeRemoved(const AkonadiModel::EventList&)), SLOT(slotEventsToBeRemoved(const AkonadiModel::EventList&)));
         connect(model, SIGNAL(eventChanged(const AkonadiModel::Event&)), SLOT(slotEventChanged(const AkonadiModel::Event&)));
+	connect(model, SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)),
+	               SLOT(slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)));
 #else
 	AlarmResources* resources = AlarmResources::instance();
 	resources->setCalIDFunction(&KAlarm::Calendar::setKAlarmVersion);
@@ -636,6 +638,20 @@ void AlarmCalendar::removeKAEvents(AlarmResource* key, bool closing)
 }
 
 #ifdef USE_AKONADI
+/******************************************************************************
+* Called when the enabled or read-only status of a collection has changed.
+* If the collection is now disabled, remove its events from the calendar.
+*/
+void AlarmCalendar::slotCollectionStatusChanged(const Collection& collection, AkonadiModel::Change change, bool value)
+{
+	if (change == AkonadiModel::Enabled  &&  !value)
+	{
+		// The collection has been disabled.
+		// Remove its events from the map, but not from AkonadiModel.
+		removeKAEvents(collection.id(), false);
+	}
+}
+
 /******************************************************************************
 * Called when events have been added to AkonadiModel.
 * Add corresponding KAEvent instances to those held by AlarmCalendar.
