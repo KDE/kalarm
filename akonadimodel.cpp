@@ -81,7 +81,8 @@ AkonadiModel* AkonadiModel::instance()
 * Constructor.
 */
 AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
-    : EntityTreeModel(monitor, parent)
+    : EntityTreeModel(monitor, parent),
+      mMonitor(monitor)
 {
     // Set lazy population to enable the contents of unselected collections to be ignored
     setItemPopulationStrategy(LazyPopulation);
@@ -1144,6 +1145,33 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
 #endif
 
 /******************************************************************************
+* Reload a collection from Akonadi storage. The backend data is not reloaded.
+*/
+bool AkonadiModel::reloadCollection(const Akonadi::Collection& collection)
+{
+    if (!collection.isValid())
+        return false;
+    kDebug() << collection.id();
+    mMonitor->setCollectionMonitored(collection, false);
+    mMonitor->setCollectionMonitored(collection, true);
+    return true;
+}
+
+/******************************************************************************
+* Reload a collection from Akonadi storage. The backend data is not reloaded.
+*/
+void AkonadiModel::reload()
+{
+    kDebug();
+    const Collection::List collections = mMonitor->collectionsMonitored();
+    foreach (const Collection& collection, collections)
+    {
+        mMonitor->setCollectionMonitored(collection, false);
+        mMonitor->setCollectionMonitored(collection, true);
+    }
+}
+
+/******************************************************************************
 * Called when a collection modification job has completed.
 * Checks for any error.
 */
@@ -1549,6 +1577,7 @@ kDebug()<<"Executing queued Modify job for item"<<qitem.id()<<", revision="<<qit
 */
 void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
+    kDebug() << start << "-" << end << "(parent =" << parent << ")";
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = index(row, 0, parent);
@@ -1570,6 +1599,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
 */
 void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
+    kDebug() << start << "-" << end << "(parent =" << parent << ")";
     EventList events = eventList(parent, start, end);
     if (!events.isEmpty())
         emit eventsToBeRemoved(events);

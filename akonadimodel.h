@@ -118,6 +118,12 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          */
         bool removeCollection(const Akonadi::Collection&);
 
+        /** Reload a collection's data from Akonadi storage (not from the backend). */
+        bool reloadCollection(const Akonadi::Collection&);
+
+        /** Reload all collections' data from Akonadi storage (not from the backend). */
+        void reload();
+
         bool isCollectionBeingDeleted(Akonadi::Collection::Id) const;
 
         QModelIndex         itemIndex(Akonadi::Item::Id id) const
@@ -256,6 +262,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static QPixmap* mAudioIcon;
         static QSize    mIconSize;
         static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
+
+        Akonadi::ChangeRecorder* mMonitor;
         QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
         QMap<Akonadi::Collection::Id, bool> mCollectionEnabled;  // last enabled status of each collection
         QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name

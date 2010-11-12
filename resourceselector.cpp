@@ -501,9 +501,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 void ResourceSelector::reloadResource()
 {
 #ifdef USE_AKONADI
-#ifdef __GNUC__
-#warning reloadResource() not implemented
-#endif
+	Collection collection = currentResource();
+	if (collection.isValid())
+		AkonadiModel::instance()->reloadCollection(collection);
 #else
 	AlarmResource* resource = currentResource();
 	if (resource)

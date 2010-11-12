@@ -164,13 +164,11 @@ CollectionListModel::CollectionListModel(QObject* parent)
 */
 Collection CollectionListModel::collection(int row) const
 {
-//    return AkonadiModel::instance()->data(mapToSource(index(row, 0)), EntityTreeModel::CollectionRole).value<Collection>();
     return data(index(row, 0), EntityTreeModel::CollectionRole).value<Collection>();
 }
 
 Collection CollectionListModel::collection(const QModelIndex& index) const
 {
-//    return AkonadiModel::instance()->data(mapToSource(index), EntityTreeModel::CollectionRole).value<Collection>();
     return data(index, EntityTreeModel::CollectionRole).value<Collection>();
 }
 

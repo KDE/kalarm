@@ -666,10 +666,7 @@ void MainWindow::refresh()
 {
 	kDebug();
 #ifdef USE_AKONADI
-#ifdef __GNUC__
-#warning How to reload Akonadi data?
-#endif
-//        mListFilterModel->reload();
+	AkonadiModel::instance()->reload();
 #else
 	EventListModel::alarms()->reload();
 #endif
