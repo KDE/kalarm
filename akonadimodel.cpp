@@ -1445,13 +1445,17 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
     if (it != mItemModifyJobQueue.end())
     {
         // A job is already queued for this item. Replace the queued item value with the new one.
+        kDebug() << "Replacing previously queued job";
         it.value() = item;
     }
     else
     {
         // There is no job already queued for this item
         if (mItemsBeingCreated.contains(item.id()))
+        {
+            kDebug() << "Waiting for item initialisation";
             mItemModifyJobQueue[item.id()] = item;   // wait for item initialisation to complete
+        }
         else
         {
             Item newItem = item;
@@ -1463,7 +1467,7 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
             job->disableRevisionCheck();
             connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
             mPendingItemJobs[job] = item.id();
-kDebug()<<"Modify job executing for item"<<item.id()<<", revision="<<newItem.revision();
+            kDebug() << "Executing Modify job for item" << item.id() << ", revision=" << newItem.revision();
         }
     }
 }
@@ -1513,7 +1517,10 @@ void AkonadiModel::itemJobDone(KJob* j)
     {
         if (jobClass == "Akonadi::ItemCreateJob")
         {
-            // Prevent modification of the item until it is fully initialised
+            // Prevent modification of the item until it is fully initialised.
+            // Either slotMonitoredItemChanged() or slotRowsInserted(), or both,
+            // will be called when the item is done.
+            kDebug() << "item id=" << static_cast<ItemCreateJob*>(j)->item().id();
             mItemsBeingCreated << static_cast<ItemCreateJob*>(j)->item().id();
         }
         emit itemDone(itemId);
@@ -1556,6 +1563,7 @@ void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
     if (!qitem.isValid())
     {
         // There is no further job queued for the item, so remove the item from the list
+kDebug()<<"No more jobs queued";
         mItemModifyJobQueue.erase(it);
     }
     else
@@ -1568,7 +1576,7 @@ void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
         job->disableRevisionCheck();
         connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
         mPendingItemJobs[job] = qitem.id();
-kDebug()<<"Executing queued Modify job for item"<<qitem.id()<<", revision="<<qitem.revision();
+        kDebug() << "Executing queued Modify job for item" << qitem.id() << ", revision=" << qitem.revision();
     }
 }
 
@@ -1587,6 +1595,16 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             QSet<QByteArray> attrs;
             attrs += CollectionAttribute::name();
             slotCollectionChanged(collection, attrs);
+        }
+        else
+        {
+            const Item item = ix.data(ItemRole).value<Item>();
+            if (item.isValid())
+            {
+                kDebug() << "item id=" << item.id() << ", revision=" << item.revision();
+                if (mItemsBeingCreated.removeAll(item.id()))   // the new item has now been initialised
+                    checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+            }
         }
     }
     EventList events = eventList(parent, start, end);
@@ -1666,9 +1684,9 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 */
 void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
-kDebug()<<"item id="<<item.id()<<", revision="<<item.revision();
-    mItemsBeingCreated.removeAll(item.id());   // the new item has now been initialised
-    checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+    kDebug() << "item id=" << item.id() << ", revision=" << item.revision();
+    if (mItemsBeingCreated.removeAll(item.id()))   // the new item has now been initialised
+        checkQueuedItemModifyJob(item);    // execute the next job queued for the item
 
     KAEvent evnt = event(item);
     if (!evnt.isValid())
