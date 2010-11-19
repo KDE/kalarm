@@ -280,15 +280,18 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		mConfirmAck->setChecked(event->confirmAck());
 		bool recurs = event->recurs();
 		int reminderMins = event->reminder();
-		if (!reminderMins  &&  event->reminderDeferral()  &&  !recurs)
+		if (!reminderMins)
 		{
-			reminderMins = event->reminderDeferral();
-			mReminderDeferral = true;
-		}
-		if (!reminderMins  &&  event->reminderArchived()  &&  recurs)
-		{
-			reminderMins = event->reminderArchived();
-			mReminderArchived = true;
+			if (event->reminderDeferral()  &&  !recurs)
+			{
+				reminderMins = event->deferDateTime().minsTo(event->mainDateTime());
+				mReminderDeferral = true;
+			}
+			else if (event->reminderArchived()  &&  recurs)
+			{
+				reminderMins = event->reminderArchived();
+				mReminderArchived = true;
+			}
 		}
 		reminder()->setMinutes(reminderMins, dateOnly());
 		reminder()->setOnceOnly(event->reminderOnceOnly());
