@@ -23,7 +23,12 @@
 
 #undef QT3_SUPPORT
 
-#define KALARM_VERSION "2.7.0pre"
+#ifdef USE_AKONADI
+#define VERSION_SUFFIX "-K"
+#else
+#define VERSION_SUFFIX "-R"
+#endif
+#define KALARM_VERSION "2.6.90" VERSION_SUFFIX
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
 
