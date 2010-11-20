@@ -1685,8 +1685,8 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
     kDebug() << "item id=" << item.id() << ", revision=" << item.revision();
-    if (mItemsBeingCreated.removeAll(item.id()))   // the new item has now been initialised
-        checkQueuedItemModifyJob(item);    // execute the next job queued for the item
+    mItemsBeingCreated.removeAll(item.id());   // the new item has now been initialised
+    checkQueuedItemModifyJob(item);    // execute the next job queued for the item
 
     KAEvent evnt = event(item);
     if (!evnt.isValid())
