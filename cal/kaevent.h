@@ -194,7 +194,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
                                                             ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
         QDate              date() const                 { return mNextMainDateTime.date(); }
         QTime              time() const                 { return mNextMainDateTime.effectiveTime(); }
-        bool               reminder() const             { return mType == REMINDER__ALARM; }
+        bool               isReminder() const           { return mType == REMINDER__ALARM; }
         bool               deferred() const             { return mDeferred; }
         void               setTime(const DateTime& dt)  { mNextMainDateTime = dt; }
         void               setTime(const KDateTime& dt) { mNextMainDateTime = dt; }
@@ -454,10 +454,9 @@ class KALARM_CAL_EXPORT KAEvent
         QTime              mainTime() const               { return d->mNextMainDateTime.effectiveTime(); }
         DateTime           mainEndRepeatTime() const      { return d->mainEndRepeatTime(); }
         DateTime           nextTrigger(TriggerType) const;
-        int                reminder() const               { return d->mReminderMinutes; }
+        int                reminderMinutes(bool active = false) const { return (!active || d->mReminderActive) ? d->mReminderMinutes : 0; }
         bool               reminderOnceOnly() const       { return d->mReminderOnceOnly; }
         bool               reminderDeferral() const       { return d->mDeferral == Private::REMINDER_DEFERRAL; }
-        int                reminderArchived() const       { return d->mArchiveReminderMinutes; }
         DateTime           deferDateTime() const          { return d->mDeferralTime; }
         DateTime           deferralLimit(DeferLimitType* t = 0) const
                                                           { return d->deferralLimit(t); }
@@ -676,8 +675,7 @@ class KALARM_CAL_EXPORT KAEvent
                 KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
 #endif
                 inline void        set_deferral(DeferType);
-                inline void        set_reminder(int minutes);
-                inline void        set_archiveReminder();
+                inline void        activate_reminder(bool activate);
 
             public:
 #ifndef USE_AKONADI
@@ -715,12 +713,12 @@ class KALARM_CAL_EXPORT KAEvent
                 DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
                 int                mDisplayingFlags;   // type of alarm which is currently being displayed
                 int                mReminderMinutes;   // how long in advance reminder is to be, or 0 if none
-                int                mArchiveReminderMinutes; // original reminder period if now expired, or for restoration after next recurrence, or 0 if none
+                bool               mReminderActive;    // reminder will be due for next main alarm/recurrence
                 int                mDeferDefaultMinutes; // default number of minutes for deferral dialog, or 0 to select time control
                 bool               mDeferDefaultDateOnly;// select date-only by default in deferral dialog
                 int                mRevision;          // SEQUENCE: revision number of the original alarm, or 0
                 KARecurrence*      mRecurrence;        // RECUR: recurrence specification, or 0 if none
-                int                mAlarmCount;        // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderMinutes, mDisplaying
+                int                mAlarmCount;        // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
                 DeferType          mDeferral;          // whether the alarm is an extra deferred/deferred-reminder alarm
                 unsigned long      mKMailSerialNumber; // if email text, message's KMail serial number
                 int                mTemplateAfterTime; // time not specified: use n minutes after default time, or -1 (applies to templates only)

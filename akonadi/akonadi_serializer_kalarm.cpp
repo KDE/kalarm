@@ -181,7 +181,7 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
         reportDifference(reporter, KAEventFormatter::SoundFadeVolume);
     if (eventL.fadeSeconds() != eventR.fadeSeconds())
         reportDifference(reporter, KAEventFormatter::SoundFadeTime);
-    if (eventL.reminder() != eventR.reminder())
+    if (eventL.reminderMinutes() != eventR.reminderMinutes())
         reportDifference(reporter, KAEventFormatter::Reminder);
     if (eventL.reminderOnceOnly() != eventR.reminderOnceOnly())
         reportDifference(reporter, KAEventFormatter::ReminderOnce);

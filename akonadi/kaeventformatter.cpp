@@ -156,7 +156,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case DeferDefault:
             return mEvent.displayAction();
         case ReminderOnce:
-            return mEvent.reminder() && mEvent.recurs();
+            return mEvent.reminderMinutes() && mEvent.recurs();
         case DeferralTime:
             return mEvent.deferred();
         case DeferDefaultDate:
@@ -263,7 +263,7 @@ QString KAEventFormatter::value(Parameter param) const
         case PreActionNoError:  return trueFalse(mEvent.dontShowPreActionError());
         case PreAction:         return mEvent.preAction();
         case PostAction:        return mEvent.postAction();
-        case Reminder:          return mEvent.reminder() ? minutesHoursDays(mEvent.reminder()) : trueFalse(false);
+        case Reminder:          return mEvent.reminderMinutes() ? minutesHoursDays(mEvent.reminderMinutes()) : trueFalse(false);
         case ReminderOnce:      return trueFalse(mEvent.reminderOnceOnly());
         case DeferralType:      return mEvent.reminderDeferral() ? i18nc("@info/plain", "Reminder") : trueFalse(mEvent.deferred());
         case DeferralTime:      return mEvent.deferred() ? dateTime(mEvent.deferDateTime().kDateTime()) : trueFalse(false);

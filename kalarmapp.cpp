@@ -1388,7 +1388,7 @@ bool KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
 	bool reply = false;
 	bool update = false;
 	event.startChanges();
-	if (alarm.reminder()  ||  alarm.deferred())
+	if (alarm.isReminder()  ||  alarm.deferred())
 	{
 		// It's an advance warning alarm or an extra deferred alarm, so delete it
 		event.removeExpiredAlarm(alarm.type());

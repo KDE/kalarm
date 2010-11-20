@@ -184,24 +184,18 @@ inline void KAEvent::Private::set_deferral(DeferType type)
     mDeferral = type;
 }
 
-inline void KAEvent::Private::set_reminder(int minutes)
+inline void KAEvent::Private::activate_reminder(bool activate)
 {
-    if (minutes < 0)
-        return;   // reminders currently must be BEFORE the main alarm
-    if (minutes  ||  !mReminderMinutes)
+    if (activate  &&  !mReminderActive  &&  mReminderMinutes)
+    {
+        mReminderActive = true;
         ++mAlarmCount;
-    else if (!minutes  &&  mReminderMinutes)
+    }
+    else if (!activate  &&  mReminderActive)
+    {
+        mReminderActive = false;
         --mAlarmCount;
-    mReminderMinutes        = minutes;
-    mArchiveReminderMinutes = 0;
-}
-
-inline void KAEvent::Private::set_archiveReminder()
-{
-    if (mReminderMinutes)
-        --mAlarmCount;
-    mArchiveReminderMinutes = mReminderMinutes;
-    mReminderMinutes        = 0;
+    }
 }
 
 KAEvent::KAEvent()
@@ -218,6 +212,7 @@ KAEvent::Private::Private()
       mItemId(-1),
 #endif
       mReminderMinutes(0),
+      mReminderActive(false),
       mRevision(0),
       mRecurrence(0),
       mAlarmCount(0),
@@ -311,7 +306,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mDisplayingTime          = event.mDisplayingTime;
     mDisplayingFlags         = event.mDisplayingFlags;
     mReminderMinutes         = event.mReminderMinutes;
-    mArchiveReminderMinutes  = event.mArchiveReminderMinutes;
+    mReminderActive          = event.mReminderActive;
     mDeferDefaultMinutes     = event.mDeferDefaultMinutes;
     mDeferDefaultDateOnly    = event.mDeferDefaultDateOnly;
     mRevision                = event.mRevision;
@@ -405,7 +400,8 @@ void KAEvent::Private::set(const Event* event)
     mDisplayingDefer        = false;
     mDisplayingEdit         = false;
     mDeferDefaultDateOnly   = false;
-    mArchiveReminderMinutes = 0;
+    mReminderActive         = false;
+    mReminderMinutes        = 0;
     mDeferDefaultMinutes    = 0;
     mLateCancel             = 0;
     mKMailSerialNumber      = 0;
@@ -574,14 +570,14 @@ void KAEvent::Private::set(const Event* event)
                         ++cat;
                     if (ch)
                     {
-                        mArchiveReminderMinutes = ch - '0';
+                        mReminderMinutes = ch - '0';
                         while ((ch = *++cat) >= '0'  &&  ch <= '9')
-                            mArchiveReminderMinutes = mArchiveReminderMinutes * 10 + ch - '0';
+                            mReminderMinutes = mReminderMinutes * 10 + ch - '0';
                         switch (ch)
                         {
                             case 'M':  break;
-                            case 'H':  mArchiveReminderMinutes *= 60;    break;
-                            case 'D':  mArchiveReminderMinutes *= 1440;  break;
+                            case 'H':  mReminderMinutes *= 60;    break;
+                            case 'D':  mReminderMinutes *= 1440;  break;
                         }
                     }
                 }
@@ -615,7 +611,6 @@ void KAEvent::Private::set(const Event* event)
     mSoundVolume       = -1;
     mFadeVolume        = -1;
     mFadeSeconds       = 0;
-    mReminderMinutes   = 0;
     mEmailFromIdentity = 0;
     mText.clear();
     mAudioFile.clear();
@@ -674,7 +669,7 @@ void KAEvent::Private::set(const Event* event)
                 if (mReminderMinutes < 0)
                     mReminderMinutes = 0;   // reminders currently must be BEFORE the main alarm
                 else if (mReminderMinutes)
-                    mArchiveReminderMinutes = 0;
+                    mReminderActive = true;
                 break;
             case KAAlarm::DEFERRED_REMINDER_DATE__ALARM:
             case KAAlarm::DEFERRED_DATE__ALARM:
@@ -801,6 +796,15 @@ void KAEvent::Private::set(const Event* event)
         setRecurrence(*recur);
         if (nextRepeat <= mRepetition.count())
             mNextRepeat = nextRepeat;
+    }
+    else if (mRepetition)
+    {
+        if (mRepetition.isDaily())
+            recur->setDaily(mRepetition.intervalDays());
+        else
+            recur->setMinutely(mRepetition.intervalMinutes());
+        recur->setDuration(mRepetition.count() + 1);
+        mRepetition.set(0, 0);
     }
 
     if (mMainExpired  &&  deferralOffset  &&  checkRecur() != KARecurrence::NO_RECUR)
@@ -1166,10 +1170,10 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mUpdated                = true;
     mKMailSerialNumber      = 0;
     mReminderMinutes        = 0;
-    mArchiveReminderMinutes = 0;
     mDeferDefaultMinutes    = 0;
     mDeferDefaultDateOnly   = false;
     mArchiveRepeatAtLogin   = false;
+    mReminderActive         = false;
     mReminderOnceOnly       = false;
     mDisplaying             = false;
     mMainExpired            = false;
@@ -1260,6 +1264,7 @@ void KAEvent::Private::setRepeatAtLogin(bool rl)
     mRepeatAtLogin = rl;
     if (mRepeatAtLogin)
     {
+        // Cancel reminder, late-cancel and copy-to-KOrganizer
         setReminder(0, false);
         mLateCancel = 0;
         mAutoClose = false;
@@ -1268,11 +1273,20 @@ void KAEvent::Private::setRepeatAtLogin(bool rl)
     mUpdated = true;
 }
 
+/******************************************************************************
+* Set a reminder.
+* 'minutes' = number of minutes BEFORE the main alarm.
+*/
 void KAEvent::Private::setReminder(int minutes, bool onceOnly)
 {
-    if (minutes != mReminderMinutes)
+    if (minutes != mReminderMinutes  ||  (minutes && !mReminderActive))
     {
-        set_reminder(minutes);
+        if (minutes  &&  !mReminderActive)
+            ++mAlarmCount;
+        else if (!minutes  &&  mReminderActive)
+            --mAlarmCount;
+        mReminderMinutes  = minutes;
+        mReminderActive   = minutes;
         mReminderOnceOnly = onceOnly;
         mUpdated          = true;
         calcTriggerTimes();
@@ -1341,14 +1355,13 @@ void KAEvent::Private::calcTriggerTimes() const
     else
     {
         mMainTrigger = mainDateTime(true);   // next recurrence or sub-repetition
-        // N.B. mReminderMinutes is only set when the reminder is pending -
-        // it is cleared once the reminder has triggered.
-        mAllTrigger = (mDeferral == REMINDER_DEFERRAL) ? mDeferralTime : mMainTrigger.addMins(-mReminderMinutes);
+        mAllTrigger = (mDeferral == REMINDER_DEFERRAL) ? mDeferralTime
+                    : mReminderActive ? mMainTrigger.addMins(-mReminderMinutes) : mMainTrigger;
         // It's not deferred.
         // If only-during-working-time is set and it recurs, it won't actually trigger
         // unless it falls during working hours.
         if ((!mWorkTimeOnly && !mExcludeHolidays)
-        ||  (!mRepetition  &&  checkRecur() == KARecurrence::NO_RECUR)
+        ||  checkRecur() == KARecurrence::NO_RECUR
         ||  isWorkingTime(mMainTrigger.kDateTime()))
         {
             // It only occurs once, or it complies with any working hours/holiday
@@ -1383,7 +1396,7 @@ void KAEvent::Private::calcTriggerTimes() const
                         break;
                     if (isWorkingTime(nextTrigger.kDateTime()))
                     {
-                        int reminder = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
+                        int reminder = mReminderMinutes;
                         mMainWorkTrigger = nextTrigger;
                         mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
                         return;   // found a non-holiday occurrence
@@ -1406,7 +1419,7 @@ void KAEvent::Private::calcTriggerTimes() const
                     break;
                 if (!mHolidays->isHoliday(nextTrigger.date()))
                 {
-                    int reminder = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
+                    int reminder = mReminderMinutes;
                     mMainWorkTrigger = nextTrigger;
                     mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
                     return;   // found a non-holiday occurrence
@@ -1437,7 +1450,7 @@ void KAEvent::Private::calcNextWorkingTime(const DateTime& nextTrigger) const
     }
     KARecurrence::Type recurType = checkRecur();
     KDateTime kdt = nextTrigger.effectiveKDateTime();
-    int reminder = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
+    int reminder = mReminderMinutes;
     // Check if it always falls on the same day(s) of the week.
     RecurrenceRule* rrule = mRecurrence->defaultRRuleConst();
     if (!rrule)
@@ -2108,12 +2121,12 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
     if (mArchive  &&  !archived)
     {
         QStringList params;
-        if (mArchiveReminderMinutes)
+        if (mReminderMinutes  &&  !mReminderActive)
         {
             if (mReminderOnceOnly)
                 params += ARCHIVE_REMINDER_ONCE_TYPE;
             char unit = 'M';
-            int count = mArchiveReminderMinutes;
+            int count = mReminderMinutes;
             if (count % 1440 == 0)
             {
                 unit = 'D';
@@ -2205,13 +2218,12 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
             ancillaryType = 1;
         }
     }
-    if (mReminderMinutes  ||  (mArchiveReminderMinutes && archived))
+    if (mReminderMinutes  &&  (mReminderActive || archived))
     {
-        int minutes = mReminderMinutes ? mReminderMinutes : mArchiveReminderMinutes;
-        initKCalAlarm(ev, -minutes * 60, QStringList(mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE));
+        initKCalAlarm(ev, -mReminderMinutes * 60, QStringList(mReminderOnceOnly ? REMINDER_ONCE_TYPE : REMINDER_TYPE));
         if (!ancillaryType)
         {
-            ancillaryOffset = -minutes * 60;
+            ancillaryOffset = -mReminderMinutes * 60;
             ancillaryType = 2;
         }
     }
@@ -2479,7 +2491,7 @@ KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
                 }
                 break;
             case KAAlarm::REMINDER_ALARM:
-                if (mReminderMinutes)
+                if (mReminderActive)
                 {
                     al.mType = KAAlarm::REMINDER__ALARM;
                     if (mReminderOnceOnly)
@@ -2557,7 +2569,7 @@ KAAlarm KAEvent::Private::nextAlarm(KAAlarm::Type prevType) const
     switch (prevType)
     {
         case KAAlarm::MAIN_ALARM:
-            if (mReminderMinutes)
+            if (mReminderActive)
                 return alarm(KAAlarm::REMINDER_ALARM);
             // fall through to REMINDER_ALARM
         case KAAlarm::REMINDER_ALARM:
@@ -2613,7 +2625,7 @@ void KAEvent::Private::removeExpiredAlarm(KAAlarm::Type type)
         case KAAlarm::REMINDER_ALARM:
             // Remove any reminder alarm, but keep a note of it for archiving purposes
             // and for restoration after the next recurrence.
-            set_archiveReminder();
+            activate_reminder(false);
             break;
         case KAAlarm::DEFERRED_REMINDER_ALARM:
         case KAAlarm::DEFERRED_ALARM:
@@ -2655,7 +2667,8 @@ bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjus
     bool checkRepetition = false;
     if (checkRecur() == KARecurrence::NO_RECUR)
     {
-        if (mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
+        // Deferring a non-recurring alarm
+        if (mReminderMinutes)
         {
             if (dateTime < mNextMainDateTime.effectiveKDateTime())
             {
@@ -2666,50 +2679,36 @@ bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjus
             else
             {
                 // Deferring past the main alarm time, so adjust any existing deferral
-                if (mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL)
+                if (mReminderActive  ||  mDeferral == REMINDER_DEFERRAL)
                 {
                     set_deferral(NO_DEFERRAL);
                     mChanged = true;
                 }
             }
-            // Remove any reminder alarm, but keep a note of it for archiving purposes
-            // and for restoration after the next recurrence.
-            if (mReminderMinutes)
+            if (mReminderActive)
             {
-                set_archiveReminder();
+                activate_reminder(false);
                 mChanged = true;
             }
         }
         if (mDeferral != REMINDER_DEFERRAL)
         {
-            // We're deferring the main alarm, not a reminder
-            if (mRepetition  &&  dateTime < mainEndRepeatTime())
+            // We're deferring the main alarm, not a reminder.
+            // Main alarm has now expired.
+            mNextMainDateTime = mDeferralTime = dateTime;
+            set_deferral(NORMAL_DEFERRAL);
+            mChanged = true;
+            if (!mMainExpired)
             {
-                // The alarm is repeated, and we're deferring to a time before the last repetition
-                set_deferral(NORMAL_DEFERRAL);
-                mDeferralTime = dateTime;
-                result = true;
-                mChanged = true;
-                setNextRepetition = true;
-            }
-            else
-            {
-                // Main alarm has now expired
-                mNextMainDateTime = mDeferralTime = dateTime;
-                set_deferral(NORMAL_DEFERRAL);
-                mChanged = true;
-                if (!mMainExpired)
+                // Mark the alarm as expired now
+                mMainExpired = true;
+                --mAlarmCount;
+                if (mRepeatAtLogin)
                 {
-                    // Mark the alarm as expired now
-                    mMainExpired = true;
+                    // Remove the repeat-at-login alarm, but keep a note of it for archiving purposes
+                    mArchiveRepeatAtLogin = true;
+                    mRepeatAtLogin = false;
                     --mAlarmCount;
-                    if (mRepeatAtLogin)
-                    {
-                        // Remove the repeat-at-login alarm, but keep a note of it for archiving purposes
-                        mArchiveRepeatAtLogin = true;
-                        mRepeatAtLogin = false;
-                        --mAlarmCount;
-                    }
                 }
             }
         }
@@ -2788,12 +2787,12 @@ void KAEvent::Private::cancelDefer()
 */
 DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
 {
-    DeferLimitType ltype;
+    DeferLimitType ltype = LIMIT_NONE;
     DateTime endTime;
     bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
-    if (recurs  ||  mRepetition)
+    if (recurs)
     {
-        // It's a repeated alarm. Don't allow it to be deferred past its
+        // It's a recurring alarm. Don't allow it to be deferred past its
         // next occurrence or repetition.
         DateTime reminderTime;
         KDateTime now = KDateTime::currentUtcDateTime();
@@ -2802,7 +2801,7 @@ DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
             ltype = LIMIT_REPETITION;
         else if (type == NO_OCCURRENCE)
             ltype = LIMIT_NONE;
-        else if (mReminderMinutes  &&  (now < (reminderTime = endTime.addMins(-mReminderMinutes))))
+        else if (mReminderActive  &&  (now < (reminderTime = endTime.addMins(-mReminderMinutes))))
         {
             endTime = reminderTime;
             ltype = LIMIT_REMINDER;
@@ -2812,15 +2811,13 @@ DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
         else
             ltype = LIMIT_RECURRENCE;
     }
-    else if ((mReminderMinutes  ||  mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
+    else if (mReminderMinutes
          &&  KDateTime::currentUtcDateTime() < mNextMainDateTime.effectiveKDateTime())
     {
-        // It's an reminder alarm. Don't allow it to be deferred past its main alarm time.
+        // It's a reminder alarm. Don't allow it to be deferred past its main alarm time.
         endTime = mNextMainDateTime;
         ltype = LIMIT_REMINDER;
     }
-    else
-        ltype = LIMIT_NONE;
     if (ltype != LIMIT_NONE)
         endTime = endTime.addMins(-1);
     if (limitType)
@@ -3196,16 +3193,8 @@ KAEvent::OccurType KAEvent::Private::setNextOccurrence(const KDateTime& preDateT
             // Need to reschedule the next trigger date/time
             mNextMainDateTime = dt;
             // Reinstate the reminder (if any) for the rescheduled recurrence
-            if (mDeferral == REMINDER_DEFERRAL  ||  mArchiveReminderMinutes)
-            {
-                if (mReminderOnceOnly)
-                {
-                    if (mReminderMinutes)
-                        set_archiveReminder();
-                }
-                else
-                    set_reminder(mArchiveReminderMinutes);
-            }
+            if (mReminderMinutes  &&  (mDeferral == REMINDER_DEFERRAL || !mReminderActive))
+                activate_reminder(!mReminderOnceOnly);
             if (mDeferral == REMINDER_DEFERRAL)
                 set_deferral(NO_DEFERRAL);
             changed = true;
@@ -3222,8 +3211,7 @@ KAEvent::OccurType KAEvent::Private::setNextOccurrence(const KDateTime& preDateT
             type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
             mNextRepeat = mRepetition.nextRepeatCount(dt.effectiveKDateTime(), preDateTime);
             // Repetitions can't have a reminder, so remove any.
-            if (mReminderMinutes)
-                set_archiveReminder();
+            activate_reminder(false);
             if (mDeferral == REMINDER_DEFERRAL)
                 set_deferral(NO_DEFERRAL);
             changed = true;
@@ -3417,9 +3405,10 @@ void KAEvent::adjustRecurrenceStartOfDay()
 }
 
 /******************************************************************************
-*  Initialise the event's sub-repetition.
-*  The repetition length is adjusted if necessary to fit the recurrence interval.
-*  Reply = false if a non-daily interval was specified for a date-only recurrence.
+* Initialise the event's sub-repetition.
+* The repetition length is adjusted if necessary to fit the recurrence interval.
+* If the event doesn't recur, the sub-repetition is cleared.
+* Reply = false if a non-daily interval was specified for a date-only recurrence.
 */
 bool KAEvent::Private::setRepetition(const Repetition& repetition)
 {
@@ -3688,10 +3677,12 @@ KARecurrence::Type KAEvent::Private::checkRecur() const
                 return type;
             default:
                 if (mRecurrence)
-                    const_cast<KAEvent::Private*>(this)->clearRecur();  // this shouldn't exist!!
+                    const_cast<KAEvent::Private*>(this)->clearRecur();  // this shouldn't ever be necessary!!
                 break;
         }
     }
+    if (mRepetition)
+        const_cast<KAEvent::Private*>(this)->clearRecur();  // this shouldn't ever be necessary!!
     return KARecurrence::NO_RECUR;
 }
 
@@ -4618,11 +4609,11 @@ void KAEvent::Private::dumpDebug() const
     kDebug() << "-- mReadOnly:" << mReadOnly;
 #endif
     if (mReminderMinutes)
+    {
         kDebug() << "-- mReminderMinutes:" << mReminderMinutes;
-    if (mArchiveReminderMinutes)
-        kDebug() << "-- mArchiveReminderMinutes:" << mArchiveReminderMinutes;
-    if (mReminderMinutes  ||  mArchiveReminderMinutes)
+        kDebug() << "-- mReminderActive:" << mReminderActive;
         kDebug() << "-- mReminderOnceOnly:" << mReminderOnceOnly;
+    }
     else if (mDeferral > 0)
     {
         kDebug() << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
@@ -4759,9 +4750,9 @@ void KAAlarmEventBase::baseDumpDebug() const
     if (!mUseDefaultFont)
         kDebug() << "-- mFont:" << mFont.toString();
     kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
-        if (!mRepetition)
-            kDebug() << "-- mRepetition: 0";
-        else if (mRepetition.isDaily())
+    if (!mRepetition)
+        kDebug() << "-- mRepetition: 0";
+    else if (mRepetition.isDaily())
         kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalDays() << "days";
     else
         kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";

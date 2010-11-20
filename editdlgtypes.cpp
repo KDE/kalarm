@@ -279,7 +279,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 		setColours(event->fgColour(), event->bgColour());
 		mConfirmAck->setChecked(event->confirmAck());
 		bool recurs = event->recurs();
-		int reminderMins = event->reminder();
+		int reminderMins = event->reminderMinutes(true);
 		if (!reminderMins)
 		{
 			if (event->reminderDeferral()  &&  !recurs)
@@ -287,9 +287,9 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
 				reminderMins = event->deferDateTime().minsTo(event->mainDateTime());
 				mReminderDeferral = true;
 			}
-			else if (event->reminderArchived()  &&  recurs)
+			else if (event->reminderMinutes()  &&  recurs)
 			{
-				reminderMins = event->reminderArchived();
+				reminderMins = event->reminderMinutes();
 				mReminderArchived = true;
 			}
 		}
