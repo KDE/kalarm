@@ -707,9 +707,10 @@ void MessageWin::initView()
 	mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
 	                                "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
 
-	setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 	if (mNoDefer)
 		mDeferButton->hide();
+	else
+		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 
 	if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
 	{
@@ -810,6 +811,7 @@ void MessageWin::showDefer()
 	{
 		mNoDefer = false;
 		mDeferButton->show();
+		setDeferralLimit(mEvent);    // ensure that button is disabled when alarm can't be deferred any more
 		resize(sizeHint());
 	}
 }
@@ -1702,8 +1704,11 @@ void MessageWin::repeat(const KAAlarm& alarm)
 				raise();
 				playAudio();
 			}
-			mDeferButton->setEnabled(true);
-			setDeferralLimit(*event);    // ensure that button is disabled when alarm can't be deferred any more
+			if (mDeferButton->isVisible())
+			{
+				mDeferButton->setEnabled(true);
+				setDeferralLimit(*event);    // ensure that button is disabled when alarm can't be deferred any more
+			}
 		}
 		alarmShowing(*event);
 	}
@@ -2098,13 +2103,10 @@ void MessageWin::setButtonsReadOnly(bool ro)
 */
 void MessageWin::setDeferralLimit(const KAEvent& event)
 {
-	if (mDeferButton->isVisible())
-	{
-		mDeferLimit = event.deferralLimit().effectiveDateTime();
-		MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
-		mDisableDeferral = false;
-		checkDeferralLimit();
-	}
+	mDeferLimit = event.deferralLimit().effectiveDateTime();
+	MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
+	mDisableDeferral = false;
+	checkDeferralLimit();
 }
 
 /******************************************************************************
@@ -2118,7 +2120,7 @@ void MessageWin::setDeferralLimit(const KAEvent& event)
 */
 void MessageWin::checkDeferralLimit()
 {
-	if (!mDeferButton->isVisible()  ||  !mDeferLimit.isValid())
+	if (!mDeferButton->isEnabled()  ||  !mDeferLimit.isValid())
 		return;
 	int n = KDateTime::currentLocalDate().daysTo(mDeferLimit.date());
 	if (n > 0)
