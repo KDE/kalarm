@@ -799,6 +799,7 @@ void KAEvent::Private::set(const Event* event)
     }
     else if (mRepetition)
     {
+        // Convert a repetition with no recurrence into a recurrence
         if (mRepetition.isDaily())
             recur->setDaily(mRepetition.intervalDays());
         else
@@ -1374,6 +1375,7 @@ void KAEvent::Private::calcTriggerTimes() const
             // The alarm is restricted to working hours.
             // Finding the next occurrence during working hours can sometimes take a long time,
             // so mark the next actual trigger as invalid until the calculation completes.
+            // Note that reminders are only triggered if the main alarm is during working time.
             if (!mExcludeHolidays)
             {
                 // There are no holiday restrictions.
@@ -2020,11 +2022,11 @@ KAEvent::Actions KAEvent::actions() const
 }
 
 /******************************************************************************
- * Update an existing KCal::Event with the KAEvent::Private data.
- * If 'setCustomProperties' is true, all the KCal::Event's existing custom
- * properties are cleared and replaced with the KAEvent's custom properties. If
- * false, the KCal::Event's non-KAlarm custom properties are left untouched.
- */
+* Update an existing KCal::Event with the KAEvent::Private data.
+* If 'setCustomProperties' is true, all the KCal::Event's existing custom
+* properties are cleared and replaced with the KAEvent's custom properties. If
+* false, the KCal::Event's non-KAlarm custom properties are left untouched.
+*/
 #ifdef USE_AKONADI
 bool KAEvent::Private::updateKCalEvent(const Event::Ptr& ev, UidAction uidact, bool setCustomProperties) const
 #else
@@ -2327,10 +2329,10 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
 }
 
 /******************************************************************************
- * Create a new alarm for a libkcal event, and initialise it according to the
- * alarm action. If 'types' is non-null, it is appended to the X-KDE-KALARM-TYPE
- * property value list.
- */
+* Create a new alarm for a libkcal event, and initialise it according to the
+* alarm action. If 'types' is non-null, it is appended to the X-KDE-KALARM-TYPE
+* property value list.
+*/
 #ifdef USE_AKONADI
 Alarm::Ptr KAEvent::Private::initKCalAlarm(const Event::Ptr& event, const DateTime& dt, const QStringList& types, KAAlarm::Type type) const
 #else
@@ -2459,8 +2461,8 @@ void KAEvent::Private::setAudioAlarm(Alarm* alarm) const
 }
 
 /******************************************************************************
- * Return the alarm of the specified type.
- */
+* Return the alarm of the specified type.
+*/
 KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
 {
     checkRecur();     // ensure recurrence/repetition data is consistent
@@ -2542,12 +2544,12 @@ KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
 }
 
 /******************************************************************************
- * Return the main alarm for the event.
- * If the main alarm does not exist, one of the subsidiary ones is returned if
- * possible.
- * N.B. a repeat-at-login alarm can only be returned if it has been read from/
- * written to the calendar file.
- */
+* Return the main alarm for the event.
+* If the main alarm does not exist, one of the subsidiary ones is returned if
+* possible.
+* N.B. a repeat-at-login alarm can only be returned if it has been read from/
+* written to the calendar file.
+*/
 KAAlarm KAEvent::Private::firstAlarm() const
 {
     if (mAlarmCount)
@@ -2560,10 +2562,10 @@ KAAlarm KAEvent::Private::firstAlarm() const
 }
 
 /******************************************************************************
- * Return the next alarm for the event, after the specified alarm.
- * N.B. a repeat-at-login alarm can only be returned if it has been read from/
- * written to the calendar file.
- */
+* Return the next alarm for the event, after the specified alarm.
+* N.B. a repeat-at-login alarm can only be returned if it has been read from/
+* written to the calendar file.
+*/
 KAAlarm KAEvent::Private::nextAlarm(KAAlarm::Type prevType) const
 {
     switch (prevType)
@@ -2601,10 +2603,10 @@ KAAlarm KAEvent::Private::nextAlarm(KAAlarm::Type prevType) const
 }
 
 /******************************************************************************
- * Remove the alarm of the specified type from the event.
- * This must only be called to remove an alarm which has expired, not to
- * reconfigure the event.
- */
+* Remove the alarm of the specified type from the event.
+* This must only be called to remove an alarm which has expired, not to
+* reconfigure the event.
+*/
 void KAEvent::Private::removeExpiredAlarm(KAAlarm::Type type)
 {
     int count = mAlarmCount;
@@ -2653,12 +2655,12 @@ void KAEvent::Private::removeExpiredAlarm(KAAlarm::Type type)
 }
 
 /******************************************************************************
- * Defer the event to the specified time.
- * If the main alarm time has passed, the main alarm is marked as expired.
- * If 'adjustRecurrence' is true, ensure that the next scheduled recurrence is
- * after the current time.
- * Reply = true if a repetition has been deferred.
- */
+* Defer the event to the specified time.
+* If the main alarm time has passed, the main alarm is marked as expired.
+* If 'adjustRecurrence' is true, ensure that the next scheduled recurrence is
+* after the current time.
+* Reply = true if a repetition has been deferred.
+*/
 bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjustRecurrence)
 {
     startChanges();   // prevent multiple trigger time evaluation here
@@ -2728,6 +2730,7 @@ bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjus
     }
     else
     {
+        // Deferring a recurring alarm
         mDeferralTime = dateTime;
         mChanged = true;
         if (mDeferral <= 0)
@@ -2769,8 +2772,8 @@ bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjus
 }
 
 /******************************************************************************
- * Cancel any deferral alarm.
- */
+* Cancel any deferral alarm.
+*/
 void KAEvent::Private::cancelDefer()
 {
     if (mDeferral > 0)
@@ -2796,7 +2799,7 @@ DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
         // next occurrence or repetition.
         DateTime reminderTime;
         KDateTime now = KDateTime::currentUtcDateTime();
-                OccurType type = nextOccurrence(now, endTime, RETURN_REPETITION);
+        OccurType type = nextOccurrence(now, endTime, RETURN_REPETITION);
         if (type & OCCURRENCE_REPEAT)
             ltype = LIMIT_REPETITION;
         else if (type == NO_OCCURRENCE)
@@ -2997,10 +3000,10 @@ KAAlarm KAEvent::convertDisplayingAlarm() const
 }
 
 /******************************************************************************
- * Determine whether the event will occur after the specified date/time.
- * If 'includeRepetitions' is true and the alarm has a sub-repetition, it
- * returns true if any repetitions occur after the specified date/time.
- */
+* Determine whether the event will occur after the specified date/time.
+* If 'includeRepetitions' is true and the alarm has a sub-repetition, it
+* returns true if any repetitions occur after the specified date/time.
+*/
 bool KAEvent::Private::occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const
 {
     KDateTime dt;
@@ -3032,10 +3035,10 @@ bool KAEvent::Private::occursAfter(const KDateTime& preDateTime, bool includeRep
 }
 
 /******************************************************************************
- * Get the date/time of the next occurrence of the event, after the specified
- * date/time.
- * 'result' = date/time of next occurrence, or invalid date/time if none.
- */
+* Get the date/time of the next occurrence of the event, after the specified
+* date/time.
+* 'result' = date/time of next occurrence, or invalid date/time if none.
+*/
 KAEvent::OccurType KAEvent::Private::nextOccurrence(const KDateTime& preDateTime, DateTime& result,
                                                     OccurOption includeRepetitions) const
 {
@@ -3101,12 +3104,12 @@ KAEvent::OccurType KAEvent::Private::nextOccurrence(const KDateTime& preDateTime
 }
 
 /******************************************************************************
- * Get the date/time of the last previous occurrence of the event, before the
- * specified date/time.
- * If 'includeRepetitions' is true and the alarm has a sub-repetition, the
- * last previous repetition is returned if appropriate.
- * 'result' = date/time of previous occurrence, or invalid date/time if none.
- */
+* Get the date/time of the last previous occurrence of the event, before the
+* specified date/time.
+* If 'includeRepetitions' is true and the alarm has a sub-repetition, the
+* last previous repetition is returned if appropriate.
+* 'result' = date/time of previous occurrence, or invalid date/time if none.
+*/
 KAEvent::OccurType KAEvent::Private::previousOccurrence(const KDateTime& afterDateTime, DateTime& result,
                                                         bool includeRepetitions) const
 {
@@ -3157,13 +3160,13 @@ KAEvent::OccurType KAEvent::Private::previousOccurrence(const KDateTime& afterDa
 }
 
 /******************************************************************************
- * Set the date/time of the event to the next scheduled occurrence after the
- * specified date/time, provided that this is later than its current date/time.
- * Any reminder alarm is adjusted accordingly.
- * If the alarm has a sub-repetition, and a repetition of a previous recurrence
- * occurs after the specified date/time, that repetition is set as the next
- * occurrence.
- */
+* Set the date/time of the event to the next scheduled occurrence after the
+* specified date/time, provided that this is later than its current date/time.
+* Any reminder alarm is adjusted accordingly.
+* If the alarm has a sub-repetition, and a repetition of a previous recurrence
+* occurs after the specified date/time, that repetition is set as the next
+* occurrence.
+*/
 KAEvent::OccurType KAEvent::Private::setNextOccurrence(const KDateTime& preDateTime)
 {
     if (preDateTime < mNextMainDateTime.effectiveKDateTime())
@@ -3232,10 +3235,10 @@ KAEvent::OccurType KAEvent::Private::setNextOccurrence(const KDateTime& preDateT
 }
 
 /******************************************************************************
- * Get the date/time of the next recurrence of the event, after the specified
- * date/time.
- * 'result' = date/time of next occurrence, or invalid date/time if none.
- */
+* Get the date/time of the next recurrence of the event, after the specified
+* date/time.
+* 'result' = date/time of next occurrence, or invalid date/time if none.
+*/
 KAEvent::OccurType KAEvent::Private::nextRecurrence(const KDateTime& preDateTime, DateTime& result) const
 {
     KDateTime recurStart = mRecurrence->startDateTime();
@@ -3258,8 +3261,8 @@ KAEvent::OccurType KAEvent::Private::nextRecurrence(const KDateTime& preDateTime
 }
 
 /******************************************************************************
- * Return the recurrence interval as text suitable for display.
- */
+* Return the recurrence interval as text suitable for display.
+*/
 QString KAEvent::recurrenceText(bool brief) const
 {
     if (d->mRepeatAtLogin)
@@ -3296,8 +3299,8 @@ QString KAEvent::recurrenceText(bool brief) const
 }
 
 /******************************************************************************
- * Return the repetition interval as text suitable for display.
- */
+* Return the repetition interval as text suitable for display.
+*/
 QString KAEvent::repetitionText(bool brief) const
 {
     if (d->mRepetition)
@@ -3321,10 +3324,10 @@ QString KAEvent::repetitionText(bool brief) const
 }
 
 /******************************************************************************
- * Adjust the event date/time to the first recurrence of the event, on or after
- * start date/time. The event start date may not be a recurrence date, in which
- * case a later date will be set.
- */
+* Adjust the event date/time to the first recurrence of the event, on or after
+* start date/time. The event start date may not be a recurrence date, in which
+* case a later date will be set.
+*/
 void KAEvent::Private::setFirstRecurrence()
 {
     switch (checkRecur())
@@ -3442,15 +3445,15 @@ bool KAEvent::Private::setRepetition(const Repetition& repetition)
 }
 
 /******************************************************************************
- * Set the recurrence to recur at a minutes interval.
- * Parameters:
- *    freq  = how many minutes between recurrences.
- *    count = number of occurrences, including first and last.
- *          = -1 to recur indefinitely.
- *          = 0 to use 'end' instead.
- *    end   = end date/time (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Set the recurrence to recur at a minutes interval.
+* Parameters:
+*    freq  = how many minutes between recurrences.
+*    count = number of occurrences, including first and last.
+*          = -1 to recur indefinitely.
+*          = 0 to use 'end' instead.
+*    end   = end date/time (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::setRecurMinutely(int freq, int count, const KDateTime& end)
 {
     bool success = d->setRecur(RecurrenceRule::rMinutely, freq, count, end);
@@ -3459,16 +3462,16 @@ bool KAEvent::setRecurMinutely(int freq, int count, const KDateTime& end)
 }
 
 /******************************************************************************
- * Set the recurrence to recur daily.
- * Parameters:
- *    freq  = how many days between recurrences.
- *    days  = which days of the week alarms are allowed to occur on.
- *    count = number of occurrences, including first and last.
- *          = -1 to recur indefinitely.
- *          = 0 to use 'end' instead.
- *    end   = end date (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Set the recurrence to recur daily.
+* Parameters:
+*    freq  = how many days between recurrences.
+*    days  = which days of the week alarms are allowed to occur on.
+*    count = number of occurrences, including first and last.
+*          = -1 to recur indefinitely.
+*          = 0 to use 'end' instead.
+*    end   = end date (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rDaily, freq, count, end);
@@ -3488,16 +3491,16 @@ bool KAEvent::setRecurDaily(int freq, const QBitArray& days, int count, const QD
 }
 
 /******************************************************************************
- * Set the recurrence to recur weekly, on the specified weekdays.
- * Parameters:
- *    freq  = how many weeks between recurrences.
- *    days  = which days of the week alarms should occur on.
- *    count = number of occurrences, including first and last.
- *          = -1 to recur indefinitely.
- *          = 0 to use 'end' instead.
- *    end   = end date (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Set the recurrence to recur weekly, on the specified weekdays.
+* Parameters:
+*    freq  = how many weeks between recurrences.
+*    days  = which days of the week alarms should occur on.
+*    count = number of occurrences, including first and last.
+*          = -1 to recur indefinitely.
+*          = 0 to use 'end' instead.
+*    end   = end date (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rWeekly, freq, count, end);
@@ -3508,16 +3511,16 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
 }
 
 /******************************************************************************
- * Set the recurrence to recur monthly, on the specified days within the month.
- * Parameters:
- *    freq  = how many months between recurrences.
- *    days  = which days of the month alarms should occur on.
- *    count = number of occurrences, including first and last.
- *          = -1 to recur indefinitely.
- *          = 0 to use 'end' instead.
- *    end   = end date (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Set the recurrence to recur monthly, on the specified days within the month.
+* Parameters:
+*    freq  = how many months between recurrences.
+*    days  = which days of the month alarms should occur on.
+*    count = number of occurrences, including first and last.
+*          = -1 to recur indefinitely.
+*          = 0 to use 'end' instead.
+*    end   = end date (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
@@ -3531,17 +3534,17 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count,
 }
 
 /******************************************************************************
- * Set the recurrence to recur monthly, on the specified weekdays in the
- * specified weeks of the month.
- * Parameters:
- *    freq  = how many months between recurrences.
- *    posns = which days of the week/weeks of the month alarms should occur on.
- *    count = number of occurrences, including first and last.
- *          = -1 to recur indefinitely.
- *          = 0 to use 'end' instead.
- *    end   = end date (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Set the recurrence to recur monthly, on the specified weekdays in the
+* specified weeks of the month.
+* Parameters:
+*    freq  = how many months between recurrences.
+*    posns = which days of the week/weeks of the month alarms should occur on.
+*    count = number of occurrences, including first and last.
+*          = -1 to recur indefinitely.
+*          = 0 to use 'end' instead.
+*    end   = end date (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
@@ -3555,19 +3558,19 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int c
 }
 
 /******************************************************************************
- * Set the recurrence to recur annually, on the specified start date in each
- * of the specified months.
- * Parameters:
- *    freq   = how many years between recurrences.
- *    months = which months of the year alarms should occur on.
- *    day    = day of month, or 0 to use start date
- *    feb29  = when February 29th should recur in non-leap years.
- *    count  = number of occurrences, including first and last.
- *           = -1 to recur indefinitely.
- *           = 0 to use 'end' instead.
- *    end    = end date (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Set the recurrence to recur annually, on the specified start date in each
+* of the specified months.
+* Parameters:
+*    freq   = how many years between recurrences.
+*    months = which months of the year alarms should occur on.
+*    day    = day of month, or 0 to use start date
+*    feb29  = when February 29th should recur in non-leap years.
+*    count  = number of occurrences, including first and last.
+*           = -1 to recur indefinitely.
+*           = 0 to use 'end' instead.
+*    end    = end date (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end, feb29);
@@ -3583,18 +3586,18 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, 
 }
 
 /******************************************************************************
- * Set the recurrence to recur annually, on the specified weekdays in the
- * specified weeks of the specified months.
- * Parameters:
- *    freq   = how many years between recurrences.
- *    posns  = which days of the week/weeks of the month alarms should occur on.
- *    months = which months of the year alarms should occur on.
- *    count  = number of occurrences, including first and last.
- *           = -1 to recur indefinitely.
- *           = 0 to use 'end' instead.
- *    end    = end date (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Set the recurrence to recur annually, on the specified weekdays in the
+* specified weeks of the specified months.
+* Parameters:
+*    freq   = how many years between recurrences.
+*    posns  = which days of the week/weeks of the month alarms should occur on.
+*    months = which months of the year alarms should occur on.
+*    count  = number of occurrences, including first and last.
+*           = -1 to recur indefinitely.
+*           = 0 to use 'end' instead.
+*    end    = end date (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const QList<int>& months, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end);
@@ -3612,15 +3615,15 @@ bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const 
 }
 
 /******************************************************************************
- * Initialise the event's recurrence data.
- * Parameters:
- *    freq  = how many intervals between recurrences.
- *    count = number of occurrences, including first and last.
- *          = -1 to recur indefinitely.
- *          = 0 to use 'end' instead.
- *    end   = end date/time (invalid to use 'count' instead).
- * Reply = false if no recurrence was set up.
- */
+* Initialise the event's recurrence data.
+* Parameters:
+*    freq  = how many intervals between recurrences.
+*    count = number of occurrences, including first and last.
+*          = -1 to recur indefinitely.
+*          = 0 to use 'end' instead.
+*    end   = end date/time (invalid to use 'count' instead).
+* Reply = false if no recurrence was set up.
+*/
 bool KAEvent::Private::setRecur(RecurrenceRule::PeriodType recurType, int freq, int count, const QDate& end, KARecurrence::Feb29Type feb29)
 {
     KDateTime edt = mNextMainDateTime.kDateTime();
@@ -3644,8 +3647,8 @@ bool KAEvent::Private::setRecur(RecurrenceRule::PeriodType recurType, int freq, 
 }
 
 /******************************************************************************
- * Clear the event's recurrence and alarm repetition data.
- */
+* Clear the event's recurrence and alarm repetition data.
+*/
 void KAEvent::Private::clearRecur()
 {
     delete mRecurrence;
@@ -3681,15 +3684,15 @@ KARecurrence::Type KAEvent::Private::checkRecur() const
                 break;
         }
     }
-    if (mRepetition)
+    if (mRepetition)    // can't have a repetition without a recurrence
         const_cast<KAEvent::Private*>(this)->clearRecur();  // this shouldn't ever be necessary!!
     return KARecurrence::NO_RECUR;
 }
 
 
 /******************************************************************************
- * Return the recurrence interval in units of the recurrence period type.
- */
+* Return the recurrence interval in units of the recurrence period type.
+*/
 int KAEvent::recurInterval() const
 {
     if (d->mRecurrence)
@@ -3713,8 +3716,8 @@ int KAEvent::recurInterval() const
 
 #if 0
 /******************************************************************************
- * Convert a QList<WDayPos> to QList<MonthPos>.
- */
+* Convert a QList<WDayPos> to QList<MonthPos>.
+*/
 QList<KAEvent::Private::MonthPos> KAEvent::Private::convRecurPos(const QList<KCal::RecurrenceRule::WDayPos>& wdaypos)
 {
     QList<MonthPos> mposns;
@@ -3754,11 +3757,11 @@ void KAEvent::setStartOfDay(const QTime& startOfDay)
 }
 
 /******************************************************************************
- * If the calendar was written by a previous version of KAlarm, do any
- * necessary format conversions on the events to ensure that when the calendar
- * is saved, no information is lost or corrupted.
- * Reply = true if any conversions were done.
- */
+* If the calendar was written by a previous version of KAlarm, do any
+* necessary format conversions on the events to ensure that when the calendar
+* is saved, no information is lost or corrupted.
+* Reply = true if any conversions were done.
+*/
 #ifdef USE_AKONADI
 bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersion, bool adjustSummerTime)
 #else
@@ -4768,9 +4771,9 @@ void KAAlarmEventBase::baseDumpDebug() const
 =============================================================================*/
 
 /******************************************************************************
- * Sets the list of email addresses, removing any empty addresses.
- * Reply = false if empty addresses were found.
- */
+* Sets the list of email addresses, removing any empty addresses.
+* Reply = false if empty addresses were found.
+*/
 #ifdef USE_AKONADI
 EmailAddressList& EmailAddressList::operator=(const Person::List& addresses)
 #else
@@ -4802,9 +4805,9 @@ EmailAddressList::operator QStringList() const
 }
 
 /******************************************************************************
- * Return the email address list as a string, each address being delimited by
- * the specified separator string.
- */
+* Return the email address list as a string, each address being delimited by
+* the specified separator string.
+*/
 QString EmailAddressList::join(const QString& separator) const
 {
     QString result;
@@ -4912,10 +4915,10 @@ QString EmailAddressList::pureAddresses(const QString& separator) const
 =============================================================================*/
 
 /******************************************************************************
- * Set the specified alarm to be a procedure alarm with the given command line.
- * The command line is first split into its program file and arguments before
- * initialising the alarm.
- */
+* Set the specified alarm to be a procedure alarm with the given command line.
+* The command line is first split into its program file and arguments before
+* initialising the alarm.
+*/
 #ifdef USE_AKONADI
 static void setProcedureAlarm(const Alarm::Ptr& alarm, const QString& commandLine)
 #else
