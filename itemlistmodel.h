@@ -80,6 +80,7 @@ Equivalent to AlarmListFilterModel
 =============================================================================*/
 class AlarmListModel : public ItemListModel
 {
+        Q_OBJECT
     public:
         enum {   // data columns
             TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
@@ -125,6 +126,7 @@ Equivalent to TemplateListFilterModel
 =============================================================================*/
 class TemplateListModel : public ItemListModel
 {
+        Q_OBJECT
     public:
         enum {   // data columns
             TypeColumn, TemplateNameColumn,
