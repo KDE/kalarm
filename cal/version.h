@@ -37,3 +37,5 @@ KALARM_CAL_EXPORT int getVersionNumber(const QString& version, QString* subVersi
 }
 
 #endif // VERSION_H
+
+// vim: et sw=4:

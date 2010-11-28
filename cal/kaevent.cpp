@@ -2786,7 +2786,7 @@ void KAEvent::Private::cancelDefer()
 }
 
 /******************************************************************************
-*  Find the latest time which the alarm can currently be deferred to.
+* Find the latest time which the alarm can currently be deferred to.
 */
 DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
 {
@@ -3370,8 +3370,8 @@ void KAEvent::Private::setFirstRecurrence()
 }
 
 /******************************************************************************
-*  Initialise the event's recurrence from a KCal::Recurrence.
-*  The event's start date/time is not changed.
+* Initialise the event's recurrence from a KCal::Recurrence.
+* The event's start date/time is not changed.
 */
 void KAEvent::Private::setRecurrence(const KARecurrence& recurrence)
 {

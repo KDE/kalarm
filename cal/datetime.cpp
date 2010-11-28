@@ -27,43 +27,45 @@ QTime DateTime::mStartOfDay;
 
 QTime DateTime::effectiveTime() const
 {
-	return mDateTime.isDateOnly() ? mStartOfDay : mDateTime.time();
+    return mDateTime.isDateOnly() ? mStartOfDay : mDateTime.time();
 }
 
 QDateTime DateTime::effectiveDateTime() const
 {
-	if (mDateTime.isDateOnly())
-	{
-		QDateTime dt = mDateTime.dateTime();    // preserve Qt::UTC or Qt::LocalTime
-		dt.setTime(mStartOfDay);
-		return dt;
-	}
-	return mDateTime.dateTime();
+    if (mDateTime.isDateOnly())
+    {
+        QDateTime dt = mDateTime.dateTime();    // preserve Qt::UTC or Qt::LocalTime
+        dt.setTime(mStartOfDay);
+        return dt;
+    }
+    return mDateTime.dateTime();
 }
 
 KDateTime DateTime::effectiveKDateTime() const
 {
-	if (mDateTime.isDateOnly())
-	{
-		KDateTime dt = mDateTime;
-		dt.setTime(mStartOfDay);
-		return dt;
-	}
-	return mDateTime;
+    if (mDateTime.isDateOnly())
+    {
+        KDateTime dt = mDateTime;
+        dt.setTime(mStartOfDay);
+        return dt;
+    }
+    return mDateTime;
 }
 
 KDateTime DateTime::calendarKDateTime() const
 {
-	if (mDateTime.isDateOnly())
-	{
-		KDateTime dt = mDateTime;
-		dt.setTime(QTime(0, 0));
-		return dt;
-	}
-	return mDateTime;
+    if (mDateTime.isDateOnly())
+    {
+        KDateTime dt = mDateTime;
+        dt.setTime(QTime(0, 0));
+        return dt;
+    }
+    return mDateTime;
 }
 
 QString DateTime::formatLocale(bool shortFormat) const
 {
-	return KGlobal::locale()->formatDateTime(mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
+    return KGlobal::locale()->formatDateTime(mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
 }
+
+// vim: et sw=4:

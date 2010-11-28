@@ -57,11 +57,11 @@ template<class T> class ConstPtrT
         operator const T*() const    { return d; }
         operator T*()                { return isConst ? cd : d; }
     private:
-	union {
-        T*       d;
-	const T* cd;
-	};
-	bool isConst;
+        union {
+            T*       d;
+            const T* cd;
+        };
+        bool isConst;
 };
 #endif
 
@@ -88,3 +88,5 @@ typedef QSharedPointer<const KCalCore::Person>  ConstPersonPtr;
 
 #endif // USE_AKONADI
 #endif // KCALCORE_CONSTPTR_H
+
+// vim: et sw=4:

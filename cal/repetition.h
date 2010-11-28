@@ -39,130 +39,132 @@
 class KALARM_CAL_EXPORT Repetition
 {
     public:
-	Repetition() : mInterval(0), mCount(0) {}
+        Repetition() : mInterval(0), mCount(0) {}
 #ifdef USE_AKONADI
-	Repetition(const KCalCore::Duration& interval, int count)
+        Repetition(const KCalCore::Duration& interval, int count)
 #else
-	Repetition(const KCal::Duration& interval, int count)
+        Repetition(const KCal::Duration& interval, int count)
 #endif
-		: mInterval(interval), mCount(count)
-	{
-		if ((!count && interval) || (count && !interval))
-		{
-			mCount = 0;
-			mInterval = 0;
-		}
-	}
-
-#ifdef USE_AKONADI
-	void set(const KCalCore::Duration& interval, int count)
-#else
-	void set(const KCal::Duration& interval, int count)
-#endif
-	{
-		if (!count || !interval)
-		{
-			mCount = 0;
-			mInterval = 0;
-		}
-		else
-		{
-			mCount = count;
-			mInterval = interval;
-		}
-	}
+            : mInterval(interval), mCount(count)
+        {
+            if ((!count && interval) || (count && !interval))
+            {
+                mCount = 0;
+                mInterval = 0;
+            }
+        }
 
 #ifdef USE_AKONADI
-	void set(const KCalCore::Duration& interval)
+        void set(const KCalCore::Duration& interval, int count)
 #else
-	void set(const KCal::Duration& interval)
+        void set(const KCal::Duration& interval, int count)
 #endif
-	{
-		if (mCount)
-		{
-			mInterval = interval;
-			if (!interval)
-				mCount = 0;
-		}
-	}
-
-	operator bool() const                       { return mCount; }
-	bool operator!() const                      { return !mCount; }
-	bool operator==(const Repetition& r) const  { return mInterval == r.mInterval && mCount == r.mCount; }
-	bool operator!=(const Repetition& r) const  { return mInterval != r.mInterval || mCount != r.mCount; }
-
-	/** Return the number of repetitions. */
-	int count() const     { return mCount; }
+        {
+            if (!count || !interval)
+            {
+                mCount = 0;
+                mInterval = 0;
+            }
+            else
+            {
+                mCount = count;
+                mInterval = interval;
+            }
+        }
 
 #ifdef USE_AKONADI
-	/** Return the interval between repetitions. */
-	const KCalCore::Duration& interval() const  { return mInterval; }
-
-	/** Return the overall duration of the repetition. */
-	KCalCore::Duration duration() const  { return mInterval * mCount; }
-
-	/** Return the overall duration of a specified number of repetitions.
-	 *  @param count the number of repetitions to find the duration of.
-	 */
-	KCalCore::Duration duration(int count) const  { return mInterval * count; }
+        void set(const KCalCore::Duration& interval)
 #else
-	/** Return the interval between repetitions. */
-	const KCal::Duration& interval() const  { return mInterval; }
+        void set(const KCal::Duration& interval)
+#endif
+        {
+            if (mCount)
+            {
+                mInterval = interval;
+                if (!interval)
+                    mCount = 0;
+            }
+        }
 
-	/** Return the overall duration of the repetition. */
-	KCal::Duration duration() const  { return mInterval * mCount; }
+        operator bool() const                       { return mCount; }
+        bool operator!() const                      { return !mCount; }
+        bool operator==(const Repetition& r) const  { return mInterval == r.mInterval && mCount == r.mCount; }
+        bool operator!=(const Repetition& r) const  { return mInterval != r.mInterval || mCount != r.mCount; }
 
-	/** Return the overall duration of a specified number of repetitions.
-	 *  @param count the number of repetitions to find the duration of.
-	 */
-	KCal::Duration duration(int count) const  { return mInterval * count; }
+        /** Return the number of repetitions. */
+        int count() const     { return mCount; }
+
+#ifdef USE_AKONADI
+        /** Return the interval between repetitions. */
+        const KCalCore::Duration& interval() const  { return mInterval; }
+
+        /** Return the overall duration of the repetition. */
+        KCalCore::Duration duration() const  { return mInterval * mCount; }
+
+        /** Return the overall duration of a specified number of repetitions.
+         *  @param count the number of repetitions to find the duration of.
+         */
+        KCalCore::Duration duration(int count) const  { return mInterval * count; }
+#else
+        /** Return the interval between repetitions. */
+        const KCal::Duration& interval() const  { return mInterval; }
+
+        /** Return the overall duration of the repetition. */
+        KCal::Duration duration() const  { return mInterval * mCount; }
+
+        /** Return the overall duration of a specified number of repetitions.
+         *  @param count the number of repetitions to find the duration of.
+         */
+        KCal::Duration duration(int count) const  { return mInterval * count; }
 #endif
 
-	/** Check whether the repetition interval is in terms of days (as opposed to minutes). */
-	bool isDaily() const          { return mInterval.isDaily(); }
+        /** Check whether the repetition interval is in terms of days (as opposed to minutes). */
+        bool isDaily() const          { return mInterval.isDaily(); }
 
-	/** Return the repetition interval in terms of days.
-	 *  If necessary, the interval is rounded down to a whole number of days.
-	 */
-	int intervalDays() const      { return mInterval.asDays(); }
+        /** Return the repetition interval in terms of days.
+         *  If necessary, the interval is rounded down to a whole number of days.
+         */
+        int intervalDays() const      { return mInterval.asDays(); }
 
-	/** Return the repetition interval in terms of minutes.
-	 *  If necessary, the interval is rounded down to a whole number of minutes.
-	 */
-	int intervalMinutes() const   { return mInterval.asSeconds() / 60; }
+        /** Return the repetition interval in terms of minutes.
+         *  If necessary, the interval is rounded down to a whole number of minutes.
+         */
+        int intervalMinutes() const   { return mInterval.asSeconds() / 60; }
 
-	/** Return the repetition interval in terms of seconds. */
-	int intervalSeconds() const   { return mInterval.asSeconds(); }
+        /** Return the repetition interval in terms of seconds. */
+        int intervalSeconds() const   { return mInterval.asSeconds(); }
 
-	/** Find the repetition count for the next repetition after a specified time.
-	 *  @param from         repetition start time, which should not be a date-only value
-	 *  @param preDateTime  time after which the desired repetition occurs
-	 */
-	int nextRepeatCount(const KDateTime& from, const KDateTime& preDateTime) const
-	{
-		return mInterval.isDaily()
-		     ? from.daysTo(preDateTime) / mInterval.asDays() + 1
-		     : static_cast<int>(from.secsTo_long(preDateTime) / mInterval.asSeconds()) + 1;
-	}
+        /** Find the repetition count for the next repetition after a specified time.
+         *  @param from         repetition start time, which should not be a date-only value
+         *  @param preDateTime  time after which the desired repetition occurs
+         */
+        int nextRepeatCount(const KDateTime& from, const KDateTime& preDateTime) const
+        {
+            return mInterval.isDaily()
+                 ? from.daysTo(preDateTime) / mInterval.asDays() + 1
+                 : static_cast<int>(from.secsTo_long(preDateTime) / mInterval.asSeconds()) + 1;
+        }
 
-	/** Find the repetition count for the last repetition before a specified time.
-	 *  @param from           repetition start time, which should not be a date-only value
-	 *  @param afterDateTime  time after which the desired repetition occurs
-	 */
-	int previousRepeatCount(const KDateTime& from, const KDateTime& afterDateTime) const
-	{
-		return mInterval.isDaily()
-		     ? from.daysTo(afterDateTime.addSecs(-1)) / mInterval.asDays()
-		     : static_cast<int>((from.secsTo_long(afterDateTime) - 1) / mInterval.asSeconds());
-	}
+        /** Find the repetition count for the last repetition before a specified time.
+         *  @param from           repetition start time, which should not be a date-only value
+         *  @param afterDateTime  time after which the desired repetition occurs
+         */
+        int previousRepeatCount(const KDateTime& from, const KDateTime& afterDateTime) const
+        {
+            return mInterval.isDaily()
+                 ? from.daysTo(afterDateTime.addSecs(-1)) / mInterval.asDays()
+                 : static_cast<int>((from.secsTo_long(afterDateTime) - 1) / mInterval.asSeconds());
+        }
 
     private:
 #ifdef USE_AKONADI
-	KCalCore::Duration mInterval;   // sub-repetition interval
+        KCalCore::Duration mInterval;   // sub-repetition interval
 #else
-	KCal::Duration mInterval;   // sub-repetition interval
+        KCal::Duration mInterval;   // sub-repetition interval
 #endif
-	int            mCount;      // sub-repetition count (excluding the first time)
+        int            mCount;      // sub-repetition count (excluding the first time)
 };
 
 #endif // REPETITION_H
+
+// vim: et sw=4:

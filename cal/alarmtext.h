@@ -36,65 +36,67 @@ class KAEvent;
 
 class KALARM_CAL_EXPORT AlarmText
 {
-	public:
-		AlarmText(const QString& text = QString())  { setText(text); }
-		void           setText(const QString&);
-		void           setScript(const QString& text)   { setText(text);  mType = Script; }
-		void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
-		                        const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
+    public:
+        AlarmText(const QString& text = QString())  { setText(text); }
+        void           setText(const QString&);
+        void           setScript(const QString& text)   { setText(text);  mType = Script; }
+        void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
+                                const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
 #ifdef USE_AKONADI
-		void           setTodo(const KCalCore::Todo::Ptr&);
+        void           setTodo(const KCalCore::Todo::Ptr&);
 #else
-		void           setTodo(const KCal::Todo*);
+        void           setTodo(const KCal::Todo*);
 #endif
-		QString        displayText() const;
-		QString        calendarText() const;
-		QString        to() const                 { return mTo; }
-		QString        from() const               { return mFrom; }
-		QString        cc() const                 { return mCc; }
-		QString        time() const               { return mTime; }
-		QString        subject() const            { return mSubject; }
-		QString        body() const               { return mType == Email ? mBody : QString(); }
-		// Todo data
-		QString        summary() const            { return mSubject; }
-		QString        location() const           { return mTo; }
-		QString        due() const                { return mTime; }
-		QString        description() const        { return mBody; }
-		bool           isEmpty() const;
-		bool           isEmail() const            { return mType == Email; }
-		bool           isScript() const           { return mType == Script; }
-		bool           isTodo() const             { return mType == Todo; }
-		unsigned long  kmailSerialNumber() const  { return mKMailSerialNum; }
-		static QString summary(const KAEvent&, int maxLines = 1, bool* truncated = 0);
-		static bool    checkIfEmail(const QString&);
-		static QString emailHeaders(const QString&, bool subjectOnly);
-		static QString fromCalendarText(const QString&, bool& email);
-		static QString toCalendarText(const QString&);
+        QString        displayText() const;
+        QString        calendarText() const;
+        QString        to() const                 { return mTo; }
+        QString        from() const               { return mFrom; }
+        QString        cc() const                 { return mCc; }
+        QString        time() const               { return mTime; }
+        QString        subject() const            { return mSubject; }
+        QString        body() const               { return mType == Email ? mBody : QString(); }
+        // Todo data
+        QString        summary() const            { return mSubject; }
+        QString        location() const           { return mTo; }
+        QString        due() const                { return mTime; }
+        QString        description() const        { return mBody; }
+        bool           isEmpty() const;
+        bool           isEmail() const            { return mType == Email; }
+        bool           isScript() const           { return mType == Script; }
+        bool           isTodo() const             { return mType == Todo; }
+        unsigned long  kmailSerialNumber() const  { return mKMailSerialNum; }
+        static QString summary(const KAEvent&, int maxLines = 1, bool* truncated = 0);
+        static bool    checkIfEmail(const QString&);
+        static QString emailHeaders(const QString&, bool subjectOnly);
+        static QString fromCalendarText(const QString&, bool& email);
+        static QString toCalendarText(const QString&);
 
-	private:
-		enum Type { None, Email, Script, Todo };
-		void           clear();
-		static void    setUpTranslations();
-		static int     emailHeaderCount(const QStringList&);
-		static QString todoTitle(const QString& text);
+    private:
+        enum Type { None, Email, Script, Todo };
+        void           clear();
+        static void    setUpTranslations();
+        static int     emailHeaderCount(const QStringList&);
+        static QString todoTitle(const QString& text);
 
-		static QString mFromPrefix;       // translated header prefixes
-		static QString mToPrefix;
-		static QString mCcPrefix;
-		static QString mDatePrefix;
-		static QString mSubjectPrefix;
-		static QString mTitlePrefix;
-		static QString mLocnPrefix;
-		static QString mDuePrefix;
-		static QString mFromPrefixEn;     // untranslated header prefixes
-		static QString mToPrefixEn;
-		static QString mCcPrefixEn;
-		static QString mDatePrefixEn;
-		static QString mSubjectPrefixEn;
-		QString        mBody, mFrom, mTo, mCc, mTime, mSubject;
-		unsigned long  mKMailSerialNum;   // if email, message's KMail serial number, else 0
-		Type           mType;
-		bool           mIsEmail;
+        static QString mFromPrefix;       // translated header prefixes
+        static QString mToPrefix;
+        static QString mCcPrefix;
+        static QString mDatePrefix;
+        static QString mSubjectPrefix;
+        static QString mTitlePrefix;
+        static QString mLocnPrefix;
+        static QString mDuePrefix;
+        static QString mFromPrefixEn;     // untranslated header prefixes
+        static QString mToPrefixEn;
+        static QString mCcPrefixEn;
+        static QString mDatePrefixEn;
+        static QString mSubjectPrefixEn;
+        QString        mBody, mFrom, mTo, mCc, mTime, mSubject;
+        unsigned long  mKMailSerialNum;   // if email, message's KMail serial number, else 0
+        Type           mType;
+        bool           mIsEmail;
 };
 
 #endif // ALARMTEXT_H
+
+// vim: et sw=4:

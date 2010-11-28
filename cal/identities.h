@@ -29,9 +29,11 @@ namespace KPIMIdentities { class IdentityManager; }
 
 namespace Identities
 {
-	KALARM_CAL_EXPORT KPIMIdentities::IdentityManager* identityManager();
-	KALARM_CAL_EXPORT bool identitiesExist();
-	KALARM_CAL_EXPORT uint identityUoid(const QString& identityUoidOrName);
+    KALARM_CAL_EXPORT KPIMIdentities::IdentityManager* identityManager();
+    KALARM_CAL_EXPORT bool identitiesExist();
+    KALARM_CAL_EXPORT uint identityUoid(const QString& identityUoidOrName);
 }
 
 #endif // IDENTITIES_H
+
+// vim: et sw=4:

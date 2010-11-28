@@ -40,98 +40,101 @@ class KALARM_CAL_EXPORT KARecurrence : public KCalCore::Recurrence
 class KALARM_CAL_EXPORT KARecurrence : public KCal::Recurrence
 #endif
 {
-	public:
-		/** The recurrence's period type.
-		 *  This is a subset of the possible KCal recurrence types.
-		 */
-		enum Type {
-			NO_RECUR,      // does not recur
-			MINUTELY,      // at an hours/minutes interval
-			DAILY,         // daily
-			WEEKLY,        // weekly, on specified weekdays
-			MONTHLY_POS,   // monthly, on specified weekdays in a specified week of the month
-			MONTHLY_DAY,   // monthly, on a specified day of the month
-			ANNUAL_DATE,   // yearly, on a specified date in each of the specified months
-			ANNUAL_POS     // yearly, on specified weekdays in the specified weeks of the specified months
-		};
-		enum Feb29Type
-		{
-			Feb29_Feb28,   // occurs on 28 Feb in non-leap years
-			Feb29_Mar1,    // occurs on 1 March in non-leap years
-			Feb29_None     // does not occur in non-leap years
-		};
+    public:
+        /** The recurrence's period type.
+         *  This is a subset of the possible KCal recurrence types.
+         */
+        enum Type
+        {
+            NO_RECUR,      // does not recur
+            MINUTELY,      // at an hours/minutes interval
+            DAILY,         // daily
+            WEEKLY,        // weekly, on specified weekdays
+            MONTHLY_POS,   // monthly, on specified weekdays in a specified week of the month
+            MONTHLY_DAY,   // monthly, on a specified day of the month
+            ANNUAL_DATE,   // yearly, on a specified date in each of the specified months
+            ANNUAL_POS     // yearly, on specified weekdays in the specified weeks of the specified months
+        };
+        enum Feb29Type
+        {
+            Feb29_Feb28,   // occurs on 28 Feb in non-leap years
+            Feb29_Mar1,    // occurs on 1 March in non-leap years
+            Feb29_None     // does not occur in non-leap years
+        };
 
 #ifdef USE_AKONADI
-		KARecurrence() : KCalCore::Recurrence(), mFeb29Type(Feb29_None), mCachedType(-1) { }
-		KARecurrence(const KCalCore::Recurrence& r) : KCalCore::Recurrence(r) { fix(); }
-		KARecurrence(const KARecurrence& r) : KCalCore::Recurrence(r), mFeb29Type(r.mFeb29Type), mCachedType(r.mCachedType) { }
+        KARecurrence() : KCalCore::Recurrence(), mFeb29Type(Feb29_None), mCachedType(-1) { }
+        KARecurrence(const KCalCore::Recurrence& r) : KCalCore::Recurrence(r) { fix(); }
+        KARecurrence(const KARecurrence& r) : KCalCore::Recurrence(r), mFeb29Type(r.mFeb29Type), mCachedType(r.mCachedType) { }
 #else
-		KARecurrence() : KCal::Recurrence(), mFeb29Type(Feb29_None), mCachedType(-1) { }
-		KARecurrence(const KCal::Recurrence& r) : KCal::Recurrence(r) { fix(); }
-		KARecurrence(const KARecurrence& r) : KCal::Recurrence(r), mFeb29Type(r.mFeb29Type), mCachedType(r.mCachedType) { }
+        KARecurrence() : KCal::Recurrence(), mFeb29Type(Feb29_None), mCachedType(-1) { }
+        KARecurrence(const KCal::Recurrence& r) : KCal::Recurrence(r) { fix(); }
+        KARecurrence(const KARecurrence& r) : KCal::Recurrence(r), mFeb29Type(r.mFeb29Type), mCachedType(r.mCachedType) { }
 #endif
-		bool        set(const QString& icalRRULE);
-		bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end)
-		                        { return set(t, freq, count, -1, start, end); }
-		bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
-		                        { return set(t, freq, count, f29, start, end); }
+        bool        set(const QString& icalRRULE);
+        bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end)
+                                { return set(t, freq, count, -1, start, end); }
+        bool        set(Type t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
+                                { return set(t, freq, count, f29, start, end); }
 #ifdef USE_AKONADI
-		bool        init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end)
-		                        { return init(t, freq, count, -1, start, end); }
-		bool        init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
-		                        { return init(t, freq, count, f29, start, end); }
-		void        writeRecurrence(KCalCore::Recurrence&) const;
-		void        setStartDateTime(const KDateTime& dt, bool dateOnly)
-					{ KCalCore::Recurrence::setStartDateTime(dt);  if (dateOnly) KCalCore::Recurrence::setAllDay(true); }
+        bool        init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end)
+                                { return init(t, freq, count, -1, start, end); }
+        bool        init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
+                                { return init(t, freq, count, f29, start, end); }
+        void        writeRecurrence(KCalCore::Recurrence&) const;
+        void        setStartDateTime(const KDateTime& dt, bool dateOnly)
+                    { KCalCore::Recurrence::setStartDateTime(dt);  if (dateOnly) KCalCore::Recurrence::setAllDay(true); }
 #else
-		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end)
-		                        { return init(t, freq, count, -1, start, end); }
-		bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
-		                        { return init(t, freq, count, f29, start, end); }
-		void        writeRecurrence(KCal::Recurrence&) const;
-		void        setStartDateTime(const KDateTime& dt, bool dateOnly)
-					{ KCal::Recurrence::setStartDateTime(dt);  if (dateOnly) KCal::Recurrence::setAllDay(true); }
+        bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end)
+                                { return init(t, freq, count, -1, start, end); }
+        bool        init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29)
+                                { return init(t, freq, count, f29, start, end); }
+        void        writeRecurrence(KCal::Recurrence&) const;
+        void        setStartDateTime(const KDateTime& dt, bool dateOnly)
+                    { KCal::Recurrence::setStartDateTime(dt);  if (dateOnly) KCal::Recurrence::setAllDay(true); }
 #endif
-		void        fix();
-		KDateTime   endDateTime() const;
-		QDate       endDate() const;
-		bool        recursOn(const QDate&, const KDateTime::Spec&) const;
-		KDateTime   getNextDateTime(const KDateTime& preDateTime) const;
-		KDateTime   getPreviousDateTime(const KDateTime& afterDateTime) const;
+        void        fix();
+        KDateTime   endDateTime() const;
+        QDate       endDate() const;
+        bool        recursOn(const QDate&, const KDateTime::Spec&) const;
+        KDateTime   getNextDateTime(const KDateTime& preDateTime) const;
+        KDateTime   getPreviousDateTime(const KDateTime& afterDateTime) const;
 #ifdef USE_AKONADI
-		KCalCore::Duration longestInterval() const;
-		KCalCore::Duration regularInterval() const;
-		Type        type() const;
-		static Type type(const KCalCore::RecurrenceRule*);
-		static bool dailyType(const KCalCore::RecurrenceRule*);
+        KCalCore::Duration longestInterval() const;
+        KCalCore::Duration regularInterval() const;
+        Type        type() const;
+        static Type type(const KCalCore::RecurrenceRule*);
+        static bool dailyType(const KCalCore::RecurrenceRule*);
 #else
-		KCal::Duration longestInterval() const;
-		KCal::Duration regularInterval() const;
-		Type        type() const;
-		static Type type(const KCal::RecurrenceRule*);
-		static bool dailyType(const KCal::RecurrenceRule*);
+        KCal::Duration longestInterval() const;
+        KCal::Duration regularInterval() const;
+        Type        type() const;
+        static Type type(const KCal::RecurrenceRule*);
+        static bool dailyType(const KCal::RecurrenceRule*);
 #endif
-		Feb29Type   feb29Type() const                   { return mFeb29Type; }
-		static Feb29Type defaultFeb29Type()             { return mDefaultFeb29; }
-		static void setDefaultFeb29Type(Feb29Type t)    { mDefaultFeb29 = t; }
+        Feb29Type   feb29Type() const                   { return mFeb29Type; }
+        static Feb29Type defaultFeb29Type()             { return mDefaultFeb29; }
+        static void setDefaultFeb29Type(Feb29Type t)    { mDefaultFeb29 = t; }
 
-	private:
-		/** Prevent public use: KARecurrence::setStartDateTime() handles all-day setting. */
-		void        setAllDay(bool);
+    private:
+        /** Prevent public use: KARecurrence::setStartDateTime() handles all-day setting. */
+        void        setAllDay(bool);
 
-		bool        set(Type, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
+        bool        set(Type, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
 #ifdef USE_AKONADI
-		bool        init(KCalCore::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
-		int         combineDurations(const KCalCore::RecurrenceRule*, const KCalCore::RecurrenceRule*, QDate& end) const;
+        bool        init(KCalCore::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
+        int         combineDurations(const KCalCore::RecurrenceRule*, const KCalCore::RecurrenceRule*, QDate& end) const;
 #else
-		bool        init(KCal::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
-		int         combineDurations(const KCal::RecurrenceRule*, const KCal::RecurrenceRule*, QDate& end) const;
+        bool        init(KCal::RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
+        int         combineDurations(const KCal::RecurrenceRule*, const KCal::RecurrenceRule*, QDate& end) const;
 #endif
-		int         longestWeeklyInterval(const QBitArray& days, int frequency);
+        int         longestWeeklyInterval(const QBitArray& days, int frequency);
 
-		static Feb29Type mDefaultFeb29;
-		Feb29Type        mFeb29Type;       // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
-		mutable int      mCachedType;
+        static Feb29Type mDefaultFeb29;
+        Feb29Type        mFeb29Type;       // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
+        mutable int      mCachedType;
 };
 
 #endif // KARECURRENCE_H
+
+// vim: et sw=4:

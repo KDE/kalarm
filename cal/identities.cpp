@@ -31,41 +31,43 @@ namespace Identities
 
 KPIMIdentities::IdentityManager* identityManager()
 {
-	if (!mIdentityManager)
-		mIdentityManager = new KPIMIdentities::IdentityManager(true);   // create a read-only kmail identity manager
-	return mIdentityManager;
+    if (!mIdentityManager)
+        mIdentityManager = new KPIMIdentities::IdentityManager(true);   // create a read-only kmail identity manager
+    return mIdentityManager;
 }
 
 /******************************************************************************
-*  Return whether any email identities exist.
+* Return whether any email identities exist.
 */
 bool identitiesExist()
 {
-	identityManager();    // create identity manager if not already done
-	return mIdentityManager->begin() != mIdentityManager->end();
+    identityManager();    // create identity manager if not already done
+    return mIdentityManager->begin() != mIdentityManager->end();
 }
 
 /******************************************************************************
-*  Fetch the uoid of an email identity name or uoid string.
+* Fetch the uoid of an email identity name or uoid string.
 */
 uint identityUoid(const QString& identityUoidOrName)
 {
-	bool ok;
-	uint id = identityUoidOrName.toUInt(&ok);
-	if (!ok  ||  identityManager()->identityForUoid(id).isNull())
-	{
-		identityManager();   // fetch it if not already done
-		for (KPIMIdentities::IdentityManager::ConstIterator it = mIdentityManager->begin();
-		     it != mIdentityManager->end();  ++it)
-		{
-			if ((*it).identityName() == identityUoidOrName)
-			{
-				id = (*it).uoid();
-				break;
-			}
-		}
-	}
-	return id;
+    bool ok;
+    uint id = identityUoidOrName.toUInt(&ok);
+    if (!ok  ||  identityManager()->identityForUoid(id).isNull())
+    {
+        identityManager();   // fetch it if not already done
+        for (KPIMIdentities::IdentityManager::ConstIterator it = mIdentityManager->begin();
+             it != mIdentityManager->end();  ++it)
+        {
+            if ((*it).identityName() == identityUoidOrName)
+            {
+                id = (*it).uoid();
+                break;
+            }
+        }
+    }
+    return id;
 }
 
 } // namespace Identities
+
+// vim: et sw=4:
