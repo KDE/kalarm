@@ -112,6 +112,7 @@ Equivalent to ResourceView
 =============================================================================*/
 class CollectionView : public QListView
 {
+        Q_OBJECT
     public:
         explicit CollectionView(CollectionFilterCheckListModel*, QWidget* parent = 0);
         CollectionFilterCheckListModel* collectionModel() const  { return static_cast<CollectionFilterCheckListModel*>(model()); }

@@ -28,6 +28,7 @@
 
 class TemplateListFilterModel : public EventListFilterModel
 {
+		Q_OBJECT
 	public:
 		enum {   // data columns
 			TypeColumn, TemplateNameColumn,

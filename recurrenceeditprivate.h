@@ -1,7 +1,7 @@
 /*
  *  recurrenceeditprivate.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  Copyright © 2003,2005,2007,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003,2005,2007,2009,2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ class QString;
 
 class NoRule : public QFrame
 {
+		Q_OBJECT
 	public:
 		explicit NoRule(QWidget* parent) : QFrame(parent) { }
 		virtual int      frequency() const       { return 0; }
@@ -103,6 +104,7 @@ class DayWeekRule : public Rule
 // Daily rule choices
 class DailyRule : public DayWeekRule
 {
+		Q_OBJECT
 	public:
 		DailyRule(bool readOnly, QWidget* parent);
 };
@@ -110,6 +112,7 @@ class DailyRule : public DayWeekRule
 // Weekly rule choices
 class WeeklyRule : public DayWeekRule
 {
+		Q_OBJECT
 	public:
 		WeeklyRule(bool readOnly, QWidget* parent);
 };
@@ -162,6 +165,7 @@ class MonthYearRule : public Rule
 // Monthly rule choices
 class MonthlyRule : public MonthYearRule
 {
+		Q_OBJECT
 	public:
 		MonthlyRule(bool readOnly, QWidget* parent);
 };

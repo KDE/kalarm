@@ -39,35 +39,37 @@ namespace Akonadi
  */
 class BirthdayModel : public Akonadi::ContactsTreeModel
 {
+        Q_OBJECT
     public:
-	enum {   // data columns
-	    NameColumn, DateColumn,
-	    ColumnCount
-	};
+        enum {   // data columns
+            NameColumn, DateColumn,
+            ColumnCount
+        };
 
-	/**
-	 * Destroys the global contact model.
-	 */
-	~BirthdayModel();
+        /**
+         * Destroys the global contact model.
+         */
+        ~BirthdayModel();
 
-	/**
-	 * Returns the global contact model instance.
-	 */
-	static BirthdayModel* instance();
+        /**
+         * Returns the global contact model instance.
+         */
+        static BirthdayModel* instance();
 
         virtual QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const;
         virtual QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const
                                     { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
 
   private:
-	BirthdayModel(Akonadi::ChangeRecorder* recorder);
+        BirthdayModel(Akonadi::ChangeRecorder* recorder);
 
-	static BirthdayModel* mInstance;
+        static BirthdayModel* mInstance;
 };
 
 
 class BirthdaySortModel : public QSortFilterProxyModel
 {
+        Q_OBJECT
     public:
         BirthdaySortModel(QObject* parent = 0);
 

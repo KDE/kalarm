@@ -29,6 +29,7 @@
 
 class AlarmListFilterModel : public EventListFilterModel
 {
+		Q_OBJECT
 	public:
 		enum { ColumnCount = 6 };
 

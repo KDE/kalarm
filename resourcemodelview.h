@@ -69,6 +69,7 @@ class ResourceModel : public QAbstractListModel
 
 class ResourceFilterModel : public QSortFilterProxyModel
 {
+		Q_OBJECT
 	public:
 		ResourceFilterModel(QAbstractItemModel* baseModel, QObject* parent);
 		void           setFilter(KAlarm::CalEvent::Type);
@@ -87,6 +88,7 @@ class ResourceFilterModel : public QSortFilterProxyModel
 
 class ResourceView : public QListView
 {
+		Q_OBJECT
 	public:
 		ResourceView(QWidget* parent = 0)  : QListView(parent) {}
 		virtual void   setModel(QAbstractItemModel*);
@@ -103,6 +105,7 @@ class ResourceView : public QListView
 
 class ResourceDelegate : public QItemDelegate
 {
+		Q_OBJECT
 	public:
 		ResourceDelegate(ResourceView* parent = 0)  : QItemDelegate(parent) {}
 		virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
