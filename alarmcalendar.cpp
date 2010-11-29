@@ -672,6 +672,8 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
 		updateEventInternal(event.event, event.collection);
 	else
 		addNewEvent(event.collection, new KAEvent(event.event));
+	bool enabled = event.event.enabled();
+	checkForDisabledAlarms(!enabled, enabled);
 }
 
 /******************************************************************************
