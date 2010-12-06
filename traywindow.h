@@ -69,6 +69,7 @@ class TrayWindow : public KStatusNotifierItem
 		void         updateIcon();
 
 		MainWindow*     mAssocMainWindow;     // main window associated with this, or null
+		QIcon           mIconDisabled;
 		KToggleAction*  mActionEnabled;
 		NewAlarmAction* mActionNew;
 		TemplateMenuAction* mActionNewFromTemplate;

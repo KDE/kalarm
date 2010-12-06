@@ -86,6 +86,9 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	setToolTipIconByName("kalarm");
 	setToolTipTitle(KGlobal::mainComponent().aboutData()->programName());
 	setIconByName("kalarm");
+	// Load the disabled icon for use by setIconByPixmap()
+	// - setIconByName() doesn't work for this one!
+	mIconDisabled.addPixmap(KIconLoader::global()->loadIcon("kalarm-disabled", KIconLoader::Panel));
 	setStatus(KStatusNotifierItem::Active);
 
 	// Set up the context menu
@@ -134,8 +137,8 @@ TrayWindow::TrayWindow(MainWindow* parent)
 	connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotCalendarStatusChanged()));
 #endif
 	connect(AlarmCalendar::resources(), SIGNAL(haveDisabledAlarmsChanged(bool)), SLOT(slotHaveDisabledAlarms(bool)));
-    connect(this, SIGNAL(activateRequested(bool, const QPoint&)), SLOT(slotActivateRequested()));
-    connect(this, SIGNAL(secondaryActivateRequested(const QPoint&)), SLOT(slotSecondaryActivateRequested()));
+	connect(this, SIGNAL(activateRequested(bool, const QPoint&)), SLOT(slotActivateRequested()));
+	connect(this, SIGNAL(secondaryActivateRequested(const QPoint&)), SLOT(slotSecondaryActivateRequested()));
 	slotCalendarStatusChanged();   // initialise action states
 	slotHaveDisabledAlarms(AlarmCalendar::resources()->haveDisabledAlarms());
 
@@ -314,13 +317,9 @@ void TrayWindow::updateToolTip()
 void TrayWindow::updateIcon()
 {
 	if (theApp()->alarmsEnabled())
-	{
 		setIconByName(mHaveDisabledAlarms ? "kalarm-partdisabled" : "kalarm");
-	}
 	else
-	{
-		setIconByName("kalarm-disabled");
-	}
+		setIconByPixmap(mIconDisabled);
 }
 
 /******************************************************************************
