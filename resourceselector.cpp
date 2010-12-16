@@ -268,10 +268,7 @@ void ResourceSelector::editResource()
 	Collection collection = currentResource();
 	if (collection.isValid())
 	{
-#ifdef __GNUC__
-#warning editResource() not implemented
-#endif
-		Akonadi::CollectionPropertiesDialog dlg(collection, this);
+		Akonadi::CollectionPropertiesDialog dlg(collection, QStringList(QLatin1String("Akonadi::CollectionGeneralPropertiesPage")), this);
 		dlg.exec();
 	}
 #else
