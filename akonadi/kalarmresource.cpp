@@ -37,6 +37,7 @@
 #include <kdebug.h>
 
 using namespace Akonadi;
+using namespace Akonadi_KAlarm_Resource;
 using KAlarm::CollectionAttribute;
 using KAlarm::EventAttribute;
 

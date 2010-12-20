@@ -58,6 +58,7 @@ include_directories(
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 ########### next target ###############
+add_definitions( -DSETTINGS_NAMESPACE=Akonadi_KAlarm_Resource )
 
 set(kalarmresource_SRCS
     ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
@@ -71,7 +72,7 @@ kde4_add_ui_files(kalarmresource_SRCS ${AKONADI_SINGLEFILERESOURCE_SHARED_UI})
 kde4_add_kcfg_files(kalarmresource_SRCS settings.kcfgc)
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
 qt4_add_dbus_adaptor(kalarmresource_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml settings.h Settings
+    ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml settings.h Akonadi_KAlarm_Resource::Settings
 )
 
 kde4_add_plugin(akonadi_kalarm_resource ${kalarmresource_SRCS})

@@ -6,3 +6,5 @@ SetUserTexts=true
 Singleton=false
 #IncludeFiles=
 GlobalEnums=true
+Namespace=Akonadi_KAlarm_Resource
+

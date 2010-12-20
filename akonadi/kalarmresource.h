@@ -43,7 +43,7 @@ class KAlarmResource : public ICalResourceBase
         /**
          * Customize the configuration dialog before it is displayed.
          */
-        virtual void customizeConfigDialog( Akonadi::SingleFileResourceConfigDialog<Settings>* dlg );
+        virtual void customizeConfigDialog( Akonadi::SingleFileResourceConfigDialog<Akonadi_KAlarm_Resource::Settings>* dlg );
 
         virtual bool readFromFile(const QString& fileName);
         virtual bool writeToFile(const QString& fileName);
