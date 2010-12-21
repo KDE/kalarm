@@ -24,7 +24,6 @@
 #include "eventattribute.h"
 #include "kacalendar.h"
 #include "kaevent.h"
-#include "settingsadaptor.h"
 
 #include <akonadi/agentfactory.h>
 #include <akonadi/attributefactory.h>
