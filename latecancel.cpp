@@ -47,61 +47,61 @@ QString LateCancelSelector::i18n_chk_AutoCloseWinLC()  { return i18nc("@option:c
 
 
 LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
-	: QFrame(parent),
-	  mDateOnly(false),
-	  mReadOnly(false),
-	  mAutoCloseShown(false)
+    : QFrame(parent),
+      mDateOnly(false),
+      mReadOnly(false),
+      mAutoCloseShown(false)
 {
-	QString whatsThis = i18nc("@info:whatsthis",
-	                          "<para>If checked, the alarm will be canceled if it cannot be triggered within the "
-	                         "specified period after its scheduled time. Possible reasons for not triggering "
-	                         "include your being logged off, X not running, or <application>KAlarm</application> not running.</para>"
-	                         "<para>If unchecked, the alarm will be triggered at the first opportunity after "
-	                         "its scheduled time, regardless of how late it is.</para>");
+    QString whatsThis = i18nc("@info:whatsthis",
+                              "<para>If checked, the alarm will be canceled if it cannot be triggered within the "
+                             "specified period after its scheduled time. Possible reasons for not triggering "
+                             "include your being logged off, X not running, or <application>KAlarm</application> not running.</para>"
+                             "<para>If unchecked, the alarm will be triggered at the first opportunity after "
+                             "its scheduled time, regardless of how late it is.</para>");
 
-	QVBoxLayout* topLayout = new QVBoxLayout(this);
-	topLayout->setMargin(0);
-	topLayout->setSpacing(KDialog::spacingHint());
+    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    topLayout->setMargin(0);
+    topLayout->setSpacing(KDialog::spacingHint());
 
-	mStack = new QStackedWidget(this);
-	topLayout->addWidget(mStack, 0, Qt::AlignLeft);
-	mCheckboxFrame = new QFrame();
-	mStack->addWidget(mCheckboxFrame);
-	QHBoxLayout* hlayout = new QHBoxLayout(mCheckboxFrame);
-	hlayout->setMargin(0);
-	mCheckbox = new CheckBox(i18n_chk_CancelIfLate(), mCheckboxFrame);
-	connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-	connect(mCheckbox, SIGNAL(toggled(bool)), SIGNAL(changed()));
-	mCheckbox->setWhatsThis(whatsThis);
-	hlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
+    mStack = new QStackedWidget(this);
+    topLayout->addWidget(mStack, 0, Qt::AlignLeft);
+    mCheckboxFrame = new QFrame();
+    mStack->addWidget(mCheckboxFrame);
+    QHBoxLayout* hlayout = new QHBoxLayout(mCheckboxFrame);
+    hlayout->setMargin(0);
+    mCheckbox = new CheckBox(i18n_chk_CancelIfLate(), mCheckboxFrame);
+    connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
+    connect(mCheckbox, SIGNAL(toggled(bool)), SIGNAL(changed()));
+    mCheckbox->setWhatsThis(whatsThis);
+    hlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
 
-	mTimeSelectorFrame = new QFrame();
-	mStack->addWidget(mTimeSelectorFrame);
-	hlayout = new QHBoxLayout(mTimeSelectorFrame);
-	hlayout->setMargin(0);
-	mTimeSelector = new TimeSelector(i18nc("@option:check Cancel if late by 10 minutes", "Cancel if late by"), QString(),
-	                                 whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
-	                                 allowHourMinute, mTimeSelectorFrame);
-	connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
+    mTimeSelectorFrame = new QFrame();
+    mStack->addWidget(mTimeSelectorFrame);
+    hlayout = new QHBoxLayout(mTimeSelectorFrame);
+    hlayout->setMargin(0);
+    mTimeSelector = new TimeSelector(i18nc("@option:check Cancel if late by 10 minutes", "Cancel if late by"), QString(),
+                                     whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
+                                     allowHourMinute, mTimeSelectorFrame);
+    connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
 #ifdef USE_AKONADI
-	connect(mTimeSelector, SIGNAL(valueChanged(const KCalCore::Duration&)), SIGNAL(changed()));
+    connect(mTimeSelector, SIGNAL(valueChanged(const KCalCore::Duration&)), SIGNAL(changed()));
 #else
-	connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
+    connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
 #endif
-	hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
+    hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-	hlayout = new QHBoxLayout();
-	hlayout->setMargin(0);
-	hlayout->addSpacing(3*KDialog::spacingHint());
-	topLayout->addLayout(hlayout);
-	mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
-	connect(mAutoClose, SIGNAL(toggled(bool)), SIGNAL(changed()));
-	mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
-	hlayout->addWidget(mAutoClose);
-	hlayout->addStretch();
+    hlayout = new QHBoxLayout();
+    hlayout->setMargin(0);
+    hlayout->addSpacing(3*KDialog::spacingHint());
+    topLayout->addLayout(hlayout);
+    mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
+    connect(mAutoClose, SIGNAL(toggled(bool)), SIGNAL(changed()));
+    mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
+    hlayout->addWidget(mAutoClose);
+    hlayout->addStretch();
 
-	mAutoClose->hide();
-	mAutoClose->setEnabled(false);
+    mAutoClose->hide();
+    mAutoClose->setEnabled(false);
 }
 
 /******************************************************************************
@@ -109,59 +109,59 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 */
 void LateCancelSelector::setReadOnly(bool ro)
 {
-	if ((int)ro != (int)mReadOnly)
-	{
-		mReadOnly = ro;
-		mCheckbox->setReadOnly(mReadOnly);
-		mTimeSelector->setReadOnly(mReadOnly);
-		mAutoClose->setReadOnly(mReadOnly);
-	}
+    if ((int)ro != (int)mReadOnly)
+    {
+        mReadOnly = ro;
+        mCheckbox->setReadOnly(mReadOnly);
+        mTimeSelector->setReadOnly(mReadOnly);
+        mAutoClose->setReadOnly(mReadOnly);
+    }
 }
 
 int LateCancelSelector::minutes() const
 {
-	return mTimeSelector->period().asSeconds() / 60;
+    return mTimeSelector->period().asSeconds() / 60;
 }
 
 void LateCancelSelector::setMinutes(int minutes, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-	slotToggled(minutes);
-	Duration period;
-	if (minutes % (24*60))
-		period = Duration(minutes * 60, Duration::Seconds);
-	else
-		period = Duration(minutes / (24*60), Duration::Days);
-	mTimeSelector->setPeriod(period, dateOnly, defaultUnits);
+    slotToggled(minutes);
+    Duration period;
+    if (minutes % (24*60))
+        period = Duration(minutes * 60, Duration::Seconds);
+    else
+        period = Duration(minutes / (24*60), Duration::Days);
+    mTimeSelector->setPeriod(period, dateOnly, defaultUnits);
 }
 
 void LateCancelSelector::setDateOnly(bool dateOnly)
 {
-	if (dateOnly != mDateOnly)
-	{
-		mDateOnly = dateOnly;
-		if (mTimeSelector->isChecked())      // don't change when it's not visible
-			mTimeSelector->setDateOnly(dateOnly);
-	}
+    if (dateOnly != mDateOnly)
+    {
+        mDateOnly = dateOnly;
+        if (mTimeSelector->isChecked())      // don't change when it's not visible
+            mTimeSelector->setDateOnly(dateOnly);
+    }
 }
 
 void LateCancelSelector::showAutoClose(bool show)
 {
-	if (show)
-		mAutoClose->show();
-	else
-		mAutoClose->hide();
-	mAutoCloseShown = show;
-	updateGeometry();
+    if (show)
+        mAutoClose->show();
+    else
+        mAutoClose->hide();
+    mAutoCloseShown = show;
+    updateGeometry();
 }
 
 bool LateCancelSelector::isAutoClose() const
 {
-	return mAutoCloseShown  &&  mAutoClose->isEnabled()  &&  mAutoClose->isChecked();
+    return mAutoCloseShown  &&  mAutoClose->isEnabled()  &&  mAutoClose->isChecked();
 }
 
 void LateCancelSelector::setAutoClose(bool autoClose)
 {
-	mAutoClose->setChecked(autoClose);
+    mAutoClose->setChecked(autoClose);
 }
 
 /******************************************************************************
@@ -169,14 +169,16 @@ void LateCancelSelector::setAutoClose(bool autoClose)
 */
 void LateCancelSelector::slotToggled(bool on)
 {
-	mCheckbox->setChecked(on);
-	mTimeSelector->setChecked(on);
-	if (on)
-	{
-		mTimeSelector->setDateOnly(mDateOnly);
-		mStack->setCurrentWidget(mTimeSelectorFrame);
-	}
-	else
-		mStack->setCurrentWidget(mCheckboxFrame);
-	mAutoClose->setEnabled(on);
+    mCheckbox->setChecked(on);
+    mTimeSelector->setChecked(on);
+    if (on)
+    {
+        mTimeSelector->setDateOnly(mDateOnly);
+        mStack->setCurrentWidget(mTimeSelectorFrame);
+    }
+    else
+        mStack->setCurrentWidget(mCheckboxFrame);
+    mAutoClose->setEnabled(on);
 }
+
+// vim: et sw=4:

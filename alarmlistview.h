@@ -30,20 +30,19 @@
 
 class AlarmListView : public EventListView
 {
-		Q_OBJECT
-	public:
-		explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = 0);
-		virtual void      setModel(QAbstractItemModel*);
-		void              selectTimeColumns(bool time, bool timeTo);
+        Q_OBJECT
+    public:
+        explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = 0);
+        virtual void      setModel(QAbstractItemModel*);
+        void              selectTimeColumns(bool time, bool timeTo);
 
-//	protected slots:
-//		virtual void dataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
-	private slots:
-		void              sectionMoved();
+    private slots:
+        void              sectionMoved();
 
-	private:
-		QByteArray        mConfigGroup;
+    private:
+        QByteArray        mConfigGroup;
 };
 
 #endif // ALARMLISTVIEW_H
 
+// vim: et sw=4:

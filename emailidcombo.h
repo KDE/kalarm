@@ -1,7 +1,7 @@
 /*
  *  emailidcombo.h  -  email identity combo box with read-only option
  *  Program:  kalarm
- *  Copyright © 2004,2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,26 +21,31 @@
 #ifndef EMAILIDCOMBO_H
 #define EMAILIDCOMBO_H
 
-#include <kpimidentities/identitycombo.h>
 #include "combobox.h"
+#include <kpimidentities/identitycombo.h>
+
 class QMouseEvent;
 class QKeyEvent;
 
 
 class EmailIdCombo : public KPIMIdentities::IdentityCombo
 {
-		Q_OBJECT
-	public:
-		explicit EmailIdCombo(KPIMIdentities::IdentityManager*, QWidget* parent = 0);
-		void  setReadOnly(bool ro)    { mReadOnly = ro; }
-	protected:
-		virtual void mousePressEvent(QMouseEvent*);
-		virtual void mouseReleaseEvent(QMouseEvent*);
-		virtual void mouseMoveEvent(QMouseEvent*);
-		virtual void keyPressEvent(QKeyEvent*);
-		virtual void keyReleaseEvent(QKeyEvent*);
-	private:
-		bool    mReadOnly;      // value cannot be changed
+        Q_OBJECT
+    public:
+        explicit EmailIdCombo(KPIMIdentities::IdentityManager*, QWidget* parent = 0);
+        void  setReadOnly(bool ro)    { mReadOnly = ro; }
+
+    protected:
+        virtual void mousePressEvent(QMouseEvent*);
+        virtual void mouseReleaseEvent(QMouseEvent*);
+        virtual void mouseMoveEvent(QMouseEvent*);
+        virtual void keyPressEvent(QKeyEvent*);
+        virtual void keyReleaseEvent(QKeyEvent*);
+
+    private:
+        bool    mReadOnly;      // value cannot be changed
 };
 
 #endif // EMAILIDCOMBO_H
+
+// vim: et sw=4:

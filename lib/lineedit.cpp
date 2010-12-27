@@ -47,35 +47,35 @@
 = focus.
 =============================================================================*/
 LineEdit::LineEdit(Type type, QWidget* parent)
-	: KLineEdit(parent),
-	  mType(type),
-	  mNoSelect(false),
-	  mSetCursorAtEnd(false)
+    : KLineEdit(parent),
+      mType(type),
+      mNoSelect(false),
+      mSetCursorAtEnd(false)
 {
-	init();
+    init();
 }
 
 LineEdit::LineEdit(QWidget* parent)
-	: KLineEdit(parent),
-	  mType(Text),
-	  mNoSelect(false),
-	  mSetCursorAtEnd(false)
+    : KLineEdit(parent),
+      mType(Text),
+      mNoSelect(false),
+      mSetCursorAtEnd(false)
 {
-	init();
+    init();
 }
 
 void LineEdit::init()
 {
-	if (mType == Url)
-	{
-		setCompletionMode(KGlobalSettings::CompletionShell);
-		KUrlCompletion* comp = new KUrlCompletion(KUrlCompletion::FileCompletion);
-		comp->setReplaceHome(true);
-		setCompletionObject(comp);
-		setAutoDeleteCompletionObject(true);
-	}
-	else
-		setCompletionMode(KGlobalSettings::CompletionNone);
+    if (mType == Url)
+    {
+        setCompletionMode(KGlobalSettings::CompletionShell);
+        KUrlCompletion* comp = new KUrlCompletion(KUrlCompletion::FileCompletion);
+        comp->setReplaceHome(true);
+        setCompletionObject(comp);
+        setAutoDeleteCompletionObject(true);
+    }
+    else
+        setCompletionMode(KGlobalSettings::CompletionNone);
 }
 
 /******************************************************************************
@@ -84,137 +84,139 @@ void LineEdit::init()
 */
 void LineEdit::focusInEvent(QFocusEvent* e)
 {
-	QFocusEvent newe(QEvent::FocusIn, (mNoSelect ? Qt::OtherFocusReason : e->reason()));
-	KLineEdit::focusInEvent(&newe);
-	mNoSelect = false;
+    QFocusEvent newe(QEvent::FocusIn, (mNoSelect ? Qt::OtherFocusReason : e->reason()));
+    KLineEdit::focusInEvent(&newe);
+    mNoSelect = false;
 }
 
 QString LineEdit::text() const
 {
-	if (mType == Url)
-		return KShell::tildeExpand(KLineEdit::text());
-	return KLineEdit::text();
+    if (mType == Url)
+        return KShell::tildeExpand(KLineEdit::text());
+    return KLineEdit::text();
 }
 
 void LineEdit::setText(const QString& text)
 {
-	KLineEdit::setText(text);
-	setCursorPosition(mSetCursorAtEnd ? text.length() : 0);
+    KLineEdit::setText(text);
+    setCursorPosition(mSetCursorAtEnd ? text.length() : 0);
 }
 
 void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
-	const QMimeData* data = e->mimeData();
-	bool ok;
+    const QMimeData* data = e->mimeData();
+    bool ok;
 #ifdef USE_AKONADI
-	if (KCalUtils::ICalDrag::canDecode(data))
+    if (KCalUtils::ICalDrag::canDecode(data))
 #else
-	if (KCal::ICalDrag::canDecode(data))
+    if (KCal::ICalDrag::canDecode(data))
 #endif
-		ok = false;   // don't accept "text/calendar" objects
-	else
-		ok = (data->hasText()
-		   || KUrl::List::canDecode(data)
-		   || (mType != Url && KPIM::MailList::canDecode(data))
-		   || (mType == Emails && KABC::VCardDrag::canDecode(data)));
-	if (ok)
-		e->accept(rect());
-	else
-		e->ignore(rect());
+        ok = false;   // don't accept "text/calendar" objects
+    else
+        ok = (data->hasText()
+           || KUrl::List::canDecode(data)
+           || (mType != Url && KPIM::MailList::canDecode(data))
+           || (mType == Emails && KABC::VCardDrag::canDecode(data)));
+    if (ok)
+        e->accept(rect());
+    else
+        e->ignore(rect());
 }
 
 void LineEdit::dropEvent(QDropEvent* e)
 {
-	const QMimeData* data = e->mimeData();
-	QString               newText;
-	QStringList           newEmails;
-	KUrl::List            files;
-	KABC::Addressee::List addrList;
+    const QMimeData* data = e->mimeData();
+    QString               newText;
+    QStringList           newEmails;
+    KUrl::List            files;
+    KABC::Addressee::List addrList;
 
-	if (mType != Url
-	&&  KPIM::MailList::canDecode(data))
-	{
-		KPIM::MailList mailList = KPIM::MailList::fromMimeData(data);
-		// KMail message(s) - ignore all but the first
-		if (mailList.count())
-		{
-			if (mType == Emails)
-				newText = mailList.first().from();
-			else
-				setText(mailList.first().subject());    // replace any existing text
-		}
-	}
-	// This must come before KUrl
-	else if (mType == Emails
-	&&  KABC::VCardDrag::canDecode(data)  &&  KABC::VCardDrag::fromMimeData(data, addrList))
-	{
-		// KAddressBook entries
-		for (KABC::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
-		{
-			QString em((*it).fullEmail());
-			if (!em.isEmpty())
-				newEmails.append(em);
-		}
-	}
-	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
-	{
-		// URL(s)
-		switch (mType)
-		{
-			case Url:
-				// URL entry field - ignore all but the first dropped URL
-				setText(files.first().prettyUrl());    // replace any existing text
-				break;
-			case Emails:
-			{
-				// Email entry field - ignore all but mailto: URLs
-				QString mailto = QLatin1String("mailto");
-				for (KUrl::List::Iterator it = files.begin();  it != files.end();  ++it)
-				{
-					if ((*it).protocol() == mailto)
-						newEmails.append((*it).path());
-				}
-				break;
-			}
-			case Text:
-				newText = files.first().prettyUrl();
-				break;
-		}
-	}
-	else if (data->hasText())
-	{
-		// Plain text
-		QString txt = data->text();
-		if (mType == Emails)
-		{
-			// Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
-			QString mailto = QLatin1String("mailto:");
-			newEmails = txt.split(QRegExp("[\r\n]+"), QString::SkipEmptyParts);
-			for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
-			{
-				if ((*it).startsWith(mailto))
-				{
-					KUrl url(*it);
-					*it = url.path();
-				}
-			}
-		}
-		else
-		{
-			int newline = txt.indexOf(QLatin1Char('\n'));
-			newText = (newline >= 0) ? txt.left(newline) : txt;
-		}
-	}
+    if (mType != Url
+    &&  KPIM::MailList::canDecode(data))
+    {
+        KPIM::MailList mailList = KPIM::MailList::fromMimeData(data);
+        // KMail message(s) - ignore all but the first
+        if (mailList.count())
+        {
+            if (mType == Emails)
+                newText = mailList.first().from();
+            else
+                setText(mailList.first().subject());    // replace any existing text
+        }
+    }
+    // This must come before KUrl
+    else if (mType == Emails
+    &&  KABC::VCardDrag::canDecode(data)  &&  KABC::VCardDrag::fromMimeData(data, addrList))
+    {
+        // KAddressBook entries
+        for (KABC::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
+        {
+            QString em((*it).fullEmail());
+            if (!em.isEmpty())
+                newEmails.append(em);
+        }
+    }
+    else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
+    {
+        // URL(s)
+        switch (mType)
+        {
+            case Url:
+                // URL entry field - ignore all but the first dropped URL
+                setText(files.first().prettyUrl());    // replace any existing text
+                break;
+            case Emails:
+            {
+                // Email entry field - ignore all but mailto: URLs
+                QString mailto = QLatin1String("mailto");
+                for (KUrl::List::Iterator it = files.begin();  it != files.end();  ++it)
+                {
+                    if ((*it).protocol() == mailto)
+                        newEmails.append((*it).path());
+                }
+                break;
+            }
+            case Text:
+                newText = files.first().prettyUrl();
+                break;
+        }
+    }
+    else if (data->hasText())
+    {
+        // Plain text
+        QString txt = data->text();
+        if (mType == Emails)
+        {
+            // Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
+            QString mailto = QLatin1String("mailto:");
+            newEmails = txt.split(QRegExp("[\r\n]+"), QString::SkipEmptyParts);
+            for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
+            {
+                if ((*it).startsWith(mailto))
+                {
+                    KUrl url(*it);
+                    *it = url.path();
+                }
+            }
+        }
+        else
+        {
+            int newline = txt.indexOf(QLatin1Char('\n'));
+            newText = (newline >= 0) ? txt.left(newline) : txt;
+        }
+    }
 
-	if (newEmails.count())
-	{
-		newText = newEmails.join(",");
-		int c = cursorPosition();
-		if (c > 0)
-			newText.prepend(",");
-		if (c < static_cast<int>(text().length()))
-			newText.append(",");
-	}
-	if (!newText.isEmpty())
-		insert(newText);
+    if (newEmails.count())
+    {
+        newText = newEmails.join(",");
+        int c = cursorPosition();
+        if (c > 0)
+            newText.prepend(",");
+        if (c < static_cast<int>(text().length()))
+            newText.append(",");
+    }
+    if (!newText.isEmpty())
+        insert(newText);
 }
+
+// vim: et sw=4:

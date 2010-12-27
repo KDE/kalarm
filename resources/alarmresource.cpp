@@ -20,19 +20,20 @@
 
 #include "kalarm.h"
 
-#include <QFile>
+#include "alarmresource.moc"
+using namespace KCal;
+#include "alarmresources.h"
+
+#include <kabc/lock.h>
+#include <kabc/locknull.h>
+#include <kcal/calendarlocal.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kabc/lock.h>
-#include <kabc/locknull.h>
-#include <kcal/calendarlocal.h>
 
-#include "alarmresource.moc"
-using namespace KCal;
-#include "alarmresources.h"
+#include <QFile>
 
 
 void                     (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
@@ -43,124 +44,124 @@ bool                       AlarmResource::mNoGui = false;
 
 
 AlarmResource::AlarmResource()
-	: ResourceCached(),
-	  mLock(0),
-	  mType(static_cast<KAlarm::CalEvent::Type>(0)),    // invalid
-	  mStandard(false),
-	  mCloseAfterSave(false),
-	  mWrongAlarmType(false),
-	  mCompatibility(KAlarm::Calendar::Incompatible),
-	  mReconfiguring(0),
-	  mLoaded(false),
-	  mLoading(false)
+    : ResourceCached(),
+      mLock(0),
+      mType(static_cast<KAlarm::CalEvent::Type>(0)),    // invalid
+      mStandard(false),
+      mCloseAfterSave(false),
+      mWrongAlarmType(false),
+      mCompatibility(KAlarm::Calendar::Incompatible),
+      mReconfiguring(0),
+      mLoaded(false),
+      mLoading(false)
 {
-	// Prevent individual events being set read-only when loading a read-only resource
-	setNoReadOnlyOnLoad(true);
-	init();
+    // Prevent individual events being set read-only when loading a read-only resource
+    setNoReadOnlyOnLoad(true);
+    init();
 }
 
 AlarmResource::AlarmResource(const KConfigGroup& group)
-	: ResourceCached(group),
-	  mLock(0),
-	  mType(static_cast<KAlarm::CalEvent::Type>(0)),    // invalid
-	  mStandard(false),
-	  mCloseAfterSave(false),
-	  mWrongAlarmType(false),
-	  mCompatibility(KAlarm::Calendar::Incompatible),
-	  mReconfiguring(0),
-	  mLoaded(false),
-	  mLoading(false)
+    : ResourceCached(group),
+      mLock(0),
+      mType(static_cast<KAlarm::CalEvent::Type>(0)),    // invalid
+      mStandard(false),
+      mCloseAfterSave(false),
+      mWrongAlarmType(false),
+      mCompatibility(KAlarm::Calendar::Incompatible),
+      mReconfiguring(0),
+      mLoaded(false),
+      mLoading(false)
 {
-	// Prevent individual events being set read-only when loading a read-only resource
-	setNoReadOnlyOnLoad(true);
+    // Prevent individual events being set read-only when loading a read-only resource
+    setNoReadOnlyOnLoad(true);
 
-	ResourceCached::readConfig(group);
-	int type = group.readEntry("AlarmType", static_cast<int>(KAlarm::CalEvent::ACTIVE));
-	switch (type)
-	{
-		case KAlarm::CalEvent::ACTIVE:
-		case KAlarm::CalEvent::ARCHIVED:
-		case KAlarm::CalEvent::TEMPLATE:
-			mType = static_cast<KAlarm::CalEvent::Type>(type);
-			mStandard = group.readEntry("Standard", true);
-			break;
-		default:
-			break;
-	}
-	mColour = group.readEntry("Color", QColor());
-	init();
+    ResourceCached::readConfig(group);
+    int type = group.readEntry("AlarmType", static_cast<int>(KAlarm::CalEvent::ACTIVE));
+    switch (type)
+    {
+        case KAlarm::CalEvent::ACTIVE:
+        case KAlarm::CalEvent::ARCHIVED:
+        case KAlarm::CalEvent::TEMPLATE:
+            mType = static_cast<KAlarm::CalEvent::Type>(type);
+            mStandard = group.readEntry("Standard", true);
+            break;
+        default:
+            break;
+    }
+    mColour = group.readEntry("Color", QColor());
+    init();
 }
 
 AlarmResource::AlarmResource(KAlarm::CalEvent::Type type)
-	: ResourceCached(),
-	  mLock(0),
-	  mType(type),
-	  mStandard(false),
-	  mCloseAfterSave(false),
-	  mCompatibility(KAlarm::Calendar::Incompatible),
-	  mReconfiguring(0),
-	  mLoaded(false),
-	  mLoading(false)
+    : ResourceCached(),
+      mLock(0),
+      mType(type),
+      mStandard(false),
+      mCloseAfterSave(false),
+      mCompatibility(KAlarm::Calendar::Incompatible),
+      mReconfiguring(0),
+      mLoaded(false),
+      mLoading(false)
 {
-	init();
+    init();
 }
 
 void AlarmResource::init()
 {
-	enableChangeNotification();
-	if (mType == KAlarm::CalEvent::ARCHIVED)
-	{
-		// Prevent unnecessary multiple saves of archived alarm resources.
-		// When multiple alarms are deleted as a group, the archive
-		// resource would be saved once for each alarm. Ironically, setting
-		// the resource to be automatically saved will prevent this, since
-		// automatic saving delays for a second after each change before
-		// actually saving the resource, thereby ensuring that they are
-		// saved as a group.
-		setSavePolicy(SaveAlways);
-	}
+    enableChangeNotification();
+    if (mType == KAlarm::CalEvent::ARCHIVED)
+    {
+        // Prevent unnecessary multiple saves of archived alarm resources.
+        // When multiple alarms are deleted as a group, the archive
+        // resource would be saved once for each alarm. Ironically, setting
+        // the resource to be automatically saved will prevent this, since
+        // automatic saving delays for a second after each change before
+        // actually saving the resource, thereby ensuring that they are
+        // saved as a group.
+        setSavePolicy(SaveAlways);
+    }
 }
 
 AlarmResource::~AlarmResource()
 {
-	delete mLock;
+    delete mLock;
 }
 
 void AlarmResource::writeConfig(KConfigGroup& group)
 {
-	group.writeEntry("AlarmType", static_cast<int>(mType));
-	if (mColour.isValid())
-		group.writeEntry("Color", mColour);
-	else
-		group.deleteEntry("Color");
-	group.writeEntry("Standard", mStandard);
-	ResourceCached::writeConfig(group);
-	ResourceCalendar::writeConfig(group);
+    group.writeEntry("AlarmType", static_cast<int>(mType));
+    if (mColour.isValid())
+        group.writeEntry("Color", mColour);
+    else
+        group.deleteEntry("Color");
+    group.writeEntry("Standard", mStandard);
+    ResourceCached::writeConfig(group);
+    ResourceCalendar::writeConfig(group);
 }
 
 void AlarmResource::startReconfig()
 {
-	mOldReadOnly = ResourceCached::readOnly();
-	mNewReadOnly = mOldReadOnly;
-	mReconfiguring = 1;
+    mOldReadOnly = ResourceCached::readOnly();
+    mNewReadOnly = mOldReadOnly;
+    mReconfiguring = 1;
 }
 
 void AlarmResource::applyReconfig()
 {
-	if (!mReconfiguring)
-		return;
-	if (mReconfiguring == 1)
-	{
-		// Called before derived classes do their stuff
-		ResourceCached::setReadOnly(mNewReadOnly);
-		mReconfiguring = 2;
-	}
-	else
-	{
-		// Called when derived classes have done their stuff
-		setReadOnly(mNewReadOnly);
-		mReconfiguring = 0;
-	}
+    if (!mReconfiguring)
+        return;
+    if (mReconfiguring == 1)
+    {
+        // Called before derived classes do their stuff
+        ResourceCached::setReadOnly(mNewReadOnly);
+        mReconfiguring = 2;
+    }
+    else
+    {
+        // Called when derived classes have done their stuff
+        setReadOnly(mNewReadOnly);
+        mReconfiguring = 0;
+    }
 }
 
 /******************************************************************************
@@ -170,31 +171,31 @@ void AlarmResource::applyReconfig()
 */
 void AlarmResource::checkCompatibility(const QString& filename)
 {
-	bool wrongType = false;
-	bool oldReadOnly = readOnly();
-	mCompatibility = KAlarm::Calendar::Incompatible;   // assume the worst
-	if (mFixFunction)
-	{
-		// Check whether the version is compatible (and convert it if desired)
-		mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT, &wrongType);
-		if (wrongType)
-			kDebug(KARES_DEBUG) << resourceName() << ": contains wrong alarm type(s)";
-		if (mCompatibility == KAlarm::Calendar::Converted)
-		{
-			// Set mCompatibility first to ensure that readOnly() returns
-			// the correct value and that save() therefore works.
-			mCompatibility = KAlarm::Calendar::Current;
-			save();
-		}
-		if (mCompatibility != KAlarm::Calendar::Current  &&  mCompatibility != KAlarm::Calendar::ByEvent)
-		{
-			// It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
-			kDebug(KARES_DEBUG) << resourceName() << ": opened read-only (not current KAlarm format)";
-		}
-	}
-	setWrongAlarmType(wrongType);
-	if (readOnly() != oldReadOnly)
-		emit readOnlyChanged(this);   // the effective read-only status has changed
+    bool wrongType = false;
+    bool oldReadOnly = readOnly();
+    mCompatibility = KAlarm::Calendar::Incompatible;   // assume the worst
+    if (mFixFunction)
+    {
+        // Check whether the version is compatible (and convert it if desired)
+        mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT, &wrongType);
+        if (wrongType)
+            kDebug(KARES_DEBUG) << resourceName() << ": contains wrong alarm type(s)";
+        if (mCompatibility == KAlarm::Calendar::Converted)
+        {
+            // Set mCompatibility first to ensure that readOnly() returns
+            // the correct value and that save() therefore works.
+            mCompatibility = KAlarm::Calendar::Current;
+            save();
+        }
+        if (mCompatibility != KAlarm::Calendar::Current  &&  mCompatibility != KAlarm::Calendar::ByEvent)
+        {
+            // It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
+            kDebug(KARES_DEBUG) << resourceName() << ": opened read-only (not current KAlarm format)";
+        }
+    }
+    setWrongAlarmType(wrongType);
+    if (readOnly() != oldReadOnly)
+        emit readOnlyChanged(this);   // the effective read-only status has changed
 }
 
 /******************************************************************************
@@ -203,27 +204,27 @@ void AlarmResource::checkCompatibility(const QString& filename)
 */
 KAlarm::Calendar::Compat AlarmResource::checkCompatibility(CalendarLocal& calendar, const QString& filename, FixFunc conv, bool* wrongType)
 {
-	if (wrongType)
-		*wrongType = false;
-	KAlarm::Calendar::Compat compat = KAlarm::Calendar::Incompatible;   // assume the worst
-	if (mFixFunction)
-	{
-		// Check whether the version is compatible (and convert it if desired)
-		compat = (*mFixFunction)(calendar, filename, this, conv, wrongType);
-		if (compat == KAlarm::Calendar::Converted)
-			calendar.save(filename);
-	}
-	return compat;
+    if (wrongType)
+        *wrongType = false;
+    KAlarm::Calendar::Compat compat = KAlarm::Calendar::Incompatible;   // assume the worst
+    if (mFixFunction)
+    {
+        // Check whether the version is compatible (and convert it if desired)
+        compat = (*mFixFunction)(calendar, filename, this, conv, wrongType);
+        if (compat == KAlarm::Calendar::Converted)
+            calendar.save(filename);
+    }
+    return compat;
 }
 
 KAlarm::Calendar::Compat AlarmResource::compatibility(const Event* event) const
 {
-	if (mCompatibility != KAlarm::Calendar::ByEvent)
-		return mCompatibility;
-	CompatibilityMap::ConstIterator it = mCompatibilityMap.find(event);
-	if (it == mCompatibilityMap.constEnd())
-		return KAlarm::Calendar::Incompatible;    // event not found!?! - assume the worst
-	return it.value();
+    if (mCompatibility != KAlarm::Calendar::ByEvent)
+        return mCompatibility;
+    CompatibilityMap::ConstIterator it = mCompatibilityMap.find(event);
+    if (it == mCompatibilityMap.constEnd())
+        return KAlarm::Calendar::Incompatible;    // event not found!?! - assume the worst
+    return it.value();
 }
 
 /******************************************************************************
@@ -232,14 +233,14 @@ KAlarm::Calendar::Compat AlarmResource::compatibility(const Event* event) const
 */
 void AlarmResource::setWrongAlarmType(bool wrongType, bool emitSignal)
 {
-	if (wrongType != mWrongAlarmType)
-	{
-		mWrongAlarmType = wrongType;
-		if (emitSignal)
-			emit wrongAlarmTypeChanged(this);
-		if (mWrongAlarmType)
-			setEnabled(false);
-	}
+    if (wrongType != mWrongAlarmType)
+    {
+        mWrongAlarmType = wrongType;
+        if (emitSignal)
+            emit wrongAlarmTypeChanged(this);
+        if (mWrongAlarmType)
+            setEnabled(false);
+    }
 }
 
 /******************************************************************************
@@ -247,137 +248,137 @@ void AlarmResource::setWrongAlarmType(bool wrongType, bool emitSignal)
 */
 void AlarmResource::updateCustomEvents(bool useCalendar)
 {
-	if (mCustomEventFunction  &&  isEnabled())
-		(*mCustomEventFunction)(this, useCalendar ? calendar() : 0);
+    if (mCustomEventFunction  &&  isEnabled())
+        (*mCustomEventFunction)(this, useCalendar ? calendar() : 0);
 }
 
 bool AlarmResource::writable(const Event* event) const
 {
-	return isActive()  &&  !KCal::ResourceCached::readOnly()
-	   &&  compatibility(event) == KAlarm::Calendar::Current;
+    return isActive()  &&  !KCal::ResourceCached::readOnly()
+       &&  compatibility(event) == KAlarm::Calendar::Current;
 }
 
 bool AlarmResource::readOnly() const
 {
-	return KCal::ResourceCached::readOnly()
-	   ||  (isActive()  &&  mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent);
+    return KCal::ResourceCached::readOnly()
+       ||  (isActive()  &&  mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent);
 }
 
 void AlarmResource::setReadOnly(bool ronly)
 {
-	if (mReconfiguring == 1)
-	{
-		mNewReadOnly = ronly;
-		return;
-	}
-	kDebug(KARES_DEBUG) << ronly;
-	bool oldRCronly = (mReconfiguring == 2) ? mOldReadOnly : ResourceCached::readOnly();
-	bool oldronly = (oldRCronly || (mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent));
-	if (!ronly  &&  isActive())
-	{
-		// Trying to change the resource to read-write.
-		// Only allow this if it is in, or can be converted to, the current KAlarm format.
-		switch (mCompatibility)
-		{
-			case KAlarm::Calendar::Incompatible:
-				emit notWritable(this);    // allow an error message to be output
-				return;
-			case KAlarm::Calendar::Convertible:
-				if (mReconfiguring <= 2)
-				{
-					if (!isOpen())
-						return;
-					load(NoSyncCache);   // give user the option of converting it
-				}
-				if (mCompatibility != KAlarm::Calendar::Current)
-					return;    // not converted, so keep as read-only
-				break;
-			case KAlarm::Calendar::Current:
-			case KAlarm::Calendar::ByEvent:
-			case KAlarm::Calendar::Converted:   // shouldn't ever happen
-				break;
-		}
-	}
-	if (ronly != oldRCronly)
-		ResourceCached::setReadOnly(ronly);
-	if ((ronly || (mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent)) != oldronly)
-		emit readOnlyChanged(this);   // the effective read-only status has changed
+    if (mReconfiguring == 1)
+    {
+        mNewReadOnly = ronly;
+        return;
+    }
+    kDebug(KARES_DEBUG) << ronly;
+    bool oldRCronly = (mReconfiguring == 2) ? mOldReadOnly : ResourceCached::readOnly();
+    bool oldronly = (oldRCronly || (mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent));
+    if (!ronly  &&  isActive())
+    {
+        // Trying to change the resource to read-write.
+        // Only allow this if it is in, or can be converted to, the current KAlarm format.
+        switch (mCompatibility)
+        {
+            case KAlarm::Calendar::Incompatible:
+                emit notWritable(this);    // allow an error message to be output
+                return;
+            case KAlarm::Calendar::Convertible:
+                if (mReconfiguring <= 2)
+                {
+                    if (!isOpen())
+                        return;
+                    load(NoSyncCache);   // give user the option of converting it
+                }
+                if (mCompatibility != KAlarm::Calendar::Current)
+                    return;    // not converted, so keep as read-only
+                break;
+            case KAlarm::Calendar::Current:
+            case KAlarm::Calendar::ByEvent:
+            case KAlarm::Calendar::Converted:   // shouldn't ever happen
+                break;
+        }
+    }
+    if (ronly != oldRCronly)
+        ResourceCached::setReadOnly(ronly);
+    if ((ronly || (mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent)) != oldronly)
+        emit readOnlyChanged(this);   // the effective read-only status has changed
 }
 
 void AlarmResource::setEnabled(bool enable)
 {
-	if (mWrongAlarmType)
-		enable = false;
-	if (isActive() != enable)
-	{
-		setActive(enable);
-		enableResource(enable);
-		emit enabledChanged(this);
-	}
+    if (mWrongAlarmType)
+        enable = false;
+    if (isActive() != enable)
+    {
+        setActive(enable);
+        enableResource(enable);
+        emit enabledChanged(this);
+    }
 }
 
 void AlarmResource::setColour(const QColor& colour)
 {
-	if (colour != mColour)
-	{
-		mColour = colour;
-		emit colourChanged(this);
-	}
+    if (colour != mColour)
+    {
+        mColour = colour;
+        emit colourChanged(this);
+    }
 }
 
 bool AlarmResource::saveAndClose(CacheAction action, Incidence* incidence)
 {
-	bool result = save(action, incidence);
-	if (isSaving())
-		mCloseAfterSave = true;   // ensure it's closed if saving is asynchronous
-	else
-		close();
-	return result;
+    bool result = save(action, incidence);
+    if (isSaving())
+        mCloseAfterSave = true;   // ensure it's closed if saving is asynchronous
+    else
+        close();
+    return result;
 }
 
 void AlarmResource::doClose()
 {
-	mCloseAfterSave = false;
-	emit invalidate(this);
-	KCal::ResourceCached::doClose();
-	mLoaded = mLoading = false;
-	mCompatibilityMap.clear();
+    mCloseAfterSave = false;
+    emit invalidate(this);
+    KCal::ResourceCached::doClose();
+    mLoaded = mLoading = false;
+    mCompatibilityMap.clear();
 }
 
 QString AlarmResource::infoText() const
 {
-	KRES::Factory* factory = KRES::Factory::self("alarms");
-	QString atype;
-	switch (mType)
-	{
-		case KAlarm::CalEvent::ACTIVE:    atype = i18nc("@info/plain", "Active alarms");  break;
-		case KAlarm::CalEvent::ARCHIVED:  atype = i18nc("@info/plain", "Archived alarms");  break;
-		case KAlarm::CalEvent::TEMPLATE:  atype = i18nc("@info/plain", "Alarm templates");  break;
-		default:  break;
-	}
-	QString perms = readOnly() ? i18nc("@info/plain", "Read-only") : i18nc("@info/plain", "Read-write");
-	QString enabled = isEnabled() ? i18nc("@info/plain", "Enabled") : mWrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
-	QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
-	return i18nc("@info",
-	    "<title>%1</title>"
-	    "<para>Calendar type: %2<nl/>"
-	    "Contents: %3<nl/>"
-	    "%4: <filename>%5</filename><nl/>"
-	    "Permissions: %6<nl/>"
-	    "Status: %7<nl/>"
-	    "Default calendar: %8</para>",
-	    resourceName(), factory->typeName(type()), atype, displayType(), displayLocation(), perms, enabled, std);
+    KRES::Factory* factory = KRES::Factory::self("alarms");
+    QString atype;
+    switch (mType)
+    {
+        case KAlarm::CalEvent::ACTIVE:    atype = i18nc("@info/plain", "Active alarms");  break;
+        case KAlarm::CalEvent::ARCHIVED:  atype = i18nc("@info/plain", "Archived alarms");  break;
+        case KAlarm::CalEvent::TEMPLATE:  atype = i18nc("@info/plain", "Alarm templates");  break;
+        default:  break;
+    }
+    QString perms = readOnly() ? i18nc("@info/plain", "Read-only") : i18nc("@info/plain", "Read-write");
+    QString enabled = isEnabled() ? i18nc("@info/plain", "Enabled") : mWrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
+    QString std = (AlarmResources::instance()->getStandardResource(mType) == this) ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes") : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
+    return i18nc("@info",
+        "<title>%1</title>"
+        "<para>Calendar type: %2<nl/>"
+        "Contents: %3<nl/>"
+        "%4: <filename>%5</filename><nl/>"
+        "Permissions: %6<nl/>"
+        "Status: %7<nl/>"
+        "Default calendar: %8</para>",
+        resourceName(), factory->typeName(type()), atype, displayType(), displayLocation(), perms, enabled, std);
 }
 
 void AlarmResource::lock(const QString& path)
 {
-	delete mLock;
-	if (path.isNull())
-		mLock = 0;
-	else if (path.isEmpty())
-		mLock = new KABC::LockNull(true);
-	else
-		mLock = new KABC::Lock(path);
+    delete mLock;
+    if (path.isNull())
+        mLock = 0;
+    else if (path.isEmpty())
+        mLock = new KABC::LockNull(true);
+    else
+        mLock = new KABC::Lock(path);
 }
 
 /******************************************************************************
@@ -387,56 +388,58 @@ void AlarmResource::lock(const QString& path)
 */
 bool AlarmResource::checkAlarmTypes(KCal::CalendarLocal& calendar) const
 {
-	if (mType != KAlarm::CalEvent::EMPTY)
-	{
-		bool have = false;
-		bool other = false;
-		const Event::List events = calendar.rawEvents();
-		for (int i = 0, iend = events.count();  i < iend;  ++i)
-		{
-			KAlarm::CalEvent::Type s = KAlarm::CalEvent::status(events[i]);
-			if (mType == s)
-				have = true;
-			else
-				other = true;
-			if (have && other)
-				break;
-		}
-		if (!have  &&  other)
-			return false;   // contains only wrong alarm types
-	}
-	return true;
+    if (mType != KAlarm::CalEvent::EMPTY)
+    {
+        bool have = false;
+        bool other = false;
+        const Event::List events = calendar.rawEvents();
+        for (int i = 0, iend = events.count();  i < iend;  ++i)
+        {
+            KAlarm::CalEvent::Type s = KAlarm::CalEvent::status(events[i]);
+            if (mType == s)
+                have = true;
+            else
+                other = true;
+            if (have && other)
+                break;
+        }
+        if (!have  &&  other)
+            return false;   // contains only wrong alarm types
+    }
+    return true;
 }
 
 /*
 void AlarmResource::kaCheckCalendar(CalendarLocal& cal)
 {
-	mTypes = KAlarm::CalEvent::EMPTY;
-	Event::List events = cal.rawEvents();
-	for (int i = 0, iend = events.count();  i < iend;  ++i)
-	{
-		switch (KAlarm::CalEvent::status(events[i]))
-		{
-			case KAlarm::CalEvent::ACTIVE:    mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::ACTIVE);  break;
-			case KAlarm::CalEvent::ARCHIVED:  mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::ARCHIVED);  break;
-			case KAlarm::CalEvent::TEMPLATE:  mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::TEMPLATE);  break;
-			default:   break;
-		}
-		if (mTypes == (KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE))
-			break;
-	}
+    mTypes = KAlarm::CalEvent::EMPTY;
+    Event::List events = cal.rawEvents();
+    for (int i = 0, iend = events.count();  i < iend;  ++i)
+    {
+        switch (KAlarm::CalEvent::status(events[i]))
+        {
+            case KAlarm::CalEvent::ACTIVE:    mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::ACTIVE);  break;
+            case KAlarm::CalEvent::ARCHIVED:  mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::ARCHIVED);  break;
+            case KAlarm::CalEvent::TEMPLATE:  mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::TEMPLATE);  break;
+            default:   break;
+        }
+        if (mTypes == (KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE))
+            break;
+    }
 }
 */
 
 #ifndef NDEBUG
 QByteArray AlarmResource::typeName() const
 {
-	switch (mType)
-	{
-		case KAlarm::CalEvent::ACTIVE:    return "Active";
-		case KAlarm::CalEvent::ARCHIVED:  return "Archived";
-		case KAlarm::CalEvent::TEMPLATE:  return "Template";
-		default:                          return "Empty";
-	}
+    switch (mType)
+    {
+        case KAlarm::CalEvent::ACTIVE:    return "Active";
+        case KAlarm::CalEvent::ARCHIVED:  return "Archived";
+        case KAlarm::CalEvent::TEMPLATE:  return "Template";
+        default:                          return "Empty";
+    }
 }
 #endif
+
+// vim: et sw=4:

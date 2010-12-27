@@ -28,31 +28,32 @@
 
 class TemplateListFilterModel : public EventListFilterModel
 {
-		Q_OBJECT
-	public:
-		enum {   // data columns
-			TypeColumn, TemplateNameColumn,
-			ColumnCount
-		};
+        Q_OBJECT
+    public:
+        enum {   // data columns
+            TypeColumn, TemplateNameColumn,
+            ColumnCount
+        };
 
-		explicit TemplateListFilterModel(EventListModel* baseModel, QObject* parent = 0)
-		               : EventListFilterModel(baseModel, parent),
-			         mTypesEnabled(KAEvent::ACT_ALL),
-			         mTypeFilter(KAEvent::ACT_ALL) {}
-		void setTypeFilter(KAEvent::Actions);
-		void setTypesEnabled(KAEvent::Actions);
-		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
-		virtual QModelIndex mapToSource(const QModelIndex& proxyIndex) const;
-		virtual Qt::ItemFlags flags(const QModelIndex&) const;
+        explicit TemplateListFilterModel(EventListModel* baseModel, QObject* parent = 0)
+                       : EventListFilterModel(baseModel, parent),
+                     mTypesEnabled(KAEvent::ACT_ALL),
+                     mTypeFilter(KAEvent::ACT_ALL) {}
+        void setTypeFilter(KAEvent::Actions);
+        void setTypesEnabled(KAEvent::Actions);
+        virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
+        virtual QModelIndex mapToSource(const QModelIndex& proxyIndex) const;
+        virtual Qt::ItemFlags flags(const QModelIndex&) const;
 
-	protected:
-		virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
-		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
+    protected:
+        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+        virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
 
-	private:
-		KAEvent::Actions mTypesEnabled;  // disable types not in this mask
-		KAEvent::Actions mTypeFilter;    // hide types not in this mask
+    private:
+        KAEvent::Actions mTypesEnabled;  // disable types not in this mask
+        KAEvent::Actions mTypeFilter;    // hide types not in this mask
 };
 
 #endif // TEMPLATELISTFILTERMODEL_H
 
+// vim: et sw=4:

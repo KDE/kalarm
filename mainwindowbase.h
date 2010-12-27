@@ -1,7 +1,7 @@
 /*
  *  mainwindowbase.h  -  base class for main application windows
  *  Program:  kalarm
- *  Copyright © 2002,2006,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2006,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,18 +35,19 @@ class QCloseEvent;
  */
 class MainWindowBase : public KXmlGuiWindow
 {
-		Q_OBJECT
+        Q_OBJECT
 
-	public:
-		explicit MainWindowBase(QWidget* parent = 0, Qt::WFlags f = Qt::Window);
+    public:
+        explicit MainWindowBase(QWidget* parent = 0, Qt::WFlags f = Qt::Window);
 
-	protected:
-		virtual void closeEvent(QCloseEvent*);
-		virtual bool queryExit();
+    protected:
+        virtual void closeEvent(QCloseEvent*);
+        virtual bool queryExit();
 
-	private:
-		bool  disableQuit;       // allow the application to quit
+    private:
+        bool  disableQuit;       // allow the application to quit
 };
 
 #endif // MAINWINDOWBASE_H
 
+// vim: et sw=4:

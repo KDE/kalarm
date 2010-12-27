@@ -52,3 +52,5 @@ uint defaultWorkDays();
 } // namespace KAlarm
 
 #endif // LOCALE_H
+
+// vim: et sw=4:

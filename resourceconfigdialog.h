@@ -1,7 +1,7 @@
 /*
  *  resourceconfigdialog.h  -  KAlarm resource configuration dialog
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <djarvie@kde.org>
  *  Based on configdialog.cpp in kdelibs/kresources,
  *  Copyright (c) 2002 Tobias Koenig <tokoe@kde.org>
  *  Copyright (c) 2002 Jan-Pascal van Best <janpascal@vanbest.org>
@@ -30,30 +30,31 @@ class KLineEdit;
 class QCheckBox;
 
 namespace KRES {
-  class ConfigWidget;
+    class ConfigWidget;
 }
 class AlarmResource;
 
 class ResourceConfigDialog : public KDialog
 {
-    Q_OBJECT
-  public:
-    // Resource=0: create new resource
-    ResourceConfigDialog(QWidget *parent, AlarmResource* resource);
+        Q_OBJECT
+    public:
+        // Resource=0: create new resource
+        ResourceConfigDialog(QWidget* parent, AlarmResource* resource);
 
-    void setInEditMode(bool value);
+        void setInEditMode(bool value);
 
-  protected Q_SLOTS:
-    void accept();
-    void setReadOnly(bool value);
-    void slotNameChanged(const QString &text);
+    protected Q_SLOTS:
+        void accept();
+        void setReadOnly(bool value);
+        void slotNameChanged(const QString& text);
 
-  private:
-    KRES::ConfigWidget *mConfigWidget;
-    AlarmResource* mResource;
-
-    KLineEdit *mName;
-    QCheckBox *mReadOnly;
+    private:
+        KRES::ConfigWidget* mConfigWidget;
+        AlarmResource*      mResource;
+        KLineEdit*          mName;
+        QCheckBox*          mReadOnly;
 };
 
 #endif
+
+// vim: et sw=4:

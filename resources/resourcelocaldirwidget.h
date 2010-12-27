@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldirwidget.h  -  configuration widget for a local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,16 +34,18 @@ class KUrlRequester;
 */
 class KALARM_RESOURCES_EXPORT ResourceLocalDirConfigWidget : public ResourceConfigWidget
 {
-		Q_OBJECT
-	public:
-		ResourceLocalDirConfigWidget(QWidget* parent = 0);
+        Q_OBJECT
+    public:
+        explicit ResourceLocalDirConfigWidget(QWidget* parent = 0);
 
-	public slots:
-		virtual void loadSettings(KRES::Resource*);
-		virtual void saveSettings(KRES::Resource*);
+    public slots:
+        virtual void loadSettings(KRES::Resource*);
+        virtual void saveSettings(KRES::Resource*);
 
-	private:
-		KUrlRequester* mURL;
+    private:
+        KUrlRequester* mURL;
 };
 
 #endif
+
+// vim: et sw=4:

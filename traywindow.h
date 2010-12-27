@@ -41,43 +41,45 @@ class AlarmListModel;
 
 class TrayWindow : public KStatusNotifierItem
 {
-		Q_OBJECT
-	public:
-		explicit TrayWindow(MainWindow* parent);
-		~TrayWindow();
-		void         removeWindow(MainWindow*);
-		MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }
-		void         setAssocMainWindow(MainWindow* win)   { mAssocMainWindow = win; }
+        Q_OBJECT
+    public:
+        explicit TrayWindow(MainWindow* parent);
+        ~TrayWindow();
+        void         removeWindow(MainWindow*);
+        MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }
+        void         setAssocMainWindow(MainWindow* win)   { mAssocMainWindow = win; }
 
-	signals:
-		void         deleted();
+    signals:
+        void         deleted();
 
-	private slots:
-		void         slotActivateRequested();
-		void         slotSecondaryActivateRequested();
-		void         slotNewAlarm(EditAlarmDlg::Type);
-		void         slotNewFromTemplate(const KAEvent*);
-		void         slotPreferences();
-		void         setEnabledStatus(bool status);
-		void         slotHaveDisabledAlarms(bool disabled);
-		void         slotCalendarStatusChanged();
-		void         slotQuit();
-		void         updateToolTip();
+    private slots:
+        void         slotActivateRequested();
+        void         slotSecondaryActivateRequested();
+        void         slotNewAlarm(EditAlarmDlg::Type);
+        void         slotNewFromTemplate(const KAEvent*);
+        void         slotPreferences();
+        void         setEnabledStatus(bool status);
+        void         slotHaveDisabledAlarms(bool disabled);
+        void         slotCalendarStatusChanged();
+        void         slotQuit();
+        void         updateToolTip();
 
-	private:
-		QString      tooltipAlarmText() const;
-		void         updateIcon();
+    private:
+        QString      tooltipAlarmText() const;
+        void         updateIcon();
 
-		MainWindow*     mAssocMainWindow;     // main window associated with this, or null
-		QIcon           mIconDisabled;
-		KToggleAction*  mActionEnabled;
-		NewAlarmAction* mActionNew;
-		TemplateMenuAction* mActionNewFromTemplate;
+        MainWindow*     mAssocMainWindow;     // main window associated with this, or null
+        QIcon           mIconDisabled;
+        KToggleAction*  mActionEnabled;
+        NewAlarmAction* mActionNew;
+        TemplateMenuAction* mActionNewFromTemplate;
 #ifdef USE_AKONADI
-		mutable AlarmListModel* mAlarmsModel; // active alarms sorted in time order
+        mutable AlarmListModel* mAlarmsModel; // active alarms sorted in time order
 #endif
-		bool            mHaveDisabledAlarms;  // some individually disabled alarms exist
-		QTimer*         mToolTipUpdateTimer;
+        bool            mHaveDisabledAlarms;  // some individually disabled alarms exist
+        QTimer*         mToolTipUpdateTimer;
 };
 
 #endif // TRAYWINDOW_H
+
+// vim: et sw=4:

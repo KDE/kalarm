@@ -35,25 +35,27 @@ class TemplateListView;
 
 class TemplatePickDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		explicit TemplatePickDlg(KAEvent::Actions, QWidget* parent = 0);
+        Q_OBJECT
+    public:
+        explicit TemplatePickDlg(KAEvent::Actions, QWidget* parent = 0);
 #ifdef USE_AKONADI
-		KAEvent        selectedTemplate() const;
+        KAEvent        selectedTemplate() const;
 #else
-		const KAEvent* selectedTemplate() const;
+        const KAEvent* selectedTemplate() const;
 #endif
-	protected:
-		virtual void   resizeEvent(QResizeEvent*);
-	private slots:
-		void           slotSelectionChanged();
-	private:
+    protected:
+        virtual void   resizeEvent(QResizeEvent*);
+    private slots:
+        void           slotSelectionChanged();
+    private:
 #ifdef USE_AKONADI
-		TemplateListModel* mListFilterModel;
+        TemplateListModel* mListFilterModel;
 #else
-		TemplateListFilterModel* mListFilterModel;
+        TemplateListFilterModel* mListFilterModel;
 #endif
-		TemplateListView*  mListView;
+        TemplateListView*  mListView;
 };
 
 #endif // TEMPLATEPICKDLG_H
+
+// vim: et sw=4:

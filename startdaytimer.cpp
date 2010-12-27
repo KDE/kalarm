@@ -27,16 +27,16 @@
 StartOfDayTimer* StartOfDayTimer::mInstance = 0;
 
 StartOfDayTimer::StartOfDayTimer()
-	: DailyTimer(Preferences::startOfDay(), false)
+    : DailyTimer(Preferences::startOfDay(), false)
 {
-	Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(startOfDayChanged()));
+    Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(startOfDayChanged()));
 }
 
 StartOfDayTimer* StartOfDayTimer::instance()
 {
-	if (!mInstance)
-		mInstance = new StartOfDayTimer;    // receive notifications of change of start-of-day time
-	return mInstance;
+    if (!mInstance)
+        mInstance = new StartOfDayTimer;    // receive notifications of change of start-of-day time
+    return mInstance;
 }
 
 /******************************************************************************
@@ -45,5 +45,7 @@ StartOfDayTimer* StartOfDayTimer::instance()
 */
 void StartOfDayTimer::startOfDayChanged()
 {
-	changeTime(Preferences::startOfDay(), true);
+    changeTime(Preferences::startOfDay(), true);
 }
+
+// vim: et sw=4:

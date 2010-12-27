@@ -1,7 +1,7 @@
 /*
  *  resourceremote_plugin.cpp  -  KAlarm remote alarm calendar file resource plugin
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,20 +20,22 @@
 
 #include "kalarm.h"
 
-#include <kglobal.h>
-#include <klocale.h>
-
 #include "resourceremote.h"
 #include "resourceremotewidget.h"
 
+#include <kglobal.h>
+#include <klocale.h>
+
 extern "C"
 {
-	KDE_EXPORT void* init_kalarm_remote()
-	{
+    KDE_EXPORT void* init_kalarm_remote()
+    {
 #ifndef KALARM_STANDALONE
-		KGlobal::locale()->insertCatalog("libkcal");
-		KGlobal::locale()->insertCatalog("kres_remote");
+        KGlobal::locale()->insertCatalog("libkcal");
+        KGlobal::locale()->insertCatalog("kres_remote");
 #endif
-		return new KRES::PluginFactory<KAResourceRemote, ResourceRemoteConfigWidget>();
-	}
+        return new KRES::PluginFactory<KAResourceRemote, ResourceRemoteConfigWidget>();
+    }
 }
+
+// vim: et sw=4:

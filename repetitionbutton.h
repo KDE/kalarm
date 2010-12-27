@@ -21,9 +21,9 @@
 #ifndef REPETITIONBUTTON_H
 #define REPETITIONBUTTON_H
 
-#include <QPushButton>
-#include <kdialog.h>
 #include "repetition.h"
+#include <kdialog.h>
+#include <QPushButton>
 
 class QGroupBox;
 class ButtonGroup;
@@ -42,69 +42,71 @@ namespace KCal { class Duration; }
 
 class RepetitionButton : public QPushButton
 {
-		Q_OBJECT
-	public:
-		RepetitionButton(const QString& caption, bool waitForInitialisation, QWidget* parent);
-		void           set(const Repetition&);
-		void           set(const Repetition&, bool dateOnly, int maxDuration = -1);
-		void           initialise(const Repetition&, bool dateOnly, int maxDuration = -1);   // use only after needsInitialisation() signal
-		void           activate()               { activate(false); }
-		Repetition     repetition() const       { return mRepetition; }
-		virtual void   setReadOnly(bool ro)     { mReadOnly = ro; }
-		virtual bool   isReadOnly() const       { return mReadOnly; }
+        Q_OBJECT
+    public:
+        RepetitionButton(const QString& caption, bool waitForInitialisation, QWidget* parent);
+        void           set(const Repetition&);
+        void           set(const Repetition&, bool dateOnly, int maxDuration = -1);
+        void           initialise(const Repetition&, bool dateOnly, int maxDuration = -1);   // use only after needsInitialisation() signal
+        void           activate()               { activate(false); }
+        Repetition     repetition() const       { return mRepetition; }
+        virtual void   setReadOnly(bool ro)     { mReadOnly = ro; }
+        virtual bool   isReadOnly() const       { return mReadOnly; }
 
-	signals:
-		void           needsInitialisation();   // dialog has been created and needs set() to be called
-		void           changed();               // the repetition dialog has been edited
+    signals:
+        void           needsInitialisation();   // dialog has been created and needs set() to be called
+        void           changed();               // the repetition dialog has been edited
 
-	private slots:
-		void           slotPressed()            { activate(mWaitForInit); }
+    private slots:
+        void           slotPressed()            { activate(mWaitForInit); }
 
-	private:
-		void           activate(bool waitForInitialisation);
-		void           displayDialog();
+    private:
+        void           activate(bool waitForInitialisation);
+        void           displayDialog();
 
-		RepetitionDlg* mDialog;
-		Repetition     mRepetition;   // repetition interval and count
-		int            mMaxDuration;  // maximum allowed duration in minutes, or -1 for infinite
-		bool           mDateOnly;     // hours/minutes cannot be displayed
-		bool           mWaitForInit;  // emit needsInitialisation() when button pressed, display when initialise() called
-		bool           mReadOnly;
+        RepetitionDlg* mDialog;
+        Repetition     mRepetition;   // repetition interval and count
+        int            mMaxDuration;  // maximum allowed duration in minutes, or -1 for infinite
+        bool           mDateOnly;     // hours/minutes cannot be displayed
+        bool           mWaitForInit;  // emit needsInitialisation() when button pressed, display when initialise() called
+        bool           mReadOnly;
 };
 
 
 class RepetitionDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = 0);
-		void       setReadOnly(bool);
-		void       set(const Repetition&, bool dateOnly = false, int maxDuration = -1);
-		Repetition repetition() const;   // get the repetition interval and count
+        Q_OBJECT
+    public:
+        RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = 0);
+        void       setReadOnly(bool);
+        void       set(const Repetition&, bool dateOnly = false, int maxDuration = -1);
+        Repetition repetition() const;   // get the repetition interval and count
 
-	private slots:
-		void       typeClicked();
-		void       countChanged(int);
+    private slots:
+        void       typeClicked();
+        void       countChanged(int);
 #ifdef USE_AKONADI
-		void       intervalChanged(const KCalCore::Duration&);
-		void       durationChanged(const KCalCore::Duration&);
+        void       intervalChanged(const KCalCore::Duration&);
+        void       durationChanged(const KCalCore::Duration&);
 #else
-		void       intervalChanged(const KCal::Duration&);
-		void       durationChanged(const KCal::Duration&);
+        void       intervalChanged(const KCal::Duration&);
+        void       durationChanged(const KCal::Duration&);
 #endif
-		void       repetitionToggled(bool);
+        void       repetitionToggled(bool);
 
-	private:
-		TimeSelector*  mTimeSelector;
-		QGroupBox*     mButtonBox;
-		ButtonGroup*   mButtonGroup;
-		RadioButton*   mCountButton;
-		SpinBox*       mCount;
-		RadioButton*   mDurationButton;
-		TimePeriod*    mDuration;
-		int            mMaxDuration;     // maximum allowed duration in minutes, or -1 for infinite
-		bool           mDateOnly;        // hours/minutes cannot be displayed
-		bool           mReadOnly;        // the widget is read only
+    private:
+        TimeSelector*  mTimeSelector;
+        QGroupBox*     mButtonBox;
+        ButtonGroup*   mButtonGroup;
+        RadioButton*   mCountButton;
+        SpinBox*       mCount;
+        RadioButton*   mDurationButton;
+        TimePeriod*    mDuration;
+        int            mMaxDuration;     // maximum allowed duration in minutes, or -1 for infinite
+        bool           mDateOnly;        // hours/minutes cannot be displayed
+        bool           mReadOnly;        // the widget is read only
 };
 
 #endif // REPETITIONBUTTON_H
+
+// vim: et sw=4:

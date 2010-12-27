@@ -19,62 +19,65 @@
  */
 
 #include "kalarm.h"
-#include <typeinfo>
 
-#include <QLabel>
-#include <QGridLayout>
+#include "resourcelocal.h"
+#include "resourcelocalwidget.moc"
 
 #include <kurlrequester.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include "resourcelocal.h"
-#include "resourcelocalwidget.moc"
+#include <QLabel>
+#include <QGridLayout>
+
+#include <typeinfo>
 
 
 ResourceLocalConfigWidget::ResourceLocalConfigWidget(QWidget* parent)
-	: ResourceConfigWidget(parent)
+    : ResourceConfigWidget(parent)
 {
-	QGridLayout* layout = new QGridLayout(this);
+    QGridLayout* layout = new QGridLayout(this);
 
-	QLabel* label = new QLabel(i18nc("@label:textbox", "Location:"), this);
-	layout->addWidget(label, 1, 0);
-	mURL = new KUrlRequester(this);
-	mURL->setFilter(QString::fromLatin1("*.vcs *.ics|%1").arg(i18nc("@info/plain", "Calendar Files")));
-	layout->addWidget(mURL, 1, 1);
+    QLabel* label = new QLabel(i18nc("@label:textbox", "Location:"), this);
+    layout->addWidget(label, 1, 0);
+    mURL = new KUrlRequester(this);
+    mURL->setFilter(QString::fromLatin1("*.vcs *.ics|%1").arg(i18nc("@info/plain", "Calendar Files")));
+    layout->addWidget(mURL, 1, 1);
 }
 
 void ResourceLocalConfigWidget::loadSettings(KRES::Resource* resource)
 {
 kDebug(KARES_DEBUG)<<typeid(resource).name();
-//	KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
-	KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
-	if (!res)
-		kError(KARES_DEBUG) << "KAResourceLocal: cast failed";
-	else
-	{
-		ResourceConfigWidget::loadSettings(resource);
-		mURL->setUrl(res->fileName());
+//    KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
+    KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
+    if (!res)
+        kError(KARES_DEBUG) << "KAResourceLocal: cast failed";
+    else
+    {
+        ResourceConfigWidget::loadSettings(resource);
+        mURL->setUrl(res->fileName());
 #ifndef NDEBUG
-		kDebug(KARES_DEBUG) << "File" << mURL->url() << " type" << res->typeName();
+        kDebug(KARES_DEBUG) << "File" << mURL->url() << " type" << res->typeName();
 #endif
-	}
+    }
 }
 
 void ResourceLocalConfigWidget::saveSettings(KRES::Resource* resource)
 {
-//	KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
-	KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
-	if (!res)
-		kDebug(KARES_DEBUG) << "KAResourceLocal: cast failed";
-	else
-	{
-		res->setFileName(mURL->url());
-		if (mURL->url().isEmpty())
-		{
-			KMessageBox::information(this, i18nc("@info", "No location specified.  The calendar will be invalid."));
-			resource->setReadOnly(true);
-		}
-	}
+//    KAResourceLocal* res = dynamic_cast<KAResourceLocal*>(resource);
+    KAResourceLocal* res = static_cast<KAResourceLocal*>(resource);
+    if (!res)
+        kDebug(KARES_DEBUG) << "KAResourceLocal: cast failed";
+    else
+    {
+        res->setFileName(mURL->url());
+        if (mURL->url().isEmpty())
+        {
+            KMessageBox::information(this, i18nc("@info", "No location specified.  The calendar will be invalid."));
+            resource->setReadOnly(true);
+        }
+    }
 }
+
+// vim: et sw=4:

@@ -21,9 +21,9 @@
 #ifndef SPECIALACTIONS_H
 #define SPECIALACTIONS_H
 
+#include <kdialog.h>
 #include <QWidget>
 #include <QPushButton>
-#include <kdialog.h>
 
 class QResizeEvent;
 class KLineEdit;
@@ -32,84 +32,86 @@ class CheckBox;
 
 class SpecialActionsButton : public QPushButton
 {
-		Q_OBJECT
-	public:
-		explicit SpecialActionsButton(bool enableCheckboxes, QWidget* parent = 0);
-		void           setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
-		const QString& preAction() const      { return mPreAction; }
-		const QString& postAction() const     { return mPostAction; }
-		bool           cancelOnError() const  { return mCancelOnError; }
-		bool           dontShowError() const  { return mDontShowError; }
-		virtual void   setReadOnly(bool ro)   { mReadOnly = ro; }
-		virtual bool   isReadOnly() const     { return mReadOnly; }
+        Q_OBJECT
+    public:
+        explicit SpecialActionsButton(bool enableCheckboxes, QWidget* parent = 0);
+        void           setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
+        const QString& preAction() const      { return mPreAction; }
+        const QString& postAction() const     { return mPostAction; }
+        bool           cancelOnError() const  { return mCancelOnError; }
+        bool           dontShowError() const  { return mDontShowError; }
+        virtual void   setReadOnly(bool ro)   { mReadOnly = ro; }
+        virtual bool   isReadOnly() const     { return mReadOnly; }
 
-	signals:
-		/** Signal emitted whenever the widget has been changed. */
-		void           selected();
+    signals:
+        /** Signal emitted whenever the widget has been changed. */
+        void           selected();
 
-	protected slots:
-		void           slotButtonPressed();
+    protected slots:
+        void           slotButtonPressed();
 
-	private:
-		QString  mPreAction;
-		QString  mPostAction;
-		bool     mCancelOnError;
-		bool     mDontShowError;
-		bool     mEnableCheckboxes;
-		bool     mReadOnly;
+    private:
+        QString  mPreAction;
+        QString  mPostAction;
+        bool     mCancelOnError;
+        bool     mDontShowError;
+        bool     mEnableCheckboxes;
+        bool     mReadOnly;
 };
 
 
 // Pre- and post-alarm actions widget
 class SpecialActions : public QWidget
 {
-		Q_OBJECT
-	public:
-		explicit SpecialActions(bool enableCheckboxes, QWidget* parent = 0);
-		void         setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
-		QString      preAction() const;
-		QString      postAction() const;
-		bool         cancelOnError() const;
-		bool         dontShowError() const;
-		void         setReadOnly(bool);
-		bool         isReadOnly() const    { return mReadOnly; }
+        Q_OBJECT
+    public:
+        explicit SpecialActions(bool enableCheckboxes, QWidget* parent = 0);
+        void         setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
+        QString      preAction() const;
+        QString      postAction() const;
+        bool         cancelOnError() const;
+        bool         dontShowError() const;
+        void         setReadOnly(bool);
+        bool         isReadOnly() const    { return mReadOnly; }
 
-	private slots:
-		void         slotPreActionChanged(const QString& text);
+    private slots:
+        void         slotPreActionChanged(const QString& text);
 
-	private:
-		KLineEdit*   mPreAction;
-		KLineEdit*   mPostAction;
-		CheckBox*    mCancelOnError;
-		CheckBox*    mDontShowError;
-		bool         mEnableCheckboxes;   // enable checkboxes even if mPreAction is blank
-		bool         mReadOnly;
+    private:
+        KLineEdit*   mPreAction;
+        KLineEdit*   mPostAction;
+        CheckBox*    mCancelOnError;
+        CheckBox*    mDontShowError;
+        bool         mEnableCheckboxes;   // enable checkboxes even if mPreAction is blank
+        bool         mReadOnly;
 };
 
 
 // Pre- and post-alarm actions dialog displayed by the push button
 class SpecialActionsDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		SpecialActionsDlg(const QString& preAction, const QString& postAction,
-		                  bool cancelOnError, bool enableCheckboxes, bool dontShowError,
-		                  QWidget* parent = 0);
-		QString      preAction() const     { return mActions->preAction(); }
-		QString      postAction() const    { return mActions->postAction(); }
-		bool         cancelOnError() const { return mActions->cancelOnError(); }
-		bool         dontShowError() const { return mActions->dontShowError(); }
-		void         setReadOnly(bool ro)  { mActions->setReadOnly(ro); }
-		bool         isReadOnly() const    { return mActions->isReadOnly(); }
+        Q_OBJECT
+    public:
+        SpecialActionsDlg(const QString& preAction, const QString& postAction,
+                          bool cancelOnError, bool enableCheckboxes, bool dontShowError,
+                          QWidget* parent = 0);
+        QString      preAction() const     { return mActions->preAction(); }
+        QString      postAction() const    { return mActions->postAction(); }
+        bool         cancelOnError() const { return mActions->cancelOnError(); }
+        bool         dontShowError() const { return mActions->dontShowError(); }
+        void         setReadOnly(bool ro)  { mActions->setReadOnly(ro); }
+        bool         isReadOnly() const    { return mActions->isReadOnly(); }
 
-	protected:
-		virtual void resizeEvent(QResizeEvent*);
+    protected:
+        virtual void resizeEvent(QResizeEvent*);
 
-	protected slots:
-		virtual void slotOk();
+    protected slots:
+        virtual void slotOk();
 
-	private:
-		SpecialActions* mActions;
+    private:
+        SpecialActions* mActions;
 };
 
 #endif // SPECIALACTIONS_H
+
+// vim: et sw=4:

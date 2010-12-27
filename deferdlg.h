@@ -21,36 +21,38 @@
 #ifndef DEFERDLG_H
 #define DEFERDLG_H
 
-#include <kdialog.h>
 #include "datetime.h"
+#include <kdialog.h>
 
 class AlarmTimeWidget;
 
 
 class DeferAlarmDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = 0);
-		void             setLimit(const DateTime&);
-		DateTime         setLimit(const QString& eventID);
-		const DateTime&  getDateTime() const   { return mAlarmDateTime; }
-		void             setDeferMinutes(int mins);
-		int              deferMinutes() const  { return mDeferMinutes; }
+        Q_OBJECT
+    public:
+        DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = 0);
+        void             setLimit(const DateTime&);
+        DateTime         setLimit(const QString& eventID);
+        const DateTime&  getDateTime() const   { return mAlarmDateTime; }
+        void             setDeferMinutes(int mins);
+        int              deferMinutes() const  { return mDeferMinutes; }
 
-	protected slots:
-		virtual void     slotOk();
-		virtual void     slotCancelDeferral();
+    protected slots:
+        virtual void     slotOk();
+        virtual void     slotCancelDeferral();
 
-	private slots:
-		void             slotPastLimit();
+    private slots:
+        void             slotPastLimit();
 
-	private:
-		AlarmTimeWidget* mTimeWidget;
-		DateTime         mAlarmDateTime;
-		DateTime         mLimitDateTime;   // latest date/time allowed for deferral
-		QString          mLimitEventID;    // event from whose recurrences to derive the limit date/time for deferral
-		int              mDeferMinutes;    // number of minutes deferral selected, or 0 if date/time entered
+    private:
+        AlarmTimeWidget* mTimeWidget;
+        DateTime         mAlarmDateTime;
+        DateTime         mLimitDateTime;   // latest date/time allowed for deferral
+        QString          mLimitEventID;    // event from whose recurrences to derive the limit date/time for deferral
+        int              mDeferMinutes;    // number of minutes deferral selected, or 0 if date/time entered
 };
 
 #endif // DEFERDLG_H
+
+// vim: et sw=4:

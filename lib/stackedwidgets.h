@@ -36,22 +36,23 @@ template <class T> class StackedGroupT;
 template <class T>
 class StackedWidgetT : public T
 {
-	public:
-		/** Constructor.
-		 *  @param parent The parent object of this widget.
-		 *  @param name The name of this widget.
-		 */
-		explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = 0)
-		      : T(parent),
-		        mGroup(group)
-		{
-			mGroup->addWidget(this);
-		}
-		~StackedWidgetT()  { mGroup->removeWidget(this); }
-		virtual QSize sizeHint() const         { return minimumSizeHint(); }
-		virtual QSize minimumSizeHint() const  { return mGroup->minimumSizeHint(); }
-	private:
-		StackedGroupT<T>* mGroup;
+    public:
+        /** Constructor.
+         *  @param parent The parent object of this widget.
+         *  @param name The name of this widget.
+         */
+        explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = 0)
+              : T(parent),
+                mGroup(group)
+        {
+            mGroup->addWidget(this);
+        }
+        ~StackedWidgetT()  { mGroup->removeWidget(this); }
+        virtual QSize sizeHint() const         { return minimumSizeHint(); }
+        virtual QSize minimumSizeHint() const  { return mGroup->minimumSizeHint(); }
+
+    private:
+        StackedGroupT<T>* mGroup;
 };
 
 /**
@@ -66,23 +67,23 @@ class StackedWidgetT : public T
 template <class T>
 class StackedGroupT : public QObject
 {
-	public:
-		explicit StackedGroupT(QObject* parent = 0) : QObject(parent) {}
-		void  addWidget(StackedWidgetT<T>* w)     { mWidgets += w; }
-		void  removeWidget(StackedWidgetT<T>* w)  { mWidgets.removeAll(w); }
-		virtual QSize minimumSizeHint() const;
+    public:
+        explicit StackedGroupT(QObject* parent = 0) : QObject(parent) {}
+        void  addWidget(StackedWidgetT<T>* w)     { mWidgets += w; }
+        void  removeWidget(StackedWidgetT<T>* w)  { mWidgets.removeAll(w); }
+        virtual QSize minimumSizeHint() const;
 
-	protected:
-		QList<StackedWidgetT<T>*> mWidgets;
+    protected:
+        QList<StackedWidgetT<T>*> mWidgets;
 };
 
 template <class T>
 QSize StackedGroupT<T>::minimumSizeHint() const
 {
-	QSize sz;
-	for (int i = 0, count = mWidgets.count();  i < count;  ++i)
-		sz = sz.expandedTo(mWidgets[i]->T::minimumSizeHint());
-	return sz;
+    QSize sz;
+    for (int i = 0, count = mWidgets.count();  i < count;  ++i)
+        sz = sz.expandedTo(mWidgets[i]->T::minimumSizeHint());
+    return sz;
 }
 
 /** A non-scrollable stacked widget. */
@@ -101,9 +102,9 @@ class StackedScrollGroup;
  */
 class StackedScrollWidget : public StackedWidgetT<QScrollArea>
 {
-	public:
-		explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = 0);
-		QWidget* widget() const  { return viewport()->findChild<QWidget*>(); }
+    public:
+        explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = 0);
+        QWidget* widget() const  { return viewport()->findChild<QWidget*>(); }
 };
 
 /**
@@ -114,20 +115,23 @@ class StackedScrollWidget : public StackedWidgetT<QScrollArea>
  */
 class StackedScrollGroup : public StackedGroupT<QScrollArea>
 {
-	public:
-		explicit StackedScrollGroup(KDialog*, QObject* tabParent);
-		virtual QSize minimumSizeHint() const;
-		int   heightReduction() const { return mHeightReduction; }
-		QSize adjustSize(bool force = false);
-		void  setSized()              { mSized = true; }
-		bool  sized() const           { return mSized; }
-	private:
-		QSize maxMinimumSizeHint() const;
+    public:
+        explicit StackedScrollGroup(KDialog*, QObject* tabParent);
+        virtual QSize minimumSizeHint() const;
+        int           heightReduction() const { return mHeightReduction; }
+        QSize         adjustSize(bool force = false);
+        void          setSized()              { mSized = true; }
+        bool          sized() const           { return mSized; }
 
-		KDialog* mDialog;
-		int   mMinHeight;
-		int   mHeightReduction;
-		bool  mSized;
+    private:
+        QSize         maxMinimumSizeHint() const;
+
+        KDialog* mDialog;
+        int      mMinHeight;
+        int      mHeightReduction;
+        bool     mSized;
 };
 
 #endif // STACKEDWIDGETS_H
+
+// vim: et sw=4:

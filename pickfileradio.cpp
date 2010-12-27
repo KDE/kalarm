@@ -31,67 +31,67 @@
 
 
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)
-	: RadioButton(text, parent),
-	  mGroup(group),
-	  mEdit(0),
-	  mLastButton(0),
-	  mRevertButton(false)
+    : RadioButton(text, parent),
+      mGroup(group),
+      mEdit(0),
+      mLastButton(0),
+      mRevertButton(false)
 {
-	Q_ASSERT(parent);
-	init(button, edit);
+    Q_ASSERT(parent);
+    init(button, edit);
 }
 
 PickFileRadio::PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
-	: RadioButton(text, parent),
-	  mGroup(group),
-	  mEdit(0),
-	  mButton(0),
-	  mLastButton(0),
-	  mRevertButton(false)
+    : RadioButton(text, parent),
+      mGroup(group),
+      mEdit(0),
+      mButton(0),
+      mLastButton(0),
+      mRevertButton(false)
 {
-	Q_ASSERT(parent);
+    Q_ASSERT(parent);
 }
 
 void PickFileRadio::init(QPushButton* button, LineEdit* edit)
 {
-	Q_ASSERT(button);
-	if (mEdit)
-		mEdit->disconnect(this);
-	mEdit   = edit;
-	mButton = button;
-	mButton->setEnabled(false);
-	connect(mButton, SIGNAL(clicked()), SLOT(slotPickFile()));
-	if (mEdit)
-	{
-		mEdit->setEnabled(false);
-		connect(mEdit, SIGNAL(textChanged(const QString&)), SIGNAL(fileChanged()));
-	}
-	connect(mGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotSelectionChanged(QAbstractButton*)));
-	setReadOnly(RadioButton::isReadOnly());
+    Q_ASSERT(button);
+    if (mEdit)
+        mEdit->disconnect(this);
+    mEdit   = edit;
+    mButton = button;
+    mButton->setEnabled(false);
+    connect(mButton, SIGNAL(clicked()), SLOT(slotPickFile()));
+    if (mEdit)
+    {
+        mEdit->setEnabled(false);
+        connect(mEdit, SIGNAL(textChanged(const QString&)), SIGNAL(fileChanged()));
+    }
+    connect(mGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotSelectionChanged(QAbstractButton*)));
+    setReadOnly(RadioButton::isReadOnly());
 }
 
 void PickFileRadio::setReadOnly(bool ro)
 {
-	RadioButton::setReadOnly(ro);
-	if (mButton)
-	{
-		if (mEdit)
-			mEdit->setReadOnly(ro);
-		if (ro)
-			mButton->hide();
-		else
-			mButton->show();
-	}
+    RadioButton::setReadOnly(ro);
+    if (mButton)
+    {
+        if (mEdit)
+            mEdit->setReadOnly(ro);
+        if (ro)
+            mButton->hide();
+        else
+            mButton->show();
+    }
 }
 
 void PickFileRadio::setFile(const QString& file)
 {
-	mFile = file;
+    mFile = file;
 }
 
 QString PickFileRadio::file() const
 {
-	return mEdit ? mEdit->text() : mFile;
+    return mEdit ? mEdit->text() : mFile;
 }
 
 /******************************************************************************
@@ -100,17 +100,17 @@ QString PickFileRadio::file() const
 */
 void PickFileRadio::setEnabled(bool enable)
 {
-	Q_ASSERT(mButton);
-	RadioButton::setEnabled(enable);
-	enable = enable  &&  mGroup->checkedButton() == this;
-	if (enable)
-	{
-		if (!pickFileIfNone())
-			enable = false;    // revert to previously selected type
-	}
-	mButton->setEnabled(enable);
-	if (mEdit)
-		mEdit->setEnabled(enable);
+    Q_ASSERT(mButton);
+    RadioButton::setEnabled(enable);
+    enable = enable  &&  mGroup->checkedButton() == this;
+    if (enable)
+    {
+        if (!pickFileIfNone())
+            enable = false;    // revert to previously selected type
+    }
+    mButton->setEnabled(enable);
+    if (mEdit)
+        mEdit->setEnabled(enable);
 }
 
 /******************************************************************************
@@ -118,23 +118,23 @@ void PickFileRadio::setEnabled(bool enable)
 */
 void PickFileRadio::slotSelectionChanged(QAbstractButton* button)
 {
-	if (button == mLastButton  ||  mRevertButton)
-		return;
-	if (mLastButton == this)
-	{
-		mButton->setEnabled(false);
-		if (mEdit)
-			mEdit->setEnabled(false);
-	}
-	else if (button == this)
-	{
-		if (!pickFileIfNone())
-			return;    // revert to previously selected type
-		mButton->setEnabled(true);
-		if (mEdit)
-			mEdit->setEnabled(true);
-	}
-	mLastButton = button;
+    if (button == mLastButton  ||  mRevertButton)
+        return;
+    if (mLastButton == this)
+    {
+        mButton->setEnabled(false);
+        if (mEdit)
+            mEdit->setEnabled(false);
+    }
+    else if (button == this)
+    {
+        if (!pickFileIfNone())
+            return;    // revert to previously selected type
+        mButton->setEnabled(true);
+        if (mEdit)
+            mEdit->setEnabled(true);
+    }
+    mLastButton = button;
 }
 
 /******************************************************************************
@@ -142,11 +142,11 @@ void PickFileRadio::slotSelectionChanged(QAbstractButton* button)
 */
 bool PickFileRadio::pickFileIfNone()
 {
-	if (mEdit)
-		mFile = mEdit->text();
-	if (!mFile.isEmpty())
-		return true;
-	return !slotPickFile().isEmpty();
+    if (mEdit)
+        mFile = mEdit->text();
+    if (!mFile.isEmpty())
+        return true;
+    return !slotPickFile().isEmpty();
 }
 
 /******************************************************************************
@@ -155,26 +155,26 @@ bool PickFileRadio::pickFileIfNone()
 */
 QString PickFileRadio::slotPickFile()
 {
-	// To avoid crashes on application quit, we need to check whether the
-	// dialogue, and hence this PickFileRadio, was deleted while active,
-	// before accessing class members.
-	QString file = pickFile();
-	if (file.isNull())
-		return file;   // 'this' is probably invalid now
-	if (!file.isEmpty())
-	{
-		mFile = file;
-		if (mEdit)
-			mEdit->setText(mFile);
-	}
-	if (mFile.isEmpty())
-	{
-		// No file is selected, so revert to the previous radio button selection.
-		// But wait a moment before setting the radio button, or it won't work.
-		mRevertButton = true;   // prevent picker dialog popping up twice
-		QTimer::singleShot(0, this, SLOT(setLastButton()));
-	}
-	return mFile;
+    // To avoid crashes on application quit, we need to check whether the
+    // dialogue, and hence this PickFileRadio, was deleted while active,
+    // before accessing class members.
+    QString file = pickFile();
+    if (file.isNull())
+        return file;   // 'this' is probably invalid now
+    if (!file.isEmpty())
+    {
+        mFile = file;
+        if (mEdit)
+            mEdit->setText(mFile);
+    }
+    if (mFile.isEmpty())
+    {
+        // No file is selected, so revert to the previous radio button selection.
+        // But wait a moment before setting the radio button, or it won't work.
+        mRevertButton = true;   // prevent picker dialog popping up twice
+        QTimer::singleShot(0, this, SLOT(setLastButton()));
+    }
+    return mFile;
 }
 
 /******************************************************************************
@@ -182,9 +182,11 @@ QString PickFileRadio::slotPickFile()
 */
 void PickFileRadio::setLastButton()
 {
-	if (!mLastButton)
-		setChecked(false);    // we don't know the previous selection, so just turn this button off
-	else
-		mLastButton->setChecked(true);
-	mRevertButton = false;
+    if (!mLastButton)
+        setChecked(false);    // we don't know the previous selection, so just turn this button off
+    else
+        mLastButton->setChecked(true);
+    mRevertButton = false;
 }
+
+// vim: et sw=4:

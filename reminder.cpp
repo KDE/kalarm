@@ -20,14 +20,11 @@
 
 #include "kalarm.h"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include "preferences.h"
+#include "checkbox.h"
+#include "timeselector.h"
+#include "reminder.moc"
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdialog.h>
-#include <kdatetime.h>
-#include <kdebug.h>
 #ifdef USE_AKONADI
 #include <kcalcore/duration.h>
 using namespace KCalCore;
@@ -36,10 +33,14 @@ using namespace KCalCore;
 using namespace KCal;
 #endif
 
-#include "preferences.h"
-#include "checkbox.h"
-#include "timeselector.h"
-#include "reminder.moc"
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdialog.h>
+#include <kdatetime.h>
+#include <kdebug.h>
+
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 // Collect these widget labels together to ensure consistent wording and
@@ -49,40 +50,40 @@ QString Reminder::i18n_chk_FirstRecurrenceOnly()   { return i18nc("@option:check
 
 Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsThis,
                    bool allowHourMinute, bool showOnceOnly, QWidget* parent)
-	: QFrame(parent),
-	  mReadOnly(false),
-	  mOnceOnlyEnabled(showOnceOnly)
+    : QFrame(parent),
+      mReadOnly(false),
+      mOnceOnlyEnabled(showOnceOnly)
 {
-	QVBoxLayout* topLayout = new QVBoxLayout(this);
-	topLayout->setMargin(0);
-	topLayout->setSpacing(KDialog::spacingHint());
+    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    topLayout->setMargin(0);
+    topLayout->setSpacing(KDialog::spacingHint());
 
-	mTime = new TimeSelector(i18nc("@option:check", "Reminder:"), i18nc("@label", "in advance"),
-	                         reminderWhatsThis, valueWhatsThis, allowHourMinute, this);
-	mTime->setFixedSize(mTime->sizeHint());
-	connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
+    mTime = new TimeSelector(i18nc("@option:check", "Reminder:"), i18nc("@label", "in advance"),
+                             reminderWhatsThis, valueWhatsThis, allowHourMinute, this);
+    mTime->setFixedSize(mTime->sizeHint());
+    connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
 #ifdef USE_AKONADI
-	connect(mTime, SIGNAL(valueChanged(const KCalCore::Duration&)), SIGNAL(changed()));
+    connect(mTime, SIGNAL(valueChanged(const KCalCore::Duration&)), SIGNAL(changed()));
 #else
-	connect(mTime, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
+    connect(mTime, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
 #endif
-	topLayout->addWidget(mTime, 0, Qt::AlignLeft);
+    topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 
-	if (showOnceOnly)
-	{
-		QHBoxLayout* layout = new QHBoxLayout();
-		layout->setMargin(0);
-		layout->addSpacing(3*KDialog::spacingHint());
-		topLayout->addLayout(layout);
-		mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
-		mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
-		connect(mOnceOnly, SIGNAL(toggled(bool)), SIGNAL(changed()));
-		mOnceOnly->setWhatsThis(i18nc("@info:whatsthis", "Display the reminder only before the first time the alarm is scheduled"));
-		layout->addWidget(mOnceOnly);
-		layout->addStretch();
-	}
-	else
-		mOnceOnly = 0;
+    if (showOnceOnly)
+    {
+        QHBoxLayout* layout = new QHBoxLayout();
+        layout->setMargin(0);
+        layout->addSpacing(3*KDialog::spacingHint());
+        topLayout->addLayout(layout);
+        mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
+        mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
+        connect(mOnceOnly, SIGNAL(toggled(bool)), SIGNAL(changed()));
+        mOnceOnly->setWhatsThis(i18nc("@info:whatsthis", "Display the reminder only before the first time the alarm is scheduled"));
+        layout->addWidget(mOnceOnly);
+        layout->addStretch();
+    }
+    else
+        mOnceOnly = 0;
 }
 
 /******************************************************************************
@@ -90,29 +91,29 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
 */
 void Reminder::setReadOnly(bool ro)
 {
-	if ((int)ro != (int)mReadOnly)
-	{
-		mReadOnly = ro;
-		mTime->setReadOnly(mReadOnly);
-		if (mOnceOnly)
-			mOnceOnly->setReadOnly(mReadOnly);
-	}
+    if ((int)ro != (int)mReadOnly)
+    {
+        mReadOnly = ro;
+        mTime->setReadOnly(mReadOnly);
+        if (mOnceOnly)
+            mOnceOnly->setReadOnly(mReadOnly);
+    }
 }
 
 bool Reminder::isReminder() const
 {
-	return mTime->isChecked();
+    return mTime->isChecked();
 }
 
 bool Reminder::isOnceOnly() const
 {
-	return mOnceOnly  &&  mOnceOnly->isEnabled()  &&  mOnceOnly->isChecked();
+    return mOnceOnly  &&  mOnceOnly->isEnabled()  &&  mOnceOnly->isChecked();
 }
 
 void Reminder::setOnceOnly(bool onceOnly)
 {
-	if (mOnceOnly)
-		mOnceOnly->setChecked(onceOnly);
+    if (mOnceOnly)
+        mOnceOnly->setChecked(onceOnly);
 }
 
 /******************************************************************************
@@ -120,16 +121,16 @@ void Reminder::setOnceOnly(bool onceOnly)
 */
 void Reminder::enableOnceOnly(bool enable)
 {
-	if (mOnceOnly)
-	{
-		mOnceOnlyEnabled = enable;
-		mOnceOnly->setEnabled(enable && mTime->isChecked());
-	}
+    if (mOnceOnly)
+    {
+        mOnceOnlyEnabled = enable;
+        mOnceOnly->setEnabled(enable && mTime->isChecked());
+    }
 }
 
 void Reminder::setMaximum(int hourmin, int days)
 {
-	mTime->setMaximum(hourmin, days);
+    mTime->setMaximum(hourmin, days);
 }
 
 /******************************************************************************
@@ -138,7 +139,7 @@ void Reminder::setMaximum(int hourmin, int days)
  */
 int Reminder::minutes() const
 {
-	return mTime->period().asSeconds() / 60;
+    return mTime->period().asSeconds() / 60;
 }
 
 /******************************************************************************
@@ -146,12 +147,12 @@ int Reminder::minutes() const
 */
 void Reminder::setMinutes(int minutes, bool dateOnly)
 {
-	Duration period;
-	if (minutes % (24*60))
-		period = Duration(minutes * 60, Duration::Seconds);
-	else
-		period = Duration(minutes / (24*60), Duration::Days);
-	mTime->setPeriod(period, dateOnly, Preferences::defaultReminderUnits());
+    Duration period;
+    if (minutes % (24*60))
+        period = Duration(minutes * 60, Duration::Seconds);
+    else
+        period = Duration(minutes / (24*60), Duration::Days);
+    mTime->setPeriod(period, dateOnly, Preferences::defaultReminderUnits());
 }
 
 /******************************************************************************
@@ -159,7 +160,7 @@ void Reminder::setMinutes(int minutes, bool dateOnly)
 */
 void Reminder::setDateOnly(bool dateOnly)
 {
-	mTime->setDateOnly(dateOnly);
+    mTime->setDateOnly(dateOnly);
 }
 
 /******************************************************************************
@@ -167,7 +168,7 @@ void Reminder::setDateOnly(bool dateOnly)
 */
 void Reminder::setFocusOnCount()
 {
-	mTime->setFocusOnCount();
+    mTime->setFocusOnCount();
 }
 
 /******************************************************************************
@@ -175,8 +176,8 @@ void Reminder::setFocusOnCount()
 */
 void Reminder::slotReminderToggled(bool on)
 {
-	if (mOnceOnly)
-		mOnceOnly->setEnabled(on && mOnceOnlyEnabled);
+    if (mOnceOnly)
+        mOnceOnly->setEnabled(on && mOnceOnlyEnabled);
 }
 
 /******************************************************************************
@@ -186,22 +187,24 @@ void Reminder::slotReminderToggled(bool on)
 */
 void Reminder::setDefaultUnits(const KDateTime& dt)
 {
-	if (mTime->isChecked())
-		return;   // don't change units if reminder is already set
-	TimePeriod::Units units;
-	TimePeriod::Units currentUnits = mTime->units();
-	if (KDateTime::currentDateTime(dt.timeSpec()).daysTo(dt) < 7)
-	{
-		if (currentUnits == TimePeriod::Minutes  ||  currentUnits == TimePeriod::HoursMinutes)
-			return;
-		units = (Preferences::defaultReminderUnits() == TimePeriod::Minutes)
-		      ? TimePeriod::Minutes : TimePeriod::HoursMinutes;
-	}
-	else
-	{
-		if (currentUnits == TimePeriod::Days  ||  currentUnits == TimePeriod::Weeks)
-			return;
-		units = TimePeriod::Days;
-	}
-	mTime->setUnits(units);
+    if (mTime->isChecked())
+        return;   // don't change units if reminder is already set
+    TimePeriod::Units units;
+    TimePeriod::Units currentUnits = mTime->units();
+    if (KDateTime::currentDateTime(dt.timeSpec()).daysTo(dt) < 7)
+    {
+        if (currentUnits == TimePeriod::Minutes  ||  currentUnits == TimePeriod::HoursMinutes)
+            return;
+        units = (Preferences::defaultReminderUnits() == TimePeriod::Minutes)
+              ? TimePeriod::Minutes : TimePeriod::HoursMinutes;
+    }
+    else
+    {
+        if (currentUnits == TimePeriod::Days  ||  currentUnits == TimePeriod::Weeks)
+            return;
+        units = TimePeriod::Days;
+    }
+    mTime->setUnits(units);
 }
+
+// vim: et sw=4:

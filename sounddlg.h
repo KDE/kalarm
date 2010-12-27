@@ -21,10 +21,9 @@
 #ifndef SOUNDDLG_H
 #define SOUNDDLG_H
 
-#include <QString>
 #include <kurl.h>
 #include <kdialog.h>
-#include <kmessagebox.h>
+#include <QString>
 
 class QPushButton;
 class QShowEvent;
@@ -40,80 +39,82 @@ class LineEdit;
 
 class SoundWidget : public QWidget
 {
-		Q_OBJECT
-	public:
-		SoundWidget(bool showPlay, bool showRepeat, QWidget* parent);
-		~SoundWidget();
-		void           set(const QString& file, float volume, float fadeVolume = -1, int fadeSeconds = 0, bool repeat = false);
-		void           setReadOnly(bool);
-		bool           isReadOnly() const    { return mReadOnly; }
-		void           setAllowEmptyFile()   { mEmptyFileAllowed = true; }
-		QString        fileName() const;
-		bool           file(KUrl&, bool showErrorMessage = true) const;
-		bool           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
-		bool           getRepeat() const;
-		QString        defaultDir() const    { return mDefaultDir; }
-		bool           validate(bool showErrorMessage) const;
+        Q_OBJECT
+    public:
+        SoundWidget(bool showPlay, bool showRepeat, QWidget* parent);
+        ~SoundWidget();
+        void           set(const QString& file, float volume, float fadeVolume = -1, int fadeSeconds = 0, bool repeat = false);
+        void           setReadOnly(bool);
+        bool           isReadOnly() const    { return mReadOnly; }
+        void           setAllowEmptyFile()   { mEmptyFileAllowed = true; }
+        QString        fileName() const;
+        bool           file(KUrl&, bool showErrorMessage = true) const;
+        bool           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
+        bool           getRepeat() const;
+        QString        defaultDir() const    { return mDefaultDir; }
+        bool           validate(bool showErrorMessage) const;
 
-		static QString i18n_chk_Repeat();      // text of Repeat checkbox
+        static QString i18n_chk_Repeat();      // text of Repeat checkbox
 
-	signals:
-		void           changed();      // emitted whenever any contents change
+    signals:
+        void           changed();      // emitted whenever any contents change
 
-	protected:
-		virtual void   showEvent(QShowEvent*);
-		virtual void   resizeEvent(QResizeEvent*);
+    protected:
+        virtual void   showEvent(QShowEvent*);
+        virtual void   resizeEvent(QResizeEvent*);
 
-	private slots:
-		void           slotPickFile();
-		void           slotVolumeToggled(bool on);
-		void           slotFadeToggled(bool on);
-		void           playSound();
-		void           playFinished();
+    private slots:
+        void           slotPickFile();
+        void           slotVolumeToggled(bool on);
+        void           slotFadeToggled(bool on);
+        void           playSound();
+        void           playFinished();
 
-	private:
-		QPushButton*   mFilePlay;
-		LineEdit*      mFileEdit;
-		PushButton*    mFileBrowseButton;
-		CheckBox*      mRepeatCheckbox;
-		CheckBox*      mVolumeCheckbox;
-		Slider*        mVolumeSlider;
-		CheckBox*      mFadeCheckbox;
-		KHBox*         mFadeBox;
-		SpinBox*       mFadeTime;
-		KHBox*         mFadeVolumeBox;
-		Slider*        mFadeSlider;
-		QString        mDefaultDir;     // current default directory for mFileEdit
-		mutable KUrl         mUrl;
-		mutable QString      mValidatedFile;
-		Phonon::MediaObject* mPlayer;
-		bool                 mReadOnly;
-		bool                 mEmptyFileAllowed;
+    private:
+        QPushButton*   mFilePlay;
+        LineEdit*      mFileEdit;
+        PushButton*    mFileBrowseButton;
+        CheckBox*      mRepeatCheckbox;
+        CheckBox*      mVolumeCheckbox;
+        Slider*        mVolumeSlider;
+        CheckBox*      mFadeCheckbox;
+        KHBox*         mFadeBox;
+        SpinBox*       mFadeTime;
+        KHBox*         mFadeVolumeBox;
+        Slider*        mFadeSlider;
+        QString        mDefaultDir;     // current default directory for mFileEdit
+        mutable KUrl         mUrl;
+        mutable QString      mValidatedFile;
+        Phonon::MediaObject* mPlayer;
+        bool                 mReadOnly;
+        bool                 mEmptyFileAllowed;
 };
 
 
 class SoundDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
-		         const QString& caption, QWidget* parent);
-		void           setReadOnly(bool);
-		bool           isReadOnly() const    { return mReadOnly; }
-		KUrl           getFile() const;
-		bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const
-		                                     { return mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
-		QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
+        Q_OBJECT
+    public:
+        SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
+                 const QString& caption, QWidget* parent);
+        void           setReadOnly(bool);
+        bool           isReadOnly() const    { return mReadOnly; }
+        KUrl           getFile() const;
+        bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const
+                                             { return mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
+        QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
 
-	protected:
-		virtual void   resizeEvent(QResizeEvent*);
+    protected:
+        virtual void   resizeEvent(QResizeEvent*);
 
-	protected slots:
-		virtual void   slotButtonClicked(int button);
+    protected slots:
+        virtual void   slotButtonClicked(int button);
 
-	private:
-		SoundWidget*   mSoundWidget;
-		bool           mReadOnly;
+    private:
+        SoundWidget*   mSoundWidget;
+        bool           mReadOnly;
 };
 
 #endif
+
+// vim: et sw=4:

@@ -35,43 +35,44 @@ class EventListView;
 
 class Find : public QObject
 {
-		Q_OBJECT
-	public:
-		explicit Find(EventListView* parent);
-		~Find();
-		void        display();
-		void        findNext(bool forward)     { findNext(forward, false, false); }
+        Q_OBJECT
+    public:
+        explicit Find(EventListView* parent);
+        ~Find();
+        void        display();
+        void        findNext(bool forward)     { findNext(forward, false, false); }
 
-	signals:
-		void        active(bool);
+    signals:
+        void        active(bool);
 
-	private slots:
-		void        slotFind();
-		void        slotKFindDestroyed()       { emit active(false); }
-		void        slotSelectionChanged();
+    private slots:
+        void        slotFind();
+        void        slotKFindDestroyed()       { emit active(false); }
+        void        slotSelectionChanged();
 
-	private:
-		void        findNext(bool forward, bool checkEnd, bool fromCurrent);
-		QModelIndex nextItem(const QModelIndex&, bool forward) const;
+    private:
+        void        findNext(bool forward, bool checkEnd, bool fromCurrent);
+        QModelIndex nextItem(const QModelIndex&, bool forward) const;
 
-		EventListView*     mListView;        // parent list view
-		QPointer<FindDlg>  mDialog;
-		QCheckBox*         mArchived;
-		QCheckBox*         mLive;
-		KSeparator*        mActiveArchivedSep;
-		QCheckBox*         mMessageType;
-		QCheckBox*         mFileType;
-		QCheckBox*         mCommandType;
-		QCheckBox*         mEmailType;
-		QCheckBox*         mAudioType;
-		KFind*             mFind;
-		QStringList        mHistory;         // list of history items for Find dialog
-		QString            mLastPattern;     // pattern used in last search
-		QString            mStartID;         // ID of first alarm searched if 'from cursor' was selected
-		long               mOptions;         // OR of find dialog options
-		bool               mNoCurrentItem;   // there is no current item for the purposes of searching
-		bool               mFound;           // true if any matches have been found
+        EventListView*     mListView;        // parent list view
+        QPointer<FindDlg>  mDialog;
+        QCheckBox*         mArchived;
+        QCheckBox*         mLive;
+        KSeparator*        mActiveArchivedSep;
+        QCheckBox*         mMessageType;
+        QCheckBox*         mFileType;
+        QCheckBox*         mCommandType;
+        QCheckBox*         mEmailType;
+        QCheckBox*         mAudioType;
+        KFind*             mFind;
+        QStringList        mHistory;         // list of history items for Find dialog
+        QString            mLastPattern;     // pattern used in last search
+        QString            mStartID;         // ID of first alarm searched if 'from cursor' was selected
+        long               mOptions;         // OR of find dialog options
+        bool               mNoCurrentItem;   // there is no current item for the purposes of searching
+        bool               mFound;           // true if any matches have been found
 };
 
 #endif // FIND_H
 
+// vim: et sw=4:

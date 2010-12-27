@@ -20,6 +20,13 @@
 
 #include "kalarm.h"
 
+#include "preferences.h"
+#include "resourcemodelview.moc"
+
+#include <klocale.h>
+#include <kmessagebox.h>
+#include <kdebug.h>
+
 #include <QApplication>
 #include <QToolTip>
 #include <QMouseEvent>
@@ -28,112 +35,105 @@
 #include <QTextLayout>
 #include <QTextLine>
 
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kdebug.h>
-
-#include "preferences.h"
-#include "resourcemodelview.moc"
-
 
 ResourceModel* ResourceModel::mInstance = 0;
 
 
 ResourceModel* ResourceModel::instance(QObject* parent)
 {
-	if (!mInstance)
-		mInstance = new ResourceModel(parent);
-	return mInstance;
+    if (!mInstance)
+        mInstance = new ResourceModel(parent);
+    return mInstance;
 }
 
 ResourceModel::ResourceModel(QObject* parent)
-	: QAbstractListModel(parent)
+    : QAbstractListModel(parent)
 {
-	refresh();
-	AlarmResources* resources = AlarmResources::instance();
-	connect(resources, SIGNAL(signalResourceModified(AlarmResource*)), SLOT(updateResource(AlarmResource*)));
-	connect(resources, SIGNAL(standardResourceChange(KAlarm::CalEvent::Type)), SLOT(slotStandardChanged(KAlarm::CalEvent::Type)));
-	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
-	connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(slotLoaded(AlarmResource*, bool)));
+    refresh();
+    AlarmResources* resources = AlarmResources::instance();
+    connect(resources, SIGNAL(signalResourceModified(AlarmResource*)), SLOT(updateResource(AlarmResource*)));
+    connect(resources, SIGNAL(standardResourceChange(KAlarm::CalEvent::Type)), SLOT(slotStandardChanged(KAlarm::CalEvent::Type)));
+    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
+    connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(slotLoaded(AlarmResource*, bool)));
 }
 
 int ResourceModel::rowCount(const QModelIndex& parent) const
 {
-	if (parent.isValid())
-		return 0;
-	return mResources.count();
+    if (parent.isValid())
+        return 0;
+    return mResources.count();
 }
 
 QModelIndex ResourceModel::index(int row, int column, const QModelIndex& parent) const
 {
-	if (parent.isValid()  ||  row >= mResources.count())
-		return QModelIndex();
-	return createIndex(row, column, mResources[row]);
+    if (parent.isValid()  ||  row >= mResources.count())
+        return QModelIndex();
+    return createIndex(row, column, mResources[row]);
 }
 
 QVariant ResourceModel::data(const QModelIndex& index, int role) const
 {
-	if (!index.isValid())
-		return QVariant();
-	AlarmResource* resource = static_cast<AlarmResource*>(index.internalPointer());
-	if (!resource)
-		return QVariant();
-	switch (role)
-	{
-		case Qt::DisplayRole:
-			return resource->resourceName();
-		case Qt::CheckStateRole:
-			return resource->isEnabled() ? Qt::Checked : Qt::Unchecked;
-		case Qt::DecorationRole:
-			if (!resource->colour().isValid())
-				return QApplication::palette().color(QPalette::Base);
-			return resource->colour();
-		case Qt::ForegroundRole:
-			switch (resource->alarmType())
-			{
-				case KAlarm::CalEvent::ACTIVE:    return resource->readOnly() ? Qt::darkGray : Qt::black;
-				case KAlarm::CalEvent::ARCHIVED:  return resource->readOnly() ? Qt::green : Qt::darkGreen;
-				case KAlarm::CalEvent::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
-				default:  break;
-			}
-			break;
-		case Qt::FontRole:
-		{
-			if (!resource->isEnabled()  ||  !resource->standardResource())
-				break;
-			QFont font = mFont;
-			font.setBold(true);
-			return font;
-		}
-		case Qt::ToolTipRole:
-		{
-			QString name = '@' + resource->resourceName();   // insert markers for stripping out name
-			QString type = '@' + resource->displayType();
-			bool inactive = !resource->isActive();
-			QString disabled = resource->isWrongAlarmType() ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
-			QString readonly = i18nc("@info/plain", "Read-only");
-			if (inactive  &&  resource->readOnly())
-				return i18nc("@info:tooltip",
-				             "%1"
-				             "<nl/>%2: <filename>%3</filename>"
-				             "<nl/>%4, %5",
-				             name, type, resource->displayLocation(), disabled, readonly);
-			if (inactive  ||  resource->readOnly())
-				return i18nc("@info:tooltip",
-				             "%1"
-				             "<nl/>%2: <filename>%3</filename>"
-				             "<nl/>%4",
-				             name, type, resource->displayLocation(),
-				             (inactive ? disabled : readonly));
-			return i18nc("@info:tooltip",
-			             "%1"
-			             "<nl/>%2: <filename>%3</filename>",
-			             name, type, resource->displayLocation());
-		}
-		default:
-			break;
-	}
-	return QVariant();
+    if (!index.isValid())
+        return QVariant();
+    AlarmResource* resource = static_cast<AlarmResource*>(index.internalPointer());
+    if (!resource)
+        return QVariant();
+    switch (role)
+    {
+        case Qt::DisplayRole:
+            return resource->resourceName();
+        case Qt::CheckStateRole:
+            return resource->isEnabled() ? Qt::Checked : Qt::Unchecked;
+        case Qt::DecorationRole:
+            if (!resource->colour().isValid())
+                return QApplication::palette().color(QPalette::Base);
+            return resource->colour();
+        case Qt::ForegroundRole:
+            switch (resource->alarmType())
+            {
+                case KAlarm::CalEvent::ACTIVE:    return resource->readOnly() ? Qt::darkGray : Qt::black;
+                case KAlarm::CalEvent::ARCHIVED:  return resource->readOnly() ? Qt::green : Qt::darkGreen;
+                case KAlarm::CalEvent::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
+                default:  break;
+            }
+            break;
+        case Qt::FontRole:
+        {
+            if (!resource->isEnabled()  ||  !resource->standardResource())
+                break;
+            QFont font = mFont;
+            font.setBold(true);
+            return font;
+        }
+        case Qt::ToolTipRole:
+        {
+            QString name = '@' + resource->resourceName();   // insert markers for stripping out name
+            QString type = '@' + resource->displayType();
+            bool inactive = !resource->isActive();
+            QString disabled = resource->isWrongAlarmType() ? i18nc("@info/plain", "Disabled (wrong alarm type)") : i18nc("@info/plain", "Disabled");
+            QString readonly = i18nc("@info/plain", "Read-only");
+            if (inactive  &&  resource->readOnly())
+                return i18nc("@info:tooltip",
+                             "%1"
+                             "<nl/>%2: <filename>%3</filename>"
+                             "<nl/>%4, %5",
+                             name, type, resource->displayLocation(), disabled, readonly);
+            if (inactive  ||  resource->readOnly())
+                return i18nc("@info:tooltip",
+                             "%1"
+                             "<nl/>%2: <filename>%3</filename>"
+                             "<nl/>%4",
+                             name, type, resource->displayLocation(),
+                             (inactive ? disabled : readonly));
+            return i18nc("@info:tooltip",
+                         "%1"
+                         "<nl/>%2: <filename>%3</filename>",
+                         name, type, resource->displayLocation());
+        }
+        default:
+            break;
+    }
+    return QVariant();
 }
 
 /******************************************************************************
@@ -142,44 +142,44 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
 */
 bool ResourceModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-	mErrorPrompt.clear();
-	if (role == Qt::FontRole)
-	{
-		// Set the font used in all views.
-		// This enables data(index, Qt::FontRole) to return bold when appropriate.
-		mFont = value.value<QFont>();
-		return true;
-	}
-	if (role != Qt::CheckStateRole  ||  !index.isValid())
-		return false;
-	AlarmResource* resource = static_cast<AlarmResource*>(index.internalPointer());
-	if (!resource)
-		return false;
-	Qt::CheckState state = static_cast<Qt::CheckState>(value.toInt());
-	bool active = (state == Qt::Checked);
-	bool saveChange = false;
-	AlarmResources* resources = AlarmResources::instance();
-	if (active)
-	{
-		// Enable the resource
-		resource->setActive(true);     // enable it now so that load() will work
-		saveChange = resources->load(resource);
-		resource->setActive(false);    // reset so that setEnabled() will work
-	}
-	else
-	{
-		// Disable the resource
-		saveChange = resource->saveAndClose();   // close resource after it is saved
-	}
-	if (saveChange)
-		resource->setEnabled(active);
-	emit dataChanged(index, index);
-	return true;
+    mErrorPrompt.clear();
+    if (role == Qt::FontRole)
+    {
+        // Set the font used in all views.
+        // This enables data(index, Qt::FontRole) to return bold when appropriate.
+        mFont = value.value<QFont>();
+        return true;
+    }
+    if (role != Qt::CheckStateRole  ||  !index.isValid())
+        return false;
+    AlarmResource* resource = static_cast<AlarmResource*>(index.internalPointer());
+    if (!resource)
+        return false;
+    Qt::CheckState state = static_cast<Qt::CheckState>(value.toInt());
+    bool active = (state == Qt::Checked);
+    bool saveChange = false;
+    AlarmResources* resources = AlarmResources::instance();
+    if (active)
+    {
+        // Enable the resource
+        resource->setActive(true);     // enable it now so that load() will work
+        saveChange = resources->load(resource);
+        resource->setActive(false);    // reset so that setEnabled() will work
+    }
+    else
+    {
+        // Disable the resource
+        saveChange = resource->saveAndClose();   // close resource after it is saved
+    }
+    if (saveChange)
+        resource->setEnabled(active);
+    emit dataChanged(index, index);
+    return true;
 }
 
 Qt::ItemFlags ResourceModel::flags(const QModelIndex&) const
 {
-	return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
+    return Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
 }
 
 /******************************************************************************
@@ -187,9 +187,9 @@ Qt::ItemFlags ResourceModel::flags(const QModelIndex&) const
 */
 AlarmResource* ResourceModel::resource(const QModelIndex& index) const
 {
-	if (!index.isValid())
-		return 0;
-	return static_cast<AlarmResource*>(index.internalPointer());
+    if (!index.isValid())
+        return 0;
+    return static_cast<AlarmResource*>(index.internalPointer());
 }
 
 /******************************************************************************
@@ -197,8 +197,8 @@ AlarmResource* ResourceModel::resource(const QModelIndex& index) const
 */
 void ResourceModel::notifyChange(const QModelIndex& index)
 {
-	if (index.isValid())
-		emit dataChanged(index, index);
+    if (index.isValid())
+        emit dataChanged(index, index);
 }
 
 /******************************************************************************
@@ -206,23 +206,23 @@ void ResourceModel::notifyChange(const QModelIndex& index)
 */
 void ResourceModel::refresh()
 {
-	// This would be better done by a reset(), but the signals are private to QAbstractItemModel
-	if (!mResources.isEmpty())
-	{
-		beginRemoveRows(QModelIndex(), 0, mResources.count() - 1);
-		mResources.clear();
-		endRemoveRows();
-	}
-	QList<AlarmResource*> newResources;
-	AlarmResourceManager* manager = AlarmResources::instance()->resourceManager();
-	for (AlarmResourceManager::Iterator it = manager->begin();  it != manager->end();  ++it)
-		newResources += *it;
-	if (!newResources.isEmpty())
-	{
-		beginInsertRows(QModelIndex(), 0, newResources.count() - 1);
-		mResources = newResources;
-		endInsertRows();
-	}
+    // This would be better done by a reset(), but the signals are private to QAbstractItemModel
+    if (!mResources.isEmpty())
+    {
+        beginRemoveRows(QModelIndex(), 0, mResources.count() - 1);
+        mResources.clear();
+        endRemoveRows();
+    }
+    QList<AlarmResource*> newResources;
+    AlarmResourceManager* manager = AlarmResources::instance()->resourceManager();
+    for (AlarmResourceManager::Iterator it = manager->begin();  it != manager->end();  ++it)
+        newResources += *it;
+    if (!newResources.isEmpty())
+    {
+        beginInsertRows(QModelIndex(), 0, newResources.count() - 1);
+        mResources = newResources;
+        endInsertRows();
+    }
 }
 
 /******************************************************************************
@@ -230,10 +230,10 @@ void ResourceModel::refresh()
 */
 void ResourceModel::addResource(AlarmResource* resource)
 {
-	int row = mResources.count();
-	beginInsertRows(QModelIndex(), row, row);
-	mResources += resource;
-	endInsertRows();
+    int row = mResources.count();
+    beginInsertRows(QModelIndex(), row, row);
+    mResources += resource;
+    endInsertRows();
 }
 
 /******************************************************************************
@@ -241,13 +241,13 @@ void ResourceModel::addResource(AlarmResource* resource)
 */
 void ResourceModel::removeResource(AlarmResource* resource)
 {
-	int row = mResources.indexOf(resource);
-	if (row >= 0)
-	{
-		beginRemoveRows(QModelIndex(), row, row);
-		mResources.removeAt(row);
-		endRemoveRows();
-	}
+    int row = mResources.indexOf(resource);
+    if (row >= 0)
+    {
+        beginRemoveRows(QModelIndex(), row, row);
+        mResources.removeAt(row);
+        endRemoveRows();
+    }
 }
 
 /******************************************************************************
@@ -256,12 +256,12 @@ void ResourceModel::removeResource(AlarmResource* resource)
 */
 void ResourceModel::updateResource(AlarmResource* resource)
 {
-	int row = mResources.indexOf(resource);
-	if (row >= 0)
-	{
-		QModelIndex ix = index(row, 0, QModelIndex());
-		emit dataChanged(ix, ix);
-	}
+    int row = mResources.indexOf(resource);
+    if (row >= 0)
+    {
+        QModelIndex ix = index(row, 0, QModelIndex());
+        emit dataChanged(ix, ix);
+    }
 }
 
 /******************************************************************************
@@ -269,14 +269,14 @@ void ResourceModel::updateResource(AlarmResource* resource)
 */
 void ResourceModel::slotStandardChanged(KAlarm::CalEvent::Type type)
 {
-	for (int row = 0, end = mResources.count();  row < end;  ++row)
-	{
-		if (mResources[row]->alarmType() == type)
-		{
-			QModelIndex ix = index(row, 0, QModelIndex());
-			emit dataChanged(ix, ix);
-		}
-	}
+    for (int row = 0, end = mResources.count();  row < end;  ++row)
+    {
+        if (mResources[row]->alarmType() == type)
+        {
+            QModelIndex ix = index(row, 0, QModelIndex());
+            emit dataChanged(ix, ix);
+        }
+    }
 }
 
 /******************************************************************************
@@ -285,8 +285,8 @@ void ResourceModel::slotStandardChanged(KAlarm::CalEvent::Type type)
 */
 void ResourceModel::slotLoaded(AlarmResource* resource, bool active)
 {
-	if (active)
-		updateResource(resource);
+    if (active)
+        updateResource(resource);
 }
 
 /******************************************************************************
@@ -294,19 +294,19 @@ void ResourceModel::slotLoaded(AlarmResource* resource, bool active)
 */
 void ResourceModel::slotStatusChanged(AlarmResource* resource, AlarmResources::Change change)
 {
-	switch (change)
-	{
-		case AlarmResources::Added:
-			addResource(resource);
-			break;
-		case AlarmResources::Enabled:
-		case AlarmResources::ReadOnly:
-		case AlarmResources::Colour:
-			updateResource(resource);
-			break;
-		default:
-			break;
-	}
+    switch (change)
+    {
+        case AlarmResources::Added:
+            addResource(resource);
+            break;
+        case AlarmResources::Enabled:
+        case AlarmResources::ReadOnly:
+        case AlarmResources::Colour:
+            updateResource(resource);
+            break;
+        default:
+            break;
+    }
 }
 
 
@@ -316,24 +316,24 @@ void ResourceModel::slotStatusChanged(AlarmResource* resource, AlarmResources::C
 =============================================================================*/
 
 ResourceFilterModel::ResourceFilterModel(QAbstractItemModel* baseModel, QObject* parent)
-	: QSortFilterProxyModel(parent),
-	  mResourceType(KAlarm::CalEvent::EMPTY)
+    : QSortFilterProxyModel(parent),
+      mResourceType(KAlarm::CalEvent::EMPTY)
 {
-	setSourceModel(baseModel);
+    setSourceModel(baseModel);
 }
 
 void ResourceFilterModel::setFilter(KAlarm::CalEvent::Type type)
 {
-	if (type != mResourceType)
-	{
-		mResourceType = type;
-		invalidateFilter();
-	}
+    if (type != mResourceType)
+    {
+        mResourceType = type;
+        invalidateFilter();
+    }
 }
 
 bool ResourceFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
 {
-	return static_cast<ResourceModel*>(sourceModel())->resource(sourceModel()->index(sourceRow, 0))->alarmType() == mResourceType;
+    return static_cast<ResourceModel*>(sourceModel())->resource(sourceModel()->index(sourceRow, 0))->alarmType() == mResourceType;
 }
 
 /******************************************************************************
@@ -341,12 +341,12 @@ bool ResourceFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) co
 */
 AlarmResource* ResourceFilterModel::resource(int row) const
 {
-	return static_cast<ResourceModel*>(sourceModel())->resource(mapToSource(index(row, 0)));
+    return static_cast<ResourceModel*>(sourceModel())->resource(mapToSource(index(row, 0)));
 }
 
 AlarmResource* ResourceFilterModel::resource(const QModelIndex& index) const
 {
-	return static_cast<ResourceModel*>(sourceModel())->resource(mapToSource(index));
+    return static_cast<ResourceModel*>(sourceModel())->resource(mapToSource(index));
 }
 
 /******************************************************************************
@@ -354,12 +354,12 @@ AlarmResource* ResourceFilterModel::resource(const QModelIndex& index) const
 */
 void ResourceFilterModel::notifyChange(int row)
 {
-	static_cast<ResourceModel*>(sourceModel())->notifyChange(mapToSource(index(row, 0)));
+    static_cast<ResourceModel*>(sourceModel())->notifyChange(mapToSource(index(row, 0)));
 }
 
 void ResourceFilterModel::notifyChange(const QModelIndex& index)
 {
-	static_cast<ResourceModel*>(sourceModel())->notifyChange(mapToSource(index));
+    static_cast<ResourceModel*>(sourceModel())->notifyChange(mapToSource(index));
 }
 
 
@@ -373,66 +373,66 @@ void ResourceFilterModel::notifyChange(const QModelIndex& index)
 */
 bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index)
 {
-	if (!(model->flags(index) & Qt::ItemIsEnabled))
-		return false;
-	if (event->type() == QEvent::MouseButtonRelease
-	||  event->type() == QEvent::MouseButtonDblClick)
-	{
-		const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-		QRect checkRect = QStyle::alignedRect(option.direction, Qt::AlignLeft | Qt::AlignVCenter,
-		                                      check(option, option.rect, Qt::Checked).size(),
-		                                      QRect(option.rect.x() + textMargin, option.rect.y(), option.rect.width(), option.rect.height()));
-		if (!checkRect.contains(static_cast<QMouseEvent*>(event)->pos()))
-			return false;
-		if (event->type() == QEvent::MouseButtonDblClick)
-			return true;    // ignore double clicks
-	}
-	else if (event->type() == QEvent::KeyPress)
-	{
-		if (static_cast<QKeyEvent*>(event)->key() != Qt::Key_Space
-		&&  static_cast<QKeyEvent*>(event)->key() != Qt::Key_Select)
-			return false;
-	}
-	else
-		return false;
+    if (!(model->flags(index) & Qt::ItemIsEnabled))
+        return false;
+    if (event->type() == QEvent::MouseButtonRelease
+    ||  event->type() == QEvent::MouseButtonDblClick)
+    {
+        const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+        QRect checkRect = QStyle::alignedRect(option.direction, Qt::AlignLeft | Qt::AlignVCenter,
+                                              check(option, option.rect, Qt::Checked).size(),
+                                              QRect(option.rect.x() + textMargin, option.rect.y(), option.rect.width(), option.rect.height()));
+        if (!checkRect.contains(static_cast<QMouseEvent*>(event)->pos()))
+            return false;
+        if (event->type() == QEvent::MouseButtonDblClick)
+            return true;    // ignore double clicks
+    }
+    else if (event->type() == QEvent::KeyPress)
+    {
+        if (static_cast<QKeyEvent*>(event)->key() != Qt::Key_Space
+        &&  static_cast<QKeyEvent*>(event)->key() != Qt::Key_Select)
+            return false;
+    }
+    else
+        return false;
 
-	QVariant value = index.data(Qt::CheckStateRole);
-	if (!value.isValid())
-		return false;
-	Qt::CheckState state = (static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked ? Qt::Unchecked : Qt::Checked);
-	if (state == Qt::Unchecked)
-	{
-		// The resource is to be disabled.
-		// Check for eligibility.
-		AlarmResource* resource = static_cast<ResourceFilterModel*>(model)->resource(index);
-		if (!resource)
-			return false;
-		if (resource->standardResource())
-		{
-			// It's the standard resource for its type.
-			if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
-			{
-				KMessageBox::sorry(static_cast<QWidget*>(parent()),
-				                   i18nc("@info", "You cannot disable your default active alarm calendar."));
-				return false;
+    QVariant value = index.data(Qt::CheckStateRole);
+    if (!value.isValid())
+        return false;
+    Qt::CheckState state = (static_cast<Qt::CheckState>(value.toInt()) == Qt::Checked ? Qt::Unchecked : Qt::Checked);
+    if (state == Qt::Unchecked)
+    {
+        // The resource is to be disabled.
+        // Check for eligibility.
+        AlarmResource* resource = static_cast<ResourceFilterModel*>(model)->resource(index);
+        if (!resource)
+            return false;
+        if (resource->standardResource())
+        {
+            // It's the standard resource for its type.
+            if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
+            {
+                KMessageBox::sorry(static_cast<QWidget*>(parent()),
+                                   i18nc("@info", "You cannot disable your default active alarm calendar."));
+                return false;
 
-			}
-			if (resource->alarmType() == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
-			{
-				// Only allow the archived alarms standard resource to be disabled if
-				// we're not saving archived alarms.
-				KMessageBox::sorry(static_cast<QWidget*>(parent()),
-				                   i18nc("@info", "You cannot disable your default archived alarm calendar "
-				                        "while expired alarms are configured to be kept."));
-				return false;
-			}
-			if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
-			                                       i18nc("@info", "Do you really want to disable your default calendar?"))
-			           == KMessageBox::Cancel)
-				return false;
-		}
-	}
-	return model->setData(index, state, Qt::CheckStateRole);
+            }
+            if (resource->alarmType() == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
+            {
+                // Only allow the archived alarms standard resource to be disabled if
+                // we're not saving archived alarms.
+                KMessageBox::sorry(static_cast<QWidget*>(parent()),
+                                   i18nc("@info", "You cannot disable your default archived alarm calendar "
+                                        "while expired alarms are configured to be kept."));
+                return false;
+            }
+            if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
+                                                   i18nc("@info", "Do you really want to disable your default calendar?"))
+                       == KMessageBox::Cancel)
+                return false;
+        }
+    }
+    return model->setData(index, state, Qt::CheckStateRole);
 }
 
 
@@ -443,9 +443,9 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
 
 void ResourceView::setModel(QAbstractItemModel* model)
 {
-	model->setData(QModelIndex(), viewOptions().font, Qt::FontRole);
-	QListView::setModel(model);
-	setItemDelegate(new ResourceDelegate(this));
+    model->setData(QModelIndex(), viewOptions().font, Qt::FontRole);
+    QListView::setModel(model);
+    setItemDelegate(new ResourceDelegate(this));
 }
 
 /******************************************************************************
@@ -453,12 +453,12 @@ void ResourceView::setModel(QAbstractItemModel* model)
 */
 AlarmResource* ResourceView::resource(int row) const
 {
-	return static_cast<ResourceFilterModel*>(model())->resource(row);
+    return static_cast<ResourceFilterModel*>(model())->resource(row);
 }
 
 AlarmResource* ResourceView::resource(const QModelIndex& index) const
 {
-	return static_cast<ResourceFilterModel*>(model())->resource(index);
+    return static_cast<ResourceFilterModel*>(model())->resource(index);
 }
 
 /******************************************************************************
@@ -466,12 +466,12 @@ AlarmResource* ResourceView::resource(const QModelIndex& index) const
 */
 void ResourceView::notifyChange(int row) const
 {
-	static_cast<ResourceFilterModel*>(model())->notifyChange(row);
+    static_cast<ResourceFilterModel*>(model())->notifyChange(row);
 }
 
 void ResourceView::notifyChange(const QModelIndex& index) const
 {
-	static_cast<ResourceFilterModel*>(model())->notifyChange(index);
+    static_cast<ResourceFilterModel*>(model())->notifyChange(index);
 }
 
 /******************************************************************************
@@ -480,9 +480,9 @@ void ResourceView::notifyChange(const QModelIndex& index) const
 */
 void ResourceView::mouseReleaseEvent(QMouseEvent* e)
 {
-	if (!indexAt(e->pos()).isValid())
-		clearSelection();
-	QListView::mouseReleaseEvent(e);
+    if (!indexAt(e->pos()).isValid())
+        clearSelection();
+    QListView::mouseReleaseEvent(e);
 }
 
 /******************************************************************************
@@ -490,47 +490,49 @@ void ResourceView::mouseReleaseEvent(QMouseEvent* e)
 */
 bool ResourceView::viewportEvent(QEvent* e)
 {
-	if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
-	{
-		QHelpEvent* he = static_cast<QHelpEvent*>(e);
-		QModelIndex index = indexAt(he->pos());
-		QVariant value = model()->data(index, Qt::ToolTipRole);
-		if (qVariantCanConvert<QString>(value))
-		{
-			QString toolTip = value.toString();
-			int i = toolTip.indexOf('@');
-			if (i > 0)
-			{
-				int j = toolTip.indexOf(QRegExp("<(nl|br)", Qt::CaseInsensitive), i + 1);
-				int k = toolTip.indexOf('@', j);
-				QString name = toolTip.mid(i + 1, j - i - 1);
-				value = model()->data(index, Qt::FontRole);
-				QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
-				int textWidth = fm.boundingRect(name).width() + 1;
-				const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
-				QStyleOptionButton opt;
-				opt.QStyleOption::operator=(viewOptions());
-				opt.rect = rectForIndex(index);
-				int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt).width();
-				int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
-				int right = left + textWidth;
-				if (left >= horizontalOffset() + spacing()
-				&&  right <= horizontalOffset() + width() - spacing() - 2*frameWidth())
-				{
-					// The whole of the resource name is already displayed,
-					// so omit it from the tooltip.
-					if (k > 0)
-						toolTip.remove(i, k + 1 - i);
-				}
-				else
-				{
-					toolTip.remove(k, 1);
-					toolTip.remove(i, 1);
-				}
-			}
-			QToolTip::showText(he->globalPos(), toolTip, this);
-			return true;
-		}
-	}
-	return QListView::viewportEvent(e);
+    if (e->type() == QEvent::ToolTip  &&  isActiveWindow())
+    {
+        QHelpEvent* he = static_cast<QHelpEvent*>(e);
+        QModelIndex index = indexAt(he->pos());
+        QVariant value = model()->data(index, Qt::ToolTipRole);
+        if (qVariantCanConvert<QString>(value))
+        {
+            QString toolTip = value.toString();
+            int i = toolTip.indexOf('@');
+            if (i > 0)
+            {
+                int j = toolTip.indexOf(QRegExp("<(nl|br)", Qt::CaseInsensitive), i + 1);
+                int k = toolTip.indexOf('@', j);
+                QString name = toolTip.mid(i + 1, j - i - 1);
+                value = model()->data(index, Qt::FontRole);
+                QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
+                int textWidth = fm.boundingRect(name).width() + 1;
+                const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+                QStyleOptionButton opt;
+                opt.QStyleOption::operator=(viewOptions());
+                opt.rect = rectForIndex(index);
+                int checkWidth = QApplication::style()->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt).width();
+                int left = spacing() + 3*margin + checkWidth + viewOptions().decorationSize.width();   // left offset of text
+                int right = left + textWidth;
+                if (left >= horizontalOffset() + spacing()
+                &&  right <= horizontalOffset() + width() - spacing() - 2*frameWidth())
+                {
+                    // The whole of the resource name is already displayed,
+                    // so omit it from the tooltip.
+                    if (k > 0)
+                        toolTip.remove(i, k + 1 - i);
+                }
+                else
+                {
+                    toolTip.remove(k, 1);
+                    toolTip.remove(i, 1);
+                }
+            }
+            QToolTip::showText(he->globalPos(), toolTip, this);
+            return true;
+        }
+    }
+    return QListView::viewportEvent(e);
 }
+
+// vim: et sw=4:

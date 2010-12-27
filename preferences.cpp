@@ -20,10 +20,16 @@
 
 #include "kalarm.h"
 
-#include <time.h>
-#include <unistd.h>
+#include "functions.h"
+#include "identities.h"
+#include "kamail.h"
+#include "messagebox.h"
+#include "preferences.moc"
 
-#include <QByteArray>
+#include <kpimidentities/identity.h>
+#include <kpimidentities/identitymanager.h>
+#include <kholidays/holidays.h>
+using namespace KHolidays;
 
 #include <kglobal.h>
 #include <kconfiggroup.h>
@@ -31,16 +37,10 @@
 #include <ksystemtimezone.h>
 #include <kdebug.h>
 
-#include <kpimidentities/identity.h>
-#include <kpimidentities/identitymanager.h>
-#include <kholidays/holidays.h>
-using namespace KHolidays;
+#include <QByteArray>
 
-#include "functions.h"
-#include "identities.h"
-#include "kamail.h"
-#include "messagebox.h"
-#include "preferences.moc"
+#include <time.h>
+#include <unistd.h>
 
 
 // Config file entry names
@@ -75,31 +75,31 @@ bool           Preferences::mAutoStartChangedByUser = false;
 
 Preferences* Preferences::self()
 {
-	if (!mInstance)
-	{
-		// Set the default button for the Quit warning message box to Cancel
-		MessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
-		MessageBox::setDefaultShouldBeShownContinue(QUIT_WARN, default_quitWarn);
-		MessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
-		MessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
+    if (!mInstance)
+    {
+        // Set the default button for the Quit warning message box to Cancel
+        MessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
+        MessageBox::setDefaultShouldBeShownContinue(QUIT_WARN, default_quitWarn);
+        MessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
+        MessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 
-		mInstance = new Preferences;
-		mInstance->readConfig();
-	}
-	return mInstance;
+        mInstance = new Preferences;
+        mInstance->readConfig();
+    }
+    return mInstance;
 }
 
 Preferences::Preferences()
 {
-	QObject::connect(this, SIGNAL(base_StartOfDayChanged(const QDateTime&)), SLOT(startDayChange(const QDateTime&)));
-	QObject::connect(this, SIGNAL(base_TimeZoneChanged(const QString&)), SLOT(timeZoneChange(const QString&)));
-	QObject::connect(this, SIGNAL(base_HolidayRegionChanged(const QString&)), SLOT(holidaysChange(const QString&)));
-	QObject::connect(this, SIGNAL(base_WorkTimeChanged(const QDateTime&, const QDateTime&, int)), SLOT(workTimeChange(const QDateTime&, const QDateTime&, int)));
+    QObject::connect(this, SIGNAL(base_StartOfDayChanged(const QDateTime&)), SLOT(startDayChange(const QDateTime&)));
+    QObject::connect(this, SIGNAL(base_TimeZoneChanged(const QString&)), SLOT(timeZoneChange(const QString&)));
+    QObject::connect(this, SIGNAL(base_HolidayRegionChanged(const QString&)), SLOT(holidaysChange(const QString&)));
+    QObject::connect(this, SIGNAL(base_WorkTimeChanged(const QDateTime&, const QDateTime&, int)), SLOT(workTimeChange(const QDateTime&, const QDateTime&, int)));
 }
 
 void Preferences::setAskAutoStart(bool yes)
 {
-	MessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
+    MessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
 }
 
 /******************************************************************************
@@ -109,104 +109,104 @@ void Preferences::setAskAutoStart(bool yes)
 */
 KTimeZone Preferences::timeZone(bool reload)
 {
-	if (reload)
-		mSystemTimeZone = KTimeZone();
-	QString timeZone = self()->mBase_TimeZone;
-	KTimeZone tz;
-	if (!timeZone.isEmpty())
-		tz = KSystemTimeZones::zone(timeZone);
-	if (!tz.isValid())
-	{
-		if (!mSystemTimeZone.isValid())
-			mSystemTimeZone = KSystemTimeZones::local();
-		tz = mSystemTimeZone;
-	}
-	return tz;
+    if (reload)
+        mSystemTimeZone = KTimeZone();
+    QString timeZone = self()->mBase_TimeZone;
+    KTimeZone tz;
+    if (!timeZone.isEmpty())
+        tz = KSystemTimeZones::zone(timeZone);
+    if (!tz.isValid())
+    {
+        if (!mSystemTimeZone.isValid())
+            mSystemTimeZone = KSystemTimeZones::local();
+        tz = mSystemTimeZone;
+    }
+    return tz;
 }
 
 void Preferences::setTimeZone(const KTimeZone& tz)
 {
-	self()->setBase_TimeZone(tz.isValid() ? tz.name() : QString());
+    self()->setBase_TimeZone(tz.isValid() ? tz.name() : QString());
 }
 
 void Preferences::timeZoneChange(const QString& zone)
 {
-	Q_UNUSED(zone);
-	emit mInstance->timeZoneChanged(timeZone(false));
+    Q_UNUSED(zone);
+    emit mInstance->timeZoneChanged(timeZone(false));
 }
 
 const HolidayRegion& Preferences::holidays()
 {
-	QString regionCode = self()->mBase_HolidayRegion;
-	if (!mHolidays  ||  mHolidays->regionCode() != regionCode)
-	{
-		delete mHolidays;
-		mHolidays = new HolidayRegion(regionCode);
-	}
-	return *mHolidays;
+    QString regionCode = self()->mBase_HolidayRegion;
+    if (!mHolidays  ||  mHolidays->regionCode() != regionCode)
+    {
+        delete mHolidays;
+        mHolidays = new HolidayRegion(regionCode);
+    }
+    return *mHolidays;
 }
 
 void Preferences::setHolidayRegion(const QString& regionCode)
 {
-	self()->setBase_HolidayRegion(regionCode);
+    self()->setBase_HolidayRegion(regionCode);
 }
 
 void Preferences::holidaysChange(const QString& regionCode)
 {
-	Q_UNUSED(regionCode);
-	emit mInstance->holidaysChanged(holidays());
+    Q_UNUSED(regionCode);
+    emit mInstance->holidaysChanged(holidays());
 }
 
 void Preferences::setStartOfDay(const QTime& t)
 {
-	if (t != self()->mBase_StartOfDay.time())
-	{
-		self()->setBase_StartOfDay(QDateTime(QDate(1900,1,1), t));
-		emit mInstance->startOfDayChanged(t);
-	}
+    if (t != self()->mBase_StartOfDay.time())
+    {
+        self()->setBase_StartOfDay(QDateTime(QDate(1900,1,1), t));
+        emit mInstance->startOfDayChanged(t);
+    }
 }
 
 // Called when the start of day value has changed in the config file
 void Preferences::startDayChange(const QDateTime& dt)
 {
-	emit mInstance->startOfDayChanged(dt.time());
+    emit mInstance->startOfDayChanged(dt.time());
 }
 
 QBitArray Preferences::workDays()
 {
-	unsigned days = self()->base_WorkDays();
-	QBitArray dayBits(7);
-	for (int i = 0;  i < 7;  ++i)
-		dayBits.setBit(i, days & (1 << i));
-	return dayBits;
+    unsigned days = self()->base_WorkDays();
+    QBitArray dayBits(7);
+    for (int i = 0;  i < 7;  ++i)
+        dayBits.setBit(i, days & (1 << i));
+    return dayBits;
 }
 
 void Preferences::setWorkDays(const QBitArray& dayBits)
 {
-	unsigned days = 0;
-	for (int i = 0;  i < 7;  ++i)
-		if (dayBits.testBit(i))
-			days |= 1 << i;
-	self()->setBase_WorkDays(days);
+    unsigned days = 0;
+    for (int i = 0;  i < 7;  ++i)
+        if (dayBits.testBit(i))
+            days |= 1 << i;
+    self()->setBase_WorkDays(days);
 }
 
 void Preferences::workTimeChange(const QDateTime& start, const QDateTime& end, int days)
 {
-	QBitArray dayBits(7);
-	for (int i = 0;  i < 7;  ++i)
-		if (days & (1 << i))
-			dayBits.setBit(i);
-	emit mInstance->workTimeChanged(start.time(), end.time(), dayBits);
+    QBitArray dayBits(7);
+    for (int i = 0;  i < 7;  ++i)
+        if (days & (1 << i))
+            dayBits.setBit(i);
+    emit mInstance->workTimeChanged(start.time(), end.time(), dayBits);
 }
 
 Preferences::MailFrom Preferences::emailFrom()
 {
-	QString from = self()->mBase_EmailFrom;
-	if (from == FROM_KMAIL)
-		return MAIL_FROM_KMAIL;
-	if (from == FROM_SYS_SETTINGS)
-		return MAIL_FROM_SYS_SETTINGS;
-	return MAIL_FROM_ADDR;
+    QString from = self()->mBase_EmailFrom;
+    if (from == FROM_KMAIL)
+        return MAIL_FROM_KMAIL;
+    if (from == FROM_SYS_SETTINGS)
+        return MAIL_FROM_SYS_SETTINGS;
+    return MAIL_FROM_ADDR;
 }
 
 /******************************************************************************
@@ -214,72 +214,72 @@ Preferences::MailFrom Preferences::emailFrom()
 */
 QString Preferences::emailAddress()
 {
-	QString from = self()->mBase_EmailFrom;
-	if (from == FROM_KMAIL)
-		return Identities::identityManager()->defaultIdentity().fullEmailAddr();
-	if (from == FROM_SYS_SETTINGS)
-		return KAMail::controlCentreAddress();
-	return from;
+    QString from = self()->mBase_EmailFrom;
+    if (from == FROM_KMAIL)
+        return Identities::identityManager()->defaultIdentity().fullEmailAddr();
+    if (from == FROM_SYS_SETTINGS)
+        return KAMail::controlCentreAddress();
+    return from;
 }
 
 void Preferences::setEmailAddress(Preferences::MailFrom from, const QString& address)
 {
-	QString out;
-	switch (from)
-	{
-		case MAIL_FROM_KMAIL:        out = FROM_KMAIL; break;
-		case MAIL_FROM_SYS_SETTINGS: out = FROM_SYS_SETTINGS; break;
-		case MAIL_FROM_ADDR:         out = address; break;
-		default:  return;
-	}
-	self()->setBase_EmailFrom(out);
+    QString out;
+    switch (from)
+    {
+        case MAIL_FROM_KMAIL:        out = FROM_KMAIL; break;
+        case MAIL_FROM_SYS_SETTINGS: out = FROM_SYS_SETTINGS; break;
+        case MAIL_FROM_ADDR:         out = address; break;
+        default:  return;
+    }
+    self()->setBase_EmailFrom(out);
 }
 
 Preferences::MailFrom Preferences::emailBccFrom()
 {
-	QString from = self()->mBase_EmailBccAddress;
-	if (from == FROM_SYS_SETTINGS)
-		return MAIL_FROM_SYS_SETTINGS;
-	return MAIL_FROM_ADDR;
+    QString from = self()->mBase_EmailBccAddress;
+    if (from == FROM_SYS_SETTINGS)
+        return MAIL_FROM_SYS_SETTINGS;
+    return MAIL_FROM_ADDR;
 }
 
 QString Preferences::emailBccAddress()
 {
-	QString from = self()->mBase_EmailBccAddress;
-	if (from == FROM_SYS_SETTINGS)
-		return KAMail::controlCentreAddress();
-	return from;
+    QString from = self()->mBase_EmailBccAddress;
+    if (from == FROM_SYS_SETTINGS)
+        return KAMail::controlCentreAddress();
+    return from;
 }
 
 bool Preferences::emailBccUseSystemSettings()
 {
-	return self()->mBase_EmailBccAddress == FROM_SYS_SETTINGS;
+    return self()->mBase_EmailBccAddress == FROM_SYS_SETTINGS;
 }
 
 void Preferences::setEmailBccAddress(bool useSystemSettings, const QString& address)
 {
-	QString out;
-	if (useSystemSettings)
-		out = FROM_SYS_SETTINGS;
-	else
-		out = address;
-	self()->setBase_EmailBccAddress(out);
+    QString out;
+    if (useSystemSettings)
+        out = FROM_SYS_SETTINGS;
+    else
+        out = address;
+    self()->setBase_EmailBccAddress(out);
 }
 
 QString Preferences::cmdXTermCommand()
 {
-	return translateXTermPath(self()->mBase_CmdXTermCommand, false);
+    return translateXTermPath(self()->mBase_CmdXTermCommand, false);
 }
 
 void Preferences::setCmdXTermCommand(const QString& cmd)
 {
-	self()->setBase_CmdXTermCommand(translateXTermPath(cmd, true));
+    self()->setBase_CmdXTermCommand(translateXTermPath(cmd, true));
 }
 
 
 void Preferences::connect(const char* signal, const QObject* receiver, const char* member)
 {
-	QObject::connect(self(), signal, receiver, member);
+    QObject::connect(self(), signal, receiver, member);
 }
 
 /******************************************************************************
@@ -288,7 +288,7 @@ void Preferences::connect(const char* signal, const QObject* receiver, const cha
 */
 void Preferences::setNotify(const QString& messageID, bool notify)
 {
-	MessageBox::saveDontShowAgainContinue(messageID, !notify);
+    MessageBox::saveDontShowAgainContinue(messageID, !notify);
 }
 
 /******************************************************************************
@@ -300,7 +300,7 @@ void Preferences::setNotify(const QString& messageID, bool notify)
 */
 bool Preferences::notifying(const QString& messageID)
 {
-	return MessageBox::shouldBeShownContinue(messageID);
+    return MessageBox::shouldBeShownContinue(messageID);
 }
 
 /******************************************************************************
@@ -314,54 +314,56 @@ bool Preferences::notifying(const QString& messageID)
 */
 QString translateXTermPath(const QString& cmdline, bool write)
 {
-	QString params;
-	QString cmd = cmdline;
-	if (cmdline.isEmpty())
-		return cmdline;
-	// Strip any leading quote
-	QChar quote = cmdline[0];
-	char q = quote.toLatin1();
-	bool quoted = (q == '"' || q == '\'');
-	if (quoted)
-		cmd = cmdline.mid(1);
-	// Split the command at the first non-escaped space
-	for (int i = 0, count = cmd.length();  i < count;  ++i)
-	{
-		switch (cmd[i].toLatin1())
-		{
-			case '\\':
-				++i;
-				continue;
-			case '"':
-			case '\'':
-				if (cmd[i] != quote)
-					continue;
-				// fall through to ' '
-			case ' ':
-				params = cmd.mid(i);
-				cmd = cmd.left(i);
-				break;
-			default:
-				continue;
-		}
-		break;
-	}
-	// Translate any home directory specification at the start of the
-	// executable's path.
-	KConfigGroup group(KGlobal::config(), GENERAL_SECTION);
-	if (write)
-	{
-		group.writePathEntry(TEMP, cmd);
-		cmd = group.readEntry(TEMP, QString());
-	}
-	else
-	{
-		group.writeEntry(TEMP, cmd);
-		cmd = group.readPathEntry(TEMP, QString());
-	}
-	group.deleteEntry(TEMP);
-	if (quoted)
-		return quote + cmd + params;
-	else
-		return cmd + params;
+    QString params;
+    QString cmd = cmdline;
+    if (cmdline.isEmpty())
+        return cmdline;
+    // Strip any leading quote
+    QChar quote = cmdline[0];
+    char q = quote.toLatin1();
+    bool quoted = (q == '"' || q == '\'');
+    if (quoted)
+        cmd = cmdline.mid(1);
+    // Split the command at the first non-escaped space
+    for (int i = 0, count = cmd.length();  i < count;  ++i)
+    {
+        switch (cmd[i].toLatin1())
+        {
+            case '\\':
+                ++i;
+                continue;
+            case '"':
+            case '\'':
+                if (cmd[i] != quote)
+                    continue;
+                // fall through to ' '
+            case ' ':
+                params = cmd.mid(i);
+                cmd = cmd.left(i);
+                break;
+            default:
+                continue;
+        }
+        break;
+    }
+    // Translate any home directory specification at the start of the
+    // executable's path.
+    KConfigGroup group(KGlobal::config(), GENERAL_SECTION);
+    if (write)
+    {
+        group.writePathEntry(TEMP, cmd);
+        cmd = group.readEntry(TEMP, QString());
+    }
+    else
+    {
+        group.writeEntry(TEMP, cmd);
+        cmd = group.readPathEntry(TEMP, QString());
+    }
+    group.deleteEntry(TEMP);
+    if (quoted)
+        return quote + cmd + params;
+    else
+        return cmd + params;
 }
+
+// vim: et sw=4:

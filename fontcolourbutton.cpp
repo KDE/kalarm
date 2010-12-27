@@ -40,22 +40,22 @@
 =============================================================================*/
 
 FontColourButton::FontColourButton(QWidget* parent)
-	: PushButton(i18nc("@action:button", "Font && Color..."), parent),
-	  mReadOnly(false)
+    : PushButton(i18nc("@action:button", "Font && Color..."), parent),
+      mReadOnly(false)
 {
-	connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
-	setWhatsThis(i18nc("@info:whatsthis", "Choose the font, and foreground and background color, for the alarm message."));
+    connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
+    setWhatsThis(i18nc("@info:whatsthis", "Choose the font, and foreground and background color, for the alarm message."));
 }
 
 void FontColourButton::setDefaultFont()
 {
-	mDefaultFont = true;
+    mDefaultFont = true;
 }
 
 void FontColourButton::setFont(const QFont& font)
 {
-	mDefaultFont = false;
-	mFont = font;
+    mDefaultFont = false;
+    mFont = font;
 }
 
 /******************************************************************************
@@ -64,20 +64,20 @@ void FontColourButton::setFont(const QFont& font)
 */
 void FontColourButton::slotButtonPressed()
 {
-	// Use AutoQPointer to guard against crash on application exit while
-	// the dialogue is still open. It prevents double deletion (both on
+    // Use AutoQPointer to guard against crash on application exit while
+    // the dialogue is still open. It prevents double deletion (both on
         // deletion of FontColourButton, and on return from this function).
-	AutoQPointer<FontColourDlg> dlg = new FontColourDlg(mBgColour, mFgColour, mFont, mDefaultFont,
-	                                         i18nc("@title:window", "Choose Alarm Font & Color"), this);
-	dlg->setReadOnly(mReadOnly);
-	if (dlg->exec() == QDialog::Accepted)
-	{
-		mDefaultFont = dlg->defaultFont();
-		mFont        = dlg->font();
-		mBgColour    = dlg->bgColour();
-		mFgColour    = dlg->fgColour();
-		emit selected(mFgColour, mBgColour);
-	}
+    AutoQPointer<FontColourDlg> dlg = new FontColourDlg(mBgColour, mFgColour, mFont, mDefaultFont,
+                                             i18nc("@title:window", "Choose Alarm Font & Color"), this);
+    dlg->setReadOnly(mReadOnly);
+    if (dlg->exec() == QDialog::Accepted)
+    {
+        mDefaultFont = dlg->defaultFont();
+        mFont        = dlg->font();
+        mBgColour    = dlg->bgColour();
+        mFgColour    = dlg->fgColour();
+        emit selected(mFgColour, mBgColour);
+    }
 }
 
 
@@ -88,26 +88,26 @@ void FontColourButton::slotButtonPressed()
 
 FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, const QFont& font,
                              bool defaultFont, const QString& caption, QWidget* parent)
-	: KDialog(parent),
-	  mReadOnly(false)
+    : KDialog(parent),
+      mReadOnly(false)
 {
-	setCaption(caption);
-	setButtons(Ok|Cancel);
-	QWidget* page = new QWidget(this);
-	setMainWidget(page);
-	QVBoxLayout* layout = new QVBoxLayout(page);
-	layout->setMargin(0);
-	layout->setSpacing(spacingHint());
-	mChooser = new FontColourChooser(page, QStringList(), QString(), true, true);
-	mChooser->setBgColour(bgColour);
-	mChooser->setFgColour(fgColour);
-	if (defaultFont)
-		mChooser->setDefaultFont();
-	else
-		mChooser->setFont(font);
-	layout->addWidget(mChooser);
-	layout->addSpacing(KDialog::spacingHint());
-	connect(this,SIGNAL(okClicked()),SLOT(slotOk()));
+    setCaption(caption);
+    setButtons(Ok|Cancel);
+    QWidget* page = new QWidget(this);
+    setMainWidget(page);
+    QVBoxLayout* layout = new QVBoxLayout(page);
+    layout->setMargin(0);
+    layout->setSpacing(spacingHint());
+    mChooser = new FontColourChooser(page, QStringList(), QString(), true, true);
+    mChooser->setBgColour(bgColour);
+    mChooser->setFgColour(fgColour);
+    if (defaultFont)
+        mChooser->setDefaultFont();
+    else
+        mChooser->setFont(font);
+    layout->addWidget(mChooser);
+    layout->addSpacing(KDialog::spacingHint());
+    connect(this,SIGNAL(okClicked()),SLOT(slotOk()));
 }
 
 /******************************************************************************
@@ -115,20 +115,22 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 */
 void FontColourDlg::slotOk()
 {
-	if (mReadOnly)
-	{
-		reject();
-		return;
-	}
-	mDefaultFont = mChooser->defaultFont();
-	mFont        = mChooser->font();
-	mBgColour    = mChooser->bgColour();
-	mFgColour    = mChooser->fgColour();
-	accept();
+    if (mReadOnly)
+    {
+        reject();
+        return;
+    }
+    mDefaultFont = mChooser->defaultFont();
+    mFont        = mChooser->font();
+    mBgColour    = mChooser->bgColour();
+    mFgColour    = mChooser->fgColour();
+    accept();
 }
 
 void FontColourDlg::setReadOnly(bool ro)
 {
-	mReadOnly = ro;
-	mChooser->setReadOnly(mReadOnly);
+    mReadOnly = ro;
+    mChooser->setReadOnly(mReadOnly);
 }
+
+// vim: et sw=4:

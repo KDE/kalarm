@@ -34,10 +34,12 @@ namespace KAlarm {
 QRect desktopWorkArea(int screen)
 {
 #ifdef Q_WS_X11
-	if (screen < 0)
-		return KWindowSystem::workArea();
+    if (screen < 0)
+        return KWindowSystem::workArea();
 #endif
-	return qApp->desktop()->availableGeometry(screen);
+    return qApp->desktop()->availableGeometry(screen);
 }
 
 } // namespace KAlarm
+
+// vim: et sw=4:

@@ -20,57 +20,59 @@
 
 #include "kalarm.h"
 
-#include <QLabel>
-#include <QGridLayout>
+#include "resourcelocaldir.h"
+#include "resourcelocaldirwidget.moc"
 
 #include <klocale.h>
 #include <kurlrequester.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
 
-#include "resourcelocaldir.h"
-#include "resourcelocaldirwidget.moc"
+#include <QLabel>
+#include <QGridLayout>
 
 
 ResourceLocalDirConfigWidget::ResourceLocalDirConfigWidget(QWidget* parent)
-	: ResourceConfigWidget(parent)
+    : ResourceConfigWidget(parent)
 {
-	QGridLayout* layout = new QGridLayout(this);
+    QGridLayout* layout = new QGridLayout(this);
 
-	QLabel* label = new QLabel(i18nc("@label:textbox", "Location:"), this);
-	layout->addWidget(label, 1, 0);
-	mURL = new KUrlRequester(this);
-	mURL->setMode(KFile::Directory | KFile::LocalOnly);
-	layout->addWidget(mURL, 1, 1);
+    QLabel* label = new QLabel(i18nc("@label:textbox", "Location:"), this);
+    layout->addWidget(label, 1, 0);
+    mURL = new KUrlRequester(this);
+    mURL->setMode(KFile::Directory | KFile::LocalOnly);
+    layout->addWidget(mURL, 1, 1);
 }
 
 void ResourceLocalDirConfigWidget::loadSettings(KRES::Resource* resource)
 {
-//	KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
-	KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
-	if (!res)
-		kError(KARES_DEBUG) << "KAResourceLocalDir: cast failed";
-	else
-	{
-		ResourceConfigWidget::loadSettings(resource);
-		mURL->setUrl(res->dirName());
-		kDebug(KARES_DEBUG) << "Directory" << mURL->url();
-	}
+//    KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
+    KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
+    if (!res)
+        kError(KARES_DEBUG) << "KAResourceLocalDir: cast failed";
+    else
+    {
+        ResourceConfigWidget::loadSettings(resource);
+        mURL->setUrl(res->dirName());
+        kDebug(KARES_DEBUG) << "Directory" << mURL->url();
+    }
 }
 
 void ResourceLocalDirConfigWidget::saveSettings(KRES::Resource *resource)
 {
-//	KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
-	KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
-	if (!res)
-		kDebug(KARES_DEBUG) << "KAResourceLocalDir: cast failed";
-	else
-	{
-		res->setDirName(mURL->url());
-		if (mURL->url().isEmpty())
-		{
-			KMessageBox::information(this, i18nc("@info", "No location specified.  The calendar will be invalid."));
-			resource->setReadOnly(true);
-		}
-	}
+//    KAResourceLocalDir* res = dynamic_cast<KAResourceLocalDir*>(resource);
+    KAResourceLocalDir* res = static_cast<KAResourceLocalDir*>(resource);
+    if (!res)
+        kDebug(KARES_DEBUG) << "KAResourceLocalDir: cast failed";
+    else
+    {
+        res->setDirName(mURL->url());
+        if (mURL->url().isEmpty())
+        {
+            KMessageBox::information(this, i18nc("@info", "No location specified.  The calendar will be invalid."));
+            resource->setReadOnly(true);
+        }
+    }
 }
+
+// vim: et sw=4:

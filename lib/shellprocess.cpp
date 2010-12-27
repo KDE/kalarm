@@ -36,10 +36,10 @@ bool       ShellProcess::mAuthorised  = false;
 
 
 ShellProcess::ShellProcess(const QString& command)
-	: mCommand(command),
-	  mStdinBytes(0),
-	  mStatus(INACTIVE),
-	  mStdinExit(false)
+    : mCommand(command),
+      mStdinBytes(0),
+      mStatus(INACTIVE),
+      mStdinExit(false)
 {
 }
 
@@ -48,25 +48,25 @@ ShellProcess::ShellProcess(const QString& command)
 */
 bool ShellProcess::start(OpenMode openMode)
 {
-	if (!authorised())
-	{
-		mStatus = UNAUTHORISED;
-		return false;
-	}
-	connect(this, SIGNAL(bytesWritten(qint64)), SLOT(writtenStdin(qint64)));
-	connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotExited(int, QProcess::ExitStatus)));
-	connect(this, SIGNAL(readyReadStandardOutput()), SLOT(stdoutReady()));
-	connect(this, SIGNAL(readyReadStandardError()), SLOT(stderrReady()));
-	QStringList args;
-	args << "-c" << mCommand;
-	QProcess::start(shellName(), args, openMode);
-	if (!waitForStarted())
-	{
-		mStatus = START_FAIL;
-		return false;
-	}
-	mStatus = RUNNING;
-	return true;
+    if (!authorised())
+    {
+        mStatus = UNAUTHORISED;
+        return false;
+    }
+    connect(this, SIGNAL(bytesWritten(qint64)), SLOT(writtenStdin(qint64)));
+    connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotExited(int, QProcess::ExitStatus)));
+    connect(this, SIGNAL(readyReadStandardOutput()), SLOT(stdoutReady()));
+    connect(this, SIGNAL(readyReadStandardError()), SLOT(stderrReady()));
+    QStringList args;
+    args << "-c" << mCommand;
+    QProcess::start(shellName(), args, openMode);
+    if (!waitForStarted())
+    {
+        mStatus = START_FAIL;
+        return false;
+    }
+    mStatus = RUNNING;
+    return true;
 }
 
 /******************************************************************************
@@ -76,26 +76,26 @@ bool ShellProcess::start(OpenMode openMode)
 */
 void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-	kDebug() << exitCode << "," << exitStatus;
-	mStdinQueue.clear();
-	mStatus = SUCCESS;
-	mExitCode = exitCode;
-	if (exitStatus != NormalExit)
-	{
-		kWarning(5950) << mCommand << ":" << mShellName << ": crashed/killed";
-		mStatus = DIED;
-	}
-	else
-	{
-		// Some shells report if the command couldn't be found, or is not executable
-		if ((mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127))
-		||  (mShellName == "ksh"  &&  exitCode == 127))
-		{
-			kWarning(5950) << mCommand << ":" << mShellName << ": not found or not executable";
-			mStatus = NOT_FOUND;
-		}
-	}
-	emit shellExited(this);
+    kDebug() << exitCode << "," << exitStatus;
+    mStdinQueue.clear();
+    mStatus = SUCCESS;
+    mExitCode = exitCode;
+    if (exitStatus != NormalExit)
+    {
+        kWarning(5950) << mCommand << ":" << mShellName << ": crashed/killed";
+        mStatus = DIED;
+    }
+    else
+    {
+        // Some shells report if the command couldn't be found, or is not executable
+        if ((mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127))
+        ||  (mShellName == "ksh"  &&  exitCode == 127))
+        {
+            kWarning(5950) << mCommand << ":" << mShellName << ": not found or not executable";
+            mStatus = NOT_FOUND;
+        }
+    }
+    emit shellExited(this);
 }
 
 /******************************************************************************
@@ -103,14 +103,14 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 */
 void ShellProcess::writeStdin(const char* buffer, int bufflen)
 {
-	QByteArray scopy(buffer, bufflen);    // construct a deep copy
-	bool doWrite = mStdinQueue.isEmpty();
-	mStdinQueue.enqueue(scopy);
-	if (doWrite)
-	{
-		mStdinBytes = mStdinQueue.head().length();
-		write(mStdinQueue.head());
-	}
+    QByteArray scopy(buffer, bufflen);    // construct a deep copy
+    bool doWrite = mStdinQueue.isEmpty();
+    mStdinQueue.enqueue(scopy);
+    if (doWrite)
+    {
+        mStdinBytes = mStdinQueue.head().length();
+        write(mStdinQueue.head());
+    }
 }
 
 /******************************************************************************
@@ -121,18 +121,18 @@ void ShellProcess::writeStdin(const char* buffer, int bufflen)
 */
 void ShellProcess::writtenStdin(qint64 bytes)
 {
-	mStdinBytes -= bytes;
-	if (mStdinBytes > 0)
-		return;   // buffer has only been partially written so far
-	if (!mStdinQueue.isEmpty())
-		mStdinQueue.dequeue();   // free the buffer which has now been written
-	if (!mStdinQueue.isEmpty())
-	{
-		mStdinBytes = mStdinQueue.head().length();
-		write(mStdinQueue.head());
-	}
-	else if (mStdinExit)
-		kill();
+    mStdinBytes -= bytes;
+    if (mStdinBytes > 0)
+        return;   // buffer has only been partially written so far
+    if (!mStdinQueue.isEmpty())
+        mStdinQueue.dequeue();   // free the buffer which has now been written
+    if (!mStdinQueue.isEmpty())
+    {
+        mStdinBytes = mStdinQueue.head().length();
+        write(mStdinQueue.head());
+    }
+    else if (mStdinExit)
+        kill();
 }
 
 /******************************************************************************
@@ -140,10 +140,10 @@ void ShellProcess::writtenStdin(qint64 bytes)
 */
 void ShellProcess::stdinExit()
 {
-	if (mStdinQueue.isEmpty())
-		kill();
-	else
-		mStdinExit = true;
+    if (mStdinQueue.isEmpty())
+        kill();
+    else
+        mStdinExit = true;
 }
 
 /******************************************************************************
@@ -152,24 +152,24 @@ void ShellProcess::stdinExit()
 */
 QString ShellProcess::errorMessage() const
 {
-	switch (mStatus)
-	{
-		case UNAUTHORISED:
-			return i18nc("@info", "Failed to execute command (shell access not authorized)");
-		case START_FAIL:
-		case NOT_FOUND:
-			return i18nc("@info", "Failed to execute command");
-		case DIED:
-			return i18nc("@info", "Command execution error");
-		case SUCCESS:
-			if (mExitCode)
-				return i18nc("@info", "Command exit code: %1", mExitCode);
-			// Fall through to INACTIVE
-		case INACTIVE:
-		case RUNNING:
-		default:
-			return QString();
-	}
+    switch (mStatus)
+    {
+        case UNAUTHORISED:
+            return i18nc("@info", "Failed to execute command (shell access not authorized)");
+        case START_FAIL:
+        case NOT_FOUND:
+            return i18nc("@info", "Failed to execute command");
+        case DIED:
+            return i18nc("@info", "Command execution error");
+        case SUCCESS:
+            if (mExitCode)
+                return i18nc("@info", "Command exit code: %1", mExitCode);
+            // Fall through to INACTIVE
+        case INACTIVE:
+        case RUNNING:
+        default:
+            return QString();
+    }
 }
 
 /******************************************************************************
@@ -179,34 +179,34 @@ QString ShellProcess::errorMessage() const
 */
 const QByteArray& ShellProcess::shellPath()
 {
-	if (mShellPath.isEmpty())
-	{
-		// Get the path to the shell
-		mShellPath = "/bin/sh";
-		QByteArray envshell = qgetenv("SHELL").trimmed();
-		if (!envshell.isEmpty())
-		{
-			KDE_struct_stat fileinfo;
-			if (KDE_stat(envshell.data(), &fileinfo) != -1  // ensure file exists
-			&&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
-			&&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
-			&&  !S_ISBLK(fileinfo.st_mode)              // and it's not a block device
+    if (mShellPath.isEmpty())
+    {
+        // Get the path to the shell
+        mShellPath = "/bin/sh";
+        QByteArray envshell = qgetenv("SHELL").trimmed();
+        if (!envshell.isEmpty())
+        {
+            KDE_struct_stat fileinfo;
+            if (KDE_stat(envshell.data(), &fileinfo) != -1  // ensure file exists
+            &&  !S_ISDIR(fileinfo.st_mode)              // and it's not a directory
+            &&  !S_ISCHR(fileinfo.st_mode)              // and it's not a character device
+            &&  !S_ISBLK(fileinfo.st_mode)              // and it's not a block device
 #ifdef S_ISSOCK
-			&&  !S_ISSOCK(fileinfo.st_mode)             // and it's not a socket
+            &&  !S_ISSOCK(fileinfo.st_mode)             // and it's not a socket
 #endif
-			&&  !S_ISFIFO(fileinfo.st_mode)             // and it's not a fifo
-			&&  !access(envshell.data(), X_OK))         // and it's executable
-				mShellPath = envshell;
-		}
+            &&  !S_ISFIFO(fileinfo.st_mode)             // and it's not a fifo
+            &&  !access(envshell.data(), X_OK))         // and it's executable
+                mShellPath = envshell;
+        }
 
-		// Get the shell filename with the path stripped off
-		int i = mShellPath.lastIndexOf('/');
-		if (i >= 0)
-			mShellName = mShellPath.mid(i + 1);
-		else
-			mShellName = mShellPath;
-	}
-	return mShellPath;
+        // Get the shell filename with the path stripped off
+        int i = mShellPath.lastIndexOf('/');
+        if (i >= 0)
+            mShellName = mShellPath.mid(i + 1);
+        else
+            mShellName = mShellPath;
+    }
+    return mShellPath;
 }
 
 /******************************************************************************
@@ -214,10 +214,12 @@ const QByteArray& ShellProcess::shellPath()
 */
 bool ShellProcess::authorised()
 {
-	if (!mInitialised)
-	{
-		mAuthorised = KAuthorized::authorizeKAction("shell_access");
-		mInitialised = true;
-	}
-	return mAuthorised;
+    if (!mInitialised)
+    {
+        mAuthorised = KAuthorized::authorizeKAction("shell_access");
+        mInitialised = true;
+    }
+    return mAuthorised;
 }
+
+// vim: et sw=4:

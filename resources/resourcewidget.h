@@ -1,7 +1,7 @@
 /*
  *  resourcewidget.h  -  base class for resource configuration widgets
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,15 +33,17 @@ class AlarmResource;
 */
 class ResourceConfigWidget : public KRES::ConfigWidget
 { 
-		Q_OBJECT
-	public:
-		ResourceConfigWidget(QWidget* parent = 0);
+        Q_OBJECT
+    public:
+        explicit ResourceConfigWidget(QWidget* parent = 0);
 
-	public slots:
-		virtual void loadSettings(KRES::Resource*);
+    public slots:
+        virtual void loadSettings(KRES::Resource*);
 
-	private slots:
-		void slotNotWritable(AlarmResource*);
+    private slots:
+        void slotNotWritable(AlarmResource*);
 };
 
 #endif
+
+// vim: et sw=4:

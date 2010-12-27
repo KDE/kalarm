@@ -44,54 +44,54 @@
 
 // KAlarm-specific options for Find dialog
 enum {
-	FIND_LIVE     = KFind::MinimumUserOption,
-	FIND_ARCHIVED = KFind::MinimumUserOption << 1,
-	FIND_MESSAGE  = KFind::MinimumUserOption << 2,
-	FIND_FILE     = KFind::MinimumUserOption << 3,
-	FIND_COMMAND  = KFind::MinimumUserOption << 4,
-	FIND_EMAIL    = KFind::MinimumUserOption << 5,
-	FIND_AUDIO    = KFind::MinimumUserOption << 6
+    FIND_LIVE     = KFind::MinimumUserOption,
+    FIND_ARCHIVED = KFind::MinimumUserOption << 1,
+    FIND_MESSAGE  = KFind::MinimumUserOption << 2,
+    FIND_FILE     = KFind::MinimumUserOption << 3,
+    FIND_COMMAND  = KFind::MinimumUserOption << 4,
+    FIND_EMAIL    = KFind::MinimumUserOption << 5,
+    FIND_AUDIO    = KFind::MinimumUserOption << 6
 };
 static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
 
 
 class FindDlg : public KFindDialog
 {
-	public:
-		FindDlg(QWidget* parent, long options = 0, const QStringList& findStrings = QStringList(), bool hasSelection = false)
-		       : KFindDialog(parent, options, findStrings, hasSelection) {}
-	protected slots:
-		void slotButtonClicked(int button)
-		{
-			if (button == Ok)
-				emit okClicked();
-			else
-				KFindDialog::slotButtonClicked(button);
-		}
+    public:
+        FindDlg(QWidget* parent, long options = 0, const QStringList& findStrings = QStringList(), bool hasSelection = false)
+            : KFindDialog(parent, options, findStrings, hasSelection) {}
+    protected slots:
+        void slotButtonClicked(int button)
+        {
+            if (button == Ok)
+                emit okClicked();
+            else
+                KFindDialog::slotButtonClicked(button);
+        }
 };
 
 
 Find::Find(EventListView* parent)
-	: QObject(parent),
-	  mListView(parent),
-	  mDialog(0),
-	  mFind(0),
-	  mOptions(0)
+    : QObject(parent),
+      mListView(parent),
+      mDialog(0),
+      mFind(0),
+      mOptions(0)
 {
-	connect(mListView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)), SLOT(slotSelectionChanged()));
+    connect(mListView->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)), SLOT(slotSelectionChanged()));
 }
 
 Find::~Find()
 {
-	delete mDialog;    // automatically set to 0
-	delete mFind;
-	mFind = 0;
+    delete mDialog;    // automatically set to 0
+    delete mFind;
+    mFind = 0;
 }
 
 void Find::slotSelectionChanged()
 {
-	if (mDialog)
-		mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
+    if (mDialog)
+        mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
 }
 
 /******************************************************************************
@@ -99,151 +99,151 @@ void Find::slotSelectionChanged()
 */
 void Find::display()
 {
-	if (!mOptions)
-		// Set defaults the first time the Find dialog is activated
-		mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
-	bool noArchived = !Preferences::archivedKeepDays();
-	bool showArchived = qobject_cast<AlarmListView*>(mListView)
+    if (!mOptions)
+        // Set defaults the first time the Find dialog is activated
+        mOptions = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
+    bool noArchived = !Preferences::archivedKeepDays();
+    bool showArchived = qobject_cast<AlarmListView*>(mListView)
 #ifdef USE_AKONADI
-	                    && (static_cast<AlarmListModel*>(mListView->model())->eventTypeFilter() & KAlarm::CalEvent::ARCHIVED);
+                        && (static_cast<AlarmListModel*>(mListView->model())->eventTypeFilter() & KAlarm::CalEvent::ARCHIVED);
 #else
-	                    && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KAlarm::CalEvent::ARCHIVED);
+                        && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KAlarm::CalEvent::ARCHIVED);
 #endif
-	if (noArchived  ||  !showArchived)      // these settings could change between activations
-		mOptions &= ~FIND_ARCHIVED;
+    if (noArchived  ||  !showArchived)      // these settings could change between activations
+        mOptions &= ~FIND_ARCHIVED;
 
-	if (mDialog)
-	{
+    if (mDialog)
+    {
 #ifdef Q_WS_X11
-		KWindowSystem::activateWindow(mDialog->winId());
+        KWindowSystem::activateWindow(mDialog->winId());
 #endif
-	}
-	else
-	{
-		mDialog = new FindDlg(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
-		mDialog->setModal(false);
-		mDialog->setObjectName("FindDlg");
-		mDialog->setHasSelection(false);
-		QWidget* kalarmWidgets = mDialog->findExtension();
+    }
+    else
+    {
+        mDialog = new FindDlg(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
+        mDialog->setModal(false);
+        mDialog->setObjectName("FindDlg");
+        mDialog->setHasSelection(false);
+        QWidget* kalarmWidgets = mDialog->findExtension();
 
-		// Alarm types
-		QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
-		layout->setMargin(0);
-		layout->setSpacing(KDialog::spacingHint());
-		QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
-		layout->addWidget(group);
-		QGridLayout* grid = new QGridLayout(group);
-		grid->setMargin(KDialog::marginHint());
-		grid->setSpacing(KDialog::spacingHint());
-		grid->setColumnStretch(1, 1);
+        // Alarm types
+        QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
+        layout->setMargin(0);
+        layout->setSpacing(KDialog::spacingHint());
+        QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
+        layout->addWidget(group);
+        QGridLayout* grid = new QGridLayout(group);
+        grid->setMargin(KDialog::marginHint());
+        grid->setSpacing(KDialog::spacingHint());
+        grid->setColumnStretch(1, 1);
 
-		// Live & archived alarm selection
-		mLive = new QCheckBox(i18nc("@option:check Alarm type", "Active"), group);
-		mLive->setFixedSize(mLive->sizeHint());
-		mLive->setWhatsThis(i18nc("@info:whatsthis", "Check to include active alarms in the search."));
-		grid->addWidget(mLive, 1, 0, Qt::AlignLeft);
+        // Live & archived alarm selection
+        mLive = new QCheckBox(i18nc("@option:check Alarm type", "Active"), group);
+        mLive->setFixedSize(mLive->sizeHint());
+        mLive->setWhatsThis(i18nc("@info:whatsthis", "Check to include active alarms in the search."));
+        grid->addWidget(mLive, 1, 0, Qt::AlignLeft);
 
-		mArchived = new QCheckBox(i18nc("@option:check Alarm type", "Archived"), group);
-		mArchived->setFixedSize(mArchived->sizeHint());
-		mArchived->setWhatsThis(i18nc("@info:whatsthis", "Check to include archived alarms in the search. "
-		                             "This option is only available if archived alarms are currently being displayed."));
-		grid->addWidget(mArchived, 1, 2, Qt::AlignLeft);
+        mArchived = new QCheckBox(i18nc("@option:check Alarm type", "Archived"), group);
+        mArchived->setFixedSize(mArchived->sizeHint());
+        mArchived->setWhatsThis(i18nc("@info:whatsthis", "Check to include archived alarms in the search. "
+                                     "This option is only available if archived alarms are currently being displayed."));
+        grid->addWidget(mArchived, 1, 2, Qt::AlignLeft);
 
-		mActiveArchivedSep = new KSeparator(Qt::Horizontal, kalarmWidgets);
-		grid->addWidget(mActiveArchivedSep, 2, 0, 1, 3);
+        mActiveArchivedSep = new KSeparator(Qt::Horizontal, kalarmWidgets);
+        grid->addWidget(mActiveArchivedSep, 2, 0, 1, 3);
 
-		// Alarm actions
-		mMessageType = new QCheckBox(i18nc("@option:check Alarm action = text display", "Text"), group);
-		mMessageType->setFixedSize(mMessageType->sizeHint());
-		mMessageType->setWhatsThis(i18nc("@info:whatsthis", "Check to include text message alarms in the search."));
-		grid->addWidget(mMessageType, 3, 0);
+        // Alarm actions
+        mMessageType = new QCheckBox(i18nc("@option:check Alarm action = text display", "Text"), group);
+        mMessageType->setFixedSize(mMessageType->sizeHint());
+        mMessageType->setWhatsThis(i18nc("@info:whatsthis", "Check to include text message alarms in the search."));
+        grid->addWidget(mMessageType, 3, 0);
 
-		mFileType = new QCheckBox(i18nc("@option:check Alarm action = file display", "File"), group);
-		mFileType->setFixedSize(mFileType->sizeHint());
-		mFileType->setWhatsThis(i18nc("@info:whatsthis", "Check to include file alarms in the search."));
-		grid->addWidget(mFileType, 3, 2);
+        mFileType = new QCheckBox(i18nc("@option:check Alarm action = file display", "File"), group);
+        mFileType->setFixedSize(mFileType->sizeHint());
+        mFileType->setWhatsThis(i18nc("@info:whatsthis", "Check to include file alarms in the search."));
+        grid->addWidget(mFileType, 3, 2);
 
-		mCommandType = new QCheckBox(i18nc("@option:check Alarm action", "Command"), group);
-		mCommandType->setFixedSize(mCommandType->sizeHint());
-		mCommandType->setWhatsThis(i18nc("@info:whatsthis", "Check to include command alarms in the search."));
-		grid->addWidget(mCommandType, 4, 0);
+        mCommandType = new QCheckBox(i18nc("@option:check Alarm action", "Command"), group);
+        mCommandType->setFixedSize(mCommandType->sizeHint());
+        mCommandType->setWhatsThis(i18nc("@info:whatsthis", "Check to include command alarms in the search."));
+        grid->addWidget(mCommandType, 4, 0);
 
-		mEmailType = new QCheckBox(i18nc("@option:check Alarm action", "Email"), group);
-		mEmailType->setFixedSize(mEmailType->sizeHint());
-		mEmailType->setWhatsThis(i18nc("@info:whatsthis", "Check to include email alarms in the search."));
-		grid->addWidget(mEmailType, 4, 2);
+        mEmailType = new QCheckBox(i18nc("@option:check Alarm action", "Email"), group);
+        mEmailType->setFixedSize(mEmailType->sizeHint());
+        mEmailType->setWhatsThis(i18nc("@info:whatsthis", "Check to include email alarms in the search."));
+        grid->addWidget(mEmailType, 4, 2);
 
-		mAudioType = new QCheckBox(i18nc("@option:check Alarm action", "Audio"), group);
-		mAudioType->setFixedSize(mAudioType->sizeHint());
-		mAudioType->setWhatsThis(i18nc("@info:whatsthis", "Check to include audio alarms in the search."));
-		grid->addWidget(mAudioType, 5, 0);
+        mAudioType = new QCheckBox(i18nc("@option:check Alarm action", "Audio"), group);
+        mAudioType->setFixedSize(mAudioType->sizeHint());
+        mAudioType->setWhatsThis(i18nc("@info:whatsthis", "Check to include audio alarms in the search."));
+        grid->addWidget(mAudioType, 5, 0);
 
-		// Set defaults
-		mLive->setChecked(mOptions & FIND_LIVE);
-		mArchived->setChecked(mOptions & FIND_ARCHIVED);
-		mMessageType->setChecked(mOptions & FIND_MESSAGE);
-		mFileType->setChecked(mOptions & FIND_FILE);
-		mCommandType->setChecked(mOptions & FIND_COMMAND);
-		mEmailType->setChecked(mOptions & FIND_EMAIL);
-		mAudioType->setChecked(mOptions & FIND_AUDIO);
+        // Set defaults
+        mLive->setChecked(mOptions & FIND_LIVE);
+        mArchived->setChecked(mOptions & FIND_ARCHIVED);
+        mMessageType->setChecked(mOptions & FIND_MESSAGE);
+        mFileType->setChecked(mOptions & FIND_FILE);
+        mCommandType->setChecked(mOptions & FIND_COMMAND);
+        mEmailType->setChecked(mOptions & FIND_EMAIL);
+        mAudioType->setChecked(mOptions & FIND_AUDIO);
 
-		connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
-	}
+        connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
+    }
 
-	// Only display active/archived options if archived alarms are being kept
-	if (noArchived)
-	{
-		mLive->hide();
-		mArchived->hide();
-		mActiveArchivedSep->hide();
-	}
-	else
-	{
-		mLive->show();
-		mArchived->show();
-		mActiveArchivedSep->show();
-	}
+    // Only display active/archived options if archived alarms are being kept
+    if (noArchived)
+    {
+        mLive->hide();
+        mArchived->hide();
+        mActiveArchivedSep->hide();
+    }
+    else
+    {
+        mLive->show();
+        mArchived->show();
+        mActiveArchivedSep->show();
+    }
 
-	// Disable options where no displayed alarms match them
-	bool live     = false;
-	bool archived = false;
-	bool text     = false;
-	bool file     = false;
-	bool command  = false;
-	bool email    = false;
-	bool audio    = false;
-	int rowCount = mListView->model()->rowCount();
-	for (int row = 0;  row < rowCount;  ++row)
-	{
+    // Disable options where no displayed alarms match them
+    bool live     = false;
+    bool archived = false;
+    bool text     = false;
+    bool file     = false;
+    bool command  = false;
+    bool email    = false;
+    bool audio    = false;
+    int rowCount = mListView->model()->rowCount();
+    for (int row = 0;  row < rowCount;  ++row)
+    {
 #ifdef USE_AKONADI
-		KAEvent viewEvent = mListView->event(row);
-		const KAEvent* event = &viewEvent;
+        KAEvent viewEvent = mListView->event(row);
+        const KAEvent* event = &viewEvent;
 #else
-		const KAEvent* event = mListView->event(row);
+        const KAEvent* event = mListView->event(row);
 #endif
-		if (event->expired())
-			archived = true;
-		else
-			live = true;
-		switch (event->action())
-		{
-			case KAEvent::MESSAGE:  text    = true;  break;
-			case KAEvent::FILE:     file    = true;  break;
-			case KAEvent::COMMAND:  command = true;  break;
-			case KAEvent::EMAIL:    email   = true;  break;
-			case KAEvent::AUDIO:    audio   = true;  break;
-		}
-	}
-	mLive->setEnabled(live);
-	mArchived->setEnabled(archived);
-	mMessageType->setEnabled(text);
-	mFileType->setEnabled(file);
-	mCommandType->setEnabled(command);
-	mEmailType->setEnabled(email);
-	mAudioType->setEnabled(audio);
+        if (event->expired())
+            archived = true;
+        else
+            live = true;
+        switch (event->action())
+        {
+            case KAEvent::MESSAGE:  text    = true;  break;
+            case KAEvent::FILE:     file    = true;  break;
+            case KAEvent::COMMAND:  command = true;  break;
+            case KAEvent::EMAIL:    email   = true;  break;
+            case KAEvent::AUDIO:    audio   = true;  break;
+        }
+    }
+    mLive->setEnabled(live);
+    mArchived->setEnabled(archived);
+    mMessageType->setEnabled(text);
+    mFileType->setEnabled(file);
+    mCommandType->setEnabled(command);
+    mEmailType->setEnabled(email);
+    mAudioType->setEnabled(audio);
 
-	mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
-	mDialog->show();
+    mDialog->setHasCursor(mListView->selectionModel()->currentIndex().isValid());
+    mDialog->show();
 }
 
 /******************************************************************************
@@ -251,69 +251,69 @@ void Find::display()
 */
 void Find::slotFind()
 {
-	if (!mDialog)
-		return;
-	mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
-	mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
-	mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
-	         |  (mArchived->isEnabled()    && mArchived->isChecked()    ? FIND_ARCHIVED : 0)
-	         |  (mMessageType->isEnabled() && mMessageType->isChecked() ? FIND_MESSAGE : 0)
-	         |  (mFileType->isEnabled()    && mFileType->isChecked()    ? FIND_FILE : 0)
-	         |  (mCommandType->isEnabled() && mCommandType->isChecked() ? FIND_COMMAND : 0)
-	         |  (mEmailType->isEnabled()   && mEmailType->isChecked()   ? FIND_EMAIL : 0)
-	         |  (mAudioType->isEnabled()   && mAudioType->isChecked()   ? FIND_AUDIO : 0);
-	if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
-	||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO)))
-	{
-		KMessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
-		return;
-	}
+    if (!mDialog)
+        return;
+    mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
+    mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
+    mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
+             |  (mArchived->isEnabled()    && mArchived->isChecked()    ? FIND_ARCHIVED : 0)
+             |  (mMessageType->isEnabled() && mMessageType->isChecked() ? FIND_MESSAGE : 0)
+             |  (mFileType->isEnabled()    && mFileType->isChecked()    ? FIND_FILE : 0)
+             |  (mCommandType->isEnabled() && mCommandType->isChecked() ? FIND_COMMAND : 0)
+             |  (mEmailType->isEnabled()   && mEmailType->isChecked()   ? FIND_EMAIL : 0)
+             |  (mAudioType->isEnabled()   && mAudioType->isChecked()   ? FIND_AUDIO : 0);
+    if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
+    ||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO)))
+    {
+        KMessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
+        return;
+    }
 
-	// Supply KFind with only those options which relate to the text within alarms
-	long options = mOptions & (KFind::WholeWordsOnly | KFind::CaseSensitive | KFind::RegularExpression);
-	bool newFind = !mFind;
-	bool newPattern = (mDialog->pattern() != mLastPattern);
-	mLastPattern = mDialog->pattern();
-	if (mFind)
-	{
-		mFind->resetCounts();
-		mFind->setPattern(mLastPattern);
-		mFind->setOptions(options);
-	}
-	else
-	{
-		mFind = new KFind(mLastPattern, options, mListView, mDialog);
-		connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
-		mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
-	}
+    // Supply KFind with only those options which relate to the text within alarms
+    long options = mOptions & (KFind::WholeWordsOnly | KFind::CaseSensitive | KFind::RegularExpression);
+    bool newFind = !mFind;
+    bool newPattern = (mDialog->pattern() != mLastPattern);
+    mLastPattern = mDialog->pattern();
+    if (mFind)
+    {
+        mFind->resetCounts();
+        mFind->setPattern(mLastPattern);
+        mFind->setOptions(options);
+    }
+    else
+    {
+        mFind = new KFind(mLastPattern, options, mListView, mDialog);
+        connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
+        mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
+    }
 
-	// Set the starting point for the search
-	mStartID.clear();
-	mNoCurrentItem = newPattern;
-	bool checkEnd = false;
-	if (newPattern)
-	{
-		mFound = false;
-		if (mOptions & KFind::FromCursor)
-		{
-			QModelIndex index = mListView->selectionModel()->currentIndex();
-			if (index.isValid())
-			{
+    // Set the starting point for the search
+    mStartID.clear();
+    mNoCurrentItem = newPattern;
+    bool checkEnd = false;
+    if (newPattern)
+    {
+        mFound = false;
+        if (mOptions & KFind::FromCursor)
+        {
+            QModelIndex index = mListView->selectionModel()->currentIndex();
+            if (index.isValid())
+            {
 #ifdef USE_AKONADI
-				mStartID       = mListView->event(index).id();
+                mStartID       = mListView->event(index).id();
 #else
-				mStartID       = mListView->event(index)->id();
+                mStartID       = mListView->event(index)->id();
 #endif
-				mNoCurrentItem = false;
-				checkEnd = true;
-			}
-		}
-	}
+                mNoCurrentItem = false;
+                checkEnd = true;
+            }
+        }
+    }
 
-	// Execute the search
-	findNext(true, checkEnd, false);
-	if (mFind  &&  newFind)
-		emit active(true);
+    // Execute the search
+    findNext(true, checkEnd, false);
+    if (mFind  &&  newFind)
+        emit active(true);
 }
 
 /******************************************************************************
@@ -323,112 +323,112 @@ void Find::slotFind()
 */
 void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 {
-	QModelIndex index;
-	if (!mNoCurrentItem)
-		index = mListView->selectionModel()->currentIndex();
-	if (!fromCurrent)
-		index = nextItem(index, forward);
+    QModelIndex index;
+    if (!mNoCurrentItem)
+        index = mListView->selectionModel()->currentIndex();
+    if (!fromCurrent)
+        index = nextItem(index, forward);
 
-	// Search successive alarms until a match is found or the end is reached
-	bool found = false;
-	bool last = false;
-	for ( ;  index.isValid() && !last;  index = nextItem(index, forward))
-	{
+    // Search successive alarms until a match is found or the end is reached
+    bool found = false;
+    bool last = false;
+    for ( ;  index.isValid() && !last;  index = nextItem(index, forward))
+    {
 #ifdef USE_AKONADI
-		KAEvent viewEvent = mListView->event(index);
-		const KAEvent* event = &viewEvent;
+        KAEvent viewEvent = mListView->event(index);
+        const KAEvent* event = &viewEvent;
 #else
-		const KAEvent* event = mListView->event(index);
+        const KAEvent* event = mListView->event(index);
 #endif
-		if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event->id())
-			last = true;    // we've wrapped round and reached the starting alarm again
-		fromCurrent = false;
-		bool live = !event->expired();
-		if ((live  &&  !(mOptions & FIND_LIVE))
-		||  (!live  &&  !(mOptions & FIND_ARCHIVED)))
-			continue;     // we're not searching this type of alarm
-		switch (event->action())
-		{
-			case KAEvent::MESSAGE:
-				if (!(mOptions & FIND_MESSAGE))
-					break;
-				mFind->setData(event->cleanText());
-				found = (mFind->find() == KFind::Match);
-				break;
+        if (!fromCurrent  &&  !mStartID.isNull()  &&  mStartID == event->id())
+            last = true;    // we've wrapped round and reached the starting alarm again
+        fromCurrent = false;
+        bool live = !event->expired();
+        if ((live  &&  !(mOptions & FIND_LIVE))
+        ||  (!live  &&  !(mOptions & FIND_ARCHIVED)))
+            continue;     // we're not searching this type of alarm
+        switch (event->action())
+        {
+            case KAEvent::MESSAGE:
+                if (!(mOptions & FIND_MESSAGE))
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
 
-			case KAEvent::FILE:
-				if (!(mOptions & FIND_FILE))
-					break;
-				mFind->setData(event->cleanText());
-				found = (mFind->find() == KFind::Match);
-				break;
+            case KAEvent::FILE:
+                if (!(mOptions & FIND_FILE))
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
 
-			case KAEvent::COMMAND:
-				if (!(mOptions & FIND_COMMAND))
-					break;
-				mFind->setData(event->cleanText());
-				found = (mFind->find() == KFind::Match);
-				break;
+            case KAEvent::COMMAND:
+                if (!(mOptions & FIND_COMMAND))
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
 
-			case KAEvent::EMAIL:
-				if (!(mOptions & FIND_EMAIL))
-					break;
-				mFind->setData(event->emailAddresses(", "));
-				found = (mFind->find() == KFind::Match);
-				if (found)
-					break;
-				mFind->setData(event->emailSubject());
-				found = (mFind->find() == KFind::Match);
-				if (found)
-					break;
-				mFind->setData(event->emailAttachments().join(", "));
-				found = (mFind->find() == KFind::Match);
-				if (found)
-					break;
-				mFind->setData(event->cleanText());
-				found = (mFind->find() == KFind::Match);
-				break;
+            case KAEvent::EMAIL:
+                if (!(mOptions & FIND_EMAIL))
+                    break;
+                mFind->setData(event->emailAddresses(", "));
+                found = (mFind->find() == KFind::Match);
+                if (found)
+                    break;
+                mFind->setData(event->emailSubject());
+                found = (mFind->find() == KFind::Match);
+                if (found)
+                    break;
+                mFind->setData(event->emailAttachments().join(", "));
+                found = (mFind->find() == KFind::Match);
+                if (found)
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
 
-			case KAEvent::AUDIO:
-				if (!(mOptions & FIND_AUDIO))
-					break;
-				mFind->setData(event->audioFile());
-				found = (mFind->find() == KFind::Match);
-				break;
-		}
-		if (found)
-			break;
-	}
+            case KAEvent::AUDIO:
+                if (!(mOptions & FIND_AUDIO))
+                    break;
+                mFind->setData(event->audioFile());
+                found = (mFind->find() == KFind::Match);
+                break;
+        }
+        if (found)
+            break;
+    }
 
-	// Process the search result
-	mNoCurrentItem = !index.isValid();
-	if (found)
-	{
-		// A matching alarm was found - highlight it and make it current
-		mFound = true;
-		QItemSelectionModel* sel = mListView->selectionModel();
-		sel->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-		sel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
-		mListView->scrollTo(index);
-	}
-	else
-	{
-		// No match was found
-		if (mFound  ||  checkEnd)
-		{
-			QString msg = forward ? i18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
-			                      : i18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
-			if (KMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
-			{
-				mNoCurrentItem = true;
-				findNext(forward, false, false);
-				return;
-			}
-		}
-		else
-			mFind->displayFinalDialog();     // display "no match was found"
-		mNoCurrentItem = false;    // restart from the currently highlighted alarm if Find Next etc selected
-	}
+    // Process the search result
+    mNoCurrentItem = !index.isValid();
+    if (found)
+    {
+        // A matching alarm was found - highlight it and make it current
+        mFound = true;
+        QItemSelectionModel* sel = mListView->selectionModel();
+        sel->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+        sel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+        mListView->scrollTo(index);
+    }
+    else
+    {
+        // No match was found
+        if (mFound  ||  checkEnd)
+        {
+            QString msg = forward ? i18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
+                                  : i18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
+            if (KMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
+            {
+                mNoCurrentItem = true;
+                findNext(forward, false, false);
+                return;
+            }
+        }
+        else
+            mFind->displayFinalDialog();     // display "no match was found"
+        mNoCurrentItem = false;    // restart from the currently highlighted alarm if Find Next etc selected
+    }
 }
 
 /******************************************************************************
@@ -436,18 +436,20 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 */
 QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
 {
-	if (mOptions & KFind::FindBackwards)
-		forward = !forward;
-	if (!index.isValid())
-	{
-		QAbstractItemModel* model = mListView->model();
-		if (forward)
-			return model->index(0, 0);
-		else
-			return model->index(model->rowCount() - 1, 0);
-	}
-	if (forward)
-		return mListView->indexBelow(index);
-	else
-		return mListView->indexAbove(index);
+    if (mOptions & KFind::FindBackwards)
+        forward = !forward;
+    if (!index.isValid())
+    {
+        QAbstractItemModel* model = mListView->model();
+        if (forward)
+            return model->index(0, 0);
+        else
+            return model->index(model->rowCount() - 1, 0);
+    }
+    if (forward)
+        return mListView->indexBelow(index);
+    else
+        return mListView->indexAbove(index);
 }
+
+// vim: et sw=4:

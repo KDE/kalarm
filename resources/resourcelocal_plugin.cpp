@@ -1,7 +1,7 @@
 /*
  *  resourcelocal_plugin.cpp  -  KAlarm local alarm calendar file resource plugin
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,19 +20,21 @@
 
 #include "kalarm.h"
 
-#include <kglobal.h>
-#include <klocale.h>
-
 #include "resourcelocal.h"
 #include "resourcelocalwidget.h"
 
+#include <kglobal.h>
+#include <klocale.h>
+
 extern "C"
 {
-	KDE_EXPORT void* init_kalarm_local()
-	{
+    KDE_EXPORT void* init_kalarm_local()
+    {
 #ifndef KALARM_STANDALONE
-		KGlobal::locale()->insertCatalog("libkcal");
+        KGlobal::locale()->insertCatalog("libkcal");
 #endif
-		return new KRES::PluginFactory<KAResourceLocal, ResourceLocalConfigWidget>();
-	}
+        return new KRES::PluginFactory<KAResourceLocal, ResourceLocalConfigWidget>();
+    }
 }
+
+// vim: et sw=4:

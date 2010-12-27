@@ -1,7 +1,7 @@
 /*
  *  mainwindowbase.cpp  -  base class for main application windows
  *  Program:  kalarm
- *  Copyright © 2002,2003,2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2003,2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,16 +19,17 @@
  */
 
 #include "kalarm.h"
-#include <QCloseEvent>
 #include "kalarmapp.h"
 #include "mainwindowbase.moc"
 
+#include <QCloseEvent>
+
 
 MainWindowBase::MainWindowBase(QWidget* parent, Qt::WFlags f)
-	: KXmlGuiWindow(parent, f),
-	  disableQuit(false)
+    : KXmlGuiWindow(parent, f),
+      disableQuit(false)
 {
-	setWindowModality(Qt::WindowModal);
+    setWindowModality(Qt::WindowModal);
 }
 
 /******************************************************************************
@@ -37,10 +38,10 @@ MainWindowBase::MainWindowBase(QWidget* parent, Qt::WFlags f)
 */
 void MainWindowBase::closeEvent(QCloseEvent* ce)
 {
-	disableQuit = theApp()->trayIconDisplayed();
-	KMainWindow::closeEvent(ce);
-	disableQuit = false;
-	ce->accept();           // allow window to close even if it's the last main window
+    disableQuit = theApp()->trayIconDisplayed();
+    KMainWindow::closeEvent(ce);
+    disableQuit = false;
+    ce->accept();           // allow window to close even if it's the last main window
 }
 
 /******************************************************************************
@@ -49,7 +50,9 @@ void MainWindowBase::closeEvent(QCloseEvent* ce)
 */
 bool MainWindowBase::queryExit()
 {
-	if (kapp->sessionSaving())
-		return true;
-	return disableQuit ? false : KMainWindow::queryExit();
+    if (kapp->sessionSaving())
+        return true;
+    return disableQuit ? false : KMainWindow::queryExit();
 }
+
+// vim: et sw=4:

@@ -21,35 +21,38 @@
 #ifndef NEWALARMACTION_H
 #define NEWALARMACTION_H
 
-#include <QMap>
-#include <kactionmenu.h>
 #include "editdlg.h"
+#include <kactionmenu.h>
+#include <QMap>
+
 class KAction;
 
 class NewAlarmAction : public KActionMenu
 {
-		Q_OBJECT
-	public:
-		NewAlarmAction(bool templates, const QString& label, QObject* parent);
-		virtual ~NewAlarmAction() {}
-		KAction* displayAlarmAction() const  { return mDisplayAction; }
-		KAction* commandAlarmAction() const  { return mCommandAction; }
-		KAction* emailAlarmAction() const    { return mEmailAction; }
-		KAction* audioAlarmAction() const    { return mAudioAction; }
+        Q_OBJECT
+    public:
+        NewAlarmAction(bool templates, const QString& label, QObject* parent);
+        virtual ~NewAlarmAction() {}
+        KAction* displayAlarmAction() const  { return mDisplayAction; }
+        KAction* commandAlarmAction() const  { return mCommandAction; }
+        KAction* emailAlarmAction() const    { return mEmailAction; }
+        KAction* audioAlarmAction() const    { return mAudioAction; }
 
-	signals:
-		void   selected(EditAlarmDlg::Type);
+    signals:
+        void   selected(EditAlarmDlg::Type);
 
-	private slots:
-		void   slotSelected(QAction*);
-		void   slotInitMenu();
+    private slots:
+        void   slotSelected(QAction*);
+        void   slotInitMenu();
 
-	private:
-		KAction* mDisplayAction;
-		KAction* mCommandAction;
-		KAction* mEmailAction;
-		KAction* mAudioAction;
-		QMap<QAction*, EditAlarmDlg::Type> mTypes;
+    private:
+        KAction* mDisplayAction;
+        KAction* mCommandAction;
+        KAction* mEmailAction;
+        KAction* mAudioAction;
+        QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };
 
 #endif // NEWALARMACTION_H
+
+// vim: et sw=4:

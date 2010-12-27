@@ -35,7 +35,7 @@ QMap<QString, KMessageBox::ButtonCode> MessageBox::mContinueDefaults;
 */
 void MessageBox::setContinueDefault(const QString& dontAskAgainName, ButtonCode defaultButton)
 {
-	mContinueDefaults[dontAskAgainName] = (defaultButton == Cancel ? Cancel : Continue);
+    mContinueDefaults[dontAskAgainName] = (defaultButton == Cancel ? Cancel : Continue);
 }
 
 /******************************************************************************
@@ -44,14 +44,14 @@ void MessageBox::setContinueDefault(const QString& dontAskAgainName, ButtonCode 
 */
 KMessageBox::ButtonCode MessageBox::getContinueDefault(const QString& dontAskAgainName)
 {
-	ButtonCode defaultButton = Continue;
-	if (!dontAskAgainName.isEmpty())
-	{
-		QMap<QString, ButtonCode>::ConstIterator it = mContinueDefaults.constFind(dontAskAgainName);
-		if (it != mContinueDefaults.constEnd())
-			defaultButton = it.value();
-	}
-	return defaultButton;
+    ButtonCode defaultButton = Continue;
+    if (!dontAskAgainName.isEmpty())
+    {
+        QMap<QString, ButtonCode>::ConstIterator it = mContinueDefaults.constFind(dontAskAgainName);
+        if (it != mContinueDefaults.constEnd())
+            defaultButton = it.value();
+    }
+    return defaultButton;
 }
 
 /******************************************************************************
@@ -65,8 +65,8 @@ KMessageBox::ButtonCode MessageBox::getContinueDefault(const QString& dontAskAga
 int MessageBox::warningContinueCancel(QWidget* parent, const QString& text, const QString& caption,
                                       const KGuiItem& buttonContinue, const QString& dontAskAgainName)
 {
-	ButtonCode defaultButton = getContinueDefault(dontAskAgainName);
-	return warningContinueCancel(parent, defaultButton, text, caption, buttonContinue, dontAskAgainName);
+    ButtonCode defaultButton = getContinueDefault(dontAskAgainName);
+    return warningContinueCancel(parent, defaultButton, text, caption, buttonContinue, dontAskAgainName);
 }
 
 /******************************************************************************
@@ -78,23 +78,23 @@ int MessageBox::warningContinueCancel(QWidget* parent, ButtonCode defaultButton,
                                       const QString& caption, const KGuiItem& buttonContinue,
                                       const QString& dontAskAgainName)
 {
-	setContinueDefault(dontAskAgainName, defaultButton);
-	if (defaultButton != Cancel)
-		return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
+    setContinueDefault(dontAskAgainName, defaultButton);
+    if (defaultButton != Cancel)
+        return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
 
-	// Cancel is the default button, so we have to use KMessageBox::warningYesNo()
-	if (!dontAskAgainName.isEmpty())
-	{
-		ButtonCode b;
-		if (!shouldBeShownYesNo(dontAskAgainName, b)
-		&&  b != KMessageBox::Yes)
-		{
-			// Notification has been suppressed, but No (alias Cancel) is the default,
-			// so unsuppress notification.
-			saveDontShowAgain(dontAskAgainName, true, false);
-		}
-	}
-	return warningYesNo(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
+    // Cancel is the default button, so we have to use KMessageBox::warningYesNo()
+    if (!dontAskAgainName.isEmpty())
+    {
+        ButtonCode b;
+        if (!shouldBeShownYesNo(dontAskAgainName, b)
+        &&  b != KMessageBox::Yes)
+        {
+            // Notification has been suppressed, but No (alias Cancel) is the default,
+            // so unsuppress notification.
+            saveDontShowAgain(dontAskAgainName, true, false);
+        }
+    }
+    return warningYesNo(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
 }
 
 /******************************************************************************
@@ -108,15 +108,15 @@ int MessageBox::warningContinueCancel(QWidget* parent, ButtonCode defaultButton,
 bool MessageBox::setDefaultShouldBeShownContinue(const QString& dontShowAgainName, bool defaultShow)
 {
     if (dontShowAgainName.isEmpty())
-		return false;
-	// First check whether there is an existing setting
-	KConfigGroup config(KGlobal::config(), "Notification Messages");
-	if (config.hasKey(dontShowAgainName))
-		return false;
+        return false;
+    // First check whether there is an existing setting
+    KConfigGroup config(KGlobal::config(), "Notification Messages");
+    if (config.hasKey(dontShowAgainName))
+        return false;
 
-	// There is no current setting, so write one
-	saveDontShowAgainContinue(dontShowAgainName, !defaultShow);
-	return true;
+    // There is no current setting, so write one
+    saveDontShowAgainContinue(dontShowAgainName, !defaultShow);
+    return true;
 }
 
 /******************************************************************************
@@ -127,11 +127,11 @@ bool MessageBox::setDefaultShouldBeShownContinue(const QString& dontShowAgainNam
 */
 bool MessageBox::shouldBeShownContinue(const QString& dontShowAgainName)
 {
-	if (getContinueDefault(dontShowAgainName) != Cancel)
-		return KMessageBox::shouldBeShownContinue(dontShowAgainName);
-	// Cancel is the default button, so we have to use a yes/no message box
-	ButtonCode b;
-	return shouldBeShownYesNo(dontShowAgainName, b);
+    if (getContinueDefault(dontShowAgainName) != Cancel)
+        return KMessageBox::shouldBeShownContinue(dontShowAgainName);
+    // Cancel is the default button, so we have to use a yes/no message box
+    ButtonCode b;
+    return shouldBeShownYesNo(dontShowAgainName, b);
 }
 
 
@@ -142,7 +142,7 @@ bool MessageBox::shouldBeShownContinue(const QString& dontShowAgainName)
 */
 void MessageBox::saveDontShowAgainYesNo(const QString& dontShowAgainName, bool dontShow, ButtonCode result)
 {
-	saveDontShowAgain(dontShowAgainName, true, dontShow, (result == Yes ? "yes" : "no"));
+    saveDontShowAgain(dontShowAgainName, true, dontShow, (result == Yes ? "yes" : "no"));
 }
 
 /******************************************************************************
@@ -155,10 +155,10 @@ void MessageBox::saveDontShowAgainYesNo(const QString& dontShowAgainName, bool d
 */
 void MessageBox::saveDontShowAgainContinue(const QString& dontShowAgainName, bool dontShow)
 {
-	if (getContinueDefault(dontShowAgainName) == Cancel)
-		saveDontShowAgainYesNo(dontShowAgainName, dontShow, Yes);
-	else
-		saveDontShowAgain(dontShowAgainName, false, dontShow);
+    if (getContinueDefault(dontShowAgainName) == Cancel)
+        saveDontShowAgainYesNo(dontShowAgainName, dontShow, Yes);
+    else
+        saveDontShowAgain(dontShowAgainName, false, dontShow);
 }
 
 /******************************************************************************
@@ -166,13 +166,15 @@ void MessageBox::saveDontShowAgainContinue(const QString& dontShowAgainName, boo
 */
 void MessageBox::saveDontShowAgain(const QString& dontShowAgainName, bool yesno, bool dontShow, const char* yesnoResult)
 {
-	if (dontShowAgainName.isEmpty())
-		return;
-	KConfigGroup config(KGlobal::config(), "Notification Messages");
-	KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == QLatin1Char(':')) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
-	if (yesno)
-		config.writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);
-	else
-		config.writeEntry(dontShowAgainName, !dontShow, flags);
-	config.sync();
+    if (dontShowAgainName.isEmpty())
+        return;
+    KConfigGroup config(KGlobal::config(), "Notification Messages");
+    KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == QLatin1Char(':')) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
+    if (yesno)
+        config.writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);
+    else
+        config.writeEntry(dontShowAgainName, !dontShow, flags);
+    config.sync();
 }
+
+// vim: et sw=4:

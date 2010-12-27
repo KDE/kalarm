@@ -1,7 +1,7 @@
 /*
  *  combobox.h  -  combo box with read-only option
  *  Program:  kalarm
- *  Copyright © 2002,2005-2007 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2005-2007 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,31 +34,33 @@ class QKeyEvent;
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class ComboBox : public KComboBox
 {
-		Q_OBJECT
-	public:
-		/** Constructor.
-		 *  @param parent The parent object of this widget.
-		 */
-		explicit ComboBox(QWidget* parent = 0);
-		/** Returns true if the widget is read only. */
-		bool         isReadOnly() const          { return mReadOnly; }
-		/** Sets whether the combo box is read-only for the user. If read-only,
-		 *  its state cannot be changed by the user.
-		 *  @param readOnly True to set the widget read-only, false to set it read-write.
-		 */
-		virtual void setReadOnly(bool readOnly);
-	protected:
-		virtual void mousePressEvent(QMouseEvent*);
-		virtual void mouseReleaseEvent(QMouseEvent*);
-		virtual void mouseMoveEvent(QMouseEvent*);
-		virtual void keyPressEvent(QKeyEvent*);
-		virtual void keyReleaseEvent(QKeyEvent*);
-	private:
-		bool    mReadOnly;      // value cannot be changed
+        Q_OBJECT
+    public:
+        /** Constructor.
+         *  @param parent The parent object of this widget.
+         */
+        explicit ComboBox(QWidget* parent = 0);
+        /** Returns true if the widget is read only. */
+        bool         isReadOnly() const          { return mReadOnly; }
+        /** Sets whether the combo box is read-only for the user. If read-only,
+         *  its state cannot be changed by the user.
+         *  @param readOnly True to set the widget read-only, false to set it read-write.
+         */
+        virtual void setReadOnly(bool readOnly);
+    protected:
+        virtual void mousePressEvent(QMouseEvent*);
+        virtual void mouseReleaseEvent(QMouseEvent*);
+        virtual void mouseMoveEvent(QMouseEvent*);
+        virtual void keyPressEvent(QKeyEvent*);
+        virtual void keyReleaseEvent(QKeyEvent*);
+    private:
+        bool    mReadOnly;      // value cannot be changed
 };
 
 #endif // COMBOBOX_H
+
+// vim: et sw=4:

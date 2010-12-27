@@ -35,10 +35,10 @@ namespace KAlarm
 */
 int localeFirstDayOfWeek()
 {
-	static int firstDay = 0;
-	if (!firstDay)
-		firstDay = KGlobal::locale()->weekStartDay();
-	return firstDay;
+    static int firstDay = 0;
+    if (!firstDay)
+        firstDay = KGlobal::locale()->weekStartDay();
+    return firstDay;
 }
 
 /******************************************************************************
@@ -46,17 +46,17 @@ int localeFirstDayOfWeek()
 */
 QString weekDayName(int day, const KLocale* locale)
 {
-	switch (day)
-	{
-		case 1: return ki18nc("@option Name of the weekday", "Monday").toString(locale);
-		case 2: return ki18nc("@option Name of the weekday", "Tuesday").toString(locale);
-		case 3: return ki18nc("@option Name of the weekday", "Wednesday").toString(locale);
-		case 4: return ki18nc("@option Name of the weekday", "Thursday").toString(locale);
-		case 5: return ki18nc("@option Name of the weekday", "Friday").toString(locale);
-		case 6: return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
-		case 7: return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
-	}
-	return QString();
+    switch (day)
+    {
+        case 1: return ki18nc("@option Name of the weekday", "Monday").toString(locale);
+        case 2: return ki18nc("@option Name of the weekday", "Tuesday").toString(locale);
+        case 3: return ki18nc("@option Name of the weekday", "Wednesday").toString(locale);
+        case 4: return ki18nc("@option Name of the weekday", "Thursday").toString(locale);
+        case 5: return ki18nc("@option Name of the weekday", "Friday").toString(locale);
+        case 6: return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
+        case 7: return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
+    }
+    return QString();
 }
 
 /******************************************************************************
@@ -65,19 +65,21 @@ QString weekDayName(int day, const KLocale* locale)
 */
 uint defaultWorkDays()
 {
-	KLocale* locale = KGlobal::locale();
-	int end = locale->workingWeekEndDay() - 1;
-	uint days = 0;
-	for (int day = locale->workingWeekStartDay() - 1;  ; )
-	{
-		days |= 1 << day;
-		if (day == end)
-			break;
-		++day;
-		if (day >= 7)
-			day = 0;
-	}
-	return days;
+    KLocale* locale = KGlobal::locale();
+    int end = locale->workingWeekEndDay() - 1;
+    uint days = 0;
+    for (int day = locale->workingWeekStartDay() - 1;  ; )
+    {
+        days |= 1 << day;
+        if (day == end)
+            break;
+        ++day;
+        if (day >= 7)
+            day = 0;
+    }
+    return days;
 }
 
 } // namespace KAlarm
+
+// vim: et sw=4:

@@ -39,97 +39,99 @@ class UndoItem;
 
 class Undo : public QObject
 {
-		Q_OBJECT
-	public:
-		enum Type { NONE, UNDO, REDO };
-		// N.B. The Event structure must be constructed before the action for
-		// which the undo is being created is carried out, since the
-		// don't-show-errors status is not contained within the KAEvent itself.
-		struct Event
-		{
-			Event() {}
+        Q_OBJECT
+    public:
+        enum Type { NONE, UNDO, REDO };
+        // N.B. The Event structure must be constructed before the action for
+        // which the undo is being created is carried out, since the
+        // don't-show-errors status is not contained within the KAEvent itself.
+        struct Event
+        {
+            Event() {}
 #ifdef USE_AKONADI
-			Event(const KAEvent&, Akonadi::Collection&);
+            Event(const KAEvent&, Akonadi::Collection&);
 #else
-			Event(const KAEvent&, AlarmResource*);
+            Event(const KAEvent&, AlarmResource*);
 #endif
-			KAEvent        event;
+            KAEvent        event;
 #ifdef USE_AKONADI
-			mutable Akonadi::Collection collection;
+            mutable Akonadi::Collection collection;
 #else
-			AlarmResource* resource;
+            AlarmResource* resource;
 #endif
-			QStringList    dontShowErrors;
-		};
-		class EventList : public QList<Event>
-		{
-		public:
+            QStringList    dontShowErrors;
+        };
+        class EventList : public QList<Event>
+        {
+        public:
 #ifdef USE_AKONADI
-			void append(const KAEvent& e, Akonadi::Collection& c)  { QList<Event>::append(Event(e, c)); }
+            void append(const KAEvent& e, Akonadi::Collection& c)  { QList<Event>::append(Event(e, c)); }
 #else
-			void append(const KAEvent& e, AlarmResource* r)  { QList<Event>::append(Event(e, r)); }
+            void append(const KAEvent& e, AlarmResource* r)  { QList<Event>::append(Event(e, r)); }
 #endif
-		};
+        };
 
-		static Undo*       instance();
+        static Undo*       instance();
 #ifdef USE_AKONADI
-		static void        saveAdd(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
+        static void        saveAdd(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
 #else
-		static void        saveAdd(const KAEvent&, AlarmResource*, const QString& name = QString());
+        static void        saveAdd(const KAEvent&, AlarmResource*, const QString& name = QString());
 #endif
-		static void        saveAdds(const EventList&, const QString& name = QString());
-		static void        saveEdit(const Event& oldEvent, const KAEvent& newEvent);
-		static void        saveDelete(const Event&, const QString& name = QString());
-		static void        saveDeletes(const EventList&, const QString& name = QString());
+        static void        saveAdds(const EventList&, const QString& name = QString());
+        static void        saveEdit(const Event& oldEvent, const KAEvent& newEvent);
+        static void        saveDelete(const Event&, const QString& name = QString());
+        static void        saveDeletes(const EventList&, const QString& name = QString());
 #ifdef USE_AKONADI
-		static void        saveReactivate(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
+        static void        saveReactivate(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
 #else
-		static void        saveReactivate(const KAEvent&, AlarmResource*, const QString& name = QString());
+        static void        saveReactivate(const KAEvent&, AlarmResource*, const QString& name = QString());
 #endif
-		static void        saveReactivates(const EventList&, const QString& name = QString());
-		static bool        undo(QWidget* parent, const QString& action)
-		                                      { return undo(0, UNDO, parent, action); }
-		static bool        undo(int id, QWidget* parent, const QString& action)
-		                                      { return undo(findItem(id, UNDO), UNDO, parent, action); }
-		static bool        redo(QWidget* parent, const QString& action)
-		                                      { return undo(0, REDO, parent, action); }
-		static bool        redo(int id, QWidget* parent, const QString& action)
-		                                      { return undo(findItem(id, REDO), REDO, parent, action); }
-		static void        clear();
-		static bool        haveUndo()         { return !mUndoList.isEmpty(); }
-		static bool        haveRedo()         { return !mRedoList.isEmpty(); }
-		static QString     actionText(Type);
-		static QString     actionText(Type, int id);
-		static QString     description(Type, int id);
-		static QList<int>  ids(Type);
-		static void        emitChanged();
+        static void        saveReactivates(const EventList&, const QString& name = QString());
+        static bool        undo(QWidget* parent, const QString& action)
+                                              { return undo(0, UNDO, parent, action); }
+        static bool        undo(int id, QWidget* parent, const QString& action)
+                                              { return undo(findItem(id, UNDO), UNDO, parent, action); }
+        static bool        redo(QWidget* parent, const QString& action)
+                                              { return undo(0, REDO, parent, action); }
+        static bool        redo(int id, QWidget* parent, const QString& action)
+                                              { return undo(findItem(id, REDO), REDO, parent, action); }
+        static void        clear();
+        static bool        haveUndo()         { return !mUndoList.isEmpty(); }
+        static bool        haveRedo()         { return !mRedoList.isEmpty(); }
+        static QString     actionText(Type);
+        static QString     actionText(Type, int id);
+        static QString     description(Type, int id);
+        static QList<int>  ids(Type);
+        static void        emitChanged();
 
-		// Types for use by UndoItem class and its descendants
-		typedef AutoDeleteList<UndoItem> List;
+        // Types for use by UndoItem class and its descendants
+        typedef AutoDeleteList<UndoItem> List;
 
-	signals:
-		void               changed(const QString& undo, const QString& redo);
+    signals:
+        void               changed(const QString& undo, const QString& redo);
 
-	protected:
-		// Methods for use by UndoItem class
-		static void        add(UndoItem*, bool undo);
-		static void        remove(UndoItem*, bool undo);
-		static void        replace(UndoItem* old, UndoItem* New);
+    protected:
+        // Methods for use by UndoItem class
+        static void        add(UndoItem*, bool undo);
+        static void        remove(UndoItem*, bool undo);
+        static void        replace(UndoItem* old, UndoItem* New);
 
-	private:
-		Undo(QObject* parent)  : QObject(parent) { }
-		static void        removeRedos(const QString& eventID);
-		static bool        undo(int index, Type, QWidget* parent, const QString& action);
-		static UndoItem*   getItem(int id, Type);
-		static int         findItem(int id, Type);
-		void               emitChanged(const QString& undo, const QString& redo)
-		                                   { emit changed(undo, redo); }
+    private:
+        Undo(QObject* parent)  : QObject(parent) { }
+        static void        removeRedos(const QString& eventID);
+        static bool        undo(int index, Type, QWidget* parent, const QString& action);
+        static UndoItem*   getItem(int id, Type);
+        static int         findItem(int id, Type);
+        void               emitChanged(const QString& undo, const QString& redo)
+                                           { emit changed(undo, redo); }
 
-		static Undo*       mInstance;     // the one and only Undo instance
-		static List        mUndoList;     // edit history for undo, latest undo first
-		static List        mRedoList;     // edit history for redo, latest redo first
+        static Undo*       mInstance;     // the one and only Undo instance
+        static List        mUndoList;     // edit history for undo, latest undo first
+        static List        mRedoList;     // edit history for redo, latest redo first
 
-	friend class UndoItem;
+    friend class UndoItem;
 };
 
 #endif // UNDO_H
+
+// vim: et sw=4:

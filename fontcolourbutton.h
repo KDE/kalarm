@@ -31,59 +31,61 @@ class FontColourChooser;
 
 class FontColourButton : public PushButton
 {
-		Q_OBJECT
-	public:
-		explicit FontColourButton(QWidget* parent = 0);
-		void          setDefaultFont();
-		void          setFont(const QFont&);
-		void          setBgColour(const QColor& c) { mBgColour = c; }
-		void          setFgColour(const QColor& c) { mFgColour = c; }
-		bool          defaultFont() const    { return mDefaultFont; }
-		QFont         font() const           { return mFont; }
-		QColor        bgColour() const       { return mBgColour; }
-		QColor        fgColour() const       { return mFgColour; }
-		virtual void  setReadOnly(bool ro, bool noHighlight = false)
-		                         { mReadOnly = ro; PushButton::setReadOnly(ro, noHighlight); }
-		virtual bool  isReadOnly() const     { return mReadOnly; }
+        Q_OBJECT
+    public:
+        explicit FontColourButton(QWidget* parent = 0);
+        void          setDefaultFont();
+        void          setFont(const QFont&);
+        void          setBgColour(const QColor& c) { mBgColour = c; }
+        void          setFgColour(const QColor& c) { mFgColour = c; }
+        bool          defaultFont() const    { return mDefaultFont; }
+        QFont         font() const           { return mFont; }
+        QColor        bgColour() const       { return mBgColour; }
+        QColor        fgColour() const       { return mFgColour; }
+        virtual void  setReadOnly(bool ro, bool noHighlight = false)
+                                 { mReadOnly = ro; PushButton::setReadOnly(ro, noHighlight); }
+        virtual bool  isReadOnly() const     { return mReadOnly; }
 
-	signals:
-		/** Signal emitted whenever a font or colour has been selected. */
-		void          selected(const QColor& fg, const QColor& bg);
+    signals:
+        /** Signal emitted whenever a font or colour has been selected. */
+        void          selected(const QColor& fg, const QColor& bg);
 
-	protected slots:
-		void          slotButtonPressed();
+    protected slots:
+        void          slotButtonPressed();
 
-	private:
-		QColor      mBgColour, mFgColour;
-		QFont       mFont;
-		bool        mDefaultFont;
-		bool        mReadOnly;
+    private:
+        QColor      mBgColour, mFgColour;
+        QFont       mFont;
+        bool        mDefaultFont;
+        bool        mReadOnly;
 };
 
 
 // Font and colour selection dialog displayed by the push button
 class FontColourDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		FontColourDlg(const QColor& bg, const QColor& fg, const QFont&, bool defaultFont,
-		              const QString& caption, QWidget* parent = 0);
-		bool         defaultFont() const   { return mDefaultFont; }
-		QFont        font() const          { return mFont; }
-		QColor       bgColour() const      { return mBgColour; }
-		QColor       fgColour() const      { return mFgColour; }
-		void         setReadOnly(bool);
-		bool         isReadOnly() const    { return mReadOnly; }
+        Q_OBJECT
+    public:
+        FontColourDlg(const QColor& bg, const QColor& fg, const QFont&, bool defaultFont,
+                      const QString& caption, QWidget* parent = 0);
+        bool         defaultFont() const   { return mDefaultFont; }
+        QFont        font() const          { return mFont; }
+        QColor       bgColour() const      { return mBgColour; }
+        QColor       fgColour() const      { return mFgColour; }
+        void         setReadOnly(bool);
+        bool         isReadOnly() const    { return mReadOnly; }
 
-	protected slots:
-		virtual void slotOk();
+    protected slots:
+        virtual void slotOk();
 
-	private:
-		FontColourChooser* mChooser;
-		QColor             mBgColour, mFgColour;
-		QFont              mFont;
-		bool               mDefaultFont;
-		bool               mReadOnly;
+    private:
+        FontColourChooser* mChooser;
+        QColor             mBgColour, mFgColour;
+        QFont              mFont;
+        bool               mDefaultFont;
+        bool               mReadOnly;
 };
 
 #endif // FONTCOLOURBUTTON_H
+
+// vim: et sw=4:

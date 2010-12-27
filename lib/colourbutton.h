@@ -36,30 +36,32 @@
  */
 class ColourButton : public KColorButton
 {
-		Q_OBJECT
-	public:
-		/** Constructor.
-		 *  @param parent The parent object of this widget.
-		 */
-		explicit ColourButton(QWidget* parent = 0);
-		/** Returns the selected colour. */
-		QColor       colour() const              { return color(); }
-		/** Sets the selected colour to @p c. */
-		void         setColour(const QColor& c)  { setColor(c); }
-		/** Returns true if the widget is read only. */
-		bool         isReadOnly() const          { return mReadOnly; }
-		/** Sets whether the button can be changed by the user.
-		 *  @param readOnly True to set the widget read-only, false to set it read-write.
-		 */
-		virtual void setReadOnly(bool readOnly);
-	protected:
-		virtual void mousePressEvent(QMouseEvent*);
-		virtual void mouseReleaseEvent(QMouseEvent*);
-		virtual void mouseMoveEvent(QMouseEvent*);
-		virtual void keyPressEvent(QKeyEvent*);
-		virtual void keyReleaseEvent(QKeyEvent*);
-	private:
-		bool         mReadOnly;        // value cannot be changed
+        Q_OBJECT
+    public:
+        /** Constructor.
+         *  @param parent The parent object of this widget.
+         */
+        explicit ColourButton(QWidget* parent = 0);
+        /** Returns the selected colour. */
+        QColor       colour() const              { return color(); }
+        /** Sets the selected colour to @p c. */
+        void         setColour(const QColor& c)  { setColor(c); }
+        /** Returns true if the widget is read only. */
+        bool         isReadOnly() const          { return mReadOnly; }
+        /** Sets whether the button can be changed by the user.
+         *  @param readOnly True to set the widget read-only, false to set it read-write.
+         */
+        virtual void setReadOnly(bool readOnly);
+    protected:
+        virtual void mousePressEvent(QMouseEvent*);
+        virtual void mouseReleaseEvent(QMouseEvent*);
+        virtual void mouseMoveEvent(QMouseEvent*);
+        virtual void keyPressEvent(QKeyEvent*);
+        virtual void keyReleaseEvent(QKeyEvent*);
+    private:
+        bool         mReadOnly;        // value cannot be changed
 };
 
 #endif // COLOURBUTTON_H
+
+// vim: et sw=4:

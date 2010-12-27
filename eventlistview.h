@@ -36,64 +36,65 @@ class Find;
 
 class EventListView : public QTreeView
 {
-		Q_OBJECT
-	public:
-		explicit EventListView(QWidget* parent = 0);
+        Q_OBJECT
+    public:
+        explicit EventListView(QWidget* parent = 0);
 #ifdef USE_AKONADI
-		ItemListModel*    itemModel() const    { return static_cast<ItemListModel*>(model()); }
-		KAEvent           event(int row) const;
-		KAEvent           event(const QModelIndex&) const;
-		void              select(Akonadi::Item::Id);
+        ItemListModel*    itemModel() const    { return static_cast<ItemListModel*>(model()); }
+        KAEvent           event(int row) const;
+        KAEvent           event(const QModelIndex&) const;
+        void              select(Akonadi::Item::Id);
 #else
-		EventListFilterModel* eventFilterModel() const   { return static_cast<EventListFilterModel*>(model()); }
-		EventListModel*   eventModel() const   { return static_cast<EventListModel*>(static_cast<QAbstractProxyModel*>(model())->sourceModel()); }
-		KAEvent*          event(int row) const;
-		KAEvent*          event(const QModelIndex&) const;
-		void              select(const QString& eventId);
+        EventListFilterModel* eventFilterModel() const   { return static_cast<EventListFilterModel*>(model()); }
+        EventListModel*   eventModel() const   { return static_cast<EventListModel*>(static_cast<QAbstractProxyModel*>(model())->sourceModel()); }
+        KAEvent*          event(int row) const;
+        KAEvent*          event(const QModelIndex&) const;
+        void              select(const QString& eventId);
 #endif
-		void              select(const QModelIndex&);
-		QModelIndex       selectedIndex() const;
+        void              select(const QModelIndex&);
+        QModelIndex       selectedIndex() const;
 #ifdef USE_AKONADI
-		KAEvent           selectedEvent() const;
-		QList<KAEvent>    selectedEvents() const;
+        KAEvent           selectedEvent() const;
+        QList<KAEvent>    selectedEvents() const;
 #else
-		KAEvent*          selectedEvent() const;
-		KAEvent::List     selectedEvents() const;
+        KAEvent*          selectedEvent() const;
+        KAEvent::List     selectedEvents() const;
 #endif
-		void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
-		bool              editOnSingleClick() const    { return mEditOnSingleClick; }
+        void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
+        bool              editOnSingleClick() const    { return mEditOnSingleClick; }
 
-	public slots:
-		virtual void      slotFind();
-		virtual void      slotFindNext()       { findNext(true); }
-		virtual void      slotFindPrev()       { findNext(false); }
+    public slots:
+        virtual void      slotFind();
+        virtual void      slotFindNext()       { findNext(true); }
+        virtual void      slotFindPrev()       { findNext(false); }
 
-	signals:
-		void              contextMenuRequested(const QPoint& globalPos);
-		void              findActive(bool);
+    signals:
+        void              contextMenuRequested(const QPoint& globalPos);
+        void              findActive(bool);
 
-	protected:
-		virtual bool      viewportEvent(QEvent*);
-		virtual void      contextMenuEvent(QContextMenuEvent*);
+    protected:
+        virtual bool      viewportEvent(QEvent*);
+        virtual void      contextMenuEvent(QContextMenuEvent*);
 
-	private:
-		void              findNext(bool forward);
+    private:
+        void              findNext(bool forward);
 
-		Find*             mFind;
-		bool              mEditOnSingleClick;
+        Find*             mFind;
+        bool              mEditOnSingleClick;
 
-		using QObject::event;   // prevent "hidden" warning
+        using QObject::event;   // prevent "hidden" warning
 };
 
 class EventListDelegate : public QItemDelegate
 {
-		Q_OBJECT
-	public:
-		explicit EventListDelegate(EventListView* parent = 0) : QItemDelegate(parent) {}
-		virtual QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const  { return 0; }
-		virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
-		virtual void edit(KAEvent*, EventListView*) = 0;
+        Q_OBJECT
+    public:
+        explicit EventListDelegate(EventListView* parent = 0) : QItemDelegate(parent) {}
+        virtual QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const  { return 0; }
+        virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
+        virtual void edit(KAEvent*, EventListView*) = 0;
 };
 
 #endif // EVENTLISTVIEW_H
 
+// vim: et sw=4:

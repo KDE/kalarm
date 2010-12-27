@@ -43,67 +43,69 @@ namespace KCal { class CalendarLocal; }
 /** A KAlarm calendar resource stored as a remote file. */
 class KALARM_RESOURCES_EXPORT KAResourceRemote : public AlarmResource
 {
-		Q_OBJECT
-	public:
-		KAResourceRemote();
-		/** Create resource from configuration information stored in a KConfig object. */
-		explicit KAResourceRemote(const KConfigGroup&);
-		/** Create remote resource.
-		 *  @param downloadUrl URL used to download iCalendar file
-		 *  @param uploadUrl   URL used to upload iCalendar file. */
-		KAResourceRemote(KAlarm::CalEvent::Type, const KUrl& downloadUrl, const KUrl& uploadUrl = KUrl());
-		virtual ~KAResourceRemote();
-		bool         setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl);
-		KUrl         downloadUrl() const                { return mDownloadUrl; }
-		KUrl         uploadUrl() const                  { return mUploadUrl; }
-		virtual QString     displayType() const;
-		virtual QString     displayLocation() const;
-		virtual QStringList location() const;
-		virtual bool        setLocation(const QString& downloadUrl, const QString& uploadUrl);
-		virtual bool readOnly() const;
-		virtual void showProgress(bool show)            { mShowProgress = show; }
-		virtual void writeConfig(KConfigGroup&);
-		virtual void startReconfig();
-		virtual void applyReconfig();
-		virtual bool isSaving()                         { return mUploadJob; }
-		virtual bool cached() const                     { return true; }
+        Q_OBJECT
+    public:
+        KAResourceRemote();
+        /** Create resource from configuration information stored in a KConfig object. */
+        explicit KAResourceRemote(const KConfigGroup&);
+        /** Create remote resource.
+         *  @param downloadUrl URL used to download iCalendar file
+         *  @param uploadUrl   URL used to upload iCalendar file. */
+        KAResourceRemote(KAlarm::CalEvent::Type, const KUrl& downloadUrl, const KUrl& uploadUrl = KUrl());
+        virtual ~KAResourceRemote();
+        bool         setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl);
+        KUrl         downloadUrl() const                { return mDownloadUrl; }
+        KUrl         uploadUrl() const                  { return mUploadUrl; }
+        virtual QString     displayType() const;
+        virtual QString     displayLocation() const;
+        virtual QStringList location() const;
+        virtual bool        setLocation(const QString& downloadUrl, const QString& uploadUrl);
+        virtual bool readOnly() const;
+        virtual void showProgress(bool show)            { mShowProgress = show; }
+        virtual void writeConfig(KConfigGroup&);
+        virtual void startReconfig();
+        virtual void applyReconfig();
+        virtual bool isSaving()                         { return mUploadJob; }
+        virtual bool cached() const                     { return true; }
 
-		// Override abstract virtual functions
-		virtual KCal::Todo::List rawTodos(KCal::TodoSortField = KCal::TodoSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Todo::List(); }
-		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
+        // Override abstract virtual functions
+        virtual KCal::Todo::List rawTodos(KCal::TodoSortField = KCal::TodoSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Todo::List(); }
+        virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
 
-	public slots:
-		virtual void cancelDownload(bool disable = true);
+    public slots:
+        virtual void cancelDownload(bool disable = true);
 
-	protected:
-		virtual bool doLoad(bool syncCache);
-		virtual bool doSave(bool syncCache);
-		virtual bool doSave(bool syncCache, KCal::Incidence* i)  { return AlarmResource::doSave(syncCache, i); }
-		virtual void doClose();
-		virtual void enableResource(bool enable);
+    protected:
+        virtual bool doLoad(bool syncCache);
+        virtual bool doSave(bool syncCache);
+        virtual bool doSave(bool syncCache, KCal::Incidence* i)  { return AlarmResource::doSave(syncCache, i); }
+        virtual void doClose();
+        virtual void enableResource(bool enable);
 
-	private slots:
-		void slotLoadJobResult(KJob*);
-		void slotSaveJobResult(KJob*);
-		void slotPercent(KJob*, unsigned long percent);
+    private slots:
+        void slotLoadJobResult(KJob*);
+        void slotSaveJobResult(KJob*);
+        void slotPercent(KJob*, unsigned long percent);
 
-	private:
-		void init();
-		// Inherited virtual methods which are not used by derived classes
-		using ResourceCalendar::doLoad;
-		virtual bool doSave() { return false; }
-		virtual bool doSave(KCal::Incidence*) { return false; }
+    private:
+        void init();
+        // Inherited virtual methods which are not used by derived classes
+        using ResourceCalendar::doLoad;
+        virtual bool doSave() { return false; }
+        virtual bool doSave(KCal::Incidence*) { return false; }
 
-		KUrl                  mDownloadUrl;
-		KUrl                  mUploadUrl;
-		KIO::FileCopyJob*     mDownloadJob;
-		KIO::FileCopyJob*     mUploadJob;
-		KCal::Incidence::List mChangedIncidences;
-		KUrl                  mNewDownloadUrl;      // new download URL to be applied by applyReconfig()
-		KUrl                  mNewUploadUrl;        // new upload URL to be applied by applyReconfig()
-		bool                  mShowProgress;        // emit download progress signals
-		bool                  mUseCacheFile;        // true to initially use cache until file can be downloaded
-		bool                  mRemoteReadOnly;      // the remote file is read-only
+        KUrl                  mDownloadUrl;
+        KUrl                  mUploadUrl;
+        KIO::FileCopyJob*     mDownloadJob;
+        KIO::FileCopyJob*     mUploadJob;
+        KCal::Incidence::List mChangedIncidences;
+        KUrl                  mNewDownloadUrl;      // new download URL to be applied by applyReconfig()
+        KUrl                  mNewUploadUrl;        // new upload URL to be applied by applyReconfig()
+        bool                  mShowProgress;        // emit download progress signals
+        bool                  mUseCacheFile;        // true to initially use cache until file can be downloaded
+        bool                  mRemoteReadOnly;      // the remote file is read-only
 };
 
 #endif
+
+// vim: et sw=4:

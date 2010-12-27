@@ -32,16 +32,18 @@ class QHBoxLayout;
  */
 class ItemBox : public KHBox
 {
-		Q_OBJECT
-	public:
-		/** Constructor.
-		 *  @param parent The parent object of this widget.
-		 */
-		explicit ItemBox(QWidget* parent = 0);
-		void leftAlign();
+        Q_OBJECT
+    public:
+        /** Constructor.
+         *  @param parent The parent object of this widget.
+         */
+        explicit ItemBox(QWidget* parent = 0);
+        void leftAlign();
 
-	private:
-		QHBoxLayout* mLayout;
+    private:
+        QHBoxLayout* mLayout;
 };
 
 #endif // ITEMBOX_H
+
+// vim: et sw=4:

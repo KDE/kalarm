@@ -32,100 +32,102 @@
 
 void TemplateListFilterModel::setTypeFilter(KAEvent::Actions type)
 {
-	if (type != mTypeFilter)
-	{
-		mTypeFilter = type;
-		invalidateFilter();
-	}
+    if (type != mTypeFilter)
+    {
+        mTypeFilter = type;
+        invalidateFilter();
+    }
 }
 
 void TemplateListFilterModel::setTypesEnabled(KAEvent::Actions type)
 {
-	if (type != mTypesEnabled)
-	{
-		mTypesEnabled = type;
-		invalidateFilter();
-	}
+    if (type != mTypesEnabled)
+    {
+        mTypesEnabled = type;
+        invalidateFilter();
+    }
 }
 
 bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
 {
-	QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0);
-	if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KAlarm::CalEvent::TEMPLATE)
-		return false;
-	if (mTypeFilter == KAEvent::ACT_ALL)
-		return true;
-	int type;
-	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
-	{
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
-		case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
-		case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
-		case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
-		default:                type = KAEvent::ACT_ALL;  break;
-	}
-	return type & mTypeFilter;
+    QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0);
+    if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KAlarm::CalEvent::TEMPLATE)
+        return false;
+    if (mTypeFilter == KAEvent::ACT_ALL)
+        return true;
+    int type;
+    switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
+    {
+        case KAEvent::MESSAGE:
+        case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
+        case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
+        case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
+        case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
+        default:                type = KAEvent::ACT_ALL;  break;
+    }
+    return type & mTypeFilter;
 }
 
 bool TemplateListFilterModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
 {
-	return sourceCol == EventListModel::TemplateNameColumn
-	   ||  sourceCol == EventListModel::TypeColumn;
+    return sourceCol == EventListModel::TemplateNameColumn
+       ||  sourceCol == EventListModel::TypeColumn;
 }
 
 QModelIndex TemplateListFilterModel::mapFromSource(const QModelIndex& sourceIndex) const
 {
-	int proxyColumn;
-	switch (sourceIndex.column())
-	{
-		case EventListModel::TypeColumn:
-			proxyColumn = TypeColumn;
-			break;
-		case EventListModel::TemplateNameColumn:
-			proxyColumn = TemplateNameColumn;
-			break;
-		default:
-			return QModelIndex();
-	}
-	QModelIndex ix = EventListFilterModel::mapFromSource(sourceIndex);
-	return index(ix.row(), proxyColumn, ix.parent());
+    int proxyColumn;
+    switch (sourceIndex.column())
+    {
+        case EventListModel::TypeColumn:
+            proxyColumn = TypeColumn;
+            break;
+        case EventListModel::TemplateNameColumn:
+            proxyColumn = TemplateNameColumn;
+            break;
+        default:
+            return QModelIndex();
+    }
+    QModelIndex ix = EventListFilterModel::mapFromSource(sourceIndex);
+    return index(ix.row(), proxyColumn, ix.parent());
 }
 
 QModelIndex TemplateListFilterModel::mapToSource(const QModelIndex& proxyIndex) const
 {
-	int sourceColumn;
-	switch (proxyIndex.column())
-	{
-		case TypeColumn:
-			sourceColumn = EventListModel::TypeColumn;
-			break;
-		case TemplateNameColumn:
-			sourceColumn = EventListModel::TemplateNameColumn;
-			break;
-		default:
-			return QModelIndex();
-	}
-	return EventListFilterModel::mapToSource(proxyIndex);
+    int sourceColumn;
+    switch (proxyIndex.column())
+    {
+        case TypeColumn:
+            sourceColumn = EventListModel::TypeColumn;
+            break;
+        case TemplateNameColumn:
+            sourceColumn = EventListModel::TemplateNameColumn;
+            break;
+        default:
+            return QModelIndex();
+    }
+    return EventListFilterModel::mapToSource(proxyIndex);
 }
 
 Qt::ItemFlags TemplateListFilterModel::flags(const QModelIndex& index) const
 {
-	QModelIndex sourceIndex = mapToSource(index);
-	Qt::ItemFlags f = sourceModel()->flags(sourceIndex);
-	if (mTypesEnabled == KAEvent::ACT_ALL)
-		return f;
-	int type;
-	switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
-	{
-		case KAEvent::MESSAGE:
-		case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
-		case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
-		case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
-		case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
-		default:                type = KAEvent::ACT_ALL;  break;
-	}
-	if (!(type & mTypesEnabled))
-		f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
-	return f;
+    QModelIndex sourceIndex = mapToSource(index);
+    Qt::ItemFlags f = sourceModel()->flags(sourceIndex);
+    if (mTypesEnabled == KAEvent::ACT_ALL)
+        return f;
+    int type;
+    switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
+    {
+        case KAEvent::MESSAGE:
+        case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
+        case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
+        case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
+        case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
+        default:                type = KAEvent::ACT_ALL;  break;
+    }
+    if (!(type & mTypesEnabled))
+        f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
+    return f;
 }
+
+// vim: et sw=4:

@@ -37,52 +37,54 @@
 /** A KAlarm calendar resource stored as a local file. */
 class KALARM_RESOURCES_EXPORT KAResourceLocal : public AlarmResource
 {
-		Q_OBJECT
-	public:
-		KAResourceLocal();
-		/** Create resource from configuration information stored in a KConfig object. */
-		explicit KAResourceLocal(const KConfigGroup&);
-		/** Create resource for file named @a fileName. */
-		KAResourceLocal(KAlarm::CalEvent::Type, const QString& fileName);
-		virtual ~KAResourceLocal();
+        Q_OBJECT
+    public:
+        KAResourceLocal();
+        /** Create resource from configuration information stored in a KConfig object. */
+        explicit KAResourceLocal(const KConfigGroup&);
+        /** Create resource for file named @a fileName. */
+        KAResourceLocal(KAlarm::CalEvent::Type, const QString& fileName);
+        virtual ~KAResourceLocal();
 
-		QString      fileName() const;
-		bool         setFileName(const KUrl&);
-		virtual QString     displayType() const;
-		virtual QString     displayLocation() const;
-		virtual QStringList location() const   { return QStringList(fileName()); }
-		virtual bool        setLocation(const QString& fileName, const QString& = QString());
-		virtual bool readOnly() const;
-		virtual void writeConfig(KConfigGroup&);
-		virtual void startReconfig();
-		virtual void applyReconfig();
+        QString      fileName() const;
+        bool         setFileName(const KUrl&);
+        virtual QString     displayType() const;
+        virtual QString     displayLocation() const;
+        virtual QStringList location() const   { return QStringList(fileName()); }
+        virtual bool        setLocation(const QString& fileName, const QString& = QString());
+        virtual bool readOnly() const;
+        virtual void writeConfig(KConfigGroup&);
+        virtual void startReconfig();
+        virtual void applyReconfig();
 
-		// Override unused virtual functions
-		virtual KCal::Todo::List rawTodos(KCal::TodoSortField = KCal::TodoSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Todo::List(); }
-		virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
+        // Override unused virtual functions
+        virtual KCal::Todo::List rawTodos(KCal::TodoSortField = KCal::TodoSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Todo::List(); }
+        virtual KCal::Journal::List rawJournals(KCal::JournalSortField = KCal::JournalSortUnsorted, KCal::SortDirection = KCal::SortDirectionAscending)  { return KCal::Journal::List(); }
 
-	protected:
-		virtual bool doLoad(bool syncCache);
-		virtual bool doSave(bool syncCache);
-		virtual bool doSave(bool syncCache, KCal::Incidence* i)  { return AlarmResource::doSave(syncCache, i); }
-		QDateTime    readLastModified();
-		virtual void enableResource(bool enable);
+    protected:
+        virtual bool doLoad(bool syncCache);
+        virtual bool doSave(bool syncCache);
+        virtual bool doSave(bool syncCache, KCal::Incidence* i)  { return AlarmResource::doSave(syncCache, i); }
+        QDateTime    readLastModified();
+        virtual void enableResource(bool enable);
 
-	protected slots:
-		void  reload();
+    protected slots:
+        void  reload();
 
-	private:
-		void  init();
-		bool  loadFile();
-		// Inherited virtual methods which should not be used by derived classes.
-		using ResourceCalendar::doLoad;
-		using ResourceCalendar::doSave;
+    private:
+        void  init();
+        bool  loadFile();
+        // Inherited virtual methods which should not be used by derived classes.
+        using ResourceCalendar::doLoad;
+        using ResourceCalendar::doSave;
 
-		KUrl        mURL;
-		KUrl        mNewURL;    // new file name to be applied by applyReconfig()
-		KDirWatch   mDirWatch;
-		QDateTime   mLastModified;
-		bool        mFileReadOnly;  // calendar file is a read-only file
+        KUrl        mURL;
+        KUrl        mNewURL;    // new file name to be applied by applyReconfig()
+        KDirWatch   mDirWatch;
+        QDateTime   mLastModified;
+        bool        mFileReadOnly;  // calendar file is a read-only file
 };
 
 #endif
+
+// vim: et sw=4:

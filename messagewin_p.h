@@ -30,43 +30,45 @@ namespace Phonon { class MediaObject; }
 
 class AudioThread : public QThread
 {
-		Q_OBJECT
-	public:
-		AudioThread(QObject* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, bool repeat)
-			: QThread(parent),
-			  mFile(audioFile),
-			  mVolume(volume),
-			  mFadeVolume(fadeVolume),
-			  mFadeSeconds(fadeSeconds),
-			  mRepeat(repeat),
-			  mAudioObject(0)
-		{}
-		~AudioThread();
-		void    stop(bool wait = false);
-		QString error() const;
+        Q_OBJECT
+    public:
+        AudioThread(QObject* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, bool repeat)
+            : QThread(parent),
+              mFile(audioFile),
+              mVolume(volume),
+              mFadeVolume(fadeVolume),
+              mFadeSeconds(fadeSeconds),
+              mRepeat(repeat),
+              mAudioObject(0)
+        {}
+        ~AudioThread();
+        void    stop(bool wait = false);
+        QString error() const;
 
-	signals:
-		void    readyToPlay();
+    signals:
+        void    readyToPlay();
 
-	protected:
-		virtual void run();
+    protected:
+        virtual void run();
 
-	private slots:
-		void    checkAudioPlay();
-		void    playStateChanged(Phonon::State);
-		void    stopPlay();
+    private slots:
+        void    checkAudioPlay();
+        void    playStateChanged(Phonon::State);
+        void    stopPlay();
 
-	private:
-		mutable QMutex       mMutex;
-		QString              mFile;
-		float                mVolume;
-		float                mFadeVolume;
-		int                  mFadeSeconds;
-		bool                 mRepeat;
-		Phonon::MediaObject* mAudioObject;
-		Phonon::Path         mPath;
-		QString              mError;
-		bool                 mPlayedOnce;      // the sound file has started playing at least once
+    private:
+        mutable QMutex       mMutex;
+        QString              mFile;
+        float                mVolume;
+        float                mFadeVolume;
+        int                  mFadeSeconds;
+        bool                 mRepeat;
+        Phonon::MediaObject* mAudioObject;
+        Phonon::Path         mPath;
+        QString              mError;
+        bool                 mPlayedOnce;      // the sound file has started playing at least once
 };
 
 #endif // MESSAGEWIN_P_H
+
+// vim: et sw=4:

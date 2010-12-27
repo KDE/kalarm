@@ -61,7 +61,7 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
                                     { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
 
   private:
-        BirthdayModel(Akonadi::ChangeRecorder* recorder);
+        explicit BirthdayModel(Akonadi::ChangeRecorder* recorder);
 
         static BirthdayModel* mInstance;
 };
@@ -71,7 +71,7 @@ class BirthdaySortModel : public QSortFilterProxyModel
 {
         Q_OBJECT
     public:
-        BirthdaySortModel(QObject* parent = 0);
+        explicit BirthdaySortModel(QObject* parent = 0);
 
         void setPrefixSuffix(const QString& prefix, const QString& suffix);
 

@@ -28,37 +28,39 @@
  *  The PackedLayout class packs a group of widgets into rows.
  *  The widgets are arranged according to the total width available.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class PackedLayout : public QLayout
 {
-	public:
-		/** Constructor.
-		 *  @param parent the parent widget
-		 *  @param alignment how to align the widgets horizontally within the layout
-		 */
-		PackedLayout(QWidget* parent, Qt::Alignment alignment);
-		explicit PackedLayout(Qt::Alignment alignment);
-		~PackedLayout();
-		// Override QLayout methods
-		virtual bool hasHeightForWidth() const  { return true; }
-		virtual int heightForWidth(int w) const;
-		virtual int count() const  { return mItems.count(); }
-		virtual void addItem(QLayoutItem* item);
-		virtual QLayoutItem* itemAt(int index) const;
-		virtual QLayoutItem* takeAt(int index);
-		virtual void setGeometry(const QRect& r);
-		virtual QSize sizeHint() const  { return minimumSize(); }
-		virtual QSize minimumSize() const;
-		virtual Qt::Orientations expandingDirections() const  { return Qt::Vertical | Qt::Horizontal; }
-		virtual void invalidate()  { mWidthCached = mHeightCached = false; }
+    public:
+        /** Constructor.
+         *  @param parent the parent widget
+         *  @param alignment how to align the widgets horizontally within the layout
+         */
+        PackedLayout(QWidget* parent, Qt::Alignment alignment);
+        explicit PackedLayout(Qt::Alignment alignment);
+        ~PackedLayout();
+        // Override QLayout methods
+        virtual bool hasHeightForWidth() const  { return true; }
+        virtual int heightForWidth(int w) const;
+        virtual int count() const  { return mItems.count(); }
+        virtual void addItem(QLayoutItem* item);
+        virtual QLayoutItem* itemAt(int index) const;
+        virtual QLayoutItem* takeAt(int index);
+        virtual void setGeometry(const QRect& r);
+        virtual QSize sizeHint() const  { return minimumSize(); }
+        virtual QSize minimumSize() const;
+        virtual Qt::Orientations expandingDirections() const  { return Qt::Vertical | Qt::Horizontal; }
+        virtual void invalidate()  { mWidthCached = mHeightCached = false; }
 
-	private:
-		int arrange(const QRect&, bool set) const;
-		QList<QLayoutItem*> mItems;
-		Qt::Alignment mAlignment;
-		mutable int mWidthCached;
-		mutable int mHeightCached;
+    private:
+        int arrange(const QRect&, bool set) const;
+        QList<QLayoutItem*> mItems;
+        Qt::Alignment mAlignment;
+        mutable int mWidthCached;
+        mutable int mHeightCached;
 };
 
 #endif // PACKEDLAYOUT_H
+
+// vim: et sw=4:

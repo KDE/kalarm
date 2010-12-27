@@ -34,32 +34,34 @@
  */
 class StartOfDayTimer : public DailyTimer
 {
-		Q_OBJECT
-	public:
-		virtual ~StartOfDayTimer()  { }
-		/** Connect to the timer signal.
-		 *  @param receiver Receiving object.
-		 *  @param member Slot to activate.
-		 */
-		static void connect(QObject* receiver, const char* member)
-		                   { instance()->connecT(receiver, member); }
-		/** Disconnect from the timer signal.
-		 *  @param receiver Receiving object.
-		 *  @param member Slot to disconnect. If null, all slots belonging to
-		 *                @p receiver will be disconnected.
-		 */
-		static void disconnect(QObject* receiver, const char* member = 0)
-		                   { if (mInstance) mInstance->disconnecT(receiver, member); }
+        Q_OBJECT
+    public:
+        virtual ~StartOfDayTimer()  { }
+        /** Connect to the timer signal.
+         *  @param receiver Receiving object.
+         *  @param member Slot to activate.
+         */
+        static void connect(QObject* receiver, const char* member)
+                           { instance()->connecT(receiver, member); }
+        /** Disconnect from the timer signal.
+         *  @param receiver Receiving object.
+         *  @param member Slot to disconnect. If null, all slots belonging to
+         *                @p receiver will be disconnected.
+         */
+        static void disconnect(QObject* receiver, const char* member = 0)
+                           { if (mInstance) mInstance->disconnecT(receiver, member); }
 
-	protected:
-		StartOfDayTimer();
-		static StartOfDayTimer* instance();
+    protected:
+        StartOfDayTimer();
+        static StartOfDayTimer* instance();
 
-	private slots:
-		void startOfDayChanged();
+    private slots:
+        void startOfDayChanged();
 
-	private:
-		static StartOfDayTimer* mInstance;    // exists solely to receive signals
+    private:
+        static StartOfDayTimer* mInstance;    // exists solely to receive signals
 };
 
 #endif // STARTDAYTIMER_H
+
+// vim: et sw=4:

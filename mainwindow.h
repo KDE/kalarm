@@ -23,9 +23,7 @@
 
 /** @file mainwindow.h - main application window */
 
-#ifdef USE_AKONADI
-#include <akonadi/item.h>
-#else
+#ifndef USE_AKONADI
 #include "alarmresources.h"
 #endif
 #include "editdlg.h"
@@ -34,6 +32,7 @@
 #include "undo.h"
 
 #ifdef USE_AKONADI
+#include <akonadi/item.h>
 #include <kcalcore/calendar.h>
 #else
 #include <kcal/calendar.h>
@@ -71,171 +70,172 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
 class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserver
 #endif
 {
-		Q_OBJECT
+        Q_OBJECT
 
-	public:
-		static MainWindow* create(bool restored = false);
-		~MainWindow();
-		bool               isTrayParent() const;
-		bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
-		bool               showingArchived() const      { return mShowArchived; }
+    public:
+        static MainWindow* create(bool restored = false);
+        ~MainWindow();
+        bool               isTrayParent() const;
+        bool               isHiddenTrayParent() const   { return mHiddenTrayParent; }
+        bool               showingArchived() const      { return mShowArchived; }
 #ifdef USE_AKONADI
-		void               selectEvent(Akonadi::Item::Id);
-		void               editAlarm(EditAlarmDlg*, const KAEvent&);
+        void               selectEvent(Akonadi::Item::Id);
+        void               editAlarm(EditAlarmDlg*, const KAEvent&);
 #else
-		void               selectEvent(const QString& eventID);
-		void               editAlarm(EditAlarmDlg*, const KAEvent&, AlarmResource*);
+        void               selectEvent(const QString& eventID);
+        void               editAlarm(EditAlarmDlg*, const KAEvent&, AlarmResource*);
 #endif
-		virtual bool       eventFilter(QObject*, QEvent*);
+        virtual bool       eventFilter(QObject*, QEvent*);
 
-		static void        refresh();
-		static void        executeDragEnterEvent(QDragEnterEvent*);
-		static void        executeDropEvent(MainWindow*, QDropEvent*);
-		static void        closeAll();
-		static MainWindow* toggleWindow(MainWindow*);
-		static MainWindow* mainMainWindow();
-		static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? 0 : mWindowList[0]; }
-		static int         count()            { return mWindowList.count(); }
+        static void        refresh();
+        static void        executeDragEnterEvent(QDragEnterEvent*);
+        static void        executeDropEvent(MainWindow*, QDropEvent*);
+        static void        closeAll();
+        static MainWindow* toggleWindow(MainWindow*);
+        static MainWindow* mainMainWindow();
+        static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? 0 : mWindowList[0]; }
+        static int         count()            { return mWindowList.count(); }
 
-		static QString i18n_a_ShowAlarmTimes();       // text of 'Show Alarm Times' action, with 'A' shortcut
-		static QString i18n_chk_ShowAlarmTime();      // text of 'Show alarm time' checkbox
-		static QString i18n_o_ShowTimeToAlarms();     // text of 'Show Time to Alarms' action, with 'O' shortcut
-		static QString i18n_chk_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox
+        static QString i18n_a_ShowAlarmTimes();       // text of 'Show Alarm Times' action, with 'A' shortcut
+        static QString i18n_chk_ShowAlarmTime();      // text of 'Show alarm time' checkbox
+        static QString i18n_o_ShowTimeToAlarms();     // text of 'Show Time to Alarms' action, with 'O' shortcut
+        static QString i18n_chk_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox
 
-	public slots:
-		virtual void   show();
+    public slots:
+        virtual void   show();
 
-	protected:
-		virtual void   resizeEvent(QResizeEvent*);
-		virtual void   showEvent(QShowEvent*);
-		virtual void   hideEvent(QHideEvent*);
-		virtual void   closeEvent(QCloseEvent*);
-		virtual void   dragEnterEvent(QDragEnterEvent* e)  { executeDragEnterEvent(e); }
-		virtual void   dropEvent(QDropEvent*);
-		virtual void   saveProperties(KConfigGroup&);
-		virtual void   readProperties(const KConfigGroup&);
+    protected:
+        virtual void   resizeEvent(QResizeEvent*);
+        virtual void   showEvent(QShowEvent*);
+        virtual void   hideEvent(QHideEvent*);
+        virtual void   closeEvent(QCloseEvent*);
+        virtual void   dragEnterEvent(QDragEnterEvent* e)  { executeDragEnterEvent(e); }
+        virtual void   dropEvent(QDropEvent*);
+        virtual void   saveProperties(KConfigGroup&);
+        virtual void   readProperties(const KConfigGroup&);
 
-	private slots:
-		void           slotNew(EditAlarmDlg::Type);
-		void           slotNewDisplay()   { slotNew(EditAlarmDlg::DISPLAY); }
-		void           slotNewCommand()   { slotNew(EditAlarmDlg::COMMAND); }
-		void           slotNewEmail()     { slotNew(EditAlarmDlg::EMAIL); }
-		void           slotNewAudio()     { slotNew(EditAlarmDlg::AUDIO); }
-		void           slotNewFromTemplate(const KAEvent*);
-		void           slotNewTemplate();
-		void           slotCopy();
-		void           slotModify();
-		void           slotDeleteIf()     { slotDelete(false); }
-		void           slotDeleteForce()  { slotDelete(true); }
-		void           slotReactivate();
-		void           slotEnable();
-		void           slotToggleTrayIcon();
-		void           slotRefreshAlarms();
-		void           slotImportAlarms();
-		void           slotExportAlarms();
-		void           slotBirthdays();
-		void           slotTemplates();
-		void           slotTemplatesEnd();
-		void           slotPreferences();
-		void           slotConfigureKeys();
-		void           slotConfigureToolbar();
-		void           slotNewToolbarConfig();
-		void           slotQuit();
-		void           slotSelection();
-		void           slotContextMenuRequested(const QPoint& globalPos);
-		void           slotShowTime();
-		void           slotShowTimeTo();
-		void           slotShowArchived();
-		void           slotSpreadWindowsShortcut();
-		void           updateKeepArchived(int days);
-		void           slotUndo();
-		void           slotUndoItem(QAction* id);
-		void           slotRedo();
-		void           slotRedoItem(QAction* id);
-		void           slotInitUndoMenu();
-		void           slotInitRedoMenu();
-		void           slotUndoStatus(const QString&, const QString&);
-		void           slotFindActive(bool);
-		void           updateTrayIconAction();
-		void           slotToggleResourceSelector();
-		void           slotCalendarStatusChanged();
-		void           resourcesResized();
-		void           showErrorMessage(const QString&);
-		void           editAlarmOk();
-		void           editAlarmDeleted(QObject*);
+    private slots:
+        void           slotNew(EditAlarmDlg::Type);
+        void           slotNewDisplay()   { slotNew(EditAlarmDlg::DISPLAY); }
+        void           slotNewCommand()   { slotNew(EditAlarmDlg::COMMAND); }
+        void           slotNewEmail()     { slotNew(EditAlarmDlg::EMAIL); }
+        void           slotNewAudio()     { slotNew(EditAlarmDlg::AUDIO); }
+        void           slotNewFromTemplate(const KAEvent*);
+        void           slotNewTemplate();
+        void           slotCopy();
+        void           slotModify();
+        void           slotDeleteIf()     { slotDelete(false); }
+        void           slotDeleteForce()  { slotDelete(true); }
+        void           slotReactivate();
+        void           slotEnable();
+        void           slotToggleTrayIcon();
+        void           slotRefreshAlarms();
+        void           slotImportAlarms();
+        void           slotExportAlarms();
+        void           slotBirthdays();
+        void           slotTemplates();
+        void           slotTemplatesEnd();
+        void           slotPreferences();
+        void           slotConfigureKeys();
+        void           slotConfigureToolbar();
+        void           slotNewToolbarConfig();
+        void           slotQuit();
+        void           slotSelection();
+        void           slotContextMenuRequested(const QPoint& globalPos);
+        void           slotShowTime();
+        void           slotShowTimeTo();
+        void           slotShowArchived();
+        void           slotSpreadWindowsShortcut();
+        void           updateKeepArchived(int days);
+        void           slotUndo();
+        void           slotUndoItem(QAction* id);
+        void           slotRedo();
+        void           slotRedoItem(QAction* id);
+        void           slotInitUndoMenu();
+        void           slotInitRedoMenu();
+        void           slotUndoStatus(const QString&, const QString&);
+        void           slotFindActive(bool);
+        void           updateTrayIconAction();
+        void           slotToggleResourceSelector();
+        void           slotCalendarStatusChanged();
+        void           resourcesResized();
+        void           showErrorMessage(const QString&);
+        void           editAlarmOk();
+        void           editAlarmDeleted(QObject*);
 
-	private:
-		typedef QList<MainWindow*> WindowList;
+    private:
+        typedef QList<MainWindow*> WindowList;
 
-		explicit MainWindow(bool restored);
-		void           createListView(bool recreate);
-		void           initActions();
-		void           initCalendarResources();
-		void           selectionCleared();
-		void           setEnableText(bool enable);
-		void           initUndoMenu(QMenu*, Undo::Type);
-		void           slotDelete(bool force);
-		static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
-		static void    setUpdateTimer();
-		static void    enableTemplateMenuItem(bool);
+        explicit MainWindow(bool restored);
+        void           createListView(bool recreate);
+        void           initActions();
+        void           initCalendarResources();
+        void           selectionCleared();
+        void           setEnableText(bool enable);
+        void           initUndoMenu(QMenu*, Undo::Type);
+        void           slotDelete(bool force);
+        static KAEvent::Action  getDropAction(QDropEvent*, QString& text);
+        static void    setUpdateTimer();
+        static void    enableTemplateMenuItem(bool);
 
-		static WindowList    mWindowList;   // active main windows
-		static TemplateDlg*  mTemplateDlg;  // the one and only template dialog
+        static WindowList    mWindowList;   // active main windows
+        static TemplateDlg*  mTemplateDlg;  // the one and only template dialog
 
 #ifdef USE_AKONADI
-		AlarmListModel*      mListFilterModel;
+        AlarmListModel*      mListFilterModel;
 #else
-		AlarmListFilterModel* mListFilterModel;
+        AlarmListFilterModel* mListFilterModel;
 #endif
-		AlarmListView*       mListView;
-		ResourceSelector*    mResourceSelector;    // resource selector widget
-		QSplitter*           mSplitter;            // splits window into list and resource selector
+        AlarmListView*       mListView;
+        ResourceSelector*    mResourceSelector;    // resource selector widget
+        QSplitter*           mSplitter;            // splits window into list and resource selector
 #ifndef USE_AKONADI
-		AlarmResources*      mAlarmResources;      // calendar resources to use for this window
+        AlarmResources*      mAlarmResources;      // calendar resources to use for this window
 #endif
-		QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
-		KToggleAction*       mActionToggleResourceSel;
-		KAction*             mActionImportAlarms;
-		KAction*             mActionExportAlarms;
-		KAction*             mActionExport;
-		KAction*             mActionImportBirthdays;
-		KAction*             mActionTemplates;
-		NewAlarmAction*      mActionNew;
-		KAction*             mActionNewDisplay;
-		KAction*             mActionNewCommand;
-		KAction*             mActionNewEmail;
-		KAction*             mActionNewAudio;
-		TemplateMenuAction*  mActionNewFromTemplate;
-		KAction*             mActionCreateTemplate;
-		KAction*             mActionCopy;
-		KAction*             mActionModify;
-		KAction*             mActionDelete;
-		KAction*             mActionDeleteForce;
-		KAction*             mActionReactivate;
-		KAction*             mActionEnable;
-		KAction*             mActionFindNext;
-		KAction*             mActionFindPrev;
-		KToolBarPopupAction* mActionUndo;
-		KToolBarPopupAction* mActionRedo;
-		KToggleAction*       mActionToggleTrayIcon;
-		KToggleAction*       mActionShowTime;
-		KToggleAction*       mActionShowTimeTo;
-		KToggleAction*       mActionShowArchived;
-		KToggleAction*       mActionSpreadWindows;
-		KMenu*               mActionsMenu;
-		KMenu*               mContextMenu;
-		QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
-		int                  mResourcesWidth;      // width of resource selector widget
-		bool                 mHiddenTrayParent;    // on session restoration, hide this window
-		bool                 mShowResources;       // show resource selector
-		bool                 mShowArchived;        // include archived alarms in the displayed list
-		bool                 mShowTime;            // show alarm times
-		bool                 mShowTimeTo;          // show time-to-alarms
-		bool                 mShown;               // true once the window has been displayed
-		bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
-		bool                 mMenuError;           // error occurred creating menus: need to show error message
-		bool                 mResizing;            // window resize is in progress
+        QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
+        KToggleAction*       mActionToggleResourceSel;
+        KAction*             mActionImportAlarms;
+        KAction*             mActionExportAlarms;
+        KAction*             mActionExport;
+        KAction*             mActionImportBirthdays;
+        KAction*             mActionTemplates;
+        NewAlarmAction*      mActionNew;
+        KAction*             mActionNewDisplay;
+        KAction*             mActionNewCommand;
+        KAction*             mActionNewEmail;
+        KAction*             mActionNewAudio;
+        TemplateMenuAction*  mActionNewFromTemplate;
+        KAction*             mActionCreateTemplate;
+        KAction*             mActionCopy;
+        KAction*             mActionModify;
+        KAction*             mActionDelete;
+        KAction*             mActionDeleteForce;
+        KAction*             mActionReactivate;
+        KAction*             mActionEnable;
+        KAction*             mActionFindNext;
+        KAction*             mActionFindPrev;
+        KToolBarPopupAction* mActionUndo;
+        KToolBarPopupAction* mActionRedo;
+        KToggleAction*       mActionToggleTrayIcon;
+        KToggleAction*       mActionShowTime;
+        KToggleAction*       mActionShowTimeTo;
+        KToggleAction*       mActionShowArchived;
+        KToggleAction*       mActionSpreadWindows;
+        KMenu*               mActionsMenu;
+        KMenu*               mContextMenu;
+        QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
+        int                  mResourcesWidth;      // width of resource selector widget
+        bool                 mHiddenTrayParent;    // on session restoration, hide this window
+        bool                 mShowResources;       // show resource selector
+        bool                 mShowArchived;        // include archived alarms in the displayed list
+        bool                 mShowTime;            // show alarm times
+        bool                 mShowTimeTo;          // show time-to-alarms
+        bool                 mShown;               // true once the window has been displayed
+        bool                 mActionEnableEnable;  // Enable/Disable action is set to "Enable"
+        bool                 mMenuError;           // error occurred creating menus: need to show error message
+        bool                 mResizing;            // window resize is in progress
 };
 
 #endif // MAINWINDOW_H
 
+// vim: et sw=4:

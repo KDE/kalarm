@@ -131,119 +131,119 @@ QString MainWindow::i18n_chk_ShowTimeToAlarm()     { return i18nc("@option:check
 */
 MainWindow* MainWindow::create(bool restored)
 {
-	theApp()->checkCalendar();    // ensure calendar is open
-	return new MainWindow(restored);
+    theApp()->checkCalendar();    // ensure calendar is open
+    return new MainWindow(restored);
 }
 
 MainWindow::MainWindow(bool restored)
-	: MainWindowBase(0, Qt::WindowContextHelpButtonHint),
-	  mResourcesWidth(-1),
-	  mHiddenTrayParent(false),
-	  mShown(false),
-	  mResizing(false)
+    : MainWindowBase(0, Qt::WindowContextHelpButtonHint),
+      mResourcesWidth(-1),
+      mHiddenTrayParent(false),
+      mShown(false),
+      mResizing(false)
 {
-	kDebug();
-	setAttribute(Qt::WA_DeleteOnClose);
-	setWindowModality(Qt::WindowModal);
-	setObjectName("MainWin");    // used by LikeBack
-	setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
-	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
-	mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
-	mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);
-	mShowTime      = config.readEntry(SHOW_TIME_KEY, true);
-	mShowTimeTo    = config.readEntry(SHOW_TIME_TO_KEY, false);
-	if (!restored)
-	{
-		KConfigGroup wconfig(KGlobal::config(), WINDOW_NAME);
-		mResourcesWidth = wconfig.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
-	}
+    kDebug();
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowModality(Qt::WindowModal);
+    setObjectName("MainWin");    // used by LikeBack
+    setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
+    KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+    mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
+    mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);
+    mShowTime      = config.readEntry(SHOW_TIME_KEY, true);
+    mShowTimeTo    = config.readEntry(SHOW_TIME_TO_KEY, false);
+    if (!restored)
+    {
+        KConfigGroup wconfig(KGlobal::config(), WINDOW_NAME);
+        mResourcesWidth = wconfig.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
+    }
 
-	setAcceptDrops(true);         // allow drag-and-drop onto this window
-	if (!mShowTimeTo)
-		mShowTime = true;     // ensure at least one time column is visible
+    setAcceptDrops(true);         // allow drag-and-drop onto this window
+    if (!mShowTimeTo)
+        mShowTime = true;     // ensure at least one time column is visible
 
-	mSplitter = new QSplitter(Qt::Horizontal, this);
-	mSplitter->setChildrenCollapsible(false);
-	mSplitter->installEventFilter(this);
-	setCentralWidget(mSplitter);
+    mSplitter = new QSplitter(Qt::Horizontal, this);
+    mSplitter->setChildrenCollapsible(false);
+    mSplitter->installEventFilter(this);
+    setCentralWidget(mSplitter);
 
-	// Create the calendar resource selector widget
+    // Create the calendar resource selector widget
 #ifdef USE_AKONADI
-	mResourceSelector = new ResourceSelector(mSplitter);
+    mResourceSelector = new ResourceSelector(mSplitter);
 #else
-	AlarmResources* resources = AlarmResources::instance();
-	mResourceSelector = new ResourceSelector(resources, mSplitter);
+    AlarmResources* resources = AlarmResources::instance();
+    mResourceSelector = new ResourceSelector(resources, mSplitter);
 #endif
-	mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
-	mSplitter->setStretchFactor(1, 1);
+    mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
+    mSplitter->setStretchFactor(1, 1);
 #ifndef USE_AKONADI
-	connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
+    connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
 #endif
 
-	// Create the alarm list widget
+    // Create the alarm list widget
 #ifdef USE_AKONADI
-	mListFilterModel = new AlarmListModel(this);
-	mListFilterModel->setEventTypeFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel = new AlarmListModel(this);
+    mListFilterModel->setEventTypeFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
 #else
-	mListFilterModel = new AlarmListFilterModel(EventListModel::alarms(), this);
-	mListFilterModel->setStatusFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel = new AlarmListFilterModel(EventListModel::alarms(), this);
+    mListFilterModel->setStatusFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
 #endif
-	mListView = new AlarmListView(WINDOW_NAME, mSplitter);
-	mListView->setModel(mListFilterModel);
-	mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+    mListView = new AlarmListView(WINDOW_NAME, mSplitter);
+    mListView->setModel(mListFilterModel);
+    mListView->selectTimeColumns(mShowTime, mShowTimeTo);
 #ifdef USE_AKONADI
-	mListView->sortByColumn(mShowTime ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
+    mListView->sortByColumn(mShowTime ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
 #else
-	mListView->sortByColumn(mShowTime ? EventListModel::TimeColumn : EventListModel::TimeToColumn, Qt::AscendingOrder);
+    mListView->sortByColumn(mShowTime ? EventListModel::TimeColumn : EventListModel::TimeToColumn, Qt::AscendingOrder);
 #endif
-	mListView->setItemDelegate(new AlarmListDelegate(mListView));
-	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
-	connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
+    mListView->setItemDelegate(new AlarmListDelegate(mListView));
+    connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
+    connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
 #ifdef USE_AKONADI
-	connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)),
-	                   SLOT(slotCalendarStatusChanged()));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)),
+                       SLOT(slotCalendarStatusChanged()));
 #else
-	connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
-	                   SLOT(slotCalendarStatusChanged()));
+    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
+                       SLOT(slotCalendarStatusChanged()));
 #endif
-	connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
-	mListView->installEventFilter(this);
-	initActions();
+    connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
+    mListView->installEventFilter(this);
+    initActions();
 
-	setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
-	mWindowList.append(this);
-	if (mWindowList.count() == 1)
-	{
-		// It's the first main window
-		if (theApp()->wantShowInSystemTray())
-			theApp()->displayTrayIcon(true, this);     // create system tray icon for run-in-system-tray mode
-		else if (theApp()->trayWindow())
-			theApp()->trayWindow()->setAssocMainWindow(this);    // associate this window with the system tray icon
-	}
-	slotCalendarStatusChanged();   // initialise action states now that window is registered
+    setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
+    mWindowList.append(this);
+    if (mWindowList.count() == 1)
+    {
+        // It's the first main window
+        if (theApp()->wantShowInSystemTray())
+            theApp()->displayTrayIcon(true, this);     // create system tray icon for run-in-system-tray mode
+        else if (theApp()->trayWindow())
+            theApp()->trayWindow()->setAssocMainWindow(this);    // associate this window with the system tray icon
+    }
+    slotCalendarStatusChanged();   // initialise action states now that window is registered
 }
 
 MainWindow::~MainWindow()
 {
-	kDebug();
-	bool trayParent = isTrayParent();   // must call before removing from window list
-	mWindowList.removeAt(mWindowList.indexOf(this));
+    kDebug();
+    bool trayParent = isTrayParent();   // must call before removing from window list
+    mWindowList.removeAt(mWindowList.indexOf(this));
 
-	// Prevent view updates during window destruction
-	delete mResourceSelector;
-	mResourceSelector = 0;
-	delete mListView;
-	mListView = 0;
+    // Prevent view updates during window destruction
+    delete mResourceSelector;
+    mResourceSelector = 0;
+    delete mListView;
+    mListView = 0;
 
-	if (theApp()->trayWindow())
-	{
-		if (trayParent)
-			delete theApp()->trayWindow();
-		else
-			theApp()->trayWindow()->removeWindow(this);
-	}
-	KGlobal::config()->sync();    // save any new window size to disc
-	theApp()->quitIf();
+    if (theApp()->trayWindow())
+    {
+        if (trayParent)
+            delete theApp()->trayWindow();
+        else
+            theApp()->trayWindow()->removeWindow(this);
+    }
+    KGlobal::config()->sync();    // save any new window size to disc
+    theApp()->quitIf();
 }
 
 /******************************************************************************
@@ -252,11 +252,11 @@ MainWindow::~MainWindow()
 */
 void MainWindow::saveProperties(KConfigGroup& config)
 {
-	config.writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
-	config.writeEntry("ShowArchived", mShowArchived);
-	config.writeEntry("ShowTime", mShowTime);
-	config.writeEntry("ShowTimeTo", mShowTimeTo);
-	config.writeEntry("ResourcesWidth", mResourceSelector->isHidden() ? 0 : mResourceSelector->width());
+    config.writeEntry("HiddenTrayParent", isTrayParent() && isHidden());
+    config.writeEntry("ShowArchived", mShowArchived);
+    config.writeEntry("ShowTime", mShowTime);
+    config.writeEntry("ShowTimeTo", mShowTimeTo);
+    config.writeEntry("ResourcesWidth", mResourceSelector->isHidden() ? 0 : mResourceSelector->width());
 }
 
 /******************************************************************************
@@ -266,12 +266,12 @@ void MainWindow::saveProperties(KConfigGroup& config)
 */
 void MainWindow::readProperties(const KConfigGroup& config)
 {
-	mHiddenTrayParent = config.readEntry("HiddenTrayParent", true);
-	mShowArchived     = config.readEntry("ShowArchived", false);
-	mShowTime         = config.readEntry("ShowTime", true);
-	mShowTimeTo       = config.readEntry("ShowTimeTo", false);
-	mResourcesWidth   = config.readEntry("ResourcesWidth", (int)0);
-	mShowResources    = (mResourcesWidth > 0);
+    mHiddenTrayParent = config.readEntry("HiddenTrayParent", true);
+    mShowArchived     = config.readEntry("ShowArchived", false);
+    mShowTime         = config.readEntry("ShowTime", true);
+    mShowTimeTo       = config.readEntry("ShowTimeTo", false);
+    mResourcesWidth   = config.readEntry("ResourcesWidth", (int)0);
+    mShowResources    = (mResourcesWidth > 0);
 }
 
 /******************************************************************************
@@ -281,17 +281,17 @@ void MainWindow::readProperties(const KConfigGroup& config)
 */
 MainWindow* MainWindow::mainMainWindow()
 {
-	MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
-	if (tray  &&  tray->isVisible())
-		return tray;
-	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
-		if (mWindowList[i]->isVisible())
-			return mWindowList[i];
-	if (tray)
-		return tray;
-	if (mWindowList.isEmpty())
-		return 0;
-	return mWindowList[0];
+    MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
+    if (tray  &&  tray->isVisible())
+        return tray;
+    for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+        if (mWindowList[i]->isVisible())
+            return mWindowList[i];
+    if (tray)
+        return tray;
+    if (mWindowList.isEmpty())
+        return 0;
+    return mWindowList[0];
 }
 
 /******************************************************************************
@@ -299,12 +299,12 @@ MainWindow* MainWindow::mainMainWindow()
 */
 bool MainWindow::isTrayParent() const
 {
-	TrayWindow* tray = theApp()->trayWindow();
-	if (!tray  ||  !KSystemTrayIcon::isSystemTrayAvailable())
-		return false;
-	if (tray->assocMainWindow() == this)
-		return true;
-	return mWindowList.count() == 1;
+    TrayWindow* tray = theApp()->trayWindow();
+    if (!tray  ||  !KSystemTrayIcon::isSystemTrayAvailable())
+        return false;
+    if (tray->assocMainWindow() == this)
+        return true;
+    return mWindowList.count() == 1;
 }
 
 /******************************************************************************
@@ -312,8 +312,8 @@ bool MainWindow::isTrayParent() const
 */
 void MainWindow::closeAll()
 {
-	while (!mWindowList.isEmpty())
-		delete mWindowList[0];    // N.B. the destructor removes the window from the list
+    while (!mWindowList.isEmpty())
+        delete mWindowList[0];    // N.B. the destructor removes the window from the list
 }
 
 /******************************************************************************
@@ -321,43 +321,43 @@ void MainWindow::closeAll()
 */
 bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 {
-	if (obj == mSplitter)
-	{
-		switch (e->type())
-		{
-			case QEvent::Resize:
-				// Don't change resources size while WINDOW is being resized.
-				// Resize event always occurs before Paint.
-				mResizing = true;
-				break;
-			case QEvent::Paint:
-				// Allow resources to be resized again
-				mResizing = false;
-				break;
-			default:
-				break;
-		}
-	}
-	else if (obj == mListView)
-	{
-		switch (e->type())
-		{
-			case QEvent::KeyPress:
-			{
-				QKeyEvent* ke = static_cast<QKeyEvent*>(e);
-				if (ke->key() == Qt::Key_Delete  &&  ke->modifiers() == Qt::ShiftModifier)
-				{
-					// Prevent Shift-Delete being processed by EventListDelegate
-					mActionDeleteForce->trigger();
-					return true;
-				}
-				break;
-			}
-			default:
-				break;
-		}
-	}
-	return false;
+    if (obj == mSplitter)
+    {
+        switch (e->type())
+        {
+            case QEvent::Resize:
+                // Don't change resources size while WINDOW is being resized.
+                // Resize event always occurs before Paint.
+                mResizing = true;
+                break;
+            case QEvent::Paint:
+                // Allow resources to be resized again
+                mResizing = false;
+                break;
+            default:
+                break;
+        }
+    }
+    else if (obj == mListView)
+    {
+        switch (e->type())
+        {
+            case QEvent::KeyPress:
+            {
+                QKeyEvent* ke = static_cast<QKeyEvent*>(e);
+                if (ke->key() == Qt::Key_Delete  &&  ke->modifiers() == Qt::ShiftModifier)
+                {
+                    // Prevent Shift-Delete being processed by EventListDelegate
+                    mActionDeleteForce->trigger();
+                    return true;
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    return false;
 }
 
 /******************************************************************************
@@ -368,35 +368,35 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 */
 void MainWindow::resizeEvent(QResizeEvent* re)
 {
-	// Save the window's new size only if it's the first main window
-	MainWindowBase::resizeEvent(re);
-	if (mResourcesWidth > 0)
-	{
-		QList<int> widths;
-		widths.append(mResourcesWidth);
-		widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
-		mSplitter->setSizes(widths);
-	}
+    // Save the window's new size only if it's the first main window
+    MainWindowBase::resizeEvent(re);
+    if (mResourcesWidth > 0)
+    {
+        QList<int> widths;
+        widths.append(mResourcesWidth);
+        widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
+        mSplitter->setSizes(widths);
+    }
 }
 
 void MainWindow::resourcesResized()
 {
-	if (!mShown  ||  mResizing)
-		return;
-	QList<int> widths = mSplitter->sizes();
-	if (widths.count() > 1)
-	{
-		mResourcesWidth = widths[0];
-		// Width is reported as non-zero when resource selector is
-		// actually invisible, so note a zero width in these circumstances.
-		if (mResourcesWidth <= 5)
-			mResourcesWidth = 0;
-		else if (mainMainWindow() == this)
-		{
-			KConfigGroup config(KGlobal::config(), WINDOW_NAME);
-			config.writeEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), mResourcesWidth);
-		}
-	}
+    if (!mShown  ||  mResizing)
+        return;
+    QList<int> widths = mSplitter->sizes();
+    if (widths.count() > 1)
+    {
+        mResourcesWidth = widths[0];
+        // Width is reported as non-zero when resource selector is
+        // actually invisible, so note a zero width in these circumstances.
+        if (mResourcesWidth <= 5)
+            mResourcesWidth = 0;
+        else if (mainMainWindow() == this)
+        {
+            KConfigGroup config(KGlobal::config(), WINDOW_NAME);
+            config.writeEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), mResourcesWidth);
+        }
+    }
 }
 
 /******************************************************************************
@@ -406,15 +406,15 @@ void MainWindow::resourcesResized()
 */
 void MainWindow::showEvent(QShowEvent* se)
 {
-	if (mResourcesWidth > 0)
-	{
-		QList<int> widths;
-		widths.append(mResourcesWidth);
-		widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
-		mSplitter->setSizes(widths);
-	}
-	MainWindowBase::showEvent(se);
-	mShown = true;
+    if (mResourcesWidth > 0)
+    {
+        QList<int> widths;
+        widths.append(mResourcesWidth);
+        widths.append(width() - mResourcesWidth - mSplitter->handleWidth());
+        mSplitter->setSizes(widths);
+    }
+    MainWindowBase::showEvent(se);
+    mShown = true;
 }
 
 /******************************************************************************
@@ -422,15 +422,15 @@ void MainWindow::showEvent(QShowEvent* se)
 */
 void MainWindow::show()
 {
-	MainWindowBase::show();
-	if (mMenuError)
-	{
-		// Show error message now that the main window has been displayed.
-		// Waiting until now lets the user easily associate the message with
-		// the main window which is faulty.
-		KMessageBox::error(this, i18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", QLatin1String(UI_FILE)));
-		mMenuError = false;
-	}
+    MainWindowBase::show();
+    if (mMenuError)
+    {
+        // Show error message now that the main window has been displayed.
+        // Waiting until now lets the user easily associate the message with
+        // the main window which is faulty.
+        KMessageBox::error(this, i18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", QLatin1String(UI_FILE)));
+        mMenuError = false;
+    }
 }
 
 /******************************************************************************
@@ -438,7 +438,7 @@ void MainWindow::show()
 */
 void MainWindow::hideEvent(QHideEvent* he)
 {
-	MainWindowBase::hideEvent(he);
+    MainWindowBase::hideEvent(he);
 }
 
 /******************************************************************************
@@ -446,208 +446,208 @@ void MainWindow::hideEvent(QHideEvent* he)
 */
 void MainWindow::initActions()
 {
-	KShortcut dummy;
-	KActionCollection* actions = actionCollection();
+    KShortcut dummy;
+    KActionCollection* actions = actionCollection();
 
-	mActionTemplates = new KAction(i18nc("@action", "&Templates..."), this);
-	actions->addAction(QLatin1String("templates"), mActionTemplates);
-	connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
+    mActionTemplates = new KAction(i18nc("@action", "&Templates..."), this);
+    actions->addAction(QLatin1String("templates"), mActionTemplates);
+    connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
 
-	mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
-	actions->addAction(QLatin1String("new"), mActionNew);
+    mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
+    actions->addAction(QLatin1String("new"), mActionNew);
 
-	mActionNewDisplay = mActionNew->displayAlarmAction();
-	actions->addAction(QLatin1String("newDisplay"), mActionNewDisplay);
-	mActionNewDisplay->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-	connect(mActionNewDisplay, SIGNAL(triggered(bool)), SLOT(slotNewDisplay()));
+    mActionNewDisplay = mActionNew->displayAlarmAction();
+    actions->addAction(QLatin1String("newDisplay"), mActionNewDisplay);
+    mActionNewDisplay->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    connect(mActionNewDisplay, SIGNAL(triggered(bool)), SLOT(slotNewDisplay()));
 
-	mActionNewCommand = mActionNew->commandAlarmAction();
-	actions->addAction(QLatin1String("newCommand"), mActionNewCommand);
-	mActionNewCommand->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-	connect(mActionNewCommand, SIGNAL(triggered(bool)), SLOT(slotNewCommand()));
+    mActionNewCommand = mActionNew->commandAlarmAction();
+    actions->addAction(QLatin1String("newCommand"), mActionNewCommand);
+    mActionNewCommand->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    connect(mActionNewCommand, SIGNAL(triggered(bool)), SLOT(slotNewCommand()));
 
-	mActionNewEmail = mActionNew->emailAlarmAction();
-	actions->addAction(QLatin1String("newEmail"), mActionNewEmail);
-	mActionNewEmail->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-	connect(mActionNewEmail, SIGNAL(triggered(bool)), SLOT(slotNewEmail()));
+    mActionNewEmail = mActionNew->emailAlarmAction();
+    actions->addAction(QLatin1String("newEmail"), mActionNewEmail);
+    mActionNewEmail->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    connect(mActionNewEmail, SIGNAL(triggered(bool)), SLOT(slotNewEmail()));
 
-	mActionNewAudio = mActionNew->audioAlarmAction();
-	actions->addAction(QLatin1String("newAudio"), mActionNewAudio);
-	mActionNewAudio->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-	connect(mActionNewAudio, SIGNAL(triggered(bool)), SLOT(slotNewAudio()));
+    mActionNewAudio = mActionNew->audioAlarmAction();
+    actions->addAction(QLatin1String("newAudio"), mActionNewAudio);
+    mActionNewAudio->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    connect(mActionNewAudio, SIGNAL(triggered(bool)), SLOT(slotNewAudio()));
 
-	mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
-	connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
+    mActionNewFromTemplate = KAlarm::createNewFromTemplateAction(i18nc("@action", "New &From Template"), actions, QLatin1String("newFromTempl"));
+    connect(mActionNewFromTemplate, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
 
-	mActionCreateTemplate = new KAction(i18nc("@action", "Create Tem&plate..."), this);
-	actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
-	connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
+    mActionCreateTemplate = new KAction(i18nc("@action", "Create Tem&plate..."), this);
+    actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
+    connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
-	mActionCopy = new KAction(KIcon("edit-copy"), i18nc("@action", "&Copy..."), this);
-	actions->addAction(QLatin1String("copy"), mActionCopy);
-	mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
-	connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
+    mActionCopy = new KAction(KIcon("edit-copy"), i18nc("@action", "&Copy..."), this);
+    actions->addAction(QLatin1String("copy"), mActionCopy);
+    mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
+    connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-	mActionModify = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
-	actions->addAction(QLatin1String("modify"), mActionModify);
-	mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
-	connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
+    mActionModify = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
+    actions->addAction(QLatin1String("modify"), mActionModify);
+    mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
+    connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
-	mActionDelete = new KAction(KIcon("edit-delete"), i18nc("@action", "&Delete"), this);
-	actions->addAction(QLatin1String("delete"), mActionDelete);
-	mActionDelete->setShortcut(QKeySequence::Delete);
-	connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
+    mActionDelete = new KAction(KIcon("edit-delete"), i18nc("@action", "&Delete"), this);
+    actions->addAction(QLatin1String("delete"), mActionDelete);
+    mActionDelete->setShortcut(QKeySequence::Delete);
+    connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
 
-	// Set up Shift-Delete as a shortcut to delete without confirmation
-	mActionDeleteForce = new KAction(i18nc("@action", "Delete Without Confirmation"), this);
-	actions->addAction(QLatin1String("delete-force"), mActionDeleteForce);
-	mActionDeleteForce->setShortcut(QKeySequence::Delete + Qt::SHIFT);
-	connect(mActionDeleteForce, SIGNAL(triggered(bool)), SLOT(slotDeleteForce()));
+    // Set up Shift-Delete as a shortcut to delete without confirmation
+    mActionDeleteForce = new KAction(i18nc("@action", "Delete Without Confirmation"), this);
+    actions->addAction(QLatin1String("delete-force"), mActionDeleteForce);
+    mActionDeleteForce->setShortcut(QKeySequence::Delete + Qt::SHIFT);
+    connect(mActionDeleteForce, SIGNAL(triggered(bool)), SLOT(slotDeleteForce()));
 
-	mActionReactivate = new KAction(i18nc("@action", "Reac&tivate"), this);
-	actions->addAction(QLatin1String("undelete"), mActionReactivate);
-	mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
-	connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
+    mActionReactivate = new KAction(i18nc("@action", "Reac&tivate"), this);
+    actions->addAction(QLatin1String("undelete"), mActionReactivate);
+    mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+    connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
 
-	mActionEnable = new KAction(this);
-	actions->addAction(QLatin1String("disable"), mActionEnable);
-	mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
-	connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
+    mActionEnable = new KAction(this);
+    actions->addAction(QLatin1String("disable"), mActionEnable);
+    mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
+    connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
-	KAction* action = KAlarm::createStopPlayAction(this);
-	actions->addAction(QLatin1String("stopAudio"), action);
-	action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    KAction* action = KAlarm::createStopPlayAction(this);
+    actions->addAction(QLatin1String("stopAudio"), action);
+    action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 
-	mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
-	actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
-	connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
+    mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
+    actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
+    connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
 
-	mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
-	actions->addAction(QLatin1String("showTimeToAlarms"), mActionShowTimeTo);
-	mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
-	connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
+    mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
+    actions->addAction(QLatin1String("showTimeToAlarms"), mActionShowTimeTo);
+    mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
-	mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
-	actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
-	mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
-	connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
+    mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
+    actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
+    mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+    connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
-	mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System &Tray"), this);
-	actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
-	connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
+    mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System &Tray"), this);
+    actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
+    connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-	mActionToggleResourceSel = new KToggleAction(KIcon("view-choose"), i18nc("@action", "Show &Calendars"), this);
-	actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
-	connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
+    mActionToggleResourceSel = new KToggleAction(KIcon("view-choose"), i18nc("@action", "Show &Calendars"), this);
+    actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
+    connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
-	mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
-	actions->addAction(QLatin1String("spread"), mActionSpreadWindows);
-	mActionSpreadWindows->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
+    actions->addAction(QLatin1String("spread"), mActionSpreadWindows);
+    mActionSpreadWindows->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 
-	mActionImportAlarms = new KAction(i18nc("@action", "Import &Alarms..."), this);
-	actions->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
-	connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
+    mActionImportAlarms = new KAction(i18nc("@action", "Import &Alarms..."), this);
+    actions->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
+    connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
 
-	mActionImportBirthdays = new KAction(i18nc("@action", "Import &Birthdays..."), this);
-	actions->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
-	connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
+    mActionImportBirthdays = new KAction(i18nc("@action", "Import &Birthdays..."), this);
+    actions->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
+    connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
 
-	mActionExportAlarms = new KAction(i18nc("@action", "E&xport Selected Alarms..."), this);
-	actions->addAction(QLatin1String("exportAlarms"), mActionExportAlarms);
-	connect(mActionExportAlarms, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
+    mActionExportAlarms = new KAction(i18nc("@action", "E&xport Selected Alarms..."), this);
+    actions->addAction(QLatin1String("exportAlarms"), mActionExportAlarms);
+    connect(mActionExportAlarms, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
 
-	mActionExport = new KAction(i18nc("@action", "E&xport..."), this);
-	actions->addAction(QLatin1String("export"), mActionExport);
-	connect(mActionExport, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
+    mActionExport = new KAction(i18nc("@action", "E&xport..."), this);
+    actions->addAction(QLatin1String("export"), mActionExport);
+    connect(mActionExport, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
 
-	action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
-	actions->addAction(QLatin1String("refreshAlarms"), action);
-	connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
+    action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
+    actions->addAction(QLatin1String("refreshAlarms"), action);
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
 
-	action = KAlarm::createAlarmEnableAction(this);
-	actions->addAction(QLatin1String("alarmsEnable"), action);
-	if (undoText.isNull())
-	{
-		// Get standard texts, etc., for Undo and Redo actions
-		QAction * act = KStandardAction::undo(this, 0, actions);
-		undoShortcut     = KShortcut(act->shortcuts());
-		undoText         = act->text();
-		undoTextStripped = KGlobal::locale()->removeAcceleratorMarker(undoText);
-		delete act;
-		act = KStandardAction::redo(this, 0, actions);
-		redoShortcut     = KShortcut(act->shortcuts());
-		redoText         = act->text();
-		redoTextStripped = KGlobal::locale()->removeAcceleratorMarker(redoText);
-		delete act;
-	}
-	mActionUndo = new KToolBarPopupAction(KIcon("edit-undo"), undoText, this);
-	actions->addAction(QLatin1String("edit_undo"), mActionUndo);
-	mActionUndo->setShortcut(undoShortcut);
-	connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
+    action = KAlarm::createAlarmEnableAction(this);
+    actions->addAction(QLatin1String("alarmsEnable"), action);
+    if (undoText.isNull())
+    {
+        // Get standard texts, etc., for Undo and Redo actions
+        QAction * act = KStandardAction::undo(this, 0, actions);
+        undoShortcut     = KShortcut(act->shortcuts());
+        undoText         = act->text();
+        undoTextStripped = KGlobal::locale()->removeAcceleratorMarker(undoText);
+        delete act;
+        act = KStandardAction::redo(this, 0, actions);
+        redoShortcut     = KShortcut(act->shortcuts());
+        redoText         = act->text();
+        redoTextStripped = KGlobal::locale()->removeAcceleratorMarker(redoText);
+        delete act;
+    }
+    mActionUndo = new KToolBarPopupAction(KIcon("edit-undo"), undoText, this);
+    actions->addAction(QLatin1String("edit_undo"), mActionUndo);
+    mActionUndo->setShortcut(undoShortcut);
+    connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
 
-	mActionRedo = new KToolBarPopupAction(KIcon("edit-redo"), redoText, this);
-	actions->addAction(QLatin1String("edit_redo"), mActionRedo);
-	mActionRedo->setShortcut(redoShortcut);
-	connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
+    mActionRedo = new KToolBarPopupAction(KIcon("edit-redo"), redoText, this);
+    actions->addAction(QLatin1String("edit_redo"), mActionRedo);
+    mActionRedo->setShortcut(redoShortcut);
+    connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
 
-	KStandardAction::find(mListView, SLOT(slotFind()), actions);
-	mActionFindNext = KStandardAction::findNext(mListView, SLOT(slotFindNext()), actions);
-	mActionFindPrev = KStandardAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
-	KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
-	KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
-	// Quit only once the event loop is called; otherwise, the parent window will
-	// be deleted while still processing the action, resulting in a crash.
-	KAction* act = KStandardAction::quit(0, 0, actions);
-	connect(act, SIGNAL(triggered(bool)), SLOT(slotQuit()), Qt::QueuedConnection);
-	KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
-	KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
-	KStandardAction::preferences(this, SLOT(slotPreferences()), actions);
-	mResourceSelector->initActions(actions);
-	setStandardToolBarMenuEnabled(true);
-	createGUI(UI_FILE);
-	// Load menu and toolbar settings
-	applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
+    KStandardAction::find(mListView, SLOT(slotFind()), actions);
+    mActionFindNext = KStandardAction::findNext(mListView, SLOT(slotFindNext()), actions);
+    mActionFindPrev = KStandardAction::findPrev(mListView, SLOT(slotFindPrev()), actions);
+    KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
+    KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+    // Quit only once the event loop is called; otherwise, the parent window will
+    // be deleted while still processing the action, resulting in a crash.
+    KAction* act = KStandardAction::quit(0, 0, actions);
+    connect(act, SIGNAL(triggered(bool)), SLOT(slotQuit()), Qt::QueuedConnection);
+    KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
+    KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
+    KStandardAction::preferences(this, SLOT(slotPreferences()), actions);
+    mResourceSelector->initActions(actions);
+    setStandardToolBarMenuEnabled(true);
+    createGUI(UI_FILE);
+    // Load menu and toolbar settings
+    applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 
-	mContextMenu = static_cast<KMenu*>(factory()->container("listContext", this));
-	mActionsMenu = static_cast<KMenu*>(factory()->container("actions", this));
-	KMenu* resourceMenu = static_cast<KMenu*>(factory()->container("resourceContext", this));
-	mResourceSelector->setContextMenu(resourceMenu);
-	mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
-	connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
-	connect(mActionUndo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotUndoItem(QAction*)));
-	connect(mActionRedo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
-	connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
-	connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
-	connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
-	Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
-	Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
-	connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
+    mContextMenu = static_cast<KMenu*>(factory()->container("listContext", this));
+    mActionsMenu = static_cast<KMenu*>(factory()->container("actions", this));
+    KMenu* resourceMenu = static_cast<KMenu*>(factory()->container("resourceContext", this));
+    mResourceSelector->setContextMenu(resourceMenu);
+    mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
+    connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
+    connect(mActionUndo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotUndoItem(QAction*)));
+    connect(mActionRedo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
+    connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
+    connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
+    connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
+    Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
+    Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
+    connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
 
-	// Set menu item states
-	setEnableText(true);
-	mActionShowTime->setChecked(mShowTime);
-	mActionShowTimeTo->setChecked(mShowTimeTo);
-	mActionShowArchived->setChecked(mShowArchived);
-	if (!Preferences::archivedKeepDays())
-		mActionShowArchived->setEnabled(false);
-	mActionToggleResourceSel->setChecked(mShowResources);
-	slotToggleResourceSelector();
-	updateTrayIconAction();         // set the correct text for this action
-	mActionUndo->setEnabled(Undo::haveUndo());
-	mActionRedo->setEnabled(Undo::haveRedo());
-	mActionFindNext->setEnabled(false);
-	mActionFindPrev->setEnabled(false);
+    // Set menu item states
+    setEnableText(true);
+    mActionShowTime->setChecked(mShowTime);
+    mActionShowTimeTo->setChecked(mShowTimeTo);
+    mActionShowArchived->setChecked(mShowArchived);
+    if (!Preferences::archivedKeepDays())
+        mActionShowArchived->setEnabled(false);
+    mActionToggleResourceSel->setChecked(mShowResources);
+    slotToggleResourceSelector();
+    updateTrayIconAction();         // set the correct text for this action
+    mActionUndo->setEnabled(Undo::haveUndo());
+    mActionRedo->setEnabled(Undo::haveRedo());
+    mActionFindNext->setEnabled(false);
+    mActionFindPrev->setEnabled(false);
 
-	mActionCopy->setEnabled(false);
-	mActionModify->setEnabled(false);
-	mActionDelete->setEnabled(false);
-	mActionReactivate->setEnabled(false);
-	mActionEnable->setEnabled(false);
-	mActionCreateTemplate->setEnabled(false);
-	mActionExport->setEnabled(false);
+    mActionCopy->setEnabled(false);
+    mActionModify->setEnabled(false);
+    mActionDelete->setEnabled(false);
+    mActionReactivate->setEnabled(false);
+    mActionEnable->setEnabled(false);
+    mActionCreateTemplate->setEnabled(false);
+    mActionExport->setEnabled(false);
 
-	Undo::emitChanged();     // set the Undo/Redo menu texts
-//	Daemon::monitoringAlarms();
+    Undo::emitChanged();     // set the Undo/Redo menu texts
+//    Daemon::monitoringAlarms();
 }
 
 /******************************************************************************
@@ -655,8 +655,8 @@ void MainWindow::initActions()
 */
 void MainWindow::enableTemplateMenuItem(bool enable)
 {
-	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
-		mWindowList[i]->mActionTemplates->setEnabled(enable);
+    for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+        mWindowList[i]->mActionTemplates->setEnabled(enable);
 }
 
 /******************************************************************************
@@ -664,11 +664,11 @@ void MainWindow::enableTemplateMenuItem(bool enable)
 */
 void MainWindow::refresh()
 {
-	kDebug();
+    kDebug();
 #ifdef USE_AKONADI
-	AkonadiModel::instance()->reload();
+    AkonadiModel::instance()->reload();
 #else
-	EventListModel::alarms()->reload();
+    EventListModel::alarms()->reload();
 #endif
 }
 
@@ -678,10 +678,10 @@ void MainWindow::refresh()
 */
 void MainWindow::updateKeepArchived(int days)
 {
-	kDebug() << (bool)days;
-	if (mShowArchived  &&  !days)
-		slotShowArchived();   // toggle Show Archived option setting
-	mActionShowArchived->setEnabled(days);
+    kDebug() << (bool)days;
+    if (mShowArchived  &&  !days)
+        slotShowArchived();   // toggle Show Archived option setting
+    mActionShowArchived->setEnabled(days);
 }
 
 /******************************************************************************
@@ -693,17 +693,17 @@ void MainWindow::selectEvent(Akonadi::Item::Id eventId)
 void MainWindow::selectEvent(const QString& eventId)
 #endif
 {
-	mListView->clearSelection();
+    mListView->clearSelection();
 #ifdef USE_AKONADI
-	QModelIndex index = mListFilterModel->eventIndex(eventId);
+    QModelIndex index = mListFilterModel->eventIndex(eventId);
 #else
-	QModelIndex index = EventListModel::alarms()->eventIndex(eventId);
+    QModelIndex index = EventListModel::alarms()->eventIndex(eventId);
 #endif
-	if (index.isValid())
-	{
-		mListView->select(index);
-		mListView->scrollTo(index);
-	}
+    if (index.isValid())
+    {
+        mListView->select(index);
+        mListView->scrollTo(index);
+    }
 }
 
 /******************************************************************************
@@ -711,7 +711,7 @@ void MainWindow::selectEvent(const QString& eventId)
 */
 void MainWindow::slotNew(EditAlarmDlg::Type type)
 {
-	KAlarm::editNewAlarm(type, mListView);
+    KAlarm::editNewAlarm(type, mListView);
 }
 
 /******************************************************************************
@@ -720,7 +720,7 @@ void MainWindow::slotNew(EditAlarmDlg::Type type)
 */
 void MainWindow::slotNewFromTemplate(const KAEvent* tmplate)
 {
-	KAlarm::editNewAlarm(tmplate, mListView);
+    KAlarm::editNewAlarm(tmplate, mListView);
 }
 
 /******************************************************************************
@@ -730,13 +730,13 @@ void MainWindow::slotNewFromTemplate(const KAEvent* tmplate)
 void MainWindow::slotNewTemplate()
 {
 #ifdef USE_AKONADI
-	KAEvent event = mListView->selectedEvent();
-	if (event.isValid())
-		KAlarm::editNewTemplate(&event, this);
+    KAEvent event = mListView->selectedEvent();
+    if (event.isValid())
+        KAlarm::editNewTemplate(&event, this);
 #else
-	KAEvent* event = mListView->selectedEvent();
-	if (event)
-		KAlarm::editNewTemplate(event, this);
+    KAEvent* event = mListView->selectedEvent();
+    if (event)
+        KAlarm::editNewTemplate(event, this);
 #endif
 }
 
@@ -747,13 +747,13 @@ void MainWindow::slotNewTemplate()
 void MainWindow::slotCopy()
 {
 #ifdef USE_AKONADI
-	KAEvent event = mListView->selectedEvent();
-	if (event.isValid())
-		KAlarm::editNewAlarm(&event, this);
+    KAEvent event = mListView->selectedEvent();
+    if (event.isValid())
+        KAlarm::editNewAlarm(&event, this);
 #else
-	KAEvent* event = mListView->selectedEvent();
-	if (event)
-		KAlarm::editNewAlarm(event, this);
+    KAEvent* event = mListView->selectedEvent();
+    if (event)
+        KAlarm::editNewAlarm(event, this);
 #endif
 }
 
@@ -764,13 +764,13 @@ void MainWindow::slotCopy()
 void MainWindow::slotModify()
 {
 #ifdef USE_AKONADI
-	KAEvent event = mListView->selectedEvent();
-	if (event.isValid())
-		KAlarm::editAlarm(&event, this);   // edit alarm (view-only mode if archived or read-only)
+    KAEvent event = mListView->selectedEvent();
+    if (event.isValid())
+        KAlarm::editAlarm(&event, this);   // edit alarm (view-only mode if archived or read-only)
 #else
-	KAEvent* event = mListView->selectedEvent();
-	if (event)
-		KAlarm::editAlarm(event, this);   // edit alarm (view-only mode if archived or read-only)
+    KAEvent* event = mListView->selectedEvent();
+    if (event)
+        KAlarm::editAlarm(event, this);   // edit alarm (view-only mode if archived or read-only)
 #endif
 }
 
@@ -781,62 +781,62 @@ void MainWindow::slotModify()
 void MainWindow::slotDelete(bool force)
 {
 #ifdef USE_AKONADI
-	QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
 #else
-	KAEvent::List events = mListView->selectedEvents();
-	// Save the IDs of the events to be deleted, in case any events are
-	// deleted by being triggered while the confirmation prompt is displayed
-	// (in which case their pointers will become invalid).
-	QStringList ids;
-	for (int i = 0, end = events.count();  i < end;  ++i)
-		ids.append(events[i]->id());
+    KAEvent::List events = mListView->selectedEvents();
+    // Save the IDs of the events to be deleted, in case any events are
+    // deleted by being triggered while the confirmation prompt is displayed
+    // (in which case their pointers will become invalid).
+    QStringList ids;
+    for (int i = 0, end = events.count();  i < end;  ++i)
+        ids.append(events[i]->id());
 #endif
 
-	if (!force  &&  Preferences::confirmAlarmDeletion())
-	{
-		int n = events.count();
-		if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
-		                                                   "Do you really want to delete the %1 selected alarms?", n),
-		                                       i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
-		                                       KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"),
-		                                       KStandardGuiItem::cancel(),
-		                                       Preferences::CONFIRM_ALARM_DELETION)
-		    != KMessageBox::Continue)
-			return;
-	}
+    if (!force  &&  Preferences::confirmAlarmDeletion())
+    {
+        int n = events.count();
+        if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
+                                                           "Do you really want to delete the %1 selected alarms?", n),
+                                               i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
+                                               KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"),
+                                               KStandardGuiItem::cancel(),
+                                               Preferences::CONFIRM_ALARM_DELETION)
+            != KMessageBox::Continue)
+            return;
+    }
 
-	// Remove any events which have just triggered, from the list to delete.
-	Undo::EventList undos;
-	AlarmCalendar* resources = AlarmCalendar::resources();
+    // Remove any events which have just triggered, from the list to delete.
+    Undo::EventList undos;
+    AlarmCalendar* resources = AlarmCalendar::resources();
 #ifdef USE_AKONADI
-	for (QList<KAEvent>::Iterator eit = events.begin();  eit != events.end();  )
-	{
-		Akonadi::Collection c = resources->collectionForEvent((*eit).itemId());
-		if (!c.isValid())
-			eit = events.erase(eit);
-		else
-			undos.append(*eit++, c);
-	}
+    for (QList<KAEvent>::Iterator eit = events.begin();  eit != events.end();  )
+    {
+        Akonadi::Collection c = resources->collectionForEvent((*eit).itemId());
+        if (!c.isValid())
+            eit = events.erase(eit);
+        else
+            undos.append(*eit++, c);
+    }
 #else
-	for (int i = 0, end = ids.count();  i < end;  ++i)
-	{
-		AlarmResource* r = resources->resourceForEvent(ids[i]);
-		if (!r)
-			events[i] = 0;
-		else
-			undos.append(*events[i], r);
-	}
-	events.removeAll((KAEvent*)0);
+    for (int i = 0, end = ids.count();  i < end;  ++i)
+    {
+        AlarmResource* r = resources->resourceForEvent(ids[i]);
+        if (!r)
+            events[i] = 0;
+        else
+            undos.append(*events[i], r);
+    }
+    events.removeAll((KAEvent*)0);
 #endif
 
-	if (events.isEmpty())
-		kDebug() << "No alarms left to delete";
-	else
-	{
-		// Delete the events from the calendar and displays
-		KAlarm::deleteEvents(events, true, this);
-		Undo::saveDeletes(undos);
-	}
+    if (events.isEmpty())
+        kDebug() << "No alarms left to delete";
+    else
+    {
+        // Delete the events from the calendar and displays
+        KAlarm::deleteEvents(events, true, this);
+        Undo::saveDeletes(undos);
+    }
 }
 
 /******************************************************************************
@@ -846,34 +846,34 @@ void MainWindow::slotDelete(bool force)
 void MainWindow::slotReactivate()
 {
 #ifdef USE_AKONADI
-	QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
 #else
-	KAEvent::List events = mListView->selectedEvents();
+    KAEvent::List events = mListView->selectedEvents();
 #endif
-	mListView->clearSelection();
+    mListView->clearSelection();
 
-	// Add the alarms to the displayed lists and to the calendar file
-	Undo::EventList undos;
-	QStringList ineligibleIDs;
-	KAlarm::reactivateEvents(events, ineligibleIDs, 0, this);
+    // Add the alarms to the displayed lists and to the calendar file
+    Undo::EventList undos;
+    QStringList ineligibleIDs;
+    KAlarm::reactivateEvents(events, ineligibleIDs, 0, this);
 
-	// Create the undo list, excluding ineligible events
-	AlarmCalendar* resources = AlarmCalendar::resources();
-	for (int i = 0, end = events.count();  i < end;  ++i)
-	{
+    // Create the undo list, excluding ineligible events
+    AlarmCalendar* resources = AlarmCalendar::resources();
+    for (int i = 0, end = events.count();  i < end;  ++i)
+    {
 #ifdef USE_AKONADI
-		if (!ineligibleIDs.contains(events[i].id()))
-		{
-			Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
-			undos.append(events[i], c);
-		}
+        if (!ineligibleIDs.contains(events[i].id()))
+        {
+            Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
+            undos.append(events[i], c);
+        }
 #else
-		QString id = events[i]->id();
-		if (!ineligibleIDs.contains(id))
-			undos.append(*events[i], resources->resourceForEvent(id));
+        QString id = events[i]->id();
+        if (!ineligibleIDs.contains(id))
+            undos.append(*events[i], resources->resourceForEvent(id));
 #endif
-	}
-	Undo::saveReactivates(undos);
+    }
+    Undo::saveReactivates(undos);
 }
 
 /******************************************************************************
@@ -882,18 +882,18 @@ void MainWindow::slotReactivate()
 */
 void MainWindow::slotEnable()
 {
-	bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
+    bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
 #ifdef USE_AKONADI
-	QList<KAEvent> events = mListView->selectedEvents();
-	QList<KAEvent> eventCopies;
+    QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> eventCopies;
 #else
-	KAEvent::List events = mListView->selectedEvents();
-	KAEvent::List eventCopies;
+    KAEvent::List events = mListView->selectedEvents();
+    KAEvent::List eventCopies;
 #endif
-	for (int i = 0, end = events.count();  i < end;  ++i)
-		eventCopies += events[i];
-	KAlarm::enableEvents(eventCopies, enable, this);
-	slotSelection();   // update Enable/Disable action text
+    for (int i = 0, end = events.count();  i < end;  ++i)
+        eventCopies += events[i];
+    KAlarm::enableEvents(eventCopies, enable, this);
+    slotSelection();   // update Enable/Disable action text
 }
 
 /******************************************************************************
@@ -901,17 +901,17 @@ void MainWindow::slotEnable()
 */
 void MainWindow::slotShowTime()
 {
-	mShowTime = !mShowTime;
-	mActionShowTime->setChecked(mShowTime);
-	if (!mShowTime  &&  !mShowTimeTo)
-		slotShowTimeTo();    // at least one time column must be displayed
-	else
-	{
-		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
-		config.writeEntry(SHOW_TIME_KEY, mShowTime);
-		config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
-	}
+    mShowTime = !mShowTime;
+    mActionShowTime->setChecked(mShowTime);
+    if (!mShowTime  &&  !mShowTimeTo)
+        slotShowTimeTo();    // at least one time column must be displayed
+    else
+    {
+        mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+        KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+        config.writeEntry(SHOW_TIME_KEY, mShowTime);
+        config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
+    }
 }
 
 /******************************************************************************
@@ -919,17 +919,17 @@ void MainWindow::slotShowTime()
 */
 void MainWindow::slotShowTimeTo()
 {
-	mShowTimeTo = !mShowTimeTo;
-	mActionShowTimeTo->setChecked(mShowTimeTo);
-	if (!mShowTimeTo  &&  !mShowTime)
-		slotShowTime();    // at least one time column must be displayed
-	else
-	{
-		mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-		KConfigGroup config(KGlobal::config(), VIEW_GROUP);
-		config.writeEntry(SHOW_TIME_KEY, mShowTime);
-		config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
-	}
+    mShowTimeTo = !mShowTimeTo;
+    mActionShowTimeTo->setChecked(mShowTimeTo);
+    if (!mShowTimeTo  &&  !mShowTime)
+        slotShowTime();    // at least one time column must be displayed
+    else
+    {
+        mListView->selectTimeColumns(mShowTime, mShowTimeTo);
+        KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+        config.writeEntry(SHOW_TIME_KEY, mShowTime);
+        config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
+    }
 }
 
 /******************************************************************************
@@ -937,18 +937,18 @@ void MainWindow::slotShowTimeTo()
 */
 void MainWindow::slotShowArchived()
 {
-	mShowArchived = !mShowArchived;
-	mActionShowArchived->setChecked(mShowArchived);
-	mActionShowArchived->setToolTip(mShowArchived ? i18nc("@info:tooltip", "Hide Archived Alarms")
-	                                              : i18nc("@info:tooltip", "Show Archived Alarms"));
+    mShowArchived = !mShowArchived;
+    mActionShowArchived->setChecked(mShowArchived);
+    mActionShowArchived->setToolTip(mShowArchived ? i18nc("@info:tooltip", "Hide Archived Alarms")
+                                                  : i18nc("@info:tooltip", "Show Archived Alarms"));
 #ifdef USE_AKONADI
-	mListFilterModel->setEventTypeFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel->setEventTypeFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
 #else
-	mListFilterModel->setStatusFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel->setStatusFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
 #endif
-	mListView->reset();
-	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
-	config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);
+    mListView->reset();
+    KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+    config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);
 }
 
 /******************************************************************************
@@ -957,7 +957,7 @@ void MainWindow::slotShowArchived()
 */
 void MainWindow::slotSpreadWindowsShortcut()
 {
-	mActionSpreadWindows->trigger();
+    mActionSpreadWindows->trigger();
 }
 
 /******************************************************************************
@@ -966,7 +966,7 @@ void MainWindow::slotSpreadWindowsShortcut()
 */
 void MainWindow::slotImportAlarms()
 {
-	AlarmCalendar::importAlarms(this);
+    AlarmCalendar::importAlarms(this);
 }
 
 /******************************************************************************
@@ -976,16 +976,16 @@ void MainWindow::slotImportAlarms()
 void MainWindow::slotExportAlarms()
 {
 #ifdef USE_AKONADI
-	QList<KAEvent> events = mListView->selectedEvents();
-	if (!events.isEmpty())
-	{
-		KAEvent::List evts = KAEvent::ptrList(events);
-		AlarmCalendar::exportAlarms(evts, this);
-	}
+    QList<KAEvent> events = mListView->selectedEvents();
+    if (!events.isEmpty())
+    {
+        KAEvent::List evts = KAEvent::ptrList(events);
+        AlarmCalendar::exportAlarms(evts, this);
+    }
 #else
-	KAEvent::List events = mListView->selectedEvents();
-	if (!events.isEmpty())
-		AlarmCalendar::exportAlarms(events, this);
+    KAEvent::List events = mListView->selectedEvents();
+    if (!events.isEmpty())
+        AlarmCalendar::exportAlarms(events, this);
 #endif
 }
 
@@ -995,36 +995,36 @@ void MainWindow::slotExportAlarms()
 */
 void MainWindow::slotBirthdays()
 {
-	// Use AutoQPointer to guard against crash on application exit while
-	// the dialogue is still open. It prevents double deletion (both on
-	// deletion of MainWindow, and on return from this function).
-	AutoQPointer<BirthdayDlg> dlg = new BirthdayDlg(this);
-	if (dlg->exec() == QDialog::Accepted)
-	{
-		QList<KAEvent> events = dlg->events();
-		if (!events.isEmpty())
-		{
-			mListView->clearSelection();
-			// Add alarm to the displayed lists and to the calendar file
-			KAlarm::UpdateStatus status = KAlarm::addEvents(events, dlg, true, true);
+    // Use AutoQPointer to guard against crash on application exit while
+    // the dialogue is still open. It prevents double deletion (both on
+    // deletion of MainWindow, and on return from this function).
+    AutoQPointer<BirthdayDlg> dlg = new BirthdayDlg(this);
+    if (dlg->exec() == QDialog::Accepted)
+    {
+        QList<KAEvent> events = dlg->events();
+        if (!events.isEmpty())
+        {
+            mListView->clearSelection();
+            // Add alarm to the displayed lists and to the calendar file
+            KAlarm::UpdateStatus status = KAlarm::addEvents(events, dlg, true, true);
 
-			Undo::EventList undos;
-			AlarmCalendar* resources = AlarmCalendar::resources();
-			for (int i = 0, end = events.count();  i < end;  ++i)
+            Undo::EventList undos;
+            AlarmCalendar* resources = AlarmCalendar::resources();
+            for (int i = 0, end = events.count();  i < end;  ++i)
 #ifdef USE_AKONADI
-			{
-				Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
-				undos.append(events[i], c);
-			}
+            {
+                Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
+                undos.append(events[i], c);
+            }
 #else
-				undos.append(events[i], resources->resourceForEvent(events[i].id()));
+                undos.append(events[i], resources->resourceForEvent(events[i].id()));
 #endif
-			Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
+            Undo::saveAdds(undos, i18nc("@info", "Import birthdays"));
 
-			if (status != KAlarm::UPDATE_FAILED)
-				KAlarm::outputAlarmWarnings(dlg);
-		}
-	}
+            if (status != KAlarm::UPDATE_FAILED)
+                KAlarm::outputAlarmWarnings(dlg);
+        }
+    }
 }
 
 /******************************************************************************
@@ -1033,13 +1033,13 @@ void MainWindow::slotBirthdays()
 */
 void MainWindow::slotTemplates()
 {
-	if (!mTemplateDlg)
-	{
-		mTemplateDlg = TemplateDlg::create(this);
-		enableTemplateMenuItem(false);     // disable menu item in all windows
-		connect(mTemplateDlg, SIGNAL(finished()), SLOT(slotTemplatesEnd()));
-		mTemplateDlg->show();
-	}
+    if (!mTemplateDlg)
+    {
+        mTemplateDlg = TemplateDlg::create(this);
+        enableTemplateMenuItem(false);     // disable menu item in all windows
+        connect(mTemplateDlg, SIGNAL(finished()), SLOT(slotTemplatesEnd()));
+        mTemplateDlg->show();
+    }
 }
 
 /******************************************************************************
@@ -1047,12 +1047,12 @@ void MainWindow::slotTemplates()
 */
 void MainWindow::slotTemplatesEnd()
 {
-	if (mTemplateDlg)
-	{
-		mTemplateDlg->delayedDestruct();   // this deletes the dialog once it is safe to do so
-		mTemplateDlg = 0;
-		enableTemplateMenuItem(true);      // re-enable menu item in all windows
-	}
+    if (mTemplateDlg)
+    {
+        mTemplateDlg->delayedDestruct();   // this deletes the dialog once it is safe to do so
+        mTemplateDlg = 0;
+        enableTemplateMenuItem(true);      // re-enable menu item in all windows
+    }
 }
 
 /******************************************************************************
@@ -1060,7 +1060,7 @@ void MainWindow::slotTemplatesEnd()
 */
 void MainWindow::slotToggleTrayIcon()
 {
-	theApp()->displayTrayIcon(!theApp()->trayIconDisplayed(), this);
+    theApp()->displayTrayIcon(!theApp()->trayIconDisplayed(), this);
 }
 
 /******************************************************************************
@@ -1068,30 +1068,30 @@ void MainWindow::slotToggleTrayIcon()
 */
 void MainWindow::slotToggleResourceSelector()
 {
-	mShowResources = mActionToggleResourceSel->isChecked();
-	if (mShowResources)
-	{
-		if (mResourcesWidth <= 0)
-		{
-			mResourcesWidth = mResourceSelector->sizeHint().width();
-			mResourceSelector->resize(mResourcesWidth, mResourceSelector->height());
-			QList<int> widths = mSplitter->sizes();
-			if (widths.count() == 1)
-			{
-				int listwidth = widths[0] - mSplitter->handleWidth() - mResourcesWidth;
-				mListView->resize(listwidth, mListView->height());
-				widths.append(listwidth);
-				widths[0] = mResourcesWidth;
-			}
-			mSplitter->setSizes(widths);
-		}
-		mResourceSelector->show();
-	}
-	else
-		mResourceSelector->hide();
+    mShowResources = mActionToggleResourceSel->isChecked();
+    if (mShowResources)
+    {
+        if (mResourcesWidth <= 0)
+        {
+            mResourcesWidth = mResourceSelector->sizeHint().width();
+            mResourceSelector->resize(mResourcesWidth, mResourceSelector->height());
+            QList<int> widths = mSplitter->sizes();
+            if (widths.count() == 1)
+            {
+                int listwidth = widths[0] - mSplitter->handleWidth() - mResourcesWidth;
+                mListView->resize(listwidth, mListView->height());
+                widths.append(listwidth);
+                widths[0] = mResourcesWidth;
+            }
+            mSplitter->setSizes(widths);
+        }
+        mResourceSelector->show();
+    }
+    else
+        mResourceSelector->hide();
 
-	KConfigGroup config(KGlobal::config(), VIEW_GROUP);
-	config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
+    KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+    config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
 }
 
 /******************************************************************************
@@ -1099,7 +1099,7 @@ void MainWindow::slotToggleResourceSelector()
 */
 void MainWindow::showErrorMessage(const QString& msg)
 {
-	KMessageBox::error(this, msg);
+    KMessageBox::error(this, msg);
 }
 
 /******************************************************************************
@@ -1109,8 +1109,8 @@ void MainWindow::showErrorMessage(const QString& msg)
 */
 void MainWindow::updateTrayIconAction()
 {
-	mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable());
-	mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
+    mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable());
+    mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 
 /******************************************************************************
@@ -1118,8 +1118,8 @@ void MainWindow::updateTrayIconAction()
 */
 void MainWindow::slotFindActive(bool active)
 {
-	mActionFindNext->setEnabled(active);
-	mActionFindPrev->setEnabled(active);
+    mActionFindNext->setEnabled(active);
+    mActionFindPrev->setEnabled(active);
 }
 
 /******************************************************************************
@@ -1127,7 +1127,7 @@ void MainWindow::slotFindActive(bool active)
 */
 void MainWindow::slotUndo()
 {
-	Undo::undo(this, KGlobal::locale()->removeAcceleratorMarker(mActionUndo->text()));
+    Undo::undo(this, KGlobal::locale()->removeAcceleratorMarker(mActionUndo->text()));
 }
 
 /******************************************************************************
@@ -1135,7 +1135,7 @@ void MainWindow::slotUndo()
 */
 void MainWindow::slotRedo()
 {
-	Undo::redo(this, KGlobal::locale()->removeAcceleratorMarker(mActionRedo->text()));
+    Undo::redo(this, KGlobal::locale()->removeAcceleratorMarker(mActionRedo->text()));
 }
 
 /******************************************************************************
@@ -1143,8 +1143,8 @@ void MainWindow::slotRedo()
 */
 void MainWindow::slotUndoItem(QAction* action)
 {
-	int id = mUndoMenuIds[action];
-	Undo::undo(id, this, Undo::actionText(Undo::UNDO, id));
+    int id = mUndoMenuIds[action];
+    Undo::undo(id, this, Undo::actionText(Undo::UNDO, id));
 }
 
 /******************************************************************************
@@ -1152,8 +1152,8 @@ void MainWindow::slotUndoItem(QAction* action)
 */
 void MainWindow::slotRedoItem(QAction* action)
 {
-	int id = mUndoMenuIds[action];
-	Undo::redo(id, this, Undo::actionText(Undo::REDO, id));
+    int id = mUndoMenuIds[action];
+    Undo::redo(id, this, Undo::actionText(Undo::REDO, id));
 }
 
 /******************************************************************************
@@ -1162,7 +1162,7 @@ void MainWindow::slotRedoItem(QAction* action)
 */
 void MainWindow::slotInitUndoMenu()
 {
-	initUndoMenu(mActionUndo->menu(), Undo::UNDO);
+    initUndoMenu(mActionUndo->menu(), Undo::UNDO);
 }
 
 /******************************************************************************
@@ -1171,7 +1171,7 @@ void MainWindow::slotInitUndoMenu()
 */
 void MainWindow::slotInitRedoMenu()
 {
-	initUndoMenu(mActionRedo->menu(), Undo::REDO);
+    initUndoMenu(mActionRedo->menu(), Undo::REDO);
 }
 
 /******************************************************************************
@@ -1179,21 +1179,21 @@ void MainWindow::slotInitRedoMenu()
 */
 void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
 {
-	menu->clear();
-	mUndoMenuIds.clear();
-	const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
-	QList<int> ids = Undo::ids(type);
-	for (int i = 0, end = ids.count();  i < end;  ++i)
-	{
-		int id = ids[i];
-		QString actText = Undo::actionText(type, id);
-		QString descrip = Undo::description(type, id);
-		QString text = descrip.isEmpty()
-		             ? i18nc("@action Undo/Redo [action]", "%1 %2", action, actText)
-		             : i18nc("@action Undo [action]: message", "%1 %2: %3", action, actText, descrip);
-		QAction* act = menu->addAction(text);
-		mUndoMenuIds[act] = id;
-	}
+    menu->clear();
+    mUndoMenuIds.clear();
+    const QString& action = (type == Undo::UNDO) ? undoTextStripped : redoTextStripped;
+    QList<int> ids = Undo::ids(type);
+    for (int i = 0, end = ids.count();  i < end;  ++i)
+    {
+        int id = ids[i];
+        QString actText = Undo::actionText(type, id);
+        QString descrip = Undo::description(type, id);
+        QString text = descrip.isEmpty()
+                     ? i18nc("@action Undo/Redo [action]", "%1 %2", action, actText)
+                     : i18nc("@action Undo [action]: message", "%1 %2: %3", action, actText, descrip);
+        QAction* act = menu->addAction(text);
+        mUndoMenuIds[act] = id;
+    }
 }
 
 /******************************************************************************
@@ -1202,26 +1202,26 @@ void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
 */
 void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
 {
-	if (undo.isNull())
-	{
-		mActionUndo->setEnabled(false);
-		mActionUndo->setText(undoText);
-	}
-	else
-	{
-		mActionUndo->setEnabled(true);
-		mActionUndo->setText(QString("%1 %2").arg(undoText).arg(undo));
-	}
-	if (redo.isNull())
-	{
-		mActionRedo->setEnabled(false);
-		mActionRedo->setText(redoText);
-	}
-	else
-	{
-		mActionRedo->setEnabled(true);
-		mActionRedo->setText(QString("%1 %2").arg(redoText).arg(redo));
-	}
+    if (undo.isNull())
+    {
+        mActionUndo->setEnabled(false);
+        mActionUndo->setText(undoText);
+    }
+    else
+    {
+        mActionUndo->setEnabled(true);
+        mActionUndo->setText(QString("%1 %2").arg(undoText).arg(undo));
+    }
+    if (redo.isNull())
+    {
+        mActionRedo->setEnabled(false);
+        mActionRedo->setText(redoText);
+    }
+    else
+    {
+        mActionRedo->setEnabled(true);
+        mActionRedo->setText(QString("%1 %2").arg(redoText).arg(redo));
+    }
 }
 
 /******************************************************************************
@@ -1229,7 +1229,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
 */
 void MainWindow::slotRefreshAlarms()
 {
-	KAlarm::refreshAlarms();
+    KAlarm::refreshAlarms();
 }
 
 /******************************************************************************
@@ -1237,7 +1237,7 @@ void MainWindow::slotRefreshAlarms()
 */
 void MainWindow::slotPreferences()
 {
-	KAlarmPrefDlg::display();
+    KAlarmPrefDlg::display();
 }
 
 /******************************************************************************
@@ -1245,7 +1245,7 @@ void MainWindow::slotPreferences()
 */
 void MainWindow::slotConfigureKeys()
 {
-	KShortcutsDialog::configure(actionCollection(), KShortcutsEditor::LetterShortcutsAllowed, this);
+    KShortcutsDialog::configure(actionCollection(), KShortcutsEditor::LetterShortcutsAllowed, this);
 }
 
 /******************************************************************************
@@ -1253,10 +1253,10 @@ void MainWindow::slotConfigureKeys()
 */
 void MainWindow::slotConfigureToolbar()
 {
-	saveMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
-	KEditToolBar dlg(factory());
-	connect(&dlg, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
-	dlg.exec();
+    saveMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
+    KEditToolBar dlg(factory());
+    connect(&dlg, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
+    dlg.exec();
 }
 
 /******************************************************************************
@@ -1265,8 +1265,8 @@ void MainWindow::slotConfigureToolbar()
 */
 void MainWindow::slotNewToolbarConfig()
 {
-	createGUI(UI_FILE);
-	applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
+    createGUI(UI_FILE);
+    applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 }
 
 /******************************************************************************
@@ -1277,7 +1277,7 @@ void MainWindow::slotNewToolbarConfig()
 */
 void MainWindow::slotQuit()
 {
-	theApp()->doQuit(this);
+    theApp()->doQuit(this);
 }
 
 /******************************************************************************
@@ -1285,20 +1285,20 @@ void MainWindow::slotQuit()
 */
 void MainWindow::closeEvent(QCloseEvent* ce)
 {
-	if (!theApp()->sessionClosingDown())
-	{
-		// The user (not the session manager) wants to close the window.
-		if (isTrayParent())
-		{
-			// It's the parent window of the system tray icon, so just hide
-			// it to prevent the system tray icon closing.
-			hide();
-			theApp()->quitIf();
-			ce->ignore();
-			return;
-		}
-	}
-	ce->accept();
+    if (!theApp()->sessionClosingDown())
+    {
+        // The user (not the session manager) wants to close the window.
+        if (isTrayParent())
+        {
+            // It's the parent window of the system tray icon, so just hide
+            // it to prevent the system tray icon closing.
+            hide();
+            theApp()->quitIf();
+            ce->ignore();
+            return;
+        }
+    }
+    ce->accept();
 }
 
 /******************************************************************************
@@ -1307,13 +1307,13 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 */
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
-	const QMimeData* data = e->mimeData();
-	bool accept = ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
-	                                           :    data->hasText()
-	                                             || KUrl::List::canDecode(data)
-	                                             || KPIM::MailList::canDecode(data);
-	if (accept)
-		e->acceptProposedAction();
+    const QMimeData* data = e->mimeData();
+    bool accept = ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
+                                               :    data->hasText()
+                                                 || KUrl::List::canDecode(data)
+                                                 || KPIM::MailList::canDecode(data);
+    if (accept)
+        e->acceptProposedAction();
 }
 
 /******************************************************************************
@@ -1322,13 +1322,13 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 */
 void MainWindow::dropEvent(QDropEvent* e)
 {
-	executeDropEvent(this, e);
+    executeDropEvent(this, e);
 }
 
 static QString getMailHeader(const char* header, KMime::Content& content)
 {
-	KMime::Headers::Base* hd = content.headerByType(header);
-	return hd ? hd->asUnicodeString() : QString();
+    KMime::Headers::Base* hd = content.headerByType(header);
+    return hd ? hd->asUnicodeString() : QString();
 }
 
 /******************************************************************************
@@ -1337,161 +1337,161 @@ static QString getMailHeader(const char* header, KMime::Content& content)
 */
 void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
-	kDebug() << "Formats:" << e->mimeData()->formats();
-	const QMimeData* data = e->mimeData();
-	KAEvent::Action action = KAEvent::MESSAGE;
-	QByteArray      bytes;
-	AlarmText       alarmText;
-	KPIM::MailList  mailList;
-	KUrl::List      files;
+    kDebug() << "Formats:" << e->mimeData()->formats();
+    const QMimeData* data = e->mimeData();
+    KAEvent::Action action = KAEvent::MESSAGE;
+    QByteArray      bytes;
+    AlarmText       alarmText;
+    KPIM::MailList  mailList;
+    KUrl::List      files;
 #ifdef USE_AKONADI
-	MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
+    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
 #else
-	CalendarLocal calendar(Preferences::timeZone(true));
+    CalendarLocal calendar(Preferences::timeZone(true));
 #endif
 #ifndef NDEBUG
-	QString fmts = data->formats().join(", ");
-	kDebug() << fmts;
+    QString fmts = data->formats().join(", ");
+    kDebug() << fmts;
 #endif
 
-	/* The order of the tests below matters, since some dropped objects
-	 * provide more than one mime type.
-	 * Don't change them without careful thought !!
-	 */
-	if (!(bytes = data->data("message/rfc822")).isEmpty())
-	{
-		// Email message(s). Ignore all but the first.
-		kDebug() << "email";
-		KMime::Content content;
-		content.setContent(bytes);
-		content.parse();
-		QString body;
-		if (content.textContent())
-			body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
-		unsigned long sernum = 0;
-		if (KPIM::MailList::canDecode(data))
-		{
-			// Get its KMail serial number to allow the KMail message
-			// to be called up from the alarm message window.
-			mailList = KPIM::MailList::fromMimeData(data);
-			if (!mailList.isEmpty())
-				sernum = mailList[0].serialNumber();
-		}
-		alarmText.setEmail(getMailHeader("To", content),
-		                   getMailHeader("From", content),
-		                   getMailHeader("Cc", content),
-		                   getMailHeader("Date", content),
-		                   getMailHeader("Subject", content),
-				   body, sernum);
-	}
+    /* The order of the tests below matters, since some dropped objects
+     * provide more than one mime type.
+     * Don't change them without careful thought !!
+     */
+    if (!(bytes = data->data("message/rfc822")).isEmpty())
+    {
+        // Email message(s). Ignore all but the first.
+        kDebug() << "email";
+        KMime::Content content;
+        content.setContent(bytes);
+        content.parse();
+        QString body;
+        if (content.textContent())
+            body = content.textContent()->decodedText(true, true);    // strip trailing newlines & spaces
+        unsigned long sernum = 0;
+        if (KPIM::MailList::canDecode(data))
+        {
+            // Get its KMail serial number to allow the KMail message
+            // to be called up from the alarm message window.
+            mailList = KPIM::MailList::fromMimeData(data);
+            if (!mailList.isEmpty())
+                sernum = mailList[0].serialNumber();
+        }
+        alarmText.setEmail(getMailHeader("To", content),
+                           getMailHeader("From", content),
+                           getMailHeader("Cc", content),
+                           getMailHeader("Date", content),
+                           getMailHeader("Subject", content),
+                   body, sernum);
+    }
 #ifdef KMAIL_SUPPORTED
-	else if (KPIM::MailList::canDecode(data))
-	{
-		mailList = KPIM::MailList::fromMimeData(data);
-		// KMail message(s). Ignore all but the first.
-		kDebug() << "KMail_list";
-		if (mailList.isEmpty())
-			return;
-		KPIM::MailSummary& summary = mailList[0];
-		QDateTime dt;
-		dt.setTime_t(summary.date());
-		QString body = KAMail::getMailBody(summary.serialNumber());
-		alarmText.setEmail(summary.to(), summary.from(), QString(),
-		                   KGlobal::locale()->formatDateTime(dt), summary.subject(),
-		                   body, summary.serialNumber());
-	}
+    else if (KPIM::MailList::canDecode(data))
+    {
+        mailList = KPIM::MailList::fromMimeData(data);
+        // KMail message(s). Ignore all but the first.
+        kDebug() << "KMail_list";
+        if (mailList.isEmpty())
+            return;
+        KPIM::MailSummary& summary = mailList[0];
+        QDateTime dt;
+        dt.setTime_t(summary.date());
+        QString body = KAMail::getMailBody(summary.serialNumber());
+        alarmText.setEmail(summary.to(), summary.from(), QString(),
+                           KGlobal::locale()->formatDateTime(dt), summary.subject(),
+                           body, summary.serialNumber());
+    }
 #endif
 #ifdef USE_AKONADI
-	else if (ICalDrag::fromMimeData(data, calendar))
+    else if (ICalDrag::fromMimeData(data, calendar))
 #else
-	else if (ICalDrag::fromMimeData(data, &calendar))
+    else if (ICalDrag::fromMimeData(data, &calendar))
 #endif
-	{
-		// iCalendar - If events are included, use the first event
-		kDebug() << "iCalendar";
+    {
+        // iCalendar - If events are included, use the first event
+        kDebug() << "iCalendar";
 #ifdef USE_AKONADI
-		Event::List events = calendar->rawEvents();
+        Event::List events = calendar->rawEvents();
 #else
-		Event::List events = calendar.rawEvents();
+        Event::List events = calendar.rawEvents();
 #endif
-		if (!events.isEmpty())
-		{
-			KAEvent ev(events[0]);
-			KAlarm::editNewAlarm(&ev, win);
-			return;
-		}
-		// If todos are included, use the first todo
+        if (!events.isEmpty())
+        {
+            KAEvent ev(events[0]);
+            KAlarm::editNewAlarm(&ev, win);
+            return;
+        }
+        // If todos are included, use the first todo
 #ifdef USE_AKONADI
-		Todo::List todos = calendar->rawTodos();
+        Todo::List todos = calendar->rawTodos();
 #else
-		Todo::List todos = calendar.rawTodos();
+        Todo::List todos = calendar.rawTodos();
 #endif
-		if (todos.isEmpty())
-			return;
+        if (todos.isEmpty())
+            return;
 #ifdef USE_AKONADI
-		Todo::Ptr todo = todos[0];
+        Todo::Ptr todo = todos[0];
 #else
-		Todo* todo = todos[0];
+        Todo* todo = todos[0];
 #endif
-		alarmText.setTodo(todo);
-		KDateTime start = todo->dtStart(true);
-		if (!start.isValid()  &&  todo->hasDueDate())
-			start = todo->dtDue(true);
-		int flags = KAEvent::DEFAULT_FONT;
-		if (start.isDateOnly())
-			flags |= KAEvent::ANY_TIME;
-		KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
-		           QFont(), KAEvent::MESSAGE, 0, flags, true);
-		if (todo->recurs())
-		{
-			ev.setRecurrence(*todo->recurrence());
-			ev.setNextOccurrence(KDateTime::currentUtcDateTime());
-		}
-		ev.endChanges();
-		KAlarm::editNewAlarm(&ev, win);
-		return;
-	}
-	else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
-	{
-		kDebug() << "URL";
-		// Try to find the mime type of the file, without downloading a remote file
-		KMimeType::Ptr mimeType = KMimeType::findByUrl(files[0]);
-		action = mimeType->name().startsWith(QLatin1String("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
-		alarmText.setText(files[0].prettyUrl());
-	}
-	else if (data->hasText())
-	{
-		QString text = data->text();
-		kDebug() << "text";
-		alarmText.setText(text);
-	}
-	else
-		return;
+        alarmText.setTodo(todo);
+        KDateTime start = todo->dtStart(true);
+        if (!start.isValid()  &&  todo->hasDueDate())
+            start = todo->dtDue(true);
+        int flags = KAEvent::DEFAULT_FONT;
+        if (start.isDateOnly())
+            flags |= KAEvent::ANY_TIME;
+        KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),
+                   QFont(), KAEvent::MESSAGE, 0, flags, true);
+        if (todo->recurs())
+        {
+            ev.setRecurrence(*todo->recurrence());
+            ev.setNextOccurrence(KDateTime::currentUtcDateTime());
+        }
+        ev.endChanges();
+        KAlarm::editNewAlarm(&ev, win);
+        return;
+    }
+    else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
+    {
+        kDebug() << "URL";
+        // Try to find the mime type of the file, without downloading a remote file
+        KMimeType::Ptr mimeType = KMimeType::findByUrl(files[0]);
+        action = mimeType->name().startsWith(QLatin1String("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
+        alarmText.setText(files[0].prettyUrl());
+    }
+    else if (data->hasText())
+    {
+        QString text = data->text();
+        kDebug() << "text";
+        alarmText.setText(text);
+    }
+    else
+        return;
 
-	if (!alarmText.isEmpty())
-	{
-		if (action == KAEvent::MESSAGE
-		&&  (alarmText.isEmail() || alarmText.isScript()))
-		{
-			// If the alarm text could be interpreted as an email or command script,
-			// prompt for which type of alarm to create.
-			QStringList types;
-			types += i18nc("@item:inlistbox", "Display Alarm");
-			if (alarmText.isEmail())
-				types += i18nc("@item:inlistbox", "Email Alarm");
-			else if (alarmText.isScript())
-				types += i18nc("@item:inlistbox", "Command Alarm");
-			bool ok = false;
-			QString type = KInputDialog::getItem(i18nc("@title:window", "Alarm Type"),
-			                                     i18nc("@info", "Choose alarm type to create:"), types, 0, false, &ok, mainMainWindow());
-			if (!ok)
-				return;   // user didn't press OK
-			int i = types.indexOf(type);
-			if (i == 1)
-				action = alarmText.isEmail() ? KAEvent::EMAIL : KAEvent::COMMAND;
-		}
-		KAlarm::editNewAlarm(action, win, &alarmText);
-	}
+    if (!alarmText.isEmpty())
+    {
+        if (action == KAEvent::MESSAGE
+        &&  (alarmText.isEmail() || alarmText.isScript()))
+        {
+            // If the alarm text could be interpreted as an email or command script,
+            // prompt for which type of alarm to create.
+            QStringList types;
+            types += i18nc("@item:inlistbox", "Display Alarm");
+            if (alarmText.isEmail())
+                types += i18nc("@item:inlistbox", "Email Alarm");
+            else if (alarmText.isScript())
+                types += i18nc("@item:inlistbox", "Command Alarm");
+            bool ok = false;
+            QString type = KInputDialog::getItem(i18nc("@title:window", "Alarm Type"),
+                                                 i18nc("@info", "Choose alarm type to create:"), types, 0, false, &ok, mainMainWindow());
+            if (!ok)
+                return;   // user didn't press OK
+            int i = types.indexOf(type);
+            if (i == 1)
+                action = alarmText.isEmail() ? KAEvent::EMAIL : KAEvent::COMMAND;
+        }
+        KAlarm::editNewAlarm(action, win, &alarmText);
+    }
 }
 
 /******************************************************************************
@@ -1500,29 +1500,29 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 */
 void MainWindow::slotCalendarStatusChanged()
 {
-	// Find whether there are any writable calendars
+    // Find whether there are any writable calendars
 #ifdef USE_AKONADI
-	bool active  = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::ACTIVE, true).isEmpty();
-	bool templat = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::TEMPLATE, true).isEmpty();
+    bool active  = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::ACTIVE, true).isEmpty();
+    bool templat = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::TEMPLATE, true).isEmpty();
 #else
-	AlarmResources* resources = AlarmResources::instance();
-	bool active  = resources->activeCount(KAlarm::CalEvent::ACTIVE, true);
-	bool templat = resources->activeCount(KAlarm::CalEvent::TEMPLATE, true);
+    AlarmResources* resources = AlarmResources::instance();
+    bool active  = resources->activeCount(KAlarm::CalEvent::ACTIVE, true);
+    bool templat = resources->activeCount(KAlarm::CalEvent::TEMPLATE, true);
 #endif
-	for (int i = 0, end = mWindowList.count();  i < end;  ++i)
-	{
-		MainWindow* w = mWindowList[i];
-		w->mActionImportAlarms->setEnabled(active || templat);
-		w->mActionImportBirthdays->setEnabled(active);
-		w->mActionNew->setEnabled(active);
+    for (int i = 0, end = mWindowList.count();  i < end;  ++i)
+    {
+        MainWindow* w = mWindowList[i];
+        w->mActionImportAlarms->setEnabled(active || templat);
+        w->mActionImportBirthdays->setEnabled(active);
+        w->mActionNew->setEnabled(active);
 #ifdef USE_AKONADI
-		w->mActionNewFromTemplate->setEnabled(active && TemplateListModel::all()->haveEvents());
+        w->mActionNewFromTemplate->setEnabled(active && TemplateListModel::all()->haveEvents());
 #else
-		w->mActionNewFromTemplate->setEnabled(active && EventListModel::templates()->haveEvents());
+        w->mActionNewFromTemplate->setEnabled(active && EventListModel::templates()->haveEvents());
 #endif
-		w->mActionCreateTemplate->setEnabled(templat);
-		w->slotSelection();
-	}
+        w->mActionCreateTemplate->setEnabled(templat);
+        w->slotSelection();
+    }
 }
 
 /******************************************************************************
@@ -1531,79 +1531,79 @@ void MainWindow::slotCalendarStatusChanged()
 */
 void MainWindow::slotSelection()
 {
-	// Find which events have been selected
+    // Find which events have been selected
 #ifdef USE_AKONADI
-	QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
 #else
-	KAEvent::List events = mListView->selectedEvents();
+    KAEvent::List events = mListView->selectedEvents();
 #endif
-	int count = events.count();
-	if (!count)
-	{
-		selectionCleared();    // disable actions
-		return;
-	}
+    int count = events.count();
+    if (!count)
+    {
+        selectionCleared();    // disable actions
+        return;
+    }
 
-	// Find whether there are any writable resources
-	bool active = mActionNew->isEnabled();
+    // Find whether there are any writable resources
+    bool active = mActionNew->isEnabled();
 
-	bool readOnly = false;
-	bool allArchived = true;
-	bool enableReactivate = true;
-	bool enableEnableDisable = true;
-	bool enableEnable = false;
-	bool enableDisable = false;
-	AlarmCalendar* resources = AlarmCalendar::resources();
-	KDateTime now = KDateTime::currentUtcDateTime();
-	for (int i = 0;  i < count;  ++i)
-	{
+    bool readOnly = false;
+    bool allArchived = true;
+    bool enableReactivate = true;
+    bool enableEnableDisable = true;
+    bool enableEnable = false;
+    bool enableDisable = false;
+    AlarmCalendar* resources = AlarmCalendar::resources();
+    KDateTime now = KDateTime::currentUtcDateTime();
+    for (int i = 0;  i < count;  ++i)
+    {
 #ifdef USE_AKONADI
-		KAEvent* ev = resources->event(events[i].id());   // get up-to-date status
-		KAEvent* event = ev ? ev : &events[i];
+        KAEvent* ev = resources->event(events[i].id());   // get up-to-date status
+        KAEvent* event = ev ? ev : &events[i];
 #else
-		KAEvent* event = events[i];
+        KAEvent* event = events[i];
 #endif
-		bool expired = event->expired();
-		if (!expired)
-			allArchived = false;
+        bool expired = event->expired();
+        if (!expired)
+            allArchived = false;
 #ifdef USE_AKONADI
-		if (resources->eventReadOnly(event->itemId()))
+        if (resources->eventReadOnly(event->itemId()))
 #else
-		if (resources->eventReadOnly(event->id()))
+        if (resources->eventReadOnly(event->id()))
 #endif
-			readOnly = true;
-		if (enableReactivate
-		&&  (!expired  ||  !event->occursAfter(now, true)))
-			enableReactivate = false;
-		if (enableEnableDisable)
-		{
-			if (expired)
-				enableEnableDisable = enableEnable = enableDisable = false;
-			else
-			{
-				if (!enableEnable  &&  !event->enabled())
-					enableEnable = true;
-				if (!enableDisable  &&  event->enabled())
-					enableDisable = true;
-			}
-		}
-	}
+            readOnly = true;
+        if (enableReactivate
+        &&  (!expired  ||  !event->occursAfter(now, true)))
+            enableReactivate = false;
+        if (enableEnableDisable)
+        {
+            if (expired)
+                enableEnableDisable = enableEnable = enableDisable = false;
+            else
+            {
+                if (!enableEnable  &&  !event->enabled())
+                    enableEnable = true;
+                if (!enableDisable  &&  event->enabled())
+                    enableDisable = true;
+            }
+        }
+    }
 
-	kDebug() << "true";
+    kDebug() << "true";
 #ifdef USE_AKONADI
-	mActionCreateTemplate->setEnabled((count == 1) && !CollectionControlModel::enabledCollections(KAlarm::CalEvent::TEMPLATE, true).isEmpty());
+    mActionCreateTemplate->setEnabled((count == 1) && !CollectionControlModel::enabledCollections(KAlarm::CalEvent::TEMPLATE, true).isEmpty());
 #else
-	mActionCreateTemplate->setEnabled((count == 1) && (AlarmResources::instance()->activeCount(KAlarm::CalEvent::TEMPLATE, true) > 0));
+    mActionCreateTemplate->setEnabled((count == 1) && (AlarmResources::instance()->activeCount(KAlarm::CalEvent::TEMPLATE, true) > 0));
 #endif
-	mActionExportAlarms->setEnabled(true);
-	mActionExport->setEnabled(true);
-	mActionCopy->setEnabled(active && count == 1);
-	mActionModify->setEnabled(count == 1);
-	mActionDelete->setEnabled(!readOnly && (active || allArchived));
-	mActionReactivate->setEnabled(active && enableReactivate);
-	mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));
-	if (enableEnable || enableDisable)
-		setEnableText(enableEnable);
+    mActionExportAlarms->setEnabled(true);
+    mActionExport->setEnabled(true);
+    mActionCopy->setEnabled(active && count == 1);
+    mActionModify->setEnabled(count == 1);
+    mActionDelete->setEnabled(!readOnly && (active || allArchived));
+    mActionReactivate->setEnabled(active && enableReactivate);
+    mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));
+    if (enableEnable || enableDisable)
+        setEnableText(enableEnable);
 }
 
 /******************************************************************************
@@ -1612,9 +1612,9 @@ void MainWindow::slotSelection()
 */
 void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
-	kDebug();
-	if (mContextMenu)
-		mContextMenu->popup(globalPos);
+    kDebug();
+    if (mContextMenu)
+        mContextMenu->popup(globalPos);
 }
 
 /******************************************************************************
@@ -1622,14 +1622,14 @@ void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 */
 void MainWindow::selectionCleared()
 {
-	mActionCreateTemplate->setEnabled(false);
-	mActionExportAlarms->setEnabled(false);
-	mActionExport->setEnabled(false);
-	mActionCopy->setEnabled(false);
-	mActionModify->setEnabled(false);
-	mActionDelete->setEnabled(false);
-	mActionReactivate->setEnabled(false);
-	mActionEnable->setEnabled(false);
+    mActionCreateTemplate->setEnabled(false);
+    mActionExportAlarms->setEnabled(false);
+    mActionExport->setEnabled(false);
+    mActionCopy->setEnabled(false);
+    mActionModify->setEnabled(false);
+    mActionDelete->setEnabled(false);
+    mActionReactivate->setEnabled(false);
+    mActionEnable->setEnabled(false);
 }
 
 /******************************************************************************
@@ -1637,8 +1637,8 @@ void MainWindow::selectionCleared()
 */
 void MainWindow::setEnableText(bool enable)
 {
-	mActionEnableEnable = enable;
-	mActionEnable->setText(enable ? i18nc("@action", "Ena&ble") : i18nc("@action", "Disa&ble"));
+    mActionEnableEnable = enable;
+    mActionEnable->setText(enable ? i18nc("@action", "Ena&ble") : i18nc("@action", "Disa&ble"));
 }
 
 /******************************************************************************
@@ -1647,30 +1647,30 @@ void MainWindow::setEnableText(bool enable)
 */
 MainWindow* MainWindow::toggleWindow(MainWindow* win)
 {
-	if (win  &&  mWindowList.indexOf(win) != -1)
-	{
-		// A window is specified (and it exists)
-		if (win->isVisible())
-		{
-			// The window is visible, so close it
-			win->close();
-			return 0;
-		}
-		else
-		{
-			// The window is hidden, so display it
-			win->hide();        // in case it's on a different desktop
-			win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
-			win->raise();
-			win->activateWindow();
-			return win;
-		}
-	}
+    if (win  &&  mWindowList.indexOf(win) != -1)
+    {
+        // A window is specified (and it exists)
+        if (win->isVisible())
+        {
+            // The window is visible, so close it
+            win->close();
+            return 0;
+        }
+        else
+        {
+            // The window is hidden, so display it
+            win->hide();        // in case it's on a different desktop
+            win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
+            win->raise();
+            win->activateWindow();
+            return win;
+        }
+    }
 
-	// No window is specified, or the window doesn't exist. Open a new one.
-	win = create();
-	win->show();
-	return win;
+    // No window is specified, or the window doesn't exist. Open a new one.
+    win = create();
+    win->show();
+    return win;
 }
 
 /******************************************************************************
@@ -1686,16 +1686,16 @@ void MainWindow::editAlarm(EditAlarmDlg* dlg, const KAEvent& event, AlarmResourc
 #endif
 {
 #ifdef USE_AKONADI
-	mEditAlarmMap[dlg] = event;
+    mEditAlarmMap[dlg] = event;
 #else
-	KAEvent ev = event;
-	ev.setResource(resource);
-	mEditAlarmMap[dlg] = ev;
+    KAEvent ev = event;
+    ev.setResource(resource);
+    mEditAlarmMap[dlg] = ev;
 #endif
-	connect(dlg, SIGNAL(accepted()), SLOT(editAlarmOk()));
-	connect(dlg, SIGNAL(destroyed(QObject*)), SLOT(editAlarmDeleted(QObject*)));
-	dlg->setAttribute(Qt::WA_DeleteOnClose, true);   // ensure no memory leaks
-	dlg->show();
+    connect(dlg, SIGNAL(accepted()), SLOT(editAlarmOk()));
+    connect(dlg, SIGNAL(destroyed(QObject*)), SLOT(editAlarmDeleted(QObject*)));
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);   // ensure no memory leaks
+    dlg->show();
 }
 
 /******************************************************************************
@@ -1704,23 +1704,23 @@ void MainWindow::editAlarm(EditAlarmDlg* dlg, const KAEvent& event, AlarmResourc
 */
 void MainWindow::editAlarmOk()
 {
-	EditAlarmDlg* dlg = qobject_cast<EditAlarmDlg*>(sender());
-	if (!dlg)
-		return;
-	QMap<EditAlarmDlg*, KAEvent>::Iterator it = mEditAlarmMap.find(dlg);
-	if (it == mEditAlarmMap.end())
-		return;
-	KAEvent event = it.value();
-	mEditAlarmMap.erase(it);
-	if (!event.isValid())
-		return;
-	if (dlg->result() != QDialog::Accepted)
-		return;
+    EditAlarmDlg* dlg = qobject_cast<EditAlarmDlg*>(sender());
+    if (!dlg)
+        return;
+    QMap<EditAlarmDlg*, KAEvent>::Iterator it = mEditAlarmMap.find(dlg);
+    if (it == mEditAlarmMap.end())
+        return;
+    KAEvent event = it.value();
+    mEditAlarmMap.erase(it);
+    if (!event.isValid())
+        return;
+    if (dlg->result() != QDialog::Accepted)
+        return;
 #ifdef USE_AKONADI
-	Akonadi::Collection c = AkonadiModel::instance()->collection(event);
-	KAlarm::updateEditedAlarm(dlg, event, c);
+    Akonadi::Collection c = AkonadiModel::instance()->collection(event);
+    KAlarm::updateEditedAlarm(dlg, event, c);
 #else
-	KAlarm::updateEditedAlarm(dlg, event, event.resource());
+    KAlarm::updateEditedAlarm(dlg, event, event.resource());
 #endif
 }
 
@@ -1730,5 +1730,7 @@ void MainWindow::editAlarmOk()
 */
 void MainWindow::editAlarmDeleted(QObject* obj)
 {
-	mEditAlarmMap.remove(static_cast<EditAlarmDlg*>(obj));
+    mEditAlarmMap.remove(static_cast<EditAlarmDlg*>(obj));
 }
+
+// vim: et sw=4:

@@ -21,9 +21,9 @@
 #ifndef EDITDLGPRIVATE_H
 #define EDITDLGPRIVATE_H
 
-#include <QFrame>
 #include <ktextedit.h>
 #include <ktabwidget.h>
+#include <QFrame>
 class QDragEnterEvent;
 class QShowEvent;
 class CheckBox;
@@ -32,51 +32,56 @@ class LineEdit;
 
 class PageFrame : public QFrame
 {
-		Q_OBJECT
-	public:
-		explicit PageFrame(QWidget* parent = 0) : QFrame(parent) { }
-	protected:
-		virtual void     showEvent(QShowEvent*)    { emit shown(); }
-	signals:
-		void             shown();
+        Q_OBJECT
+    public:
+        explicit PageFrame(QWidget* parent = 0) : QFrame(parent) { }
+
+    protected:
+        virtual void     showEvent(QShowEvent*)    { emit shown(); }
+
+    signals:
+        void             shown();
 };
 
 class TextEdit : public KTextEdit
 {
-		Q_OBJECT
-	public:
-		explicit TextEdit(QWidget* parent);
-		virtual QSize sizeHint() const         { return minimumSizeHint(); }
-		virtual QSize minimumSizeHint() const  { return minimumSize(); }
-	protected:
-		virtual void dragEnterEvent(QDragEnterEvent*);
+        Q_OBJECT
+    public:
+        explicit TextEdit(QWidget* parent);
+        virtual QSize sizeHint() const         { return minimumSizeHint(); }
+        virtual QSize minimumSizeHint() const  { return minimumSize(); }
+
+    protected:
+        virtual void dragEnterEvent(QDragEnterEvent*);
 };
 
 class CommandEdit : public QWidget
 {
-		Q_OBJECT
-	public:
-		explicit CommandEdit(QWidget* parent);
-		bool      isScript() const;
-		void      setScript(bool);
-		QString   text() const;
-		QString   text(EditAlarmDlg*, bool showErrorMessage) const;
-		void      setText(const AlarmText&);
-		void      setReadOnly(bool);
-		virtual QSize minimumSizeHint() const;
-		virtual QSize sizeHint() const   { return minimumSizeHint(); }
+        Q_OBJECT
+    public:
+        explicit CommandEdit(QWidget* parent);
+        bool      isScript() const;
+        void      setScript(bool);
+        QString   text() const;
+        QString   text(EditAlarmDlg*, bool showErrorMessage) const;
+        void      setText(const AlarmText&);
+        void      setReadOnly(bool);
+        virtual QSize minimumSizeHint() const;
+        virtual QSize sizeHint() const   { return minimumSizeHint(); }
 
-	signals:
-		void      scriptToggled(bool);
-		void      changed();        // emitted when any changes occur
+    signals:
+        void      scriptToggled(bool);
+        void      changed();        // emitted when any changes occur
 
-	private slots:
-		void      slotCmdScriptToggled(bool);
+    private slots:
+        void      slotCmdScriptToggled(bool);
 
-	private:
-		CheckBox* mTypeScript;      // entering a script
-		LineEdit* mCommandEdit;     // command line edit box
-		TextEdit* mScriptEdit;      // script edit box
+    private:
+        CheckBox* mTypeScript;      // entering a script
+        LineEdit* mCommandEdit;     // command line edit box
+        TextEdit* mScriptEdit;      // script edit box
 };
 
 #endif // EDITDLGPRIVATE_H
+
+// vim: et sw=4:

@@ -19,14 +19,14 @@
  */
 #include "kalarm.h"
 
-#include <QAbstractButton>
 #include "buttongroup.moc"
+#include <QAbstractButton>
 
 
 ButtonGroup::ButtonGroup(QObject* parent)
-	: QButtonGroup(parent)
+    : QButtonGroup(parent)
 {
-	connect(this, SIGNAL(buttonClicked(QAbstractButton*)), SIGNAL(buttonSet(QAbstractButton*)));
+    connect(this, SIGNAL(buttonClicked(QAbstractButton*)), SIGNAL(buttonSet(QAbstractButton*)));
 }
 
 /******************************************************************************
@@ -34,8 +34,8 @@ ButtonGroup::ButtonGroup(QObject* parent)
  */
 void ButtonGroup::addButton(QAbstractButton* button)
 {
-	QButtonGroup::addButton(button);
-	connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
+    QButtonGroup::addButton(button);
+    connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
 }
 
 /******************************************************************************
@@ -43,8 +43,8 @@ void ButtonGroup::addButton(QAbstractButton* button)
  */
 void ButtonGroup::addButton(QAbstractButton* button, int id)
 {
-	addButton(button);
-	mIds[id] = button;
+    addButton(button);
+    mIds[id] = button;
 }
 
 /******************************************************************************
@@ -53,10 +53,10 @@ void ButtonGroup::addButton(QAbstractButton* button, int id)
  */
 int ButtonGroup::id(QAbstractButton* button) const
 {
-	for (QMap<int, QAbstractButton*>::ConstIterator it = mIds.constBegin();  it != mIds.constEnd();  ++it)
-		if (it.value() == button)
-			return it.key();
-	return -1;
+    for (QMap<int, QAbstractButton*>::ConstIterator it = mIds.constBegin();  it != mIds.constEnd();  ++it)
+        if (it.value() == button)
+            return it.key();
+    return -1;
 }
 
 /******************************************************************************
@@ -64,10 +64,10 @@ int ButtonGroup::id(QAbstractButton* button) const
  */
 QAbstractButton* ButtonGroup::find(int id) const
 {
-	QMap<int, QAbstractButton*>::ConstIterator it = mIds.find(id);
-	if (it == mIds.constEnd())
-		return 0;
-	return it.value();
+    QMap<int, QAbstractButton*>::ConstIterator it = mIds.find(id);
+    if (it == mIds.constEnd())
+        return 0;
+    return it.value();
 }
 
 /******************************************************************************
@@ -75,7 +75,7 @@ QAbstractButton* ButtonGroup::find(int id) const
  */
 int ButtonGroup::selectedId() const
 {
-	return id(checkedButton());
+    return id(checkedButton());
 }
 
 /******************************************************************************
@@ -83,9 +83,9 @@ int ButtonGroup::selectedId() const
  */
 void ButtonGroup::setButton(int id)
 {
-	QAbstractButton* button = find(id);
-	if (button)
-		button->setChecked(true);
+    QAbstractButton* button = find(id);
+    if (button)
+        button->setChecked(true);
 }
 
 /******************************************************************************
@@ -93,5 +93,7 @@ void ButtonGroup::setButton(int id)
  */
 void ButtonGroup::slotButtonToggled(bool)
 {
-	emit buttonSet(checkedButton());
+    emit buttonSet(checkedButton());
 }
+
+// vim: et sw=4:

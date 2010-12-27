@@ -1,7 +1,7 @@
 /*
  *  emailidcombo.cpp  -  email identity combo box with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2004 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,47 +18,50 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "emailidcombo.moc"
+
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include "emailidcombo.moc"
 
 
 EmailIdCombo::EmailIdCombo(KPIMIdentities::IdentityManager* manager, QWidget* parent)
-	: KPIMIdentities::IdentityCombo(manager, parent),
-	  mReadOnly(false)
+    : KPIMIdentities::IdentityCombo(manager, parent),
+      mReadOnly(false)
 { }
 
 void EmailIdCombo::mousePressEvent(QMouseEvent* e)
 {
-	if (mReadOnly)
-	{
-		// Swallow up the event if it's the left button
-		if (e->button() == Qt::LeftButton)
-			return;
-	}
-	KPIMIdentities::IdentityCombo::mousePressEvent(e);
+    if (mReadOnly)
+    {
+        // Swallow up the event if it's the left button
+        if (e->button() == Qt::LeftButton)
+            return;
+    }
+    KPIMIdentities::IdentityCombo::mousePressEvent(e);
 }
 
 void EmailIdCombo::mouseReleaseEvent(QMouseEvent* e)
 {
-	if (!mReadOnly)
-		KPIMIdentities::IdentityCombo::mouseReleaseEvent(e);
+    if (!mReadOnly)
+        KPIMIdentities::IdentityCombo::mouseReleaseEvent(e);
 }
 
 void EmailIdCombo::mouseMoveEvent(QMouseEvent* e)
 {
-	if (!mReadOnly)
-		KPIMIdentities::IdentityCombo::mouseMoveEvent(e);
+    if (!mReadOnly)
+        KPIMIdentities::IdentityCombo::mouseMoveEvent(e);
 }
 
 void EmailIdCombo::keyPressEvent(QKeyEvent* e)
 {
-	if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
-		KPIMIdentities::IdentityCombo::keyPressEvent(e);
+    if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
+        KPIMIdentities::IdentityCombo::keyPressEvent(e);
 }
 
 void EmailIdCombo::keyReleaseEvent(QKeyEvent* e)
 {
-	if (!mReadOnly)
-		KPIMIdentities::IdentityCombo::keyReleaseEvent(e);
+    if (!mReadOnly)
+        KPIMIdentities::IdentityCombo::keyReleaseEvent(e);
 }
+
+// vim: et sw=4:

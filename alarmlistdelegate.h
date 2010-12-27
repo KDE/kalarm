@@ -28,14 +28,15 @@
 
 class AlarmListDelegate : public EventListDelegate
 {
-		Q_OBJECT
-	public:
-		explicit AlarmListDelegate(AlarmListView* parent = 0)
-		           : EventListDelegate(parent) {}
-		virtual void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
-		virtual QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const;
-		virtual void edit(KAEvent*, EventListView*);
+        Q_OBJECT
+    public:
+        explicit AlarmListDelegate(AlarmListView* parent = 0)
+                   : EventListDelegate(parent) {}
+        virtual void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const;
+        virtual QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const;
+        virtual void edit(KAEvent*, EventListView*);
 };
 
 #endif
 
+// vim: et sw=4:

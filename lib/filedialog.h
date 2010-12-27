@@ -27,19 +27,21 @@ class QCheckBox;
 
 class FileDialog : public KFileDialog
 {
-		Q_OBJECT
-	public:
-		FileDialog(const KUrl& startDir, const QString& filter,
-		           QWidget* parent, QWidget* widget = 0)
-		      : KFileDialog(startDir, filter, parent, widget) {}
-		static QString getSaveFileName(const KUrl& dir = KUrl(), const QString& filter = QString(),
-		                               QWidget* parent = 0, const QString& caption = QString(), bool* append = 0);
+        Q_OBJECT
+    public:
+        FileDialog(const KUrl& startDir, const QString& filter,
+                   QWidget* parent, QWidget* widget = 0)
+              : KFileDialog(startDir, filter, parent, widget) {}
+        static QString getSaveFileName(const KUrl& dir = KUrl(), const QString& filter = QString(),
+                                       QWidget* parent = 0, const QString& caption = QString(), bool* append = 0);
 
-	private slots:
-		void appendToggled(bool);
+    private slots:
+        void appendToggled(bool);
 
-	private:
-		static QCheckBox* mAppendCheck;
+    private:
+        static QCheckBox* mAppendCheck;
 };
 
 #endif
+
+// vim: et sw=4:

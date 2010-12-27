@@ -30,32 +30,34 @@
 
 
 AlarmListFilterModel::AlarmListFilterModel(EventListModel* baseModel, QObject* parent)
-	: EventListFilterModel(baseModel, parent),
-	  mStatusFilter(KAlarm::CalEvent::EMPTY)
+    : EventListFilterModel(baseModel, parent),
+      mStatusFilter(KAlarm::CalEvent::EMPTY)
 {}
 
 void AlarmListFilterModel::setStatusFilter(KAlarm::CalEvent::Types type)
 {
-	if (type != mStatusFilter)
-	{
-		mStatusFilter = type;
-		invalidateFilter();
-	}
+    if (type != mStatusFilter)
+    {
+        mStatusFilter = type;
+        invalidateFilter();
+    }
 }
 
 bool AlarmListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
 {
-	return sourceModel()->data(sourceModel()->index(sourceRow, 0), EventListModel::StatusRole).toInt() & mStatusFilter;
+    return sourceModel()->data(sourceModel()->index(sourceRow, 0), EventListModel::StatusRole).toInt() & mStatusFilter;
 }
 
 bool AlarmListFilterModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
 {
-	return (sourceCol != EventListModel::TemplateNameColumn);
+    return (sourceCol != EventListModel::TemplateNameColumn);
 }
 
 QModelIndex AlarmListFilterModel::mapFromSource(const QModelIndex& sourceIndex) const
 {
-	if (sourceIndex.column() == EventListModel::TemplateNameColumn)
-		return QModelIndex();
-	return EventListFilterModel::mapFromSource(sourceIndex);
+    if (sourceIndex.column() == EventListModel::TemplateNameColumn)
+        return QModelIndex();
+    return EventListFilterModel::mapFromSource(sourceIndex);
 }
+
+// vim: et sw=4:

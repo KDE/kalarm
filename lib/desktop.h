@@ -30,3 +30,5 @@ QRect desktopWorkArea(int screen = -1);
 } // namespace KAlarm
 
 #endif // DESKTOP_H
+
+// vim: et sw=4:

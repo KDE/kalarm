@@ -21,9 +21,10 @@
 #ifndef SPINBOX2_P_H
 #define SPINBOX2_P_H
 
+#include "spinbox.h"
+
 #include <QPixmap>
 #include <QGraphicsView>
-#include "spinbox.h"
 
 class QMouseEvent;
 class QPaintEvent;
@@ -37,19 +38,22 @@ class QPaintEvent;
 
 class ExtraSpinBox : public SpinBox
 {
-		Q_OBJECT
-	public:
-		explicit ExtraSpinBox(QWidget* parent)
-		             : SpinBox(parent), mInhibitPaintSignal(0) { }
-		ExtraSpinBox(int minValue, int maxValue, QWidget* parent)
-		             : SpinBox(minValue, maxValue, parent), mInhibitPaintSignal(0) { }
-		void         inhibitPaintSignal(int i)  { mInhibitPaintSignal = i; }
-	signals:
-		void         painted();
-	protected:
-		virtual void paintEvent(QPaintEvent*);
-	private:
-		int          mInhibitPaintSignal;
+        Q_OBJECT
+    public:
+        explicit ExtraSpinBox(QWidget* parent)
+                     : SpinBox(parent), mInhibitPaintSignal(0) { }
+        ExtraSpinBox(int minValue, int maxValue, QWidget* parent)
+                     : SpinBox(minValue, maxValue, parent), mInhibitPaintSignal(0) { }
+        void         inhibitPaintSignal(int i)  { mInhibitPaintSignal = i; }
+
+    signals:
+        void         painted();
+
+    protected:
+        virtual void paintEvent(QPaintEvent*);
+
+    private:
+        int          mInhibitPaintSignal;
 };
 
 
@@ -63,34 +67,37 @@ class ExtraSpinBox : public SpinBox
 
 class SpinMirror : public QGraphicsView
 {
-		Q_OBJECT
-	public:
-		explicit SpinMirror(ExtraSpinBox*, SpinBox*, QWidget* parent = 0);
-		void         setReadOnly(bool ro)        { mReadOnly = ro; }
-		bool         isReadOnly() const          { return mReadOnly; }
-		void         setButtons();
-		void         setFrame();
-		void         setButtonPos(const QPoint&);
+        Q_OBJECT
+    public:
+        explicit SpinMirror(ExtraSpinBox*, SpinBox*, QWidget* parent = 0);
+        void         setReadOnly(bool ro)        { mReadOnly = ro; }
+        bool         isReadOnly() const          { return mReadOnly; }
+        void         setButtons();
+        void         setFrame();
+        void         setButtonPos(const QPoint&);
 
-	protected:
-		virtual bool event(QEvent*);
-		virtual void resizeEvent(QResizeEvent*);
-		virtual void styleChange(QStyle&);
-		virtual void mousePressEvent(QMouseEvent* e)        { mouseEvent(e); }
-		virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
-		virtual void mouseMoveEvent(QMouseEvent* e)         { mouseEvent(e); }
-		virtual void mouseDoubleClickEvent(QMouseEvent* e)  { mouseEvent(e); }
-		virtual void wheelEvent(QWheelEvent*);
-	private:
-		void         mouseEvent(QMouseEvent*);
-		void         setMirroredState(bool clear = false);
-		QPoint       spinboxPoint(const QPoint&) const;
+    protected:
+        virtual bool event(QEvent*);
+        virtual void resizeEvent(QResizeEvent*);
+        virtual void styleChange(QStyle&);
+        virtual void mousePressEvent(QMouseEvent* e)        { mouseEvent(e); }
+        virtual void mouseReleaseEvent(QMouseEvent* e)      { mouseEvent(e); }
+        virtual void mouseMoveEvent(QMouseEvent* e)         { mouseEvent(e); }
+        virtual void mouseDoubleClickEvent(QMouseEvent* e)  { mouseEvent(e); }
+        virtual void wheelEvent(QWheelEvent*);
 
-		ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
-		SpinBox*             mMainSpinbox;
-		QGraphicsPixmapItem* mButtons;    // image of spin butttons
-		bool                 mReadOnly;   // value cannot be changed
-		bool                 mMirrored;   // mirror left-to-right
+    private:
+        void         mouseEvent(QMouseEvent*);
+        void         setMirroredState(bool clear = false);
+        QPoint       spinboxPoint(const QPoint&) const;
+
+        ExtraSpinBox*        mSpinbox;    // spinbox whose spin buttons are being mirrored
+        SpinBox*             mMainSpinbox;
+        QGraphicsPixmapItem* mButtons;    // image of spin butttons
+        bool                 mReadOnly;   // value cannot be changed
+        bool                 mMirrored;   // mirror left-to-right
 };
 
 #endif // SPINBOX2_P_H
+
+// vim: et sw=4:

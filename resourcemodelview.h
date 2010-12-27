@@ -37,79 +37,80 @@
 
 class ResourceModel : public QAbstractListModel
 {
-		Q_OBJECT
-	public:
-		static ResourceModel* instance(QObject* parent = 0);
-		virtual int      rowCount(const QModelIndex& parent = QModelIndex()) const;
-		virtual QModelIndex index(int row, int column, const QModelIndex& parent) const;
-		virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
-		virtual bool     setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole);
-		virtual Qt::ItemFlags flags(const QModelIndex&) const;
-		AlarmResource*   resource(const QModelIndex&) const;
-		void             removeResource(AlarmResource*);
-		void             notifyChange(const QModelIndex&);
+        Q_OBJECT
+    public:
+        static ResourceModel* instance(QObject* parent = 0);
+        virtual int      rowCount(const QModelIndex& parent = QModelIndex()) const;
+        virtual QModelIndex index(int row, int column, const QModelIndex& parent) const;
+        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+        virtual bool     setData(const QModelIndex&, const QVariant& value, int role = Qt::EditRole);
+        virtual Qt::ItemFlags flags(const QModelIndex&) const;
+        AlarmResource*   resource(const QModelIndex&) const;
+        void             removeResource(AlarmResource*);
+        void             notifyChange(const QModelIndex&);
 
-	private slots:
-		void             refresh();
-		void             addResource(AlarmResource*);
-		void             updateResource(AlarmResource*);
-		void             slotStandardChanged(KAlarm::CalEvent::Type);
-		void             slotLoaded(AlarmResource*, bool active);
-		void             slotStatusChanged(AlarmResource*, AlarmResources::Change);
+    private slots:
+        void             refresh();
+        void             addResource(AlarmResource*);
+        void             updateResource(AlarmResource*);
+        void             slotStandardChanged(KAlarm::CalEvent::Type);
+        void             slotLoaded(AlarmResource*, bool active);
+        void             slotStatusChanged(AlarmResource*, AlarmResources::Change);
 
-	private:
-		explicit ResourceModel(QObject* parent = 0);
+    private:
+        explicit ResourceModel(QObject* parent = 0);
 
-		static ResourceModel* mInstance;
-		QList<AlarmResource*> mResources;
-		QString               mErrorPrompt;
-		QFont                 mFont;
+        static ResourceModel* mInstance;
+        QList<AlarmResource*> mResources;
+        QString               mErrorPrompt;
+        QFont                 mFont;
 };
 
 
 class ResourceFilterModel : public QSortFilterProxyModel
 {
-		Q_OBJECT
-	public:
-		ResourceFilterModel(QAbstractItemModel* baseModel, QObject* parent);
-		void           setFilter(KAlarm::CalEvent::Type);
-		AlarmResource* resource(int row) const;
-		AlarmResource* resource(const QModelIndex&) const;
-		void           notifyChange(int row);
-		void           notifyChange(const QModelIndex&);
+        Q_OBJECT
+    public:
+        ResourceFilterModel(QAbstractItemModel* baseModel, QObject* parent);
+        void           setFilter(KAlarm::CalEvent::Type);
+        AlarmResource* resource(int row) const;
+        AlarmResource* resource(const QModelIndex&) const;
+        void           notifyChange(int row);
+        void           notifyChange(const QModelIndex&);
 
-	protected:
-		virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+    protected:
+        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
-	private:
-		KAlarm::CalEvent::Type mResourceType;
+    private:
+        KAlarm::CalEvent::Type mResourceType;
 };
 
 
 class ResourceView : public QListView
 {
-		Q_OBJECT
-	public:
-		ResourceView(QWidget* parent = 0)  : QListView(parent) {}
-		virtual void   setModel(QAbstractItemModel*);
-		AlarmResource* resource(int row) const;
-		AlarmResource* resource(const QModelIndex&) const;
-		void           notifyChange(int row) const;
-		void           notifyChange(const QModelIndex&) const;
+        Q_OBJECT
+    public:
+        ResourceView(QWidget* parent = 0)  : QListView(parent) {}
+        virtual void   setModel(QAbstractItemModel*);
+        AlarmResource* resource(int row) const;
+        AlarmResource* resource(const QModelIndex&) const;
+        void           notifyChange(int row) const;
+        void           notifyChange(const QModelIndex&) const;
 
-	protected:
-		virtual void   mouseReleaseEvent(QMouseEvent*);
-		virtual bool   viewportEvent(QEvent*);
+    protected:
+        virtual void   mouseReleaseEvent(QMouseEvent*);
+        virtual bool   viewportEvent(QEvent*);
 };
 
 
 class ResourceDelegate : public QItemDelegate
 {
-		Q_OBJECT
-	public:
-		ResourceDelegate(ResourceView* parent = 0)  : QItemDelegate(parent) {}
-		virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
+        Q_OBJECT
+    public:
+        ResourceDelegate(ResourceView* parent = 0)  : QItemDelegate(parent) {}
+        virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
 };
 
 #endif // RESOURCEMODELVIEW_H
 
+// vim: et sw=4:

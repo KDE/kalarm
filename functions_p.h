@@ -31,24 +31,26 @@ namespace KAlarm
 // Private class which exists solely to allow signals/slots to work.
 class Private : public QObject
 {
-	Q_OBJECT
+        Q_OBJECT
     public:
-	Private(QObject* parent = 0) : QObject(parent) {}
-	static bool startKMailMinimised();
-	static Private* instance()
-	{
-		if (!mInstance)
-			mInstance = new Private;
-		return mInstance;
-	}
+        explicit Private(QObject* parent = 0) : QObject(parent) {}
+        static bool startKMailMinimised();
+        static Private* instance()
+        {
+            if (!mInstance)
+                mInstance = new Private;
+            return mInstance;
+        }
 
     public slots:
-	void windowAdded(WId);
+        void windowAdded(WId);
 
     private:
-	static Private* mInstance;
+        static Private* mInstance;
 };
 
 } // namespace KAlarm
 
 #endif // FUNCTIONS_P_H
+
+// vim: et sw=4:

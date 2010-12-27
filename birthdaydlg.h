@@ -41,48 +41,52 @@ class BirthdaySortModel;
 
 class BirthdayDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		explicit BirthdayDlg(QWidget* parent = 0);
-		QList<KAEvent> events() const;
+        Q_OBJECT
+    public:
+        explicit BirthdayDlg(QWidget* parent = 0);
+        QList<KAEvent> events() const;
 
-	protected slots:
-		virtual void   slotOk();
+    protected slots:
+        virtual void   slotOk();
 
-	private slots:
-		void           slotSelectionChanged();
-		void           slotTextLostFocus();
-		void           resizeViewColumns();
-		void           setColours(const QColor& fg, const QColor& bg);
+    private slots:
+        void           slotSelectionChanged();
+        void           slotTextLostFocus();
+        void           resizeViewColumns();
+        void           setColours(const QColor& fg, const QColor& bg);
 
-	private:
-		BirthdaySortModel*    mBirthdaySortModel;
-		QTreeView*            mListView;
-		BLineEdit*            mPrefix;
-		BLineEdit*            mSuffix;
-		Reminder*             mReminder;
-		SoundPicker*          mSoundPicker;
-		FontColourButton*     mFontColourButton;
-		CheckBox*             mConfirmAck;
-		LateCancelSelector*   mLateCancel;
-		SpecialActionsButton* mSpecialActionsButton;
-		RepetitionButton*     mSubRepetition;
-		QString               mPrefixText;   // last entered value of prefix text
-		QString               mSuffixText;   // last entered value of suffix text
-		int                   mFlags;        // event flag bits
+    private:
+        BirthdaySortModel*    mBirthdaySortModel;
+        QTreeView*            mListView;
+        BLineEdit*            mPrefix;
+        BLineEdit*            mSuffix;
+        Reminder*             mReminder;
+        SoundPicker*          mSoundPicker;
+        FontColourButton*     mFontColourButton;
+        CheckBox*             mConfirmAck;
+        LateCancelSelector*   mLateCancel;
+        SpecialActionsButton* mSpecialActionsButton;
+        RepetitionButton*     mSubRepetition;
+        QString               mPrefixText;   // last entered value of prefix text
+        QString               mSuffixText;   // last entered value of suffix text
+        int                   mFlags;        // event flag bits
 };
 
 
 class BLineEdit : public KLineEdit
 {
-		Q_OBJECT
-	public:
-		explicit BLineEdit(QWidget* parent = 0)                       : KLineEdit(parent) { }
-		explicit BLineEdit(const QString& text, QWidget* parent = 0)  : KLineEdit(text, parent) { }
-	signals:
-		void         focusLost();
-	protected:
-		virtual void focusOutEvent(QFocusEvent*)  { emit focusLost(); }
+        Q_OBJECT
+    public:
+        explicit BLineEdit(QWidget* parent = 0)                       : KLineEdit(parent) { }
+        explicit BLineEdit(const QString& text, QWidget* parent = 0)  : KLineEdit(text, parent) { }
+
+    signals:
+        void         focusLost();
+
+    protected:
+        virtual void focusOutEvent(QFocusEvent*)  { emit focusLost(); }
 };
 
 #endif // BIRTHDAYDLG_H
+
+// vim: et sw=4:

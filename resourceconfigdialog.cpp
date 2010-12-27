@@ -22,6 +22,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "alarmresource.h"
+#include "resourceconfigdialog.moc"
+
+#include <kresources/factory.h>
+
 #include <klocale.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
@@ -31,108 +36,107 @@
 #include <QLayout>
 #include <QCheckBox>
 
-#include <kresources/factory.h>
-#include "alarmresource.h"
-#include "resourceconfigdialog.moc"
-
 using namespace KRES;
 
-ResourceConfigDialog::ResourceConfigDialog( QWidget *parent, AlarmResource* resource )
-  : KDialog( parent ), mResource( resource )
+ResourceConfigDialog::ResourceConfigDialog(QWidget* parent, AlarmResource* resource)
+    : KDialog(parent), mResource(resource)
 {
-  Factory *factory = Factory::self(QLatin1String("alarms"));
+    Factory* factory = Factory::self(QLatin1String("alarms"));
 
-  QFrame *main = new QFrame( this );
-  setMainWidget( main );
-  setCaption(i18nc("@title:window", "Calendar Configuration"));
-  setButtons( Ok|Cancel );
-  setDefaultButton( Ok );
-  setModal( true );
+    QFrame* main = new QFrame(this);
+    setMainWidget(main);
+    setCaption(i18nc("@title:window", "Calendar Configuration"));
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
+    setModal(true);
 
-  QVBoxLayout *mainLayout = new QVBoxLayout( main );
-  mainLayout->setSpacing( spacingHint() );
+    QVBoxLayout* mainLayout = new QVBoxLayout(main);
+    mainLayout->setSpacing(spacingHint());
 
-  QGroupBox *generalGroupBox = new QGroupBox( main );
-  QGridLayout *gbLayout = new QGridLayout;
-  gbLayout->setSpacing( spacingHint() );
-  generalGroupBox->setLayout( gbLayout );
+    QGroupBox* generalGroupBox = new QGroupBox(main);
+    QGridLayout* gbLayout = new QGridLayout;
+    gbLayout->setSpacing(spacingHint());
+    generalGroupBox->setLayout(gbLayout);
 
-  generalGroupBox->setTitle(i18nc("@title:group", "General Settings"));
+    generalGroupBox->setTitle(i18nc("@title:group", "General Settings"));
 
-  gbLayout->addWidget(new QLabel(i18nc("@label:textbox Calendar name", "Name:"), generalGroupBox ), 0, 0 );
+    gbLayout->addWidget(new QLabel(i18nc("@label:textbox Calendar name", "Name:"), generalGroupBox), 0, 0);
 
-  mName = new KLineEdit();
-  gbLayout->addWidget( mName, 0, 1 );
+    mName = new KLineEdit();
+    gbLayout->addWidget(mName, 0, 1);
 
-  mReadOnly = new QCheckBox(i18nc("@option:check", "Read-only"), generalGroupBox );
-  gbLayout->addWidget( mReadOnly, 1, 0, 1, 2 );
+    mReadOnly = new QCheckBox(i18nc("@option:check", "Read-only"), generalGroupBox);
+    gbLayout->addWidget(mReadOnly, 1, 0, 1, 2);
 
-  mName->setText( mResource->resourceName() );
-  mReadOnly->setChecked( mResource->readOnly() );
+    mName->setText(mResource->resourceName());
+    mReadOnly->setChecked(mResource->readOnly());
 
-  mainLayout->addWidget( generalGroupBox );
+    mainLayout->addWidget(generalGroupBox);
 
-  QGroupBox *resourceGroupBox = new QGroupBox( main );
-  QGridLayout *resourceLayout = new QGridLayout;
-  resourceLayout->setSpacing( spacingHint() );
-  resourceGroupBox->setLayout( resourceLayout );
+    QGroupBox* resourceGroupBox = new QGroupBox(main);
+    QGridLayout* resourceLayout = new QGridLayout;
+    resourceLayout->setSpacing(spacingHint());
+    resourceGroupBox->setLayout(resourceLayout);
 
-  resourceGroupBox->setTitle(i18nc("@title:group", "<resource>%1</resource> Calendar Settings",
-                                factory->typeName( resource->type() ) ) );
-  mainLayout->addWidget( resourceGroupBox );
+    resourceGroupBox->setTitle(i18nc("@title:group", "<resource>%1</resource> Calendar Settings",
+                                     factory->typeName(resource->type())));
+    mainLayout->addWidget(resourceGroupBox);
 
-  mainLayout->addStretch();
+    mainLayout->addStretch();
 
-  mConfigWidget = factory->configWidget( resource->type(), resourceGroupBox );
-  if ( mConfigWidget ) {
-    resourceLayout->addWidget( mConfigWidget );
-    mConfigWidget->setInEditMode( false );
-    mConfigWidget->loadSettings( mResource );
-    mConfigWidget->show();
-    connect( mConfigWidget, SIGNAL( setReadOnly( bool ) ),
-        SLOT( setReadOnly( bool ) ) );
-  }
+    mConfigWidget = factory->configWidget(resource->type(), resourceGroupBox);
+    if (mConfigWidget)
+    {
+        resourceLayout->addWidget(mConfigWidget);
+        mConfigWidget->setInEditMode(false);
+        mConfigWidget->loadSettings(mResource);
+        mConfigWidget->show();
+        connect(mConfigWidget, SIGNAL(setReadOnly(bool)), SLOT(setReadOnly(bool)));
+    }
 
-  connect( mName, SIGNAL( textChanged(const QString &)),
-      SLOT( slotNameChanged(const QString &)));
+    connect(mName, SIGNAL(textChanged(const QString&)), SLOT(slotNameChanged(const QString&)));
 
-  slotNameChanged( mName->text() );
-  setMinimumSize( sizeHint() );
+    slotNameChanged(mName->text());
+    setMinimumSize(sizeHint());
 }
 
-void ResourceConfigDialog::setInEditMode( bool value )
+void ResourceConfigDialog::setInEditMode(bool value)
 {
-  if ( mConfigWidget )
-    mConfigWidget->setInEditMode( value );
+    if (mConfigWidget)
+        mConfigWidget->setInEditMode(value);
 }
 
-void ResourceConfigDialog::slotNameChanged( const QString &text)
+void ResourceConfigDialog::slotNameChanged(const QString& text)
 {
-  enableButtonOk( !text.isEmpty() );
+    enableButtonOk(!text.isEmpty());
 }
 
-void ResourceConfigDialog::setReadOnly( bool value )
+void ResourceConfigDialog::setReadOnly(bool value)
 {
-  mReadOnly->setChecked( value );
+    mReadOnly->setChecked(value);
 }
 
 void ResourceConfigDialog::accept()
 {
-  if ( mName->text().isEmpty() ) {
-    KMessageBox::sorry(this, i18nc("@info", "Please enter a calendar name."));
-    return;
-  }
+    if (mName->text().isEmpty())
+    {
+        KMessageBox::sorry(this, i18nc("@info", "Please enter a calendar name."));
+        return;
+    }
 
-  mResource->startReconfig();
-  mResource->setResourceName( mName->text() );
-  mResource->setReadOnly( mReadOnly->isChecked() );
+    mResource->startReconfig();
+    mResource->setResourceName(mName->text());
+    mResource->setReadOnly(mReadOnly->isChecked());
 
-  if ( mConfigWidget ) {
-    // First save generic information
-    // Also save setting of specific resource type
-    mConfigWidget->saveSettings( mResource );
-  }
-  mResource->applyReconfig();
+    if (mConfigWidget)
+    {
+        // First save generic information
+        // Also save setting of specific resource type
+        mConfigWidget->saveSettings(mResource);
+    }
+    mResource->applyReconfig();
 
-  KDialog::accept();
+    KDialog::accept();
 }
+
+// vim: et sw=4:

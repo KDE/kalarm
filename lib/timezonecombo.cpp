@@ -25,31 +25,33 @@
 
 
 TimeZoneCombo::TimeZoneCombo(QWidget* parent)
-	: ComboBox(parent)
+    : ComboBox(parent)
 {
-	KGlobal::locale()->insertCatalog( "timezones4" ); // for time zone translations
-	QString utc = KTimeZone::utc().name();
-	addItem(utc);   // put UTC at start of list
-	mZoneNames << utc;
-	const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
-	for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != zones.constEnd();  ++it)
-		if (it.key() != utc)
-		{
-			mZoneNames << it.key();
-			addItem(i18n(it.key().toUtf8()).replace('_', ' '));
-		}
+    KGlobal::locale()->insertCatalog( "timezones4" ); // for time zone translations
+    QString utc = KTimeZone::utc().name();
+    addItem(utc);   // put UTC at start of list
+    mZoneNames << utc;
+    const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
+    for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != zones.constEnd();  ++it)
+        if (it.key() != utc)
+        {
+            mZoneNames << it.key();
+            addItem(i18n(it.key().toUtf8()).replace('_', ' '));
+        }
 }
 
 KTimeZone TimeZoneCombo::timeZone() const
 {
-	return KSystemTimeZones::zone(mZoneNames[currentIndex()]);
+    return KSystemTimeZones::zone(mZoneNames[currentIndex()]);
 }
 
 void TimeZoneCombo::setTimeZone(const KTimeZone& tz)
 {
-	if (!tz.isValid())
-		return;
-	int index = mZoneNames.indexOf(tz.name());
-	if (index >= 0)
-		setCurrentIndex(index);
+    if (!tz.isValid())
+        return;
+    int index = mZoneNames.indexOf(tz.name());
+    if (index >= 0)
+        setCurrentIndex(index);
 }
+
+// vim: et sw=4:

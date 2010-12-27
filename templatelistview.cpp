@@ -38,27 +38,29 @@
 
 
 TemplateListView::TemplateListView(QWidget* parent)
-	: EventListView(parent)
+    : EventListView(parent)
 {
-	setEditOnSingleClick(false);
-	setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
+    setEditOnSingleClick(false);
+    setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
 }
 
 void TemplateListView::setModel(QAbstractItemModel* model)
 {
-	EventListView::setModel(model);
-	header()->setMovable(false);
-	header()->setStretchLastSection(true);
-	header()->setResizeMode(TEMPLATE_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
-	const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
+    EventListView::setModel(model);
+    header()->setMovable(false);
+    header()->setStretchLastSection(true);
+    header()->setResizeMode(TEMPLATE_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
+    const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
 #ifdef USE_AKONADI
-	header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, ItemListModel::iconWidth() + 2*margin + 2);
+    header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, ItemListModel::iconWidth() + 2*margin + 2);
 #else
-	header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
+    header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
 #endif
 }
 
 void TemplateListDelegate::edit(KAEvent* event, EventListView* view)
 {
-	KAlarm::editTemplate(event, static_cast<TemplateListView*>(view));
+    KAlarm::editTemplate(event, static_cast<TemplateListView*>(view));
 }
+
+// vim: et sw=4:

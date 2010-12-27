@@ -21,8 +21,8 @@
 #ifndef TIMESELECTOR_H
 #define TIMESELECTOR_H
 
-#include <QFrame>
 #include "timeperiod.h"
+#include <QFrame>
 
 class QLabel;
 class CheckBox;
@@ -30,48 +30,50 @@ class CheckBox;
 
 class TimeSelector : public QFrame
 {
-		Q_OBJECT
-	public:
-		TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
-		             const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent);
-		bool         isChecked() const;
-		void         setChecked(bool on);
+        Q_OBJECT
+    public:
+        TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
+                     const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent);
+        bool         isChecked() const;
+        void         setChecked(bool on);
 #ifdef USE_AKONADI
-		KCalCore::Duration period() const;
-		void         setPeriod(const KCalCore::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
+        KCalCore::Duration period() const;
+        void         setPeriod(const KCalCore::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
 #else
-		KCal::Duration period() const;
-		void         setPeriod(const KCal::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
+        KCal::Duration period() const;
+        void         setPeriod(const KCal::Duration&, bool dateOnly, TimePeriod::Units defaultUnits);
 #endif
-		TimePeriod::Units units() const   { return mPeriod->units(); }
-		void         setUnits(TimePeriod::Units units)  { mPeriod->setUnits(units); }
-		void         setReadOnly(bool);
-		bool         isDateOnly() const   { return mPeriod->isDateOnly(); }
-		void         setDateOnly(bool dateOnly = true);
-		void         setMaximum(int hourmin, int days);
-		void         setFocusOnCount();
+        TimePeriod::Units units() const   { return mPeriod->units(); }
+        void         setUnits(TimePeriod::Units units)  { mPeriod->setUnits(units); }
+        void         setReadOnly(bool);
+        bool         isDateOnly() const   { return mPeriod->isDateOnly(); }
+        void         setDateOnly(bool dateOnly = true);
+        void         setMaximum(int hourmin, int days);
+        void         setFocusOnCount();
 
-	signals:
-		void         toggled(bool);             // selection checkbox has been toggled
+    signals:
+        void         toggled(bool);             // selection checkbox has been toggled
 #ifdef USE_AKONADI
-		void         valueChanged(const KCalCore::Duration&); // value has changed
+        void         valueChanged(const KCalCore::Duration&); // value has changed
 #else
-		void         valueChanged(const KCal::Duration&); // value has changed
-#endif
-
-	protected slots:
-		void         selectToggled(bool);
-#ifdef USE_AKONADI
-		void         periodChanged(const KCalCore::Duration&);
-#else
-		void         periodChanged(const KCal::Duration&);
+        void         valueChanged(const KCal::Duration&); // value has changed
 #endif
 
-	private:
-		CheckBox*    mSelect;
-		TimePeriod*  mPeriod;
-		QLabel*      mLabel;
-		bool         mReadOnly;           // the widget is read only
+    protected slots:
+        void         selectToggled(bool);
+#ifdef USE_AKONADI
+        void         periodChanged(const KCalCore::Duration&);
+#else
+        void         periodChanged(const KCal::Duration&);
+#endif
+
+    private:
+        CheckBox*    mSelect;
+        TimePeriod*  mPeriod;
+        QLabel*      mLabel;
+        bool         mReadOnly;           // the widget is read only
 };
 
 #endif // TIMESELECTOR_H
+
+// vim: et sw=4:

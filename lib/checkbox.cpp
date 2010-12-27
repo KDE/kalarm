@@ -1,7 +1,7 @@
 /*
  *  checkbox.cpp  -  check box with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2002, 2003, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2002,2003,2005 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,23 +18,23 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include "checkbox.moc"
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include "checkbox.moc"
 
 
 CheckBox::CheckBox(QWidget* parent)
-	: QCheckBox(parent),
-	  mFocusPolicy(focusPolicy()),
-	  mFocusWidget(0),
-	  mReadOnly(false)
+    : QCheckBox(parent),
+      mFocusPolicy(focusPolicy()),
+      mFocusWidget(0),
+      mReadOnly(false)
 { }
 
 CheckBox::CheckBox(const QString& text, QWidget* parent)
-	: QCheckBox(text, parent),
-	  mFocusPolicy(focusPolicy()),
-	  mFocusWidget(0),
-	  mReadOnly(false)
+    : QCheckBox(text, parent),
+      mFocusPolicy(focusPolicy()),
+      mFocusWidget(0),
+      mReadOnly(false)
 { }
 
 /******************************************************************************
@@ -43,13 +43,13 @@ CheckBox::CheckBox(const QString& text, QWidget* parent)
 */
 void CheckBox::setReadOnly(bool ro)
 {
-	if ((int)ro != (int)mReadOnly)
-	{
-		mReadOnly = ro;
-		setFocusPolicy(ro ? Qt::NoFocus : mFocusPolicy);
-		if (ro)
-			clearFocus();
-	}
+    if ((int)ro != (int)mReadOnly)
+    {
+        mReadOnly = ro;
+        setFocusPolicy(ro ? Qt::NoFocus : mFocusPolicy);
+        if (ro)
+            clearFocus();
+    }
 }
 
 /******************************************************************************
@@ -57,12 +57,12 @@ void CheckBox::setReadOnly(bool ro)
 */
 void CheckBox::setFocusWidget(QWidget* w, bool enable)
 {
-	mFocusWidget = w;
-	mFocusWidgetEnable = enable;
-	if (w)
-		connect(this, SIGNAL(clicked()), SLOT(slotClicked()));
-	else
-		disconnect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
+    mFocusWidget = w;
+    mFocusWidgetEnable = enable;
+    if (w)
+        connect(this, SIGNAL(clicked()), SLOT(slotClicked()));
+    else
+        disconnect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
 }
 
 /******************************************************************************
@@ -71,12 +71,12 @@ void CheckBox::setFocusWidget(QWidget* w, bool enable)
 */
 void CheckBox::slotClicked()
 {
-	if (mFocusWidget  &&  isChecked())
-	{
-		if (mFocusWidgetEnable)
-			mFocusWidget->setEnabled(true);
-		mFocusWidget->setFocus();
-	}
+    if (mFocusWidget  &&  isChecked())
+    {
+        if (mFocusWidgetEnable)
+            mFocusWidget->setEnabled(true);
+        mFocusWidget->setFocus();
+    }
 }
 
 /******************************************************************************
@@ -85,51 +85,55 @@ void CheckBox::slotClicked()
 */
 void CheckBox::mousePressEvent(QMouseEvent* e)
 {
-	if (mReadOnly)
-	{
-		// Swallow up the event if it's the left button
-		if (e->button() == Qt::LeftButton)
-			return;
-	}
-	QCheckBox::mousePressEvent(e);
+    if (mReadOnly)
+    {
+        // Swallow up the event if it's the left button
+        if (e->button() == Qt::LeftButton)
+            return;
+    }
+    QCheckBox::mousePressEvent(e);
 }
 
 void CheckBox::mouseReleaseEvent(QMouseEvent* e)
 {
-	if (mReadOnly)
-	{
-		// Swallow up the event if it's the left button
-		if (e->button() == Qt::LeftButton)
-			return;
-	}
-	QCheckBox::mouseReleaseEvent(e);
+    if (mReadOnly)
+    {
+        // Swallow up the event if it's the left button
+        if (e->button() == Qt::LeftButton)
+            return;
+    }
+    QCheckBox::mouseReleaseEvent(e);
 }
 
 void CheckBox::mouseMoveEvent(QMouseEvent* e)
 {
-	if (!mReadOnly)
-		QCheckBox::mouseMoveEvent(e);
+    if (!mReadOnly)
+        QCheckBox::mouseMoveEvent(e);
 }
 
 void CheckBox::keyPressEvent(QKeyEvent* e)
 {
-	if (mReadOnly)
-		switch (e->key())
-		{
-			case Qt::Key_Up:
-			case Qt::Key_Left:
-			case Qt::Key_Right:
-			case Qt::Key_Down:
-				// Process keys which shift the focus
-				break;
-			default:
-				return;
-		}
-	QCheckBox::keyPressEvent(e);
+    if (mReadOnly)
+    {
+        switch (e->key())
+        {
+            case Qt::Key_Up:
+            case Qt::Key_Left:
+            case Qt::Key_Right:
+            case Qt::Key_Down:
+                // Process keys which shift the focus
+                break;
+            default:
+                return;
+        }
+    }
+    QCheckBox::keyPressEvent(e);
 }
 
 void CheckBox::keyReleaseEvent(QKeyEvent* e)
 {
-	if (!mReadOnly)
-		QCheckBox::keyReleaseEvent(e);
+    if (!mReadOnly)
+        QCheckBox::keyReleaseEvent(e);
 }
+
+// vim: et sw=4:

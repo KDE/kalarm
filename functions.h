@@ -59,13 +59,13 @@ enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };
  *  DO NOT CHANGE THE ORDER OF THESE VALUES!
  */
 enum UpdateStatus {
-	UPDATE_OK,            // update succeeded
-	UPDATE_KORG_FUNCERR,  // update succeeded, but KOrganizer reported an error updating
-	UPDATE_KORG_ERRSTART, // update succeeded, but KOrganizer update failed (KOrganizer not fully started)
-	UPDATE_KORG_ERR,      // update succeeded, but KOrganizer update failed
-	UPDATE_ERROR,         // update failed partially
-	UPDATE_FAILED,        // update failed completely
-	SAVE_FAILED           // calendar was updated in memory, but save failed
+    UPDATE_OK,            // update succeeded
+    UPDATE_KORG_FUNCERR,  // update succeeded, but KOrganizer reported an error updating
+    UPDATE_KORG_ERRSTART, // update succeeded, but KOrganizer update failed (KOrganizer not fully started)
+    UPDATE_KORG_ERR,      // update succeeded, but KOrganizer update failed
+    UPDATE_ERROR,         // update failed partially
+    UPDATE_FAILED,        // update failed completely
+    SAVE_FAILED           // calendar was updated in memory, but save failed
 };
 /** Error codes supplied as parameter to displayUpdateError() */
 enum UpdateError { ERR_ADD, ERR_MODIFY, ERR_DELETE, ERR_REACTIVATE, ERR_TEMPLATE };
@@ -87,11 +87,11 @@ FileType            fileType(const KMimeType::Ptr& mimetype);
  *  Display a Continue/Cancel error message if 'errmsgParent' non-null.
  */
 enum FileErr {
-	FileErr_None = 0,
-	FileErr_Blank,           // generic blank error
-	FileErr_Nonexistent, FileErr_Directory, FileErr_Unreadable, FileErr_NotTextImage,
-	FileErr_BlankDisplay,    // blank error to use for file to display
-	FileErr_BlankPlay        // blank error to use for file to play
+    FileErr_None = 0,
+    FileErr_Blank,           // generic blank error
+    FileErr_Nonexistent, FileErr_Directory, FileErr_Unreadable, FileErr_NotTextImage,
+    FileErr_BlankDisplay,    // blank error to use for file to display
+    FileErr_BlankPlay        // blank error to use for file to play
 };
 FileErr             checkFileExists(QString& filename, KUrl&);
 bool                showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QWidget* errmsgParent);
@@ -138,9 +138,9 @@ void                setDontShowErrors(const QString& eventId, const QString& tag
 
 enum         // 'options' parameter values for addEvent(). May be OR'ed together.
 {
-	USE_EVENT_ID       = 0x01,   // use event ID if it's provided
-	NO_RESOURCE_PROMPT = 0x02,   // don't prompt for resource
-	ALLOW_KORG_UPDATE  = 0x04    // allow change to be sent to KOrganizer
+    USE_EVENT_ID       = 0x01,   // use event ID if it's provided
+    NO_RESOURCE_PROMPT = 0x02,   // don't prompt for resource
+    ALLOW_KORG_UPDATE  = 0x04    // allow change to be sent to KOrganizer
 };
 #ifdef USE_AKONADI
 UpdateStatus        addEvent(KAEvent&, Akonadi::Collection* = 0, QWidget* msgParent = 0, int options = ALLOW_KORG_UPDATE, bool showKOrgErr = true);
@@ -163,12 +163,12 @@ UpdateStatus        deleteEvent(KAEvent&, bool archive = true, QWidget* msgParen
 UpdateStatus        deleteEvents(QList<KAEvent>&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteTemplates(const KAEvent::List& events, QWidget* msgParent = 0);
 inline UpdateStatus deleteTemplate(KAEvent& event, QWidget* msgParent = 0)
-			{ KAEvent::List e;  e += &event;  return deleteTemplates(e, msgParent); }
+                        { KAEvent::List e;  e += &event;  return deleteTemplates(e, msgParent); }
 #else
 UpdateStatus        deleteEvents(KAEvent::List&, bool archive = true, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        deleteTemplates(const QStringList& eventIDs, QWidget* msgParent = 0);
 inline UpdateStatus deleteTemplate(const QString& eventID, QWidget* msgParent = 0)
-			{ return deleteTemplates(QStringList(eventID), msgParent); }
+                        { return deleteTemplates(QStringList(eventID), msgParent); }
 #endif
 void                deleteDisplayEvent(const QString& eventID);
 #ifdef USE_AKONADI
@@ -202,3 +202,5 @@ void                setSimulatedSystemTime(const KDateTime&);
 bool caseInsensitiveLessThan(const QString& s1, const QString& s2);
 
 #endif // FUNCTIONS_H
+
+// vim: et sw=4:

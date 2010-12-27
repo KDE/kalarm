@@ -32,23 +32,25 @@ class KTimeZone;
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
- *  @author David Jarvie <software@astrojar.org.uk>
+ *  @author David Jarvie <djarvie@kde.org>
  */
 class TimeZoneCombo : public ComboBox
 {
-		Q_OBJECT
-	public:
-		/** Constructor.
-		 *  @param parent The parent object of this widget.
-		 */
-		explicit TimeZoneCombo(QWidget* parent = 0);
-		/** Returns the currently selected time zone, or null if none. */
-		KTimeZone timeZone() const;
-		/** Selects the specified time zone. */
-		void setTimeZone(const KTimeZone& tz);
+        Q_OBJECT
+    public:
+        /** Constructor.
+         *  @param parent The parent object of this widget.
+         */
+        explicit TimeZoneCombo(QWidget* parent = 0);
+        /** Returns the currently selected time zone, or null if none. */
+        KTimeZone timeZone() const;
+        /** Selects the specified time zone. */
+        void setTimeZone(const KTimeZone& tz);
 
-	private:
-		QStringList mZoneNames;
+    private:
+        QStringList mZoneNames;
 };
 
 #endif // TIMEZONECOMBO_H
+
+// vim: et sw=4:

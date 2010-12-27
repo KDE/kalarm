@@ -59,80 +59,80 @@ TemplateDlg* TemplateDlg::mInstance = 0;
 
 
 TemplateDlg::TemplateDlg(QWidget* parent)
-	: KDialog(parent)
+    : KDialog(parent)
 {
-	QWidget* topWidget = new QWidget(this);
-	setMainWidget(topWidget);
-	setButtons(Close);
-	setDefaultButton(Close);
-	setModal(false);
-	setCaption(i18nc("@title:window", "Alarm Templates"));
-	showButtonSeparator(true);
-	QBoxLayout* topLayout = new QHBoxLayout(topWidget);
-	topLayout->setMargin(0);
-	topLayout->setSpacing(spacingHint());
+    QWidget* topWidget = new QWidget(this);
+    setMainWidget(topWidget);
+    setButtons(Close);
+    setDefaultButton(Close);
+    setModal(false);
+    setCaption(i18nc("@title:window", "Alarm Templates"));
+    showButtonSeparator(true);
+    QBoxLayout* topLayout = new QHBoxLayout(topWidget);
+    topLayout->setMargin(0);
+    topLayout->setSpacing(spacingHint());
 
-	QBoxLayout* layout = new QVBoxLayout();
-	layout->setMargin(0);
-	topLayout->addLayout(layout);
+    QBoxLayout* layout = new QVBoxLayout();
+    layout->setMargin(0);
+    topLayout->addLayout(layout);
 #ifdef USE_AKONADI
-	mListFilterModel = new TemplateListModel(this);
-	if (!ShellProcess::authorised())
-		mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
+    mListFilterModel = new TemplateListModel(this);
+    if (!ShellProcess::authorised())
+        mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
 #else
-	mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
-	if (!ShellProcess::authorised())
-		mListFilterModel->setTypeFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
+    mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
+    if (!ShellProcess::authorised())
+        mListFilterModel->setTypeFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
 #endif
-	mListView = new TemplateListView(topWidget);
-	mListView->setModel(mListFilterModel);
+    mListView = new TemplateListView(topWidget);
+    mListView->setModel(mListFilterModel);
 #ifdef USE_AKONADI
-	mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
+    mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
 #else
-	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
+    mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
 #endif
-	mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-	mListView->setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
-	mListView->setItemDelegate(new TemplateListDelegate(mListView));
-	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
-	layout->addWidget(mListView);
+    mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+    mListView->setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
+    mListView->setItemDelegate(new TemplateListDelegate(mListView));
+    connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
+    layout->addWidget(mListView);
 
-	layout = new QVBoxLayout();
-	layout->setMargin(0);
-	topLayout->addLayout(layout);
-	QPushButton* button = new QPushButton(i18nc("@action:button", "New"), topWidget);
-	mNewAction = new NewAlarmAction(true, i18nc("@action", "New"), this);
-	button->setMenu(mNewAction->menu());
-	connect(mNewAction, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
-	button->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template"));
-	layout->addWidget(button);
+    layout = new QVBoxLayout();
+    layout->setMargin(0);
+    topLayout->addLayout(layout);
+    QPushButton* button = new QPushButton(i18nc("@action:button", "New"), topWidget);
+    mNewAction = new NewAlarmAction(true, i18nc("@action", "New"), this);
+    button->setMenu(mNewAction->menu());
+    connect(mNewAction, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
+    button->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template"));
+    layout->addWidget(button);
 
-	mEditButton = new QPushButton(i18nc("@action:button", "Edit..."), topWidget);
-	connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
-	mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the currently highlighted alarm template"));
-	layout->addWidget(mEditButton);
+    mEditButton = new QPushButton(i18nc("@action:button", "Edit..."), topWidget);
+    connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
+    mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the currently highlighted alarm template"));
+    layout->addWidget(mEditButton);
 
-	mCopyButton = new QPushButton(i18nc("@action:button", "Copy"), topWidget);
-	connect(mCopyButton, SIGNAL(clicked()), SLOT(slotCopy()));
-	mCopyButton->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template based on a copy of the currently highlighted template"));
-	layout->addWidget(mCopyButton);
+    mCopyButton = new QPushButton(i18nc("@action:button", "Copy"), topWidget);
+    connect(mCopyButton, SIGNAL(clicked()), SLOT(slotCopy()));
+    mCopyButton->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template based on a copy of the currently highlighted template"));
+    layout->addWidget(mCopyButton);
 
-	mDeleteButton = new QPushButton(i18nc("@action:button", "Delete"), topWidget);
-	connect(mDeleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
-	mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Delete the currently highlighted alarm template"));
-	layout->addWidget(mDeleteButton);
+    mDeleteButton = new QPushButton(i18nc("@action:button", "Delete"), topWidget);
+    connect(mDeleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
+    mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Delete the currently highlighted alarm template"));
+    layout->addWidget(mDeleteButton);
 
-	KActionCollection* actions = new KActionCollection(this);
-	KAction* act = KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
-	topLevelWidget()->addAction(act);
-	act = KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
-	topLevelWidget()->addAction(act);
+    KActionCollection* actions = new KActionCollection(this);
+    KAction* act = KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
+    topLevelWidget()->addAction(act);
+    act = KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
+    topLevelWidget()->addAction(act);
 
-	slotSelectionChanged();          // enable/disable buttons as appropriate
+    slotSelectionChanged();          // enable/disable buttons as appropriate
 
-	QSize s;
-	if (KAlarm::readConfigWindowSize(TMPL_DIALOG_NAME, s))
-		resize(s);
+    QSize s;
+    if (KAlarm::readConfigWindowSize(TMPL_DIALOG_NAME, s))
+        resize(s);
 }
 
 /******************************************************************************
@@ -140,7 +140,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 */
 TemplateDlg::~TemplateDlg()
 {
-	mInstance = 0;
+    mInstance = 0;
 }
 
 /******************************************************************************
@@ -148,10 +148,10 @@ TemplateDlg::~TemplateDlg()
 */
 TemplateDlg* TemplateDlg::create(QWidget* parent)
 {
-	if (mInstance)
-		return 0;
-	mInstance = new TemplateDlg(parent);
-	return mInstance;
+    if (mInstance)
+        return 0;
+    mInstance = new TemplateDlg(parent);
+    return mInstance;
 }
 
 /******************************************************************************
@@ -159,7 +159,7 @@ TemplateDlg* TemplateDlg::create(QWidget* parent)
 */
 void TemplateDlg::slotNew(EditAlarmDlg::Type type)
 {
-	KAlarm::editNewTemplate(type, mListView);
+    KAlarm::editNewTemplate(type, mListView);
 }
 
 /******************************************************************************
@@ -169,13 +169,13 @@ void TemplateDlg::slotNew(EditAlarmDlg::Type type)
 void TemplateDlg::slotCopy()
 {
 #ifdef USE_AKONADI
-	KAEvent event = mListView->selectedEvent();
-	if (event.isValid())
-		KAlarm::editNewTemplate(&event, mListView);
+    KAEvent event = mListView->selectedEvent();
+    if (event.isValid())
+        KAlarm::editNewTemplate(&event, mListView);
 #else
-	KAEvent* event = mListView->selectedEvent();
-	if (event)
-		KAlarm::editNewTemplate(event, mListView);
+    KAEvent* event = mListView->selectedEvent();
+    if (event)
+        KAlarm::editNewTemplate(event, mListView);
 #endif
 }
 
@@ -186,13 +186,13 @@ void TemplateDlg::slotCopy()
 void TemplateDlg::slotEdit()
 {
 #ifdef USE_AKONADI
-	KAEvent event = mListView->selectedEvent();
-	if (event.isValid())
-		KAlarm::editTemplate(&event, mListView);
+    KAEvent event = mListView->selectedEvent();
+    if (event.isValid())
+        KAlarm::editTemplate(&event, mListView);
 #else
-	KAEvent* event = mListView->selectedEvent();
-	if (event)
-		KAlarm::editTemplate(event, mListView);
+    KAEvent* event = mListView->selectedEvent();
+    if (event)
+        KAlarm::editTemplate(event, mListView);
 #endif
 }
 
@@ -203,40 +203,40 @@ void TemplateDlg::slotEdit()
 void TemplateDlg::slotDelete()
 {
 #ifdef USE_AKONADI
-	QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
 #else
-	KAEvent::List events = mListView->selectedEvents();
+    KAEvent::List events = mListView->selectedEvents();
 #endif
-	int n = events.count();
-	if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm template?",
-	                                                  "Do you really want to delete the %1 selected alarm templates?", n),
-	                                       i18ncp("@title:window", "Delete Alarm Template", "Delete Alarm Templates", n),
-	                                       KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"))
-		    != KMessageBox::Continue)
-		return;
+    int n = events.count();
+    if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm template?",
+                                                      "Do you really want to delete the %1 selected alarm templates?", n),
+                                           i18ncp("@title:window", "Delete Alarm Template", "Delete Alarm Templates", n),
+                                           KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"))
+            != KMessageBox::Continue)
+        return;
 
 #ifdef USE_AKONADI
-	KAEvent::List delEvents;
+    KAEvent::List delEvents;
 #else
-	QStringList delEvents;
+    QStringList delEvents;
 #endif
-	Undo::EventList undos;
-	AlarmCalendar* resources = AlarmCalendar::resources();
-	for (int i = 0;  i < n;  ++i)
-	{
+    Undo::EventList undos;
+    AlarmCalendar* resources = AlarmCalendar::resources();
+    for (int i = 0;  i < n;  ++i)
+    {
 #ifdef USE_AKONADI
-		KAEvent* event = &events[i];
-		delEvents.append(event);
-		Akonadi::Collection c = resources->collectionForEvent(event->itemId());
-		undos.append(*event, c);
+        KAEvent* event = &events[i];
+        delEvents.append(event);
+        Akonadi::Collection c = resources->collectionForEvent(event->itemId());
+        undos.append(*event, c);
 #else
-		const KAEvent* event = events[i];
-		delEvents.append(event->id());
-		undos.append(*event, resources->resourceForEvent(event->id()));
+        const KAEvent* event = events[i];
+        delEvents.append(event->id());
+        undos.append(*event, resources->resourceForEvent(event->id()));
 #endif
-	}
-	KAlarm::deleteTemplates(delEvents, this);
-	Undo::saveDeletes(undos);
+    }
+    KAlarm::deleteTemplates(delEvents, this);
+    Undo::saveDeletes(undos);
 }
 
 /******************************************************************************
@@ -246,31 +246,31 @@ void TemplateDlg::slotDelete()
 */
 void TemplateDlg::slotSelectionChanged()
 {
-	AlarmCalendar* resources = AlarmCalendar::resources();
+    AlarmCalendar* resources = AlarmCalendar::resources();
 #ifdef USE_AKONADI
-	QList<KAEvent> events = mListView->selectedEvents();
+    QList<KAEvent> events = mListView->selectedEvents();
 #else
-	KAEvent::List events = mListView->selectedEvents();
+    KAEvent::List events = mListView->selectedEvents();
 #endif
-	int count = events.count();
-	bool readOnly = false;
-	for (int i = 0;  i < count;  ++i)
-	{
+    int count = events.count();
+    bool readOnly = false;
+    for (int i = 0;  i < count;  ++i)
+    {
 #ifdef USE_AKONADI
-		const KAEvent* event = &events[i];
-		if (resources->eventReadOnly(event->itemId()))
+        const KAEvent* event = &events[i];
+        if (resources->eventReadOnly(event->itemId()))
 #else
-		const KAEvent* event = events[i];
-		if (resources->eventReadOnly(event->id()))
+        const KAEvent* event = events[i];
+        if (resources->eventReadOnly(event->id()))
 #endif
-		{
-			readOnly = true;
-			break;
-		}
-	}
-	mEditButton->setEnabled(count == 1);
-	mCopyButton->setEnabled(count == 1);
-	mDeleteButton->setEnabled(count && !readOnly);
+        {
+            readOnly = true;
+            break;
+        }
+    }
+    mEditButton->setEnabled(count == 1);
+    mCopyButton->setEnabled(count == 1);
+    mDeleteButton->setEnabled(count && !readOnly);
 }
 
 /******************************************************************************
@@ -279,7 +279,9 @@ void TemplateDlg::slotSelectionChanged()
 */
 void TemplateDlg::resizeEvent(QResizeEvent* re)
 {
-	if (isVisible())
-		KAlarm::writeConfigWindowSize(TMPL_DIALOG_NAME, re->size());
-	KDialog::resizeEvent(re);
+    if (isVisible())
+        KAlarm::writeConfigWindowSize(TMPL_DIALOG_NAME, re->size());
+    KDialog::resizeEvent(re);
 }
+
+// vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  resourceremotewidget.h  -  configuration widget for remote file calendar resource
  *  Program:  kalarm
- *  Copyright © 2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,19 +39,21 @@ namespace KCal {
 */
 class KALARM_RESOURCES_EXPORT ResourceRemoteConfigWidget : public ResourceConfigWidget
 {
-		Q_OBJECT
-	public:
-		ResourceRemoteConfigWidget(QWidget* parent = 0);
+        Q_OBJECT
+    public:
+        explicit ResourceRemoteConfigWidget(QWidget* parent = 0);
 
-	public slots:
-		virtual void loadSettings(KRES::Resource*);
-		virtual void saveSettings(KRES::Resource*);
+    public slots:
+        virtual void loadSettings(KRES::Resource*);
+        virtual void saveSettings(KRES::Resource*);
 
-	private:
-		KUrlRequester* mDownloadUrl;
-		KUrlRequester* mUploadUrl;
-		KCal::ResourceCachedReloadConfig* mReloadConfig;
-		KCal::ResourceCachedSaveConfig*   mSaveConfig;
+    private:
+        KUrlRequester* mDownloadUrl;
+        KUrlRequester* mUploadUrl;
+        KCal::ResourceCachedReloadConfig* mReloadConfig;
+        KCal::ResourceCachedSaveConfig*   mSaveConfig;
 };
 
 #endif
+
+// vim: et sw=4:

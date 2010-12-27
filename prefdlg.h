@@ -36,47 +36,49 @@ class StackedScrollGroup;
 // The Preferences dialog
 class KAlarmPrefDlg : public KPageDialog
 {
-		Q_OBJECT
-	public:
-		static void display();
-		~KAlarmPrefDlg();
-		virtual QSize minimumSizeHint() const;
+        Q_OBJECT
+    public:
+        static void display();
+        ~KAlarmPrefDlg();
+        virtual QSize minimumSizeHint() const;
 
-		MiscPrefTab*       mMiscPage;
-		TimePrefTab*       mTimePage;
-		StorePrefTab*      mStorePage;
-		EditPrefTab*       mEditPage;
-		EmailPrefTab*      mEmailPage;
-		ViewPrefTab*       mViewPage;
-		FontColourPrefTab* mFontColourPage;
+        MiscPrefTab*       mMiscPage;
+        TimePrefTab*       mTimePage;
+        StorePrefTab*      mStorePage;
+        EditPrefTab*       mEditPage;
+        EmailPrefTab*      mEmailPage;
+        ViewPrefTab*       mViewPage;
+        FontColourPrefTab* mFontColourPage;
 
-		KPageWidgetItem*   mMiscPageItem;
-		KPageWidgetItem*   mTimePageItem;
-		KPageWidgetItem*   mStorePageItem;
-		KPageWidgetItem*   mEditPageItem;
-		KPageWidgetItem*   mEmailPageItem;
-		KPageWidgetItem*   mViewPageItem;
-		KPageWidgetItem*   mFontColourPageItem;
+        KPageWidgetItem*   mMiscPageItem;
+        KPageWidgetItem*   mTimePageItem;
+        KPageWidgetItem*   mStorePageItem;
+        KPageWidgetItem*   mEditPageItem;
+        KPageWidgetItem*   mEmailPageItem;
+        KPageWidgetItem*   mViewPageItem;
+        KPageWidgetItem*   mFontColourPageItem;
 
-	protected:
-		virtual void  showEvent(QShowEvent*);
-		virtual void  resizeEvent(QResizeEvent*);
+    protected:
+        virtual void  showEvent(QShowEvent*);
+        virtual void  resizeEvent(QResizeEvent*);
 
-	protected slots:
-		virtual void slotOk();
-		virtual void slotApply();
-		virtual void slotHelp();
-		virtual void slotDefault();
-		virtual void slotCancel();
+    protected slots:
+        virtual void slotOk();
+        virtual void slotApply();
+        virtual void slotHelp();
+        virtual void slotDefault();
+        virtual void slotCancel();
 
-	private:
-		KAlarmPrefDlg();
-		void         restore(bool defaults);
+    private:
+        KAlarmPrefDlg();
+        void         restore(bool defaults);
 
-		static KAlarmPrefDlg* mInstance;
-		StackedScrollGroup*   mTabScrollGroup;
-		bool         mShown;
-		bool         mValid;
+        static KAlarmPrefDlg* mInstance;
+        StackedScrollGroup*   mTabScrollGroup;
+        bool         mShown;
+        bool         mValid;
 };
 
 #endif // PREFDLG_H
+
+// vim: et sw=4:

@@ -19,27 +19,28 @@
  */
 
 #include "kalarm.h"
-//#include <typeinfo>
-
-#include <kmessagebox.h>
-#include <klocale.h>
 
 #include "alarmresource.h"
 #include "resourcewidget.moc"
 
+#include <kmessagebox.h>
+#include <klocale.h>
+
+//#include <typeinfo>
+
 
 ResourceConfigWidget::ResourceConfigWidget(QWidget* parent)
-	: KRES::ConfigWidget(parent)
+    : KRES::ConfigWidget(parent)
 {
-	resize(245, 115); 
+    resize(245, 115); 
 }
 
 void ResourceConfigWidget::loadSettings(KRES::Resource* resource)
 {
-//	AlarmResource* res = dynamic_cast<AlarmResource*>(resource);
-	AlarmResource* res = static_cast<AlarmResource*>(resource);
-	if (res)
-		connect(res, SIGNAL(notWritable(AlarmResource*)), SLOT(slotNotWritable(AlarmResource*)));
+//    AlarmResource* res = dynamic_cast<AlarmResource*>(resource);
+    AlarmResource* res = static_cast<AlarmResource*>(resource);
+    if (res)
+        connect(res, SIGNAL(notWritable(AlarmResource*)), SLOT(slotNotWritable(AlarmResource*)));
 }
 
 /******************************************************************************
@@ -50,6 +51,8 @@ void ResourceConfigWidget::loadSettings(KRES::Resource* resource)
 */
 void ResourceConfigWidget::slotNotWritable(AlarmResource* resource)
 {
-	QString text = i18nc("@info", "Calendar <resource>%1</resource> cannot be made writable since it either was not created by <application>KAlarm</application>, or was created by a newer version of <application>KAlarm</application>", resource->resourceName());
-	KMessageBox::sorry(this, text);
+    QString text = i18nc("@info", "Calendar <resource>%1</resource> cannot be made writable since it either was not created by <application>KAlarm</application>, or was created by a newer version of <application>KAlarm</application>", resource->resourceName());
+    KMessageBox::sorry(this, text);
 }
+
+// vim: et sw=4:

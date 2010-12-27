@@ -29,22 +29,23 @@
 
 class AlarmListFilterModel : public EventListFilterModel
 {
-		Q_OBJECT
-	public:
-		enum { ColumnCount = 6 };
+        Q_OBJECT
+    public:
+        enum { ColumnCount = 6 };
 
-		explicit AlarmListFilterModel(EventListModel* baseModel, QObject* parent = 0);
-		void                setStatusFilter(KAlarm::CalEvent::Types);
-		KAlarm::CalEvent::Types   statusFilter() const   { return mStatusFilter; }
-		virtual QModelIndex mapFromSource(const QModelIndex& sourceIndex) const;
+        explicit AlarmListFilterModel(EventListModel* baseModel, QObject* parent = 0);
+        void                    setStatusFilter(KAlarm::CalEvent::Types);
+        KAlarm::CalEvent::Types statusFilter() const   { return mStatusFilter; }
+        virtual QModelIndex     mapFromSource(const QModelIndex& sourceIndex) const;
 
-	protected:
-		virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
-		virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
+    protected:
+        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+        virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
 
-	private:
-		KAlarm::CalEvent::Types mStatusFilter;
+    private:
+        KAlarm::CalEvent::Types mStatusFilter;
 };
 
 #endif // ALARMLISTFILTERMODEL_H
 
+// vim: et sw=4:

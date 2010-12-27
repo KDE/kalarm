@@ -36,18 +36,20 @@ namespace KCal { class CalendarLocal; }
 
 class CalendarCompat
 {
-	public:
+    public:
 #ifdef USE_AKONADI
-		/** Whether the fix function should convert old format KAlarm calendars. */
-		enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
+        /** Whether the fix function should convert old format KAlarm calendars. */
+        enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
 
-		static KAlarm::Calendar::Compat fix(const KCalCore::FileStorage::Ptr&, 
-		                                    const Akonadi::Collection& = Akonadi::Collection(),
-		                                    FixFunc = PROMPT, bool* wrongType = 0);
+        static KAlarm::Calendar::Compat fix(const KCalCore::FileStorage::Ptr&, 
+                                            const Akonadi::Collection& = Akonadi::Collection(),
+                                            FixFunc = PROMPT, bool* wrongType = 0);
 #else
-		static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
-		                                    AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
+        static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
+                                            AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
 #endif
 };
 
 #endif // CALENDARCOMPAT_H
+
+// vim: et sw=4:

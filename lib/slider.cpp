@@ -1,7 +1,7 @@
 /*
  *  slider.cpp  -  slider control with read-only option
  *  Program:  kalarm
- *  Copyright (c) 2004-2006 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004-2006 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,26 +18,26 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QMouseEvent>
 #include "slider.moc"
+#include <QMouseEvent>
 
 
 Slider::Slider(QWidget* parent)
-	: QSlider(parent),
-	  mReadOnly(false)
+    : QSlider(parent),
+      mReadOnly(false)
 { }
 
 Slider::Slider(Qt::Orientation o, QWidget* parent)
-	: QSlider(o, parent),
-	  mReadOnly(false)
+    : QSlider(o, parent),
+      mReadOnly(false)
 { }
 
 Slider::Slider(int minval, int maxval, int pageStep, Qt::Orientation o, QWidget* parent)
-	: QSlider(o, parent),
-	  mReadOnly(false)
+    : QSlider(o, parent),
+      mReadOnly(false)
 { 
-	setRange(minval, maxval);
-	setPageStep(pageStep);
+    setRange(minval, maxval);
+    setPageStep(pageStep);
 }
 
 /******************************************************************************
@@ -46,7 +46,7 @@ Slider::Slider(int minval, int maxval, int pageStep, Qt::Orientation o, QWidget*
 */
 void Slider::setReadOnly(bool ro)
 {
-	mReadOnly = ro;
+    mReadOnly = ro;
 }
 
 /******************************************************************************
@@ -55,35 +55,37 @@ void Slider::setReadOnly(bool ro)
 */
 void Slider::mousePressEvent(QMouseEvent* e)
 {
-	if (mReadOnly)
-	{
-		// Swallow up the event if it's the left button
-		if (e->button() == Qt::LeftButton)
-			return;
-	}
-	QSlider::mousePressEvent(e);
+    if (mReadOnly)
+    {
+        // Swallow up the event if it's the left button
+        if (e->button() == Qt::LeftButton)
+            return;
+    }
+    QSlider::mousePressEvent(e);
 }
 
 void Slider::mouseReleaseEvent(QMouseEvent* e)
 {
-	if (!mReadOnly)
-		QSlider::mouseReleaseEvent(e);
+    if (!mReadOnly)
+        QSlider::mouseReleaseEvent(e);
 }
 
 void Slider::mouseMoveEvent(QMouseEvent* e)
 {
-	if (!mReadOnly)
-		QSlider::mouseMoveEvent(e);
+    if (!mReadOnly)
+        QSlider::mouseMoveEvent(e);
 }
 
 void Slider::keyPressEvent(QKeyEvent* e)
 {
-	if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
-		QSlider::keyPressEvent(e);
+    if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
+        QSlider::keyPressEvent(e);
 }
 
 void Slider::keyReleaseEvent(QKeyEvent* e)
 {
-	if (!mReadOnly)
-		QSlider::keyReleaseEvent(e);
+    if (!mReadOnly)
+        QSlider::keyReleaseEvent(e);
 }
+
+// vim: et sw=4:

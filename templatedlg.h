@@ -36,39 +36,41 @@ class TemplateListView;
 
 class TemplateDlg : public KDialog
 {
-		Q_OBJECT
-	public:
-		static TemplateDlg*  create(QWidget* parent = 0);
-		~TemplateDlg();
+        Q_OBJECT
+    public:
+        static TemplateDlg*  create(QWidget* parent = 0);
+        ~TemplateDlg();
 
-	signals:
-		void          emptyToggled(bool notEmpty);
+    signals:
+        void          emptyToggled(bool notEmpty);
 
-	protected:
-		virtual void  resizeEvent(QResizeEvent*);
+    protected:
+        virtual void  resizeEvent(QResizeEvent*);
 
-	private slots:
-		void          slotNew(EditAlarmDlg::Type);
-		void          slotCopy();
-		void          slotEdit();
-		void          slotDelete();
-		void          slotSelectionChanged();
+    private slots:
+        void          slotNew(EditAlarmDlg::Type);
+        void          slotCopy();
+        void          slotEdit();
+        void          slotDelete();
+        void          slotSelectionChanged();
 
-	private:
-		explicit TemplateDlg(QWidget* parent);
+    private:
+        explicit TemplateDlg(QWidget* parent);
 
-		static TemplateDlg* mInstance;   // the current instance, to prevent multiple dialogues
+        static TemplateDlg* mInstance;   // the current instance, to prevent multiple dialogues
 
 #ifdef USE_AKONADI
-		TemplateListModel* mListFilterModel;
+        TemplateListModel* mListFilterModel;
 #else
-		TemplateListFilterModel* mListFilterModel;
+        TemplateListFilterModel* mListFilterModel;
 #endif
-		TemplateListView*  mListView;
-		QPushButton*       mEditButton;
-		QPushButton*       mCopyButton;
-		QPushButton*       mDeleteButton;
-		NewAlarmAction*    mNewAction;
+        TemplateListView*  mListView;
+        QPushButton*       mEditButton;
+        QPushButton*       mCopyButton;
+        QPushButton*       mDeleteButton;
+        NewAlarmAction*    mNewAction;
 };
 
 #endif // TEMPLATEDLG_H
+
+// vim: et sw=4:

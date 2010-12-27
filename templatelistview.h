@@ -28,20 +28,21 @@
 
 class TemplateListView : public EventListView
 {
-		Q_OBJECT
-	public:
-		explicit TemplateListView(QWidget* parent = 0);
-		virtual void setModel(QAbstractItemModel*);
+        Q_OBJECT
+    public:
+        explicit TemplateListView(QWidget* parent = 0);
+        virtual void setModel(QAbstractItemModel*);
 };
 
 class TemplateListDelegate : public EventListDelegate
 {
-		Q_OBJECT
-	public:
-		explicit TemplateListDelegate(TemplateListView* parent = 0)
-		           : EventListDelegate(parent) {}
-		virtual void edit(KAEvent*, EventListView*);
+        Q_OBJECT
+    public:
+        explicit TemplateListDelegate(TemplateListView* parent = 0)
+                   : EventListDelegate(parent) {}
+        virtual void edit(KAEvent*, EventListView*);
 };
 
 #endif // TEMPLATELISTVIEW_H
 
+// vim: et sw=4:

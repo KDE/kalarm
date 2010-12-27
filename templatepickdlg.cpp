@@ -39,52 +39,52 @@ static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
 
 TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
-	: KDialog(parent)
+    : KDialog(parent)
 {
-	QWidget* topWidget = new QWidget(this);
-	setMainWidget(topWidget);
-	setCaption(i18nc("@title:window", "Choose Alarm Template"));
-	setButtons(Ok|Cancel);
-	setDefaultButton(Ok);
-	QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-	topLayout->setMargin(0);
-	topLayout->setSpacing(spacingHint());
+    QWidget* topWidget = new QWidget(this);
+    setMainWidget(topWidget);
+    setCaption(i18nc("@title:window", "Choose Alarm Template"));
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
+    QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
+    topLayout->setMargin(0);
+    topLayout->setSpacing(spacingHint());
 
-	// Display the list of templates, but exclude command alarms if in kiosk mode.
-	KAEvent::Actions shown = KAEvent::ACT_ALL;
-	if (!ShellProcess::authorised())
-	{
-		type = static_cast<KAEvent::Actions>(type & ~KAEvent::ACT_COMMAND);
-		shown = static_cast<KAEvent::Actions>(shown & ~KAEvent::ACT_COMMAND);
-	}
+    // Display the list of templates, but exclude command alarms if in kiosk mode.
+    KAEvent::Actions shown = KAEvent::ACT_ALL;
+    if (!ShellProcess::authorised())
+    {
+        type = static_cast<KAEvent::Actions>(type & ~KAEvent::ACT_COMMAND);
+        shown = static_cast<KAEvent::Actions>(shown & ~KAEvent::ACT_COMMAND);
+    }
 #ifdef USE_AKONADI
-	mListFilterModel = new TemplateListModel(this);
-	mListFilterModel->setAlarmActionsEnabled(type);
-	mListFilterModel->setAlarmActionFilter(shown);
+    mListFilterModel = new TemplateListModel(this);
+    mListFilterModel->setAlarmActionsEnabled(type);
+    mListFilterModel->setAlarmActionFilter(shown);
 #else
-	mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
-	mListFilterModel->setTypesEnabled(type);
-	mListFilterModel->setTypeFilter(shown);
+    mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
+    mListFilterModel->setTypesEnabled(type);
+    mListFilterModel->setTypeFilter(shown);
 #endif
-	mListView = new TemplateListView(topWidget);
-	mListView->setModel(mListFilterModel);
+    mListView = new TemplateListView(topWidget);
+    mListView->setModel(mListFilterModel);
 #ifdef USE_AKONADI
-	mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
+    mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
 #else
-	mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
+    mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
 #endif
-	mListView->setSelectionMode(QAbstractItemView::SingleSelection);
-	mListView->setWhatsThis(i18nc("@info:whatsthis", "Select a template to base the new alarm on."));
-	connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
-	// Require a real double click (even if KDE is in single-click mode) to accept the selection
-	connect(mListView, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(accept()));
-	topLayout->addWidget(mListView);
+    mListView->setSelectionMode(QAbstractItemView::SingleSelection);
+    mListView->setWhatsThis(i18nc("@info:whatsthis", "Select a template to base the new alarm on."));
+    connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
+    // Require a real double click (even if KDE is in single-click mode) to accept the selection
+    connect(mListView, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(accept()));
+    topLayout->addWidget(mListView);
 
-	slotSelectionChanged();        // enable or disable the OK button
+    slotSelectionChanged();        // enable or disable the OK button
 
-	QSize s;
-	if (KAlarm::readConfigWindowSize(TMPL_PICK_DIALOG_NAME, s))
-		resize(s);
+    QSize s;
+    if (KAlarm::readConfigWindowSize(TMPL_PICK_DIALOG_NAME, s))
+        resize(s);
 }
 
 /******************************************************************************
@@ -96,7 +96,7 @@ KAEvent TemplatePickDlg::selectedTemplate() const
 const KAEvent* TemplatePickDlg::selectedTemplate() const
 #endif
 {
-	return mListView->selectedEvent();
+    return mListView->selectedEvent();
 }
 
 /******************************************************************************
@@ -105,10 +105,10 @@ const KAEvent* TemplatePickDlg::selectedTemplate() const
 */
 void TemplatePickDlg::slotSelectionChanged()
 {
-	bool enable = !mListView->selectionModel()->selectedRows().isEmpty();
-	if (enable)
-		enable = mListView->model()->flags(mListView->selectedIndex()) & Qt::ItemIsEnabled;
-	enableButtonOk(enable);
+    bool enable = !mListView->selectionModel()->selectedRows().isEmpty();
+    if (enable)
+        enable = mListView->model()->flags(mListView->selectedIndex()) & Qt::ItemIsEnabled;
+    enableButtonOk(enable);
 }
 
 /******************************************************************************
@@ -117,7 +117,9 @@ void TemplatePickDlg::slotSelectionChanged()
 */
 void TemplatePickDlg::resizeEvent(QResizeEvent* re)
 {
-	if (isVisible())
-		KAlarm::writeConfigWindowSize(TMPL_PICK_DIALOG_NAME, re->size());
-	KDialog::resizeEvent(re);
+    if (isVisible())
+        KAlarm::writeConfigWindowSize(TMPL_PICK_DIALOG_NAME, re->size());
+    KDialog::resizeEvent(re);
 }
+
+// vim: et sw=4:

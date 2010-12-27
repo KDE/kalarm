@@ -20,24 +20,24 @@
 
 #include "kalarm.h"
 
-
-#include <kmenu.h>
-#include <kdebug.h>
-#include <kactionmenu.h>
-#include <kactioncollection.h>
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "kaevent.h"
 #include "templatemenuaction.moc"
 
+#include <kmenu.h>
+#include <kactionmenu.h>
+#include <kactioncollection.h>
+#include <kdebug.h>
+
 
 TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* actions, const QString& name)
-	: KActionMenu(icon, label, actions)
+    : KActionMenu(icon, label, actions)
 {
-	setDelayed(false);
-	connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
-	connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
-	actions->addAction(name, this);
+    setDelayed(false);
+    connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
+    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
+    actions->addAction(name, this);
 }
 
 /******************************************************************************
@@ -46,29 +46,29 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 */
 void TemplateMenuAction::slotInitMenu()
 {
-	KMenu* m = menu();
-	m->clear();
-	mOriginalTexts.clear();
+    KMenu* m = menu();
+    m->clear();
+    mOriginalTexts.clear();
 
-	// Compile a sorted list of template names
-	int i, end;
-	QStringList sorted;
-	KAEvent::List templates = KAlarm::templateList();
-	for (i = 0, end = templates.count();  i < end;  ++i)
-	{
-		QString name = templates[i]->templateName();
-		int j = 0;
-		for (int jend = sorted.count();
-		     j < jend  &&  QString::localeAwareCompare(name, sorted[j]) > 0;
-		     ++j) ;
-		sorted.insert(j, name);
-	}
+    // Compile a sorted list of template names
+    int i, end;
+    QStringList sorted;
+    KAEvent::List templates = KAlarm::templateList();
+    for (i = 0, end = templates.count();  i < end;  ++i)
+    {
+        QString name = templates[i]->templateName();
+        int j = 0;
+        for (int jend = sorted.count();
+             j < jend  &&  QString::localeAwareCompare(name, sorted[j]) > 0;
+             ++j) ;
+        sorted.insert(j, name);
+    }
 
-	for (i = 0, end = sorted.count();  i < end;  ++i)
-	{
-		QAction* act = m->addAction(sorted[i]);
-		mOriginalTexts[act] = sorted[i];   // keep original text, since action text has shortcuts added
-	}
+    for (i = 0, end = sorted.count();  i < end;  ++i)
+    {
+        QAction* act = m->addAction(sorted[i]);
+        mOriginalTexts[act] = sorted[i];   // keep original text, since action text has shortcuts added
+    }
 }
 
 /******************************************************************************
@@ -77,9 +77,11 @@ void TemplateMenuAction::slotInitMenu()
 */
 void TemplateMenuAction::slotSelected(QAction* action)
 {
-	QMap<QAction*, QString>::ConstIterator it = mOriginalTexts.constFind(action);
-	if (it == mOriginalTexts.constEnd()  ||  it.value().isEmpty())
-		return;
-	KAEvent* templ = AlarmCalendar::resources()->templateEvent(it.value());
-	emit selected(templ);
+    QMap<QAction*, QString>::ConstIterator it = mOriginalTexts.constFind(action);
+    if (it == mOriginalTexts.constEnd()  ||  it.value().isEmpty())
+        return;
+    KAEvent* templ = AlarmCalendar::resources()->templateEvent(it.value());
+    emit selected(templ);
 }
+
+// vim: et sw=4:

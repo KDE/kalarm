@@ -19,17 +19,19 @@
  */
 
 #include "itembox.moc"
-#include <qboxlayout.h>
+#include <QBoxLayout>
 
 
 ItemBox::ItemBox(QWidget* parent)
-	: KHBox(parent)
+    : KHBox(parent)
 {
-	mLayout = qobject_cast<QHBoxLayout*>(layout());
-	Q_ASSERT(mLayout);
+    mLayout = qobject_cast<QHBoxLayout*>(layout());
+    Q_ASSERT(mLayout);
 }
 
 void ItemBox::leftAlign()
 {
-	mLayout->addStretch();
+    mLayout->addStretch();
 }
+
+// vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  label.cpp  -  label with radiobutton buddy option
  *  Program:  kalarm
- *  Copyright (c) 2004, 2005 by David Jarvie <software@astrojar.org.uk>
+ *  Copyright © 2004,2005 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -19,28 +19,28 @@
  */
 
 #include "kalarm.h"
-#include <QRadioButton>
 #include "label.moc"
+#include <QRadioButton>
 
 
 Label::Label(QWidget* parent, Qt::WFlags f)
-	: QLabel(parent, f),
-	  mRadioButton(0),
-	  mFocusWidget(0)
+    : QLabel(parent, f),
+      mRadioButton(0),
+      mFocusWidget(0)
 { }
 
 Label::Label(const QString& text, QWidget* parent, Qt::WFlags f)
-	: QLabel(text, parent, f),
-	  mRadioButton(0),
-	  mFocusWidget(0)
+    : QLabel(text, parent, f),
+      mRadioButton(0),
+      mFocusWidget(0)
 { }
 
 Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WFlags f)
-	: QLabel(text, parent, f),
-	  mRadioButton(0),
-	  mFocusWidget(0)
+    : QLabel(text, parent, f),
+      mRadioButton(0),
+      mFocusWidget(0)
 {
-	setBuddy(buddy);
+    setBuddy(buddy);
 }
 
 /******************************************************************************
@@ -51,40 +51,40 @@ Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WFlags f)
 */
 void Label::setBuddy(QWidget* bud)
 {
-	if (mRadioButton)
-		disconnect(mRadioButton, SIGNAL(destroyed()), this, SLOT(buddyDead()));
-	QWidget* w = bud;
-	if (w)
-	{
-		while (w->focusProxy())
-			w = w->focusProxy();
-		if (!qobject_cast<QRadioButton*>(w))
-			w = 0;
-	}
-	if (!w)
-	{
-		// The buddy widget isn't a radio button
-		QLabel::setBuddy(bud);
-		delete mFocusWidget;
-		mFocusWidget = 0;
-		mRadioButton = 0;
-	}
-	else
-	{
-		// The buddy widget is a radio button, so set a different buddy
-		if (!mFocusWidget)
-			mFocusWidget = new LabelFocusWidget(this);
-		QLabel::setBuddy(mFocusWidget);
-		mRadioButton = (QRadioButton*)bud;
-		connect(mRadioButton, SIGNAL(destroyed()), this, SLOT(buddyDead()));
-	}
+    if (mRadioButton)
+        disconnect(mRadioButton, SIGNAL(destroyed()), this, SLOT(buddyDead()));
+    QWidget* w = bud;
+    if (w)
+    {
+        while (w->focusProxy())
+            w = w->focusProxy();
+        if (!qobject_cast<QRadioButton*>(w))
+            w = 0;
+    }
+    if (!w)
+    {
+        // The buddy widget isn't a radio button
+        QLabel::setBuddy(bud);
+        delete mFocusWidget;
+        mFocusWidget = 0;
+        mRadioButton = 0;
+    }
+    else
+    {
+        // The buddy widget is a radio button, so set a different buddy
+        if (!mFocusWidget)
+            mFocusWidget = new LabelFocusWidget(this);
+        QLabel::setBuddy(mFocusWidget);
+        mRadioButton = (QRadioButton*)bud;
+        connect(mRadioButton, SIGNAL(destroyed()), this, SLOT(buddyDead()));
+    }
 }
 
 void Label::buddyDead()
 {
-	delete mFocusWidget;
-	mFocusWidget = 0;
-	mRadioButton = 0;
+    delete mFocusWidget;
+    mFocusWidget = 0;
+    mRadioButton = 0;
 }
 
 /******************************************************************************
@@ -93,11 +93,11 @@ void Label::buddyDead()
 */
 void Label::activated()
 {
-	if (mFocusWidget  &&  mRadioButton)
-	{
-		mRadioButton->setFocus();
-		mRadioButton->setChecked(true);
-	}
+    if (mFocusWidget  &&  mRadioButton)
+    {
+        mRadioButton->setFocus();
+        mRadioButton->setChecked(true);
+    }
 }
 
 
@@ -106,15 +106,17 @@ void Label::activated()
 =============================================================================*/
 
 LabelFocusWidget::LabelFocusWidget(QWidget* parent)
-	: QWidget(parent)
+    : QWidget(parent)
 {
-	setFocusPolicy(Qt::ClickFocus);
-	setFixedSize(QSize(1,1));
+    setFocusPolicy(Qt::ClickFocus);
+    setFixedSize(QSize(1,1));
 }
 
 void LabelFocusWidget::focusInEvent(QFocusEvent*)
 {
-	Label* parent = (Label*)parentWidget();
-	parent->activated();
+    Label* parent = (Label*)parentWidget();
+    parent->activated();
 
 }
+
+// vim: et sw=4:

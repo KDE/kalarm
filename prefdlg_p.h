@@ -49,223 +49,225 @@ class TimeZoneCombo;
 // Base class for each tab in the Preferences dialog
 class PrefsTabBase : public StackedScrollWidget
 {
-		Q_OBJECT
-	public:
-		PrefsTabBase(StackedScrollGroup*);
+        Q_OBJECT
+    public:
+        PrefsTabBase(StackedScrollGroup*);
 
-		void         setPreferences();
-		virtual void restore(bool defaults) = 0;
-		virtual void apply(bool syncToDisc) = 0;
-		void         addAlignedLabel(QLabel*);
-		KVBox*       topWidget() const  { return mTopWidget; }
-		QVBoxLayout* topLayout() const  { return mTopLayout; }
-		static int   indentWidth()      { return mIndentWidth; }
+        void         setPreferences();
+        virtual void restore(bool defaults) = 0;
+        virtual void apply(bool syncToDisc) = 0;
+        void         addAlignedLabel(QLabel*);
+        KVBox*       topWidget() const  { return mTopWidget; }
+        QVBoxLayout* topLayout() const  { return mTopLayout; }
+        static int   indentWidth()      { return mIndentWidth; }
 
-	protected:
-		virtual void showEvent(QShowEvent*);
+    protected:
+        virtual void showEvent(QShowEvent*);
 
-	private:
-		static int   mIndentWidth;       // indent width for checkboxes etc.
-		KVBox*       mTopWidget;
-		QVBoxLayout* mTopLayout;
-		QList<QLabel*> mLabels;          // labels to right-align
-		bool           mLabelsAligned;   // labels have been aligned
+    private:
+        static int   mIndentWidth;       // indent width for checkboxes etc.
+        KVBox*       mTopWidget;
+        QVBoxLayout* mTopLayout;
+        QList<QLabel*> mLabels;          // labels to right-align
+        bool           mLabelsAligned;   // labels have been aligned
 };
 
 
 // Miscellaneous tab of the Preferences dialog
 class MiscPrefTab : public PrefsTabBase
 {
-		Q_OBJECT
-	public:
-		MiscPrefTab(StackedScrollGroup*);
+        Q_OBJECT
+    public:
+        MiscPrefTab(StackedScrollGroup*);
 
-		virtual void restore(bool defaults);
-		virtual void apply(bool syncToDisc);
+        virtual void restore(bool defaults);
+        virtual void apply(bool syncToDisc);
 
-	private slots:
-		void         slotAutostartClicked();
-		void         slotOtherTerminalToggled(bool);
+    private slots:
+        void         slotAutostartClicked();
+        void         slotOtherTerminalToggled(bool);
 
-	private:
-		void         setTimeZone(const KTimeZone&);
+    private:
+        void         setTimeZone(const KTimeZone&);
 
-		QCheckBox*    mAutoStart;
-		QCheckBox*    mQuitWarn;
-		QCheckBox*    mConfirmAlarmDeletion;
-		TimeSpinBox*  mDefaultDeferTime;
-		ButtonGroup*  mXtermType;
-		KLineEdit*    mXtermCommand;
-		int           mXtermFirst;              // id of first terminal window radio button
-		int           mXtermCount;              // number of terminal window types
+        QCheckBox*    mAutoStart;
+        QCheckBox*    mQuitWarn;
+        QCheckBox*    mConfirmAlarmDeletion;
+        TimeSpinBox*  mDefaultDeferTime;
+        ButtonGroup*  mXtermType;
+        KLineEdit*    mXtermCommand;
+        int           mXtermFirst;              // id of first terminal window radio button
+        int           mXtermCount;              // number of terminal window types
 };
 
 
 // Date/time tab of the Preferences dialog
 class TimePrefTab : public PrefsTabBase
 {
-		Q_OBJECT
-	public:
-		TimePrefTab(StackedScrollGroup*);
+        Q_OBJECT
+    public:
+        TimePrefTab(StackedScrollGroup*);
 
-		virtual void restore(bool defaults);
-		virtual void apply(bool syncToDisc);
+        virtual void restore(bool defaults);
+        virtual void apply(bool syncToDisc);
 
-	private:
-		void         setWorkDays(const QBitArray& days);
+    private:
+        void         setWorkDays(const QBitArray& days);
 
-		TimeZoneCombo* mTimeZone;
-		KComboBox*    mHolidays;
-		QMap<QString, QString> mHolidayNames;
-		TimeEdit*     mStartOfDay;
-		QCheckBox*    mWorkDays[7];
-		TimeEdit*     mWorkStart;
-		TimeEdit*     mWorkEnd;
-		TimeSpinBox*  mKOrgEventDuration;
+        TimeZoneCombo* mTimeZone;
+        KComboBox*    mHolidays;
+        QMap<QString, QString> mHolidayNames;
+        TimeEdit*     mStartOfDay;
+        QCheckBox*    mWorkDays[7];
+        TimeEdit*     mWorkStart;
+        TimeEdit*     mWorkEnd;
+        TimeSpinBox*  mKOrgEventDuration;
 };
 
 
 // Storage tab of the Preferences dialog
 class StorePrefTab : public PrefsTabBase
 {
-		Q_OBJECT
-	public:
-		StorePrefTab(StackedScrollGroup*);
+        Q_OBJECT
+    public:
+        StorePrefTab(StackedScrollGroup*);
 
-		virtual void restore(bool defaults);
-		virtual void apply(bool syncToDisc);
+        virtual void restore(bool defaults);
+        virtual void apply(bool syncToDisc);
 
-	private slots:
-		void         slotArchivedToggled(bool);
-		void         slotClearArchived();
+    private slots:
+        void         slotArchivedToggled(bool);
+        void         slotClearArchived();
 
-	private:
-		void         setArchivedControls(int purgeDays);
+    private:
+        void         setArchivedControls(int purgeDays);
 
-		QRadioButton* mDefaultResource;
-		QRadioButton* mAskResource;
-		QCheckBox*    mKeepArchived;
-		QCheckBox*    mPurgeArchived;
-		SpinBox*      mPurgeAfter;
-		QLabel*       mPurgeAfterLabel;
-		QPushButton*  mClearArchived;
-		bool          mOldKeepArchived;    // previous setting of keep-archived
-		bool          mCheckKeepChanges;
+        QRadioButton* mDefaultResource;
+        QRadioButton* mAskResource;
+        QCheckBox*    mKeepArchived;
+        QCheckBox*    mPurgeArchived;
+        SpinBox*      mPurgeAfter;
+        QLabel*       mPurgeAfterLabel;
+        QPushButton*  mClearArchived;
+        bool          mOldKeepArchived;    // previous setting of keep-archived
+        bool          mCheckKeepChanges;
 };
 
 
 // Email tab of the Preferences dialog
 class EmailPrefTab : public PrefsTabBase
 {
-		Q_OBJECT
-	public:
-		EmailPrefTab(StackedScrollGroup*);
+        Q_OBJECT
+    public:
+        EmailPrefTab(StackedScrollGroup*);
 
-		QString      validate();
-		virtual void restore(bool defaults);
-		virtual void apply(bool syncToDisc);
+        QString      validate();
+        virtual void restore(bool defaults);
+        virtual void apply(bool syncToDisc);
 
-	private slots:
-		void         slotEmailClientChanged(QAbstractButton*);
-		void         slotFromAddrChanged(QAbstractButton*);
-		void         slotBccAddrChanged(QAbstractButton*);
-		void         slotAddressChanged()    { mAddressChanged = true; }
+    private slots:
+        void         slotEmailClientChanged(QAbstractButton*);
+        void         slotFromAddrChanged(QAbstractButton*);
+        void         slotBccAddrChanged(QAbstractButton*);
+        void         slotAddressChanged()    { mAddressChanged = true; }
 
-	private:
-		void         setEmailAddress(Preferences::MailFrom, const QString& address);
-		void         setEmailBccAddress(bool useSystemSettings, const QString& address);
-		QString      validateAddr(ButtonGroup*, KLineEdit* addr, const QString& msg);
+    private:
+        void         setEmailAddress(Preferences::MailFrom, const QString& address);
+        void         setEmailBccAddress(bool useSystemSettings, const QString& address);
+        QString      validateAddr(ButtonGroup*, KLineEdit* addr, const QString& msg);
 
-		ButtonGroup* mEmailClient;
-		RadioButton* mKMailButton;
-		RadioButton* mSendmailButton;
-		ButtonGroup* mFromAddressGroup;
-		RadioButton* mFromAddrButton;
-		RadioButton* mFromCCentreButton;
-		RadioButton* mFromKMailButton;
-		KLineEdit*   mEmailAddress;
-		ButtonGroup* mBccAddressGroup;
-		RadioButton* mBccAddrButton;
-		RadioButton* mBccCCentreButton;
-		KLineEdit*   mEmailBccAddress;
-		QCheckBox*   mEmailQueuedNotify;
-		QCheckBox*   mEmailCopyToKMail;
-		bool         mAddressChanged;
-		bool         mBccAddressChanged;
+        ButtonGroup* mEmailClient;
+        RadioButton* mKMailButton;
+        RadioButton* mSendmailButton;
+        ButtonGroup* mFromAddressGroup;
+        RadioButton* mFromAddrButton;
+        RadioButton* mFromCCentreButton;
+        RadioButton* mFromKMailButton;
+        KLineEdit*   mEmailAddress;
+        ButtonGroup* mBccAddressGroup;
+        RadioButton* mBccAddrButton;
+        RadioButton* mBccCCentreButton;
+        KLineEdit*   mEmailBccAddress;
+        QCheckBox*   mEmailQueuedNotify;
+        QCheckBox*   mEmailCopyToKMail;
+        bool         mAddressChanged;
+        bool         mBccAddressChanged;
 };
 
 
 // Edit defaults tab of the Preferences dialog
 class EditPrefTab : public PrefsTabBase
 {
-		Q_OBJECT
-	public:
-		EditPrefTab(StackedScrollGroup*);
+        Q_OBJECT
+    public:
+        EditPrefTab(StackedScrollGroup*);
 
-		QString      validate();
-		virtual void restore(bool defaults);
-		virtual void apply(bool syncToDisc);
+        QString      validate();
+        virtual void restore(bool defaults);
+        virtual void apply(bool syncToDisc);
 
-	private slots:
-		void         slotBrowseSoundFile();
+    private slots:
+        void         slotBrowseSoundFile();
 
-	private:
-		QCheckBox*      mAutoClose;
-		QCheckBox*      mConfirmAck;
-		KComboBox*      mReminderUnits;
-		SpecialActionsButton* mSpecialActionsButton;
-		QCheckBox*      mCmdScript;
-		QCheckBox*      mCmdXterm;
-		QCheckBox*      mEmailBcc;
-		KComboBox*      mSound;
-		QLabel*         mSoundFileLabel;
-		KLineEdit*      mSoundFile;
-		QPushButton*    mSoundFileBrowse;
-		QCheckBox*      mSoundRepeat;
-		QCheckBox*      mCopyToKOrganizer;
-		QCheckBox*      mLateCancel;
-		KComboBox*      mRecurPeriod;
-		ButtonGroup*    mFeb29;
-		FontColourChooser* mFontChooser;
+    private:
+        QCheckBox*      mAutoClose;
+        QCheckBox*      mConfirmAck;
+        KComboBox*      mReminderUnits;
+        SpecialActionsButton* mSpecialActionsButton;
+        QCheckBox*      mCmdScript;
+        QCheckBox*      mCmdXterm;
+        QCheckBox*      mEmailBcc;
+        KComboBox*      mSound;
+        QLabel*         mSoundFileLabel;
+        KLineEdit*      mSoundFile;
+        QPushButton*    mSoundFileBrowse;
+        QCheckBox*      mSoundRepeat;
+        QCheckBox*      mCopyToKOrganizer;
+        QCheckBox*      mLateCancel;
+        KComboBox*      mRecurPeriod;
+        ButtonGroup*    mFeb29;
+        FontColourChooser* mFontChooser;
 
-		static int soundIndex(Preferences::SoundType);
+        static int soundIndex(Preferences::SoundType);
 };
 
 
 // View tab of the Preferences dialog
 class ViewPrefTab : public PrefsTabBase
 {
-		Q_OBJECT
-	public:
-		ViewPrefTab(StackedScrollGroup*);
+        Q_OBJECT
+    public:
+        ViewPrefTab(StackedScrollGroup*);
 
-		virtual void restore(bool defaults);
-		virtual void apply(bool syncToDisc);
+        virtual void restore(bool defaults);
+        virtual void apply(bool syncToDisc);
 
-	private slots:
-		void         slotTooltipAlarmsToggled(bool);
-		void         slotTooltipMaxToggled(bool);
-		void         slotTooltipTimeToggled(bool);
-		void         slotTooltipTimeToToggled(bool);
-		void         slotWindowPosChanged(QAbstractButton*);
+    private slots:
+        void         slotTooltipAlarmsToggled(bool);
+        void         slotTooltipMaxToggled(bool);
+        void         slotTooltipTimeToggled(bool);
+        void         slotTooltipTimeToToggled(bool);
+        void         slotWindowPosChanged(QAbstractButton*);
 
-	private:
-		void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
+    private:
+        void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
-		ColourButton* mDisabledColour;
-		ColourButton* mArchivedColour;
-		QCheckBox*    mShowInSystemTray;
-		QCheckBox*    mTooltipShowAlarms;
-		QCheckBox*    mTooltipMaxAlarms;
-		SpinBox*      mTooltipMaxAlarmCount;
-		QCheckBox*    mTooltipShowTime;
-		QCheckBox*    mTooltipShowTimeTo;
-		KLineEdit*    mTooltipTimeToPrefix;
-		QLabel*       mTooltipTimeToPrefixLabel;
-		ButtonGroup*  mWindowPosition;
-		QSpinBox*     mWindowButtonDelay;
-		QLabel*       mWindowButtonDelayLabel;
-		QCheckBox*    mModalMessages;
+        ColourButton* mDisabledColour;
+        ColourButton* mArchivedColour;
+        QCheckBox*    mShowInSystemTray;
+        QCheckBox*    mTooltipShowAlarms;
+        QCheckBox*    mTooltipMaxAlarms;
+        SpinBox*      mTooltipMaxAlarmCount;
+        QCheckBox*    mTooltipShowTime;
+        QCheckBox*    mTooltipShowTimeTo;
+        KLineEdit*    mTooltipTimeToPrefix;
+        QLabel*       mTooltipTimeToPrefixLabel;
+        ButtonGroup*  mWindowPosition;
+        QSpinBox*     mWindowButtonDelay;
+        QLabel*       mWindowButtonDelayLabel;
+        QCheckBox*    mModalMessages;
 };
 
 #endif // PREFDLG_P_H
+
+// vim: et sw=4:

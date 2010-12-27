@@ -21,26 +21,28 @@
 #ifndef TEMPLATEMENUACTION_H
 #define TEMPLATEMENUACTION_H
 
-#include <QMap>
 #include <kactionmenu.h>
+#include <QMap>
 class QAction;
 class KAEvent;
 
 class TemplateMenuAction : public KActionMenu
 {
-		Q_OBJECT
-	public:
-		TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* parent, const QString& name);
-		virtual ~TemplateMenuAction() {}
-	signals:
-		void   selected(const KAEvent*);
+        Q_OBJECT
+    public:
+        TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* parent, const QString& name);
+        virtual ~TemplateMenuAction() {}
+    signals:
+        void   selected(const KAEvent*);
 
-	private slots:
-		void   slotInitMenu();
-		void   slotSelected(QAction*);
+    private slots:
+        void   slotInitMenu();
+        void   slotSelected(QAction*);
 
-	private:
-		QMap<QAction*, QString> mOriginalTexts;   // menu item texts without added ampersands
+    private:
+        QMap<QAction*, QString> mOriginalTexts;   // menu item texts without added ampersands
 };
 
 #endif // TEMPLATEMENUACTION_H
+
+// vim: et sw=4:

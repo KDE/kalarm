@@ -20,17 +20,17 @@
 
 #include "kalarm.h"
 
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
+#include "checkbox.h"
+#include "timeselector.moc"
 
 #include <klocale.h>
 #include <kdialog.h>
 #include <khbox.h>
 #include <kdebug.h>
 
-#include "checkbox.h"
-#include "timeselector.moc"
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #ifdef USE_AKONADI
 using namespace KCalCore;
@@ -41,40 +41,40 @@ using namespace KCal;
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent)
-	: QFrame(parent),
-	  mLabel(0),
-	  mReadOnly(false)
+    : QFrame(parent),
+      mLabel(0),
+      mReadOnly(false)
 {
-	QHBoxLayout* layout = new QHBoxLayout(this);
-	layout->setMargin(0);
-	layout->setSpacing(KDialog::spacingHint());
-	mSelect = new CheckBox(selectText, this);
-	mSelect->setFixedSize(mSelect->sizeHint());
-	connect(mSelect, SIGNAL(toggled(bool)), SLOT(selectToggled(bool)));
-	mSelect->setWhatsThis(selectWhatsThis);
-	layout->addWidget(mSelect);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
+    mSelect = new CheckBox(selectText, this);
+    mSelect->setFixedSize(mSelect->sizeHint());
+    connect(mSelect, SIGNAL(toggled(bool)), SLOT(selectToggled(bool)));
+    mSelect->setWhatsThis(selectWhatsThis);
+    layout->addWidget(mSelect);
 
-	KHBox* box = new KHBox(this);    // to group widgets for QWhatsThis text
-	box->setSpacing(KDialog::spacingHint());
-	layout->addWidget(box);
-	mPeriod = new TimePeriod(allowHourMinute, box);
-	mPeriod->setFixedSize(mPeriod->sizeHint());
-	mPeriod->setSelectOnStep(false);
+    KHBox* box = new KHBox(this);    // to group widgets for QWhatsThis text
+    box->setSpacing(KDialog::spacingHint());
+    layout->addWidget(box);
+    mPeriod = new TimePeriod(allowHourMinute, box);
+    mPeriod->setFixedSize(mPeriod->sizeHint());
+    mPeriod->setSelectOnStep(false);
 #ifdef USE_AKONADI
-	connect(mPeriod, SIGNAL(valueChanged(const KCalCore::Duration&)), SLOT(periodChanged(const KCalCore::Duration&)));
+    connect(mPeriod, SIGNAL(valueChanged(const KCalCore::Duration&)), SLOT(periodChanged(const KCalCore::Duration&)));
 #else
-	connect(mPeriod, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(periodChanged(const KCal::Duration&)));
+    connect(mPeriod, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(periodChanged(const KCal::Duration&)));
 #endif
-	mSelect->setFocusWidget(mPeriod);
-	mPeriod->setEnabled(false);
+    mSelect->setFocusWidget(mPeriod);
+    mPeriod->setEnabled(false);
 
-	if (!postfix.isEmpty())
-	{
-		mLabel = new QLabel(postfix, box);
-		mLabel->setEnabled(false);
-	}
-	box->setWhatsThis(valueWhatsThis);
-	layout->addStretch();
+    if (!postfix.isEmpty())
+    {
+        mLabel = new QLabel(postfix, box);
+        mLabel->setEnabled(false);
+    }
+    box->setWhatsThis(valueWhatsThis);
+    layout->addStretch();
 }
 
 /******************************************************************************
@@ -82,36 +82,36 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
 */
 void TimeSelector::setReadOnly(bool ro)
 {
-	if ((int)ro != (int)mReadOnly)
-	{
-		mReadOnly = ro;
-		mSelect->setReadOnly(mReadOnly);
-		mPeriod->setReadOnly(mReadOnly);
-	}
+    if ((int)ro != (int)mReadOnly)
+    {
+        mReadOnly = ro;
+        mSelect->setReadOnly(mReadOnly);
+        mPeriod->setReadOnly(mReadOnly);
+    }
 }
 
 bool TimeSelector::isChecked() const
 {
-	return mSelect->isChecked();
+    return mSelect->isChecked();
 }
 
 void TimeSelector::setChecked(bool on)
 {
-	if (on != mSelect->isChecked())
-	{
-		mSelect->setChecked(on);
-		emit valueChanged(period());
-	}
+    if (on != mSelect->isChecked())
+    {
+        mSelect->setChecked(on);
+        emit valueChanged(period());
+    }
 }
 
 void TimeSelector::setMaximum(int hourmin, int days)
 {
-	mPeriod->setMaximum(hourmin, days);
+    mPeriod->setMaximum(hourmin, days);
 }
 
 void TimeSelector::setDateOnly(bool dateOnly)
 {
-	mPeriod->setDateOnly(dateOnly);
+    mPeriod->setDateOnly(dateOnly);
 }
 
 /******************************************************************************
@@ -120,7 +120,7 @@ void TimeSelector::setDateOnly(bool dateOnly)
  */
 Duration TimeSelector::period() const
 {
-	return mSelect->isChecked() ? mPeriod->period() : Duration(0);
+    return mSelect->isChecked() ? mPeriod->period() : Duration(0);
 }
 
 /******************************************************************************
@@ -131,11 +131,11 @@ Duration TimeSelector::period() const
 */
 void TimeSelector::setPeriod(const Duration& period, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-	mSelect->setChecked(period);
-	mPeriod->setEnabled(period);
-	if (mLabel)
-		mLabel->setEnabled(period);
-	mPeriod->setPeriod(period, dateOnly, defaultUnits);
+    mSelect->setChecked(period);
+    mPeriod->setEnabled(period);
+    if (mLabel)
+        mLabel->setEnabled(period);
+    mPeriod->setPeriod(period, dateOnly, defaultUnits);
 }
 
 /******************************************************************************
@@ -143,7 +143,7 @@ void TimeSelector::setPeriod(const Duration& period, bool dateOnly, TimePeriod::
 */
 void TimeSelector::setFocusOnCount()
 {
-	mPeriod->setFocusOnCount();
+    mPeriod->setFocusOnCount();
 }
 
 /******************************************************************************
@@ -151,13 +151,13 @@ void TimeSelector::setFocusOnCount()
 */
 void TimeSelector::selectToggled(bool on)
 {
-	mPeriod->setEnabled(on);
-	if (mLabel)
-		mLabel->setEnabled(on);
-	if (on)
-		mPeriod->setFocus();
-	emit toggled(on);
-	emit valueChanged(period());
+    mPeriod->setEnabled(on);
+    if (mLabel)
+        mLabel->setEnabled(on);
+    if (on)
+        mPeriod->setFocus();
+    emit toggled(on);
+    emit valueChanged(period());
 }
 
 /******************************************************************************
@@ -165,6 +165,8 @@ void TimeSelector::selectToggled(bool on)
 */
 void TimeSelector::periodChanged(const Duration& period)
 {
-	if (mSelect->isChecked())
-		emit valueChanged(period);
+    if (mSelect->isChecked())
+        emit valueChanged(period);
 }
+
+// vim: et sw=4:

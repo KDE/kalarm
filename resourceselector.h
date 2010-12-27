@@ -58,74 +58,76 @@ using KCal::ResourceCalendar;
 */
 class ResourceSelector : public QFrame
 {
-	Q_OBJECT
+        Q_OBJECT
     public:
 #ifdef USE_AKONADI
-	explicit ResourceSelector(QWidget* parent = 0);
+        explicit ResourceSelector(QWidget* parent = 0);
 #else
-	explicit ResourceSelector(AlarmResources*, QWidget* parent = 0);
-	AlarmResources* calendar() const    { return mCalendar; }
+        explicit ResourceSelector(AlarmResources*, QWidget* parent = 0);
+        AlarmResources* calendar() const    { return mCalendar; }
 #endif
-	void  initActions(KActionCollection*);
-	void  setContextMenu(KMenu*);
+        void  initActions(KActionCollection*);
+        void  setContextMenu(KMenu*);
 
     signals:
-	void  resized(const QSize& oldSize, const QSize& newSize);
+        void  resized(const QSize& oldSize, const QSize& newSize);
 
     protected:
-	virtual void resizeEvent(QResizeEvent*);
+        virtual void resizeEvent(QResizeEvent*);
 
     private slots:
-	void  alarmTypeSelected();
-	void  addResource();
-	void  editResource();
-	void  removeResource();
-	void  selectionChanged();
-	void  contextMenuRequested(const QPoint&);
-	void  reloadResource();
-	void  saveResource();
-	void  setStandard();
-	void  setColour();
-	void  clearColour();
-	void  importCalendar();
-	void  exportCalendar();
-	void  showInfo();
-	void  archiveDaysChanged(int days);
+        void  alarmTypeSelected();
+        void  addResource();
+        void  editResource();
+        void  removeResource();
+        void  selectionChanged();
+        void  contextMenuRequested(const QPoint&);
+        void  reloadResource();
+        void  saveResource();
+        void  setStandard();
+        void  setColour();
+        void  clearColour();
+        void  importCalendar();
+        void  exportCalendar();
+        void  showInfo();
+        void  archiveDaysChanged(int days);
 #ifdef USE_AKONADI
-	void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool);
+        void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool);
 #else
-	void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
+        void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
 #endif
-	void  reinstateAlarmTypeScrollBars();
+        void  reinstateAlarmTypeScrollBars();
 
     private:
-	KAlarm::CalEvent::Type currentResourceType() const;
+        KAlarm::CalEvent::Type currentResourceType() const;
 #ifdef USE_AKONADI
-	Akonadi::Collection currentResource() const;
+        Akonadi::Collection currentResource() const;
 
-	CollectionView* mListView;
+        CollectionView* mListView;
 #else
-	AlarmResource*  currentResource() const;
+        AlarmResource*  currentResource() const;
 
-	AlarmResources* mCalendar;
-	ResourceView*   mListView;
+        AlarmResources* mCalendar;
+        ResourceView*   mListView;
 #endif
-	KComboBox*      mAlarmType;
-	QPushButton*    mAddButton;
-	QPushButton*    mDeleteButton;
-	QPushButton*    mEditButton;
-	KAlarm::CalEvent::Type mCurrentAlarmType;
-	KMenu*          mContextMenu;
-	KAction*        mActionReload;
-	KAction*        mActionSave;
-	KAction*        mActionShowDetails;
-	KAction*        mActionSetColour;
-	KAction*        mActionClearColour;
-	KAction*        mActionEdit;
-	KAction*        mActionRemove;
-	KAction*        mActionImport;
-	KAction*        mActionExport;
-	KToggleAction*  mActionSetDefault;
+        KComboBox*      mAlarmType;
+        QPushButton*    mAddButton;
+        QPushButton*    mDeleteButton;
+        QPushButton*    mEditButton;
+        KAlarm::CalEvent::Type mCurrentAlarmType;
+        KMenu*          mContextMenu;
+        KAction*        mActionReload;
+        KAction*        mActionSave;
+        KAction*        mActionShowDetails;
+        KAction*        mActionSetColour;
+        KAction*        mActionClearColour;
+        KAction*        mActionEdit;
+        KAction*        mActionRemove;
+        KAction*        mActionImport;
+        KAction*        mActionExport;
+        KToggleAction*  mActionSetDefault;
 };
 
 #endif
+
+// vim: et sw=4:
