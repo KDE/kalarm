@@ -23,7 +23,7 @@
 
 #include "kalarm.h"
 #include "recurrenceedit.moc"
-#include "recurrenceeditprivate.moc"
+#include "recurrenceedit_p.moc"
 
 #include "alarmtimewidget.h"
 #include "checkbox.h"

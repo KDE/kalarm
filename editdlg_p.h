@@ -1,5 +1,5 @@
 /*
- *  editdlgprivate.h  -  private classes for editdlg.cpp
+ *  editdlg_p.h  -  private classes for editdlg.cpp
  *  Program:  kalarm
  *  Copyright © 2003-2005,2007-2009 by David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef EDITDLGPRIVATE_H
-#define EDITDLGPRIVATE_H
+#ifndef EDITDLG_P_H
+#define EDITDLG_P_H
 
 #include <ktextedit.h>
 #include <ktabwidget.h>
@@ -82,6 +82,6 @@ class CommandEdit : public QWidget
         TextEdit* mScriptEdit;      // script edit box
 };
 
-#endif // EDITDLGPRIVATE_H
+#endif // EDITDLG_P_H
 
 // vim: et sw=4:

@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 #include "editdlg.moc"
-#include "editdlgprivate.moc"
+#include "editdlg_p.moc"
 #include "editdlgtypes.h"
 
 #include "alarmcalendar.h"

@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 #include "editdlgtypes.moc"
-#include "editdlgprivate.h"
+#include "editdlg_p.h"
 
 #include "autoqpointer.h"
 #include "buttongroup.h"

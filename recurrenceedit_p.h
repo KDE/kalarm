@@ -1,5 +1,5 @@
 /*
- *  recurrenceeditprivate.h  -  private classes for recurrenceedit.cpp
+ *  recurrenceedit_p.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
  *  Copyright © 2003,2005,2007,2009,2010 by David Jarvie <djarvie@kde.org>
  *
@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef RECURRENCEEDITPRIVATE_H
-#define RECURRENCEEDITPRIVATE_H
+#ifndef RECURRENCEEDIT_P_H
+#define RECURRENCEEDIT_P_H
 
 #include "karecurrence.h"
 #include "radiobutton.h"
@@ -211,6 +211,6 @@ class YearlyRule : public MonthYearRule
         int              mSavedFeb29Type;    // February 29th recurrence type
 };
 
-#endif // RECURRENCEEDITPRIVATE_H
+#endif // RECURRENCEEDIT_P_H
 
 // vim: et sw=4:
