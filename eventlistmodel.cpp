@@ -342,7 +342,6 @@ bool EventListModel::setData(const QModelIndex& ix, const QVariant&, int role)
 {
     if (ix.isValid()  &&  role == Qt::EditRole)
     {
-//??? update event
         int row = ix.row();
         emit dataChanged(index(row, 0), index(row, ColumnCount - 1));
         return true;
