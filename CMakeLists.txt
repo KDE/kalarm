@@ -2,13 +2,8 @@ project(kalarm)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 
-# KAlarm depends on kdepim/akonadi/ which is impossible for packagers.
 # Akonadi for KAlarm is still experimental.
 option(KALARM_USE_AKONADI "Build to use Akonadi" TRUE)
-
-if(NOT BUILD_runtime)
-    set(KALARM_USE_AKONADI FALSE)
-endif()
 
 if(KALARM_USE_AKONADI)
     add_definitions(-DUSE_AKONADI)

@@ -1,51 +1,39 @@
-# Set location of this directory:
-#   LOCAL_BUILD = TRUE if kdepim/kalarm/akonadi,
-#               = FALSE if kdepim/runtime/resources/ical/alarms
-set(LOCAL_BUILD TRUE)
-if (LOCAL_BUILD)
-    # Note that resource configuration dialogs don't appear if built with this option.
-    set(KALARM_CALENDAR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/kalarm/cal)
-    set(AKONADI_ICAL_RESOURCE ${CMAKE_SOURCE_DIR}/runtime/resources/ical)
+# Note that resource configuration dialogs don't appear if built with this option.
+set(KALARM_CALENDAR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/kalarm/cal)
 
-    ########### definitions copied from runtime/ ###############
-    set(SHARED_MIME_INFO_MINIMUM_VERSION "0.30")
-    find_package(SharedMimeInfo)
-    macro_log_feature(SHARED_MIME_INFO_FOUND "SMI" "SharedMimeInfo" "http://freedesktop.org/wiki/Software/shared-mime-info" TRUE "0.30" "SharedMimeInfo is required.")
+########### definitions copied from kdepim-runtime module ###############
+set(SHARED_MIME_INFO_MINIMUM_VERSION "0.30")
+find_package(SharedMimeInfo)
+macro_log_feature(SHARED_MIME_INFO_FOUND "SMI" "SharedMimeInfo" "http://freedesktop.org/wiki/Software/shared-mime-info" TRUE "0.30" "SharedMimeInfo is required.")
 
-    set(AKONADI_SHARED_RESOURCES ${CMAKE_SOURCE_DIR}/runtime/resources/shared)
+if (RUNTIME_PLUGINS_STATIC)
+    set(SERIALIZER_TYPE STATIC)
+endif (RUNTIME_PLUGINS_STATIC)
+########### end definitions copied from kdepim-runtime module ###############
 
-    set(AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
-        ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp
-        ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget.cpp
-        ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
-    )
+########### files copied from kdepim-runtime module ###############
+set(AKONADI_ICAL_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/kdepim-runtime/ical)
+set(AKONADI_SHARED_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/kdepim-runtime/shared)
 
-    if (KDEPIM_MOBILE_UI)
-    set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
-        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_mobile.ui
-        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
-    )
-    else (KDEPIM_MOBILE_UI)
-    set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
-        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigwidget_desktop.ui
-        ${CMAKE_SOURCE_DIR}/runtime/resources/shared/singlefileresourceconfigdialog.ui
-    )
-    endif (KDEPIM_MOBILE_UI)
+set(AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget.cpp
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
+)
 
-    if (RUNTIME_PLUGINS_STATIC)
-        set(SERIALIZER_TYPE STATIC)
-    endif (RUNTIME_PLUGINS_STATIC)
-    ########### end definitions copied from runtime/ ###############
-else (LOCAL_BUILD)
-    set(KALARM_USE_AKONADI TRUE)
-    set(KALARM_CALENDAR_INCLUDE_DIR cal)
-    set(AKONADI_ICAL_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/..)
+if (KDEPIM_MOBILE_UI)
+set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget_mobile.ui
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog.ui
+)
+else (KDEPIM_MOBILE_UI)
+set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget_desktop.ui
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog.ui
+)
+endif (KDEPIM_MOBILE_UI)
+########### end files copied from kdepim-runtime module ###############
 
-    add_definitions(-DUSE_AKONADI)
-    add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
-
-    add_subdirectory(cal)
-endif (LOCAL_BUILD)
 
 include_directories(
     ${KALARM_CALENDAR_INCLUDE_DIR}
