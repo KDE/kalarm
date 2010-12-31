@@ -188,7 +188,8 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     else
     {
         kDebug() << "Sending via KDE";
-        transport = manager->transportByName(identity.transport(), true);
+        const int transportId = identity.transport().isEmpty() ? -1 : identity.transport().toInt();
+        transport = manager->transportById( transportId, true );
         if (!transport)
         {
             kError() << "No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
