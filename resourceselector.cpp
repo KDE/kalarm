@@ -75,8 +75,7 @@ using namespace KCalCore;
 using namespace KCal;
 #endif
 #ifdef USE_AKONADI
-using Akonadi::Collection;
-using Akonadi::EntityDisplayAttribute;
+using namespace Akonadi;
 #endif
 
 
@@ -268,7 +267,7 @@ void ResourceSelector::editResource()
     Collection collection = currentResource();
     if (collection.isValid())
     {
-        Akonadi::CollectionPropertiesDialog dlg(collection, QStringList(QLatin1String("Akonadi::CollectionGeneralPropertiesPage")), this);
+        CollectionPropertiesDialog dlg(collection, QStringList(CollectionPropertiesDialog::defaultPageObjectName(CollectionPropertiesDialog::GeneralPage)), this);
         dlg.exec();
     }
 #else
@@ -699,7 +698,7 @@ void ResourceSelector::showInfo()
         QString name;
         if (collection.hasAttribute<EntityDisplayAttribute>())
             name = collection.attribute<EntityDisplayAttribute>()->displayName();
-        QString calType = Akonadi::AgentManager::self()->instance(collection.resource()).type().name();
+        QString calType = AgentManager::self()->instance(collection.resource()).type().name();
         QString storage = AkonadiModel::instance()->storageType(collection);
         QString location = collection.remoteId();
         KUrl url(location);
