@@ -848,8 +848,11 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
                 quitIf(0);    // exit the application if there are no open windows
         }
     }
-    delete mTrayWindow;
-    mTrayWindow = 0;
+    else
+    {
+        delete mTrayWindow;
+        mTrayWindow = 0;
+    }
     return true;
 }
 
