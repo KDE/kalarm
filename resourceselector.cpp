@@ -218,7 +218,7 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 void ResourceSelector::addResource()
 {
 #ifdef USE_AKONADI
-        AkonadiModel::instance()->addCollection(mCurrentAlarmType, this);
+    AkonadiModel::instance()->addCollection(mCurrentAlarmType, this);
 #else
     AlarmResourceManager* manager = mCalendar->resourceManager();
     QStringList descs = manager->resourceTypeDescriptions();

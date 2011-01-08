@@ -307,8 +307,8 @@ void SoundWidget::setReadOnly(bool readOnly)
     {
         mFileEdit->setReadOnly(readOnly);
         mFileBrowseButton->setReadOnly(readOnly);
-            if (mRepeatCheckbox)
-                mRepeatCheckbox->setReadOnly(readOnly);
+        if (mRepeatCheckbox)
+            mRepeatCheckbox->setReadOnly(readOnly);
         mVolumeCheckbox->setReadOnly(readOnly);
         mVolumeSlider->setReadOnly(readOnly);
         mFadeCheckbox->setReadOnly(readOnly);
