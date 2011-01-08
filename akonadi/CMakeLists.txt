@@ -9,66 +9,27 @@ macro_log_feature(SHARED_MIME_INFO_FOUND "SMI" "SharedMimeInfo" "http://freedesk
 if (RUNTIME_PLUGINS_STATIC)
     set(SERIALIZER_TYPE STATIC)
 endif (RUNTIME_PLUGINS_STATIC)
-########### end definitions copied from kdepim-runtime module ###############
 
-########### files copied from kdepim-runtime module ###############
 set(AKONADI_ICAL_RESOURCE ${CMAKE_CURRENT_SOURCE_DIR}/kdepim-runtime/ical)
 set(AKONADI_SHARED_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/kdepim-runtime/shared)
+########### end definitions copied from kdepim-runtime module ###############
 
-set(AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget.cpp
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
-)
+set(KALARM_COMMON_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
-if (KDEPIM_MOBILE_UI)
-set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget_mobile.ui
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog.ui
-)
-else (KDEPIM_MOBILE_UI)
-set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget_desktop.ui
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog.ui
-)
-endif (KDEPIM_MOBILE_UI)
-########### end files copied from kdepim-runtime module ###############
-
+add_subdirectory(common)
+add_subdirectory(kalarm)
+add_subdirectory(kalarmdir)
 
 include_directories(
     ${KALARM_CALENDAR_INCLUDE_DIR}
-    ${AKONADI_ICAL_RESOURCE}
-    ${AKONADI_SHARED_RESOURCES}
+#    ${AKONADI_ICAL_RESOURCE}
+#    ${AKONADI_SHARED_RESOURCES}
     ${QT_QTDBUS_INCLUDE_DIR}
     ${Boost_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
-
-########### next target ###############
-add_definitions( -DSETTINGS_NAMESPACE=Akonadi_KAlarm_Resource )
-
-set(kalarmresource_SRCS
-    ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
-    ${AKONADI_ICAL_RESOURCE}/icalresourcebase.cpp
-    kalarmresource.cpp
-)
-
-install(FILES kalarmresource.desktop kalarmresource_active.desktop kalarmresource_archived.desktop kalarmresource_template.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents")
-
-kde4_add_ui_files(kalarmresource_SRCS ${AKONADI_SINGLEFILERESOURCE_SHARED_UI})
-kde4_add_kcfg_files(kalarmresource_SRCS settings.kcfgc)
-kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-qt4_add_dbus_adaptor(kalarmresource_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml settings.h Akonadi_KAlarm_Resource::Settings icalsettingsadaptor ICalSettingsAdaptor
-)
-
-kde4_add_plugin(akonadi_kalarm_resource ${kalarmresource_SRCS})
-
-target_link_libraries(akonadi_kalarm_resource kalarm_calendar akonadi-kcal ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCALCORE_LIBS} ${KDE4_KIO_LIBS})
-
-install(TARGETS akonadi_kalarm_resource DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 

@@ -1,7 +1,7 @@
 /*
  *  kalarmresource.cpp  -  Akonadi resource for KAlarm
  *  Program:  kalarm
- *  Copyright © 2009,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -20,6 +20,7 @@
  */
 
 #include "kalarmresource.h"
+#include "kalarmresourcecommon.h"
 #include "collectionattribute.h"
 #include "eventattribute.h"
 #include "kacalendar.h"
@@ -37,6 +38,7 @@
 
 using namespace Akonadi;
 using namespace Akonadi_KAlarm_Resource;
+using KAlarmResourceCommon::errorMessage;
 using KAlarm::CollectionAttribute;
 using KAlarm::EventAttribute;
 
@@ -45,23 +47,9 @@ KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
       mCompatibility(KAlarm::Calendar::Incompatible)
 {
-    // Set a default start-of-day time for date-only alarms.
-    KAEvent::setStartOfDay(QTime(0,0,0));
-
-    QStringList mimeTypes;
-    if (id.contains("_active"))
-        mimeTypes << KAlarm::MIME_ACTIVE;
-    else if (id.contains("_archived"))
-        mimeTypes << KAlarm::MIME_ARCHIVED;
-    else if (id.contains("_template"))
-        mimeTypes << KAlarm::MIME_TEMPLATE;
-    else
-        mimeTypes << KAlarm::MIME_BASE
-                  << KAlarm::MIME_ACTIVE << KAlarm::MIME_ARCHIVED << KAlarm::MIME_TEMPLATE;
-    initialise(mimeTypes, "kalarm");
-
-    AttributeFactory::registerAttribute<CollectionAttribute>();
-    AttributeFactory::registerAttribute<EventAttribute>();
+    kDebug(5950) << id;
+    KAlarmResourceCommon::initialise(this);
+    initialise(KAlarmResourceCommon::mimeTypes(id), "kalarm");
 }
 
 KAlarmResource::~KAlarmResource()
@@ -101,11 +89,7 @@ bool KAlarmResource::readFromFile(const QString& fileName)
         // It's a new file. Set up the KAlarm custom property.
         KAlarm::Calendar::setKAlarmVersion(calendar());
     }
-    QString versionString;
-    int version = KAlarm::Calendar::checkCompatibility(fileStorage(), versionString);
-    mCompatibility = (version < 0) ? KAlarm::Calendar::Incompatible  // calendar is not in KAlarm format, or is in a future format
-                   : (version > 0) ? KAlarm::Calendar::Convertible   // calendar is in an out of date format
-                   :                 KAlarm::Calendar::Current;      // calendar is in the current format
+    mCompatibility = KAlarmResourceCommon::getCompatibility(fileStorage());
     return true;
 }
 
@@ -140,14 +124,14 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     if (!kcalEvent)
     {
         kWarning() << "Event not found:" << rid;
-        emit error(i18n("Event with uid '%1' not found.", rid));
+        emit error(errorMessage(KAlarmResourceCommon::UidNotFound, rid));
         return false;
     }
 
     if (kcalEvent->alarms().isEmpty())
     {
         kWarning() << "KCalCore::Event has no alarms:" << rid;
-        emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
+        emit error(errorMessage(KAlarmResourceCommon::EventNoAlarms, rid));
         return false;
     }
 
@@ -156,17 +140,12 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     if (mime.isEmpty())
     {
         kWarning() << "KAEvent has no alarms:" << rid;
-        emit error(i18n("Event with uid '%1' contains no usable alarms.", rid));
+        emit error(errorMessage(KAlarmResourceCommon::EventNoAlarms, rid));
         return false;
     }
-    event.setItemId(item.id());
-    if (item.hasAttribute<EventAttribute>())
-        event.setCommandError(item.attribute<EventAttribute>()->commandError());
-
-    Item i = item;
-    i.setMimeType(mime);
-    i.setPayload<KAEvent>(event);
-    itemRetrieved(i);
+    event.setCompatibility(mCompatibility);
+    Item newItem = KAlarmResourceCommon::retrieveItem(item, event);
+    itemRetrieved(newItem);
     return true;
 }
 
@@ -181,7 +160,8 @@ void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collect
         return;
     if (mCompatibility != KAlarm::Calendar::Current)
     {
-        cancelTask(i18nc("@info", "Calendar is not in current KAlarm format."));
+        kWarning() << "Calendar not in current format";
+        cancelTask(errorMessage(KAlarmResourceCommon::NotCurrentFormat));
         return;
     }
     KAEvent event = item.payload<KAEvent>();
@@ -204,26 +184,24 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     Q_UNUSED(parts)
     if (!checkItemAddedChanged<KAEvent>(item, CheckForChanged))
         return;
-    if (mCompatibility != KAlarm::Calendar::Current)
+    QString errorMsg;
+    KAEvent event = KAlarmResourceCommon::checkItemChanged(item, mCompatibility, errorMsg);
+    if (!event.isValid())
     {
-        kWarning() << "Calendar not in current format";
-        cancelTask(i18nc("@info", "Calendar is not in current KAlarm format."));
+        if (errorMsg.isEmpty())
+            changeProcessed();
+        else
+            cancelTask(errorMsg);
         return;
     }
-    KAEvent event = item.payload<KAEvent>();
-    if (item.remoteId() != event.id())
-    {
-        kWarning() << "Item ID" << item.remoteId() << "differs from payload ID" << event.id();
-        cancelTask(i18n("Item ID %1 differs from payload ID %2.", item.remoteId(), event.id()));
-        return;
-    }
+
     KCalCore::Incidence::Ptr incidence = calendar()->incidence(item.remoteId());
     if (incidence)
     {
         if (incidence->isReadOnly())
         {
             kWarning() << "Event is read only:" << event.id();
-            cancelTask(i18nc("@info", "Event with uid '%1' is read only", event.id()));
+            cancelTask(errorMessage(KAlarmResourceCommon::EventReadOnly, event.id()));
             return;
         }
         if (incidence->type() == KCalCore::Incidence::TypeEvent)
@@ -235,7 +213,6 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
         {
             KCalCore::Event::Ptr ev(incidence.staticCast<KCalCore::Event>());
             event.updateKCalEvent(ev, KAEvent::UID_SET);
-kDebug()<<"KAEvent enabled="<<event.enabled();
             calendar()->setModified(true);
         }
     }
@@ -263,11 +240,7 @@ kDebug()<<"KAEvent enabled="<<event.enabled();
 void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
 {
     // Set the collection's compatibility status
-    Collection col = collection;
-    CollectionAttribute* attr = col.attribute<CollectionAttribute>(Collection::AddIfMissing);
-    attr->setCompatibility(mCompatibility);
-    CollectionModifyJob* job = new CollectionModifyJob(col, this);
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
+    KAlarmResourceCommon::setCollectionCompatibility(collection, mCompatibility);
 
     // Retrieve events from the calendar
     KCalCore::Event::List events = calendar()->events();
@@ -294,18 +267,6 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
         items << item;
     }
     itemsRetrieved(items);
-}
-
-/******************************************************************************
-* Called when a collection modification job has completed, to report any error.
-*/
-void KAlarmResource::modifyCollectionJobDone(KJob* j)
-{
-    if (j->error())
-    {
-        Collection collection = static_cast<CollectionModifyJob*>(j)->collection();
-        kError() << "Error: collection id" << collection.id() << ":" << j->errorString();
-    }
 }
 
 AKONADI_AGENT_FACTORY(KAlarmResource, akonadi_kalarm_resource)

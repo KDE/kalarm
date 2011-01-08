@@ -31,11 +31,7 @@
 #include <QtCore/QObject>
 
 class KAEvent;
-
-namespace Akonadi
-{
-
-class AbstractDifferencesReporter;
+namespace Akonadi { class AbstractDifferencesReporter; }
 
 class SerializerPluginKAlarm : public QObject,
                                public Akonadi::ItemSerializerPlugin,
@@ -57,8 +53,6 @@ class SerializerPluginKAlarm : public QObject,
         KAEventFormatter mValueL;
         KAEventFormatter mValueR;
 };
-
-}
 
 #endif // AKONADI_SERIALIZER_KALARM_H
 

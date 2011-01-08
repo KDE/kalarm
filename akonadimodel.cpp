@@ -25,9 +25,11 @@
 #include "preferences.h"
 #include "synchtimer.h"
 
+#include <akonadi/agentfilterproxymodel.h>
 #include <akonadi/agentinstancecreatejob.h>
 #include <akonadi/agentmanager.h>
 #include <akonadi/agenttype.h>
+#include <akonadi/agenttypedialog.h>
 #include <akonadi/attributefactory.h>
 #include <akonadi/changerecorder.h>
 #include <akonadi/collectiondeletejob.h>
@@ -90,6 +92,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     // Restrict monitoring to collections containing the KAlarm mime types
     monitor->setCollectionMonitored(Collection::root());
     monitor->setResourceMonitored("akonadi_kalarm_resource");
+    monitor->setResourceMonitored("akonadi_kalarm_dir_resource");
     monitor->setMimeTypeMonitored(KAlarm::MIME_ACTIVE);
     monitor->setMimeTypeMonitored(KAlarm::MIME_ARCHIVED);
     monitor->setMimeTypeMonitored(KAlarm::MIME_TEMPLATE);
@@ -735,8 +738,8 @@ QString AkonadiModel::timeToAlarmText(const DateTime& dateTime) const
 }
 
 /******************************************************************************
-* Recursive function to emit the dataChanged() signal for all items with a
-* given mime type and in a specified column range.
+* Recursive function to emit the dataChanged() signal for all items in a
+* specified column range.
 */
 void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startColumn, int endColumn, const QModelIndex& parent)
 {
@@ -1047,21 +1050,29 @@ QString AkonadiModel::whatsThisText(int column) const
 */
 AgentInstanceCreateJob* AkonadiModel::addCollection(KAlarm::CalEvent::Type type, QWidget* parent)
 {
-    QString resourceType;
+    AgentTypeDialog dlg(parent);
+    QString mimeType;
     switch (type)
     {
-        case KAlarm::CalEvent::ACTIVE:    resourceType = "akonadi_kalarm_active_resource";  break;
-        case KAlarm::CalEvent::ARCHIVED:  resourceType = "akonadi_kalarm_archived_resource";  break;
-        case KAlarm::CalEvent::TEMPLATE:  resourceType = "akonadi_kalarm_template_resource";  break;
+        case KAlarm::CalEvent::ACTIVE:
+            mimeType = KAlarm::MIME_ACTIVE;
+            break;
+        case KAlarm::CalEvent::ARCHIVED:
+            mimeType = KAlarm::MIME_ARCHIVED;
+            break;
+        case KAlarm::CalEvent::TEMPLATE:
+            mimeType = KAlarm::MIME_TEMPLATE;
+            break;
         default:
             return 0;
     }
-    AgentType agentType = AgentManager::self()->type(resourceType);
-    if (!agentType.isValid())
-    {
-        kError() << "invalid agent type:" << resourceType;
+    dlg.agentFilterProxyModel()->addMimeTypeFilter(mimeType);
+    dlg.agentFilterProxyModel()->addCapabilityFilter(QLatin1String("Resource"));
+    if (dlg.exec() != QDialog::Accepted)
         return 0;
-    }
+    const AgentType agentType = dlg.agentType();
+    if (!agentType.isValid())
+        return 0;
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
     job->configure(parent);    // cause the user to be prompted for configuration
     connect(job, SIGNAL(result(KJob*)), SLOT(addCollectionJobDone(KJob*)));

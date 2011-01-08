@@ -1,6 +1,7 @@
 project(kalarm)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
+add_definitions(-DQT_STRICT_ITERATORS)
 
 # Akonadi for KAlarm is still experimental.
 option(KALARM_USE_AKONADI "Build to use Akonadi" TRUE)
@@ -21,7 +22,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/cal
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
-    #${CMAKE_SOURCE_DIR}/runtime/resources/ical/alarms/cal
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
 )
@@ -143,11 +143,6 @@ if (KMAIL_SUPPORTED)
     qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/org.kde.kmail.kmail.xml)
 endif (KMAIL_SUPPORTED)
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
-
-if(KALARM_USE_AKONADI)
-    kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmresourcesettings KAlarmResourceSettings)
-endif(KALARM_USE_AKONADI)
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 

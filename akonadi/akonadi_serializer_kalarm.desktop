@@ -67,4 +67,4 @@ Comment[zh_TW]=KAlarm 事件使用的 Akonadi 序列器外掛程式
 Type=application/x-vnd.kde.alarm,application/x-vnd.kde.alarm.active,application/x-vnd.kde.alarm.archived,application/x-vnd.kde.alarm.template
 X-Akonadi-Class=default;KAEvent;
 X-KDE-Library=akonadi_serializer_kalarm
-X-KDE-ClassName=Akonadi::SerializerPluginKAlarm
+X-KDE-ClassName=SerializerPluginKAlarm

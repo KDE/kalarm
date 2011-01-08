@@ -1,7 +1,7 @@
 /*
  *  kaevent.cpp  -  represents calendar events
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -221,6 +221,7 @@ KAEvent::Private::Private()
       mChanged(false),
       mCategory(KAlarm::CalEvent::EMPTY),
 #ifdef USE_AKONADI
+      mCompatibility(KAlarm::Calendar::Current),
       mReadOnly(false),
 #endif
       mConfirmAck(false),
@@ -315,6 +316,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mLogFile                 = event.mLogFile;
     mCategory                = event.mCategory;
 #ifdef USE_AKONADI
+    mCompatibility           = event.mCompatibility;
     mReadOnly                = event.mReadOnly;
 #endif
     mCancelOnPreActErr       = event.mCancelOnPreActErr;
@@ -410,6 +412,7 @@ void KAEvent::Private::set(const Event* event)
     mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
     mFgColour               = QColor(0, 0, 0);          // and black foreground
 #ifdef USE_AKONADI
+    mCompatibility          = KAlarm::Calendar::Current;
     mReadOnly               = event->isReadOnly();
 #endif
     mUseDefaultFont         = true;
@@ -1185,6 +1188,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mDontShowPreActErr      = false;
     mUpdated                = false;
 #ifdef USE_AKONADI
+    mCompatibility          = KAlarm::Calendar::Current;
     mReadOnly               = false;
 #endif
     mCommandError           = CMD_NO_ERROR;
@@ -4609,6 +4613,7 @@ void KAEvent::Private::dumpDebug() const
     kDebug() << "-- mEnabled:" << mEnabled;
 #ifdef USE_AKONADI
     kDebug() << "-- mItemId:" << mItemId;
+    kDebug() << "-- mCompatibility:" << mCompatibility;
     kDebug() << "-- mReadOnly:" << mReadOnly;
 #endif
     if (mReminderMinutes)

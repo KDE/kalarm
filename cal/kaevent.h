@@ -1,7 +1,7 @@
 /*
  *  kaevent.h  -  represents calendar events
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -344,6 +344,7 @@ class KALARM_CAL_EXPORT KAEvent
         void               setEventId(const QString& id)           { d->mEventID = id;  d->mUpdated = true; }
 #ifdef USE_AKONADI
         void               setItemId(Akonadi::Item::Id id)         { d->mItemId = id; }
+        void               setCompatibility(KAlarm::Calendar::Compat c) { if (c != d->mCompatibility) { d->mCompatibility = c; d->mUpdated = true; } }
         void               setReadOnly(bool ro)                    { if (ro != d->mReadOnly) { d->mReadOnly = ro; d->mUpdated = true; } }
 #endif
         void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt;  d->mUpdated = true; }
@@ -441,6 +442,7 @@ class KALARM_CAL_EXPORT KAEvent
         const QString&     id() const                     { return d->mEventID; }
 #ifdef USE_AKONADI
         Akonadi::Item::Id  itemId() const                 { return d->mItemId; }
+        KAlarm::Calendar::Compat compatibility() const    { return d->mCompatibility; }
         bool               isReadOnly() const             { return d->mReadOnly; }
 #endif
         int                revision() const               { return d->mRevision; }
@@ -734,6 +736,7 @@ class KALARM_CAL_EXPORT KAEvent
                 int                mFadeSeconds;       // fade time for sound file, or 0 if none
                 KAlarm::CalEvent::Type mCategory;      // event category (active, archived, template, ...)
 #ifdef USE_AKONADI
+                KAlarm::Calendar::Compat mCompatibility; // event's storage format compatibility
                 bool               mReadOnly;          // event is read-only in its original calendar file
 #endif
                 bool               mCancelOnPreActErr; // cancel alarm if pre-alarm action fails
