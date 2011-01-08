@@ -6,6 +6,11 @@ add_definitions(-DQT_STRICT_ITERATORS)
 # Akonadi for KAlarm is still experimental.
 option(KALARM_USE_AKONADI "Build to use Akonadi" TRUE)
 
+# Kalarm from kdepim master needs kdepimlibs 4.7
+if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.40)
+  set(KALARM_USE_AKONADI FALSE)
+endif()
+
 if(KALARM_USE_AKONADI)
     add_definitions(-DUSE_AKONADI)
 else(KALARM_USE_AKONADI)
