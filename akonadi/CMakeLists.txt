@@ -16,7 +16,6 @@ set(AKONADI_SHARED_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/kdepim-runtime/shared)
 
 set(KALARM_COMMON_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
-add_subdirectory(common)
 add_subdirectory(kalarm)
 add_subdirectory(kalarmdir)
 
