@@ -1,8 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Directory
-Name[en_GB]=KAlarm Directory
 Comment=Loads data from a local KAlarm folder
-Comment[en_GB]=Loads data from a local KAlarm folder
 Type=AkonadiResource
 Exec=akonadi_kalarm_dir_resource
 Icon=kalarm
