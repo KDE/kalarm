@@ -267,8 +267,11 @@ void ResourceSelector::editResource()
     Collection collection = currentResource();
     if (collection.isValid())
     {
-        CollectionPropertiesDialog dlg(collection, QStringList(CollectionPropertiesDialog::defaultPageObjectName(CollectionPropertiesDialog::GeneralPage)), this);
-        dlg.exec();
+        AgentInstance instance = AgentManager::self()->instance(collection.resource());
+        if (instance.isValid())
+            instance.configure(this);
+//        CollectionPropertiesDialog dlg(collection, QStringList(CollectionPropertiesDialog::defaultPageObjectName(CollectionPropertiesDialog::GeneralPage)), this);
+//        dlg.exec();
     }
 #else
     AlarmResource* resource = currentResource();
@@ -315,34 +318,46 @@ void ResourceSelector::editResource()
 void ResourceSelector::removeResource()
 {
 #ifdef USE_AKONADI
-    AkonadiModel::instance()->removeCollection(currentResource());
+    Collection collection = currentResource();
+    if (!collection.isValid())
+        return;
+    QString name = collection.name();
+    // Check if it's the standard or only resource for at least one type.
+    KAlarm::CalEvent::Types standardTypes = CollectionControlModel::standardTypes(collection, true);
+    bool std = standardTypes & (KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE);
+    KAlarm::CalEvent::Type stdType = (standardTypes & KAlarm::CalEvent::ACTIVE)   ? KAlarm::CalEvent::ACTIVE
+                                   : (standardTypes & KAlarm::CalEvent::ARCHIVED) ? KAlarm::CalEvent::ARCHIVED
+                                   : KAlarm::CalEvent::EMPTY;
 #else
     AlarmResource* resource = currentResource();
     if (!resource)
         return;
+    QString name = resource->resourceName();
     bool std = resource->standardResource();
-    if (std)
+    // Check if it's the standard resource for its type.
+    KAlarm::CalEvent::Type stdType = std ? resource->alarmType() : KAlarm::CalEvent::EMPTY;
+#endif
+    if (stdType == KAlarm::CalEvent::ACTIVE)
     {
-        // It's the standard resource for its type.
-        if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
-        {
-            KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
-            return;
-        }
-        if (resource->alarmType() == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
-        {
-            // Only allow the archived alarms standard resource to be removed if
-            // we're not saving archived alarms.
-            KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
-                                          "while expired alarms are configured to be kept."));
-            return;
-        }
+        KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
+        return;
     }
-    QString text = std ? i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", resource->resourceName())
-                       : i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", resource->resourceName());
+    if (stdType == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
+    {
+        // Only allow the archived alarms standard resource to be removed if
+        // we're not saving archived alarms.
+        KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
+                                      "while expired alarms are configured to be kept."));
+        return;
+    }
+    QString text = std ? i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name)
+                       : i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
     if (KMessageBox::warningContinueCancel(this, text, "", KStandardGuiItem::remove()) == KMessageBox::Cancel)
         return;
 
+#ifdef USE_AKONADI
+    AkonadiModel::instance()->removeCollection(collection);
+#else
     // Remove resource from alarm and resource lists before deleting it, to avoid
     // crashes when display updates occur immediately after it is deleted.
     if (resource->alarmType() == KAlarm::CalEvent::TEMPLATE)
