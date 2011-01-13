@@ -47,7 +47,7 @@ KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
       mCompatibility(KAlarm::Calendar::Incompatible)
 {
-    kDebug(5950) << id;
+    kDebug() << id;
     KAlarmResourceCommon::initialise(this);
     initialise(KAlarmResourceCommon::mimeTypes(id), "kalarm");
 }

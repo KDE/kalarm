@@ -48,6 +48,7 @@
 using namespace Akonadi;
 using namespace KCalCore;
 using namespace Akonadi_KAlarm_Dir_Resource;
+using KAlarm::CollectionAttribute;
 using KAlarmResourceCommon::errorMessage;
 
 
@@ -56,31 +57,30 @@ KAlarmDirResource::KAlarmDirResource(const QString& id)
       mSettings(new Settings(componentData().config())),
       mCompatibility(KAlarm::Calendar::Incompatible)
 {
-    kDebug(5950) << id;
+    kDebug() << id;
     KAlarmResourceCommon::initialise(this);
 
     // Set up the resource
     new KAlarmDirSettingsAdaptor(mSettings);
     DBusConnectionPool::threadConnection().registerObject(QLatin1String("/Settings"),
                                 mSettings, QDBusConnection::ExportAdaptors);
+    connect(mSettings, SIGNAL(configChanged()), SLOT(settingsChanged()));
 
     changeRecorder()->itemFetchScope().fetchFullPayload();
 }
 
 KAlarmDirResource::~KAlarmDirResource()
 {
-    kDebug(5950);
 }
 
 void KAlarmDirResource::aboutToQuit()
 {
-    kDebug(5950);
     mSettings->writeConfig();
 }
 
 void KAlarmDirResource::configure(WId windowId)
 {
-    kDebug(5950);
+    kDebug();
     SettingsDialog dlg(windowId, mSettings);
     if (dlg.exec())
     {
@@ -96,13 +96,39 @@ void KAlarmDirResource::configure(WId windowId)
     }
 }
 
-// Load and parse data from each file in the directory.
+/******************************************************************************
+* Called when the resource settings have changed.
+* Update the display name if it has changed.
+*/
+void KAlarmDirResource::settingsChanged()
+{
+    kDebug();
+    QString display = mSettings->displayName();
+    if (display != name())
+        setName(display);
+}
+
+/******************************************************************************
+* Load and parse data from each file in the directory.
+* The events are cached in mEvents.
+*/
 bool KAlarmDirResource::loadFiles()
 {
-    kDebug(5950);
+    kDebug() << directoryName();
     mEvents.clear();
 
-    QDirIterator it(directoryName());
+    QDir dir(directoryName());
+
+    // Set the resource display name to the configured name, else the directory
+    // name, if not already set.
+    QString display = mSettings->displayName();
+    if (display.isEmpty()  &&  (name().isEmpty() || name() == identifier()))
+        display = dir.dirName();
+    if (!display.isEmpty())
+        setName(display);
+
+    // Read and parse each file in turn
+    QDirIterator it(dir);
     while (it.hasNext())
     {
         it.next();
@@ -137,8 +163,9 @@ bool KAlarmDirResource::loadFiles()
         }
     }
 
-    emit status(Idle);
+    setCompatibility(false);
 
+    emit status(Idle);
     return true;
 }
 
@@ -150,7 +177,6 @@ bool KAlarmDirResource::loadFiles()
 */
 bool KAlarmDirResource::retrieveItem(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
-    kDebug(5950);
     const QString rid = item.remoteId();
     QMap<QString, KAEvent>::ConstIterator it = mEvents.constFind(rid);
     if (it == mEvents.constEnd())
@@ -190,6 +216,8 @@ void KAlarmDirResource::itemAdded(const Akonadi::Item& item, const Akonadi::Coll
         return;
     }
     event.setCompatibility(KAlarm::Calendar::Current);
+    if (mCompatibility != KAlarm::Calendar::Current)
+        mCompatibility = KAlarm::Calendar::ByEvent;
 
     if (!writeToFile(event))
         return;
@@ -230,6 +258,8 @@ void KAlarmDirResource::itemChanged(const Akonadi::Item& item, const QSet<QByteA
         return;
     }
     event.setCompatibility(KAlarm::Calendar::Current);
+    if (mCompatibility != KAlarm::Calendar::Current)
+        setCompatibility();
 
     if (!writeToFile(event))
         return;
@@ -250,6 +280,9 @@ void KAlarmDirResource::itemRemoved(const Akonadi::Item& item)
 
     mEvents.remove(item.remoteId());
     QFile::remove(directoryFileName(item.remoteId()));
+
+    if (mCompatibility == KAlarm::Calendar::ByEvent)
+        setCompatibility();
 
     changeProcessed();
 }
@@ -275,6 +308,7 @@ bool KAlarmDirResource::cancelIfReadOnly()
 */
 bool KAlarmDirResource::writeToFile(const KAEvent& event)
 {
+    kDebug() << event.id();
     Event::Ptr kcalEvent(new Event);
     event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     MemoryCalendar::Ptr calendar(new MemoryCalendar(QLatin1String("UTC")));
@@ -295,11 +329,13 @@ bool KAlarmDirResource::writeToFile(const KAEvent& event)
 
 void KAlarmDirResource::retrieveCollections()
 {
+    kDebug();
     Collection c;
     c.setParentCollection(Collection::root());
     c.setRemoteId(directoryName());
     const QString display = mSettings->displayName();
-    c.setName(display.isEmpty() ? name() : display );
+    c.setName(display.isEmpty() ? name() : display);
+kDebug(5950)<<"display name="<<display<<", name="<<name()<<", id="<<identifier();
     c.setContentMimeTypes(KAlarmResourceCommon::mimeTypes(identifier()));
     if (mSettings->readOnly())
     {
@@ -318,6 +354,9 @@ void KAlarmDirResource::retrieveCollections()
     EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
     attr->setDisplayName(name());
     attr->setIconName("kalarm");
+
+    CollectionAttribute* cattr = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
+    cattr->setCompatibility(mCompatibility);
 
     Collection::List list;
     list << c;
@@ -359,9 +398,12 @@ void KAlarmDirResource::retrieveItems(const Akonadi::Collection& collection)
     itemsRetrieved(items);
 }
 
+/******************************************************************************
+* Called when the collection has been changed.
+* Set its display name if that has changed.
+*/
 void KAlarmDirResource::collectionChanged(const Akonadi::Collection& collection)
 {
-    kDebug(5950);
     QString newName;
     EntityDisplayAttribute* attr = 0;
     if (collection.hasAttribute<EntityDisplayAttribute>())
@@ -395,6 +437,10 @@ QString KAlarmDirResource::directoryFileName(const QString& file) const
     return mSettings->path() + QDir::separator() + file;
 }
 
+/******************************************************************************
+* Create the directory if it doesn't already exist, and ensure that it
+* contains a WARNING_README.txt file.
+*/
 void KAlarmDirResource::initializeDirectory() const
 {
     QDir dir(directoryName());
@@ -417,6 +463,37 @@ void KAlarmDirResource::initializeDirectory() const
                    "Do not create or copy items inside this folder manually: they are managed by the Akonadi framework!\n");
         file.close();
     }
+}
+
+/******************************************************************************
+* Evaluate the version compatibility status of the calendar. This is either the
+* status of the individual events if they are all the same, or 'ByEvent'
+* otherwise.
+*/
+void KAlarmDirResource::setCompatibility(bool writeAttr)
+{
+    KAlarm::Calendar::Compat oldCompatibility = mCompatibility;
+    if (mEvents.isEmpty())
+        mCompatibility = KAlarm::Calendar::Current;
+    else
+    {
+        bool first = true;
+        foreach (const KAEvent& event, mEvents)
+        {
+            if (first)
+            {
+                mCompatibility = event.compatibility();
+                first = false;
+            }
+            else if (event.compatibility() != mCompatibility)
+            {
+                mCompatibility = KAlarm::Calendar::ByEvent;
+                break;
+            }
+        }
+    }
+    if (writeAttr  &&  mCompatibility != oldCompatibility  &&  currentCollection().isValid())
+        KAlarmResourceCommon::setCollectionCompatibility(currentCollection(), mCompatibility);
 }
 
 AKONADI_AGENT_FACTORY(KAlarmDirResource, akonadi_kalarm_dir_resource)

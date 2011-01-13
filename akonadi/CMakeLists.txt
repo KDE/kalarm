@@ -31,6 +31,7 @@ include_directories(
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 ########### next target ###############
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5954)
 
 set(akonadi_serializer_kalarm_SRCS
     akonadi_serializer_kalarm.cpp

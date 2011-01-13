@@ -7,6 +7,7 @@ include_directories(
 )
 
 ########### next target ###############
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5953)
 add_definitions( -DSETTINGS_NAMESPACE=Akonadi_KAlarm_Dir_Resource )
 
 set(kalarmdirresource_SRCS
