@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Directory
+Name[de]=KAlarm-Ordner
 Name[en_GB]=KAlarm Directory
 Name[ia]=Directorio de KAlarm
 Name[nl]=KAlarm-map
@@ -11,6 +12,7 @@ Name[uk]=Каталог KAlarm
 Name[x-test]=xxKAlarm Directoryxx
 Name[zh_TW]=KAlarm 目錄
 Comment=Loads data from a local KAlarm folder
+Comment[de]=Laden von Daten aus einem lokalen KAlarm-Ordner
 Comment[en_GB]=Loads data from a local KAlarm folder
 Comment[ia]=Carga datos ex un dossier local de KAlarm
 Comment[nl]=Laadt gegevens uit een lokale KAlarm-map
