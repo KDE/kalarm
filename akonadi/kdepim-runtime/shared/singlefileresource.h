@@ -57,14 +57,15 @@ class SingleFileResource : public SingleFileResourceBase
     /**
      * Read changes from the backend file.
      */
-    void readFile()
+    void readFile( bool taskContext = false )
     {
       if ( KDirWatch::self()->contains( mCurrentUrl.toLocalFile() ) )
         KDirWatch::self()->removeFile( mCurrentUrl.toLocalFile() );
 
       if ( mSettings->path().isEmpty() ) {
         emit status( Broken, i18n( "No file selected." ) );
-        cancelTask();
+        if ( taskContext )
+          cancelTask();
         return;
       }
 
@@ -97,7 +98,8 @@ class SingleFileResource : public SingleFileResourceBase
           } else {
             emit status( Broken, i18n( "Could not create file '%1'.", mCurrentUrl.prettyUrl() ) );
             mCurrentUrl.clear();
-            cancelTask();
+            if ( taskContext )
+              cancelTask();
             return;
           }
         }
@@ -106,7 +108,8 @@ class SingleFileResource : public SingleFileResourceBase
         const QString localFileName = mCurrentUrl.toLocalFile();
         if ( !readLocalFile( mCurrentUrl.toLocalFile() ) ) {
           emit status( Broken, i18n( "Could not read file '%1'", localFileName ) );
-          cancelTask();
+          if ( taskContext )
+            cancelTask();
           return;
         }
 
@@ -120,14 +123,16 @@ class SingleFileResource : public SingleFileResourceBase
         if ( mDownloadJob )
         {
           emit error( i18n( "Another download is still in progress." ) );
-          cancelTask();
+          if ( taskContext )
+            cancelTask();
           return;
         }
 
         if ( mUploadJob )
         {
           emit error( i18n( "Another file upload is still in progress." ) );
-          cancelTask();
+          if ( taskContext )
+            cancelTask();
           return;
         }
 
@@ -152,11 +157,12 @@ class SingleFileResource : public SingleFileResourceBase
     /**
      * Write changes to the backend file.
      */
-    void writeFile()
+    void writeFile( bool taskContext = false )
     {
       if ( mSettings->readOnly() ) {
         emit error( i18n( "Trying to write to a read-only file: '%1'.", mSettings->path() ) );
-        cancelTask();
+        if ( taskContext )
+          cancelTask();
         return;
       }
 
@@ -164,7 +170,8 @@ class SingleFileResource : public SingleFileResourceBase
       // and in that case it would probably cause data lose.
       if ( mCurrentUrl.isEmpty() ) {
         emit status( Broken, i18n( "No file specified." ) );
-        cancelTask();
+        if ( taskContext )
+          cancelTask();
         return;
       }
 
@@ -178,7 +185,8 @@ class SingleFileResource : public SingleFileResourceBase
         KDirWatch::self()->startScan();
         if ( !writeResult )
         {
-          cancelTask();
+          if ( taskContext )
+            cancelTask();
           return;
         }
         emit status( Idle, i18nc( "@info:status", "Ready" ) );
@@ -187,20 +195,23 @@ class SingleFileResource : public SingleFileResourceBase
         // Check if there is a download or an upload in progress.
         if ( mDownloadJob ) {
           emit error( i18n( "A download is still in progress." ) );
-          cancelTask();
+          if ( taskContext )
+            cancelTask();
           return;
         }
 
         if ( mUploadJob ) {
           emit error( i18n( "Another file upload is still in progress." ) );
-          cancelTask();
+          if ( taskContext )
+            cancelTask();
           return;
         }
 
         // Write te items to the localy cached file.
         if ( !writeToFile( cacheFile() ) )
         {
-          cancelTask();
+          if ( taskContext )
+            cancelTask();
           return;
         }
 
@@ -219,7 +230,8 @@ class SingleFileResource : public SingleFileResourceBase
 
         emit status( Running, i18n( "Uploading cached file to remote location." ) );
       }
-      taskDone();
+      if ( taskContext )
+        taskDone();
     }
 
     virtual void collectionChanged( const Collection &collection )
@@ -287,7 +299,7 @@ class SingleFileResource : public SingleFileResourceBase
       c.setName( display.isEmpty() ? identifier() : display );
       QStringList mimeTypes;
       c.setContentMimeTypes( mSupportedMimetypes );
-      if ( mSettings->readOnly() ) {
+      if ( readOnly() ) {
         c.setRights( Collection::CanChangeCollection );
       } else {
         Collection::Rights rights;
@@ -303,6 +315,11 @@ class SingleFileResource : public SingleFileResourceBase
       Collection::List list;
       list << c;
       collectionsRetrieved( list );
+    }
+
+    bool readOnly() const
+    {
+      return mSettings->readOnly();
     }
 
   protected:
