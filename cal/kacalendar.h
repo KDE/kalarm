@@ -146,7 +146,7 @@ class KALARM_CAL_EXPORT CalEvent
 #endif
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types);
+Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
 } // namespace KAlarm
 

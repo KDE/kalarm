@@ -765,7 +765,7 @@ class KALARM_CAL_EXPORT KAEvent
         QSharedDataPointer<class Private> d;
 };
 
-Q_DECLARE_METATYPE(KAEvent);
+Q_DECLARE_METATYPE(KAEvent)
 
 #endif // KAEVENT_H
 

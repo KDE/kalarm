@@ -92,7 +92,7 @@ class KAEventFormatter
             EmailTo,
             EmailBcc,
             EmailBody,
-            EmailAttachments,
+            EmailAttachments
             
         };
 
