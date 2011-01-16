@@ -573,21 +573,27 @@ bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, b
 
 /******************************************************************************
 * Return the standard collection for a specified mime type.
+* If 'useDefault' is true and there is no standard collection, the only
+* collection for the mime type will be returned as a default.
 */
-Collection CollectionControlModel::getStandard(KAlarm::CalEvent::Type type)
+Collection CollectionControlModel::getStandard(KAlarm::CalEvent::Type type, bool useDefault)
 {
     QString mimeType = KAlarm::CalEvent::mimeType(type);
+    int defalt = -1;
     Collection::List cols = instance()->collections();
     for (int i = 0, count = cols.count();  i < count;  ++i)
     {
         AkonadiModel::instance()->refresh(cols[i]);    // update with latest data
         if (cols[i].isValid()
-        &&  cols[i].contentMimeTypes().contains(mimeType)
-        &&  cols[i].hasAttribute<CollectionAttribute>()
-        &&  (cols[i].attribute<CollectionAttribute>()->standard() & type))
-            return cols[i];
+        &&  cols[i].contentMimeTypes().contains(mimeType))
+        {
+            if (cols[i].hasAttribute<CollectionAttribute>()
+            &&  (cols[i].attribute<CollectionAttribute>()->standard() & type))
+                return cols[i];
+            defalt = (defalt == -1) ? i : -2;
+        }
     }
-    return Collection();
+    return (useDefault && defalt >= 0) ? cols[defalt] : Collection();
 }
 
 /******************************************************************************
@@ -607,15 +613,31 @@ bool CollectionControlModel::isStandard(Akonadi::Collection& collection, KAlarm:
 /******************************************************************************
 * Return the alarm type(s) for which a collection is the standard collection.
 */
-KAlarm::CalEvent::Types CollectionControlModel::standardTypes(const Collection& collection)
+KAlarm::CalEvent::Types CollectionControlModel::standardTypes(const Collection& collection, bool useDefault)
 {
     if (!instance()->collections().contains(collection))
         return KAlarm::CalEvent::EMPTY;
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
-    if (!col.hasAttribute<CollectionAttribute>())
-        return KAlarm::CalEvent::EMPTY;
-    return col.attribute<CollectionAttribute>()->standard();
+    KAlarm::CalEvent::Types stdTypes = col.hasAttribute<CollectionAttribute>()
+                                     ? col.attribute<CollectionAttribute>()->standard()
+                                     : KAlarm::CalEvent::EMPTY;
+    if (useDefault)
+    {
+        // Also return alarm types for which this is the only collection.
+        KAlarm::CalEvent::Types wantedTypes = AkonadiModel::types(collection) & ~stdTypes;
+        Collection::List cols = instance()->collections();
+        for (int i = 0, count = cols.count();  wantedTypes && i < count;  ++i)
+        {
+            if (cols[i] == col)
+                continue;
+            AkonadiModel::instance()->refresh(cols[i]);    // update with latest data
+            if (cols[i].isValid())
+                wantedTypes &= ~AkonadiModel::types(cols[i]);
+        }
+        stdTypes |= wantedTypes;
+    }
+    return stdTypes;
 }
 
 /******************************************************************************

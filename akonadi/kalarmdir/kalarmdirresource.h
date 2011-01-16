@@ -50,6 +50,9 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         virtual void itemChanged(const Akonadi::Item&, const QSet<QByteArray>& parts);
         virtual void itemRemoved(const Akonadi::Item&);
 
+    private Q_SLOTS:
+        void settingsChanged();
+
     private:
         bool loadFiles();
         QString directoryName() const;
@@ -57,6 +60,7 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         void initializeDirectory() const;
         bool cancelIfReadOnly();
         bool writeToFile(const KAEvent&);
+        void setCompatibility(bool writeAttr = true);
 
         QMap<QString, KAEvent> mEvents;    // cached alarms, indexed by ID
         Akonadi_KAlarm_Dir_Resource::Settings* mSettings;

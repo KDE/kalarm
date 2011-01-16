@@ -182,7 +182,7 @@ void SingleFileResourceBase::reloadFile()
 
   // if we have something loaded already, make sure we write that back in case
   // the settings changed
-  if ( !mCurrentUrl.isEmpty() )
+  if ( !mCurrentUrl.isEmpty() && !readOnly() )
     writeFile();
 
   readFile();
@@ -243,7 +243,7 @@ void SingleFileResourceBase::fileChanged( const QString & fileName )
 
 void SingleFileResourceBase::scheduleWrite()
 {
-  scheduleCustomTask(this, "writeFile", QVariant(), ResourceBase::AfterChangeReplay);
+  scheduleCustomTask(this, "writeFile", QVariant(true), ResourceBase::AfterChangeReplay);
 }
 
 void SingleFileResourceBase::slotDownloadJobResult( KJob *job )

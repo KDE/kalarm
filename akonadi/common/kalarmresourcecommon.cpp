@@ -177,14 +177,7 @@ KAEvent checkItemChanged(const Akonadi::Item& item, KAlarm::Calendar::Compat cal
 }
 
 /******************************************************************************
-* Retrieve all events from the calendar, and set each into a new item's
-* payload. Items are identified by their remote IDs. The Akonadi ID is not
-* used.
-* Signal the retrieval of the items by calling itemsRetrieved(items), which
-* updates Akonadi with any changes to the items. itemsRetrieved() compares
-* the new and old items, matching them on the remoteId(). If the flags or
-* payload have changed, or the Item has any new Attributes, the Akonadi
-* storage is updated.
+* Set a collection's compatibility attribute.
 */
 void setCollectionCompatibility(const Collection& collection, KAlarm::Calendar::Compat compatibility)
 {
@@ -195,6 +188,7 @@ void setCollectionCompatibility(const Collection& collection, KAlarm::Calendar::
     CollectionModifyJob* job = new CollectionModifyJob(col, Private::mInstance->parent());
     Private::mInstance->connect(job, SIGNAL(result(KJob*)), SLOT(modifyCollectionJobDone(KJob*)));
 }
+
 /******************************************************************************
 * Return an error message common to more than one resource.
 */

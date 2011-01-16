@@ -157,16 +157,22 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static bool isWritable(const Akonadi::Collection&, bool ignoreEnabledStatus = false);
 
         /** Return the standard collection for a specified mime type.
+         *  @param useDefault false to return the defined standard collection, if any;
+         *                    true to return the standard or only collection for the type.
          *  Reply = invalid collection if there is no standard collection.
          */
-        static Akonadi::Collection getStandard(KAlarm::CalEvent::Type);
+        static Akonadi::Collection getStandard(KAlarm::CalEvent::Type, bool useDefault = false);
 
         /** Return whether a collection is the standard collection for a specified
          *  mime type. */
         static bool isStandard(Akonadi::Collection&, KAlarm::CalEvent::Type);
 
-        /** Return the alarm type(s) for which a collection is the standard collection. */
-        static KAlarm::CalEvent::Types standardTypes(const Akonadi::Collection&);
+        /** Return the alarm type(s) for which a collection is the standard collection.
+         *  @param useDefault false to return the defined standard types, if any;
+         *                    true to return the types for which it is the standard or
+         *                    only collection.
+         */
+        static KAlarm::CalEvent::Types standardTypes(const Akonadi::Collection&, bool useDefault = false);
 
         /** Set or clear a collection as the standard collection for a specified
          *  mime type. This does not affect its status for other mime types.
