@@ -1,5 +1,5 @@
 /*
- *  settingsdialog.h  -  Akonadi KAlarm directory resource configuration dialog
+ *  alarmtypewidget.h  -  KAlarm Akonadi configuration alarm type selection widget
  *  Program:  kalarm
  *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
  *
@@ -19,42 +19,26 @@
  *  02110-1301, USA.
  */
 
-#ifndef KALARMDIR_SETTINGSDIALOG_H
-#define KALARMDIR_SETTINGSDIALOG_H
+#ifndef KALARM_ALARMTPEWIDGET_H
+#define KALARM_ALARMTPEWIDGET_H
 
-#include "ui_settingsdialog.h"
 #include "ui_alarmtypewidget.h"
 #include "kacalendar.h"
 
-#include <KDE/KDialog>
 
-class KConfigDialogManager;
-class AlarmTypeWidget;
-
-namespace Akonadi_KAlarm_Dir_Resource
-{
-
-class Settings;
-
-class SettingsDialog : public KDialog
+class AlarmTypeWidget : public QWidget
 {
         Q_OBJECT
     public:
-        SettingsDialog(WId windowId, Settings*);
-	void setAlarmTypes(KAlarm::CalEvent::Types);
-	KAlarm::CalEvent::Types alarmTypes() const;
+        AlarmTypeWidget(QWidget* parent, QLayout* layout);
+        void setAlarmTypes(KAlarm::CalEvent::Types);
+        KAlarm::CalEvent::Types alarmTypes() const;
 
-    private Q_SLOTS:
-        void save();
-        void validate();
+    signals:
+        void changed();
 
     private:
-        Ui::SettingsDialog    ui;
-        AlarmTypeWidget*      mTypeSelector;
-        KConfigDialogManager* mManager;
-        Akonadi_KAlarm_Dir_Resource::Settings* mSettings;
+        Ui::AlarmTypeWidget ui;
 };
 
-}
-
-#endif // KALARMDIR_SETTINGSDIALOG_H
+#endif // KALARM_ALARMTPEWIDGET_H

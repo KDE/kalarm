@@ -327,6 +327,9 @@ bool KAlarmDirResource::writeToFile(const KAEvent& event)
     return true;
 }
 
+/******************************************************************************
+* Create the resource's collection.
+*/
 void KAlarmDirResource::retrieveCollections()
 {
     kDebug();
@@ -336,7 +339,7 @@ void KAlarmDirResource::retrieveCollections()
     const QString display = mSettings->displayName();
     c.setName(display.isEmpty() ? name() : display);
 kDebug(5950)<<"display name="<<display<<", name="<<name()<<", id="<<identifier();
-    c.setContentMimeTypes(KAlarmResourceCommon::mimeTypes(identifier()));
+    c.setContentMimeTypes(mSettings->alarmTypes());
     if (mSettings->readOnly())
     {
         c.setRights(Collection::CanChangeCollection);
@@ -378,6 +381,9 @@ void KAlarmDirResource::retrieveItems(const Akonadi::Collection& collection)
     // Set the collection's compatibility status
     KAlarmResourceCommon::setCollectionCompatibility(collection, mCompatibility);
 
+    // Fetch the list of valid mime types
+    QStringList mimeTypes = mSettings->alarmTypes();
+
     // Retrieve events
     Item::List items;
     foreach (const KAEvent& event, mEvents)
@@ -388,6 +394,8 @@ void KAlarmDirResource::retrieveItems(const Akonadi::Collection& collection)
             kWarning() << "KAEvent has no alarms:" << event.id();
             continue;   // event has no usable alarms
         }
+        if (!mimeTypes.contains(mime))
+            continue;   // restrict alarms returned to the defined types
 
         Item item(mime);
         item.setRemoteId(event.id());
@@ -404,6 +412,9 @@ void KAlarmDirResource::retrieveItems(const Akonadi::Collection& collection)
 */
 void KAlarmDirResource::collectionChanged(const Akonadi::Collection& collection)
 {
+    kDebug();
+    // If the collection has a new display name, set the resource's display
+    // name the same, and save to the settings.
     QString newName;
     EntityDisplayAttribute* attr = 0;
     if (collection.hasAttribute<EntityDisplayAttribute>())

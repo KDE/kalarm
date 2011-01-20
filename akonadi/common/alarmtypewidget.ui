@@ -1,0 +1,47 @@
+<ui version="4.0" >
+ <class>AlarmTypeWidget</class>
+ <widget class="QWidget" name="AlarmTypeWidget">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title" >
+      <string>Alarm Types</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_1">
+      <item>
+       <widget class="QCheckBox" name="activeCheckBox">
+        <property name="text" >
+         <string>Active Alarms</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="archivedCheckBox">
+        <property name="text">
+         <string>Archived Alarms</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="templateCheckBox">
+        <property name="text">
+         <string>Alarm Templates</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+</ui>

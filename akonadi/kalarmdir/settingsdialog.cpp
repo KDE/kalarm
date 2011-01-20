@@ -21,13 +21,12 @@
 
 #include "settingsdialog.h"
 #include "settings.h"
+#include "alarmtypewidget.h"
 
 #include <KConfigDialogManager>
 #include <KWindowSystem>
 
 #include <QTimer>
-
-//using namespace Akonadi;
 
 namespace Akonadi_KAlarm_Dir_Resource
 {
@@ -37,6 +36,7 @@ SettingsDialog::SettingsDialog( WId windowId, Settings* settings )
     mSettings(settings)
 {
   ui.setupUi( mainWidget() );
+  mTypeSelector = new AlarmTypeWidget(ui.tab, ui.tabLayout);
   ui.ktabwidget->setTabBarHidden(true);
   ui.kcfg_Path->setMode( KFile::LocalOnly | KFile::Directory );
   setButtons( Ok | Cancel );
@@ -49,10 +49,12 @@ SettingsDialog::SettingsDialog( WId windowId, Settings* settings )
 
   connect( ui.kcfg_Path, SIGNAL( textChanged( QString ) ), SLOT( validate() ) );
   connect( ui.kcfg_ReadOnly, SIGNAL( toggled( bool ) ), SLOT( validate() ) );
+  connect(mTypeSelector, SIGNAL(changed()), SLOT(validate()));
 
   QTimer::singleShot( 0, this, SLOT( validate() ) );
 
   ui.kcfg_Path->setUrl( KUrl( mSettings->path() ) );
+  mTypeSelector->setAlarmTypes(KAlarm::CalEvent::types(mSettings->alarmTypes()));
   mManager = new KConfigDialogManager( this, mSettings );
   mManager->updateWidgets();
 }
@@ -61,25 +63,30 @@ void SettingsDialog::save()
 {
   mManager->updateSettings();
   mSettings->setPath( ui.kcfg_Path->url().toLocalFile() );
+  mSettings->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mTypeSelector->alarmTypes()));
   mSettings->writeConfig();
 }
 
 void SettingsDialog::validate()
 {
   bool enableOk = false;
-  const KUrl currentUrl = ui.kcfg_Path->url();
-  // The entered URL must be valid and local
-  if ( !currentUrl.isEmpty() && currentUrl.isLocalFile() ) {
-    const QFileInfo file( currentUrl.toLocalFile() );
-    // It must either be a directory, or not yet exist
-    if ( !file.exists() || file.isDir() ) {
-      if ( file.exists() && !file.isWritable() ) {
-        ui.kcfg_ReadOnly->setEnabled( false );
-        ui.kcfg_ReadOnly->setChecked( true );
-      } else {
-        ui.kcfg_ReadOnly->setEnabled( true );
+  // At least one alarm type must be selected
+  if (mTypeSelector->alarmTypes() != KAlarm::CalEvent::EMPTY)
+  {
+    // The entered URL must be valid and local
+    const KUrl currentUrl = ui.kcfg_Path->url();
+    if ( !currentUrl.isEmpty() && currentUrl.isLocalFile() ) {
+      const QFileInfo file( currentUrl.toLocalFile() );
+      // It must either be a directory, or not yet exist
+      if ( !file.exists() || file.isDir() ) {
+        if ( file.exists() && !file.isWritable() ) {
+          ui.kcfg_ReadOnly->setEnabled( false );
+          ui.kcfg_ReadOnly->setChecked( true );
+        } else {
+          ui.kcfg_ReadOnly->setEnabled( true );
+        }
+        enableOk = true;
       }
-      enableOk = true;
     }
   }
   enableButton( Ok, enableOk );

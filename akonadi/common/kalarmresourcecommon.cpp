@@ -87,7 +87,7 @@ QStringList mimeTypes(const QString& id)
         mimes << KAlarm::MIME_TEMPLATE;
     else
         mimes << KAlarm::MIME_BASE
-                  << KAlarm::MIME_ACTIVE << KAlarm::MIME_ARCHIVED << KAlarm::MIME_TEMPLATE;
+              << KAlarm::MIME_ACTIVE << KAlarm::MIME_ARCHIVED << KAlarm::MIME_TEMPLATE;
     return mimes;
 }
 

@@ -7,18 +7,20 @@ include_directories(
 )
 
 ########### next target ###############
+remove_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5953)
-add_definitions( -DSETTINGS_NAMESPACE=Akonadi_KAlarm_Dir_Resource )
+add_definitions(-DSETTINGS_NAMESPACE=Akonadi_KAlarm_Dir_Resource)
 
 set(kalarmdirresource_SRCS
     settingsdialog.cpp
     kalarmdirresource.cpp
     ../common/kalarmresourcecommon.cpp
+    ../common/alarmtypewidget.cpp
 )
 
 install(FILES kalarmdirresource.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents")
 
-kde4_add_ui_files(kalarmdirresource_SRCS settingsdialog.ui)
+kde4_add_ui_files(kalarmdirresource_SRCS settingsdialog.ui ../common/alarmtypewidget.ui)
 kde4_add_kcfg_files(kalarmdirresource_SRCS settings.kcfgc)
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
 qt4_add_dbus_adaptor(kalarmdirresource_SRCS

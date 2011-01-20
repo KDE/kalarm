@@ -64,6 +64,7 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
 
         QMap<QString, KAEvent> mEvents;    // cached alarms, indexed by ID
         Akonadi_KAlarm_Dir_Resource::Settings* mSettings;
+        KAlarm::CalEvent::Types  mAlarmTypes;
         KAlarm::Calendar::Compat mCompatibility;
 };
 

@@ -29,8 +29,9 @@ include_directories(
 )
 
 ########### next target ###############
+remove_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5952)
-add_definitions( -DSETTINGS_NAMESPACE=Akonadi_KAlarm_Resource )
+add_definitions(-DSETTINGS_NAMESPACE=Akonadi_KAlarm_Resource)
 
 set(kalarmresource_SRCS
     ${AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES}
