@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.cpp -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -95,7 +95,10 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
     if (!version)
         return KAlarm::Calendar::Current;     // calendar is in current KAlarm format
 #ifdef USE_AKONADI
-    if (!CollectionControlModel::isWritable(collection)  ||  conv == NO_CONVERT)
+    if (conv == NO_CONVERT
+    ||  (!CollectionControlModel::isWritable(collection, KAlarm::CalEvent::ACTIVE)
+      && !CollectionControlModel::isWritable(collection, KAlarm::CalEvent::ARCHIVED)
+      && !CollectionControlModel::isWritable(collection, KAlarm::CalEvent::TEMPLATE)))
 #else
     if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)
 #endif

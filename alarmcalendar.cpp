@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -158,8 +158,8 @@ AlarmCalendar::AlarmCalendar()
     connect(model, SIGNAL(eventsAdded(const AkonadiModel::EventList&)), SLOT(slotEventsAdded(const AkonadiModel::EventList&)));
     connect(model, SIGNAL(eventsToBeRemoved(const AkonadiModel::EventList&)), SLOT(slotEventsToBeRemoved(const AkonadiModel::EventList&)));
     connect(model, SIGNAL(eventChanged(const AkonadiModel::Event&)), SLOT(slotEventChanged(const AkonadiModel::Event&)));
-    connect(model, SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)),
-                   SLOT(slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)));
+    connect(model, SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
+                   SLOT(slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
 #else
     AlarmResources* resources = AlarmResources::instance();
     resources->setCalIDFunction(&KAlarm::Calendar::setKAlarmVersion);
@@ -604,16 +604,55 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
     checkForDisabledAlarms();
 }
 
+#ifdef USE_AKONADI
+/******************************************************************************
+* Delete a calendar and all its KAEvent instances of specified alarm types from
+* the lists.
+* Called after the calendar is deleted or alarm types have been disabled, or
+* the AlarmCalendar is closed.
+*/
+void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, KAlarm::CalEvent::Types types)
+{
+    bool removed = false;
+    ResourceMap::Iterator rit = mResourceMap.find(key);
+    if (rit != mResourceMap.end())
+    {
+        bool empty = true;
+        KAEvent::List& events = rit.value();
+        for (int i = 0, end = events.count();  i < end;  ++i)
+        {
+            KAEvent* event = events[i];
+            if (event->category() & types)
+            {
+                mEventMap.remove(event->id());
+                delete event;
+                removed = true;
+            }
+            else
+                empty = false;
+        }
+        if (empty)
+            mResourceMap.erase(rit);
+    }
+    if (removed)
+    {
+        mEarliestAlarm.remove(key);
+        // Emit signal only if we're not in the process of closing the calendar
+        if (!closing  &&  mOpen)
+        {
+            emit earliestAlarmChanged();
+            if (mHaveDisabledAlarms)
+                checkForDisabledAlarms();
+        }
+    }
+}
+#else
 /******************************************************************************
 * Delete a calendar and all its KAEvent instances from the lists.
 * Called after the calendar is deleted or disabled, or the AlarmCalendar is
 * closed.
 */
-#ifdef USE_AKONADI
-void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing)
-#else
 void AlarmCalendar::removeKAEvents(AlarmResource* key, bool closing)
-#endif
 {
     ResourceMap::Iterator rit = mResourceMap.find(key);
     if (rit != mResourceMap.end())
@@ -636,19 +675,22 @@ void AlarmCalendar::removeKAEvents(AlarmResource* key, bool closing)
             checkForDisabledAlarms();
     }
 }
+#endif
 
 #ifdef USE_AKONADI
 /******************************************************************************
 * Called when the enabled or read-only status of a collection has changed.
 * If the collection is now disabled, remove its events from the calendar.
 */
-void AlarmCalendar::slotCollectionStatusChanged(const Collection& collection, AkonadiModel::Change change, bool value)
+void AlarmCalendar::slotCollectionStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value)
 {
-    if (change == AkonadiModel::Enabled  &&  !value)
+    if (change == AkonadiModel::Enabled)
     {
-        // The collection has been disabled.
-        // Remove its events from the map, but not from AkonadiModel.
-        removeKAEvents(collection.id(), false);
+        // For each alarm type which has been disabled, remove the collection's
+        // events from the map, but not from AkonadiModel.
+        KAlarm::CalEvent::Types enabled = static_cast<KAlarm::CalEvent::Types>(value.toInt());
+        KAlarm::CalEvent::Types disabled = ~enabled & KAlarm::CalEvent::ALL;
+        removeKAEvents(collection.id(), false, disabled);
     }
 }
 
@@ -1228,7 +1270,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
     {
 #ifdef USE_AKONADI
         Collection col;
-        if (collection  &&  CollectionControlModel::isEnabled(*collection))
+        if (collection  &&  CollectionControlModel::isEnabled(*collection, type))
             col = *collection;
         else
             col = CollectionControlModel::destination(type, promptParent, noPrompt, cancelled);
@@ -1896,9 +1938,9 @@ bool AlarmCalendar::eventReadOnly(Item::Id id) const
         return true;
     AkonadiModel* model = AkonadiModel::instance();
     Collection collection = model->collectionForItem(id);
-    if (!CollectionControlModel::isWritable(collection))
-        return true;
     KAEvent event = model->event(id);
+    if (!CollectionControlModel::isWritable(collection, event.category()))
+        return true;
     return !event.isValid()  ||  event.isReadOnly();
     //   ||  compatibility(event) != KAlarm::Calendar::Current;
 }

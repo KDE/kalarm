@@ -1,7 +1,7 @@
 /*
  *  collectionattribute.h  -  Akonadi attribute holding Collection characteristics
  *  Program:  kalarm
- *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,17 +42,26 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
 {
     public:
         CollectionAttribute()
-                : mStandard(KAlarm::CalEvent::EMPTY),
-                  mCompatibility(KAlarm::Calendar::Incompatible),
-                  mEnabled(false) { }
+                : mEnabled(KAlarm::CalEvent::EMPTY),
+                  mStandard(KAlarm::CalEvent::EMPTY),
+                  mCompatibility(KAlarm::Calendar::Incompatible)  { }
 
-        bool isEnabled() const   { return mEnabled; }
+        bool isEnabled(KAlarm::CalEvent::Type type) const   { return mEnabled & type; }
 
-        /** Set the enabled/disabled state of the collection and its alarms.
-         *  The alarms in a disabled collection are ignored, and not displayed in the alarm list.
-         *  The standard status for a disabled collection is automatically cleared.
+        /** Return which mime types the collection is enabled for. */
+        KAlarm::CalEvent::Types enabled() const     { return mEnabled; }
+
+        /** Set the enabled/disabled state of the collection and its alarms, for a
+         *  specified alarm type. The enabled/disabled state for other alarm types
+         *  is not affected.
+         *  The alarms of that type in a disabled collection are ignored, and not
+         *  displayed in the alarm list. The standard status for that type for
+         *  a disabled collection is automatically cleared.
          */
-        void setEnabled(bool enabled);
+        void setEnabled(KAlarm::CalEvent::Type, bool enabled);
+
+        /** Set which mime types the collection enabled for. */
+        void setEnabled(KAlarm::CalEvent::Types);
 
         /** Return whether the collection is the standard collection for a specified
          *  mime type. */
@@ -66,7 +75,7 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         KAlarm::CalEvent::Types standard() const     { return mStandard; }
 
         /** Set which mime types the collection is the standard collection for. */
-        void setStandard(KAlarm::CalEvent::Types t)  { mStandard = t; }
+        void setStandard(KAlarm::CalEvent::Types);
 
         /** Return the background color to display this collection and its alarms,
          *  or invalid color if none is set.
@@ -92,9 +101,9 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         CollectionAttribute(const CollectionAttribute&);
 
         QColor                   mBackgroundColour; // background color for collection and its alarms
+        KAlarm::CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
         KAlarm::CalEvent::Types  mStandard;         // whether the collection is a standard collection
         KAlarm::Calendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
-        bool                     mEnabled;          // if false, this collection's alarms are ignored
 };
 
 } // namespace KAlarm

@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.h  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -62,13 +62,13 @@ class CollectionListModel : public KDescendantsProxyModel
 
 /*=============================================================================
 = Class: CollectionCheckListModel
-= Proxy model providing a checkable collection list.
+= Proxy model providing a checkable collection list, for a specified mime type.
 =============================================================================*/
 class CollectionCheckListModel : public Future::KCheckableProxyModel
 {
         Q_OBJECT
     public:
-        static CollectionCheckListModel* instance();
+        explicit CollectionCheckListModel(KAlarm::CalEvent::Type, QObject* parent = 0);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
         virtual bool setData(const QModelIndex&, const QVariant& value, int role);
@@ -78,16 +78,15 @@ class CollectionCheckListModel : public Future::KCheckableProxyModel
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
 
     private:
-        explicit CollectionCheckListModel(QObject* parent = 0);
-
-        static CollectionCheckListModel* mInstance;
-        QItemSelectionModel* mSelectionModel;
+        static CollectionListModel* mModel;
+        KAlarm::CalEvent::Type mAlarmType;     // alarm type contained in this model
+        QItemSelectionModel*   mSelectionModel;
 };
 
 
 /*=============================================================================
 = Class: CollectionFilterCheckListModel
-= Proxy model providing a checkable collection list, filtered by mime type.
+= Proxy model providing a checkable collection list, for a given alarm type.
 =============================================================================*/
 class CollectionFilterCheckListModel : public QSortFilterProxyModel
 {
@@ -97,18 +96,22 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
         void setEventTypeFilter(KAlarm::CalEvent::Type);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
+        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
     private:
-        QString mMimeType;     // collection content type contained in this model
+        CollectionCheckListModel* mActiveModel;
+        CollectionCheckListModel* mArchivedModel;
+        CollectionCheckListModel* mTemplateModel;
+        KAlarm::CalEvent::Type    mAlarmType;     // alarm type contained in this model
 };
 
 
 /*=============================================================================
 = Class: CollectionView
-Equivalent to ResourceView
+= View for a CollectionFilterCheckListModel.
 =============================================================================*/
 class CollectionView : public QListView
 {
@@ -144,17 +147,17 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static CollectionControlModel* instance();
 
         /** Return whether a collection is enabled (and valid). */
-        static bool isEnabled(const Akonadi::Collection&);
+        static bool isEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type);
 
-        /** Enable or disable a collection (if it is valid). */
-        static void setEnabled(const Akonadi::Collection&, bool enabled);
+        /** Enable or disable a collection (if it is valid) for a specified alarm type. */
+        static void setEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type, bool enabled);
 
-        /** Return whether a collection is both enabled and fully writable,
-         *  i.e. with create/delete/change rights and compatible with the current
-         *  KAlarm calendar format.
+        /** Return whether a collection is both enabled and fully writable for a
+         *  given alarm type, i.e. with create/delete/change rights and compatible
+         *  with the current KAlarm calendar format.
          *  Optionally, the enabled status can be ignored.
          */
-        static bool isWritable(const Akonadi::Collection&, bool ignoreEnabledStatus = false);
+        static bool isWritable(const Akonadi::Collection&, KAlarm::CalEvent::Type, bool ignoreEnabledStatus = false);
 
         /** Return the standard collection for a specified mime type.
          *  @param useDefault false to return the defined standard collection, if any;
@@ -208,7 +211,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
     private slots:
-        void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool value);
+        void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value);
 
     private:
         explicit CollectionControlModel(QObject* parent = 0);

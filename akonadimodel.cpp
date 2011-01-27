@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -170,9 +170,9 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             case Qt::DisplayRole:
                 return displayName_p(collection);
             case EnabledRole:
-                if (collection.hasAttribute<CollectionAttribute>())
-                    return collection.attribute<CollectionAttribute>()->isEnabled();
-                return false;
+                if (!collection.hasAttribute<CollectionAttribute>())
+                    return 0;
+                return static_cast<int>(collection.attribute<CollectionAttribute>()->enabled());
             case BaseColourRole:
                 role = Qt::BackgroundRole;
                 break;
@@ -199,7 +199,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 if (!collection.hasAttribute<CollectionAttribute>())
                     break;
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
-                if (!attr->isEnabled())
+                if (!attr->enabled())
                     break;
                 QStringList mimeTypes = collection.contentMimeTypes();
                 if ((mimeTypes.contains(KAlarm::MIME_ACTIVE)  &&  attr->isStandard(KAlarm::CalEvent::ACTIVE))
@@ -214,34 +214,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 break;
             }
             case Qt::ToolTipRole:
-            {
-                QString name = '@' + displayName_p(collection);   // insert markers for stripping out name
-                KUrl url = collection.remoteId();
-                QString type = '@' + storageType(collection);   // file/directory/URL etc.
-                QString locn = url.pathOrUrl();
-                bool inactive = !collection.hasAttribute<CollectionAttribute>()
-                             || !collection.attribute<CollectionAttribute>()->isEnabled();
-                bool writable = (collection.rights() & writableRights) == writableRights;
-                QString disabled = i18nc("@info/plain", "Disabled");
-                QString readonly = i18nc("@info/plain", "Read-only");
-//if (!collection.hasAttribute<CollectionAttribute>()) { kDebug()<<"Tooltip: no collection attribute"; } else { kDebug()<<"Tooltip: enabled="<<collection.attribute<CollectionAttribute>()->isEnabled(); } //disabled="<<inactive;
-                if (inactive  &&  !writable)
-                    return i18nc("@info:tooltip",
-                                 "%1"
-                                 "<nl/>%2: <filename>%3</filename>"
-                                 "<nl/>%4, %5",
-                                 name, type, locn, disabled, readonly);
-                if (inactive  ||  !writable)
-                    return i18nc("@info:tooltip",
-                                 "%1"
-                                 "<nl/>%2: <filename>%3</filename>"
-                                 "<nl/>%4",
-                                 name, type, locn, (inactive ? disabled : readonly));
-                return i18nc("@info:tooltip",
-                             "%1"
-                             "<nl/>%2: <filename>%3</filename>",
-                             name, type, locn);
-            }
+                return tooltip(collection, KAlarm::CalEvent::ALL);
             case AlarmTypeRole:
                 return static_cast<int>(types(collection));
             case IsStandardRole:
@@ -528,12 +501,12 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 return true;
             case EnabledRole:
             {
-                bool enabled = value.toBool();
+                KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
-if (attr) { kDebug()<<"Set enabled:"<<enabled<<", was="<<attr->isEnabled(); } else { kDebug()<<"Set enabled:"<<enabled<<", no attribute"; }
-                if (attr->isEnabled() == enabled)
+if (attr) { kDebug()<<"Set enabled:"<<types<<", was="<<attr->enabled(); } else { kDebug()<<"Set enabled:"<<types<<", no attribute"; }
+                if (attr->enabled() == types)
                     return true;   // no change
-                attr->setEnabled(enabled);
+                attr->setEnabled(types);
                 updateCollection = true;
                 break;
             }
@@ -944,6 +917,40 @@ QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
     return !url.isLocalFile()                     ? i18nc("@info/plain", "URL")
            : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info/plain Directory in filesystem", "Directory")
            :                                        i18nc("@info/plain", "File");
+}
+
+/******************************************************************************
+* Return a collection's tooltip text. The collection's enabled status is
+* evaluated for specified alarm types.
+*/
+QString AkonadiModel::tooltip(const Collection& collection, KAlarm::CalEvent::Types types) const
+{
+    QString name = '@' + displayName_p(collection);   // insert markers for stripping out name
+    KUrl url = collection.remoteId();
+    QString type = '@' + storageType(collection);   // file/directory/URL etc.
+    QString locn = url.pathOrUrl();
+    bool inactive = !collection.hasAttribute<CollectionAttribute>()
+                 || !(collection.attribute<CollectionAttribute>()->enabled() & types);
+    bool writable = (collection.rights() & writableRights) == writableRights;
+    QString disabled = i18nc("@info/plain", "Disabled");
+    QString readonly = i18nc("@info/plain", "Read-only");
+//if (!collection.hasAttribute<CollectionAttribute>()) { kDebug()<<"Tooltip: no collection attribute"; } else { kDebug()<<"Tooltip: enabled="<<collection.attribute<CollectionAttribute>()->enabled(); } //disabled="<<inactive;
+    if (inactive  &&  !writable)
+        return i18nc("@info:tooltip",
+                     "%1"
+                     "<nl/>%2: <filename>%3</filename>"
+                     "<nl/>%4, %5",
+                     name, type, locn, disabled, readonly);
+    if (inactive  ||  !writable)
+        return i18nc("@info:tooltip",
+                     "%1"
+                     "<nl/>%2: <filename>%3</filename>"
+                     "<nl/>%4",
+                     name, type, locn, (inactive ? disabled : readonly));
+    return i18nc("@info:tooltip",
+                 "%1"
+                 "<nl/>%2: <filename>%3</filename>",
+                 name, type, locn);
 }
 
 /******************************************************************************
@@ -1668,14 +1675,14 @@ void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSe
     {
         static bool first = true;
 kDebug()<<"COLLECTION ATTRIBUTE changed";
-        bool oldEnabled = mCollectionEnabled.value(collection.id(), false);
-        bool newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->isEnabled() : false;
+        KAlarm::CalEvent::Types oldEnabled = mCollectionEnabled.value(collection.id(), KAlarm::CalEvent::EMPTY);
+        KAlarm::CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : KAlarm::CalEvent::EMPTY;
         if (first  ||  newEnabled != oldEnabled)
         {
             kDebug() << "enabled ->" << newEnabled;
             first = false;
             mCollectionEnabled[collection.id()] = newEnabled;
-            emit collectionStatusChanged(collection, Enabled, newEnabled);
+            emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled));
         }
     }
 }

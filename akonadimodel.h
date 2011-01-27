@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.h  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -86,6 +86,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void setBackgroundColor(Akonadi::Collection&, const QColor&);
         /** Get the background color for a collection and its alarms. */
         QColor backgroundColor(Akonadi::Collection&) const;
+        /** Get the tooltip for a collection. The collection's enabled status is
+         *  evaluated for specified alarm types. */
+        QString tooltip(const Akonadi::Collection&, KAlarm::CalEvent::Types) const;
 
         /** To be called when the command error status of an alarm has changed,
          *  to set in the Akonadi database and update the visual command error indications.
@@ -170,7 +173,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void collectionAdded(Akonadi::AgentInstanceCreateJob*, bool success);
 
         /** Signal emitted when a collection's enabled or read-only status has changed. */
-        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool value = false);
+        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& newValue);
 
         /** Signal emitted when events have been added to the model. */
         void eventsAdded(const AkonadiModel::EventList&);
@@ -265,7 +268,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         Akonadi::ChangeRecorder* mMonitor;
         QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
-        QMap<Akonadi::Collection::Id, bool> mCollectionEnabled;  // last enabled status of each collection
+        QMap<Akonadi::Collection::Id, KAlarm::CalEvent::Types> mCollectionEnabled;  // last enabled mime types of each collection
         QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
         QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
         QMap<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active

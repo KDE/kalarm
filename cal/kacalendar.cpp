@@ -280,6 +280,8 @@ bool isUTC(const QString& localFile)
 * Class: KAlarm::CalEvent
 *============================================================================*/
 
+const CalEvent::Types CalEvent::ALL = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE;
+
 // Struct to contain static strings, to allow use of K_GLOBAL_STATIC
 // to delete them on program termination.
 struct StaticStrings

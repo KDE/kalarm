@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.h  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -138,7 +138,7 @@ class AlarmCalendar : public QObject
     private slots:
         void                  setAskResource(bool ask);
 #ifdef USE_AKONADI
-        void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool value);
+        void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value);
         void                  slotEventsAdded(const AkonadiModel::EventList&);
         void                  slotEventsToBeRemoved(const AkonadiModel::EventList&);
         void                  slotEventChanged(const AkonadiModel::Event&);
@@ -170,7 +170,7 @@ class AlarmCalendar : public QObject
         KAlarm::CalEvent::Type deleteEventInternal(const KAEvent&, const Akonadi::Collection& = Akonadi::Collection());
         KAlarm::CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(), const Akonadi::Collection& = Akonadi::Collection());
         void                  updateKAEvents(const Akonadi::Collection&);
-        void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false);
+        void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false, KAlarm::CalEvent::Types = KAlarm::CalEvent::ALL);
         void                  findEarliestAlarm(const Akonadi::Collection&);
         void                  findEarliestAlarm(Akonadi::Collection::Id);  //deprecated
 #else

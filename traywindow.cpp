@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -132,7 +132,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     setEnabledStatus(theApp()->alarmsEnabled());
 
 #ifdef USE_AKONADI
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)), SLOT(slotCalendarStatusChanged()));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)), SLOT(slotCalendarStatusChanged()));
 #else
     connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotCalendarStatusChanged()));
 #endif

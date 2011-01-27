@@ -423,7 +423,7 @@ void AlarmResource::kaCheckCalendar(CalendarLocal& cal)
             case KAlarm::CalEvent::TEMPLATE:  mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::TEMPLATE);  break;
             default:   break;
         }
-        if (mTypes == (KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE))
+        if (mTypes == KAlarm::CalEvent::ALL)
             break;
     }
 }

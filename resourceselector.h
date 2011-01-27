@@ -1,7 +1,7 @@
 /*
  *  resourceselector.h  -  alarm calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -47,6 +47,7 @@ class KMenu;
 class ResourceView;
 #ifdef USE_AKONADI
 class AkonadiModel;
+class CollectionFilterCheckListModel;
 namespace Akonadi { class Collection; }
 #else
 using KCal::ResourceCalendar;
@@ -92,7 +93,7 @@ class ResourceSelector : public QFrame
         void  showInfo();
         void  archiveDaysChanged(int days);
 #ifdef USE_AKONADI
-        void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool);
+        void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&);
 #else
         void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
 #endif

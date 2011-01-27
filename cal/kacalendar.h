@@ -126,6 +126,8 @@ class KALARM_CAL_EXPORT CalEvent
             DISPLAYING = 0x08     // the event is currently being displayed
         };
         Q_DECLARE_FLAGS(Types, Type)
+        /** All main event categories (ACTIVE, ARCHIVE and TEMPLATE only). */
+        static const Types ALL;
 
         static QString uid(const QString& id, Type);
 #ifdef USE_AKONADI

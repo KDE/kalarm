@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -144,7 +144,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
     connect(mDeleteButton, SIGNAL(clicked()), SLOT(removeResource()));
 
 #ifdef USE_AKONADI
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)), SLOT(slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, bool)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
+                                      SLOT(slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
 #else
     connect(mCalendar, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
 #endif
@@ -324,7 +325,7 @@ void ResourceSelector::removeResource()
     QString name = collection.name();
     // Check if it's the standard or only resource for at least one type.
     KAlarm::CalEvent::Types standardTypes = CollectionControlModel::standardTypes(collection, true);
-    bool std = standardTypes & (KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE);
+    bool std = standardTypes & KAlarm::CalEvent::ALL;
     KAlarm::CalEvent::Type stdType = (standardTypes & KAlarm::CalEvent::ACTIVE)   ? KAlarm::CalEvent::ACTIVE
                                    : (standardTypes & KAlarm::CalEvent::ARCHIVED) ? KAlarm::CalEvent::ARCHIVED
                                    : KAlarm::CalEvent::EMPTY;
@@ -462,8 +463,8 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     if (haveCalendar)
     {
 #ifdef USE_AKONADI
-        active   = CollectionControlModel::isEnabled(collection);
-        writable = CollectionControlModel::isWritable(collection);
+        active   = CollectionControlModel::isEnabled(collection, type);
+        writable = CollectionControlModel::isWritable(collection, type);
         if (!(AkonadiModel::instance()->types(collection) & type))
             type = KAlarm::CalEvent::EMPTY;
 #else
@@ -573,10 +574,11 @@ void ResourceSelector::setStandard()
     Collection collection = currentResource();
     if (collection.isValid())
     {
+        KAlarm::CalEvent::Type alarmType = currentResourceType();
         bool standard = mActionSetDefault->isChecked();
         if (standard)
-            CollectionControlModel::setEnabled(collection, true);
-        CollectionControlModel::setStandard(collection, currentResourceType(), standard);
+            CollectionControlModel::setEnabled(collection, alarmType, true);
+        CollectionControlModel::setStandard(collection, alarmType, standard);
     }
 #else
     AlarmResource* resource = currentResource();
@@ -597,7 +599,7 @@ void ResourceSelector::setStandard()
 * Called when a calendar status has changed.
 */
 #ifdef USE_AKONADI
-void ResourceSelector::slotStatusChanged(const Collection& collection, AkonadiModel::Change change, bool value)
+void ResourceSelector::slotStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value)
 #else
 void ResourceSelector::slotStatusChanged(AlarmResource* resource, AlarmResources::Change change)
 #endif
@@ -713,21 +715,22 @@ void ResourceSelector::showInfo()
         QString name;
         if (collection.hasAttribute<EntityDisplayAttribute>())
             name = collection.attribute<EntityDisplayAttribute>()->displayName();
+        KAlarm::CalEvent::Type alarmType = currentResourceType();
         QString calType = AgentManager::self()->instance(collection.resource()).type().name();
         QString storage = AkonadiModel::instance()->storageType(collection);
         QString location = collection.remoteId();
         KUrl url(location);
         if (url.isLocalFile())
             location = url.path();
-        QString perms = CollectionControlModel::isWritable(collection, true)
+        QString perms = CollectionControlModel::isWritable(collection, alarmType, true)
                   ? i18nc("@info/plain", "Read-write")
                   : i18nc("@info/plain", "Read-only");
 bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
-        QString enabled = CollectionControlModel::isEnabled(collection)
+        QString enabled = CollectionControlModel::isEnabled(collection, alarmType)
                     ? i18nc("@info/plain", "Enabled")
                 : wrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)")
                 : i18nc("@info/plain", "Disabled");
-        QString std = CollectionControlModel::isStandard(collection, currentResourceType())
+        QString std = CollectionControlModel::isStandard(collection, alarmType)
                 ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
                 : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
         QString text = name.isEmpty()
