@@ -1246,6 +1246,7 @@ void KAEvent::setTemplate(const QString& name, int afterTime)
     d->mTemplateAfterTime = afterTime;
     // Templates don't need trigger times to be calculated
     d->mChangeCount = 0;
+    d->calcTriggerTimes();   // invalidate all trigger times
 }
 
 /******************************************************************************
@@ -1330,8 +1331,6 @@ void KAEvent::Private::endChanges()
 */
 void KAEvent::Private::calcTriggerTimes() const
 {
-    if (mCategory == KAlarm::CalEvent::TEMPLATE)
-        return;
     if (mChangeCount)
     {
         mChanged = true;   // note that changes have actually occurred
