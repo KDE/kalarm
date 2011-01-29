@@ -318,11 +318,9 @@ void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int s
 void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
     const QModelIndexList sel = selected.indexes();
-kDebug()<<"Selected count="<<sel.count();;
     foreach (const QModelIndex& ix, sel)
         CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, true);
     const QModelIndexList desel = deselected.indexes();
-kDebug()<<"Deselected count="<<desel.count();;
     foreach (const QModelIndex& ix, desel)
         CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, false);
 }
@@ -339,7 +337,6 @@ CollectionFilterCheckListModel::CollectionFilterCheckListModel(QObject* parent)
       mTemplateModel(new CollectionCheckListModel(KAlarm::CalEvent::TEMPLATE, this)),
       mAlarmType(KAlarm::CalEvent::EMPTY)
 {
-//    setSourceModel(CollectionCheckListModel::instance());
 }
 
 void CollectionFilterCheckListModel::setEventTypeFilter(KAlarm::CalEvent::Type type)
@@ -380,9 +377,7 @@ QVariant CollectionFilterCheckListModel::data(const QModelIndex& index, int role
     {
         case Qt::ToolTipRole:
         {
-kDebug()<<"tooltip role: alarm type="<<mAlarmType;
             const Collection col = collection(index);
-//            const Collection collection = AkonadiModel::instance()->data(index, AkonadiModel::CollectionRole).value<Collection>();
             if (col.isValid())
                 return AkonadiModel::instance()->tooltip(col, mAlarmType);
             break;
