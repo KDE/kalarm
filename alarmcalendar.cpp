@@ -1331,7 +1331,6 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
 #endif
         return false;
     }
-    event->clearUpdated();
 #ifdef USE_AKONADI
     evnt = *event;
     if (remove)
@@ -1526,7 +1525,6 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
     if (kaevnt  &&  kcalEvent)
     {
         evnt->updateKCalEvent(kcalEvent, KAEvent::UID_CHECK);
-        evnt->clearUpdated();
         bool oldEnabled = kaevnt->enabled();
         if (kaevnt != evnt)
             *kaevnt = *evnt;   // update the event instance in our lists, keeping the same pointer
