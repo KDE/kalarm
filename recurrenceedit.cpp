@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.cpp  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.cpp,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -1040,7 +1040,6 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
     event.setWorkTimeOnly(mWorkTimeOnly->isChecked());
     event.setExcludeHolidays(mExcludeHolidays->isChecked());
 
-    event.setUpdated();
     event.endChanges();
 }
 

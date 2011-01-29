@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1384,7 +1384,9 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 */
 bool KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay, const KDateTime& nextDt)
 {
-    kDebug();
+    kDebug() << "Alarm type:" << alarm.type();
+    if (alarm.repeatAtLogin())
+        return false;  // leave an alarm which repeats at every login until its main alarm triggers
     bool reply = false;
     bool update = false;
     event.startChanges();
@@ -1393,12 +1395,6 @@ bool KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
         // It's an advance warning alarm or an extra deferred alarm, so delete it
         event.removeExpiredAlarm(alarm.type());
         update = true;
-    }
-    else if (alarm.repeatAtLogin())
-    {
-        // Leave an alarm which repeats at every login until its main alarm is deleted
-        if (updateCalAndDisplay  &&  event.updated())
-            update = true;
     }
     else
     {

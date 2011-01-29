@@ -348,7 +348,6 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mDisplayingDefer         = event.mDisplayingDefer;
     mDisplayingEdit          = event.mDisplayingEdit;
     mEnabled                 = event.mEnabled;
-    mUpdated                 = event.mUpdated;
     mChangeCount             = 0;
     mChanged                 = false;
     delete mRecurrence;
@@ -832,8 +831,6 @@ void KAEvent::Private::set(const Event* event)
     }
     mChanged = true;
     endChanges();
-
-    mUpdated = false;
 }
 
 /******************************************************************************
@@ -1171,7 +1168,6 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     if (mSpeak)
         mBeep               = false;
 
-    mUpdated                = true;
     mKMailSerialNumber      = 0;
     mReminderMinutes        = 0;
     mDeferDefaultMinutes    = 0;
@@ -1186,7 +1182,6 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mArchive                = false;
     mCancelOnPreActErr      = false;
     mDontShowPreActErr      = false;
-    mUpdated                = false;
 #ifdef USE_AKONADI
     mCompatibility          = KAlarm::Calendar::Current;
     mReadOnly               = false;
@@ -1226,7 +1221,6 @@ void KAEvent::Private::setAudioFile(const QString& filename, float volume, float
         mFadeVolume  = -1;
         mFadeSeconds = 0;
     }
-    mUpdated = true;
 }
 
 /******************************************************************************
@@ -1240,7 +1234,6 @@ void KAEvent::Private::setCategory(KAlarm::CalEvent::Type s)
         return;
     mEventID = KAlarm::CalEvent::uid(mEventID, s);
     mCategory = s;
-    mUpdated = true;
 }
 
 /******************************************************************************
@@ -1251,7 +1244,6 @@ void KAEvent::setTemplate(const QString& name, int afterTime)
     d->setCategory(KAlarm::CalEvent::TEMPLATE);
     d->mTemplateName = name;
     d->mTemplateAfterTime = afterTime;
-    d->mUpdated = true;
     // Templates don't need trigger times to be calculated
     d->mChangeCount = 0;
     d->calcTriggerTimes();   // invalidate all trigger times
@@ -1275,7 +1267,6 @@ void KAEvent::Private::setRepeatAtLogin(bool rl)
         mAutoClose = false;
         mCopyToKOrganizer = false;
     }
-    mUpdated = true;
 }
 
 /******************************************************************************
@@ -1293,7 +1284,6 @@ void KAEvent::Private::setReminder(int minutes, bool onceOnly)
         mReminderMinutes  = minutes;
         mReminderActive   = minutes;
         mReminderOnceOnly = onceOnly;
-        mUpdated          = true;
         calcTriggerTimes();
     }
 }
@@ -2652,10 +2642,7 @@ void KAEvent::Private::removeExpiredAlarm(KAAlarm::Type type)
             break;
     }
     if (mAlarmCount != count)
-    {
-        mUpdated = true;
         calcTriggerTimes();
-    }
 }
 
 /******************************************************************************
@@ -2770,7 +2757,6 @@ bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjus
             mNextRepeat = mRepetition.nextRepeatCount(mNextMainDateTime.kDateTime(), mDeferralTime.kDateTime());
         mChanged = true;
     }
-    mUpdated = true;
     endChanges();
     return result;
 }
@@ -2784,7 +2770,6 @@ void KAEvent::Private::cancelDefer()
     {
         mDeferralTime = DateTime();
         set_deferral(NO_DEFERRAL);
-        mUpdated = true;
         calcTriggerTimes();
     }
 }
@@ -2939,7 +2924,6 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
                 default:                                      mDisplayingFlags = 0;  break;
             }
             ++mAlarmCount;
-            mUpdated = true;
             return true;
         }
     }
@@ -2969,7 +2953,6 @@ void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& 
         showEdit     = mDisplayingEdit;
         mDisplaying  = false;
         --mAlarmCount;
-        mUpdated = true;
     }
 }
 
@@ -3231,10 +3214,7 @@ KAEvent::OccurType KAEvent::Private::setNextOccurrence(const KDateTime& preDateT
         }
     }
     if (changed)
-    {
-        mUpdated = true;
         calcTriggerTimes();
-    }
     return type;
 }
 
@@ -3366,7 +3346,7 @@ void KAEvent::Private::setFirstRecurrence()
     {
         mRecurrence->setStartDateTime(next.effectiveKDateTime(), next.isDateOnly());
         mStartDateTime = mNextMainDateTime = next;
-        mUpdated = changed = true;
+        changed = true;
     }
     mRecurrence->setFrequency(frequency);    // restore the frequency
     if (changed)
@@ -3380,7 +3360,6 @@ void KAEvent::Private::setFirstRecurrence()
 void KAEvent::Private::setRecurrence(const KARecurrence& recurrence)
 {
     startChanges();   // prevent multiple trigger time evaluation here
-    mUpdated = true;
     delete mRecurrence;
     if (recurrence.recurs())
     {
@@ -3421,7 +3400,6 @@ bool KAEvent::Private::setRepetition(const Repetition& repetition)
 {
     // Don't set mRepetition to zero at the start of this function, in case the
     // 'repetition' parameter passed in is a reference to mRepetition.
-    mUpdated    = true;
     mNextRepeat = 0;
     if (repetition  &&  !mRepeatAtLogin)
     {
@@ -3641,10 +3619,7 @@ bool KAEvent::Private::setRecur(RecurrenceRule::PeriodType recurType, int freq, 
         if (!mRecurrence)
             mRecurrence = new KARecurrence;
         if (mRecurrence->init(recurType, freq, count, mNextMainDateTime.kDateTime(), end, feb29))
-        {
-            mUpdated = true;
             return true;
-        }
     }
     clearRecur();
     return false;
@@ -3659,7 +3634,6 @@ void KAEvent::Private::clearRecur()
     mRecurrence = 0;
     mRepetition.set(0, 0);
     mNextRepeat = 0;
-    mUpdated    = true;
 }
 
 /******************************************************************************

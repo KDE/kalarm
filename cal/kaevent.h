@@ -336,23 +336,23 @@ class KALARM_CAL_EXPORT KAEvent
                                                                    { d->setAudioFile(filename, volume, fadeVolume, fadeSeconds, allowEmptyFile); }
         void               setTemplate(const QString& name, int afterTime = -1);
         void               setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError)
-                                                                   { d->mPreAction = pre;  d->mPostAction = post;  d->mCancelOnPreActErr = cancelOnError;  d->mDontShowPreActErr = dontShowError;  d->mUpdated = true; }
+                                                                   { d->mPreAction = pre;  d->mPostAction = post;  d->mCancelOnPreActErr = cancelOnError;  d->mDontShowPreActErr = dontShowError; }
         OccurType          setNextOccurrence(const KDateTime& preDateTime)  { return d->setNextOccurrence(preDateTime); }
         void               setFirstRecurrence()                    { d->setFirstRecurrence(); }
         void               setCategory(KAlarm::CalEvent::Type s)   { d->setCategory(s); }
-        void               setUid(KAlarm::CalEvent::Type s)        { d->mEventID = KAlarm::CalEvent::uid(d->mEventID, s);  d->mUpdated = true; }
-        void               setEventId(const QString& id)           { d->mEventID = id;  d->mUpdated = true; }
+        void               setUid(KAlarm::CalEvent::Type s)        { d->mEventID = KAlarm::CalEvent::uid(d->mEventID, s); }
+        void               setEventId(const QString& id)           { d->mEventID = id; }
 #ifdef USE_AKONADI
         void               setItemId(Akonadi::Item::Id id)         { d->mItemId = id; }
-        void               setCompatibility(KAlarm::Calendar::Compat c) { if (c != d->mCompatibility) { d->mCompatibility = c; d->mUpdated = true; } }
-        void               setReadOnly(bool ro)                    { if (ro != d->mReadOnly) { d->mReadOnly = ro; d->mUpdated = true; } }
+        void               setCompatibility(KAlarm::Calendar::Compat c) { if (c != d->mCompatibility) { d->mCompatibility = c; } }
+        void               setReadOnly(bool ro)                    { if (ro != d->mReadOnly) { d->mReadOnly = ro; } }
 #endif
-        void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt;  d->mUpdated = true; }
-        void               setSaveDateTime(const KDateTime& dt)    { d->mSaveDateTime = dt;  d->mUpdated = true; }
-        void               setLateCancel(int lc)                   { d->mLateCancel = lc;  d->mUpdated = true; }
-        void               setAutoClose(bool ac)                   { d->mAutoClose = ac;  d->mUpdated = true; }
+        void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt; }
+        void               setSaveDateTime(const KDateTime& dt)    { d->mSaveDateTime = dt; }
+        void               setLateCancel(int lc)                   { d->mLateCancel = lc; }
+        void               setAutoClose(bool ac)                   { d->mAutoClose = ac; }
         void               setRepeatAtLogin(bool rl)               { d->setRepeatAtLogin(rl); }
-        void               setExcludeHolidays(bool ex)             { d->mExcludeHolidays = ex;  d->mUpdated = true; }
+        void               setExcludeHolidays(bool ex)             { d->mExcludeHolidays = ex; }
         void               setWorkTimeOnly(bool wto)               { d->mWorkTimeOnly = wto; }
         void               setKMailSerialNumber(unsigned long n)   { d->mKMailSerialNumber = n; }
         void               setLogFile(const QString& logfile);
@@ -361,7 +361,7 @@ class KALARM_CAL_EXPORT KAEvent
                                                                    { return d->defer(dt, reminder, adjustRecurrence); }
         void               cancelDefer()                           { d->cancelDefer(); }
         void               setDeferDefaultMinutes(int minutes, bool dateOnly = false)
-                                                                   { d->mDeferDefaultMinutes = minutes;  d->mDeferDefaultDateOnly = dateOnly;  d->mUpdated = true; }
+                                                                   { d->mDeferDefaultMinutes = minutes;  d->mDeferDefaultDateOnly = dateOnly; }
 #ifdef USE_AKONADI
         bool               setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer)
                                                                    { return d->setDisplaying(*e.d, t, colId, dt, showEdit, showDefer); }
@@ -377,12 +377,10 @@ class KALARM_CAL_EXPORT KAEvent
         void               setCommandError(CmdErrType t, bool writeConfig = true) const
                                                                    { d->setCommandError(t, writeConfig); }
 #endif
-        void               setArchive()                            { d->mArchive = true;  d->mUpdated = true; }
-        void               setEnabled(bool enable)                 { d->mEnabled = enable;  d->mUpdated = true; }
+        void               setArchive()                            { d->mArchive = true; }
+        void               setEnabled(bool enable)                 { d->mEnabled = enable; }
         void               startChanges()                          { d->startChanges(); }
         void               endChanges()                            { d->endChanges(); }
-        void               setUpdated()                            { d->mUpdated = true; }
-        void               clearUpdated() const                    { d->mUpdated = false; }
 #ifdef USE_AKONADI
         void               clearCollectionId()                     { d->mCollectionId = -1; }
 #else
@@ -391,7 +389,7 @@ class KALARM_CAL_EXPORT KAEvent
         void               updateWorkHours() const                 { if (d->mWorkTimeOnly) d->calcTriggerTimes(); }
         void               updateHolidays() const                  { if (d->mExcludeHolidays) d->calcTriggerTimes(); }
         void               removeExpiredAlarm(KAAlarm::Type t)     { d->removeExpiredAlarm(t); }
-        void               incrementRevision()                     { ++d->mRevision;  d->mUpdated = true; }
+        void               incrementRevision()                     { ++d->mRevision; }
 
         const QString&     cleanText() const              { return d->mText; }
         QString            message() const                { return (d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_EMAIL) ? d->mText : QString(); }
@@ -486,7 +484,6 @@ class KALARM_CAL_EXPORT KAEvent
         bool               deferred() const               { return d->mDeferral > 0; }
         bool               toBeArchived() const           { return d->mArchive; }
         bool               enabled() const                { return d->mEnabled; }
-        bool               updated() const                { return d->mUpdated; }
         bool               mainExpired() const            { return d->mMainExpired; }
         bool               expired() const                { return (d->mDisplaying && d->mMainExpired)  ||  d->mCategory == KAlarm::CalEvent::ARCHIVED; }
         KAlarm::CalEvent::Type category() const           { return d->mCategory; }
@@ -759,7 +756,6 @@ class KALARM_CAL_EXPORT KAEvent
                 bool               mDisplayingDefer;   // show Defer button (applies to displaying calendar only)
                 bool               mDisplayingEdit;    // show Edit button (applies to displaying calendar only)
                 bool               mEnabled;           // false if event is disabled
-                mutable bool       mUpdated;           // event has been updated but not written to calendar file
         };
 
         QSharedDataPointer<class Private> d;
