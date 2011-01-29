@@ -256,7 +256,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             int column = index.column();
             if (role == Qt::WhatsThisRole)
                 return whatsThisText(column);
-            KAEvent event = this->event(item);
+            const KAEvent event(this->event(item));
             if (!event.isValid())
                 return QVariant();
             if (role == AlarmActionsRole)
@@ -777,7 +777,7 @@ static bool checkItem_isDisabled(const Item& item)
 {
     if (item.hasPayload<KAEvent>())
     {
-        KAEvent event = item.payload<KAEvent>();
+        const KAEvent event = item.payload<KAEvent>();
         if (event.isValid())
             return !event.enabled();
     }
@@ -799,7 +799,7 @@ static bool checkItem_excludesHolidays(const Item& item)
 {
     if (item.hasPayload<KAEvent>())
     {
-        KAEvent event = item.payload<KAEvent>();
+        const KAEvent event = item.payload<KAEvent>();
         if (event.isValid()  &&  event.holidaysExcluded())
         {
             event.updateHolidays();
@@ -825,7 +825,7 @@ static bool checkItem_workTimeOnly(const Item& item)
 {
     if (item.hasPayload<KAEvent>())
     {
-        KAEvent event = item.payload<KAEvent>();
+        const KAEvent event = item.payload<KAEvent>();
         if (event.isValid()  &&  event.workTimeOnly())
         {
             event.updateWorkHours();
@@ -1243,15 +1243,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::T
             {
                 KAEvent event = item.payload<KAEvent>();
                 if (event.isValid()  &&  event.category() == type)
-                {
-                    event.setItemId(item.id());
-                    if (item.hasAttribute<EventAttribute>())
-                    {
-                        KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
-                        event.setCommandError(err, false);
-                    }
                     events += event;
-                }
             }
         }
         else
@@ -1279,21 +1271,9 @@ KAEvent AkonadiModel::event(Item::Id itemId) const
 
 KAEvent AkonadiModel::event(const Item& item) const
 {
-    if (item.isValid()  &&  item.hasPayload<KAEvent>())
-    {
-        KAEvent event = item.payload<KAEvent>();
-        if (event.isValid())
-        {
-            event.setItemId(item.id());
-            if (item.hasAttribute<EventAttribute>())
-            {
-                KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
-                event.setCommandError(err);
-            }
-        }
-        return event;
-    }
-    return KAEvent();
+    if (!item.isValid()  ||  !item.hasPayload<KAEvent>())
+        return KAEvent();
+    return item.payload<KAEvent>();
 }
 
 #if 0
