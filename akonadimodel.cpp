@@ -1416,7 +1416,6 @@ bool AkonadiModel::setItemPayload(Item& item, KAEvent& event, const Collection& 
         kWarning() << "Invalid mime type for Collection";
         return false;
     }
-    event.clearUpdated();
     item.setMimeType(mimetype);
     item.setPayload<KAEvent>(event);
     return true;
