@@ -1,7 +1,7 @@
 /*
  *  akonadi_serializer_kalarm.cpp  -  Akonadi resource serializer for KAlarm
  *  Program:  kalarm
- *  Copyright © 2009,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -20,12 +20,14 @@
  */
 
 #include "akonadi_serializer_kalarm.h"
+#include "eventattribute.h"
 #include "kacalendar.h"
 #include "kaevent.h"
 #include "kaeventformatter.h"
 
 #include <akonadi/item.h>
 #include <akonadi/abstractdifferencesreporter.h>
+#include <akonadi/attributefactory.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -58,11 +60,25 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
     }
     KAEvent event(i.staticCast<KCalCore::Event>());
     QString mime = KAlarm::CalEvent::mimeType(event.category());
-    if (mime.isEmpty())
+    if (mime.isEmpty()  ||  !event.isValid())
     {
         kWarning(5263) << "Event with uid" << event.id() << "contains no usable alarms!";
         data.seek(0);
         return false;
+    }
+    event.setItemId(item.id());
+
+    // Set additional event data contained in attributes
+    static bool attrRegistered = false;
+    if (!attrRegistered)
+    {
+        AttributeFactory::registerAttribute<KAlarm::EventAttribute>();
+        attrRegistered = true;
+    }
+    if (item.hasAttribute<KAlarm::EventAttribute>())
+    {
+        KAEvent::CmdErrType err = item.attribute<KAlarm::EventAttribute>()->commandError();
+        event.setCommandError(err);
     }
 
     item.setMimeType(mime);
