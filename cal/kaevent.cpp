@@ -313,7 +313,16 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mRevision                = event.mRevision;
     mAlarmCount              = event.mAlarmCount;
     mDeferral                = event.mDeferral;
+    mKMailSerialNumber       = event.mKMailSerialNumber;
+    mTemplateAfterTime       = event.mTemplateAfterTime;
+    mEmailFromIdentity       = event.mEmailFromIdentity;
+    mEmailAddresses          = event.mEmailAddresses;
+    mEmailSubject            = event.mEmailSubject;
+    mEmailAttachments        = event.mEmailAttachments;
     mLogFile                 = event.mLogFile;
+    mSoundVolume             = event.mSoundVolume;
+    mFadeVolume              = event.mFadeVolume;
+    mFadeSeconds             = event.mFadeSeconds;
     mCategory                = event.mCategory;
 #ifdef USE_AKONADI
     mCompatibility           = event.mCompatibility;
@@ -328,7 +337,6 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mBeep                    = event.mBeep;
     mRepeatSound             = event.mRepeatSound;
     mSpeak                   = event.mSpeak;
-    mKMailSerialNumber       = event.mKMailSerialNumber;
     mCopyToKOrganizer        = event.mCopyToKOrganizer;
     mExcludeHolidays         = event.mExcludeHolidays;
     mWorkTimeOnly            = event.mWorkTimeOnly;
@@ -336,14 +344,6 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mMainExpired             = event.mMainExpired;
     mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
     mArchive                 = event.mArchive;
-    mTemplateAfterTime       = event.mTemplateAfterTime;
-    mEmailFromIdentity       = event.mEmailFromIdentity;
-    mEmailAddresses          = event.mEmailAddresses;
-    mEmailSubject            = event.mEmailSubject;
-    mEmailAttachments        = event.mEmailAttachments;
-    mSoundVolume             = event.mSoundVolume;
-    mFadeVolume              = event.mFadeVolume;
-    mFadeSeconds             = event.mFadeSeconds;
     mDisplaying              = event.mDisplaying;
     mDisplayingDefer         = event.mDisplayingDefer;
     mDisplayingEdit          = event.mDisplayingEdit;
