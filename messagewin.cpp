@@ -26,7 +26,6 @@
 #include "autoqpointer.h"
 #ifdef USE_AKONADI
 #include "collectionmodel.h"
-#include "collectionmodel.h"
 #endif
 #include "deferdlg.h"
 #include "desktop.h"
