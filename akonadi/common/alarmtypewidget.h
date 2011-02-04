@@ -19,8 +19,8 @@
  *  02110-1301, USA.
  */
 
-#ifndef KALARM_ALARMTPEWIDGET_H
-#define KALARM_ALARMTPEWIDGET_H
+#ifndef ALARMTYPEWIDGET_H
+#define ALARMTYPEWIDGET_H
 
 #include "ui_alarmtypewidget.h"
 #include "kacalendar.h"
@@ -41,4 +41,4 @@ class AlarmTypeWidget : public QWidget
         Ui::AlarmTypeWidget ui;
 };
 
-#endif // KALARM_ALARMTPEWIDGET_H
+#endif // ALARMTYPEWIDGET_H

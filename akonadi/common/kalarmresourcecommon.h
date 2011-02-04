@@ -19,6 +19,9 @@
  *  02110-1301, USA.
  */
 
+#ifndef KALARMRESOURCECOMMON_H
+#define KALARMRESOURCECOMMON_H
+
 #include "kacalendar.h"
 #include "kaevent.h"
 #include <QObject>
@@ -48,5 +51,7 @@ namespace KAlarmResourceCommon
     };
     QString       errorMessage(ErrorCode, const QString& param = QString());
 }
+
+#endif // KALARMRESOURCECOMMON_H
 
 // vim: et sw=4:
