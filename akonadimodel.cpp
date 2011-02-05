@@ -20,6 +20,7 @@
 
 #include "akonadimodel.h"
 #include "alarmtext.h"
+#include "autoqpointer.h"
 #include "collectionattribute.h"
 #include "eventattribute.h"
 #include "preferences.h"
@@ -1057,7 +1058,10 @@ QString AkonadiModel::whatsThisText(int column) const
 */
 AgentInstanceCreateJob* AkonadiModel::addCollection(KAlarm::CalEvent::Type type, QWidget* parent)
 {
-    AgentTypeDialog dlg(parent);
+    // Use AutoQPointer to guard against crash on application exit while
+    // the dialogue is still open. It prevents double deletion (both on
+    // deletion of parent, and on return from this function).
+    AutoQPointer<AgentTypeDialog> dlg = new AgentTypeDialog(parent);
     QString mimeType;
     switch (type)
     {
@@ -1073,11 +1077,11 @@ AgentInstanceCreateJob* AkonadiModel::addCollection(KAlarm::CalEvent::Type type,
         default:
             return 0;
     }
-    dlg.agentFilterProxyModel()->addMimeTypeFilter(mimeType);
-    dlg.agentFilterProxyModel()->addCapabilityFilter(QLatin1String("Resource"));
-    if (dlg.exec() != QDialog::Accepted)
+    dlg->agentFilterProxyModel()->addMimeTypeFilter(mimeType);
+    dlg->agentFilterProxyModel()->addCapabilityFilter(QLatin1String("Resource"));
+    if (dlg->exec() != QDialog::Accepted)
         return 0;
-    const AgentType agentType = dlg.agentType();
+    const AgentType agentType = dlg->agentType();
     if (!agentType.isValid())
         return 0;
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);

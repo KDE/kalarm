@@ -23,6 +23,7 @@
 
 #include "kalarmdirresource.h"
 #include "kalarmresourcecommon.h"
+#include "autoqpointer.h"
 #include "collectionattribute.h"
 #include "eventattribute.h"
 
@@ -81,8 +82,11 @@ void KAlarmDirResource::aboutToQuit()
 void KAlarmDirResource::configure(WId windowId)
 {
     kDebug();
-    SettingsDialog dlg(windowId, mSettings);
-    if (dlg.exec())
+    // Use AutoQPointer to guard against crash on application exit while
+    // the dialogue is still open. It prevents double deletion (both on
+    // deletion of parent, and on return from this function).
+    AutoQPointer<SettingsDialog> dlg = new SettingsDialog(windowId, mSettings);
+    if (dlg->exec())
     {
         clearCache();
         initializeDirectory();
