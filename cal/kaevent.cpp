@@ -126,6 +126,7 @@ const KHolidays::HolidayRegion* KAEvent::Private::mHolidays = 0;
 QBitArray                       KAEvent::Private::mWorkDays(7);
 QTime                           KAEvent::Private::mWorkDayStart(9, 0, 0);
 QTime                           KAEvent::Private::mWorkDayEnd(17, 0, 0);
+int                             KAEvent::Private::mWorkTimeIndex = 1;
 
 
 struct AlarmData
@@ -219,6 +220,8 @@ KAEvent::Private::Private()
       mDeferral(NO_DEFERRAL),
       mChangeCount(0),
       mTriggerChanged(false),
+      mExcludeHolidays(0),
+      mWorkTimeOnly(0),
       mCategory(KAlarm::CalEvent::EMPTY),
 #ifdef USE_AKONADI
       mCompatibility(KAlarm::Calendar::Current),
@@ -227,8 +230,6 @@ KAEvent::Private::Private()
       mConfirmAck(false),
       mEmailBcc(false),
       mBeep(false),
-      mExcludeHolidays(false),
-      mWorkTimeOnly(false),
       mDisplaying(false)
 { }
 
@@ -320,6 +321,8 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mSoundVolume             = event.mSoundVolume;
     mFadeVolume              = event.mFadeVolume;
     mFadeSeconds             = event.mFadeSeconds;
+    mExcludeHolidays         = event.mExcludeHolidays;
+    mWorkTimeOnly            = event.mWorkTimeOnly;
     mCategory                = event.mCategory;
 #ifdef USE_AKONADI
     mCompatibility           = event.mCompatibility;
@@ -335,8 +338,6 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mRepeatSound             = event.mRepeatSound;
     mSpeak                   = event.mSpeak;
     mCopyToKOrganizer        = event.mCopyToKOrganizer;
-    mExcludeHolidays         = event.mExcludeHolidays;
-    mWorkTimeOnly            = event.mWorkTimeOnly;
     mReminderOnceOnly        = event.mReminderOnceOnly;
     mMainExpired             = event.mMainExpired;
     mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
@@ -386,8 +387,6 @@ void KAEvent::Private::set(const Event* event)
     mCommandXterm           = false;
     mCommandDisplay         = false;
     mCopyToKOrganizer       = false;
-    mExcludeHolidays        = false;
-    mWorkTimeOnly           = false;
     mConfirmAck             = false;
     mArchive                = false;
     mReminderOnceOnly       = false;
@@ -401,6 +400,8 @@ void KAEvent::Private::set(const Event* event)
     mDeferDefaultMinutes    = 0;
     mLateCancel             = 0;
     mKMailSerialNumber      = 0;
+    mExcludeHolidays        = 0;
+    mWorkTimeOnly           = 0;
     mChangeCount            = 0;
     mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
     mFgColour               = QColor(0, 0, 0);          // and black foreground
@@ -464,9 +465,9 @@ void KAEvent::Private::set(const Event* event)
         else if (flags[i] == KORGANIZER_FLAG)
             mCopyToKOrganizer = true;
         else if (flags[i] == EXCLUDE_HOLIDAYS_FLAG)
-            mExcludeHolidays = true;
+            mExcludeHolidays = mHolidays;
         else if (flags[i] == WORK_TIME_ONLY_FLAG)
-            mWorkTimeOnly = true;
+            mWorkTimeOnly = 1;
         else if (flags[i]== KMAIL_SERNUM_FLAG)
         {
             unsigned long n = flags[i + 1].toULong(&ok);
@@ -1151,7 +1152,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mCommandXterm           = flags & EXEC_IN_XTERM;
     mCommandDisplay         = flags & DISPLAY_COMMAND;
     mCopyToKOrganizer       = flags & COPY_KORGANIZER;
-    mExcludeHolidays        = flags & EXCL_HOLIDAYS;
+    mExcludeHolidays        = (flags & EXCL_HOLIDAYS) ? mHolidays : 0;
     mWorkTimeOnly           = flags & WORK_TIME_ONLY;
     mEmailBcc               = flags & EMAIL_BCC;
     mEnabled                = !(flags & DISABLED);
@@ -1281,12 +1282,33 @@ void KAEvent::Private::setReminder(int minutes, bool onceOnly)
     }
 }
 
+/******************************************************************************
+* Set a new holiday region.
+* Alarms which exclude holidays record the pointer to the holiday definition
+* at the time their next trigger times were last calculated. The change in
+* holiday definition pointer will cause their next trigger times to be
+* recalculated.
+*/
 void KAEvent::setHolidays(const HolidayRegion& h)
 {
     Private::mHolidays = &h;
-#ifdef __GNUC__
-#warning This and working time change should recalculate all exclude-holidays alarms
-#endif
+}
+
+/******************************************************************************
+* Set new working days and times.
+* Increment a counter so that working-time-only alarms can detect that they
+* need to update their next trigger time.
+*/
+void KAEvent::setWorkTime(const QBitArray& days, const QTime& start, const QTime& end)
+{
+    if (days != Private::mWorkDays  ||  start != Private::mWorkDayStart  ||  end != Private::mWorkDayEnd)
+    {
+        Private::mWorkDays     = days;
+        Private::mWorkDayStart = start;
+        Private::mWorkDayEnd   = end;
+        if (!++Private::mWorkTimeIndex)
+            ++Private::mWorkTimeIndex;
+    }
 }
 
 DateTime KAEvent::nextTrigger(TriggerType type) const
@@ -1326,9 +1348,23 @@ void KAEvent::Private::endChanges()
 */
 void KAEvent::Private::calcTriggerTimes() const
 {
-    if (mChangeCount  ||  !mTriggerChanged)
+    if (mChangeCount)
+        return;
+    if ((mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
+    ||  (mExcludeHolidays  &&  mExcludeHolidays != mHolidays))
+    {
+        // It's a work time alarm, and work days/times have changed, or
+        // it excludes holidays, and the holidays definition has changed.
+        mTriggerChanged = true;
+    }
+    else if (!mTriggerChanged)
         return;
     mTriggerChanged = false;
+    if (mWorkTimeOnly)
+        mWorkTimeOnly = mWorkTimeIndex;   // note which work time definition was used in calculation
+    if (mExcludeHolidays)
+        mExcludeHolidays = mHolidays;     // note which holiday definition was used in calculation
+
     if (mCategory == KAlarm::CalEvent::ARCHIVED  ||  mCategory == KAlarm::CalEvent::TEMPLATE)
     {
         // It's a template or archived
@@ -4538,7 +4574,7 @@ void KAEvent::Private::dumpDebug() const
     }
     kDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
     kDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
-    kDebug() << "-- mExcludeHolidays:" << mExcludeHolidays;
+    kDebug() << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
     kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
     kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
     kDebug() << "-- mSaveDateTime:" << mSaveDateTime;

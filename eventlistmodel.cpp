@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.cpp  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -463,7 +463,6 @@ void EventListModel::slotUpdateHolidays()
     {
         if (mEvents[row]->holidaysExcluded())
         {
-            mEvents[row]->updateHolidays();
             // For efficiency, emit a single signal for each group
             // of consecutive alarms to update, rather than a separate
             // signal for each alarm.
@@ -497,7 +496,6 @@ void EventListModel::slotUpdateWorkingHours()
     {
         if (mEvents[row]->workTimeOnly())
         {
-            mEvents[row]->updateWorkHours();
             // For efficiency, emit a single signal for each group
             // of consecutive alarms to update, rather than a separate
             // signal for each alarm.

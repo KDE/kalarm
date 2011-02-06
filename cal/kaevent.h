@@ -352,7 +352,7 @@ class KALARM_CAL_EXPORT KAEvent
         void               setLateCancel(int lc)                   { d->mLateCancel = lc; }
         void               setAutoClose(bool ac)                   { d->mAutoClose = ac; }
         void               setRepeatAtLogin(bool rl)               { d->setRepeatAtLogin(rl); }
-        void               setExcludeHolidays(bool ex)             { d->mExcludeHolidays = ex; d->mTriggerChanged = true; }
+        void               setExcludeHolidays(bool ex)             { d->mExcludeHolidays = ex ? Private::mHolidays : 0; d->mTriggerChanged = true; }
         void               setWorkTimeOnly(bool wto)               { d->mWorkTimeOnly = wto; d->mTriggerChanged = true; }
         void               setKMailSerialNumber(unsigned long n)   { d->mKMailSerialNumber = n; }
         void               setLogFile(const QString& logfile);
@@ -386,8 +386,6 @@ class KALARM_CAL_EXPORT KAEvent
 #else
         void               clearResourceId()                       { d->mResourceId.clear(); }
 #endif
-        void               updateWorkHours() const                 { if (d->mWorkTimeOnly) d->mTriggerChanged = true; }
-        void               updateHolidays() const                  { if (d->mExcludeHolidays) d->mTriggerChanged = true; }
         void               removeExpiredAlarm(KAAlarm::Type t)     { d->removeExpiredAlarm(t); }
         void               incrementRevision()                     { ++d->mRevision; }
 
@@ -557,8 +555,7 @@ class KALARM_CAL_EXPORT KAEvent
         static void setDefaultFont(const QFont& f)        { Private::mDefaultFont = f; }
         static void setStartOfDay(const QTime&);
         static void setHolidays(const KHolidays::HolidayRegion&);
-        static void setWorkTime(const QBitArray& days, const QTime& start, const QTime& end)
-                                                          { Private::mWorkDays = days;  Private::mWorkDayStart = start;  Private::mWorkDayEnd = end; }
+        static void setWorkTime(const QBitArray& days, const QTime& start, const QTime& end);
 
     private:
 #ifdef USE_AKONADI
@@ -685,6 +682,7 @@ class KALARM_CAL_EXPORT KAEvent
                 static QBitArray   mWorkDays;          // working days of the week
                 static QTime       mWorkDayStart;      // start time of the working day
                 static QTime       mWorkDayEnd;        // end time of the working day
+                static int         mWorkTimeIndex;     // incremented every time working days/times are changed
 #ifndef USE_AKONADI
                 AlarmResource*     mResource;          // resource which owns the event (for convenience - not used by this class)
 #endif
@@ -731,6 +729,9 @@ class KALARM_CAL_EXPORT KAEvent
                 float              mSoundVolume;       // volume for sound file, or < 0 for unspecified
                 float              mFadeVolume;        // initial volume for sound file, or < 0 for no fade
                 int                mFadeSeconds;       // fade time for sound file, or 0 if none
+                mutable const KHolidays::HolidayRegion*
+                                   mExcludeHolidays;   // non-null to not trigger alarms on holidays (= mHolidays when trigger calculated)
+                mutable int        mWorkTimeOnly;      // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
                 KAlarm::CalEvent::Type mCategory;      // event category (active, archived, template, ...)
 #ifdef USE_AKONADI
                 KAlarm::Calendar::Compat mCompatibility; // event's storage format compatibility
@@ -746,8 +747,6 @@ class KALARM_CAL_EXPORT KAEvent
                 bool               mRepeatSound;       // whether to repeat the sound file while the alarm is displayed
                 bool               mSpeak;             // whether to speak the message when the alarm is displayed
                 bool               mCopyToKOrganizer;  // KOrganizer should hold a copy of the event
-                bool               mExcludeHolidays;   // don't trigger alarms on holidays
-                bool               mWorkTimeOnly;      // trigger alarm only during working hours
                 bool               mReminderOnceOnly;  // the reminder is output only for the first recurrence
                 bool               mMainExpired;       // main alarm has expired (in which case a deferral alarm will exist)
                 bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login

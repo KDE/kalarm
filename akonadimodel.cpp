@@ -793,8 +793,6 @@ void AkonadiModel::slotUpdateDisabledColour(const QColor&)
 
 /******************************************************************************
 * Called when the definition of holidays has changed.
-* Update the next trigger time for all alarms which are set to recur only on
-* non-holidays.
 */
 static bool checkItem_excludesHolidays(const Item& item)
 {
@@ -802,10 +800,7 @@ static bool checkItem_excludesHolidays(const Item& item)
     {
         const KAEvent event = item.payload<KAEvent>();
         if (event.isValid()  &&  event.holidaysExcluded())
-        {
-            event.updateHolidays();
             return true;
-        }
     }
     return false;
 }
@@ -819,8 +814,6 @@ void AkonadiModel::slotUpdateHolidays()
 
 /******************************************************************************
 * Called when the definition of working hours has changed.
-* Update the next trigger time for all alarms which are set to recur only
-* during working hours.
 */
 static bool checkItem_workTimeOnly(const Item& item)
 {
@@ -828,10 +821,7 @@ static bool checkItem_workTimeOnly(const Item& item)
     {
         const KAEvent event = item.payload<KAEvent>();
         if (event.isValid()  &&  event.workTimeOnly())
-        {
-            event.updateWorkHours();
             return true;
-        }
     }
     return false;
 }
