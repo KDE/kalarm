@@ -28,6 +28,7 @@
 #include <QMouseEvent>
 #include <QStyleOptionSpinBox>
 #include <QGraphicsPixmapItem>
+#include <QPaintEngine>
 #include <QTimer>
 #include <QFrame>
 #include <QBrush>
@@ -47,6 +48,8 @@ static const char* mirrorStyles[] = {
     0    // list terminator
 };
 static bool isMirrorStyle(const QStyle*);
+static bool isOxygenStyle(const QWidget*);
+static QRect spinBoxEditFieldRect(const QWidget*, const QStyleOptionSpinBox&);
 
 static inline QPixmap grabWidget(QWidget* w, QRect r = QRect())
 {
@@ -402,9 +405,9 @@ void SpinBox2::getMetrics() const
                   | udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
     if (style()->inherits("PlastikStyle"))
         butRect.setLeft(butRect.left() - 1);    // Plastik excludes left border from spin widget rectangle
-    QRect r = mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
+    QRect r = spinBoxEditFieldRect(mSpinbox, option);
     wSpinboxHide = mRightToLeft ? mSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxFrame).right() - r.right() : r.left();
-    QRect edRect = udStyle->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
+    QRect edRect = spinBoxEditFieldRect(mUpdown2, option);
     int butx;
     if (isMirrorStyle(udStyle))
     {
@@ -565,7 +568,7 @@ void SpinMirror::setFrame()
     QGraphicsScene* c = scene();
     QStyleOptionSpinBox option;
     option.initFrom(mMainSpinbox);
-    QRect r = mMainSpinbox->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
+    QRect r = spinBoxEditFieldRect(mMainSpinbox, option);
     bool rtl = QApplication::isRightToLeft();
     QPixmap p;
     if (mMirrored)
@@ -575,17 +578,30 @@ void SpinMirror::setFrame()
     }
     else
     {
-        int x = rtl ? r.right() - 2 : r.left() + 2;
-        p = grabWidget(mMainSpinbox, QRect(x, 0, 1, height())).scaled(size());
+        // Grab a single pixel wide vertical slice through the main spinbox, between the
+        // frame and edit field.
+        bool oxygen  = mMainSpinbox->style()->inherits("Oxygen::Style"); // KDE >= 4.4 Oxygen style
+        bool oxygen1 = mMainSpinbox->style()->inherits("OxygenStyle");   // KDE <= 4.3 Oxygen style
+        int editOffsetY = oxygen ? 5 : oxygen1 ? 6 : 2;   // offset to edit field
+        int editOffsetX = (oxygen || oxygen1) ? (KDE::version() >= KDE_MAKE_VERSION(4,6,0) ? 4 : 2) : 2;   // offset to edit field
+        int x = rtl ? r.right() - editOffsetX : r.left() + editOffsetX;
+        p = grabWidget(mMainSpinbox, QRect(x, 0, 1, height()));
+        // Blot out edit field stuff from the middle of the slice
+        QPixmap dot = grabWidget(mMainSpinbox, QRect(x, editOffsetY, 1, 1));
+        QPaintEngine* pe = p.paintEngine();
+        pe->drawTiledPixmap(QRectF(0, editOffsetY, 1, height() - 2*editOffsetY), dot, QPointF(0, 0));
+        // Horizontally fill the mirror widget with the vertical slice
+        p = p.scaled(size());
+        // Grab the left hand border of the main spinbox, and draw it into the mirror widget.
         QRect endr = rect();
         if (rtl)
         {
             int mr = mMainSpinbox->width() - 1;
-            endr.setWidth(mr - r.right() + 2);
+            endr.setWidth(mr - r.right() + editOffsetX);
             endr.moveRight(mr);
         }
         else
-            endr.setWidth(r.left() + 2);
+            endr.setWidth(r.left() + editOffsetX);
         x = rtl ? width() - endr.width() : 0;
         mMainSpinbox->render(&p, QPoint(x, 0), endr, QWidget::DrawWindowBackground | QWidget::DrawChildren | QWidget::IgnoreMask);
     }
@@ -600,7 +616,7 @@ void SpinMirror::setButtons()
     QStyle* st = mSpinbox->style();
     QRect r = st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxUp)
             | st->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxDown);
-    if (st->inherits("OxygenStyle"))
+    if (isOxygenStyle(mSpinbox))
     {
         // They don't use all their height, so shorten them to 
         // allow frame highlighting to work properly.
@@ -617,7 +633,7 @@ void SpinMirror::setButtonPos(const QPoint& pos)
     //kDebug()<<pos;
     int x = pos.x();
     int y = pos.y();
-    if (style()->inherits("OxygenStyle"))
+    if (isOxygenStyle(this))
     {
         // Oxygen spin buttons don't use all their height. Prevent
         // the top overlapping the frame highlighting. Their height
@@ -743,6 +759,22 @@ static bool isMirrorStyle(const QStyle* style)
         if (style->inherits(*s))
             return true;
     return false;
+}
+
+static bool isOxygenStyle(const QWidget* w)
+{
+    return w->style()->inherits("Oxygen::Style")  ||  w->style()->inherits("OxygenStyle");
+}
+
+static QRect spinBoxEditFieldRect(const QWidget* w, const QStyleOptionSpinBox& option)
+{
+    QRect r = w->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
+    if (isOxygenStyle(w))
+    {
+        int xadjust = (KDE::version() >= KDE_MAKE_VERSION(4,6,0)) ? 3 : 2;
+        r.adjust(xadjust, 2, -xadjust, -2);
+    }
+    return r;
 }
 
 // vim: et sw=4:
