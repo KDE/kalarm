@@ -2,6 +2,7 @@
 Name=KAlarm Directory
 Name[de]=KAlarm-Ordner
 Name[en_GB]=KAlarm Directory
+Name[es]=Directorio de KAlarm
 Name[et]=KAlarmi kataloog
 Name[fr]=Dossier KAlarm
 Name[gl]=Directorio de KAlarm
@@ -20,6 +21,7 @@ Name[zh_TW]=KAlarm 目錄
 Comment=Loads data from a local KAlarm folder
 Comment[de]=Laden von Daten aus einem lokalen KAlarm-Ordner
 Comment[en_GB]=Loads data from a local KAlarm folder
+Comment[es]=Carga datos de una carpeta local de KAlarm
 Comment[et]=Andmete laadimine kohalikust KAlarmi kataloogist
 Comment[fr]=Charge des données d'un dossier local KAlarm
 Comment[gl]=Carga datos desde un cartafol local de KAlarm
