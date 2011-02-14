@@ -1583,12 +1583,15 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
         const Collection collection = ix.data(CollectionRole).value<Collection>();
         if (collection.isValid())
         {
+            // A collection has been inserted
             QSet<QByteArray> attrs;
             attrs += CollectionAttribute::name();
             slotCollectionChanged(collection, attrs);
+            emit collectionAdded(collection);
         }
         else
         {
+            // An item has been inserted
             const Item item = ix.data(ItemRole).value<Item>();
             if (item.isValid())
             {

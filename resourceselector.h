@@ -28,6 +28,8 @@
 #ifdef USE_AKONADI
 #include "akonadimodel.h"
 #include "collectionmodel.h"
+
+#include <akonadi/agentinstance.h>
 #else
 #include "alarmresource.h"
 #include "alarmresources.h"
@@ -36,6 +38,9 @@
 #include <QModelIndex>
 #include <QFrame>
 #include <QSize>
+#ifdef USE_AKONADI
+#include <QList>
+#endif
 
 class QPushButton;
 class QResizeEvent;
@@ -48,7 +53,10 @@ class ResourceView;
 #ifdef USE_AKONADI
 class AkonadiModel;
 class CollectionFilterCheckListModel;
-namespace Akonadi { class Collection; }
+namespace Akonadi {
+    class Collection;
+    class AgentInstanceCreateJob;
+}
 #else
 using KCal::ResourceCalendar;
 #endif
@@ -93,6 +101,8 @@ class ResourceSelector : public QFrame
         void  showInfo();
         void  archiveDaysChanged(int days);
 #ifdef USE_AKONADI
+        void  resourceAdded(Akonadi::AgentInstanceCreateJob*, bool success);
+        void  slotCollectionAdded(const Akonadi::Collection&);
         void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&);
 #else
         void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
@@ -105,6 +115,8 @@ class ResourceSelector : public QFrame
         Akonadi::Collection currentResource() const;
 
         CollectionView* mListView;
+        QList<Akonadi::AgentInstanceCreateJob*> mAddJobs;   // AkonadiModel::addCollection() jobs pending
+        QList<Akonadi::AgentInstance> mAddAgents;   // agent added by addResource()
 #else
         AlarmResource*  currentResource() const;
 

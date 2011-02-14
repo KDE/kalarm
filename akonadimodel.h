@@ -172,6 +172,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          */
         void collectionAdded(Akonadi::AgentInstanceCreateJob*, bool success);
 
+        /** Signal emitted when a collection has been added to the model. */
+        void collectionAdded(const Akonadi::Collection&);
+
         /** Signal emitted when a collection's enabled or read-only status has changed. */
         void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& newValue);
 

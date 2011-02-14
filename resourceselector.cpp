@@ -146,6 +146,10 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 #ifdef USE_AKONADI
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
                                       SLOT(slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::AgentInstanceCreateJob*, bool)),
+                                      SLOT(resourceAdded(Akonadi::AgentInstanceCreateJob*, bool)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionAdded(const Akonadi::Collection&)),
+                                      SLOT(slotCollectionAdded(const Akonadi::Collection&)));
 #else
     connect(mCalendar, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
 #endif
@@ -219,7 +223,9 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 void ResourceSelector::addResource()
 {
 #ifdef USE_AKONADI
-    AkonadiModel::instance()->addCollection(mCurrentAlarmType, this);
+    AgentInstanceCreateJob* job = AkonadiModel::instance()->addCollection(mCurrentAlarmType, this);
+    if (job)
+        mAddJobs += job;
 #else
     AlarmResourceManager* manager = mCalendar->resourceManager();
     QStringList descs = manager->resourceTypeDescriptions();
@@ -258,6 +264,50 @@ void ResourceSelector::addResource()
     }
 #endif
 }
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Called when the job started by AkonadiModel::addCollection() has completed.
+*/
+void ResourceSelector::resourceAdded(AgentInstanceCreateJob* job, bool success)
+{
+    int i = mAddJobs.indexOf(job);
+    if (i >= 0)
+    {
+        if (success)
+        {
+            AgentInstance agent = job->instance();
+            if (agent.isValid())
+                mAddAgents += agent;
+        }
+        mAddJobs.removeAt(i);
+    }
+}
+
+/******************************************************************************
+* Called when a collection is added to the AkonadiModel.
+*/
+void ResourceSelector::slotCollectionAdded(const Collection& collection)
+{
+    if (collection.isValid())
+    {
+        AgentInstance agent = AgentManager::self()->instance(collection.resource());
+        if (agent.isValid())
+        {
+            int i = mAddAgents.indexOf(agent);
+            if (i >= 0)
+            {
+                KAlarm::CalEvent::Types types = KAlarm::CalEvent::types(collection.contentMimeTypes());
+                CollectionControlModel::setEnabled(collection, types, true);
+#ifdef __GNUC__
+#warning Display collection list for one of the selected alarm types?
+#endif
+                mAddAgents.removeAt(i);
+            }
+        }
+    }
+}
+#endif
 
 /******************************************************************************
 * Edit the currently selected resource.

@@ -149,8 +149,10 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         /** Return whether a collection is enabled (and valid). */
         static bool isEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type);
 
-        /** Enable or disable a collection (if it is valid) for a specified alarm type. */
-        static void setEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type, bool enabled);
+        /** Enable or disable a collection (if it is valid) for specified alarm types.
+         *  Note that this only changes the status for the specified alarm types.
+         */
+        static void setEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Types, bool enabled);
 
         /** Return whether a collection is both enabled and fully writable for a
          *  given alarm type, i.e. with create/delete/change rights and compatible

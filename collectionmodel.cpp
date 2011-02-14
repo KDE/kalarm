@@ -553,9 +553,9 @@ bool CollectionControlModel::isEnabled(const Collection& collection, KAlarm::Cal
        &&  col.attribute<CollectionAttribute>()->isEnabled(type);
 }
 
-void CollectionControlModel::setEnabled(const Collection& collection, KAlarm::CalEvent::Type type, bool enabled)
+void CollectionControlModel::setEnabled(const Collection& collection, KAlarm::CalEvent::Types types, bool enabled)
 {
-    kDebug() << "id:" << collection.id() << ", alarm type" << type << "->" << enabled;
+    kDebug() << "id:" << collection.id() << ", alarm types" << types << "->" << enabled;
     if (!collection.isValid()  ||  (!enabled && !instance()->collections().contains(collection)))
         return;
     Collection col = collection;
@@ -563,9 +563,9 @@ void CollectionControlModel::setEnabled(const Collection& collection, KAlarm::Ca
     KAlarm::CalEvent::Types alarmTypes = !col.hasAttribute<CollectionAttribute>() ? KAlarm::CalEvent::EMPTY
                                          : col.attribute<CollectionAttribute>()->enabled();
     if (enabled)
-        alarmTypes |= static_cast<KAlarm::CalEvent::Types>(type & KAlarm::CalEvent::ALL);
+        alarmTypes |= static_cast<KAlarm::CalEvent::Types>(types & KAlarm::CalEvent::ALL);
     else
-        alarmTypes &= ~type;
+        alarmTypes &= ~types;
     instance()->statusChanged(collection, AkonadiModel::Enabled, static_cast<int>(alarmTypes));
 }
 
