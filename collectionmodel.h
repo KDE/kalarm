@@ -71,6 +71,7 @@ class CollectionCheckListModel : public Future::KCheckableProxyModel
         explicit CollectionCheckListModel(KAlarm::CalEvent::Type, QObject* parent = 0);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
+        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
         virtual bool setData(const QModelIndex&, const QVariant& value, int role);
 
     private slots:
@@ -86,7 +87,9 @@ class CollectionCheckListModel : public Future::KCheckableProxyModel
 
 /*=============================================================================
 = Class: CollectionFilterCheckListModel
-= Proxy model providing a checkable collection list, for a given alarm type.
+= Proxy model providing a checkable collection list. The model contains all
+= alarm types, but returns only one type at any given time. The selected alarm
+= type may be changed as desired.
 =============================================================================*/
 class CollectionFilterCheckListModel : public QSortFilterProxyModel
 {

@@ -146,7 +146,6 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         case Qt::AccessibleTextRole:
         case Qt::ToolTipRole:
         case Qt::CheckStateRole:
-        case Qt::FontRole:
         case SortRole:
         case ValueRole:
         case StatusRole:
@@ -193,25 +192,6 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                     return (collection.rights() & writableRights) == writableRights ? Qt::darkGreen : Qt::green;
                 if (mimeTypes.contains(KAlarm::MIME_TEMPLATE))
                     return (collection.rights() & writableRights) == writableRights ? Qt::darkBlue : Qt::blue;
-                break;
-            }
-            case Qt::FontRole:
-            {
-                if (!collection.hasAttribute<CollectionAttribute>())
-                    break;
-                CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
-                if (!attr->enabled())
-                    break;
-                QStringList mimeTypes = collection.contentMimeTypes();
-                if ((mimeTypes.contains(KAlarm::MIME_ACTIVE)  &&  attr->isStandard(KAlarm::CalEvent::ACTIVE))
-                ||  (mimeTypes.contains(KAlarm::MIME_ARCHIVED)  &&  attr->isStandard(KAlarm::CalEvent::ARCHIVED))
-                ||  (mimeTypes.contains(KAlarm::MIME_TEMPLATE)  &&  attr->isStandard(KAlarm::CalEvent::TEMPLATE)))
-                {
-                    // It's the standard collection for a mime type
-                    QFont font = mFont;
-                    font.setBold(true);
-                    return font;
-                }
                 break;
             }
             case Qt::ToolTipRole:
@@ -495,11 +475,6 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 updateCollection = true;
                 break;
             }
-            case Qt::FontRole:
-                // Set the font used in all views.
-                // This enables data(index, Qt::FontRole) to return bold when appropriate.
-                mFont = value.value<QFont>();
-                return true;
             case EnabledRole:
             {
                 KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());

@@ -29,7 +29,6 @@
 #include <QSize>
 #include <QColor>
 #include <QMap>
-#include <QFont>
 #include <QQueue>
 
 namespace Akonadi {
@@ -278,7 +277,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
         QList<Akonadi::Collection::Id> mCollectionsDeleting;  // collections currently being removed
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
-        QFont           mFont;
 };
 
 #endif // AKONADIMODEL_H
