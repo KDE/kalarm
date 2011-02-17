@@ -401,6 +401,9 @@ void ResourceSelector::removeResource()
                                       "while expired alarms are configured to be kept."));
         return;
     }
+#ifdef __GNUC__
+#warning Ensure default calendars are identified sufficiently (Akonadi only)
+#endif
     QString text = std ? i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name)
                        : i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
     if (KMessageBox::warningContinueCancel(this, text, "", KStandardGuiItem::remove()) == KMessageBox::Cancel)
@@ -552,8 +555,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<KAlarm::CalEvent::Type>(type))  &&  resource->standardResource());
 #endif
     mActionSetDefault->setChecked(active && writable && standard);
-    bool allowChange = (type == KAlarm::CalEvent::ARCHIVED  &&  !Preferences::archivedKeepDays());
-    mActionSetDefault->setEnabled(active && writable && (!standard || allowChange));
+    mActionSetDefault->setEnabled(active && writable);
     mContextMenu->popup(mListView->viewport()->mapToGlobal(viewportPos));
 }
 
