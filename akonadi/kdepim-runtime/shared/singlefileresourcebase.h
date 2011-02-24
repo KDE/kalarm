@@ -69,6 +69,12 @@ class SingleFileResourceBase : public ResourceBase, public AgentBase::Observer
      */
     virtual void writeFile( bool taskContext = false ) = 0;
 
+     /*
+      * Same method as above, but uses a QVariant so it can
+      * be called from Akonadi::ResourceScheduler.
+      */
+    virtual void writeFile( const QVariant &taskContext ) = 0;
+
   protected:
     /**
      * Returns a pointer to the KConfig object which is used to store runtime

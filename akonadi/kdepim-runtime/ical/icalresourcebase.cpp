@@ -89,23 +89,35 @@ void ICalResourceBase::customizeConfigDialog( SingleFileResourceConfigDialog<Set
 bool ICalResourceBase::readFromFile( const QString &fileName )
 {
   mCalendar = KCalCore::MemoryCalendar::Ptr( new KCalCore::MemoryCalendar( QLatin1String( "UTC" ) ) );
-
   mFileStorage = KCalCore::FileStorage::Ptr( new KCalCore::FileStorage( mCalendar, fileName,
-                                                                 new KCalCore::ICalFormat() ) );
+                                                                        new KCalCore::ICalFormat() ) );
+  const bool result = mFileStorage->load();
+  if ( !result ) {
+    kError() << "Error loading file " << fileName;
+  }
 
-  return mFileStorage->load();
+  return result;
 }
 
 void ICalResourceBase::itemRemoved( const Akonadi::Item &item )
 {
   if ( !mCalendar ) {
+    kError() << "mCalendar is 0!";
     cancelTask( i18n("Calendar not loaded.") );
     return;
   }
 
   Incidence::Ptr i = mCalendar->incidence( item.remoteId() );
   if ( i ) {
-    mCalendar->deleteIncidence( i );
+    if ( !mCalendar->deleteIncidence( i ) ) {
+      kError() << "Can't delete incidence with uid " << item.remoteId()
+               << "; item.id() = " << item.id();
+      cancelTask();
+      return;
+    }
+  } else {
+    kError() << "Can't find incidence with uid " << item.remoteId()
+             << "; item.id() = " << item.id();
   }
   scheduleWrite();
   changeProcessed();
@@ -116,12 +128,15 @@ void ICalResourceBase::retrieveItems( const Akonadi::Collection &col )
   reloadFile();
   if ( mCalendar ) {
     doRetrieveItems( col );
+  } else {
+    kError() << "mCalendar is 0!";
   }
 }
 
 bool ICalResourceBase::writeToFile( const QString &fileName )
 {
   if ( !mCalendar ) {
+    kError() << "mCalendar is 0!";
     return false;
   }
 
@@ -134,6 +149,7 @@ bool ICalResourceBase::writeToFile( const QString &fileName )
 
   bool success = true;
   if ( !fileStorage->save() ) {
+    kError() << "Failed to save calendar to file " + fileName;
     emit error( i18n("Failed to save calendar file to %1", fileName ) );
     success = false;
   }

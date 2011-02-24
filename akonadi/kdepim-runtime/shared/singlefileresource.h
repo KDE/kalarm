@@ -154,6 +154,11 @@ class SingleFileResource : public SingleFileResourceBase
       }
     }
 
+    void writeFile( const QVariant &task_context )
+    {
+      writeFile( task_context.canConvert<bool>() && task_context.toBool() );
+    }
+
     /**
      * Write changes to the backend file.
      */
