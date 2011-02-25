@@ -785,7 +785,7 @@ bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
         QString std = CollectionControlModel::isStandard(collection, alarmType)
                 ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
                 : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
-        QString text = name.isEmpty()
+        QString text = (name.isEmpty() || name == id)
                      ? i18nc("@info",
                              "<title>%1</title>"
                              "Contents: %2<nl/>"
