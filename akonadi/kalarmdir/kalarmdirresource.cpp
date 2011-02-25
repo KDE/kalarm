@@ -68,6 +68,7 @@ KAlarmDirResource::KAlarmDirResource(const QString& id)
     connect(mSettings, SIGNAL(configChanged()), SLOT(settingsChanged()));
 
     changeRecorder()->itemFetchScope().fetchFullPayload();
+    changeRecorder()->fetchCollection(true);
 }
 
 KAlarmDirResource::~KAlarmDirResource()
@@ -299,7 +300,7 @@ bool KAlarmDirResource::cancelIfReadOnly()
 {
     if (mSettings->readOnly())
     {
-        kWarning(5950) << "Calendar is read-only:" << directoryName();
+        kWarning() << "Calendar is read-only:" << directoryName();
         emit error(i18nc("@info", "Trying to write to a read-only calendar: '%1'", directoryName()));
         cancelTask();
         return true;
@@ -312,7 +313,6 @@ bool KAlarmDirResource::cancelIfReadOnly()
 */
 bool KAlarmDirResource::writeToFile(const KAEvent& event)
 {
-    kDebug() << event.id();
     Event::Ptr kcalEvent(new Event);
     event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     MemoryCalendar::Ptr calendar(new MemoryCalendar(QLatin1String("UTC")));
@@ -320,7 +320,7 @@ bool KAlarmDirResource::writeToFile(const KAEvent& event)
     calendar->addIncidence(kcalEvent);
 
     QString fileName = directoryFileName(event.id());
-    kDebug(5950)<<fileName;
+    kDebug() << event.id() << " File:" << fileName;
     FileStorage::Ptr fileStorage(new FileStorage(calendar, fileName, new ICalFormat()));
     if (!fileStorage->save())
     {
@@ -342,7 +342,6 @@ void KAlarmDirResource::retrieveCollections()
     c.setRemoteId(directoryName());
     const QString display = mSettings->displayName();
     c.setName(display.isEmpty() ? name() : display);
-kDebug(5950)<<"display name="<<display<<", name="<<name()<<", id="<<identifier();
     c.setContentMimeTypes(mSettings->alarmTypes());
     if (mSettings->readOnly())
     {
@@ -419,25 +418,21 @@ void KAlarmDirResource::collectionChanged(const Akonadi::Collection& collection)
     kDebug();
     // If the collection has a new display name, set the resource's display
     // name the same, and save to the settings.
-    QString newName;
+    QString newName = collection.name();
     EntityDisplayAttribute* attr = 0;
     if (collection.hasAttribute<EntityDisplayAttribute>())
     {
         attr = collection.attribute<EntityDisplayAttribute>();
-        newName = attr->displayName();
+        if (!attr->displayName().isEmpty())
+            newName = attr->displayName();
     }
-    const QString oldName = mSettings->displayName();
-    if (newName != oldName)
+    if (!newName.isEmpty()  &&  newName != name())
+        setName(newName);
+    if (newName != mSettings->displayName())
     {
         mSettings->setDisplayName(newName);
         mSettings->writeConfig();
     }
-
-    newName = collection.name();
-    if (attr && !attr->displayName().isEmpty())
-        newName = attr->displayName();
-    if (newName != name())
-        setName(newName);
 
     changeCommitted(collection);
 }
@@ -464,7 +459,7 @@ void KAlarmDirResource::initializeDirectory() const
     // If folder does not exist, create it
     if (!dir.exists())
     {
-        kDebug(5950) << "Creating" << dirPath;
+        kDebug() << "Creating" << dirPath;
         QDir::root().mkpath(dirPath);
     }
 
