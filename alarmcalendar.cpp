@@ -1192,8 +1192,9 @@ void AlarmCalendar::purgeEvents(const KAEvent::List& events)
 * is used or the user is prompted, depending on policy. If 'noPrompt' is true,
 * the user will not be prompted so that if no default resource is defined, the
 * function will fail.
-* Reply = true if 'event' was written to the calendar, in which case ownership
-*              of 'event' is taken by the calendar. 'event' is updated.
+* Reply = true if 'event' was written to the calendar, in which case (not
+*              Akonadi) ownership of 'event' is taken by the calendar. 'event'
+*              is updated.
 *       = false if an error occurred, in which case 'event' is unchanged.
 */
 #ifdef USE_AKONADI
@@ -1427,13 +1428,22 @@ void AlarmCalendar::addNewEvent(AlarmResource* resource, KAEvent* event)
 * Modify the specified event in the calendar with its new contents.
 * The new event must have a different event ID from the old one.
 * It is assumed to be of the same event type as the old one (active, etc.)
-* Reply = true if 'newEvent' was written to the calendar, in which case ownership
-*              of 'newEvent' is taken by the calendar. 'newEvent' is updated.
+* Reply = true if 'newEvent' was written to the calendar, in which case (not
+*              Akonadi) ownership of 'newEvent' is taken by the calendar.
+*              'newEvent' is updated.
 *       = false if an error occurred, in which case 'newEvent' is unchanged.
 */
+#ifdef USE_AKONADI
+bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent& newEvent)
+#else
 bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
+#endif
 {
+#ifdef USE_AKONADI
+    QString newId = newEvent.id();
+#else
     QString newId = newEvent->id();
+#endif
     bool noNewId = newId.isEmpty();
     if (!noNewId  &&  oldEventId == newId)
     {
@@ -1453,22 +1463,19 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
             kError() << "Old event not found";
             return false;
         }
-        KAEvent kaevnt(*newEvent);
         if (noNewId)
-            kaevnt.setEventId(CalFormat::createUniqueId());
+            newEvent.setEventId(CalFormat::createUniqueId());
         Entity::Id oldItemId = oldEvent->itemId();
         Collection c = AkonadiModel::instance()->collectionForItem(oldItemId);
         if (!c.isValid())
             return false;
         // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
-        if (!AkonadiModel::instance()->addEvent(kaevnt, c))
+        if (!AkonadiModel::instance()->addEvent(newEvent, c))
             return false;
         KAEvent ev(*oldEvent);   // deleteEventInternal() will delete oldEvent before using event parameter
-        deleteEventInternal(ev, c);
+        deleteEventInternal(KAEvent(*oldEvent), c);
         if (mHaveDisabledAlarms)
             checkForDisabledAlarms();
-        // The event's 'updated' flag was cleared by AkonadiModel
-        *newEvent = kaevnt;
 #else
         // Create a new KCal::Event, keeping any custom properties from the old event.
         // Ensure it has a new ID.
@@ -1488,9 +1495,9 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
     else
     {
 #ifdef USE_AKONADI
-        if (!addEvent(*newEvent, 0, true))
-            return false;
-        deleteDisplayEvent(oldEventId);   // this calls checkForDisabledAlarms()
+        // This functionality isn't needed for the display calendar.
+        // The calendar would take ownership of newEvent.
+        return false;
 #else
         if (!addEvent(newEvent, 0, true))
             return false;

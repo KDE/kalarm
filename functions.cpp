@@ -508,11 +508,15 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
             // deleted it since KAlarm asked KOrganizer to set it up.
             deleteFromKOrganizer(oldId);
         }
-#ifndef USE_AKONADI
+#ifdef USE_AKONADI
+        // Update the event in the calendar file, and get the new event ID
+        AlarmCalendar* cal = AlarmCalendar::resources();
+        if (!cal->modifyEvent(oldId, newEvent))
+            status = UPDATE_FAILED;
+#else
         // Delete from the window lists to prevent the event's invalid
         // pointer being accessed.
         EventListModel::alarms()->removeEvent(oldId);
-#endif
 
         // Update the event in the calendar file, and get the new event ID
         KAEvent* newev = new KAEvent(newEvent);
@@ -522,16 +526,19 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
             delete newev;
             status = UPDATE_FAILED;
         }
+#endif
         else
         {
+#ifndef USE_AKONADI
             newEvent = *newev;
+#endif
             if (!cal->save())
                 status = SAVE_FAILED;
             if (status == UPDATE_OK)
             {
-                if (newev->copyToKOrganizer())
+                if (newEvent.copyToKOrganizer())
                 {
-                    UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the new event
+                    UpdateStatus st = sendToKOrganizer(&newEvent);    // tell KOrganizer to show the new event
                     if (st > status)
                         status = st;
                 }
@@ -541,7 +548,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 
 #ifndef USE_AKONADI
                 // Update the window lists
-                EventListModel::alarms()->addEvent(newev);
+                EventListModel::alarms()->addEvent(&newEvent);
 #endif
             }
         }
