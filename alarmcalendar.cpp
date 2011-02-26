@@ -1456,9 +1456,17 @@ bool AlarmCalendar::modifyEvent(const QString& oldEventId, KAEvent* newEvent)
         KAEvent kaevnt(*newEvent);
         if (noNewId)
             kaevnt.setEventId(CalFormat::createUniqueId());
-        kaevnt.setItemId(oldEvent->itemId());
-        if (!AkonadiModel::instance()->updateEvent(kaevnt))
+        Entity::Id oldItemId = oldEvent->itemId();
+        Collection c = AkonadiModel::instance()->collectionForItem(oldItemId);
+        if (!c.isValid())
             return false;
+        // Don't add new event to mEventMap yet - its Akonadi item id is not yet known
+        if (!AkonadiModel::instance()->addEvent(kaevnt, c))
+            return false;
+        KAEvent ev(*oldEvent);   // deleteEventInternal() will delete oldEvent before using event parameter
+        deleteEventInternal(ev, c);
+        if (mHaveDisabledAlarms)
+            checkForDisabledAlarms();
         // The event's 'updated' flag was cleared by AkonadiModel
         *newEvent = kaevnt;
 #else
@@ -1614,8 +1622,8 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 
 #ifdef USE_AKONADI
     Event::Ptr kcalEvent;
-           if (mCalendarStorage)
-           kcalEvent = mCalendarStorage->calendar()->event(id);
+    if (mCalendarStorage)
+        kcalEvent = mCalendarStorage->calendar()->event(id);
 #else
     Event* kcalEvent = mCalendar ? mCalendar->event(id) : 0;
 #endif
