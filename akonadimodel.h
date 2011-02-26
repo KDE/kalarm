@@ -240,6 +240,13 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             Akonadi::Collection::Id id;
             QString                 displayName;
         };
+        struct CollTypeData  // data for configuration dialog for collection creation job
+        {
+            CollTypeData() : parent(0), alarmType(KAlarm::CalEvent::EMPTY) {}
+            CollTypeData(KAlarm::CalEvent::Type t, QWidget* p) : parent(p), alarmType(t) {}
+            QWidget*               parent;
+            KAlarm::CalEvent::Type alarmType;
+        };
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
         QString   alarmTimeText(const DateTime&) const;
@@ -272,6 +279,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
         QMap<Akonadi::Collection::Id, KAlarm::CalEvent::Types> mCollectionEnabled;  // last enabled mime types of each collection
         QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name
+        QMap<KJob*, CollTypeData> mPendingColCreateJobs;  // default alarm type for pending collection creation jobs
         QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
         QMap<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet

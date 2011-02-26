@@ -25,6 +25,7 @@
 #include "eventattribute.h"
 #include "preferences.h"
 #include "synchtimer.h"
+#include "kalarmdirsettings.h"
 
 #include <akonadi/agentfilterproxymodel.h>
 #include <akonadi/agentinstancecreatejob.h>
@@ -1050,7 +1051,10 @@ AgentInstanceCreateJob* AkonadiModel::addCollection(KAlarm::CalEvent::Type type,
     if (!agentType.isValid())
         return 0;
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
-    job->configure(parent);    // cause the user to be prompted for configuration
+    if (agentType.identifier() == QLatin1String("akonadi_kalarm_dir_resource"))
+        mPendingColCreateJobs[job] = CollTypeData(type, parent);
+    else
+        job->configure(parent);    // cause the user to be prompted for configuration
     connect(job, SIGNAL(result(KJob*)), SLOT(addCollectionJobDone(KJob*)));
     job->start();
     return job;
@@ -1070,7 +1074,27 @@ void AkonadiModel::addCollectionJobDone(KJob* j)
         emit collectionAdded(job, false);
     }
     else
+    {
+        QMap<KJob*, CollTypeData>::iterator it = mPendingColCreateJobs.find(j);
+        if (it != mPendingColCreateJobs.end())
+        {
+            // Set the default alarm type for a directory resource config dialog
+            AgentInstance agent = static_cast<AgentInstanceCreateJob*>(job)->instance();
+            OrgKdeAkonadiKAlarmDirSettingsInterface *iface = new OrgKdeAkonadiKAlarmDirSettingsInterface("org.freedesktop.Akonadi.Resource." + agent.identifier(),
+                    "/Settings", QDBusConnection::sessionBus(), this);
+            if (!iface->isValid())
+                kError() << "Error creating D-Bus interface for KAlarmDir configuration.";
+            else
+            {
+                iface->setAlarmTypes(KAlarm::CalEvent::mimeTypes(it.value().alarmType));
+                iface->writeConfig();
+                agent.reconfigure();
+            }
+            agent.configure(it.value().parent);
+            delete iface;
+        }
         emit collectionAdded(job, true);
+    }
 }
 
 /******************************************************************************
