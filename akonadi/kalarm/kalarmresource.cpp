@@ -185,7 +185,13 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     if (!checkItemAddedChanged<KAEvent>(item, CheckForChanged))
         return;
     QString errorMsg;
-    KAEvent event = KAlarmResourceCommon::checkItemChanged(item, mCompatibility, errorMsg);
+    if (mCompatibility != KAlarm::Calendar::Current)
+    {
+        kWarning() << "Calendar not in current format";
+        cancelTask(errorMessage(KAlarmResourceCommon::NotCurrentFormat));
+        return;
+    }
+    KAEvent event = KAlarmResourceCommon::checkItemChanged(item, errorMsg);
     if (!event.isValid())
     {
         if (errorMsg.isEmpty())

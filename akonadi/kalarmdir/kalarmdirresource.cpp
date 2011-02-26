@@ -203,14 +203,9 @@ bool KAlarmDirResource::retrieveItem(const Akonadi::Item& item, const QSet<QByte
 */
 void KAlarmDirResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collection&)
 {
+    kDebug() << item.id();
     if (cancelIfReadOnly())
         return;
-    if (mCompatibility != KAlarm::Calendar::Current)
-    {
-        kWarning() << "Calendar not in current format";
-        cancelTask(errorMessage(KAlarmResourceCommon::NotCurrentFormat));
-        return;
-    }
 
     KAEvent event;
     if (item.hasPayload<KAEvent>())
@@ -241,19 +236,28 @@ void KAlarmDirResource::itemAdded(const Akonadi::Item& item, const Akonadi::Coll
 */
 void KAlarmDirResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArray>&)
 {
+    kDebug() << item.id() << ", remote ID:" << item.remoteId();
     if (cancelIfReadOnly())
         return;
     QMap<QString, KAEvent>::Iterator it = mEvents.find(item.remoteId());
-    if (it != mEvents.end()
-    &&  (it.value().isReadOnly() || it.value().compatibility() != KAlarm::Calendar::Current))
+    if (it != mEvents.end())
     {
-        kWarning() << "Event is read only:" << item.remoteId();
-        cancelTask(errorMessage(KAlarmResourceCommon::EventReadOnly, item.remoteId()));
-        return;
+        if (it.value().isReadOnly())
+        {
+            kWarning() << "Event is read only:" << item.remoteId();
+            cancelTask(errorMessage(KAlarmResourceCommon::EventReadOnly, item.remoteId()));
+            return;
+        }
+        if (it.value().compatibility() != KAlarm::Calendar::Current)
+        {
+            kWarning() << "Event not in current format:" << item.remoteId();
+            cancelTask(errorMessage(KAlarmResourceCommon::EventNotCurrentFormat, item.remoteId()));
+            return;
+        }
     }
 
     QString errorMsg;
-    KAEvent event = KAlarmResourceCommon::checkItemChanged(item, mCompatibility, errorMsg);
+    KAEvent event = KAlarmResourceCommon::checkItemChanged(item, errorMsg);
     if (!event.isValid())
     {
         if (errorMsg.isEmpty())
@@ -280,6 +284,7 @@ void KAlarmDirResource::itemChanged(const Akonadi::Item& item, const QSet<QByteA
 */
 void KAlarmDirResource::itemRemoved(const Akonadi::Item& item)
 {
+    kDebug() << item.id();
     if (cancelIfReadOnly())
         return;
 
@@ -363,6 +368,8 @@ void KAlarmDirResource::retrieveCollections()
 
     CollectionAttribute* cattr = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
     cattr->setCompatibility(mCompatibility);
+
+    mCollectionId = c.id();   // note the one and only collection for this resource
 
     Collection::List list;
     list << c;
@@ -502,8 +509,12 @@ void KAlarmDirResource::setCompatibility(bool writeAttr)
             }
         }
     }
-    if (writeAttr  &&  mCompatibility != oldCompatibility  &&  currentCollection().isValid())
-        KAlarmResourceCommon::setCollectionCompatibility(currentCollection(), mCompatibility);
+    if (writeAttr  &&  mCompatibility != oldCompatibility)
+    {
+        Collection c(mCollectionId);
+        if (c.isValid())
+            KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility);
+    }
 }
 
 AKONADI_AGENT_FACTORY(KAlarmDirResource, akonadi_kalarm_dir_resource)

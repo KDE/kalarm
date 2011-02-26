@@ -144,21 +144,12 @@ Item retrieveItem(const Akonadi::Item& item, KAEvent& event)
 
 /******************************************************************************
 * Called when an item has been changed to validate it.
-* Note that this only checks the calendar's compatibility status, not the
-* event's individual compatibility (if applicable).
 * Reply = the KAEvent for the item
 *       = invalid if error, in which case errorMsg contains the error message
 *         (which will be empty if the KAEvent is simply invalid).
 */
-KAEvent checkItemChanged(const Akonadi::Item& item, KAlarm::Calendar::Compat calendarCompatibility, QString& errorMsg)
+KAEvent checkItemChanged(const Akonadi::Item& item, QString& errorMsg)
 {
-    if (calendarCompatibility != KAlarm::Calendar::Current)
-    {
-        kWarning() << "Calendar not in current format";
-        errorMsg = errorMessage(NotCurrentFormat);
-        return KAEvent();
-    }
-
     KAEvent event;
     if (item.hasPayload<KAEvent>())
         event = item.payload<KAEvent>();
@@ -200,6 +191,12 @@ QString errorMessage(ErrorCode code, const QString& param)
             return i18nc("@info", "Event with uid '%1' not found.", param);
         case NotCurrentFormat:
             return i18nc("@info", "Calendar is not in current KAlarm format.");
+        case EventNotCurrentFormat:
+#ifdef __GNUC__
+#warning New user string needed
+#endif
+//            return i18nc("@info", "Event with uid '%1' is not in current KAlarm format.", param);
+return i18nc("@info", "Event with uid '%1' is read only", param);
         case EventNoAlarms:
             return i18nc("@info", "Event with uid '%1' contains no usable alarms.", param);
         case EventReadOnly:

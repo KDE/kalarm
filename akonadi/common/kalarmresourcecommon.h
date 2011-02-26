@@ -39,13 +39,14 @@ namespace KAlarmResourceCommon
 //    void          customizeConfigDialog(SingleFileResourceConfigDialog<Settings>*);
     KAlarm::Calendar::Compat getCompatibility(const KCalCore::FileStorage::Ptr&);
     Akonadi::Item retrieveItem(const Akonadi::Item&, KAEvent&);
-    KAEvent       checkItemChanged(const Akonadi::Item&, KAlarm::Calendar::Compat, QString& errorMsg);
+    KAEvent       checkItemChanged(const Akonadi::Item&, QString& errorMsg);
     void          setCollectionCompatibility(const Akonadi::Collection&, KAlarm::Calendar::Compat);
 
     enum ErrorCode
     {
         UidNotFound,
         NotCurrentFormat,
+        EventNotCurrentFormat,
         EventNoAlarms,
         EventReadOnly
     };

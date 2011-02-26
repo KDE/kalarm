@@ -22,7 +22,6 @@
 #ifndef KALARMDIRRESOURCE_H
 #define KALARMDIRRESOURCE_H
 
-#include "kacalendar.h"
 #include "kaevent.h"
 #include <akonadi/resourcebase.h>
 
@@ -62,9 +61,9 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         bool writeToFile(const KAEvent&);
         void setCompatibility(bool writeAttr = true);
 
-        QMap<QString, KAEvent> mEvents;    // cached alarms, indexed by ID
+        QMap<QString, KAEvent>   mEvents;         // cached alarms, indexed by ID
         Akonadi_KAlarm_Dir_Resource::Settings* mSettings;
-        KAlarm::CalEvent::Types  mAlarmTypes;
+        Akonadi::Collection::Id  mCollectionId;   // ID of this resource's collection
         KAlarm::Calendar::Compat mCompatibility;
 };
 
