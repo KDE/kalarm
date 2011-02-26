@@ -138,7 +138,8 @@ bool KAlarmDirResource::loadFiles()
     {
         it.next();
         QString fileName = it.fileName();
-        if (fileName != "." && fileName != ".." && fileName != "WARNING_README.txt")
+        if (fileName != "." && fileName != ".."
+        &&  !fileName.endsWith('~')  &&  fileName != "WARNING_README.txt")
         {
             MemoryCalendar::Ptr calendar(new MemoryCalendar(QLatin1String("UTC")));
             FileStorage::Ptr fileStorage(new FileStorage(calendar, fileName, new ICalFormat()));
