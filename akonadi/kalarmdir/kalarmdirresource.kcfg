@@ -17,8 +17,8 @@
       <label>Do not change the actual backend data.</label>
       <default>false</default>
     </entry>
-    <entry name="MonitorFile" type="Bool">
-      <label>Monitor file for changes.</label>
+    <entry name="MonitorFiles" type="Bool">
+      <label>Monitor directory for changes.</label>
       <default>true</default>
     </entry>
     <entry name="AlarmTypes" type="StringList">

@@ -426,6 +426,7 @@ class KALARM_CAL_EXPORT KAEvent
         KAAlarm            nextAlarm(KAAlarm::Type t) const    { return d->nextAlarm(t); }
         KAAlarm            convertDisplayingAlarm() const;
 #ifdef USE_AKONADI
+        bool               setItemPayload(Akonadi::Item&, const QStringList& collectionMimeTypes) const;
         bool               updateKCalEvent(const KCalCore::Event::Ptr& e, UidAction u, bool setCustomProperties = true) const
                                                           { return d->updateKCalEvent(e, u, setCustomProperties); }
 #else

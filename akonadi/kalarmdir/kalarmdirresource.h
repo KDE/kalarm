@@ -24,6 +24,7 @@
 
 #include "kaevent.h"
 #include <akonadi/resourcebase.h>
+#include <QHash>
 
 namespace Akonadi_KAlarm_Dir_Resource { class Settings; }
 
@@ -50,21 +51,42 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         virtual void itemRemoved(const Akonadi::Item&);
 
     private Q_SLOTS:
-        void settingsChanged();
+        void    settingsChanged();
+        void    fileCreated(const QString& path);
+        void    fileChanged(const QString& path);
+        void    fileDeleted(const QString& path);
+        bool    loadFiles();
+        void    collectionsReceived(const Akonadi::Collection::List&);
+        void    collectionFetchResult(KJob*);
+        void    itemJobDone(KJob*);
 
     private:
-        bool loadFiles();
+        KAEvent loadFile(const QString& path, const QString& file);
+        KAEvent loadNextFile(const QString& eventId, const QString& file);
         QString directoryName() const;
-        QString directoryFileName(const QString& file) const;
-        void initializeDirectory() const;
-        bool cancelIfReadOnly();
-        bool writeToFile(const KAEvent&);
-        void setCompatibility(bool writeAttr = true);
+        QString filePath(const QString& file) const;
+        QString fileName(const QString& path) const;
+        void    initializeDirectory() const;
+        bool    cancelIfReadOnly();
+        bool    writeToFile(const KAEvent&);
+        void    setCompatibility(bool writeAttr = true);
+        void    addEventFile(const KAEvent&, const QString& file);
+        QString removeEventFile(const QString& eventId, const QString& file, KAEvent* = 0);
 
-        QMap<QString, KAEvent>   mEvents;         // cached alarms, indexed by ID
+        struct EventFile    // data to be indexed by event ID
+        {
+            EventFile() {}
+            EventFile(const KAEvent& e, const QStringList& f) : event(e), files(f) {}
+            KAEvent     event;
+            QStringList files;   // files containing this event ID, in-use one first
+        };
+        QHash<QString, EventFile> mEvents;         // cached alarms and file names, indexed by ID
+        QHash<QString, QString>   mFileEventIds;   // alarm IDs, indexed by file name
         Akonadi_KAlarm_Dir_Resource::Settings* mSettings;
-        Akonadi::Collection::Id  mCollectionId;   // ID of this resource's collection
-        KAlarm::Calendar::Compat mCompatibility;
+        Akonadi::Collection::Id   mCollectionId;   // ID of this resource's collection
+        KAlarm::Calendar::Compat  mCompatibility;
+        QStringList               mChangedFiles;   // files being written to
+        bool                      mCollectionFetched;  // mCollectionId has been initialised
 };
 
 #endif

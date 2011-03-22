@@ -1,3 +1,6 @@
+#ifdef __GNUC__
+#warning Editing the display name of a calendar produces errors
+#endif
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
@@ -1328,8 +1331,11 @@ bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
 {
     kDebug() << "ID:" << event.id();
     Item item;
-    if (!setItemPayload(item, event, collection))
+    if (!event.setItemPayload(item, collection.contentMimeTypes()))
+    {
+        kWarning() << "Invalid mime type for collection";
         return false;
+    }
     event.setItemId(item.id());
 kDebug()<<"-> item id="<<item.id();
     ItemCreateJob* job = new ItemCreateJob(item, collection);
@@ -1356,41 +1362,19 @@ bool AkonadiModel::updateEvent(KAEvent& event)
 bool AkonadiModel::updateEvent(Akonadi::Entity::Id itemId, KAEvent& newEvent)
 {
 kDebug()<<"item id="<<itemId;
-    QModelIndex ix = itemIndex(itemId);
+    const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;
-    Collection collection = ix.data(ParentCollectionRole).value<Collection>();
+    const Collection collection = ix.data(ParentCollectionRole).value<Collection>();
     Item item = ix.data(ItemRole).value<Item>();
 kDebug()<<"item id="<<item.id()<<", revision="<<item.revision();
-    if (!setItemPayload(item, newEvent, collection))
+    if (!newEvent.setItemPayload(item, collection.contentMimeTypes()))
+    {
+        kWarning() << "Invalid mime type for collection";
         return false;
+    }
 //    setData(ix, QVariant::fromValue(item), ItemRole);
     queueItemModifyJob(item);
-    return true;
-}
-
-/******************************************************************************
-* Initialise an Item with an event.
-* Note that the event is not updated with the Item ID.
-* The event's 'updated' flag is cleared.
-*/
-bool AkonadiModel::setItemPayload(Item& item, KAEvent& event, const Collection& collection)
-{
-    QString mimetype;
-    switch (event.category())
-    {
-        case KAlarm::CalEvent::ACTIVE:      mimetype = KAlarm::MIME_ACTIVE;    break;
-        case KAlarm::CalEvent::ARCHIVED:    mimetype = KAlarm::MIME_ARCHIVED;  break;
-        case KAlarm::CalEvent::TEMPLATE:    mimetype = KAlarm::MIME_TEMPLATE;  break;
-        default:                            Q_ASSERT(0);  return false;
-    }
-    if (!collection.contentMimeTypes().contains(mimetype))
-    {
-        kWarning() << "Invalid mime type for Collection";
-        return false;
-    }
-    item.setMimeType(mimetype);
-    item.setPayload<KAEvent>(event);
     return true;
 }
 

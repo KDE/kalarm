@@ -2043,6 +2043,31 @@ KAEvent::Actions KAEvent::actions() const
     }
 }
 
+#ifdef USE_AKONADI
+/******************************************************************************
+* Initialise an Item with the event.
+* Note that the event is not updated with the Item ID.
+* Reply = true if successful,
+*         false if event's category does not match collection's mime types.
+*/
+bool KAEvent::setItemPayload(Akonadi::Item& item, const QStringList& collectionMimeTypes) const
+{
+    QString mimetype;
+    switch (d->mCategory)
+    {
+        case KAlarm::CalEvent::ACTIVE:      mimetype = KAlarm::MIME_ACTIVE;    break;
+        case KAlarm::CalEvent::ARCHIVED:    mimetype = KAlarm::MIME_ARCHIVED;  break;
+        case KAlarm::CalEvent::TEMPLATE:    mimetype = KAlarm::MIME_TEMPLATE;  break;
+        default:                            Q_ASSERT(0);  return false;
+    }
+    if (!collectionMimeTypes.contains(mimetype))
+        return false;
+    item.setMimeType(mimetype);
+    item.setPayload<KAEvent>(*this);
+    return true;
+}
+#endif
+
 /******************************************************************************
 * Update an existing KCal::Event with the KAEvent::Private data.
 * If 'setCustomProperties' is true, all the KCal::Event's existing custom

@@ -264,7 +264,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QPixmap*  eventIcon(const KAEvent&) const;
         QString   whatsThisText(int column) const;
         EventList eventList(const QModelIndex& parent, int start, int end);
-        bool      setItemPayload(Akonadi::Item&, KAEvent&, const Akonadi::Collection&);
 
         static AkonadiModel*  mInstance;
         static QPixmap* mTextIcon;
