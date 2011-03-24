@@ -273,6 +273,11 @@ KAEvent KAlarmDirResource::loadFile(const QString& path, const QString& file)
         kWarning() << "KAEvent has no usable alarms:" << event.id();
         return KAEvent();
     }
+    if (!mSettings->alarmTypes().contains(mime))
+    {
+        kWarning() << "KAEvent has wrong alarm type for resource:" << mime;
+        return KAEvent();
+    }
     event.setCompatibility(KAlarmResourceCommon::getCompatibility(fileStorage));
     return event;
 }
@@ -514,6 +519,9 @@ void KAlarmDirResource::retrieveCollections()
     attr->setDisplayName(name());
     attr->setIconName("kalarm");
 
+#ifdef __GNUC__
+#warning Attributes may need to be stored in settings
+#endif
     CollectionAttribute* cattr = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
     cattr->setCompatibility(mCompatibility);
 
@@ -599,7 +607,13 @@ void KAlarmDirResource::collectionChanged(const Akonadi::Collection& collection)
 void KAlarmDirResource::fileCreated(const QString& path)
 {
     kDebug() << path;
-    if (path != directoryName())
+    if (path == directoryName())
+    {
+#ifdef __GNUC__
+#warning Load all files in directory
+#endif
+    }
+    else
     {
         const QString file = fileName(path);
         int i = mChangedFiles.indexOf(file);
@@ -610,24 +624,13 @@ void KAlarmDirResource::fileCreated(const QString& path)
             KAEvent event = loadFile(path, file);
             if (event.isValid())
             {
-                Item item;
-                if (event.setItemPayload(item, mSettings->alarmTypes()))
+                // Tell the Akonadi server to create an Item for the event
+                if (createItem(event))
                 {
-                    // The event's type is compatible with the collection's mime types
-                    item.setRemoteId(event.id());
-                    event.setItemId(item.id());
-
                     addEventFile(event, file);
                     mFileEventIds.insert(file, event.id());
 
                     setCompatibility();
-
-                    // Tell the Akonadi server to create an Item for the event
-                    Collection c(mCollectionId);
-                    item.setParentCollection(c);
-                    ItemCreateJob* job = new ItemCreateJob(item, c);
-                    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
-                    job->start();
 DEBUG_DATA;
                 }
             }
@@ -651,6 +654,7 @@ void KAlarmDirResource::fileChanged(const QString& path)
         else if (isFileValid(file))
         {
             QString nextFile, oldId;
+            KAEvent oldEvent;
             const KAEvent event = loadFile(path, file);
             // Get the file's old event ID
             QHash<QString, QString>::iterator fit = mFileEventIds.find(file);
@@ -660,7 +664,7 @@ void KAlarmDirResource::fileChanged(const QString& path)
                 if (event.id() != oldId)
                 {
                     // The file's event ID has changed - remove the old event
-                    nextFile = removeEventFile(oldId, file);
+                    nextFile = removeEventFile(oldId, file, &oldEvent);
                     if (event.isValid())
                         fit.value() = event.id();
                     else
@@ -674,25 +678,20 @@ void KAlarmDirResource::fileChanged(const QString& path)
             }
             addEventFile(event, file);
 
-#ifdef __GNUC__
-#warning ????
-#endif
-            loadNextFile(oldId, nextFile);   // load any other file with the same event ID
+            KAEvent e = loadNextFile(oldId, nextFile);   // load any other file with the same event ID
             setCompatibility();
 
             // Tell the Akonadi server to amend the Item for the event
-            Item item;
-            if (!event.setItemPayload(item, mSettings->alarmTypes()))
-                kWarning() << "Invalid mime type for collection";
-            else
+            if (event.id() != oldId)
             {
-                Collection c(mCollectionId);
-                item.setParentCollection(c);
-                item.setRemoteId(event.id());
-                ItemModifyJob* job = new ItemModifyJob(item);
-                job->disableRevisionCheck();
-                connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+                if (e.isValid())
+                    modifyItem(e);
+                else
+                    deleteItem(oldEvent);
+                createItem(event);   // create a new Item for the new event ID
             }
+            else
+                modifyItem(event);
 DEBUG_DATA;
         }
     }
@@ -709,7 +708,11 @@ void KAlarmDirResource::fileDeleted(const QString& path)
         // The directory has been deleted
         mEvents.clear();
         mFileEventIds.clear();
-//???        synchronize();
+
+        // Tell the Akonadi server to delete all Items in the collection
+        Collection c(mCollectionId);
+        ItemDeleteJob* job = new ItemDeleteJob(c);
+        connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
     }
     else
     {
@@ -725,23 +728,75 @@ void KAlarmDirResource::fileDeleted(const QString& path)
                 QString nextFile = removeEventFile(eventId, file, &event);
                 mFileEventIds.erase(fit);
 
-#ifdef __GNUC__
-#warning ????
-#endif
-                loadNextFile(eventId, nextFile);   // load any other file with the same event ID
+                KAEvent e = loadNextFile(eventId, nextFile);   // load any other file with the same event ID
                 setCompatibility();
 
-                // Tell the Akonadi server to delete the Item for the event
-                Collection c(mCollectionId);
-                Item item(KAlarm::CalEvent::mimeType(event.category()));
-                item.setParentCollection(c);
-                item.setRemoteId(eventId);
-                ItemDeleteJob* job = new ItemDeleteJob(item);
-                connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+                if (e.isValid())
+                {
+                    // Tell the Akonadi server to amend the Item for the event
+                    modifyItem(e);
+                }
+                else
+                {
+                    // Tell the Akonadi server to delete the Item for the event
+                    deleteItem(event);
+                }
 DEBUG_DATA;
             }
         }
     }
+}
+
+/******************************************************************************
+* Tell the Akonadi server to create an Item for a given event.
+*/
+bool KAlarmDirResource::createItem(const KAEvent& event)
+{
+    Item item;
+    if (!event.setItemPayload(item, mSettings->alarmTypes()))
+    {
+        kWarning() << "Invalid mime type for collection";
+        return false;
+    }
+    Collection c(mCollectionId);
+    item.setParentCollection(c);
+    item.setRemoteId(event.id());
+    ItemCreateJob* job = new ItemCreateJob(item, c);
+    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+    return true;
+}
+
+/******************************************************************************
+* Tell the Akonadi server to amend the Item for a given event.
+*/
+bool KAlarmDirResource::modifyItem(const KAEvent& event)
+{
+    Item item;
+    if (!event.setItemPayload(item, mSettings->alarmTypes()))
+    {
+        kWarning() << "Invalid mime type for collection";
+        return false;
+    }
+    Collection c(mCollectionId);
+    item.setParentCollection(c);
+    item.setRemoteId(event.id());
+    ItemModifyJob* job = new ItemModifyJob(item);
+    job->disableRevisionCheck();
+    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+    return true;
+}
+
+/******************************************************************************
+* Tell the Akonadi server to delete the Item for a given event.
+*/
+void KAlarmDirResource::deleteItem(const KAEvent& event)
+{
+    Item item(KAlarm::CalEvent::mimeType(event.category()));
+    Collection c(mCollectionId);
+    item.setParentCollection(c);
+    item.setRemoteId(event.id());
+    ItemDeleteJob* job = new ItemDeleteJob(item);
+    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
 }
 
 /******************************************************************************

@@ -72,6 +72,9 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         void    setCompatibility(bool writeAttr = true);
         void    addEventFile(const KAEvent&, const QString& file);
         QString removeEventFile(const QString& eventId, const QString& file, KAEvent* = 0);
+        bool    createItem(const KAEvent&);
+        bool    modifyItem(const KAEvent&);
+        void    deleteItem(const KAEvent&);
 
         struct EventFile    // data to be indexed by event ID
         {
