@@ -234,9 +234,8 @@ DEBUG_DATA;
             KDirWatch::self()->addDir(dirPath, KDirWatch::WatchFiles);
     }
 
-#ifdef __GNUC__
-#warning Need to synchronise if not calling from configure()
-#endif
+    // Ensure the Akonadi server is updated with the current list of events
+    synchronize();
 
     emit status(Idle);
     return true;
@@ -544,6 +543,7 @@ void KAlarmDirResource::retrieveCollections()
 */
 void KAlarmDirResource::retrieveItems(const Akonadi::Collection& collection)
 {
+    kDebug() << "Collection id:" << collection.id();
     // Set the collection's compatibility status
     KAlarmResourceCommon::setCollectionCompatibility(collection, mCompatibility);
 
@@ -609,9 +609,13 @@ void KAlarmDirResource::fileCreated(const QString& path)
     kDebug() << path;
     if (path == directoryName())
     {
-#ifdef __GNUC__
-#warning Load all files in directory
-#endif
+        // The directory has been created. Load all files in it, and
+        // tell the Akonadi server to create an Item for each event.
+        loadFiles();
+        foreach (const EventFile& data, mEvents)
+        {
+            createItem(data.event);
+        }
     }
     else
     {
