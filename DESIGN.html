@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>KAlarm Design Notes</title>
+  <meta content="KAlarm" name=description>
+  <style type="text/css">
+      .eg          { color: green }
+      .titlerow    { font-size: 1.2em; padding-top: 1em; padding-bottom: 0.5em; font-weight: bold }
+      td           { vertical-align: top; padding-right: 1em }
+      th           { vertical-align: top; padding-top: 0.3em; text-align: left }
+  </style>
+
+</head>
+
+<body>
+
+<h1>KAlarm Design</h1>
+
+The terms "alarm" and "event" are often used interchangeably in the context of KAlarm (including in source code comments). Technically speaking, a KAlarm "alarm" is really an event which contains one or more alarms. Each event is held in a <tt>KAEvent</tt> object and is stored as an iCalendar <tt>VEVENT</tt>. Each event normally contains the "main" alarm together with other subsidiary alarms; subsidiary alarms are used to represent reminders, deferrals, sounds, at-login alarms, pre-alarm actions and post-alarm actions. However, if the "main" alarm has expired but a subsidiary alarm is still due (e.g. a deferral), the event may no longer contain the "main" alarm. Individual alarms in the event may be fetched as <tt>KAAlarm</tt> objects.
+
+<h2>Calendar format</h2>
+
+KAlarm uses the iCalendar format defined in RFC2445. Compliant with this, it defines a number of custom fields prefixed by <tt>X-KDE-KALARM-</tt> for use in the calendar. These are listed here, together with their possible parameters. All properties are optional unless stated to be mandatory.
+
+<p>Note that in the iCalendar format, the property name is separated from its parameter(s) by a semi-colon. Multiple parameters are also semi-colon separated.</p>
+
+<table>
+
+<tr><td colspan=3 class=titlerow>Calendar-level custom properties</td></tr>
+<tr><td colspan=3>The following custom properties are used within a <tt>VCALENDAR</tt> element.</td></tr>
+
+    <tr><th align=left>Property&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Parameter</th><th align=left>Description</th></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-VERSION</tt></td><td>Mandatory. The single parameter contains the KAlarm calendar format version used to write this calendar. Note that this version may be older than the actual KAlarm application version; the calendar format version is only updated when the calendar format changes.</td></tr>
+    <tr><td></td><td><em>version</em><tt></td><td>KAlarm calendar format version, in the format <em>n</em><tt>.</tt><em>n</em><tt>.</tt><em>n</em> . E.g. <tt class=eg>2.3.10</tt></td></tr>
+
+<tr><td colspan=3 class=titlerow>Event-level custom properties</td></tr>
+<tr><td colspan=3>The following custom properties are used within a <tt>VEVENT</tt> element.</td></tr>
+
+    <tr><th align=left>Property</th><th>Parameter</th><th align=left>Description</th></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-TYPE</tt></td><td>Mandatory. Multiple parameters hold the alarm's type. The first two parameters are always in the following order:</td></tr>
+    <tr><td></td><td><em>type</em></td><td>The event's type, one of <tt>ACTIVE</tt>, <tt>ARCHIVED</tt>, <tt>TEMPLATE</tt>, <tt>DISPLAYING</tt></td></tr>
+    <tr><td></td><td><em>resource</em></td><td>The saved Akonadi collection ID, or KResources resource ID. Note that this is not the collection/resource which the event is in.</td></tr>
+    <tr><td></td><td><tt>DEFER</tt></td><td>For an event in the displaying calendar, indicates that the Defer button should be shown in the alarm window. Optional.</td></tr>
+    <tr><td></td><td><tt>EDIT</tt></td><td>For an event in the displaying calendar, indicates that the Edit button should be shown in the alarm window. Optional.</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-FLAGS</tt></td><td>Multiple parameters specify various properties of the event</td></tr>
+    <tr><td></td><td><tt>DATE</tt></td><td>The event time is date-only, i.e. its time is ignored and it triggers at the first opportunity on the specified date (after the start-of-day time configured by the user). Note that this is used instead of specifying a start date (<tt>DTSTART</tt>) without a time.</td></tr>
+    <tr><td></td><td><tt>ACKCONF</tt></td><td>For a display alarm, when the user acknowledges the alarm (i.e. closes the alarm window), a confirmation prompt will be output</td></tr>
+    <tr><td></td><td><tt>KORG</tt></td><td>The event was copied as an alarm to KOrganizer</td></tr>
+    <tr><td></td><td><tt>EXHOLIDAYS</tt></td><td>The alarm will not trigger on holidays (as defined for the holiday region configured by the user)</td></tr>
+    <tr><td></td><td><tt>WORKTIME</tt></td><td>The alarm will not trigger during working hours on working days (as configured by the user)</td></tr>
+    <tr><td></td><td><tt>DEFER;</tt><em>interval</em></td><td>Records the default deferral parameters for the alarm, used when the Defer dialogue is displayed. <em>interval</em> holds the deferral interval in minutes, with an optional <tt>D</tt> suffix to specify a date-only deferral. E.g. <tt class=eg>DEFER;1440D</tt> = 1 day, date-only</td></tr>
+    <tr><td></td><td><tt>LATECANCEL;</tt><em>interval</em></td><td>How late the alarm can trigger (in minutes) before it will be cancelled; default = 1 minute</td></tr>
+    <tr><td></td><td><tt>LATECLOSE;</tt><em>interval</em></td><td>For a display alarm, how long after the trigger time (in minutes) until the alarm window is automatically closed; default = 1 minute. It will also be cancelled if it triggers after this time.</td></tr>
+    <tr><td></td><td><tt>TMPLAFTTIME;</tt><em>interval</em></td><td>For a template alarm, holds the value (in minutes) of the "After time" option</td></tr>
+    <tr><td></td><td><tt>KMAIL;</tt><em>sernum</em></td><td>The KMail serial number of the email whose text forms the alarm message</td></tr>
+    <tr><td></td><td><tt>BCC</tt></td><td>For an email alarm, the email will be blind copied to the user</td></tr>
+
+    <tr><td colspan=2><tt>X-KDE-KALARM-NEXTRECUR</tt></td><td>The single parameter records the next due recurrence date/time of the main alarm</td></tr>
+    <tr><td></td><td><em>date-time</em></td><td>The date and optional time, in the format <em>YYYYMMDD</em><tt>T</tt><em>HHMMSS</em> for a date/time alarm, or <em>YYYYMMDD</em> for a date-only alarm. E.g. <tt class=eg>19990131T120000</tt></td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-REPEAT</tt></td><td>Used for an active alarm when its main alarm has expired, holds the alarm's sub-repetition information. (Normally, this is held in the main alarm.)</td></tr>
+    <tr><td></td><td><em>interval</em><tt>:</tt><em>count</em></td><td>Sub-repetition interval (in minutes) and count</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-LOG</tt></td><td>The single parameter specifies where command alarm output should go; default = discard</td></tr>
+    <tr><td></td><td><tt>xterm:</tt></td><td>Display command output in a terminal window</td></tr>
+    <tr><td></td><td><tt>display:</tt></td><td>Display command output in an alarm window</td></tr>
+    <tr><td></td><td><em>filename</em></td><td>Store command output in the specified file</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-ARCHIVE</tt></td><td>Multiple parameters record archiving information for an active alarm. Its presence indicates that the alarm has triggered at least once and should be archived when it expires or is deleted.</td></tr>
+    <tr><td></td><td><tt>LOGIN</tt></td><td>When the main alarm has expired, records that the original alarm was repeat-at-login</td></tr>
+    <tr><td></td><td><tt>ONCE</tt></td><td>Used when no reminder is currently pending, to indicate that the reminder should be shown only for the first recurrence</td></tr>
+    <tr><td></td><td><em>interval</em></td><td>Used when no reminder is currently pending, to hold the reminder interval. The suffix indicates the time units: <tt>M</tt> = minutes, <tt>H</tt> = hours, <tt>D</tt> = days. E.g. <tt class=eg>12M</tt></td></tr>
+    <tr><td></td><td><tt>0</tt></td><td>Dummy parameter used when no other parameter is present, because iCalendar requires every property to have a parameter</td></tr>
+
+<tr><td colspan=3 class=titlerow>Alarm-level custom properties</td></tr>
+<tr><td colspan=3>The following custom properties are used within a <tt>VALARM</tt> element.</td></tr>
+
+    <tr><th align=left>Property</th><th>Parameter</th><th align=left>Description</th></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-TYPE</tt></td><td>Multiple parameters hold information about the alarm's type. If this property is missing, the alarm is the "main" alarm for the event.</td></tr>
+    <tr><td></td><td><tt>LOGIN</tt></td><td>The alarm should be triggered each time KAlarm starts up (normally at each login)</td></tr>
+    <tr><td></td><td><tt>FILE</tt></td><td>For a display alarm, indicates that the alarm text holds the name of a file whose contents should form the alarm message</td></tr>
+    <tr><td></td><td><tt>REMINDER</tt></td><td>The alarm is a subsidiary reminder alarm</td></tr>
+    <tr><td></td><td><tt>REMINDER_ONCE</tt></td><td>The alarm is a subsidiary reminder alarm, to be triggered only on the first recurrence</td></tr>
+    <tr><td></td><td><tt>DEFERRAL</tt></td><td>The alarm is a subsidiary timed deferral alarm</td></tr>
+    <tr><td></td><td><tt>DATE_DEFERRAL</tt></td><td>The alarm is a subsidiary date-only deferral alarm</td></tr>
+    <tr><td></td><td><tt>DISPLAYING</tt></td><td>The alarm is currently being displayed, i.e. in the displaying calendar</td></tr>
+    <tr><td></td><td><tt>PRE</tt></td><td>The alarm is a subsidiary pre-alarm action command, which is executed immediately before the main alarm</td></tr>
+    <tr><td></td><td><tt>POST</tt></td><td>The alarm is a subsidiary post-alarm action command, which is executed immediately after the user acknowledges the main display alarm</td></tr>
+    <tr><td></td><td><tt>SOUNDREPEAT</tt></td><td>For an audio alarm, indicates that the sound file should be repeated indefinitely</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-NEXTREPEAT</tt></td><td>The single parameter holds the repetition count of the next due sub-repetition</td></tr>
+    <tr><td></td><td><em>count</em></td><td>Repetition number</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-FONTCOLOR</tt></td><td>For a display alarm, holds the colours to use in the alarm message window</td></tr>
+    <tr><td></td><td><em>[background][</em><tt>;</tt><em>foreground]</em></td><td>The optional background colour (default = white) and optional foreground colour (default = black)</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-EMAILID</tt></td><td>For an email alarm, holds the email ID to use in the 'From' field</td></tr>
+    <tr><td></td><td><em>uoid</em></td><td>KDE email identity uoid</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-VOLUME</tt></td><td>Holds volume settings for an audio alarm</td></tr>
+    <tr><td></td><td><em>[volume][</em><tt>;</tt><em>fadevolume</em><tt>;</tt><em>fadeinterval]</em></td><td>Contains the optional volume (floating point, range 0 - 1), and optionally the fade volume (floating point, range 0 - 1) and fade interval in seconds. E.g. <tt class=eg>0.75</tt> to set volume with no fade, <tt class=eg>;0.3;10</tt> for default volume with fade, <tt class=eg>0.75;0.3;10</tt> to specify volume and fade</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-SPEAK</tt></td><td>For an audio alarm in an event whose main alarm is a display or command alarm, specifies that the alarm text should be spoken</td></tr>
+    <tr><td></td><td><tt>Y</tt></td><td>Non-null string</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-ERRCANCEL</tt></td><td>For a command alarm containing a pre-alarm action, indicates that the alarm should be cancelled if the pre-alarm action fails</td></tr>
+    <tr><td></td><td><tt>Y</tt></td><td>Non-null string</td></tr>
+    <tr><td colspan=2><tt>X-KDE-KALARM-ERRNOSHOW</tt></td><td>For a command alarm containing a pre-alarm action, indicates that there should be no error notification if the pre-alarm action fails</td></tr>
+    <tr><td></td><td><tt>Y</tt></td><td>Non-null string</td></tr>
+</table>
+
+<h3>Custom status field values</h3>
+
+The following custom parameter value is used in the <tt>STATUS</tt> property in <tt>VEVENT</tt>:
+<ul><li><tt>DISABLED</tt> - indicates that the individual event is disabled.</ul>
+
+????Validate sound/fade volumes in kaevent.cpp<br/>
+
+????Use FLAGS property for SPEAK, ERRCANCEL, ERRNOSHOW.
+
+</body>
