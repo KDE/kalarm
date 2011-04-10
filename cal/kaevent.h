@@ -727,8 +727,8 @@ class KALARM_CAL_EXPORT KAEvent
                 mutable int        mChangeCount;       // >0 = inhibit calling calcTriggerTimes()
                 mutable bool       mTriggerChanged;    // true if need to recalculate trigger times
                 QString            mLogFile;           // alarm output is to be logged to this URL
-                float              mSoundVolume;       // volume for sound file, or < 0 for unspecified
-                float              mFadeVolume;        // initial volume for sound file, or < 0 for no fade
+                float              mSoundVolume;       // volume for sound file (range 0 - 1), or < 0 for unspecified
+                float              mFadeVolume;        // initial volume for sound file (range 0 - 1), or < 0 for no fade
                 int                mFadeSeconds;       // fade time for sound file, or 0 if none
                 mutable const KHolidays::HolidayRegion*
                                    mExcludeHolidays;   // non-null to not trigger alarms on holidays (= mHolidays when trigger calculated)
