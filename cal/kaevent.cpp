@@ -2987,7 +2987,7 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
 * Reinstate the original event from the 'displaying' event.
 */
 #ifdef USE_AKONADI
-void KAEvent::Private::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, Akonadi::Collection::Id collectionId, bool& showEdit, bool& showDefer)
+void KAEvent::Private::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, Akonadi::Collection::Id& collectionId, bool& showEdit, bool& showDefer)
 #else
 void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
 #endif

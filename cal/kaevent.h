@@ -365,7 +365,7 @@ class KALARM_CAL_EXPORT KAEvent
 #ifdef USE_AKONADI
         bool               setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer)
                                                                    { return d->setDisplaying(*e.d, t, colId, dt, showEdit, showDefer); }
-        void               reinstateFromDisplaying(const KCalCore::ConstEventPtr& e, Akonadi::Collection::Id colId, bool& showEdit, bool& showDefer)
+        void               reinstateFromDisplaying(const KCalCore::ConstEventPtr& e, Akonadi::Collection::Id& colId, bool& showEdit, bool& showDefer)
                                                                    { d->reinstateFromDisplaying(e, colId, showEdit, showDefer); }
         void               setCommandError(CmdErrType t) const     { d->setCommandError(t); }
 #else
@@ -609,7 +609,7 @@ class KALARM_CAL_EXPORT KAEvent
                 void               cancelDefer();
 #ifdef USE_AKONADI
                 bool               setDisplaying(const Private&, KAAlarm::Type, Akonadi::Collection::Id, const KDateTime& dt, bool showEdit, bool showDefer);
-                void               reinstateFromDisplaying(const KCalCore::ConstEventPtr&, Akonadi::Collection::Id, bool& showEdit, bool& showDefer);
+                void               reinstateFromDisplaying(const KCalCore::ConstEventPtr&, Akonadi::Collection::Id&, bool& showEdit, bool& showDefer);
                 void               setCommandError(CmdErrType t) const  { mCommandError = t; }
 #else
                 bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);

@@ -697,7 +697,7 @@ QString AkonadiModel::timeToAlarmText(const DateTime& dateTime) const
 void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startColumn, int endColumn, const QModelIndex& parent)
 {
     int start = -1;
-    int end;
+    int end   = -1;
     for (int row = 0, count = rowCount(parent);  row < count;  ++row)
     {
         const QModelIndex ix = index(row, 0, parent);
