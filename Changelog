@@ -5,47 +5,23 @@ KAlarm Change Log
 - Fix initialisation of library global statics.
 - Ensure sound volume is not out of range when reading from calendar.
 
-=== Version 2.6.2 --- 2 December 2010 ===
-- Fix possible crash when enabling individual alarms.
-- Fix KAlarm showing in system tray at login when configured not to show in tray.
-- Fix working-time-only alarms not triggering if KAlarm is started up outside
-  working hours, after the last trigger time during working hours was missed.
-- Disable Defer button in new message window when deferral limit has been reached.
-- Fix reminder time shown when editing a non-recurring alarm's deferred reminder.
-- Fix conversion of pre-version 1.9.10 non-recurring alarms with simple repetition.
-- Make disabled system tray icon more distinguishable for colour blind users.
-
-=== Version 2.6.1 --- 4 October 2010 ===
-- Fix crash when Try button is clicked while creating new display alarm.
-- Fix crash on KAlarm exit.
-
 === Version 2.6.0 --- 2 October 2010 ===
+- Don't reactivate start-at-login without prompting, after user switches it off,
+  except if KAlarm is session restored.
+- Show error message and set read-only if location is blank for new resource.
 - Add option to not notify execution errors for pre-alarm actions.
 - Set environment variable KALARM_UID to event UID for pre- & post-alarm actions.
 - Warn user if only UTC time zone is available (if ktimezoned not installed).
 
-=== Version 2.5.3 --- 2 October 2010 ===
-- Fix crash when a reminder alarm is being redisplayed.
-- Fix possible crash: on alarm deletion, always update next alarm to trigger.
-- Fix crash if alarm triggers while its deletion confirmation prompt is visible.
-- Fix Sound File selection dialogue Play button not playing any sound.
-- Always show current storage location choice in Configuration dialogue.
-- Fix inability to leave file name blank in audio alarm templates.
-- Fix changes to volume not enabling OK button when editing an audio alarm
-  template with no audio file specified.
-- Prevent long file name from expanding the width of file display alarm window.
-- Combine 4 New Alarm icons in toolbar, to fix icon texts not fitting into width.
-
-=== Version 2.5.0 --- 17 March 2010 ===
-- Don't reactivate start-at-login without prompting, after user switches it off,
-  except if KAlarm is session restored.
-- Show error message and set read-only if location is blank for new resource.
-
-=== Version 2.4.10 --- 15 Nov 2010 ===
+=== Version 2.4.10 (KDEPIM 4.4.8) --- 2 December 2010 ===
 - Fix KAlarm showing in system tray at login when configured not to show in tray.
 - Fix working-time-only alarms not triggering if KAlarm is started up outside
   working hours, after the last trigger time during working hours was missed.
 - Don't quit if no window is visible when 'show in system tray' is deselected.
+- Disable Defer button in new message window when deferral limit has been reached.
+- Fix reminder time shown when editing a non-recurring alarm's deferred reminder.
+- Fix conversion of pre-version 1.9.10 non-recurring alarms with simple repetition.
+- Make disabled system tray icon more distinguishable for colour blind users.
 
 === Version 2.4.9 (KDEPIM 4.4.7) --- 19 October 2010 ===
 - Fix crash if alarm triggers while its deletion confirmation prompt is visible.
