@@ -68,4 +68,21 @@ QString DateTime::formatLocale(bool shortFormat) const
     return KGlobal::locale()->formatDateTime(mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
 }
 
+bool operator<(const DateTime& dt1, const DateTime& dt2)
+{
+    if (dt1.isDateOnly()  &&  !dt2.isDateOnly())
+    {
+        KDateTime dt = dt1.mDateTime.addDays(1);
+        dt.setTime(DateTime::mStartOfDay);
+        return dt <= dt2.mDateTime;
+    }
+    if (!dt1.isDateOnly()  &&  dt2.isDateOnly())
+    {
+        KDateTime dt = dt2.mDateTime;
+        dt.setTime(DateTime::mStartOfDay);
+        return dt1.mDateTime < dt;
+    }
+    return dt1.mDateTime < dt2.mDateTime;
+}
+
 // vim: et sw=4:

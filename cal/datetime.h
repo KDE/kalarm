@@ -212,33 +212,33 @@ class KALARM_CAL_EXPORT DateTime
 /** Returns true if the two values are equal. */
 inline bool operator==(const DateTime& dt1, const DateTime& dt2)   { return dt1.mDateTime == dt2.mDateTime; }
 inline bool operator==(const KDateTime& dt1, const DateTime& dt2)  { return dt1 == dt2.mDateTime; }
+/** Returns true if the two values are not equal. */
+inline bool operator!=(const DateTime& dt1, const DateTime& dt2)   { return !operator==(dt1, dt2); }
+inline bool operator!=(const KDateTime& dt1, const DateTime& dt2)  { return !operator==(dt1, dt2); }
 /** Returns true if the @p dt1 is earlier than @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialog.
  */
-inline bool operator<(const DateTime& dt1, const DateTime& dt2)    { return dt1.mDateTime < dt2.mDateTime; }
-inline bool operator<(const KDateTime& dt1, const DateTime& dt2)   { return dt1 < dt2.mDateTime; }
-/** Returns true if the two values are not equal. */
-inline bool operator!=(const DateTime& dt1, const DateTime& dt2)   { return !operator==(dt1, dt2); }
-inline bool operator!=(const KDateTime& dt1, const DateTime& dt2)  { return !operator==(dt1, dt2); }
+KALARM_CAL_EXPORT bool operator<(const DateTime& dt1, const DateTime& dt2);
+inline bool operator<(const KDateTime& dt1, const DateTime& dt2)   { return operator<(DateTime(dt1), dt2); }
 /** Returns true if the @p dt1 is later than @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialog.
  */
 inline bool operator>(const DateTime& dt1, const DateTime& dt2)    { return operator<(dt2, dt1); }
-inline bool operator>(const KDateTime& dt1, const DateTime& dt2)   { return operator<(dt2, dt1); }
+inline bool operator>(const KDateTime& dt1, const DateTime& dt2)   { return operator<(dt2, DateTime(dt1)); }
 /** Returns true if the @p dt1 is later than or equal to @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialog.
  */
 inline bool operator>=(const DateTime& dt1, const DateTime& dt2)   { return !operator<(dt1, dt2); }
-inline bool operator>=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(dt1, dt2); }
+inline bool operator>=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(DateTime(dt1), dt2); }
 /** Returns true if the @p dt1 is earlier than or equal to @p dt2.
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialog.
  */
 inline bool operator<=(const DateTime& dt1, const DateTime& dt2)   { return !operator<(dt2, dt1); }
-inline bool operator<=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(dt2, dt1); }
+inline bool operator<=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(dt2, DateTime(dt1)); }
 
 #endif // DATETIME_H
 
