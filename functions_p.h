@@ -1,7 +1,7 @@
 /*
  *  functions_p.h  -  private declarations for miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include <kwindowsystem.h>
 #include <QObject>
 
+class EditAlarmDlg;
+
 namespace KAlarm
 {
 
@@ -47,6 +49,19 @@ class Private : public QObject
 
     private:
         static Private* mInstance;
+};
+
+// Private class to handle Edit New Alarm dialog OK button.
+class PrivateNewAlarmDlg : public QObject
+{
+        Q_OBJECT
+    public:
+        PrivateNewAlarmDlg() {}
+        explicit PrivateNewAlarmDlg(EditAlarmDlg*);
+        void accept(EditAlarmDlg*);
+
+    private slots:
+        void okClicked();
 };
 
 } // namespace KAlarm
