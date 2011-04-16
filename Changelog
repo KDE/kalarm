@@ -1,17 +1,18 @@
 KAlarm Change Log
 
-=== Version 2.6.3 --- 10 April 2011 ===
-- Fix bad borders round left hand buttons of time spinboxes in Oxygen style.
-- Fix initialisation of library global statics.
-- Ensure sound volume is not out of range when reading from calendar.
-
-=== Version 2.6.0 --- 2 October 2010 ===
-- Don't reactivate start-at-login without prompting, after user switches it off,
-  except if KAlarm is session restored.
-- Show error message and set read-only if location is blank for new resource.
+=== Version 2.6.3 --- 16 April 2011 ===
 - Add option to not notify execution errors for pre-alarm actions.
 - Set environment variable KALARM_UID to event UID for pre- & post-alarm actions.
 - Warn user if only UTC time zone is available (if ktimezoned not installed).
+- Don't reactivate start-at-login without prompting, after user switches it off,
+  except if KAlarm is session restored.
+- Show error message and set read-only if location is blank for new resource.
+
+=== Version 2.4.11 (KDEPIM 4.4.11) --- 16 April 2011 ===
+- Fix bad borders round left hand buttons of time spinboxes in Oxygen style.
+- Fix initialisation of library global statics.
+- Ensure sound volume is not out of range when reading from calendar.
+- Fix New Alarm dialogue from system tray menu restoring other windows.
 
 === Version 2.4.10 (KDEPIM 4.4.8) --- 2 December 2010 ===
 - Fix KAlarm showing in system tray at login when configured not to show in tray.
