@@ -1,5 +1,5 @@
 #ifdef __GNUC__
-#warning Editing the display name of a calendar produces errors
+#warning Editing the directory path of a calendar produces errors
 #endif
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi

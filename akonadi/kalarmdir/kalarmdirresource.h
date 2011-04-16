@@ -58,7 +58,7 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         bool    loadFiles();
         void    collectionsReceived(const Akonadi::Collection::List&);
         void    collectionFetchResult(KJob*);
-        void    itemJobDone(KJob*);
+        void    jobDone(KJob*);
 
     private:
         KAEvent loadFile(const QString& path, const QString& file);
@@ -67,6 +67,7 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         QString filePath(const QString& file) const;
         QString fileName(const QString& path) const;
         void    initializeDirectory() const;
+        void    setNameRights(Akonadi::Collection&);
         bool    cancelIfReadOnly();
         bool    writeToFile(const KAEvent&);
         void    setCompatibility(bool writeAttr = true);

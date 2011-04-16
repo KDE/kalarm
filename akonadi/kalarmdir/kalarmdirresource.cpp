@@ -39,6 +39,7 @@
 #include <akonadi/entitydisplayattribute.h>
 #include <akonadi/collectionfetchjob.h>
 #include <akonadi/collectionfetchscope.h>
+#include <akonadi/collectionmodifyjob.h>
 #include <akonadi/itemfetchscope.h>
 #include <akonadi/itemcreatejob.h>
 #include <akonadi/itemdeletejob.h>
@@ -114,6 +115,7 @@ void KAlarmDirResource::aboutToQuit()
 void KAlarmDirResource::collectionsReceived(const Akonadi::Collection::List& collections)
 {
     int count = collections.count();
+    kDebug() << "Count:" << count;
     if (!count)
         kError() << "Cannot retrieve this resource's collection";
     else
@@ -142,16 +144,38 @@ void KAlarmDirResource::collectionFetchResult(KJob* j)
 void KAlarmDirResource::configure(WId windowId)
 {
     kDebug();
+    // Save the old configuration settings
+    QString     path     = mSettings->path();
+    QString     name     = mSettings->displayName();
+    bool        readOnly = mSettings->readOnly();
+    bool        monitor  = mSettings->monitorFiles();
+    QStringList types    = mSettings->alarmTypes();
+
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
     AutoQPointer<SettingsDialog> dlg = new SettingsDialog(windowId, mSettings);
     if (dlg->exec())
     {
-        clearCache();
-        initializeDirectory();
-        loadFiles();
-        synchronizeCollectionTree();
+        if (mSettings->path() != path
+        ||  mSettings->alarmTypes() != types
+        ||  (mSettings->monitorFiles() && !monitor))
+        {
+            // Settings have changed which might affect the alarm configuration
+            clearCache();
+            initializeDirectory();
+            loadFiles();
+            synchronizeCollectionTree();
+        }
+        else if (mSettings->readOnly() != readOnly
+             ||  mSettings->displayName() != name)
+        {
+            // Need to change the collection's rights or name
+            Collection c(mCollectionId);
+            setNameRights(c);
+            CollectionModifyJob* job = new CollectionModifyJob(c);
+            connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
+        }
         emit configurationDialogAccepted();
     }
     else
@@ -174,11 +198,14 @@ void KAlarmDirResource::settingsChanged()
         setName(display);
 
     const QString dirPath = mSettings->path();
-    bool monitoring = KDirWatch::self()->contains(dirPath);
-    if (monitoring  &&  !mSettings->monitorFiles())
-        KDirWatch::self()->removeDir(dirPath);
-    else if (!monitoring  &&  mSettings->monitorFiles())
-        KDirWatch::self()->addDir(dirPath, KDirWatch::WatchFiles);
+    if (!dirPath.isEmpty())
+    {
+        bool monitoring = KDirWatch::self()->contains(dirPath);
+        if (monitoring  &&  !mSettings->monitorFiles())
+            KDirWatch::self()->removeDir(dirPath);
+        else if (!monitoring  &&  mSettings->monitorFiles())
+            KDirWatch::self()->addDir(dirPath, KDirWatch::WatchFiles);
+    }
 }
 
 /******************************************************************************
@@ -497,25 +524,10 @@ void KAlarmDirResource::retrieveCollections()
     Collection c;
     c.setParentCollection(Collection::root());
     c.setRemoteId(directoryName());
-    const QString display = mSettings->displayName();
-    c.setName(display.isEmpty() ? name() : display);
     c.setContentMimeTypes(mSettings->alarmTypes());
-    if (mSettings->readOnly())
-    {
-        c.setRights(Collection::CanChangeCollection);
-    }
-    else
-    {
-        Collection::Rights rights = Collection::ReadOnly;
-        rights |= Collection::CanChangeItem;
-        rights |= Collection::CanCreateItem;
-        rights |= Collection::CanDeleteItem;
-        rights |= Collection::CanChangeCollection;
-        c.setRights(rights);
-    }
+    setNameRights(c);
 
     EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
-    attr->setDisplayName(name());
     attr->setIconName("kalarm");
 
 #ifdef __GNUC__
@@ -529,6 +541,32 @@ void KAlarmDirResource::retrieveCollections()
     Collection::List list;
     list << c;
     collectionsRetrieved(list);
+}
+
+/******************************************************************************
+* Set the collection's name and rights.
+* It is the caller's responsibility to notify the Akonadi server.
+*/
+void KAlarmDirResource::setNameRights(Collection& c)
+{
+    kDebug();
+    const QString display = mSettings->displayName();
+    c.setName(display.isEmpty() ? name() : display);
+    EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
+    attr->setDisplayName(name());
+    if (mSettings->readOnly())
+    {
+        c.setRights(Collection::CanChangeCollection);
+    }
+    else
+    {
+        Collection::Rights rights = Collection::ReadOnly;
+        rights |= Collection::CanChangeItem;
+        rights |= Collection::CanCreateItem;
+        rights |= Collection::CanDeleteItem;
+        rights |= Collection::CanChangeCollection;
+        c.setRights(rights);
+    }
 }
 
 /******************************************************************************
@@ -716,7 +754,7 @@ void KAlarmDirResource::fileDeleted(const QString& path)
         // Tell the Akonadi server to delete all Items in the collection
         Collection c(mCollectionId);
         ItemDeleteJob* job = new ItemDeleteJob(c);
-        connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+        connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
     }
     else
     {
@@ -766,7 +804,7 @@ bool KAlarmDirResource::createItem(const KAEvent& event)
     item.setParentCollection(c);
     item.setRemoteId(event.id());
     ItemCreateJob* job = new ItemCreateJob(item, c);
-    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+    connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
     return true;
 }
 
@@ -786,7 +824,7 @@ bool KAlarmDirResource::modifyItem(const KAEvent& event)
     item.setRemoteId(event.id());
     ItemModifyJob* job = new ItemModifyJob(item);
     job->disableRevisionCheck();
-    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+    connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
     return true;
 }
 
@@ -800,14 +838,14 @@ void KAlarmDirResource::deleteItem(const KAEvent& event)
     item.setParentCollection(c);
     item.setRemoteId(event.id());
     ItemDeleteJob* job = new ItemDeleteJob(item);
-    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+    connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
 }
 
 /******************************************************************************
-* Called when an item job has completed.
+* Called when a collection or item job has completed.
 * Checks for any error.
 */
-void KAlarmDirResource::itemJobDone(KJob* j)
+void KAlarmDirResource::jobDone(KJob* j)
 {
     if (j->error())
         kError() << j->metaObject()->className() << "error:" << j->errorString();
