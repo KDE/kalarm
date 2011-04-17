@@ -201,7 +201,7 @@ class KALARM_CAL_EXPORT DateTime
 
         friend bool operator==(const DateTime& dt1, const DateTime& dt2);
         friend bool operator==(const KDateTime& dt1, const DateTime& dt2);
-        friend bool operator<(const DateTime& dt1, const DateTime& dt2);
+        KALARM_CAL_EXPORT friend bool operator<(const DateTime& dt1, const DateTime& dt2);
         friend bool operator<(const KDateTime& dt1, const DateTime& dt2);
 
     private:
