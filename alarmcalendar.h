@@ -134,6 +134,9 @@ class AlarmCalendar : public QObject
     signals:
         void                  earliestAlarmChanged();
         void                  haveDisabledAlarmsChanged(bool haveDisabled);
+#ifdef USE_AKONADI
+        void                  atLoginEventAdded(const KAEvent&);
+#endif
         void                  calendarSaved(AlarmCalendar*);
 
     private slots:

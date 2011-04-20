@@ -152,6 +152,7 @@ KAlarmApp::KAlarmApp()
     if (AlarmCalendar::initialiseCalendars())
     {
         connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
+        connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(const KAEvent&)), SLOT(atLoginEventAdded(const KAEvent&)));
 
         KConfigGroup config(KGlobal::config(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
@@ -809,6 +810,22 @@ void KAlarmApp::processQueue()
         checkNextDueAlarm();
     }
 }
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Called when a repeat-at-login alarm has been added externally.
+* Queues it for triggering.
+*/
+void KAlarmApp::atLoginEventAdded(const KAEvent& event)
+{
+    if (mAlarmsEnabled)
+    {
+        mDcopQueue.enqueue(DcopQEntry(EVENT_HANDLE, event.id()));
+        if (mInitialised)
+            QTimer::singleShot(0, this, SLOT(processQueue()));
+    }
+}
+#endif
 
 /******************************************************************************
 * Called when the system tray main window is closed.
