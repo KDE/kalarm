@@ -55,12 +55,13 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         void    fileCreated(const QString& path);
         void    fileChanged(const QString& path);
         void    fileDeleted(const QString& path);
-        bool    loadFiles();
+        void    loadFiles()         { loadFiles(true); }
         void    collectionsReceived(const Akonadi::Collection::List&);
         void    collectionFetchResult(KJob*);
         void    jobDone(KJob*);
 
     private:
+        bool    loadFiles(bool sync);
         KAEvent loadFile(const QString& path, const QString& file);
         KAEvent loadNextFile(const QString& eventId, const QString& file);
         QString directoryName() const;

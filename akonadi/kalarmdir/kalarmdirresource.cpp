@@ -157,15 +157,20 @@ void KAlarmDirResource::configure(WId windowId)
     AutoQPointer<SettingsDialog> dlg = new SettingsDialog(windowId, mSettings);
     if (dlg->exec())
     {
-        if (mSettings->path() != path
+        bool pathChanged = (mSettings->path() != path);
+        if (pathChanged
         ||  mSettings->alarmTypes() != types
         ||  (mSettings->monitorFiles() && !monitor))
         {
             // Settings have changed which might affect the alarm configuration
+#ifdef __GNUC__
+#warning This creates a new collection with a different ID (due to remote ID changing?)
+#endif
             clearCache();
             initializeDirectory();
-            loadFiles();
-            synchronizeCollectionTree();
+            loadFiles(!pathChanged);
+            if (pathChanged)
+                synchronizeCollectionTree();
         }
         else if (mSettings->readOnly() != readOnly
              ||  mSettings->displayName() != name)
@@ -212,7 +217,7 @@ void KAlarmDirResource::settingsChanged()
 * Load and parse data from each file in the directory.
 * The events are cached in mEvents.
 */
-bool KAlarmDirResource::loadFiles()
+bool KAlarmDirResource::loadFiles(bool sync)
 {
     const QString dirPath = directoryName();
     kDebug() << dirPath;
@@ -261,8 +266,11 @@ DEBUG_DATA;
             KDirWatch::self()->addDir(dirPath, KDirWatch::WatchFiles);
     }
 
-    // Ensure the Akonadi server is updated with the current list of events
-    synchronize();
+    if (sync)
+    {
+        // Ensure the Akonadi server is updated with the current list of events
+        synchronize();
+    }
 
     emit status(Idle);
     return true;
@@ -649,7 +657,7 @@ void KAlarmDirResource::fileCreated(const QString& path)
     {
         // The directory has been created. Load all files in it, and
         // tell the Akonadi server to create an Item for each event.
-        loadFiles();
+        loadFiles(true);
         foreach (const EventFile& data, mEvents)
         {
             createItem(data.event);
