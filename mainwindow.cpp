@@ -696,14 +696,14 @@ void MainWindow::selectEvent(const QString& eventId)
     mListView->clearSelection();
 #ifdef USE_AKONADI
     QModelIndex index = mListFilterModel->eventIndex(eventId);
-#else
-    QModelIndex index = EventListModel::alarms()->eventIndex(eventId);
-#endif
     if (index.isValid())
     {
         mListView->select(index);
         mListView->scrollTo(index);
     }
+#else
+    mListView->select(eventId, true);
+#endif
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  eventlistview.h  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007,2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2008,2010,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,9 +49,9 @@ class EventListView : public QTreeView
         EventListModel*   eventModel() const   { return static_cast<EventListModel*>(static_cast<QAbstractProxyModel*>(model())->sourceModel()); }
         KAEvent*          event(int row) const;
         KAEvent*          event(const QModelIndex&) const;
-        void              select(const QString& eventId);
+        void              select(const QString& eventId, bool scrollToEvent = false);
 #endif
-        void              select(const QModelIndex&);
+        void              select(const QModelIndex&, bool scrollToIndex = false);
         QModelIndex       selectedIndex() const;
 #ifdef USE_AKONADI
         KAEvent           selectedEvent() const;

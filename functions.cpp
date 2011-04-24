@@ -153,14 +153,9 @@ MainWindow* displayMainWindowSelected(const QString& eventId)
     else
     {
         // There is already a main window, so make it the active window
-        bool visible = win->isVisible();
-        if (visible)
-            win->hide();        // in case it's on a different desktop
-        if (!visible  ||  win->isMinimized())
-        {
-            win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
-            win->show();
-        }
+        win->hide();        // in case it's on a different desktop
+        win->setWindowState(win->windowState() & ~Qt::WindowMinimized);
+        win->show();
         win->raise();
         win->activateWindow();
     }
