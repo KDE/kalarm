@@ -152,7 +152,9 @@ KAlarmApp::KAlarmApp()
     if (AlarmCalendar::initialiseCalendars())
     {
         connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
+#ifdef USE_AKONADI
         connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(const KAEvent&)), SLOT(atLoginEventAdded(const KAEvent&)));
+#endif
 
         KConfigGroup config(KGlobal::config(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
