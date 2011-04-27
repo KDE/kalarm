@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 2.6.3 --- 26 April 2011 ===
+=== Version 2.6.3 --- 27 April 2011 ===
 - Add option to not notify execution errors for pre-alarm actions.
 - Set environment variable KALARM_UID to event UID for pre- & post-alarm actions.
 - Warn user if only UTC time zone is available (if ktimezoned not installed).
@@ -11,6 +11,7 @@ KAlarm Change Log
   icon menu.
 - Fix KAlarm button in alarm window not always showing main window and not
   highlighting the alarm in the main window.
+- Move New Alarm From Template action into New alarm menu to simplify toolbar.
 
 === Version 2.4.11 (KDEPIM 4.4.11) --- 16 April 2011 ===
 - Fix bad borders round left hand buttons of time spinboxes in Oxygen style.

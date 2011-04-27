@@ -208,22 +208,6 @@ KToggleAction* createSpreadWindowsAction(QObject* parent)
 }
 
 /******************************************************************************
-* Create a New From Template action.
-*/
-TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection* actions, const QString& name)
-{
-    TemplateMenuAction* action = new TemplateMenuAction(KIcon(QLatin1String("document-new-from-template")), label, actions, name);
-#ifdef USE_AKONADI
-    QObject::connect(TemplateListModel::all(), SIGNAL(haveEventsStatus(bool)), action, SLOT(setEnabled(bool)));
-    action->setEnabled(TemplateListModel::all()->haveEvents());
-#else
-    QObject::connect(EventListModel::templates(), SIGNAL(haveEventsStatus(bool)), action, SLOT(setEnabled(bool)));
-    action->setEnabled(EventListModel::templates()->haveEvents());
-#endif
-    return action;
-}
-
-/******************************************************************************
 * Add a new active (non-archived) alarm.
 * Save it in the calendar file and add it to every main window instance.
 * Parameters: msgParent = parent widget for any calendar selection prompt or

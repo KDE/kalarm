@@ -118,7 +118,6 @@ void                editNewTemplate(const KAEvent* preset, QWidget* parent = 0);
 void                editTemplate(KAEvent*, QWidget* parent = 0);
 void                execNewAlarmDlg(EditAlarmDlg*);
 /** Create a "New From Template" QAction */
-TemplateMenuAction* createNewFromTemplateAction(const QString& label, KActionCollection*, const QString& name);
 KToggleAction*      createAlarmEnableAction(QObject* parent);
 KAction*            createStopPlayAction(QObject* parent);
 KToggleAction*      createSpreadWindowsAction(QObject* parent);

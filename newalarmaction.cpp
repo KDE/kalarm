@@ -1,7 +1,7 @@
 /*
  *  newalarmaction.cpp  -  menu action to select a new alarm type
  *  Program:  kalarm
- *  Copyright © 2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2009,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,17 @@
 #include "kalarm.h"
 #include "newalarmaction.moc"
 
+#ifdef USE_AKONADI
+#include "akonadimodel.h"
+#include "collectionmodel.h"
+#include "itemlistmodel.h"
+#else
+#include "alarmresources.h"
+#include "eventlistmodel.h"
+#endif
+#include "functions.h"
 #include "shellprocess.h"
+#include "templatemenuaction.h"
 
 #include <kmenu.h>
 #include <kactionmenu.h>
@@ -30,18 +40,20 @@
 #include <kdebug.h>
 
 
-#define DISP_ICON  QLatin1String("window-new")
-#define CMD_ICON   QLatin1String("new-command-alarm")
-#define MAIL_ICON  QLatin1String("mail-message-new")
-#define AUDIO_ICON QLatin1String("new-audio-alarm")
-#define DISP_KEY   QKeySequence(Qt::CTRL + Qt::Key_D)
-#define CMD_KEY    QKeySequence(Qt::CTRL + Qt::Key_C)
-#define MAIL_KEY   QKeySequence(Qt::CTRL + Qt::Key_M)
-#define AUDIO_KEY  QKeySequence(Qt::CTRL + Qt::Key_U)
+#define DISP_ICON     QLatin1String("window-new")
+#define CMD_ICON      QLatin1String("new-command-alarm")
+#define MAIL_ICON     QLatin1String("mail-message-new")
+#define AUDIO_ICON    QLatin1String("new-audio-alarm")
+#define TEMPLATE_ICON QLatin1String("document-new-from-template")
+#define DISP_KEY      QKeySequence(Qt::CTRL + Qt::Key_D)
+#define CMD_KEY       QKeySequence(Qt::CTRL + Qt::Key_C)
+#define MAIL_KEY      QKeySequence(Qt::CTRL + Qt::Key_M)
+#define AUDIO_KEY     QKeySequence(Qt::CTRL + Qt::Key_U)
 
 
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
-    : KActionMenu(KIcon("document-new"), label, parent)
+    : KActionMenu(KIcon("document-new"), label, parent),
+      mTemplateAction(0)
 {
     mDisplayAction = new KAction(KIcon(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
     menu()->addAction(mDisplayAction);
@@ -61,6 +73,18 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         mCommandAction->setShortcut(CMD_KEY);
         mEmailAction->setShortcut(MAIL_KEY);
         mAudioAction->setShortcut(AUDIO_KEY);
+
+        // Include New From Template only in non-template menu
+        mTemplateAction = new TemplateMenuAction(KIcon(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
+        menu()->addAction(mTemplateAction);
+#ifdef USE_AKONADI
+        connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)), SLOT(slotCalendarStatusChanged()));
+        connect(TemplateListModel::all(), SIGNAL(haveEventsStatus(bool)), SLOT(slotCalendarStatusChanged()));
+#else
+        connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotCalendarStatusChanged()));
+        connect(EventListModel::templates(), SIGNAL(haveEventsStatus(bool)), SLOT(slotCalendarStatusChanged()));
+#endif
+        slotCalendarStatusChanged();   // initialise action states
     }
     setDelayed(false);
     connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
@@ -68,7 +92,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
 }
 
 /******************************************************************************
-*  Called when the action is clicked.
+* Called when the action is clicked.
 */
 void NewAlarmAction::slotInitMenu()
 {
@@ -77,13 +101,31 @@ void NewAlarmAction::slotInitMenu()
 }
 
 /******************************************************************************
-*  Called when an alarm type is selected from the New popup menu.
+* Called when an alarm type is selected from the New popup menu.
 */
 void NewAlarmAction::slotSelected(QAction* action)
 {
     QMap<QAction*, EditAlarmDlg::Type>::ConstIterator it = mTypes.constFind(action);
     if (it != mTypes.constEnd())
         emit selected(it.value());
+}
+
+/******************************************************************************
+* Called when the status of a calendar has changed.
+* Enable or disable the New From Template action appropriately.
+*/
+void NewAlarmAction::slotCalendarStatusChanged()
+{
+    // Find whether there are any writable active alarm calendars
+#ifdef USE_AKONADI
+    bool active = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::ACTIVE, true).isEmpty();
+    bool haveEvents = TemplateListModel::all()->haveEvents();
+#else
+    bool active = AlarmResources::instance()->activeCount(KAlarm::CalEvent::ACTIVE, true);
+    bool haveEvents = EventListModel::templates()->haveEvents();
+#endif
+    mTemplateAction->setEnabled(active && haveEvents);
+    setEnabled(active);
 }
 
 // vim: et sw=4:

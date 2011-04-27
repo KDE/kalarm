@@ -1,7 +1,7 @@
 /*
  *  templatemenuaction.cpp  -  menu action to select a template
  *  Program:  kalarm
- *  Copyright © 2005,2006,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2006,2008,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,17 +27,15 @@
 
 #include <kmenu.h>
 #include <kactionmenu.h>
-#include <kactioncollection.h>
 #include <kdebug.h>
 
 
-TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, KActionCollection* actions, const QString& name)
-    : KActionMenu(icon, label, actions)
+TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, QObject* parent)
+    : KActionMenu(icon, label, parent)
 {
     setDelayed(false);
     connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
     connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
-    actions->addAction(name, this);
 }
 
 /******************************************************************************
