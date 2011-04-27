@@ -1,7 +1,7 @@
 /*
  *  itemlistmodel.cpp  -  Akonadi item models
  *  Program:  kalarm
- *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
     setSortRole(AkonadiModel::SortRole);
     setDynamicSortFilter(true);
     connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted()));
-    connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsToBeRemoved()));
+    connect(this, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(slotRowsRemoved()));
 }
 
 int ItemListModel::columnCount(const QModelIndex& /*parent*/) const
@@ -77,7 +77,7 @@ void ItemListModel::slotRowsInserted()
 /******************************************************************************
 * Called when rows have been deleted from the model.
 */
-void ItemListModel::slotRowsToBeRemoved()
+void ItemListModel::slotRowsRemoved()
 {
     if (mHaveEvents  &&  !rowCount())
     {

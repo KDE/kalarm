@@ -1,7 +1,7 @@
 /*
  *  itemlistmodel.h  -  Akonadi item models
  *  Program:  kalarm
- *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,7 +64,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
 
     private slots:
         void slotRowsInserted();
-        void slotRowsToBeRemoved();
+        void slotRowsRemoved();
 
     private:
         KAlarm::CalEvent::Types mAllowedTypes; // types of events allowed in this model
