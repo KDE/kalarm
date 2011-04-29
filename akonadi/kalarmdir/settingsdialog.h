@@ -58,3 +58,5 @@ class SettingsDialog : public KDialog
 }
 
 #endif // KALARMDIR_SETTINGSDIALOG_H
+
+// vim: et sw=4:

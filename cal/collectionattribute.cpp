@@ -133,7 +133,11 @@ kDebug(5950)<<"Size="<<count<<", data="<<data;
     {
         // 0: calendar format compatibility
         c[0] = items[index++].toInt(&ok);
-        if (!ok  ||  (c[0] & ~(KAlarm::Calendar::Incompatible | KAlarm::Calendar::Current | KAlarm::Calendar::Convertible)))
+        if (!ok
+        ||  (c[0] != KAlarm::Calendar::Incompatible
+          && c[0] != KAlarm::Calendar::Current
+          && c[0] != KAlarm::Calendar::Convertible
+          && c[0] != KAlarm::Calendar::ByEvent))
         {
             kError() << "Invalid compatibility:" << c[0];
             return;

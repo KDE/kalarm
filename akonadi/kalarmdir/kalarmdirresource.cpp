@@ -114,6 +114,7 @@ void KAlarmDirResource::aboutToQuit()
 
 void KAlarmDirResource::collectionsReceived(const Akonadi::Collection::List& collections)
 {
+    kDebug();
     int count = collections.count();
     kDebug() << "Count:" << count;
     if (!count)
@@ -127,6 +128,10 @@ void KAlarmDirResource::collectionsReceived(const Akonadi::Collection::List& col
             if (collections[i].remoteId() == mSettings->path())
             {
                 mCollectionId = collections[i].id();
+
+                // Set collection's format compatibility flag now that the collection
+                // and its attributes have been fetched.
+                KAlarmResourceCommon::setCollectionCompatibility(collections[i], mCompatibility);
                 break;
             }
         }
@@ -150,6 +155,7 @@ void KAlarmDirResource::configure(WId windowId)
     bool        readOnly = mSettings->readOnly();
     bool        monitor  = mSettings->monitorFiles();
     QStringList types    = mSettings->alarmTypes();
+    bool        creating = path.isEmpty();
 
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
@@ -157,36 +163,36 @@ void KAlarmDirResource::configure(WId windowId)
     AutoQPointer<SettingsDialog> dlg = new SettingsDialog(windowId, mSettings);
     if (dlg->exec())
     {
-        bool pathChanged = (mSettings->path() != path);
-        if (pathChanged
-        ||  mSettings->alarmTypes() != types
-        ||  (mSettings->monitorFiles() && !monitor))
+        // Directory path change is not allowed for existing resources
+        if (creating  ||  mSettings->path() == path)
         {
-            // Settings have changed which might affect the alarm configuration
+            if (mSettings->alarmTypes() != types
+            ||  (mSettings->monitorFiles() && !monitor))
+            {
+                // Settings have changed which might affect the alarm configuration
+                if (creating)
+                    clearCache();   // this deletes any existing collection
+                initializeDirectory();   // should only be needed for new resource, but just in case ...
 #ifdef __GNUC__
-#warning This creates a new collection with a different ID (due to remote ID changing?)
+#warning Check for new/deleted/changed events if existing resource
 #endif
-            clearCache();
-            initializeDirectory();
-            loadFiles(!pathChanged);
-            if (pathChanged)
-                synchronizeCollectionTree();
+                loadFiles(true);
+//              synchronizeCollectionTree();
+            }
+            else if (mSettings->readOnly() != readOnly
+                 ||  mSettings->displayName() != name)
+            {
+                // Need to change the collection's rights or name
+                Collection c(mCollectionId);
+                setNameRights(c);
+                CollectionModifyJob* job = new CollectionModifyJob(c);
+                connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
+            }
+            emit configurationDialogAccepted();
+            return;
         }
-        else if (mSettings->readOnly() != readOnly
-             ||  mSettings->displayName() != name)
-        {
-            // Need to change the collection's rights or name
-            Collection c(mCollectionId);
-            setNameRights(c);
-            CollectionModifyJob* job = new CollectionModifyJob(c);
-            connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
-        }
-        emit configurationDialogAccepted();
     }
-    else
-    {
-        emit configurationDialogRejected();
-    }
+    emit configurationDialogRejected();
 }
 
 /******************************************************************************
@@ -537,12 +543,8 @@ void KAlarmDirResource::retrieveCollections()
 
     EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
     attr->setIconName("kalarm");
-
-#ifdef __GNUC__
-#warning Attributes may need to be stored in settings
-#endif
-    CollectionAttribute* cattr = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
-    cattr->setCompatibility(mCompatibility);
+    // Don't update CollectionAttribute here, since it hasn't yet been fetched
+    // from Akonadi database.
 
     mCollectionId = c.id();   // note the one and only collection for this resource
 
@@ -865,6 +867,7 @@ void KAlarmDirResource::jobDone(KJob* j)
 */
 void KAlarmDirResource::initializeDirectory() const
 {
+    kDebug();
     const QDir dir(directoryName());
     const QString dirPath = dir.absolutePath();
 

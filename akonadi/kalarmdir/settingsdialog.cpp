@@ -31,65 +31,74 @@
 namespace Akonadi_KAlarm_Dir_Resource
 {
 
-SettingsDialog::SettingsDialog( WId windowId, Settings* settings )
+SettingsDialog::SettingsDialog(WId windowId, Settings* settings)
   : KDialog(),
     mSettings(settings)
 {
-  ui.setupUi( mainWidget() );
-  mTypeSelector = new AlarmTypeWidget(ui.tab, ui.tabLayout);
-  ui.ktabwidget->setTabBarHidden(true);
-  ui.kcfg_Path->setMode( KFile::LocalOnly | KFile::Directory );
-  setButtons( Ok | Cancel );
-  setCaption( i18nc("@title", "Configure Calendar") );
+    ui.setupUi(mainWidget());
+    mTypeSelector = new AlarmTypeWidget(ui.tab, ui.tabLayout);
+    ui.ktabwidget->setTabBarHidden(true);
+    ui.kcfg_Path->setMode(KFile::LocalOnly | KFile::Directory);
+    setButtons(Ok | Cancel);
+    setCaption(i18nc("@title", "Configure Calendar"));
 
-  if ( windowId )
-    KWindowSystem::setMainWindow( this, windowId );
+    if (windowId)
+        KWindowSystem::setMainWindow(this, windowId);
 
-  connect( this, SIGNAL( okClicked() ), SLOT( save() ) );
+    // Make directory path read-only if the resource already exists
+    KUrl path(mSettings->path());
+    ui.kcfg_Path->setUrl(path);
+    if (!path.isEmpty())
+        ui.kcfg_Path->setEnabled(false);
 
-  connect( ui.kcfg_Path, SIGNAL( textChanged( QString ) ), SLOT( validate() ) );
-  connect( ui.kcfg_ReadOnly, SIGNAL( toggled( bool ) ), SLOT( validate() ) );
-  connect(mTypeSelector, SIGNAL(changed()), SLOT(validate()));
+    mTypeSelector->setAlarmTypes(KAlarm::CalEvent::types(mSettings->alarmTypes()));
+    mManager = new KConfigDialogManager(this, mSettings);
+    mManager->updateWidgets();
 
-  QTimer::singleShot( 0, this, SLOT( validate() ) );
+    connect(this, SIGNAL(okClicked()), SLOT(save()));
+    connect(ui.kcfg_Path, SIGNAL(textChanged(QString)), SLOT(validate()));
+    connect(ui.kcfg_ReadOnly, SIGNAL(toggled(bool)), SLOT(validate()));
+    connect(mTypeSelector, SIGNAL(changed()), SLOT(validate()));
 
-  ui.kcfg_Path->setUrl( KUrl( mSettings->path() ) );
-  mTypeSelector->setAlarmTypes(KAlarm::CalEvent::types(mSettings->alarmTypes()));
-  mManager = new KConfigDialogManager( this, mSettings );
-  mManager->updateWidgets();
+    QTimer::singleShot(0, this, SLOT(validate()));
 }
 
 void SettingsDialog::save()
 {
-  mManager->updateSettings();
-  mSettings->setPath( ui.kcfg_Path->url().toLocalFile() );
-  mSettings->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mTypeSelector->alarmTypes()));
-  mSettings->writeConfig();
+    mManager->updateSettings();
+    mSettings->setPath(ui.kcfg_Path->url().toLocalFile());
+    mSettings->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mTypeSelector->alarmTypes()));
+    mSettings->writeConfig();
 }
 
 void SettingsDialog::validate()
 {
-  bool enableOk = false;
-  // At least one alarm type must be selected
-  if (mTypeSelector->alarmTypes() != KAlarm::CalEvent::EMPTY)
-  {
-    // The entered URL must be valid and local
-    const KUrl currentUrl = ui.kcfg_Path->url();
-    if ( !currentUrl.isEmpty() && currentUrl.isLocalFile() ) {
-      const QFileInfo file( currentUrl.toLocalFile() );
-      // It must either be a directory, or not yet exist
-      if ( !file.exists() || file.isDir() ) {
-        if ( file.exists() && !file.isWritable() ) {
-          ui.kcfg_ReadOnly->setEnabled( false );
-          ui.kcfg_ReadOnly->setChecked( true );
-        } else {
-          ui.kcfg_ReadOnly->setEnabled( true );
+    bool enableOk = false;
+    // At least one alarm type must be selected
+    if (mTypeSelector->alarmTypes() != KAlarm::CalEvent::EMPTY)
+    {
+        // The entered URL must be valid and local
+        const KUrl currentUrl = ui.kcfg_Path->url();
+        if (!currentUrl.isEmpty() && currentUrl.isLocalFile())
+        {
+            const QFileInfo file(currentUrl.toLocalFile());
+            // It must either be a directory, or not yet exist
+            if (!file.exists() || file.isDir())
+            {
+                if (file.exists() && !file.isWritable())
+                {
+                    ui.kcfg_ReadOnly->setEnabled(false);
+                    ui.kcfg_ReadOnly->setChecked(true);
+                }
+                else
+                    ui.kcfg_ReadOnly->setEnabled(true);
+                enableOk = true;
+            }
         }
-        enableOk = true;
-      }
     }
-  }
-  enableButton( Ok, enableOk );
+    enableButton(Ok, enableOk);
 }
 
 }
+
+// vim: et sw=4:
