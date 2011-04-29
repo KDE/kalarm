@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     options.add("cancelEvent <eventID>", ki18n("Cancel alarm with the specified event ID"));
     options.add("d");
     options.add("disable", ki18n("Disable the alarm"));
+    options.add("disable-all", ki18n("Disable monitoring of all alarms"));
     options.add("e");
     options.add("!exec <commandline>", ki18n("Execute a shell command line"));
     options.add("E");

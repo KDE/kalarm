@@ -49,7 +49,8 @@ CommandOptions::CommandOptions()
       mReminderMinutes(0),
       mAudioVolume(-1),
       mFromID(0),
-      mFlags(KAEvent::DEFAULT_FONT)
+      mFlags(KAEvent::DEFAULT_FONT),
+      mDisableAll(false)
 {
     mArgs = KCmdLineArgs::parsedArgs();
 #ifndef NDEBUG
@@ -194,6 +195,12 @@ CommandOptions::CommandOptions()
             mAttachments += params[i];
         if (mArgs->count())
             mText = mArgs->arg(0);
+    }
+    if (mArgs->isSet("disable-all"))
+    {
+        if (mCommand == TRIGGER_EVENT)
+            setErrorIncompatible("--disable-all", mCommandName);
+        mDisableAll = true;
     }
 
     // Check that other options are only specified for the

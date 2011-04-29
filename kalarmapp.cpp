@@ -310,6 +310,8 @@ int KAlarmApp::newInstance()
             KAlarm::setSimulatedSystemTime(options.simulationTime());
 #endif
         CommandOptions::Command command = options.command();
+        if (options.disableAll())
+            setAlarmsEnabled(false);   // disable alarm monitoring
         switch (command)
         {
             case CommandOptions::TRIGGER_EVENT:
