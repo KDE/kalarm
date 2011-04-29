@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         void            setConfirmAck(bool);
         void            setAutoClose(bool);
         void            setAudio(Preferences::SoundType, const QString& file = QString(), float volume = -1, bool repeat = false);
-        void            setReminder(int minutes);   // minutes < 0 for once only option
+        void            setReminder(int minutes, bool onceOnly);
 
         virtual Reminder* createReminder(QWidget* parent);
         static CheckBox*  createConfirmAckCheckbox(QWidget* parent);

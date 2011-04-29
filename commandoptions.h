@@ -1,7 +1,7 @@
 /*
  *  commandoptions.h  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ class CommandOptions
         int                 mLateCancel;     // NEW: late-cancellation interval
         QColor              mBgColour;       // NEW: background colour
         QColor              mFgColour;       // NEW: foreground colour
-        int                 mReminderMinutes;// NEW: reminder period, < 0 if once only reminder
+        int                 mReminderMinutes;// NEW: reminder period
         QString             mAudioFile;      // NEW: audio file path
         float               mAudioVolume;    // NEW: audio file volume
         EmailAddressList    mAddressees;     // NEW: email addressees

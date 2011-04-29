@@ -380,7 +380,7 @@ int KAlarmApp::newInstance()
                                 dlg->setAudio(type, options.audioFile(), options.audioVolume(), flags & KAEvent::REPEAT_SOUND);
                             }
                             if (options.reminderMinutes())
-                                dlg->setReminder(options.reminderMinutes());
+                                dlg->setReminder(options.reminderMinutes(), (options.flags() & KAEvent::REMINDER_ONCE));
                             if (options.flags() & KAEvent::CONFIRM_ACK)
                                 dlg->setConfirmAck(true);
                             if (options.flags() & KAEvent::AUTO_CLOSE)
@@ -759,12 +759,21 @@ void KAlarmApp::processQueue()
         // Refresh alarms if that's been queued
         KAlarm::refreshAlarmsIfQueued();
 
-        if (!mLoginAlarmsDone  &&  mAlarmsEnabled)
+        if (!mLoginAlarmsDone)
         {
-            // Queue all at-login alarms once only, at program start-up
+            // Queue all at-login alarms once only, at program start-up.
+            // First, cancel any scheduled reminders or deferrals for them,
+            // since these will be superseded by the new at-login trigger.
             KAEvent::List events = AlarmCalendar::resources()->atLoginAlarms();
             for (int i = 0, end = events.count();  i < end;  ++i)
-                queueAlarmId(events[i]->id());
+            {
+                KAEvent event = *events[i];
+                if (!cancelReminderAndDeferral(event))
+                {
+                    if (mAlarmsEnabled)
+                        queueAlarmId(event.id());
+                }
+            }
             mLoginAlarmsDone = true;
         }
 
@@ -816,15 +825,21 @@ void KAlarmApp::processQueue()
 #ifdef USE_AKONADI
 /******************************************************************************
 * Called when a repeat-at-login alarm has been added externally.
-* Queues it for triggering.
+* Queues the alarm for triggering.
+* First, cancel any scheduled reminder or deferral for it, since these will be
+* superseded by the new at-login trigger.
 */
 void KAlarmApp::atLoginEventAdded(const KAEvent& event)
 {
-    if (mAlarmsEnabled)
+    KAEvent ev = event;
+    if (!cancelReminderAndDeferral(ev))
     {
-        mDcopQueue.enqueue(DcopQEntry(EVENT_HANDLE, event.id()));
-        if (mInitialised)
-            QTimer::singleShot(0, this, SLOT(processQueue()));
+        if (mAlarmsEnabled)
+        {
+            mDcopQueue.enqueue(DcopQEntry(EVENT_HANDLE, ev.id()));
+            if (mInitialised)
+                QTimer::singleShot(0, this, SLOT(processQueue()));
+        }
     }
 }
 #endif
@@ -1111,8 +1126,8 @@ bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const
     KAEvent event(alarmTime, text, bg, fg, font, action, lateCancel, flags, true);
     if (reminderMinutes)
     {
-        bool onceOnly = (reminderMinutes < 0);
-        event.setReminder((onceOnly ? -reminderMinutes : reminderMinutes), onceOnly);
+        bool onceOnly = flags & KAEvent::REMINDER_ONCE;
+        event.setReminder(reminderMinutes, onceOnly);
     }
     if (!audioFile.isEmpty())
         event.setAudioFile(audioFile, audioVolume, -1, 0);
@@ -1165,6 +1180,7 @@ bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
 * c) Reschedule the event for its next repetition. If none remain, delete it.
 * If the event is deleted, it is removed from the calendar file and from every
 * main window instance.
+* Reply = false if event ID not found.
 */
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
@@ -1404,20 +1420,33 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 bool KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay, const KDateTime& nextDt)
 {
     kDebug() << "Alarm type:" << alarm.type();
-    if (alarm.repeatAtLogin())
-        return false;  // leave an alarm which repeats at every login until its main alarm triggers
     bool reply = false;
     bool update = false;
     event.startChanges();
-    if (alarm.isReminder()  ||  alarm.deferred())
+    if (alarm.repeatAtLogin())
     {
-        // It's an advance warning alarm or an extra deferred alarm, so delete it
+        // Leave an alarm which repeats at every login until its main alarm triggers 
+        if (!event.reminderActive()  &&  event.reminderMinutes() < 0)
+        {
+            // Executing an at-login alarm: first schedule the reminder
+            // which occurs AFTER the main alarm.
+            event.activateReminderAfter(KDateTime::currentUtcDateTime());
+            update = true;
+        }
+    }
+    else if (alarm.isReminder()  ||  alarm.deferred())
+    {
+        // It's a reminder alarm or an extra deferred alarm, so delete it
         event.removeExpiredAlarm(alarm.type());
         update = true;
     }
     else
     {
         // Reschedule the alarm for its next occurrence.
+        bool cancelled = false;
+        DateTime last = event.mainDateTime(false);   // note this trigger time
+        if (last != event.mainDateTime(true))
+            last = DateTime();                       // but ignore sub-repetition triggers
         bool next = nextDt.isValid();
         KDateTime next_dt = nextDt;
         KDateTime now = KDateTime::currentUtcDateTime();
@@ -1428,6 +1457,14 @@ bool KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
             {
                 case KAEvent::NO_OCCURRENCE:
                     // All repetitions are finished, so cancel the event
+                    if (event.reminderMinutes() < 0  &&  last.isValid()
+                    &&  alarm.type() != KAAlarm::AT_LOGIN_ALARM  &&  !event.mainExpired())
+                    {
+                        // Set the reminder which is now due after the last main alarm trigger.
+                        // Note that at-login reminders are scheduled in execAlarm().
+                        event.activateReminderAfter(last);
+                        updateCalAndDisplay = true;
+                    }         
                     if (cancelAlarm(event, alarm.type(), updateCalAndDisplay))
                         return false;
                     break;
@@ -1446,6 +1483,8 @@ bool KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
                     // The first occurrence is still due?!?, so don't do anything
                     break;
             }
+            if (cancelled)
+                break;
             if (event.deferred())
             {
                 // Just in case there's also a deferred alarm, ensure it's removed
@@ -1467,7 +1506,15 @@ bool KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updat
                     next = !event.isWorkingTime(next_dt);
             }
         } while (next && next_dt <= now);
-        reply = next_dt.isValid() && (next_dt <= now);
+        reply = !cancelled && next_dt.isValid() && (next_dt <= now);
+
+        if (event.reminderMinutes() < 0  &&  last.isValid()
+        &&  alarm.type() != KAAlarm::AT_LOGIN_ALARM)
+        {
+            // Set the reminder which is now due after the last main alarm trigger.
+            // Note that at-login reminders are scheduled in execAlarm().
+            event.activateReminderAfter(last);
+        }         
     }
     event.endChanges();
     if (update)
@@ -1498,6 +1545,20 @@ bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
     if (updateCalAndDisplay)
         KAlarm::updateEvent(event);    // update the window lists and calendar file
     return false;
+}
+
+/******************************************************************************
+* Cancel any reminder or deferred alarms in an repeat-at-login event.
+* This should be called when the event is first loaded.
+* If there are no more alarms left in the event, the event is removed from the
+* calendar file and from every main window instance.
+* Reply = true if event has been deleted.
+*/
+bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
+{
+    return cancelAlarm(event, KAAlarm::REMINDER_ALARM, false)
+       ||  cancelAlarm(event, KAAlarm::DEFERRED_REMINDER_ALARM, false)
+       ||  cancelAlarm(event, KAAlarm::DEFERRED_ALARM, true);
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  reminder.h  -  reminder setting widget
  *  Program:  kalarm
- *  Copyright © 2003-2005,2007-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2005,2007-2009,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 class KDateTime;
 class TimeSelector;
 class CheckBox;
+class ComboBox;
 
 
 class Reminder : public QFrame
@@ -33,7 +34,9 @@ class Reminder : public QFrame
         Q_OBJECT
     public:
         Reminder(const QString& reminderWhatsThis, const QString& valueWhatsThis,
-                 bool allowHourMinute, bool showOnceOnly, QWidget* parent);
+                 const QString& beforeAfterWhatsThis, bool allowHourMinute,
+                 bool showOnceOnly, QWidget* parent);
+        void           setAfterOnly(bool after);
         bool           isReminder() const;
         bool           isOnceOnly() const;
         int            minutes() const;
@@ -59,6 +62,7 @@ class Reminder : public QFrame
     private:
         TimeSelector*  mTime;
         CheckBox*      mOnceOnly;
+        ComboBox*      mTimeSignCombo;
         bool           mReadOnly;           // the widget is read only
         bool           mOnceOnlyEnabled;    // 'mOnceOnly' checkbox is allowed to be enabled
 };

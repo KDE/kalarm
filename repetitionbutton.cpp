@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.cpp  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -162,7 +162,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     topLayout->setMargin(0);
     topLayout->setSpacing(spacing);
 
-    mTimeSelector = new TimeSelector(i18nc("@option:check Repeat every 10 minutes", "Repeat every"), QString(),
+    mTimeSelector = new TimeSelector(i18nc("@option:check Repeat every 10 minutes", "Repeat every"),
                       i18nc("@info:whatsthis", "Instead of the alarm triggering just once at each recurrence, "
                             "checking this option makes the alarm trigger multiple times at each recurrence."),
                       i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),

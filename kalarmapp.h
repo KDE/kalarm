@@ -175,6 +175,7 @@ class KAlarmApp : public KUniqueApplication
         bool               handleEvent(const QString& eventID, EventFunc);
         bool               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay, const KDateTime& nextDt = KDateTime());
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
+        bool               cancelReminderAndDeferral(KAEvent&);
         ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags = 0, const QObject* receiver = 0, const char* slot = 0);
         QString            composeXTermCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags, QString& tempScriptFile) const;
         QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&) const;

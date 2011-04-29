@@ -89,7 +89,6 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
     public:
         ~KAAlarmEventBase()  { }
         int                lateCancel() const          { return mLateCancel; }
-        bool               repeatAtLogin() const       { return mRepeatAtLogin; }
 
     protected:
         enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_EMAIL, T_AUDIO };
@@ -164,6 +163,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
         {
             INVALID__ALARM                = INVALID_ALARM,
             MAIN__ALARM                   = MAIN_ALARM,
+            AT_LOGIN__ALARM               = AT_LOGIN_ALARM,
             // The following values may be used in combination as a bitmask 0x0E
             REMINDER__ALARM               = REMINDER_ALARM,
             TIMED_DEFERRAL_FLAG           = 0x08,  // deferral has a time; if clear, it is date-only
@@ -173,7 +173,6 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
             DEFERRED_REMINDER_TIME__ALARM = REMINDER_ALARM | DEFERRED_ALARM | TIMED_DEFERRAL_FLAG,  // deferred early warning (date/time)
             // The following values must be greater than the preceding ones, to
             // ensure that in ordered processing they are processed afterwards.
-            AT_LOGIN__ALARM               = AT_LOGIN_ALARM,
             DISPLAYING__ALARM             = DISPLAYING_ALARM,
             // The following values are for internal KAEvent use only
             AUDIO__ALARM                  = AUDIO_ALARM,   // audio alarm for main display alarm
@@ -194,6 +193,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
                                                             ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
         QDate              date() const                 { return mNextMainDateTime.date(); }
         QTime              time() const                 { return mNextMainDateTime.effectiveTime(); }
+        bool               repeatAtLogin() const        { return mRepeatAtLogin; }
         bool               isReminder() const           { return mType == REMINDER__ALARM; }
         bool               deferred() const             { return mDeferred; }
         void               setTime(const DateTime& dt)  { mNextMainDateTime = dt; }
@@ -238,6 +238,7 @@ class KALARM_CAL_EXPORT KAEvent
             EXCL_HOLIDAYS   = 0x4000,  // don't trigger alarm on holidays
             WORK_TIME_ONLY  = 0x8000,  // trigger alarm only during working hours
             DISPLAY_COMMAND = 0x10000, // display command output in alarm window
+            REMINDER_ONCE   = 0x20000, // only trigger reminder on first recurrence
             // The following are read-only internal values
             REMINDER        = 0x100000,
             DEFERRAL        = 0x200000,
@@ -357,6 +358,7 @@ class KALARM_CAL_EXPORT KAEvent
         void               setKMailSerialNumber(unsigned long n)   { d->mKMailSerialNumber = n; }
         void               setLogFile(const QString& logfile);
         void               setReminder(int minutes, bool onceOnly) { d->setReminder(minutes, onceOnly); }
+        void               activateReminderAfter(const DateTime& mainAlarmTime)  { d->activateReminderAfter(mainAlarmTime); }
         bool               defer(const DateTime& dt, bool reminder, bool adjustRecurrence = false)
                                                                    { return d->defer(dt, reminder, adjustRecurrence); }
         void               cancelDefer()                           { d->cancelDefer(); }
@@ -412,7 +414,7 @@ class KALARM_CAL_EXPORT KAEvent
         bool               autoClose() const              { return d->mAutoClose; }
         bool               commandScript() const          { return d->mCommandScript; }
         bool               confirmAck() const             { return d->mConfirmAck; }
-        bool               repeatAtLogin() const          { return d->repeatAtLogin(); }
+        bool               repeatAtLogin(bool includeArchived = false) const  { return d->mRepeatAtLogin || (includeArchived && d->mArchiveRepeatAtLogin); }
         const Repetition&  repetition() const             { return d->mRepetition; }
         int                nextRepetition() const         { return d->mNextRepeat; }
         bool               beep() const                   { return d->mBeep; }
@@ -453,7 +455,8 @@ class KALARM_CAL_EXPORT KAEvent
         QTime              mainTime() const               { return d->mNextMainDateTime.effectiveTime(); }
         DateTime           mainEndRepeatTime() const      { return d->mainEndRepeatTime(); }
         DateTime           nextTrigger(TriggerType) const;
-        int                reminderMinutes(bool active = false) const { return (!active || d->mReminderActive) ? d->mReminderMinutes : 0; }
+        int                reminderMinutes() const        { return d->mReminderMinutes; }
+        bool               reminderActive() const         { return d->mReminderActive == Private::ACTIVE_REMINDER; }
         bool               reminderOnceOnly() const       { return d->mReminderOnceOnly; }
         bool               reminderDeferral() const       { return d->mDeferral == Private::REMINDER_DEFERRAL; }
         DateTime           deferDateTime() const          { return d->mDeferralTime; }
@@ -546,7 +549,6 @@ class KALARM_CAL_EXPORT KAEvent
         static bool        convertKCalEvents(const KCalCore::Calendar::Ptr&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCalCore::MemoryCalendar&);
         static List        ptrList(QList<KAEvent>&);
-        static bool        archivePropertyValue(const KCalCore::ConstEventPtr&, QString& value);
 #else
         static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCal::CalendarLocal&);
@@ -576,10 +578,16 @@ class KALARM_CAL_EXPORT KAEvent
         class Private : public KAAlarmEventBase, public QSharedData
         {
             public:
+                enum ReminderType   // current active state of reminder
+                {
+                    NO_REMINDER,       // reminder is not due
+                    ACTIVE_REMINDER,   // reminder is due
+                    HIDDEN_REMINDER    // reminder-after is disabled due to main alarm being deferred past it
+                };
                 enum DeferType {
-                    NO_DEFERRAL = 0,        // there is no deferred alarm
-                    NORMAL_DEFERRAL,        // the main alarm, a recurrence or a repeat is deferred
-                    REMINDER_DEFERRAL       // a reminder alarm is deferred
+                    NO_DEFERRAL = 0,   // there is no deferred alarm
+                    NORMAL_DEFERRAL,   // the main alarm, a recurrence or a repeat is deferred
+                    REMINDER_DEFERRAL  // a reminder alarm is deferred
                 };
 
                 Private();
@@ -605,6 +613,7 @@ class KALARM_CAL_EXPORT KAEvent
                 void               setCategory(KAlarm::CalEvent::Type);
                 void               setRepeatAtLogin(bool);
                 void               setReminder(int minutes, bool onceOnly);
+                void               activateReminderAfter(const DateTime& mainAlarmTime);
                 bool               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
                 void               cancelDefer();
 #ifdef USE_AKONADI
@@ -710,8 +719,9 @@ class KALARM_CAL_EXPORT KAEvent
                 DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
                 DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
                 int                mDisplayingFlags;   // type of alarm which is currently being displayed
-                int                mReminderMinutes;   // how long in advance reminder is to be, or 0 if none
-                bool               mReminderActive;    // reminder will be due for next main alarm/recurrence
+                int                mReminderMinutes;   // how long in advance reminder is to be, or 0 if none (<0 for reminder AFTER the alarm)
+                DateTime           mReminderAfterTime; // if mReminderActive true, time to trigger reminder AFTER the main alarm, or invalid if not pending
+                ReminderType       mReminderActive;    // whether a reminder is due (before next, or after last, main alarm/recurrence)
                 int                mDeferDefaultMinutes; // default number of minutes for deferral dialog, or 0 to select time control
                 bool               mDeferDefaultDateOnly;// select date-only by default in deferral dialog
                 int                mRevision;          // SEQUENCE: revision number of the original alarm, or 0
@@ -765,15 +775,15 @@ class KALARM_CAL_EXPORT KAEvent
                 static const QString KORGANIZER_FLAG;
                 static const QString EXCLUDE_HOLIDAYS_FLAG;
                 static const QString WORK_TIME_ONLY_FLAG;
+                static const QString REMINDER_ONCE_FLAG;
                 static const QString DEFER_FLAG;
                 static const QString LATE_CANCEL_FLAG;
                 static const QString AUTO_CLOSE_FLAG;
                 static const QString TEMPL_AFTER_TIME_FLAG;
                 static const QString KMAIL_SERNUM_FLAG;
+                static const QString ARCHIVE_FLAG;
                 static const QByteArray NEXT_RECUR_PROPERTY;
                 static const QByteArray REPEAT_PROPERTY;
-                static const QByteArray ARCHIVE_PROPERTY;
-                static const QString ARCHIVE_REMINDER_ONCE_TYPE;
                 static const QByteArray LOG_PROPERTY;
                 static const QString xtermURL;
                 static const QString displayURL;
@@ -789,6 +799,7 @@ class KALARM_CAL_EXPORT KAEvent
                 static const QString POST_ACTION_TYPE;
                 static const QString SOUND_REPEAT_TYPE;
                 static const QByteArray NEXT_REPEAT_PROPERTY;
+                static const QByteArray HIDDEN_REMINDER_FLAG;
                 static const QByteArray FONT_COLOUR_PROPERTY;
                 static const QByteArray EMAIL_ID_PROPERTY;
                 static const QByteArray VOLUME_PROPERTY;

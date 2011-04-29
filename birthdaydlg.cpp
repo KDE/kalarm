@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -180,9 +180,10 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(setColours(const QColor&, const QColor&)));
 
     // How much advance warning to give
-    mReminder = new Reminder(i18nc("@info:whatsthis", "Check to display a reminder in advance of the birthday."),
-                             i18nc("@info:whatsthis", "Enter the number of days before each birthday to display a reminder. "
+    mReminder = new Reminder(i18nc("@info:whatsthis", "Check to display a reminder in advance of or after the birthday."),
+                             i18nc("@info:whatsthis", "Enter the number of days before or after each birthday to display a reminder. "
                                   "This is in addition to the alarm which is displayed on the birthday."),
+                             i18nc("@info:whatsthis", "Select whether the reminder should be triggered before or after the birthday."),
                              false, false, group);
     mReminder->setFixedSize(mReminder->sizeHint());
     mReminder->setMaximum(0, 364);

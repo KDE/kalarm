@@ -1594,7 +1594,11 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
     kDebug() << start << "-" << end << "(parent =" << parent << ")";
     EventList events = eventList(parent, start, end);
     if (!events.isEmpty())
+    {
+        foreach (const Event& event, events)
+            kDebug() << "Collection:" << event.collection.id() << ", Event ID:" << event.event.id();
         emit eventsToBeRemoved(events);
+    }
 }
 
 /******************************************************************************

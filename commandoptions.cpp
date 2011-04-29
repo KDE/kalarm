@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -304,8 +304,7 @@ CommandOptions::CommandOptions()
                 // Get the recurrence interval
                 int interval;
                 KARecurrence::Type recurType;
-                if (!convInterval(mArgs->getOption("interval").toLocal8Bit(), recurType, interval, !haveRecurrence)
-                ||  interval < 0)
+                if (!convInterval(mArgs->getOption("interval").toLocal8Bit(), recurType, interval, !haveRecurrence))
                     setErrorParameter("--interval");
                 else if (mAlarmTime.isDateOnly()  &&  recurType == KARecurrence::MINUTELY)
                     setError(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", QLatin1String("--interval")));
@@ -372,25 +371,30 @@ CommandOptions::CommandOptions()
             bool onceOnly = mArgs->isSet("reminder-once");
             if (mArgs->isSet("reminder")  ||  onceOnly)
             {
-                // Issue a reminder alarm in advance of the main alarm
+                // Issue a reminder alarm in advance of or after the main alarm
                 if (onceOnly  &&  mArgs->isSet("reminder"))
                     setErrorIncompatible("--reminder", "--reminder-once");
                 const char* opt = onceOnly ? "--reminder-once" : "--reminder";
                 KARecurrence::Type recurType;
-                QString optval = mArgs->getOption(onceOnly ? "reminder-once" : "reminder");
-                if (!convInterval(mArgs->getOption(onceOnly ? "reminder-once" : "reminder").toLocal8Bit(), recurType, mReminderMinutes))
+                QByteArray optval = mArgs->getOption(onceOnly ? "reminder-once" : "reminder").toLocal8Bit();
+                bool after = (optval[0] == '+');
+                if (after)
+                    optval = optval.right(1);
+                if (!convInterval(optval, recurType, mReminderMinutes))
                     setErrorParameter(opt);
                 else if (recurType == KARecurrence::MINUTELY  &&  mAlarmTime.isDateOnly())
                     setError(i18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", QLatin1String(opt)));
-                if (onceOnly)
+                if (after)
                     mReminderMinutes = -mReminderMinutes;
+                if (onceOnly)
+                    mFlags |= KAEvent::REMINDER_ONCE;
             }
 
             if (mArgs->isSet("late-cancel"))
             {
                 KARecurrence::Type recurType;
                 bool ok = convInterval(mArgs->getOption("late-cancel").toLocal8Bit(), recurType, mLateCancel);
-                if (!ok  ||  mLateCancel <= 0)
+                if (!ok)
                     setErrorParameter("--late-cancel");
             }
             else if (mArgs->isSet("auto-close"))
@@ -542,7 +546,7 @@ void CommandOptions::checkEditType(EditAlarmDlg::Type type1, EditAlarmDlg::Type 
 }
 
 /******************************************************************************
-* Convert a time interval command line parameter.
+* Convert a non-zero positive time interval command line parameter.
 * 'timeInterval' receives the count for the recurType. If 'allowMonthYear' is
 * false, weeks are converted to days in 'timeInterval'.
 * Reply = true if successful.
@@ -553,9 +557,6 @@ static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurT
     // Get the recurrence interval
     bool ok = true;
     uint interval = 0;
-    bool negative = (timeString[0] == '-');
-    if (negative)
-        timeString = timeString.right(1);
     uint length = timeString.length();
     switch (timeString[length - 1])
     {
@@ -613,9 +614,7 @@ static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurT
         }
     }
     timeInterval = static_cast<int>(interval);
-    if (negative)
-        timeInterval = -timeInterval;
-    return ok;
+    return ok && interval;
 }
 
 // vim: et sw=4:

@@ -1,7 +1,7 @@
 /*
  *  timeselector.h  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2008,2010,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,14 +26,16 @@
 
 class QLabel;
 class CheckBox;
+class ComboBox;
 
 
 class TimeSelector : public QFrame
 {
         Q_OBJECT
     public:
-        TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
+        TimeSelector(const QString& selectText, const QString& selectWhatsThis,
                      const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent);
+        ComboBox*    createSignCombo();
         bool         isChecked() const;
         void         setChecked(bool on);
 #ifdef USE_AKONADI
@@ -70,7 +72,7 @@ class TimeSelector : public QFrame
     private:
         CheckBox*    mSelect;
         TimePeriod*  mPeriod;
-        QLabel*      mLabel;
+        ComboBox*    mSignWidget;
         bool         mReadOnly;           // the widget is read only
 };
 

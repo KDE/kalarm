@@ -988,7 +988,7 @@ bool EditAlarmDlg::validate()
             KAEvent event;
             setEvent(event, mAlarmMessage, false);
             mAlarmDateTime = dt;   // restore
-                KDateTime pre = dt.effectiveKDateTime();
+            KDateTime pre = dt.effectiveKDateTime();
             bool dateOnly = dt.isDateOnly();
             if (dateOnly)
                 pre = pre.addDays(-1);
@@ -1397,7 +1397,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
             mReminder->enableOnceOnly(recurs && !atLogin);
     }
     if (mReminder)
-        mReminder->setEnabled(!atLogin);
+        mReminder->setAfterOnly(atLogin);
     mLateCancel->setEnabled(!atLogin);
     if (mShowInKorganizer)
         mShowInKorganizer->setEnabled(!atLogin);

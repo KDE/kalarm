@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2009,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "kalarm.h"
 
 #include "checkbox.h"
+#include "combobox.h"
 #include "timeselector.moc"
 
 #include <klocale.h>
@@ -28,7 +29,6 @@
 #include <khbox.h>
 #include <kdebug.h>
 
-#include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
@@ -39,10 +39,10 @@ using namespace KCal;
 #endif
 
 
-TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, const QString& selectWhatsThis,
+TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhatsThis,
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent)
     : QFrame(parent),
-      mLabel(0),
+      mSignWidget(0),
       mReadOnly(false)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -68,13 +68,20 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& postfix, co
     mSelect->setFocusWidget(mPeriod);
     mPeriod->setEnabled(false);
 
-    if (!postfix.isEmpty())
-    {
-        mLabel = new QLabel(postfix, box);
-        mLabel->setEnabled(false);
-    }
     box->setWhatsThis(valueWhatsThis);
     layout->addStretch();
+}
+
+/******************************************************************************
+* Create a ComboBox used to select the time period's sign.
+* The caller is responsible for populating the ComboBox and handling its value.
+*/
+ComboBox* TimeSelector::createSignCombo()
+{
+    delete mSignWidget;
+    mSignWidget = new ComboBox(mPeriod->parentWidget());
+    mSignWidget->setEnabled(mPeriod->isEnabled());
+    return mSignWidget;
 }
 
 /******************************************************************************
@@ -87,6 +94,7 @@ void TimeSelector::setReadOnly(bool ro)
         mReadOnly = ro;
         mSelect->setReadOnly(mReadOnly);
         mPeriod->setReadOnly(mReadOnly);
+        mSignWidget->setReadOnly(mReadOnly);
     }
 }
 
@@ -133,8 +141,8 @@ void TimeSelector::setPeriod(const Duration& period, bool dateOnly, TimePeriod::
 {
     mSelect->setChecked(period);
     mPeriod->setEnabled(period);
-    if (mLabel)
-        mLabel->setEnabled(period);
+    if (mSignWidget)
+        mSignWidget->setEnabled(period);
     mPeriod->setPeriod(period, dateOnly, defaultUnits);
 }
 
@@ -152,8 +160,8 @@ void TimeSelector::setFocusOnCount()
 void TimeSelector::selectToggled(bool on)
 {
     mPeriod->setEnabled(on);
-    if (mLabel)
-        mLabel->setEnabled(on);
+    if (mSignWidget)
+        mSignWidget->setEnabled(on);
     if (on)
         mPeriod->setFocus();
     emit toggled(on);

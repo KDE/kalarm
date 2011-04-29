@@ -1,7 +1,7 @@
 /*
  *  kaeventformatter.cpp  -  converts KAEvent properties to text
  *  Program:  kalarm
- *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -224,7 +224,7 @@ QString KAEventFormatter::value(Parameter param) const
         case Recurs:            return trueFalse(mEvent.recurs());
         case Recurrence:
         {
-            if (mEvent.repeatAtLogin())
+            if (mEvent.repeatAtLogin(true))
                 return i18nc("@info/plain Repeat at login", "At login until %1", dateTime(mEvent.mainDateTime().kDateTime()));
             KCalCore::Event::Ptr eptr(new KCalCore::Event);
             mEvent.updateKCalEvent(eptr, KAEvent::UID_SET);
@@ -241,17 +241,7 @@ QString KAEventFormatter::value(Parameter param) const
         case AutoClose:         return trueFalse(mEvent.lateCancel() ? mEvent.autoClose() : false);
         case CopyKOrganizer:    return trueFalse(mEvent.copyToKOrganizer());
         case Enabled:           return trueFalse(mEvent.enabled());
-        case Archive:
-        {
-            if (!mEvent.toBeArchived())
-                return trueFalse(false);
-            KCalCore::Event::Ptr eptr(new KCalCore::Event);
-            mEvent.updateKCalEvent(eptr, KAEvent::UID_SET);
-            QString prop;
-            if (!KAEvent::archivePropertyValue(eptr, prop))
-                return trueFalse(true);
-            return prop;
-        }
+        case Archive:           return trueFalse(mEvent.toBeArchived());
         case Revision:          return number(mEvent.revision());
 
         case MessageText:       return (mEvent.action() == KAEvent::MESSAGE) ? mEvent.cleanText() : QString();

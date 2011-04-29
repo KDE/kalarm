@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -241,9 +241,10 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 */
 Reminder* EditDisplayAlarmDlg::createReminder(QWidget* parent)
 {
-    static const QString reminderText = i18nc("@info:whatsthis", "Enter how long in advance of the main alarm to display a reminder alarm.");
-    return new Reminder(i18nc("@info:whatsthis", "Check to additionally display a reminder in advance of the main alarm time(s)."),
-                        i18nc("@info:whatsthis", "<para>Enter how long in advance of the main alarm to display a reminder alarm.</para><para>%1</para>", TimeSpinBox::shiftWhatsThis()),
+    static const QString reminderText = i18nc("@info:whatsthis", "Enter how long in advance of or after the main alarm to display a reminder alarm.");
+    return new Reminder(i18nc("@info:whatsthis", "Check to additionally display a reminder in advance of or after the main alarm time(s)."),
+                        i18nc("@info:whatsthis", "<para>Enter how long in advance of or after the main alarm to display a reminder alarm.</para><para>%1</para>", TimeSpinBox::shiftWhatsThis()),
+                        i18nc("@info:whatsthis", "Select whether the reminder should be triggered before or after the main alarm"),
                         true, true, parent);
 }
 
@@ -279,7 +280,9 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         setColours(event->fgColour(), event->bgColour());
         mConfirmAck->setChecked(event->confirmAck());
         bool recurs = event->recurs();
-        int reminderMins = event->reminderMinutes(true);
+        int reminderMins = event->reminderMinutes();
+        if (reminderMins > 0  &&  !event->reminderActive())
+            reminderMins = 0;   // don't show advance reminder which has already passed
         if (!reminderMins)
         {
             if (event->reminderDeferral()  &&  !recurs)
@@ -419,11 +422,8 @@ void EditDisplayAlarmDlg::setAudio(Preferences::SoundType type, const QString& f
 {
     mSoundPicker->set(type, file, volume, -1, 0, repeat);
 }
-void EditDisplayAlarmDlg::setReminder(int minutes)
+void EditDisplayAlarmDlg::setReminder(int minutes, bool onceOnly)
 {
-    bool onceOnly = (minutes < 0);
-    if (onceOnly)
-        minutes = -minutes;
     reminder()->setMinutes(minutes, dateOnly());
     reminder()->setOnceOnly(onceOnly);
     reminder()->enableOnceOnly(isTimedRecurrence());
