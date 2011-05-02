@@ -274,11 +274,15 @@ void ResourceSelector::resourceAdded(AgentInstanceCreateJob* job, bool success)
     int i = mAddJobs.indexOf(job);
     if (i >= 0)
     {
+        // The agent has been created by addResource().
         if (success)
         {
             AgentInstance agent = job->instance();
             if (agent.isValid())
+            {
+                // Note that we're expecting the agent's Collection to be added
                 mAddAgents += agent;
+            }
         }
         mAddJobs.removeAt(i);
     }
@@ -297,6 +301,7 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
             int i = mAddAgents.indexOf(agent);
             if (i >= 0)
             {
+                // The collection belongs to an agent created by addResource()
                 KAlarm::CalEvent::Types types = KAlarm::CalEvent::types(collection.contentMimeTypes());
                 CollectionControlModel::setEnabled(collection, types, true);
 #ifdef __GNUC__
@@ -321,8 +326,6 @@ void ResourceSelector::editResource()
         AgentInstance instance = AgentManager::self()->instance(collection.resource());
         if (instance.isValid())
             instance.configure(this);
-//        CollectionPropertiesDialog dlg(collection, QStringList(CollectionPropertiesDialog::defaultPageObjectName(CollectionPropertiesDialog::GeneralPage)), this);
-//        dlg.exec();
     }
 #else
     AlarmResource* resource = currentResource();
