@@ -171,8 +171,10 @@ class AlarmCalendar : public QObject
         bool                  addEvent(const Akonadi::Collection&, KAEvent*);
         void                  addNewEvent(const Akonadi::Collection&, KAEvent*, bool replace = false);
         void                  updateEventInternal(const KAEvent&, const Akonadi::Collection&);
-        KAlarm::CalEvent::Type deleteEventInternal(const KAEvent&, const Akonadi::Collection& = Akonadi::Collection());
-        KAlarm::CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(), const Akonadi::Collection& = Akonadi::Collection());
+        KAlarm::CalEvent::Type deleteEventInternal(const KAEvent&, const Akonadi::Collection& = Akonadi::Collection(),
+                                                   bool deleteFromAkonadi = true);
+        KAlarm::CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(),
+                                                   const Akonadi::Collection& = Akonadi::Collection(), bool deleteFromAkonadi = true);
         void                  updateKAEvents(const Akonadi::Collection&);
         void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false, KAlarm::CalEvent::Types = KAlarm::CalEvent::ALL);
         void                  findEarliestAlarm(const Akonadi::Collection&);

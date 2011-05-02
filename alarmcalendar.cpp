@@ -732,7 +732,7 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
     for (int i = 0, count = events.count();  i < count;  ++i)
     {
         if (mEventMap.contains(events[i].event.id()))
-            deleteEventInternal(events[i].event, events[i].collection);
+            deleteEventInternal(events[i].event, events[i].collection, false);
     }
 }
 
@@ -1623,13 +1623,13 @@ bool AlarmCalendar::deleteEvent(const QString& eventID, bool saveit)
 *       = KAlarm::CalEvent::EMPTY otherwise.
 */
 #ifdef USE_AKONADI
-KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Collection& collection)
+KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Collection& collection, bool deleteFromAkonadi)
 {
     Collection col = collection.isValid() ? collection : AkonadiModel::instance()->collection(event);
-    return deleteEventInternal(event.id(), event, col);
+    return deleteEventInternal(event.id(), event, col, deleteFromAkonadi);
 }
 
-KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, const Collection& collection)
+KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const KAEvent& event, const Collection& collection, bool deleteFromAkonadi)
 #else
 KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID)
 #endif
@@ -1687,7 +1687,7 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 #endif
     }
 #ifdef USE_AKONADI
-    else
+    else if (deleteFromAkonadi)
     {
         // It's an Akonadi event
         KAlarm::CalEvent::Type s = event.category();
