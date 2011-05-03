@@ -192,11 +192,7 @@ QString errorMessage(ErrorCode code, const QString& param)
         case NotCurrentFormat:
             return i18nc("@info", "Calendar is not in current KAlarm format.");
         case EventNotCurrentFormat:
-#ifdef __GNUC__
-#warning New user string needed
-#endif
-//            return i18nc("@info", "Event with uid '%1' is not in current KAlarm format.", param);
-return i18nc("@info", "Event with uid '%1' is read only", param);
+            return i18nc("@info", "Event with uid '%1' is not in current KAlarm format.", param);
         case EventNoAlarms:
             return i18nc("@info", "Event with uid '%1' contains no usable alarms.", param);
         case EventReadOnly:
