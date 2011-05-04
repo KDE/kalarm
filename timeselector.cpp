@@ -94,7 +94,8 @@ void TimeSelector::setReadOnly(bool ro)
         mReadOnly = ro;
         mSelect->setReadOnly(mReadOnly);
         mPeriod->setReadOnly(mReadOnly);
-        mSignWidget->setReadOnly(mReadOnly);
+        if (mSignWidget)
+            mSignWidget->setReadOnly(mReadOnly);
     }
 }
 
