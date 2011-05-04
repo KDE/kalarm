@@ -52,8 +52,8 @@ using namespace KHolidays;
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
-QByteArray KAEvent::currentCalendarVersionString()  { return QByteArray("2.2.9"); }
-int        KAEvent::currentCalendarVersion()        { return KAlarm::Version(2,2,9); }
+QByteArray KAEvent::currentCalendarVersionString()  { return QByteArray("2.7.0"); }
+int        KAEvent::currentCalendarVersion()        { return KAlarm::Version(2,7,0); }
 
 // Custom calendar properties.
 // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -92,17 +92,17 @@ const QString    KAEvent::Private::PRE_ACTION_TYPE            = QLatin1String("P
 const QString    KAEvent::Private::POST_ACTION_TYPE           = QLatin1String("POST");
 const QString    KAEvent::Private::SOUND_REPEAT_TYPE          = QLatin1String("SOUNDREPEAT");
 const QByteArray KAEvent::Private::NEXT_REPEAT_PROPERTY("NEXTREPEAT");   // X-KDE-KALARM-NEXTREPEAT property
-const QByteArray KAEvent::Private::HIDDEN_REMINDER_FLAG("HIDE");
+const QString    KAEvent::Private::HIDDEN_REMINDER_FLAG = QLatin1String("HIDE");
 // - Display alarm properties
 const QByteArray KAEvent::Private::FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
-const QByteArray KAEvent::Private::EMAIL_ID_PROPERTY("EMAILID");         // X-KDE-KALARM-EMAILID property
+const QString    KAEvent::Private::EMAIL_ID_FLAG        = QLatin1String("EMAILID");
 // - Audio alarm properties
 const QByteArray KAEvent::Private::VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
-const QByteArray KAEvent::Private::SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
+const QString    KAEvent::Private::SPEAK_FLAG           = QLatin1String("SPEAK");
 // - Command alarm properties
-const QByteArray KAEvent::Private::CANCEL_ON_ERROR_PROPERTY("ERRCANCEL");// X-KDE-KALARM-ERRCANCEL property
-const QByteArray KAEvent::Private::DONT_SHOW_ERROR_PROPERTY("ERRNOSHOW");// X-KDE-KALARM-ERRNOSHOW property
+const QString    KAEvent::Private::CANCEL_ON_ERROR_FLAG = QLatin1String("ERRCANCEL");
+const QString    KAEvent::Private::DONT_SHOW_ERROR_FLAG = QLatin1String("ERRNOSHOW");
 
 // Event status strings
 const QString    KAEvent::Private::DISABLED_STATUS            = QLatin1String("DISABLED");
@@ -954,8 +954,8 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
                     data.cleanText += ' ';
                 data.cleanText += alarm->programArguments();
             }
-            data.cancelOnPreActErr = !alarm->customProperty(KAlarm::Calendar::APPNAME, Private::CANCEL_ON_ERROR_PROPERTY).isNull();
-            data.dontShowPreActErr = !alarm->customProperty(KAlarm::Calendar::APPNAME, Private::DONT_SHOW_ERROR_PROPERTY).isNull();
+            data.cancelOnPreActErr = flags.contains(Private::CANCEL_ON_ERROR_FLAG);
+            data.dontShowPreActErr = flags.contains(Private::DONT_SHOW_ERROR_FLAG);
             if (!cmdDisplay)
                 break;
             // fall through to Display
@@ -992,10 +992,14 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
             break;
         }
         case Alarm::Email:
-            data.action      = KAAlarmEventBase::T_EMAIL;
-            data.emailFromId = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::EMAIL_ID_PROPERTY).toUInt();
-            data.cleanText   = alarm->mailText();
+        {
+            data.action    = KAAlarmEventBase::T_EMAIL;
+            data.cleanText = alarm->mailText();
+            int i = flags.indexOf(Private::EMAIL_ID_FLAG);
+            if (i >= 0  &&  i + 1 < flags.count())
+                data.emailFromId = flags[i + 1].toUInt();
             break;
+        }
         case Alarm::Audio:
         {
             data.action      = KAAlarmEventBase::T_AUDIO;
@@ -1028,7 +1032,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
             if (!audioMain)
             {
                 data.type  = KAAlarm::AUDIO__ALARM;
-                data.speak = !alarm->customProperty(KAlarm::Calendar::APPNAME, Private::SPEAK_PROPERTY).isNull();
+                data.speak = flags.contains(Private::SPEAK_FLAG);
                 return;
             }
             break;
@@ -2432,7 +2436,7 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
         case KAAlarm::AUDIO_ALARM:
             setAudioAlarm(alarm);
             if (mSpeak)
-                alarm->setCustomProperty(KAlarm::Calendar::APPNAME, SPEAK_PROPERTY, QLatin1String("Y"));
+                flags << Private::SPEAK_FLAG;
             if (mRepeatSound)
             {
                 alarm->setRepeatCount(-1);
@@ -2442,9 +2446,9 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
         case KAAlarm::PRE_ACTION_ALARM:
             setProcedureAlarm(alarm, mPreAction);
             if (mCancelOnPreActErr)
-                alarm->setCustomProperty(KAlarm::Calendar::APPNAME, CANCEL_ON_ERROR_PROPERTY, QLatin1String("Y"));
+                flags << Private::CANCEL_ON_ERROR_FLAG;
             if (mDontShowPreActErr)
-                alarm->setCustomProperty(KAlarm::Calendar::APPNAME, DONT_SHOW_ERROR_PROPERTY, QLatin1String("Y"));
+                flags << Private::DONT_SHOW_ERROR_FLAG;
             break;
         case KAAlarm::POST_ACTION_ALARM:
             setProcedureAlarm(alarm, mPostAction);
@@ -2464,7 +2468,7 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
             {
                 // It's a reminder AFTER the alarm which is currently disabled
                 // due to the main alarm being deferred past it.
-                flags += HIDDEN_REMINDER_FLAG;
+                flags << HIDDEN_REMINDER_FLAG;
             }
             bool display = false;
             switch (mActionType)
@@ -2486,7 +2490,7 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
                 case T_EMAIL:
                     alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
                     if (mEmailFromIdentity)
-                        alarm->setCustomProperty(KAlarm::Calendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(mEmailFromIdentity));
+                        flags << Private::EMAIL_ID_FLAG << QString::number(mEmailFromIdentity);
                     break;
                 case T_AUDIO:
                     setAudioAlarm(alarm);
@@ -2508,9 +2512,9 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
             break;
     }
     alltypes += types;
-    if (alltypes.count() > 0)
+    if (!alltypes.isEmpty())
         alarm->setCustomProperty(KAlarm::Calendar::APPNAME, TYPE_PROPERTY, alltypes.join(","));
-    if (flags.count() > 0)
+    if (!flags.isEmpty())
         alarm->setCustomProperty(KAlarm::Calendar::APPNAME, FLAGS_PROPERTY, flags.join(SC));
     return alarm;
 }
@@ -3922,6 +3926,10 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
     static const QByteArray ARCHIVE_PROPERTY("ARCHIVE");     // X-KDE-KALARM-ARCHIVE property
     static const QString ARCHIVE_REMINDER_ONCE_TYPE = QLatin1String("ONCE");
     static const QString REMINDER_ONCE_TYPE         = QLatin1String("REMINDER_ONCE");
+    static const QByteArray EMAIL_ID_PROPERTY("EMAILID");         // X-KDE-KALARM-EMAILID property
+    static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
+    static const QByteArray CANCEL_ON_ERROR_PROPERTY("ERRCANCEL");// X-KDE-KALARM-ERRCANCEL property
+    static const QByteArray DONT_SHOW_ERROR_PROPERTY("ERRNOSHOW");// X-KDE-KALARM-ERRNOSHOW property
 
     if (calendarVersion >= currentCalendarVersion())
         return false;
@@ -3944,8 +3952,8 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
     bool pre_2_2_9  = (calendarVersion < KAlarm::Version(2,2,9));
     bool pre_2_3_0  = (calendarVersion < KAlarm::Version(2,3,0));
     bool pre_2_3_2  = (calendarVersion < KAlarm::Version(2,3,2));
-    bool pre_2_6_0  = (calendarVersion < KAlarm::Version(2,6,0));
-    Q_ASSERT(currentCalendarVersion() == KAlarm::Version(2,6,0));
+    bool pre_2_7_0  = (calendarVersion < KAlarm::Version(2,7,0));
+    Q_ASSERT(currentCalendarVersion() == KAlarm::Version(2,7,0));
 
     KTimeZone localZone;
     if (pre_1_9_2)
@@ -4429,7 +4437,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
                     continue;
                 uint id = Identities::identityUoid(name);
                 if (id)
-                    alarm->setCustomProperty(KAlarm::Calendar::APPNAME, Private::EMAIL_ID_PROPERTY, QString::number(id));
+                    alarm->setCustomProperty(KAlarm::Calendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(id));
                 alarm->removeCustomProperty(KAlarm::Calendar::APPNAME, KMAIL_ID_PROPERTY);
                 converted = true;
             }
@@ -4455,14 +4463,15 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
                 converted = true;
         }
 
-        if (pre_2_6_0)
+        if (pre_2_7_0)
         {
             /*
-             * It's a KAlarm pre-2.6.0 calendar file.
+             * It's a KAlarm pre-2.7.0 calendar file.
              * Archive and at-login flags were stored in event's ARCHIVE property when the main alarm had expired. 
              * Reminder parameters were stored in event's ARCHIVE property when no reminder was pending.
              * Negative reminder periods (i.e. alarm offset > 0) were invalid, so convert to 0.
              * Now store reminder information in FLAGS property, whether reminder is pending or not.
+             * Move EMAILID, SPEAK, ERRCANCEL and ERRNOSHOW alarm properties into new FLAGS property.
              */
             bool flagsValid = false;
             QStringList flags;
@@ -4494,7 +4503,6 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
                 event->removeCustomProperty(KAlarm::Calendar::APPNAME, ARCHIVE_PROPERTY);
             }
 
-            // Invalidate negative reminder periods in alarms
             for (int i = 0, alend = alarms.count();  i < alend;  ++i)
             {
 #ifdef USE_AKONADI
@@ -4502,9 +4510,36 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
 #else
                 Alarm* alarm = alarms[i];
 #endif
+                // Convert EMAILID, SPEAK, ERRCANCEL, ERRNOSHOW properties
+                QStringList flags;
+                QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, EMAIL_ID_PROPERTY);
+                if (!property.isEmpty())
+                {
+                    flags << Private::EMAIL_ID_FLAG << property;
+                    alarm->removeCustomProperty(KAlarm::Calendar::APPNAME, EMAIL_ID_PROPERTY);
+                }
+                if (!alarm->customProperty(KAlarm::Calendar::APPNAME, SPEAK_PROPERTY).isEmpty())
+                {
+                    flags << Private::SPEAK_FLAG;
+                    alarm->removeCustomProperty(KAlarm::Calendar::APPNAME, SPEAK_PROPERTY);
+                }
+                if (!alarm->customProperty(KAlarm::Calendar::APPNAME, CANCEL_ON_ERROR_PROPERTY).isEmpty())
+                {
+                    flags << Private::CANCEL_ON_ERROR_FLAG;
+                    alarm->removeCustomProperty(KAlarm::Calendar::APPNAME, CANCEL_ON_ERROR_PROPERTY);
+                }
+                if (!alarm->customProperty(KAlarm::Calendar::APPNAME, DONT_SHOW_ERROR_PROPERTY).isEmpty())
+                {
+                    flags << Private::DONT_SHOW_ERROR_FLAG;
+                    alarm->removeCustomProperty(KAlarm::Calendar::APPNAME, DONT_SHOW_ERROR_PROPERTY);
+                }
+                if (!flags.isEmpty())
+                    alarm->setCustomProperty(KAlarm::Calendar::APPNAME, Private::FLAGS_PROPERTY, flags.join(Private::SC));
+                
+                // Invalidate negative reminder periods in alarms
                 if (!alarm->hasStartOffset())
                     continue;
-                QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::TYPE_PROPERTY);
+                property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::TYPE_PROPERTY);
                 QStringList types = property.split(QChar::fromLatin1(','), QString::SkipEmptyParts);
                 int r = types.indexOf(REMINDER_ONCE_TYPE);
                 if (r >= 0)

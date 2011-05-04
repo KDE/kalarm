@@ -799,13 +799,13 @@ class KALARM_CAL_EXPORT KAEvent
                 static const QString POST_ACTION_TYPE;
                 static const QString SOUND_REPEAT_TYPE;
                 static const QByteArray NEXT_REPEAT_PROPERTY;
-                static const QByteArray HIDDEN_REMINDER_FLAG;
+                static const QString HIDDEN_REMINDER_FLAG;
                 static const QByteArray FONT_COLOUR_PROPERTY;
-                static const QByteArray EMAIL_ID_PROPERTY;
                 static const QByteArray VOLUME_PROPERTY;
-                static const QByteArray SPEAK_PROPERTY;
-                static const QByteArray CANCEL_ON_ERROR_PROPERTY;
-                static const QByteArray DONT_SHOW_ERROR_PROPERTY;
+                static const QString EMAIL_ID_FLAG;
+                static const QString SPEAK_FLAG;
+                static const QString CANCEL_ON_ERROR_FLAG;
+                static const QString DONT_SHOW_ERROR_FLAG;
                 static const QString DISABLED_STATUS;
                 static const QString DISP_DEFER;
                 static const QString DISP_EDIT;
