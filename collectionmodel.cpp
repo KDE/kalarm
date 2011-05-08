@@ -218,7 +218,7 @@ QVariant CollectionListModel::data(const QModelIndex& index, int role) const
 CollectionListModel* CollectionCheckListModel::mModel = 0;
 
 CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, QObject* parent)
-    : Future::KCheckableProxyModel(parent),
+    : KCheckableProxyModel(parent),
       mAlarmType(type)
 {
     if (!mModel)
@@ -266,7 +266,7 @@ QVariant CollectionCheckListModel::data(const QModelIndex& index, int role) cons
                 if (attr->isStandard(mAlarmType)  &&  mimeTypes.contains(KAlarm::CalEvent::mimeType(mAlarmType)))
                 {
                     // It's the standard collection for a mime type
-                    QFont font = qvariant_cast<QFont>(Future::KCheckableProxyModel::data(index, role));
+                    QFont font = qvariant_cast<QFont>(KCheckableProxyModel::data(index, role));
                     font.setBold(true);
                     return font;
                 }
@@ -276,7 +276,7 @@ QVariant CollectionCheckListModel::data(const QModelIndex& index, int role) cons
                 break;
         }
     }
-    return Future::KCheckableProxyModel::data(index, role);
+    return KCheckableProxyModel::data(index, role);
 }
 
 /******************************************************************************
@@ -324,7 +324,7 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
             }
         }
     }
-    return Future::KCheckableProxyModel::setData(index, value, role);
+    return KCheckableProxyModel::setData(index, value, role);
 }
 
 /******************************************************************************
