@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Templates
+Name[bs]=KAlarm šabloni
 Name[ca]=Plantilles del KAlarm
 Name[ca@valencia]=Plantilles del KAlarm
 Name[da]=KAlarm-skabeloner
@@ -36,6 +37,7 @@ Name[x-test]=xxKAlarm Templatesxx
 Name[zh_CN]=KAlarm 模板
 Name[zh_TW]=KAlarm 樣本
 Comment=Loads data from a KAlarm alarm template file
+Comment[bs]=Učitava podatke iz KAlarm alarm nacrtne datoteke
 Comment[ca]=Carrega dades des d'un fitxer de plantilla d'alarma del KAlarm
 Comment[ca@valencia]=Carrega dades des d'un fitxer de plantilla d'alarma del KAlarm
 Comment[da]=Indlæser data fra en KAlarm-alarmskabelonfil

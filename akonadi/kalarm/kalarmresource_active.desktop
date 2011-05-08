@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Active Alarms
+Name[bs]=KAlarm aktivni alarmi
 Name[ca]=Alarmes actives del KAlarm
 Name[ca@valencia]=Alarmes actives del KAlarm
 Name[da]=Aktive alarmer i KAlarm
@@ -35,6 +36,7 @@ Name[x-test]=xxKAlarm Active Alarmsxx
 Name[zh_CN]=KAlarm 活动中的提醒
 Name[zh_TW]=KAlarm 作用中鬧鐘
 Comment=Loads data from a KAlarm active alarm calendar file
+Comment[bs]=Učitava podatke iz KAlarm aktivne alarm kalendar datoteke
 Comment[ca]=Carrega dades des d'un fitxer de calendari d'alarmes actives del KAlarm
 Comment[ca@valencia]=Carrega dades des d'un fitxer de calendari d'alarmes actives del KAlarm
 Comment[da]=Indlæser data fra en kalenderfil med aktive alarmer i KAlarm

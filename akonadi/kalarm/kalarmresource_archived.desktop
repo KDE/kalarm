@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KAlarm Archived Alarms
+Name[bs]=KAlarm arhivirani alarmi
 Name[ca]=Alarmes expirades del KAlarm
 Name[ca@valencia]=Alarmes expirades del KAlarm
 Name[da]=Arkiverede alarmer i KAlarm
@@ -34,6 +35,7 @@ Name[x-test]=xxKAlarm Archived Alarmsxx
 Name[zh_CN]=KAlarm 已归档的提醒
 Name[zh_TW]=KAlarm 已歸檔鬧鐘
 Comment=Loads data from a KAlarm archived alarm calendar file
+Comment[bs]=Učitava podatke iz KAlarm arhivirane alarm kalendar datoteke
 Comment[ca]=Carrega dades des d'un fitxer de calendari d'alarmes expirades del KAlarm
 Comment[ca@valencia]=Carrega dades des d'un fitxer de calendari d'alarmes expirades del KAlarm
 Comment[da]=Indlæser data fra en kalenderfil med arkiverede alarmer i KAlarm
