@@ -1,0 +1,9 @@
+[Domain]
+Name=KAlarm
+Icon=kalarm
+
+[org.kde.kalarmrtcwake.settimer]
+Name=Set RTC wakeup time
+Description=Set RTC wake-from-suspend time
+Policy=auth_admin
+Persistence=always

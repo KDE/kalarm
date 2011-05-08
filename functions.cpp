@@ -1229,6 +1229,23 @@ void editNewTemplate(const KAEvent* preset, QWidget* parent)
     ::editNewTemplate(EditAlarmDlg::Type(0), preset, parent);
 }
 
+/******************************************************************************
+* Check the config as to whether there is a wake-on-suspend alarm pending, and
+* if so, delete it from the config if it has expired.
+* Reply = config entry: [0] = event ID, [1] = trigger time (time_t).
+*       = empty list if none or expired.
+*/
+QStringList checkRtcWakeConfig()
+{
+    KConfigGroup config(KGlobal::config(), "General");
+    QStringList params = config.readEntry("RtcWake", QStringList());
+    if (params.count() == 2  &&  params[1].toUInt() > KDateTime::currentUtcDateTime().toTime_t())
+        return params;                   // config entry is valid
+    if (!params.isEmpty())
+        config.deleteEntry("RtcWake");   // delete the expired config entry
+    return QStringList();
+}
+
 } // namespace KAlarm
 namespace
 {

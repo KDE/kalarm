@@ -1186,6 +1186,9 @@ bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
 */
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
+    // Delete any expired wake-on-suspend config data
+    KAlarm::checkRtcWakeConfig();
+
     KAEvent* event = AlarmCalendar::resources()->event(eventID);
     if (!event)
     {

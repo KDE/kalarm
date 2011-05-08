@@ -61,6 +61,8 @@
    <Action name="alarmsEnable" />
    <Action name="refreshAlarms" />
    <Separator/>
+   <Action name="wakeSuspend" />
+   <Separator/>
    <Action name="stopAudio" />
   </Menu>
   <Menu noMerge="1" name="settings" >

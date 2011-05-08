@@ -85,6 +85,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
         void               selectEvent(const QString& eventID);
         void               editAlarm(EditAlarmDlg*, const KAEvent&, AlarmResource*);
 #endif
+        KAEvent            selectedEvent() const;
         virtual bool       eventFilter(QObject*, QEvent*);
 
         static void        refresh();
@@ -103,6 +104,9 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
 
     public slots:
         virtual void   show();
+
+    signals:
+        void           selectionChanged();
 
     protected:
         virtual void   resizeEvent(QResizeEvent*);
@@ -146,6 +150,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
         void           slotShowTimeTo();
         void           slotShowArchived();
         void           slotSpreadWindowsShortcut();
+        void           slotWakeFromSuspend();
         void           updateKeepArchived(int days);
         void           slotUndo();
         void           slotUndoItem(QAction* id);

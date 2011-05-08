@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WakeFromSuspendDlgWidget</class>
+ <widget class="QWidget" name="WakeFromSuspendDlgWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>333</width>
+    <height>162</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Wake From Suspend Alarm</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout1">
+        <item>
+         <widget class="QPushButton" name="showWakeButton">
+          <property name="toolTip">
+           <string>Show current wake-from-suspend alarm</string>
+          </property>
+          <property name="whatsThis">
+           <string>Highlight the current wake-from-suspend alarm in the alarm list. This button is disabled if no wake-from-suspend alarm is configured.</string>
+          </property>
+          <property name="text">
+           <string>Show current alarm</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="useWakeButton">
+          <property name="toolTip">
+           <string>Set highlighted alarm as the wake-from-suspend alarm</string>
+          </property>
+          <property name="whatsThis">
+           <string>Set the alarm highlighted in the alarm list to wake-from-suspend. This replaces any existing wake-from-suspend alarm.</string>
+          </property>
+          <property name="text">
+           <string>Use highlighted alarm</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="cancelWakeButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="toolTip">
+           <string>Cancel the current wake-from-suspend</string>
+          </property>
+          <property name="whatsThis">
+           <string>Cancel the currently configured wake-from-suspend. Note that this does not cancel the alarm itself, which will still trigger in the normal way. This button is disabled if no wake-from-suspend alarm is configured.</string>
+          </property>
+          <property name="text">
+           <string>Cancel wake from suspend</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QSpinBox" name="advanceWakeTime">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="whatsThis">
+        <string>Enter how many minutes before the alarm trigger time to wake the system from suspend. This can be used to ensure that the system is fully restored by the time the alarm triggers.</string>
+       </property>
+       <property name="maximum">
+        <number>10</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Number of minutes before alarm to wake from suspend</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

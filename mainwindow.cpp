@@ -45,6 +45,7 @@
 #include "templatemenuaction.h"
 #include "templatepickdlg.h"
 #include "traywindow.h"
+#include "wakedlg.h"
 
 #include <libkdepim/maillistdrag.h>
 #include <kmime/kmime_content.h>
@@ -515,6 +516,10 @@ void MainWindow::initActions()
     mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
     connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
+    action = new KAction(i18nc("@action", "Wake From Suspend"), this);
+    actions->addAction(QLatin1String("wakeSuspend"), action);
+    connect(action, SIGNAL(triggered(bool)), SLOT(slotWakeFromSuspend()));
+
     action = KAlarm::createStopPlayAction(this);
     actions->addAction(QLatin1String("stopAudio"), action);
     action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
@@ -704,6 +709,18 @@ void MainWindow::selectEvent(const QString& eventId)
     }
 #else
     mListView->select(eventId, true);
+#endif
+}
+
+/******************************************************************************
+* Return the single selected alarm in the displayed list.
+*/
+KAEvent MainWindow::selectedEvent() const
+{
+#ifdef USE_AKONADI
+    return mListView->selectedEvent();
+#else
+    return *mListView->selectedEvent();
 #endif
 }
 
@@ -959,6 +976,14 @@ void MainWindow::slotShowArchived()
 void MainWindow::slotSpreadWindowsShortcut()
 {
     mActionSpreadWindows->trigger();
+}
+
+/******************************************************************************
+* Called when the Wake From Suspend menu option is selected.
+*/
+void MainWindow::slotWakeFromSuspend()
+{
+    (WakeFromSuspendDlg::create(this))->show();
 }
 
 /******************************************************************************
@@ -1537,6 +1562,7 @@ void MainWindow::slotSelection()
     if (!count)
     {
         selectionCleared();    // disable actions
+        emit selectionChanged();
         return;
     }
 
@@ -1600,6 +1626,8 @@ void MainWindow::slotSelection()
     mActionEnable->setEnabled(active && !readOnly && (enableEnable || enableDisable));
     if (enableEnable || enableDisable)
         setEnableText(enableEnable);
+
+    emit selectionChanged();
 }
 
 /******************************************************************************
