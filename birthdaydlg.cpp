@@ -44,11 +44,7 @@
 #include <kmessagebox.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
-#if KDE_IS_VERSION(4,5,60)
 #include <kdescendantsproxymodel.h>
-#else
-#include <libkdepim/kdescendantsproxymodel_p.h>
-#endif
 #include <khbox.h>
 #include <kdebug.h>
 

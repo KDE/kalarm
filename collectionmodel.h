@@ -26,7 +26,7 @@
 
 #include <akonadi/favoritecollectionsmodel.h>
 #include <akonadi_next/kcheckableproxymodel.h>
-#include <libkdepim/kdescendantsproxymodel_p.h>
+#include <kdescendantsproxymodel.h>
 
 #include <QSortFilterProxyModel>
 #include <QListView>
