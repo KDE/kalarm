@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.7.0 --- 4 May 2011 ===
+=== Version 2.7.0 --- 9 May 2011 ===
 - Add option to set a reminder AFTER the main alarm.
+- Add option to wake computer from suspend when a selected alarm is triggered.
 - Add command line option to disable alarm monitoring.
 - Replace EMAILID, SPEAK, ERRCANCEL, ERRNOSHOW calendar properties with FLAGS
   property parameters.

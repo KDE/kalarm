@@ -26,6 +26,8 @@
 
 #include <QDebug>
 
+#include <stdio.h>
+
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 {
     unsigned t = args["time"].toUInt();
@@ -36,9 +38,35 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
         // time 5 seconds from now, which will then expire.
         t = KDateTime::currentUtcDateTime().toTime_t() + 5;
     }
+
+    // Find the rtcwake executable
+    QString exe("/usr/sbin/rtcwake");   // default location
+    FILE* wh = popen("whereis -b rtcwake", "r");
+    if (wh)
+    {
+        char buff[512] = { '\0' };
+        fgets(buff, sizeof(buff), wh);
+        pclose(wh);
+        // The string should be in the form "rtcwake: /path/rtcwake"
+        char* start = strchr(buff, ':');
+        if (start)
+        {
+            if (*++start == ' ')
+                ++start;
+            char* end = strpbrk(start, " \r\n");
+            if (end)
+                *end = 0;
+            if (*start)
+            {
+                exe = QString::fromLocal8Bit(start);
+                qDebug() << "RtcWakeAction::settimer:" << exe;
+            }
+        }
+    }
+
+    // Set the wakeup by executing the rtcwake command
     int result = -2;   // default = command not found
     KProcess proc;
-    QString exe("/usr/sbin/rtcwake");
     if (!exe.isEmpty())
     {
         // The "-m no" option sets the wakeup time without suspending the computer.

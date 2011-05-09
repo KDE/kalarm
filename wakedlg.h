@@ -23,6 +23,7 @@
 
 #include <kdialog.h>
 
+class QTimer;
 class KAEvent;
 class MainWindow;
 class Ui_WakeFromSuspendDlgWidget;
@@ -38,6 +39,7 @@ class WakeFromSuspendDlg : public KDialog
         void showWakeClicked();
         void useWakeClicked();
         void cancelWakeClicked();
+        bool checkPendingAlarm();
 
     private:
         explicit WakeFromSuspendDlg(QWidget* parent);
@@ -46,6 +48,7 @@ class WakeFromSuspendDlg : public KDialog
         static WakeFromSuspendDlg* mInstance;   // the one and only instance of the dialog
         Ui_WakeFromSuspendDlgWidget* mUi;
         MainWindow* mMainWindow;
+        QTimer*     mTimer;
 };
 
 #endif // WAKEDLG_H

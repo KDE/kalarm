@@ -35,6 +35,7 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
+#include <QTimer>
 
 WakeFromSuspendDlg* WakeFromSuspendDlg::mInstance = 0;
 
@@ -59,15 +60,14 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
     if (!mMainWindow)
         mMainWindow = MainWindow::mainMainWindow();
 
-    // Check if there's a wake-from-suspend alarm pending, and whether it has
-    // now expired.
-    if (KAlarm::checkRtcWakeConfig().isEmpty())
-    {
-        mUi->showWakeButton->setEnabled(false);
-        mUi->cancelWakeButton->setEnabled(false);
-    }
-    // Check if there is any alarm selected in the main window
+    // Check if there is any alarm selected in the main window, and enable/disable
+    // the Show and Cancel buttons as necessary.
     slotSelectedEventChanged();
+
+    // Update the Show and Cancel button status every 5 seconds
+    mTimer = new QTimer(this);
+    connect(mTimer, SIGNAL(timeout()), SLOT(checkPendingAlarm()));
+    mTimer->start(5000);
 
     connect(mMainWindow, SIGNAL(selectionChanged()), SLOT(slotSelectedEventChanged()));
     connect(mUi->showWakeButton, SIGNAL(clicked()), SLOT(showWakeClicked()));
@@ -83,6 +83,22 @@ void WakeFromSuspendDlg::slotSelectedEventChanged()
 {
     KAEvent event = mMainWindow->selectedEvent();
     mUi->useWakeButton->setEnabled(event.isValid() && !event.mainDateTime().isDateOnly());
+    checkPendingAlarm();
+}
+
+/******************************************************************************
+* Update the Show and Cancel buttons if the pending alarm status has changed.
+* Reply = true if an alarm is still pending.
+*/
+bool WakeFromSuspendDlg::checkPendingAlarm()
+{
+    if (KAlarm::checkRtcWakeConfig().isEmpty())
+    {
+        mUi->showWakeButton->setEnabled(false);
+        mUi->cancelWakeButton->setEnabled(false);
+        return false;
+    }
+    return true;
 }
 
 /******************************************************************************
@@ -91,16 +107,19 @@ void WakeFromSuspendDlg::slotSelectedEventChanged()
 */
 void WakeFromSuspendDlg::showWakeClicked()
 {
-    QStringList params = KAlarm::checkRtcWakeConfig();
-    if (!params.isEmpty())
+    if (checkPendingAlarm())
     {
+        QStringList params = KAlarm::checkRtcWakeConfig();
+        if (!params.isEmpty())
+        {
 #ifdef USE_AKONADI
-        KAEvent* event = AlarmCalendar::resources()->event(params[0]);
-        if (event)
-            mMainWindow->selectEvent(event->itemId());
+            KAEvent* event = AlarmCalendar::resources()->event(params[0]);
+            if (event)
+                mMainWindow->selectEvent(event->itemId());
 #else
-        mMainWindow->selectEvent(params[0]);
+            mMainWindow->selectEvent(params[0]);
 #endif
+        }
     }
 }
 
@@ -150,8 +169,7 @@ void WakeFromSuspendDlg::useWakeClicked()
 void WakeFromSuspendDlg::cancelWakeClicked()
 {
     setTime(0);
-    KConfigGroup config(KGlobal::config(), "General");
-    config.deleteEntry("RtcWake");
+    KAlarm::deleteRtcWakeConfig();
     mUi->showWakeButton->setEnabled(false);
     mUi->cancelWakeButton->setEnabled(false);
 }

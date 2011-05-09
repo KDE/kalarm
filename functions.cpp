@@ -679,6 +679,11 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
             ++warnErr;
         }
 
+        // Remove any wake-from-suspend scheduled for this alarm
+        QStringList wakeup = checkRtcWakeConfig();
+        if (!wakeup.isEmpty()  &&  wakeup[0] == id)
+            deleteRtcWakeConfig();
+
         // Remove "Don't show error messages again" for this alarm
         setDontShowErrors(id);
     }
@@ -1241,9 +1246,21 @@ QStringList checkRtcWakeConfig()
     QStringList params = config.readEntry("RtcWake", QStringList());
     if (params.count() == 2  &&  params[1].toUInt() > KDateTime::currentUtcDateTime().toTime_t())
         return params;                   // config entry is valid
+#ifdef __GNUC__
+#warning Should delete if calendar disabled or removed, or event id no longer exists
+#endif
     if (!params.isEmpty())
         config.deleteEntry("RtcWake");   // delete the expired config entry
     return QStringList();
+}
+
+/******************************************************************************
+* Delete any wake-on-suspend alarm from the config.
+*/
+void deleteRtcWakeConfig()
+{
+    KConfigGroup config(KGlobal::config(), "General");
+    config.deleteEntry("RtcWake");
 }
 
 } // namespace KAlarm
