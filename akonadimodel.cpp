@@ -1192,7 +1192,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
     if (j->error())
     {
         emit collectionModified(collection.id(), false);
-        QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
+        QString errMsg = i18nc("@info/plain", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
         kError() << errMsg << ":" << j->errorString();
         KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
