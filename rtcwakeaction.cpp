@@ -20,6 +20,7 @@
 
 #include "rtcwakeaction.h"
 
+#include <kglobal.h>
 #include <klocale.h>
 #include <kprocess.h>
 #include <kdatetime.h>
@@ -27,6 +28,11 @@
 #include <QDebug>
 
 #include <stdio.h>
+
+RtcWakeAction::RtcWakeAction()
+{
+    KGlobal::locale()->insertCatalog("kalarm");
+}
 
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 {

@@ -28,6 +28,9 @@ using namespace KAuth;
 class RtcWakeAction : public QObject
 {
         Q_OBJECT
+    public:
+        RtcWakeAction();
+
     public Q_SLOTS:
         ActionReply settimer(const QVariantMap& args);
 };
