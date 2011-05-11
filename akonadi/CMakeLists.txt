@@ -18,6 +18,7 @@ set(KALARM_COMMON_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 add_subdirectory(kalarm)
 add_subdirectory(kalarmdir)
+add_subdirectory(migrator)
 
 include_directories(
     ${KALARM_CALENDAR_INCLUDE_DIR}
