@@ -37,6 +37,7 @@ namespace Akonadi {
 class QPixmap;
 class KJob;
 class DateTime;
+class CalendarMigrator;
 
 
 class AkonadiModel : public Akonadi::EntityTreeModel

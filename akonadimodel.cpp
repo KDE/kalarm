@@ -21,6 +21,7 @@
 #include "akonadimodel.h"
 #include "alarmtext.h"
 #include "autoqpointer.h"
+#include "calendarmigrator.h"
 #include "collectionattribute.h"
 #include "eventattribute.h"
 #include "preferences.h"
@@ -128,6 +129,27 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
     connect(monitor, SIGNAL(itemChanged(const Akonadi::Item&, const QSet<QByteArray>&)), SLOT(slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&)));
+
+    // Check whether there are any KAlarm resources configured
+    bool found = false;
+    AgentInstance::List agents = AgentManager::self()->instances();
+    foreach (const AgentInstance& agent, agents)
+    {
+        QString type = agent.type().identifier();
+        if (type == QLatin1String("akonadi_kalarm_resource")
+        ||  type == QLatin1String("akonadi_kalarm_dir_resource"))
+        {
+            found = true;
+            break;
+        }
+    }
+    if (!found)
+    {
+        // There are no KAlarm Akonadi resources.
+        // Migrate any KResources alarm calendars from pre-Akonadi versions of KAlarm,
+        // or create default calendars.
+        CalendarMigrator::execute();
+    }
 }
 
 /******************************************************************************
@@ -1192,7 +1214,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
     if (j->error())
     {
         emit collectionModified(collection.id(), false);
-        QString errMsg = i18nc("@info/plain", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
+        QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
         kError() << errMsg << ":" << j->errorString();
         KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
