@@ -36,6 +36,8 @@
 #include <kmessagebox.h>
 #include <kdebug.h>
 
+#include <QTimer>
+
 using namespace Akonadi;
 
 
@@ -59,7 +61,7 @@ class CalendarCreator : public QObject
         void finished(CalendarCreator*);
 
     private slots:
-        void collectionsReceived(const Akonadi::Collection::List&);
+        void fetchCollection();
         void collectionFetchResult(KJob*);
         void modifyCollectionJobDone(KJob*);
 
@@ -318,12 +320,18 @@ void CalendarCreator::agentCreated(KJob* j)
     }
     mAgent.reconfigure();   // notify the agent that its configuration has been changed
 
-    // Find the collection which this agent manages
+    fetchCollection();   // find the collection which this agent manages
+}
+
+/******************************************************************************
+* Find the collection which this agent manages.
+*/
+void CalendarCreator::fetchCollection()
+{
     CollectionFetchJob* fjob = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
     fjob->fetchScope().setResource(mAgent.identifier());
-    connect(fjob, SIGNAL(collectionsReceived(const Akonadi::Collection::List&)),
-                  SLOT(collectionsReceived(const Akonadi::Collection::List&)));
     connect(fjob, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
+    fjob->start();
 }
 
 bool CalendarCreator::migrateLocalFile()
@@ -367,6 +375,7 @@ template <class Interface> Interface* CalendarCreator::migrateBasic()
     if (!iface->isValid())
     {
         mErrorMessage = iface->lastError().message();
+        kDebug() << "D-Bus error accessing resource:" << mErrorMessage;
         delete iface;
         return 0;
     }
@@ -377,49 +386,51 @@ template <class Interface> Interface* CalendarCreator::migrateBasic()
 }
 
 /******************************************************************************
-* Called when a collection fetch job has retrieved the agent's collection.
-* Obtains the collection handled by the agent, and configures it.
-*/
-void CalendarCreator::collectionsReceived(const Akonadi::Collection::List& collections)
-{
-    if (collections.count() != 1)
-    {
-        mErrorMessage = i18nc("@info/plain", "New configuration was corrupt");
-        kError() << "Wrong number of collections for this resource:" << collections.count();
-        finish(true);
-    }
-    else
-    {
-        // Set Akonadi Collection attributes
-        kDebug() << mName;
-        Collection collection = collections[0];
-        collection.setRemoteId(mPath);
-        collection.setContentMimeTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
-        EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
-        dattr->setIconName("kalarm");
-        KAlarm::CollectionAttribute* attr = collection.attribute<KAlarm::CollectionAttribute>(Entity::AddIfMissing);
-        attr->setEnabled(mEnabled ? mAlarmType : KAlarm::CalEvent::EMPTY);
-        if (mStandard)
-            attr->setStandard(mAlarmType);
-        if (mColour.isValid())
-            attr->setBackgroundColor(mColour);
-        CollectionModifyJob* job = new CollectionModifyJob(collection, this);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
-    }
-}
-
-/******************************************************************************
 * Called when a collection fetch job has completed.
-* Checks for error.
+* Obtains the collection handled by the agent, and configures it.
 */
 void CalendarCreator::collectionFetchResult(KJob* j)
 {
+    kDebug() << mName;
     if (j->error())
     {
         mErrorMessage = j->errorString();
         kError() << "CollectionFetchJob error: " << mErrorMessage;
         finish(true);
+        return;
     }
+    CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
+    Collection::List collections = job->collections();
+    if (collections.isEmpty())
+    {
+        // Need to wait a bit longer until the resource has initialised and
+        // created its collection. Retry after 200ms.
+        kDebug() << "Retrying";
+        QTimer::singleShot(200, this, SLOT(fetchCollection()));
+        return;
+    }
+    if (collections.count() > 1)
+    {
+        mErrorMessage = i18nc("@info/plain", "New configuration was corrupt");
+        kError() << "Wrong number of collections for this resource:" << collections.count();
+        finish(true);
+        return;
+    }
+
+    // Set Akonadi Collection attributes
+    Collection collection = collections[0];
+    collection.setRemoteId(mPath);
+    collection.setContentMimeTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
+    EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
+    dattr->setIconName("kalarm");
+    KAlarm::CollectionAttribute* attr = collection.attribute<KAlarm::CollectionAttribute>(Entity::AddIfMissing);
+    attr->setEnabled(mEnabled ? mAlarmType : KAlarm::CalEvent::EMPTY);
+    if (mStandard)
+        attr->setStandard(mAlarmType);
+    if (mColour.isValid())
+        attr->setBackgroundColor(mColour);
+    CollectionModifyJob* cmjob = new CollectionModifyJob(collection, this);
+    connect(cmjob, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
 }
 
 /******************************************************************************
