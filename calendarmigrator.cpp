@@ -92,6 +92,11 @@ CalendarMigrator::CalendarMigrator(QObject* parent)
 {
 }
 
+CalendarMigrator::~CalendarMigrator()
+{
+    kDebug();
+}
+
 /******************************************************************************
 * Migrate old KResource calendars, or if none, create default Akonadi resources.
 */
@@ -132,25 +137,6 @@ void CalendarMigrator::migrateOrCreate()
             continue;   // unknown resource type - can't convert
 
         haveResources = true;
-#if 0
-    KRES::Manager<KRES::Resource> manager(QLatin1String("alarms"));
-    manager.readConfig();
-    for (KRES::Manager<KRES::Resource>::Iterator it = manager.begin();  it != manager.end();  ++it)
-    {
-        KRES::Resource* resource = *it;
-        QString agentType;
-        if (resource->type() == QLatin1String("file"))
-            agentType = QLatin1String("akonadi_kalarm_resource");
-        else if (resource->type() == QLatin1String("dir"))
-            agentType = QLatin1String("akonadi_kalarm_dir_resource");
-        else if (resource->type() == QLatin1String("remote"))
-            agentType = QLatin1String("akonadi_kalarm_resource");
-        else
-            continue;   // unknown resource type - can't convert
-
-        haveResources = true;
-        KConfigGroup configGroup(&config, "Resource_" + resource->identifier());
-#endif
         creator = new CalendarCreator(resourceType, configGroup);
         if (!creator->isValid())
             delete creator;
@@ -203,18 +189,24 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
     int i = mCalendarsPending.indexOf(creator);
     if (i < 0)
         return;    // calendar already finished
-    mCalendarsPending.removeAt(i);    // remove it from the pending list
 
     if (!creator->errorMessage().isEmpty())
     {
         QString errmsg = creator->newCalendar()
                        ? i18nc("@info/plain", "Failed to create default calendar <resource>%1</resource>", creator->resourceName())
-                       : i18nc("@info/plain", "Failed to convert old configuration for calendar <resource>%1</resource>", creator->resourceName());
+                       : i18nc("@info/plain 'Import Alarms' is the name of a menu option",
+                               "Failed to convert old configuration for calendar <resource>%1</resource>. "
+                               "Please use Import Alarms to load its alarms into a new or existing calendar.", creator->resourceName());
         QString locn = i18nc("@info/plain File path or URL", "Location: %1", creator->path());
-        KMessageBox::error(0, i18nc("@info", "%1<nl/>%2<nl/>(%3)", errmsg, locn, creator->errorMessage()));
+        if (creator->errorMessage().isEmpty())
+            errmsg = i18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
+        else
+            errmsg = i18nc("@info", "<para>%1</para><para>%2<nl/>(%3)</para>", errmsg, locn, creator->errorMessage());
+        KMessageBox::error(0, errmsg);
     }
     creator->deleteLater();
 
+    mCalendarsPending.removeAt(i);    // remove it from the pending list
     if (mCalendarsPending.isEmpty())
         deleteLater();
 }

@@ -38,6 +38,7 @@ class CalendarMigrator : public QObject
 {
         Q_OBJECT
     public:
+        ~CalendarMigrator();
         static void execute();
 
     private slots:
