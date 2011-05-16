@@ -98,6 +98,11 @@ void EventListView::select(const QModelIndex& index, bool scrollToIndex)
         scrollTo(index);
 }
 
+void EventListView::clearSelection()
+{
+    selectionModel()->clearSelection();
+}
+
 /******************************************************************************
 * Return the single selected item.
 * Reply = invalid if no items are selected, or if multiple items are selected.

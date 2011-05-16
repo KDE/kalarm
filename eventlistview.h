@@ -52,6 +52,7 @@ class EventListView : public QTreeView
         void              select(const QString& eventId, bool scrollToEvent = false);
 #endif
         void              select(const QModelIndex&, bool scrollToIndex = false);
+        void              clearSelection();
         QModelIndex       selectedIndex() const;
 #ifdef USE_AKONADI
         KAEvent           selectedEvent() const;

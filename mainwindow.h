@@ -86,6 +86,7 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
         void               editAlarm(EditAlarmDlg*, const KAEvent&, AlarmResource*);
 #endif
         KAEvent            selectedEvent() const;
+        void               clearSelection();
         virtual bool       eventFilter(QObject*, QEvent*);
 
         static void        refresh();

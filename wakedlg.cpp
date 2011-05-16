@@ -115,12 +115,17 @@ void WakeFromSuspendDlg::showWakeClicked()
 #ifdef USE_AKONADI
             KAEvent* event = AlarmCalendar::resources()->event(params[0]);
             if (event)
+            {
                 mMainWindow->selectEvent(event->itemId());
+                return;
+            }
 #else
             mMainWindow->selectEvent(params[0]);
+            return;
 #endif
         }
     }
+    mMainWindow->clearSelection();
 }
 
 /******************************************************************************

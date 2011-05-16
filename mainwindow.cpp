@@ -725,6 +725,14 @@ KAEvent MainWindow::selectedEvent() const
 }
 
 /******************************************************************************
+* Deselect all alarms in the displayed list.
+*/
+void MainWindow::clearSelection()
+{
+    mListView->clearSelection();
+}
+
+/******************************************************************************
 *  Called when the New button is clicked to edit a new alarm to add to the list.
 */
 void MainWindow::slotNew(EditAlarmDlg::Type type)
