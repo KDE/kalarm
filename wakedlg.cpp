@@ -28,7 +28,6 @@
 #include "mainwindow.h"
 #include "preferences.h"
 
-#include <kauth.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
@@ -154,7 +153,7 @@ void WakeFromSuspendDlg::useWakeClicked()
             return;
         int advance = mUi->advanceWakeTime->value();
         unsigned triggerTime = dt.addSecs(-advance * 60).toTime_t();
-        if (setTime(triggerTime))
+        if (KAlarm::setRtcWakeTime(triggerTime, this))
         {
             QStringList param;
             param << event.id() << QString::number(triggerTime);
@@ -173,57 +172,10 @@ void WakeFromSuspendDlg::useWakeClicked()
 */
 void WakeFromSuspendDlg::cancelWakeClicked()
 {
-    setTime(0);
+    KAlarm::setRtcWakeTime(0, this);
     KAlarm::deleteRtcWakeConfig();
     mUi->showWakeButton->setEnabled(false);
     mUi->cancelWakeButton->setEnabled(false);
-}
-
-/******************************************************************************
-* Set the wakeup time for the system.
-*/
-bool WakeFromSuspendDlg::setTime(unsigned triggerTime)
-{
-    QVariantMap args;
-    args["time"] = triggerTime;
-    KAuth::Action action("org.kde.kalarmrtcwake.settimer");
-    action.setHelperID("org.kde.kalarmrtcwake");
-    action.setParentWidget(this);
-    action.setArguments(args);
-    KAuth::ActionReply reply = action.execute();
-    if (reply.failed())
-    {
-        QString errmsg = reply.errorDescription();
-        kDebug() << "Error code=" << reply.errorCode() << errmsg;
-        if (errmsg.isEmpty())
-        {
-            int errcode = reply.errorCode();
-            switch (reply.type())
-            {
-                case KAuth::ActionReply::KAuthError:
-                    kDebug() << "Authorisation error:" << errcode;
-                    switch (errcode)
-                    {
-                        case KAuth::ActionReply::AuthorizationDenied:
-                        case KAuth::ActionReply::UserCancelled:
-                            return false;   // the user should already know about this
-                        default:
-                            break;
-                    }
-                    break;
-                case KAuth::ActionReply::HelperError:
-                    kDebug() << "Helper error:" << errcode;
-                    errcode += 100;    // make code distinguishable from KAuthError type
-                    break;
-                default:
-                    break;
-            }
-            errmsg = i18nc("@info", "Error obtaining authorization (%1)", errcode);
-        }
-        KMessageBox::information(this, errmsg);
-        return false;
-    }
-    return true;
 }
 
 // vim: et sw=4:

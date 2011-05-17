@@ -68,6 +68,7 @@ using namespace KCal;
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kauth.h>
 #include <ksystemtimezone.h>
 #include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
@@ -682,7 +683,11 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
         // Remove any wake-from-suspend scheduled for this alarm
         QStringList wakeup = checkRtcWakeConfig();
         if (!wakeup.isEmpty()  &&  wakeup[0] == id)
+        {
+            // setRtcWakeTime will only work with a parent window specified
+            setRtcWakeTime(0, (msgParent ? msgParent : MainWindow::mainMainWindow()));
             deleteRtcWakeConfig();
+        }
 
         // Remove "Don't show error messages again" for this alarm
         setDontShowErrors(id);
@@ -1261,6 +1266,55 @@ void deleteRtcWakeConfig()
 {
     KConfigGroup config(KGlobal::config(), "General");
     config.deleteEntry("RtcWake");
+}
+
+/******************************************************************************
+* Set the wakeup time for the system.
+* Set 'triggerTime' to zero to cancel the wakeup.
+* Reply = true if successful.
+*/
+bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
+{
+    QVariantMap args;
+    args["time"] = triggerTime;
+    KAuth::Action action("org.kde.kalarmrtcwake.settimer");
+    action.setHelperID("org.kde.kalarmrtcwake");
+    action.setParentWidget(parent);
+    action.setArguments(args);
+    KAuth::ActionReply reply = action.execute();
+    if (reply.failed())
+    {
+        QString errmsg = reply.errorDescription();
+        kDebug() << "Error code=" << reply.errorCode() << errmsg;
+        if (errmsg.isEmpty())
+        {
+            int errcode = reply.errorCode();
+            switch (reply.type())
+            {
+                case KAuth::ActionReply::KAuthError:
+                    kDebug() << "Authorisation error:" << errcode;
+                    switch (errcode)
+                    {
+                        case KAuth::ActionReply::AuthorizationDenied:
+                        case KAuth::ActionReply::UserCancelled:
+                            return false;   // the user should already know about this
+                        default:
+                            break;
+                    }
+                    break;
+                case KAuth::ActionReply::HelperError:
+                    kDebug() << "Helper error:" << errcode;
+                    errcode += 100;    // make code distinguishable from KAuthError type
+                    break;
+                default:
+                    break;
+            }
+            errmsg = i18nc("@info", "Error obtaining authorization (%1)", errcode);
+        }
+        KMessageBox::information(parent, errmsg);
+        return false;
+    }
+    return true;
 }
 
 } // namespace KAlarm

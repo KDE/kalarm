@@ -184,6 +184,7 @@ void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateErro
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateStatus korgError, int nAlarms);
 QStringList         checkRtcWakeConfig();
 void                deleteRtcWakeConfig();
+bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 
 bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,

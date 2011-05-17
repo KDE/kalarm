@@ -43,7 +43,6 @@ class WakeFromSuspendDlg : public KDialog
 
     private:
         explicit WakeFromSuspendDlg(QWidget* parent);
-        bool setTime(unsigned triggerTime);
 
         static WakeFromSuspendDlg* mInstance;   // the one and only instance of the dialog
         Ui_WakeFromSuspendDlgWidget* mUi;
