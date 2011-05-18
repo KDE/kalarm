@@ -47,7 +47,7 @@ class CalendarCreator : public QObject
         Q_OBJECT
     public:
         CalendarCreator(const QString& resourceType, const KConfigGroup&);
-        CalendarCreator(KAlarm::CalEvent::Type, const QString& path, const QString& name);
+        CalendarCreator(KAlarm::CalEvent::Type, const QString& file, const QString& name);
         bool    isValid() const        { return mAlarmType != KAlarm::CalEvent::EMPTY; }
         bool    newCalendar() const    { return mNew; }
         QString resourceName() const   { return mName; }
@@ -214,6 +214,9 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
 }
 
 
+/******************************************************************************
+* Constructor to migrate a KResources calendar, using its parameters.
+*/
 CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup& config)
     : mAlarmType(KAlarm::CalEvent::EMPTY),
       mNew(false),
@@ -263,10 +266,9 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
 * Constructor to create a new default local file resource.
 * This is created as enabled, read-write, and standard for its alarm type.
 */
-CalendarCreator::CalendarCreator(KAlarm::CalEvent::Type alarmType, const QString& path, const QString& name)
+CalendarCreator::CalendarCreator(KAlarm::CalEvent::Type alarmType, const QString& file, const QString& name)
     : mAlarmType(alarmType),
       mResourceType(LocalFile),
-      mPath(path),
       mName(name),
       mColour(),
       mReadOnly(false),
@@ -275,7 +277,8 @@ CalendarCreator::CalendarCreator(KAlarm::CalEvent::Type alarmType, const QString
       mNew(true),
       mFinished(false)
 {
-    kDebug() << "New:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
+    kDebug() << "New:" << mName << ", type=" << mAlarmType << ", file=" << file;
+    mPath = KStandardDirs::locateLocal("appdata", file);
 }
 
 /******************************************************************************
