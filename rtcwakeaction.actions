@@ -67,6 +67,7 @@ Icon=kalarm
 [org.kde.kalarmrtcwake.settimer]
 Name=Set RTC wakeup time
 Name[ca]=Defineix l'hora d'activació de l'RTC
+Name[da]=Angiv RTC-opvågningstidspunkt
 Name[ia]=Fixa tempore de eveliar RTC
 Name[nl]=Wektijd van RTC instellen
 Name[pt]=Definir a hora de activação do RTC
@@ -76,6 +77,7 @@ Name[x-test]=xxSet RTC wakeup timexx
 Name[zh_TW]=設定 RTC 喚醒時間
 Description=Set RTC wake-from-suspend time
 Description[ca]=Defineix l'hora d'activació des de suspensió de l'RTC
+Description[da]=Angiv RTC-opvågningstidspunkt fra suspendering
 Description[ia]=Fixa tempore de eveliar-ex-suspender RTC
 Description[nl]=Wektijd-na-opschorten instellen
 Description[pt]=Definir a hora para acordar da suspensão no RTC
