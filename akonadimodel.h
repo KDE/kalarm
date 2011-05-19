@@ -44,7 +44,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 {
         Q_OBJECT
     public:
-        enum Change { Added, Deleted, Invalidated, Enabled, ReadOnly, WrongType, Location, Colour };
+        enum Change { Added, Deleted, Invalidated, Enabled, ReadOnly, AlarmTypes, WrongType, Location, Colour };
         enum {   // data columns
             // Item columns
             TimeColumn = 0, TimeToColumn, RepeatColumn, ColourColumn, TypeColumn, TextColumn,
@@ -276,6 +276,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
         Akonadi::ChangeRecorder* mMonitor;
+        QMap<Akonadi::Collection::Id, KAlarm::CalEvent::Types> mCollectionAlarmTypes;  // last content mime types of each collection
         QMap<Akonadi::Collection::Id, Akonadi::Collection::Rights> mCollectionRights;  // last writable status of each collection
         QMap<Akonadi::Collection::Id, KAlarm::CalEvent::Types> mCollectionEnabled;  // last enabled mime types of each collection
         QMap<KJob*, CollJobData> mPendingCollectionJobs;  // pending collection creation/deletion jobs, with collection ID & name

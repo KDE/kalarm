@@ -277,8 +277,8 @@ CalendarCreator::CalendarCreator(KAlarm::CalEvent::Type alarmType, const QString
       mNew(true),
       mFinished(false)
 {
-    kDebug() << "New:" << mName << ", type=" << mAlarmType << ", file=" << file;
     mPath = KStandardDirs::locateLocal("appdata", file);
+    kDebug() << "New:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
 }
 
 /******************************************************************************
@@ -422,7 +422,6 @@ void CalendarCreator::collectionFetchResult(KJob* j)
 
     // Set Akonadi Collection attributes
     Collection collection = collections[0];
-    collection.setRemoteId(mPath);
     collection.setContentMimeTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
     EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
     dattr->setIconName("kalarm");

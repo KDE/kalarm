@@ -1586,6 +1586,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
         if (collection.isValid())
         {
             // A collection has been inserted
+            kDebug() << "Collection" << collection.id() << collection.name();
             QSet<QByteArray> attrs;
             attrs += CollectionAttribute::name();
             slotCollectionChanged(collection, attrs);
@@ -1645,6 +1646,7 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 */
 void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames)
 {
+    // Check for a read/write permission change
     Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
     Collection::Rights newRights = collection.rights() & writableRights;
     if (newRights != oldRights)
@@ -1653,6 +1655,18 @@ void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSe
         emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights));
     }
 
+    // Check for a change in content mime types
+    // (e.g. when a collection is first created at startup).
+    KAlarm::CalEvent::Types oldAlarmTypes = mCollectionAlarmTypes.value(collection.id(), KAlarm::CalEvent::EMPTY);
+    KAlarm::CalEvent::Types newAlarmTypes = KAlarm::CalEvent::types(collection.contentMimeTypes());
+    if (newAlarmTypes != oldAlarmTypes)
+    {
+        kDebug() << "Collection" << collection.id() << ": alarm types ->" << newAlarmTypes;
+        mCollectionAlarmTypes[collection.id()] = newAlarmTypes;
+        emit collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes));
+    }
+
+    // Check for the collection being enabled/disabled
     if (attributeNames.contains(CollectionAttribute::name()))
     {
         static bool first = true;
@@ -1661,7 +1675,7 @@ kDebug()<<"COLLECTION ATTRIBUTE changed";
         KAlarm::CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : KAlarm::CalEvent::EMPTY;
         if (first  ||  newEnabled != oldEnabled)
         {
-            kDebug() << "enabled ->" << newEnabled;
+            kDebug() << "Collection" << collection.id() << ": enabled ->" << newEnabled;
             first = false;
             mCollectionEnabled[collection.id()] = newEnabled;
             emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled));
