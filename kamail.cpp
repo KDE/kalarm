@@ -209,17 +209,17 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         return -1;
     }
 
-        MailTransport::MessageQueueJob* mailjob = new MailTransport::MessageQueueJob(kapp);
-        mailjob->setMessage(message);
-        mailjob->transportAttribute().setTransportId(transport->id());
-        mailjob->addressAttribute().setFrom(jobdata.from);
-        mailjob->addressAttribute().setTo(static_cast<QStringList>(jobdata.event.emailAddresses()));
+    MailTransport::MessageQueueJob* mailjob = new MailTransport::MessageQueueJob(kapp);
+    mailjob->setMessage(message);
+    mailjob->transportAttribute().setTransportId(transport->id());
+    mailjob->addressAttribute().setFrom(jobdata.from);
+    mailjob->addressAttribute().setTo(static_cast<QStringList>(jobdata.event.emailAddresses()));
     if (!jobdata.bcc.isEmpty())
-            mailjob->addressAttribute().setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
-        MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
+        mailjob->addressAttribute().setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
+    MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
                          (Preferences::emailClient() == Preferences::kmail || Preferences::emailCopyToKMail())
                          ? MailTransport::SentBehaviourAttribute::MoveToDefaultSentCollection : MailTransport::SentBehaviourAttribute::Delete;
-        mailjob->sentBehaviourAttribute().setSentBehaviour(sentAction);
+    mailjob->sentBehaviourAttribute().setSentBehaviour(sentAction);
     mJobs.enqueue(mailjob);
     mJobData.enqueue(jobdata);
     if (mJobs.count() == 1)
@@ -336,7 +336,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
     else
     {
         // There are attachments, so the message must be in MIME format
-            message.contentType()->setMimeType("multipart/mixed");
+        message.contentType()->setMimeType("multipart/mixed");
         message.contentType()->setBoundary(KMime::multiPartBoundary());
 
         if (!data.event.message().isEmpty())
