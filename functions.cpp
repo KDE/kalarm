@@ -528,7 +528,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 
 #ifndef USE_AKONADI
                 // Update the window lists
-                EventListModel::alarms()->addEvent(&newEvent);
+                EventListModel::alarms()->addEvent(newev);
 #endif
             }
         }
