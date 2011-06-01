@@ -715,13 +715,13 @@ void MainWindow::selectEvent(const QString& eventId)
 /******************************************************************************
 * Return the single selected alarm in the displayed list.
 */
-KAEvent MainWindow::selectedEvent() const
-{
 #ifdef USE_AKONADI
-    return mListView->selectedEvent();
+KAEvent MainWindow::selectedEvent() const
 #else
-    return *mListView->selectedEvent();
+KAEvent* MainWindow::selectedEvent() const
 #endif
+{
+    return mListView->selectedEvent();
 }
 
 /******************************************************************************

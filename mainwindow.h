@@ -80,12 +80,13 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
         bool               showingArchived() const      { return mShowArchived; }
 #ifdef USE_AKONADI
         void               selectEvent(Akonadi::Item::Id);
+        KAEvent            selectedEvent() const;
         void               editAlarm(EditAlarmDlg*, const KAEvent&);
 #else
         void               selectEvent(const QString& eventID);
+        KAEvent*           selectedEvent() const;
         void               editAlarm(EditAlarmDlg*, const KAEvent&, AlarmResource*);
 #endif
-        KAEvent            selectedEvent() const;
         void               clearSelection();
         virtual bool       eventFilter(QObject*, QEvent*);
 

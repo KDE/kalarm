@@ -80,8 +80,13 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
 */
 void WakeFromSuspendDlg::slotSelectedEventChanged()
 {
+#ifdef USE_AKONADI
     KAEvent event = mMainWindow->selectedEvent();
     mUi->useWakeButton->setEnabled(event.isValid() && !event.mainDateTime().isDateOnly());
+#else
+    KAEvent* event = mMainWindow->selectedEvent();
+    mUi->useWakeButton->setEnabled(event && !event->mainDateTime().isDateOnly());
+#endif
     checkPendingAlarm();
 }
 
@@ -133,36 +138,46 @@ void WakeFromSuspendDlg::showWakeClicked()
 */
 void WakeFromSuspendDlg::useWakeClicked()
 {
+#ifdef USE_AKONADI
     KAEvent event = mMainWindow->selectedEvent();
-    if (event.isValid())
+    if (!event.isValid())
+        return;
+    KDateTime dt = event.mainDateTime().kDateTime();
+#else
+    KAEvent* event = mMainWindow->selectedEvent();
+    if (!event)
+        return;
+    KDateTime dt = event->mainDateTime().kDateTime();
+#endif
+    if (dt.isDateOnly())
     {
-        KDateTime dt = event.mainDateTime().kDateTime();
-        if (dt.isDateOnly())
-        {
-            KMessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
-            return;
-        }
-        if (KMessageBox::warningContinueCancel(this,
-                    i18nc("@info", "<para>This wakeup will cancel any existing wakeup which has been set by KAlarm "
-                                   "or any other application, because your computer can only schedule a single wakeup time.</para>"
-                                   "<para><b>Note:</b> Wake From Suspend is not supported at all on some computers, especially older ones, "
-                                   "and some computers only support setting a wakeup time up to 24 hours ahead. "
-                                   "You may wish to set up a test alarm to check your system's capability.</para>"),
-                    QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QLatin1String("wakeupWarning"))
-                != KMessageBox::Continue)
-            return;
-        int advance = mUi->advanceWakeTime->value();
-        unsigned triggerTime = dt.addSecs(-advance * 60).toTime_t();
-        if (KAlarm::setRtcWakeTime(triggerTime, this))
-        {
-            QStringList param;
-            param << event.id() << QString::number(triggerTime);
-            KConfigGroup config(KGlobal::config(), "General");
-            config.writeEntry("RtcWake", param);
-            Preferences::setWakeFromSuspendAdvance(advance);
-            mUi->showWakeButton->setEnabled(true);
-            mUi->cancelWakeButton->setEnabled(true);
-        }
+        KMessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
+        return;
+    }
+    if (KMessageBox::warningContinueCancel(this,
+                i18nc("@info", "<para>This wakeup will cancel any existing wakeup which has been set by KAlarm "
+                               "or any other application, because your computer can only schedule a single wakeup time.</para>"
+                               "<para><b>Note:</b> Wake From Suspend is not supported at all on some computers, especially older ones, "
+                               "and some computers only support setting a wakeup time up to 24 hours ahead. "
+                               "You may wish to set up a test alarm to check your system's capability.</para>"),
+                QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel(), QLatin1String("wakeupWarning"))
+            != KMessageBox::Continue)
+        return;
+    int advance = mUi->advanceWakeTime->value();
+    unsigned triggerTime = dt.addSecs(-advance * 60).toTime_t();
+    if (KAlarm::setRtcWakeTime(triggerTime, this))
+    {
+        QStringList param;
+#ifdef USE_AKONADI
+        param << event.id() << QString::number(triggerTime);
+#else
+        param << event->id() << QString::number(triggerTime);
+#endif
+        KConfigGroup config(KGlobal::config(), "General");
+        config.writeEntry("RtcWake", param);
+        Preferences::setWakeFromSuspendAdvance(advance);
+        mUi->showWakeButton->setEnabled(true);
+        mUi->cancelWakeButton->setEnabled(true);
     }
 }
 
