@@ -21,5 +21,8 @@
       <label>Monitor file for changes.</label>
       <default>true</default>
     </entry>
+    <entry name="AlarmTypes" type="StringList">
+      <label>Alarm types.</label>
+    </entry>
   </group>
 </kcfg>

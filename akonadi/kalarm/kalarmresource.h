@@ -50,6 +50,9 @@ class KAlarmResource : public ICalResourceBase
         virtual void itemAdded(const Akonadi::Item&, const Akonadi::Collection&);
         virtual void itemChanged(const Akonadi::Item&, const QSet<QByteArray>& parts);
 
+    private Q_SLOTS:
+        void settingsChanged();
+
     private:
         KAlarm::Calendar::Compat mCompatibility;
 };

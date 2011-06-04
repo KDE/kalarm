@@ -29,6 +29,7 @@
 #include <akonadi/collectionfetchscope.h>
 #include <akonadi/collectionmodifyjob.h>
 #include <akonadi/entitydisplayattribute.h>
+#include <akonadi/resourcesynchronizationjob.h>
 
 #include <klocale.h>
 #include <kconfiggroup.h>
@@ -63,6 +64,7 @@ class CalendarCreator : public QObject
     private slots:
         void fetchCollection();
         void collectionFetchResult(KJob*);
+        void resourceSynchronised(KJob*);
         void modifyCollectionJobDone(KJob*);
 
     private:
@@ -81,6 +83,7 @@ class CalendarCreator : public QObject
         QString                mName;
         QColor                 mColour;
         QString                mErrorMessage;
+        int                    mCollectionFetchRetryCount;
         bool                   mReadOnly;
         bool                   mEnabled;
         bool                   mStandard;
@@ -121,12 +124,16 @@ void CalendarMigrator::migrateOrCreate()
     bool haveResources = false;
     const QString configFile = KStandardDirs::locateLocal("config", QLatin1String("kresources/alarms/stdrc"));
     KConfig config(configFile, KConfig::SimpleConfig);
-    QStringList groupNames = config.groupList();
-    foreach (const QString& groupName, groupNames)
+
+    // Fetch all the resource identifiers which are actually in use
+    KConfigGroup group = config.group("General");
+    QStringList keys = group.readEntry("ResourceKeys", QStringList())
+                     + group.readEntry("PassiveResourceKeys", QStringList());
+
+    // Create an Akonadi resource for each resource id
+    foreach (const QString& id, keys)
     {
-        if (!groupName.startsWith(QLatin1String("Resource_")))
-            continue;
-        KConfigGroup configGroup(&config, groupName);
+        KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
         QString resourceType = configGroup.readEntry("ResourceType", QString());
         QString agentType;
         if (resourceType == QLatin1String("file"))
@@ -323,7 +330,26 @@ void CalendarCreator::agentCreated(KJob* j)
     }
     mAgent.reconfigure();   // notify the agent that its configuration has been changed
 
-    fetchCollection();   // find the collection which this agent manages
+    // Wait for the resource to create its collection.
+    ResourceSynchronizationJob* sjob = new ResourceSynchronizationJob(mAgent);
+    connect(sjob, SIGNAL(result(KJob*)), SLOT(resourceSynchronised(KJob*)));
+    sjob->start();   // this is required (not an Akonadi::Job)
+}
+
+/******************************************************************************
+* Called when a resource synchronisation job has completed.
+* Fetches the collection which this agent manages.
+*/
+void CalendarCreator::resourceSynchronised(KJob* j)
+{
+    kDebug() << mName;
+    if (j->error())
+    {
+        // Don't give up on error - we can still try to fetch the collection
+        kError() << "ResourceSynchronizationJob error: " << j->errorString();
+    }
+    mCollectionFetchRetryCount = 0;
+    fetchCollection();
 }
 
 /******************************************************************************
@@ -331,10 +357,10 @@ void CalendarCreator::agentCreated(KJob* j)
 */
 void CalendarCreator::fetchCollection()
 {
-    CollectionFetchJob* fjob = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
-    fjob->fetchScope().setResource(mAgent.identifier());
-    connect(fjob, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
-    fjob->start();
+    CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
+    job->fetchScope().setResource(mAgent.identifier());
+    connect(job, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
+    job->start();
 }
 
 bool CalendarCreator::migrateLocalFile()
@@ -342,6 +368,7 @@ bool CalendarCreator::migrateLocalFile()
     OrgKdeAkonadiKAlarmSettingsInterface* iface = migrateBasic<OrgKdeAkonadiKAlarmSettingsInterface>();
     if (!iface)
         return false;
+    iface->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
     iface->setMonitorFile(true);
     iface->writeConfig();   // save the Agent config changes
     delete iface;
@@ -406,6 +433,13 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     Collection::List collections = job->collections();
     if (collections.isEmpty())
     {
+        if (++mCollectionFetchRetryCount >= 10)
+        {
+            mErrorMessage = i18nc("@info/plain", "New configuration timed out");
+            kError() << "Timeout fetching collection for resource";
+            finish(true);
+            return;
+        }
         // Need to wait a bit longer until the resource has initialised and
         // created its collection. Retry after 200ms.
         kDebug() << "Retrying";

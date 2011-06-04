@@ -49,7 +49,8 @@ KAlarmResource::KAlarmResource(const QString& id)
 {
     kDebug() << id;
     KAlarmResourceCommon::initialise(this);
-    initialise(KAlarmResourceCommon::mimeTypes(id), "kalarm");
+    initialise(mSettings->alarmTypes(), "kalarm");
+    connect(mSettings, SIGNAL(configChanged()), SLOT(settingsChanged()));
 }
 
 KAlarmResource::~KAlarmResource()
@@ -147,6 +148,18 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     Item newItem = KAlarmResourceCommon::retrieveItem(item, event);
     itemRetrieved(newItem);
     return true;
+}
+
+/******************************************************************************
+* Called when the resource settings have changed.
+* Update the supported mime types if the AlarmTypes setting has changed.
+*/
+void KAlarmResource::settingsChanged()
+{
+    kDebug();
+    QStringList mimeTypes = mSettings->alarmTypes();
+    if (mimeTypes != mSupportedMimetypes)
+        mSupportedMimetypes = mimeTypes;
 }
 
 /******************************************************************************
