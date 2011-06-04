@@ -384,16 +384,21 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
 {
     if (!collection.isValid())
         return;
-    if (change == AkonadiModel::AlarmTypes)
+    switch (change)
     {
-        kDebug() << "AlarmTypes" << collection.id();
-        QModelIndex ix = mapFromSource(mModel->collectionIndex(collection));
-        if (ix.isValid())
-        {
-            setSelectionStatus(collection, ix);
-            emit collectionTypeChange(this);
-        }
+        case AkonadiModel::Enabled:
+            break;
+        case AkonadiModel::AlarmTypes:
+            kDebug() << "AlarmTypes" << collection.id();
+            break;
+        default:
+            return;
     }
+    QModelIndex ix = mapFromSource(mModel->collectionIndex(collection));
+    if (ix.isValid())
+        setSelectionStatus(collection, ix);
+    if (change == AkonadiModel::AlarmTypes)
+        emit collectionTypeChange(this);
 }
 
 /******************************************************************************
