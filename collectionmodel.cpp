@@ -229,7 +229,7 @@ QVariant CollectionListModel::data(const QModelIndex& index, int role) const
 = checked status is equivalent to whether it is selected or not.
 = An alarm type is specified, whereby Collections which are enabled for that
 = alarm type are checked; Collections which do not contain that alarm type, or
-= which are disabled for that alarm type, are unchedked.
+= which are disabled for that alarm type, are unchecked.
 =============================================================================*/
 
 CollectionListModel* CollectionCheckListModel::mModel = 0;
@@ -352,7 +352,6 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
 */
 void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
-#warning Rows are inserted even when not inserted in AkonadiModel
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = mapToSource(index(row, 0, parent));
@@ -363,7 +362,8 @@ void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int s
 }
 
 /******************************************************************************
-* Called when the user has ticked/unticked a collection to enable/disable it.
+* Called when the user has ticked/unticked a collection to enable/disable it
+* (or when the selection changes for any other reason).
 */
 void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, const QItemSelection& deselected)
 {
@@ -421,6 +421,7 @@ CollectionFilterCheckListModel::CollectionFilterCheckListModel(QObject* parent)
       mTemplateModel(new CollectionCheckListModel(KAlarm::CalEvent::TEMPLATE, this)),
       mAlarmType(KAlarm::CalEvent::EMPTY)
 {
+    setDynamicSortFilter(true);
     connect(mActiveModel, SIGNAL(collectionTypeChange(CollectionCheckListModel*)), SLOT(collectionTypeChanged(CollectionCheckListModel*)));
     connect(mArchivedModel, SIGNAL(collectionTypeChange(CollectionCheckListModel*)), SLOT(collectionTypeChanged(CollectionCheckListModel*)));
     connect(mTemplateModel, SIGNAL(collectionTypeChange(CollectionCheckListModel*)), SLOT(collectionTypeChanged(CollectionCheckListModel*)));
