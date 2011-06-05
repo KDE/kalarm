@@ -20,7 +20,7 @@
  */
 
 #include "kalarmresourcecommon.h"
-#include "collectionattribute.h"
+#include "compatibilityattribute.h"
 #include "eventattribute.h"
 
 #include <akonadi/attributefactory.h>
@@ -35,7 +35,7 @@
 
 using namespace Akonadi;
 using namespace KCalCore;
-using KAlarm::CollectionAttribute;
+using KAlarm::CompatibilityAttribute;
 using KAlarm::EventAttribute;
 
 
@@ -67,7 +67,7 @@ void initialise(QObject* parent)
     // Set a default start-of-day time for date-only alarms.
     KAEvent::setStartOfDay(QTime(0,0,0));
 
-    AttributeFactory::registerAttribute<CollectionAttribute>();
+    AttributeFactory::registerAttribute<CompatibilityAttribute>();
     AttributeFactory::registerAttribute<EventAttribute>();
 
     KGlobal::locale()->insertCatalog("akonadi_kalarm_resource_common");
@@ -148,11 +148,16 @@ KAEvent checkItemChanged(const Akonadi::Item& item, QString& errorMsg)
 
 /******************************************************************************
 * Set a collection's compatibility attribute.
+* Note that because this parameter is set asynchronously by the resource, it
+* can't be stored in the same attribute as other collection parameters which
+* are written by the application. This avoids the resource and application
+* overwriting each other's changes if they attempt simultaneous updates.
 */
 void setCollectionCompatibility(const Collection& collection, KAlarm::Calendar::Compat compatibility)
 {
+    kDebug() << "->" << compatibility;
     Collection col = collection;
-    CollectionAttribute* attr = col.attribute<CollectionAttribute>(Collection::AddIfMissing);
+    CompatibilityAttribute* attr = col.attribute<CompatibilityAttribute>(Collection::AddIfMissing);
     attr->setCompatibility(compatibility);
     Q_ASSERT(Private::mInstance);
     CollectionModifyJob* job = new CollectionModifyJob(col, Private::mInstance->parent());
@@ -187,6 +192,7 @@ QString errorMessage(ErrorCode code, const QString& param)
 */
 void Private::modifyCollectionJobDone(KJob* j)
 {
+    kDebug();
     if (j->error())
     {
         Collection collection = static_cast<CollectionModifyJob*>(j)->collection();

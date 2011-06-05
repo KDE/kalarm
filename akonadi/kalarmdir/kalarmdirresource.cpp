@@ -24,8 +24,6 @@
 #include "kalarmdirresource.h"
 #include "kalarmresourcecommon.h"
 #include "autoqpointer.h"
-#include "collectionattribute.h"
-#include "eventattribute.h"
 #include "kacalendar.h"
 
 #include "kalarmdirsettingsadaptor.h"
@@ -59,7 +57,6 @@
 using namespace Akonadi;
 using namespace KCalCore;
 using namespace Akonadi_KAlarm_Dir_Resource;
-using KAlarm::CollectionAttribute;
 using KAlarmResourceCommon::errorMessage;
 
 static bool isFileValid(const QString& file);

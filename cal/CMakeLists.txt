@@ -11,6 +11,7 @@ set(kalarm_calendar_LIB_SRCS
 if(KALARM_USE_AKONADI)
     set(kalarm_calendar_LIB_SRCS ${kalarm_calendar_LIB_SRCS}
 	collectionattribute.cpp
+	compatibilityattribute.cpp
 	eventattribute.cpp
     )
 endif(KALARM_USE_AKONADI)

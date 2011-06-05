@@ -156,6 +156,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         bool  deleteEvent(const KAEvent& event);
         bool  deleteEvent(Akonadi::Item::Id itemId);
 
+        /** Check whether a collection is stored in the current KAlarm calendar format. */
+        static bool isCompatible(const Akonadi::Collection&);
+
         static KAlarm::CalEvent::Types types(const Akonadi::Collection&);
 
         /** Check whether the alarm types in a local calendar correspond with a

@@ -21,6 +21,7 @@
 #include "collectionmodel.h"
 #include "autoqpointer.h"
 #include "collectionattribute.h"
+#include "compatibilityattribute.h"
 #include "preferences.h"
 
 #include <akonadi/collectiondialog.h>
@@ -39,6 +40,7 @@
 
 using namespace Akonadi;
 using KAlarm::CollectionAttribute;
+using KAlarm::CompatibilityAttribute;
 
 static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
@@ -276,7 +278,8 @@ QVariant CollectionCheckListModel::data(const QModelIndex& index, int role) cons
         {
             case Qt::FontRole:
             {
-                if (!collection.hasAttribute<CollectionAttribute>())
+                if (!collection.hasAttribute<CollectionAttribute>()
+                ||  !AkonadiModel::isCompatible(collection))
                     break;
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
                 if (!attr->enabled())
@@ -316,7 +319,8 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
             {
                 QString errmsg;
                 QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
-                if (attr->standard() != KAlarm::CalEvent::EMPTY)
+                if (attr->standard() != KAlarm::CalEvent::EMPTY
+                &&  AkonadiModel::isCompatible(collection))
                 {
                     // It's the standard collection for some alarm type.
                     if (attr->isStandard(KAlarm::CalEvent::ACTIVE))
@@ -720,8 +724,7 @@ bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, K
 {
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
-    if (!col.hasAttribute<CollectionAttribute>()
-    ||  col.attribute<CollectionAttribute>()->compatibility() != KAlarm::Calendar::Current)
+    if (!AkonadiModel::isCompatible(col))
         return false;
     return (ignoreEnabledStatus || isEnabled(col, type))
        &&  (col.rights() & writableRights) == writableRights;
@@ -744,7 +747,8 @@ Collection CollectionControlModel::getStandard(KAlarm::CalEvent::Type type, bool
         &&  cols[i].contentMimeTypes().contains(mimeType))
         {
             if (cols[i].hasAttribute<CollectionAttribute>()
-            &&  (cols[i].attribute<CollectionAttribute>()->standard() & type))
+            &&  (cols[i].attribute<CollectionAttribute>()->standard() & type)
+            &&  AkonadiModel::isCompatible(cols[i]))
                 return cols[i];
             defalt = (defalt == -1) ? i : -2;
         }
@@ -761,7 +765,8 @@ bool CollectionControlModel::isStandard(Akonadi::Collection& collection, KAlarm:
     if (!instance()->collections().contains(collection))
         return false;
     AkonadiModel::instance()->refresh(collection);    // update with latest data
-    if (!collection.hasAttribute<CollectionAttribute>())
+    if (!collection.hasAttribute<CollectionAttribute>()
+    ||  !AkonadiModel::isCompatible(collection))
         return false;
     return collection.attribute<CollectionAttribute>()->isStandard(type);
 }
@@ -775,6 +780,8 @@ KAlarm::CalEvent::Types CollectionControlModel::standardTypes(const Collection& 
         return KAlarm::CalEvent::EMPTY;
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
+    if (!AkonadiModel::isCompatible(col))
+        return KAlarm::CalEvent::EMPTY;
     KAlarm::CalEvent::Types stdTypes = col.hasAttribute<CollectionAttribute>()
                                      ? col.attribute<CollectionAttribute>()->standard()
                                      : KAlarm::CalEvent::EMPTY;
@@ -805,6 +812,8 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, KAlarm
 {
     AkonadiModel* model = AkonadiModel::instance();
     model->refresh(collection);    // update with latest data
+    if (!AkonadiModel::isCompatible(collection))
+        standard = false;   // the collection isn't writable
     if (standard)
     {
         // The collection is being set as standard.
@@ -861,6 +870,8 @@ void CollectionControlModel::setStandard(Akonadi::Collection& collection, KAlarm
 {
     AkonadiModel* model = AkonadiModel::instance();
     model->refresh(collection);    // update with latest data
+    if (!AkonadiModel::isCompatible(collection))
+        types = KAlarm::CalEvent::EMPTY;   // the collection isn't writable
     if (types)
     {
         // The collection is being set as standard for at least one mime type.

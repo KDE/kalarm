@@ -34,8 +34,7 @@ namespace KAlarm
 
 /*=============================================================================
 = Class: CollectionAttribute
-= User-specific attributes of a KAlarm collection, including the compatibility
-= status of collections or items.
+= User-specific attributes of a KAlarm collection.
 =============================================================================*/
 
 class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
@@ -43,8 +42,7 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
     public:
         CollectionAttribute()
                 : mEnabled(KAlarm::CalEvent::EMPTY),
-                  mStandard(KAlarm::CalEvent::EMPTY),
-                  mCompatibility(KAlarm::Calendar::Incompatible)  { }
+                  mStandard(KAlarm::CalEvent::EMPTY)  {}
 
         bool isEnabled(KAlarm::CalEvent::Type type) const   { return mEnabled & type; }
 
@@ -85,12 +83,6 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         /** Set the background color for this collection and its alarms. */
         void   setBackgroundColor(const QColor& c)  { mBackgroundColour = c; }
 
-        /** Return the compatibility status for the entity. */
-        KAlarm::Calendar::Compat compatibility() const  { return mCompatibility; }
-
-        /** Set the compatibility status for the entity. */
-        void setCompatibility(KAlarm::Calendar::Compat c)  { mCompatibility = c; }
-
         virtual QByteArray type() const    { return name(); }
         virtual CollectionAttribute* clone() const;
         virtual QByteArray serialized() const;
@@ -103,7 +95,6 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         QColor                   mBackgroundColour; // background color for collection and its alarms
         KAlarm::CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
         KAlarm::CalEvent::Types  mStandard;         // whether the collection is a standard collection
-        KAlarm::Calendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
 };
 
 } // namespace KAlarm

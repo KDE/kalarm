@@ -21,8 +21,6 @@
 
 #include "kalarmresource.h"
 #include "kalarmresourcecommon.h"
-#include "collectionattribute.h"
-#include "eventattribute.h"
 #include "kacalendar.h"
 #include "kaevent.h"
 
@@ -39,8 +37,6 @@
 using namespace Akonadi;
 using namespace Akonadi_KAlarm_Resource;
 using KAlarmResourceCommon::errorMessage;
-using KAlarm::CollectionAttribute;
-using KAlarm::EventAttribute;
 
 
 KAlarmResource::KAlarmResource(const QString& id)
@@ -83,6 +79,7 @@ void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settin
 */
 bool KAlarmResource::readFromFile(const QString& fileName)
 {
+    kDebug() << fileName;
     if (!ICalResourceBase::readFromFile(fileName))
         return false;
     if (calendar()->incidences().isEmpty())
@@ -100,6 +97,7 @@ bool KAlarmResource::readFromFile(const QString& fileName)
 */
 bool KAlarmResource::writeToFile(const QString& fileName)
 {
+    kDebug() << fileName;
 #ifdef __GNUC__
 #warning Crashes if not a local file
 #endif
@@ -258,6 +256,8 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
 */
 void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
 {
+    kDebug();
+
     // Set the collection's compatibility status
     KAlarmResourceCommon::setCollectionCompatibility(collection, mCompatibility);
 

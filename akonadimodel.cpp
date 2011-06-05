@@ -23,6 +23,7 @@
 #include "autoqpointer.h"
 #include "calendarmigrator.h"
 #include "collectionattribute.h"
+#include "compatibilityattribute.h"
 #include "eventattribute.h"
 #include "preferences.h"
 #include "synchtimer.h"
@@ -53,6 +54,7 @@
 
 using namespace Akonadi;
 using KAlarm::CollectionAttribute;
+using KAlarm::CompatibilityAttribute;
 using KAlarm::EventAttribute;
 
 static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
@@ -103,6 +105,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     monitor->itemFetchScope().fetchAttribute<EventAttribute>();
 
     AttributeFactory::registerAttribute<CollectionAttribute>();
+    AttributeFactory::registerAttribute<CompatibilityAttribute>();
     AttributeFactory::registerAttribute<EventAttribute>();
 
     if (!mTextIcon)
@@ -222,7 +225,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             case AlarmTypeRole:
                 return static_cast<int>(types(collection));
             case IsStandardRole:
-                if (!collection.hasAttribute<CollectionAttribute>())
+                if (!collection.hasAttribute<CollectionAttribute>()
+                ||  !isCompatible(collection))
                     return 0;
                 return static_cast<int>(collection.attribute<CollectionAttribute>()->standard());
             default:
@@ -510,7 +514,8 @@ if (attr) { kDebug()<<"Set enabled:"<<types<<", was="<<attr->enabled(); } else {
                 break;
             }
             case IsStandardRole:
-                if (collection.hasAttribute<CollectionAttribute>())
+                if (collection.hasAttribute<CollectionAttribute>()
+                &&  isCompatible(collection))
                 {
                     KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
 CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
@@ -1810,6 +1815,12 @@ Collection AkonadiModel::collectionForItem(Item::Id id) const
     if (!ix.isValid())
         return Collection();
     return ix.data(ParentCollectionRole).value<Collection>();
+}
+
+bool AkonadiModel::isCompatible(const Collection& collection)
+{
+    return collection.hasAttribute<CompatibilityAttribute>()
+       &&  collection.attribute<CompatibilityAttribute>()->compatibility() == KAlarm::Calendar::Current;
 }
 
 KAlarm::CalEvent::Types AkonadiModel::types(const Collection& collection)
