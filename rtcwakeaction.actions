@@ -67,6 +67,7 @@ Icon=kalarm
 [org.kde.kalarmrtcwake.settimer]
 Name=Set RTC wakeup time
 Name[ca]=Defineix l'hora d'activació de l'RTC
+Name[ca@valencia]=Defineix l'hora d'activació de l'RTC
 Name[da]=Angiv RTC-opvågningstidspunkt
 Name[de]=Den Zeitpunkt zum Aufwachen gemäß der Echtzeituhr setzen
 Name[es]=Establecer hora de despertar RTC
@@ -83,6 +84,7 @@ Name[x-test]=xxSet RTC wakeup timexx
 Name[zh_TW]=設定 RTC 喚醒時間
 Description=Set RTC wake-from-suspend time
 Description[ca]=Defineix l'hora d'activació des de suspensió de l'RTC
+Description[ca@valencia]=Defineix l'hora d'activació des de suspensió de l'RTC
 Description[da]=Angiv RTC-opvågningstidspunkt fra suspendering
 Description[de]=Den Zeitpunkt zum Aufwachen aus dem Ruhezustand gemäß der Echtzeituhr setzen
 Description[es]=Establecer hora despertar-desde-suspendido RTC
