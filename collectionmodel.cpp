@@ -722,12 +722,21 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
 */
 bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, bool ignoreEnabledStatus)
 {
+    if (!collection.isValid())
+        return false;
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
-    if (!AkonadiModel::isCompatible(col))
+    if ((col.rights() & writableRights) != writableRights
+    ||  !AkonadiModel::isCompatible(col))
         return false;
-    return (ignoreEnabledStatus || isEnabled(col, type))
-       &&  (col.rights() & writableRights) == writableRights;
+    if (ignoreEnabledStatus)
+        return true;
+
+    // Check the collection's enabled status
+    if (!instance()->collections().contains(col)
+    ||  !col.hasAttribute<CollectionAttribute>())
+        return false;
+    return col.attribute<CollectionAttribute>()->isEnabled(type);
 }
 
 /******************************************************************************
