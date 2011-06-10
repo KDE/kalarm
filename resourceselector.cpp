@@ -304,8 +304,23 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
                 // The collection belongs to an agent created by addResource()
                 KAlarm::CalEvent::Types types = KAlarm::CalEvent::types(collection.contentMimeTypes());
                 CollectionControlModel::setEnabled(collection, types, true);
+                if (!(types & mCurrentAlarmType))
+                {
+                    // The user has selected alarm types for the resource
+                    // which don't include the currently displayed type.
+                    // Show a collection list which includes a selected type.
+                    int index = -1;
+                    if (types & KAlarm::CalEvent::ACTIVE)
+                        index = 0;
+                    else if (types & KAlarm::CalEvent::ARCHIVED)
+                        index = 1;
+                    else if (types & KAlarm::CalEvent::TEMPLATE)
+                        index = 2;
+                    if (index >= 0)
+                        mAlarmType->setCurrentIndex(index);
+                }
 #ifdef __GNUC__
-#warning Display collection list for one of the selected alarm types?
+#warning Newly displayed list does not show new resource until refreshed
 #endif
                 mAddAgents.removeAt(i);
             }
