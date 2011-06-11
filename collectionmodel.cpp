@@ -391,6 +391,7 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
     switch (change)
     {
         case AkonadiModel::Enabled:
+            kDebug() << "Enabled" << collection.id();
             break;
         case AkonadiModel::AlarmTypes:
             kDebug() << "AlarmTypes" << collection.id();
@@ -451,6 +452,7 @@ void CollectionFilterCheckListModel::setEventTypeFilter(KAlarm::CalEvent::Type t
         }
         mAlarmType = type;
         setSourceModel(newModel);
+        invalidate();
     }
 }
 

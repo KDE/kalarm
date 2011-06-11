@@ -317,11 +317,11 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
                     else if (types & KAlarm::CalEvent::TEMPLATE)
                         index = 2;
                     if (index >= 0)
+                    {
                         mAlarmType->setCurrentIndex(index);
+                        alarmTypeSelected();
+                    }
                 }
-#ifdef __GNUC__
-#warning Newly displayed list does not show new resource until refreshed
-#endif
                 mAddAgents.removeAt(i);
             }
         }
