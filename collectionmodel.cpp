@@ -247,6 +247,7 @@ CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, 
     setSelectionModel(mSelectionModel);
     connect(mSelectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
                              SLOT(selectionChanged(const QItemSelection&, const QItemSelection&)));
+    connect(mModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
                                       SLOT(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
@@ -363,6 +364,7 @@ void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int s
         if (collection.isValid())
             setSelectionStatus(collection, ix);
     }
+    emit layoutChanged();   // this is needed to make CollectionFilterCheckListModel update
 }
 
 /******************************************************************************
