@@ -506,9 +506,9 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             {
                 KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
-if (attr) { kDebug()<<"Set enabled:"<<types<<", was="<<attr->enabled(); } else { kDebug()<<"Set enabled:"<<types<<", no attribute"; }
                 if (attr->enabled() == types)
                     return true;   // no change
+                kDebug() << "Set enabled:" << types << ", was=" << attr->enabled();
                 attr->setEnabled(types);
                 updateCollection = true;
                 break;
@@ -1594,7 +1594,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             kDebug() << "Collection" << collection.id() << collection.name();
             QSet<QByteArray> attrs;
             attrs += CollectionAttribute::name();
-            slotCollectionChanged(collection, attrs);
+            setCollectionChanged(collection, attrs, false);
             emit collectionAdded(collection);
         }
         else
@@ -1647,9 +1647,9 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 
 /******************************************************************************
 * Called when a monitored collection's properties or content have changed.
-* Emits a signal if the writable property has changed.
+* Optionally emits a signal if properties of interest have changed.
 */
-void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames)
+void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames, bool signal)
 {
     // Check for a read/write permission change
     Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
@@ -1657,7 +1657,8 @@ void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSe
     if (newRights != oldRights)
     {
         mCollectionRights[collection.id()] = newRights;
-        emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights));
+        if (signal)
+            emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights));
     }
 
     // Check for a change in content mime types
@@ -1668,7 +1669,8 @@ void AkonadiModel::slotCollectionChanged(const Collection& collection, const QSe
     {
         kDebug() << "Collection" << collection.id() << ": alarm types ->" << newAlarmTypes;
         mCollectionAlarmTypes[collection.id()] = newAlarmTypes;
-        emit collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes));
+        if (signal)
+            emit collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes));
     }
 
     // Check for the collection being enabled/disabled
@@ -1683,7 +1685,8 @@ kDebug()<<"COLLECTION ATTRIBUTE changed";
             kDebug() << "Collection" << collection.id() << ": enabled ->" << newEnabled;
             first = false;
             mCollectionEnabled[collection.id()] = newEnabled;
-            emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled));
+            if (signal)
+                emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled));
         }
     }
 }

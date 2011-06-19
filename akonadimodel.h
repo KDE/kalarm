@@ -214,7 +214,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         virtual int entityColumnCount(HeaderGroup) const;
 
     private slots:
-        void slotCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&);
+        void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)
+                       { setCollectionChanged(c, attrNames, true); }
         void slotCollectionRemoved(const Akonadi::Collection&);
         void slotUpdateTimeTo();
         void slotUpdateArchivedColour(const QColor&);
@@ -256,6 +257,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QString   alarmTimeText(const DateTime&) const;
         QString   timeToAlarmText(const DateTime&) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
+        void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool signal);
         void      queueItemModifyJob(const Akonadi::Item&);
         void      checkQueuedItemModifyJob(const Akonadi::Item&);
 #if 0
