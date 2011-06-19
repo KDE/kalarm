@@ -320,15 +320,15 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
             {
                 QString errmsg;
                 QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
-                if (attr->standard() != KAlarm::CalEvent::EMPTY
+                if (attr->isStandard(mAlarmType)
                 &&  AkonadiModel::isCompatible(collection))
                 {
                     // It's the standard collection for some alarm type.
-                    if (attr->isStandard(KAlarm::CalEvent::ACTIVE))
+                    if (mAlarmType == KAlarm::CalEvent::ACTIVE)
                     {
                         errmsg = i18nc("@info", "You cannot disable your default active alarm calendar.");
                     }
-                    else if (attr->isStandard(KAlarm::CalEvent::ARCHIVED)  &&  Preferences::archivedKeepDays())
+                    else if (mAlarmType == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
                     {
                         // Only allow the archived alarms standard collection to be disabled if
                         // we're not saving expired alarms.
@@ -401,7 +401,7 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
         default:
             return;
     }
-    QModelIndex ix = mapFromSource(mModel->collectionIndex(collection));
+    QModelIndex ix = mModel->collectionIndex(collection);
     if (ix.isValid())
         setSelectionStatus(collection, ix);
     if (change == AkonadiModel::AlarmTypes)
@@ -411,12 +411,12 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
 /******************************************************************************
 * Select or deselect an index according to its enabled status.
 */
-void CollectionCheckListModel::setSelectionStatus(const Collection& collection, const QModelIndex& ix)
+void CollectionCheckListModel::setSelectionStatus(const Collection& collection, const QModelIndex& sourceIndex)
 {
     QItemSelectionModel::SelectionFlags sel = (collection.hasAttribute<CollectionAttribute>()
                                                &&  collection.attribute<CollectionAttribute>()->isEnabled(mAlarmType))
                                             ? QItemSelectionModel::Select : QItemSelectionModel::Deselect;
-    mSelectionModel->select(ix, sel);
+    mSelectionModel->select(sourceIndex, sel);
 }
 
 
