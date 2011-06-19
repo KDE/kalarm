@@ -420,7 +420,8 @@ void ResourceSelector::removeResource()
         return;
     }
 #ifdef __GNUC__
-#warning Ensure default calendars are identified sufficiently (Akonadi only)
+#warning Akonadi: warn if calendar also contains other alarm types than the current list type
+#warning Akonadi: Prompt should show default calendar alarm type(s) if other than current list type
 #endif
     QString text = std ? i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name)
                        : i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
