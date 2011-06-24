@@ -1,7 +1,7 @@
 /*
  *  timezonecombo.cpp  -  time zone selection combo box
  *  Program:  kalarm
- *  Copyright © 2006,2008,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006,2008,2009,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,11 +23,16 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+bool TimeZoneCombo::mCatalogLoaded = false;
 
 TimeZoneCombo::TimeZoneCombo(QWidget* parent)
     : ComboBox(parent)
 {
-    KGlobal::locale()->insertCatalog( "timezones4" ); // for time zone translations
+    if (!mCatalogLoaded)
+    {
+        KGlobal::locale()->insertCatalog( "timezones4" ); // for time zone translations
+        mCatalogLoaded = true;
+    }
     QString utc = KTimeZone::utc().name();
     addItem(utc);   // put UTC at start of list
     mZoneNames << utc;
