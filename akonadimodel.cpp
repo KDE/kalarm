@@ -27,6 +27,7 @@
 #include "eventattribute.h"
 #include "preferences.h"
 #include "synchtimer.h"
+#include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 
 #include <akonadi/agentfilterproxymodel.h>
@@ -1078,10 +1079,7 @@ AgentInstanceCreateJob* AkonadiModel::addCollection(KAlarm::CalEvent::Type type,
     if (!agentType.isValid())
         return 0;
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
-    if (agentType.identifier() == QLatin1String("akonadi_kalarm_dir_resource"))
-        mPendingColCreateJobs[job] = CollTypeData(type, parent);
-    else
-        job->configure(parent);    // cause the user to be prompted for configuration
+    mPendingColCreateJobs[job] = CollTypeData(type, parent);
     connect(job, SIGNAL(result(KJob*)), SLOT(addCollectionJobDone(KJob*)));
     job->start();
     return job;
@@ -1106,21 +1104,33 @@ void AkonadiModel::addCollectionJobDone(KJob* j)
         if (it != mPendingColCreateJobs.end())
         {
             // Set the default alarm type for a directory resource config dialog
-            AgentInstance agent = static_cast<AgentInstanceCreateJob*>(job)->instance();
-            OrgKdeAkonadiKAlarmDirSettingsInterface *iface = new OrgKdeAkonadiKAlarmDirSettingsInterface("org.freedesktop.Akonadi.Resource." + agent.identifier(),
-                    "/Settings", QDBusConnection::sessionBus(), this);
-            if (!iface->isValid())
-                kError() << "Error creating D-Bus interface for KAlarmDir configuration.";
-            else
-            {
-                iface->setAlarmTypes(KAlarm::CalEvent::mimeTypes(it.value().alarmType));
-                iface->writeConfig();
-                agent.reconfigure();
-            }
+            AgentInstance agent = job->instance();
+            QString type = agent.type().identifier();
+            if (type == QLatin1String("akonadi_kalarm_dir_resource"))
+                setResourceAlarmType<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, it.value().alarmType);
+            else if (type == QLatin1String("akonadi_kalarm_resource"))
+                setResourceAlarmType<OrgKdeAkonadiKAlarmSettingsInterface>(agent, it.value().alarmType);
             agent.configure(it.value().parent);
-            delete iface;
         }
         emit collectionAdded(job, true);
+    }
+}
+
+/******************************************************************************
+* Set the alarm type for an Akonadi resource.
+*/
+template <class Settings>
+void AkonadiModel::setResourceAlarmType(AgentInstance& agent, KAlarm::CalEvent::Type alarmType)
+{
+    Settings iface("org.freedesktop.Akonadi.Resource." + agent.identifier(),
+                   "/Settings", QDBusConnection::sessionBus(), this);
+    if (!iface.isValid())
+        kError() << "Error creating D-Bus interface for" << agent.identifier() << "resource configuration.";
+    else
+    {
+        iface.setAlarmTypes(KAlarm::CalEvent::mimeTypes(alarmType));
+        iface.writeConfig();
+        agent.reconfigure();
     }
 }
 

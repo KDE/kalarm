@@ -32,6 +32,7 @@
 #include <QQueue>
 
 namespace Akonadi {
+    class AgentInstance;
     class AgentInstanceCreateJob;
 }
 class QPixmap;
@@ -256,6 +257,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
         QString   alarmTimeText(const DateTime&) const;
         QString   timeToAlarmText(const DateTime&) const;
+        template <class Settings> void setResourceAlarmType(Akonadi::AgentInstance&, KAlarm::CalEvent::Type);
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool signal);
         void      queueItemModifyJob(const Akonadi::Item&);

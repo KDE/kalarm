@@ -62,17 +62,29 @@ KAlarmResource::~KAlarmResource()
 void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settings>* dlg)
 {
     ICalResourceBase::customizeConfigDialog(dlg);
-    dlg->appendToConfigWidget(new AlarmTypeRadioWidget(dlg));
+    AlarmTypeRadioWidget* typeSelector = new AlarmTypeRadioWidget(dlg);
+    QStringList types = mSettings->alarmTypes();
+    KAlarm::CalEvent::Type alarmType = KAlarm::CalEvent::ACTIVE;
+    if (!types.isEmpty())
+        alarmType = KAlarm::CalEvent::type(types[0]);
+    typeSelector->setAlarmType(alarmType);
+    dlg->appendToConfigWidget(typeSelector);
     dlg->setMonitorEnabled(false);
     QString title;
-    if (identifier().contains("_active"))
-        title = i18nc("@title:window", "Select Active Alarm Calendar");
-    else if (identifier().contains("_archived"))
-        title = i18nc("@title:window", "Select Archived Alarm Calendar");
-    else if (identifier().contains("_template"))
-        title = i18nc("@title:window", "Select Alarm Template Calendar");
-    else
-        return;
+    switch (alarmType)
+    {
+        case KAlarm::CalEvent::ACTIVE:
+            title = i18nc("@title:window", "Select Active Alarm Calendar");
+            break;
+        case KAlarm::CalEvent::ARCHIVED:
+            title = i18nc("@title:window", "Select Archived Alarm Calendar");
+            break;
+        case KAlarm::CalEvent::TEMPLATE:
+            title = i18nc("@title:window", "Select Alarm Template Calendar");
+            break;
+        default:
+            return;
+    }
     dlg->setCaption(title);
 }
 

@@ -41,7 +41,7 @@ set(kalarmresource_SRCS
     ../common/alarmtyperadiowidget.cpp
 )
 
-install(FILES kalarmresource.desktop kalarmresource_active.desktop kalarmresource_archived.desktop kalarmresource_template.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents")
+install(FILES kalarmresource.desktop DESTINATION "${CMAKE_INSTALL_PREFIX}/share/akonadi/agents")
 
 kde4_add_ui_files(kalarmresource_SRCS ../common/alarmtyperadiowidget.ui ${AKONADI_SINGLEFILERESOURCE_SHARED_UI})
 kde4_add_kcfg_files(kalarmresource_SRCS settings.kcfgc)
