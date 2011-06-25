@@ -78,6 +78,11 @@ class SingleFileResourceConfigDialogBase : public KDialog
      */
     void setLocalFileOnly( bool local );
 
+    /**
+     * Add a widget to the SingleFileResourceConfigWidget.
+     */
+    void appendToConfigWidget(QWidget* widget);
+
   protected Q_SLOTS:
     virtual void save() = 0;
 

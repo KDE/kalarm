@@ -21,6 +21,7 @@
 
 #include "kalarmresource.h"
 #include "kalarmresourcecommon.h"
+#include "alarmtyperadiowidget.h"
 #include "kacalendar.h"
 #include "kaevent.h"
 
@@ -33,6 +34,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+
+#include <QGroupBox>
 
 using namespace Akonadi;
 using namespace Akonadi_KAlarm_Resource;
@@ -59,6 +62,7 @@ KAlarmResource::~KAlarmResource()
 void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settings>* dlg)
 {
     ICalResourceBase::customizeConfigDialog(dlg);
+    dlg->appendToConfigWidget(new AlarmTypeRadioWidget(dlg));
     dlg->setMonitorEnabled(false);
     QString title;
     if (identifier().contains("_active"))

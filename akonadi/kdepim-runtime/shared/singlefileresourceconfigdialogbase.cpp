@@ -84,3 +84,8 @@ void SingleFileResourceConfigDialogBase::validated( bool ok )
 {
   enableButton( Ok, ok );
 }
+
+void SingleFileResourceConfigDialogBase::appendToConfigWidget(QWidget* widget)
+{
+  mConfigWidget->appendWidget(widget);
+}

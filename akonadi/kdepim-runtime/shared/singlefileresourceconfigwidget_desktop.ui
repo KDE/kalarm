@@ -11,60 +11,8 @@
   <attribute name="title">
    <string>File</string>
   </attribute>
-  <layout class="QGridLayout" name="gridLayout_3">
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Access Rights</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout_4">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="kcfg_ReadOnly">
-        <property name="text">
-         <string>Read only</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>If read-only mode is enabled, no changes will be written to the file selected above. Read-only mode will be automatically enabled if you do not have write access to the file or the file is on a remote server that does not support write access.</string>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QGroupBox" name="groupBox_MonitorFile">
-     <property name="title">
-      <string>Monitoring</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0" colspan="3">
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>If file monitoring is enabled the resource will reload the file when changes are made by other programs. It also tries to create a backup in case of conflicts whenever possible.</string>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="kcfg_MonitorFile">
-        <property name="text">
-         <string>Enable file &amp;monitoring</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="mainLayout">
+   <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Filename</string>
@@ -107,7 +55,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
+   <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
       <string>Display Name</string>
@@ -137,6 +85,58 @@
         </property>
         <property name="wordWrap">
          <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Access Rights</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="kcfg_ReadOnly">
+        <property name="text">
+         <string>Read only</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>If read-only mode is enabled, no changes will be written to the file selected above. Read-only mode will be automatically enabled if you do not have write access to the file or the file is on a remote server that does not support write access.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_MonitorFile">
+     <property name="title">
+      <string>Monitoring</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="1" column="0" colspan="3">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>If file monitoring is enabled the resource will reload the file when changes are made by other programs. It also tries to create a backup in case of conflicts whenever possible.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="kcfg_MonitorFile">
+        <property name="text">
+         <string>Enable file &amp;monitoring</string>
         </property>
        </widget>
       </item>

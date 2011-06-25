@@ -1,0 +1,41 @@
+<ui version="4.0" >
+ <class>AlarmTypeRadioWidget</class>
+  <widget class="QGroupBox" name="AlarmTypeRadioWidget">
+   <property name="title" >
+    <string>Alarm Types</string>
+   </property>
+   <layout class="QHBoxLayout" name="layout">
+    <item>
+     <widget class="QRadioButton" name="activeRadio">
+      <property name="text" >
+       <string>Active Alarms</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="archivedRadio">
+      <property name="text">
+       <string>Archived Alarms</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="templateRadio">
+      <property name="text">
+       <string>Alarm Templates</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ <resources/>
+</ui>

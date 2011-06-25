@@ -76,6 +76,11 @@ class SingleFileResourceConfigWidget : public QWidget
      */
     void setLocalFileOnly( bool local );
 
+    /**
+     * Append an extra widget to the bottom of this widget.
+     */
+    void appendWidget( QWidget* );
+
   signals:
     /**
      * Signal emitted when the user input has been validated.

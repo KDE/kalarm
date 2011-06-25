@@ -177,3 +177,9 @@ void SingleFileResourceConfigWidget::slotStatJobResult( KJob* job )
   mDirUrlChecked = false;
   mStatJob = 0;
 }
+
+void SingleFileResourceConfigWidget::appendWidget( QWidget* w )
+{
+  w->setParent( static_cast<QWidget*>( ui.groupBox->parent() ) );
+  ui.mainLayout->addWidget( w );
+}

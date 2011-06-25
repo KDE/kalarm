@@ -1,5 +1,5 @@
 /*
- *  alarmtypewidget.h  -  KAlarm Akonadi configuration alarm type selection widget
+ *  alarmtyperadiowidget.h  -  KAlarm alarm type exclusive selection widget
  *  Program:  kalarm
  *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
  *
@@ -19,28 +19,28 @@
  *  02110-1301, USA.
  */
 
-#ifndef ALARMTYPEWIDGET_H
-#define ALARMTYPEWIDGET_H
+#ifndef ALARMTYPERADIOWIDGET_H
+#define ALARMTYPERADIOWIDGET_H
 
-#include "ui_alarmtypewidget.h"
+#include "ui_alarmtyperadiowidget.h"
 #include "kacalendar.h"
 
 
-class AlarmTypeWidget : public QWidget
+class AlarmTypeRadioWidget : public QGroupBox
 {
         Q_OBJECT
     public:
-        AlarmTypeWidget(QWidget* parent, QLayout* layout);
-        void setAlarmTypes(KAlarm::CalEvent::Types);
-        KAlarm::CalEvent::Types alarmTypes() const;
+        explicit AlarmTypeRadioWidget(QWidget* parent = 0);
+        void setAlarmType(KAlarm::CalEvent::Type);
+        KAlarm::CalEvent::Type alarmType() const;
 
     signals:
         void changed();
 
     private:
-        Ui::AlarmTypeWidget ui;
+        Ui::AlarmTypeRadioWidget ui;
 };
 
-#endif // ALARMTYPEWIDGET_H
+#endif // ALARMTYPERADIOWIDGET_H
 
 // vim: et sw=4:

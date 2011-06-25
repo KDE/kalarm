@@ -53,3 +53,5 @@ KAlarm::CalEvent::Types AlarmTypeWidget::alarmTypes() const
         types |= KAlarm::CalEvent::TEMPLATE;
     return types;
 }
+
+// vim: et sw=4:
