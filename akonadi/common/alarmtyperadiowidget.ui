@@ -1,6 +1,9 @@
 <ui version="4.0" >
  <class>AlarmTypeRadioWidget</class>
-  <widget class="QGroupBox" name="AlarmTypeRadioWidget">
+  <widget class="QWidget" name="AlarmTypeRadioWidget">
+   <layout class="QVBoxLayout" name="mainLayout">
+    <item>
+  <widget class="QGroupBox" name="groupBox">
    <property name="title" >
     <string>Alarm Types</string>
    </property>
@@ -34,6 +37,9 @@
        <bool>false</bool>
       </property>
      </widget>
+    </item>
+   </layout>
+  </widget>
     </item>
    </layout>
   </widget>

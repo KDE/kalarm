@@ -22,23 +22,24 @@
 #ifndef ALARMTYPERADIOWIDGET_H
 #define ALARMTYPERADIOWIDGET_H
 
+#include "singlefileresourceconfigdialogbase.h"
 #include "ui_alarmtyperadiowidget.h"
 #include "kacalendar.h"
 
+class QButtonGroup;
 
-class AlarmTypeRadioWidget : public QGroupBox
+class AlarmTypeRadioWidget : public Akonadi::SingleFileValidatingWidget
 {
         Q_OBJECT
     public:
         explicit AlarmTypeRadioWidget(QWidget* parent = 0);
         void setAlarmType(KAlarm::CalEvent::Type);
         KAlarm::CalEvent::Type alarmType() const;
-
-    signals:
-        void changed();
+        virtual bool validate() const;
 
     private:
         Ui::AlarmTypeRadioWidget ui;
+        QButtonGroup* mButtonGroup;
 };
 
 #endif // ALARMTYPERADIOWIDGET_H

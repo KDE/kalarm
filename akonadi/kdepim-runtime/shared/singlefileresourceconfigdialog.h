@@ -40,7 +40,7 @@ class SingleFileResourceConfigDialog : public SingleFileResourceConfigDialogBase
         : SingleFileResourceConfigDialogBase( windowId )
         , mSettings( settings )
     {
-      SingleFileResourceConfigDialogBase::setUrl( KUrl( mSettings->path() ) );
+      ui.kcfg_Path->setUrl( KUrl( mSettings->path() ) );
       mManager = new KConfigDialogManager( this, mSettings );
       mManager->updateWidgets();
     }
@@ -49,7 +49,7 @@ class SingleFileResourceConfigDialog : public SingleFileResourceConfigDialogBase
     void save()
     {
       mManager->updateSettings();
-      mSettings->setPath( SingleFileResourceConfigDialogBase::url().url() );
+      mSettings->setPath( ui.kcfg_Path->url().url() );
       mSettings->writeConfig();
     }
 };

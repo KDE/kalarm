@@ -1,7 +1,7 @@
 /*
     Copyright (c) 2008 Bertjan Broeksema <b.broeksema@kdemail.org>
     Copyright (c) 2008 Volker Krause <vkrause@kde.org>
-    Copyright (c) 2010 David Jarvie <djarvie@kde.org>
+    Copyright (c) 2010,2011 David Jarvie <djarvie@kde.org>
 
     This library is free software; you can redistribute it and/or modify it
     under the terms of the GNU Library General Public License as published by
@@ -22,17 +22,24 @@
 #ifndef AKONADI_SINGLEFILERESOURCECONFIGDIALOGBASE_H
 #define AKONADI_SINGLEFILERESOURCECONFIGDIALOGBASE_H
 
-#include "ui_singlefileresourceconfigdialog.h"
+#ifdef KDEPIM_MOBILE_UI
+#include "ui_singlefileresourceconfigdialog_mobile.h"
+#else
+#include "ui_singlefileresourceconfigdialog_desktop.h"
+#endif
 
 #include <KDE/KDialog>
-#include <KDE/KUrl>
 
-class KTabWidget;
 class KConfigDialogManager;
+class KJob;
+
+namespace KIO {
+  class StatJob;
+}
 
 namespace Akonadi {
 
-class SingleFileResourceConfigWidget;
+class SingleFileValidatingWidget;
 
 /**
  * Base class for the configuration dialog for single file based resources.
@@ -79,9 +86,9 @@ class SingleFileResourceConfigDialogBase : public KDialog
     void setLocalFileOnly( bool local );
 
     /**
-     * Add a widget to the SingleFileResourceConfigWidget.
+     * Add a widget to the dialog.
      */
-    void appendToConfigWidget(QWidget* widget);
+    void appendWidget(SingleFileValidatingWidget* widget);
 
   protected Q_SLOTS:
     virtual void save() = 0;
@@ -91,10 +98,42 @@ class SingleFileResourceConfigDialogBase : public KDialog
     KConfigDialogManager* mManager;
 
   private Q_SLOTS:
-    void validated( bool ok );
+    void validate();
+    void slotStatJobResult( KJob * );
 
   private:
-    SingleFileResourceConfigWidget* mConfigWidget;
+    KIO::StatJob* mStatJob;
+    SingleFileValidatingWidget* mAppendedWidget;
+    bool mDirUrlChecked;
+    bool mMonitorEnabled;
+    bool mLocalFileOnly;
+};
+
+/**
+ * Base class for widgets added to SingleFileResourceConfigDialogBase
+ * using its appendWidget() method.
+ *
+ * Derived classes must implement validate() and emit changed() when
+ * appropriate.
+ */
+class SingleFileValidatingWidget : public QWidget
+{
+    Q_OBJECT
+  public:
+    SingleFileValidatingWidget( QWidget* parent = 0 );
+
+    /**
+     * Return whether the widget's value is valid when the dialog is
+     * accepted.
+     */
+    virtual bool validate() const = 0;
+
+  signals:
+    /**
+     * Signal emitted when the widget's value changes in a way which
+     * might affect the result of validate().
+     */
+    void changed();
 };
 
 }

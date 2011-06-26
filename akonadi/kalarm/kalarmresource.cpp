@@ -68,7 +68,7 @@ void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settin
     if (!types.isEmpty())
         alarmType = KAlarm::CalEvent::type(types[0]);
     mTypeSelector->setAlarmType(alarmType);
-    dlg->appendToConfigWidget(mTypeSelector);
+    dlg->appendWidget(mTypeSelector);
     dlg->setMonitorEnabled(false);
     QString title;
     switch (alarmType)

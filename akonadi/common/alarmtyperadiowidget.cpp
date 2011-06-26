@@ -23,13 +23,14 @@
 
 
 AlarmTypeRadioWidget::AlarmTypeRadioWidget(QWidget* parent)
-    : QGroupBox(parent)
+    : Akonadi::SingleFileValidatingWidget(parent)
 {
     ui.setupUi(this);
-    QButtonGroup* group = new QButtonGroup(this);
-    group->addButton(ui.activeRadio);
-    group->addButton(ui.archivedRadio);
-    group->addButton(ui.templateRadio);
+    ui.mainLayout->setContentsMargins(0, 0, 0, 0);
+    mButtonGroup = new QButtonGroup(ui.groupBox);
+    mButtonGroup->addButton(ui.activeRadio);
+    mButtonGroup->addButton(ui.archivedRadio);
+    mButtonGroup->addButton(ui.templateRadio);
     connect(ui.activeRadio, SIGNAL(toggled(bool)), SIGNAL(changed()));
     connect(ui.archivedRadio, SIGNAL(toggled(bool)), SIGNAL(changed()));
     connect(ui.templateRadio, SIGNAL(toggled(bool)), SIGNAL(changed()));
@@ -62,6 +63,11 @@ KAlarm::CalEvent::Type AlarmTypeRadioWidget::alarmType() const
     if (ui.templateRadio->isChecked())
         return KAlarm::CalEvent::TEMPLATE;
     return KAlarm::CalEvent::EMPTY;
+}
+
+bool AlarmTypeRadioWidget::validate() const
+{
+    return static_cast<bool>(mButtonGroup->checkedButton());
 }
 
 // vim: et sw=4:

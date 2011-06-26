@@ -1,19 +1,16 @@
 ########### files copied from kdepim-runtime module ###############
 set(AKONADI_SINGLEFILERESOURCE_SHARED_SOURCES
     ${AKONADI_SHARED_RESOURCES}/singlefileresourcebase.cpp
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget.cpp
     ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialogbase.cpp
 )
 
 if (KDEPIM_MOBILE_UI)
 set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget_mobile.ui
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog.ui
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog_mobile.ui
 )
 else (KDEPIM_MOBILE_UI)
 set(AKONADI_SINGLEFILERESOURCE_SHARED_UI
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigwidget_desktop.ui
-    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog.ui
+    ${AKONADI_SHARED_RESOURCES}/singlefileresourceconfigdialog_desktop.ui
 )
 endif (KDEPIM_MOBILE_UI)
 ########### end files copied from kdepim-runtime module ###############
