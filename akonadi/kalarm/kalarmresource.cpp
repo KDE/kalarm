@@ -62,13 +62,13 @@ KAlarmResource::~KAlarmResource()
 void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settings>* dlg)
 {
     ICalResourceBase::customizeConfigDialog(dlg);
-    AlarmTypeRadioWidget* typeSelector = new AlarmTypeRadioWidget(dlg);
+    mTypeSelector = new AlarmTypeRadioWidget(dlg);
     QStringList types = mSettings->alarmTypes();
     KAlarm::CalEvent::Type alarmType = KAlarm::CalEvent::ACTIVE;
     if (!types.isEmpty())
         alarmType = KAlarm::CalEvent::type(types[0]);
-    typeSelector->setAlarmType(alarmType);
-    dlg->appendToConfigWidget(typeSelector);
+    mTypeSelector->setAlarmType(alarmType);
+    dlg->appendToConfigWidget(mTypeSelector);
     dlg->setMonitorEnabled(false);
     QString title;
     switch (alarmType)
@@ -86,6 +86,15 @@ void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settin
             return;
     }
     dlg->setCaption(title);
+}
+
+/******************************************************************************
+* Save extra settings after the configuration dialog has been accepted.
+*/
+void KAlarmResource::configDialogAcceptedActions(SingleFileResourceConfigDialog<Settings>*)
+{
+    mSettings->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mTypeSelector->alarmType()));
+    mSettings->writeConfig();
 }
 
 /******************************************************************************

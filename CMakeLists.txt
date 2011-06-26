@@ -131,6 +131,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
 if(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     akonadimodel.cpp
+    akonadiresourcecreator.cpp
     collectionmodel.cpp
     itemlistmodel.cpp
     calendarmigrator.cpp
@@ -161,6 +162,9 @@ if(KALARM_USE_AKONADI)
 
     kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmdir/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
     qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/akonadi/kalarmdir/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
+
+    qt4_add_dbus_interfaces(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml)
+#    qt4_add_dbus_adaptor(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml agentbase.h Akonadi::AgentBase controladaptor Akonadi__ControlAdaptor)
 endif()
 
 kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)

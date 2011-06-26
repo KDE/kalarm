@@ -1,0 +1,57 @@
+/*
+ *  akonadiresourcecreator.h  -  interactively create an Akonadi resource
+ *  Program:  kalarm
+ *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation, Inc.,
+ *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+#include "kalarmsettings.h"
+#include "kalarmdirsettings.h"
+#include "kacalendar.h"
+
+#include <akonadi/agentinstance.h>
+#include <akonadi/agenttype.h>
+
+class QWidget;
+class KJob;
+
+class AkonadiResourceCreator : public QObject
+{
+        Q_OBJECT
+    public:
+        AkonadiResourceCreator(KAlarm::CalEvent::Type defaultType, QWidget* parent);
+        void createResource();
+        Akonadi::AgentInstance agentInstance() const   { return mAgentInstance; }
+
+    signals:
+        void finished(AkonadiResourceCreator*, bool success);
+
+    private slots:
+        void getAgentType();
+        void agentInstanceCreated(KJob*);
+        void configurationDialogAccepted();
+        void exitWithError();
+
+    private:
+        template <class Settings> void setResourceAlarmType();
+
+        QWidget*               mParent;
+        KAlarm::CalEvent::Type mDefaultType;
+        Akonadi::AgentType     mAgentType;
+        Akonadi::AgentInstance mAgentInstance;
+};
+
+// vim: et sw=4:

@@ -111,12 +111,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         Akonadi::Collection collectionForItem(Akonadi::Item::Id) const;
         Akonadi::Collection collection(const KAEvent& e) const   { return collectionForItem(e.itemId()); }
 
-        /** Create a new collection after prompting the user for its configuration.
-         *  The signal collectionAdded() will be emitted once the collection is created.
-         *  @return creation job which was started, or null if error.
-         */
-        Akonadi::AgentInstanceCreateJob* addCollection(KAlarm::CalEvent::Type, QWidget* parent = 0);
-
         /** Remove a collection from Akonadi. The calendar file is not removed.
          *  @return true if a removal job has been scheduled.
          */
@@ -171,11 +165,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         static QSize iconSize()  { return mIconSize; }
 
     signals:
-        /** Signal emitted when a collection creation job has completed.
-         *  Note that it may not yet have been added to the model.
-         */
-        void collectionAdded(Akonadi::AgentInstanceCreateJob*, bool success);
-
         /** Signal emitted when a collection has been added to the model. */
         void collectionAdded(const Akonadi::Collection&);
 
@@ -227,7 +216,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end);
         void slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&);
         void slotEmitEventChanged();
-        void addCollectionJobDone(KJob*);
         void modifyCollectionJobDone(KJob*);
         void itemJobDone(KJob*);
 
@@ -257,7 +245,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
         QString   alarmTimeText(const DateTime&) const;
         QString   timeToAlarmText(const DateTime&) const;
-        template <class Settings> void setResourceAlarmType(Akonadi::AgentInstance&, KAlarm::CalEvent::Type);
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool signal);
         void      queueItemModifyJob(const Akonadi::Item&);

@@ -27,7 +27,9 @@
 #include "kalarm.h"
 #include "alarmcalendar.h"
 #include "autoqpointer.h"
-#ifndef USE_AKONADI
+#ifdef USE_AKONADI
+#include "akonadiresourcecreator.h"
+#else
 #include "alarmresources.h"
 #include "eventlistmodel.h"
 #include "resourcemodelview.h"
@@ -146,8 +148,6 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 #ifdef USE_AKONADI
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
                                       SLOT(slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
-    connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::AgentInstanceCreateJob*, bool)),
-                                      SLOT(resourceAdded(Akonadi::AgentInstanceCreateJob*, bool)));
     connect(AkonadiModel::instance(), SIGNAL(collectionAdded(const Akonadi::Collection&)),
                                       SLOT(slotCollectionAdded(const Akonadi::Collection&)));
 #else
@@ -223,9 +223,10 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 void ResourceSelector::addResource()
 {
 #ifdef USE_AKONADI
-    AgentInstanceCreateJob* job = AkonadiModel::instance()->addCollection(mCurrentAlarmType, this);
-    if (job)
-        mAddJobs += job;
+    AkonadiResourceCreator* creator = new AkonadiResourceCreator(mCurrentAlarmType, this);
+    connect(creator, SIGNAL(finished(AkonadiResourceCreator*, bool)), 
+                     SLOT(resourceAdded(AkonadiResourceCreator*, bool)));
+    creator->createResource();
 #else
     AlarmResourceManager* manager = mCalendar->resourceManager();
     QStringList descs = manager->resourceTypeDescriptions();
@@ -269,23 +270,18 @@ void ResourceSelector::addResource()
 /******************************************************************************
 * Called when the job started by AkonadiModel::addCollection() has completed.
 */
-void ResourceSelector::resourceAdded(AgentInstanceCreateJob* job, bool success)
+void ResourceSelector::resourceAdded(AkonadiResourceCreator* creator, bool success)
 {
-    int i = mAddJobs.indexOf(job);
-    if (i >= 0)
+    if (success)
     {
-        // The agent has been created by addResource().
-        if (success)
+        AgentInstance agent = creator->agentInstance();
+        if (agent.isValid())
         {
-            AgentInstance agent = job->instance();
-            if (agent.isValid())
-            {
-                // Note that we're expecting the agent's Collection to be added
-                mAddAgents += agent;
-            }
+            // Note that we're expecting the agent's Collection to be added
+            mAddAgents += agent;
         }
-        mAddJobs.removeAt(i);
     }
+    delete creator;
 }
 
 /******************************************************************************
