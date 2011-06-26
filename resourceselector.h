@@ -103,7 +103,7 @@ class ResourceSelector : public QFrame
 #ifdef USE_AKONADI
         void  resourceAdded(AkonadiResourceCreator*, bool success);
         void  slotCollectionAdded(const Akonadi::Collection&);
-        void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&);
+        void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool inserted);
 #else
         void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
 #endif

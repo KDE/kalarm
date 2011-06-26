@@ -146,8 +146,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
     connect(mDeleteButton, SIGNAL(clicked()), SLOT(removeResource()));
 
 #ifdef USE_AKONADI
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
-                                      SLOT(slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
+                                      SLOT(slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)));
     connect(AkonadiModel::instance(), SIGNAL(collectionAdded(const Akonadi::Collection&)),
                                       SLOT(slotCollectionAdded(const Akonadi::Collection&)));
 #else
@@ -666,7 +666,7 @@ void ResourceSelector::setStandard()
 * Called when a calendar status has changed.
 */
 #ifdef USE_AKONADI
-void ResourceSelector::slotStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value)
+void ResourceSelector::slotStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value, bool inserted)
 #else
 void ResourceSelector::slotStatusChanged(AlarmResource* resource, AlarmResources::Change change)
 #endif

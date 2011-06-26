@@ -168,8 +168,11 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Signal emitted when a collection has been added to the model. */
         void collectionAdded(const Akonadi::Collection&);
 
-        /** Signal emitted when a collection's enabled or read-only status has changed. */
-        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& newValue);
+        /** Signal emitted when a collection's enabled or read-only status has changed.
+         *  @param inserted  true if the reason for the change is that the collection
+         *                   has been inserted into the model
+         */
+        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& newValue, bool inserted);
 
         /** Signal emitted when events have been added to the model. */
         void eventsAdded(const AkonadiModel::EventList&);
@@ -205,7 +208,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
     private slots:
         void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)
-                       { setCollectionChanged(c, attrNames, true); }
+                       { setCollectionChanged(c, attrNames, false); }
         void slotCollectionRemoved(const Akonadi::Collection&);
         void slotUpdateTimeTo();
         void slotUpdateArchivedColour(const QColor&);
@@ -246,7 +249,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QString   alarmTimeText(const DateTime&) const;
         QString   timeToAlarmText(const DateTime&) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
-        void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool signal);
+        void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool rowInserted);
         void      queueItemModifyJob(const Akonadi::Item&);
         void      checkQueuedItemModifyJob(const Akonadi::Item&);
 #if 0

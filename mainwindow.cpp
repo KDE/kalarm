@@ -201,7 +201,7 @@ MainWindow::MainWindow(bool restored)
     connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
     connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
 #ifdef USE_AKONADI
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
                        SLOT(slotCalendarStatusChanged()));
 #else
     connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),

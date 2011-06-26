@@ -142,7 +142,8 @@ class AlarmCalendar : public QObject
     private slots:
         void                  setAskResource(bool ask);
 #ifdef USE_AKONADI
-        void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value);
+        void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change,
+                                                          const QVariant& value, bool inserted);
         void                  slotEventsAdded(const AkonadiModel::EventList&);
         void                  slotEventsToBeRemoved(const AkonadiModel::EventList&);
         void                  slotEventChanged(const AkonadiModel::Event&);

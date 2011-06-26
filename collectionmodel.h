@@ -86,7 +86,7 @@ class CollectionCheckListModel : public KCheckableProxyModel
     private slots:
         void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
-        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value);
+        void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
 
     private:
         void setSelectionStatus(const Akonadi::Collection&, const QModelIndex&);
@@ -231,7 +231,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
     private slots:
-        void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value);
+        void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
 
     private:
         explicit CollectionControlModel(QObject* parent = 0);

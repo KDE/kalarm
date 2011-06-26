@@ -249,8 +249,8 @@ CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, 
                              SLOT(selectionChanged(const QItemSelection&, const QItemSelection&)));
     connect(mModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
-                                      SLOT(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
+                                      SLOT(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)));
 }
 
 /******************************************************************************
@@ -386,9 +386,9 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
 * If the collection's alarm types have been reconfigured, ensure that the
 * model views are updated to reflect this.
 */
-void CollectionCheckListModel::collectionStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant&)
+void CollectionCheckListModel::collectionStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted)
 {
-    if (!collection.isValid())
+    if (inserted  ||  !collection.isValid())
         return;
     switch (change)
     {
@@ -629,8 +629,8 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     findEnabledCollections(filter, QModelIndex(), collections);
     setCollections(collections);
 
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)),
-                                      SLOT(statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
+                                      SLOT(statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)));
 }
 
 /******************************************************************************
@@ -675,7 +675,7 @@ void CollectionControlModel::setEnabled(const Collection& collection, KAlarm::Ca
         alarmTypes |= static_cast<KAlarm::CalEvent::Types>(types & KAlarm::CalEvent::ALL);
     else
         alarmTypes &= ~types;
-    instance()->statusChanged(collection, AkonadiModel::Enabled, static_cast<int>(alarmTypes));
+    instance()->statusChanged(collection, AkonadiModel::Enabled, static_cast<int>(alarmTypes), false);
 }
 
 /******************************************************************************
@@ -683,7 +683,7 @@ void CollectionControlModel::setEnabled(const Collection& collection, KAlarm::Ca
 * If it's the enabled status, add or remove the collection to/from the enabled
 * list.
 */
-void CollectionControlModel::statusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value)
+void CollectionControlModel::statusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant& value, bool inserted)
 {
     if (!collection.isValid())
         return;
@@ -712,10 +712,13 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
         else
             removeCollection(collection);
 
-        // Update the collection's status
-        AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
-        if (!model->isCollectionBeingDeleted(collection.id()))
-            model->setData(model->collectionIndex(collection), static_cast<int>(enabled), AkonadiModel::EnabledRole);
+        if (!inserted)
+        {
+            // Update the collection's status
+            AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
+            if (!model->isCollectionBeingDeleted(collection.id()))
+                model->setData(model->collectionIndex(collection), static_cast<int>(enabled), AkonadiModel::EnabledRole);
+        }
     }
 }
 

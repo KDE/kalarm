@@ -1517,7 +1517,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             kDebug() << "Collection" << collection.id() << collection.name();
             QSet<QByteArray> attrs;
             attrs += CollectionAttribute::name();
-            setCollectionChanged(collection, attrs, false);
+            setCollectionChanged(collection, attrs, true);
             emit collectionAdded(collection);
         }
         else
@@ -1572,7 +1572,7 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 * Called when a monitored collection's properties or content have changed.
 * Optionally emits a signal if properties of interest have changed.
 */
-void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames, bool signal)
+void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames, bool rowInserted)
 {
     // Check for a read/write permission change
     Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
@@ -1580,8 +1580,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     if (newRights != oldRights)
     {
         mCollectionRights[collection.id()] = newRights;
-        if (signal)
-            emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights));
+        emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights), rowInserted);
     }
 
     // Check for a change in content mime types
@@ -1592,8 +1591,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     {
         kDebug() << "Collection" << collection.id() << ": alarm types ->" << newAlarmTypes;
         mCollectionAlarmTypes[collection.id()] = newAlarmTypes;
-        if (signal)
-            emit collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes));
+        emit collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes), rowInserted);
     }
 
     // Check for the collection being enabled/disabled
@@ -1608,8 +1606,7 @@ kDebug()<<"COLLECTION ATTRIBUTE changed";
             kDebug() << "Collection" << collection.id() << ": enabled ->" << newEnabled;
             first = false;
             mCollectionEnabled[collection.id()] = newEnabled;
-            if (signal)
-                emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled));
+            emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled), rowInserted);
         }
     }
 }
