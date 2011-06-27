@@ -38,12 +38,6 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 {
     unsigned t = args["time"].toUInt();
     qDebug() << "RtcWakeAction::settimer(" << t << ")";
-    if (!t)
-    {
-        // Cancel the current wakeup. This is done by setting a new wakeup
-        // time 5 seconds from now, which will then expire.
-        t = KDateTime::currentUtcDateTime().toTime_t() + 5;
-    }
 
     // Find the rtcwake executable
     QString exe("/usr/sbin/rtcwake");   // default location
@@ -75,8 +69,15 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
     KProcess proc;
     if (!exe.isEmpty())
     {
+        // The wakeup time is set using a time from now ("-s") in preference to
+        // an absolute time ("-t") so that if the hardware clock is not in sync
+        // with the system clock, the alarm will still occur at the correct time.
         // The "-m no" option sets the wakeup time without suspending the computer.
-        proc << exe << "-m" << "no" << "-t" << QString::number(t);
+
+        // If 't' is zero, the current wakeup is cancelled by setting a new wakeup
+        // time 2 seconds from now, which will then expire.
+        unsigned now = KDateTime::currentUtcDateTime().toTime_t();
+        proc << exe << "-m" << "no" << "-s" << QString::number(t ? t - now : 2);
         result = proc.execute(5000);   // allow a timeout of 5 seconds
     }
     QString errmsg;
