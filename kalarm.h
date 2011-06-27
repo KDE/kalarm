@@ -30,7 +30,7 @@
 #define KALARM_VERSION "2.6.90" VERSION_SUFFIX
 #else
 #define VERSION_SUFFIX "-R"
-#define KALARM_VERSION "2.7.0"
+#define KALARM_VERSION "2.7.1"
 #endif
 //#define KALARM_VERSION "2.6.90" VERSION_SUFFIX
 #define KALARM_NAME "KAlarm"
