@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -331,6 +331,9 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         message.contentType()->setMimeType("text/plain");
         message.contentType()->setCharset("utf-8");
         message.fromUnicodeString(data.event.message());
+        QList<KMime::Headers::contentEncoding> encodings = KMime::encodingsForData(message.body());
+        encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
+        message.contentTransferEncoding()->setEncoding(encodings[0]);
         message.assemble();
     }
     else
@@ -346,6 +349,9 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             content->contentType()->setMimeType("text/plain");
             content->contentType()->setCharset("utf-8");
             content->fromUnicodeString(data.event.message());
+            QList<KMime::Headers::contentEncoding> encodings = KMime::encodingsForData(content->body());
+            encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
+            content->contentTransferEncoding()->setEncoding(encodings[0]);
             content->assemble();
             message.addContent(content);
         }
