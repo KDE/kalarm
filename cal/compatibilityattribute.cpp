@@ -26,7 +26,8 @@ namespace KAlarm
 {
 
 CompatibilityAttribute::CompatibilityAttribute(const CompatibilityAttribute& rhs)
-    : mCompatibility(rhs.mCompatibility)
+    : mCompatibility(rhs.mCompatibility),
+      mVersion(rhs.mVersion)
 {
 }
 
@@ -37,32 +38,45 @@ CompatibilityAttribute* CompatibilityAttribute::clone() const
 
 QByteArray CompatibilityAttribute::serialized() const
 {
-kDebug(5950)<<mCompatibility;
-    return QByteArray::number(mCompatibility);
+    QByteArray v = QByteArray::number(mCompatibility) + ' '
+                 + QByteArray::number(mVersion);
+kDebug(5950)<<v;
+    return v;
 }
 
 void CompatibilityAttribute::deserialize(const QByteArray& data)
 {
     // Set default values
     mCompatibility = KAlarm::Calendar::Incompatible;
+    mVersion       = KAlarm::Calendar::IncompatibleFormat;
 
+    bool ok;
     const QList<QByteArray> items = data.simplified().split(' ');
-kDebug(5950)<<"Data="<<data;
-    if (!items.isEmpty())
+    int count = items.count();
+    int index = 0;
+kDebug(5950)<<"Size="<<count<<", data="<<data;
+    if (count > index)
     {
         // 0: calendar format compatibility
-        bool ok;
-        int c = items[0].toInt(&ok);
-        if (!ok
-        ||  (c != KAlarm::Calendar::Incompatible
-          && c != KAlarm::Calendar::Current
-          && c != KAlarm::Calendar::Convertible
-          && c != KAlarm::Calendar::ByEvent))
+        int c = items[index++].toInt(&ok);
+        KAlarm::Calendar::Compat AllCompat(KAlarm::Calendar::Current | KAlarm::Calendar::Converted | KAlarm::Calendar::Convertible | KAlarm::Calendar::Incompatible | KAlarm::Calendar::Unknown);
+        if (!ok  ||  (c & AllCompat) != c)
         {
             kError() << "Invalid compatibility:" << c;
             return;
         }
         mCompatibility = static_cast<KAlarm::Calendar::Compat>(c);
+    }
+    if (count > index)
+    {
+        // 1: KAlarm calendar version number
+        int c = items[index++].toInt(&ok);
+        if (!ok)
+        {
+            kError() << "Invalid version:" << c;
+            return;
+        }
+        mVersion = c;
     }
 }
 

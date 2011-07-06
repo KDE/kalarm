@@ -28,7 +28,8 @@ namespace KAlarm
 CollectionAttribute::CollectionAttribute(const CollectionAttribute& rhs)
     : mBackgroundColour(rhs.mBackgroundColour),
       mEnabled(rhs.mEnabled),
-      mStandard(rhs.mStandard)
+      mStandard(rhs.mStandard),
+      mKeepFormat(rhs.mKeepFormat)
 {
 }
 
@@ -102,6 +103,7 @@ QByteArray CollectionAttribute::serialized() const
 {
     QByteArray v = QByteArray::number(mEnabled) + ' '
                  + QByteArray::number(mStandard) + ' '
+                 + QByteArray(mKeepFormat ? "1" : "0") + ' '
                  + QByteArray(mBackgroundColour.isValid() ? "1" : "0");
     if (mBackgroundColour.isValid())
         v += ' '
@@ -119,6 +121,7 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     mEnabled          = KAlarm::CalEvent::EMPTY;
     mStandard         = KAlarm::CalEvent::EMPTY;
     mBackgroundColour = QColor();
+    mKeepFormat       = false;
 
     bool ok;
     int c[4];
@@ -151,7 +154,15 @@ kDebug(5950)<<"Size="<<count<<", data="<<data;
     }
     if (count > index)
     {
-        // 2: background color valid flag
+        // 2: keep old calendar storage format
+        c[0] = items[index++].toInt(&ok);
+        if (!ok)
+            return;
+        mKeepFormat = c[0];
+    }
+    if (count > index)
+    {
+        // 3: background color valid flag
         c[0] = items[index++].toInt(&ok);
         if (!ok)
             return;

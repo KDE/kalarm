@@ -92,12 +92,13 @@ QStringList mimeTypes(const QString& id)
 }
 
 /******************************************************************************
-* Find the compatibility of an existing calendar file.
+* Find the compatibility of an existing calendar file, and convert it in
+* memory to the current KAlarm format (if possible).
 */
-KAlarm::Calendar::Compat getCompatibility(const FileStorage::Ptr& fileStorage)
+KAlarm::Calendar::Compat getCompatibility(const FileStorage::Ptr& fileStorage, int& version)
 {
     QString versionString;
-    int version = KAlarm::Calendar::checkCompatibility(fileStorage, versionString);
+    version = KAlarm::Calendar::updateVersion(fileStorage, versionString);
     return (version < 0) ? KAlarm::Calendar::Incompatible  // calendar is not in KAlarm format, or is in a future format
          : (version > 0) ? KAlarm::Calendar::Convertible   // calendar is in an out of date format
          :                 KAlarm::Calendar::Current;      // calendar is in the current format
@@ -153,12 +154,13 @@ KAEvent checkItemChanged(const Akonadi::Item& item, QString& errorMsg)
 * are written by the application. This avoids the resource and application
 * overwriting each other's changes if they attempt simultaneous updates.
 */
-void setCollectionCompatibility(const Collection& collection, KAlarm::Calendar::Compat compatibility)
+void setCollectionCompatibility(const Collection& collection, KAlarm::Calendar::Compat compatibility, int version)
 {
     kDebug() << "->" << compatibility;
     Collection col = collection;
     CompatibilityAttribute* attr = col.attribute<CompatibilityAttribute>(Collection::AddIfMissing);
     attr->setCompatibility(compatibility);
+    attr->setVersion(version);
     Q_ASSERT(Private::mInstance);
     CollectionModifyJob* job = new CollectionModifyJob(col, Private::mInstance->parent());
     Private::mInstance->connect(job, SIGNAL(result(KJob*)), SLOT(modifyCollectionJobDone(KJob*)));

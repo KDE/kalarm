@@ -40,13 +40,20 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
 {
     public:
         CompatibilityAttribute()
-                : mCompatibility(KAlarm::Calendar::Incompatible)  { }
+                : mCompatibility(KAlarm::Calendar::Incompatible),
+                  mVersion(KAlarm::Calendar::IncompatibleFormat)  { }
 
         /** Return the compatibility status for the entity. */
-        KAlarm::Calendar::Compat compatibility() const  { return mCompatibility; }
+        KAlarm::Calendar::Compat compatibility() const     { return mCompatibility; }
 
         /** Set the compatibility status for the entity. */
         void setCompatibility(KAlarm::Calendar::Compat c)  { mCompatibility = c; }
+
+        /** Return the KAlarm version of the backend calendar format. */
+        int version() const                                { return mVersion; }
+
+        /** Set the KAlarm version of the backend calendar format. */
+        void setVersion(int v)                             { mVersion = v; }
 
         virtual QByteArray type() const    { return name(); }
         virtual CompatibilityAttribute* clone() const;
@@ -58,6 +65,7 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
         CompatibilityAttribute(const CompatibilityAttribute&);
 
         KAlarm::Calendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
+        int                      mVersion;          // KAlarm calendar format version
 };
 
 } // namespace KAlarm

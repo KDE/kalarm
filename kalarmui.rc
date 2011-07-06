@@ -93,6 +93,7 @@
   <Separator/>
   <Action name="resDetails" />
   <Action name="resEdit" />
+  <Action name="resUpdate" />
   <Action name="resRemove" />
   <Action name="resDefault" />
   <Separator/>

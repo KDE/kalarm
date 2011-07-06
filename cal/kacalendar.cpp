@@ -23,18 +23,23 @@
 #include "kaevent.h"
 #include "version.h"
 
-#include <kglobal.h>
-#include <klocale.h>
-#include <kdebug.h>
-
 #ifdef USE_AKONADI
+#include "collectionattribute.h"
+
 #include <kcalcore/event.h>
 #include <kcalcore/alarm.h>
+#include <kcalcore/memorycalendar.h>
+
+#include <kmessagebox.h>
 #else
 #include <kcal/event.h>
 #include <kcal/alarm.h>
 #include <kcal/calendarlocal.h>
 #endif
+
+#include <kglobal.h>
+#include <klocale.h>
+#include <kdebug.h>
 
 #include <QMap>
 #include <QFile>
@@ -43,6 +48,7 @@
 
 #ifdef USE_AKONADI
 using namespace KCalCore;
+using Akonadi::Collection;
 #else
 using namespace KCal;
 #endif
@@ -103,9 +109,9 @@ void Calendar::setKAlarmVersion(CalendarLocal& calendar)
 * value.
 */
 #ifdef USE_AKONADI
-int Calendar::checkCompatibility(const FileStorage::Ptr& fileStorage, QString& versionString)
+int Calendar::updateVersion(const FileStorage::Ptr& fileStorage, QString& versionString)
 #else
-int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFile, QString& versionString)
+int Calendar::updateVersion(CalendarLocal& calendar, const QString& localFile, QString& versionString)
 #endif
 {
     bool version057_UTC = false;
@@ -116,9 +122,9 @@ int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFi
     int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
 #endif
     if (!version)
-        return 0;     // calendar is in the current KAlarm format
+        return CurrentFormat;       // calendar is in the current KAlarm format
     if (version < 0  ||  version > KAEvent::currentCalendarVersion())
-        return -1;    // calendar was created by another program, or an unknown version of KAlarm
+        return IncompatibleFormat;  // calendar was created by another program, or an unknown version of KAlarm
 
     // Calendar was created by an earlier version of KAlarm.
     // Convert it to the current format.
@@ -142,6 +148,99 @@ int Calendar::checkCompatibility(CalendarLocal& calendar, const QString& localFi
     KAEvent::convertKCalEvents(calendar, version, version057_UTC);
 #endif
     return version;
+}
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Find the version of KAlarm which wrote the calendar file, and do any
+* necessary conversions to the current format. If it is a resource calendar,
+* the user is prompted whether to save the conversions. 
+* If the calendar only contains the wrong alarm types, 'wrongType' is set true.
+* Reply = true if the calendar file is now in the current format.
+*
+* NOTE: Any non-Akonadi-specific changes to this method should also be applied
+*       to CalendarCompat::fix() which serves the same function for KResources.
+*/
+Calendar::Compat Calendar::fix(const KCalCore::FileStorage::Ptr& fileStorage,
+                               const Collection& collection, FixFunc conv, bool* wrongType)
+{
+    static Collection::Rights changeable(Collection::CanChangeItem | Collection::CanChangeCollection);
+
+    if (wrongType)
+        *wrongType = false;
+    QString versionString;
+    int version = updateVersion(fileStorage, versionString);
+    if (version == IncompatibleFormat)
+        return Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
+    if (!collection.isValid())
+        return Current;    // update non-shared calendars regardless
+
+    // Check whether the alarm types in the calendar correspond with the resource's alarm types
+    KCalCore::Calendar::Ptr calendar = fileStorage->calendar();
+    CalEvent::Types alarmTypes = actualAlarmTypes(calendar);
+    if (wrongType)
+        *wrongType = !(CalEvent::types(collection.contentMimeTypes()) & alarmTypes);
+
+    if (version == CurrentFormat)
+        return Current;     // calendar is in current KAlarm format
+    if (conv == NO_CONVERT
+    ||  (collection.rights() & changeable) != changeable)
+        return Convertible;
+    // Only allow conversion of collections which are enabled for all alarm types which they contain
+    if (!collection.hasAttribute<CollectionAttribute>()
+    ||  (collection.attribute<CollectionAttribute>()->enabled() & alarmTypes) != alarmTypes)
+        return Convertible;
+
+    // Update the calendar file now if the user wants it to be read-write
+    if (conv == PROMPT  ||  conv == PROMPT_PART)
+    {
+        QString msg = conversionPrompt(collection.name(), versionString, (conv == PROMPT));
+        if (KMessageBox::warningYesNo(0, msg) != KMessageBox::Yes)
+            return Convertible;
+    }
+    setKAlarmVersion(calendar);
+    return Converted;
+}
+
+/******************************************************************************
+* Find which alarm types exist in a calendar.
+*/
+CalEvent::Types Calendar::actualAlarmTypes(const KCalCore::Calendar::Ptr& calendar)
+{
+    CalEvent::Types types = CalEvent::EMPTY;
+    const KCalCore::Event::List events = calendar->rawEvents();
+    for (int i = 0, iend = events.count();  i < iend;  ++i)
+    {
+        types |= CalEvent::status(events[i]);
+        if (types == CalEvent::ALL)
+            break;
+    }
+    return types;
+}
+#endif
+
+/******************************************************************************
+* Return a prompt string to ask the user whether to convert the calendar to the
+* current format.
+* If 'whole' is true, the whole calendar needs to be converted; else only some
+* alarms may need to be converted.
+*
+* Note: This method is defined here to avoid duplicating the i18n string
+*       definition between the Akonadi and KResources code.
+*/
+QString Calendar::conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
+{
+    QString msg = whole
+                ? i18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
+                       "and will be read-only unless you choose to update it to the current format.",
+                       calendarName, calendarVersion)
+                : i18nc("@info", "Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
+                       "and will be read-only unless you choose to update them to the current format.",
+                       calendarName);
+    return i18nc("@info", "<para>%1</para><para>"
+                 "<warning>Do not update the calendar if it is also used with an older version of <application>KAlarm</application> "
+                 "(e.g. on another computer). If you do so, the calendar may become unusable there.</warning></para>"
+                 "<para>Do you wish to update the calendar?</para>", msg);
 }
 
 /******************************************************************************
@@ -186,7 +285,7 @@ int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFil
             QFileInfo fi(localFile);
 #endif
             if (!fi.size())
-                return 0;
+                return CurrentFormat;
         }
 
         // Find the KAlarm identifier
@@ -200,7 +299,7 @@ int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFil
             progname = QString(" ") + i18n("KAlarm") + ' ';
             i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
             if (i < 0)
-                return -1;    // calendar wasn't created by KAlarm
+                return IncompatibleFormat;    // calendar wasn't created by KAlarm
         }
 
         // Extract the KAlarm version string
@@ -210,14 +309,14 @@ int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFil
         if (j >= 0  &&  j < i)
             i = j;
         if (i <= 0)
-            return -1;    // missing version string
+            return IncompatibleFormat;    // missing version string
         versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
     }
     if (versionString == KAEvent::currentCalendarVersionString())
-        return 0;      // the calendar is in the current KAlarm format
+        return CurrentFormat;      // the calendar is in the current KAlarm format
     int ver = KAlarm::getVersionNumber(versionString, &subVersion);
     if (ver == KAEvent::currentCalendarVersion())
-        return 0;      // the calendar is in the current KAlarm format
+        return CurrentFormat;      // the calendar is in the current KAlarm format
     return KAlarm::getVersionNumber(versionString, &subVersion);
 }
 

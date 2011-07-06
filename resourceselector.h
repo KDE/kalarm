@@ -88,6 +88,9 @@ class ResourceSelector : public QFrame
         void  alarmTypeSelected();
         void  addResource();
         void  editResource();
+#ifdef USE_AKONADI
+        void  updateResource();
+#endif
         void  removeResource();
         void  selectionChanged();
         void  contextMenuRequested(const QPoint&);
@@ -134,6 +137,9 @@ class ResourceSelector : public QFrame
         KAction*        mActionSetColour;
         KAction*        mActionClearColour;
         KAction*        mActionEdit;
+#ifdef USE_AKONADI
+        KAction*        mActionUpdate;
+#endif
         KAction*        mActionRemove;
         KAction*        mActionImport;
         KAction*        mActionExport;

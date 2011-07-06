@@ -729,12 +729,25 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
 */
 bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, bool ignoreEnabledStatus)
 {
+    KAlarm::Calendar::Compat format;
+    return isWritable(collection, type, format, ignoreEnabledStatus);
+}
+bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, KAlarm::Calendar::Compat& format, bool ignoreEnabledStatus)
+{
+    format = KAlarm::Calendar::Current;
     if (!collection.isValid())
         return false;
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
-    if ((col.rights() & writableRights) != writableRights
-    ||  !AkonadiModel::isCompatible(col))
+    if ((col.rights() & writableRights) != writableRights)
+        return false;
+    if (!col.hasAttribute<CompatibilityAttribute>())
+    {
+        format = KAlarm::Calendar::Incompatible;
+        return false;
+    }
+    format = col.attribute<CompatibilityAttribute>()->compatibility();
+    if (format != KAlarm::Calendar::Current)
         return false;
     if (ignoreEnabledStatus)
         return true;

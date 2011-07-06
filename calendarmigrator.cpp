@@ -19,9 +19,12 @@
  */
 
 #include "calendarmigrator.h"
+#include "akonadimodel.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "collectionattribute.h"
+#include "compatibilityattribute.h"
+#include "version.h"
 
 #include <akonadi/agentinstancecreatejob.h>
 #include <akonadi/agentmanager.h>
@@ -40,9 +43,11 @@
 #include <QTimer>
 
 using namespace Akonadi;
+using KAlarm::CollectionAttribute;
+using KAlarm::CompatibilityAttribute;
 
 
-// Creates or migrates a single alarm calendar
+// Creates, or migrates from KResources, a single alarm calendar
 class CalendarCreator : public QObject
 {
         Q_OBJECT
@@ -54,11 +59,13 @@ class CalendarCreator : public QObject
         QString resourceName() const   { return mName; }
         QString path() const           { return mPath; }
         QString errorMessage() const   { return mErrorMessage; }
+        void    createAgent(const QString& agentType, QObject* parent);
 
     public slots:
         void agentCreated(KJob*);
 
     signals:
+        void creating(const QString& path);
         void finished(CalendarCreator*);
 
     private slots:
@@ -91,6 +98,27 @@ class CalendarCreator : public QObject
         bool                   mFinished;
 };
 
+// Updates the backend calendar format of a single alarm calendar
+class CalendarUpdater : public QObject
+{
+        Q_OBJECT
+    public:
+        CalendarUpdater(const Collection& collection, bool dirResource,
+                        bool ignoreKeepFormat, bool newCollection, QObject* parent);
+
+    public slots:
+        bool update();
+
+    private:
+        Akonadi::Collection mCollection;
+        QObject*            mParent;
+        bool                mDirResource;
+        bool                mIgnoreKeepFormat;
+        bool                mNewCollection;
+};
+
+
+CalendarMigrator* CalendarMigrator::mInstance = 0;
 
 CalendarMigrator::CalendarMigrator(QObject* parent)
     : QObject(parent)
@@ -103,12 +131,21 @@ CalendarMigrator::~CalendarMigrator()
 }
 
 /******************************************************************************
+* Create and return the unique CalendarMigrator instance.
+*/
+CalendarMigrator* CalendarMigrator::instance()
+{
+    if (!mInstance)
+        mInstance = new CalendarMigrator;
+    return mInstance;
+}
+
+/******************************************************************************
 * Migrate old KResource calendars, or if none, create default Akonadi resources.
 */
 void CalendarMigrator::execute()
 {
-    CalendarMigrator* instance = new CalendarMigrator;
-    instance->migrateOrCreate();
+    instance()->migrateOrCreate();
 }
 
 /******************************************************************************
@@ -118,7 +155,6 @@ void CalendarMigrator::migrateOrCreate()
 {
     kDebug();
     CalendarCreator* creator;
-    AgentInstanceCreateJob* job;
 
     // First migrate any KResources alarm calendars from pre-Akonadi versions of KAlarm.
     bool haveResources = false;
@@ -152,41 +188,49 @@ void CalendarMigrator::migrateOrCreate()
         else
         {
             connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
+            connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
             mCalendarsPending << creator;
-            job = new AgentInstanceCreateJob(agentType, this);
-            connect(job, SIGNAL(result(KJob*)), creator, SLOT(agentCreated(KJob*)));
-            job->start();
+            creator->createAgent(agentType, this);
         }
     }
 
     if (!haveResources)
     {
-        // There were no calendars to migrate, so create default ones.
+#ifdef __GNUC__
+#warning Check if this uses existing default calendar files even if not found in KResources
+#endif
+        // There were no KResources calendars to migrate, so create default ones.
         // Normally this occurs on first installation of KAlarm.
         creator = new CalendarCreator(KAlarm::CalEvent::ACTIVE, QLatin1String("calendar.ics"), i18nc("@info/plain", "Active Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
+        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
         mCalendarsPending << creator;
-        job = new AgentInstanceCreateJob(QLatin1String("akonadi_kalarm_resource"), this);
-        connect(job, SIGNAL(result(KJob*)), creator, SLOT(agentCreated(KJob*)));
-        job->start();
+        creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
 
         creator = new CalendarCreator(KAlarm::CalEvent::ARCHIVED, QLatin1String("expired.ics"), i18nc("@info/plain", "Archived Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
+        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
         mCalendarsPending << creator;
-        job = new AgentInstanceCreateJob(QLatin1String("akonadi_kalarm_resource"), this);
-        connect(job, SIGNAL(result(KJob*)), creator, SLOT(agentCreated(KJob*)));
-        job->start();
+        creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
 
         creator = new CalendarCreator(KAlarm::CalEvent::TEMPLATE, QLatin1String("template.ics"), i18nc("@info/plain", "Alarm Templates"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
+        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
         mCalendarsPending << creator;
-        job = new AgentInstanceCreateJob(QLatin1String("akonadi_kalarm_resource"), this);
-        connect(job, SIGNAL(result(KJob*)), creator, SLOT(agentCreated(KJob*)));
-        job->start();
+        creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
     }
 
     if (mCalendarsPending.isEmpty())
         deleteLater();
+}
+
+/******************************************************************************
+* Called when a calendar resource is about to be created.
+* Emits the 'creating' signal.
+*/
+void CalendarMigrator::creatingCalendar(CalendarCreator* creator)
+{
+    emit creating(creator->path(), false);
 }
 
 /******************************************************************************
@@ -198,6 +242,8 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
     int i = mCalendarsPending.indexOf(creator);
     if (i < 0)
         return;    // calendar already finished
+
+    emit creating(creator->path(), true);
 
     if (!creator->errorMessage().isEmpty())
     {
@@ -218,6 +264,147 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
     mCalendarsPending.removeAt(i);    // remove it from the pending list
     if (mCalendarsPending.isEmpty())
         deleteLater();
+}
+
+/******************************************************************************
+* If an existing Akonadi resource calendar can be converted to the current
+* KAlarm format, prompt the user whether to convert it, and if yes, tell the
+* Akonadi resource to update the backend storage to the current format.
+* The CollectionAttribute's KeepFormat property will be updated if the user
+* chooses not to update the calendar.
+*
+* Note: the collection should be up to date: use AkonadiModel::refresh() before
+*       calling this function.
+*/
+void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool ignoreKeepFormat, QObject* parent)
+{
+    kDebug() << collection.id();
+    AgentInstance agent = AgentManager::self()->instance(collection.resource());
+    const QString id = agent.type().identifier();
+    bool dirResource;
+    if (id == QLatin1String("akonadi_kalarm_resource"))
+        dirResource = false;
+    else if (id == QLatin1String("akonadi_kalarm_dir_resource"))
+        dirResource = true;
+    else
+    {
+        kError() << "Invalid agent type" << id;
+        return;
+    }
+    CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
+    QTimer::singleShot(0, updater, SLOT(update()));
+}
+
+
+CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
+                                 bool ignoreKeepFormat, bool newCollection, QObject* parent)
+    : mCollection(collection),
+      mParent(parent),
+      mDirResource(dirResource),
+      mIgnoreKeepFormat(ignoreKeepFormat),
+      mNewCollection(newCollection)
+{
+}
+
+bool CalendarUpdater::update()
+{
+    kDebug() << mCollection.id() << (mDirResource ? "directory" : "file");
+    bool result = true;
+    if (mCollection.hasAttribute<CompatibilityAttribute>())
+    {
+        const CompatibilityAttribute* compatAttr = mCollection.attribute<CompatibilityAttribute>();
+        KAlarm::Calendar::Compat compatibility = compatAttr->compatibility();
+        if ((compatibility & ~KAlarm::Calendar::Converted)
+        // The calendar isn't in the current KAlarm format
+        &&  !(compatibility & ~(KAlarm::Calendar::Convertible | KAlarm::Calendar::Converted))
+        // The calendar format is convertible to the current KAlarm format
+        &&  (mIgnoreKeepFormat
+            || !mCollection.hasAttribute<CollectionAttribute>()
+            || !mCollection.attribute<CollectionAttribute>()->keepFormat()))
+        {
+            // The user hasn't previously said not to convert it
+            QString versionString = KAlarm::getVersionString(compatAttr->version());
+            QString msg = KAlarm::Calendar::conversionPrompt(mCollection.name(), versionString, false);
+            if (KMessageBox::warningYesNo(0, msg) == KMessageBox::Yes)
+            {
+                // Tell the resource to update the backend storage format
+                QString errmsg;
+                if (!mNewCollection)
+                {
+                    // Refetch the collection's details because anything could
+                    // have happened since the prompt was first displayed.
+                    if (!AkonadiModel::instance()->refresh(mCollection))
+                        errmsg = i18nc("@info/plain", "Invalid collection");
+                }
+                if (errmsg.isEmpty())
+                {
+                    AgentInstance agent = AgentManager::self()->instance(mCollection.resource());
+                    if (mDirResource)
+                        CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, errmsg, mParent);
+                    else
+                        CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmSettingsInterface>(agent, errmsg, mParent);
+                }
+                if (!errmsg.isEmpty())
+                {
+                    KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)",
+                                                i18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
+                                                errmsg));
+                }
+            }
+            else
+            {
+                // The user chose not to update the calendar
+                result = false;
+                if (!mNewCollection)
+                {
+                    QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
+                    AkonadiModel::instance()->setData(ix, true, AkonadiModel::KeepFormatRole);
+                }
+            }
+        }
+    }
+    deleteLater();
+    return result;
+}
+
+/******************************************************************************
+* Tell an Akonadi resource to update the backend storage format to the current
+* KAlarm format.
+* Reply = true if success; if false, 'errorMessage' contains the error message.
+*/
+template <class Interface> bool CalendarMigrator::updateStorageFormat(const AgentInstance& agent, QString& errorMessage, QObject* parent)
+{
+    kDebug();
+    Interface* iface = getAgentInterface<Interface>(agent, errorMessage, parent);
+    if (!iface)
+    {
+        kDebug() << errorMessage;
+        return false;
+    }
+    iface->setUpdateStorageFormat(true);
+    iface->writeConfig();
+    delete iface;
+    kDebug() << "true";
+    return true;
+}
+
+/******************************************************************************
+* Create a D-Bus interface to an Akonadi resource.
+* Reply = interface if success
+*       = 0 if error: 'errorMessage' contains the error message.
+*/
+template <class Interface> Interface* CalendarMigrator::getAgentInterface(const AgentInstance& agent, QString& errorMessage, QObject* parent)
+{
+    Interface* iface = new Interface("org.freedesktop.Akonadi.Resource." + agent.identifier(),
+              "/Settings", QDBusConnection::sessionBus(), parent);
+    if (!iface->isValid())
+    {
+        errorMessage = iface->lastError().message();
+        kDebug() << "D-Bus error accessing resource:" << errorMessage;
+        delete iface;
+        return 0;
+    }
+    return iface;
 }
 
 
@@ -286,6 +473,17 @@ CalendarCreator::CalendarCreator(KAlarm::CalEvent::Type alarmType, const QString
 {
     mPath = KStandardDirs::locateLocal("appdata", file);
     kDebug() << "New:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
+}
+
+/******************************************************************************
+* Create the Akonadi agent for this calendar.
+*/
+void CalendarCreator::createAgent(const QString& agentType, QObject* parent)
+{
+    emit creating(mPath);
+    AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
+    connect(job, SIGNAL(result(KJob*)), SLOT(agentCreated(KJob*)));
+    job->start();
 }
 
 /******************************************************************************
@@ -368,7 +566,6 @@ bool CalendarCreator::migrateLocalFile()
     OrgKdeAkonadiKAlarmSettingsInterface* iface = migrateBasic<OrgKdeAkonadiKAlarmSettingsInterface>();
     if (!iface)
         return false;
-    iface->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
     iface->setMonitorFile(true);
     iface->writeConfig();   // save the Agent config changes
     delete iface;
@@ -381,7 +578,6 @@ bool CalendarCreator::migrateLocalDirectory()
     if (!iface)
         return false;
     iface->setMonitorFiles(true);
-    iface->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
     iface->writeConfig();   // save the Agent config changes
     delete iface;
     return true;
@@ -400,18 +596,15 @@ bool CalendarCreator::migrateRemoteFile()
 
 template <class Interface> Interface* CalendarCreator::migrateBasic()
 {
-    Interface* iface = new Interface("org.freedesktop.Akonadi.Resource." + mAgent.identifier(),
-              "/Settings", QDBusConnection::sessionBus(), this);
-    if (!iface->isValid())
+    Interface* iface = CalendarMigrator::getAgentInterface<Interface>(mAgent, mErrorMessage, this);
+    if (iface)
     {
-        mErrorMessage = iface->lastError().message();
-        kDebug() << "D-Bus error accessing resource:" << mErrorMessage;
-        delete iface;
-        return 0;
+        iface->setReadOnly(mReadOnly);
+        iface->setDisplayName(mName);
+        iface->setPath(mPath);
+        iface->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
+        iface->setUpdateStorageFormat(false);
     }
-    iface->setReadOnly(mReadOnly);
-    iface->setDisplayName(mName);
-    iface->setPath(mPath);
     return iface;
 }
 
@@ -459,12 +652,36 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     collection.setContentMimeTypes(KAlarm::CalEvent::mimeTypes(mAlarmType));
     EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
     dattr->setIconName("kalarm");
-    KAlarm::CollectionAttribute* attr = collection.attribute<KAlarm::CollectionAttribute>(Entity::AddIfMissing);
+    CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
     attr->setEnabled(mEnabled ? mAlarmType : KAlarm::CalEvent::EMPTY);
     if (mStandard)
         attr->setStandard(mAlarmType);
     if (mColour.isValid())
         attr->setBackgroundColor(mColour);
+
+    // Update the calendar to the current KAlarm format if necessary,
+    // and if the user agrees.
+    bool dirResource = false;
+    switch (mResourceType)
+    {
+        case LocalFile:
+        case RemoteFile:
+            break;
+        case LocalDir:
+            dirResource = true;
+            break;
+        default:
+            Q_ASSERT(0); // Invalid resource type
+            break;
+    }
+    CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, false, true, this);
+    if (!updater->update())   // note that 'updater' will auto-delete when finished
+    {
+        // Record that the user chose not to update the calendar
+        attr->setKeepFormat(true);
+    }
+
+    // Update the collection's attributes in the Akonadi database
     CollectionModifyJob* cmjob = new CollectionModifyJob(collection, this);
     connect(cmjob, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
 }

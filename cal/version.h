@@ -1,7 +1,7 @@
 /*
  *  version.h  -  program version functions
  *  Program:  kalarm
- *  Copyright © 2005,2009-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005,2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -22,8 +22,7 @@
 #define VERSION_H
 
 #include "kalarm_cal_export.h"
-
-class QString;
+#include <QString>
 
 namespace KAlarm
 {
@@ -33,6 +32,9 @@ inline int Version(int major, int minor, int rev)     { return major*10000 + min
 
 /** Convert a version string to an integer. */
 KALARM_CAL_EXPORT int getVersionNumber(const QString& version, QString* subVersion = 0);
+
+/** Convert a version integer to a string. */
+KALARM_CAL_EXPORT QString getVersionString(int version);
 
 }
 

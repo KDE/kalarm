@@ -33,22 +33,37 @@ class KJob;
 namespace KRES { class Resource; }
 
 class CalendarCreator;
+class CalendarUpdater;
 
 class CalendarMigrator : public QObject
 {
         Q_OBJECT
     public:
         ~CalendarMigrator();
+        static CalendarMigrator* instance();
         static void execute();
+        static void updateToCurrentFormat(const Akonadi::Collection&, bool ignoreKeepFormat, QObject* parent);
+        template <class Interface> static Interface* getAgentInterface(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
+
+    signals:
+        /** Signal emitted when a resource is about to be created, and when creation has
+         *  completed (successfully or not).
+         */
+        void creating(const QString& path, bool finished);
 
     private slots:
+        void creatingCalendar(CalendarCreator*);
         void calendarCreated(CalendarCreator*);
 
     private:
         CalendarMigrator(QObject* parent = 0);
         void migrateOrCreate();
+        template <class Interface> static bool updateStorageFormat(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
+        static CalendarMigrator* mInstance;
         QList<CalendarCreator*> mCalendarsPending;   // pending calendar migration or creation jobs
+
+        friend class CalendarUpdater;
 };
 
 #endif // CALENDARMIGRATOR_H

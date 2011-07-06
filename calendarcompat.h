@@ -1,7 +1,7 @@
 /*
  *  calendarcompat.h  -  compatibility for old calendar file formats
  *  Program:  kalarm
- *  Copyright © 2005-2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,34 +21,20 @@
 #ifndef CALENDARCOMPAT_H
 #define CALENDARCOMPAT_H
 
-/* @file calendarcompat.h - compatibility for old calendar file formats */
+#ifndef USE_AKONADI
 
 #include "kacalendar.h"
-#ifdef USE_AKONADI
-#include <akonadi/collection.h>
-#include <kcalcore/memorycalendar.h>
-#include <kcalcore/filestorage.h>
-#else
 #include "alarmresource.h"
 namespace KCal { class CalendarLocal; }
-#endif
 
 
-class CalendarCompat
+namespace CalendarCompat
 {
-    public:
-#ifdef USE_AKONADI
-        /** Whether the fix function should convert old format KAlarm calendars. */
-        enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
+    KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
+                                 AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
+}
 
-        static KAlarm::Calendar::Compat fix(const KCalCore::FileStorage::Ptr&, 
-                                            const Akonadi::Collection& = Akonadi::Collection(),
-                                            FixFunc = PROMPT, bool* wrongType = 0);
-#else
-        static KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
-                                            AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
 #endif
-};
 
 #endif // CALENDARCOMPAT_H
 

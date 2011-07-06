@@ -3078,7 +3078,7 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
             mDisplayingEdit  = showEdit;
             mDisplaying      = true;
             mDisplayingTime  = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
-            switch (al.type())
+            switch (al.subType())
             {
                 case KAAlarm::AT_LOGIN__ALARM:                mDisplayingFlags = REPEAT_AT_LOGIN;  break;
                 case KAAlarm::REMINDER__ALARM:                mDisplayingFlags = REMINDER;  break;

@@ -120,7 +120,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     find.cpp
     pickfileradio.cpp
     newalarmaction.cpp
-    calendarcompat.cpp
     commandoptions.cpp
     resourceselector.cpp
     templatepickdlg.cpp
@@ -138,6 +137,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
    )
 else(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
+    calendarcompat.cpp
     eventlistmodel.cpp
     alarmlistfiltermodel.cpp
     resourceconfigdialog.cpp

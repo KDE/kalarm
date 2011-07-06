@@ -56,8 +56,9 @@ class KAlarmResource : public ICalResourceBase
         void settingsChanged();
 
     private:
+        AlarmTypeRadioWidget*    mTypeSelector;
         KAlarm::Calendar::Compat mCompatibility;
-        AlarmTypeRadioWidget* mTypeSelector;
+        int                      mVersion;   // calendar format version
 };
 
 #endif

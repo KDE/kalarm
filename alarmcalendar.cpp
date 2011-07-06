@@ -25,9 +25,9 @@
 #include "collectionmodel.h"
 #else
 #include "alarmresources.h"
+#include "calendarcompat.h"
 #include "eventlistmodel.h"
 #endif
-#include "calendarcompat.h"
 #include "filedialog.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -347,7 +347,7 @@ int AlarmCalendar::load()
             KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
         mLocalFile = tmpFile;
 #ifdef USE_AKONADI
-        CalendarCompat::fix(mCalendarStorage);   // convert events to current KAlarm format for when calendar is saved
+        KAlarm::Calendar::fix(mCalendarStorage);   // convert events to current KAlarm format for when calendar is saved
         updateKAEvents(Collection());
 #else
         CalendarCompat::fix(*calendar, mLocalFile);   // convert events to current KAlarm format for when calendar is saved
@@ -886,7 +886,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
     else
     {
 #ifdef USE_AKONADI
-        KAlarm::Calendar::Compat caltype = CalendarCompat::fix(calStorage);
+        KAlarm::Calendar::Compat caltype = KAlarm::Calendar::fix(calStorage);
         KAlarm::CalEvent::Types wantedTypes = collection && collection->isValid() ? KAlarm::CalEvent::types(collection->contentMimeTypes()) : KAlarm::CalEvent::EMPTY;
         Collection activeColl, archiveColl, templateColl;
 #else

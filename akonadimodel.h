@@ -59,6 +59,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             BaseColourRole,            // background colour ignoring collection colour
             AlarmTypeRole,             // OR of event types which collection contains
             IsStandardRole,            // OR of event types which collection is standard for
+            KeepFormatRole,            // user has chosen not to update collection's calendar storage format
             // Item roles
             StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
             AlarmActionsRole,          // KAEvent::Actions
@@ -156,12 +157,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         static KAlarm::CalEvent::Types types(const Akonadi::Collection&);
 
-        /** Check whether the alarm types in a local calendar correspond with a
-         *  Collection's mime types.
-         *  @return true if at least one alarm is the right type.
-         */
-        static bool checkAlarmTypes(const Akonadi::Collection&, KCalCore::Calendar::Ptr&);
-
         static QSize iconSize()  { return mIconSize; }
 
     signals:
@@ -210,6 +205,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)
                        { setCollectionChanged(c, attrNames, false); }
         void slotCollectionRemoved(const Akonadi::Collection&);
+        void slotCollectionBeingCreated(const QString& path, bool finished);
         void slotUpdateTimeTo();
         void slotUpdateArchivedColour(const QColor&);
         void slotUpdateDisabledColour(const QColor&);
@@ -280,8 +276,10 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QMap<KJob*, CollTypeData> mPendingColCreateJobs;  // default alarm type for pending collection creation jobs
         QMap<KJob*, Akonadi::Item::Id> mPendingItemJobs;  // pending item creation/deletion jobs, with event ID
         QMap<Akonadi::Item::Id, Akonadi::Item> mItemModifyJobQueue;  // pending item modification jobs, invalid item = queue empty but job active
+        QList<QString>     mCollectionsBeingCreated;  // path names of new collections being created
         QList<Akonadi::Item::Id> mItemsBeingCreated;  // new items not fully initialised yet
         QList<Akonadi::Collection::Id> mCollectionsDeleting;  // collections currently being removed
+        QList<Akonadi::Collection::Id> mCollectionsDeleted;   // collections recently removed
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
 };
 

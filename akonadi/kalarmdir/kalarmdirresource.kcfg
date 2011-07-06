@@ -24,5 +24,9 @@
     <entry name="AlarmTypes" type="StringList">
       <label>Alarm types.</label>
     </entry>
+    <entry name="UpdateStorageFormat" type="Bool">
+      <label>Update backend storage format.</label>
+      <default>false</default>
+    </entry>
   </group>
 </kcfg>

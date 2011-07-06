@@ -317,9 +317,15 @@ class SingleFileResource : public SingleFileResourceBase
       EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>( Collection::AddIfMissing );
       attr->setDisplayName( name() );
       attr->setIconName( mCollectionIcon );
+
       Collection::List list;
       list << c;
       collectionsRetrieved( list );
+    }
+
+    void retrieveItems( const Akonadi::Collection &collection )
+    {
+      mCollectionId = collection.id();
     }
 
     bool readOnly() const
@@ -327,8 +333,16 @@ class SingleFileResource : public SingleFileResourceBase
       return mSettings->readOnly();
     }
 
+    Collection::Id collectionId() const
+    {
+      return mCollectionId;
+    }
+
   protected:
     Settings *mSettings;
+
+  private:
+    Collection::Id mCollectionId;  //!< the one and only collection for this resource
 };
 
 }

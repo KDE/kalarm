@@ -29,6 +29,7 @@
 #include "autoqpointer.h"
 #ifdef USE_AKONADI
 #include "akonadiresourcecreator.h"
+#include "calendarmigrator.h"
 #else
 #include "alarmresources.h"
 #include "eventlistmodel.h"
@@ -377,6 +378,21 @@ void ResourceSelector::editResource()
 #endif
 }
 
+#ifdef USE_AKONADI
+/******************************************************************************
+* Update the backend storage format for the currently selected resource in the
+* displayed list.
+*/
+void ResourceSelector::updateResource()
+{
+    Collection collection = currentResource();
+    if (!collection.isValid())
+        return;
+    AkonadiModel::instance()->refresh(collection);  // update with latest data
+    CalendarMigrator::updateToCurrentFormat(collection, true, this);
+}
+#endif
+
 /******************************************************************************
 * Remove the currently selected resource from the displayed list.
 */
@@ -412,7 +428,7 @@ void ResourceSelector::removeResource()
         // Only allow the archived alarms standard resource to be removed if
         // we're not saving archived alarms.
         KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
-                                      "while expired alarms are configured to be kept."));
+                                       "while expired alarms are configured to be kept."));
         return;
     }
 #ifdef __GNUC__
@@ -474,6 +490,11 @@ void ResourceSelector::initActions(KActionCollection* actions)
     mActionEdit        = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("resEdit"), mActionEdit);
     connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
+#ifdef USE_AKONADI
+    mActionUpdate      = new KAction(i18nc("@action", "&Update Calendar Format"), this);
+    actions->addAction(QLatin1String("resUpdate"), mActionUpdate);
+    connect(mActionUpdate, SIGNAL(triggered(bool)), SLOT(updateResource()));
+#endif
     mActionRemove      = new KAction(KIcon("edit-delete"), i18nc("@action", "&Remove"), this);
     actions->addAction(QLatin1String("resRemove"), mActionRemove);
     connect(mActionRemove, SIGNAL(triggered(bool)), SLOT(removeResource()));
@@ -503,9 +524,10 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 {
     if (!mContextMenu)
         return;
-    bool active   = false;
-    bool writable = false;
+    bool active    = false;
+    bool writable  = false;
 #ifdef USE_AKONADI
+    bool updatable = false;
     Collection collection;
 #else
     AlarmResource* resource = 0;
@@ -531,8 +553,14 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     if (haveCalendar)
     {
 #ifdef USE_AKONADI
+        // Note: the CollectionControlModel functions call AkonadiModel::refresh(collection)
         active   = CollectionControlModel::isEnabled(collection, type);
-        writable = CollectionControlModel::isWritable(collection, type);
+        KAlarm::Calendar::Compat compatibility;
+        writable = CollectionControlModel::isWritable(collection, type, compatibility);
+        if (!writable
+        &&  (compatibility & ~KAlarm::Calendar::Converted)
+        &&  !(compatibility & ~(KAlarm::Calendar::Convertible | KAlarm::Calendar::Converted)))
+            updatable = true; // the calendar format is convertible to the current KAlarm format
         if (!(AkonadiModel::instance()->types(collection) & type))
             type = KAlarm::CalEvent::EMPTY;
 #else
@@ -552,6 +580,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     mActionClearColour->setVisible(resource && resource->colour().isValid());
 #endif
     mActionEdit->setEnabled(haveCalendar);
+#ifdef USE_AKONADI
+    mActionUpdate->setEnabled(updatable);
+#endif
     mActionRemove->setEnabled(haveCalendar);
     mActionImport->setEnabled(active && writable);
     mActionExport->setEnabled(active);
@@ -789,35 +820,47 @@ void ResourceSelector::showInfo()
         KUrl url(location);
         if (url.isLocalFile())
             location = url.path();
-        QString perms = CollectionControlModel::isWritable(collection, alarmType, true)
-                  ? i18nc("@info/plain", "Read-write")
-                  : i18nc("@info/plain", "Read-only");
-bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
+        KAlarm::CalEvent::Types altypes = AkonadiModel::instance()->types(collection);
+        QStringList alarmTypes;
+        if (altypes & KAlarm::CalEvent::ACTIVE)
+            alarmTypes << i18nc("@info/plain", "Active alarms");
+        if (altypes & KAlarm::CalEvent::ARCHIVED)
+            alarmTypes << i18nc("@info/plain", "Archived alarms");
+        if (altypes & KAlarm::CalEvent::TEMPLATE)
+            alarmTypes << i18nc("@info/plain", "Alarm templates");
+        QString alarmTypeString = alarmTypes.join(i18nc("@info/plain List separator", ", "));
+        KAlarm::Calendar::Compat compat;
+        QString perms = CollectionControlModel::isWritable(collection, alarmType, compat, true)
+                    ? i18nc("@info/plain", "Read-write")
+                    : (compat == KAlarm::Calendar::Current) ? i18nc("@info/plain", "Read-only")
+                    : (compat == KAlarm::Calendar::Incompatible) ? i18nc("@info/plain", "Read-only (other format)")
+                    : i18nc("@info/plain", "Read-only (old format)");
         QString enabled = CollectionControlModel::isEnabled(collection, alarmType)
                     ? i18nc("@info/plain", "Enabled")
-                : wrongAlarmType ? i18nc("@info/plain", "Disabled (wrong alarm type)")
-                : i18nc("@info/plain", "Disabled");
+                    : i18nc("@info/plain", "Disabled");
         QString std = CollectionControlModel::isStandard(collection, alarmType)
-                ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
-                : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
+                    ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
+                    : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
         QString text = (name.isEmpty() || name == id)
                      ? i18nc("@info",
                              "<title>%1</title>"
-                             "Contents: %2<nl/>"
-                             "%3: <filename>%4</filename><nl/>"
-                             "Permissions: %5<nl/>"
-                             "Status: %6<nl/>"
-                             "Default calendar: %7</para>",
-                             id, calType, storage, location, perms, enabled, std)
-                     : i18nc("@info",
-                             "<title>%1</title>"
-                             "<para>ID: %2<nl/>"
+                             "<para>Calendar type: %2<nl/>"
                              "Contents: %3<nl/>"
                              "%4: <filename>%5</filename><nl/>"
                              "Permissions: %6<nl/>"
                              "Status: %7<nl/>"
                              "Default calendar: %8</para>",
-                             name, id, calType, storage, location, perms, enabled, std);
+                             id, calType, alarmTypeString, storage, location, perms, enabled, std)
+                     : i18nc("@info",
+                             "<title>%1</title>"
+                             "<para>ID: %2<nl/>"
+                             "Calendar type: %3<nl/>"
+                             "Contents: %4<nl/>"
+                             "%5: <filename>%6</filename><nl/>"
+                             "Permissions: %7<nl/>"
+                             "Status: %8<nl/>"
+                             "Default calendar: %9</para>",
+                             name, id, calType, alarmTypeString, storage, location, perms, enabled, std);
         // Display the collection information. Because the user requested
         // the information, don't raise a KNotify event.
         KMessageBox::information(this, text, QString(), QString(), 0);
