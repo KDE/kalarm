@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.7.1 --- 27 June 2011 ===
+=== Version 2.7.1 --- 6 July 2011 ===
 - Make wake-from-suspend schedule a time-from-now, to make it work correctly
   on systems whose hardware clock is out of sync with the system clock.
+- Include Content-Transfer-Encoding header in emails to allow correct display.
 
 === Version 2.7.0 --- 9 May 2011 ===
 - Add option to set a reminder AFTER the main alarm.
