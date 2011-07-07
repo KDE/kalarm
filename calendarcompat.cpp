@@ -46,7 +46,7 @@ KAlarm::Calendar::Compat fix(KCal::CalendarLocal& calendar, const QString& local
         *wrongType = false;
     QString versionString;
     int version = KAlarm::Calendar::updateVersion(calendar, localFile, versionString);
-    if (version < 0)
+    if (version == KAlarm::Calendar::IncompatibleFormat)
         return KAlarm::Calendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
     if (!resource)
         return KAlarm::Calendar::Current;    // update non-shared calendars regardless
@@ -55,7 +55,7 @@ KAlarm::Calendar::Compat fix(KCal::CalendarLocal& calendar, const QString& local
     if (wrongType)
         *wrongType = !resource->checkAlarmTypes(calendar);
 
-    if (!version)
+    if (version == KAlarm::Calendar::CurrentFormat)
         return KAlarm::Calendar::Current;     // calendar is in current KAlarm format
     if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)
         return KAlarm::Calendar::Convertible;

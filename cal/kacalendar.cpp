@@ -53,13 +53,6 @@ using Akonadi::Collection;
 using namespace KCal;
 #endif
 
-#ifndef USE_AKONADI
-namespace
-{
-    const int IncompatibleFormat = -1;   // not written by KAlarm, or a newer KAlarm version
-    const int CurrentFormat = 0;         // current KAlarm format
-}
-#endif
 
 namespace KAlarm
 {
@@ -128,9 +121,9 @@ int Calendar::updateVersion(CalendarLocal& calendar, const QString& localFile, Q
 #else
     int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
 #endif
-    if (!version)
+    if (version == CurrentFormat)
         return CurrentFormat;       // calendar is in the current KAlarm format
-    if (version < 0  ||  version > KAEvent::currentCalendarVersion())
+    if (version == IncompatibleFormat  ||  version > KAEvent::currentCalendarVersion())
         return IncompatibleFormat;  // calendar was created by another program, or an unknown version of KAlarm
 
     // Calendar was created by an earlier version of KAlarm.
@@ -253,8 +246,8 @@ QString Calendar::conversionPrompt(const QString& calendarName, const QString& c
 /******************************************************************************
 * Return the KAlarm version which wrote the calendar which has been loaded.
 * The format is, for example, 000507 for 0.5.7.
-* Reply = 0 if the calendar was created by the current version of KAlarm
-*       = -1 if it was created by KAlarm pre-0.3.5, or another program
+* Reply = CurrentFormat if the calendar was created by the current version of KAlarm
+*       = IncompatibleFormat if it was created by KAlarm pre-0.3.5, or another program
 *       = version number if created by another KAlarm version.
 */
 #ifdef USE_AKONADI

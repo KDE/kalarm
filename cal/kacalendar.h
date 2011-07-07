@@ -117,15 +117,12 @@ class KALARM_CAL_EXPORT Calendar
         };
 #endif
 
+        // Special calendar storage format version codes.
+        // Positive version values are actual KAlarm format version numbers.
+        static const int CurrentFormat      = 0;    // current KAlarm format
+        static const int IncompatibleFormat = -1;   // not written by KAlarm, or a newer KAlarm version
 #ifdef USE_AKONADI
-        /** Calendar storage format version */
-        enum Format
-        {
-            MixedFormat = -2,          // calendar may contain more than one version
-            IncompatibleFormat = -1,   // not written by KAlarm, or a newer KAlarm version
-            CurrentFormat = 0          // current KAlarm format
-            // Positive version values are KAlarm format version numbers
-        };
+        static const int MixedFormat        = -2;   // calendar may contain more than one version
 #endif
 
         /** Check the version of KAlarm which wrote a calendar file, and convert
@@ -136,9 +133,10 @@ class KALARM_CAL_EXPORT Calendar
          *  @param calendar       calendar stored in @p localFile
          *  @param localFile      full path of the calendar's file storage
          *  @param versionString  receives calendar's KAlarm version as a string
-         *  @return 0 if the calendar is in the current KAlarm format;
-         *          >0 the older KAlarm version which wrote the calendar;
-         *          -1 calendar is not a KAlarm format or is an unknown KAlarm format
+         *  @return CurrentFormat if the calendar is in the current KAlarm format;
+         *          IncompatibleFormat calendar is not a KAlarm format or is an
+                                       unknown KAlarm format;
+         *          >0 the older KAlarm version which wrote the calendar
          */
 #ifdef USE_AKONADI
         static int updateVersion(const KCalCore::FileStorage::Ptr&, QString& versionString);
