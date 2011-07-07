@@ -249,6 +249,11 @@ CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, 
                              SLOT(selectionChanged(const QItemSelection&, const QItemSelection&)));
     connect(mModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+    // This is probably needed to make CollectionFilterCheckListModel update
+    // (similarly to when rows are inserted).
+    connect(mModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SIGNAL(layoutAboutToBeChanged()));
+    connect(mModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SIGNAL(layoutChanged()));
+
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
                                       SLOT(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)));
 }
