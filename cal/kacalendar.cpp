@@ -53,6 +53,13 @@ using Akonadi::Collection;
 using namespace KCal;
 #endif
 
+#ifndef USE_AKONADI
+namespace
+{
+    const int IncompatibleFormat = -1;   // not written by KAlarm, or a newer KAlarm version
+    const int CurrentFormat = 0;         // current KAlarm format
+}
+#endif
 
 namespace KAlarm
 {
