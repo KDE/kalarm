@@ -106,7 +106,6 @@ class ResourceSelector : public QFrame
 #ifdef USE_AKONADI
         void  resourceAdded(AkonadiResourceCreator*, bool success);
         void  slotCollectionAdded(const Akonadi::Collection&);
-        void  slotStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool inserted);
 #else
         void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
 #endif
@@ -116,6 +115,7 @@ class ResourceSelector : public QFrame
         KAlarm::CalEvent::Type currentResourceType() const;
 #ifdef USE_AKONADI
         Akonadi::Collection currentResource() const;
+        static QString typeListForDisplay(KAlarm::CalEvent::Types);
 
         CollectionView* mListView;
         QList<Akonadi::AgentInstance> mAddAgents;   // agent added by addResource()
