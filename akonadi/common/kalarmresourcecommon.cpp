@@ -98,7 +98,8 @@ QStringList mimeTypes(const QString& id)
 KAlarm::Calendar::Compat getCompatibility(const FileStorage::Ptr& fileStorage, int& version)
 {
     QString versionString;
-    switch (KAlarm::Calendar::updateVersion(fileStorage, versionString))
+    version = KAlarm::Calendar::updateVersion(fileStorage, versionString);
+    switch (version)
     {
         case KAlarm::Calendar::IncompatibleFormat:
             return KAlarm::Calendar::Incompatible;  // calendar is not in KAlarm format, or is in a future format
