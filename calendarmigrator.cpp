@@ -188,7 +188,7 @@ void CalendarMigrator::migrateOrCreate()
         else
         {
             connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-            connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
+            connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
             mCalendarsPending << creator;
             creator->createAgent(agentType, this);
         }
@@ -196,26 +196,25 @@ void CalendarMigrator::migrateOrCreate()
 
     if (!haveResources)
     {
-#ifdef __GNUC__
-#warning Check if this uses existing default calendar files even if not found in KResources
-#endif
         // There were no KResources calendars to migrate, so create default ones.
         // Normally this occurs on first installation of KAlarm.
+        // If the default files already exist, they will be used; otherwise they
+        // will be created.
         creator = new CalendarCreator(KAlarm::CalEvent::ACTIVE, QLatin1String("calendar.ics"), i18nc("@info/plain", "Active Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
+        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
 
         creator = new CalendarCreator(KAlarm::CalEvent::ARCHIVED, QLatin1String("expired.ics"), i18nc("@info/plain", "Archived Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
+        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
 
         creator = new CalendarCreator(KAlarm::CalEvent::TEMPLATE, QLatin1String("template.ics"), i18nc("@info/plain", "Alarm Templates"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(CalendarCreator*)));
+        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
     }
@@ -228,9 +227,9 @@ void CalendarMigrator::migrateOrCreate()
 * Called when a calendar resource is about to be created.
 * Emits the 'creating' signal.
 */
-void CalendarMigrator::creatingCalendar(CalendarCreator* creator)
+void CalendarMigrator::creatingCalendar(const QString& path)
 {
-    emit creating(creator->path(), false);
+    emit creating(path, false);
 }
 
 /******************************************************************************
@@ -325,6 +324,7 @@ bool CalendarUpdater::update()
             // The user hasn't previously said not to convert it
             QString versionString = KAlarm::getVersionString(compatAttr->version());
             QString msg = KAlarm::Calendar::conversionPrompt(mCollection.name(), versionString, false);
+            kDebug() << "Version" << versionString;
             if (KMessageBox::warningYesNo(0, msg) == KMessageBox::Yes)
             {
                 // Tell the resource to update the backend storage format

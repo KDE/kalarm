@@ -1,5 +1,7 @@
 #ifdef __GNUC__
 #warning Update a calendar format, enable the calendar, copy old version on top -> crash
+#warning Add a directory resource containing 2 alarm types, right click on it -> crash
+#warning Set default template calendar to read-only -> crash
 #endif
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
@@ -1661,9 +1663,9 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 void AkonadiModel::slotCollectionBeingCreated(const QString& path, bool finished)
 {
     if (finished)
-        mCollectionsBeingCreated << path;
-    else
         mCollectionsBeingCreated.removeAll(path);
+    else
+        mCollectionsBeingCreated << path;
 }
 
 /******************************************************************************

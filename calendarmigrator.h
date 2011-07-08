@@ -52,7 +52,7 @@ class CalendarMigrator : public QObject
         void creating(const QString& path, bool finished);
 
     private slots:
-        void creatingCalendar(CalendarCreator*);
+        void creatingCalendar(const QString& path);
         void calendarCreated(CalendarCreator*);
 
     private:
