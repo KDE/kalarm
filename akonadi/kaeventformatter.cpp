@@ -67,8 +67,10 @@ QString KAEventFormatter::label(Parameter param)
         case AutoClose:         return i18nc("@label Automatically close window", "Auto close");
         case CopyKOrganizer:    return i18nc("@label", "Copy to KOrganizer");
         case Enabled:           return i18nc("@label", "Enabled");
+        case ReadOnly:          return i18nc("@label", "Read-only");
         case Archive:           return i18nc("@label Whether alarm should be archived", "Archive");
         case Revision:          return i18nc("@label", "Revision");
+        case CustomProperties:  return i18nc("@label", "Custom properties");
 
         case MessageText:       return i18nc("@label", "Message text");
         case MessageFile:       return i18nc("@label File to provide text for message", "Message file");
@@ -119,8 +121,10 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case Recurs:
         case LateCancel:
         case Enabled:
+        case ReadOnly:
         case Archive:
         case Revision:
+        case CustomProperties:
         case CopyKOrganizer:
             return true;
         case TemplateName:
@@ -241,8 +245,18 @@ QString KAEventFormatter::value(Parameter param) const
         case AutoClose:         return trueFalse(mEvent.lateCancel() ? mEvent.autoClose() : false);
         case CopyKOrganizer:    return trueFalse(mEvent.copyToKOrganizer());
         case Enabled:           return trueFalse(mEvent.enabled());
+        case ReadOnly:          return trueFalse(mEvent.isReadOnly());
         case Archive:           return trueFalse(mEvent.toBeArchived());
         case Revision:          return number(mEvent.revision());
+        case CustomProperties:
+        {
+            if (mEvent.customProperties().isEmpty())
+                return QString();
+            QString value;
+            for (QMap<QByteArray, QString>::ConstIterator it = mEvent.customProperties().constBegin();  it != mEvent.customProperties().constEnd();  ++it)
+                value += QString::fromLatin1(it.key()) + QLatin1String("=") + it.value() + QLatin1String("<nl/>");
+            return i18nc("@info/plain", "%1", value);
+        }
 
         case MessageText:       return (mEvent.action() == KAEvent::MESSAGE) ? mEvent.cleanText() : QString();
         case MessageFile:       return (mEvent.action() == KAEvent::FILE) ? mEvent.cleanText() : QString();

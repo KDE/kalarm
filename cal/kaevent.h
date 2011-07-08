@@ -491,6 +491,7 @@ class KALARM_CAL_EXPORT KAEvent
         KAlarm::CalEvent::Type category() const           { return d->mCategory; }
         bool               displaying() const             { return d->mDisplaying; }
 #ifdef USE_AKONADI
+        QMap<QByteArray, QString> customProperties() const { return d->mCustomProperties; }
         Akonadi::Collection::Id collectionId() const      { return d->mCollectionId; }
 #else
         QString            resourceId() const             { return d->mResourceId; }

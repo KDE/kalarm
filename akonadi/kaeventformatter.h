@@ -54,11 +54,10 @@ class KAEventFormatter
             HolidaysExcluded,
             CopyKOrganizer,
             Enabled,
+            ReadOnly,
             Archive,
-#ifdef __GNUC__
-#warning ReadOnly, custom properties
-#endif
             Revision,
+            CustomProperties,
         
             MessageText,
             MessageFile,
