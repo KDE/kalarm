@@ -161,8 +161,12 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
         reportDifference(reporter, KAEventFormatter::CopyKOrganizer);
     if (eventL.enabled() != eventR.enabled())
         reportDifference(reporter, KAEventFormatter::Enabled);
+    if (eventL.isReadOnly() != eventR.isReadOnly())
+        reportDifference(reporter, KAEventFormatter::ReadOnly);
     if (eventL.toBeArchived() != eventR.toBeArchived())
         reportDifference(reporter, KAEventFormatter::Archive);
+    if (eventL.customProperties() != eventR.customProperties())
+        reportDifference(reporter, KAEventFormatter::CustomProperties);
     if (eventL.message() != eventR.message())
         reportDifference(reporter, KAEventFormatter::MessageText);
     if (eventL.fileName() != eventR.fileName())
