@@ -438,11 +438,11 @@ void ResourceSelector::removeResource()
         if (allTypes != currentType)
         {
             // It also contains alarm types other than the currently displayed type
-            QString stdTypes = typeListForDisplay(standardTypes);
+            QString stdTypes = CollectionControlModel::typeListForDisplay(standardTypes);
             QString otherTypes;
             KAlarm::CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
             if (nonStandardTypes != currentType)
-                otherTypes = i18nc("@info", "<para>It also contains:%1</para>", typeListForDisplay(nonStandardTypes));
+                otherTypes = i18nc("@info", "<para>It also contains:%1</para>", CollectionControlModel::typeListForDisplay(nonStandardTypes));
             text = i18nc("@info", "<para><resource>%1</resource> is the default calendar for:%2</para>%3"
                                   "<para>Do you really want to remove it from all calendar lists?</para>", name, stdTypes, otherTypes);
         }
@@ -451,7 +451,7 @@ void ResourceSelector::removeResource()
     }
     else if (allTypes != currentType)
         text = i18nc("@info", "<para><resource>%1</resource> contains:%2</para><para>Do you really want to remove it from all calendar lists?</para>",
-                     name, typeListForDisplay(allTypes));
+                     name, CollectionControlModel::typeListForDisplay(allTypes));
     else
         text = i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
 #else
@@ -476,25 +476,6 @@ void ResourceSelector::removeResource()
     manager->writeConfig();
 #endif
 }
-
-#ifdef USE_AKONADI
-/******************************************************************************
-* Create a bulleted list of alarm types.
-*/
-QString ResourceSelector::typeListForDisplay(KAlarm::CalEvent::Types alarmTypes)
-{
-    QString list;
-    if (alarmTypes & KAlarm::CalEvent::ACTIVE)
-        list += QLatin1String("<item>") + i18nc("@info/plain", "Active Alarms") + QLatin1String("</item>");
-    if (alarmTypes & KAlarm::CalEvent::ARCHIVED)
-        list += QLatin1String("<item>") + i18nc("@info/plain", "Archived Alarms") + QLatin1String("</item>");
-    if (alarmTypes & KAlarm::CalEvent::TEMPLATE)
-        list += QLatin1String("<item>") + i18nc("@info/plain", "Alarm Templates") + QLatin1String("</item>");
-    if (!list.isEmpty())
-        list = QLatin1String("<list>") + list + QLatin1String("</list>");
-    return list;
-}
-#endif
 
 /******************************************************************************
 * Called when the current selection changes, to enable/disable the

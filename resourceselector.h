@@ -115,7 +115,6 @@ class ResourceSelector : public QFrame
         KAlarm::CalEvent::Type currentResourceType() const;
 #ifdef USE_AKONADI
         Akonadi::Collection currentResource() const;
-        static QString typeListForDisplay(KAlarm::CalEvent::Types);
 
         CollectionView* mListView;
         QList<Akonadi::AgentInstance> mAddAgents;   // agent added by addResource()

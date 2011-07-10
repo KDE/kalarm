@@ -693,38 +693,108 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
     if (!collection.isValid())
         return;
 
-    if (change == AkonadiModel::Enabled)
+    switch (change)
     {
-        KAlarm::CalEvent::Types enabled = static_cast<KAlarm::CalEvent::Types>(value.toInt());
-        kDebug() << "id:" << collection.id() << ", enabled=" << enabled;
-
-        // Update the list of enabled collections
-        if (enabled)
+        case AkonadiModel::Enabled:
         {
-            bool inList = false;
-            const Collection::List cols = collections();
-            foreach (const Collection& c, cols)
+            KAlarm::CalEvent::Types enabled = static_cast<KAlarm::CalEvent::Types>(value.toInt());
+            kDebug() << "id:" << collection.id() << ", enabled=" << enabled;
+
+            // Update the list of enabled collections
+            if (enabled)
             {
-                if (c.id() == collection.id())
+                bool inList = false;
+                const Collection::List cols = collections();
+                foreach (const Collection& c, cols)
                 {
-                    inList = true;
-                    break;
+                    if (c.id() == collection.id())
+                    {
+                        inList = true;
+                        break;
+                    }
+                }
+                if (!inList)
+                    addCollection(collection);
+            }
+            else
+                removeCollection(collection);
+
+            if (!inserted)
+            {
+                // Update the collection's status
+                AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
+                if (!model->isCollectionBeingDeleted(collection.id()))
+                    model->setData(model->collectionIndex(collection), static_cast<int>(enabled), AkonadiModel::EnabledRole);
+            }
+            break;
+        }
+        case AkonadiModel::ReadOnly:
+        {
+            bool readOnly = value.toBool();
+            kDebug() << "id:" << collection.id() << ", readOnly=" << readOnly;
+            if (readOnly)
+            {
+                // A read-only collection can't be the default for any alarm type
+                KAlarm::CalEvent::Types std = standardTypes(collection, false);
+                if (std != KAlarm::CalEvent::EMPTY)
+                {
+                    Collection c(collection);
+                    setStandard(c, KAlarm::CalEvent::Types(KAlarm::CalEvent::EMPTY));
+                    QWidget* messageParent = qobject_cast<QWidget*>(QObject::parent());
+                    bool singleType = true;
+                    QString msg;
+                    switch (std)
+                    {
+                        case KAlarm::CalEvent::ACTIVE:
+                            msg = i18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                                                 "This was the default calendar for active alarms.",
+                                        collection.name());
+                            break;
+                        case KAlarm::CalEvent::ARCHIVED:
+                            msg = i18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                                                 "This was the default calendar for archived alarms.",
+                                        collection.name());
+                            break;
+                        case KAlarm::CalEvent::TEMPLATE:
+                            msg = i18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                                                 "This was the default calendar for alarm templates.",
+                                        collection.name());
+                            break;
+                        default:
+                            msg = i18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
+                                                 "This was the default calendar for:%2</para>"
+                                                 "<para>Please select new default calendars.</para>",
+                                        collection.name(), typeListForDisplay(std));
+                            singleType = false;
+                            break;
+                    }
+                    if (singleType)
+                        msg = i18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
+                    KMessageBox::information(messageParent, msg);
                 }
             }
-            if (!inList)
-                addCollection(collection);
+            break;
         }
-        else
-            removeCollection(collection);
-
-        if (!inserted)
-        {
-            // Update the collection's status
-            AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
-            if (!model->isCollectionBeingDeleted(collection.id()))
-                model->setData(model->collectionIndex(collection), static_cast<int>(enabled), AkonadiModel::EnabledRole);
-        }
+        default:
+            break;
     }
+}
+
+/******************************************************************************
+* Create a bulleted list of alarm types for insertion into <para>...</para>.
+*/
+QString CollectionControlModel::typeListForDisplay(KAlarm::CalEvent::Types alarmTypes)
+{
+    QString list;
+    if (alarmTypes & KAlarm::CalEvent::ACTIVE)
+        list += QLatin1String("<item>") + i18nc("@info/plain", "Active Alarms") + QLatin1String("</item>");
+    if (alarmTypes & KAlarm::CalEvent::ARCHIVED)
+        list += QLatin1String("<item>") + i18nc("@info/plain", "Archived Alarms") + QLatin1String("</item>");
+    if (alarmTypes & KAlarm::CalEvent::TEMPLATE)
+        list += QLatin1String("<item>") + i18nc("@info/plain", "Alarm Templates") + QLatin1String("</item>");
+    if (!list.isEmpty())
+        list = QLatin1String("<list>") + list + QLatin1String("</list>");
+    return list;
 }
 
 /******************************************************************************
