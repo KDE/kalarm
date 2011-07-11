@@ -18,6 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef AKONADIRESOURCECREATOR_H
+#define AKONADIRESOURCECREATOR_H
+
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "kacalendar.h"
@@ -53,5 +56,7 @@ class AkonadiResourceCreator : public QObject
         Akonadi::AgentType     mAgentType;
         Akonadi::AgentInstance mAgentInstance;
 };
+
+#endif // AKONADIRESOURCECREATOR_H
 
 // vim: et sw=4:
