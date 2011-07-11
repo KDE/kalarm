@@ -91,6 +91,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Get the tooltip for a collection. The collection's enabled status is
          *  evaluated for specified alarm types. */
         QString tooltip(const Akonadi::Collection&, KAlarm::CalEvent::Types) const;
+        /** Return the read-only status tooltip for a collection.
+          * A null string is returned if the collection is fully writable. */
+        static QString readOnlyTooltip(const Akonadi::Collection&);
 
         /** To be called when the command error status of an alarm has changed,
          *  to set in the Akonadi database and update the visual command error indications.
@@ -154,6 +157,25 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         /** Check whether a collection is stored in the current KAlarm calendar format. */
         static bool isCompatible(const Akonadi::Collection&);
+
+        /** Return whether a collection is fully writable, i.e. with
+         *  create/delete/change rights and compatible with the current KAlarm
+         *  calendar format.
+         */
+        static bool isWritable(const Akonadi::Collection&);
+
+        /** Return whether a collection is fully writable, i.e. with
+         *  create/delete/change rights and compatible with the current KAlarm
+         *  calendar format.
+         *
+         *  @param format  If the reply is false, and the calendar is not read-only
+         *                 but its backend calendar storage format is not the
+         *                 current KAlarm format, @p format is set to the calendar
+         *                 format used by the backend. If the calendar is
+         *                 non-writable for any other reason, @p format is set
+         *                 to KAlarm::Calendar::Current.
+         */
+        static bool isWritable(const Akonadi::Collection&, KAlarm::Calendar::Compat& format);
 
         static KAlarm::CalEvent::Types types(const Akonadi::Collection&);
 

@@ -802,36 +802,21 @@ QString CollectionControlModel::typeListForDisplay(KAlarm::CalEvent::Types alarm
 * alarm type.
 * Optionally, the enabled status can be ignored.
 */
-bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, bool ignoreEnabledStatus)
+bool CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type)
 {
     KAlarm::Calendar::Compat format;
-    return isWritable(collection, type, format, ignoreEnabledStatus);
+    return isWritableEnabled(collection, type, format);
 }
-bool CollectionControlModel::isWritable(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, KAlarm::Calendar::Compat& format, bool ignoreEnabledStatus)
+bool CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, KAlarm::Calendar::Compat& format)
 {
-    format = KAlarm::Calendar::Current;
-    if (!collection.isValid())
+    if (!AkonadiModel::isWritable(collection, format))
         return false;
-    Collection col = collection;
-    AkonadiModel::instance()->refresh(col);    // update with latest data
-    if ((col.rights() & writableRights) != writableRights)
-        return false;
-    if (!col.hasAttribute<CompatibilityAttribute>())
-    {
-        format = KAlarm::Calendar::Incompatible;
-        return false;
-    }
-    format = col.attribute<CompatibilityAttribute>()->compatibility();
-    if (format != KAlarm::Calendar::Current)
-        return false;
-    if (ignoreEnabledStatus)
-        return true;
 
     // Check the collection's enabled status
-    if (!instance()->collections().contains(col)
-    ||  !col.hasAttribute<CollectionAttribute>())
+    if (!instance()->collections().contains(collection)
+    ||  !collection.hasAttribute<CollectionAttribute>())
         return false;
-    return col.attribute<CollectionAttribute>()->isEnabled(type);
+    return collection.attribute<CollectionAttribute>()->isEnabled(type);
 }
 
 /******************************************************************************

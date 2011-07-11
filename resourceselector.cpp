@@ -577,7 +577,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         // Note: the CollectionControlModel functions call AkonadiModel::refresh(collection)
         active   = CollectionControlModel::isEnabled(collection, type);
         KAlarm::Calendar::Compat compatibility;
-        writable = CollectionControlModel::isWritable(collection, type, compatibility);
+        writable = CollectionControlModel::isWritableEnabled(collection, type, compatibility);
         if (!writable
         &&  (compatibility & ~KAlarm::Calendar::Converted)
         &&  !(compatibility & ~(KAlarm::Calendar::Convertible | KAlarm::Calendar::Converted)))
@@ -847,11 +847,9 @@ void ResourceSelector::showInfo()
             alarmTypes << i18nc("@info/plain", "Alarm templates");
         QString alarmTypeString = alarmTypes.join(i18nc("@info/plain List separator", ", "));
         KAlarm::Calendar::Compat compat;
-        QString perms = CollectionControlModel::isWritable(collection, alarmType, compat, true)
-                    ? i18nc("@info/plain", "Read-write")
-                    : (compat == KAlarm::Calendar::Current) ? i18nc("@info/plain", "Read-only")
-                    : (compat == KAlarm::Calendar::Incompatible) ? i18nc("@info/plain", "Read-only (other format)")
-                    : i18nc("@info/plain", "Read-only (old format)");
+        QString perms = AkonadiModel::readOnlyTooltip(collection);
+        if (perms.isEmpty())
+            perms = i18nc("@info/plain", "Read-write");
         QString enabled = CollectionControlModel::isEnabled(collection, alarmType)
                     ? i18nc("@info/plain", "Enabled")
                     : i18nc("@info/plain", "Disabled");
