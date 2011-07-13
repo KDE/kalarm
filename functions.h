@@ -182,8 +182,9 @@ UpdateStatus        enableEvents(KAEvent::List&, bool enable, QWidget* msgParent
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateStatus korgError, int nAlarms);
-QStringList         checkRtcWakeConfig();
+QStringList         checkRtcWakeConfig(bool checkEventExists = false);
 void                deleteRtcWakeConfig();
+void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
 bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 
 bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);

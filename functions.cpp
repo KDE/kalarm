@@ -92,6 +92,7 @@ using namespace KCal;
 #include <QRegExp>
 #include <QDesktopWidget>
 #include <QtDBus/QtDBus>
+#include <QTimer>
 #include <qglobal.h>
 
 #ifdef USE_AKONADI
@@ -632,6 +633,8 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
     int warnKOrg = 0;
     UpdateStatus status = UPDATE_OK;
     AlarmCalendar* cal = AlarmCalendar::resources();
+    bool deleteWakeFromSuspendAlarm = false;
+    QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         // Save the event details in the calendar file, and get the new event ID
@@ -680,14 +683,8 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
             ++warnErr;
         }
 
-        // Remove any wake-from-suspend scheduled for this alarm
-        QStringList wakeup = checkRtcWakeConfig();
-        if (!wakeup.isEmpty()  &&  wakeup[0] == id)
-        {
-            // setRtcWakeTime will only work with a parent window specified
-            setRtcWakeTime(0, (msgParent ? msgParent : MainWindow::mainMainWindow()));
-            deleteRtcWakeConfig();
-        }
+        if (id == wakeFromSuspendId)
+            deleteWakeFromSuspendAlarm = true;
 
         // Remove "Don't show error messages again" for this alarm
         setDontShowErrors(id);
@@ -702,6 +699,11 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
     }
     if (status != UPDATE_OK  &&  msgParent)
         displayUpdateError(msgParent, status, ERR_DELETE, warnErr, warnKOrg, showKOrgErr);
+
+    // Remove any wake-from-suspend scheduled for a deleted alarm
+    if (deleteWakeFromSuspendAlarm  &&  !wakeFromSuspendId.isEmpty())
+        cancelRtcWake(msgParent, wakeFromSuspendId);
+
     return status;
 }
 
@@ -938,6 +940,8 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
         return UPDATE_OK;
     UpdateStatus status = UPDATE_OK;
     AlarmCalendar* cal = AlarmCalendar::resources();
+    bool deleteWakeFromSuspendAlarm = false;
+    QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
 #ifdef USE_AKONADI
@@ -949,6 +953,9 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
         &&  enable != event->enabled())
         {
             event->setEnabled(enable);
+
+            if (!enable  &&  event->id() == wakeFromSuspendId)
+                deleteWakeFromSuspendAlarm = true;
 
             // Update the event in the calendar file
             KAEvent* newev = cal->updateEvent(event);
@@ -977,6 +984,11 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
         status = SAVE_FAILED;
     if (status != UPDATE_OK  &&  msgParent)
         displayUpdateError(msgParent, status, ERR_ADD, events.count(), 0);
+
+    // Remove any wake-from-suspend scheduled for a disabled alarm
+    if (deleteWakeFromSuspendAlarm  &&  !wakeFromSuspendId.isEmpty())
+        cancelRtcWake(msgParent, wakeFromSuspendId);
+
     return status;
 }
 
@@ -1242,20 +1254,26 @@ void editNewTemplate(const KAEvent* preset, QWidget* parent)
 /******************************************************************************
 * Check the config as to whether there is a wake-on-suspend alarm pending, and
 * if so, delete it from the config if it has expired.
+* If 'checkExists' is true, the config entry will only be returned if the
+* event exists.
 * Reply = config entry: [0] = event ID, [1] = trigger time (time_t).
 *       = empty list if none or expired.
 */
-QStringList checkRtcWakeConfig()
+QStringList checkRtcWakeConfig(bool checkEventExists)
 {
     KConfigGroup config(KGlobal::config(), "General");
     QStringList params = config.readEntry("RtcWake", QStringList());
     if (params.count() == 2  &&  params[1].toUInt() > KDateTime::currentUtcDateTime().toTime_t())
+    {
+        if (checkEventExists  &&  !AlarmCalendar::getEvent(params[0]))
+            return QStringList();
         return params;                   // config entry is valid
-#ifdef __GNUC__
-#warning Should delete if calendar disabled or removed, or event id no longer exists
-#endif
+    }
     if (!params.isEmpty())
+    {
         config.deleteEntry("RtcWake");   // delete the expired config entry
+        config.sync();
+    }
     return QStringList();
 }
 
@@ -1266,6 +1284,31 @@ void deleteRtcWakeConfig()
 {
     KConfigGroup config(KGlobal::config(), "General");
     config.deleteEntry("RtcWake");
+    config.sync();
+}
+
+/******************************************************************************
+* Delete any wake-on-suspend alarm, optionally only for a specified event.
+*/
+void cancelRtcWake(QWidget* msgParent, const QString& eventId)
+{
+    QStringList wakeup = checkRtcWakeConfig();
+    if (!wakeup.isEmpty()  &&  (eventId.isEmpty() || wakeup[0] == eventId))
+    {
+        Private::instance()->mMsgParent = msgParent ? msgParent : MainWindow::mainMainWindow();
+        QTimer::singleShot(0, Private::instance(), SLOT(cancelRtcWake()));
+    }
+}
+
+/******************************************************************************
+* Delete any wake-on-suspend alarm.
+*/
+void Private::cancelRtcWake()
+{
+    // setRtcWakeTime will only work with a parent window specified
+    setRtcWakeTime(0, mMsgParent);
+    deleteRtcWakeConfig();
+    KMessageBox::information(mMsgParent, i18nc("info", "The scheduled Wake from Suspend has been cancelled."));
 }
 
 /******************************************************************************

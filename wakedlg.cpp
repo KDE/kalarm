@@ -25,6 +25,7 @@
 #include "alarmcalendar.h"
 #include "functions.h"
 #include "kaevent.h"
+#include "kalarmapp.h"
 #include "mainwindow.h"
 #include "preferences.h"
 
@@ -48,6 +49,7 @@ WakeFromSuspendDlg* WakeFromSuspendDlg::create(QWidget* parent)
 WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
     : KDialog(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setCaption(i18nc("@title:window", "Wake From Suspend"));
     setButtons(Close);
     mUi = new Ui_WakeFromSuspendDlgWidget;
@@ -61,32 +63,49 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
 
     // Check if there is any alarm selected in the main window, and enable/disable
     // the Show and Cancel buttons as necessary.
-    slotSelectedEventChanged();
+    enableDisableUseButton();
 
     // Update the Show and Cancel button status every 5 seconds
     mTimer = new QTimer(this);
     connect(mTimer, SIGNAL(timeout()), SLOT(checkPendingAlarm()));
     mTimer->start(5000);
 
-    connect(mMainWindow, SIGNAL(selectionChanged()), SLOT(slotSelectedEventChanged()));
+    connect(mMainWindow, SIGNAL(selectionChanged()), SLOT(enableDisableUseButton()));
     connect(mUi->showWakeButton, SIGNAL(clicked()), SLOT(showWakeClicked()));
     connect(mUi->useWakeButton, SIGNAL(clicked()), SLOT(useWakeClicked()));
     connect(mUi->cancelWakeButton, SIGNAL(clicked()), SLOT(cancelWakeClicked()));
+
+    connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(enableDisableUseButton()));
+}
+
+WakeFromSuspendDlg::~WakeFromSuspendDlg()
+{
+    if (mInstance == this)
+        mInstance = 0;
 }
 
 /******************************************************************************
 * Called when the the alarm selection in the main window changes.
 * Enable or disable the Use Highlighted Alarm button.
 */
-void WakeFromSuspendDlg::slotSelectedEventChanged()
+void WakeFromSuspendDlg::enableDisableUseButton()
 {
+    bool enable = theApp()->alarmsEnabled();
+    if (enable)
+    {
+        QString wakeFromSuspendId = KAlarm::checkRtcWakeConfig().value(0);
 #ifdef USE_AKONADI
-    KAEvent event = mMainWindow->selectedEvent();
-    mUi->useWakeButton->setEnabled(event.isValid() && !event.mainDateTime().isDateOnly());
+        const KAEvent event = mMainWindow->selectedEvent();
 #else
-    KAEvent* event = mMainWindow->selectedEvent();
-    mUi->useWakeButton->setEnabled(event && !event->mainDateTime().isDateOnly());
+        const KAEvent& event = *mMainWindow->selectedEvent();
 #endif
+        enable = event.isValid()
+              && event.category() == KAlarm::CalEvent::ACTIVE
+              && event.enabled()
+              && !event.mainDateTime().isDateOnly()
+              && event.id() != wakeFromSuspendId;
+    }
+    mUi->useWakeButton->setEnabled(enable);
     checkPendingAlarm();
 }
 
@@ -96,7 +115,7 @@ void WakeFromSuspendDlg::slotSelectedEventChanged()
 */
 bool WakeFromSuspendDlg::checkPendingAlarm()
 {
-    if (KAlarm::checkRtcWakeConfig().isEmpty())
+    if (KAlarm::checkRtcWakeConfig(true).isEmpty())
     {
         mUi->showWakeButton->setEnabled(false);
         mUi->cancelWakeButton->setEnabled(false);
@@ -175,9 +194,9 @@ void WakeFromSuspendDlg::useWakeClicked()
 #endif
         KConfigGroup config(KGlobal::config(), "General");
         config.writeEntry("RtcWake", param);
+        config.sync();
         Preferences::setWakeFromSuspendAdvance(advance);
-        mUi->showWakeButton->setEnabled(true);
-        mUi->cancelWakeButton->setEnabled(true);
+        close();
     }
 }
 
@@ -191,6 +210,7 @@ void WakeFromSuspendDlg::cancelWakeClicked()
     KAlarm::deleteRtcWakeConfig();
     mUi->showWakeButton->setEnabled(false);
     mUi->cancelWakeButton->setEnabled(false);
+    enableDisableUseButton();
 }
 
 // vim: et sw=4:

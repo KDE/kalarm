@@ -44,8 +44,11 @@ class Private : public QObject
             return mInstance;
         }
 
+        QWidget* mMsgParent;
+
     public slots:
         void windowAdded(WId);
+        void cancelRtcWake();
 
     private:
         static Private* mInstance;
