@@ -530,6 +530,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
         // Quit regardless, except for message windows
         mQuitting = true;
         MainWindow::closeAll();
+        mQuitting = false;
         displayTrayIcon(false);
         if (MessageWin::instanceCount(true))    // ignore always-hidden windows (e.g. audio alarms)
             return false;
@@ -540,13 +541,14 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     {
         // Quit only if there are no more "instances" running
         mPendingQuit = false;
-        if (mActiveCount > 0  ||  MessageWin::instanceCount())
+        if (mActiveCount > 0  ||  MessageWin::instanceCount(true))  // ignore always-hidden windows (e.g. audio alarms)
             return false;
         int mwcount = MainWindow::count();
         MainWindow* mw = mwcount ? MainWindow::firstWindow() : 0;
         if (mwcount > 1  ||  (mwcount && (!mw->isHidden() || !mw->isTrayParent())))
             return false;
-        // There are no windows left except perhaps a main window which is a hidden tray icon parent
+        // There are no windows left except perhaps a main window which is a hidden
+        // tray icon parent, or an always-hidden message window.
         if (mTrayWindow)
         {
             // There is a system tray icon.
