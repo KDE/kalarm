@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.7.1 --- 6 July 2011 ===
+=== Version 2.7.2 --- 14 July 2011 ===
+- Fix KAlarm not quitting when no visible windows or system tray icon remain.
+
+=== Version 2.7.1 (KDE 4.7.0 RC2) --- 6 July 2011 ===
 - Make wake-from-suspend schedule a time-from-now, to make it work correctly
   on systems whose hardware clock is out of sync with the system clock.
 - Include Content-Transfer-Encoding header in emails to allow correct display.
