@@ -1,7 +1,7 @@
 /*
  *  resourcemodelview.cpp  -  model/view classes for alarm resource lists
  *  Program:  kalarm
- *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -84,10 +84,6 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
             return resource->resourceName();
         case Qt::CheckStateRole:
             return resource->isEnabled() ? Qt::Checked : Qt::Unchecked;
-        case Qt::DecorationRole:
-            if (!resource->colour().isValid())
-                return QApplication::palette().color(QPalette::Base);
-            return resource->colour();
         case Qt::ForegroundRole:
             switch (resource->alarmType())
             {
@@ -96,6 +92,10 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
                 case KAlarm::CalEvent::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
                 default:  break;
             }
+            break;
+        case Qt::BackgroundRole:
+            if (resource->colour().isValid())
+                return resource->colour();
             break;
         case Qt::FontRole:
         {
