@@ -404,8 +404,8 @@ MessageWin::~MessageWin()
     {
         if (!mNoPostAction  &&  !mEvent.postAction().isEmpty())
             theApp()->alarmCompleted(mEvent);
-        if (!instanceCount(true))
-            theApp()->quitIf();   // no visible windows remain - check whether to quit
+        if (!mWindowList.count())
+            theApp()->quitIf();
     }
 }
 
