@@ -24,15 +24,14 @@
 #undef QT3_SUPPORT
 
 // Temporarily define a different version number for the Resources version,
-// since the only changes post-2.6 are to implement Akonadi.
+// since the only changes post-2.7 are to implement Akonadi.
 #ifdef USE_AKONADI
-#define VERSION_SUFFIX "-AK"
-#define KALARM_VERSION "2.6.90" VERSION_SUFFIX
+#define VERSION_SUFFIX "-Ak"
+#define KALARM_VERSION "2.7.90" VERSION_SUFFIX
 #else
 #define VERSION_SUFFIX "-R"
 #define KALARM_VERSION "2.7.2"
 #endif
-//#define KALARM_VERSION "2.6.90" VERSION_SUFFIX
 #define KALARM_NAME "KAlarm"
 #define KALARM_DBUS_SERVICE  "org.kde.kalarm"  // D-Bus service name of KAlarm application
 

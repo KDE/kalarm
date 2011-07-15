@@ -5,6 +5,7 @@ KAlarm Change Log
 - Cancel wake-from-suspend if alarm is disabled, or if all alarms are disabled.
 - Various improvements and bug fixes to Wake From Suspend dialogue.
 - In calendar list show calendar colours by text background, not coloured square.
+- In alarm list show multi-line tooltip for alarm text when appropriate.
 
 === Version 2.7.1 (KDE 4.7.0 RC2) --- 6 July 2011 ===
 - Make wake-from-suspend schedule a time-from-now, to make it work correctly
