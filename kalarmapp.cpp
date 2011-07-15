@@ -1080,9 +1080,10 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
     {
         mAlarmsEnabled = enabled;
         emit alarmEnabledToggled(enabled);
-        if (enabled  &&  !mProcessingQueue)
+        if (!enabled)
+            KAlarm::cancelRtcWake(0);
+        else if (!mProcessingQueue)
             checkNextDueAlarm();
-
     }
 }
 

@@ -2,6 +2,8 @@ KAlarm Change Log
 
 === Version 2.7.2 --- 14 July 2011 ===
 - Fix KAlarm not quitting when no visible windows or system tray icon remain.
+- Cancel wake-from-suspend if alarm is disabled, or if all alarms are disabled.
+- Various improvements and bug fixes to Wake From Suspend dialogue.
 
 === Version 2.7.1 (KDE 4.7.0 RC2) --- 6 July 2011 ===
 - Make wake-from-suspend schedule a time-from-now, to make it work correctly
