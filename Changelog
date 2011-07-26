@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.7.3 --- 26 July 2011 ===
+- Fix crash when Wake From Suspend dialogue is shown with no alarm selected.
+
 === Version 2.7.2 --- 15 July 2011 ===
 - Fix KAlarm not quitting when no visible windows or system tray icon remain.
 - Cancel wake-from-suspend if alarm is disabled, or if all alarms are disabled.
