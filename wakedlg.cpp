@@ -96,14 +96,19 @@ void WakeFromSuspendDlg::enableDisableUseButton()
         QString wakeFromSuspendId = KAlarm::checkRtcWakeConfig().value(0);
 #ifdef USE_AKONADI
         const KAEvent event = mMainWindow->selectedEvent();
-#else
-        const KAEvent& event = *mMainWindow->selectedEvent();
-#endif
         enable = event.isValid()
               && event.category() == KAlarm::CalEvent::ACTIVE
               && event.enabled()
               && !event.mainDateTime().isDateOnly()
               && event.id() != wakeFromSuspendId;
+#else
+        const KAEvent* event = mMainWindow->selectedEvent();
+        enable = event && event->isValid()
+              && event->category() == KAlarm::CalEvent::ACTIVE
+              && event->enabled()
+              && !event->mainDateTime().isDateOnly()
+              && event->id() != wakeFromSuspendId;
+#endif
     }
     mUi->useWakeButton->setEnabled(enable);
     checkPendingAlarm();
