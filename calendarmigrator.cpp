@@ -188,7 +188,7 @@ void CalendarMigrator::migrateOrCreate()
         else
         {
             connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-            connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
+            connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
             mCalendarsPending << creator;
             creator->createAgent(agentType, this);
         }
@@ -202,19 +202,19 @@ void CalendarMigrator::migrateOrCreate()
         // will be created.
         creator = new CalendarCreator(KAlarm::CalEvent::ACTIVE, QLatin1String("calendar.ics"), i18nc("@info/plain", "Active Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
+        connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
 
         creator = new CalendarCreator(KAlarm::CalEvent::ARCHIVED, QLatin1String("expired.ics"), i18nc("@info/plain", "Archived Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
+        connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
 
         creator = new CalendarCreator(KAlarm::CalEvent::TEMPLATE, QLatin1String("template.ics"), i18nc("@info/plain", "Alarm Templates"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(const QString&)), SLOT(creatingCalendar(const QString&)));
+        connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
     }

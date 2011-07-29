@@ -134,17 +134,17 @@ KAlarmApp::KAlarmApp()
         Preferences::setAutoStart(true);
         Preferences::self()->writeConfig();
     }
-    Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(changeStartOfDay()));
-    Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), this, SLOT(slotWorkTimeChanged(const QTime&, const QTime&, const QBitArray&)));
-    Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::HolidayRegion&)), this, SLOT(slotHolidaysChanged(const KHolidays::HolidayRegion&)));
+    Preferences::connect(SIGNAL(startOfDayChanged(QTime)), this, SLOT(changeStartOfDay()));
+    Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotWorkTimeChanged(QTime,QTime,QBitArray)));
+    Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), this, SLOT(slotHolidaysChanged(KHolidays::HolidayRegion)));
     Preferences::connect(SIGNAL(feb29TypeChanged(Feb29Type)), this, SLOT(slotFeb29TypeChanged(Feb29Type)));
     Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(slotShowInSystemTrayChanged()));
     Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(setArchivePurgeDays()));
-    Preferences::connect(SIGNAL(messageFontChanged(const QFont&)), this, SLOT(slotMessageFontChanged(const QFont&)));
+    Preferences::connect(SIGNAL(messageFontChanged(QFont)), this, SLOT(slotMessageFontChanged(QFont)));
     slotFeb29TypeChanged(Preferences::defaultFeb29Type());
 
-    connect(QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(const QString&)),
-            SLOT(slotDBusServiceUnregistered(const QString&)));
+    connect(QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(QString)),
+            SLOT(slotDBusServiceUnregistered(QString)));
     KAEvent::setStartOfDay(Preferences::startOfDay());
     KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd());
     KAEvent::setHolidays(Preferences::holidays());
@@ -153,7 +153,7 @@ KAlarmApp::KAlarmApp()
     {
         connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
 #ifdef USE_AKONADI
-        connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(const KAEvent&)), SLOT(atLoginEventAdded(const KAEvent&)));
+        connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
 #endif
 
         KConfigGroup config(KGlobal::config(), "General");

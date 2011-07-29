@@ -61,9 +61,9 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     mPeriod->setFixedSize(mPeriod->sizeHint());
     mPeriod->setSelectOnStep(false);
 #ifdef USE_AKONADI
-    connect(mPeriod, SIGNAL(valueChanged(const KCalCore::Duration&)), SLOT(periodChanged(const KCalCore::Duration&)));
+    connect(mPeriod, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(periodChanged(KCalCore::Duration)));
 #else
-    connect(mPeriod, SIGNAL(valueChanged(const KCal::Duration&)), SLOT(periodChanged(const KCal::Duration&)));
+    connect(mPeriod, SIGNAL(valueChanged(KCal::Duration)), SLOT(periodChanged(KCal::Duration)));
 #endif
     mSelect->setFocusWidget(mPeriod);
     mPeriod->setEnabled(false);

@@ -156,8 +156,8 @@ void SingleFileResourceConfigDialogBase::validate()
     mStatJob->setDetails( 2 ); // All details.
     mStatJob->setSide( KIO::StatJob::SourceSide );
 
-    connect( mStatJob, SIGNAL( result( KJob * ) ),
-             SLOT( slotStatJobResult( KJob * ) ) );
+    connect( mStatJob, SIGNAL(result(KJob*)),
+             SLOT(slotStatJobResult(KJob*)) );
 
     // Allow the OK button to be disabled until the MetaJob is finished.
     enableButton( Ok, false );
@@ -175,8 +175,8 @@ void SingleFileResourceConfigDialogBase::slotStatJobResult( KJob* job )
     mStatJob->setDetails( 2 ); // All details.
     mStatJob->setSide( KIO::StatJob::SourceSide );
 
-    connect( mStatJob, SIGNAL( result( KJob * ) ),
-             SLOT( slotStatJobResult( KJob * ) ) );
+    connect( mStatJob, SIGNAL(result(KJob*)),
+             SLOT(slotStatJobResult(KJob*)) );
 
     // Make sure we don't check the whole path upwards.
     mDirUrlChecked = true;

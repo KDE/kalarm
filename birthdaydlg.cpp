@@ -120,7 +120,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     Akonadi::Control::start();
 
     BirthdayModel* model = BirthdayModel::instance();
-    connect(model, SIGNAL(dataChanged(const QModelIndex&,const QModelIndex&)), SLOT(resizeViewColumns()));
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(resizeViewColumns()));
 
     KDescendantsProxyModel* descendantsModel = new KDescendantsProxyModel(this);
     descendantsModel->setSourceModel(model);
@@ -145,7 +145,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mListView->setTextElideMode(Qt::ElideRight);
     mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
     mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
+    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged()));
     mListView->setWhatsThis(i18nc("@info:whatsthis",
           "<para>Select birthdays to set alarms for.<nl/>"
           "This list shows all birthdays in <application>KAddressBook</application> except those for which alarms already exist.</para>"
@@ -173,7 +173,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mFontColourButton = new FontColourButton(group);
     mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
     hlayout->addWidget(mFontColourButton);
-    connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(setColours(const QColor&, const QColor&)));
+    connect(mFontColourButton, SIGNAL(selected(QColor,QColor)), SLOT(setColours(QColor,QColor)));
 
     // How much advance warning to give
     mReminder = new Reminder(i18nc("@info:whatsthis", "Check to display a reminder in advance of or after the birthday."),

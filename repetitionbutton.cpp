@@ -168,7 +168,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
                       i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
                       true, page);
     mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
-    connect(mTimeSelector, SIGNAL(valueChanged(const Duration&)), SLOT(intervalChanged(const Duration&)));
+    connect(mTimeSelector, SIGNAL(valueChanged(Duration)), SLOT(intervalChanged(Duration)));
     connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
     topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
@@ -208,7 +208,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     layout->addWidget(mDurationButton);
     mDuration = new TimePeriod(true, mButtonBox);
     mDuration->setFixedSize(mDuration->sizeHint());
-    connect(mDuration, SIGNAL(valueChanged(const Duration&)), SLOT(durationChanged(const Duration&)));
+    connect(mDuration, SIGNAL(valueChanged(Duration)), SLOT(durationChanged(Duration)));
     mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
     layout->addWidget(mDuration);
     mDurationButton->setFocusWidget(mDuration);

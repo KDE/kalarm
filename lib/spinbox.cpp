@@ -69,7 +69,7 @@ void SpinBox::init()
     lineEdit()->installEventFilter(this);   // handle shift-up/down arrow presses
 
     // Detect when the text field is edited
-    connect(lineEdit(), SIGNAL(textChanged(const QString&)), SLOT(textEdited()));
+    connect(lineEdit(), SIGNAL(textChanged(QString)), SLOT(textEdited()));
     connect(this, SIGNAL(valueChanged(int)), SLOT(valueChange()));
 }
 

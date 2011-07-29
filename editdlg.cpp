@@ -261,7 +261,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         label->setFixedSize(label->sizeHint());
         mTemplateName = new KLineEdit(box);
         mTemplateName->setReadOnly(mReadOnly);
-        connect(mTemplateName, SIGNAL(userTextChanged(const QString&)), SLOT(contentsChanged()));
+        connect(mTemplateName, SIGNAL(userTextChanged(QString)), SLOT(contentsChanged()));
         label->setBuddy(mTemplateName);
         box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
         box->setFixedHeight(box->sizeHint().height());
@@ -400,7 +400,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     {
         mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
         connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-        connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), SLOT(contentsChanged()));
+        connect(mTimeWidget, SIGNAL(changed(KDateTime)), SLOT(contentsChanged()));
         topLayout->addWidget(mTimeWidget);
     }
 
@@ -420,7 +420,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         connect(mReminder, SIGNAL(changed()), SLOT(contentsChanged()));
         moreLayout->addWidget(mReminder, 0, Qt::AlignLeft);
         if (mTimeWidget)
-            connect(mTimeWidget, SIGNAL(changed(const KDateTime&)), mReminder, SLOT(setDefaultUnits(const KDateTime&)));
+            connect(mTimeWidget, SIGNAL(changed(KDateTime)), mReminder, SLOT(setDefaultUnits(KDateTime)));
     }
 
     // Late cancel selector - default = allow late display

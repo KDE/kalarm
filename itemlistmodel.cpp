@@ -53,8 +53,8 @@ ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
     setHeaderGroup(EntityTreeModel::ItemListHeaders);
     setSortRole(AkonadiModel::SortRole);
     setDynamicSortFilter(true);
-    connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted()));
-    connect(this, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(slotRowsRemoved()));
+    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotRowsInserted()));
+    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotRowsRemoved()));
 }
 
 int ItemListModel::columnCount(const QModelIndex& /*parent*/) const

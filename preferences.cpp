@@ -91,10 +91,10 @@ Preferences* Preferences::self()
 
 Preferences::Preferences()
 {
-    QObject::connect(this, SIGNAL(base_StartOfDayChanged(const QDateTime&)), SLOT(startDayChange(const QDateTime&)));
-    QObject::connect(this, SIGNAL(base_TimeZoneChanged(const QString&)), SLOT(timeZoneChange(const QString&)));
-    QObject::connect(this, SIGNAL(base_HolidayRegionChanged(const QString&)), SLOT(holidaysChange(const QString&)));
-    QObject::connect(this, SIGNAL(base_WorkTimeChanged(const QDateTime&, const QDateTime&, int)), SLOT(workTimeChange(const QDateTime&, const QDateTime&, int)));
+    QObject::connect(this, SIGNAL(base_StartOfDayChanged(QDateTime)), SLOT(startDayChange(QDateTime)));
+    QObject::connect(this, SIGNAL(base_TimeZoneChanged(QString)), SLOT(timeZoneChange(QString)));
+    QObject::connect(this, SIGNAL(base_HolidayRegionChanged(QString)), SLOT(holidaysChange(QString)));
+    QObject::connect(this, SIGNAL(base_WorkTimeChanged(QDateTime,QDateTime,int)), SLOT(workTimeChange(QDateTime,QDateTime,int)));
 }
 
 void Preferences::setAskAutoStart(bool yes)

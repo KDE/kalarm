@@ -123,8 +123,8 @@ TrayWindow::TrayWindow(MainWindow* parent)
     setEnabledStatus(theApp()->alarmsEnabled());
 
     connect(AlarmCalendar::resources(), SIGNAL(haveDisabledAlarmsChanged(bool)), SLOT(slotHaveDisabledAlarms(bool)));
-    connect(this, SIGNAL(activateRequested(bool, const QPoint&)), SLOT(slotActivateRequested()));
-    connect(this, SIGNAL(secondaryActivateRequested(const QPoint&)), SLOT(slotSecondaryActivateRequested()));
+    connect(this, SIGNAL(activateRequested(bool,QPoint)), SLOT(slotActivateRequested()));
+    connect(this, SIGNAL(secondaryActivateRequested(QPoint)), SLOT(slotSecondaryActivateRequested()));
     slotHaveDisabledAlarms(AlarmCalendar::resources()->haveDisabledAlarms());
 
     // Hack: KSNI does not let us know when it is about to show the tooltip,
@@ -141,24 +141,24 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
     // Update when alarms are modified
 #ifdef USE_AKONADI
-    connect(AlarmListModel::all(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+    connect(AlarmListModel::all(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(AlarmListModel::all(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+    connect(AlarmListModel::all(), SIGNAL(rowsInserted(QModelIndex,int,int)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(AlarmListModel::all(), SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+    connect(AlarmListModel::all(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(AlarmListModel::all(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+    connect(AlarmListModel::all(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
             mToolTipUpdateTimer, SLOT(start()));
     connect(AlarmListModel::all(), SIGNAL(modelReset()),
             mToolTipUpdateTimer, SLOT(start()));
 #else
-    connect(EventListModel::alarms(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+    connect(EventListModel::alarms(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(EventListModel::alarms(), SIGNAL(rowsInserted(const QModelIndex&, int, int)),
+    connect(EventListModel::alarms(), SIGNAL(rowsInserted(QModelIndex,int,int)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(EventListModel::alarms(), SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)),
+    connect(EventListModel::alarms(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
             mToolTipUpdateTimer, SLOT(start()));
-    connect(EventListModel::alarms(), SIGNAL(rowsRemoved(const QModelIndex&, int, int)),
+    connect(EventListModel::alarms(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
             mToolTipUpdateTimer, SLOT(start()));
     connect(EventListModel::alarms(), SIGNAL(modelReset()),
             mToolTipUpdateTimer, SLOT(start()));

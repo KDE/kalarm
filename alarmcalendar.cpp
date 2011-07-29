@@ -155,19 +155,19 @@ AlarmCalendar::AlarmCalendar()
 {
 #ifdef USE_AKONADI
     AkonadiModel* model = AkonadiModel::instance();
-    connect(model, SIGNAL(eventsAdded(const AkonadiModel::EventList&)), SLOT(slotEventsAdded(const AkonadiModel::EventList&)));
-    connect(model, SIGNAL(eventsToBeRemoved(const AkonadiModel::EventList&)), SLOT(slotEventsToBeRemoved(const AkonadiModel::EventList&)));
-    connect(model, SIGNAL(eventChanged(const AkonadiModel::Event&)), SLOT(slotEventChanged(const AkonadiModel::Event&)));
-    connect(model, SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
-                   SLOT(slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)));
+    connect(model, SIGNAL(eventsAdded(AkonadiModel::EventList)), SLOT(slotEventsAdded(AkonadiModel::EventList)));
+    connect(model, SIGNAL(eventsToBeRemoved(AkonadiModel::EventList)), SLOT(slotEventsToBeRemoved(AkonadiModel::EventList)));
+    connect(model, SIGNAL(eventChanged(AkonadiModel::Event)), SLOT(slotEventChanged(AkonadiModel::Event)));
+    connect(model, SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
+                   SLOT(slotCollectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
 #else
     AlarmResources* resources = AlarmResources::instance();
     resources->setCalIDFunction(&KAlarm::Calendar::setKAlarmVersion);
     resources->setFixFunction(&CalendarCompat::fix);
     resources->setCustomEventFunction(&updateResourceKAEvents);
-    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotResourceChange(AlarmResource*, AlarmResources::Change)));
+    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)), SLOT(slotResourceChange(AlarmResource*,AlarmResources::Change)));
     connect(resources, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
-    connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(slotResourceLoaded(AlarmResource*, bool)));
+    connect(resources, SIGNAL(resourceLoaded(AlarmResource*,bool)), SLOT(slotResourceLoaded(AlarmResource*,bool)));
 #endif
     Preferences::connect(SIGNAL(askResourceChanged(bool)), this, SLOT(setAskResource(bool)));
 }

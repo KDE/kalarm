@@ -177,7 +177,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     QLabel* label = new QLabel(i18nc("@label:textbox", "Command:"), box);
     mPreAction = new KLineEdit(box);
     label->setBuddy(mPreAction);
-    connect(mPreAction, SIGNAL(textChanged(const QString&)), SLOT(slotPreActionChanged(const QString&)));
+    connect(mPreAction, SIGNAL(textChanged(QString)), SLOT(slotPreActionChanged(QString)));
     box->setWhatsThis(i18nc("@info:whatsthis",
                             "<para>Enter a shell command to execute before the alarm is displayed.</para>"
                             "<para>Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.</para>"

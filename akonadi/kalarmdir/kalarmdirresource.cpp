@@ -87,15 +87,15 @@ KAlarmDirResource::KAlarmDirResource(const QString& id)
     changeRecorder()->itemFetchScope().fetchFullPayload();
     changeRecorder()->fetchCollection(true);
 
-    connect(KDirWatch::self(), SIGNAL(created(const QString&)), SLOT(fileCreated(const QString&)));
-    connect(KDirWatch::self(), SIGNAL(dirty(const QString&)), SLOT(fileChanged(const QString&)));
-    connect(KDirWatch::self(), SIGNAL(deleted(const QString&)), SLOT(fileDeleted(const QString&)));
+    connect(KDirWatch::self(), SIGNAL(created(QString)), SLOT(fileCreated(QString)));
+    connect(KDirWatch::self(), SIGNAL(dirty(QString)), SLOT(fileChanged(QString)));
+    connect(KDirWatch::self(), SIGNAL(deleted(QString)), SLOT(fileDeleted(QString)));
 
     // Find the collection which this resource manages
     CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
     job->fetchScope().setResource(identifier());
-    connect(job, SIGNAL(collectionsReceived(const Akonadi::Collection::List&)),
-                 SLOT(collectionsReceived(const Akonadi::Collection::List&)));
+    connect(job, SIGNAL(collectionsReceived(Akonadi::Collection::List)),
+                 SLOT(collectionsReceived(Akonadi::Collection::List)));
     connect(job, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
 
     QTimer::singleShot(0, this, SLOT(loadFiles()));

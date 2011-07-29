@@ -39,16 +39,16 @@ using namespace Akonadi;
 SingleFileResourceBase::SingleFileResourceBase( const QString & id )
   : ResourceBase( id ), mDownloadJob( 0 ), mUploadJob( 0 )
 {
-  connect( this, SIGNAL( reloadConfiguration() ), SLOT( reloadFile() ) );
-  QTimer::singleShot( 0, this, SLOT( readFile() ) );
+  connect( this, SIGNAL(reloadConfiguration()), SLOT(reloadFile()) );
+  QTimer::singleShot( 0, this, SLOT(readFile()) );
 
   changeRecorder()->itemFetchScope().fetchFullPayload();
   changeRecorder()->fetchCollection( true );
 
-  connect( changeRecorder(), SIGNAL( changesAdded() ), SLOT( scheduleWrite() ) );
+  connect( changeRecorder(), SIGNAL(changesAdded()), SLOT(scheduleWrite()) );
 
-  connect( KDirWatch::self(), SIGNAL( dirty( QString ) ), SLOT( fileChanged( QString ) ) );
-  connect( KDirWatch::self(), SIGNAL( created( QString ) ), SLOT( fileChanged( QString ) ) );
+  connect( KDirWatch::self(), SIGNAL(dirty(QString)), SLOT(fileChanged(QString)) );
+  connect( KDirWatch::self(), SIGNAL(created(QString)), SLOT(fileChanged(QString)) );
 
   KGlobal::locale()->insertCatalog( "akonadi_singlefile_resource" );
 }

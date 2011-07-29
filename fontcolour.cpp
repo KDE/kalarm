@@ -71,7 +71,7 @@ FontColourChooser::FontColourChooser(QWidget *parent,
         QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
         box->setStretchFactor(new QWidget(box), 0);
         mFgColourButton = new ColourButton(box);
-        connect(mFgColourButton, SIGNAL(changed(const QColor&)), SLOT(setSampleColour()));
+        connect(mFgColourButton, SIGNAL(changed(QColor)), SLOT(setSampleColour()));
         label->setBuddy(mFgColourButton);
         box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message foreground color"));
     }
@@ -84,7 +84,7 @@ FontColourChooser::FontColourChooser(QWidget *parent,
     QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
     box->setStretchFactor(new QWidget(box), 0);
     mBgColourButton = new ColourButton(box);
-    connect(mBgColourButton, SIGNAL(changed(const QColor&)), SLOT(setSampleColour()));
+    connect(mBgColourButton, SIGNAL(changed(QColor)), SLOT(setSampleColour()));
     label->setBuddy(mBgColourButton);
     box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message background color"));
     hlayout->addStretch();

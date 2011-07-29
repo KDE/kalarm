@@ -54,7 +54,7 @@ bool ShellProcess::start(OpenMode openMode)
         return false;
     }
     connect(this, SIGNAL(bytesWritten(qint64)), SLOT(writtenStdin(qint64)));
-    connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), SLOT(slotExited(int, QProcess::ExitStatus)));
+    connect(this, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotExited(int,QProcess::ExitStatus)));
     connect(this, SIGNAL(readyReadStandardOutput()), SLOT(stdoutReady()));
     connect(this, SIGNAL(readyReadStandardError()), SLOT(stderrReady()));
     QStringList args;

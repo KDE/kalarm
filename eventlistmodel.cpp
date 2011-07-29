@@ -57,10 +57,10 @@ EventListModel* EventListModel::alarms()
     if (!mAlarmInstance)
     {
         mAlarmInstance = new EventListModel(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED);
-        Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateArchivedColour(const QColor&)));
-        Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), mAlarmInstance, SLOT(slotUpdateDisabledColour(const QColor&)));
-        Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::HolidayRegion&)), mAlarmInstance, SLOT(slotUpdateHolidays()));
-        Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), mAlarmInstance, SLOT(slotUpdateWorkingHours()));
+        Preferences::connect(SIGNAL(archivedColourChanged(QColor)), mAlarmInstance, SLOT(slotUpdateArchivedColour(QColor)));
+        Preferences::connect(SIGNAL(disabledColourChanged(QColor)), mAlarmInstance, SLOT(slotUpdateDisabledColour(QColor)));
+        Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), mAlarmInstance, SLOT(slotUpdateHolidays()));
+        Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), mAlarmInstance, SLOT(slotUpdateWorkingHours()));
     }
     return mAlarmInstance;
 }
@@ -102,10 +102,10 @@ EventListModel::EventListModel(KAlarm::CalEvent::Types status, QObject* parent)
     }
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
     AlarmResources* resources = AlarmResources::instance();
-    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
-                       SLOT(slotResourceStatusChanged(AlarmResource*, AlarmResources::Change)));
-    connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)),
-                       SLOT(slotResourceLoaded(AlarmResource*, bool)));
+    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)),
+                       SLOT(slotResourceStatusChanged(AlarmResource*,AlarmResources::Change)));
+    connect(resources, SIGNAL(resourceLoaded(AlarmResource*,bool)),
+                       SLOT(slotResourceLoaded(AlarmResource*,bool)));
 }
 
 int EventListModel::rowCount(const QModelIndex& parent) const

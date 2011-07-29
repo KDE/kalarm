@@ -29,7 +29,7 @@ StartOfDayTimer* StartOfDayTimer::mInstance = 0;
 StartOfDayTimer::StartOfDayTimer()
     : DailyTimer(Preferences::startOfDay(), false)
 {
-    Preferences::connect(SIGNAL(startOfDayChanged(const QTime&)), this, SLOT(startOfDayChanged()));
+    Preferences::connect(SIGNAL(startOfDayChanged(QTime)), this, SLOT(startOfDayChanged()));
 }
 
 StartOfDayTimer* StartOfDayTimer::instance()

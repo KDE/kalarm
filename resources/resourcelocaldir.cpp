@@ -69,9 +69,9 @@ void KAResourceLocalDir::init()
 
     //setSavePolicy(SaveDelayed);  // unnecessary for KAlarm, and would override base class setting
 
-    connect(&mDirWatch, SIGNAL(dirty(const QString&)), SLOT(slotUpdated(const QString&)));
-    connect(&mDirWatch, SIGNAL(created(const QString&)), SLOT(slotUpdated(const QString&)));
-    connect(&mDirWatch, SIGNAL(deleted(const QString&)), SLOT(slotUpdated(const QString&)));
+    connect(&mDirWatch, SIGNAL(dirty(QString)), SLOT(slotUpdated(QString)));
+    connect(&mDirWatch, SIGNAL(created(QString)), SLOT(slotUpdated(QString)));
+    connect(&mDirWatch, SIGNAL(deleted(QString)), SLOT(slotUpdated(QString)));
     mDirWatch.addDir(mURL.toLocalFile(), KDirWatch::WatchFiles);
 
     enableResource(isActive());

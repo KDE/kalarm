@@ -101,7 +101,7 @@ void SpinBox2::init()
     mUpdown2->installEventFilter(this);
     connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
     connect(mSpinbox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
-    connect(mSpinbox, SIGNAL(valueChanged(const QString&)), SIGNAL(valueChanged(const QString&)));
+    connect(mSpinbox, SIGNAL(valueChanged(QString)), SIGNAL(valueChanged(QString)));
     connect(mUpdown2, SIGNAL(stepped(int)), SLOT(stepPage(int)));
     connect(mUpdown2, SIGNAL(painted()), SLOT(paintTimer()));
 }

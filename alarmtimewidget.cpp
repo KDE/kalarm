@@ -113,7 +113,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
     // Date edit box
     mDateEdit = new KPIM::KDateEdit(topWidget);
-    connect(mDateEdit, SIGNAL(dateEntered(const QDate&)), SLOT(dateTimeChanged()));
+    connect(mDateEdit, SIGNAL(dateEntered(QDate)), SLOT(dateTimeChanged()));
     mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
           "<para>Enter the date to schedule the alarm.</para>"
           "<para>%1</para>", (mDeferring ? tzText : recurText)));

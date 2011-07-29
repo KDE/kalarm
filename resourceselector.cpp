@@ -117,9 +117,9 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
     mListView = new ResourceView(this);
     mListView->setModel(filterModel);
 #endif
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(selectionChanged()));
+    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(mListView, SIGNAL(customContextMenuRequested(const QPoint&)), SLOT(contextMenuRequested(const QPoint&)));
+    connect(mListView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(contextMenuRequested(QPoint)));
     mListView->setWhatsThis(i18nc("@info:whatsthis",
                                   "List of available calendars of the selected type. The checked state shows whether a calendar "
                                  "is enabled (checked) or disabled (unchecked). The default calendar is shown in bold."));
@@ -147,10 +147,10 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
     connect(mDeleteButton, SIGNAL(clicked()), SLOT(removeResource()));
 
 #ifdef USE_AKONADI
-    connect(AkonadiModel::instance(), SIGNAL(collectionAdded(const Akonadi::Collection&)),
-                                      SLOT(slotCollectionAdded(const Akonadi::Collection&)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
+                                      SLOT(slotCollectionAdded(Akonadi::Collection)));
 #else
-    connect(mCalendar, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
+    connect(mCalendar, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*,AlarmResources::Change)));
 #endif
 
     connect(mAlarmType, SIGNAL(activated(int)), SLOT(alarmTypeSelected()));
@@ -223,8 +223,8 @@ void ResourceSelector::addResource()
 {
 #ifdef USE_AKONADI
     AkonadiResourceCreator* creator = new AkonadiResourceCreator(mCurrentAlarmType, this);
-    connect(creator, SIGNAL(finished(AkonadiResourceCreator*, bool)), 
-                     SLOT(resourceAdded(AkonadiResourceCreator*, bool)));
+    connect(creator, SIGNAL(finished(AkonadiResourceCreator*,bool)), 
+                     SLOT(resourceAdded(AkonadiResourceCreator*,bool)));
     creator->createResource();
 #else
     AlarmResourceManager* manager = mCalendar->resourceManager();

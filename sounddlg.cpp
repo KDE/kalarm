@@ -176,7 +176,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a sound file to play."));
     if (label)
         label->setBuddy(mFileEdit);
-    connect(mFileEdit, SIGNAL(textChanged(const QString&)), SIGNAL(changed()));
+    connect(mFileEdit, SIGNAL(textChanged(QString)), SIGNAL(changed()));
 
     // File browse button
     mFileBrowseButton = new PushButton(box);

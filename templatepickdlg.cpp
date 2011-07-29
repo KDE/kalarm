@@ -75,9 +75,9 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
 #endif
     mListView->setSelectionMode(QAbstractItemView::SingleSelection);
     mListView->setWhatsThis(i18nc("@info:whatsthis", "Select a template to base the new alarm on."));
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelectionChanged()));
+    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged()));
     // Require a real double click (even if KDE is in single-click mode) to accept the selection
-    connect(mListView, SIGNAL(doubleClicked(const QModelIndex&)), SLOT(accept()));
+    connect(mListView, SIGNAL(doubleClicked(QModelIndex)), SLOT(accept()));
     topLayout->addWidget(mListView);
 
     slotSelectionChanged();        // enable or disable the OK button

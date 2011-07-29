@@ -94,7 +94,7 @@ ResourceConfigDialog::ResourceConfigDialog(QWidget* parent, AlarmResource* resou
         connect(mConfigWidget, SIGNAL(setReadOnly(bool)), SLOT(setReadOnly(bool)));
     }
 
-    connect(mName, SIGNAL(textChanged(const QString&)), SLOT(slotNameChanged(const QString&)));
+    connect(mName, SIGNAL(textChanged(QString)), SLOT(slotNameChanged(QString)));
 
     slotNameChanged(mName->text());
     setMinimumSize(sizeHint());

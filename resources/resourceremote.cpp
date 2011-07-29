@@ -182,8 +182,8 @@ bool KAResourceRemote::doLoad(bool syncCache)
 #if 0
         if (mShowProgress  &&  hasGui())
         {
-            connect(mDownloadJob, SIGNAL(percent(KJob*, unsigned long)),
-                          SLOT(slotPercent(KJob*, unsigned long)));
+            connect(mDownloadJob, SIGNAL(percent(KJob*,ulong)),
+                          SLOT(slotPercent(KJob*,ulong)));
             emit downloading(this, 0);
         }
 #endif

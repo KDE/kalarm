@@ -127,18 +127,18 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 #ifdef __GNUC__
 #warning Only want to monitor collection properties, not content, when this becomes possible
 #endif
-    connect(monitor, SIGNAL(collectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&)), SLOT(slotCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&)));
-    connect(monitor, SIGNAL(collectionRemoved(const Akonadi::Collection&)), SLOT(slotCollectionRemoved(const Akonadi::Collection&)));
-    connect(CalendarMigrator::instance(), SIGNAL(creating(const QString&, bool)), SLOT(slotCollectionBeingCreated(const QString&, bool)));
+    connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
+    connect(monitor, SIGNAL(collectionRemoved(Akonadi::Collection)), SLOT(slotCollectionRemoved(Akonadi::Collection)));
+    connect(CalendarMigrator::instance(), SIGNAL(creating(QString,bool)), SLOT(slotCollectionBeingCreated(QString,bool)));
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
-    Preferences::connect(SIGNAL(archivedColourChanged(const QColor&)), this, SLOT(slotUpdateArchivedColour(const QColor&)));
-    Preferences::connect(SIGNAL(disabledColourChanged(const QColor&)), this, SLOT(slotUpdateDisabledColour(const QColor&)));
-    Preferences::connect(SIGNAL(holidaysChanged(const KHolidays::HolidayRegion&)), this, SLOT(slotUpdateHolidays()));
-    Preferences::connect(SIGNAL(workTimeChanged(const QTime&, const QTime&, const QBitArray&)), this, SLOT(slotUpdateWorkingHours()));
+    Preferences::connect(SIGNAL(archivedColourChanged(QColor)), this, SLOT(slotUpdateArchivedColour(QColor)));
+    Preferences::connect(SIGNAL(disabledColourChanged(QColor)), this, SLOT(slotUpdateDisabledColour(QColor)));
+    Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), this, SLOT(slotUpdateHolidays()));
+    Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotUpdateWorkingHours()));
 
-    connect(this, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
-    connect(this, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SLOT(slotRowsAboutToBeRemoved(const QModelIndex&, int, int)));
-    connect(monitor, SIGNAL(itemChanged(const Akonadi::Item&, const QSet<QByteArray>&)), SLOT(slotMonitoredItemChanged(const Akonadi::Item&, const QSet<QByteArray>&)));
+    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotRowsInserted(QModelIndex,int,int)));
+    connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(monitor, SIGNAL(itemChanged(Akonadi::Item,QSet<QByteArray>)), SLOT(slotMonitoredItemChanged(Akonadi::Item,QSet<QByteArray>)));
 
     // Check whether there are any KAlarm resources configured
     bool found = false;

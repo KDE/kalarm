@@ -185,7 +185,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
     mFileMessageEdit->setAcceptDrops(true);
     mFileMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a text or image file to display."));
-    connect(mFileMessageEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
+    connect(mFileMessageEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
 
     // File browse button
     mFileBrowseButton = new QPushButton(mFileBox);
@@ -217,8 +217,8 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mFontColourButton = new FontColourButton(parent);
     mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
     hlayout->addWidget(mFontColourButton);
-    connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(setColours(const QColor&, const QColor&)));
-    connect(mFontColourButton, SIGNAL(selected(const QColor&, const QColor&)), SLOT(contentsChanged()));
+    connect(mFontColourButton, SIGNAL(selected(QColor,QColor)), SLOT(setColours(QColor,QColor)));
+    connect(mFontColourButton, SIGNAL(selected(QColor,QColor)), SLOT(contentsChanged()));
 
     if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
     {
@@ -766,7 +766,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
     mCmdLogFileEdit->setAcceptDrops(true);
     mCmdLogFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or path of the log file."));
-    connect(mCmdLogFileEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
+    connect(mCmdLogFileEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
 
     // Log file browse button.
     // The file browser dialog is activated by the PickLogFileRadio class.
@@ -1066,7 +1066,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mEmailToEdit->setMinimumSize(mEmailToEdit->sizeHint());
     mEmailToEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the addresses of the email recipients. Separate multiple addresses by "
                                     "commas or semicolons."));
-    connect(mEmailToEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
+    connect(mEmailToEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
     grid->addWidget(mEmailToEdit, 1, 1);
 
     mEmailAddressButton = new QPushButton(parent);
@@ -1087,7 +1087,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mEmailSubjectEdit->setMinimumSize(mEmailSubjectEdit->sizeHint());
     label->setBuddy(mEmailSubjectEdit);
     mEmailSubjectEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the email subject."));
-    connect(mEmailSubjectEdit, SIGNAL(textChanged(const QString&)), SLOT(contentsChanged()));
+    connect(mEmailSubjectEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
     grid->addWidget(mEmailSubjectEdit, 2, 1, 1, 2);
 
     // Email body
@@ -1620,7 +1620,7 @@ CommandEdit::CommandEdit(QWidget* parent)
 
     mCommandEdit = new LineEdit(LineEdit::Url, this);
     mCommandEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter a shell command to execute."));
-    connect(mCommandEdit, SIGNAL(textChanged(const QString&)), SIGNAL(changed()));
+    connect(mCommandEdit, SIGNAL(textChanged(QString)), SIGNAL(changed()));
     vlayout->addWidget(mCommandEdit);
 
     mScriptEdit = new TextEdit(this);

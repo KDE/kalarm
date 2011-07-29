@@ -1030,7 +1030,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     label->setBuddy(mFromAddrButton);
     grid->addWidget(mFromAddrButton, 1, 1);
     mEmailAddress = new KLineEdit(group);
-    connect(mEmailAddress, SIGNAL(textChanged(const QString&)), SLOT(slotAddressChanged()));
+    connect(mEmailAddress, SIGNAL(textChanged(QString)), SLOT(slotAddressChanged()));
     QString whatsThis = i18nc("@info:whatsthis", "Your email address, used to identify you as the sender when sending email alarms.");
     mFromAddrButton->setWhatsThis(whatsThis);
     mEmailAddress->setWhatsThis(whatsThis);

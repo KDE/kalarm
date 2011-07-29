@@ -84,9 +84,9 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
                                      allowHourMinute, mTimeSelectorFrame);
     connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
 #ifdef USE_AKONADI
-    connect(mTimeSelector, SIGNAL(valueChanged(const KCalCore::Duration&)), SIGNAL(changed()));
+    connect(mTimeSelector, SIGNAL(valueChanged(KCalCore::Duration)), SIGNAL(changed()));
 #else
-    connect(mTimeSelector, SIGNAL(valueChanged(const KCal::Duration&)), SIGNAL(changed()));
+    connect(mTimeSelector, SIGNAL(valueChanged(KCal::Duration)), SIGNAL(changed()));
 #endif
     hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 

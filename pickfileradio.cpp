@@ -64,7 +64,7 @@ void PickFileRadio::init(QPushButton* button, LineEdit* edit)
     if (mEdit)
     {
         mEdit->setEnabled(false);
-        connect(mEdit, SIGNAL(textChanged(const QString&)), SIGNAL(fileChanged()));
+        connect(mEdit, SIGNAL(textChanged(QString)), SIGNAL(fileChanged()));
     }
     connect(mGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotSelectionChanged(QAbstractButton*)));
     setReadOnly(RadioButton::isReadOnly());

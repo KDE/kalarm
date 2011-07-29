@@ -43,7 +43,7 @@ AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
       mConfigGroup(configGroup)
 {
     setEditOnSingleClick(true);
-    connect(header(), SIGNAL(sectionMoved(int, int, int)), SLOT(sectionMoved()));
+    connect(header(), SIGNAL(sectionMoved(int,int,int)), SLOT(sectionMoved()));
 }
 
 void AlarmListView::setModel(QAbstractItemModel* model)

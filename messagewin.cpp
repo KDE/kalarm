@@ -1596,7 +1596,7 @@ void AudioThread::run()
             mPath.insertEffect(fader);
         }
     }
-    connect(mAudioObject, SIGNAL(stateChanged(Phonon::State, Phonon::State)), SLOT(playStateChanged(Phonon::State)), Qt::DirectConnection);
+    connect(mAudioObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), SLOT(playStateChanged(Phonon::State)), Qt::DirectConnection);
     connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()), Qt::DirectConnection);
     mPlayedOnce = false;
     mMutex.unlock();

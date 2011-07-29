@@ -53,8 +53,8 @@ ResourceModel::ResourceModel(QObject* parent)
     AlarmResources* resources = AlarmResources::instance();
     connect(resources, SIGNAL(signalResourceModified(AlarmResource*)), SLOT(updateResource(AlarmResource*)));
     connect(resources, SIGNAL(standardResourceChange(KAlarm::CalEvent::Type)), SLOT(slotStandardChanged(KAlarm::CalEvent::Type)));
-    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*, AlarmResources::Change)));
-    connect(resources, SIGNAL(resourceLoaded(AlarmResource*, bool)), SLOT(slotLoaded(AlarmResource*, bool)));
+    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*,AlarmResources::Change)));
+    connect(resources, SIGNAL(resourceLoaded(AlarmResource*,bool)), SLOT(slotLoaded(AlarmResource*,bool)));
 }
 
 int ResourceModel::rowCount(const QModelIndex& parent) const

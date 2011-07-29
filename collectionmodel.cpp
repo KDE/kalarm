@@ -245,17 +245,17 @@ CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, 
     setSourceModel(mModel);    // the source model is NOT filtered by alarm type
     mSelectionModel = new QItemSelectionModel(mModel);
     setSelectionModel(mSelectionModel);
-    connect(mSelectionModel, SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
-                             SLOT(selectionChanged(const QItemSelection&, const QItemSelection&)));
-    connect(mModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)), SIGNAL(layoutAboutToBeChanged()));
-    connect(mModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(slotRowsInserted(const QModelIndex&, int, int)));
+    connect(mSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+                             SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    connect(mModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
+    connect(mModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotRowsInserted(QModelIndex,int,int)));
     // This is probably needed to make CollectionFilterCheckListModel update
     // (similarly to when rows are inserted).
-    connect(mModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)), SIGNAL(layoutAboutToBeChanged()));
-    connect(mModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SIGNAL(layoutChanged()));
+    connect(mModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
+    connect(mModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(layoutChanged()));
 
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
-                                      SLOT(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
+                                      SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
 }
 
 /******************************************************************************
@@ -634,8 +634,8 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     findEnabledCollections(filter, QModelIndex(), collections);
     setCollections(collections);
 
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
-                                      SLOT(statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
+                                      SLOT(statusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
 }
 
 /******************************************************************************

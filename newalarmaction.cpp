@@ -78,10 +78,10 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         mTemplateAction = new TemplateMenuAction(KIcon(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
 #ifdef USE_AKONADI
-        connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)), SLOT(slotCalendarStatusChanged()));
+        connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)), SLOT(slotCalendarStatusChanged()));
         connect(TemplateListModel::all(), SIGNAL(haveEventsStatus(bool)), SLOT(slotCalendarStatusChanged()));
 #else
-        connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)), SLOT(slotCalendarStatusChanged()));
+        connect(AlarmResources::instance(), SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)), SLOT(slotCalendarStatusChanged()));
         connect(EventListModel::templates(), SIGNAL(haveEventsStatus(bool)), SLOT(slotCalendarStatusChanged()));
 #endif
         slotCalendarStatusChanged();   // initialise action states

@@ -700,14 +700,14 @@ void AlarmResources::connectResource(AlarmResource* resource)
     connect(resource, SIGNAL(invalidate(AlarmResource*)), SLOT(slotResourceInvalidated(AlarmResource*)));
     connect(resource, SIGNAL(loaded(AlarmResource*)), SLOT(slotResourceLoaded(AlarmResource*)));
     connect(resource, SIGNAL(cacheDownloaded(AlarmResource*)), SLOT(slotCacheDownloaded(AlarmResource*)));
-//    connect(resource, SIGNAL(downloading(AlarmResource*, unsigned long)),
-//                      SLOT(slotResourceDownloading(AlarmResource*, unsigned long)));
+//    connect(resource, SIGNAL(downloading(AlarmResource*,ulong)),
+//                      SLOT(slotResourceDownloading(AlarmResource*,ulong)));
     connect(resource, SIGNAL(resourceSaved(AlarmResource*)), SLOT(slotResourceSaved(AlarmResource*)));
     connect(resource, SIGNAL(resourceChanged(ResourceCalendar*)), SLOT(slotResourceChanged(ResourceCalendar*)));
-    connect(resource, SIGNAL(resourceLoadError(ResourceCalendar*, const QString&)),
-                      SLOT(slotLoadError(ResourceCalendar*, const QString&)));
-    connect(resource, SIGNAL(resourceSaveError(ResourceCalendar*, const QString&)),
-                      SLOT(slotSaveError(ResourceCalendar*, const QString&)));
+    connect(resource, SIGNAL(resourceLoadError(ResourceCalendar*,QString)),
+                      SLOT(slotLoadError(ResourceCalendar*,QString)));
+    connect(resource, SIGNAL(resourceSaveError(ResourceCalendar*,QString)),
+                      SLOT(slotSaveError(ResourceCalendar*,QString)));
 }
 
 void AlarmResources::slotResourceInvalidated(AlarmResource* resource)

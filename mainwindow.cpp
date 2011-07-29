@@ -178,7 +178,7 @@ MainWindow::MainWindow(bool restored)
     mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
     mSplitter->setStretchFactor(1, 1);
 #ifndef USE_AKONADI
-    connect(resources, SIGNAL(signalErrorMessage(const QString&)), SLOT(showErrorMessage(const QString&)));
+    connect(resources, SIGNAL(signalErrorMessage(QString)), SLOT(showErrorMessage(QString)));
 #endif
 
     // Create the alarm list widget
@@ -198,16 +198,16 @@ MainWindow::MainWindow(bool restored)
     mListView->sortByColumn(mShowTime ? EventListModel::TimeColumn : EventListModel::TimeToColumn, Qt::AscendingOrder);
 #endif
     mListView->setItemDelegate(new AlarmListDelegate(mListView));
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), SLOT(slotSelection()));
-    connect(mListView, SIGNAL(contextMenuRequested(const QPoint&)), SLOT(slotContextMenuRequested(const QPoint&)));
+    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelection()));
+    connect(mListView, SIGNAL(contextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)));
 #ifdef USE_AKONADI
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant&, bool)),
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                        SLOT(slotCalendarStatusChanged()));
 #else
-    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*, AlarmResources::Change)),
+    connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)),
                        SLOT(slotCalendarStatusChanged()));
 #endif
-    connect(mResourceSelector, SIGNAL(resized(const QSize&, const QSize&)), SLOT(resourcesResized()));
+    connect(mResourceSelector, SIGNAL(resized(QSize,QSize)), SLOT(resourcesResized()));
     mListView->installEventFilter(this);
     initActions();
 
@@ -623,7 +623,7 @@ void MainWindow::initActions()
     connect(mActionUndo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotUndoItem(QAction*)));
     connect(mActionRedo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
     connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
-    connect(Undo::instance(), SIGNAL(changed(const QString&, const QString&)), SLOT(slotUndoStatus(const QString&, const QString&)));
+    connect(Undo::instance(), SIGNAL(changed(QString,QString)), SLOT(slotUndoStatus(QString,QString)));
     connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
     Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
     Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
