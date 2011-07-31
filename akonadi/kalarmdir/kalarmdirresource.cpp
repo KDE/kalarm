@@ -176,23 +176,34 @@ void KAlarmDirResource::configure(WId windowId)
             emit configurationDialogRejected();
             return;
         }
-        else if (mSettings->alarmTypes() != types)
+        else
         {
-            // Settings have changed which might affect the alarm configuration
-            initializeDirectory();   // should only be needed for new resource, but just in case ...
-            KAlarm::CalEvent::Types newTypes = KAlarm::CalEvent::types(mSettings->alarmTypes());
-            KAlarm::CalEvent::Types oldTypes = KAlarm::CalEvent::types(types);
-            changeAlarmTypes(~newTypes & oldTypes);
-        }
-        else if (mSettings->readOnly() != readOnly
-             ||  mSettings->displayName() != name)
-        {
-            // Need to change the collection's rights or name
+            bool modify = false;
             Collection c(mCollectionId);
-            c.setRemoteId(directoryName());
-            setNameRights(c);
-            CollectionModifyJob* job = new CollectionModifyJob(c);
-            connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
+            if (mSettings->alarmTypes() != types)
+            {
+                // Settings have changed which might affect the alarm configuration
+                initializeDirectory();   // should only be needed for new resource, but just in case ...
+                KAlarm::CalEvent::Types newTypes = KAlarm::CalEvent::types(mSettings->alarmTypes());
+                KAlarm::CalEvent::Types oldTypes = KAlarm::CalEvent::types(types);
+                changeAlarmTypes(~newTypes & oldTypes);
+                c.setContentMimeTypes(mSettings->alarmTypes());
+                modify = true;
+            }
+            if (mSettings->readOnly() != readOnly
+            ||  mSettings->displayName() != name)
+            {
+                // Need to change the collection's rights or name
+                c.setRemoteId(directoryName());
+                setNameRights(c);
+                modify = true;
+            }
+            if (modify)
+            {
+                // Update the Akonadi server with the changes
+                CollectionModifyJob* job = new CollectionModifyJob(c);
+                connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
+            }
         }
         emit configurationDialogAccepted();
     }
@@ -274,12 +285,6 @@ DEBUG_DATA;
     }
 DEBUG_DATA;
     setCompatibility();
-
-    // Update the Akonadi server with the new alarm types
-    Collection c(mCollectionId);
-    c.setContentMimeTypes(mSettings->alarmTypes());
-    CollectionModifyJob* job = new CollectionModifyJob(c);
-    connect(job, SIGNAL(result(KJob*)), SLOT(jobDone(KJob*)));
 }
 
 /******************************************************************************
@@ -693,8 +698,6 @@ void KAlarmDirResource::retrieveCollections()
     c.setContentMimeTypes(mSettings->alarmTypes());
     setNameRights(c);
 
-    EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
-    attr->setIconName("kalarm");
     // Don't update CollectionAttribute here, since it hasn't yet been fetched
     // from Akonadi database.
 
@@ -714,6 +717,7 @@ void KAlarmDirResource::setNameRights(Collection& c)
     c.setName(display.isEmpty() ? name() : display);
     EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
     attr->setDisplayName(name());
+    attr->setIconName("kalarm");
     if (mSettings->readOnly())
     {
         c.setRights(Collection::CanChangeCollection);
