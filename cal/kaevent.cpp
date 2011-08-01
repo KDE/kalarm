@@ -294,9 +294,9 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
 #ifdef USE_AKONADI
     mCustomProperties        = event.mCustomProperties;
     mItemId                  = event.mItemId;
-    mCollectionId            = event.mCollectionId;
+    mOriginalCollectionId    = event.mOriginalCollectionId;
 #else
-    mResourceId              = event.mResourceId;
+    mOriginalResourceId      = event.mOriginalResourceId;
 #endif
     mAudioFile               = event.mAudioFile;
     mPreAction               = event.mPreAction;
@@ -380,9 +380,9 @@ void KAEvent::Private::set(const Event* event)
     mLogFile.clear();
 #ifdef USE_AKONADI
     mItemId                 = -1;
-    mCollectionId           = -1;
+    mOriginalCollectionId   = -1;
 #else
-    mResourceId.clear();
+    mOriginalResourceId.clear();
 #endif
     mTemplateAfterTime      = -1;
     mBeep                   = false;
@@ -429,9 +429,9 @@ void KAEvent::Private::set(const Event* event)
 #ifdef USE_AKONADI
             qlonglong id = params[0].toLongLong(&ok);
             if (ok)
-                mCollectionId = id;
+                mOriginalCollectionId = id;
 #else
-            mResourceId = params[0];
+            mOriginalResourceId = params[0];
 #endif
             for (int i = 1;  i < n;  ++i)
             {
@@ -1129,10 +1129,10 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mTemplateName.clear();
 #ifdef USE_AKONADI
     mItemId                 = -1;
-    mCollectionId           = -1;
+    mOriginalCollectionId   = -1;
 #else
     mResource               = 0;
-    mResourceId.clear();
+    mOriginalResourceId.clear();
 #endif
     mPreAction.clear();
     mPostAction.clear();
@@ -2137,9 +2137,9 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
     if (mCategory == KAlarm::CalEvent::DISPLAYING)
     {
 #ifdef USE_AKONADI
-        param = QString::number(mCollectionId);
+        param = QString::number(mOriginalCollectionId);
 #else
-        param = mResourceId;
+        param = mOriginalResourceId;
 #endif
         if (mDisplayingDefer)
             param += SC + DISP_DEFER;
@@ -3069,15 +3069,15 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(KAlarm::CalEvent::DISPLAYING);
 #ifdef USE_AKONADI
-            mItemId          = -1;    // the display event doesn't have an associated Item
-            mCollectionId    = collectionId;;
+            mItemId               = -1;    // the display event doesn't have an associated Item
+            mOriginalCollectionId = collectionId;;
 #else
-            mResourceId      = resourceID;
+            mOriginalResourceId   = resourceID;
 #endif
-            mDisplayingDefer = showDefer;
-            mDisplayingEdit  = showEdit;
-            mDisplaying      = true;
-            mDisplayingTime  = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
+            mDisplayingDefer      = showDefer;
+            mDisplayingEdit       = showEdit;
+            mDisplaying           = true;
+            mDisplayingTime       = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
             switch (al.subType())
             {
                 case KAAlarm::AT_LOGIN__ALARM:                mDisplayingFlags = REPEAT_AT_LOGIN;  break;
@@ -3110,11 +3110,11 @@ void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& 
         // Retrieve the original event's unique ID
         setCategory(KAlarm::CalEvent::ACTIVE);
 #ifdef USE_AKONADI
-        collectionId = mCollectionId;
-        mCollectionId = -1;
+        collectionId = mOriginalCollectionId;
+        mOriginalCollectionId = -1;
 #else
-        resourceID   = mResourceId;
-        mResourceId.clear();
+        resourceID   = mOriginalResourceId;
+        mOriginalResourceId.clear();
 #endif
         showDefer    = mDisplayingDefer;
         showEdit     = mDisplayingEdit;
