@@ -3111,8 +3111,10 @@ void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& 
         setCategory(KAlarm::CalEvent::ACTIVE);
 #ifdef USE_AKONADI
         collectionId = mCollectionId;
+        mCollectionId = -1;
 #else
         resourceID   = mResourceId;
+        mResourceId.clear();
 #endif
         showDefer    = mDisplayingDefer;
         showEdit     = mDisplayingEdit;

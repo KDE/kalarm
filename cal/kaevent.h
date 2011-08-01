@@ -383,11 +383,6 @@ class KALARM_CAL_EXPORT KAEvent
         void               setEnabled(bool enable)                 { d->mEnabled = enable; }
         void               startChanges()                          { d->startChanges(); }
         void               endChanges()                            { d->endChanges(); }
-#ifdef USE_AKONADI
-        void               clearCollectionId()                     { d->mCollectionId = -1; }
-#else
-        void               clearResourceId()                       { d->mResourceId.clear(); }
-#endif
         void               removeExpiredAlarm(KAAlarm::Type t)     { d->removeExpiredAlarm(t); }
         void               incrementRevision()                     { ++d->mRevision; }
 
