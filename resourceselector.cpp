@@ -195,6 +195,10 @@ void ResourceSelector::alarmTypeSelected()
     mAddButton->setToolTip(addTip);
     // WORKAROUND: Switch scroll bars back on after allowing geometry to update ...
     QTimer::singleShot(0, this, SLOT(reinstateAlarmTypeScrollBars()));
+
+#ifdef USE_AKONADI
+    selectionChanged();   // enable/disable buttons
+#endif
 }
 
 /******************************************************************************
