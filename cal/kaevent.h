@@ -487,9 +487,7 @@ class KALARM_CAL_EXPORT KAEvent
         bool               displaying() const             { return d->mDisplaying; }
 #ifdef USE_AKONADI
         QMap<QByteArray, QString> customProperties() const { return d->mCustomProperties; }
-        Akonadi::Collection::Id collectionId() const      { return d->mCollectionId; }
 #else
-        QString            resourceId() const             { return d->mResourceId; }
         AlarmResource*     resource() const               { return d->mResource; }
 #endif
         CmdErrType         commandError() const           { return d->mCommandError; }
@@ -702,9 +700,9 @@ class KALARM_CAL_EXPORT KAEvent
 #ifdef USE_AKONADI
                 QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
                 Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
-                Akonadi::Collection::Id mCollectionId; // saved collection ID (not the collection the event is in)
+                Akonadi::Collection::Id mOriginalCollectionId; // displaying alarm's original collection ID
 #else
-                QString            mResourceId;        // saved resource ID (not the resource the event is in)
+                QString            mOriginalResourceId; // displaying alarm's original resource ID
 #endif
                 QString            mAudioFile;         // ATTACH: audio file to play
                 QString            mPreAction;         // command to execute before alarm is displayed
