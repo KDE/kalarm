@@ -1229,14 +1229,12 @@ bool MessageWin::reinstateFromDisplaying(const Event* kcalEvent, KAEvent& event,
     Akonadi::Collection::Id collectionId;
     event.reinstateFromDisplaying(kcalEvent, collectionId, showEdit, showDefer);
     collection = AkonadiModel::instance()->collectionById(collectionId);
-    event.clearCollectionId();
 #else
     QString resourceID;
     event.reinstateFromDisplaying(kcalEvent, resourceID, showEdit, showDefer);
     resource = AlarmResources::instance()->resourceWithId(resourceID);
     if (resource  &&  !resource->isOpen())
         resource = 0;
-    event.clearResourceId();
 #endif
     kDebug() << event.id() << ": success";
     return true;
