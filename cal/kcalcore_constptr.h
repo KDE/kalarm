@@ -67,19 +67,9 @@ template<class T> class ConstPtrT
 
 // KCalCore::Event::Ptr is equivalent to KCal::Event*
 typedef QSharedPointer<const Event>  ConstEventPtr;
-template <class T>
-inline T constCast(const ConstEventPtr& event)
-{
-    return T(const_cast<Event*>(event.data()));
-}
 
 // KCalCore::Alarm::Ptr is equivalent to KCal::Alarm*
 typedef QSharedPointer<const KCalCore::Alarm>  ConstAlarmPtr;
-template <class T>
-inline T constCast(const ConstAlarmPtr& alarm)
-{
-    return T(const_cast<Alarm*>(alarm.data()));
-}
 
 // KCalCore::Person::Ptr is equivalent to KCal::Person*
 typedef QSharedPointer<const KCalCore::Person>  ConstPersonPtr;
