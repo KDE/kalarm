@@ -62,9 +62,13 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
          */
         void         haveEventsStatus(bool have);
 
+    protected:
+        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+
     private slots:
         void slotRowsInserted();
         void slotRowsRemoved();
+        void collectionStatusChanged(const Akonadi::Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted);
 
     private:
         KAlarm::CalEvent::Types mAllowedTypes; // types of events allowed in this model

@@ -2,6 +2,7 @@
 #warning Update a calendar format, enable the calendar, copy old version on top -> crash
 #warning Add a directory resource containing 2 alarm types, right click on it -> crash
 #warning Set default template calendar to read-only -> crash
+#warning Set default archived calendar to read-only, then read-write -> now "other format"
 #endif
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
@@ -185,6 +186,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         case AlarmActionsRole:
         case AlarmActionRole:
         case EnabledRole:
+        case EnabledTypesRole:
         case CommandErrorRole:
         case BaseColourRole:
         case AlarmTypeRole:
@@ -202,7 +204,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         {
             case Qt::DisplayRole:
                 return displayName_p(collection);
-            case EnabledRole:
+            case EnabledTypesRole:
                 if (!collection.hasAttribute<CollectionAttribute>())
                     return 0;
                 return static_cast<int>(collection.attribute<CollectionAttribute>()->enabled());
@@ -513,7 +515,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 updateCollection = true;
                 break;
             }
-            case EnabledRole:
+            case EnabledTypesRole:
             {
                 KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
