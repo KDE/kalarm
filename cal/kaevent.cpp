@@ -4348,6 +4348,13 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
 #endif
                 if (!alarm->hasStartOffset())
                     continue;
+                // Find whether the alarm triggers at the same time as the main
+                // alarm, in which case its offset needs to be set to 0. The
+                // following trigger with the main alarm:
+                //  - Additional audio alarm
+                //  - PRE_ACTION_TYPE
+                //  - POST_ACTION_TYPE
+                //  - DISPLAYING_TYPE
                 bool mainAlarm = true;
                 QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::TYPE_PROPERTY);
                 QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
@@ -4358,10 +4365,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
                     ||  type == Private::TIME_DEFERRAL_TYPE
                     ||  type == Private::DATE_DEFERRAL_TYPE
                     ||  type == Private::REMINDER_TYPE
-                    ||  type == REMINDER_ONCE_TYPE
-                    ||  type == Private::DISPLAYING_TYPE
-                    ||  type == Private::PRE_ACTION_TYPE
-                    ||  type == Private::POST_ACTION_TYPE)
+                    ||  type == REMINDER_ONCE_TYPE)
                     {
                         mainAlarm = false;
                         break;
@@ -4418,12 +4422,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
                     {
                         QString type = types[t];
                         if (type == Private::TIME_DEFERRAL_TYPE
-                        ||  type == Private::DATE_DEFERRAL_TYPE
-                        ||  type == Private::REMINDER_TYPE
-                        ||  type == REMINDER_ONCE_TYPE)
-#ifdef __GNUC__
-#warning Should set offset for all types of non-main alarms?
-#endif
+                        ||  type == Private::DATE_DEFERRAL_TYPE)
                         {
                             alarm->setStartOffset(alarm->startOffset().asSeconds() - adjustment);
                             converted = true;
