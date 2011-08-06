@@ -4325,8 +4325,8 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
             /*
              * It's a KAlarm pre-1.4.14 or KAlarm 1.9 series pre-1.9.7 calendar file.
              * For recurring events, convert the main alarm offset to an absolute
-             * time in the X-KDE-KALARM-NEXTRECUR property, and convert main
-             * alarm offsets to zero and deferral alarm offsets to be relative to
+             * time in the X-KDE-KALARM-NEXTRECUR property, and set main alarm
+             * offsets to zero, and convert deferral alarm offsets to be relative to
              * the next recurrence.
              */
             QStringList flags = event->customProperty(KAlarm::Calendar::APPNAME, Private::FLAGS_PROPERTY).split(Private::SC, QString::SkipEmptyParts);
@@ -4346,33 +4346,45 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
 #endif
                 if (!alarm->hasStartOffset())
                     continue;
+                // Find whether the alarm triggers at the same time as the main
+                // alarm, in which case its offset needs to be set to 0. The
+                // following trigger with the main alarm:
+                //  - Additional audio alarm
+                //  - PRE_ACTION_TYPE
+                //  - POST_ACTION_TYPE
+                //  - DISPLAYING_TYPE
                 bool mainAlarm = true;
                 QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::TYPE_PROPERTY);
                 QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
-                for (int i = 0;  i < types.count();  ++i)
+                for (int t = 0;  t < types.count();  ++t)
                 {
-                    QString type = types[i];
+                    QString type = types[t];
                     if (type == Private::AT_LOGIN_TYPE
                     ||  type == Private::TIME_DEFERRAL_TYPE
                     ||  type == Private::DATE_DEFERRAL_TYPE
                     ||  type == Private::REMINDER_TYPE
-                    ||  type == REMINDER_ONCE_TYPE
-                    ||  type == Private::DISPLAYING_TYPE
-                    ||  type == Private::PRE_ACTION_TYPE
-                    ||  type == Private::POST_ACTION_TYPE)
+                    ||  type == REMINDER_ONCE_TYPE)
+                    {
                         mainAlarm = false;
+                        break;
+                    }
                 }
                 if (mainAlarm)
                 {
-                    mainExpired = false;
-                    nextMainDateTime = alarm->time();
-                    nextMainDateTime.setDateOnly(dateOnly);
-                    nextMainDateTime = nextMainDateTime.toTimeSpec(startDateTime);
-                    if (nextMainDateTime != startDateTime)
+                    if (mainExpired)
                     {
-                        QDateTime dt = nextMainDateTime.dateTime();
-                        event->setCustomProperty(KAlarm::Calendar::APPNAME, Private::NEXT_RECUR_PROPERTY,
-                                                 dt.toString(dateOnly ? "yyyyMMdd" : "yyyyMMddThhmmss"));
+                        // All main alarms are supposed to be at the same time, so
+                        // don't readjust the event's time for subsequent main alarms.
+                        mainExpired = false;
+                        nextMainDateTime = alarm->time();
+                        nextMainDateTime.setDateOnly(dateOnly);
+                        nextMainDateTime = nextMainDateTime.toTimeSpec(startDateTime);
+                        if (nextMainDateTime != startDateTime)
+                        {
+                            QDateTime dt = nextMainDateTime.dateTime();
+                            event->setCustomProperty(KAlarm::Calendar::APPNAME, Private::NEXT_RECUR_PROPERTY,
+                                                     dt.toString(dateOnly ? "yyyyMMdd" : "yyyyMMddThhmmss"));
+                        }
                     }
                     alarm->setStartOffset(0);
                     converted = true;
@@ -4404,9 +4416,9 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
                         continue;
                     QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::TYPE_PROPERTY);
                     QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
-                    for (int i = 0;  i < types.count();  ++i)
+                    for (int t = 0;  t < types.count();  ++t)
                     {
-                        QString type = types[i];
+                        QString type = types[t];
                         if (type == Private::TIME_DEFERRAL_TYPE
                         ||  type == Private::DATE_DEFERRAL_TYPE)
                         {
@@ -4615,10 +4627,10 @@ bool KAEvent::convertStartOfDay(Event* event)
                     continue;
                 if (data.type & KAAlarm::TIMED_DEFERRAL_FLAG)
                 {
-                    // Timed deferral alarm, so adjust the offset
+                    // Found a timed deferral alarm, so adjust the offset
                     deferralOffset = data.alarm->startOffset().asSeconds();
 #ifdef USE_AKONADI
-                    constCast<Alarm::Ptr>(data.alarm)->setStartOffset(deferralOffset - adjustment);
+                    const_cast<Alarm*>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
 #else
                     const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
 #endif
@@ -4626,9 +4638,9 @@ bool KAEvent::convertStartOfDay(Event* event)
                 else if (data.type == KAAlarm::AUDIO__ALARM
                 &&       data.alarm->startOffset().asSeconds() == deferralOffset)
                 {
-                    // Audio alarm is set for the same time as the deferral alarm
+                    // Audio alarm is set for the same time as the above deferral alarm
 #ifdef USE_AKONADI
-                    constCast<Alarm::Ptr>(data.alarm)->setStartOffset(deferralOffset - adjustment);
+                    const_cast<Alarm*>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
 #else
                     const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
 #endif
@@ -4640,6 +4652,7 @@ bool KAEvent::convertStartOfDay(Event* event)
     else
     {
         // It's a timed event. Fix any untimed alarms.
+        bool foundDeferral = false;
         int deferralOffset = 0;
         int newDeferralOffset = 0;
         DateTime start;
@@ -4654,24 +4667,26 @@ bool KAEvent::convertStartOfDay(Event* event)
             if ((data.type & KAAlarm::DEFERRED_ALARM)
             &&  !(data.type & KAAlarm::TIMED_DEFERRAL_FLAG))
             {
-                // Date-only deferral alarm, so adjust its time
+                // Found a date-only deferral alarm, so adjust its time
                 KDateTime altime = data.alarm->startOffset().end(nextMainDateTime);
                 altime.setTime(midnight);
                 deferralOffset = data.alarm->startOffset().asSeconds();
                 newDeferralOffset = event->dtStart().secsTo(altime);
 #ifdef USE_AKONADI
-                constCast<Alarm::Ptr>(data.alarm)->setStartOffset(newDeferralOffset);
+                const_cast<Alarm*>(data.alarm.data())->setStartOffset(newDeferralOffset);
 #else
                 const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
 #endif
+                foundDeferral = true;
                 changed = true;
             }
-            else if (data.type == KAAlarm::AUDIO__ALARM
-            &&       data.alarm->startOffset().asSeconds() == deferralOffset)
+            else if (foundDeferral
+                 &&  data.type == KAAlarm::AUDIO__ALARM
+                 &&  data.alarm->startOffset().asSeconds() == deferralOffset)
             {
-                // Audio alarm is set for the same time as the deferral alarm
+                // Audio alarm is set for the same time as the above deferral alarm
 #ifdef USE_AKONADI
-                constCast<Alarm::Ptr>(data.alarm)->setStartOffset(newDeferralOffset);
+                const_cast<Alarm*>(data.alarm.data())->setStartOffset(newDeferralOffset);
 #else
                 const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
 #endif

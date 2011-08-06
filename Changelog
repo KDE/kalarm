@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.7.4 --- 6 August 2011 ===
+- Fix conversion of pre-version 1.4.14 subsidiary alarms.
+
 === Version 2.7.3 --- 26 July 2011 ===
 - Fix crash when Wake From Suspend dialogue is shown with no alarm selected.
 
