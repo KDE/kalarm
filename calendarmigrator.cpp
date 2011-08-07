@@ -275,7 +275,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
 * Note: the collection should be up to date: use AkonadiModel::refresh() before
 *       calling this function.
 */
-void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool ignoreKeepFormat, QObject* parent)
+void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool ignoreKeepFormat, QWidget* parent)
 {
     kDebug() << collection.id();
     AgentInstance agent = AgentManager::self()->instance(collection.resource());
@@ -325,7 +325,7 @@ bool CalendarUpdater::update()
             QString versionString = KAlarm::getVersionString(compatAttr->version());
             QString msg = KAlarm::Calendar::conversionPrompt(mCollection.name(), versionString, false);
             kDebug() << "Version" << versionString;
-            if (KMessageBox::warningYesNo(0, msg) == KMessageBox::Yes)
+            if (KMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) == KMessageBox::Yes)
             {
                 // Tell the resource to update the backend storage format
                 QString errmsg;

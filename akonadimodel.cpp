@@ -31,6 +31,7 @@
 #include "collectionattribute.h"
 #include "compatibilityattribute.h"
 #include "eventattribute.h"
+#include "mainwindow.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "kalarmsettings.h"
@@ -1566,7 +1567,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             if (!mCollectionsBeingCreated.contains(collection.remoteId()))
             {
                 // Update to current KAlarm format if necessary, and if the user agrees
-                CalendarMigrator::updateToCurrentFormat(collection, false, this);
+                CalendarMigrator::updateToCurrentFormat(collection, false, MainWindow::mainMainWindow());
             }
         }
         else
