@@ -55,6 +55,8 @@ ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
     setDynamicSortFilter(true);
     connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotRowsInserted()));
     connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotRowsRemoved()));
+    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
+                                      SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
 }
 
 int ItemListModel::columnCount(const QModelIndex& /*parent*/) const
@@ -84,6 +86,31 @@ void ItemListModel::slotRowsRemoved()
         mHaveEvents = false;
         emit haveEventsStatus(false);
     }
+}
+
+/******************************************************************************
+* Called when a collection parameter or status has changed.
+* If the collection's enabled status has changed, re-filter the list to add or
+* remove its alarms.
+*/
+void ItemListModel::collectionStatusChanged(const Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted)
+{
+    Q_UNUSED(inserted);
+    if (!collection.isValid())
+        return;
+    if (change == AkonadiModel::Enabled)
+        invalidateFilter();
+}
+
+bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
+{
+    if (!EntityMimeTypeFilterModel::filterAcceptsRow(sourceRow, sourceParent))
+        return false;
+    // Get the alarm type of the item
+    QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
+    KAlarm::CalEvent::Type type = static_cast<KAlarm::CalEvent::Type>(sourceModel()->data(sourceIndex, AkonadiModel::StatusRole).toInt());
+    Collection parent = sourceIndex.data(AkonadiModel::ParentCollectionRole).value<Collection>();
+    return CollectionControlModel::isEnabled(parent, type);
 }
 
 #if 0
@@ -152,8 +179,8 @@ bool ItemListModel::haveEvents() const
 
 /*=============================================================================
 = Class: AlarmListModel
-= Filter proxy model containing all alarms of specified mime types in enabled
-= collections.
+= Filter proxy model containing all alarms (not templates) of specified mime
+= types in enabled collections.
 Equivalent to AlarmListFilterModel
 =============================================================================*/
 AlarmListModel* AlarmListModel::mAllInstance = 0;

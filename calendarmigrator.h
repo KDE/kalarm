@@ -42,7 +42,7 @@ class CalendarMigrator : public QObject
         ~CalendarMigrator();
         static CalendarMigrator* instance();
         static void execute();
-        static void updateToCurrentFormat(const Akonadi::Collection&, bool ignoreKeepFormat, QObject* parent);
+        static void updateToCurrentFormat(const Akonadi::Collection&, bool ignoreKeepFormat, QWidget* parent);
         template <class Interface> static Interface* getAgentInterface(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
     signals:

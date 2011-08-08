@@ -53,14 +53,14 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             ColumnCount
         };
         enum {   // additional data roles
-            // Collection and Item roles
-            EnabledRole = UserRole,    // true for enabled alarm, false for disabled
             // Collection roles
+            EnabledTypesRole = UserRole, // alarm types which are enabled for the collection
             BaseColourRole,            // background colour ignoring collection colour
             AlarmTypeRole,             // OR of event types which collection contains
             IsStandardRole,            // OR of event types which collection is standard for
             KeepFormatRole,            // user has chosen not to update collection's calendar storage format
             // Item roles
+            EnabledRole,               // true for enabled alarm, false for disabled
             StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
             AlarmActionsRole,          // KAEvent::Actions
             AlarmActionRole,           // KAEvent::Action

@@ -724,7 +724,7 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                 // Update the collection's status
                 AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
                 if (!model->isCollectionBeingDeleted(collection.id()))
-                    model->setData(model->collectionIndex(collection), static_cast<int>(enabled), AkonadiModel::EnabledRole);
+                    model->setData(model->collectionIndex(collection), value, AkonadiModel::EnabledTypesRole);
             }
             break;
         }
