@@ -234,14 +234,19 @@ QVariant CollectionListModel::data(const QModelIndex& index, int role) const
 = which are disabled for that alarm type, are unchecked.
 =============================================================================*/
 
+#ifdef __GNUC__
+#warning Quit with message windows open, restart -> all collections unticked
+#endif
 CollectionListModel* CollectionCheckListModel::mModel = 0;
+int                  CollectionCheckListModel::mInstanceCount = 0;
 
 CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, QObject* parent)
     : KCheckableProxyModel(parent),
       mAlarmType(type)
 {
+    ++mInstanceCount;
     if (!mModel)
-        mModel = new CollectionListModel(this);
+        mModel = new CollectionListModel(0);
     setSourceModel(mModel);    // the source model is NOT filtered by alarm type
     mSelectionModel = new QItemSelectionModel(mModel);
     setSelectionModel(mSelectionModel);
@@ -256,6 +261,15 @@ CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, 
 
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                                       SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
+}
+
+CollectionCheckListModel::~CollectionCheckListModel()
+{
+    if (--mInstanceCount <= 0)
+    {
+        delete mModel;
+        mModel = 0;
+    }
 }
 
 /******************************************************************************
