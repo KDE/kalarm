@@ -234,9 +234,6 @@ QVariant CollectionListModel::data(const QModelIndex& index, int role) const
 = which are disabled for that alarm type, are unchecked.
 =============================================================================*/
 
-#ifdef __GNUC__
-#warning Quit with message windows open, restart -> all collections unticked
-#endif
 CollectionListModel* CollectionCheckListModel::mModel = 0;
 int                  CollectionCheckListModel::mInstanceCount = 0;
 
@@ -261,6 +258,12 @@ CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, 
 
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                                       SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
+
+    // Initialise checked status for all collections.
+    // Note that this is only necessary if the model is recreated after
+    // being deleted.
+    for (int row = 0, count = mModel->rowCount();  row < count;  ++row)
+        setSelectionStatus(mModel->collection(row), mModel->index(row, 0));
 }
 
 CollectionCheckListModel::~CollectionCheckListModel()
