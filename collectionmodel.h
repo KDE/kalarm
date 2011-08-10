@@ -75,6 +75,7 @@ class CollectionCheckListModel : public KCheckableProxyModel
         Q_OBJECT
     public:
         explicit CollectionCheckListModel(KAlarm::CalEvent::Type, QObject* parent = 0);
+        ~CollectionCheckListModel();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
@@ -92,6 +93,7 @@ class CollectionCheckListModel : public KCheckableProxyModel
         void setSelectionStatus(const Akonadi::Collection&, const QModelIndex&);
 
         static CollectionListModel* mModel;
+        static int             mInstanceCount;
         KAlarm::CalEvent::Type mAlarmType;     // alarm type contained in this model
         QItemSelectionModel*   mSelectionModel;
 };

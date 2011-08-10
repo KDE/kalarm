@@ -235,13 +235,15 @@ QVariant CollectionListModel::data(const QModelIndex& index, int role) const
 =============================================================================*/
 
 CollectionListModel* CollectionCheckListModel::mModel = 0;
+int                  CollectionCheckListModel::mInstanceCount = 0;
 
 CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, QObject* parent)
     : KCheckableProxyModel(parent),
       mAlarmType(type)
 {
+    ++mInstanceCount;
     if (!mModel)
-        mModel = new CollectionListModel(this);
+        mModel = new CollectionListModel(0);
     setSourceModel(mModel);    // the source model is NOT filtered by alarm type
     mSelectionModel = new QItemSelectionModel(mModel);
     setSelectionModel(mSelectionModel);
@@ -256,6 +258,21 @@ CollectionCheckListModel::CollectionCheckListModel(KAlarm::CalEvent::Type type, 
 
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                                       SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
+
+    // Initialise checked status for all collections.
+    // Note that this is only necessary if the model is recreated after
+    // being deleted.
+    for (int row = 0, count = mModel->rowCount();  row < count;  ++row)
+        setSelectionStatus(mModel->collection(row), mModel->index(row, 0));
+}
+
+CollectionCheckListModel::~CollectionCheckListModel()
+{
+    if (--mInstanceCount <= 0)
+    {
+        delete mModel;
+        mModel = 0;
+    }
 }
 
 /******************************************************************************
