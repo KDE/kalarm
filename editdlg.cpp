@@ -39,6 +39,7 @@
 #include "latecancel.h"
 #include "lineedit.h"
 #include "mainwindow.h"
+#include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
 #include "radiobutton.h"
@@ -58,7 +59,6 @@
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kpushbutton.h>
-#include <kmessagebox.h>
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>
@@ -958,7 +958,7 @@ bool EditAlarmDlg::validate()
         if (!errmsg.isEmpty())
         {
             mTemplateName->setFocus();
-            KMessageBox::sorry(this, errmsg);
+            MessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -1006,7 +1006,7 @@ bool EditAlarmDlg::validate()
                                                   "The start date/time does not match the alarm's recurrence pattern, "
                                                   "so it will be adjusted to the date/time of the next recurrence (%1).",
                                                   KGlobal::locale()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
-                if (KMessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
+                if (MessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
                     return false;
             }
         }
@@ -1030,12 +1030,12 @@ bool EditAlarmDlg::validate()
                 // has already expired, so we must adjust it.
                 if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
                 {
-                    KMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
+                    MessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
                 }
                 if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::DISPLAY_TRIGGER).isValid())
                 {
-                    if (KMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
+                    if (MessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
                         != KMessageBox::Continue)
                         return false;
                 }
@@ -1047,7 +1047,7 @@ bool EditAlarmDlg::validate()
         {
             mTabs->setCurrentIndex(mRecurPageIndex);
             errWidget->setFocus();
-            KMessageBox::sorry(this, errmsg);
+            MessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -1064,7 +1064,7 @@ bool EditAlarmDlg::validate()
             {
                 mTabs->setCurrentIndex(mMainPageIndex);
                 mReminder->setFocusOnCount();
-                KMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked."
+                MessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked."
                                  , Reminder::i18n_chk_FirstRecurrenceOnly()));
                 return false;
             }
@@ -1079,14 +1079,14 @@ bool EditAlarmDlg::validate()
             if (longestRecurMinutes > 0
             &&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminder)
             {
-                KMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
+                MessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
             if (!recurEvent.repetition().isDaily()
             &&  ((mTemplate && mTemplateAnyTime->isChecked())  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
             {
-                KMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
+                MessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
@@ -1118,7 +1118,7 @@ bool EditAlarmDlg::validate()
         if (!mCollection.isValid())
         {
             if (!cancelled)
-                KMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
+                MessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
             return false;
         }
     }
@@ -1147,7 +1147,7 @@ bool EditAlarmDlg::validate()
         if (!mResource)
         {
             if (!cancelled)
-                KMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
+                MessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
             return false;
         }
     }

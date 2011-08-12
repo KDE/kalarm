@@ -1,7 +1,7 @@
 /*
  *  messagebox.cpp  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2008,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 
 QMap<QString, KMessageBox::ButtonCode> MessageBox::mContinueDefaults;
 
+const MessageBox::Options MessageBox::NoAppModal = KMessageBox::Options(KMessageBox::Notify | MessageBox::WindowModal);
 
 /******************************************************************************
 * Set the default button for continue/cancel message boxes with the specified
@@ -52,21 +53,6 @@ KMessageBox::ButtonCode MessageBox::getContinueDefault(const QString& dontAskAga
             defaultButton = it.value();
     }
     return defaultButton;
-}
-
-/******************************************************************************
-* Continue/cancel message box.
-* If 'dontAskAgainName' is specified:
-*   1) The message box will only be suppressed if the user chose Continue last time.
-*   2) The default button is that last set with either setContinueDefault() or
-*      warningContinueCancel() for that 'dontAskAgainName' value. If neither method
-*      has set a default button, Continue is the default.
-*/
-int MessageBox::warningContinueCancel(QWidget* parent, const QString& text, const QString& caption,
-                                      const KGuiItem& buttonContinue, const QString& dontAskAgainName)
-{
-    ButtonCode defaultButton = getContinueDefault(dontAskAgainName);
-    return warningContinueCancel(parent, defaultButton, text, caption, buttonContinue, dontAskAgainName);
 }
 
 /******************************************************************************

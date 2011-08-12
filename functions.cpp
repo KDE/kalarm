@@ -37,6 +37,7 @@
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
+#include "messagebox.h"
 #include "messagewin.h"
 #include "preferences.h"
 #include "shellprocess.h"
@@ -72,7 +73,6 @@ using namespace KCal;
 #include <ksystemtimezone.h>
 #include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
-#include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <kicon.h>
 #include <kio/netaccess.h>
@@ -1065,7 +1065,7 @@ void displayUpdateError(QWidget* parent, UpdateStatus status, UpdateError code, 
                                        : i18nc("@info", "Error saving alarm template");
                 break;
         }
-        KMessageBox::error(parent, errmsg);
+        MessageBox::error(parent, errmsg);
     }
     else if (showKOrgError)
         displayKOrgUpdateError(parent, code, status, nKOrgAlarms);
@@ -1101,7 +1101,7 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateStatus korg
         msg = i18nc("@info", "<para>%1</para><para>(Error communicating with KOrganizer)</para>", errmsg);
     else
         msg = errmsg;
-    KMessageBox::error(parent, msg);
+    MessageBox::error(parent, msg);
 }
 
 /******************************************************************************
@@ -1308,7 +1308,7 @@ void Private::cancelRtcWake()
     // setRtcWakeTime will only work with a parent window specified
     setRtcWakeTime(0, mMsgParent);
     deleteRtcWakeConfig();
-    KMessageBox::information(mMsgParent, i18nc("info", "The scheduled Wake from Suspend has been cancelled."));
+    MessageBox::information(mMsgParent, i18nc("info", "The scheduled Wake from Suspend has been cancelled."));
 }
 
 /******************************************************************************
@@ -1354,7 +1354,7 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
             }
             errmsg = i18nc("@info", "Error obtaining authorization (%1)", errcode);
         }
-        KMessageBox::information(parent, errmsg);
+        MessageBox::information(parent, errmsg);
         return false;
     }
     return true;
@@ -1377,7 +1377,7 @@ void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* pa
     if (!AlarmResources::instance()->activeCount(KAlarm::CalEvent::TEMPLATE, true))
 #endif
     {
-        KMessageBox::sorry(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
+        MessageBox::sorry(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
         return;
     }
     // Use AutoQPointer to guard against crash on application exit while
@@ -1632,12 +1632,12 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
     if (event  &&  event->action() == KAEvent::EMAIL
     &&  Preferences::emailAddress().isEmpty())
-        KMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
+        MessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
                                                "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
 
     if (!theApp()->alarmsEnabled())
     {
-        if (KMessageBox::warningYesNo(parent, i18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
+        if (MessageBox::warningYesNo(parent, i18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
                                       QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
                                       QLatin1String("EditEnableAlarms"))
                         == KMessageBox::Yes)
@@ -1988,10 +1988,10 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
                     errmsg = i18nc("@info", "Please select a file to play");
                 else
                     kFatal() << "Program error";
-                KMessageBox::sorry(errmsgParent, errmsg);
+                MessageBox::sorry(errmsgParent, errmsg);
                 return false;
             case FileErr_Directory:
-                KMessageBox::sorry(errmsgParent, i18nc("@info", "<filename>%1</filename> is a folder", file));
+                MessageBox::sorry(errmsgParent, i18nc("@info", "<filename>%1</filename> is a folder", file));
                 return false;
             case FileErr_Nonexistent:   errmsg = i18nc("@info", "<filename>%1</filename> not found", file);  break;
             case FileErr_Unreadable:    errmsg = i18nc("@info", "<filename>%1</filename> is not readable", file);  break;
@@ -2000,7 +2000,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
             default:
                 break;
         }
-        if (KMessageBox::warningContinueCancel(errmsgParent, errmsg)
+        if (MessageBox::warningContinueCancel(errmsgParent, errmsg)
             == KMessageBox::Cancel)
             return false;
     }

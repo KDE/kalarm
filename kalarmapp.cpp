@@ -512,8 +512,8 @@ void KAlarmApp::checkKtimezoned()
     if (!KSystemTimeZones::isTimeZoneDaemonAvailable())
     {    
         kDebug() << "ktimezoned not running: using UTC only";
-        KMessageBox::information(MainWindow::mainMainWindow(),
-                                 i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
+        MessageBox::information(MainWindow::mainMainWindow(),
+                                i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
                      QString(), QLatin1String("tzunavailable"));
     }
 #endif
@@ -594,7 +594,7 @@ void KAlarmApp::doQuit(QWidget* parent)
         int option = KMessageBox::No;
         if (!Preferences::autoStartChangedByUser())
         {
-            option = KMessageBox::questionYesNoCancel(parent,
+            option = MessageBox::questionYesNoCancel(parent,
                                          i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
                                                         "(Note that alarms will be disabled if KAlarm is not started.)"),
                                          QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
@@ -655,7 +655,7 @@ void KAlarmApp::quitFatal()
             return;
         case 1:
             mFatalError = 2;
-            KMessageBox::error(0, mFatalMessage);
+            KMessageBox::error(0, mFatalMessage);   // this is an application modal window
             mFatalError = 3;
             // fall through to '3'
         case 3:
@@ -1990,7 +1990,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                         errmsg += '\n';
                         errmsg += proc->command();
                     }
-                    KMessageBox::error(pd->messageBoxParent, errmsg);
+                    MessageBox::error(pd->messageBoxParent, errmsg);
                 }
                 else
                     commandErrorMsg(proc, *pd->event, pd->alarm, pd->flags);

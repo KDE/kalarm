@@ -22,6 +22,7 @@
 #include "autoqpointer.h"
 #include "collectionattribute.h"
 #include "compatibilityattribute.h"
+#include "messagebox.h"
 #include "preferences.h"
 
 #include <akonadi/collectiondialog.h>
@@ -30,7 +31,6 @@
 #include <akonadi/entitymimetypefiltermodel.h>
 
 #include <klocale.h>
-#include <kmessagebox.h>
 
 #include <QApplication>
 #include <QMouseEvent>
@@ -357,14 +357,14 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
                         errmsg = i18nc("@info", "You cannot disable your default archived alarm calendar "
                                                 "while expired alarms are configured to be kept.");
                     }
-                    else if (KMessageBox::warningContinueCancel(messageParent,
+                    else if (MessageBox::warningContinueCancel(messageParent,
                                                            i18nc("@info", "Do you really want to disable your default calendar?"))
                                == KMessageBox::Cancel)
                         return false;
                 }
                 if (!errmsg.isEmpty())
                 {
-                    KMessageBox::sorry(messageParent, errmsg);
+                    MessageBox::sorry(messageParent, errmsg);
                     return false;
                 }
             }
@@ -787,7 +787,7 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                     }
                     if (singleType)
                         msg = i18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
-                    KMessageBox::information(messageParent, msg);
+                    MessageBox::information(messageParent, msg);
                 }
             }
             break;

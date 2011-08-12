@@ -19,10 +19,10 @@
  */
 
 #include "calendarcompat.h"
+#include "messagebox.h"
 
 #include <kcal/calendarlocal.h>
 
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 namespace CalendarCompat
@@ -63,7 +63,7 @@ KAlarm::Calendar::Compat fix(KCal::CalendarLocal& calendar, const QString& local
     if (conv == AlarmResource::PROMPT  ||  conv == AlarmResource::PROMPT_PART)
     {
         QString msg = KAlarm::Calendar::conversionPrompt(resource->resourceName(), versionString, (conv == AlarmResource::PROMPT));
-        if (KMessageBox::warningYesNo(0, msg) != KMessageBox::Yes)
+        if (MessageBox::warningYesNo(MainWindow::mainMainWindow(), msg) != KMessageBox::Yes)
             return KAlarm::Calendar::Convertible;
     }
     KAlarm::Calendar::setKAlarmVersion(calendar);

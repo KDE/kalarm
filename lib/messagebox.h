@@ -1,7 +1,7 @@
 /*
  *  messagebox.h  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright © 2004,2007 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2007,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #ifndef MESSAGEBOX_H
 #define MESSAGEBOX_H
 
+#include <kdeversion.h>
 #include <kstandardguiitem.h>
 #include <kmessagebox.h>
 
@@ -73,20 +74,6 @@ class MessageBox : public KMessageBox
                                           const QString& caption = QString(),
                                           const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
                                           const QString& dontAskAgainName = QString());
-        /** Displays a Continue/Cancel message box.
-         *  @param parent Parent widget
-         *  @param text Message string
-         *  @param caption Caption (window title) of the message box
-         *  @param buttonContinue The text for the first button (default = "Continue")
-         *  @param dontAskAgainName If specified, (1) The message box will only be suppressed
-         *    if the user chose Continue last time, and (2) The default button is that last set
-         *    with either setContinueDefault() or warningContinueCancel() for the same
-         *    @p dontAskAgainName value. If neither method has been used to set a default button,
-         *    Continue is the default.
-         */
-        static int  warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
-                                          const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
-                                          const QString& dontAskAgainName = QString());
         /** If there is no current setting for whether a non-Yes/No message box should be
          *  shown, sets it to @p defaultShow.
          *  If a Continue/Cancel message box has Cancel as the default button, either
@@ -116,6 +103,76 @@ class MessageBox : public KMessageBox
          *  @param dontShow If true, the message box will be suppressed and will return Continue.
          */
         static void saveDontShowAgainContinue(const QString& dontShowAgainName, bool dontShow = true);
+ 
+        /** Same as KMessageBox::detailedError() except that it defaults to window-modal,
+         *  not application-modal. */
+        static void detailedError(QWidget* parent, const QString& text, const QString& details,
+                                  const QString& caption = QString(), Options options = Options(Notify|WindowModal))
+        { KMessageBox::detailedError(parent, text, details, caption, options); }
+ 
+        /** Same as KMessageBox::detailedSorry() except that it defaults to window-modal,
+         *  not application-modal. */
+        static void detailedSorry(QWidget* parent, const QString& text, const QString& details,
+                                  const QString& caption = QString(), Options options = Options(Notify|WindowModal))
+        { KMessageBox::detailedSorry(parent, text, details, caption, options); }
+ 
+        /** Same as KMessageBox::error() except that it defaults to window-modal,
+         *  not application-modal. */
+        static void error(QWidget* parent, const QString& text, const QString& caption = QString(),
+                          Options options = Options(Notify|WindowModal))
+        { KMessageBox::error(parent, text, caption, options); }
+ 
+        /** Same as KMessageBox::information() except that it defaults to window-modal,
+         *  not application-modal. */
+        static void information(QWidget* parent, const QString& text, const QString& caption = QString(),
+                                const QString& dontShowAgainName = QString(), Options options = Options(Notify|WindowModal))
+        { KMessageBox::information(parent, text, caption, dontShowAgainName, options); }
+ 
+        /** Same as KMessageBox::sorry() except that it defaults to window-modal,
+         *  not application-modal. */
+        static void sorry(QWidget* parent, const QString& text, const QString& caption = QString(),
+                          Options options = Options(Notify|WindowModal))
+        { KMessageBox::sorry(parent, text, caption, options); }
+ 
+        /** Same as KMessageBox::questionYesNo() except that it defaults to window-modal,
+         *  not application-modal. */
+        static int questionYesNo(QWidget* parent, const QString& text, const QString& caption = QString(),
+                                 const KGuiItem& buttonYes = KStandardGuiItem::yes(),
+                                 const KGuiItem& buttonNo = KStandardGuiItem::no(),
+                                 const QString& dontAskAgainName = QString(), Options options = Options(Notify|WindowModal))
+        { return KMessageBox::questionYesNo(parent, text, caption, buttonYes, buttonNo, dontAskAgainName, options); }
+ 
+        /** Same as KMessageBox::questionYesNoCancel() except that it defaults
+         *  to window-modal, not application-modal. */
+        static int questionYesNoCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
+                                       const KGuiItem& buttonYes = KStandardGuiItem::yes(),
+                                       const KGuiItem& buttonNo = KStandardGuiItem::no(),
+                                       const KGuiItem &buttonCancel = KStandardGuiItem::cancel(),
+                                       const QString& dontAskAgainName = QString(), Options options = Options(Notify|WindowModal))
+        { return KMessageBox::questionYesNoCancel(parent, text, caption, buttonYes, buttonNo, buttonCancel, dontAskAgainName, options); }
+ 
+        /** Same as KMessageBox::warningContinueCancel() except that it defaults to window-modal,
+         *  not application-modal. */
+        static int warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
+                                         const KGuiItem& buttonContinue = KStandardGuiItem::cont(),
+                                         const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
+                                         const QString& dontAskAgainName = QString(), Options options = Options(Notify|WindowModal))
+        { return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, buttonCancel, dontAskAgainName, options); }
+ 
+        /** Same as KMessageBox::warningYesNo() except that it defaults to window-modal,
+         *  not application-modal. */
+        static int warningYesNo(QWidget* parent, const QString& text, const QString& caption = QString(),
+                                const KGuiItem& buttonYes = KStandardGuiItem::yes(),
+                                const KGuiItem& buttonNo = KStandardGuiItem::no(),
+                                const QString& dontAskAgainName = QString(), Options options = Options(Notify|Dangerous|WindowModal))
+        { return KMessageBox::warningYesNo(parent, text, caption, buttonYes, buttonNo, dontAskAgainName, options); }
+
+        /** Shortcut to represent Options(Notify | WindowModal). */
+        static const Options NoAppModal;
+
+#if !KDE_IS_VERSION(4,7,1)
+        static const Option WindowModal = Notify;
+#endif
 
     private:
         static void saveDontShowAgain(const QString& dontShowAgainName, bool yesno, bool dontShow, const char* yesnoResult = 0);
