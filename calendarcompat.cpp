@@ -19,6 +19,7 @@
  */
 
 #include "calendarcompat.h"
+#include "mainwindow.h"
 #include "messagebox.h"
 
 #include <kcal/calendarlocal.h>
