@@ -20,11 +20,11 @@
 
 #include "kalarm.h"
 
+#include "messagebox.h"
 #include "preferences.h"
 #include "resourcemodelview.moc"
 
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <QApplication>
@@ -412,8 +412,8 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
             // It's the standard resource for its type.
             if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
             {
-                KMessageBox::sorry(static_cast<QWidget*>(parent()),
-                                   i18nc("@info", "You cannot disable your default active alarm calendar."));
+                MessageBox::sorry(static_cast<QWidget*>(parent()),
+                                  i18nc("@info", "You cannot disable your default active alarm calendar."));
                 return false;
 
             }
@@ -421,13 +421,13 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
             {
                 // Only allow the archived alarms standard resource to be disabled if
                 // we're not saving archived alarms.
-                KMessageBox::sorry(static_cast<QWidget*>(parent()),
-                                   i18nc("@info", "You cannot disable your default archived alarm calendar "
+                MessageBox::sorry(static_cast<QWidget*>(parent()),
+                                  i18nc("@info", "You cannot disable your default archived alarm calendar "
                                         "while expired alarms are configured to be kept."));
                 return false;
             }
-            if (KMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
-                                                   i18nc("@info", "Do you really want to disable your default calendar?"))
+            if (MessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
+                                                  i18nc("@info", "Do you really want to disable your default calendar?"))
                        == KMessageBox::Cancel)
                 return false;
         }

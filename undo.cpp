@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,10 +25,10 @@
 #include "alarmtext.h"
 #include "functions.h"
 #include "kaevent.h"
+#include "messagebox.h"
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <QObject>
@@ -443,7 +443,7 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
         case UndoItem::ERR_PROG:       err = i18nc("@info/plain", "Program error");  break;
         default:                       err = i18nc("@info/plain", "Unknown error");  break;
     }
-    KMessageBox::sorry(parent, i18nc("@info Undo-action: message", "%1: %2", action, err));
+    MessageBox::sorry(parent, i18nc("@info Undo-action: message", "%1: %2", action, err));
     return false;
 }
 

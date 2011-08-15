@@ -24,6 +24,8 @@
 #include "kalarmdirsettings.h"
 #include "collectionattribute.h"
 #include "compatibilityattribute.h"
+#include "mainwindow.h"
+#include "messagebox.h"
 #include "version.h"
 
 #include <akonadi/agentinstancecreatejob.h>
@@ -37,7 +39,6 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <QTimer>
@@ -256,7 +257,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
             errmsg = i18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
         else
             errmsg = i18nc("@info", "<para>%1</para><para>%2<nl/>(%3)</para>", errmsg, locn, creator->errorMessage());
-        KMessageBox::error(0, errmsg);
+        MessageBox::error(MainWindow::mainMainWindow(), errmsg);
     }
     creator->deleteLater();
 
@@ -325,7 +326,7 @@ bool CalendarUpdater::update()
             QString versionString = KAlarm::getVersionString(compatAttr->version());
             QString msg = KAlarm::Calendar::conversionPrompt(mCollection.name(), versionString, false);
             kDebug() << "Version" << versionString;
-            if (KMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) == KMessageBox::Yes)
+            if (MessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg))
             {
                 // Tell the resource to update the backend storage format
                 QString errmsg;
@@ -346,9 +347,10 @@ bool CalendarUpdater::update()
                 }
                 if (!errmsg.isEmpty())
                 {
-                    KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)",
-                                                i18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
-                                                errmsg));
+                    MessageBox::error(MainWindow::mainMainWindow(),
+                                      i18nc("@info", "%1<nl/>(%2)",
+                                            i18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
+                                      errmsg));
                 }
             }
             else

@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@
 #include "label.h"
 #include "latecancel.h"
 #include "mainwindow.h"
+#include "messagebox.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "recurrenceedit.h"
@@ -64,7 +65,6 @@ using namespace KHolidays;
 #include <kstandarddirs.h>
 #include <kshell.h>
 #include <klineedit.h>
-#include <kmessagebox.h>
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -216,7 +216,7 @@ void KAlarmPrefDlg::slotApply()
     if (!errmsg.isEmpty())
     {
         setCurrentPage(mEmailPageItem);
-        if (KMessageBox::warningYesNo(this, errmsg) != KMessageBox::Yes)
+        if (MessageBox::warningYesNo(this, errmsg) != KMessageBox::Yes)
         {
             mValid = false;
             return;
@@ -226,7 +226,7 @@ void KAlarmPrefDlg::slotApply()
     if (!errmsg.isEmpty())
     {
         setCurrentPage(mEditPageItem);
-        KMessageBox::sorry(this, errmsg);
+        MessageBox::sorry(this, errmsg);
         mValid = false;
         return;
     }
@@ -261,9 +261,9 @@ void KAlarmPrefDlg::slotCancel()
 // Reset all controls to the application defaults
 void KAlarmPrefDlg::slotDefault()
 {
-    switch (KMessageBox::questionYesNoCancel(this, i18nc("@info", "Reset all tabs to their default values, or only reset the current tab?"),
-                                             QString(),
-                                             KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
+    switch (MessageBox::questionYesNoCancel(this, i18nc("@info", "Reset all tabs to their default values, or only reset the current tab?"),
+                                            QString(),
+                                            KGuiItem(i18nc("@action:button Reset ALL tabs", "&All")),
                          KGuiItem(i18nc("@action:button Reset the CURRENT tab", "C&urrent"))))
     {
         case KMessageBox::Yes:
@@ -542,7 +542,7 @@ void MiscPrefTab::apply(bool syncToDisc)
             if (KStandardDirs::findExe(cmd).isEmpty())
             {
                 mXtermCommand->setFocus();
-                if (KMessageBox::warningContinueCancel(topWidget(), i18nc("@info", "Command to invoke terminal window not found: <command>%1</command>", cmd))
+                if (MessageBox::warningContinueCancel(topWidget(), i18nc("@info", "Command to invoke terminal window not found: <command>%1</command>", cmd))
                                 != KMessageBox::Continue)
                     return;
             }
@@ -584,7 +584,7 @@ void MiscPrefTab::apply(bool syncToDisc)
 void MiscPrefTab::slotAutostartClicked()
 {
     if (!mAutoStart->isChecked()
-    &&  KMessageBox::warningYesNo(topWidget(),
+    &&  MessageBox::warningYesNo(topWidget(),
                               i18nc("@info", "You should not uncheck this option unless you intend to discontinue use of <application>KAlarm</application>"),
                               QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()
                              ) != KMessageBox::Yes)
@@ -935,7 +935,7 @@ void StorePrefTab::slotArchivedToggled(bool)
     &&  !AlarmResources::instance()->getStandardResource(KAlarm::CalEvent::ARCHIVED))
 #endif
     {
-        KMessageBox::sorry(topWidget(),
+        MessageBox::sorry(topWidget(),
              i18nc("@info", "<para>A default calendar is required in order to archive alarms, but none is currently enabled.</para>"
                   "<para>If you wish to keep expired alarms, please first use the calendars view to select a default "
                   "archived alarms calendar.</para>"));
@@ -956,8 +956,8 @@ void StorePrefTab::slotClearArchived()
 #else
     bool single = AlarmResources::instance()->activeCount(KAlarm::CalEvent::ARCHIVED, false) <= 1;
 #endif
-    if (KMessageBox::warningContinueCancel(topWidget(), single ? i18nc("@info", "Do you really want to delete all archived alarms?")
-                                                        : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm calendar?"))
+    if (MessageBox::warningContinueCancel(topWidget(), single ? i18nc("@info", "Do you really want to delete all archived alarms?")
+                                                              : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm calendar?"))
             != KMessageBox::Continue)
         return;
     theApp()->purgeAll();

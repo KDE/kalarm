@@ -32,6 +32,7 @@
 #include "compatibilityattribute.h"
 #include "eventattribute.h"
 #include "mainwindow.h"
+#include "messagebox.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "kalarmsettings.h"
@@ -54,7 +55,6 @@
 #include <akonadi/itemfetchscope.h>
 
 #include <klocale.h>
-#include <kmessagebox.h>
 
 #include <QApplication>
 #include <QFileInfo>
@@ -1135,7 +1135,9 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
         emit collectionDeleted(jobData.id, false);
         QString errMsg = i18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
         kError() << errMsg << ":" << j->errorString();
-        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        KMessageBox::error(MainWindow::mainMainWindow(),
+                           i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()),
+                           QString(), MessageBox::NoAppModal);
     }
     else
         emit collectionDeleted(jobData.id, true);
@@ -1186,7 +1188,9 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
         {
             QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
             kError() << "Id:" << collection.id() << errMsg << ":" << j->errorString();
-            KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+            KMessageBox::error(MainWindow::mainMainWindow(),
+                               i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()),
+                               QString(), MessageBox::NoAppModal);
         }
     }
     else
@@ -1475,7 +1479,9 @@ void AkonadiModel::itemJobDone(KJob* j)
             Item current = itemById(itemId);    // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
-        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        KMessageBox::error(MainWindow::mainMainWindow(),
+                           i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()),
+                           QString(), MessageBox::NoAppModal);
     }
     else
     {

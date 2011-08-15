@@ -1,7 +1,7 @@
 /*
  *  deferdlg.cpp  -  dialog to defer an alarm
  *  Program:  kalarm
- *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,10 +27,10 @@
 #include "functions.h"
 #include "kaevent.h"
 #include "kalarmapp.h"
+#include "messagebox.h"
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <QVBoxLayout>
@@ -112,7 +112,7 @@ void DeferAlarmDlg::slotOk()
             case KAEvent::LIMIT_NONE:
                 break;   // can't happen with a valid endTime
         }
-        KMessageBox::sorry(this, text);
+        MessageBox::sorry(this, text);
     }
     else
         accept();
