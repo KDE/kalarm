@@ -27,12 +27,12 @@
 #include "kaevent.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
+#include "messagebox.h"
 #include "preferences.h"
 
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <QTimer>
@@ -175,10 +175,10 @@ void WakeFromSuspendDlg::useWakeClicked()
 #endif
     if (dt.isDateOnly())
     {
-        KMessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
+        MessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
         return;
     }
-    if (KMessageBox::warningContinueCancel(this,
+    if (MessageBox::warningContinueCancel(this,
                 i18nc("@info", "<para>This wakeup will cancel any existing wakeup which has been set by KAlarm "
                                "or any other application, because your computer can only schedule a single wakeup time.</para>"
                                "<para><b>Note:</b> Wake From Suspend is not supported at all on some computers, especially older ones, "

@@ -335,14 +335,14 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
                         errmsg = i18nc("@info", "You cannot disable your default archived alarm calendar "
                                                 "while expired alarms are configured to be kept.");
                     }
-                    else if (KMessageBox::warningContinueCancel(messageParent,
+                    else if (MessageBox::warningContinueCancel(messageParent,
                                                            i18nc("@info", "Do you really want to disable your default calendar?"))
                                == KMessageBox::Cancel)
                         return false;
                 }
                 if (!errmsg.isEmpty())
                 {
-                    KMessageBox::sorry(messageParent, errmsg);
+                    MessageBox::sorry(messageParent, errmsg);
                     return false;
                 }
             }

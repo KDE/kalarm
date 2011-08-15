@@ -1,7 +1,7 @@
 /*
  *  resourceconfigdialog.cpp  -  KAlarm resource configuration dialog
  *  Program:  kalarm
- *  Copyright © 2006-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on configdialog.cpp in kdelibs/kresources,
  *  Copyright (c) 2002 Tobias Koenig <tokoe@kde.org>
  *  Copyright (c) 2002 Jan-Pascal van Best <janpascal@vanbest.org>
@@ -24,12 +24,12 @@
 
 #include "alarmresource.h"
 #include "resourceconfigdialog.moc"
+#include "messagebox.h"
 
 #include <kresources/factory.h>
 
 #include <klocale.h>
 #include <klineedit.h>
-#include <kmessagebox.h>
 
 #include <QGroupBox>
 #include <QLabel>
@@ -120,7 +120,7 @@ void ResourceConfigDialog::accept()
 {
     if (mName->text().isEmpty())
     {
-        KMessageBox::sorry(this, i18nc("@info", "Please enter a calendar name."));
+        MessageBox::sorry(this, i18nc("@info", "Please enter a calendar name."));
         return;
     }
 

@@ -1,7 +1,7 @@
 /*
  *  alarmtimewidget.cpp  -  alarm date/time entry widget
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "buttongroup.h"
 #include "checkbox.h"
 #include "datetime.h"
+#include "messagebox.h"
 #include "preferences.h"
 #include "pushbutton.h"
 #include "radiobutton.h"
@@ -35,7 +36,6 @@
 #include <libkdepim/kdateedit.h>
 
 #include <kdialog.h>
-#include <kmessagebox.h>
 #include <klocale.h>
 
 #include <QGroupBox>
@@ -289,7 +289,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
         if (!mDelayTimeEdit->isValid())
         {
             if (showErrorMessage)
-                KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
+                MessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
             if (errorWidget)
                 *errorWidget = mDelayTimeEdit;
             return KDateTime();
@@ -308,14 +308,14 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
             if (!mDateEdit->date().isValid())
             {
                 if (showErrorMessage)
-                    KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid date"));
+                    MessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid date"));
                 if (errorWidget)
                     *errorWidget = mDateEdit;
             }
             else
             {
                 if (showErrorMessage)
-                    KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
+                    MessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Invalid time"));
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
             }
@@ -329,7 +329,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
             if (checkExpired  &&  result.date() < now.date())
             {
                 if (showErrorMessage)
-                    KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm date has already expired"));
+                    MessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm date has already expired"));
                 if (errorWidget)
                     *errorWidget = mDateEdit;
                 return KDateTime();
@@ -341,7 +341,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
             if (checkExpired  &&  result <= now.addSecs(1))
             {
                 if (showErrorMessage)
-                    KMessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
+                    MessageBox::sorry(const_cast<AlarmTimeWidget*>(this), i18nc("@info", "Alarm time has already expired"));
                 if (errorWidget)
                     *errorWidget = mTimeEdit;
                 return KDateTime();

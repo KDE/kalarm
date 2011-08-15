@@ -32,6 +32,7 @@
 #include "eventlistmodel.h"
 #include "resourcemodelview.h"
 #endif
+#include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
 #include "resourceconfigdialog.h"
@@ -49,7 +50,6 @@
 #include <kdialog.h>
 #include <klocale.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
 #include <kcombobox.h>
 #include <kinputdialog.h>
 #include <kmenu.h>
@@ -238,7 +238,7 @@ void ResourceSelector::addResource()
     AlarmResource* resource = dynamic_cast<AlarmResource*>(manager->createResource(type));
     if (!resource)
     {
-        KMessageBox::error(this, i18nc("@info", "Unable to create calendar of type <resource>%1</resource>.", type));
+        MessageBox::error(this, i18nc("@info", "Unable to create calendar of type <resource>%1</resource>.", type));
         return;
     }
     resource->setResourceName(i18nc("@info/plain", "%1 calendar", type));
@@ -360,18 +360,18 @@ void ResourceSelector::editResource()
             // A standard resource is being made read-only.
             if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
             {
-                KMessageBox::sorry(this, i18nc("@info", "You cannot make your default active alarm calendar read-only."));
+                MessageBox::sorry(this, i18nc("@info", "You cannot make your default active alarm calendar read-only."));
                 resource->setReadOnly(false);
             }
             else if (resource->alarmType() == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
             {
                 // Only allow the archived alarms standard resource to be made read-only
                 // if we're not saving archived alarms.
-                KMessageBox::sorry(this, i18nc("@info", "You cannot make your default archived alarm calendar "
+                MessageBox::sorry(this, i18nc("@info", "You cannot make your default archived alarm calendar "
                                               "read-only while expired alarms are configured to be kept."));
                 resource->setReadOnly(false);
             }
-            else if (KMessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to make your default calendar read-only?"))
+            else if (MessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to make your default calendar read-only?"))
                        == KMessageBox::Cancel)
             {
                 resource->setReadOnly(false);
@@ -408,14 +408,14 @@ void ResourceSelector::removeResource()
 #endif
     if (stdType == KAlarm::CalEvent::ACTIVE)
     {
-        KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
+        MessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
         return;
     }
     if (stdType == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
     {
         // Only allow the archived alarms standard resource to be removed if
         // we're not saving archived alarms.
-        KMessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
+        MessageBox::sorry(this, i18nc("@info", "You cannot remove your default archived alarm calendar "
                                       "while expired alarms are configured to be kept."));
         return;
     }
@@ -425,7 +425,7 @@ void ResourceSelector::removeResource()
 #endif
     QString text = std ? i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name)
                        : i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
-    if (KMessageBox::warningContinueCancel(this, text, "", KStandardGuiItem::remove()) == KMessageBox::Cancel)
+    if (MessageBox::warningContinueCancel(this, text, "", KStandardGuiItem::remove()) == KMessageBox::Cancel)
         return;
 
 #ifdef USE_AKONADI
@@ -693,7 +693,7 @@ void ResourceSelector::slotStatusChanged(AlarmResource* resource, AlarmResources
             default:
                 return;
         }
-        KMessageBox::sorry(this, i18nc("@info", "<para>Calendar <resource>%1</resource> has been disabled:</para><para>%2</para>", resource->resourceName(), text));
+        MessageBox::sorry(this, i18nc("@info", "<para>Calendar <resource>%1</resource> has been disabled:</para><para>%2</para>", resource->resourceName(), text));
     }
 #endif
 }
@@ -824,7 +824,7 @@ bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
                              name, id, calType, storage, location, perms, enabled, std);
         // Display the collection information. Because the user requested
         // the information, don't raise a KNotify event.
-        KMessageBox::information(this, text, QString(), QString(), 0);
+        MessageBox::information(this, text, QString(), QString(), 0);
     }
 #else
     AlarmResource* resource = currentResource();
@@ -832,7 +832,7 @@ bool wrongAlarmType = false;  //(applies only to resourcelocaldir)
     {
         // Display the collection information. Because the user requested
         // the information, don't raise a KNotify event.
-        KMessageBox::information(this, resource->infoText(), QString(), QString(), 0);
+        MessageBox::information(this, resource->infoText(), QString(), QString(), 0);
     }
 #endif
 }

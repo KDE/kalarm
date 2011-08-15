@@ -36,6 +36,7 @@
 #include "kaevent.h"
 #include "kalarmapp.h"
 #include "kamail.h"
+#include "messagebox.h"
 #include "newalarmaction.h"
 #include "prefdlg.h"
 #include "preferences.h"
@@ -69,7 +70,6 @@ using namespace KCal;
 #include <ksystemtrayicon.h>
 #include <kstandardaction.h>
 #include <kiconloader.h>
-#include <kmessagebox.h>
 #include <kurl.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
@@ -429,7 +429,7 @@ void MainWindow::show()
         // Show error message now that the main window has been displayed.
         // Waiting until now lets the user easily associate the message with
         // the main window which is faulty.
-        KMessageBox::error(this, i18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", QLatin1String(UI_FILE)));
+        MessageBox::error(this, i18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", QLatin1String(UI_FILE)));
         mMenuError = false;
     }
 }
@@ -821,12 +821,12 @@ void MainWindow::slotDelete(bool force)
     if (!force  &&  Preferences::confirmAlarmDeletion())
     {
         int n = events.count();
-        if (KMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
+        if (MessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
                                                            "Do you really want to delete the %1 selected alarms?", n),
-                                               i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
-                                               KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"),
-                                               KStandardGuiItem::cancel(),
-                                               Preferences::CONFIRM_ALARM_DELETION)
+                                              i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
+                                              KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"),
+                                              KStandardGuiItem::cancel(),
+                                              Preferences::CONFIRM_ALARM_DELETION)
             != KMessageBox::Continue)
             return;
     }
@@ -1133,7 +1133,7 @@ void MainWindow::slotToggleResourceSelector()
 */
 void MainWindow::showErrorMessage(const QString& msg)
 {
-    KMessageBox::error(this, msg);
+    MessageBox::error(this, msg);
 }
 
 /******************************************************************************

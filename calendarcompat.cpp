@@ -29,6 +29,8 @@
 #endif
 #include "functions.h"
 #include "kaevent.h"
+#include "mainwindow.h"
+#include "messagebox.h"
 #include "preferences.h"
 
 #ifndef USE_AKONADI
@@ -39,7 +41,6 @@ using namespace KCal;
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include <QFile>
@@ -129,7 +130,7 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 #else
                            resource->resourceName());
 #endif
-        if (KMessageBox::warningYesNo(0,
+        if (MessageBox::warningYesNo(MainWindow::mainMainWindow(),
               i18nc("@info", "<para>%1</para><para>"
                    "<warning>Do not update the calendar if it is shared with other users who run an older version "
                    "of <application>KAlarm</application>. If you do so, they may be unable to use it any more.</warning></para>"
