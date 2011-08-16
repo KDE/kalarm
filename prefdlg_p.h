@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ class PrefsTabBase : public StackedScrollWidget
         PrefsTabBase(StackedScrollGroup*);
 
         void         setPreferences();
-        virtual void restore(bool defaults) = 0;
+        virtual void restore(bool defaults, bool allTabs) = 0;
         virtual void apply(bool syncToDisc) = 0;
         void         addAlignedLabel(QLabel*);
         KVBox*       topWidget() const  { return mTopWidget; }
@@ -80,7 +80,7 @@ class MiscPrefTab : public PrefsTabBase
     public:
         MiscPrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults);
+        virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
     private slots:
@@ -108,7 +108,7 @@ class TimePrefTab : public PrefsTabBase
     public:
         TimePrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults);
+        virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
     private:
@@ -132,7 +132,7 @@ class StorePrefTab : public PrefsTabBase
     public:
         StorePrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults);
+        virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
     private slots:
@@ -162,7 +162,7 @@ class EmailPrefTab : public PrefsTabBase
         EmailPrefTab(StackedScrollGroup*);
 
         QString      validate();
-        virtual void restore(bool defaults);
+        virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
     private slots:
@@ -203,13 +203,14 @@ class EditPrefTab : public PrefsTabBase
         EditPrefTab(StackedScrollGroup*);
 
         QString      validate();
-        virtual void restore(bool defaults);
+        virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
     private slots:
         void         slotBrowseSoundFile();
 
     private:
+        KTabWidget*     mTabs;
         QCheckBox*      mAutoClose;
         QCheckBox*      mConfirmAck;
         KComboBox*      mReminderUnits;
@@ -227,6 +228,9 @@ class EditPrefTab : public PrefsTabBase
         KComboBox*      mRecurPeriod;
         ButtonGroup*    mFeb29;
         FontColourChooser* mFontChooser;
+        int             mTabGeneral;     // index of General tab
+        int             mTabTypes;       // index of Alarm Types tab
+        int             mTabFontColour;  // index of Font & Color tab
 
         static int soundIndex(Preferences::SoundType);
 };
@@ -239,7 +243,7 @@ class ViewPrefTab : public PrefsTabBase
     public:
         ViewPrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults);
+        virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
     private slots:
@@ -252,6 +256,7 @@ class ViewPrefTab : public PrefsTabBase
     private:
         void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
+        KTabWidget*   mTabs;
         ColourButton* mDisabledColour;
         ColourButton* mArchivedColour;
         QCheckBox*    mShowInSystemTray;
@@ -266,6 +271,8 @@ class ViewPrefTab : public PrefsTabBase
         QSpinBox*     mWindowButtonDelay;
         QLabel*       mWindowButtonDelayLabel;
         QCheckBox*    mModalMessages;
+        int           mTabGeneral;    // index of General tab
+        int           mTabWindows;    // index of Alarm Windows tab
 };
 
 #endif // PREFDLG_P_H
