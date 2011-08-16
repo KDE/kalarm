@@ -1,7 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.7.4 --- 6 August 2011 ===
+=== Version 2.7.4 --- 16 August 2011 ===
 - Fix conversion of pre-version 1.4.14 subsidiary alarms.
+- Don't do search if invalid regular expression is entered in Find dialogue.
+- Don't prevent interaction with alarm windows when a prompt or warning message
+  window is displayed [using KDE 4.7.1 or later].
 
 === Version 2.7.3 --- 26 July 2011 ===
 - Fix crash when Wake From Suspend dialogue is shown with no alarm selected.
@@ -13,12 +16,12 @@ KAlarm Change Log
 - In calendar list show calendar colours by text background, not coloured square.
 - In alarm list show multi-line tooltip for alarm text when appropriate.
 
-=== Version 2.7.1 (KDE 4.7.0 RC2) --- 6 July 2011 ===
+=== Version 2.7.1 (KDE 4.7.0) --- 6 July 2011 ===
 - Make wake-from-suspend schedule a time-from-now, to make it work correctly
   on systems whose hardware clock is out of sync with the system clock.
 - Include Content-Transfer-Encoding header in emails to allow correct display.
 
-=== Version 2.7.0 --- 9 May 2011 ===
+=== Version 2.7.0 (KDE 4.7.0 beta2) --- 9 May 2011 ===
 - Add option to set a reminder AFTER the main alarm.
 - Add option to wake computer from suspend when a selected alarm is triggered.
 - Add command line option to disable alarm monitoring.
