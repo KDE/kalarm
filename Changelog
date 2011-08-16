@@ -5,6 +5,7 @@ KAlarm Change Log
 - Don't do search if invalid regular expression is entered in Find dialogue.
 - Don't prevent interaction with alarm windows when a prompt or warning message
   window is displayed [using KDE 4.7.1 or later].
+- Fix crash when last recurrence of late-cancel alarm triggers too late.
 
 === Version 2.7.3 --- 26 July 2011 ===
 - Fix crash when Wake From Suspend dialogue is shown with no alarm selected.
