@@ -271,7 +271,7 @@ void KAlarmPrefDlg::slotDefault()
             break;
         case KMessageBox::No:
             Preferences::self()->useDefaults(true);
-            static_cast<PrefsTabBase*>(currentPage()->widget())->restore(true);
+            static_cast<PrefsTabBase*>(currentPage()->widget())->restore(true, false);
             Preferences::self()->useDefaults(false);
             break;
         default:
@@ -285,12 +285,12 @@ void KAlarmPrefDlg::restore(bool defaults)
     kDebug() << (defaults ? "defaults" : "");
     if (defaults)
         Preferences::self()->useDefaults(true);
-    mEmailPage->restore(defaults);
-    mViewPage->restore(defaults);
-    mEditPage->restore(defaults);
-    mStorePage->restore(defaults);
-    mTimePage->restore(defaults);
-    mMiscPage->restore(defaults);
+    mEmailPage->restore(defaults, true);
+    mViewPage->restore(defaults, true);
+    mEditPage->restore(defaults, true);
+    mStorePage->restore(defaults, true);
+    mTimePage->restore(defaults, true);
+    mMiscPage->restore(defaults, true);
     if (defaults)
         Preferences::self()->useDefaults(false);
 }
@@ -505,7 +505,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     topLayout()->addStretch();    // top adjust the widgets
 }
 
-void MiscPrefTab::restore(bool defaults)
+void MiscPrefTab::restore(bool defaults, bool)
 {
     mAutoStart->setChecked(defaults ? true : Preferences::autoStart());
     mQuitWarn->setChecked(Preferences::quitWarn());
@@ -754,7 +754,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     topLayout()->addStretch();    // top adjust the widgets
 }
 
-void TimePrefTab::restore(bool)
+void TimePrefTab::restore(bool, bool)
 {
 #if 1
     mTimeZone->setTimeZone(Preferences::timeZone());
@@ -892,7 +892,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     topLayout()->addStretch();    // top adjust the widgets
 }
 
-void StorePrefTab::restore(bool defaults)
+void StorePrefTab::restore(bool defaults, bool)
 {
     mCheckKeepChanges = defaults;
     if (Preferences::askResource())
@@ -1085,7 +1085,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     topLayout()->addStretch();    // top adjust the widgets
 }
 
-void EmailPrefTab::restore(bool defaults)
+void EmailPrefTab::restore(bool defaults, bool)
 {
     mEmailClient->setButton(Preferences::emailClient());
     mEmailCopyToKMail->setChecked(Preferences::emailCopyToKMail());
@@ -1199,20 +1199,20 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 {
     KLocalizedString defsetting = ki18nc("@info:whatsthis", "The default setting for <interface>%1</interface> in the alarm edit dialog.");
 
-    KTabWidget* tabs = new KTabWidget(topWidget());
-    StackedGroupT<KVBox>* tabgroup = new StackedGroupT<KVBox>(tabs);
+    mTabs = new KTabWidget(topWidget());
+    StackedGroupT<KVBox>* tabgroup = new StackedGroupT<KVBox>(mTabs);
     StackedWidgetT<KVBox>* topGeneral = new StackedWidgetT<KVBox>(tabgroup);
     topGeneral->setMargin(KDialog::marginHint()/2);
     topGeneral->setSpacing(KDialog::spacingHint());
-    tabs->addTab(topGeneral, i18nc("@title:tab", "General"));
+    mTabGeneral = mTabs->addTab(topGeneral, i18nc("@title:tab", "General"));
     StackedWidgetT<KVBox>* topTypes = new StackedWidgetT<KVBox>(tabgroup);
     topTypes->setMargin(KDialog::marginHint()/2);
     topTypes->setSpacing(KDialog::spacingHint());
-    tabs->addTab(topTypes, i18nc("@title:tab", "Alarm Types"));
+    mTabTypes = mTabs->addTab(topTypes, i18nc("@title:tab", "Alarm Types"));
     StackedWidgetT<KVBox>* topFontColour = new StackedWidgetT<KVBox>(tabgroup);
     topFontColour->setMargin(KDialog::marginHint()/2);
     topFontColour->setSpacing(KDialog::spacingHint());
-    tabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
+    mTabFontColour = mTabs->addTab(topFontColour, i18nc("@title:tab", "Font && Color"));
 
     // MISCELLANEOUS
     // Show in KOrganizer
@@ -1395,46 +1395,55 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mFontChooser = new FontColourChooser(topFontColour, QStringList(), i18nc("@title:group", "Message Font && Color"), true);
 }
 
-void EditPrefTab::restore(bool)
+void EditPrefTab::restore(bool, bool allTabs)
 {
     int index;
-    mAutoClose->setChecked(Preferences::defaultAutoClose());
-    mConfirmAck->setChecked(Preferences::defaultConfirmAck());
-    switch (Preferences::defaultReminderUnits())
+    if (allTabs  ||  mTabs->currentIndex() == mTabGeneral)
     {
-        case TimePeriod::Weeks:        index = 3; break;
-        case TimePeriod::Days:         index = 2; break;
-        default:
-        case TimePeriod::HoursMinutes: index = 1; break;
-        case TimePeriod::Minutes:      index = 0; break;
+        mCopyToKOrganizer->setChecked(Preferences::defaultCopyToKOrganizer());
+        mLateCancel->setChecked(Preferences::defaultLateCancel());
+        switch (Preferences::defaultRecurPeriod())
+        {
+            case Preferences::Recur_Yearly:   index = 6; break;
+            case Preferences::Recur_Monthly:  index = 5; break;
+            case Preferences::Recur_Weekly:   index = 4; break;
+            case Preferences::Recur_Daily:    index = 3; break;
+            case Preferences::Recur_SubDaily: index = 2; break;
+            case Preferences::Recur_Login:    index = 1; break;
+            case Preferences::Recur_None:
+            default:                          index = 0; break;
+        }
+        mRecurPeriod->setCurrentIndex(index);
+        mFeb29->setButton(Preferences::defaultFeb29Type());
     }
-    mReminderUnits->setCurrentIndex(index);
-    mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
-                                      Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
-    mSound->setCurrentIndex(soundIndex(Preferences::defaultSoundType()));
-    mSoundFile->setText(Preferences::defaultSoundFile());
-    mSoundRepeat->setChecked(Preferences::defaultSoundRepeat());
-    mCmdScript->setChecked(Preferences::defaultCmdScript());
-    mCmdXterm->setChecked(Preferences::defaultCmdLogType() == Preferences::Log_Terminal);
-    mEmailBcc->setChecked(Preferences::defaultEmailBcc());
-    mCopyToKOrganizer->setChecked(Preferences::defaultCopyToKOrganizer());
-    mLateCancel->setChecked(Preferences::defaultLateCancel());
-    switch (Preferences::defaultRecurPeriod())
+    if (allTabs  ||  mTabs->currentIndex() == mTabTypes)
     {
-        case Preferences::Recur_Yearly:   index = 6; break;
-        case Preferences::Recur_Monthly:  index = 5; break;
-        case Preferences::Recur_Weekly:   index = 4; break;
-        case Preferences::Recur_Daily:    index = 3; break;
-        case Preferences::Recur_SubDaily: index = 2; break;
-        case Preferences::Recur_Login:    index = 1; break;
-        case Preferences::Recur_None:
-        default:                          index = 0; break;
+        mConfirmAck->setChecked(Preferences::defaultConfirmAck());
+        mAutoClose->setChecked(Preferences::defaultAutoClose());
+        switch (Preferences::defaultReminderUnits())
+        {
+            case TimePeriod::Weeks:        index = 3; break;
+            case TimePeriod::Days:         index = 2; break;
+            default:
+            case TimePeriod::HoursMinutes: index = 1; break;
+            case TimePeriod::Minutes:      index = 0; break;
+        }
+        mReminderUnits->setCurrentIndex(index);
+        mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
+                                          Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
+        mSound->setCurrentIndex(soundIndex(Preferences::defaultSoundType()));
+        mSoundFile->setText(Preferences::defaultSoundFile());
+        mSoundRepeat->setChecked(Preferences::defaultSoundRepeat());
+        mCmdScript->setChecked(Preferences::defaultCmdScript());
+        mCmdXterm->setChecked(Preferences::defaultCmdLogType() == Preferences::Log_Terminal);
+        mEmailBcc->setChecked(Preferences::defaultEmailBcc());
     }
-    mRecurPeriod->setCurrentIndex(index);
-    mFeb29->setButton(Preferences::defaultFeb29Type());
-    mFontChooser->setFgColour(Preferences::defaultFgColour());
-    mFontChooser->setBgColour(Preferences::defaultBgColour());
-    mFontChooser->setFont(Preferences::messageFont());
+    if (allTabs  ||  mTabs->currentIndex() == mTabFontColour)
+    {
+        mFontChooser->setFgColour(Preferences::defaultFgColour());
+        mFontChooser->setBgColour(Preferences::defaultBgColour());
+        mFontChooser->setFont(Preferences::messageFont());
+    }
 }
 
 void EditPrefTab::apply(bool syncToDisc)
@@ -1567,15 +1576,15 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
-    KTabWidget* tabs = new KTabWidget(topWidget());
+    mTabs = new KTabWidget(topWidget());
     KVBox* topGeneral = new KVBox();
     topGeneral->setMargin(KDialog::marginHint()/2);
     topGeneral->setSpacing(KDialog::spacingHint());
-    tabs->addTab(topGeneral, i18nc("@title:tab", "General"));
+    mTabGeneral = mTabs->addTab(topGeneral, i18nc("@title:tab", "General"));
     KVBox* topWindows = new KVBox();
     topWindows->setMargin(KDialog::marginHint()/2);
     topWindows->setSpacing(KDialog::spacingHint());
-    tabs->addTab(topWindows, i18nc("@title:tab", "Alarm Windows"));
+    mTabWindows = mTabs->addTab(topWindows, i18nc("@title:tab", "Alarm Windows"));
 
     // Run-in-system-tray radio button
     KHBox* box = new KHBox(topGeneral);   // this is to allow left adjustment
@@ -1723,18 +1732,24 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
         lay->addStretch();    // top adjust the widgets
 }
 
-void ViewPrefTab::restore(bool)
+void ViewPrefTab::restore(bool, bool allTabs)
 {
-    mDisabledColour->setColor(Preferences::disabledColour());
-    mArchivedColour->setColor(Preferences::archivedColour());
-    setTooltip(Preferences::tooltipAlarmCount(),
-               Preferences::showTooltipAlarmTime(),
-               Preferences::showTooltipTimeToAlarm(),
-               Preferences::tooltipTimeToPrefix());
-    mShowInSystemTray->setChecked(Preferences::showInSystemTray());
-    mWindowPosition->setButton(Preferences::messageButtonDelay() ? 1 : 0);
-    mWindowButtonDelay->setValue(Preferences::messageButtonDelay());
-    mModalMessages->setChecked(Preferences::modalMessages());
+    if (allTabs  ||  mTabs->currentIndex() == mTabGeneral)
+    {
+        mShowInSystemTray->setChecked(Preferences::showInSystemTray());
+        setTooltip(Preferences::tooltipAlarmCount(),
+                   Preferences::showTooltipAlarmTime(),
+                   Preferences::showTooltipTimeToAlarm(),
+                   Preferences::tooltipTimeToPrefix());
+        mDisabledColour->setColor(Preferences::disabledColour());
+        mArchivedColour->setColor(Preferences::archivedColour());
+    }
+    if (allTabs  ||  mTabs->currentIndex() == mTabWindows)
+    {
+        mWindowPosition->setButton(Preferences::messageButtonDelay() ? 1 : 0);
+        mWindowButtonDelay->setValue(Preferences::messageButtonDelay());
+        mModalMessages->setChecked(Preferences::modalMessages());
+    }
 }
 
 void ViewPrefTab::apply(bool syncToDisc)
