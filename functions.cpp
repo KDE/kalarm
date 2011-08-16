@@ -1633,13 +1633,13 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
     if (event  &&  event->action() == KAEvent::EMAIL
     &&  Preferences::emailAddress().isEmpty())
         MessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
-                                               "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
+                                              "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
 
     if (!theApp()->alarmsEnabled())
     {
         if (MessageBox::warningYesNo(parent, i18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
-                                      QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
-                                      QLatin1String("EditEnableAlarms"))
+                                     QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
+                                     QLatin1String("EditEnableAlarms"))
                         == KMessageBox::Yes)
             theApp()->setAlarmsEnabled(true);
     }

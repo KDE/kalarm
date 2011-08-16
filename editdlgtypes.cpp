@@ -1336,7 +1336,7 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
         }
     }
     if (trial  &&  MessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to send the email now to the specified recipient(s)?"),
-                                                      i18nc("@action:button", "Confirm Email"), KGuiItem(i18nc("@action:button", "Send"))) != KMessageBox::Continue)
+                                                     i18nc("@action:button", "Confirm Email"), KGuiItem(i18nc("@action:button", "Send"))) != KMessageBox::Continue)
         return false;
     return true;
 }
