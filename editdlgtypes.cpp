@@ -73,6 +73,7 @@ using namespace KCal;
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
+#include <QStandardItemModel>
 
 enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 
@@ -160,6 +161,18 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mTypeCombo->addItem(commandItem);  // index = tCOMMAND
     mTypeCombo->setFixedSize(mTypeCombo->sizeHint());
     mTypeCombo->setCurrentIndex(-1);    // ensure slotAlarmTypeChanged() is called when index is set
+    if (!ShellProcess::authorised())
+    {
+        // User not authorised to issue shell commands - disable Command Output option
+        QStandardItemModel* model = qobject_cast<QStandardItemModel*>(mTypeCombo->model());
+        if (model)
+        {
+            QModelIndex index = model->index(2, mTypeCombo->modelColumn(), mTypeCombo->rootModelIndex());
+            QStandardItem* item = model->itemFromIndex(index);
+            if (item)
+                item->setEnabled(false);
+        }
+    }
     connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotAlarmTypeChanged(int)));
     connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(contentsChanged()));
     label->setBuddy(mTypeCombo);
