@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 2.7.4 --- 19 August 2011 ===
+=== Version 2.7.4 --- 20 August 2011 ===
 - Fix crash when last recurrence of late-cancel alarm triggers too late.
 - Fix conversion of pre-version 1.4.14 subsidiary alarms.
 - Don't do search if invalid regular expression is entered in Find dialogue.
@@ -10,6 +10,8 @@ KAlarm Change Log
   in Configuration dialogue, and Current tab option is selected.
 - Disable command output option for display alarms in edit alarm dialogue if
   user not authorised to run shell commands.
+- Always output "not authorised" error message if unauthorised user tries to run
+  shell commands.
 
 === Version 2.7.3 --- 26 July 2011 ===
 - Fix crash when Wake From Suspend dialogue is shown with no alarm selected.
