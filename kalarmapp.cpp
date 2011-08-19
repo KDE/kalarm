@@ -1411,14 +1411,11 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 {
     if (!event.postAction().isEmpty())
     {
-        if (!ShellProcess::authorised())
-            setEventCommandError(event, KAEvent::CMD_ERROR_POST);
-        else
-        {
-            QString command = event.postAction();
-            kDebug() << event.id() << ":" << command;
-            doShellCommand(command, event, 0, ProcData::POST_ACTION);
-        }
+        // doShellCommand() will error if the user is not authorised to run
+        // shell commands.
+        QString command = event.postAction();
+        kDebug() << event.id() << ":" << command;
+        doShellCommand(command, event, 0, ProcData::POST_ACTION);
     }
 }
 
@@ -1623,40 +1620,38 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 //
                 // NOTE: The pre-action is not executed for a recurring alarm if an
                 // alarm message window for a previous occurrence is still visible.
-                if (!ShellProcess::authorised())
-                    setEventCommandError(event, KAEvent::CMD_ERROR_PRE);
-                else
-                {
-                    // Check whether the command is already being executed for this alarm.
-                    for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
-                    {
-                        ProcData* pd = mCommandProcesses[i];
-                        if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
-                        {
-                            kDebug() << "Already executing pre-DISPLAY command";
-                            return pd->process;   // already executing - don't duplicate the action
-                        }
-                    }
 
-                    QString command = event.preAction();
-                    kDebug() << "Pre-DISPLAY command:" << command;
-                    int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
-                    if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
+                // Check whether the command is already being executed for this alarm.
+                for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
+                {
+                    ProcData* pd = mCommandProcesses[i];
+                    if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
                     {
-                        AlarmCalendar::resources()->setAlarmPending(&event);
-                        return result;     // display the message after the command completes
+                        kDebug() << "Already executing pre-DISPLAY command";
+                        return pd->process;   // already executing - don't duplicate the action
                     }
-                    // Error executing command
-                    if (event.cancelOnPreActionError())
-                    {
-                        // Cancel the rest of the alarm execution
-                        kDebug() << event.id() << ": pre-action failed: cancelled";
-                        if (reschedule)
-                            rescheduleAlarm(event, alarm, true);
-                        return 0;
-                    }
-                    // Display the message even though it failed
                 }
+
+                // doShellCommand() will error if the user is not authorised to run
+                // shell commands.
+                QString command = event.preAction();
+                kDebug() << "Pre-DISPLAY command:" << command;
+                int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
+                if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
+                {
+                    AlarmCalendar::resources()->setAlarmPending(&event);
+                    return result;     // display the message after the command completes
+                }
+                // Error executing command
+                if (event.cancelOnPreActionError())
+                {
+                    // Cancel the rest of the alarm execution
+                    kDebug() << event.id() << ": pre-action failed: cancelled";
+                    if (reschedule)
+                        rescheduleAlarm(event, alarm, true);
+                    return 0;
+                }
+                // Display the message even though it failed
             }
 
             if (!win)
@@ -1690,14 +1685,11 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             break;
         }
         case KAAlarm::COMMAND:
-            if (!ShellProcess::authorised())
-                setEventCommandError(event, KAEvent::CMD_ERROR);
-            else
-            {
-                result = execCommandAlarm(event, alarm);
-                if (reschedule)
-                    rescheduleAlarm(event, alarm, true);
-            }
+            // execCommandAlarm() will error if the user is not authorised
+            // to run shell commands.
+            result = execCommandAlarm(event, alarm);
+            if (reschedule)
+                rescheduleAlarm(event, alarm, true);
             break;
         case KAAlarm::EMAIL:
         {
@@ -1769,6 +1761,8 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
 */
 ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& alarm, const QObject* receiver, const char* slot)
 {
+    // doShellCommand() will error if the user is not authorised to run
+    // shell commands.
     int flags = (event.commandXterm()   ? ProcData::EXEC_IN_XTERM : 0)
               | (event.commandDisplay() ? ProcData::DISP_OUTPUT : 0);
     QString command = event.cleanText();
@@ -1800,6 +1794,9 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
 * a pre- or post-alarm action respectively.
 * To connect to the output ready signals of the process, specify a slot to be
 * called by supplying 'receiver' and 'slot' parameters.
+*
+* Note that if shell access is not authorised, the attempt to run the command
+* will be errored.
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, const QObject* receiver, const char* slot)
 {
@@ -1822,6 +1819,8 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
     ShellProcess* proc = 0;
     if (!cmd.isEmpty())
     {
+        // Use ShellProcess, which automatically checks whether the user is
+        // authorised to run shell commands.
         proc = new ShellProcess(cmd);
         proc->setEnv(QLatin1String("KALARM_UID"), event.id(), true);
         proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
