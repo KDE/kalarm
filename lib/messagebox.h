@@ -25,27 +25,25 @@
 #include <kstandardguiitem.h>
 #include <kmessagebox.h>
 
-#ifdef MessageBox
-#undef MessageBox // conflicting Windows macro
-#endif
-
 /**
  *  @short Enhanced KMessageBox.
  *
- *  The MessageBox class provides an extension to KMessageBox, including the option for
+ *  The KAMessageBox class provides an extension to KMessageBox, including the option for
  *  Continue/Cancel message boxes to have a default button of Cancel.
+ *
+ *  Note that this class is not called simply MessageBox due to a name clash on Windows.
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class MessageBox : public KMessageBox
+class KAMessageBox : public KMessageBox
 {
     public:
-        /** MessageBox types.
+        /** KAMessageBox types.
          *  @li CONT_CANCEL_DEF_CONT - Continue/Cancel, with Continue as the default button.
          *  @li CONT_CANCEL_DEF_CANCEL - Continue/Cancel, with Cancel as the default button.
          *  @li YES_NO_DEF_NO - Yes/No, with No as the default button.
          */
-        enum AskType {      // MessageBox types
+        enum AskType {      // KAMessageBox types
             CONT_CANCEL_DEF_CONT,    // Continue/Cancel, with default = Continue
             CONT_CANCEL_DEF_CANCEL,  // Continue/Cancel, with default = Cancel
             YES_NO_DEF_NO            // Yes/No, with default = No

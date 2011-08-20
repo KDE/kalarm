@@ -211,7 +211,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
             errmsg = i18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
         else
             errmsg = i18nc("@info", "<para>%1</para><para>%2<nl/>(%3)</para>", errmsg, locn, creator->errorMessage());
-        MessageBox::error(MainWindow::mainMainWindow(), errmsg);
+        KAMessageBox::error(MainWindow::mainMainWindow(), errmsg);
     }
     creator->deleteLater();
 

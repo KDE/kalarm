@@ -78,10 +78,10 @@ Preferences* Preferences::self()
     if (!mInstance)
     {
         // Set the default button for the Quit warning message box to Cancel
-        MessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
-        MessageBox::setDefaultShouldBeShownContinue(QUIT_WARN, default_quitWarn);
-        MessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
-        MessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
+        KAMessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
+        KAMessageBox::setDefaultShouldBeShownContinue(QUIT_WARN, default_quitWarn);
+        KAMessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
+        KAMessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 
         mInstance = new Preferences;
         mInstance->readConfig();
@@ -99,7 +99,7 @@ Preferences::Preferences()
 
 void Preferences::setAskAutoStart(bool yes)
 {
-    MessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
+    KAMessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
 }
 
 /******************************************************************************
@@ -288,7 +288,7 @@ void Preferences::connect(const char* signal, const QObject* receiver, const cha
 */
 void Preferences::setNotify(const QString& messageID, bool notify)
 {
-    MessageBox::saveDontShowAgainContinue(messageID, !notify);
+    KAMessageBox::saveDontShowAgainContinue(messageID, !notify);
 }
 
 /******************************************************************************
@@ -300,7 +300,7 @@ void Preferences::setNotify(const QString& messageID, bool notify)
 */
 bool Preferences::notifying(const QString& messageID)
 {
-    return MessageBox::shouldBeShownContinue(messageID);
+    return KAMessageBox::shouldBeShownContinue(messageID);
 }
 
 /******************************************************************************

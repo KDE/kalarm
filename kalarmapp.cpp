@@ -512,8 +512,8 @@ void KAlarmApp::checkKtimezoned()
     if (!KSystemTimeZones::isTimeZoneDaemonAvailable())
     {    
         kDebug() << "ktimezoned not running: using UTC only";
-        MessageBox::information(MainWindow::mainMainWindow(),
-                                i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
+        KAMessageBox::information(MainWindow::mainMainWindow(),
+                                  i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
                      QString(), QLatin1String("tzunavailable"));
     }
 #endif
@@ -584,17 +584,17 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 void KAlarmApp::doQuit(QWidget* parent)
 {
     kDebug();
-    if (MessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
-                                          i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
-                                          QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
-                                         ) != KMessageBox::Yes)
+    if (KAMessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
+                                            i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
+                                            QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
+                                           ) != KMessageBox::Yes)
         return;
     if (!Preferences::autoStart())
     {
         int option = KMessageBox::No;
         if (!Preferences::autoStartChangedByUser())
         {
-            option = MessageBox::questionYesNoCancel(parent,
+            option = KAMessageBox::questionYesNoCancel(parent,
                                          i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
                                                         "(Note that alarms will be disabled if KAlarm is not started.)"),
                                          QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
@@ -1998,7 +1998,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                         errmsg += '\n';
                         errmsg += proc->command();
                     }
-                    MessageBox::error(pd->messageBoxParent, errmsg);
+                    KAMessageBox::error(pd->messageBoxParent, errmsg);
                 }
                 else
                     commandErrorMsg(proc, *pd->event, pd->alarm, pd->flags);

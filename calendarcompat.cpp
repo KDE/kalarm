@@ -130,7 +130,7 @@ KAlarm::Calendar::Compat CalendarCompat::fix(KCal::CalendarLocal& calendar, cons
 #else
                            resource->resourceName());
 #endif
-        if (MessageBox::warningYesNo(MainWindow::mainMainWindow(),
+        if (KAMessageBox::warningYesNo(MainWindow::mainMainWindow(),
               i18nc("@info", "<para>%1</para><para>"
                    "<warning>Do not update the calendar if it is shared with other users who run an older version "
                    "of <application>KAlarm</application>. If you do so, they may be unable to use it any more.</warning></para>"

@@ -175,10 +175,10 @@ void WakeFromSuspendDlg::useWakeClicked()
 #endif
     if (dt.isDateOnly())
     {
-        MessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
+        KAMessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
         return;
     }
-    if (MessageBox::warningContinueCancel(this,
+    if (KAMessageBox::warningContinueCancel(this,
                 i18nc("@info", "<para>This wakeup will cancel any existing wakeup which has been set by KAlarm "
                                "or any other application, because your computer can only schedule a single wakeup time.</para>"
                                "<para><b>Note:</b> Wake From Suspend is not supported at all on some computers, especially older ones, "

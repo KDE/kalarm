@@ -1425,7 +1425,7 @@ void MessageWin::slotSpeak()
     {
         if (!haveErrorMessage(ErrMsg_Speak))
         {
-            MessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), error);
+            KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), error);
             clearErrorMessage(ErrMsg_Speak);
         }
         return;
@@ -1435,7 +1435,7 @@ void MessageWin::slotSpeak()
         kDebug() << "SayMessage() D-Bus error";
         if (!haveErrorMessage(ErrMsg_Speak))
         {
-            MessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call say() failed"));
+            KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call say() failed"));
             clearErrorMessage(ErrMsg_Speak);
         }
     }
@@ -1516,7 +1516,7 @@ void MessageWin::playFinished()
     {
         if (!haveErrorMessage(ErrMsg_AudioFile))
         {
-            MessageBox::error(this, mAudioThread->error());
+            KAMessageBox::error(this, mAudioThread->error());
             clearErrorMessage(ErrMsg_AudioFile);
         }
     }
@@ -1981,8 +1981,8 @@ void MessageWin::closeEvent(QCloseEvent* ce)
         if (mConfirmAck  &&  !mNoCloseConfirm)
         {
             // Ask for confirmation of acknowledgement. Use warningYesNo() because its default is No.
-            if (MessageBox::warningYesNo(this, i18nc("@info", "Do you really want to acknowledge this alarm?"),
-                                               i18nc("@action:button", "Acknowledge Alarm"), KGuiItem(i18nc("@action:button", "Acknowledge")), KStandardGuiItem::cancel())
+            if (KAMessageBox::warningYesNo(this, i18nc("@info", "Do you really want to acknowledge this alarm?"),
+                                                 i18nc("@action:button", "Acknowledge Alarm"), KGuiItem(i18nc("@action:button", "Acknowledge")), KStandardGuiItem::cancel())
                 != KMessageBox::Yes)
             {
                 ce->ignore();
@@ -2021,7 +2021,7 @@ void MessageWin::slotShowKMailMessage()
     QString err = KAlarm::runKMail(false);
     if (!err.isNull())
     {
-        MessageBox::sorry(this, err);
+        KAMessageBox::sorry(this, err);
         return;
     }
     org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
@@ -2029,7 +2029,7 @@ void MessageWin::slotShowKMailMessage()
     if (!reply.isValid())
         kError() << "kmail D-Bus call failed:" << reply.error().message();
     else if (!reply.value())
-        MessageBox::sorry(this, i18nc("@info", "Unable to locate this email in <application>KMail</application>"));
+        KAMessageBox::sorry(this, i18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }
 #endif
 
@@ -2199,7 +2199,7 @@ void MessageWin::slotDefer()
             {
                 // The event doesn't exist any more !?!, so recurrence data,
                 // flags, and more, have been lost.
-                MessageBox::error(this, i18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
+                KAMessageBox::error(this, i18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
                 raise();
                 delete mDeferDlg;
                 mDeferDlg = 0;

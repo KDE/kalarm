@@ -1097,8 +1097,8 @@ void AkonadiModel::addCollectionJobDone(KJob* j)
     if (j->error())
     {
         kError() << "Failed to create new calendar resource:" << j->errorString();
-        MessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)",
-                          i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
+        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)",
+                            i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
         emit collectionAdded(job, false);
     }
     else
@@ -1176,7 +1176,7 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
         emit collectionDeleted(jobData.id, false);
         QString errMsg = i18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
         kError() << errMsg << ":" << j->errorString();
-        MessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
         emit collectionDeleted(jobData.id, true);
@@ -1222,7 +1222,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
         emit collectionModified(collection.id(), false);
         QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
         kError() << errMsg << ":" << j->errorString();
-        MessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
         emit collectionModified(collection.id(), true);
@@ -1510,7 +1510,7 @@ void AkonadiModel::itemJobDone(KJob* j)
             Item current = itemById(itemId);    // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
-        MessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
     {

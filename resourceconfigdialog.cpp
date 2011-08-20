@@ -120,7 +120,7 @@ void ResourceConfigDialog::accept()
 {
     if (mName->text().isEmpty())
     {
-        MessageBox::sorry(this, i18nc("@info", "Please enter a calendar name."));
+        KAMessageBox::sorry(this, i18nc("@info", "Please enter a calendar name."));
         return;
     }
 

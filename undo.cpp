@@ -443,7 +443,7 @@ bool Undo::undo(int i, Undo::Type type, QWidget* parent, const QString& action)
         case UndoItem::ERR_PROG:       err = i18nc("@info/plain", "Program error");  break;
         default:                       err = i18nc("@info/plain", "Unknown error");  break;
     }
-    MessageBox::sorry(parent, i18nc("@info Undo-action: message", "%1: %2", action, err));
+    KAMessageBox::sorry(parent, i18nc("@info Undo-action: message", "%1: %2", action, err));
     return false;
 }
 
