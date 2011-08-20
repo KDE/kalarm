@@ -268,7 +268,7 @@ void Find::slotFind()
     if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
     ||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO)))
     {
-        MessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
+        KAMessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
         return;
     }
 
@@ -421,7 +421,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
         {
             QString msg = forward ? i18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
                                   : i18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
-            if (MessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
+            if (KAMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
             {
                 mNoCurrentItem = true;
                 findNext(forward, false, false);

@@ -1135,9 +1135,7 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
         emit collectionDeleted(jobData.id, false);
         QString errMsg = i18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
         kError() << errMsg << ":" << j->errorString();
-        KMessageBox::error(MainWindow::mainMainWindow(),
-                           i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()),
-                           QString(), MessageBox::NoAppModal);
+        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
         emit collectionDeleted(jobData.id, true);
@@ -1188,9 +1186,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
         {
             QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
             kError() << "Id:" << collection.id() << errMsg << ":" << j->errorString();
-            KMessageBox::error(MainWindow::mainMainWindow(),
-                               i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()),
-                               QString(), MessageBox::NoAppModal);
+            KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
         }
     }
     else
@@ -1479,9 +1475,7 @@ void AkonadiModel::itemJobDone(KJob* j)
             Item current = itemById(itemId);    // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
-        KMessageBox::error(MainWindow::mainMainWindow(),
-                           i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()),
-                           QString(), MessageBox::NoAppModal);
+        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
     {
