@@ -119,7 +119,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, Ge
 EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                    GetResourceType getResource, bool readOnly)
 {
-    switch (event->actions())
+    switch (event->actionTypes())
     {
         case KAEvent::ACT_COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
         case KAEvent::ACT_DISPLAY_COMMAND:
@@ -168,7 +168,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
     : KDialog(parent),
-      mAlarmType(event->action()),
+      mAlarmType(event->actionSubType()),
       mMainPageShown(false),
       mRecurPageShown(false),
       mRecurSetDefaultEndDate(true),
@@ -553,7 +553,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
             }
         }
 
-        KAEvent::Action action = event->action();
+        KAEvent::Action action = event->actionSubType();
         AlarmText altext;
         if (event->commandScript())
             altext.setScript(event->cleanText());

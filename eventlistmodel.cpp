@@ -201,7 +201,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
             switch (role)
             {
                 case Qt::BackgroundRole:
-                    switch (event->actions())
+                    switch (event->actionTypes())
                     {
                         case KAEvent::ACT_DISPLAY_COMMAND:
                         case KAEvent::ACT_DISPLAY:
@@ -217,7 +217,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
                 case Qt::ForegroundRole:
                     if (event->commandError() != KAEvent::CMD_NO_ERROR)
                     {
-                        if (event->actions() == KAEvent::ACT_COMMAND)
+                        if (event->actionTypes() == KAEvent::ACT_COMMAND)
                             return Qt::white;
                         QColor colour = Qt::red;
                         int r, g, b;
@@ -233,7 +233,7 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
                     break;
                 case SortRole:
                 {
-                    unsigned i = (event->actions() == KAEvent::ACT_DISPLAY)
+                    unsigned i = (event->actionTypes() == KAEvent::ACT_DISPLAY)
                                ? event->bgColour().rgb() : 0;
                     return QString("%1").arg(i, 6, 10, QLatin1Char('0'));
                 }
@@ -260,9 +260,9 @@ QVariant EventListModel::data(const QModelIndex& index, int role) const
 #endif
                     return QString();
                 case ValueRole:
-                    return static_cast<int>(event->action());
+                    return static_cast<int>(event->actionSubType());
                 case SortRole:
-                    return QString("%1").arg(event->action(), 2, 10, QLatin1Char('0'));
+                    return QString("%1").arg(event->actionSubType(), 2, 10, QLatin1Char('0'));
             }
             break;
         case TextColumn:
@@ -939,7 +939,7 @@ QString EventListModel::repeatOrder(const KAEvent* event) const
 */
 QPixmap* EventListModel::eventIcon(const KAEvent* event) const
 {
-    switch (event->actions())
+    switch (event->actionTypes())
     {
         case KAEvent::ACT_EMAIL:
             return mEmailIcon;
@@ -948,7 +948,7 @@ QPixmap* EventListModel::eventIcon(const KAEvent* event) const
         case KAEvent::ACT_COMMAND:
             return mCommandIcon;
         case KAEvent::ACT_DISPLAY:
-            if (event->action() == KAEvent::FILE)
+            if (event->actionSubType() == KAEvent::FILE)
                 return mFileIcon;
             // fall through to ACT_DISPLAY_COMMAND
         case KAEvent::ACT_DISPLAY_COMMAND:

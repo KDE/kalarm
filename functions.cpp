@@ -966,7 +966,7 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
                 cal->disabledChanged(newev);
 
                 // If we're disabling a display alarm, close any message window
-                if (!enable  &&  event->displayAction())
+                if (!enable  &&  (event->actionTypes() & KAEvent::ACT_DISPLAY))
                 {
                     MessageWin* win = MessageWin::findEvent(event->id());
                     delete win;
@@ -1617,7 +1617,7 @@ KAEvent::List templateList()
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         KAEvent* event = events[i];
-        if (includeCmdAlarms  ||  !(event->actions() & KAEvent::ACT_COMMAND))
+        if (includeCmdAlarms  ||  !(event->actionTypes() & KAEvent::ACT_COMMAND))
             templates.append(event);
     }
     return templates;
@@ -1630,7 +1630,7 @@ KAEvent::List templateList()
 */
 void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
-    if (event  &&  event->action() == KAEvent::EMAIL
+    if (event  &&  event->actionTypes() == KAEvent::ACT_EMAIL
     &&  Preferences::emailAddress().isEmpty())
         KAMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
                                                 "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
@@ -1676,7 +1676,7 @@ void refreshAlarmsIfQueued()
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             KAEvent* event = events[i];
-            if (!event->enabled()  &&  event->displayAction())
+            if (!event->enabled()  &&  (event->actionTypes() & KAEvent::ACT_DISPLAY))
             {
                 MessageWin* win = MessageWin::findEvent(event->id());
                 delete win;
@@ -2281,7 +2281,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
     kcalEvent->setUid(uid);
     kcalEvent->clearAlarms();
     QString userEmail;
-    switch (event->actions())
+    switch (event->actionTypes())
     {
         case KAEvent::ACT_DISPLAY:
         case KAEvent::ACT_COMMAND:

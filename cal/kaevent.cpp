@@ -1262,7 +1262,7 @@ void KAEvent::Private::setRepeatAtLogin(bool rl)
     mRepeatAtLogin = rl;
     if (mRepeatAtLogin)
     {
-        // Cancel reminder, late-cancel and copy-to-KOrganizer
+        // Cancel pre-alarm reminder, late-cancel and copy-to-KOrganizer
         if (mReminderMinutes >= 0)
             setReminder(0, false);
         mLateCancel = 0;
@@ -2049,7 +2049,7 @@ int KAEvent::Private::flags() const
          | (mEnabled                    ? 0 : DISABLED);
 }
 
-KAEvent::Actions KAEvent::actions() const
+KAEvent::Actions KAEvent::actionTypes() const
 {
     switch (d->mActionType)
     {

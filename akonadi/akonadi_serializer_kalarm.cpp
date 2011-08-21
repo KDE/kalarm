@@ -127,7 +127,7 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
     reportDifference(reporter, KAEventFormatter::Id);
     if (eventL.revision() != eventR.revision())
         reportDifference(reporter, KAEventFormatter::Revision);
-    if (eventL.action() != eventR.action())
+    if (eventL.actionSubType() != eventR.actionSubType())
         reportDifference(reporter, KAEventFormatter::AlarmType);
     if (eventL.category() != eventR.category())
         reportDifference(reporter, KAEventFormatter::AlarmCategory);

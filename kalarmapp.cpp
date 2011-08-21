@@ -1596,11 +1596,19 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
     void* result = (void*)1;
     event.setArchive();
 
-    KAAlarm::Action action = alarm.action();
-    if (action == KAAlarm::COMMAND && event.commandDisplay())
-        action = KAAlarm::MESSAGE;
-    switch (action)
+    switch (alarm.action())
     {
+        case KAAlarm::COMMAND:
+            if (!event.commandDisplay())
+            {
+                // execCommandAlarm() will error if the user is not authorised
+                // to run shell commands.
+                result = execCommandAlarm(event, alarm);
+                if (reschedule)
+                    rescheduleAlarm(event, alarm, true);
+                break;
+            }
+            // fall through to MESSAGE
         case KAAlarm::MESSAGE:
         case KAAlarm::FILE:
         {
@@ -1620,7 +1628,6 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 //
                 // NOTE: The pre-action is not executed for a recurring alarm if an
                 // alarm message window for a previous occurrence is still visible.
-
                 // Check whether the command is already being executed for this alarm.
                 for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
                 {
@@ -1684,13 +1691,6 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             }
             break;
         }
-        case KAAlarm::COMMAND:
-            // execCommandAlarm() will error if the user is not authorised
-            // to run shell commands.
-            result = execCommandAlarm(event, alarm);
-            if (reschedule)
-                rescheduleAlarm(event, alarm, true);
-            break;
         case KAAlarm::EMAIL:
         {
             kDebug() << "EMAIL to:" << event.emailAddresses(",");

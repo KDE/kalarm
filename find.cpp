@@ -226,13 +226,22 @@ void Find::display()
             archived = true;
         else
             live = true;
-        switch (event->action())
+        switch (event->actionTypes())
         {
-            case KAEvent::MESSAGE:  text    = true;  break;
-            case KAEvent::FILE:     file    = true;  break;
-            case KAEvent::COMMAND:  command = true;  break;
-            case KAEvent::EMAIL:    email   = true;  break;
-            case KAEvent::AUDIO:    audio   = true;  break;
+            case KAEvent::ACT_EMAIL:    email   = true;  break;
+            case KAEvent::ACT_AUDIO:    audio   = true;  break;
+            case KAEvent::ACT_COMMAND:  command = true;  break;
+            case KAEvent::ACT_DISPLAY:
+                if (event->actionSubType() == KAEvent::FILE)
+                {
+                    file = true;
+                    break;
+                }
+                // fall through to ACT_DISPLAY_COMMAND
+            case KAEvent::ACT_DISPLAY_COMMAND:
+            default:
+                text = true;
+                break;
         }
     }
     mLive->setEnabled(live);
@@ -350,30 +359,9 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
         if ((live  &&  !(mOptions & FIND_LIVE))
         ||  (!live  &&  !(mOptions & FIND_ARCHIVED)))
             continue;     // we're not searching this type of alarm
-        switch (event->action())
+        switch (event->actionTypes())
         {
-            case KAEvent::MESSAGE:
-                if (!(mOptions & FIND_MESSAGE))
-                    break;
-                mFind->setData(event->cleanText());
-                found = (mFind->find() == KFind::Match);
-                break;
-
-            case KAEvent::FILE:
-                if (!(mOptions & FIND_FILE))
-                    break;
-                mFind->setData(event->cleanText());
-                found = (mFind->find() == KFind::Match);
-                break;
-
-            case KAEvent::COMMAND:
-                if (!(mOptions & FIND_COMMAND))
-                    break;
-                mFind->setData(event->cleanText());
-                found = (mFind->find() == KFind::Match);
-                break;
-
-            case KAEvent::EMAIL:
+            case KAEvent::ACT_EMAIL:
                 if (!(mOptions & FIND_EMAIL))
                     break;
                 mFind->setData(event->emailAddresses(", "));
@@ -392,11 +380,37 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                 found = (mFind->find() == KFind::Match);
                 break;
 
-            case KAEvent::AUDIO:
+            case KAEvent::ACT_AUDIO:
                 if (!(mOptions & FIND_AUDIO))
                     break;
                 mFind->setData(event->audioFile());
                 found = (mFind->find() == KFind::Match);
+                break;
+
+            case KAEvent::ACT_COMMAND:
+                if (!(mOptions & FIND_COMMAND))
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
+
+            case KAEvent::ACT_DISPLAY:
+                if (event->actionSubType() == KAEvent::FILE)
+                {
+                    if (!(mOptions & FIND_FILE))
+                        break;
+                    mFind->setData(event->cleanText());
+                    found = (mFind->find() == KFind::Match);
+                    break;
+                }
+                // fall through to ACT_DISPLAY_COMMAND
+            case KAEvent::ACT_DISPLAY_COMMAND:
+                if (!(mOptions & FIND_MESSAGE))
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
+            default:
                 break;
         }
         if (found)

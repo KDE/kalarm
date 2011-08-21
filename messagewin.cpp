@@ -189,7 +189,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mFadeSeconds(qMin(event->fadeSeconds(), 86400)),
       mDefaultDeferMinutes(event->deferDefaultMinutes()),
       mAlarmType(alarm.type()),
-      mAction(event->action()),
+      mAction(event->actionSubType()),
 #ifdef KMAIL_SUPPORTED
       mKMailSerialNumber(event->kmailSerialNumber()),
 #else
@@ -312,7 +312,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 #endif
       mEventID(event->id()),
       mAlarmType(KAAlarm::MAIN_ALARM),
-      mAction(event->action()),
+      mAction(event->actionSubType()),
       mKMailSerialNumber(0),
       mCommandError(KAEvent::CMD_NO_ERROR),
       mErrorMsgs(errmsgs),

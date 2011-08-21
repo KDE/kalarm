@@ -185,7 +185,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         case ValueRole:
         case StatusRole:
         case AlarmActionsRole:
-        case AlarmActionRole:
+        case AlarmSubActionRole:
         case EnabledRole:
         case EnabledTypesRole:
         case CommandErrorRole:
@@ -282,9 +282,9 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             if (!event.isValid())
                 return QVariant();
             if (role == AlarmActionsRole)
-                return event.actions();
-            if (role == AlarmActionRole)
-                return event.action();
+                return event.actionTypes();
+            if (role == AlarmSubActionRole)
+                return event.actionSubType();
             bool calendarColour = false;
             switch (column)
             {
@@ -352,20 +352,21 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                     switch (role)
                     {
                         case Qt::BackgroundRole:
-                            if (event.action() == KAEvent::MESSAGE
-                            ||  event.action() == KAEvent::FILE
-                            ||  (event.action() == KAEvent::COMMAND && event.commandDisplay()))
+                        {
+                            KAEvent::Actions type = event.actionTypes();
+                            if (type & KAEvent::ACT_DISPLAY)
                                 return event.bgColour();
-                            if (event.action() == KAEvent::COMMAND)
+                            if (type == KAEvent::ACT_COMMAND)
                             {
                                 if (event.commandError() != KAEvent::CMD_NO_ERROR)
                                     return Qt::red;
                             }
                             break;
+                        }
                         case Qt::ForegroundRole:
                             if (event.commandError() != KAEvent::CMD_NO_ERROR)
                             {
-                                if (event.action() == KAEvent::COMMAND && !event.commandDisplay())
+                                if (event.actionTypes() == KAEvent::ACT_COMMAND)
                                     return Qt::white;
                                 QColor colour = Qt::red;
                                 int r, g, b;
@@ -381,8 +382,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             break;
                         case SortRole:
                         {
-                            unsigned i = (event.action() == KAEvent::MESSAGE || event.action() == KAEvent::FILE)
-                                       ? event.bgColour().rgb() : 0;
+                            unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
+                                         ? event.bgColour().rgb() : 0;
                             return QString("%1").arg(i, 6, 10, QLatin1Char('0'));
                         }
                         default:
@@ -411,9 +412,9 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
 #endif
                             return QString();
                         case ValueRole:
-                            return static_cast<int>(event.action());
+                            return static_cast<int>(event.actionSubType());
                         case SortRole:
-                            return QString("%1").arg(event.action(), 2, 10, QLatin1Char('0'));
+                            return QString("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
                     }
                     break;
                 case TextColumn:
@@ -1040,19 +1041,19 @@ QString AkonadiModel::repeatOrder(const KAEvent& event) const
 */
 QPixmap* AkonadiModel::eventIcon(const KAEvent& event) const
 {
-    switch (event.action())
+    switch (event.actionTypes())
     {
-        case KAAlarm::FILE:
-            return mFileIcon;
-        case KAAlarm::EMAIL:
+        case KAEvent::ACT_EMAIL:
             return mEmailIcon;
-        case KAAlarm::AUDIO:
+        case KAEvent::ACT_AUDIO:
             return mAudioIcon;
-        case KAAlarm::COMMAND:
-            if (!event.commandDisplay())
-                return mCommandIcon;
-            // fall through to MESSAGE
-        case KAAlarm::MESSAGE:
+        case KAEvent::ACT_COMMAND:
+            return mCommandIcon;
+        case KAEvent::ACT_DISPLAY:
+            if (event.actionSubType() == KAEvent::FILE)
+                return mFileIcon;
+            // fall through to ACT_DISPLAY_COMMAND
+        case KAEvent::ACT_DISPLAY_COMMAND:
         default:
             return mTextIcon;
     }

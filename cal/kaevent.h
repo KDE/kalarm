@@ -341,7 +341,6 @@ class KALARM_CAL_EXPORT KAEvent
         OccurType          setNextOccurrence(const KDateTime& preDateTime)  { return d->setNextOccurrence(preDateTime); }
         void               setFirstRecurrence()                    { d->setFirstRecurrence(); }
         void               setCategory(KAlarm::CalEvent::Type s)   { d->setCategory(s); }
-        void               setUid(KAlarm::CalEvent::Type s)        { d->mEventID = KAlarm::CalEvent::uid(d->mEventID, s); }
         void               setEventId(const QString& id)           { d->mEventID = id; }
 #ifdef USE_AKONADI
         void               setItemId(Akonadi::Item::Id id)         { d->mItemId = id; }
@@ -430,9 +429,8 @@ class KALARM_CAL_EXPORT KAEvent
         bool               updateKCalEvent(KCal::Event* e, UidAction u) const
                                                           { return d->updateKCalEvent(e, u); }
 #endif
-        Action             action() const                 { return (Action)d->mActionType; }
-        Actions            actions() const;
-        bool               displayAction() const          { return d->mActionType == KAAlarmEventBase::T_MESSAGE || d->mActionType == KAAlarmEventBase::T_FILE || (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay); }
+        Action             actionSubType() const          { return (Action)d->mActionType; }
+        Actions            actionTypes() const;
         const QString&     id() const                     { return d->mEventID; }
 #ifdef USE_AKONADI
         Akonadi::Item::Id  itemId() const                 { return d->mItemId; }

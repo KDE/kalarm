@@ -63,7 +63,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
             EnabledRole,               // true for enabled alarm, false for disabled
             StatusRole,                // KAEvent::ACTIVE/ARCHIVED/TEMPLATE
             AlarmActionsRole,          // KAEvent::Actions
-            AlarmActionRole,           // KAEvent::Action
+            AlarmSubActionRole,        // KAEvent::Action
             ValueRole,                 // numeric value
             SortRole,                  // the value to use for sorting
             CommandErrorRole           // last command execution error for alarm (per user)

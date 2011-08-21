@@ -145,9 +145,9 @@ bool KAEventFormatter::isApplicable(Parameter param) const
               
 
         case MessageText:
-            return mEvent.action() == KAEvent::MESSAGE;
+            return mEvent.actionSubType() == KAEvent::MESSAGE;
         case MessageFile:
-            return mEvent.action() == KAEvent::FILE;
+            return mEvent.actionSubType() == KAEvent::FILE;
         case FgColour:
         case BgColour:
         case Font:
@@ -158,7 +158,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case Reminder:
         case DeferralType:
         case DeferDefault:
-            return mEvent.displayAction();
+            return mEvent.actionTypes() & KAEvent::ACT_DISPLAY;
         case ReminderOnce:
             return mEvent.reminderMinutes() && mEvent.recurs();
         case DeferralTime:
@@ -169,7 +169,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case PreActionNoError:
             return !mEvent.preAction().isEmpty();
         case Sound:
-            return mEvent.action() == KAEvent::MESSAGE  ||  mEvent.action() == KAEvent::AUDIO;
+            return mEvent.actionSubType() == KAEvent::MESSAGE  ||  mEvent.actionSubType() == KAEvent::AUDIO;
         case SoundRepeat:
             return !mEvent.audioFile().isEmpty();
         case SoundVolume:
@@ -181,7 +181,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case Command:
         case LogFile:
         case CommandXTerm:
-            return mEvent.action() == KAEvent::COMMAND;
+            return mEvent.actionSubType() == KAEvent::COMMAND;
 
         case EmailSubject:
         case EmailFromId:
@@ -189,7 +189,7 @@ bool KAEventFormatter::isApplicable(Parameter param) const
         case EmailBcc:
         case EmailBody:
         case EmailAttachments:
-            return mEvent.action() == KAEvent::EMAIL;
+            return mEvent.actionSubType() == KAEvent::EMAIL;
     }
     return false;
 }
@@ -200,7 +200,7 @@ QString KAEventFormatter::value(Parameter param) const
     {
         case Id:                return mEvent.id();
         case AlarmType:
-            switch (mEvent.action())
+            switch (mEvent.actionSubType())
             {
                 case KAEvent::MESSAGE:  return i18nc("@info/plain Alarm type", "Display (text)");
                 case KAEvent::FILE:     return i18nc("@info/plain Alarm type", "Display (file)");
@@ -258,8 +258,8 @@ QString KAEventFormatter::value(Parameter param) const
             return i18nc("@info/plain", "%1", value);
         }
 
-        case MessageText:       return (mEvent.action() == KAEvent::MESSAGE) ? mEvent.cleanText() : QString();
-        case MessageFile:       return (mEvent.action() == KAEvent::FILE) ? mEvent.cleanText() : QString();
+        case MessageText:       return (mEvent.actionSubType() == KAEvent::MESSAGE) ? mEvent.cleanText() : QString();
+        case MessageFile:       return (mEvent.actionSubType() == KAEvent::FILE) ? mEvent.cleanText() : QString();
         case FgColour:          return mEvent.fgColour().name();
         case BgColour:          return mEvent.bgColour().name();
         case Font:              return mEvent.useDefaultFont() ? i18nc("@info/plain Using default font", "Default") : mEvent.font().toString();
@@ -289,12 +289,12 @@ QString KAEventFormatter::value(Parameter param) const
                                      ? i18ncp("@info/plain", "1 Second", "%s Seconds", mEvent.fadeSeconds())
                                      : mUnspecifiedValue;
 
-        case Command:           return (mEvent.action() == KAEvent::COMMAND) ? mEvent.cleanText() : QString();
+        case Command:           return (mEvent.actionSubType() == KAEvent::COMMAND) ? mEvent.cleanText() : QString();
         case LogFile:           return mEvent.logFile();
         case CommandXTerm:      return trueFalse(mEvent.commandXterm());
 
         case EmailSubject:      return mEvent.emailSubject();
-        case EmailFromId:       return (mEvent.action() == KAEvent::EMAIL) ? number(mEvent.emailFromId()) : QString();
+        case EmailFromId:       return (mEvent.actionSubType() == KAEvent::EMAIL) ? number(mEvent.emailFromId()) : QString();
         case EmailTo:           return mEvent.emailAddresses(", ");
         case EmailBcc:          return trueFalse(mEvent.emailBcc());
         case EmailBody:         return mEvent.emailMessage();
