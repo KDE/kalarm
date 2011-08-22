@@ -412,8 +412,8 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
             // It's the standard resource for its type.
             if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
             {
-                MessageBox::sorry(static_cast<QWidget*>(parent()),
-                                  i18nc("@info", "You cannot disable your default active alarm calendar."));
+                KAMessageBox::sorry(static_cast<QWidget*>(parent()),
+                                    i18nc("@info", "You cannot disable your default active alarm calendar."));
                 return false;
 
             }
@@ -421,13 +421,13 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
             {
                 // Only allow the archived alarms standard resource to be disabled if
                 // we're not saving archived alarms.
-                MessageBox::sorry(static_cast<QWidget*>(parent()),
-                                  i18nc("@info", "You cannot disable your default archived alarm calendar "
-                                        "while expired alarms are configured to be kept."));
+                KAMessageBox::sorry(static_cast<QWidget*>(parent()),
+                                    i18nc("@info", "You cannot disable your default archived alarm calendar "
+                                          "while expired alarms are configured to be kept."));
                 return false;
             }
-            if (MessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
-                                                  i18nc("@info", "Do you really want to disable your default calendar?"))
+            if (KAMessageBox::warningContinueCancel(static_cast<QWidget*>(parent()),
+                                                    i18nc("@info", "Do you really want to disable your default calendar?"))
                        == KMessageBox::Cancel)
                 return false;
         }

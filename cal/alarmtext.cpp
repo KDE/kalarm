@@ -1,7 +1,7 @@
 /*
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -354,7 +354,7 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
 {
     static const QRegExp localfile("^file:/+");
     QString text;
-    switch (event.action())
+    switch (event.actionSubType())
     {
         case KAEvent::AUDIO:
             text = event.audioFile();

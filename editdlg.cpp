@@ -119,7 +119,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, Ge
 EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                    GetResourceType getResource, bool readOnly)
 {
-    switch (event->actions())
+    switch (event->actionTypes())
     {
         case KAEvent::ACT_COMMAND:  return new EditCommandAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly);
         case KAEvent::ACT_DISPLAY_COMMAND:
@@ -168,7 +168,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* paren
 EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
     : KDialog(parent),
-      mAlarmType(event->action()),
+      mAlarmType(event->actionSubType()),
       mMainPageShown(false),
       mRecurPageShown(false),
       mRecurSetDefaultEndDate(true),
@@ -553,7 +553,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
             }
         }
 
-        KAEvent::Action action = event->action();
+        KAEvent::Action action = event->actionSubType();
         AlarmText altext;
         if (event->commandScript())
             altext.setScript(event->cleanText());
@@ -958,7 +958,7 @@ bool EditAlarmDlg::validate()
         if (!errmsg.isEmpty())
         {
             mTemplateName->setFocus();
-            MessageBox::sorry(this, errmsg);
+            KAMessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -1006,7 +1006,7 @@ bool EditAlarmDlg::validate()
                                                   "The start date/time does not match the alarm's recurrence pattern, "
                                                   "so it will be adjusted to the date/time of the next recurrence (%1).",
                                                   KGlobal::locale()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
-                if (MessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
+                if (KAMessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
                     return false;
             }
         }
@@ -1030,12 +1030,12 @@ bool EditAlarmDlg::validate()
                 // has already expired, so we must adjust it.
                 if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
                 {
-                    MessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
+                    KAMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
                 }
                 if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::DISPLAY_TRIGGER).isValid())
                 {
-                    if (MessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
+                    if (KAMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
                         != KMessageBox::Continue)
                         return false;
                 }
@@ -1047,7 +1047,7 @@ bool EditAlarmDlg::validate()
         {
             mTabs->setCurrentIndex(mRecurPageIndex);
             errWidget->setFocus();
-            MessageBox::sorry(this, errmsg);
+            KAMessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -1064,8 +1064,8 @@ bool EditAlarmDlg::validate()
             {
                 mTabs->setCurrentIndex(mMainPageIndex);
                 mReminder->setFocusOnCount();
-                MessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked."
-                                 , Reminder::i18n_chk_FirstRecurrenceOnly()));
+                KAMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
+                                                Reminder::i18n_chk_FirstRecurrenceOnly()));
                 return false;
             }
         }
@@ -1079,14 +1079,14 @@ bool EditAlarmDlg::validate()
             if (longestRecurMinutes > 0
             &&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminder)
             {
-                MessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
+                KAMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
             if (!recurEvent.repetition().isDaily()
             &&  ((mTemplate && mTemplateAnyTime->isChecked())  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
             {
-                MessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
+                KAMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
@@ -1118,7 +1118,7 @@ bool EditAlarmDlg::validate()
         if (!mCollection.isValid())
         {
             if (!cancelled)
-                MessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
+                KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
             return false;
         }
     }
@@ -1147,7 +1147,7 @@ bool EditAlarmDlg::validate()
         if (!mResource)
         {
             if (!cancelled)
-                MessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
+                KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
             return false;
         }
     }

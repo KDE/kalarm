@@ -37,6 +37,7 @@
 using namespace Akonadi;
 
 
+// Convert from backend data stream to a KAEvent, and set it into the item's payload.
 bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QIODevice& data, int version)
 {
     Q_UNUSED(version);
@@ -86,6 +87,7 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
     return true;
 }
 
+// Convert an item's KAEvent payload to backend data stream.
 void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label, QIODevice& data, int& version)
 {
     Q_UNUSED(version);
@@ -125,7 +127,7 @@ void SerializerPluginKAlarm::compare(AbstractDifferencesReporter* reporter, cons
     reportDifference(reporter, KAEventFormatter::Id);
     if (eventL.revision() != eventR.revision())
         reportDifference(reporter, KAEventFormatter::Revision);
-    if (eventL.action() != eventR.action())
+    if (eventL.actionSubType() != eventR.actionSubType())
         reportDifference(reporter, KAEventFormatter::AlarmType);
     if (eventL.category() != eventR.category())
         reportDifference(reporter, KAEventFormatter::AlarmCategory);

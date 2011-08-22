@@ -996,8 +996,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
             data.action    = KAAlarmEventBase::T_EMAIL;
             data.cleanText = alarm->mailText();
             int i = flags.indexOf(Private::EMAIL_ID_FLAG);
-            if (i >= 0  &&  i + 1 < flags.count())
-                data.emailFromId = flags[i + 1].toUInt();
+            data.emailFromId = (i >= 0  &&  i + 1 < flags.count()) ? flags[i + 1].toUInt() : 0;
             break;
         }
         case Alarm::Audio:
@@ -1263,7 +1262,7 @@ void KAEvent::Private::setRepeatAtLogin(bool rl)
     mRepeatAtLogin = rl;
     if (mRepeatAtLogin)
     {
-        // Cancel reminder, late-cancel and copy-to-KOrganizer
+        // Cancel pre-alarm reminder, late-cancel and copy-to-KOrganizer
         if (mReminderMinutes >= 0)
             setReminder(0, false);
         mLateCancel = 0;
@@ -2050,7 +2049,7 @@ int KAEvent::Private::flags() const
          | (mEnabled                    ? 0 : DISABLED);
 }
 
-KAEvent::Actions KAEvent::actions() const
+KAEvent::Actions KAEvent::actionTypes() const
 {
     switch (d->mActionType)
     {

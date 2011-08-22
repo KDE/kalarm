@@ -173,7 +173,7 @@ class KAlarmApp : public KUniqueApplication
         void               queueAlarmId(const QString& id);
         bool               dbusHandleEvent(const QString& eventID, EventFunc);
         bool               handleEvent(const QString& eventID, EventFunc);
-        bool               rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay, const KDateTime& nextDt = KDateTime());
+        int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay, const KDateTime& nextDt = KDateTime());
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
         bool               cancelReminderAndDeferral(KAEvent&);
         ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*, int flags = 0, const QObject* receiver = 0, const char* slot = 0);

@@ -1,7 +1,7 @@
 /*
  *  templatelistfiltermodel.cpp  -  proxy model class for lists of alarm templates
  *  Program:  kalarm
- *  Copyright © 2007,2009,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,16 +55,9 @@ bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&
         return false;
     if (mTypeFilter == KAEvent::ACT_ALL)
         return true;
-    int type;
-    switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
-    {
-        case KAEvent::MESSAGE:
-        case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
-        case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
-        case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
-        case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
-        default:                type = KAEvent::ACT_ALL;  break;
-    }
+    KAEvent::Actions type = static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->actionTypes();
+    if (type == KAEvent::ACT_DISPLAY_COMMAND)
+        type = KAEvent::ACT_DISPLAY;
     return type & mTypeFilter;
 }
 
@@ -115,16 +108,9 @@ Qt::ItemFlags TemplateListFilterModel::flags(const QModelIndex& index) const
     Qt::ItemFlags f = sourceModel()->flags(sourceIndex);
     if (mTypesEnabled == KAEvent::ACT_ALL)
         return f;
-    int type;
-    switch (static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->action())
-    {
-        case KAEvent::MESSAGE:
-        case KAEvent::FILE:     type = KAEvent::ACT_DISPLAY;  break;
-        case KAEvent::COMMAND:  type = KAEvent::ACT_COMMAND;  break;
-        case KAEvent::EMAIL:    type = KAEvent::ACT_EMAIL;  break;
-        case KAEvent::AUDIO:    type = KAEvent::ACT_AUDIO;  break;
-        default:                type = KAEvent::ACT_ALL;  break;
-    }
+    KAEvent::Actions type = static_cast<EventListModel*>(sourceModel())->event(sourceIndex)->actionTypes();
+    if (type == KAEvent::ACT_DISPLAY_COMMAND)
+        type = KAEvent::ACT_DISPLAY;
     if (!(type & mTypesEnabled))
         f = static_cast<Qt::ItemFlags>(f & ~(Qt::ItemIsEnabled | Qt::ItemIsSelectable));
     return f;

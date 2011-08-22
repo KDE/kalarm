@@ -64,7 +64,7 @@ KAlarm::Calendar::Compat fix(KCal::CalendarLocal& calendar, const QString& local
     if (conv == AlarmResource::PROMPT  ||  conv == AlarmResource::PROMPT_PART)
     {
         QString msg = KAlarm::Calendar::conversionPrompt(resource->resourceName(), versionString, (conv == AlarmResource::PROMPT));
-        if (MessageBox::warningYesNo(MainWindow::mainMainWindow(), msg) != KMessageBox::Yes)
+        if (KAMessageBox::warningYesNo(MainWindow::mainMainWindow(), msg) != KMessageBox::Yes)
             return KAlarm::Calendar::Convertible;
     }
     KAlarm::Calendar::setKAlarmVersion(calendar);

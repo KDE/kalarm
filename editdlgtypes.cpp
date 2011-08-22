@@ -73,6 +73,7 @@ using namespace KCal;
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
+#include <QStandardItemModel>
 
 enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 
@@ -160,6 +161,18 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mTypeCombo->addItem(commandItem);  // index = tCOMMAND
     mTypeCombo->setFixedSize(mTypeCombo->sizeHint());
     mTypeCombo->setCurrentIndex(-1);    // ensure slotAlarmTypeChanged() is called when index is set
+    if (!ShellProcess::authorised())
+    {
+        // User not authorised to issue shell commands - disable Command Output option
+        QStandardItemModel* model = qobject_cast<QStandardItemModel*>(mTypeCombo->model());
+        if (model)
+        {
+            QModelIndex index = model->index(2, mTypeCombo->modelColumn(), mTypeCombo->rootModelIndex());
+            QStandardItem* item = model->itemFromIndex(index);
+            if (item)
+                item->setEnabled(false);
+        }
+    }
     connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotAlarmTypeChanged(int)));
     connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(contentsChanged()));
     label->setBuddy(mTypeCombo);
@@ -942,7 +955,7 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
         {
             showMainPage();
             mCmdLogFileEdit->setFocus();
-            MessageBox::sorry(this, i18nc("@info", "Log file must be the name or path of a local file, with write permission."));
+            KAMessageBox::sorry(this, i18nc("@info", "Log file must be the name or path of a local file, with write permission."));
             return false;
         }
         // Convert the log file to an absolute path
@@ -959,7 +972,7 @@ void EditCommandAlarmDlg::type_trySuccessMessage(ShellProcess* proc, const QStri
     if (mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
     {
         theApp()->commandMessage(proc, this);
-        MessageBox::information(this, i18nc("@info", "Command executed: <icode>%1</icode>", text));
+        KAMessageBox::information(this, i18nc("@info", "Command executed: <icode>%1</icode>", text));
         theApp()->commandMessage(proc, 0);
     }
 }
@@ -1307,14 +1320,14 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
         if (!bad.isEmpty())
         {
             mEmailToEdit->setFocus();
-            MessageBox::error(this, i18nc("@info", "Invalid email address: <email>%1</email>", bad));
+            KAMessageBox::error(this, i18nc("@info", "Invalid email address: <email>%1</email>", bad));
             return false;
         }
     }
     if (mEmailAddresses.isEmpty())
     {
         mEmailToEdit->setFocus();
-        MessageBox::error(this, i18nc("@info", "No email address specified"));
+        KAMessageBox::error(this, i18nc("@info", "No email address specified"));
         return false;
     }
 
@@ -1331,12 +1344,12 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
                 break;      // empty
             case -1:
                 mEmailAttachList->setFocus();
-                MessageBox::error(this, i18nc("@info", "Invalid email attachment: <filename>%1</filename>", att));
+                KAMessageBox::error(this, i18nc("@info", "Invalid email attachment: <filename>%1</filename>", att));
                 return false;
         }
     }
-    if (trial  &&  MessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to send the email now to the specified recipient(s)?"),
-                                                      i18nc("@action:button", "Confirm Email"), KGuiItem(i18nc("@action:button", "Send"))) != KMessageBox::Continue)
+    if (trial  &&  KAMessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to send the email now to the specified recipient(s)?"),
+                                                       i18nc("@action:button", "Confirm Email"), KGuiItem(i18nc("@action:button", "Send"))) != KMessageBox::Continue)
         return false;
     return true;
 }
@@ -1355,7 +1368,7 @@ void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
                     to, Preferences::emailBccAddress()) + "</qt>";
     else
         msg = "<qt>" + i18nc("@info", "Email sent to:<nl/>%1", to) + "</qt>";
-    MessageBox::information(this, msg);
+    KAMessageBox::information(this, msg);
 }
 
 /******************************************************************************
@@ -1680,7 +1693,7 @@ QString CommandEdit::text(EditAlarmDlg* dlg, bool showErrorMessage) const
 {
     QString result = text();
     if (showErrorMessage  &&  result.isEmpty())
-        MessageBox::sorry(dlg, i18nc("@info", "Please enter a command or script to execute"));
+        KAMessageBox::sorry(dlg, i18nc("@info", "Please enter a command or script to execute"));
     return result;
 }
 

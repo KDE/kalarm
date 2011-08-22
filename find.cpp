@@ -41,6 +41,7 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QRegExp>
 
 // KAlarm-specific options for Find dialog
 enum {
@@ -225,13 +226,22 @@ void Find::display()
             archived = true;
         else
             live = true;
-        switch (event->action())
+        switch (event->actionTypes())
         {
-            case KAEvent::MESSAGE:  text    = true;  break;
-            case KAEvent::FILE:     file    = true;  break;
-            case KAEvent::COMMAND:  command = true;  break;
-            case KAEvent::EMAIL:    email   = true;  break;
-            case KAEvent::AUDIO:    audio   = true;  break;
+            case KAEvent::ACT_EMAIL:    email   = true;  break;
+            case KAEvent::ACT_AUDIO:    audio   = true;  break;
+            case KAEvent::ACT_COMMAND:  command = true;  break;
+            case KAEvent::ACT_DISPLAY:
+                if (event->actionSubType() == KAEvent::FILE)
+                {
+                    file = true;
+                    break;
+                }
+                // fall through to ACT_DISPLAY_COMMAND
+            case KAEvent::ACT_DISPLAY_COMMAND:
+            default:
+                text = true;
+                break;
         }
     }
     mLive->setEnabled(live);
@@ -255,6 +265,8 @@ void Find::slotFind()
         return;
     mHistory = mDialog->findHistory();    // save search history so that it can be displayed again
     mOptions = mDialog->options() & ~FIND_KALARM_OPTIONS;
+    if ((mOptions & KFind::RegularExpression)  &&  !QRegExp(mDialog->pattern()).isValid())
+        return;
     mOptions |= (mLive->isEnabled()        && mLive->isChecked()        ? FIND_LIVE : 0)
              |  (mArchived->isEnabled()    && mArchived->isChecked()    ? FIND_ARCHIVED : 0)
              |  (mMessageType->isEnabled() && mMessageType->isChecked() ? FIND_MESSAGE : 0)
@@ -265,7 +277,7 @@ void Find::slotFind()
     if (!(mOptions & (FIND_LIVE | FIND_ARCHIVED))
     ||  !(mOptions & (FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO)))
     {
-        MessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
+        KAMessageBox::sorry(mDialog, i18nc("@info", "No alarm types are selected to search"));
         return;
     }
 
@@ -347,30 +359,9 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
         if ((live  &&  !(mOptions & FIND_LIVE))
         ||  (!live  &&  !(mOptions & FIND_ARCHIVED)))
             continue;     // we're not searching this type of alarm
-        switch (event->action())
+        switch (event->actionTypes())
         {
-            case KAEvent::MESSAGE:
-                if (!(mOptions & FIND_MESSAGE))
-                    break;
-                mFind->setData(event->cleanText());
-                found = (mFind->find() == KFind::Match);
-                break;
-
-            case KAEvent::FILE:
-                if (!(mOptions & FIND_FILE))
-                    break;
-                mFind->setData(event->cleanText());
-                found = (mFind->find() == KFind::Match);
-                break;
-
-            case KAEvent::COMMAND:
-                if (!(mOptions & FIND_COMMAND))
-                    break;
-                mFind->setData(event->cleanText());
-                found = (mFind->find() == KFind::Match);
-                break;
-
-            case KAEvent::EMAIL:
+            case KAEvent::ACT_EMAIL:
                 if (!(mOptions & FIND_EMAIL))
                     break;
                 mFind->setData(event->emailAddresses(", "));
@@ -389,11 +380,37 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                 found = (mFind->find() == KFind::Match);
                 break;
 
-            case KAEvent::AUDIO:
+            case KAEvent::ACT_AUDIO:
                 if (!(mOptions & FIND_AUDIO))
                     break;
                 mFind->setData(event->audioFile());
                 found = (mFind->find() == KFind::Match);
+                break;
+
+            case KAEvent::ACT_COMMAND:
+                if (!(mOptions & FIND_COMMAND))
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
+
+            case KAEvent::ACT_DISPLAY:
+                if (event->actionSubType() == KAEvent::FILE)
+                {
+                    if (!(mOptions & FIND_FILE))
+                        break;
+                    mFind->setData(event->cleanText());
+                    found = (mFind->find() == KFind::Match);
+                    break;
+                }
+                // fall through to ACT_DISPLAY_COMMAND
+            case KAEvent::ACT_DISPLAY_COMMAND:
+                if (!(mOptions & FIND_MESSAGE))
+                    break;
+                mFind->setData(event->cleanText());
+                found = (mFind->find() == KFind::Match);
+                break;
+            default:
                 break;
         }
         if (found)
@@ -418,7 +435,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
         {
             QString msg = forward ? i18nc("@info", "<para>End of alarm list reached.</para><para>Continue from the beginning?</para>")
                                   : i18nc("@info", "<para>Beginning of alarm list reached.</para><para>Continue from the end?</para>");
-            if (MessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
+            if (KAMessageBox::questionYesNo(mListView, msg, QString(), KStandardGuiItem::cont(), KStandardGuiItem::cancel()) == KMessageBox::Yes)
             {
                 mNoCurrentItem = true;
                 findNext(forward, false, false);

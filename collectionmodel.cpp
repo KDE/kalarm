@@ -357,14 +357,14 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
                         errmsg = i18nc("@info", "You cannot disable your default archived alarm calendar "
                                                 "while expired alarms are configured to be kept.");
                     }
-                    else if (MessageBox::warningContinueCancel(messageParent,
+                    else if (KAMessageBox::warningContinueCancel(messageParent,
                                                            i18nc("@info", "Do you really want to disable your default calendar?"))
                                == KMessageBox::Cancel)
                         return false;
                 }
                 if (!errmsg.isEmpty())
                 {
-                    MessageBox::sorry(messageParent, errmsg);
+                    KAMessageBox::sorry(messageParent, errmsg);
                     return false;
                 }
             }
@@ -787,7 +787,7 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                     }
                     if (singleType)
                         msg = i18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
-                    MessageBox::information(messageParent, msg);
+                    KAMessageBox::information(messageParent, msg);
                 }
             }
             break;

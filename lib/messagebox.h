@@ -25,27 +25,25 @@
 #include <kstandardguiitem.h>
 #include <kmessagebox.h>
 
-#ifdef MessageBox
-#undef MessageBox // conflicting Windows macro
-#endif
-
 /**
  *  @short Enhanced KMessageBox.
  *
- *  The MessageBox class provides an extension to KMessageBox, including the option for
+ *  The KAMessageBox class provides an extension to KMessageBox, including the option for
  *  Continue/Cancel message boxes to have a default button of Cancel.
+ *
+ *  Note that this class is not called simply MessageBox due to a name clash on Windows.
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class MessageBox : public KMessageBox
+class KAMessageBox : public KMessageBox
 {
     public:
-        /** MessageBox types.
+        /** KAMessageBox types.
          *  @li CONT_CANCEL_DEF_CONT - Continue/Cancel, with Continue as the default button.
          *  @li CONT_CANCEL_DEF_CANCEL - Continue/Cancel, with Cancel as the default button.
          *  @li YES_NO_DEF_NO - Yes/No, with No as the default button.
          */
-        enum AskType {      // MessageBox types
+        enum AskType {      // KAMessageBox types
             CONT_CANCEL_DEF_CONT,    // Continue/Cancel, with default = Continue
             CONT_CANCEL_DEF_CANCEL,  // Continue/Cancel, with default = Cancel
             YES_NO_DEF_NO            // Yes/No, with default = No
@@ -103,37 +101,37 @@ class MessageBox : public KMessageBox
          *  @param dontShow If true, the message box will be suppressed and will return Continue.
          */
         static void saveDontShowAgainContinue(const QString& dontShowAgainName, bool dontShow = true);
- 
+
         /** Same as KMessageBox::detailedError() except that it defaults to window-modal,
          *  not application-modal. */
         static void detailedError(QWidget* parent, const QString& text, const QString& details,
                                   const QString& caption = QString(), Options options = Options(Notify|WindowModal))
         { KMessageBox::detailedError(parent, text, details, caption, options); }
- 
+
         /** Same as KMessageBox::detailedSorry() except that it defaults to window-modal,
          *  not application-modal. */
         static void detailedSorry(QWidget* parent, const QString& text, const QString& details,
                                   const QString& caption = QString(), Options options = Options(Notify|WindowModal))
         { KMessageBox::detailedSorry(parent, text, details, caption, options); }
- 
+
         /** Same as KMessageBox::error() except that it defaults to window-modal,
          *  not application-modal. */
         static void error(QWidget* parent, const QString& text, const QString& caption = QString(),
                           Options options = Options(Notify|WindowModal))
         { KMessageBox::error(parent, text, caption, options); }
- 
+
         /** Same as KMessageBox::information() except that it defaults to window-modal,
          *  not application-modal. */
         static void information(QWidget* parent, const QString& text, const QString& caption = QString(),
                                 const QString& dontShowAgainName = QString(), Options options = Options(Notify|WindowModal))
         { KMessageBox::information(parent, text, caption, dontShowAgainName, options); }
- 
+
         /** Same as KMessageBox::sorry() except that it defaults to window-modal,
          *  not application-modal. */
         static void sorry(QWidget* parent, const QString& text, const QString& caption = QString(),
                           Options options = Options(Notify|WindowModal))
         { KMessageBox::sorry(parent, text, caption, options); }
- 
+
         /** Same as KMessageBox::questionYesNo() except that it defaults to window-modal,
          *  not application-modal. */
         static int questionYesNo(QWidget* parent, const QString& text, const QString& caption = QString(),
@@ -141,7 +139,7 @@ class MessageBox : public KMessageBox
                                  const KGuiItem& buttonNo = KStandardGuiItem::no(),
                                  const QString& dontAskAgainName = QString(), Options options = Options(Notify|WindowModal))
         { return KMessageBox::questionYesNo(parent, text, caption, buttonYes, buttonNo, dontAskAgainName, options); }
- 
+
         /** Same as KMessageBox::questionYesNoCancel() except that it defaults
          *  to window-modal, not application-modal. */
         static int questionYesNoCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
@@ -150,7 +148,7 @@ class MessageBox : public KMessageBox
                                        const KGuiItem &buttonCancel = KStandardGuiItem::cancel(),
                                        const QString& dontAskAgainName = QString(), Options options = Options(Notify|WindowModal))
         { return KMessageBox::questionYesNoCancel(parent, text, caption, buttonYes, buttonNo, buttonCancel, dontAskAgainName, options); }
- 
+
         /** Same as KMessageBox::warningContinueCancel() except that it defaults to window-modal,
          *  not application-modal. */
         static int warningContinueCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
@@ -158,7 +156,7 @@ class MessageBox : public KMessageBox
                                          const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
                                          const QString& dontAskAgainName = QString(), Options options = Options(Notify|WindowModal))
         { return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, buttonCancel, dontAskAgainName, options); }
- 
+
         /** Same as KMessageBox::warningYesNo() except that it defaults to window-modal,
          *  not application-modal. */
         static int warningYesNo(QWidget* parent, const QString& text, const QString& caption = QString(),
