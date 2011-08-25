@@ -197,8 +197,9 @@ void KAlarmResource::settingsChanged()
         else
         {
             // Update the backend storage format to the current KAlarm format
-            KAlarm::Calendar::setKAlarmVersion(fileStorage()->calendar());
             QString filename = fileStorage()->fileName();
+            kDebug() << "Updating storage for" << filename;
+            KAlarm::Calendar::setKAlarmVersion(fileStorage()->calendar());
             if (!writeToFile(filename))
                 kWarning() << "Error updating calendar storage format";
             else

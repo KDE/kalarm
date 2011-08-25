@@ -254,6 +254,31 @@ class SingleFileResource : public SingleFileResourceBase
       SingleFileResourceBase::collectionChanged( collection );
     }
 
+    virtual Collection rootCollection() const
+    {
+      Collection c;
+      c.setParentCollection( Collection::root() );
+      c.setRemoteId( mSettings->path() );
+      const QString display = mSettings->displayName();
+      c.setName( display.isEmpty() ? identifier() : display );
+      QStringList mimeTypes;
+      c.setContentMimeTypes( mSupportedMimetypes );
+      if ( readOnly() ) {
+        c.setRights( Collection::CanChangeCollection );
+      } else {
+        Collection::Rights rights;
+        rights |= Collection::CanChangeItem;
+        rights |= Collection::CanCreateItem;
+        rights |= Collection::CanDeleteItem;
+        rights |= Collection::CanChangeCollection;
+        c.setRights( rights );
+      }
+      EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>( Collection::AddIfMissing );
+      attr->setDisplayName( name() );
+      attr->setIconName( mCollectionIcon );
+      return c;
+    }
+
   public Q_SLOTS:
     /**
      * Display the configuration dialog for the resource.
@@ -297,29 +322,8 @@ class SingleFileResource : public SingleFileResourceBase
 
     void retrieveCollections()
     {
-      Collection c;
-      c.setParentCollection( Collection::root() );
-      c.setRemoteId( mSettings->path() );
-      const QString display = mSettings->displayName();
-      c.setName( display.isEmpty() ? identifier() : display );
-      QStringList mimeTypes;
-      c.setContentMimeTypes( mSupportedMimetypes );
-      if ( readOnly() ) {
-        c.setRights( Collection::CanChangeCollection );
-      } else {
-        Collection::Rights rights;
-        rights |= Collection::CanChangeItem;
-        rights |= Collection::CanCreateItem;
-        rights |= Collection::CanDeleteItem;
-        rights |= Collection::CanChangeCollection;
-        c.setRights( rights );
-      }
-      EntityDisplayAttribute* attr = c.attribute<EntityDisplayAttribute>( Collection::AddIfMissing );
-      attr->setDisplayName( name() );
-      attr->setIconName( mCollectionIcon );
-
       Collection::List list;
-      list << c;
+      list << rootCollection();
       collectionsRetrieved( list );
     }
 
