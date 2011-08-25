@@ -818,22 +818,28 @@ QString CollectionControlModel::typeListForDisplay(KAlarm::CalEvent::Types alarm
 * Return whether a collection is both enabled and fully writable for a given
 * alarm type.
 * Optionally, the enabled status can be ignored.
+* Reply: 1 = fully enabled and writable,
+*        0 = enabled and writable except that backend calendar is in an old KAlarm format,
+*       -1 = not enabled, read-only, or incompatible format.
 */
-bool CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type)
+int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type)
 {
     KAlarm::Calendar::Compat format;
     return isWritableEnabled(collection, type, format);
 }
-bool CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, KAlarm::Calendar::Compat& format)
+int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, KAlarm::Calendar::Compat& format)
 {
-    if (!AkonadiModel::isWritable(collection, format))
-        return false;
+    int writable = AkonadiModel::isWritable(collection, format);
+    if (writable == -1)
+        return -1;
 
     // Check the collection's enabled status
     if (!instance()->collections().contains(collection)
     ||  !collection.hasAttribute<CollectionAttribute>())
-        return false;
-    return collection.attribute<CollectionAttribute>()->isEnabled(type);
+        return -1;
+    if (!collection.attribute<CollectionAttribute>()->isEnabled(type))
+        return -1;
+    return writable;
 }
 
 /******************************************************************************

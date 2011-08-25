@@ -581,8 +581,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         // Note: the CollectionControlModel functions call AkonadiModel::refresh(collection)
         active   = CollectionControlModel::isEnabled(collection, type);
         KAlarm::Calendar::Compat compatibility;
-        writable = CollectionControlModel::isWritableEnabled(collection, type, compatibility);
-        if (!writable
+        int rw = CollectionControlModel::isWritableEnabled(collection, type, compatibility);
+        writable = (rw > 0);
+        if (!rw
         &&  (compatibility & ~KAlarm::Calendar::Converted)
         &&  !(compatibility & ~(KAlarm::Calendar::Convertible | KAlarm::Calendar::Converted)))
             updatable = true; // the calendar format is convertible to the current KAlarm format

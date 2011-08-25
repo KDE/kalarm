@@ -1159,7 +1159,7 @@ void MessageWin::redisplayAlarms()
                 MessageWin* win = new MessageWin(&event, alarm, flags);
 #ifdef USE_AKONADI
                 win->mCollection = collection;
-                bool rw = CollectionControlModel::isWritableEnabled(collection, event.category());
+                bool rw = CollectionControlModel::isWritableEnabled(collection, event.category()) > 0;
 #else
                 win->mResource = resource;
                 bool rw = resource  &&  resource->writable();
