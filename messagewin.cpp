@@ -202,6 +202,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mNoDefer(true),
       mInvalid(false),
       mEvent(*event),
+      mOriginalEvent(*event),
 #ifdef USE_AKONADI
       mCollection(AlarmCalendar::resources()->collectionForEvent(mEventItemId)),
 #else
@@ -323,6 +324,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
       mNoDefer(true),
       mInvalid(false),
       mEvent(*event),
+      mOriginalEvent(*event),
 #ifndef USE_AKONADI
       mResource(0),
 #endif
@@ -2045,7 +2047,7 @@ void MessageWin::slotEdit()
 {
     kDebug();
     MainWindow* mainWin = MainWindow::mainMainWindow();
-    mEditDlg = EditAlarmDlg::create(false, &mEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
+    mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
     KWindowSystem::setMainWindow(mEditDlg, winId());
     KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);
     setButtonsReadOnly(true);
@@ -2054,9 +2056,9 @@ void MessageWin::slotEdit()
     connect(mEditDlg, SIGNAL(destroyed(QObject*)), SLOT(editCloseCancel()));
     connect(KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)), SLOT(activeWindowChanged(WId)));
 #ifdef USE_AKONADI
-    mainWin->editAlarm(mEditDlg, mEvent);
+    mainWin->editAlarm(mEditDlg, mOriginalEvent);
 #else
-    mainWin->editAlarm(mEditDlg, mEvent, mResource);
+    mainWin->editAlarm(mEditDlg, mOriginalEvent, mResource);
 #endif
 }
 

@@ -175,6 +175,7 @@ class MessageWin : public MainWindowBase
         bool                mInvalid;         // restored window is invalid
         // Miscellaneous
         KAEvent             mEvent;           // the whole event, for updating the calendar file
+        KAEvent             mOriginalEvent;   // the original event supplied to the constructor
 #ifdef USE_AKONADI
         Akonadi::Collection mCollection;      // collection which the event comes/came from
 #else
