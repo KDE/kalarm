@@ -6,7 +6,7 @@ set(kalarmautostart_SRCS
 	autostart.cpp 
 )
 
-kde4_add_app_icon(kalarmautostart_SRCS "../ox*-app-kalarm.png")
+kde4_add_app_icon(kalarmautostart_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/ox*-app-kalarm.png")
 
 kde4_add_executable(kalarmautostart ${kalarmautostart_SRCS})
 
