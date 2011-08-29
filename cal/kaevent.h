@@ -348,7 +348,7 @@ class KALARM_CAL_EXPORT KAEvent
         void               setReadOnly(bool ro)                    { if (ro != d->mReadOnly) { d->mReadOnly = ro; } }
 #endif
         void               setTime(const KDateTime& dt)            { d->mNextMainDateTime = dt; d->mTriggerChanged = true; }
-        void               setSaveDateTime(const KDateTime& dt)    { d->mSaveDateTime = dt; }
+        void               setCreatedDateTime(const KDateTime& dt) { d->mCreatedDateTime = dt; }
         void               setLateCancel(int lc)                   { d->mLateCancel = lc; }
         void               setAutoClose(bool ac)                   { d->mAutoClose = ac; }
         void               setRepeatAtLogin(bool rl)               { d->setRepeatAtLogin(rl); }
@@ -440,7 +440,7 @@ class KALARM_CAL_EXPORT KAEvent
         int                revision() const               { return d->mRevision; }
         bool               isValid() const                { return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin); }
         int                alarmCount() const             { return d->mAlarmCount; }
-        KDateTime          createdDateTime() const        { return d->mSaveDateTime; }
+        KDateTime          createdDateTime() const        { return d->mCreatedDateTime; }
         const DateTime&    startDateTime() const          { return d->mStartDateTime; }
         DateTime           mainDateTime(bool withRepeats = false) const
                                                           { return d->mainDateTime(withRepeats); }
@@ -706,7 +706,7 @@ class KALARM_CAL_EXPORT KAEvent
                 QString            mPreAction;         // command to execute before alarm is displayed
                 QString            mPostAction;        // command to execute after alarm window is closed
                 DateTime           mStartDateTime;     // DTSTART and DTEND: start and end time for event
-                KDateTime          mSaveDateTime;      // CREATED: date event was created, or saved in archive calendar
+                KDateTime          mCreatedDateTime;   // CREATED: date event was created, or saved in archive calendar
                 KDateTime          mAtLoginDateTime;   // repeat-at-login end time
                 DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
                 DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
