@@ -326,7 +326,7 @@ bool CalendarUpdater::update()
             QString versionString = KAlarm::getVersionString(compatAttr->version());
             QString msg = KAlarm::Calendar::conversionPrompt(mCollection.name(), versionString, false);
             kDebug() << "Version" << versionString;
-            if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg))
+            if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) == KMessageBox::Yes)
             {
                 // Tell the resource to update the backend storage format
                 QString errmsg;
