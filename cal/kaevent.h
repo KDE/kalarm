@@ -528,12 +528,12 @@ class KALARM_CAL_EXPORT KAEvent
         bool               setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
         bool               setRecurAnnualByPos(int freq, const QList<MonthPos>& pos, const QList<int>& months, int count, const QDate& end);
 //        static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
-        void               adjustRecurrenceStartOfDay();
 #ifdef KDE_NO_DEBUG_OUTPUT
         void               dumpDebug() const  { }
 #else
         void               dumpDebug() const  { d->dumpDebug(); }
 #endif
+        static void        adjustStartOfDay(const KAEvent::List&);
         static int         currentCalendarVersion();
         static QByteArray  currentCalendarVersionString();
 #ifdef USE_AKONADI

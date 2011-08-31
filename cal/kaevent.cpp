@@ -3545,12 +3545,17 @@ void KAEvent::Private::setRecurrence(const KARecurrence& recurrence)
 
 /******************************************************************************
 * Called when the user changes the start-of-day time.
-* Adjust the start time of a date-only alarm's recurrence.
+* Adjust the start time of the recurrence to match, for each date-only event in
+* a list.
 */
-void KAEvent::adjustRecurrenceStartOfDay()
+void KAEvent::adjustStartOfDay(const KAEvent::List& events)
 {
-    if (d->mRecurrence)
-        d->mRecurrence->setStartDateTime(d->mStartDateTime.effectiveKDateTime(), d->mStartDateTime.isDateOnly());
+    for (int i = 0, end = events.count();  i < end;  ++i)
+    {
+        Private* p = events[i]->d;
+        if (p->mStartDateTime.isDateOnly()  &&  p->checkRecur() != KARecurrence::NO_RECUR)
+            p->mRecurrence->setStartDateTime(p->mStartDateTime.effectiveKDateTime(), true);
+    }
 }
 
 /******************************************************************************
