@@ -457,7 +457,6 @@ class KALARM_CAL_EXPORT KAEvent
                                                           { return d->deferralLimit(t); }
         int                deferDefaultMinutes() const    { return d->mDeferDefaultMinutes; }
         bool               deferDefaultDateOnly() const   { return d->mDeferDefaultDateOnly; }
-        const QString&     messageFileOrCommand() const   { return d->mText; }
         QString            logFile() const                { return d->mLogFile; }
         bool               commandXterm() const           { return d->mCommandXterm; }
         bool               commandDisplay() const         { return d->mCommandDisplay; }
