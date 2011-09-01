@@ -43,7 +43,7 @@ using KAlarmResourceCommon::errorMessage;
 KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
       mCompatibility(KAlarm::Calendar::Incompatible),
-      mVersion(KAlarm::Calendar::MixedFormat)
+      mVersion(KAlarm::MixedFormat)
 {
     kDebug() << id;
     KAlarmResourceCommon::initialise(this);
@@ -338,7 +338,7 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
             kWarning() << "KAEvent has no alarms:" << event.id();
             continue;   // event has no usable alarms
         }
- 
+
         Item item(mime);
         item.setRemoteId(kcalEvent->uid());
         item.setPayload(event);
