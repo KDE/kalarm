@@ -1026,7 +1026,7 @@ void purgeArchive(int purgeDays)
         KAEvent* event = events[i];
         Incidence* kcalIncidence = resource->incidence(event->id());
         if (purgeDays  &&  kcalIncidence  &&  kcalIncidence->created().date() >= cutoff)
-            events.removeAt(i);
+            events.remove(i);
         else
             EventListModel::alarms()->removeEvent(events[i++]);   // update the window lists
     }

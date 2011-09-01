@@ -61,7 +61,7 @@ typedef KCalCore::Person  EmailAddress;
 class KALARM_CAL_EXPORT EmailAddressList : public KCalCore::Person::List
 #else
 typedef KCal::Person  EmailAddress;
-class KALARM_CAL_EXPORT EmailAddressList : public QVector<KCal::Person>
+class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
 #endif
 {
     public:
@@ -70,9 +70,9 @@ class KALARM_CAL_EXPORT EmailAddressList : public QVector<KCal::Person>
         EmailAddressList(const KCalCore::Person::List& list)  { operator=(list); }
         EmailAddressList& operator=(const KCalCore::Person::List&);
 #else
-        EmailAddressList() : QVector<KCal::Person>() { }
-        EmailAddressList(const QVector<KCal::Person>& list)  { operator=(list); }
-        EmailAddressList& operator=(const QVector<KCal::Person>&);
+        EmailAddressList() : QList<KCal::Person>() { }
+        EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
+        EmailAddressList& operator=(const QList<KCal::Person>&);
 #endif
         operator QStringList() const;
         QString     join(const QString& separator) const;

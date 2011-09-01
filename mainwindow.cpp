@@ -848,11 +848,10 @@ void MainWindow::slotDelete(bool force)
     {
         AlarmResource* r = resources->resourceForEvent(ids[i]);
         if (!r)
-            events[i] = 0;
+            events.remove(i);
         else
             undos.append(*events[i], r);
     }
-    events.removeAll((KAEvent*)0);
 #endif
 
     if (events.isEmpty())

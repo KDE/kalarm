@@ -2209,7 +2209,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
      * allows the alarm to float within the 24-hour period defined by the
      * start-of-day time (which is user-dependent and therefore can't be
      * written into the calendar) rather than midnight to midnight, and there
-     * is no RFC2445 conformant way to specify this. 
+     * is no RFC2445 conformant way to specify this.
      * RFC2445 states that alarm trigger times specified in absolute terms
      * (rather than relative to DTSTART or DTEND) can only be specified as a
      * UTC DATE-TIME value. So always use a time relative to DTSTART instead of
@@ -4485,7 +4485,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
         {
             /*
              * It's a KAlarm pre-2.7.0 calendar file.
-             * Archive and at-login flags were stored in event's ARCHIVE property when the main alarm had expired. 
+             * Archive and at-login flags were stored in event's ARCHIVE property when the main alarm had expired.
              * Reminder parameters were stored in event's ARCHIVE property when no reminder was pending.
              * Negative reminder periods (i.e. alarm offset > 0) were invalid, so convert to 0.
              * Now store reminder information in FLAGS property, whether reminder is pending or not.
@@ -4553,7 +4553,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
                 }
                 if (!flags.isEmpty())
                     alarm->setCustomProperty(KAlarm::Calendar::APPNAME, Private::FLAGS_PROPERTY, flags.join(Private::SC));
-                
+
                 // Invalidate negative reminder periods in alarms
                 if (!alarm->hasStartOffset())
                     continue;
@@ -5017,7 +5017,7 @@ void KAAlarmEventBase::baseDumpDebug() const
 #ifdef USE_AKONADI
 EmailAddressList& EmailAddressList::operator=(const Person::List& addresses)
 #else
-EmailAddressList& EmailAddressList::operator=(const QVector<Person>& addresses)
+EmailAddressList& EmailAddressList::operator=(const QList<Person>& addresses)
 #endif
 {
     clear();
