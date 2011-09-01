@@ -178,8 +178,13 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  given alarm type, i.e. with create/delete/change rights and compatible
          *  with the current KAlarm calendar format.
          *  Optionally, the enabled status can be ignored.
+         *
+         *  @return 1 = fully enabled and writable,
+         *          0 = enabled and writable except that backend calendar is in an
+         *              old KAlarm format,
+         *         -1 = read-only, disabled or incompatible format.
          */
-        static bool isWritableEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type);
+        static int isWritableEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type);
 
         /** Return whether a collection is both enabled and fully writable for a
          *  given alarm type, i.e. with create/delete/change rights and compatible
@@ -192,8 +197,13 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *                 format used by the backend. If the calendar is
          *                 non-writable for any other reason, @p format is set
          *                 to KAlarm::Calendar::Current.
+         *  @return 1 = fully enabled and writable,
+         *          0 = enabled and writable except that backend calendar is in an
+         *              old KAlarm format,
+         *         -1 = read-only (if @p format == KAlarm::Calendar::Current), or
+         *              disabled or incompatible format.
          */
-        static bool isWritableEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type, KAlarm::Calendar::Compat& format);
+        static int isWritableEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type, KAlarm::Calendar::Compat& format);
 
         /** Return the standard collection for a specified mime type.
          *  @param useDefault false to return the defined standard collection, if any;

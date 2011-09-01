@@ -130,8 +130,8 @@ void KAlarmDirResource::collectionsReceived(const Akonadi::Collection::List& col
                 // Set collection's format compatibility flag now that the collection
                 // and its attributes have been fetched.
                 KAlarmResourceCommon::setCollectionCompatibility(collections[i], mCompatibility,
-                                                                 (mCompatibility == KAlarm::Calendar::Current ? KAlarm::Calendar::CurrentFormat
-                                                                                                              : KAlarm::Calendar::MixedFormat));
+                                                                 (mCompatibility == KAlarm::Calendar::Current ? KAlarm::CurrentFormat
+                                                                                                              : KAlarm::MixedFormat));
                 break;
             }
         }
@@ -354,7 +354,7 @@ kDebug()<<"Monitored changed";
                 mCompatibility = KAlarm::Calendar::Current;
                 const Collection c(mCollectionId);
                 if (c.isValid())
-                    KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, KAlarm::Calendar::CurrentFormat);
+                    KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, KAlarm::CurrentFormat);
             }
         }
         mSettings->setUpdateStorageFormat(false);
@@ -750,8 +750,8 @@ void KAlarmDirResource::retrieveItems(const Akonadi::Collection& collection)
 
     // Set the collection's compatibility status
     KAlarmResourceCommon::setCollectionCompatibility(collection, mCompatibility,
-                                                     (mCompatibility == KAlarm::Calendar::Current ? KAlarm::Calendar::CurrentFormat
-                                                                                                  : KAlarm::Calendar::MixedFormat));
+                                                     (mCompatibility == KAlarm::Calendar::Current ? KAlarm::CurrentFormat
+                                                                                                  : KAlarm::MixedFormat));
 
     // Fetch the list of valid mime types
     const QStringList mimeTypes = mSettings->alarmTypes();
@@ -1109,8 +1109,8 @@ void KAlarmDirResource::setCompatibility(bool writeAttr)
         const Collection c(mCollectionId);
         if (c.isValid())
             KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility,
-                                                             (mCompatibility == KAlarm::Calendar::Current ? KAlarm::Calendar::CurrentFormat
-                                                                                                          : KAlarm::Calendar::MixedFormat));
+                                                             (mCompatibility == KAlarm::Calendar::Current ? KAlarm::CurrentFormat
+                                                                                                          : KAlarm::MixedFormat));
     }
 }
 

@@ -161,21 +161,27 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Return whether a collection is fully writable, i.e. with
          *  create/delete/change rights and compatible with the current KAlarm
          *  calendar format.
+         *
+         *  @return 1 = fully writable,
+         *          0 = writable except that backend calendar is in an old KAlarm format,
+         *         -1 = read-only or incompatible format.
          */
-        static bool isWritable(const Akonadi::Collection&);
+        static int isWritable(const Akonadi::Collection&);
 
         /** Return whether a collection is fully writable, i.e. with
          *  create/delete/change rights and compatible with the current KAlarm
          *  calendar format.
          *
-         *  @param format  If the reply is false, and the calendar is not read-only
-         *                 but its backend calendar storage format is not the
-         *                 current KAlarm format, @p format is set to the calendar
-         *                 format used by the backend. If the calendar is
-         *                 non-writable for any other reason, @p format is set
-         *                 to KAlarm::Calendar::Current.
+         *  @param format  Updated to contain the backend calendar storage format.
+         *                 If read-only, = KAlarm::Calendar::Current;
+         *                 if unknown format, = KAlarm::Calendar::Incompatible;
+         *                 otherwise = the backend calendar storage format.
+         *  @return 1 = fully writable,
+         *          0 = writable except that backend calendar is in an old KAlarm format,
+         *         -1 = read-only (if @p compat == KAlarm::Calendar::Current), or
+         *              incompatible format otherwise.
          */
-        static bool isWritable(const Akonadi::Collection&, KAlarm::Calendar::Compat& format);
+        static int isWritable(const Akonadi::Collection&, KAlarm::Calendar::Compat& format);
 
         static KAlarm::CalEvent::Types types(const Akonadi::Collection&);
 

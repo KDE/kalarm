@@ -3,6 +3,7 @@
 #warning Add a directory resource containing 2 alarm types, right click on it -> crash
 #warning Set default template calendar to read-only -> crash
 #warning Set default archived calendar to read-only, then read-write -> now "other format"
+#warning Create new email template, get valgrind uninitialised errors from serialize()
 #endif
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
@@ -979,11 +980,17 @@ QString AkonadiModel::tooltip(const Collection& collection, KAlarm::CalEvent::Ty
 QString AkonadiModel::readOnlyTooltip(const Collection& collection)
 {
     KAlarm::Calendar::Compat compat;
-    return AkonadiModel::isWritable(collection, compat)
-         ? QString()
-         : (compat == KAlarm::Calendar::Current)      ? i18nc("@info/plain", "Read-only")
-         : (compat == KAlarm::Calendar::Incompatible) ? i18nc("@info/plain", "Read-only (other format)")
-         :                                              i18nc("@info/plain", "Read-only (old format)");
+    switch (AkonadiModel::isWritable(collection, compat))
+    {
+        case 1:
+            return QString();
+        case 0:
+            return i18nc("@info/plain", "Read-only (old format)");
+        default:
+            if (compat == KAlarm::Calendar::Current)
+                return i18nc("@info/plain", "Read-only");
+            return i18nc("@info/plain", "Read-only (other format)");
+    }
 }
 
 /******************************************************************************
@@ -1814,30 +1821,37 @@ bool AkonadiModel::isCompatible(const Collection& collection)
 /******************************************************************************
 * Return whether a collection is fully writable.
 */
-bool AkonadiModel::isWritable(const Akonadi::Collection& collection)
+int AkonadiModel::isWritable(const Akonadi::Collection& collection)
 {
     KAlarm::Calendar::Compat format;
     return isWritable(collection, format);
 }
 
-bool AkonadiModel::isWritable(const Akonadi::Collection& collection, KAlarm::Calendar::Compat& format)
+int AkonadiModel::isWritable(const Akonadi::Collection& collection, KAlarm::Calendar::Compat& format)
 {
-    format = KAlarm::Calendar::Current;
+    format = KAlarm::Calendar::Incompatible;
     if (!collection.isValid())
-        return false;
+        return -1;
     Collection col = collection;
     instance()->refresh(col);    // update with latest data
     if ((col.rights() & writableRights) != writableRights)
-        return false;
-    if (!col.hasAttribute<CompatibilityAttribute>())
     {
-        format = KAlarm::Calendar::Incompatible;
-        return false;
+        format = KAlarm::Calendar::Current;
+        return -1;
     }
+    if (!col.hasAttribute<CompatibilityAttribute>())
+        return -1;
     format = col.attribute<CompatibilityAttribute>()->compatibility();
-    if (format != KAlarm::Calendar::Current)
-        return false;
-    return true;
+    switch (format)
+    {
+        case KAlarm::Calendar::Current:
+            return 1;
+        case KAlarm::Calendar::Converted:
+        case KAlarm::Calendar::Convertible:
+            return 0;
+        default:
+            return -1;
+    }
 }
 
 KAlarm::CalEvent::Types AkonadiModel::types(const Collection& collection)

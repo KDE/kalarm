@@ -85,7 +85,7 @@ bool SingleFileResourceBase::readLocalFile( const QString &fileName )
     // the last time this file was read. Before we synchronize first
     // clearCache is called to make sure that the cached items get the
     // actual values as present in the file.
-    clearCache();
+    invalidateCache( rootCollection() );
     synchronize();
   } else {
     // The hash didn't change, notify implementing resources about the
@@ -167,6 +167,8 @@ void SingleFileResourceBase::collectionChanged( const Akonadi::Collection & coll
     EntityDisplayAttribute *attr = collection.attribute<EntityDisplayAttribute>();
     if ( !attr->displayName().isEmpty() )
       newName = attr->displayName();
+    if ( !attr->iconName().isEmpty() )
+      mCollectionIcon = attr->iconName();
   }
 
   if ( newName != name() )
@@ -237,7 +239,7 @@ void SingleFileResourceBase::fileChanged( const QString & fileName )
   // Notify resources, so that information bound to the file like indexes etc.
   // can be updated.
   handleHashChange();
-  clearCache();
+  invalidateCache( rootCollection() );
   synchronize();
 }
 

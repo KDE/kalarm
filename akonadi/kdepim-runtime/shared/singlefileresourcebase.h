@@ -160,6 +160,11 @@ class SingleFileResourceBase : public ResourceBase, public AgentBase::Observer
      */
     virtual bool readOnly() const = 0;
 
+    /**
+     * Returns the collection of this resource.
+     */
+    virtual Collection rootCollection() const = 0;
+
   protected:
     KUrl mCurrentUrl;
     QStringList mSupportedMimetypes;

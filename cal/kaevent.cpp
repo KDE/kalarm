@@ -302,7 +302,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mPreAction               = event.mPreAction;
     mPostAction              = event.mPostAction;
     mStartDateTime           = event.mStartDateTime;
-    mSaveDateTime            = event.mSaveDateTime;
+    mCreatedDateTime         = event.mCreatedDateTime;
     mAtLoginDateTime         = event.mAtLoginDateTime;
     mDeferralTime            = event.mDeferralTime;
     mDisplayingTime          = event.mDisplayingTime;
@@ -571,7 +571,7 @@ void KAEvent::Private::set(const Event* event)
         }
     }
     mNextMainDateTime = readDateTime(event, dateOnly, mStartDateTime);
-    mSaveDateTime = event->created();
+    mCreatedDateTime = event->created();
     if (dateOnly  &&  !mRepetition.isDaily())
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
     if (mCategory == KAlarm::CalEvent::TEMPLATE)
@@ -2384,8 +2384,8 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
         mRecurrence->writeRecurrence(*ev->recurrence());
     else
         ev->clearRecurrence();
-    if (mSaveDateTime.isValid())
-        ev->setCreated(mSaveDateTime);
+    if (mCreatedDateTime.isValid())
+        ev->setCreated(mCreatedDateTime);
     ev->setReadOnly(readOnly);
     ev->endUpdates();     // finally issue an update notification
     return true;
@@ -3545,12 +3545,17 @@ void KAEvent::Private::setRecurrence(const KARecurrence& recurrence)
 
 /******************************************************************************
 * Called when the user changes the start-of-day time.
-* Adjust the start time of a date-only alarm's recurrence.
+* Adjust the start time of the recurrence to match, for each date-only event in
+* a list.
 */
-void KAEvent::adjustRecurrenceStartOfDay()
+void KAEvent::adjustStartOfDay(const KAEvent::List& events)
 {
-    if (d->mRecurrence)
-        d->mRecurrence->setStartDateTime(d->mStartDateTime.effectiveKDateTime(), d->mStartDateTime.isDateOnly());
+    for (int i = 0, end = events.count();  i < end;  ++i)
+    {
+        Private* p = events[i]->d;
+        if (p->mStartDateTime.isDateOnly()  &&  p->checkRecur() != KARecurrence::NO_RECUR)
+            p->mRecurrence->setStartDateTime(p->mStartDateTime.effectiveKDateTime(), true);
+    }
 }
 
 /******************************************************************************
@@ -4835,7 +4840,7 @@ void KAEvent::Private::dumpDebug() const
     kDebug() << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
     kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
     kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
-    kDebug() << "-- mSaveDateTime:" << mSaveDateTime;
+    kDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
     if (mRepeatAtLogin)
         kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
     kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;

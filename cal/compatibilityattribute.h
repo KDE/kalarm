@@ -40,8 +40,8 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
 {
     public:
         CompatibilityAttribute()
-                : mCompatibility(KAlarm::Calendar::Incompatible),
-                  mVersion(KAlarm::Calendar::IncompatibleFormat)  { }
+          : mCompatibility(KAlarm::Calendar::Incompatible),
+                  mVersion(KAlarm::IncompatibleFormat)  { }
 
         /** Return the compatibility status for the entity. */
         KAlarm::Calendar::Compat compatibility() const     { return mCompatibility; }

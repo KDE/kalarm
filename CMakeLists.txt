@@ -3,8 +3,7 @@ project(kalarm)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 add_definitions(-DQT_STRICT_ITERATORS)
 
-# Akonadi for KAlarm is still experimental.
-option(KALARM_USE_AKONADI "Build to use Akonadi" FALSE)
+option(KALARM_USE_AKONADI "Build to use Akonadi" TRUE)
 
 # Kalarm from kdepim master needs kdepimlibs 4.7
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.40)
@@ -158,10 +157,10 @@ qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpe
 
 if(KALARM_USE_AKONADI)
     kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarm/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/akonadi/kalarm/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
+    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
 
     kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/akonadi/kalarmdir/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
-    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/akonadi/kalarmdir/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
+    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
 
     qt4_add_dbus_interfaces(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml)
 #    qt4_add_dbus_adaptor(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml agentbase.h Akonadi::AgentBase controladaptor Akonadi__ControlAdaptor)

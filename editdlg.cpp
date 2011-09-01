@@ -1113,7 +1113,7 @@ bool EditAlarmDlg::validate()
         }
         bool cancelled = false;
         KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
-        if (!CollectionControlModel::isWritableEnabled(mCollection, type))
+        if (CollectionControlModel::isWritableEnabled(mCollection, type) <= 0)
             mCollection = CollectionControlModel::destination(type, this, false, &cancelled);
         if (!mCollection.isValid())
         {

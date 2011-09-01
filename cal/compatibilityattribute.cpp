@@ -48,7 +48,7 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
 {
     // Set default values
     mCompatibility = KAlarm::Calendar::Incompatible;
-    mVersion       = KAlarm::Calendar::IncompatibleFormat;
+    mVersion       = KAlarm::IncompatibleFormat;
 
     bool ok;
     const QList<QByteArray> items = data.simplified().split(' ');

@@ -44,6 +44,16 @@ namespace KCal {
 }
 #endif
 
+namespace KAlarm {
+// Special calendar storage format version codes.
+// Positive version values are actual KAlarm format version numbers.
+static const int CurrentFormat      = 0;    // current KAlarm format
+static const int IncompatibleFormat = -1;   // not written by KAlarm, or a newer KAlarm version
+#ifdef USE_AKONADI
+static const int MixedFormat        = -2;   // calendar may contain more than one version
+#endif
+}
+
 namespace KAlarm
 {
 
@@ -117,16 +127,8 @@ class KALARM_CAL_EXPORT Calendar
         };
 #endif
 
-        // Special calendar storage format version codes.
-        // Positive version values are actual KAlarm format version numbers.
-        static const int CurrentFormat      = 0;    // current KAlarm format
-        static const int IncompatibleFormat = -1;   // not written by KAlarm, or a newer KAlarm version
-#ifdef USE_AKONADI
-        static const int MixedFormat        = -2;   // calendar may contain more than one version
-#endif
-
         /** Check the version of KAlarm which wrote a calendar file, and convert
-         *  it in memory to the current KAlarm format if possible. The storage 
+         *  it in memory to the current KAlarm format if possible. The storage
          *  file is not updated. The compatibility of the calendar format is
          *  indicated by the return value.
          *
@@ -148,7 +150,7 @@ class KALARM_CAL_EXPORT Calendar
         /** Whether the fix function should convert old format KAlarm calendars. */
         enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
 
-        static Compat fix(const KCalCore::FileStorage::Ptr&, 
+        static Compat fix(const KCalCore::FileStorage::Ptr&,
                           const Akonadi::Collection& = Akonadi::Collection(),
                           FixFunc = PROMPT, bool* wrongType = 0);
 

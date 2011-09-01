@@ -101,9 +101,9 @@ KAlarm::Calendar::Compat getCompatibility(const FileStorage::Ptr& fileStorage, i
     version = KAlarm::Calendar::updateVersion(fileStorage, versionString);
     switch (version)
     {
-        case KAlarm::Calendar::IncompatibleFormat:
+        case KAlarm::IncompatibleFormat:
             return KAlarm::Calendar::Incompatible;  // calendar is not in KAlarm format, or is in a future format
-        case KAlarm::Calendar::CurrentFormat:
+        case KAlarm::CurrentFormat:
             return KAlarm::Calendar::Current;       // calendar is in the current format
         default:
             return KAlarm::Calendar::Convertible;   // calendar is in an out of date format

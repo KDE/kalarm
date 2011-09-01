@@ -2219,14 +2219,7 @@ void AlarmCalendar::adjustStartOfDay()
     if (!isValid())
         return;
     for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
-    {
-        const KAEvent::List events = rit.value();
-        for (int i = 0, end = events.count();  i < end;  ++i)
-        {
-            if (events[i]->startDateTime().isDateOnly()  &&  events[i]->recurs())
-                events[i]->adjustRecurrenceStartOfDay();
-        }
-    }
+        KAEvent::adjustStartOfDay(rit.value());
 }
 
 // vim: et sw=4:

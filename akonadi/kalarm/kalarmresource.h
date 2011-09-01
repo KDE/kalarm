@@ -36,10 +36,6 @@ class KAlarmResource : public ICalResourceBase
         KAlarmResource(const QString& id);
         virtual ~KAlarmResource();
 
-    protected Q_SLOTS:
-        void doRetrieveItems(const Akonadi::Collection&);
-        bool doRetrieveItem(const Akonadi::Item&, const QSet<QByteArray>& parts);
-
     protected:
         /**
          * Customize the configuration dialog before it is displayed.
@@ -47,6 +43,8 @@ class KAlarmResource : public ICalResourceBase
         virtual void customizeConfigDialog(Akonadi::SingleFileResourceConfigDialog<Akonadi_KAlarm_Resource::Settings>*);
         virtual void configDialogAcceptedActions(Akonadi::SingleFileResourceConfigDialog<Akonadi_KAlarm_Resource::Settings>*);
 
+        virtual void doRetrieveItems(const Akonadi::Collection&);
+        virtual bool doRetrieveItem(const Akonadi::Item&, const QSet<QByteArray>& parts);
         virtual bool readFromFile(const QString& fileName);
         virtual bool writeToFile(const QString& fileName);
         virtual void itemAdded(const Akonadi::Item&, const Akonadi::Collection&);

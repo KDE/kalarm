@@ -384,7 +384,7 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
     if (archiving)
     {
         newev->setCategory(KAlarm::CalEvent::ARCHIVED);    // this changes the event ID
-        newev->setSaveDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
+        newev->setCreatedDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
     }
     // Note that archived resources are automatically saved after changes are made
 #ifdef USE_AKONADI
