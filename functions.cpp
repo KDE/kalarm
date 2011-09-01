@@ -273,7 +273,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParen
 * Save them in the calendar file and add them to every main window instance.
 * The events are updated with their actual event IDs.
 */
-UpdateStatus addEvents(QList<KAEvent>& events, QWidget* msgParent, bool allowKOrgUpdate, bool showKOrgErr)
+UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowKOrgUpdate, bool showKOrgErr)
 {
     kDebug() << events.count();
     if (events.isEmpty())
@@ -611,8 +611,7 @@ UpdateStatus updateTemplate(KAEvent& event, QWidget* msgParent)
 UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool showKOrgErr)
 {
 #ifdef USE_AKONADI
-    QList<KAEvent> events;
-    events += event;
+    QVector<KAEvent> events(1, event);
 #else
     KAEvent::List events;
     events += &event;
@@ -621,7 +620,7 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool 
 }
 
 #ifdef USE_AKONADI
-UpdateStatus deleteEvents(QList<KAEvent>& events, bool archive, QWidget* msgParent, bool showKOrgErr)
+UpdateStatus deleteEvents(QVector<KAEvent>& events, bool archive, QWidget* msgParent, bool showKOrgErr)
 #else
 UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParent, bool showKOrgErr)
 #endif
@@ -788,8 +787,7 @@ UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* calendar, QWidget* m
 {
     QStringList ids;
 #ifdef USE_AKONADI
-    QList<KAEvent> events;
-    events += event;
+    QVector<KAEvent> events(1, event);
 #else
     KAEvent::List events;
     events += &event;
@@ -798,7 +796,7 @@ UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* calendar, QWidget* m
 }
 
 #ifdef USE_AKONADI
-UpdateStatus reactivateEvents(QList<KAEvent>& events, QStringList& ineligibleIDs, Collection* col, QWidget* msgParent, bool showKOrgErr)
+UpdateStatus reactivateEvents(QVector<KAEvent>& events, QStringList& ineligibleIDs, Collection* col, QWidget* msgParent, bool showKOrgErr)
 #else
 UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
 #endif
@@ -930,7 +928,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 * The new events will have the same event IDs as the old ones.
 */
 #ifdef USE_AKONADI
-UpdateStatus enableEvents(QList<KAEvent>& events, bool enable, QWidget* msgParent)
+UpdateStatus enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent)
 #else
 UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent)
 #endif
@@ -1014,7 +1012,7 @@ void purgeArchive(int purgeDays)
     for (int i = 0;  i < events.count();  )
     {
         if (purgeDays  &&  events[i]->createdDateTime().date() >= cutoff)
-            events.removeAt(i);
+            events.remove(i);
         else
             ++i;
     }
@@ -1115,7 +1113,7 @@ void editNewAlarm(EditAlarmDlg::Type type, QWidget* parent)
 /******************************************************************************
 * Execute a New Alarm dialog for the specified alarm type.
 */
-void editNewAlarm(KAEvent::Action action, QWidget* parent, const AlarmText* text)
+void editNewAlarm(KAEvent::SubAction action, QWidget* parent, const AlarmText* text)
 {
     bool setAction = false;
     EditAlarmDlg::Type type;

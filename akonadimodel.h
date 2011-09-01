@@ -149,7 +149,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 #endif
 
         bool  addEvent(KAEvent&, Akonadi::Collection&);
-        bool  addEvents(const QList<KAEvent*>&, Akonadi::Collection&);
+        bool  addEvents(const KAEvent::List&, Akonadi::Collection&);
         bool  updateEvent(KAEvent& event);
         bool  updateEvent(Akonadi::Item::Id oldId, KAEvent& newEvent);
         bool  deleteEvent(const KAEvent& event);

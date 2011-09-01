@@ -203,7 +203,7 @@ void TemplateDlg::slotEdit()
 void TemplateDlg::slotDelete()
 {
 #ifdef USE_AKONADI
-    QList<KAEvent> events = mListView->selectedEvents();
+    QVector<KAEvent> events = mListView->selectedEvents();
 #else
     KAEvent::List events = mListView->selectedEvents();
 #endif
@@ -248,7 +248,7 @@ void TemplateDlg::slotSelectionChanged()
 {
     AlarmCalendar* resources = AlarmCalendar::resources();
 #ifdef USE_AKONADI
-    QList<KAEvent> events = mListView->selectedEvents();
+    QVector<KAEvent> events = mListView->selectedEvents();
 #else
     KAEvent::List events = mListView->selectedEvents();
 #endif

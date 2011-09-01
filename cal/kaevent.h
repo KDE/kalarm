@@ -42,7 +42,7 @@
 #include <QBitArray>
 #include <QColor>
 #include <QFont>
-#include <QList>
+#include <QVector>
 #include <QMetaType>
 
 namespace KHolidays { class HolidayRegion; }
@@ -61,7 +61,7 @@ typedef KCalCore::Person  EmailAddress;
 class KALARM_CAL_EXPORT EmailAddressList : public KCalCore::Person::List
 #else
 typedef KCal::Person  EmailAddress;
-class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
+class KALARM_CAL_EXPORT EmailAddressList : public QVector<KCal::Person>
 #endif
 {
     public:
@@ -70,9 +70,9 @@ class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
         EmailAddressList(const KCalCore::Person::List& list)  { operator=(list); }
         EmailAddressList& operator=(const KCalCore::Person::List&);
 #else
-        EmailAddressList() : QList<KCal::Person>() { }
-        EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
-        EmailAddressList& operator=(const QList<KCal::Person>&);
+        EmailAddressList() : QVector<KCal::Person>() { }
+        EmailAddressList(const QVector<KCal::Person>& list)  { operator=(list); }
+        EmailAddressList& operator=(const QVector<KCal::Person>&);
 #endif
         operator QStringList() const;
         QString     join(const QString& separator) const;
@@ -219,7 +219,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
 class KALARM_CAL_EXPORT KAEvent
 {
     public:
-        typedef QList<KAEvent*> List;
+        typedef QVector<KAEvent*> List;
         enum          // Flags for use in D-Bus calls, etc.
         {
             BEEP            = 0x02,    // sound audible beep when alarm is displayed
@@ -258,7 +258,7 @@ class KALARM_CAL_EXPORT KAEvent
             ACT_DISPLAY_COMMAND = ACT_DISPLAY | ACT_COMMAND,  // the alarm displays command output
             ACT_ALL     = ACT_DISPLAY | ACT_COMMAND | ACT_EMAIL | ACT_AUDIO   // all types mask
         };
-        enum Action
+        enum SubAction
         {
             MESSAGE = KAAlarmEventBase::T_MESSAGE,
             FILE    = KAAlarmEventBase::T_FILE,
@@ -318,7 +318,7 @@ class KALARM_CAL_EXPORT KAEvent
 
         KAEvent();
         KAEvent(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
-                const QFont& f, Action, int lateCancel, int flags, bool changesPending = false);
+                const QFont& f, SubAction, int lateCancel, int flags, bool changesPending = false);
 #ifdef USE_AKONADI
 //        explicit KAEvent(const QSharedPointer<const KCalCore::Event>&);
         explicit KAEvent(const KCalCore::ConstEventPtr&);
@@ -327,7 +327,7 @@ class KALARM_CAL_EXPORT KAEvent
         explicit KAEvent(const KCal::Event*);
         void               set(const KCal::Event* e)               { d->set(e); }
 #endif
-        void               set(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, Action act, int lateCancel, int flags, bool changesPending = false)
+        void               set(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f, SubAction act, int lateCancel, int flags, bool changesPending = false)
                                                                    { d->set(dt, message, bg, fg, f, act, lateCancel, flags, changesPending); }
         void               setEmail(uint from, const EmailAddressList&, const QString& subject, const QStringList& attachments);
 #ifndef USE_AKONADI
@@ -429,7 +429,7 @@ class KALARM_CAL_EXPORT KAEvent
         bool               updateKCalEvent(KCal::Event* e, UidAction u) const
                                                           { return d->updateKCalEvent(e, u); }
 #endif
-        Action             actionSubType() const          { return (Action)d->mActionType; }
+        SubAction          actionSubType() const          { return (SubAction)d->mActionType; }
         Actions            actionTypes() const;
         const QString&     id() const                     { return d->mEventID; }
 #ifdef USE_AKONADI
@@ -523,10 +523,10 @@ class KALARM_CAL_EXPORT KAEvent
         bool               setRecurMinutely(int freq, int count, const KDateTime& end);
         bool               setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end);
         bool               setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end);
-        bool               setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end);
-        bool               setRecurMonthlyByPos(int freq, const QList<MonthPos>& pos, int count, const QDate& end);
-        bool               setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
-        bool               setRecurAnnualByPos(int freq, const QList<MonthPos>& pos, const QList<int>& months, int count, const QDate& end);
+        bool               setRecurMonthlyByDate(int freq, const QVector<int>& days, int count, const QDate& end);
+        bool               setRecurMonthlyByPos(int freq, const QVector<MonthPos>& pos, int count, const QDate& end);
+        bool               setRecurAnnualByDate(int freq, const QVector<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
+        bool               setRecurAnnualByPos(int freq, const QVector<MonthPos>& pos, const QVector<int>& months, int count, const QDate& end);
 //        static QValueList<MonthPos> convRecurPos(const QValueList<KCal::RecurrenceRule::WDayPos>&);
 #ifdef KDE_NO_DEBUG_OUTPUT
         void               dumpDebug() const  { }
@@ -539,7 +539,7 @@ class KALARM_CAL_EXPORT KAEvent
 #ifdef USE_AKONADI
         static bool        convertKCalEvents(const KCalCore::Calendar::Ptr&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCalCore::MemoryCalendar&);
-        static List        ptrList(QList<KAEvent>&);
+        static List        ptrList(QVector<KAEvent>&);
 #else
         static bool        convertKCalEvents(KCal::CalendarLocal&, int calendarVersion, bool adjustSummerTime);
 //        static bool        convertRepetitions(KCal::CalendarLocal&);
@@ -552,20 +552,6 @@ class KALARM_CAL_EXPORT KAEvent
         static void setWorkTime(const QBitArray& days, const QTime& start, const QTime& end);
 
     private:
-#ifdef USE_AKONADI
-        static bool        convertRepetition(const KCalCore::Event::Ptr&);
-        static bool        convertStartOfDay(const KCalCore::Event::Ptr&);
-        static DateTime    readDateTime(const KCalCore::ConstEventPtr&, bool dateOnly, DateTime& start);
-        static void        readAlarms(const KCalCore::ConstEventPtr&, void* alarmMap, bool cmdDisplay = false);
-        static void        readAlarm(const KCalCore::ConstAlarmPtr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
-#else
-        static bool        convertRepetition(KCal::Event*);
-        static bool        convertStartOfDay(KCal::Event*);
-        static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
-        static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
-        static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
-#endif
-
         class Private : public KAAlarmEventBase, public QSharedData
         {
             public:
@@ -583,7 +569,7 @@ class KALARM_CAL_EXPORT KAEvent
 
                 Private();
                 Private(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
-                        const QFont& f, Action, int lateCancel, int flags, bool changesPending = false);
+                        const QFont& f, SubAction, int lateCancel, int flags, bool changesPending = false);
 #ifdef USE_AKONADI
                 explicit Private(const KCalCore::ConstEventPtr&);
 #else
@@ -597,7 +583,7 @@ class KALARM_CAL_EXPORT KAEvent
 #else
                 void               set(const KCal::Event*);
 #endif
-                void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, Action, int lateCancel, int flags, bool changesPending = false);
+                void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, SubAction, int lateCancel, int flags, bool changesPending = false);
                 void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile);
                 OccurType          setNextOccurrence(const KDateTime& preDateTime);
                 void               setFirstRecurrence();
@@ -655,6 +641,20 @@ class KALARM_CAL_EXPORT KAEvent
 #else
                 void               dumpDebug() const;
 #endif
+#ifdef USE_AKONADI
+                static bool        convertRepetition(const KCalCore::Event::Ptr&);
+                static bool        convertStartOfDay(const KCalCore::Event::Ptr&);
+                static DateTime    readDateTime(const KCalCore::ConstEventPtr&, bool dateOnly, DateTime& start);
+                static void        readAlarms(const KCalCore::ConstEventPtr&, void* alarmMap, bool cmdDisplay = false);
+                static void        readAlarm(const KCalCore::ConstAlarmPtr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
+#else
+                static bool        convertRepetition(KCal::Event*);
+                static bool        convertStartOfDay(KCal::Event*);
+                static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
+                static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
+                static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
+#endif
+
             private:
                 void               copy(const Private&);
                 bool               mayOccurDailyDuringWork(const KDateTime&) const;

@@ -80,7 +80,7 @@ class KAlarmApp : public KUniqueApplication
         void               notifyAudioPlaying(bool playing);
         void               setSpreadWindowsState(bool spread);
         // Methods called indirectly by the DCOP interface
-        bool               scheduleEvent(KAEvent::Action, const QString& text, const KDateTime&,
+        bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KDateTime&,
                                          int lateCancel, int flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,

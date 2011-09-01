@@ -140,7 +140,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 *            = false to edit/create an alarm.
 *   event   != to initialise the dialog to show the specified event's data.
 */
-EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::Action action, QWidget* parent, GetResourceType getResource)
+EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* parent, GetResourceType getResource)
     : KDialog(parent),
       mAlarmType(action),
       mMainPageShown(false),
@@ -553,7 +553,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
             }
         }
 
-        KAEvent::Action action = event->actionSubType();
+        KAEvent::SubAction action = event->actionSubType();
         AlarmText altext;
         if (event->commandScript())
             altext.setScript(event->cleanText());

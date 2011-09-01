@@ -237,13 +237,13 @@ KAEvent::Private::Private()
 { }
 
 KAEvent::KAEvent(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f,
-                 Action action, int lateCancel, int flags, bool changesPending)
+                 SubAction action, int lateCancel, int flags, bool changesPending)
     : d(new Private(dt, message, bg, fg, f, action, lateCancel, flags, changesPending))
 {
 }
 
 KAEvent::Private::Private(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg, const QFont& f,
-                          Action action, int lateCancel, int flags, bool changesPending)
+                          SubAction action, int lateCancel, int flags, bool changesPending)
     : mRecurrence(0)
 {
     set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending);
@@ -834,9 +834,9 @@ void KAEvent::Private::set(const Event* event)
 * Reply = next main date/time.
 */
 #ifdef USE_AKONADI
-DateTime KAEvent::readDateTime(const ConstEventPtr& event, bool dateOnly, DateTime& start)
+DateTime KAEvent::Private::readDateTime(const ConstEventPtr& event, bool dateOnly, DateTime& start)
 #else
-DateTime KAEvent::readDateTime(const Event* event, bool dateOnly, DateTime& start)
+DateTime KAEvent::Private::readDateTime(const Event* event, bool dateOnly, DateTime& start)
 #endif
 {
     start = event->dtStart();
@@ -877,9 +877,9 @@ DateTime KAEvent::readDateTime(const Event* event, bool dateOnly, DateTime& star
 * Reply = map of alarm data, indexed by KAAlarm::Type
 */
 #ifdef USE_AKONADI
-void KAEvent::readAlarms(const ConstEventPtr& event, void* almap, bool cmdDisplay)
+void KAEvent::Private::readAlarms(const ConstEventPtr& event, void* almap, bool cmdDisplay)
 #else
-void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
+void KAEvent::Private::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 #endif
 {
     AlarmMap* alarmMap = (AlarmMap*)almap;
@@ -920,9 +920,9 @@ void KAEvent::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 * Reply = alarm ID (sequence number)
 */
 #ifdef USE_AKONADI
-void KAEvent::readAlarm(const ConstAlarmPtr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
+void KAEvent::Private::readAlarm(const ConstAlarmPtr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
 #else
-void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
+void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
 #endif
 {
     // Parse the next alarm's text
@@ -1105,7 +1105,7 @@ void KAEvent::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, boo
 * Initialise the instance with the specified parameters.
 */
 void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const QColor& bg, const QColor& fg,
-                           const QFont& font, Action action, int lateCancel, int flags, bool changesPending)
+                           const QFont& font, SubAction action, int lateCancel, int flags, bool changesPending)
 {
     clearRecur();
     mStartDateTime = dateTime;
@@ -3674,7 +3674,7 @@ bool KAEvent::setRecurWeekly(int freq, const QBitArray& days, int count, const Q
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByDate(int freq, const QVector<int>& days, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
     if (success)
@@ -3698,7 +3698,7 @@ bool KAEvent::setRecurMonthlyByDate(int freq, const QList<int>& days, int count,
 *    end   = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int count, const QDate& end)
+bool KAEvent::setRecurMonthlyByPos(int freq, const QVector<MonthPos>& posns, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rMonthly, freq, count, end);
     if (success)
@@ -3724,7 +3724,7 @@ bool KAEvent::setRecurMonthlyByPos(int freq, const QList<MonthPos>& posns, int c
 *    end    = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByDate(int freq, const QVector<int>& months, int day, KARecurrence::Feb29Type feb29, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end, feb29);
     if (success)
@@ -3751,7 +3751,7 @@ bool KAEvent::setRecurAnnualByDate(int freq, const QList<int>& months, int day, 
 *    end    = end date (invalid to use 'count' instead).
 * Reply = false if no recurrence was set up.
 */
-bool KAEvent::setRecurAnnualByPos(int freq, const QList<MonthPos>& posns, const QList<int>& months, int count, const QDate& end)
+bool KAEvent::setRecurAnnualByPos(int freq, const QVector<MonthPos>& posns, const QVector<int>& months, int count, const QDate& end)
 {
     bool success = d->setRecur(RecurrenceRule::rYearly, freq, count, end);
     if (success)
@@ -4186,7 +4186,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
 
                     // Parse and order the alarms to know which one's date/time to use
                     AlarmMap alarmMap;
-                    readAlarms(event, &alarmMap);
+                    Private::readAlarms(event, &alarmMap);
                     AlarmMap::ConstIterator it = alarmMap.constBegin();
                     if (it != alarmMap.constEnd())
                     {
@@ -4467,7 +4467,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
              * It's a KAlarm pre-1.9.10 calendar file.
              * Convert simple repetitions without a recurrence, to a recurrence.
              */
-            if (convertRepetition(event))
+            if (Private::convertRepetition(event))
                 converted = true;
         }
 
@@ -4477,7 +4477,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
              * It's a KAlarm pre-2.2.9 or KAlarm 2.3 series pre-2.3.2 calendar file.
              * Set the time in the calendar for all date-only alarms to 00:00.
              */
-            if (convertStartOfDay(event))
+            if (Private::convertStartOfDay(event))
                 converted = true;
         }
 
@@ -4607,9 +4607,9 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
 * Reply = true if the event was updated.
 */
 #ifdef USE_AKONADI
-bool KAEvent::convertStartOfDay(const Event::Ptr& event)
+bool KAEvent::Private::convertStartOfDay(const Event::Ptr& event)
 #else
-bool KAEvent::convertStartOfDay(Event* event)
+bool KAEvent::Private::convertStartOfDay(Event* event)
 #endif
 {
     bool changed = false;
@@ -4712,9 +4712,9 @@ bool KAEvent::convertStartOfDay(Event* event)
 * Reply = true if any conversions were done.
 */
 #ifdef USE_AKONADI
-bool KAEvent::convertRepetition(const Event::Ptr& event)
+bool KAEvent::Private::convertRepetition(const Event::Ptr& event)
 #else
-bool KAEvent::convertRepetition(Event* event)
+bool KAEvent::Private::convertRepetition(Event* event)
 #endif
 {
     Alarm::List alarms = event->alarms();
@@ -4763,7 +4763,7 @@ bool KAEvent::convertRepetition(Event* event)
 /******************************************************************************
 * Return a list of pointers to KAEvent objects.
 */
-KAEvent::List KAEvent::ptrList(QList<KAEvent>& objList)
+KAEvent::List KAEvent::ptrList(QVector<KAEvent>& objList)
 {
     KAEvent::List ptrs;
     for (int i = 0, count = objList.count();  i < count;  ++i)
@@ -5017,7 +5017,7 @@ void KAAlarmEventBase::baseDumpDebug() const
 #ifdef USE_AKONADI
 EmailAddressList& EmailAddressList::operator=(const Person::List& addresses)
 #else
-EmailAddressList& EmailAddressList::operator=(const QList<Person>& addresses)
+EmailAddressList& EmailAddressList::operator=(const QVector<Person>& addresses)
 #endif
 {
     clear();

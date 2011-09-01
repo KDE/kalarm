@@ -766,7 +766,10 @@ void AlarmCalendar::updateEventInternal(const KAEvent& event, const Collection& 
         mEventMap.erase(it);
         for (ResourceMap::Iterator rit = mResourceMap.begin();  rit != mResourceMap.end();  ++rit)
         {
-            rit.value().removeAll(storedEvent);
+            KAEvent::List& events = rit.value();
+            int i = events.indexOf(storedEvent);
+            if (i >= 0)
+                events.remove(i);
             if (mEarliestAlarm[rit.key()] == storedEvent)
                 findEarliestAlarm(Collection(rit.key()));
         }
@@ -1334,7 +1337,10 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
         {
             // Adding to mCalendar failed, so undo AlarmCalendar::addEvent()
             mEventMap.remove(event->id());
-            mResourceMap[key].removeAll(event);
+            KAEvent::List& events = mResourceMap[key];
+            int i = events.indexOf(event);
+            if (i >= 0)
+                events.remove(i);
             if (mEarliestAlarm[key] == event)
                 findEarliestAlarm(key);
         }
@@ -1662,7 +1668,10 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 #else
         AlarmResource* key = AlarmResources::instance()->resource(kcalEvent);
 #endif
-        mResourceMap[key].removeAll(ev);
+        KAEvent::List& events = mResourceMap[key];
+        int i = events.indexOf(ev);
+        if (i >= 0)
+            events.remove(i);
         delete ev;
         if (mEarliestAlarm[key] == ev)
 #ifdef USE_AKONADI

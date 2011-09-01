@@ -1308,7 +1308,7 @@ AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, KAlarm::CalEvent::Ty
 * Reply = true if item creation has been scheduled for all events,
 *         false if at least one item creation failed to be scheduled.
 */
-bool AkonadiModel::addEvents(const QList<KAEvent*>& events, Collection& collection)
+bool AkonadiModel::addEvents(const KAEvent::List& events, Collection& collection)
 {
     bool ok = true;
     for (int i = 0, count = events.count();  i < count;  ++i)

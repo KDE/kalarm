@@ -983,22 +983,20 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
             pos.days.fill(false);
             pos.days.setBit(mMonthlyRule->dayOfWeek() - 1);
             pos.weeknum = mMonthlyRule->week();
-            QList<KAEvent::MonthPos> poses;
-            poses.append(pos);
+            QVector<KAEvent::MonthPos> poses(1, pos);
             event.setRecurMonthlyByPos(frequency, poses, repeatCount, endDate);
         }
         else
         {
             // It's by day
             int daynum = mMonthlyRule->date();
-            QList<int> daynums;
-            daynums.append(daynum);
+            QVector<int> daynums(1, daynum);
             event.setRecurMonthlyByDate(frequency, daynums, repeatCount, endDate);
         }
     }
     else if (button == mYearlyButton)
     {
-        QList<int> months = mYearlyRule->months();
+        QVector<int> months = mYearlyRule->months();
         if (mYearlyRule->type() == YearlyRule::POS)
         {
             // It's by position
@@ -1006,8 +1004,7 @@ void RecurrenceEdit::updateEvent(KAEvent& event, bool adjustStart)
             pos.days.fill(false);
             pos.days.setBit(mYearlyRule->dayOfWeek() - 1);
             pos.weeknum = mYearlyRule->week();
-            QList<KAEvent::MonthPos> poses;
-            poses.append(pos);
+            QVector<KAEvent::MonthPos> poses(1, pos);
             event.setRecurAnnualByPos(frequency, poses, months, repeatCount, endDate);
         }
         else
@@ -1618,12 +1615,12 @@ void YearlyRule::setDefaultValues(int dayOfMonth, int dayOfWeek, int month)
 }
 
 /******************************************************************************
- * Fetch which months have been checked (1 - 12).
- * Reply = true if February has been checked.
- */
-QList<int> YearlyRule::months() const
+* Fetch which months have been checked (1 - 12).
+* Reply = true if February has been checked.
+*/
+QVector<int> YearlyRule::months() const
 {
-    QList<int> mnths;
+    QVector<int> mnths;
     for (int i = 0;  i < 12;  ++i)
         if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
             mnths.append(i + 1);
@@ -1631,8 +1628,8 @@ QList<int> YearlyRule::months() const
 }
 
 /******************************************************************************
- * Check/uncheck each month of the year according to the specified list.
- */
+* Check/uncheck each month of the year according to the specified list.
+*/
 void YearlyRule::setMonths(const QList<int>& mnths)
 {
     bool checked[12];
@@ -1646,8 +1643,8 @@ void YearlyRule::setMonths(const QList<int>& mnths)
 }
 
 /******************************************************************************
- * Return the date for February 29th alarms in non-leap years.
- */
+* Return the date for February 29th alarms in non-leap years.
+*/
 KARecurrence::Feb29Type YearlyRule::feb29Type() const
 {
     if (mFeb29Combo->isEnabled())

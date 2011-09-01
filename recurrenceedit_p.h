@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit_p.h  -  private classes for recurrenceedit.cpp
  *  Program:  kalarm
- *  Copyright © 2003,2005,2007,2009,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003,2005,2007,2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@
 #include "radiobutton.h"
 
 #include <QList>
+#include <QVector>
 #include <QFrame>
 #include <QBitArray>
 #include <QAbstractButton>
@@ -184,7 +185,7 @@ class YearlyRule : public MonthYearRule
         Q_OBJECT
     public:
         YearlyRule(bool readOnly, QWidget* parent);
-        QList<int>       months() const;
+        QVector<int>     months() const;
         void             setMonths(const QList<int>& months);
         void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
         KARecurrence::Feb29Type feb29Type() const;
@@ -207,7 +208,7 @@ class YearlyRule : public MonthYearRule
         QLabel*          mFeb29Label;
         ComboBox*        mFeb29Combo;
         // Saved state of all controls
-        QList<int>       mSavedMonths;       // ticked months for yearly rule
+        QVector<int>     mSavedMonths;       // ticked months for yearly rule
         int              mSavedFeb29Type;    // February 29th recurrence type
 };
 
