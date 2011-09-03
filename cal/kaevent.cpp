@@ -1765,7 +1765,7 @@ void KAEvent::setEventId(const QString& id)
     d->mEventID = id;
 }
 
-const QString& KAEvent::id() const
+QString KAEvent::id() const
 {
     return d->mEventID;
 }
@@ -2137,7 +2137,7 @@ void KAEvent::Private::setAudioFile(const QString& filename, float volume, float
     }
 }
 
-const QString& KAEvent::audioFile() const
+QString KAEvent::audioFile() const
 {
     return d->mAudioFile;
 }
@@ -2190,7 +2190,7 @@ bool KAEvent::isTemplate() const
     return !d->mTemplateName.isEmpty();
 }
 
-const QString& KAEvent::templateName() const
+QString KAEvent::templateName() const
 {
     return d->mTemplateName;
 }
@@ -2213,12 +2213,12 @@ void KAEvent::setActions(const QString& pre, const QString& post, bool cancelOnE
     d->mDontShowPreActErr = dontShowError;
 }
 
-const QString& KAEvent::preAction() const
+QString KAEvent::preAction() const
 {
     return d->mPreAction;
 }
 
-const QString& KAEvent::postAction() const
+QString KAEvent::postAction() const
 {
     return d->mPostAction;
 }
@@ -2560,7 +2560,7 @@ bool KAEvent::deferDefaultDateOnly() const
     return d->mDeferDefaultDateOnly;
 }
 
-const DateTime& KAEvent::startDateTime() const
+DateTime KAEvent::startDateTime() const
 {
     return d->mStartDateTime;
 }
@@ -3176,7 +3176,7 @@ bool KAEvent::Private::setRepetition(const Repetition& repetition)
     return true;
 }
 
-const Repetition& KAEvent::repetition() const
+Repetition KAEvent::repetition() const
 {
     return d->mRepetition;
 }

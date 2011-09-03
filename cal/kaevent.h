@@ -461,7 +461,7 @@ class KALARM_CAL_EXPORT KAEvent
         /** Return the event's unique identifier. Note that the UID is guaranteed to be unique
          *  only within the calendar containing the event.
          */
-        const QString& id() const;
+        QString id() const;
 
         /** Increment the revision number of the event (SEQUENCE property in iCalendar). */
         void incrementRevision();
@@ -660,7 +660,7 @@ class KALARM_CAL_EXPORT KAEvent
                           int fadeSeconds, bool allowEmptyFile = false);
 
         /** Return the audio file path. */
-        const QString& audioFile() const;
+        QString audioFile() const;
 
         /** Return the sound volume (the final volume if fade is specified).
          *  @return volume in range 0 - 1, or -1 for default volume.
@@ -697,7 +697,7 @@ class KALARM_CAL_EXPORT KAEvent
         /** Return the alarm template's name.
          *  @return template name, or empty if not a template
          */
-        const QString& templateName() const;
+        QString templateName() const;
 
         /** Return whether the alarm template does not specify a time.
          *  @return true if no time is specified, i.e. the normal default alarm time will
@@ -723,10 +723,10 @@ class KALARM_CAL_EXPORT KAEvent
         void setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
 
         /** Return the shell command to execute before the alarm is displayed. */
-        const QString& preAction() const;
+        QString preAction() const;
 
         /** Return the shell command to execute after the display alarm is acknowledged. */
-        const QString& postAction() const;
+        QString postAction() const;
 
         /** Return whether the alarm is to be cancelled if the pre-alarm action fails. */
         bool cancelOnPreActionError() const;
@@ -801,7 +801,7 @@ class KALARM_CAL_EXPORT KAEvent
 
         /** Return the start time for the event. If the event recurs, this is the
          *  time of the first recurrence. */
-        const DateTime& startDateTime() const;
+        DateTime startDateTime() const;
         /** Set the next time to trigger the alarm (excluding sub-repetitions).
          *  Note that for a recurring event, this should match one of the
          *  recurrence times.
@@ -1034,7 +1034,7 @@ class KALARM_CAL_EXPORT KAEvent
         bool setRepetition(const Repetition& r);
 
         /** Return the event's sub-repetition data. */
-        const Repetition& repetition() const;
+        Repetition repetition() const;
 
         /** Return the count of the next sub-repetition which is due.
          *  @return sub-repetition count (>=1), or 0 for the main recurrence.
@@ -1126,15 +1126,9 @@ class KALARM_CAL_EXPORT KAEvent
          */
         KAAlarm firstAlarm() const;
 
-        /** Return the next alarm for the event, after the specified alarm.
-         *  N.B. a repeat-at-login alarm can only be returned if it has been read from/
-         *  written to the calendar file.
-         */
+        /** Return the next alarm for the event, after the specified alarm. */
         KAAlarm nextAlarm(const KAAlarm& previousAlarm) const;
-        /** Return the next alarm for the event, after the specified alarm type.
-         *  N.B. a repeat-at-login alarm can only be returned if it has been read from/
-         *  written to the calendar file.
-         */
+        /** Return the next alarm for the event, after the specified alarm type. */
         KAAlarm nextAlarm(KAAlarm::Type previousType) const;
 
         /** Return the number of alarms in the event, i.e. the count of:
