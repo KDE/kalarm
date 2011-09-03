@@ -290,6 +290,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mAllWorkTrigger          = event.mAllWorkTrigger;
     mMainWorkTrigger         = event.mMainWorkTrigger;
     mCommandError            = event.mCommandError;
+    mEventID                 = event.mEventID;
     mTemplateName            = event.mTemplateName;
 #ifdef USE_AKONADI
     mCustomProperties        = event.mCustomProperties;
@@ -317,6 +318,9 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mDeferral                = event.mDeferral;
     mKMailSerialNumber       = event.mKMailSerialNumber;
     mTemplateAfterTime       = event.mTemplateAfterTime;
+    mBgColour                = event.mBgColour;
+    mFgColour                = event.mFgColour;
+    mFont                    = event.mFont;
     mEmailFromIdentity       = event.mEmailFromIdentity;
     mEmailAddresses          = event.mEmailAddresses;
     mEmailSubject            = event.mEmailSubject;
@@ -335,6 +339,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mCancelOnPreActErr       = event.mCancelOnPreActErr;
     mDontShowPreActErr       = event.mDontShowPreActErr;
     mConfirmAck              = event.mConfirmAck;
+    mUseDefaultFont          = event.mUseDefaultFont;
     mCommandXterm            = event.mCommandXterm;
     mCommandDisplay          = event.mCommandDisplay;
     mEmailBcc                = event.mEmailBcc;
@@ -1156,6 +1161,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mStartDateTime.setDateOnly(flags & ANY_TIME);
     set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
     mConfirmAck             = flags & CONFIRM_ACK;
+    mUseDefaultFont         = flags & DEFAULT_FONT;
     mCommandXterm           = flags & EXEC_IN_XTERM;
     mCommandDisplay         = flags & DISPLAY_COMMAND;
     mCopyToKOrganizer       = flags & COPY_KORGANIZER;
@@ -2039,6 +2045,7 @@ int KAEvent::Private::flags() const
          | (mDeferral != NO_DEFERRAL    ? DEFERRAL : 0)
          | (mSpeak                      ? SPEAK : 0)
          | (mConfirmAck                 ? CONFIRM_ACK : 0)
+         | (mUseDefaultFont             ? DEFAULT_FONT : 0)
          | (mCommandXterm               ? EXEC_IN_XTERM : 0)
          | (mCommandDisplay             ? DISPLAY_COMMAND : 0)
          | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
@@ -2544,13 +2551,8 @@ KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
     KAAlarm al;       // this sets type to INVALID_ALARM
     if (mAlarmCount)
     {
-        al.mEventID        = mEventID;
         al.mActionType     = mActionType;
         al.mText           = mText;
-        al.mBgColour       = mBgColour;
-        al.mFgColour       = mFgColour;
-        al.mFont           = mFont;
-        al.mUseDefaultFont = mUseDefaultFont;
         al.mRepeatAtLogin  = false;
         al.mDeferred       = false;
         al.mLateCancel     = mLateCancel;
@@ -4780,6 +4782,7 @@ void KAEvent::Private::dumpDebug() const
 #ifndef USE_AKONADI
     if (mResource) { kDebug() << "-- mResource:" << mResource->resourceName(); }
 #endif
+    kDebug() << "-- mEventID:" << mEventID;
     kDebug() << "-- mCommandError:" << mCommandError;
     kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
     kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
@@ -4794,6 +4797,11 @@ void KAEvent::Private::dumpDebug() const
     }
     if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
     {
+        kDebug() << "-- mBgColour:" << mBgColour.name();
+        kDebug() << "-- mFgColour:" << mFgColour.name();
+        kDebug() << "-- mUseDefaultFont:" << mUseDefaultFont;
+        if (!mUseDefaultFont)
+            kDebug() << "-- mFont:" << mFont.toString();
         kDebug() << "-- mSpeak:" << mSpeak;
         kDebug() << "-- mAudioFile:" << mAudioFile;
         kDebug() << "-- mPreAction:" << mPreAction;
@@ -4946,12 +4954,8 @@ const char* KAAlarm::debugType(Type type)
 
 void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 {
-    mEventID           = rhs.mEventID;
     mText              = rhs.mText;
     mNextMainDateTime  = rhs.mNextMainDateTime;
-    mBgColour          = rhs.mBgColour;
-    mFgColour          = rhs.mFgColour;
-    mFont              = rhs.mFont;
     mActionType        = rhs.mActionType;
     mCommandScript     = rhs.mCommandScript;
     mRepetition        = rhs.mRepetition;
@@ -4959,14 +4963,12 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
     mRepeatAtLogin     = rhs.mRepeatAtLogin;
     mLateCancel        = rhs.mLateCancel;
     mAutoClose         = rhs.mAutoClose;
-    mUseDefaultFont    = rhs.mUseDefaultFont;
 }
 
 void KAAlarmEventBase::set(int flags)
 {
     mRepeatAtLogin  = flags & KAEvent::REPEAT_AT_LOGIN;
     mAutoClose      = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
-    mUseDefaultFont = flags & KAEvent::DEFAULT_FONT;
     mCommandScript  = flags & KAEvent::SCRIPT;
 }
 
@@ -4974,24 +4976,17 @@ int KAAlarmEventBase::baseFlags() const
 {
     return (mRepeatAtLogin  ? KAEvent::REPEAT_AT_LOGIN : 0)
          | (mAutoClose      ? KAEvent::AUTO_CLOSE : 0)
-         | (mUseDefaultFont ? KAEvent::DEFAULT_FONT : 0)
          | (mCommandScript  ? KAEvent::SCRIPT : 0);
 }
 
 #ifndef KDE_NO_DEBUG_OUTPUT
 void KAAlarmEventBase::baseDumpDebug() const
 {
-    kDebug() << "-- mEventID:" << mEventID;
     kDebug() << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??");
     kDebug() << "-- mText:" << mText;
     if (mActionType == T_COMMAND)
         kDebug() << "-- mCommandScript:" << mCommandScript;
     kDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
-    kDebug() << "-- mBgColour:" << mBgColour.name();
-    kDebug() << "-- mFgColour:" << mFgColour.name();
-    kDebug() << "-- mUseDefaultFont:" << mUseDefaultFont;
-    if (!mUseDefaultFont)
-        kDebug() << "-- mFont:" << mFont.toString();
     kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
     if (!mRepetition)
         kDebug() << "-- mRepetition: 0";

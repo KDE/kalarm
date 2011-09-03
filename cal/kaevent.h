@@ -105,12 +105,8 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
         void               baseDumpDebug() const;
 #endif
 
-        QString            mEventID;          // UID: KCal::Event unique ID
         DateTime           mNextMainDateTime; // next time to display the alarm, excluding repetitions
         QString            mText;             // message text, file URL, command, email body [or audio file for KAAlarm]
-        QColor             mBgColour;         // background colour of alarm message
-        QColor             mFgColour;         // foreground colour of alarm message, or invalid for default
-        QFont              mFont;             // font of alarm message (ignored if mUseDefaultFont true)
         Type               mActionType;       // alarm action type
         Repetition         mRepetition;       // sub-repetition count and interval
         int                mNextRepeat;       // repetition count of next due sub-repetition
@@ -118,7 +114,6 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
         bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
         bool               mCommandScript;    // the command text is a script, not a shell command line
         bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
-        bool               mUseDefaultFont;   // use default message font, not mFont
 
     friend class KAEvent;
     friend class AlarmData;
@@ -187,7 +182,6 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
         bool               isValid() const              { return mType != INVALID__ALARM; }
         Type               type() const                 { return static_cast<Type>(mType & ~TIMED_DEFERRAL_FLAG); }
         SubType            subType() const              { return mType; }
-        const QString&     eventId() const              { return mEventID; }
         DateTime           dateTime(bool withRepeats = false) const
                                                         { return (withRepeats && mNextRepeat && mRepetition)
                                                             ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
@@ -693,6 +687,7 @@ class KALARM_CAL_EXPORT KAEvent
                 mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
                 mutable CmdErrType mCommandError;      // command execution error last time the alarm triggered
 
+                QString            mEventID;           // UID: KCal::Event unique ID
                 QString            mTemplateName;      // alarm template's name, or null if normal event
 #ifdef USE_AKONADI
                 QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
@@ -721,6 +716,9 @@ class KALARM_CAL_EXPORT KAEvent
                 DeferType          mDeferral;          // whether the alarm is an extra deferred/deferred-reminder alarm
                 unsigned long      mKMailSerialNumber; // if email text, message's KMail serial number
                 int                mTemplateAfterTime; // time not specified: use n minutes after default time, or -1 (applies to templates only)
+                QColor             mBgColour;          // background colour of alarm message
+                QColor             mFgColour;          // foreground colour of alarm message, or invalid for default
+                QFont              mFont;              // font of alarm message (ignored if mUseDefaultFont true)
                 uint               mEmailFromIdentity; // standard email identity uoid for 'From' field, or empty
                 EmailAddressList   mEmailAddresses;    // ATTENDEE: addresses to send email to
                 QString            mEmailSubject;      // SUMMARY: subject line of email
@@ -742,6 +740,7 @@ class KALARM_CAL_EXPORT KAEvent
                 bool               mCancelOnPreActErr; // cancel alarm if pre-alarm action fails
                 bool               mDontShowPreActErr; // don't notify error if pre-alarm action fails
                 bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
+                bool               mUseDefaultFont;    // use default message font, not mFont
                 bool               mCommandXterm;      // command alarm is to be executed in a terminal window
                 bool               mCommandDisplay;    // command output is to be displayed in an alarm window
                 bool               mEmailBcc;          // blind copy the email to the user
