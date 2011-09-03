@@ -87,6 +87,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         void               setFirstRecurrence();
         void               setCategory(KAlarm::CalEvent::Type);
         void               setRepeatAtLogin(bool);
+        void               setRepeatAtLoginTrue(bool clearReminder);
         void               setReminder(int minutes, bool onceOnly);
         void               activateReminderAfter(const DateTime& mainAlarmTime);
         void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
@@ -199,6 +200,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
 #else
         QString            mOriginalResourceId;// saved resource ID (not the resource the event is in)
 #endif
+        QString            mText;              // message text, file URL, command, email body [or audio file for KAAlarm]
         QString            mAudioFile;         // ATTACH: audio file to play
         QString            mPreAction;         // command to execute before alarm is displayed
         QString            mPostAction;        // command to execute after alarm window is closed
@@ -232,6 +234,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         float              mSoundVolume;       // volume for sound file (range 0 - 1), or < 0 for unspecified
         float              mFadeVolume;        // initial volume for sound file (range 0 - 1), or < 0 for no fade
         int                mFadeSeconds;       // fade time for sound file, or 0 if none
+        int                mLateCancel;        // how many minutes late will cancel the alarm, or 0 for no cancellation
         mutable const KHolidays::HolidayRegion*
                            mExcludeHolidays;   // non-null to not trigger alarms on holidays (= mHolidays when trigger calculated)
         mutable int        mWorkTimeOnly;      // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
@@ -252,6 +255,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         bool               mSpeak;             // whether to speak the message when the alarm is displayed
         bool               mCopyToKOrganizer;  // KOrganizer should hold a copy of the event
         bool               mReminderOnceOnly;  // the reminder is output only for the first recurrence
+        bool               mAutoClose;         // whether to close the alarm window after the late-cancel period
         bool               mMainExpired;       // main alarm has expired (in which case a deferral alarm will exist)
         bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login
         bool               mArchive;           // event has triggered in the past, so archive it when closed
@@ -483,6 +487,7 @@ KAEvent::Private::Private()
       mDeferral(NO_DEFERRAL),
       mChangeCount(0),
       mTriggerChanged(false),
+      mLateCancel(0),
       mExcludeHolidays(0),
       mWorkTimeOnly(0),
       mCategory(KAlarm::CalEvent::EMPTY),
@@ -493,6 +498,7 @@ KAEvent::Private::Private()
       mConfirmAck(false),
       mEmailBcc(false),
       mBeep(false),
+      mAutoClose(false),
       mDisplaying(false)
 { }
 
@@ -573,6 +579,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
 #else
     mOriginalResourceId      = event.mOriginalResourceId;
 #endif
+    mText                    = event.mText;
     mAudioFile               = event.mAudioFile;
     mPreAction               = event.mPreAction;
     mPostAction              = event.mPostAction;
@@ -603,6 +610,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mSoundVolume             = event.mSoundVolume;
     mFadeVolume              = event.mFadeVolume;
     mFadeSeconds             = event.mFadeSeconds;
+    mLateCancel              = event.mLateCancel;
     mExcludeHolidays         = event.mExcludeHolidays;
     mWorkTimeOnly            = event.mWorkTimeOnly;
     mCategory                = event.mCategory;
@@ -622,6 +630,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mSpeak                   = event.mSpeak;
     mCopyToKOrganizer        = event.mCopyToKOrganizer;
     mReminderOnceOnly        = event.mReminderOnceOnly;
+    mAutoClose               = event.mAutoClose;
     mMainExpired             = event.mMainExpired;
     mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
     mArchive                 = event.mArchive;
@@ -1065,15 +1074,6 @@ void KAEvent::Private::set(const Event* event)
     }
     if (!isEmailText)
         mKMailSerialNumber = 0;
-    if (mRepeatAtLogin)
-    {
-        mArchiveRepeatAtLogin = false;
-        if (mReminderMinutes > 0)
-        {
-            mReminderMinutes = 0;      // pre-alarm reminder not allowed for at-login alarm
-            mReminderActive  = NO_REMINDER;
-        }
-    }
 
     Recurrence* recur = event->recurrence();
     if (recur  &&  recur->recurs())
@@ -1092,6 +1092,17 @@ void KAEvent::Private::set(const Event* event)
             recur->setMinutely(mRepetition.intervalMinutes());
         recur->setDuration(mRepetition.count() + 1);
         mRepetition.set(0, 0);
+    }
+
+    if (mRepeatAtLogin)
+    {
+        mArchiveRepeatAtLogin = false;
+        if (mReminderMinutes > 0)
+        {
+            mReminderMinutes = 0;      // pre-alarm reminder not allowed for at-login alarm
+            mReminderActive  = NO_REMINDER;
+        }
+        setRepeatAtLoginTrue(false);   // clear other incompatible statuses
     }
 
     if (mMainExpired  &&  deferralOffset  &&  checkRecur() != KARecurrence::NO_RECUR)
@@ -1173,8 +1184,6 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mDeferral               = NO_DEFERRAL;    // do this before setting flags
 
     KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
-    if (mRepeatAtLogin)                       // do this after setting flags
-        ++mAlarmCount;
     mStartDateTime.setDateOnly(flags & ANY_TIME);
     set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
     mConfirmAck             = flags & CONFIRM_ACK;
@@ -1188,11 +1197,17 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mEnabled                = !(flags & DISABLED);
     mDisplaying             = flags & DISPLAYING_;
     mReminderOnceOnly       = flags & REMINDER_ONCE;
+    mAutoClose              = (flags & AUTO_CLOSE) && mLateCancel;
     mRepeatSound            = flags & REPEAT_SOUND;
     mBeep                   = (flags & BEEP) && action != AUDIO;
     mSpeak                  = (flags & SPEAK) && action != AUDIO;
     if (mSpeak)
         mBeep               = false;
+    if (mRepeatAtLogin)                       // do this after setting other flags
+    {
+        ++mAlarmCount;
+        setRepeatAtLoginTrue(false);
+    }
 
     mKMailSerialNumber      = 0;
     mReminderMinutes        = 0;
@@ -1732,6 +1747,7 @@ int KAEvent::Private::flags() const
          | (mExcludeHolidays            ? EXCL_HOLIDAYS : 0)
          | (mWorkTimeOnly               ? WORK_TIME_ONLY : 0)
          | (mReminderOnceOnly           ? REMINDER_ONCE : 0)
+         | (mAutoClose                  ? AUTO_CLOSE : 0)
          | (mDisplaying                 ? DISPLAYING_ : 0)
          | (mEnabled                    ? 0 : DISABLED);
 }
@@ -1861,12 +1877,16 @@ KAEvent::Actions KAEvent::actionTypes() const
 
 void KAEvent::setLateCancel(int minutes)
 {
+    if (d->mRepeatAtLogin)
+        minutes = 0;
     d->mLateCancel = minutes;
+    if (!minutes)
+        d->mAutoClose = false;
 }
 
 int KAEvent::lateCancel() const
 {
-    return d->lateCancel();
+    return d->mLateCancel;
 }
 
 void KAEvent::setAutoClose(bool ac)
@@ -2244,6 +2264,8 @@ void KAEvent::setReminder(int minutes, bool onceOnly)
 
 void KAEvent::Private::setReminder(int minutes, bool onceOnly)
 {
+    if (minutes > 0  &&  mRepeatAtLogin)
+        minutes = 0;
     if (minutes != mReminderMinutes  ||  (minutes && mReminderActive != ACTIVE_REMINDER))
     {
         if (minutes  &&  mReminderActive == NO_REMINDER)
@@ -2657,22 +2679,28 @@ void KAEvent::setRepeatAtLogin(bool rl)
 
 void KAEvent::Private::setRepeatAtLogin(bool rl)
 {
-    clearRecur();   // repeat-at-login is incompatible with recurrences
     if (rl  &&  !mRepeatAtLogin)
+    {
+        setRepeatAtLoginTrue(true);   // clear incompatible statuses
         ++mAlarmCount;
+    }
     else if (!rl  &&  mRepeatAtLogin)
         --mAlarmCount;
     mRepeatAtLogin = rl;
-    if (mRepeatAtLogin)
-    {
-        // Cancel pre-alarm reminder, late-cancel and copy-to-KOrganizer
-        if (mReminderMinutes >= 0)
-            setReminder(0, false);
-        mLateCancel = 0;
-        mAutoClose = false;
-        mCopyToKOrganizer = false;
-    }
     mTriggerChanged = true;
+}
+
+/******************************************************************************
+* Clear incompatible statuses when repeat-at-login is set.
+*/
+void KAEvent::Private::setRepeatAtLoginTrue(bool clearReminder)
+{
+    clearRecur();                // clear recurrences
+    if (mReminderMinutes >= 0 && clearReminder)
+        setReminder(0, false);   // clear pre-alarm reminder
+    mLateCancel = 0;
+    mAutoClose = false;
+    mCopyToKOrganizer = false;
 }
 
 bool KAEvent::repeatAtLogin(bool includeArchived) const
@@ -3617,11 +3645,8 @@ KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
     if (mAlarmCount)
     {
         al.mActionType     = mActionType;
-        al.mText           = mText;
         al.mRepeatAtLogin  = false;
         al.mDeferred       = false;
-        al.mLateCancel     = mLateCancel;
-        al.mAutoClose      = mAutoClose;
         al.mCommandScript  = mCommandScript;
         switch (type)
         {
@@ -3665,8 +3690,6 @@ KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
                     al.mType             = KAAlarm::AT_LOGIN__ALARM;
                     al.mNextMainDateTime = mAtLoginDateTime;
                     al.mRepeatAtLogin    = true;
-                    al.mLateCancel       = 0;
-                    al.mAutoClose        = false;
                 }
                 break;
             case KAAlarm::DISPLAYING_ALARM:
@@ -3894,6 +3917,7 @@ void KAEvent::Private::dumpDebug() const
         kDebug() << "-- mTemplateName:" << mTemplateName;
         kDebug() << "-- mTemplateAfterTime:" << mTemplateAfterTime;
     }
+    kDebug() << "-- mText:" << mText;
     if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
     {
         kDebug() << "-- mBgColour:" << mBgColour.name();
@@ -3907,6 +3931,8 @@ void KAEvent::Private::dumpDebug() const
         kDebug() << "-- mCancelOnPreActErr:" << mCancelOnPreActErr;
         kDebug() << "-- mDontShowPreActErr:" << mDontShowPreActErr;
         kDebug() << "-- mPostAction:" << mPostAction;
+        kDebug() << "-- mLateCancel:" << mLateCancel;
+        kDebug() << "-- mAutoClose:" << mAutoClose;
     }
     else if (mActionType == T_COMMAND)
     {
@@ -5953,28 +5979,23 @@ const char* KAAlarm::debugType(Type type)
 
 void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 {
-    mText              = rhs.mText;
     mNextMainDateTime  = rhs.mNextMainDateTime;
     mActionType        = rhs.mActionType;
     mCommandScript     = rhs.mCommandScript;
     mRepetition        = rhs.mRepetition;
     mNextRepeat        = rhs.mNextRepeat;
     mRepeatAtLogin     = rhs.mRepeatAtLogin;
-    mLateCancel        = rhs.mLateCancel;
-    mAutoClose         = rhs.mAutoClose;
 }
 
 void KAAlarmEventBase::set(int flags)
 {
     mRepeatAtLogin  = flags & KAEvent::REPEAT_AT_LOGIN;
-    mAutoClose      = (flags & KAEvent::AUTO_CLOSE) && mLateCancel;
     mCommandScript  = flags & KAEvent::SCRIPT;
 }
 
 int KAAlarmEventBase::baseFlags() const
 {
     return (mRepeatAtLogin  ? KAEvent::REPEAT_AT_LOGIN : 0)
-         | (mAutoClose      ? KAEvent::AUTO_CLOSE : 0)
          | (mCommandScript  ? KAEvent::SCRIPT : 0);
 }
 
@@ -5982,7 +6003,6 @@ int KAAlarmEventBase::baseFlags() const
 void KAAlarmEventBase::baseDumpDebug() const
 {
     kDebug() << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??");
-    kDebug() << "-- mText:" << mText;
     if (mActionType == T_COMMAND)
         kDebug() << "-- mCommandScript:" << mCommandScript;
     kDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
@@ -5994,8 +6014,6 @@ void KAAlarmEventBase::baseDumpDebug() const
     else
         kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";
     kDebug() << "-- mNextRepeat:" << mNextRepeat;
-    kDebug() << "-- mLateCancel:" << mLateCancel;
-    kDebug() << "-- mAutoClose:" << mAutoClose;
 }
 #endif
 

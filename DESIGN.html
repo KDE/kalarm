@@ -23,7 +23,7 @@
 
 The terms "alarm" and "event" are often used interchangeably in the context of KAlarm (including in source code comments). Technically speaking, a KAlarm "alarm" is really an event which contains one or more alarms. Each event is held in a <tt>KAEvent</tt> object and is stored as an iCalendar <tt>VEVENT</tt>. Each event normally contains the "main" alarm together with other subsidiary alarms; subsidiary alarms are used to represent reminders, deferrals, sounds, at-login alarms, pre-alarm actions and post-alarm actions. However, if the "main" alarm has expired but a subsidiary alarm is still due (e.g. a deferral), the event may no longer contain the "main" alarm. Individual alarms in the event may be fetched as <tt>KAAlarm</tt> objects.
 
-<p>A reminder before the alarm is not allowed for an at-login event.
+<p>Repeat-at-login events do not allow a reminder before the alarm, late-cancellation, or copying to KOrganizer, since these are incompatible with an alarm with no fixed trigger time.
 
 <p>The limit for deferring an alarm is as follows. Note that reminders are not triggered for sub-repetitions, just recurrences.
 <table>

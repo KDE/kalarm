@@ -92,12 +92,11 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
 {
     public:
         ~KAAlarmEventBase()  { }
-        int                lateCancel() const          { return mLateCancel; }
 
     protected:
         enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_EMAIL, T_AUDIO };
 
-        KAAlarmEventBase() : mNextRepeat(0), mLateCancel(0), mAutoClose(false), mRepeatAtLogin(false)  {}
+        KAAlarmEventBase() : mNextRepeat(0), mRepeatAtLogin(false)  {}
         KAAlarmEventBase(const KAAlarmEventBase& rhs)             { copy(rhs); }
         KAAlarmEventBase& operator=(const KAAlarmEventBase& rhs)  { copy(rhs);  return *this; }
         void               copy(const KAAlarmEventBase&);
@@ -110,12 +109,9 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
 #endif
 
         DateTime           mNextMainDateTime; // next time to display the alarm, excluding repetitions
-        QString            mText;             // message text, file URL, command, email body [or audio file for KAAlarm]
         Type               mActionType;       // alarm action type
         Repetition         mRepetition;       // sub-repetition count and interval
         int                mNextRepeat;       // repetition count of next due sub-repetition
-        int                mLateCancel;       // how many minutes late will cancel the alarm, or 0 for no cancellation
-        bool               mAutoClose;        // whether to close the alarm window after the late-cancel period
         bool               mCommandScript;    // the command text is a script, not a shell command line
         bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
 
