@@ -844,13 +844,13 @@ void MainWindow::slotDelete(bool force)
             undos.append(events[i++], c);
     }
 #else
-    for (int i = 0, end = ids.count();  i < end;  ++i)
+    for (int i = 0, e = 0, end = ids.count();  i < end;  ++i)
     {
         AlarmResource* r = resources->resourceForEvent(ids[i]);
         if (!r)
-            events.remove(i);
+            events.remove(e);
         else
-            undos.append(*events[i], r);
+            undos.append(*events[e++], r);
     }
 #endif
 
