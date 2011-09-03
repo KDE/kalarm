@@ -49,6 +49,266 @@ using namespace KCal;
 #endif
 using namespace KHolidays;
 
+
+class KAEvent::Private : public KAAlarmEventBase, public QSharedData
+{
+    public:
+        enum ReminderType   // current active state of reminder
+        {
+            NO_REMINDER,       // reminder is not due
+            ACTIVE_REMINDER,   // reminder is due
+            HIDDEN_REMINDER    // reminder-after is disabled due to main alarm being deferred past it
+        };
+        enum DeferType {
+            NO_DEFERRAL = 0,   // there is no deferred alarm
+            NORMAL_DEFERRAL,   // the main alarm, a recurrence or a repeat is deferred
+            REMINDER_DEFERRAL  // a reminder alarm is deferred
+        };
+
+        Private();
+        Private(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
+                const QFont& f, SubAction, int lateCancel, int flags, bool changesPending = false);
+#ifdef USE_AKONADI
+        explicit Private(const KCalCore::ConstEventPtr&);
+#else
+        explicit Private(const KCal::Event*);
+#endif
+        Private(const Private&);
+        ~Private()         { delete mRecurrence; }
+        Private&           operator=(const Private& e)       { if (&e != this) copy(e);  return *this; }
+#ifdef USE_AKONADI
+        void               set(const KCalCore::ConstEventPtr&);
+#else
+        void               set(const KCal::Event*);
+#endif
+        void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg, const QFont&, SubAction, int lateCancel, int flags, bool changesPending = false);
+        void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile);
+        OccurType          setNextOccurrence(const KDateTime& preDateTime);
+        void               setFirstRecurrence();
+        void               setCategory(KAlarm::CalEvent::Type);
+        void               setRepeatAtLogin(bool);
+        void               setReminder(int minutes, bool onceOnly);
+        void               activateReminderAfter(const DateTime& mainAlarmTime);
+        void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
+        void               cancelDefer();
+#ifdef USE_AKONADI
+        bool               setDisplaying(const Private&, KAAlarm::Type, Akonadi::Collection::Id, const KDateTime& dt, bool showEdit, bool showDefer);
+        void               reinstateFromDisplaying(const KCalCore::ConstEventPtr&, Akonadi::Collection::Id&, bool& showEdit, bool& showDefer);
+#else
+        bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
+        void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
+        void               setCommandError(const QString& configString);
+        void               setCommandError(CmdErrType, bool writeConfig) const;
+#endif
+        void               startChanges()                 { ++mChangeCount; }
+        void               endChanges();
+        void               removeExpiredAlarm(KAAlarm::Type);
+        KAAlarm            alarm(KAAlarm::Type) const;
+        KAAlarm            firstAlarm() const;
+        KAAlarm            nextAlarm(KAAlarm::Type) const;
+#ifdef USE_AKONADI
+        bool               updateKCalEvent(const KCalCore::Event::Ptr&, UidAction, bool setCustomProperties = true) const;
+#else
+        bool               updateKCalEvent(KCal::Event*, UidAction) const;
+#endif
+        DateTime           mainDateTime(bool withRepeats = false) const
+                                                  { return (withRepeats && mNextRepeat && mRepetition)
+                                                    ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
+        DateTime           mainEndRepeatTime() const      { return mRepetition ? mRepetition.duration().end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
+        DateTime           deferralLimit(DeferLimitType* = 0) const;
+        int                flags() const;
+        bool               isWorkingTime(const KDateTime&) const;
+        bool               setRepetition(const Repetition&);
+        bool               occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const;
+        OccurType          nextOccurrence(const KDateTime& preDateTime, DateTime& result, OccurOption = IGNORE_REPETITION) const;
+        OccurType          previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
+        void               setRecurrence(const KARecurrence&);
+#ifdef USE_AKONADI
+        bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+        bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+#else
+        bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+        bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
+#endif
+        KARecurrence::Type checkRecur() const;
+        void               clearRecur();
+        void               calcTriggerTimes() const;
+#ifdef KDE_NO_DEBUG_OUTPUT
+        void               dumpDebug() const  { }
+#else
+        void               dumpDebug() const;
+#endif
+#ifdef USE_AKONADI
+        static bool        convertRepetition(const KCalCore::Event::Ptr&);
+        static bool        convertStartOfDay(const KCalCore::Event::Ptr&);
+        static DateTime    readDateTime(const KCalCore::ConstEventPtr&, bool dateOnly, DateTime& start);
+        static void        readAlarms(const KCalCore::ConstEventPtr&, void* alarmMap, bool cmdDisplay = false);
+        static void        readAlarm(const KCalCore::ConstAlarmPtr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
+#else
+        static bool        convertRepetition(KCal::Event*);
+        static bool        convertStartOfDay(KCal::Event*);
+        static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
+        static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
+        static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
+#endif
+
+    private:
+        void               copy(const Private&);
+        bool               mayOccurDailyDuringWork(const KDateTime&) const;
+        int                nextWorkRepetition(const KDateTime& pre) const;
+        void               calcNextWorkingTime(const DateTime& nextTrigger) const;
+        DateTime           nextWorkingTime() const;
+        OccurType          nextRecurrence(const KDateTime& preDateTime, DateTime& result) const;
+#ifdef USE_AKONADI
+        void               setAudioAlarm(const KCalCore::Alarm::Ptr&) const;
+        KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr&, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+        KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr&, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+#else
+        void               setAudioAlarm(KCal::Alarm*) const;
+        KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+        KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, KAAlarm::Type = KAAlarm::INVALID_ALARM) const;
+#endif
+        inline void        set_deferral(DeferType);
+        inline void        activate_reminder(bool activate);
+
+    public:
+#ifndef USE_AKONADI
+        static QString     mCmdErrConfigGroup; // config file group for command error recording
+#endif
+        static QFont       mDefaultFont;       // default alarm message font
+        static const KHolidays::HolidayRegion* mHolidays;  // holiday region to use
+        static QBitArray   mWorkDays;          // working days of the week
+        static QTime       mWorkDayStart;      // start time of the working day
+        static QTime       mWorkDayEnd;        // end time of the working day
+        static int         mWorkTimeIndex;     // incremented every time working days/times are changed
+#ifndef USE_AKONADI
+        AlarmResource*     mResource;          // resource which owns the event (for convenience - not used by this class)
+#endif
+        mutable DateTime   mAllTrigger;        // next trigger time, including reminders, ignoring working hours
+        mutable DateTime   mMainTrigger;       // next trigger time, ignoring reminders and working hours
+        mutable DateTime   mAllWorkTrigger;    // next trigger time, taking account of reminders and working hours
+        mutable DateTime   mMainWorkTrigger;   // next trigger time, ignoring reminders but taking account of working hours
+        mutable CmdErrType mCommandError;      // command execution error last time the alarm triggered
+
+        QString            mEventID;           // UID: KCal::Event unique ID
+        QString            mTemplateName;      // alarm template's name, or null if normal event
+#ifdef USE_AKONADI
+        QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
+        Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
+        Akonadi::Collection::Id mOriginalCollectionId; // saved collection ID (not the collection the event is in)
+#else
+        QString            mOriginalResourceId;// saved resource ID (not the resource the event is in)
+#endif
+        QString            mAudioFile;         // ATTACH: audio file to play
+        QString            mPreAction;         // command to execute before alarm is displayed
+        QString            mPostAction;        // command to execute after alarm window is closed
+        DateTime           mStartDateTime;     // DTSTART and DTEND: start and end time for event
+        KDateTime          mCreatedDateTime;   // CREATED: date event was created, or saved in archive calendar
+        KDateTime          mAtLoginDateTime;   // repeat-at-login end time
+        DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
+        DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
+        int                mDisplayingFlags;   // type of alarm which is currently being displayed
+        int                mReminderMinutes;   // how long in advance reminder is to be, or 0 if none (<0 for reminder AFTER the alarm)
+        DateTime           mReminderAfterTime; // if mReminderActive true, time to trigger reminder AFTER the main alarm, or invalid if not pending
+        ReminderType       mReminderActive;    // whether a reminder is due (before next, or after last, main alarm/recurrence)
+        int                mDeferDefaultMinutes; // default number of minutes for deferral dialog, or 0 to select time control
+        bool               mDeferDefaultDateOnly;// select date-only by default in deferral dialog
+        int                mRevision;          // SEQUENCE: revision number of the original alarm, or 0
+        KARecurrence*      mRecurrence;        // RECUR: recurrence specification, or 0 if none
+        int                mAlarmCount;        // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
+        DeferType          mDeferral;          // whether the alarm is an extra deferred/deferred-reminder alarm
+        unsigned long      mKMailSerialNumber; // if email text, message's KMail serial number
+        int                mTemplateAfterTime; // time not specified: use n minutes after default time, or -1 (applies to templates only)
+        QColor             mBgColour;          // background colour of alarm message
+        QColor             mFgColour;          // foreground colour of alarm message, or invalid for default
+        QFont              mFont;              // font of alarm message (ignored if mUseDefaultFont true)
+        uint               mEmailFromIdentity; // standard email identity uoid for 'From' field, or empty
+        EmailAddressList   mEmailAddresses;    // ATTENDEE: addresses to send email to
+        QString            mEmailSubject;      // SUMMARY: subject line of email
+        QStringList        mEmailAttachments;  // ATTACH: email attachment file names
+        mutable int        mChangeCount;       // >0 = inhibit calling calcTriggerTimes()
+        mutable bool       mTriggerChanged;    // true if need to recalculate trigger times
+        QString            mLogFile;           // alarm output is to be logged to this URL
+        float              mSoundVolume;       // volume for sound file (range 0 - 1), or < 0 for unspecified
+        float              mFadeVolume;        // initial volume for sound file (range 0 - 1), or < 0 for no fade
+        int                mFadeSeconds;       // fade time for sound file, or 0 if none
+        mutable const KHolidays::HolidayRegion*
+                           mExcludeHolidays;   // non-null to not trigger alarms on holidays (= mHolidays when trigger calculated)
+        mutable int        mWorkTimeOnly;      // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
+        KAlarm::CalEvent::Type mCategory;      // event category (active, archived, template, ...)
+#ifdef USE_AKONADI
+        KAlarm::Calendar::Compat mCompatibility; // event's storage format compatibility
+        bool               mReadOnly;          // event is read-only in its original calendar file
+#endif
+        bool               mCancelOnPreActErr; // cancel alarm if pre-alarm action fails
+        bool               mDontShowPreActErr; // don't notify error if pre-alarm action fails
+        bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
+        bool               mUseDefaultFont;    // use default message font, not mFont
+        bool               mCommandXterm;      // command alarm is to be executed in a terminal window
+        bool               mCommandDisplay;    // command output is to be displayed in an alarm window
+        bool               mEmailBcc;          // blind copy the email to the user
+        bool               mBeep;              // whether to beep when the alarm is displayed
+        bool               mRepeatSound;       // whether to repeat the sound file while the alarm is displayed
+        bool               mSpeak;             // whether to speak the message when the alarm is displayed
+        bool               mCopyToKOrganizer;  // KOrganizer should hold a copy of the event
+        bool               mReminderOnceOnly;  // the reminder is output only for the first recurrence
+        bool               mMainExpired;       // main alarm has expired (in which case a deferral alarm will exist)
+        bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login
+        bool               mArchive;           // event has triggered in the past, so archive it when closed
+        bool               mDisplaying;        // whether the alarm is currently being displayed (i.e. in displaying calendar)
+        bool               mDisplayingDefer;   // show Defer button (applies to displaying calendar only)
+        bool               mDisplayingEdit;    // show Edit button (applies to displaying calendar only)
+        bool               mEnabled;           // false if event is disabled
+
+    public:
+        static const QByteArray FLAGS_PROPERTY;
+        static const QString DATE_ONLY_FLAG;
+        static const QString EMAIL_BCC_FLAG;
+        static const QString CONFIRM_ACK_FLAG;
+        static const QString KORGANIZER_FLAG;
+        static const QString EXCLUDE_HOLIDAYS_FLAG;
+        static const QString WORK_TIME_ONLY_FLAG;
+        static const QString REMINDER_ONCE_FLAG;
+        static const QString DEFER_FLAG;
+        static const QString LATE_CANCEL_FLAG;
+        static const QString AUTO_CLOSE_FLAG;
+        static const QString TEMPL_AFTER_TIME_FLAG;
+        static const QString KMAIL_SERNUM_FLAG;
+        static const QString ARCHIVE_FLAG;
+        static const QByteArray NEXT_RECUR_PROPERTY;
+        static const QByteArray REPEAT_PROPERTY;
+        static const QByteArray LOG_PROPERTY;
+        static const QString xtermURL;
+        static const QString displayURL;
+        static const QByteArray TYPE_PROPERTY;
+        static const QString FILE_TYPE;
+        static const QString AT_LOGIN_TYPE;
+        static const QString REMINDER_TYPE;
+        static const QString REMINDER_ONCE_TYPE;
+        static const QString TIME_DEFERRAL_TYPE;
+        static const QString DATE_DEFERRAL_TYPE;
+        static const QString DISPLAYING_TYPE;
+        static const QString PRE_ACTION_TYPE;
+        static const QString POST_ACTION_TYPE;
+        static const QString SOUND_REPEAT_TYPE;
+        static const QByteArray NEXT_REPEAT_PROPERTY;
+        static const QString HIDDEN_REMINDER_FLAG;
+        static const QByteArray FONT_COLOUR_PROPERTY;
+        static const QByteArray VOLUME_PROPERTY;
+        static const QString EMAIL_ID_FLAG;
+        static const QString SPEAK_FLAG;
+        static const QString CANCEL_ON_ERROR_FLAG;
+        static const QString DONT_SHOW_ERROR_FLAG;
+        static const QString DISABLED_STATUS;
+        static const QString DISP_DEFER;
+        static const QString DISP_EDIT;
+        static const QString CMD_ERROR_VALUE;
+        static const QString CMD_ERROR_PRE_VALUE;
+        static const QString CMD_ERROR_POST_VALUE;
+        static const QString SC;
+};
+
+
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
@@ -276,6 +536,20 @@ KAEvent::Private::Private(const KAEvent::Private& e)
     copy(e);
 }
 
+KAEvent::KAEvent(const KAEvent& other)
+    : d(other.d)
+{ }
+
+KAEvent::~KAEvent()
+{ }
+
+KAEvent& KAEvent::operator=(const KAEvent& other)
+{
+    if (&other != this)
+        d = other.d;
+    return *this;
+}
+
 /******************************************************************************
 * Copies the data from another instance.
 */
@@ -362,6 +636,15 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
         mRecurrence = new KARecurrence(*event.mRecurrence);
     else
         mRecurrence = 0;
+}
+
+#ifdef USE_AKONADI
+void KAEvent::set(const ConstEventPtr& e)
+#else
+void KAEvent::set(const Event* e)
+#endif
+{
+    d->set(e);
 }
 
 /******************************************************************************
@@ -834,276 +1117,10 @@ void KAEvent::Private::set(const Event* event)
     endChanges();
 }
 
-/******************************************************************************
-* Fetch the start and next date/time for a KCal::Event.
-* Reply = next main date/time.
-*/
-#ifdef USE_AKONADI
-DateTime KAEvent::Private::readDateTime(const ConstEventPtr& event, bool dateOnly, DateTime& start)
-#else
-DateTime KAEvent::Private::readDateTime(const Event* event, bool dateOnly, DateTime& start)
-#endif
+void KAEvent::set(const KDateTime& dt, const QString& message, const QColor& bg, const QColor& fg,
+                  const QFont& f, SubAction act, int lateCancel, int flags, bool changesPending)
 {
-    start = event->dtStart();
-    if (dateOnly)
-    {
-        // A date-only event is indicated by the X-KDE-KALARM-FLAGS:DATE property, not
-        // by a date-only start date/time (for the reasons given in updateKCalEvent()).
-        start.setDateOnly(true);
-    }
-    DateTime next = start;
-    QString prop = event->customProperty(KAlarm::Calendar::APPNAME, Private::NEXT_RECUR_PROPERTY);
-    if (prop.length() >= 8)
-    {
-        // The next due recurrence time is specified
-        QDate d(prop.left(4).toInt(), prop.mid(4,2).toInt(), prop.mid(6,2).toInt());
-        if (d.isValid())
-        {
-            if (dateOnly  &&  prop.length() == 8)
-                next.setDate(d);
-            else if (!dateOnly  &&  prop.length() == 15  &&  prop[8] == QChar('T'))
-            {
-                QTime t(prop.mid(9,2).toInt(), prop.mid(11,2).toInt(), prop.mid(13,2).toInt());
-                if (t.isValid())
-                {
-                    next.setDate(d);
-                    next.setTime(t);
-                }
-            }
-            if (next < start)
-                next = start;   // ensure next recurrence time is valid
-        }
-    }
-    return next;
-}
-
-/******************************************************************************
-* Parse the alarms for a KCal::Event.
-* Reply = map of alarm data, indexed by KAAlarm::Type
-*/
-#ifdef USE_AKONADI
-void KAEvent::Private::readAlarms(const ConstEventPtr& event, void* almap, bool cmdDisplay)
-#else
-void KAEvent::Private::readAlarms(const Event* event, void* almap, bool cmdDisplay)
-#endif
-{
-    AlarmMap* alarmMap = (AlarmMap*)almap;
-    Alarm::List alarms = event->alarms();
-
-    // Check if it's an audio event with no display alarm
-    bool audioOnly = false;
-    for (int i = 0, end = alarms.count();  i < end;  ++i)
-    {
-        switch (alarms[i]->type())
-        {
-            case Alarm::Display:
-            case Alarm::Procedure:
-                audioOnly = false;
-                i = end;   // exit from the 'for' loop
-                break;
-            case Alarm::Audio:
-                audioOnly = true;
-                break;
-            default:
-                break;
-        }
-    }
-
-    for (int i = 0, end = alarms.count();  i < end;  ++i)
-    {
-        // Parse the next alarm's text
-        AlarmData data;
-        readAlarm(alarms[i], data, audioOnly, cmdDisplay);
-        if (data.type != KAAlarm::INVALID__ALARM)
-            alarmMap->insert(data.type, data);
-    }
-}
-
-/******************************************************************************
-* Parse a KCal::Alarm.
-* If 'audioMain' is true, the event contains an audio alarm but no display alarm.
-* Reply = alarm ID (sequence number)
-*/
-#ifdef USE_AKONADI
-void KAEvent::Private::readAlarm(const ConstAlarmPtr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
-#else
-void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
-#endif
-{
-    // Parse the next alarm's text
-    data.alarm           = alarm;
-    data.displayingFlags = 0;
-    data.isEmailText     = false;
-    data.speak           = false;
-    data.hiddenReminder  = false;
-    data.nextRepeat      = 0;
-    if (alarm->repeatCount())
-    {
-        bool ok;
-        QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::NEXT_REPEAT_PROPERTY);
-        int n = static_cast<int>(property.toUInt(&ok));
-        if (ok)
-            data.nextRepeat = n;
-    }
-    QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::FLAGS_PROPERTY);
-    QStringList flags = property.split(Private::SC, QString::SkipEmptyParts);
-    switch (alarm->type())
-    {
-        case Alarm::Procedure:
-            data.action        = KAAlarmEventBase::T_COMMAND;
-            data.cleanText     = alarm->programFile();
-            data.commandScript = data.cleanText.isEmpty();   // blank command indicates a script
-            if (!alarm->programArguments().isEmpty())
-            {
-                if (!data.commandScript)
-                    data.cleanText += ' ';
-                data.cleanText += alarm->programArguments();
-            }
-            data.cancelOnPreActErr = flags.contains(Private::CANCEL_ON_ERROR_FLAG);
-            data.dontShowPreActErr = flags.contains(Private::DONT_SHOW_ERROR_FLAG);
-            if (!cmdDisplay)
-                break;
-            // fall through to Display
-        case Alarm::Display:
-        {
-            if (alarm->type() == Alarm::Display)
-            {
-                data.action    = KAAlarmEventBase::T_MESSAGE;
-                data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
-            }
-            QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::FONT_COLOUR_PROPERTY);
-            QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
-            data.bgColour = QColor(255, 255, 255);   // white
-            data.fgColour = QColor(0, 0, 0);         // black
-            int n = list.count();
-            if (n > 0)
-            {
-                if (!list[0].isEmpty())
-                {
-                    QColor c(list[0]);
-                    if (c.isValid())
-                        data.bgColour = c;
-                }
-                if (n > 1  &&  !list[1].isEmpty())
-                {
-                    QColor c(list[1]);
-                    if (c.isValid())
-                        data.fgColour = c;
-                }
-            }
-            data.defaultFont = (n <= 2 || list[2].isEmpty());
-            if (!data.defaultFont)
-                data.font.fromString(list[2]);
-            break;
-        }
-        case Alarm::Email:
-        {
-            data.action    = KAAlarmEventBase::T_EMAIL;
-            data.cleanText = alarm->mailText();
-            int i = flags.indexOf(Private::EMAIL_ID_FLAG);
-            data.emailFromId = (i >= 0  &&  i + 1 < flags.count()) ? flags[i + 1].toUInt() : 0;
-            break;
-        }
-        case Alarm::Audio:
-        {
-            data.action      = KAAlarmEventBase::T_AUDIO;
-            data.cleanText   = alarm->audioFile();
-            data.soundVolume = -1;
-            data.fadeVolume  = -1;
-            data.fadeSeconds = 0;
-            QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::VOLUME_PROPERTY);
-            if (!property.isEmpty())
-            {
-                bool ok;
-                float fadeVolume;
-                int   fadeSecs = 0;
-                QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
-                data.soundVolume = list[0].toFloat(&ok);
-                if (!ok  ||  data.soundVolume > 1.0f)
-                    data.soundVolume = -1;
-                if (data.soundVolume >= 0  &&  list.count() >= 3)
-                {
-                    fadeVolume = list[1].toFloat(&ok);
-                    if (ok)
-                        fadeSecs = static_cast<int>(list[2].toUInt(&ok));
-                    if (ok  &&  fadeVolume >= 0  &&  fadeVolume <= 1.0f  &&  fadeSecs > 0)
-                    {
-                        data.fadeVolume  = fadeVolume;
-                        data.fadeSeconds = fadeSecs;
-                    }
-                }
-            }
-            if (!audioMain)
-            {
-                data.type  = KAAlarm::AUDIO__ALARM;
-                data.speak = flags.contains(Private::SPEAK_FLAG);
-                return;
-            }
-            break;
-        }
-        case Alarm::Invalid:
-            data.type = KAAlarm::INVALID__ALARM;
-            return;
-    }
-
-    bool atLogin          = false;
-    bool reminder         = false;
-    bool deferral         = false;
-    bool dateDeferral     = false;
-    data.repeatSound      = false;
-    data.type = KAAlarm::MAIN__ALARM;
-    property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::TYPE_PROPERTY);
-    QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
-    for (int i = 0, end = types.count();  i < end;  ++i)
-    {
-        QString type = types[i];
-        if (type == Private::AT_LOGIN_TYPE)
-            atLogin = true;
-        else if (type == Private::FILE_TYPE  &&  data.action == KAAlarmEventBase::T_MESSAGE)
-            data.action = KAAlarmEventBase::T_FILE;
-        else if (type == Private::REMINDER_TYPE)
-            reminder = true;
-        else if (type == Private::TIME_DEFERRAL_TYPE)
-            deferral = true;
-        else if (type == Private::DATE_DEFERRAL_TYPE)
-            dateDeferral = deferral = true;
-        else if (type == Private::DISPLAYING_TYPE)
-            data.type = KAAlarm::DISPLAYING__ALARM;
-        else if (type == Private::PRE_ACTION_TYPE  &&  data.action == KAAlarmEventBase::T_COMMAND)
-            data.type = KAAlarm::PRE_ACTION__ALARM;
-        else if (type == Private::POST_ACTION_TYPE  &&  data.action == KAAlarmEventBase::T_COMMAND)
-            data.type = KAAlarm::POST_ACTION__ALARM;
-        else if (type == Private::SOUND_REPEAT_TYPE  &&  data.action == KAAlarmEventBase::T_AUDIO)
-            data.repeatSound = true;
-    }
-
-    if (reminder)
-    {
-        if (data.type == KAAlarm::MAIN__ALARM)
-            data.type = dateDeferral ? KAAlarm::DEFERRED_REMINDER_DATE__ALARM
-                      : deferral ? KAAlarm::DEFERRED_REMINDER_TIME__ALARM : KAAlarm::REMINDER__ALARM;
-        else if (data.type == KAAlarm::DISPLAYING__ALARM)
-            data.displayingFlags = dateDeferral ? REMINDER | DATE_DEFERRAL
-                                 : deferral ? REMINDER | TIME_DEFERRAL : REMINDER;
-        else if (data.type == KAAlarm::REMINDER__ALARM
-             &&  flags.contains(Private::HIDDEN_REMINDER_FLAG))
-            data.hiddenReminder = true;
-    }
-    else if (deferral)
-    {
-        if (data.type == KAAlarm::MAIN__ALARM)
-            data.type = dateDeferral ? KAAlarm::DEFERRED_DATE__ALARM : KAAlarm::DEFERRED_TIME__ALARM;
-        else if (data.type == KAAlarm::DISPLAYING__ALARM)
-            data.displayingFlags = dateDeferral ? DATE_DEFERRAL : TIME_DEFERRAL;
-    }
-    if (atLogin)
-    {
-        if (data.type == KAAlarm::MAIN__ALARM)
-            data.type = KAAlarm::AT_LOGIN__ALARM;
-        else if (data.type == KAAlarm::DISPLAYING__ALARM)
-            data.displayingFlags = REPEAT_AT_LOGIN;
-    }
-//kDebug()<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
+    d->set(dt, message, bg, fg, f, act, lateCancel, flags, changesPending);
 }
 
 /******************************************************************************
@@ -1200,906 +1217,25 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mTriggerChanged         = true;
 }
 
-void KAEvent::setLogFile(const QString& logfile)
-{
-    d->mLogFile = logfile;
-    if (!logfile.isEmpty())
-        d->mCommandDisplay = d->mCommandXterm = false;
-}
-
-void KAEvent::setEmail(uint from, const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
-{
-    d->mEmailFromIdentity = from;
-    d->mEmailAddresses    = addresses;
-    d->mEmailSubject      = subject;
-    d->mEmailAttachments  = attachments;
-}
-
-void KAEvent::Private::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile)
-{
-    mAudioFile = filename;
-    mSoundVolume = (!allowEmptyFile && filename.isEmpty()) ? -1 : volume;
-    if (mSoundVolume >= 0)
-    {
-        mFadeVolume  = (fadeSeconds > 0) ? fadeVolume : -1;
-        mFadeSeconds = (mFadeVolume >= 0) ? fadeSeconds : 0;
-    }
-    else
-    {
-        mFadeVolume  = -1;
-        mFadeSeconds = 0;
-    }
-}
-
-/******************************************************************************
-* Change the type of an event.
-* If it is being set to archived, set the archived indication in the event ID;
-* otherwise, remove the archived indication from the event ID.
-*/
-void KAEvent::Private::setCategory(KAlarm::CalEvent::Type s)
-{
-    if (s == mCategory)
-        return;
-    mEventID = KAlarm::CalEvent::uid(mEventID, s);
-    mCategory = s;
-    mTriggerChanged = true;   // templates and archived don't have trigger times
-}
-
-/******************************************************************************
-* Set the event to be an alarm template.
-*/
-void KAEvent::setTemplate(const QString& name, int afterTime)
-{
-    d->setCategory(KAlarm::CalEvent::TEMPLATE);
-    d->mTemplateName = name;
-    d->mTemplateAfterTime = afterTime;
-    d->mTriggerChanged = true;   // templates and archived don't have trigger times
-}
-
-/******************************************************************************
-* Set or clear repeat-at-login.
-*/
-void KAEvent::Private::setRepeatAtLogin(bool rl)
-{
-    if (rl  &&  !mRepeatAtLogin)
-        ++mAlarmCount;
-    else if (!rl  &&  mRepeatAtLogin)
-        --mAlarmCount;
-    mRepeatAtLogin = rl;
-    if (mRepeatAtLogin)
-    {
-        // Cancel pre-alarm reminder, late-cancel and copy-to-KOrganizer
-        if (mReminderMinutes >= 0)
-            setReminder(0, false);
-        mLateCancel = 0;
-        mAutoClose = false;
-        mCopyToKOrganizer = false;
-    }
-    mTriggerChanged = true;
-}
-
-/******************************************************************************
-* Set a reminder.
-* 'minutes' = number of minutes BEFORE the main alarm.
-*/
-void KAEvent::Private::setReminder(int minutes, bool onceOnly)
-{
-    if (minutes != mReminderMinutes  ||  (minutes && mReminderActive != ACTIVE_REMINDER))
-    {
-        if (minutes  &&  mReminderActive == NO_REMINDER)
-            ++mAlarmCount;
-        else if (!minutes  &&  mReminderActive != NO_REMINDER)
-            --mAlarmCount;
-        mReminderMinutes   = minutes;
-        mReminderActive    = minutes ? ACTIVE_REMINDER : NO_REMINDER;
-        mReminderOnceOnly  = onceOnly;
-        mReminderAfterTime = DateTime();
-        mTriggerChanged = true;
-    }
-}
-
-/******************************************************************************
-* Set a new holiday region.
-* Alarms which exclude holidays record the pointer to the holiday definition
-* at the time their next trigger times were last calculated. The change in
-* holiday definition pointer will cause their next trigger times to be
-* recalculated.
-*/
-void KAEvent::setHolidays(const HolidayRegion& h)
-{
-    Private::mHolidays = &h;
-}
-
-/******************************************************************************
-* Set new working days and times.
-* Increment a counter so that working-time-only alarms can detect that they
-* need to update their next trigger time.
-*/
-void KAEvent::setWorkTime(const QBitArray& days, const QTime& start, const QTime& end)
-{
-    if (days != Private::mWorkDays  ||  start != Private::mWorkDayStart  ||  end != Private::mWorkDayEnd)
-    {
-        Private::mWorkDays     = days;
-        Private::mWorkDayStart = start;
-        Private::mWorkDayEnd   = end;
-        if (!++Private::mWorkTimeIndex)
-            ++Private::mWorkTimeIndex;
-    }
-}
-
-DateTime KAEvent::nextTrigger(TriggerType type) const
-{
-    d->calcTriggerTimes();
-    switch (type)
-    {
-        case ALL_TRIGGER:       return d->mAllTrigger;
-        case MAIN_TRIGGER:      return d->mMainTrigger;
-        case ALL_WORK_TRIGGER:  return d->mAllWorkTrigger;
-        case WORK_TRIGGER:      return d->mMainWorkTrigger;
-        case DISPLAY_TRIGGER:
-        {
-            bool reminderAfter = d->mMainExpired && d->mReminderActive && d->mReminderMinutes < 0;
-            return (d->mWorkTimeOnly || d->mExcludeHolidays)
-                   ? (reminderAfter ? d->mAllWorkTrigger : d->mMainWorkTrigger)
-                   : (reminderAfter ? d->mAllTrigger : d->mMainTrigger);
-        }
-        default:                return DateTime();
-    }
-}
-
-/******************************************************************************
-* Indicate that changes to the instance are complete.
-* This allows trigger times to be recalculated if any changes have occurred.
-*/
-void KAEvent::Private::endChanges()
-{
-    if (mChangeCount > 0)
-        --mChangeCount;
-}
-
-/******************************************************************************
-* Calculate the next trigger times of the alarm.
-* This should only be called when changes have actually occurred which might
-* affect the event's trigger times.
-* mMainTrigger is set to the next scheduled recurrence/sub-repetition, or the
-*              deferral time if a deferral is pending.
-* mAllTrigger is the same as mMainTrigger, but takes account of reminders.
-* mMainWorkTrigger is set to the next scheduled recurrence/sub-repetition
-*                  which occurs in working hours, if working-time-only is set.
-* mAllWorkTrigger is the same as mMainWorkTrigger, but takes account of reminders.
-*/
-void KAEvent::Private::calcTriggerTimes() const
-{
-    if (mChangeCount)
-        return;
-    if ((mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
-    ||  (mExcludeHolidays  &&  mExcludeHolidays != mHolidays))
-    {
-        // It's a work time alarm, and work days/times have changed, or
-        // it excludes holidays, and the holidays definition has changed.
-        mTriggerChanged = true;
-    }
-    else if (!mTriggerChanged)
-        return;
-    mTriggerChanged = false;
-    if (mWorkTimeOnly)
-        mWorkTimeOnly = mWorkTimeIndex;   // note which work time definition was used in calculation
-    if (mExcludeHolidays)
-        mExcludeHolidays = mHolidays;     // note which holiday definition was used in calculation
-
-    if (mCategory == KAlarm::CalEvent::ARCHIVED  ||  mCategory == KAlarm::CalEvent::TEMPLATE)
-    {
-        // It's a template or archived
-        mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KDateTime();
-    }
-    else if (mDeferral == NORMAL_DEFERRAL)
-    {
-        // For a deferred alarm, working time setting is ignored
-        mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = mDeferralTime;
-    }
-    else
-    {
-        mMainTrigger = mainDateTime(true);   // next recurrence or sub-repetition
-        mAllTrigger = (mDeferral == REMINDER_DEFERRAL)     ? mDeferralTime
-                    : (mReminderActive != ACTIVE_REMINDER) ? mMainTrigger
-                    : (mReminderMinutes < 0)               ? mReminderAfterTime
-                    :                                        mMainTrigger.addMins(-mReminderMinutes);
-        // It's not deferred.
-        // If only-during-working-time is set and it recurs, it won't actually trigger
-        // unless it falls during working hours.
-        if ((!mWorkTimeOnly && !mExcludeHolidays)
-        ||  checkRecur() == KARecurrence::NO_RECUR
-        ||  isWorkingTime(mMainTrigger.kDateTime()))
-        {
-            // It only occurs once, or it complies with any working hours/holiday
-            // restrictions.
-            mMainWorkTrigger = mMainTrigger;
-            mAllWorkTrigger = mAllTrigger;
-        }
-        else if (mWorkTimeOnly)
-        {
-            // The alarm is restricted to working hours.
-            // Finding the next occurrence during working hours can sometimes take a long time,
-            // so mark the next actual trigger as invalid until the calculation completes.
-            // Note that reminders are only triggered if the main alarm is during working time.
-            if (!mExcludeHolidays)
-            {
-                // There are no holiday restrictions.
-                calcNextWorkingTime(mMainTrigger);
-            }
-            else if (mHolidays)
-            {
-                // Holidays are excluded.
-                DateTime nextTrigger = mMainTrigger;
-                KDateTime kdt;
-                for (int i = 0;  i < 20;  ++i)
-                {
-                    calcNextWorkingTime(nextTrigger);
-                    if (!mHolidays->isHoliday(mMainWorkTrigger.date()))
-                        return;   // found a non-holiday occurrence
-                    kdt = mMainWorkTrigger.effectiveKDateTime();
-                    kdt.setTime(QTime(23,59,59));
-                    OccurType type = nextOccurrence(kdt, nextTrigger, RETURN_REPETITION);
-                    if (!nextTrigger.isValid())
-                        break;
-                    if (isWorkingTime(nextTrigger.kDateTime()))
-                    {
-                        int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
-                        mMainWorkTrigger = nextTrigger;
-                        mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
-                        return;   // found a non-holiday occurrence
-                    }
-                }
-                mMainWorkTrigger = mAllWorkTrigger = DateTime();
-            }
-        }
-        else if (mExcludeHolidays  &&  mHolidays)
-        {
-            // Holidays are excluded.
-            DateTime nextTrigger = mMainTrigger;
-            KDateTime kdt;
-            for (int i = 0;  i < 20;  ++i)
-            {
-                kdt = nextTrigger.effectiveKDateTime();
-                kdt.setTime(QTime(23,59,59));
-                OccurType type = nextOccurrence(kdt, nextTrigger, RETURN_REPETITION);
-                if (!nextTrigger.isValid())
-                    break;
-                if (!mHolidays->isHoliday(nextTrigger.date()))
-                {
-                    int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
-                    mMainWorkTrigger = nextTrigger;
-                    mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
-                    return;   // found a non-holiday occurrence
-                }
-            }
-            mMainWorkTrigger = mAllWorkTrigger = DateTime();
-        }
-    }
-}
-
-/******************************************************************************
-* Return the time of the next scheduled occurrence of the event during working
-* hours, for an alarm which is restricted to working hours.
-* On entry, 'nextTrigger' = the next recurrence or repetition (as returned by
-* mainDateTime(true) ).
-*/
-void KAEvent::Private::calcNextWorkingTime(const DateTime& nextTrigger) const
-{
-    kDebug() << "next=" << nextTrigger.kDateTime().dateTime();
-    mMainWorkTrigger = mAllWorkTrigger = DateTime();
-
-    for (int i = 0;  ;  ++i)
-    {
-        if (i >= 7)
-            return;   // no working days are defined
-        if (mWorkDays.testBit(i))
-            break;
-    }
-    KARecurrence::Type recurType = checkRecur();
-    KDateTime kdt = nextTrigger.effectiveKDateTime();
-    int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
-    // Check if it always falls on the same day(s) of the week.
-    RecurrenceRule* rrule = mRecurrence->defaultRRuleConst();
-    if (!rrule)
-        return;   // no recurrence rule!
-    unsigned allDaysMask = 0x7F;  // mask bits for all days of week
-    bool noWorkPos = false;  // true if no recurrence day position is working day
-    QList<RecurrenceRule::WDayPos> pos = rrule->byDays();
-    int nDayPos = pos.count();  // number of day positions
-    if (nDayPos)
-    {
-        noWorkPos = true;
-        allDaysMask = 0;
-        for (int i = 0;  i < nDayPos;  ++i)
-        {
-            int day = pos[i].day() - 1;  // Monday = 0
-            if (mWorkDays.testBit(day))
-                noWorkPos = false;   // found a working day occurrence
-            allDaysMask |= 1 << day;
-        }
-        if (noWorkPos  &&  !mRepetition)
-            return;   // never occurs on a working day
-    }
-    DateTime newdt;
-
-    if (mStartDateTime.isDateOnly())
-    {
-        // It's a date-only alarm.
-        // Sub-repetitions also have to be date-only.
-        int repeatFreq = mRepetition.intervalDays();
-        bool weeklyRepeat = mRepetition && !(repeatFreq % 7);
-        Duration interval = mRecurrence->regularInterval();
-        if ((interval  &&  !(interval.asDays() % 7))
-        ||  nDayPos == 1)
-        {
-            // It recurs on the same day each week
-            if (!mRepetition || weeklyRepeat)
-                return;   // any repetitions are also weekly
-
-            // It's a weekly recurrence with a non-weekly sub-repetition.
-            // Check one cycle of repetitions for the next one that lands
-            // on a working day.
-            KDateTime dt(nextTrigger.kDateTime().addDays(1));
-            dt.setTime(QTime(0,0,0));
-            previousOccurrence(dt, newdt, false);
-            if (!newdt.isValid())
-                return;   // this should never happen
-            kdt = newdt.effectiveKDateTime();
-            int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
-            for (int repeatNum = mNextRepeat + 1;  ;  ++repeatNum)
-            {
-                if (repeatNum > mRepetition.count())
-                    repeatNum = 0;
-                if (repeatNum == mNextRepeat)
-                    break;
-                if (!repeatNum)
-                {
-                    nextOccurrence(newdt.kDateTime(), newdt, IGNORE_REPETITION);
-                    if (mWorkDays.testBit(day))
-                    {
-                        mMainWorkTrigger = newdt;
-                        mAllWorkTrigger  = mMainWorkTrigger.addMins(-reminder);
-                        return;
-                    }
-                    kdt = newdt.effectiveKDateTime();
-                }
-                else
-                {
-                    int inc = repeatFreq * repeatNum;
-                    if (mWorkDays.testBit((day + inc) % 7))
-                    {
-                        kdt = kdt.addDays(inc);
-                        kdt.setDateOnly(true);
-                        mMainWorkTrigger = mAllWorkTrigger = kdt;
-                        return;
-                    }
-                }
-            }
-            return;
-        }
-        if (!mRepetition  ||  weeklyRepeat)
-        {
-            // It's a date-only alarm with either no sub-repetition or a
-            // sub-repetition which always falls on the same day of the week
-            // as the recurrence (if any).
-            unsigned days = 0;
-            for ( ; ; )
-            {
-                kdt.setTime(QTime(23,59,59));
-                nextOccurrence(kdt, newdt, IGNORE_REPETITION);
-                if (!newdt.isValid())
-                    return;
-                kdt = newdt.effectiveKDateTime();
-                int day = kdt.date().dayOfWeek() - 1;
-                if (mWorkDays.testBit(day))
-                    break;   // found a working day occurrence
-                // Prevent indefinite looping (which should never happen anyway)
-                if ((days & allDaysMask) == allDaysMask)
-                    return;  // found a recurrence on every possible day of the week!?!
-                days |= 1 << day;
-            }
-            kdt.setDateOnly(true);
-            mMainWorkTrigger = kdt;
-            mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
-            return;
-        }
-
-        // It's a date-only alarm which recurs on different days of the week,
-        // as does the sub-repetition.
-        // Find the previous recurrence (as opposed to sub-repetition)
-        unsigned days = 1 << (kdt.date().dayOfWeek() - 1);
-        KDateTime dt(nextTrigger.kDateTime().addDays(1));
-        dt.setTime(QTime(0,0,0));
-        previousOccurrence(dt, newdt, false);
-        if (!newdt.isValid())
-            return;   // this should never happen
-        kdt = newdt.effectiveKDateTime();
-        int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
-        for (int repeatNum = mNextRepeat;  ;  repeatNum = 0)
-        {
-            while (++repeatNum <= mRepetition.count())
-            {
-                int inc = repeatFreq * repeatNum;
-                if (mWorkDays.testBit((day + inc) % 7))
-                {
-                    kdt = kdt.addDays(inc);
-                    kdt.setDateOnly(true);
-                    mMainWorkTrigger = mAllWorkTrigger = kdt;
-                    return;
-                }
-                if ((days & allDaysMask) == allDaysMask)
-                    return;  // found an occurrence on every possible day of the week!?!
-                days |= 1 << day;
-            }
-            nextOccurrence(kdt, newdt, IGNORE_REPETITION);
-            if (!newdt.isValid())
-                return;
-            kdt = newdt.effectiveKDateTime();
-            day = kdt.date().dayOfWeek() - 1;
-            if (mWorkDays.testBit(day))
-            {
-                kdt.setDateOnly(true);
-                mMainWorkTrigger = kdt;
-                mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
-                return;
-            }
-            if ((days & allDaysMask) == allDaysMask)
-                return;  // found an occurrence on every possible day of the week!?!
-            days |= 1 << day;
-        }
-        return;
-    }
-
-    // It's a date-time alarm.
-
-    /* Check whether the recurrence or sub-repetition occurs at the same time
-     * every day. Note that because of seasonal time changes, a recurrence
-     * defined in terms of minutes will vary its time of day even if its value
-     * is a multiple of a day (24*60 minutes). Sub-repetitions are considered
-     * to repeat at the same time of day regardless of time changes if they
-     * are multiples of a day, which doesn't strictly conform to the iCalendar
-     * format because this only allows their interval to be recorded in seconds.
-     */
-    bool recurTimeVaries = (recurType == KARecurrence::MINUTELY);
-    bool repeatTimeVaries = (mRepetition  &&  !mRepetition.isDaily());
-
-    if (!recurTimeVaries  &&  !repeatTimeVaries)
-    {
-        // The alarm always occurs at the same time of day.
-        // Check whether it can ever occur during working hours.
-        if (!mayOccurDailyDuringWork(kdt))
-            return;   // never occurs during working hours
-
-        // Find the next working day it occurs on
-        bool repetition = false;
-        unsigned days = 0;
-        for ( ; ; )
-        {
-            OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
-            if (!newdt.isValid())
-                return;
-            repetition = (type & OCCURRENCE_REPEAT);
-            kdt = newdt.effectiveKDateTime();
-            int day = kdt.date().dayOfWeek() - 1;
-            if (mWorkDays.testBit(day))
-                break;   // found a working day occurrence
-            // Prevent indefinite looping (which should never happen anyway)
-            if (!repetition)
-            {
-                if ((days & allDaysMask) == allDaysMask)
-                    return;  // found a recurrence on every possible day of the week!?!
-                days |= 1 << day;
-            }
-        }
-        mMainWorkTrigger = nextTrigger;
-        mMainWorkTrigger.setDate(kdt.date());
-        mAllWorkTrigger = repetition ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
-        return;
-    }
-
-    // The alarm occurs at different times of day.
-    // We may need to check for a full annual cycle of seasonal time changes, in
-    // case it only occurs during working hours after a time change.
-    KTimeZone tz = kdt.timeZone();
-    if (tz.isValid()  &&  tz.type() == "KSystemTimeZone")
-    {
-        // It's a system time zone, so fetch full transition information
-        KTimeZone ktz = KSystemTimeZones::readZone(tz.name());
-        if (ktz.isValid())
-            tz = ktz;
-    }
-    QList<KTimeZone::Transition> tzTransitions = tz.transitions();
-
-    if (recurTimeVaries)
-    {
-        /* The alarm recurs at regular clock intervals, at different times of day.
-         * Note that for this type of recurrence, it's necessary to avoid the
-         * performance overhead of Recurrence class calls since these can in the
-         * worst case cause the program to hang for a significant length of time.
-         * In this case, we can calculate the next recurrence by simply adding the
-         * recurrence interval, since KAlarm offers no facility to regularly miss
-         * recurrences. (But exception dates/times need to be taken into account.)
-         */
-        KDateTime kdtRecur;
-        int repeatFreq = 0;
-        int repeatNum = 0;
-        if (mRepetition)
-        {
-            // It's a repetition inside a recurrence, each of which occurs
-            // at different times of day (bearing in mind that the repetition
-            // may occur at daily intervals after each recurrence).
-            // Find the previous recurrence (as opposed to sub-repetition)
-            repeatFreq = mRepetition.intervalSeconds();
-            previousOccurrence(kdt.addSecs(1), newdt, false);
-            if (!newdt.isValid())
-                return;   // this should never happen
-            kdtRecur = newdt.effectiveKDateTime();
-            repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
-            kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
-        }
-        else
-        {
-            // There is no sub-repetition.
-            // (N.B. Sub-repetitions can't exist without a recurrence.)
-            // Check until the original time wraps round, but ensure that
-            // if there are seasonal time changes, that all other subsequent
-            // time offsets within the next year are checked.
-            // This does not guarantee to find the next working time,
-            // particularly if there are exceptions, but it's a
-            // reasonable try.
-            kdtRecur = kdt;
-        }
-        QTime firstTime = kdtRecur.time();
-        int firstOffset = kdtRecur.utcOffset();
-        int currentOffset = firstOffset;
-        int dayRecur = kdtRecur.date().dayOfWeek() - 1;   // Monday = 0
-        int firstDay = dayRecur;
-        QDate finalDate;
-        bool subdaily = (repeatFreq < 24*3600);
-//        int period = mRecurrence->frequency() % (24*60);  // it is by definition a MINUTELY recurrence
-//        int limit = (24*60 + period - 1) / period;  // number of times until recurrence wraps round
-        int transitionIndex = -1;
-        for (int n = 0;  n < 7*24*60;  ++n)
-        {
-            if (mRepetition)
-            {
-                // Check the sub-repetitions for this recurrence
-                for ( ; ; )
-                {
-                    // Find the repeat count to the next start of the working day
-                    int inc = subdaily ? nextWorkRepetition(kdt) : 1;
-                    repeatNum += inc;
-                    if (repeatNum > mRepetition.count())
-                        break;
-                    kdt = kdt.addSecs(inc * repeatFreq);
-                    QTime t = kdt.time();
-                    if (t >= mWorkDayStart  &&  t < mWorkDayEnd)
-                    {
-                        if (mWorkDays.testBit(kdt.date().dayOfWeek() - 1))
-                        {
-                            mMainWorkTrigger = mAllWorkTrigger = kdt;
-                            return;
-                        }
-                    }
-                }
-                repeatNum = 0;
-            }
-            nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
-            if (!newdt.isValid())
-                return;
-            kdtRecur = newdt.effectiveKDateTime();
-            dayRecur = kdtRecur.date().dayOfWeek() - 1;   // Monday = 0
-            QTime t = kdtRecur.time();
-            if (t >= mWorkDayStart  &&  t < mWorkDayEnd)
-            {
-                if (mWorkDays.testBit(dayRecur))
-                {
-                    mMainWorkTrigger = kdtRecur;
-                    mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
-                    return;
-                }
-            }
-            if (kdtRecur.utcOffset() != currentOffset)
-                currentOffset = kdtRecur.utcOffset();
-            if (t == firstTime  &&  dayRecur == firstDay  &&  currentOffset == firstOffset)
-            {
-                // We've wrapped round to the starting day and time.
-                // If there are seasonal time changes, check for up
-                // to the next year in other time offsets in case the
-                // alarm occurs inside working hours then.
-                if (!finalDate.isValid())
-                    finalDate = kdtRecur.date();
-                int i = tz.transitionIndex(kdtRecur.toUtc().dateTime());
-                if (i < 0)
-                    return;
-                if (i > transitionIndex)
-                    transitionIndex = i;
-                if (++transitionIndex >= static_cast<int>(tzTransitions.count()))
-                    return;
-                previousOccurrence(KDateTime(tzTransitions[transitionIndex].time(), KDateTime::UTC), newdt, IGNORE_REPETITION);
-                kdtRecur = newdt.effectiveKDateTime();
-                if (finalDate.daysTo(kdtRecur.date()) > 365)
-                    return;
-                firstTime = kdtRecur.time();
-                firstOffset = kdtRecur.utcOffset();
-                currentOffset = firstOffset;
-                firstDay = kdtRecur.date().dayOfWeek() - 1;
-            }
-            kdt = kdtRecur;
-        }
-//kDebug()<<"-----exit loop: count="<<limit<<endl;
-        return;   // too many iterations
-    }
-
-    if (repeatTimeVaries)
-    {
-        /* There's a sub-repetition which occurs at different times of
-         * day, inside a recurrence which occurs at the same time of day.
-         * We potentially need to check recurrences starting on each day.
-         * Then, it is still possible that a working time sub-repetition
-         * could occur immediately after a seasonal time change.
-         */
-        // Find the previous recurrence (as opposed to sub-repetition)
-        int repeatFreq = mRepetition.intervalSeconds();
-        previousOccurrence(kdt.addSecs(1), newdt, false);
-        if (!newdt.isValid())
-            return;   // this should never happen
-        KDateTime kdtRecur = newdt.effectiveKDateTime();
-        bool recurDuringWork = (kdtRecur.time() >= mWorkDayStart  &&  kdtRecur.time() < mWorkDayEnd);
-
-        // Use the previous recurrence as a base for checking whether
-        // our tests have wrapped round to the same time/day of week.
-        bool subdaily = (repeatFreq < 24*3600);
-        unsigned days = 0;
-        bool checkTimeChangeOnly = false;
-        int transitionIndex = -1;
-        for (int limit = 10;  --limit >= 0;  )
-        {
-            // Check the next seasonal time change (for an arbitrary 10 times,
-            // even though that might not guarantee the correct result)
-            QDate dateRecur = kdtRecur.date();
-            int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
-            int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
-            kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
-
-            // Find the next recurrence, which sets the limit on possible sub-repetitions.
-            // Note that for a monthly recurrence, for example, a sub-repetition could
-            // be defined which is longer than the recurrence interval in short months.
-            // In these cases, the sub-repetition is truncated by the following
-            // recurrence.
-            nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
-            KDateTime kdtNextRecur = newdt.effectiveKDateTime();
-
-            int repeatsToCheck = mRepetition.count();
-            int repeatsDuringWork = 0;  // 0=unknown, 1=does, -1=never
-            for ( ; ; )
-            {
-                // Check the sub-repetitions for this recurrence
-                if (repeatsDuringWork >= 0)
-                {
-                    for ( ; ; )
-                    {
-                        // Find the repeat count to the next start of the working day
-                        int inc = subdaily ? nextWorkRepetition(kdt) : 1;
-                        repeatNum += inc;
-                        bool pastEnd = (repeatNum > mRepetition.count());
-                        if (pastEnd)
-                            inc -= repeatNum - mRepetition.count();
-                        repeatsToCheck -= inc;
-                        kdt = kdt.addSecs(inc * repeatFreq);
-                        if (kdtNextRecur.isValid()  &&  kdt >= kdtNextRecur)
-                        {
-                            // This sub-repetition is past the next recurrence,
-                            // so start the check again from the next recurrence.
-                            repeatsToCheck = mRepetition.count();
-                            break;
-                        }
-                        if (pastEnd)
-                            break;
-                        QTime t = kdt.time();
-                        if (t >= mWorkDayStart  &&  t < mWorkDayEnd)
-                        {
-                            if (mWorkDays.testBit(kdt.date().dayOfWeek() - 1))
-                            {
-                                mMainWorkTrigger = mAllWorkTrigger = kdt;
-                                return;
-                            }
-                            repeatsDuringWork = 1;
-                        }
-                        else if (!repeatsDuringWork  &&  repeatsToCheck <= 0)
-                        {
-                            // Sub-repetitions never occur during working hours
-                            repeatsDuringWork = -1;
-                            break;
-                        }
-                    }
-                }
-                repeatNum = 0;
-                if (repeatsDuringWork < 0  &&  !recurDuringWork)
-                    break;   // it never occurs during working hours
-
-                // Check the next recurrence
-                if (!kdtNextRecur.isValid())
-                    return;
-                if (checkTimeChangeOnly  ||  (days & allDaysMask) == allDaysMask)
-                    break;  // found a recurrence on every possible day of the week!?!
-                kdtRecur = kdtNextRecur;
-                nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
-                kdtNextRecur = newdt.effectiveKDateTime();
-                dateRecur = kdtRecur.date();
-                dayRecur = dateRecur.dayOfWeek() - 1;
-                if (recurDuringWork  &&  mWorkDays.testBit(dayRecur))
-                {
-                    mMainWorkTrigger = kdtRecur;
-                    mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
-                    return;
-                }
-                days |= 1 << dayRecur;
-                kdt = kdtRecur;
-            }
-
-            // Find the next recurrence before a seasonal time change,
-            // and ensure the time change is after the last one processed.
-            checkTimeChangeOnly = true;
-            int i = tz.transitionIndex(kdtRecur.toUtc().dateTime());
-            if (i < 0)
-                return;
-            if (i > transitionIndex)
-                transitionIndex = i;
-            if (++transitionIndex >= static_cast<int>(tzTransitions.count()))
-                return;
-            kdt = KDateTime(tzTransitions[transitionIndex].time(), KDateTime::UTC);
-            previousOccurrence(kdt, newdt, IGNORE_REPETITION);
-            kdtRecur = newdt.effectiveKDateTime();
-        }
-        return;  // not found - give up
-    }
-}
-
-/******************************************************************************
-* Find the repeat count to the next start of a working day.
-* This allows for possible daylight saving time changes during the repetition.
-* Use for repetitions which occur at different times of day.
-*/
-int KAEvent::Private::nextWorkRepetition(const KDateTime& pre) const
-{
-    KDateTime nextWork(pre);
-    if (pre.time() < mWorkDayStart)
-        nextWork.setTime(mWorkDayStart);
-    else
-    {
-        int preDay = pre.date().dayOfWeek() - 1;   // Monday = 0
-        for (int n = 1;  ;  ++n)
-        {
-            if (n >= 7)
-                return mRepetition.count() + 1;  // should never happen
-            if (mWorkDays.testBit((preDay + n) % 7))
-            {
-                nextWork = nextWork.addDays(n);
-                nextWork.setTime(mWorkDayStart);
-                break;
-            }
-        }
-    }
-    return (pre.secsTo(nextWork) - 1) / mRepetition.intervalSeconds() + 1;
-}
-
-/******************************************************************************
-* Check whether an alarm which recurs at the same time of day can possibly
-* occur during working hours.
-* This does not determine whether it actually does, but rather whether it could
-* potentially given enough repetitions.
-* Reply = false if it can never occur during working hours, true if it might.
-*/
-bool KAEvent::Private::mayOccurDailyDuringWork(const KDateTime& kdt) const
-{
-    if (!kdt.isDateOnly()
-    &&  (kdt.time() < mWorkDayStart || kdt.time() >= mWorkDayEnd))
-        return false;   // its time is outside working hours
-    // Check if it always occurs on the same day of the week
-    Duration interval = mRecurrence->regularInterval();
-    if (interval  &&  interval.isDaily()  &&  !(interval.asDays() % 7))
-    {
-        // It recurs weekly
-        if (!mRepetition  ||  (mRepetition.isDaily() && !(mRepetition.intervalDays() % 7)))
-            return false;   // any repetitions are also weekly
-        // Repetitions are daily. Check if any occur on working days
-        // by checking the first recurrence and up to 6 repetitions.
-        int day = mRecurrence->startDateTime().date().dayOfWeek() - 1;   // Monday = 0
-        int repeatDays = mRepetition.intervalDays();
-        int maxRepeat = (mRepetition.count() < 6) ? mRepetition.count() : 6;
-        for (int i = 0;  !mWorkDays.testBit(day);  ++i, day = (day + repeatDays) % 7)
-        {
-            if (i >= maxRepeat)
-                return false;  // no working day occurrences
-        }
-    }
-    return true;
-}
-
-/******************************************************************************
-* Check whether a date/time is during working hours and/or holidays, depending
-* on the flags set for the specified event.
-*/
-bool KAEvent::Private::isWorkingTime(const KDateTime& dt) const
-{
-    if ((mWorkTimeOnly  &&  !mWorkDays.testBit(dt.date().dayOfWeek() - 1))
-    ||  (mExcludeHolidays  &&  mHolidays  &&  mHolidays->isHoliday(dt.date())))
-        return false;
-    if (!mWorkTimeOnly)
-        return true;
-    return dt.isDateOnly()
-       ||  (dt.time() >= mWorkDayStart  &&  dt.time() < mWorkDayEnd);
-}
-
-int KAEvent::Private::flags() const
-{
-    if (mSpeak)
-        const_cast<KAEvent::Private*>(this)->mBeep = false;
-    return baseFlags()
-         | (mBeep                       ? BEEP : 0)
-         | (mRepeatSound                ? REPEAT_SOUND : 0)
-         | (mEmailBcc                   ? EMAIL_BCC : 0)
-         | (mStartDateTime.isDateOnly() ? ANY_TIME : 0)
-         | (mDeferral != NO_DEFERRAL    ? DEFERRAL : 0)
-         | (mSpeak                      ? SPEAK : 0)
-         | (mConfirmAck                 ? CONFIRM_ACK : 0)
-         | (mUseDefaultFont             ? DEFAULT_FONT : 0)
-         | (mCommandXterm               ? EXEC_IN_XTERM : 0)
-         | (mCommandDisplay             ? DISPLAY_COMMAND : 0)
-         | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
-         | (mExcludeHolidays            ? EXCL_HOLIDAYS : 0)
-         | (mWorkTimeOnly               ? WORK_TIME_ONLY : 0)
-         | (mReminderOnceOnly           ? REMINDER_ONCE : 0)
-         | (mDisplaying                 ? DISPLAYING_ : 0)
-         | (mEnabled                    ? 0 : DISABLED);
-}
-
-KAEvent::Actions KAEvent::actionTypes() const
-{
-    switch (d->mActionType)
-    {
-        case KAAlarmEventBase::T_MESSAGE:
-        case KAAlarmEventBase::T_FILE:     return ACT_DISPLAY;
-        case KAAlarmEventBase::T_COMMAND:  return d->mCommandDisplay ? ACT_DISPLAY_COMMAND : ACT_COMMAND;
-        case KAAlarmEventBase::T_EMAIL:    return ACT_EMAIL;
-        case KAAlarmEventBase::T_AUDIO:    return ACT_AUDIO;
-        default:                           return ACT_NONE;
-    }
-}
-
-#ifdef USE_AKONADI
-/******************************************************************************
-* Initialise an Item with the event.
-* Note that the event is not updated with the Item ID.
-* Reply = true if successful,
-*         false if event's category does not match collection's mime types.
-*/
-bool KAEvent::setItemPayload(Akonadi::Item& item, const QStringList& collectionMimeTypes) const
-{
-    QString mimetype;
-    switch (d->mCategory)
-    {
-        case KAlarm::CalEvent::ACTIVE:      mimetype = KAlarm::MIME_ACTIVE;    break;
-        case KAlarm::CalEvent::ARCHIVED:    mimetype = KAlarm::MIME_ARCHIVED;  break;
-        case KAlarm::CalEvent::TEMPLATE:    mimetype = KAlarm::MIME_TEMPLATE;  break;
-        default:                            Q_ASSERT(0);  return false;
-    }
-    if (!collectionMimeTypes.contains(mimetype))
-        return false;
-    item.setMimeType(mimetype);
-    item.setPayload<KAEvent>(*this);
-    return true;
-}
-#endif
-
 /******************************************************************************
 * Update an existing KCal::Event with the KAEvent::Private data.
 * If 'setCustomProperties' is true, all the KCal::Event's existing custom
 * properties are cleared and replaced with the KAEvent's custom properties. If
 * false, the KCal::Event's non-KAlarm custom properties are left untouched.
 */
+#ifdef USE_AKONADI
+bool KAEvent::updateKCalEvent(const KCalCore::Event::Ptr& e, UidAction u, bool setCustomProperties) const
+{
+    return d->updateKCalEvent(e, u, setCustomProperties);
+}
+
+#else
+bool KAEvent::updateKCalEvent(KCal::Event* e, UidAction u) const
+{
+    return d->updateKCalEvent(e, u);
+}
+#endif
+
 #ifdef USE_AKONADI
 bool KAEvent::Private::updateKCalEvent(const Event::Ptr& ev, UidAction uidact, bool setCustomProperties) const
 #else
@@ -2525,229 +1661,612 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
     return alarm;
 }
 
-/******************************************************************************
-* Set the specified alarm to be an audio alarm with the given file name.
-*/
+bool KAEvent::isValid() const
+{
+    return d->mAlarmCount  &&  (d->mAlarmCount != 1 || !d->mRepeatAtLogin);
+}
+
+void KAEvent::setEnabled(bool enable)
+{
+    d->mEnabled = enable;
+}
+
+bool KAEvent::enabled() const
+{
+    return d->mEnabled;
+}
+
 #ifdef USE_AKONADI
-void KAEvent::Private::setAudioAlarm(const Alarm::Ptr& alarm) const
-#else
-void KAEvent::Private::setAudioAlarm(Alarm* alarm) const
+void KAEvent::setReadOnly(bool ro)
+{
+    d->mReadOnly = ro;
+}
+
+bool KAEvent::isReadOnly() const
+{
+    return d->mReadOnly;
+}
 #endif
+
+void KAEvent::setArchive()
 {
-    alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
-    if (mSoundVolume >= 0)
-        alarm->setCustomProperty(KAlarm::Calendar::APPNAME, VOLUME_PROPERTY,
-                      QString::fromLatin1("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2))
-                                                     .arg(QString::number(mFadeVolume, 'f', 2))
-                                                     .arg(mFadeSeconds));
+    d->mArchive = true;
+}
+
+bool KAEvent::toBeArchived() const
+{
+    return d->mArchive;
+}
+
+bool KAEvent::mainExpired() const
+{
+    return d->mMainExpired;
+}
+
+bool KAEvent::expired() const
+{
+    return (d->mDisplaying && d->mMainExpired)  ||  d->mCategory == KAlarm::CalEvent::ARCHIVED;
+}
+
+int KAEvent::flags() const
+{
+    return d->flags();
+}
+
+int KAEvent::Private::flags() const
+{
+    if (mSpeak)
+        const_cast<KAEvent::Private*>(this)->mBeep = false;
+    return baseFlags()
+         | (mBeep                       ? BEEP : 0)
+         | (mRepeatSound                ? REPEAT_SOUND : 0)
+         | (mEmailBcc                   ? EMAIL_BCC : 0)
+         | (mStartDateTime.isDateOnly() ? ANY_TIME : 0)
+         | (mDeferral != NO_DEFERRAL    ? DEFERRAL : 0)
+         | (mSpeak                      ? SPEAK : 0)
+         | (mConfirmAck                 ? CONFIRM_ACK : 0)
+         | (mUseDefaultFont             ? DEFAULT_FONT : 0)
+         | (mCommandXterm               ? EXEC_IN_XTERM : 0)
+         | (mCommandDisplay             ? DISPLAY_COMMAND : 0)
+         | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
+         | (mExcludeHolidays            ? EXCL_HOLIDAYS : 0)
+         | (mWorkTimeOnly               ? WORK_TIME_ONLY : 0)
+         | (mReminderOnceOnly           ? REMINDER_ONCE : 0)
+         | (mDisplaying                 ? DISPLAYING_ : 0)
+         | (mEnabled                    ? 0 : DISABLED);
 }
 
 /******************************************************************************
-* Return the alarm of the specified type.
+* Change the type of an event.
+* If it is being set to archived, set the archived indication in the event ID;
+* otherwise, remove the archived indication from the event ID.
 */
-KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
+void KAEvent::setCategory(KAlarm::CalEvent::Type s)
 {
-    checkRecur();     // ensure recurrence/repetition data is consistent
-    KAAlarm al;       // this sets type to INVALID_ALARM
-    if (mAlarmCount)
+    d->setCategory(s);
+}
+
+void KAEvent::Private::setCategory(KAlarm::CalEvent::Type s)
+{
+    if (s == mCategory)
+        return;
+    mEventID = KAlarm::CalEvent::uid(mEventID, s);
+    mCategory = s;
+    mTriggerChanged = true;   // templates and archived don't have trigger times
+}
+
+KAlarm::CalEvent::Type KAEvent::category() const
+{
+    return d->mCategory;
+}
+
+void KAEvent::setEventId(const QString& id)
+{
+    d->mEventID = id;
+}
+
+const QString& KAEvent::id() const
+{
+    return d->mEventID;
+}
+
+void KAEvent::incrementRevision()
+{
+    ++d->mRevision;
+}
+
+int KAEvent::revision() const
+{
+    return d->mRevision;
+}
+
+#ifdef USE_AKONADI
+void KAEvent::setItemId(Akonadi::Item::Id id)
+{
+    d->mItemId = id;
+}
+
+Akonadi::Item::Id KAEvent::itemId() const
+{
+    return d->mItemId;
+}
+
+/******************************************************************************
+* Initialise an Item with the event.
+* Note that the event is not updated with the Item ID.
+* Reply = true if successful,
+*         false if event's category does not match collection's mime types.
+*/
+bool KAEvent::setItemPayload(Akonadi::Item& item, const QStringList& collectionMimeTypes) const
+{
+    QString mimetype;
+    switch (d->mCategory)
     {
-        al.mActionType     = mActionType;
-        al.mText           = mText;
-        al.mRepeatAtLogin  = false;
-        al.mDeferred       = false;
-        al.mLateCancel     = mLateCancel;
-        al.mAutoClose      = mAutoClose;
-        al.mCommandScript  = mCommandScript;
-        switch (type)
+        case KAlarm::CalEvent::ACTIVE:      mimetype = KAlarm::MIME_ACTIVE;    break;
+        case KAlarm::CalEvent::ARCHIVED:    mimetype = KAlarm::MIME_ARCHIVED;  break;
+        case KAlarm::CalEvent::TEMPLATE:    mimetype = KAlarm::MIME_TEMPLATE;  break;
+        default:                            Q_ASSERT(0);  return false;
+    }
+    if (!collectionMimeTypes.contains(mimetype))
+        return false;
+    item.setMimeType(mimetype);
+    item.setPayload<KAEvent>(*this);
+    return true;
+}
+
+void KAEvent::setCompatibility(KAlarm::Calendar::Compat c)
+{
+    d->mCompatibility = c;
+}
+
+KAlarm::Calendar::Compat KAEvent::compatibility() const
+{
+    return d->mCompatibility;
+}
+
+QMap<QByteArray, QString> KAEvent::customProperties() const
+{
+    return d->mCustomProperties;
+}
+
+#else
+void KAEvent::setResource(AlarmResource* r)
+{
+    d->mResource = r;
+}
+
+AlarmResource* KAEvent::resource() const
+{
+    return d->mResource;
+}
+#endif
+
+KAEvent::SubAction KAEvent::actionSubType() const
+{
+    return (SubAction)d->mActionType;
+}
+
+KAEvent::Actions KAEvent::actionTypes() const
+{
+    switch (d->mActionType)
+    {
+        case KAAlarmEventBase::T_MESSAGE:
+        case KAAlarmEventBase::T_FILE:     return ACT_DISPLAY;
+        case KAAlarmEventBase::T_COMMAND:  return d->mCommandDisplay ? ACT_DISPLAY_COMMAND : ACT_COMMAND;
+        case KAAlarmEventBase::T_EMAIL:    return ACT_EMAIL;
+        case KAAlarmEventBase::T_AUDIO:    return ACT_AUDIO;
+        default:                           return ACT_NONE;
+    }
+}
+
+void KAEvent::setLateCancel(int minutes)
+{
+    d->mLateCancel = minutes;
+}
+
+int KAEvent::lateCancel() const
+{
+    return d->lateCancel();
+}
+
+void KAEvent::setAutoClose(bool ac)
+{
+    d->mAutoClose = ac;
+}
+
+bool KAEvent::autoClose() const
+{
+    return d->mAutoClose;
+}
+
+void KAEvent::setKMailSerialNumber(unsigned long n)
+{
+    d->mKMailSerialNumber = n;
+}
+
+unsigned long KAEvent::kmailSerialNumber() const
+{
+    return d->mKMailSerialNumber;
+}
+
+QString KAEvent::cleanText() const
+{
+    return d->mText;
+}
+
+QString KAEvent::message() const
+{
+    return (d->mActionType == KAAlarmEventBase::T_MESSAGE
+         || d->mActionType == KAAlarmEventBase::T_EMAIL) ? d->mText : QString();
+}
+
+QString KAEvent::displayMessage() const
+{
+    return (d->mActionType == KAAlarmEventBase::T_MESSAGE) ? d->mText : QString();
+}
+
+QString KAEvent::fileName() const
+{
+    return (d->mActionType == KAAlarmEventBase::T_FILE) ? d->mText : QString();
+}
+
+QColor KAEvent::bgColour() const
+{
+    return d->mBgColour;
+}
+
+QColor KAEvent::fgColour() const
+{
+    return d->mFgColour;
+}
+
+void KAEvent::setDefaultFont(const QFont& f)
+{
+    Private::mDefaultFont = f;
+}
+
+bool KAEvent::useDefaultFont() const
+{
+    return d->mUseDefaultFont;
+}
+
+QFont KAEvent::font() const
+{
+    return d->mUseDefaultFont ? Private::mDefaultFont : d->mFont;
+}
+
+QString KAEvent::command() const
+{
+    return (d->mActionType == KAAlarmEventBase::T_COMMAND) ? d->mText : QString();
+}
+
+bool KAEvent::commandScript() const
+{
+    return d->mCommandScript;
+}
+
+bool KAEvent::commandXterm() const
+{
+    return d->mCommandXterm;
+}
+
+bool KAEvent::commandDisplay() const
+{
+    return d->mCommandDisplay;
+}
+
+#ifdef USE_AKONADI
+void KAEvent::setCommandError(CmdErrType t) const
+{
+    d->mCommandError = t;
+}
+
+#else
+/******************************************************************************
+* Set the command last error status.
+* If 'writeConfig' is true, the status is written to the config file.
+*/
+void KAEvent::setCommandError(CmdErrType t, bool writeConfig) const
+{
+    d->setCommandError(t, writeConfig);
+}
+
+void KAEvent::Private::setCommandError(CmdErrType error, bool writeConfig) const
+{
+    kDebug() << mEventID << "," << error;
+    if (error == mCommandError)
+        return;
+    mCommandError = error;
+    if (writeConfig)
+    {
+        KConfigGroup config(KGlobal::config(), mCmdErrConfigGroup);
+        if (mCommandError == CMD_NO_ERROR)
+            config.deleteEntry(mEventID);
+        else
         {
-            case KAAlarm::MAIN_ALARM:
-                if (!mMainExpired)
-                {
-                    al.mType             = KAAlarm::MAIN__ALARM;
-                    al.mNextMainDateTime = mNextMainDateTime;
-                    al.mRepetition       = mRepetition;
-                    al.mNextRepeat       = mNextRepeat;
-                }
-                break;
-            case KAAlarm::REMINDER_ALARM:
-                if (mReminderActive == ACTIVE_REMINDER)
-                {
-                    al.mType = KAAlarm::REMINDER__ALARM;
-                    if (mReminderMinutes < 0)
-                        al.mNextMainDateTime = mReminderAfterTime;
-                    else if (mReminderOnceOnly)
-                        al.mNextMainDateTime = mStartDateTime.addMins(-mReminderMinutes);
-                    else
-                        al.mNextMainDateTime = mNextMainDateTime.addMins(-mReminderMinutes);
-                }
-                break;
-            case KAAlarm::DEFERRED_REMINDER_ALARM:
-                if (mDeferral != REMINDER_DEFERRAL)
+            QString errtext;
+            switch (mCommandError)
+            {
+                case CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
+                case CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
+                case CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
+                case CMD_ERROR_PRE_POST:
+                    errtext = CMD_ERROR_PRE_VALUE + ',' + CMD_ERROR_POST_VALUE;
                     break;
-                // fall through to DEFERRED_ALARM
-            case KAAlarm::DEFERRED_ALARM:
-                if (mDeferral != NO_DEFERRAL)
-                {
-                    al.mType = static_cast<KAAlarm::SubType>((mDeferral == REMINDER_DEFERRAL ? KAAlarm::DEFERRED_REMINDER_ALARM : KAAlarm::DEFERRED_ALARM)
-                                                             | (mDeferralTime.isDateOnly() ? 0 : KAAlarm::TIMED_DEFERRAL_FLAG));
-                    al.mNextMainDateTime = mDeferralTime;
-                    al.mDeferred         = true;
-                }
-                break;
-            case KAAlarm::AT_LOGIN_ALARM:
-                if (mRepeatAtLogin)
-                {
-                    al.mType             = KAAlarm::AT_LOGIN__ALARM;
-                    al.mNextMainDateTime = mAtLoginDateTime;
-                    al.mRepeatAtLogin    = true;
-                    al.mLateCancel       = 0;
-                    al.mAutoClose        = false;
-                }
-                break;
-            case KAAlarm::DISPLAYING_ALARM:
-                if (mDisplaying)
-                {
-                    al.mType             = KAAlarm::DISPLAYING__ALARM;
-                    al.mNextMainDateTime = mDisplayingTime;
-                }
-                break;
-            case KAAlarm::AUDIO_ALARM:
-            case KAAlarm::PRE_ACTION_ALARM:
-            case KAAlarm::POST_ACTION_ALARM:
-            case KAAlarm::INVALID_ALARM:
-            default:
-                break;
+                default:
+                    break;
+            }
+            config.writeEntry(mEventID, errtext);
         }
+        config.sync();
     }
-    return al;
 }
 
 /******************************************************************************
-* Return the main alarm for the event.
-* If the main alarm does not exist, one of the subsidiary ones is returned if
-* possible.
-* N.B. a repeat-at-login alarm can only be returned if it has been read from/
-* written to the calendar file.
+* Initialise the command last error status of the alarm from the config file.
 */
-KAAlarm KAEvent::Private::firstAlarm() const
+void KAEvent::setCommandError(const QString& configString)
 {
-    if (mAlarmCount)
+    d->setCommandError(configString);
+}
+
+void KAEvent::Private::setCommandError(const QString& configString)
+{
+    mCommandError = CMD_NO_ERROR;
+    const QStringList errs = configString.split(',');
+    if (errs.indexOf(CMD_ERROR_VALUE) >= 0)
+        mCommandError = CMD_ERROR;
+    else
     {
-        if (!mMainExpired)
-            return alarm(KAAlarm::MAIN_ALARM);
-        return nextAlarm(KAAlarm::MAIN_ALARM);
+        if (errs.indexOf(CMD_ERROR_PRE_VALUE) >= 0)
+            mCommandError = CMD_ERROR_PRE;
+        if (errs.indexOf(CMD_ERROR_POST_VALUE) >= 0)
+            mCommandError = static_cast<CmdErrType>(mCommandError | CMD_ERROR_POST);
     }
-    return KAAlarm();
+}
+
+QString KAEvent::commandErrorConfigGroup()
+{
+    return Private::mCmdErrConfigGroup;
+}
+#endif
+
+KAEvent::CmdErrType KAEvent::commandError() const
+{
+    return d->mCommandError;
+}
+
+void KAEvent::setLogFile(const QString& logfile)
+{
+    d->mLogFile = logfile;
+    if (!logfile.isEmpty())
+        d->mCommandDisplay = d->mCommandXterm = false;
+}
+
+QString KAEvent::logFile() const
+{
+    return d->mLogFile;
+}
+
+bool KAEvent::confirmAck() const
+{
+    return d->mConfirmAck;
+}
+
+bool KAEvent::copyToKOrganizer() const
+{
+    return d->mCopyToKOrganizer;
+}
+
+void KAEvent::setEmail(uint from, const EmailAddressList& addresses, const QString& subject, const QStringList& attachments)
+{
+    d->mEmailFromIdentity = from;
+    d->mEmailAddresses    = addresses;
+    d->mEmailSubject      = subject;
+    d->mEmailAttachments  = attachments;
+}
+
+QString KAEvent::emailMessage() const
+{
+    return (d->mActionType == KAAlarmEventBase::T_EMAIL) ? d->mText : QString();
+}
+
+uint KAEvent::emailFromId() const
+{
+    return d->mEmailFromIdentity;
+}
+
+EmailAddressList KAEvent::emailAddresses() const
+{
+    return d->mEmailAddresses;
+}
+
+QString KAEvent::emailAddresses(const QString& sep) const
+{
+    return d->mEmailAddresses.join(sep);
+}
+
+QStringList KAEvent::emailPureAddresses() const
+{
+    return d->mEmailAddresses.pureAddresses();
+}
+
+QString KAEvent::emailPureAddresses(const QString& sep) const
+{
+    return d->mEmailAddresses.pureAddresses(sep);
+}
+
+QString KAEvent::emailSubject() const
+{
+    return d->mEmailSubject;
+}
+
+QStringList KAEvent::emailAttachments() const
+{
+    return d->mEmailAttachments;
+}
+
+QString KAEvent::emailAttachments(const QString& sep) const
+{
+    return d->mEmailAttachments.join(sep);
+}
+
+bool KAEvent::emailBcc() const
+{
+    return d->mEmailBcc;
+}
+
+void KAEvent::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile)
+{
+    d->setAudioFile(filename, volume, fadeVolume, fadeSeconds, allowEmptyFile);
+}
+
+void KAEvent::Private::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile)
+{
+    mAudioFile = filename;
+    mSoundVolume = (!allowEmptyFile && filename.isEmpty()) ? -1 : volume;
+    if (mSoundVolume >= 0)
+    {
+        mFadeVolume  = (fadeSeconds > 0) ? fadeVolume : -1;
+        mFadeSeconds = (mFadeVolume >= 0) ? fadeSeconds : 0;
+    }
+    else
+    {
+        mFadeVolume  = -1;
+        mFadeSeconds = 0;
+    }
+}
+
+const QString& KAEvent::audioFile() const
+{
+    return d->mAudioFile;
+}
+
+float KAEvent::soundVolume() const
+{
+    return d->mSoundVolume;
+}
+
+float KAEvent::fadeVolume() const
+{
+    return d->mSoundVolume >= 0 && d->mFadeSeconds ? d->mFadeVolume : -1;
+}
+
+int KAEvent::fadeSeconds() const
+{
+    return d->mSoundVolume >= 0 && d->mFadeVolume >= 0 ? d->mFadeSeconds : 0;
+}
+
+bool KAEvent::repeatSound() const
+{
+    return d->mRepeatSound;
+}
+
+bool KAEvent::beep() const
+{
+    return d->mBeep;
+}
+
+bool KAEvent::speak() const
+{
+    return (d->mActionType == KAAlarmEventBase::T_MESSAGE
+            ||  (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay))
+        && d->mSpeak;
 }
 
 /******************************************************************************
-* Return the next alarm for the event, after the specified alarm.
-* N.B. a repeat-at-login alarm can only be returned if it has been read from/
-* written to the calendar file.
+* Set the event to be an alarm template.
 */
-KAAlarm KAEvent::Private::nextAlarm(KAAlarm::Type prevType) const
+void KAEvent::setTemplate(const QString& name, int afterTime)
 {
-    switch (prevType)
-    {
-        case KAAlarm::MAIN_ALARM:
-            if (mReminderActive == ACTIVE_REMINDER)
-                return alarm(KAAlarm::REMINDER_ALARM);
-            // fall through to REMINDER_ALARM
-        case KAAlarm::REMINDER_ALARM:
-            // There can only be one deferral alarm
-            if (mDeferral == REMINDER_DEFERRAL)
-                return alarm(KAAlarm::DEFERRED_REMINDER_ALARM);
-            if (mDeferral == NORMAL_DEFERRAL)
-                return alarm(KAAlarm::DEFERRED_ALARM);
-            // fall through to DEFERRED_ALARM
-        case KAAlarm::DEFERRED_REMINDER_ALARM:
-        case KAAlarm::DEFERRED_ALARM:
-            if (mRepeatAtLogin)
-                return alarm(KAAlarm::AT_LOGIN_ALARM);
-            // fall through to AT_LOGIN_ALARM
-        case KAAlarm::AT_LOGIN_ALARM:
-            if (mDisplaying)
-                return alarm(KAAlarm::DISPLAYING_ALARM);
-            // fall through to DISPLAYING_ALARM
-        case KAAlarm::DISPLAYING_ALARM:
-            // fall through to default
-        case KAAlarm::AUDIO_ALARM:
-        case KAAlarm::PRE_ACTION_ALARM:
-        case KAAlarm::POST_ACTION_ALARM:
-        case KAAlarm::INVALID_ALARM:
-        default:
-            break;
-    }
-    return KAAlarm();
+    d->setCategory(KAlarm::CalEvent::TEMPLATE);
+    d->mTemplateName = name;
+    d->mTemplateAfterTime = afterTime;
+    d->mTriggerChanged = true;   // templates and archived don't have trigger times
+}
+
+bool KAEvent::isTemplate() const
+{
+    return !d->mTemplateName.isEmpty();
+}
+
+const QString& KAEvent::templateName() const
+{
+    return d->mTemplateName;
+}
+
+bool KAEvent::usingDefaultTime() const
+{
+    return d->mTemplateAfterTime == 0;
+}
+
+int KAEvent::templateAfterTime() const
+{
+    return d->mTemplateAfterTime;
+}
+
+void KAEvent::setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError)
+{
+    d->mPreAction = pre;
+    d->mPostAction = post;
+    d->mCancelOnPreActErr = cancelOnError;
+    d->mDontShowPreActErr = dontShowError;
+}
+
+const QString& KAEvent::preAction() const
+{
+    return d->mPreAction;
+}
+
+const QString& KAEvent::postAction() const
+{
+    return d->mPostAction;
+}
+
+bool KAEvent::cancelOnPreActionError() const
+{
+    return d->mCancelOnPreActErr;
+}
+
+bool KAEvent::dontShowPreActionError() const
+{
+    return d->mDontShowPreActErr;
 }
 
 /******************************************************************************
-* Remove the alarm of the specified type from the event.
-* This must only be called to remove an alarm which has expired, not to
-* reconfigure the event.
+* Set a reminder.
+* 'minutes' = number of minutes BEFORE the main alarm.
 */
-void KAEvent::Private::removeExpiredAlarm(KAAlarm::Type type)
+void KAEvent::setReminder(int minutes, bool onceOnly)
 {
-    int count = mAlarmCount;
-    switch (type)
+    d->setReminder(minutes, onceOnly);
+}
+
+void KAEvent::Private::setReminder(int minutes, bool onceOnly)
+{
+    if (minutes != mReminderMinutes  ||  (minutes && mReminderActive != ACTIVE_REMINDER))
     {
-        case KAAlarm::MAIN_ALARM:
-            if (!mReminderActive  ||  mReminderMinutes > 0)
-            {
-                mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
-                break;
-            }
-            // There is a reminder after the main alarm - retain the
-            // reminder and remove other subsidiary alarms.
-            mMainExpired = true;    // mark the alarm as expired now
+        if (minutes  &&  mReminderActive == NO_REMINDER)
+            ++mAlarmCount;
+        else if (!minutes  &&  mReminderActive != NO_REMINDER)
             --mAlarmCount;
-            set_deferral(NO_DEFERRAL);
-            if (mDisplaying)
-            {
-                mDisplaying = false;
-                --mAlarmCount;
-            }
-            // fall through to AT_LOGIN_ALARM
-        case KAAlarm::AT_LOGIN_ALARM:
-            if (mRepeatAtLogin)
-            {
-                // Remove the at-login alarm, but keep a note of it for archiving purposes
-                mArchiveRepeatAtLogin = true;
-                mRepeatAtLogin = false;
-                --mAlarmCount;
-            }
-            break;
-        case KAAlarm::REMINDER_ALARM:
-            // Remove any reminder alarm, but keep a note of it for archiving purposes
-            // and for restoration after the next recurrence.
-            activate_reminder(false);
-            break;
-        case KAAlarm::DEFERRED_REMINDER_ALARM:
-        case KAAlarm::DEFERRED_ALARM:
-            set_deferral(NO_DEFERRAL);
-            break;
-        case KAAlarm::DISPLAYING_ALARM:
-            if (mDisplaying)
-            {
-                mDisplaying = false;
-                --mAlarmCount;
-            }
-            break;
-        case KAAlarm::AUDIO_ALARM:
-        case KAAlarm::PRE_ACTION_ALARM:
-        case KAAlarm::POST_ACTION_ALARM:
-        case KAAlarm::INVALID_ALARM:
-        default:
-            break;
-    }
-    if (mAlarmCount != count)
+        mReminderMinutes   = minutes;
+        mReminderActive    = minutes ? ACTIVE_REMINDER : NO_REMINDER;
+        mReminderOnceOnly  = onceOnly;
+        mReminderAfterTime = DateTime();
         mTriggerChanged = true;
+    }
 }
 
 /******************************************************************************
 * Activate the event's reminder which occurs AFTER the given main alarm time.
 * Reply = true if successful (i.e. reminder falls before the next main alarm).
 */
+void KAEvent::activateReminderAfter(const DateTime& mainAlarmTime)
+{
+    d->activateReminderAfter(mainAlarmTime);
+}
+
 void KAEvent::Private::activateReminderAfter(const DateTime& mainAlarmTime)
 {
     if (mReminderMinutes >= 0  ||  mReminderActive == ACTIVE_REMINDER  ||  !mainAlarmTime.isValid())
@@ -2781,17 +2300,40 @@ void KAEvent::Private::activateReminderAfter(const DateTime& mainAlarmTime)
     mReminderAfterTime = reminderTime;
 }
 
+int KAEvent::reminderMinutes() const
+{
+    return d->mReminderMinutes;
+}
+
+bool KAEvent::reminderActive() const
+{
+    return d->mReminderActive == Private::ACTIVE_REMINDER;
+}
+
+bool KAEvent::reminderOnceOnly() const
+{
+    return d->mReminderOnceOnly;
+}
+
+bool KAEvent::reminderDeferral() const
+{
+    return d->mDeferral == Private::REMINDER_DEFERRAL;
+}
+
 /******************************************************************************
 * Defer the event to the specified time.
 * If the main alarm time has passed, the main alarm is marked as expired.
 * If 'adjustRecurrence' is true, ensure that the next scheduled recurrence is
 * after the current time.
-* Reply = true if a repetition has been deferred.
 */
-bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjustRecurrence)
+void KAEvent::defer(const DateTime& dt, bool reminder, bool adjustRecurrence)
+{
+    return d->defer(dt, reminder, adjustRecurrence);
+}
+
+void KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjustRecurrence)
 {
     startChanges();   // prevent multiple trigger time evaluation here
-    bool result = false;
     bool setNextRepetition = false;
     bool checkRepetition = false;
     bool checkReminderAfter = false;
@@ -2913,12 +2455,16 @@ bool KAEvent::Private::defer(const DateTime& dateTime, bool reminder, bool adjus
         mTriggerChanged = true;
     }
     endChanges();
-    return result;
 }
 
 /******************************************************************************
 * Cancel any deferral alarm.
 */
+void KAEvent::cancelDefer()
+{
+    d->cancelDefer();
+}
+
 void KAEvent::Private::cancelDefer()
 {
     if (mDeferral != NO_DEFERRAL)
@@ -2929,9 +2475,30 @@ void KAEvent::Private::cancelDefer()
     }
 }
 
+void KAEvent::setDeferDefaultMinutes(int minutes, bool dateOnly)
+{
+    d->mDeferDefaultMinutes = minutes;
+    d->mDeferDefaultDateOnly = dateOnly;
+}
+
+bool KAEvent::deferred() const
+{
+    return d->mDeferral > 0;
+}
+
+DateTime KAEvent::deferDateTime() const
+{
+    return d->mDeferralTime;
+}
+
 /******************************************************************************
 * Find the latest time which the alarm can currently be deferred to.
 */
+DateTime KAEvent::deferralLimit(DeferLimitType* limitType) const
+{
+    return d->deferralLimit(limitType);
+}
+
 DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
 {
     DeferLimitType ltype = LIMIT_NONE;
@@ -2983,545 +2550,236 @@ DateTime KAEvent::Private::deferralLimit(DeferLimitType* limitType) const
     return endTime;
 }
 
-#ifndef USE_AKONADI
-/******************************************************************************
-* Initialise the command last error status of the alarm from the config file.
-*/
-void KAEvent::Private::setCommandError(const QString& configString)
+int KAEvent::deferDefaultMinutes() const
 {
-    mCommandError = CMD_NO_ERROR;
-    const QStringList errs = configString.split(',');
-    if (errs.indexOf(CMD_ERROR_VALUE) >= 0)
-        mCommandError = CMD_ERROR;
-    else
-    {
-        if (errs.indexOf(CMD_ERROR_PRE_VALUE) >= 0)
-            mCommandError = CMD_ERROR_PRE;
-        if (errs.indexOf(CMD_ERROR_POST_VALUE) >= 0)
-            mCommandError = static_cast<CmdErrType>(mCommandError | CMD_ERROR_POST);
-    }
+    return d->mDeferDefaultMinutes;
+}
+
+bool KAEvent::deferDefaultDateOnly() const
+{
+    return d->mDeferDefaultDateOnly;
+}
+
+const DateTime& KAEvent::startDateTime() const
+{
+    return d->mStartDateTime;
+}
+
+void KAEvent::setTime(const KDateTime& dt)
+{
+    d->mNextMainDateTime = dt;
+    d->mTriggerChanged = true;
+}
+
+DateTime KAEvent::mainDateTime(bool withRepeats) const
+{
+    return d->mainDateTime(withRepeats);
+}
+
+QDate KAEvent::mainDate() const
+{
+    return d->mNextMainDateTime.date();
+}
+
+QTime KAEvent::mainTime() const
+{
+    return d->mNextMainDateTime.effectiveTime();
+}
+
+DateTime KAEvent::mainEndRepeatTime() const
+{
+    return d->mainEndRepeatTime();
 }
 
 /******************************************************************************
-* Set the command last error status.
-* If 'writeConfig' is true, the status is written to the config file.
+* Set the start-of-day time for date-only alarms.
 */
-void KAEvent::Private::setCommandError(CmdErrType error, bool writeConfig) const
+void KAEvent::setStartOfDay(const QTime& startOfDay)
 {
-    kDebug() << mEventID << "," << error;
-    if (error == mCommandError)
-        return;
-    mCommandError = error;
-    if (writeConfig)
+    DateTime::setStartOfDay(startOfDay);
+#ifdef __GNUC__
+#warning Does this need all trigger times for date-only alarms to be recalculated?
+#endif
+}
+
+/******************************************************************************
+* Called when the user changes the start-of-day time.
+* Adjust the start time of the recurrence to match, for each date-only event in
+* a list.
+*/
+void KAEvent::adjustStartOfDay(const KAEvent::List& events)
+{
+    for (int i = 0, end = events.count();  i < end;  ++i)
     {
-        KConfigGroup config(KGlobal::config(), mCmdErrConfigGroup);
-        if (mCommandError == CMD_NO_ERROR)
-            config.deleteEntry(mEventID);
-        else
+        Private* p = events[i]->d;
+        if (p->mStartDateTime.isDateOnly()  &&  p->checkRecur() != KARecurrence::NO_RECUR)
+            p->mRecurrence->setStartDateTime(p->mStartDateTime.effectiveKDateTime(), true);
+    }
+}
+
+DateTime KAEvent::nextTrigger(TriggerType type) const
+{
+    d->calcTriggerTimes();
+    switch (type)
+    {
+        case ALL_TRIGGER:       return d->mAllTrigger;
+        case MAIN_TRIGGER:      return d->mMainTrigger;
+        case ALL_WORK_TRIGGER:  return d->mAllWorkTrigger;
+        case WORK_TRIGGER:      return d->mMainWorkTrigger;
+        case DISPLAY_TRIGGER:
         {
-            QString errtext;
-            switch (mCommandError)
-            {
-                case CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
-                case CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
-                case CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
-                case CMD_ERROR_PRE_POST:
-                    errtext = CMD_ERROR_PRE_VALUE + ',' + CMD_ERROR_POST_VALUE;
-                    break;
-                default:
-                    break;
-            }
-            config.writeEntry(mEventID, errtext);
+            bool reminderAfter = d->mMainExpired && d->mReminderActive && d->mReminderMinutes < 0;
+            return (d->mWorkTimeOnly || d->mExcludeHolidays)
+                   ? (reminderAfter ? d->mAllWorkTrigger : d->mMainWorkTrigger)
+                   : (reminderAfter ? d->mAllTrigger : d->mMainTrigger);
         }
-        config.sync();
+        default:                return DateTime();
     }
 }
-#endif
 
-/******************************************************************************
-* Set the event to be a copy of the specified event, making the specified
-* alarm the 'displaying' alarm.
-* The purpose of setting up a 'displaying' alarm is to be able to reinstate
-* the alarm message in case of a crash, or to reinstate it should the user
-* choose to defer the alarm. Note that even repeat-at-login alarms need to be
-* saved in case their end time expires before the next login.
-* Reply = true if successful, false if alarm was not copied.
-*/
-#ifdef USE_AKONADI
-bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Type alarmType, Akonadi::Collection::Id collectionId,
-                                     const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
-#else
-bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Type alarmType, const QString& resourceID,
-                                     const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
-#endif
+void KAEvent::setCreatedDateTime(const KDateTime& dt)
 {
-    if (!mDisplaying
-    &&  (alarmType == KAAlarm::MAIN_ALARM
-      || alarmType == KAAlarm::REMINDER_ALARM
-      || alarmType == KAAlarm::DEFERRED_REMINDER_ALARM
-      || alarmType == KAAlarm::DEFERRED_ALARM
-      || alarmType == KAAlarm::AT_LOGIN_ALARM))
-    {
-//kDebug()<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
-        KAAlarm al = event.alarm(alarmType);
-        if (al.isValid())
-        {
-            *this = event;
-            // Change the event ID to avoid duplicating the same unique ID as the original event
-            setCategory(KAlarm::CalEvent::DISPLAYING);
-#ifdef USE_AKONADI
-            mItemId               = -1;    // the display event doesn't have an associated Item
-            mOriginalCollectionId = collectionId;;
-#else
-            mOriginalResourceId   = resourceID;
-#endif
-            mDisplayingDefer      = showDefer;
-            mDisplayingEdit       = showEdit;
-            mDisplaying           = true;
-            mDisplayingTime       = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
-            switch (al.subType())
-            {
-                case KAAlarm::AT_LOGIN__ALARM:                mDisplayingFlags = REPEAT_AT_LOGIN;  break;
-                case KAAlarm::REMINDER__ALARM:                mDisplayingFlags = REMINDER;  break;
-                case KAAlarm::DEFERRED_REMINDER_TIME__ALARM:  mDisplayingFlags = REMINDER | TIME_DEFERRAL;  break;
-                case KAAlarm::DEFERRED_REMINDER_DATE__ALARM:  mDisplayingFlags = REMINDER | DATE_DEFERRAL;  break;
-                case KAAlarm::DEFERRED_TIME__ALARM:           mDisplayingFlags = TIME_DEFERRAL;  break;
-                case KAAlarm::DEFERRED_DATE__ALARM:           mDisplayingFlags = DATE_DEFERRAL;  break;
-                default:                                      mDisplayingFlags = 0;  break;
-            }
-            ++mAlarmCount;
-            return true;
-        }
-    }
-    return false;
+    d->mCreatedDateTime = dt;
+}
+
+KDateTime KAEvent::createdDateTime() const
+{
+    return d->mCreatedDateTime;
 }
 
 /******************************************************************************
-* Reinstate the original event from the 'displaying' event.
+* Set or clear repeat-at-login.
 */
-#ifdef USE_AKONADI
-void KAEvent::Private::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, Akonadi::Collection::Id& collectionId, bool& showEdit, bool& showDefer)
-#else
-void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
-#endif
+void KAEvent::setRepeatAtLogin(bool rl)
 {
-    set(kcalEvent);
-    if (mDisplaying)
-    {
-        // Retrieve the original event's unique ID
-        setCategory(KAlarm::CalEvent::ACTIVE);
-#ifdef USE_AKONADI
-        collectionId = mOriginalCollectionId;
-        mOriginalCollectionId = -1;
-#else
-        resourceID   = mOriginalResourceId;
-        mOriginalResourceId.clear();
-#endif
-        showDefer    = mDisplayingDefer;
-        showEdit     = mDisplayingEdit;
-        mDisplaying  = false;
+    d->setRepeatAtLogin(rl);
+}
+
+void KAEvent::Private::setRepeatAtLogin(bool rl)
+{
+    clearRecur();   // repeat-at-login is incompatible with recurrences
+    if (rl  &&  !mRepeatAtLogin)
+        ++mAlarmCount;
+    else if (!rl  &&  mRepeatAtLogin)
         --mAlarmCount;
+    mRepeatAtLogin = rl;
+    if (mRepeatAtLogin)
+    {
+        // Cancel pre-alarm reminder, late-cancel and copy-to-KOrganizer
+        if (mReminderMinutes >= 0)
+            setReminder(0, false);
+        mLateCancel = 0;
+        mAutoClose = false;
+        mCopyToKOrganizer = false;
     }
+    mTriggerChanged = true;
+}
+
+bool KAEvent::repeatAtLogin(bool includeArchived) const
+{
+    return d->mRepeatAtLogin || (includeArchived && d->mArchiveRepeatAtLogin);
+}
+
+void KAEvent::setExcludeHolidays(bool ex)
+{
+    d->mExcludeHolidays = ex ? Private::mHolidays : 0;
+    d->mTriggerChanged = true;
+}
+
+bool KAEvent::holidaysExcluded() const
+{
+    return d->mExcludeHolidays;
 }
 
 /******************************************************************************
-* Return the original alarm which the displaying alarm refers to.
-* Note that the caller is responsible for ensuring that the event was a
-* displaying event, since this is normally called after
-* reinstateFromDisplaying(), which clears mDisplaying.
+* Set a new holiday region.
+* Alarms which exclude holidays record the pointer to the holiday definition
+* at the time their next trigger times were last calculated. The change in
+* holiday definition pointer will cause their next trigger times to be
+* recalculated.
 */
-KAAlarm KAEvent::convertDisplayingAlarm() const
+void KAEvent::setHolidays(const HolidayRegion& h)
 {
-    KAAlarm al = alarm(KAAlarm::DISPLAYING_ALARM);
-    int displayingFlags = d->mDisplayingFlags;
-    if (displayingFlags & REPEAT_AT_LOGIN)
-    {
-        al.mRepeatAtLogin = true;
-        al.mType = KAAlarm::AT_LOGIN__ALARM;
-    }
-    else if (displayingFlags & DEFERRAL)
-    {
-        al.mDeferred = true;
-        al.mType = (displayingFlags == (REMINDER | DATE_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_DATE__ALARM
-             : (displayingFlags == (REMINDER | TIME_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_TIME__ALARM
-             : (displayingFlags == DATE_DEFERRAL) ? KAAlarm::DEFERRED_DATE__ALARM
-             : KAAlarm::DEFERRED_TIME__ALARM;
-    }
-    else if (displayingFlags & REMINDER)
-        al.mType = KAAlarm::REMINDER__ALARM;
-    else
-        al.mType = KAAlarm::MAIN__ALARM;
-    return al;
+    Private::mHolidays = &h;
+}
+
+void KAEvent::setWorkTimeOnly(bool wto)
+{
+    d->mWorkTimeOnly = wto;
+    d->mTriggerChanged = true;
+}
+
+bool KAEvent::workTimeOnly() const
+{
+    return d->mWorkTimeOnly;
 }
 
 /******************************************************************************
-* Determine whether the event will occur after the specified date/time.
-* If 'includeRepetitions' is true and the alarm has a sub-repetition, it
-* returns true if any repetitions occur after the specified date/time.
+* Check whether a date/time is during working hours and/or holidays, depending
+* on the flags set for the specified event.
 */
-bool KAEvent::Private::occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const
+bool KAEvent::isWorkingTime(const KDateTime& dt) const
 {
-    KDateTime dt;
-    if (checkRecur() != KARecurrence::NO_RECUR)
-    {
-        if (mRecurrence->duration() < 0)
-            return true;    // infinite recurrence
-        dt = mRecurrence->endDateTime();
-    }
-    else
-        dt = mNextMainDateTime.effectiveKDateTime();
-    if (mStartDateTime.isDateOnly())
-    {
-        QDate pre = preDateTime.date();
-        if (preDateTime.toTimeSpec(mStartDateTime.timeSpec()).time() < DateTime::startOfDay())
-            pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
-        if (pre < dt.date())
-            return true;
-    }
-    else if (preDateTime < dt)
+    return d->isWorkingTime(dt);
+}
+
+bool KAEvent::Private::isWorkingTime(const KDateTime& dt) const
+{
+    if ((mWorkTimeOnly  &&  !mWorkDays.testBit(dt.date().dayOfWeek() - 1))
+    ||  (mExcludeHolidays  &&  mHolidays  &&  mHolidays->isHoliday(dt.date())))
+        return false;
+    if (!mWorkTimeOnly)
         return true;
-
-    if (includeRepetitions  &&  mRepetition)
-    {
-        if (preDateTime < mRepetition.duration().end(dt))
-            return true;
-    }
-    return false;
+    return dt.isDateOnly()
+       ||  (dt.time() >= mWorkDayStart  &&  dt.time() < mWorkDayEnd);
 }
 
 /******************************************************************************
-* Get the date/time of the next occurrence of the event, after the specified
-* date/time.
-* 'result' = date/time of next occurrence, or invalid date/time if none.
+* Set new working days and times.
+* Increment a counter so that working-time-only alarms can detect that they
+* need to update their next trigger time.
 */
-KAEvent::OccurType KAEvent::Private::nextOccurrence(const KDateTime& preDateTime, DateTime& result,
-                                                    OccurOption includeRepetitions) const
+void KAEvent::setWorkTime(const QBitArray& days, const QTime& start, const QTime& end)
 {
-    KDateTime pre = preDateTime;
-    if (includeRepetitions != IGNORE_REPETITION)
-    {                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
-        if (!mRepetition)
-            includeRepetitions = IGNORE_REPETITION;
-        else
-            pre = mRepetition.duration(-mRepetition.count()).end(preDateTime);
-    }
-
-    OccurType type;
-    bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
-    if (recurs)
-        type = nextRecurrence(pre, result);
-    else if (pre < mNextMainDateTime.effectiveKDateTime())
+    if (days != Private::mWorkDays  ||  start != Private::mWorkDayStart  ||  end != Private::mWorkDayEnd)
     {
-        result = mNextMainDateTime;
-        type = FIRST_OR_ONLY_OCCURRENCE;
+        Private::mWorkDays     = days;
+        Private::mWorkDayStart = start;
+        Private::mWorkDayEnd   = end;
+        if (!++Private::mWorkTimeIndex)
+            ++Private::mWorkTimeIndex;
     }
-    else
-    {
-        result = DateTime();
-        type = NO_OCCURRENCE;
-    }
-
-    if (type != NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != IGNORE_REPETITION)
-    {                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
-        // The next occurrence is a sub-repetition
-        int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
-        DateTime repeatDT = mRepetition.duration(repetition).end(result.kDateTime());
-        if (recurs)
-        {
-            // We've found a recurrence before the specified date/time, which has
-            // a sub-repetition after the date/time.
-            // However, if the intervals between recurrences vary, we could possibly
-            // have missed a later recurrence which fits the criterion, so check again.
-            DateTime dt;
-            OccurType newType = previousOccurrence(repeatDT.effectiveKDateTime(), dt, false);
-            if (dt > result)
-            {
-                type = newType;
-                result = dt;
-                if (includeRepetitions == RETURN_REPETITION  &&  result <= preDateTime)
-                {
-                    // The next occurrence is a sub-repetition
-                    int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
-                    result = mRepetition.duration(repetition).end(result.kDateTime());
-                    type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
-                }
-                return type;
-            }
-        }
-        if (includeRepetitions == RETURN_REPETITION)
-        {
-            // The next occurrence is a sub-repetition
-            result = repeatDT;
-            type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
-        }
-    }
-    return type;
 }
 
 /******************************************************************************
-* Get the date/time of the last previous occurrence of the event, before the
-* specified date/time.
-* If 'includeRepetitions' is true and the alarm has a sub-repetition, the
-* last previous repetition is returned if appropriate.
-* 'result' = date/time of previous occurrence, or invalid date/time if none.
+* Clear the event's recurrence and alarm repetition data.
 */
-KAEvent::OccurType KAEvent::Private::previousOccurrence(const KDateTime& afterDateTime, DateTime& result,
-                                                        bool includeRepetitions) const
+void KAEvent::setNoRecur()
 {
-    Q_ASSERT(!afterDateTime.isDateOnly());
-    if (mStartDateTime >= afterDateTime)
-    {
-        result = KDateTime();
-        return NO_OCCURRENCE;     // the event starts after the specified date/time
-    }
-
-    // Find the latest recurrence of the event
-    OccurType type;
-    if (checkRecur() == KARecurrence::NO_RECUR)
-    {
-        result = mStartDateTime;
-        type = FIRST_OR_ONLY_OCCURRENCE;
-    }
-    else
-    {
-        KDateTime recurStart = mRecurrence->startDateTime();
-        KDateTime after = afterDateTime.toTimeSpec(mStartDateTime.timeSpec());
-        if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > DateTime::startOfDay())
-            after = after.addDays(1);    // today's recurrence (if today recurs) has passed
-        KDateTime dt = mRecurrence->getPreviousDateTime(after);
-        result = dt;
-        result.setDateOnly(mStartDateTime.isDateOnly());
-        if (!dt.isValid())
-            return NO_OCCURRENCE;
-        if (dt == recurStart)
-            type = FIRST_OR_ONLY_OCCURRENCE;
-        else if (mRecurrence->getNextDateTime(dt).isValid())
-            type = result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
-        else
-            type = LAST_RECURRENCE;
-    }
-
-    if (includeRepetitions  &&  mRepetition)
-    {
-        // Find the latest repetition which is before the specified time.
-        int repetition = mRepetition.previousRepeatCount(result.effectiveKDateTime(), afterDateTime);
-        if (repetition > 0)
-        {
-            result = mRepetition.duration(qMin(repetition, mRepetition.count())).end(result.kDateTime());
-            return static_cast<OccurType>(type | OCCURRENCE_REPEAT);
-        }
-    }
-    return type;
+    d->clearRecur();
 }
 
-/******************************************************************************
-* Set the date/time of the event to the next scheduled occurrence after the
-* specified date/time, provided that this is later than its current date/time.
-* Any reminder alarm is adjusted accordingly.
-* If the alarm has a sub-repetition, and a repetition of a previous recurrence
-* occurs after the specified date/time, that repetition is set as the next
-* occurrence.
-*/
-KAEvent::OccurType KAEvent::Private::setNextOccurrence(const KDateTime& preDateTime)
+void KAEvent::Private::clearRecur()
 {
-    if (preDateTime < mNextMainDateTime.effectiveKDateTime())
-        return FIRST_OR_ONLY_OCCURRENCE;    // it might not be the first recurrence - tant pis
-    KDateTime pre = preDateTime;
-    // If there are repetitions, adjust the comparison date/time so that
-    // we find the earliest recurrence which has a repetition falling after
-    // the specified preDateTime.
-    if (mRepetition)
-        pre = mRepetition.duration(-mRepetition.count()).end(preDateTime);
-
-    DateTime afterPre;          // next recurrence after 'pre'
-    OccurType type;
-    if (pre < mNextMainDateTime.effectiveKDateTime())
+    if (mRecurrence || mRepetition)
     {
-        afterPre = mNextMainDateTime;
-        type = FIRST_OR_ONLY_OCCURRENCE;   // may not actually be the first occurrence
-    }
-    else if (checkRecur() != KARecurrence::NO_RECUR)
-    {
-        type = nextRecurrence(pre, afterPre);
-        if (type == NO_OCCURRENCE)
-            return NO_OCCURRENCE;
-        if (type != FIRST_OR_ONLY_OCCURRENCE  &&  afterPre != mNextMainDateTime)
-        {
-            // Need to reschedule the next trigger date/time
-            mNextMainDateTime = afterPre;
-            if (mReminderMinutes > 0  &&  (mDeferral == REMINDER_DEFERRAL || mReminderActive != ACTIVE_REMINDER))
-            {
-                // Reinstate the advance reminder for the rescheduled recurrence.
-                // Note that a reminder AFTER the main alarm will be left active.
-                activate_reminder(!mReminderOnceOnly);
-            }
-            if (mDeferral == REMINDER_DEFERRAL)
-                set_deferral(NO_DEFERRAL);
-            mTriggerChanged = true;
-        }
-    }
-    else
-        return NO_OCCURRENCE;
-
-    if (mRepetition)
-    {
-        if (afterPre <= preDateTime)
-        {
-            // The next occurrence is a sub-repetition.
-            type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
-            mNextRepeat = mRepetition.nextRepeatCount(afterPre.effectiveKDateTime(), preDateTime);
-            // Repetitions can't have a reminder, so remove any.
-            activate_reminder(false);
-            if (mDeferral == REMINDER_DEFERRAL)
-                set_deferral(NO_DEFERRAL);
-            mTriggerChanged = true;
-        }
-        else if (mNextRepeat)
-        {
-            // The next occurrence is the main occurrence, not a repetition
-            mNextRepeat = 0;
-            mTriggerChanged = true;
-        }
-    }
-    return type;
-}
-
-/******************************************************************************
-* Get the date/time of the next recurrence of the event, after the specified
-* date/time.
-* 'result' = date/time of next occurrence, or invalid date/time if none.
-*/
-KAEvent::OccurType KAEvent::Private::nextRecurrence(const KDateTime& preDateTime, DateTime& result) const
-{
-    KDateTime recurStart = mRecurrence->startDateTime();
-    KDateTime pre = preDateTime.toTimeSpec(mStartDateTime.timeSpec());
-    if (mStartDateTime.isDateOnly()  &&  !pre.isDateOnly()  &&  pre.time() < DateTime::startOfDay())
-    {
-        pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
-        pre.setTime(DateTime::startOfDay());
-    }
-    KDateTime dt = mRecurrence->getNextDateTime(pre);
-    result = dt;
-    result.setDateOnly(mStartDateTime.isDateOnly());
-    if (!dt.isValid())
-        return NO_OCCURRENCE;
-    if (dt == recurStart)
-        return FIRST_OR_ONLY_OCCURRENCE;
-    if (mRecurrence->duration() >= 0  &&  dt == mRecurrence->endDateTime())
-        return LAST_RECURRENCE;
-    return result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
-}
-
-/******************************************************************************
-* Return the recurrence interval as text suitable for display.
-*/
-QString KAEvent::recurrenceText(bool brief) const
-{
-    if (d->mRepeatAtLogin)
-        return brief ? i18nc("@info/plain Brief form of 'At Login'", "Login") : i18nc("@info/plain", "At login");
-    if (d->mRecurrence)
-    {
-        int frequency = d->mRecurrence->frequency();
-        switch (d->mRecurrence->defaultRRuleConst()->recurrenceType())
-        {
-            case RecurrenceRule::rMinutely:
-                if (frequency < 60)
-                    return i18ncp("@info/plain", "1 Minute", "%1 Minutes", frequency);
-                else if (frequency % 60 == 0)
-                    return i18ncp("@info/plain", "1 Hour", "%1 Hours", frequency/60);
-                else
-                {
-                    QString mins;
-                    return i18nc("@info/plain Hours and minutes", "%1h %2m", frequency/60, mins.sprintf("%02d", frequency%60));
-                }
-            case RecurrenceRule::rDaily:
-                return i18ncp("@info/plain", "1 Day", "%1 Days", frequency);
-            case RecurrenceRule::rWeekly:
-                return i18ncp("@info/plain", "1 Week", "%1 Weeks", frequency);
-            case RecurrenceRule::rMonthly:
-                return i18ncp("@info/plain", "1 Month", "%1 Months", frequency);
-            case RecurrenceRule::rYearly:
-                return i18ncp("@info/plain", "1 Year", "%1 Years", frequency);
-            case RecurrenceRule::rNone:
-            default:
-                break;
-        }
-    }
-    return brief ? QString() : i18nc("@info/plain No recurrence", "None");
-}
-
-/******************************************************************************
-* Return the repetition interval as text suitable for display.
-*/
-QString KAEvent::repetitionText(bool brief) const
-{
-    if (d->mRepetition)
-    {
-        if (!d->mRepetition.isDaily())
-        {
-            int minutes = d->mRepetition.intervalMinutes();
-            if (minutes < 60)
-                return i18ncp("@info/plain", "1 Minute", "%1 Minutes", minutes);
-            if (minutes % 60 == 0)
-                return i18ncp("@info/plain", "1 Hour", "%1 Hours", minutes/60);
-            QString mins;
-            return i18nc("@info/plain Hours and minutes", "%1h %2m", minutes/60, mins.sprintf("%02d", minutes%60));
-        }
-        int days = d->mRepetition.intervalDays();
-        if (days % 7)
-            return i18ncp("@info/plain", "1 Day", "%1 Days", days);
-        return i18ncp("@info/plain", "1 Week", "%1 Weeks", days / 7);
-    }
-    return brief ? QString() : i18nc("@info/plain No repetition", "None");
-}
-
-/******************************************************************************
-* Adjust the event date/time to the first recurrence of the event, on or after
-* start date/time. The event start date may not be a recurrence date, in which
-* case a later date will be set.
-*/
-void KAEvent::Private::setFirstRecurrence()
-{
-    switch (checkRecur())
-    {
-        case KARecurrence::NO_RECUR:
-        case KARecurrence::MINUTELY:
-            return;
-        case KARecurrence::ANNUAL_DATE:
-        case KARecurrence::ANNUAL_POS:
-            if (mRecurrence->yearMonths().isEmpty())
-                return;    // (presumably it's a template)
-            break;
-        case KARecurrence::DAILY:
-        case KARecurrence::WEEKLY:
-        case KARecurrence::MONTHLY_POS:
-        case KARecurrence::MONTHLY_DAY:
-            break;
-    }
-    KDateTime recurStart = mRecurrence->startDateTime();
-    if (mRecurrence->recursOn(recurStart.date(), recurStart.timeSpec()))
-        return;           // it already recurs on the start date
-
-    // Set the frequency to 1 to find the first possible occurrence
-    int frequency = mRecurrence->frequency();
-    mRecurrence->setFrequency(1);
-    DateTime next;
-    nextRecurrence(mNextMainDateTime.effectiveKDateTime(), next);
-    if (!next.isValid())
-        mRecurrence->setStartDateTime(recurStart, mStartDateTime.isDateOnly());   // reinstate the old value
-    else
-    {
-        mRecurrence->setStartDateTime(next.effectiveKDateTime(), next.isDateOnly());
-        mStartDateTime = mNextMainDateTime = next;
+        delete mRecurrence;
+        mRecurrence = 0;
+        mRepetition.set(0, 0);
         mTriggerChanged = true;
     }
-    mRecurrence->setFrequency(frequency);    // restore the frequency
+    mNextRepeat = 0;
 }
 
 /******************************************************************************
 * Initialise the event's recurrence from a KCal::Recurrence.
 * The event's start date/time is not changed.
 */
+void KAEvent::setRecurrence(const KARecurrence& recurrence)
+{
+    d->setRecurrence(recurrence);
+}
+
 void KAEvent::Private::setRecurrence(const KARecurrence& recurrence)
 {
     startChanges();   // prevent multiple trigger time evaluation here
@@ -3543,60 +2801,6 @@ void KAEvent::Private::setRecurrence(const KARecurrence& recurrence)
     setRepetition(mRepetition);
 
     endChanges();
-}
-
-/******************************************************************************
-* Called when the user changes the start-of-day time.
-* Adjust the start time of the recurrence to match, for each date-only event in
-* a list.
-*/
-void KAEvent::adjustStartOfDay(const KAEvent::List& events)
-{
-    for (int i = 0, end = events.count();  i < end;  ++i)
-    {
-        Private* p = events[i]->d;
-        if (p->mStartDateTime.isDateOnly()  &&  p->checkRecur() != KARecurrence::NO_RECUR)
-            p->mRecurrence->setStartDateTime(p->mStartDateTime.effectiveKDateTime(), true);
-    }
-}
-
-/******************************************************************************
-* Initialise the event's sub-repetition.
-* The repetition length is adjusted if necessary to fit the recurrence interval.
-* If the event doesn't recur, the sub-repetition is cleared.
-* Reply = false if a non-daily interval was specified for a date-only recurrence.
-*/
-bool KAEvent::Private::setRepetition(const Repetition& repetition)
-{
-    // Don't set mRepetition to zero at the start of this function, in case the
-    // 'repetition' parameter passed in is a reference to mRepetition.
-    mNextRepeat = 0;
-    if (repetition  &&  !mRepeatAtLogin)
-    {
-        Q_ASSERT(checkRecur() != KARecurrence::NO_RECUR);
-        if (!repetition.isDaily()  &&  mStartDateTime.isDateOnly())
-        {
-            mRepetition.set(0, 0);
-            return false;    // interval must be in units of days for date-only alarms
-        }
-        Duration longestInterval = mRecurrence->longestInterval();
-        if (repetition.duration() >= longestInterval)
-        {
-            int count = mStartDateTime.isDateOnly()
-                      ? (longestInterval.asDays() - 1) / repetition.intervalDays()
-                      : (longestInterval.asSeconds() - 1) / repetition.intervalSeconds();
-            mRepetition.set(repetition.interval(), count);
-        }
-        else
-            mRepetition = repetition;
-        mTriggerChanged = true;
-    }
-    else if (mRepetition)
-    {
-        mRepetition.set(0, 0);
-        mTriggerChanged = true;
-    }
-    return true;
 }
 
 /******************************************************************************
@@ -3798,25 +3002,1974 @@ bool KAEvent::Private::setRecur(RecurrenceRule::PeriodType recurType, int freq, 
     return false;
 }
 
-/******************************************************************************
-* Clear the event's recurrence and alarm repetition data.
-*/
-void KAEvent::Private::clearRecur()
+bool KAEvent::recurs() const
 {
-    if (mRecurrence || mRepetition)
+    return d->checkRecur() != KARecurrence::NO_RECUR;
+}
+
+KARecurrence::Type KAEvent::recurType() const
+{
+    return d->checkRecur();
+}
+
+KARecurrence* KAEvent::recurrence() const
+{
+    return d->mRecurrence;
+}
+
+/******************************************************************************
+* Return the recurrence interval in units of the recurrence period type.
+*/
+int KAEvent::recurInterval() const
+{
+    if (d->mRecurrence)
     {
-        delete mRecurrence;
-        mRecurrence = 0;
+        switch (d->mRecurrence->type())
+        {
+            case KARecurrence::MINUTELY:
+            case KARecurrence::DAILY:
+            case KARecurrence::WEEKLY:
+            case KARecurrence::MONTHLY_DAY:
+            case KARecurrence::MONTHLY_POS:
+            case KARecurrence::ANNUAL_DATE:
+            case KARecurrence::ANNUAL_POS:
+                return d->mRecurrence->frequency();
+            default:
+                break;
+        }
+    }
+    return 0;
+}
+
+Duration KAEvent::longestRecurrenceInterval() const
+{
+    return d->mRecurrence ? d->mRecurrence->longestInterval() : Duration(0);
+}
+
+/******************************************************************************
+* Adjust the event date/time to the first recurrence of the event, on or after
+* start date/time. The event start date may not be a recurrence date, in which
+* case a later date will be set.
+*/
+void KAEvent::setFirstRecurrence()
+{
+    d->setFirstRecurrence();
+}
+
+void KAEvent::Private::setFirstRecurrence()
+{
+    switch (checkRecur())
+    {
+        case KARecurrence::NO_RECUR:
+        case KARecurrence::MINUTELY:
+            return;
+        case KARecurrence::ANNUAL_DATE:
+        case KARecurrence::ANNUAL_POS:
+            if (mRecurrence->yearMonths().isEmpty())
+                return;    // (presumably it's a template)
+            break;
+        case KARecurrence::DAILY:
+        case KARecurrence::WEEKLY:
+        case KARecurrence::MONTHLY_POS:
+        case KARecurrence::MONTHLY_DAY:
+            break;
+    }
+    KDateTime recurStart = mRecurrence->startDateTime();
+    if (mRecurrence->recursOn(recurStart.date(), recurStart.timeSpec()))
+        return;           // it already recurs on the start date
+
+    // Set the frequency to 1 to find the first possible occurrence
+    int frequency = mRecurrence->frequency();
+    mRecurrence->setFrequency(1);
+    DateTime next;
+    nextRecurrence(mNextMainDateTime.effectiveKDateTime(), next);
+    if (!next.isValid())
+        mRecurrence->setStartDateTime(recurStart, mStartDateTime.isDateOnly());   // reinstate the old value
+    else
+    {
+        mRecurrence->setStartDateTime(next.effectiveKDateTime(), next.isDateOnly());
+        mStartDateTime = mNextMainDateTime = next;
+        mTriggerChanged = true;
+    }
+    mRecurrence->setFrequency(frequency);    // restore the frequency
+}
+
+/******************************************************************************
+* Return the recurrence interval as text suitable for display.
+*/
+QString KAEvent::recurrenceText(bool brief) const
+{
+    if (d->mRepeatAtLogin)
+        return brief ? i18nc("@info/plain Brief form of 'At Login'", "Login") : i18nc("@info/plain", "At login");
+    if (d->mRecurrence)
+    {
+        int frequency = d->mRecurrence->frequency();
+        switch (d->mRecurrence->defaultRRuleConst()->recurrenceType())
+        {
+            case RecurrenceRule::rMinutely:
+                if (frequency < 60)
+                    return i18ncp("@info/plain", "1 Minute", "%1 Minutes", frequency);
+                else if (frequency % 60 == 0)
+                    return i18ncp("@info/plain", "1 Hour", "%1 Hours", frequency/60);
+                else
+                {
+                    QString mins;
+                    return i18nc("@info/plain Hours and minutes", "%1h %2m", frequency/60, mins.sprintf("%02d", frequency%60));
+                }
+            case RecurrenceRule::rDaily:
+                return i18ncp("@info/plain", "1 Day", "%1 Days", frequency);
+            case RecurrenceRule::rWeekly:
+                return i18ncp("@info/plain", "1 Week", "%1 Weeks", frequency);
+            case RecurrenceRule::rMonthly:
+                return i18ncp("@info/plain", "1 Month", "%1 Months", frequency);
+            case RecurrenceRule::rYearly:
+                return i18ncp("@info/plain", "1 Year", "%1 Years", frequency);
+            case RecurrenceRule::rNone:
+            default:
+                break;
+        }
+    }
+    return brief ? QString() : i18nc("@info/plain No recurrence", "None");
+}
+
+/******************************************************************************
+* Initialise the event's sub-repetition.
+* The repetition length is adjusted if necessary to fit the recurrence interval.
+* If the event doesn't recur, the sub-repetition is cleared.
+* Reply = false if a non-daily interval was specified for a date-only recurrence.
+*/
+bool KAEvent::setRepetition(const Repetition& r)
+{
+    return d->setRepetition(r);
+}
+
+bool KAEvent::Private::setRepetition(const Repetition& repetition)
+{
+    // Don't set mRepetition to zero at the start of this function, in case the
+    // 'repetition' parameter passed in is a reference to mRepetition.
+    mNextRepeat = 0;
+    if (repetition  &&  !mRepeatAtLogin)
+    {
+        Q_ASSERT(checkRecur() != KARecurrence::NO_RECUR);
+        if (!repetition.isDaily()  &&  mStartDateTime.isDateOnly())
+        {
+            mRepetition.set(0, 0);
+            return false;    // interval must be in units of days for date-only alarms
+        }
+        Duration longestInterval = mRecurrence->longestInterval();
+        if (repetition.duration() >= longestInterval)
+        {
+            int count = mStartDateTime.isDateOnly()
+                      ? (longestInterval.asDays() - 1) / repetition.intervalDays()
+                      : (longestInterval.asSeconds() - 1) / repetition.intervalSeconds();
+            mRepetition.set(repetition.interval(), count);
+        }
+        else
+            mRepetition = repetition;
+        mTriggerChanged = true;
+    }
+    else if (mRepetition)
+    {
         mRepetition.set(0, 0);
         mTriggerChanged = true;
     }
-    mNextRepeat = 0;
+    return true;
+}
+
+const Repetition& KAEvent::repetition() const
+{
+    return d->mRepetition;
+}
+
+int KAEvent::nextRepetition() const
+{
+    return d->mNextRepeat;
+}
+
+/******************************************************************************
+* Return the repetition interval as text suitable for display.
+*/
+QString KAEvent::repetitionText(bool brief) const
+{
+    if (d->mRepetition)
+    {
+        if (!d->mRepetition.isDaily())
+        {
+            int minutes = d->mRepetition.intervalMinutes();
+            if (minutes < 60)
+                return i18ncp("@info/plain", "1 Minute", "%1 Minutes", minutes);
+            if (minutes % 60 == 0)
+                return i18ncp("@info/plain", "1 Hour", "%1 Hours", minutes/60);
+            QString mins;
+            return i18nc("@info/plain Hours and minutes", "%1h %2m", minutes/60, mins.sprintf("%02d", minutes%60));
+        }
+        int days = d->mRepetition.intervalDays();
+        if (days % 7)
+            return i18ncp("@info/plain", "1 Day", "%1 Days", days);
+        return i18ncp("@info/plain", "1 Week", "%1 Weeks", days / 7);
+    }
+    return brief ? QString() : i18nc("@info/plain No repetition", "None");
+}
+
+/******************************************************************************
+* Determine whether the event will occur after the specified date/time.
+* If 'includeRepetitions' is true and the alarm has a sub-repetition, it
+* returns true if any repetitions occur after the specified date/time.
+*/
+bool KAEvent::occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const
+{
+    return d->occursAfter(preDateTime, includeRepetitions);
+}
+
+bool KAEvent::Private::occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const
+{
+    KDateTime dt;
+    if (checkRecur() != KARecurrence::NO_RECUR)
+    {
+        if (mRecurrence->duration() < 0)
+            return true;    // infinite recurrence
+        dt = mRecurrence->endDateTime();
+    }
+    else
+        dt = mNextMainDateTime.effectiveKDateTime();
+    if (mStartDateTime.isDateOnly())
+    {
+        QDate pre = preDateTime.date();
+        if (preDateTime.toTimeSpec(mStartDateTime.timeSpec()).time() < DateTime::startOfDay())
+            pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
+        if (pre < dt.date())
+            return true;
+    }
+    else if (preDateTime < dt)
+        return true;
+
+    if (includeRepetitions  &&  mRepetition)
+    {
+        if (preDateTime < mRepetition.duration().end(dt))
+            return true;
+    }
+    return false;
+}
+
+/******************************************************************************
+* Set the date/time of the event to the next scheduled occurrence after the
+* specified date/time, provided that this is later than its current date/time.
+* Any reminder alarm is adjusted accordingly.
+* If the alarm has a sub-repetition, and a repetition of a previous recurrence
+* occurs after the specified date/time, that repetition is set as the next
+* occurrence.
+*/
+KAEvent::OccurType KAEvent::setNextOccurrence(const KDateTime& preDateTime)
+{
+    return d->setNextOccurrence(preDateTime);
+}
+
+KAEvent::OccurType KAEvent::Private::setNextOccurrence(const KDateTime& preDateTime)
+{
+    if (preDateTime < mNextMainDateTime.effectiveKDateTime())
+        return FIRST_OR_ONLY_OCCURRENCE;    // it might not be the first recurrence - tant pis
+    KDateTime pre = preDateTime;
+    // If there are repetitions, adjust the comparison date/time so that
+    // we find the earliest recurrence which has a repetition falling after
+    // the specified preDateTime.
+    if (mRepetition)
+        pre = mRepetition.duration(-mRepetition.count()).end(preDateTime);
+
+    DateTime afterPre;          // next recurrence after 'pre'
+    OccurType type;
+    if (pre < mNextMainDateTime.effectiveKDateTime())
+    {
+        afterPre = mNextMainDateTime;
+        type = FIRST_OR_ONLY_OCCURRENCE;   // may not actually be the first occurrence
+    }
+    else if (checkRecur() != KARecurrence::NO_RECUR)
+    {
+        type = nextRecurrence(pre, afterPre);
+        if (type == NO_OCCURRENCE)
+            return NO_OCCURRENCE;
+        if (type != FIRST_OR_ONLY_OCCURRENCE  &&  afterPre != mNextMainDateTime)
+        {
+            // Need to reschedule the next trigger date/time
+            mNextMainDateTime = afterPre;
+            if (mReminderMinutes > 0  &&  (mDeferral == REMINDER_DEFERRAL || mReminderActive != ACTIVE_REMINDER))
+            {
+                // Reinstate the advance reminder for the rescheduled recurrence.
+                // Note that a reminder AFTER the main alarm will be left active.
+                activate_reminder(!mReminderOnceOnly);
+            }
+            if (mDeferral == REMINDER_DEFERRAL)
+                set_deferral(NO_DEFERRAL);
+            mTriggerChanged = true;
+        }
+    }
+    else
+        return NO_OCCURRENCE;
+
+    if (mRepetition)
+    {
+        if (afterPre <= preDateTime)
+        {
+            // The next occurrence is a sub-repetition.
+            type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
+            mNextRepeat = mRepetition.nextRepeatCount(afterPre.effectiveKDateTime(), preDateTime);
+            // Repetitions can't have a reminder, so remove any.
+            activate_reminder(false);
+            if (mDeferral == REMINDER_DEFERRAL)
+                set_deferral(NO_DEFERRAL);
+            mTriggerChanged = true;
+        }
+        else if (mNextRepeat)
+        {
+            // The next occurrence is the main occurrence, not a repetition
+            mNextRepeat = 0;
+            mTriggerChanged = true;
+        }
+    }
+    return type;
+}
+
+/******************************************************************************
+* Get the date/time of the next occurrence of the event, after the specified
+* date/time.
+* 'result' = date/time of next occurrence, or invalid date/time if none.
+*/
+KAEvent::OccurType KAEvent::nextOccurrence(const KDateTime& preDateTime, DateTime& result, OccurOption o) const
+{
+    return d->nextOccurrence(preDateTime, result, o);
+}
+
+KAEvent::OccurType KAEvent::Private::nextOccurrence(const KDateTime& preDateTime, DateTime& result,
+                                                    OccurOption includeRepetitions) const
+{
+    KDateTime pre = preDateTime;
+    if (includeRepetitions != IGNORE_REPETITION)
+    {                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
+        if (!mRepetition)
+            includeRepetitions = IGNORE_REPETITION;
+        else
+            pre = mRepetition.duration(-mRepetition.count()).end(preDateTime);
+    }
+
+    OccurType type;
+    bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
+    if (recurs)
+        type = nextRecurrence(pre, result);
+    else if (pre < mNextMainDateTime.effectiveKDateTime())
+    {
+        result = mNextMainDateTime;
+        type = FIRST_OR_ONLY_OCCURRENCE;
+    }
+    else
+    {
+        result = DateTime();
+        type = NO_OCCURRENCE;
+    }
+
+    if (type != NO_OCCURRENCE  &&  result <= preDateTime  &&  includeRepetitions != IGNORE_REPETITION)
+    {                   // RETURN_REPETITION or ALLOW_FOR_REPETITION
+        // The next occurrence is a sub-repetition
+        int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
+        DateTime repeatDT = mRepetition.duration(repetition).end(result.kDateTime());
+        if (recurs)
+        {
+            // We've found a recurrence before the specified date/time, which has
+            // a sub-repetition after the date/time.
+            // However, if the intervals between recurrences vary, we could possibly
+            // have missed a later recurrence which fits the criterion, so check again.
+            DateTime dt;
+            OccurType newType = previousOccurrence(repeatDT.effectiveKDateTime(), dt, false);
+            if (dt > result)
+            {
+                type = newType;
+                result = dt;
+                if (includeRepetitions == RETURN_REPETITION  &&  result <= preDateTime)
+                {
+                    // The next occurrence is a sub-repetition
+                    int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
+                    result = mRepetition.duration(repetition).end(result.kDateTime());
+                    type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
+                }
+                return type;
+            }
+        }
+        if (includeRepetitions == RETURN_REPETITION)
+        {
+            // The next occurrence is a sub-repetition
+            result = repeatDT;
+            type = static_cast<OccurType>(type | OCCURRENCE_REPEAT);
+        }
+    }
+    return type;
+}
+
+/******************************************************************************
+* Get the date/time of the last previous occurrence of the event, before the
+* specified date/time.
+* If 'includeRepetitions' is true and the alarm has a sub-repetition, the
+* last previous repetition is returned if appropriate.
+* 'result' = date/time of previous occurrence, or invalid date/time if none.
+*/
+KAEvent::OccurType KAEvent::previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions) const
+{
+    return d->previousOccurrence(afterDateTime, result, includeRepetitions);
+}
+
+KAEvent::OccurType KAEvent::Private::previousOccurrence(const KDateTime& afterDateTime, DateTime& result,
+                                                        bool includeRepetitions) const
+{
+    Q_ASSERT(!afterDateTime.isDateOnly());
+    if (mStartDateTime >= afterDateTime)
+    {
+        result = KDateTime();
+        return NO_OCCURRENCE;     // the event starts after the specified date/time
+    }
+
+    // Find the latest recurrence of the event
+    OccurType type;
+    if (checkRecur() == KARecurrence::NO_RECUR)
+    {
+        result = mStartDateTime;
+        type = FIRST_OR_ONLY_OCCURRENCE;
+    }
+    else
+    {
+        KDateTime recurStart = mRecurrence->startDateTime();
+        KDateTime after = afterDateTime.toTimeSpec(mStartDateTime.timeSpec());
+        if (mStartDateTime.isDateOnly()  &&  afterDateTime.time() > DateTime::startOfDay())
+            after = after.addDays(1);    // today's recurrence (if today recurs) has passed
+        KDateTime dt = mRecurrence->getPreviousDateTime(after);
+        result = dt;
+        result.setDateOnly(mStartDateTime.isDateOnly());
+        if (!dt.isValid())
+            return NO_OCCURRENCE;
+        if (dt == recurStart)
+            type = FIRST_OR_ONLY_OCCURRENCE;
+        else if (mRecurrence->getNextDateTime(dt).isValid())
+            type = result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
+        else
+            type = LAST_RECURRENCE;
+    }
+
+    if (includeRepetitions  &&  mRepetition)
+    {
+        // Find the latest repetition which is before the specified time.
+        int repetition = mRepetition.previousRepeatCount(result.effectiveKDateTime(), afterDateTime);
+        if (repetition > 0)
+        {
+            result = mRepetition.duration(qMin(repetition, mRepetition.count())).end(result.kDateTime());
+            return static_cast<OccurType>(type | OCCURRENCE_REPEAT);
+        }
+    }
+    return type;
+}
+
+/******************************************************************************
+* Set the event to be a copy of the specified event, making the specified
+* alarm the 'displaying' alarm.
+* The purpose of setting up a 'displaying' alarm is to be able to reinstate
+* the alarm message in case of a crash, or to reinstate it should the user
+* choose to defer the alarm. Note that even repeat-at-login alarms need to be
+* saved in case their end time expires before the next login.
+* Reply = true if successful, false if alarm was not copied.
+*/
+#ifdef USE_AKONADI
+bool KAEvent::setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id id, const KDateTime& dt, bool showEdit, bool showDefer)
+#else
+bool KAEvent::setDisplaying(const KAEvent& e, KAAlarm::Type t, const QString& id, const KDateTime& dt, bool showEdit, bool showDefer)
+#endif
+{
+    return d->setDisplaying(*e.d, t, id, dt, showEdit, showDefer);
+}
+
+#ifdef USE_AKONADI
+bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Type alarmType, Akonadi::Collection::Id collectionId,
+                                     const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
+#else
+bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Type alarmType, const QString& resourceID,
+                                     const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
+#endif
+{
+    if (!mDisplaying
+    &&  (alarmType == KAAlarm::MAIN_ALARM
+      || alarmType == KAAlarm::REMINDER_ALARM
+      || alarmType == KAAlarm::DEFERRED_REMINDER_ALARM
+      || alarmType == KAAlarm::DEFERRED_ALARM
+      || alarmType == KAAlarm::AT_LOGIN_ALARM))
+    {
+//kDebug()<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
+        KAAlarm al = event.alarm(alarmType);
+        if (al.isValid())
+        {
+            *this = event;
+            // Change the event ID to avoid duplicating the same unique ID as the original event
+            setCategory(KAlarm::CalEvent::DISPLAYING);
+#ifdef USE_AKONADI
+            mItemId               = -1;    // the display event doesn't have an associated Item
+            mOriginalCollectionId = collectionId;;
+#else
+            mOriginalResourceId   = resourceID;
+#endif
+            mDisplayingDefer      = showDefer;
+            mDisplayingEdit       = showEdit;
+            mDisplaying           = true;
+            mDisplayingTime       = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
+            switch (al.subType())
+            {
+                case KAAlarm::AT_LOGIN__ALARM:                mDisplayingFlags = REPEAT_AT_LOGIN;  break;
+                case KAAlarm::REMINDER__ALARM:                mDisplayingFlags = REMINDER;  break;
+                case KAAlarm::DEFERRED_REMINDER_TIME__ALARM:  mDisplayingFlags = REMINDER | TIME_DEFERRAL;  break;
+                case KAAlarm::DEFERRED_REMINDER_DATE__ALARM:  mDisplayingFlags = REMINDER | DATE_DEFERRAL;  break;
+                case KAAlarm::DEFERRED_TIME__ALARM:           mDisplayingFlags = TIME_DEFERRAL;  break;
+                case KAAlarm::DEFERRED_DATE__ALARM:           mDisplayingFlags = DATE_DEFERRAL;  break;
+                default:                                      mDisplayingFlags = 0;  break;
+            }
+            ++mAlarmCount;
+            return true;
+        }
+    }
+    return false;
+}
+
+/******************************************************************************
+* Reinstate the original event from the 'displaying' event.
+*/
+#ifdef USE_AKONADI
+void KAEvent::reinstateFromDisplaying(const KCalCore::ConstEventPtr& e, Akonadi::Collection::Id& id, bool& showEdit, bool& showDefer)
+#else
+void KAEvent::reinstateFromDisplaying(const KCal::Event* e, QString& id, bool& showEdit, bool& showDefer)
+#endif
+{
+    d->reinstateFromDisplaying(e, id, showEdit, showDefer);
+}
+
+#ifdef USE_AKONADI
+void KAEvent::Private::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, Akonadi::Collection::Id& collectionId, bool& showEdit, bool& showDefer)
+#else
+void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
+#endif
+{
+    set(kcalEvent);
+    if (mDisplaying)
+    {
+        // Retrieve the original event's unique ID
+        setCategory(KAlarm::CalEvent::ACTIVE);
+#ifdef USE_AKONADI
+        collectionId = mOriginalCollectionId;
+        mOriginalCollectionId = -1;
+#else
+        resourceID   = mOriginalResourceId;
+        mOriginalResourceId.clear();
+#endif
+        showDefer    = mDisplayingDefer;
+        showEdit     = mDisplayingEdit;
+        mDisplaying  = false;
+        --mAlarmCount;
+    }
+}
+
+/******************************************************************************
+* Return the original alarm which the displaying alarm refers to.
+* Note that the caller is responsible for ensuring that the event was a
+* displaying event, since this is normally called after
+* reinstateFromDisplaying(), which clears mDisplaying.
+*/
+KAAlarm KAEvent::convertDisplayingAlarm() const
+{
+    KAAlarm al = alarm(KAAlarm::DISPLAYING_ALARM);
+    int displayingFlags = d->mDisplayingFlags;
+    if (displayingFlags & REPEAT_AT_LOGIN)
+    {
+        al.mRepeatAtLogin = true;
+        al.mType = KAAlarm::AT_LOGIN__ALARM;
+    }
+    else if (displayingFlags & DEFERRAL)
+    {
+        al.mDeferred = true;
+        al.mType = (displayingFlags == (REMINDER | DATE_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_DATE__ALARM
+             : (displayingFlags == (REMINDER | TIME_DEFERRAL)) ? KAAlarm::DEFERRED_REMINDER_TIME__ALARM
+             : (displayingFlags == DATE_DEFERRAL) ? KAAlarm::DEFERRED_DATE__ALARM
+             : KAAlarm::DEFERRED_TIME__ALARM;
+    }
+    else if (displayingFlags & REMINDER)
+        al.mType = KAAlarm::REMINDER__ALARM;
+    else
+        al.mType = KAAlarm::MAIN__ALARM;
+    return al;
+}
+
+bool KAEvent::displaying() const
+{
+    return d->mDisplaying;
+}
+
+/******************************************************************************
+* Return the alarm of the specified type.
+*/
+KAAlarm KAEvent::alarm(KAAlarm::Type t) const
+{
+    return d->alarm(t);
+}
+
+KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
+{
+    checkRecur();     // ensure recurrence/repetition data is consistent
+    KAAlarm al;       // this sets type to INVALID_ALARM
+    if (mAlarmCount)
+    {
+        al.mActionType     = mActionType;
+        al.mText           = mText;
+        al.mRepeatAtLogin  = false;
+        al.mDeferred       = false;
+        al.mLateCancel     = mLateCancel;
+        al.mAutoClose      = mAutoClose;
+        al.mCommandScript  = mCommandScript;
+        switch (type)
+        {
+            case KAAlarm::MAIN_ALARM:
+                if (!mMainExpired)
+                {
+                    al.mType             = KAAlarm::MAIN__ALARM;
+                    al.mNextMainDateTime = mNextMainDateTime;
+                    al.mRepetition       = mRepetition;
+                    al.mNextRepeat       = mNextRepeat;
+                }
+                break;
+            case KAAlarm::REMINDER_ALARM:
+                if (mReminderActive == ACTIVE_REMINDER)
+                {
+                    al.mType = KAAlarm::REMINDER__ALARM;
+                    if (mReminderMinutes < 0)
+                        al.mNextMainDateTime = mReminderAfterTime;
+                    else if (mReminderOnceOnly)
+                        al.mNextMainDateTime = mStartDateTime.addMins(-mReminderMinutes);
+                    else
+                        al.mNextMainDateTime = mNextMainDateTime.addMins(-mReminderMinutes);
+                }
+                break;
+            case KAAlarm::DEFERRED_REMINDER_ALARM:
+                if (mDeferral != REMINDER_DEFERRAL)
+                    break;
+                // fall through to DEFERRED_ALARM
+            case KAAlarm::DEFERRED_ALARM:
+                if (mDeferral != NO_DEFERRAL)
+                {
+                    al.mType = static_cast<KAAlarm::SubType>((mDeferral == REMINDER_DEFERRAL ? KAAlarm::DEFERRED_REMINDER_ALARM : KAAlarm::DEFERRED_ALARM)
+                                                             | (mDeferralTime.isDateOnly() ? 0 : KAAlarm::TIMED_DEFERRAL_FLAG));
+                    al.mNextMainDateTime = mDeferralTime;
+                    al.mDeferred         = true;
+                }
+                break;
+            case KAAlarm::AT_LOGIN_ALARM:
+                if (mRepeatAtLogin)
+                {
+                    al.mType             = KAAlarm::AT_LOGIN__ALARM;
+                    al.mNextMainDateTime = mAtLoginDateTime;
+                    al.mRepeatAtLogin    = true;
+                    al.mLateCancel       = 0;
+                    al.mAutoClose        = false;
+                }
+                break;
+            case KAAlarm::DISPLAYING_ALARM:
+                if (mDisplaying)
+                {
+                    al.mType             = KAAlarm::DISPLAYING__ALARM;
+                    al.mNextMainDateTime = mDisplayingTime;
+                }
+                break;
+            case KAAlarm::AUDIO_ALARM:
+            case KAAlarm::PRE_ACTION_ALARM:
+            case KAAlarm::POST_ACTION_ALARM:
+            case KAAlarm::INVALID_ALARM:
+            default:
+                break;
+        }
+    }
+    return al;
+}
+
+/******************************************************************************
+* Return the main alarm for the event.
+* If the main alarm does not exist, one of the subsidiary ones is returned if
+* possible.
+* N.B. a repeat-at-login alarm can only be returned if it has been read from/
+* written to the calendar file.
+*/
+KAAlarm KAEvent::firstAlarm() const
+{
+    return d->firstAlarm();
+}
+
+KAAlarm KAEvent::Private::firstAlarm() const
+{
+    if (mAlarmCount)
+    {
+        if (!mMainExpired)
+            return alarm(KAAlarm::MAIN_ALARM);
+        return nextAlarm(KAAlarm::MAIN_ALARM);
+    }
+    return KAAlarm();
+}
+
+/******************************************************************************
+* Return the next alarm for the event, after the specified alarm.
+* N.B. a repeat-at-login alarm can only be returned if it has been read from/
+* written to the calendar file.
+*/
+KAAlarm KAEvent::nextAlarm(const KAAlarm& previousAlarm) const
+{
+    return d->nextAlarm(previousAlarm.type());
+}
+
+KAAlarm KAEvent::nextAlarm(KAAlarm::Type previousType) const
+{
+    return d->nextAlarm(previousType);
+}
+
+KAAlarm KAEvent::Private::nextAlarm(KAAlarm::Type previousType) const
+{
+    switch (previousType)
+    {
+        case KAAlarm::MAIN_ALARM:
+            if (mReminderActive == ACTIVE_REMINDER)
+                return alarm(KAAlarm::REMINDER_ALARM);
+            // fall through to REMINDER_ALARM
+        case KAAlarm::REMINDER_ALARM:
+            // There can only be one deferral alarm
+            if (mDeferral == REMINDER_DEFERRAL)
+                return alarm(KAAlarm::DEFERRED_REMINDER_ALARM);
+            if (mDeferral == NORMAL_DEFERRAL)
+                return alarm(KAAlarm::DEFERRED_ALARM);
+            // fall through to DEFERRED_ALARM
+        case KAAlarm::DEFERRED_REMINDER_ALARM:
+        case KAAlarm::DEFERRED_ALARM:
+            if (mRepeatAtLogin)
+                return alarm(KAAlarm::AT_LOGIN_ALARM);
+            // fall through to AT_LOGIN_ALARM
+        case KAAlarm::AT_LOGIN_ALARM:
+            if (mDisplaying)
+                return alarm(KAAlarm::DISPLAYING_ALARM);
+            // fall through to DISPLAYING_ALARM
+        case KAAlarm::DISPLAYING_ALARM:
+            // fall through to default
+        case KAAlarm::AUDIO_ALARM:
+        case KAAlarm::PRE_ACTION_ALARM:
+        case KAAlarm::POST_ACTION_ALARM:
+        case KAAlarm::INVALID_ALARM:
+        default:
+            break;
+    }
+    return KAAlarm();
+}
+
+int KAEvent::alarmCount() const
+{
+    return d->mAlarmCount;
+}
+
+/******************************************************************************
+* Remove the alarm of the specified type from the event.
+* This must only be called to remove an alarm which has expired, not to
+* reconfigure the event.
+*/
+void KAEvent::removeExpiredAlarm(KAAlarm::Type type)
+{
+    d->removeExpiredAlarm(type);
+}
+
+void KAEvent::Private::removeExpiredAlarm(KAAlarm::Type type)
+{
+    int count = mAlarmCount;
+    switch (type)
+    {
+        case KAAlarm::MAIN_ALARM:
+            if (!mReminderActive  ||  mReminderMinutes > 0)
+            {
+                mAlarmCount = 0;    // removing main alarm - also remove subsidiary alarms
+                break;
+            }
+            // There is a reminder after the main alarm - retain the
+            // reminder and remove other subsidiary alarms.
+            mMainExpired = true;    // mark the alarm as expired now
+            --mAlarmCount;
+            set_deferral(NO_DEFERRAL);
+            if (mDisplaying)
+            {
+                mDisplaying = false;
+                --mAlarmCount;
+            }
+            // fall through to AT_LOGIN_ALARM
+        case KAAlarm::AT_LOGIN_ALARM:
+            if (mRepeatAtLogin)
+            {
+                // Remove the at-login alarm, but keep a note of it for archiving purposes
+                mArchiveRepeatAtLogin = true;
+                mRepeatAtLogin = false;
+                --mAlarmCount;
+            }
+            break;
+        case KAAlarm::REMINDER_ALARM:
+            // Remove any reminder alarm, but keep a note of it for archiving purposes
+            // and for restoration after the next recurrence.
+            activate_reminder(false);
+            break;
+        case KAAlarm::DEFERRED_REMINDER_ALARM:
+        case KAAlarm::DEFERRED_ALARM:
+            set_deferral(NO_DEFERRAL);
+            break;
+        case KAAlarm::DISPLAYING_ALARM:
+            if (mDisplaying)
+            {
+                mDisplaying = false;
+                --mAlarmCount;
+            }
+            break;
+        case KAAlarm::AUDIO_ALARM:
+        case KAAlarm::PRE_ACTION_ALARM:
+        case KAAlarm::POST_ACTION_ALARM:
+        case KAAlarm::INVALID_ALARM:
+        default:
+            break;
+    }
+    if (mAlarmCount != count)
+        mTriggerChanged = true;
+}
+
+void KAEvent::startChanges()
+{
+    d->startChanges();
+}
+
+/******************************************************************************
+* Indicate that changes to the instance are complete.
+* This allows trigger times to be recalculated if any changes have occurred.
+*/
+void KAEvent::endChanges()
+{
+    d->endChanges();
+}
+
+void KAEvent::Private::endChanges()
+{
+    if (mChangeCount > 0)
+        --mChangeCount;
+}
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Return a list of pointers to KAEvent objects.
+*/
+KAEvent::List KAEvent::ptrList(QVector<KAEvent>& objList)
+{
+    KAEvent::List ptrs;
+    for (int i = 0, count = objList.count();  i < count;  ++i)
+        ptrs += &objList[i];
+    return ptrs;
+}
+#endif
+
+void KAEvent::dumpDebug() const
+{
+#ifndef KDE_NO_DEBUG_OUTPUT
+    d->dumpDebug();
+#endif
+}
+
+#ifndef KDE_NO_DEBUG_OUTPUT
+void KAEvent::Private::dumpDebug() const
+{
+    kDebug() << "KAEvent dump:";
+#ifndef USE_AKONADI
+    if (mResource) { kDebug() << "-- mResource:" << mResource->resourceName(); }
+#endif
+    kDebug() << "-- mEventID:" << mEventID;
+    kDebug() << "-- mCommandError:" << mCommandError;
+    kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
+    kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
+    kDebug() << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
+    kDebug() << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
+    kDebug() << "-- mCategory:" << mCategory;
+    baseDumpDebug();
+    if (!mTemplateName.isEmpty())
+    {
+        kDebug() << "-- mTemplateName:" << mTemplateName;
+        kDebug() << "-- mTemplateAfterTime:" << mTemplateAfterTime;
+    }
+    if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
+    {
+        kDebug() << "-- mBgColour:" << mBgColour.name();
+        kDebug() << "-- mFgColour:" << mFgColour.name();
+        kDebug() << "-- mUseDefaultFont:" << mUseDefaultFont;
+        if (!mUseDefaultFont)
+            kDebug() << "-- mFont:" << mFont.toString();
+        kDebug() << "-- mSpeak:" << mSpeak;
+        kDebug() << "-- mAudioFile:" << mAudioFile;
+        kDebug() << "-- mPreAction:" << mPreAction;
+        kDebug() << "-- mCancelOnPreActErr:" << mCancelOnPreActErr;
+        kDebug() << "-- mDontShowPreActErr:" << mDontShowPreActErr;
+        kDebug() << "-- mPostAction:" << mPostAction;
+    }
+    else if (mActionType == T_COMMAND)
+    {
+        kDebug() << "-- mCommandXterm:" << mCommandXterm;
+        kDebug() << "-- mCommandDisplay:" << mCommandDisplay;
+        kDebug() << "-- mLogFile:" << mLogFile;
+    }
+    else if (mActionType == T_EMAIL)
+    {
+        kDebug() << "-- mEmail: FromKMail:" << mEmailFromIdentity;
+        kDebug() << "--         Addresses:" << mEmailAddresses.join(",");
+        kDebug() << "--         Subject:" << mEmailSubject;
+        kDebug() << "--         Attachments:" << mEmailAttachments.join(",");
+        kDebug() << "--         Bcc:" << mEmailBcc;
+    }
+    else if (mActionType == T_AUDIO)
+        kDebug() << "-- mAudioFile:" << mAudioFile;
+    kDebug() << "-- mBeep:" << mBeep;
+    if (mActionType == T_AUDIO  ||  !mAudioFile.isEmpty())
+    {
+        if (mSoundVolume >= 0)
+        {
+            kDebug() << "-- mSoundVolume:" << mSoundVolume;
+            if (mFadeVolume >= 0)
+            {
+                kDebug() << "-- mFadeVolume:" << mFadeVolume;
+                kDebug() << "-- mFadeSeconds:" << mFadeSeconds;
+            }
+            else
+                kDebug() << "-- mFadeVolume:-:";
+        }
+        else
+            kDebug() << "-- mSoundVolume:-:";
+        kDebug() << "-- mRepeatSound:" << mRepeatSound;
+    }
+    kDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
+    kDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
+    kDebug() << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
+    kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
+    kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
+    kDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
+    if (mRepeatAtLogin)
+        kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
+    kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
+    kDebug() << "-- mConfirmAck:" << mConfirmAck;
+    kDebug() << "-- mEnabled:" << mEnabled;
+#ifdef USE_AKONADI
+    kDebug() << "-- mItemId:" << mItemId;
+    kDebug() << "-- mCompatibility:" << mCompatibility;
+    kDebug() << "-- mReadOnly:" << mReadOnly;
+#endif
+    if (mReminderMinutes)
+    {
+        kDebug() << "-- mReminderMinutes:" << mReminderMinutes;
+        kDebug() << "-- mReminderActive:" << (mReminderActive == ACTIVE_REMINDER ? "active" : mReminderActive == HIDDEN_REMINDER ? "hidden" : "no");
+        kDebug() << "-- mReminderOnceOnly:" << mReminderOnceOnly;
+    }
+    else if (mDeferral > 0)
+    {
+        kDebug() << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
+        kDebug() << "-- mDeferralTime:" << mDeferralTime.toString();
+    }
+    kDebug() << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
+    if (mDeferDefaultMinutes)
+        kDebug() << "-- mDeferDefaultDateOnly:" << mDeferDefaultDateOnly;
+    if (mDisplaying)
+    {
+        kDebug() << "-- mDisplayingTime:" << mDisplayingTime.toString();
+        kDebug() << "-- mDisplayingFlags:" << mDisplayingFlags;
+        kDebug() << "-- mDisplayingDefer:" << mDisplayingDefer;
+        kDebug() << "-- mDisplayingEdit:" << mDisplayingEdit;
+    }
+    kDebug() << "-- mRevision:" << mRevision;
+    kDebug() << "-- mRecurrence:" << mRecurrence;
+    kDebug() << "-- mAlarmCount:" << mAlarmCount;
+    kDebug() << "-- mMainExpired:" << mMainExpired;
+    kDebug() << "-- mDisplaying:" << mDisplaying;
+    kDebug() << "KAEvent dump end";
+}
+#endif
+
+
+/******************************************************************************
+* Fetch the start and next date/time for a KCal::Event.
+* Reply = next main date/time.
+*/
+#ifdef USE_AKONADI
+DateTime KAEvent::Private::readDateTime(const ConstEventPtr& event, bool dateOnly, DateTime& start)
+#else
+DateTime KAEvent::Private::readDateTime(const Event* event, bool dateOnly, DateTime& start)
+#endif
+{
+    start = event->dtStart();
+    if (dateOnly)
+    {
+        // A date-only event is indicated by the X-KDE-KALARM-FLAGS:DATE property, not
+        // by a date-only start date/time (for the reasons given in updateKCalEvent()).
+        start.setDateOnly(true);
+    }
+    DateTime next = start;
+    QString prop = event->customProperty(KAlarm::Calendar::APPNAME, Private::NEXT_RECUR_PROPERTY);
+    if (prop.length() >= 8)
+    {
+        // The next due recurrence time is specified
+        QDate d(prop.left(4).toInt(), prop.mid(4,2).toInt(), prop.mid(6,2).toInt());
+        if (d.isValid())
+        {
+            if (dateOnly  &&  prop.length() == 8)
+                next.setDate(d);
+            else if (!dateOnly  &&  prop.length() == 15  &&  prop[8] == QChar('T'))
+            {
+                QTime t(prop.mid(9,2).toInt(), prop.mid(11,2).toInt(), prop.mid(13,2).toInt());
+                if (t.isValid())
+                {
+                    next.setDate(d);
+                    next.setTime(t);
+                }
+            }
+            if (next < start)
+                next = start;   // ensure next recurrence time is valid
+        }
+    }
+    return next;
+}
+
+/******************************************************************************
+* Parse the alarms for a KCal::Event.
+* Reply = map of alarm data, indexed by KAAlarm::Type
+*/
+#ifdef USE_AKONADI
+void KAEvent::Private::readAlarms(const ConstEventPtr& event, void* almap, bool cmdDisplay)
+#else
+void KAEvent::Private::readAlarms(const Event* event, void* almap, bool cmdDisplay)
+#endif
+{
+    AlarmMap* alarmMap = (AlarmMap*)almap;
+    Alarm::List alarms = event->alarms();
+
+    // Check if it's an audio event with no display alarm
+    bool audioOnly = false;
+    for (int i = 0, end = alarms.count();  i < end;  ++i)
+    {
+        switch (alarms[i]->type())
+        {
+            case Alarm::Display:
+            case Alarm::Procedure:
+                audioOnly = false;
+                i = end;   // exit from the 'for' loop
+                break;
+            case Alarm::Audio:
+                audioOnly = true;
+                break;
+            default:
+                break;
+        }
+    }
+
+    for (int i = 0, end = alarms.count();  i < end;  ++i)
+    {
+        // Parse the next alarm's text
+        AlarmData data;
+        readAlarm(alarms[i], data, audioOnly, cmdDisplay);
+        if (data.type != KAAlarm::INVALID__ALARM)
+            alarmMap->insert(data.type, data);
+    }
+}
+
+/******************************************************************************
+* Parse a KCal::Alarm.
+* If 'audioMain' is true, the event contains an audio alarm but no display alarm.
+* Reply = alarm ID (sequence number)
+*/
+#ifdef USE_AKONADI
+void KAEvent::Private::readAlarm(const ConstAlarmPtr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
+#else
+void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
+#endif
+{
+    // Parse the next alarm's text
+    data.alarm           = alarm;
+    data.displayingFlags = 0;
+    data.isEmailText     = false;
+    data.speak           = false;
+    data.hiddenReminder  = false;
+    data.nextRepeat      = 0;
+    if (alarm->repeatCount())
+    {
+        bool ok;
+        QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::NEXT_REPEAT_PROPERTY);
+        int n = static_cast<int>(property.toUInt(&ok));
+        if (ok)
+            data.nextRepeat = n;
+    }
+    QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::FLAGS_PROPERTY);
+    QStringList flags = property.split(Private::SC, QString::SkipEmptyParts);
+    switch (alarm->type())
+    {
+        case Alarm::Procedure:
+            data.action        = KAAlarmEventBase::T_COMMAND;
+            data.cleanText     = alarm->programFile();
+            data.commandScript = data.cleanText.isEmpty();   // blank command indicates a script
+            if (!alarm->programArguments().isEmpty())
+            {
+                if (!data.commandScript)
+                    data.cleanText += ' ';
+                data.cleanText += alarm->programArguments();
+            }
+            data.cancelOnPreActErr = flags.contains(Private::CANCEL_ON_ERROR_FLAG);
+            data.dontShowPreActErr = flags.contains(Private::DONT_SHOW_ERROR_FLAG);
+            if (!cmdDisplay)
+                break;
+            // fall through to Display
+        case Alarm::Display:
+        {
+            if (alarm->type() == Alarm::Display)
+            {
+                data.action    = KAAlarmEventBase::T_MESSAGE;
+                data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
+            }
+            QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::FONT_COLOUR_PROPERTY);
+            QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
+            data.bgColour = QColor(255, 255, 255);   // white
+            data.fgColour = QColor(0, 0, 0);         // black
+            int n = list.count();
+            if (n > 0)
+            {
+                if (!list[0].isEmpty())
+                {
+                    QColor c(list[0]);
+                    if (c.isValid())
+                        data.bgColour = c;
+                }
+                if (n > 1  &&  !list[1].isEmpty())
+                {
+                    QColor c(list[1]);
+                    if (c.isValid())
+                        data.fgColour = c;
+                }
+            }
+            data.defaultFont = (n <= 2 || list[2].isEmpty());
+            if (!data.defaultFont)
+                data.font.fromString(list[2]);
+            break;
+        }
+        case Alarm::Email:
+        {
+            data.action    = KAAlarmEventBase::T_EMAIL;
+            data.cleanText = alarm->mailText();
+            int i = flags.indexOf(Private::EMAIL_ID_FLAG);
+            data.emailFromId = (i >= 0  &&  i + 1 < flags.count()) ? flags[i + 1].toUInt() : 0;
+            break;
+        }
+        case Alarm::Audio:
+        {
+            data.action      = KAAlarmEventBase::T_AUDIO;
+            data.cleanText   = alarm->audioFile();
+            data.soundVolume = -1;
+            data.fadeVolume  = -1;
+            data.fadeSeconds = 0;
+            QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::VOLUME_PROPERTY);
+            if (!property.isEmpty())
+            {
+                bool ok;
+                float fadeVolume;
+                int   fadeSecs = 0;
+                QStringList list = property.split(QLatin1Char(';'), QString::KeepEmptyParts);
+                data.soundVolume = list[0].toFloat(&ok);
+                if (!ok  ||  data.soundVolume > 1.0f)
+                    data.soundVolume = -1;
+                if (data.soundVolume >= 0  &&  list.count() >= 3)
+                {
+                    fadeVolume = list[1].toFloat(&ok);
+                    if (ok)
+                        fadeSecs = static_cast<int>(list[2].toUInt(&ok));
+                    if (ok  &&  fadeVolume >= 0  &&  fadeVolume <= 1.0f  &&  fadeSecs > 0)
+                    {
+                        data.fadeVolume  = fadeVolume;
+                        data.fadeSeconds = fadeSecs;
+                    }
+                }
+            }
+            if (!audioMain)
+            {
+                data.type  = KAAlarm::AUDIO__ALARM;
+                data.speak = flags.contains(Private::SPEAK_FLAG);
+                return;
+            }
+            break;
+        }
+        case Alarm::Invalid:
+            data.type = KAAlarm::INVALID__ALARM;
+            return;
+    }
+
+    bool atLogin          = false;
+    bool reminder         = false;
+    bool deferral         = false;
+    bool dateDeferral     = false;
+    data.repeatSound      = false;
+    data.type = KAAlarm::MAIN__ALARM;
+    property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::TYPE_PROPERTY);
+    QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
+    for (int i = 0, end = types.count();  i < end;  ++i)
+    {
+        QString type = types[i];
+        if (type == Private::AT_LOGIN_TYPE)
+            atLogin = true;
+        else if (type == Private::FILE_TYPE  &&  data.action == KAAlarmEventBase::T_MESSAGE)
+            data.action = KAAlarmEventBase::T_FILE;
+        else if (type == Private::REMINDER_TYPE)
+            reminder = true;
+        else if (type == Private::TIME_DEFERRAL_TYPE)
+            deferral = true;
+        else if (type == Private::DATE_DEFERRAL_TYPE)
+            dateDeferral = deferral = true;
+        else if (type == Private::DISPLAYING_TYPE)
+            data.type = KAAlarm::DISPLAYING__ALARM;
+        else if (type == Private::PRE_ACTION_TYPE  &&  data.action == KAAlarmEventBase::T_COMMAND)
+            data.type = KAAlarm::PRE_ACTION__ALARM;
+        else if (type == Private::POST_ACTION_TYPE  &&  data.action == KAAlarmEventBase::T_COMMAND)
+            data.type = KAAlarm::POST_ACTION__ALARM;
+        else if (type == Private::SOUND_REPEAT_TYPE  &&  data.action == KAAlarmEventBase::T_AUDIO)
+            data.repeatSound = true;
+    }
+
+    if (reminder)
+    {
+        if (data.type == KAAlarm::MAIN__ALARM)
+            data.type = dateDeferral ? KAAlarm::DEFERRED_REMINDER_DATE__ALARM
+                      : deferral ? KAAlarm::DEFERRED_REMINDER_TIME__ALARM : KAAlarm::REMINDER__ALARM;
+        else if (data.type == KAAlarm::DISPLAYING__ALARM)
+            data.displayingFlags = dateDeferral ? REMINDER | DATE_DEFERRAL
+                                 : deferral ? REMINDER | TIME_DEFERRAL : REMINDER;
+        else if (data.type == KAAlarm::REMINDER__ALARM
+             &&  flags.contains(Private::HIDDEN_REMINDER_FLAG))
+            data.hiddenReminder = true;
+    }
+    else if (deferral)
+    {
+        if (data.type == KAAlarm::MAIN__ALARM)
+            data.type = dateDeferral ? KAAlarm::DEFERRED_DATE__ALARM : KAAlarm::DEFERRED_TIME__ALARM;
+        else if (data.type == KAAlarm::DISPLAYING__ALARM)
+            data.displayingFlags = dateDeferral ? DATE_DEFERRAL : TIME_DEFERRAL;
+    }
+    if (atLogin)
+    {
+        if (data.type == KAAlarm::MAIN__ALARM)
+            data.type = KAAlarm::AT_LOGIN__ALARM;
+        else if (data.type == KAAlarm::DISPLAYING__ALARM)
+            data.displayingFlags = REPEAT_AT_LOGIN;
+    }
+//kDebug()<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
+}
+
+/******************************************************************************
+* Calculate the next trigger times of the alarm.
+* This should only be called when changes have actually occurred which might
+* affect the event's trigger times.
+* mMainTrigger is set to the next scheduled recurrence/sub-repetition, or the
+*              deferral time if a deferral is pending.
+* mAllTrigger is the same as mMainTrigger, but takes account of reminders.
+* mMainWorkTrigger is set to the next scheduled recurrence/sub-repetition
+*                  which occurs in working hours, if working-time-only is set.
+* mAllWorkTrigger is the same as mMainWorkTrigger, but takes account of reminders.
+*/
+void KAEvent::Private::calcTriggerTimes() const
+{
+    if (mChangeCount)
+        return;
+#warning Only allow work time or exclude holidays if recurring
+    if ((mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
+    ||  (mExcludeHolidays  &&  mExcludeHolidays != mHolidays))
+    {
+        // It's a work time alarm, and work days/times have changed, or
+        // it excludes holidays, and the holidays definition has changed.
+        mTriggerChanged = true;
+    }
+    else if (!mTriggerChanged)
+        return;
+    mTriggerChanged = false;
+    if (mWorkTimeOnly)
+        mWorkTimeOnly = mWorkTimeIndex;   // note which work time definition was used in calculation
+    if (mExcludeHolidays)
+        mExcludeHolidays = mHolidays;     // note which holiday definition was used in calculation
+
+    if (mCategory == KAlarm::CalEvent::ARCHIVED  ||  mCategory == KAlarm::CalEvent::TEMPLATE)
+    {
+        // It's a template or archived
+        mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = KDateTime();
+    }
+    else if (mDeferral == NORMAL_DEFERRAL)
+    {
+        // For a deferred alarm, working time setting is ignored
+        mAllTrigger = mMainTrigger = mAllWorkTrigger = mMainWorkTrigger = mDeferralTime;
+    }
+    else
+    {
+        mMainTrigger = mainDateTime(true);   // next recurrence or sub-repetition
+        mAllTrigger = (mDeferral == REMINDER_DEFERRAL)     ? mDeferralTime
+                    : (mReminderActive != ACTIVE_REMINDER) ? mMainTrigger
+                    : (mReminderMinutes < 0)               ? mReminderAfterTime
+                    :                                        mMainTrigger.addMins(-mReminderMinutes);
+        // It's not deferred.
+        // If only-during-working-time is set and it recurs, it won't actually trigger
+        // unless it falls during working hours.
+        if ((!mWorkTimeOnly && !mExcludeHolidays)
+        ||  checkRecur() == KARecurrence::NO_RECUR
+        ||  isWorkingTime(mMainTrigger.kDateTime()))
+        {
+            // It only occurs once, or it complies with any working hours/holiday
+            // restrictions.
+            mMainWorkTrigger = mMainTrigger;
+            mAllWorkTrigger = mAllTrigger;
+        }
+        else if (mWorkTimeOnly)
+        {
+            // The alarm is restricted to working hours.
+            // Finding the next occurrence during working hours can sometimes take a long time,
+            // so mark the next actual trigger as invalid until the calculation completes.
+            // Note that reminders are only triggered if the main alarm is during working time.
+            if (!mExcludeHolidays)
+            {
+                // There are no holiday restrictions.
+                calcNextWorkingTime(mMainTrigger);
+            }
+            else if (mHolidays)
+            {
+                // Holidays are excluded.
+                DateTime nextTrigger = mMainTrigger;
+                KDateTime kdt;
+                for (int i = 0;  i < 20;  ++i)
+                {
+                    calcNextWorkingTime(nextTrigger);
+                    if (!mHolidays->isHoliday(mMainWorkTrigger.date()))
+                        return;   // found a non-holiday occurrence
+                    kdt = mMainWorkTrigger.effectiveKDateTime();
+                    kdt.setTime(QTime(23,59,59));
+                    OccurType type = nextOccurrence(kdt, nextTrigger, RETURN_REPETITION);
+                    if (!nextTrigger.isValid())
+                        break;
+                    if (isWorkingTime(nextTrigger.kDateTime()))
+                    {
+                        int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
+                        mMainWorkTrigger = nextTrigger;
+                        mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+                        return;   // found a non-holiday occurrence
+                    }
+                }
+                mMainWorkTrigger = mAllWorkTrigger = DateTime();
+            }
+        }
+        else if (mExcludeHolidays  &&  mHolidays)
+        {
+            // Holidays are excluded.
+            DateTime nextTrigger = mMainTrigger;
+            KDateTime kdt;
+            for (int i = 0;  i < 20;  ++i)
+            {
+                kdt = nextTrigger.effectiveKDateTime();
+                kdt.setTime(QTime(23,59,59));
+                OccurType type = nextOccurrence(kdt, nextTrigger, RETURN_REPETITION);
+                if (!nextTrigger.isValid())
+                    break;
+                if (!mHolidays->isHoliday(nextTrigger.date()))
+                {
+                    int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
+                    mMainWorkTrigger = nextTrigger;
+                    mAllWorkTrigger = (type & OCCURRENCE_REPEAT) ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+                    return;   // found a non-holiday occurrence
+                }
+            }
+            mMainWorkTrigger = mAllWorkTrigger = DateTime();
+        }
+    }
+}
+
+/******************************************************************************
+* Return the time of the next scheduled occurrence of the event during working
+* hours, for an alarm which is restricted to working hours.
+* On entry, 'nextTrigger' = the next recurrence or repetition (as returned by
+* mainDateTime(true) ).
+*/
+void KAEvent::Private::calcNextWorkingTime(const DateTime& nextTrigger) const
+{
+    kDebug() << "next=" << nextTrigger.kDateTime().dateTime();
+    mMainWorkTrigger = mAllWorkTrigger = DateTime();
+
+    for (int i = 0;  ;  ++i)
+    {
+        if (i >= 7)
+            return;   // no working days are defined
+        if (mWorkDays.testBit(i))
+            break;
+    }
+    const KARecurrence::Type recurType = checkRecur();
+    KDateTime kdt = nextTrigger.effectiveKDateTime();
+    const int reminder = (mReminderMinutes > 0) ? mReminderMinutes : 0;   // only interested in reminders BEFORE the alarm
+    // Check if it always falls on the same day(s) of the week.
+    const RecurrenceRule* rrule = mRecurrence->defaultRRuleConst();
+    if (!rrule)
+        return;   // no recurrence rule!
+    unsigned allDaysMask = 0x7F;  // mask bits for all days of week
+    bool noWorkPos = false;  // true if no recurrence day position is working day
+    const QList<RecurrenceRule::WDayPos> pos = rrule->byDays();
+    int nDayPos = pos.count();  // number of day positions
+    if (nDayPos)
+    {
+        noWorkPos = true;
+        allDaysMask = 0;
+        for (int i = 0;  i < nDayPos;  ++i)
+        {
+            const int day = pos[i].day() - 1;  // Monday = 0
+            if (mWorkDays.testBit(day))
+                noWorkPos = false;   // found a working day occurrence
+            allDaysMask |= 1 << day;
+        }
+        if (noWorkPos  &&  !mRepetition)
+            return;   // never occurs on a working day
+    }
+    DateTime newdt;
+
+    if (mStartDateTime.isDateOnly())
+    {
+        // It's a date-only alarm.
+        // Sub-repetitions also have to be date-only.
+        const int repeatFreq = mRepetition.intervalDays();
+        const bool weeklyRepeat = mRepetition && !(repeatFreq % 7);
+        const Duration interval = mRecurrence->regularInterval();
+        if ((interval  &&  !(interval.asDays() % 7))
+        ||  nDayPos == 1)
+        {
+            // It recurs on the same day each week
+            if (!mRepetition || weeklyRepeat)
+                return;   // any repetitions are also weekly
+
+            // It's a weekly recurrence with a non-weekly sub-repetition.
+            // Check one cycle of repetitions for the next one that lands
+            // on a working day.
+            KDateTime dt(nextTrigger.kDateTime().addDays(1));
+            dt.setTime(QTime(0,0,0));
+            previousOccurrence(dt, newdt, false);
+            if (!newdt.isValid())
+                return;   // this should never happen
+            kdt = newdt.effectiveKDateTime();
+            const int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+            for (int repeatNum = mNextRepeat + 1;  ;  ++repeatNum)
+            {
+                if (repeatNum > mRepetition.count())
+                    repeatNum = 0;
+                if (repeatNum == mNextRepeat)
+                    break;
+                if (!repeatNum)
+                {
+                    nextOccurrence(newdt.kDateTime(), newdt, IGNORE_REPETITION);
+                    if (mWorkDays.testBit(day))
+                    {
+                        mMainWorkTrigger = newdt;
+                        mAllWorkTrigger  = mMainWorkTrigger.addMins(-reminder);
+                        return;
+                    }
+                    kdt = newdt.effectiveKDateTime();
+                }
+                else
+                {
+                    const int inc = repeatFreq * repeatNum;
+                    if (mWorkDays.testBit((day + inc) % 7))
+                    {
+                        kdt = kdt.addDays(inc);
+                        kdt.setDateOnly(true);
+                        mMainWorkTrigger = mAllWorkTrigger = kdt;
+                        return;
+                    }
+                }
+            }
+            return;
+        }
+        if (!mRepetition  ||  weeklyRepeat)
+        {
+            // It's a date-only alarm with either no sub-repetition or a
+            // sub-repetition which always falls on the same day of the week
+            // as the recurrence (if any).
+            unsigned days = 0;
+            for ( ; ; )
+            {
+                kdt.setTime(QTime(23,59,59));
+                nextOccurrence(kdt, newdt, IGNORE_REPETITION);
+                if (!newdt.isValid())
+                    return;
+                kdt = newdt.effectiveKDateTime();
+                const int day = kdt.date().dayOfWeek() - 1;
+                if (mWorkDays.testBit(day))
+                    break;   // found a working day occurrence
+                // Prevent indefinite looping (which should never happen anyway)
+                if ((days & allDaysMask) == allDaysMask)
+                    return;  // found a recurrence on every possible day of the week!?!
+                days |= 1 << day;
+            }
+            kdt.setDateOnly(true);
+            mMainWorkTrigger = kdt;
+            mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
+            return;
+        }
+
+        // It's a date-only alarm which recurs on different days of the week,
+        // as does the sub-repetition.
+        // Find the previous recurrence (as opposed to sub-repetition)
+        unsigned days = 1 << (kdt.date().dayOfWeek() - 1);
+        KDateTime dt(nextTrigger.kDateTime().addDays(1));
+        dt.setTime(QTime(0,0,0));
+        previousOccurrence(dt, newdt, false);
+        if (!newdt.isValid())
+            return;   // this should never happen
+        kdt = newdt.effectiveKDateTime();
+        int day = kdt.date().dayOfWeek() - 1;   // Monday = 0
+        for (int repeatNum = mNextRepeat;  ;  repeatNum = 0)
+        {
+            while (++repeatNum <= mRepetition.count())
+            {
+                const int inc = repeatFreq * repeatNum;
+                if (mWorkDays.testBit((day + inc) % 7))
+                {
+                    kdt = kdt.addDays(inc);
+                    kdt.setDateOnly(true);
+                    mMainWorkTrigger = mAllWorkTrigger = kdt;
+                    return;
+                }
+                if ((days & allDaysMask) == allDaysMask)
+                    return;  // found an occurrence on every possible day of the week!?!
+                days |= 1 << day;
+            }
+            nextOccurrence(kdt, newdt, IGNORE_REPETITION);
+            if (!newdt.isValid())
+                return;
+            kdt = newdt.effectiveKDateTime();
+            day = kdt.date().dayOfWeek() - 1;
+            if (mWorkDays.testBit(day))
+            {
+                kdt.setDateOnly(true);
+                mMainWorkTrigger = kdt;
+                mAllWorkTrigger  = kdt.addSecs(-60 * reminder);
+                return;
+            }
+            if ((days & allDaysMask) == allDaysMask)
+                return;  // found an occurrence on every possible day of the week!?!
+            days |= 1 << day;
+        }
+        return;
+    }
+
+    // It's a date-time alarm.
+
+    /* Check whether the recurrence or sub-repetition occurs at the same time
+     * every day. Note that because of seasonal time changes, a recurrence
+     * defined in terms of minutes will vary its time of day even if its value
+     * is a multiple of a day (24*60 minutes). Sub-repetitions are considered
+     * to repeat at the same time of day regardless of time changes if they
+     * are multiples of a day, which doesn't strictly conform to the iCalendar
+     * format because this only allows their interval to be recorded in seconds.
+     */
+    const bool recurTimeVaries = (recurType == KARecurrence::MINUTELY);
+    const bool repeatTimeVaries = (mRepetition  &&  !mRepetition.isDaily());
+
+    if (!recurTimeVaries  &&  !repeatTimeVaries)
+    {
+        // The alarm always occurs at the same time of day.
+        // Check whether it can ever occur during working hours.
+        if (!mayOccurDailyDuringWork(kdt))
+            return;   // never occurs during working hours
+
+        // Find the next working day it occurs on
+        bool repetition = false;
+        unsigned days = 0;
+        for ( ; ; )
+        {
+            OccurType type = nextOccurrence(kdt, newdt, RETURN_REPETITION);
+            if (!newdt.isValid())
+                return;
+            repetition = (type & OCCURRENCE_REPEAT);
+            kdt = newdt.effectiveKDateTime();
+            const int day = kdt.date().dayOfWeek() - 1;
+            if (mWorkDays.testBit(day))
+                break;   // found a working day occurrence
+            // Prevent indefinite looping (which should never happen anyway)
+            if (!repetition)
+            {
+                if ((days & allDaysMask) == allDaysMask)
+                    return;  // found a recurrence on every possible day of the week!?!
+                days |= 1 << day;
+            }
+        }
+        mMainWorkTrigger = nextTrigger;
+        mMainWorkTrigger.setDate(kdt.date());
+        mAllWorkTrigger = repetition ? mMainWorkTrigger : mMainWorkTrigger.addMins(-reminder);
+        return;
+    }
+
+    // The alarm occurs at different times of day.
+    // We may need to check for a full annual cycle of seasonal time changes, in
+    // case it only occurs during working hours after a time change.
+    KTimeZone tz = kdt.timeZone();
+    if (tz.isValid()  &&  tz.type() == "KSystemTimeZone")
+    {
+        // It's a system time zone, so fetch full transition information
+        const KTimeZone ktz = KSystemTimeZones::readZone(tz.name());
+        if (ktz.isValid())
+            tz = ktz;
+    }
+    const QList<KTimeZone::Transition> tzTransitions = tz.transitions();
+
+    if (recurTimeVaries)
+    {
+        /* The alarm recurs at regular clock intervals, at different times of day.
+         * Note that for this type of recurrence, it's necessary to avoid the
+         * performance overhead of Recurrence class calls since these can in the
+         * worst case cause the program to hang for a significant length of time.
+         * In this case, we can calculate the next recurrence by simply adding the
+         * recurrence interval, since KAlarm offers no facility to regularly miss
+         * recurrences. (But exception dates/times need to be taken into account.)
+         */
+        KDateTime kdtRecur;
+        int repeatFreq = 0;
+        int repeatNum = 0;
+        if (mRepetition)
+        {
+            // It's a repetition inside a recurrence, each of which occurs
+            // at different times of day (bearing in mind that the repetition
+            // may occur at daily intervals after each recurrence).
+            // Find the previous recurrence (as opposed to sub-repetition)
+            repeatFreq = mRepetition.intervalSeconds();
+            previousOccurrence(kdt.addSecs(1), newdt, false);
+            if (!newdt.isValid())
+                return;   // this should never happen
+            kdtRecur = newdt.effectiveKDateTime();
+            repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
+            kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+        }
+        else
+        {
+            // There is no sub-repetition.
+            // (N.B. Sub-repetitions can't exist without a recurrence.)
+            // Check until the original time wraps round, but ensure that
+            // if there are seasonal time changes, that all other subsequent
+            // time offsets within the next year are checked.
+            // This does not guarantee to find the next working time,
+            // particularly if there are exceptions, but it's a
+            // reasonable try.
+            kdtRecur = kdt;
+        }
+        QTime firstTime = kdtRecur.time();
+        int firstOffset = kdtRecur.utcOffset();
+        int currentOffset = firstOffset;
+        int dayRecur = kdtRecur.date().dayOfWeek() - 1;   // Monday = 0
+        int firstDay = dayRecur;
+        QDate finalDate;
+        const bool subdaily = (repeatFreq < 24*3600);
+//        int period = mRecurrence->frequency() % (24*60);  // it is by definition a MINUTELY recurrence
+//        int limit = (24*60 + period - 1) / period;  // number of times until recurrence wraps round
+        int transitionIndex = -1;
+        for (int n = 0;  n < 7*24*60;  ++n)
+        {
+            if (mRepetition)
+            {
+                // Check the sub-repetitions for this recurrence
+                for ( ; ; )
+                {
+                    // Find the repeat count to the next start of the working day
+                    const int inc = subdaily ? nextWorkRepetition(kdt) : 1;
+                    repeatNum += inc;
+                    if (repeatNum > mRepetition.count())
+                        break;
+                    kdt = kdt.addSecs(inc * repeatFreq);
+                    const QTime t = kdt.time();
+                    if (t >= mWorkDayStart  &&  t < mWorkDayEnd)
+                    {
+                        if (mWorkDays.testBit(kdt.date().dayOfWeek() - 1))
+                        {
+                            mMainWorkTrigger = mAllWorkTrigger = kdt;
+                            return;
+                        }
+                    }
+                }
+                repeatNum = 0;
+            }
+            nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
+            if (!newdt.isValid())
+                return;
+            kdtRecur = newdt.effectiveKDateTime();
+            dayRecur = kdtRecur.date().dayOfWeek() - 1;   // Monday = 0
+            const QTime t = kdtRecur.time();
+            if (t >= mWorkDayStart  &&  t < mWorkDayEnd)
+            {
+                if (mWorkDays.testBit(dayRecur))
+                {
+                    mMainWorkTrigger = kdtRecur;
+                    mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
+                    return;
+                }
+            }
+            if (kdtRecur.utcOffset() != currentOffset)
+                currentOffset = kdtRecur.utcOffset();
+            if (t == firstTime  &&  dayRecur == firstDay  &&  currentOffset == firstOffset)
+            {
+                // We've wrapped round to the starting day and time.
+                // If there are seasonal time changes, check for up
+                // to the next year in other time offsets in case the
+                // alarm occurs inside working hours then.
+                if (!finalDate.isValid())
+                    finalDate = kdtRecur.date();
+                const int i = tz.transitionIndex(kdtRecur.toUtc().dateTime());
+                if (i < 0)
+                    return;
+                if (i > transitionIndex)
+                    transitionIndex = i;
+                if (++transitionIndex >= static_cast<int>(tzTransitions.count()))
+                    return;
+                previousOccurrence(KDateTime(tzTransitions[transitionIndex].time(), KDateTime::UTC), newdt, IGNORE_REPETITION);
+                kdtRecur = newdt.effectiveKDateTime();
+                if (finalDate.daysTo(kdtRecur.date()) > 365)
+                    return;
+                firstTime = kdtRecur.time();
+                firstOffset = kdtRecur.utcOffset();
+                currentOffset = firstOffset;
+                firstDay = kdtRecur.date().dayOfWeek() - 1;
+            }
+            kdt = kdtRecur;
+        }
+//kDebug()<<"-----exit loop: count="<<limit<<endl;
+        return;   // too many iterations
+    }
+
+    if (repeatTimeVaries)
+    {
+        /* There's a sub-repetition which occurs at different times of
+         * day, inside a recurrence which occurs at the same time of day.
+         * We potentially need to check recurrences starting on each day.
+         * Then, it is still possible that a working time sub-repetition
+         * could occur immediately after a seasonal time change.
+         */
+        // Find the previous recurrence (as opposed to sub-repetition)
+        const int repeatFreq = mRepetition.intervalSeconds();
+        previousOccurrence(kdt.addSecs(1), newdt, false);
+        if (!newdt.isValid())
+            return;   // this should never happen
+        KDateTime kdtRecur = newdt.effectiveKDateTime();
+        const bool recurDuringWork = (kdtRecur.time() >= mWorkDayStart  &&  kdtRecur.time() < mWorkDayEnd);
+
+        // Use the previous recurrence as a base for checking whether
+        // our tests have wrapped round to the same time/day of week.
+        const bool subdaily = (repeatFreq < 24*3600);
+        unsigned days = 0;
+        bool checkTimeChangeOnly = false;
+        int transitionIndex = -1;
+        for (int limit = 10;  --limit >= 0;  )
+        {
+            // Check the next seasonal time change (for an arbitrary 10 times,
+            // even though that might not guarantee the correct result)
+            QDate dateRecur = kdtRecur.date();
+            int dayRecur = dateRecur.dayOfWeek() - 1;   // Monday = 0
+            int repeatNum = kdtRecur.secsTo(kdt) / repeatFreq;
+            kdt = kdtRecur.addSecs(repeatNum * repeatFreq);
+
+            // Find the next recurrence, which sets the limit on possible sub-repetitions.
+            // Note that for a monthly recurrence, for example, a sub-repetition could
+            // be defined which is longer than the recurrence interval in short months.
+            // In these cases, the sub-repetition is truncated by the following
+            // recurrence.
+            nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
+            KDateTime kdtNextRecur = newdt.effectiveKDateTime();
+
+            int repeatsToCheck = mRepetition.count();
+            int repeatsDuringWork = 0;  // 0=unknown, 1=does, -1=never
+            for ( ; ; )
+            {
+                // Check the sub-repetitions for this recurrence
+                if (repeatsDuringWork >= 0)
+                {
+                    for ( ; ; )
+                    {
+                        // Find the repeat count to the next start of the working day
+                        int inc = subdaily ? nextWorkRepetition(kdt) : 1;
+                        repeatNum += inc;
+                        const bool pastEnd = (repeatNum > mRepetition.count());
+                        if (pastEnd)
+                            inc -= repeatNum - mRepetition.count();
+                        repeatsToCheck -= inc;
+                        kdt = kdt.addSecs(inc * repeatFreq);
+                        if (kdtNextRecur.isValid()  &&  kdt >= kdtNextRecur)
+                        {
+                            // This sub-repetition is past the next recurrence,
+                            // so start the check again from the next recurrence.
+                            repeatsToCheck = mRepetition.count();
+                            break;
+                        }
+                        if (pastEnd)
+                            break;
+                        const QTime t = kdt.time();
+                        if (t >= mWorkDayStart  &&  t < mWorkDayEnd)
+                        {
+                            if (mWorkDays.testBit(kdt.date().dayOfWeek() - 1))
+                            {
+                                mMainWorkTrigger = mAllWorkTrigger = kdt;
+                                return;
+                            }
+                            repeatsDuringWork = 1;
+                        }
+                        else if (!repeatsDuringWork  &&  repeatsToCheck <= 0)
+                        {
+                            // Sub-repetitions never occur during working hours
+                            repeatsDuringWork = -1;
+                            break;
+                        }
+                    }
+                }
+                repeatNum = 0;
+                if (repeatsDuringWork < 0  &&  !recurDuringWork)
+                    break;   // it never occurs during working hours
+
+                // Check the next recurrence
+                if (!kdtNextRecur.isValid())
+                    return;
+                if (checkTimeChangeOnly  ||  (days & allDaysMask) == allDaysMask)
+                    break;  // found a recurrence on every possible day of the week!?!
+                kdtRecur = kdtNextRecur;
+                nextOccurrence(kdtRecur, newdt, IGNORE_REPETITION);
+                kdtNextRecur = newdt.effectiveKDateTime();
+                dateRecur = kdtRecur.date();
+                dayRecur = dateRecur.dayOfWeek() - 1;
+                if (recurDuringWork  &&  mWorkDays.testBit(dayRecur))
+                {
+                    mMainWorkTrigger = kdtRecur;
+                    mAllWorkTrigger  = kdtRecur.addSecs(-60 * reminder);
+                    return;
+                }
+                days |= 1 << dayRecur;
+                kdt = kdtRecur;
+            }
+
+            // Find the next recurrence before a seasonal time change,
+            // and ensure the time change is after the last one processed.
+            checkTimeChangeOnly = true;
+            const int i = tz.transitionIndex(kdtRecur.toUtc().dateTime());
+            if (i < 0)
+                return;
+            if (i > transitionIndex)
+                transitionIndex = i;
+            if (++transitionIndex >= static_cast<int>(tzTransitions.count()))
+                return;
+            kdt = KDateTime(tzTransitions[transitionIndex].time(), KDateTime::UTC);
+            previousOccurrence(kdt, newdt, IGNORE_REPETITION);
+            kdtRecur = newdt.effectiveKDateTime();
+        }
+        return;  // not found - give up
+    }
+}
+
+/******************************************************************************
+* Find the repeat count to the next start of a working day.
+* This allows for possible daylight saving time changes during the repetition.
+* Use for repetitions which occur at different times of day.
+*/
+int KAEvent::Private::nextWorkRepetition(const KDateTime& pre) const
+{
+    KDateTime nextWork(pre);
+    if (pre.time() < mWorkDayStart)
+        nextWork.setTime(mWorkDayStart);
+    else
+    {
+        int preDay = pre.date().dayOfWeek() - 1;   // Monday = 0
+        for (int n = 1;  ;  ++n)
+        {
+            if (n >= 7)
+                return mRepetition.count() + 1;  // should never happen
+            if (mWorkDays.testBit((preDay + n) % 7))
+            {
+                nextWork = nextWork.addDays(n);
+                nextWork.setTime(mWorkDayStart);
+                break;
+            }
+        }
+    }
+    return (pre.secsTo(nextWork) - 1) / mRepetition.intervalSeconds() + 1;
+}
+
+/******************************************************************************
+* Check whether an alarm which recurs at the same time of day can possibly
+* occur during working hours.
+* This does not determine whether it actually does, but rather whether it could
+* potentially given enough repetitions.
+* Reply = false if it can never occur during working hours, true if it might.
+*/
+bool KAEvent::Private::mayOccurDailyDuringWork(const KDateTime& kdt) const
+{
+    if (!kdt.isDateOnly()
+    &&  (kdt.time() < mWorkDayStart || kdt.time() >= mWorkDayEnd))
+        return false;   // its time is outside working hours
+    // Check if it always occurs on the same day of the week
+    Duration interval = mRecurrence->regularInterval();
+    if (interval  &&  interval.isDaily()  &&  !(interval.asDays() % 7))
+    {
+        // It recurs weekly
+        if (!mRepetition  ||  (mRepetition.isDaily() && !(mRepetition.intervalDays() % 7)))
+            return false;   // any repetitions are also weekly
+        // Repetitions are daily. Check if any occur on working days
+        // by checking the first recurrence and up to 6 repetitions.
+        int day = mRecurrence->startDateTime().date().dayOfWeek() - 1;   // Monday = 0
+        int repeatDays = mRepetition.intervalDays();
+        int maxRepeat = (mRepetition.count() < 6) ? mRepetition.count() : 6;
+        for (int i = 0;  !mWorkDays.testBit(day);  ++i, day = (day + repeatDays) % 7)
+        {
+            if (i >= maxRepeat)
+                return false;  // no working day occurrences
+        }
+    }
+    return true;
+}
+
+/******************************************************************************
+* Set the specified alarm to be an audio alarm with the given file name.
+*/
+#ifdef USE_AKONADI
+void KAEvent::Private::setAudioAlarm(const Alarm::Ptr& alarm) const
+#else
+void KAEvent::Private::setAudioAlarm(Alarm* alarm) const
+#endif
+{
+    alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
+    if (mSoundVolume >= 0)
+        alarm->setCustomProperty(KAlarm::Calendar::APPNAME, VOLUME_PROPERTY,
+                      QString::fromLatin1("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2))
+                                                     .arg(QString::number(mFadeVolume, 'f', 2))
+                                                     .arg(mFadeSeconds));
+}
+
+/******************************************************************************
+* Get the date/time of the next recurrence of the event, after the specified
+* date/time.
+* 'result' = date/time of next occurrence, or invalid date/time if none.
+*/
+KAEvent::OccurType KAEvent::Private::nextRecurrence(const KDateTime& preDateTime, DateTime& result) const
+{
+    KDateTime recurStart = mRecurrence->startDateTime();
+    KDateTime pre = preDateTime.toTimeSpec(mStartDateTime.timeSpec());
+    if (mStartDateTime.isDateOnly()  &&  !pre.isDateOnly()  &&  pre.time() < DateTime::startOfDay())
+    {
+        pre = pre.addDays(-1);    // today's recurrence (if today recurs) is still to come
+        pre.setTime(DateTime::startOfDay());
+    }
+    KDateTime dt = mRecurrence->getNextDateTime(pre);
+    result = dt;
+    result.setDateOnly(mStartDateTime.isDateOnly());
+    if (!dt.isValid())
+        return NO_OCCURRENCE;
+    if (dt == recurStart)
+        return FIRST_OR_ONLY_OCCURRENCE;
+    if (mRecurrence->duration() >= 0  &&  dt == mRecurrence->endDateTime())
+        return LAST_RECURRENCE;
+    return result.isDateOnly() ? RECURRENCE_DATE : RECURRENCE_DATE_TIME;
 }
 
 /******************************************************************************
 * Validate the event's recurrence data, correcting any inconsistencies (which
 * should never occur!).
-* Reply = true if a recurrence (as opposed to a login repetition) exists.
+* Reply = recurrence period type.
 */
 KARecurrence::Type KAEvent::Private::checkRecur() const
 {
@@ -3844,42 +4997,6 @@ KARecurrence::Type KAEvent::Private::checkRecur() const
     return KARecurrence::NO_RECUR;
 }
 
-
-/******************************************************************************
-* Return the recurrence interval in units of the recurrence period type.
-*/
-int KAEvent::recurInterval() const
-{
-    if (d->mRecurrence)
-    {
-        switch (d->mRecurrence->type())
-        {
-            case KARecurrence::MINUTELY:
-            case KARecurrence::DAILY:
-            case KARecurrence::WEEKLY:
-            case KARecurrence::MONTHLY_DAY:
-            case KARecurrence::MONTHLY_POS:
-            case KARecurrence::ANNUAL_DATE:
-            case KARecurrence::ANNUAL_POS:
-                return d->mRecurrence->frequency();
-            default:
-                break;
-        }
-    }
-    return 0;
-}
-
-/******************************************************************************
-* Set the start-of-day time for date-only alarms.
-*/
-void KAEvent::setStartOfDay(const QTime& startOfDay)
-{
-    DateTime::setStartOfDay(startOfDay);
-#ifdef __GNUC__
-#warning Does this need all trigger times for date-only alarms to be recalculated?
-#endif
-}
-
 /******************************************************************************
 * If the calendar was written by a previous version of KAlarm, do any
 * necessary format conversions on the events to ensure that when the calendar
@@ -3887,9 +5004,9 @@ void KAEvent::setStartOfDay(const QTime& startOfDay)
 * Reply = true if any conversions were done.
 */
 #ifdef USE_AKONADI
-bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersion, bool adjustSummerTime)
+bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersion)
 #else
-bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bool adjustSummerTime)
+bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
 #endif
 {
     // KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
@@ -3938,6 +5055,15 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion, bo
     static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
     static const QByteArray CANCEL_ON_ERROR_PROPERTY("ERRCANCEL");// X-KDE-KALARM-ERRCANCEL property
     static const QByteArray DONT_SHOW_ERROR_PROPERTY("ERRNOSHOW");// X-KDE-KALARM-ERRNOSHOW property
+
+    bool adjustSummerTime = false;
+    if (calendarVersion == -KAlarm::Version(0,5,7))
+    {
+        // The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
+        // Summer time was ignored when converting to UTC.
+        calendarVersion = -calendarVersion;
+        adjustSummerTime = true;
+    }
 
     if (calendarVersion >= currentCalendarVersion())
         return false;
@@ -4761,133 +5887,6 @@ bool KAEvent::Private::convertRepetition(Event* event)
     return converted;
 }
 
-#ifdef USE_AKONADI
-/******************************************************************************
-* Return a list of pointers to KAEvent objects.
-*/
-KAEvent::List KAEvent::ptrList(QVector<KAEvent>& objList)
-{
-    KAEvent::List ptrs;
-    for (int i = 0, count = objList.count();  i < count;  ++i)
-        ptrs += &objList[i];
-    return ptrs;
-}
-#endif
-
-
-#ifndef KDE_NO_DEBUG_OUTPUT
-void KAEvent::Private::dumpDebug() const
-{
-    kDebug() << "KAEvent dump:";
-#ifndef USE_AKONADI
-    if (mResource) { kDebug() << "-- mResource:" << mResource->resourceName(); }
-#endif
-    kDebug() << "-- mEventID:" << mEventID;
-    kDebug() << "-- mCommandError:" << mCommandError;
-    kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
-    kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
-    kDebug() << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
-    kDebug() << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
-    kDebug() << "-- mCategory:" << mCategory;
-    baseDumpDebug();
-    if (!mTemplateName.isEmpty())
-    {
-        kDebug() << "-- mTemplateName:" << mTemplateName;
-        kDebug() << "-- mTemplateAfterTime:" << mTemplateAfterTime;
-    }
-    if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
-    {
-        kDebug() << "-- mBgColour:" << mBgColour.name();
-        kDebug() << "-- mFgColour:" << mFgColour.name();
-        kDebug() << "-- mUseDefaultFont:" << mUseDefaultFont;
-        if (!mUseDefaultFont)
-            kDebug() << "-- mFont:" << mFont.toString();
-        kDebug() << "-- mSpeak:" << mSpeak;
-        kDebug() << "-- mAudioFile:" << mAudioFile;
-        kDebug() << "-- mPreAction:" << mPreAction;
-        kDebug() << "-- mCancelOnPreActErr:" << mCancelOnPreActErr;
-        kDebug() << "-- mDontShowPreActErr:" << mDontShowPreActErr;
-        kDebug() << "-- mPostAction:" << mPostAction;
-    }
-    else if (mActionType == T_COMMAND)
-    {
-        kDebug() << "-- mCommandXterm:" << mCommandXterm;
-        kDebug() << "-- mCommandDisplay:" << mCommandDisplay;
-        kDebug() << "-- mLogFile:" << mLogFile;
-    }
-    else if (mActionType == T_EMAIL)
-    {
-        kDebug() << "-- mEmail: FromKMail:" << mEmailFromIdentity;
-        kDebug() << "--         Addresses:" << mEmailAddresses.join(",");
-        kDebug() << "--         Subject:" << mEmailSubject;
-        kDebug() << "--         Attachments:" << mEmailAttachments.join(",");
-        kDebug() << "--         Bcc:" << mEmailBcc;
-    }
-    else if (mActionType == T_AUDIO)
-        kDebug() << "-- mAudioFile:" << mAudioFile;
-    kDebug() << "-- mBeep:" << mBeep;
-    if (mActionType == T_AUDIO  ||  !mAudioFile.isEmpty())
-    {
-        if (mSoundVolume >= 0)
-        {
-            kDebug() << "-- mSoundVolume:" << mSoundVolume;
-            if (mFadeVolume >= 0)
-            {
-                kDebug() << "-- mFadeVolume:" << mFadeVolume;
-                kDebug() << "-- mFadeSeconds:" << mFadeSeconds;
-            }
-            else
-                kDebug() << "-- mFadeVolume:-:";
-        }
-        else
-            kDebug() << "-- mSoundVolume:-:";
-        kDebug() << "-- mRepeatSound:" << mRepeatSound;
-    }
-    kDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
-    kDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
-    kDebug() << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
-    kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
-    kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
-    kDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
-    if (mRepeatAtLogin)
-        kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
-    kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
-    kDebug() << "-- mConfirmAck:" << mConfirmAck;
-    kDebug() << "-- mEnabled:" << mEnabled;
-#ifdef USE_AKONADI
-    kDebug() << "-- mItemId:" << mItemId;
-    kDebug() << "-- mCompatibility:" << mCompatibility;
-    kDebug() << "-- mReadOnly:" << mReadOnly;
-#endif
-    if (mReminderMinutes)
-    {
-        kDebug() << "-- mReminderMinutes:" << mReminderMinutes;
-        kDebug() << "-- mReminderActive:" << (mReminderActive == ACTIVE_REMINDER ? "active" : mReminderActive == HIDDEN_REMINDER ? "hidden" : "no");
-        kDebug() << "-- mReminderOnceOnly:" << mReminderOnceOnly;
-    }
-    else if (mDeferral > 0)
-    {
-        kDebug() << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
-        kDebug() << "-- mDeferralTime:" << mDeferralTime.toString();
-    }
-    kDebug() << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
-    if (mDeferDefaultMinutes)
-        kDebug() << "-- mDeferDefaultDateOnly:" << mDeferDefaultDateOnly;
-    if (mDisplaying)
-    {
-        kDebug() << "-- mDisplayingTime:" << mDisplayingTime.toString();
-        kDebug() << "-- mDisplayingFlags:" << mDisplayingFlags;
-        kDebug() << "-- mDisplayingDefer:" << mDisplayingDefer;
-        kDebug() << "-- mDisplayingEdit:" << mDisplayingEdit;
-    }
-    kDebug() << "-- mRevision:" << mRevision;
-    kDebug() << "-- mRecurrence:" << mRecurrence;
-    kDebug() << "-- mAlarmCount:" << mAlarmCount;
-    kDebug() << "-- mMainExpired:" << mMainExpired;
-    kDebug() << "-- mDisplaying:" << mDisplaying;
-    kDebug() << "KAEvent dump end";
-}
-#endif
 
 
 /*=============================================================================
