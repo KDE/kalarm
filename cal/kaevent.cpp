@@ -247,6 +247,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         bool               mDontShowPreActErr; // don't notify error if pre-alarm action fails
         bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
         bool               mUseDefaultFont;    // use default message font, not mFont
+        bool               mCommandScript;     // the command text is a script, not a shell command line
         bool               mCommandXterm;      // command alarm is to be executed in a terminal window
         bool               mCommandDisplay;    // command output is to be displayed in an alarm window
         bool               mEmailBcc;          // blind copy the email to the user
@@ -622,6 +623,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mDontShowPreActErr       = event.mDontShowPreActErr;
     mConfirmAck              = event.mConfirmAck;
     mUseDefaultFont          = event.mUseDefaultFont;
+    mCommandScript           = event.mCommandScript;
     mCommandXterm            = event.mCommandXterm;
     mCommandDisplay          = event.mCommandDisplay;
     mEmailBcc                = event.mEmailBcc;
@@ -1188,6 +1190,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
     mConfirmAck             = flags & CONFIRM_ACK;
     mUseDefaultFont         = flags & DEFAULT_FONT;
+    mCommandScript          = flags & SCRIPT;
     mCommandXterm           = flags & EXEC_IN_XTERM;
     mCommandDisplay         = flags & DISPLAY_COMMAND;
     mCopyToKOrganizer       = flags & COPY_KORGANIZER;
@@ -1741,6 +1744,7 @@ int KAEvent::Private::flags() const
          | (mSpeak                      ? SPEAK : 0)
          | (mConfirmAck                 ? CONFIRM_ACK : 0)
          | (mUseDefaultFont             ? DEFAULT_FONT : 0)
+         | (mCommandScript              ? SCRIPT : 0)
          | (mCommandXterm               ? EXEC_IN_XTERM : 0)
          | (mCommandDisplay             ? DISPLAY_COMMAND : 0)
          | (mCopyToKOrganizer           ? COPY_KORGANIZER : 0)
@@ -3644,10 +3648,9 @@ KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
     KAAlarm al;       // this sets type to INVALID_ALARM
     if (mAlarmCount)
     {
-        al.mActionType     = mActionType;
-        al.mRepeatAtLogin  = false;
-        al.mDeferred       = false;
-        al.mCommandScript  = mCommandScript;
+        al.mActionType    = mActionType;
+        al.mRepeatAtLogin = false;
+        al.mDeferred      = false;
         switch (type)
         {
             case KAAlarm::MAIN_ALARM:
@@ -3936,6 +3939,7 @@ void KAEvent::Private::dumpDebug() const
     }
     else if (mActionType == T_COMMAND)
     {
+        kDebug() << "-- mCommandScript:" << mCommandScript;
         kDebug() << "-- mCommandXterm:" << mCommandXterm;
         kDebug() << "-- mCommandDisplay:" << mCommandDisplay;
         kDebug() << "-- mLogFile:" << mLogFile;
@@ -5981,7 +5985,6 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 {
     mNextMainDateTime  = rhs.mNextMainDateTime;
     mActionType        = rhs.mActionType;
-    mCommandScript     = rhs.mCommandScript;
     mRepetition        = rhs.mRepetition;
     mNextRepeat        = rhs.mNextRepeat;
     mRepeatAtLogin     = rhs.mRepeatAtLogin;
@@ -5990,21 +5993,17 @@ void KAAlarmEventBase::copy(const KAAlarmEventBase& rhs)
 void KAAlarmEventBase::set(int flags)
 {
     mRepeatAtLogin  = flags & KAEvent::REPEAT_AT_LOGIN;
-    mCommandScript  = flags & KAEvent::SCRIPT;
 }
 
 int KAAlarmEventBase::baseFlags() const
 {
-    return (mRepeatAtLogin  ? KAEvent::REPEAT_AT_LOGIN : 0)
-         | (mCommandScript  ? KAEvent::SCRIPT : 0);
+    return (mRepeatAtLogin  ? KAEvent::REPEAT_AT_LOGIN : 0);
 }
 
 #ifndef KDE_NO_DEBUG_OUTPUT
 void KAAlarmEventBase::baseDumpDebug() const
 {
     kDebug() << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??");
-    if (mActionType == T_COMMAND)
-        kDebug() << "-- mCommandScript:" << mCommandScript;
     kDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
     kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
     if (!mRepetition)

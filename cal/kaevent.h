@@ -112,7 +112,6 @@ class KALARM_CAL_EXPORT KAAlarmEventBase
         Type               mActionType;       // alarm action type
         Repetition         mRepetition;       // sub-repetition count and interval
         int                mNextRepeat;       // repetition count of next due sub-repetition
-        bool               mCommandScript;    // the command text is a script, not a shell command line
         bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
 
     friend class KAEvent;
