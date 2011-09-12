@@ -56,7 +56,7 @@ class EventListView : public QTreeView
         QModelIndex       selectedIndex() const;
 #ifdef USE_AKONADI
         KAEvent           selectedEvent() const;
-        QList<KAEvent>    selectedEvents() const;
+        QVector<KAEvent>  selectedEvents() const;
 #else
         KAEvent*          selectedEvent() const;
         KAEvent::List     selectedEvents() const;

@@ -616,7 +616,7 @@ void EventListModel::slotResourceStatusChanged(AlarmResource* resource, AlarmRes
         for (int i = list.count();  --i >= 0;  )
         {
             if (mEvents.indexOf(list[i]) >= 0)
-                list.removeAt(i);    // avoid creating duplicate entries
+                list.remove(i);    // avoid creating duplicate entries
         }
         if (!list.isEmpty())
         {
@@ -656,7 +656,7 @@ void EventListModel::removeResource(AlarmResource* resource)
         {
             beginRemoveRows(QModelIndex(), row + 1, lastRow);
             while (lastRow > row)
-                mEvents.removeAt(lastRow--);
+                mEvents.remove(lastRow--);
             endRemoveRows();
             lastRow = -1;
         }
@@ -665,7 +665,7 @@ void EventListModel::removeResource(AlarmResource* resource)
     {
         beginRemoveRows(QModelIndex(), 0, lastRow);
         while (lastRow >= 0)
-            mEvents.removeAt(lastRow--);
+            mEvents.remove(lastRow--);
         endRemoveRows();
     }
     if (mHaveEvents  &&  mEvents.isEmpty())
@@ -759,7 +759,7 @@ void EventListModel::removeEvent(int row)
     if (row < 0)
         return;
     beginRemoveRows(QModelIndex(), row, row);
-    mEvents.removeAt(row);
+    mEvents.remove(row);
     endRemoveRows();
     if (mHaveEvents  &&  mEvents.isEmpty())
         updateHaveEvents(false);

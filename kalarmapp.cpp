@@ -1110,7 +1110,7 @@ void KAlarmApp::setSpreadWindowsState(bool spread)
 * to command line options.
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
-bool KAlarmApp::scheduleEvent(KAEvent::Action action, const QString& text, const KDateTime& dateTime,
+bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KDateTime& dateTime,
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
@@ -1267,7 +1267,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
                     // Set the time to display if it's a display alarm
                     alarm.setTime(now);
                 }
-                if (!reschedule  &&  alarm.lateCancel())
+                if (!reschedule  &&  event->lateCancel())
                 {
                     // Alarm is due, and it is to be cancelled if too late.
                     kDebug() << "LATE_CANCEL";
@@ -1275,7 +1275,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
                     if (alarm.dateTime().isDateOnly())
                     {
                         // The alarm has no time, so cancel it if its date is too far past
-                        int maxlate = alarm.lateCancel() / 1440;    // maximum lateness in days
+                        int maxlate = event->lateCancel() / 1440;    // maximum lateness in days
                         KDateTime limit(DateTime(nextDT.addDays(maxlate + 1)).effectiveKDateTime());
                         if (now >= limit)
                         {
@@ -1309,7 +1309,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
                     else
                     {
                         // The alarm is timed. Allow it to be the permitted amount late before cancelling it.
-                        int maxlate = maxLateness(alarm.lateCancel());
+                        int maxlate = maxLateness(event->lateCancel());
                         if (secs > maxlate)
                         {
                             // It's over the maximum interval late.

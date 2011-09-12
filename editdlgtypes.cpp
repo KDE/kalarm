@@ -386,7 +386,7 @@ void EditDisplayAlarmDlg::setColours(const QColor& fgColour, const QColor& bgCol
 /******************************************************************************
 * Set the dialog's action and the action's text.
 */
-void EditDisplayAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
+void EditDisplayAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
     QString text = alarmText.displayText();
     switch (action)
@@ -541,7 +541,7 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
 */
 void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const QString& text, int lateCancel, bool trial)
 {
-    KAEvent::Action type;
+    KAEvent::SubAction type;
     switch (mTypeCombo->currentIndex())
     {
         case tFILE:     type = KAEvent::FILE; break;
@@ -853,7 +853,7 @@ void EditCommandAlarmDlg::type_showOptions(bool more)
 /******************************************************************************
 * Set the dialog's action and the action's text.
 */
-void EditCommandAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
+void EditCommandAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
     Q_UNUSED(action);
     Q_ASSERT(action == KAEvent::COMMAND);
@@ -1185,7 +1185,7 @@ void EditEmailAlarmDlg::attachmentEnable()
 /******************************************************************************
 * Set the dialog's action and the action's text.
 */
-void EditEmailAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
+void EditEmailAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
     Q_UNUSED(action);
     Q_ASSERT(action == KAEvent::EMAIL);
@@ -1523,7 +1523,7 @@ void EditAudioAlarmDlg::setAudio(const QString& file, float volume)
 /******************************************************************************
 * Set the dialog's action and the action's text.
 */
-void EditAudioAlarmDlg::setAction(KAEvent::Action action, const AlarmText& alarmText)
+void EditAudioAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& alarmText)
 {
     Q_UNUSED(action);
     Q_ASSERT(action == KAEvent::AUDIO);

@@ -146,13 +146,13 @@ kDebug(0)<<"SelectedEvent() count="<<list.count();
 * Return the selected events.
 */
 #ifdef USE_AKONADI
-QList<KAEvent> EventListView::selectedEvents() const
+QVector<KAEvent> EventListView::selectedEvents() const
 #else
 KAEvent::List EventListView::selectedEvents() const
 #endif
 {
 #ifdef USE_AKONADI
-    QList<KAEvent> elist;
+    QVector<KAEvent> elist;
 #else
     KAEvent::List elist;
 #endif

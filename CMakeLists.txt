@@ -3,7 +3,7 @@ project(kalarm)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 add_definitions(-DQT_STRICT_ITERATORS)
 
-option(KALARM_USE_AKONADI "Build to use Akonadi" TRUE)
+option(KALARM_USE_AKONADI "Build to use Akonadi" ON)
 
 # Kalarm from kdepim master needs kdepimlibs 4.7
 if(NOT ${KDE_VERSION} VERSION_GREATER 4.6.40)

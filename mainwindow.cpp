@@ -807,7 +807,7 @@ void MainWindow::slotModify()
 void MainWindow::slotDelete(bool force)
 {
 #ifdef USE_AKONADI
-    QList<KAEvent> events = mListView->selectedEvents();
+    QVector<KAEvent> events = mListView->selectedEvents();
 #else
     KAEvent::List events = mListView->selectedEvents();
     // Save the IDs of the events to be deleted, in case any events are
@@ -835,24 +835,23 @@ void MainWindow::slotDelete(bool force)
     Undo::EventList undos;
     AlarmCalendar* resources = AlarmCalendar::resources();
 #ifdef USE_AKONADI
-    for (QList<KAEvent>::Iterator eit = events.begin();  eit != events.end();  )
+    for (int i = 0;  i < events.count();  )
     {
-        Akonadi::Collection c = resources->collectionForEvent((*eit).itemId());
+        Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
         if (!c.isValid())
-            eit = events.erase(eit);
+            events.remove(i);
         else
-            undos.append(*eit++, c);
+            undos.append(events[i++], c);
     }
 #else
-    for (int i = 0, end = ids.count();  i < end;  ++i)
+    for (int i = 0, e = 0, end = ids.count();  i < end;  ++i)
     {
         AlarmResource* r = resources->resourceForEvent(ids[i]);
         if (!r)
-            events[i] = 0;
+            events.remove(e);
         else
-            undos.append(*events[i], r);
+            undos.append(*events[e++], r);
     }
-    events.removeAll((KAEvent*)0);
 #endif
 
     if (events.isEmpty())
@@ -872,7 +871,7 @@ void MainWindow::slotDelete(bool force)
 void MainWindow::slotReactivate()
 {
 #ifdef USE_AKONADI
-    QList<KAEvent> events = mListView->selectedEvents();
+    QVector<KAEvent> events = mListView->selectedEvents();
 #else
     KAEvent::List events = mListView->selectedEvents();
 #endif
@@ -910,8 +909,8 @@ void MainWindow::slotEnable()
 {
     bool enable = mActionEnableEnable;    // save since changed in response to KAlarm::enableEvent()
 #ifdef USE_AKONADI
-    QList<KAEvent> events = mListView->selectedEvents();
-    QList<KAEvent> eventCopies;
+    QVector<KAEvent> events = mListView->selectedEvents();
+    QVector<KAEvent> eventCopies;
 #else
     KAEvent::List events = mListView->selectedEvents();
     KAEvent::List eventCopies;
@@ -1010,7 +1009,7 @@ void MainWindow::slotImportAlarms()
 void MainWindow::slotExportAlarms()
 {
 #ifdef USE_AKONADI
-    QList<KAEvent> events = mListView->selectedEvents();
+    QVector<KAEvent> events = mListView->selectedEvents();
     if (!events.isEmpty())
     {
         KAEvent::List evts = KAEvent::ptrList(events);
@@ -1035,7 +1034,7 @@ void MainWindow::slotBirthdays()
     AutoQPointer<BirthdayDlg> dlg = new BirthdayDlg(this);
     if (dlg->exec() == QDialog::Accepted)
     {
-        QList<KAEvent> events = dlg->events();
+        QVector<KAEvent> events = dlg->events();
         if (!events.isEmpty())
         {
             mListView->clearSelection();
@@ -1373,11 +1372,11 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
     kDebug() << "Formats:" << e->mimeData()->formats();
     const QMimeData* data = e->mimeData();
-    KAEvent::Action action = KAEvent::MESSAGE;
-    QByteArray      bytes;
-    AlarmText       alarmText;
-    KPIM::MailList  mailList;
-    KUrl::List      files;
+    KAEvent::SubAction action = KAEvent::MESSAGE;
+    QByteArray         bytes;
+    AlarmText          alarmText;
+    KPIM::MailList     mailList;
+    KUrl::List         files;
 #ifdef USE_AKONADI
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
 #else
@@ -1562,7 +1561,7 @@ void MainWindow::slotSelection()
 {
     // Find which events have been selected
 #ifdef USE_AKONADI
-    QList<KAEvent> events = mListView->selectedEvents();
+    QVector<KAEvent> events = mListView->selectedEvents();
 #else
     KAEvent::List events = mListView->selectedEvents();
 #endif
