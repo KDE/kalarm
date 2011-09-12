@@ -87,55 +87,25 @@ class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
 };
 
 
-// Base class containing data common to KAAlarm and KAEvent::Private
-class KALARM_CAL_EXPORT KAAlarmEventBase
-{
-    public:
-        ~KAAlarmEventBase()  { }
-
-    protected:
-        enum Type  { T_MESSAGE, T_FILE, T_COMMAND, T_EMAIL, T_AUDIO };
-
-        KAAlarmEventBase() : mNextRepeat(0), mRepeatAtLogin(false)  {}
-        KAAlarmEventBase(const KAAlarmEventBase& rhs)             { copy(rhs); }
-        KAAlarmEventBase& operator=(const KAAlarmEventBase& rhs)  { copy(rhs);  return *this; }
-        void               copy(const KAAlarmEventBase&);
-        void               set(int flags);
-        int                baseFlags() const;
-#ifdef KDE_NO_DEBUG_OUTPUT
-        void               baseDumpDebug() const  { }
-#else
-        void               baseDumpDebug() const;
-#endif
-
-        DateTime           mNextMainDateTime; // next time to display the alarm, excluding repetitions
-        Type               mActionType;       // alarm action type
-        Repetition         mRepetition;       // sub-repetition count and interval
-        int                mNextRepeat;       // repetition count of next due sub-repetition
-        bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
-
-    friend class KAEvent;
-    friend class AlarmData;
-};
-
-
 // KAAlarm corresponds to a single KCal::Alarm instance.
 // A KAEvent may contain multiple KAAlarm's.
-class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
+class KALARM_CAL_EXPORT KAAlarm
 {
     public:
-        // Define the basic KAAlarm action types
+        /** The basic KAAlarm action types. */
         enum Action
         {
-            MESSAGE = T_MESSAGE,   // KCal::Alarm::Display type: display a text message
-            FILE    = T_FILE,      // KCal::Alarm::Display type: display a file (URL given by the alarm text)
-            COMMAND = T_COMMAND,   // KCal::Alarm::Procedure type: execute a shell command
-            EMAIL   = T_EMAIL,     // KCal::Alarm::Email type: send an email
-            AUDIO   = T_AUDIO      // KCal::Alarm::Audio type: play a sound file
+            MESSAGE,   // KCal::Alarm::Display type: display a text message
+            FILE,      // KCal::Alarm::Display type: display a file (URL given by the alarm text)
+            COMMAND,   // KCal::Alarm::Procedure type: execute a shell command
+            EMAIL,     // KCal::Alarm::Email type: send an email
+            AUDIO      // KCal::Alarm::Audio type: play a sound file
         };
-        // Define the KAAlarm types.
-        // KAAlarm's of different types may be contained in a KAEvent,
-        // each defining a different component of the overall alarm.
+
+        /** The alarm types.
+         *  KAAlarm's of different types may be contained in a KAEvent,
+         *  each defining a different component of the overall alarm.
+         */
         enum Type
         {
             INVALID_ALARM       = 0,     // not an alarm
@@ -153,6 +123,7 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
             PRE_ACTION_ALARM    = 0x40,  // command to execute before displaying the alarm
             POST_ACTION_ALARM   = 0x50   // command to execute after the alarm window is closed
         };
+
         enum SubType
         {
             INVALID__ALARM                = INVALID_ALARM,
@@ -174,10 +145,10 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
             POST_ACTION__ALARM            = POST_ACTION_ALARM
         };
 
-        KAAlarm()          : mType(INVALID__ALARM), mDeferred(false) { }
+        KAAlarm() : mType(INVALID__ALARM), mNextRepeat(0), mRepeatAtLogin(false), mDeferred(false) { }
         KAAlarm(const KAAlarm&);
         ~KAAlarm()  { }
-        Action             action() const               { return (Action)mActionType; }
+        Action             action() const               { return mActionType; }
         bool               isValid() const              { return mType != INVALID__ALARM; }
         Type               type() const                 { return static_cast<Type>(mType & ~TIMED_DEFERRAL_FLAG); }
         SubType            subType() const              { return mType; }
@@ -200,7 +171,12 @@ class KALARM_CAL_EXPORT KAAlarm : public KAAlarmEventBase
 #endif
 
     private:
+        Action             mActionType;       // alarm action type
         SubType            mType;             // alarm type
+        DateTime           mNextMainDateTime; // next time to display the alarm, excluding repetitions
+        Repetition         mRepetition;       // sub-repetition count and interval
+        int                mNextRepeat;       // repetition count of next due sub-repetition
+        bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
         bool               mRecurs;           // there is a recurrence rule for the alarm
         bool               mDeferred;         // whether the alarm is an extra deferred/deferred-reminder alarm
 
@@ -260,11 +236,11 @@ class KALARM_CAL_EXPORT KAEvent
         /** The sub-action type for the event's main alarm. */
         enum SubAction
         {
-            MESSAGE = KAAlarmEventBase::T_MESSAGE,  //!< display a message text
-            FILE    = KAAlarmEventBase::T_FILE,     //!< display the contents of a file
-            COMMAND = KAAlarmEventBase::T_COMMAND,  //!< execute a command
-            EMAIL   = KAAlarmEventBase::T_EMAIL,    //!< send an email
-            AUDIO   = KAAlarmEventBase::T_AUDIO     //!< play an audio file
+            MESSAGE = KAAlarm::MESSAGE,    //!< display a message text
+            FILE    = KAAlarm::FILE,       //!< display the contents of a file
+            COMMAND = KAAlarm::COMMAND,    //!< execute a command
+            EMAIL   = KAAlarm::EMAIL,      //!< send an email
+            AUDIO   = KAAlarm::AUDIO       //!< play an audio file
         };
 
         /** What type of occurrence is due. */

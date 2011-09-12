@@ -50,7 +50,7 @@ using namespace KCal;
 using namespace KHolidays;
 
 
-class KAEvent::Private : public KAAlarmEventBase, public QSharedData
+class KAEvent::Private : public QSharedData
 {
     public:
         enum ReminderType   // current active state of reminder
@@ -206,6 +206,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         QString            mPostAction;        // command to execute after alarm window is closed
         DateTime           mStartDateTime;     // DTSTART and DTEND: start and end time for event
         KDateTime          mCreatedDateTime;   // CREATED: date event was created, or saved in archive calendar
+        DateTime           mNextMainDateTime;  // next time to display the alarm, excluding repetitions
         KDateTime          mAtLoginDateTime;   // repeat-at-login end time
         DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
         DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
@@ -217,6 +218,8 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         bool               mDeferDefaultDateOnly;// select date-only by default in deferral dialog
         int                mRevision;          // SEQUENCE: revision number of the original alarm, or 0
         KARecurrence*      mRecurrence;        // RECUR: recurrence specification, or 0 if none
+        Repetition         mRepetition;        // sub-repetition count and interval
+        int                mNextRepeat;        // repetition count of next due sub-repetition
         int                mAlarmCount;        // number of alarms: count of !mMainExpired, mRepeatAtLogin, mDeferral, mReminderActive, mDisplaying
         DeferType          mDeferral;          // whether the alarm is an extra deferred/deferred-reminder alarm
         unsigned long      mKMailSerialNumber; // if email text, message's KMail serial number
@@ -238,6 +241,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         mutable const KHolidays::HolidayRegion*
                            mExcludeHolidays;   // non-null to not trigger alarms on holidays (= mHolidays when trigger calculated)
         mutable int        mWorkTimeOnly;      // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
+        SubAction          mActionSubType;     // sub-action type for the event's main alarm
         KAlarm::CalEvent::Type mCategory;      // event category (active, archived, template, ...)
 #ifdef USE_AKONADI
         KAlarm::Calendar::Compat mCompatibility; // event's storage format compatibility
@@ -258,6 +262,7 @@ class KAEvent::Private : public KAAlarmEventBase, public QSharedData
         bool               mReminderOnceOnly;  // the reminder is output only for the first recurrence
         bool               mAutoClose;         // whether to close the alarm window after the late-cancel period
         bool               mMainExpired;       // main alarm has expired (in which case a deferral alarm will exist)
+        bool               mRepeatAtLogin;     // whether to repeat the alarm at every login
         bool               mArchiveRepeatAtLogin; // if now archived, original event was repeat-at-login
         bool               mArchive;           // event has triggered in the past, so archive it when closed
         bool               mDisplaying;        // whether the alarm is currently being displayed (i.e. in displaying calendar)
@@ -411,7 +416,7 @@ struct AlarmData
     int                    nextRepeat;
     bool                   speak;
     KAAlarm::SubType       type;
-    KAAlarmEventBase::Type action;
+    KAAlarm::Action        action;
     int                    displayingFlags;
     bool                   defaultFont;
     bool                   isEmailText;
@@ -484,6 +489,7 @@ KAEvent::Private::Private()
       mReminderActive(NO_REMINDER),
       mRevision(0),
       mRecurrence(0),
+      mNextRepeat(0),
       mAlarmCount(0),
       mDeferral(NO_DEFERRAL),
       mChangeCount(0),
@@ -500,6 +506,7 @@ KAEvent::Private::Private()
       mEmailBcc(false),
       mBeep(false),
       mAutoClose(false),
+      mRepeatAtLogin(false),
       mDisplaying(false)
 { }
 
@@ -536,8 +543,7 @@ KAEvent::Private::Private(const Event* e)
 }
 
 KAEvent::Private::Private(const KAEvent::Private& e)
-    : KAAlarmEventBase(e),
-      QSharedData(e),
+    : QSharedData(e),
       mRecurrence(0)
 {
     copy(e);
@@ -562,7 +568,6 @@ KAEvent& KAEvent::operator=(const KAEvent& other)
 */
 void KAEvent::Private::copy(const KAEvent::Private& event)
 {
-    KAAlarmEventBase::copy(event);
 #ifndef USE_AKONADI
     mResource                = event.mResource;
 #endif
@@ -586,6 +591,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mPostAction              = event.mPostAction;
     mStartDateTime           = event.mStartDateTime;
     mCreatedDateTime         = event.mCreatedDateTime;
+    mNextMainDateTime        = event.mNextMainDateTime;
     mAtLoginDateTime         = event.mAtLoginDateTime;
     mDeferralTime            = event.mDeferralTime;
     mDisplayingTime          = event.mDisplayingTime;
@@ -596,6 +602,8 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mDeferDefaultMinutes     = event.mDeferDefaultMinutes;
     mDeferDefaultDateOnly    = event.mDeferDefaultDateOnly;
     mRevision                = event.mRevision;
+    mRepetition              = event.mRepetition;
+    mNextRepeat              = event.mNextRepeat;
     mAlarmCount              = event.mAlarmCount;
     mDeferral                = event.mDeferral;
     mKMailSerialNumber       = event.mKMailSerialNumber;
@@ -614,6 +622,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mLateCancel              = event.mLateCancel;
     mExcludeHolidays         = event.mExcludeHolidays;
     mWorkTimeOnly            = event.mWorkTimeOnly;
+    mActionSubType           = event.mActionSubType;
     mCategory                = event.mCategory;
 #ifdef USE_AKONADI
     mCompatibility           = event.mCompatibility;
@@ -634,6 +643,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mReminderOnceOnly        = event.mReminderOnceOnly;
     mAutoClose               = event.mAutoClose;
     mMainExpired             = event.mMainExpired;
+    mRepeatAtLogin           = event.mRepeatAtLogin;
     mArchiveRepeatAtLogin    = event.mArchiveRepeatAtLogin;
     mArchive                 = event.mArchive;
     mDisplaying              = event.mDisplaying;
@@ -884,7 +894,7 @@ void KAEvent::Private::set(const Event* event)
 
     // Extract status from the event's alarms.
     // First set up defaults.
-    mActionType        = T_MESSAGE;
+    mActionSubType     = MESSAGE;
     mMainExpired       = true;
     mRepeatAtLogin     = false;
     mDisplaying        = false;
@@ -932,7 +942,7 @@ void KAEvent::Private::set(const Event* event)
                     mRepetition.set(data.alarm->snoozeTime(), data.alarm->repeatCount());   // values may be adjusted in setRecurrence()
                     mNextRepeat = data.nextRepeat;
                 }
-                if (data.action != T_AUDIO)
+                if (data.action != KAAlarm::AUDIO)
                     break;
                 // Fall through to AUDIO__ALARM
             case KAAlarm::AUDIO__ALARM:
@@ -1028,32 +1038,32 @@ void KAEvent::Private::set(const Event* event)
                 // alarm in the event (if it has expired and then been deferred)
                 if (!set)
                 {
-                    mActionType = data.action;
-                    mText = (mActionType == T_COMMAND) ? data.cleanText.trimmed() : data.cleanText;
+                    mActionSubType = (KAEvent::SubAction)data.action;
+                    mText = (mActionSubType == COMMAND) ? data.cleanText.trimmed() : data.cleanText;
                     switch (data.action)
                     {
-                        case T_COMMAND:
+                        case KAAlarm::COMMAND:
                             mCommandScript = data.commandScript;
                             if (!mCommandDisplay)
                                 break;
-                            // fall through to T_MESSAGE
-                        case T_MESSAGE:
+                            // fall through to MESSAGE
+                        case KAAlarm::MESSAGE:
                             mFont           = data.font;
                             mUseDefaultFont = data.defaultFont;
                             if (data.isEmailText)
                                 isEmailText = true;
-                            // fall through to T_FILE
-                        case T_FILE:
+                            // fall through to FILE
+                        case KAAlarm::FILE:
                             mBgColour = data.bgColour;
                             mFgColour = data.fgColour;
                             break;
-                        case T_EMAIL:
+                        case KAAlarm::EMAIL:
                             mEmailFromIdentity = data.emailFromId;
                             mEmailAddresses    = data.alarm->mailAddresses();
                             mEmailSubject      = data.alarm->mailSubject();
                             mEmailAttachments  = data.alarm->mailAttachments();
                             break;
-                        case T_AUDIO:
+                        case KAAlarm::AUDIO:
                             // Already mostly handled above
                             mRepeatSound = data.repeatSound;
                             break;
@@ -1062,8 +1072,8 @@ void KAEvent::Private::set(const Event* event)
                     }
                     set = true;
                 }
-                if (data.action == T_FILE  &&  mActionType == T_MESSAGE)
-                    mActionType = T_FILE;
+                if (data.action == KAAlarm::FILE  &&  mActionSubType == MESSAGE)
+                    mActionSubType = FILE;
                 ++mAlarmCount;
                 break;
             case KAAlarm::AUDIO__ALARM:
@@ -1153,10 +1163,10 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
         case COMMAND:
         case EMAIL:
         case AUDIO:
-            mActionType = (KAAlarmEventBase::Type)action;
+            mActionSubType = (KAEvent::SubAction)action;
             break;
         default:
-            mActionType = T_MESSAGE;
+            mActionSubType = MESSAGE;
             break;
     }
     mEventID.clear();
@@ -1170,10 +1180,10 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
 #endif
     mPreAction.clear();
     mPostAction.clear();
-    mText                   = (mActionType == T_COMMAND) ? text.trimmed()
-                            : (mActionType == T_AUDIO) ? QString() : text;
+    mText                   = (mActionSubType == COMMAND) ? text.trimmed()
+                            : (mActionSubType == AUDIO) ? QString() : text;
     mCategory               = KAlarm::CalEvent::ACTIVE;
-    mAudioFile              = (mActionType == T_AUDIO) ? text : QString();
+    mAudioFile              = (mActionSubType == AUDIO) ? text : QString();
     mSoundVolume            = -1;
     mFadeVolume             = -1;
     mTemplateAfterTime      = -1;
@@ -1185,9 +1195,9 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mLateCancel             = lateCancel;     // do this before setting flags
     mDeferral               = NO_DEFERRAL;    // do this before setting flags
 
-    KAAlarmEventBase::set(flags & ~READ_ONLY_FLAGS);
     mStartDateTime.setDateOnly(flags & ANY_TIME);
     set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
+    mRepeatAtLogin          = flags & REPEAT_AT_LOGIN;
     mConfirmAck             = flags & CONFIRM_ACK;
     mUseDefaultFont         = flags & DEFAULT_FONT;
     mCommandScript          = flags & SCRIPT;
@@ -1516,7 +1526,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
             ancillaryType = 1;
         }
     }
-    if ((mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())  &&  mActionType != T_AUDIO)
+    if ((mBeep  ||  mSpeak  ||  !mAudioFile.isEmpty())  &&  mActionSubType != AUDIO)
     {
         // A sound is specified
         if (ancillaryType == 2)
@@ -1631,28 +1641,28 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
                 flags << HIDDEN_REMINDER_FLAG;
             }
             bool display = false;
-            switch (mActionType)
+            switch (mActionSubType)
             {
-                case T_FILE:
+                case FILE:
                     alltypes += FILE_TYPE;
-                    // fall through to T_MESSAGE
-                case T_MESSAGE:
+                    // fall through to MESSAGE
+                case MESSAGE:
                     alarm->setDisplayAlarm(AlarmText::toCalendarText(mText));
                     display = true;
                     break;
-                case T_COMMAND:
+                case COMMAND:
                     if (mCommandScript)
                         alarm->setProcedureAlarm("", mText);
                     else
                         setProcedureAlarm(alarm, mText);
                     display = mCommandDisplay;
                     break;
-                case T_EMAIL:
+                case EMAIL:
                     alarm->setEmailAlarm(mEmailSubject, mText, mEmailAddresses, mEmailAttachments);
                     if (mEmailFromIdentity)
                         flags << Private::EMAIL_ID_FLAG << QString::number(mEmailFromIdentity);
                     break;
-                case T_AUDIO:
+                case AUDIO:
                     setAudioAlarm(alarm);
                     if (mRepeatSound)
                         alltypes += SOUND_REPEAT_TYPE;
@@ -1735,13 +1745,13 @@ int KAEvent::Private::flags() const
 {
     if (mSpeak)
         const_cast<KAEvent::Private*>(this)->mBeep = false;
-    return baseFlags()
-         | (mBeep                       ? BEEP : 0)
+    return (mBeep                       ? BEEP : 0)
          | (mRepeatSound                ? REPEAT_SOUND : 0)
          | (mEmailBcc                   ? EMAIL_BCC : 0)
          | (mStartDateTime.isDateOnly() ? ANY_TIME : 0)
          | (mDeferral != NO_DEFERRAL    ? DEFERRAL : 0)
          | (mSpeak                      ? SPEAK : 0)
+         | (mRepeatAtLogin              ? REPEAT_AT_LOGIN : 0)
          | (mConfirmAck                 ? CONFIRM_ACK : 0)
          | (mUseDefaultFont             ? DEFAULT_FONT : 0)
          | (mCommandScript              ? SCRIPT : 0)
@@ -1863,19 +1873,19 @@ AlarmResource* KAEvent::resource() const
 
 KAEvent::SubAction KAEvent::actionSubType() const
 {
-    return (SubAction)d->mActionType;
+    return d->mActionSubType;
 }
 
 KAEvent::Actions KAEvent::actionTypes() const
 {
-    switch (d->mActionType)
+    switch (d->mActionSubType)
     {
-        case KAAlarmEventBase::T_MESSAGE:
-        case KAAlarmEventBase::T_FILE:     return ACT_DISPLAY;
-        case KAAlarmEventBase::T_COMMAND:  return d->mCommandDisplay ? ACT_DISPLAY_COMMAND : ACT_COMMAND;
-        case KAAlarmEventBase::T_EMAIL:    return ACT_EMAIL;
-        case KAAlarmEventBase::T_AUDIO:    return ACT_AUDIO;
-        default:                           return ACT_NONE;
+        case MESSAGE:
+        case FILE:     return ACT_DISPLAY;
+        case COMMAND:  return d->mCommandDisplay ? ACT_DISPLAY_COMMAND : ACT_COMMAND;
+        case EMAIL:    return ACT_EMAIL;
+        case AUDIO:    return ACT_AUDIO;
+        default:       return ACT_NONE;
     }
 }
 
@@ -1920,18 +1930,18 @@ QString KAEvent::cleanText() const
 
 QString KAEvent::message() const
 {
-    return (d->mActionType == KAAlarmEventBase::T_MESSAGE
-         || d->mActionType == KAAlarmEventBase::T_EMAIL) ? d->mText : QString();
+    return (d->mActionSubType == MESSAGE
+         || d->mActionSubType == EMAIL) ? d->mText : QString();
 }
 
 QString KAEvent::displayMessage() const
 {
-    return (d->mActionType == KAAlarmEventBase::T_MESSAGE) ? d->mText : QString();
+    return (d->mActionSubType == MESSAGE) ? d->mText : QString();
 }
 
 QString KAEvent::fileName() const
 {
-    return (d->mActionType == KAAlarmEventBase::T_FILE) ? d->mText : QString();
+    return (d->mActionSubType == FILE) ? d->mText : QString();
 }
 
 QColor KAEvent::bgColour() const
@@ -1961,7 +1971,7 @@ QFont KAEvent::font() const
 
 QString KAEvent::command() const
 {
-    return (d->mActionType == KAAlarmEventBase::T_COMMAND) ? d->mText : QString();
+    return (d->mActionSubType == COMMAND) ? d->mText : QString();
 }
 
 bool KAEvent::commandScript() const
@@ -2092,7 +2102,7 @@ void KAEvent::setEmail(uint from, const EmailAddressList& addresses, const QStri
 
 QString KAEvent::emailMessage() const
 {
-    return (d->mActionType == KAAlarmEventBase::T_EMAIL) ? d->mText : QString();
+    return (d->mActionSubType == EMAIL) ? d->mText : QString();
 }
 
 uint KAEvent::emailFromId() const
@@ -2193,8 +2203,8 @@ bool KAEvent::beep() const
 
 bool KAEvent::speak() const
 {
-    return (d->mActionType == KAAlarmEventBase::T_MESSAGE
-            ||  (d->mActionType == KAAlarmEventBase::T_COMMAND && d->mCommandDisplay))
+    return (d->mActionSubType == MESSAGE
+            ||  (d->mActionSubType == COMMAND && d->mCommandDisplay))
         && d->mSpeak;
 }
 
@@ -3648,7 +3658,7 @@ KAAlarm KAEvent::Private::alarm(KAAlarm::Type type) const
     KAAlarm al;       // this sets type to INVALID_ALARM
     if (mAlarmCount)
     {
-        al.mActionType    = mActionType;
+        al.mActionType    = (KAAlarm::Action)mActionSubType;
         al.mRepeatAtLogin = false;
         al.mDeferred      = false;
         switch (type)
@@ -3908,20 +3918,21 @@ void KAEvent::Private::dumpDebug() const
     if (mResource) { kDebug() << "-- mResource:" << mResource->resourceName(); }
 #endif
     kDebug() << "-- mEventID:" << mEventID;
+    kDebug() << "-- mActionSubType:" << (mActionSubType == MESSAGE ? "MESSAGE" : mActionSubType == FILE ? "FILE" : mActionSubType == COMMAND ? "COMMAND" : mActionSubType == EMAIL ? "EMAIL" : mActionSubType == AUDIO ? "AUDIO" : "??");
+    kDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
     kDebug() << "-- mCommandError:" << mCommandError;
     kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
     kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
     kDebug() << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
     kDebug() << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
     kDebug() << "-- mCategory:" << mCategory;
-    baseDumpDebug();
     if (!mTemplateName.isEmpty())
     {
         kDebug() << "-- mTemplateName:" << mTemplateName;
         kDebug() << "-- mTemplateAfterTime:" << mTemplateAfterTime;
     }
     kDebug() << "-- mText:" << mText;
-    if (mActionType == T_MESSAGE  ||  mActionType == T_FILE)
+    if (mActionSubType == MESSAGE  ||  mActionSubType == FILE)
     {
         kDebug() << "-- mBgColour:" << mBgColour.name();
         kDebug() << "-- mFgColour:" << mFgColour.name();
@@ -3937,14 +3948,14 @@ void KAEvent::Private::dumpDebug() const
         kDebug() << "-- mLateCancel:" << mLateCancel;
         kDebug() << "-- mAutoClose:" << mAutoClose;
     }
-    else if (mActionType == T_COMMAND)
+    else if (mActionSubType == COMMAND)
     {
         kDebug() << "-- mCommandScript:" << mCommandScript;
         kDebug() << "-- mCommandXterm:" << mCommandXterm;
         kDebug() << "-- mCommandDisplay:" << mCommandDisplay;
         kDebug() << "-- mLogFile:" << mLogFile;
     }
-    else if (mActionType == T_EMAIL)
+    else if (mActionSubType == EMAIL)
     {
         kDebug() << "-- mEmail: FromKMail:" << mEmailFromIdentity;
         kDebug() << "--         Addresses:" << mEmailAddresses.join(",");
@@ -3952,10 +3963,10 @@ void KAEvent::Private::dumpDebug() const
         kDebug() << "--         Attachments:" << mEmailAttachments.join(",");
         kDebug() << "--         Bcc:" << mEmailBcc;
     }
-    else if (mActionType == T_AUDIO)
+    else if (mActionSubType == AUDIO)
         kDebug() << "-- mAudioFile:" << mAudioFile;
     kDebug() << "-- mBeep:" << mBeep;
-    if (mActionType == T_AUDIO  ||  !mAudioFile.isEmpty())
+    if (mActionSubType == AUDIO  ||  !mAudioFile.isEmpty())
     {
         if (mSoundVolume >= 0)
         {
@@ -3978,6 +3989,7 @@ void KAEvent::Private::dumpDebug() const
     kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
     kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
     kDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
+    kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
     if (mRepeatAtLogin)
         kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
     kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
@@ -4011,6 +4023,13 @@ void KAEvent::Private::dumpDebug() const
     }
     kDebug() << "-- mRevision:" << mRevision;
     kDebug() << "-- mRecurrence:" << mRecurrence;
+    if (!mRepetition)
+        kDebug() << "-- mRepetition: 0";
+    else if (mRepetition.isDaily())
+        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalDays() << "days";
+    else
+        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";
+    kDebug() << "-- mNextRepeat:" << mNextRepeat;
     kDebug() << "-- mAlarmCount:" << mAlarmCount;
     kDebug() << "-- mMainExpired:" << mMainExpired;
     kDebug() << "-- mDisplaying:" << mDisplaying;
@@ -4135,7 +4154,7 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
     switch (alarm->type())
     {
         case Alarm::Procedure:
-            data.action        = KAAlarmEventBase::T_COMMAND;
+            data.action        = KAAlarm::COMMAND;
             data.cleanText     = alarm->programFile();
             data.commandScript = data.cleanText.isEmpty();   // blank command indicates a script
             if (!alarm->programArguments().isEmpty())
@@ -4153,7 +4172,7 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         {
             if (alarm->type() == Alarm::Display)
             {
-                data.action    = KAAlarmEventBase::T_MESSAGE;
+                data.action    = KAAlarm::MESSAGE;
                 data.cleanText = AlarmText::fromCalendarText(alarm->text(), data.isEmailText);
             }
             QString property = alarm->customProperty(KAlarm::Calendar::APPNAME, Private::FONT_COLOUR_PROPERTY);
@@ -4183,7 +4202,7 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         }
         case Alarm::Email:
         {
-            data.action    = KAAlarmEventBase::T_EMAIL;
+            data.action    = KAAlarm::EMAIL;
             data.cleanText = alarm->mailText();
             int i = flags.indexOf(Private::EMAIL_ID_FLAG);
             data.emailFromId = (i >= 0  &&  i + 1 < flags.count()) ? flags[i + 1].toUInt() : 0;
@@ -4191,7 +4210,7 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         }
         case Alarm::Audio:
         {
-            data.action      = KAAlarmEventBase::T_AUDIO;
+            data.action      = KAAlarm::AUDIO;
             data.cleanText   = alarm->audioFile();
             data.soundVolume = -1;
             data.fadeVolume  = -1;
@@ -4244,8 +4263,8 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         QString type = types[i];
         if (type == Private::AT_LOGIN_TYPE)
             atLogin = true;
-        else if (type == Private::FILE_TYPE  &&  data.action == KAAlarmEventBase::T_MESSAGE)
-            data.action = KAAlarmEventBase::T_FILE;
+        else if (type == Private::FILE_TYPE  &&  data.action == KAAlarm::MESSAGE)
+            data.action = KAAlarm::FILE;
         else if (type == Private::REMINDER_TYPE)
             reminder = true;
         else if (type == Private::TIME_DEFERRAL_TYPE)
@@ -4254,11 +4273,11 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
             dateDeferral = deferral = true;
         else if (type == Private::DISPLAYING_TYPE)
             data.type = KAAlarm::DISPLAYING__ALARM;
-        else if (type == Private::PRE_ACTION_TYPE  &&  data.action == KAAlarmEventBase::T_COMMAND)
+        else if (type == Private::PRE_ACTION_TYPE  &&  data.action == KAAlarm::COMMAND)
             data.type = KAAlarm::PRE_ACTION__ALARM;
-        else if (type == Private::POST_ACTION_TYPE  &&  data.action == KAAlarmEventBase::T_COMMAND)
+        else if (type == Private::POST_ACTION_TYPE  &&  data.action == KAAlarm::COMMAND)
             data.type = KAAlarm::POST_ACTION__ALARM;
-        else if (type == Private::SOUND_REPEAT_TYPE  &&  data.action == KAAlarmEventBase::T_AUDIO)
+        else if (type == Private::SOUND_REPEAT_TYPE  &&  data.action == KAAlarm::AUDIO)
             data.repeatSound = true;
     }
 
@@ -5178,7 +5197,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 bool atLogin    = false;
                 bool deferral   = false;
                 bool lateCancel = false;
-                KAAlarmEventBase::Type action = KAAlarmEventBase::T_MESSAGE;
+                KAAlarm::Action action = KAAlarm::MESSAGE;
                 QString txt = alarm->text();
                 int length = txt.length();
                 int i = 0;
@@ -5207,12 +5226,12 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                     i += TEXT_PREFIX.length();
                 else if (txt.indexOf(FILE_PREFIX, i) == i)
                 {
-                    action = KAAlarmEventBase::T_FILE;
+                    action = KAAlarm::FILE;
                     i += FILE_PREFIX.length();
                 }
                 else if (txt.indexOf(COMMAND_PREFIX, i) == i)
                 {
-                    action = KAAlarmEventBase::T_COMMAND;
+                    action = KAAlarm::COMMAND;
                     i += COMMAND_PREFIX.length();
                 }
                 else
@@ -5222,17 +5241,17 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 QStringList types;
                 switch (action)
                 {
-                    case KAAlarmEventBase::T_FILE:
+                    case KAAlarm::FILE:
                         types += Private::FILE_TYPE;
-                        // fall through to T_MESSAGE
-                    case KAAlarmEventBase::T_MESSAGE:
+                        // fall through to MESSAGE
+                    case KAAlarm::MESSAGE:
                         alarm->setDisplayAlarm(txt);
                         break;
-                    case KAAlarmEventBase::T_COMMAND:
+                    case KAAlarm::COMMAND:
                         setProcedureAlarm(alarm, txt);
                         break;
-                    case KAAlarmEventBase::T_EMAIL:     // email alarms were introduced in KAlarm 0.9
-                    case KAAlarmEventBase::T_AUDIO:     // audio alarms (with no display) were introduced in KAlarm 2.3.2
+                    case KAAlarm::EMAIL:     // email alarms were introduced in KAlarm 0.9
+                    case KAAlarm::AUDIO:     // audio alarms (with no display) were introduced in KAlarm 2.3.2
                         break;
                 }
                 if (atLogin)
@@ -5925,8 +5944,12 @@ bool KAEvent::Private::convertRepetition(Event* event)
 =============================================================================*/
 
 KAAlarm::KAAlarm(const KAAlarm& alarm)
-    : KAAlarmEventBase(alarm),
+    : mActionType(alarm.mActionType),
       mType(alarm.mType),
+      mNextMainDateTime(alarm.mNextMainDateTime),
+      mRepetition(alarm.mRepetition),
+      mNextRepeat(alarm.mNextRepeat),
+      mRepeatAtLogin(alarm.mRepeatAtLogin),
       mRecurs(alarm.mRecurs),
       mDeferred(alarm.mDeferred)
 { }
@@ -5935,7 +5958,7 @@ KAAlarm::KAAlarm(const KAAlarm& alarm)
 void KAAlarm::dumpDebug() const
 {
     kDebug() << "KAAlarm dump:";
-    baseDumpDebug();
+    kDebug() << "-- mActionType:" << (mActionType == MESSAGE ? "MESSAGE" : mActionType == FILE ? "FILE" : mActionType == COMMAND ? "COMMAND" : mActionType == EMAIL ? "EMAIL" : mActionType == AUDIO ? "AUDIO" : "??");
     const char* altype = 0;
     switch (mType)
     {
@@ -5953,7 +5976,16 @@ void KAAlarm::dumpDebug() const
         default:                             altype = "INVALID";  break;
     }
     kDebug() << "-- mType:" << altype;
+    kDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
+    kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
     kDebug() << "-- mRecurs:" << mRecurs;
+    if (!mRepetition)
+        kDebug() << "-- mRepetition: 0";
+    else if (mRepetition.isDaily())
+        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalDays() << "days";
+    else
+        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";
+    kDebug() << "-- mNextRepeat:" << mNextRepeat;
     kDebug() << "-- mDeferred:" << mDeferred;
     kDebug() << "KAAlarm dump end";
 }
@@ -5976,7 +6008,7 @@ const char* KAAlarm::debugType(Type type)
 }
 #endif
 
-
+#if 0
 /*=============================================================================
 = Class KAAlarmEventBase
 =============================================================================*/
@@ -6003,17 +6035,8 @@ int KAAlarmEventBase::baseFlags() const
 #ifndef KDE_NO_DEBUG_OUTPUT
 void KAAlarmEventBase::baseDumpDebug() const
 {
-    kDebug() << "-- mActionType:" << (mActionType == T_MESSAGE ? "MESSAGE" : mActionType == T_FILE ? "FILE" : mActionType == T_COMMAND ? "COMMAND" : mActionType == T_EMAIL ? "EMAIL" : mActionType == T_AUDIO ? "AUDIO" : "??");
-    kDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
-    kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
-    if (!mRepetition)
-        kDebug() << "-- mRepetition: 0";
-    else if (mRepetition.isDaily())
-        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalDays() << "days";
-    else
-        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";
-    kDebug() << "-- mNextRepeat:" << mNextRepeat;
 }
+#endif
 #endif
 
 
