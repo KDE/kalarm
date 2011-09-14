@@ -213,7 +213,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     mailjob->setMessage(message);
     mailjob->transportAttribute().setTransportId(transport->id());
     mailjob->addressAttribute().setFrom(jobdata.from);
-    mailjob->addressAttribute().setTo(static_cast<QStringList>(jobdata.event.emailAddresses()));
+    mailjob->addressAttribute().setTo(jobdata.event.emailAddresses());
     if (!jobdata.bcc.isEmpty())
         mailjob->addressAttribute().setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
     MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
@@ -287,7 +287,11 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(from);
 
     KMime::Headers::To* to = new KMime::Headers::To;
-    EmailAddressList toList = data.event.emailAddresses();
+#ifdef USE_AKONADI
+    KCalCore::Person::List toList = data.event.emailAddressees();
+#else
+    QList<KCal::Person> toList = data.event.emailAddressees();
+#endif
     for (int i = 0, count = toList.count();  i < count;  ++i)
 #ifdef USE_AKONADI
         to->addAddress(toList[i]->email().toLatin1(), toList[i]->name());
@@ -430,7 +434,11 @@ void KAMail::notifyQueued(const KAEvent& event)
     KMime::Types::Address addr;
     QString localhost = QLatin1String("localhost");
     QString hostname  = QHostInfo::localHostName();
-    const EmailAddressList& addresses = event.emailAddresses();
+#ifdef USE_AKONADI
+    KCalCore::Person::List addresses = event.emailAddressees();
+#else
+    QList<KCal::Person> addresses = event.emailAddressees();
+#endif
     for (int i = 0, end = addresses.count();  i < end;  ++i)
     {
 #ifdef USE_AKONADI
@@ -466,7 +474,11 @@ QString KAMail::controlCentreAddress()
 * entered by the user.
 * Reply = the invalid item if error, else empty string.
 */
-QString KAMail::convertAddresses(const QString& items, EmailAddressList& list)
+#ifdef USE_AKONADI
+QString KAMail::convertAddresses(const QString& items, KCalCore::Person::List& list)
+#else
+QString KAMail::convertAddresses(const QString& items, QList<KCal::Person>& list)
+#endif
 {
     list.clear();
     QString invalidItem;

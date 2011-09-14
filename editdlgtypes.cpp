@@ -1202,13 +1202,18 @@ void EditEmailAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& al
 /******************************************************************************
 * Initialise various values in the New Alarm dialogue.
 */
-void EditEmailAlarmDlg::setEmailFields(uint fromID, const EmailAddressList& addresses,
+#ifdef USE_AKONADI
+void EditEmailAlarmDlg::setEmailFields(uint fromID, const KCalCore::Person::List& addresses,
                                        const QString& subject, const QStringList& attachments)
+#else
+void EditEmailAlarmDlg::setEmailFields(uint fromID, const QList<KCal::Person>& addresses,
+                                       const QString& subject, const QStringList& attachments)
+#endif
 {
     if (fromID)
         mEmailFromList->setCurrentIdentity(fromID);
     if (!addresses.isEmpty())
-        mEmailToEdit->setText(addresses.join(", "));
+        mEmailToEdit->setText(KAEvent::joinEmailAddresses(addresses, ", "));
     if (!subject.isEmpty())
         mEmailSubjectEdit->setText(subject);
     if (!attachments.isEmpty())
@@ -1360,7 +1365,7 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
 {
     QString msg;
-    QString to = mEmailAddresses.join("<nl/>");
+    QString to = KAEvent::joinEmailAddresses(mEmailAddresses, "<nl/>");
     to.replace('<', "&lt;");
     to.replace('>', "&gt;");
     if (mEmailBcc->isChecked())

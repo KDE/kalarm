@@ -63,7 +63,11 @@ class CommandOptions
         int                 reminderMinutes() const   { return mReminderMinutes; }
         QString             audioFile() const         { return mAudioFile; }
         float               audioVolume() const       { return mAudioVolume; }
-        EmailAddressList    addressees() const        { return mAddressees; }
+#ifdef USE_AKONADI
+        KCalCore::Person::List addressees() const     { return mAddressees; }
+#else
+        QList<KCal::Person> addressees() const        { return mAddressees; }
+#endif
         QStringList         attachments() const       { return mAttachments; }
         QString             subject() const           { return mSubject; }
         uint                fromID() const            { return mFromID; }
@@ -104,7 +108,11 @@ class CommandOptions
         int                 mReminderMinutes;// NEW: reminder period
         QString             mAudioFile;      // NEW: audio file path
         float               mAudioVolume;    // NEW: audio file volume
-        EmailAddressList    mAddressees;     // NEW: email addressees
+#ifdef USE_AKONADI
+        KCalCore::Person::List mAddressees;  // NEW: email addressees
+#else
+        QList<KCal::Person> mAddressees;     // NEW: email addressees
+#endif
         QStringList         mAttachments;    // NEW: email attachment file names
         QString             mSubject;        // NEW: email subject
         uint                mFromID;         // NEW: email sender ID

@@ -1,7 +1,7 @@
 /*
  *  kamail.h  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,19 +23,28 @@
 
 #include "kaevent.h"
 
+#ifdef USE_AKONADI
+#include <kcalcore/person.h>
+#endif
+
 #include <QObject>
 #include <QString>
 #include <QStringList>
 #include <QQueue>
+#ifdef USE_AKONADI
+#include <QList>
+#endif
 
 class KUrl;
 class KJob;
-class EmailAddressList;
 namespace MailTransport  { class MessageQueueJob; }
 namespace KMime {
     namespace Types { struct Address; }
     class Message;
 }
+#ifndef USE_AKONADI
+namespace KCal { class Person; }
+#endif
 
 
 class KAMail : public QObject
@@ -61,7 +70,11 @@ class KAMail : public QObject
         static int         checkAddress(QString& address);
         static int         checkAttachment(QString& attachment, KUrl* = 0);
         static bool        checkAttachment(const KUrl&);
-        static QString     convertAddresses(const QString& addresses, EmailAddressList&);
+#ifdef USE_AKONADI
+        static QString     convertAddresses(const QString& addresses, KCalCore::Person::List&);
+#else
+        static QString     convertAddresses(const QString& addresses, QList<KCal::Person>&);
+#endif
         static QString     convertAttachments(const QString& attachments, QStringList& list);
         static QString     controlCentreAddress();
 #ifdef KMAIL_SUPPORTED

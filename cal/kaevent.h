@@ -60,125 +60,122 @@ class AlarmResource;
 class AlarmData;
 
 
-#ifdef USE_AKONADI
-typedef KCalCore::Person  EmailAddress;
-class KALARM_CAL_EXPORT EmailAddressList : public KCalCore::Person::List
-#else
-typedef KCal::Person  EmailAddress;
-class KALARM_CAL_EXPORT EmailAddressList : public QList<KCal::Person>
-#endif
-{
-    public:
-#ifdef USE_AKONADI
-        EmailAddressList() : KCalCore::Person::List() { }
-        EmailAddressList(const KCalCore::Person::List& list)  { operator=(list); }
-        EmailAddressList& operator=(const KCalCore::Person::List&);
-#else
-        EmailAddressList() : QList<KCal::Person>() { }
-        EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
-        EmailAddressList& operator=(const QList<KCal::Person>&);
-#endif
-        operator QStringList() const;
-        QString     join(const QString& separator) const;
-        QStringList pureAddresses() const;
-        QString     pureAddresses(const QString& separator) const;
-    private:
-        QString     address(int index) const;
-};
-
-
-// KAAlarm corresponds to a single KCal::Alarm instance.
-// A KAEvent may contain multiple KAAlarm's.
+/**
+ * The KAAlarm class represents one of the main or subsidiary alarms in
+ * a KAEvent instance. It contains the alarm's type and trigger time.
+ *
+ * Note that valid KAAlarm instances can only be created by the KAEvent
+ * class.
+ *
+ * @see KAEvent::alarm(), KAEvent::firstAlarm(), KAEvent::nextAlarm().
+ */
 class KALARM_CAL_EXPORT KAAlarm
 {
     public:
         /** The basic KAAlarm action types. */
         enum Action
         {
-            MESSAGE,   // KCal::Alarm::Display type: display a text message
-            FILE,      // KCal::Alarm::Display type: display a file (URL given by the alarm text)
-            COMMAND,   // KCal::Alarm::Procedure type: execute a shell command
-            EMAIL,     // KCal::Alarm::Email type: send an email
-            AUDIO      // KCal::Alarm::Audio type: play a sound file
+            MESSAGE,   //!< KCal::Alarm::Display type: display a text message
+            FILE,      //!< KCal::Alarm::Display type: display a file (URL given by the alarm text)
+            COMMAND,   //!< KCal::Alarm::Procedure type: execute a shell command
+            EMAIL,     //!< KCal::Alarm::Email type: send an email
+            AUDIO      //!< KCal::Alarm::Audio type: play a sound file
         };
 
-        /** The alarm types.
+        /** Alarm types.
          *  KAAlarm's of different types may be contained in a KAEvent,
-         *  each defining a different component of the overall alarm.
+         *  each KAAlarm defining a different component of the overall alarm.
          */
         enum Type
         {
-            INVALID_ALARM       = 0,     // not an alarm
-            MAIN_ALARM          = 1,     // THE real alarm. Must be the first in the enumeration.
-            // The following values may be used in combination as a bitmask 0x0E
-            REMINDER_ALARM      = 0x02,  // reminder in advance of main alarm
-            DEFERRED_ALARM      = 0x04,  // deferred alarm
-            DEFERRED_REMINDER_ALARM = REMINDER_ALARM | DEFERRED_ALARM,  // deferred early warning
+            INVALID_ALARM       = 0,     //!< Not an alarm
+            MAIN_ALARM          = 1,     //!< THE real alarm. Must be the first in the enumeration.
+            REMINDER_ALARM      = 0x02,  //!< Reminder in advance of/after the main alarm
+            DEFERRED_ALARM      = 0x04,  //!< Deferred alarm
+            DEFERRED_REMINDER_ALARM = REMINDER_ALARM | DEFERRED_ALARM,  //!< Deferred reminder alarm
             // The following values must be greater than the preceding ones, to
             // ensure that in ordered processing they are processed afterwards.
-            AT_LOGIN_ALARM      = 0x10,  // additional repeat-at-login trigger
-            DISPLAYING_ALARM    = 0x20,  // copy of the alarm currently being displayed
+            AT_LOGIN_ALARM      = 0x10,  //!< Additional repeat-at-login trigger
+            DISPLAYING_ALARM    = 0x20,  //!< Copy of the alarm currently being displayed
             // The following values are for internal KAEvent use only
             AUDIO_ALARM         = 0x30,  // sound to play when displaying the alarm
             PRE_ACTION_ALARM    = 0x40,  // command to execute before displaying the alarm
             POST_ACTION_ALARM   = 0x50   // command to execute after the alarm window is closed
         };
 
-        enum SubType
-        {
-            INVALID__ALARM                = INVALID_ALARM,
-            MAIN__ALARM                   = MAIN_ALARM,
-            AT_LOGIN__ALARM               = AT_LOGIN_ALARM,
-            // The following values may be used in combination as a bitmask 0x0E
-            REMINDER__ALARM               = REMINDER_ALARM,
-            TIMED_DEFERRAL_FLAG           = 0x08,  // deferral has a time; if clear, it is date-only
-            DEFERRED_DATE__ALARM          = DEFERRED_ALARM,  // deferred alarm - date-only
-            DEFERRED_TIME__ALARM          = DEFERRED_ALARM | TIMED_DEFERRAL_FLAG,
-            DEFERRED_REMINDER_DATE__ALARM = REMINDER_ALARM | DEFERRED_ALARM,  // deferred early warning (date-only)
-            DEFERRED_REMINDER_TIME__ALARM = REMINDER_ALARM | DEFERRED_ALARM | TIMED_DEFERRAL_FLAG,  // deferred early warning (date/time)
-            // The following values must be greater than the preceding ones, to
-            // ensure that in ordered processing they are processed afterwards.
-            DISPLAYING__ALARM             = DISPLAYING_ALARM,
-            // The following values are for internal KAEvent use only
-            AUDIO__ALARM                  = AUDIO_ALARM,   // audio alarm for main display alarm
-            PRE_ACTION__ALARM             = PRE_ACTION_ALARM,
-            POST_ACTION__ALARM            = POST_ACTION_ALARM
-        };
+        /** Default constructor, which creates an invalid instance. */
+        KAAlarm();
 
-        KAAlarm() : mType(INVALID__ALARM), mNextRepeat(0), mRepeatAtLogin(false), mDeferred(false) { }
-        KAAlarm(const KAAlarm&);
-        ~KAAlarm()  { }
-        Action             action() const               { return mActionType; }
-        bool               isValid() const              { return mType != INVALID__ALARM; }
-        Type               type() const                 { return static_cast<Type>(mType & ~TIMED_DEFERRAL_FLAG); }
-        SubType            subType() const              { return mType; }
-        DateTime           dateTime(bool withRepeats = false) const
-                                                        { return (withRepeats && mNextRepeat && mRepetition)
-                                                            ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
-        QDate              date() const                 { return mNextMainDateTime.date(); }
-        QTime              time() const                 { return mNextMainDateTime.effectiveTime(); }
-        bool               repeatAtLogin() const        { return mRepeatAtLogin; }
-        bool               isReminder() const           { return mType == REMINDER__ALARM; }
-        bool               deferred() const             { return mDeferred; }
-        void               setTime(const DateTime& dt)  { mNextMainDateTime = dt; }
-        void               setTime(const KDateTime& dt) { mNextMainDateTime = dt; }
-#ifdef KDE_NO_DEBUG_OUTPUT
-        void               dumpDebug() const  { }
-        static const char* debugType(Type)   { return ""; }
-#else
-        void               dumpDebug() const;
+        /** Copy constructor. */
+        KAAlarm(const KAAlarm& other);
+
+        /** Destructor. */
+        ~KAAlarm();
+
+        /** Assignment operator. */
+        KAAlarm& operator=(const KAAlarm& other);
+
+        /** Return the action type for the alarm. */
+        Action action() const;
+
+        /** Return whether the alarm is valid. */
+        bool isValid() const;
+
+        /** Return the alarm's type (main, reminder, etc.). */
+        Type type() const;
+
+        /** Return the trigger time for the alarm.
+         *  Sub-repetitions can optionally be ignored; in this case, if a sub-repetition
+         *  is due next, the last main recurrence will be returned instead.
+         *  @param withRepeats if true, returns the next sub-repetition time where appropriate;
+         *                     if false, ignores sub-repetitions.
+         */
+        DateTime dateTime(bool withRepeats = false) const;
+
+        /** Return the trigger date for the alarm.
+         *  Sub-repetitions are ignored: if a sub-repetition is due next, the
+         *  last main recurrence will be returned instead.
+         */
+        QDate date() const;
+
+        /** Return the trigger time-of-day for the alarm.
+         *  Sub-repetitions are ignored: if a sub-repetition is due next, the
+         *  last main recurrence will be returned instead.
+         *  @return trigger time-of-day. If the alarm is date-only, this will be
+         *          the user-defined start-of-day time.
+         */
+        QTime time() const;
+
+        /** Set the alarm's trigger time. */
+        void setTime(const DateTime& dt);
+        /** Set the alarm's trigger time. */
+        void setTime(const KDateTime& dt);
+
+        /** Return whether this is a repeat-at-login alarm. */
+        bool repeatAtLogin() const;
+
+        /** Return whether this is a reminder alarm. */
+        bool isReminder() const;
+
+        /** Return whether this is a deferred alarm. */
+        bool deferred() const;
+
+        /** Return whether in the case of a deferred alarm, it is timed (as
+         *  opposed to date-only).
+         *  @return true if a timed deferral alarm, false if date-only or not a deferred alarm.
+         */
+        bool timedDeferral() const;
+
+        /** Return an alarm type as a string.
+         *  @return alarm type string, or the empty string if debug output is disabled.
+         */
         static const char* debugType(Type);
-#endif
 
     private:
-        Action             mActionType;       // alarm action type
-        SubType            mType;             // alarm type
-        DateTime           mNextMainDateTime; // next time to display the alarm, excluding repetitions
-        Repetition         mRepetition;       // sub-repetition count and interval
-        int                mNextRepeat;       // repetition count of next due sub-repetition
-        bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
-        bool               mRecurs;           // there is a recurrence rule for the alarm
-        bool               mDeferred;         // whether the alarm is an extra deferred/deferred-reminder alarm
+        //@cond PRIVATE
+        class Private;
+        Private* const d;
+        //@endcond
 
     friend class KAEvent;
 };
@@ -577,8 +574,13 @@ class KALARM_CAL_EXPORT KAEvent
         bool copyToKOrganizer() const;
 
         /** Set the email related data for the event. */
-        void setEmail(uint from, const EmailAddressList&, const QString& subject,
+#ifdef USE_AKONADI
+        void setEmail(uint from, const KCalCore::Person::List&, const QString& subject,
                       const QStringList& attachments);
+#else
+        void setEmail(uint from, const QList<KCal::Person>&, const QString& subject,
+                      const QStringList& attachments);
+#endif
 
         /** Return the email message body, for an email alarm.
          *  @return email body, or empty if not an email alarm
@@ -591,12 +593,26 @@ class KALARM_CAL_EXPORT KAEvent
         uint emailFromId() const;
 
         /** Return the list of email addressees, including names, for an email alarm. */
-        EmailAddressList emailAddresses() const;
+#ifdef USE_AKONADI
+        KCalCore::Person::List emailAddressees() const;
+#else
+        QList<KCal::Person> emailAddressees() const;
+#endif
+
+        /** Return a list of the email addresses, including names, for an email alarm. */
+        QStringList emailAddresses() const;
 
         /** Return a string containing the email addressees, including names, for an email alarm.
          *  @param sep  separator string to insert between addresses.
          */
         QString emailAddresses(const QString& sep) const;
+
+        /** Concatenate a list of email addresses into a string. */
+#ifdef USE_AKONADI
+        static QString joinEmailAddresses(const KCalCore::Person::List& addresses, const QString& separator);
+#else
+        static QString joinEmailAddresses(const QList<KCal::Person>& addresses, const QString& separator);
+#endif
 
         /** Return the list of email addressees, excluding names, for an email alarm. */
         QStringList emailPureAddresses() const;

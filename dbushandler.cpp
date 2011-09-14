@@ -354,7 +354,11 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
             return false;
         }
     }
-    EmailAddressList addrs;
+#ifdef USE_AKONADI
+    KCalCore::Person::List addrs;
+#else
+    QList<KCal::Person> addrs;
+#endif
     QString bad = KAMail::convertAddresses(addresses, addrs);
     if (!bad.isEmpty())
     {

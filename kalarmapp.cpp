@@ -1114,7 +1114,11 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
                               int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
                               const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
-                              uint mailFromID, const EmailAddressList& mailAddresses,
+#ifdef USE_AKONADI
+                              uint mailFromID, const KCalCore::Person::List& mailAddresses,
+#else
+                              uint mailFromID, const QList<KCal::Person>& mailAddresses,
+#endif
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
     kDebug() << text;

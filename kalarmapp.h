@@ -84,8 +84,12 @@ class KAlarmApp : public KUniqueApplication
                                          int lateCancel, int flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,
-                         int repeatInterval, int repeatCount,
-                                         uint mailFromID = 0, const EmailAddressList& mailAddresses = EmailAddressList(),
+                                         int repeatInterval, int repeatCount,
+#ifdef USE_AKONADI
+                                         uint mailFromID = 0, const KCalCore::Person::List& mailAddresses = KCalCore::Person::List(),
+#else
+                                         uint mailFromID = 0, const QList<KCal::Person>& mailAddresses = QList<KCal::Person>(),
+#endif
                                          const QString& mailSubject = QString(),
                                          const QStringList& mailAttachments = QStringList());
         bool               dbusTriggerEvent(const QString& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
