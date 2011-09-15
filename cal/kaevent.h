@@ -96,11 +96,10 @@ class KALARM_CAL_EXPORT KAAlarm
             // The following values must be greater than the preceding ones, to
             // ensure that in ordered processing they are processed afterwards.
             AT_LOGIN_ALARM      = 0x10,  //!< Additional repeat-at-login trigger
-            DISPLAYING_ALARM    = 0x20,  //!< Copy of the alarm currently being displayed
-            // The following values are for internal KAEvent use only
-            AUDIO_ALARM         = 0x30,  // sound to play when displaying the alarm
-            PRE_ACTION_ALARM    = 0x40,  // command to execute before displaying the alarm
-            POST_ACTION_ALARM   = 0x50   // command to execute after the alarm window is closed
+            DISPLAYING_ALARM    = 0x20   //!< Copy of the alarm currently being displayed
+
+            // IMPORTANT: if any values are added to this list, ensure that the
+            //            KAEvent::Private::AlarmType enum is adjusted similarly.
         };
 
         /** Default constructor, which creates an invalid instance. */
@@ -189,7 +188,7 @@ class KALARM_CAL_EXPORT KAEvent
         typedef QVector<KAEvent*> List;
 
         /** Flags for use in D-Bus calls, etc. */
-        enum
+        enum Flag
         {
             BEEP            = 0x02,    //!< sound an audible beep when the alarm is displayed
             REPEAT_AT_LOGIN = 0x04,    //!< repeat the alarm at every login
@@ -207,16 +206,12 @@ class KALARM_CAL_EXPORT KAEvent
             EXCL_HOLIDAYS   = 0x4000,  //!< don't trigger the alarm on holidays
             WORK_TIME_ONLY  = 0x8000,  //!< trigger the alarm only during working hours
             DISPLAY_COMMAND = 0x10000, //!< display command output in the alarm window
-            REMINDER_ONCE   = 0x20000, //!< only trigger the reminder on the first recurrence
-            // The following are read-only internal values
-            REMINDER        = 0x100000,
-            DEFERRAL        = 0x200000,
-            TIMED_FLAG      = 0x400000,
-            DATE_DEFERRAL   = DEFERRAL,
-            TIME_DEFERRAL   = DEFERRAL | TIMED_FLAG,
-            DISPLAYING_     = 0x800000,
-            READ_ONLY_FLAGS = 0xF00000  //!< mask for all read-only internal values
+            REMINDER_ONCE   = 0x20000  //!< only trigger the reminder on the first recurrence
+
+            // IMPORTANT: if any values are added to this list, ensure that the
+            //            additional enum values in KAEvent::Private are also adjusted.
         };
+        Q_DECLARE_FLAGS(Flags, Flag)
 
         /** The basic action type(s) for the event's main alarm, as bit values. */
         enum Actions
@@ -316,13 +311,13 @@ class KALARM_CAL_EXPORT KAEvent
          *  @param font  font (for display alarms, ignored otherwise).
          *  @param action         alarm action type.
          *  @param lateCancel     late-cancellation period (minutes), else 0.
-         *  @param flags          OR of flag enum values.
+         *  @param flags          OR of Flag enum values.
          *  @param changesPending true to inhibit automatic data updates until
          *                        further changes have been applied to the instance;
          *                        call endChanges() when changes are complete.
          */
         KAEvent(const KDateTime&, const QString& text, const QColor& bg, const QColor& fg,
-                const QFont& f, SubAction, int lateCancel, int flags, bool changesPending = false);
+                const QFont& f, SubAction, int lateCancel, Flags flags, bool changesPending = false);
 #ifdef USE_AKONADI
         /** Construct an event and initialise it from a KCalCore::Event. */
         explicit KAEvent(const KCalCore::ConstEventPtr&);
@@ -354,14 +349,14 @@ class KALARM_CAL_EXPORT KAEvent
          *  @param font  font (for display alarms, ignored otherwise)
          *  @param action         alarm action type
          *  @param lateCancel     late-cancellation period (minutes), else 0
-         *  @param flags          OR of flag enum values
+         *  @param flags          OR of Flag enum values
          *  @param changesPending true to inhibit automatic data updates until
          *                        further changes have been applied to the instance;
          *                        call endChanges() when changes are complete.
          */
         void set(const KDateTime& dt, const QString& text, const QColor& bg,
                  const QColor& fg, const QFont& font, SubAction action, int lateCancel,
-                 int flags, bool changesPending = false);
+                 Flags flags, bool changesPending = false);
 
 #ifdef USE_AKONADI
         /** Update an existing KCalCore::Event with the KAEvent data.
@@ -412,8 +407,8 @@ class KALARM_CAL_EXPORT KAEvent
          */
         bool expired() const;
 
-        /** Return the OR of various flag enum status values. */
-        int flags() const;
+        /** Return the OR of various Flag enum status values. */
+        Flags flags() const;
 
         /** Set the alarm category (active/archived/template). */
         void setCategory(KAlarm::CalEvent::Type type);
@@ -1186,6 +1181,7 @@ class KALARM_CAL_EXPORT KAEvent
         QSharedDataPointer<Private> d;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KAEvent::Flags)
 Q_DECLARE_METATYPE(KAEvent)
 
 #endif // KAEVENT_H

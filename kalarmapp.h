@@ -81,7 +81,7 @@ class KAlarmApp : public KUniqueApplication
         void               setSpreadWindowsState(bool spread);
         // Methods called indirectly by the DCOP interface
         bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KDateTime&,
-                                         int lateCancel, int flags, const QColor& bg, const QColor& fg,
+                                         int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,
                                          int repeatInterval, int repeatCount,

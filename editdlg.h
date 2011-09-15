@@ -109,7 +109,7 @@ class EditAlarmDlg : public KDialog
         virtual void    saveState(const KAEvent*) = 0;
         virtual bool    type_stateChanged() const = 0;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) = 0;
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial) = 0;
         virtual void    type_trySuccessMessage(ShellProcess*, const QString& text) = 0;
         virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return 0; }

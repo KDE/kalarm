@@ -834,11 +834,16 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 /******************************************************************************
 * Get the currently specified alarm flag bits.
 */
-int EditAlarmDlg::getAlarmFlags() const
+KAEvent::Flags EditAlarmDlg::getAlarmFlags() const
 {
-    return (mShowInKorganizer && mShowInKorganizer->isEnabled() && mShowInKorganizer->isChecked() ? KAEvent::COPY_KORGANIZER : 0)
-         | (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN                 ? KAEvent::REPEAT_AT_LOGIN : 0)
-         | ((mTemplate ? mTemplateAnyTime->isChecked() : mAlarmDateTime.isDateOnly()) ? KAEvent::ANY_TIME : 0);
+    KAEvent::Flags flags(0);
+    if (mShowInKorganizer && mShowInKorganizer->isEnabled() && mShowInKorganizer->isChecked())
+        flags |= KAEvent::COPY_KORGANIZER;
+    if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)
+        flags |= KAEvent::REPEAT_AT_LOGIN;
+    if (mTemplate ? mTemplateAnyTime->isChecked() : mAlarmDateTime.isDateOnly())
+        flags |= KAEvent::ANY_TIME;
+    return flags;
 }
 
 /******************************************************************************

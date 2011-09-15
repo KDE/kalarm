@@ -218,8 +218,6 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mDontShowAgainCheck(0),
       mEditDlg(0),
       mDeferDlg(0),
-      mFlags(event->flags()),
-      mLateCancel(event->lateCancel()),
       mAlwaysHide(flags & ALWAYS_HIDE),
       mErrorWindow(false),
       mInitialised(false),

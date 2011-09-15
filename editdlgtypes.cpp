@@ -570,18 +570,19 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 /******************************************************************************
 * Get the currently specified alarm flag bits.
 */
-int EditDisplayAlarmDlg::getAlarmFlags() const
+KAEvent::Flags EditDisplayAlarmDlg::getAlarmFlags() const
 {
     bool cmd = (mTypeCombo->currentIndex() == tCOMMAND);
-    return EditAlarmDlg::getAlarmFlags()
-         | (mSoundPicker->sound() == Preferences::Sound_Beep  ? KAEvent::BEEP : 0)
-         | (mSoundPicker->sound() == Preferences::Sound_Speak ? KAEvent::SPEAK : 0)
-         | (mSoundPicker->repeat()                            ? KAEvent::REPEAT_SOUND : 0)
-         | (mConfirmAck->isChecked()                          ? KAEvent::CONFIRM_ACK : 0)
-         | (lateCancel()->isAutoClose()                       ? KAEvent::AUTO_CLOSE : 0)
-         | (mFontColourButton->defaultFont()                  ? KAEvent::DEFAULT_FONT : 0)
-         | (cmd                                               ? KAEvent::DISPLAY_COMMAND : 0)
-         | (cmd && mCmdEdit->isScript()                       ? KAEvent::SCRIPT : 0);
+    KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
+    if (mSoundPicker->sound() == Preferences::Sound_Beep)  flags |= KAEvent::BEEP;
+    if (mSoundPicker->sound() == Preferences::Sound_Speak) flags |= KAEvent::SPEAK;
+    if (mSoundPicker->repeat())                            flags |= KAEvent::REPEAT_SOUND;
+    if (mConfirmAck->isChecked())                          flags |= KAEvent::CONFIRM_ACK;
+    if (lateCancel()->isAutoClose())                       flags |= KAEvent::AUTO_CLOSE;
+    if (mFontColourButton->defaultFont())                  flags |= KAEvent::DEFAULT_FONT;
+    if (cmd)                                               flags |= KAEvent::DISPLAY_COMMAND;
+    if (cmd && mCmdEdit->isScript())                       flags |= KAEvent::SCRIPT;
+    return flags;
 }
 
 /******************************************************************************
@@ -919,11 +920,12 @@ void EditCommandAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
 /******************************************************************************
 * Get the currently specified alarm flag bits.
 */
-int EditCommandAlarmDlg::getAlarmFlags() const
+KAEvent::Flags EditCommandAlarmDlg::getAlarmFlags() const
 {
-    return EditAlarmDlg::getAlarmFlags()
-         | (mCmdEdit->isScript()                               ? KAEvent::SCRIPT : 0)
-         | (mCmdOutputGroup->checkedButton() == mCmdExecInTerm ? KAEvent::EXEC_IN_XTERM : 0);
+    KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
+    if (mCmdEdit->isScript())                               flags |= KAEvent::SCRIPT;
+    if (mCmdOutputGroup->checkedButton() == mCmdExecInTerm) flags |= KAEvent::EXEC_IN_XTERM;
+    return flags;
 }
 
 /******************************************************************************
@@ -1304,10 +1306,11 @@ void EditEmailAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
 /******************************************************************************
 * Get the currently specified alarm flag bits.
 */
-int EditEmailAlarmDlg::getAlarmFlags() const
+KAEvent::Flags EditEmailAlarmDlg::getAlarmFlags() const
 {
-    return EditAlarmDlg::getAlarmFlags()
-         | (mEmailBcc->isChecked() ? KAEvent::EMAIL_BCC : 0);
+    KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
+    if (mEmailBcc->isChecked()) flags |= KAEvent::EMAIL_BCC;
+    return flags;
 }
 
 /******************************************************************************
@@ -1597,10 +1600,11 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
 /******************************************************************************
 * Get the currently specified alarm flag bits.
 */
-int EditAudioAlarmDlg::getAlarmFlags() const
+KAEvent::Flags EditAudioAlarmDlg::getAlarmFlags() const
 {
-    return EditAlarmDlg::getAlarmFlags()
-         | (mSoundConfig->getRepeat() ? KAEvent::REPEAT_SOUND : 0);
+    KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
+    if (mSoundConfig->getRepeat()) flags |= KAEvent::REPEAT_SOUND;
+    return flags;
 }
 
 /******************************************************************************

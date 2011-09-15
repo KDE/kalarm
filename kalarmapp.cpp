@@ -375,7 +375,7 @@ int KAlarmApp::newInstance()
                             if (!options.audioFile().isEmpty()
                             ||  options.flags() & (KAEvent::BEEP | KAEvent::SPEAK))
                             {
-                                int flags = options.flags();
+                                KAEvent::Flags flags = options.flags();
                                 Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
                                                             : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
                                                             : Preferences::Sound_File;
@@ -1111,8 +1111,8 @@ void KAlarmApp::setSpreadWindowsState(bool spread)
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
 bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KDateTime& dateTime,
-                              int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
-                              const QString& audioFile, float audioVolume, int reminderMinutes,
+                              int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
+                              const QFont& font, const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
 #ifdef USE_AKONADI
                               uint mailFromID, const KCalCore::Person::List& mailAddresses,

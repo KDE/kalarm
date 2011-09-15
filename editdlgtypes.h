@@ -81,7 +81,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial) { Q_UNUSED(trial); return true; }
         virtual void    type_trySuccessMessage(ShellProcess*, const QString&)  {}
         virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
@@ -165,7 +165,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial);
         virtual void    type_trySuccessMessage(ShellProcess*, const QString& text);
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
@@ -223,7 +223,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial);
         virtual void    type_trySuccessMessage(ShellProcess*, const QString& text);
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
@@ -288,7 +288,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial) { Q_UNUSED(trial); return true; }
         virtual void    type_trySuccessMessage(ShellProcess*, const QString&)  {}
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
