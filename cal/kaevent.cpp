@@ -122,7 +122,10 @@ class KAEvent::Private : public QSharedData
             NORMAL_DEFERRAL,   // the main alarm, a recurrence or a repeat is deferred
             REMINDER_DEFERRAL  // a reminder alarm is deferred
         };
-        enum AlarmType    // alarm types (same scheme as KAAlarm::Type, with some extra values)
+        // Alarm types.
+        // This uses the same scheme as KAAlarm::Type, with some extra values.
+        // Note that the actual enum values need not be the same as KAAlarm::Type.
+        enum AlarmType
         {
             INVALID_ALARM       = 0,     // Not an alarm
             MAIN_ALARM          = 1,     // THE real alarm. Must be the first in the enumeration.
