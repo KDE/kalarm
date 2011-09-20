@@ -124,7 +124,7 @@ class KAEvent::Private : public QSharedData
         };
         // Alarm types.
         // This uses the same scheme as KAAlarm::Type, with some extra values.
-        // Note that the actual enum values need not be the same as KAAlarm::Type.
+        // Note that the actual enum values need not be the same as in KAAlarm::Type.
         enum AlarmType
         {
             INVALID_ALARM       = 0,     // Not an alarm
@@ -136,7 +136,7 @@ class KAEvent::Private : public QSharedData
             // ensure that in ordered processing they are processed afterwards.
             AT_LOGIN_ALARM      = 0x10,  // Additional repeat-at-login trigger
             DISPLAYING_ALARM    = 0x20,  // Copy of the alarm currently being displayed
-            // The following values are for internal KAEvent use only
+            // The following are extra internal KAEvent values
             AUDIO_ALARM         = 0x30,  // sound to play when displaying the alarm
             PRE_ACTION_ALARM    = 0x40,  // command to execute before displaying the alarm
             POST_ACTION_ALARM   = 0x50   // command to execute after the alarm window is closed
@@ -1818,7 +1818,6 @@ KAEvent::Flags KAEvent::Private::flags() const
     if (mRepeatSound)                result |= REPEAT_SOUND;
     if (mEmailBcc)                   result |= EMAIL_BCC;
     if (mStartDateTime.isDateOnly()) result |= ANY_TIME;
-    if (mDeferral != NO_DEFERRAL)    result |= static_cast<Flag>(DEFERRAL);
     if (mSpeak)                      result |= SPEAK;
     if (mRepeatAtLogin)              result |= REPEAT_AT_LOGIN;
     if (mConfirmAck)                 result |= CONFIRM_ACK;
@@ -1831,7 +1830,6 @@ KAEvent::Flags KAEvent::Private::flags() const
     if (mWorkTimeOnly)               result |= WORK_TIME_ONLY;
     if (mReminderOnceOnly)           result |= REMINDER_ONCE;
     if (mAutoClose)                  result |= AUTO_CLOSE;
-    if (mDisplaying)                 result |= static_cast<Flag>(DISPLAYING_);
     if (!mEnabled)                   result |= DISABLED;
     return result;
 }
