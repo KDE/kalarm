@@ -27,7 +27,9 @@
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
-#ifndef USE_AKONADI
+#ifdef USE_AKONADI
+#include "collectionmodel.h"
+#else
 #include "eventlistmodel.h"
 #endif
 #include "functions.h"
@@ -154,6 +156,8 @@ KAlarmApp::KAlarmApp()
         connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
 #ifdef USE_AKONADI
         connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
+        connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
+                                          SLOT(slotCollectionAdded(Akonadi::Collection)));
 #endif
 
         KConfigGroup config(KGlobal::config(), "General");
@@ -1026,6 +1030,40 @@ bool KAlarmApp::wantShowInSystemTray() const
 {
     return Preferences::showInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable();
 }
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Called when a new collection has been added.
+* If it is the default archived calendar, purge its old alarms if necessary.
+*/
+void KAlarmApp::slotCollectionAdded(const Akonadi::Collection& collection)
+{
+    Akonadi::Collection col(collection);
+    if (CollectionControlModel::isStandard(col, KAlarm::CalEvent::ARCHIVED))
+    {
+        // Allow time (1 minute) for AkonadiModel to be populated with the
+        // collection's events before purging it.
+        kDebug() << collection.id() << ": standard archived...";
+        QTimer::singleShot(60000, this, SLOT(purgeAfterDelay()));
+    }
+}
+
+/******************************************************************************
+* Called after a delay, after the default archived calendar has been added to
+* AkonadiModel.
+* Purge old alarms from it if necessary.
+*/
+void KAlarmApp::purgeAfterDelay()
+{
+#ifdef __GNUC__
+#warning Purge after selecting a new default archived calendar
+#endif
+    if (mArchivedPurgeDays >= 0)
+        purge(mArchivedPurgeDays);
+    else
+        setArchivePurgeDays();
+}
+#endif
 
 /******************************************************************************
 * Called when the length of time to keep archived alarms changes in KAlarm's

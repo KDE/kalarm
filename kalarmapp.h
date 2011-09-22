@@ -28,7 +28,6 @@
 #include "preferences.h"
 
 #include <kuniqueapplication.h>
-#include <kurl.h>
 
 #include <QPointer>
 #include <QQueue>
@@ -36,6 +35,9 @@
 
 class KDateTime;
 namespace KCal { class Event; }
+#ifdef USE_AKONADI
+namespace Akonadi { class Collection; }
+#endif
 class DBusHandler;
 class MainWindow;
 class TrayWindow;
@@ -130,6 +132,10 @@ class KAlarmApp : public KUniqueApplication
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
+#ifdef USE_AKONADI
+        void               slotCollectionAdded(const Akonadi::Collection&);
+        void               purgeAfterDelay();
+#endif
         void               slotCommandExited(ShellProcess*);
         void               slotDBusServiceUnregistered(const QString& serviceName);
 
