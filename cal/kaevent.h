@@ -32,7 +32,6 @@
 #include "kcalcore_constptr.h"
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
-#include <kcalcore/alarm.h>
 #include <kcalcore/person.h>
 #include <kcalcore/calendar.h>
 #else
