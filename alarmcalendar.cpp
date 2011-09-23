@@ -1647,8 +1647,9 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID)
 #endif
 {
-    // Make a copy of the ID QString since the supplied reference might be
-    // destructed when the event is deleted.
+    // Make a copy of the KAEvent and the ID QString, since the supplied
+    // references might be destructed when the event is deleted below.
+    const KAEvent paramEvent = event;
     const QString id = eventID;
 
 #ifdef USE_AKONADI
@@ -1706,8 +1707,8 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
     else if (deleteFromAkonadi)
     {
         // It's an Akonadi event
-        KAlarm::CalEvent::Type s = event.category();
-        if (AkonadiModel::instance()->deleteEvent(event))
+        KAlarm::CalEvent::Type s = paramEvent.category();
+        if (AkonadiModel::instance()->deleteEvent(paramEvent))
             status = s;
     }
 #else
