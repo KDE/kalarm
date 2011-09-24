@@ -1649,10 +1649,10 @@ KAlarm::CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID
 {
     // Make a copy of the KAEvent and the ID QString, since the supplied
     // references might be destructed when the event is deleted below.
-    const KAEvent paramEvent = event;
     const QString id = eventID;
-
 #ifdef USE_AKONADI
+    const KAEvent paramEvent = event;
+
     Event::Ptr kcalEvent;
     if (mCalendarStorage)
         kcalEvent = mCalendarStorage->calendar()->event(id);
