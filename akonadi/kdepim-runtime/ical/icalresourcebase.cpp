@@ -125,6 +125,7 @@ void ICalResourceBase::itemRemoved( const Akonadi::Item &item )
 
 void ICalResourceBase::retrieveItems( const Akonadi::Collection &col )
 {
+  SingleFileResource<Settings>::retrieveItems( col );
   reloadFile();
   if ( mCalendar ) {
     doRetrieveItems( col );
