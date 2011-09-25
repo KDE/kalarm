@@ -27,7 +27,9 @@
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
-#ifndef USE_AKONADI
+#ifdef USE_AKONADI
+#include "collectionmodel.h"
+#else
 #include "eventlistmodel.h"
 #endif
 #include "functions.h"
@@ -154,6 +156,8 @@ KAlarmApp::KAlarmApp()
         connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
 #ifdef USE_AKONADI
         connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
+        connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
+                                          SLOT(slotCollectionAdded(Akonadi::Collection)));
 #endif
 
         KConfigGroup config(KGlobal::config(), "General");
@@ -375,7 +379,7 @@ int KAlarmApp::newInstance()
                             if (!options.audioFile().isEmpty()
                             ||  options.flags() & (KAEvent::BEEP | KAEvent::SPEAK))
                             {
-                                int flags = options.flags();
+                                KAEvent::Flags flags = options.flags();
                                 Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
                                                             : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
                                                             : Preferences::Sound_File;
@@ -1027,6 +1031,40 @@ bool KAlarmApp::wantShowInSystemTray() const
     return Preferences::showInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable();
 }
 
+#ifdef USE_AKONADI
+/******************************************************************************
+* Called when a new collection has been added.
+* If it is the default archived calendar, purge its old alarms if necessary.
+*/
+void KAlarmApp::slotCollectionAdded(const Akonadi::Collection& collection)
+{
+    Akonadi::Collection col(collection);
+    if (CollectionControlModel::isStandard(col, KAlarm::CalEvent::ARCHIVED))
+    {
+        // Allow time (1 minute) for AkonadiModel to be populated with the
+        // collection's events before purging it.
+        kDebug() << collection.id() << ": standard archived...";
+        QTimer::singleShot(60000, this, SLOT(purgeAfterDelay()));
+    }
+}
+
+/******************************************************************************
+* Called after a delay, after the default archived calendar has been added to
+* AkonadiModel.
+* Purge old alarms from it if necessary.
+*/
+void KAlarmApp::purgeAfterDelay()
+{
+#ifdef __GNUC__
+#warning Purge after selecting a new default archived calendar
+#endif
+    if (mArchivedPurgeDays >= 0)
+        purge(mArchivedPurgeDays);
+    else
+        setArchivePurgeDays();
+}
+#endif
+
 /******************************************************************************
 * Called when the length of time to keep archived alarms changes in KAlarm's
 * preferences.
@@ -1111,10 +1149,14 @@ void KAlarmApp::setSpreadWindowsState(bool spread)
 * Reply = true unless there was a parameter error or an error opening calendar file.
 */
 bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KDateTime& dateTime,
-                              int lateCancel, int flags, const QColor& bg, const QColor& fg, const QFont& font,
-                              const QString& audioFile, float audioVolume, int reminderMinutes,
+                              int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
+                              const QFont& font, const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
-                              uint mailFromID, const EmailAddressList& mailAddresses,
+#ifdef USE_AKONADI
+                              uint mailFromID, const KCalCore::Person::List& mailAddresses,
+#else
+                              uint mailFromID, const QList<KCal::Person>& mailAddresses,
+#endif
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
     kDebug() << text;

@@ -1470,7 +1470,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         KDateTime start = todo->dtStart(true);
         if (!start.isValid()  &&  todo->hasDueDate())
             start = todo->dtDue(true);
-        int flags = KAEvent::DEFAULT_FONT;
+        KAEvent::Flags flags = KAEvent::DEFAULT_FONT;
         if (start.isDateOnly())
             flags |= KAEvent::ANY_TIME;
         KAEvent ev(start, alarmText.displayText(), Preferences::defaultBgColour(), Preferences::defaultFgColour(),

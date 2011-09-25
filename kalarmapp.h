@@ -28,7 +28,6 @@
 #include "preferences.h"
 
 #include <kuniqueapplication.h>
-#include <kurl.h>
 
 #include <QPointer>
 #include <QQueue>
@@ -36,6 +35,9 @@
 
 class KDateTime;
 namespace KCal { class Event; }
+#ifdef USE_AKONADI
+namespace Akonadi { class Collection; }
+#endif
 class DBusHandler;
 class MainWindow;
 class TrayWindow;
@@ -81,11 +83,15 @@ class KAlarmApp : public KUniqueApplication
         void               setSpreadWindowsState(bool spread);
         // Methods called indirectly by the DCOP interface
         bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KDateTime&,
-                                         int lateCancel, int flags, const QColor& bg, const QColor& fg,
+                                         int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,
-                         int repeatInterval, int repeatCount,
-                                         uint mailFromID = 0, const EmailAddressList& mailAddresses = EmailAddressList(),
+                                         int repeatInterval, int repeatCount,
+#ifdef USE_AKONADI
+                                         uint mailFromID = 0, const KCalCore::Person::List& mailAddresses = KCalCore::Person::List(),
+#else
+                                         uint mailFromID = 0, const QList<KCal::Person>& mailAddresses = QList<KCal::Person>(),
+#endif
                                          const QString& mailSubject = QString(),
                                          const QStringList& mailAttachments = QStringList());
         bool               dbusTriggerEvent(const QString& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
@@ -126,6 +132,10 @@ class KAlarmApp : public KUniqueApplication
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
+#ifdef USE_AKONADI
+        void               slotCollectionAdded(const Akonadi::Collection&);
+        void               purgeAfterDelay();
+#endif
         void               slotCommandExited(ShellProcess*);
         void               slotDBusServiceUnregistered(const QString& serviceName);
 

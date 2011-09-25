@@ -194,8 +194,6 @@ class MessageWin : public MainWindowBase
         EditAlarmDlg*       mEditDlg;         // alarm edit dialog invoked by Edit button
         DeferAlarmDlg*      mDeferDlg;
         QDateTime           mDeferLimit;      // last time to which the message can currently be deferred
-        int                 mFlags;           // event flags
-        int                 mLateCancel;
         int                 mButtonDelay;     // delay (ms) after window is shown before buttons are enabled
         int                 mScreenNumber;    // screen to display on, or -1 for default
         bool                mAlwaysHide;      // the window should never be displayed

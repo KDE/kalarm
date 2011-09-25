@@ -69,7 +69,7 @@ class BirthdayDlg : public KDialog
         RepetitionButton*     mSubRepetition;
         QString               mPrefixText;   // last entered value of prefix text
         QString               mSuffixText;   // last entered value of suffix text
-        int                   mFlags;        // event flag bits
+        KAEvent::Flags        mFlags;        // event flag bits
 };
 
 

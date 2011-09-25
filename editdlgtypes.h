@@ -81,7 +81,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial) { Q_UNUSED(trial); return true; }
         virtual void    type_trySuccessMessage(ShellProcess*, const QString&)  {}
         virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
@@ -165,7 +165,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial);
         virtual void    type_trySuccessMessage(ShellProcess*, const QString& text);
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
@@ -203,8 +203,13 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence().
         virtual void    setAction(KAEvent::SubAction, const AlarmText& = AlarmText());
-        void            setEmailFields(uint fromID, const EmailAddressList&, const QString& subject,
+#ifdef USE_AKONADI
+        void            setEmailFields(uint fromID, const KCalCore::Person::List&, const QString& subject,
                                        const QStringList& attachments);
+#else
+        void            setEmailFields(uint fromID, const QList<KCal::Person>&, const QString& subject,
+                                       const QStringList& attachments);
+#endif
         void            setBcc(bool);
 
         static QString  i18n_chk_CopyEmailToSelf();    // text of 'Copy email to self' checkbox
@@ -218,7 +223,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial);
         virtual void    type_trySuccessMessage(ShellProcess*, const QString& text);
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
@@ -243,7 +248,12 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         CheckBox*           mEmailBcc;
         QString             mAttachDefaultDir;
 
-        EmailAddressList    mEmailAddresses;     // list of addresses to send email to
+#ifdef USE_AKONADI
+        KCalCore::Person::List mEmailAddresses;  // list of addresses to send email to
+#else
+        QList<KCal::Person> mEmailAddresses;     // list of addresses to send email to
+#endif
+
         QStringList         mEmailAttachments;   // list of email attachment file names
 
         // Initial state of all controls
@@ -278,7 +288,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         virtual void    saveState(const KAEvent*);
         virtual bool    type_stateChanged() const;
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial);
-        virtual int     getAlarmFlags() const;
+        virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial) { Q_UNUSED(trial); return true; }
         virtual void    type_trySuccessMessage(ShellProcess*, const QString&)  {}
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;

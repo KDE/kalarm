@@ -269,10 +269,10 @@ QVector<KAEvent> BirthdayDlg::events() const
         if (date <= today)
             date.setYMD(thisYear + 1, date.month(), date.day());
         KAEvent event(KDateTime(date, KDateTime::ClockTime),
-                  mPrefix->text() + name + mSuffix->text(),
-                  mFontColourButton->bgColour(), mFontColourButton->fgColour(),
-                  mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
-                  mFlags, true);
+                      mPrefix->text() + name + mSuffix->text(),
+                      mFontColourButton->bgColour(), mFontColourButton->fgColour(),
+                      mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
+                      mFlags, true);
         float fadeVolume;
         int   fadeSecs;
         float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
@@ -305,11 +305,11 @@ void BirthdayDlg::slotOk()
     config.writeEntry("BirthdaySuffix", mSuffix->text());
     config.sync();
 
-    mFlags = (mSoundPicker->sound() == Preferences::Sound_Beep ? KAEvent::BEEP : 0)
-           | (mSoundPicker->repeat()                           ? KAEvent::REPEAT_SOUND : 0)
-           | (mConfirmAck->isChecked()                         ? KAEvent::CONFIRM_ACK : 0)
-           | (mFontColourButton->defaultFont()                 ? KAEvent::DEFAULT_FONT : 0)
-           |                                                     KAEvent::ANY_TIME;
+    mFlags = KAEvent::ANY_TIME;
+    if (mSoundPicker->sound() == Preferences::Sound_Beep) mFlags |= KAEvent::BEEP;
+    if (mSoundPicker->repeat())                           mFlags |= KAEvent::REPEAT_SOUND;
+    if (mConfirmAck->isChecked())                         mFlags |= KAEvent::CONFIRM_ACK;
+    if (mFontColourButton->defaultFont())                 mFlags |= KAEvent::DEFAULT_FONT;
     KDialog::accept();
 }
 
