@@ -47,7 +47,6 @@ using namespace KCalCore;
 #include <kcal/event.h>
 using namespace KCal;
 #endif
-#include <libkdepim/kdateedit.h>
 
 #include <kglobal.h>
 #include <klocale.h>
