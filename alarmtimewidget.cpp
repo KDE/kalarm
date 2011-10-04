@@ -33,8 +33,7 @@
 #include "timezonecombo.h"
 #include "alarmtimewidget.moc"
 
-#include <libkdepim/kdateedit.h>
-
+#include <kdatecombobox.h>
 #include <kdialog.h>
 #include <klocale.h>
 
@@ -82,7 +81,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 {
     static const QString recurText = i18nc("@info/plain",
                                            "If a recurrence is configured, the start date/time will be adjusted "
-                                           "to the first recurrence on or after the entered date/time."); 
+                                           "to the first recurrence on or after the entered date/time.");
     static const QString tzText = i18nc("@info/plain",
                                         "This uses KAlarm's default time zone, set in the Configuration dialog.");
 
@@ -112,7 +111,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mButtonGroup->addButton(mAtTimeRadio);
 
     // Date edit box
-    mDateEdit = new KPIM::KDateEdit(topWidget);
+    mDateEdit = new KDateComboBox(topWidget);
     connect(mDateEdit, SIGNAL(dateEntered(QDate)), SLOT(dateTimeChanged()));
     mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
           "<para>Enter the date to schedule the alarm.</para>"
@@ -244,7 +243,10 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 void AlarmTimeWidget::setReadOnly(bool ro)
 {
     mAtTimeRadio->setReadOnly(ro);
-    mDateEdit->setReadOnly(ro);
+    if ( ro )
+      mDateEdit->setOptions( mDateEdit->options() & ~KDateComboBox::EditDate );
+    else
+      mDateEdit->setOptions( mDateEdit->options() | KDateComboBox::EditDate );
     mTimeEdit->setReadOnly(ro);
     if (mAnyTimeCheckBox)
         mAnyTimeCheckBox->setReadOnly(ro);

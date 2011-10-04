@@ -56,6 +56,7 @@ using namespace KCal;
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <kdatecombobox.h>
 
 #include <QPushButton>
 #include <QLabel>
@@ -280,8 +281,11 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
           i18nc("@info:whatsthis", "<para>Repeat the alarm until the date/time specified.</para>"
                 "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
     mRangeButtonGroup->addButton(mEndDateButton);
-    mEndDateEdit = new KPIM::KDateEdit(mRangeButtonBox);
-    mEndDateEdit->setReadOnly(mReadOnly);
+    mEndDateEdit = new KDateComboBox(mRangeButtonBox);
+    if ( mReadOnly )
+      mEndDateEdit->setOptions( mEndDateEdit->options() & ~KDateComboBox::EditDate );
+    else
+      mEndDateEdit->setOptions( mEndDateEdit->options() | KDateComboBox::EditDate );
     static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
     mEndDateEdit->setWhatsThis(i18nc("@info:whatsthis",
           "<para>Enter the last date to repeat the alarm.</para><para>%1</para>", tzText));
@@ -340,7 +344,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
         vlayout = new QVBoxLayout();
         vlayout->setMargin(0);
         hlayout->addLayout(vlayout);
-        mExceptionDateEdit = new KPIM::KDateEdit(mExceptionGroup);
+        mExceptionDateEdit = new KDateComboBox(mExceptionGroup);
         mExceptionDateEdit->setDate(KDateTime::currentLocalDate());
         mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
               "Enter a date to insert in the exceptions list. "
