@@ -25,8 +25,8 @@
 #include <QFrame>
 
 class QAbstractButton;
+class KDateComboBox;
 class KHBox;
-namespace KPIM { class KDateEdit; }
 class ButtonGroup;
 class RadioButton;
 class CheckBox;
@@ -89,7 +89,7 @@ class AlarmTimeWidget : public QFrame
         RadioButton*     mAtTimeRadio;
         RadioButton*     mAfterTimeRadio;
         CheckBox*        mAnyTimeCheckBox;
-        KPIM::KDateEdit* mDateEdit;
+        KDateComboBox*   mDateEdit;
         TimeEdit*        mTimeEdit;
         TimeSpinBox*     mDelayTimeEdit;
         PushButton*      mTimeZoneButton;

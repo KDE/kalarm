@@ -113,7 +113,16 @@ bool KAlarmResource::readFromFile(const QString& fileName)
     }
     // Find the calendar file's compatibility with the current KAlarm format,
     // and if necessary convert it in memory to the current version.
-    mCompatibility = KAlarmResourceCommon::getCompatibility(fileStorage(), mVersion);
+    int version;
+    KAlarm::Calendar::Compat compat = KAlarmResourceCommon::getCompatibility(fileStorage(), version);
+    if (compat != mCompatibility  ||  version != mVersion)
+    {
+        mCompatibility = compat;
+        mVersion       = version;
+        const Collection c(collectionId());
+        if (c.isValid())
+            KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, mVersion);
+    }
     return true;
 }
 

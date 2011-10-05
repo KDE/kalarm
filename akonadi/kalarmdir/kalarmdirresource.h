@@ -93,6 +93,7 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         Akonadi_KAlarm_Dir_Resource::Settings* mSettings;
         Akonadi::Collection::Id   mCollectionId;   // ID of this resource's collection
         KAlarm::Calendar::Compat  mCompatibility;
+        int                       mVersion;        // calendar format version
         QStringList               mChangedFiles;   // files being written to
         bool                      mCollectionFetched;  // mCollectionId has been initialised
 };

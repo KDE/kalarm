@@ -34,12 +34,13 @@
 class DateTime;
 
 
-/**============================================================================
- * Class KARecurrence
- * The purpose of this class is to represent the restricted range of recurrence
- * types which are handled by KAlarm, and to translate between these and the
- * libkcalcore Recurrence class. In particular, it handles yearly recurrences
- * on 29th February specially:
+/**
+ * @short Represents recurrences for KAlarm.
+ *
+ * This class represents the restricted range of recurrence types which are
+ * handled by KAlarm, and to translate between these and the libkcalcore
+ * Recurrence class. In particular, it handles yearly recurrences on 29th
+ * February in non-leap years specially:
  *
  * KARecurrence allows annual 29th February recurrences to fall on 28th
  * February or 1st March, or not at all, in non-leap years. It allows such
@@ -48,7 +49,9 @@ class DateTime;
  * February. For storage in the libkcalcore calendar, the 29th day of the month
  * recurrence for other months is combined with a last-day-of-February or a
  * 60th-day-of-the-year recurrence rule, thereby conforming to RFC2445.
- *===========================================================================*/
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
 #ifdef USE_AKONADI
 class KALARM_CAL_EXPORT KARecurrence : public KCalCore::Recurrence
 #else
