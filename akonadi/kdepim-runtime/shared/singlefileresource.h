@@ -327,26 +327,13 @@ class SingleFileResource : public SingleFileResourceBase
       collectionsRetrieved( list );
     }
 
-    void retrieveItems( const Akonadi::Collection &collection )
-    {
-      mCollectionId = collection.id();
-    }
-
     bool readOnly() const
     {
       return mSettings->readOnly();
     }
 
-    Collection::Id collectionId() const
-    {
-      return mCollectionId;
-    }
-
   protected:
     Settings *mSettings;
-
-  private:
-    Collection::Id mCollectionId;  //!< the one and only collection for this resource
 };
 
 }

@@ -56,6 +56,7 @@ void AkonadiResourceCreator::createResource()
 
 void AkonadiResourceCreator::getAgentType()
 {
+    kDebug() << "Type:" << mDefaultType;
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).

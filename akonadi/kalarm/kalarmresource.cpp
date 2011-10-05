@@ -119,9 +119,10 @@ bool KAlarmResource::readFromFile(const QString& fileName)
     {
         mCompatibility = compat;
         mVersion       = version;
-        const Collection c(collectionId());
-        if (c.isValid())
-            KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, mVersion);
+        Collection c;
+        c.setParentCollection(Collection::root());
+        c.setRemoteId(mSettings->path());
+        KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, mVersion);
     }
     return true;
 }
@@ -218,9 +219,10 @@ void KAlarmResource::settingsChanged()
                 mCurrentHash = calculateHash(filename);
 
                 mCompatibility = KAlarm::Calendar::Current;
-                const Collection c(collectionId());
-                if (c.isValid())
-                    KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, 0);
+                Collection c;
+                c.setParentCollection(Collection::root());
+                c.setRemoteId(mSettings->path());
+                KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, 0);
             }
         }
         mSettings->setUpdateStorageFormat(false);

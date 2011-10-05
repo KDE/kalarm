@@ -1666,6 +1666,15 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
             emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled), rowInserted);
         }
     }
+
+    // Check for the backend calendar format changing
+    if (attributeNames.contains(CompatibilityAttribute::name()))
+    {
+        // Update to current KAlarm format if necessary, and if the user agrees
+        Collection col(collection);
+        refresh(col);
+        CalendarMigrator::updateToCurrentFormat(col, false, MainWindow::mainMainWindow());
+    }
 }
 
 /******************************************************************************

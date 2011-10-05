@@ -162,7 +162,7 @@ KAEvent checkItemChanged(const Akonadi::Item& item, QString& errorMsg)
 */
 void setCollectionCompatibility(const Collection& collection, KAlarm::Calendar::Compat compatibility, int version)
 {
-    kDebug() << "->" << compatibility;
+    kDebug() << collection.id() << "->" << compatibility << version;
     Collection col = collection;
     CompatibilityAttribute* attr = col.attribute<CompatibilityAttribute>(Collection::AddIfMissing);
     attr->setCompatibility(compatibility);
