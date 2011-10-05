@@ -281,10 +281,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
                 "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
     mRangeButtonGroup->addButton(mEndDateButton);
     mEndDateEdit = new KDateComboBox(mRangeButtonBox);
-    if ( mReadOnly )
-      mEndDateEdit->setOptions( mEndDateEdit->options() & ~KDateComboBox::EditDate );
-    else
-      mEndDateEdit->setOptions( mEndDateEdit->options() | KDateComboBox::EditDate );
+    mEndDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
     mEndDateEdit->setWhatsThis(i18nc("@info:whatsthis",
           "<para>Enter the last date to repeat the alarm.</para><para>%1</para>", tzText));
