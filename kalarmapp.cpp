@@ -157,7 +157,7 @@ KAlarmApp::KAlarmApp()
 #ifdef USE_AKONADI
         connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
         connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
-                                          SLOT(slotCollectionAdded(Akonadi::Collection)));
+                                          SLOT(purgeNewArchivedDefault(Akonadi::Collection)));
 #endif
 
         KConfigGroup config(KGlobal::config(), "General");
@@ -1033,10 +1033,11 @@ bool KAlarmApp::wantShowInSystemTray() const
 
 #ifdef USE_AKONADI
 /******************************************************************************
-* Called when a new collection has been added.
+* Called when a new collection has been added, or when a collection has been
+* set as the standard collection for its type.
 * If it is the default archived calendar, purge its old alarms if necessary.
 */
-void KAlarmApp::slotCollectionAdded(const Akonadi::Collection& collection)
+void KAlarmApp::purgeNewArchivedDefault(const Akonadi::Collection& collection)
 {
     Akonadi::Collection col(collection);
     if (CollectionControlModel::isStandard(col, KAlarm::CalEvent::ARCHIVED))
@@ -1055,9 +1056,6 @@ void KAlarmApp::slotCollectionAdded(const Akonadi::Collection& collection)
 */
 void KAlarmApp::purgeAfterDelay()
 {
-#ifdef __GNUC__
-#warning Purge after selecting a new default archived calendar
-#endif
     if (mArchivedPurgeDays >= 0)
         purge(mArchivedPurgeDays);
     else

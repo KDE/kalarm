@@ -101,6 +101,7 @@ class KAlarmApp : public KUniqueApplication
         void               processQueue();
         void               setAlarmsEnabled(bool);
 #ifdef USE_AKONADI
+        void               purgeNewArchivedDefault(const Akonadi::Collection&);
         void               atLoginEventAdded(const KAEvent&);
 #endif
         void               stopAudio();
@@ -133,7 +134,6 @@ class KAlarmApp : public KUniqueApplication
         void               setArchivePurgeDays();
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
 #ifdef USE_AKONADI
-        void               slotCollectionAdded(const Akonadi::Collection&);
         void               purgeAfterDelay();
 #endif
         void               slotCommandExited(ShellProcess*);

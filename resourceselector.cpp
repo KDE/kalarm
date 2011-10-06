@@ -30,6 +30,7 @@
 #ifdef USE_AKONADI
 #include "akonadiresourcecreator.h"
 #include "calendarmigrator.h"
+#include "kalarmapp.h"
 #else
 #include "alarmresources.h"
 #include "eventlistmodel.h"
@@ -677,7 +678,10 @@ void ResourceSelector::archiveDaysChanged(int days)
         {
             Collection::List cols = CollectionControlModel::enabledCollections(KAlarm::CalEvent::ARCHIVED, true);
             if (cols.count() == 1)
-            CollectionControlModel::setStandard(cols[1], KAlarm::CalEvent::ARCHIVED);
+            {
+                CollectionControlModel::setStandard(cols[0], KAlarm::CalEvent::ARCHIVED);
+                theApp()->purgeNewArchivedDefault(cols[0]);
+            }
         }
 #else
         AlarmResources* resources = AlarmResources::instance();
@@ -703,6 +707,8 @@ void ResourceSelector::setStandard()
         if (standard)
             CollectionControlModel::setEnabled(collection, alarmType, true);
         CollectionControlModel::setStandard(collection, alarmType, standard);
+        if (alarmType == KAlarm::CalEvent::ARCHIVED)
+            theApp()->purgeNewArchivedDefault(collection);
     }
 #else
     AlarmResource* resource = currentResource();
