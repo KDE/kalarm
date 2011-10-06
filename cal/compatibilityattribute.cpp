@@ -26,10 +26,44 @@
 namespace KAlarm
 {
 
-CompatibilityAttribute::CompatibilityAttribute(const CompatibilityAttribute& rhs)
-    : mCompatibility(rhs.mCompatibility),
-      mVersion(rhs.mVersion)
+
+class CompatibilityAttribute::Private
 {
+    public:
+        Private()
+            : mCompatibility(KAlarm::Calendar::Incompatible),
+              mVersion(KAlarm::IncompatibleFormat)
+            {}
+
+        KAlarm::Calendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
+        int                      mVersion;          // KAlarm calendar format version
+};
+ 
+    
+CompatibilityAttribute::CompatibilityAttribute()
+    : d(new Private)
+{
+}
+
+CompatibilityAttribute::CompatibilityAttribute(const CompatibilityAttribute& rhs)
+    : Akonadi::Attribute(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+CompatibilityAttribute::~CompatibilityAttribute()
+{
+    delete d;
+}
+
+CompatibilityAttribute& CompatibilityAttribute::operator=(const CompatibilityAttribute& other)
+{
+    if (&other != this)
+    {
+        Attribute::operator=(other);
+        *d = *other.d;
+    }
+    return *this;
 }
 
 CompatibilityAttribute* CompatibilityAttribute::clone() const
@@ -37,10 +71,40 @@ CompatibilityAttribute* CompatibilityAttribute::clone() const
     return new CompatibilityAttribute(*this);
 }
 
+KAlarm::Calendar::Compat CompatibilityAttribute::compatibility() const
+{
+    return d->mCompatibility;
+}
+
+void CompatibilityAttribute::setCompatibility(KAlarm::Calendar::Compat c)
+{
+    d->mCompatibility = c;
+}
+
+int CompatibilityAttribute::version() const
+{
+    return d->mVersion;
+}
+
+void CompatibilityAttribute::setVersion(int v)
+{
+    d->mVersion = v;
+}
+
+QByteArray CompatibilityAttribute::type() const
+{
+    return name();
+}
+
+QByteArray CompatibilityAttribute::name()
+{
+    return "KAlarmCompatibility";
+}
+
 QByteArray CompatibilityAttribute::serialized() const
 {
-    QByteArray v = QByteArray::number(mCompatibility) + ' '
-                 + QByteArray::number(mVersion);
+    QByteArray v = QByteArray::number(d->mCompatibility) + ' '
+                 + QByteArray::number(d->mVersion);
 kDebug(5950)<<v;
     return v;
 }
@@ -48,8 +112,8 @@ kDebug(5950)<<v;
 void CompatibilityAttribute::deserialize(const QByteArray& data)
 {
     // Set default values
-    mCompatibility = KAlarm::Calendar::Incompatible;
-    mVersion       = KAlarm::IncompatibleFormat;
+    d->mCompatibility = KAlarm::Calendar::Incompatible;
+    d->mVersion       = KAlarm::IncompatibleFormat;
 
     bool ok;
     const QList<QByteArray> items = data.simplified().split(' ');
@@ -66,7 +130,7 @@ kDebug(5950)<<"Size="<<count<<", data="<<data;
             kError() << "Invalid compatibility:" << c;
             return;
         }
-        mCompatibility = static_cast<KAlarm::Calendar::Compat>(c);
+        d->mCompatibility = static_cast<KAlarm::Calendar::Compat>(c);
     }
     if (count > index)
     {
@@ -77,7 +141,7 @@ kDebug(5950)<<"Size="<<count<<", data="<<data;
             kError() << "Invalid version:" << c;
             return;
         }
-        mVersion = c;
+        d->mVersion = c;
     }
 }
 

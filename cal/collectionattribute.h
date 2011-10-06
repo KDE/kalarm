@@ -33,23 +33,38 @@
 namespace KAlarm
 {
 
-/*=============================================================================
-= Class: CollectionAttribute
-= User-specific attributes of a KAlarm collection.
-=============================================================================*/
+/**
+ * @short An Attribute for a KAlarm Collection containing various status information.
+ *
+ * This class represents an Akonadi attribute of a KAlarm Collection. It contains
+ * information on the enabled status, the mime types allowed in the resource,
+ * which mime types the resource is the standard Collection for, etc.
+ *
+ * The attribute is maintained by client applications.
+ *
+ * @see CompatibilityAttribute
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
 
 class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
 {
     public:
-        CollectionAttribute()
-                : mEnabled(KAlarm::CalEvent::EMPTY),
-                  mStandard(KAlarm::CalEvent::EMPTY),
-                  mKeepFormat(false)  {}
+        CollectionAttribute();
 
-        bool isEnabled(KAlarm::CalEvent::Type type) const   { return mEnabled & type; }
+        /** Copy constructor. */
+        CollectionAttribute(const CollectionAttribute& other);
+
+        /** Assignment operator. */
+        CollectionAttribute& operator=(const CollectionAttribute& other);
+
+        ~CollectionAttribute();
+
+        /** Return whether the collection is enabled for a specified mime type. */
+        bool isEnabled(KAlarm::CalEvent::Type type) const;
 
         /** Return which mime types the collection is enabled for. */
-        KAlarm::CalEvent::Types enabled() const     { return mEnabled; }
+        KAlarm::CalEvent::Types enabled() const;
 
         /** Set the enabled/disabled state of the collection and its alarms, for a
          *  specified alarm type. The enabled/disabled state for other alarm types
@@ -72,7 +87,7 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         void setStandard(KAlarm::CalEvent::Type, bool standard);
 
         /** Return which mime types the collection is standard for. */
-        KAlarm::CalEvent::Types standard() const     { return mStandard; }
+        KAlarm::CalEvent::Types standard() const;
 
         /** Set which mime types the collection is the standard collection for. */
         void setStandard(KAlarm::CalEvent::Types);
@@ -80,32 +95,35 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         /** Return the background color to display this collection and its alarms,
          *  or invalid color if none is set.
          */
-        QColor backgroundColor() const     { return mBackgroundColour; }
+        QColor backgroundColor() const;
 
         /** Set the background color for this collection and its alarms. */
-        void setBackgroundColor(const QColor& c)  { mBackgroundColour = c; }
+        void setBackgroundColor(const QColor& c);
 
         /** Return whether the user has chosen to keep the old calendar storage
          *  format, i.e. not update to current KAlarm format.
          */
-        bool keepFormat() const            { return mKeepFormat; }
+        bool keepFormat() const;
 
         /** Set whether to keep the old calendar storage format unchanged. */
-        void setKeepFormat(bool keep)      { mKeepFormat = keep; }
+        void setKeepFormat(bool keep);
 
-        virtual QByteArray type() const    { return name(); }
+        /** Reimplemented from Attribute */
+        virtual QByteArray type() const;
+        /** Reimplemented from Attribute */
         virtual CollectionAttribute* clone() const;
+        /** Reimplemented from Attribute */
         virtual QByteArray serialized() const;
+        /** Reimplemented from Attribute */
         virtual void deserialize(const QByteArray& data);
-        static QByteArray name()    { return "KAlarmCollection"; }
+        /** Reimplemented from Attribute */
+        static QByteArray name();
 
     private:
-        CollectionAttribute(const CollectionAttribute&);
-
-        QColor                   mBackgroundColour; // background color for collection and its alarms
-        KAlarm::CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
-        KAlarm::CalEvent::Types  mStandard;         // whether the collection is a standard collection
-        bool                     mKeepFormat;       // whether user has chosen to keep old calendar storage format
+        //@cond PRIVATE
+        class Private;
+        Private* const d;
+        //@endcond
 };
 
 } // namespace KAlarm

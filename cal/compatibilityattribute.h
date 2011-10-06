@@ -18,7 +18,6 @@
  *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
-
 #ifndef COMPATIBILITY_ATTRIBUTE_H
 #define COMPATIBILITY_ATTRIBUTE_H
 
@@ -31,42 +30,61 @@
 namespace KAlarm
 {
 
-/*=============================================================================
-= Class: CompatibilityAttribute
-= Resource-specific attributes of a KAlarm collection, i.e. the compatibility
-= status of collections or items.
-=============================================================================*/
+/**
+ * @short An Attribute for a KAlarm Collection containing compatibility information.
+ *
+ * This class represents an Akonadi attribute of a KAlarm Collection. It contains
+ * information on the compatibility of the Collection and its Items with the
+ * current KAlarm calendar format. The attribute is maintained by the Akonadi
+ * resource, and should be treated as read-only by applications.
+ *
+ * @see CollectionAttribute
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
 
 class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
 {
     public:
-        CompatibilityAttribute()
-          : mCompatibility(KAlarm::Calendar::Incompatible),
-                  mVersion(KAlarm::IncompatibleFormat)  { }
+        /** Default constructor. Creates an incompatible attribute. */
+        CompatibilityAttribute();
+
+        /** Copy constructor. */
+        CompatibilityAttribute(const CompatibilityAttribute& other);
+
+        /** Assignment operator. */
+        CompatibilityAttribute& operator=(const CompatibilityAttribute& other);
+
+        ~CompatibilityAttribute();
 
         /** Return the compatibility status for the entity. */
-        KAlarm::Calendar::Compat compatibility() const     { return mCompatibility; }
+        KAlarm::Calendar::Compat compatibility() const;
 
         /** Set the compatibility status for the entity. */
-        void setCompatibility(KAlarm::Calendar::Compat c)  { mCompatibility = c; }
+        void setCompatibility(KAlarm::Calendar::Compat c);
 
         /** Return the KAlarm version of the backend calendar format. */
-        int version() const                                { return mVersion; }
+        int version() const;
 
         /** Set the KAlarm version of the backend calendar format. */
-        void setVersion(int v)                             { mVersion = v; }
+        void setVersion(int v);
 
-        virtual QByteArray type() const    { return name(); }
+        /** Reimplemented from Attribute */
+        virtual QByteArray type() const;
+        /** Reimplemented from Attribute */
         virtual CompatibilityAttribute* clone() const;
+        /** Reimplemented from Attribute */
         virtual QByteArray serialized() const;
+        /** Reimplemented from Attribute */
         virtual void deserialize(const QByteArray& data);
-        static QByteArray name()    { return "KAlarmCompatibility"; }
+        /** Reimplemented from Attribute */
+        static QByteArray name();
 
     private:
-        CompatibilityAttribute(const CompatibilityAttribute&);
-
-        KAlarm::Calendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
-        int                      mVersion;          // KAlarm calendar format version
+        //@cond PRIVATE
+        class Private;
+        Private* const d;
+        //@endcond
 };
 
 } // namespace KAlarm
