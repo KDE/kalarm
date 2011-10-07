@@ -1,7 +1,7 @@
 /*
  *  eventattribute.cpp  -  per-user attributes for individual events
  *  Program:  kalarm
- *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -27,6 +27,56 @@
 namespace KAlarm
 {
 
+class EventAttribute::Private
+{
+    public:
+        Private() : mCommandError(KAEvent::CMD_NO_ERROR) {}
+
+        KAEvent::CmdErrType mCommandError;         // the last command execution error for the alarm
+};
+
+
+EventAttribute::EventAttribute()
+    : d(new Private)
+{
+}
+
+EventAttribute::EventAttribute(const EventAttribute& rhs)
+    : Akonadi::Attribute(rhs),
+      d(new Private(*rhs.d))
+{
+}
+
+EventAttribute::~EventAttribute()
+{
+    delete d;
+}
+
+EventAttribute& EventAttribute::operator=(const EventAttribute& other)
+{
+    if (&other != this)
+    {
+        Attribute::operator=(other);
+        *d = *other.d;
+    }
+    return *this;
+}
+
+KAEvent::CmdErrType EventAttribute::commandError() const
+{
+    return d->mCommandError;
+}
+
+void EventAttribute::setCommandError(KAEvent::CmdErrType err)
+{
+    d->mCommandError = err;
+}
+
+QByteArray EventAttribute::type() const
+{
+    return "KAlarmEvent";
+}
+
 EventAttribute* EventAttribute::clone() const
 {
     return new EventAttribute(*this);
@@ -34,14 +84,17 @@ EventAttribute* EventAttribute::clone() const
 
 QByteArray EventAttribute::serialized() const
 {
-kDebug()<<QByteArray::number(mCommandError);
-    return QByteArray::number(mCommandError);
+    QByteArray v = QByteArray::number(d->mCommandError);
+    kDebug() << v;
+    return v;
 }
 
 void EventAttribute::deserialize(const QByteArray& data)
 {
+    kDebug() << data;
+
     // Set default values
-    mCommandError = KAEvent::CMD_NO_ERROR;
+    d->mCommandError = KAEvent::CMD_NO_ERROR;
 
     bool ok;
     int c[1];
@@ -52,8 +105,7 @@ void EventAttribute::deserialize(const QByteArray& data)
             c[0] = items[0].toInt(&ok);
             if (!ok  ||  (c[0] & ~(KAEvent::CMD_ERROR | KAEvent::CMD_ERROR_PRE | KAEvent::CMD_ERROR_POST)))
                 return;
-            mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
-kDebug()<<"command error="<<mCommandError;
+            d->mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
             break;
 
         default:

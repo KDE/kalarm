@@ -189,12 +189,14 @@ QByteArray CollectionAttribute::serialized() const
           + QByteArray::number(d->mBackgroundColour.green()) + ' '
           + QByteArray::number(d->mBackgroundColour.blue()) + ' '
           + QByteArray::number(d->mBackgroundColour.alpha());
-kDebug(5950)<<v;
+    kDebug() << v;
     return v;
 }
 
 void CollectionAttribute::deserialize(const QByteArray& data)
 {
+    kDebug() << data;
+
     // Set default values
     d->mEnabled          = KAlarm::CalEvent::EMPTY;
     d->mStandard         = KAlarm::CalEvent::EMPTY;
@@ -206,7 +208,6 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     const QList<QByteArray> items = data.simplified().split(' ');
     int count = items.count();
     int index = 0;
-kDebug(5950)<<"Size="<<count<<", data="<<data;
     if (count > index)
     {
         // 0: type(s) of alarms for which the collection is enabled

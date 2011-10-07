@@ -1,7 +1,7 @@
 /*
  *  alarmtext.h  -  text/email alarm text conversion
  *  Program:  kalarm
- *  Copyright © 2004,2005,2008-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2008-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -38,9 +38,12 @@ class KAEvent;
 class KALARM_CAL_EXPORT AlarmText
 {
     public:
-        AlarmText(const QString& text = QString())  { setText(text); }
+        explicit AlarmText(const QString& text = QString());
+        AlarmText(const AlarmText& other);
+        ~AlarmText();
+        AlarmText& operator=(const AlarmText& other);
         void           setText(const QString&);
-        void           setScript(const QString& text)   { setText(text);  mType = Script; }
+        void           setScript(const QString& text);
         void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
                                 const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
 #ifdef USE_AKONADI
@@ -48,54 +51,77 @@ class KALARM_CAL_EXPORT AlarmText
 #else
         void           setTodo(const KCal::Todo*);
 #endif
+        /** Return the text for a text message alarm, in display format. */
         QString        displayText() const;
-        QString        calendarText() const;
-        QString        to() const                 { return mTo; }
-        QString        from() const               { return mFrom; }
-        QString        cc() const                 { return mCc; }
-        QString        time() const               { return mTime; }
-        QString        subject() const            { return mSubject; }
-        QString        body() const               { return mType == Email ? mBody : QString(); }
+        /** Return the 'To' header parameter. */
+        QString        to() const;
+        /** Return the 'From' header parameter. */
+        QString        from() const;
+        /** Return the 'Cc' header parameter. */
+        QString        cc() const;
+        /** Return the 'Date' header parameter. */
+        QString        time() const;
+        /** Return the 'Subject' header parameter. */
+        QString        subject() const;
+        /** Return the email message body.
+         *  @return message body, or empty string if not email type.
+         */
+        QString        body() const;
         // Todo data
-        QString        summary() const            { return mSubject; }
-        QString        location() const           { return mTo; }
-        QString        due() const                { return mTime; }
-        QString        description() const        { return mBody; }
+        QString        summary() const;
+        QString        location() const;
+        QString        due() const;
+        QString        description() const;
+
+        /** Return whether there is any text. */
         bool           isEmpty() const;
-        bool           isEmail() const            { return mType == Email; }
-        bool           isScript() const           { return mType == Script; }
-        bool           isTodo() const             { return mType == Todo; }
-        unsigned long  kmailSerialNumber() const  { return mKMailSerialNum; }
-        static QString summary(const KAEvent&, int maxLines = 1, bool* truncated = 0);
-        static bool    checkIfEmail(const QString&);
-        static QString emailHeaders(const QString&, bool subjectOnly);
-        static QString fromCalendarText(const QString&, bool& email);
-        static QString toCalendarText(const QString&);
+        bool           isEmail() const;
+        bool           isScript() const;
+        bool           isTodo() const;
+        unsigned long  kmailSerialNumber() const;
+
+        /** Return the alarm summary text for either single line or tooltip display.
+         *  @param event      event whose summary text is to be returned
+         *  @param maxLines   the maximum number of lines returned
+         *  @param truncated  if non-null, points to a variable which will be set true
+         *                    if the text returned has been truncated, other than to
+         *                    strip a trailing newline, or false otherwise.
+         */
+        static QString summary(const KAEvent& event, int maxLines = 1, bool* truncated = 0);
+
+        /** Return whether a text is an email, with at least To and From headers.
+         *  @param text  text to check.
+         */
+        static bool    checkIfEmail(const QString& text);
+
+        /** Check whether a text is an email (with at least To and From headers),
+         *  and if so return its headers or optionally only its subject line.
+         *  @param text         text to check
+         *  @param subjectOnly  true to only return the subject line,
+         *                      false to return all headers.
+         *  @return headers/subject line, or QString() if not the text of an email.
+         */
+        static QString emailHeaders(const QString& text, bool subjectOnly);
+
+        /** Translate an alarm calendar text to a display text.
+         *  Translation is needed for email texts, since the alarm calendar stores
+         *  untranslated email prefixes.
+         *  @param text   text to translate
+         *  @param email  updated to indicate whether it is an email text.
+         */
+        static QString fromCalendarText(const QString& text, bool& email);
+
+        /** Return the text for an alarm message text, in alarm calendar format.
+         *  (The prefix strings are untranslated in the calendar.)
+         *  @param text  alarm message text.
+         */
+        static QString toCalendarText(const QString& text);
 
     private:
-        enum Type { None, Email, Script, Todo };
-        void           clear();
-        static void    setUpTranslations();
-        static int     emailHeaderCount(const QStringList&);
-        static QString todoTitle(const QString& text);
-
-        static QString mFromPrefix;       // translated header prefixes
-        static QString mToPrefix;
-        static QString mCcPrefix;
-        static QString mDatePrefix;
-        static QString mSubjectPrefix;
-        static QString mTitlePrefix;
-        static QString mLocnPrefix;
-        static QString mDuePrefix;
-        static QString mFromPrefixEn;     // untranslated header prefixes
-        static QString mToPrefixEn;
-        static QString mCcPrefixEn;
-        static QString mDatePrefixEn;
-        static QString mSubjectPrefixEn;
-        QString        mBody, mFrom, mTo, mCc, mTime, mSubject;
-        unsigned long  mKMailSerialNum;   // if email, message's KMail serial number, else 0
-        Type           mType;
-        bool           mIsEmail;
+        //@cond PRIVATE
+        class Private;
+        Private* const d;
+        //@endcond
 };
 
 #endif // ALARMTEXT_H

@@ -19,8 +19,8 @@
  *  MA 02110-1301, USA.
  */
 
-#ifndef COLLECTION_ATTRIBUTE_H
-#define COLLECTION_ATTRIBUTE_H
+#ifndef KALARM_COLLECTION_ATTRIBUTE_H
+#define KALARM_COLLECTION_ATTRIBUTE_H
 
 #include "kalarm_cal_export.h"
 
@@ -58,7 +58,7 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         /** Assignment operator. */
         CollectionAttribute& operator=(const CollectionAttribute& other);
 
-        ~CollectionAttribute();
+        virtual ~CollectionAttribute();
 
         /** Return whether the collection is enabled for a specified mime type. */
         bool isEnabled(KAlarm::CalEvent::Type type) const;
@@ -116,7 +116,8 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         virtual QByteArray serialized() const;
         /** Reimplemented from Attribute */
         virtual void deserialize(const QByteArray& data);
-        /** Reimplemented from Attribute */
+
+        /** Return the attribute name. */
         static QByteArray name();
 
     private:
@@ -128,6 +129,6 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
 
 } // namespace KAlarm
 
-#endif // COLLECTION_ATTRIBUTE_H
+#endif // KALARM_COLLECTION_ATTRIBUTE_H
 
 // vim: et sw=4:

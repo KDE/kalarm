@@ -361,7 +361,7 @@ int KAlarmApp::newInstance()
                         editDlg->setRecurrence(*options.recurrence(), options.subRepeatInterval(), options.subRepeatCount());
                     else if (options.flags() & KAEvent::REPEAT_AT_LOGIN)
                         editDlg->setRepeatAtLogin();
-                    editDlg->setAction(options.editAction(), options.text());
+                    editDlg->setAction(options.editAction(), AlarmText(options.text()));
                     if (options.lateCancel())
                         editDlg->setLateCancel(options.lateCancel());
                     if (options.flags() & KAEvent::COPY_KORGANIZER)

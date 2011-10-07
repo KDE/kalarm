@@ -18,8 +18,8 @@
  *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
-#ifndef COMPATIBILITY_ATTRIBUTE_H
-#define COMPATIBILITY_ATTRIBUTE_H
+#ifndef KALARM_COMPATIBILITY_ATTRIBUTE_H
+#define KALARM_COMPATIBILITY_ATTRIBUTE_H
 
 #include "kalarm_cal_export.h"
 
@@ -55,7 +55,7 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
         /** Assignment operator. */
         CompatibilityAttribute& operator=(const CompatibilityAttribute& other);
 
-        ~CompatibilityAttribute();
+        virtual ~CompatibilityAttribute();
 
         /** Return the compatibility status for the entity. */
         KAlarm::Calendar::Compat compatibility() const;
@@ -77,7 +77,8 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
         virtual QByteArray serialized() const;
         /** Reimplemented from Attribute */
         virtual void deserialize(const QByteArray& data);
-        /** Reimplemented from Attribute */
+
+        /** Return the attribute name. */
         static QByteArray name();
 
     private:
@@ -89,6 +90,6 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
 
 } // namespace KAlarm
 
-#endif // COMPATIBILITY_ATTRIBUTE_H
+#endif // KALARM_COMPATIBILITY_ATTRIBUTE_H
 
 // vim: et sw=4:

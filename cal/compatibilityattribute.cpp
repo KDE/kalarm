@@ -105,12 +105,14 @@ QByteArray CompatibilityAttribute::serialized() const
 {
     QByteArray v = QByteArray::number(d->mCompatibility) + ' '
                  + QByteArray::number(d->mVersion);
-kDebug(5950)<<v;
+    kDebug() << v;
     return v;
 }
 
 void CompatibilityAttribute::deserialize(const QByteArray& data)
 {
+    kDebug() << data;
+
     // Set default values
     d->mCompatibility = KAlarm::Calendar::Incompatible;
     d->mVersion       = KAlarm::IncompatibleFormat;
@@ -119,7 +121,6 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
     const QList<QByteArray> items = data.simplified().split(' ');
     int count = items.count();
     int index = 0;
-kDebug(5950)<<"Size="<<count<<", data="<<data;
     if (count > index)
     {
         // 0: calendar format compatibility
