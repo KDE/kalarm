@@ -2757,7 +2757,7 @@ DateTime KAEvent::nextTrigger(TriggerType type) const
         case DISPLAY_TRIGGER:
         {
             const bool reminderAfter = d->mMainExpired && d->mReminderActive && d->mReminderMinutes < 0;
-            return (d->mWorkTimeOnly || d->mExcludeHolidays)
+            return d->checkRecur() != KARecurrence::NO_RECUR  &&  (d->mWorkTimeOnly || d->mExcludeHolidays)
                    ? (reminderAfter ? d->mAllWorkTrigger : d->mMainWorkTrigger)
                    : (reminderAfter ? d->mAllTrigger : d->mMainTrigger);
         }
@@ -2817,7 +2817,8 @@ bool KAEvent::repeatAtLogin(bool includeArchived) const
 void KAEvent::setExcludeHolidays(bool ex)
 {
     d->mExcludeHolidays = ex ? Private::mHolidays : 0;
-    d->mTriggerChanged = true;
+    // Option only affects recurring alarms
+    d->mTriggerChanged = (d->checkRecur() != KARecurrence::NO_RECUR);
 }
 
 bool KAEvent::holidaysExcluded() const
@@ -2840,7 +2841,8 @@ void KAEvent::setHolidays(const HolidayRegion& h)
 void KAEvent::setWorkTimeOnly(bool wto)
 {
     d->mWorkTimeOnly = wto;
-    d->mTriggerChanged = true;
+    // Option only affects recurring alarms
+    d->mTriggerChanged = (d->checkRecur() != KARecurrence::NO_RECUR);
 }
 
 bool KAEvent::workTimeOnly() const
@@ -4412,9 +4414,12 @@ void KAEvent::Private::calcTriggerTimes() const
 {
     if (mChangeCount)
         return;
-#warning Only allow work time or exclude holidays if recurring
-    if ((mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
-    ||  (mExcludeHolidays  &&  mExcludeHolidays != mHolidays))
+#ifdef __GNUC__
+#warning May need to set date-only alarms to after start-of-day time in working-time checks
+#endif
+    bool recurs = (checkRecur() != KARecurrence::NO_RECUR);
+    if ((recurs  &&  mWorkTimeOnly  &&  mWorkTimeOnly != mWorkTimeIndex)
+    ||  (recurs  &&  mExcludeHolidays  &&  mExcludeHolidays != mHolidays))
     {
         // It's a work time alarm, and work days/times have changed, or
         // it excludes holidays, and the holidays definition has changed.
@@ -4423,9 +4428,9 @@ void KAEvent::Private::calcTriggerTimes() const
     else if (!mTriggerChanged)
         return;
     mTriggerChanged = false;
-    if (mWorkTimeOnly)
+    if (recurs  &&  mWorkTimeOnly)
         mWorkTimeOnly = mWorkTimeIndex;   // note which work time definition was used in calculation
-    if (mExcludeHolidays)
+    if (recurs  &&  mExcludeHolidays)
         mExcludeHolidays = mHolidays;     // note which holiday definition was used in calculation
 
     if (mCategory == KAlarm::CalEvent::ARCHIVED  ||  mCategory == KAlarm::CalEvent::TEMPLATE)
@@ -4449,7 +4454,7 @@ void KAEvent::Private::calcTriggerTimes() const
         // If only-during-working-time is set and it recurs, it won't actually trigger
         // unless it falls during working hours.
         if ((!mWorkTimeOnly && !mExcludeHolidays)
-        ||  checkRecur() == KARecurrence::NO_RECUR
+        ||  !recurs
         ||  isWorkingTime(mMainTrigger.kDateTime()))
         {
             // It only occurs once, or it complies with any working hours/holiday
