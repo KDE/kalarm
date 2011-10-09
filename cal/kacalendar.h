@@ -1,7 +1,7 @@
 /*
  *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
  *  Program:  kalarm
- *  Copyright © 2005-2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -145,18 +145,6 @@ class KALARM_CAL_EXPORT Calendar
         static int updateVersion(const KCalCore::FileStorage::Ptr&, QString& versionString);
 #else
         static int updateVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
-#endif
-
-#ifdef USE_AKONADI
-        /** Whether the fix function should convert old format KAlarm calendars. */
-        enum FixFunc { PROMPT, PROMPT_PART, CONVERT, NO_CONVERT };
-
-        static Compat fix(const KCalCore::FileStorage::Ptr&,
-                          const Akonadi::Collection& = Akonadi::Collection(),
-                          FixFunc = PROMPT, bool* wrongType = 0);
-
-        /** Return all the alarm types actually present in a local calendar. */
-        static CalEvent::Types actualAlarmTypes(const KCalCore::Calendar::Ptr&);
 #endif
 
         /** Return a prompt string to ask the user whether to convert the calendar to the

@@ -36,9 +36,6 @@ namespace CalendarCompat
 * file, any conversions will only be saved if changes are made later.
 * If the calendar only contains the wrong alarm types, 'wrongType' is set true.
 * Reply = true if the calendar file is now in the current format.
-*
-* NOTE: Any non-KResources-specific changes to this method should also be applied
-*       to KAlarm::Calendar::fix() which serves the same function for Akonadi.
 */
 KAlarm::Calendar::Compat fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource,
                              AlarmResource::FixFunc conv, bool* wrongType)

@@ -62,6 +62,10 @@ using namespace KCalCore;
 using namespace KCal;
 #endif
 
+#ifdef USE_AKONADI
+static KAlarm::Calendar::Compat fix(const KCalCore::FileStorage::Ptr&);
+#endif
+
 static const QString displayCalendarName = QLatin1String("displaying.ics");
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = 0;
@@ -349,7 +353,7 @@ int AlarmCalendar::load()
             KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
         mLocalFile = tmpFile;
 #ifdef USE_AKONADI
-        KAlarm::Calendar::fix(mCalendarStorage);   // convert events to current KAlarm format for when calendar is saved
+        fix(mCalendarStorage);   // convert events to current KAlarm format for when calendar is saved
         updateKAEvents(Collection());
 #else
         CalendarCompat::fix(*calendar, mLocalFile);   // convert events to current KAlarm format for when calendar is saved
@@ -893,7 +897,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
     else
     {
 #ifdef USE_AKONADI
-        KAlarm::Calendar::Compat caltype = KAlarm::Calendar::fix(calStorage);
+        KAlarm::Calendar::Compat caltype = fix(calStorage);
         KAlarm::CalEvent::Types wantedTypes = collection && collection->isValid() ? KAlarm::CalEvent::types(collection->contentMimeTypes()) : KAlarm::CalEvent::EMPTY;
         Collection activeColl, archiveColl, templateColl;
 #else
@@ -2231,5 +2235,20 @@ void AlarmCalendar::adjustStartOfDay()
     for (ResourceMap::ConstIterator rit = mResourceMap.constBegin();  rit != mResourceMap.constEnd();  ++rit)
         KAEvent::adjustStartOfDay(rit.value());
 }
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Find the version of KAlarm which wrote the calendar file, and do any
+* necessary conversions to the current format.
+*/
+KAlarm::Calendar::Compat fix(const FileStorage::Ptr& fileStorage)
+{
+    QString versionString;
+    int version = KAlarm::Calendar::updateVersion(fileStorage, versionString);
+    if (version == KAlarm::IncompatibleFormat)
+        return KAlarm::Calendar::Incompatible;  // calendar was created by another program, or an unknown version of KAlarm
+    return KAlarm::Calendar::Current;
+}
+#endif
 
 // vim: et sw=4:
