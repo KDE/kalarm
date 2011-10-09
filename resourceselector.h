@@ -131,13 +131,14 @@ class ResourceSelector : public QFrame
         KAlarm::CalEvent::Type mCurrentAlarmType;
         KMenu*          mContextMenu;
         KAction*        mActionReload;
-        KAction*        mActionSave;
         KAction*        mActionShowDetails;
         KAction*        mActionSetColour;
         KAction*        mActionClearColour;
         KAction*        mActionEdit;
 #ifdef USE_AKONADI
         KAction*        mActionUpdate;
+#else
+        KAction*        mActionSave;
 #endif
         KAction*        mActionRemove;
         KAction*        mActionImport;

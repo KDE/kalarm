@@ -501,9 +501,11 @@ void ResourceSelector::initActions(KActionCollection* actions)
     mActionReload      = new KAction(KIcon("view-refresh"), i18nc("@action Reload calendar", "Re&load"), this);
     actions->addAction(QLatin1String("resReload"), mActionReload);
     connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
+#ifndef USE_AKONADI
     mActionSave        = new KAction(KIcon("document-save"), i18nc("@action", "&Save"), this);
     actions->addAction(QLatin1String("resSave"), mActionSave);
     connect(mActionSave, SIGNAL(triggered(bool)), SLOT(saveResource()));
+#endif
     mActionShowDetails = new KAction(KIcon("help-about"), i18nc("@action", "Show &Details"), this);
     actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
     connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
@@ -597,7 +599,6 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 #endif
     }
     mActionReload->setEnabled(active);
-    mActionSave->setEnabled(active && writable);
     mActionShowDetails->setEnabled(haveCalendar);
     mActionSetColour->setEnabled(haveCalendar);
     mActionClearColour->setEnabled(haveCalendar);
@@ -605,6 +606,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     mActionClearColour->setVisible(AkonadiModel::instance()->backgroundColor(collection).isValid());
 #else
     mActionClearColour->setVisible(resource && resource->colour().isValid());
+    mActionSave->setEnabled(active && writable);
 #endif
     mActionEdit->setEnabled(haveCalendar);
 #ifdef USE_AKONADI
@@ -654,9 +656,7 @@ void ResourceSelector::reloadResource()
 void ResourceSelector::saveResource()
 {
 #ifdef USE_AKONADI
-#ifdef __GNUC__
-#warning saveResource() not implemented
-#endif
+    // Save resource is not applicable to Akonadi
 #else
     AlarmResource* resource = currentResource();
     if (resource)
