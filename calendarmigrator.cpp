@@ -326,7 +326,9 @@ bool CalendarUpdater::update()
             QString versionString = KAlarm::getVersionString(compatAttr->version());
             QString msg = KAlarm::Calendar::conversionPrompt(mCollection.name(), versionString, false);
             kDebug() << "Version" << versionString;
-            if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) == KMessageBox::Yes)
+            if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
+                result = false;   // the user chose not to update the calendar
+            else
             {
                 // Tell the resource to update the backend storage format
                 QString errmsg;
@@ -353,15 +355,11 @@ bool CalendarUpdater::update()
                                         errmsg));
                 }
             }
-            else
+            if (!mNewCollection)
             {
-                // The user chose not to update the calendar
-                result = false;
-                if (!mNewCollection)
-                {
-                    QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
-                    AkonadiModel::instance()->setData(ix, true, AkonadiModel::KeepFormatRole);
-                }
+                // Record the user's choice of whether to update the calendar
+                QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
+                AkonadiModel::instance()->setData(ix, !result, AkonadiModel::KeepFormatRole);
             }
         }
     }
@@ -677,11 +675,9 @@ void CalendarCreator::collectionFetchResult(KJob* j)
             break;
     }
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, false, true, this);
-    if (!updater->update())   // note that 'updater' will auto-delete when finished
-    {
-        // Record that the user chose not to update the calendar
-        attr->setKeepFormat(true);
-    }
+    bool updated = updater->update();   // note that 'updater' will auto-delete when finished
+    // Record the user's choice of whether to update the calendar
+    attr->setKeepFormat(!updated);
 
     // Update the collection's attributes in the Akonadi database
     CollectionModifyJob* cmjob = new CollectionModifyJob(collection, this);
