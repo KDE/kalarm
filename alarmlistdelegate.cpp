@@ -82,9 +82,6 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             case ITEM_LIST_MODEL::ColourColumn:
             {
 #ifdef USE_AKONADI
-#ifdef __GNUC__
-#warning Check this
-#endif
                 const KAEvent event = static_cast<const ItemListModel*>(index.model())->event(index);
                 if (event.isValid()  &&  event.commandError() != KAEvent::CMD_NO_ERROR)
 #else
