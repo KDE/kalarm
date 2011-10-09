@@ -61,6 +61,8 @@ using KAlarmResourceCommon::errorMessage;
 
 static bool isFileValid(const QString& file);
 
+static const char warningFile[] = "WARNING_README.txt";
+
 #define DEBUG_DATA \
 kDebug()<<"ID:Files:"; \
 foreach (const QString& id, mEvents.uniqueKeys()) { kDebug()<<id<<":"<<mEvents[id].files; } \
@@ -164,7 +166,6 @@ void KAlarmDirResource::configure(WId windowId)
         {
             // Creating a new resource
             clearCache();   // this deletes any existing collection
-            initializeDirectory();   // should only be needed for new resource, but just in case ...
             loadFiles(true);
             synchronizeCollectionTree();
         }
@@ -313,7 +314,6 @@ void KAlarmDirResource::settingsChanged()
         {
             // Settings have changed which might affect the alarm configuration
 kDebug()<<"Monitored changed";
-            initializeDirectory();   // should only be needed for new resource, but just in case ...
             loadFiles(true);
 //              synchronizeCollectionTree();
         }
@@ -370,6 +370,10 @@ bool KAlarmDirResource::loadFiles(bool sync)
     const QString dirPath = directoryName();
     kDebug() << dirPath;
     const QDir dir(dirPath);
+
+    // Create the directory if it doesn't exist.
+    // This should only be needed for a new resource, but just in case ...
+    initializeDirectory();
 
     mEvents.clear();
     mFileEventIds.clear();
@@ -1045,13 +1049,14 @@ void KAlarmDirResource::initializeDirectory() const
     }
 
     // Check whether warning file is in place...
-    QFile file(dirPath + QDir::separator() + "WARNING_README.txt");
+    QFile file(dirPath + QDir::separator() + warningFile);
     if (!file.exists())
     {
         // ... if not, create it
         file.open(QIODevice::WriteOnly);
-        file.write("Important Warning!!!\n\n"
-                   "Do not create or copy items inside this folder manually: they are managed by the Akonadi framework!\n");
+        file.write("Important Warning!!!\n"
+                   "Do not create or copy items inside this folder manually:\n"
+                   "they are managed by the Akonadi framework!\n");
         file.close();
     }
 }
@@ -1160,7 +1165,7 @@ bool isFileValid(const QString& file)
 {
     return !file.isEmpty()
         &&  !file.startsWith('.')  &&  !file.endsWith('~')
-        &&  file != QLatin1String("WARNING_README.txt");
+        &&  file != QLatin1String(warningFile);
 }
 
 AKONADI_AGENT_FACTORY(KAlarmDirResource, akonadi_kalarm_dir_resource)
