@@ -38,7 +38,7 @@ class DateTime;
  * @short Represents recurrences for KAlarm.
  *
  * This class represents the restricted range of recurrence types which are
- * handled by KAlarm, and to translate between these and the libkcalcore
+ * handled by KAlarm, and translates between these and the libkcalcore
  * Recurrence class. In particular, it handles yearly recurrences on 29th
  * February in non-leap years specially:
  *
