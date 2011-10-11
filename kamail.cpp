@@ -236,14 +236,12 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 */
 void KAMail::slotEmailSent(KJob* job)
 {
-    bool fail = false;
     bool copyerr = false;
     QStringList errmsgs;
     if (job->error())
     {
         kError() << "Failed:" << job->errorString();
         errmsgs = errors(job->errorString(), SEND_ERROR);
-        fail = true;
     }
     JobData jobdata;
     if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != mJobs.head())
