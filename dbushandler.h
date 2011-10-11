@@ -21,7 +21,6 @@
 #ifndef DBUSHANDLER_H
 #define DBUSHANDLER_H
 
-#include "datetime.h"
 #include "kalarmiface.h"
 #include "kaevent.h"
 

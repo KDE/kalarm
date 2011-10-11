@@ -20,8 +20,6 @@
 
 #include "karecurrence.h"
 
-#include "datetime.h"
-
 #ifdef USE_AKONADI
 #include <kcalcore/icalformat.h>
 #else

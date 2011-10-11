@@ -24,6 +24,7 @@
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
 #include "alarmtext.h"
+using KAlarm::AlarmText;
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"

@@ -62,6 +62,8 @@
 #include <QTimer>
 
 using namespace Akonadi;
+using KAlarm::DateTime;
+using KAlarm::AlarmText;
 using KAlarm::CollectionAttribute;
 using KAlarm::CompatibilityAttribute;
 using KAlarm::EventAttribute;

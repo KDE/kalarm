@@ -22,6 +22,7 @@
 #define REPETITIONBUTTON_H
 
 #include "repetition.h"
+using KAlarm::Repetition;
 #include <kdialog.h>
 #include <QPushButton>
 
@@ -38,7 +39,6 @@ namespace KCalCore { class Duration; }
 #else
 namespace KCal { class Duration; }
 #endif
-
 
 class RepetitionButton : public QPushButton
 {

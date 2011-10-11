@@ -1,7 +1,7 @@
 /*
  *  identities.cpp  -  email identity functions
  *  Program:  kalarm
- *  Copyright © 2004-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -27,6 +27,8 @@
 
 static KPIMIdentities::IdentityManager* mIdentityManager = 0;
 
+namespace KAlarm
+{
 namespace Identities
 {
 
@@ -70,5 +72,7 @@ uint identityUoid(const QString& identityUoidOrName)
 }
 
 } // namespace Identities
+
+} // namespace KAlarm
 
 // vim: et sw=4:

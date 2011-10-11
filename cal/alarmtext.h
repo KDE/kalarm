@@ -34,6 +34,21 @@ namespace KCal { class Todo; }
 class QStringList;
 class KAEvent;
 
+namespace KAlarm
+{
+
+/**
+ * @short Parses email, todo and script alarm texts.
+ *
+ * Parses email, todo and script texts, enabling drag and drop of these items
+ * to be recognised and interpreted.
+ *
+ * - Email texts should contain headers (To, From, etc.) in normal RFC format.
+ * - Todos should be in iCalendar format.
+ * - Scripts are assumed if the alarm text starts with '#!'.
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
 
 class KALARM_CAL_EXPORT AlarmText
 {
@@ -42,43 +57,85 @@ class KALARM_CAL_EXPORT AlarmText
         AlarmText(const AlarmText& other);
         ~AlarmText();
         AlarmText& operator=(const AlarmText& other);
-        void           setText(const QString&);
-        void           setScript(const QString& text);
-        void           setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
-                                const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
-#ifdef USE_AKONADI
-        void           setTodo(const KCalCore::Todo::Ptr&);
-#else
-        void           setTodo(const KCal::Todo*);
-#endif
-        /** Return the text for a text message alarm, in display format. */
-        QString        displayText() const;
-        /** Return the 'To' header parameter. */
-        QString        to() const;
-        /** Return the 'From' header parameter. */
-        QString        from() const;
-        /** Return the 'Cc' header parameter. */
-        QString        cc() const;
-        /** Return the 'Date' header parameter. */
-        QString        time() const;
-        /** Return the 'Subject' header parameter. */
-        QString        subject() const;
-        /** Return the email message body.
-         *  @return message body, or empty string if not email type.
+
+        /** Set the alarm text.
+         *  If @p text starts with '#!', it is flagged as a script, else plain text.
          */
-        QString        body() const;
-        // Todo data
-        QString        summary() const;
-        QString        location() const;
-        QString        due() const;
-        QString        description() const;
+        void setText(const QString& text);
+        /** Set the instance contents to be a script. */
+        void setScript(const QString& text);
+        /** Set the instance contents to be an email. */
+        void setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
+                      const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
+#ifdef USE_AKONADI
+        /** Set the instance contents to be a todo. */
+        void setTodo(const KCalCore::Todo::Ptr& todo);
+#else
+        /** Set the instance contents to be a todo. */
+        void setTodo(const KCal::Todo* todo);
+#endif
+
+        /** Return the text for a text message alarm, in display format.
+         *  - An email is returned as a sequence of headers followed by the message body.
+         *  - A todo is returned as a subject, location and due date followed by any text.
+         *  - A script or plain text is returned without interpretation.
+         */
+        QString displayText() const;
+        /** Return the 'To' header parameter for an email alarm.
+         *  @return 'from' value, or empty if not an email text.
+         */
+        QString to() const;
+        /** Return the 'From' header parameter for an email alarm.
+         *  @return 'from' value, or empty if not an email text.
+         */
+        QString from() const;
+        /** Return the 'Cc' header parameter for an email alarm.
+         *  @return 'cc' value, or empty if not an email text.
+         */
+        QString cc() const;
+        /** Return the 'Date' header parameter for an email alarm.
+         *  @return 'date' value, or empty if not an email text.
+         */
+        QString time() const;
+        /** Return the 'Subject' header parameter for an email alarm.
+         *  @return 'subject' value, or empty if not an email text.
+         */
+        QString subject() const;
+        /** Return the email message body.
+         *  @return message body, or empty if not an email text.
+         */
+        QString body() const;
+
+        /** Return the summary text for a todo.
+         *  @return summary text, or empty if not a todo.
+         */
+        QString summary() const;
+        /** Return the location text for a todo.
+         *  @return location text, or empty if not a todo.
+         */
+        QString location() const;
+        /** Return the due date text for a todo.
+         *  @return due date text, or empty if not a todo.
+         */
+        QString due() const;
+        /** Return the description text for a todo.
+         *  @return description text, or empty if not a todo.
+         */
+        QString description() const;
 
         /** Return whether there is any text. */
-        bool           isEmpty() const;
-        bool           isEmail() const;
-        bool           isScript() const;
-        bool           isTodo() const;
-        unsigned long  kmailSerialNumber() const;
+        bool isEmpty() const;
+        /** Return whether the instance contains the text of an email. */
+        bool isEmail() const;
+        /** Return whether the instance contains the text of a script. */
+        bool isScript() const;
+        /** Return whether the instance contains the text of a todo. */
+        bool isTodo() const;
+
+        /** Return the kmail serial number of an email.
+         *  @return serial number, or 0 if none.
+         */
+        unsigned long kmailSerialNumber() const;
 
         /** Return the alarm summary text for either single line or tooltip display.
          *  @param event      event whose summary text is to be returned
@@ -92,7 +149,7 @@ class KALARM_CAL_EXPORT AlarmText
         /** Return whether a text is an email, with at least To and From headers.
          *  @param text  text to check.
          */
-        static bool    checkIfEmail(const QString& text);
+        static bool checkIfEmail(const QString& text);
 
         /** Check whether a text is an email (with at least To and From headers),
          *  and if so return its headers or optionally only its subject line.
@@ -123,6 +180,8 @@ class KALARM_CAL_EXPORT AlarmText
         Private* const d;
         //@endcond
 };
+
+} // namespace KAlarm
 
 #endif // ALARMTEXT_H
 

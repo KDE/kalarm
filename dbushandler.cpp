@@ -347,7 +347,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
     uint senderId = 0;
     if (!fromID.isEmpty())
     {
-        senderId = Identities::identityUoid(fromID);
+        senderId = KAlarm::Identities::identityUoid(fromID);
         if (!senderId)
         {
             kError() << "D-Bus call scheduleEmail(): unknown sender ID:" << fromID;

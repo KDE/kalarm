@@ -19,8 +19,8 @@
  *  MA 02110-1301, USA.
  */
 
-#ifndef KACALENDAR_H
-#define KACALENDAR_H
+#ifndef KALARM_KACALENDAR_H
+#define KALARM_KACALENDAR_H
 
 #include "kalarm_cal_export.h"
 #ifdef USE_AKONADI
@@ -170,21 +170,10 @@ class KALARM_CAL_EXPORT Calendar
         static QByteArray  icalProductId();
 
         static const QByteArray APPNAME;           //!< The application name ("KALARM") used in calendar properties
-
-    private:
-#ifdef USE_AKONADI
-        static int  readKAlarmVersion(const KCalCore::FileStorage::Ptr&, QString& subVersion, QString& versionString);
-#else
-        static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
-#endif
-        static void insertKAlarmCatalog();
-
-        static QByteArray mIcalProductId;
-        static bool mHaveKAlarmCatalog;
 };
 
 } // namespace KAlarm
 
-#endif
+#endif // KALARM_KACALENDAR_H
 
 // vim: et sw=4:

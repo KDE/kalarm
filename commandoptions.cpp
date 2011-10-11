@@ -176,7 +176,7 @@ CommandOptions::CommandOptions()
         if (mArgs->isSet("subject"))
             mSubject = mArgs->getOption("subject");
         if (mArgs->isSet("from-id"))
-            mFromID = Identities::identityUoid(mArgs->getOption("from-id"));
+            mFromID = KAlarm::Identities::identityUoid(mArgs->getOption("from-id"));
         QStringList params = mArgs->getOptionList("mail");
         for (int i = 0, count = params.count();  i < count;  ++i)
         {

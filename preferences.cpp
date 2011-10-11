@@ -216,7 +216,7 @@ QString Preferences::emailAddress()
 {
     QString from = self()->mBase_EmailFrom;
     if (from == FROM_KMAIL)
-        return Identities::identityManager()->defaultIdentity().fullEmailAddr();
+        return KAlarm::Identities::identityManager()->defaultIdentity().fullEmailAddr();
     if (from == FROM_SYS_SETTINGS)
         return KAMail::controlCentreAddress();
     return from;

@@ -30,6 +30,8 @@
 #include <kglobal.h>
 #include <QStringList>
 
+namespace KAlarm
+{
 
 class AlarmText::Private
 {
@@ -218,52 +220,52 @@ QString AlarmText::Private::displayText() const
 
 QString AlarmText::to() const
 {
-    return d->mTo;
+    return (d->mType == Private::Email) ? d->mTo : QString();
 }
 
 QString AlarmText::from() const
 {
-    return d->mFrom;
+    return (d->mType == Private::Email) ? d->mFrom : QString();
 }
 
 QString AlarmText::cc() const
 {
-    return d->mCc;
+    return (d->mType == Private::Email) ? d->mCc : QString();
 }
 
 QString AlarmText::time() const
 {
-    return d->mTime;
+    return (d->mType == Private::Email) ? d->mTime : QString();
 }
 
 QString AlarmText::subject() const
 {
-    return d->mSubject;
+    return (d->mType == Private::Email) ? d->mSubject : QString();
 }
 
 QString AlarmText::body() const
 {
-    return d->mType == Private::Email ? d->mBody : QString();
+    return (d->mType == Private::Email) ? d->mBody : QString();
 }
 
 QString AlarmText::summary() const
 {
-    return d->mSubject;
+    return (d->mType == Private::Todo) ? d->mSubject : QString();
 }
 
 QString AlarmText::location() const
 {
-    return d->mTo;
+    return (d->mType == Private::Todo) ? d->mTo : QString();
 }
 
 QString AlarmText::due() const
 {
-    return d->mTime;
+    return (d->mType == Private::Todo) ? d->mTime : QString();
 }
 
 QString AlarmText::description() const
 {
-    return d->mBody;
+    return (d->mType == Private::Todo) ? d->mBody : QString();
 }
 
 /******************************************************************************
@@ -568,5 +570,7 @@ QString AlarmText::Private::todoTitle(const QString& text)
     }
     return QString();
 }
+
+} // namespace KAlarm
 
 // vim: et sw=4:

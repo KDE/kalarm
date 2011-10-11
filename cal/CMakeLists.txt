@@ -6,6 +6,7 @@ set(kalarm_calendar_LIB_SRCS
 	identities.cpp
 	kaevent.cpp
 	datetime.cpp
+	repetition.cpp
 	version.cpp
 )
 if(KALARM_USE_AKONADI)

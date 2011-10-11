@@ -22,6 +22,7 @@
 #define EDITDLG_H
 
 #include "alarmtext.h"
+using KAlarm::AlarmText;
 #include "datetime.h"
 #include "kaevent.h"
 
@@ -81,7 +82,7 @@ class EditAlarmDlg : public KDialog
         // Methods to initialise values in the New Alarm dialogue.
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence() if applicable.
-        void            setTime(const DateTime&);    // must be called first to set date-only value
+        void            setTime(const KAlarm::DateTime&);    // must be called first to set date-only value
         void            setRecurrence(const KARecurrence&, int subRepeatInterval, int subRepeatCount);
         void            setRepeatAtLogin();
         virtual void    setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) = 0;
@@ -189,8 +190,8 @@ class EditAlarmDlg : public KDialog
         RecurrenceEdit*     mRecurrenceEdit;
 
         QString             mAlarmMessage;       // message text/file name/command/email message
-        DateTime            mAlarmDateTime;
-        DateTime            mDeferDateTime;
+        KAlarm::DateTime    mAlarmDateTime;
+        KAlarm::DateTime    mDeferDateTime;
 #ifdef USE_AKONADI
         Akonadi::Item::Id   mCollectionItemId;   // if >=0, save alarm in collection containing this item ID
         Akonadi::Collection mCollection;         // collection to save event into, or null

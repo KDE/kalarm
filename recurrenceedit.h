@@ -24,12 +24,15 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
-#include "datetime.h"
 #include "repetition.h"
+using KAlarm::Repetition;
+
+#include <kdatetime.h>
 
 #include <QFrame>
 
 class KDateComboBox;
+class QDate;
 class QShowEvent;
 class QStackedWidget;
 class QGroupBox;
@@ -51,7 +54,6 @@ class DailyRule;
 class WeeklyRule;
 class MonthlyRule;
 class YearlyRule;
-
 
 class RecurrenceEdit : public QFrame
 {

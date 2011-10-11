@@ -116,7 +116,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         jobdata.from = Preferences::emailAddress();
     else
     {
-        identity = Identities::identityManager()->identityForUoid(jobdata.event.emailFromId());
+        identity = KAlarm::Identities::identityManager()->identityForUoid(jobdata.event.emailFromId());
         if (identity.isNull())
         {
             kError() << "Identity" << jobdata.event.emailFromId() << "not found";

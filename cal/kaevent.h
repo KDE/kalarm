@@ -129,7 +129,7 @@ class KALARM_CAL_EXPORT KAAlarm
          *  @param withRepeats if true, returns the next sub-repetition time where appropriate;
          *                     if false, ignores sub-repetitions.
          */
-        DateTime dateTime(bool withRepeats = false) const;
+        KAlarm::DateTime dateTime(bool withRepeats = false) const;
 
         /** Return the trigger date for the alarm.
          *  Sub-repetitions are ignored: if a sub-repetition is due next, the
@@ -146,7 +146,7 @@ class KALARM_CAL_EXPORT KAAlarm
         QTime time() const;
 
         /** Set the alarm's trigger time. */
-        void setTime(const DateTime& dt);
+        void setTime(const KAlarm::DateTime& dt);
         /** Set the alarm's trigger time. */
         void setTime(const KDateTime& dt);
 
@@ -730,7 +730,7 @@ class KALARM_CAL_EXPORT KAEvent
          *  Activate the event's reminder which occurs after the given main alarm time.
          *  @return true if successful (i.e. reminder falls before the next main alarm).
          */
-        void activateReminderAfter(const DateTime& mainAlarmTime);
+        void activateReminderAfter(const KAlarm::DateTime& mainAlarmTime);
 
         /** Return the number of minutes BEFORE the main alarm when a reminder alarm is set.
          *  @return >0 if the reminder is before the main alarm;
@@ -753,7 +753,7 @@ class KALARM_CAL_EXPORT KAEvent
          *  @param adjustRecurrence if true, ensure that the next scheduled recurrence is
          *                          after the current time.
          */
-        void defer(const DateTime& dt, bool reminder, bool adjustRecurrence = false);
+        void defer(const KAlarm::DateTime& dt, bool reminder, bool adjustRecurrence = false);
 
         /** Cancel any deferral alarm which is pending. */
         void cancelDefer();
@@ -767,14 +767,14 @@ class KALARM_CAL_EXPORT KAEvent
         /** Return the time at which the currently pending deferred alarm should trigger.
          *  @return trigger time, or invalid if no deferral pending.
          */
-        DateTime deferDateTime() const;
+        KAlarm::DateTime deferDateTime() const;
 
         /** Return the latest time which the alarm can currently be deferred to.
          *  @param limitType  if non-null, pointer to variable which will be updated to hold
          *                    the type of occurrence which currently limits the deferral.
          *  @return deferral limit, or invalid if no limit
          */
-        DateTime deferralLimit(DeferLimitType* limitType = 0) const;
+        KAlarm::DateTime deferralLimit(DeferLimitType* limitType = 0) const;
 
         /** Return the default deferral interval used in the deferral dialog. */
         int deferDefaultMinutes() const;
@@ -783,7 +783,7 @@ class KALARM_CAL_EXPORT KAEvent
 
         /** Return the start time for the event. If the event recurs, this is the
          *  time of the first recurrence. */
-        DateTime startDateTime() const;
+        KAlarm::DateTime startDateTime() const;
         /** Set the next time to trigger the alarm (excluding sub-repetitions).
          *  Note that for a recurring event, this should match one of the
          *  recurrence times.
@@ -792,7 +792,7 @@ class KALARM_CAL_EXPORT KAEvent
         /** Return the next time the main alarm will trigger.
          *  @param withRepeats  true to include sub-repetitions, false to exclude them.
          */
-        DateTime mainDateTime(bool withRepeats = false) const;
+        KAlarm::DateTime mainDateTime(bool withRepeats = false) const;
 
         /** Return the date on which the main alarm will next trigger.
          *  Sub-repetitions are ignored. */
@@ -805,7 +805,7 @@ class KALARM_CAL_EXPORT KAEvent
          *  @return last sub-repetition time, or main alarm time if no
          *          sub-repetitions are configured.
          */
-        DateTime mainEndRepeatTime() const;
+        KAlarm::DateTime mainEndRepeatTime() const;
 
         /** Set the start-of-day time used by all date-only alarms.
          *  Note that adjustStartOfDay() should be called immediately after this,
@@ -823,7 +823,7 @@ class KALARM_CAL_EXPORT KAEvent
          *  @param type specifies whether to ignore reminders, working time
          *              restrictions, etc.
          */
-        DateTime nextTrigger(TriggerType type) const;
+        KAlarm::DateTime nextTrigger(TriggerType type) const;
 
         /** Set the date/time the event was created, or saved in the archive calendar. */
         void setCreatedDateTime(const KDateTime& dt);
@@ -1013,10 +1013,10 @@ class KALARM_CAL_EXPORT KAEvent
         *  If the event doesn't recur, the sub-repetition is cleared.
         *  @return false if a non-daily interval was specified for a date-only recurrence.
         */
-        bool setRepetition(const Repetition& r);
+        bool setRepetition(const KAlarm::Repetition& r);
 
         /** Return the event's sub-repetition data. */
-        Repetition repetition() const;
+        KAlarm::Repetition repetition() const;
 
         /** Return the count of the next sub-repetition which is due.
          *  @return sub-repetition count (>=1), or 0 for the main recurrence.
@@ -1047,7 +1047,7 @@ class KALARM_CAL_EXPORT KAEvent
          *  @param result  date/time of next occurrence, or invalid date/time if none.
          *  @param option  how/whether to make allowance for sub-repetitions.
          */
-        OccurType nextOccurrence(const KDateTime& preDateTime, DateTime& result, OccurOption option = IGNORE_REPETITION) const;
+        OccurType nextOccurrence(const KDateTime& preDateTime, KAlarm::DateTime& result, OccurOption option = IGNORE_REPETITION) const;
 
         /** Get the date/time of the last previous occurrence of the event, before the
          *  specified date/time.
@@ -1057,7 +1057,7 @@ class KALARM_CAL_EXPORT KAEvent
          *                             last previous repetition is returned if
          *                             appropriate.
          */
-        OccurType previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
+        OccurType previousOccurrence(const KDateTime& afterDateTime, KAlarm::DateTime& result, bool includeRepetitions = false) const;
 
         /** Set the event to be a copy of the specified event, making the specified
          *  alarm the 'displaying' alarm.

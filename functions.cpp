@@ -2290,7 +2290,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
         case KAEvent::ACT_EMAIL:
         {
             QString from = event->emailFromId()
-                         ? Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
+                         ? KAlarm::Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
                          : Preferences::emailAddress();
             AlarmText atext;
             atext.setEmail(event->emailAddresses(", "), from, QString(), QString(), event->emailSubject(), QString());

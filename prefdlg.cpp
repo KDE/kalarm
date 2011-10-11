@@ -1177,7 +1177,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
             errmsg = i18nc("@info", "No email address is currently set in KDE System Settings. %1", errmsg);
             break;
         case Preferences::MAIL_FROM_KMAIL:
-            if (Identities::identitiesExist())
+            if (KAlarm::Identities::identitiesExist())
                 return QString();
             errmsg = i18nc("@info", "No <application>KMail</application> identities currently exist. %1", errmsg);
             break;
