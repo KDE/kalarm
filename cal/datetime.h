@@ -18,13 +18,15 @@
  *  Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  *  MA 02110-1301, USA.
  */
-#ifndef DATETIME_H
-#define DATETIME_H
+#ifndef KALARM_DATETIME_H
+#define KALARM_DATETIME_H
 
 #include "kalarm_cal_export.h"
 
 #include <kdatetime.h>
 
+namespace KAlarm
+{
 
 /**
  *  @short As KDateTime, but with a configurable start-of-day time for date-only values.
@@ -209,10 +211,10 @@ class KALARM_CAL_EXPORT DateTime
         /** Compare this value with another. */
         KDateTime::Comparison compare(const DateTime &other) const;
 
-        KALARM_CAL_EXPORT friend bool operator==(const DateTime& dt1, const DateTime& dt2);
-        KALARM_CAL_EXPORT friend bool operator==(const KDateTime& dt1, const DateTime& dt2);
-        KALARM_CAL_EXPORT friend bool operator<(const DateTime& dt1, const DateTime& dt2);
-        friend bool operator<(const KDateTime& dt1, const DateTime& dt2);
+        KALARM_CAL_EXPORT friend bool operator==(const KAlarm::DateTime& dt1, const KAlarm::DateTime& dt2);
+        KALARM_CAL_EXPORT friend bool operator==(const KDateTime& dt1, const KAlarm::DateTime& dt2);
+        KALARM_CAL_EXPORT friend bool operator<(const KAlarm::DateTime& dt1, const KAlarm::DateTime& dt2);
+        friend bool operator<(const KDateTime& dt1, const KAlarm::DateTime& dt2);
 
     private:
         //@cond PRIVATE
@@ -257,6 +259,8 @@ inline bool operator>=(const KDateTime& dt1, const DateTime& dt2)  { return !ope
 inline bool operator<=(const DateTime& dt1, const DateTime& dt2)   { return !operator<(dt2, dt1); }
 inline bool operator<=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(dt2, DateTime(dt1)); }
 
-#endif // DATETIME_H
+} // namespace KAlarm
+
+#endif // KALARM_DATETIME_H
 
 // vim: et sw=4:

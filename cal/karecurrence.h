@@ -31,8 +31,6 @@
 #include <kcal/duration.h>
 #endif
 
-class DateTime;
-
 
 /**
  * @short Represents recurrences for KAlarm.

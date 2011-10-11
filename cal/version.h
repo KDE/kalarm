@@ -18,8 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef VERSION_H
-#define VERSION_H
+#ifndef KALARM_VERSION_H
+#define KALARM_VERSION_H
 
 #include "kalarm_cal_export.h"
 #include <QString>
@@ -38,6 +38,6 @@ KALARM_CAL_EXPORT QString getVersionString(int version);
 
 }
 
-#endif // VERSION_H
+#endif // KALARM_VERSION_H
 
 // vim: et sw=4:

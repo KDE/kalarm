@@ -24,6 +24,7 @@
 #include "resources/alarmresources.h"
 #include "alarmcalendar.h"
 #include "alarmtext.h"
+using KAlarm::AlarmText;
 #include "preferences.h"
 #include "synchtimer.h"
 #include "eventlistmodel.moc"

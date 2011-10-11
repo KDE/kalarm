@@ -1064,7 +1064,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
         label->setFixedSize(label->sizeHint());
         grid->addWidget(label, 0, 0);
 
-        mEmailFromList = new EmailIdCombo(Identities::identityManager(), parent);
+        mEmailFromList = new EmailIdCombo(KAlarm::Identities::identityManager(), parent);
         mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
         label->setBuddy(mEmailFromList);
         mEmailFromList->setWhatsThis(i18nc("@info:whatsthis", "Your email identity, used to identify you as the sender when sending email alarms."));

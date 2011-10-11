@@ -46,11 +46,12 @@ class KToggleAction;
 class AlarmResource;
 class KAEvent;
 class MainWindow;
-class AlarmText;
 class TemplateMenuAction;
 
 namespace KAlarm
 {
+
+class AlarmText;
 
 /** Return codes from fileType() */
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };

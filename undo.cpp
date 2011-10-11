@@ -23,6 +23,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmtext.h"
+using KAlarm::AlarmText;
 #include "functions.h"
 #include "kaevent.h"
 #include "messagebox.h"

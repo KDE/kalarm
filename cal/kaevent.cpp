@@ -50,6 +50,9 @@ using namespace KCal;
 #endif
 using namespace KHolidays;
 
+using KAlarm::DateTime;
+using KAlarm::AlarmText;
+using KAlarm::Repetition;
 
 #ifdef USE_AKONADI
 typedef KCalCore::Person  EmailAddress;
@@ -83,15 +86,15 @@ class KAAlarm::Private
     public:
         Private();
 
-        Action             mActionType;       // alarm action type
-        Type               mType;             // alarm type
-        DateTime           mNextMainDateTime; // next time to display the alarm, excluding repetitions
-        Repetition         mRepetition;       // sub-repetition count and interval
-        int                mNextRepeat;       // repetition count of next due sub-repetition
-        bool               mRepeatAtLogin;    // whether to repeat the alarm at every login
-        bool               mRecurs;           // there is a recurrence rule for the alarm
-        bool               mDeferred;         // whether the alarm is an extra deferred/deferred-reminder alarm
-        bool               mTimedDeferral;    // if mDeferred = true: true if the deferral is timed, false if date-only
+        Action      mActionType;       // alarm action type
+        Type        mType;             // alarm type
+        DateTime    mNextMainDateTime; // next time to display the alarm, excluding repetitions
+        Repetition  mRepetition;       // sub-repetition count and interval
+        int         mNextRepeat;       // repetition count of next due sub-repetition
+        bool        mRepeatAtLogin;    // whether to repeat the alarm at every login
+        bool        mRecurs;           // there is a recurrence rule for the alarm
+        bool        mDeferred;         // whether the alarm is an extra deferred/deferred-reminder alarm
+        bool        mTimedDeferral;    // if mDeferred = true: true if the deferral is timed, false if date-only
 };
 
 
@@ -5721,7 +5724,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 const QString name = alarm->customProperty(KAlarm::Calendar::APPNAME, KMAIL_ID_PROPERTY);
                 if (name.isEmpty())
                     continue;
-                const uint id = Identities::identityUoid(name);
+                const uint id = KAlarm::Identities::identityUoid(name);
                 if (id)
                     alarm->setCustomProperty(KAlarm::Calendar::APPNAME, EMAIL_ID_PROPERTY, QString::number(id));
                 alarm->removeCustomProperty(KAlarm::Calendar::APPNAME, KMAIL_ID_PROPERTY);

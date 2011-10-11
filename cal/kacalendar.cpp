@@ -69,23 +69,39 @@ static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION
 
 static bool isUTC(const QString& localFile);
 
+
+class Private
+{
+    public:
+#ifdef USE_AKONADI
+        static int  readKAlarmVersion(const KCalCore::FileStorage::Ptr&, QString& subVersion, QString& versionString);
+#else
+        static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
+#endif
+        static void insertKAlarmCatalog();
+
+        static QByteArray mIcalProductId;
+        static bool mHaveKAlarmCatalog;
+};
+
+QByteArray Private::mIcalProductId;
+bool       Private::mHaveKAlarmCatalog = false;
+
+
 /*=============================================================================
 * Class: KAlarm::Calendar
 *============================================================================*/
 
 const QByteArray Calendar::APPNAME("KALARM");
 
-QByteArray Calendar::mIcalProductId;
-bool       Calendar::mHaveKAlarmCatalog = false;
-
 void Calendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
 {
-    mIcalProductId = QByteArray("-//K Desktop Environment//NONSGML " + progName + " " + progVersion + "//EN");
+    Private::mIcalProductId = QByteArray("-//K Desktop Environment//NONSGML " + progName + " " + progVersion + "//EN");
 }
 
 QByteArray Calendar::icalProductId()
 {
-    return mIcalProductId.isEmpty() ? QByteArray("-//K Desktop Environment//NONSGML  //EN") : mIcalProductId;
+    return Private::mIcalProductId.isEmpty() ? QByteArray("-//K Desktop Environment//NONSGML  //EN") : Private::mIcalProductId;
 }
 
 /******************************************************************************
@@ -115,12 +131,11 @@ int Calendar::updateVersion(const FileStorage::Ptr& fileStorage, QString& versio
 int Calendar::updateVersion(CalendarLocal& calendar, const QString& localFile, QString& versionString)
 #endif
 {
-    bool version057_UTC = false;
     QString subVersion;
 #ifdef USE_AKONADI
-    int version = readKAlarmVersion(fileStorage, subVersion, versionString);
+    int version = Private::readKAlarmVersion(fileStorage, subVersion, versionString);
 #else
-    int version = readKAlarmVersion(calendar, localFile, subVersion, versionString);
+    int version = Private::readKAlarmVersion(calendar, localFile, subVersion, versionString);
 #endif
     if (version == CurrentFormat)
         return CurrentFormat;       // calendar is in the current KAlarm format
@@ -132,23 +147,23 @@ int Calendar::updateVersion(CalendarLocal& calendar, const QString& localFile, Q
 #ifdef USE_AKONADI
     const QString localFile = fileStorage->fileName();
 #endif
+    int ver = version;
     if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
     {
         // KAlarm version 0.5.7 - check whether times are stored in UTC, in which
         // case it is the KDE 3.0.0 version, which needs adjustment of summer times.
-        version057_UTC = isUTC(localFile);
         if (isUTC(localFile))
-            version = -version;
-        kDebug() << "KAlarm version 0.5.7 (" << (version < 0 ? "" : "non-") << "UTC)";
+            ver = -version;
+        kDebug() << "KAlarm version 0.5.7 (" << (ver < 0 ? "" : "non-") << "UTC)";
     }
     else
         kDebug() << "KAlarm version" << version;
 
     // Convert events to current KAlarm format for when/if the calendar is saved
 #ifdef USE_AKONADI
-    KAEvent::convertKCalEvents(fileStorage->calendar(), version);
+    KAEvent::convertKCalEvents(fileStorage->calendar(), ver);
 #else
-    KAEvent::convertKCalEvents(calendar, version);
+    KAEvent::convertKCalEvents(calendar, ver);
 #endif
     return version;
 }
@@ -185,19 +200,19 @@ QString Calendar::conversionPrompt(const QString& calendarName, const QString& c
 *       = version number if created by another KAlarm version.
 */
 #ifdef USE_AKONADI
-int Calendar::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& subVersion, QString& versionString)
+int Private::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& subVersion, QString& versionString)
 #else
-int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
+int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
 #endif
 {
     subVersion.clear();
 #ifdef USE_AKONADI
     KCalCore::Calendar::Ptr calendar = fileStorage->calendar();
-    versionString = calendar->customProperty(APPNAME, VERSION_PROPERTY);
+    versionString = calendar->customProperty(Calendar::APPNAME, VERSION_PROPERTY);
     kDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
 
 #else
-    versionString = calendar.customProperty(APPNAME, VERSION_PROPERTY);
+    versionString = calendar.customProperty(Calendar::APPNAME, VERSION_PROPERTY);
 #endif
 
     if (versionString.isEmpty())
@@ -229,7 +244,7 @@ int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFil
         {
             // Older versions used KAlarm's translated name in the product ID, which
             // could have created problems using a calendar in different locales.
-            insertKAlarmCatalog();
+            Private::insertKAlarmCatalog();
             progname = QString(" ") + i18n("KAlarm") + ' ';
             i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
             if (i < 0)
@@ -257,7 +272,7 @@ int Calendar::readKAlarmVersion(CalendarLocal& calendar, const QString& localFil
 /******************************************************************************
 * Access the KAlarm message translation catalog.
 */
-void Calendar::insertKAlarmCatalog()
+void Private::insertKAlarmCatalog()
 {
     if (!mHaveKAlarmCatalog)
     {

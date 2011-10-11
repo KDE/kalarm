@@ -31,6 +31,7 @@
 #include "eventlistmodel.h"
 #endif
 #include "alarmtext.h"
+using KAlarm::AlarmText;
 #include "birthdaydlg.h"
 #include "functions.h"
 #include "kaevent.h"

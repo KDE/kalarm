@@ -48,10 +48,10 @@ class AlarmTimeWidget : public QFrame
         AlarmTimeWidget(const QString& groupBoxTitle, Mode, QWidget* parent = 0);
         explicit AlarmTimeWidget(Mode, QWidget* parent = 0);
         KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
-        void             setDateTime(const DateTime&);
+        void             setDateTime(const KAlarm::DateTime&);
         void             setMinDateTimeIsCurrent();
         void             setMinDateTime(const KDateTime& = KDateTime());
-        void             setMaxDateTime(const DateTime& = DateTime());
+        void             setMaxDateTime(const KAlarm::DateTime& = KAlarm::DateTime());
         const KDateTime& maxDateTime() const           { return mMaxDateTime; }
         KDateTime::Spec  timeSpec() const              { return mTimeSpec; }
         void             setReadOnly(bool);

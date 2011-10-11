@@ -25,6 +25,7 @@
 #include "alarmlistview.h"
 #include "autoqpointer.h"
 #include "commandoptions.h"
+#include "datetime.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
 #ifdef USE_AKONADI
@@ -75,6 +76,8 @@
 #include <ctype.h>
 #include <iostream>
 #include <climits>
+
+using KAlarm::DateTime;
 
 static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
 static const char* KTTDS_DBUS_PATH     = "/KSpeech";
@@ -1180,7 +1183,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
         event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
     event.setRecurrence(recurrence);
     event.setFirstRecurrence();
-    event.setRepetition(Repetition(repeatInterval, repeatCount - 1));
+    event.setRepetition(KAlarm::Repetition(repeatInterval, repeatCount - 1));
     event.endChanges();
     if (alarmTime <= now)
     {
