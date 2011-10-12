@@ -36,6 +36,7 @@ using KAlarm::AlarmText;
 #include <QApplication>
 #include <QPixmap>
 
+using KAlarm::DateTime;
 
 /*=============================================================================
 = Class: EventListModel
