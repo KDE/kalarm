@@ -102,7 +102,7 @@ class KALARM_CAL_EXPORT CalEvent
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
-class KALARM_CAL_EXPORT Calendar
+class KALARM_CAL_EXPORT KACalendar
 {
     public:
 #ifdef USE_AKONADI

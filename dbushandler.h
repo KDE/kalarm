@@ -32,7 +32,9 @@
 
 #include <QWidget>
 class KUrl;
-class KARecurrence;
+
+using KAlarm::KAEvent;
+using KAlarm::KARecurrence;
 
 
 class DBusHandler : public QObject, public KAlarmIface

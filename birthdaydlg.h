@@ -38,6 +38,7 @@ class Reminder;
 class BLineEdit;
 class BirthdaySortModel;
 
+using KAlarm::KAEvent;
 
 class BirthdayDlg : public KDialog
 {

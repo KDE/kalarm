@@ -1,7 +1,7 @@
 /*
  *  resourcelocaldir.cpp  -  KAlarm local directory calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocaldir.cpp in libkcal (updated to rev 779953,938673,938806),
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -173,7 +173,7 @@ bool KAResourceLocalDir::doLoad(bool syncCache)
     mLoading = true;
     mLoaded = false;
     disableChangeNotification();
-    setCompatibility(KAlarm::Calendar::ByEvent);
+    setCompatibility(KACalendar::ByEvent);
     if (syncCache)
     {
         emit invalidate(this);
@@ -315,19 +315,19 @@ bool KAResourceLocalDir::loadFile(const QString& fileName, const QString& id, bo
     }
     else
     {
-        KAlarm::Calendar::Compat compat = checkCompatibility(calendar, fileName, prompt);
+        KACalendar::Compat compat = checkCompatibility(calendar, fileName, prompt);
         switch (compat)
         {
-            case KAlarm::Calendar::Converted:   // user elected to convert. Don't prompt again.
+            case KACalendar::Converted:   // user elected to convert. Don't prompt again.
                 prompt = CONVERT;
-                compat = KAlarm::Calendar::Current;
+                compat = KACalendar::Current;
                 break;
-            case KAlarm::Calendar::Convertible: // user elected not to convert. Don't prompt again.
+            case KACalendar::Convertible: // user elected not to convert. Don't prompt again.
                 prompt = NO_CONVERT;
                 break;
-            case KAlarm::Calendar::Current:
-            case KAlarm::Calendar::Incompatible:
-            case KAlarm::Calendar::ByEvent:
+            case KACalendar::Current:
+            case KACalendar::Incompatible:
+            case KACalendar::ByEvent:
                 break;
         }
         kDebug(KARES_DEBUG) << fileName << ": compatibility=" << compat;
@@ -409,7 +409,7 @@ bool KAResourceLocalDir::addEvent(Event* event)
 {
     if (!AlarmResource::addEvent(event))
         return false;
-    mCompatibilityMap[event] = KAlarm::Calendar::Current;
+    mCompatibilityMap[event] = KACalendar::Current;
     return true;
 }
 

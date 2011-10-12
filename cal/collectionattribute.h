@@ -61,10 +61,10 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         virtual ~CollectionAttribute();
 
         /** Return whether the collection is enabled for a specified mime type. */
-        bool isEnabled(KAlarm::CalEvent::Type type) const;
+        bool isEnabled(CalEvent::Type type) const;
 
         /** Return which mime types the collection is enabled for. */
-        KAlarm::CalEvent::Types enabled() const;
+        CalEvent::Types enabled() const;
 
         /** Set the enabled/disabled state of the collection and its alarms, for a
          *  specified alarm type. The enabled/disabled state for other alarm types
@@ -73,24 +73,24 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
          *  displayed in the alarm list. The standard status for that type for
          *  a disabled collection is automatically cleared.
          */
-        void setEnabled(KAlarm::CalEvent::Type, bool enabled);
+        void setEnabled(CalEvent::Type, bool enabled);
 
         /** Set which mime types the collection enabled for. */
-        void setEnabled(KAlarm::CalEvent::Types);
+        void setEnabled(CalEvent::Types);
 
         /** Return whether the collection is the standard collection for a specified
          *  mime type. */
-        bool isStandard(KAlarm::CalEvent::Type) const;
+        bool isStandard(CalEvent::Type) const;
 
         /** Set or clear the collection as the standard collection for a specified
          *  mime type. */
-        void setStandard(KAlarm::CalEvent::Type, bool standard);
+        void setStandard(CalEvent::Type, bool standard);
 
         /** Return which mime types the collection is standard for. */
-        KAlarm::CalEvent::Types standard() const;
+        CalEvent::Types standard() const;
 
         /** Set which mime types the collection is the standard collection for. */
-        void setStandard(KAlarm::CalEvent::Types);
+        void setStandard(CalEvent::Types);
 
         /** Return the background color to display this collection and its alarms,
          *  or invalid color if none is set.

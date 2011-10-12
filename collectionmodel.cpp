@@ -824,10 +824,10 @@ QString CollectionControlModel::typeListForDisplay(KAlarm::CalEvent::Types alarm
 */
 int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type)
 {
-    KAlarm::Calendar::Compat format;
+    KACalendar::Compat format;
     return isWritableEnabled(collection, type, format);
 }
-int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, KAlarm::Calendar::Compat& format)
+int CollectionControlModel::isWritableEnabled(const Akonadi::Collection& collection, KAlarm::CalEvent::Type type, KACalendar::Compat& format)
 {
     int writable = AkonadiModel::isWritable(collection, format);
     if (writable == -1)

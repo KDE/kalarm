@@ -40,6 +40,8 @@ class SpinBox;
 class TimeSpinBox;
 class QString;
 
+using KAlarm::KARecurrence;
+
 
 class NoRule : public QFrame
 {

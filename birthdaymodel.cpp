@@ -33,6 +33,9 @@
 #include <kglobal.h>
 #include <klocale.h>
 
+using KAlarm::KAEvent;
+using KAlarm::KARecurrence;
+
 
 BirthdayModel* BirthdayModel::mInstance = 0;
 

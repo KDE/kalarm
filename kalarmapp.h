@@ -44,6 +44,10 @@ class TrayWindow;
 class ShellProcess;
 class OrgKdeKSpeechInterface;
 
+using KAlarm::KAEvent;
+using KAlarm::KAAlarm;
+using KAlarm::KARecurrence;
+
 
 class KAlarmApp : public KUniqueApplication
 {

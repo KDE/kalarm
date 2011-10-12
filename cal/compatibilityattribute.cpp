@@ -31,12 +31,12 @@ class CompatibilityAttribute::Private
 {
     public:
         Private()
-            : mCompatibility(KAlarm::Calendar::Incompatible),
-              mVersion(KAlarm::IncompatibleFormat)
+            : mCompatibility(KACalendar::Incompatible),
+              mVersion(IncompatibleFormat)
             {}
 
-        KAlarm::Calendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
-        int                      mVersion;          // KAlarm calendar format version
+        KACalendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
+        int                mVersion;          // KAlarm calendar format version
 };
  
     
@@ -71,12 +71,12 @@ CompatibilityAttribute* CompatibilityAttribute::clone() const
     return new CompatibilityAttribute(*this);
 }
 
-KAlarm::Calendar::Compat CompatibilityAttribute::compatibility() const
+KACalendar::Compat CompatibilityAttribute::compatibility() const
 {
     return d->mCompatibility;
 }
 
-void CompatibilityAttribute::setCompatibility(KAlarm::Calendar::Compat c)
+void CompatibilityAttribute::setCompatibility(KACalendar::Compat c)
 {
     d->mCompatibility = c;
 }
@@ -114,8 +114,8 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
     kDebug() << data;
 
     // Set default values
-    d->mCompatibility = KAlarm::Calendar::Incompatible;
-    d->mVersion       = KAlarm::IncompatibleFormat;
+    d->mCompatibility = KACalendar::Incompatible;
+    d->mVersion       = IncompatibleFormat;
 
     bool ok;
     const QList<QByteArray> items = data.simplified().split(' ');
@@ -125,13 +125,13 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
     {
         // 0: calendar format compatibility
         int c = items[index++].toInt(&ok);
-        KAlarm::Calendar::Compat AllCompat(KAlarm::Calendar::Current | KAlarm::Calendar::Converted | KAlarm::Calendar::Convertible | KAlarm::Calendar::Incompatible | KAlarm::Calendar::Unknown);
+        KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Converted | KACalendar::Convertible | KACalendar::Incompatible | KACalendar::Unknown);
         if (!ok  ||  (c & AllCompat) != c)
         {
             kError() << "Invalid compatibility:" << c;
             return;
         }
-        d->mCompatibility = static_cast<KAlarm::Calendar::Compat>(c);
+        d->mCompatibility = static_cast<KACalendar::Compat>(c);
     }
     if (count > index)
     {

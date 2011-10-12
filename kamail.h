@@ -46,6 +46,8 @@ namespace KMime {
 namespace KCal { class Person; }
 #endif
 
+using KAlarm::KAEvent;
+using KAlarm::KAAlarm;
 
 class KAMail : public QObject
 {

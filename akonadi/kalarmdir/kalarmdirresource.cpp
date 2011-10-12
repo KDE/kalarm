@@ -74,7 +74,7 @@ KAlarmDirResource::KAlarmDirResource(const QString& id)
     : ResourceBase(id),
       mSettings(new Settings(componentData().config())),
       mCollectionId(-1),
-      mCompatibility(KAlarm::Calendar::Incompatible),
+      mCompatibility(KACalendar::Incompatible),
       mCollectionFetched(true)
 {
     kDebug() << id;
@@ -324,7 +324,7 @@ kDebug()<<"Monitored changed";
     {
         // This is a flag to request that the backend calendar storage format should
         // be updated to the current KAlarm format.
-        KAlarm::Calendar::Compat okCompat(KAlarm::Calendar::Current | KAlarm::Calendar::Convertible);
+        KACalendar::Compat okCompat(KACalendar::Current | KACalendar::Convertible);
         if (mCompatibility & ~okCompat)
             kWarning() << "Either incompatible storage format or nothing to update";
         else if (mSettings->readOnly())
@@ -336,10 +336,10 @@ kDebug()<<"Monitored changed";
             for (QHash<QString, EventFile>::iterator it = mEvents.begin();  it != mEvents.end();  ++it)
             {
                 KAEvent& event = it.value().event;
-                if (event.compatibility() == KAlarm::Calendar::Convertible)
+                if (event.compatibility() == KACalendar::Convertible)
                 {
                     if (writeToFile(event))
-                        event.setCompatibility(KAlarm::Calendar::Current);
+                        event.setCompatibility(KACalendar::Current);
                     else
                     {
                         kWarning() << "Error updating storage format for event id" << event.id();
@@ -349,7 +349,7 @@ kDebug()<<"Monitored changed";
             }
             if (ok)
             {
-                mCompatibility = KAlarm::Calendar::Current;
+                mCompatibility = KACalendar::Current;
                 mVersion       = KAlarm::CurrentFormat;
                 const Collection c(mCollectionId);
                 if (c.isValid())
@@ -457,7 +457,7 @@ KAEvent KAlarmDirResource::loadFile(const QString& path, const QString& file)
     }
     // Convert event in memory to current KAlarm format if possible
     int version;
-    KAlarm::Calendar::Compat compat = KAlarmResourceCommon::getCompatibility(fileStorage, version);
+    KACalendar::Compat compat = KAlarmResourceCommon::getCompatibility(fileStorage, version);
     KAEvent event(kcalEvent);
     const QString mime = KAlarm::CalEvent::mimeType(event.category());
     if (mime.isEmpty())
@@ -539,7 +539,7 @@ void KAlarmDirResource::itemAdded(const Akonadi::Item& item, const Akonadi::Coll
         changeProcessed();
         return;
     }
-    event.setCompatibility(KAlarm::Calendar::Current);
+    event.setCompatibility(KACalendar::Current);
     setCompatibility();
 
     if (!writeToFile(event))
@@ -571,7 +571,7 @@ void KAlarmDirResource::itemChanged(const Akonadi::Item& item, const QSet<QByteA
             cancelTask(errorMessage(KAlarmResourceCommon::EventReadOnly, item.remoteId()));
             return;
         }
-        if (it.value().event.compatibility() != KAlarm::Calendar::Current)
+        if (it.value().event.compatibility() != KACalendar::Current)
         {
             kWarning() << "Event not in current format:" << item.remoteId();
             cancelTask(errorMessage(KAlarmResourceCommon::EventNotCurrentFormat, item.remoteId()));
@@ -599,8 +599,8 @@ void KAlarmDirResource::itemChanged(const Akonadi::Item& item, const QSet<QByteA
         return;
     }
 #endif
-    event.setCompatibility(KAlarm::Calendar::Current);
-    if (mCompatibility != KAlarm::Calendar::Current)
+    event.setCompatibility(KACalendar::Current);
+    if (mCompatibility != KACalendar::Current)
         setCompatibility();
 
     if (!writeToFile(event))
@@ -672,7 +672,7 @@ bool KAlarmDirResource::writeToFile(const KAEvent& event)
     Event::Ptr kcalEvent(new Event);
     event.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     MemoryCalendar::Ptr calendar(new MemoryCalendar(QLatin1String("UTC")));
-    KAlarm::Calendar::setKAlarmVersion(calendar);   // set the KAlarm custom property
+    KACalendar::setKAlarmVersion(calendar);   // set the KAlarm custom property
     calendar->addIncidence(kcalEvent);
 
     mChangedFiles += event.id();    // suppress KDirWatch processing for this write
@@ -1090,15 +1090,15 @@ QString KAlarmDirResource::fileName(const QString& path) const
 */
 void KAlarmDirResource::setCompatibility(bool writeAttr)
 {
-    static const KAlarm::Calendar::Compat AllCompat(KAlarm::Calendar::Current | KAlarm::Calendar::Convertible | KAlarm::Calendar::Incompatible);
+    static const KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Convertible | KACalendar::Incompatible);
 
-    const KAlarm::Calendar::Compat oldCompatibility = mCompatibility;
+    const KACalendar::Compat oldCompatibility = mCompatibility;
     const int oldVersion = mVersion;
     if (mEvents.isEmpty())
-        mCompatibility = KAlarm::Calendar::Current;
+        mCompatibility = KACalendar::Current;
     else
     {
-        mCompatibility = KAlarm::Calendar::Unknown;
+        mCompatibility = KACalendar::Unknown;
         foreach (const EventFile& data, mEvents)
         {
             const KAEvent& event = data.event;
@@ -1107,7 +1107,7 @@ void KAlarmDirResource::setCompatibility(bool writeAttr)
                 break;
         }
     }
-    mVersion = (mCompatibility == KAlarm::Calendar::Current) ? KAlarm::CurrentFormat : KAlarm::MixedFormat;
+    mVersion = (mCompatibility == KACalendar::Current) ? KAlarm::CurrentFormat : KAlarm::MixedFormat;
     if (writeAttr  &&  (mCompatibility != oldCompatibility || mVersion != oldVersion))
     {
         const Collection c(mCollectionId);

@@ -31,6 +31,8 @@
 #include <QStringList>
 class KCmdLineArgs;
 
+using KAlarm::KARecurrence;
+
 class CommandOptions
 {
     public:

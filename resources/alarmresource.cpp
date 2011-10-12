@@ -1,7 +1,7 @@
 /*
  *  alarmresource.cpp  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ using namespace KCal;
 
 void                     (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;
 void                     (*AlarmResource::mCustomEventFunction)(AlarmResource*, CalendarLocal*) = 0;
-KAlarm::Calendar::Compat (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType) = 0;
+KACalendar::Compat (*AlarmResource::mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType) = 0;
 int                        AlarmResource::mDebugArea = 0;
 bool                       AlarmResource::mNoGui = false;
 
@@ -50,7 +50,7 @@ AlarmResource::AlarmResource()
       mStandard(false),
       mCloseAfterSave(false),
       mWrongAlarmType(false),
-      mCompatibility(KAlarm::Calendar::Incompatible),
+      mCompatibility(KACalendar::Incompatible),
       mReconfiguring(0),
       mLoaded(false),
       mLoading(false)
@@ -67,7 +67,7 @@ AlarmResource::AlarmResource(const KConfigGroup& group)
       mStandard(false),
       mCloseAfterSave(false),
       mWrongAlarmType(false),
-      mCompatibility(KAlarm::Calendar::Incompatible),
+      mCompatibility(KACalendar::Incompatible),
       mReconfiguring(0),
       mLoaded(false),
       mLoading(false)
@@ -98,7 +98,7 @@ AlarmResource::AlarmResource(KAlarm::CalEvent::Type type)
       mType(type),
       mStandard(false),
       mCloseAfterSave(false),
-      mCompatibility(KAlarm::Calendar::Incompatible),
+      mCompatibility(KACalendar::Incompatible),
       mReconfiguring(0),
       mLoaded(false),
       mLoading(false)
@@ -173,21 +173,21 @@ void AlarmResource::checkCompatibility(const QString& filename)
 {
     bool wrongType = false;
     bool oldReadOnly = readOnly();
-    mCompatibility = KAlarm::Calendar::Incompatible;   // assume the worst
+    mCompatibility = KACalendar::Incompatible;   // assume the worst
     if (mFixFunction)
     {
         // Check whether the version is compatible (and convert it if desired)
         mCompatibility = (*mFixFunction)(*calendar(), filename, this, PROMPT, &wrongType);
         if (wrongType)
             kDebug(KARES_DEBUG) << resourceName() << ": contains wrong alarm type(s)";
-        if (mCompatibility == KAlarm::Calendar::Converted)
+        if (mCompatibility == KACalendar::Converted)
         {
             // Set mCompatibility first to ensure that readOnly() returns
             // the correct value and that save() therefore works.
-            mCompatibility = KAlarm::Calendar::Current;
+            mCompatibility = KACalendar::Current;
             save();
         }
-        if (mCompatibility != KAlarm::Calendar::Current  &&  mCompatibility != KAlarm::Calendar::ByEvent)
+        if (mCompatibility != KACalendar::Current  &&  mCompatibility != KACalendar::ByEvent)
         {
             // It's not in the current KAlarm format, so it will be read-only to prevent incompatible updates
             kDebug(KARES_DEBUG) << resourceName() << ": opened read-only (not current KAlarm format)";
@@ -202,28 +202,28 @@ void AlarmResource::checkCompatibility(const QString& filename)
 * If a function is defined to convert alarms to the current format, call it to
 * convert an individual file within the overall resource.
 */
-KAlarm::Calendar::Compat AlarmResource::checkCompatibility(CalendarLocal& calendar, const QString& filename, FixFunc conv, bool* wrongType)
+KACalendar::Compat AlarmResource::checkCompatibility(CalendarLocal& calendar, const QString& filename, FixFunc conv, bool* wrongType)
 {
     if (wrongType)
         *wrongType = false;
-    KAlarm::Calendar::Compat compat = KAlarm::Calendar::Incompatible;   // assume the worst
+    KACalendar::Compat compat = KACalendar::Incompatible;   // assume the worst
     if (mFixFunction)
     {
         // Check whether the version is compatible (and convert it if desired)
         compat = (*mFixFunction)(calendar, filename, this, conv, wrongType);
-        if (compat == KAlarm::Calendar::Converted)
+        if (compat == KACalendar::Converted)
             calendar.save(filename);
     }
     return compat;
 }
 
-KAlarm::Calendar::Compat AlarmResource::compatibility(const Event* event) const
+KACalendar::Compat AlarmResource::compatibility(const Event* event) const
 {
-    if (mCompatibility != KAlarm::Calendar::ByEvent)
+    if (mCompatibility != KACalendar::ByEvent)
         return mCompatibility;
     CompatibilityMap::ConstIterator it = mCompatibilityMap.find(event);
     if (it == mCompatibilityMap.constEnd())
-        return KAlarm::Calendar::Incompatible;    // event not found!?! - assume the worst
+        return KACalendar::Incompatible;    // event not found!?! - assume the worst
     return it.value();
 }
 
@@ -255,13 +255,13 @@ void AlarmResource::updateCustomEvents(bool useCalendar)
 bool AlarmResource::writable(const Event* event) const
 {
     return isActive()  &&  !KCal::ResourceCached::readOnly()
-       &&  compatibility(event) == KAlarm::Calendar::Current;
+       &&  compatibility(event) == KACalendar::Current;
 }
 
 bool AlarmResource::readOnly() const
 {
     return KCal::ResourceCached::readOnly()
-       ||  (isActive()  &&  mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent);
+       ||  (isActive()  &&  mCompatibility != KACalendar::Current && mCompatibility != KACalendar::ByEvent);
 }
 
 void AlarmResource::setReadOnly(bool ronly)
@@ -273,35 +273,35 @@ void AlarmResource::setReadOnly(bool ronly)
     }
     kDebug(KARES_DEBUG) << ronly;
     bool oldRCronly = (mReconfiguring == 2) ? mOldReadOnly : ResourceCached::readOnly();
-    bool oldronly = (oldRCronly || (mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent));
+    bool oldronly = (oldRCronly || (mCompatibility != KACalendar::Current && mCompatibility != KACalendar::ByEvent));
     if (!ronly  &&  isActive())
     {
         // Trying to change the resource to read-write.
         // Only allow this if it is in, or can be converted to, the current KAlarm format.
         switch (mCompatibility)
         {
-            case KAlarm::Calendar::Incompatible:
+            case KACalendar::Incompatible:
                 emit notWritable(this);    // allow an error message to be output
                 return;
-            case KAlarm::Calendar::Convertible:
+            case KACalendar::Convertible:
                 if (mReconfiguring <= 2)
                 {
                     if (!isOpen())
                         return;
                     load(NoSyncCache);   // give user the option of converting it
                 }
-                if (mCompatibility != KAlarm::Calendar::Current)
+                if (mCompatibility != KACalendar::Current)
                     return;    // not converted, so keep as read-only
                 break;
-            case KAlarm::Calendar::Current:
-            case KAlarm::Calendar::ByEvent:
-            case KAlarm::Calendar::Converted:   // shouldn't ever happen
+            case KACalendar::Current:
+            case KACalendar::ByEvent:
+            case KACalendar::Converted:   // shouldn't ever happen
                 break;
         }
     }
     if (ronly != oldRCronly)
         ResourceCached::setReadOnly(ronly);
-    if ((ronly || (mCompatibility != KAlarm::Calendar::Current && mCompatibility != KAlarm::Calendar::ByEvent)) != oldronly)
+    if ((ronly || (mCompatibility != KACalendar::Current && mCompatibility != KACalendar::ByEvent)) != oldronly)
         emit readOnlyChanged(this);   // the effective read-only status has changed
 }
 

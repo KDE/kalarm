@@ -58,10 +58,10 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
         virtual ~CompatibilityAttribute();
 
         /** Return the compatibility status for the entity. */
-        KAlarm::Calendar::Compat compatibility() const;
+        KACalendar::Compat compatibility() const;
 
         /** Set the compatibility status for the entity. */
-        void setCompatibility(KAlarm::Calendar::Compat c);
+        void setCompatibility(KACalendar::Compat c);
 
         /** Return the KAlarm version of the backend calendar format. */
         int version() const;

@@ -96,7 +96,6 @@ using namespace KCalCore;
 #else
 using namespace KCal;
 #endif
-using KAlarm::DateTime;
 
 #ifdef Q_WS_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };

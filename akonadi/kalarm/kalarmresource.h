@@ -26,8 +26,8 @@
 #include <icalresourcebase.h>
 
 class KJob;
-class KAEvent;
 class AlarmTypeRadioWidget;
+using KAlarm::KACalendar;
 
 class KAlarmResource : public ICalResourceBase
 {
@@ -54,9 +54,9 @@ class KAlarmResource : public ICalResourceBase
         void settingsChanged();
 
     private:
-        AlarmTypeRadioWidget*    mTypeSelector;
-        KAlarm::Calendar::Compat mCompatibility;
-        int                      mVersion;   // calendar format version
+        AlarmTypeRadioWidget* mTypeSelector;
+        KACalendar::Compat    mCompatibility;
+        int                   mVersion;   // calendar format version
 };
 
 #endif

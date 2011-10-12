@@ -80,7 +80,6 @@
 #include <QTimer>
 
 using namespace KCal;
-using KAlarm::DateTime;
 
 static const char EDIT_DIALOG_NAME[] = "EditDialog";
 static const char TEMPLATE_DIALOG_NAME[] = "EditTemplateDialog";

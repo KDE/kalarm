@@ -583,12 +583,12 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 #ifdef USE_AKONADI
         // Note: the CollectionControlModel functions call AkonadiModel::refresh(collection)
         active   = CollectionControlModel::isEnabled(collection, type);
-        KAlarm::Calendar::Compat compatibility;
+        KACalendar::Compat compatibility;
         int rw = CollectionControlModel::isWritableEnabled(collection, type, compatibility);
         writable = (rw > 0);
         if (!rw
-        &&  (compatibility & ~KAlarm::Calendar::Converted)
-        &&  !(compatibility & ~(KAlarm::Calendar::Convertible | KAlarm::Calendar::Converted)))
+        &&  (compatibility & ~KACalendar::Converted)
+        &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted)))
             updatable = true; // the calendar format is convertible to the current KAlarm format
         if (!(AkonadiModel::instance()->types(collection) & type))
             type = KAlarm::CalEvent::EMPTY;
@@ -857,7 +857,7 @@ void ResourceSelector::showInfo()
         if (altypes & KAlarm::CalEvent::TEMPLATE)
             alarmTypes << i18nc("@info/plain", "Alarm templates");
         QString alarmTypeString = alarmTypes.join(i18nc("@info/plain List separator", ", "));
-        KAlarm::Calendar::Compat compat;
+        KACalendar::Compat compat;
         QString perms = AkonadiModel::readOnlyTooltip(collection);
         if (perms.isEmpty())
             perms = i18nc("@info/plain", "Read-write");

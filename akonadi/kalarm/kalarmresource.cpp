@@ -38,11 +38,12 @@
 using namespace Akonadi;
 using namespace Akonadi_KAlarm_Resource;
 using KAlarmResourceCommon::errorMessage;
+using KAlarm::KAEvent;
 
 
 KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
-      mCompatibility(KAlarm::Calendar::Incompatible),
+      mCompatibility(KACalendar::Incompatible),
       mVersion(KAlarm::MixedFormat)
 {
     kDebug() << id;
@@ -109,12 +110,12 @@ bool KAlarmResource::readFromFile(const QString& fileName)
     if (calendar()->incidences().isEmpty())
     {
         // It's a new file. Set up the KAlarm custom property.
-        KAlarm::Calendar::setKAlarmVersion(calendar());
+        KACalendar::setKAlarmVersion(calendar());
     }
     // Find the calendar file's compatibility with the current KAlarm format,
     // and if necessary convert it in memory to the current version.
     int version;
-    KAlarm::Calendar::Compat compat = KAlarmResourceCommon::getCompatibility(fileStorage(), version);
+    KACalendar::Compat compat = KAlarmResourceCommon::getCompatibility(fileStorage(), version);
     if (compat != mCompatibility  ||  version != mVersion)
     {
         mCompatibility = compat;
@@ -140,7 +141,7 @@ bool KAlarmResource::writeToFile(const QString& fileName)
     if (calendar()->incidences().isEmpty())
     {
         // It's an empty file. Set up the KAlarm custom property.
-        KAlarm::Calendar::setKAlarmVersion(calendar());
+        KACalendar::setKAlarmVersion(calendar());
     }
     return ICalResourceBase::writeToFile(fileName);
 }
@@ -200,7 +201,7 @@ void KAlarmResource::settingsChanged()
     {
         // This is a flag to request that the backend calendar storage format should
         // be updated to the current KAlarm format.
-        if (mCompatibility != KAlarm::Calendar::Convertible)
+        if (mCompatibility != KACalendar::Convertible)
             kWarning() << "Either incompatible storage format or nothing to update: compat=" << mCompatibility;
         else if (mSettings->readOnly())
             kWarning() << "Cannot update storage format for a read-only resource";
@@ -209,7 +210,7 @@ void KAlarmResource::settingsChanged()
             // Update the backend storage format to the current KAlarm format
             QString filename = fileStorage()->fileName();
             kDebug() << "Updating storage for" << filename;
-            KAlarm::Calendar::setKAlarmVersion(fileStorage()->calendar());
+            KACalendar::setKAlarmVersion(fileStorage()->calendar());
             if (!writeToFile(filename))
                 kWarning() << "Error updating calendar storage format";
             else
@@ -218,7 +219,7 @@ void KAlarmResource::settingsChanged()
                 // would replace the current Collection by a new one.
                 mCurrentHash = calculateHash(filename);
 
-                mCompatibility = KAlarm::Calendar::Current;
+                mCompatibility = KACalendar::Current;
                 Collection c;
                 c.setParentCollection(Collection::root());
                 c.setRemoteId(mSettings->path());
@@ -239,7 +240,7 @@ void KAlarmResource::itemAdded(const Akonadi::Item& item, const Akonadi::Collect
 {
     if (!checkItemAddedChanged<KAEvent>(item, CheckForAdded))
         return;
-    if (mCompatibility != KAlarm::Calendar::Current)
+    if (mCompatibility != KACalendar::Current)
     {
         kWarning() << "Calendar not in current format";
         cancelTask(errorMessage(KAlarmResourceCommon::NotCurrentFormat));
@@ -266,7 +267,7 @@ void KAlarmResource::itemChanged(const Akonadi::Item& item, const QSet<QByteArra
     if (!checkItemAddedChanged<KAEvent>(item, CheckForChanged))
         return;
     QString errorMsg;
-    if (mCompatibility != KAlarm::Calendar::Current)
+    if (mCompatibility != KACalendar::Current)
     {
         kWarning() << "Calendar not in current format";
         cancelTask(errorMessage(KAlarmResourceCommon::NotCurrentFormat));

@@ -30,8 +30,8 @@ namespace KCal { class CalendarLocal; }
 
 namespace CalendarCompat
 {
-    KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
-                                 AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
+    KACalendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
+                           AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
 }
 
 #endif

@@ -95,18 +95,18 @@ QStringList mimeTypes(const QString& id)
 * Find the compatibility of an existing calendar file, and convert it in
 * memory to the current KAlarm format (if possible).
 */
-KAlarm::Calendar::Compat getCompatibility(const FileStorage::Ptr& fileStorage, int& version)
+KACalendar::Compat getCompatibility(const FileStorage::Ptr& fileStorage, int& version)
 {
     QString versionString;
-    version = KAlarm::Calendar::updateVersion(fileStorage, versionString);
+    version = KACalendar::updateVersion(fileStorage, versionString);
     switch (version)
     {
         case KAlarm::IncompatibleFormat:
-            return KAlarm::Calendar::Incompatible;  // calendar is not in KAlarm format, or is in a future format
+            return KACalendar::Incompatible;  // calendar is not in KAlarm format, or is in a future format
         case KAlarm::CurrentFormat:
-            return KAlarm::Calendar::Current;       // calendar is in the current format
+            return KACalendar::Current;       // calendar is in the current format
         default:
-            return KAlarm::Calendar::Convertible;   // calendar is in an out of date format
+            return KACalendar::Convertible;   // calendar is in an out of date format
     }
 }
 
@@ -160,7 +160,7 @@ KAEvent checkItemChanged(const Akonadi::Item& item, QString& errorMsg)
 * are written by the application. This avoids the resource and application
 * overwriting each other's changes if they attempt simultaneous updates.
 */
-void setCollectionCompatibility(const Collection& collection, KAlarm::Calendar::Compat compatibility, int version)
+void setCollectionCompatibility(const Collection& collection, KACalendar::Compat compatibility, int version)
 {
     kDebug() << collection.id() << "->" << compatibility << version;
     Collection col = collection;

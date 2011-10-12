@@ -77,8 +77,6 @@
 #include <iostream>
 #include <climits>
 
-using KAlarm::DateTime;
-
 static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
 static const char* KTTDS_DBUS_PATH     = "/KSpeech";
 

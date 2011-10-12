@@ -25,7 +25,6 @@
 #define RECURRENCEEDIT_H
 
 #include "repetition.h"
-using KAlarm::Repetition;
 
 #include <kdatetime.h>
 
@@ -46,7 +45,6 @@ class RadioButton;
 class TimeEdit;
 class ButtonGroup;
 class RepetitionButton;
-class KAEvent;
 class Rule;
 class NoRule;
 class SubDailyRule;
@@ -54,6 +52,10 @@ class DailyRule;
 class WeeklyRule;
 class MonthlyRule;
 class YearlyRule;
+namespace KAlarm { class KAEvent; }
+
+using KAlarm::KAEvent;
+using KAlarm::Repetition;
 
 class RecurrenceEdit : public QFrame
 {

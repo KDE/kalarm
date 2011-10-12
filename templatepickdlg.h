@@ -1,7 +1,7 @@
 /*
  *  templatepickdlg.h  -  dialog to choose an alarm template
  *  Program:  kalarm
- *  Copyright © 2004,2006-2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ class TemplateListFilterModel;
 #endif
 class TemplateListView;
 
+using KAlarm::KAEvent;
 
 class TemplatePickDlg : public KDialog
 {

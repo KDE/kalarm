@@ -24,7 +24,6 @@
 #include "resources/alarmresources.h"
 #include "alarmcalendar.h"
 #include "alarmtext.h"
-using KAlarm::AlarmText;
 #include "preferences.h"
 #include "synchtimer.h"
 #include "eventlistmodel.moc"
@@ -36,7 +35,8 @@ using KAlarm::AlarmText;
 #include <QApplication>
 #include <QPixmap>
 
-using KAlarm::DateTime;
+using KAlarm::AlarmText;
+using KAlarm::KARecurrence;
 
 /*=============================================================================
 = Class: EventListModel

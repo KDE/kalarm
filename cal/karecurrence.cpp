@@ -21,8 +21,10 @@
 #include "karecurrence.h"
 
 #ifdef USE_AKONADI
+#include <kcalcore/recurrence.h>
 #include <kcalcore/icalformat.h>
 #else
+#include <kcal/recurrence.h>
 #include <kcal/icalformat.h>
 #endif
 #include <kglobal.h>
@@ -38,28 +40,41 @@ using namespace KCalCore;
 using namespace KCal;
 #endif
 
+namespace KAlarm
+{
+
+class Recurrence_p : public Recurrence
+{
+    public:
+        using Recurrence::setNewRecurrenceType;
+        Recurrence_p() : Recurrence() {}
+        Recurrence_p(const Recurrence& r) : Recurrence(r) {}
+        Recurrence_p(const Recurrence_p& r) : Recurrence(r) {}
+};
+
 class KARecurrence::Private
 {
     public:
-        Private(KARecurrence* r)
-            : q(r), mFeb29Type(Feb29_None), mCachedType(-1) {}
-        Private(const Private& p, KARecurrence* r)
-            : q(r), mFeb29Type(p.mFeb29Type), mCachedType(p.mCachedType) {}
-        void copy(const Private& p)
+        Private()
+            : mFeb29Type(Feb29_None), mCachedType(-1) {}
+        explicit Private(const Recurrence& r)
+            : mRecurrence(r), mFeb29Type(Feb29_None), mCachedType(-1) {}
+        void clear()
         {
-            mFeb29Type  = p.mFeb29Type;
-            mCachedType = p.mCachedType;
+            mRecurrence.clear();
+            mFeb29Type  = Feb29_None;
+            mCachedType = -1;
         }
-
         bool set(Type, int freq, int count, int f29, const KDateTime& start, const KDateTime& end);
         bool init(RecurrenceRule::PeriodType, int freq, int count, int feb29Type, const KDateTime& start, const KDateTime& end);
+        void fix();
+        void writeRecurrence(const KARecurrence* q, Recurrence& recur) const;
+        KDateTime endDateTime() const;
         int  combineDurations(const RecurrenceRule*, const RecurrenceRule*, QDate& end) const;
 
-    private:
-        KARecurrence* const q;
-    public:
         static Feb29Type mDefaultFeb29;
-        Feb29Type        mFeb29Type;       // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
+        Recurrence_p     mRecurrence;
+        Feb29Type        mFeb29Type;    // yearly recurrence on Feb 29th (leap years) / Mar 1st (non-leap years)
         mutable int      mCachedType;
 };
 
@@ -85,20 +100,17 @@ KARecurrence::Feb29Type KARecurrence::Private::mDefaultFeb29 = KARecurrence::Feb
 
 
 KARecurrence::KARecurrence()
-    : Recurrence(),
-      d(new Private(this))
+    : d(new Private)
 { }
 
 KARecurrence::KARecurrence(const Recurrence& r)
-    : Recurrence(r),
-      d(new Private(this))
+    : d(new Private(r))
 {
     fix();
 }
 
 KARecurrence::KARecurrence(const KARecurrence& r)
-    : Recurrence(r),
-      d(new Private(*r.d, this))
+    : d(new Private(*r.d))
 { }
 
 KARecurrence::~KARecurrence()
@@ -109,11 +121,14 @@ KARecurrence::~KARecurrence()
 KARecurrence& KARecurrence::operator=(const KARecurrence& r)
 {
     if (&r != this)
-    {
-        Recurrence::operator=(r);
-        d->copy(*r.d);
-    }
+        *d = *r.d;
     return *this;
+}
+
+bool KARecurrence::operator==(const KARecurrence& r) const
+{
+    return d->mRecurrence == r.d->mRecurrence
+       &&  d->mFeb29Type == r.d->mFeb29Type;
 }
 
 KARecurrence::Feb29Type KARecurrence::feb29Type() const
@@ -170,15 +185,15 @@ bool KARecurrence::Private::set(Type recurType, int freq, int count, int f29, co
         {
             QBitArray days(7);
             days.setBit(start.date().dayOfWeek() - 1);
-            q->addWeeklyDays(days);
+            mRecurrence.addWeeklyDays(days);
             break;
         }
         case MONTHLY_DAY:
-            q->addMonthlyDate(start.date().day());
+            mRecurrence.addMonthlyDate(start.date().day());
             break;
         case ANNUAL_DATE:
-            q->addYearlyDate(start.date().day());
-            q->addYearlyMonth(start.date().month());
+            mRecurrence.addYearlyDate(start.date().day());
+            mRecurrence.addYearlyMonth(start.date().month());
             break;
         default:
             break;
@@ -203,10 +218,8 @@ bool KARecurrence::init(RecurrenceRule::PeriodType t, int freq, int count, const
 bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq, int count, int f29, const KDateTime& start,
                                  const KDateTime& end)
 {
-    mCachedType = -1;
+    clear();
     Feb29Type feb29Type = (f29 == -1) ? mDefaultFeb29 : static_cast<Feb29Type>(f29);
-    mFeb29Type = Feb29_None;
-    q->clear();
     if (count < -1)
         return false;
     bool dateOnly = start.isDateOnly();
@@ -221,18 +234,18 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
         case RecurrenceRule::rMonthly:
         case RecurrenceRule::rYearly:
             break;
-        case rNone:
+        case RecurrenceRule::rNone:
             return true;
         default:
             return false;
     }
-    q->setNewRecurrenceType(recurType, freq);
+    mRecurrence.setNewRecurrenceType(recurType, freq);
     if (count)
-        q->setDuration(count);
+        mRecurrence.setDuration(count);
     else if (dateOnly)
-        q->setEndDate(end.date());
+        mRecurrence.setEndDate(end.date());
     else
-        q->setEndDateTime(end);
+        mRecurrence.setEndDateTime(end);
     KDateTime startdt = start;
     if (recurType == RecurrenceRule::rYearly
     &&  (feb29Type == Feb29_Feb28  ||  feb29Type == Feb29_Mar1))
@@ -253,7 +266,7 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
         }
         mFeb29Type = feb29Type;
     }
-    q->Recurrence::setStartDateTime(startdt);   // sets recurrence all-day if date-only
+    mRecurrence.setStartDateTime(startdt);   // sets recurrence all-day if date-only
     return true;
 }
 
@@ -263,16 +276,20 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
 bool KARecurrence::set(const QString& icalRRULE)
 {
     static QString RRULE = QLatin1String("RRULE:");
-    d->mCachedType = -1;
-    clear();
+    d->clear();
     if (icalRRULE.isEmpty())
         return true;
     ICalFormat format;
-    if (!format.fromString(defaultRRule(true),
+    if (!format.fromString(d->mRecurrence.defaultRRule(true),
                            (icalRRULE.startsWith(RRULE) ? icalRRULE.mid(RRULE.length()) : icalRRULE)))
         return false;
     fix();
     return true;
+}
+
+void KARecurrence::clear()
+{
+    d->clear();
 }
 
 /******************************************************************************
@@ -286,12 +303,17 @@ bool KARecurrence::set(const QString& icalRRULE)
 */
 void KARecurrence::fix()
 {
-    d->mCachedType = -1;
-    d->mFeb29Type = Feb29_None;
+    d->fix();
+}
+
+void KARecurrence::Private::fix()
+{
+    mCachedType = -1;
+    mFeb29Type = Feb29_None;
     int convert = 0;
     int days[2] = { 0, 0 };
     RecurrenceRule* rrules[2];
-    RecurrenceRule::List rrulelist = rRules();
+    RecurrenceRule::List rrulelist = mRecurrence.rRules();
     int rri = 0;
     int rrend = rrulelist.count();
     for (int i = 0;  i < 2  &&  rri < rrend;  ++i, ++rri)
@@ -299,31 +321,31 @@ void KARecurrence::fix()
         RecurrenceRule* rrule = rrulelist[rri];
         rrules[i] = rrule;
         bool stop = true;
-        int rtype = recurrenceType(rrule);
+        int rtype = mRecurrence.recurrenceType(rrule);
         switch (rtype)
         {
-            case rHourly:
+            case Recurrence::rHourly:
                 // Convert an hourly recurrence to a minutely one
                 rrule->setRecurrenceType(RecurrenceRule::rMinutely);
                 rrule->setFrequency(rrule->frequency() * 60);
                 // fall through to rMinutely
-            case rMinutely:
-            case rDaily:
-            case rWeekly:
-            case rMonthlyDay:
-            case rMonthlyPos:
-            case rYearlyPos:
+            case Recurrence::rMinutely:
+            case Recurrence::rDaily:
+            case Recurrence::rWeekly:
+            case Recurrence::rMonthlyDay:
+            case Recurrence::rMonthlyPos:
+            case Recurrence::rYearlyPos:
                 if (!convert)
                     ++rri;    // remove all rules except the first
                 break;
-            case rOther:
+            case Recurrence::rOther:
                 if (dailyType(rrule))
                 {                        // it's a daily rule with BYDAYS
                     if (!convert)
                         ++rri;    // remove all rules except the first
                 }
                 break;
-            case rYearlyDay:
+            case Recurrence::rYearlyDay:
             {
                 // Ensure that the yearly day number is 60 (i.e. Feb 29th/Mar 1st)
                 if (convert)
@@ -345,7 +367,7 @@ void KARecurrence::fix()
                 }
                 break;     // not day 60, so remove this rule
             }
-            case rYearlyMonth:
+            case Recurrence::rYearlyMonth:
             {
                 QList<int> ds = rrule->byMonthDays();
                 if (!ds.isEmpty())
@@ -394,7 +416,7 @@ void KARecurrence::fix()
 
     // Remove surplus rules
     for ( ;  rri < rrend;  ++rri)
-        deleteRRule(rrulelist[rri]);
+        mRecurrence.deleteRRule(rrulelist[rri]);
 
     QDate end;
     int count;
@@ -419,33 +441,33 @@ void KARecurrence::fix()
         if (months.removeAll(2))
             rrules[0]->setByMonths(months);
 
-        count = d->combineDurations(rrules[0], rrules[1], end);
-        d->mFeb29Type = (days[1] == 60) ? Feb29_Mar1 : Feb29_Feb28;
+        count = combineDurations(rrules[0], rrules[1], end);
+        mFeb29Type = (days[1] == 60) ? Feb29_Mar1 : Feb29_Feb28;
     }
     else if (convert == 1  &&  days[0] == 60)
     {
         // There is a single 60th day of the year rule.
         // Convert it to a February 29th recurrence.
-        count = duration();
+        count = mRecurrence.duration();
         if (!count)
-            end = endDate();
-        d->mFeb29Type = Feb29_Mar1;
+            end = mRecurrence.endDate();
+        mFeb29Type = Feb29_Mar1;
     }
     else
         return;
 
     // Create the new February 29th recurrence
-    setNewRecurrenceType(RecurrenceRule::rYearly, frequency());
-    RecurrenceRule* rrule = defaultRRule();
+    mRecurrence.setNewRecurrenceType(RecurrenceRule::rYearly, mRecurrence.frequency());
+    RecurrenceRule* rrule = mRecurrence.defaultRRule();
     months.append(2);
     rrule->setByMonths(months);
     QList<int> ds;
     ds.append(29);
     rrule->setByMonthDays(ds);
     if (count)
-        setDuration(count);
+        mRecurrence.setDuration(count);
     else
-        setEndDate(end);
+        mRecurrence.setEndDate(end);
 }
 
 /******************************************************************************
@@ -454,21 +476,26 @@ void KARecurrence::fix()
 */
 void KARecurrence::writeRecurrence(Recurrence& recur) const
 {
+    d->writeRecurrence(this, recur);
+}
+
+void KARecurrence::Private::writeRecurrence(const KARecurrence* q, Recurrence& recur) const
+{
     recur.clear();
-    recur.setStartDateTime(startDateTime());
-    recur.setExDates(exDates());
-    recur.setExDateTimes(exDateTimes());
-    const RecurrenceRule* rrule = defaultRRuleConst();
+    recur.setStartDateTime(mRecurrence.startDateTime());
+    recur.setExDates(mRecurrence.exDates());
+    recur.setExDateTimes(mRecurrence.exDateTimes());
+    const RecurrenceRule* rrule = mRecurrence.defaultRRuleConst();
     if (!rrule)
         return;
-    int freq  = frequency();
-    int count = duration();
-    static_cast<KARecurrence*>(&recur)->setNewRecurrenceType(rrule->recurrenceType(), freq);
+    int freq  = mRecurrence.frequency();
+    int count = mRecurrence.duration();
+    static_cast<Recurrence_p*>(&recur)->setNewRecurrenceType(rrule->recurrenceType(), freq);
     if (count)
         recur.setDuration(count);
     else
         recur.setEndDateTime(endDateTime());
-    switch (type())
+    switch (q->type())
     {
         case DAILY:
             if (rrule->byDays().isEmpty())
@@ -488,8 +515,8 @@ void KARecurrence::writeRecurrence(Recurrence& recur) const
         case ANNUAL_DATE:
         {
             QList<int> months = rrule->byMonths();
-            QList<int> days   = monthDays();
-            bool special = (d->mFeb29Type != Feb29_None  &&  !days.isEmpty()
+            QList<int> days   = mRecurrence.monthDays();
+            bool special = (mFeb29Type != Feb29_None  &&  !days.isEmpty()
                             &&  days.first() == 29  &&  months.removeAll(2));
             RecurrenceRule* rrule1 = recur.defaultRRule();
             rrule1->setByMonths(months);
@@ -502,11 +529,11 @@ void KARecurrence::writeRecurrence(Recurrence& recur) const
             RecurrenceRule* rrule2 = new RecurrenceRule();
             rrule2->setRecurrenceType(RecurrenceRule::rYearly);
             rrule2->setFrequency(freq);
-            rrule2->setStartDt(startDateTime());
-            rrule2->setAllDay(allDay());
+            rrule2->setStartDt(mRecurrence.startDateTime());
+            rrule2->setAllDay(mRecurrence.allDay());
             if (!count)
                 rrule2->setEndDt(endDateTime());
-            if (d->mFeb29Type == Feb29_Mar1)
+            if (mFeb29Type == Feb29_Mar1)
             {
                 QList<int> ds;
                 ds.append(60);
@@ -551,17 +578,17 @@ void KARecurrence::writeRecurrence(Recurrence& recur) const
                          */
                         KDateTime end = endDateTime();
                         int count1 = rrule1->durationTo(end)
-                                     - (rrule1->recursOn(startDate(), startDateTime().timeSpec()) ? 0 : 1);
+                                     - (rrule1->recursOn(mRecurrence.startDate(), mRecurrence.startDateTime().timeSpec()) ? 0 : 1);
                         if (count1 > 0)
                             rrule1->setDuration(count1);
                         else
-                            rrule1->setEndDt(startDateTime());
+                            rrule1->setEndDt(mRecurrence.startDateTime());
                         int count2 = rrule2->durationTo(end)
-                                     - (rrule2->recursOn(startDate(), startDateTime().timeSpec()) ? 0 : 1);
+                                     - (rrule2->recursOn(mRecurrence.startDate(), mRecurrence.startDateTime().timeSpec()) ? 0 : 1);
                         if (count2 > 0)
                             rrule2->setDuration(count2);
                         else
-                            rrule2->setEndDt(startDateTime());
+                            rrule2->setEndDt(mRecurrence.startDateTime());
                     }
                 }
             }
@@ -573,11 +600,21 @@ void KARecurrence::writeRecurrence(Recurrence& recur) const
     }
 }
 
+KDateTime KARecurrence::startDateTime() const
+{
+    return d->mRecurrence.startDateTime();
+}
+
+QDate KARecurrence::startDate() const
+{
+    return d->mRecurrence.startDate();
+}
+
 void KARecurrence::setStartDateTime(const KDateTime& dt, bool dateOnly)
 {
-    Recurrence::setStartDateTime(dt);
+    d->mRecurrence.setStartDateTime(dt);
     if (dateOnly)
-        Recurrence::setAllDay(true);
+        d->mRecurrence.setAllDay(true);
 }
 
 /******************************************************************************
@@ -585,14 +622,19 @@ void KARecurrence::setStartDateTime(const KDateTime& dt, bool dateOnly)
 */
 KDateTime KARecurrence::endDateTime() const
 {
-    if (d->mFeb29Type == Feb29_None  ||  duration() <= 1)
+    return d->endDateTime();
+}
+
+KDateTime KARecurrence::Private::endDateTime() const
+{
+    if (mFeb29Type == Feb29_None  ||  mRecurrence.duration() <= 1)
     {
         /* Either it doesn't have any special February 29th treatment,
          * it's infinite (count = -1), the end date is specified
          * (count = 0), or it ends on the start date (count = 1).
          * So just use the normal KCal end date calculation.
          */
-        return Recurrence::endDateTime();
+        return mRecurrence.endDateTime();
     }
 
     /* Create a temporary recurrence rule to find the end date.
@@ -602,7 +644,7 @@ KDateTime KARecurrence::endDateTime() const
      */
     RecurrenceRule* rrule = new RecurrenceRule();
     rrule->setRecurrenceType(RecurrenceRule::rYearly);
-    KDateTime dt = startDateTime();
+    KDateTime dt = mRecurrence.startDateTime();
     QDate da = dt.date();
     switch (da.day())
     {
@@ -612,14 +654,14 @@ KDateTime KARecurrence::endDateTime() const
             da.setYMD(da.year(), da.month(), 28);
             break;
         case 28:
-            if (da.month() != 2  ||  d->mFeb29Type != Feb29_Feb28  ||  QDate::isLeapYear(da.year()))
+            if (da.month() != 2  ||  mFeb29Type != Feb29_Feb28  ||  QDate::isLeapYear(da.year()))
             {
                 // Start date is not a recurrence date, so shift it to 27th
                 da.setYMD(da.year(), da.month(), 27);
             }
             break;
         case 1:
-            if (da.month() == 3  &&  d->mFeb29Type == Feb29_Mar1  &&  !QDate::isLeapYear(da.year()))
+            if (da.month() == 3  &&  mFeb29Type == Feb29_Mar1  &&  !QDate::isLeapYear(da.year()))
             {
                 // Start date is a March 1st recurrence date, so shift
                 // start date to the temporary recurrence date of the 28th
@@ -631,19 +673,19 @@ KDateTime KARecurrence::endDateTime() const
     }
     dt.setDate(da);
     rrule->setStartDt(dt);
-    rrule->setAllDay(allDay());
-    rrule->setFrequency(frequency());
-    rrule->setDuration(duration());
+    rrule->setAllDay(mRecurrence.allDay());
+    rrule->setFrequency(mRecurrence.frequency());
+    rrule->setDuration(mRecurrence.duration());
     QList<int> ds;
     ds.append(28);
     rrule->setByMonthDays(ds);
-    rrule->setByMonths(defaultRRuleConst()->byMonths());
+    rrule->setByMonths(mRecurrence.defaultRRuleConst()->byMonths());
     dt = rrule->endDt();
     delete rrule;
 
     // We've found the end date for a recurrence on the 28th. Unless that date
     // is a real February 28th recurrence, adjust to the actual recurrence date.
-    if (d->mFeb29Type == Feb29_Feb28  &&  dt.date().month() == 2  &&  !QDate::isLeapYear(dt.date().year()))
+    if (mFeb29Type == Feb29_Feb28  &&  dt.date().month() == 2  &&  !QDate::isLeapYear(dt.date().year()))
         return dt;
     return dt.addDays(1);
 }
@@ -655,6 +697,111 @@ QDate KARecurrence::endDate() const
 {
     KDateTime end = endDateTime();
     return end.isValid() ? end.date() : QDate();
+}
+
+void KARecurrence::setEndDate(const QDate& endDate)
+{
+    d->mRecurrence.setEndDate(endDate);
+}
+
+void KARecurrence::setEndDateTime(const KDateTime& endDateTime)
+{
+    d->mRecurrence.setEndDateTime(endDateTime);
+}
+
+bool KARecurrence::allDay() const
+{
+    return d->mRecurrence.allDay();
+}
+
+void KARecurrence::setRecurReadOnly(bool readOnly)
+{
+    d->mRecurrence.setRecurReadOnly(readOnly);
+}
+
+bool KARecurrence::recurReadOnly() const
+{
+    return d->mRecurrence.recurReadOnly();
+}
+
+bool KARecurrence::recurs() const
+{
+    return d->mRecurrence.recurs();
+}
+
+QBitArray KARecurrence::days() const
+{
+    return d->mRecurrence.days();
+}
+
+QList<RecurrenceRule::WDayPos> KARecurrence::monthPositions() const
+{
+    return d->mRecurrence.monthPositions();
+}
+
+QList<int> KARecurrence::monthDays() const
+{
+    return d->mRecurrence.monthDays();
+}
+
+QList<int> KARecurrence::yearDays() const
+{
+    return d->mRecurrence.yearDays();
+}
+
+QList<int> KARecurrence::yearDates() const
+{
+    return d->mRecurrence.yearDates();
+}
+
+QList<int> KARecurrence::yearMonths() const
+{
+    return d->mRecurrence.yearMonths();
+}
+
+QList<RecurrenceRule::WDayPos> KARecurrence::yearPositions() const
+{
+    return d->mRecurrence.yearPositions();
+}
+
+void KARecurrence::addWeeklyDays(const QBitArray& days)
+{
+    d->mRecurrence.addWeeklyDays(days);
+}
+
+void KARecurrence::addYearlyDay(int day)
+{
+    d->mRecurrence.addYearlyDay(day);
+}
+
+void KARecurrence::addYearlyDate(int date)
+{
+    d->mRecurrence.addYearlyDate(date);
+}
+
+void KARecurrence::addYearlyMonth(short month)
+{
+    d->mRecurrence.addYearlyMonth(month);
+}
+
+void KARecurrence::addYearlyPos(short pos, const QBitArray& days)
+{
+    d->mRecurrence.addYearlyPos(pos, days);
+}
+
+void KARecurrence::addMonthlyPos(short pos, const QBitArray& days)
+{
+    d->mRecurrence.addMonthlyPos(pos, days);
+}
+
+void KARecurrence::addMonthlyPos(short pos, ushort day)
+{
+    d->mRecurrence.addMonthlyPos(pos, day);
+}
+
+void KARecurrence::addMonthlyDate(short day)
+{
+    d->mRecurrence.addMonthlyDate(day);
 }
 
 /******************************************************************************
@@ -672,7 +819,7 @@ KDateTime KARecurrence::getNextDateTime(const KDateTime& preDateTime) const
             return recur.getNextDateTime(preDateTime);
         }
         default:
-            return Recurrence::getNextDateTime(preDateTime);
+            return d->mRecurrence.getNextDateTime(preDateTime);
     }
 }
 
@@ -691,7 +838,7 @@ KDateTime KARecurrence::getPreviousDateTime(const KDateTime& afterDateTime) cons
             return recur.getPreviousDateTime(afterDateTime);
         }
         default:
-            return Recurrence::getPreviousDateTime(afterDateTime);
+            return d->mRecurrence.getPreviousDateTime(afterDateTime);
     }
 }
 
@@ -701,23 +848,68 @@ KDateTime KARecurrence::getPreviousDateTime(const KDateTime& afterDateTime) cons
 */
 bool KARecurrence::recursOn(const QDate& dt, const KDateTime::Spec& timeSpec) const
 {
-    if (!Recurrence::recursOn(dt, timeSpec))
+    if (!d->mRecurrence.recursOn(dt, timeSpec))
         return false;
-    if (dt != startDate())
+    if (dt != d->mRecurrence.startDate())
         return true;
     // We know now that it isn't in EXDATES or EXRULES,
     // so we just need to check if it's in RDATES or RRULES
-    if (rDates().contains(dt))
+    if (d->mRecurrence.rDates().contains(dt))
         return true;
-    RecurrenceRule::List rulelist = rRules();
+    RecurrenceRule::List rulelist = d->mRecurrence.rRules();
     for (int rri = 0, rrend = rulelist.count();  rri < rrend;  ++rri)
         if (rulelist[rri]->recursOn(dt, timeSpec))
             return true;
-    DateTimeList dtlist = rDateTimes();
+    DateTimeList dtlist = d->mRecurrence.rDateTimes();
     for (int dti = 0, dtend = dtlist.count();  dti < dtend;  ++dti)
         if (dtlist[dti].date() == dt)
             return true;
     return false;
+}
+
+bool KARecurrence::recursAt(const KDateTime& dt) const
+{
+    return d->mRecurrence.recursAt(dt);
+}
+
+TimeList KARecurrence::recurTimesOn(const QDate& date, const KDateTime::Spec& timeSpec) const
+{
+    return d->mRecurrence.recurTimesOn(date, timeSpec);
+}
+
+DateTimeList KARecurrence::timesInInterval(const KDateTime& start, const KDateTime& end) const
+{
+    return d->mRecurrence.timesInInterval(start, end);
+}
+
+int KARecurrence::frequency() const
+{
+    return d->mRecurrence.frequency();
+}
+
+void KARecurrence::setFrequency(int freq)
+{
+    d->mRecurrence.setFrequency(freq);
+}
+
+int KARecurrence::duration() const
+{
+    return d->mRecurrence.duration();
+}
+
+void KARecurrence::setDuration(int duration)
+{
+    d->mRecurrence.setDuration(duration);
+}
+
+int KARecurrence::durationTo(const KDateTime& dt) const
+{
+    return d->mRecurrence.durationTo(dt);
+}
+
+int KARecurrence::durationTo(const QDate& date) const
+{
+    return d->mRecurrence.durationTo(date);
 }
 
 /******************************************************************************
@@ -733,9 +925,9 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule* rrule1, const 
 
     // One of the RRULEs may not recur at all if the recurrence count is small.
     // In this case, its end date will have been set to the start date.
-    if (count1  &&  !count2  &&  rrule2->endDt().date() == q->startDateTime().date())
+    if (count1  &&  !count2  &&  rrule2->endDt().date() == mRecurrence.startDateTime().date())
         return count1;
-    if (count2  &&  !count1  &&  rrule1->endDt().date() == q->startDateTime().date())
+    if (count2  &&  !count1  &&  rrule1->endDt().date() == mRecurrence.startDateTime().date())
         return count2;
 
     /* The duration counts will be different even for RRULEs of the same length,
@@ -801,7 +993,7 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule* rrule1, const 
 */
 Duration KARecurrence::longestInterval() const
 {
-    int freq = frequency();
+    int freq = d->mRecurrence.frequency();
     switch (type())
     {
         case MINUTELY:
@@ -809,7 +1001,7 @@ Duration KARecurrence::longestInterval() const
 
         case DAILY:
         {
-            QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
+            QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
             if (days.isEmpty())
                 return Duration(freq, Duration::Days);
 
@@ -847,7 +1039,7 @@ Duration KARecurrence::longestInterval() const
             {
                 // It will recur on the same day of the week every time.
                 // Ensure that the day is a day which is not excluded.
-                if (ds[startDate().dayOfWeek() - 1])
+                if (ds[d->mRecurrence.startDate().dayOfWeek() - 1])
                        return Duration(freq, Duration::Days);
                 break;
             }
@@ -856,7 +1048,7 @@ Duration KARecurrence::longestInterval() const
         {
             // Find which days of the week it recurs on, and if on more than
             // one, reduce the maximum interval accordingly.
-            QBitArray ds = days();
+            QBitArray ds = d->mRecurrence.days();
             int first = -1;
             int last  = -1;
             int maxgap = 1;
@@ -894,7 +1086,7 @@ Duration KARecurrence::longestInterval() const
         {
             // Find which months of the year it recurs on, and if on more than
             // one, reduce the maximum interval accordingly.
-            const QList<int> months = yearMonths();  // month list is sorted
+            const QList<int> months = d->mRecurrence.yearMonths();  // month list is sorted
             if (months.isEmpty())
                 break;    // no months recur
             if (months.count() == 1)
@@ -934,14 +1126,14 @@ Duration KARecurrence::longestInterval() const
 */
 Duration KARecurrence::regularInterval() const
 {
-    int freq = frequency();
+    int freq = d->mRecurrence.frequency();
     switch (type())
     {
         case MINUTELY:
             return Duration(freq * 60, Duration::Seconds);
         case DAILY:
         {
-            QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
+            QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
             if (days.isEmpty())
                 return Duration(freq, Duration::Days);
             // After applying the frequency, the specified days of the week
@@ -955,7 +1147,7 @@ Duration KARecurrence::regularInterval() const
             {
                 // It will recur on the same day of the week every time.
                 // Check whether that day is in the list of included days.
-                if (ds[startDate().dayOfWeek() - 1])
+                if (ds[d->mRecurrence.startDate().dayOfWeek() - 1])
                        return Duration(freq, Duration::Days);
                 break;
             }
@@ -971,7 +1163,7 @@ Duration KARecurrence::regularInterval() const
         }
         case WEEKLY:
         {
-            QList<RecurrenceRule::WDayPos> days = defaultRRuleConst()->byDays();
+            QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
             if (days.isEmpty())
                 return Duration(freq * 7, Duration::Days);
             // The specified days of the week occur every week in which the
@@ -1001,13 +1193,53 @@ Duration KARecurrence::regularInterval() const
     return 0;
 }
 
+DateTimeList KARecurrence::exDateTimes() const
+{
+    return d->mRecurrence.exDateTimes();
+}
+
+DateList KARecurrence::exDates() const
+{
+    return d->mRecurrence.exDates();
+}
+
+void KARecurrence::setExDateTimes(const DateTimeList& exdates)
+{
+    d->mRecurrence.setExDateTimes(exdates);
+}
+
+void KARecurrence::setExDates(const DateList& exdates)
+{
+    d->mRecurrence.setExDates(exdates);
+}
+
+void KARecurrence::addExDateTime(const KDateTime& exdate)
+{
+    d->mRecurrence.addExDateTime(exdate);
+}
+
+void KARecurrence::addExDate(const QDate& exdate)
+{
+    d->mRecurrence.addExDate(exdate);
+}
+
+void KARecurrence::shiftTimes(const KDateTime::Spec& oldSpec, const KDateTime::Spec& newSpec)
+{
+    d->mRecurrence.shiftTimes(oldSpec, newSpec);
+}
+
+RecurrenceRule* KARecurrence::defaultRRuleConst() const
+{
+    return d->mRecurrence.defaultRRuleConst();
+}
+
 /******************************************************************************
 * Return the recurrence's period type.
 */
 KARecurrence::Type KARecurrence::type() const
 {
     if (d->mCachedType == -1)
-        d->mCachedType = type(defaultRRuleConst());
+        d->mCachedType = type(d->mRecurrence.defaultRRuleConst());
     return static_cast<Type>(d->mCachedType);
 }
 
@@ -1016,15 +1248,15 @@ KARecurrence::Type KARecurrence::type() const
 */
 KARecurrence::Type KARecurrence::type(const RecurrenceRule* rrule)
 {
-    switch (recurrenceType(rrule))
+    switch (Recurrence::recurrenceType(rrule))
     {
-        case rMinutely:     return MINUTELY;
-        case rDaily:        return DAILY;
-        case rWeekly:       return WEEKLY;
-        case rMonthlyDay:   return MONTHLY_DAY;
-        case rMonthlyPos:   return MONTHLY_POS;
-        case rYearlyMonth:  return ANNUAL_DATE;
-        case rYearlyPos:    return ANNUAL_POS;
+        case Recurrence::rMinutely:     return MINUTELY;
+        case Recurrence::rDaily:        return DAILY;
+        case Recurrence::rWeekly:       return WEEKLY;
+        case Recurrence::rMonthlyDay:   return MONTHLY_DAY;
+        case Recurrence::rMonthlyPos:   return MONTHLY_POS;
+        case Recurrence::rYearlyMonth:  return ANNUAL_DATE;
+        case Recurrence::rYearlyPos:    return ANNUAL_POS;
         default:
             if (dailyType(rrule))
                 return DAILY;
@@ -1060,5 +1292,7 @@ bool KARecurrence::dailyType(const RecurrenceRule* rrule)
     }
     return found;
 }
+
+} // namespace KAlarm
 
 // vim: et sw=4:

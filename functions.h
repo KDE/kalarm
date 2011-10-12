@@ -38,13 +38,13 @@
 #include <QVector>
 
 namespace KCal { class Event; }
+namespace KAlarm { class KAEvent; }
 class QWidget;
 class QAction;
 class KAction;
 class KActionCollection;
 class KToggleAction;
 class AlarmResource;
-class KAEvent;
 class MainWindow;
 class TemplateMenuAction;
 

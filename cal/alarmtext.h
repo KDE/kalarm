@@ -32,10 +32,11 @@ namespace KCal { class Todo; }
 #include <QString>
 
 class QStringList;
-class KAEvent;
 
 namespace KAlarm
 {
+
+class KAEvent;
 
 /**
  * @short Parses email, todo and script alarm texts.

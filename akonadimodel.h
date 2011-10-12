@@ -37,8 +37,11 @@ namespace Akonadi {
 }
 class QPixmap;
 class KJob;
-namespace KAlarm { class DateTime; }
 class CalendarMigrator;
+
+using KAlarm::KAEvent;
+using KAlarm::KACalendar;
+using KAlarm::DateTime;
 
 
 class AkonadiModel : public Akonadi::EntityTreeModel
@@ -173,15 +176,15 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          *  calendar format.
          *
          *  @param format  Updated to contain the backend calendar storage format.
-         *                 If read-only, = KAlarm::Calendar::Current;
-         *                 if unknown format, = KAlarm::Calendar::Incompatible;
+         *                 If read-only, = KACalendar::Current;
+         *                 if unknown format, = KACalendar::Incompatible;
          *                 otherwise = the backend calendar storage format.
          *  @return 1 = fully writable,
          *          0 = writable except that backend calendar is in an old KAlarm format,
-         *         -1 = read-only (if @p compat == KAlarm::Calendar::Current), or
+         *         -1 = read-only (if @p compat == KACalendar::Current), or
          *              incompatible format otherwise.
          */
-        static int isWritable(const Akonadi::Collection&, KAlarm::Calendar::Compat& format);
+        static int isWritable(const Akonadi::Collection&, KACalendar::Compat& format);
 
         static KAlarm::CalEvent::Types types(const Akonadi::Collection&);
 
@@ -270,8 +273,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         };
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
-        QString   alarmTimeText(const KAlarm::DateTime&) const;
-        QString   timeToAlarmText(const KAlarm::DateTime&) const;
+        QString   alarmTimeText(const DateTime&) const;
+        QString   timeToAlarmText(const DateTime&) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool rowInserted);
         void      queueItemModifyJob(const Akonadi::Item&);

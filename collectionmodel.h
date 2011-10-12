@@ -196,14 +196,14 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *                 current KAlarm format, @p format is set to the calendar
          *                 format used by the backend. If the calendar is
          *                 non-writable for any other reason, @p format is set
-         *                 to KAlarm::Calendar::Current.
+         *                 to KACalendar::Current.
          *  @return 1 = fully enabled and writable,
          *          0 = enabled and writable except that backend calendar is in an
          *              old KAlarm format,
-         *         -1 = read-only (if @p format == KAlarm::Calendar::Current), or
+         *         -1 = read-only (if @p format == KACalendar::Current), or
          *              disabled or incompatible format.
          */
-        static int isWritableEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type, KAlarm::Calendar::Compat& format);
+        static int isWritableEnabled(const Akonadi::Collection&, KAlarm::CalEvent::Type, KACalendar::Compat& format);
 
         /** Return the standard collection for a specified mime type.
          *  @param useDefault false to return the defined standard collection, if any;

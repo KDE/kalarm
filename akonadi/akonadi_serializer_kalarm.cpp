@@ -35,6 +35,7 @@
 #include <QtCore/qplugin.h>
 
 using namespace Akonadi;
+using KAlarm::KACalendar;
 
 
 // Convert from backend data stream to a KAEvent, and set it into the item's payload.
@@ -98,7 +99,7 @@ void SerializerPluginKAlarm::serialize(const Item& item, const QByteArray& label
     KCalCore::Event::Ptr kcalEvent(new KCalCore::Event);
     e.updateKCalEvent(kcalEvent, KAEvent::UID_SET);
     QByteArray head = "BEGIN:VCALENDAR\nPRODID:";
-    head += KAlarm::Calendar::icalProductId();
+    head += KACalendar::icalProductId();
     head += "\nVERSION:2.0\nX-KDE-KALARM-VERSION:";
     head += KAEvent::currentCalendarVersionString();
     head += '\n';

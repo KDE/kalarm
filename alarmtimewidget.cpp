@@ -41,8 +41,6 @@
 #include <QGridLayout>
 #include <QLabel>
 
-using KAlarm::DateTime;
-
 static const QTime time_23_59(23, 59);
 
 

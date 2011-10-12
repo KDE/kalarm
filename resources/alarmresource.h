@@ -1,7 +1,7 @@
 /*
  *  alarmresource.h  -  base class for a KAlarm alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +33,7 @@
 #include <sys/stat.h>
 
 using KCal::CalendarLocal;
+using KAlarm::KACalendar;
 
 
 #define KARES_DEBUG AlarmResource::debugArea()
@@ -157,15 +158,15 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
          *  set to null to indicate that the resource is about to be reloaded. */
         static void setCustomEventFunction(void (*f)(AlarmResource*, CalendarLocal*))   { mCustomEventFunction = f; }
         /** Set a function to fix the calendar once it has been loaded. */
-        static void setFixFunction(KAlarm::Calendar::Compat (*f)(CalendarLocal&, const QString&, AlarmResource*, FixFunc, bool* wrongType))
+        static void setFixFunction(KACalendar::Compat (*f)(CalendarLocal&, const QString&, AlarmResource*, FixFunc, bool* wrongType))
                                                  { mFixFunction = f; }
         /** Return whether the resource is in a different format from the
          *  current KAlarm format, in which case it cannot be written to.
          *  Note that readOnly() takes account of both incompatible() and
          *  KCal::ResourceCached::readOnly().
          */
-        KAlarm::Calendar::Compat compatibility() const  { return mCompatibility; }
-        KAlarm::Calendar::Compat compatibility(const KCal::Event*) const;
+        KACalendar::Compat compatibility() const  { return mCompatibility; }
+        KACalendar::Compat compatibility(const KCal::Event*) const;
 
         virtual void showProgress(bool)  {}
 
@@ -213,16 +214,16 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
     protected:
         virtual void      doClose();
         bool              closeAfterSave() const    { return mCloseAfterSave; }
-        void              setCompatibility(KAlarm::Calendar::Compat c)    { mCompatibility = c; }
+        void              setCompatibility(KACalendar::Compat c)    { mCompatibility = c; }
         void              checkCompatibility(const QString&);
-        KAlarm::Calendar::Compat checkCompatibility(KCal::CalendarLocal&, const QString& filename, FixFunc, bool* wrongType = 0);
+        KACalendar::Compat checkCompatibility(KCal::CalendarLocal&, const QString& filename, FixFunc, bool* wrongType = 0);
         void              setWrongAlarmType(bool wrongType, bool emitSignal = true);
         void              updateCustomEvents(bool useCalendar = true);
         virtual void      enableResource(bool enable) = 0;
         void              lock(const QString& path);
 
         static void                     (*mCalIDFunction)(CalendarLocal&);
-        static KAlarm::Calendar::Compat (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc, bool* wrongType);
+        static KACalendar::Compat (*mFixFunction)(CalendarLocal&, const QString&, AlarmResource*, FixFunc, bool* wrongType);
 
     private:
         void        init();
@@ -239,10 +240,10 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
         bool        mOldReadOnly;     // old read-only status (when startReconfig() called)
         bool        mCloseAfterSave;  // resource is to be closed once save() is complete
         bool        mWrongAlarmType;  // calendar contains only alarms of the wrong type
-        KAlarm::Calendar::Compat mCompatibility; // whether resource is in compatible format
+        KACalendar::Compat mCompatibility; // whether resource is in compatible format
 
     protected:
-        typedef QMap<const KCal::Event*, KAlarm::Calendar::Compat>  CompatibilityMap;
+        typedef QMap<const KCal::Event*, KACalendar::Compat>  CompatibilityMap;
         CompatibilityMap  mCompatibilityMap;   // whether individual events are in compatible format
         short       mReconfiguring;   // a batch of config changes is in progress
         bool        mLoaded;          // true if resource has finished loading

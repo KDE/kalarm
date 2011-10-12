@@ -26,15 +26,17 @@
 
 class AlarmTimeWidget;
 
+using KAlarm::DateTime;
+
 
 class DeferAlarmDlg : public KDialog
 {
         Q_OBJECT
     public:
-        DeferAlarmDlg(const KAlarm::DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = 0);
-        void             setLimit(const KAlarm::DateTime&);
-        KAlarm::DateTime setLimit(const QString& eventID);
-        const KAlarm::DateTime&  getDateTime() const   { return mAlarmDateTime; }
+        DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = 0);
+        void             setLimit(const DateTime&);
+        DateTime         setLimit(const QString& eventID);
+        const DateTime&  getDateTime() const   { return mAlarmDateTime; }
         void             setDeferMinutes(int mins);
         int              deferMinutes() const  { return mDeferMinutes; }
 
@@ -47,8 +49,8 @@ class DeferAlarmDlg : public KDialog
 
     private:
         AlarmTimeWidget* mTimeWidget;
-        KAlarm::DateTime mAlarmDateTime;
-        KAlarm::DateTime mLimitDateTime;   // latest date/time allowed for deferral
+        DateTime         mAlarmDateTime;
+        DateTime         mLimitDateTime;   // latest date/time allowed for deferral
         QString          mLimitEventID;    // event from whose recurrences to derive the limit date/time for deferral
         int              mDeferMinutes;    // number of minutes deferral selected, or 0 if date/time entered
 };

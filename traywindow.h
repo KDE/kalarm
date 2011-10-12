@@ -31,12 +31,12 @@ class QDragEnterEvent;
 class QDropEvent;
 class KAction;
 class KToggleAction;
-class KAEvent;
 class MainWindow;
 class NewAlarmAction;
 #ifdef USE_AKONADI
 class AlarmListModel;
 #endif
+namespace KAlarm { class KAEvent; }
 
 class TrayWindow : public KStatusNotifierItem
 {

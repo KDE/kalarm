@@ -63,7 +63,7 @@ using namespace KCal;
 #endif
 
 #ifdef USE_AKONADI
-static KAlarm::Calendar::Compat fix(const KCalCore::FileStorage::Ptr&);
+static KACalendar::Compat fix(const KCalCore::FileStorage::Ptr&);
 #endif
 
 static const QString displayCalendarName = QLatin1String("displaying.ics");
@@ -101,8 +101,8 @@ bool AlarmCalendar::initialiseCalendars()
 #endif
     mResourcesCalendar = new AlarmCalendar();
     mDisplayCalendar = new AlarmCalendar(displayCal, KAlarm::CalEvent::DISPLAYING);
-    KAlarm::Calendar::setProductId(KALARM_NAME, KALARM_VERSION);
-    CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KAlarm::Calendar::icalProductId()));
+    KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
+    CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
     return true;
 }
 
@@ -166,7 +166,7 @@ AlarmCalendar::AlarmCalendar()
                    SLOT(slotCollectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
 #else
     AlarmResources* resources = AlarmResources::instance();
-    resources->setCalIDFunction(&KAlarm::Calendar::setKAlarmVersion);
+    resources->setCalIDFunction(&KACalendar::setKAlarmVersion);
     resources->setFixFunction(&CalendarCompat::fix);
     resources->setCustomEventFunction(&updateResourceKAEvents);
     connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)), SLOT(slotResourceChange(AlarmResource*,AlarmResources::Change)));
@@ -897,11 +897,11 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
     else
     {
 #ifdef USE_AKONADI
-        KAlarm::Calendar::Compat caltype = fix(calStorage);
+        KACalendar::Compat caltype = fix(calStorage);
         KAlarm::CalEvent::Types wantedTypes = collection && collection->isValid() ? KAlarm::CalEvent::types(collection->contentMimeTypes()) : KAlarm::CalEvent::EMPTY;
         Collection activeColl, archiveColl, templateColl;
 #else
-        KAlarm::Calendar::Compat caltype = CalendarCompat::fix(cal, filename);
+        KACalendar::Compat caltype = CalendarCompat::fix(cal, filename);
         KAlarm::CalEvent::Type wantedType = resource ? resource->alarmType() : KAlarm::CalEvent::EMPTY;
         AlarmResources* resources = AlarmResources::instance();
         AlarmResource* activeRes   = 0;
@@ -929,7 +929,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
             if (type == KAlarm::CalEvent::TEMPLATE)
             {
                 // If we know the event was not created by KAlarm, don't treat it as a template
-                if (caltype == KAlarm::Calendar::Incompatible)
+                if (caltype == KACalendar::Incompatible)
                     type = KAlarm::CalEvent::ACTIVE;
             }
 #ifdef USE_AKONADI
@@ -1078,7 +1078,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
             return false;
         }
     }
-    KAlarm::Calendar::setKAlarmVersion(calendar);
+    KACalendar::setKAlarmVersion(calendar);
 
     // Add the alarms to the calendar
     bool ok = true;
@@ -1987,7 +1987,7 @@ bool AlarmCalendar::eventReadOnly(Item::Id id) const
     if (!CollectionControlModel::isWritableEnabled(collection, event.category()))
         return true;
     return !event.isValid()  ||  event.isReadOnly();
-    //   ||  compatibility(event) != KAlarm::Calendar::Current;
+    //   ||  compatibility(event) != KACalendar::Current;
 }
 #else
 bool AlarmCalendar::eventReadOnly(const QString& uniqueID) const
@@ -2241,13 +2241,13 @@ void AlarmCalendar::adjustStartOfDay()
 * Find the version of KAlarm which wrote the calendar file, and do any
 * necessary conversions to the current format.
 */
-KAlarm::Calendar::Compat fix(const FileStorage::Ptr& fileStorage)
+KACalendar::Compat fix(const FileStorage::Ptr& fileStorage)
 {
     QString versionString;
-    int version = KAlarm::Calendar::updateVersion(fileStorage, versionString);
+    int version = KACalendar::updateVersion(fileStorage, versionString);
     if (version == KAlarm::IncompatibleFormat)
-        return KAlarm::Calendar::Incompatible;  // calendar was created by another program, or an unknown version of KAlarm
-    return KAlarm::Calendar::Current;
+        return KACalendar::Incompatible;  // calendar was created by another program, or an unknown version of KAlarm
+    return KACalendar::Current;
 }
 #endif
 

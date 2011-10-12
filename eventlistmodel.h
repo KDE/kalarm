@@ -34,8 +34,10 @@
 
 class QPixmap;
 namespace KCal { class Event; }
-namespace KAlarm { class DateTime; }
-class KAEvent;
+namespace KAlarm { class KAEvent; }
+
+using KAlarm::KAEvent;
+using KAlarm::DateTime;
 
 
 class EventListModel : public QAbstractTableModel
@@ -102,8 +104,8 @@ class EventListModel : public QAbstractTableModel
         void     removeEvent(int row);
         int      findEvent(const QString& eventId) const;
         void     updateHaveEvents(bool have)        { mHaveEvents = have;  emit haveEventsStatus(have); }
-        QString  alarmTimeText(const KAlarm::DateTime&) const;
-        QString  timeToAlarmText(const KAlarm::DateTime&) const;
+        QString  alarmTimeText(const DateTime&) const;
+        QString  timeToAlarmText(const DateTime&) const;
         QString  repeatText(const KAEvent*) const;
         QString  repeatOrder(const KAEvent*) const;
         QPixmap* eventIcon(const KAEvent*) const;

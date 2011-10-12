@@ -24,7 +24,6 @@
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
 #include "datetime.h"
-using KAlarm::DateTime;
 #include "functions.h"
 #include "kaevent.h"
 #include "kalarmapp.h"

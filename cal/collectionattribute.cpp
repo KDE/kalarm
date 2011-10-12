@@ -29,14 +29,14 @@ namespace KAlarm
 class CollectionAttribute::Private
 {
     public:
-        Private() : mEnabled(KAlarm::CalEvent::EMPTY),
-                    mStandard(KAlarm::CalEvent::EMPTY),
+        Private() : mEnabled(CalEvent::EMPTY),
+                    mStandard(CalEvent::EMPTY),
                     mKeepFormat(false)  {}
 
-        QColor                   mBackgroundColour; // background color for collection and its alarms
-        KAlarm::CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
-        KAlarm::CalEvent::Types  mStandard;         // whether the collection is a standard collection
-        bool                     mKeepFormat;       // whether user has chosen to keep old calendar storage format
+        QColor           mBackgroundColour; // background color for collection and its alarms
+        CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
+        CalEvent::Types  mStandard;         // whether the collection is a standard collection
+        bool             mKeepFormat;       // whether user has chosen to keep old calendar storage format
 };
 
 
@@ -71,12 +71,12 @@ CollectionAttribute* CollectionAttribute::clone() const
     return new CollectionAttribute(*this);
 }
 
-bool CollectionAttribute::isEnabled(KAlarm::CalEvent::Type type) const   
+bool CollectionAttribute::isEnabled(CalEvent::Type type) const   
 {
     return d->mEnabled & type;
 }
 
-KAlarm::CalEvent::Types CollectionAttribute::enabled() const     
+CalEvent::Types CollectionAttribute::enabled() const     
 {
     return d->mEnabled;
 }
@@ -101,48 +101,48 @@ void CollectionAttribute::setEnabled(CalEvent::Type type, bool enabled)
     }
 }
 
-void CollectionAttribute::setEnabled(KAlarm::CalEvent::Types types)
+void CollectionAttribute::setEnabled(CalEvent::Types types)
 {
     d->mEnabled  = types & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
     d->mStandard &= d->mEnabled;
 }
 
-bool CollectionAttribute::isStandard(KAlarm::CalEvent::Type type) const
+bool CollectionAttribute::isStandard(CalEvent::Type type) const
 {
     switch (type)
     {
-        case KAlarm::CalEvent::ACTIVE:
-        case KAlarm::CalEvent::ARCHIVED:
-        case KAlarm::CalEvent::TEMPLATE:
+        case CalEvent::ACTIVE:
+        case CalEvent::ARCHIVED:
+        case CalEvent::TEMPLATE:
             return d->mStandard & type;
         default:
             return false;
     }
 }
 
-KAlarm::CalEvent::Types CollectionAttribute::standard() const     
+CalEvent::Types CollectionAttribute::standard() const     
 {
     return d->mStandard;
 }
 
-void CollectionAttribute::setStandard(KAlarm::CalEvent::Type type, bool standard)
+void CollectionAttribute::setStandard(CalEvent::Type type, bool standard)
 {
     switch (type)
     {
-        case KAlarm::CalEvent::ACTIVE:
-        case KAlarm::CalEvent::ARCHIVED:
-        case KAlarm::CalEvent::TEMPLATE:
+        case CalEvent::ACTIVE:
+        case CalEvent::ARCHIVED:
+        case CalEvent::TEMPLATE:
             if (standard)
-                d->mStandard = static_cast<KAlarm::CalEvent::Types>(d->mStandard | type);
+                d->mStandard = static_cast<CalEvent::Types>(d->mStandard | type);
             else
-                d->mStandard = static_cast<KAlarm::CalEvent::Types>(d->mStandard & ~type);
+                d->mStandard = static_cast<CalEvent::Types>(d->mStandard & ~type);
             break;
         default:
             break;
     }
 }
 
-void CollectionAttribute::setStandard(KAlarm::CalEvent::Types types)
+void CollectionAttribute::setStandard(CalEvent::Types types)
 {
     d->mStandard = types & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
 }
@@ -198,8 +198,8 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     kDebug() << data;
 
     // Set default values
-    d->mEnabled          = KAlarm::CalEvent::EMPTY;
-    d->mStandard         = KAlarm::CalEvent::EMPTY;
+    d->mEnabled          = CalEvent::EMPTY;
+    d->mStandard         = CalEvent::EMPTY;
     d->mBackgroundColour = QColor();
     d->mKeepFormat       = false;
 
@@ -212,24 +212,24 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     {
         // 0: type(s) of alarms for which the collection is enabled
         c[0] = items[index++].toInt(&ok);
-        if (!ok  ||  (c[0] & ~(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED | KAlarm::CalEvent::TEMPLATE)))
+        if (!ok  ||  (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE)))
         {
             kError() << "Invalid alarm types:" << c[0];
             return;
         }
-        d->mEnabled = static_cast<KAlarm::CalEvent::Types>(c[0]);
+        d->mEnabled = static_cast<CalEvent::Types>(c[0]);
     }
     if (count > index)
     {
         // 1: type(s) of alarms for which the collection is the standard collection
         c[0] = items[index++].toInt(&ok);
-        if (!ok  ||  (c[0] & ~KAlarm::CalEvent::ALL))
+        if (!ok  ||  (c[0] & ~CalEvent::ALL))
         {
             kError() << "Invalid alarm types:" << c[0];
             return;
         }
         if (d->mEnabled)
-            d->mStandard = static_cast<KAlarm::CalEvent::Types>(c[0]);
+            d->mStandard = static_cast<CalEvent::Types>(c[0]);
     }
     if (count > index)
     {

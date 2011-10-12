@@ -45,6 +45,8 @@ class AlarmResource;
 class ProgressDialog;
 #endif
 
+using KAlarm::KAEvent;
+
 
 /** Provides read and write access to calendar files and resources.
  *  Either vCalendar or iCalendar files may be read, but the calendar is saved

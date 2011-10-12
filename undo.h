@@ -35,6 +35,7 @@
 class AlarmResource;
 #endif
 class UndoItem;
+using KAlarm::KAEvent;
 
 
 class Undo : public QObject

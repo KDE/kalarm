@@ -1,7 +1,7 @@
 /*
  *  alarmresources.h  -  alarm calendar resources
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on calendarresources.h in libkcal,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -35,6 +35,7 @@ class KConfigGroup;
 namespace KCal { class Event; }
 using KCal::CalendarLocal;
 using KCal::ResourceCalendar;
+using KAlarm::KACalendar;
 
 
 /** Provides access to all alarm calendar resources. */
@@ -108,7 +109,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
         void setCustomEventFunction(void (*f)(AlarmResource*, CalendarLocal*))
                                       { AlarmResource::setCustomEventFunction(f); }
         /** Set a function to fix the calendar once it has been loaded. */
-        void setFixFunction(KAlarm::Calendar::Compat (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType))
+        void setFixFunction(KACalendar::Compat (*f)(CalendarLocal&, const QString&, AlarmResource*, AlarmResource::FixFunc, bool* wrongType))
                                       { AlarmResource::setFixFunction(f); }
 
         /** Add an event to the resource calendar.

@@ -47,6 +47,10 @@ class EditAlarmDlg;
 class ShellProcess;
 class AudioThread;
 
+using KAlarm::KAEvent;
+using KAlarm::KAAlarm;
+using KAlarm::DateTime;
+
 /**
  * MessageWin: A window to display an alarm or error message
  */
@@ -66,7 +70,7 @@ class MessageWin : public MainWindowBase
         ~MessageWin();
         void                repeat(const KAAlarm&);
         void                setRecreating()        { mRecreating = true; }
-        const KAlarm::DateTime& dateTime()         { return mDateTime; }
+        const DateTime&     dateTime()         { return mDateTime; }
         KAAlarm::Type       alarmType() const      { return mAlarmType; }
         bool                hasDefer() const;
         void                showDefer();
@@ -81,7 +85,7 @@ class MessageWin : public MainWindowBase
         static void         redisplayAlarms();
         static void         stopAudio(bool wait = false);
         static bool         isAudioPlaying();
-        static void         showError(const KAEvent&, const KAlarm::DateTime& alarmDateTime, const QStringList& errmsgs,
+        static void         showError(const KAEvent&, const DateTime& alarmDateTime, const QStringList& errmsgs,
                                       const QString& dontShowAgain = QString());
         static bool         spread(bool scatter);
 
@@ -117,7 +121,7 @@ class MessageWin : public MainWindowBase
         void                readProcessOutput(ShellProcess*);
 
     private:
-        MessageWin(const KAEvent*, const KAlarm::DateTime& alarmDateTime, const QStringList& errmsgs,
+        MessageWin(const KAEvent*, const DateTime& alarmDateTime, const QStringList& errmsgs,
                    const QString& dontShowAgain);
         void                initView();
         QString             dateTimeToDisplay();
@@ -150,7 +154,7 @@ class MessageWin : public MainWindowBase
         QString             mMessage;
         QFont               mFont;
         QColor              mBgColour, mFgColour;
-        KAlarm::DateTime    mDateTime;        // date/time displayed in the message window
+        DateTime            mDateTime;        // date/time displayed in the message window
         QDateTime           mCloseTime;       // local time at which window should be auto-closed
 #ifdef USE_AKONADI
         Akonadi::Item::Id   mEventItemId;

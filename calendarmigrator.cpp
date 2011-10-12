@@ -313,10 +313,10 @@ bool CalendarUpdater::update()
     if (mCollection.hasAttribute<CompatibilityAttribute>())
     {
         const CompatibilityAttribute* compatAttr = mCollection.attribute<CompatibilityAttribute>();
-        KAlarm::Calendar::Compat compatibility = compatAttr->compatibility();
-        if ((compatibility & ~KAlarm::Calendar::Converted)
+        KACalendar::Compat compatibility = compatAttr->compatibility();
+        if ((compatibility & ~KACalendar::Converted)
         // The calendar isn't in the current KAlarm format
-        &&  !(compatibility & ~(KAlarm::Calendar::Convertible | KAlarm::Calendar::Converted))
+        &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted))
         // The calendar format is convertible to the current KAlarm format
         &&  (mIgnoreKeepFormat
             || !mCollection.hasAttribute<CollectionAttribute>()
@@ -324,7 +324,7 @@ bool CalendarUpdater::update()
         {
             // The user hasn't previously said not to convert it
             QString versionString = KAlarm::getVersionString(compatAttr->version());
-            QString msg = KAlarm::Calendar::conversionPrompt(mCollection.name(), versionString, false);
+            QString msg = KACalendar::conversionPrompt(mCollection.name(), versionString, false);
             kDebug() << "Version" << versionString;
             if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
                 result = false;   // the user chose not to update the calendar

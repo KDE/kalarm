@@ -35,6 +35,8 @@ class TimeEdit;
 class TimeSpinBox;
 class TimeZoneCombo;
 
+using KAlarm::DateTime;
+
 
 class AlarmTimeWidget : public QFrame
 {
@@ -48,10 +50,10 @@ class AlarmTimeWidget : public QFrame
         AlarmTimeWidget(const QString& groupBoxTitle, Mode, QWidget* parent = 0);
         explicit AlarmTimeWidget(Mode, QWidget* parent = 0);
         KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
-        void             setDateTime(const KAlarm::DateTime&);
+        void             setDateTime(const DateTime&);
         void             setMinDateTimeIsCurrent();
         void             setMinDateTime(const KDateTime& = KDateTime());
-        void             setMaxDateTime(const KAlarm::DateTime& = KAlarm::DateTime());
+        void             setMaxDateTime(const DateTime& = DateTime());
         const KDateTime& maxDateTime() const           { return mMaxDateTime; }
         KDateTime::Spec  timeSpec() const              { return mTimeSpec; }
         void             setReadOnly(bool);

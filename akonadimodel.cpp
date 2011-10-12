@@ -62,11 +62,11 @@
 #include <QTimer>
 
 using namespace Akonadi;
-using KAlarm::DateTime;
 using KAlarm::AlarmText;
 using KAlarm::CollectionAttribute;
 using KAlarm::CompatibilityAttribute;
 using KAlarm::EventAttribute;
+using KAlarm::KARecurrence;
 
 static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
@@ -981,7 +981,7 @@ QString AkonadiModel::tooltip(const Collection& collection, KAlarm::CalEvent::Ty
 */
 QString AkonadiModel::readOnlyTooltip(const Collection& collection)
 {
-    KAlarm::Calendar::Compat compat;
+    KACalendar::Compat compat;
     switch (AkonadiModel::isWritable(collection, compat))
     {
         case 1:
@@ -989,7 +989,7 @@ QString AkonadiModel::readOnlyTooltip(const Collection& collection)
         case 0:
             return i18nc("@info/plain", "Read-only (old format)");
         default:
-            if (compat == KAlarm::Calendar::Current)
+            if (compat == KACalendar::Current)
                 return i18nc("@info/plain", "Read-only");
             return i18nc("@info/plain", "Read-only (other format)");
     }
@@ -1826,7 +1826,7 @@ Collection AkonadiModel::collectionForItem(Item::Id id) const
 bool AkonadiModel::isCompatible(const Collection& collection)
 {
     return collection.hasAttribute<CompatibilityAttribute>()
-       &&  collection.attribute<CompatibilityAttribute>()->compatibility() == KAlarm::Calendar::Current;
+       &&  collection.attribute<CompatibilityAttribute>()->compatibility() == KACalendar::Current;
 }
 
 /******************************************************************************
@@ -1834,20 +1834,20 @@ bool AkonadiModel::isCompatible(const Collection& collection)
 */
 int AkonadiModel::isWritable(const Akonadi::Collection& collection)
 {
-    KAlarm::Calendar::Compat format;
+    KACalendar::Compat format;
     return isWritable(collection, format);
 }
 
-int AkonadiModel::isWritable(const Akonadi::Collection& collection, KAlarm::Calendar::Compat& format)
+int AkonadiModel::isWritable(const Akonadi::Collection& collection, KACalendar::Compat& format)
 {
-    format = KAlarm::Calendar::Incompatible;
+    format = KACalendar::Incompatible;
     if (!collection.isValid())
         return -1;
     Collection col = collection;
     instance()->refresh(col);    // update with latest data
     if ((col.rights() & writableRights) != writableRights)
     {
-        format = KAlarm::Calendar::Current;
+        format = KACalendar::Current;
         return -1;
     }
     if (!col.hasAttribute<CompatibilityAttribute>())
@@ -1855,10 +1855,10 @@ int AkonadiModel::isWritable(const Akonadi::Collection& collection, KAlarm::Cale
     format = col.attribute<CompatibilityAttribute>()->compatibility();
     switch (format)
     {
-        case KAlarm::Calendar::Current:
+        case KACalendar::Current:
             return 1;
-        case KAlarm::Calendar::Converted:
-        case KAlarm::Calendar::Convertible:
+        case KACalendar::Converted:
+        case KACalendar::Convertible:
             return 0;
         default:
             return -1;

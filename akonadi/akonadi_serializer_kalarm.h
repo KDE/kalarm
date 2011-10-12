@@ -1,7 +1,7 @@
 /*
  *  akonadi_serializer_kalarm.h  -  Akonadi resource serializer for KAlarm
  *  Program:  kalarm
- *  Copyright © 2009,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify it
  *  under the terms of the GNU Library General Public License as published by
@@ -30,7 +30,6 @@
 
 #include <QtCore/QObject>
 
-class KAEvent;
 namespace Akonadi { class AbstractDifferencesReporter; }
 
 class SerializerPluginKAlarm : public QObject,

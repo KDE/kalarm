@@ -74,9 +74,9 @@ class Private
 {
     public:
 #ifdef USE_AKONADI
-        static int  readKAlarmVersion(const KCalCore::FileStorage::Ptr&, QString& subVersion, QString& versionString);
+        static int  readKAlarmVersion(const FileStorage::Ptr&, QString& subVersion, QString& versionString);
 #else
-        static int  readKAlarmVersion(KCal::CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
+        static int  readKAlarmVersion(CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
 #endif
         static void insertKAlarmCatalog();
 
@@ -89,17 +89,17 @@ bool       Private::mHaveKAlarmCatalog = false;
 
 
 /*=============================================================================
-* Class: KAlarm::Calendar
+* Class: KAlarm::KACalendar
 *============================================================================*/
 
-const QByteArray Calendar::APPNAME("KALARM");
+const QByteArray KACalendar::APPNAME("KALARM");
 
-void Calendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
+void KACalendar::setProductId(const QByteArray& progName, const QByteArray& progVersion)
 {
     Private::mIcalProductId = QByteArray("-//K Desktop Environment//NONSGML " + progName + " " + progVersion + "//EN");
 }
 
-QByteArray Calendar::icalProductId()
+QByteArray KACalendar::icalProductId()
 {
     return Private::mIcalProductId.isEmpty() ? QByteArray("-//K Desktop Environment//NONSGML  //EN") : Private::mIcalProductId;
 }
@@ -108,12 +108,12 @@ QByteArray Calendar::icalProductId()
 * Set the X-KDE-KALARM-VERSION property in a calendar.
 */
 #ifdef USE_AKONADI
-void Calendar::setKAlarmVersion(const KCalCore::Calendar::Ptr& calendar)
+void KACalendar::setKAlarmVersion(const Calendar::Ptr& calendar)
 {
     calendar->setCustomProperty(APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
 }
 #else
-void Calendar::setKAlarmVersion(CalendarLocal& calendar)
+void KACalendar::setKAlarmVersion(CalendarLocal& calendar)
 {
     calendar.setCustomProperty(APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
 }
@@ -126,9 +126,9 @@ void Calendar::setKAlarmVersion(CalendarLocal& calendar)
 * value.
 */
 #ifdef USE_AKONADI
-int Calendar::updateVersion(const FileStorage::Ptr& fileStorage, QString& versionString)
+int KACalendar::updateVersion(const FileStorage::Ptr& fileStorage, QString& versionString)
 #else
-int Calendar::updateVersion(CalendarLocal& calendar, const QString& localFile, QString& versionString)
+int KACalendar::updateVersion(CalendarLocal& calendar, const QString& localFile, QString& versionString)
 #endif
 {
     QString subVersion;
@@ -177,7 +177,7 @@ int Calendar::updateVersion(CalendarLocal& calendar, const QString& localFile, Q
 * Note: This method is defined here to avoid duplicating the i18n string
 *       definition between the Akonadi and KResources code.
 */
-QString Calendar::conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
+QString KACalendar::conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
 {
     QString msg = whole
                 ? i18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
@@ -207,12 +207,12 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
 {
     subVersion.clear();
 #ifdef USE_AKONADI
-    KCalCore::Calendar::Ptr calendar = fileStorage->calendar();
-    versionString = calendar->customProperty(Calendar::APPNAME, VERSION_PROPERTY);
+    Calendar::Ptr calendar = fileStorage->calendar();
+    versionString = calendar->customProperty(KACalendar::APPNAME, VERSION_PROPERTY);
     kDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
 
 #else
-    versionString = calendar.customProperty(Calendar::APPNAME, VERSION_PROPERTY);
+    versionString = calendar.customProperty(KACalendar::APPNAME, VERSION_PROPERTY);
 #endif
 
     if (versionString.isEmpty())
@@ -444,7 +444,7 @@ CalEvent::Type CalEvent::status(const Event* event, QString* param)
 	if (alarms.isEmpty())
 		return EMPTY;
 
-	const QString property = event->customProperty(Calendar::APPNAME, staticStrings->STATUS_PROPERTY);
+	const QString property = event->customProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
 	if (!property.isEmpty())
 	{
 		// There's a X-KDE-KALARM-TYPE property.
@@ -496,22 +496,22 @@ void CalEvent::setStatus(Event* event, CalEvent::Type status, const QString& par
 		case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
 		case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
 		default:
-			event->removeCustomProperty(Calendar::APPNAME, staticStrings->STATUS_PROPERTY);
+			event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
 			return;
 	}
 	if (!param.isEmpty())
 		text += ';' + param;
-	event->setCustomProperty(Calendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
+	event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
 
 #ifdef USE_AKONADI
 CalEvent::Type CalEvent::type(const QString& mimeType)
 {
-    if (mimeType == KAlarm::MIME_ACTIVE)
+    if (mimeType == MIME_ACTIVE)
         return ACTIVE;
-    if (mimeType == KAlarm::MIME_ARCHIVED)
+    if (mimeType == MIME_ARCHIVED)
         return ARCHIVED;
-    if (mimeType == KAlarm::MIME_TEMPLATE)
+    if (mimeType == MIME_TEMPLATE)
         return TEMPLATE;
     return EMPTY;
 }
@@ -521,11 +521,11 @@ CalEvent::Types CalEvent::types(const QStringList& mimeTypes)
     Types types = 0;
     foreach (const QString& type, mimeTypes)
     {
-        if (type == KAlarm::MIME_ACTIVE)
+        if (type == MIME_ACTIVE)
             types |= ACTIVE;
-        if (type == KAlarm::MIME_ARCHIVED)
+        if (type == MIME_ARCHIVED)
             types |= ARCHIVED;
-        if (type == KAlarm::MIME_TEMPLATE)
+        if (type == MIME_TEMPLATE)
             types |= TEMPLATE;
     }
     return types;
@@ -535,9 +535,9 @@ QString CalEvent::mimeType(CalEvent::Type type)
 {
     switch (type)
     {
-        case ACTIVE:    return KAlarm::MIME_ACTIVE;
-        case ARCHIVED:  return KAlarm::MIME_ARCHIVED;
-        case TEMPLATE:  return KAlarm::MIME_TEMPLATE;
+        case ACTIVE:    return MIME_ACTIVE;
+        case ARCHIVED:  return MIME_ARCHIVED;
+        case TEMPLATE:  return MIME_TEMPLATE;
         default:        return QString();
     }
 }

@@ -31,16 +31,18 @@ namespace Akonadi {
     class Collection;
     class Item;
 }
+using KAlarm::KAEvent;
+using KAlarm::KACalendar;
 
 namespace KAlarmResourceCommon
 {
     void          initialise(QObject* parent);
     QStringList   mimeTypes(const QString& id);
 //    void          customizeConfigDialog(SingleFileResourceConfigDialog<Settings>*);
-    KAlarm::Calendar::Compat getCompatibility(const KCalCore::FileStorage::Ptr&, int& version);
+    KACalendar::Compat getCompatibility(const KCalCore::FileStorage::Ptr&, int& version);
     Akonadi::Item retrieveItem(const Akonadi::Item&, KAEvent&);
     KAEvent       checkItemChanged(const Akonadi::Item&, QString& errorMsg);
-    void          setCollectionCompatibility(const Akonadi::Collection&, KAlarm::Calendar::Compat, int version);
+    void          setCollectionCompatibility(const Akonadi::Collection&, KACalendar::Compat, int version);
 
     enum ErrorCode
     {
