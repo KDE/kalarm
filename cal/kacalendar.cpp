@@ -234,7 +234,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
             QFileInfo fi(localFile);
 #endif
             if (!fi.size())
-                return CurrentFormat;
+                return KACalendar::CurrentFormat;
         }
 
         // Find the KAlarm identifier
@@ -248,7 +248,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
             progname = QString(" ") + i18n("KAlarm") + ' ';
             i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
             if (i < 0)
-                return IncompatibleFormat;    // calendar wasn't created by KAlarm
+                return KACalendar::IncompatibleFormat;    // calendar wasn't created by KAlarm
         }
 
         // Extract the KAlarm version string
@@ -258,14 +258,14 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
         if (j >= 0  &&  j < i)
             i = j;
         if (i <= 0)
-            return IncompatibleFormat;    // missing version string
+            return KACalendar::IncompatibleFormat;    // missing version string
         versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
     }
     if (versionString == KAEvent::currentCalendarVersionString())
-        return CurrentFormat;      // the calendar is in the current KAlarm format
+        return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
     int ver = KAlarm::getVersionNumber(versionString, &subVersion);
     if (ver == KAEvent::currentCalendarVersion())
-        return CurrentFormat;      // the calendar is in the current KAlarm format
+        return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
     return KAlarm::getVersionNumber(versionString, &subVersion);
 }
 

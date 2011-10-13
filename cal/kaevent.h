@@ -63,6 +63,8 @@ namespace KAlarm
 {
 
 /**
+ * @short KAAlarm represents individual alarms within a KAEvent.
+ *
  * The KAAlarm class represents one of the main or subsidiary alarms in
  * a KAEvent instance. It contains the alarm's type and trigger time.
  *
@@ -70,6 +72,8 @@ namespace KAlarm
  * class.
  *
  * @see KAEvent::alarm(), KAEvent::firstAlarm(), KAEvent::nextAlarm().
+ *
+ * @author David Jarvie <djarvie@kde.org>
  */
 class KALARM_CAL_EXPORT KAAlarm
 {
@@ -182,7 +186,26 @@ class KALARM_CAL_EXPORT KAAlarm
 };
 
 
-/** KAEvent corresponds to a KCal::Event instance */
+/**
+ * @short KAEvent represents a KAlarm event
+ *
+ * KAEvent represents a KAlarm event. An event contains a main alarm together
+ * with optional subsidiary alarms such as reminders and deferrals. Individual
+ * alarms are represented by the KAAlarm class. KAEvent includes the complete
+ * definition of the event including recurrence information, and also holds
+ * current status information such as the next due occurrence and command
+ * execution error status. It provides methods to set and get the event
+ * properties, to defer the alarm, to convert it for storage in the displaying
+ * calendar.
+ *
+ * Methods which act globally or on multiple KAEvent instances include
+ * convertKCalEvents() which converts events stored in an older KAlarm
+ * calendar format to the current format; setStartOfDay() and adjustStartOfDay()
+ * which set a new start-of-day time for date-only alarms; setHolidays()
+ * and setWorkTime() which set holiday region and working days/hours.
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
 class KALARM_CAL_EXPORT KAEvent
 {
     public:
@@ -754,6 +777,8 @@ class KALARM_CAL_EXPORT KAEvent
          *  @param reminder         true if deferring a reminder alarm
          *  @param adjustRecurrence if true, ensure that the next scheduled recurrence is
          *                          after the current time.
+         *
+         *  @see cancelDefer()
          */
         void defer(const DateTime& dt, bool reminder, bool adjustRecurrence = false);
 

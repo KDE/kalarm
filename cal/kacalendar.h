@@ -45,16 +45,6 @@ namespace KCal {
 }
 #endif
 
-namespace KAlarm {
-// Special calendar storage format version codes.
-// Positive version values are actual KAlarm format version numbers.
-static const int CurrentFormat      = 0;    // current KAlarm format
-static const int IncompatibleFormat = -1;   // not written by KAlarm, or a newer KAlarm version
-#ifdef USE_AKONADI
-static const int MixedFormat        = -2;   // calendar may contain more than one version
-#endif
-}
-
 namespace KAlarm
 {
 
@@ -65,17 +55,26 @@ extern const QLatin1String KALARM_CAL_EXPORT MIME_ARCHIVED;  //!< The mime type 
 extern const QLatin1String KALARM_CAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
 #endif
 
+/**
+ * @short Class representing type attributes of a KAlarm event.
+ *
+ * CalEvent provides methods to manipulate a KAEvent UID according to its category
+ * (active, archived or template). It also provides methods to access KAEvent
+ * mime types.
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
 class KALARM_CAL_EXPORT CalEvent
 {
     public:
         /** The category of an event, indicated by the middle part of its UID. */
         enum Type
         {
-            EMPTY      = 0,       // the event has no alarms
-            ACTIVE     = 0x01,    // the event is currently active
-            ARCHIVED   = 0x02,    // the event is archived
-            TEMPLATE   = 0x04,    // the event is an alarm template
-            DISPLAYING = 0x08     // the event is currently being displayed
+            EMPTY      = 0,       //!< the event has no alarms
+            ACTIVE     = 0x01,    //!< the event is currently active
+            ARCHIVED   = 0x02,    //!< the event is archived
+            TEMPLATE   = 0x04,    //!< the event is an alarm template
+            DISPLAYING = 0x08     //!< the event is currently being displayed
         };
         Q_DECLARE_FLAGS(Types, Type)
         /** All main event categories (ACTIVE, ARCHIVE and TEMPLATE only). */
@@ -102,6 +101,16 @@ class KALARM_CAL_EXPORT CalEvent
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
+
+/**
+ * @short Class representing attributes of a KAlarm calendar.
+ *
+ * KACalendar provides methods to check and convert the KAlarm calendar format
+ * version, and to get and set the iCalendar product ID (which contains the
+ * identity of the application which wrote the calendar).
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
 class KALARM_CAL_EXPORT KACalendar
 {
     public:
@@ -109,24 +118,36 @@ class KALARM_CAL_EXPORT KACalendar
         /** Compatibility of resource backend calendar format. */
         enum Compatibility
         {
-            Unknown      = 0,               // format not determined
-            Current      = 0x02,            // in current KAlarm format
-            Converted    = Current | 0x01,  // in current KAlarm format, but not yet saved
-            Convertible  = 0x04,            // in an older KAlarm format
-            Incompatible = 0x08             // not written by KAlarm, or in a newer KAlarm version
+            Unknown      = 0,               //!< format not determined
+            Current      = 0x02,            //!< in current KAlarm format
+            Converted    = Current | 0x01,  //!< in current KAlarm format, but not yet saved
+            Convertible  = 0x04,            //!< in an older KAlarm format
+            Incompatible = 0x08             //!< not written by KAlarm, or in a newer KAlarm version
         };
         Q_DECLARE_FLAGS(Compat, Compatibility)
 #else
         /** Compatibility of resource calendar format. */
         enum Compat
         {
-            Current,       // in current KAlarm format
-            Converted,     // in current KAlarm format, but not yet saved
-            Convertible,   // in an older KAlarm format
-            Incompatible,  // not written by KAlarm, or in a newer KAlarm version
-            ByEvent        // individual events have their own compatibility status
+            Current,       //!< in current KAlarm format
+            Converted,     //!< in current KAlarm format, but not yet saved
+            Convertible,   //!< in an older KAlarm format
+            Incompatible,  //!< not written by KAlarm, or in a newer KAlarm version
+            ByEvent        //!< individual events have their own compatibility status
         };
 #endif
+
+        /** Special calendar storage format version codes.
+         *  Positive version values are actual KAlarm format version numbers.
+         */
+        enum
+        {
+            CurrentFormat      = 0,    //!< current KAlarm format
+#ifdef USE_AKONADI
+            MixedFormat        = -2,   //!< calendar may contain more than one version
+#endif
+            IncompatibleFormat = -1    //!< not written by KAlarm, or a newer KAlarm version
+        };
 
         /** Check the version of KAlarm which wrote a calendar file, and convert
          *  it in memory to the current KAlarm format if possible. The storage

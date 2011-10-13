@@ -44,7 +44,7 @@ using KAlarm::KAEvent;
 KAlarmResource::KAlarmResource(const QString& id)
     : ICalResourceBase(id),
       mCompatibility(KACalendar::Incompatible),
-      mVersion(KAlarm::MixedFormat)
+      mVersion(KACalendar::MixedFormat)
 {
     kDebug() << id;
     KAlarmResourceCommon::initialise(this);

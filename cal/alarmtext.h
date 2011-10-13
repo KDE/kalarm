@@ -41,10 +41,11 @@ class KAEvent;
 /**
  * @short Parses email, todo and script alarm texts.
  *
- * Parses email, todo and script texts, enabling drag and drop of these items
- * to be recognised and interpreted.
+ * This class parses email, todo and script texts, enabling drag and drop of
+ * these items to be recognised and interpreted. It also holds plain alarm
+ * texts.
  *
- * - Email texts should contain headers (To, From, etc.) in normal RFC format.
+ * - Email texts must contain headers (To, From, etc.) in normal RFC format.
  * - Todos should be in iCalendar format.
  * - Scripts are assumed if the alarm text starts with '#!'.
  *
@@ -54,7 +55,12 @@ class KAEvent;
 class KALARM_CAL_EXPORT AlarmText
 {
     public:
+        /** Constructor which sets the alarm text.
+         *  If @p text starts with '#!', it is flagged as a script, else plain text.
+         *  @param text alarm text to set.
+         */
         explicit AlarmText(const QString& text = QString());
+
         AlarmText(const AlarmText& other);
         ~AlarmText();
         AlarmText& operator=(const AlarmText& other);
@@ -63,16 +69,32 @@ class KALARM_CAL_EXPORT AlarmText
          *  If @p text starts with '#!', it is flagged as a script, else plain text.
          */
         void setText(const QString& text);
-        /** Set the instance contents to be a script. */
+
+        /** Set the instance contents to be a script.
+         *  @param text text of script to set
+         */
         void setScript(const QString& text);
-        /** Set the instance contents to be an email. */
+
+        /** Set the instance contents to be an email.
+         *  @param to      'To' header parameter
+         *  @param from    'From' header parameter
+         *  @param cc      'Cc' header parameter
+         *  @param time    'Date' header parameter
+         *  @param subject 'Subject' header parameter
+         *  @param body    email body text
+         */
         void setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
                       const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
+
 #ifdef USE_AKONADI
-        /** Set the instance contents to be a todo. */
+        /** Set the instance contents to be a todo.
+         *  @param todo Todo instance to set as the text
+         */
         void setTodo(const KCalCore::Todo::Ptr& todo);
 #else
-        /** Set the instance contents to be a todo. */
+        /** Set the instance contents to be a todo.
+         *  @param todo Todo instance to set as the text
+         */
         void setTodo(const KCal::Todo* todo);
 #endif
 

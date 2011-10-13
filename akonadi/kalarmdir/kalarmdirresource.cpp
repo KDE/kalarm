@@ -350,7 +350,7 @@ kDebug()<<"Monitored changed";
             if (ok)
             {
                 mCompatibility = KACalendar::Current;
-                mVersion       = KAlarm::CurrentFormat;
+                mVersion       = KACalendar::CurrentFormat;
                 const Collection c(mCollectionId);
                 if (c.isValid())
                     KAlarmResourceCommon::setCollectionCompatibility(c, mCompatibility, mVersion);
@@ -1107,7 +1107,7 @@ void KAlarmDirResource::setCompatibility(bool writeAttr)
                 break;
         }
     }
-    mVersion = (mCompatibility == KACalendar::Current) ? KAlarm::CurrentFormat : KAlarm::MixedFormat;
+    mVersion = (mCompatibility == KACalendar::Current) ? KACalendar::CurrentFormat : KACalendar::MixedFormat;
     if (writeAttr  &&  (mCompatibility != oldCompatibility || mVersion != oldVersion))
     {
         const Collection c(mCollectionId);

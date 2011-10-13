@@ -32,7 +32,7 @@ class CompatibilityAttribute::Private
     public:
         Private()
             : mCompatibility(KACalendar::Incompatible),
-              mVersion(IncompatibleFormat)
+              mVersion(KACalendar::IncompatibleFormat)
             {}
 
         KACalendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
@@ -115,7 +115,7 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
 
     // Set default values
     d->mCompatibility = KACalendar::Incompatible;
-    d->mVersion       = IncompatibleFormat;
+    d->mVersion       = KACalendar::IncompatibleFormat;
 
     bool ok;
     const QList<QByteArray> items = data.simplified().split(' ');

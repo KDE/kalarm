@@ -2245,7 +2245,7 @@ KACalendar::Compat fix(const FileStorage::Ptr& fileStorage)
 {
     QString versionString;
     int version = KACalendar::updateVersion(fileStorage, versionString);
-    if (version == KAlarm::IncompatibleFormat)
+    if (version == KACalendar::IncompatibleFormat)
         return KACalendar::Incompatible;  // calendar was created by another program, or an unknown version of KAlarm
     return KACalendar::Current;
 }
