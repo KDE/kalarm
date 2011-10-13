@@ -37,8 +37,8 @@ namespace KAlarm
  * @short An Attribute for a KAlarm Collection containing various status information.
  *
  * This class represents an Akonadi attribute of a KAlarm Collection. It contains
- * information on the enabled status, the mime types allowed in the resource,
- * which mime types the resource is the standard Collection for, etc.
+ * information on the enabled status, the alarm types allowed in the resource,
+ * which alarm types the resource is the standard Collection for, etc.
  *
  * The attribute is maintained by client applications.
  *
@@ -60,44 +60,67 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
 
         virtual ~CollectionAttribute();
 
-        /** Return whether the collection is enabled for a specified mime type. */
+        /** Return whether the collection is enabled for a specified alarm type
+         *  (active, archived, template or displaying).
+         *  @param type  alarm type to check for.
+         */
         bool isEnabled(CalEvent::Type type) const;
 
-        /** Return which mime types the collection is enabled for. */
+        /** Return which alarm types (active, archived, template or displaying)
+         *  the collection is enabled for. */
         CalEvent::Types enabled() const;
 
-        /** Set the enabled/disabled state of the collection and its alarms, for a
-         *  specified alarm type. The enabled/disabled state for other alarm types
-         *  is not affected.
-         *  The alarms of that type in a disabled collection are ignored, and not
-         *  displayed in the alarm list. The standard status for that type for
-         *  a disabled collection is automatically cleared.
+        /** Set the enabled/disabled state of the collection and its alarms,
+         *  for a specified alarm type (active, archived, template or
+         *  displaying). The enabled/disabled state for other alarm types is
+         *  not affected.
+         *  The alarms of that type in a disabled collection are ignored, and
+         *  not displayed in the alarm list. The standard status for that type
+         *  for a disabled collection is automatically cleared.
+         *  @param type     alarm type
+         *  @param enabled  true to set enabled, false to set disabled.
          */
-        void setEnabled(CalEvent::Type, bool enabled);
+        void setEnabled(CalEvent::Type type, bool enabled);
 
-        /** Set which mime types the collection enabled for. */
-        void setEnabled(CalEvent::Types);
+        /** Set which alarm types (active, archived, template or displaying)
+         *  the collection is enabled for.
+         *  @param types  alarm types
+         */
+        void setEnabled(CalEvent::Types types);
 
         /** Return whether the collection is the standard collection for a specified
-         *  mime type. */
-        bool isStandard(CalEvent::Type) const;
+         *  alarm type (active, archived, template or displaying).
+         *  @param type  alarm type
+         */
+        bool isStandard(CalEvent::Type type) const;
 
         /** Set or clear the collection as the standard collection for a specified
-         *  mime type. */
+         *  alarm type (active, archived, template or displaying).
+         *  @param type      alarm type
+         *  @param standard  true to set as standard, false to clear standard status.
+         */
         void setStandard(CalEvent::Type, bool standard);
 
-        /** Return which mime types the collection is standard for. */
+        /** Return which alarm types (active, archived, template or displaying)
+         *  the collection is standard for.
+         *  @return alarm types.
+         */
         CalEvent::Types standard() const;
 
-        /** Set which mime types the collection is the standard collection for. */
-        void setStandard(CalEvent::Types);
+        /** Set which alarm types (active, archived, template or displaying)
+         *  the collection is the standard collection for.
+         *  @param types  alarm types.
+         */
+        void setStandard(CalEvent::Types types);
 
         /** Return the background color to display this collection and its alarms,
          *  or invalid color if none is set.
          */
         QColor backgroundColor() const;
 
-        /** Set the background color for this collection and its alarms. */
+        /** Set the background color for this collection and its alarms.
+         *  @param c  background color
+         */
         void setBackgroundColor(const QColor& c);
 
         /** Return whether the user has chosen to keep the old calendar storage
@@ -105,7 +128,9 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
          */
         bool keepFormat() const;
 
-        /** Set whether to keep the old calendar storage format unchanged. */
+        /** Set whether to keep the old calendar storage format unchanged.
+         *  @param keep  true to keep format unchanged, false to allow changes.
+         */
         void setKeepFormat(bool keep);
 
         /** Reimplemented from Attribute */
