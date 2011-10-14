@@ -31,8 +31,7 @@ namespace Akonadi {
     class Collection;
     class Item;
 }
-using KAlarm::KAEvent;
-using KAlarm::KACalendar;
+using namespace KAlarm;
 
 namespace KAlarmResourceCommon
 {

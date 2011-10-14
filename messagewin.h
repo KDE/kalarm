@@ -47,9 +47,7 @@ class EditAlarmDlg;
 class ShellProcess;
 class AudioThread;
 
-using KAlarm::KAEvent;
-using KAlarm::KAAlarm;
-using KAlarm::DateTime;
+using namespace KAlarm;
 
 /**
  * MessageWin: A window to display an alarm or error message

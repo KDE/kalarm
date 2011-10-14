@@ -62,11 +62,7 @@
 #include <QTimer>
 
 using namespace Akonadi;
-using KAlarm::AlarmText;
-using KAlarm::CollectionAttribute;
-using KAlarm::CompatibilityAttribute;
-using KAlarm::EventAttribute;
-using KAlarm::KARecurrence;
+using namespace KAlarm;
 
 static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
@@ -234,7 +230,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 break;
             }
             case Qt::ToolTipRole:
-                return tooltip(collection, KAlarm::CalEvent::ALL);
+                return tooltip(collection, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
             case AlarmTypeRole:
                 return static_cast<int>(types(collection));
             case IsStandardRole:

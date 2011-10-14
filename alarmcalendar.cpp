@@ -697,7 +697,7 @@ void AlarmCalendar::slotCollectionStatusChanged(const Collection& collection, Ak
         // For each alarm type which has been disabled, remove the collection's
         // events from the map, but not from AkonadiModel.
         KAlarm::CalEvent::Types enabled = static_cast<KAlarm::CalEvent::Types>(value.toInt());
-        KAlarm::CalEvent::Types disabled = ~enabled & KAlarm::CalEvent::ALL;
+        KAlarm::CalEvent::Types disabled = ~enabled & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
         removeKAEvents(collection.id(), false, disabled);
     }
 }

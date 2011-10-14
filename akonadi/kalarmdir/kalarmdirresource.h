@@ -27,8 +27,7 @@
 #include <QHash>
 
 namespace Akonadi_KAlarm_Dir_Resource { class Settings; }
-using KAlarm::KAEvent;
-using KAlarm::KACalendar;
+using namespace KAlarm;
 
 class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBase::Observer
 {

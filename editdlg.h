@@ -55,10 +55,7 @@ class ShellProcess;
 class StackedScrollGroup;
 class TimeSpinBox;
 
-using KAlarm::KAEvent;
-using KAlarm::AlarmText;
-using KAlarm::DateTime;
-using KAlarm::KARecurrence;
+using namespace KAlarm;
 
 
 class EditAlarmDlg : public KDialog

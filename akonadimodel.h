@@ -39,9 +39,7 @@ class QPixmap;
 class KJob;
 class CalendarMigrator;
 
-using KAlarm::KAEvent;
-using KAlarm::KACalendar;
-using KAlarm::DateTime;
+using namespace KAlarm;
 
 
 class AkonadiModel : public Akonadi::EntityTreeModel

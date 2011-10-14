@@ -35,7 +35,7 @@
 #include <QtCore/qplugin.h>
 
 using namespace Akonadi;
-using KAlarm::KACalendar;
+using namespace KAlarm;
 
 
 // Convert from backend data stream to a KAEvent, and set it into the item's payload.

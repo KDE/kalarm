@@ -39,8 +39,7 @@
 #include <QObject>
 
 using namespace Akonadi;
-using KAlarm::CollectionAttribute;
-using KAlarm::CompatibilityAttribute;
+using namespace KAlarm;
 
 static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
@@ -694,7 +693,7 @@ void CollectionControlModel::setEnabled(const Collection& collection, KAlarm::Ca
     KAlarm::CalEvent::Types alarmTypes = !col.hasAttribute<CollectionAttribute>() ? KAlarm::CalEvent::EMPTY
                                          : col.attribute<CollectionAttribute>()->enabled();
     if (enabled)
-        alarmTypes |= static_cast<KAlarm::CalEvent::Types>(types & KAlarm::CalEvent::ALL);
+        alarmTypes |= static_cast<KAlarm::CalEvent::Types>(types & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE));
     else
         alarmTypes &= ~types;
     instance()->statusChanged(collection, AkonadiModel::Enabled, static_cast<int>(alarmTypes), false);

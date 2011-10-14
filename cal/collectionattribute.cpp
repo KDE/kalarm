@@ -223,7 +223,7 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     {
         // 1: type(s) of alarms for which the collection is the standard collection
         c[0] = items[index++].toInt(&ok);
-        if (!ok  ||  (c[0] & ~CalEvent::ALL))
+        if (!ok  ||  (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE)))
         {
             kError() << "Invalid alarm types:" << c[0];
             return;

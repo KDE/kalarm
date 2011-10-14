@@ -45,7 +45,7 @@ class AlarmResource;
 class ProgressDialog;
 #endif
 
-using KAlarm::KAEvent;
+using namespace KAlarm;
 
 
 /** Provides read and write access to calendar files and resources.
@@ -179,7 +179,7 @@ class AlarmCalendar : public QObject
         KAlarm::CalEvent::Type deleteEventInternal(const QString& eventID, const KAEvent& = KAEvent(),
                                                    const Akonadi::Collection& = Akonadi::Collection(), bool deleteFromAkonadi = true);
         void                  updateKAEvents(const Akonadi::Collection&);
-        void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false, KAlarm::CalEvent::Types = KAlarm::CalEvent::ALL);
+        void                  removeKAEvents(Akonadi::Collection::Id, bool closing = false, KAlarm::CalEvent::Types = CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
         void                  findEarliestAlarm(const Akonadi::Collection&);
         void                  findEarliestAlarm(Akonadi::Collection::Id);  //deprecated
 #else
