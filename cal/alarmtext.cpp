@@ -23,7 +23,7 @@
 
 #include "kaevent.h"
 
-#ifndef USE_AKONADI
+#ifdef USE_KRESOURCES
 #include <kcal/todo.h>
 #endif
 #include <klocale.h>
@@ -145,7 +145,7 @@ void AlarmText::setEmail(const QString& to, const QString& from, const QString& 
     d->mKMailSerialNum = kmailSerialNumber;
 }
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 void AlarmText::setTodo(const KCalCore::Todo::Ptr& todo)
 #else
 void AlarmText::setTodo(const KCal::Todo* todo)

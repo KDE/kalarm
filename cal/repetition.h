@@ -23,7 +23,7 @@
 #define KALARM_REPETITION_H
 
 #include "kalarm_cal_export.h"
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 #include <kcalcore/duration.h>
 #else
 #include <kcal/duration.h>
@@ -51,7 +51,7 @@ class KALARM_CAL_EXPORT Repetition
          */
         Repetition();
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Constructor.
          *  Initialises with the specified @p interval and @p count.
          */
@@ -69,7 +69,7 @@ class KALARM_CAL_EXPORT Repetition
 
         Repetition& operator=(const Repetition& other);
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Initialises the instance with the specified @p interval and @p count. */
         void set(const KCalCore::Duration& interval, int count);
 #else
@@ -77,7 +77,7 @@ class KALARM_CAL_EXPORT Repetition
         void set(const KCal::Duration& interval, int count);
 #endif
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Sets the @p interval. The repetition count is unchanged unless
          *  The repetition count is set to zero if @p interval is zero; otherwise
          *  the repetition count is unchanged.
@@ -107,7 +107,7 @@ class KALARM_CAL_EXPORT Repetition
         /** Return the number of repetitions. */
         int count() const;
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Return the interval between repetitions. */
         const KCalCore::Duration& interval() const;
 

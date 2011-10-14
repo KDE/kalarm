@@ -22,7 +22,7 @@
 #include "repetition.h"
 #include <kdatetime.h>
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 using namespace KCalCore;
 #else
 using namespace KCal;

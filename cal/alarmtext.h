@@ -24,7 +24,7 @@
 
 #include "kalarm_cal_export.h"
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 #include <kcalcore/todo.h>
 #else
 namespace KCal { class Todo; }
@@ -86,7 +86,7 @@ class KALARM_CAL_EXPORT AlarmText
         void setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
                       const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Set the instance contents to be a todo.
          *  @param todo Todo instance to set as the text
          */

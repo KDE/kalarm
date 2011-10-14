@@ -20,7 +20,7 @@
 
 #include "karecurrence.h"
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 #include <kcalcore/recurrence.h>
 #include <kcalcore/icalformat.h>
 #else
@@ -34,7 +34,7 @@
 #include <QBitArray>
 
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 using namespace KCalCore;
 #else
 using namespace KCal;

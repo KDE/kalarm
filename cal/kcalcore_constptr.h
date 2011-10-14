@@ -21,7 +21,7 @@
 #ifndef KCALCORE_CONSTPTR_H
 #define KCALCORE_CONSTPTR_H
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 
 #include <QSharedPointer>
 #include <kcalcore/event.h>
@@ -76,7 +76,7 @@ typedef QSharedPointer<const KCalCore::Person>  ConstPersonPtr;
 
 } // namespace KCalCore
 
-#endif // USE_AKONADI
+#endif // USE_KRESOURCES
 #endif // KCALCORE_CONSTPTR_H
 
 // vim: et sw=4:

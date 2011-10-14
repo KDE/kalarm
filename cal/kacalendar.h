@@ -23,7 +23,7 @@
 #define KALARM_KACALENDAR_H
 
 #include "kalarm_cal_export.h"
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 #include "kcalcore_constptr.h"
 #include <kcalcore/filestorage.h>
 #include <kcalcore/calendar.h>
@@ -33,7 +33,7 @@
 #include <QByteArray>
 #include <QStringList>
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 namespace KCalCore {
   class Alarm;
 }
@@ -48,7 +48,7 @@ namespace KCal {
 namespace KAlarm
 {
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 extern const QLatin1String KALARM_CAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
 extern const QLatin1String KALARM_CAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
 extern const QLatin1String KALARM_CAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
@@ -81,7 +81,7 @@ class KALARM_CAL_EXPORT CalEvent
         static const Types ALL;
 
         static QString uid(const QString& id, Type);
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         static Type    status(const KCalCore::ConstEventPtr&, QString* param = 0);
         static void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
 
@@ -114,7 +114,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 class KALARM_CAL_EXPORT KACalendar
 {
     public:
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Compatibility of resource backend calendar format. */
         enum Compatibility
         {
@@ -143,7 +143,7 @@ class KALARM_CAL_EXPORT KACalendar
         enum
         {
             CurrentFormat      = 0,    //!< current KAlarm format
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
             MixedFormat        = -2,   //!< calendar may contain more than one version
 #endif
             IncompatibleFormat = -1    //!< not written by KAlarm, or a newer KAlarm version
@@ -162,7 +162,7 @@ class KALARM_CAL_EXPORT KACalendar
                                        unknown KAlarm format;
          *          >0 the older KAlarm version which wrote the calendar
          */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         static int updateVersion(const KCalCore::FileStorage::Ptr&, QString& versionString);
 #else
         static int updateVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
@@ -175,7 +175,7 @@ class KALARM_CAL_EXPORT KACalendar
          */
         static QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Set the KAlarm version custom property for a calendar. */
         static void setKAlarmVersion(const KCalCore::Calendar::Ptr&);
 #else

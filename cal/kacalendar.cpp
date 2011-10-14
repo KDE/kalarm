@@ -24,7 +24,7 @@
 #include "kaevent.h"
 #include "version.h"
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 #include "collectionattribute.h"
 
 #include <kcalcore/event.h>
@@ -47,7 +47,7 @@
 #include <QFileInfo>
 #include <QTextStream>
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 using namespace KCalCore;
 using Akonadi::Collection;
 #else
@@ -58,7 +58,7 @@ using namespace KCal;
 namespace KAlarm
 {
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 const QLatin1String MIME_BASE("application/x-vnd.kde.alarm");
 const QLatin1String MIME_ACTIVE("application/x-vnd.kde.alarm.active");
 const QLatin1String MIME_ARCHIVED("application/x-vnd.kde.alarm.archived");
@@ -73,7 +73,7 @@ static bool isUTC(const QString& localFile);
 class Private
 {
     public:
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         static int  readKAlarmVersion(const FileStorage::Ptr&, QString& subVersion, QString& versionString);
 #else
         static int  readKAlarmVersion(CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
@@ -107,7 +107,7 @@ QByteArray KACalendar::icalProductId()
 /******************************************************************************
 * Set the X-KDE-KALARM-VERSION property in a calendar.
 */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 void KACalendar::setKAlarmVersion(const Calendar::Ptr& calendar)
 {
     calendar->setCustomProperty(APPNAME, VERSION_PROPERTY, QString::fromLatin1(KAEvent::currentCalendarVersionString()));
@@ -125,14 +125,14 @@ void KACalendar::setKAlarmVersion(CalendarLocal& calendar)
 * updated. The compatibility of the calendar format is indicated by the return
 * value.
 */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 int KACalendar::updateVersion(const FileStorage::Ptr& fileStorage, QString& versionString)
 #else
 int KACalendar::updateVersion(CalendarLocal& calendar, const QString& localFile, QString& versionString)
 #endif
 {
     QString subVersion;
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
     int version = Private::readKAlarmVersion(fileStorage, subVersion, versionString);
 #else
     int version = Private::readKAlarmVersion(calendar, localFile, subVersion, versionString);
@@ -144,7 +144,7 @@ int KACalendar::updateVersion(CalendarLocal& calendar, const QString& localFile,
 
     // Calendar was created by an earlier version of KAlarm.
     // Convert it to the current format.
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
     const QString localFile = fileStorage->fileName();
 #endif
     int ver = version;
@@ -160,7 +160,7 @@ int KACalendar::updateVersion(CalendarLocal& calendar, const QString& localFile,
         kDebug() << "KAlarm version" << version;
 
     // Convert events to current KAlarm format for when/if the calendar is saved
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
     KAEvent::convertKCalEvents(fileStorage->calendar(), ver);
 #else
     KAEvent::convertKCalEvents(calendar, ver);
@@ -199,14 +199,14 @@ QString KACalendar::conversionPrompt(const QString& calendarName, const QString&
 *       = IncompatibleFormat if it was created by KAlarm pre-0.3.5, or another program
 *       = version number if created by another KAlarm version.
 */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 int Private::readKAlarmVersion(const FileStorage::Ptr& fileStorage, QString& subVersion, QString& versionString)
 #else
 int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile, QString& subVersion, QString& versionString)
 #endif
 {
     subVersion.clear();
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
     Calendar::Ptr calendar = fileStorage->calendar();
     versionString = calendar->customProperty(KACalendar::APPNAME, VERSION_PROPERTY);
     kDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
@@ -219,7 +219,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
     {
         // Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.
         // If another application has written to the file, this may not be present.
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         const QString prodid = calendar->productId();
 #else
         const QString prodid = calendar.productId();
@@ -228,7 +228,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
         {
             // Check whether the calendar file is empty, in which case
             // it can be written to freely.
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
             QFileInfo fi(fileStorage->fileName());
 #else
             QFileInfo fi(localFile);
@@ -419,7 +419,7 @@ QString CalEvent::uid(const QString& id, Type status)
 * triggered. They will be archived once KAlarm tries to handle them.
 * Do not call this function for the displaying alarm calendar.
 */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 CalEvent::Type CalEvent::status(const ConstEventPtr& event, QString* param)
 #else
 CalEvent::Type CalEvent::status(const Event* event, QString* param)
@@ -480,7 +480,7 @@ CalEvent::Type CalEvent::status(const Event* event, QString* param)
 * If a parameter is supplied, it will be appended as a second parameter to the
 * custom property.
 */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 void CalEvent::setStatus(const Event::Ptr& event, CalEvent::Type status, const QString& param)
 #else
 void CalEvent::setStatus(Event* event, CalEvent::Type status, const QString& param)
@@ -504,7 +504,7 @@ void CalEvent::setStatus(Event* event, CalEvent::Type status, const QString& par
 	event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 CalEvent::Type CalEvent::type(const QString& mimeType)
 {
     if (mimeType == MIME_ACTIVE)

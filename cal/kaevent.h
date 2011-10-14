@@ -29,7 +29,7 @@
 #include "kacalendar.h"
 #include "repetition.h"
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
 #include "kcalcore_constptr.h"
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
@@ -43,14 +43,14 @@
 #include <QColor>
 #include <QFont>
 #include <QVector>
-#ifndef USE_AKONADI
+#ifdef USE_KRESOURCES
 #include <QList>
 #endif
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QMetaType>
 
 namespace KHolidays { class HolidayRegion; }
-#ifndef USE_AKONADI
+#ifdef USE_KRESOURCES
 namespace KCal {
     class CalendarLocal;
     class Event;
@@ -343,7 +343,7 @@ class KALARM_CAL_EXPORT KAEvent
          */
         KAEvent(const KDateTime&, const QString& text, const QColor& bg, const QColor& fg,
                 const QFont& f, SubAction, int lateCancel, Flags flags, bool changesPending = false);
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Construct an event and initialise it from a KCalCore::Event. */
         explicit KAEvent(const KCalCore::ConstEventPtr&);
 
@@ -383,7 +383,7 @@ class KALARM_CAL_EXPORT KAEvent
                  const QColor& fg, const QFont& font, SubAction action, int lateCancel,
                  Flags flags, bool changesPending = false);
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Update an existing KCalCore::Event with the KAEvent data.
          *  @param event  Event to update.
          *  @param u      how to deal with the Event's UID.
@@ -410,7 +410,7 @@ class KALARM_CAL_EXPORT KAEvent
         /** Return the enabled status of the alarm. */
         bool enabled() const;
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Set the read-only status of the alarm. */
         void setReadOnly(bool ro);
         /** Return the read-only status of the alarm. */
@@ -456,7 +456,7 @@ class KALARM_CAL_EXPORT KAEvent
         /** Return the revision number of the event (SEQUENCE property in iCalendar). */
         int revision() const;
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Set the ID of the Akonadi Item which contains the event. */
         void setItemId(Akonadi::Item::Id id);
         /** Return the ID of the Akonadi Item which contains the event. */
@@ -561,7 +561,7 @@ class KALARM_CAL_EXPORT KAEvent
         bool commandXterm() const;
         /** Return whether the command output is to be displayed in an alarm message window. */
         bool commandDisplay() const;
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Set or clear the command execution error for the last time the alarm triggered. */
         void setCommandError(CmdErrType error) const;
 #else
@@ -594,7 +594,7 @@ class KALARM_CAL_EXPORT KAEvent
         bool copyToKOrganizer() const;
 
         /** Set the email related data for the event. */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         void setEmail(uint from, const KCalCore::Person::List&, const QString& subject,
                       const QStringList& attachments);
 #else
@@ -613,7 +613,7 @@ class KALARM_CAL_EXPORT KAEvent
         uint emailFromId() const;
 
         /** Return the list of email addressees, including names, for an email alarm. */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         KCalCore::Person::List emailAddressees() const;
 #else
         QList<KCal::Person> emailAddressees() const;
@@ -628,7 +628,7 @@ class KALARM_CAL_EXPORT KAEvent
         QString emailAddresses(const QString& sep) const;
 
         /** Concatenate a list of email addresses into a string. */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         static QString joinEmailAddresses(const KCalCore::Person::List& addresses, const QString& separator);
 #else
         static QString joinEmailAddresses(const QList<KCal::Person>& addresses, const QString& separator);
@@ -1020,7 +1020,7 @@ class KALARM_CAL_EXPORT KAEvent
         int recurInterval() const;
 
         /** Return the longest interval which can occur between consecutive recurrences. */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         KCalCore::Duration longestRecurrenceInterval() const;
 #else
         KCal::Duration longestRecurrenceInterval() const;
@@ -1094,13 +1094,13 @@ class KALARM_CAL_EXPORT KAEvent
          *  saved in case their end time expires before the next login.
          *  @return true if successful, false if alarm was not copied.
          */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         bool setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer);
 #else
         bool setDisplaying(const KAEvent& e, KAAlarm::Type t, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
 #endif
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Reinstate the original event from the 'displaying' event.
          *  This instance is initialised from the supplied displaying @p event,
          *  and appropriate adjustments are made to convert it back to the
@@ -1189,13 +1189,13 @@ class KALARM_CAL_EXPORT KAEvent
          *                          which does not require the adjustment.
          *  @return true if any conversions were done.
          */
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         static bool convertKCalEvents(const KCalCore::Calendar::Ptr&, int calendarVersion);
 #else
         static bool convertKCalEvents(KCal::CalendarLocal&, int calendarVersion);
 #endif
 
-#ifdef USE_AKONADI
+#ifndef USE_KRESOURCES
         /** Return a list of pointers to a list of KAEvent objects. */
         static List ptrList(QVector<KAEvent>& events);
 #endif
