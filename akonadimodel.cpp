@@ -1570,7 +1570,8 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             setCollectionChanged(collection, attrs, true);
             emit collectionAdded(collection);
 
-            if (!mCollectionsBeingCreated.contains(collection.remoteId()))
+            if (!mCollectionsBeingCreated.contains(collection.remoteId())
+            &&  (collection.rights() & writableRights) == writableRights)
             {
                 // Update to current KAlarm format if necessary, and if the user agrees
                 CalendarMigrator::updateToCurrentFormat(collection, false, MainWindow::mainMainWindow());

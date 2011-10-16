@@ -674,10 +674,14 @@ void CalendarCreator::collectionFetchResult(KJob* j)
             Q_ASSERT(0); // Invalid resource type
             break;
     }
-    CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, false, true, this);
-    bool updated = updater->update();   // note that 'updater' will auto-delete when finished
+    bool keep = false;
+    if (!mReadOnly)
+    {
+        CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, false, true, this);
+        keep = !updater->update();   // note that 'updater' will auto-delete when finished
+    }
     // Record the user's choice of whether to update the calendar
-    attr->setKeepFormat(!updated);
+    attr->setKeepFormat(keep);
 
     // Update the collection's attributes in the Akonadi database
     CollectionModifyJob* cmjob = new CollectionModifyJob(collection, this);
