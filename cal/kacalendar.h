@@ -56,50 +56,6 @@ extern const QLatin1String KALARM_CAL_EXPORT MIME_TEMPLATE;  //!< The mime type 
 #endif
 
 /**
- * @short Class representing type attributes of a KAlarm event.
- *
- * CalEvent provides methods to manipulate a KAEvent UID according to its category
- * (active, archived or template). It also provides methods to access KAEvent
- * mime types.
- *
- * @author David Jarvie <djarvie@kde.org>
- */
-namespace CalEvent
-{
-    /** The category of an event, indicated by the middle part of its UID. */
-    enum Type
-    {
-        EMPTY      = 0,       //!< the event has no alarms
-        ACTIVE     = 0x01,    //!< the event is currently active
-        ARCHIVED   = 0x02,    //!< the event is archived
-        TEMPLATE   = 0x04,    //!< the event is an alarm template
-        DISPLAYING = 0x08     //!< the event is currently being displayed
-    };
-    Q_DECLARE_FLAGS(Types, Type)
-
-    KALARM_CAL_EXPORT QString uid(const QString& id, Type);
-#ifndef USE_KRESOURCES
-    KALARM_CAL_EXPORT Type    status(const KCalCore::ConstEventPtr&, QString* param = 0);
-    KALARM_CAL_EXPORT void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
-
-    /** Return the alarm Type for a mime type string. */
-    KALARM_CAL_EXPORT Type    type(const QString& mimeType);
-    /** Return the alarm Types for a list of mime type strings. */
-    KALARM_CAL_EXPORT Types   types(const QStringList& mimeTypes);
-    /** Return the mime type string corresponding to an alarm Type. */
-    KALARM_CAL_EXPORT QString mimeType(Type);
-    /** Return the mime type strings corresponding to alarm Types. */
-    KALARM_CAL_EXPORT QStringList mimeTypes(Types);
-#else
-    KALARM_CAL_EXPORT Type    status(const KCal::Event*, QString* param = 0);
-    KALARM_CAL_EXPORT void    setStatus(KCal::Event*, Type, const QString& param = QString());
-#endif
-} // namespace CalEvent
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
-
-
-/**
  * @short Class representing attributes of a KAlarm calendar.
  *
  * KACalendar provides methods to check and convert the KAlarm calendar format
@@ -188,6 +144,50 @@ namespace KACalendar
 
     extern const QByteArray APPNAME;    //!< The application name ("KALARM") used in calendar properties
 } // namespace KACalendar
+
+
+/**
+ * @short Class representing type attributes of a KAlarm event.
+ *
+ * CalEvent provides methods to manipulate a KAEvent UID according to its category
+ * (active, archived or template). It also provides methods to access KAEvent
+ * mime types.
+ *
+ * @author David Jarvie <djarvie@kde.org>
+ */
+namespace CalEvent
+{
+    /** The category of an event, indicated by the middle part of its UID. */
+    enum Type
+    {
+        EMPTY      = 0,       //!< the event has no alarms
+        ACTIVE     = 0x01,    //!< the event is currently active
+        ARCHIVED   = 0x02,    //!< the event is archived
+        TEMPLATE   = 0x04,    //!< the event is an alarm template
+        DISPLAYING = 0x08     //!< the event is currently being displayed
+    };
+    Q_DECLARE_FLAGS(Types, Type)
+
+    KALARM_CAL_EXPORT QString uid(const QString& id, Type);
+#ifndef USE_KRESOURCES
+    KALARM_CAL_EXPORT Type    status(const KCalCore::ConstEventPtr&, QString* param = 0);
+    KALARM_CAL_EXPORT void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
+
+    /** Return the alarm Type for a mime type string. */
+    KALARM_CAL_EXPORT Type    type(const QString& mimeType);
+    /** Return the alarm Types for a list of mime type strings. */
+    KALARM_CAL_EXPORT Types   types(const QStringList& mimeTypes);
+    /** Return the mime type string corresponding to an alarm Type. */
+    KALARM_CAL_EXPORT QString mimeType(Type);
+    /** Return the mime type strings corresponding to alarm Types. */
+    KALARM_CAL_EXPORT QStringList mimeTypes(Types);
+#else
+    KALARM_CAL_EXPORT Type    status(const KCal::Event*, QString* param = 0);
+    KALARM_CAL_EXPORT void    setStatus(KCal::Event*, Type, const QString& param = QString());
+#endif
+} // namespace CalEvent
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
 } // namespace KAlarm
 
