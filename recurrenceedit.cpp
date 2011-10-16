@@ -341,6 +341,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
         vlayout->setMargin(0);
         hlayout->addLayout(vlayout);
         mExceptionDateEdit = new KDateComboBox(mExceptionGroup);
+        mExceptionDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
         mExceptionDateEdit->setDate(KDateTime::currentLocalDate());
         mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
               "Enter a date to insert in the exceptions list. "
