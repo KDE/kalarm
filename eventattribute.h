@@ -28,7 +28,7 @@
 
 #include <akonadi/attribute.h>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**
@@ -78,7 +78,7 @@ class KALARM_CAL_EXPORT EventAttribute : public Akonadi::Attribute
         //@endcond
 };
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // KALARM_EVENT_ATTRIBUTE_H
 

@@ -24,7 +24,7 @@
 #include <QList>
 #include <QByteArray>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 class EventAttribute::Private
@@ -113,6 +113,6 @@ void EventAttribute::deserialize(const QByteArray& data)
     }
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

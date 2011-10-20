@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 
@@ -146,6 +146,6 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
     }
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

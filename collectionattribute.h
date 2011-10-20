@@ -30,7 +30,7 @@
 
 #include <QColor>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**
@@ -152,7 +152,7 @@ class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
         //@endcond
 };
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // KALARM_COLLECTION_ATTRIBUTE_H
 

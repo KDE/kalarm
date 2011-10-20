@@ -27,7 +27,7 @@
 
 #include <akonadi/attribute.h>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**
@@ -64,12 +64,12 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
         void setCompatibility(KACalendar::Compat c);
 
         /** Return the KAlarm version of the backend calendar format.
-         *  @return version number in the format returned by KAlarm::Version().
+         *  @return version number in the format returned by KAlarmCal::Version().
          */
         int version() const;
 
         /** Set the KAlarm version of the backend calendar format.
-         *  @param v  version number in the format returned by KAlarm::Version().
+         *  @param v  version number in the format returned by KAlarmCal::Version().
          */
         void setVersion(int v);
 
@@ -92,7 +92,7 @@ class KALARM_CAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
         //@endcond
 };
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // KALARM_COMPATIBILITY_ATTRIBUTE_H
 

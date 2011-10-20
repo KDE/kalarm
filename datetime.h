@@ -25,7 +25,7 @@
 
 #include <kdatetime.h>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**
@@ -211,10 +211,10 @@ class KALARM_CAL_EXPORT DateTime
         /** Compare this value with another. */
         KDateTime::Comparison compare(const DateTime &other) const;
 
-        KALARM_CAL_EXPORT friend bool operator==(const KAlarm::DateTime& dt1, const KAlarm::DateTime& dt2);
-        KALARM_CAL_EXPORT friend bool operator==(const KDateTime& dt1, const KAlarm::DateTime& dt2);
-        KALARM_CAL_EXPORT friend bool operator<(const KAlarm::DateTime& dt1, const KAlarm::DateTime& dt2);
-        friend bool operator<(const KDateTime& dt1, const KAlarm::DateTime& dt2);
+        KALARM_CAL_EXPORT friend bool operator==(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
+        KALARM_CAL_EXPORT friend bool operator==(const KDateTime& dt1, const KAlarmCal::DateTime& dt2);
+        KALARM_CAL_EXPORT friend bool operator<(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
+        friend bool operator<(const KDateTime& dt1, const KAlarmCal::DateTime& dt2);
 
     private:
         //@cond PRIVATE
@@ -259,7 +259,7 @@ inline bool operator>=(const KDateTime& dt1, const DateTime& dt2)  { return !ope
 inline bool operator<=(const DateTime& dt1, const DateTime& dt2)   { return !operator<(dt2, dt1); }
 inline bool operator<=(const KDateTime& dt1, const DateTime& dt2)  { return !operator<(dt2, DateTime(dt1)); }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // KALARM_DATETIME_H
 

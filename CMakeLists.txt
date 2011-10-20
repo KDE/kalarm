@@ -11,6 +11,9 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 
 # KALARM_USE_KRESOURCES - builds to use KResources instead of Akonadi
 option(KALARM_USE_KRESOURCES "Build to use KResources" OFF)
+if (KDEPIM_NO_KRESOURCES)
+    set(KALARM_USE_KRESOURCES OFF CACHE BOOL "Build to use KResources")
+endif (KDEPIM_NO_KRESOURCES)
 
 ########### next target ###############
 set(kalarmcal_LIB_SRCS
@@ -35,16 +38,20 @@ kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 
 if(KALARM_USE_KRESOURCES)
     target_link_libraries(kalarmcal
-		          ${KDEPIMLIBS_KCAL_LIBS}
-			  ${KDEPIMLIBS_KPIMIDENTITIES_LIBS}
-			  ${KDEPIMLIBS_KHOLIDAYS_LIBS}
+		          kcal
+                          kholidays
+                          kpimidentities
+			  ${KDE4_KDECORE_LIBS}
+			  ${QT_QTCORE_LIBRARY}
 			 )
 else(KALARM_USE_KRESOURCES)
     target_link_libraries(kalarmcal
-		          ${KDEPIMLIBS_AKONADI_LIBS}
-			  ${KDEPIMLIBS_KCALCORE_LIBS}
-			  ${KDEPIMLIBS_KPIMIDENTITIES_LIBS}
-			  ${KDEPIMLIBS_KHOLIDAYS_LIBS}
+                          akonadi-kde
+                          kcalcore
+                          kholidays
+                          kpimidentities
+			  ${KDE4_KDECORE_LIBS}
+			  ${QT_QTCORE_LIBRARY}
 			 )
 endif(KALARM_USE_KRESOURCES)
 

@@ -40,7 +40,7 @@ using namespace KCalCore;
 using namespace KCal;
 #endif
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 class Recurrence_p : public Recurrence
@@ -1293,6 +1293,6 @@ bool KARecurrence::dailyType(const RecurrenceRule* rrule)
     return found;
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

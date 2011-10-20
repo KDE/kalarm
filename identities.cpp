@@ -27,7 +27,7 @@
 
 static KPIMIdentities::IdentityManager* mIdentityManager = 0;
 
-namespace KAlarm
+namespace KAlarmCal
 {
 namespace Identities
 {
@@ -73,6 +73,6 @@ uint identityUoid(const QString& identityUoidOrName)
 
 } // namespace Identities
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

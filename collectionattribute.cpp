@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 class CollectionAttribute::Private
@@ -264,6 +264,6 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     }
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

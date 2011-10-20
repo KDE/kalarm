@@ -23,7 +23,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 class DateTime::Private
@@ -385,6 +385,6 @@ bool operator<(const DateTime& dt1, const DateTime& dt2)
     return dt1.d->mDateTime < dt2.d->mDateTime;
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

@@ -30,7 +30,7 @@
 #include <kglobal.h>
 #include <QStringList>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 class AlarmText::Private
@@ -571,6 +571,6 @@ QString AlarmText::Private::todoTitle(const QString& text)
     return QString();
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

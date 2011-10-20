@@ -31,7 +31,7 @@
 
 class KDateTime;
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**
@@ -166,7 +166,7 @@ class KALARM_CAL_EXPORT Repetition
         //@endcond
 };
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // KALARM_REPETITION_H
 

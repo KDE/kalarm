@@ -50,7 +50,7 @@ using namespace KCal;
 #endif
 using namespace KHolidays;
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 #ifndef USE_KRESOURCES
@@ -6383,6 +6383,6 @@ QString reminderToString(int minutes)
         return QString("%1%2").arg(count).arg(unit);
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

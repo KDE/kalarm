@@ -55,7 +55,7 @@ using namespace KCal;
 #endif
 
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 #ifndef USE_KRESOURCES
@@ -147,7 +147,7 @@ int updateVersion(CalendarLocal& calendar, const QString& localFile, QString& ve
     const QString localFile = fileStorage->fileName();
 #endif
     int ver = version;
-    if (version == KAlarm::Version(0,5,7)  &&  !localFile.isEmpty())
+    if (version == KAlarmCal::Version(0,5,7)  &&  !localFile.isEmpty())
     {
         // KAlarm version 0.5.7 - check whether times are stored in UTC, in which
         // case it is the KDE 3.0.0 version, which needs adjustment of summer times.
@@ -264,10 +264,10 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
     }
     if (versionString == KAEvent::currentCalendarVersionString())
         return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
-    int ver = KAlarm::getVersionNumber(versionString, &subVersion);
+    int ver = KAlarmCal::getVersionNumber(versionString, &subVersion);
     if (ver == KAEvent::currentCalendarVersion())
         return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
-    return KAlarm::getVersionNumber(versionString, &subVersion);
+    return KAlarmCal::getVersionNumber(versionString, &subVersion);
 }
 
 /******************************************************************************
@@ -557,6 +557,6 @@ QStringList mimeTypes(Types types)
 
 } // namespace CalEvent
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

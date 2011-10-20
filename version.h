@@ -24,7 +24,7 @@
 #include "kalarm_cal_export.h"
 #include <QString>
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /** Return a specified version as an integer. */

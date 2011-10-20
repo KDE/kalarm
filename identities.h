@@ -28,7 +28,7 @@ class QString;
 
 namespace KPIMIdentities { class IdentityManager; }
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**

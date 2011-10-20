@@ -59,7 +59,7 @@ class AlarmResource;
 #endif
 class AlarmData;
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**
@@ -1168,7 +1168,7 @@ class KALARM_CAL_EXPORT KAEvent
         void endChanges();
 
         /** Return the current KAlarm calendar storage format version.
-         *  @return version in the format returned by KAlarm::Version().
+         *  @return version in the format returned by KAlarmCal::Version().
          */
         static int currentCalendarVersion();
 
@@ -1182,7 +1182,7 @@ class KALARM_CAL_EXPORT KAEvent
          *  is saved, no information is lost or corrupted.
          *  @param calendar         calendar whose events are to be converted.
          *  @param calendarVersion  KAlarm calendar format version of @p calendar, in the
-         *                          format returned by KAlarm::Version(). The KDE 3.0.0
+         *                          format returned by KAlarmCal::Version(). The KDE 3.0.0
          *                          version 0.5.7 requires a special adjustment for
          *                          summer time and should be passed negated (-507) to
          *                          distinguish it from the KDE 3.0.1 version 0.5.7
@@ -1208,10 +1208,10 @@ class KALARM_CAL_EXPORT KAEvent
         QSharedDataPointer<Private> d;
 };
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarm::KAEvent::Flags)
-Q_DECLARE_METATYPE(KAlarm::KAEvent)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KAlarmCal::KAEvent::Flags)
+Q_DECLARE_METATYPE(KAlarmCal::KAEvent)
 
 #endif // KAEVENT_H
 

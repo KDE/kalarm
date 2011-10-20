@@ -28,7 +28,7 @@ using namespace KCalCore;
 using namespace KCal;
 #endif
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 class Repetition::Private
@@ -165,6 +165,6 @@ int Repetition::previousRepeatCount(const KDateTime& from, const KDateTime& afte
          : static_cast<int>((from.secsTo_long(afterDateTime) - 1) / d->mInterval.asSeconds());
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

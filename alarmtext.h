@@ -33,7 +33,7 @@ namespace KCal { class Todo; }
 
 class QStringList;
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 class KAEvent;
@@ -204,7 +204,7 @@ class KALARM_CAL_EXPORT AlarmText
         //@endcond
 };
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // ALARMTEXT_H
 

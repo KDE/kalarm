@@ -33,7 +33,7 @@ namespace KCalCore { class Recurrence; }
 namespace KCal { class Recurrence; }
 #endif
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /**
@@ -509,7 +509,7 @@ class KALARM_CAL_EXPORT KARecurrence
         //@endcond
 };
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // KALARM_RECURRENCE_H
 

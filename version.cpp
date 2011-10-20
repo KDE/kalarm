@@ -20,7 +20,7 @@
 
 #include "version.h"
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 /******************************************************************************
@@ -68,6 +68,6 @@ QString getVersionString(int version)
     return QString("%1.%2.%3").arg(version/10000).arg((version%10000)/100).arg(version%100);
 }
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 // vim: et sw=4:

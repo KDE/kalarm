@@ -45,7 +45,7 @@ namespace KCal {
 }
 #endif
 
-namespace KAlarm
+namespace KAlarmCal
 {
 
 #ifndef USE_KRESOURCES
@@ -189,7 +189,7 @@ namespace CalEvent
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)
 
-} // namespace KAlarm
+} // namespace KAlarmCal
 
 #endif // KALARM_KACALENDAR_H
 
