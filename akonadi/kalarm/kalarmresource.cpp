@@ -22,8 +22,9 @@
 #include "kalarmresource.h"
 #include "kalarmresourcecommon.h"
 #include "alarmtyperadiowidget.h"
-#include "kacalendar.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kacalendar.h>
+#include <kalarmcal/kaevent.h>
 
 #include <akonadi/agentfactory.h>
 #include <akonadi/attributefactory.h>
@@ -37,8 +38,8 @@
 
 using namespace Akonadi;
 using namespace Akonadi_KAlarm_Resource;
+using namespace KAlarmCal;
 using KAlarmResourceCommon::errorMessage;
-using KAlarm::KAEvent;
 
 
 KAlarmResource::KAlarmResource(const QString& id)
@@ -64,22 +65,22 @@ void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settin
     ICalResourceBase::customizeConfigDialog(dlg);
     mTypeSelector = new AlarmTypeRadioWidget(dlg);
     QStringList types = mSettings->alarmTypes();
-    KAlarm::CalEvent::Type alarmType = KAlarm::CalEvent::ACTIVE;
+    CalEvent::Type alarmType = CalEvent::ACTIVE;
     if (!types.isEmpty())
-        alarmType = KAlarm::CalEvent::type(types[0]);
+        alarmType = CalEvent::type(types[0]);
     mTypeSelector->setAlarmType(alarmType);
     dlg->appendWidget(mTypeSelector);
     dlg->setMonitorEnabled(false);
     QString title;
     switch (alarmType)
     {
-        case KAlarm::CalEvent::ACTIVE:
+        case CalEvent::ACTIVE:
             title = i18nc("@title:window", "Select Active Alarm Calendar");
             break;
-        case KAlarm::CalEvent::ARCHIVED:
+        case CalEvent::ARCHIVED:
             title = i18nc("@title:window", "Select Archived Alarm Calendar");
             break;
-        case KAlarm::CalEvent::TEMPLATE:
+        case CalEvent::TEMPLATE:
             title = i18nc("@title:window", "Select Alarm Template Calendar");
             break;
         default:
@@ -93,7 +94,7 @@ void KAlarmResource::customizeConfigDialog(SingleFileResourceConfigDialog<Settin
 */
 void KAlarmResource::configDialogAcceptedActions(SingleFileResourceConfigDialog<Settings>*)
 {
-    mSettings->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mTypeSelector->alarmType()));
+    mSettings->setAlarmTypes(CalEvent::mimeTypes(mTypeSelector->alarmType()));
     mSettings->writeConfig();
 }
 
@@ -172,7 +173,7 @@ bool KAlarmResource::doRetrieveItem(const Akonadi::Item& item, const QSet<QByteA
     }
 
     KAEvent event(kcalEvent);
-    QString mime = KAlarm::CalEvent::mimeType(event.category());
+    QString mime = CalEvent::mimeType(event.category());
     if (mime.isEmpty())
     {
         kWarning() << "KAEvent has no alarms:" << rid;
@@ -344,7 +345,7 @@ void KAlarmResource::doRetrieveItems(const Akonadi::Collection& collection)
         }
 
         KAEvent event(kcalEvent);
-        QString mime = KAlarm::CalEvent::mimeType(event.category());
+        QString mime = CalEvent::mimeType(event.category());
         if (mime.isEmpty())
         {
             kWarning() << "KAEvent has no alarms:" << event.id();

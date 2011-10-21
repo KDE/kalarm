@@ -22,11 +22,13 @@
 #define ITEMLISTMODEL_H
 
 #include "akonadimodel.h"
-#include "kacalendar.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kacalendar.h>
+#include <kalarmcal/kaevent.h>
 
 #include <akonadi/entitymimetypefiltermodel.h>
 
+using namespace KAlarmCal;
 
 /*=============================================================================
 = Class: ItemListModel
@@ -40,9 +42,9 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         /** Constructor.
          *  @param allowed the alarm types (active/archived/template) included in this model
          */
-        explicit ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent = 0);
+        explicit ItemListModel(CalEvent::Types allowed, QObject* parent = 0);
 
-        KAlarm::CalEvent::Types includedTypes() const  { return mAllowedTypes; }
+        CalEvent::Types includedTypes() const  { return mAllowedTypes; }
         KAEvent      event(int row) const;
         KAEvent      event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
@@ -71,7 +73,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         void collectionStatusChanged(const Akonadi::Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted);
 
     private:
-        KAlarm::CalEvent::Types mAllowedTypes; // types of events allowed in this model
+        CalEvent::Types mAllowedTypes; // types of events allowed in this model
         bool                    mHaveEvents;   // there are events in this model
 };
 
@@ -101,12 +103,12 @@ class AlarmListModel : public ItemListModel
          *  specified in the constructor.
          *  @param types the event types to be included in the model
          */
-        void setEventTypeFilter(KAlarm::CalEvent::Types types);
+        void setEventTypeFilter(CalEvent::Types types);
 
         /** Return the filter set by setEventTypeFilter().
          *  @return all event types included in the model
          */
-        KAlarm::CalEvent::Types eventTypeFilter() const   { return mFilterTypes; }
+        CalEvent::Types eventTypeFilter() const   { return mFilterTypes; }
 
         virtual int  columnCount(const QModelIndex& = QModelIndex()) const  { return ColumnCount; }
         virtual QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
@@ -118,7 +120,7 @@ class AlarmListModel : public ItemListModel
     private:
         static AlarmListModel* mAllInstance;
 
-        KAlarm::CalEvent::Types mFilterTypes;  // types of events contained in this model
+        CalEvent::Types mFilterTypes;  // types of events contained in this model
 };
 
 

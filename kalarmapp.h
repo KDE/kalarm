@@ -23,9 +23,10 @@
 
 /** @file kalarmapp.h - the KAlarm application object */
 
-#include "kaevent.h"
 #include "kamail.h"
 #include "preferences.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <kuniqueapplication.h>
 
@@ -44,9 +45,7 @@ class TrayWindow;
 class ShellProcess;
 class OrgKdeKSpeechInterface;
 
-using KAlarm::KAEvent;
-using KAlarm::KAAlarm;
-using KAlarm::KARecurrence;
+using namespace KAlarmCal;
 
 
 class KAlarmApp : public KUniqueApplication

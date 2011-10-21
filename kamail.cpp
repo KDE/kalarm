@@ -22,11 +22,12 @@
 #include "kamail.h"
 
 #include "functions.h"
-#include "identities.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
+
+#include <kalarmcal/identities.h>
 
 #include <kpimidentities/identitymanager.h>
 #include <kpimidentities/identity.h>
@@ -116,7 +117,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         jobdata.from = Preferences::emailAddress();
     else
     {
-        identity = KAlarm::Identities::identityManager()->identityForUoid(jobdata.event.emailFromId());
+        identity = Identities::identityManager()->identityForUoid(jobdata.event.emailFromId());
         if (identity.isNull())
         {
             kError() << "Identity" << jobdata.event.emailFromId() << "not found";

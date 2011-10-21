@@ -19,9 +19,10 @@
  */
 
 #include "kaeventformatter.h"
-#include "kacalendar.h"
-#include "kaevent.h"
-#include "datetime.h"
+
+#include <kalarmcal/kacalendar.h>
+#include <kalarmcal/kaevent.h>
+#include <kalarmcal/datetime.h>
 
 #include <kcalutils/incidenceformatter.h>
 
@@ -214,9 +215,9 @@ QString KAEventFormatter::value(Parameter param) const
         case AlarmCategory:
             switch (mEvent.category())
             {
-                case KAlarm::CalEvent::ACTIVE:    return i18nc("@info/plain Alarm type", "Active");
-                case KAlarm::CalEvent::ARCHIVED:  return i18nc("@info/plain Alarm type", "Archived");
-                case KAlarm::CalEvent::TEMPLATE:  return i18nc("@info/plain Alarm type", "Template");
+                case CalEvent::ACTIVE:    return i18nc("@info/plain Alarm type", "Active");
+                case CalEvent::ARCHIVED:  return i18nc("@info/plain Alarm type", "Archived");
+                case CalEvent::TEMPLATE:  return i18nc("@info/plain Alarm type", "Template");
                 default:
                     break;
             }

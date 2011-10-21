@@ -24,8 +24,9 @@
 /** @file messagewin.h - displays an alarm message */
 
 #include "autoqpointer.h"
-#include "kaevent.h"
 #include "mainwindowbase.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
@@ -47,7 +48,7 @@ class EditAlarmDlg;
 class ShellProcess;
 class AudioThread;
 
-using namespace KAlarm;
+using namespace KAlarmCal;
 
 /**
  * MessageWin: A window to display an alarm or error message

@@ -21,10 +21,15 @@
 #ifndef EDITDLGTYPES_H
 #define EDITDLGTYPES_H
 
-#include "alarmtext.h"
 #include "editdlg.h"
-#include "kaevent.h"
 #include "preferences.h"
+
+#include <kalarmcal/alarmtext.h>
+#include <kalarmcal/kaevent.h>
+
+#ifndef USE_AKONADI
+#include <kcal/person.h>
+#endif
 
 #include <kurl.h>
 

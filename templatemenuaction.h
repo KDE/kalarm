@@ -24,7 +24,7 @@
 #include <kactionmenu.h>
 #include <QMap>
 class QAction;
-namespace KAlarm { class KAEvent; }
+namespace KAlarmCal { class KAEvent; }
 
 class TemplateMenuAction : public KActionMenu
 {

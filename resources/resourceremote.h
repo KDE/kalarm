@@ -1,7 +1,7 @@
 /*
  *  resourceremote.h  -  KAlarm remote alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on resourceremote.h in kresources,
  *  Copyright (c) 2003 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -51,7 +51,7 @@ class KALARM_RESOURCES_EXPORT KAResourceRemote : public AlarmResource
         /** Create remote resource.
          *  @param downloadUrl URL used to download iCalendar file
          *  @param uploadUrl   URL used to upload iCalendar file. */
-        KAResourceRemote(KAlarm::CalEvent::Type, const KUrl& downloadUrl, const KUrl& uploadUrl = KUrl());
+        KAResourceRemote(CalEvent::Type, const KUrl& downloadUrl, const KUrl& uploadUrl = KUrl());
         virtual ~KAResourceRemote();
         bool         setUrls(const KUrl& downloadUrl, const KUrl& uploadUrl);
         KUrl         downloadUrl() const                { return mDownloadUrl; }

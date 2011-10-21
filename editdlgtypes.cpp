@@ -29,7 +29,6 @@
 #include "emailidcombo.h"
 #include "fontcolourbutton.h"
 #include "functions.h"
-#include "identities.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "latecancel.h"
@@ -46,6 +45,8 @@
 #include "specialactions.h"
 #include "templatepickdlg.h"
 #include "timespinbox.h"
+
+#include <kalarmcal/identities.h>
 
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #ifdef USE_AKONADI
@@ -74,6 +75,8 @@ using namespace KCal;
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
 #include <QStandardItemModel>
+
+using namespace KAlarmCal;
 
 enum { tTEXT, tFILE, tCOMMAND };  // order of mTypeCombo items
 
@@ -1064,7 +1067,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
         label->setFixedSize(label->sizeHint());
         grid->addWidget(label, 0, 0);
 
-        mEmailFromList = new EmailIdCombo(KAlarm::Identities::identityManager(), parent);
+        mEmailFromList = new EmailIdCombo(Identities::identityManager(), parent);
         mEmailFromList->setMinimumSize(mEmailFromList->sizeHint());
         label->setBuddy(mEmailFromList);
         mEmailFromList->setWhatsThis(i18nc("@info:whatsthis", "Your email identity, used to identify you as the sender when sending email alarms."));

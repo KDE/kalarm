@@ -22,8 +22,9 @@
 #define COMMANDOPTIONS_H
 
 #include "editdlg.h"
-#include "kaevent.h"
-#include "karecurrence.h"
+
+#include <kalarmcal/kaevent.h>
+#include <kalarmcal/karecurrence.h>
 
 #include <kdatetime.h>
 #include <QByteArray>
@@ -31,7 +32,7 @@
 #include <QStringList>
 class KCmdLineArgs;
 
-using KAlarm::KARecurrence;
+using namespace KAlarmCal;
 
 class CommandOptions
 {

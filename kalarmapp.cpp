@@ -25,7 +25,6 @@
 #include "alarmlistview.h"
 #include "autoqpointer.h"
 #include "commandoptions.h"
-#include "datetime.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
 #ifdef USE_AKONADI
@@ -35,7 +34,6 @@
 #endif
 #include "functions.h"
 #include "kamail.h"
-#include "karecurrence.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "messagewin.h"
@@ -46,6 +44,9 @@
 #include "traywindow.h"
 
 #include "kspeechinterface.h"
+
+#include <kalarmcal/datetime.h>
+#include <kalarmcal/karecurrence.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -1041,7 +1042,7 @@ bool KAlarmApp::wantShowInSystemTray() const
 void KAlarmApp::purgeNewArchivedDefault(const Akonadi::Collection& collection)
 {
     Akonadi::Collection col(collection);
-    if (CollectionControlModel::isStandard(col, KAlarm::CalEvent::ARCHIVED))
+    if (CollectionControlModel::isStandard(col, CalEvent::ARCHIVED))
     {
         // Allow time (1 minute) for AkonadiModel to be populated with the
         // collection's events before purging it.
@@ -1181,7 +1182,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
         event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
     event.setRecurrence(recurrence);
     event.setFirstRecurrence();
-    event.setRepetition(KAlarm::Repetition(repeatInterval, repeatCount - 1));
+    event.setRepetition(Repetition(repeatInterval, repeatCount - 1));
     event.endChanges();
     if (alarmTime <= now)
     {

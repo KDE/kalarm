@@ -28,10 +28,8 @@
 #include "alarmtimewidget.h"
 #include "checkbox.h"
 #include "combobox.h"
-#include "kaevent.h"
 #include "kalarmapp.h"
 #include "kalocale.h"
-#include "karecurrence.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "repetitionbutton.h"
@@ -39,6 +37,9 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 #include "buttongroup.h"
+
+#include <kalarmcal/kaevent.h>
+#include <kalarmcal/karecurrence.h>
 
 #ifdef USE_AKONADI
 #include <kcalcore/event.h>

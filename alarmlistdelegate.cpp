@@ -1,7 +1,7 @@
 /*
  *  alarmlistdelegate.cpp  -  handles editing and display of alarm list
  *  Program:  kalarm
- *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@
 #include "kalarm.h"
 #include "alarmlistdelegate.moc"
 
-#include "kacalendar.h"
 #ifdef USE_AKONADI
 #include "akonadimodel.h"
 #define ITEM_LIST_MODEL AlarmListModel
@@ -30,6 +29,8 @@
 #define ITEM_LIST_MODEL EventListModel
 #endif
 #include "functions.h"
+
+#include <kalarmcal/kacalendar.h>
 
 #include <kcolorscheme.h>
 #include <kdebug.h>

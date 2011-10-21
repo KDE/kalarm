@@ -22,12 +22,13 @@
 #ifndef KALARMDIRRESOURCE_H
 #define KALARMDIRRESOURCE_H
 
-#include "kaevent.h"
+#include <kalarmcal/kaevent.h>
+
 #include <akonadi/resourcebase.h>
 #include <QHash>
 
 namespace Akonadi_KAlarm_Dir_Resource { class Settings; }
-using namespace KAlarm;
+using namespace KAlarmCal;
 
 class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBase::Observer
 {
@@ -62,7 +63,7 @@ class KAlarmDirResource : public Akonadi::ResourceBase, public Akonadi::AgentBas
         void    jobDone(KJob*);
 
     private:
-        void   changeAlarmTypes(KAlarm::CalEvent::Types removed);
+        void   changeAlarmTypes(CalEvent::Types removed);
         bool    loadFiles(bool sync);
         KAEvent loadFile(const QString& path, const QString& file);
         KAEvent loadNextFile(const QString& eventId, const QString& file);

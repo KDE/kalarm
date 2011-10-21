@@ -22,8 +22,9 @@
 
 #include "alarmcalendar.h"
 #include "functions.h"
-#include "kaevent.h"
 #include "templatemenuaction.moc"
+
+#include <kalarmcal/kaevent.h>
 
 #include <kmenu.h>
 #include <kactionmenu.h>

@@ -42,6 +42,8 @@
 #include <QList>
 #endif
 
+using namespace KAlarmCal;
+
 class QPushButton;
 class QResizeEvent;
 class KAction;
@@ -112,7 +114,7 @@ class ResourceSelector : public QFrame
         void  reinstateAlarmTypeScrollBars();
 
     private:
-        KAlarm::CalEvent::Type currentResourceType() const;
+        CalEvent::Type currentResourceType() const;
 #ifdef USE_AKONADI
         Akonadi::Collection currentResource() const;
 
@@ -128,7 +130,7 @@ class ResourceSelector : public QFrame
         QPushButton*    mAddButton;
         QPushButton*    mDeleteButton;
         QPushButton*    mEditButton;
-        KAlarm::CalEvent::Type mCurrentAlarmType;
+        CalEvent::Type  mCurrentAlarmType;
         KMenu*          mContextMenu;
         KAction*        mActionReload;
         KAction*        mActionShowDetails;

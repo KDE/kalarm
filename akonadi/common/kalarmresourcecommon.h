@@ -22,8 +22,9 @@
 #ifndef KALARMRESOURCECOMMON_H
 #define KALARMRESOURCECOMMON_H
 
-#include "kacalendar.h"
-#include "kaevent.h"
+#include <kalarmcal/kacalendar.h>
+#include <kalarmcal/kaevent.h>
+
 #include <QObject>
 
 namespace KCalCore { class FileStorage; }
@@ -31,7 +32,7 @@ namespace Akonadi {
     class Collection;
     class Item;
 }
-using namespace KAlarm;
+using namespace KAlarmCal;
 
 namespace KAlarmResourceCommon
 {

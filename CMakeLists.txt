@@ -13,6 +13,7 @@ endif()
 if(KALARM_USE_AKONADI)
     add_definitions(-DUSE_AKONADI)
 else(KALARM_USE_AKONADI)
+    add_definitions(-DUSE_KRESOURCES)
     add_definitions(-DWANT_DEPRECATED_KCAL_API)
     add_definitions(-DWANT_DEPRECATED_KABC_API)
     add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
@@ -24,7 +25,6 @@ if(KALARM_USE_AKONADI)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/
-    ${CMAKE_CURRENT_SOURCE_DIR}/cal
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
@@ -33,7 +33,6 @@ else(KALARM_USE_AKONADI)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/
-    ${CMAKE_CURRENT_SOURCE_DIR}/cal
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/resources
     ${CMAKE_SOURCE_DIR}
@@ -41,7 +40,6 @@ include_directories(
 )
 endif(KALARM_USE_AKONADI)
 
-add_subdirectory(cal)
 if(KALARM_USE_AKONADI)
     add_subdirectory(akonadi)
 else(KALARM_USE_AKONADI)
@@ -125,6 +123,8 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     templatedlg.cpp
     templatemenuaction.cpp
     wakedlg.cpp
+kcombobox.cpp
+kdatecombobox.cpp
 )
 if(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
@@ -182,7 +182,7 @@ set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
 if(KALARM_USE_AKONADI)
     target_link_libraries(kalarm_bin
-        kalarm_calendar
+        ${KDEPIMLIBS_KALARMCAL_LIBS}
         ${KDEPIMLIBS_KCALCORE_LIBS}
         ${KDEPIMLIBS_KCALUTILS_LIBS}
         ${KDEPIMLIBS_KABC_LIBS}
@@ -202,7 +202,7 @@ if(KALARM_USE_AKONADI)
 else(KALARM_USE_AKONADI)
     target_link_libraries(kalarm_bin
         kalarm_resources
-        kalarm_calendar
+        ${KDEPIMLIBS_KALARMCAL_LIBS}
         ${KDEPIMLIBS_KCAL_LIBS}
         ${KDEPIMLIBS_KABC_LIBS}
         ${KDEPIMLIBS_KMIME_LIBS}

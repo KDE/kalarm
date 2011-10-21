@@ -21,8 +21,9 @@
 #ifndef RECURRENCEEDIT_P_H
 #define RECURRENCEEDIT_P_H
 
-#include "karecurrence.h"
 #include "radiobutton.h"
+
+#include <kalarmcal/karecurrence.h>
 
 #include <QList>
 #include <QVector>
@@ -40,7 +41,7 @@ class SpinBox;
 class TimeSpinBox;
 class QString;
 
-using KAlarm::KARecurrence;
+using namespace KAlarmCal;
 
 
 class NoRule : public QFrame

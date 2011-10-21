@@ -22,7 +22,8 @@
 #define DBUSHANDLER_H
 
 #include "kalarmiface.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <kcalcore/duration.h>
@@ -33,8 +34,7 @@
 #include <QWidget>
 class KUrl;
 
-using KAlarm::KAEvent;
-using KAlarm::KARecurrence;
+using namespace KAlarmCal;
 
 
 class DBusHandler : public QObject, public KAlarmIface

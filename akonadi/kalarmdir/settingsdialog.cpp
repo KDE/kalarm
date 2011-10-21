@@ -51,7 +51,7 @@ SettingsDialog::SettingsDialog(WId windowId, Settings* settings)
     if (!path.isEmpty())
         ui.kcfg_Path->setEnabled(false);
 
-    mTypeSelector->setAlarmTypes(KAlarm::CalEvent::types(mSettings->alarmTypes()));
+    mTypeSelector->setAlarmTypes(CalEvent::types(mSettings->alarmTypes()));
     mManager = new KConfigDialogManager(this, mSettings);
     mManager->updateWidgets();
 
@@ -67,7 +67,7 @@ void SettingsDialog::save()
 {
     mManager->updateSettings();
     mSettings->setPath(ui.kcfg_Path->url().toLocalFile());
-    mSettings->setAlarmTypes(KAlarm::CalEvent::mimeTypes(mTypeSelector->alarmTypes()));
+    mSettings->setAlarmTypes(CalEvent::mimeTypes(mTypeSelector->alarmTypes()));
     mSettings->writeConfig();
 }
 
@@ -75,7 +75,7 @@ void SettingsDialog::validate()
 {
     bool enableOk = false;
     // At least one alarm type must be selected
-    if (mTypeSelector->alarmTypes() != KAlarm::CalEvent::EMPTY)
+    if (mTypeSelector->alarmTypes() != CalEvent::EMPTY)
     {
         // The entered URL must be valid and local
         const KUrl currentUrl = ui.kcfg_Path->url();

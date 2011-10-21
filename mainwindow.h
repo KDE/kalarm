@@ -27,9 +27,10 @@
 #include "alarmresources.h"
 #endif
 #include "editdlg.h"
-#include "kaevent.h"
 #include "mainwindowbase.h"
 #include "undo.h"
+
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <akonadi/item.h>

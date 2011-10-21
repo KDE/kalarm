@@ -22,7 +22,6 @@
 
 #include "buttongroup.h"
 #include "checkbox.h"
-#include "datetime.h"
 #include "messagebox.h"
 #include "preferences.h"
 #include "pushbutton.h"
@@ -32,6 +31,8 @@
 #include "timespinbox.h"
 #include "timezonecombo.h"
 #include "alarmtimewidget.moc"
+
+#include <kalarmcal/datetime.h>
 
 #include <kdatecombobox.h>
 #include <kdialog.h>

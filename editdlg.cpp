@@ -80,6 +80,7 @@
 #include <QTimer>
 
 using namespace KCal;
+using namespace KAlarmCal;
 
 static const char EDIT_DIALOG_NAME[] = "EditDialog";
 static const char TEMPLATE_DIALOG_NAME[] = "EditTemplateDialog";
@@ -548,7 +549,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
             else
             {
                 mExpiredRecurrence = recurs && event->mainExpired();
-                mTimeWidget->setDateTime(recurs || event->category() == KAlarm::CalEvent::ARCHIVED ? event->startDateTime()
+                mTimeWidget->setDateTime(recurs || event->category() == CalEvent::ARCHIVED ? event->startDateTime()
                                          : event->mainExpired() ? event->deferDateTime() : event->mainDateTime());
             }
         }
@@ -594,7 +595,7 @@ void EditAlarmDlg::initValues(const KAEvent* event)
     if (!deferGroupVisible  &&  mDeferGroup)
         mDeferGroup->hide();
 
-    bool empty = AlarmCalendar::resources()->events(KAlarm::CalEvent::TEMPLATE).isEmpty();
+    bool empty = AlarmCalendar::resources()->events(CalEvent::TEMPLATE).isEmpty();
     enableButton(Help, !empty);   // Load Templates button
 }
 
@@ -1111,13 +1112,13 @@ bool EditAlarmDlg::validate()
             mCollection = AlarmCalendar::resources()->collectionForEvent(mCollectionItemId);
             if (mCollection.isValid())
             {
-                KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
+                CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
                 if (!(AkonadiModel::instance()->types(mCollection) & type))
                     mCollection = Akonadi::Collection();   // event may have expired while dialog was open
             }
         }
         bool cancelled = false;
-        KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
+        CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
         if (CollectionControlModel::isWritableEnabled(mCollection, type) <= 0)
             mCollection = CollectionControlModel::destination(type, this, false, &cancelled);
         if (!mCollection.isValid())
@@ -1138,7 +1139,7 @@ bool EditAlarmDlg::validate()
             mResource = AlarmCalendar::resources()->resourceForEvent(mResourceEventId);
             if (mResource)
             {
-                KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
+                CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
                 if (mResource->alarmType() != type)
                     mResource = 0;   // event may have expired while dialog was open
             }
@@ -1146,7 +1147,7 @@ bool EditAlarmDlg::validate()
         bool cancelled = false;
         if (!mResource  ||  !mResource->writable())
         {
-            KAlarm::CalEvent::Type type = mTemplate ? KAlarm::CalEvent::TEMPLATE : KAlarm::CalEvent::ACTIVE;
+            CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
             mResource = AlarmResources::instance()->destination(type, this, false, &cancelled);
         }
         if (!mResource)

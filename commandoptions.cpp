@@ -23,7 +23,8 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
-#include "identities.h"
+
+#include <kalarmcal/identities.h>
 
 #include <kcmdlineargs.h>
 
@@ -176,7 +177,7 @@ CommandOptions::CommandOptions()
         if (mArgs->isSet("subject"))
             mSubject = mArgs->getOption("subject");
         if (mArgs->isSet("from-id"))
-            mFromID = KAlarm::Identities::identityUoid(mArgs->getOption("from-id"));
+            mFromID = Identities::identityUoid(mArgs->getOption("from-id"));
         QStringList params = mArgs->getOptionList("mail");
         for (int i = 0, count = params.count();  i < count;  ++i)
         {

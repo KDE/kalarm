@@ -24,7 +24,10 @@
 
 #include "singlefileresourceconfigdialogbase.h"
 #include "ui_alarmtyperadiowidget.h"
-#include "kacalendar.h"
+
+#include <kalarmcal/kacalendar.h>
+
+using namespace KAlarmCal;
 
 class QButtonGroup;
 
@@ -33,8 +36,8 @@ class AlarmTypeRadioWidget : public Akonadi::SingleFileValidatingWidget
         Q_OBJECT
     public:
         explicit AlarmTypeRadioWidget(QWidget* parent = 0);
-        void setAlarmType(KAlarm::CalEvent::Type);
-        KAlarm::CalEvent::Type alarmType() const;
+        void setAlarmType(CalEvent::Type);
+        CalEvent::Type alarmType() const;
         virtual bool validate() const;
 
     private:

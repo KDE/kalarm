@@ -26,18 +26,19 @@
  */
 
 #include "akonadimodel.h"
-#include "alarmtext.h"
 #include "autoqpointer.h"
 #include "calendarmigrator.h"
-#include "collectionattribute.h"
-#include "compatibilityattribute.h"
-#include "eventattribute.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
+
+#include <kalarmcal/alarmtext.h>
+#include <kalarmcal/collectionattribute.h>
+#include <kalarmcal/compatibilityattribute.h>
+#include <kalarmcal/eventattribute.h>
 
 #include <akonadi/agentfilterproxymodel.h>
 #include <akonadi/agentinstancecreatejob.h>
@@ -62,7 +63,7 @@
 #include <QTimer>
 
 using namespace Akonadi;
-using namespace KAlarm;
+using namespace KAlarmCal;
 
 static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
@@ -105,9 +106,9 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     monitor->setCollectionMonitored(Collection::root());
     monitor->setResourceMonitored("akonadi_kalarm_resource");
     monitor->setResourceMonitored("akonadi_kalarm_dir_resource");
-    monitor->setMimeTypeMonitored(KAlarm::MIME_ACTIVE);
-    monitor->setMimeTypeMonitored(KAlarm::MIME_ARCHIVED);
-    monitor->setMimeTypeMonitored(KAlarm::MIME_TEMPLATE);
+    monitor->setMimeTypeMonitored(KAlarmCal::MIME_ACTIVE);
+    monitor->setMimeTypeMonitored(KAlarmCal::MIME_ARCHIVED);
+    monitor->setMimeTypeMonitored(KAlarmCal::MIME_TEMPLATE);
     monitor->itemFetchScope().fetchFullPayload();
     monitor->itemFetchScope().fetchAttribute<EventAttribute>();
 
@@ -221,11 +222,11 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             case Qt::ForegroundRole:
             {
                 QStringList mimeTypes = collection.contentMimeTypes();
-                if (mimeTypes.contains(KAlarm::MIME_ACTIVE))
+                if (mimeTypes.contains(KAlarmCal::MIME_ACTIVE))
                     return (collection.rights() & writableRights) == writableRights ? Qt::black : Qt::darkGray;
-                if (mimeTypes.contains(KAlarm::MIME_ARCHIVED))
+                if (mimeTypes.contains(KAlarmCal::MIME_ARCHIVED))
                     return (collection.rights() & writableRights) == writableRights ? Qt::darkGreen : Qt::green;
-                if (mimeTypes.contains(KAlarm::MIME_TEMPLATE))
+                if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
                     return (collection.rights() & writableRights) == writableRights ? Qt::darkBlue : Qt::blue;
                 break;
             }
@@ -253,19 +254,19 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         {
             // This is an Item row
             QString mime = item.mimeType();
-            if ((mime != KAlarm::MIME_ACTIVE  &&  mime != KAlarm::MIME_ARCHIVED  &&  mime != KAlarm::MIME_TEMPLATE)
+            if ((mime != KAlarmCal::MIME_ACTIVE  &&  mime != KAlarmCal::MIME_ARCHIVED  &&  mime != KAlarmCal::MIME_TEMPLATE)
             ||  !item.hasPayload<KAEvent>())
                 return QVariant();
             switch (role)
             {
                 case StatusRole:
                     // Mime type has a one-to-one relationship to event's category()
-                    if (mime == KAlarm::MIME_ACTIVE)
-                        return KAlarm::CalEvent::ACTIVE;
-                    if (mime == KAlarm::MIME_ARCHIVED)
-                        return KAlarm::CalEvent::ARCHIVED;
-                    if (mime == KAlarm::MIME_TEMPLATE)
-                        return KAlarm::CalEvent::TEMPLATE;
+                    if (mime == KAlarmCal::MIME_ACTIVE)
+                        return CalEvent::ACTIVE;
+                    if (mime == KAlarmCal::MIME_ARCHIVED)
+                        return CalEvent::ARCHIVED;
+                    if (mime == KAlarmCal::MIME_TEMPLATE)
+                        return CalEvent::TEMPLATE;
                     return QVariant();
                 case CommandErrorRole:
                     if (!item.hasAttribute<EventAttribute>())
@@ -518,7 +519,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             }
             case EnabledTypesRole:
             {
-                KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
+                CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
                 CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->enabled() == types)
                     return true;   // no change
@@ -531,7 +532,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 if (collection.hasAttribute<CollectionAttribute>()
                 &&  isCompatible(collection))
                 {
-                    KAlarm::CalEvent::Types types = static_cast<KAlarm::CalEvent::Types>(value.value<int>());
+                    CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
 CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
 kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                     collection.attribute<CollectionAttribute>()->setStandard(types);
@@ -778,7 +779,7 @@ void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startCo
 * Signal every minute that the time-to-alarm values have changed.
 */
 static bool checkItem_isActive(const Item& item)
-{ return item.mimeType() == KAlarm::MIME_ACTIVE; }
+{ return item.mimeType() == KAlarmCal::MIME_ACTIVE; }
 
 void AkonadiModel::slotUpdateTimeTo()
 {
@@ -790,7 +791,7 @@ void AkonadiModel::slotUpdateTimeTo()
 * Called when the colour used to display archived alarms has changed.
 */
 static bool checkItem_isArchived(const Item& item)
-{ return item.mimeType() == KAlarm::MIME_ARCHIVED; }
+{ return item.mimeType() == KAlarmCal::MIME_ARCHIVED; }
 
 void AkonadiModel::slotUpdateArchivedColour(const QColor&)
 {
@@ -941,7 +942,7 @@ QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 * Return a collection's tooltip text. The collection's enabled status is
 * evaluated for specified alarm types.
 */
-QString AkonadiModel::tooltip(const Collection& collection, KAlarm::CalEvent::Types types) const
+QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types types) const
 {
     QString name = '@' + displayName_p(collection);   // insert markers for stripping out name
     KUrl url = collection.remoteId();
@@ -1211,7 +1212,7 @@ QModelIndex AkonadiModel::eventIndex(const KAEvent& event)
 /******************************************************************************
 * Return all events of a given type belonging to a collection.
 */
-KAEvent::List AkonadiModel::events(Akonadi::Collection& collection, KAlarm::CalEvent::Type type) const
+KAEvent::List AkonadiModel::events(Akonadi::Collection& collection, CalEvent::Type type) const
 {
     KAEvent::List list;
     QModelIndex ix = modelIndexForCollection(this, collection);
@@ -1223,7 +1224,7 @@ KAEvent::List AkonadiModel::events(Akonadi::Collection& collection, KAlarm::CalE
 /******************************************************************************
 * Recursive function to append all child Events with a given mime type.
 */
-void AkonadiModel::getChildEvents(const QModelIndex& parent, KAlarm::CalEvent::Type type, KAEvent::List& events) const
+void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type, KAEvent::List& events) const
 {
     for (int row = 0, count = rowCount(parent);  row < count;  ++row)
     {
@@ -1272,7 +1273,7 @@ KAEvent AkonadiModel::event(const Item& item) const
 /******************************************************************************
 * Add an event to the default or a user-selected Collection.
 */
-AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, KAlarm::CalEvent::Type type, QWidget* promptParent, bool noPrompt)
+AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, CalEvent::Type type, QWidget* promptParent, bool noPrompt)
 {
     kDebug() << event->id();
 
@@ -1642,8 +1643,8 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
 
     // Check for a change in content mime types
     // (e.g. when a collection is first created at startup).
-    KAlarm::CalEvent::Types oldAlarmTypes = mCollectionAlarmTypes.value(collection.id(), KAlarm::CalEvent::EMPTY);
-    KAlarm::CalEvent::Types newAlarmTypes = KAlarm::CalEvent::types(collection.contentMimeTypes());
+    CalEvent::Types oldAlarmTypes = mCollectionAlarmTypes.value(collection.id(), CalEvent::EMPTY);
+    CalEvent::Types newAlarmTypes = CalEvent::types(collection.contentMimeTypes());
     if (newAlarmTypes != oldAlarmTypes)
     {
         kDebug() << "Collection" << collection.id() << ": alarm types ->" << newAlarmTypes;
@@ -1655,8 +1656,8 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     if (attributeNames.contains(CollectionAttribute::name()))
     {
         static bool first = true;
-        KAlarm::CalEvent::Types oldEnabled = mCollectionEnabled.value(collection.id(), KAlarm::CalEvent::EMPTY);
-        KAlarm::CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : KAlarm::CalEvent::EMPTY;
+        CalEvent::Types oldEnabled = mCollectionEnabled.value(collection.id(), CalEvent::EMPTY);
+        CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
         if (first  ||  newEnabled != oldEnabled)
         {
             kDebug() << "Collection" << collection.id() << ": enabled ->" << newEnabled;
@@ -1862,9 +1863,9 @@ int AkonadiModel::isWritable(const Akonadi::Collection& collection, KACalendar::
     }
 }
 
-KAlarm::CalEvent::Types AkonadiModel::types(const Collection& collection)
+CalEvent::Types AkonadiModel::types(const Collection& collection)
 {
-    return KAlarm::CalEvent::types(collection.contentMimeTypes());
+    return CalEvent::types(collection.contentMimeTypes());
 }
 
 // vim: et sw=4:

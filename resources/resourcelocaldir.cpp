@@ -55,7 +55,7 @@ KAResourceLocalDir::KAResourceLocalDir(const KConfigGroup& group)
     init();
 }
 
-KAResourceLocalDir::KAResourceLocalDir(KAlarm::CalEvent::Type type, const QString& dirName)
+KAResourceLocalDir::KAResourceLocalDir(CalEvent::Type type, const QString& dirName)
     : AlarmResource(type),
       mURL(KUrl::fromPath(dirName)),
       mDirReadOnly(false)

@@ -22,14 +22,15 @@
 
 #include "alarmcalendar.h"
 #include "functions.h"
-#include "identities.h"
 #include "kalarmapp.h"
 #include "kamail.h"
-#include "karecurrence.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "dbushandler.moc"
 #include <kalarmadaptor.h>
+
+#include <kalarmcal/identities.h>
+#include <kalarmcal/karecurrence.h>
 
 #ifdef USE_AKONADI
 #include <kcalcore/duration.h>
@@ -347,7 +348,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
     uint senderId = 0;
     if (!fromID.isEmpty())
     {
-        senderId = KAlarm::Identities::identityUoid(fromID);
+        senderId = Identities::identityUoid(fromID);
         if (!senderId)
         {
             kError() << "D-Bus call scheduleEmail(): unknown sender ID:" << fromID;

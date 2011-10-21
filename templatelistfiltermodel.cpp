@@ -21,11 +21,12 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "templatelistfiltermodel.h"
 
-#include "kaevent.h"
-#include "kacalendar.h"
+#include <kalarmcal/kaevent.h>
+#include <kalarmcal/kacalendar.h>
 
 #include <kdebug.h>
 
+using namespace KAlarmCal;
 
 // TemplateListFilterModel provides sorting and filtering for the alarm list model.
 
@@ -51,7 +52,7 @@ void TemplateListFilterModel::setTypesEnabled(KAEvent::Actions type)
 bool TemplateListFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex&) const
 {
     QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0);
-    if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != KAlarm::CalEvent::TEMPLATE)
+    if (sourceModel()->data(sourceIndex, EventListModel::StatusRole).toInt() != CalEvent::TEMPLATE)
         return false;
     if (mTypeFilter == KAEvent::ACT_ALL)
         return true;

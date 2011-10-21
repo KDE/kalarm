@@ -37,9 +37,10 @@
 #include <QTimer>
 
 using namespace Akonadi;
+using namespace KAlarmCal;
 
 
-AkonadiResourceCreator::AkonadiResourceCreator(KAlarm::CalEvent::Type defaultType, QWidget* parent)
+AkonadiResourceCreator::AkonadiResourceCreator(CalEvent::Type defaultType, QWidget* parent)
     : QObject(),
       mParent(parent),
       mDefaultType(defaultType)
@@ -64,14 +65,14 @@ void AkonadiResourceCreator::getAgentType()
     QString mimeType;
     switch (mDefaultType)
     {
-        case KAlarm::CalEvent::ACTIVE:
-            mimeType = KAlarm::MIME_ACTIVE;
+        case CalEvent::ACTIVE:
+            mimeType = KAlarmCal::MIME_ACTIVE;
             break;
-        case KAlarm::CalEvent::ARCHIVED:
-            mimeType = KAlarm::MIME_ARCHIVED;
+        case CalEvent::ARCHIVED:
+            mimeType = KAlarmCal::MIME_ARCHIVED;
             break;
-        case KAlarm::CalEvent::TEMPLATE:
-            mimeType = KAlarm::MIME_TEMPLATE;
+        case CalEvent::TEMPLATE:
+            mimeType = KAlarmCal::MIME_TEMPLATE;
             break;
         default:
             emit finished(this, false);
@@ -153,7 +154,7 @@ void AkonadiResourceCreator::setResourceAlarmType()
         kError() << "Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
     else
     {
-        iface.setAlarmTypes(KAlarm::CalEvent::mimeTypes(mDefaultType));
+        iface.setAlarmTypes(CalEvent::mimeTypes(mDefaultType));
         iface.writeConfig();
         mAgentInstance.reconfigure();   // notify the agent that its configuration has changed
     }

@@ -20,7 +20,7 @@
 #ifndef BIRTHDAYDLG_H
 #define BIRTHDAYDLG_H
 
-#include "kaevent.h"
+#include <kalarmcal/kaevent.h>
 
 #include <kdialog.h>
 #include <klineedit.h>
@@ -38,7 +38,7 @@ class Reminder;
 class BLineEdit;
 class BirthdaySortModel;
 
-using KAlarm::KAEvent;
+using namespace KAlarmCal;
 
 class BirthdayDlg : public KDialog
 {

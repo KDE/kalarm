@@ -22,8 +22,11 @@
 #ifndef KALARMRESOURCE_H
 #define KALARMRESOURCE_H
 
-#include "kacalendar.h"
 #include <icalresourcebase.h>
+
+#include <kalarmcal/kacalendar.h>
+
+using namespace KAlarmCal;
 
 class KJob;
 class AlarmTypeRadioWidget;
@@ -54,7 +57,7 @@ class KAlarmResource : public ICalResourceBase
 
     private:
         AlarmTypeRadioWidget*      mTypeSelector;
-        KAlarm::KACalendar::Compat mCompatibility;
+        KACalendar::Compat mCompatibility;
         int                        mVersion;   // calendar format version
 };
 

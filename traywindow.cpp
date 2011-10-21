@@ -23,8 +23,6 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
-#include "alarmtext.h"
-using KAlarm::AlarmText;
 #include "functions.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
@@ -34,6 +32,8 @@ using KAlarm::AlarmText;
 #include "preferences.h"
 #include "synchtimer.h"
 #include "templatemenuaction.h"
+
+#include <kalarmcal/alarmtext.h>
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -56,6 +56,7 @@ using KAlarm::AlarmText;
 
 #include <stdlib.h>
 
+using namespace KAlarmCal;
 
 struct TipItem
 {
@@ -310,12 +311,12 @@ QString TrayWindow::tooltipAlarmText() const
     if (!mAlarmsModel)
     {
         mAlarmsModel = new AlarmListModel(const_cast<TrayWindow*>(this));
-        mAlarmsModel->setEventTypeFilter(KAlarm::CalEvent::ACTIVE);
+        mAlarmsModel->setEventTypeFilter(CalEvent::ACTIVE);
         mAlarmsModel->sort(AlarmListModel::TimeColumn);
     }
     for (i = 0, iend = mAlarmsModel->rowCount();  i < iend;  ++i)
 #else
-    KAEvent::List events = AlarmCalendar::resources()->events(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, KAlarm::CalEvent::ACTIVE);
+    KAEvent::List events = AlarmCalendar::resources()->events(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, CalEvent::ACTIVE);
     for (i = 0, iend = events.count();  i < iend;  ++i)
 #endif
     {

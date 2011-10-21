@@ -33,7 +33,6 @@
 #include "editdlgtypes.h"
 #include "fontcolour.h"
 #include "functions.h"
-#include "identities.h"
 #include "itembox.h"
 #include "kalarmapp.h"
 #include "kalocale.h"
@@ -55,6 +54,8 @@
 #include "traywindow.h"
 #include "prefdlg_p.moc"
 #include "prefdlg.moc"
+
+#include <kalarmcal/identities.h>
 
 #include <kholidays/holidays.h>
 using namespace KHolidays;
@@ -92,6 +93,8 @@ using namespace KHolidays;
 #include <QStyle>
 #include <QResizeEvent>
 #include <QTimer>
+
+using namespace KAlarmCal;
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";
 
@@ -880,9 +883,9 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     mClearArchived->setFixedSize(mClearArchived->sizeHint());
     connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
 #ifdef USE_AKONADI
-    mClearArchived->setWhatsThis((CollectionControlModel::enabledCollections(KAlarm::CalEvent::ARCHIVED, false).count() <= 1)
+    mClearArchived->setWhatsThis((CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, false).count() <= 1)
 #else
-    mClearArchived->setWhatsThis((AlarmResources::instance()->activeCount(KAlarm::CalEvent::ARCHIVED, false) <= 1)
+    mClearArchived->setWhatsThis((AlarmResources::instance()->activeCount(CalEvent::ARCHIVED, false) <= 1)
 #endif
             ? i18nc("@info:whatsthis", "Delete all existing archived alarms.")
             : i18nc("@info:whatsthis", "Delete all existing archived alarms (from the default archived alarm calendar only)."));
@@ -930,9 +933,9 @@ void StorePrefTab::slotArchivedToggled(bool)
     bool keep = mKeepArchived->isChecked();
     if (keep  &&  !mOldKeepArchived  &&  mCheckKeepChanges
 #ifdef USE_AKONADI
-    &&  !CollectionControlModel::getStandard(KAlarm::CalEvent::ARCHIVED).isValid())
+    &&  !CollectionControlModel::getStandard(CalEvent::ARCHIVED).isValid())
 #else
-    &&  !AlarmResources::instance()->getStandardResource(KAlarm::CalEvent::ARCHIVED))
+    &&  !AlarmResources::instance()->getStandardResource(CalEvent::ARCHIVED))
 #endif
     {
         KAMessageBox::sorry(topWidget(),
@@ -952,9 +955,9 @@ void StorePrefTab::slotArchivedToggled(bool)
 void StorePrefTab::slotClearArchived()
 {
 #ifdef USE_AKONADI
-    bool single = CollectionControlModel::enabledCollections(KAlarm::CalEvent::ARCHIVED, false).count() <= 1;
+    bool single = CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, false).count() <= 1;
 #else
-    bool single = AlarmResources::instance()->activeCount(KAlarm::CalEvent::ARCHIVED, false) <= 1;
+    bool single = AlarmResources::instance()->activeCount(CalEvent::ARCHIVED, false) <= 1;
 #endif
     if (KAMessageBox::warningContinueCancel(topWidget(), single ? i18nc("@info", "Do you really want to delete all archived alarms?")
                                                                 : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm calendar?"))
@@ -1177,7 +1180,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QS
             errmsg = i18nc("@info", "No email address is currently set in KDE System Settings. %1", errmsg);
             break;
         case Preferences::MAIL_FROM_KMAIL:
-            if (KAlarm::Identities::identitiesExist())
+            if (Identities::identitiesExist())
                 return QString();
             errmsg = i18nc("@info", "No <application>KMail</application> identities currently exist. %1", errmsg);
             break;

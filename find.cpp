@@ -26,9 +26,10 @@
 #endif
 #include "alarmlistview.h"
 #include "eventlistview.h"
-#include "kaevent.h"
 #include "messagebox.h"
 #include "preferences.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <kfinddialog.h>
 #include <kfind.h>
@@ -42,6 +43,8 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QRegExp>
+
+using namespace KAlarmCal;
 
 // KAlarm-specific options for Find dialog
 enum {
@@ -106,9 +109,9 @@ void Find::display()
     bool noArchived = !Preferences::archivedKeepDays();
     bool showArchived = qobject_cast<AlarmListView*>(mListView)
 #ifdef USE_AKONADI
-                        && (static_cast<AlarmListModel*>(mListView->model())->eventTypeFilter() & KAlarm::CalEvent::ARCHIVED);
+                        && (static_cast<AlarmListModel*>(mListView->model())->eventTypeFilter() & CalEvent::ARCHIVED);
 #else
-                        && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & KAlarm::CalEvent::ARCHIVED);
+                        && (static_cast<AlarmListFilterModel*>(mListView->model())->statusFilter() & CalEvent::ARCHIVED);
 #endif
     if (noArchived  ||  !showArchived)      // these settings could change between activations
         mOptions &= ~FIND_ARCHIVED;

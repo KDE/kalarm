@@ -36,17 +36,17 @@ AlarmTypeRadioWidget::AlarmTypeRadioWidget(QWidget* parent)
     connect(ui.templateRadio, SIGNAL(toggled(bool)), SIGNAL(changed()));
 }
 
-void AlarmTypeRadioWidget::setAlarmType(KAlarm::CalEvent::Type type)
+void AlarmTypeRadioWidget::setAlarmType(CalEvent::Type type)
 {
     switch (type)
     {
-        case KAlarm::CalEvent::ACTIVE:
+        case CalEvent::ACTIVE:
             ui.activeRadio->setChecked(true);
             break;
-        case KAlarm::CalEvent::ARCHIVED:
+        case CalEvent::ARCHIVED:
             ui.archivedRadio->setChecked(true);
             break;
-        case KAlarm::CalEvent::TEMPLATE:
+        case CalEvent::TEMPLATE:
             ui.templateRadio->setChecked(true);
             break;
         default:
@@ -54,15 +54,15 @@ void AlarmTypeRadioWidget::setAlarmType(KAlarm::CalEvent::Type type)
     }
 }
 
-KAlarm::CalEvent::Type AlarmTypeRadioWidget::alarmType() const
+CalEvent::Type AlarmTypeRadioWidget::alarmType() const
 {
     if (ui.activeRadio->isChecked())
-        return KAlarm::CalEvent::ACTIVE;
+        return CalEvent::ACTIVE;
     if (ui.archivedRadio->isChecked())
-        return KAlarm::CalEvent::ARCHIVED;
+        return CalEvent::ARCHIVED;
     if (ui.templateRadio->isChecked())
-        return KAlarm::CalEvent::TEMPLATE;
-    return KAlarm::CalEvent::EMPTY;
+        return CalEvent::TEMPLATE;
+    return CalEvent::EMPTY;
 }
 
 bool AlarmTypeRadioWidget::validate() const

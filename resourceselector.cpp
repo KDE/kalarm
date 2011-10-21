@@ -171,15 +171,15 @@ void ResourceSelector::alarmTypeSelected()
     switch (mAlarmType->currentIndex())
     {
         case 0:
-            mCurrentAlarmType = KAlarm::CalEvent::ACTIVE;
+            mCurrentAlarmType = CalEvent::ACTIVE;
             addTip = i18nc("@info:tooltip", "Add a new active alarm calendar");
             break;
         case 1:
-            mCurrentAlarmType = KAlarm::CalEvent::ARCHIVED;
+            mCurrentAlarmType = CalEvent::ARCHIVED;
             addTip = i18nc("@info:tooltip", "Add a new archived alarm calendar");
             break;
         case 2:
-            mCurrentAlarmType = KAlarm::CalEvent::TEMPLATE;
+            mCurrentAlarmType = CalEvent::TEMPLATE;
             addTip = i18nc("@info:tooltip", "Add a new alarm template calendar");
             break;
     }
@@ -302,7 +302,7 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
             if (i >= 0)
             {
                 // The collection belongs to an agent created by addResource()
-                KAlarm::CalEvent::Types types = KAlarm::CalEvent::types(collection.contentMimeTypes());
+                CalEvent::Types types = CalEvent::types(collection.contentMimeTypes());
                 CollectionControlModel::setEnabled(collection, types, true);
                 if (!(types & mCurrentAlarmType))
                 {
@@ -310,11 +310,11 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
                     // which don't include the currently displayed type.
                     // Show a collection list which includes a selected type.
                     int index = -1;
-                    if (types & KAlarm::CalEvent::ACTIVE)
+                    if (types & CalEvent::ACTIVE)
                         index = 0;
-                    else if (types & KAlarm::CalEvent::ARCHIVED)
+                    else if (types & CalEvent::ARCHIVED)
                         index = 1;
-                    else if (types & KAlarm::CalEvent::TEMPLATE)
+                    else if (types & CalEvent::TEMPLATE)
                         index = 2;
                     if (index >= 0)
                     {
@@ -358,12 +358,12 @@ void ResourceSelector::editResource()
         if (!readOnly  &&  resource->readOnly()  &&  resource->standardResource())
         {
             // A standard resource is being made read-only.
-            if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
+            if (resource->alarmType() == CalEvent::ACTIVE)
             {
                 KAMessageBox::sorry(this, i18nc("@info", "You cannot make your default active alarm calendar read-only."));
                 resource->setReadOnly(false);
             }
-            else if (resource->alarmType() == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
+            else if (resource->alarmType() == CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
             {
                 // Only allow the archived alarms standard resource to be made read-only
                 // if we're not saving archived alarms.
@@ -407,12 +407,12 @@ void ResourceSelector::removeResource()
         return;
     QString name = collection.name();
     // Check if it's the standard or only resource for at least one type.
-    KAlarm::CalEvent::Types allTypes      = AkonadiModel::types(collection);
-    KAlarm::CalEvent::Types standardTypes = CollectionControlModel::standardTypes(collection, true);
-    KAlarm::CalEvent::Type  currentType   = currentResourceType();
-    KAlarm::CalEvent::Type stdType = (standardTypes & KAlarm::CalEvent::ACTIVE)   ? KAlarm::CalEvent::ACTIVE
-                                   : (standardTypes & KAlarm::CalEvent::ARCHIVED) ? KAlarm::CalEvent::ARCHIVED
-                                   : KAlarm::CalEvent::EMPTY;
+    CalEvent::Types allTypes      = AkonadiModel::types(collection);
+    CalEvent::Types standardTypes = CollectionControlModel::standardTypes(collection, true);
+    CalEvent::Type  currentType   = currentResourceType();
+    CalEvent::Type stdType = (standardTypes & CalEvent::ACTIVE)   ? CalEvent::ACTIVE
+                                   : (standardTypes & CalEvent::ARCHIVED) ? CalEvent::ARCHIVED
+                                   : CalEvent::EMPTY;
 #else
     AlarmResource* resource = currentResource();
     if (!resource)
@@ -420,14 +420,14 @@ void ResourceSelector::removeResource()
     QString name = resource->resourceName();
     bool std = resource->standardResource();
     // Check if it's the standard resource for its type.
-    KAlarm::CalEvent::Type stdType = std ? resource->alarmType() : KAlarm::CalEvent::EMPTY;
+    CalEvent::Type stdType = std ? resource->alarmType() : CalEvent::EMPTY;
 #endif
-    if (stdType == KAlarm::CalEvent::ACTIVE)
+    if (stdType == CalEvent::ACTIVE)
     {
         KAMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
         return;
     }
-    if (stdType == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
+    if (stdType == CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
     {
         // Only allow the archived alarms standard resource to be removed if
         // we're not saving archived alarms.
@@ -445,7 +445,7 @@ void ResourceSelector::removeResource()
             // It also contains alarm types other than the currently displayed type
             QString stdTypes = CollectionControlModel::typeListForDisplay(standardTypes);
             QString otherTypes;
-            KAlarm::CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
+            CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
             if (nonStandardTypes != currentType)
                 otherTypes = i18nc("@info", "<para>It also contains:%1</para>", CollectionControlModel::typeListForDisplay(nonStandardTypes));
             text = i18nc("@info", "<para><resource>%1</resource> is the default calendar for:%2</para>%3"
@@ -471,7 +471,7 @@ void ResourceSelector::removeResource()
 #else
     // Remove resource from alarm and resource lists before deleting it, to avoid
     // crashes when display updates occur immediately after it is deleted.
-    if (resource->alarmType() == KAlarm::CalEvent::TEMPLATE)
+    if (resource->alarmType() == CalEvent::TEMPLATE)
         EventListModel::templates()->removeResource(resource);
     else
         EventListModel::alarms()->removeResource(resource);
@@ -572,7 +572,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         else
             mListView->clearSelection();
     }
-    KAlarm::CalEvent::Type type = currentResourceType();
+    CalEvent::Type type = currentResourceType();
 #ifdef USE_AKONADI
     bool haveCalendar = collection.isValid();
 #else
@@ -591,7 +591,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted)))
             updatable = true; // the calendar format is convertible to the current KAlarm format
         if (!(AkonadiModel::instance()->types(collection) & type))
-            type = KAlarm::CalEvent::EMPTY;
+            type = CalEvent::EMPTY;
 #else
         active   = resource->isEnabled();
         type     = resource->alarmType();
@@ -618,16 +618,16 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
     QString text;
     switch (type)
     {
-        case KAlarm::CalEvent::ACTIVE:   text = i18nc("@action", "Use as &Default for Active Alarms");  break;
-        case KAlarm::CalEvent::ARCHIVED: text = i18nc("@action", "Use as &Default for Archived Alarms");  break;
-        case KAlarm::CalEvent::TEMPLATE: text = i18nc("@action", "Use as &Default for Alarm Templates");  break;
+        case CalEvent::ACTIVE:   text = i18nc("@action", "Use as &Default for Active Alarms");  break;
+        case CalEvent::ARCHIVED: text = i18nc("@action", "Use as &Default for Archived Alarms");  break;
+        case CalEvent::TEMPLATE: text = i18nc("@action", "Use as &Default for Alarm Templates");  break;
         default:  break;
     }
     mActionSetDefault->setText(text);
 #ifdef USE_AKONADI
     bool standard = CollectionControlModel::isStandard(collection, type);
 #else
-    bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<KAlarm::CalEvent::Type>(type))  &&  resource->standardResource());
+    bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<CalEvent::Type>(type))  &&  resource->standardResource());
 #endif
     mActionSetDefault->setChecked(active && writable && standard);
     mActionSetDefault->setEnabled(active && writable);
@@ -674,18 +674,18 @@ void ResourceSelector::archiveDaysChanged(int days)
     if (days)
     {
 #ifdef USE_AKONADI
-        if (!CollectionControlModel::getStandard(KAlarm::CalEvent::ARCHIVED).isValid())
+        if (!CollectionControlModel::getStandard(CalEvent::ARCHIVED).isValid())
         {
-            Collection::List cols = CollectionControlModel::enabledCollections(KAlarm::CalEvent::ARCHIVED, true);
+            Collection::List cols = CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, true);
             if (cols.count() == 1)
             {
-                CollectionControlModel::setStandard(cols[0], KAlarm::CalEvent::ARCHIVED);
+                CollectionControlModel::setStandard(cols[0], CalEvent::ARCHIVED);
                 theApp()->purgeNewArchivedDefault(cols[0]);
             }
         }
 #else
         AlarmResources* resources = AlarmResources::instance();
-        AlarmResource* std = resources->getStandardResource(KAlarm::CalEvent::ARCHIVED);
+        AlarmResource* std = resources->getStandardResource(CalEvent::ARCHIVED);
         if (std  &&  !std->standardResource())
             resources->setStandardResource(std);
 #endif
@@ -702,12 +702,12 @@ void ResourceSelector::setStandard()
     Collection collection = currentResource();
     if (collection.isValid())
     {
-        KAlarm::CalEvent::Type alarmType = currentResourceType();
+        CalEvent::Type alarmType = currentResourceType();
         bool standard = mActionSetDefault->isChecked();
         if (standard)
             CollectionControlModel::setEnabled(collection, alarmType, true);
         CollectionControlModel::setStandard(collection, alarmType, standard);
-        if (alarmType == KAlarm::CalEvent::ARCHIVED)
+        if (alarmType == CalEvent::ARCHIVED)
             theApp()->purgeNewArchivedDefault(collection);
     }
 #else
@@ -736,13 +736,13 @@ void ResourceSelector::slotStatusChanged(AlarmResource* resource, AlarmResources
         QString text;
         switch (resource->alarmType())
         {
-            case KAlarm::CalEvent::ACTIVE:
+            case CalEvent::ACTIVE:
                 text = i18nc("@info/plain", "It is not an active alarm calendar.");
                 break;
-            case KAlarm::CalEvent::ARCHIVED:
+            case CalEvent::ARCHIVED:
                 text = i18nc("@info/plain", "It is not an archived alarm calendar.");
                 break;
-            case KAlarm::CalEvent::TEMPLATE:
+            case CalEvent::TEMPLATE:
                 text = i18nc("@info/plain", "It is not an alarm template calendar.");
                 break;
             default:
@@ -841,20 +841,20 @@ void ResourceSelector::showInfo()
         QString name;
         if (collection.hasAttribute<EntityDisplayAttribute>())
             name = collection.attribute<EntityDisplayAttribute>()->displayName();
-        KAlarm::CalEvent::Type alarmType = currentResourceType();
+        CalEvent::Type alarmType = currentResourceType();
         QString calType = AgentManager::self()->instance(collection.resource()).type().name();
         QString storage = AkonadiModel::instance()->storageType(collection);
         QString location = collection.remoteId();
         KUrl url(location);
         if (url.isLocalFile())
             location = url.path();
-        KAlarm::CalEvent::Types altypes = AkonadiModel::instance()->types(collection);
+        CalEvent::Types altypes = AkonadiModel::instance()->types(collection);
         QStringList alarmTypes;
-        if (altypes & KAlarm::CalEvent::ACTIVE)
+        if (altypes & CalEvent::ACTIVE)
             alarmTypes << i18nc("@info/plain", "Active alarms");
-        if (altypes & KAlarm::CalEvent::ARCHIVED)
+        if (altypes & CalEvent::ARCHIVED)
             alarmTypes << i18nc("@info/plain", "Archived alarms");
-        if (altypes & KAlarm::CalEvent::TEMPLATE)
+        if (altypes & CalEvent::TEMPLATE)
             alarmTypes << i18nc("@info/plain", "Alarm templates");
         QString alarmTypeString = alarmTypes.join(i18nc("@info/plain List separator", ", "));
         KACalendar::Compat compat;
@@ -920,14 +920,14 @@ AlarmResource* ResourceSelector::currentResource() const
 /******************************************************************************
 * Return the currently selected resource type.
 */
-KAlarm::CalEvent::Type ResourceSelector::currentResourceType() const
+CalEvent::Type ResourceSelector::currentResourceType() const
 {
     switch (mAlarmType->currentIndex())
     {
-        case 0:  return KAlarm::CalEvent::ACTIVE;
-        case 1:  return KAlarm::CalEvent::ARCHIVED;
-        case 2:  return KAlarm::CalEvent::TEMPLATE;
-        default:  return KAlarm::CalEvent::EMPTY;
+        case 0:  return CalEvent::ACTIVE;
+        case 1:  return CalEvent::ARCHIVED;
+        case 2:  return CalEvent::TEMPLATE;
+        default:  return CalEvent::EMPTY;
     }
 }
 

@@ -24,8 +24,8 @@
 /**  @file functions.h - miscellaneous functions */
 
 #include "editdlg.h"
-#include "kaevent.h"
 
+#include <kalarmcal/kaevent.h>
 #ifdef USE_AKONADI
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
@@ -37,8 +37,9 @@
 #include <QString>
 #include <QVector>
 
+using namespace KAlarmCal;
+
 namespace KCal { class Event; }
-namespace KAlarm { class KAEvent; }
 class QWidget;
 class QAction;
 class KAction;
@@ -50,8 +51,6 @@ class TemplateMenuAction;
 
 namespace KAlarm
 {
-
-class AlarmText;
 
 /** Return codes from fileType() */
 enum FileType { Unknown, TextPlain, TextFormatted, TextApplication, Image };

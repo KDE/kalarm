@@ -1,6 +1,3 @@
-# Note that resource configuration dialogs don't appear if built with this option.
-set(KALARM_CALENDAR_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/kalarm/cal)
-
 ########### definitions copied from kdepim-runtime module ###############
 set(SHARED_MIME_INFO_MINIMUM_VERSION "0.30")
 find_package(SharedMimeInfo)
@@ -20,7 +17,6 @@ add_subdirectory(kalarm)
 add_subdirectory(kalarmdir)
 
 include_directories(
-    ${KALARM_CALENDAR_INCLUDE_DIR}
 #    ${AKONADI_ICAL_RESOURCE}
 #    ${AKONADI_SHARED_RESOURCES}
     ${QT_QTDBUS_INCLUDE_DIR}
@@ -40,7 +36,13 @@ set(akonadi_serializer_kalarm_SRCS
 )
 
 kde4_add_plugin(akonadi_serializer_kalarm ${SERIALIZER_TYPE} ${akonadi_serializer_kalarm_SRCS})
-target_link_libraries(akonadi_serializer_kalarm kalarm_calendar ${KDEPIMLIBS_KCALCORE_LIBS} ${KDEPIMLIBS_KCALUTILS_LIBS} ${KDEPIMLIBS_AKONADI_LIBS} ${KDE4_KDECORE_LIBS})
+target_link_libraries(akonadi_serializer_kalarm
+                      ${KDEPIMLIBS_KALARMCAL_LIBS}
+                      ${KDEPIMLIBS_KCALCORE_LIBS}
+                      ${KDEPIMLIBS_KCALUTILS_LIBS}
+                      ${KDEPIMLIBS_AKONADI_LIBS}
+                      ${KDE4_KDECORE_LIBS}
+                     )
 install(TARGETS akonadi_serializer_kalarm DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install(FILES akonadi_serializer_kalarm.desktop DESTINATION ${DATA_INSTALL_DIR}/akonadi/plugins/serializer)

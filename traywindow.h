@@ -22,7 +22,9 @@
 #define TRAYWINDOW_H
 
 #include "editdlg.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kaevent.h>
+
 #include <kstatusnotifieritem.h>
 #include <QIcon>
 
@@ -36,7 +38,6 @@ class NewAlarmAction;
 #ifdef USE_AKONADI
 class AlarmListModel;
 #endif
-namespace KAlarm { class KAEvent; }
 
 class TrayWindow : public KStatusNotifierItem
 {

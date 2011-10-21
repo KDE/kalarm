@@ -24,9 +24,12 @@
 
 #include "ui_settingsdialog.h"
 #include "ui_alarmtypewidget.h"
-#include "kacalendar.h"
+
+#include <kalarmcal/kacalendar.h>
 
 #include <KDE/KDialog>
+
+using namespace KAlarmCal;
 
 class KConfigDialogManager;
 class AlarmTypeWidget;
@@ -41,8 +44,8 @@ class SettingsDialog : public KDialog
         Q_OBJECT
     public:
         SettingsDialog(WId windowId, Settings*);
-	void setAlarmTypes(KAlarm::CalEvent::Types);
-	KAlarm::CalEvent::Types alarmTypes() const;
+	void setAlarmTypes(CalEvent::Types);
+	CalEvent::Types alarmTypes() const;
 
     private Q_SLOTS:
         void save();

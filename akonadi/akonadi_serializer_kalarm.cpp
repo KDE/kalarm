@@ -20,10 +20,11 @@
  */
 
 #include "akonadi_serializer_kalarm.h"
-#include "eventattribute.h"
-#include "kacalendar.h"
-#include "kaevent.h"
 #include "kaeventformatter.h"
+
+#include <kalarmcal/eventattribute.h>
+#include <kalarmcal/kacalendar.h>
+#include <kalarmcal/kaevent.h>
 
 #include <akonadi/item.h>
 #include <akonadi/abstractdifferencesreporter.h>
@@ -35,7 +36,7 @@
 #include <QtCore/qplugin.h>
 
 using namespace Akonadi;
-using namespace KAlarm;
+using namespace KAlarmCal;
 
 
 // Convert from backend data stream to a KAEvent, and set it into the item's payload.
@@ -61,7 +62,7 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
         return false;
     }
     KAEvent event(i.staticCast<KCalCore::Event>());
-    QString mime = KAlarm::CalEvent::mimeType(event.category());
+    QString mime = CalEvent::mimeType(event.category());
     if (mime.isEmpty()  ||  !event.isValid())
     {
         kWarning(5263) << "Event with uid" << event.id() << "contains no usable alarms!";
@@ -74,12 +75,12 @@ bool SerializerPluginKAlarm::deserialize(Item& item, const QByteArray& label, QI
     static bool attrRegistered = false;
     if (!attrRegistered)
     {
-        AttributeFactory::registerAttribute<KAlarm::EventAttribute>();
+        AttributeFactory::registerAttribute<KAlarmCal::EventAttribute>();
         attrRegistered = true;
     }
-    if (item.hasAttribute<KAlarm::EventAttribute>())
+    if (item.hasAttribute<EventAttribute>())
     {
-        KAEvent::CmdErrType err = item.attribute<KAlarm::EventAttribute>()->commandError();
+        KAEvent::CmdErrType err = item.attribute<EventAttribute>()->commandError();
         event.setCommandError(err);
     }
 

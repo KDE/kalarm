@@ -26,7 +26,6 @@
 class QTimer;
 class MainWindow;
 class Ui_WakeFromSuspendDlgWidget;
-namespace KAlarm { class KAEvent; }
 
 class WakeFromSuspendDlg : public KDialog
 {

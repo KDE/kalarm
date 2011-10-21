@@ -1,7 +1,7 @@
 /*
  *  resourcemodelview.h  -  model/view classes for alarm resource lists
  *  Program:  kalarm
- *  Copyright © 2007,2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007,2008,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,9 @@
 
 #include "kalarm.h"
 
+#include "resources/alarmresource.h"
+#include "resources/alarmresources.h"
+
 #include <QAbstractListModel>
 #include <QSortFilterProxyModel>
 #include <QItemDelegate>
@@ -31,9 +34,7 @@
 #include <QFont>
 #include <QColor>
 
-#include "resources/alarmresource.h"
-#include "resources/alarmresources.h"
-
+using namespace KAlarmCal;
 
 class ResourceModel : public QAbstractListModel
 {
@@ -53,7 +54,7 @@ class ResourceModel : public QAbstractListModel
         void             refresh();
         void             addResource(AlarmResource*);
         void             updateResource(AlarmResource*);
-        void             slotStandardChanged(KAlarm::CalEvent::Type);
+        void             slotStandardChanged(CalEvent::Type);
         void             slotLoaded(AlarmResource*, bool active);
         void             slotStatusChanged(AlarmResource*, AlarmResources::Change);
 
@@ -72,7 +73,7 @@ class ResourceFilterModel : public QSortFilterProxyModel
         Q_OBJECT
     public:
         ResourceFilterModel(QAbstractItemModel* baseModel, QObject* parent);
-        void           setFilter(KAlarm::CalEvent::Type);
+        void           setFilter(CalEvent::Type);
         AlarmResource* resource(int row) const;
         AlarmResource* resource(const QModelIndex&) const;
         void           notifyChange(int row);
@@ -82,7 +83,7 @@ class ResourceFilterModel : public QSortFilterProxyModel
         virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
     private:
-        KAlarm::CalEvent::Type mResourceType;
+        CalEvent::Type mResourceType;
 };
 
 

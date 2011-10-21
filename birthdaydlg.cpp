@@ -57,7 +57,6 @@
 #include <QVBoxLayout>
 
 using namespace KCal;
-using KAlarm::KARecurrence;
 
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)

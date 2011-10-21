@@ -46,7 +46,7 @@ bool                       AlarmResource::mNoGui = false;
 AlarmResource::AlarmResource()
     : ResourceCached(),
       mLock(0),
-      mType(static_cast<KAlarm::CalEvent::Type>(0)),    // invalid
+      mType(static_cast<CalEvent::Type>(0)),    // invalid
       mStandard(false),
       mCloseAfterSave(false),
       mWrongAlarmType(false),
@@ -63,7 +63,7 @@ AlarmResource::AlarmResource()
 AlarmResource::AlarmResource(const KConfigGroup& group)
     : ResourceCached(group),
       mLock(0),
-      mType(static_cast<KAlarm::CalEvent::Type>(0)),    // invalid
+      mType(static_cast<CalEvent::Type>(0)),    // invalid
       mStandard(false),
       mCloseAfterSave(false),
       mWrongAlarmType(false),
@@ -76,13 +76,13 @@ AlarmResource::AlarmResource(const KConfigGroup& group)
     setNoReadOnlyOnLoad(true);
 
     ResourceCached::readConfig(group);
-    int type = group.readEntry("AlarmType", static_cast<int>(KAlarm::CalEvent::ACTIVE));
+    int type = group.readEntry("AlarmType", static_cast<int>(CalEvent::ACTIVE));
     switch (type)
     {
-        case KAlarm::CalEvent::ACTIVE:
-        case KAlarm::CalEvent::ARCHIVED:
-        case KAlarm::CalEvent::TEMPLATE:
-            mType = static_cast<KAlarm::CalEvent::Type>(type);
+        case CalEvent::ACTIVE:
+        case CalEvent::ARCHIVED:
+        case CalEvent::TEMPLATE:
+            mType = static_cast<CalEvent::Type>(type);
             mStandard = group.readEntry("Standard", true);
             break;
         default:
@@ -92,7 +92,7 @@ AlarmResource::AlarmResource(const KConfigGroup& group)
     init();
 }
 
-AlarmResource::AlarmResource(KAlarm::CalEvent::Type type)
+AlarmResource::AlarmResource(CalEvent::Type type)
     : ResourceCached(),
       mLock(0),
       mType(type),
@@ -109,7 +109,7 @@ AlarmResource::AlarmResource(KAlarm::CalEvent::Type type)
 void AlarmResource::init()
 {
     enableChangeNotification();
-    if (mType == KAlarm::CalEvent::ARCHIVED)
+    if (mType == CalEvent::ARCHIVED)
     {
         // Prevent unnecessary multiple saves of archived alarm resources.
         // When multiple alarms are deleted as a group, the archive
@@ -351,9 +351,9 @@ QString AlarmResource::infoText() const
     QString atype;
     switch (mType)
     {
-        case KAlarm::CalEvent::ACTIVE:    atype = i18nc("@info/plain", "Active alarms");  break;
-        case KAlarm::CalEvent::ARCHIVED:  atype = i18nc("@info/plain", "Archived alarms");  break;
-        case KAlarm::CalEvent::TEMPLATE:  atype = i18nc("@info/plain", "Alarm templates");  break;
+        case CalEvent::ACTIVE:    atype = i18nc("@info/plain", "Active alarms");  break;
+        case CalEvent::ARCHIVED:  atype = i18nc("@info/plain", "Archived alarms");  break;
+        case CalEvent::TEMPLATE:  atype = i18nc("@info/plain", "Alarm templates");  break;
         default:  break;
     }
     QString perms = readOnly() ? i18nc("@info/plain", "Read-only") : i18nc("@info/plain", "Read-write");
@@ -388,14 +388,14 @@ void AlarmResource::lock(const QString& path)
 */
 bool AlarmResource::checkAlarmTypes(KCal::CalendarLocal& calendar) const
 {
-    if (mType != KAlarm::CalEvent::EMPTY)
+    if (mType != CalEvent::EMPTY)
     {
         bool have = false;
         bool other = false;
         const Event::List events = calendar.rawEvents();
         for (int i = 0, iend = events.count();  i < iend;  ++i)
         {
-            KAlarm::CalEvent::Type s = KAlarm::CalEvent::status(events[i]);
+            CalEvent::Type s = CalEvent::status(events[i]);
             if (mType == s)
                 have = true;
             else
@@ -412,18 +412,18 @@ bool AlarmResource::checkAlarmTypes(KCal::CalendarLocal& calendar) const
 /*
 void AlarmResource::kaCheckCalendar(CalendarLocal& cal)
 {
-    mTypes = KAlarm::CalEvent::EMPTY;
+    mTypes = CalEvent::EMPTY;
     Event::List events = cal.rawEvents();
     for (int i = 0, iend = events.count();  i < iend;  ++i)
     {
-        switch (KAlarm::CalEvent::status(events[i]))
+        switch (CalEvent::status(events[i]))
         {
-            case KAlarm::CalEvent::ACTIVE:    mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::ACTIVE);  break;
-            case KAlarm::CalEvent::ARCHIVED:  mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::ARCHIVED);  break;
-            case KAlarm::CalEvent::TEMPLATE:  mTypes = static_cast<KAlarm::CalEvent::Type>(mTypes | KAlarm::CalEvent::TEMPLATE);  break;
+            case CalEvent::ACTIVE:    mTypes = static_cast<CalEvent::Type>(mTypes | CalEvent::ACTIVE);  break;
+            case CalEvent::ARCHIVED:  mTypes = static_cast<CalEvent::Type>(mTypes | CalEvent::ARCHIVED);  break;
+            case CalEvent::TEMPLATE:  mTypes = static_cast<CalEvent::Type>(mTypes | CalEvent::TEMPLATE);  break;
             default:   break;
         }
-        if (mTypes == KAlarm::CalEvent::ALL)
+        if (mTypes == CalEvent::ALL)
             break;
     }
 }
@@ -434,10 +434,10 @@ QByteArray AlarmResource::typeName() const
 {
     switch (mType)
     {
-        case KAlarm::CalEvent::ACTIVE:    return "Active";
-        case KAlarm::CalEvent::ARCHIVED:  return "Archived";
-        case KAlarm::CalEvent::TEMPLATE:  return "Template";
-        default:                          return "Empty";
+        case CalEvent::ACTIVE:    return "Active";
+        case CalEvent::ARCHIVED:  return "Archived";
+        case CalEvent::TEMPLATE:  return "Template";
+        default:                  return "Empty";
     }
 }
 #endif

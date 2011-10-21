@@ -1,7 +1,7 @@
 /*
  *  recurrenceedit.h  -  widget to edit the event's recurrence definition
  *  Program:  kalarm
- *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  Based originally on KOrganizer module koeditorrecurrence.h,
  *  Copyright (c) 2000,2001 Cornelius Schumacher <schumacher@kde.org>
@@ -24,7 +24,7 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
-#include "repetition.h"
+#include <kalarmcal/repetition.h>
 
 #include <kdatetime.h>
 
@@ -52,10 +52,9 @@ class DailyRule;
 class WeeklyRule;
 class MonthlyRule;
 class YearlyRule;
-namespace KAlarm { class KAEvent; }
+namespace KAlarmCal { class KAEvent; }
 
-using KAlarm::KAEvent;
-using KAlarm::Repetition;
+using namespace KAlarmCal;
 
 class RecurrenceEdit : public QFrame
 {

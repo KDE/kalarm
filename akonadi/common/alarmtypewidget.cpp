@@ -32,25 +32,25 @@ AlarmTypeWidget::AlarmTypeWidget(QWidget* parent, QLayout* layout)
     connect(ui.templateCheckBox, SIGNAL(toggled(bool)), SIGNAL(changed()));
 }
 
-void AlarmTypeWidget::setAlarmTypes(KAlarm::CalEvent::Types types)
+void AlarmTypeWidget::setAlarmTypes(CalEvent::Types types)
 {
-    if (types & KAlarm::CalEvent::ACTIVE)
+    if (types & CalEvent::ACTIVE)
         ui.activeCheckBox->setChecked(true);
-    if (types & KAlarm::CalEvent::ARCHIVED)
+    if (types & CalEvent::ARCHIVED)
         ui.archivedCheckBox->setChecked(true);
-    if (types & KAlarm::CalEvent::TEMPLATE)
+    if (types & CalEvent::TEMPLATE)
         ui.templateCheckBox->setChecked(true);
 }
 
-KAlarm::CalEvent::Types AlarmTypeWidget::alarmTypes() const
+CalEvent::Types AlarmTypeWidget::alarmTypes() const
 {
-    KAlarm::CalEvent::Types types = KAlarm::CalEvent::EMPTY;
+    CalEvent::Types types = CalEvent::EMPTY;
     if (ui.activeCheckBox->isChecked())
-        types |= KAlarm::CalEvent::ACTIVE;
+        types |= CalEvent::ACTIVE;
     if (ui.archivedCheckBox->isChecked())
-        types |= KAlarm::CalEvent::ARCHIVED;
+        types |= CalEvent::ARCHIVED;
     if (ui.templateCheckBox->isChecked())
-        types |= KAlarm::CalEvent::TEMPLATE;
+        types |= CalEvent::TEMPLATE;
     return types;
 }
 

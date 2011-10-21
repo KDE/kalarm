@@ -21,9 +21,9 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
-#include "alarmtext.h"
-#include "datetime.h"
-#include "kaevent.h"
+#include <kalarmcal/alarmtext.h>
+#include <kalarmcal/datetime.h>
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <akonadi/collection.h>
@@ -55,7 +55,7 @@ class ShellProcess;
 class StackedScrollGroup;
 class TimeSpinBox;
 
-using namespace KAlarm;
+using namespace KAlarmCal;
 
 
 class EditAlarmDlg : public KDialog

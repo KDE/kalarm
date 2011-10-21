@@ -24,7 +24,8 @@
 /* @file alarmresource.h - base class for a KAlarm alarm calendar resource */
 
 #include "kalarm_resources_export.h"
-#include "kacalendar.h"
+
+#include <kalarmcal/kacalendar.h>
 
 #include <kcal/resourcecached.h>
 #include <QMap>
@@ -33,7 +34,7 @@
 #include <sys/stat.h>
 
 using KCal::CalendarLocal;
-using KAlarm::KACalendar;
+using namespace KAlarmCal;
 
 
 #define KARES_DEBUG AlarmResource::debugArea()
@@ -49,17 +50,17 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
 
         AlarmResource();
         explicit AlarmResource(const KConfigGroup&);
-        explicit AlarmResource(KAlarm::CalEvent::Type);
+        explicit AlarmResource(CalEvent::Type);
         ~AlarmResource();
         virtual void writeConfig(KConfigGroup&);
         virtual QString infoText() const;
         KABC::Lock*  lock()                      { return mLock; }
 
         /** Return which type of alarms the resource can contain. */
-        KAlarm::CalEvent::Type alarmType() const               { return mType; }
+        CalEvent::Type alarmType() const               { return mType; }
 
         /** Set the type of alarms which the resource can contain. */
-        void     setAlarmType(KAlarm::CalEvent::Type type)     { mType = type; }
+        void     setAlarmType(CalEvent::Type type)     { mType = type; }
 
         /** Return whether the resource contains only alarms of the wrong type. */
         bool     isWrongAlarmType() const        { return mWrongAlarmType; }
@@ -233,7 +234,7 @@ class KALARM_RESOURCES_EXPORT AlarmResource : public KCal::ResourceCached
         static void              (*mCustomEventFunction)(AlarmResource*, CalendarLocal*);
 
         KABC::Lock* mLock;
-        KAlarm::CalEvent::Type mType; // type of alarm held in this resource
+        CalEvent::Type mType; // type of alarm held in this resource
         QColor      mColour;          // background colour for displaying this resource
         bool        mStandard;        // this is the standard resource for this mWriteType
         bool        mNewReadOnly;     // new read-only status (while mReconfiguring = 1)

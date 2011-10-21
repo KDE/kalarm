@@ -20,7 +20,8 @@
 #ifndef TEMPLATEPICKDLG_H
 #define TEMPLATEPICKDLG_H
 
-#include "kaevent.h"
+#include <kalarmcal/kaevent.h>
+
 #include <kdialog.h>
 
 class QResizeEvent;
@@ -32,7 +33,7 @@ class TemplateListFilterModel;
 #endif
 class TemplateListView;
 
-using KAlarm::KAEvent;
+using namespace KAlarmCal;
 
 class TemplatePickDlg : public KDialog
 {

@@ -24,10 +24,11 @@
 #include "kalarmdirresource.h"
 #include "kalarmresourcecommon.h"
 #include "autoqpointer.h"
-#include "kacalendar.h"
 
 #include "kalarmdirsettingsadaptor.h"
 #include "settingsdialog.h"
+
+#include <kalarmcal/kacalendar.h>
 
 #include <kcalcore/filestorage.h>
 #include <kcalcore/icalformat.h>
@@ -183,8 +184,8 @@ void KAlarmDirResource::configure(WId windowId)
             {
                 // Settings have changed which might affect the alarm configuration
                 initializeDirectory();   // should only be needed for new resource, but just in case ...
-                KAlarm::CalEvent::Types newTypes = KAlarm::CalEvent::types(mSettings->alarmTypes());
-                KAlarm::CalEvent::Types oldTypes = KAlarm::CalEvent::types(types);
+                CalEvent::Types newTypes = CalEvent::types(mSettings->alarmTypes());
+                CalEvent::Types oldTypes = CalEvent::types(types);
                 changeAlarmTypes(~newTypes & oldTypes);
                 c.setContentMimeTypes(mSettings->alarmTypes());
                 modify = true;
@@ -216,7 +217,7 @@ void KAlarmDirResource::configure(WId windowId)
 * Add/remove events to ensure that they match the changed alarm types for the
 * resource.
 */
-void KAlarmDirResource::changeAlarmTypes(KAlarm::CalEvent::Types removed)
+void KAlarmDirResource::changeAlarmTypes(CalEvent::Types removed)
 {
 DEBUG_DATA;
     const QString dirPath = directoryName();
@@ -459,7 +460,7 @@ KAEvent KAlarmDirResource::loadFile(const QString& path, const QString& file)
     int version;
     KACalendar::Compat compat = KAlarmResourceCommon::getCompatibility(fileStorage, version);
     KAEvent event(kcalEvent);
-    const QString mime = KAlarm::CalEvent::mimeType(event.category());
+    const QString mime = CalEvent::mimeType(event.category());
     if (mime.isEmpty())
     {
         kWarning() << "KAEvent has no usable alarms:" << event.id();
@@ -762,7 +763,7 @@ void KAlarmDirResource::retrieveItems(const Akonadi::Collection& collection)
     foreach (const EventFile& data, mEvents)
     {
         const KAEvent& event = data.event;
-        const QString mime = KAlarm::CalEvent::mimeType(event.category());
+        const QString mime = CalEvent::mimeType(event.category());
         if (mime.isEmpty())
         {
             kWarning() << "KAEvent has no alarms:" << event.id();
@@ -1013,7 +1014,7 @@ bool KAlarmDirResource::modifyItem(const KAEvent& event)
 */
 void KAlarmDirResource::deleteItem(const KAEvent& event)
 {
-    Item item(KAlarm::CalEvent::mimeType(event.category()));
+    Item item(CalEvent::mimeType(event.category()));
     Collection c(mCollectionId);
     item.setParentCollection(c);
     item.setRemoteId(event.id());

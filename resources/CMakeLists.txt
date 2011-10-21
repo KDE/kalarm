@@ -1,25 +1,33 @@
-include_directories(
-	../cal
-)
-
 ########### next target ###############
 set(kalarm_resources_LIB_SRCS
-	alarmresource.cpp 
-	alarmresources.cpp 
-	resourcelocal.cpp 
-	resourcelocalwidget.cpp 
-	resourcelocaldir.cpp 
-	resourcelocaldirwidget.cpp 
-	resourceremote.cpp 
-	resourceremotewidget.cpp 
-	resourcewidget.cpp 
+        alarmresource.cpp 
+        alarmresources.cpp 
+        resourcelocal.cpp 
+        resourcelocalwidget.cpp 
+        resourcelocaldir.cpp 
+        resourcelocaldirwidget.cpp 
+        resourceremote.cpp 
+        resourceremotewidget.cpp 
+        resourcewidget.cpp 
 )
 
 
 kde4_add_library(kalarm_resources ${LIBRARY_TYPE} ${kalarm_resources_LIB_SRCS})
 
-target_link_libraries(kalarm_resources kalarm_calendar ${KDEPIMLIBS_KRESOURCES_LIBS} ${KDEPIMLIBS_KABC_LIBS} ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KIO_LIBS})
-target_link_libraries(kalarm_resources LINK_INTERFACE_LIBRARIES kalarm_calendar ${KDEPIMLIBS_KRESOURCES_LIBS} ${KDEPIMLIBS_KABC_LIBS} ${KDEPIMLIBS_KCAL_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(kalarm_resources
+                      ${KDEPIMLIBS_KALARMCAL_LIBS}
+                      ${KDEPIMLIBS_KRESOURCES_LIBS}
+                      ${KDEPIMLIBS_KABC_LIBS}
+                      ${KDEPIMLIBS_KCAL_LIBS}
+                      ${KDE4_KIO_LIBS}
+                     )
+target_link_libraries(kalarm_resources LINK_INTERFACE_LIBRARIES
+                      ${KDEPIMLIBS_KALARMCAL_LIBS}
+                      ${KDEPIMLIBS_KRESOURCES_LIBS}
+                      ${KDEPIMLIBS_KABC_LIBS}
+                      ${KDEPIMLIBS_KCAL_LIBS}
+                      ${KDE4_KIO_LIBS}
+                     )
 
 set_target_properties(kalarm_resources PROPERTIES 
    VERSION ${GENERIC_LIB_VERSION} 

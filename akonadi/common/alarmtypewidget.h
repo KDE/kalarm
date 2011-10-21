@@ -23,16 +23,18 @@
 #define ALARMTYPEWIDGET_H
 
 #include "ui_alarmtypewidget.h"
-#include "kacalendar.h"
 
+#include <kalarmcal/kacalendar.h>
+
+using namespace KAlarmCal;
 
 class AlarmTypeWidget : public QWidget
 {
         Q_OBJECT
     public:
         AlarmTypeWidget(QWidget* parent, QLayout* layout);
-        void setAlarmTypes(KAlarm::CalEvent::Types);
-        KAlarm::CalEvent::Types alarmTypes() const;
+        void setAlarmTypes(CalEvent::Types);
+        CalEvent::Types alarmTypes() const;
 
     signals:
         void changed();

@@ -20,8 +20,9 @@
  */
 
 #include "kalarmresourcecommon.h"
-#include "compatibilityattribute.h"
-#include "eventattribute.h"
+
+#include <kalarmcal/compatibilityattribute.h>
+#include <kalarmcal/eventattribute.h>
 
 #include <akonadi/attributefactory.h>
 #include <akonadi/collectionmodifyjob.h>
@@ -35,8 +36,7 @@
 
 using namespace Akonadi;
 using namespace KCalCore;
-using KAlarm::CompatibilityAttribute;
-using KAlarm::EventAttribute;
+using namespace KAlarmCal;
 
 
 class Private : public QObject
@@ -80,14 +80,14 @@ QStringList mimeTypes(const QString& id)
 {
     QStringList mimes;
     if (id.contains("_active"))
-        mimes << KAlarm::MIME_ACTIVE;
+        mimes << KAlarmCal::MIME_ACTIVE;
     else if (id.contains("_archived"))
-        mimes << KAlarm::MIME_ARCHIVED;
+        mimes << KAlarmCal::MIME_ARCHIVED;
     else if (id.contains("_template"))
-        mimes << KAlarm::MIME_TEMPLATE;
+        mimes << KAlarmCal::MIME_TEMPLATE;
     else
-        mimes << KAlarm::MIME_BASE
-              << KAlarm::MIME_ACTIVE << KAlarm::MIME_ARCHIVED << KAlarm::MIME_TEMPLATE;
+        mimes << KAlarmCal::MIME_BASE
+              << KAlarmCal::MIME_ACTIVE << KAlarmCal::MIME_ARCHIVED << KAlarmCal::MIME_TEMPLATE;
     return mimes;
 }
 
@@ -117,7 +117,7 @@ KACalendar::Compat getCompatibility(const FileStorage::Ptr& fileStorage, int& ve
 */
 Item retrieveItem(const Akonadi::Item& item, KAEvent& event)
 {
-    QString mime = KAlarm::CalEvent::mimeType(event.category());
+    QString mime = CalEvent::mimeType(event.category());
     event.setItemId(item.id());
     if (item.hasAttribute<EventAttribute>())
         event.setCommandError(item.attribute<EventAttribute>()->commandError());

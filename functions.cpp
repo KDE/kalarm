@@ -32,8 +32,6 @@
 #include "autoqpointer.h"
 #include "alarmlistview.h"
 #include "editdlg.h"
-#include "identities.h"
-#include "kaevent.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "mainwindow.h"
@@ -43,6 +41,9 @@
 #include "shellprocess.h"
 #include "templatelistview.h"
 #include "templatemenuaction.h"
+
+#include <kalarmcal/identities.h>
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <kcalcore/event.h>
@@ -291,10 +292,10 @@ UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
     else
     {
 #ifdef USE_AKONADI
-        collection = CollectionControlModel::instance()->destination(KAlarm::CalEvent::ACTIVE, msgParent);
+        collection = CollectionControlModel::instance()->destination(CalEvent::ACTIVE, msgParent);
         if (!collection.isValid())
 #else
-        resource = AlarmResources::instance()->destination(KAlarm::CalEvent::ACTIVE, msgParent);
+        resource = AlarmResources::instance()->destination(CalEvent::ACTIVE, msgParent);
         if (!resource)
 #endif
         {
@@ -370,7 +371,7 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 {
     kDebug() << event.id();
     QString oldid = event.id();
-    bool archiving = (event.category() == KAlarm::CalEvent::ACTIVE);
+    bool archiving = (event.category() == CalEvent::ACTIVE);
     if (archiving  &&  !Preferences::archivedKeepDays())
         return false;   // expired alarms aren't being kept
     AlarmCalendar* cal = AlarmCalendar::resources();
@@ -383,7 +384,7 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 #endif
     if (archiving)
     {
-        newev->setCategory(KAlarm::CalEvent::ARCHIVED);    // this changes the event ID
+        newev->setCategory(CalEvent::ARCHIVED);    // this changes the event ID
         newev->setCreatedDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
     }
     // Note that archived resources are automatically saved after changes are made
@@ -651,7 +652,7 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
 #endif
 
         // Delete the event from the calendar file
-        if (event->category() != KAlarm::CalEvent::ARCHIVED)
+        if (event->category() != CalEvent::ARCHIVED)
         {
             if (event->copyToKOrganizer())
             {
@@ -813,11 +814,11 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
     if (col)
         collection = *col;
     if (!collection.isValid())
-        collection = CollectionControlModel::instance()->destination(KAlarm::CalEvent::ACTIVE, msgParent);
+        collection = CollectionControlModel::instance()->destination(CalEvent::ACTIVE, msgParent);
     if (!collection.isValid())
 #else
     if (!resource)
-        resource = AlarmResources::instance()->destination(KAlarm::CalEvent::ACTIVE, msgParent);
+        resource = AlarmResources::instance()->destination(CalEvent::ACTIVE, msgParent);
     if (!resource)
 #endif
     {
@@ -839,7 +840,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 #else
             KAEvent* event = events[i];
 #endif
-            if (event->category() != KAlarm::CalEvent::ARCHIVED
+            if (event->category() != CalEvent::ARCHIVED
             ||  !event->occursAfter(now, true))
             {
                 ineligibleIDs += event->id();
@@ -854,7 +855,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
             KAEvent* newev = new KAEvent(*event);
             QString oldid = event->id();
 #endif
-            newev->setCategory(KAlarm::CalEvent::ACTIVE);    // this changes the event ID
+            newev->setCategory(CalEvent::ACTIVE);    // this changes the event ID
             if (newev->recurs()  ||  newev->repetition())
                 newev->setNextOccurrence(now);   // skip any recurrences in the past
             newev->setArchive();    // ensure that it gets re-archived if it is deleted
@@ -947,7 +948,7 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
 #else
         KAEvent* event = events[i];
 #endif
-        if (event->category() == KAlarm::CalEvent::ACTIVE
+        if (event->category() == CalEvent::ACTIVE
         &&  enable != event->enabled())
         {
             event->setEnabled(enable);
@@ -1005,7 +1006,7 @@ void purgeArchive(int purgeDays)
     kDebug() << purgeDays;
     QDate cutoff = KDateTime::currentLocalDate().addDays(-purgeDays);
 #ifdef USE_AKONADI
-    Collection collection = CollectionControlModel::getStandard(KAlarm::CalEvent::ARCHIVED);
+    Collection collection = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
     if (!collection.isValid())
         return;
     KAEvent::List events = AlarmCalendar::resources()->events(collection);
@@ -1017,7 +1018,7 @@ void purgeArchive(int purgeDays)
             ++i;
     }
 #else
-    AlarmResource* resource = AlarmResources::instance()->getStandardResource(KAlarm::CalEvent::ARCHIVED);
+    AlarmResource* resource = AlarmResources::instance()->getStandardResource(CalEvent::ARCHIVED);
     if (!resource)
         return;
     KAEvent::List events = AlarmCalendar::resources()->events(resource);
@@ -1370,9 +1371,9 @@ namespace
 void editNewTemplate(EditAlarmDlg::Type type, const KAEvent* preset, QWidget* parent)
 {
 #ifdef USE_AKONADI
-    if (CollectionControlModel::enabledCollections(KAlarm::CalEvent::TEMPLATE, true).isEmpty())
+    if (CollectionControlModel::enabledCollections(CalEvent::TEMPLATE, true).isEmpty())
 #else
-    if (!AlarmResources::instance()->activeCount(KAlarm::CalEvent::TEMPLATE, true))
+    if (!AlarmResources::instance()->activeCount(CalEvent::TEMPLATE, true))
 #endif
     {
         KAMessageBox::sorry(parent, i18nc("@info", "You must enable a template calendar to save the template in"));
@@ -1490,8 +1491,8 @@ bool editAlarm(const QString& eventID, QWidget* parent)
     }
     switch (event->category())
     {
-        case KAlarm::CalEvent::ACTIVE:
-        case KAlarm::CalEvent::TEMPLATE:
+        case CalEvent::ACTIVE:
+        case CalEvent::TEMPLATE:
             break;
         default:
             kError() << eventID << ": event not active or template";
@@ -1611,7 +1612,7 @@ KAEvent::List templateList()
 {
     KAEvent::List templates;
     bool includeCmdAlarms = ShellProcess::authorised();
-    KAEvent::List events = AlarmCalendar::resources()->events(KAlarm::CalEvent::TEMPLATE);
+    KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::TEMPLATE);
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         KAEvent* event = events[i];
@@ -1670,7 +1671,7 @@ void refreshAlarmsIfQueued()
         AlarmCalendar::resources()->reload();
 
         // Close any message windows for alarms which are now disabled
-        KAEvent::List events = AlarmCalendar::resources()->events(KAlarm::CalEvent::ACTIVE);
+        KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::ACTIVE);
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             KAEvent* event = events[i];
@@ -2290,7 +2291,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
         case KAEvent::ACT_EMAIL:
         {
             QString from = event->emailFromId()
-                         ? KAlarm::Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
+                         ? Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
                          : Preferences::emailAddress();
             AlarmText atext;
             atext.setEmail(event->emailAddresses(", "), from, QString(), QString(), event->emailSubject(), QString());

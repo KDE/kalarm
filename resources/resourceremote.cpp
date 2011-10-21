@@ -1,7 +1,7 @@
 /*
  *  resourceremote.cpp  -  KAlarm remote alarm calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on resourceremote.cpp in kresources (updated to rev 721447),
  *  Copyright (c) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *
@@ -61,7 +61,7 @@ KAResourceRemote::KAResourceRemote(const KConfigGroup& group)
     init();
 }
 
-KAResourceRemote::KAResourceRemote(KAlarm::CalEvent::Type type, const KUrl& downloadUrl, const KUrl& uploadUrl)
+KAResourceRemote::KAResourceRemote(CalEvent::Type type, const KUrl& downloadUrl, const KUrl& uploadUrl)
     : AlarmResource(type),
       mDownloadUrl(downloadUrl),
       mUploadUrl(uploadUrl.isEmpty() ? mDownloadUrl : uploadUrl),

@@ -17,7 +17,6 @@ endif (KDEPIM_MOBILE_UI)
 
 include_directories(
     ${KALARM_COMMON_RESOURCES}
-    ${KALARM_CALENDAR_INCLUDE_DIR}
     ${AKONADI_ICAL_RESOURCE}
     ${AKONADI_SHARED_RESOURCES}
     ${QT_QTDBUS_INCLUDE_DIR}
@@ -60,6 +59,13 @@ if (Q_WS_MAC)
     set_target_properties(akonadi_kalarm_resource PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KDE Akonadi KAlarm Resource")
 endif (Q_WS_MAC)
 
-target_link_libraries(akonadi_kalarm_resource kalarm_calendar akonadi-kcal ${KDEPIMLIBS_AKONADI_LIBS} ${QT_QTDBUS_LIBRARY} ${KDEPIMLIBS_KCALCORE_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(akonadi_kalarm_resource
+                      ${KDEPIMLIBS_KALARMCAL_LIBS}
+                      ${KDEPIMLIBS_AKONADI_KCAL_LIBS}
+                      ${KDEPIMLIBS_AKONADI_LIBS}
+                      ${KDEPIMLIBS_KCALCORE_LIBS}
+                      ${KDE4_KIO_LIBS}
+                      ${QT_QTDBUS_LIBRARY}
+                     )
 
 install(TARGETS akonadi_kalarm_resource DESTINATION ${PLUGIN_INSTALL_DIR})
