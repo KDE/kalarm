@@ -1,8 +1,7 @@
 /*
- *  identities.h  -  email identity functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -20,37 +19,27 @@
  *  MA 02110-1301, USA.
  */
 
-#ifndef KALARM_IDENTITIES_H
-#define KALARM_IDENTITIES_H
+#ifndef KALARMCAL_EXPORT_H
+#define KALARMCAL_EXPORT_H
 
-#include "kalarmcal_export.h"
+/* needed for KDE_EXPORT and KDE_IMPORT macros */
+#include <kdemacros.h>
 
-class QString;
+#ifndef KALARMCAL_EXPORT
+# if defined(KDEPIM_STATIC_LIBS)
+   /* No export/import for static libraries */
+#  define KALARMCAL_EXPORT
+# elif defined(MAKE_KALARMCAL_LIB)
+   /* We are building this library */
+#  define KALARMCAL_EXPORT KDE_EXPORT
+# else
+   /* We are using this library */
+#  define KALARMCAL_EXPORT KDE_IMPORT
+# endif
+#endif
 
-namespace KPIMIdentities { class IdentityManager; }
+# ifndef KALARMCAL_EXPORT_DEPRECATED
+#  define KALARMCAL_EXPORT_DEPRECATED KDE_DEPRECATED KALARMCAL_EXPORT
+# endif
 
-namespace KAlarmCal
-{
-
-/**
- * Functions to facilitate use of KDE email identities.
- *
- * @author David Jarvie <djarvie@kde.org>
- */
-namespace Identities
-{
-    /** Return the unique identity manager instance. It is created if it does not already exist. */
-    KALARMCAL_EXPORT KPIMIdentities::IdentityManager* identityManager();
-
-    /** Return whether any identities exist. */
-    KALARMCAL_EXPORT bool identitiesExist();
-
-    /** Fetch the uoid of an identity name or uoid string. */
-    KALARMCAL_EXPORT uint identityUoid(const QString& identityUoidOrName);
-}
-
-}
-
-#endif // KALARM_IDENTITIES_H
-
-// vim: et sw=4:
+#endif

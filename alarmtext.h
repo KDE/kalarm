@@ -1,6 +1,7 @@
 /*
  *  alarmtext.h  -  text/email alarm text conversion
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2004,2005,2008-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
@@ -22,7 +23,7 @@
 #ifndef ALARMTEXT_H
 #define ALARMTEXT_H
 
-#include "kalarm_cal_export.h"
+#include "kalarmcal_export.h"
 
 #ifndef USE_KRESOURCES
 #include <kcalcore/todo.h>
@@ -52,7 +53,7 @@ class KAEvent;
  * @author David Jarvie <djarvie@kde.org>
  */
 
-class KALARM_CAL_EXPORT AlarmText
+class KALARMCAL_EXPORT AlarmText
 {
     public:
         /** Constructor which sets the alarm text.

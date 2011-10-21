@@ -1,6 +1,7 @@
 /*
  *  version.cpp  -  program version functions
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2002-2007,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify

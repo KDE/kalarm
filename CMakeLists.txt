@@ -11,9 +11,11 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 
 # KALARM_USE_KRESOURCES - builds to use KResources instead of Akonadi
 option(KALARM_USE_KRESOURCES "Build to use KResources" OFF)
-if (KDEPIM_NO_KRESOURCES)
-    set(KALARM_USE_KRESOURCES OFF CACHE BOOL "Build to use KResources")
-endif (KDEPIM_NO_KRESOURCES)
+
+set(USE_KRESOURCES false)
+if(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
+    set(USE_KRESOURCES true)
+endif(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
 
 ########### next target ###############
 set(kalarmcal_LIB_SRCS
@@ -26,17 +28,17 @@ set(kalarmcal_LIB_SRCS
     repetition.cpp
     version.cpp
    )
-if(NOT KALARM_USE_KRESOURCES)
+if(NOT USE_KRESOURCES)
     set(kalarmcal_LIB_SRCS ${kalarmcal_LIB_SRCS}
 	collectionattribute.cpp
 	compatibilityattribute.cpp
 	eventattribute.cpp
        )
-endif(NOT KALARM_USE_KRESOURCES)
+endif(NOT USE_KRESOURCES)
 
 kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 
-if(KALARM_USE_KRESOURCES)
+if(USE_KRESOURCES)
     target_link_libraries(kalarmcal
 		          kcal
                           kholidays
@@ -44,7 +46,7 @@ if(KALARM_USE_KRESOURCES)
 			  ${KDE4_KDECORE_LIBS}
 			  ${QT_QTCORE_LIBRARY}
 			 )
-else(KALARM_USE_KRESOURCES)
+else(USE_KRESOURCES)
     target_link_libraries(kalarmcal
                           akonadi-kde
                           kcalcore
@@ -53,7 +55,7 @@ else(KALARM_USE_KRESOURCES)
 			  ${KDE4_KDECORE_LIBS}
 			  ${QT_QTCORE_LIBRARY}
 			 )
-endif(KALARM_USE_KRESOURCES)
+endif(USE_KRESOURCES)
 
 set_target_properties(kalarmcal PROPERTIES 
                       VERSION ${LIB_VERSION} 
@@ -67,7 +69,7 @@ install(FILES
 	identities.h
 	kacalendar.h
 	kaevent.h
-	kalarm_cal_export.h
+	kalarmcal_export.h
 	karecurrence.h
 	kcalcore_constptr.h
 	repetition.h
@@ -75,7 +77,7 @@ install(FILES
 	DESTINATION ${INCLUDE_INSTALL_DIR}/kalarmcal
 	COMPONENT Devel
 )
-if(NOT KALARM_USE_KRESOURCES)
+if(NOT USE_KRESOURCES)
     install(FILES
 	    collectionattribute.h
 	    compatibilityattribute.h
@@ -83,4 +85,4 @@ if(NOT KALARM_USE_KRESOURCES)
 	    DESTINATION ${INCLUDE_INSTALL_DIR}/kalarmcal
 	    COMPONENT Devel
            )
-endif(NOT KALARM_USE_KRESOURCES)
+endif(NOT USE_KRESOURCES)

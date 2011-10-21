@@ -1,6 +1,7 @@
 /*
  *  repetition.h  -  represents a sub-repetition: interval and count
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2009,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
@@ -22,7 +23,7 @@
 #ifndef KALARM_REPETITION_H
 #define KALARM_REPETITION_H
 
-#include "kalarm_cal_export.h"
+#include "kalarmcal_export.h"
 #ifndef USE_KRESOURCES
 #include <kcalcore/duration.h>
 #else
@@ -43,7 +44,7 @@ namespace KAlarmCal
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class KALARM_CAL_EXPORT Repetition
+class KALARMCAL_EXPORT Repetition
 {
     public:
         /** Default constructor.

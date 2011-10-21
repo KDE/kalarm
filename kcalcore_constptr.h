@@ -1,6 +1,7 @@
 /*
  *  kcalcore_constptr.h  -  ConstPtr types for kcalcore objects
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2010 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify

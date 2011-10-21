@@ -1,6 +1,7 @@
 /*
  *  collectionattribute.h  -  Akonadi attribute holding Collection characteristics
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
@@ -22,7 +23,7 @@
 #ifndef KALARM_COLLECTION_ATTRIBUTE_H
 #define KALARM_COLLECTION_ATTRIBUTE_H
 
-#include "kalarm_cal_export.h"
+#include "kalarmcal_export.h"
 
 #include "kacalendar.h"
 
@@ -47,7 +48,7 @@ namespace KAlarmCal
  * @author David Jarvie <djarvie@kde.org>
  */
 
-class KALARM_CAL_EXPORT CollectionAttribute : public Akonadi::Attribute
+class KALARMCAL_EXPORT CollectionAttribute : public Akonadi::Attribute
 {
     public:
         CollectionAttribute();

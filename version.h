@@ -1,6 +1,7 @@
 /*
  *  version.h  -  program version functions
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2005,2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,7 +22,7 @@
 #ifndef KALARM_VERSION_H
 #define KALARM_VERSION_H
 
-#include "kalarm_cal_export.h"
+#include "kalarmcal_export.h"
 #include <QString>
 
 namespace KAlarmCal
@@ -31,10 +32,10 @@ namespace KAlarmCal
 inline int Version(int major, int minor, int rev)     { return major*10000 + minor*100 + rev; }
 
 /** Convert a version string to an integer. */
-KALARM_CAL_EXPORT int getVersionNumber(const QString& version, QString* subVersion = 0);
+KALARMCAL_EXPORT int getVersionNumber(const QString& version, QString* subVersion = 0);
 
 /** Convert a version integer to a string. */
-KALARM_CAL_EXPORT QString getVersionString(int version);
+KALARMCAL_EXPORT QString getVersionString(int version);
 
 }
 

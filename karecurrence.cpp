@@ -1,6 +1,7 @@
 /*
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify

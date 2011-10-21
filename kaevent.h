@@ -1,6 +1,7 @@
 /*
  *  kaevent.h  -  represents calendar events
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
@@ -22,7 +23,7 @@
 #ifndef KAEVENT_H
 #define KAEVENT_H
 
-#include "kalarm_cal_export.h"
+#include "kalarmcal_export.h"
 
 #include "datetime.h"
 #include "karecurrence.h"
@@ -75,7 +76,7 @@ namespace KAlarmCal
  *
  * @author David Jarvie <djarvie@kde.org>
  */
-class KALARM_CAL_EXPORT KAAlarm
+class KALARMCAL_EXPORT KAAlarm
 {
     public:
         /** The basic KAAlarm action types. */
@@ -206,7 +207,7 @@ class KALARM_CAL_EXPORT KAAlarm
  *
  * @author David Jarvie <djarvie@kde.org>
  */
-class KALARM_CAL_EXPORT KAEvent
+class KALARMCAL_EXPORT KAEvent
 {
     public:
         /** A list of pointers to KAEvent objects. */

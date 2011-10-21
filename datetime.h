@@ -1,6 +1,7 @@
 /*
  *  datetime.h  -  date/time with start-of-day time for date-only values 
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2003,2005-2007,2009,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
@@ -21,7 +22,7 @@
 #ifndef KALARM_DATETIME_H
 #define KALARM_DATETIME_H
 
-#include "kalarm_cal_export.h"
+#include "kalarmcal_export.h"
 
 #include <kdatetime.h>
 
@@ -38,7 +39,7 @@ namespace KAlarmCal
  *
  *  @author David Jarvie <djarvie@kde.org>
 */
-class KALARM_CAL_EXPORT DateTime
+class KALARMCAL_EXPORT DateTime
 {
     public:
         /** Default constructor.
@@ -211,9 +212,9 @@ class KALARM_CAL_EXPORT DateTime
         /** Compare this value with another. */
         KDateTime::Comparison compare(const DateTime &other) const;
 
-        KALARM_CAL_EXPORT friend bool operator==(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
-        KALARM_CAL_EXPORT friend bool operator==(const KDateTime& dt1, const KAlarmCal::DateTime& dt2);
-        KALARM_CAL_EXPORT friend bool operator<(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
+        KALARMCAL_EXPORT friend bool operator==(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
+        KALARMCAL_EXPORT friend bool operator==(const KDateTime& dt1, const KAlarmCal::DateTime& dt2);
+        KALARMCAL_EXPORT friend bool operator<(const KAlarmCal::DateTime& dt1, const KAlarmCal::DateTime& dt2);
         friend bool operator<(const KDateTime& dt1, const KAlarmCal::DateTime& dt2);
 
     private:
@@ -224,8 +225,8 @@ class KALARM_CAL_EXPORT DateTime
 };
 
 /** Returns true if the two values are equal. */
-KALARM_CAL_EXPORT bool operator==(const DateTime& dt1, const DateTime& dt2);
-KALARM_CAL_EXPORT bool operator==(const KDateTime& dt1, const DateTime& dt2);
+KALARMCAL_EXPORT bool operator==(const DateTime& dt1, const DateTime& dt2);
+KALARMCAL_EXPORT bool operator==(const KDateTime& dt1, const DateTime& dt2);
 
 /** Returns true if the two values are not equal. */
 inline bool operator!=(const DateTime& dt1, const DateTime& dt2)   { return !operator==(dt1, dt2); }
@@ -235,7 +236,7 @@ inline bool operator!=(const KDateTime& dt1, const DateTime& dt2)  { return !ope
  *  If the two values have the same date, and one value is date-only while the other is a date-time, the
  *  time used for the date-only value is the start-of-day time set in the KAlarm Preferences dialog.
  */
-KALARM_CAL_EXPORT bool operator<(const DateTime& dt1, const DateTime& dt2);
+KALARMCAL_EXPORT bool operator<(const DateTime& dt1, const DateTime& dt2);
 inline bool operator<(const KDateTime& dt1, const DateTime& dt2)   { return operator<(DateTime(dt1), dt2); }
 
 /** Returns true if the @p dt1 is later than @p dt2.

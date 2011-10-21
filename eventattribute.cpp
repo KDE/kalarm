@@ -1,6 +1,7 @@
 /*
  *  eventattribute.cpp  -  per-user attributes for individual events
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify

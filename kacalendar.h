@@ -1,6 +1,7 @@
 /*
  *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
- *  Program:  kalarm
+ *  This file is part of kalarmcal library, which provides access to KAlarm
+ *  calendar data.
  *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
@@ -22,7 +23,7 @@
 #ifndef KALARM_KACALENDAR_H
 #define KALARM_KACALENDAR_H
 
-#include "kalarm_cal_export.h"
+#include "kalarmcal_export.h"
 #ifndef USE_KRESOURCES
 #include "kcalcore_constptr.h"
 #include <kcalcore/filestorage.h>
@@ -49,10 +50,10 @@ namespace KAlarmCal
 {
 
 #ifndef USE_KRESOURCES
-extern const QLatin1String KALARM_CAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
-extern const QLatin1String KALARM_CAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
-extern const QLatin1String KALARM_CAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
-extern const QLatin1String KALARM_CAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
+extern const QLatin1String KALARMCAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
+extern const QLatin1String KALARMCAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
+extern const QLatin1String KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
+extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
 #endif
 
 /**
@@ -115,9 +116,9 @@ namespace KACalendar
      *          >0 the older KAlarm version which wrote the calendar
      */
 #ifndef USE_KRESOURCES
-    KALARM_CAL_EXPORT int updateVersion(const KCalCore::FileStorage::Ptr&, QString& versionString);
+    KALARMCAL_EXPORT int updateVersion(const KCalCore::FileStorage::Ptr&, QString& versionString);
 #else
-    KALARM_CAL_EXPORT int updateVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
+    KALARMCAL_EXPORT int updateVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
 #endif
 
     /** Return a prompt string to ask the user whether to convert the calendar to the
@@ -125,22 +126,22 @@ namespace KACalendar
      *  @param whole if true, the whole calendar needs to be converted; else only some
      *               alarms may need to be converted.
      */
-    KALARM_CAL_EXPORT QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
+    KALARMCAL_EXPORT QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
 
 #ifndef USE_KRESOURCES
     /** Set the KAlarm version custom property for a calendar. */
-    KALARM_CAL_EXPORT void setKAlarmVersion(const KCalCore::Calendar::Ptr&);
+    KALARMCAL_EXPORT void setKAlarmVersion(const KCalCore::Calendar::Ptr&);
 #else
-    KALARM_CAL_EXPORT void setKAlarmVersion(KCal::CalendarLocal&);
+    KALARMCAL_EXPORT void setKAlarmVersion(KCal::CalendarLocal&);
 #endif
 
     /** Set the program name and version for use in calendars. */
-    KALARM_CAL_EXPORT void setProductId(const QByteArray& progName, const QByteArray& progVersion);
+    KALARMCAL_EXPORT void setProductId(const QByteArray& progName, const QByteArray& progVersion);
 
     /** Return the product ID string for use in calendars.
      *  setProductId() must have been called previously.
      */
-    KALARM_CAL_EXPORT QByteArray  icalProductId();
+    KALARMCAL_EXPORT QByteArray  icalProductId();
 
     extern const QByteArray APPNAME;    //!< The application name ("KALARM") used in calendar properties
 } // namespace KACalendar
@@ -168,22 +169,22 @@ namespace CalEvent
     };
     Q_DECLARE_FLAGS(Types, Type)
 
-    KALARM_CAL_EXPORT QString uid(const QString& id, Type);
+    KALARMCAL_EXPORT QString uid(const QString& id, Type);
 #ifndef USE_KRESOURCES
-    KALARM_CAL_EXPORT Type    status(const KCalCore::ConstEventPtr&, QString* param = 0);
-    KALARM_CAL_EXPORT void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
+    KALARMCAL_EXPORT Type    status(const KCalCore::ConstEventPtr&, QString* param = 0);
+    KALARMCAL_EXPORT void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
 
     /** Return the alarm Type for a mime type string. */
-    KALARM_CAL_EXPORT Type    type(const QString& mimeType);
+    KALARMCAL_EXPORT Type    type(const QString& mimeType);
     /** Return the alarm Types for a list of mime type strings. */
-    KALARM_CAL_EXPORT Types   types(const QStringList& mimeTypes);
+    KALARMCAL_EXPORT Types   types(const QStringList& mimeTypes);
     /** Return the mime type string corresponding to an alarm Type. */
-    KALARM_CAL_EXPORT QString mimeType(Type);
+    KALARMCAL_EXPORT QString mimeType(Type);
     /** Return the mime type strings corresponding to alarm Types. */
-    KALARM_CAL_EXPORT QStringList mimeTypes(Types);
+    KALARMCAL_EXPORT QStringList mimeTypes(Types);
 #else
-    KALARM_CAL_EXPORT Type    status(const KCal::Event*, QString* param = 0);
-    KALARM_CAL_EXPORT void    setStatus(KCal::Event*, Type, const QString& param = QString());
+    KALARMCAL_EXPORT Type    status(const KCal::Event*, QString* param = 0);
+    KALARMCAL_EXPORT void    setStatus(KCal::Event*, Type, const QString& param = QString());
 #endif
 } // namespace CalEvent
 
