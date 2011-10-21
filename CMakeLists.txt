@@ -67,7 +67,7 @@ install(FILES
 	identities.h
 	kacalendar.h
 	kaevent.h
-	kalarmcal_export.h
+	kalarm_cal_export.h
 	karecurrence.h
 	kcalcore_constptr.h
 	repetition.h
