@@ -15,6 +15,9 @@ option(KALARM_USE_KRESOURCES "Build to use KResources" OFF)
 set(USE_KRESOURCES false)
 if(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
     set(USE_KRESOURCES true)
+    add_definitions(-DUSE_KRESOURCES)
+    add_definitions(-DWANT_DEPRECATED_KCAL_API)
+    add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
 endif(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
 
 ########### next target ###############

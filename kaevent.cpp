@@ -23,7 +23,7 @@
 #include "kaevent.h"
 
 #ifdef USE_KRESOURCES
-#include "alarmresource.h"
+//#include "alarmresource.h"
 #endif
 #include "alarmtext.h"
 #include "identities.h"
@@ -40,6 +40,7 @@ using namespace KHolidays;
 #include <ksystemtimezone.h>
 #include <klocale.h>
 #ifdef USE_KRESOURCES
+#include <kglobal.h>
 #include <kconfiggroup.h>
 #endif
 #include <kdebug.h>
@@ -4001,7 +4002,7 @@ void KAEvent::Private::dumpDebug() const
 {
     kDebug() << "KAEvent dump:";
 #ifdef USE_KRESOURCES
-    if (mResource) { kDebug() << "-- mResource:" << mResource->resourceName(); }
+    if (mResource) { kDebug() << "-- mResource:" << (void*)mResource; }
 #endif
     kDebug() << "-- mEventID:" << mEventID;
     kDebug() << "-- mActionSubType:" << (mActionSubType == MESSAGE ? "MESSAGE" : mActionSubType == FILE ? "FILE" : mActionSubType == COMMAND ? "COMMAND" : mActionSubType == EMAIL ? "EMAIL" : mActionSubType == AUDIO ? "AUDIO" : "??");
