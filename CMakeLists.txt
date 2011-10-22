@@ -123,8 +123,8 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     templatedlg.cpp
     templatemenuaction.cpp
     wakedlg.cpp
-kcombobox.cpp
-kdatecombobox.cpp
+#kcombobox.cpp
+#kdatecombobox.cpp
 )
 if(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
