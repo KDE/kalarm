@@ -39,7 +39,6 @@
 #include <kcal/calendarlocal.h>
 #endif
 
-#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -55,6 +54,8 @@ using Akonadi::Collection;
 using namespace KCal;
 #endif
 
+
+static const KCatalogLoader loader("libkalarmcal");
 
 namespace KAlarmCal
 {
@@ -79,14 +80,11 @@ class Private
 #else
         static int  readKAlarmVersion(CalendarLocal&, const QString& localFile, QString& subVersion, QString& versionString);
 #endif
-        static void insertKAlarmCatalog();
 
         static QByteArray mIcalProductId;
-        static bool mHaveKAlarmCatalog;
 };
 
 QByteArray Private::mIcalProductId;
-bool       Private::mHaveKAlarmCatalog = false;
 
 
 namespace KACalendar
@@ -246,7 +244,6 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
         {
             // Older versions used KAlarm's translated name in the product ID, which
             // could have created problems using a calendar in different locales.
-            Private::insertKAlarmCatalog();
             progname = QString(" ") + i18n("KAlarm") + ' ';
             i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
             if (i < 0)
@@ -269,18 +266,6 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
     if (ver == KAEvent::currentCalendarVersion())
         return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
     return KAlarmCal::getVersionNumber(versionString, &subVersion);
-}
-
-/******************************************************************************
-* Access the KAlarm message translation catalog.
-*/
-void Private::insertKAlarmCatalog()
-{
-    if (!mHaveKAlarmCatalog)
-    {
-        KGlobal::locale()->insertCatalog("kalarm");
-        mHaveKAlarmCatalog = true;
-    }
 }
 
 /******************************************************************************
