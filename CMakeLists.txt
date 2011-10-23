@@ -40,11 +40,9 @@ include_directories(
 )
 endif(KALARM_USE_AKONADI)
 
-if(KALARM_USE_AKONADI)
-    add_subdirectory(akonadi)
-else(KALARM_USE_AKONADI)
+if(NOT KALARM_USE_AKONADI)
     add_subdirectory(resources)
-endif(KALARM_USE_AKONADI)
+endif(NOT KALARM_USE_AKONADI)
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
