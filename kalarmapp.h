@@ -213,6 +213,7 @@ class KAlarmApp : public KUniqueApplication
         mutable OrgKdeKSpeechInterface* mKSpeech;// KSpeech D-Bus interface object
         int                mPendingQuitCode;     // exit code for a pending quit
         bool               mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
+        bool               mCancelRtcWake;       // cancel RTC wake on quitting
         bool               mProcessingQueue;     // a mDcopQueue entry is currently being processed
         bool               mNoSystemTray;        // no system tray exists
         bool               mSessionClosingDown;  // session manager is closing the application

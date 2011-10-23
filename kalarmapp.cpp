@@ -118,6 +118,7 @@ KAlarmApp::KAlarmApp()
       mPurgeDaysQueued(-1),
       mKSpeech(0),
       mPendingQuit(false),
+      mCancelRtcWake(false),
       mProcessingQueue(false),
       mSessionClosingDown(false),
       mAlarmsEnabled(true),
@@ -574,6 +575,11 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     // This was the last/only running "instance" of the program, so exit completely.
     kDebug() << exitCode << ": quitting";
     MessageWin::stopAudio(true);
+    if (mCancelRtcWake)
+    {
+        KAlarm::setRtcWakeTime(0, 0);
+        KAlarm::deleteRtcWakeConfig();
+    }
     delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
     mAlarmTimer = 0;
     mInitialised = false;   // prevent processQueue() from running
@@ -595,6 +601,16 @@ void KAlarmApp::doQuit(QWidget* parent)
                                             QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
                                            ) != KMessageBox::Yes)
         return;
+    if (!KAlarm::checkRtcWakeConfig(true).isEmpty())
+    {
+        // A wake-on-suspend alarm is set
+        if (KAMessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
+                                                i18nc("@info", "Quitting will cancel the scheduled Wake from Suspend."),
+                                                QString(), KStandardGuiItem::quit()
+                                               ) != KMessageBox::Yes)
+            return;
+        mCancelRtcWake = true;
+    }
     if (!Preferences::autoStart())
     {
         int option = KMessageBox::No;
