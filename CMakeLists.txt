@@ -152,11 +152,11 @@ endif (KMAIL_SUPPORTED)
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
 if(KALARM_USE_AKONADI)
-    kcfg_generate_dbus_interface(${KCFG_INSTALL_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-    qt4_add_dbus_interface(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
+    kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
+    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
 
-    kcfg_generate_dbus_interface(${KCFG_INSTALL_DIR}/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
-    qt4_add_dbus_interface(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
+    kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
+    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
 
     qt4_add_dbus_interfaces(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml)
 #    qt4_add_dbus_adaptor(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml agentbase.h Akonadi::AgentBase controladaptor Akonadi__ControlAdaptor)
