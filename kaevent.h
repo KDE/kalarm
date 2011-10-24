@@ -505,22 +505,35 @@ class KALARMCAL_EXPORT KAEvent
          */
         Actions actionTypes() const;
 
-        /** Set or clear the late-cancel option.
+        /** Set or clear the late-cancel option. This determines whether the alarm
+         *  will be cancelled if it is late in triggering.
          *  @param minutes  late cancellation period in minutes, or 0 to clear
+         *  @see lateCancel()
          */
         void setLateCancel(int minutes);
 
-        /** Get the late cancellation period.
+        /** Get the late cancellation period. This is how late the alarm can
+         *  trigger after its scheduled time, before it will be cancelled.
          *  @return period in minutes, or 0 if no late cancellation is specified
+         *  @see setLateCancel()
          */
         int lateCancel() const;
 
-        /** Enable or disable auto-close for a display alarm. Note that auto-close will only
-         *  operate if in addition to being enabled, late-cancel is also set. */
+        /** Enable or disable auto-close for a display alarm, i.e. whether the
+         *  alarm window will be closed on expiry of the late-cancellation
+         *  time. Note that auto-close will only take effect if the late-cancel
+         *  option is also set.
+         *  @see setLateCancel(), autoClose()
+         */
         void setAutoClose(bool autoclose);
 
-        /** Return whether auto-close is enabled. Note that auto-close will only
-         *  operate if in addition to being enabled, late-cancel is also set. */
+        /** Return whether auto-close is enabled, i.e. whether the alarm window
+         *  will be closed on expiry of the late-cancellation time. Note that
+         *  auto-close will only operate if in addition to being enabled,
+         *  late-cancel is also set.
+         *  @return true if it is a display alarm and auto-close is enabled.
+         *  @see lateCancel(), setAutoClose()
+         */
         bool autoClose() const;
 
         void               setKMailSerialNumber(unsigned long n);
@@ -531,7 +544,8 @@ class KALARMCAL_EXPORT KAEvent
          *  which incorporate checks on alarm type.
          */
         QString cleanText() const;
-        /** Return the message text for a display alarm, or the email body for an email alarm.
+        /** Return the message text for a display alarm, or the email body for
+         *  an email alarm.
          *  @return message/email text, or empty if not a display or email alarm. */
         QString message() const;
         /** Return the message text for a display alarm.
@@ -548,7 +562,8 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Set the global default font for alarm message texts. */
         static void setDefaultFont(const QFont& font);
-        /** Return whether to use the default font (as set by setDefaultFont()) for alarm message texts. */
+        /** Return whether to use the default font (as set by setDefaultFont())
+         *  for alarm message texts. */
         bool useDefaultFont() const;
         /** Return the font to use for alarm message texts. */
         QFont font() const;
