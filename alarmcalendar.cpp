@@ -574,7 +574,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
     for (i = 0, end = kcalevents.count();  i < end;  ++i)
     {
 #ifdef USE_AKONADI
-        ConstEventPtr kcalevent = kcalevents[i];
+        Event::Ptr kcalevent = kcalevents[i];
 #else
         const Event* kcalevent = kcalevents[i];
 #endif
@@ -920,7 +920,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
 #ifdef USE_AKONADI
-            ConstEventPtr event = events[i];
+            Event::Ptr event = events[i];
 #else
             const Event* event = events[i];
 #endif

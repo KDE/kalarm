@@ -138,7 +138,7 @@ class MessageWin : public MainWindowBase
         bool                haveErrorMessage(unsigned msg) const;
         void                clearErrorMessage(unsigned msg) const;
 #ifdef USE_AKONADI
-        static bool         reinstateFromDisplaying(const KCalCore::ConstEventPtr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
+        static bool         reinstateFromDisplaying(const KCalCore::Event::Ptr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
 #else
         static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
 #endif
