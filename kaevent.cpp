@@ -22,9 +22,6 @@
 
 #include "kaevent.h"
 
-#ifdef USE_KRESOURCES
-//#include "alarmresource.h"
-#endif
 #include "alarmtext.h"
 #include "identities.h"
 #include "version.h"
@@ -150,7 +147,7 @@ class KAEvent::Private : public QSharedData
         struct AlarmData
         {
 #ifndef USE_KRESOURCES
-            ConstAlarmPtr               alarm;
+            Alarm::Ptr                  alarm;
 #else
             const Alarm*                alarm;
 #endif
@@ -181,7 +178,7 @@ class KAEvent::Private : public QSharedData
         Private(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
                 const QFont& f, SubAction, int lateCancel, Flags flags, bool changesPending = false);
 #ifndef USE_KRESOURCES
-        explicit Private(const KCalCore::ConstEventPtr&);
+        explicit Private(const KCalCore::Event::Ptr&);
 #else
         explicit Private(const KCal::Event*);
 #endif
@@ -189,7 +186,7 @@ class KAEvent::Private : public QSharedData
         ~Private()         { delete mRecurrence; }
         Private&           operator=(const Private& e)       { if (&e != this) copy(e);  return *this; }
 #ifndef USE_KRESOURCES
-        void               set(const KCalCore::ConstEventPtr&);
+        void               set(const KCalCore::Event::Ptr&);
 #else
         void               set(const KCal::Event*);
 #endif
@@ -207,7 +204,7 @@ class KAEvent::Private : public QSharedData
         void               cancelDefer();
 #ifndef USE_KRESOURCES
         bool               setDisplaying(const Private&, KAAlarm::Type, Akonadi::Collection::Id, const KDateTime& dt, bool showEdit, bool showDefer);
-        void               reinstateFromDisplaying(const KCalCore::ConstEventPtr&, Akonadi::Collection::Id&, bool& showEdit, bool& showDefer);
+        void               reinstateFromDisplaying(const KCalCore::Event::Ptr&, Akonadi::Collection::Id&, bool& showEdit, bool& showDefer);
 #else
         bool               setDisplaying(const Private&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
         void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
@@ -256,9 +253,9 @@ class KAEvent::Private : public QSharedData
 #ifndef USE_KRESOURCES
         static bool        convertRepetition(const KCalCore::Event::Ptr&);
         static bool        convertStartOfDay(const KCalCore::Event::Ptr&);
-        static DateTime    readDateTime(const KCalCore::ConstEventPtr&, bool dateOnly, DateTime& start);
-        static void        readAlarms(const KCalCore::ConstEventPtr&, void* alarmMap, bool cmdDisplay = false);
-        static void        readAlarm(const KCalCore::ConstAlarmPtr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
+        static DateTime    readDateTime(const KCalCore::Event::Ptr&, bool dateOnly, DateTime& start);
+        static void        readAlarms(const KCalCore::Event::Ptr&, void* alarmMap, bool cmdDisplay = false);
+        static void        readAlarm(const KCalCore::Alarm::Ptr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
 #else
         static bool        convertRepetition(KCal::Event*);
         static bool        convertStartOfDay(KCal::Event*);
@@ -609,7 +606,7 @@ KAEvent::Private::Private(const KDateTime& dt, const QString& message, const QCo
 }
 
 #ifndef USE_KRESOURCES
-KAEvent::KAEvent(const ConstEventPtr& e)
+KAEvent::KAEvent(const Event::Ptr& e)
 #else
 KAEvent::KAEvent(const Event* e)
 #endif
@@ -618,7 +615,7 @@ KAEvent::KAEvent(const Event* e)
 }
 
 #ifndef USE_KRESOURCES
-KAEvent::Private::Private(const ConstEventPtr& e)
+KAEvent::Private::Private(const Event::Ptr& e)
 #else
 KAEvent::Private::Private(const Event* e)
 #endif
@@ -745,7 +742,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
 }
 
 #ifndef USE_KRESOURCES
-void KAEvent::set(const ConstEventPtr& e)
+void KAEvent::set(const Event::Ptr& e)
 #else
 void KAEvent::set(const Event* e)
 #endif
@@ -757,7 +754,7 @@ void KAEvent::set(const Event* e)
 * Initialise the KAEvent::Private from a KCal::Event.
 */
 #ifndef USE_KRESOURCES
-void KAEvent::Private::set(const ConstEventPtr& event)
+void KAEvent::Private::set(const Event::Ptr& event)
 #else
 void KAEvent::Private::set(const Event* event)
 #endif
@@ -3672,7 +3669,7 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
 * Reinstate the original event from the 'displaying' event.
 */
 #ifndef USE_KRESOURCES
-void KAEvent::reinstateFromDisplaying(const KCalCore::ConstEventPtr& e, Akonadi::Collection::Id& id, bool& showEdit, bool& showDefer)
+void KAEvent::reinstateFromDisplaying(const KCalCore::Event::Ptr& e, Akonadi::Collection::Id& id, bool& showEdit, bool& showDefer)
 #else
 void KAEvent::reinstateFromDisplaying(const KCal::Event* e, QString& id, bool& showEdit, bool& showDefer)
 #endif
@@ -3681,7 +3678,7 @@ void KAEvent::reinstateFromDisplaying(const KCal::Event* e, QString& id, bool& s
 }
 
 #ifndef USE_KRESOURCES
-void KAEvent::Private::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, Akonadi::Collection::Id& collectionId, bool& showEdit, bool& showDefer)
+void KAEvent::Private::reinstateFromDisplaying(const Event::Ptr& kcalEvent, Akonadi::Collection::Id& collectionId, bool& showEdit, bool& showDefer)
 #else
 void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
 #endif
@@ -4130,7 +4127,7 @@ void KAEvent::Private::dumpDebug() const
 * Reply = next main date/time.
 */
 #ifndef USE_KRESOURCES
-DateTime KAEvent::Private::readDateTime(const ConstEventPtr& event, bool dateOnly, DateTime& start)
+DateTime KAEvent::Private::readDateTime(const Event::Ptr& event, bool dateOnly, DateTime& start)
 #else
 DateTime KAEvent::Private::readDateTime(const Event* event, bool dateOnly, DateTime& start)
 #endif
@@ -4173,7 +4170,7 @@ DateTime KAEvent::Private::readDateTime(const Event* event, bool dateOnly, DateT
 * Reply = map of alarm data, indexed by KAAlarm::Type
 */
 #ifndef USE_KRESOURCES
-void KAEvent::Private::readAlarms(const ConstEventPtr& event, void* almap, bool cmdDisplay)
+void KAEvent::Private::readAlarms(const Event::Ptr& event, void* almap, bool cmdDisplay)
 #else
 void KAEvent::Private::readAlarms(const Event* event, void* almap, bool cmdDisplay)
 #endif
@@ -4216,7 +4213,7 @@ void KAEvent::Private::readAlarms(const Event* event, void* almap, bool cmdDispl
 * Reply = alarm ID (sequence number)
 */
 #ifndef USE_KRESOURCES
-void KAEvent::Private::readAlarm(const ConstAlarmPtr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
+void KAEvent::Private::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
 #else
 void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
 #endif

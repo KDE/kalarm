@@ -31,7 +31,6 @@
 #include "repetition.h"
 
 #ifndef USE_KRESOURCES
-#include "kcalcore_constptr.h"
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
 #include <kcalcore/person.h>
@@ -346,10 +345,10 @@ class KALARMCAL_EXPORT KAEvent
                 const QFont& f, SubAction, int lateCancel, Flags flags, bool changesPending = false);
 #ifndef USE_KRESOURCES
         /** Construct an event and initialise it from a KCalCore::Event. */
-        explicit KAEvent(const KCalCore::ConstEventPtr&);
+        explicit KAEvent(const KCalCore::Event::Ptr&);
 
         /** Initialise the instance from a KCalCore::Event. */
-        void set(const KCalCore::ConstEventPtr&);
+        void set(const KCalCore::Event::Ptr&);
 #else
         /** Construct an event and initialise it from a KCal::Event. */
         explicit KAEvent(const KCal::Event*);
@@ -1122,7 +1121,7 @@ class KALARMCAL_EXPORT KAEvent
          *  and appropriate adjustments are made to convert it back to the
          *  original pre-displaying state.
          */
-        void reinstateFromDisplaying(const KCalCore::ConstEventPtr& event, Akonadi::Collection::Id& colId, bool& showEdit, bool& showDefer);
+        void reinstateFromDisplaying(const KCalCore::Event::Ptr& event, Akonadi::Collection::Id& colId, bool& showEdit, bool& showDefer);
 #else
         void reinstateFromDisplaying(const KCal::Event* event, QString& resourceID, bool& showEdit, bool& showDefer);
 #endif

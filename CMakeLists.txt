@@ -74,7 +74,6 @@ install(FILES
 	kaevent.h
 	kalarmcal_export.h
 	karecurrence.h
-	kcalcore_constptr.h
 	repetition.h
 	version.h
 	DESTINATION ${INCLUDE_INSTALL_DIR}/kalarmcal

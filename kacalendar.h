@@ -25,7 +25,6 @@
 
 #include "kalarmcal_export.h"
 #ifndef USE_KRESOURCES
-#include "kcalcore_constptr.h"
 #include <kcalcore/filestorage.h>
 #include <kcalcore/calendar.h>
 #include <kcalcore/event.h>
@@ -171,7 +170,7 @@ namespace CalEvent
 
     KALARMCAL_EXPORT QString uid(const QString& id, Type);
 #ifndef USE_KRESOURCES
-    KALARMCAL_EXPORT Type    status(const KCalCore::ConstEventPtr&, QString* param = 0);
+    KALARMCAL_EXPORT Type    status(const KCalCore::Event::Ptr&, QString* param = 0);
     KALARMCAL_EXPORT void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
 
     /** Return the alarm Type for a mime type string. */
