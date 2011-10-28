@@ -2705,11 +2705,6 @@ DateTime KAEvent::mainDateTime(bool withRepeats) const
     return d->mainDateTime(withRepeats);
 }
 
-QDate KAEvent::mainDate() const
-{
-    return d->mNextMainDateTime.date();
-}
-
 QTime KAEvent::mainTime() const
 {
     return d->mNextMainDateTime.effectiveTime();
