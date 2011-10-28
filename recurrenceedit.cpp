@@ -870,7 +870,7 @@ void RecurrenceEdit::set(const KAEvent& event)
         {
             mMonthlyButton->setChecked(true);
             QList<int> rmd = recurrence->monthDays();
-            int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
+            int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
             mMonthlyRule->setDate(day);
             break;
         }
@@ -881,7 +881,7 @@ void RecurrenceEdit::set(const KAEvent& event)
             {
                 mYearlyButton->setChecked(true);
                 const QList<int> rmd = recurrence->monthDays();
-                int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
+                int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
                 mYearlyRule->setDate(day);
                 mYearlyRule->setFeb29Type(recurrence->feb29Type());
             }
