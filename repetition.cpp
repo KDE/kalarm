@@ -117,7 +117,7 @@ int Repetition::count() const
     return d->mCount;
 }
 
-const Duration& Repetition::interval() const
+Duration Repetition::interval() const
 {
     return d->mInterval;
 }

@@ -39,12 +39,12 @@
 #include <kcal/person.h>
 #endif
 
-#include <QBitArray>
-#include <QColor>
-#include <QFont>
-#include <QVector>
+#include <QtCore/QBitArray>
+#include <QtGui/QColor>
+#include <QtGui/QFont>
+#include <QtCore/QVector>
 #ifdef USE_KRESOURCES
-#include <QList>
+#include <QtCore/QList>
 #endif
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QMetaType>
@@ -1032,7 +1032,7 @@ class KALARMCAL_EXPORT KAEvent
          *  used to specify some monthly or annual recurrences. */
         struct MonthPos
         {
-            MonthPos() : days(7) { }
+            MonthPos() : days(7) {}    //krazy:exclude=inline (need default constructor)
             int        weeknum;     //!< Week in month, or < 0 to count from end of month.
             QBitArray  days;        //!< Days in week, element 0 = Monday.
         };

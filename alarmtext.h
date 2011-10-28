@@ -30,7 +30,7 @@
 #else
 namespace KCal { class Todo; }
 #endif
-#include <QString>
+#include <QtCore/QString>
 
 class QStringList;
 

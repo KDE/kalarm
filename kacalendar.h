@@ -30,8 +30,8 @@
 #include <kcalcore/event.h>
 #include <akonadi/collection.h>
 #endif
-#include <QByteArray>
-#include <QStringList>
+#include <QtCore/QByteArray>
+#include <QtCore/QStringList>
 
 #ifndef USE_KRESOURCES
 namespace KCalCore {

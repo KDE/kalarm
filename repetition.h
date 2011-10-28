@@ -110,7 +110,7 @@ class KALARMCAL_EXPORT Repetition
 
 #ifndef USE_KRESOURCES
         /** Return the interval between repetitions. */
-        const KCalCore::Duration& interval() const;
+        KCalCore::Duration interval() const;
 
         /** Return the overall duration of the repetition. */
         KCalCore::Duration duration() const;
@@ -121,7 +121,7 @@ class KALARMCAL_EXPORT Repetition
         KCalCore::Duration duration(int count) const;
 #else
         /** Return the interval between repetitions. */
-        const KCal::Duration& interval() const;
+        KCal::Duration interval() const;
 
         /** Return the overall duration of the repetition. */
         KCal::Duration duration() const;
