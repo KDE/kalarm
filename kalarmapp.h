@@ -23,9 +23,10 @@
 
 /** @file kalarmapp.h - the KAlarm application object */
 
-#include "kaevent.h"
 #include "kamail.h"
 #include "preferences.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <kuniqueapplication.h>
 
@@ -43,6 +44,8 @@ class MainWindow;
 class TrayWindow;
 class ShellProcess;
 class OrgKdeKSpeechInterface;
+
+using namespace KAlarmCal;
 
 
 class KAlarmApp : public KUniqueApplication
@@ -101,6 +104,7 @@ class KAlarmApp : public KUniqueApplication
         void               processQueue();
         void               setAlarmsEnabled(bool);
 #ifdef USE_AKONADI
+        void               purgeNewArchivedDefault(const Akonadi::Collection&);
         void               atLoginEventAdded(const KAEvent&);
 #endif
         void               stopAudio();
@@ -133,7 +137,6 @@ class KAlarmApp : public KUniqueApplication
         void               setArchivePurgeDays();
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
 #ifdef USE_AKONADI
-        void               slotCollectionAdded(const Akonadi::Collection&);
         void               purgeAfterDelay();
 #endif
         void               slotCommandExited(ShellProcess*);
@@ -210,6 +213,7 @@ class KAlarmApp : public KUniqueApplication
         mutable OrgKdeKSpeechInterface* mKSpeech;// KSpeech D-Bus interface object
         int                mPendingQuitCode;     // exit code for a pending quit
         bool               mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
+        bool               mCancelRtcWake;       // cancel RTC wake on quitting
         bool               mProcessingQueue;     // a mDcopQueue entry is currently being processed
         bool               mNoSystemTray;        // no system tray exists
         bool               mSessionClosingDown;  // session manager is closing the application

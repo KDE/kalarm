@@ -22,7 +22,6 @@
 
 #include "buttongroup.h"
 #include "checkbox.h"
-#include "datetime.h"
 #include "messagebox.h"
 #include "preferences.h"
 #include "pushbutton.h"
@@ -32,6 +31,8 @@
 #include "timespinbox.h"
 #include "timezonecombo.h"
 #include "alarmtimewidget.moc"
+
+#include <kalarmcal/datetime.h>
 
 #include <kdatecombobox.h>
 #include <kdialog.h>
@@ -112,6 +113,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
     // Date edit box
     mDateEdit = new KDateComboBox(topWidget);
+    mDateEdit->setOptions(KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     connect(mDateEdit, SIGNAL(dateEntered(QDate)), SLOT(dateTimeChanged()));
     mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
           "<para>Enter the date to schedule the alarm.</para>"
@@ -243,10 +245,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 void AlarmTimeWidget::setReadOnly(bool ro)
 {
     mAtTimeRadio->setReadOnly(ro);
-    if ( ro )
-      mDateEdit->setOptions( mDateEdit->options() & ~KDateComboBox::EditDate );
-    else
-      mDateEdit->setOptions( mDateEdit->options() | KDateComboBox::EditDate );
+    mDateEdit->setOptions(ro ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     mTimeEdit->setReadOnly(ro);
     if (mAnyTimeCheckBox)
         mAnyTimeCheckBox->setReadOnly(ro);

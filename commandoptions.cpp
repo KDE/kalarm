@@ -23,7 +23,8 @@
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
-#include "identities.h"
+
+#include <kalarmcal/identities.h>
 
 #include <kcmdlineargs.h>
 

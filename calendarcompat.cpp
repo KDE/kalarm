@@ -36,39 +36,36 @@ namespace CalendarCompat
 * file, any conversions will only be saved if changes are made later.
 * If the calendar only contains the wrong alarm types, 'wrongType' is set true.
 * Reply = true if the calendar file is now in the current format.
-*
-* NOTE: Any non-KResources-specific changes to this method should also be applied
-*       to KAlarm::Calendar::fix() which serves the same function for Akonadi.
 */
-KAlarm::Calendar::Compat fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource,
+KACalendar::Compat fix(KCal::CalendarLocal& calendar, const QString& localFile, AlarmResource* resource,
                              AlarmResource::FixFunc conv, bool* wrongType)
 {
     if (wrongType)
         *wrongType = false;
     QString versionString;
-    int version = KAlarm::Calendar::updateVersion(calendar, localFile, versionString);
-    if (version == KAlarm::IncompatibleFormat)
-        return KAlarm::Calendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
+    int version = KACalendar::updateVersion(calendar, localFile, versionString);
+    if (version == KACalendar::IncompatibleFormat)
+        return KACalendar::Incompatible;    // calendar was created by another program, or an unknown version of KAlarm
     if (!resource)
-        return KAlarm::Calendar::Current;    // update non-shared calendars regardless
+        return KACalendar::Current;    // update non-shared calendars regardless
 
     // Check whether the alarm types in the calendar correspond with the resource's alarm type
     if (wrongType)
         *wrongType = !resource->checkAlarmTypes(calendar);
 
-    if (version == KAlarm::CurrentFormat)
-        return KAlarm::Calendar::Current;     // calendar is in current KAlarm format
+    if (version == KACalendar::CurrentFormat)
+        return KACalendar::Current;     // calendar is in current KAlarm format
     if (resource->ResourceCached::readOnly()  ||  conv == AlarmResource::NO_CONVERT)
-        return KAlarm::Calendar::Convertible;
+        return KACalendar::Convertible;
     // Update the calendar file now if the user wants it to be read-write
     if (conv == AlarmResource::PROMPT  ||  conv == AlarmResource::PROMPT_PART)
     {
-        QString msg = KAlarm::Calendar::conversionPrompt(resource->resourceName(), versionString, (conv == AlarmResource::PROMPT));
+        QString msg = KAlarm::conversionPrompt(resource->resourceName(), versionString, (conv == AlarmResource::PROMPT));
         if (KAMessageBox::warningYesNo(MainWindow::mainMainWindow(), msg) != KMessageBox::Yes)
-            return KAlarm::Calendar::Convertible;
+            return KACalendar::Convertible;
     }
-    KAlarm::Calendar::setKAlarmVersion(calendar);
-    return KAlarm::Calendar::Converted;
+    KACalendar::setKAlarmVersion(calendar);
+    return KACalendar::Converted;
 }
 
 } // namespace CalendarCompat

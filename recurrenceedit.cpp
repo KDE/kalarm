@@ -28,10 +28,8 @@
 #include "alarmtimewidget.h"
 #include "checkbox.h"
 #include "combobox.h"
-#include "kaevent.h"
 #include "kalarmapp.h"
 #include "kalocale.h"
-#include "karecurrence.h"
 #include "preferences.h"
 #include "radiobutton.h"
 #include "repetitionbutton.h"
@@ -39,6 +37,9 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 #include "buttongroup.h"
+
+#include <kalarmcal/kaevent.h>
+#include <kalarmcal/karecurrence.h>
 
 #ifdef USE_AKONADI
 #include <kcalcore/event.h>
@@ -281,10 +282,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
                 "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
     mRangeButtonGroup->addButton(mEndDateButton);
     mEndDateEdit = new KDateComboBox(mRangeButtonBox);
-    if ( mReadOnly )
-      mEndDateEdit->setOptions( mEndDateEdit->options() & ~KDateComboBox::EditDate );
-    else
-      mEndDateEdit->setOptions( mEndDateEdit->options() | KDateComboBox::EditDate );
+    mEndDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
     mEndDateEdit->setWhatsThis(i18nc("@info:whatsthis",
           "<para>Enter the last date to repeat the alarm.</para><para>%1</para>", tzText));
@@ -344,6 +342,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
         vlayout->setMargin(0);
         hlayout->addLayout(vlayout);
         mExceptionDateEdit = new KDateComboBox(mExceptionGroup);
+        mExceptionDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
         mExceptionDateEdit->setDate(KDateTime::currentLocalDate());
         mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
               "Enter a date to insert in the exceptions list. "
@@ -871,7 +870,7 @@ void RecurrenceEdit::set(const KAEvent& event)
         {
             mMonthlyButton->setChecked(true);
             QList<int> rmd = recurrence->monthDays();
-            int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
+            int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
             mMonthlyRule->setDate(day);
             break;
         }
@@ -882,7 +881,7 @@ void RecurrenceEdit::set(const KAEvent& event)
             {
                 mYearlyButton->setChecked(true);
                 const QList<int> rmd = recurrence->monthDays();
-                int day = (rmd.isEmpty()) ? event.mainDate().day() : rmd.first();
+                int day = (rmd.isEmpty()) ? event.mainDateTime().date().day() : rmd.first();
                 mYearlyRule->setDate(day);
                 mYearlyRule->setFeb29Type(recurrence->feb29Type());
             }

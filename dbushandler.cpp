@@ -22,14 +22,15 @@
 
 #include "alarmcalendar.h"
 #include "functions.h"
-#include "identities.h"
 #include "kalarmapp.h"
 #include "kamail.h"
-#include "karecurrence.h"
 #include "mainwindow.h"
 #include "preferences.h"
 #include "dbushandler.moc"
 #include <kalarmadaptor.h>
+
+#include <kalarmcal/identities.h>
+#include <kalarmcal/karecurrence.h>
 
 #ifdef USE_AKONADI
 #include <kcalcore/duration.h>

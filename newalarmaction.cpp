@@ -39,6 +39,7 @@
 #include <kstandardshortcut.h>
 #include <kdebug.h>
 
+using namespace KAlarmCal;
 
 #define DISP_ICON     QLatin1String("window-new")
 #define CMD_ICON      QLatin1String("new-command-alarm")
@@ -118,10 +119,10 @@ void NewAlarmAction::slotCalendarStatusChanged()
 {
     // Find whether there are any writable active alarm calendars
 #ifdef USE_AKONADI
-    bool active = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::ACTIVE, true).isEmpty();
+    bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
     bool haveEvents = TemplateListModel::all()->haveEvents();
 #else
-    bool active = AlarmResources::instance()->activeCount(KAlarm::CalEvent::ACTIVE, true);
+    bool active = AlarmResources::instance()->activeCount(CalEvent::ACTIVE, true);
     bool haveEvents = EventListModel::templates()->haveEvents();
 #endif
     mTemplateAction->setEnabled(active && haveEvents);

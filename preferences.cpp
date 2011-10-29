@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,15 +21,15 @@
 #include "kalarm.h"
 
 #include "functions.h"
-#include "identities.h"
 #include "kamail.h"
 #include "messagebox.h"
 #include "preferences.moc"
 
+#include <kalarmcal/identities.h>
+
 #include <kpimidentities/identity.h>
 #include <kpimidentities/identitymanager.h>
 #include <kholidays/holidays.h>
-using namespace KHolidays;
 
 #include <kglobal.h>
 #include <kconfiggroup.h>
@@ -42,6 +42,8 @@ using namespace KHolidays;
 #include <time.h>
 #include <unistd.h>
 
+using namespace KHolidays;
+using namespace KAlarmCal;
 
 // Config file entry names
 static const char* GENERAL_SECTION  = "General";

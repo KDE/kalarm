@@ -24,8 +24,9 @@
 /** @file messagewin.h - displays an alarm message */
 
 #include "autoqpointer.h"
-#include "kaevent.h"
 #include "mainwindowbase.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
@@ -47,6 +48,8 @@ class EditAlarmDlg;
 class ShellProcess;
 class AudioThread;
 
+using namespace KAlarmCal;
+
 /**
  * MessageWin: A window to display an alarm or error message
  */
@@ -66,7 +69,7 @@ class MessageWin : public MainWindowBase
         ~MessageWin();
         void                repeat(const KAAlarm&);
         void                setRecreating()        { mRecreating = true; }
-        const DateTime&     dateTime()             { return mDateTime; }
+        const DateTime&     dateTime()         { return mDateTime; }
         KAAlarm::Type       alarmType() const      { return mAlarmType; }
         bool                hasDefer() const;
         void                showDefer();
@@ -135,7 +138,7 @@ class MessageWin : public MainWindowBase
         bool                haveErrorMessage(unsigned msg) const;
         void                clearErrorMessage(unsigned msg) const;
 #ifdef USE_AKONADI
-        static bool         reinstateFromDisplaying(const KCalCore::ConstEventPtr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
+        static bool         reinstateFromDisplaying(const KCalCore::Event::Ptr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
 #else
         static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
 #endif

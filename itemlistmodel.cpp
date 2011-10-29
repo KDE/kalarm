@@ -20,7 +20,8 @@
 
 #include "itemlistmodel.h"
 #include "collectionmodel.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <kselectionproxymodel.h>
 
@@ -32,7 +33,7 @@ using namespace Akonadi;
 = Filter proxy model containing all items (alarms/templates) of specified mime
 = types in enabled collections.
 =============================================================================*/
-ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
+ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
     : EntityMimeTypeFilterModel(parent),
       mAllowedTypes(allowed),
       mHaveEvents(false)
@@ -46,7 +47,7 @@ ItemListModel::ItemListModel(KAlarm::CalEvent::Types allowed, QObject* parent)
     setHeaderGroup(EntityTreeModel::ItemListHeaders);
     if (allowed)
     {
-        QStringList mimeTypes = KAlarm::CalEvent::mimeTypes(allowed);
+        QStringList mimeTypes = CalEvent::mimeTypes(allowed);
         foreach (const QString& mime, mimeTypes)
             addMimeTypeInclusionFilter(mime);
     }
@@ -108,7 +109,7 @@ bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePar
         return false;
     // Get the alarm type of the item
     QModelIndex sourceIndex = sourceModel()->index(sourceRow, 0, sourceParent);
-    KAlarm::CalEvent::Type type = static_cast<KAlarm::CalEvent::Type>(sourceModel()->data(sourceIndex, AkonadiModel::StatusRole).toInt());
+    CalEvent::Type type = static_cast<CalEvent::Type>(sourceModel()->data(sourceIndex, AkonadiModel::StatusRole).toInt());
     Collection parent = sourceIndex.data(AkonadiModel::ParentCollectionRole).value<Collection>();
     return CollectionControlModel::isEnabled(parent, type);
 }
@@ -186,8 +187,8 @@ Equivalent to AlarmListFilterModel
 AlarmListModel* AlarmListModel::mAllInstance = 0;
 
 AlarmListModel::AlarmListModel(QObject* parent)
-    : ItemListModel(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED, parent),
-      mFilterTypes(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED)
+    : ItemListModel(CalEvent::ACTIVE | CalEvent::ARCHIVED, parent),
+      mFilterTypes(CalEvent::ACTIVE | CalEvent::ARCHIVED)
 {
 }
 
@@ -207,7 +208,7 @@ AlarmListModel* AlarmListModel::all()
     return mAllInstance;
 }
 
-void AlarmListModel::setEventTypeFilter(KAlarm::CalEvent::Types types)
+void AlarmListModel::setEventTypeFilter(CalEvent::Types types)
 {
     // Ensure that the filter isn't applied to the 'all' instance, and that
     // 'types' doesn't include any disallowed alarm types
@@ -225,10 +226,10 @@ bool AlarmListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourcePa
 {
     if (!ItemListModel::filterAcceptsRow(sourceRow, sourceParent))
         return false;
-    if (mFilterTypes == KAlarm::CalEvent::EMPTY)
+    if (mFilterTypes == CalEvent::EMPTY)
         return false;
     int type = sourceModel()->data(sourceModel()->index(sourceRow, 0, sourceParent), AkonadiModel::StatusRole).toInt();
-    return static_cast<KAlarm::CalEvent::Type>(type) & mFilterTypes;
+    return static_cast<CalEvent::Type>(type) & mFilterTypes;
 }
 
 bool AlarmListModel::filterAcceptsColumn(int sourceCol, const QModelIndex&) const
@@ -256,7 +257,7 @@ Equivalent to TemplateListFilterModel
 TemplateListModel* TemplateListModel::mAllInstance = 0;
 
 TemplateListModel::TemplateListModel(QObject* parent)
-    : ItemListModel(KAlarm::CalEvent::TEMPLATE, parent),
+    : ItemListModel(CalEvent::TEMPLATE, parent),
       mActionsEnabled(KAEvent::ACT_ALL),
       mActionsFilter(KAEvent::ACT_ALL)
 {

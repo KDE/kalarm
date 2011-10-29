@@ -23,10 +23,13 @@
 
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
-#include "kacalendar.h"
+
+#include <kalarmcal/kacalendar.h>
 
 #include <akonadi/agentinstance.h>
 #include <akonadi/agenttype.h>
+
+using namespace KAlarmCal;
 
 class QWidget;
 class KJob;
@@ -35,7 +38,7 @@ class AkonadiResourceCreator : public QObject
 {
         Q_OBJECT
     public:
-        AkonadiResourceCreator(KAlarm::CalEvent::Type defaultType, QWidget* parent);
+        AkonadiResourceCreator(CalEvent::Type defaultType, QWidget* parent);
         void createResource();
         Akonadi::AgentInstance agentInstance() const   { return mAgentInstance; }
 
@@ -52,7 +55,7 @@ class AkonadiResourceCreator : public QObject
         template <class Settings> void setResourceAlarmType();
 
         QWidget*               mParent;
-        KAlarm::CalEvent::Type mDefaultType;
+        CalEvent::Type         mDefaultType;
         Akonadi::AgentType     mAgentType;
         Akonadi::AgentInstance mAgentInstance;
 };

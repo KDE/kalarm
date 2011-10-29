@@ -23,15 +23,15 @@
 
 #ifndef USE_AKONADI
 
-#include "kacalendar.h"
 #include "alarmresource.h"
+#include <kalarmcal/kacalendar.h>
 namespace KCal { class CalendarLocal; }
 
 
 namespace CalendarCompat
 {
-    KAlarm::Calendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
-                                 AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
+    KACalendar::Compat fix(KCal::CalendarLocal&, const QString& localFile,
+                           AlarmResource* = 0, AlarmResource::FixFunc = AlarmResource::PROMPT, bool* wrongType = 0);
 }
 
 #endif

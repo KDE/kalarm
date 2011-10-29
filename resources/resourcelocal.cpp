@@ -1,7 +1,7 @@
 /*
  *  resourcelocal.cpp  -  KAlarm local calendar resource
  *  Program:  kalarm
- *  Copyright © 2006-2008,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
  *  Based on resourcelocal.cpp in libkcal (updated to rev 765072),
  *  Copyright (c) 1998 Preston Brown <pbrown@kde.org>
  *  Copyright (c) 2001,2003 Cornelius Schumacher <schumacher@kde.org>
@@ -52,7 +52,7 @@ KAResourceLocal::KAResourceLocal(const KConfigGroup& group)
     init();
 }
 
-KAResourceLocal::KAResourceLocal(KAlarm::CalEvent::Type type, const QString& fileName)
+KAResourceLocal::KAResourceLocal(CalEvent::Type type, const QString& fileName)
     : AlarmResource(type),
       mURL(KUrl::fromPath(fileName)),
       mFileReadOnly(false)
@@ -144,7 +144,7 @@ bool KAResourceLocal::doLoad(bool)
             return false;
         }
         mFileReadOnly = false;
-        setCompatibility(KAlarm::Calendar::Current);
+        setCompatibility(KACalendar::Current);
         mLoading = false;
         mLoaded = true;
         setReloaded(true);   // the resource has now been loaded at least once

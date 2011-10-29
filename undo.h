@@ -1,7 +1,7 @@
 /*
  *  undo.h  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,7 +24,9 @@
 /**  @file undo.h - undo/redo facility */
 
 #include "autodeletelist.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kaevent.h>
+
 #ifdef USE_AKONADI
 #include <akonadi/collection.h>
 #endif
@@ -35,6 +37,7 @@
 class AlarmResource;
 #endif
 class UndoItem;
+using namespace KAlarmCal;
 
 
 class Undo : public QObject

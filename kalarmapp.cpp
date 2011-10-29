@@ -34,7 +34,6 @@
 #endif
 #include "functions.h"
 #include "kamail.h"
-#include "karecurrence.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "messagewin.h"
@@ -45,6 +44,9 @@
 #include "traywindow.h"
 
 #include "kspeechinterface.h"
+
+#include <kalarmcal/datetime.h>
+#include <kalarmcal/karecurrence.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -116,6 +118,7 @@ KAlarmApp::KAlarmApp()
       mPurgeDaysQueued(-1),
       mKSpeech(0),
       mPendingQuit(false),
+      mCancelRtcWake(false),
       mProcessingQueue(false),
       mSessionClosingDown(false),
       mAlarmsEnabled(true),
@@ -157,7 +160,7 @@ KAlarmApp::KAlarmApp()
 #ifdef USE_AKONADI
         connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
         connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
-                                          SLOT(slotCollectionAdded(Akonadi::Collection)));
+                                          SLOT(purgeNewArchivedDefault(Akonadi::Collection)));
 #endif
 
         KConfigGroup config(KGlobal::config(), "General");
@@ -361,7 +364,7 @@ int KAlarmApp::newInstance()
                         editDlg->setRecurrence(*options.recurrence(), options.subRepeatInterval(), options.subRepeatCount());
                     else if (options.flags() & KAEvent::REPEAT_AT_LOGIN)
                         editDlg->setRepeatAtLogin();
-                    editDlg->setAction(options.editAction(), options.text());
+                    editDlg->setAction(options.editAction(), AlarmText(options.text()));
                     if (options.lateCancel())
                         editDlg->setLateCancel(options.lateCancel());
                     if (options.flags() & KAEvent::COPY_KORGANIZER)
@@ -572,6 +575,11 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     // This was the last/only running "instance" of the program, so exit completely.
     kDebug() << exitCode << ": quitting";
     MessageWin::stopAudio(true);
+    if (mCancelRtcWake)
+    {
+        KAlarm::setRtcWakeTime(0, 0);
+        KAlarm::deleteRtcWakeConfig();
+    }
     delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
     mAlarmTimer = 0;
     mInitialised = false;   // prevent processQueue() from running
@@ -593,6 +601,16 @@ void KAlarmApp::doQuit(QWidget* parent)
                                             QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
                                            ) != KMessageBox::Yes)
         return;
+    if (!KAlarm::checkRtcWakeConfig(true).isEmpty())
+    {
+        // A wake-on-suspend alarm is set
+        if (KAMessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
+                                                i18nc("@info", "Quitting will cancel the scheduled Wake from Suspend."),
+                                                QString(), KStandardGuiItem::quit()
+                                               ) != KMessageBox::Yes)
+            return;
+        mCancelRtcWake = true;
+    }
     if (!Preferences::autoStart())
     {
         int option = KMessageBox::No;
@@ -1033,13 +1051,14 @@ bool KAlarmApp::wantShowInSystemTray() const
 
 #ifdef USE_AKONADI
 /******************************************************************************
-* Called when a new collection has been added.
+* Called when a new collection has been added, or when a collection has been
+* set as the standard collection for its type.
 * If it is the default archived calendar, purge its old alarms if necessary.
 */
-void KAlarmApp::slotCollectionAdded(const Akonadi::Collection& collection)
+void KAlarmApp::purgeNewArchivedDefault(const Akonadi::Collection& collection)
 {
     Akonadi::Collection col(collection);
-    if (CollectionControlModel::isStandard(col, KAlarm::CalEvent::ARCHIVED))
+    if (CollectionControlModel::isStandard(col, CalEvent::ARCHIVED))
     {
         // Allow time (1 minute) for AkonadiModel to be populated with the
         // collection's events before purging it.
@@ -1055,9 +1074,6 @@ void KAlarmApp::slotCollectionAdded(const Akonadi::Collection& collection)
 */
 void KAlarmApp::purgeAfterDelay()
 {
-#ifdef __GNUC__
-#warning Purge after selecting a new default archived calendar
-#endif
     if (mArchivedPurgeDays >= 0)
         purge(mArchivedPurgeDays);
     else

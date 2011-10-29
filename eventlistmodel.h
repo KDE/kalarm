@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.h  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,8 +24,9 @@
 #include "kalarm.h"
 
 #include "alarmresources.h"
-#include "kacalendar.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kacalendar.h>
+#include <kalarmcal/kaevent.h>
 
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
@@ -34,8 +35,8 @@
 
 class QPixmap;
 namespace KCal { class Event; }
-class DateTime;
-class KAEvent;
+
+using namespace KAlarmCal;
 
 
 class EventListModel : public QAbstractTableModel
@@ -97,7 +98,7 @@ class EventListModel : public QAbstractTableModel
         void     slotResourceStatusChanged(AlarmResource*, AlarmResources::Change);
 
     private:
-        explicit EventListModel(KAlarm::CalEvent::Types, QObject* parent = 0);
+        explicit EventListModel(CalEvent::Types, QObject* parent = 0);
         bool     updateEvent(int row);
         void     removeEvent(int row);
         int      findEvent(const QString& eventId) const;
@@ -119,9 +120,9 @@ class EventListModel : public QAbstractTableModel
         static QSize    mIconSize;      // maximum size of any icon
         static int      mTimeHourPos;   // position of hour within time string, or -1 if leading zeroes included
 
-        KAEvent::List           mEvents;
-        KAlarm::CalEvent::Types mStatus;    // types of events contained in this model
-        bool                    mHaveEvents;// there are events in this model
+        KAEvent::List   mEvents;
+        CalEvent::Types mStatus;    // types of events contained in this model
+        bool            mHaveEvents;// there are events in this model
 
         using QObject::event;   // prevent "hidden" warning
 };

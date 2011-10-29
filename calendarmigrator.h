@@ -21,7 +21,7 @@
 #ifndef CALENDARMIGRATOR_H
 #define CALENDARMIGRATOR_H
 
-#include "kacalendar.h"
+#include <kalarmcal/kacalendar.h>
 
 #include <akonadi/agentinstance.h>
 #include <akonadi/collection.h>

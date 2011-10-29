@@ -21,10 +21,12 @@
 #ifndef KAMAIL_H
 #define KAMAIL_H
 
-#include "kaevent.h"
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <kcalcore/person.h>
+#else
+#include <kcal/person.h>
 #endif
 
 #include <QObject>
@@ -42,10 +44,8 @@ namespace KMime {
     namespace Types { struct Address; }
     class Message;
 }
-#ifndef USE_AKONADI
-namespace KCal { class Person; }
-#endif
 
+using namespace KAlarmCal;
 
 class KAMail : public QObject
 {

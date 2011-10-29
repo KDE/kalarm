@@ -22,7 +22,9 @@
 #define TRAYWINDOW_H
 
 #include "editdlg.h"
-#include "kaevent.h"
+
+#include <kalarmcal/kaevent.h>
+
 #include <kstatusnotifieritem.h>
 #include <QIcon>
 
@@ -31,7 +33,6 @@ class QDragEnterEvent;
 class QDropEvent;
 class KAction;
 class KToggleAction;
-class KAEvent;
 class MainWindow;
 class NewAlarmAction;
 #ifdef USE_AKONADI

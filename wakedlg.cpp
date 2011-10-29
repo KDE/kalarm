@@ -24,11 +24,12 @@
 
 #include "alarmcalendar.h"
 #include "functions.h"
-#include "kaevent.h"
 #include "kalarmapp.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "preferences.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -36,6 +37,8 @@
 #include <kdebug.h>
 
 #include <QTimer>
+
+using namespace KAlarmCal;
 
 WakeFromSuspendDlg* WakeFromSuspendDlg::mInstance = 0;
 
@@ -97,14 +100,14 @@ void WakeFromSuspendDlg::enableDisableUseButton()
 #ifdef USE_AKONADI
         const KAEvent event = mMainWindow->selectedEvent();
         enable = event.isValid()
-              && event.category() == KAlarm::CalEvent::ACTIVE
+              && event.category() == CalEvent::ACTIVE
               && event.enabled()
               && !event.mainDateTime().isDateOnly()
               && event.id() != wakeFromSuspendId;
 #else
         const KAEvent* event = mMainWindow->selectedEvent();
         enable = event && event->isValid()
-              && event->category() == KAlarm::CalEvent::ACTIVE
+              && event->category() == CalEvent::ACTIVE
               && event->enabled()
               && !event->mainDateTime().isDateOnly()
               && event->id() != wakeFromSuspendId;

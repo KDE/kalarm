@@ -30,10 +30,8 @@
 #include "alarmresources.h"
 #include "eventlistmodel.h"
 #endif
-#include "alarmtext.h"
 #include "birthdaydlg.h"
 #include "functions.h"
-#include "kaevent.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 #include "messagebox.h"
@@ -47,6 +45,9 @@
 #include "templatepickdlg.h"
 #include "traywindow.h"
 #include "wakedlg.h"
+
+#include <kalarmcal/alarmtext.h>
+#include <kalarmcal/kaevent.h>
 
 #include <libkdepim/maillistdrag.h>
 #include <kmime/kmime_content.h>
@@ -92,6 +93,8 @@ using namespace KCal;
 #include <QResizeEvent>
 #include <QCloseEvent>
 #include <QTimer>
+
+using namespace KAlarmCal;
 
 static const char* UI_FILE     = "kalarmui.rc";
 static const char* WINDOW_NAME = "MainWindow";
@@ -184,10 +187,10 @@ MainWindow::MainWindow(bool restored)
     // Create the alarm list widget
 #ifdef USE_AKONADI
     mListFilterModel = new AlarmListModel(this);
-    mListFilterModel->setEventTypeFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel->setEventTypeFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
 #else
     mListFilterModel = new AlarmListFilterModel(EventListModel::alarms(), this);
-    mListFilterModel->setStatusFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel->setStatusFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
 #endif
     mListView = new AlarmListView(WINDOW_NAME, mSplitter);
     mListView->setModel(mListFilterModel);
@@ -967,9 +970,9 @@ void MainWindow::slotShowArchived()
     mActionShowArchived->setToolTip(mShowArchived ? i18nc("@info:tooltip", "Hide Archived Alarms")
                                                   : i18nc("@info:tooltip", "Show Archived Alarms"));
 #ifdef USE_AKONADI
-    mListFilterModel->setEventTypeFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel->setEventTypeFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
 #else
-    mListFilterModel->setStatusFilter(mShowArchived ? KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED : KAlarm::CalEvent::ACTIVE);
+    mListFilterModel->setStatusFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
 #endif
     mListView->reset();
     KConfigGroup config(KGlobal::config(), VIEW_GROUP);
@@ -1535,12 +1538,12 @@ void MainWindow::slotCalendarStatusChanged()
 {
     // Find whether there are any writable calendars
 #ifdef USE_AKONADI
-    bool active  = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::ACTIVE, true).isEmpty();
-    bool templat = !CollectionControlModel::enabledCollections(KAlarm::CalEvent::TEMPLATE, true).isEmpty();
+    bool active  = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
+    bool templat = !CollectionControlModel::enabledCollections(CalEvent::TEMPLATE, true).isEmpty();
 #else
     AlarmResources* resources = AlarmResources::instance();
-    bool active  = resources->activeCount(KAlarm::CalEvent::ACTIVE, true);
-    bool templat = resources->activeCount(KAlarm::CalEvent::TEMPLATE, true);
+    bool active  = resources->activeCount(CalEvent::ACTIVE, true);
+    bool templat = resources->activeCount(CalEvent::TEMPLATE, true);
 #endif
     for (int i = 0, end = mWindowList.count();  i < end;  ++i)
     {
@@ -1620,9 +1623,9 @@ void MainWindow::slotSelection()
 
     kDebug() << "true";
 #ifdef USE_AKONADI
-    mActionCreateTemplate->setEnabled((count == 1) && !CollectionControlModel::enabledCollections(KAlarm::CalEvent::TEMPLATE, true).isEmpty());
+    mActionCreateTemplate->setEnabled((count == 1) && !CollectionControlModel::enabledCollections(CalEvent::TEMPLATE, true).isEmpty());
 #else
-    mActionCreateTemplate->setEnabled((count == 1) && (AlarmResources::instance()->activeCount(KAlarm::CalEvent::TEMPLATE, true) > 0));
+    mActionCreateTemplate->setEnabled((count == 1) && (AlarmResources::instance()->activeCount(CalEvent::TEMPLATE, true) > 0));
 #endif
     mActionExportAlarms->setEnabled(true);
     mActionExport->setEnabled(true);

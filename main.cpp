@@ -21,7 +21,8 @@
 #include "kalarm.h"
 
 #include "kalarmapp.h"
-#include "version.h"
+
+#include <kalarmcal/version.h>
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -139,7 +140,7 @@ int Version()
 {
     static int version = 0;
     if (!version)
-        version = KAlarm::getVersionNumber(KALARM_VERSION);
+        version = KAlarmCal::getVersionNumber(KALARM_VERSION);
     return version;
 }
 

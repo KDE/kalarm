@@ -24,8 +24,8 @@
 /**  @file functions.h - miscellaneous functions */
 
 #include "editdlg.h"
-#include "kaevent.h"
 
+#include <kalarmcal/kaevent.h>
 #ifdef USE_AKONADI
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
@@ -37,6 +37,8 @@
 #include <QString>
 #include <QVector>
 
+using namespace KAlarmCal;
+
 namespace KCal { class Event; }
 class QWidget;
 class QAction;
@@ -44,9 +46,7 @@ class KAction;
 class KActionCollection;
 class KToggleAction;
 class AlarmResource;
-class KAEvent;
 class MainWindow;
-class AlarmText;
 class TemplateMenuAction;
 
 namespace KAlarm
@@ -190,6 +190,13 @@ bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
 bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
 KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
                                   bool haveTime, const KDateTime& defaultDt = KDateTime());
+
+/** Return a prompt string to ask the user whether to convert the calendar to the
+ *  current format.
+ *  @param whole if true, the whole calendar needs to be converted; else only some
+ *               alarms may need to be converted.
+ */
+QString             conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
 
 #ifdef USE_AKONADI
 Akonadi::Collection invalidCollection();  // for use as a non-const default parameter

@@ -1,8 +1,0 @@
-File=kalarmdirresource.kcfg
-ClassName=Settings
-Mutators=true
-ItemAccessors=true
-SetUserTexts=true
-Singleton=false
-GlobalEnums=true
-Namespace=Akonadi_KAlarm_Dir_Resource

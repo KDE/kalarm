@@ -52,7 +52,7 @@ ResourceModel::ResourceModel(QObject* parent)
     refresh();
     AlarmResources* resources = AlarmResources::instance();
     connect(resources, SIGNAL(signalResourceModified(AlarmResource*)), SLOT(updateResource(AlarmResource*)));
-    connect(resources, SIGNAL(standardResourceChange(KAlarm::CalEvent::Type)), SLOT(slotStandardChanged(KAlarm::CalEvent::Type)));
+    connect(resources, SIGNAL(standardResourceChange(CalEvent::Type)), SLOT(slotStandardChanged(CalEvent::Type)));
     connect(resources, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*,AlarmResources::Change)));
     connect(resources, SIGNAL(resourceLoaded(AlarmResource*,bool)), SLOT(slotLoaded(AlarmResource*,bool)));
 }
@@ -87,9 +87,9 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
         case Qt::ForegroundRole:
             switch (resource->alarmType())
             {
-                case KAlarm::CalEvent::ACTIVE:    return resource->readOnly() ? Qt::darkGray : Qt::black;
-                case KAlarm::CalEvent::ARCHIVED:  return resource->readOnly() ? Qt::green : Qt::darkGreen;
-                case KAlarm::CalEvent::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
+                case CalEvent::ACTIVE:    return resource->readOnly() ? Qt::darkGray : Qt::black;
+                case CalEvent::ARCHIVED:  return resource->readOnly() ? Qt::green : Qt::darkGreen;
+                case CalEvent::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
                 default:  break;
             }
             break;
@@ -267,7 +267,7 @@ void ResourceModel::updateResource(AlarmResource* resource)
 /******************************************************************************
 * Called when a different resource has been set as the standard resource.
 */
-void ResourceModel::slotStandardChanged(KAlarm::CalEvent::Type type)
+void ResourceModel::slotStandardChanged(CalEvent::Type type)
 {
     for (int row = 0, end = mResources.count();  row < end;  ++row)
     {
@@ -317,12 +317,12 @@ void ResourceModel::slotStatusChanged(AlarmResource* resource, AlarmResources::C
 
 ResourceFilterModel::ResourceFilterModel(QAbstractItemModel* baseModel, QObject* parent)
     : QSortFilterProxyModel(parent),
-      mResourceType(KAlarm::CalEvent::EMPTY)
+      mResourceType(CalEvent::EMPTY)
 {
     setSourceModel(baseModel);
 }
 
-void ResourceFilterModel::setFilter(KAlarm::CalEvent::Type type)
+void ResourceFilterModel::setFilter(CalEvent::Type type)
 {
     if (type != mResourceType)
     {
@@ -410,14 +410,14 @@ bool ResourceDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, con
         if (resource->standardResource())
         {
             // It's the standard resource for its type.
-            if (resource->alarmType() == KAlarm::CalEvent::ACTIVE)
+            if (resource->alarmType() == CalEvent::ACTIVE)
             {
                 KAMessageBox::sorry(static_cast<QWidget*>(parent()),
                                     i18nc("@info", "You cannot disable your default active alarm calendar."));
                 return false;
 
             }
-            if (resource->alarmType() == KAlarm::CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
+            if (resource->alarmType() == CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
             {
                 // Only allow the archived alarms standard resource to be disabled if
                 // we're not saving archived alarms.

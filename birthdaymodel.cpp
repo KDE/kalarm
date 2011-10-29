@@ -19,10 +19,10 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kaevent.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "birthdaymodel.h"
-
 #include "alarmcalendar.h"
+
+#include <kalarmcal/kaevent.h>
 
 #include <akonadi/changerecorder.h>
 #include <akonadi/entitydisplayattribute.h>
@@ -32,6 +32,8 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+
+using namespace KAlarmCal;
 
 
 BirthdayModel* BirthdayModel::mInstance = 0;
@@ -95,7 +97,7 @@ void BirthdaySortModel::setPrefixSuffix(const QString& prefix, const QString& su
     mSuffix = suffix;
 
     KAEvent event;
-    const KAEvent::List events = AlarmCalendar::resources()->events(KAlarm::CalEvent::ACTIVE);
+    const KAEvent::List events = AlarmCalendar::resources()->events(CalEvent::ACTIVE);
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         KAEvent* event = events[i];

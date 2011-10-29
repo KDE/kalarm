@@ -23,11 +23,12 @@
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
-#include "datetime.h"
 #include "functions.h"
-#include "kaevent.h"
 #include "kalarmapp.h"
 #include "messagebox.h"
+
+#include <kalarmcal/datetime.h>
+#include <kalarmcal/kaevent.h>
 
 #include <kglobal.h>
 #include <klocale.h>

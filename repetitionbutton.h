@@ -1,7 +1,7 @@
 /*
  *  repetitionbutton.h  -  pushbutton and dialog to specify alarm repetition
  *  Program:  kalarm
- *  Copyright © 2004-2007,2009,2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2007,2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,12 @@
 #ifndef REPETITIONBUTTON_H
 #define REPETITIONBUTTON_H
 
-#include "repetition.h"
+#include <kalarmcal/repetition.h>
+
 #include <kdialog.h>
 #include <QPushButton>
+
+using namespace KAlarmCal;
 
 class QGroupBox;
 class ButtonGroup;
@@ -38,7 +41,6 @@ namespace KCalCore { class Duration; }
 #else
 namespace KCal { class Duration; }
 #endif
-
 
 class RepetitionButton : public QPushButton
 {

@@ -96,6 +96,7 @@ using namespace KCalCore;
 #else
 using namespace KCal;
 #endif
+using namespace KAlarmCal;
 
 #ifdef Q_WS_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
@@ -1184,20 +1185,20 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 #endif
 {
 #ifdef USE_AKONADI
-    ConstEventPtr kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(KAlarm::CalEvent::uid(mEventID, KAlarm::CalEvent::DISPLAYING));
+    Event::Ptr kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(CalEvent::uid(mEventID, CalEvent::DISPLAYING));
 #else
-    const Event* kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(KAlarm::CalEvent::uid(mEventID, KAlarm::CalEvent::DISPLAYING));
+    const Event* kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(CalEvent::uid(mEventID, CalEvent::DISPLAYING));
 #endif
     if (!reinstateFromDisplaying(kcalEvent, event, resource, showEdit, showDefer))
     {
         // The event isn't in the displaying calendar.
         // Try to retrieve it from the archive calendar.
-        KAEvent* ev = AlarmCalendar::resources()->event(KAlarm::CalEvent::uid(mEventID, KAlarm::CalEvent::ARCHIVED));
+        KAEvent* ev = AlarmCalendar::resources()->event(CalEvent::uid(mEventID, CalEvent::ARCHIVED));
         if (!ev)
             return false;
         event = *ev;
         event.setArchive();     // ensure that it gets re-archived if it's saved
-        event.setCategory(KAlarm::CalEvent::ACTIVE);
+        event.setCategory(CalEvent::ACTIVE);
         if (mEventID != event.id())
             kError() << "Wrong event ID";
         event.setEventId(mEventID);
@@ -1218,7 +1219,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 *  from the displaying calendar.
 */
 #ifdef USE_AKONADI
-bool MessageWin::reinstateFromDisplaying(const ConstEventPtr& kcalEvent, KAEvent& event, Akonadi::Collection& collection, bool& showEdit, bool& showDefer)
+bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& event, Akonadi::Collection& collection, bool& showEdit, bool& showDefer)
 #else
 bool MessageWin::reinstateFromDisplaying(const Event* kcalEvent, KAEvent& event, AlarmResource*& resource, bool& showEdit, bool& showDefer)
 #endif
@@ -1990,7 +1991,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
         if (!mEventID.isNull())
         {
             // Delete from the display calendar
-            KAlarm::deleteDisplayEvent(KAlarm::CalEvent::uid(mEventID, KAlarm::CalEvent::DISPLAYING));
+            KAlarm::deleteDisplayEvent(CalEvent::uid(mEventID, CalEvent::DISPLAYING));
         }
     }
     MainWindowBase::closeEvent(ce);
@@ -2220,7 +2221,7 @@ void MessageWin::slotDefer()
                 mNoPostAction = true;
             // Finally delete it from the archived calendar now that it has
             // been reactivated.
-            event.setCategory(KAlarm::CalEvent::ARCHIVED);
+            event.setCategory(CalEvent::ARCHIVED);
             KAlarm::deleteEvent(event, false);
         }
         if (theApp()->wantShowInSystemTray())

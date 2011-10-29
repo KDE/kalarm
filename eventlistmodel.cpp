@@ -23,10 +23,11 @@
 #include "resources/alarmresource.h"
 #include "resources/alarmresources.h"
 #include "alarmcalendar.h"
-#include "alarmtext.h"
 #include "preferences.h"
 #include "synchtimer.h"
 #include "eventlistmodel.moc"
+
+#include <kalarmcal/alarmtext.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -34,7 +35,6 @@
 
 #include <QApplication>
 #include <QPixmap>
-
 
 /*=============================================================================
 = Class: EventListModel
@@ -56,7 +56,7 @@ EventListModel* EventListModel::alarms()
 {
     if (!mAlarmInstance)
     {
-        mAlarmInstance = new EventListModel(KAlarm::CalEvent::ACTIVE | KAlarm::CalEvent::ARCHIVED);
+        mAlarmInstance = new EventListModel(CalEvent::ACTIVE | CalEvent::ARCHIVED);
         Preferences::connect(SIGNAL(archivedColourChanged(QColor)), mAlarmInstance, SLOT(slotUpdateArchivedColour(QColor)));
         Preferences::connect(SIGNAL(disabledColourChanged(QColor)), mAlarmInstance, SLOT(slotUpdateDisabledColour(QColor)));
         Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), mAlarmInstance, SLOT(slotUpdateHolidays()));
@@ -68,7 +68,7 @@ EventListModel* EventListModel::alarms()
 EventListModel* EventListModel::templates()
 {
     if (!mTemplateInstance)
-        mTemplateInstance = new EventListModel(KAlarm::CalEvent::TEMPLATE);
+        mTemplateInstance = new EventListModel(CalEvent::TEMPLATE);
     return mTemplateInstance;
 }
 
@@ -80,7 +80,7 @@ EventListModel::~EventListModel()
         mTemplateInstance = 0;
 }
 
-EventListModel::EventListModel(KAlarm::CalEvent::Types status, QObject* parent)
+EventListModel::EventListModel(CalEvent::Types status, QObject* parent)
     : QAbstractTableModel(parent),
       mStatus(status)
 {
@@ -405,7 +405,7 @@ void EventListModel::slotUpdateArchivedColour(const QColor&)
     int firstRow = -1;
     for (int row = 0, end = mEvents.count();  row < end;  ++row)
     {
-        if (mEvents[row]->category() == KAlarm::CalEvent::ARCHIVED)
+        if (mEvents[row]->category() == CalEvent::ARCHIVED)
         {
             // For efficiency, emit a single signal for each group
             // of consecutive archived alarms, rather than a separate
