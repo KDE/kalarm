@@ -120,13 +120,6 @@ namespace KACalendar
     KALARMCAL_EXPORT int updateVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
 #endif
 
-    /** Return a prompt string to ask the user whether to convert the calendar to the
-     *  current format.
-     *  @param whole if true, the whole calendar needs to be converted; else only some
-     *               alarms may need to be converted.
-     */
-    KALARMCAL_EXPORT QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole);
-
 #ifndef USE_KRESOURCES
     /** Set the KAlarm version custom property for a calendar. */
     KALARMCAL_EXPORT void setKAlarmVersion(const KCalCore::Calendar::Ptr&);
