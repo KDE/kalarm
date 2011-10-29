@@ -20,6 +20,7 @@
 
 #include "calendarmigrator.h"
 #include "akonadimodel.h"
+#include "functions.h"
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 #include "mainwindow.h"
@@ -324,7 +325,7 @@ bool CalendarUpdater::update()
         {
             // The user hasn't previously said not to convert it
             QString versionString = KAlarmCal::getVersionString(compatAttr->version());
-            QString msg = KACalendar::conversionPrompt(mCollection.name(), versionString, false);
+            QString msg = KAlarm::conversionPrompt(mCollection.name(), versionString, false);
             kDebug() << "Version" << versionString;
             if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
                 result = false;   // the user chose not to update the calendar

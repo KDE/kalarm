@@ -60,7 +60,7 @@ KACalendar::Compat fix(KCal::CalendarLocal& calendar, const QString& localFile, 
     // Update the calendar file now if the user wants it to be read-write
     if (conv == AlarmResource::PROMPT  ||  conv == AlarmResource::PROMPT_PART)
     {
-        QString msg = KACalendar::conversionPrompt(resource->resourceName(), versionString, (conv == AlarmResource::PROMPT));
+        QString msg = KAlarm::conversionPrompt(resource->resourceName(), versionString, (conv == AlarmResource::PROMPT));
         if (KAMessageBox::warningYesNo(MainWindow::mainMainWindow(), msg) != KMessageBox::Yes)
             return KACalendar::Convertible;
     }

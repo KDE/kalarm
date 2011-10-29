@@ -2232,6 +2232,30 @@ KDateTime applyTimeZone(const QString& tzstring, const QDate& date, const QTime&
     return result;
 }
 
+/******************************************************************************
+* Return a prompt string to ask the user whether to convert the calendar to the
+* current format.
+* If 'whole' is true, the whole calendar needs to be converted; else only some
+* alarms may need to be converted.
+*
+* Note: This method is defined here to avoid duplicating the i18n string
+*       definition between the Akonadi and KResources code.
+*/
+QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
+{
+    QString msg = whole
+                ? i18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
+                       "and will be read-only unless you choose to update it to the current format.",
+                       calendarName, calendarVersion)
+                : i18nc("@info", "Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
+                       "and will be read-only unless you choose to update them to the current format.",
+                       calendarName);
+    return i18nc("@info", "<para>%1</para><para>"
+                 "<warning>Do not update the calendar if it is also used with an older version of <application>KAlarm</application> "
+                 "(e.g. on another computer). If you do so, the calendar may become unusable there.</warning></para>"
+                 "<para>Do you wish to update the calendar?</para>", msg);
+}
+
 #ifndef NDEBUG
 /******************************************************************************
 * Set up KAlarm test conditions based on environment variables.
