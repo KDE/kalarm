@@ -404,7 +404,7 @@ QString uid(const QString& id, Type status)
 * Do not call this function for the displaying alarm calendar.
 */
 #ifndef USE_KRESOURCES
-Type status(const ConstEventPtr& event, QString* param)
+Type status(const Event::Ptr& event, QString* param)
 #else
 Type status(const Event* event, QString* param)
 #endif

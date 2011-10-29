@@ -31,7 +31,6 @@
 #include "repetition.h"
 
 #ifndef USE_KRESOURCES
-#include "kcalcore_constptr.h"
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
 #include <kcalcore/person.h>
@@ -168,7 +167,7 @@ class KALARMCAL_EXPORT KAAlarm
 
         /** Return whether in the case of a deferred alarm, it is timed (as
          *  opposed to date-only).
-         *  @return true if a timed deferral alarm, false if date-only or not a deferred alarm.
+         *  @return @c true if a timed deferral alarm, @c false if date-only or not a deferred alarm.
          */
         bool timedDeferral() const;
 
@@ -213,7 +212,7 @@ class KALARMCAL_EXPORT KAEvent
         /** A list of pointers to KAEvent objects. */
         typedef QVector<KAEvent*> List;
 
-        /** Flags for use in D-Bus calls, etc. */
+        /** Flags for use in D-Bus calls, etc. Flags may be combined by OR'ing them together. */
         enum Flag
         {
             BEEP            = 0x02,    //!< sound an audible beep when the alarm is displayed
@@ -239,7 +238,8 @@ class KALARMCAL_EXPORT KAEvent
         };
         Q_DECLARE_FLAGS(Flags, Flag)
 
-        /** The basic action type(s) for the event's main alarm, as bit values. */
+        /** The basic action type(s) for the event's main alarm.
+         *  Values may be combined by OR'ing them together. */
         enum Actions
         {
             ACT_NONE            = 0,      //!< invalid
@@ -327,29 +327,30 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Construct an event and initialise with the specified parameters.
          *  @param dt    start date/time.
-         *  @param text  alarm message (@p action = MESSAGE);
-         *               file to display (@p action = FILE);
-         *               command to execute (@p action = COMMAND);
-         *               email body (@p action = EMAIL);
-         *               audio file (@p action = AUDIO).
+         *  @param text  alarm message (@p action = #MESSAGE);
+         *               file to display (@p action = #FILE);
+         *               command to execute (@p action = #COMMAND);
+         *               email body (@p action = #EMAIL);
+         *               audio file (@p action = #AUDIO).
          *  @param bg    background color (for display alarms, ignored otherwise).
-         *  @param fg    background color (for display alarms, ignored otherwise).
+         *  @param fg    foreground color (for display alarms, ignored otherwise).
          *  @param font  font (for display alarms, ignored otherwise).
          *  @param action         alarm action type.
          *  @param lateCancel     late-cancellation period (minutes), else 0.
-         *  @param flags          OR of Flag enum values.
-         *  @param changesPending true to inhibit automatic data updates until
-         *                        further changes have been applied to the instance;
-         *                        call endChanges() when changes are complete.
+         *  @param flags          OR of #Flag enum values.
+         *  @param changesPending true to inhibit automatic calculations and data
+         *                        updates until further changes have been applied
+         *                        to the instance; call endChanges() when changes
+         *                        are complete.
          */
         KAEvent(const KDateTime&, const QString& text, const QColor& bg, const QColor& fg,
                 const QFont& f, SubAction, int lateCancel, Flags flags, bool changesPending = false);
 #ifndef USE_KRESOURCES
         /** Construct an event and initialise it from a KCalCore::Event. */
-        explicit KAEvent(const KCalCore::ConstEventPtr&);
+        explicit KAEvent(const KCalCore::Event::Ptr&);
 
         /** Initialise the instance from a KCalCore::Event. */
-        void set(const KCalCore::ConstEventPtr&);
+        void set(const KCalCore::Event::Ptr&);
 #else
         /** Construct an event and initialise it from a KCal::Event. */
         explicit KAEvent(const KCal::Event*);
@@ -365,17 +366,17 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Initialise the instance with the specified parameters.
          *  @param dt    start date/time
-         *  @param text  alarm message (@p action = MESSAGE);
-         *               file to display (@p action = FILE);
-         *               command to execute (@p action = COMMAND);
-         *               email body (@p action = EMAIL);
-         *               audio file (@p action = AUDIO)
+         *  @param text  alarm message (@p action = #MESSAGE);
+         *               file to display (@p action = #FILE);
+         *               command to execute (@p action = #COMMAND);
+         *               email body (@p action = #EMAIL);
+         *               audio file (@p action = #AUDIO)
          *  @param bg    background color (for display alarms, ignored otherwise)
          *  @param fg    background color (for display alarms, ignored otherwise)
          *  @param font  font (for display alarms, ignored otherwise)
          *  @param action         alarm action type
          *  @param lateCancel     late-cancellation period (minutes), else 0
-         *  @param flags          OR of Flag enum values
+         *  @param flags          OR of #Flag enum values
          *  @param changesPending true to inhibit automatic data updates until
          *                        further changes have been applied to the instance;
          *                        call endChanges() when changes are complete.
@@ -428,7 +429,7 @@ class KALARMCAL_EXPORT KAEvent
         /** Return whether the event's main alarm has expired. If so, a deferral alarm will exist. */
         bool mainExpired() const;
         /** Return whether the event has expired.
-         *  @return true if the event has expired and is currently being displayed,
+         *  @return @c true if the event has expired and is currently being displayed,
          *               or it is an archived event.
          */
         bool expired() const;
@@ -465,7 +466,7 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Initialise an Akonadi::Item with the event's data.
          *  Note that the event is not updated with the Item ID.
-         *  @return true if successful; false if the event's category does not match the
+         *  @return @c true if successful; @c false if the event's category does not match the
          *          collection's mime types.
          */
         bool setItemPayload(Akonadi::Item&, const QStringList& collectionMimeTypes) const;
@@ -501,26 +502,39 @@ class KALARMCAL_EXPORT KAEvent
         /** Return the OR of the basic action types of the event's main alarm (display,
          *  command, email, audio).
          *  Note that for a display alarm whose text is generated by a command, the
-         *  returned type is ACT_DISPLAY|ACT_COMMAND.
+         *  returned type is @c ACT_DISPLAY|ACT_COMMAND.
          */
         Actions actionTypes() const;
 
-        /** Set or clear the late-cancel option.
+        /** Set or clear the late-cancel option. This determines whether the alarm
+         *  will be cancelled if it is late in triggering.
          *  @param minutes  late cancellation period in minutes, or 0 to clear
+         *  @see lateCancel()
          */
         void setLateCancel(int minutes);
 
-        /** Get the late cancellation period.
+        /** Get the late cancellation period. This is how late the alarm can
+         *  trigger after its scheduled time, before it will be cancelled.
          *  @return period in minutes, or 0 if no late cancellation is specified
+         *  @see setLateCancel()
          */
         int lateCancel() const;
 
-        /** Enable or disable auto-close for a display alarm. Note that auto-close will only
-         *  operate if in addition to being enabled, late-cancel is also set. */
+        /** Enable or disable auto-close for a display alarm, i.e. whether the
+         *  alarm window will be closed on expiry of the late-cancellation
+         *  time. Note that auto-close will only take effect if the late-cancel
+         *  option is also set.
+         *  @see setLateCancel(), autoClose()
+         */
         void setAutoClose(bool autoclose);
 
-        /** Return whether auto-close is enabled. Note that auto-close will only
-         *  operate if in addition to being enabled, late-cancel is also set. */
+        /** Return whether auto-close is enabled, i.e. whether the alarm window
+         *  will be closed on expiry of the late-cancellation time. Note that
+         *  auto-close will only operate if in addition to being enabled,
+         *  late-cancel is also set.
+         *  @return @c true if it is a display alarm and auto-close is enabled.
+         *  @see lateCancel(), setAutoClose()
+         */
         bool autoClose() const;
 
         void               setKMailSerialNumber(unsigned long n);
@@ -531,7 +545,8 @@ class KALARMCAL_EXPORT KAEvent
          *  which incorporate checks on alarm type.
          */
         QString cleanText() const;
-        /** Return the message text for a display alarm, or the email body for an email alarm.
+        /** Return the message text for a display alarm, or the email body for
+         *  an email alarm.
          *  @return message/email text, or empty if not a display or email alarm. */
         QString message() const;
         /** Return the message text for a display alarm.
@@ -548,7 +563,8 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Set the global default font for alarm message texts. */
         static void setDefaultFont(const QFont& font);
-        /** Return whether to use the default font (as set by setDefaultFont()) for alarm message texts. */
+        /** Return whether to use the default font (as set by setDefaultFont())
+         *  for alarm message texts. */
         bool useDefaultFont() const;
         /** Return the font to use for alarm message texts. */
         QFont font() const;
@@ -628,11 +644,13 @@ class KALARMCAL_EXPORT KAEvent
          */
         QString emailAddresses(const QString& sep) const;
 
-        /** Concatenate a list of email addresses into a string. */
+        /** Concatenate a list of email addresses into a string.
+         *  @param sep  separator string to insert between addresses.
+         */
 #ifndef USE_KRESOURCES
-        static QString joinEmailAddresses(const KCalCore::Person::List& addresses, const QString& separator);
+        static QString joinEmailAddresses(const KCalCore::Person::List& addresses, const QString& sep);
 #else
-        static QString joinEmailAddresses(const QList<KCal::Person>& addresses, const QString& separator);
+        static QString joinEmailAddresses(const QList<KCal::Person>& addresses, const QString& sep);
 #endif
 
         /** Return the list of email addressees, excluding names, for an email alarm. */
@@ -663,24 +681,31 @@ class KALARMCAL_EXPORT KAEvent
          *  @param fadeVolume     initial volume (0 - 1), or -1 for no fade
          *  @param fadeSeconds    number of seconds to fade from @p fadeVolume to @p volume
          *  @param allowEmptyFile true to set the volume levels even if \p filename is empty
+         *  @see audioFile(), soundVolume(), fadeVolume(), fadeSeconds()
          */
         void setAudioFile(const QString& filename, float volume, float fadeVolume,
                           int fadeSeconds, bool allowEmptyFile = false);
 
-        /** Return the audio file path. */
+        /** Return the audio file path.
+         *  @see setAudioFile()
+         */
         QString audioFile() const;
 
         /** Return the sound volume (the final volume if fade is specified).
          *  @return volume in range 0 - 1, or -1 for default volume.
+         *  @see setAudioFile()
          */
         float soundVolume() const;
 
         /** Return the initial volume which will fade to the final volume.
          *  @return volume in range 0 - 1, or -1 if no fade specified.
+         *  @see setAudioFile()
          */
         float fadeVolume() const;
 
-        /** Return the fade period in seconds, or 0 if no fade is specified. */
+        /** Return the fade period in seconds, or 0 if no fade is specified.
+         *  @see setAudioFile()
+         */
         int fadeSeconds() const;
 
         /** Return whether the sound file will be repeated indefinitely. */
@@ -696,20 +721,24 @@ class KALARMCAL_EXPORT KAEvent
          *  @param name      template's name
          *  @param afterTime number of minutes after default time to schedule alarm for, or
          *                   -1 to not use 'time from now'
+         *  @see isTemplate(), templateName()
          */
         void setTemplate(const QString& name, int afterTime = -1);
 
-        /** Return whether the event is an alarm template. */
+        /** Return whether the event is an alarm template.
+         *  @see setTemplate()
+         */
         bool isTemplate() const;
 
         /** Return the alarm template's name.
          *  @return template name, or empty if not a template
+         *  @see setTemplate()
          */
         QString templateName() const;
 
         /** Return whether the alarm template does not specify a time.
-         *  @return true if no time is specified, i.e. the normal default alarm time will
-         *          be used, false if the template specifies a time.
+         *  @return @c true if no time is specified, i.e. the normal default alarm time will
+         *          be used, @c false if the template specifies a time.
          */
         bool usingDefaultTime() const;
 
@@ -727,20 +756,26 @@ class KALARMCAL_EXPORT KAEvent
          *  @param post shell command to execute after the alarm is acknowledged
          *  @param cancelOnError true to cancel the alarm if the pre-alarm action fails
          *  @param dontShowError true to not notify the error if the pre-alarm action fails
+         *  @see preAction(), postAction(), cancelOnPreActionError(), dontShowPreActionError()
          */
         void setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
 
         /** Return the shell command to execute before the alarm is displayed. */
         QString preAction() const;
 
-        /** Return the shell command to execute after the display alarm is acknowledged. */
+        /** Return the shell command to execute after the display alarm is acknowledged.
+         *  @see setActions()
+         */
         QString postAction() const;
 
-        /** Return whether the alarm is to be cancelled if the pre-alarm action fails. */
+        /** Return whether the alarm is to be cancelled if the pre-alarm action fails.
+         *  @see preAction(), setActions()
+         */
         bool cancelOnPreActionError() const;
 
         /** Return whether the user should not be notified if the pre-alarm action fails.
-         *  @return false if the user will be notified
+         *  @return @c true if the user will not be notified, @c false if the user will be notified
+         *  @see preAction(), setActions()
          */
         bool dontShowPreActionError() const;
 
@@ -749,12 +784,14 @@ class KALARMCAL_EXPORT KAEvent
          *                  will occur AFTER the main alarm.
          *                  0 = clear the reminder.
          *  @param onceOnly true to trigger a reminder only for the first recurrence.
+         *  @see reminderMinutes(), reminderOnceOnly()
          */
         void setReminder(int minutes, bool onceOnly);
 
-        /** For a reminder which occurs AFTER the main alarm:
-         *  Activate the event's reminder which occurs after the given main alarm time.
-         *  @return true if successful (i.e. reminder falls before the next main alarm).
+        /** If there is a reminder which occurs AFTER the main alarm,
+         *  activate the event's reminder which occurs after the given main alarm time.
+         *  If there is no reminder after the main alarm, this method does nothing.
+         *  @return @c true if successful (i.e. reminder falls before the next main alarm).
          */
         void activateReminderAfter(const DateTime& mainAlarmTime);
 
@@ -762,12 +799,17 @@ class KALARMCAL_EXPORT KAEvent
          *  @return >0 if the reminder is before the main alarm;
          *          <0 if the reminder is after the main alarm;
          *          0  if no reminder is configured.
+         *  @see setReminder()
          */
         int reminderMinutes() const;
         /** Return whether a reminder is currently due (before the next, or after the last,
-         *  main alarm/recurrence). */
+         *  main alarm/recurrence).
+         *  @see reminderDeferral()
+         */
         bool reminderActive() const;
-        /** Return whether the reminder alarm is triggered only for the first recurrence. */
+        /** Return whether the reminder alarm is triggered only for the first recurrence.
+         *  @see setReminder()
+         */
         bool reminderOnceOnly() const;
         /** Return whether there is currently a deferred reminder alarm pending. */
         bool reminderDeferral() const;
@@ -779,21 +821,27 @@ class KALARMCAL_EXPORT KAEvent
          *  @param adjustRecurrence if true, ensure that the next scheduled recurrence is
          *                          after the current time.
          *
-         *  @see cancelDefer()
+         *  @see cancelDefer(), deferred(), deferDateTime()
          */
         void defer(const DateTime& dt, bool reminder, bool adjustRecurrence = false);
 
-        /** Cancel any deferral alarm which is pending. */
+        /** Cancel any deferral alarm which is pending.
+         *  @see defer()
+         */
         void cancelDefer();
         /** Set defaults for the deferral dialog.
          *  @param minutes   default number of minutes, or 0 to select time control.
          *  @param dateOnly  true to select date-only by default.
+         *  @see deferDefaultMinutes()
          */
         void setDeferDefaultMinutes(int minutes, bool dateOnly = false);
-        /** Return whether there is currently a deferred alarm pending. */
+        /** Return whether there is currently a deferred alarm pending.
+         *  @see defer(), deferDateTime()
+         */
         bool deferred() const;
         /** Return the time at which the currently pending deferred alarm should trigger.
          *  @return trigger time, or invalid if no deferral pending.
+         *  @see defer(), deferred()
          */
         DateTime deferDateTime() const;
 
@@ -804,13 +852,17 @@ class KALARMCAL_EXPORT KAEvent
          */
         DateTime deferralLimit(DeferLimitType* limitType = 0) const;
 
-        /** Return the default deferral interval used in the deferral dialog. */
+        /** Return the default deferral interval used in the deferral dialog.
+         *  @see setDeferDefaultMinutes()
+         */
         int deferDefaultMinutes() const;
         /** Return the default date-only setting used in the deferral dialog. */
         bool deferDefaultDateOnly() const;
 
         /** Return the start time for the event. If the event recurs, this is the
-         *  time of the first recurrence. */
+         *  time of the first recurrence.
+         *  @see mainDateTime()
+         */
         DateTime startDateTime() const;
         /** Set the next time to trigger the alarm (excluding sub-repetitions).
          *  Note that for a recurring event, this should match one of the
@@ -819,12 +871,10 @@ class KALARMCAL_EXPORT KAEvent
         void setTime(const KDateTime& dt);
         /** Return the next time the main alarm will trigger.
          *  @param withRepeats  true to include sub-repetitions, false to exclude them.
+         *  @see mainTime(), startDateTime(), setTime()
          */
         DateTime mainDateTime(bool withRepeats = false) const;
 
-        /** Return the date on which the main alarm will next trigger.
-         *  Sub-repetitions are ignored. */
-        QDate mainDate() const;
         /** Return the time at which the main alarm will next trigger.
          *  Sub-repetitions are ignored. */
         QTime mainTime() const;
@@ -843,7 +893,8 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Call when the user changes the start-of-day time, to adjust the data
          *  for each date-only event in a list.
-         *  @param events list of events, including date-only and date-time.
+         *  @param events list of events. Any date-time events in the list are ignored.
+         *  @see setStartOfDay()
          */
         static void adjustStartOfDay(const KAEvent::List& events);
 
@@ -853,20 +904,26 @@ class KALARMCAL_EXPORT KAEvent
          */
         DateTime nextTrigger(TriggerType type) const;
 
-        /** Set the date/time the event was created, or saved in the archive calendar. */
+        /** Set the date/time the event was created, or saved in the archive calendar.
+         *  @see createdDateTime()
+         */
         void setCreatedDateTime(const KDateTime& dt);
-        /** Return the date/time the event was created, or saved in the archive calendar. */
+        /** Return the date/time the event was created, or saved in the archive calendar.
+         *  @see setCreatedDateTime()
+         */
         KDateTime createdDateTime() const;
 
         /** Enable or disable repeat-at-login.
          *  If @p repeat is true, any existing pre-alarm reminder, late-cancel and
          *  copy-to-KOrganizer will all be disabled.
+         *  @see repeatAtLogin()
          */
         void setRepeatAtLogin(bool repeat);
 
         /** Return whether the alarm repeats at login.
          *  @param includeArchived  true to also test for archived repeat-at-login status,
          *                          false to test only for a current repeat-at-login alarm.
+         *  @see setRepeatAtLogin()
          */
         bool repeatAtLogin(bool includeArchived = false) const;
 
@@ -874,9 +931,12 @@ class KALARMCAL_EXPORT KAEvent
          *  holiday region determines which dates are holidays.
          *  Note that this option only has any effect for recurring alarms.
          *  @param exclude  true to disable on holidays, false to enable
+         *  @see holidaysExcluded(), setHolidays()
          */
         void setExcludeHolidays(bool exclude);
-        /** Return whether the alarm is disabled on holiday dates. */
+        /** Return whether the alarm is disabled on holiday dates.
+         *  @see setExcludeHolidays()
+         */
         bool holidaysExcluded() const;
 
         /** Set the holiday region to be used by all KAEvent instances.
@@ -887,15 +947,19 @@ class KALARMCAL_EXPORT KAEvent
          *  @param region  the holiday region data. The data object must persist for
          *                 the lifetime of the application, since this class just
          *                 stores a pointer to @p region.
+         *  @see setExcludeHolidays()
          */
         static void setHolidays(const KHolidays::HolidayRegion& region);
 
         /** Enable or disable the alarm on non-working days and outside working hours.
          *  Note that this option only has any effect for recurring alarms.
          *  @param exclude  true to restrict to working time, false to enable any time
+         *  @see workTimeOnly(), setWorkTime()
          */
         void setWorkTimeOnly(bool wto);
-        /** Return whether the alarm is disabled on non-working days and outside working hours. */
+        /** Return whether the alarm is disabled on non-working days and outside working hours.
+         *  @see setWorkTimeOnly()
+         */
         bool workTimeOnly() const;
 
         /** Check whether a date/time is during working hours and/or holidays, depending
@@ -906,14 +970,19 @@ class KALARMCAL_EXPORT KAEvent
          *  @param days   bits set to 1 for each working day. Array element 0 = Monday ... 6 = Sunday.
          *  @param start  start time in working day.
          *  @param end    end time in working day.
+         *  @see setWorkTimeOnly(), isWorkingTime()
          */
         static void setWorkTime(const QBitArray& days, const QTime& start, const QTime& end);
 
-        /** Clear the event's recurrence and sub-repetition data. */
+        /** Clear the event's recurrence and sub-repetition data.
+         *  @see setRecurrence(), recurs()
+         */
         void setNoRecur();
 
         /** Initialise the event's recurrence from a KARecurrence.
-         *  The event's start date/time is not changed. */
+         *  The event's start date/time is not changed.
+         *  @see setRecurMinutely(), setRecurDaily(), setRecurWeekly(), setRecurMonthlyByDate(), setRecurMonthlyByPos(), setRecurAnnualByDate(), setRecurAnnualByPos(), setFirstRecurrence()
+         */
         void setRecurrence(const KARecurrence& r);
 
         /** Set the recurrence to recur at a minutes interval.
@@ -922,7 +991,7 @@ class KALARMCAL_EXPORT KAEvent
          *                = -1 to recur indefinitely;
          *                = 0 to use @p end instead.
          *  @param end   = end date/time (set invalid to use @p count instead).
-         *  @return false if no recurrence was set up.
+         *  @return @c false if no recurrence was set up.
          */
         bool setRecurMinutely(int freq, int count, const KDateTime& end);
 
@@ -933,7 +1002,7 @@ class KALARMCAL_EXPORT KAEvent
          *                = -1 to recur indefinitely;
          *                = 0 to use @p end instead.
          *  @param end   = end date (set invalid to use @p count instead).
-         *  @return false if no recurrence was set up.
+         *  @return @c false if no recurrence was set up.
          */
         bool setRecurDaily(int freq, const QBitArray& days, int count, const QDate& end);
 
@@ -944,7 +1013,7 @@ class KALARMCAL_EXPORT KAEvent
          *                = -1 to recur indefinitely;
          *                = 0 to use @p end instead.
          *  @param end   = end date (set invalid to use @p count instead).
-         *  @return false if no recurrence was set up.
+         *  @return @c false if no recurrence was set up.
          */
         bool setRecurWeekly(int freq, const QBitArray& days, int count, const QDate& end);
 
@@ -955,7 +1024,7 @@ class KALARMCAL_EXPORT KAEvent
          *                = -1 to recur indefinitely;
          *                = 0 to use @p end instead.
          *  @param end   = end date (set invalid to use @p count instead).
-         *  @return false if no recurrence was set up.
+         *  @return @c false if no recurrence was set up.
          */
         bool setRecurMonthlyByDate(int freq, const QVector<int>& days, int count, const QDate& end);
 
@@ -976,7 +1045,7 @@ class KALARMCAL_EXPORT KAEvent
          *                = -1 to recur indefinitely;
          *                = 0 to use @p end instead.
          *  @param end   = end date (set invalid to use @p count instead).
-         *  @return false if no recurrence was set up.
+         *  @return @c false if no recurrence was set up.
          */
         bool setRecurMonthlyByPos(int freq, const QVector<MonthPos>& pos, int count, const QDate& end);
 
@@ -991,7 +1060,7 @@ class KALARMCAL_EXPORT KAEvent
          *                = -1 to recur indefinitely;
          *                = 0 to use @p end instead.
          *  @param end   = end date (set invalid to use @p count instead).
-         *  @return false if no recurrence was set up.
+         *  @return @c false if no recurrence was set up.
          */
         bool setRecurAnnualByDate(int freq, const QVector<int>& months, int day, KARecurrence::Feb29Type, int count, const QDate& end);
 
@@ -1004,23 +1073,34 @@ class KALARMCAL_EXPORT KAEvent
          *                = -1 to recur indefinitely;
          *                = 0 to use @p end instead.
          *  @param end   = end date (set invalid to use @p count instead).
-         *  @return false if no recurrence was set up.
+         *  @return @c false if no recurrence was set up.
          */
         bool setRecurAnnualByPos(int freq, const QVector<MonthPos>& pos, const QVector<int>& months, int count, const QDate& end);
 
-        /** Return whether the event recurs. */
+        /** Return whether the event recurs.
+         *  @see recurType()
+         */
         bool recurs() const;
         /** Return the recurrence period type for the event.
-         *  Note that this does not test for repeat-at-login. */
+         *  Note that this does not test for repeat-at-login.
+         *  @see recurInterval()
+         */
         KARecurrence::Type recurType() const;
-        /** Return the full recurrence data for the event. */
+        /** Return the full recurrence data for the event.
+         *  @return recurrence data, or null if none.
+         *  @see recurrenceText()
+         */
         KARecurrence* recurrence() const;
 
         /** Return the recurrence interval in units of the recurrence period type
-         *  (minutes, days, etc). */
+         *  (minutes, days, etc).
+         *  @see longestRecurrenceInterval()
+         */
         int recurInterval() const;
 
-        /** Return the longest interval which can occur between consecutive recurrences. */
+        /** Return the longest interval which can occur between consecutive recurrences.
+         *  @see recurInterval()
+         */
 #ifndef USE_KRESOURCES
         KCalCore::Duration longestRecurrenceInterval() const;
 #else
@@ -1039,15 +1119,19 @@ class KALARMCAL_EXPORT KAEvent
         /** Initialise the event's sub-repetition.
         *  The repetition length is adjusted if necessary to fit the recurrence interval.
         *  If the event doesn't recur, the sub-repetition is cleared.
-        *  @return false if a non-daily interval was specified for a date-only recurrence.
+        *  @return @c false if a non-daily interval was specified for a date-only recurrence.
+        *  @see repetition()
         */
         bool setRepetition(const Repetition& r);
 
-        /** Return the event's sub-repetition data. */
+        /** Return the event's sub-repetition data.
+         *  @see setRepetition(), repetitionText()
+         */
         Repetition repetition() const;
 
         /** Return the count of the next sub-repetition which is due.
          *  @return sub-repetition count (>=1), or 0 for the main recurrence.
+         *  @see nextOccurrence()
          */
         int nextRepetition() const;
 
@@ -1058,6 +1142,7 @@ class KALARMCAL_EXPORT KAEvent
          *  @param includeRepetitions if true and the alarm has a sub-repetition, the
          *                            method will return true if any sub-repetitions
          *                            occur after @p preDateTime.
+         *  @see nextOccurrence()
          */
         bool occursAfter(const KDateTime& preDateTime, bool includeRepetitions) const;
 
@@ -1067,6 +1152,7 @@ class KALARMCAL_EXPORT KAEvent
          *  If the alarm has a sub-repetition, and a sub-repetition of a previous
          *  recurrence occurs after the specified date/time, that sub-repetition is
          *  set as the next occurrence.
+         *  @see nextOccurrence()
          */
         OccurType setNextOccurrence(const KDateTime& preDateTime);
 
@@ -1074,6 +1160,7 @@ class KALARMCAL_EXPORT KAEvent
          *  date/time.
          *  @param result  date/time of next occurrence, or invalid date/time if none.
          *  @param option  how/whether to make allowance for sub-repetitions.
+         *  @see nextRepetition(), setNextOccurrence(), previousOccurrence(), occursAfter()
          */
         OccurType nextOccurrence(const KDateTime& preDateTime, DateTime& result, OccurOption option = IGNORE_REPETITION) const;
 
@@ -1084,6 +1171,7 @@ class KALARMCAL_EXPORT KAEvent
          *  @param includeRepetitions  if true and the alarm has a sub-repetition, the
          *                             last previous repetition is returned if
          *                             appropriate.
+         *  @see nextOccurrence()
          */
         OccurType previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
 
@@ -1093,7 +1181,7 @@ class KALARMCAL_EXPORT KAEvent
          *  the alarm message in case of a crash, or to reinstate it should the user
          *  choose to defer the alarm. Note that even repeat-at-login alarms need to be
          *  saved in case their end time expires before the next login.
-         *  @return true if successful, false if alarm was not copied.
+         *  @return @c true if successful, @c false if alarm was not copied.
          */
 #ifndef USE_KRESOURCES
         bool setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer);
@@ -1107,16 +1195,16 @@ class KALARMCAL_EXPORT KAEvent
          *  and appropriate adjustments are made to convert it back to the
          *  original pre-displaying state.
          */
-        void reinstateFromDisplaying(const KCalCore::ConstEventPtr& event, Akonadi::Collection::Id& colId, bool& showEdit, bool& showDefer);
+        void reinstateFromDisplaying(const KCalCore::Event::Ptr& event, Akonadi::Collection::Id& colId, bool& showEdit, bool& showDefer);
 #else
         void reinstateFromDisplaying(const KCal::Event* event, QString& resourceID, bool& showEdit, bool& showDefer);
 #endif
 
         /** Return the original alarm which the displaying alarm refers to.
          *  Note that the caller is responsible for ensuring that the event was
-         *  a displaying event, since this is normally called after
-         *  reinstateFromDisplaying(), which resets the instance so that
-         *  displaying() returns false.
+         *  a displaying event; this check is not made in convertDisplayingAlarm()
+         *  since it is normally called after reinstateFromDisplaying(), which
+         *  resets the instance so that displaying() returns false.
          */
         KAAlarm convertDisplayingAlarm() const;
 
@@ -1125,6 +1213,7 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Return the alarm of a specified type.
          *  @param type  alarm type to return.
+         *  @see nextAlarm(), alarmCount()
          */
         KAAlarm alarm(KAAlarm::Type type) const;
 
@@ -1133,12 +1222,17 @@ class KALARMCAL_EXPORT KAEvent
          *  possible.
          *  N.B. a repeat-at-login alarm can only be returned if it has been read from/
          *  written to the calendar file.
+         *  @see nextAlarm()
          */
         KAAlarm firstAlarm() const;
 
-        /** Return the next alarm for the event, after the specified alarm. */
+        /** Return the next alarm for the event, after the specified alarm.
+         *  @see firstAlarm()
+         */
         KAAlarm nextAlarm(const KAAlarm& previousAlarm) const;
-        /** Return the next alarm for the event, after the specified alarm type. */
+        /** Return the next alarm for the event, after the specified alarm type.
+         *  @see firstAlarm()
+         */
         KAAlarm nextAlarm(KAAlarm::Type previousType) const;
 
         /** Return the number of alarms in the event, i.e. the count of:
@@ -1170,11 +1264,13 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Return the current KAlarm calendar storage format version.
          *  @return version in the format returned by KAlarmCal::Version().
+         *  @see currentCalendarVersionString()
          */
         static int currentCalendarVersion();
 
         /** Return the current KAlarm calendar storage format version.
          *  @return version as a string in the format "1.2.3".
+         *  @see currentCalendarVersion()
          */
         static QByteArray currentCalendarVersionString();
 
@@ -1188,7 +1284,7 @@ class KALARMCAL_EXPORT KAEvent
          *                          summer time and should be passed negated (-507) to
          *                          distinguish it from the KDE 3.0.1 version 0.5.7
          *                          which does not require the adjustment.
-         *  @return true if any conversions were done.
+         *  @return @c true if any conversions were done.
          */
 #ifndef USE_KRESOURCES
         static bool convertKCalEvents(const KCalCore::Calendar::Ptr&, int calendarVersion);
