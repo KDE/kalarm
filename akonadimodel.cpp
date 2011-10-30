@@ -57,6 +57,7 @@
 #include <akonadi/itemfetchscope.h>
 
 #include <klocale.h>
+#include <kcolorutils.h>
 
 #include <QApplication>
 #include <QFileInfo>
@@ -222,12 +223,15 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             case Qt::ForegroundRole:
             {
                 QStringList mimeTypes = collection.contentMimeTypes();
+                QColor colour;
                 if (mimeTypes.contains(KAlarmCal::MIME_ACTIVE))
-                    return (collection.rights() & writableRights) == writableRights ? Qt::black : Qt::darkGray;
-                if (mimeTypes.contains(KAlarmCal::MIME_ARCHIVED))
-                    return (collection.rights() & writableRights) == writableRights ? Qt::darkGreen : Qt::green;
-                if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
-                    return (collection.rights() & writableRights) == writableRights ? Qt::darkBlue : Qt::blue;
+                    colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();
+                else if (mimeTypes.contains(KAlarmCal::MIME_ARCHIVED))
+                    colour = Preferences::archivedColour();
+                else if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
+                    colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
+                if (colour.isValid())
+                    return (collection.rights() & writableRights) == writableRights ? colour : KColorUtils::lighten(colour, 0.5);
                 break;
             }
             case Qt::ToolTipRole:
@@ -1637,6 +1641,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     Collection::Rights newRights = collection.rights() & writableRights;
     if (newRights != oldRights)
     {
+        kDebug() << "Collection" << collection.id() << ": rights ->" << newRights;
         mCollectionRights[collection.id()] = newRights;
         emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights), rowInserted);
     }
@@ -1671,6 +1676,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     if (attributeNames.contains(CompatibilityAttribute::name()))
     {
         // Update to current KAlarm format if necessary, and if the user agrees
+        kDebug() << "CompatibilityAttribute";
         Collection col(collection);
         refresh(col);
         CalendarMigrator::updateToCurrentFormat(col, false, MainWindow::mainMainWindow());

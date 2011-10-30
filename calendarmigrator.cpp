@@ -107,11 +107,14 @@ class CalendarUpdater : public QObject
     public:
         CalendarUpdater(const Collection& collection, bool dirResource,
                         bool ignoreKeepFormat, bool newCollection, QObject* parent);
+        ~CalendarUpdater();
+        static bool containsCollection(Collection::Id);
 
     public slots:
         bool update();
 
     private:
+        static QList<CalendarUpdater*> mInstances;
         Akonadi::Collection mCollection;
         QObject*            mParent;
         bool                mDirResource;
@@ -280,6 +283,8 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
 void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool ignoreKeepFormat, QWidget* parent)
 {
     kDebug() << collection.id();
+    if (CalendarUpdater::containsCollection(collection.id()))
+        return;   // prevent multiple simultaneous user prompts
     AgentInstance agent = AgentManager::self()->instance(collection.resource());
     const QString id = agent.type().identifier();
     bool dirResource;
@@ -297,6 +302,8 @@ void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool 
 }
 
 
+QList<CalendarUpdater*> CalendarUpdater::mInstances;
+
 CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
                                  bool ignoreKeepFormat, bool newCollection, QObject* parent)
     : mCollection(collection),
@@ -305,6 +312,22 @@ CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
       mIgnoreKeepFormat(ignoreKeepFormat),
       mNewCollection(newCollection)
 {
+    mInstances.append(this);
+}
+
+CalendarUpdater::~CalendarUpdater()
+{
+    mInstances.removeAll(this);
+}
+
+bool CalendarUpdater::containsCollection(Collection::Id id)
+{
+    for (int i = 0, count = mInstances.count();  i < count;  ++i)
+    {
+        if (mInstances[i]->mCollection.id() == id)
+            return true;
+    }
+    return false;
 }
 
 bool CalendarUpdater::update()
@@ -317,50 +340,54 @@ bool CalendarUpdater::update()
         KACalendar::Compat compatibility = compatAttr->compatibility();
         if ((compatibility & ~KACalendar::Converted)
         // The calendar isn't in the current KAlarm format
-        &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted))
-        // The calendar format is convertible to the current KAlarm format
-        &&  (mIgnoreKeepFormat
-            || !mCollection.hasAttribute<CollectionAttribute>()
-            || !mCollection.attribute<CollectionAttribute>()->keepFormat()))
+        &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted)))
         {
-            // The user hasn't previously said not to convert it
-            QString versionString = KAlarmCal::getVersionString(compatAttr->version());
-            QString msg = KAlarm::conversionPrompt(mCollection.name(), versionString, false);
-            kDebug() << "Version" << versionString;
-            if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
-                result = false;   // the user chose not to update the calendar
+            // The calendar format is convertible to the current KAlarm format
+            if (!mIgnoreKeepFormat
+            &&  mCollection.hasAttribute<CollectionAttribute>()
+            &&  mCollection.attribute<CollectionAttribute>()->keepFormat())
+                kDebug() << "Not updating format (previous user choice)";
             else
             {
-                // Tell the resource to update the backend storage format
-                QString errmsg;
+                // The user hasn't previously said not to convert it
+                QString versionString = KAlarmCal::getVersionString(compatAttr->version());
+                QString msg = KAlarm::conversionPrompt(mCollection.name(), versionString, false);
+                kDebug() << "Version" << versionString;
+                if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
+                    result = false;   // the user chose not to update the calendar
+                else
+                {
+                    // Tell the resource to update the backend storage format
+                    QString errmsg;
+                    if (!mNewCollection)
+                    {
+                        // Refetch the collection's details because anything could
+                        // have happened since the prompt was first displayed.
+                        if (!AkonadiModel::instance()->refresh(mCollection))
+                            errmsg = i18nc("@info/plain", "Invalid collection");
+                    }
+                    if (errmsg.isEmpty())
+                    {
+                        AgentInstance agent = AgentManager::self()->instance(mCollection.resource());
+                        if (mDirResource)
+                            CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, errmsg, mParent);
+                        else
+                            CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmSettingsInterface>(agent, errmsg, mParent);
+                    }
+                    if (!errmsg.isEmpty())
+                    {
+                        KAMessageBox::error(MainWindow::mainMainWindow(),
+                                            i18nc("@info", "%1<nl/>(%2)",
+                                                  i18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
+                                            errmsg));
+                    }
+                }
                 if (!mNewCollection)
                 {
-                    // Refetch the collection's details because anything could
-                    // have happened since the prompt was first displayed.
-                    if (!AkonadiModel::instance()->refresh(mCollection))
-                        errmsg = i18nc("@info/plain", "Invalid collection");
+                    // Record the user's choice of whether to update the calendar
+                    QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
+                    AkonadiModel::instance()->setData(ix, !result, AkonadiModel::KeepFormatRole);
                 }
-                if (errmsg.isEmpty())
-                {
-                    AgentInstance agent = AgentManager::self()->instance(mCollection.resource());
-                    if (mDirResource)
-                        CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, errmsg, mParent);
-                    else
-                        CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmSettingsInterface>(agent, errmsg, mParent);
-                }
-                if (!errmsg.isEmpty())
-                {
-                    KAMessageBox::error(MainWindow::mainMainWindow(),
-                                        i18nc("@info", "%1<nl/>(%2)",
-                                              i18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
-                                        errmsg));
-                }
-            }
-            if (!mNewCollection)
-            {
-                // Record the user's choice of whether to update the calendar
-                QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
-                AkonadiModel::instance()->setData(ix, !result, AkonadiModel::KeepFormatRole);
             }
         }
     }

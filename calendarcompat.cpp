@@ -19,6 +19,7 @@
  */
 
 #include "calendarcompat.h"
+#include "functions.h"
 #include "mainwindow.h"
 #include "messagebox.h"
 
