@@ -25,6 +25,7 @@
 #include "resourcemodelview.moc"
 
 #include <klocale.h>
+#include <kcolorutils.h>
 #include <kdebug.h>
 
 #include <QApplication>
@@ -85,14 +86,19 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
         case Qt::CheckStateRole:
             return resource->isEnabled() ? Qt::Checked : Qt::Unchecked;
         case Qt::ForegroundRole:
+        {
+            QColor colour;
             switch (resource->alarmType())
             {
-                case CalEvent::ACTIVE:    return resource->readOnly() ? Qt::darkGray : Qt::black;
-                case CalEvent::ARCHIVED:  return resource->readOnly() ? Qt::green : Qt::darkGreen;
-                case CalEvent::TEMPLATE:  return resource->readOnly() ? Qt::blue : Qt::darkBlue;
+                case CalEvent::ACTIVE:    colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();  break;
+                case CalEvent::ARCHIVED:  colour = Preferences::archivedColour();  break;
+                case CalEvent::TEMPLATE:  colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();  break;
                 default:  break;
             }
+            if (colour.isValid())
+                return resource->readOnly() ? KColorUtils::lighten(colour, 0.5) : colour;
             break;
+        }
         case Qt::BackgroundRole:
             if (resource->colour().isValid())
                 return resource->colour();
