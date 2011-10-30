@@ -39,6 +39,7 @@
 #include <kcal/calendarlocal.h>
 #endif
 
+#include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
 
