@@ -680,11 +680,12 @@ class KALARMCAL_EXPORT KAEvent
          *  @param volume         final volume (0 - 1), or -1 for default volume
          *  @param fadeVolume     initial volume (0 - 1), or -1 for no fade
          *  @param fadeSeconds    number of seconds to fade from @p fadeVolume to @p volume
+         *  @param repeatPause    number of seconds to pause between repetitions, or -1 if no repeat
          *  @param allowEmptyFile true to set the volume levels even if \p filename is empty
          *  @see audioFile(), soundVolume(), fadeVolume(), fadeSeconds()
          */
         void setAudioFile(const QString& filename, float volume, float fadeVolume,
-                          int fadeSeconds, bool allowEmptyFile = false);
+                          int fadeSeconds, int repeatPause = -1, bool allowEmptyFile = false);
 
         /** Return the audio file path.
          *  @see setAudioFile()
@@ -710,6 +711,11 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Return whether the sound file will be repeated indefinitely. */
         bool repeatSound() const;
+
+        /** Return how many seconds to pause between repetitions of the sound file.
+         *  @return pause interval, or -1 if sound does not repeat.
+         */
+        int repeatSoundPause() const;
 
         /** Return whether a beep should sound when the alarm is displayed. */
         bool beep() const;
