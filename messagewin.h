@@ -171,7 +171,7 @@ class MessageWin : public MainWindowBase
         QStringList         mErrorMsgs;
         QString             mDontShowAgain;   // non-null for don't-show-again option with error message
         int                 mRestoreHeight;
-        bool                mAudioRepeat;
+        int                 mAudioRepeatPause;
         bool                mConfirmAck;
         bool                mShowEdit;        // display the Edit button
         bool                mNoDefer;         // don't display a Defer option

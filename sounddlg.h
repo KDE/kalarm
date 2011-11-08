@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2007,2009-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2007,2009-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ class QShowEvent;
 class QResizeEvent;
 class KHBox;
 namespace Phonon { class MediaObject; }
+class GroupBox;
 class PushButton;
 class CheckBox;
 class SpinBox;
@@ -43,14 +44,14 @@ class SoundWidget : public QWidget
     public:
         SoundWidget(bool showPlay, bool showRepeat, QWidget* parent);
         ~SoundWidget();
-        void           set(const QString& file, float volume, float fadeVolume = -1, int fadeSeconds = 0, bool repeat = false);
+        void           set(const QString& file, float volume, float fadeVolume = -1, int fadeSeconds = 0, int repeatPause = -1);
         void           setReadOnly(bool);
         bool           isReadOnly() const    { return mReadOnly; }
         void           setAllowEmptyFile()   { mEmptyFileAllowed = true; }
         QString        fileName() const;
         bool           file(KUrl&, bool showErrorMessage = true) const;
-        bool           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
-        bool           getRepeat() const;
+        void           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const;
+        int            repeatPause() const;   // -1 if none, else seconds between repeats
         QString        defaultDir() const    { return mDefaultDir; }
         bool           validate(bool showErrorMessage) const;
 
@@ -74,7 +75,8 @@ class SoundWidget : public QWidget
         QPushButton*   mFilePlay;
         LineEdit*      mFileEdit;
         PushButton*    mFileBrowseButton;
-        CheckBox*      mRepeatCheckbox;
+        GroupBox*      mRepeatGroupBox;
+        SpinBox*       mRepeatPause;
         CheckBox*      mVolumeCheckbox;
         Slider*        mVolumeSlider;
         CheckBox*      mFadeCheckbox;
@@ -95,13 +97,14 @@ class SoundDlg : public KDialog
 {
         Q_OBJECT
     public:
-        SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
+        SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause,
                  const QString& caption, QWidget* parent);
         void           setReadOnly(bool);
         bool           isReadOnly() const    { return mReadOnly; }
         KUrl           getFile() const;
-        bool           getSettings(float& volume, float& fadeVolume, int& fadeSeconds) const
-                                             { return mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
+        void           getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const
+                                             { mSoundWidget->getVolume(volume, fadeVolume, fadeSeconds); }
+        int            repeatPause() const   { return mSoundWidget->repeatPause(); }
         QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
 
     protected:

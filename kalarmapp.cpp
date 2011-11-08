@@ -386,7 +386,7 @@ int KAlarmApp::newInstance()
                                 Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
                                                             : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
                                                             : Preferences::Sound_File;
-                                dlg->setAudio(type, options.audioFile(), options.audioVolume(), flags & KAEvent::REPEAT_SOUND);
+                                dlg->setAudio(type, options.audioFile(), options.audioVolume(), (flags & KAEvent::REPEAT_SOUND ? 0 : -1));
                             }
                             if (options.reminderMinutes())
                                 dlg->setReminder(options.reminderMinutes(), (options.flags() & KAEvent::REMINDER_ONCE));
@@ -1193,7 +1193,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
         event.setReminder(reminderMinutes, onceOnly);
     }
     if (!audioFile.isEmpty())
-        event.setAudioFile(audioFile, audioVolume, -1, 0);
+        event.setAudioFile(audioFile, audioVolume, -1, 0, (flags & KAEvent::REPEAT_SOUND) ? 0 : -1);
     if (!mailAddresses.isEmpty())
         event.setEmail(mailFromID, mailAddresses, mailSubject, mailAttachments);
     event.setRecurrence(recurrence);

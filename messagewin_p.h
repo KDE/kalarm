@@ -1,7 +1,7 @@
 /*
  *  messagewin_p.h  -  private declarations for MessageWin
  *  Program:  kalarm
- *  Copyright © 2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,13 +32,13 @@ class AudioThread : public QThread
 {
         Q_OBJECT
     public:
-        AudioThread(QObject* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, bool repeat)
+        AudioThread(QObject* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
             : QThread(parent),
               mFile(audioFile),
               mVolume(volume),
               mFadeVolume(fadeVolume),
               mFadeSeconds(fadeSeconds),
-              mRepeat(repeat),
+              mRepeatPause(repeatPause),
               mAudioObject(0)
         {}
         ~AudioThread();
@@ -62,11 +62,12 @@ class AudioThread : public QThread
         float                mVolume;
         float                mFadeVolume;
         int                  mFadeSeconds;
-        bool                 mRepeat;
+        int                  mRepeatPause;
         Phonon::MediaObject* mAudioObject;
         Phonon::Path         mPath;
         QString              mError;
-        bool                 mPlayedOnce;      // the sound file has started playing at least once
+        bool                 mPlayedOnce;   // the sound file has started playing at least once
+        bool                 mPausing;      // currently pausing between repeats
 };
 
 #endif // MESSAGEWIN_P_H

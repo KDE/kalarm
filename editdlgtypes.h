@@ -69,7 +69,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         void            setFgColour(const QColor&);
         void            setConfirmAck(bool);
         void            setAutoClose(bool);
-        void            setAudio(Preferences::SoundType, const QString& file = QString(), float volume = -1, bool repeat = false);
+        void            setAudio(Preferences::SoundType, const QString& file = QString(), float volume = -1, int repeatPause = -1);
         void            setReminder(int minutes, bool onceOnly);
 
         virtual Reminder* createReminder(QWidget* parent);
@@ -125,7 +125,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         int                 mSavedType;             // mTypeCombo index
         Preferences::SoundType mSavedSoundType;     // mSoundPicker sound type
         bool                mSavedSound;            // mSoundPicker sound status
-        bool                mSavedRepeatSound;      // mSoundPicker repeat status
+        int                 mSavedRepeatPause;      // mSoundPicker repeat pause
         KUrl                mSavedSoundFile;        // mSoundPicker sound file
         float               mSavedSoundVolume;      // mSoundPicker volume
         float               mSavedSoundFadeVolume;  // mSoundPicker fade volume
@@ -307,7 +307,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         float               mSavedVolume;      // volume
         float               mSavedFadeVolume;  // fade volume
         int                 mSavedFadeSeconds; // fade time
-        bool                mSavedRepeat;      // repeat sound file
+        int                 mSavedRepeatPause; // sound file repeat pause
 };
 
 #endif // EDITDLGTYPES_H

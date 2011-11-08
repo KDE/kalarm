@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 
 #include "checkbox.h"
 #include "functions.h"
+#include "groupbox.h"
 #include "lineedit.h"
 #include "pushbutton.h"
 #include "slider.h"
@@ -55,7 +56,7 @@ QString SoundWidget::i18n_chk_Repeat()      { return i18nc("@option:check", "Rep
 static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 
 
-SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat,
+SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause,
                    const QString& caption, QWidget* parent)
     : KDialog(parent),
       mReadOnly(false)
@@ -72,7 +73,7 @@ SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fade
         resize(s);
 
     // Initialise the control values
-        mSoundWidget->set(file, volume, fadeVolume, fadeSeconds, repeat);
+    mSoundWidget->set(file, volume, fadeVolume, fadeSeconds, repeatPause);
 }
 
 /******************************************************************************
@@ -140,7 +141,8 @@ void SoundDlg::slotButtonClicked(int button)
 SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     : QWidget(parent),
       mFilePlay(0),
-      mRepeatCheckbox(0),
+      mRepeatGroupBox(0),
+      mRepeatPause(0),
       mPlayer(0),
       mReadOnly(false),
       mEmptyFileAllowed(false)
@@ -197,11 +199,28 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     if (showRepeat)
     {
         // Sound repetition checkbox
-        mRepeatCheckbox = new CheckBox(i18n_chk_Repeat(), this);
-        mRepeatCheckbox->setFixedSize(mRepeatCheckbox->sizeHint());
-        mRepeatCheckbox->setWhatsThis(i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly for as long as the message is displayed."));
-        connect(mRepeatCheckbox, SIGNAL(toggled(bool)), SIGNAL(changed()));
-        layout->addWidget(mRepeatCheckbox);
+        mRepeatGroupBox = new GroupBox(i18n_chk_Repeat(), this);
+        mRepeatGroupBox->setCheckable(true);
+        mRepeatGroupBox->setWhatsThis(i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly for as long as the message is displayed."));
+        connect(mRepeatGroupBox, SIGNAL(toggled(bool)), SIGNAL(changed()));
+        layout->addWidget(mRepeatGroupBox);
+        QVBoxLayout* glayout = new QVBoxLayout(mRepeatGroupBox);
+
+        // Pause between repetitions
+        KHBox* box = new KHBox(mRepeatGroupBox);
+        box->setMargin(0);
+        box->setSpacing(KDialog::spacingHint());
+        glayout->addWidget(box);
+        label = new QLabel(i18nc("@label:spinbox Length of time to pause between repetitions", "Pause between repetitions:"), box);
+        label->setFixedSize(label->sizeHint());
+        mRepeatPause = new SpinBox(0, 999, box);
+        mRepeatPause->setSingleShiftStep(10);
+        mRepeatPause->setFixedSize(mRepeatPause->sizeHint());
+        label->setBuddy(mRepeatPause);
+        connect(mRepeatPause, SIGNAL(valueChanged(int)), SIGNAL(changed()));
+        label = new QLabel(i18nc("@label", "seconds"), box);
+        label->setFixedSize(label->sizeHint());
+        box->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to pause between repetitions."));
     }
 
     // Volume
@@ -284,12 +303,15 @@ SoundWidget::~SoundWidget()
 /******************************************************************************
 * Set the controls' values.
 */
-void SoundWidget::set(const QString& file, float volume, float fadeVolume, int fadeSeconds, bool repeat)
+void SoundWidget::set(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
 {
     // Initialise the control values
     mFileEdit->setText(KAlarm::pathOrUrl(file));
-    if (mRepeatCheckbox)
-        mRepeatCheckbox->setChecked(repeat);
+    if (mRepeatGroupBox)
+    {
+        mRepeatGroupBox->setChecked(repeatPause >= 0);
+        mRepeatPause->setValue(repeatPause >= 0 ? repeatPause : 0);
+    }
     mVolumeCheckbox->setChecked(volume >= 0);
     mVolumeSlider->setValue(volume >= 0 ? static_cast<int>(volume*100) : 100);
     mFadeCheckbox->setChecked(fadeVolume >= 0);
@@ -307,8 +329,8 @@ void SoundWidget::setReadOnly(bool readOnly)
     {
         mFileEdit->setReadOnly(readOnly);
         mFileBrowseButton->setReadOnly(readOnly);
-        if (mRepeatCheckbox)
-            mRepeatCheckbox->setReadOnly(readOnly);
+        if (mRepeatGroupBox)
+            mRepeatGroupBox->setReadOnly(readOnly);
         mVolumeCheckbox->setReadOnly(readOnly);
         mVolumeSlider->setReadOnly(readOnly);
         mFadeCheckbox->setReadOnly(readOnly);
@@ -340,9 +362,8 @@ bool SoundWidget::file(KUrl& url, bool showErrorMessage) const
 * Return the entered repetition and volume settings:
 * 'volume' is in range 0 - 1, or < 0 if volume is not to be set.
 * 'fadeVolume is similar, with 'fadeTime' set to the fade interval in seconds.
-* Reply = whether to repeat or not.
 */
-bool SoundWidget::getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const
+void SoundWidget::getVolume(float& volume, float& fadeVolume, int& fadeSeconds) const
 {
     volume = mVolumeCheckbox->isChecked() ? (float)mVolumeSlider->value() / 100 : -1;
     if (mFadeCheckbox->isChecked())
@@ -355,16 +376,15 @@ bool SoundWidget::getVolume(float& volume, float& fadeVolume, int& fadeSeconds) 
         fadeVolume  = -1;
         fadeSeconds = 0;
     }
-    return mRepeatCheckbox && mRepeatCheckbox->isChecked();
 }
 
 /******************************************************************************
 * Return the entered repetition setting.
-* Reply = whether to repeat or not.
+* Reply = seconds to pause between repetitions, or -1 if no repeat.
 */
-bool SoundWidget::getRepeat() const
+int SoundWidget::repeatPause() const
 {
-    return mRepeatCheckbox && mRepeatCheckbox->isChecked();
+    return mRepeatGroupBox && mRepeatGroupBox->isChecked() ? mRepeatPause->value() : -1;
 }
 
 /******************************************************************************

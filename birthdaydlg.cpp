@@ -276,7 +276,8 @@ QVector<KAEvent> BirthdayDlg::events() const
         float fadeVolume;
         int   fadeSecs;
         float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
-        event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
+        int   repeatPause = mSoundPicker->repeatPause();
+        event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs, repeatPause);
         QVector<int> months(1, date.month());
         event.setRecurAnnualByDate(1, months, 0, KARecurrence::defaultFeb29Type(), -1, QDate());
         event.setRepetition(mSubRepetition->repetition());
@@ -307,7 +308,7 @@ void BirthdayDlg::slotOk()
 
     mFlags = KAEvent::ANY_TIME;
     if (mSoundPicker->sound() == Preferences::Sound_Beep) mFlags |= KAEvent::BEEP;
-    if (mSoundPicker->repeat())                           mFlags |= KAEvent::REPEAT_SOUND;
+    if (mSoundPicker->repeatPause() >= 0)                 mFlags |= KAEvent::REPEAT_SOUND;
     if (mConfirmAck->isChecked())                         mFlags |= KAEvent::CONFIRM_ACK;
     if (mFontColourButton->defaultFont())                 mFlags |= KAEvent::DEFAULT_FONT;
     KDialog::accept();

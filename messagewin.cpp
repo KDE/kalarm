@@ -198,7 +198,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 #endif
       mCommandError(event->commandError()),
       mRestoreHeight(0),
-      mAudioRepeat(event->repeatSound()),
+      mAudioRepeatPause(event->repeatSoundPause()),
       mConfirmAck(event->confirmAck()),
       mNoDefer(true),
       mInvalid(false),
@@ -1005,11 +1005,12 @@ void MessageWin::saveProperties(KConfigGroup& config)
         }
         if (mCloseTime.isValid())
             config.writeEntry("Expiry", mCloseTime);
-        if (mAudioRepeat  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
+        if (mAudioRepeatPause >= 0  &&  mSilenceButton  &&  mSilenceButton->isEnabled())
         {
             // Only need to restart sound file playing if it's being repeated
             config.writePathEntry("AudioFile", mAudioFile);
             config.writeEntry("Volume", static_cast<int>(mVolume * 100));
+            config.writeEntry("AudioPause", mAudioRepeatPause);
         }
         config.writeEntry("Speak", mSpeak);
         config.writeEntry("Height", height());
@@ -1071,8 +1072,8 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mVolume              = static_cast<float>(config.readEntry("Volume", 0)) / 100;
     mFadeVolume          = -1;
     mFadeSeconds         = 0;
-    if (!mAudioFile.isEmpty())
-        mAudioRepeat = true;
+    if (!mAudioFile.isEmpty())   // audio file URL was only saved if it repeats
+        mAudioRepeatPause = config.readEntry("AudioPause", 0);
     mSpeak               = config.readEntry("Speak", false);
     mRestoreHeight       = config.readEntry("Height", 0);
     mDefaultDeferMinutes = config.readEntry("DeferMins", 0);
@@ -1458,7 +1459,7 @@ void MessageWin::startAudio()
     {
         kDebug() << QThread::currentThread();
         theApp()->notifyAudioPlaying(true);
-        mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeat);
+        mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
         mAudioOwner = this;
         connect(mAudioThread, SIGNAL(readyToPlay()), SLOT(playReady()));
         connect(mAudioThread, SIGNAL(finished()), SLOT(playFinished()));
@@ -1598,6 +1599,7 @@ void AudioThread::run()
     connect(mAudioObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), SLOT(playStateChanged(Phonon::State)), Qt::DirectConnection);
     connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()), Qt::DirectConnection);
     mPlayedOnce = false;
+    mPausing    = false;
     mMutex.unlock();
     emit readyToPlay();
     checkAudioPlay();
@@ -1609,8 +1611,8 @@ void AudioThread::run()
 }
 
 /******************************************************************************
-*  Called when the audio file has loaded and is ready to play, or on a timer
-*  when play is expected to have completed.
+*  Called when the audio file has loaded and is ready to play, or when play
+*  has completed.
 *  If it is ready to play, start playing it (for the first time or repeated).
 *  If play has not yet completed, wait a bit longer.
 */
@@ -1622,15 +1624,31 @@ void AudioThread::checkAudioPlay()
         mMutex.unlock();
         return;
     }
-    // The file has loaded and is ready to play, or play has completed
-    if (mPlayedOnce  &&  !mRepeat)
+    if (mPausing)
+        mPausing = false;
+    else
     {
-        // Play has completed
-        mMutex.unlock();
-        stopPlay();
-        return;
+        // The file has loaded and is ready to play, or play has completed
+        if (mPlayedOnce)
+        {
+            if (mRepeatPause < 0)
+            {
+                // Play has completed
+                mMutex.unlock();
+                stopPlay();
+                return;
+            }
+            if (mRepeatPause > 0)
+            {
+                // Pause before playing the file again
+                mPausing = true;
+                QTimer::singleShot(mRepeatPause * 1000, this, SLOT(checkAudioPlay()));
+                mMutex.unlock();
+                return;
+            }
+        }
+        mPlayedOnce = true;
     }
-    mPlayedOnce = true;
 
     // Start playing the file, either for the first time or again
     kDebug() << "start";

@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002,2004-2007,2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002,2004-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,11 +54,11 @@ class SoundPicker : public QFrame
          *  @param fadeSeconds The number of seconds over which the sound file volume should be faded,
          *                  or 0 for no fading. If the 'file' option is not initially selected,
          *                  @p fadeSeconds provides the default should 'file' later be selected by the user.
-         *  @param repeat   True to play the sound file repeatedly. If the 'file' option is not initially
-         *                  selected, @p repeat provides the default should 'file' later be selected by
-         *                  the user.
+         *  @param repeatPause Number of seconds to pause between sound file repetitions, or -1 for no
+         *                  repetition. If the 'file' option is not initially selected, @p repeatPause
+         *                  provides the default should 'file' later be selected by the user.
          */
-        void           set(Preferences::SoundType type, const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool repeat);
+        void           set(Preferences::SoundType type, const QString& filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
         /** Returns true if the widget is read only for the user. */
         bool           isReadOnly() const          { return mReadOnly; }
         /** Sets whether the widget can be changed the user.
@@ -81,14 +81,14 @@ class SoundPicker : public QFrame
          *  @return Volume to play the sound file, or < 0 if the 'file' option is not selected.
          */
         float          volume(float& fadeVolume, int& fadeSeconds) const;
-        /** Returns true if a sound file is to be played repeatedly.
-         *  If the 'file' option is not selected, returns false.
+        /** Returns pause in seconds between repetitions of the sound file,
+         *  or -1 if no repeat or 'file' option is not selected.
          */
-        bool           repeat() const;
+        int            repeatPause() const;
         /** Returns the current file URL regardless of whether the 'file' option is selected. */
         KUrl           fileSetting() const   { return mFile; }
         /** Returns the current file repetition setting regardless of whether the 'file' option is selected. */
-        bool           repeatSetting() const { return mRepeat; }
+        bool           repeatPauseSetting() const { return mRepeatPause; }
         /** Display a dialog to choose a sound file, initially highlighting
          *  @p initialFile if non-null.
          *  @param initialDir  Initial directory to display if @p initialFile is null. If a file is
@@ -122,10 +122,10 @@ class SoundPicker : public QFrame
         float          mVolume;       // volume for file, or < 0 to not set volume
         float          mFadeVolume;   // initial volume for file, or < 0 for no fading
         int            mFadeSeconds;  // fade interval in seconds
+        int            mRepeatPause;  // seconds to pause between repetitions of the sound file, or -1 if no repeat
         Preferences::SoundType mLastType;     // last selected sound option
         bool           mSpeakShowing; // Speak option is shown in combo box
         bool           mRevertType;   // reverting to last selected sound option
-        bool           mRepeat;       // repeat the sound file
         bool           mReadOnly;
 };
 

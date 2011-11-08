@@ -322,7 +322,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
                                          : !event->audioFile().isEmpty() ? Preferences::Sound_File
                                          :                                 Preferences::Sound_None;
         mSoundPicker->set(soundType, event->audioFile(), event->soundVolume(),
-                          event->fadeVolume(), event->fadeSeconds(), event->repeatSound());
+                          event->fadeVolume(), event->fadeSeconds(), event->repeatSoundPause());
     }
     else
     {
@@ -346,7 +346,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
             mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
                                               Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
         mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
-                          Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
+                          Preferences::defaultSoundVolume(), -1, 0, (Preferences::defaultSoundRepeat() ? 0 : -1));
     }
 }
 
@@ -434,9 +434,9 @@ void EditDisplayAlarmDlg::setAutoClose(bool close)
 {
     lateCancel()->setAutoClose(close);
 }
-void EditDisplayAlarmDlg::setAudio(Preferences::SoundType type, const QString& file, float volume, bool repeat)
+void EditDisplayAlarmDlg::setAudio(Preferences::SoundType type, const QString& file, float volume, int repeatPause)
 {
-    mSoundPicker->set(type, file, volume, -1, 0, repeat);
+    mSoundPicker->set(type, file, volume, -1, 0, repeatPause);
 }
 void EditDisplayAlarmDlg::setReminder(int minutes, bool onceOnly)
 {
@@ -478,7 +478,7 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
     mSavedSoundType   = mSoundPicker->sound();
     mSavedSoundFile   = mSoundPicker->file();
     mSavedSoundVolume = mSoundPicker->volume(mSavedSoundFadeVolume, mSavedSoundFadeSeconds);
-    mSavedRepeatSound = mSoundPicker->repeat();
+    mSavedRepeatPause = mSoundPicker->repeatPause();
     mSavedConfirmAck  = mConfirmAck->isChecked();
     mSavedFont        = mFontColourButton->font();
     mSavedFgColour    = mFontColourButton->fgColour();
@@ -528,7 +528,7 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
         {
             float fadeVolume;
             int   fadeSecs;
-            if (mSavedRepeatSound != mSoundPicker->repeat()
+            if (mSavedRepeatPause != mSoundPicker->repeatPause()
             ||  mSavedSoundVolume != mSoundPicker->volume(fadeVolume, fadeSecs)
             ||  mSavedSoundFadeVolume != fadeVolume
             ||  mSavedSoundFadeSeconds != fadeSecs)
@@ -562,7 +562,8 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
     float fadeVolume;
     int   fadeSecs;
     float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
-    event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs);
+    int   repeatPause = mSoundPicker->repeatPause();
+    event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs, repeatPause);
     if (!trial  &&  reminder()->isEnabled())
         event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
     if (mSpecialActionsButton  &&  mSpecialActionsButton->isEnabled())
@@ -579,7 +580,7 @@ KAEvent::Flags EditDisplayAlarmDlg::getAlarmFlags() const
     KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
     if (mSoundPicker->sound() == Preferences::Sound_Beep)  flags |= KAEvent::BEEP;
     if (mSoundPicker->sound() == Preferences::Sound_Speak) flags |= KAEvent::SPEAK;
-    if (mSoundPicker->repeat())                            flags |= KAEvent::REPEAT_SOUND;
+    if (mSoundPicker->repeatPause() >= 0)                  flags |= KAEvent::REPEAT_SOUND;
     if (mConfirmAck->isChecked())                          flags |= KAEvent::CONFIRM_ACK;
     if (lateCancel()->isAutoClose())                       flags |= KAEvent::AUTO_CLOSE;
     if (mFontColourButton->defaultFont())                  flags |= KAEvent::DEFAULT_FONT;
@@ -1557,7 +1558,8 @@ void EditAudioAlarmDlg::saveState(const KAEvent* event)
 {
     EditAlarmDlg::saveState(event);
     mSavedFile   = mSoundConfig->fileName();
-    mSavedRepeat = mSoundConfig->getVolume(mSavedVolume, mSavedFadeVolume, mSavedFadeSeconds);
+    mSoundConfig->getVolume(mSavedVolume, mSavedFadeVolume, mSavedFadeSeconds);
+    mSavedRepeatPause = mSoundConfig->repeatPause();
 }
 
 /******************************************************************************
@@ -1568,17 +1570,18 @@ void EditAudioAlarmDlg::saveState(const KAEvent* event)
 */
 bool EditAudioAlarmDlg::type_stateChanged() const
 {
-        if (mSavedFile != mSoundConfig->fileName())
-                return true;
-        if (!mSavedFile.isEmpty()  ||  isTemplate())
-        {
-                float volume, fadeVolume;
-                int   fadeSecs;
-        if (mSavedRepeat      != mSoundConfig->getVolume(volume, fadeVolume, fadeSecs)
-                ||  mSavedVolume      != volume
-                ||  mSavedFadeVolume  != fadeVolume
-                ||  mSavedFadeSeconds != fadeSecs)
-                        return true;
+    if (mSavedFile != mSoundConfig->fileName())
+        return true;
+    if (!mSavedFile.isEmpty()  ||  isTemplate())
+    {
+        float volume, fadeVolume;
+        int   fadeSecs;
+        mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
+        if (mSavedRepeatPause != mSoundConfig->repeatPause()
+        ||  mSavedVolume      != volume
+        ||  mSavedFadeVolume  != fadeVolume
+        ||  mSavedFadeSeconds != fadeSecs)
+            return true;
     }
     return false;
 }
@@ -1595,9 +1598,10 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
     float volume, fadeVolume;
     int   fadeSecs;
     mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
+    int   repeatPause = mSoundConfig->repeatPause();
     KUrl url;
     mSoundConfig->file(url, false);
-    event.setAudioFile(url.prettyUrl(), volume, fadeVolume, fadeSecs, isTemplate());
+    event.setAudioFile(url.prettyUrl(), volume, fadeVolume, fadeSecs, repeatPause, isTemplate());
 }
 
 /******************************************************************************
@@ -1606,7 +1610,7 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
 KAEvent::Flags EditAudioAlarmDlg::getAlarmFlags() const
 {
     KAEvent::Flags flags = EditAlarmDlg::getAlarmFlags();
-    if (mSoundConfig->getRepeat()) flags |= KAEvent::REPEAT_SOUND;
+    if (mSoundConfig->repeatPause() >= 0) flags |= KAEvent::REPEAT_SOUND;
     return flags;
 }
 

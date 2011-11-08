@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -194,18 +194,18 @@ float SoundPicker::volume(float& fadeVolume, int& fadeSeconds) const
 }
 
 /******************************************************************************
-* Return whether sound file repetition is selected, if the main checkbox is checked.
-* Returns false if beep is currently selected.
+* Return the pause between sound file repetitions is selected.
+* Reply = pause in seconds, or -1 if repetition is not selected or beep is selected.
 */
-bool SoundPicker::repeat() const
+int SoundPicker::repeatPause() const
 {
-    return mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]  &&  !mFile.isEmpty()  &&  mRepeat;
+    return mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]  &&  !mFile.isEmpty() ? mRepeatPause : -1;
 }
 
 /******************************************************************************
 * Initialise the widget's state.
 */
-void SoundPicker::set(Preferences::SoundType type, const QString& f, float volume, float fadeVolume, int fadeSeconds, bool repeat)
+void SoundPicker::set(Preferences::SoundType type, const QString& f, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
 {
     if (type == Preferences::Sound_File  &&  f.isEmpty())
         type = Preferences::Sound_Beep;
@@ -213,7 +213,7 @@ void SoundPicker::set(Preferences::SoundType type, const QString& f, float volum
     mVolume      = volume;
     mFadeVolume  = fadeVolume;
     mFadeSeconds = fadeSeconds;
-    mRepeat      = repeat;
+    mRepeatPause = repeatPause;
     mTypeCombo->setCurrentIndex(indexes[type]);  // this doesn't trigger slotTypeSelected()
     mFilePicker->setEnabled(type == Preferences::Sound_File);
     mTypeCombo->setToolTip(type == Preferences::Sound_File ? mFile.prettyUrl() : QString());
@@ -262,7 +262,7 @@ void SoundPicker::slotPickFile()
 {
     KUrl oldfile = mFile;
     KUrl file = mFile;
-    SoundDlg dlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeat, i18nc("@title:window", "Sound File"), this);
+    SoundDlg dlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeatPause, i18nc("@title:window", "Sound File"), this);
     dlg.setReadOnly(mReadOnly);
     bool accepted = (dlg.exec() == QDialog::Accepted);
     if (mReadOnly)
@@ -271,8 +271,9 @@ void SoundPicker::slotPickFile()
     {
         float volume, fadeVolume;
         int   fadeTime;
+        dlg.getVolume(volume, fadeVolume, fadeTime);
         file         = dlg.getFile();
-        mRepeat      = dlg.getSettings(volume, fadeVolume, fadeTime);
+        mRepeatPause = dlg.repeatPause();
         mVolume      = volume;
         mFadeVolume  = fadeVolume;
         mFadeSeconds = fadeTime;

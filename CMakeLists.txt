@@ -56,6 +56,7 @@ set(libkalarm_SRCS
     lib/combobox.cpp
     lib/desktop.cpp
     lib/filedialog.cpp
+    lib/groupbox.cpp
     lib/itembox.cpp
     lib/kalocale.cpp
     lib/label.cpp
