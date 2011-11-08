@@ -2295,7 +2295,7 @@ bool KAEvent::repeatSound() const
  
 int KAEvent::repeatSoundPause() const
 {
-    return d->mRepeatSoundPause >= 0 ? d->mRepeatSoundPause : -1;
+    return d->mRepeatSoundPause;
 }
 
 bool KAEvent::beep() const
