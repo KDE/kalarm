@@ -1034,7 +1034,7 @@ void KAEvent::Private::set(const Event* event)
                 mSoundVolume = (!mBeep && !mSpeak) ? data.soundVolume : -1;
                 mFadeVolume  = (mSoundVolume >= 0  &&  data.fadeSeconds > 0) ? data.fadeVolume : -1;
                 mFadeSeconds = (mFadeVolume >= 0) ? data.fadeSeconds : 0;
-                mRepeatSoundPause = (!mBeep && !mSpeak)  &&  (data.alarm->repeatCount() < 0) ? data.repeatSoundPause : -1;
+                mRepeatSoundPause = (!mBeep && !mSpeak) ? data.repeatSoundPause : -1;
                 break;
             case AT_LOGIN_ALARM:
                 mRepeatAtLogin   = true;
@@ -1681,8 +1681,10 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
                 flags << Private::SPEAK_FLAG;
             if (mRepeatSoundPause >= 0)
             {
-                alarm->setRepeatCount(-1);
-                alarm->setSnoozeTime(0);
+                // Alarm::setSnoozeTime() sets 5 seconds if duration parameter is zero,
+                // so repeat count = -1 represents 0 pause, -2 represents non-zero pause.
+                alarm->setRepeatCount(mRepeatSoundPause ? -2 : -1);
+                alarm->setSnoozeTime(Duration(mRepeatSoundPause, Duration::Seconds));
             }
             break;
         case PRE_ACTION_ALARM:
@@ -4299,6 +4301,8 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         {
             data.action      = KAAlarm::AUDIO;
             data.cleanText   = alarm->audioFile();
+            data.repeatSoundPause = (alarm->repeatCount() == -2) ? alarm->snoozeTime().asSeconds()
+                                  : (alarm->repeatCount() == -1) ? 0 : -1;
             data.soundVolume = -1;
             data.fadeVolume  = -1;
             data.fadeSeconds = 0;
@@ -4321,13 +4325,6 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
                     {
                         data.fadeVolume  = fadeVolume;
                         data.fadeSeconds = fadeSecs;
-                    }
-                    if (list.count() >= 4)
-                    {
-                        int pause;
-                        pause = list[3].toUInt(&ok);
-                        if (ok)
-                            data.repeatSoundPause = pause;
                     }
                 }
             }
@@ -5092,8 +5089,7 @@ void KAEvent::Private::setAudioAlarm(Alarm* alarm) const
         alarm->setCustomProperty(KACalendar::APPNAME, VOLUME_PROPERTY,
                       QString::fromLatin1("%1;%2;%3;%4").arg(QString::number(mSoundVolume, 'f', 2))
                                                      .arg(QString::number(mFadeVolume, 'f', 2))
-                                                     .arg(mFadeSeconds)
-                                                     .arg(mRepeatSoundPause));
+                                                     .arg(mFadeSeconds));
 }
 
 /******************************************************************************
