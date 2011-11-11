@@ -158,6 +158,7 @@ class KAEvent::Private : public QSharedData
             float                       soundVolume;
             float                       fadeVolume;
             int                         fadeSeconds;
+            int                         repeatSoundPause;
             int                         nextRepeat;
             bool                        speak;
             KAEvent::Private::AlarmType type;
@@ -168,7 +169,6 @@ class KAEvent::Private : public QSharedData
             bool                        commandScript;
             bool                        cancelOnPreActErr;
             bool                        dontShowPreActErr;
-            bool                        repeatSound;
             bool                        timedDeferral;
             bool                        hiddenReminder;
         };
@@ -192,7 +192,7 @@ class KAEvent::Private : public QSharedData
 #endif
         void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
                                const QFont&, SubAction, int lateCancel, Flags flags, bool changesPending = false);
-        void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile);
+        void               setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause, bool allowEmptyFile);
         OccurType          setNextOccurrence(const KDateTime& preDateTime);
         void               setFirstRecurrence();
         void               setCategory(CalEvent::Type);
@@ -347,7 +347,8 @@ class KAEvent::Private : public QSharedData
         QString            mLogFile;           // alarm output is to be logged to this URL
         float              mSoundVolume;       // volume for sound file (range 0 - 1), or < 0 for unspecified
         float              mFadeVolume;        // initial volume for sound file (range 0 - 1), or < 0 for no fade
-        int                mFadeSeconds;       // fade time for sound file, or 0 if none
+        int                mFadeSeconds;       // fade time (seconds) for sound file, or 0 if none
+        int                mRepeatSoundPause;  // seconds to pause between sound file repetitions, or -1 if no repetition
         int                mLateCancel;        // how many minutes late will cancel the alarm, or 0 for no cancellation
         mutable const KHolidays::HolidayRegion*
                            mExcludeHolidays;   // non-null to not trigger alarms on holidays (= mHolidays when trigger calculated)
@@ -367,7 +368,6 @@ class KAEvent::Private : public QSharedData
         bool               mCommandDisplay;    // command output is to be displayed in an alarm window
         bool               mEmailBcc;          // blind copy the email to the user
         bool               mBeep;              // whether to beep when the alarm is displayed
-        bool               mRepeatSound;       // whether to repeat the sound file while the alarm is displayed
         bool               mSpeak;             // whether to speak the message when the alarm is displayed
         bool               mCopyToKOrganizer;  // KOrganizer should hold a copy of the event
         bool               mReminderOnceOnly;  // the reminder is output only for the first recurrence
@@ -701,6 +701,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mSoundVolume             = event.mSoundVolume;
     mFadeVolume              = event.mFadeVolume;
     mFadeSeconds             = event.mFadeSeconds;
+    mRepeatSoundPause        = event.mRepeatSoundPause;
     mLateCancel              = event.mLateCancel;
     mExcludeHolidays         = event.mExcludeHolidays;
     mWorkTimeOnly            = event.mWorkTimeOnly;
@@ -719,7 +720,6 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mCommandDisplay          = event.mCommandDisplay;
     mEmailBcc                = event.mEmailBcc;
     mBeep                    = event.mBeep;
-    mRepeatSound             = event.mRepeatSound;
     mSpeak                   = event.mSpeak;
     mCopyToKOrganizer        = event.mCopyToKOrganizer;
     mReminderOnceOnly        = event.mReminderOnceOnly;
@@ -980,13 +980,13 @@ void KAEvent::Private::set(const Event* event)
     mMainExpired       = true;
     mRepeatAtLogin     = false;
     mDisplaying        = false;
-    mRepeatSound       = false;
     mCommandScript     = false;
     mCancelOnPreActErr = false;
     mDontShowPreActErr = false;
     mDeferral          = NO_DEFERRAL;
     mSoundVolume       = -1;
     mFadeVolume        = -1;
+    mRepeatSoundPause  = -1;
     mFadeSeconds       = 0;
     mEmailFromIdentity = 0;
     mReminderAfterTime = DateTime();
@@ -1034,7 +1034,7 @@ void KAEvent::Private::set(const Event* event)
                 mSoundVolume = (!mBeep && !mSpeak) ? data.soundVolume : -1;
                 mFadeVolume  = (mSoundVolume >= 0  &&  data.fadeSeconds > 0) ? data.fadeVolume : -1;
                 mFadeSeconds = (mFadeVolume >= 0) ? data.fadeSeconds : 0;
-                mRepeatSound = (!mBeep && !mSpeak)  &&  (data.alarm->repeatCount() < 0);
+                mRepeatSoundPause = (!mBeep && !mSpeak) ? data.repeatSoundPause : -1;
                 break;
             case AT_LOGIN_ALARM:
                 mRepeatAtLogin   = true;
@@ -1139,7 +1139,7 @@ void KAEvent::Private::set(const Event* event)
                             break;
                         case KAAlarm::AUDIO:
                             // Already mostly handled above
-                            mRepeatSound = data.repeatSound;
+                            mRepeatSoundPause = data.repeatSoundPause;
                             break;
                         default:
                             break;
@@ -1285,7 +1285,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mDisplaying             = flags & DISPLAYING_;
     mReminderOnceOnly       = flags & REMINDER_ONCE;
     mAutoClose              = (flags & AUTO_CLOSE) && mLateCancel;
-    mRepeatSound            = flags & REPEAT_SOUND;
+    mRepeatSoundPause       = (flags & REPEAT_SOUND) ? 0 : -1;
     mSpeak                  = (flags & SPEAK) && action != AUDIO;
     mBeep                   = (flags & BEEP) && action != AUDIO && !mSpeak;
     if (mRepeatAtLogin)                       // do this after setting other flags
@@ -1679,10 +1679,12 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
             setAudioAlarm(alarm);
             if (mSpeak)
                 flags << Private::SPEAK_FLAG;
-            if (mRepeatSound)
+            if (mRepeatSoundPause >= 0)
             {
-                alarm->setRepeatCount(-1);
-                alarm->setSnoozeTime(0);
+                // Alarm::setSnoozeTime() sets 5 seconds if duration parameter is zero,
+                // so repeat count = -1 represents 0 pause, -2 represents non-zero pause.
+                alarm->setRepeatCount(mRepeatSoundPause ? -2 : -1);
+                alarm->setSnoozeTime(Duration(mRepeatSoundPause, Duration::Seconds));
             }
             break;
         case PRE_ACTION_ALARM:
@@ -1736,7 +1738,7 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
                     break;
                 case AUDIO:
                     setAudioAlarm(alarm);
-                    if (mRepeatSound)
+                    if (mRepeatSoundPause >= 0)
                         alltypes += SOUND_REPEAT_TYPE;
                     break;
             }
@@ -1817,7 +1819,7 @@ KAEvent::Flags KAEvent::Private::flags() const
 {
     Flags result(0);
     if (mBeep)                       result |= BEEP;
-    if (mRepeatSound)                result |= REPEAT_SOUND;
+    if (mRepeatSoundPause >= 0)      result |= REPEAT_SOUND;
     if (mEmailBcc)                   result |= EMAIL_BCC;
     if (mStartDateTime.isDateOnly()) result |= ANY_TIME;
     if (mSpeak)                      result |= SPEAK;
@@ -2244,12 +2246,12 @@ bool KAEvent::emailBcc() const
     return d->mEmailBcc;
 }
 
-void KAEvent::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile)
+void KAEvent::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause, bool allowEmptyFile)
 {
-    d->setAudioFile(filename, volume, fadeVolume, fadeSeconds, allowEmptyFile);
+    d->setAudioFile(filename, volume, fadeVolume, fadeSeconds, repeatPause, allowEmptyFile);
 }
 
-void KAEvent::Private::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, bool allowEmptyFile)
+void KAEvent::Private::setAudioFile(const QString& filename, float volume, float fadeVolume, int fadeSeconds, int repeatPause, bool allowEmptyFile)
 {
     mAudioFile = filename;
     mSoundVolume = (!allowEmptyFile && filename.isEmpty()) ? -1 : volume;
@@ -2263,6 +2265,7 @@ void KAEvent::Private::setAudioFile(const QString& filename, float volume, float
         mFadeVolume  = -1;
         mFadeSeconds = 0;
     }
+    mRepeatSoundPause = repeatPause;
 }
 
 QString KAEvent::audioFile() const
@@ -2287,7 +2290,12 @@ int KAEvent::fadeSeconds() const
 
 bool KAEvent::repeatSound() const
 {
-    return d->mRepeatSound;
+    return d->mRepeatSoundPause >= 0;
+}
+ 
+int KAEvent::repeatSoundPause() const
+{
+    return d->mRepeatSoundPause;
 }
 
 bool KAEvent::beep() const
@@ -4060,7 +4068,7 @@ void KAEvent::Private::dumpDebug() const
         }
         else
             kDebug() << "-- mSoundVolume:-:";
-        kDebug() << "-- mRepeatSound:" << mRepeatSound;
+        kDebug() << "-- mRepeatSoundPause:" << mRepeatSoundPause;
     }
     kDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
     kDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
@@ -4214,13 +4222,14 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
 #endif
 {
     // Parse the next alarm's text
-    data.alarm           = alarm;
-    data.displayingFlags = 0;
-    data.isEmailText     = false;
-    data.speak           = false;
-    data.hiddenReminder  = false;
-    data.timedDeferral   = false;
-    data.nextRepeat      = 0;
+    data.alarm            = alarm;
+    data.displayingFlags  = 0;
+    data.isEmailText      = false;
+    data.speak            = false;
+    data.hiddenReminder   = false;
+    data.timedDeferral    = false;
+    data.nextRepeat       = 0;
+    data.repeatSoundPause = -1;
     if (alarm->repeatCount())
     {
         bool ok;
@@ -4292,6 +4301,8 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         {
             data.action      = KAAlarm::AUDIO;
             data.cleanText   = alarm->audioFile();
+            data.repeatSoundPause = (alarm->repeatCount() == -2) ? alarm->snoozeTime().asSeconds()
+                                  : (alarm->repeatCount() == -1) ? 0 : -1;
             data.soundVolume = -1;
             data.fadeVolume  = -1;
             data.fadeSeconds = 0;
@@ -4334,7 +4345,7 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
     bool reminder         = false;
     bool deferral         = false;
     bool dateDeferral     = false;
-    data.repeatSound      = false;
+    bool repeatSound      = false;
     data.type = MAIN_ALARM;
     property = alarm->customProperty(KACalendar::APPNAME, Private::TYPE_PROPERTY);
     const QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
@@ -4358,8 +4369,12 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         else if (type == Private::POST_ACTION_TYPE  &&  data.action == KAAlarm::COMMAND)
             data.type = POST_ACTION_ALARM;
         else if (type == Private::SOUND_REPEAT_TYPE  &&  data.action == KAAlarm::AUDIO)
-            data.repeatSound = true;
+            repeatSound = true;
     }
+    if (repeatSound && data.repeatSoundPause < 0)
+        data.repeatSoundPause = 0;
+    else if (!repeatSound)
+        data.repeatSoundPause = -1;
 
     if (reminder)
     {
@@ -5072,7 +5087,7 @@ void KAEvent::Private::setAudioAlarm(Alarm* alarm) const
     alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
     if (mSoundVolume >= 0)
         alarm->setCustomProperty(KACalendar::APPNAME, VOLUME_PROPERTY,
-                      QString::fromLatin1("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2))
+                      QString::fromLatin1("%1;%2;%3;%4").arg(QString::number(mSoundVolume, 'f', 2))
                                                      .arg(QString::number(mFadeVolume, 'f', 2))
                                                      .arg(mFadeSeconds));
 }
