@@ -711,8 +711,15 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     // Record the user's choice of whether to update the calendar
     attr->setKeepFormat(keep);
 
-    // Update the collection's attributes in the Akonadi database
-    CollectionModifyJob* cmjob = new CollectionModifyJob(collection, this);
+    // Update the collection's CollectionAttribute value in the Akonadi database.
+    // Note that we can't supply 'collection' to CollectionModifyJob since
+    // that also contains the CompatibilityAttribute value, which is read-only
+    // for applications. So create a new Collection instance and only set a
+    // value for CollectionAttribute.
+    Collection c(collection.id());
+    CollectionAttribute* att = c.attribute<CollectionAttribute>(Entity::AddIfMissing);
+    *att = *attr;
+    CollectionModifyJob* cmjob = new CollectionModifyJob(c, this);
     connect(cmjob, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
 }
 

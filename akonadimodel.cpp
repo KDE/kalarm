@@ -509,12 +509,13 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
     {
         // This is a Collection row
         bool updateCollection = false;
+        CollectionAttribute* attr = 0;
         switch (role)
         {
             case Qt::BackgroundRole:
             {
                 QColor colour = value.value<QColor>();
-                CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->backgroundColor() == colour)
                     return true;   // no change
                 attr->setBackgroundColor(colour);
@@ -524,7 +525,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             case EnabledTypesRole:
             {
                 CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
-                CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->enabled() == types)
                     return true;   // no change
                 kDebug() << "Set enabled:" << types << ", was=" << attr->enabled();
@@ -537,16 +538,16 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 &&  isCompatible(collection))
                 {
                     CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
-CollectionAttribute* attr = collection.attribute<CollectionAttribute>();
+                    attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
 kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
-                    collection.attribute<CollectionAttribute>()->setStandard(types);
+                    attr->setStandard(types);
                     updateCollection = true;
                 }
                 break;
             case KeepFormatRole:
             {
                 bool keepFormat = value.value<bool>();
-                CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->keepFormat() == keepFormat)
                     return true;   // no change
                 attr->setKeepFormat(keepFormat);
@@ -558,7 +559,15 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
         }
         if (updateCollection)
         {
-            CollectionModifyJob* job = new CollectionModifyJob(collection, this);
+            // Update the CollectionAttribute value.
+            // Note that we can't supply 'collection' to CollectionModifyJob since
+            // that also contains the CompatibilityAttribute value, which is read-only
+            // for applications. So create a new Collection instance and only set a
+            // value for CollectionAttribute.
+            Collection c(collection.id());
+            CollectionAttribute* att = c.attribute<CollectionAttribute>(Entity::AddIfMissing);
+            *att = *attr;
+            CollectionModifyJob* job = new CollectionModifyJob(c, this);
             connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
             return true;
         }
