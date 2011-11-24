@@ -1521,7 +1521,7 @@ void MessageWin::playFinished()
         }
     }
     theApp()->notifyAudioPlaying(false);
-    delete mAudioThread;
+    delete mAudioThread.data();
     mAudioOwner = 0;
     if (mAlwaysHide)
         close();
@@ -1606,6 +1606,8 @@ void AudioThread::run()
 
     // Start an event loop.
     // The function will exit once exit() or quit() is called.
+    // First, ensure that the thread object is deleted once it has completed.
+    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     exec();
     stopPlay();
 }
