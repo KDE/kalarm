@@ -231,7 +231,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 else if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
                     colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
                 if (colour.isValid())
-                    return (collection.rights() & writableRights) == writableRights ? colour : KColorUtils::lighten(colour, 0.5);
+                    return (collection.rights() & writableRights) == writableRights ? colour : KColorUtils::lighten(colour, 0.25);
                 break;
             }
             case Qt::ToolTipRole:

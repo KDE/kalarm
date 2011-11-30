@@ -96,7 +96,7 @@ QVariant ResourceModel::data(const QModelIndex& index, int role) const
                 default:  break;
             }
             if (colour.isValid())
-                return resource->readOnly() ? KColorUtils::lighten(colour, 0.5) : colour;
+                return resource->readOnly() ? KColorUtils::lighten(colour, 0.25) : colour;
             break;
         }
         case Qt::BackgroundRole:
