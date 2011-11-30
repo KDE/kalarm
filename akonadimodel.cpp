@@ -221,19 +221,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 break;
             }
             case Qt::ForegroundRole:
-            {
-                QStringList mimeTypes = collection.contentMimeTypes();
-                QColor colour;
-                if (mimeTypes.contains(KAlarmCal::MIME_ACTIVE))
-                    colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();
-                else if (mimeTypes.contains(KAlarmCal::MIME_ARCHIVED))
-                    colour = Preferences::archivedColour();
-                else if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
-                    colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
-                if (colour.isValid())
-                    return (collection.rights() & writableRights) == writableRights ? colour : KColorUtils::lighten(colour, 0.25);
-                break;
-            }
+                return foregroundColor(collection, collection.contentMimeTypes());
             case Qt::ToolTipRole:
                 return tooltip(collection, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
             case AlarmTypeRole:
@@ -883,6 +871,24 @@ void AkonadiModel::updateCommandError(const KAEvent& event)
     QModelIndex ix = itemIndex(event.itemId());
     if (ix.isValid())
         setData(ix, QVariant(static_cast<int>(event.commandError())), CommandErrorRole);
+}
+
+/******************************************************************************
+* Return the foreground color for displaying a collection, based on the
+* supplied mime types which it contains, and on whether it is fully writable.
+*/
+QColor AkonadiModel::foregroundColor(const Akonadi::Collection& collection, const QStringList& mimeTypes)
+{
+    QColor colour;
+    if (mimeTypes.contains(KAlarmCal::MIME_ACTIVE))
+        colour = KColorScheme(QPalette::Active).foreground(KColorScheme::NormalText).color();
+    else if (mimeTypes.contains(KAlarmCal::MIME_ARCHIVED))
+        colour = Preferences::archivedColour();
+    else if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
+        colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
+    if (colour.isValid()  &&  (collection.rights() & writableRights) != writableRights)
+        return KColorUtils::lighten(colour, 0.25);
+    return colour;
 }
 
 /******************************************************************************

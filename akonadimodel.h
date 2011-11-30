@@ -85,6 +85,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QString displayName(Akonadi::Collection&) const;
         /** Return the storage type (file/directory/URL etc.) for a collection. */
         QString storageType(const Akonadi::Collection&) const;
+        /** Get the foreground color for a collection, based on specified mime types. */
+        static QColor foregroundColor(const Akonadi::Collection&, const QStringList& mimeTypes);
         /** Set the background color for a collection and its alarms. */
         void setBackgroundColor(Akonadi::Collection&, const QColor&);
         /** Get the background color for a collection and its alarms. */

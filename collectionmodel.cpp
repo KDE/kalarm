@@ -299,6 +299,13 @@ QVariant CollectionCheckListModel::data(const QModelIndex& index, int role) cons
         // This is a Collection row
         switch (role)
         {
+            case Qt::ForegroundRole:
+            {
+                QString mimeType = CalEvent::mimeType(mAlarmType);
+                if (collection.contentMimeTypes().contains(mimeType))
+                    return AkonadiModel::foregroundColor(collection, QStringList(mimeType));
+                break;
+            }
             case Qt::FontRole:
             {
                 if (!collection.hasAttribute<CollectionAttribute>()
