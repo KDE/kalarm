@@ -837,12 +837,14 @@ void ResourceSelector::showInfo()
     Collection collection = currentResource();
     if (collection.isValid())
     {
-        QString id = collection.name();
         QString name;
         if (collection.hasAttribute<EntityDisplayAttribute>())
             name = collection.attribute<EntityDisplayAttribute>()->displayName();
+        if (name.isEmpty())
+            name = collection.name();
+        QString id = collection.resource();   // resource name
         CalEvent::Type alarmType = currentResourceType();
-        QString calType = AgentManager::self()->instance(collection.resource()).type().name();
+        QString calType = AgentManager::self()->instance(id).type().name();
         QString storage = AkonadiModel::instance()->storageType(collection);
         QString location = collection.remoteId();
         KUrl url(location);
@@ -867,17 +869,7 @@ void ResourceSelector::showInfo()
         QString std = CollectionControlModel::isStandard(collection, alarmType)
                     ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
                     : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
-        QString text = (name.isEmpty() || name == id)
-                     ? i18nc("@info",
-                             "<title>%1</title>"
-                             "<para>Calendar type: %2<nl/>"
-                             "Contents: %3<nl/>"
-                             "%4: <filename>%5</filename><nl/>"
-                             "Permissions: %6<nl/>"
-                             "Status: %7<nl/>"
-                             "Default calendar: %8</para>",
-                             id, calType, alarmTypeString, storage, location, perms, enabled, std)
-                     : i18nc("@info",
+        QString text = i18nc("@info",
                              "<title>%1</title>"
                              "<para>ID: %2<nl/>"
                              "Calendar type: %3<nl/>"
