@@ -399,7 +399,6 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 
             QByteArray coded = KCodecs::base64Encode(contents, true);
             KMime::Content* content = new KMime::Content();
-            content = new KMime::Content();
             content->setBody(coded + "\n\n");
 
             // Set the content type
