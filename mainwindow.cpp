@@ -519,7 +519,7 @@ void MainWindow::initActions()
     mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
     connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
-    action = new KAction(i18nc("@action", "Wake From Suspend"), this);
+    action = new KAction(i18nc("@action", "Wake From Suspend..."), this);
     actions->addAction(QLatin1String("wakeSuspend"), action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotWakeFromSuspend()));
 
