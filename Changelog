@@ -1,5 +1,40 @@
 KAlarm Change Log
 
+=== Version 2.7.91 --- 1 December 2011 ===
+- Use Akonadi as the default calendar access method.
+
+=== Version 2.7.5 (KDE 4.7.4) --- 23 November 2011 ===
+- Fix crash due to audio thread not being correctly deleted.
+
+=== Version 2.7.4 (KDE 4.7.1) --- 28 August 2011 ===
+- Fix crash when last recurrence of late-cancel alarm triggers too late.
+- Fix conversion of pre-version 1.4.14 subsidiary alarms.
+- Fix new alarm not being scheduled after editing alarm from alarm window.
+- Don't do search if invalid regular expression is entered in Find dialogue.
+- Don't prevent interaction with alarm windows when a prompt or warning message
+  window is displayed [using KDE 4.7.1 or later].
+- Only reset visible tab in multi-tab settings sections when Defaults is clicked
+  in Configuration dialogue, and Current tab option is selected.
+- Disable command output option for display alarms in edit alarm dialogue if
+  user not authorised to run shell commands.
+- Always output "not authorised" error message if unauthorised user tries to run
+  shell commands.
+
+=== Version 2.7.3 --- 26 July 2011 ===
+- Fix crash when Wake From Suspend dialogue is shown with no alarm selected.
+
+=== Version 2.7.2 --- 15 July 2011 ===
+- Fix KAlarm not quitting when no visible windows or system tray icon remain.
+- Cancel wake-from-suspend if alarm is disabled, or if all alarms are disabled.
+- Various improvements and bug fixes to Wake From Suspend dialogue.
+- In calendar list show calendar colours by text background, not coloured square.
+- In alarm list show multi-line tooltip for alarm text when appropriate.
+
+=== Version 2.7.1 (KDE 4.7.0) --- 6 July 2011 ===
+- Make wake-from-suspend schedule a time-from-now, to make it work correctly
+  on systems whose hardware clock is out of sync with the system clock.
+- Include Content-Transfer-Encoding header in emails to allow correct display.
+
 === Version 2.7.0 --- 9 May 2011 ===
 - Add option to set a reminder AFTER the main alarm.
 - Add option to wake computer from suspend when a selected alarm is triggered.
