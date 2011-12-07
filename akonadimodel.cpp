@@ -1,10 +1,3 @@
-#ifdef __GNUC__
-#warning Update a calendar format, enable the calendar, copy old version on top -> crash
-#warning Add a directory resource containing 2 alarm types, right click on it -> crash
-#warning Set default template calendar to read-only -> crash
-#warning Set default archived calendar to read-only, then read-write -> now "other format"
-#warning Create new email template, get valgrind uninitialised errors from serialize()
-#endif
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
@@ -972,7 +965,6 @@ QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types type
     QString disabled = i18nc("@info/plain", "Disabled");
     QString readonly = readOnlyTooltip(collection);
     bool writable = readonly.isEmpty();
-//if (!collection.hasAttribute<CollectionAttribute>()) { kDebug()<<"Tooltip: no collection attribute"; } else { kDebug()<<"Tooltip: enabled="<<collection.attribute<CollectionAttribute>()->enabled(); } //disabled="<<inactive;
     if (inactive  &&  !writable)
         return i18nc("@info:tooltip",
                      "%1"
