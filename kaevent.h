@@ -2,7 +2,7 @@
  *  kaevent.h  -  represents calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -304,7 +304,7 @@ class KALARMCAL_EXPORT KAEvent
             DISPLAY_TRIGGER    //!< next trigger time for display purposes (i.e. excluding reminders)
         };
 
-        //!< Command execution error type for last time the alarm was triggered. */
+        /** Command execution error type for last time the alarm was triggered. */
         enum CmdErrType
         {
             CMD_NO_ERROR   = 0,      //!< no error
@@ -313,6 +313,17 @@ class KALARMCAL_EXPORT KAEvent
             CMD_ERROR_POST = 0x04,   //!< post-alarm command execution failed
             CMD_ERROR_PRE_POST = CMD_ERROR_PRE | CMD_ERROR_POST
         };
+
+        /** Options for pre- or post-alarm actions.
+         *  @since 4.9
+         */
+        enum ExtraActionOption
+        {
+            CancelOnPreActError,    //!< cancel alarm on pre-alarm action error
+            DontShowPreActError,    //!< do not notify pre-alarm action errors to user
+            ExecPreActOnDeferral    //!< execute pre-alarm action also for deferred alarms
+        };
+        Q_DECLARE_FLAGS(ExtraActionOptions, ExtraActionOption)
 
         /** How to deal with the event UID in updateKCalEvent(). */
         enum UidAction
@@ -760,9 +771,19 @@ class KALARMCAL_EXPORT KAEvent
         /** Set the pre-alarm and post-alarm actions, and their options.
          *  @param pre  shell command to execute before the alarm is displayed
          *  @param post shell command to execute after the alarm is acknowledged
+         *  @param options options for pre- or post-alarm actions
+         *  @see preAction(), postAction(), cancelOnPreActionError(), dontShowPreActionError()
+         *  @since 4.9
+         */
+        void setActions(const QString& pre, const QString& post, ExtraActionOptions options);
+
+        /** Set the pre-alarm and post-alarm actions, and their options.
+         *  @param pre  shell command to execute before the alarm is displayed
+         *  @param post shell command to execute after the alarm is acknowledged
          *  @param cancelOnError true to cancel the alarm if the pre-alarm action fails
          *  @param dontShowError true to not notify the error if the pre-alarm action fails
          *  @see preAction(), postAction(), cancelOnPreActionError(), dontShowPreActionError()
+         *  @deprecated Use alternative form of setActions() instead.
          */
         void setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
 
@@ -774,14 +795,22 @@ class KALARMCAL_EXPORT KAEvent
          */
         QString postAction() const;
 
+        /** Return the pre- and post-alarm action options.
+         *  @see preAction(), postAction(), setActions()
+         *  @since 4.9
+         */
+        ExtraActionOptions extraActionOptions() const;
+
         /** Return whether the alarm is to be cancelled if the pre-alarm action fails.
          *  @see preAction(), setActions()
+         *  @deprecated Use preActionOptions() instead
          */
         bool cancelOnPreActionError() const;
 
         /** Return whether the user should not be notified if the pre-alarm action fails.
          *  @return @c true if the user will not be notified, @c false if the user will be notified
          *  @see preAction(), setActions()
+         *  @deprecated Use preActionOptions() instead
          */
         bool dontShowPreActionError() const;
 
