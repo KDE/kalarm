@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.h  -  dialogues to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -140,7 +140,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         int                 mSavedReminder;         // mReminder value
         bool                mSavedAutoClose;        // mLateCancel->isAutoClose() value
         bool                mSavedOnceOnly;         // mReminder once-only status
-        bool                mSavedPreActionCancel;  // mSpecialActionsButton cancel on pre-alarm action error
+        KAEvent::ExtraActionOptions mSavedPreActionOptions; // mSpecialActionsButton pre-alarm action options
 };
 
 

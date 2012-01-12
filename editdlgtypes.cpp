@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -316,7 +316,7 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         reminder()->setOnceOnly(event->reminderOnceOnly());
         reminder()->enableOnceOnly(recurs);
         if (mSpecialActionsButton)
-            mSpecialActionsButton->setActions(event->preAction(), event->postAction(), event->cancelOnPreActionError(), event->dontShowPreActionError());
+            mSpecialActionsButton->setActions(event->preAction(), event->postAction(), event->extraActionOptions());
         Preferences::SoundType soundType = event->speak()                ? Preferences::Sound_Speak
                                          : event->beep()                 ? Preferences::Sound_Beep
                                          : !event->audioFile().isEmpty() ? Preferences::Sound_File
@@ -343,8 +343,16 @@ void EditDisplayAlarmDlg::type_initValues(const KAEvent* event)
         reminder()->setMinutes(0, false);
         reminder()->enableOnceOnly(isTimedRecurrence());   // must be called after mRecurrenceEdit is set up
         if (mSpecialActionsButton)
-            mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
-                                              Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
+        {
+            KAEvent::ExtraActionOptions opts(0);
+            if (Preferences::defaultExecPreActionOnDeferral())
+                opts |= KAEvent::ExecPreActOnDeferral;
+            if (Preferences::defaultCancelOnPreActionError())
+                opts |= KAEvent::CancelOnPreActError;
+            if (Preferences::defaultDontShowPreActionError())
+                opts |= KAEvent::DontShowPreActError;
+            mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), opts);
+        }
         mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
                           Preferences::defaultSoundVolume(), -1, 0, (Preferences::defaultSoundRepeat() ? 0 : -1));
     }
@@ -488,9 +496,9 @@ void EditDisplayAlarmDlg::saveState(const KAEvent* event)
     mSavedAutoClose   = lateCancel()->isAutoClose();
     if (mSpecialActionsButton)
     {
-        mSavedPreAction       = mSpecialActionsButton->preAction();
-        mSavedPostAction      = mSpecialActionsButton->postAction();
-        mSavedPreActionCancel = mSpecialActionsButton->cancelOnError();
+        mSavedPreAction        = mSpecialActionsButton->preAction();
+        mSavedPostAction       = mSpecialActionsButton->postAction();
+        mSavedPreActionOptions = mSpecialActionsButton->options();
     }
 }
 
@@ -515,9 +523,9 @@ bool EditDisplayAlarmDlg::type_stateChanged() const
         return true;
     if (mSpecialActionsButton)
     {
-        if (mSavedPreAction       != mSpecialActionsButton->preAction()
-        ||  mSavedPostAction      != mSpecialActionsButton->postAction()
-        ||  mSavedPreActionCancel != mSpecialActionsButton->cancelOnError())
+        if (mSavedPreAction        != mSpecialActionsButton->preAction()
+        ||  mSavedPostAction       != mSpecialActionsButton->postAction()
+        ||  mSavedPreActionOptions != mSpecialActionsButton->options())
             return true;
     }
     if (mSavedSoundType == Preferences::Sound_File)
@@ -568,7 +576,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
         event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
     if (mSpecialActionsButton  &&  mSpecialActionsButton->isEnabled())
         event.setActions(mSpecialActionsButton->preAction(), mSpecialActionsButton->postAction(),
-                         mSpecialActionsButton->cancelOnError(), mSpecialActionsButton->dontShowError());
+                         mSpecialActionsButton->options());
 }
 
 /******************************************************************************

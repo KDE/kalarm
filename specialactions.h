@@ -1,7 +1,7 @@
 /*
  *  specialactions.h  -  widget to specify special alarm actions
  *  Program:  kalarm
- *  Copyright © 2004-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2010,2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +21,12 @@
 #ifndef SPECIALACTIONS_H
 #define SPECIALACTIONS_H
 
+#include <kalarmcal/kaevent.h>
 #include <kdialog.h>
 #include <QWidget>
 #include <QPushButton>
+
+using namespace KAlarmCal;
 
 class QResizeEvent;
 class KLineEdit;
@@ -35,11 +38,10 @@ class SpecialActionsButton : public QPushButton
         Q_OBJECT
     public:
         explicit SpecialActionsButton(bool enableCheckboxes, QWidget* parent = 0);
-        void           setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
+        void           setActions(const QString& pre, const QString& post, KAEvent::ExtraActionOptions);
         const QString& preAction() const      { return mPreAction; }
         const QString& postAction() const     { return mPostAction; }
-        bool           cancelOnError() const  { return mCancelOnError; }
-        bool           dontShowError() const  { return mDontShowError; }
+        KAEvent::ExtraActionOptions options() const  { return mOptions; }
         virtual void   setReadOnly(bool ro)   { mReadOnly = ro; }
         virtual bool   isReadOnly() const     { return mReadOnly; }
 
@@ -53,8 +55,7 @@ class SpecialActionsButton : public QPushButton
     private:
         QString  mPreAction;
         QString  mPostAction;
-        bool     mCancelOnError;
-        bool     mDontShowError;
+        KAEvent::ExtraActionOptions mOptions;
         bool     mEnableCheckboxes;
         bool     mReadOnly;
 };
@@ -66,11 +67,10 @@ class SpecialActions : public QWidget
         Q_OBJECT
     public:
         explicit SpecialActions(bool enableCheckboxes, QWidget* parent = 0);
-        void         setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError);
+        void         setActions(const QString& pre, const QString& post, KAEvent::ExtraActionOptions);
         QString      preAction() const;
         QString      postAction() const;
-        bool         cancelOnError() const;
-        bool         dontShowError() const;
+        KAEvent::ExtraActionOptions options() const;
         void         setReadOnly(bool);
         bool         isReadOnly() const    { return mReadOnly; }
 
@@ -82,6 +82,7 @@ class SpecialActions : public QWidget
         KLineEdit*   mPostAction;
         CheckBox*    mCancelOnError;
         CheckBox*    mDontShowError;
+        CheckBox*    mExecOnDeferral;
         bool         mEnableCheckboxes;   // enable checkboxes even if mPreAction is blank
         bool         mReadOnly;
 };
@@ -93,14 +94,13 @@ class SpecialActionsDlg : public KDialog
         Q_OBJECT
     public:
         SpecialActionsDlg(const QString& preAction, const QString& postAction,
-                          bool cancelOnError, bool enableCheckboxes, bool dontShowError,
+                          KAEvent::ExtraActionOptions, bool enableCheckboxes,
                           QWidget* parent = 0);
-        QString      preAction() const     { return mActions->preAction(); }
-        QString      postAction() const    { return mActions->postAction(); }
-        bool         cancelOnError() const { return mActions->cancelOnError(); }
-        bool         dontShowError() const { return mActions->dontShowError(); }
-        void         setReadOnly(bool ro)  { mActions->setReadOnly(ro); }
-        bool         isReadOnly() const    { return mActions->isReadOnly(); }
+        QString        preAction() const     { return mActions->preAction(); }
+        QString        postAction() const    { return mActions->postAction(); }
+        KAEvent::ExtraActionOptions options() const  { return mActions->options(); }
+        void           setReadOnly(bool ro)  { mActions->setReadOnly(ro); }
+        bool           isReadOnly() const    { return mActions->isReadOnly(); }
 
     protected:
         virtual void resizeEvent(QResizeEvent*);

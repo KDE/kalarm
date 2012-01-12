@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1432,8 +1432,14 @@ void EditPrefTab::restore(bool, bool allTabs)
             case TimePeriod::Minutes:      index = 0; break;
         }
         mReminderUnits->setCurrentIndex(index);
-        mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
-                                          Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
+        KAEvent::ExtraActionOptions opts(0);
+        if (Preferences::defaultExecPreActionOnDeferral())
+            opts |= KAEvent::ExecPreActOnDeferral;
+        if (Preferences::defaultCancelOnPreActionError())
+            opts |= KAEvent::CancelOnPreActError;
+        if (Preferences::defaultDontShowPreActionError())
+            opts |= KAEvent::DontShowPreActError;
+        mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), opts);
         mSound->setCurrentIndex(soundIndex(Preferences::defaultSoundType()));
         mSoundFile->setText(Preferences::defaultSoundFile());
         mSoundRepeat->setChecked(Preferences::defaultSoundRepeat());
@@ -1471,15 +1477,19 @@ void EditPrefTab::apply(bool syncToDisc)
     QString text = mSpecialActionsButton->preAction();
     if (text != Preferences::defaultPreAction())
         Preferences::setDefaultPreAction(text);
-    b = mSpecialActionsButton->cancelOnError();
-    if (b != Preferences::defaultCancelOnPreActionError())
-        Preferences::setDefaultCancelOnPreActionError(b);
-    b = mSpecialActionsButton->dontShowError();
-    if (b != Preferences::defaultDontShowPreActionError())
-        Preferences::setDefaultDontShowPreActionError(b);
     text = mSpecialActionsButton->postAction();
     if (text != Preferences::defaultPostAction())
         Preferences::setDefaultPostAction(text);
+    KAEvent::ExtraActionOptions opts = mSpecialActionsButton->options();
+    b = opts & KAEvent::ExecPreActOnDeferral;
+    if (b != Preferences::defaultExecPreActionOnDeferral())
+        Preferences::setDefaultExecPreActionOnDeferral(b);
+    b = opts & KAEvent::CancelOnPreActError;
+    if (b != Preferences::defaultCancelOnPreActionError())
+        Preferences::setDefaultCancelOnPreActionError(b);
+    b = opts & KAEvent::DontShowPreActError;
+    if (b != Preferences::defaultDontShowPreActionError())
+        Preferences::setDefaultDontShowPreActionError(b);
     Preferences::SoundType snd;
     switch (mSound->currentIndex())
     {

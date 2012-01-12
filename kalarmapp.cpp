@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1676,13 +1676,15 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             // Find if we're changing a reminder message to the real message
             bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
             bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
-            if (!reminder  &&  !event.deferred()
+            if (!reminder
+            &&  (!event.deferred() || (event.extraActionOptions() & KAEvent::ExecPreActOnDeferral))
             &&  (replaceReminder || !win)  &&  !noPreAction
             &&  !event.preAction().isEmpty())
             {
-                // It's not a reminder or a deferred alarm, and there is no message window
-                // (other than a reminder window) currently displayed for this alarm,
-                // and we need to execute a command before displaying the new window.
+                // It's not a reminder alarm, and it's not a deferred alarm unless the
+                // pre-alarm action applies to deferred alarms, and there is no message
+                // window (other than a reminder window) currently displayed for this
+                // alarm, and we need to execute a command before displaying the new window.
                 //
                 // NOTE: The pre-action is not executed for a recurring alarm if an
                 // alarm message window for a previous occurrence is still visible.

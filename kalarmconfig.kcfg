@@ -352,6 +352,11 @@
       <label context="@label">Pre-alarm action</label>
       <whatsthis context="@info:whatsthis">Default command to execute before displaying alarms.</whatsthis>
     </entry>
+    <entry name="DefaultExecPreActionOnDeferral" key="PreActionExecDefer" type="Bool">
+      <label context="@label">Execute pre-alarm action for deferred alarms</label>
+      <whatsthis context="@info:whatsthis">Default setting for whether to execute the pre-alarm action before deferred alarms trigger.</whatsthis>
+      <default>false</default>
+    </entry>
     <entry name="DefaultCancelOnPreActionError" key="PreActionErrCancel" type="Bool">
       <label context="@label">Cancel alarm on pre-alarm action error</label>
       <whatsthis context="@info:whatsthis">Default setting for whether to cancel the alarm if the pre-alarm action command fails.</whatsthis>

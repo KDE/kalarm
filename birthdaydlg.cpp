@@ -1,7 +1,7 @@
 /*
  *  birthdaydlg.cpp  -  dialog to pick birthdays from address book
  *  Program:  kalarm
- *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -232,8 +232,16 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mSoundPicker->set(Preferences::defaultSoundType(), Preferences::defaultSoundFile(),
                       Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
     if (mSpecialActionsButton)
-        mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(),
-                                          Preferences::defaultCancelOnPreActionError(), Preferences::defaultDontShowPreActionError());
+    {
+        KAEvent::ExtraActionOptions opts(0);
+        if (Preferences::defaultExecPreActionOnDeferral())
+            opts |= KAEvent::ExecPreActOnDeferral;
+        if (Preferences::defaultCancelOnPreActionError())
+            opts |= KAEvent::CancelOnPreActError;
+        if (Preferences::defaultDontShowPreActionError())
+            opts |= KAEvent::DontShowPreActError;
+        mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), opts);
+    }
 
     KActionCollection* actions = new KActionCollection(this);
     KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
@@ -286,9 +294,8 @@ QVector<KAEvent> BirthdayDlg::events() const
             event.setReminder(reminder, false);
         if (mSpecialActionsButton)
             event.setActions(mSpecialActionsButton->preAction(),
-                     mSpecialActionsButton->postAction(),
-                             mSpecialActionsButton->cancelOnError(),
-                             mSpecialActionsButton->dontShowError());
+                             mSpecialActionsButton->postAction(),
+                             mSpecialActionsButton->options());
         event.endChanges();
         list.append(event);
     }
