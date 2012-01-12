@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -113,7 +113,8 @@ class EditAlarmDlg : public KDialog
         virtual void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) = 0;
         virtual KAEvent::Flags getAlarmFlags() const;
         virtual bool    type_validate(bool trial) = 0;
-        virtual void    type_trySuccessMessage(ShellProcess*, const QString& text) = 0;
+        virtual void    type_aboutToTry() {}
+        virtual void    type_executedTry(const QString& text, void* obj) { Q_UNUSED(text); Q_UNUSED(obj); }
         virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return 0; }
         virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { Q_UNUSED(parent); return 0; }
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const = 0;
@@ -143,7 +144,6 @@ class EditAlarmDlg : public KDialog
         void            slotAnyTimeToggled(bool anyTime);
         void            slotTemplateTimeType(QAbstractButton*);
         void            slotSetSubRepetition();
-        void            slotTrySuccess();
         void            slotResize();
 
     private:

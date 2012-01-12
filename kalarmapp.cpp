@@ -1636,6 +1636,7 @@ bool KAlarmApp::cancelReminderAndDeferral(KAEvent& event)
 /******************************************************************************
 * Execute an alarm by displaying its message or file, or executing its command.
 * Reply = ShellProcess instance if a command alarm
+*       = MessageWin if an audio alarm
 *       != 0 if successful
 *       = -1 if execution has not completed
 *       = 0 if the alarm is disabled, or if an error message was output.
@@ -1783,14 +1784,14 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             {
                 // There isn't already a message for this event.
                 int flags = (reschedule ? 0 : MessageWin::NO_RESCHEDULE) | MessageWin::ALWAYS_HIDE;
-                new MessageWin(&event, alarm, flags);
+                win = new MessageWin(&event, alarm, flags);
             }
             else
             {
                 // There's an existing message window: replay the sound
                 win->repeat(alarm);    // N.B. this reschedules the alarm
             }
-            break;
+            return win;
         }
         default:
             return 0;

@@ -35,6 +35,7 @@
 #include "lineedit.h"
 #include "mainwindow.h"
 #include "messagebox.h"
+#include "messagewin.h"
 #include "pickfileradio.h"
 #include "preferences.h"
 #include "radiobutton.h"
@@ -979,11 +980,14 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
 }
 
 /******************************************************************************
+* Called when the Try action has been executed.
 * Tell the user the result of the Try action.
 */
-void EditCommandAlarmDlg::type_trySuccessMessage(ShellProcess* proc, const QString& text)
+void EditCommandAlarmDlg::type_executedTry(const QString& text, void* result)
 {
-    if (mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
+    ShellProcess* proc = (ShellProcess*)result;
+    if (proc  &&  proc != (void*)-1
+    &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
     {
         theApp()->commandMessage(proc, this);
         KAMessageBox::information(this, i18nc("@info", "Command executed: <icode>%1</icode>", text));
@@ -1375,9 +1379,17 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 }
 
 /******************************************************************************
+* Called when the Try action is about to be executed.
+*/
+void EditEmailAlarmDlg::type_aboutToTry()
+{
+    connect(theApp(), SIGNAL(execAlarmSuccess()), SLOT(slotTrySuccess()));
+}
+
+/******************************************************************************
 * Tell the user the result of the Try action.
 */
-void EditEmailAlarmDlg::type_trySuccessMessage(ShellProcess*, const QString&)
+void EditEmailAlarmDlg::slotTrySuccess()
 {
     QString msg;
     QString to = KAEvent::joinEmailAddresses(mEmailAddresses, "<nl/>");
@@ -1473,7 +1485,8 @@ bool EditEmailAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResourceType getResource)
-    : EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource)
+    : EditAlarmDlg(Template, KAEvent::AUDIO, parent, getResource),
+      mMessageWin(0)
 {
     kDebug() << "New";
     init(0);
@@ -1481,10 +1494,14 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, QWidget* parent, GetResource
 
 EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                                      GetResourceType getResource, bool readOnly)
-    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly)
+    : EditAlarmDlg(Template, event, newAlarm, parent, getResource, readOnly),
+      mMessageWin(0)
 {
     kDebug() << "Event.id()";
     init(event);
+    KPushButton* tryButton = button(Try);
+    tryButton->setEnabled(!MessageWin::isAudioPlaying());
+    connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(slotAudioPlaying(bool)));
 }
 
 /******************************************************************************
@@ -1635,6 +1652,67 @@ bool EditAudioAlarmDlg::checkText(QString& result, bool showErrorMessage) const
     }
     result = url.pathOrUrl();
     return true;
+}
+
+/******************************************************************************
+* Called when the Try button is clicked.
+* If the audio file is currently playing (as a result of previously clicking
+* the Try button), cancel playback. Otherwise, play the audio file.
+*/
+void EditAudioAlarmDlg::slotTry()
+{
+    KPushButton* tryButton = button(Try);
+    if (!MessageWin::isAudioPlaying())
+        EditAlarmDlg::slotTry();   // play the audio file
+    else if (mMessageWin)
+    {
+        mMessageWin->stopAudio();
+        mMessageWin = 0;
+    }
+}
+
+/******************************************************************************
+* Called when the Try action has been executed.
+*/
+void EditAudioAlarmDlg::type_executedTry(const QString&, void* result)
+{
+    mMessageWin = (MessageWin*)result;    // note which MessageWin controls the audio playback
+    if (mMessageWin)
+    {
+        slotAudioPlaying(true);
+        connect(mMessageWin, SIGNAL(destroyed(QObject*)), SLOT(audioWinDestroyed()));
+    }
+}
+
+/******************************************************************************
+* Called when audio playing starts or stops.
+* Enable/disable/toggle the Try button.
+*/
+void EditAudioAlarmDlg::slotAudioPlaying(bool playing)
+{
+    KPushButton* tryButton = button(Try);
+    if (!playing)
+    {
+        // Nothing is playing, so enable the Try button
+        tryButton->setEnabled(true);
+        tryButton->setCheckable(false);
+        tryButton->setChecked(false);
+        mMessageWin = 0;
+    }
+    else if (mMessageWin)
+    {
+        // The test sound file is playing, so enable the Try button and depress it
+        tryButton->setEnabled(true);
+        tryButton->setCheckable(true);
+        tryButton->setChecked(true);
+    }
+    else
+    {
+        // An alarm is playing, so disable the Try button
+        tryButton->setEnabled(false);
+        tryButton->setCheckable(false);
+        tryButton->setChecked(false);
+    }
 }
 
 
