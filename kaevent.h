@@ -314,14 +314,14 @@ class KALARMCAL_EXPORT KAEvent
             CMD_ERROR_PRE_POST = CMD_ERROR_PRE | CMD_ERROR_POST
         };
 
-        /** Options for pre- or post-alarm actions.
+        /** Options for pre- or post-alarm actions. These may be OR'ed together.
          *  @since 4.9
          */
         enum ExtraActionOption
         {
-            CancelOnPreActError,    //!< cancel alarm on pre-alarm action error
-            DontShowPreActError,    //!< do not notify pre-alarm action errors to user
-            ExecPreActOnDeferral    //!< execute pre-alarm action also for deferred alarms
+            CancelOnPreActError  = 0x01,   //!< cancel alarm on pre-alarm action error
+            DontShowPreActError  = 0x02,   //!< do not notify pre-alarm action errors to user
+            ExecPreActOnDeferral = 0x04    //!< execute pre-alarm action also for deferred alarms
         };
         Q_DECLARE_FLAGS(ExtraActionOptions, ExtraActionOption)
 
