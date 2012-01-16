@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,26 +136,10 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
     connect(monitor, SIGNAL(itemChanged(Akonadi::Item,QSet<QByteArray>)), SLOT(slotMonitoredItemChanged(Akonadi::Item,QSet<QByteArray>)));
 
-    // Check whether there are any KAlarm resources configured
-    bool found = false;
-    AgentInstance::List agents = AgentManager::self()->instances();
-    foreach (const AgentInstance& agent, agents)
-    {
-        QString type = agent.type().identifier();
-        if (type == QLatin1String("akonadi_kalarm_resource")
-        ||  type == QLatin1String("akonadi_kalarm_dir_resource"))
-        {
-            found = true;
-            break;
-        }
-    }
-    if (!found)
-    {
-        // There are no KAlarm Akonadi resources.
-        // Migrate any KResources alarm calendars from pre-Akonadi versions of KAlarm,
-        // or create default calendars.
-        CalendarMigrator::execute();
-    }
+    // If necessary, migrate any KResources alarm calendars from pre-Akonadi
+    // versions of KAlarm, or create default Akonadi calendar resources if any
+    // are missing.
+    CalendarMigrator::execute();
 }
 
 /******************************************************************************

@@ -1,7 +1,7 @@
 /*
  *  calendarmigrator.cpp  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,14 +54,17 @@ class CalendarCreator : public QObject
 {
         Q_OBJECT
     public:
+        // Constructor to migrate a calendar from KResources.
         CalendarCreator(const QString& resourceType, const KConfigGroup&);
+        // Constructor to create a default Akonadi calendar.
         CalendarCreator(CalEvent::Type, const QString& file, const QString& name);
-        bool    isValid() const        { return mAlarmType != CalEvent::EMPTY; }
-        bool    newCalendar() const    { return mNew; }
-        QString resourceName() const   { return mName; }
-        QString path() const           { return mPath; }
-        QString errorMessage() const   { return mErrorMessage; }
-        void    createAgent(const QString& agentType, QObject* parent);
+        bool           isValid() const        { return mAlarmType != CalEvent::EMPTY; }
+        CalEvent::Type alarmType() const      { return mAlarmType; }
+        bool           newCalendar() const    { return mNew; }
+        QString        resourceName() const   { return mName; }
+        QString        path() const           { return mPath; }
+        QString        errorMessage() const   { return mErrorMessage; }
+        void           createAgent(const QString& agentType, QObject* parent);
 
     public slots:
         void agentCreated(KJob*);
@@ -126,7 +129,8 @@ class CalendarUpdater : public QObject
 CalendarMigrator* CalendarMigrator::mInstance = 0;
 
 CalendarMigrator::CalendarMigrator(QObject* parent)
-    : QObject(parent)
+    : QObject(parent),
+      mExistingAlarmTypes(0)
 {
 }
 
@@ -154,69 +158,135 @@ void CalendarMigrator::execute()
 }
 
 /******************************************************************************
-* Migrate old KResource calendars, or if none, create default Akonadi resources.
+* Migrate old KResource calendars, and create default Akonadi resources.
 */
 void CalendarMigrator::migrateOrCreate()
 {
     kDebug();
-    CalendarCreator* creator;
 
-    // First migrate any KResources alarm calendars from pre-Akonadi versions of KAlarm.
-    bool haveResources = false;
-    const QString configFile = KStandardDirs::locateLocal("config", QLatin1String("kresources/alarms/stdrc"));
-    KConfig config(configFile, KConfig::SimpleConfig);
-
-    // Fetch all the resource identifiers which are actually in use
-    KConfigGroup group = config.group("General");
-    QStringList keys = group.readEntry("ResourceKeys", QStringList())
-                     + group.readEntry("PassiveResourceKeys", QStringList());
-
-    // Create an Akonadi resource for each resource id
-    foreach (const QString& id, keys)
+    // First, check whether any Akonadi resources already exist, and if
+    // so, find their alarm types.
+    AgentInstance::List agents = AgentManager::self()->instances();
+    foreach (const AgentInstance& agent, agents)
     {
-        KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
-        QString resourceType = configGroup.readEntry("ResourceType", QString());
-        QString agentType;
-        if (resourceType == QLatin1String("file"))
-            agentType = QLatin1String("akonadi_kalarm_resource");
-        else if (resourceType == QLatin1String("dir"))
-            agentType = QLatin1String("akonadi_kalarm_dir_resource");
-        else if (resourceType == QLatin1String("remote"))
-            agentType = QLatin1String("akonadi_kalarm_resource");
-        else
-            continue;   // unknown resource type - can't convert
-
-        haveResources = true;
-        creator = new CalendarCreator(resourceType, configGroup);
-        if (!creator->isValid())
-            delete creator;
-        else
+        QString type = agent.type().identifier();
+        if (type == QLatin1String("akonadi_kalarm_resource")
+        ||  type == QLatin1String("akonadi_kalarm_dir_resource"))
         {
-            connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-            connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
-            mCalendarsPending << creator;
-            creator->createAgent(agentType, this);
+            // Fetch the resource's collection to determine its alarm types
+            CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
+            job->fetchScope().setResource(agent.identifier());
+            mFetchesPending << job;
+            connect(job, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
+            // Note: Once all collections have been fetched, any missing
+            //       default resources will be created.
         }
     }
 
-    if (!haveResources)
+    if (mFetchesPending.isEmpty())
     {
-        // There were no KResources calendars to migrate, so create default ones.
-        // Normally this occurs on first installation of KAlarm.
-        // If the default files already exist, they will be used; otherwise they
-        // will be created.
+        // There are no Akonadi resources, so migrate any KResources alarm
+        // calendars from pre-Akonadi versions of KAlarm.
+        const QString configFile = KStandardDirs::locateLocal("config", QLatin1String("kresources/alarms/stdrc"));
+        KConfig config(configFile, KConfig::SimpleConfig);
+
+        // Fetch all the KResource identifiers which are actually in use
+        KConfigGroup group = config.group("General");
+        QStringList keys = group.readEntry("ResourceKeys", QStringList())
+                         + group.readEntry("PassiveResourceKeys", QStringList());
+
+        // Create an Akonadi resource for each KResource id
+        CalendarCreator* creator;
+        foreach (const QString& id, keys)
+        {
+            KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
+            QString resourceType = configGroup.readEntry("ResourceType", QString());
+            QString agentType;
+            if (resourceType == QLatin1String("file"))
+                agentType = QLatin1String("akonadi_kalarm_resource");
+            else if (resourceType == QLatin1String("dir"))
+                agentType = QLatin1String("akonadi_kalarm_dir_resource");
+            else if (resourceType == QLatin1String("remote"))
+                agentType = QLatin1String("akonadi_kalarm_resource");
+            else
+                continue;   // unknown resource type - can't convert
+
+            creator = new CalendarCreator(resourceType, configGroup);
+            if (!creator->isValid())
+                delete creator;
+            else
+            {
+                connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
+                connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
+                mExistingAlarmTypes |= creator->alarmType();
+                mCalendarsPending << creator;
+                creator->createAgent(agentType, this);
+            }
+        }
+
+        // After migrating KResources, create any necessary additional default
+        // Akonadi resources.
+        createDefaultResources();
+    }
+}
+
+/******************************************************************************
+* Called when a collection fetch job has completed.
+* Finds which mime types are handled by the existing collection.
+*/
+void CalendarMigrator::collectionFetchResult(KJob* j)
+{
+    CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
+    QString id = job->fetchScope().resource();
+    if (j->error())
+        kError() << "CollectionFetchJob" << id << "error: " << j->errorString();
+    else
+    {
+        Collection::List collections = job->collections();
+        if (collections.isEmpty())
+            kError() << "No collections found for resource" << id;
+        else
+            mExistingAlarmTypes |= CalEvent::types(collections[0].contentMimeTypes());
+    }
+    mFetchesPending.removeAll(job);
+
+    if (mFetchesPending.isEmpty())
+    {
+        // The alarm types of all collections have been found, so now
+        // create any necessary default Akonadi resources.
+        createDefaultResources();
+    }
+}
+
+/******************************************************************************
+* Create default Akonadi resources for any alarm types not covered by existing
+* resources. Normally, this occurs on the first run of KAlarm, but if resources
+* have been deleted, it could occur on later runs.
+* If the default calendar files already exist, they will be used; otherwise
+* they will be created.
+*/
+void CalendarMigrator::createDefaultResources()
+{
+    kDebug();
+    CalendarCreator* creator;
+    if (!(mExistingAlarmTypes & CalEvent::ACTIVE))
+    {
         creator = new CalendarCreator(CalEvent::ACTIVE, QLatin1String("calendar.ics"), i18nc("@info/plain", "Active Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
-
+    }
+    if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
+    {
         creator = new CalendarCreator(CalEvent::ARCHIVED, QLatin1String("expired.ics"), i18nc("@info/plain", "Archived Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
         creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
-
+    }
+    if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
+    {
         creator = new CalendarCreator(CalEvent::TEMPLATE, QLatin1String("template.ics"), i18nc("@info/plain", "Alarm Templates"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
