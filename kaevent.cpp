@@ -2,7 +2,7 @@
  *  kaevent.cpp  -  represents calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -164,11 +164,10 @@ class KAEvent::Private : public QSharedData
             KAEvent::Private::AlarmType type;
             KAAlarm::Action             action;
             int                         displayingFlags;
+            ExtraActionOptions          extraActionOptions;
             bool                        defaultFont;
             bool                        isEmailText;
             bool                        commandScript;
-            bool                        cancelOnPreActErr;
-            bool                        dontShowPreActErr;
             bool                        timedDeferral;
             bool                        hiddenReminder;
         };
@@ -355,12 +354,11 @@ class KAEvent::Private : public QSharedData
         mutable int        mWorkTimeOnly;      // non-zero to trigger alarm only during working hours (= mWorkTimeIndex when trigger calculated)
         SubAction          mActionSubType;     // sub-action type for the event's main alarm
         CalEvent::Type     mCategory;      // event category (active, archived, template, ...)
+        ExtraActionOptions mExtraActionOptions;// options for pre- or post-alarm actions
 #ifndef USE_KRESOURCES
         KACalendar::Compat mCompatibility; // event's storage format compatibility
         bool               mReadOnly;          // event is read-only in its original calendar file
 #endif
-        bool               mCancelOnPreActErr; // cancel alarm if pre-alarm action fails
-        bool               mDontShowPreActErr; // don't notify error if pre-alarm action fails
         bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
         bool               mUseDefaultFont;    // use default message font, not mFont
         bool               mCommandScript;     // the command text is a script, not a shell command line
@@ -418,6 +416,7 @@ class KAEvent::Private : public QSharedData
         static const QByteArray VOLUME_PROPERTY;
         static const QString EMAIL_ID_FLAG;
         static const QString SPEAK_FLAG;
+        static const QString EXEC_ON_DEFERRAL_FLAG;
         static const QString CANCEL_ON_ERROR_FLAG;
         static const QString DONT_SHOW_ERROR_FLAG;
         static const QString DISABLED_STATUS;
@@ -482,8 +481,9 @@ const QString    KAEvent::Private::EMAIL_ID_FLAG        = QLatin1String("EMAILID
 const QByteArray KAEvent::Private::VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
 const QString    KAEvent::Private::SPEAK_FLAG           = QLatin1String("SPEAK");
 // - Command alarm properties
-const QString    KAEvent::Private::CANCEL_ON_ERROR_FLAG = QLatin1String("ERRCANCEL");
-const QString    KAEvent::Private::DONT_SHOW_ERROR_FLAG = QLatin1String("ERRNOSHOW");
+const QString    KAEvent::Private::EXEC_ON_DEFERRAL_FLAG = QLatin1String("EXECDEFER");
+const QString    KAEvent::Private::CANCEL_ON_ERROR_FLAG  = QLatin1String("ERRCANCEL");
+const QString    KAEvent::Private::DONT_SHOW_ERROR_FLAG  = QLatin1String("ERRNOSHOW");
 
 // Event status strings
 const QString    KAEvent::Private::DISABLED_STATUS            = QLatin1String("DISABLED");
@@ -707,12 +707,11 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
     mWorkTimeOnly            = event.mWorkTimeOnly;
     mActionSubType           = event.mActionSubType;
     mCategory                = event.mCategory;
+    mExtraActionOptions      = event.mExtraActionOptions;
 #ifndef USE_KRESOURCES
     mCompatibility           = event.mCompatibility;
     mReadOnly                = event.mReadOnly;
 #endif
-    mCancelOnPreActErr       = event.mCancelOnPreActErr;
-    mDontShowPreActErr       = event.mDontShowPreActErr;
     mConfirmAck              = event.mConfirmAck;
     mUseDefaultFont          = event.mUseDefaultFont;
     mCommandScript           = event.mCommandScript;
@@ -976,20 +975,19 @@ void KAEvent::Private::set(const Event* event)
 
     // Extract status from the event's alarms.
     // First set up defaults.
-    mActionSubType     = MESSAGE;
-    mMainExpired       = true;
-    mRepeatAtLogin     = false;
-    mDisplaying        = false;
-    mCommandScript     = false;
-    mCancelOnPreActErr = false;
-    mDontShowPreActErr = false;
-    mDeferral          = NO_DEFERRAL;
-    mSoundVolume       = -1;
-    mFadeVolume        = -1;
-    mRepeatSoundPause  = -1;
-    mFadeSeconds       = 0;
-    mEmailFromIdentity = 0;
-    mReminderAfterTime = DateTime();
+    mActionSubType      = MESSAGE;
+    mMainExpired        = true;
+    mRepeatAtLogin      = false;
+    mDisplaying         = false;
+    mCommandScript      = false;
+    mExtraActionOptions = 0;
+    mDeferral           = NO_DEFERRAL;
+    mSoundVolume        = -1;
+    mFadeVolume         = -1;
+    mRepeatSoundPause   = -1;
+    mFadeSeconds        = 0;
+    mEmailFromIdentity  = 0;
+    mReminderAfterTime  = DateTime();
     mText.clear();
     mAudioFile.clear();
     mPreAction.clear();
@@ -1076,9 +1074,8 @@ void KAEvent::Private::set(const Event* event)
                 break;
             }
             case PRE_ACTION_ALARM:
-                mPreAction         = data.cleanText;
-                mCancelOnPreActErr = data.cancelOnPreActErr;
-                mDontShowPreActErr = data.dontShowPreActErr;
+                mPreAction          = data.cleanText;
+                mExtraActionOptions = data.extraActionOptions;
                 break;
             case POST_ACTION_ALARM:
                 mPostAction = data.cleanText;
@@ -1305,9 +1302,8 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mDisplayingDefer        = false;
     mDisplayingEdit         = false;
     mArchive                = false;
-    mCancelOnPreActErr      = false;
-    mDontShowPreActErr      = false;
     mReminderAfterTime      = DateTime();
+    mExtraActionOptions     = 0;
 #ifndef USE_KRESOURCES
     mCompatibility          = KACalendar::Current;
     mReadOnly               = false;
@@ -1689,9 +1685,11 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
             break;
         case PRE_ACTION_ALARM:
             setProcedureAlarm(alarm, mPreAction);
-            if (mCancelOnPreActErr)
+            if (mExtraActionOptions & ExecPreActOnDeferral)
+                flags << Private::EXEC_ON_DEFERRAL_FLAG;
+            if (mExtraActionOptions & CancelOnPreActError)
                 flags << Private::CANCEL_ON_ERROR_FLAG;
-            if (mDontShowPreActErr)
+            if (mExtraActionOptions & DontShowPreActError)
                 flags << Private::DONT_SHOW_ERROR_FLAG;
             break;
         case POST_ACTION_ALARM:
@@ -2341,12 +2339,21 @@ int KAEvent::templateAfterTime() const
     return d->mTemplateAfterTime;
 }
 
-void KAEvent::setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError)
+void KAEvent::setActions(const QString& pre, const QString& post, ExtraActionOptions options)
 {
     d->mPreAction = pre;
     d->mPostAction = post;
-    d->mCancelOnPreActErr = cancelOnError;
-    d->mDontShowPreActErr = dontShowError;
+    d->mExtraActionOptions = options;
+}
+
+void KAEvent::setActions(const QString& pre, const QString& post, bool cancelOnError, bool dontShowError)
+{
+    ExtraActionOptions opts(0);
+    if (cancelOnError)
+        opts |= CancelOnPreActError;
+    if (dontShowError)
+        opts |= DontShowPreActError;
+    setActions(pre, post, opts);
 }
 
 QString KAEvent::preAction() const
@@ -2359,14 +2366,19 @@ QString KAEvent::postAction() const
     return d->mPostAction;
 }
 
+KAEvent::ExtraActionOptions KAEvent::extraActionOptions() const
+{
+    return d->mExtraActionOptions;
+}
+
 bool KAEvent::cancelOnPreActionError() const
 {
-    return d->mCancelOnPreActErr;
+    return d->mExtraActionOptions & CancelOnPreActError;
 }
 
 bool KAEvent::dontShowPreActionError() const
 {
-    return d->mDontShowPreActErr;
+    return d->mExtraActionOptions & DontShowPreActError;
 }
 
 /******************************************************************************
@@ -4029,8 +4041,9 @@ void KAEvent::Private::dumpDebug() const
         kDebug() << "-- mSpeak:" << mSpeak;
         kDebug() << "-- mAudioFile:" << mAudioFile;
         kDebug() << "-- mPreAction:" << mPreAction;
-        kDebug() << "-- mCancelOnPreActErr:" << mCancelOnPreActErr;
-        kDebug() << "-- mDontShowPreActErr:" << mDontShowPreActErr;
+        kDebug() << "-- mExecPreActOnDeferral:" << (mExtraActionOptions & ExecPreActOnDeferral);
+        kDebug() << "-- mCancelOnPreActErr:" << (mExtraActionOptions & CancelOnPreActError);
+        kDebug() << "-- mDontShowPreActErr:" << (mExtraActionOptions & DontShowPreActError);
         kDebug() << "-- mPostAction:" << mPostAction;
         kDebug() << "-- mLateCancel:" << mLateCancel;
         kDebug() << "-- mAutoClose:" << mAutoClose;
@@ -4252,8 +4265,13 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
                     data.cleanText += ' ';
                 data.cleanText += alarm->programArguments();
             }
-            data.cancelOnPreActErr = flags.contains(Private::CANCEL_ON_ERROR_FLAG);
-            data.dontShowPreActErr = flags.contains(Private::DONT_SHOW_ERROR_FLAG);
+            data.extraActionOptions = 0;
+            if (flags.contains(Private::EXEC_ON_DEFERRAL_FLAG))
+                data.extraActionOptions |= ExecPreActOnDeferral;
+            if (flags.contains(Private::CANCEL_ON_ERROR_FLAG))
+                data.extraActionOptions |= CancelOnPreActError;
+            if (flags.contains(Private::DONT_SHOW_ERROR_FLAG))
+                data.extraActionOptions |= DontShowPreActError;
             if (!cmdDisplay)
                 break;
             // fall through to Display
