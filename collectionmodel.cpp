@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.cpp  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -125,12 +125,12 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
         return false;
     if (mAlarmType != CalEvent::EMPTY  &&  !collection.contentMimeTypes().contains(CalEvent::mimeType(mAlarmType)))
         return false;
-    if (mEnabledOnly)
-    {
-        if (!collection.hasAttribute<CollectionAttribute>()
-        ||  !collection.attribute<CollectionAttribute>()->isEnabled(mAlarmType))
-            return false;
-    }
+    if ((mWritableOnly || mEnabledOnly)  &&  !collection.hasAttribute<CollectionAttribute>())
+        return false;
+    if (mWritableOnly  &&  collection.attribute<CompatibilityAttribute>()->compatibility() != KACalendar::Current)
+        return false;
+    if (mEnabledOnly  &&  !collection.attribute<CollectionAttribute>()->isEnabled(mAlarmType))
+        return false;
     return true;
 }
 
