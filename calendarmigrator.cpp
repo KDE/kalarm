@@ -111,6 +111,9 @@ class CalendarUpdater : public QObject
         CalendarUpdater(const Collection& collection, bool dirResource,
                         bool ignoreKeepFormat, bool newCollection, QObject* parent);
         ~CalendarUpdater();
+        // Return whether another instance is already updating this collection
+        bool isDuplicate() const   { return mDuplicate; }
+        // Check whether any instance is for the given collection ID
         static bool containsCollection(Collection::Id);
 
     public slots:
@@ -120,9 +123,10 @@ class CalendarUpdater : public QObject
         static QList<CalendarUpdater*> mInstances;
         Akonadi::Collection mCollection;
         QObject*            mParent;
-        bool                mDirResource;
-        bool                mIgnoreKeepFormat;
-        bool                mNewCollection;
+        const bool          mDirResource;
+        const bool          mIgnoreKeepFormat;
+        const bool          mNewCollection;
+        const bool          mDuplicate;     // another instance is already updating this collection
 };
 
 
@@ -380,7 +384,8 @@ CalendarUpdater::CalendarUpdater(const Collection& collection, bool dirResource,
       mParent(parent),
       mDirResource(dirResource),
       mIgnoreKeepFormat(ignoreKeepFormat),
-      mNewCollection(newCollection)
+      mNewCollection(newCollection),
+      mDuplicate(containsCollection(collection.id()))
 {
     mInstances.append(this);
 }
@@ -404,7 +409,8 @@ bool CalendarUpdater::update()
 {
     kDebug() << mCollection.id() << (mDirResource ? "directory" : "file");
     bool result = true;
-    if (mCollection.hasAttribute<CompatibilityAttribute>())
+    if (!mDuplicate     // prevent concurrent updates
+    &&  mCollection.hasAttribute<CompatibilityAttribute>())   // must know format to update
     {
         const CompatibilityAttribute* compatAttr = mCollection.attribute<CompatibilityAttribute>();
         KACalendar::Compat compatibility = compatAttr->compatibility();
@@ -773,13 +779,18 @@ void CalendarCreator::collectionFetchResult(KJob* j)
             break;
     }
     bool keep = false;
+    bool duplicate = false;
     if (!mReadOnly)
     {
         CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, false, true, this);
+        duplicate = updater->isDuplicate();
         keep = !updater->update();   // note that 'updater' will auto-delete when finished
     }
-    // Record the user's choice of whether to update the calendar
-    attr->setKeepFormat(keep);
+    if (!duplicate)
+    {
+        // Record the user's choice of whether to update the calendar
+        attr->setKeepFormat(keep);
+    }
 
     // Update the collection's CollectionAttribute value in the Akonadi database.
     // Note that we can't supply 'collection' to CollectionModifyJob since
