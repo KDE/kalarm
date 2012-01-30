@@ -59,8 +59,8 @@ void FontColourButton::setFont(const QFont& font)
 }
 
 /******************************************************************************
-*  Called when the OK button is clicked.
-*  Display a font and colour selection dialog and get the selections.
+* Called when the OK button is clicked.
+* Display a font and colour selection dialog and get the selections.
 */
 void FontColourButton::slotButtonPressed()
 {
@@ -111,7 +111,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
 }
 
 /******************************************************************************
-*  Called when the OK button is clicked.
+* Called when the OK button is clicked.
 */
 void FontColourDlg::slotOk()
 {

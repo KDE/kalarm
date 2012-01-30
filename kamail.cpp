@@ -459,7 +459,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 }
 
 /******************************************************************************
-*  Fetch the user's email address configured in the KDE System Settings.
+* Fetch the user's email address configured in the KDE System Settings.
 */
 QString KAMail::controlCentreAddress()
 {
@@ -496,10 +496,10 @@ QString KAMail::convertAddresses(const QString& items, QList<KCal::Person>& list
 }
 
 /******************************************************************************
-*  Check the validity of an email address.
-*  Because internal email addresses don't have to abide by the usual internet
-*  email address rules, only some basic checks are made.
-*  Reply = 1 if alright, 0 if empty, -1 if error.
+* Check the validity of an email address.
+* Because internal email addresses don't have to abide by the usual internet
+* email address rules, only some basic checks are made.
+* Reply = 1 if alright, 0 if empty, -1 if error.
 */
 int KAMail::checkAddress(QString& address)
 {
@@ -546,9 +546,9 @@ int KAMail::checkAddress(QString& address)
 }
 
 /******************************************************************************
-*  Convert a comma or semicolon delimited list of attachments into a
-*  QStringList. The items are checked for validity.
-*  Reply = the invalid item if error, else empty string.
+* Convert a comma or semicolon delimited list of attachments into a
+* QStringList. The items are checked for validity.
+* Reply = the invalid item if error, else empty string.
 */
 QString KAMail::convertAttachments(const QString& items, QStringList& list)
 {
@@ -580,11 +580,11 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 }
 
 /******************************************************************************
-*  Check for the existence of the attachment file.
-*  If non-null, '*url' receives the KUrl of the attachment.
-*  Reply = 1 if attachment exists
-*        = 0 if null name
-*        = -1 if doesn't exist.
+* Check for the existence of the attachment file.
+* If non-null, '*url' receives the KUrl of the attachment.
+* Reply = 1 if attachment exists
+*       = 0 if null name
+*       = -1 if doesn't exist.
 */
 int KAMail::checkAttachment(QString& attachment, KUrl* url)
 {
@@ -604,7 +604,7 @@ int KAMail::checkAttachment(QString& attachment, KUrl* url)
 }
 
 /******************************************************************************
-*  Check for the existence of the attachment file.
+* Check for the existence of the attachment file.
 */
 bool KAMail::checkAttachment(const KUrl& url)
 {
@@ -637,7 +637,7 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
 
 #ifdef KMAIL_SUPPORTED
 /******************************************************************************
-*  Get the body of an email from KMail, given its serial number.
+* Get the body of an email from KMail, given its serial number.
 */
 QString KAMail::getMailBody(quint32 serialNumber)
 {
@@ -839,8 +839,8 @@ using namespace KMime::Types;
 using namespace KMime::HeaderParsing;
 
 /******************************************************************************
-*  New function.
-*  Allow a local user name to be specified as an email address.
+* New function.
+* Allow a local user name to be specified as an email address.
 */
 bool parseUserName( const char* & scursor, const char * const send,
                     QString & result, bool isCRLF ) {
@@ -873,9 +873,9 @@ bool parseUserName( const char* & scursor, const char * const send,
 }
 
 /******************************************************************************
-*  Modified function.
-*  Allow a local user name to be specified as an email address, and reinstate
-*  the original scursor on error return.
+* Modified function.
+* Allow a local user name to be specified as an email address, and reinstate
+* the original scursor on error return.
 */
 bool parseAddress( const char* & scursor, const char * const send,
                    Address & result, bool isCRLF ) {

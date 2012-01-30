@@ -57,8 +57,8 @@ SpecialActionsButton::SpecialActionsButton(bool enableCheckboxes, QWidget* paren
 }
 
 /******************************************************************************
-*  Set the pre- and post-alarm actions.
-*  The button's pressed state is set to reflect whether any actions are set.
+* Set the pre- and post-alarm actions.
+* The button's pressed state is set to reflect whether any actions are set.
 */
 void SpecialActionsButton::setActions(const QString& pre, const QString& post, KAEvent::ExtraActionOptions options)
 {
@@ -69,8 +69,8 @@ void SpecialActionsButton::setActions(const QString& pre, const QString& post, K
 }
 
 /******************************************************************************
-*  Called when the OK button is clicked.
-*  Display a font and colour selection dialog and get the selections.
+* Called when the OK button is clicked.
+* Display a font and colour selection dialog and get the selections.
 */
 void SpecialActionsButton::slotButtonPressed()
 {
@@ -126,7 +126,7 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
 }
 
 /******************************************************************************
-*  Called when the OK button is clicked.
+* Called when the OK button is clicked.
 */
 void SpecialActionsDlg::slotOk()
 {
@@ -136,8 +136,8 @@ void SpecialActionsDlg::slotOk()
 }
 
 /******************************************************************************
-*  Called when the dialog's size has changed.
-*  Records the new size in the config file.
+* Called when the dialog's size has changed.
+* Records the new size in the config file.
 */
 void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 {

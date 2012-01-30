@@ -169,10 +169,10 @@ QPointer<AudioThread> MessageWin::mAudioThread;
 MessageWin*           MessageWin::mAudioOwner = 0;
 
 /******************************************************************************
-*  Construct the message window for the specified alarm.
-*  Other alarms in the supplied event may have been updated by the caller, so
-*  the whole event needs to be stored for updating the calendar file when it is
-*  displayed.
+* Construct the message window for the specified alarm.
+* Other alarms in the supplied event may have been updated by the caller, so
+* the whole event needs to be stored for updating the calendar file when it is
+* displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     : MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint))),
@@ -274,9 +274,9 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
 }
 
 /******************************************************************************
-*  Display an error message window.
-*  If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
-*  that the option is specific to 'event'.
+* Display an error message window.
+* If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
+* that the option is specific to 'event'.
 */
 void MessageWin::showError(const KAEvent& event, const DateTime& alarmDateTime,
                            const QStringList& errmsgs, const QString& dontShowAgain)
@@ -298,9 +298,9 @@ void MessageWin::showError(const KAEvent& event, const DateTime& alarmDateTime,
 }
 
 /******************************************************************************
-*  Construct the message window for a specified error message.
-*  If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
-*  that the option is specific to 'event'.
+* Construct the message window for a specified error message.
+* If 'dontShowAgain' is non-null, a "Don't show again" option is displayed. Note
+* that the option is specific to 'event'.
 */
 MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
                        const QStringList& errmsgs, const QString& dontShowAgain)
@@ -358,8 +358,8 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 }
 
 /******************************************************************************
-*  Construct the message window for restoration by session management.
-*  The window is initialised by readProperties().
+* Construct the message window for restoration by session management.
+* The window is initialised by readProperties().
 */
 MessageWin::MessageWin()
     : MainWindowBase(0, WFLAGS),
@@ -411,7 +411,7 @@ MessageWin::~MessageWin()
 }
 
 /******************************************************************************
-*  Construct the message window.
+* Construct the message window.
 */
 void MessageWin::initView()
 {
@@ -1121,10 +1121,10 @@ void MessageWin::readProperties(const KConfigGroup& config)
 }
 
 /******************************************************************************
-*  Redisplay alarms which were being shown when the program last exited.
-*  Normally, these alarms will have been displayed by session restoration, but
-*  if the program crashed or was killed, we can redisplay them here so that
-*  they won't be lost.
+* Redisplay alarms which were being shown when the program last exited.
+* Normally, these alarms will have been displayed by session restoration, but
+* if the program crashed or was killed, we can redisplay them here so that
+* they won't be lost.
 */
 void MessageWin::redisplayAlarms()
 {
@@ -1176,8 +1176,8 @@ void MessageWin::redisplayAlarms()
 }
 
 /******************************************************************************
-*  Retrieves the event with the current ID from the displaying calendar file,
-*  or if not found there, from the archive calendar.
+* Retrieves the event with the current ID from the displaying calendar file,
+* or if not found there, from the archive calendar.
 */
 #ifdef USE_AKONADI
 bool MessageWin::retrieveEvent(KAEvent& event, Akonadi::Collection& resource, bool& showEdit, bool& showDefer)
@@ -1216,8 +1216,8 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 }
 
 /******************************************************************************
-*  Retrieves the displayed event from the calendar file, or if not found there,
-*  from the displaying calendar.
+* Retrieves the displayed event from the calendar file, or if not found there,
+* from the displaying calendar.
 */
 #ifdef USE_AKONADI
 bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& event, Akonadi::Collection& collection, bool& showEdit, bool& showDefer)
@@ -1371,8 +1371,8 @@ bool MessageWin::isSpread(const QPoint& topLeft)
 }
 
 /******************************************************************************
-*  Returns the existing message window (if any) which is displaying the event
-*  with the specified ID.
+* Returns the existing message window (if any) which is displaying the event
+* with the specified ID.
 */
 MessageWin* MessageWin::findEvent(const QString& eventID)
 {
@@ -1389,7 +1389,7 @@ MessageWin* MessageWin::findEvent(const QString& eventID)
 }
 
 /******************************************************************************
-*  Beep and play the audio file, as appropriate.
+* Beep and play the audio file, as appropriate.
 */
 void MessageWin::playAudio()
 {
@@ -1613,10 +1613,10 @@ void AudioThread::run()
 }
 
 /******************************************************************************
-*  Called when the audio file has loaded and is ready to play, or when play
-*  has completed.
-*  If it is ready to play, start playing it (for the first time or repeated).
-*  If play has not yet completed, wait a bit longer.
+* Called when the audio file has loaded and is ready to play, or when play
+* has completed.
+* If it is ready to play, start playing it (for the first time or repeated).
+* If play has not yet completed, wait a bit longer.
 */
 void AudioThread::checkAudioPlay()
 {
@@ -1707,8 +1707,8 @@ QString AudioThread::error() const
 }
 
 /******************************************************************************
-*  Raise the alarm window, re-output any required audio notification, and
-*  reschedule the alarm in the calendar file.
+* Raise the alarm window, re-output any required audio notification, and
+* reschedule the alarm in the calendar file.
 */
 void MessageWin::repeat(const KAAlarm& alarm)
 {
@@ -1745,10 +1745,10 @@ void MessageWin::repeat(const KAAlarm& alarm)
 }
 
 /******************************************************************************
-*  Display the window.
-*  If windows are being positioned away from the mouse cursor, it is initially
-*  positioned at the top left to slightly reduce the number of times the
-*  windows need to be moved in showEvent().
+* Display the window.
+* If windows are being positioned away from the mouse cursor, it is initially
+* positioned at the top left to slightly reduce the number of times the
+* windows need to be moved in showEvent().
 */
 void MessageWin::show()
 {
@@ -1768,7 +1768,7 @@ void MessageWin::show()
 }
 
 /******************************************************************************
-*  Returns the window's recommended size exclusive of its frame.
+* Returns the window's recommended size exclusive of its frame.
 */
 QSize MessageWin::sizeHint() const
 {
@@ -1802,9 +1802,9 @@ QSize MessageWin::sizeHint() const
 }
 
 /******************************************************************************
-*  Called when the window is shown.
-*  The first time, output any required audio notification, and reschedule or
-*  delete the event from the calendar file.
+* Called when the window is shown.
+* The first time, output any required audio notification, and reschedule or
+* delete the event from the calendar file.
 */
 void MessageWin::showEvent(QShowEvent* se)
 {
@@ -1898,7 +1898,7 @@ void MessageWin::showEvent(QShowEvent* se)
 }
 
 /******************************************************************************
-*  Called when the window has been moved.
+* Called when the window has been moved.
 */
 void MessageWin::moveEvent(QMoveEvent* e)
 {
@@ -1929,8 +1929,8 @@ void MessageWin::frameDrawn()
 }
 
 /******************************************************************************
-*  Called when the window has been displayed properly (in its correct position),
-*  to play sounds and reschedule the event.
+* Called when the window has been displayed properly (in its correct position),
+* to play sounds and reschedule the event.
 */
 void MessageWin::displayComplete()
 {
@@ -1949,7 +1949,7 @@ void MessageWin::displayComplete()
 }
 
 /******************************************************************************
-*  Enable the window's buttons.
+* Enable the window's buttons.
 */
 void MessageWin::enableButtons()
 {
@@ -1964,7 +1964,7 @@ void MessageWin::enableButtons()
 }
 
 /******************************************************************************
-*  Called when the window's size has changed (before it is painted).
+* Called when the window's size has changed (before it is painted).
 */
 void MessageWin::resizeEvent(QResizeEvent* re)
 {
@@ -1989,8 +1989,8 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 }
 
 /******************************************************************************
-*  Called when a close event is received.
-*  Only quits the application if there is no system tray icon displayed.
+* Called when a close event is received.
+* Only quits the application if there is no system tray icon displayed.
 */
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
@@ -2018,7 +2018,7 @@ void MessageWin::closeEvent(QCloseEvent* ce)
 }
 
 /******************************************************************************
-*  Called when the OK button is clicked.
+* Called when the OK button is clicked.
 */
 void MessageWin::slotOk()
 {
@@ -2029,8 +2029,8 @@ void MessageWin::slotOk()
 
 #ifdef KMAIL_SUPPORTED
 /******************************************************************************
-*  Called when the KMail button is clicked.
-*  Tells KMail to display the email message displayed in this message window.
+* Called when the KMail button is clicked.
+* Tells KMail to display the email message displayed in this message window.
 */
 void MessageWin::slotShowKMailMessage()
 {
@@ -2171,8 +2171,8 @@ void MessageWin::checkDeferralLimit()
 }
 
 /******************************************************************************
-*  Called when the Defer... button is clicked.
-*  Displays the defer message dialog.
+* Called when the Defer... button is clicked.
+* Displays the defer message dialog.
 */
 void MessageWin::slotDefer()
 {
@@ -2260,8 +2260,8 @@ void MessageWin::slotDefer()
 }
 
 /******************************************************************************
-*  Called when the KAlarm icon button in the message window is clicked.
-*  Displays the main window, with the appropriate alarm selected.
+* Called when the KAlarm icon button in the message window is clicked.
+* Displays the main window, with the appropriate alarm selected.
 */
 void MessageWin::displayMainWindow()
 {

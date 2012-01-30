@@ -105,7 +105,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
 }
 
 /******************************************************************************
-*  Set the read-only status.
+* Set the read-only status.
 */
 void LateCancelSelector::setReadOnly(bool ro)
 {
@@ -165,7 +165,7 @@ void LateCancelSelector::setAutoClose(bool autoClose)
 }
 
 /******************************************************************************
-*  Called when either of the checkboxes is toggled.
+* Called when either of the checkboxes is toggled.
 */
 void LateCancelSelector::slotToggled(bool on)
 {

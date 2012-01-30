@@ -99,7 +99,7 @@ void Find::slotSelectionChanged()
 }
 
 /******************************************************************************
-*  Display the Find dialog.
+* Display the Find dialog.
 */
 void Find::display()
 {
@@ -260,7 +260,7 @@ void Find::display()
 }
 
 /******************************************************************************
-*  Called when the user requests a search by clicking the dialog OK button.
+* Called when the user requests a search by clicking the dialog OK button.
 */
 void Find::slotFind()
 {
@@ -332,9 +332,9 @@ void Find::slotFind()
 }
 
 /******************************************************************************
-*  Perform the search.
-*  If 'fromCurrent' is true, the search starts with the current search item;
-*  otherwise, it starts from the next item.
+* Perform the search.
+* If 'fromCurrent' is true, the search starts with the current search item;
+* otherwise, it starts from the next item.
 */
 void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 {
@@ -452,7 +452,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
 }
 
 /******************************************************************************
-*  Get the next alarm item to search.
+* Get the next alarm item to search.
 */
 QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
 {

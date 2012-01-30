@@ -879,7 +879,7 @@ void KAlarmApp::removeWindow(TrayWindow*)
 }
 
 /******************************************************************************
-*  Display or close the system tray icon.
+* Display or close the system tray icon.
 */
 bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 {

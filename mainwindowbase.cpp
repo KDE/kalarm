@@ -33,8 +33,8 @@ MainWindowBase::MainWindowBase(QWidget* parent, Qt::WFlags f)
 }
 
 /******************************************************************************
-*  Called when a close event is received.
-*  Only quits the application if there is no system tray icon displayed.
+* Called when a close event is received.
+* Only quits the application if there is no system tray icon displayed.
 */
 void MainWindowBase::closeEvent(QCloseEvent* ce)
 {
@@ -45,8 +45,8 @@ void MainWindowBase::closeEvent(QCloseEvent* ce)
 }
 
 /******************************************************************************
-*  Called when the window is being closed.
-*  Returns true if the application should quit.
+* Called when the window is being closed.
+* Returns true if the application should quit.
 */
 bool MainWindowBase::queryExit()
 {

@@ -312,7 +312,7 @@ bool MainWindow::isTrayParent() const
 }
 
 /******************************************************************************
-*  Close all main windows.
+* Close all main windows.
 */
 void MainWindow::closeAll()
 {
@@ -365,10 +365,10 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 }
 
 /******************************************************************************
-*  Called when the window's size has changed (before it is painted).
-*  Sets the last column in the list view to extend at least to the right hand
-*  edge of the list view.
-*  Records the new size in the config file.
+* Called when the window's size has changed (before it is painted).
+* Sets the last column in the list view to extend at least to the right hand
+* edge of the list view.
+* Records the new size in the config file.
 */
 void MainWindow::resizeEvent(QResizeEvent* re)
 {
@@ -404,9 +404,9 @@ void MainWindow::resourcesResized()
 }
 
 /******************************************************************************
-*  Called when the window is first displayed.
-*  Sets the last column in the list view to extend at least to the right hand
-*  edge of the list view.
+* Called when the window is first displayed.
+* Sets the last column in the list view to extend at least to the right hand
+* edge of the list view.
 */
 void MainWindow::showEvent(QShowEvent* se)
 {
@@ -422,7 +422,7 @@ void MainWindow::showEvent(QShowEvent* se)
 }
 
 /******************************************************************************
-*  Display the window.
+* Display the window.
 */
 void MainWindow::show()
 {
@@ -438,7 +438,7 @@ void MainWindow::show()
 }
 
 /******************************************************************************
-*  Called after the window is hidden.
+* Called after the window is hidden.
 */
 void MainWindow::hideEvent(QHideEvent* he)
 {
@@ -446,7 +446,7 @@ void MainWindow::hideEvent(QHideEvent* he)
 }
 
 /******************************************************************************
-*  Initialise the menu, toolbar and main window actions.
+* Initialise the menu, toolbar and main window actions.
 */
 void MainWindow::initActions()
 {
@@ -736,7 +736,7 @@ void MainWindow::clearSelection()
 }
 
 /******************************************************************************
-*  Called when the New button is clicked to edit a new alarm to add to the list.
+* Called when the New button is clicked to edit a new alarm to add to the list.
 */
 void MainWindow::slotNew(EditAlarmDlg::Type type)
 {
@@ -744,8 +744,8 @@ void MainWindow::slotNew(EditAlarmDlg::Type type)
 }
 
 /******************************************************************************
-*  Called when a template is selected from the New From Template popup menu.
-*  Executes a New Alarm dialog, preset from the selected template.
+* Called when a template is selected from the New From Template popup menu.
+* Executes a New Alarm dialog, preset from the selected template.
 */
 void MainWindow::slotNewFromTemplate(const KAEvent* tmplate)
 {
@@ -753,8 +753,8 @@ void MainWindow::slotNewFromTemplate(const KAEvent* tmplate)
 }
 
 /******************************************************************************
-*  Called when the New Template button is clicked to create a new template
-*  based on the currently selected alarm.
+* Called when the New Template button is clicked to create a new template
+* based on the currently selected alarm.
 */
 void MainWindow::slotNewTemplate()
 {
@@ -770,8 +770,8 @@ void MainWindow::slotNewTemplate()
 }
 
 /******************************************************************************
-*  Called when the Copy button is clicked to edit a copy of an existing alarm,
-*  to add to the list.
+* Called when the Copy button is clicked to edit a copy of an existing alarm,
+* to add to the list.
 */
 void MainWindow::slotCopy()
 {
@@ -787,8 +787,8 @@ void MainWindow::slotCopy()
 }
 
 /******************************************************************************
-*  Called when the Modify button is clicked to edit the currently highlighted
-*  alarm in the list.
+* Called when the Modify button is clicked to edit the currently highlighted
+* alarm in the list.
 */
 void MainWindow::slotModify()
 {
@@ -804,8 +804,8 @@ void MainWindow::slotModify()
 }
 
 /******************************************************************************
-*  Called when the Delete button is clicked to delete the currently highlighted
-*  alarms in the list.
+* Called when the Delete button is clicked to delete the currently highlighted
+* alarms in the list.
 */
 void MainWindow::slotDelete(bool force)
 {
@@ -868,8 +868,8 @@ void MainWindow::slotDelete(bool force)
 }
 
 /******************************************************************************
-*  Called when the Reactivate button is clicked to reinstate the currently
-*  highlighted archived alarms in the list.
+* Called when the Reactivate button is clicked to reinstate the currently
+* highlighted archived alarms in the list.
 */
 void MainWindow::slotReactivate()
 {
@@ -905,8 +905,8 @@ void MainWindow::slotReactivate()
 }
 
 /******************************************************************************
-*  Called when the Enable/Disable button is clicked to enable or disable the
-*  currently highlighted alarms in the list.
+* Called when the Enable/Disable button is clicked to enable or disable the
+* currently highlighted alarms in the list.
 */
 void MainWindow::slotEnable()
 {
@@ -925,7 +925,7 @@ void MainWindow::slotEnable()
 }
 
 /******************************************************************************
-*  Called when the Show Alarm Times menu item is selected or deselected.
+* Called when the Show Alarm Times menu item is selected or deselected.
 */
 void MainWindow::slotShowTime()
 {
@@ -943,7 +943,7 @@ void MainWindow::slotShowTime()
 }
 
 /******************************************************************************
-*  Called when the Show Time To Alarms menu item is selected or deselected.
+* Called when the Show Time To Alarms menu item is selected or deselected.
 */
 void MainWindow::slotShowTimeTo()
 {
@@ -961,7 +961,7 @@ void MainWindow::slotShowTimeTo()
 }
 
 /******************************************************************************
-*  Called when the Show Archived Alarms menu item is selected or deselected.
+* Called when the Show Archived Alarms menu item is selected or deselected.
 */
 void MainWindow::slotShowArchived()
 {
@@ -997,8 +997,8 @@ void MainWindow::slotWakeFromSuspend()
 }
 
 /******************************************************************************
-*  Called when the Import Alarms menu item is selected, to merge alarms from an
-*  external calendar into the current calendars.
+* Called when the Import Alarms menu item is selected, to merge alarms from an
+* external calendar into the current calendars.
 */
 void MainWindow::slotImportAlarms()
 {
@@ -1026,8 +1026,8 @@ void MainWindow::slotExportAlarms()
 }
 
 /******************************************************************************
-*  Called when the Import Birthdays menu item is selected, to display birthdays
-*  from the address book for selection as alarms.
+* Called when the Import Birthdays menu item is selected, to display birthdays
+* from the address book for selection as alarms.
 */
 void MainWindow::slotBirthdays()
 {
@@ -1064,8 +1064,8 @@ void MainWindow::slotBirthdays()
 }
 
 /******************************************************************************
-*  Called when the Templates menu item is selected, to display the alarm
-*  template editing dialog.
+* Called when the Templates menu item is selected, to display the alarm
+* template editing dialog.
 */
 void MainWindow::slotTemplates()
 {
@@ -1079,7 +1079,7 @@ void MainWindow::slotTemplates()
 }
 
 /******************************************************************************
-*  Called when the alarm template editing dialog has exited.
+* Called when the alarm template editing dialog has exited.
 */
 void MainWindow::slotTemplatesEnd()
 {
@@ -1092,7 +1092,7 @@ void MainWindow::slotTemplatesEnd()
 }
 
 /******************************************************************************
-*  Called when the Display System Tray Icon menu item is selected.
+* Called when the Display System Tray Icon menu item is selected.
 */
 void MainWindow::slotToggleTrayIcon()
 {
@@ -1100,7 +1100,7 @@ void MainWindow::slotToggleTrayIcon()
 }
 
 /******************************************************************************
-*  Called when the Show Resource Selector menu item is selected.
+* Called when the Show Resource Selector menu item is selected.
 */
 void MainWindow::slotToggleResourceSelector()
 {
@@ -1150,7 +1150,7 @@ void MainWindow::updateTrayIconAction()
 }
 
 /******************************************************************************
-*  Called when the active status of Find changes.
+* Called when the active status of Find changes.
 */
 void MainWindow::slotFindActive(bool active)
 {
@@ -1159,7 +1159,7 @@ void MainWindow::slotFindActive(bool active)
 }
 
 /******************************************************************************
-*  Called when the Undo action is selected.
+* Called when the Undo action is selected.
 */
 void MainWindow::slotUndo()
 {
@@ -1167,7 +1167,7 @@ void MainWindow::slotUndo()
 }
 
 /******************************************************************************
-*  Called when the Redo action is selected.
+* Called when the Redo action is selected.
 */
 void MainWindow::slotRedo()
 {
@@ -1175,7 +1175,7 @@ void MainWindow::slotRedo()
 }
 
 /******************************************************************************
-*  Called when an Undo item is selected.
+* Called when an Undo item is selected.
 */
 void MainWindow::slotUndoItem(QAction* action)
 {
@@ -1184,7 +1184,7 @@ void MainWindow::slotUndoItem(QAction* action)
 }
 
 /******************************************************************************
-*  Called when a Redo item is selected.
+* Called when a Redo item is selected.
 */
 void MainWindow::slotRedoItem(QAction* action)
 {
@@ -1193,8 +1193,8 @@ void MainWindow::slotRedoItem(QAction* action)
 }
 
 /******************************************************************************
-*  Called when the Undo menu is about to show.
-*  Populates the menu.
+* Called when the Undo menu is about to show.
+* Populates the menu.
 */
 void MainWindow::slotInitUndoMenu()
 {
@@ -1202,8 +1202,8 @@ void MainWindow::slotInitUndoMenu()
 }
 
 /******************************************************************************
-*  Called when the Redo menu is about to show.
-*  Populates the menu.
+* Called when the Redo menu is about to show.
+* Populates the menu.
 */
 void MainWindow::slotInitRedoMenu()
 {
@@ -1211,7 +1211,7 @@ void MainWindow::slotInitRedoMenu()
 }
 
 /******************************************************************************
-*  Populate the undo or redo menu.
+* Populate the undo or redo menu.
 */
 void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
 {
@@ -1233,8 +1233,8 @@ void MainWindow::initUndoMenu(QMenu* menu, Undo::Type type)
 }
 
 /******************************************************************************
-*  Called when the status of the Undo or Redo list changes.
-*  Change the Undo or Redo text to include the action which would be undone/redone.
+* Called when the status of the Undo or Redo list changes.
+* Change the Undo or Redo text to include the action which would be undone/redone.
 */
 void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
 {
@@ -1261,7 +1261,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
 }
 
 /******************************************************************************
-*  Called when the Refresh Alarms menu item is selected.
+* Called when the Refresh Alarms menu item is selected.
 */
 void MainWindow::slotRefreshAlarms()
 {
@@ -1269,7 +1269,7 @@ void MainWindow::slotRefreshAlarms()
 }
 
 /******************************************************************************
-*  Called when the "Configure KAlarm" menu item is selected.
+* Called when the "Configure KAlarm" menu item is selected.
 */
 void MainWindow::slotPreferences()
 {
@@ -1277,7 +1277,7 @@ void MainWindow::slotPreferences()
 }
 
 /******************************************************************************
-*  Called when the Configure Keys menu item is selected.
+* Called when the Configure Keys menu item is selected.
 */
 void MainWindow::slotConfigureKeys()
 {
@@ -1285,7 +1285,7 @@ void MainWindow::slotConfigureKeys()
 }
 
 /******************************************************************************
-*  Called when the Configure Toolbars menu item is selected.
+* Called when the Configure Toolbars menu item is selected.
 */
 void MainWindow::slotConfigureToolbar()
 {
@@ -1296,8 +1296,8 @@ void MainWindow::slotConfigureToolbar()
 }
 
 /******************************************************************************
-*  Called when OK or Apply is clicked in the Configure Toolbars dialog, to save
-*  the new configuration.
+* Called when OK or Apply is clicked in the Configure Toolbars dialog, to save
+* the new configuration.
 */
 void MainWindow::slotNewToolbarConfig()
 {
@@ -1317,7 +1317,7 @@ void MainWindow::slotQuit()
 }
 
 /******************************************************************************
-*  Called when the user or the session manager attempts to close the window.
+* Called when the user or the session manager attempts to close the window.
 */
 void MainWindow::closeEvent(QCloseEvent* ce)
 {
@@ -1338,8 +1338,8 @@ void MainWindow::closeEvent(QCloseEvent* ce)
 }
 
 /******************************************************************************
-*  Called when the drag cursor enters a main or system tray window, to accept
-*  or reject the dragged object.
+* Called when the drag cursor enters a main or system tray window, to accept
+* or reject the dragged object.
 */
 void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 {
@@ -1353,8 +1353,8 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
 }
 
 /******************************************************************************
-*  Called when an object is dropped on the window.
-*  If the object is recognised, the edit alarm dialog is opened appropriately.
+* Called when an object is dropped on the window.
+* If the object is recognised, the edit alarm dialog is opened appropriately.
 */
 void MainWindow::dropEvent(QDropEvent* e)
 {
@@ -1368,8 +1368,8 @@ static QString getMailHeader(const char* header, KMime::Content& content)
 }
 
 /******************************************************************************
-*  Called when an object is dropped on a main or system tray window, to
-*  evaluate the action required and extract the text.
+* Called when an object is dropped on a main or system tray window, to
+* evaluate the action required and extract the text.
 */
 void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
 {
@@ -1557,8 +1557,8 @@ void MainWindow::slotCalendarStatusChanged()
 }
 
 /******************************************************************************
-*  Called when the selected items in the ListView change.
-*  Enables the actions appropriately.
+* Called when the selected items in the ListView change.
+* Enables the actions appropriately.
 */
 void MainWindow::slotSelection()
 {
@@ -1641,8 +1641,8 @@ void MainWindow::slotSelection()
 }
 
 /******************************************************************************
-*  Called when a context menu is requested in the ListView.
-*  Displays a context menu to modify or delete the selected item.
+* Called when a context menu is requested in the ListView.
+* Displays a context menu to modify or delete the selected item.
 */
 void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 {
@@ -1652,7 +1652,7 @@ void MainWindow::slotContextMenuRequested(const QPoint& globalPos)
 }
 
 /******************************************************************************
-*  Disables actions when no item is selected.
+* Disables actions when no item is selected.
 */
 void MainWindow::selectionCleared()
 {
@@ -1667,7 +1667,7 @@ void MainWindow::selectionCleared()
 }
 
 /******************************************************************************
-*  Set the text of the Enable/Disable menu action.
+* Set the text of the Enable/Disable menu action.
 */
 void MainWindow::setEnableText(bool enable)
 {
@@ -1676,8 +1676,8 @@ void MainWindow::setEnableText(bool enable)
 }
 
 /******************************************************************************
-*  Display or hide the specified main window.
-*  This should only be called when the application doesn't run in the system tray.
+* Display or hide the specified main window.
+* This should only be called when the application doesn't run in the system tray.
 */
 MainWindow* MainWindow::toggleWindow(MainWindow* win)
 {

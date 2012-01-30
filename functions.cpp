@@ -136,7 +136,7 @@ namespace KAlarm
 Private* Private::mInstance = 0;
 
 /******************************************************************************
-*  Display a main window with the specified event selected.
+* Display a main window with the specified event selected.
 */
 #ifdef USE_AKONADI
 MainWindow* displayMainWindowSelected(Akonadi::Item::Id eventId)
@@ -1688,9 +1688,9 @@ void refreshAlarmsIfQueued()
 }
 
 /******************************************************************************
-*  Start KMail if it isn't already running, optionally minimised.
-*  Reply = reason for failure to run KMail (which may be the empty string)
-*        = null string if success.
+* Start KMail if it isn't already running, optionally minimised.
+* Reply = reason for failure to run KMail (which may be the empty string)
+*       = null string if success.
 */
 QString runKMail(bool minimise)
 {
@@ -1863,10 +1863,10 @@ void setDontShowErrors(const QString& eventId, const QString& tag)
 }
 
 /******************************************************************************
-*  Read the size for the specified window from the config file, for the
-*  current screen resolution.
-*  Reply = true if size set in the config file, in which case 'result' is set
-*        = false if no size is set, in which case 'result' is unchanged.
+* Read the size for the specified window from the config file, for the
+* current screen resolution.
+* Reply = true if size set in the config file, in which case 'result' is set
+*       = false if no size is set, in which case 'result' is unchanged.
 */
 bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
@@ -1883,8 +1883,8 @@ bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 }
 
 /******************************************************************************
-*  Write the size for the specified window to the config file, for the
-*  current screen resolution.
+* Write the size for the specified window to the config file, for the
+* current screen resolution.
 */
 void writeConfigWindowSize(const char* window, const QSize& size, int splitterWidth)
 {

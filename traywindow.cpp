@@ -132,7 +132,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     // Hack: KSNI does not let us know when it is about to show the tooltip,
     // so we need to update it whenever something change in it.
 
-    // This timer ensure updateToolTip() is not called several times in a row
+    // This timer ensures that updateToolTip() is not called several times in a row
     mToolTipUpdateTimer = new QTimer(this);
     mToolTipUpdateTimer->setInterval(0);
     mToolTipUpdateTimer->setSingleShot(true);
@@ -178,7 +178,7 @@ TrayWindow::~TrayWindow()
 }
 
 /******************************************************************************
-*  Called when the "New Alarm" menu item is selected to edit a new alarm.
+* Called when the "New Alarm" menu item is selected to edit a new alarm.
 */
 void TrayWindow::slotNewAlarm(EditAlarmDlg::Type type)
 {
@@ -186,7 +186,7 @@ void TrayWindow::slotNewAlarm(EditAlarmDlg::Type type)
 }
 
 /******************************************************************************
-*  Called when the "New Alarm" menu item is selected to edit a new alarm.
+* Called when the "New Alarm" menu item is selected to edit a new alarm.
 */
 void TrayWindow::slotNewFromTemplate(const KAEvent* event)
 {
@@ -194,7 +194,7 @@ void TrayWindow::slotNewFromTemplate(const KAEvent* event)
 }
 
 /******************************************************************************
-*  Called when the "Configure KAlarm" menu item is selected.
+* Called when the "Configure KAlarm" menu item is selected.
 */
 void TrayWindow::slotPreferences()
 {
@@ -237,7 +237,7 @@ void TrayWindow::slotHaveDisabledAlarms(bool haveDisabled)
 }
 
 /******************************************************************************
-*  A left click displays the KAlarm main window.
+* A left click displays the KAlarm main window.
 */
 void TrayWindow::slotActivateRequested()
 {
@@ -250,7 +250,7 @@ void TrayWindow::slotActivateRequested()
 }
 
 /******************************************************************************
-*  A middle button click displays the New Alarm window.
+* A middle button click displays the New Alarm window.
 */
 void TrayWindow::slotSecondaryActivateRequested()
 {
@@ -259,9 +259,9 @@ void TrayWindow::slotSecondaryActivateRequested()
 }
 
 /******************************************************************************
-*  Adjust tooltip according to the app state.
-*  The tooltip text shows alarms due in the next 24 hours. The limit of 24
-*  hours is because only times, not dates, are displayed.
+* Adjust tooltip according to the app state.
+* The tooltip text shows alarms due in the next 24 hours. The limit of 24
+* hours is because only times, not dates, are displayed.
 */
 void TrayWindow::updateToolTip()
 {
@@ -282,7 +282,7 @@ void TrayWindow::updateToolTip()
 }
 
 /******************************************************************************
-*  Adjust icon according to the app state.
+* Adjust icon according to the app state.
 */
 void TrayWindow::updateIcon()
 {
@@ -293,8 +293,8 @@ void TrayWindow::updateIcon()
 }
 
 /******************************************************************************
-*  Return the tooltip text showing alarms due in the next 24 hours.
-*  The limit of 24 hours is because only times, not dates, are displayed.
+* Return the tooltip text showing alarms due in the next 24 hours.
+* The limit of 24 hours is because only times, not dates, are displayed.
 */
 QString TrayWindow::tooltipAlarmText() const
 {

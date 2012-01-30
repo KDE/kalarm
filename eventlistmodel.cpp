@@ -935,7 +935,7 @@ QString EventListModel::repeatOrder(const KAEvent* event) const
 }
 
 /******************************************************************************
-*  Return the icon associated with the event's action.
+* Return the icon associated with the event's action.
 */
 QPixmap* EventListModel::eventIcon(const KAEvent* event) const
 {
@@ -958,7 +958,7 @@ QPixmap* EventListModel::eventIcon(const KAEvent* event) const
 }
 
 /******************************************************************************
-*  Returns the QWhatsThis text for a specified column.
+* Returns the QWhatsThis text for a specified column.
 */
 QString EventListModel::whatsThisText(int column) const
 {

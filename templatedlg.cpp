@@ -136,7 +136,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 }
 
 /******************************************************************************
-*  Destructor.
+* Destructor.
 */
 TemplateDlg::~TemplateDlg()
 {
@@ -144,7 +144,7 @@ TemplateDlg::~TemplateDlg()
 }
 
 /******************************************************************************
-*  Create an instance, if none already exists.
+* Create an instance, if none already exists.
 */
 TemplateDlg* TemplateDlg::create(QWidget* parent)
 {
@@ -155,7 +155,7 @@ TemplateDlg* TemplateDlg::create(QWidget* parent)
 }
 
 /******************************************************************************
-*  Called when the New Template button is clicked to create a new template.
+* Called when the New Template button is clicked to create a new template.
 */
 void TemplateDlg::slotNew(EditAlarmDlg::Type type)
 {
@@ -163,8 +163,8 @@ void TemplateDlg::slotNew(EditAlarmDlg::Type type)
 }
 
 /******************************************************************************
-*  Called when the Copy button is clicked to edit a copy of an existing alarm,
-*  to add to the list.
+* Called when the Copy button is clicked to edit a copy of an existing alarm,
+* to add to the list.
 */
 void TemplateDlg::slotCopy()
 {
@@ -180,8 +180,8 @@ void TemplateDlg::slotCopy()
 }
 
 /******************************************************************************
-*  Called when the Modify button is clicked to edit the currently highlighted
-*  alarm in the list.
+* Called when the Modify button is clicked to edit the currently highlighted
+* alarm in the list.
 */
 void TemplateDlg::slotEdit()
 {
@@ -197,8 +197,8 @@ void TemplateDlg::slotEdit()
 }
 
 /******************************************************************************
-*  Called when the Delete button is clicked to delete the currently highlighted
-*  alarms in the list.
+* Called when the Delete button is clicked to delete the currently highlighted
+* alarms in the list.
 */
 void TemplateDlg::slotDelete()
 {
@@ -274,8 +274,8 @@ void TemplateDlg::slotSelectionChanged()
 }
 
 /******************************************************************************
-*  Called when the dialog's size has changed.
-*  Records the new size in the config file.
+* Called when the dialog's size has changed.
+* Records the new size in the config file.
 */
 void TemplateDlg::resizeEvent(QResizeEvent* re)
 {

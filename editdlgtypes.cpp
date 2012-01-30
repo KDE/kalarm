@@ -599,8 +599,8 @@ KAEvent::Flags EditDisplayAlarmDlg::getAlarmFlags() const
 }
 
 /******************************************************************************
-*  Called when one of the alarm display type combo box is changed, to display
-*  the appropriate set of controls for that action type.
+* Called when one of the alarm display type combo box is changed, to display
+* the appropriate set of controls for that action type.
 */
 void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
 {

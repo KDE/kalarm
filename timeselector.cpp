@@ -85,7 +85,7 @@ ComboBox* TimeSelector::createSignCombo()
 }
 
 /******************************************************************************
-*  Set the read-only status.
+* Set the read-only status.
 */
 void TimeSelector::setReadOnly(bool ro)
 {
@@ -133,10 +133,10 @@ Duration TimeSelector::period() const
 }
 
 /******************************************************************************
-*  Initialise the controls with a specified time period.
-*  If minutes = 0, it will be deselected.
-*  The time unit combo-box is initialised to 'defaultUnits', but if 'dateOnly'
-*  is true, it will never be initialised to hours/minutes.
+* Initialise the controls with a specified time period.
+* If minutes = 0, it will be deselected.
+* The time unit combo-box is initialised to 'defaultUnits', but if 'dateOnly'
+* is true, it will never be initialised to hours/minutes.
 */
 void TimeSelector::setPeriod(const Duration& period, bool dateOnly, TimePeriod::Units defaultUnits)
 {
@@ -148,7 +148,7 @@ void TimeSelector::setPeriod(const Duration& period, bool dateOnly, TimePeriod::
 }
 
 /******************************************************************************
-*  Set the input focus on the count field.
+* Set the input focus on the count field.
 */
 void TimeSelector::setFocusOnCount()
 {
@@ -156,7 +156,7 @@ void TimeSelector::setFocusOnCount()
 }
 
 /******************************************************************************
-*  Called when the TimeSelector checkbox is toggled.
+* Called when the TimeSelector checkbox is toggled.
 */
 void TimeSelector::selectToggled(bool on)
 {
@@ -170,7 +170,7 @@ void TimeSelector::selectToggled(bool on)
 }
 
 /******************************************************************************
-*  Called when the period value changes.
+* Called when the period value changes.
 */
 void TimeSelector::periodChanged(const Duration& period)
 {

@@ -1038,7 +1038,7 @@ QString AkonadiModel::repeatOrder(const KAEvent& event) const
 }
 
 /******************************************************************************
-*  Return the icon associated with the event's action.
+* Return the icon associated with the event's action.
 */
 QPixmap* AkonadiModel::eventIcon(const KAEvent& event) const
 {
@@ -1300,7 +1300,7 @@ AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, CalEvent::Type type,
 * have been added successfully. Note that the first signal may be emitted
 * before this function returns.
 * Reply = true if item creation has been scheduled for all events,
-*         false if at least one item creation failed to be scheduled.
+*       = false if at least one item creation failed to be scheduled.
 */
 bool AkonadiModel::addEvents(const KAEvent::List& events, Collection& collection)
 {

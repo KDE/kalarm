@@ -547,12 +547,12 @@ Repetition RecurrenceEdit::subRepetition() const
 }
 
 /******************************************************************************
-*  Called when the Sub-Repetition button has been pressed to display the
-*  sub-repetition dialog.
-*  Alarm repetition has the following restrictions:
-*  1) Not allowed for a repeat-at-login alarm
-*  2) For a date-only alarm, the repeat interval must be a whole number of days.
-*  3) The overall repeat duration must be less than the recurrence interval.
+* Called when the Sub-Repetition button has been pressed to display the
+* sub-repetition dialog.
+* Alarm repetition has the following restrictions:
+* 1) Not allowed for a repeat-at-login alarm
+* 2) For a date-only alarm, the repeat interval must be a whole number of days.
+* 3) The overall repeat duration must be less than the recurrence interval.
 */
 void RecurrenceEdit::setSubRepetition(int reminderMinutes, bool dateOnly)
 {

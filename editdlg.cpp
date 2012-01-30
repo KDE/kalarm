@@ -770,9 +770,9 @@ bool EditAlarmDlg::getEvent(KAEvent& event, AlarmResource*& resource)
 }
 
 /******************************************************************************
-*  Extract the data in the dialog and set up a KAEvent from it.
-*  If 'trial' is true, the event is set up for a simple one-off test, ignoring
-*  recurrence, reminder, template etc. data.
+* Extract the data in the dialog and set up a KAEvent from it.
+* If 'trial' is true, the event is set up for a simple one-off test, ignoring
+* recurrence, reminder, template etc. data.
 */
 void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 {
@@ -848,9 +848,9 @@ KAEvent::Flags EditAlarmDlg::getAlarmFlags() const
 }
 
 /******************************************************************************
-*  Called when the dialog is displayed.
-*  The first time through, sets the size to the same as the last time it was
-*  displayed.
+* Called when the dialog is displayed.
+* The first time through, sets the size to the same as the last time it was
+* displayed.
 */
 void EditAlarmDlg::showEvent(QShowEvent* se)
 {
@@ -902,9 +902,9 @@ void EditAlarmDlg::slotResize()
 }
 
 /******************************************************************************
-*  Called when the dialog's size has changed.
-*  Records the new size (adjusted to ignore the optional height of the deferred
-*  time edit widget) in the config file.
+* Called when the dialog's size has changed.
+* Records the new size (adjusted to ignore the optional height of the deferred
+* time edit widget) in the config file.
 */
 void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 {
@@ -918,7 +918,7 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 }
 
 /******************************************************************************
-*  Called when any button is clicked.
+* Called when any button is clicked.
 */
 void EditAlarmDlg::slotButtonClicked(int button)
 {
@@ -932,8 +932,8 @@ void EditAlarmDlg::slotButtonClicked(int button)
 }
 
 /******************************************************************************
-*  Called when the OK button is clicked.
-*  Validate the input data.
+* Called when the OK button is clicked.
+* Validate the input data.
 */
 bool EditAlarmDlg::validate()
 {
@@ -1162,8 +1162,8 @@ bool EditAlarmDlg::validate()
 }
 
 /******************************************************************************
-*  Called when the Try button is clicked.
-*  Display/execute the alarm immediately for the user to check its configuration.
+* Called when the Try button is clicked.
+* Display/execute the alarm immediately for the user to check its configuration.
 */
 void EditAlarmDlg::slotTry()
 {
@@ -1187,8 +1187,8 @@ void EditAlarmDlg::slotTry()
 }
 
 /******************************************************************************
-*  Called when the Load Template button is clicked.
-*  Prompt to select a template and initialise the dialog with its contents.
+* Called when the Load Template button is clicked.
+* Prompt to select a template and initialise the dialog with its contents.
 */
 void EditAlarmDlg::slotHelp()
 {
@@ -1317,8 +1317,8 @@ void EditAlarmDlg::slotEditDeferral()
 }
 
 /******************************************************************************
-*  Called when the main page is shown.
-*  Sets the focus widget to the first edit field.
+* Called when the main page is shown.
+* Sets the focus widget to the first edit field.
 */
 void EditAlarmDlg::slotShowMainPage()
 {
@@ -1346,10 +1346,10 @@ void EditAlarmDlg::slotShowMainPage()
 }
 
 /******************************************************************************
-*  Called when the recurrence edit page is shown.
-*  The recurrence defaults are set to correspond to the start date.
-*  The first time, for a new alarm, the recurrence end date is set according to
-*  the alarm start time.
+* Called when the recurrence edit page is shown.
+* The recurrence defaults are set to correspond to the start date.
+* The first time, for a new alarm, the recurrence end date is set according to
+* the alarm start time.
 */
 void EditAlarmDlg::slotShowRecurrenceEdit()
 {
@@ -1372,9 +1372,9 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
 }
 
 /******************************************************************************
-*  Called when the recurrence type selection changes.
-*  Enables/disables date-only alarms as appropriate.
-*  Enables/disables controls depending on at-login setting.
+* Called when the recurrence type selection changes.
+* Enables/disables date-only alarms as appropriate.
+* Enables/disables controls depending on at-login setting.
 */
 void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 {
@@ -1402,9 +1402,9 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
 }
 
 /******************************************************************************
-*  Called when the recurrence frequency selection changes, or the sub-
-*  repetition interval changes.
-*  Updates the recurrence frequency text.
+* Called when the recurrence frequency selection changes, or the sub-
+* repetition interval changes.
+* Updates the recurrence frequency text.
 */
 void EditAlarmDlg::slotRecurFrequencyChange()
 {
@@ -1415,12 +1415,12 @@ void EditAlarmDlg::slotRecurFrequencyChange()
 }
 
 /******************************************************************************
-*  Called when the Repetition within Recurrence button has been pressed to
-*  display the sub-repetition dialog.
-*  Alarm repetition has the following restrictions:
-*  1) Not allowed for a repeat-at-login alarm
-*  2) For a date-only alarm, the repeat interval must be a whole number of days.
-*  3) The overall repeat duration must be less than the recurrence interval.
+* Called when the Repetition within Recurrence button has been pressed to
+* display the sub-repetition dialog.
+* Alarm repetition has the following restrictions:
+* 1) Not allowed for a repeat-at-login alarm
+* 2) For a date-only alarm, the repeat interval must be a whole number of days.
+* 3) The overall repeat duration must be less than the recurrence interval.
 */
 void EditAlarmDlg::slotSetSubRepetition()
 {
@@ -1429,8 +1429,8 @@ void EditAlarmDlg::slotSetSubRepetition()
 }
 
 /******************************************************************************
-*  Called when one of the template time radio buttons is clicked,
-*  to enable or disable the template time entry spin boxes.
+* Called when one of the template time radio buttons is clicked,
+* to enable or disable the template time entry spin boxes.
 */
 void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*)
 {
@@ -1439,8 +1439,8 @@ void EditAlarmDlg::slotTemplateTimeType(QAbstractButton*)
 }
 
 /******************************************************************************
-*  Called when the "Any time" checkbox is toggled in the date/time widget.
-*  Sets the advance reminder and late cancel units to days if any time is checked.
+* Called when the "Any time" checkbox is toggled in the date/time widget.
+* Sets the advance reminder and late cancel units to days if any time is checked.
 */
 void EditAlarmDlg::slotAnyTimeToggled(bool anyTime)
 {

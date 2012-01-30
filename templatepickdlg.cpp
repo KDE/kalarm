@@ -112,8 +112,8 @@ void TemplatePickDlg::slotSelectionChanged()
 }
 
 /******************************************************************************
-*  Called when the dialog's size has changed.
-*  Records the new size in the config file.
+* Called when the dialog's size has changed.
+* Records the new size in the config file.
 */
 void TemplatePickDlg::resizeEvent(QResizeEvent* re)
 {

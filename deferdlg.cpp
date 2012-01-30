@@ -68,7 +68,7 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool
 
 
 /******************************************************************************
-*  Called when the OK button is clicked.
+* Called when the OK button is clicked.
 */
 void DeferAlarmDlg::slotOk()
 {
@@ -128,7 +128,7 @@ void DeferAlarmDlg::setDeferMinutes(int minutes)
 }
 
 /******************************************************************************
-*  Called the maximum date/time for the date/time edit widget has been passed.
+* Called the maximum date/time for the date/time edit widget has been passed.
 */
 void DeferAlarmDlg::slotPastLimit()
 {
@@ -136,8 +136,8 @@ void DeferAlarmDlg::slotPastLimit()
 }
 
 /******************************************************************************
-*  Set the time limit for deferral based on the next occurrence of the alarm
-*  with the specified ID.
+* Set the time limit for deferral based on the next occurrence of the alarm
+* with the specified ID.
 */
 void DeferAlarmDlg::setLimit(const DateTime& limit)
 {
@@ -147,8 +147,8 @@ void DeferAlarmDlg::setLimit(const DateTime& limit)
 }
 
 /******************************************************************************
-*  Set the time limit for deferral based on the next occurrence of the alarm
-*  with the specified ID.
+* Set the time limit for deferral based on the next occurrence of the alarm
+* with the specified ID.
 */
 DateTime DeferAlarmDlg::setLimit(const QString& eventID)
 {
@@ -160,7 +160,7 @@ DateTime DeferAlarmDlg::setLimit(const QString& eventID)
 }
 
 /******************************************************************************
-*  Called when the Cancel Deferral button is clicked.
+* Called when the Cancel Deferral button is clicked.
 */
 void DeferAlarmDlg::slotCancelDeferral()
 {

@@ -71,8 +71,8 @@ void TemplateMenuAction::slotInitMenu()
 }
 
 /******************************************************************************
-*  Called when a template is selected from the New From Template popup menu.
-*  Executes a New Alarm dialog, preset from the selected template.
+* Called when a template is selected from the New From Template popup menu.
+* Executes a New Alarm dialog, preset from the selected template.
 */
 void TemplateMenuAction::slotSelected(QAction* action)
 {

@@ -108,7 +108,7 @@ void Reminder::setAfterOnly(bool afterOnly)
 }
 
 /******************************************************************************
-*  Set the read-only status.
+* Set the read-only status.
 */
 void Reminder::setReadOnly(bool ro)
 {
@@ -138,7 +138,7 @@ void Reminder::setOnceOnly(bool onceOnly)
 }
 
 /******************************************************************************
-*  Specify whether the once-only checkbox is allowed to be enabled.
+* Specify whether the once-only checkbox is allowed to be enabled.
 */
 void Reminder::enableOnceOnly(bool enable)
 {
@@ -171,7 +171,7 @@ int Reminder::minutes() const
 }
 
 /******************************************************************************
-*  Initialise the controls with a specified reminder time.
+* Initialise the controls with a specified reminder time.
 */
 void Reminder::setMinutes(int minutes, bool dateOnly)
 {
@@ -187,7 +187,7 @@ void Reminder::setMinutes(int minutes, bool dateOnly)
 }
 
 /******************************************************************************
-*  Set the reminder units to days if "Any time" is checked.
+* Set the reminder units to days if "Any time" is checked.
 */
 void Reminder::setDateOnly(bool dateOnly)
 {
@@ -195,7 +195,7 @@ void Reminder::setDateOnly(bool dateOnly)
 }
 
 /******************************************************************************
-*  Set the input focus on the count field.
+* Set the input focus on the count field.
 */
 void Reminder::setFocusOnCount()
 {
@@ -203,7 +203,7 @@ void Reminder::setFocusOnCount()
 }
 
 /******************************************************************************
-*  Called when the Reminder checkbox is toggled.
+* Called when the Reminder checkbox is toggled.
 */
 void Reminder::slotReminderToggled(bool on)
 {
