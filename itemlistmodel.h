@@ -74,7 +74,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
 
     private:
         CalEvent::Types mAllowedTypes; // types of events allowed in this model
-        bool                    mHaveEvents;   // there are events in this model
+        bool            mHaveEvents;   // there are events in this model
 };
 
 

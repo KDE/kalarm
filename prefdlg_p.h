@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 #include "stackedwidgets.h"
 
 class QCheckBox;
+class QGroupBox;
 class QAbstractButton;
 class QRadioButton;
 class QPushButton;
@@ -40,6 +41,7 @@ class ColourButton;
 class ButtonGroup;
 class RadioButton;
 class TimeEdit;
+class TimePeriod;
 class SpinBox;
 class TimeSpinBox;
 class SpecialActionsButton;
@@ -251,6 +253,7 @@ class ViewPrefTab : public PrefsTabBase
         void         slotTooltipMaxToggled(bool);
         void         slotTooltipTimeToggled(bool);
         void         slotTooltipTimeToToggled(bool);
+        void         slotAutoHideSysTrayChanged(QAbstractButton*);
         void         slotWindowPosChanged(QAbstractButton*);
 
     private:
@@ -259,7 +262,9 @@ class ViewPrefTab : public PrefsTabBase
         KTabWidget*   mTabs;
         ColourButton* mDisabledColour;
         ColourButton* mArchivedColour;
-        QCheckBox*    mShowInSystemTray;
+        QGroupBox*    mShowInSystemTray;
+        ButtonGroup*  mAutoHideSystemTray;
+        TimePeriod*   mAutoHideSystemTrayPeriod;
         QCheckBox*    mTooltipShowAlarms;
         QCheckBox*    mTooltipMaxAlarms;
         SpinBox*      mTooltipMaxAlarmCount;

@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@
 #include <QTimer>
 
 #include <stdlib.h>
+#include <limits.h>
 
 using namespace KAlarmCal;
 
@@ -76,6 +77,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 #ifdef USE_AKONADI
       mAlarmsModel(0),
 #endif
+      mStatusUpdateTimer(new QTimer(this)),
       mHaveDisabledAlarms(false)
 {
     kDebug();
@@ -166,6 +168,13 @@ TrayWindow::TrayWindow(MainWindow* parent)
             mToolTipUpdateTimer, SLOT(start()));
 #endif
 
+    // Set auto-hide status when next alarm or preferences change
+    mStatusUpdateTimer->setSingleShot(true);
+    connect(mStatusUpdateTimer, SIGNAL(timeout()), SLOT(updateStatus()));
+    connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(updateStatus()));
+    Preferences::connect(SIGNAL(autoHideSystemTrayChanged(int)), this, SLOT(updateStatus()));
+    updateStatus();
+
     // Update when tooltip preferences are modified
     Preferences::connect(SIGNAL(tooltipPreferencesChanged()), mToolTipUpdateTimer, SLOT(start()));
 }
@@ -221,6 +230,7 @@ void TrayWindow::setEnabledStatus(bool status)
 {
     kDebug() << (int)status;
     updateIcon();
+    updateStatus();
     updateToolTip();
 }
 
@@ -256,6 +266,44 @@ void TrayWindow::slotSecondaryActivateRequested()
 {
     if (mActionNew->isEnabled())
         mActionNew->trigger();    // display a New Alarm dialog
+}
+
+/******************************************************************************
+* Adjust icon auto-hide status according to when the next alarm is due.
+*/
+void TrayWindow::updateStatus()
+{
+    mStatusUpdateTimer->stop();
+    int period =  Preferences::autoHideSystemTray();
+    bool active = !period;    // AutoHideSystemTray = 0 to always show tray icon
+    if (period)
+    {
+        active = theApp()->alarmsEnabled();
+        if (active)
+        {
+            KAEvent* event = AlarmCalendar::resources()->earliestAlarm();
+            active = static_cast<bool>(event);
+            if (event  &&  period > 0)
+            {
+                KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
+                qint64 delay = KDateTime::currentLocalDateTime().secsTo_long(dt);
+                delay -= static_cast<qint64>(period) * 60;   // delay until icon to be shown
+                active = (delay <= 0);
+                if (!active)
+                {
+                    // First alarm trigger is too far in future, so tray icon is to
+                    // be auto-hidden. Set timer for when it should be shown again.
+                    delay *= 1000;   // convert to msec
+                    int delay_int = static_cast<int>(delay);
+                    if (delay_int != delay)
+                        delay_int = INT_MAX;
+                    mStatusUpdateTimer->setInterval(delay_int);
+                    mStatusUpdateTimer->start();
+                }
+            }
+        }
+    }
+    setStatus(active ? Active : Passive);
 }
 
 /******************************************************************************

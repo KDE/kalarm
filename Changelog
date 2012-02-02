@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.9.0 --- 12 January 2012 ===
+=== Version 2.9.0 --- 2 February 2012 ===
 - Add option to execute a pre-alarm action before deferred alarms.
 - Allow user to stop playback after clicking Try in audio alarm edit dialogue.
+- Provide options to auto-hide system tray icon when no alarms are due.
 
 === Version 2.8.0 --- 1 December 2011 ===
 - Use Akonadi as the default calendar access method.

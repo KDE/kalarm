@@ -18,6 +18,9 @@
   <signal name="showInSystemTrayChanged">
     <argument type="Bool">ShowInSystemTray</argument>
   </signal>
+  <signal name="autoHideSystemTrayChanged">
+    <argument type="Int">AutoHideSystemTray</argument>
+  </signal>
   <signal name="askResourceChanged">
     <argument type="Bool">AskResource</argument>
   </signal>
@@ -89,6 +92,12 @@
       <whatsthis context="@info:whatsthis">&lt;para>Check to show &lt;application>KAlarm&lt;/application>'s icon in the system tray. Showing it in the system tray provides easy access and a status indication.&lt;/para></whatsthis>
       <default>true</default>
       <emit signal="showInSystemTrayChanged"/>
+    </entry>
+    <entry name="AutoHideSystemTray" type="Int">
+      <label context="@label">Auto-hide in system tray if no alarms due within period</label>
+      <whatsthis context="@info:whatsthis">&lt;para>Enter 0 to auto-hide &lt;application>KAlarm&lt;/application>'s icon in the system tray when there are no active alarms.&lt;/para>&lt;para>To auto-hide the system tray icon when there are no alarms due within a set period of time, enter the time period in minutes.&lt;/para>&lt;para>Enter 0 to always show the system tray icon.&lt;/para></whatsthis>
+      <default>1440</default>
+      <emit signal="autoHideSystemTrayChanged"/>
     </entry>
     <entry name="AutoStart" key="AutoStart" type="Bool">
       <label context="@label">Start at login</label>

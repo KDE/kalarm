@@ -94,6 +94,11 @@ using namespace KHolidays;
 #include <QResizeEvent>
 #include <QTimer>
 
+#ifdef USE_AKONADI
+using namespace KCalCore;
+#else
+using namespace KCal;
+#endif
 using namespace KAlarmCal;
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";
@@ -1599,18 +1604,55 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     topWindows->setSpacing(KDialog::spacingHint());
     mTabWindows = mTabs->addTab(topWindows, i18nc("@title:tab", "Alarm Windows"));
 
-    // Run-in-system-tray radio button
-    KHBox* box = new KHBox(topGeneral);   // this is to allow left adjustment
-    box->setMargin(0);
-    mShowInSystemTray = new QCheckBox(i18nc("@option:check", "Show in system tray"), box);
+    // Run-in-system-tray group box
+    mShowInSystemTray = new QGroupBox(i18nc("@option:check", "Show in system tray"), topGeneral);
+    mShowInSystemTray->setCheckable(true);
     mShowInSystemTray->setWhatsThis(
           i18nc("@info:whatsthis", "<para>Check to show <application>KAlarm</application>'s icon in the system tray."
                " Showing it in the system tray provides easy access and a status indication.</para>"));
-    box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-    box->setFixedHeight(box->sizeHint().height());
+    QGridLayout* grid = new QGridLayout(mShowInSystemTray);
+    grid->setMargin(KDialog::marginHint());
+    grid->setSpacing(KDialog::spacingHint());
+    grid->setColumnStretch(1, 1);
+    grid->setColumnMinimumWidth(0, indentWidth());
 
+    mAutoHideSystemTray = new ButtonGroup(mShowInSystemTray);
+    connect(mAutoHideSystemTray, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotAutoHideSysTrayChanged(QAbstractButton*)));
+
+    QRadioButton* radio = new QRadioButton(i18nc("@option:radio Always show KAlarm icon", "Always show"), mShowInSystemTray);
+    mAutoHideSystemTray->addButton(radio, 0);
+    radio->setWhatsThis(
+          i18nc("@info:whatsthis",
+                "Check to show <application>KAlarm</application>'s icon in the system tray "
+                "regardless of whether alarms are due."));
+    grid->addWidget(radio, 0, 0, 1, 2, Qt::AlignLeft);
+
+    radio = new QRadioButton(i18nc("@option:radio", "Automatically hide if no active alarms"), mShowInSystemTray);
+    mAutoHideSystemTray->addButton(radio, 1);
+    radio->setWhatsThis(
+          i18nc("@info:whatsthis",
+                "Check to automatically hide <application>KAlarm</application>'s icon in "
+                "the system tray if there are no active alarms. When hidden, the icon can "
+                "always be made visible by use of the system tray option to show hidden icons."));
+    grid->addWidget(radio, 1, 0, 1, 2, Qt::AlignLeft);
+
+    QString text = i18nc("@info:whatsthis",
+                         "Check to automatically hide <application>KAlarm</application>'s icon in the "
+                         "system tray if no alarms are due within the specified time period. When hidden, "
+                         "the icon can always be made visible by use of the system tray option to show hidden icons.");
+    radio = new QRadioButton(i18nc("@option:radio", "Automatically hide if no alarm due within time period:"), mShowInSystemTray);
+    radio->setWhatsThis(text);
+    mAutoHideSystemTray->addButton(radio, 2);
+    grid->addWidget(radio, 2, 0, 1, 2, Qt::AlignLeft);
+    mAutoHideSystemTrayPeriod = new TimePeriod(true, mShowInSystemTray);
+    mAutoHideSystemTrayPeriod->setWhatsThis(text);
+    mAutoHideSystemTrayPeriod->setMaximumWidth(mAutoHideSystemTrayPeriod->sizeHint().width());
+    grid->addWidget(mAutoHideSystemTrayPeriod, 3, 1, 1, 1, Qt::AlignLeft);
+    mShowInSystemTray->setMaximumHeight(mShowInSystemTray->sizeHint().height());
+
+    // System tray tooltip group box
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "System Tray Tooltip"), topGeneral);
-    QGridLayout* grid = new QGridLayout(group);
+    grid = new QGridLayout(group);
     grid->setMargin(KDialog::marginHint());
     grid->setSpacing(KDialog::spacingHint());
     grid->setColumnStretch(2, 1);
@@ -1624,7 +1666,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
           i18nc("@info:whatsthis", "Specify whether to include in the system tray tooltip, a summary of alarms due in the next 24 hours."));
     grid->addWidget(mTooltipShowAlarms, 0, 0, 1, 3, Qt::AlignLeft);
 
-    box = new KHBox(group);
+    KHBox* box = new KHBox(group);
     box->setMargin(0);
     box->setSpacing(KDialog::spacingHint());
     mTooltipMaxAlarms = new QCheckBox(i18nc("@option:check", "Maximum number of alarms to show:"), box);
@@ -1706,7 +1748,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
           "<para>Choose how to reduce the chance of alarm messages being accidentally acknowledged:"
           "<list><item>Position alarm message windows as far as possible from the current mouse cursor location, or</item>"
           "<item>Position alarm message windows in the center of the screen, but disable buttons for a short time after the window is displayed.</item></list></para>");
-    QRadioButton* radio = new QRadioButton(i18nc("@option:radio", "Position windows far from mouse cursor"), group);
+    radio = new QRadioButton(i18nc("@option:radio", "Position windows far from mouse cursor"), group);
     mWindowPosition->addButton(radio, 0);
     radio->setWhatsThis(whatsthis);
     grid->addWidget(radio, 0, 0, 1, 2, Qt::AlignLeft);
@@ -1750,6 +1792,29 @@ void ViewPrefTab::restore(bool, bool allTabs)
     if (allTabs  ||  mTabs->currentIndex() == mTabGeneral)
     {
         mShowInSystemTray->setChecked(Preferences::showInSystemTray());
+        int id;
+        int mins = Preferences::autoHideSystemTray();
+        switch (mins)
+        {
+            case -1:  id = 1;  break;    // hide if any active alarms
+            case 0:   id = 0;  break;    // never hide
+            default:
+            {
+                id = 2;
+                int days = 0;
+                int secs = 0;
+                if (mins % 1440)
+                    secs = mins * 60;
+                else
+                    days = mins / 1440;
+                TimePeriod::Units units = secs ? TimePeriod::HoursMinutes
+                                        : (days % 7) ? TimePeriod::Days : TimePeriod::Weeks;
+                Duration duration((secs ? secs : days), (secs ? Duration::Seconds : Duration::Days));
+                mAutoHideSystemTrayPeriod->setPeriod(duration, false, units);
+                break;
+            }
+        }
+        mAutoHideSystemTray->setButton(id);
         setTooltip(Preferences::tooltipAlarmCount(),
                    Preferences::showTooltipAlarmTime(),
                    Preferences::showTooltipTimeToAlarm(),
@@ -1790,6 +1855,19 @@ void ViewPrefTab::apply(bool syncToDisc)
     b = mShowInSystemTray->isChecked();
     if (b != Preferences::showInSystemTray())
         Preferences::setShowInSystemTray(b);
+    if (b)
+    {
+        switch (mAutoHideSystemTray->selectedId())
+        {
+            case 0:  n = 0;   break;    // never hide
+            case 1:  n = -1;  break;    // hide if any active alarms
+            case 2:                     // hide if no alarms due within period
+                     n = mAutoHideSystemTrayPeriod->period().asSeconds() / 60;
+                     break;
+        }
+        if (n != Preferences::autoHideSystemTray())
+            Preferences::setAutoHideSystemTray(n);
+    }
     n = mWindowPosition->selectedId();
     if (n)
         n = mWindowButtonDelay->value();
@@ -1857,6 +1935,11 @@ void ViewPrefTab::slotTooltipTimeToToggled(bool on)
     on = on && mTooltipShowTimeTo->isEnabled();
     mTooltipTimeToPrefix->setEnabled(on);
     mTooltipTimeToPrefixLabel->setEnabled(on);
+}
+
+void ViewPrefTab::slotAutoHideSysTrayChanged(QAbstractButton* button)
+{
+    mAutoHideSystemTrayPeriod->setEnabled(mAutoHideSystemTray->id(button) == 2);
 }
 
 void ViewPrefTab::slotWindowPosChanged(QAbstractButton* button)
