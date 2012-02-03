@@ -88,7 +88,7 @@ WakeFromSuspendDlg::~WakeFromSuspendDlg()
 }
 
 /******************************************************************************
-* Called when the the alarm selection in the main window changes.
+* Called when the alarm selection in the main window changes.
 * Enable or disable the Use Highlighted Alarm button.
 */
 void WakeFromSuspendDlg::enableDisableUseButton()
