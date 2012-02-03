@@ -1661,7 +1661,6 @@ bool EditAudioAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 */
 void EditAudioAlarmDlg::slotTry()
 {
-    KPushButton* tryButton = button(Try);
     if (!MessageWin::isAudioPlaying())
         EditAlarmDlg::slotTry();   // play the audio file
     else if (mMessageWin)
