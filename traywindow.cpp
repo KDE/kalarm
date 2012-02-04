@@ -108,6 +108,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     actions->addAction(QLatin1String("tStopPlay"), a);
     contextMenu()->addAction(a);
     QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), a, SLOT(setVisible(bool)));
+    QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(updateStatus()));
 
     a = KAlarm::createSpreadWindowsAction(this);
     actions->addAction(QLatin1String("tSpread"), a);
@@ -270,14 +271,19 @@ void TrayWindow::slotSecondaryActivateRequested()
 
 /******************************************************************************
 * Adjust icon auto-hide status according to when the next alarm is due.
+* The icon is always shown if audio is playing, to give access to the 'stop'
+* menu option.
 */
 void TrayWindow::updateStatus()
 {
     mStatusUpdateTimer->stop();
     int period =  Preferences::autoHideSystemTray();
-    bool active = !period;    // AutoHideSystemTray = 0 to always show tray icon
-    if (period)
+    // If the icon is always to be shown (AutoHideSystemTray = 0),
+    // or audio is playing, show the icon.
+    bool active = !period || MessageWin::isAudioPlaying();
+    if (!active)
     {
+        // Show the icon only if the next active alarm complies
         active = theApp()->alarmsEnabled();
         if (active)
         {

@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1458,13 +1458,15 @@ void MessageWin::startAudio()
     else
     {
         kDebug() << QThread::currentThread();
-        theApp()->notifyAudioPlaying(true);
         mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
         mAudioOwner = this;
         connect(mAudioThread, SIGNAL(readyToPlay()), SLOT(playReady()));
         connect(mAudioThread, SIGNAL(finished()), SLOT(playFinished()));
         if (mSilenceButton)
             connect(mSilenceButton, SIGNAL(clicked()), mAudioThread, SLOT(quit()));
+        // Notify after creating mAudioThread, so that isAudioPlaying() will
+        // return the correct value.
+        theApp()->notifyAudioPlaying(true);
         mAudioThread->start();
     }
 }
@@ -1520,8 +1522,10 @@ void MessageWin::playFinished()
             clearErrorMessage(ErrMsg_AudioFile);
         }
     }
-    theApp()->notifyAudioPlaying(false);
     delete mAudioThread.data();
+    // Notify after deleting mAudioThread, so that isAudioPlaying() will
+    // return the correct value.
+    theApp()->notifyAudioPlaying(false);
     mAudioOwner = 0;
     if (mAlwaysHide)
         close();
