@@ -404,7 +404,11 @@ void CollectionCheckListModel::selectionChanged(const QItemSelection& selected, 
 {
     const QModelIndexList sel = selected.indexes();
     foreach (const QModelIndex& ix, sel)
-        CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, true);
+    {
+        // Try to enable the collection, but untick it if not possible
+        if (!CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, true))
+            mSelectionModel->select(ix, QItemSelectionModel::Deselect);
+    }
     const QModelIndexList desel = deselected.indexes();
     foreach (const QModelIndex& ix, desel)
         CollectionControlModel::setEnabled(mModel->collection(ix), mAlarmType, false);
@@ -665,6 +669,8 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
 /******************************************************************************
 * Recursive function to check all collections' enabled status, and to compile a
 * list of all collections which have any alarm types enabled.
+* Collections which duplicate the same backend storage are filtered out, to
+* avoid crashes due to duplicate events in different resources.
 */
 void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterModel* filter, const QModelIndex& parent, Collection::List& collections) const
 {
@@ -673,8 +679,17 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
     {
         const QModelIndex ix = filter->index(row, 0, parent);
         const Collection collection = model->data(filter->mapToSource(ix), AkonadiModel::CollectionRole).value<Collection>();
-        if (collection.hasAttribute<CollectionAttribute>()
-        &&  collection.attribute<CollectionAttribute>()->enabled())
+        CalEvent::Types enabled = !collection.hasAttribute<CollectionAttribute>() ? CalEvent::EMPTY
+                                           : collection.attribute<CollectionAttribute>()->enabled();
+        CalEvent::Types canEnable = checkTypesToEnable(collection, collections, enabled);
+        if (canEnable != enabled)
+        {
+            // There is another collection which uses the same backend
+            // storage. Disable alarm types enabled in the other collection.
+            if (!model->isCollectionBeingDeleted(collection.id()))
+                model->setData(model->collectionIndex(collection), static_cast<int>(canEnable), AkonadiModel::EnabledTypesRole);
+        }
+        if (canEnable)
             collections += collection;
         if (filter->rowCount(ix) > 0)
             findEnabledCollections(filter, ix, collections);
@@ -691,11 +706,15 @@ bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::T
        &&  col.attribute<CollectionAttribute>()->isEnabled(type);
 }
 
-void CollectionControlModel::setEnabled(const Collection& collection, CalEvent::Types types, bool enabled)
+/******************************************************************************
+* Enable or disable the specified alarm types for a collection.
+* Reply = alarm types which can be enabled
+*/
+CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection, CalEvent::Types types, bool enabled)
 {
     kDebug() << "id:" << collection.id() << ", alarm types" << types << "->" << enabled;
     if (!collection.isValid()  ||  (!enabled && !instance()->collections().contains(collection)))
-        return;
+        return CalEvent::EMPTY;
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
     CalEvent::Types alarmTypes = !col.hasAttribute<CollectionAttribute>() ? CalEvent::EMPTY
@@ -704,7 +723,51 @@ void CollectionControlModel::setEnabled(const Collection& collection, CalEvent::
         alarmTypes |= static_cast<CalEvent::Types>(types & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE));
     else
         alarmTypes &= ~types;
-    instance()->statusChanged(collection, AkonadiModel::Enabled, static_cast<int>(alarmTypes), false);
+
+    return instance()->setEnabledStatus(collection, alarmTypes, false);
+}
+
+/******************************************************************************
+* Change the collection's enabled status.
+* Add or remove the collection to/from the enabled list.
+* Reply = alarm types which can be enabled
+*/
+CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& collection, CalEvent::Types types, bool inserted)
+{
+    kDebug() << "id:" << collection.id() << ", types=" << types;
+
+    // Prevent the enabling of duplicate alarm types if another collection
+    // uses the same backend storage.
+    const Collection::List cols = collections();
+    CalEvent::Types canEnable = checkTypesToEnable(collection, cols, types);
+
+    // Update the list of enabled collections
+    if (canEnable)
+    {
+        bool inList = false;
+        const Collection::List cols = collections();
+        foreach (const Collection& c, cols)
+        {
+            if (c.id() == collection.id())
+            {
+                inList = true;
+                break;
+            }
+        }
+        if (!inList)
+            addCollection(collection);
+    }
+    else
+        removeCollection(collection);
+
+    if (!inserted  ||  canEnable != types)
+    {
+        // Update the collection's status
+        AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
+        if (!model->isCollectionBeingDeleted(collection.id()))
+            model->setData(model->collectionIndex(collection), static_cast<int>(canEnable), AkonadiModel::EnabledTypesRole);
+    }
+    return canEnable;
 }
 
 /******************************************************************************
@@ -722,34 +785,8 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
         case AkonadiModel::Enabled:
         {
             CalEvent::Types enabled = static_cast<CalEvent::Types>(value.toInt());
-            kDebug() << "id:" << collection.id() << ", enabled=" << enabled;
-
-            // Update the list of enabled collections
-            if (enabled)
-            {
-                bool inList = false;
-                const Collection::List cols = collections();
-                foreach (const Collection& c, cols)
-                {
-                    if (c.id() == collection.id())
-                    {
-                        inList = true;
-                        break;
-                    }
-                }
-                if (!inList)
-                    addCollection(collection);
-            }
-            else
-                removeCollection(collection);
-
-            if (!inserted)
-            {
-                // Update the collection's status
-                AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
-                if (!model->isCollectionBeingDeleted(collection.id()))
-                    model->setData(model->collectionIndex(collection), value, AkonadiModel::EnabledTypesRole);
-            }
+            kDebug() << "id:" << collection.id() << ", enabled=" << enabled << ", inserted=" << inserted;
+            setEnabledStatus(collection, enabled, inserted);
             break;
         }
         case AkonadiModel::ReadOnly:
@@ -802,6 +839,44 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
         default:
             break;
     }
+}
+
+/******************************************************************************
+* Check which alarm types can be enabled for a specified collection.
+* If the collection uses the same backend storage as another collection, any
+* alarm types already enabled in the other collection must be disabled in this
+* collection. This is to avoid duplicating events between different resources,
+* which causes user confusion and annoyance, and causes crashes.
+* Parameters:
+*   collection  - must be up to date (using AkonadiModel::refresh() etc.)
+*   collections = list of collections to search for duplicates.
+*   types       = alarm types to be enabled for the collection.
+* Reply = alarm types which can be enabled without duplicating other collections.
+*/
+CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& collection, const Collection::List& collections, CalEvent::Types types)
+{
+    types &= (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
+    if (types)
+    {
+        // At least on alarm type is to be enabled
+        KUrl location(collection.remoteId());
+        foreach (const Collection& c, collections)
+        {
+            if (c.id() != collection.id()  &&  KUrl(c.remoteId()) == location)
+            {
+                // The collection duplicates the backend storage
+                // used by another enabled collection.
+                // N.B. don't refresh this collection - assume no change.
+                if (c.hasAttribute<CollectionAttribute>())
+                {
+                    types &= ~c.attribute<CollectionAttribute>()->enabled();
+                    if (!types)
+                        break;
+                }
+            }
+        }
+    }
+    return types;
 }
 
 /******************************************************************************
