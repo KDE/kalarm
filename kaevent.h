@@ -470,6 +470,11 @@ class KALARMCAL_EXPORT KAEvent
         int revision() const;
 
 #ifndef USE_KRESOURCES
+        /** Set the ID of the Akonadi Collection which contains the event. */
+        void setCollectionId(Akonadi::Collection::Id id);
+        /** Return the ID of the Akonadi Collection which contains the event. */
+        Akonadi::Collection::Id  collectionId() const;
+
         /** Set the ID of the Akonadi Item which contains the event. */
         void setItemId(Akonadi::Item::Id id);
         /** Return the ID of the Akonadi Item which contains the event. */
@@ -1216,12 +1221,18 @@ class KALARMCAL_EXPORT KAEvent
          *  the alarm message in case of a crash, or to reinstate it should the user
          *  choose to defer the alarm. Note that even repeat-at-login alarms need to be
          *  saved in case their end time expires before the next login.
+         *  @param event      the event to copy
+         *  @param type       the alarm type (main, reminder, deferred etc.)
+         *  @param colId      the ID of the collection which originally contained the event
+         *  @param repeatAtLoginTime repeat-at-login time if @p type == AT_LOGIN_ALARM, else ignored
+         *  @param showEdit   whether the Edit button was displayed
+         *  @param showDefer  whether the Defer button was displayed
          *  @return @c true if successful, @c false if alarm was not copied.
          */
 #ifndef USE_KRESOURCES
-        bool setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer);
+        bool setDisplaying(const KAEvent& event, KAAlarm::Type type, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer);
 #else
-        bool setDisplaying(const KAEvent& e, KAAlarm::Type t, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
+        bool setDisplaying(const KAEvent& event, KAAlarm::Type type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
 #endif
 
 #ifndef USE_KRESOURCES
@@ -1229,6 +1240,10 @@ class KALARMCAL_EXPORT KAEvent
          *  This instance is initialised from the supplied displaying @p event,
          *  and appropriate adjustments are made to convert it back to the
          *  original pre-displaying state.
+         *  @param event      the displaying event
+         *  @param colId      updated to the ID of the collection which originally contained the event
+         *  @param showEdit   updated to true if Edit button was displayed, else false
+         *  @param showDefer  updated to true if Defer button was displayed, else false
          */
         void reinstateFromDisplaying(const KCalCore::Event::Ptr& event, Akonadi::Collection::Id& colId, bool& showEdit, bool& showDefer);
 #else
