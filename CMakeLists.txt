@@ -7,6 +7,10 @@ set(LIB_SOVERSION 2)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 
+include_directories(
+  ${kcalcore_BINARY_DIR}
+)
+
 ############### Build Options ###############
 
 # KALARM_USE_KRESOURCES - builds to use KResources instead of Akonadi
