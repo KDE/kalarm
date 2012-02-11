@@ -25,6 +25,7 @@
 #include <kalarmcal/kaevent.h>
 
 #include <akonadi/entitytreemodel.h>
+#include <akonadi/servermanager.h>
 
 #include <QSize>
 #include <QColor>
@@ -233,6 +234,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         virtual int entityColumnCount(HeaderGroup) const;
 
     private slots:
+        void checkResources(Akonadi::ServerManager::State);
         void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)
                        { setCollectionChanged(c, attrNames, false); }
         void slotCollectionRemoved(const Akonadi::Collection&);
@@ -312,6 +314,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         QList<Akonadi::Collection::Id> mCollectionsDeleting;  // collections currently being removed
         QList<Akonadi::Collection::Id> mCollectionsDeleted;   // collections recently removed
         QQueue<Event>   mPendingEventChanges;   // changed events with changedEvent() signal pending
+        bool            mResourcesChecked;      // whether resource existence has been checked yet
 };
 
 #endif // AKONADIMODEL_H
