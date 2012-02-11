@@ -1140,9 +1140,6 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mEmailAttachList->setMinimumSize(mEmailAttachList->sizeHint());
     if (mEmailAttachList->lineEdit())
         mEmailAttachList->lineEdit()->setReadOnly(true);
-//Q3ListBox* list = mEmailAttachList->listBox();
-//QRect rect = list->geometry();
-//list->setGeometry(rect.left() - 50, rect.top(), rect.width(), rect.height());
     label->setBuddy(mEmailAttachList);
     mEmailAttachList->setWhatsThis(i18nc("@info:whatsthis", "Files to send as attachments to the email."));
     grid->addWidget(mEmailAttachList, 0, 1);
