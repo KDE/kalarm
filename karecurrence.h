@@ -2,7 +2,7 @@
  *  karecurrence.h  -  recurrence with special yearly February 29th handling
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -25,7 +25,7 @@
 
 #include "kalarmcal_export.h"
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/recurrencerule.h>
 #include <kcalcore/duration.h>
 namespace KCalCore { class Recurrence; }
@@ -82,7 +82,7 @@ class KALARMCAL_EXPORT KARecurrence
         };
 
         KARecurrence();
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         KARecurrence(const KCalCore::Recurrence& r);
 #else
         KARecurrence(const KCal::Recurrence& r);
@@ -138,7 +138,7 @@ class KALARMCAL_EXPORT KARecurrence
          *  weekly, monthly, yearly or none.
          *  @return true if successful.
          */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end);
 #else
         bool init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end);
@@ -150,7 +150,7 @@ class KALARMCAL_EXPORT KARecurrence
          *  weekly, monthly, yearly or none.
          *  @return true if successful.
          */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         bool init(KCalCore::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29);
 #else
         bool init(KCal::RecurrenceRule::PeriodType t, int freq, int count, const KDateTime& start, const KDateTime& end, Feb29Type f29);
@@ -162,7 +162,7 @@ class KALARMCAL_EXPORT KARecurrence
         /** Initialise a KCalCore::Recurrence to be the same as this instance.
          *  Additional recurrence rules are created as necessary if it recurs on Feb 29th.
          */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         void writeRecurrence(KCalCore::Recurrence&) const;
 #else
         void writeRecurrence(KCal::Recurrence&) const;
@@ -230,7 +230,7 @@ class KALARMCAL_EXPORT KARecurrence
     QBitArray days() const; // Emulate the old behavior
 
     /** Returns list of day positions in months. */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     QList<KCalCore::RecurrenceRule::WDayPos> monthPositions() const;
 #else
     QList<KCal::RecurrenceRule::WDayPos> monthPositions() const;
@@ -274,7 +274,7 @@ class KALARMCAL_EXPORT KARecurrence
      *         Friday in the given months, otherwise as third Friday of the
      *         year.
      */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     QList<KCalCore::RecurrenceRule::WDayPos> yearPositions() const;
 #else
     QList<KCal::RecurrenceRule::WDayPos> yearPositions() const;
@@ -368,7 +368,7 @@ class KALARMCAL_EXPORT KARecurrence
      * @param date the date for which to find the recurrence times
      * @param timeSpec time specification for @p date
      */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     KCalCore::TimeList recurTimesOn(const QDate& date, const KDateTime::Spec& timeSpec) const;
 #else
     KCal::TimeList recurTimesOn(const QDate& date, const KDateTime::Spec& timeSpec) const;
@@ -386,7 +386,7 @@ class KALARMCAL_EXPORT KARecurrence
      * @param end inclusive end of interval
      * @return list of date/time values
      */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     KCalCore::DateTimeList timesInInterval(const KDateTime& start, const KDateTime& end) const;
 #else
     KCal::DateTimeList timesInInterval(const KDateTime& start, const KDateTime& end) const;
@@ -422,7 +422,7 @@ class KALARMCAL_EXPORT KARecurrence
         /** Return the longest interval between recurrences.
          *  @return  0 if it never recurs.
          */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         KCalCore::Duration longestInterval() const;
 #else
         KCal::Duration longestInterval() const;
@@ -432,12 +432,12 @@ class KALARMCAL_EXPORT KARecurrence
          *  successive occurrences does not vary.
          *  @return  0 if recurrence does not occur at fixed intervals.
          */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         KCalCore::Duration regularInterval() const;
 #else
         KCal::Duration regularInterval() const;
 #endif
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     KCalCore::DateTimeList exDateTimes() const;
     KCalCore::DateList exDates() const;
     void setExDateTimes(const KCalCore::DateTimeList& exdates);
@@ -467,7 +467,7 @@ class KALARMCAL_EXPORT KARecurrence
      */
     void shiftTimes(const KDateTime::Spec& oldSpec, const KDateTime::Spec& newSpec);
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     KCalCore::RecurrenceRule* defaultRRuleConst() const;
 #else
     KCal::RecurrenceRule* defaultRRuleConst() const;
@@ -476,14 +476,14 @@ class KALARMCAL_EXPORT KARecurrence
         Type type() const;
 
         /** Return the type of a recurrence rule. */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         static Type type(const KCalCore::RecurrenceRule*);
 #else
         static Type type(const KCal::RecurrenceRule*);
 #endif
 
         /** Check if the recurrence rule is a daily rule with or without BYDAYS specified. */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         static bool dailyType(const KCalCore::RecurrenceRule*);
 #else
         static bool dailyType(const KCal::RecurrenceRule*);

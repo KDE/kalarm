@@ -39,6 +39,14 @@ if(NOT USE_KRESOURCES)
        )
 endif()
 
+if(USE_KRESOURCES)
+    set(KALARMCAL_USE_KRESOURCES "// This library was built to use KResources.\n// It must be rebuilt in order to use Akonadi.\n#define KALARMCAL_USE_KRESOURCES")
+else()
+    set(KALARMCAL_USE_KRESOURCES "// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif")
+endif()
+
+configure_file(kalarmcal_export.h.in kalarmcal_export.h)
+
 kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 
 if(USE_KRESOURCES)
@@ -72,7 +80,7 @@ install(FILES
 	identities.h
 	kacalendar.h
 	kaevent.h
-	kalarmcal_export.h
+	${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
 	karecurrence.h
 	repetition.h
 	version.h
