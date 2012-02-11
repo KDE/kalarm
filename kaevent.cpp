@@ -306,7 +306,8 @@ class KAEvent::Private : public QSharedData
 #ifndef USE_KRESOURCES
         QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
         Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
-        Akonadi::Collection::Id mOriginalCollectionId; // saved collection ID (not the collection the event is in)
+        Akonadi::Collection::Id mCollectionId; // ID of collection containing the event, or for a displaying event,
+                                               // saved collection ID (not the collection the event is in)
 #else
         QString            mOriginalResourceId;// saved resource ID (not the resource the event is in)
 #endif
@@ -566,6 +567,7 @@ KAEvent::Private::Private()
       mCommandError(CMD_NO_ERROR),
 #ifndef USE_KRESOURCES
       mItemId(-1),
+      mCollectionId(-1),
 #endif
       mReminderMinutes(0),
       mReminderActive(NO_REMINDER),
@@ -663,7 +665,7 @@ void KAEvent::Private::copy(const KAEvent::Private& event)
 #ifndef USE_KRESOURCES
     mCustomProperties        = event.mCustomProperties;
     mItemId                  = event.mItemId;
-    mOriginalCollectionId    = event.mOriginalCollectionId;
+    mCollectionId            = event.mCollectionId;
 #else
     mOriginalResourceId      = event.mOriginalResourceId;
 #endif
@@ -770,7 +772,7 @@ void KAEvent::Private::set(const Event* event)
     mLogFile.clear();
 #ifndef USE_KRESOURCES
     mItemId                 = -1;
-    mOriginalCollectionId   = -1;
+    mCollectionId           = -1;
 #else
     mOriginalResourceId.clear();
 #endif
@@ -819,7 +821,7 @@ void KAEvent::Private::set(const Event* event)
 #ifndef USE_KRESOURCES
             const qlonglong id = params[0].toLongLong(&ok);
             if (ok)
-                mOriginalCollectionId = id;
+                mCollectionId = id;   // original collection ID which contained the event
 #else
             mOriginalResourceId = params[0];
 #endif
@@ -1244,7 +1246,7 @@ void KAEvent::Private::set(const KDateTime& dateTime, const QString& text, const
     mTemplateName.clear();
 #ifndef USE_KRESOURCES
     mItemId                 = -1;
-    mOriginalCollectionId   = -1;
+    mCollectionId           = -1;
 #else
     mResource               = 0;
     mOriginalResourceId.clear();
@@ -1375,7 +1377,7 @@ bool KAEvent::Private::updateKCalEvent(Event* ev, UidAction uidact) const
     if (mCategory == CalEvent::DISPLAYING)
     {
 #ifndef USE_KRESOURCES
-        param = QString::number(mOriginalCollectionId);
+        param = QString::number(mCollectionId);   // original collection ID which contained the event
 #else
         param = mOriginalResourceId;
 #endif
@@ -1881,6 +1883,17 @@ int KAEvent::revision() const
 }
 
 #ifndef USE_KRESOURCES
+void KAEvent::setCollectionId(Akonadi::Collection::Id id)
+{
+    d->mCollectionId = id;
+}
+
+Akonadi::Collection::Id KAEvent::collectionId() const
+{
+    // A displaying alarm contains the event's original collection ID
+    return d->mDisplaying ? -1 : d->mCollectionId;
+}
+
 void KAEvent::setItemId(Akonadi::Item::Id id)
 {
     d->mItemId = id;
@@ -3656,15 +3669,15 @@ bool KAEvent::Private::setDisplaying(const KAEvent::Private& event, KAAlarm::Typ
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(CalEvent::DISPLAYING);
 #ifndef USE_KRESOURCES
-            mItemId               = -1;    // the display event doesn't have an associated Item
-            mOriginalCollectionId = collectionId;;
+            mItemId             = -1;    // the display event doesn't have an associated Item
+            mCollectionId       = collectionId;  // original collection ID which contained the event
 #else
-            mOriginalResourceId   = resourceID;
+            mOriginalResourceId = resourceID;
 #endif
-            mDisplayingDefer      = showDefer;
-            mDisplayingEdit       = showEdit;
-            mDisplaying           = true;
-            mDisplayingTime       = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
+            mDisplayingDefer    = showDefer;
+            mDisplayingEdit     = showEdit;
+            mDisplaying         = true;
+            mDisplayingTime     = (alarmType == KAAlarm::AT_LOGIN_ALARM) ? repeatAtLoginTime : al.dateTime().kDateTime();
             switch (al.type())
             {
                 case KAAlarm::AT_LOGIN_ALARM:           mDisplayingFlags = REPEAT_AT_LOGIN;  break;
@@ -3704,8 +3717,8 @@ void KAEvent::Private::reinstateFromDisplaying(const Event* kcalEvent, QString& 
         // Retrieve the original event's unique ID
         setCategory(CalEvent::ACTIVE);
 #ifndef USE_KRESOURCES
-        collectionId = mOriginalCollectionId;
-        mOriginalCollectionId = -1;
+        collectionId = mCollectionId;
+        mCollectionId = -1;
 #else
         resourceID   = mOriginalResourceId;
         mOriginalResourceId.clear();
@@ -4097,6 +4110,7 @@ void KAEvent::Private::dumpDebug() const
     kDebug() << "-- mEnabled:" << mEnabled;
 #ifndef USE_KRESOURCES
     kDebug() << "-- mItemId:" << mItemId;
+    kDebug() << "-- mCollectionId:" << mCollectionId;
     kDebug() << "-- mCompatibility:" << mCompatibility;
     kDebug() << "-- mReadOnly:" << mReadOnly;
 #endif

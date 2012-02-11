@@ -18,7 +18,7 @@ if(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
     add_definitions(-DUSE_KRESOURCES)
     add_definitions(-DWANT_DEPRECATED_KCAL_API)
     add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
-endif(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
+endif()
 
 ########### next target ###############
 set(kalarmcal_LIB_SRCS
@@ -37,7 +37,7 @@ if(NOT USE_KRESOURCES)
 	compatibilityattribute.cpp
 	eventattribute.cpp
        )
-endif(NOT USE_KRESOURCES)
+endif()
 
 kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 
@@ -49,7 +49,7 @@ if(USE_KRESOURCES)
 			  ${KDE4_KDECORE_LIBS}
 			  ${QT_QTCORE_LIBRARY}
 			 )
-else(USE_KRESOURCES)
+else()
     target_link_libraries(kalarmcal
                           akonadi-kde
                           kcalcore
@@ -58,7 +58,7 @@ else(USE_KRESOURCES)
 			  ${KDE4_KDECORE_LIBS}
 			  ${QT_QTCORE_LIBRARY}
 			 )
-endif(USE_KRESOURCES)
+endif()
 
 set_target_properties(kalarmcal PROPERTIES 
                       VERSION ${LIB_VERSION} 
@@ -87,4 +87,4 @@ if(NOT USE_KRESOURCES)
 	    DESTINATION ${INCLUDE_INSTALL_DIR}/kalarmcal
 	    COMPONENT Devel
            )
-endif(NOT USE_KRESOURCES)
+endif()
