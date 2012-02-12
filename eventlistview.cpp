@@ -286,7 +286,6 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
             kError() << "Invalid cast to ItemListModel*";
         else
         {
-kDebug()<<"Cast works!!!!!!!!!!!!";
             KAEvent event = itemModel->event(index);
             edit(&event, static_cast<EventListView*>(parent()));
             return true;
