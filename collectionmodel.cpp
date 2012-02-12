@@ -735,6 +735,8 @@ CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection,
 CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& collection, CalEvent::Types types, bool inserted)
 {
     kDebug() << "id:" << collection.id() << ", types=" << types;
+    CalEvent::Types disallowedStdTypes(0);
+    CalEvent::Types stdTypes(0);
 
     // Prevent the enabling of duplicate alarm types if another collection
     // uses the same backend storage.
@@ -755,17 +757,52 @@ CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& colle
             }
         }
         if (!inList)
+        {
+            // It's a new collection.
+            // Prevent duplicate standard collections being created for any alarm type.
+            stdTypes = collection.hasAttribute<CollectionAttribute>()
+                                ? collection.attribute<CollectionAttribute>()->standard()
+                                : CalEvent::EMPTY;
+            if (stdTypes)
+            {
+                foreach (const Collection& col, cols)
+                {
+                    Collection c(col);
+                    AkonadiModel::instance()->refresh(c);    // update with latest data
+                    if (c.isValid())
+                    {
+                        CalEvent::Types t = stdTypes & CalEvent::types(c.contentMimeTypes());
+                        if (t)
+                        {
+                            if (c.hasAttribute<CollectionAttribute>()
+                            &&  AkonadiModel::isCompatible(c))
+                            {
+                                disallowedStdTypes |= c.attribute<CollectionAttribute>()->standard() & t;
+                                if (disallowedStdTypes == stdTypes)
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
             addCollection(collection);
+        }
     }
     else
         removeCollection(collection);
 
-    if (!inserted  ||  canEnable != types)
+    if (disallowedStdTypes  ||  !inserted  ||  canEnable != types)
     {
         // Update the collection's status
         AkonadiModel* model = static_cast<AkonadiModel*>(sourceModel());
         if (!model->isCollectionBeingDeleted(collection.id()))
-            model->setData(model->collectionIndex(collection), static_cast<int>(canEnable), AkonadiModel::EnabledTypesRole);
+        {
+            QModelIndex ix = model->collectionIndex(collection);
+            if (!inserted  ||  canEnable != types)
+                model->setData(ix, static_cast<int>(canEnable), AkonadiModel::EnabledTypesRole);
+            if (disallowedStdTypes)
+                model->setData(ix, static_cast<int>(stdTypes & ~disallowedStdTypes), AkonadiModel::IsStandardRole);
+        }
     }
     return canEnable;
 }
