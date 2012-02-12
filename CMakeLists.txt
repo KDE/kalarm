@@ -227,11 +227,12 @@ int main() { return 0; }")
     set(_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/check_kalarmcal_akonadi.cpp)
     file(WRITE "${_source_file}" "${_source}")
     set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${KDE4_INCLUDES}")
+    set(_try_kalarm_akonadi_compile)
     try_compile(HAVE_PIMLIBS_AKONADI ${CMAKE_BINARY_DIR} ${_source_file}
                 CMAKE_FLAGS "${_include_dirs};${QT_INCLUDE_DIR}"
 	        LINK_DIRECTORIES "-DLINK_DIRECTORIES:STRING=${QT_LIBRARY_DIR}"
-	        LINK_LIBRARIES "-DLINK_LIBRARIES:STRING=QtCore"
-	        COMPILE_OUTPUT_VARIABLE _compile_output_var)
+                LINK_LIBRARIES "-DLINK_LIBRARIES:STRING=${QT4_QTCORE_LIBRARY}"
+                OUTPUT_VARIABLE _try_kalarm_akonadi_compile )
 
     if(KALARM_USE_AKONADI AND NOT HAVE_PIMLIBS_AKONADI)
         message(FATAL_ERROR "\nIncompatible build options between KAlarm and kdepimlibs/kalarmcal.
