@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2004-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,9 @@
 /**  @file functions.h - miscellaneous functions */
 
 #include "editdlg.h"
+#ifdef USE_AKONADI
+#include "eventid.h"
+#endif
 
 #include <kalarmcal/kaevent.h>
 #ifdef USE_AKONADI
@@ -105,7 +108,7 @@ bool                editNewAlarm(const QString& templateName, QWidget* parent = 
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewAlarm(KAEvent::SubAction, QWidget* parent = 0, const AlarmText* = 0);
 void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
-bool                editAlarm(const QString& eventID, QWidget* parent = 0);
+bool                editAlarmById(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent*, QWidget* parent = 0);
 #ifdef USE_AKONADI
 void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, Akonadi::Collection&);
@@ -130,9 +133,16 @@ void                refreshAlarms();
 void                refreshAlarmsIfQueued();    // must only be called from KAlarmApp::processQueue()
 QString             runKMail(bool minimise);
 
+#ifdef USE_AKONADI
+QStringList         dontShowErrors(const EventId&);
+bool                dontShowErrors(const EventId&, const QString& tag);
+void                setDontShowErrors(const EventId&, const QStringList& tags = QStringList());
+void                setDontShowErrors(const EventId&, const QString& tag);
+#else
 QStringList         dontShowErrors(const QString& eventId);
 bool                dontShowErrors(const QString& eventId, const QString& tag);
 void                setDontShowErrors(const QString& eventId, const QStringList& tags = QStringList());
+#endif
 void                setDontShowErrors(const QString& eventId, const QString& tag);
 
 enum         // 'options' parameter values for addEvent(). May be OR'ed together.
@@ -172,7 +182,7 @@ inline UpdateStatus deleteTemplate(const QString& eventID, QWidget* msgParent = 
 void                deleteDisplayEvent(const QString& eventID);
 #ifdef USE_AKONADI
 UpdateStatus        reactivateEvent(KAEvent&, Akonadi::Collection* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
-UpdateStatus        reactivateEvents(QVector<KAEvent>&, QStringList& ineligibleIDs, Akonadi::Collection* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
+UpdateStatus        reactivateEvents(QVector<KAEvent>&, QVector<EventId>& ineligibleIDs, Akonadi::Collection* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        enableEvents(QVector<KAEvent>&, bool enable, QWidget* msgParent = 0);
 #else
 UpdateStatus        reactivateEvent(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);

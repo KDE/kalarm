@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.h  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2010-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #ifndef AKONADIMODEL_H
 #define AKONADIMODEL_H
+
+#include "eventid.h"
 
 #include <kalarmcal/kacalendar.h>
 #include <kalarmcal/kaevent.h>
@@ -75,6 +77,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         struct Event
         {
             Event(const KAEvent& e, const Akonadi::Collection& c) : event(e), collection(c) {}
+            EventId eventId() const       { return EventId(collection.id(), event.id()); }
+            bool    isConsistent() const  { return event.collectionId() == collection.id(); }
             KAEvent             event;
             Akonadi::Collection collection;
         };

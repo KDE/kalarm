@@ -52,7 +52,7 @@ class Undo : public QObject
         {
             Event() {}
 #ifdef USE_AKONADI
-            Event(const KAEvent&, Akonadi::Collection&);
+            Event(const KAEvent&, const Akonadi::Collection&);
 #else
             Event(const KAEvent&, AlarmResource*);
 #endif
@@ -68,7 +68,7 @@ class Undo : public QObject
         {
         public:
 #ifdef USE_AKONADI
-            void append(const KAEvent& e, Akonadi::Collection& c)  { QList<Event>::append(Event(e, c)); }
+            void append(const KAEvent& e, const Akonadi::Collection& c)  { QList<Event>::append(Event(e, c)); }
 #else
             void append(const KAEvent& e, AlarmResource* r)  { QList<Event>::append(Event(e, r)); }
 #endif
@@ -76,7 +76,7 @@ class Undo : public QObject
 
         static Undo*       instance();
 #ifdef USE_AKONADI
-        static void        saveAdd(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
+        static void        saveAdd(const KAEvent&, const Akonadi::Collection&, const QString& name = QString());
 #else
         static void        saveAdd(const KAEvent&, AlarmResource*, const QString& name = QString());
 #endif
@@ -85,7 +85,7 @@ class Undo : public QObject
         static void        saveDelete(const Event&, const QString& name = QString());
         static void        saveDeletes(const EventList&, const QString& name = QString());
 #ifdef USE_AKONADI
-        static void        saveReactivate(const KAEvent&, Akonadi::Collection&, const QString& name = QString());
+        static void        saveReactivate(const KAEvent&, const Akonadi::Collection&, const QString& name = QString());
 #else
         static void        saveReactivate(const KAEvent&, AlarmResource*, const QString& name = QString());
 #endif

@@ -340,7 +340,7 @@ int KAlarmApp::newInstance()
                 // Edit a specified existing alarm
                 if (!initCheck())
                     exitCode = 1;
-                else if (!KAlarm::editAlarm(options.eventId()))
+                else if (!KAlarm::editAlarmById(options.eventId()))
                 {
                     CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not editable", QString::fromLatin1("--edit"), options.eventId()));
                     exitCode = 1;
@@ -1243,19 +1243,33 @@ bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
 * c) Reschedule the event for its next repetition. If none remain, delete it.
 * If the event is deleted, it is removed from the calendar file and from every
 * main window instance.
-* Reply = false if event ID not found.
+* Reply = false if event ID not found, or if more than one event with the same
+*         ID is found.
 */
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
 {
     // Delete any expired wake-on-suspend config data
     KAlarm::checkRtcWakeConfig();
 
+#ifdef USE_AKONADI
+    KAEvent::List events = AlarmCalendar::resources()->events(eventID);
+    if (events.count() > 1)
+    {
+        kWarning() << "Multiple events found with ID" << eventID;
+        return false;
+    }
+    if (events.isEmpty())
+#else
     KAEvent* event = AlarmCalendar::resources()->event(eventID);
     if (!event)
+#endif
     {
         kWarning() << "Event ID not found:" << eventID;
         return false;
     }
+#ifdef USE_AKONADI
+    KAEvent* event = events[0];
+#endif
     switch (function)
     {
         case EVENT_CANCEL:
@@ -1673,7 +1687,11 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         {
             // Display a message, file or command output, provided that the same event
             // isn't already being displayed
+#ifdef USE_AKONADI
+            MessageWin* win = MessageWin::findEvent(EventId(event));
+#else
             MessageWin* win = MessageWin::findEvent(event.id());
+#endif
             // Find if we're changing a reminder message to the real message
             bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
             bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
@@ -1779,7 +1797,11 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         {
             // Play the sound, provided that the same event
             // isn't already playing
+#ifdef USE_AKONADI
+            MessageWin* win = MessageWin::findEvent(EventId(event));
+#else
             MessageWin* win = MessageWin::findEvent(event.id());
+#endif
             if (!win)
             {
                 // There isn't already a message for this event.
@@ -2240,7 +2262,11 @@ void setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
     if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
         err = KAEvent::CMD_ERROR_PRE_POST;
     event.setCommandError(err);
+#ifdef USE_AKONADI
+    KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
+#else
     KAEvent* ev = AlarmCalendar::resources()->event(event.id());
+#endif
     if (ev  &&  ev->commandError() != err)
         ev->setCommandError(err);
 #ifdef USE_AKONADI
@@ -2254,7 +2280,11 @@ void clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
 {
     KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
     event.setCommandError(newerr);
+#ifdef USE_AKONADI
+    KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
+#else
     KAEvent* ev = AlarmCalendar::resources()->event(event.id());
+#endif
     if (ev)
     {
         newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);

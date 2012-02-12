@@ -1,7 +1,7 @@
 /*
  *  wakedlg.cpp  -  dialog to configure wake-from-suspend alarms
  *  Program:  kalarm
- *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -144,7 +144,7 @@ void WakeFromSuspendDlg::showWakeClicked()
         if (!params.isEmpty())
         {
 #ifdef USE_AKONADI
-            KAEvent* event = AlarmCalendar::resources()->event(params[0]);
+            KAEvent* event = AlarmCalendar::resources()->event(EventId(params[0].toLongLong(), params[1]));
             if (event)
             {
                 mMainWindow->selectEvent(event->itemId());
@@ -196,7 +196,7 @@ void WakeFromSuspendDlg::useWakeClicked()
     {
         QStringList param;
 #ifdef USE_AKONADI
-        param << event.id() << QString::number(triggerTime);
+        param << QString::number(event.collectionId()) << event.id() << QString::number(triggerTime);
 #else
         param << event->id() << QString::number(triggerTime);
 #endif

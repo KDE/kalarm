@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 /** @file messagewin.h - displays an alarm message */
 
 #include "autoqpointer.h"
+#include "eventid.h"
 #include "mainwindowbase.h"
 
 #include <kalarmcal/kaevent.h>
@@ -80,7 +81,11 @@ class MessageWin : public MainWindowBase
         virtual void        show();
         virtual QSize       sizeHint() const;
         static int          instanceCount(bool excludeAlwaysHidden = false);
-        static MessageWin*  findEvent(const QString& eventID);
+#ifdef USE_AKONADI
+        static MessageWin*  findEvent(const EventId& eventId);
+#else
+        static MessageWin*  findEvent(const QString& eventId);
+#endif
         static void         redisplayAlarms();
         static void         stopAudio(bool wait = false);
         static bool         isAudioPlaying();
@@ -145,7 +150,11 @@ class MessageWin : public MainWindowBase
         static bool         isSpread(const QPoint& topLeft);
 
         static QList<MessageWin*>      mWindowList;    // list of existing message windows
+#ifdef USE_AKONADI
+        static QMap<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
+#else
         static QMap<QString, unsigned> mErrorMessages; // error messages currently displayed, by event ID
+#endif
         // Sound file playing
         static QPointer<AudioThread>   mAudioThread;   // thread to play audio file
         static MessageWin*             mAudioOwner;    // window which owns mAudioThread
@@ -157,8 +166,10 @@ class MessageWin : public MainWindowBase
         QDateTime           mCloseTime;       // local time at which window should be auto-closed
 #ifdef USE_AKONADI
         Akonadi::Item::Id   mEventItemId;
+        EventId             mEventId;
+#else
+        QString             mEventId;
 #endif
-        QString             mEventID;
         QString             mAudioFile;
         float               mVolume;
         float               mFadeVolume;

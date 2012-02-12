@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -482,13 +482,21 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
     }
     else
     {
+#ifdef USE_AKONADI
+        EventId oldId(oldEvent);
+#else
         QString oldId = oldEvent.id();
+#endif
         if (oldEvent.copyToKOrganizer())
         {
             // Tell KOrganizer to delete its old event.
             // But ignore errors, because the user could have manually
             // deleted it since KAlarm asked KOrganizer to set it up.
+#ifdef USE_AKONADI
+            deleteFromKOrganizer(oldId.eventId());
+#else
             deleteFromKOrganizer(oldId);
+#endif
         }
 #ifdef USE_AKONADI
         // Update the event in the calendar file, and get the new event ID
@@ -687,7 +695,11 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
             deleteWakeFromSuspendAlarm = true;
 
         // Remove "Don't show error messages again" for this alarm
+#ifdef USE_AKONADI
+        setDontShowErrors(EventId(*event));
+#else
         setDontShowErrors(id);
+#endif
     }
 
     if (warnErr == events.count())
@@ -786,10 +798,11 @@ UpdateStatus reactivateEvent(KAEvent& event, Collection* calendar, QWidget* msgP
 UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParent, bool showKOrgErr)
 #endif
 {
-    QStringList ids;
 #ifdef USE_AKONADI
+    QVector<EventId> ids;
     QVector<KAEvent> events(1, event);
 #else
+    QStringList ids;
     KAEvent::List events;
     events += &event;
 #endif
@@ -797,7 +810,7 @@ UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* calendar, QWidget* m
 }
 
 #ifdef USE_AKONADI
-UpdateStatus reactivateEvents(QVector<KAEvent>& events, QStringList& ineligibleIDs, Collection* col, QWidget* msgParent, bool showKOrgErr)
+UpdateStatus reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& ineligibleIDs, Collection* col, QWidget* msgParent, bool showKOrgErr)
 #else
 UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
 #endif
@@ -843,7 +856,11 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
             if (event->category() != CalEvent::ARCHIVED
             ||  !event->occursAfter(now, true))
             {
+#ifdef USE_AKONADI
+                ineligibleIDs += EventId(*event);
+#else
                 ineligibleIDs += event->id();
+#endif
                 continue;
             }
             ++count;
@@ -893,7 +910,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 #endif
 
 #ifdef USE_AKONADI
-            if (cal->event(event->id())    // no error if event doesn't exist in archived resource
+            if (cal->event(EventId(*event))  // no error if event doesn't exist in archived resource
             &&  !cal->deleteEvent(*event, false))   // don't save calendar after deleting
 #else
             if (cal->event(oldid)    // no error if event doesn't exist in archived resource
@@ -967,7 +984,11 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
                 // If we're disabling a display alarm, close any message window
                 if (!enable  &&  (event->actionTypes() & KAEvent::ACT_DISPLAY))
                 {
+#ifdef USE_AKONADI
+                    MessageWin* win = MessageWin::findEvent(EventId(*event));
+#else
                     MessageWin* win = MessageWin::findEvent(event->id());
+#endif
                     delete win;
                 }
 
@@ -1255,16 +1276,26 @@ void editNewTemplate(const KAEvent* preset, QWidget* parent)
 * if so, delete it from the config if it has expired.
 * If 'checkExists' is true, the config entry will only be returned if the
 * event exists.
-* Reply = config entry: [0] = event ID, [1] = trigger time (time_t).
+* Reply = config entry: [0] = event's collection ID (Akonadi only),
+*                       [1] = event ID,
+*                       [2] = trigger time (time_t).
 *       = empty list if none or expired.
 */
 QStringList checkRtcWakeConfig(bool checkEventExists)
 {
     KConfigGroup config(KGlobal::config(), "General");
     QStringList params = config.readEntry("RtcWake", QStringList());
+#ifdef USE_AKONADI
+    if (params.count() == 3  &&  params[2].toUInt() > KDateTime::currentUtcDateTime().toTime_t())
+#else
     if (params.count() == 2  &&  params[1].toUInt() > KDateTime::currentUtcDateTime().toTime_t())
+#endif
     {
+#ifdef USE_AKONADI
+        if (checkEventExists  &&  !AlarmCalendar::getEvent(EventId(params[0].toLongLong(), params[1])))
+#else
         if (checkEventExists  &&  !AlarmCalendar::getEvent(params[0]))
+#endif
             return QStringList();
         return params;                   // config entry is valid
     }
@@ -1426,7 +1457,11 @@ void editAlarm(KAEvent* event, QWidget* parent)
         viewAlarm(event, parent);
         return;
     }
+#ifdef USE_AKONADI
+    EventId id(*event);
+#else
     QString id = event->id();
+#endif
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
@@ -1469,18 +1504,30 @@ void editAlarm(KAEvent* event, QWidget* parent)
 }
 
 /******************************************************************************
-* Display the alarm edit dialog to edit a specified alarm.
-* An error occurs if the alarm is read-only or expired.
+* Display the alarm edit dialog to edit the alarm with the specified ID.
+* An error occurs if the alarm is not found, if there is more than one alarm
+* with the same ID, or if it is read-only or expired.
 */
-bool editAlarm(const QString& eventID, QWidget* parent)
+bool editAlarmById(const QString& eventID, QWidget* parent)
 {
+#ifdef USE_AKONADI
+    KAEvent::List events = AlarmCalendar::resources()->events(eventID);
+    if (events.count() > 1)
+    {
+        kWarning() << eventID << ": multiple events found";
+        return false;
+    }
+    if (events.isEmpty())
+#else
     KAEvent* event = AlarmCalendar::resources()->event(eventID);
     if (!event)
+#endif
     {
         kError() << eventID << ": event ID not found";
         return false;
     }
 #ifdef USE_AKONADI
+    KAEvent* event = events[0];
     if (AlarmCalendar::resources()->eventReadOnly(event->itemId()))
 #else
     if (AlarmCalendar::resources()->eventReadOnly(eventID))
@@ -1579,7 +1626,11 @@ void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, AlarmResource* cal
 
     // Update the displayed lists and the calendar file
     UpdateStatus status;
+#ifdef USE_AKONADI
+    if (AlarmCalendar::resources()->event(EventId(event)))
+#else
     if (AlarmCalendar::resources()->event(event.id()))
+#endif
     {
         // The old alarm hasn't expired yet, so replace it
         Undo::Event undo(event, calendar);
@@ -1677,7 +1728,11 @@ void refreshAlarmsIfQueued()
             KAEvent* event = events[i];
             if (!event->enabled()  &&  (event->actionTypes() & KAEvent::ACT_DISPLAY))
             {
+#ifdef USE_AKONADI
+                MessageWin* win = MessageWin::findEvent(EventId(*event));
+#else
                 MessageWin* win = MessageWin::findEvent(event->id());
+#endif
                 delete win;
             }
         }
@@ -1805,22 +1860,35 @@ void Private::windowAdded(WId w)
 /******************************************************************************
 * Return the Don't-show-again error message tags set for a specified alarm ID.
 */
+#ifdef USE_AKONADI
+QStringList dontShowErrors(const EventId& eventId)
+#else
 QStringList dontShowErrors(const QString& eventId)
+#endif
 {
     if (eventId.isEmpty())
         return QStringList();
     KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    return group.readEntry(eventId, QStringList());
+#ifdef USE_AKONADI
+    const QString id = QString("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+#else
+    const QString id(eventId);
+#endif
+    return group.readEntry(id, QStringList());
 }
 
 /******************************************************************************
 * Check whether the specified Don't-show-again error message tag is set for an
 * alarm ID.
 */
+#ifdef USE_AKONADI
+bool dontShowErrors(const EventId& eventId, const QString& tag)
+#else
 bool dontShowErrors(const QString& eventId, const QString& tag)
+#endif
 {
-    if (tag.isEmpty()  ||  eventId.isEmpty())
+    if (tag.isEmpty())
         return false;
     QStringList tags = dontShowErrors(eventId);
     return tags.indexOf(tag) >= 0;
@@ -1830,16 +1898,25 @@ bool dontShowErrors(const QString& eventId, const QString& tag)
 * Reset the Don't-show-again error message tags for an alarm ID.
 * If 'tags' is empty, the config entry is deleted.
 */
+#ifdef USE_AKONADI
+void setDontShowErrors(const EventId& eventId, const QStringList& tags)
+#else
 void setDontShowErrors(const QString& eventId, const QStringList& tags)
+#endif
 {
     if (eventId.isEmpty())
         return;
     KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
+#ifdef USE_AKONADI
+    const QString id = QString("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+#else
+    const QString id(eventId);
+#endif
     if (tags.isEmpty())
-        group.deleteEntry(eventId);
+        group.deleteEntry(id);
     else
-        group.writeEntry(eventId, tags);
+        group.writeEntry(id, tags);
     group.sync();
 }
 
@@ -1847,17 +1924,26 @@ void setDontShowErrors(const QString& eventId, const QStringList& tags)
 * Set the specified Don't-show-again error message tag for an alarm ID.
 * Existing tags are unaffected.
 */
+#ifdef USE_AKONADI
+void setDontShowErrors(const EventId& eventId, const QString& tag)
+#else
 void setDontShowErrors(const QString& eventId, const QString& tag)
+#endif
 {
-    if (tag.isEmpty()  ||  eventId.isEmpty())
+    if (eventId.isEmpty()  ||  tag.isEmpty())
         return;
     KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    QStringList tags = group.readEntry(eventId, QStringList());
+#ifdef USE_AKONADI
+    const QString id = QString("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+#else
+    const QString id(eventId);
+#endif
+    QStringList tags = group.readEntry(id, QStringList());
     if (tags.indexOf(tag) < 0)
     {
         tags += tag;
-        group.writeEntry(eventId, tags);
+        group.writeEntry(id, tags);
         group.sync();
     }
 }

@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -882,18 +882,22 @@ void MainWindow::slotReactivate()
 
     // Add the alarms to the displayed lists and to the calendar file
     Undo::EventList undos;
+#ifdef USE_AKONADI
+    QVector<EventId> ineligibleIDs;
+    KAlarm::reactivateEvents(events, ineligibleIDs, 0, this);
+#else
     QStringList ineligibleIDs;
     KAlarm::reactivateEvents(events, ineligibleIDs, 0, this);
+#endif
 
     // Create the undo list, excluding ineligible events
     AlarmCalendar* resources = AlarmCalendar::resources();
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
 #ifdef USE_AKONADI
-        if (!ineligibleIDs.contains(events[i].id()))
+        if (!ineligibleIDs.contains(EventId(events[i])))
         {
-            Akonadi::Collection c = resources->collectionForEvent(events[i].itemId());
-            undos.append(events[i], c);
+            undos.append(events[i], resources->collectionForEvent(events[i].itemId()));
         }
 #else
         QString id = events[i]->id();
@@ -1590,7 +1594,7 @@ void MainWindow::slotSelection()
     for (int i = 0;  i < count;  ++i)
     {
 #ifdef USE_AKONADI
-        KAEvent* ev = resources->event(events[i].id());   // get up-to-date status
+        KAEvent* ev = resources->event(EventId(events[i]));   // get up-to-date status
         KAEvent* event = ev ? ev : &events[i];
 #else
         KAEvent* event = events[i];

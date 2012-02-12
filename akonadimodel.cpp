@@ -1632,7 +1632,11 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
         QModelIndex ix = index(row, 0, parent);
         KAEvent evnt = event(ix.data(ItemRole).value<Item>());
         if (evnt.isValid())
-            events += Event(evnt, data(ix, ParentCollectionRole).value<Collection>());
+        {
+            Collection c = data(ix, ParentCollectionRole).value<Collection>();
+            evnt.setCollectionId(c.id());
+            events += Event(evnt, c);
+        }
     }
     return events;
 }
@@ -1734,7 +1738,9 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
         {
             // Wait to ensure that the base EntityTreeModel has processed the
             // itemChanged() signal first, before we emit eventChanged().
-            mPendingEventChanges.enqueue(Event(evnt, data(index, ParentCollectionRole).value<Collection>()));
+            Collection c = data(index, ParentCollectionRole).value<Collection>();
+            evnt.setCollectionId(c.id());
+            mPendingEventChanges.enqueue(Event(evnt, c));
             QTimer::singleShot(0, this, SLOT(slotEmitEventChanged()));
             break;
         }

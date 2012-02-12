@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,7 +42,7 @@ static int maxCount = 12;
 
 // Simplify access to Undo::Event struct
 #ifdef USE_AKONADI
-#define RESOURCE_PARAM_TYPE  Collection&
+#define RESOURCE_PARAM_TYPE  const Collection&
 #define EVENT_RESOURCE collection
 #else
 #define RESOURCE_PARAM_TYPE  AlarmResource*
@@ -137,19 +137,19 @@ class UndoAdd : public UndoItem
 #else
         virtual AlarmResource* resource() const  { return mResource; }
 #endif
-        virtual QString    eventID() const       { return mEventID; }
-        virtual QString    newEventID() const    { return mEventID; }
+        virtual QString    eventID() const       { return mEventId; }
+        virtual QString    newEventID() const    { return mEventId; }
         virtual UndoItem*  restore()             { return doRestore(); }
     protected:
         UndoItem*          doRestore(bool setArchive = false);
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
     private:
 #ifdef USE_AKONADI
-                Collection     mResource;  // collection containing the event
+        Collection     mResource;  // collection containing the event
 #else
         AlarmResource* mResource;  // resource calendar containing the event
 #endif
-        QString        mEventID;
+        QString        mEventId;
         QString        mDescription;
 };
 
@@ -167,18 +167,18 @@ class UndoEdit : public UndoItem
 #else
         virtual AlarmResource* resource() const  { return mResource; }
 #endif
-        virtual QString    eventID() const       { return mNewEventID; }
+        virtual QString    eventID() const       { return mNewEventId; }
         virtual QString    oldEventID() const    { return mOldEvent->id(); }
-        virtual QString    newEventID() const    { return mNewEventID; }
+        virtual QString    newEventID() const    { return mNewEventId; }
         virtual UndoItem*  restore();
     private:
 #ifdef USE_AKONADI
-                Collection     mResource;  // collection containing the event
+        Collection     mResource;  // collection containing the event
 #else
         AlarmResource* mResource;  // resource calendar containing the event
 #endif
         KAEvent*       mOldEvent;
-        QString        mNewEventID;
+        QString        mNewEventId;
         QString        mDescription;
         QStringList    mDontShowErrors;
 };
@@ -205,7 +205,7 @@ class UndoDelete : public UndoItem
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
     private:
 #ifdef USE_AKONADI
-                Collection     mResource;  // collection containing the event
+        Collection     mResource;  // collection containing the event
 #else
         AlarmResource* mResource;  // resource calendar containing the event
 #endif
@@ -780,7 +780,7 @@ bool UndoMulti<T>::deleteID(const QString& id)
 UndoAdd::UndoAdd(Undo::Type type, const Undo::Event& undo, const QString& name)
     : UndoItem(type, name),
       mResource(undo.EVENT_RESOURCE),
-      mEventID(undo.event.id())
+      mEventId(undo.event.id())
 {
     setCalendar(undo.event.category());
     mDescription = UndoItem::description(undo.event);    // calendar must be set before calling this
@@ -789,7 +789,7 @@ UndoAdd::UndoAdd(Undo::Type type, const Undo::Event& undo, const QString& name)
 UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE resource, const QString& name)
     : UndoItem(type, name),
       mResource(resource),
-      mEventID(event.id())
+      mEventId(event.id())
 {
     setCalendar(event.category());
     mDescription = UndoItem::description(event);    // calendar must be set before calling this
@@ -798,7 +798,7 @@ UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE reso
 UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE resource, const QString& name, CalEvent::Type cal)
     : UndoItem(type, name),
       mResource(resource),
-      mEventID(CalEvent::uid(event.id(), cal))    // convert if old-style event ID
+      mEventId(CalEvent::uid(event.id(), cal))    // convert if old-style event ID
 {
     setCalendar(cal);
     mDescription = UndoItem::description(event);    // calendar must be set before calling this
@@ -812,8 +812,12 @@ UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE reso
 UndoItem* UndoAdd::doRestore(bool setArchive)
 {
     // Retrieve the current state of the alarm
-    kDebug() << mEventID;
-    const KAEvent* ev = AlarmCalendar::getEvent(mEventID);
+    kDebug() << mEventId;
+#ifdef USE_AKONADI
+    const KAEvent* ev = AlarmCalendar::getEvent(EventId(mResource.id(), mEventId));
+#else
+    const KAEvent* ev = AlarmCalendar::getEvent(mEventId);
+#endif
     if (!ev)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
@@ -923,7 +927,7 @@ UndoEdit::UndoEdit(Undo::Type type, const KAEvent& oldEvent, const QString& newE
     : UndoItem(type),
       mResource(resource),
       mOldEvent(new KAEvent(oldEvent)),
-      mNewEventID(newEventID),
+      mNewEventId(newEventID),
       mDescription(description),
       mDontShowErrors(dontShowErrors)
 {
@@ -942,9 +946,13 @@ UndoEdit::~UndoEdit()
 */
 UndoItem* UndoEdit::restore()
 {
-    kDebug() << mNewEventID;
+    kDebug() << mNewEventId;
     // Retrieve the current state of the alarm
-    const KAEvent* event = AlarmCalendar::getEvent(mNewEventID);
+#ifdef USE_AKONADI
+    const KAEvent* event = AlarmCalendar::getEvent(EventId(mResource.id(), mNewEventId));
+#else
+    const KAEvent* event = AlarmCalendar::getEvent(mNewEventId);
+#endif
     if (!event)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
@@ -954,7 +962,11 @@ UndoItem* UndoEdit::restore()
 
     // Create a redo item to restore the edit
     Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
-    UndoItem* undo = new UndoEdit(t, newEvent, mOldEvent->id(), mResource, KAlarm::dontShowErrors(mNewEventID), mDescription);
+#ifdef USE_AKONADI
+    UndoItem* undo = new UndoEdit(t, newEvent, mOldEvent->id(), mResource, KAlarm::dontShowErrors(EventId(newEvent)), mDescription);
+#else
+    UndoItem* undo = new UndoEdit(t, newEvent, mOldEvent->id(), mResource, KAlarm::dontShowErrors(mNewEventId), mDescription);
+#endif
 
     switch (calendar())
     {
@@ -977,7 +989,11 @@ UndoItem* UndoEdit::restore()
                         mRestoreWarningKorg = status;
                     // fall through to default
                 default:
+#ifdef USE_AKONADI
+                    KAlarm::setDontShowErrors(EventId(*mOldEvent), mDontShowErrors);
+#else
                     KAlarm::setDontShowErrors(mOldEvent->id(), mDontShowErrors);
+#endif
                     break;
             }
             break;
@@ -1107,7 +1123,11 @@ UndoItem* UndoDelete::restore()
                         break;
                 }
             }
+#ifdef USE_AKONADI
+            KAlarm::setDontShowErrors(EventId(*mEvent), mDontShowErrors);
+#else
             KAlarm::setDontShowErrors(mEvent->id(), mDontShowErrors);
+#endif
             break;
         case CalEvent::TEMPLATE:
 #ifdef USE_AKONADI
@@ -1316,7 +1336,11 @@ Undo::Event::Event(const KAEvent& e, RESOURCE_PARAM_TYPE r)
       EVENT_RESOURCE(r)
 {
     if (e.category() == CalEvent::ACTIVE)
+#ifdef USE_AKONADI
+        dontShowErrors = KAlarm::dontShowErrors(EventId(e));
+#else
         dontShowErrors = KAlarm::dontShowErrors(e.id());
+#endif
 }
 
 // vim: et sw=4:
