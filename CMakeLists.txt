@@ -226,7 +226,7 @@ if(${KDE_VERSION} VERSION_GREATER 4.6.40)
 int main() { return 0; }")
     set(_source_file ${CMAKE_BINARY_DIR}/CMakeTmp/check_kalarmcal_akonadi.cpp)
     file(WRITE "${_source_file}" "${_source}")
-    set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${KDE4_INCLUDES}")
+    set(_include_dirs "-DINCLUDE_DIRECTORIES:STRING=${KDEPIMLIBS_INCLUDE_DIRS}")
     set(_try_kalarm_akonadi_compile)
     try_compile(HAVE_PIMLIBS_AKONADI ${CMAKE_BINARY_DIR} ${_source_file}
                 CMAKE_FLAGS "${_include_dirs};${QT_INCLUDE_DIR}"
