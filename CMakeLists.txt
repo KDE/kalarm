@@ -11,8 +11,11 @@ if(${KDE_VERSION} VERSION_LESS 4.6.40)
 endif()
 
 if(KALARM_USE_KRESOURCES AND KALARM_USE_AKONADI)
-    message(STATUS "Kalarmcal was built without Akonadi support. KAlarm will NOT be built with Akonadi support")
+    message(STATUS "Kalarmcal (in kdepimlibs) was built to use KResources, not Akonadi. KAlarm will NOT be built with Akonadi support.")
     set(KALARM_USE_AKONADI FALSE)
+elseif(NOT KALARM_USE_KRESOURCES AND NOT KALARM_USE_AKONADI)
+    message(STATUS "Kalarmcal (in kdepimlibs) was built to use Akonadi, not KResources. KAlarm will be built WITH Akonadi support.")
+    set(KALARM_USE_AKONADI TRUE)
 endif()
 
 if(KALARM_USE_AKONADI)
