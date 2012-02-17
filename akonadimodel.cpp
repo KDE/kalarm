@@ -1260,24 +1260,37 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type
 }
 #endif
 
-KAEvent AkonadiModel::event(const QModelIndex& index) const
-{
-    return event(index.data(ItemRole).value<Item>());
-}
-
 KAEvent AkonadiModel::event(Item::Id itemId) const
 {
     QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return KAEvent();
-    return event(ix);
+    return event(ix.data(ItemRole).value<Item>(), ix, 0);
 }
 
-KAEvent AkonadiModel::event(const Item& item) const
+KAEvent AkonadiModel::event(const QModelIndex& index) const
+{
+    return event(index.data(ItemRole).value<Item>(), index, 0);
+}
+
+KAEvent AkonadiModel::event(const Item& item, const QModelIndex& index, Collection* collection) const
 {
     if (!item.isValid()  ||  !item.hasPayload<KAEvent>())
         return KAEvent();
-    return item.payload<KAEvent>();
+    const QModelIndex ix = index.isValid() ? index : itemIndex(item.id());
+    if (!ix.isValid())
+        return KAEvent();
+    KAEvent e = item.payload<KAEvent>();
+    if (e.isValid())
+    {
+
+        Collection c = data(index, ParentCollectionRole).value<Collection>();
+        // Set collection ID using a const method, to avoid unnecessary copying of KAEvent
+        e.setCollectionId_const(c.id());
+        if (collection)
+            *collection = c;
+    }
+    return e;
 }
 
 #if 0
@@ -1629,14 +1642,11 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
     EventList events;
     for (int row = start;  row <= end;  ++row)
     {
+        Collection c;
         QModelIndex ix = index(row, 0, parent);
-        KAEvent evnt = event(ix.data(ItemRole).value<Item>());
+        KAEvent evnt = event(ix.data(ItemRole).value<Item>(), ix, &c);
         if (evnt.isValid())
-        {
-            Collection c = data(ix, ParentCollectionRole).value<Collection>();
-            evnt.setCollectionId(c.id());
             events += Event(evnt, c);
-        }
     }
     return events;
 }

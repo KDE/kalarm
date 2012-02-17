@@ -144,7 +144,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Return the alarm with the specified unique identifier.
          *  @return the event, or invalid event if no such event exists.
          */
-        KAEvent event(const Akonadi::Item&) const;
+        KAEvent event(const Akonadi::Item& item) const  { return event(item, QModelIndex(), 0); }
         KAEvent event(Akonadi::Item::Id) const;
         KAEvent event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
@@ -279,6 +279,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         };
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
+        KAEvent   event(const Akonadi::Item&, const QModelIndex&, Akonadi::Collection*) const;
         QString   alarmTimeText(const DateTime&) const;
         QString   timeToAlarmText(const DateTime&) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
