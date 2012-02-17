@@ -472,6 +472,14 @@ class KALARMCAL_EXPORT KAEvent
 #ifndef KALARMCAL_USE_KRESOURCES
         /** Set the ID of the Akonadi Collection which contains the event. */
         void setCollectionId(Akonadi::Collection::Id id);
+        /** Set the ID of the Akonadi Collection which contains the event.
+         *  \warning This is a const method, which means that any other instance
+         *           which references the same shared data will also be
+         *           updated. It is designed to be used when a KAEvent is
+         *           being created from an Akonadi Item, to avoid unnecessary
+         *           copying. Use with caution!
+         */
+        void setCollectionId_const(Akonadi::Collection::Id id) const;
         /** Return the ID of the Akonadi Collection which contains the event. */
         Akonadi::Collection::Id  collectionId() const;
 

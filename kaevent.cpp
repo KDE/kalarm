@@ -306,7 +306,7 @@ class KAEvent::Private : public QSharedData
 #ifndef KALARMCAL_USE_KRESOURCES
         QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
         Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
-        Akonadi::Collection::Id mCollectionId; // ID of collection containing the event, or for a displaying event,
+        mutable Akonadi::Collection::Id mCollectionId; // ID of collection containing the event, or for a displaying event,
                                                // saved collection ID (not the collection the event is in)
 #else
         QString            mOriginalResourceId;// saved resource ID (not the resource the event is in)
@@ -1884,6 +1884,11 @@ int KAEvent::revision() const
 
 #ifndef KALARMCAL_USE_KRESOURCES
 void KAEvent::setCollectionId(Akonadi::Collection::Id id)
+{
+    d->mCollectionId = id;
+}
+
+void KAEvent::setCollectionId_const(Akonadi::Collection::Id id) const
 {
     d->mCollectionId = id;
 }
