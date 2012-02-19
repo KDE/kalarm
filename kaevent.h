@@ -1238,9 +1238,9 @@ class KALARMCAL_EXPORT KAEvent
          *  @return @c true if successful, @c false if alarm was not copied.
          */
 #ifndef KALARMCAL_USE_KRESOURCES
-        bool setDisplaying(const KAEvent& event, KAAlarm::Type type, Akonadi::Collection::Id colId, const KDateTime& dt, bool showEdit, bool showDefer);
+        bool setDisplaying(const KAEvent& event, KAAlarm::Type type, Akonadi::Collection::Id colId, const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer);
 #else
-        bool setDisplaying(const KAEvent& event, KAAlarm::Type type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
+        bool setDisplaying(const KAEvent& event, KAAlarm::Type type, const QString& resourceID, const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer);
 #endif
 
 #ifndef KALARMCAL_USE_KRESOURCES
