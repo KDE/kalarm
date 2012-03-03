@@ -879,7 +879,7 @@ QColor AkonadiModel::foregroundColor(const Akonadi::Collection& collection, cons
         colour = Preferences::archivedColour();
     else if (mimeTypes.contains(KAlarmCal::MIME_TEMPLATE))
         colour = KColorScheme(QPalette::Active).foreground(KColorScheme::LinkText).color();
-    if (colour.isValid()  &&  (collection.rights() & writableRights) != writableRights)
+    if (colour.isValid()  &&  isWritable(collection) <= 0)
         return KColorUtils::lighten(colour, 0.25);
     return colour;
 }
