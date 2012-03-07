@@ -1284,7 +1284,7 @@ KAEvent AkonadiModel::event(const Item& item, const QModelIndex& index, Collecti
     if (e.isValid())
     {
 
-        Collection c = data(index, ParentCollectionRole).value<Collection>();
+        Collection c = data(ix, ParentCollectionRole).value<Collection>();
         // Set collection ID using a const method, to avoid unnecessary copying of KAEvent
         e.setCollectionId_const(c.id());
         if (collection)
