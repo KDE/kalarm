@@ -50,7 +50,11 @@ struct EventId : public QPair<Akonadi::Collection::Id, QString>
     QString                 eventId() const       { return second; }
 };
 
-inline QDebug operator<<(QDebug s, const EventId& id)  { return s << id.eventId(); }
+inline QDebug operator<<(QDebug s, const EventId& id)
+{
+    s.nospace() << "\"" << id.collectionId() << "::" << id.eventId().toLatin1().constData() << "\"";
+    return s.space();
+}
 
 #endif // EVENTID_H
 
