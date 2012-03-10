@@ -1380,6 +1380,8 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 */
 void EditEmailAlarmDlg::type_aboutToTry()
 {
+    // Disconnect any previous connections, to prevent multiple messages being output
+    disconnect(theApp(), SIGNAL(execAlarmSuccess()), this, SLOT(slotTrySuccess()));
     connect(theApp(), SIGNAL(execAlarmSuccess()), SLOT(slotTrySuccess()));
 }
 
@@ -1388,6 +1390,7 @@ void EditEmailAlarmDlg::type_aboutToTry()
 */
 void EditEmailAlarmDlg::slotTrySuccess()
 {
+    disconnect(theApp(), SIGNAL(execAlarmSuccess()), this, SLOT(slotTrySuccess()));
     QString msg;
     QString to = KAEvent::joinEmailAddresses(mEmailAddresses, "<nl/>");
     to.replace('<', "&lt;");
