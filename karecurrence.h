@@ -35,6 +35,8 @@ namespace KCalCore { class Recurrence; }
 namespace KCal { class Recurrence; }
 #endif
 
+#include <QBitArray>
+
 namespace KAlarmCal
 {
 
