@@ -21,7 +21,9 @@
 #ifndef DEFERDLG_H
 #define DEFERDLG_H
 
+#ifdef USE_AKONADI
 #include "eventid.h"
+#endif
 
 #include <kalarmcal/datetime.h>
 #include <akonadi/collection.h>

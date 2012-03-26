@@ -24,13 +24,17 @@
 /** @file messagewin.h - displays an alarm message */
 
 #include "autoqpointer.h"
+#ifdef USE_AKONADI
 #include "eventid.h"
+#endif
 #include "mainwindowbase.h"
 
 #include <kalarmcal/kaevent.h>
 
+#ifdef USE_AKONADI
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
+#endif
 
 #include <QList>
 #include <QMap>
