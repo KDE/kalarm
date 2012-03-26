@@ -52,21 +52,23 @@ kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 
 if(USE_KRESOURCES)
     target_link_libraries(kalarmcal
-		          kcal
+                          kcal
                           kholidays
                           kpimidentities
-			  ${KDE4_KDECORE_LIBS}
-			  ${QT_QTCORE_LIBRARY}
-			 )
+                          ${KDE4_KDECORE_LIBS}
+                          ${QT_QTGUI_LIBRARY}
+                          ${QT_QTCORE_LIBRARY}
+                         )
 else()
     target_link_libraries(kalarmcal
                           akonadi-kde
                           kcalcore
                           kholidays
                           kpimidentities
-			  ${KDE4_KDECORE_LIBS}
-			  ${QT_QTCORE_LIBRARY}
-			 )
+                          ${KDE4_KDECORE_LIBS}
+                          ${QT_QTGUI_LIBRARY}
+                          ${QT_QTCORE_LIBRARY}
+                         )
 endif()
 
 set_target_properties(kalarmcal PROPERTIES 
