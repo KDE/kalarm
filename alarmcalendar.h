@@ -120,7 +120,7 @@ class AlarmCalendar : public QObject
         bool                  deleteEvent(const QString& eventID, bool save = false);
 #endif
         void                  purgeEvents(const KAEvent::List&);
-        bool                  isOpen() const         { return mOpen; }
+        bool                  isOpen();
         QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
         QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.url(); }
         void                  adjustStartOfDay();

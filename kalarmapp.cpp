@@ -2229,7 +2229,8 @@ bool KAlarmApp::initCheck(bool calendarOnly)
          */
         AlarmCalendar::displayCalendar()->open();
 
-        AlarmCalendar::resources()->open();
+        if (!AlarmCalendar::resources()->open())
+            return false;
         setArchivePurgeDays();
 
         firstTime = false;

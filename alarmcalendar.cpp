@@ -224,11 +224,26 @@ AlarmCalendar::~AlarmCalendar()
 }
 
 /******************************************************************************
+* Check whether the calendar is open.
+*/
+bool AlarmCalendar::isOpen()
+{
+#ifndef USE_AKONADI
+    if (mOpen  &&  mCalType == RESOURCES  &&  !AlarmResources::instance())
+    {
+        mCalendar = 0;
+        mOpen = false;
+    }
+#endif
+    return mOpen;
+}
+
+/******************************************************************************
 * Open the calendar if not already open, and load it into memory.
 */
 bool AlarmCalendar::open()
 {
-    if (mOpen)
+    if (isOpen())
         return true;
     if (mCalType == RESOURCES)
     {
@@ -287,7 +302,7 @@ bool AlarmCalendar::open()
         mCalendar = 0;
 #endif
     }
-    return mOpen;
+    return isOpen();
 }
 
 /******************************************************************************
