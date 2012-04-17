@@ -133,7 +133,7 @@ KAlarmApp::KAlarmApp()
     connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
 
     setQuitOnLastWindowClosed(false);
-    Preferences::self()->readConfig();
+    Preferences::self();    // read KAlarm configuration
     if (!Preferences::noAutoStart())
     {
         Preferences::setAutoStart(true);

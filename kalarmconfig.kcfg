@@ -61,6 +61,14 @@
       <label context="@label">KAlarm version</label>
       <whatsthis context="@info:whatsthis">KAlarm version which wrote this file.</whatsthis>
     </entry>
+    <entry name="Backend" type="Enum" hidden="true">
+      <label context="@label">Data storage backend</label>
+      <whatsthis context="@info:whatsthis">Data storage backend currently used by KAlarm.</whatsthis>
+      <choices name="Backend">
+        <choice name="Kresources"><label context="@option">KResources</label></choice>
+        <choice name="Akonadi"><label context="@option">Akonadi</label></choice>
+      </choices>
+    </entry>
     <entry name="Base_TimeZone" key="TimeZone" type="String">
       <label context="@label">Time zone</label>
       <whatsthis context="@info:whatsthis">Select the time zone which &lt;application>KAlarm&lt;/application> should use as its default for displaying and entering dates and times.</whatsthis>

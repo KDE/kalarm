@@ -45,6 +45,8 @@ class Preferences : public PreferencesBase
         static void             setAutoStartChangedByUser(bool c){ mAutoStartChangedByUser = c; }
 
         // Access to settings
+        static QString          previousVersion()                { return mPreviousVersion; }
+        static Backend          previousBackend()                { return mPreviousBackend; }
         static void             setAskAutoStart(bool yes);
         static KTimeZone        timeZone(bool reload = false);
         static void             setTimeZone(const KTimeZone&);
@@ -108,6 +110,8 @@ class Preferences : public PreferencesBase
         static bool             mUsingDefaults;
         static KTimeZone        mSystemTimeZone;
         static KHolidays::HolidayRegion* mHolidays;
+        static QString          mPreviousVersion;  // last KAlarm version which wrote the config file
+        static Backend          mPreviousBackend;  // backend used by last used version of KAlarm
 
         // All the following members are accessed by the Preferences dialog classes
         static int              mMessageButtonDelay;  // 0 = scatter; -1 = no delay, no scatter; >0 = delay, no scatter

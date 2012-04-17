@@ -71,6 +71,8 @@ Preferences*   Preferences::mInstance = 0;
 bool           Preferences::mUsingDefaults = false;
 KTimeZone      Preferences::mSystemTimeZone;
 HolidayRegion* Preferences::mHolidays = 0;   // always non-null after Preferences initialisation
+QString        Preferences::mPreviousVersion;
+Preferences::Backend Preferences::mPreviousBackend;
 // Change tracking
 bool           Preferences::mAutoStartChangedByUser = false;
 
@@ -86,7 +88,6 @@ Preferences* Preferences::self()
         KAMessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 
         mInstance = new Preferences;
-        mInstance->readConfig();
     }
     return mInstance;
 }
@@ -97,6 +98,15 @@ Preferences::Preferences()
     QObject::connect(this, SIGNAL(base_TimeZoneChanged(QString)), SLOT(timeZoneChange(QString)));
     QObject::connect(this, SIGNAL(base_HolidayRegionChanged(QString)), SLOT(holidaysChange(QString)));
     QObject::connect(this, SIGNAL(base_WorkTimeChanged(QDateTime,QDateTime,int)), SLOT(workTimeChange(QDateTime,QDateTime,int)));
+
+    readConfig();
+    // Fetch the KAlarm version and backend which wrote the previous config file
+    mPreviousVersion = version();
+    mPreviousBackend = backend();
+    // Update the KAlarm version in the config file, but don't call
+    // writeConfig() here - leave it to be written only if the config file
+    // is updated with other data.
+    setVersion(KALARM_VERSION);
 }
 
 void Preferences::setAskAutoStart(bool yes)

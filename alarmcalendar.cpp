@@ -88,6 +88,7 @@ bool AlarmCalendar::initialiseCalendars()
 #ifdef USE_AKONADI
     AkonadiModel::instance();
     CollectionControlModel::setAskDestinationPolicy(Preferences::askResource());
+    Preferences::setBackend(Preferences::Akonadi);
 #else
     AlarmResources::setDebugArea(5951);
     AlarmResources::setReservedFile(displayCal);
@@ -99,7 +100,9 @@ bool AlarmCalendar::initialiseCalendars()
     }
     resources->setAskDestinationPolicy(Preferences::askResource());
     resources->showProgress(true);
+    Preferences::setBackend(Preferences::Kresources);
 #endif
+    Preferences::self()->writeConfig();
     mResourcesCalendar = new AlarmCalendar();
     mDisplayCalendar = new AlarmCalendar(displayCal, CalEvent::DISPLAYING);
     KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
