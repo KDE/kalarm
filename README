@@ -1,27 +1,34 @@
 KAlarm
+======
 
-KAlarm is a personal alarm message, command and email scheduler. It lets you
-set up personal alarm messages which pop up on the screen at the chosen time,
-or you can schedule commands to be executed or emails to be sent.
+KAlarm is a personal alarm message, audio, command and email scheduler.
 
-When setting up or modifying an alarm, the options available let you:
- * choose whether the alarm should display a text message, display a text file,
-   execute a command, or send an email.
- * configure the alarm to recur on an hours/minutes, daily, weekly, monthly or
-   annual basis, or set it to trigger every time you log in.
- * specify that a reminder should be displayed in advance of the main alarm
+KAlarm provides a graphical interface to schedule personal timed events -
+pop-up alarm messages, playing audio files, command execution and the sending
+of emails. It has a wide range of options, including:
+
+ * Configuring alarms to recur on an hours/minutes, daily, weekly, monthly or
+   annual basis, or setting them to trigger every time you log in.
+
+ * Choice of whether or not an alarm should be cancelled if it can't be
+   triggered at its scheduled time. An alarm can only be triggered while you
+   are logged in and running a graphical environment. If you choose not to
+   cancel the alarm if it can't be triggered at the correct time, it will be
+   triggered when you eventually log in.
+
+Options for pop-up alarms include:
+
+ * Speaking the message.
+
+ * Playing a sound file when the alarm is displayed.
+
+ * Setting a reminder to be displayed in advance of, or after, the main alarm
    time(s).
- * choose a colour and font for displaying the alarm message.
- * specify an audible beep or a sound file to play when the message is
-   displayed.
- * choose whether or not the alarm should be cancelled if it can't be triggered
-   at its scheduled time. An alarm can only be triggered while you are logged
-   in and running a graphical environment. If you choose not to cancel the
-   alarm if it can't be triggered at the correct time, it will be triggered
-   when you eventually log in.
+
+ * Selection of the alarm message's colour and font.
 
 In addition to its graphical mode, alarms may also be scheduled from the
-command line, or via DCOP calls from other programs.
+command line, or via D-Bus calls from other programs.
 
 See the INSTALL file for installation instructions.
 

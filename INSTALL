@@ -1,42 +1,76 @@
+Requirements
+============
+
+The following KDE packages must be installed in order to run KAlarm
+successfully:
+   - kdelibs
+   - kdepimlibs
+   - kdebase-runtime (specifically, ktimezoned)
+   - kdepim-runtime (for the Akonadi based version of KAlarm)
+
+The following optional packages enhance KAlarm if they are installed:
+   - Jovie (from kdeaccessibility): if installed and configured (together with
+	   compatible speech synthesiser packages), it allows KAlarm to speak
+	   alarm messages when alarms are displayed.
+
 Setting up KAlarm on non-KDE desktops
 =====================================
 
-Although KAlarm is a KDE application and requires KDE to be installed on your
-system, you can still use it while running other desktops or window managers.
+Although KAlarm is a KDE application and requires the above KDE packages to be
+installed on your system, you can still use it while running other desktops or
+window managers.
 
 In order to have alarms monitored and displayed automatically from one login
 session to the next, KAlarm must be run automatically when you graphically log
 in or otherwise start X. If you are running the KDE desktop, the KAlarm
 installation process sets this up for you.
 
-If you want to use KAlarm with Gnome or another non-KDE window manager, you
-have two alternatives:
+- GNOME 2
+  =======
+  Run Desktop Preferences -> Advanced -> Sessions. In the Sessions dialog,
+  select the Startup Programs tab and click Add. Enter
+  'kalarmautostart kalarm --tray' as the Startup Command. This will run KAlarm
+  in the system tray every time you start up.
 
-1)  If your desktop environment/window manager performs session restoration,
-    ensure that the kalarm is included in the session restoration, and that
-    after login or restarting X kalarm is running with a '-session' command
-    line option, e.g.
+- Other Window Managers
+  =====================
+  If you want to use KAlarm with a non-KDE window manager:
 
-        kalarm -session 117f000002000100176495700000008340018
+  1) If your desktop environment/window manager performs session restoration,
+     ensure that the kalarm is included in the session restoration, and that
+     after login or restarting X kalarm is running with a '-session' command
+     line option, e.g.
 
-    You can use the 'ps' command to check this.
+         kalarm -session 117f000002000100176495700000008340018
 
-2)  If you cannot use session restoration to start KAlarm correctly, you
-    must configure the following command to be run whenever you graphically log
-    in or start X:
+     You can use the 'ps' command to check this.
 
-        kalarm --tray
+     Using session restoration will ensure that alarm message windows which
+     were displayed at the time of logout will be redisplayed when you log in
+     again.
 
-    If you have successfully configured session restoration, you should also
-    configure the following command to be run whenever you graphically log in
-    or start X:
+  2) To ensure that KAlarm is always started when you log in, even if it was
+     not running at logout (so that it wouldn't be included in session
+     restoration), you should configure one of the following commands to be run
+     whenever you graphically log in or start X:
 
-        kalarmautostart kalarm --tray
+     a) If you cannot use session restoration to start KAlarm, run:
 
-    If your desktop environment or window manager has a facility to configure
-    programs to be run at login, you can use that facility. Otherwise, you need
-    to add the command to an appropriate script which is run after X is started.
+            kalarm --tray
 
+     b) If you use session restoration, you MUST NOT use the above command, but
+        instead run:
 
-If you can send me details on how to set up KAlarm for any particular window
-manager, I will include these in the next version of KAlarm.
+            kalarmautostart kalarm --tray
+
+        The reason for using this command instead is that if 'kalarm --tray' is
+        executed while session restoration is already underway, KAlarm will
+        fail to start. This is an unavoidable consequence of how a KDE
+        application interacts with session restoration.
+
+     If your desktop environment or window manager has a facility to configure
+     programs to be run at login, you can use that facility. Otherwise, you need
+     to add the command to an appropriate script which is run after X is started.
+
+  If you can send me details on how to set up KAlarm for any particular window
+  manager, I will include these in the next version of KAlarm.
