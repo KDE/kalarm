@@ -1,7 +1,7 @@
 /*
  *  sounddlg.h  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2007,2009-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2007,2009-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ class SoundWidget : public QWidget
         void           playFinished();
 
     private:
+        static QString mDefaultDir;     // current default directory for mFileEdit
         QPushButton*   mFilePlay;
         LineEdit*      mFileEdit;
         PushButton*    mFileBrowseButton;
@@ -84,7 +85,6 @@ class SoundWidget : public QWidget
         SpinBox*       mFadeTime;
         KHBox*         mFadeVolumeBox;
         Slider*        mFadeSlider;
-        QString        mDefaultDir;     // current default directory for mFileEdit
         mutable KUrl         mUrl;
         mutable QString      mValidatedFile;
         Phonon::MediaObject* mPlayer;

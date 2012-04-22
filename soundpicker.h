@@ -1,7 +1,7 @@
 /*
  *  soundpicker.h  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002,2004-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002,2004-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -117,7 +117,6 @@ class SoundPicker : public QFrame
         ComboBox*      mTypeCombo;
         KHBox*         mTypeBox;
         PushButton*    mFilePicker;
-        QString        mDefaultDir;
         KUrl           mFile;         // sound file to play when alarm is triggered
         float          mVolume;       // volume for file, or < 0 to not set volume
         float          mFadeVolume;   // initial volume for file, or < 0 for no fading

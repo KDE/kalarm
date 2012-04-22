@@ -1,7 +1,7 @@
 /*
  *  sounddlg.cpp  -  sound file selection and configuration dialog and widget
  *  Program:  kalarm
- *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -137,6 +137,7 @@ void SoundDlg::slotButtonClicked(int button)
 = Class SoundWidget
 = Select a sound file and configure how to play it.
 =============================================================================*/
+QString SoundWidget::mDefaultDir;
 
 SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     : QWidget(parent),

@@ -1,7 +1,7 @@
 /*
  *  soundpicker.cpp  -  widget to select a sound file or a beep
  *  Program:  kalarm
- *  Copyright © 2002-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 #include "kalarm.h"
 
+#include "autoqpointer.h"
 #include "combobox.h"
 #include "functions.h"
 #include "kalarmapp.h"
@@ -261,27 +262,26 @@ void SoundPicker::slotTypeSelected(int id)
 void SoundPicker::slotPickFile()
 {
     KUrl oldfile = mFile;
-    KUrl file = mFile;
-    SoundDlg dlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeatPause, i18nc("@title:window", "Sound File"), this);
-    dlg.setReadOnly(mReadOnly);
-    bool accepted = (dlg.exec() == QDialog::Accepted);
+    // Use AutoQPointer to guard against crash on application exit while
+    // the dialogue is still open. It prevents double deletion (both on
+    // deletion of EditAlarmDlg, and on return from this function).
+    AutoQPointer<SoundDlg> dlg = new SoundDlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeatPause, i18nc("@title:window", "Sound File"), this);
+    dlg->setReadOnly(mReadOnly);
+    bool accepted = (dlg->exec() == QDialog::Accepted);
     if (mReadOnly)
         return;
     if (accepted)
     {
         float volume, fadeVolume;
         int   fadeTime;
-        dlg.getVolume(volume, fadeVolume, fadeTime);
-        file         = dlg.getFile();
-        mRepeatPause = dlg.repeatPause();
+        dlg->getVolume(volume, fadeVolume, fadeTime);
+        KUrl file    = dlg->getFile();
+        if (!file.isEmpty())
+            mFile    = file;
+        mRepeatPause = dlg->repeatPause();
         mVolume      = volume;
         mFadeVolume  = fadeVolume;
         mFadeSeconds = fadeTime;
-    }
-    if (!file.isEmpty())
-    {
-        mFile       = file;
-        mDefaultDir = dlg.defaultDir();
     }
     if (mFile.isEmpty())
     {

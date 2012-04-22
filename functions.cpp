@@ -2130,11 +2130,11 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     if (!initialFile.isEmpty())
         fileDlg->setSelection(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)
-        return fileDlg ? QString("") : QString();
+        return fileDlg ? QString() : QString();
     KUrl url = fileDlg->selectedUrl();
     if (url.isEmpty())
-        return QString("");
-    defaultDir = url.isLocalFile() ? url.toLocalFile() : url.path();
+        return QString();
+    defaultDir = url.isLocalFile() ? url.upUrl().toLocalFile() : url.directory();
     return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
 }
 
