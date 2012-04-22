@@ -49,8 +49,8 @@ NAMING
 
 EXAMPLE
 
-const Animal& ZooCage::releaseAnimal(const QString& name, Species species,
-		                     int arrivalNumber) const
+Animal ZooCage::releaseAnimal(const QString& name, Species species,
+                              int arrivalNumber) const
 {
     if (!name.isEmpty()
     &&  (arrivalNumber > mMinimumSpeciesCount  &&  arrivalNumber < mMaximumSpeciesCount)
@@ -61,4 +61,5 @@ const Animal& ZooCage::releaseAnimal(const QString& name, Species species,
     }
     if (name.isEmpty()  ||  mUnclassifiedAnimals.contains(name))
         return mUnclassifiedAnimalTypes[species];
+    return Animal();
 }
