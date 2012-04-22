@@ -1796,7 +1796,7 @@ void ViewPrefTab::restore(bool, bool allTabs)
         int mins = Preferences::autoHideSystemTray();
         switch (mins)
         {
-            case -1:  id = 1;  break;    // hide if any active alarms
+            case -1:  id = 1;  break;    // hide if no active alarms
             case 0:   id = 0;  break;    // never hide
             default:
             {
@@ -1860,7 +1860,7 @@ void ViewPrefTab::apply(bool syncToDisc)
         switch (mAutoHideSystemTray->selectedId())
         {
             case 0:  n = 0;   break;    // never hide
-            case 1:  n = -1;  break;    // hide if any active alarms
+            case 1:  n = -1;  break;    // hide if no active alarms
             case 2:                     // hide if no alarms due within period
                      n = mAutoHideSystemTrayPeriod->period().asSeconds() / 60;
                      break;

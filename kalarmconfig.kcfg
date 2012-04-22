@@ -103,7 +103,7 @@
     </entry>
     <entry name="AutoHideSystemTray" type="Int">
       <label context="@label">Auto-hide in system tray if no alarms due within period</label>
-      <whatsthis context="@info:whatsthis">&lt;para>Enter 0 to auto-hide &lt;application>KAlarm&lt;/application>'s icon in the system tray when there are no active alarms.&lt;/para>&lt;para>To auto-hide the system tray icon when there are no alarms due within a set period of time, enter the time period in minutes.&lt;/para>&lt;para>Enter 0 to always show the system tray icon.&lt;/para></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;para>Enter -1 to auto-hide &lt;application>KAlarm&lt;/application>'s icon in the system tray when there are no active alarms.&lt;/para>&lt;para>To auto-hide the system tray icon when there are no alarms due within a set period of time, enter the time period in minutes.&lt;/para>&lt;para>Enter 0 to always show the system tray icon.&lt;/para></whatsthis>
       <default>1440</default>
       <emit signal="autoHideSystemTrayChanged"/>
     </entry>
