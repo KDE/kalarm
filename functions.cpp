@@ -2130,10 +2130,10 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     if (!initialFile.isEmpty())
         fileDlg->setSelection(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)
-        return fileDlg ? QString() : QString();
+        return fileDlg ? QString("") : QString();  // return null only if dialog was deleted
     KUrl url = fileDlg->selectedUrl();
     if (url.isEmpty())
-        return QString();
+        return QString("");   // return empty, non-null string
     defaultDir = url.isLocalFile() ? url.upUrl().toLocalFile() : url.directory();
     return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
 }
