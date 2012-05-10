@@ -563,7 +563,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
             if (checkSystemTray())
                 return false;
         }
-        if (!mDcopQueue.isEmpty()  ||  !mCommandProcesses.isEmpty())
+        if (!mActionQueue.isEmpty()  ||  !mCommandProcesses.isEmpty())
         {
             // Don't quit yet if there are outstanding actions on the execution queue
             mPendingQuit = true;
@@ -743,12 +743,12 @@ void KAlarmApp::checkNextDueAlarm()
 */
 void KAlarmApp::queueAlarmId(const QString& id)
 {
-    for (int i = 0, end = mDcopQueue.count();  i < end;  ++i)
+    for (int i = 0, end = mActionQueue.count();  i < end;  ++i)
     {
-        if (mDcopQueue[i].function == EVENT_HANDLE  &&  mDcopQueue[i].eventId == id)
+        if (mActionQueue[i].function == EVENT_HANDLE  &&  mActionQueue[i].eventId == id)
             return;  // the alarm is already queued
     }
-    mDcopQueue.enqueue(DcopQEntry(EVENT_HANDLE, id));
+    mActionQueue.enqueue(ActionQEntry(EVENT_HANDLE, id));
 }
 
 /******************************************************************************
@@ -804,9 +804,9 @@ void KAlarmApp::processQueue()
         }
 
         // Process queued events
-        while (!mDcopQueue.isEmpty())
+        while (!mActionQueue.isEmpty())
         {
-            DcopQEntry& entry = mDcopQueue.head();
+            ActionQEntry& entry = mActionQueue.head();
             if (entry.eventId.isEmpty())
             {
                 // It's a new alarm
@@ -824,7 +824,7 @@ void KAlarmApp::processQueue()
             }
             else
                 handleEvent(entry.eventId, entry.function);
-            mDcopQueue.dequeue();
+            mActionQueue.dequeue();
         }
 
         // Purge the default archived alarms resource if it's time to do so
@@ -862,7 +862,7 @@ void KAlarmApp::atLoginEventAdded(const KAEvent& event)
     {
         if (mAlarmsEnabled)
         {
-            mDcopQueue.enqueue(DcopQEntry(EVENT_HANDLE, ev.id()));
+            mActionQueue.enqueue(ActionQEntry(EVENT_HANDLE, ev.id()));
             if (mInitialised)
                 QTimer::singleShot(0, this, SLOT(processQueue()));
         }
@@ -1205,7 +1205,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
         // Alarm is due for display already.
         // First execute it once without adding it to the calendar file.
         if (!mInitialised)
-            mDcopQueue.enqueue(DcopQEntry(event, EVENT_TRIGGER));
+            mActionQueue.enqueue(ActionQEntry(event, EVENT_TRIGGER));
         else
             execAlarm(event, event.firstAlarm(), false);
         // If it's a recurring alarm, reschedule it for its next occurrence
@@ -1216,7 +1216,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     }
 
     // Queue the alarm for insertion into the calendar file
-    mDcopQueue.enqueue(DcopQEntry(event));
+    mActionQueue.enqueue(ActionQEntry(event));
     if (mInitialised)
         QTimer::singleShot(0, this, SLOT(processQueue()));
     return true;
@@ -1230,7 +1230,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
 bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
 {
     kDebug() << eventID;
-    mDcopQueue.append(DcopQEntry(function, eventID));
+    mActionQueue.append(ActionQEntry(function, eventID));
     if (mInitialised)
         QTimer::singleShot(0, this, SLOT(processQueue()));
     return true;
