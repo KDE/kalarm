@@ -50,6 +50,9 @@ struct EventId : public QPair<Akonadi::Collection::Id, QString>
     QString                 eventId() const       { return second; }
 };
 
+// Declare as a movable type (note that QString is movable).
+Q_DECLARE_TYPEINFO(EventId, Q_MOVABLE_TYPE);
+
 inline QDebug operator<<(QDebug s, const EventId& id)
 {
     s.nospace() << "\"" << id.collectionId() << "::" << id.eventId().toLatin1().constData() << "\"";
