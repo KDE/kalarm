@@ -127,7 +127,8 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
         return false;
     if ((mWritableOnly || mEnabledOnly)  &&  !collection.hasAttribute<CollectionAttribute>())
         return false;
-    if (mWritableOnly  &&  collection.attribute<CompatibilityAttribute>()->compatibility() != KACalendar::Current)
+    if (mWritableOnly  &&  (!collection.hasAttribute<CompatibilityAttribute>()
+                         || collection.attribute<CompatibilityAttribute>()->compatibility() != KACalendar::Current))
         return false;
     if (mEnabledOnly  &&  !collection.attribute<CollectionAttribute>()->isEnabled(mAlarmType))
         return false;
