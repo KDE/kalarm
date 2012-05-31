@@ -202,6 +202,7 @@ if(KALARM_USE_AKONADI)
         kdepim
         ${KDE4_KCMUTILS_LIBS}
         ${KDE4_PHONON_LIBS}
+        ${X11_X11_LIB}
     )
 else(KALARM_USE_AKONADI)
     target_link_libraries(kalarm_bin
@@ -220,6 +221,7 @@ else(KALARM_USE_AKONADI)
         kdepim
         ${KDE4_KCMUTILS_LIBS}
         ${KDE4_PHONON_LIBS}
+        ${X11_X11_LIB}
     )
 endif(KALARM_USE_AKONADI)
 
