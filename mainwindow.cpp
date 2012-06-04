@@ -54,6 +54,7 @@
 #ifdef USE_AKONADI
 #include <kcalcore/memorycalendar.h>
 #include <kcalutils/icaldrag.h>
+#include <akonadi/control.h>
 using namespace KCalCore;
 using namespace KCalUtils;
 #else
@@ -173,6 +174,7 @@ MainWindow::MainWindow(bool restored)
 
     // Create the calendar resource selector widget
 #ifdef USE_AKONADI
+    Akonadi::Control::widgetNeedsAkonadi(this);
     mResourceSelector = new ResourceSelector(mSplitter);
 #else
     AlarmResources* resources = AlarmResources::instance();
