@@ -1550,7 +1550,7 @@ void MessageWin::playFinished()
 {
     if (mSilenceButton)
         mSilenceButton->setEnabled(false);
-    if (!mAudioThread->error().isEmpty())
+    if (mAudioThread  &&  !mAudioThread->error().isEmpty())
     {
         if (!haveErrorMessage(ErrMsg_AudioFile))
         {
