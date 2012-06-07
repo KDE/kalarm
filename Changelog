@@ -1,12 +1,40 @@
 KAlarm Change Log
 
-=== Version 2.9.0 --- 2 February 2012 ===
+=== Version 2.9.1 --- 6 June 2012 ===
 - Add option to execute a pre-alarm action before deferred alarms.
-- Allow user to stop playback after clicking Try in audio alarm edit dialogue.
 - Provide options to auto-hide system tray icon when no alarms are due.
+- Store KAlarm version and backend in config file.
 
-=== Version 2.8.0 --- 1 December 2011 ===
+=== Version 2.8.5 --- 6 June 2012 ===
+- [Akonadi] Warn user and disable KAlarm if Akonadi fails to run.
+- Fix crash when closing alarm window for alarm which plays audio file.
+
+=== Version 2.8.4 (KDE 4.8.4) --- 29 May 2012 ===
+- [Akonadi] Fix crash when saving new alarm.
+
+=== Version 2.8.3 (KDE 4.8.3) --- 22 April 2012 ===
+- Store KAlarm version and backend in config file.
+- Use the last selected sound file picker directory as the default next time.
+
+=== Version 2.8.2 (KDE 4.8.2) --- 29 March 2012 ===
+- [Akonadi] Fix error saving changed alarms when closing Edit Alarm dialogue.
+- [Akonadi] Show old-format calendars in read-only colour in calendar list.
+- [KResources] Fail cleanly if calendar resources fail to open.
+- Prevent multiple email success messages after Try used in Edit Alarm dialogue.
+
+=== Version 2.8.1 (KDE 4.8.1) --- 19 February 2012 ===
+- [Akonadi] Don't give option to save new alarms in old format calendars.
+- [Akonadi] Prevent duplicate prompts to update format of new calendar resource.
+- [Akonadi] Automatically disable duplicated calendar resources.
+- [Akonadi] Fix errors when creating default calendar resources.
+- [Akonadi] Prevent multiple standard calendars for any alarm type.
+- [Akonadi] Fix various crashes.
+- Output cmake error if Akonadi option incompatible with kdepimlibs/kalarmcal.
+
+=== Version 2.8.0 (KDE 4.8.0) --- 16 January 2012 ===
 - Use Akonadi as the default calendar access method.
+- Use configurable colours and KDE colour scheme for calendar list.
+- Allow user to stop playback after clicking Try in audio alarm edit dialogue.
 
 === Version 2.7.5 (KDE 4.7.4) --- 23 November 2011 ===
 - Fix crash due to audio thread not being correctly deleted.
