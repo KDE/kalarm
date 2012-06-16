@@ -26,6 +26,7 @@
 #include <kalarmcal/collectionattribute.h>
 #include <kalarmcal/compatibilityattribute.h>
 
+#include <akonadi/agentmanager.h>
 #include <akonadi/collectiondialog.h>
 #include <akonadi/collectiondeletejob.h>
 #include <akonadi/collectionmodifyjob.h>
@@ -116,11 +117,13 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
 {
     if (!EntityMimeTypeFilterModel::filterAcceptsRow(sourceRow, sourceParent))
         return false;
-    if (!mWritableOnly  &&  mAlarmType == CalEvent::EMPTY)
-        return true;
     AkonadiModel* model = AkonadiModel::instance();
     QModelIndex ix = model->index(sourceRow, 0, sourceParent);
     Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
+    if (!AgentManager::self()->instance(collection.resource()).isValid())
+        return false;
+    if (!mWritableOnly  &&  mAlarmType == CalEvent::EMPTY)
+        return true;
     if (mWritableOnly  &&  (collection.rights() & writableRights) != writableRights)
         return false;
     if (mAlarmType != CalEvent::EMPTY  &&  !collection.contentMimeTypes().contains(CalEvent::mimeType(mAlarmType)))
@@ -680,6 +683,8 @@ void CollectionControlModel::findEnabledCollections(const EntityMimeTypeFilterMo
     {
         const QModelIndex ix = filter->index(row, 0, parent);
         const Collection collection = model->data(filter->mapToSource(ix), AkonadiModel::CollectionRole).value<Collection>();
+        if (!AgentManager::self()->instance(collection.resource()).isValid())
+            continue;    // the collection doesn't belong to a resource, so omit it
         CalEvent::Types enabled = !collection.hasAttribute<CollectionAttribute>() ? CalEvent::EMPTY
                                            : collection.attribute<CollectionAttribute>()->enabled();
         CalEvent::Types canEnable = checkTypesToEnable(collection, collections, enabled);
@@ -701,6 +706,13 @@ bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::T
 {
     if (!collection.isValid()  ||  !instance()->collections().contains(collection))
         return false;
+    if (!AgentManager::self()->instance(collection.resource()).isValid())
+    {
+        // The collection doesn't belong to a resource, so it can't be used.
+        // Remove it from the list of collections.
+        instance()->removeCollection(collection);
+        return false;
+    }
     Collection col = collection;
     AkonadiModel::instance()->refresh(col);    // update with latest data
     return col.hasAttribute<CollectionAttribute>()

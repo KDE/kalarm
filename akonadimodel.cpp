@@ -1587,19 +1587,22 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
         const Collection collection = ix.data(CollectionRole).value<Collection>();
         if (collection.isValid())
         {
-            // A collection has been inserted
+            // A collection has been inserted.
+            // Ignore it if it isn't owned by a valid resource.
             kDebug() << "Collection" << collection.id() << collection.name();
-
-            QSet<QByteArray> attrs;
-            attrs += CollectionAttribute::name();
-            setCollectionChanged(collection, attrs, true);
-            emit collectionAdded(collection);
-
-            if (!mCollectionsBeingCreated.contains(collection.remoteId())
-            &&  (collection.rights() & writableRights) == writableRights)
+            if (AgentManager::self()->instance(collection.resource()).isValid())
             {
-                // Update to current KAlarm format if necessary, and if the user agrees
-                CalendarMigrator::updateToCurrentFormat(collection, false, MainWindow::mainMainWindow());
+                QSet<QByteArray> attrs;
+                attrs += CollectionAttribute::name();
+                setCollectionChanged(collection, attrs, true);
+                emit collectionAdded(collection);
+
+                if (!mCollectionsBeingCreated.contains(collection.remoteId())
+                &&  (collection.rights() & writableRights) == writableRights)
+                {
+                    // Update to current KAlarm format if necessary, and if the user agrees
+                    CalendarMigrator::updateToCurrentFormat(collection, false, MainWindow::mainMainWindow());
+                }
             }
         }
         else
