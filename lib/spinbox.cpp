@@ -530,8 +530,8 @@ void SpinBox::initStyleOption(QStyleOptionSpinBox& so) const
 {
     so.init(this);
 //    so.activeSubControls = ??;
-    so.subControls   = mUpDownOnly ? QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame
-                                   : QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame | QStyle::SC_SpinBoxEditField;
+    so.subControls   = mUpDownOnly ? (QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame)
+                                   : (QStyle::SC_SpinBoxUp | QStyle::SC_SpinBoxDown | QStyle::SC_SpinBoxFrame | QStyle::SC_SpinBoxEditField);
     so.buttonSymbols = buttonSymbols();
     so.frame         = hasFrame();
     so.stepEnabled   = stepEnabled();
