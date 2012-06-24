@@ -1,15 +1,18 @@
 KAlarm Change Log
 
-=== Version 2.9.1 --- 6 June 2012 ===
+=== Version 2.9.1 --- 24 June 2012 ===
 - Add option to execute a pre-alarm action before deferred alarms.
 - Provide options to auto-hide system tray icon when no alarms are due.
 - Store KAlarm version and backend in config file.
 
-=== Version 2.8.5 --- 6 June 2012 ===
-- [Akonadi] Warn user and disable KAlarm if Akonadi fails to run.
+=== Version 2.8.6 --- 24 June 2012 ===
+- [Akonadi] Don't display calendars which have no Akonadi resource.
+- [Akonadi resources] Fix resource if config is missing.
+- [Akonadi resources] Make resource work if location is set by path OR URL.
 - Fix crash when closing alarm window for alarm which plays audio file.
 
-=== Version 2.8.4 (KDE 4.8.4) --- 29 May 2012 ===
+=== Version 2.8.5 (KDE 4.8.4) --- 6 June 2012 ===
+- [Akonadi] Warn user and disable KAlarm if Akonadi fails to run.
 - [Akonadi] Fix crash when saving new alarm.
 
 === Version 2.8.3 (KDE 4.8.3) --- 22 April 2012 ===
