@@ -99,6 +99,7 @@ class KAlarmApp : public KUniqueApplication
                                          const QStringList& mailAttachments = QStringList());
         bool               dbusTriggerEvent(const QString& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
         bool               dbusDeleteEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
+        QString            dbusList();
 
     public slots:
         void               processQueue();
@@ -200,7 +201,7 @@ class KAlarmApp : public KUniqueApplication
 #ifdef USE_AKONADI
         bool               checkResourcesPopulated();
 #endif
-        void               listScheduledAlarms();
+        QStringList        scheduledAlarmList();
 
         static KAlarmApp*  theInstance;          // the one and only KAlarmApp instance
         static int         mActiveCount;         // number of active instances without main windows

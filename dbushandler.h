@@ -1,7 +1,7 @@
 /*
  *  dbushandler.h  -  handler for D-Bus calls by other applications
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ class DBusHandler : public QObject, public KAlarmIface
     public Q_SLOTS:
         Q_SCRIPTABLE bool cancelEvent(const QString& eventId);
         Q_SCRIPTABLE bool triggerEvent(const QString& eventId);
+        Q_SCRIPTABLE QString list();
 
         Q_SCRIPTABLE bool scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                           const QString& bgColor, const QString& fgColor, const QString& font,

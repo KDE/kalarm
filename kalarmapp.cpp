@@ -349,7 +349,9 @@ int KAlarmApp::newInstance()
                 else
                 {
                     dontRedisplay = true;
-                    listScheduledAlarms();
+                    QStringList alarms = scheduledAlarmList();
+                    for (int i = 0, count = alarms.count();  i < count;  ++i)
+                        std::cout << alarms[i].toUtf8().constData() << std::endl;
                 }
                 break;
             case CommandOptions::EDIT:
@@ -1144,7 +1146,7 @@ void KAlarmApp::purge(int daysToKeep)
 /******************************************************************************
 * Output a list of pending alarms, with their next scheduled occurrence.
 */
-void KAlarmApp::listScheduledAlarms()
+QStringList KAlarmApp::scheduledAlarmList()
 {
 #ifdef USE_AKONADI
     QVector<KAEvent> events = KAlarm::getSortedActiveEvents(this);
@@ -1152,6 +1154,7 @@ void KAlarmApp::listScheduledAlarms()
     KAEvent::List events = KAlarm::getSortedActiveEvents();
 #endif
 kDebug()<<"List count="<<events.count();
+    QStringList alarms;
     for (int i = 0, count = events.count();  i < count;  ++i)
     {
 #ifdef USE_AKONADI
@@ -1168,8 +1171,9 @@ kDebug()<<"List count="<<events.count();
         text += event->id() + ' '
              +  dateTime.toString("%Y%m%dT%H%M ")
              +  AlarmText::summary(events[i], 1);
-        std::cerr << text.toUtf8().constData() << std::endl;
+        alarms << text;
     }
+    return alarms;
 }
 
 /******************************************************************************
@@ -1281,6 +1285,15 @@ bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
     if (mInitialised)
         QTimer::singleShot(0, this, SLOT(processQueue()));
     return true;
+}
+
+/******************************************************************************
+* Called in response to a D-Bus request to list all pending alarms.
+*/
+QString KAlarmApp::dbusList()
+{
+    kDebug();
+    return scheduledAlarmList().join("\n") + '\n';
 }
 
 /******************************************************************************

@@ -72,6 +72,11 @@ bool DBusHandler::triggerEvent(const QString& eventId)
     return theApp()->dbusTriggerEvent(eventId);
 }
 
+QString DBusHandler::list()
+{
+    return theApp()->dbusList();
+}
+
 bool DBusHandler::scheduleMessage(const QString& message, const QString& startDateTime, int lateCancel, unsigned flags,
                                   const QString& bgColor, const QString& fgColor, const QString& font,
                                   const QString& audioUrl, int reminderMins, const QString& recurrence,

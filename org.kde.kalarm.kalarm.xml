@@ -9,6 +9,9 @@
       <arg type="b" direction="out"/>
       <arg name="eventId" type="s" direction="in"/>
     </method>
+    <method name="list">
+      <arg type="s" direction="out"/>
+    </method>
     <method name="scheduleMessage">
       <arg type="b" direction="out"/>
       <arg name="message" type="s" direction="in"/>
