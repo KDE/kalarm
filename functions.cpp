@@ -29,6 +29,7 @@
 #include "eventlistmodel.h"
 #endif
 #include "alarmcalendar.h"
+#include "alarmtime.h"
 #include "autoqpointer.h"
 #include "alarmlistview.h"
 #include "editdlg.h"
@@ -2220,7 +2221,7 @@ void setTestModeConditions()
     if (!newTime.isEmpty())
     {
         KDateTime dt;
-        if (convertTimeString(newTime, dt, KDateTime::realCurrentLocalDateTime(), true))
+        if (AlarmTime::convertTimeString(newTime, dt, KDateTime::realCurrentLocalDateTime(), true))
             setSimulatedSystemTime(dt);
     }
 }
