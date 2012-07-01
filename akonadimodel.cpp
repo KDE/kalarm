@@ -19,6 +19,7 @@
  */
 
 #include "akonadimodel.h"
+#include "alarmtime.h"
 #include "autoqpointer.h"
 #include "calendarmigrator.h"
 #include "mainwindow.h"
@@ -281,8 +282,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             break;
                         case Qt::DisplayRole:
                             if (event.expired())
-                                return alarmTimeText(event.startDateTime());
-                            return alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+                                return AlarmTime::alarmTimeText(event.startDateTime());
+                            return AlarmTime::alarmTimeText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
                         case SortRole:
                         {
                             DateTime due;
@@ -306,7 +307,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                         case Qt::DisplayRole:
                             if (event.expired())
                                 return QString();
-                            return timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
+                            return AlarmTime::timeToAlarmText(event.nextTrigger(KAEvent::DISPLAY_TRIGGER));
                         case SortRole:
                         {
                             if (event.expired())
@@ -666,71 +667,6 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
         }
     }
     return EntityTreeModel::entityHeaderData(section, orientation, role, group);
-}
-
-/******************************************************************************
-* Return the alarm time text in the form "date time".
-*/
-QString AkonadiModel::alarmTimeText(const DateTime& dateTime) const
-{
-    if (!dateTime.isValid())
-        return i18nc("@info/plain Alarm never occurs", "Never");
-    KLocale* locale = KGlobal::locale();
-    KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
-    QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
-    if (!dateTime.isDateOnly()
-    ||  (!dateTime.isClockTime()  &&  kdt.utcOffset() != dateTime.utcOffset()))
-    {
-        // Display the time of day if it's a date/time value, or if it's
-        // a date-only value but it's in a different time zone
-        dateTimeText += QLatin1Char(' ');
-        QString time = locale->formatTime(kdt.time());
-        if (mTimeHourPos == -2)
-        {
-            // Initialise the position of the hour within the time string, if leading
-            // zeroes are omitted, so that displayed times can be aligned with each other.
-            mTimeHourPos = -1;     // default = alignment isn't possible/sensible
-            if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
-            {
-                QString fmt = locale->timeFormat();
-                int i = fmt.indexOf(QRegExp("%[kl]"));   // check if leading zeroes are omitted
-                if (i >= 0  &&  i == fmt.indexOf(QLatin1Char('%')))   // and whether the hour is first
-                    mTimeHourPos = i;             // yes, so need to align
-            }
-        }
-        if (mTimeHourPos >= 0  &&  (int)time.length() > mTimeHourPos + 1
-        &&  time[mTimeHourPos].isDigit()  &&  !time[mTimeHourPos + 1].isDigit())
-            dateTimeText += QLatin1Char('~');     // improve alignment of times with no leading zeroes
-        dateTimeText += time;
-    }
-    return dateTimeText + QLatin1Char(' ');
-}
-
-/******************************************************************************
-* Return the time-to-alarm text.
-*/
-QString AkonadiModel::timeToAlarmText(const DateTime& dateTime) const
-{
-    if (!dateTime.isValid())
-        return i18nc("@info/plain Alarm never occurs", "Never");
-    KDateTime now = KDateTime::currentUtcDateTime();
-    if (dateTime.isDateOnly())
-    {
-        int days = now.date().daysTo(dateTime.date());
-        // xgettext: no-c-format
-        return i18nc("@info/plain n days", "%1d", days);
-    }
-    int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
-    if (mins < 0)
-        return QString();
-    char minutes[3] = "00";
-    minutes[0] = (mins%60) / 10 + '0';
-    minutes[1] = (mins%60) % 10 + '0';
-    if (mins < 24*60)
-        return i18nc("@info/plain hours:minutes", "%1:%2", mins/60, minutes);
-    int days = mins / (24*60);
-    mins = mins % (24*60);
-    return i18nc("@info/plain days hours:minutes", "%1d %2:%3", days, mins/60, minutes);
 }
 
 /******************************************************************************

@@ -197,6 +197,10 @@ class KAlarmApp : public KUniqueApplication
         QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&) const;
         void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
         void               purge(int daysToKeep);
+#ifdef USE_AKONADI
+        bool               checkResourcesPopulated();
+#endif
+        void               listScheduledAlarms();
 
         static KAlarmApp*  theInstance;          // the one and only KAlarmApp instance
         static int         mActiveCount;         // number of active instances without main windows

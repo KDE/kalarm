@@ -362,25 +362,18 @@ QString TrayWindow::tooltipAlarmText() const
     int i, iend;
     QList<TipItem> items;
 #ifdef USE_AKONADI
-    if (!mAlarmsModel)
-    {
-        mAlarmsModel = new AlarmListModel(const_cast<TrayWindow*>(this));
-        mAlarmsModel->setEventTypeFilter(CalEvent::ACTIVE);
-        mAlarmsModel->sort(AlarmListModel::TimeColumn);
-    }
-    for (i = 0, iend = mAlarmsModel->rowCount();  i < iend;  ++i)
+    QVector<KAEvent> events = KAlarm::getSortedActiveEvents(const_cast<TrayWindow*>(this), &mAlarmsModel);
 #else
-    KAEvent::List events = AlarmCalendar::resources()->events(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow, CalEvent::ACTIVE);
-    for (i = 0, iend = events.count();  i < iend;  ++i)
+    KAEvent::List events = KAlarm::getSortedActiveEvents(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow);
 #endif
+    for (i = 0, iend = events.count();  i < iend;  ++i)
     {
 #ifdef USE_AKONADI
-        KAEvent mevent = mAlarmsModel->event(i);
-        KAEvent* event = &mevent;
+        KAEvent* event = &events[i];
 #else
         KAEvent* event = events[i];
 #endif
-        if (event->enabled()  &&  !event->expired()  &&  event->actionSubType() == KAEvent::MESSAGE)
+        if (event->actionSubType() == KAEvent::MESSAGE)
         {
             TipItem item;
             QDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().dateTime();

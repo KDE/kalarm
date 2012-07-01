@@ -280,8 +280,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
         KAEvent   event(const Akonadi::Item&, const QModelIndex&, Akonadi::Collection*) const;
-        QString   alarmTimeText(const DateTime&) const;
-        QString   timeToAlarmText(const DateTime&) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool rowInserted);
         void      queueItemModifyJob(const Akonadi::Item&);

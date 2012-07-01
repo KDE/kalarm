@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 #include "kalarm.h"      //krazy:exclude=includes (kalarm.h must be first)
 #include "commandoptions.h"
-#include "functions.h"
+#include "alarmtime.h"
 #include "kalarmapp.h"
 #include "kamail.h"
 
@@ -58,12 +58,17 @@ CommandOptions::CommandOptions()
     if (mArgs->isSet("test-set-time"))
     {
         QString time = mArgs->getOption("test-set-time");
-        if (!KAlarm::convertTimeString(time.toLatin1(), mSimulationTime, KDateTime::realCurrentLocalDateTime(), true))
+        if (!AlarmTime::convertTimeString(time.toLatin1(), mSimulationTime, KDateTime::realCurrentLocalDateTime(), true))
             setErrorParameter("--test-set-time");
     }
 #endif
     if (checkCommand("tray", TRAY))
     {
+    }
+    if (checkCommand("list", LIST))
+    {
+        if (mArgs->count())
+            setErrorParameter("--list");
     }
     if (checkCommand("triggerEvent", TRIGGER_EVENT))
     {
@@ -199,7 +204,7 @@ CommandOptions::CommandOptions()
     }
     if (mArgs->isSet("disable-all"))
     {
-        if (mCommand == TRIGGER_EVENT)
+        if (mCommand == TRIGGER_EVENT  ||  mCommand == LIST)
             setErrorIncompatible("--disable-all", mCommandName);
         mDisableAll = true;
     }
@@ -255,7 +260,7 @@ CommandOptions::CommandOptions()
             if (mArgs->isSet("time"))
             {
                 QByteArray dateTime = mArgs->getOption("time").toLocal8Bit();
-                if (!KAlarm::convertTimeString(dateTime, mAlarmTime))
+                if (!AlarmTime::convertTimeString(dateTime, mAlarmTime))
                     setErrorParameter("--time");
             }
             else
@@ -294,9 +299,9 @@ CommandOptions::CommandOptions()
                     QByteArray dateTime = mArgs->getOption("until").toLocal8Bit();
                     bool ok;
                     if (mArgs->isSet("time"))
-                        ok = KAlarm::convertTimeString(dateTime, endTime, mAlarmTime);
+                        ok = AlarmTime::convertTimeString(dateTime, endTime, mAlarmTime);
                     else
-                        ok = KAlarm::convertTimeString(dateTime, endTime);
+                        ok = AlarmTime::convertTimeString(dateTime, endTime);
                     if (!ok)
                         setErrorParameter("--until");
                     else if (mAlarmTime.isDateOnly()  &&  !endTime.isDateOnly())

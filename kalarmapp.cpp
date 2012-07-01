@@ -23,6 +23,7 @@
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
+#include "alarmtime.h"
 #include "autoqpointer.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
@@ -328,14 +329,29 @@ int KAlarmApp::newInstance()
                 EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
                 if (!initCheck(true))   // open the calendar, don't start processing execution queue yet
                     exitCode = 1;
+                else if (!checkResourcesPopulated()) // wait for Akonadi resources to be populated
+                    exitCode = 1;    // Akonadi not running
                 else
                 {
-                    startProcessQueue();        // start processing the execution queue
+                    startProcessQueue();      // start processing the execution queue
+                    dontRedisplay = true;
                     if (!handleEvent(options.eventId(), function))
                         exitCode = 1;
                 }
                 break;
             }
+            case CommandOptions::LIST:
+                // Output a list of scheduled alarms to stdout
+                if (!initCheck(true))   // open the calendar, don't start processing execution queue yet
+                    exitCode = 1;
+                else if (!checkResourcesPopulated()) // wait for Akonadi resources to be populated
+                    exitCode = 1;    // Akonadi not running
+                else
+                {
+                    dontRedisplay = true;
+                    listScheduledAlarms();
+                }
+                break;
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm
                 if (!initCheck())
@@ -1124,6 +1140,37 @@ void KAlarmApp::purge(int daysToKeep)
     processQueue();
 }
 
+
+/******************************************************************************
+* Output a list of pending alarms, with their next scheduled occurrence.
+*/
+void KAlarmApp::listScheduledAlarms()
+{
+#ifdef USE_AKONADI
+    QVector<KAEvent> events = KAlarm::getSortedActiveEvents(this);
+#else
+    KAEvent::List events = KAlarm::getSortedActiveEvents();
+#endif
+kDebug()<<"List count="<<events.count();
+    for (int i = 0, count = events.count();  i < count;  ++i)
+    {
+#ifdef USE_AKONADI
+        KAEvent* event = &events[i];
+#else
+        KAEvent* event = events[i];
+#endif
+        KDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
+#ifdef USE_AKONADI
+        QString text(QString::number(event->collectionId()) + ":");
+#else
+        QString text;
+#endif
+        text += event->id() + ' '
+             +  dateTime.toString("%Y%m%dT%H%M ")
+             +  AlarmText::summary(events[i], 1);
+        std::cerr << text.toUtf8().constData() << std::endl;
+    }
+}
 
 /******************************************************************************
 * Enable or disable alarm monitoring.
@@ -2240,6 +2287,19 @@ bool KAlarmApp::initCheck(bool calendarOnly)
         startProcessQueue();      // start processing the execution queue
     return true;
 }
+
+#ifdef USE_AKONADI
+/******************************************************************************
+* Wait until the Akonadi resources are fully populated with alarms.
+*/
+bool KAlarmApp::checkResourcesPopulated()
+{
+#ifdef __GNUC__
+#warning Wait for Akonadi resources to be populated
+#endif
+return true;
+}
+#endif
 
 /******************************************************************************
 * Called when an audio thread starts or stops.

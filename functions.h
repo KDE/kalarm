@@ -51,6 +51,9 @@ class KToggleAction;
 class AlarmResource;
 class MainWindow;
 class TemplateMenuAction;
+#ifdef USE_AKONADI
+class AlarmListModel;
+#endif
 
 namespace KAlarm
 {
@@ -184,10 +187,12 @@ void                deleteDisplayEvent(const QString& eventID);
 UpdateStatus        reactivateEvent(KAEvent&, Akonadi::Collection* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        reactivateEvents(QVector<KAEvent>&, QVector<EventId>& ineligibleIDs, Akonadi::Collection* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        enableEvents(QVector<KAEvent>&, bool enable, QWidget* msgParent = 0);
+QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = 0);
 #else
 UpdateStatus        reactivateEvent(KAEvent&, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        reactivateEvents(KAEvent::List&, QStringList& ineligibleIDs, AlarmResource* = 0, QWidget* msgParent = 0, bool showKOrgErr = true);
 UpdateStatus        enableEvents(KAEvent::List&, bool enable, QWidget* msgParent = 0);
+KAEvent::List       getSortedActiveEvents(const KDateTime& startTime = KDateTime(), const KDateTime& endTime = KDateTime());
 #endif
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 void                displayUpdateError(QWidget* parent, UpdateStatus, UpdateError, int nAlarms, int nKOrgAlarms = 1, bool showKOrgError = true);
@@ -196,10 +201,6 @@ QStringList         checkRtcWakeConfig(bool checkEventExists = false);
 void                deleteRtcWakeConfig();
 void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());
 bool                setRtcWakeTime(unsigned triggerTime, QWidget* parent);
-
-bool                convertTimeString(const QByteArray& timeString, KDateTime& dateTime, const KDateTime& defaultDt = KDateTime(), bool allowTZ = true);
-KDateTime           applyTimeZone(const QString& tzstring, const QDate& date, const QTime& time,
-                                  bool haveTime, const KDateTime& defaultDt = KDateTime());
 
 /** Return a prompt string to ask the user whether to convert the calendar to the
  *  current format.

@@ -21,6 +21,7 @@
 #include "kalarm.h"
 
 #include "alarmcalendar.h"
+#include "alarmtime.h"
 #include "functions.h"
 #include "kalarmapp.h"
 #include "kamail.h"
@@ -445,7 +446,7 @@ KDateTime DBusHandler::convertDateTime(const QString& dateTime, const KDateTime&
     }
     KDateTime result;
     if (!error)
-        result = KAlarm::applyTimeZone(zone, date, time, haveTime, defaultDt);
+        result = AlarmTime::applyTimeZone(zone, date, time, haveTime, defaultDt);
     if (error  ||  !result.isValid())
     {
         if (!defaultDt.isValid())

@@ -1,7 +1,7 @@
 /*
  *  commandoptions.h  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -47,7 +47,8 @@ class CommandOptions
             EDIT,             // --edit
             EDIT_NEW_PRESET,  // --edit-new-preset
             EDIT_NEW,         // --edit-new-display, --edit-new-command, --edit-new-email
-            NEW               // --file, --exec-display, --exec, --mail, message
+            NEW,              // --file, --exec-display, --exec, --mail, message
+            LIST              // --list
         };
         CommandOptions();
         Command             command() const           { return mCommand; }

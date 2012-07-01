@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
     options.add("korganizer", ki18n("Show alarm as an event in KOrganizer"));
     options.add("l");
     options.add("late-cancel <period>", ki18n("Cancel alarm if more than 'period' late when triggered"), "1");
+    options.add("list", ki18n("Output list of scheduled alarms to stdout"));
     options.add("L");
     options.add("login", ki18n("Repeat alarm at every login"));
     options.add("m");

@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.h  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -103,8 +103,6 @@ class EventListModel : public QAbstractTableModel
         void     removeEvent(int row);
         int      findEvent(const QString& eventId) const;
         void     updateHaveEvents(bool have)        { mHaveEvents = have;  emit haveEventsStatus(have); }
-        QString  alarmTimeText(const DateTime&) const;
-        QString  timeToAlarmText(const DateTime&) const;
         QString  repeatText(const KAEvent*) const;
         QString  repeatOrder(const KAEvent*) const;
         QPixmap* eventIcon(const KAEvent*) const;
