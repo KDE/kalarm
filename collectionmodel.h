@@ -258,6 +258,11 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Akonadi::Collection::List enabledCollections(CalEvent::Type, bool writable);
 
+        /** Return the collection ID for a given resource ID.
+         *  \return  collection ID, or -1 if the resource is not in KAlarm's list.
+         */
+        static Akonadi::Collection collectionForResource(const QString& resourceId);
+
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
         /** Return a bulleted list of alarm types for inclusion in an i18n message. */

@@ -111,11 +111,12 @@ bool                editNewAlarm(const QString& templateName, QWidget* parent = 
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
 void                editNewAlarm(KAEvent::SubAction, QWidget* parent = 0, const AlarmText* = 0);
 void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
-bool                editAlarmById(const QString& eventID, QWidget* parent = 0);
 void                editAlarm(KAEvent*, QWidget* parent = 0);
 #ifdef USE_AKONADI
+bool                editAlarmById(const EventId& eventID, QWidget* parent = 0);
 void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, Akonadi::Collection&);
 #else
+bool                editAlarmById(const QString& eventID, QWidget* parent = 0);
 void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, AlarmResource*);
 #endif
 void                viewAlarm(const KAEvent*, QWidget* parent = 0);

@@ -1798,15 +1798,34 @@ Event* AlarmCalendar::createKCalEvent(const KAEvent* ev, const QString& baseID) 
 
 /******************************************************************************
 * Return the event with the specified ID.
+* If 'checkDuplicates' is true, and the collection ID is invalid, if there is
+* a unique event with the given ID, it will be returned.
 */
 #ifdef USE_AKONADI
-KAEvent* AlarmCalendar::event(const EventId& uniqueID)
+KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
 #else
 KAEvent* AlarmCalendar::event(const QString& uniqueID)
 #endif
 {
     if (!isValid())
         return 0;
+#ifdef USE_AKONADI
+    const QString eventId = uniqueID.eventId();
+    if (uniqueID.collectionId() == -1  &&  checkDuplicates)
+    {
+        // The collection isn't known, but use the event ID if it is
+        // unique among all collections.
+        KAEvent::List list = events(eventId);
+        if (list.count() > 1)
+        {
+            kWarning() << "Multiple events found with ID" << eventId;
+            return 0;
+        }
+        if (list.isEmpty())
+            return 0;
+        return list[0];
+    }
+#endif
     KAEventMap::ConstIterator it = mEventMap.constFind(uniqueID);
     if (it == mEventMap.constEnd())
         return 0;

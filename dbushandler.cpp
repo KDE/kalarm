@@ -64,12 +64,20 @@ DBusHandler::DBusHandler()
 
 bool DBusHandler::cancelEvent(const QString& eventId)
 {
+#ifdef USE_AKONADI
+    return theApp()->dbusDeleteEvent(EventId(eventId));
+#else
     return theApp()->dbusDeleteEvent(eventId);
+#endif
 }
 
 bool DBusHandler::triggerEvent(const QString& eventId)
 {
+#ifdef USE_AKONADI
+    return theApp()->dbusTriggerEvent(EventId(eventId));
+#else
     return theApp()->dbusTriggerEvent(eventId);
+#endif
 }
 
 QString DBusHandler::list()
@@ -248,7 +256,11 @@ bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent, cons
 
 bool DBusHandler::edit(const QString& eventID)
 {
+#ifdef USE_AKONADI
+    return KAlarm::editAlarmById(EventId(eventID));
+#else
     return KAlarm::editAlarmById(eventID);
+#endif
 }
 
 bool DBusHandler::editNew(int type)

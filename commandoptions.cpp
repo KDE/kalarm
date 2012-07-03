@@ -70,17 +70,17 @@ CommandOptions::CommandOptions()
         if (mArgs->count())
             setErrorParameter("--list");
     }
-    if (checkCommand("triggerEvent", TRIGGER_EVENT))
+    if (checkCommand("triggerEvent", TRIGGER_EVENT)
+    ||  checkCommand("cancelEvent", CANCEL_EVENT)
+    ||  checkCommand("edit", EDIT))
     {
+#ifdef USE_AKONADI
+        // Fetch the event ID. This can optionally include a prefix of the
+        // resource ID followed by a colon delimiter.
+        mEventId = EventId(mArgs->getOption(mCommandName));
+#else
         mEventId = mArgs->getOption(mCommandName);
-    }
-    if (checkCommand("cancelEvent", CANCEL_EVENT))
-    {
-        mEventId = mArgs->getOption(mCommandName);
-    }
-    if (checkCommand("edit", EDIT))
-    {
-        mEventId = mArgs->getOption(mCommandName);
+#endif
     }
     if (checkCommand("edit-new-preset", EDIT_NEW_PRESET))
     {

@@ -139,6 +139,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     collectionmodel.cpp
     itemlistmodel.cpp
     calendarmigrator.cpp
+    eventid.cpp
    )
 else(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}

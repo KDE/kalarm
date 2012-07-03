@@ -1231,6 +1231,20 @@ Collection::List CollectionControlModel::enabledCollections(CalEvent::Type type,
 }
 
 /******************************************************************************
+* Return the collection ID for a given resource ID.
+*/
+Collection CollectionControlModel::collectionForResource(const QString& resourceId)
+{
+    Collection::List cols = instance()->collections();
+    for (int i = 0, count = cols.count();  i < count;  ++i)
+    {
+        if (cols[i].resource() == resourceId)
+            return cols[i];
+    }
+    return Collection();
+}
+
+/******************************************************************************
 * Return the data for a given role, for a specified item.
 */
 QVariant CollectionControlModel::data(const QModelIndex& index, int role) const

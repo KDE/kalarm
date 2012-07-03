@@ -80,7 +80,7 @@ class AlarmCalendar : public QObject
         KAEvent::List         atLoginAlarms() const;
 #ifdef USE_AKONADI
         KCalCore::Event::Ptr  kcalEvent(const QString& uniqueID);   // if Akonadi, display calendar only
-        KAEvent*              event(const EventId& uniqueId);
+        KAEvent*              event(const EventId& uniqueId, bool checkDuplicates = false);
 #else
         KCal::Event*          createKCalEvent(const KAEvent* e) const
                                                      { return createKCalEvent(e, QString()); }

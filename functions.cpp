@@ -1556,28 +1556,31 @@ void editAlarm(KAEvent* event, QWidget* parent)
 * An error occurs if the alarm is not found, if there is more than one alarm
 * with the same ID, or if it is read-only or expired.
 */
+#ifdef USE_AKONADI
+bool editAlarmById(const EventId& id, QWidget* parent)
+#else
 bool editAlarmById(const QString& eventID, QWidget* parent)
+#endif
 {
 #ifdef USE_AKONADI
-    KAEvent::List events = AlarmCalendar::resources()->events(eventID);
-    if (events.count() > 1)
+    const QString eventID(id.eventId());
+    KAEvent* event = AlarmCalendar::resources()->event(id, true);
+    if (!event)
     {
-        kWarning() << eventID << ": multiple events found";
+        if (id.collectionId() != -1)    
+            kWarning() << "Event ID not found, or duplicated:" << eventID;
+        else
+            kWarning() << "Event ID not found:" << eventID;
         return false;
     }
-    if (events.isEmpty())
+    if (AlarmCalendar::resources()->eventReadOnly(event->itemId()))
 #else
     KAEvent* event = AlarmCalendar::resources()->event(eventID);
     if (!event)
-#endif
     {
         kError() << eventID << ": event ID not found";
         return false;
     }
-#ifdef USE_AKONADI
-    KAEvent* event = events[0];
-    if (AlarmCalendar::resources()->eventReadOnly(event->itemId()))
-#else
     if (AlarmCalendar::resources()->eventReadOnly(eventID))
 #endif
     {

@@ -335,8 +335,19 @@ int KAlarmApp::newInstance()
                 {
                     startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
+#ifdef USE_AKONADI
+                    if (!handleEvent(options.eventId(), function, true))
+#else
                     if (!handleEvent(options.eventId(), function))
+#endif
+                    {
+#ifdef USE_AKONADI
+                        CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not unique", "--" + options.commandName(), options.eventId().eventId()));
+#else
+                        CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found", "--" + options.commandName(), options.eventId()));
+#endif
                         exitCode = 1;
+                    }
                 }
                 break;
             }
@@ -360,7 +371,11 @@ int KAlarmApp::newInstance()
                     exitCode = 1;
                 else if (!KAlarm::editAlarmById(options.eventId()))
                 {
-                    CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not editable", QString::fromLatin1("--edit"), options.eventId()));
+#ifdef USE_AKONADI
+                    CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId().eventId()));
+#else
+                    CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId()));
+#endif
                     exitCode = 1;
                 }
                 break;
@@ -535,7 +550,7 @@ void KAlarmApp::checkKtimezoned()
     done = true;
 #if KDE_IS_VERSION(4,5,70)
     if (!KSystemTimeZones::isTimeZoneDaemonAvailable())
-    {    
+    {
         kDebug() << "ktimezoned not running: using UTC only";
         KAMessageBox::information(MainWindow::mainMainWindow(),
                                   i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
@@ -726,7 +741,7 @@ void KAlarmApp::checkNextDueAlarm()
     if (interval <= 0)
     {
         // Queue the alarm
-        queueAlarmId(nextEvent->id());
+        queueAlarmId(*nextEvent);
         kDebug() << nextEvent->id() << ": due now";
         QTimer::singleShot(0, this, SLOT(processQueue()));
     }
@@ -759,8 +774,13 @@ void KAlarmApp::checkNextDueAlarm()
 * Also called when the execution queue has finished processing to check for the
 * next alarm.
 */
-void KAlarmApp::queueAlarmId(const QString& id)
+void KAlarmApp::queueAlarmId(const KAEvent& event)
 {
+#ifdef USE_AKONADI
+    EventId id(event);
+#else
+    const QString id(event.id());
+#endif
     for (int i = 0, end = mActionQueue.count();  i < end;  ++i)
     {
         if (mActionQueue[i].function == EVENT_HANDLE  &&  mActionQueue[i].eventId == id)
@@ -815,7 +835,7 @@ void KAlarmApp::processQueue()
                 if (!cancelReminderAndDeferral(event))
                 {
                     if (mAlarmsEnabled)
-                        queueAlarmId(event.id());
+                        queueAlarmId(event);
                 }
             }
             mLoginAlarmsDone = true;
@@ -880,7 +900,7 @@ void KAlarmApp::atLoginEventAdded(const KAEvent& event)
     {
         if (mAlarmsEnabled)
         {
-            mActionQueue.enqueue(ActionQEntry(EVENT_HANDLE, ev.id()));
+            mActionQueue.enqueue(ActionQEntry(EVENT_HANDLE, EventId(ev)));
             if (mInitialised)
                 QTimer::singleShot(0, this, SLOT(processQueue()));
         }
@@ -1153,7 +1173,6 @@ QStringList KAlarmApp::scheduledAlarmList()
 #else
     KAEvent::List events = KAlarm::getSortedActiveEvents();
 #endif
-kDebug()<<"List count="<<events.count();
     QStringList alarms;
     for (int i = 0, count = events.count();  i < count;  ++i)
     {
@@ -1278,7 +1297,11 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
+#ifdef USE_AKONADI
+bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
+#else
 bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
+#endif
 {
     kDebug() << eventID;
     mActionQueue.append(ActionQEntry(function, eventID));
@@ -1306,29 +1329,33 @@ QString KAlarmApp::dbusList()
 * Reply = false if event ID not found, or if more than one event with the same
 *         ID is found.
 */
+#ifdef USE_AKONADI
+bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDuplicates)
+#else
 bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
+#endif
 {
     // Delete any expired wake-on-suspend config data
     KAlarm::checkRtcWakeConfig();
 
 #ifdef USE_AKONADI
-    KAEvent::List events = AlarmCalendar::resources()->events(eventID);
-    if (events.count() > 1)
+    const QString eventID(id.eventId());
+    KAEvent* event = AlarmCalendar::resources()->event(id, checkDuplicates);
+    if (!event)
     {
-        kWarning() << "Multiple events found with ID" << eventID;
+        if (id.collectionId() != -1)
+            kWarning() << "Event ID not found, or duplicated:" << eventID;
+        else
+            kWarning() << "Event ID not found:" << eventID;
         return false;
     }
-    if (events.isEmpty())
 #else
     KAEvent* event = AlarmCalendar::resources()->event(eventID);
     if (!event)
-#endif
     {
         kWarning() << "Event ID not found:" << eventID;
         return false;
     }
-#ifdef USE_AKONADI
-    KAEvent* event = events[0];
 #endif
     switch (function)
     {
@@ -1570,7 +1597,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
     event.startChanges();
     if (alarm.repeatAtLogin())
     {
-        // Leave an alarm which repeats at every login until its main alarm triggers 
+        // Leave an alarm which repeats at every login until its main alarm triggers
         if (!event.reminderActive()  &&  event.reminderMinutes() < 0)
         {
             // Executing an at-login alarm: first schedule the reminder
@@ -1610,7 +1637,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
                         // Note that at-login reminders are scheduled in execAlarm().
                         event.activateReminderAfter(last);
                         updateCalAndDisplay = true;
-                    }         
+                    }
                     if (cancelAlarm(event, alarm.type(), updateCalAndDisplay))
                         return -1;
                     break;
@@ -1660,7 +1687,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
             // Set the reminder which is now due after the last main alarm trigger.
             // Note that at-login reminders are scheduled in execAlarm().
             event.activateReminderAfter(last);
-        }         
+        }
     }
     event.endChanges();
     if (update)

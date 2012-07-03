@@ -23,6 +23,9 @@
 
 /** @file kalarmapp.h - the KAlarm application object */
 
+#ifdef USE_AKONADI
+#include "eventid.h"
+#endif
 #include "kamail.h"
 #include "preferences.h"
 
@@ -79,7 +82,6 @@ class KAlarmApp : public KUniqueApplication
         ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, const QObject* receiver = 0, const char* slot = 0);
         void               alarmCompleted(const KAEvent&);
         void               rescheduleAlarm(KAEvent& e, const KAAlarm& a)   { rescheduleAlarm(e, a, true); }
-        bool               deleteEvent(const QString& eventID)         { return handleEvent(eventID, EVENT_CANCEL); }
         void               purgeAll()             { purge(0); }
         void               commandMessage(ShellProcess*, QWidget* parent);
         void               notifyAudioPlaying(bool playing);
@@ -97,8 +99,13 @@ class KAlarmApp : public KUniqueApplication
 #endif
                                          const QString& mailSubject = QString(),
                                          const QStringList& mailAttachments = QStringList());
+#ifdef USE_AKONADI
+        bool               dbusTriggerEvent(const EventId& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
+        bool               dbusDeleteEvent(const EventId& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
+#else
         bool               dbusTriggerEvent(const QString& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
         bool               dbusDeleteEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
+#endif
         QString            dbusList();
 
     public slots:
@@ -172,11 +179,19 @@ class KAlarmApp : public KUniqueApplication
         };
         struct ActionQEntry
         {
+#ifdef USE_AKONADI
+            ActionQEntry(EventFunc f, const EventId& id) : function(f), eventId(id) { }
+#else
             ActionQEntry(EventFunc f, const QString& id) : function(f), eventId(id) { }
+#endif
             ActionQEntry(const KAEvent& e, EventFunc f = EVENT_HANDLE) : function(f), event(e) { }
             ActionQEntry() { }
             EventFunc  function;
+#ifdef USE_AKONADI
+            EventId    eventId;
+#else
             QString    eventId;
+#endif
             KAEvent    event;
         };
 
@@ -184,9 +199,14 @@ class KAlarmApp : public KUniqueApplication
         bool               quitIf(int exitCode, bool force = false);
         bool               checkSystemTray();
         void               startProcessQueue();
-        void               queueAlarmId(const QString& id);
+        void               queueAlarmId(const KAEvent&);
+#ifdef USE_AKONADI
+        bool               dbusHandleEvent(const EventId&, EventFunc);
+        bool               handleEvent(const EventId&, EventFunc, bool checkDuplicates = false);
+#else
         bool               dbusHandleEvent(const QString& eventID, EventFunc);
         bool               handleEvent(const QString& eventID, EventFunc);
+#endif
         int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay,
                                            const KDateTime& nextDt = KDateTime());
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
