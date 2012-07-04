@@ -342,9 +342,9 @@ int KAlarmApp::newInstance()
 #endif
                     {
 #ifdef USE_AKONADI
-                        CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not unique", "--" + options.commandName(), options.eventId().eventId()));
+                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", "--" + options.commandName(), options.eventId().eventId()));
 #else
-                        CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found", "--" + options.commandName(), options.eventId()));
+                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found", "--" + options.commandName(), options.eventId()));
 #endif
                         exitCode = 1;
                     }
@@ -372,9 +372,9 @@ int KAlarmApp::newInstance()
                 else if (!KAlarm::editAlarmById(options.eventId()))
                 {
 #ifdef USE_AKONADI
-                    CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId().eventId()));
+                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId().eventId()));
 #else
-                    CommandOptions::printError(i18nc("@info:shell", "<icode>%1</icode>: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId()));
+                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId()));
 #endif
                     exitCode = 1;
                 }
