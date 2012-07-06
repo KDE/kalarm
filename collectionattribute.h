@@ -67,14 +67,13 @@ class KALARMCAL_EXPORT CollectionAttribute : public Akonadi::Attribute
          */
         bool isEnabled(CalEvent::Type type) const;
 
-        /** Return which alarm types (active, archived, template or displaying)
-         *  the collection is enabled for. */
+        /** Return which alarm types (active, archived or template) the
+         *  collection is enabled for. */
         CalEvent::Types enabled() const;
 
         /** Set the enabled/disabled state of the collection and its alarms,
-         *  for a specified alarm type (active, archived, template or
-         *  displaying). The enabled/disabled state for other alarm types is
-         *  not affected.
+         *  for a specified alarm type (active, archived or template). The
+         *  enabled/disabled state for other alarm types is not affected.
          *  The alarms of that type in a disabled collection are ignored, and
          *  not displayed in the alarm list. The standard status for that type
          *  for a disabled collection is automatically cleared.
@@ -83,33 +82,33 @@ class KALARMCAL_EXPORT CollectionAttribute : public Akonadi::Attribute
          */
         void setEnabled(CalEvent::Type type, bool enabled);
 
-        /** Set which alarm types (active, archived, template or displaying)
-         *  the collection is enabled for.
+        /** Set which alarm types (active, archived or template) the collection
+         *  is enabled for.
          *  @param types  alarm types
          */
         void setEnabled(CalEvent::Types types);
 
         /** Return whether the collection is the standard collection for a specified
-         *  alarm type (active, archived, template or displaying).
+         *  alarm type (active, archived or template).
          *  @param type  alarm type
          */
         bool isStandard(CalEvent::Type type) const;
 
         /** Set or clear the collection as the standard collection for a specified
-         *  alarm type (active, archived, template or displaying).
+         *  alarm type (active, archived or template).
          *  @param type      alarm type
          *  @param standard  true to set as standard, false to clear standard status.
          */
         void setStandard(CalEvent::Type, bool standard);
 
-        /** Return which alarm types (active, archived, template or displaying)
-         *  the collection is standard for.
+        /** Return which alarm types (active, archived or template) the
+         *  collection is standard for.
          *  @return alarm types.
          */
         CalEvent::Types standard() const;
 
-        /** Set which alarm types (active, archived, template or displaying)
-         *  the collection is the standard collection for.
+        /** Set which alarm types (active, archived or template) the
+         *  collection is the standard collection for.
          *  @param types  alarm types.
          */
         void setStandard(CalEvent::Types types);
