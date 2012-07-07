@@ -82,6 +82,8 @@ bool parseAddress( const char* & scursor, const char * const send,
 
 static void initHeaders(KMime::Message&, KAMail::JobData&);
 static KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalidItem);
+static QString     extractEmailAndNormalize(const QString& emailAddress);
+static QStringList extractEmailsAndNormalize(const QString& emailAddresses);
 static QByteArray autoDetectCharset(const QString& text);
 static const QTextCodec* codecForName(const QByteArray& str);
 
@@ -101,7 +103,6 @@ KAMail* KAMail::instance()
         mInstance = new KAMail();
     return mInstance;
 }
-
 
 /******************************************************************************
 * Send the email message specified in an event.
@@ -213,10 +214,12 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     MailTransport::MessageQueueJob* mailjob = new MailTransport::MessageQueueJob(kapp);
     mailjob->setMessage(message);
     mailjob->transportAttribute().setTransportId(transport->id());
-    mailjob->addressAttribute().setFrom(jobdata.from);
-    mailjob->addressAttribute().setTo(jobdata.event.emailAddresses());
+    // MessageQueueJob email addresses must be pure, i.e. without display name. Note
+    // that display names are included in the actual headers set up by initHeaders().
+    mailjob->addressAttribute().setFrom(extractEmailAndNormalize(jobdata.from));
+    mailjob->addressAttribute().setTo(extractEmailsAndNormalize(jobdata.event.emailAddresses(",")));
     if (!jobdata.bcc.isEmpty())
-        mailjob->addressAttribute().setBcc(QStringList(KPIMUtils::extractEmailAddress(jobdata.bcc)));
+        mailjob->addressAttribute().setBcc(extractEmailsAndNormalize(jobdata.bcc));
     MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
                          (Preferences::emailClient() == Preferences::kmail || Preferences::emailCopyToKMail())
                          ? MailTransport::SentBehaviourAttribute::MoveToDefaultSentCollection : MailTransport::SentBehaviourAttribute::Delete;
@@ -656,6 +659,25 @@ QString KAMail::getMailBody(quint32 serialNumber)
     return reply.value();
 }
 #endif
+
+/******************************************************************************
+* Extract the pure addresses from given email addresses.
+*/
+QString extractEmailAndNormalize(const QString& emailAddress)
+{
+    return KPIMUtils::extractEmailAddress(KPIMUtils::normalizeAddressesAndEncodeIdn(emailAddress));
+}
+
+QStringList extractEmailsAndNormalize(const QString& emailAddresses)
+{
+    const QStringList splitEmails(KPIMUtils::splitAddressList(emailAddresses));
+    QStringList normalizedEmail;
+    Q_FOREACH(const QString& email, splitEmails)
+    {
+        normalizedEmail << KPIMUtils::extractEmailAddress(KPIMUtils::normalizeAddressesAndEncodeIdn(email));
+    }
+    return normalizedEmail;
+}
 
 //-----------------------------------------------------------------------------
 // Based on KMail KMMsgBase::autoDetectCharset().
