@@ -2,7 +2,7 @@
  *  repetition.cpp  -  represents a sub-repetition: interval and count
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -23,7 +23,7 @@
 #include "repetition.h"
 #include <kdatetime.h>
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 using namespace KCalCore;
 #else
 using namespace KCal;

@@ -15,7 +15,6 @@ option(KALARM_USE_KRESOURCES "Build to use KResources" OFF)
 set(USE_KRESOURCES false)
 if(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
     set(USE_KRESOURCES true)
-    add_definitions(-DUSE_KRESOURCES)
     add_definitions(-DWANT_DEPRECATED_KCAL_API)
     add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
 endif()
@@ -39,25 +38,37 @@ if(NOT USE_KRESOURCES)
        )
 endif()
 
+if(USE_KRESOURCES)
+    set(KALARMCAL_USE_KRESOURCES "// This library was built to use KResources.\n// It must be rebuilt in order to use Akonadi.\n#define KALARMCAL_USE_KRESOURCES")
+else()
+    set(KALARMCAL_USE_KRESOURCES "// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif")
+endif()
+
+# NOTE: kalarmcal_export.h is only generated when cmake is run.
+#       If it is deleted, 'make' will not regenerate it.
+configure_file(kalarmcal_export.h.in ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h)
+
 kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 
 if(USE_KRESOURCES)
     target_link_libraries(kalarmcal
-		          kcal
+                          kcal
                           kholidays
                           kpimidentities
-			  ${KDE4_KDECORE_LIBS}
-			  ${QT_QTCORE_LIBRARY}
-			 )
+                          ${KDE4_KDECORE_LIBS}
+                          ${QT_QTGUI_LIBRARY}
+                          ${QT_QTCORE_LIBRARY}
+                         )
 else()
     target_link_libraries(kalarmcal
                           akonadi-kde
                           kcalcore
                           kholidays
                           kpimidentities
-			  ${KDE4_KDECORE_LIBS}
-			  ${QT_QTCORE_LIBRARY}
-			 )
+                          ${KDE4_KDECORE_LIBS}
+                          ${QT_QTGUI_LIBRARY}
+                          ${QT_QTCORE_LIBRARY}
+                         )
 endif()
 
 set_target_properties(kalarmcal PROPERTIES 
@@ -72,7 +83,7 @@ install(FILES
 	identities.h
 	kacalendar.h
 	kaevent.h
-	kalarmcal_export.h
+	${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
 	karecurrence.h
 	repetition.h
 	version.h

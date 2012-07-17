@@ -2,7 +2,7 @@
  *  alarmtext.h  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004,2005,2008-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2008-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -25,7 +25,7 @@
 
 #include "kalarmcal_export.h"
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/todo.h>
 #else
 namespace KCal { class Todo; }
@@ -87,7 +87,7 @@ class KALARMCAL_EXPORT AlarmText
         void setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
                       const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         /** Set the instance contents to be a todo.
          *  @param todo Todo instance to set as the text
          */

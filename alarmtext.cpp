@@ -2,7 +2,7 @@
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004,2005,2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -24,7 +24,7 @@
 
 #include "kaevent.h"
 
-#ifdef USE_KRESOURCES
+#ifdef KALARMCAL_USE_KRESOURCES
 #include <kcal/todo.h>
 #endif
 #include <klocale.h>
@@ -146,7 +146,7 @@ void AlarmText::setEmail(const QString& to, const QString& from, const QString& 
     d->mKMailSerialNum = kmailSerialNumber;
 }
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 void AlarmText::setTodo(const KCalCore::Todo::Ptr& todo)
 #else
 void AlarmText::setTodo(const KCal::Todo* todo)

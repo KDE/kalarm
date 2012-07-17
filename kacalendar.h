@@ -2,7 +2,7 @@
  *  kacalendar.h  -  KAlarm kcal library calendar and event categorisation
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2005-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -24,7 +24,7 @@
 #define KALARM_KACALENDAR_H
 
 #include "kalarmcal_export.h"
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/filestorage.h>
 #include <kcalcore/calendar.h>
 #include <kcalcore/event.h>
@@ -33,7 +33,7 @@
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 namespace KCalCore {
   class Alarm;
 }
@@ -48,7 +48,7 @@ namespace KCal {
 namespace KAlarmCal
 {
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 extern const QLatin1String KALARMCAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
 extern const QLatin1String KALARMCAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
 extern const QLatin1String KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
@@ -66,7 +66,7 @@ extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type f
  */
 namespace KACalendar
 {
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     /** Compatibility of resource backend calendar format. */
     enum Compatibility
     {
@@ -95,7 +95,7 @@ namespace KACalendar
     enum
     {
         CurrentFormat      = 0,    //!< current KAlarm format
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         MixedFormat        = -2,   //!< calendar may contain more than one version
 #endif
         IncompatibleFormat = -1    //!< not written by KAlarm, or a newer KAlarm version
@@ -114,13 +114,13 @@ namespace KACalendar
                                    unknown KAlarm format;
      *          >0 the older KAlarm version which wrote the calendar
      */
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     KALARMCAL_EXPORT int updateVersion(const KCalCore::FileStorage::Ptr&, QString& versionString);
 #else
     KALARMCAL_EXPORT int updateVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
 #endif
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     /** Set the KAlarm version custom property for a calendar. */
     KALARMCAL_EXPORT void setKAlarmVersion(const KCalCore::Calendar::Ptr&);
 #else
@@ -162,7 +162,7 @@ namespace CalEvent
     Q_DECLARE_FLAGS(Types, Type)
 
     KALARMCAL_EXPORT QString uid(const QString& id, Type);
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
     KALARMCAL_EXPORT Type    status(const KCalCore::Event::Ptr&, QString* param = 0);
     KALARMCAL_EXPORT void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
 

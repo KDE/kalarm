@@ -2,7 +2,7 @@
  *  repetition.h  -  represents a sub-repetition: interval and count
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -24,7 +24,7 @@
 #define KALARM_REPETITION_H
 
 #include "kalarmcal_export.h"
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/duration.h>
 #else
 #include <kcal/duration.h>
@@ -52,7 +52,7 @@ class KALARMCAL_EXPORT Repetition
          */
         Repetition();
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         /** Constructor.
          *  Initialises with the specified @p interval and @p count.
          */
@@ -70,7 +70,7 @@ class KALARMCAL_EXPORT Repetition
 
         Repetition& operator=(const Repetition& other);
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         /** Initialises the instance with the specified @p interval and @p count. */
         void set(const KCalCore::Duration& interval, int count);
 #else
@@ -78,7 +78,7 @@ class KALARMCAL_EXPORT Repetition
         void set(const KCal::Duration& interval, int count);
 #endif
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         /** Sets the @p interval. The repetition count is unchanged unless
          *  The repetition count is set to zero if @p interval is zero; otherwise
          *  the repetition count is unchanged.
@@ -108,7 +108,7 @@ class KALARMCAL_EXPORT Repetition
         /** Return the number of repetitions. */
         int count() const;
 
-#ifndef USE_KRESOURCES
+#ifndef KALARMCAL_USE_KRESOURCES
         /** Return the interval between repetitions. */
         KCalCore::Duration interval() const;
 
