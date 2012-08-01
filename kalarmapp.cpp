@@ -126,6 +126,7 @@ KAlarmApp::KAlarmApp()
       mSpeechEnabled(false)
 {
     KGlobal::locale()->insertCatalog("libkdepim");
+    KGlobal::locale()->insertCatalog("libkpimutils");
     kDebug();
 #ifndef NDEBUG
     KAlarm::setTestModeConditions();
