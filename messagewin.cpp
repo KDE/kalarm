@@ -1550,11 +1550,12 @@ void MessageWin::playFinished()
 {
     if (mSilenceButton)
         mSilenceButton->setEnabled(false);
-    if (mAudioThread  &&  !mAudioThread->error().isEmpty())
+    if (mAudioThread)   // mAudioThread can actually be null here!
     {
-        if (!haveErrorMessage(ErrMsg_AudioFile))
+        QString errmsg = mAudioThread->error();
+        if (!errmsg.isEmpty()  &&  !haveErrorMessage(ErrMsg_AudioFile))
         {
-            KAMessageBox::error(this, mAudioThread->error());
+            KAMessageBox::error(this, errmsg);
             clearErrorMessage(ErrMsg_AudioFile);
         }
     }
