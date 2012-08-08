@@ -64,6 +64,7 @@ class TrayWindow : public KStatusNotifierItem
         void         setEnabledStatus(bool status);
         void         slotHaveDisabledAlarms(bool disabled);
         void         slotQuit();
+        void         slotQuitAfter();
         void         updateStatus();
         void         updateToolTip();
 
