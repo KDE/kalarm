@@ -1184,7 +1184,9 @@ QStringList KAlarmApp::scheduledAlarmList()
 #endif
         KDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
 #ifdef USE_AKONADI
-        QString text(QString::number(event->collectionId()) + ":");
+        Akonadi::Collection c(event->collectionId());
+        AkonadiModel::instance()->refresh(c);
+        QString text(c.resource() + ":");
 #else
         QString text;
 #endif
