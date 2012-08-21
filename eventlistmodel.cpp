@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.cpp  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1008,6 +1008,22 @@ KAEvent* EventListFilterModel::event(const QModelIndex& index) const
 KAEvent* EventListFilterModel::event(int row) const
 {
     return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
+}
+
+/******************************************************************************
+* Return the index to a specified event.
+*/
+QModelIndex EventListFilterModel::eventIndex(const QString& eventId) const
+{
+    return mapFromSource(static_cast<EventListModel*>(sourceModel())->eventIndex(eventId));
+}
+
+/******************************************************************************
+* Return the index to a specified event.
+*/
+QModelIndex EventListFilterModel::eventIndex(const KAEvent* event) const
+{
+    return mapFromSource(static_cast<EventListModel*>(sourceModel())->eventIndex(event));
 }
 
 void EventListFilterModel::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)

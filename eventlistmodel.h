@@ -1,7 +1,7 @@
 /*
  *  eventlistmodel.h  -  model class for lists of alarms or templates
  *  Program:  kalarm
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -135,6 +135,8 @@ class EventListFilterModel : public QSortFilterProxyModel
         explicit EventListFilterModel(EventListModel* baseModel, QObject* parent = 0);
         KAEvent* event(int row) const;
         KAEvent* event(const QModelIndex&) const;
+        QModelIndex eventIndex(const KAEvent*) const;
+        QModelIndex eventIndex(const QString& eventId) const;
     
     private slots:
         void     slotDataChanged(const QModelIndex&, const QModelIndex&);
