@@ -946,6 +946,22 @@ KAEvent* EventListFilterModel::event(int row) const
     return static_cast<EventListModel*>(sourceModel())->event(mapToSource(index(row, 0)));
 }
 
+/******************************************************************************
+* Return the index to a specified event.
+*/
+QModelIndex EventListFilterModel::eventIndex(const QString& eventId) const
+{
+    return mapFromSource(static_cast<EventListModel*>(sourceModel())->eventIndex(eventId));
+}
+
+/******************************************************************************
+* Return the index to a specified event.
+*/
+QModelIndex EventListFilterModel::eventIndex(const KAEvent* event) const
+{
+    return mapFromSource(static_cast<EventListModel*>(sourceModel())->eventIndex(event));
+}
+
 void EventListFilterModel::slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight)
 {
     emit dataChanged(mapFromSource(topLeft), mapFromSource(bottomRight));

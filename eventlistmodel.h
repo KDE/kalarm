@@ -133,6 +133,8 @@ class EventListFilterModel : public QSortFilterProxyModel
         explicit EventListFilterModel(EventListModel* baseModel, QObject* parent = 0);
         KAEvent* event(int row) const;
         KAEvent* event(const QModelIndex&) const;
+        QModelIndex eventIndex(const KAEvent*) const;
+        QModelIndex eventIndex(const QString& eventId) const;
     
     private slots:
         void     slotDataChanged(const QModelIndex&, const QModelIndex&);
