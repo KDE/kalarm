@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.9.2 --- 8 August 2012 ===
+=== Version 2.9.2 --- 22 August 2012 ===
 - Fix Quit not working in system tray icon context menu.
+- [KResources] Fix KAlarm button not highlighting the alarm in the main window.
 
 === Version 2.9.1 (KDE 4.9.0) --- 7 July 2012 ===
 - Add option to execute a pre-alarm action before deferred alarms.
