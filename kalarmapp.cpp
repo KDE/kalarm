@@ -82,6 +82,10 @@
 static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
 static const char* KTTDS_DBUS_PATH     = "/KSpeech";
 
+#ifdef USE_AKONADI
+static const int AKONADI_TIMEOUT = 30;   // timeout (seconds) for Akonadi collections to be populated
+#endif
+
 static void setEventCommandError(const KAEvent&, KAEvent::CmdErrType);
 static void clearEventCommandError(const KAEvent&, KAEvent::CmdErrType);
 
@@ -328,10 +332,14 @@ int KAlarmApp::newInstance()
             {
                 // Display or delete the event with the specified event ID
                 EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
-                if (!initCheck(true))   // open the calendar, don't start processing execution queue yet
+                // Open the calendar, don't start processing execution queue yet,
+                // and wait for the Akonadi collection to be populated.
+#ifdef USE_AKONADI
+                if (!initCheck(true, true, options.eventId().collectionId()))
+#else
+                if (!initCheck(true))
+#endif
                     exitCode = 1;
-                else if (!checkResourcesPopulated()) // wait for Akonadi resources to be populated
-                    exitCode = 1;    // Akonadi not running
                 else
                 {
                     startProcessQueue();      // start processing the execution queue
@@ -353,11 +361,15 @@ int KAlarmApp::newInstance()
                 break;
             }
             case CommandOptions::LIST:
-                // Output a list of scheduled alarms to stdout
-                if (!initCheck(true))   // open the calendar, don't start processing execution queue yet
+                // Output a list of scheduled alarms to stdout.
+                // Open the calendar, don't start processing execution queue yet,
+                // and wait for all Akonadi collections to be populated.
+#ifdef USE_AKONADI
+                if (!initCheck(true, true))
+#else
+                if (!initCheck(true))
+#endif
                     exitCode = 1;
-                else if (!checkResourcesPopulated()) // wait for Akonadi resources to be populated
-                    exitCode = 1;    // Akonadi not running
                 else
                 {
                     dontRedisplay = true;
@@ -367,8 +379,13 @@ int KAlarmApp::newInstance()
                 }
                 break;
             case CommandOptions::EDIT:
-                // Edit a specified existing alarm
+                // Edit a specified existing alarm.
+                // Open the calendar and wait for the Akonadi collection to be populated.
+#ifdef USE_AKONADI
+                if (!initCheck(false, true, options.eventId().collectionId()))
+#else
                 if (!initCheck())
+#endif
                     exitCode = 1;
                 else if (!KAlarm::editAlarmById(options.eventId()))
                 {
@@ -2305,7 +2322,11 @@ void KAlarmApp::slotDBusServiceUnregistered(const QString& serviceName)
 * If this is the first time through, open the calendar file, and start
 * processing the execution queue.
 */
+#ifdef USE_AKONADI
+bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Collection::Id collectionId)
+#else
 bool KAlarmApp::initCheck(bool calendarOnly)
+#endif
 {
     static bool firstTime = true;
     if (firstTime)
@@ -2328,21 +2349,19 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 
     if (!calendarOnly)
         startProcessQueue();      // start processing the execution queue
-    return true;
-}
 
 #ifdef USE_AKONADI
-/******************************************************************************
-* Wait until the Akonadi resources are fully populated with alarms.
-*/
-bool KAlarmApp::checkResourcesPopulated()
-{
-#ifdef __GNUC__
-#warning Wait for Akonadi resources to be populated
+    if (waitForCollection)
+    {
+#if KDE_IS_VERSION(4,9,80)
+        // Wait for one or all Akonadi collections to be populated
+        if (!CollectionControlModel::instance()->waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
+            return false;
 #endif
-return true;
+    }
+#endif
+    return true;
 }
-#endif
 
 /******************************************************************************
 * Called when an audio thread starts or stops.

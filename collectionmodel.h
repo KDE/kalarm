@@ -28,12 +28,14 @@
 #include <akonadi/favoritecollectionsmodel.h>
 #include <kcheckableproxymodel.h>
 #include <kdescendantsproxymodel.h>
+#include <kdeversion.h>
 
 #include <QSortFilterProxyModel>
 #include <QListView>
 
 using namespace KAlarmCal;
 
+class QEventLoop;
 namespace Akonadi
 {
     class EntityMimeTypeFilterModel;
@@ -174,7 +176,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
         /** Enable or disable a collection (if it is valid) for specified alarm types.
          *  Note that this only changes the status for the specified alarm types.
-         *  \return alarm types which can be enabled
+         *  @return alarm types which can be enabled
          */
         static CalEvent::Types setEnabled(const Akonadi::Collection&, CalEvent::Types, bool enabled);
 
@@ -259,9 +261,24 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static Akonadi::Collection::List enabledCollections(CalEvent::Type, bool writable);
 
         /** Return the collection ID for a given resource ID.
-         *  \return  collection ID, or -1 if the resource is not in KAlarm's list.
+         *  @return  collection ID, or -1 if the resource is not in KAlarm's list.
          */
         static Akonadi::Collection collectionForResource(const QString& resourceId);
+
+#if KDE_IS_VERSION(4,9,80)
+        /** Return whether one or all enabled collections have been populated,
+         *  i.e. whether their items have been fetched.
+         */
+        static bool isPopulated(Akonadi::Collection::Id);
+
+        /** Wait until one or all enabled collections have been populated,
+         *  i.e. whether their items have been fetched.
+         *  @param   colId    collection ID, or -1 for all collections
+         *  @param   timeout  timeout in seconds, or 0 for no timeout
+         *  @return  true if successful.
+         */
+        bool waitUntilPopulated(Akonadi::Collection::Id colId = -1, int timeout = 0);
+#endif
 
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
@@ -270,6 +287,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
     private slots:
         void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
+        void collectionPopulated();
 
     private:
         explicit CollectionControlModel(QObject* parent = 0);
@@ -279,6 +297,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
 
         static CollectionControlModel* mInstance;
         static bool mAskDestination;
+        QEventLoop* mPopulatedCheckLoop;
 };
 
 #endif // COLLECTIONMODEL_H

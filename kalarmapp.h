@@ -195,7 +195,11 @@ class KAlarmApp : public KUniqueApplication
             KAEvent    event;
         };
 
+#ifdef USE_AKONADI
+        bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, Akonadi::Collection::Id = -1);
+#else
         bool               initCheck(bool calendarOnly = false);
+#endif
         bool               quitIf(int exitCode, bool force = false);
         bool               checkSystemTray();
         void               startProcessQueue();
@@ -218,9 +222,6 @@ class KAlarmApp : public KUniqueApplication
         QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&) const;
         void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
         void               purge(int daysToKeep);
-#ifdef USE_AKONADI
-        bool               checkResourcesPopulated();
-#endif
         QStringList        scheduledAlarmList();
 
         static KAlarmApp*  theInstance;          // the one and only KAlarmApp instance

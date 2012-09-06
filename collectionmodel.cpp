@@ -38,6 +38,7 @@
 #include <QMouseEvent>
 #include <QHelpEvent>
 #include <QToolTip>
+#include <QTimer>
 #include <QObject>
 
 using namespace Akonadi;
@@ -278,6 +279,7 @@ CollectionCheckListModel::~CollectionCheckListModel()
         mModel = 0;
     }
 }
+
 
 /******************************************************************************
 * Return the collection for a given row.
@@ -656,7 +658,8 @@ CollectionControlModel* CollectionControlModel::instance()
 }
 
 CollectionControlModel::CollectionControlModel(QObject* parent)
-    : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KGlobal::config(), "Collections"), parent)
+    : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KGlobal::config(), "Collections"), parent),
+      mPopulatedCheckLoop(0)
 {
     // Initialise the list of enabled collections
     EntityMimeTypeFilterModel* filter = new EntityMimeTypeFilterModel(this);
@@ -668,6 +671,12 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
 
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                                       SLOT(statusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
+#if KDE_IS_VERSION(4,9,80)
+    connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
+                                      SLOT(collectionPopulated()));
+    connect(AkonadiModel::instance(), SIGNAL(collectionPopulated(Akonadi::Collection::Id)),
+                                      SLOT(collectionPopulated()));
+#endif
 }
 
 /******************************************************************************
@@ -1242,6 +1251,61 @@ Collection CollectionControlModel::collectionForResource(const QString& resource
             return cols[i];
     }
     return Collection();
+}
+
+#if KDE_IS_VERSION(4,9,80)
+/******************************************************************************
+* Return whether all enabled collections have been populated.
+*/
+bool CollectionControlModel::isPopulated(Collection::Id colId)
+{
+    AkonadiModel* model = AkonadiModel::instance();
+    Collection::List cols = instance()->collections();
+    for (int i = 0, count = cols.count();  i < count;  ++i)
+    {
+        if ((colId == -1  ||  colId == cols[i].id())
+        &&  !model->data(model->collectionIndex(cols[i].id()), AkonadiModel::IsPopulatedRole).toBool())
+        {
+            model->refresh(cols[i]);    // update with latest data
+            if (!cols[i].hasAttribute<CollectionAttribute>()
+            ||  cols[i].attribute<CollectionAttribute>()->enabled() == CalEvent::EMPTY)
+                return false;
+        }
+    }
+    return true;
+}
+
+/******************************************************************************
+* Wait for one or all enabled collections to be populated.
+* Reply = true if successful.
+*/
+bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeout)
+{
+    kDebug();
+    int result = 1;
+    AkonadiModel* model = AkonadiModel::instance();
+    while (!model->isCollectionTreeFetched()
+       ||  !isPopulated(colId))
+    {
+        if (!mPopulatedCheckLoop)
+            mPopulatedCheckLoop = new QEventLoop(this);
+        if (timeout > 0)
+            QTimer::singleShot(timeout * 1000, mPopulatedCheckLoop, SLOT(quit()));
+        result = mPopulatedCheckLoop->exec();
+    }
+    delete mPopulatedCheckLoop;
+    mPopulatedCheckLoop = 0;
+    return result;
+}
+#endif
+
+/******************************************************************************
+* Exit from the populated event loop when a collection has been populated.
+*/
+void CollectionControlModel::collectionPopulated()
+{
+    if (mPopulatedCheckLoop)
+        mPopulatedCheckLoop->exit(1);
 }
 
 /******************************************************************************
