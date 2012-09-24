@@ -23,7 +23,7 @@
 
 #include <akonadi/contact/contactstreemodel.h>
 
-#include <QtGui/QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 
 namespace Akonadi
 {
