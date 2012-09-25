@@ -40,8 +40,8 @@
 #endif
 
 #include <QtCore/QBitArray>
-#include <QtGui/QColor>
-#include <QtGui/QFont>
+#include <QColor>
+#include <QFont>
 #include <QtCore/QVector>
 #ifdef KALARMCAL_USE_KRESOURCES
 #include <QtCore/QList>
