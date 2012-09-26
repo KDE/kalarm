@@ -29,7 +29,7 @@
 
 #include <akonadi/attribute.h>
 
-#include <QtGui/QColor>
+#include <QColor>
 
 namespace KAlarmCal
 {
