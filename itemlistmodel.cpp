@@ -1,7 +1,7 @@
 /*
  *  itemlistmodel.cpp  -  Akonadi item models
  *  Program:  kalarm
- *  Copyright © 2007-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,7 +100,11 @@ void ItemListModel::collectionStatusChanged(const Collection& collection, Akonad
     if (!collection.isValid())
         return;
     if (change == AkonadiModel::Enabled)
-        invalidateFilter();
+    {
+        // Ensure that items for a newly enabled collection are always ordered
+        // correctly. Note that invalidateFilter() is not adequate for this.
+        invalidate();
+    }
 }
 
 bool ItemListModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const

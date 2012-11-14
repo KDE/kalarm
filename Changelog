@@ -1,10 +1,13 @@
 KAlarm Change Log
 
-=== Version 2.10.0 --- 6 September 2012 ===
+=== Version 2.10.0 --- 13 November 2012 ===
 - Add --list command line option to list scheduled alarms to stdout.
 - Add 'list' D-Bus command to return list of scheduled alarms.
 - [Akonadi] Wait until calendars are populated before using them at startup.
 - [KResources] Fix KAlarm button not highlighting the alarm in the main window.
+
+=== Version 2.9.3 --- 13 November 2012 ===
+- [Akonadi] Fix alarm list not sorting new alarms when calendar is enabled.
 
 === Version 2.9.2 --- 22 August 2012 ===
 - Fix Quit not working in system tray icon context menu.
