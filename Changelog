@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.9.3 --- 13 November 2012 ===
+=== Version 2.9.3 --- 2 December 2012 ===
 - [Akonadi] Fix alarm list not sorting new alarms when calendar is enabled.
+- [Akonadi] Fix memory leak when an alarm message window is displayed.
 
 === Version 2.9.2 --- 22 August 2012 ===
 - Fix Quit not working in system tray icon context menu.
