@@ -1299,12 +1299,13 @@ void MessageWin::alarmShowing(KAEvent& event)
     if (!mAlwaysHide)
     {
         // Copy the alarm to the displaying calendar in case of a crash, etc.
-        KAEvent* dispEvent = new KAEvent;
 #ifdef USE_AKONADI
+        KAEvent dispEvent;
         Akonadi::Collection collection = AkonadiModel::instance()->collectionForItem(event.itemId());
-        dispEvent->setDisplaying(event, mAlarmType, collection.id(),
+        dispEvent.setDisplaying(event, mAlarmType, collection.id(),
                     mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
 #else
+        KAEvent* dispEvent = new KAEvent;
         AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
         dispEvent->setDisplaying(event, mAlarmType, (resource ? resource->identifier() : QString()),
                     mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
@@ -1313,17 +1314,19 @@ void MessageWin::alarmShowing(KAEvent& event)
         if (cal)
         {
 #ifdef USE_AKONADI
-            cal->deleteDisplayEvent(dispEvent->id());   // in case it already exists
-            if (!cal->addEvent(*dispEvent))
+            cal->deleteDisplayEvent(dispEvent.id());   // in case it already exists
+            cal->addEvent(dispEvent);
 #else
             cal->deleteEvent(dispEvent->id());   // in case it already exists
             if (!cal->addEvent(dispEvent))
-#endif
                 delete dispEvent;
+#endif
             cal->save();
         }
+#ifndef USE_AKONADI
         else
             delete dispEvent;
+#endif
     }
     theApp()->rescheduleAlarm(event, alarm);
 }
