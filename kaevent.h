@@ -406,13 +406,13 @@ class KALARMCAL_EXPORT KAEvent
          *                             KCal::Event's non-KAlarm custom properties
          *                             are left untouched.
          */
-        bool updateKCalEvent(const KCalCore::Event::Ptr& e, UidAction u, bool setCustomProperties = true) const;
+        bool updateKCalEvent(const KCalCore::Event::Ptr& event, UidAction u, bool setCustomProperties = true) const;
 #else
         /** Update an existing KCal::Event with the KAEvent data.
          *  @param event  Event to update.
          *  @param u      how to deal with the Event's UID.
          */
-        bool updateKCalEvent(KCal::Event* e, UidAction u) const;
+        bool updateKCalEvent(KCal::Event* event, UidAction u) const;
 #endif
 
         /** Return whether the instance represents a valid event. */
