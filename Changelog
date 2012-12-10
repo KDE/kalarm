@@ -1,10 +1,13 @@
 KAlarm Change Log
 
-=== Version 2.9.3 --- 2 December 2012 ===
-- [Akonadi] Fix alarm list not sorting new alarms when calendar is enabled.
+=== Version 2.9.4 --- 10 December 2012 ===
 - [Akonadi] Fix memory leak when an alarm message window is displayed.
+- [Akonadi] Fix memory leak on alarm edit.
 
-=== Version 2.9.2 --- 22 August 2012 ===
+=== Version 2.9.3 (KDE 4.9.4) --- 13 November 2012 ===
+- [Akonadi] Fix alarm list not sorting new alarms when calendar is enabled.
+
+=== Version 2.9.2 (KDE 4.9.1) --- 22 August 2012 ===
 - Fix Quit not working in system tray icon context menu.
 - [KResources] Fix KAlarm button not highlighting the alarm in the main window.
 
