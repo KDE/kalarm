@@ -124,7 +124,7 @@ const char*   ALARM_OPTS_FILE        = "alarmopts";
 const char*   DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
 void editNewTemplate(EditAlarmDlg::Type, const KAEvent* preset, QWidget* parent);
-KAlarm::UpdateStatus sendToKOrganizer(const KAEvent*);
+KAlarm::UpdateStatus sendToKOrganizer(const KAEvent&);
 KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID);
 KAlarm::UpdateStatus runKOrganizer();
 QString uidKOrganizer(const QString& eventID);
@@ -233,19 +233,24 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParen
     {
         // Save the event details in the calendar file, and get the new event ID
         AlarmCalendar* cal = AlarmCalendar::resources();
-        KAEvent* newev = new KAEvent(event);
 #ifdef USE_AKONADI
-        if (!cal->addEvent(*newev, msgParent, (options & USE_EVENT_ID), calendar, (options & NO_RESOURCE_PROMPT), &cancelled))
+        // Note that AlarmCalendar::addEvent() updates 'event'.
+        if (!cal->addEvent(event, msgParent, (options & USE_EVENT_ID), calendar, (options & NO_RESOURCE_PROMPT), &cancelled))
 #else
+        KAEvent* newev = new KAEvent(event);
         if (!cal->addEvent(newev, msgParent, (options & USE_EVENT_ID), calendar, (options & NO_RESOURCE_PROMPT), &cancelled))
 #endif
         {
+#ifndef USE_AKONADI
             delete newev;
+#endif
             status = UPDATE_FAILED;
         }
         else
         {
+#ifndef USE_AKONADI
             event = *newev;   // update event ID etc.
+#endif
             if (!cal->save())
                 status = SAVE_FAILED;
         }
@@ -253,7 +258,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParen
         {
             if ((options & ALLOW_KORG_UPDATE)  &&  event.copyToKOrganizer())
             {
-                UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the event
+                UpdateStatus st = sendToKOrganizer(event);    // tell KOrganizer to show the event
                 if (st > status)
                     status = st;
             }
@@ -312,7 +317,6 @@ UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
         {
             // Save the event details in the calendar file, and get the new event ID
 #ifdef USE_AKONADI
-            KAEvent* const newev = &events[i];
             if (!cal->addEvent(events[i], msgParent, false, &collection))
 #else
             KAEvent* newev = new KAEvent(events[i]);
@@ -329,9 +333,9 @@ UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
 #ifndef USE_AKONADI
             events[i] = *newev;   // update event ID etc.
 #endif
-            if (allowKOrgUpdate  &&  newev->copyToKOrganizer())
+            if (allowKOrgUpdate  &&  events[i].copyToKOrganizer())
             {
-                UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the event
+                UpdateStatus st = sendToKOrganizer(events[i]);    // tell KOrganizer to show the event
                 if (st != UPDATE_OK)
                 {
                     ++warnKOrg;
@@ -529,7 +533,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
             {
                 if (newEvent.copyToKOrganizer())
                 {
-                    UpdateStatus st = sendToKOrganizer(&newEvent);    // tell KOrganizer to show the new event
+                    UpdateStatus st = sendToKOrganizer(newEvent);    // tell KOrganizer to show the new event
                     if (st > status)
                         status = st;
                 }
@@ -895,7 +899,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
             }
             if (newev->copyToKOrganizer())
             {
-                UpdateStatus st = sendToKOrganizer(newev);    // tell KOrganizer to show the event
+                UpdateStatus st = sendToKOrganizer(*newev);    // tell KOrganizer to show the event
                 if (st != UPDATE_OK)
                 {
                     ++warnKOrg;
@@ -2248,40 +2252,40 @@ namespace
 * It will be held by KOrganizer as a simple event, without alarms - KAlarm
 * is still responsible for alarming.
 */
-KAlarm::UpdateStatus sendToKOrganizer(const KAEvent* event)
+KAlarm::UpdateStatus sendToKOrganizer(const KAEvent& event)
 {
 #ifdef USE_AKONADI
     Event::Ptr kcalEvent(new KCalCore::Event);
-        event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
+    event.updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
 #else
-    Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(event);
+    Event* kcalEvent = AlarmCalendar::resources()->createKCalEvent(&event);
 #endif
     // Change the event ID to avoid duplicating the same unique ID as the original event
-    QString uid = uidKOrganizer(event->id());
+    QString uid = uidKOrganizer(event.id());
     kcalEvent->setUid(uid);
     kcalEvent->clearAlarms();
     QString userEmail;
-    switch (event->actionTypes())
+    switch (event.actionTypes())
     {
         case KAEvent::ACT_DISPLAY:
         case KAEvent::ACT_COMMAND:
         case KAEvent::ACT_DISPLAY_COMMAND:
-            kcalEvent->setSummary(event->cleanText());
+            kcalEvent->setSummary(event.cleanText());
             userEmail = Preferences::emailAddress();
             break;
         case KAEvent::ACT_EMAIL:
         {
-            QString from = event->emailFromId()
-                         ? Identities::identityManager()->identityForUoid(event->emailFromId()).fullEmailAddr()
+            QString from = event.emailFromId()
+                         ? Identities::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
                          : Preferences::emailAddress();
             AlarmText atext;
-            atext.setEmail(event->emailAddresses(", "), from, QString(), QString(), event->emailSubject(), QString());
+            atext.setEmail(event.emailAddresses(", "), from, QString(), QString(), event.emailSubject(), QString());
             kcalEvent->setSummary(atext.displayText());
             userEmail = from;
             break;
         }
         case KAEvent::ACT_AUDIO:
-            kcalEvent->setSummary(event->audioFile());
+            kcalEvent->setSummary(event.audioFile());
             break;
         default:
             break;
