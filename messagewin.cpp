@@ -149,8 +149,8 @@ class MessageText : public KTextEdit
 
 
 // Basic flags for the window
-static const Qt::WFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
-static const Qt::WFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
+static const Qt::WindowFlags          WFLAGS       = Qt::WindowStaysOnTopHint;
+static const Qt::WindowFlags          WFLAGS2      = Qt::WindowContextHelpButtonHint;
 static const Qt::WidgetAttribute WidgetFlags  = Qt::WA_DeleteOnClose;
 
 // Error message bit masks
@@ -179,7 +179,7 @@ MessageWin*           MessageWin::mAudioOwner = 0;
 * displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
-    : MainWindowBase(0, static_cast<Qt::WFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint))),
+    : MainWindowBase(0, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint))),
       mMessage(event->cleanText()),
       mFont(event->font()),
       mBgColour(event->bgColour()),

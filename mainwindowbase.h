@@ -38,7 +38,7 @@ class MainWindowBase : public KXmlGuiWindow
         Q_OBJECT
 
     public:
-        explicit MainWindowBase(QWidget* parent = 0, Qt::WFlags f = Qt::Window);
+        explicit MainWindowBase(QWidget* parent = 0, Qt::WindowFlags f = Qt::Window);
 
     protected:
         virtual void closeEvent(QCloseEvent*);

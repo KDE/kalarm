@@ -23,19 +23,19 @@
 #include <QRadioButton>
 
 
-Label::Label(QWidget* parent, Qt::WFlags f)
+Label::Label(QWidget* parent, Qt::WindowFlags f)
     : QLabel(parent, f),
       mRadioButton(0),
       mFocusWidget(0)
 { }
 
-Label::Label(const QString& text, QWidget* parent, Qt::WFlags f)
+Label::Label(const QString& text, QWidget* parent, Qt::WindowFlags f)
     : QLabel(text, parent, f),
       mRadioButton(0),
       mFocusWidget(0)
 { }
 
-Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WFlags f)
+Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WindowFlags f)
     : QLabel(text, parent, f),
       mRadioButton(0),
       mFocusWidget(0)

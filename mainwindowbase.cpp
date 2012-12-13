@@ -25,7 +25,7 @@
 #include <QCloseEvent>
 
 
-MainWindowBase::MainWindowBase(QWidget* parent, Qt::WFlags f)
+MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)
     : KXmlGuiWindow(parent, f),
       disableQuit(false)
 {
