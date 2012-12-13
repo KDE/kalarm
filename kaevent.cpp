@@ -6371,7 +6371,7 @@ static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
         else
         {
             bool done = false;
-            switch (ch.toAscii())
+            switch (ch.toLatin1())
             {
                 case ' ':
                 case ';':
