@@ -87,7 +87,7 @@ class LabelFocusWidget : public QWidget
 {
         Q_OBJECT
     public:
-        LabelFocusWidget(QWidget* parent);
+        explicit LabelFocusWidget(QWidget* parent);
 
     protected:
         virtual void focusInEvent(QFocusEvent*);

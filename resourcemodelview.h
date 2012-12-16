@@ -91,7 +91,7 @@ class ResourceView : public QListView
 {
         Q_OBJECT
     public:
-        ResourceView(QWidget* parent = 0)  : QListView(parent) {}
+        explicit ResourceView(QWidget* parent = 0)  : QListView(parent) {}
         virtual void   setModel(QAbstractItemModel*);
         AlarmResource* resource(int row) const;
         AlarmResource* resource(const QModelIndex&) const;
@@ -108,7 +108,7 @@ class ResourceDelegate : public QItemDelegate
 {
         Q_OBJECT
     public:
-        ResourceDelegate(ResourceView* parent = 0)  : QItemDelegate(parent) {}
+        explicit ResourceDelegate(ResourceView* parent = 0)  : QItemDelegate(parent) {}
         virtual bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&);
 };
 

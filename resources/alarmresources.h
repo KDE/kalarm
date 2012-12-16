@@ -54,7 +54,7 @@ class KALARM_RESOURCES_EXPORT AlarmResources : public KCal::Calendar, public KRE
           public:
             AlarmResource* resource() const  { return mResource; }
           private:
-            Ticket(AlarmResource* r) : mResource(r) { }
+            explicit Ticket(AlarmResource* r) : mResource(r) { }
             AlarmResource* mResource;
         };
 

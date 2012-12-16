@@ -53,7 +53,7 @@ class PrefsTabBase : public StackedScrollWidget
 {
         Q_OBJECT
     public:
-        PrefsTabBase(StackedScrollGroup*);
+        explicit PrefsTabBase(StackedScrollGroup*);
 
         void         setPreferences();
         virtual void restore(bool defaults, bool allTabs) = 0;
@@ -80,7 +80,7 @@ class MiscPrefTab : public PrefsTabBase
 {
         Q_OBJECT
     public:
-        MiscPrefTab(StackedScrollGroup*);
+        explicit MiscPrefTab(StackedScrollGroup*);
 
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
@@ -108,7 +108,7 @@ class TimePrefTab : public PrefsTabBase
 {
         Q_OBJECT
     public:
-        TimePrefTab(StackedScrollGroup*);
+        explicit TimePrefTab(StackedScrollGroup*);
 
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
@@ -132,7 +132,7 @@ class StorePrefTab : public PrefsTabBase
 {
         Q_OBJECT
     public:
-        StorePrefTab(StackedScrollGroup*);
+        explicit StorePrefTab(StackedScrollGroup*);
 
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
@@ -161,7 +161,7 @@ class EmailPrefTab : public PrefsTabBase
 {
         Q_OBJECT
     public:
-        EmailPrefTab(StackedScrollGroup*);
+        exlpicit EmailPrefTab(StackedScrollGroup*);
 
         QString      validate();
         virtual void restore(bool defaults, bool allTabs);
@@ -202,7 +202,7 @@ class EditPrefTab : public PrefsTabBase
 {
         Q_OBJECT
     public:
-        EditPrefTab(StackedScrollGroup*);
+        explicit EditPrefTab(StackedScrollGroup*);
 
         QString      validate();
         virtual void restore(bool defaults, bool allTabs);
@@ -243,7 +243,7 @@ class ViewPrefTab : public PrefsTabBase
 {
         Q_OBJECT
     public:
-        ViewPrefTab(StackedScrollGroup*);
+        explicit ViewPrefTab(StackedScrollGroup*);
 
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
