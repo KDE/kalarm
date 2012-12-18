@@ -161,7 +161,7 @@ class EmailPrefTab : public PrefsTabBase
 {
         Q_OBJECT
     public:
-        exlpicit EmailPrefTab(StackedScrollGroup*);
+        explicit EmailPrefTab(StackedScrollGroup*);
 
         QString      validate();
         virtual void restore(bool defaults, bool allTabs);
