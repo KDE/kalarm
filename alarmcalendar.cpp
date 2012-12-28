@@ -1128,8 +1128,6 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         else
             ok = false;
     }
-    Q_UNUSED( ok );
-    Q_UNUSED( some );
 
     // Save the calendar to file
     bool success = true;
