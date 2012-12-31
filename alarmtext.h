@@ -68,6 +68,7 @@ class KALARMCAL_EXPORT AlarmText
 
         /** Set the alarm text.
          *  If @p text starts with '#!', it is flagged as a script, else plain text.
+         *  @param the text to set for alarm
          */
         void setText(const QString& text);
 
