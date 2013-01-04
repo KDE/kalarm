@@ -58,7 +58,7 @@ class KALARMCAL_EXPORT AlarmText
     public:
         /** Constructor which sets the alarm text.
          *  If @p text starts with '#!', it is flagged as a script, else plain text.
-         *  @param text alarm text to set.
+         *  @param text alarm text to set
          */
         explicit AlarmText(const QString& text = QString());
 
@@ -68,7 +68,7 @@ class KALARMCAL_EXPORT AlarmText
 
         /** Set the alarm text.
          *  If @p text starts with '#!', it is flagged as a script, else plain text.
-         *  @param the text to set for alarm
+         *  @param text alarm text to set
          */
         void setText(const QString& text);
 
@@ -167,12 +167,12 @@ class KALARMCAL_EXPORT AlarmText
          *  @param maxLines   the maximum number of lines returned
          *  @param truncated  if non-null, points to a variable which will be set true
          *                    if the text returned has been truncated, other than to
-         *                    strip a trailing newline, or false otherwise.
+         *                    strip a trailing newline, or false otherwise
          */
         static QString summary(const KAEvent& event, int maxLines = 1, bool* truncated = 0);
 
         /** Return whether a text is an email, with at least To and From headers.
-         *  @param text  text to check.
+         *  @param text  text to check
          */
         static bool checkIfEmail(const QString& text);
 
@@ -180,7 +180,7 @@ class KALARMCAL_EXPORT AlarmText
          *  and if so return its headers or optionally only its subject line.
          *  @param text         text to check
          *  @param subjectOnly  true to only return the subject line,
-         *                      false to return all headers.
+         *                      false to return all headers
          *  @return headers/subject line, or QString() if not the text of an email.
          */
         static QString emailHeaders(const QString& text, bool subjectOnly);
@@ -189,13 +189,13 @@ class KALARMCAL_EXPORT AlarmText
          *  Translation is needed for email texts, since the alarm calendar stores
          *  untranslated email prefixes.
          *  @param text   text to translate
-         *  @param email  updated to indicate whether it is an email text.
+         *  @param email  updated to indicate whether it is an email text
          */
         static QString fromCalendarText(const QString& text, bool& email);
 
         /** Return the text for an alarm message text, in alarm calendar format.
          *  (The prefix strings are untranslated in the calendar.)
-         *  @param text  alarm message text.
+         *  @param text  alarm message text
          */
         static QString toCalendarText(const QString& text);
 
