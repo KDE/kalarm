@@ -984,7 +984,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     KHBox* box = new KHBox(topWidget());
     box->setMargin(0);
     box->setSpacing(2*KDialog::spacingHint());
-    QLabel* label = new QLabel(i18nc("@label", "Email client:"), box);
+    new QLabel(i18nc("@label", "Email client:"), box);
     mEmailClient = new ButtonGroup(box);
     QString kmailOption = i18nc("@option:radio", "KMail");
     QString sendmailOption = i18nc("@option:radio", "Sendmail");
@@ -1027,7 +1027,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     grid->setColumnStretch(2, 1);
 
     // 'From' email address controls ...
-    label = new Label(i18nc("@label 'From' email address", "From:"), group);
+    QLabel *label = new Label(i18nc("@label 'From' email address", "From:"), group);
     grid->addWidget(label, 1, 0);
     mFromAddressGroup = new ButtonGroup(group);
     connect(mFromAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotFromAddrChanged(QAbstractButton*)));
