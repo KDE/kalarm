@@ -20,12 +20,12 @@ endif()
 
 if(KALARM_USE_AKONADI)
     add_definitions(-DUSE_AKONADI)
-else(KALARM_USE_AKONADI)
+else()
     add_definitions(-DUSE_KRESOURCES)
     add_definitions(-DWANT_DEPRECATED_KCAL_API)
     add_definitions(-DWANT_DEPRECATED_KABC_API)
     add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
-endif(KALARM_USE_AKONADI)
+endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 
 
@@ -37,7 +37,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
 )
-else(KALARM_USE_AKONADI)
+else()
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/
@@ -46,11 +46,11 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${Boost_INCLUDE_DIR}
 )
-endif(KALARM_USE_AKONADI)
+endif()
 
 if(NOT KALARM_USE_AKONADI)
     add_subdirectory(resources)
-endif(NOT KALARM_USE_AKONADI)
+endif()
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
@@ -141,7 +141,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     calendarmigrator.cpp
     eventid.cpp
    )
-else(KALARM_USE_AKONADI)
+else()
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     calendarcompat.cpp
     eventlistmodel.cpp
@@ -150,7 +150,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     resourcemodelview.cpp
     templatelistfiltermodel.cpp
    )
-endif(KALARM_USE_AKONADI)
+endif()
 
 kde4_add_ui_files(kalarm_bin_SRCS
     wakedlg.ui
@@ -159,7 +159,7 @@ kde4_add_ui_files(kalarm_bin_SRCS
 qt4_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
 if (KMAIL_SUPPORTED)
     qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/org.kde.kmail.kmail.xml)
-endif (KMAIL_SUPPORTED)
+endif ()
 qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
 if(KALARM_USE_AKONADI)
@@ -180,10 +180,10 @@ kde4_add_app_icon(kalarm_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/ox*-app-
 kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
 if(KALARM_USE_AKONADI)
     add_dependencies(kalarm_bin kalarm_resource_xml kalarmdir_resource_xml)
-endif(KALARM_USE_AKONADI)
+endif()
 if (KMAIL_SUPPORTED)
     add_dependencies(kalarm_bin kmail_xml)
-endif (KMAIL_SUPPORTED)
+endif ()
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
@@ -206,7 +206,7 @@ if(KALARM_USE_AKONADI)
         ${KDE4_PHONON_LIBS}
         ${X11_X11_LIB}
     )
-else(KALARM_USE_AKONADI)
+else()
     target_link_libraries(kalarm_bin
         kalarm_resources
         ${KDEPIMLIBS_KALARMCAL_LIBS}
@@ -225,7 +225,7 @@ else(KALARM_USE_AKONADI)
         ${KDE4_PHONON_LIBS}
         ${X11_X11_LIB}
     )
-endif(KALARM_USE_AKONADI)
+endif()
 
 
 install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
