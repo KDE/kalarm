@@ -75,7 +75,7 @@ void DeferAlarmDlg::slotOk()
     mAlarmDateTime = mTimeWidget->getDateTime(&mDeferMinutes);
     if (!mAlarmDateTime.isValid())
         return;
-    KAEvent::DeferLimitType limitType;
+    KAEvent::DeferLimitType limitType = KAEvent::LIMIT_NONE;
     DateTime endTime;
     if (!mLimitEventId.isEmpty())
     {
