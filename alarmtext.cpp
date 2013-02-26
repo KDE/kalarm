@@ -28,6 +28,7 @@
 #include <kcal/todo.h>
 #endif
 #include <klocale.h>
+#include <klocalizedstring.h>
 #include <kglobal.h>
 #include <QStringList>
 
@@ -126,7 +127,7 @@ void AlarmText::setText(const QString& text)
         d->mType = Private::Script;
 }
 
-void AlarmText::setScript(const QString& text)   
+void AlarmText::setScript(const QString& text)
 {
     setText(text);
     d->mType = Private::Script;
@@ -281,22 +282,22 @@ bool AlarmText::isEmpty() const
     return d->mFrom.isEmpty() && d->mTo.isEmpty() && d->mCc.isEmpty() && d->mTime.isEmpty() && d->mSubject.isEmpty();
 }
 
-bool AlarmText::isEmail() const            
+bool AlarmText::isEmail() const
 {
     return d->mType == Private::Email;
 }
 
-bool AlarmText::isScript() const           
+bool AlarmText::isScript() const
 {
     return d->mType == Private::Script;
 }
 
-bool AlarmText::isTodo() const             
+bool AlarmText::isTodo() const
 {
     return d->mType == Private::Todo;
 }
 
-unsigned long AlarmText::kmailSerialNumber() const  
+unsigned long AlarmText::kmailSerialNumber() const
 {
     return d->mKMailSerialNum;
 }

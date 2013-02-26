@@ -35,7 +35,7 @@
 using namespace KHolidays;
 
 #include <ksystemtimezone.h>
-#include <klocale.h>
+#include <klocalizedstring.h>
 #ifdef KALARMCAL_USE_KRESOURCES
 #include <kglobal.h>
 #include <kconfiggroup.h>
