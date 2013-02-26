@@ -35,6 +35,7 @@
 #include <kdebug.h>
 
 #include <QBitArray>
+#include <QDateTime>
 
 
 #ifndef KALARMCAL_USE_KRESOURCES

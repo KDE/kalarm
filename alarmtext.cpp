@@ -31,6 +31,7 @@
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <QStringList>
+#include <QDate>
 
 namespace KAlarmCal
 {
