@@ -287,7 +287,6 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 #if 0
         void     getChildEvents(const QModelIndex& parent, CalEvent::Type, KAEvent::List&) const;
 #endif
-        QString   displayName_p(const Akonadi::Collection&) const;
         QColor    backgroundColor_p(const Akonadi::Collection&) const;
         QString   repeatText(const KAEvent&) const;
         QString   repeatOrder(const KAEvent&) const;

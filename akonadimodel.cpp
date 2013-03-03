@@ -199,7 +199,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         switch (role)
         {
             case Qt::DisplayRole:
-                return displayName_p(collection);
+                return collection.displayName();
             case EnabledTypesRole:
                 if (!collection.hasAttribute<CollectionAttribute>())
                     return 0;
@@ -861,18 +861,7 @@ QString AkonadiModel::displayName(Akonadi::Collection& collection) const
     if (!collection.isValid())
         return QString();
     refresh(collection);
-    return displayName_p(collection);
-}
-
-/******************************************************************************
-* Return the display name for the collection.
-*/
-QString AkonadiModel::displayName_p(const Akonadi::Collection& collection) const
-{
-    QString name;
-    if (collection.isValid()  &&  collection.hasAttribute<EntityDisplayAttribute>())
-        name = collection.attribute<EntityDisplayAttribute>()->displayName();
-    return name.isEmpty() ? collection.name() : name;
+    return collection.displayName();
 }
 
 /******************************************************************************
@@ -892,7 +881,7 @@ QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 */
 QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types types) const
 {
-    QString name = '@' + displayName_p(collection);   // insert markers for stripping out name
+    QString name = '@' + collection.displayName();   // insert markers for stripping out name
     KUrl url = collection.remoteId();
     QString type = '@' + storageType(collection);   // file/directory/URL etc.
     QString locn = url.pathOrUrl();

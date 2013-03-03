@@ -837,11 +837,7 @@ void ResourceSelector::showInfo()
     Collection collection = currentResource();
     if (collection.isValid())
     {
-        QString name;
-        if (collection.hasAttribute<EntityDisplayAttribute>())
-            name = collection.attribute<EntityDisplayAttribute>()->displayName();
-        if (name.isEmpty())
-            name = collection.name();
+        const QString name = collection.displayName();
         QString id = collection.resource();   // resource name
         CalEvent::Type alarmType = currentResourceType();
         QString calType = AgentManager::self()->instance(id).type().name();
