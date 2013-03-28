@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -141,6 +141,7 @@ class KAlarmApp : public KUniqueApplication
         void               slotWorkTimeChanged(const QTime& start, const QTime& end, const QBitArray& days);
         void               slotHolidaysChanged(const KHolidays::HolidayRegion&);
         void               slotFeb29TypeChanged(Feb29Type);
+        void               checkWritableCalendar();
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
@@ -230,6 +231,7 @@ class KAlarmApp : public KUniqueApplication
         static QString     mFatalMessage;        // fatal error message to output
         bool               mInitialised;         // initialisation complete: ready to process execution queue
         bool               mQuitting;            // a forced quit is in progress
+        bool               mReadOnly;            // only read-only access to calendars is needed
         bool               mLoginAlarmsDone;     // alarms repeated at login have been processed
         DBusHandler*       mDBusHandler;         // the parent of the main DCOP receiver object
         TrayWindow*        mTrayWindow;          // active system tray icon

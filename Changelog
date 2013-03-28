@@ -1,10 +1,13 @@
 KAlarm Change Log
 
+=== Version 2.10.2 --- 28 March 2013 ===
+- Show startup warning message if no writable active alarm calendar is enabled.
+
 === Version 2.10.1 --- 10 December 2012 ===
 - [Akonadi] Fix memory leak when an alarm message window is displayed.
 - [Akonadi] Fix memory leak on alarm edit.
 
-=== Version 2.10.0 (KDE 4.10 beta1)--- 13 November 2012 ===
+=== Version 2.10.0 (KDE 4.10 beta1) --- 13 November 2012 ===
 - Add --list command line option to list scheduled alarms to stdout.
 - Add 'list' D-Bus command to return list of scheduled alarms.
 - [Akonadi] Wait until calendars are populated before using them at startup.

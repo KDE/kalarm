@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,6 +115,7 @@ KAlarmApp::KAlarmApp()
     : KUniqueApplication(),
       mInitialised(false),
       mQuitting(false),
+      mReadOnly(false),
       mLoginAlarmsDone(false),
       mDBusHandler(new DBusHandler()),
       mTrayWindow(0),
@@ -167,6 +168,8 @@ KAlarmApp::KAlarmApp()
         connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
         connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
                                           SLOT(purgeNewArchivedDefault(Akonadi::Collection)));
+        connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
+                                          SLOT(checkWritableCalendar()));
 #endif
 
         KConfigGroup config(KGlobal::config(), "General");
@@ -364,6 +367,7 @@ int KAlarmApp::newInstance()
                 // Output a list of scheduled alarms to stdout.
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for all Akonadi collections to be populated.
+                mReadOnly = true;   // don't need write access to calendars
 #ifdef USE_AKONADI
                 if (!initCheck(true, true))
 #else
@@ -526,6 +530,7 @@ int KAlarmApp::newInstance()
                 break;
 
             case CommandOptions::CMD_ERROR:
+                mReadOnly = true;   // don't need write access to calendars
                 exitCode = 1;
                 break;
         }
@@ -1103,6 +1108,41 @@ void KAlarmApp::slotFeb29TypeChanged(Preferences::Feb29Type type)
 bool KAlarmApp::wantShowInSystemTray() const
 {
     return Preferences::showInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable();
+}
+
+/******************************************************************************
+* Called when all calendars have been fetched at startup.
+* Check whether there are any writable active calendars, and if not, warn the
+* user.
+*/
+void KAlarmApp::checkWritableCalendar()
+{
+kDebug();
+    if (mReadOnly)
+        return;    // don't need write access to calendars
+#ifdef USE_AKONADI
+    if (!AkonadiModel::instance()->isCollectionTreeFetched())
+        return;
+#endif
+    static bool done = false;
+    if (done)
+        return;
+    done = true;
+kDebug()<<"checking";
+    // Find whether there are any writable active alarm calendars
+#ifdef USE_AKONADI
+    bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
+#else
+    bool active = AlarmResources::instance()->activeCount(CalEvent::ACTIVE, true);
+#endif
+    if (!active)
+    {
+        kWarning() << "No writable active calendar";
+        KAMessageBox::information(MainWindow::mainMainWindow(),
+                                  i18nc("@info", "Alarms cannot be created or updated, because no writable active alarm calendar is enabled.<nl/><nl/>"
+                                                 "To fix this, use <interface>View | Show Calendars</interface> to check or change calendar statuses."),
+                                  QString(), QLatin1String("noWritableCal"));
+    }
 }
 
 #ifdef USE_AKONADI
@@ -2343,6 +2383,9 @@ bool KAlarmApp::initCheck(bool calendarOnly)
         if (!AlarmCalendar::resources()->open())
             return false;
         setArchivePurgeDays();
+
+        // Warn the user if there are no writable active alarm calendars
+        checkWritableCalendar();
 
         firstTime = false;
     }
