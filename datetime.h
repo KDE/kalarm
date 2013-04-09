@@ -1,5 +1,5 @@
 /*
- *  datetime.h  -  date/time with start-of-day time for date-only values 
+ *  datetime.h  -  date/time with start-of-day time for date-only values
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
  *  Copyright © 2003,2005-2007,2009,2011 by David Jarvie <djarvie@kde.org>

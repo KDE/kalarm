@@ -186,7 +186,7 @@ class KALARMCAL_EXPORT KARecurrence
         KDateTime startDateTime() const;
         /** Return the start date/time of the recurrence */
         QDate startDate() const;
- 
+
         /** Set the recurrence start date/time, and optionally set it to all-day.
          *  @param dt        start date/time.
          *  @param dateOnly  if true, sets the recurrence to all-day.

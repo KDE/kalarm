@@ -2308,7 +2308,7 @@ bool KAEvent::repeatSound() const
 {
     return d->mRepeatSoundPause >= 0;
 }
- 
+
 int KAEvent::repeatSoundPause() const
 {
     return d->mRepeatSoundPause;
