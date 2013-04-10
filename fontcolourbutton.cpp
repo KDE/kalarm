@@ -1,7 +1,7 @@
 /*
  *  fontcolourbutton.cpp  -  pushbutton widget to select a font and colour
  *  Program:  kalarm
- *  Copyright © 2003-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@
 
 FontColourButton::FontColourButton(QWidget* parent)
     : PushButton(i18nc("@action:button", "Font && Color..."), parent),
+      mDefaultFont(true),
       mReadOnly(false)
 {
     connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));

@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1097,6 +1097,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mFadeSeconds         = 0;
     if (!mAudioFile.isEmpty())   // audio file URL was only saved if it repeats
         mAudioRepeatPause = config.readEntry("AudioPause", 0);
+    mBeep                = false;   // don't beep after restart (similar to not playing non-repeated sound file)
     mSpeak               = config.readEntry("Speak", false);
     mRestoreHeight       = config.readEntry("Height", 0);
     mDefaultDeferMinutes = config.readEntry("DeferMins", 0);

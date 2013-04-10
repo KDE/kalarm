@@ -1,7 +1,7 @@
 /*
  *  eventlistview.cpp  -  base class for widget showing list of alarms
  *  Program:  kalarm
- *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,7 +39,8 @@
 
 EventListView::EventListView(QWidget* parent)
     : QTreeView(parent),
-      mFind(0)
+      mFind(0),
+      mEditOnSingleClick(false)
 {
     setRootIsDecorated(false);    // don't show expander icons for child-less items
     setSortingEnabled(true);

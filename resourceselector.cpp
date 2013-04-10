@@ -1,7 +1,7 @@
 /*
  *  resourceselector.cpp  -  calendar resource selection widget
  *  Program:  kalarm
- *  Copyright © 2006-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2006-2013 by David Jarvie <djarvie@kde.org>
  *  Based on KOrganizer's ResourceView class and KAddressBook's ResourceSelection class,
  *  Copyright (C) 2003,2004 Cornelius Schumacher <schumacher@kde.org>
  *  Copyright (C) 2003-2004 Reinhold Kainhofer <reinhold@kainhofer.com>
@@ -92,7 +92,21 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
 #ifndef USE_AKONADI
       mCalendar(calendar),
 #endif
-      mContextMenu(0)
+      mContextMenu(0),
+      mActionReload(0),
+      mActionShowDetails(0),
+      mActionSetColour(0),
+      mActionClearColour(0),
+      mActionEdit(0),
+#ifdef USE_AKONADI
+      mActionUpdate(0),
+#else
+      mActionSave(0),
+#endif
+      mActionRemove(0),
+      mActionImport(0),
+      mActionExport(0),
+      mActionSetDefault(0)
 {
     QBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setMargin(KDialog::spacingHint());   // use spacingHint for the margin

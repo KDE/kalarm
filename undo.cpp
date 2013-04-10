@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -643,7 +643,8 @@ int                  UndoItem::mRestoreWarningCount;
 UndoItem::UndoItem(Undo::Type type, const QString& name)
     : mName(name),
       mId(0),
-      mType(type)
+      mType(type),
+      mCalendar(CalEvent::EMPTY)
 {
     if (type != Undo::NONE)
     {
