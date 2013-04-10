@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -2136,7 +2136,6 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
             case FileErr_Nonexistent:   errmsg = i18nc("@info", "<filename>%1</filename> not found", file);  break;
             case FileErr_Unreadable:    errmsg = i18nc("@info", "<filename>%1</filename> is not readable", file);  break;
             case FileErr_NotTextImage:  errmsg = i18nc("@info", "<filename>%1</filename> appears not to be a text or image file", file);  break;
-            case FileErr_None:
             default:
                 break;
         }
