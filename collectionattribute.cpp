@@ -72,12 +72,12 @@ CollectionAttribute* CollectionAttribute::clone() const
     return new CollectionAttribute(*this);
 }
 
-bool CollectionAttribute::isEnabled(CalEvent::Type type) const   
+bool CollectionAttribute::isEnabled(CalEvent::Type type) const
 {
     return d->mEnabled & type;
 }
 
-CalEvent::Types CollectionAttribute::enabled() const     
+CalEvent::Types CollectionAttribute::enabled() const
 {
     return d->mEnabled;
 }
@@ -121,7 +121,7 @@ bool CollectionAttribute::isStandard(CalEvent::Type type) const
     }
 }
 
-CalEvent::Types CollectionAttribute::standard() const     
+CalEvent::Types CollectionAttribute::standard() const
 {
     return d->mStandard;
 }
@@ -148,32 +148,32 @@ void CollectionAttribute::setStandard(CalEvent::Types types)
     d->mStandard = types & (CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE);
 }
 
-QColor CollectionAttribute::backgroundColor() const     
+QColor CollectionAttribute::backgroundColor() const
 {
     return d->mBackgroundColour;
 }
 
-void CollectionAttribute::setBackgroundColor(const QColor& c)  
+void CollectionAttribute::setBackgroundColor(const QColor& c)
 {
     d->mBackgroundColour = c;
 }
 
-bool CollectionAttribute::keepFormat() const            
+bool CollectionAttribute::keepFormat() const
 {
     return d->mKeepFormat;
 }
 
-void CollectionAttribute::setKeepFormat(bool keep)      
+void CollectionAttribute::setKeepFormat(bool keep)
 {
     d->mKeepFormat = keep;
 }
 
-QByteArray CollectionAttribute::type() const    
+QByteArray CollectionAttribute::type() const
 {
     return name();
 }
 
-QByteArray CollectionAttribute::name()    
+QByteArray CollectionAttribute::name()
 {
     return "KAlarmCollection";
 }

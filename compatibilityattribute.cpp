@@ -39,8 +39,8 @@ class CompatibilityAttribute::Private
         KACalendar::Compat mCompatibility;    // calendar compatibility with current KAlarm format
         int                mVersion;          // KAlarm calendar format version
 };
- 
-    
+
+
 CompatibilityAttribute::CompatibilityAttribute()
     : d(new Private)
 {
