@@ -1,7 +1,7 @@
 /*
  *  prefdlg.h  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@
 
 #include <kpagedialog.h>
 
-class FontColourPrefTab;
 class EditPrefTab;
 class EmailPrefTab;
 class ViewPrefTab;
@@ -48,7 +47,6 @@ class KAlarmPrefDlg : public KPageDialog
         EditPrefTab*       mEditPage;
         EmailPrefTab*      mEmailPage;
         ViewPrefTab*       mViewPage;
-        FontColourPrefTab* mFontColourPage;
 
         KPageWidgetItem*   mMiscPageItem;
         KPageWidgetItem*   mTimePageItem;
@@ -56,7 +54,6 @@ class KAlarmPrefDlg : public KPageDialog
         KPageWidgetItem*   mEditPageItem;
         KPageWidgetItem*   mEmailPageItem;
         KPageWidgetItem*   mViewPageItem;
-        KPageWidgetItem*   mFontColourPageItem;
 
     protected:
         virtual void  showEvent(QShowEvent*);
