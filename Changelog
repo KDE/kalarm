@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.10.2 --- 4 May 2013 ===
+- [Akonadi] Fix infinite loop on shutdown if display alarms are active [KDE Bug 317806]
+
 === Version 2.10.1 --- 10 December 2012 ===
 - [Akonadi] Fix memory leak when an alarm message window is displayed.
 - [Akonadi] Fix memory leak on alarm edit.

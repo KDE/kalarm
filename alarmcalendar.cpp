@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -68,6 +68,7 @@ static KACalendar::Compat fix(const KCalCore::FileStorage::Ptr&);
 #endif
 
 static const QString displayCalendarName = QLatin1String("displaying.ics");
+static const Collection::Id DISPLAY_COL_ID = -1;   // collection ID used for displaying calendar
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = 0;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = 0;
@@ -519,7 +520,11 @@ void AlarmCalendar::close()
 #endif
     // Resource map should be empty, but just in case...
     while (!mResourceMap.isEmpty())
+#ifdef USE_AKONADI
+        removeKAEvents(mResourceMap.begin().key(), true, CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE | CalEvent::DISPLAYING);
+#else
         removeKAEvents(mResourceMap.begin().key(), true);
+#endif
 }
 
 #ifndef USE_AKONADI
@@ -575,10 +580,10 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
     if (mCalType == RESOURCES)
         return;
     kDebug();
-    Collection::Id key = -1;
+    const Collection::Id key = DISPLAY_COL_ID;
 #else
     kDebug() << (resource ? resource->resourceName() : "0");
-    AlarmResource* key = resource;
+    const AlarmResource* key = resource;
 #endif
     KAEvent::List& events = mResourceMap[key];
     int i, end;
@@ -666,7 +671,10 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
             KAEvent* event = events[i];
             bool remove = (event->collectionId() != key);
             if (remove)
-                kError() << "Event" << event->id() << ", collection" << event->collectionId() << "Indexed under collection" << key;
+            {
+                if (key != DISPLAY_COL_ID)
+                    kError() << "Event" << event->id() << ", collection" << event->collectionId() << "Indexed under collection" << key;
+            }
             else
                 remove = event->category() & types;
             if (remove)
@@ -1348,7 +1356,7 @@ bool AlarmCalendar::addEvent(KAEvent* event, QWidget* promptParent, bool useEven
         // It's the display calendar
 #ifdef USE_AKONADI
         event->updateKCalEvent(kcalEvent, KAEvent::UID_IGNORE);
-        key = -1;
+        key = DISPLAY_COL_ID;
         if (!mEventMap.contains(EventId(key, event->id())))
         {
             addNewEvent(Collection(), event);
