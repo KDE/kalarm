@@ -448,10 +448,10 @@ class KALARMCAL_EXPORT KAEvent
         /** Return the OR of various Flag enum status values. */
         Flags flags() const;
 
-        /** Set the alarm category (active/archived/template). */
+        /** Set the alarm category (active/archived/template, or displaying). */
         void setCategory(CalEvent::Type type);
 
-        /** Return the alarm category (active/archived/template). */
+        /** Return the alarm category (active/archived/template, or displaying). */
         CalEvent::Type category() const;
 
         /** Set the event's unique identifier. Note that the UID is guaranteed to be unique
