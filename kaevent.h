@@ -2,7 +2,7 @@
  *  kaevent.h  -  represents calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -105,7 +105,7 @@ class KALARMCAL_EXPORT KAAlarm
             DISPLAYING_ALARM    = 0x20   //!< Copy of the alarm currently being displayed
 
             // IMPORTANT: if any values are added to this list, ensure that the
-            //            KAEvent::Private::AlarmType enum is adjusted similarly.
+            //            KAEventPrivate::AlarmType enum is adjusted similarly.
         };
 
         /** Default constructor, which creates an invalid instance. */
@@ -183,8 +183,10 @@ class KALARMCAL_EXPORT KAAlarm
         //@endcond
 
     friend class KAEvent;
+    friend class KAEventPrivate;
 };
 
+class KAEventPrivate;
 
 /**
  * @short KAEvent represents a KAlarm event
@@ -234,7 +236,7 @@ class KALARMCAL_EXPORT KAEvent
             REMINDER_ONCE   = 0x20000  //!< only trigger the reminder on the first recurrence
 
             // IMPORTANT: if any values are added to this list, ensure that the
-            //            additional enum values in KAEvent::Private are also adjusted.
+            //            additional enum values in KAEventPrivate are also adjusted.
         };
         Q_DECLARE_FLAGS(Flags, Flag)
 
@@ -1359,8 +1361,7 @@ class KALARMCAL_EXPORT KAEvent
         void dumpDebug() const;
 
     private:
-        class Private;
-        QSharedDataPointer<Private> d;
+        QSharedDataPointer<KAEventPrivate> d;
 };
 
 } // namespace KAlarmCal
