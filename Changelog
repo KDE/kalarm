@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.10.3 --- 4 May 2013 ===
+- Show startup warning if no writable active alarm calendar is enabled [KDE Bug 316338]
+
 === Version 2.10.2 --- 4 May 2013 ===
 - [Akonadi] Fix infinite loop on shutdown if display alarms are active [KDE Bug 317806]
 
@@ -7,17 +10,17 @@ KAlarm Change Log
 - [Akonadi] Fix memory leak when an alarm message window is displayed.
 - [Akonadi] Fix memory leak on alarm edit.
 
-=== Version 2.10.0 (KDE 4.10 beta1) --- 13 November 2012 ===
+=== Version 2.10.0 (KDE 4.10 beta1)--- 13 November 2012 ===
 - Add --list command line option to list scheduled alarms to stdout.
 - Add 'list' D-Bus command to return list of scheduled alarms.
 - [Akonadi] Wait until calendars are populated before using them at startup.
 
 === Version 2.9.3 (KDE 4.9.4) --- 13 November 2012 ===
-- [Akonadi] Fix alarm list not sorting new alarms when calendar is enabled.
+- [Akonadi] Fix alarm list not sorting new alarms when calendar is enabled [KDE Bug 306178]
 
 === Version 2.9.2 (KDE 4.9.1) --- 22 August 2012 ===
 - Fix Quit not working in system tray icon context menu.
-- [KResources] Fix KAlarm button not highlighting the alarm in the main window.
+- [KResources] Fix KAlarm button not highlighting the alarm in the main window [KDE Bug 266082]
 
 === Version 2.9.1 (KDE 4.9.0) --- 7 July 2012 ===
 - Add option to execute a pre-alarm action before deferred alarms.
@@ -29,11 +32,11 @@ KAlarm Change Log
 - [Akonadi resources] Fix resource if config is missing.
 - [Akonadi resources] Make resource work if location is set by path OR URL.
 - Fix crash when closing alarm window for alarm which plays audio file.
-- Fix "server did not accept the sender address" errors sending emails.
+- Fix "server did not accept the sender address" errors sending emails [KDE Bug 301946]
 
 === Version 2.8.5 (KDE 4.8.4) --- 6 June 2012 ===
-- [Akonadi] Warn user and disable KAlarm if Akonadi fails to run.
-- [Akonadi] Fix crash when saving new alarm.
+- [Akonadi] Warn user and disable KAlarm if Akonadi fails to run [KDE Bug 300083]
+- [Akonadi] Fix crash when saving new alarm [KDE Bug Bug 300376]
 
 === Version 2.8.3 (KDE 4.8.3) --- 22 April 2012 ===
 - Store KAlarm version and backend in config file.
@@ -42,14 +45,14 @@ KAlarm Change Log
 === Version 2.8.2 (KDE 4.8.2) --- 29 March 2012 ===
 - [Akonadi] Fix error saving changed alarms when closing Edit Alarm dialogue.
 - [Akonadi] Show old-format calendars in read-only colour in calendar list.
-- [KResources] Fail cleanly if calendar resources fail to open.
+- [KResources] Fail cleanly if calendar resources fail to open [KDE Bug 296383]
 - Prevent multiple email success messages after Try used in Edit Alarm dialogue.
 
 === Version 2.8.1 (KDE 4.8.1) --- 19 February 2012 ===
 - [Akonadi] Don't give option to save new alarms in old format calendars.
 - [Akonadi] Prevent duplicate prompts to update format of new calendar resource.
-- [Akonadi] Automatically disable duplicated calendar resources.
-- [Akonadi] Fix errors when creating default calendar resources.
+- [Akonadi] Automatically disable duplicated calendar resources [KDE Bug 293193]
+- [Akonadi] Fix errors when creating default calendar resources [KDE Bug 293208]
 - [Akonadi] Prevent multiple standard calendars for any alarm type.
 - [Akonadi] Fix various crashes.
 - Output cmake error if Akonadi option incompatible with kdepimlibs/kalarmcal.
