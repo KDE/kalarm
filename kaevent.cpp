@@ -37,6 +37,7 @@ using namespace KHolidays;
 #include <ksystemtimezone.h>
 #include <klocalizedstring.h>
 #ifdef KALARMCAL_USE_KRESOURCES
+#include <ksharedconfig.h>
 #include <kglobal.h>
 #include <kconfiggroup.h>
 #endif
@@ -211,7 +212,7 @@ class KAEventPrivate : public QSharedData
         bool               setDisplaying(const KAEventPrivate&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
         void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
         void               setCommandError(const QString& configString);
-        void               setCommandError(CmdErrType, bool writeConfig) const;
+        void               setCommandError(KAEvent::CmdErrType, bool writeConfig) const;
 #endif
         void               startChanges()                 { ++mChangeCount; }
         void               endChanges();
@@ -2116,10 +2117,10 @@ void KAEventPrivate::setCommandError(KAEvent::CmdErrType error, bool writeConfig
             QString errtext;
             switch (mCommandError)
             {
-                case CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
-                case CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
-                case CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
-                case CMD_ERROR_PRE_POST:
+                case KAEvent::CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
+                case KAEvent::CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
+                case KAEvent::CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
+                case KAEvent::CMD_ERROR_PRE_POST:
                     errtext = CMD_ERROR_PRE_VALUE + ',' + CMD_ERROR_POST_VALUE;
                     break;
                 default:
@@ -2144,13 +2145,13 @@ void KAEventPrivate::setCommandError(const QString& configString)
     mCommandError = KAEvent::CMD_NO_ERROR;
     const QStringList errs = configString.split(',');
     if (errs.indexOf(CMD_ERROR_VALUE) >= 0)
-        mCommandError = CMD_ERROR;
+        mCommandError = KAEvent::CMD_ERROR;
     else
     {
         if (errs.indexOf(CMD_ERROR_PRE_VALUE) >= 0)
-            mCommandError = CMD_ERROR_PRE;
+            mCommandError = KAEvent::CMD_ERROR_PRE;
         if (errs.indexOf(CMD_ERROR_POST_VALUE) >= 0)
-            mCommandError = static_cast<KAEvent::CmdErrType>(mCommandError | CMD_ERROR_POST);
+            mCommandError = static_cast<KAEvent::CmdErrType>(mCommandError | KAEvent::CMD_ERROR_POST);
     }
 }
 
