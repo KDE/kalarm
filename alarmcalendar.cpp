@@ -68,7 +68,9 @@ static KACalendar::Compat fix(const KCalCore::FileStorage::Ptr&);
 #endif
 
 static const QString displayCalendarName = QLatin1String("displaying.ics");
+#ifdef USE_AKONADI
 static const Collection::Id DISPLAY_COL_ID = -1;   // collection ID used for displaying calendar
+#endif
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = 0;
 AlarmCalendar* AlarmCalendar::mDisplayCalendar = 0;
@@ -583,7 +585,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
     const Collection::Id key = DISPLAY_COL_ID;
 #else
     kDebug() << (resource ? resource->resourceName() : "0");
-    const AlarmResource* key = resource;
+    AlarmResource* key = resource;
 #endif
     KAEvent::List& events = mResourceMap[key];
     int i, end;

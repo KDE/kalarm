@@ -1249,7 +1249,7 @@ QStringList KAlarmApp::scheduledAlarmList()
 #endif
         text += event->id() + ' '
              +  dateTime.toString("%Y%m%dT%H%M ")
-             +  AlarmText::summary(events[i], 1);
+             +  AlarmText::summary(*event, 1);
         alarms << text;
     }
     return alarms;

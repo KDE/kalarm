@@ -1100,8 +1100,9 @@ KAEvent::List getSortedActiveEvents(const KDateTime& startTime, const KDateTime&
     else
         events = AlarmCalendar::resources()->events(CalEvent::ACTIVE);
     KAEvent::List result;
-    for (i = 0, count = events.count();  i < count;  ++i)
+    for (int i = 0, count = events.count();  i < count;  ++i)
     {
+        KAEvent* event = events[i];
         if (event->enabled()  &&  !event->expired())
             result += event;
     }
