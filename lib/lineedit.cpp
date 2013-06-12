@@ -21,7 +21,7 @@
 #include "kalarm.h"
 #include "lineedit.moc"
 
-#include <libkdepim/maillistdrag.h>
+#include <libkdepim/misc/maillistdrag.h>
 #include <kabc/vcarddrag.h>
 #ifdef USE_AKONADI
 #include <kcalutils/icaldrag.h>

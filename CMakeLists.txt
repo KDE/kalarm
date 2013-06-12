@@ -35,6 +35,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/libkdepim/
     ${Boost_INCLUDE_DIR}
 )
 else()
@@ -44,6 +45,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/lib
     ${CMAKE_CURRENT_SOURCE_DIR}/resources
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/libkdepim/
     ${Boost_INCLUDE_DIR}
 )
 endif()

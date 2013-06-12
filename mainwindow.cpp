@@ -49,7 +49,7 @@
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
 
-#include <libkdepim/maillistdrag.h>
+#include <libkdepim/misc/maillistdrag.h>
 #include <kmime/kmime_content.h>
 #ifdef USE_AKONADI
 #include <kcalcore/memorycalendar.h>

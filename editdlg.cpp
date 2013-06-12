@@ -52,7 +52,7 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 
-#include <libkdepim/maillistdrag.h>
+#include <libkdepim/misc/maillistdrag.h>
 
 #include <kglobal.h>
 #include <klocale.h>
