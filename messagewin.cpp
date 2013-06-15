@@ -170,7 +170,7 @@ QMap<QString, unsigned> MessageWin::mErrorMessages;
 // sound files simultaneously would result in a cacophony, and besides
 // that, Phonon currently crashes...
 QPointer<AudioThread> MessageWin::mAudioThread;
-MessageWin*           MessageWin::mAudioOwner = 0;
+MessageWin*           AudioThread::mAudioOwner = 0;
 
 /******************************************************************************
 * Construct the message window for the specified alarm.
@@ -415,7 +415,7 @@ MessageWin::MessageWin()
 MessageWin::~MessageWin()
 {
     kDebug() << mEventId;
-    if (mAudioOwner == this  &&  mAudioThread)
+    if (AudioThread::mAudioOwner == this  &&  !mAudioThread.isNull())
         mAudioThread->quit();
     mErrorMessages.remove(mEventId);
     mWindowList.removeAll(this);
@@ -1498,7 +1498,6 @@ void MessageWin::startAudio()
     {
         kDebug() << QThread::currentThread();
         mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
-        mAudioOwner = this;
         connect(mAudioThread, SIGNAL(readyToPlay()), SLOT(playReady()));
         connect(mAudioThread, SIGNAL(finished()), SLOT(playFinished()));
         if (mSilenceButton)
@@ -1563,12 +1562,25 @@ void MessageWin::playFinished()
         }
     }
     delete mAudioThread.data();
-    // Notify after deleting mAudioThread, so that isAudioPlaying() will
-    // return the correct value.
-    theApp()->notifyAudioPlaying(false);
-    mAudioOwner = 0;
     if (mAlwaysHide)
         close();
+}
+
+/******************************************************************************
+* Constructor for audio thread.
+*/
+AudioThread::AudioThread(MessageWin* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
+    : QThread(parent),
+      mFile(audioFile),
+      mVolume(volume),
+      mFadeVolume(fadeVolume),
+      mFadeSeconds(fadeSeconds),
+      mRepeatPause(repeatPause),
+      mAudioObject(0)
+{
+    if (mAudioOwner)
+        kError() << "mAudioOwner already set";
+    mAudioOwner = parent;
 }
 
 /******************************************************************************
@@ -1581,6 +1593,11 @@ AudioThread::~AudioThread()
     stop(true);   // stop playing and tidy up (timeout 3 seconds)
     delete mAudioObject;
     mAudioObject = 0;
+    if (mAudioOwner == parent())
+        mAudioOwner = 0;
+    // Notify after deleting mAudioThread, so that isAudioPlaying() will
+    // return the correct value.
+    QTimer::singleShot(0, theApp(), SLOT(notifyAudioStopped()));
 }
 
 /******************************************************************************
