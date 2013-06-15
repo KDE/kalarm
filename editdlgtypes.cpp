@@ -1540,7 +1540,7 @@ void EditAudioAlarmDlg::type_initValues(const KAEvent* event)
     if (event)
     {
         mSoundConfig->set(event->audioFile(), event->soundVolume(), event->fadeVolume(), event->fadeSeconds(),
-                          (event->flags() & KAEvent::REPEAT_SOUND));
+                          (event->flags() & KAEvent::REPEAT_SOUND) ? event->repeatSoundPause() : -1);
     }
     else
     {

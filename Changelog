@@ -1,7 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.10.3 --- 4 May 2013 ===
+=== Version 2.10.4 --- 15 June 2013 ===
 - Show startup warning if no writable active alarm calendar is enabled [KDE Bug 316338]
+
+=== Version 2.10.3 --- 15 June 2013 ===
+- Fix sound repetition pause not working in audio alarms [KDE Bug 319261]
 
 === Version 2.10.2 --- 4 May 2013 ===
 - [Akonadi] Fix infinite loop on shutdown if display alarms are active [KDE Bug 317806]
