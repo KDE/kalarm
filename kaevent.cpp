@@ -1739,7 +1739,11 @@ Alarm* KAEvent::Private::initKCalAlarm(Event* event, int startOffsetSecs, const 
                 case AUDIO:
                     setAudioAlarm(alarm);
                     if (mRepeatSoundPause >= 0)
+                    {
                         alltypes += SOUND_REPEAT_TYPE;
+                        if (type == MAIN_ALARM)
+                            alltypes += QString::number(mRepeatSoundPause);
+                    }
                     break;
             }
             if (display)
@@ -4406,7 +4410,19 @@ void KAEvent::Private::readAlarm(const Alarm* alarm, AlarmData& data, bool audio
         else if (type == Private::POST_ACTION_TYPE  &&  data.action == KAAlarm::COMMAND)
             data.type = POST_ACTION_ALARM;
         else if (type == Private::SOUND_REPEAT_TYPE  &&  data.action == KAAlarm::AUDIO)
+        {
             repeatSound = true;
+            if (i + 1 < end)
+            {
+                bool ok;
+                uint n = types[i + 1].toUInt(&ok);
+                if (ok)
+                {
+                    data.repeatSoundPause = n;
+                    ++i;
+                }
+            }
+        }
     }
     if (repeatSound && data.repeatSoundPause < 0)
         data.repeatSoundPause = 0;
