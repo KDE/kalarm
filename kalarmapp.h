@@ -115,6 +115,7 @@ class KAlarmApp : public KUniqueApplication
         void               purgeNewArchivedDefault(const Akonadi::Collection&);
         void               atLoginEventAdded(const KAEvent&);
 #endif
+        void               notifyAudioStopped()  { notifyAudioPlaying(false); }
         void               stopAudio();
         void               spreadWindows(bool);
         void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);

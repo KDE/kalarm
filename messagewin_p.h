@@ -1,7 +1,7 @@
 /*
  *  messagewin_p.h  -  private declarations for MessageWin
  *  Program:  kalarm
- *  Copyright © 2009,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2009-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,24 +26,20 @@
 #include <QThread>
 #include <QMutex>
 
+class MessageWin;
+
 namespace Phonon { class MediaObject; }
 
 class AudioThread : public QThread
 {
         Q_OBJECT
     public:
-        AudioThread(QObject* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause)
-            : QThread(parent),
-              mFile(audioFile),
-              mVolume(volume),
-              mFadeVolume(fadeVolume),
-              mFadeSeconds(fadeSeconds),
-              mRepeatPause(repeatPause),
-              mAudioObject(0)
-        {}
+        AudioThread(MessageWin* parent, const QString& audioFile, float volume, float fadeVolume, int fadeSeconds, int repeatPause);
         ~AudioThread();
         void    stop(bool wait = false);
         QString error() const;
+
+        static MessageWin*   mAudioOwner;    // window which owns the unique AudioThread
 
     signals:
         void    readyToPlay();

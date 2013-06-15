@@ -1,7 +1,7 @@
 /*
  *  messagewin.h  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -160,8 +160,7 @@ class MessageWin : public MainWindowBase
         static QMap<QString, unsigned> mErrorMessages; // error messages currently displayed, by event ID
 #endif
         // Sound file playing
-        static QPointer<AudioThread>   mAudioThread;   // thread to play audio file
-        static MessageWin*             mAudioOwner;    // window which owns mAudioThread
+        static QPointer<AudioThread> mAudioThread;   // thread to play audio file
         // Properties needed by readProperties()
         QString             mMessage;
         QFont               mFont;
