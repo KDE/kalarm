@@ -31,6 +31,9 @@ set(kalarmcal_LIB_SRCS
     version.cpp
    )
 if(NOT USE_KRESOURCES)
+    # The includes in akonadi/ use exceptions, we must enable them here for clang to be happy.
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+
     set(kalarmcal_LIB_SRCS ${kalarmcal_LIB_SRCS}
 	collectionattribute.cpp
 	compatibilityattribute.cpp
