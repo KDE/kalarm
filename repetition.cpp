@@ -107,7 +107,7 @@ Repetition::operator bool() const
     return d->mCount;
 }
 
-bool Repetition::operator==(const Repetition& r) const  
+bool Repetition::operator==(const Repetition& r) const
 {
     return d->mInterval == r.d->mInterval && d->mCount == r.d->mCount;
 }

@@ -296,30 +296,30 @@ namespace CalEvent
 // to delete them on program termination.
 struct StaticStrings
 {
-	StaticStrings()
-		: STATUS_PROPERTY("TYPE"),
-		  ACTIVE_STATUS(QLatin1String("ACTIVE")),
-		  TEMPLATE_STATUS(QLatin1String("TEMPLATE")),
-		  ARCHIVED_STATUS(QLatin1String("ARCHIVED")),
-		  DISPLAYING_STATUS(QLatin1String("DISPLAYING")),
-		  ARCHIVED_UID(QLatin1String("-exp-")),
-		  DISPLAYING_UID(QLatin1String("-disp-")),
-		  TEMPLATE_UID(QLatin1String("-tmpl-"))
-	{}
-	// Event custom properties.
-	// Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
-	const QByteArray STATUS_PROPERTY;    // X-KDE-KALARM-TYPE property
-	const QString ACTIVE_STATUS;
-	const QString TEMPLATE_STATUS;
-	const QString ARCHIVED_STATUS;
-	const QString DISPLAYING_STATUS;
+    StaticStrings()
+        : STATUS_PROPERTY("TYPE"),
+          ACTIVE_STATUS(QLatin1String("ACTIVE")),
+          TEMPLATE_STATUS(QLatin1String("TEMPLATE")),
+          ARCHIVED_STATUS(QLatin1String("ARCHIVED")),
+          DISPLAYING_STATUS(QLatin1String("DISPLAYING")),
+          ARCHIVED_UID(QLatin1String("-exp-")),
+          DISPLAYING_UID(QLatin1String("-disp-")),
+          TEMPLATE_UID(QLatin1String("-tmpl-"))
+    {}
+    // Event custom properties.
+    // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
+    const QByteArray STATUS_PROPERTY;    // X-KDE-KALARM-TYPE property
+    const QString ACTIVE_STATUS;
+    const QString TEMPLATE_STATUS;
+    const QString ARCHIVED_STATUS;
+    const QString DISPLAYING_STATUS;
 
-	// Event ID identifiers
-	const QString ARCHIVED_UID;
-	const QString DISPLAYING_UID;
+    // Event ID identifiers
+    const QString ARCHIVED_UID;
+    const QString DISPLAYING_UID;
 
-	// Old KAlarm format identifiers
-	const QString TEMPLATE_UID;
+    // Old KAlarm format identifiers
+    const QString TEMPLATE_UID;
 };
 K_GLOBAL_STATIC(StaticStrings, staticStrings)
 
@@ -328,47 +328,47 @@ K_GLOBAL_STATIC(StaticStrings, staticStrings)
 */
 QString uid(const QString& id, Type status)
 {
-	QString result = id;
-	Type oldType;
-	int i, len;
-	if ((i = result.indexOf(staticStrings->ARCHIVED_UID)) > 0)
-	{
-		oldType = ARCHIVED;
-		len = staticStrings->ARCHIVED_UID.length();
-	}
-	else if ((i = result.indexOf(staticStrings->DISPLAYING_UID)) > 0)
-	{
-		oldType = DISPLAYING;
-		len = staticStrings->DISPLAYING_UID.length();
-	}
-	else
-	{
-		oldType = ACTIVE;
-		i = result.lastIndexOf('-');
-		len = 1;
-		if (i < 0)
-		{
-			i = result.length();
-			len = 0;
-		}
-		else
-			len = 1;
-	}
-	if (status != oldType  &&  i > 0)
-	{
-		QString part;
-		switch (status)
-		{
-			case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
-			case DISPLAYING:  part = staticStrings->DISPLAYING_UID;  break;
-			case ACTIVE:
-			case TEMPLATE:
-			case EMPTY:
-			default:          part = QLatin1String("-");  break;
-		}
-		result.replace(i, len, part);
-	}
-	return result;
+    QString result = id;
+    Type oldType;
+    int i, len;
+    if ((i = result.indexOf(staticStrings->ARCHIVED_UID)) > 0)
+    {
+        oldType = ARCHIVED;
+        len = staticStrings->ARCHIVED_UID.length();
+    }
+    else if ((i = result.indexOf(staticStrings->DISPLAYING_UID)) > 0)
+    {
+        oldType = DISPLAYING;
+        len = staticStrings->DISPLAYING_UID.length();
+    }
+    else
+    {
+        oldType = ACTIVE;
+        i = result.lastIndexOf('-');
+        len = 1;
+        if (i < 0)
+        {
+            i = result.length();
+            len = 0;
+        }
+        else
+            len = 1;
+    }
+    if (status != oldType  &&  i > 0)
+    {
+        QString part;
+        switch (status)
+        {
+            case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
+            case DISPLAYING:  part = staticStrings->DISPLAYING_UID;  break;
+            case ACTIVE:
+            case TEMPLATE:
+            case EMPTY:
+            default:          part = QLatin1String("-");  break;
+        }
+        result.replace(i, len, part);
+    }
+    return result;
 }
 
 /******************************************************************************
@@ -386,54 +386,54 @@ Type status(const Event::Ptr& event, QString* param)
 Type status(const Event* event, QString* param)
 #endif
 {
-	// Set up a static quick lookup for type strings
-	typedef QMap<QString, Type> PropertyMap;
-	static PropertyMap properties;
-	if (properties.isEmpty())
-	{
-		properties[staticStrings->ACTIVE_STATUS]     = ACTIVE;
-		properties[staticStrings->TEMPLATE_STATUS]   = TEMPLATE;
-		properties[staticStrings->ARCHIVED_STATUS]   = ARCHIVED;
-		properties[staticStrings->DISPLAYING_STATUS] = DISPLAYING;
-	}
+    // Set up a static quick lookup for type strings
+    typedef QMap<QString, Type> PropertyMap;
+    static PropertyMap properties;
+    if (properties.isEmpty())
+    {
+        properties[staticStrings->ACTIVE_STATUS]     = ACTIVE;
+        properties[staticStrings->TEMPLATE_STATUS]   = TEMPLATE;
+        properties[staticStrings->ARCHIVED_STATUS]   = ARCHIVED;
+        properties[staticStrings->DISPLAYING_STATUS] = DISPLAYING;
+    }
 
-	if (param)
-		param->clear();
-	if (!event)
-		return EMPTY;
-	Alarm::List alarms = event->alarms();
-	if (alarms.isEmpty())
-		return EMPTY;
+    if (param)
+        param->clear();
+    if (!event)
+        return EMPTY;
+    Alarm::List alarms = event->alarms();
+    if (alarms.isEmpty())
+        return EMPTY;
 
-	const QString property = event->customProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
-	if (!property.isEmpty())
-	{
-		// There's a X-KDE-KALARM-TYPE property.
-		// It consists of the event type, plus an optional parameter.
-		PropertyMap::ConstIterator it = properties.constFind(property);
-		if (it != properties.constEnd())
-			return it.value();
-		int i = property.indexOf(';');
-		if (i < 0)
-			return EMPTY;
-		it = properties.constFind(property.left(i));
-		if (it == properties.constEnd())
-			return EMPTY;
-		if (param)
-			*param = property.mid(i + 1);
-		return it.value();
-	}
+    const QString property = event->customProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+    if (!property.isEmpty())
+    {
+        // There's a X-KDE-KALARM-TYPE property.
+        // It consists of the event type, plus an optional parameter.
+        PropertyMap::ConstIterator it = properties.constFind(property);
+        if (it != properties.constEnd())
+            return it.value();
+        int i = property.indexOf(';');
+        if (i < 0)
+            return EMPTY;
+        it = properties.constFind(property.left(i));
+        if (it == properties.constEnd())
+            return EMPTY;
+        if (param)
+            *param = property.mid(i + 1);
+        return it.value();
+    }
 
-	// The event either wasn't written by KAlarm, or was written by a pre-2.0 version.
-	// Check first for an old KAlarm format, which indicated the event type in its UID.
-	QString uid = event->uid();
-	if (uid.indexOf(staticStrings->ARCHIVED_UID) > 0)
-		return ARCHIVED;
-	if (uid.indexOf(staticStrings->TEMPLATE_UID) > 0)
-		return TEMPLATE;
+    // The event either wasn't written by KAlarm, or was written by a pre-2.0 version.
+    // Check first for an old KAlarm format, which indicated the event type in its UID.
+    QString uid = event->uid();
+    if (uid.indexOf(staticStrings->ARCHIVED_UID) > 0)
+        return ARCHIVED;
+    if (uid.indexOf(staticStrings->TEMPLATE_UID) > 0)
+        return TEMPLATE;
 
-	// Otherwise, assume it's an active alarm
-	return ACTIVE;
+    // Otherwise, assume it's an active alarm
+    return ACTIVE;
 }
 
 /******************************************************************************
@@ -447,22 +447,22 @@ void setStatus(const Event::Ptr& event, Type status, const QString& param)
 void setStatus(Event* event, Type status, const QString& param)
 #endif
 {
-	if (!event)
-		return;
-	QString text;
-	switch (status)
-	{
-		case ACTIVE:      text = staticStrings->ACTIVE_STATUS;  break;
-		case TEMPLATE:    text = staticStrings->TEMPLATE_STATUS;  break;
-		case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
-		case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
-		default:
-			event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
-			return;
-	}
-	if (!param.isEmpty())
-		text += ';' + param;
-	event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
+    if (!event)
+        return;
+    QString text;
+    switch (status)
+    {
+        case ACTIVE:      text = staticStrings->ACTIVE_STATUS;  break;
+        case TEMPLATE:    text = staticStrings->TEMPLATE_STATUS;  break;
+        case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
+        case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
+        default:
+            event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+            return;
+    }
+    if (!param.isEmpty())
+        text += ';' + param;
+    event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
 
 #ifndef KALARMCAL_USE_KRESOURCES

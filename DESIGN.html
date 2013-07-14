@@ -123,7 +123,7 @@ Compliant with the iCalendar specification, KAlarm defines a number of custom fi
     <tr><td class=cont></td><td class=cont><tt>DATE_DEFERRAL</tt></td><td class=cont>The alarm is a subsidiary date-only deferral alarm</td></tr>
     <tr><td class=cont></td><td class=cont><tt>PRE</tt></td><td class=cont>The alarm is a subsidiary pre-alarm action command, which is executed immediately before the main alarm</td></tr>
     <tr><td class=cont></td><td class=cont><tt>POST</tt></td><td class=cont>The alarm is a subsidiary post-alarm action command, which is executed immediately after the user acknowledges the main display alarm</td></tr>
-    <tr><td class=cont></td><td class=cont><tt>SOUNDREPEAT</tt></td><td class=cont>For an audio alarm, indicates that the sound file should be repeated indefinitely</td></tr>
+    <tr><td class=cont></td><td class=cont><tt>SOUNDREPEAT<em>[,pause]</em></tt></td><td class=cont>For an audio alarm, indicates that the sound file should be repeated indefinitely. The argument, which is present only in the "main" alarm, is the pause in seconds between repetitions.</td></tr>
     <tr><td class=cont></td><td class=cont><tt>DISPLAYING</tt></td><td class=cont>The alarm is currently being displayed, i.e. in the displaying calendar</td></tr>
     <tr><td colspan=2><tt>X-KDE-KALARM-FLAGS</tt></td><td>Multiple parameters specify various properties of the alarm</td></tr>
     <tr><td></td><td><tt>HIDE</tt></td><td>For an alarm of type REMINDER, indicates that it is suppressed by a deferral alarm whose trigger time is later than this alarm. Allows the reminder alarm to be reinstated if the deferral is subsequently cancelled.</td></tr>
@@ -147,8 +147,13 @@ The following custom parameter value is used in the <tt>STATUS</tt> property in 
 
 <h3>Other</h3>
 
-In an audio alarm (<tt>ACTION:AUDIO</tt>), sound file repetition is indicated as follows. The reason for this scheme is that KCalCore::Alarm cannot set a snooze time of zero.
-    <ul>No pause between repetitions: <tt>REPEAT:-1</tt> (<tt>DURATION</tt> is ignored)
-    <br>Pause between repetitions: <tt>REPEAT:-2</tt> with <tt>DURATION</tt> containing the pause interval.
+In an audio alarm (<tt>ACTION:AUDIO</tt>), sound file repetition (which occurs can be specified independently of the overall event recurrence or sub-repetition, is indicated as follows.
+<ul><li>In the "main" alarm, <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT</tt> is used to specify sound file repetition, because the REPEAT and DURATION properties apply to the overall event.
+        <ul>No pause between repetitions: <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT</tt>
+        <br>Pause between repetitions: <tt>X-KDE-KALARM-TYPE:SOUNDREPEAT,<em>pause</em></tt></ul>
+    <li>In subsidiary alarms, the following scheme is used. The reason for this scheme is that KCalCore::Alarm cannot set a snooze time of zero.
+        <ul>No pause between repetitions: <tt>REPEAT:-1</tt> (<tt>DURATION</tt> is ignored)
+        <br>Pause between repetitions: <tt>REPEAT:-2</tt> with <tt>DURATION</tt> containing the pause interval.</ul>
+</ul>
 
 </body>
