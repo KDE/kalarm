@@ -233,6 +233,7 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
 
 void EditAlarmDlg::init(const KAEvent* event)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setObjectName(mTemplate ? "TemplEditDlg" : "EditDlg");    // used by LikeBack
     QString caption;
     if (mReadOnly)
