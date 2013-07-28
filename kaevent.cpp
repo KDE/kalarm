@@ -54,6 +54,8 @@ using namespace KHolidays;
 namespace KAlarmCal
 {
 
+//=============================================================================
+
 #ifndef KALARMCAL_USE_KRESOURCES
 typedef KCalCore::Person  EmailAddress;
 class EmailAddressList : public KCalCore::Person::List
@@ -80,6 +82,7 @@ class EmailAddressList : public QList<KCal::Person>
         QString     address(int index) const;
 };
 
+//=============================================================================
 
 class KAAlarm::Private
 {
@@ -97,6 +100,7 @@ class KAAlarm::Private
         bool        mTimedDeferral;    // if mDeferred = true: true if the deferral is timed, false if date-only
 };
 
+//=============================================================================
 
 class KAEventPrivate : public QSharedData
 {
@@ -433,6 +437,7 @@ class KAEventPrivate : public QSharedData
         static const QString SC;
 };
 
+//=============================================================================
 
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.

@@ -138,6 +138,7 @@ namespace KACalendar
     extern const QByteArray APPNAME;    //!< The application name ("KALARM") used in calendar properties
 } // namespace KACalendar
 
+//
 
 /**
  * @short Class representing type attributes of a KAlarm event.

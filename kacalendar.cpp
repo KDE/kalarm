@@ -88,6 +88,8 @@ class Private
 QByteArray Private::mIcalProductId;
 
 
+//=============================================================================
+
 namespace KACalendar
 {
 
@@ -288,6 +290,7 @@ bool isUTC(const QString& localFile)
     return false;
 }
 
+//=============================================================================
 
 namespace CalEvent
 {
