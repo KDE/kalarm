@@ -55,7 +55,6 @@ using Akonadi::Collection;
 using namespace KCal;
 #endif
 
-
 static const KCatalogLoader loader("libkalarmcal");
 
 namespace KAlarmCal
@@ -72,7 +71,6 @@ static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION
 
 static bool isUTC(const QString& localFile);
 
-
 class Private
 {
     public:
@@ -86,7 +84,6 @@ class Private
 };
 
 QByteArray Private::mIcalProductId;
-
 
 //=============================================================================
 

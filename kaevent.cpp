@@ -519,14 +519,12 @@ QTime                           KAEventPrivate::mWorkDayStart(9, 0, 0);
 QTime                           KAEventPrivate::mWorkDayEnd(17, 0, 0);
 int                             KAEventPrivate::mWorkTimeIndex = 1;
 
-
 #ifndef KALARMCAL_USE_KRESOURCES
 static void setProcedureAlarm(const Alarm::Ptr&, const QString& commandLine);
 #else
 static void setProcedureAlarm(Alarm*, const QString& commandLine);
 #endif
 static QString reminderToString(int minutes);
-
 
 /*=============================================================================
 = Class KAEvent
@@ -4173,7 +4171,6 @@ void KAEventPrivate::dumpDebug() const
 }
 #endif
 
-
 /******************************************************************************
 * Fetch the start and next date/time for a KCal::Event.
 * Reply = next main date/time.
@@ -5669,7 +5666,6 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
             event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, flags.join(KAEventPrivate::SC));
         event->setCategories(cats);
 
-
         if ((pre_1_4_14  ||  (pre_1_9_7 && !pre_1_9_0))
         &&  event->recurrence()  &&  event->recurrence()->recurs())
         {
@@ -6103,8 +6099,6 @@ bool KAEventPrivate::convertRepetition(Event* event)
     return converted;
 }
 
-
-
 /*=============================================================================
 = Class KAAlarm
 = Corresponds to a single KCal::Alarm instance.
@@ -6219,7 +6213,6 @@ const char* KAAlarm::debugType(Type type)
     }
 }
 #endif
-
 
 /*=============================================================================
 = Class EmailAddressList
@@ -6362,7 +6355,6 @@ QString EmailAddressList::pureAddresses(const QString& separator) const
     }
     return result;
 }
-
 
 /*=============================================================================
 = Static functions

@@ -37,7 +37,6 @@
 #include <QBitArray>
 #include <QDateTime>
 
-
 #ifndef KALARMCAL_USE_KRESOURCES
 using namespace KCalCore;
 #else
@@ -82,7 +81,6 @@ class KARecurrence::Private
         mutable int      mCachedType;
 };
 
-
 /*=============================================================================
 = Class KARecurrence
 = The purpose of this class is to represent the restricted range of recurrence
@@ -99,9 +97,7 @@ class KARecurrence::Private
 = 60th-day-of-the-year recurrence rule, thereby conforming to RFC2445.
 =============================================================================*/
 
-
 KARecurrence::Feb29Type KARecurrence::Private::mDefaultFeb29 = KARecurrence::Feb29_None;
-
 
 KARecurrence::KARecurrence()
     : d(new Private)
