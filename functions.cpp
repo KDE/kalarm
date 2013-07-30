@@ -1288,6 +1288,8 @@ void PrivateNewAlarmDlg::accept(EditAlarmDlg* editDlg)
     Undo::saveAdd(event, calendar);
 
     outputAlarmWarnings(editDlg, &event);
+
+    editDlg->deleteLater();
 }
 
 /******************************************************************************
