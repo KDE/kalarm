@@ -1243,6 +1243,7 @@ PrivateNewAlarmDlg::PrivateNewAlarmDlg(EditAlarmDlg* dlg)
     : QObject(dlg)
 {
     connect(dlg, SIGNAL(accepted()), SLOT(okClicked()));
+    connect(dlg, SIGNAL(rejected()), SLOT(cancelClicked()));
 }
 
 /******************************************************************************
@@ -1290,6 +1291,14 @@ void PrivateNewAlarmDlg::accept(EditAlarmDlg* editDlg)
     outputAlarmWarnings(editDlg, &event);
 
     editDlg->deleteLater();
+}
+
+/******************************************************************************
+* Called when the dialogue is rejected (e.g. by clicking the Cancel button).
+*/
+void PrivateNewAlarmDlg::cancelClicked()
+{
+    static_cast<EditAlarmDlg*>(parent())->deleteLater();
 }
 
 /******************************************************************************

@@ -65,6 +65,7 @@ class PrivateNewAlarmDlg : public QObject
 
     private slots:
         void okClicked();
+        void cancelClicked();
 };
 
 } // namespace KAlarm
