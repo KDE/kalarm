@@ -166,7 +166,7 @@ class MessageWin : public MainWindowBase
         QFont               mFont;
         QColor              mBgColour, mFgColour;
         DateTime            mDateTime;        // date/time displayed in the message window
-        QDateTime           mCloseTime;       // local time at which window should be auto-closed
+        QDateTime           mCloseTime;       // UTC time at which window should be auto-closed
 #ifdef USE_AKONADI
         Akonadi::Item::Id   mEventItemId;
         EventId             mEventId;

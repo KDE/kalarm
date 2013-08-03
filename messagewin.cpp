@@ -271,7 +271,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     setAutoSaveSettings(QLatin1String("MessageWin"), false);
     mWindowList.append(this);
     if (event->autoClose())
-        mCloseTime = alarm.dateTime().effectiveDateTime().addSecs(event->lateCancel() * 60);
+        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().dateTime().addSecs(event->lateCancel() * 60);
     if (mAlwaysHide)
     {
         hide();
@@ -857,7 +857,7 @@ void MessageWin::cancelReminder(const KAEvent& event, const KAAlarm& alarm)
     mNoPostAction = false;
     mAlarmType = alarm.type();
     if (event.autoClose())
-        mCloseTime = alarm.dateTime().effectiveDateTime().addSecs(event.lateCancel() * 60);
+        mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().dateTime().addSecs(event.lateCancel() * 60);
     setCaption(i18nc("@title:window", "Message"));
     mTimeLabel->setText(dateTimeToDisplay());
     if (mRemainingText)
@@ -1091,6 +1091,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     if (dateOnly)
         mDateTime.setDateOnly(true);
     mCloseTime           = config.readEntry("Expiry", invalidDateTime);
+    mCloseTime.setTimeSpec(Qt::UTC);
     mAudioFile           = config.readPathEntry("AudioFile", QString());
     mVolume              = static_cast<float>(config.readEntry("Volume", 0)) / 100;
     mFadeVolume          = -1;
@@ -1817,7 +1818,7 @@ void MessageWin::show()
     if (mCloseTime.isValid())
     {
         // Set a timer to auto-close the window
-        int delay = KDateTime::currentLocalDateTime().dateTime().secsTo(mCloseTime);
+        int delay = KDateTime::currentUtcDateTime().dateTime().secsTo(mCloseTime);
         if (delay < 0)
             delay = 0;
         QTimer::singleShot(delay * 1000, this, SLOT(close()));
