@@ -2200,7 +2200,7 @@ void MessageWin::setButtonsReadOnly(bool ro)
 */
 void MessageWin::setDeferralLimit(const KAEvent& event)
 {
-    mDeferLimit = event.deferralLimit().effectiveKDateTime().toLocalZone().dateTime();
+    mDeferLimit = event.deferralLimit().effectiveKDateTime().toUtc().dateTime();
     MidnightTimer::connect(this, SLOT(checkDeferralLimit()));   // check every day
     mDisableDeferral = false;
     checkDeferralLimit();
@@ -2219,14 +2219,14 @@ void MessageWin::checkDeferralLimit()
 {
     if (!mDeferButton->isEnabled()  ||  !mDeferLimit.isValid())
         return;
-    int n = KDateTime::currentLocalDate().daysTo(mDeferLimit.date());
+    int n = KDateTime::currentLocalDate().daysTo(KDateTime(mDeferLimit, KDateTime::LocalZone).date());
     if (n > 0)
         return;
     MidnightTimer::disconnect(this, SLOT(checkDeferralLimit()));
     if (n == 0)
     {
         // The deferral limit will be reached today
-        n = KDateTime::currentLocalTime().secsTo(mDeferLimit.time());
+        n = KDateTime::currentUtcDateTime().dateTime().secsTo(mDeferLimit);
         if (n > 0)
         {
             QTimer::singleShot(n * 1000, this, SLOT(checkDeferralLimit()));
