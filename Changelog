@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.10.5 --- 3 August 2013 ===
+=== Version 2.10.6 --- 27 August 2013 ===
+- [Akonadi] Fix error saving template when closing Edit Template dialogue [KDE Bug 323965]
+
+=== Version 2.10.5 (KDE 4.11.0) --- 3 August 2013 ===
 - Fix memory leak whenever the edit dialogue is closed.
 - Fix auto-close alarms not displaying when KAlarm defaults to UTC time zone.
 - Fix display alarm deferral limit when KAlarm defaults to UTC time zone.

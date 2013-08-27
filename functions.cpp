@@ -1651,6 +1651,10 @@ void editTemplate(KAEvent* event, QWidget* parent)
         editDlg->getEvent(newEvent, calendar);
         QString id = event->id();
         newEvent.setEventId(id);
+#ifdef USE_AKONADI
+        newEvent.setCollectionId(event->collectionId());
+        newEvent.setItemId(event->itemId());
+#endif
 
         // Update the event in the displays and in the calendar file
         Undo::Event undo(*event, calendar);
