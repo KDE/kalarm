@@ -206,7 +206,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 
     // File browse button
     mFileBrowseButton = new QPushButton(mFileBox);
-    mFileBrowseButton->setIcon(SmallIcon("document-open"));
+    mFileBrowseButton->setIcon(SmallIcon(QLatin1String("document-open")));
     int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
     mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
@@ -798,7 +798,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Log file browse button.
     // The file browser dialog is activated by the PickLogFileRadio class.
     QPushButton* browseButton = new QPushButton(box);
-    browseButton->setIcon(SmallIcon("document-open"));
+    browseButton->setIcon(SmallIcon(QLatin1String("document-open")));
     int size = browseButton->sizeHint().height();
     browseButton->setFixedSize(size, size);
     browseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
@@ -1101,7 +1101,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     grid->addWidget(mEmailToEdit, 1, 1);
 
     mEmailAddressButton = new QPushButton(parent);
-    mEmailAddressButton->setIcon(SmallIcon("help-contents"));
+    mEmailAddressButton->setIcon(SmallIcon(QLatin1String("help-contents")));
     int size = mEmailAddressButton->sizeHint().height();
     mEmailAddressButton->setFixedSize(size, size);
     connect(mEmailAddressButton, SIGNAL(clicked()), SLOT(openAddressBook()));
@@ -1172,7 +1172,7 @@ void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
     {
         // Set the values to those for the specified event
         mEmailAttachList->addItems(event->emailAttachments());
-        mEmailToEdit->setText(event->emailAddresses(", "));
+        mEmailToEdit->setText(event->emailAddresses(QLatin1String(", ")));
         mEmailSubjectEdit->setText(event->emailSubject());
         mEmailBcc->setChecked(event->emailBcc());
         if (mEmailFromList)
@@ -1228,7 +1228,7 @@ void EditEmailAlarmDlg::setEmailFields(uint fromID, const QList<KCal::Person>& a
     if (fromID)
         mEmailFromList->setCurrentIdentity(fromID);
     if (!addresses.isEmpty())
-        mEmailToEdit->setText(KAEvent::joinEmailAddresses(addresses, ", "));
+        mEmailToEdit->setText(KAEvent::joinEmailAddresses(addresses, QLatin1String(", ")));
     if (!subject.isEmpty())
         mEmailSubjectEdit->setText(subject);
     if (!attachments.isEmpty())
@@ -1392,14 +1392,14 @@ void EditEmailAlarmDlg::slotTrySuccess()
 {
     disconnect(theApp(), SIGNAL(execAlarmSuccess()), this, SLOT(slotTrySuccess()));
     QString msg;
-    QString to = KAEvent::joinEmailAddresses(mEmailAddresses, "<nl/>");
-    to.replace('<', "&lt;");
-    to.replace('>', "&gt;");
+    QString to = KAEvent::joinEmailAddresses(mEmailAddresses, QLatin1String("<nl/>"));
+    to.replace(QLatin1Char('<'), QLatin1String("&lt;"));
+    to.replace(QLatin1Char('>'), QLatin1String("&gt;"));
     if (mEmailBcc->isChecked())
-        msg = "<qt>" + i18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
-                    to, Preferences::emailBccAddress()) + "</qt>";
+        msg = QLatin1String("<qt>") + i18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
+                    to, Preferences::emailBccAddress()) + QLatin1String("</qt>");
     else
-        msg = "<qt>" + i18nc("@info", "Email sent to:<nl/>%1", to) + "</qt>";
+        msg = QLatin1String("<qt>") + i18nc("@info", "Email sent to:<nl/>%1", to) + QLatin1String("</qt>");
     KAMessageBox::information(this, msg);
 }
 
@@ -1421,7 +1421,7 @@ void EditEmailAlarmDlg::openAddressBook()
     Person person(selections.first().name(), selections.first().email());
     QString addrs = mEmailToEdit->text().trimmed();
     if (!addrs.isEmpty())
-        addrs += ", ";
+        addrs += QLatin1String(", ");
     addrs += person.fullName();
     mEmailToEdit->setText(addrs);
 }

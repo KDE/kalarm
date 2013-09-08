@@ -63,7 +63,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     : KDialog(parent),
       mSpecialActionsButton(0)
 {
-    setObjectName("BirthdayDlg");    // used by LikeBack
+    setObjectName(QLatin1String("BirthdayDlg"));    // used by LikeBack
     setCaption(i18nc("@title:window", "Import Birthdays From KAddressBook"));
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);

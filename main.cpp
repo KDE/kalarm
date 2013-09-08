@@ -141,7 +141,7 @@ int Version()
 {
     static int version = 0;
     if (!version)
-        version = KAlarmCal::getVersionNumber(KALARM_VERSION);
+        version = KAlarmCal::getVersionNumber(QLatin1String(KALARM_VERSION));
     return version;
 }
 

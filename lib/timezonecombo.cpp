@@ -30,18 +30,19 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 {
     if (!mCatalogLoaded)
     {
-        KGlobal::locale()->insertCatalog( "timezones4" ); // for time zone translations
+        KGlobal::locale()->insertCatalog( QLatin1String("timezones4") ); // for time zone translations
         mCatalogLoaded = true;
     }
     QString utc = KTimeZone::utc().name();
     addItem(utc);   // put UTC at start of list
     mZoneNames << utc;
     const KTimeZones::ZoneMap zones = KSystemTimeZones::zones();
-    for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != zones.constEnd();  ++it)
+    KTimeZones::ZoneMap::ConstIterator end = zones.constEnd();
+    for (KTimeZones::ZoneMap::ConstIterator it = zones.constBegin();  it != end;  ++it)
         if (it.key() != utc)
         {
             mZoneNames << it.key();
-            addItem(i18n(it.key().toUtf8()).replace('_', ' '));
+            addItem(i18n(it.key().toUtf8()).replace(QLatin1Char('_'), QLatin1Char(' ')));
         }
 }
 

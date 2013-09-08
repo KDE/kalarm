@@ -248,14 +248,14 @@ QSize TimeSpinBox::sizeHint() const
 {
     QSize sz = SpinBox2::sizeHint();
     QFontMetrics fm(font());
-    return QSize(sz.width() + fm.width(":"), sz.height());
+    return QSize(sz.width() + fm.width(QLatin1Char(':')), sz.height());
 }
 
 QSize TimeSpinBox::minimumSizeHint() const
 {
     QSize sz = SpinBox2::minimumSizeHint();
     QFontMetrics fm(font());
-    return QSize(sz.width() + fm.width(":"), sz.height());
+    return QSize(sz.width() + fm.width(QLatin1Char(':')), sz.height());
 }
 
 /******************************************************************************

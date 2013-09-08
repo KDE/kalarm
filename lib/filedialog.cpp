@@ -36,7 +36,7 @@ QCheckBox* FileDialog::mAppendCheck = 0;
 QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWidget* parent, const QString& caption, bool* append)
 {
     bool defaultDir = dir.isEmpty();
-    bool specialDir = !defaultDir && dir.protocol() == "kfiledialog";
+    bool specialDir = !defaultDir && dir.protocol() == QLatin1String("kfiledialog");
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).

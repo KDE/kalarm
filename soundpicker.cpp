@@ -92,7 +92,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 
     // Sound file picker button
     mFilePicker = new PushButton(this);
-    mFilePicker->setIcon(KIcon(SmallIcon("audio-x-generic")));
+    mFilePicker->setIcon(KIcon(SmallIcon(QLatin1String("audio-x-generic"))));
     int size = mFilePicker->sizeHint().height();
     mFilePicker->setFixedSize(size, size);
     connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
@@ -324,10 +324,10 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
     if (defaultDir.isEmpty())
     {
         if (kdeSoundDir.isNull())
-            kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", "KDE-Sys-Warning.ogg");
+            kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", QLatin1String("KDE-Sys-Warning.ogg"));
         defaultDir = kdeSoundDir;
     }
-    QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(" ");
+    QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1String(" "));
     return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }
 

@@ -499,7 +499,7 @@ void AlarmCalendar::close()
         if (!mLocalFile.isEmpty())
         {
             KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
-            mLocalFile = "";
+            mLocalFile = QLatin1String("");
         }
     }
     // Flag as closed now to prevent removeKAEvents() doing silly things
