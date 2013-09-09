@@ -103,7 +103,7 @@ CommandOptions::CommandOptions()
         int n = mArgs->count();
         for (int i = 0;  i < n;  ++i)
         {
-            mText += ' ';
+            mText += QLatin1Char(' ');
             mText += mArgs->arg(i);
         }
     }
@@ -116,7 +116,7 @@ CommandOptions::CommandOptions()
         int n = mArgs->count();
         for (int i = 0;  i < n;  ++i)
         {
-            mText += ' ';
+            mText += QLatin1Char(' ');
             mText += mArgs->arg(i);
         }
     }
@@ -240,8 +240,8 @@ CommandOptions::CommandOptions()
             {
                 // Background colour is specified
                 QString colourText = mArgs->getOption("color");
-                if (colourText[0] == '0' && colourText[1].toLower() == 'x')
-                    colourText.replace(0, 2, "#");
+                if (colourText[0] == QLatin1Char('0') && colourText[1].toLower() == QLatin1Char('x'))
+                    colourText.replace(0, 2, QLatin1String("#"));
                 mBgColour.setNamedColor(colourText);
                 if (!mBgColour.isValid())
                     setErrorParameter("--color");
@@ -250,8 +250,8 @@ CommandOptions::CommandOptions()
             {
                 // Foreground colour is specified
                 QString colourText = mArgs->getOption("colorfg");
-                if (colourText[0] == '0' && colourText[1].toLower() == 'x')
-                    colourText.replace(0, 2, "#");
+                if (colourText[0] == QLatin1Char('0') && colourText[1].toLower() == QLatin1Char('x'))
+                    colourText.replace(0, 2, QLatin1String("#"));
                 mFgColour.setNamedColor(colourText);
                 if (!mFgColour.isValid())
                     setErrorParameter("--colorfg");

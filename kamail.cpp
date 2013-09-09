@@ -154,7 +154,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         return -1;
     }
     jobdata.bcc  = (jobdata.event.emailBcc() ? Preferences::emailBccAddress() : QString());
-    kDebug() << "To:" << jobdata.event.emailAddresses(",")
+    kDebug() << "To:" << jobdata.event.emailAddresses(QLatin1String(","))
                   << endl << "Subject:" << jobdata.event.emailSubject();
 
     MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
@@ -217,7 +217,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     // MessageQueueJob email addresses must be pure, i.e. without display name. Note
     // that display names are included in the actual headers set up by initHeaders().
     mailjob->addressAttribute().setFrom(extractEmailAndNormalize(jobdata.from));
-    mailjob->addressAttribute().setTo(extractEmailsAndNormalize(jobdata.event.emailAddresses(",")));
+    mailjob->addressAttribute().setTo(extractEmailsAndNormalize(jobdata.event.emailAddresses(QLatin1String(","))));
     if (!jobdata.bcc.isEmpty())
         mailjob->addressAttribute().setBcc(extractEmailsAndNormalize(jobdata.bcc));
     MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
@@ -315,11 +315,11 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(subject);
 
     KMime::Headers::UserAgent* agent = new KMime::Headers::UserAgent;
-    agent->fromUnicodeString(KGlobal::mainComponent().aboutData()->programName() + "/" KALARM_VERSION, "us-ascii");
+    agent->fromUnicodeString(KGlobal::mainComponent().aboutData()->programName() + QLatin1String("/") + QLatin1String(KALARM_VERSION), "us-ascii");
     message.setHeader(agent);
 
     KMime::Headers::MessageID* id = new KMime::Headers::MessageID;
-    id->generate(data.from.mid(data.from.indexOf('@') + 1).toLatin1());
+    id->generate(data.from.mid(data.from.indexOf(QLatin1Char('@')) + 1).toLatin1());
     message.setHeader(id);
 }
 
@@ -365,7 +365,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         // Append each attachment in turn
         for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
         {
-            QString attachment = (*at).toLocal8Bit();
+            QString attachment = QString::fromLatin1((*at).toLocal8Bit());
             KUrl url(attachment);
             QString attachError = i18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
             url.cleanPath();
@@ -454,7 +454,7 @@ void KAMail::notifyQueued(const KAEvent& event)
             QString domain = addr.mailboxList.first().addrSpec().domain;
             if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
             {
-                KAMessageBox::information(MainWindow::mainMainWindow(), i18nc("@info", "An email has been queued to be sent"), QString(), Preferences::EMAIL_QUEUED_NOTIFY);
+                KAMessageBox::information(MainWindow::mainMainWindow(), i18nc("@info", "An email has been queued to be sent"), QString(), QLatin1String(Preferences::EMAIL_QUEUED_NOTIFY));
                 return;
             }
         }
@@ -649,7 +649,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 #ifdef __GNUC__
 #warning Set correct DBus interface/object for kmail
 #endif
-    QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("KMailIface"));
+    QDBusInterface iface(QLatin1String(KMAIL_DBUS_SERVICE), QString(), QLatin1String("KMailIface"));
     QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("getDecodedBodyPart"), args);
     if (!reply.isValid())
     {
@@ -725,7 +725,7 @@ const QTextCodec* codecForName(const QByteArray& str)
         return 0;
     QByteArray codec = str;
     kAsciiToLower(codec.data());
-    return KGlobal::charsets()->codecForName(codec);
+    return KGlobal::charsets()->codecForName(QLatin1String(codec));
 }
 
 /******************************************************************************
@@ -832,7 +832,7 @@ KMime::Types::Mailbox::List parseAddresses(const QString& text, QString& invalid
             {
                 int len = endName - start;
                 QString name = text.mid(start, endName - start);
-                if (name[0] == '"'  &&  name[len - 1] == '"')
+                if (name[0] == QLatin1Char('"')  &&  name[len - 1] == QLatin1Char('"'))
                     name = name.mid(1, len - 2);
                 mbox.setName(name);
             }
