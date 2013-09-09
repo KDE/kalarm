@@ -97,7 +97,7 @@ using namespace KCal;
 
 using namespace KAlarmCal;
 
-static const char* UI_FILE     = "kalarmui.rc";
+static const QString UI_FILE     = QLatin1String("kalarmui.rc");
 static const char* WINDOW_NAME = "MainWindow";
 
 static const char* VIEW_GROUP         = "View";
@@ -150,7 +150,7 @@ MainWindow::MainWindow(bool restored)
     kDebug();
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
-    setObjectName("MainWin");    // used by LikeBack
+    setObjectName(QLatin1String("MainWin"));    // used by LikeBack
     setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
     KConfigGroup config(KGlobal::config(), VIEW_GROUP);
     mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
@@ -434,7 +434,7 @@ void MainWindow::show()
         // Show error message now that the main window has been displayed.
         // Waiting until now lets the user easily associate the message with
         // the main window which is faulty.
-        KAMessageBox::error(this, i18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", QLatin1String(UI_FILE)));
+        KAMessageBox::error(this, i18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", UI_FILE));
         mMenuError = false;
     }
 }
@@ -490,17 +490,17 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
     connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
-    mActionCopy = new KAction(KIcon("edit-copy"), i18nc("@action", "&Copy..."), this);
+    mActionCopy = new KAction(KIcon(QLatin1String("edit-copy")), i18nc("@action", "&Copy..."), this);
     actions->addAction(QLatin1String("copy"), mActionCopy);
     mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
     connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-    mActionModify = new KAction(KIcon("document-properties"), i18nc("@action", "&Edit..."), this);
+    mActionModify = new KAction(KIcon(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("modify"), mActionModify);
     mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
-    mActionDelete = new KAction(KIcon("edit-delete"), i18nc("@action", "&Delete"), this);
+    mActionDelete = new KAction(KIcon(QLatin1String("edit-delete")), i18nc("@action", "&Delete"), this);
     actions->addAction(QLatin1String("delete"), mActionDelete);
     mActionDelete->setShortcut(QKeySequence::Delete);
     connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
@@ -547,7 +547,7 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
     connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-    mActionToggleResourceSel = new KToggleAction(KIcon("view-choose"), i18nc("@action", "Show &Calendars"), this);
+    mActionToggleResourceSel = new KToggleAction(KIcon(QLatin1String("view-choose")), i18nc("@action", "Show &Calendars"), this);
     actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
     connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
@@ -571,7 +571,7 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("export"), mActionExport);
     connect(mActionExport, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
 
-    action = new KAction(KIcon("view-refresh"), i18nc("@action", "&Refresh Alarms"), this);
+    action = new KAction(KIcon(QLatin1String("view-refresh")), i18nc("@action", "&Refresh Alarms"), this);
     actions->addAction(QLatin1String("refreshAlarms"), action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
 
@@ -591,12 +591,12 @@ void MainWindow::initActions()
         redoTextStripped = KGlobal::locale()->removeAcceleratorMarker(redoText);
         delete act;
     }
-    mActionUndo = new KToolBarPopupAction(KIcon("edit-undo"), undoText, this);
+    mActionUndo = new KToolBarPopupAction(KIcon(QLatin1String("edit-undo")), undoText, this);
     actions->addAction(QLatin1String("edit_undo"), mActionUndo);
     mActionUndo->setShortcut(undoShortcut);
     connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
 
-    mActionRedo = new KToolBarPopupAction(KIcon("edit-redo"), redoText, this);
+    mActionRedo = new KToolBarPopupAction(KIcon(QLatin1String("edit-redo")), redoText, this);
     actions->addAction(QLatin1String("edit_redo"), mActionRedo);
     mActionRedo->setShortcut(redoShortcut);
     connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
@@ -619,9 +619,9 @@ void MainWindow::initActions()
     // Load menu and toolbar settings
     applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
 
-    mContextMenu = static_cast<KMenu*>(factory()->container("listContext", this));
-    mActionsMenu = static_cast<KMenu*>(factory()->container("actions", this));
-    KMenu* resourceMenu = static_cast<KMenu*>(factory()->container("resourceContext", this));
+    mContextMenu = static_cast<KMenu*>(factory()->container(QLatin1String("listContext"), this));
+    mActionsMenu = static_cast<KMenu*>(factory()->container(QLatin1String("actions"), this));
+    KMenu* resourceMenu = static_cast<KMenu*>(factory()->container(QLatin1String("resourceContext"), this));
     mResourceSelector->setContextMenu(resourceMenu);
     mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
     connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
@@ -829,9 +829,9 @@ void MainWindow::slotDelete(bool force)
         if (KAMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
                                                              "Do you really want to delete the %1 selected alarms?", n),
                                                 i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
-                                                KGuiItem(i18nc("@action:button", "&Delete"), "edit-delete"),
+                                                KGuiItem(i18nc("@action:button", "&Delete"), QLatin1String("edit-delete")),
                                                 KStandardGuiItem::cancel(),
-                                                Preferences::CONFIRM_ALARM_DELETION)
+                                                QLatin1String(Preferences::CONFIRM_ALARM_DELETION))
             != KMessageBox::Continue)
             return;
     }
@@ -1252,7 +1252,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
     else
     {
         mActionUndo->setEnabled(true);
-        mActionUndo->setText(QString("%1 %2").arg(undoText).arg(undo));
+        mActionUndo->setText(QString::fromLatin1("%1 %2").arg(undoText).arg(undo));
     }
     if (redo.isNull())
     {
@@ -1262,7 +1262,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
     else
     {
         mActionRedo->setEnabled(true);
-        mActionRedo->setText(QString("%1 %2").arg(redoText).arg(redo));
+        mActionRedo->setText(QString::fromLatin1("%1 %2").arg(redoText).arg(redo));
     }
 }
 
@@ -1392,7 +1392,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     CalendarLocal calendar(Preferences::timeZone(true));
 #endif
 #ifndef NDEBUG
-    QString fmts = data->formats().join(", ");
+    QString fmts = data->formats().join(QLatin1String(", "));
     kDebug() << fmts;
 #endif
 
@@ -1400,7 +1400,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
      * provide more than one mime type.
      * Don't change them without careful thought !!
      */
-    if (!(bytes = data->data("message/rfc822")).isEmpty())
+    if (!(bytes = data->data(QLatin1String("message/rfc822"))).isEmpty())
     {
         // Email message(s). Ignore all but the first.
         kDebug() << "email";

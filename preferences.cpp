@@ -82,10 +82,10 @@ Preferences* Preferences::self()
     if (!mInstance)
     {
         // Set the default button for the Quit warning message box to Cancel
-        KAMessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
-        KAMessageBox::setDefaultShouldBeShownContinue(QUIT_WARN, default_quitWarn);
-        KAMessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
-        KAMessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
+        KAMessageBox::setContinueDefault(QLatin1String(QUIT_WARN), KMessageBox::Cancel);
+        KAMessageBox::setDefaultShouldBeShownContinue(QLatin1String(QUIT_WARN), default_quitWarn);
+        KAMessageBox::setDefaultShouldBeShownContinue(QLatin1String(EMAIL_QUEUED_NOTIFY), default_emailQueuedNotify);
+        KAMessageBox::setDefaultShouldBeShownContinue(QLatin1String(CONFIRM_ALARM_DELETION), default_confirmAlarmDeletion);
 
         mInstance = new Preferences;
     }
@@ -106,12 +106,12 @@ Preferences::Preferences()
     // Update the KAlarm version in the config file, but don't call
     // writeConfig() here - leave it to be written only if the config file
     // is updated with other data.
-    setVersion(KALARM_VERSION);
+    setVersion(QLatin1String(KALARM_VERSION));
 }
 
 void Preferences::setAskAutoStart(bool yes)
 {
-    KAMessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
+    KAMessageBox::saveDontShowAgainYesNo(QLatin1String(ASK_AUTO_START), !yes);
 }
 
 /******************************************************************************

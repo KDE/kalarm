@@ -130,8 +130,8 @@ KAlarmApp::KAlarmApp()
       mAlarmsEnabled(true),
       mSpeechEnabled(false)
 {
-    KGlobal::locale()->insertCatalog("libkdepim");
-    KGlobal::locale()->insertCatalog("libkpimutils");
+    KGlobal::locale()->insertCatalog(QLatin1String("libkdepim"));
+    KGlobal::locale()->insertCatalog(QLatin1String("libkpimutils"));
     kDebug();
 #ifndef NDEBUG
     KAlarm::setTestModeConditions();
@@ -180,7 +180,7 @@ KAlarmApp::KAlarmApp()
     }
 
     // Check if the speech synthesis daemon is installed
-    mSpeechEnabled = (KServiceTypeTrader::self()->query("DBUS/Text-to-Speech", "Name == 'KTTSD'").count() > 0);
+    mSpeechEnabled = (KServiceTypeTrader::self()->query(QLatin1String("DBUS/Text-to-Speech"), QLatin1String("Name == 'KTTSD'")).count() > 0);
     if (!mSpeechEnabled) { kDebug() << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
     QString korg = QLatin1String("korganizer");
@@ -354,9 +354,9 @@ int KAlarmApp::newInstance()
 #endif
                     {
 #ifdef USE_AKONADI
-                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", "--" + options.commandName(), options.eventId().eventId()));
+                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
 #else
-                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found", "--" + options.commandName(), options.eventId()));
+                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found", QLatin1String("--") + options.commandName(), options.eventId()));
 #endif
                         exitCode = 1;
                     }
@@ -394,9 +394,9 @@ int KAlarmApp::newInstance()
                 else if (!KAlarm::editAlarmById(options.eventId()))
                 {
 #ifdef USE_AKONADI
-                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId().eventId()));
+                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
 #else
-                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", "--" + options.commandName(), options.eventId()));
+                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QLatin1String("--") + options.commandName(), options.eventId()));
 #endif
                     exitCode = 1;
                 }
@@ -654,7 +654,7 @@ void KAlarmApp::doQuit(QWidget* parent)
     kDebug();
     if (KAMessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
                                             i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
-                                            QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
+                                            QString(), KStandardGuiItem::quit(), QLatin1String(Preferences::QUIT_WARN)
                                            ) != KMessageBox::Yes)
         return;
     if (!KAlarm::checkRtcWakeConfig(true).isEmpty())
@@ -676,7 +676,7 @@ void KAlarmApp::doQuit(QWidget* parent)
                                          i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
                                                         "(Note that alarms will be disabled if KAlarm is not started.)"),
                                          QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
-                                         KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START);
+                                         KStandardGuiItem::cancel(), QLatin1String(Preferences::ASK_AUTO_START));
         }
         switch (option)
         {
@@ -760,7 +760,7 @@ void KAlarmApp::checkNextDueAlarm()
     KDateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
     KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
     qint64 interval = now.secsTo_long(nextDt);
-    kDebug() << "now:" << qPrintable(now.toString("%Y-%m-%d %H:%M %:Z")) << ", next:" << qPrintable(nextDt.toString("%Y-%m-%d %H:%M %:Z")) << ", due:" << interval;
+    kDebug() << "now:" << qPrintable(now.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
     if (interval <= 0)
     {
         // Queue the alarm
@@ -1243,12 +1243,12 @@ QStringList KAlarmApp::scheduledAlarmList()
 #ifdef USE_AKONADI
         Akonadi::Collection c(event->collectionId());
         AkonadiModel::instance()->refresh(c);
-        QString text(c.resource() + ":");
+        QString text(c.resource() + QLatin1String(":"));
 #else
         QString text;
 #endif
-        text += event->id() + ' '
-             +  dateTime.toString("%Y%m%dT%H%M ")
+        text += event->id() + QLatin1Char(' ')
+             +  dateTime.toString(QLatin1String("%Y%m%dT%H%M "))
              +  AlarmText::summary(*event, 1);
         alarms << text;
     }
@@ -1376,7 +1376,7 @@ bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
 QString KAlarmApp::dbusList()
 {
     kDebug();
-    return scheduledAlarmList().join("\n") + '\n';
+    return scheduledAlarmList().join(QLatin1String("\n")) + QLatin1Char('\n');
 }
 
 /******************************************************************************
@@ -1428,7 +1428,7 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
         case EVENT_HANDLE:     // handle it if it's due
         {
             KDateTime now = KDateTime::currentUtcDateTime();
-            kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString("yyyy-MM-dd hh:mm")) << "UTC";
+            kDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm"))) << "UTC";
             bool updateCalAndDisplay = false;
             bool alarmToExecuteValid = false;
             KAAlarm alarmToExecute;
@@ -1919,7 +1919,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         }
         case KAAlarm::EMAIL:
         {
-            kDebug() << "EMAIL to:" << event.emailAddresses(",");
+            kDebug() << "EMAIL to:" << event.emailAddresses(QLatin1String(","));
             QStringList errmsgs;
             KAMail::JobData data(event, alarm, reschedule, (reschedule || allowDefer));
             data.queued = true;
@@ -2113,43 +2113,43 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
     kDebug() << command << "," << event.id();
     tempScriptFile.clear();
     QString cmd = Preferences::cmdXTermCommand();
-    cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());     // set the terminal window title
-    if (cmd.indexOf("%C") >= 0)
+    cmd.replace(QLatin1String("%t"), KGlobal::mainComponent().aboutData()->programName());     // set the terminal window title
+    if (cmd.indexOf(QLatin1String("%C")) >= 0)
     {
         // Execute the command from a temporary script file
         if (flags & ProcData::TEMP_FILE)
-            cmd.replace("%C", command);    // the command is already calling a temporary file
+            cmd.replace(QLatin1String("%C"), command);    // the command is already calling a temporary file
         else
         {
             tempScriptFile = createTempScriptFile(command, true, event, *alarm);
             if (tempScriptFile.isEmpty())
                 return QString();
-            cmd.replace("%C", tempScriptFile);    // %C indicates where to insert the command
+            cmd.replace(QLatin1String("%C"), tempScriptFile);    // %C indicates where to insert the command
         }
     }
-    else if (cmd.indexOf("%W") >= 0)
+    else if (cmd.indexOf(QLatin1String("%W")) >= 0)
     {
         // Execute the command from a temporary script file,
         // with a sleep after the command is executed
         tempScriptFile = createTempScriptFile(command + QLatin1String("\nsleep 86400\n"), true, event, *alarm);
         if (tempScriptFile.isEmpty())
             return QString();
-        cmd.replace("%W", tempScriptFile);    // %w indicates where to insert the command
+        cmd.replace(QLatin1String("%W"), tempScriptFile);    // %w indicates where to insert the command
     }
-    else if (cmd.indexOf("%w") >= 0)
+    else if (cmd.indexOf(QLatin1String("%w")) >= 0)
     {
         // Append a sleep to the command.
         // Quote the command in case it contains characters such as [>|;].
         QString exec = KShell::quoteArg(command + QLatin1String("; sleep 86400"));
-        cmd.replace("%w", exec);    // %w indicates where to insert the command string
+        cmd.replace(QLatin1String("%w"), exec);    // %w indicates where to insert the command string
     }
     else
     {
         // Set the command to execute.
         // Put it in quotes in case it contains characters such as [>|;].
         QString exec = KShell::quoteArg(command);
-        if (cmd.indexOf("%c") >= 0)
-            cmd.replace("%c", exec);    // %c indicates where to insert the command string
+        if (cmd.indexOf(QLatin1String("%c")) >= 0)
+            cmd.replace(QLatin1String("%c"), exec);    // %c indicates where to insert the command string
         else
             cmd.append(exec);           // otherwise, simply append the command string
     }
@@ -2225,7 +2225,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                                                    : KAEvent::CMD_ERROR);
                     if (!pd->tempFile())
                     {
-                        errmsg += '\n';
+                        errmsg += QLatin1Char('\n');
                         errmsg += proc->command();
                     }
                     KAMessageBox::error(pd->messageBoxParent, errmsg);
@@ -2324,7 +2324,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
 {
     error.clear();
     QDBusConnection client = QDBusConnection::sessionBus();
-    if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
+    if (!client.interface()->isServiceRegistered(QLatin1String(KTTSD_DBUS_SERVICE)))
     {
         // kttsd is not running, so start it
         delete mKSpeech;
@@ -2337,7 +2337,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
     }
     if (!mKSpeech)
     {
-        mKSpeech = new OrgKdeKSpeechInterface(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, QDBusConnection::sessionBus());
+        mKSpeech = new OrgKdeKSpeechInterface(QLatin1String(KTTSD_DBUS_SERVICE), QLatin1String(KTTDS_DBUS_PATH), QDBusConnection::sessionBus());
         mKSpeech->setParent(theApp());
         mKSpeech->setApplicationName(KGlobal::mainComponent().aboutData()->programName());
         mKSpeech->setDefaultPriority(KSpeech::jpMessage);
@@ -2351,7 +2351,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
 */
 void KAlarmApp::slotDBusServiceUnregistered(const QString& serviceName)
 {
-    if (serviceName == KTTSD_DBUS_SERVICE)
+    if (serviceName == QLatin1String(KTTSD_DBUS_SERVICE))
     {
         delete mKSpeech;
         mKSpeech = 0;

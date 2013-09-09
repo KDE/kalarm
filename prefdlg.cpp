@@ -153,7 +153,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
       mShown(false)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    setObjectName("PrefDlg");    // used by LikeBack
+    setObjectName(QLatin1String("PrefDlg"));    // used by LikeBack
     setCaption(i18nc("@title:window", "Configure"));
     setButtons(Help | Default | Ok | Apply | Cancel);
     setDefaultButton(Ok);
@@ -164,37 +164,37 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     mMiscPage = new MiscPrefTab(mTabScrollGroup);
     mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab General preferences", "General"));
     mMiscPageItem->setHeader(i18nc("@title General preferences", "General"));
-    mMiscPageItem->setIcon(KIcon(DesktopIcon("preferences-other")));
+    mMiscPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("preferences-other"))));
     addPage(mMiscPageItem);
 
     mTimePage = new TimePrefTab(mTabScrollGroup);
     mTimePageItem = new KPageWidgetItem(mTimePage, i18nc("@title:tab", "Time & Date"));
     mTimePageItem->setHeader(i18nc("@title", "Time and Date"));
-    mTimePageItem->setIcon(KIcon(DesktopIcon("preferences-system-time")));
+    mTimePageItem->setIcon(KIcon(DesktopIcon(QLatin1String("preferences-system-time"))));
     addPage(mTimePageItem);
 
     mStorePage = new StorePrefTab(mTabScrollGroup);
     mStorePageItem = new KPageWidgetItem(mStorePage, i18nc("@title:tab", "Storage"));
     mStorePageItem->setHeader(i18nc("@title", "Alarm Storage"));
-    mStorePageItem->setIcon(KIcon(DesktopIcon("system-file-manager")));
+    mStorePageItem->setIcon(KIcon(DesktopIcon(QLatin1String("system-file-manager"))));
     addPage(mStorePageItem);
 
     mEmailPage = new EmailPrefTab(mTabScrollGroup);
     mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab Email preferences", "Email"));
     mEmailPageItem->setHeader(i18nc("@title", "Email Alarm Settings"));
-    mEmailPageItem->setIcon(KIcon(DesktopIcon("internet-mail")));
+    mEmailPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("internet-mail"))));
     addPage(mEmailPageItem);
 
     mViewPage = new ViewPrefTab(mTabScrollGroup);
     mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
     mViewPageItem->setHeader(i18nc("@title", "View Settings"));
-    mViewPageItem->setIcon(KIcon(DesktopIcon("preferences-desktop-theme")));
+    mViewPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("preferences-desktop-theme"))));
     addPage(mViewPageItem);
 
     mEditPage = new EditPrefTab(mTabScrollGroup);
     mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
     mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
-    mEditPageItem->setIcon(KIcon(DesktopIcon("document-properties")));
+    mEditPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("document-properties"))));
     addPage(mEditPageItem);
 
     connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
@@ -213,7 +213,7 @@ KAlarmPrefDlg::~KAlarmPrefDlg()
 
 void KAlarmPrefDlg::slotHelp()
 {
-    KToolInvocation::invokeHelp("preferences");
+    KToolInvocation::invokeHelp(QLatin1String("preferences"));
 }
 
 // Apply the preferences that are currently selected
@@ -479,11 +479,11 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
         mXtermType->addButton(radio, mXtermCount);
         if (mXtermFirst < 0)
             mXtermFirst = mXtermCount;   // note the id of the first button
-        cmd.replace("%t", KGlobal::mainComponent().aboutData()->programName());
-        cmd.replace("%c", "<command>");
-        cmd.replace("%w", "<command; sleep>");
-        cmd.replace("%C", "[command]");
-        cmd.replace("%W", "[command; sleep]");
+        cmd.replace(QLatin1String("%t"), KGlobal::mainComponent().aboutData()->programName());
+        cmd.replace(QLatin1String("%c"), QLatin1String("<command>"));
+        cmd.replace(QLatin1String("%w"), QLatin1String("<command; sleep>"));
+        cmd.replace(QLatin1String("%C"), QLatin1String("[command]"));
+        cmd.replace(QLatin1String("%W"), QLatin1String("[command; sleep]"));
         radio->setWhatsThis(
                 i18nc("@info:whatsthis", "Check to execute command alarms in a terminal window by <icode>%1</icode>", cmd));
         grid->addWidget(radio, (row = index/3), index % 3, Qt::AlignLeft);
@@ -531,7 +531,7 @@ void MiscPrefTab::restore(bool defaults, bool)
     }
     mXtermType->setButton(id);
     mXtermCommand->setEnabled(id == mXtermCount);
-    mXtermCommand->setText(id == mXtermCount ? xtermCmd : "");
+    mXtermCommand->setText(id == mXtermCount ? xtermCmd : QString());
 }
 
 void MiscPrefTab::apply(bool syncToDisc)
@@ -1353,7 +1353,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSoundFile = new KLineEdit(box);
     mSoundFileLabel->setBuddy(mSoundFile);
     mSoundFileBrowse = new QPushButton(box);
-    mSoundFileBrowse->setIcon(KIcon(SmallIcon("document-open")));
+    mSoundFileBrowse->setIcon(KIcon(SmallIcon(QLatin1String("document-open"))));
     int size = mSoundFileBrowse->sizeHint().height();
     mSoundFileBrowse->setFixedSize(size, size);
     connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
