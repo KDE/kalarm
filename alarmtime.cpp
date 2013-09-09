@@ -58,7 +58,7 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
             if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
             {
                 QString fmt = locale->timeFormat();
-                int i = fmt.indexOf(QRegExp("%[kl]"));   // check if leading zeroes are omitted
+                int i = fmt.indexOf(QRegExp(QLatin1String("%[kl]")));   // check if leading zeroes are omitted
                 if (i >= 0  &&  i == fmt.indexOf(QLatin1Char('%')))   // and whether the hour is first
                     mTimeHourPos = i;             // yes, so need to align
             }
@@ -92,10 +92,10 @@ QString AlarmTime::timeToAlarmText(const DateTime& dateTime)
     minutes[0] = (mins%60) / 10 + '0';
     minutes[1] = (mins%60) % 10 + '0';
     if (mins < 24*60)
-        return i18nc("@info/plain hours:minutes", "%1:%2", mins/60, minutes);
+        return i18nc("@info/plain hours:minutes", "%1:%2", mins/60, QLatin1String(minutes));
     int days = mins / (24*60);
     mins = mins % (24*60);
-    return i18nc("@info/plain days hours:minutes", "%1d %2:%3", days, mins/60, minutes);
+    return i18nc("@info/plain days hours:minutes", "%1d %2:%3", days, mins/60, QLatin1String(minutes));
 }
 
 /******************************************************************************

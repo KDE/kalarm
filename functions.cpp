@@ -105,7 +105,7 @@ using namespace Akonadi;
 namespace
 {
 bool          refreshAlarmsQueued = false;
-QString       korganizerName    = "korganizer";
+QString       korganizerName    = QLatin1String("korganizer");
 QString       korgStartError;
 QDBusInterface* korgInterface = 0;
 
@@ -191,7 +191,7 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 */
 KAction* createStopPlayAction(QObject* parent)
 {
-    KAction* action = new KAction(KIcon("media-playback-stop"), i18nc("@action", "Stop Play"), parent);
+    KAction* action = new KAction(KIcon(QLatin1String("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
     action->setEnabled(MessageWin::isAudioPlaying());
     QObject::connect(action, SIGNAL(triggered(bool)), theApp(), SLOT(stopAudio()));
     // The following line ensures that all instances are kept in the same state
@@ -1413,9 +1413,9 @@ void Private::cancelRtcWake()
 bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
 {
     QVariantMap args;
-    args["time"] = triggerTime;
-    KAuth::Action action("org.kde.kalarmrtcwake.settimer");
-    action.setHelperID("org.kde.kalarmrtcwake");
+    args[QLatin1String("time")] = triggerTime;
+    KAuth::Action action(QLatin1String("org.kde.kalarmrtcwake.settimer"));
+    action.setHelperID(QLatin1String("org.kde.kalarmrtcwake"));
     action.setParentWidget(parent);
     action.setArguments(args);
     KAuth::ActionReply reply = action.execute();
@@ -1820,7 +1820,7 @@ void refreshAlarmsIfQueued()
 */
 QString runKMail(bool minimise)
 {
-    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KMAIL_DBUS_SERVICE);
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String(KMAIL_DBUS_SERVICE));
     if (!reply.isValid()  ||  !reply.value())
     {
         // Program is not already running, so start it
@@ -1848,10 +1848,10 @@ bool Private::startKMailMinimised()
     {
         kDebug() << "using rules";
         KXMessages msg;
-        QString message = "wmclass=kmail\nwmclassmatch=1\n"  // 1 = exact match
+        QString message = QLatin1String("wmclass=kmail\nwmclassmatch=1\n"  // 1 = exact match
                           "wmclasscomplete=false\n"
                           "minimize=true\nminimizerule=3\n"
-                          "type=" + QString().setNum(NET::Normal) + "\ntyperule=2";
+                          "type=") + QString().setNum(NET::Normal) + QLatin1String("\ntyperule=2");
         msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1, false);
         qApp->flush();
     }
@@ -1865,7 +1865,7 @@ bool Private::startKMailMinimised()
     // We are not using KApplication, so the env remained set.
     KStartupInfoId id = KStartupInfo::currentStartupIdEnv();
     KProcess* proc = new KProcess;
-    (*proc) << "kmail";
+    (*proc) << QLatin1String("kmail");
     int pid = proc->startDetached();
     if (!pid)
     {
@@ -1874,8 +1874,8 @@ bool Private::startKMailMinimised()
     }
     KStartupInfoData data;
     data.addPid(pid);
-    data.setName("kmail");
-    data.setBin("kmail");
+    data.setName(QLatin1String("kmail"));
+    data.setBin(QLatin1String("kmail"));
     KStartupInfo::sendChange(id, data);
     return true;
 #else
@@ -1939,10 +1939,10 @@ QStringList dontShowErrors(const QString& eventId)
 {
     if (eventId.isEmpty())
         return QStringList();
-    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+    KConfig config(KStandardDirs::locateLocal("appdata", QLatin1String(ALARM_OPTS_FILE)));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
 #ifdef USE_AKONADI
-    const QString id = QString("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
 #else
     const QString id(eventId);
 #endif
@@ -1977,10 +1977,10 @@ void setDontShowErrors(const QString& eventId, const QStringList& tags)
 {
     if (eventId.isEmpty())
         return;
-    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+    KConfig config(KStandardDirs::locateLocal("appdata", QLatin1String(ALARM_OPTS_FILE)));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
 #ifdef USE_AKONADI
-    const QString id = QString("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
 #else
     const QString id(eventId);
 #endif
@@ -2003,10 +2003,10 @@ void setDontShowErrors(const QString& eventId, const QString& tag)
 {
     if (eventId.isEmpty()  ||  tag.isEmpty())
         return;
-    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+    KConfig config(KStandardDirs::locateLocal("appdata", QLatin1String(ALARM_OPTS_FILE)));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
 #ifdef USE_AKONADI
-    const QString id = QString("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
 #else
     const QString id(eventId);
 #endif
@@ -2061,11 +2061,11 @@ void writeConfigWindowSize(const char* window, const QSize& size, int splitterWi
 */
 FileType fileType(const KMimeType::Ptr& mimetype)
 {
-    if (mimetype->is("text/html"))
+    if (mimetype->is(QLatin1String("text/html")))
         return TextFormatted;
-    if (mimetype->is("application/x-executable"))
+    if (mimetype->is(QLatin1String("application/x-executable")))
         return TextApplication;
-    if (mimetype->is("text/plain"))
+    if (mimetype->is(QLatin1String("text/plain")))
         return TextPlain;
     if (mimetype->name().startsWith(QLatin1String("image/")))
         return Image;
@@ -2082,7 +2082,7 @@ FileErr checkFileExists(QString& filename, KUrl& url)
     url = KUrl();
     FileErr err = FileErr_None;
     QString file = filename;
-    QRegExp f("^file:/+");
+    QRegExp f(QLatin1String("^file:/+"));
     if (f.indexIn(file) >= 0)
         file = file.mid(f.matchedLength() - 1);
     // Convert any relative file path to absolute
@@ -2130,7 +2130,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
     {
         // If file is a local file, remove "file://" from name
         QString file = filename;
-        QRegExp f("^file:/+");
+        QRegExp f(QLatin1String("^file:/+"));
         if (f.indexIn(file) >= 0)
             file = file.mid(f.matchedLength() - 1);
 
@@ -2167,7 +2167,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 */
 QString pathOrUrl(const QString& url)
 {
-    static const QRegExp localfile("^file:/+");
+    static const QRegExp localfile(QLatin1String("^file:/+"));
     return (localfile.indexIn(url) >= 0) ? url.mid(localfile.matchedLength() - 1) : url;
 }
 
@@ -2187,7 +2187,7 @@ QString pathOrUrl(const QString& url)
 QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
                    const QString& filter, KFile::Modes mode, QWidget* parent)
 {
-    QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp("/[^/]*$"))
+    QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
                        : !defaultDir.isEmpty()  ? defaultDir
                        :                          QDir::homePath();
     // Use AutoQPointer to guard against crash on application exit while
@@ -2200,10 +2200,10 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     if (!initialFile.isEmpty())
         fileDlg->setSelection(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)
-        return fileDlg ? QString("") : QString();  // return null only if dialog was deleted
+        return fileDlg ? QLatin1String("") : QString();  // return null only if dialog was deleted
     KUrl url = fileDlg->selectedUrl();
     if (url.isEmpty())
-        return QString("");   // return empty, non-null string
+        return QLatin1String("");   // return empty, non-null string
     defaultDir = url.isLocalFile() ? url.upUrl().toLocalFile() : url.directory();
     return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
 }
@@ -2254,7 +2254,7 @@ void setTestModeConditions()
 void setSimulatedSystemTime(const KDateTime& dt)
 {
     KDateTime::setSimulatedSystemTime(dt);
-    kDebug() << "New time =" << qPrintable(KDateTime::currentLocalDateTime().toString("%Y-%m-%d %H:%M %:Z"));
+    kDebug() << "New time =" << qPrintable(KDateTime::currentLocalDateTime().toString(QLatin1String("%Y-%m-%d %H:%M %:Z")));
 }
 #endif
 
@@ -2294,7 +2294,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent& event)
                          ? Identities::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
                          : Preferences::emailAddress();
             AlarmText atext;
-            atext.setEmail(event.emailAddresses(", "), from, QString(), QString(), event.emailSubject(), QString());
+            atext.setEmail(event.emailAddresses(QLatin1String(", ")), from, QString(), QString(), event.emailSubject(), QString());
             kcalEvent->setSummary(atext.displayText());
             userEmail = from;
             break;
@@ -2384,7 +2384,7 @@ KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
 KAlarm::UpdateStatus runKOrganizer()
 {
     QString error, dbusService;
-    int result = KDBusServiceStarter::self()->findServiceFor("DBUS/Organizer", QString(), &error, &dbusService);
+    int result = KDBusServiceStarter::self()->findServiceFor(QLatin1String("DBUS/Organizer"), QString(), &error, &dbusService);
     if (result)
     {
         kWarning() << "Unable to start DBUS/Organizer:" << dbusService << error;
@@ -2393,13 +2393,13 @@ KAlarm::UpdateStatus runKOrganizer()
     // If Kontact is running, there is be a load() method which needs to be called
     // to load KOrganizer into Kontact. But if KOrganizer is running independently,
     // the load() method doesn't exist.
-    QDBusInterface iface(KORG_DBUS_SERVICE, KORG_DBUS_LOAD_PATH, "org.kde.KUniqueApplication");
+    QDBusInterface iface(QLatin1String(KORG_DBUS_SERVICE), QLatin1String(KORG_DBUS_LOAD_PATH), QLatin1String("org.kde.KUniqueApplication"));
     if (!iface.isValid())
     {
         kWarning() << "Unable to access "KORG_DBUS_LOAD_PATH" D-Bus interface:" << iface.lastError().message();
         return KAlarm::UPDATE_KORG_ERR;
     }
-    QDBusReply<bool> reply = iface.call("load");
+    QDBusReply<bool> reply = iface.call(QLatin1String("load"));
     if ((!reply.isValid() || !reply.value())
     &&  iface.lastError().type() != QDBusError::UnknownMethod)
     {
@@ -2412,7 +2412,7 @@ KAlarm::UpdateStatus runKOrganizer()
     if (!korgInterface  ||  !korgInterface->isValid())
     {
         delete korgInterface;
-        korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, KORG_DBUS_PATH, KORG_DBUS_IFACE);
+        korgInterface = new QDBusInterface(QLatin1String(KORG_DBUS_SERVICE), QLatin1String(KORG_DBUS_PATH), QLatin1String(KORG_DBUS_IFACE));
         if (!korgInterface->isValid())
         {
             kWarning() << "Unable to access "KORG_DBUS_PATH" D-Bus interface:" << korgInterface->lastError().message();
@@ -2430,7 +2430,7 @@ KAlarm::UpdateStatus runKOrganizer()
 QString uidKOrganizer(const QString& id)
 {
     QString result = id;
-    int i = result.lastIndexOf('-');
+    int i = result.lastIndexOf(QLatin1Char('-'));
     if (i < 0)
         i = result.length();
     return result.insert(i, KORGANIZER_UID);

@@ -213,7 +213,7 @@ bool EventListView::viewportEvent(QEvent* e)
         if (qVariantCanConvert<QString>(value))
         {
             QString toolTip = value.toString();
-            int i = toolTip.indexOf('\n');
+            int i = toolTip.indexOf(QLatin1Char('\n'));
             if (i < 0)
             {
 #ifdef USE_AKONADI
