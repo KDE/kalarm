@@ -499,8 +499,8 @@ template <class Interface> bool CalendarMigrator::updateStorageFormat(const Agen
 */
 template <class Interface> Interface* CalendarMigrator::getAgentInterface(const AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
-    Interface* iface = new Interface("org.freedesktop.Akonadi.Resource." + agent.identifier(),
-              "/Settings", QDBusConnection::sessionBus(), parent);
+    Interface* iface = new Interface(QLatin1String("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
+              QLatin1String("/Settings"), QDBusConnection::sessionBus(), parent);
     if (!iface->isValid())
     {
         errorMessage = iface->lastError().message();
@@ -542,7 +542,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
         kError() << "Invalid resource type:" << resourceType;
         return;
     }
-    mPath = config.readPathEntry(pathKey, "");
+    mPath = config.readPathEntry(pathKey, QLatin1String(""));
     switch (config.readEntry("AlarmType", (int)0))
     {
         case 1:  mAlarmType = CalEvent::ACTIVE;  break;
@@ -755,7 +755,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     Collection collection = collections[0];
     collection.setContentMimeTypes(CalEvent::mimeTypes(mAlarmType));
     EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
-    dattr->setIconName("kalarm");
+    dattr->setIconName(QLatin1String("kalarm"));
     CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
     attr->setEnabled(mEnabled ? mAlarmType : CalEvent::EMPTY);
     if (mStandard)

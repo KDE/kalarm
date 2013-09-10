@@ -3,8 +3,8 @@ project(kalarm)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5950)
 add_definitions(-DQT_STRICT_ITERATORS)
 
-#add_definitions( -DQT_NO_CAST_FROM_ASCII )
-#add_definitions( -DQT_NO_CAST_TO_ASCII )
+add_definitions( -DQT_NO_CAST_FROM_ASCII )
+add_definitions( -DQT_NO_CAST_TO_ASCII )
 
 
 option(KALARM_USE_AKONADI "Build to use Akonadi" ON)

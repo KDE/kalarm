@@ -31,16 +31,16 @@
 
 RtcWakeAction::RtcWakeAction()
 {
-    KGlobal::locale()->insertCatalog("kalarm");
+    KGlobal::locale()->insertCatalog(QLatin1String("kalarm"));
 }
 
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 {
-    unsigned t = args["time"].toUInt();
+    unsigned t = args[QLatin1String("time")].toUInt();
     qDebug() << "RtcWakeAction::settimer(" << t << ")";
 
     // Find the rtcwake executable
-    QString exe("/usr/sbin/rtcwake");   // default location
+    QString exe(QLatin1String("/usr/sbin/rtcwake"));   // default location
     FILE* wh = popen("whereis -b rtcwake", "r");
     if (wh)
     {
@@ -77,7 +77,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
         // If 't' is zero, the current wakeup is cancelled by setting a new wakeup
         // time 2 seconds from now, which will then expire.
         unsigned now = KDateTime::currentUtcDateTime().toTime_t();
-        proc << exe << "-m" << "no" << "-s" << QString::number(t ? t - now : 2);
+        proc << exe << QLatin1String("-m") << QLatin1String("no") << QLatin1String("-s") << QString::number(t ? t - now : 2);
         result = proc.execute(5000);   // allow a timeout of 5 seconds
     }
     QString errmsg;
@@ -86,10 +86,10 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
         case 0:
             return ActionReply::SuccessReply;
         case -2:
-            errmsg = i18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", "rtcwake");
+            errmsg = i18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QLatin1String("rtcwake"));
             break;
         default:
-            errmsg = i18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(" "), result);
+            errmsg = i18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(QLatin1String(" ")), result);
             break;
     }
     ActionReply reply(ActionReply::HelperError);

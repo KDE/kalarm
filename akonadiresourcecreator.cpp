@@ -148,8 +148,8 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
 template <class Settings>
 void AkonadiResourceCreator::setResourceAlarmType()
 {
-    Settings iface("org.freedesktop.Akonadi.Resource." + mAgentInstance.identifier(),
-                   "/Settings", QDBusConnection::sessionBus(), this);
+    Settings iface(QLatin1String("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
+                   QLatin1String("/Settings"), QDBusConnection::sessionBus(), this);
     if (!iface.isValid())
         kError() << "Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
     else

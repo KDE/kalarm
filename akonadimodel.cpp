@@ -114,11 +114,11 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     if (!mTextIcon)
     {
-        mTextIcon    = new QPixmap(SmallIcon("dialog-information"));
-        mFileIcon    = new QPixmap(SmallIcon("document-open"));
-        mCommandIcon = new QPixmap(SmallIcon("system-run"));
-        mEmailIcon   = new QPixmap(SmallIcon("mail-message-unread"));
-        mAudioIcon   = new QPixmap(SmallIcon("audio-x-generic"));
+        mTextIcon    = new QPixmap(SmallIcon(QLatin1String("dialog-information")));
+        mFileIcon    = new QPixmap(SmallIcon(QLatin1String("document-open")));
+        mCommandIcon = new QPixmap(SmallIcon(QLatin1String("system-run")));
+        mEmailIcon   = new QPixmap(SmallIcon(QLatin1String("mail-message-unread")));
+        mAudioIcon   = new QPixmap(SmallIcon(QLatin1String("audio-x-generic")));
         mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size()).expandedTo(mAudioIcon->size());
     }
 
@@ -370,7 +370,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                         {
                             unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
                                          ? event.bgColour().rgb() : 0;
-                            return QString("%1").arg(i, 6, 10, QLatin1Char('0'));
+                            return QString::fromLatin1("%1").arg(i, 6, 10, QLatin1Char('0'));
                         }
                         default:
                             break;
@@ -400,7 +400,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                         case ValueRole:
                             return static_cast<int>(event.actionSubType());
                         case SortRole:
-                            return QString("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
+                            return QString::fromLatin1("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
                     }
                     break;
                 case TextColumn:
@@ -881,9 +881,9 @@ QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 */
 QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types types) const
 {
-    QString name = '@' + collection.displayName();   // insert markers for stripping out name
+    QString name = QLatin1Char('@') + collection.displayName();   // insert markers for stripping out name
     KUrl url = collection.remoteId();
-    QString type = '@' + storageType(collection);   // file/directory/URL etc.
+    QString type = QLatin1Char('@') + storageType(collection);   // file/directory/URL etc.
     QString locn = url.pathOrUrl();
     bool inactive = !collection.hasAttribute<CollectionAttribute>()
                  || !(collection.attribute<CollectionAttribute>()->enabled() & types);
@@ -975,7 +975,7 @@ QString AkonadiModel::repeatOrder(const KAEvent& event) const
                 break;
         }
     }
-    return QString("%1%2").arg(static_cast<char>('0' + repeatOrder)).arg(repeatInterval, 8, 10, QLatin1Char('0'));
+    return QString::fromLatin1("%1%2").arg(static_cast<char>('0' + repeatOrder)).arg(repeatInterval, 8, 10, QLatin1Char('0'));
 }
 
 /******************************************************************************

@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
 
     AutostartApp app;
-    KGlobal::locale()->insertCatalog("kalarm");
+    KGlobal::locale()->insertCatalog(QLatin1String("kalarm"));
     return app.exec();
 }
 
@@ -76,7 +76,7 @@ AutostartApp::AutostartApp()
 
 void AutostartApp::slotAutostart()
 {
-    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KALARM_DBUS_SERVICE);
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String(KALARM_DBUS_SERVICE));
     if (reply.isValid()  &&  reply.value())
         kDebug(5900) << "KAlarm already running";
     else

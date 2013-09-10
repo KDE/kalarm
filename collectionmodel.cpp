@@ -599,11 +599,11 @@ bool CollectionView::viewportEvent(QEvent* e)
         if (qVariantCanConvert<QString>(value))
         {
             QString toolTip = value.toString();
-            int i = toolTip.indexOf('@');
+            int i = toolTip.indexOf(QLatin1Char('@'));
             if (i > 0)
             {
-                int j = toolTip.indexOf(QRegExp("<(nl|br)", Qt::CaseInsensitive), i + 1);
-                int k = toolTip.indexOf('@', j);
+                int j = toolTip.indexOf(QRegExp(QLatin1String("<(nl|br)"), Qt::CaseInsensitive), i + 1);
+                int k = toolTip.indexOf(QLatin1Char('@'), j);
                 QString name = toolTip.mid(i + 1, j - i - 1);
                 value = model()->data(index, Qt::FontRole);
                 QFontMetrics fm(qvariant_cast<QFont>(value).resolve(viewOptions().font));
