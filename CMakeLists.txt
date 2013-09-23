@@ -55,7 +55,7 @@ include_directories(
   ${CMAKE_BINARY_DIR}/kholidays
   ${CMAKE_BINARY_DIR}/kpimidentities
 )
-kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
+add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 generate_export_header(kalarmcal)
 if(USE_KRESOURCES)
     file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h" "\n// This library was built to use KResources.\n// It must be rebuilt in order to use Akonadi.\n#define KALARMCAL_USE_KRESOURCES\n")
