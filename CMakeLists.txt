@@ -6,6 +6,9 @@ set(LIB_VERSION 2.7.0)
 set(LIB_SOVERSION 2)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
+add_definitions( -DQT_NO_CAST_FROM_ASCII )
+add_definitions( -DQT_NO_CAST_TO_ASCII )
+
 
 ############### Build Options ###############
 

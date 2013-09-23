@@ -906,7 +906,7 @@ void KAEventPrivate::set(const Event* event)
         else if (flags[i] == DEFER_FLAG)
         {
             QString mins = flags[i + 1];
-            if (mins.endsWith('D'))
+            if (mins.endsWith(QLatin1Char('D')))
             {
                 mDeferDefaultDateOnly = true;
                 mins.truncate(mins.length() - 1);
@@ -1428,7 +1428,7 @@ bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
     {
         QString param = QString::number(mDeferDefaultMinutes);
         if (mDeferDefaultDateOnly)
-            param += 'D';
+            param += QLatin1Char('D');
         (flags += DEFER_FLAG) += param;
     }
     if (!mTemplateName.isEmpty()  &&  mTemplateAfterTime >= 0)
@@ -1486,7 +1486,7 @@ bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
         {
             QDateTime dt = mNextMainDateTime.kDateTime().toTimeSpec(mStartDateTime.timeSpec()).dateTime();
             ev->setCustomProperty(KACalendar::APPNAME, NEXT_RECUR_PROPERTY,
-                                  dt.toString(mNextMainDateTime.isDateOnly() ? "yyyyMMdd" : "yyyyMMddThhmmss"));
+                                  dt.toString(mNextMainDateTime.isDateOnly() ? QLatin1String("yyyyMMdd") : QLatin1String("yyyyMMddThhmmss")));
         }
         // Add the main alarm
         initKCalAlarm(ev, 0, QStringList(), MAIN_ALARM);
@@ -1497,7 +1497,7 @@ bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
     {
         // Alarm repetition is normally held in the main alarm, but since
         // the main alarm has expired, store in a custom property.
-        const QString param = QString("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
+        const QString param = QString::fromLatin1("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
         ev->setCustomProperty(KACalendar::APPNAME, REPEAT_PROPERTY, param);
     }
 
@@ -1737,7 +1737,7 @@ Alarm* KAEventPrivate::initKCalAlarm(Event* event, int startOffsetSecs, const QS
                     break;
                 case KAEvent::COMMAND:
                     if (mCommandScript)
-                        alarm->setProcedureAlarm("", mText);
+                        alarm->setProcedureAlarm(QLatin1String(""), mText);
                     else
                         setProcedureAlarm(alarm, mText);
                     display = mCommandDisplay;
@@ -1772,7 +1772,7 @@ Alarm* KAEventPrivate::initKCalAlarm(Event* event, int startOffsetSecs, const QS
     }
     alltypes += types;
     if (!alltypes.isEmpty())
-        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(","));
+        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(QLatin1String(",")));
     if (!flags.isEmpty())
         alarm->setCustomProperty(KACalendar::APPNAME, FLAGS_PROPERTY, flags.join(SC));
     return alarm;
@@ -4091,9 +4091,9 @@ void KAEventPrivate::dumpDebug() const
     else if (mActionSubType == KAEvent::EMAIL)
     {
         kDebug() << "-- mEmail: FromKMail:" << mEmailFromIdentity;
-        kDebug() << "--         Addresses:" << mEmailAddresses.join(",");
+        kDebug() << "--         Addresses:" << mEmailAddresses.join(QLatin1String(","));
         kDebug() << "--         Subject:" << mEmailSubject;
-        kDebug() << "--         Attachments:" << mEmailAttachments.join(",");
+        kDebug() << "--         Attachments:" << mEmailAttachments.join(QLatin1String(","));
         kDebug() << "--         Bcc:" << mEmailBcc;
     }
     else if (mActionSubType == KAEvent::AUDIO)
@@ -4198,7 +4198,7 @@ DateTime KAEventPrivate::readDateTime(const Event* event, bool dateOnly, DateTim
         {
             if (dateOnly  &&  prop.length() == 8)
                 next.setDate(d);
-            else if (!dateOnly  &&  prop.length() == 15  &&  prop[8] == QChar('T'))
+            else if (!dateOnly  &&  prop.length() == 15  &&  prop[8] == QLatin1Char('T'))
             {
                 const QTime t(prop.mid(9,2).toInt(), prop.mid(11,2).toInt(), prop.mid(13,2).toInt());
                 if (t.isValid())
@@ -4295,7 +4295,7 @@ void KAEventPrivate::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMa
             if (!alarm->programArguments().isEmpty())
             {
                 if (!data.commandScript)
-                    data.cleanText += ' ';
+                    data.cleanText += QLatin1Char(' ');
                 data.cleanText += alarm->programArguments();
             }
             data.extraActionOptions = 0;
@@ -5430,7 +5430,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 if (lateCancel)
                     addLateCancel = true;
                 if (types.count() > 0)
-                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(","));
+                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QLatin1String(",")));
 
                 if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0)
                 {
@@ -5702,7 +5702,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 //  - DISPLAYING_TYPE
                 bool mainAlarm = true;
                 QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
-                QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
+                QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
                 for (int t = 0;  t < types.count();  ++t)
                 {
                     QString type = types[t];
@@ -5730,7 +5730,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                         {
                             QDateTime dt = nextMainDateTime.dateTime();
                             event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY,
-                                                     dt.toString(dateOnly ? "yyyyMMdd" : "yyyyMMddThhmmss"));
+                                                     dt.toString(dateOnly ? QLatin1String("yyyyMMdd") : QLatin1String("yyyyMMddThhmmss")));
                         }
                     }
                     alarm->setStartOffset(0);
@@ -5762,7 +5762,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                     if (!alarm->hasStartOffset())
                         continue;
                     const QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
-                    const QStringList types = property.split(QChar(','), QString::SkipEmptyParts);
+                    const QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
                     for (int t = 0;  t < types.count();  ++t)
                     {
                         const QString type = types[t];
@@ -6296,7 +6296,7 @@ QString EmailAddressList::address(int index) const
             if (!ch.isLetterOrNumber())
             {
                 quote = true;
-                result += '\"';
+                result += QLatin1Char('\"');
                 break;
             }
         }
@@ -6305,7 +6305,7 @@ QString EmailAddressList::address(int index) const
 #else
         result += (*this)[index].name();
 #endif
-        result += (quote ? "\" <" : " <");
+        result += (quote ? QLatin1String("\" <") : QLatin1String(" <"));
         quote = true;    // need angle brackets round email address
     }
 
@@ -6315,7 +6315,7 @@ QString EmailAddressList::address(int index) const
     result += person.email();
 #endif
     if (quote)
-        result += '>';
+        result += QLatin1Char('>');
     return result;
 }
 
@@ -6447,7 +6447,7 @@ QString reminderToString(int minutes)
         }
         if (minutes < 0)
             count = -count;
-        return QString("%1%2").arg(count).arg(unit);
+        return QString::fromLatin1("%1%2").arg(count).arg(unit);
 }
 
 } // namespace KAlarmCal
