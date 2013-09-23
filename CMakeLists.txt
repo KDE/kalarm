@@ -15,8 +15,15 @@ option(KALARM_USE_KRESOURCES "Build to use KResources" OFF)
 set(USE_KRESOURCES false)
 if(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
     set(USE_KRESOURCES true)
-    add_definitions(-DWANT_DEPRECATED_KCAL_API)
-    add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
+    add_definitions(
+      -DKRESOURCES_DEPRECATED=
+      -DKCAL_DEPRECATED=
+    )
+    # This one won't be needed when CMake 2.8.13 is depended on.
+    add_definitions(
+      -DKRESOURCES_DEPRECATED_EXPORT=KRESOURCES_EXPORT
+      -DKCAL_DEPRECATED_EXPORT=KCAL_EXPORT
+    )
 endif()
 
 ########### next target ###############
