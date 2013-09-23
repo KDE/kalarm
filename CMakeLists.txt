@@ -41,17 +41,20 @@ if(NOT USE_KRESOURCES)
        )
 endif()
 
-if(USE_KRESOURCES)
-    set(KALARMCAL_USE_KRESOURCES "// This library was built to use KResources.\n// It must be rebuilt in order to use Akonadi.\n#define KALARMCAL_USE_KRESOURCES")
-else()
-    set(KALARMCAL_USE_KRESOURCES "// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif")
-endif()
-
-# NOTE: kalarmcal_export.h is only generated when cmake is run.
-#       If it is deleted, 'make' will not regenerate it.
-configure_file(kalarmcal_export.h.in ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h)
-
+include_directories(
+  ${CMAKE_BINARY_DIR}/kcal
+  ${CMAKE_BINARY_DIR}/kcalcore
+  ${CMAKE_BINARY_DIR}/akonadi
+  ${CMAKE_BINARY_DIR}/kholidays
+  ${CMAKE_BINARY_DIR}/kpimidentities
+)
 kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
+generate_export_header(kalarmcal)
+if(USE_KRESOURCES)
+    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h" "\n// This library was built to use KResources.\n// It must be rebuilt in order to use Akonadi.\n#define KALARMCAL_USE_KRESOURCES\n")
+else()
+    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h" "\n// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif\n")
+endif()
 
 if(USE_KRESOURCES)
     target_link_libraries(kalarmcal
