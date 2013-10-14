@@ -56,10 +56,10 @@ static const QString FROM_SYS_SETTINGS = QLatin1String("@SystemSettings");
 static const QString FROM_KMAIL        = QLatin1String("@KMail");
 
 // Config file entry names for notification messages
-const char* Preferences::QUIT_WARN              = "QuitWarn";
-const char* Preferences::ASK_AUTO_START         = "AskAutoStart";
-const char* Preferences::CONFIRM_ALARM_DELETION = "ConfirmAlarmDeletion";
-const char* Preferences::EMAIL_QUEUED_NOTIFY    = "EmailQueuedNotify";
+const QLatin1String Preferences::QUIT_WARN("QuitWarn");
+const QLatin1String Preferences::ASK_AUTO_START("AskAutoStart");
+const QLatin1String Preferences::CONFIRM_ALARM_DELETION("ConfirmAlarmDeletion");
+const QLatin1String Preferences::EMAIL_QUEUED_NOTIFY("EmailQueuedNotify");
 const bool  default_quitWarn             = true;
 const bool  default_emailQueuedNotify    = false;
 const bool  default_confirmAlarmDeletion = true;
@@ -82,10 +82,10 @@ Preferences* Preferences::self()
     if (!mInstance)
     {
         // Set the default button for the Quit warning message box to Cancel
-        KAMessageBox::setContinueDefault(QLatin1String(QUIT_WARN), KMessageBox::Cancel);
-        KAMessageBox::setDefaultShouldBeShownContinue(QLatin1String(QUIT_WARN), default_quitWarn);
-        KAMessageBox::setDefaultShouldBeShownContinue(QLatin1String(EMAIL_QUEUED_NOTIFY), default_emailQueuedNotify);
-        KAMessageBox::setDefaultShouldBeShownContinue(QLatin1String(CONFIRM_ALARM_DELETION), default_confirmAlarmDeletion);
+        KAMessageBox::setContinueDefault(QUIT_WARN, KMessageBox::Cancel);
+        KAMessageBox::setDefaultShouldBeShownContinue(QUIT_WARN, default_quitWarn);
+        KAMessageBox::setDefaultShouldBeShownContinue(EMAIL_QUEUED_NOTIFY, default_emailQueuedNotify);
+        KAMessageBox::setDefaultShouldBeShownContinue(CONFIRM_ALARM_DELETION, default_confirmAlarmDeletion);
 
         mInstance = new Preferences;
     }
@@ -111,7 +111,7 @@ Preferences::Preferences()
 
 void Preferences::setAskAutoStart(bool yes)
 {
-    KAMessageBox::saveDontShowAgainYesNo(QLatin1String(ASK_AUTO_START), !yes);
+    KAMessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
 }
 
 /******************************************************************************

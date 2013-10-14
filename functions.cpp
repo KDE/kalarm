@@ -104,24 +104,24 @@ using namespace Akonadi;
 
 namespace
 {
-bool          refreshAlarmsQueued = false;
-QString       korganizerName    = QLatin1String("korganizer");
-QString       korgStartError;
+bool            refreshAlarmsQueued = false;
+QString         korganizerName    = QLatin1String("korganizer");
+QString         korgStartError;
 QDBusInterface* korgInterface = 0;
 
-const char*   KMAIL_DBUS_SERVICE      = "org.kde.kmail";
-//const char*   KMAIL_DBUS_IFACE        = "org.kde.kmail.kmail";
-//const char*   KMAIL_DBUS_WINDOW_PATH  = "/kmail/kmail_mainwindow_1";
-const char*   KORG_DBUS_SERVICE       = "org.kde.korganizer";
-const char*   KORG_DBUS_IFACE         = "org.kde.korganizer.Korganizer";
+const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
+//const QLatin1String KMAIL_DBUS_IFACE("org.kde.kmail.kmail");
+//const QLatin1String KMAIL_DBUS_WINDOW_PATH("/kmail/kmail_mainwindow_1");
+const QLatin1String KORG_DBUS_SERVICE("org.kde.korganizer");
+const QLatin1String KORG_DBUS_IFACE("org.kde.korganizer.Korganizer");
 // D-Bus object path of KOrganizer's notification interface
 #define       KORG_DBUS_PATH            "/Korganizer"
 #define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
-//const char*   KORG_DBUS_WINDOW_PATH   = "/korganizer/MainWindow_1";
+//const QLatin1String KORG_DBUS_WINDOW_PATH("/korganizer/MainWindow_1");
 const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
 
-const char*   ALARM_OPTS_FILE        = "alarmopts";
-const char*   DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
+const QLatin1String ALARM_OPTS_FILE("alarmopts");
+const char*         DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
 void editNewTemplate(EditAlarmDlg::Type, const KAEvent* preset, QWidget* parent);
 KAlarm::UpdateStatus sendToKOrganizer(const KAEvent&);
@@ -1820,7 +1820,7 @@ void refreshAlarmsIfQueued()
 */
 QString runKMail(bool minimise)
 {
-    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String(KMAIL_DBUS_SERVICE));
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(KMAIL_DBUS_SERVICE);
     if (!reply.isValid()  ||  !reply.value())
     {
         // Program is not already running, so start it
@@ -1939,7 +1939,7 @@ QStringList dontShowErrors(const QString& eventId)
 {
     if (eventId.isEmpty())
         return QStringList();
-    KConfig config(KStandardDirs::locateLocal("appdata", QLatin1String(ALARM_OPTS_FILE)));
+    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
 #ifdef USE_AKONADI
     const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
@@ -1977,7 +1977,7 @@ void setDontShowErrors(const QString& eventId, const QStringList& tags)
 {
     if (eventId.isEmpty())
         return;
-    KConfig config(KStandardDirs::locateLocal("appdata", QLatin1String(ALARM_OPTS_FILE)));
+    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
 #ifdef USE_AKONADI
     const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
@@ -2003,7 +2003,7 @@ void setDontShowErrors(const QString& eventId, const QString& tag)
 {
     if (eventId.isEmpty()  ||  tag.isEmpty())
         return;
-    KConfig config(KStandardDirs::locateLocal("appdata", QLatin1String(ALARM_OPTS_FILE)));
+    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
 #ifdef USE_AKONADI
     const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
@@ -2393,7 +2393,7 @@ KAlarm::UpdateStatus runKOrganizer()
     // If Kontact is running, there is be a load() method which needs to be called
     // to load KOrganizer into Kontact. But if KOrganizer is running independently,
     // the load() method doesn't exist.
-    QDBusInterface iface(QLatin1String(KORG_DBUS_SERVICE), QLatin1String(KORG_DBUS_LOAD_PATH), QLatin1String("org.kde.KUniqueApplication"));
+    QDBusInterface iface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_LOAD_PATH), QLatin1String("org.kde.KUniqueApplication"));
     if (!iface.isValid())
     {
         kWarning() << "Unable to access "KORG_DBUS_LOAD_PATH" D-Bus interface:" << iface.lastError().message();
@@ -2412,7 +2412,7 @@ KAlarm::UpdateStatus runKOrganizer()
     if (!korgInterface  ||  !korgInterface->isValid())
     {
         delete korgInterface;
-        korgInterface = new QDBusInterface(QLatin1String(KORG_DBUS_SERVICE), QLatin1String(KORG_DBUS_PATH), QLatin1String(KORG_DBUS_IFACE));
+        korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_PATH), KORG_DBUS_IFACE);
         if (!korgInterface->isValid())
         {
             kWarning() << "Unable to access "KORG_DBUS_PATH" D-Bus interface:" << korgInterface->lastError().message();

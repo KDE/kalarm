@@ -106,8 +106,8 @@ static FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, Q
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
-static const char* KMAIL_DBUS_SERVICE   = "org.kde.kmail";
-static const char* KMAIL_DBUS_PATH      = "/KMail";
+static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
+static const QLatin1String KMAIL_DBUS_PATH("/KMail");
 #endif
 
 // The delay for enabling message window buttons if a zero delay is
@@ -2110,7 +2110,7 @@ void MessageWin::slotShowKMailMessage()
         KAMessageBox::sorry(this, err);
         return;
     }
-    org::kde::kmail::kmail kmail(QLatin1String(KMAIL_DBUS_SERVICE), QLatin1String(KMAIL_DBUS_PATH), QDBusConnection::sessionBus());
+    org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
     QDBusReply<bool> reply = kmail.showMail((qulonglong)mKMailSerialNumber, QString());
     if (!reply.isValid())
         kError() << "kmail D-Bus call failed:" << reply.error().message();

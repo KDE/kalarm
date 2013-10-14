@@ -70,8 +70,8 @@
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
 
-static const char* KMAIL_DBUS_SERVICE = "org.kde.kmail";
-//static const char* KMAIL_DBUS_PATH    = "/KMail";
+static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
+//static const QLatin1String KMAIL_DBUS_PATH("/KMail");
 #endif
 
 namespace HeaderParsing
@@ -315,7 +315,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(subject);
 
     KMime::Headers::UserAgent* agent = new KMime::Headers::UserAgent;
-    agent->fromUnicodeString(KGlobal::mainComponent().aboutData()->programName() + QLatin1String("/") + QLatin1String(KALARM_VERSION), "us-ascii");
+    agent->fromUnicodeString(KGlobal::mainComponent().aboutData()->programName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
     message.setHeader(agent);
 
     KMime::Headers::MessageID* id = new KMime::Headers::MessageID;
@@ -454,7 +454,7 @@ void KAMail::notifyQueued(const KAEvent& event)
             QString domain = addr.mailboxList.first().addrSpec().domain;
             if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
             {
-                KAMessageBox::information(MainWindow::mainMainWindow(), i18nc("@info", "An email has been queued to be sent"), QString(), QLatin1String(Preferences::EMAIL_QUEUED_NOTIFY));
+                KAMessageBox::information(MainWindow::mainMainWindow(), i18nc("@info", "An email has been queued to be sent"), QString(), Preferences::EMAIL_QUEUED_NOTIFY);
                 return;
             }
         }
@@ -649,7 +649,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
 #ifdef __GNUC__
 #warning Set correct DBus interface/object for kmail
 #endif
-    QDBusInterface iface(QLatin1String(KMAIL_DBUS_SERVICE), QString(), QLatin1String("KMailIface"));
+    QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("KMailIface"));
     QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("getDecodedBodyPart"), args);
     if (!reply.isValid())
     {

@@ -98,13 +98,13 @@ using namespace KCal;
 using namespace KAlarmCal;
 
 static const QString UI_FILE     = QLatin1String("kalarmui.rc");
-static const char* WINDOW_NAME = "MainWindow";
+static const char*   WINDOW_NAME = "MainWindow";
 
-static const char* VIEW_GROUP         = "View";
-static const char* SHOW_TIME_KEY      = "ShowAlarmTime";
-static const char* SHOW_TIME_TO_KEY   = "ShowTimeToAlarm";
-static const char* SHOW_ARCHIVED_KEY  = "ShowArchivedAlarms";
-static const char* SHOW_RESOURCES_KEY = "ShowResources";
+static const char*   VIEW_GROUP         = "View";
+static const char*   SHOW_TIME_KEY      = "ShowAlarmTime";
+static const char*   SHOW_TIME_TO_KEY   = "ShowTimeToAlarm";
+static const char*   SHOW_ARCHIVED_KEY  = "ShowArchivedAlarms";
+static const char*   SHOW_RESOURCES_KEY = "ShowResources";
 
 static QString   undoText;
 static QString   undoTextStripped;
@@ -831,7 +831,7 @@ void MainWindow::slotDelete(bool force)
                                                 i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
                                                 KGuiItem(i18nc("@action:button", "&Delete"), QLatin1String("edit-delete")),
                                                 KStandardGuiItem::cancel(),
-                                                QLatin1String(Preferences::CONFIRM_ALARM_DELETION))
+                                                Preferences::CONFIRM_ALARM_DELETION)
             != KMessageBox::Continue)
             return;
     }

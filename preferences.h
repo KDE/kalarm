@@ -60,14 +60,14 @@ class Preferences : public PreferencesBase
         static void             setWorkDayStart(const QTime& t)  { self()->setBase_WorkDayStart(QDateTime(QDate(1900,1,1), t)); }
         static void             setWorkDayEnd(const QTime& t)    { self()->setBase_WorkDayEnd(QDateTime(QDate(1900,1,1), t)); }
         static void             setWorkDays(const QBitArray&);
-        static bool             quitWarn()                       { return mUsingDefaults ? self()->base_QuitWarn() : notifying(QLatin1String(QUIT_WARN)); }
-        static void             setQuitWarn(bool yes)            { setNotify(QLatin1String(QUIT_WARN), yes); }
-        static bool             confirmAlarmDeletion()           { return mUsingDefaults ? self()->base_ConfirmAlarmDeletion() : notifying(QLatin1String(CONFIRM_ALARM_DELETION)); }
-        static void             setConfirmAlarmDeletion(bool yes){ setNotify(QLatin1String(CONFIRM_ALARM_DELETION), yes); }
+        static bool             quitWarn()                       { return mUsingDefaults ? self()->base_QuitWarn() : notifying(QUIT_WARN); }
+        static void             setQuitWarn(bool yes)            { setNotify(QUIT_WARN, yes); }
+        static bool             confirmAlarmDeletion()           { return mUsingDefaults ? self()->base_ConfirmAlarmDeletion() : notifying(CONFIRM_ALARM_DELETION); }
+        static void             setConfirmAlarmDeletion(bool yes){ setNotify(CONFIRM_ALARM_DELETION, yes); }
         static bool             emailCopyToKMail()               { return self()->mBase_EmailCopyToKMail  &&  self()->mEmailClient == sendmail; }
         static void             setEmailCopyToKMail(bool yes)    { self()->setBase_EmailCopyToKMail(yes); }
-        static bool             emailQueuedNotify()              { return mUsingDefaults ? self()->base_EmailQueuedNotify() : notifying(QLatin1String(EMAIL_QUEUED_NOTIFY)); }
-        static void             setEmailQueuedNotify(bool yes)   { setNotify(QLatin1String(EMAIL_QUEUED_NOTIFY), yes); }
+        static bool             emailQueuedNotify()              { return mUsingDefaults ? self()->base_EmailQueuedNotify() : notifying(EMAIL_QUEUED_NOTIFY); }
+        static void             setEmailQueuedNotify(bool yes)   { setNotify(EMAIL_QUEUED_NOTIFY, yes); }
         static MailFrom         emailFrom();
         static QString          emailAddress();
         static void             setEmailAddress(MailFrom, const QString& address);
@@ -81,10 +81,10 @@ class Preferences : public PreferencesBase
         static void             setDefaultSoundVolume(float v)   { self()->setBase_DefaultSoundVolume(v < 0 ? -1 : static_cast<int>(v * 100)); }
 
         // Config file entry names for notification messages
-        static const char*      QUIT_WARN;
-        static const char*      ASK_AUTO_START;
-        static const char*      CONFIRM_ALARM_DELETION;
-        static const char*      EMAIL_QUEUED_NOTIFY;
+        static const QLatin1String QUIT_WARN;
+        static const QLatin1String ASK_AUTO_START;
+        static const QLatin1String CONFIRM_ALARM_DELETION;
+        static const QLatin1String EMAIL_QUEUED_NOTIFY;
 
         virtual bool useDefaults(bool def)   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
 

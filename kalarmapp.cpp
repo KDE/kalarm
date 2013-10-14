@@ -79,8 +79,8 @@
 #include <iostream>
 #include <climits>
 
-static const char* KTTSD_DBUS_SERVICE  = "org.kde.kttsd";
-static const char* KTTDS_DBUS_PATH     = "/KSpeech";
+static const QLatin1String KTTSD_DBUS_SERVICE("org.kde.kttsd");
+static const QLatin1String KTTDS_DBUS_PATH("/KSpeech");
 
 #ifdef USE_AKONADI
 static const int AKONADI_TIMEOUT = 30;   // timeout (seconds) for Akonadi collections to be populated
@@ -654,7 +654,7 @@ void KAlarmApp::doQuit(QWidget* parent)
     kDebug();
     if (KAMessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
                                             i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
-                                            QString(), KStandardGuiItem::quit(), QLatin1String(Preferences::QUIT_WARN)
+                                            QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
                                            ) != KMessageBox::Yes)
         return;
     if (!KAlarm::checkRtcWakeConfig(true).isEmpty())
@@ -676,7 +676,7 @@ void KAlarmApp::doQuit(QWidget* parent)
                                          i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
                                                         "(Note that alarms will be disabled if KAlarm is not started.)"),
                                          QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
-                                         KStandardGuiItem::cancel(), QLatin1String(Preferences::ASK_AUTO_START));
+                                         KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START);
         }
         switch (option)
         {
@@ -2324,7 +2324,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
 {
     error.clear();
     QDBusConnection client = QDBusConnection::sessionBus();
-    if (!client.interface()->isServiceRegistered(QLatin1String(KTTSD_DBUS_SERVICE)))
+    if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
     {
         // kttsd is not running, so start it
         delete mKSpeech;
@@ -2337,7 +2337,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
     }
     if (!mKSpeech)
     {
-        mKSpeech = new OrgKdeKSpeechInterface(QLatin1String(KTTSD_DBUS_SERVICE), QLatin1String(KTTDS_DBUS_PATH), QDBusConnection::sessionBus());
+        mKSpeech = new OrgKdeKSpeechInterface(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, QDBusConnection::sessionBus());
         mKSpeech->setParent(theApp());
         mKSpeech->setApplicationName(KGlobal::mainComponent().aboutData()->programName());
         mKSpeech->setDefaultPriority(KSpeech::jpMessage);
@@ -2351,7 +2351,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
 */
 void KAlarmApp::slotDBusServiceUnregistered(const QString& serviceName)
 {
-    if (serviceName == QLatin1String(KTTSD_DBUS_SERVICE))
+    if (serviceName == KTTSD_DBUS_SERVICE)
     {
         delete mKSpeech;
         mKSpeech = 0;
