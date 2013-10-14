@@ -2,7 +2,7 @@
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004,2005,2007-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -391,7 +391,7 @@ bool AlarmText::checkIfEmail(const QString& text)
 */
 QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 {
-    QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     int n = Private::emailHeaderCount(lines);
     if (!n)
         return QString();
@@ -415,7 +415,7 @@ QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 QString AlarmText::fromCalendarText(const QString& text, bool& email)
 {
     Private::initialise();
-    QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     int maxn = lines.count();
     if (maxn >= 4
     &&  lines[0].startsWith(Private::mFromPrefixEn)
@@ -455,7 +455,7 @@ QString AlarmText::fromCalendarText(const QString& text, bool& email)
 QString AlarmText::toCalendarText(const QString& text)
 {
     Private::setUpTranslations();
-    QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     int maxn = lines.count();
     if (maxn >= 4
     &&  lines[0].startsWith(Private::mFromPrefix)
@@ -547,7 +547,7 @@ int AlarmText::Private::emailHeaderCount(const QStringList& lines)
 QString AlarmText::Private::todoTitle(const QString& text)
 {
     setUpTranslations();
-    QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     int n;
     for (n = 0;  n < lines.count() && lines[n].contains(QLatin1Char('\t'));  ++n) ;
     if (!n  ||  n > 3)

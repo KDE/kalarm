@@ -862,40 +862,42 @@ void KAEventPrivate::set(const Event* event)
     flags << QString() << QString();    // to avoid having to check for end of list
     for (int i = 0, end = flags.count() - 1;  i < end;  ++i)
     {
-        if (flags[i] == DATE_ONLY_FLAG)
+        QString flag = flags.at(i);
+        if (flag == DATE_ONLY_FLAG)
             dateOnly = true;
-        else if (flags[i] == CONFIRM_ACK_FLAG)
+        else if (flag == CONFIRM_ACK_FLAG)
             mConfirmAck = true;
-        else if (flags[i] == EMAIL_BCC_FLAG)
+        else if (flag == EMAIL_BCC_FLAG)
             mEmailBcc = true;
-        else if (flags[i] == KORGANIZER_FLAG)
+        else if (flag == KORGANIZER_FLAG)
             mCopyToKOrganizer = true;
-        else if (flags[i] == EXCLUDE_HOLIDAYS_FLAG)
+        else if (flag == EXCLUDE_HOLIDAYS_FLAG)
             mExcludeHolidays = mHolidays;
-        else if (flags[i] == WORK_TIME_ONLY_FLAG)
+        else if (flag == WORK_TIME_ONLY_FLAG)
             mWorkTimeOnly = 1;
-        else if (flags[i]== KMAIL_SERNUM_FLAG)
+        else if (flag == KMAIL_SERNUM_FLAG)
         {
-            const unsigned long n = flags[i + 1].toULong(&ok);
+            const unsigned long n = flags.at(i + 1).toULong(&ok);
             if (!ok)
                 continue;
             mKMailSerialNumber = n;
             ++i;
         }
-        else if (flags[i] == KAEventPrivate::ARCHIVE_FLAG)
+        else if (flag == KAEventPrivate::ARCHIVE_FLAG)
             mArchive = true;
-        else if (flags[i] == KAEventPrivate::AT_LOGIN_TYPE)
+        else if (flag == KAEventPrivate::AT_LOGIN_TYPE)
             mArchiveRepeatAtLogin = true;
-        else if (flags[i] == KAEventPrivate::REMINDER_TYPE)
+        else if (flag == KAEventPrivate::REMINDER_TYPE)
         {
-            if (flags[++i] == KAEventPrivate::REMINDER_ONCE_FLAG)
+            flag = flags.at(++i);
+            if (flag == KAEventPrivate::REMINDER_ONCE_FLAG)
             {
                 mReminderOnceOnly = true;
                 ++i;
             }
-            const int len = flags[i].length() - 1;
-            mReminderMinutes = -flags[i].left(len).toInt();    // -> 0 if conversion fails
-            switch (flags[i].at(len).toLatin1())
+            const int len = flag.length() - 1;
+            mReminderMinutes = -flag.left(len).toInt();    // -> 0 if conversion fails
+            switch (flag.at(len).toLatin1())
             {
                 case 'M':  break;
                 case 'H':  mReminderMinutes *= 60;  break;
@@ -903,9 +905,9 @@ void KAEventPrivate::set(const Event* event)
                 default:   mReminderMinutes = 0;  break;
             }
         }
-        else if (flags[i] == DEFER_FLAG)
+        else if (flag == DEFER_FLAG)
         {
-            QString mins = flags[i + 1];
+            QString mins = flags.at(i + 1);
             if (mins.endsWith(QLatin1Char('D')))
             {
                 mDeferDefaultDateOnly = true;
@@ -917,25 +919,25 @@ void KAEventPrivate::set(const Event* event)
             mDeferDefaultMinutes = n;
             ++i;
         }
-        else if (flags[i] == TEMPL_AFTER_TIME_FLAG)
+        else if (flag == TEMPL_AFTER_TIME_FLAG)
         {
-            const int n = static_cast<int>(flags[i + 1].toUInt(&ok));
+            const int n = static_cast<int>(flags.at(i + 1).toUInt(&ok));
             if (!ok)
                 continue;
             mTemplateAfterTime = n;
             ++i;
         }
-        else if (flags[i] == LATE_CANCEL_FLAG)
+        else if (flag == LATE_CANCEL_FLAG)
         {
-            mLateCancel = static_cast<int>(flags[i + 1].toUInt(&ok));
+            mLateCancel = static_cast<int>(flags.at(i + 1).toUInt(&ok));
             if (ok)
                 ++i;
             if (!ok  ||  !mLateCancel)
                 mLateCancel = 1;    // invalid parameter defaults to 1 minute
         }
-        else if (flags[i] == AUTO_CLOSE_FLAG)
+        else if (flag == AUTO_CLOSE_FLAG)
         {
-            mLateCancel = static_cast<int>(flags[i + 1].toUInt(&ok));
+            mLateCancel = static_cast<int>(flags.at(i + 1).toUInt(&ok));
             if (ok)
                 ++i;
             if (!ok  ||  !mLateCancel)
@@ -4026,7 +4028,7 @@ void KAEventPrivate::endChanges()
 /******************************************************************************
 * Return a list of pointers to KAEvent objects.
 */
-KAEvent::List KAEvent::ptrList(QVector<KAEvent>& objList)
+KAEvent::List KAEvent::ptrList(const QVector<KAEvent>& objList)
 {
     KAEvent::List ptrs;
     for (int i = 0, count = objList.count();  i < count;  ++i)
@@ -4189,7 +4191,7 @@ DateTime KAEventPrivate::readDateTime(const Event* event, bool dateOnly, DateTim
         start.setDateOnly(true);
     }
     DateTime next = start;
-    QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY);
+    const QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY);
     if (prop.length() >= 8)
     {
         // The next due recurrence time is specified
@@ -4225,7 +4227,7 @@ void KAEventPrivate::readAlarms(const Event* event, void* almap, bool cmdDisplay
 #endif
 {
     AlarmMap* alarmMap = (AlarmMap*)almap;
-    Alarm::List alarms = event->alarms();
+    const Alarm::List alarms = event->alarms();
 
     // Check if it's an audio event with no display alarm
     bool audioOnly = false;
@@ -5364,7 +5366,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 bool deferral   = false;
                 bool lateCancel = false;
                 KAAlarm::Action action = KAAlarm::MESSAGE;
-                QString txt = alarm->text();
+                const QString txt = alarm->text();
                 const int length = txt.length();
                 int i = 0;
                 if (txt[0].isDigit())
@@ -5402,7 +5404,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 }
                 else
                     i = 0;
-                txt = txt.mid(i);
+                const QString altxt = txt.mid(i);
 
                 QStringList types;
                 switch (action)
@@ -5411,10 +5413,10 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                         types += KAEventPrivate::FILE_TYPE;
                         // fall through to MESSAGE
                     case KAAlarm::MESSAGE:
-                        alarm->setDisplayAlarm(txt);
+                        alarm->setDisplayAlarm(altxt);
                         break;
                     case KAAlarm::COMMAND:
-                        setProcedureAlarm(alarm, txt);
+                        setProcedureAlarm(alarm, altxt);
                         break;
                     case KAAlarm::EMAIL:     // email alarms were introduced in KAlarm 0.9
                     case KAAlarm::AUDIO:     // audio alarms (with no display) were introduced in KAlarm 2.3.2
@@ -5506,14 +5508,14 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
 #endif
                     if (alarm->type() == Alarm::Display)
                         alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY,
-                                                 QString::fromLatin1("%1;;").arg(cats[0]));
+                                                 QString::fromLatin1("%1;;").arg(cats.at(0)));
                 }
                 cats.removeAt(0);
             }
 
             for (int i = 0, end = cats.count();  i < end;  ++i)
             {
-                if (cats[i] == BEEP_CATEGORY)
+                if (cats.at(i) == BEEP_CATEGORY)
                 {
                     cats.removeAt(i);
 
@@ -5616,7 +5618,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
             CalEvent::setStatus(event, CalEvent::status(event));
             for (int i = 0;  i < cats.count(); )
             {
-                QString cat = cats[i];
+                const QString cat = cats.at(i);
                 if (cat == DATE_ONLY_CATEGORY)
                     flags += KAEventPrivate::DATE_ONLY_FLAG;
                 else if (cat == CONFIRM_ACK_CATEGORY)
@@ -5702,7 +5704,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 //  - DISPLAYING_TYPE
                 bool mainAlarm = true;
                 QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
-                QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
+                const QStringList types = property.split(QLatin1Char(','), QString::SkipEmptyParts);
                 for (int t = 0;  t < types.count();  ++t)
                 {
                     QString type = types[t];

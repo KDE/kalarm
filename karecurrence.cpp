@@ -2,7 +2,7 @@
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2005-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -313,7 +313,7 @@ void KARecurrence::Private::fix()
     int convert = 0;
     int days[2] = { 0, 0 };
     RecurrenceRule* rrules[2];
-    RecurrenceRule::List rrulelist = mRecurrence.rRules();
+    const RecurrenceRule::List rrulelist = mRecurrence.rRules();
     int rri = 0;
     int rrend = rrulelist.count();
     for (int i = 0;  i < 2  &&  rri < rrend;  ++i, ++rri)
@@ -856,11 +856,11 @@ bool KARecurrence::recursOn(const QDate& dt, const KDateTime::Spec& timeSpec) co
     // so we just need to check if it's in RDATES or RRULES
     if (d->mRecurrence.rDates().contains(dt))
         return true;
-    RecurrenceRule::List rulelist = d->mRecurrence.rRules();
+    const RecurrenceRule::List rulelist = d->mRecurrence.rRules();
     for (int rri = 0, rrend = rulelist.count();  rri < rrend;  ++rri)
         if (rulelist[rri]->recursOn(dt, timeSpec))
             return true;
-    DateTimeList dtlist = d->mRecurrence.rDateTimes();
+    const DateTimeList dtlist = d->mRecurrence.rDateTimes();
     for (int dti = 0, dtend = dtlist.count();  dti < dtend;  ++dti)
         if (dtlist[dti].date() == dt)
             return true;
@@ -1001,7 +1001,7 @@ Duration KARecurrence::longestInterval() const
 
         case DAILY:
         {
-            QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
+            const QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
             if (days.isEmpty())
                 return Duration(freq, Duration::Days);
 
@@ -1133,7 +1133,7 @@ Duration KARecurrence::regularInterval() const
             return Duration(freq * 60, Duration::Seconds);
         case DAILY:
         {
-            QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
+            const QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
             if (days.isEmpty())
                 return Duration(freq, Duration::Days);
             // After applying the frequency, the specified days of the week
@@ -1163,7 +1163,7 @@ Duration KARecurrence::regularInterval() const
         }
         case WEEKLY:
         {
-            QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
+            const QList<RecurrenceRule::WDayPos> days = d->mRecurrence.defaultRRuleConst()->byDays();
             if (days.isEmpty())
                 return Duration(freq * 7, Duration::Days);
             // The specified days of the week occur every week in which the
@@ -1279,7 +1279,7 @@ bool KARecurrence::dailyType(const RecurrenceRule* rrule)
     ||  !rrule->bySetPos().isEmpty()
     ||  !rrule->byYearDays().isEmpty())
         return false;
-    QList<RecurrenceRule::WDayPos> days = rrule->byDays();
+    const QList<RecurrenceRule::WDayPos> days = rrule->byDays();
     if (days.isEmpty())
         return true;
     // Check that all the positions are zero (i.e. every time)

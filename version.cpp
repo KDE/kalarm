@@ -2,7 +2,7 @@
  *  version.cpp  -  program version functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2002-2007,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2007,2011,2013 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -56,7 +56,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
     if (count >= 3)
     {
         // Issue number: allow other characters to follow the last digit
-        QString issue = version.section(QLatin1Char('.'), 2);
+        const QString issue = version.section(QLatin1Char('.'), 2);
         int n = issue.length();
         if (!n  ||  !issue[0].isDigit())
             return 0;
