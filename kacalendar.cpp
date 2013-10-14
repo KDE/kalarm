@@ -2,7 +2,7 @@
  *  kacalendar.cpp  -  KAlarm kcal library calendar and event functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -266,7 +266,7 @@ bool isUTC(const QString& localFile)
     const QByteArray BEGIN_VCALENDAR("BEGIN:VCALENDAR");
     const QByteArray BEGIN_VEVENT("BEGIN:VEVENT");
     const QByteArray CREATED("CREATED:");
-    QList<QByteArray> lines = text.split('\n');
+    const QList<QByteArray> lines = text.split('\n');
     for (int i = 0, end = lines.count();  i < end;  ++i)
     {
         if (lines[i].startsWith(BEGIN_VCALENDAR))
