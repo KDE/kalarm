@@ -1354,7 +1354,7 @@ class KALARMCAL_EXPORT KAEvent
 
 #ifndef KALARMCAL_USE_KRESOURCES
         /** Return a list of pointers to a list of KAEvent objects. */
-        static List ptrList(const QVector<KAEvent>& events);
+        static List ptrList(QVector<KAEvent>& events);
 #endif
 
         /** Output the event's data as debug output. */

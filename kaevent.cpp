@@ -4028,7 +4028,7 @@ void KAEventPrivate::endChanges()
 /******************************************************************************
 * Return a list of pointers to KAEvent objects.
 */
-KAEvent::List KAEvent::ptrList(const QVector<KAEvent>& objList)
+KAEvent::List KAEvent::ptrList(QVector<KAEvent>& objList)
 {
     KAEvent::List ptrs;
     for (int i = 0, count = objList.count();  i < count;  ++i)
