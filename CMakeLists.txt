@@ -6,6 +6,7 @@ add_definitions(-DQT_STRICT_ITERATORS)
 add_definitions( -DQT_NO_CAST_FROM_ASCII )
 add_definitions( -DQT_NO_CAST_TO_ASCII )
 
+set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 option(KALARM_USE_AKONADI "Build to use Akonadi" ON)
 
