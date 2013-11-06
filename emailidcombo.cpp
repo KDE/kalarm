@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "emailidcombo.moc"
+#include "emailidcombo.h"
 
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -63,5 +63,5 @@ void EmailIdCombo::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         KPIMIdentities::IdentityCombo::keyReleaseEvent(e);
 }
-
+#include "moc_emailidcombo.cpp"
 // vim: et sw=4:

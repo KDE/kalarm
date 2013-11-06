@@ -22,7 +22,7 @@
 
 #include "alarmcalendar.h"
 #include "functions.h"
-#include "templatemenuaction.moc"
+#include "templatemenuaction.h"
 
 #include <kalarmcal/kaevent.h>
 
@@ -83,4 +83,5 @@ void TemplateMenuAction::slotSelected(QAction* action)
     emit selected(templ);
 }
 
+#include "moc_templatemenuaction.cpp"
 // vim: et sw=4:

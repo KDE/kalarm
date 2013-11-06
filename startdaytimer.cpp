@@ -21,7 +21,7 @@
 #include "kalarm.h"
 
 #include "preferences.h"
-#include "startdaytimer.moc"
+#include "startdaytimer.h"
 
 
 StartOfDayTimer* StartOfDayTimer::mInstance = 0;
@@ -48,4 +48,5 @@ void StartOfDayTimer::startOfDayChanged()
     changeTime(Preferences::startOfDay(), true);
 }
 
+#include "moc_startdaytimer.cpp"
 // vim: et sw=4:

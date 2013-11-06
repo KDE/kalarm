@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "colourbutton.moc"
+#include "colourbutton.h"
 
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -70,5 +70,5 @@ void ColourButton::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         KColorButton::keyReleaseEvent(e);
 }
-
+#include "moc_colourbutton.cpp"
 // vim: et sw=4:

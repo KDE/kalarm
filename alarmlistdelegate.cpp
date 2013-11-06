@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "alarmlistdelegate.moc"
+#include "alarmlistdelegate.h"
 
 #ifdef USE_AKONADI
 #include "akonadimodel.h"
@@ -142,4 +142,5 @@ void AlarmListDelegate::edit(KAEvent* event, EventListView* view)
     KAlarm::editAlarm(event, static_cast<AlarmListView*>(view));   // edit alarm (view-only mode if archived or read-only)
 }    
 
+#include "moc_alarmlistdelegate.cpp"
 // vim: et sw=4:

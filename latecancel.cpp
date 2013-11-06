@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "latecancel.moc"
+#include "latecancel.h"
 
 #include "checkbox.h"
 
@@ -180,5 +180,5 @@ void LateCancelSelector::slotToggled(bool on)
         mStack->setCurrentWidget(mCheckboxFrame);
     mAutoClose->setEnabled(on);
 }
-
+#include "moc_latecancel.cpp"
 // vim: et sw=4:

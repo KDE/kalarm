@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "newalarmaction.moc"
+#include "newalarmaction.h"
 
 #ifdef USE_AKONADI
 #include "akonadimodel.h"
@@ -128,5 +128,5 @@ void NewAlarmAction::slotCalendarStatusChanged()
     mTemplateAction->setEnabled(active && haveEvents);
     setEnabled(active);
 }
-
+#include "moc_newalarmaction.cpp"
 // vim: et sw=4:

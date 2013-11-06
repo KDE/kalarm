@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "checkbox.moc"
+#include "checkbox.h"
 #include <QMouseEvent>
 #include <QKeyEvent>
 
@@ -135,5 +135,5 @@ void CheckBox::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QCheckBox::keyReleaseEvent(e);
 }
-
+#include "moc_checkbox.cpp"
 // vim: et sw=4:

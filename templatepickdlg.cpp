@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "templatepickdlg.moc"
+#include "templatepickdlg.h"
 
 #ifndef USE_AKONADI
 #include "eventlistmodel.h"
@@ -122,4 +122,5 @@ void TemplatePickDlg::resizeEvent(QResizeEvent* re)
     KDialog::resizeEvent(re);
 }
 
+#include "moc_templatepickdlg.cpp"
 // vim: et sw=4:

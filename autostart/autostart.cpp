@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "autostart.moc"
+#include "autostart.h"
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
@@ -103,5 +103,5 @@ void AutostartApp::slotAutostart()
     }
     exit();
 }
-
+#include "moc_autostart.cpp"
 // vim: et sw=4:

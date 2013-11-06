@@ -2347,5 +2347,6 @@ KACalendar::Compat fix(const FileStorage::Ptr& fileStorage)
     return KACalendar::Current;
 }
 #endif
+#include "moc_alarmcalendar.cpp"
 
 // vim: et sw=4:

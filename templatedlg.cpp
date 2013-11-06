@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "templatedlg.moc"
+#include "templatedlg.h"
 
 #include "editdlg.h"
 #include "alarmcalendar.h"
@@ -283,5 +283,5 @@ void TemplateDlg::resizeEvent(QResizeEvent* re)
         KAlarm::writeConfigWindowSize(TMPL_DIALOG_NAME, re->size());
     KDialog::resizeEvent(re);
 }
-
+#include "moc_templatedlg.h"
 // vim: et sw=4:

@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "pickfileradio.moc"
+#include "pickfileradio.h"
 
 #include "buttongroup.h"
 #include "lineedit.h"
@@ -188,5 +188,5 @@ void PickFileRadio::setLastButton()
         mLastButton->setChecked(true);
     mRevertButton = false;
 }
-
+#include "moc_pickfileradio.cpp"
 // vim: et sw=4:

@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "combobox.moc"
+#include "combobox.h"
 
 #include <QLineEdit>
 #include <QMouseEvent>
@@ -74,5 +74,5 @@ void ComboBox::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         KComboBox::keyReleaseEvent(e);
 }
-
+#include "moc_combobox.cpp"
 // vim: et sw=4:

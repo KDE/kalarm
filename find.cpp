@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "find.moc"
+#include "find.h"
 
 #ifndef USE_AKONADI
 #include "alarmlistfiltermodel.h"
@@ -472,5 +472,5 @@ QModelIndex Find::nextItem(const QModelIndex& index, bool forward) const
     else
         return mListView->indexAbove(index);
 }
-
+#include "moc_find.cpp"
 // vim: et sw=4:

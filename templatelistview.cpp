@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "templatelistview.moc"
+#include "templatelistview.h"
 
 #include "functions.h"
 #ifdef USE_AKONADI
@@ -62,5 +62,5 @@ void TemplateListDelegate::edit(KAEvent* event, EventListView* view)
 {
     KAlarm::editTemplate(event, static_cast<TemplateListView*>(view));
 }
-
+#include "moc_templatelistview.cpp"
 // vim: et sw=4:

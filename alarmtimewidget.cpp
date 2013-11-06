@@ -30,7 +30,7 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 #include "timezonecombo.h"
-#include "alarmtimewidget.moc"
+#include "alarmtimewidget.h"
 
 #include <kalarmcal/datetime.h>
 
@@ -692,5 +692,5 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
         emit changed(KDateTime(dt.date(), dt.time(), mTimeSpec));
     }
 }
-
+#include "moc_alarmtimewidget.cpp"
 // vim: et sw=4:
