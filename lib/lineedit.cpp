@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "lineedit.moc"
+#include "lineedit.h"
 
 #include <libkdepim/misc/maillistdrag.h>
 #include <kabc/vcarddrag.h>
@@ -218,5 +218,5 @@ void LineEdit::dropEvent(QDropEvent* e)
     if (!newText.isEmpty())
         insert(newText);
 }
-
+#include "moc_lineedit.cpp"
 // vim: et sw=4:

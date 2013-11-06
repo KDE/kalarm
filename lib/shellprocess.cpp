@@ -26,7 +26,7 @@
 #include <kdebug.h>
 #include <kauthorized.h>
 
-#include "shellprocess.moc"
+#include "shellprocess.h"
 
 
 QByteArray ShellProcess::mShellName;
@@ -221,5 +221,5 @@ bool ShellProcess::authorised()
     }
     return mAuthorised;
 }
-
+#include "moc_shellprocess.cpp"
 // vim: et sw=4:

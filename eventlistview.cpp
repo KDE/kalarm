@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "eventlistview.moc"
+#include "eventlistview.h"
 
 #include "find.h"
 #ifndef USE_AKONADI
@@ -300,5 +300,5 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
     }
     return false;   // indicate that the event has not been handled
 }    
-
+#include "moc_eventlistview.cpp"
 // vim: et sw=4:

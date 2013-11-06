@@ -20,7 +20,7 @@
 
 #include <kdebug.h>
 
-#include "spinbox.moc"
+#include "spinbox.h"
 
 #include <QLineEdit>
 #include <QObject>
@@ -536,5 +536,5 @@ void SpinBox::initStyleOption(QStyleOptionSpinBox& so) const
     so.frame         = hasFrame();
     so.stepEnabled   = stepEnabled();
 }
-
+#include "moc_spinbox.cpp"
 // vim: et sw=4:

@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 #include "kalarmapp.h"
-#include "mainwindowbase.moc"
+#include "mainwindowbase.h"
 
 #include <QCloseEvent>
 
@@ -54,5 +54,5 @@ bool MainWindowBase::queryExit()
         return true;
     return disableQuit ? false : KMainWindow::queryExit();
 }
-
+#include "moc_mainwindowbase.cpp"
 // vim: et sw=4:

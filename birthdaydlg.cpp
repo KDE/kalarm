@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "birthdaydlg.moc"
+#include "birthdaydlg.h"
 
 #include "kalarm.h"
 #include "alarmcalendar.h"
@@ -369,5 +369,5 @@ void BirthdayDlg::slotTextLostFocus()
         mBirthdaySortModel->setPrefixSuffix(mPrefixText, mSuffixText);
     }
 }
-
+#include "moc_birthdaydlg.cpp"
 // vim: et sw=4:

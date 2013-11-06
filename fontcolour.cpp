@@ -22,7 +22,7 @@
 #include "preferences.h"
 #include "colourbutton.h"
 #include "checkbox.h"
-#include "fontcolour.moc"
+#include "fontcolour.h"
 
 #include <kglobal.h>
 #include <kfontchooser.h>
@@ -223,5 +223,6 @@ void FontColourChooser::slotDefaultFontToggled(bool on)
 {
     mFontChooser->setEnabled(!on);
 }
+#include "moc_fontcolour.cpp"
 
 // vim: et sw=4:

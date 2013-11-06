@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "specialactions.moc"
+#include "specialactions.h"
 
 #include "autoqpointer.h"
 #include "checkbox.h"
@@ -269,5 +269,5 @@ void SpecialActions::slotPreActionChanged(const QString& text)
         mDontShowError->setEnabled(textValid);
     }
 }
-
+#include "moc_specialactions.cpp"
 // vim: et sw=4:

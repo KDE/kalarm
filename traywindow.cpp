@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
-#include "traywindow.moc"
+#include "traywindow.h"
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
@@ -445,5 +445,5 @@ void TrayWindow::removeWindow(MainWindow* win)
     if (win == mAssocMainWindow)
         mAssocMainWindow = 0;
 }
-
+#include "moc_traywindow.cpp"
 // vim: et sw=4:

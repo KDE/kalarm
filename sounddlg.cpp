@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "sounddlg.moc"
+#include "sounddlg.h"
 
 #include "checkbox.h"
 #include "functions.h"
@@ -545,5 +545,5 @@ void SoundWidget::slotFadeToggled(bool on)
     mFadeVolumeBox->setEnabled(on);
     emit changed();
 }
-
+#include "moc_sounddlg.cpp"
 // vim: et sw=4:

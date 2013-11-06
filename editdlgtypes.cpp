@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "editdlgtypes.moc"
+#include "editdlgtypes.h"
 #include "editdlg_p.h"
 
 #include "autoqpointer.h"
@@ -1866,5 +1866,5 @@ void TextEdit::dragEnterEvent(QDragEnterEvent* e)
         e->ignore();   // don't accept "text/calendar" objects
     KTextEdit::dragEnterEvent(e);
 }
-
+#include "moc_editdlgtypes.cpp"
 // vim: et sw=4:

@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "itembox.moc"
+#include "itembox.h"
 #include <QBoxLayout>
 
 
@@ -33,5 +33,5 @@ void ItemBox::leftAlign()
 {
     mLayout->addStretch();
 }
-
+#include "moc_itembox.cpp"
 // vim: et sw=4:

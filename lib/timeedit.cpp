@@ -22,7 +22,7 @@
 
 #include "combobox.h"
 #include "timespinbox.h"
-#include "timeedit.moc"
+#include "timeedit.h"
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -205,5 +205,5 @@ void TimeEdit::setAmPmCombo(int am, int pm)
         mAmPm->setCurrentIndex(mAmIndex);
     }
 }
-
+#include "moc_timeedit.cpp"
 // vim: et sw=4:

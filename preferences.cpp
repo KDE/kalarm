@@ -23,7 +23,7 @@
 #include "functions.h"
 #include "kamail.h"
 #include "messagebox.h"
-#include "preferences.moc"
+#include "preferences.h"
 
 #include <kalarmcal/identities.h>
 
@@ -377,5 +377,5 @@ QString translateXTermPath(const QString& cmdline, bool write)
     else
         return cmd + params;
 }
-
+#include "moc_preferences.cpp"
 // vim: et sw=4:

@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "groupbox.moc"
+#include "groupbox.h"
 
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -91,5 +91,5 @@ void GroupBox::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QGroupBox::keyReleaseEvent(e);
 }
-
+#include "moc_groupbox.cpp"
 // vim: et sw=4:

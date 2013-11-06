@@ -24,7 +24,7 @@
 #include "checkbox.h"
 #include "combobox.h"
 #include "timeselector.h"
-#include "reminder.moc"
+#include "reminder.h"
 
 #ifdef USE_AKONADI
 #include <kcalcore/duration.h>
@@ -237,5 +237,5 @@ void Reminder::setDefaultUnits(const KDateTime& dt)
     }
     mTime->setUnits(units);
 }
-
+#include "moc_reminder.cpp"
 // vim: et sw=4:

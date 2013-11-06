@@ -26,7 +26,7 @@
 #include "kalarmapp.h"
 #include "pushbutton.h"
 #include "sounddlg.h"
-#include "soundpicker.moc"
+#include "soundpicker.h"
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -330,5 +330,5 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
     QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1String(" "));
     return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }
-
+#include "moc_soundpicker.cpp"
 // vim: et sw=4:

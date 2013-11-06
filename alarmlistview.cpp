@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "alarmlistview.moc"
+#include "alarmlistview.h"
 
 #ifdef USE_AKONADI
 #define ALARM_LIST_MODEL AlarmListModel
@@ -129,5 +129,5 @@ void AlarmListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
     }
 }
 */
-
+#include "moc_alarmlistview.cpp"
 // vim: et sw=4:

@@ -1316,7 +1316,6 @@ QVariant CollectionControlModel::data(const QModelIndex& index, int role) const
     return sourceModel()->data(mapToSource(index), role);
 }
 
-#include "collectionmodel.moc"
 #include "moc_collectionmodel.cpp"
 
 // vim: et sw=4:

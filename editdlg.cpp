@@ -19,8 +19,8 @@
  */
 
 #include "kalarm.h"
-#include "editdlg.moc"
-#include "editdlg_p.moc"
+#include "editdlg.h"
+#include "editdlg_p.h"
 #include "editdlgtypes.h"
 
 #include "alarmcalendar.h"
@@ -1463,5 +1463,7 @@ void EditAlarmDlg::showMainPage()
 {
     mTabs->setCurrentIndex(mMainPageIndex);
 }
+#include "moc_editdlg.cpp"
+#include "moc_editdlg_p.cpp"
 
 // vim: et sw=4:

@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "deferdlg.moc"
+#include "deferdlg.h"
 
 #include "alarmcalendar.h"
 #include "alarmtimewidget.h"
@@ -172,5 +172,5 @@ void DeferAlarmDlg::slotCancelDeferral()
     mAlarmDateTime = DateTime();
     accept();
 }
-
+#include "moc_deferdlg.cpp"
 // vim: et sw=4:

@@ -19,8 +19,8 @@
  */
 
 #include "kalarm.h"
-#include "messagewin_p.moc"
-#include "messagewin.moc"
+#include "messagewin_p.h"
+#include "messagewin.h"
 
 #include "alarmcalendar.h"
 #include "autoqpointer.h"
@@ -2550,5 +2550,7 @@ kDebug()<<"FULL SCREEN on screen"<<s<<", active="<<active;
     return result;
 }
 #endif
+#include "moc_messagewin_p.cpp"
+#include "moc_messagewin.cpp"
 
 // vim: et sw=4:

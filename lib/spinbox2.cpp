@@ -20,8 +20,8 @@
 
 #include "kalarm.h"
 
-#include "spinbox2.moc"
-#include "spinbox2_p.moc"
+#include "spinbox2.h"
+#include "spinbox2_p.h"
 
 #include <kdebug.h>
 
@@ -777,5 +777,6 @@ static QRect spinBoxEditFieldRect(const QWidget* w, const QStyleOptionSpinBox& o
     }
     return r;
 }
-
+#include "moc_spinbox2_p.cpp"
+#include "moc_spinbox2.cpp"
 // vim: et sw=4:

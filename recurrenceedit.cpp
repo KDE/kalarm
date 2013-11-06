@@ -22,8 +22,8 @@
  */
 
 #include "kalarm.h"
-#include "recurrenceedit.moc"
-#include "recurrenceedit_p.moc"
+#include "recurrenceedit.h"
+#include "recurrenceedit_p.h"
 
 #include "alarmtimewidget.h"
 #include "checkbox.h"
@@ -1744,5 +1744,7 @@ bool YearlyRule::stateChanged() const
         ||  mSavedMonths    != months()
         ||  mSavedFeb29Type != feb29Type());
 }
+#include "moc_recurrenceedit.cpp"
+#include "moc_recurrenceedit_p.cpp"
 
 // vim: et sw=4:

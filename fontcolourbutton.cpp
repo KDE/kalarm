@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "fontcolourbutton.moc"
+#include "fontcolourbutton.h"
 
 #include "autoqpointer.h"
 #include "fontcolour.h"
@@ -133,5 +133,5 @@ void FontColourDlg::setReadOnly(bool ro)
     mReadOnly = ro;
     mChooser->setReadOnly(mReadOnly);
 }
-
+#include "moc_fontcolourbutton.cpp"
 // vim: et sw=4:

@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "slider.moc"
+#include "slider.h"
 #include <QMouseEvent>
 
 
@@ -87,5 +87,5 @@ void Slider::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QSlider::keyReleaseEvent(e);
 }
-
+#include "moc_slider.cpp"
 // vim: et sw=4:

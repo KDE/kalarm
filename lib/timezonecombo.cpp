@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "timezonecombo.moc"
+#include "timezonecombo.h"
 #include <ksystemtimezone.h>
 #include <kglobal.h>
 #include <klocale.h>
@@ -59,5 +59,5 @@ void TimeZoneCombo::setTimeZone(const KTimeZone& tz)
     if (index >= 0)
         setCurrentIndex(index);
 }
-
+#include "moc_timezonecombo.cpp"
 // vim: et sw=4:

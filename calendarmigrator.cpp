@@ -839,7 +839,7 @@ void CalendarCreator::finish(bool cleanup)
     }
 }
 
-#include "calendarmigrator.moc"
+#include "moc_calendarmigrator.cpp"
 #include "moc_calendarmigrator.cpp"
 
 // vim: et sw=4:

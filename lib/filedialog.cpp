@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
-#include "filedialog.moc"
+#include "filedialog.h"
 #include "autoqpointer.h"
 
 #include <kabstractfilewidget.h>
@@ -81,5 +81,5 @@ void FileDialog::appendToggled(bool ticked)
 {
     setConfirmOverwrite(!ticked);
 }
-
+#include "moc_filedialog.cpp"
 // vim: et sw=4:

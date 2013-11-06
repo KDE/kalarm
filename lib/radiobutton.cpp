@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "radiobutton.moc"
+#include "radiobutton.h"
 #include <QMouseEvent>
 #include <QKeyEvent>
 
@@ -136,5 +136,5 @@ void RadioButton::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QRadioButton::keyReleaseEvent(e);
 }
-
+#include "moc_radiobutton.cpp"
 // vim: et sw=4:

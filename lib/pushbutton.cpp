@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "pushbutton.moc"
+#include "pushbutton.h"
 
 #include <QMouseEvent>
 #include <QKeyEvent>
@@ -127,5 +127,5 @@ bool PushButton::event(QEvent* e)
     }
     return KPushButton::event(e);
 }
-
+#include "moc_pushbutton.cpp"
 // vim: et sw=4:

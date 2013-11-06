@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "kalarmapp.moc"
+#include "kalarmapp.h"
 
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
@@ -2485,5 +2485,5 @@ KAlarmApp::ProcData::~ProcData()
     delete event;
     delete alarm;
 }
-
+#include "moc_kalarmapp.cpp"
 // vim: et sw=4:

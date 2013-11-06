@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "label.moc"
+#include "label.h"
 #include <QRadioButton>
 
 
@@ -118,5 +118,5 @@ void LabelFocusWidget::focusInEvent(QFocusEvent*)
     parent->activated();
 
 }
-
+#include "moc_label.cpp"
 // vim: et sw=4:

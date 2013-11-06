@@ -52,8 +52,8 @@
 #include "timespinbox.h"
 #include "timezonecombo.h"
 #include "traywindow.h"
-#include "prefdlg_p.moc"
-#include "prefdlg.moc"
+#include "prefdlg_p.h"
+#include "prefdlg.h"
 
 #include <kalarmcal/identities.h>
 
@@ -1948,5 +1948,7 @@ void ViewPrefTab::slotWindowPosChanged(QAbstractButton* button)
     mWindowButtonDelay->setEnabled(enable);
     mWindowButtonDelayLabel->setEnabled(enable);
 }
+#include "moc_prefdlg_p.cpp"
+#include "moc_prefdlg.cpp"
 
 // vim: et sw=4:
