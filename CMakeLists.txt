@@ -25,6 +25,10 @@ endif()
 
 if(KALARM_USE_AKONADI)
     add_definitions(-DUSE_AKONADI)
+    if (NOT CMAKE_VERSION VERSION_LESS 2.8.12 AND CMAKE_VERSION VERSION_LESS 2.8.12.1)
+        # http://public.kitware.com/Bug/view.php?id=14535
+        set(CMAKE_AUTOMOC_MOC_OPTIONS -DUSE_AKONADI)
+    endif()
 else()
     add_definitions(-DUSE_KRESOURCES)
     add_definitions(
