@@ -283,5 +283,5 @@ void TemplateDlg::resizeEvent(QResizeEvent* re)
         KAlarm::writeConfigWindowSize(TMPL_DIALOG_NAME, re->size());
     KDialog::resizeEvent(re);
 }
-#include "moc_templatedlg.h"
+
 // vim: et sw=4:

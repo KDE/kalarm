@@ -220,5 +220,5 @@ void WakeFromSuspendDlg::cancelWakeClicked()
     mUi->cancelWakeButton->setEnabled(false);
     enableDisableUseButton();
 }
-#include "moc_wakedlg.h"
+
 // vim: et sw=4:
