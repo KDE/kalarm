@@ -22,7 +22,7 @@
 
 #include "checkbox.h"
 #include "combobox.h"
-#include "timeselector.moc"
+#include "timeselector.h"
 
 #include <klocale.h>
 #include <kdialog.h>

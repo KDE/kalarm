@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "alarmcalendar.moc"
+#include "alarmcalendar.h"
 
 #ifdef USE_AKONADI
 #include "collectionmodel.h"

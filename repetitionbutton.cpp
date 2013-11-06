@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "repetitionbutton.moc"
+#include "repetitionbutton.h"
 
 #include "buttongroup.h"
 #include "radiobutton.h"

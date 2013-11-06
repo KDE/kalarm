@@ -19,7 +19,7 @@
  */
 
 #include "kalarm.h"
-#include "mainwindow.moc"
+#include "mainwindow.h"
 
 #include "alarmcalendar.h"
 #include "alarmlistdelegate.h"

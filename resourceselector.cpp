@@ -22,7 +22,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "resourceselector.moc"
+#include "resourceselector.h"
 
 #include "kalarm.h"
 #include "alarmcalendar.h"

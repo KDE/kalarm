@@ -19,11 +19,10 @@
  */
 
 #include "kalarm.h"
-
+#include "timeperiod.h"
 #include "combobox.h"
 #include "spinbox.h"
 #include "timespinbox.h"
-#include "timeperiod.moc"
 
 #include <klocale.h>
 #include <kdialog.h>
