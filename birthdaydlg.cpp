@@ -135,6 +135,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mBirthdaySortModel->setSortCaseSensitivity(Qt::CaseInsensitive);
     mBirthdaySortModel->setPrefixSuffix(mPrefixText, mSuffixText);
     mListView = new QTreeView(group);
+    mListView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mListView->setModel(mBirthdaySortModel);
     mListView->setRootIsDecorated(false);    // don't show expander icons
     mListView->setSortingEnabled(true);
