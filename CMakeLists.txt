@@ -1,5 +1,8 @@
 project(kalarmcal)
 
+find_package(Qt5 NO_MODULE REQUIRED COMPONENTS Sql)
+find_package(KF5 NO_MODULE REQUIRED COMPONENTS CoreAddons ItemViews)
+
 # The library version should be the same as that returned by
 # KAEvent::currentCalendarVersion()  (see kaevent.cpp)
 set(LIB_VERSION 2.7.0)
@@ -62,9 +65,7 @@ if(USE_KRESOURCES)
                           kcal
                           kholidays
                           kpimidentities
-                          ${KDE4_KDECORE_LIBS}
-                          ${QT_QTGUI_LIBRARY}
-                          ${QT_QTCORE_LIBRARY}
+                          KF5::CoreAddons
                          )
 else()
     target_link_libraries(kalarmcal
@@ -72,9 +73,7 @@ else()
                           kcalcore
                           kholidays
                           kpimidentities
-                          ${KDE4_KDECORE_LIBS}
-                          ${QT_QTGUI_LIBRARY}
-                          ${QT_QTCORE_LIBRARY}
+                          KF5::CoreAddons
                          )
 endif()
 
