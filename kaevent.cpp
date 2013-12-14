@@ -4118,10 +4118,10 @@ void KAEventPrivate::dumpDebug() const
     kDebug() << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
     kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
     kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
-    kDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
+//     kDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
     kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
-    if (mRepeatAtLogin)
-        kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
+//     if (mRepeatAtLogin)
+//         kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
     kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
     kDebug() << "-- mConfirmAck:" << mConfirmAck;
     kDebug() << "-- mEnabled:" << mEnabled;
