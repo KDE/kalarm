@@ -9,6 +9,9 @@ set(LIB_VERSION 2.7.0)
 set(LIB_SOVERSION 2)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
+add_definitions( -DQT_NO_CAST_FROM_ASCII )
+add_definitions( -DQT_NO_CAST_TO_ASCII )
+
 
 include_directories(
   ${kcalcore_BINARY_DIR}
@@ -22,8 +25,15 @@ option(KALARM_USE_KRESOURCES "Build to use KResources" OFF)
 set(USE_KRESOURCES false)
 if(KALARM_USE_KRESOURCES AND NOT KDEPIM_NO_KRESOURCES)
     set(USE_KRESOURCES true)
-    add_definitions(-DWANT_DEPRECATED_KCAL_API)
-    add_definitions(-DWANT_DEPRECATED_KRESOURCE_API)
+    add_definitions(
+      -DKRESOURCES_DEPRECATED=
+      -DKCAL_DEPRECATED=
+    )
+    # This one won't be needed when CMake 2.8.13 is depended on.
+    add_definitions(
+      -DKRESOURCES_DEPRECATED_EXPORT=KRESOURCES_EXPORT
+      -DKCAL_DEPRECATED_EXPORT=KCAL_EXPORT
+    )
 endif()
 
 ########### next target ###############
@@ -48,17 +58,20 @@ if(NOT USE_KRESOURCES)
        )
 endif()
 
+include_directories(
+  ${CMAKE_BINARY_DIR}/kcal
+  ${CMAKE_BINARY_DIR}/kcalcore
+  ${CMAKE_BINARY_DIR}/akonadi
+  ${CMAKE_BINARY_DIR}/kholidays
+  ${CMAKE_BINARY_DIR}/kpimidentities
+)
+add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
+generate_export_header(kalarmcal)
 if(USE_KRESOURCES)
-    set(KALARMCAL_USE_KRESOURCES "// This library was built to use KResources.\n// It must be rebuilt in order to use Akonadi.\n#define KALARMCAL_USE_KRESOURCES")
+    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h" "\n// This library was built to use KResources.\n// It must be rebuilt in order to use Akonadi.\n#define KALARMCAL_USE_KRESOURCES\n")
 else()
-    set(KALARMCAL_USE_KRESOURCES "// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif")
+    file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h" "\n// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif\n")
 endif()
-
-# NOTE: kalarmcal_export.h is only generated when cmake is run.
-#       If it is deleted, 'make' will not regenerate it.
-configure_file(kalarmcal_export.h.in ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h)
-
-kde4_add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
 
 if(USE_KRESOURCES)
     target_link_libraries(kalarmcal

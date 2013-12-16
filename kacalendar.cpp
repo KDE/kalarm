@@ -2,7 +2,7 @@
  *  kacalendar.cpp  -  KAlarm kcal library calendar and event functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -55,8 +55,7 @@ using Akonadi::Collection;
 using namespace KCal;
 #endif
 
-
-static const KCatalogLoader loader("libkalarmcal");
+static const KCatalogLoader loader(QLatin1String("libkalarmcal"));
 
 namespace KAlarmCal
 {
@@ -72,7 +71,6 @@ static const QByteArray VERSION_PROPERTY("VERSION");     // X-KDE-KALARM-VERSION
 
 static bool isUTC(const QString& localFile);
 
-
 class Private
 {
     public:
@@ -87,6 +85,7 @@ class Private
 
 QByteArray Private::mIcalProductId;
 
+//=============================================================================
 
 namespace KACalendar
 {
@@ -221,7 +220,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
         {
             // Older versions used KAlarm's translated name in the product ID, which
             // could have created problems using a calendar in different locales.
-            progname = QString(" ") + i18n("KAlarm") + ' ';
+            progname = QLatin1String(" ") + i18n("KAlarm") + QLatin1Char(' ');
             i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
             if (i < 0)
                 return KACalendar::IncompatibleFormat;    // calendar wasn't created by KAlarm
@@ -229,15 +228,15 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
 
         // Extract the KAlarm version string
         versionString = prodid.mid(i + progname.length()).trimmed();
-        i = versionString.indexOf('/');
-        int j = versionString.indexOf(' ');
+        i = versionString.indexOf(QLatin1Char('/'));
+        int j = versionString.indexOf(QLatin1Char(' '));
         if (j >= 0  &&  j < i)
             i = j;
         if (i <= 0)
             return KACalendar::IncompatibleFormat;    // missing version string
         versionString = versionString.left(i);   // 'versionString' now contains the KAlarm version string
     }
-    if (versionString == KAEvent::currentCalendarVersionString())
+    if (versionString == QLatin1String(KAEvent::currentCalendarVersionString()))
         return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
     int ver = KAlarmCal::getVersionNumber(versionString, &subVersion);
     if (ver == KAEvent::currentCalendarVersion())
@@ -266,7 +265,7 @@ bool isUTC(const QString& localFile)
     const QByteArray BEGIN_VCALENDAR("BEGIN:VCALENDAR");
     const QByteArray BEGIN_VEVENT("BEGIN:VEVENT");
     const QByteArray CREATED("CREATED:");
-    QList<QByteArray> lines = text.split('\n');
+    const QList<QByteArray> lines = text.split('\n');
     for (int i = 0, end = lines.count();  i < end;  ++i)
     {
         if (lines[i].startsWith(BEGIN_VCALENDAR))
@@ -288,6 +287,7 @@ bool isUTC(const QString& localFile)
     return false;
 }
 
+//=============================================================================
 
 namespace CalEvent
 {
@@ -344,7 +344,7 @@ QString uid(const QString& id, Type status)
     else
     {
         oldType = ACTIVE;
-        i = result.lastIndexOf('-');
+        i = result.lastIndexOf(QLatin1Char('-'));
         len = 1;
         if (i < 0)
         {
@@ -413,7 +413,7 @@ Type status(const Event* event, QString* param)
         PropertyMap::ConstIterator it = properties.constFind(property);
         if (it != properties.constEnd())
             return it.value();
-        int i = property.indexOf(';');
+        int i = property.indexOf(QLatin1Char(';'));
         if (i < 0)
             return EMPTY;
         it = properties.constFind(property.left(i));
@@ -461,7 +461,7 @@ void setStatus(Event* event, Type status, const QString& param)
             return;
     }
     if (!param.isEmpty())
-        text += ';' + param;
+        text += QLatin1Char(';') + param;
     event->setCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY, text);
 }
 

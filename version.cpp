@@ -2,7 +2,7 @@
  *  version.cpp  -  program version functions
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2002-2007,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2007,2011,2013 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -42,21 +42,21 @@ int getVersionNumber(const QString& version, QString* subVersion)
     //      if the representation returned by this method changes.
     if (subVersion)
         subVersion->clear();
-    int count = version.count(QChar('.')) + 1;
+    int count = version.count(QLatin1Char('.')) + 1;
     if (count < 2)
         return 0;
     bool ok;
-    unsigned vernum = version.section('.', 0, 0).toUInt(&ok) * 10000;  // major version
+    unsigned vernum = version.section(QLatin1Char('.'), 0, 0).toUInt(&ok) * 10000;  // major version
     if (!ok)
         return 0;
-    unsigned v = version.section('.', 1, 1).toUInt(&ok);               // minor version
+    unsigned v = version.section(QLatin1Char('.'), 1, 1).toUInt(&ok);               // minor version
     if (!ok)
         return 0;
     vernum += (v < 99 ? v : 99) * 100;
     if (count >= 3)
     {
         // Issue number: allow other characters to follow the last digit
-        QString issue = version.section('.', 2);
+        const QString issue = version.section(QLatin1Char('.'), 2);
         int n = issue.length();
         if (!n  ||  !issue[0].isDigit())
             return 0;
@@ -72,7 +72,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
 
 QString getVersionString(int version)
 {
-    return QString("%1.%2.%3").arg(version/10000).arg((version%10000)/100).arg(version%100);
+    return QString::fromLatin1("%1.%2.%3").arg(version/10000).arg((version%10000)/100).arg(version%100);
 }
 
 } // namespace KAlarmCal

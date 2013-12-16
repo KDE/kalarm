@@ -24,6 +24,7 @@
 #define KALARM_IDENTITIES_H
 
 #include "kalarmcal_export.h"
+#include <qglobal.h>
 
 class QString;
 

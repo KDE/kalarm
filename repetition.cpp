@@ -50,7 +50,6 @@ class Repetition::Private
         int      mCount;      // sub-repetition count (excluding the first time)
 };
 
-
 Repetition::Repetition()
     : d(new Private)
 {

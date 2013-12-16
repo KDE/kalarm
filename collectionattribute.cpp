@@ -40,7 +40,6 @@ class CollectionAttribute::Private
         bool             mKeepFormat;       // whether user has chosen to keep old calendar storage format
 };
 
-
 CollectionAttribute::CollectionAttribute()
     : d(new Private)
 {

@@ -36,7 +36,6 @@ class EventAttribute::Private
         KAEvent::CmdErrType mCommandError;         // the last command execution error for the alarm
 };
 
-
 EventAttribute::EventAttribute()
     : d(new Private)
 {

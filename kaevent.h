@@ -475,7 +475,7 @@ class KALARMCAL_EXPORT KAEvent
         /** Set the ID of the Akonadi Collection which contains the event. */
         void setCollectionId(Akonadi::Collection::Id id);
         /** Set the ID of the Akonadi Collection which contains the event.
-         *  \warning This is a const method, which means that any other instance
+         *  @warning This is a const method, which means that any other instance
          *           which references the same shared data will also be
          *           updated. It is designed to be used when a KAEvent is
          *           being created from an Akonadi Item, to avoid unnecessary
@@ -707,7 +707,7 @@ class KALARMCAL_EXPORT KAEvent
          *  @param fadeVolume     initial volume (0 - 1), or -1 for no fade
          *  @param fadeSeconds    number of seconds to fade from @p fadeVolume to @p volume
          *  @param repeatPause    number of seconds to pause between repetitions, or -1 if no repeat
-         *  @param allowEmptyFile true to set the volume levels even if \p filename is empty
+         *  @param allowEmptyFile true to set the volume levels even if @p filename is empty
          *  @see audioFile(), soundVolume(), fadeVolume(), fadeSeconds()
          */
         void setAudioFile(const QString& filename, float volume, float fadeVolume,

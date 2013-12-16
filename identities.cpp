@@ -25,7 +25,6 @@
 #include <kpimidentities/identitymanager.h>
 #include <kpimidentities/identity.h>
 
-
 static KPIMIdentities::IdentityManager* mIdentityManager = 0;
 
 namespace KAlarmCal
