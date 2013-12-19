@@ -61,7 +61,6 @@ class AlarmListFilterModel;
 class AlarmListView;
 class NewAlarmAction;
 class TemplateDlg;
-class TemplateMenuAction;
 class ResourceSelector;
 
 

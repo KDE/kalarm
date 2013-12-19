@@ -46,11 +46,9 @@ namespace KCal { class Event; }
 class QWidget;
 class QAction;
 class KAction;
-class KActionCollection;
 class KToggleAction;
 class AlarmResource;
 class MainWindow;
-class TemplateMenuAction;
 #ifdef USE_AKONADI
 class AlarmListModel;
 #endif

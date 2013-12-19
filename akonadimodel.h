@@ -36,11 +36,9 @@
 
 namespace Akonadi {
     class AgentInstance;
-    class AgentInstanceCreateJob;
 }
 class QPixmap;
 class KJob;
-class CalendarMigrator;
 
 using namespace KAlarmCal;
 

@@ -51,7 +51,6 @@ class LateCancelSelector;
 class AlarmTimeWidget;
 class RecurrenceEdit;
 class Reminder;
-class ShellProcess;
 class StackedScrollGroup;
 class TimeSpinBox;
 

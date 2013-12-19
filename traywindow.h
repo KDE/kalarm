@@ -28,11 +28,7 @@
 #include <kstatusnotifieritem.h>
 #include <QIcon>
 
-class QEvent;
-class QDragEnterEvent;
-class QDropEvent;
 class QTimer;
-class KAction;
 class KToggleAction;
 class MainWindow;
 class NewAlarmAction;

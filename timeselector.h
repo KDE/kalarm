@@ -24,7 +24,6 @@
 #include "timeperiod.h"
 #include <QFrame>
 
-class QLabel;
 class CheckBox;
 class ComboBox;
 

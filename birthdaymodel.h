@@ -28,7 +28,6 @@
 namespace Akonadi
 {
     class ChangeRecorder;
-    class Session;
 }
 
 /**
