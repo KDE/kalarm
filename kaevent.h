@@ -57,7 +57,6 @@ namespace KCal {
 }
 class AlarmResource;
 #endif
-class AlarmData;
 
 namespace KAlarmCal
 {
