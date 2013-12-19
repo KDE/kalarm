@@ -65,17 +65,13 @@
 #include <kdebug.h>
 
 #include <QLabel>
-#include <QDir>
-#include <QStyle>
 #include <QGroupBox>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QDragEnterEvent>
 #include <QResizeEvent>
 #include <QShowEvent>
-#include <QStackedWidget>
 #include <QScrollBar>
 #include <QTimer>
 

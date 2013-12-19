@@ -26,7 +26,6 @@
 #include <akonadi/agentinstance.h>
 #include <akonadi/collection.h>
 
-#include <QColor>
 
 class KJob;
 namespace KRES { class Resource; }

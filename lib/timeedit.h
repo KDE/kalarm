@@ -22,7 +22,6 @@
 #define TIMEEDIT_H
 
 #include <khbox.h>
-#include <QDateTime>
 
 class ComboBox;
 class TimeSpinBox;

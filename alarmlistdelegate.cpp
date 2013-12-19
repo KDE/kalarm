@@ -35,8 +35,6 @@
 #include <kcolorscheme.h>
 #include <kdebug.h>
 
-#include <QAbstractProxyModel>
-#include <QMouseEvent>
 #include <QApplication>
 
 

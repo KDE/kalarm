@@ -29,7 +29,6 @@
 #include <khbox.h>
 #include <kdebug.h>
 
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 
 #ifdef USE_AKONADI

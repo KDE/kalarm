@@ -59,9 +59,7 @@
 #include <QFile>
 #include <QHostInfo>
 #include <QList>
-#include <QRegExp>
 #include <QByteArray>
-#include <QTextStream>
 #include <QTextCodec>
 #include <QtDBus/QtDBus>
 

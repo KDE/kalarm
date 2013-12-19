@@ -33,8 +33,6 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QHelpEvent>
-#include <QTextLayout>
-#include <QTextLine>
 
 
 ResourceModel* ResourceModel::mInstance = 0;

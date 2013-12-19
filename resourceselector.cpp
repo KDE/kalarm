@@ -64,12 +64,9 @@
 #include <ktoggleaction.h>
 #include <kcolordialog.h>
 
-#include <QLayout>
 #include <QLabel>
 #include <QPushButton>
 #include <QTimer>
-#include <QPainter>
-#include <QFont>
 #include <QResizeEvent>
 #include <QApplication>
 

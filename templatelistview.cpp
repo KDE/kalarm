@@ -33,7 +33,6 @@
 #include <klocale.h>
 
 #include <QHeaderView>
-#include <QMouseEvent>
 #include <QApplication>
 
 

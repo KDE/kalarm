@@ -92,7 +92,6 @@ using namespace KHolidays;
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QResizeEvent>
-#include <QTimer>
 
 #ifdef USE_AKONADI
 using namespace KCalCore;

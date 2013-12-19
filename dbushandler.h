@@ -31,7 +31,6 @@
 #include <kcal/duration.h>
 #endif
 
-#include <QWidget>
 class KUrl;
 
 using namespace KAlarmCal;

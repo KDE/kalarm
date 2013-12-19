@@ -23,7 +23,6 @@
 
 #include "spinbox.h"
 
-#include <QPixmap>
 #include <QGraphicsView>
 
 class QMouseEvent;

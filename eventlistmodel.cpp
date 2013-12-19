@@ -34,7 +34,6 @@
 #include <kiconloader.h>
 #include <kdebug.h>
 
-#include <QApplication>
 #include <QPixmap>
 
 /*=============================================================================

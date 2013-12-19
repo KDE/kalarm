@@ -68,9 +68,7 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QRegExp>
 #include <QFile>
-#include <QByteArray>
 #include <QTextStream>
 #include <QtDBus/QtDBus>
 

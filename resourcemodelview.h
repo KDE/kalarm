@@ -32,7 +32,6 @@
 #include <QListView>
 #include <QList>
 #include <QFont>
-#include <QColor>
 
 using namespace KAlarmCal;
 

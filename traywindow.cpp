@@ -49,8 +49,6 @@
 #include <kconfig.h>
 #include <kdebug.h>
 
-#include <QToolTip>
-#include <QMouseEvent>
 #include <QList>
 #include <QTimer>
 

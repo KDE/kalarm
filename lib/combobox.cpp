@@ -20,10 +20,9 @@
 
 #include "combobox.h"
 
-#include <QLineEdit>
 #include <QMouseEvent>
 #include <QKeyEvent>
-
+#include <QLineEdit>
 
 ComboBox::ComboBox(QWidget* parent)
     : KComboBox(parent),

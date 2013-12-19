@@ -33,7 +33,6 @@
 
 #include <QGroupBox>
 #include <QLabel>
-#include <QLayout>
 #include <QCheckBox>
 
 using namespace KRES;

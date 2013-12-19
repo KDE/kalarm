@@ -44,7 +44,6 @@
 #include <kmenu.h>
 
 #include <QPushButton>
-#include <QList>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QBoxLayout>

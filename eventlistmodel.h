@@ -30,7 +30,6 @@
 
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
-#include <QList>
 #include <QSize>
 
 class QPixmap;

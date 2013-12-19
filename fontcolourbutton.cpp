@@ -30,7 +30,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QHBoxLayout>
 #include <QVBoxLayout>
 
 

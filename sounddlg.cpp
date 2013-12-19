@@ -42,7 +42,6 @@
 #include <QLabel>
 #include <QDir>
 #include <QGroupBox>
-#include <QApplication>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QShowEvent>

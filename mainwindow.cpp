@@ -85,15 +85,13 @@ using namespace KCal;
 #include <ktoolbarpopupaction.h>
 #include <kicon.h>
 
-#include <QHeaderView>
 #include <QSplitter>
 #include <QByteArray>
-#include <QDesktopWidget>
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QResizeEvent>
 #include <QCloseEvent>
-#include <QTimer>
+#include <QDesktopWidget>
 
 using namespace KAlarmCal;
 

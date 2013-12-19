@@ -37,7 +37,6 @@
 #include <ksystemtimezone.h>
 #include <kdebug.h>
 
-#include <QByteArray>
 
 #include <time.h>
 #include <unistd.h>

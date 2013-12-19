@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QObject>
 
 static int maxCount = 12;
 

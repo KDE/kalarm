@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QHeaderView>
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>

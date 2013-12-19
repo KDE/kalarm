@@ -34,7 +34,6 @@
 #include <kglobal.h>
 
 #include <QHeaderView>
-#include <QMouseEvent>
 #include <QApplication>
 
 

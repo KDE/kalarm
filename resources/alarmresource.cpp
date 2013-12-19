@@ -33,7 +33,6 @@ using namespace KCal;
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <QFile>
 
 
 void                     (*AlarmResource::mCalIDFunction)(CalendarLocal&) = 0;

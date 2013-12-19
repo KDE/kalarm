@@ -35,7 +35,6 @@
 #include "alarmresources.h"
 #endif
 
-#include <QModelIndex>
 #include <QFrame>
 #include <QSize>
 #ifdef USE_AKONADI
