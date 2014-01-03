@@ -32,7 +32,6 @@ namespace KCal { class Todo; }
 #endif
 #include <QtCore/QString>
 
-class QStringList;
 
 namespace KAlarmCal
 {
