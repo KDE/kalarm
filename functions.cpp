@@ -2396,7 +2396,7 @@ KAlarm::UpdateStatus runKOrganizer()
     QDBusInterface iface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_LOAD_PATH), QLatin1String("org.kde.KUniqueApplication"));
     if (!iface.isValid())
     {
-        kWarning() << "Unable to access "KORG_DBUS_LOAD_PATH" D-Bus interface:" << iface.lastError().message();
+        kWarning() << "Unable to access " KORG_DBUS_LOAD_PATH " D-Bus interface:" << iface.lastError().message();
         return KAlarm::UPDATE_KORG_ERR;
     }
     QDBusReply<bool> reply = iface.call(QLatin1String("load"));
@@ -2415,7 +2415,7 @@ KAlarm::UpdateStatus runKOrganizer()
         korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_PATH), KORG_DBUS_IFACE);
         if (!korgInterface->isValid())
         {
-            kWarning() << "Unable to access "KORG_DBUS_PATH" D-Bus interface:" << korgInterface->lastError().message();
+            kWarning() << "Unable to access " KORG_DBUS_PATH " D-Bus interface:" << korgInterface->lastError().message();
             delete korgInterface;
             korgInterface = 0;
             return KAlarm::UPDATE_KORG_ERRSTART;
