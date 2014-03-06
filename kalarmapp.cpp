@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -119,7 +119,7 @@ KAlarmApp::KAlarmApp()
       mLoginAlarmsDone(false),
       mDBusHandler(new DBusHandler()),
       mTrayWindow(0),
-      mAlarmTimer(new QTimer(this)),
+      mAlarmTimer(0),
       mArchivedPurgeDays(-1),      // default to not purging
       mPurgeDaysQueued(-1),
       mKSpeech(0),
@@ -136,8 +136,6 @@ KAlarmApp::KAlarmApp()
 #ifndef NDEBUG
     KAlarm::setTestModeConditions();
 #endif
-    mAlarmTimer->setSingleShot(true);
-    connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
 
     setQuitOnLastWindowClosed(false);
     Preferences::self();    // read KAlarm configuration
@@ -161,11 +159,9 @@ KAlarmApp::KAlarmApp()
     KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd());
     KAEvent::setHolidays(Preferences::holidays());
     KAEvent::setDefaultFont(Preferences::messageFont());
-    if (AlarmCalendar::initialiseCalendars())
+    if (initialise())   // initialise calendars and alarm timer
     {
-        connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
 #ifdef USE_AKONADI
-        connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
         connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
                                           SLOT(purgeNewArchivedDefault(Akonadi::Collection)));
         connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
@@ -183,7 +179,7 @@ KAlarmApp::KAlarmApp()
     mSpeechEnabled = (KServiceTypeTrader::self()->query(QLatin1String("DBUS/Text-to-Speech"), QLatin1String("Name == 'KTTSD'")).count() > 0);
     if (!mSpeechEnabled) { kDebug() << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
-    QString korg = QLatin1String("korganizer");
+    const QString korg = QLatin1String("korganizer");
     mKOrganizerEnabled = !KStandardDirs::locate("exe", korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
     if (!mKOrganizerEnabled) { kDebug() << "KOrganizer options disabled (KOrganizer not found)"; }
 }
@@ -215,6 +211,37 @@ KAlarmApp* KAlarmApp::getInstance()
             theInstance->quitFatal();
     }
     return theInstance;
+}
+
+/******************************************************************************
+* (Re)initialise things which are tidied up/closed by quitIf().
+* Reinitialisation can be necessary if session restoration finds nothing to
+* restore and starts quitting the application, but KAlarm then starts up again
+* before the application has exited.
+* Reply = true if calendars were initialised successfully,
+*         false if they were already initialised, or if initialisation failed.
+*/
+bool KAlarmApp::initialise()
+{
+    if (!mAlarmTimer)
+    {
+        mAlarmTimer = new QTimer(this);
+        mAlarmTimer->setSingleShot(true);
+        connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
+    }
+    if (!AlarmCalendar::resources())
+    {
+        kDebug() << "initialising calendars";
+        if (AlarmCalendar::initialiseCalendars())
+        {
+            connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
+#ifdef USE_AKONADI
+            connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
+#endif
+            return true;
+        }
+    }
+    return false;
 }
 
 /******************************************************************************
@@ -629,6 +656,9 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     }
 
     // This was the last/only running "instance" of the program, so exit completely.
+    // NOTE: Everything which is terminated/deleted here must where applicable
+    //       be initialised in the initialise() method, in case KAlarm is
+    //       started again before application exit completes!
     kDebug() << exitCode << ": quitting";
     MessageWin::stopAudio(true);
     if (mCancelRtcWake)
@@ -2370,9 +2400,10 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 {
     static bool firstTime = true;
     if (firstTime)
-    {
         kDebug() << "first time";
 
+    if (initialise()  ||  firstTime)
+    {
         /* Need to open the display calendar now, since otherwise if display
          * alarms are immediately due, they will often be processed while
          * MessageWin::redisplayAlarms() is executing open() (but before open()
@@ -2382,6 +2413,9 @@ bool KAlarmApp::initCheck(bool calendarOnly)
 
         if (!AlarmCalendar::resources()->open())
             return false;
+    }
+    if (firstTime)
+    {
         setArchivePurgeDays();
 
         // Warn the user if there are no writable active alarm calendars
