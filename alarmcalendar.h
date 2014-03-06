@@ -60,8 +60,8 @@ class AlarmCalendar : public QObject
         Q_OBJECT
     public:
         virtual ~AlarmCalendar();
-        bool                  valid() const          { return (mCalType == RESOURCES) || mUrl.isValid(); }
-        CalEvent::Type type() const          { return (mCalType == RESOURCES) ? CalEvent::EMPTY : mEventType; }
+        bool                  valid() const         { return (mCalType == RESOURCES) || mUrl.isValid(); }
+        CalEvent::Type        type() const          { return (mCalType == RESOURCES) ? CalEvent::EMPTY : mEventType; }
         bool                  open();
         int                   load();
         bool                  reload();
