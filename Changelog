@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.10.7 --- 6 March 2014 ===
+- Fix crash after session restoration has nothing to restore [KDE Bug 331719]
+
 === Version 2.10.6 (KDE 4.11.1) --- 27 August 2013 ===
 - [Akonadi] Fix error saving template when closing Edit Template dialogue [KDE Bug 323965]
 
