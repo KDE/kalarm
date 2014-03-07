@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1071,8 +1071,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
 * Export all selected alarms to an external calendar.
 * The alarms are given new unique event IDs.
 * Parameters: parent = parent widget for error message boxes
-* Reply = true if all alarms in the calendar were successfully imported
-*       = false if any alarms failed to be imported.
+* Reply = true if all alarms in the calendar were successfully exported
+*       = false if any alarms failed to be exported.
 */
 bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 {
@@ -1115,8 +1115,8 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     KACalendar::setKAlarmVersion(calendar);
 
     // Add the alarms to the calendar
-    bool ok = true;
-    bool some = false;
+    bool success = true;
+    bool exported = false;
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
         const KAEvent* event = events[i];
@@ -1134,46 +1134,49 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 #else
         if (calendar.addEvent(kcalEvent))
 #endif
-            some = true;
+            exported = true;
         else
-            ok = false;
+            success = false;
     }
 
-    // Save the calendar to file
-    bool success = true;
-    KTemporaryFile* tempFile = 0;
-    bool local = url.isLocalFile();
-    if (!local)
+    if (exported)
     {
-        tempFile = new KTemporaryFile;
-        file = tempFile->fileName();
-    }
+        // One or more alarms have been exported to the calendar.
+        // Save the calendar to file.
+        KTemporaryFile* tempFile = 0;
+        bool local = url.isLocalFile();
+        if (!local)
+        {
+            tempFile = new KTemporaryFile;
+            file = tempFile->fileName();
+        }
 #ifdef USE_AKONADI
-    calStorage->setFileName(file);
-    calStorage->setSaveFormat(new ICalFormat);
-    if (!calStorage->save())
+        calStorage->setFileName(file);
+        calStorage->setSaveFormat(new ICalFormat);
+        if (!calStorage->save())
 #else
-    if (!calendar.save(file, new ICalFormat))
+        if (!calendar.save(file, new ICalFormat))
 #endif
-    {
-        kError() << file << ": failed";
-        KAMessageBox::error(MainWindow::mainMainWindow(),
-                            i18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
-        success = false;
-    }
-    else if (!local  &&  !KIO::NetAccess::upload(file, url, parent))
-    {
-        kError() << file << ": upload failed";
-        KAMessageBox::error(MainWindow::mainMainWindow(),
-                            i18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
-        success = false;
+        {
+            kError() << file << ": failed";
+            KAMessageBox::error(MainWindow::mainMainWindow(),
+                                i18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
+            success = false;
+        }
+        else if (!local  &&  !KIO::NetAccess::upload(file, url, parent))
+        {
+            kError() << file << ": upload failed";
+            KAMessageBox::error(MainWindow::mainMainWindow(),
+                                i18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
+            success = false;
+        }
+        delete tempFile;
     }
 #ifdef USE_AKONADI
     calendar->close();
 #else
     calendar.close();
 #endif
-    delete tempFile;
     return success;
 }
 
