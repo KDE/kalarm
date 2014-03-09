@@ -1631,9 +1631,10 @@ void AudioThread::run()
         return;
     }
     kDebug() << QThread::currentThread() << mFile;
-    QString audioFile = mFile;
-    mFile = KAlarm::pathOrUrl(mFile);
-    Phonon::MediaSource source(audioFile);
+    const QString audioFile = mFile;
+    const QUrl url = QUrl::fromUserInput(mFile);
+    mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
+    Phonon::MediaSource source(url);
     if (source.type() == Phonon::MediaSource::Invalid)
     {
         mError = i18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
