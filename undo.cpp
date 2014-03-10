@@ -32,7 +32,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-
 static int maxCount = 12;
 
 #ifdef DELETE

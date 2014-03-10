@@ -30,7 +30,7 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 {
     if (!mCatalogLoaded)
     {
-        KGlobal::locale()->insertCatalog( QLatin1String("timezones4") ); // for time zone translations
+        KGlobal::locale()->insertCatalog(QLatin1String("timezones4")); // for time zone translations
         mCatalogLoaded = true;
     }
     QString utc = KTimeZone::utc().name();

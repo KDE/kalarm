@@ -26,7 +26,6 @@
 #include <akonadi/agentinstance.h>
 #include <akonadi/collection.h>
 
-
 class KJob;
 namespace KRES { class Resource; }
 namespace Akonadi { class CollectionFetchJob; }
