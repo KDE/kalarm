@@ -1739,7 +1739,7 @@ Alarm* KAEventPrivate::initKCalAlarm(Event* event, int startOffsetSecs, const QS
                     break;
                 case KAEvent::COMMAND:
                     if (mCommandScript)
-                        alarm->setProcedureAlarm(QLatin1String(""), mText);
+                        alarm->setProcedureAlarm(QString(), mText);
                     else
                         setProcedureAlarm(alarm, mText);
                     display = mCommandDisplay;
