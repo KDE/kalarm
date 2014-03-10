@@ -1471,7 +1471,7 @@ bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
      */
     ev->setDtStart(mStartDateTime.calendarKDateTime());
     ev->setAllDay(false);
-    ev->setHasEndDate(false);
+    ev->setDtEnd(KDateTime());
 
     const DateTime dtMain = archived ? mStartDateTime : mNextMainDateTime;
     int      ancillaryType = 0;   // 0 = invalid, 1 = time, 2 = offset
@@ -1739,7 +1739,7 @@ Alarm* KAEventPrivate::initKCalAlarm(Event* event, int startOffsetSecs, const QS
                     break;
                 case KAEvent::COMMAND:
                     if (mCommandScript)
-                        alarm->setProcedureAlarm(QLatin1String(""), mText);
+                        alarm->setProcedureAlarm(QString(), mText);
                     else
                         setProcedureAlarm(alarm, mText);
                     display = mCommandDisplay;
@@ -5485,7 +5485,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 start.setTime(QTime(0, 0));
                 flags += KAEventPrivate::DATE_ONLY_FLAG;
             }
-            event->setHasEndDate(false);
+            event->setDtEnd(KDateTime());
 
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
             {
