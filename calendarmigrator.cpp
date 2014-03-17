@@ -170,10 +170,10 @@ void CalendarMigrator::migrateOrCreate()
 
     // First, check whether any Akonadi resources already exist, and if
     // so, find their alarm types.
-    AgentInstance::List agents = AgentManager::self()->instances();
+    const AgentInstance::List agents = AgentManager::self()->instances();
     foreach (const AgentInstance& agent, agents)
     {
-        QString type = agent.type().identifier();
+        const QString type = agent.type().identifier();
         if (type == QLatin1String("akonadi_kalarm_resource")
         ||  type == QLatin1String("akonadi_kalarm_dir_resource"))
         {
@@ -192,19 +192,19 @@ void CalendarMigrator::migrateOrCreate()
         // There are no Akonadi resources, so migrate any KResources alarm
         // calendars from pre-Akonadi versions of KAlarm.
         const QString configFile = KStandardDirs::locateLocal("config", QLatin1String("kresources/alarms/stdrc"));
-        KConfig config(configFile, KConfig::SimpleConfig);
+        const KConfig config(configFile, KConfig::SimpleConfig);
 
         // Fetch all the KResource identifiers which are actually in use
-        KConfigGroup group = config.group("General");
-        QStringList keys = group.readEntry("ResourceKeys", QStringList())
-                         + group.readEntry("PassiveResourceKeys", QStringList());
+        const KConfigGroup group = config.group("General");
+        const QStringList keys = group.readEntry("ResourceKeys", QStringList())
+                               + group.readEntry("PassiveResourceKeys", QStringList());
 
         // Create an Akonadi resource for each KResource id
         CalendarCreator* creator;
         foreach (const QString& id, keys)
         {
-            KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
-            QString resourceType = configGroup.readEntry("ResourceType", QString());
+            const KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
+            const QString resourceType = configGroup.readEntry("ResourceType", QString());
             QString agentType;
             if (resourceType == QLatin1String("file"))
                 agentType = QLatin1String("akonadi_kalarm_resource");
@@ -241,12 +241,12 @@ void CalendarMigrator::migrateOrCreate()
 void CalendarMigrator::collectionFetchResult(KJob* j)
 {
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
-    QString id = job->fetchScope().resource();
+    const QString id = job->fetchScope().resource();
     if (j->error())
         kError() << "CollectionFetchJob" << id << "error: " << j->errorString();
     else
     {
-        Collection::List collections = job->collections();
+        const Collection::List collections = job->collections();
         if (collections.isEmpty())
             kError() << "No collections found for resource" << id;
         else
@@ -330,7 +330,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
                        : i18nc("@info/plain 'Import Alarms' is the name of a menu option",
                                "Failed to convert old configuration for calendar <resource>%1</resource>. "
                                "Please use Import Alarms to load its alarms into a new or existing calendar.", creator->resourceName());
-        QString locn = i18nc("@info/plain File path or URL", "Location: %1", creator->path());
+        const QString locn = i18nc("@info/plain File path or URL", "Location: %1", creator->path());
         if (creator->errorMessage().isEmpty())
             errmsg = i18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
         else
@@ -359,7 +359,7 @@ void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool 
     kDebug() << collection.id();
     if (CalendarUpdater::containsCollection(collection.id()))
         return;   // prevent multiple simultaneous user prompts
-    AgentInstance agent = AgentManager::self()->instance(collection.resource());
+    const AgentInstance agent = AgentManager::self()->instance(collection.resource());
     const QString id = agent.type().identifier();
     bool dirResource;
     if (id == QLatin1String("akonadi_kalarm_resource"))
@@ -413,7 +413,7 @@ bool CalendarUpdater::update()
     &&  mCollection.hasAttribute<CompatibilityAttribute>())   // must know format to update
     {
         const CompatibilityAttribute* compatAttr = mCollection.attribute<CompatibilityAttribute>();
-        KACalendar::Compat compatibility = compatAttr->compatibility();
+        const KACalendar::Compat compatibility = compatAttr->compatibility();
         if ((compatibility & ~KACalendar::Converted)
         // The calendar isn't in the current KAlarm format
         &&  !(compatibility & ~(KACalendar::Convertible | KACalendar::Converted)))
@@ -426,8 +426,8 @@ bool CalendarUpdater::update()
             else
             {
                 // The user hasn't previously said not to convert it
-                QString versionString = KAlarmCal::getVersionString(compatAttr->version());
-                QString msg = KAlarm::conversionPrompt(mCollection.name(), versionString, false);
+                const QString versionString = KAlarmCal::getVersionString(compatAttr->version());
+                const QString msg = KAlarm::conversionPrompt(mCollection.name(), versionString, false);
                 kDebug() << "Version" << versionString;
                 if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
                     result = false;   // the user chose not to update the calendar
@@ -444,7 +444,7 @@ bool CalendarUpdater::update()
                     }
                     if (errmsg.isEmpty())
                     {
-                        AgentInstance agent = AgentManager::self()->instance(mCollection.resource());
+                        const AgentInstance agent = AgentManager::self()->instance(mCollection.resource());
                         if (mDirResource)
                             CalendarMigrator::updateStorageFormat<OrgKdeAkonadiKAlarmDirSettingsInterface>(agent, errmsg, mParent);
                         else
@@ -461,7 +461,7 @@ bool CalendarUpdater::update()
                 if (!mNewCollection)
                 {
                     // Record the user's choice of whether to update the calendar
-                    QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
+                    const QModelIndex ix = AkonadiModel::instance()->collectionIndex(mCollection);
                     AkonadiModel::instance()->setData(ix, !result, AkonadiModel::KeepFormatRole);
                 }
             }
@@ -727,7 +727,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
         return;
     }
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
-    Collection::List collections = job->collections();
+    const Collection::List collections = job->collections();
     if (collections.isEmpty())
     {
         if (++mCollectionFetchRetryCount >= 10)
