@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@
 
 #ifdef USE_AKONADI
 #include "collectionmodel.h"
+#include "collectionsearch.h"
 #else
 #include "alarmresources.h"
 #include "eventlistmodel.h"
@@ -105,8 +106,6 @@ using namespace Akonadi;
 namespace
 {
 bool            refreshAlarmsQueued = false;
-QString         korganizerName    = QLatin1String("korganizer");
-QString         korgStartError;
 QDBusInterface* korgInterface = 0;
 
 const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
@@ -118,7 +117,10 @@ const QLatin1String KORG_DBUS_IFACE("org.kde.korganizer.Korganizer");
 #define       KORG_DBUS_PATH            "/Korganizer"
 #define       KORG_DBUS_LOAD_PATH       "/korganizer_PimApplication"
 //const QLatin1String KORG_DBUS_WINDOW_PATH("/korganizer/MainWindow_1");
-const QString KORGANIZER_UID         = QString::fromLatin1("-korg");
+#ifdef USE_AKONADI
+const QLatin1String KORG_MIME_TYPE("application/x-vnd.akonadi.calendar.event");
+#endif
+const QLatin1String KORGANIZER_UID("-korg");
 
 const QLatin1String ALARM_OPTS_FILE("alarmopts");
 const char*         DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
@@ -2352,10 +2354,14 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent& event)
 */
 KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
 {
+    const QString newID = uidKOrganizer(eventID);
+#ifdef USE_AKONADI
+    new CollectionSearch(KORG_MIME_TYPE, newID, true);  // this auto-deletes when complete
+    // Ignore errors
+#else
     KAlarm::UpdateStatus st = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
     if (st != KAlarm::UPDATE_OK)
         return st;
-    QString newID = uidKOrganizer(eventID);
     QList<QVariant> args;
     args << newID << true;
     QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("deleteIncidence"), args);
@@ -2375,6 +2381,7 @@ KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
         return KAlarm::UPDATE_KORG_FUNCERR;
     }
     kDebug() << newID << ": success";
+#endif
     return KAlarm::UPDATE_OK;
 }
 
