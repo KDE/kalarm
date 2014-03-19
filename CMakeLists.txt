@@ -151,6 +151,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     akonadimodel.cpp
     akonadiresourcecreator.cpp
     collectionmodel.cpp
+    collectionsearch.cpp
     itemlistmodel.cpp
     calendarmigrator.cpp
     eventid.cpp
