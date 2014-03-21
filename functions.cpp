@@ -2355,7 +2355,7 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent& event)
 KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
 {
     const QString newID = uidKOrganizer(eventID);
-#if defined(USE_AKONADI) && KDE_IS_VERSION(4,12,4)   // kdepimlibs 4.12.4 is required
+#if defined(USE_AKONADI) && KDE_IS_VERSION(4,12,4)   // kdepimlibs/kdepim-runtime 4.12.4 are required
     new CollectionSearch(KORG_MIME_TYPE, newID, true);  // this auto-deletes when complete
     // Ignore errors
 #else
