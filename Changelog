@@ -1,6 +1,6 @@
 KAlarm Change Log
 
-=== Version 2.10.7 --- 19 March 2014 ===
+=== Version 2.10.7 --- 21 March 2014 ===
 - [Akonadi] Fix deletion of alarm copies from KOrganiser not working.
 - Fix crash after session restoration has nothing to restore [KDE Bug 331719]
 - Prevent data in birthday import dialogue being editable.
