@@ -18,7 +18,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef USE_AKONADI
+// kdepimlibs and kdepim-runtime 4.12.4 minimum are required
+#include <kdeversion.h>
+#if defined(USE_AKONADI) && KDE_IS_VERSION(4,12,4)
 
 #include "collectionsearch.h"
 
@@ -38,17 +40,17 @@ using namespace Akonadi;
 * Constructor.
 * Creates jobs to fetch all collections for resources containing the mime type.
 * Its subsequent actions depend on the parameters:
-* - If 'remove' is true, it will locate all Items with the specified 'remoteId'
-*   and delete them. The deleted() signal will be emitted.
-* - Otherwise, if 'remoteId' is specified, it will emit the signal items() to
-*   notify all Items with that remote ID.
+* - If 'remove' is true, it will locate all Items with the specified 'gid' and
+*   delete them. The deleted() signal will be emitted.
+* - Otherwise, if 'gid' is specified, it will emit the signal items() to
+*   notify all Items with that GID.
 * - Otherwise, it will emit the signal collections() to notify all Collections.
 */
-CollectionSearch::CollectionSearch(const QString& mimeType, const QString& remoteId, bool remove)
+CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, bool remove)
     : mMimeType(mimeType),
-      mRemoteId(remoteId),
+      mGid(gid),
       mDeleteCount(0),
-      mDelete(remove && !mRemoteId.isEmpty())
+      mDelete(remove && !mGid.isEmpty())
 {
     const AgentInstance::List agents = AgentManager::self()->instances();
     foreach (const AgentInstance& agent, agents)
@@ -87,13 +89,13 @@ void CollectionSearch::collectionFetchResult(KJob* j)
         {
             if (c.contentMimeTypes().contains(mMimeType))
             {
-                if (mRemoteId.isEmpty())
+                if (mGid.isEmpty())
                     mCollections << c;
                 else
                 {
-                    // Search for all Items with the specified remote ID
+                    // Search for all Items with the specified GID
                     Item item;
-                    item.setRemoteId(mRemoteId);
+                    item.setGid(mGid);
                     ItemFetchJob* ijob = new ItemFetchJob(item, this);
                     ijob->setCollection(c);
                     mItemFetchJobs[ijob] = c.id();
@@ -107,7 +109,7 @@ void CollectionSearch::collectionFetchResult(KJob* j)
     if (mCollectionJobs.isEmpty())
     {
         // All collections have now been fetched
-        if (mRemoteId.isEmpty())
+        if (mGid.isEmpty())
             finish();
     }
 }
@@ -119,7 +121,7 @@ void CollectionSearch::itemFetchResult(KJob* j)
 {
     ItemFetchJob* job = static_cast<ItemFetchJob*>(j);
     if (j->error())
-        kDebug() << "ItemFetchJob: collection" << mItemFetchJobs[job] << "remote ID" << mRemoteId << "error: " << j->errorString();
+        kDebug() << "ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
     else
     {
         if (mDelete)
@@ -148,7 +150,7 @@ void CollectionSearch::itemDeleteResult(KJob* j)
 {
     ItemDeleteJob* job = static_cast<ItemDeleteJob*>(j);
     if (j->error())
-        kDebug() << "ItemDeleteJob: resource" << mItemDeleteJobs[job] << "remote ID" << mRemoteId << "error: " << j->errorString();
+        kDebug() << "ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
     else
         ++mDeleteCount;
     mItemDeleteJobs.remove(job);
@@ -164,13 +166,14 @@ void CollectionSearch::finish()
 {
     if (mDelete)
         emit deleted(mDeleteCount);
-    else if (mRemoteId.isEmpty())
+    else if (mGid.isEmpty())
         emit collections(mCollections);
     else
         emit items(mItems);
     deleteLater();
 }
 
+#include "moc_collectionsearch.cpp"
 #endif
 
 // vim: et sw=4:
