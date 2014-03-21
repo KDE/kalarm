@@ -42,8 +42,7 @@ class ItemDeleteJob;
 /*=============================================================================
 = Class: CollectionSearch
 = Fetches a list of all Akonadi collections which handle a specified mime type,
-= and then optionally fetches or deletes all Items from them with a given
-= remote ID.
+= and then optionally fetches or deletes all Items from them with a given GID.
 =
 = Note that this class auto-deletes once it has emitted its completion signal.
 = Instances must therefore be created on the heap by operator new(), not on the
@@ -53,7 +52,7 @@ class CollectionSearch : public QObject
 {
         Q_OBJECT
     public:
-        explicit CollectionSearch(const QString& mimeType, const QString& remoteId = QString(), bool remove = false);
+        explicit CollectionSearch(const QString& mimeType, const QString& gid = QString(), bool remove = false);
 
     signals:
         // Signal emitted if action is to fetch all collections for the mime type
@@ -71,7 +70,7 @@ class CollectionSearch : public QObject
 
     private:
         QString                                mMimeType;
-        QString                                mRemoteId;
+        QString                                mGid;
         QList<Akonadi::CollectionFetchJob*>    mCollectionJobs;
         QMap<Akonadi::ItemFetchJob*, Akonadi::Collection::Id>  mItemFetchJobs;
         QMap<Akonadi::ItemDeleteJob*, Akonadi::Collection::Id> mItemDeleteJobs;
