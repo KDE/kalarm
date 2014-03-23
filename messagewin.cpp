@@ -2112,7 +2112,7 @@ void MessageWin::slotShowKMailMessage()
         return;
     }
     org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
-    QDBusReply<bool> reply = kmail.showMail((qulonglong)mKMailSerialNumber, QString());
+    QDBusReply<bool> reply = kmail.showMail((qint64)mKMailSerialNumber);
     if (!reply.isValid())
         kError() << "kmail D-Bus call failed:" << reply.error().message();
     else if (!reply.value())
