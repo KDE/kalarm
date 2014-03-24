@@ -60,7 +60,7 @@
 using namespace Akonadi;
 using namespace KAlarmCal;
 
-static Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
+static const Collection::Rights writableRights = Collection::CanChangeItem | Collection::CanCreateItem | Collection::CanDeleteItem;
 
 //static bool checkItem_true(const Item&) { return true; }
 
@@ -209,7 +209,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 break;
             case Qt::BackgroundRole:
             {
-                QColor colour = backgroundColor_p(collection);
+                const QColor colour = backgroundColor_p(collection);
                 if (colour.isValid())
                     return colour;
                 break;
@@ -239,7 +239,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
         if (item.isValid())
         {
             // This is an Item row
-            QString mime = item.mimeType();
+            const QString mime = item.mimeType();
             if ((mime != KAlarmCal::MIME_ACTIVE  &&  mime != KAlarmCal::MIME_ARCHIVED  &&  mime != KAlarmCal::MIME_TEMPLATE)
             ||  !item.hasPayload<KAEvent>())
                 return QVariant();
@@ -261,7 +261,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                 default:
                     break;
             }
-            int column = index.column();
+            const int column = index.column();
             if (role == Qt::WhatsThisRole)
                 return whatsThisText(column);
             const KAEvent event(this->event(item));
@@ -312,8 +312,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                         {
                             if (event.expired())
                                 return -1;
-                            DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
-                            KDateTime now = KDateTime::currentUtcDateTime();
+                            const DateTime due = event.nextTrigger(KAEvent::DISPLAY_TRIGGER);
+                            const KDateTime now = KDateTime::currentUtcDateTime();
                             if (due.isDateOnly())
                                 return now.date().daysTo(due.date()) * 1440;
                             return (now.secsTo(due.effectiveKDateTime()) + 59) / 60;
@@ -339,7 +339,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                     {
                         case Qt::BackgroundRole:
                         {
-                            KAEvent::Actions type = event.actionTypes();
+                            const KAEvent::Actions type = event.actionTypes();
                             if (type & KAEvent::ACT_DISPLAY)
                                 return event.bgColour();
                             if (type == KAEvent::ACT_COMMAND)
@@ -368,8 +368,8 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             break;
                         case SortRole:
                         {
-                            unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
-                                         ? event.bgColour().rgb() : 0;
+                            const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
+                                               ? event.bgColour().rgb() : 0;
                             return QString::fromLatin1("%1").arg(i, 6, 10, QLatin1Char('0'));
                         }
                         default:
@@ -468,7 +468,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
             if (calendarColour)
             {
                 Collection parent = item.parentCollection();
-                QColor colour = backgroundColor(parent);
+                const QColor colour = backgroundColor(parent);
                 if (colour.isValid())
                     return colour;
             }
@@ -496,7 +496,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
         {
             case Qt::BackgroundRole:
             {
-                QColor colour = value.value<QColor>();
+                const QColor colour = value.value<QColor>();
                 attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->backgroundColor() == colour)
                     return true;   // no change
@@ -506,7 +506,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             }
             case EnabledTypesRole:
             {
-                CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
+                const CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
                 attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->enabled() == types)
                     return true;   // no change
@@ -519,7 +519,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 if (collection.hasAttribute<CollectionAttribute>()
                 &&  isCompatible(collection))
                 {
-                    CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
+                    const CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
                     attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
 kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                     attr->setStandard(types);
@@ -528,7 +528,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
                 break;
             case KeepFormatRole:
             {
-                bool keepFormat = value.value<bool>();
+                const bool keepFormat = value.value<bool>();
                 attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->keepFormat() == keepFormat)
                     return true;   // no change
@@ -564,7 +564,7 @@ kDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
             {
                 case CommandErrorRole:
                 {
-                    KAEvent::CmdErrType err = static_cast<KAEvent::CmdErrType>(value.toInt());
+                    const KAEvent::CmdErrType err = static_cast<KAEvent::CmdErrType>(value.toInt());
                     switch (err)
                     {
                         case KAEvent::CMD_NO_ERROR:
@@ -681,7 +681,7 @@ void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startCo
     {
         const QModelIndex ix = index(row, 0, parent);
         const Item item = data(ix, ItemRole).value<Item>();
-        bool isItem = item.isValid();
+        const bool isItem = item.isValid();
         if (isItem)
         {
             if ((*checkFunc)(item))
@@ -797,7 +797,7 @@ void AkonadiModel::slotUpdateWorkingHours()
 */
 void AkonadiModel::updateCommandError(const KAEvent& event)
 {
-    QModelIndex ix = itemIndex(event.itemId());
+    const QModelIndex ix = itemIndex(event.itemId());
     if (ix.isValid())
         setData(ix, QVariant(static_cast<int>(event.commandError())), CommandErrorRole);
 }
@@ -825,7 +825,7 @@ QColor AkonadiModel::foregroundColor(const Akonadi::Collection& collection, cons
 */
 void AkonadiModel::setBackgroundColor(Collection& collection, const QColor& colour)
 {
-    QModelIndex ix = modelIndexForCollection(this, collection);
+    const QModelIndex ix = modelIndexForCollection(this, collection);
     if (ix.isValid())
         setData(ix, QVariant(colour), Qt::BackgroundRole);
 }
@@ -869,7 +869,7 @@ QString AkonadiModel::displayName(Akonadi::Collection& collection) const
 */
 QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 {
-    KUrl url = collection.remoteId();
+    const KUrl url = collection.remoteId();
     return !url.isLocalFile()                     ? i18nc("@info/plain", "URL")
            : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info/plain Directory in filesystem", "Directory")
            :                                        i18nc("@info/plain", "File");
@@ -881,15 +881,15 @@ QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 */
 QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types types) const
 {
-    QString name = QLatin1Char('@') + collection.displayName();   // insert markers for stripping out name
-    KUrl url = collection.remoteId();
-    QString type = QLatin1Char('@') + storageType(collection);   // file/directory/URL etc.
-    QString locn = url.pathOrUrl();
-    bool inactive = !collection.hasAttribute<CollectionAttribute>()
-                 || !(collection.attribute<CollectionAttribute>()->enabled() & types);
-    QString disabled = i18nc("@info/plain", "Disabled");
-    QString readonly = readOnlyTooltip(collection);
-    bool writable = readonly.isEmpty();
+    const QString name = QLatin1Char('@') + collection.displayName();   // insert markers for stripping out name
+    const KUrl url = collection.remoteId();
+    const QString type = QLatin1Char('@') + storageType(collection);   // file/directory/URL etc.
+    const QString locn = url.pathOrUrl();
+    const bool inactive = !collection.hasAttribute<CollectionAttribute>()
+                       || !(collection.attribute<CollectionAttribute>()->enabled() & types);
+    const QString disabled = i18nc("@info/plain", "Disabled");
+    const QString readonly = readOnlyTooltip(collection);
+    const bool writable = readonly.isEmpty();
     if (inactive  &&  !writable)
         return i18nc("@info:tooltip",
                      "%1"
@@ -1076,7 +1076,7 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
     if (j->error())
     {
         emit collectionDeleted(jobData.id, false);
-        QString errMsg = i18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
+        const QString errMsg = i18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
         kError() << errMsg << ":" << j->errorString();
         KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
@@ -1119,7 +1119,7 @@ void AkonadiModel::reload()
 void AkonadiModel::modifyCollectionJobDone(KJob* j)
 {
     Collection collection = static_cast<CollectionModifyJob*>(j)->collection();
-    Collection::Id id = collection.id();
+    const Collection::Id id = collection.id();
     if (j->error())
     {
         emit collectionModified(id, false);
@@ -1127,7 +1127,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
             mCollectionsDeleted.removeAll(id);
         else
         {
-            QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
+            const QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
             kError() << "Id:" << collection.id() << errMsg << ":" << j->errorString();
             KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
         }
@@ -1151,7 +1151,7 @@ QModelIndex AkonadiModel::eventIndex(const KAEvent& event)
 KAEvent::List AkonadiModel::events(Akonadi::Collection& collection, CalEvent::Type type) const
 {
     KAEvent::List list;
-    QModelIndex ix = modelIndexForCollection(this, collection);
+    const QModelIndex ix = modelIndexForCollection(this, collection);
     if (ix.isValid())
         getChildEvents(ix, type, list);
     return list;
@@ -1177,7 +1177,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type
         }
         else
         {
-            Collection c = ix.data(CollectionRole).value<Collection>();
+            const Collection c = ix.data(CollectionRole).value<Collection>();
             if (c.isValid())
                 getChildEvents(ix, type, events);
         }
@@ -1187,7 +1187,7 @@ void AkonadiModel::getChildEvents(const QModelIndex& parent, CalEvent::Type type
 
 KAEvent AkonadiModel::event(Item::Id itemId) const
 {
-    QModelIndex ix = itemIndex(itemId);
+    const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return KAEvent();
     return event(ix.data(ItemRole).value<Item>(), ix, 0);
@@ -1228,7 +1228,7 @@ AkonadiModel::Result AkonadiModel::addEvent(KAEvent* event, CalEvent::Type type,
 
     // Determine parent collection - prompt or use default
     bool cancelled;
-    Collection collection = destination(type, Collection::CanCreateItem, promptParent, noPrompt, &cancelled);
+    const Collection collection = destination(type, Collection::CanCreateItem, promptParent, noPrompt, &cancelled);
     if (!collection.isValid())
     {
         delete event;
@@ -1334,7 +1334,7 @@ bool AkonadiModel::deleteEvent(const KAEvent& event)
 bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
 {
     kDebug() << itemId;
-    QModelIndex ix = itemIndex(itemId);
+    const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return false;
     if (mCollectionsDeleting.contains(ix.data(ParentCollectionRole).value<Collection>().id()))
@@ -1342,7 +1342,7 @@ bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
         kDebug() << "Collection being deleted";
         return true;    // the event's collection is being deleted
     }
-    Item item = ix.data(ItemRole).value<Item>();
+    const Item item = ix.data(ItemRole).value<Item>();
     ItemDeleteJob* job = new ItemDeleteJob(item);
     connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
     mPendingItemJobs[job] = itemId;
@@ -1379,7 +1379,7 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
         else
         {
             Item newItem = item;
-            Item current = itemById(item.id());    // fetch the up-to-date item
+            const Item current = itemById(item.id());    // fetch the up-to-date item
             if (current.isValid())
                 newItem.setRevision(current.revision());
             mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
@@ -1402,14 +1402,14 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
 */
 void AkonadiModel::itemJobDone(KJob* j)
 {
-    QMap<KJob*, Entity::Id>::iterator it = mPendingItemJobs.find(j);
+    const QMap<KJob*, Entity::Id>::iterator it = mPendingItemJobs.find(j);
     Entity::Id itemId = -1;
     if (it != mPendingItemJobs.end())
     {
         itemId = it.value();
         mPendingItemJobs.erase(it);
     }
-    QByteArray jobClass = j->metaObject()->className();
+    const QByteArray jobClass = j->metaObject()->className();
     kDebug() << jobClass;
     if (j->error())
     {
@@ -1428,7 +1428,7 @@ void AkonadiModel::itemJobDone(KJob* j)
         if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
         {
             // Execute the next queued job for this item
-            Item current = itemById(itemId);    // fetch the up-to-date item
+            const Item current = itemById(itemId);    // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
         KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
@@ -1448,7 +1448,7 @@ void AkonadiModel::itemJobDone(KJob* j)
 
 /*    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
     {
-        QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
+        const QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(itemId);
         if (it != mItemModifyJobQueue.end())
         {
             if (!it.value().isValid())
@@ -1474,7 +1474,7 @@ void AkonadiModel::checkQueuedItemModifyJob(const Item& item)
 {kDebug()<<"Still being created";
         return;    // the item hasn't been fully initialised yet
 }
-    QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
+    const QMap<Item::Id, Item>::iterator it = mItemModifyJobQueue.find(item.id());
     if (it == mItemModifyJobQueue.end())
 {kDebug()<<"No jobs queued";
         return;    // there are no jobs queued for the item
@@ -1542,7 +1542,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
             }
         }
     }
-    EventList events = eventList(parent, start, end);
+    const EventList events = eventList(parent, start, end);
     if (!events.isEmpty())
         emit eventsAdded(events);
 }
@@ -1553,7 +1553,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
 void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start, int end)
 {
     kDebug() << start << "-" << end << "(parent =" << parent << ")";
-    EventList events = eventList(parent, start, end);
+    const EventList events = eventList(parent, start, end);
     if (!events.isEmpty())
     {
         foreach (const Event& event, events)
@@ -1571,8 +1571,8 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
     for (int row = start;  row <= end;  ++row)
     {
         Collection c;
-        QModelIndex ix = index(row, 0, parent);
-        KAEvent evnt = event(ix.data(ItemRole).value<Item>(), ix, &c);
+        const QModelIndex ix = index(row, 0, parent);
+        const KAEvent evnt = event(ix.data(ItemRole).value<Item>(), ix, &c);
         if (evnt.isValid())
             events += Event(evnt, c);
     }
@@ -1586,8 +1586,8 @@ AkonadiModel::EventList AkonadiModel::eventList(const QModelIndex& parent, int s
 void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet<QByteArray>& attributeNames, bool rowInserted)
 {
     // Check for a read/write permission change
-    Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
-    Collection::Rights newRights = collection.rights() & writableRights;
+    const Collection::Rights oldRights = mCollectionRights.value(collection.id(), Collection::AllRights);
+    const Collection::Rights newRights = collection.rights() & writableRights;
     if (newRights != oldRights)
     {
         kDebug() << "Collection" << collection.id() << ": rights ->" << newRights;
@@ -1597,8 +1597,8 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
 
     // Check for a change in content mime types
     // (e.g. when a collection is first created at startup).
-    CalEvent::Types oldAlarmTypes = mCollectionAlarmTypes.value(collection.id(), CalEvent::EMPTY);
-    CalEvent::Types newAlarmTypes = CalEvent::types(collection.contentMimeTypes());
+    const CalEvent::Types oldAlarmTypes = mCollectionAlarmTypes.value(collection.id(), CalEvent::EMPTY);
+    const CalEvent::Types newAlarmTypes = CalEvent::types(collection.contentMimeTypes());
     if (newAlarmTypes != oldAlarmTypes)
     {
         kDebug() << "Collection" << collection.id() << ": alarm types ->" << newAlarmTypes;
@@ -1610,8 +1610,8 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     if (attributeNames.contains(CollectionAttribute::name()))
     {
         static bool first = true;
-        CalEvent::Types oldEnabled = mCollectionEnabled.value(collection.id(), CalEvent::EMPTY);
-        CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
+        const CalEvent::Types oldEnabled = mCollectionEnabled.value(collection.id(), CalEvent::EMPTY);
+        const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
         if (first  ||  newEnabled != oldEnabled)
         {
             kDebug() << "Collection" << collection.id() << ": enabled ->" << newEnabled;
@@ -1637,7 +1637,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
 */
 void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 {
-    Collection::Id id = collection.id();
+    const Collection::Id id = collection.id();
     kDebug() << id;
     mCollectionRights.remove(id);
     mCollectionsDeleting.removeAll(id);
@@ -1703,7 +1703,7 @@ void AkonadiModel::slotEmitEventChanged()
 */
 bool AkonadiModel::refresh(Akonadi::Collection& collection) const
 {
-    QModelIndex ix = modelIndexForCollection(this, collection);
+    const QModelIndex ix = modelIndexForCollection(this, collection);
     if (!ix.isValid())
         return false;
     collection = ix.data(CollectionRole).value<Collection>();
@@ -1728,7 +1728,7 @@ bool AkonadiModel::refresh(Akonadi::Item& item) const
 */
 QModelIndex AkonadiModel::collectionIndex(const Collection& collection) const
 {
-    QModelIndex ix = modelIndexForCollection(this, collection);
+    const QModelIndex ix = modelIndexForCollection(this, collection);
     if (!ix.isValid())
         return QModelIndex();
     return ix;
@@ -1739,7 +1739,7 @@ QModelIndex AkonadiModel::collectionIndex(const Collection& collection) const
 */
 Collection AkonadiModel::collectionById(Collection::Id id) const
 {
-    QModelIndex ix = modelIndexForCollection(this, Collection(id));
+    const QModelIndex ix = modelIndexForCollection(this, Collection(id));
     if (!ix.isValid())
         return Collection();
     return ix.data(CollectionRole).value<Collection>();
@@ -1772,7 +1772,7 @@ Item AkonadiModel::itemById(Item::Id id) const
 */
 Collection AkonadiModel::collectionForItem(Item::Id id) const
 {
-    QModelIndex ix = itemIndex(id);
+    const QModelIndex ix = itemIndex(id);
     if (!ix.isValid())
         return Collection();
     return ix.data(ParentCollectionRole).value<Collection>();

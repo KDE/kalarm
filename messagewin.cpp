@@ -1,7 +1,7 @@
 /*
  *  messagewin.cpp  -  displays an alarm message
  *  Program:  kalarm
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -137,7 +137,7 @@ class MessageText : public KTextEdit
         }
         virtual QSize sizeHint() const
         {
-            QSizeF docsize = document()->size();
+            const QSizeF docsize = document()->size();
             return QSize(static_cast<int>(docsize.width() + 0.99) + verticalScrollBar()->width(),
                          static_cast<int>(docsize.height() + 0.99) + horizontalScrollBar()->height());
         }
@@ -258,9 +258,9 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     if (!(flags & (NO_INIT_VIEW | ALWAYS_HIDE)))
     {
 #ifdef USE_AKONADI
-        bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventItemId);
+        const bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventItemId);
 #else
-        bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventId);
+        const bool readonly = AlarmCalendar::resources()->eventReadOnly(mEventId);
 #endif
         mShowEdit = !mEventId.isEmpty()  &&  !readonly;
         mNoDefer  = readonly || (flags & NO_DEFER) || alarm.repeatAtLogin();
@@ -299,7 +299,7 @@ void MessageWin::showError(const KAEvent& event, const DateTime& alarmDateTime,
     // Don't pile up duplicate error messages for the same alarm
     for (int i = 0, end = mWindowList.count();  i < end;  ++i)
     {
-        MessageWin* w = mWindowList[i];
+        const MessageWin* w = mWindowList[i];
 #ifdef USE_AKONADI
         if (w->mErrorWindow  &&  w->mEventId == EventId(event)
         &&  w->mErrorMsgs == errmsgs  &&  w->mDontShowAgain == dontShowAgain)
@@ -433,8 +433,8 @@ MessageWin::~MessageWin()
 */
 void MessageWin::initView()
 {
-    bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
-    int leading = fontMetrics().leading();
+    const bool reminder = (!mErrorWindow  &&  (mAlarmType & KAAlarm::REMINDER_ALARM));
+    const int leading = fontMetrics().leading();
     setCaption((mAlarmType & KAAlarm::REMINDER_ALARM) ? i18nc("@title:window", "Reminder") : i18nc("@title:window", "Message"));
     QWidget* topWidget = new QWidget(this);
     setCentralWidget(topWidget);
@@ -491,11 +491,11 @@ void MessageWin::initView()
                 bool opened = false;
                 bool dir = false;
                 QString tmpFile;
-                KUrl url(mMessage);
+                const KUrl url(mMessage);
                 if (KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow()))
                 {
                     QFile qfile(tmpFile);
-                    QFileInfo info(qfile);
+                    const QFileInfo info(qfile);
                     if (!(dir = info.isDir()))
                     {
                         opened = true;
@@ -547,7 +547,7 @@ void MessageWin::initView()
                 if (!opened)
                 {
                     // File couldn't be opened
-                    bool exists = KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, MainWindow::mainMainWindow());
+                    const bool exists = KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, MainWindow::mainMainWindow());
                     mErrorMsgs += dir ? i18nc("@info", "File is a folder") : exists ? i18nc("@info", "Failed to open file") : i18nc("@info", "File not found");
                 }
                 break;
@@ -562,15 +562,15 @@ void MessageWin::initView()
                 text->setTextColor(mFgColour);
                 text->setCurrentFont(mFont);
                 text->insertPlainText(mMessage);
-                int lineSpacing = text->fontMetrics().lineSpacing();
-                QSize s = text->sizeHint();
-                int h = s.height();
+                const int lineSpacing = text->fontMetrics().lineSpacing();
+                const QSize s = text->sizeHint();
+                const int h = s.height();
                 text->setMaximumHeight(h + text->scrollBarHeight());
                 text->setMinimumHeight(qMin(h, lineSpacing*4));
                 text->setMaximumWidth(s.width() + text->scrollBarWidth());
                 text->setWhatsThis(i18nc("@info:whatsthis", "The alarm message"));
-                int vspace = lineSpacing/2;
-                int hspace = lineSpacing - KDialog::marginHint();
+                const int vspace = lineSpacing/2;
+                const int hspace = lineSpacing - KDialog::marginHint();
                 topLayout->addSpacing(vspace);
                 topLayout->addStretch();
                 // Don't include any horizontal margins if message is 2/3 screen width
@@ -687,7 +687,7 @@ void MessageWin::initView()
         layout->addWidget(label, 0, Qt::AlignRight);
         QVBoxLayout* vlayout = new QVBoxLayout();
         layout->addLayout(vlayout);
-        for (QStringList::Iterator it = mErrorMsgs.begin();  it != mErrorMsgs.end();  ++it)
+        for (QStringList::ConstIterator it = mErrorMsgs.constBegin();  it != mErrorMsgs.constEnd();  ++it)
         {
             label = new QLabel(*it, topWidget);
             label->setFixedSize(label->sizeHint());
@@ -745,7 +745,7 @@ void MessageWin::initView()
     if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
     {
         // Silence button to stop sound repetition
-        QPixmap pixmap = MainBarIcon(QLatin1String("media-playback-stop"));
+        const QPixmap pixmap = MainBarIcon(QLatin1String("media-playback-stop"));
         mSilenceButton = new PushButton(topWidget);
         mSilenceButton->setIcon(KIcon(pixmap));
         grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
@@ -759,7 +759,7 @@ void MessageWin::initView()
     if (mKMailSerialNumber)
     {
         // KMail button
-        QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
+        const QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
         mKMailButton = new PushButton(topWidget);
         mKMailButton->setIcon(KIcon(pixmap));
         connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
@@ -769,7 +769,7 @@ void MessageWin::initView()
     }
 
     // KAlarm button
-    QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
+    const QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
     mKAlarmButton = new PushButton(topWidget);
     mKAlarmButton->setIcon(KIcon(pixmap));
     connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
@@ -801,8 +801,8 @@ void MessageWin::initView()
 
     topLayout->activate();
     setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
-    bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
-    unsigned long wstate = (modal ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
+    const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
+    const unsigned long wstate = (modal ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
     WId winid = winId();
     KWindowSystem::setState(winid, wstate);
     KWindowSystem::setOnAllDesktops(winid, true);
@@ -906,7 +906,7 @@ QString MessageWin::dateTimeToDisplay()
                 // zone. Note that the iCalendar time zone might represent the local
                 // time zone in a slightly different way from the system time zone,
                 // so the zone comparison above might not produce the desired result.
-                QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
+                const QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
                 KDateTime local = mDateTime.kDateTime();
                 local.setTimeSpec(KDateTime::Spec::LocalZone());
                 showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
@@ -924,7 +924,7 @@ QString MessageWin::dateTimeToDisplay()
 void MessageWin::setRemainingTextDay()
 {
     QString text;
-    int days = KDateTime::currentLocalDate().daysTo(mDateTime.date());
+    const int days = KDateTime::currentLocalDate().daysTo(mDateTime.date());
     if (days <= 0  &&  !mDateTime.isDateOnly())
     {
         // The alarm is due today, so start refreshing every minute
@@ -951,7 +951,7 @@ void MessageWin::setRemainingTextDay()
 void MessageWin::setRemainingTextMinute()
 {
     QString text;
-    int mins = (KDateTime::currentUtcDateTime().secsTo(mDateTime.effectiveKDateTime()) + 59) / 60;
+    const int mins = (KDateTime::currentUtcDateTime().secsTo(mDateTime.effectiveKDateTime()) + 59) / 60;
     if (mins < 60)
         text = i18ncp("@info", "in 1 minute's time", "in %1 minutes' time", (mins > 0 ? mins : 0));
     else if (mins % 60 == 0)
@@ -970,14 +970,14 @@ void MessageWin::setRemainingTextMinute()
 */
 void MessageWin::readProcessOutput(ShellProcess* proc)
 {
-    QByteArray data = proc->readAll();
+    const QByteArray data = proc->readAll();
     if (!data.isEmpty())
     {
         // Strip any trailing newline, to avoid showing trailing blank line
         // in message window.
         if (mCommandText->newLine())
             mCommandText->append(QLatin1String("\n"));
-        int nl = data.endsWith('\n') ? 1 : 0;
+        const int nl = data.endsWith('\n') ? 1 : 0;
         mCommandText->setNewLine(nl);
         mCommandText->insertPlainText(QString::fromLocal8Bit(data.data(), data.length() - nl));
         resize(sizeHint());
@@ -1017,7 +1017,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
                 zone = QLatin1String("UTC");
             else
             {
-                KTimeZone tz = mDateTime.timeZone();
+                const KTimeZone tz = mDateTime.timeZone();
                 if (tz.isValid())
                     zone = tz.name();
             }
@@ -1074,7 +1074,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mConfirmAck          = config.readEntry("ConfirmAck", false);
     QDateTime invalidDateTime;
     QDateTime dt         = config.readEntry("Time", invalidDateTime);
-    QString zone         = config.readEntry("TimeZone");
+    const QString zone   = config.readEntry("TimeZone");
     if (zone.isEmpty())
         mDateTime = KDateTime(dt, KDateTime::ClockTime);
     else if (zone == QLatin1String("UTC"))
@@ -1087,7 +1087,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
         KTimeZone tz = KSystemTimeZones::zone(zone);
         mDateTime = KDateTime(dt, (tz.isValid() ? tz : KSystemTimeZones::local()));
     }
-    bool dateOnly        = config.readEntry("DateOnly", false);
+    const bool dateOnly  = config.readEntry("DateOnly", false);
     if (dateOnly)
         mDateTime.setDateOnly(true);
     mCloseTime           = config.readEntry("Expiry", invalidDateTime);
@@ -1160,7 +1160,7 @@ void MessageWin::redisplayAlarms()
 #else
         AlarmResource* resource;
 #endif
-        Event::List events = cal->kcalEvents();
+        const Event::List events = cal->kcalEvents();
         for (int i = 0, end = events.count();  i < end;  ++i)
         {
             bool showDefer, showEdit;
@@ -1173,22 +1173,22 @@ void MessageWin::redisplayAlarms()
 #endif
             {
                 // This event should be displayed, but currently isn't being
-                KAAlarm alarm = event.convertDisplayingAlarm();
+                const KAAlarm alarm = event.convertDisplayingAlarm();
                 if (alarm.type() == KAAlarm::INVALID_ALARM)
                 {
                     kError() << "Invalid alarm: id=" << event.id();
                     continue;
                 }
                 kDebug() << event.id();
-                bool login = alarm.repeatAtLogin();
-                int flags = NO_RESCHEDULE | (login ? NO_DEFER : 0) | NO_INIT_VIEW;
+                const bool login = alarm.repeatAtLogin();
+                const int flags = NO_RESCHEDULE | (login ? NO_DEFER : 0) | NO_INIT_VIEW;
                 MessageWin* win = new MessageWin(&event, alarm, flags);
 #ifdef USE_AKONADI
                 win->mCollection = collection;
-                bool rw = CollectionControlModel::isWritableEnabled(collection, event.category()) > 0;
+                const bool rw = CollectionControlModel::isWritableEnabled(collection, event.category()) > 0;
 #else
                 win->mResource = resource;
-                bool rw = resource  &&  resource->writable();
+                const bool rw = resource  &&  resource->writable();
 #endif
                 win->mShowEdit = rw ? showEdit : false;
                 win->mNoDefer  = (rw && !login) ? !showDefer : true;
@@ -1210,7 +1210,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
 #endif
 {
 #ifdef USE_AKONADI
-    Event::Ptr kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(CalEvent::uid(mEventId.eventId(), CalEvent::DISPLAYING));
+    const Event::Ptr kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(CalEvent::uid(mEventId.eventId(), CalEvent::DISPLAYING));
 #else
     const Event* kcalEvent = AlarmCalendar::displayCalendar()->kcalEvent(CalEvent::uid(mEventId, CalEvent::DISPLAYING));
 #endif
@@ -1224,7 +1224,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, AlarmResource*& resource, bool& s
         if (archiveCol.isValid())
             ev = AlarmCalendar::resources()->event(EventId(archiveCol.id(), CalEvent::uid(mEventId.eventId(), CalEvent::ARCHIVED)));
 #else
-        KAEvent* ev = AlarmCalendar::resources()->event(CalEvent::uid(mEventId, CalEvent::ARCHIVED));
+        const KAEvent* ev = AlarmCalendar::resources()->event(CalEvent::uid(mEventId, CalEvent::ARCHIVED));
 #endif
         if (!ev)
             return false;
@@ -1292,7 +1292,7 @@ void MessageWin::alarmShowing(KAEvent& event)
         return;
     }
 #endif
-    KAAlarm alarm = event.alarm(mAlarmType);
+    const KAAlarm alarm = event.alarm(mAlarmType);
     if (!alarm.isValid())
     {
         kError() << "Alarm type not found:" << event.id() << ":" << mAlarmType;
@@ -1303,14 +1303,14 @@ void MessageWin::alarmShowing(KAEvent& event)
         // Copy the alarm to the displaying calendar in case of a crash, etc.
 #ifdef USE_AKONADI
         KAEvent dispEvent;
-        Akonadi::Collection collection = AkonadiModel::instance()->collectionForItem(event.itemId());
+        const Akonadi::Collection collection = AkonadiModel::instance()->collectionForItem(event.itemId());
         dispEvent.setDisplaying(event, mAlarmType, collection.id(),
-                    mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
+                                mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
 #else
         KAEvent* dispEvent = new KAEvent;
-        AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
+        const AlarmResource* resource = AlarmResources::instance()->resource(kcalEvent);
         dispEvent->setDisplaying(event, mAlarmType, (resource ? resource->identifier() : QString()),
-                    mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
+                                 mDateTime.effectiveKDateTime(), mShowEdit, !mNoDefer);
 #endif
         AlarmCalendar* cal = AlarmCalendar::displayCalendarOpen();
         if (cal)
@@ -1343,7 +1343,7 @@ bool MessageWin::spread(bool scatter)
     if (instanceCount(true) <= 1)    // ignore always-hidden windows
         return false;
 
-    QRect desk = KAlarm::desktopWorkArea();   // get the usable area of the desktop
+    const QRect desk = KAlarm::desktopWorkArea();   // get the usable area of the desktop
     if (scatter == isSpread(desk.topLeft()))
         return scatter;
 
@@ -1364,7 +1364,7 @@ bool MessageWin::spread(bool scatter)
                 if ((!errmsgs && w->mErrorWindow)
                 ||  (errmsgs && !w->mErrorWindow))
                     continue;
-                QSize sz = w->frameGeometry().size();
+                const QSize sz = w->frameGeometry().size();
                 if (x + sz.width() > desk.right())
                 {
                     x = desk.left();
@@ -1556,7 +1556,7 @@ void MessageWin::playFinished()
         mSilenceButton->setEnabled(false);
     if (mAudioThread)   // mAudioThread can actually be null here!
     {
-        QString errmsg = mAudioThread->error();
+        const QString errmsg = mAudioThread->error();
         if (!errmsg.isEmpty()  &&  !haveErrorMessage(ErrMsg_AudioFile))
         {
             KAMessageBox::error(this, errmsg);
@@ -1649,8 +1649,8 @@ void AudioThread::run()
     mPath = Phonon::createPath(mAudioObject, output);
     if (mVolume >= 0  ||  mFadeVolume >= 0)
     {
-        float vol = (mVolume >= 0) ? mVolume : output->volume();
-        float maxvol = qMax(vol, mFadeVolume);
+        const float vol = (mVolume >= 0) ? mVolume : output->volume();
+        const float maxvol = qMax(vol, mFadeVolume);
         output->setVolume(maxvol);
         if (mFadeVolume >= 0  &&  mFadeSeconds > 0)
         {
@@ -1731,7 +1731,7 @@ void AudioThread::playStateChanged(Phonon::State newState)
     if (newState == Phonon::ErrorState)
     {
         QMutexLocker locker(&mMutex);
-        QString err = mAudioObject->errorString();
+        const QString err = mAudioObject->errorString();
         if (!err.isEmpty())
         {
             kError() << "Play failure:" << mFile << ":" << err;
@@ -1751,7 +1751,7 @@ void AudioThread::stopPlay()
     if (mAudioObject)
     {
         mAudioObject->stop();
-        QList<Phonon::Effect*> effects = mPath.effects();
+        const QList<Phonon::Effect*> effects = mPath.effects();
         for (int i = 0;  i < effects.count();  ++i)
         {
             mPath.removeEffect(effects[i]);
@@ -1846,11 +1846,11 @@ QSize MessageWin::sizeHint() const
             if (mShown)
             {
                 // For command output, expand the window to accommodate the text
-                QSize texthint = mCommandText->sizeHint();
+                const QSize texthint = mCommandText->sizeHint();
                 int w = texthint.width() + 2*KDialog::marginHint();
                 if (w < width())
                     w = width();
-                int ypadding = height() - mCommandText->height();
+                const int ypadding = height() - mCommandText->height();
                 desired = QSize(w, texthint.height() + ypadding);
                 break;
             }
@@ -1860,8 +1860,8 @@ QSize MessageWin::sizeHint() const
     }
 
     // Limit the size to fit inside the working area of the desktop
-    QSize desktop  = KAlarm::desktopWorkArea(mScreenNumber).size();
-    QSize frameThickness = frameGeometry().size() - geometry().size();  // title bar & window frame
+    const QSize desktop = KAlarm::desktopWorkArea(mScreenNumber).size();
+    const QSize frameThickness = frameGeometry().size() - geometry().size();  // title bar & window frame
     return desired.boundedTo(desktop - frameThickness);
 }
 
@@ -1894,8 +1894,8 @@ void MessageWin::showEvent(QShowEvent* se)
             KAlarm::readConfigWindowSize("FileMessage", s);
         resize(s);
 
-        QRect desk = KAlarm::desktopWorkArea(mScreenNumber);
-        QRect frame = frameGeometry();
+        const QRect desk = KAlarm::desktopWorkArea(mScreenNumber);
+        const QRect frame = frameGeometry();
 
         mButtonDelay = Preferences::messageButtonDelay() * 1000;
         if (mButtonDelay)
@@ -1919,25 +1919,25 @@ void MessageWin::showEvent(QShowEvent* se)
              *      See the Qt documentation on window geometry for more details.
              */
             // PROBLEM: The frame size is not known yet!
-            QPoint cursor = QCursor::pos();
-            QRect rect  = geometry();
+            const QPoint cursor = QCursor::pos();
+            const QRect rect  = geometry();
             // Find the offsets from the outside of the frame to the edges of the OK button
-            QRect button(mOkButton->mapToParent(QPoint(0, 0)), mOkButton->mapToParent(mOkButton->rect().bottomRight()));
-            int buttonLeft   = button.left() + rect.left() - frame.left();
-            int buttonRight  = width() - button.right() + frame.right() - rect.right();
-            int buttonTop    = button.top() + rect.top() - frame.top();
-            int buttonBottom = height() - button.bottom() + frame.bottom() - rect.bottom();
+            const QRect button(mOkButton->mapToParent(QPoint(0, 0)), mOkButton->mapToParent(mOkButton->rect().bottomRight()));
+            const int buttonLeft   = button.left() + rect.left() - frame.left();
+            const int buttonRight  = width() - button.right() + frame.right() - rect.right();
+            const int buttonTop    = button.top() + rect.top() - frame.top();
+            const int buttonBottom = height() - button.bottom() + frame.bottom() - rect.bottom();
 
-            int centrex = (desk.width() + buttonLeft - buttonRight) / 2;
-            int centrey = (desk.height() + buttonTop - buttonBottom) / 2;
-            int x = (cursor.x() < centrex) ? desk.right() - frame.width() : desk.left();
-            int y = (cursor.y() < centrey) ? desk.bottom() - frame.height() : desk.top();
+            const int centrex = (desk.width() + buttonLeft - buttonRight) / 2;
+            const int centrey = (desk.height() + buttonTop - buttonBottom) / 2;
+            const int x = (cursor.x() < centrex) ? desk.right() - frame.width() : desk.left();
+            const int y = (cursor.y() < centrey) ? desk.bottom() - frame.height() : desk.top();
 
             // Find the enclosing rectangle for the new button positions
             // and check if the cursor is too near
             QRect buttons = mOkButton->geometry().unite(mKAlarmButton->geometry());
             buttons.translate(rect.left() + x - frame.left(), rect.top() + y - frame.top());
-            int minDistance = proximityMultiple * mOkButton->height();
+            const int minDistance = proximityMultiple * mOkButton->height();
             if ((abs(cursor.x() - buttons.left()) < minDistance
               || abs(cursor.x() - buttons.right()) < minDistance)
             &&  (abs(cursor.y() - buttons.top()) < minDistance
@@ -1985,7 +1985,7 @@ void MessageWin::frameDrawn()
 {
     if (!mErrorWindow  &&  mAction == KAEvent::MESSAGE)
     {
-        QSize s = sizeHint();
+        const QSize s = sizeHint();
         if (width() > s.width()  ||  height() > s.height())
             resize(s);
     }
@@ -2105,7 +2105,7 @@ void MessageWin::slotShowKMailMessage()
     kDebug();
     if (!mKMailSerialNumber)
         return;
-    QString err = KAlarm::runKMail(false);
+    const QString err = KAlarm::runKMail(false);
     if (!err.isNull())
     {
         KAMessageBox::sorry(this, err);
@@ -2252,8 +2252,8 @@ void MessageWin::slotDefer()
         lower();
     if (mDeferDlg->exec() == QDialog::Accepted)
     {
-        DateTime dateTime  = mDeferDlg->getDateTime();
-        int      delayMins = mDeferDlg->deferMinutes();
+        const DateTime dateTime  = mDeferDlg->getDateTime();
+        const int      delayMins = mDeferDlg->deferMinutes();
         // Fetch the up-to-date alarm from the calendar. Note that it could have
         // changed since it was displayed.
         const KAEvent* event = mEventId.isEmpty() ? 0 : AlarmCalendar::resources()->event(mEventId);
@@ -2349,7 +2349,7 @@ bool MessageWin::haveErrorMessage(unsigned msg) const
 {
     if (!mErrorMessages.contains(mEventId))
         mErrorMessages.insert(mEventId, 0);
-    bool result = (mErrorMessages[mEventId] & msg);
+    const bool result = (mErrorMessages[mEventId] & msg);
     mErrorMessages[mEventId] |= msg;
     return result;
 }
@@ -2379,10 +2379,10 @@ void MessageWin::clearErrorMessage(unsigned msg) const
 bool MessageWin::getWorkAreaAndModal()
 {
     mScreenNumber = -1;
-    bool modal = Preferences::modalMessages();
+    const bool modal = Preferences::modalMessages();
 #ifdef Q_WS_X11
-    QDesktopWidget* desktop = qApp->desktop();
-    int numScreens = desktop->numScreens();
+    const QDesktopWidget* desktop = qApp->desktop();
+    const int numScreens = desktop->numScreens();
     if (numScreens > 1)
     {
         // There are multiple screens.
@@ -2397,7 +2397,7 @@ bool MessageWin::getWorkAreaAndModal()
             QVector<QRect> screenRects(numScreens);
             for (int s = 0;  s < numScreens;  ++s)
                 screenRects[s] = desktop->screenGeometry(s);
-            FullScreenType full = findFullScreenWindows(screenRects, screenTypes);
+            const FullScreenType full = findFullScreenWindows(screenRects, screenTypes);
             if (full == NoFullScreen  ||  screenTypes[mScreenNumber] == NoFullScreen)
                 return modal;
             for (int s = 0;  s < numScreens;  ++s)
@@ -2459,8 +2459,8 @@ kDebug()<<"full="<<full<<", screen="<<mScreenNumber;
 #endif
     if (modal)
     {
-        WId activeId = KWindowSystem::activeWindow();
-        KWindowInfo wi = KWindowSystem::windowInfo(activeId, NET::WMState);
+        const WId activeId = KWindowSystem::activeWindow();
+        const KWindowInfo wi = KWindowSystem::windowInfo(activeId, NET::WMState);
         if (wi.valid()  &&  wi.hasState(NET::FullScreen))
             return false;    // the active window is full screen.
     }
@@ -2476,11 +2476,11 @@ FullScreenType haveFullScreenWindow(int screen)
 {
     FullScreenType type = NoFullScreen;
     Display* display = QX11Info::display();
-    NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, screen);
-    Window rootWindow     = rootInfo.rootWindow();
-    Window activeWindow   = rootInfo.activeWindow();
-    const Window* windows = rootInfo.clientList();
-    int windowCount       = rootInfo.clientListCount();
+    const NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, screen);
+    const Window rootWindow   = rootInfo.rootWindow();
+    const Window activeWindow = rootInfo.activeWindow();
+    const Window* windows     = rootInfo.clientList();
+    const int windowCount     = rootInfo.clientListCount();
 kDebug()<<"Screen"<<screen<<": Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(screen);
 NETRect geom;
 NETRect frame;
@@ -2488,8 +2488,8 @@ NETRect frame;
     {
         NETWinInfo winInfo(display, windows[w], rootWindow, NET::WMState|NET::WMGeometry);
 winInfo.kdeGeometry(frame, geom);
-QRect fr(frame.pos.x, frame.pos.y, frame.size.width, frame.size.height);
-QRect gm(geom.pos.x, geom.pos.y, geom.size.width, geom.size.height);
+const QRect fr(frame.pos.x, frame.pos.y, frame.size.width, frame.size.height);
+const QRect gm(geom.pos.x, geom.pos.y, geom.size.width, geom.size.height);
         if (winInfo.state() & NET::FullScreen)
         {
 kDebug()<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<gm<<", frame="<<fr;
@@ -2511,11 +2511,11 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
     FullScreenType result = NoFullScreen;
     screenTypes.fill(NoFullScreen);
     Display* display = QX11Info::display();
-    NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, 0);
-    Window rootWindow     = rootInfo.rootWindow();
-    Window activeWindow   = rootInfo.activeWindow();
-    const Window* windows = rootInfo.clientList();
-    int windowCount       = rootInfo.clientListCount();
+    const NETRootInfo rootInfo(display, NET::ClientList | NET::ActiveWindow, 0);
+    const Window rootWindow   = rootInfo.rootWindow();
+    const Window activeWindow = rootInfo.activeWindow();
+    const Window* windows     = rootInfo.clientList();
+    const int windowCount     = rootInfo.clientListCount();
 kDebug()<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(0);
     NETRect netgeom;
     NETRect netframe;
@@ -2525,9 +2525,9 @@ kDebug()<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWin
         if (winInfo.state() & NET::FullScreen)
         {
             // Found a full screen window - find which screen it's on
-            bool active = (windows[w] == activeWindow);
+            const bool active = (windows[w] == activeWindow);
             winInfo.kdeGeometry(netframe, netgeom);
-            QRect winRect(netgeom.pos.x, netgeom.pos.y, netgeom.size.width, netgeom.size.height);
+            const QRect winRect(netgeom.pos.x, netgeom.pos.y, netgeom.size.width, netgeom.size.height);
 kDebug()<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
             for (int s = 0, count = screenRects.count();  s < count;  ++s)
             {
@@ -2551,6 +2551,7 @@ kDebug()<<"FULL SCREEN on screen"<<s<<", active="<<active;
     return result;
 }
 #endif
+
 #include "moc_messagewin_p.cpp"
 #include "moc_messagewin.cpp"
 
