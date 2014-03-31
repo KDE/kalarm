@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.cpp  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -141,6 +141,12 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     connect(ServerManager::self(), SIGNAL(stateChanged(Akonadi::ServerManager::State)),
                                    SLOT(checkResources(Akonadi::ServerManager::State)));
     checkResources(ServerManager::state());
+}
+
+AkonadiModel::~AkonadiModel()
+{
+    if (mInstance == this)
+        mInstance = 0;
 }
 
 /******************************************************************************
