@@ -1,7 +1,7 @@
 /*
  *  undo.cpp  -  undo/redo facility
  *  Program:  kalarm
- *  Copyright © 2005-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,7 +82,7 @@ class UndoItem
         static int         mLastId;
         static Error       mRestoreError;         // error code valid only if restore() returns 0
         static Warning     mRestoreWarning;       // warning code set by restore()
-        static KAlarm::UpdateStatus mRestoreWarningKorg; // KOrganizer error status set by restore()
+        static KAlarm::UpdateResult mRestoreWarningKorg; // KOrganizer error status set by restore()
         static int         mRestoreWarningCount;  // item count for mRestoreWarning (to allow i18n messages to work correctly)
 
     protected:
@@ -631,7 +631,7 @@ int Undo::findItem(int id, Undo::Type type)
 int                  UndoItem::mLastId = 0;
 UndoItem::Error      UndoItem::mRestoreError;
 UndoItem::Warning    UndoItem::mRestoreWarning;
-KAlarm::UpdateStatus UndoItem::mRestoreWarningKorg;
+KAlarm::UpdateResult UndoItem::mRestoreWarningKorg;
 int                  UndoItem::mRestoreWarningCount;
 
 /******************************************************************************
@@ -835,8 +835,8 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
             if (setArchive)
                 event.setArchive();
             // Archive it if it has already triggered
-            KAlarm::UpdateStatus status = KAlarm::deleteEvent(event, true);
-            switch (status)
+            KAlarm::UpdateResult status = KAlarm::deleteEvent(event, true);
+            switch (status.status)
             {
                 case KAlarm::UPDATE_ERROR:
                 case KAlarm::UPDATE_FAILED:
@@ -844,11 +844,12 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
                     mRestoreError = ERR_CREATE;
                     break;
                 case KAlarm::UPDATE_KORG_FUNCERR:
+                case KAlarm::UPDATE_KORG_ERRINIT:
                 case KAlarm::UPDATE_KORG_ERRSTART:
                 case KAlarm::UPDATE_KORG_ERR:
                     mRestoreWarning = WARN_KORG_DELETE;
                     ++mRestoreWarningCount;
-                    if (status > mRestoreWarningKorg)
+                    if (status.status > mRestoreWarningKorg.status)
                         mRestoreWarningKorg = status;
                     break;
                 default:
@@ -971,8 +972,8 @@ UndoItem* UndoEdit::restore()
     {
         case CalEvent::ACTIVE:
         {
-            KAlarm::UpdateStatus status = KAlarm::modifyEvent(newEvent, *mOldEvent);
-            switch (status)
+            KAlarm::UpdateResult status = KAlarm::modifyEvent(newEvent, *mOldEvent);
+            switch (status.status)
             {
                 case KAlarm::UPDATE_ERROR:
                 case KAlarm::UPDATE_FAILED:
@@ -980,11 +981,12 @@ UndoItem* UndoEdit::restore()
                     mRestoreError = ERR_CREATE;
                     break;
                 case KAlarm::UPDATE_KORG_FUNCERR:
+                case KAlarm::UPDATE_KORG_ERRINIT:
                 case KAlarm::UPDATE_KORG_ERRSTART:
                 case KAlarm::UPDATE_KORG_ERR:
                     mRestoreWarning = WARN_KORG_MODIFY;
                     ++mRestoreWarningCount;
-                    if (status > mRestoreWarningKorg)
+                    if (status.status > mRestoreWarningKorg.status)
                         mRestoreWarningKorg = status;
                     // fall through to default
                 default:
@@ -1073,18 +1075,19 @@ UndoItem* UndoDelete::restore()
                 // It was archived when it was deleted
                 mEvent->setCategory(CalEvent::ARCHIVED);
 #ifdef USE_AKONADI
-                KAlarm::UpdateStatus status = KAlarm::reactivateEvent(*mEvent, &mResource);
+                KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
 #else
-                KAlarm::UpdateStatus status = KAlarm::reactivateEvent(*mEvent, mResource);
+                KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, mResource);
 #endif
-                switch (status)
+                switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
+                    case KAlarm::UPDATE_KORG_ERRINIT:
                     case KAlarm::UPDATE_KORG_ERRSTART:
                     case KAlarm::UPDATE_KORG_ERR:
                         mRestoreWarning = WARN_KORG_ADD;
                         ++mRestoreWarningCount;
-                        if (status > mRestoreWarningKorg)
+                        if (status.status > mRestoreWarningKorg.status)
                             mRestoreWarningKorg = status;
                         break;
                     case KAlarm::UPDATE_ERROR:
@@ -1099,18 +1102,19 @@ UndoItem* UndoDelete::restore()
             else
             {
 #ifdef USE_AKONADI
-                KAlarm::UpdateStatus status = KAlarm::addEvent(*mEvent, &mResource, 0, true);
+                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, 0, true);
 #else
-                KAlarm::UpdateStatus status = KAlarm::addEvent(*mEvent, mResource, 0, true);
+                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, mResource, 0, true);
 #endif
-                switch (status)
+                switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
+                    case KAlarm::UPDATE_KORG_ERRINIT:
                     case KAlarm::UPDATE_KORG_ERRSTART:
                     case KAlarm::UPDATE_KORG_ERR:
                         mRestoreWarning = WARN_KORG_ADD;
                         ++mRestoreWarningCount;
-                        if (status > mRestoreWarningKorg)
+                        if (status.status > mRestoreWarningKorg.status)
                             mRestoreWarningKorg = status;
                         break;
                     case KAlarm::UPDATE_ERROR:

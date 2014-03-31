@@ -108,6 +108,34 @@ namespace
 bool            refreshAlarmsQueued = false;
 QDBusInterface* korgInterface = 0;
 
+struct UpdateStatusData
+{
+    KAlarm::UpdateResult status;   // status code and KOrganizer error message if any
+    int                  warnErr;
+    int                  warnKOrg;
+
+    explicit UpdateStatusData(KAlarm::UpdateStatus s = KAlarm::UPDATE_OK) : status(s), warnErr(0), warnKOrg(0) {}
+    // Set an error status and increment to number of errors to warn about
+    void setError(KAlarm::UpdateStatus st, int errorCount = -1)
+    {
+        status.set(st);
+        if (errorCount < 0)
+            ++warnErr;
+        else
+            warnErr = errorCount;
+    }
+    // Update the error status with a KOrganizer related status
+    void korgUpdate(KAlarm::UpdateResult result)
+    {
+        if (result.status != KAlarm::UPDATE_OK)
+        {
+            ++warnKOrg;
+            if (result.status > status.status)
+                status = result;
+        }
+    }
+};
+
 const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 //const QLatin1String KMAIL_DBUS_IFACE("org.kde.kmail.kmail");
 //const QLatin1String KMAIL_DBUS_WINDOW_PATH("/kmail/kmail_mainwindow_1");
@@ -126,9 +154,10 @@ const QLatin1String ALARM_OPTS_FILE("alarmopts");
 const char*         DONT_SHOW_ERRORS_GROUP = "DontShowErrors";
 
 void editNewTemplate(EditAlarmDlg::Type, const KAEvent* preset, QWidget* parent);
-KAlarm::UpdateStatus sendToKOrganizer(const KAEvent&);
-KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID);
-KAlarm::UpdateStatus runKOrganizer();
+void displayUpdateError(QWidget* parent, KAlarm::UpdateError, const UpdateStatusData&, bool showKOrgError = true);
+KAlarm::UpdateResult sendToKOrganizer(const KAEvent&);
+KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID);
+KAlarm::UpdateResult runKOrganizer();
 QString uidKOrganizer(const QString& eventID);
 }
 
@@ -221,16 +250,16 @@ KToggleAction* createSpreadWindowsAction(QObject* parent)
 *             event - is updated with the actual event ID.
 */
 #ifdef USE_AKONADI
-UpdateStatus addEvent(KAEvent& event, Collection* calendar, QWidget* msgParent, int options, bool showKOrgErr)
+UpdateResult addEvent(KAEvent& event, Collection* calendar, QWidget* msgParent, int options, bool showKOrgErr)
 #else
-UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParent, int options, bool showKOrgErr)
+UpdateResult addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParent, int options, bool showKOrgErr)
 #endif
 {
     kDebug() << event.id();
     bool cancelled = false;
-    UpdateStatus status = UPDATE_OK;
+    UpdateStatusData status;
     if (!theApp()->checkCalendar())    // ensure calendar is open
-        status = UPDATE_FAILED;
+        status.status = UPDATE_FAILED;
     else
     {
         // Save the event details in the calendar file, and get the new event ID
@@ -246,7 +275,7 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParen
 #ifndef USE_AKONADI
             delete newev;
 #endif
-            status = UPDATE_FAILED;
+            status.status = UPDATE_FAILED;
         }
         else
         {
@@ -254,15 +283,14 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParen
             event = *newev;   // update event ID etc.
 #endif
             if (!cal->save())
-                status = SAVE_FAILED;
+                status.status = SAVE_FAILED;
         }
-        if (status == UPDATE_OK)
+        if (status.status == UPDATE_OK)
         {
             if ((options & ALLOW_KORG_UPDATE)  &&  event.copyToKOrganizer())
             {
-                UpdateStatus st = sendToKOrganizer(event);    // tell KOrganizer to show the event
-                if (st > status)
-                    status = st;
+                UpdateResult st = sendToKOrganizer(event);    // tell KOrganizer to show the event
+                status.korgUpdate(st);
             }
 
 #ifndef USE_AKONADI
@@ -272,9 +300,9 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParen
         }
     }
 
-    if (status != UPDATE_OK  &&  !cancelled  &&  msgParent)
-        displayUpdateError(msgParent, status, ERR_ADD, 1, 1, showKOrgErr);
-    return status;
+    if (status.status != UPDATE_OK  &&  !cancelled  &&  msgParent)
+        displayUpdateError(msgParent, ERR_ADD, status, showKOrgErr);
+    return status.status;
 }
 
 /******************************************************************************
@@ -282,21 +310,19 @@ UpdateStatus addEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParen
 * Save them in the calendar file and add them to every main window instance.
 * The events are updated with their actual event IDs.
 */
-UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowKOrgUpdate, bool showKOrgErr)
+UpdateResult addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowKOrgUpdate, bool showKOrgErr)
 {
     kDebug() << events.count();
     if (events.isEmpty())
-        return UPDATE_OK;
-    int warnErr = 0;
-    int warnKOrg = 0;
-    UpdateStatus status = UPDATE_OK;
+        return UpdateResult(UPDATE_OK);
+    UpdateStatusData status;
 #ifdef USE_AKONADI
     Collection collection;
 #else
     AlarmResource* resource;
 #endif
     if (!theApp()->checkCalendar())    // ensure calendar is open
-        status = UPDATE_FAILED;
+        status.status = UPDATE_FAILED;
     else
     {
 #ifdef USE_AKONADI
@@ -308,10 +334,10 @@ UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
 #endif
         {
             kDebug() << "No calendar";
-            status = UPDATE_FAILED;
+            status.status = UPDATE_FAILED;
         }
     }
-    if (status == UPDATE_OK)
+    if (status.status == UPDATE_OK)
     {
         QString selectID;
         AlarmCalendar* cal = AlarmCalendar::resources();
@@ -328,8 +354,7 @@ UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
 #ifndef USE_AKONADI
                 delete newev;
 #endif
-                status = UPDATE_ERROR;
-                ++warnErr;
+                status.setError(UPDATE_ERROR);
                 continue;
             }
 #ifndef USE_AKONADI
@@ -337,13 +362,8 @@ UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
 #endif
             if (allowKOrgUpdate  &&  events[i].copyToKOrganizer())
             {
-                UpdateStatus st = sendToKOrganizer(events[i]);    // tell KOrganizer to show the event
-                if (st != UPDATE_OK)
-                {
-                    ++warnKOrg;
-                    if (st > status)
-                        status = st;
-                }
+                UpdateResult st = sendToKOrganizer(events[i]);    // tell KOrganizer to show the event
+                status.korgUpdate(st);
             }
 
 #ifndef USE_AKONADI
@@ -352,18 +372,15 @@ UpdateStatus addEvents(QVector<KAEvent>& events, QWidget* msgParent, bool allowK
 //            selectID = newev->id();
 #endif
         }
-        if (warnErr == events.count())
-            status = UPDATE_FAILED;
+        if (status.warnErr == events.count())
+            status.status = UPDATE_FAILED;
         else if (!cal->save())
-        {
-            status = SAVE_FAILED;
-            warnErr = 0;    // everything failed
-        }
+            status.setError(SAVE_FAILED, events.count());  // everything failed
     }
 
-    if (status != UPDATE_OK  &&  msgParent)
-        displayUpdateError(msgParent, status, ERR_ADD, (warnErr ? warnErr : events.count()), warnKOrg, showKOrgErr);
-    return status;
+    if (status.status != UPDATE_OK  &&  msgParent)
+        displayUpdateError(msgParent, ERR_ADD, status, showKOrgErr);
+    return status.status;
 }
 
 /******************************************************************************
@@ -426,26 +443,26 @@ bool addArchivedEvent(KAEvent& event, AlarmResource* resource)
 * Parameters: promptParent = parent widget for any calendar selection prompt.
 */
 #ifdef USE_AKONADI
-UpdateStatus addTemplate(KAEvent& event, Collection* collection, QWidget* msgParent)
+UpdateResult addTemplate(KAEvent& event, Collection* collection, QWidget* msgParent)
 #else
-UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgParent)
+UpdateResult addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgParent)
 #endif
 {
     kDebug() << event.id();
-    UpdateStatus status = UPDATE_OK;
+    UpdateStatusData status;
 
     // Add the template to the calendar file
     AlarmCalendar* cal = AlarmCalendar::resources();
 #ifdef USE_AKONADI
     KAEvent newev(event);
     if (!cal->addEvent(newev, msgParent, false, collection))
-        status = UPDATE_FAILED;
+        status.status = UPDATE_FAILED;
 #else
     KAEvent* newev = new KAEvent(event);
     if (!cal->addEvent(newev, msgParent, false, resource))
     {
         delete newev;
-        status = UPDATE_FAILED;
+        status.status = UPDATE_FAILED;
     }
 #endif
     else
@@ -456,20 +473,20 @@ UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgPa
         event = *newev;   // update event ID etc.
 #endif
         if (!cal->save())
-            status = SAVE_FAILED;
+            status.status = SAVE_FAILED;
         else
         {
 #ifndef USE_AKONADI
             // Update the window lists
             EventListModel::templates()->addEvent(newev);
 #endif
-            return UPDATE_OK;
+            return UpdateResult(UPDATE_OK);
         }
     }
 
     if (msgParent)
-        displayUpdateError(msgParent, status, ERR_TEMPLATE, 1);
-    return status;
+        displayUpdateError(msgParent, ERR_TEMPLATE, status);
+    return status.status;
 }
 
 /******************************************************************************
@@ -477,15 +494,15 @@ UpdateStatus addTemplate(KAEvent& event, AlarmResource* resource, QWidget* msgPa
 * window instance.
 * The new event must have a different event ID from the old one.
 */
-UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent, bool showKOrgErr)
+UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParent, bool showKOrgErr)
 {
     kDebug() << oldEvent.id();
 
-    UpdateStatus status = UPDATE_OK;
+    UpdateStatusData status;
     if (!newEvent.isValid())
     {
         deleteEvent(oldEvent, true);
-        status = UPDATE_FAILED;
+        status.status = UPDATE_FAILED;
     }
     else
     {
@@ -509,7 +526,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
         // Update the event in the calendar file, and get the new event ID
         AlarmCalendar* cal = AlarmCalendar::resources();
         if (!cal->modifyEvent(oldId, newEvent))
-            status = UPDATE_FAILED;
+            status.status = UPDATE_FAILED;
 #else
         // Delete from the window lists to prevent the event's invalid
         // pointer being accessed.
@@ -521,7 +538,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
         if (!cal->modifyEvent(oldId, newev))
         {
             delete newev;
-            status = UPDATE_FAILED;
+            status.status = UPDATE_FAILED;
         }
 #endif
         else
@@ -530,14 +547,13 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
             newEvent = *newev;
 #endif
             if (!cal->save())
-                status = SAVE_FAILED;
-            if (status == UPDATE_OK)
+                status.status = SAVE_FAILED;
+            if (status.status == UPDATE_OK)
             {
                 if (newEvent.copyToKOrganizer())
                 {
-                    UpdateStatus st = sendToKOrganizer(newEvent);    // tell KOrganizer to show the new event
-                    if (st > status)
-                        status = st;
+                    UpdateResult st = sendToKOrganizer(newEvent);    // tell KOrganizer to show the new event
+                    status.korgUpdate(st);
                 }
 
                 // Remove "Don't show error messages again" for the old alarm
@@ -551,9 +567,9 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
         }
     }
 
-    if (status != UPDATE_OK  &&  msgParent)
-        displayUpdateError(msgParent, status, ERR_MODIFY, 1, 1, showKOrgErr);
-    return status;
+    if (status.status != UPDATE_OK  &&  msgParent)
+        displayUpdateError(msgParent, ERR_MODIFY, status, showKOrgErr);
+    return status.status;
 }
 
 /******************************************************************************
@@ -563,7 +579,7 @@ UpdateStatus modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 * The event is not updated in KOrganizer, since this function is called when an
 * existing alarm is rescheduled (due to recurrence or deferral).
 */
-UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete)
+UpdateResult updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelete)
 {
     kDebug() << event.id();
 
@@ -581,8 +597,8 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
         if (!cal->save())
         {
             if (msgParent)
-                displayUpdateError(msgParent, SAVE_FAILED, ERR_ADD, 1);
-            return SAVE_FAILED;
+                displayUpdateError(msgParent, ERR_ADD, UpdateStatusData(SAVE_FAILED));
+            return UpdateResult(SAVE_FAILED);
         }
 
 #ifndef USE_AKONADI
@@ -590,7 +606,7 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
         EventListModel::alarms()->updateEvent(newEvent);
 #endif
     }
-    return UPDATE_OK;
+    return UpdateResult(UPDATE_OK);
 }
 
 /******************************************************************************
@@ -598,7 +614,7 @@ UpdateStatus updateEvent(KAEvent& event, QWidget* msgParent, bool archiveOnDelet
 * If 'selectionView' is non-null, the selection highlight is moved to the
 * updated event in that listView instance.
 */
-UpdateStatus updateTemplate(KAEvent& event, QWidget* msgParent)
+UpdateResult updateTemplate(KAEvent& event, QWidget* msgParent)
 {
     AlarmCalendar* cal = AlarmCalendar::resources();
     KAEvent* newEvent = cal->updateEvent(event);
@@ -610,21 +626,21 @@ UpdateStatus updateTemplate(KAEvent& event, QWidget* msgParent)
     if (status != UPDATE_OK)
     {
         if (msgParent)
-            displayUpdateError(msgParent, SAVE_FAILED, ERR_TEMPLATE, 1);
-        return status;
+            displayUpdateError(msgParent, ERR_TEMPLATE, UpdateStatusData(SAVE_FAILED));
+        return UpdateResult(status);
     }
 
 #ifndef USE_AKONADI
     EventListModel::templates()->updateEvent(newEvent);
 #endif
-    return UPDATE_OK;
+    return UpdateResult(UPDATE_OK);
 }
 
 /******************************************************************************
 * Delete alarms from the calendar file and from every main window instance.
 * If the events are archived, the events' IDs are changed to archived IDs if necessary.
 */
-UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool showKOrgErr)
+UpdateResult deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool showKOrgErr)
 {
 #ifdef USE_AKONADI
     QVector<KAEvent> events(1, event);
@@ -636,17 +652,15 @@ UpdateStatus deleteEvent(KAEvent& event, bool archive, QWidget* msgParent, bool 
 }
 
 #ifdef USE_AKONADI
-UpdateStatus deleteEvents(QVector<KAEvent>& events, bool archive, QWidget* msgParent, bool showKOrgErr)
+UpdateResult deleteEvents(QVector<KAEvent>& events, bool archive, QWidget* msgParent, bool showKOrgErr)
 #else
-UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParent, bool showKOrgErr)
+UpdateResult deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParent, bool showKOrgErr)
 #endif
 {
     kDebug() << events.count();
     if (events.isEmpty())
-        return UPDATE_OK;
-    int warnErr = 0;
-    int warnKOrg = 0;
-    UpdateStatus status = UPDATE_OK;
+        return UpdateResult(UPDATE_OK);
+    UpdateStatusData status;
     AlarmCalendar* cal = AlarmCalendar::resources();
     bool deleteWakeFromSuspendAlarm = false;
     QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
@@ -674,13 +688,8 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
                 // The event was shown in KOrganizer, so tell KOrganizer to
                 // delete it. But ignore errors, because the user could have
                 // manually deleted it from KOrganizer since it was set up.
-                UpdateStatus st = deleteFromKOrganizer(id);
-                if (st != UPDATE_OK)
-                {
-                    ++warnKOrg;
-                    if (st > status)
-                        status = st;
-                }
+                UpdateResult st = deleteFromKOrganizer(id);
+                status.korgUpdate(st);
             }
             if (archive  &&  event->toBeArchived())
             {
@@ -693,10 +702,7 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
 #else
         if (!cal->deleteEvent(id, false))   // don't save calendar after deleting
 #endif
-        {
-            status = UPDATE_ERROR;
-            ++warnErr;
-        }
+            status.setError(UPDATE_ERROR);
 
         if (id == wakeFromSuspendId)
             deleteWakeFromSuspendAlarm = true;
@@ -709,30 +715,27 @@ UpdateStatus deleteEvents(KAEvent::List& events, bool archive, QWidget* msgParen
 #endif
     }
 
-    if (warnErr == events.count())
-        status = UPDATE_FAILED;
+    if (status.warnErr == events.count())
+        status.status = UPDATE_FAILED;
     else if (!cal->save())      // save the calendars now
-    {
-        status = SAVE_FAILED;
-        warnErr = events.count();
-    }
-    if (status != UPDATE_OK  &&  msgParent)
-        displayUpdateError(msgParent, status, ERR_DELETE, warnErr, warnKOrg, showKOrgErr);
+        status.setError(SAVE_FAILED, events.count());
+    if (status.status != UPDATE_OK  &&  msgParent)
+        displayUpdateError(msgParent, ERR_DELETE, status, showKOrgErr);
 
     // Remove any wake-from-suspend scheduled for a deleted alarm
     if (deleteWakeFromSuspendAlarm  &&  !wakeFromSuspendId.isEmpty())
         cancelRtcWake(msgParent, wakeFromSuspendId);
 
-    return status;
+    return status.status;
 }
 
 /******************************************************************************
 * Delete templates from the calendar file and from every template list view.
 */
 #ifdef USE_AKONADI
-UpdateStatus deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
+UpdateResult deleteTemplates(const KAEvent::List& events, QWidget* msgParent)
 #else
-UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
+UpdateResult deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 #endif
 {
 #ifdef USE_AKONADI
@@ -742,9 +745,8 @@ UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 #endif
     kDebug() << count;
     if (!count)
-        return UPDATE_OK;
-    int warnErr = 0;
-    UpdateStatus status = UPDATE_OK;
+        return UpdateResult(UPDATE_OK);
+    UpdateStatusData status;
     AlarmCalendar* cal = AlarmCalendar::resources();
     for (int i = 0, end = count;  i < end;  ++i)
     {
@@ -761,22 +763,16 @@ UpdateStatus deleteTemplates(const QStringList& eventIDs, QWidget* msgParent)
 #else
         if (!cal->deleteEvent(id, false))    // don't save calendar after deleting
 #endif
-        {
-            status = UPDATE_ERROR;
-            ++warnErr;
-        }
+            status.setError(UPDATE_ERROR);
     }
 
-    if (warnErr == count)
-        status = UPDATE_FAILED;
+    if (status.warnErr == count)
+        status.status = UPDATE_FAILED;
     else if (!cal->save())      // save the calendars now
-    {
-        status = SAVE_FAILED;
-        warnErr = count;
-    }
-    if (status != UPDATE_OK  &&  msgParent)
-        displayUpdateError(msgParent, status, ERR_TEMPLATE, warnErr);
-    return status;
+        status.setError(SAVE_FAILED, count);
+    if (status.status != UPDATE_OK  &&  msgParent)
+        displayUpdateError(msgParent, ERR_TEMPLATE, status);
+    return status.status;
 }
 
 /******************************************************************************
@@ -800,9 +796,9 @@ void deleteDisplayEvent(const QString& eventID)
 * 'ineligibleIDs' is filled in with the IDs of any ineligible events.
 */
 #ifdef USE_AKONADI
-UpdateStatus reactivateEvent(KAEvent& event, Collection* calendar, QWidget* msgParent, bool showKOrgErr)
+UpdateResult reactivateEvent(KAEvent& event, Collection* calendar, QWidget* msgParent, bool showKOrgErr)
 #else
-UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParent, bool showKOrgErr)
+UpdateResult reactivateEvent(KAEvent& event, AlarmResource* calendar, QWidget* msgParent, bool showKOrgErr)
 #endif
 {
 #ifdef USE_AKONADI
@@ -817,18 +813,16 @@ UpdateStatus reactivateEvent(KAEvent& event, AlarmResource* calendar, QWidget* m
 }
 
 #ifdef USE_AKONADI
-UpdateStatus reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& ineligibleIDs, Collection* col, QWidget* msgParent, bool showKOrgErr)
+UpdateResult reactivateEvents(QVector<KAEvent>& events, QVector<EventId>& ineligibleIDs, Collection* col, QWidget* msgParent, bool showKOrgErr)
 #else
-UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
+UpdateResult reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs, AlarmResource* resource, QWidget* msgParent, bool showKOrgErr)
 #endif
 {
     kDebug() << events.count();
     ineligibleIDs.clear();
     if (events.isEmpty())
-        return UPDATE_OK;
-    int warnErr = 0;
-    int warnKOrg = 0;
-    UpdateStatus status = UPDATE_OK;
+        return UpdateResult(UPDATE_OK);
+    UpdateStatusData status;
 #ifdef USE_AKONADI
     Collection collection;
     if (col)
@@ -843,8 +837,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 #endif
     {
         kDebug() << "No calendar";
-        status = UPDATE_FAILED;
-        warnErr = events.count();
+        status.setError(UPDATE_FAILED, events.count());
     }
     else
     {
@@ -895,19 +888,13 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 #ifndef USE_AKONADI
                 delete newev;
 #endif
-                status = UPDATE_ERROR;
-                ++warnErr;
+                status.setError(UPDATE_ERROR);
                 continue;
             }
             if (newev->copyToKOrganizer())
             {
-                UpdateStatus st = sendToKOrganizer(*newev);    // tell KOrganizer to show the event
-                if (st != UPDATE_OK)
-                {
-                    ++warnKOrg;
-                    if (st > status)
-                        status = st;
-                }
+                UpdateResult st = sendToKOrganizer(*newev);    // tell KOrganizer to show the event
+                status.korgUpdate(st);
             }
 
 #ifndef USE_AKONADI
@@ -923,10 +910,7 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
             if (cal->event(oldid)    // no error if event doesn't exist in archived resource
             &&  !cal->deleteEvent(oldid, false))   // don't save calendar after deleting
 #endif
-            {
-                status = UPDATE_ERROR;
-                ++warnErr;
-            }
+                status.setError(UPDATE_ERROR);
 #ifdef USE_AKONADI
             events[i] = newevent;
 #else
@@ -934,18 +918,15 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 #endif
         }
 
-        if (warnErr == count)
-            status = UPDATE_FAILED;
+        if (status.warnErr == count)
+            status.status = UPDATE_FAILED;
         // Save the calendars, even if all events failed, since more than one calendar was updated
-        if (!cal->save()  &&  status != UPDATE_FAILED)
-        {
-            status = SAVE_FAILED;
-            warnErr = count;
-        }
+        if (!cal->save()  &&  status.status != UPDATE_FAILED)
+            status.setError(SAVE_FAILED, count);
     }
-    if (status != UPDATE_OK  &&  msgParent)
-        displayUpdateError(msgParent, status, ERR_REACTIVATE, warnErr, warnKOrg, showKOrgErr);
-    return status;
+    if (status.status != UPDATE_OK  &&  msgParent)
+        displayUpdateError(msgParent, ERR_REACTIVATE, status, showKOrgErr);
+    return status.status;
 }
 
 /******************************************************************************
@@ -953,15 +934,15 @@ UpdateStatus reactivateEvents(KAEvent::List& events, QStringList& ineligibleIDs,
 * The new events will have the same event IDs as the old ones.
 */
 #ifdef USE_AKONADI
-UpdateStatus enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent)
+UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgParent)
 #else
-UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent)
+UpdateResult enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent)
 #endif
 {
     kDebug() << events.count();
     if (events.isEmpty())
-        return UPDATE_OK;
-    UpdateStatus status = UPDATE_OK;
+        return UpdateResult(UPDATE_OK);
+    UpdateStatusData status;
     AlarmCalendar* cal = AlarmCalendar::resources();
     bool deleteWakeFromSuspendAlarm = false;
     QString wakeFromSuspendId = checkRtcWakeConfig().value(0);
@@ -1008,15 +989,15 @@ UpdateStatus enableEvents(KAEvent::List& events, bool enable, QWidget* msgParent
     }
 
     if (!cal->save())
-        status = SAVE_FAILED;
-    if (status != UPDATE_OK  &&  msgParent)
-        displayUpdateError(msgParent, status, ERR_ADD, events.count(), 0);
+        status.setError(SAVE_FAILED, events.count());
+    if (status.status != UPDATE_OK  &&  msgParent)
+        displayUpdateError(msgParent, ERR_ADD, status);
 
     // Remove any wake-from-suspend scheduled for a disabled alarm
     if (deleteWakeFromSuspendAlarm  &&  !wakeFromSuspendId.isEmpty())
         cancelRtcWake(msgParent, wakeFromSuspendId);
 
-    return status;
+    return status.status;
 }
 
 /******************************************************************************
@@ -1113,43 +1094,9 @@ KAEvent::List getSortedActiveEvents(const KDateTime& startTime, const KDateTime&
 #endif
 
 /******************************************************************************
-* Display an error message about an error when saving an event.
-*/
-void displayUpdateError(QWidget* parent, UpdateStatus status, UpdateError code, int nAlarms, int nKOrgAlarms, bool showKOrgError)
-{
-    QString errmsg;
-    if (status > UPDATE_KORG_ERR)
-    {
-        switch (code)
-        {
-            case ERR_ADD:
-            case ERR_MODIFY:
-                errmsg = (nAlarms > 1) ? i18nc("@info", "Error saving alarms")
-                                       : i18nc("@info", "Error saving alarm");
-                break;
-            case ERR_DELETE:
-                errmsg = (nAlarms > 1) ? i18nc("@info", "Error deleting alarms")
-                                       : i18nc("@info", "Error deleting alarm");
-                break;
-            case ERR_REACTIVATE:
-                errmsg = (nAlarms > 1) ? i18nc("@info", "Error saving reactivated alarms")
-                                       : i18nc("@info", "Error saving reactivated alarm");
-                break;
-            case ERR_TEMPLATE:
-                errmsg = (nAlarms > 1) ? i18nc("@info", "Error saving alarm templates")
-                                       : i18nc("@info", "Error saving alarm template");
-                break;
-        }
-        KAMessageBox::error(parent, errmsg);
-    }
-    else if (showKOrgError)
-        displayKOrgUpdateError(parent, code, status, nKOrgAlarms);
-}
-
-/******************************************************************************
 * Display an error message corresponding to a specified alarm update error code.
 */
-void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateStatus korgError, int nAlarms)
+void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateResult korgError, int nAlarms)
 {
     QString errmsg;
     switch (code)
@@ -1169,14 +1116,28 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateStatus korg
         case ERR_TEMPLATE:
             return;
     }
+    bool showDetail = !korgError.message.isEmpty();
     QString msg;
-    if (korgError == UPDATE_KORG_ERRSTART)
-        msg = i18nc("@info", "<para>%1</para><para>(KOrganizer not fully started)</para>", errmsg);
-    else if (korgError == UPDATE_KORG_ERR)
-        msg = i18nc("@info", "<para>%1</para><para>(Error communicating with KOrganizer)</para>", errmsg);
+    switch (korgError.status)
+    {
+        case UPDATE_KORG_ERRINIT:
+            msg = i18nc("@info", "<para>%1</para><para>(Could not start KOrganizer)</para>", errmsg);
+            break;
+        case UPDATE_KORG_ERRSTART:
+            msg = i18nc("@info", "<para>%1</para><para>(KOrganizer not fully started)</para>", errmsg);
+            break;
+        case UPDATE_KORG_ERR:
+            msg = i18nc("@info", "<para>%1</para><para>(Error communicating with KOrganizer)</para>", errmsg);
+            break;
+        default:
+            msg = errmsg;
+            showDetail = false;
+            break;
+    }
+    if (showDetail)
+        KAMessageBox::detailedError(parent, msg, korgError.message);
     else
-        msg = errmsg;
-    KAMessageBox::error(parent, msg);
+        KAMessageBox::error(parent, msg);
 }
 
 /******************************************************************************
@@ -1272,18 +1233,19 @@ void PrivateNewAlarmDlg::accept(EditAlarmDlg* editDlg)
 
     // Add the alarm to the displayed lists and to the calendar file
 #ifdef USE_AKONADI
-    UpdateStatus status = addEvent(event, &calendar, editDlg);
+    UpdateResult status = addEvent(event, &calendar, editDlg);
 #else
-    UpdateStatus status = addEvent(event, calendar, editDlg);
+    UpdateResult status = addEvent(event, calendar, editDlg);
 #endif
-    switch (status)
+    switch (status.status)
     {
         case UPDATE_FAILED:
             return;
         case UPDATE_KORG_ERR:
+        case UPDATE_KORG_ERRINIT:
         case UPDATE_KORG_ERRSTART:
         case UPDATE_KORG_FUNCERR:
-            displayKOrgUpdateError(editDlg, ERR_ADD, status, 1);
+            displayKOrgUpdateError(editDlg, ERR_ADD, status);
             break;
         default:
             break;
@@ -1559,9 +1521,9 @@ void editAlarm(KAEvent* event, QWidget* parent)
         }
         else
         {
-            UpdateStatus status = modifyEvent(*event, newEvent, editDlg);
-            if (status != UPDATE_OK  &&  status <= UPDATE_KORG_ERR)
-                displayKOrgUpdateError(editDlg, ERR_MODIFY, status, 1);
+            UpdateResult status = modifyEvent(*event, newEvent, editDlg);
+            if (status.status != UPDATE_OK  &&  status.status <= UPDATE_KORG_ERR)
+                displayKOrgUpdateError(editDlg, ERR_MODIFY, status);
         }
         Undo::saveEdit(undo, newEvent);
 
@@ -1698,7 +1660,7 @@ void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, AlarmResource* cal
     editDlg->getEvent(newEvent, cal);
 
     // Update the displayed lists and the calendar file
-    UpdateStatus status;
+    UpdateResult status;
 #ifdef USE_AKONADI
     if (AlarmCalendar::resources()->event(EventId(event)))
 #else
@@ -1721,8 +1683,8 @@ void updateEditedAlarm(EditAlarmDlg* editDlg, KAEvent& event, AlarmResource* cal
         Undo::saveAdd(newEvent, calendar);
     }
 
-    if (status != UPDATE_OK  &&  status <= UPDATE_KORG_ERR)
-        displayKOrgUpdateError(editDlg, ERR_MODIFY, status, 1);
+    if (status.status != UPDATE_OK  &&  status.status <= UPDATE_KORG_ERR)
+        displayKOrgUpdateError(editDlg, ERR_MODIFY, status);
     outputAlarmWarnings(editDlg, &newEvent);
 
     editDlg->close();
@@ -2265,11 +2227,45 @@ namespace
 {
 
 /******************************************************************************
+* Display an error message about an error when saving an event.
+*/
+void displayUpdateError(QWidget* parent, KAlarm::UpdateError code, const UpdateStatusData& status, bool showKOrgError)
+{
+    QString errmsg;
+    if (status.status.status > KAlarm::UPDATE_KORG_ERR)
+    {
+        switch (code)
+        {
+            case KAlarm::ERR_ADD:
+            case KAlarm::ERR_MODIFY:
+                errmsg = (status.warnErr > 1) ? i18nc("@info", "Error saving alarms")
+                                       : i18nc("@info", "Error saving alarm");
+                break;
+            case KAlarm::ERR_DELETE:
+                errmsg = (status.warnErr > 1) ? i18nc("@info", "Error deleting alarms")
+                                       : i18nc("@info", "Error deleting alarm");
+                break;
+            case KAlarm::ERR_REACTIVATE:
+                errmsg = (status.warnErr > 1) ? i18nc("@info", "Error saving reactivated alarms")
+                                       : i18nc("@info", "Error saving reactivated alarm");
+                break;
+            case KAlarm::ERR_TEMPLATE:
+                errmsg = (status.warnErr > 1) ? i18nc("@info", "Error saving alarm templates")
+                                       : i18nc("@info", "Error saving alarm template");
+                break;
+        }
+        KAMessageBox::error(parent, errmsg);
+    }
+    else if (showKOrgError)
+        displayKOrgUpdateError(parent, code, status.status, status.warnKOrg);
+}
+
+/******************************************************************************
 * Tell KOrganizer to put an alarm in its calendar.
 * It will be held by KOrganizer as a simple event, without alarms - KAlarm
 * is still responsible for alarming.
 */
-KAlarm::UpdateStatus sendToKOrganizer(const KAEvent& event)
+KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 {
 #ifdef USE_AKONADI
     Event::Ptr kcalEvent(new KCalCore::Event);
@@ -2324,9 +2320,9 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent& event)
 #endif
 
     // Send the event to KOrganizer
-    KAlarm::UpdateStatus st = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
-    if (st != KAlarm::UPDATE_OK)
-        return st;
+    KAlarm::UpdateResult status = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
+    if (status != KAlarm::UPDATE_OK)
+        return status;
     QList<QVariant> args;
     args << iCal;
     QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("addIncidence"), args);
@@ -2334,34 +2330,39 @@ KAlarm::UpdateStatus sendToKOrganizer(const KAEvent& event)
     {
         if (reply.error().type() == QDBusError::UnknownObject)
         {
-            kError()<<"addIncidence() D-Bus error: still starting";
-            return KAlarm::UPDATE_KORG_ERRSTART;
+            status =  KAlarm::UPDATE_KORG_ERRSTART;
+            kError() << "addIncidence() D-Bus error: still starting";
         }
-        kError() << "addIncidence(" << uid << ") D-Bus call failed:" << reply.error().message();
-        return KAlarm::UPDATE_KORG_ERR;
+        else
+        {
+            status.set(KAlarm::UPDATE_KORG_ERR, reply.error().message());
+            kError() << "addIncidence(" << uid << ") D-Bus call failed:" << status.message;
+        }
     }
-    if (!reply.value())
+    else if (!reply.value())
     {
+        status = KAlarm::UPDATE_KORG_FUNCERR;
         kDebug() << "addIncidence(" << uid << ") D-Bus call returned false";
-        return KAlarm::UPDATE_KORG_FUNCERR;
     }
-    kDebug() << uid << ": success";
-    return KAlarm::UPDATE_OK;
+    else
+        kDebug() << uid << ": success";
+    return status;
 }
 
 /******************************************************************************
 * Tell KOrganizer to delete an event from its calendar.
 */
-KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
+KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
 {
     const QString newID = uidKOrganizer(eventID);
 #if defined(USE_AKONADI) && KDE_IS_VERSION(4,12,4)   // kdepimlibs/kdepim-runtime 4.12.4 are required
     new CollectionSearch(KORG_MIME_TYPE, newID, true);  // this auto-deletes when complete
     // Ignore errors
+    return KAlarm::UpdateResult(KAlarm::UPDATE_OK);
 #else
-    KAlarm::UpdateStatus st = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
-    if (st != KAlarm::UPDATE_OK)
-        return st;
+    KAlarm::UpdateResult status = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
+    if (status != KAlarm::UPDATE_OK)
+        return status;
     QList<QVariant> args;
     args << newID << true;
     QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("deleteIncidence"), args);
@@ -2369,49 +2370,54 @@ KAlarm::UpdateStatus deleteFromKOrganizer(const QString& eventID)
     {
         if (reply.error().type() == QDBusError::UnknownObject)
         {
-            kError()<<"deleteIncidence() D-Bus error: still starting";
+            kError() << "deleteIncidence() D-Bus error: still starting";
             return KAlarm::UPDATE_KORG_ERRSTART;
         }
-        kError() << "deleteIncidence(" << newID << ") D-Bus call failed:" << reply.error().message();
-        return KAlarm::UPDATE_KORG_ERR;
+        status.set(KAlarm::UPDATE_KORG_ERR, reply.error().message());
+        kError() << "deleteIncidence(" << newID << ") D-Bus call failed:" << status.message;
     }
-    if (!reply.value())
+    else if (!reply.value())
     {
+        status = KAlarm::UPDATE_KORG_FUNCERR;
         kDebug() << "deleteIncidence(" << newID << ") D-Bus call returned false";
-        return KAlarm::UPDATE_KORG_FUNCERR;
     }
-    kDebug() << newID << ": success";
+    else
+        kDebug() << newID << ": success";
+    return status;
 #endif
-    return KAlarm::UPDATE_OK;
 }
 
 /******************************************************************************
 * Start KOrganizer if not already running, and create its D-Bus interface.
 */
-KAlarm::UpdateStatus runKOrganizer()
+KAlarm::UpdateResult runKOrganizer()
 {
+    KAlarm::UpdateResult status;
     QString error, dbusService;
     int result = KDBusServiceStarter::self()->findServiceFor(QLatin1String("DBUS/Organizer"), QString(), &error, &dbusService);
     if (result)
     {
-        kWarning() << "Unable to start DBUS/Organizer:" << dbusService << error;
-        return KAlarm::UPDATE_KORG_ERR;
+        status.set(KAlarm::UPDATE_KORG_ERRINIT, error);
+        kWarning() << "Unable to start DBUS/Organizer:" << status.message;
+        return status;
     }
-    // If Kontact is running, there is be a load() method which needs to be called
-    // to load KOrganizer into Kontact. But if KOrganizer is running independently,
+    // If Kontact is running, there is a load() method which needs to be called to
+    // load KOrganizer into Kontact. But if KOrganizer is running independently,
     // the load() method doesn't exist.
     QDBusInterface iface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_LOAD_PATH), QLatin1String("org.kde.KUniqueApplication"));
     if (!iface.isValid())
     {
-        kWarning() << "Unable to access " KORG_DBUS_LOAD_PATH " D-Bus interface:" << iface.lastError().message();
-        return KAlarm::UPDATE_KORG_ERR;
+        status.set(KAlarm::UPDATE_KORG_ERR, iface.lastError().message());
+        kWarning() << "Unable to access " KORG_DBUS_LOAD_PATH " D-Bus interface:" << status.message;
+        return status;
     }
     QDBusReply<bool> reply = iface.call(QLatin1String("load"));
     if ((!reply.isValid() || !reply.value())
     &&  iface.lastError().type() != QDBusError::UnknownMethod)
     {
-        kWarning() << "Loading KOrganizer failed:" << iface.lastError().message();
-        return KAlarm::UPDATE_KORG_ERR;
+        status.set(KAlarm::UPDATE_KORG_ERR, iface.lastError().message());
+        kWarning() << "Loading KOrganizer failed:" << status.message;
+        return status;
     }
 
     // KOrganizer has been started, but it may not have the necessary
@@ -2422,13 +2428,13 @@ KAlarm::UpdateStatus runKOrganizer()
         korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_PATH), KORG_DBUS_IFACE);
         if (!korgInterface->isValid())
         {
-            kWarning() << "Unable to access " KORG_DBUS_PATH " D-Bus interface:" << korgInterface->lastError().message();
+            status.set(KAlarm::UPDATE_KORG_ERRSTART, korgInterface->lastError().message());
+            kWarning() << "Unable to access " KORG_DBUS_PATH " D-Bus interface:" << status.message;
             delete korgInterface;
             korgInterface = 0;
-            return KAlarm::UPDATE_KORG_ERRSTART;
         }
     }
-    return KAlarm::UPDATE_OK;
+    return status;
 }
 
 /******************************************************************************

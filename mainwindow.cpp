@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1046,7 +1046,7 @@ void MainWindow::slotBirthdays()
         {
             mListView->clearSelection();
             // Add alarm to the displayed lists and to the calendar file
-            KAlarm::UpdateStatus status = KAlarm::addEvents(events, dlg, true, true);
+            KAlarm::UpdateResult status = KAlarm::addEvents(events, dlg, true, true);
 
             Undo::EventList undos;
             AlarmCalendar* resources = AlarmCalendar::resources();
