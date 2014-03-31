@@ -189,13 +189,13 @@ QByteArray CollectionAttribute::serialized() const
           + QByteArray::number(d->mBackgroundColour.green()) + ' '
           + QByteArray::number(d->mBackgroundColour.blue()) + ' '
           + QByteArray::number(d->mBackgroundColour.alpha());
-    kDebug() << v;
+    qDebug() << v;
     return v;
 }
 
 void CollectionAttribute::deserialize(const QByteArray& data)
 {
-    kDebug() << data;
+    qDebug() << data;
 
     // Set default values
     d->mEnabled          = CalEvent::EMPTY;
@@ -214,7 +214,7 @@ void CollectionAttribute::deserialize(const QByteArray& data)
         c[0] = items[index++].toInt(&ok);
         if (!ok  ||  (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE)))
         {
-            kError() << "Invalid alarm types:" << c[0];
+            qCritical() << "Invalid alarm types:" << c[0];
             return;
         }
         d->mEnabled = static_cast<CalEvent::Types>(c[0]);
@@ -225,7 +225,7 @@ void CollectionAttribute::deserialize(const QByteArray& data)
         c[0] = items[index++].toInt(&ok);
         if (!ok  ||  (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE)))
         {
-            kError() << "Invalid alarm types:" << c[0];
+            qCritical() << "Invalid alarm types:" << c[0];
             return;
         }
         if (d->mEnabled)
@@ -249,7 +249,7 @@ void CollectionAttribute::deserialize(const QByteArray& data)
         {
             if (count < index + 4)
             {
-                kError() << "Invalid number of background color elements";
+                qCritical() << "Invalid number of background color elements";
                 return;
             }
             // 4-7: background color elements

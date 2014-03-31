@@ -104,13 +104,13 @@ QByteArray CompatibilityAttribute::serialized() const
 {
     QByteArray v = QByteArray::number(d->mCompatibility) + ' '
                  + QByteArray::number(d->mVersion);
-    kDebug() << v;
+    qDebug() << v;
     return v;
 }
 
 void CompatibilityAttribute::deserialize(const QByteArray& data)
 {
-    kDebug() << data;
+    qDebug() << data;
 
     // Set default values
     d->mCompatibility = KACalendar::Incompatible;
@@ -127,7 +127,7 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
         KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Converted | KACalendar::Convertible | KACalendar::Incompatible | KACalendar::Unknown);
         if (!ok  ||  (c & AllCompat) != c)
         {
-            kError() << "Invalid compatibility:" << c;
+            qCritical() << "Invalid compatibility:" << c;
             return;
         }
         d->mCompatibility = static_cast<KACalendar::Compat>(c);
@@ -138,7 +138,7 @@ void CompatibilityAttribute::deserialize(const QByteArray& data)
         int c = items[index++].toInt(&ok);
         if (!ok)
         {
-            kError() << "Invalid version:" << c;
+            qCritical() << "Invalid version:" << c;
             return;
         }
         d->mVersion = c;

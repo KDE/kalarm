@@ -152,10 +152,10 @@ int updateVersion(CalendarLocal& calendar, const QString& localFile, QString& ve
         // case it is the KDE 3.0.0 version, which needs adjustment of summer times.
         if (isUTC(localFile))
             ver = -version;
-        kDebug() << "KAlarm version 0.5.7 (" << (ver < 0 ? "" : "non-") << "UTC)";
+        qDebug() << "KAlarm version 0.5.7 (" << (ver < 0 ? "" : "non-") << "UTC)";
     }
     else
-        kDebug() << "KAlarm version" << version;
+        qDebug() << "KAlarm version" << version;
 
     // Convert events to current KAlarm format for when/if the calendar is saved
 #ifndef KALARMCAL_USE_KRESOURCES
@@ -185,7 +185,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
 #ifndef KALARMCAL_USE_KRESOURCES
     Calendar::Ptr calendar = fileStorage->calendar();
     versionString = calendar->customProperty(KACalendar::APPNAME, VERSION_PROPERTY);
-    kDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
+    qDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
 
 #else
     versionString = calendar.customProperty(KACalendar::APPNAME, VERSION_PROPERTY);

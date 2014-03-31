@@ -85,13 +85,13 @@ EventAttribute* EventAttribute::clone() const
 QByteArray EventAttribute::serialized() const
 {
     QByteArray v = QByteArray::number(d->mCommandError);
-    kDebug() << v;
+    qDebug() << v;
     return v;
 }
 
 void EventAttribute::deserialize(const QByteArray& data)
 {
-    kDebug() << data;
+    qDebug() << data;
 
     // Set default values
     d->mCommandError = KAEvent::CMD_NO_ERROR;

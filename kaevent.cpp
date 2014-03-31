@@ -2112,7 +2112,7 @@ void KAEvent::setCommandError(CmdErrType t, bool writeConfig) const
 
 void KAEventPrivate::setCommandError(KAEvent::CmdErrType error, bool writeConfig) const
 {
-    kDebug() << mEventID << "," << error;
+    qDebug() << mEventID << "," << error;
     if (error == mCommandError)
         return;
     mCommandError = error;
@@ -2480,7 +2480,7 @@ void KAEventPrivate::activateReminderAfter(const DateTime& mainAlarmTime)
     &&  reminderTime >= next)
         return;    // the reminder time is after the next occurrence of the main alarm
 
-    kDebug() << "Setting reminder at" << reminderTime.effectiveKDateTime().dateTime();
+    qDebug() << "Setting reminder at" << reminderTime.effectiveKDateTime().dateTime();
     activate_reminder(true);
     mReminderAfterTime = reminderTime;
 }
@@ -3683,7 +3683,7 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
       || alarmType == KAAlarm::DEFERRED_ALARM
       || alarmType == KAAlarm::AT_LOGIN_ALARM))
     {
-//kDebug()<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
+//qDebug()<<event.id()<<","<<(alarmType==KAAlarm::MAIN_ALARM?"MAIN":alarmType==KAAlarm::REMINDER_ALARM?"REMINDER":alarmType==KAAlarm::DEFERRED_REMINDER_ALARM?"REMINDER_DEFERRAL":alarmType==KAAlarm::DEFERRED_ALARM?"DEFERRAL":"LOGIN")<<"): time="<<repeatAtLoginTime.toString();
         KAAlarm al = event.alarm(alarmType);
         if (al.isValid())
         {
@@ -4047,129 +4047,129 @@ void KAEvent::dumpDebug() const
 #ifndef KDE_NO_DEBUG_OUTPUT
 void KAEventPrivate::dumpDebug() const
 {
-    kDebug() << "KAEvent dump:";
+    qDebug() << "KAEvent dump:";
 #ifdef KALARMCAL_USE_KRESOURCES
-    if (mResource) { kDebug() << "-- mResource:" << (void*)mResource; }
+    if (mResource) { qDebug() << "-- mResource:" << (void*)mResource; }
 #endif
-    kDebug() << "-- mEventID:" << mEventID;
-    kDebug() << "-- mActionSubType:" << (mActionSubType == KAEvent::MESSAGE ? "MESSAGE" : mActionSubType == KAEvent::FILE ? "FILE" : mActionSubType == KAEvent::COMMAND ? "COMMAND" : mActionSubType == KAEvent::EMAIL ? "EMAIL" : mActionSubType == KAEvent::AUDIO ? "AUDIO" : "??");
-    kDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
-    kDebug() << "-- mCommandError:" << mCommandError;
-    kDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
-    kDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
-    kDebug() << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
-    kDebug() << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
-    kDebug() << "-- mCategory:" << mCategory;
+    qDebug() << "-- mEventID:" << mEventID;
+    qDebug() << "-- mActionSubType:" << (mActionSubType == KAEvent::MESSAGE ? "MESSAGE" : mActionSubType == KAEvent::FILE ? "FILE" : mActionSubType == KAEvent::COMMAND ? "COMMAND" : mActionSubType == KAEvent::EMAIL ? "EMAIL" : mActionSubType == KAEvent::AUDIO ? "AUDIO" : "??");
+    qDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
+    qDebug() << "-- mCommandError:" << mCommandError;
+    qDebug() << "-- mAllTrigger:" << mAllTrigger.toString();
+    qDebug() << "-- mMainTrigger:" << mMainTrigger.toString();
+    qDebug() << "-- mAllWorkTrigger:" << mAllWorkTrigger.toString();
+    qDebug() << "-- mMainWorkTrigger:" << mMainWorkTrigger.toString();
+    qDebug() << "-- mCategory:" << mCategory;
     if (!mTemplateName.isEmpty())
     {
-        kDebug() << "-- mTemplateName:" << mTemplateName;
-        kDebug() << "-- mTemplateAfterTime:" << mTemplateAfterTime;
+        qDebug() << "-- mTemplateName:" << mTemplateName;
+        qDebug() << "-- mTemplateAfterTime:" << mTemplateAfterTime;
     }
-    kDebug() << "-- mText:" << mText;
+    qDebug() << "-- mText:" << mText;
     if (mActionSubType == KAEvent::MESSAGE  ||  mActionSubType == KAEvent::FILE)
     {
-        kDebug() << "-- mBgColour:" << mBgColour.name();
-        kDebug() << "-- mFgColour:" << mFgColour.name();
-        kDebug() << "-- mUseDefaultFont:" << mUseDefaultFont;
+        qDebug() << "-- mBgColour:" << mBgColour.name();
+        qDebug() << "-- mFgColour:" << mFgColour.name();
+        qDebug() << "-- mUseDefaultFont:" << mUseDefaultFont;
         if (!mUseDefaultFont)
-            kDebug() << "-- mFont:" << mFont.toString();
-        kDebug() << "-- mSpeak:" << mSpeak;
-        kDebug() << "-- mAudioFile:" << mAudioFile;
-        kDebug() << "-- mPreAction:" << mPreAction;
-        kDebug() << "-- mExecPreActOnDeferral:" << (mExtraActionOptions & KAEvent::ExecPreActOnDeferral);
-        kDebug() << "-- mCancelOnPreActErr:" << (mExtraActionOptions & KAEvent::CancelOnPreActError);
-        kDebug() << "-- mDontShowPreActErr:" << (mExtraActionOptions & KAEvent::DontShowPreActError);
-        kDebug() << "-- mPostAction:" << mPostAction;
-        kDebug() << "-- mLateCancel:" << mLateCancel;
-        kDebug() << "-- mAutoClose:" << mAutoClose;
+            qDebug() << "-- mFont:" << mFont.toString();
+        qDebug() << "-- mSpeak:" << mSpeak;
+        qDebug() << "-- mAudioFile:" << mAudioFile;
+        qDebug() << "-- mPreAction:" << mPreAction;
+        qDebug() << "-- mExecPreActOnDeferral:" << (mExtraActionOptions & KAEvent::ExecPreActOnDeferral);
+        qDebug() << "-- mCancelOnPreActErr:" << (mExtraActionOptions & KAEvent::CancelOnPreActError);
+        qDebug() << "-- mDontShowPreActErr:" << (mExtraActionOptions & KAEvent::DontShowPreActError);
+        qDebug() << "-- mPostAction:" << mPostAction;
+        qDebug() << "-- mLateCancel:" << mLateCancel;
+        qDebug() << "-- mAutoClose:" << mAutoClose;
     }
     else if (mActionSubType == KAEvent::COMMAND)
     {
-        kDebug() << "-- mCommandScript:" << mCommandScript;
-        kDebug() << "-- mCommandXterm:" << mCommandXterm;
-        kDebug() << "-- mCommandDisplay:" << mCommandDisplay;
-        kDebug() << "-- mLogFile:" << mLogFile;
+        qDebug() << "-- mCommandScript:" << mCommandScript;
+        qDebug() << "-- mCommandXterm:" << mCommandXterm;
+        qDebug() << "-- mCommandDisplay:" << mCommandDisplay;
+        qDebug() << "-- mLogFile:" << mLogFile;
     }
     else if (mActionSubType == KAEvent::EMAIL)
     {
-        kDebug() << "-- mEmail: FromKMail:" << mEmailFromIdentity;
-        kDebug() << "--         Addresses:" << mEmailAddresses.join(QLatin1String(","));
-        kDebug() << "--         Subject:" << mEmailSubject;
-        kDebug() << "--         Attachments:" << mEmailAttachments.join(QLatin1String(","));
-        kDebug() << "--         Bcc:" << mEmailBcc;
+        qDebug() << "-- mEmail: FromKMail:" << mEmailFromIdentity;
+        qDebug() << "--         Addresses:" << mEmailAddresses.join(QLatin1String(","));
+        qDebug() << "--         Subject:" << mEmailSubject;
+        qDebug() << "--         Attachments:" << mEmailAttachments.join(QLatin1String(","));
+        qDebug() << "--         Bcc:" << mEmailBcc;
     }
     else if (mActionSubType == KAEvent::AUDIO)
-        kDebug() << "-- mAudioFile:" << mAudioFile;
-    kDebug() << "-- mBeep:" << mBeep;
+        qDebug() << "-- mAudioFile:" << mAudioFile;
+    qDebug() << "-- mBeep:" << mBeep;
     if (mActionSubType == KAEvent::AUDIO  ||  !mAudioFile.isEmpty())
     {
         if (mSoundVolume >= 0)
         {
-            kDebug() << "-- mSoundVolume:" << mSoundVolume;
+            qDebug() << "-- mSoundVolume:" << mSoundVolume;
             if (mFadeVolume >= 0)
             {
-                kDebug() << "-- mFadeVolume:" << mFadeVolume;
-                kDebug() << "-- mFadeSeconds:" << mFadeSeconds;
+                qDebug() << "-- mFadeVolume:" << mFadeVolume;
+                qDebug() << "-- mFadeSeconds:" << mFadeSeconds;
             }
             else
-                kDebug() << "-- mFadeVolume:-:";
+                qDebug() << "-- mFadeVolume:-:";
         }
         else
-            kDebug() << "-- mSoundVolume:-:";
-        kDebug() << "-- mRepeatSoundPause:" << mRepeatSoundPause;
+            qDebug() << "-- mSoundVolume:-:";
+        qDebug() << "-- mRepeatSoundPause:" << mRepeatSoundPause;
     }
-    kDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
-    kDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
-    kDebug() << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
-    kDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
-    kDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
-//     kDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
-    kDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
+    qDebug() << "-- mKMailSerialNumber:" << mKMailSerialNumber;
+    qDebug() << "-- mCopyToKOrganizer:" << mCopyToKOrganizer;
+    qDebug() << "-- mExcludeHolidays:" << (bool)mExcludeHolidays;
+    qDebug() << "-- mWorkTimeOnly:" << mWorkTimeOnly;
+    qDebug() << "-- mStartDateTime:" << mStartDateTime.toString();
+//     qDebug() << "-- mCreatedDateTime:" << mCreatedDateTime;
+    qDebug() << "-- mRepeatAtLogin:" << mRepeatAtLogin;
 //     if (mRepeatAtLogin)
-//         kDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
-    kDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
-    kDebug() << "-- mConfirmAck:" << mConfirmAck;
-    kDebug() << "-- mEnabled:" << mEnabled;
+//         qDebug() << "-- mAtLoginDateTime:" << mAtLoginDateTime;
+    qDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
+    qDebug() << "-- mConfirmAck:" << mConfirmAck;
+    qDebug() << "-- mEnabled:" << mEnabled;
 #ifndef KALARMCAL_USE_KRESOURCES
-    kDebug() << "-- mItemId:" << mItemId;
-    kDebug() << "-- mCollectionId:" << mCollectionId;
-    kDebug() << "-- mCompatibility:" << mCompatibility;
-    kDebug() << "-- mReadOnly:" << mReadOnly;
+    qDebug() << "-- mItemId:" << mItemId;
+    qDebug() << "-- mCollectionId:" << mCollectionId;
+    qDebug() << "-- mCompatibility:" << mCompatibility;
+    qDebug() << "-- mReadOnly:" << mReadOnly;
 #endif
     if (mReminderMinutes)
     {
-        kDebug() << "-- mReminderMinutes:" << mReminderMinutes;
-        kDebug() << "-- mReminderActive:" << (mReminderActive == ACTIVE_REMINDER ? "active" : mReminderActive == HIDDEN_REMINDER ? "hidden" : "no");
-        kDebug() << "-- mReminderOnceOnly:" << mReminderOnceOnly;
+        qDebug() << "-- mReminderMinutes:" << mReminderMinutes;
+        qDebug() << "-- mReminderActive:" << (mReminderActive == ACTIVE_REMINDER ? "active" : mReminderActive == HIDDEN_REMINDER ? "hidden" : "no");
+        qDebug() << "-- mReminderOnceOnly:" << mReminderOnceOnly;
     }
     else if (mDeferral > 0)
     {
-        kDebug() << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
-        kDebug() << "-- mDeferralTime:" << mDeferralTime.toString();
+        qDebug() << "-- mDeferral:" << (mDeferral == NORMAL_DEFERRAL ? "normal" : "reminder");
+        qDebug() << "-- mDeferralTime:" << mDeferralTime.toString();
     }
-    kDebug() << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
+    qDebug() << "-- mDeferDefaultMinutes:" << mDeferDefaultMinutes;
     if (mDeferDefaultMinutes)
-        kDebug() << "-- mDeferDefaultDateOnly:" << mDeferDefaultDateOnly;
+        qDebug() << "-- mDeferDefaultDateOnly:" << mDeferDefaultDateOnly;
     if (mDisplaying)
     {
-        kDebug() << "-- mDisplayingTime:" << mDisplayingTime.toString();
-        kDebug() << "-- mDisplayingFlags:" << mDisplayingFlags;
-        kDebug() << "-- mDisplayingDefer:" << mDisplayingDefer;
-        kDebug() << "-- mDisplayingEdit:" << mDisplayingEdit;
+        qDebug() << "-- mDisplayingTime:" << mDisplayingTime.toString();
+        qDebug() << "-- mDisplayingFlags:" << mDisplayingFlags;
+        qDebug() << "-- mDisplayingDefer:" << mDisplayingDefer;
+        qDebug() << "-- mDisplayingEdit:" << mDisplayingEdit;
     }
-    kDebug() << "-- mRevision:" << mRevision;
-    kDebug() << "-- mRecurrence:" << mRecurrence;
+    qDebug() << "-- mRevision:" << mRevision;
+    qDebug() << "-- mRecurrence:" << mRecurrence;
     if (!mRepetition)
-        kDebug() << "-- mRepetition: 0";
+        qDebug() << "-- mRepetition: 0";
     else if (mRepetition.isDaily())
-        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalDays() << "days";
+        qDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalDays() << "days";
     else
-        kDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";
-    kDebug() << "-- mNextRepeat:" << mNextRepeat;
-    kDebug() << "-- mAlarmCount:" << mAlarmCount;
-    kDebug() << "-- mMainExpired:" << mMainExpired;
-    kDebug() << "-- mDisplaying:" << mDisplaying;
-    kDebug() << "KAEvent dump end";
+        qDebug() << "-- mRepetition: count:" << mRepetition.count() << ", interval:" << mRepetition.intervalMinutes() << "minutes";
+    qDebug() << "-- mNextRepeat:" << mNextRepeat;
+    qDebug() << "-- mAlarmCount:" << mAlarmCount;
+    qDebug() << "-- mMainExpired:" << mMainExpired;
+    qDebug() << "-- mDisplaying:" << mDisplaying;
+    qDebug() << "KAEvent dump end";
 }
 #endif
 
@@ -4472,7 +4472,7 @@ void KAEventPrivate::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMa
         else if (data.type == DISPLAYING_ALARM)
             data.displayingFlags = KAEvent::REPEAT_AT_LOGIN;
     }
-//kDebug()<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
+//qDebug()<<"text="<<alarm->text()<<", time="<<alarm->time().toString()<<", valid time="<<alarm->time().isValid();
 }
 
 /******************************************************************************
@@ -4608,7 +4608,7 @@ void KAEventPrivate::calcTriggerTimes() const
 */
 void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
 {
-    kDebug() << "next=" << nextTrigger.kDateTime().dateTime();
+    qDebug() << "next=" << nextTrigger.kDateTime().dateTime();
     mMainWorkTrigger = mAllWorkTrigger = DateTime();
 
     for (int i = 0;  ;  ++i)
@@ -4950,7 +4950,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime& nextTrigger) const
             }
             kdt = kdtRecur;
         }
-//kDebug()<<"-----exit loop: count="<<limit<<endl;
+//qDebug()<<"-----exit loop: count="<<limit<<endl;
         return;   // too many iterations
     }
 
@@ -5285,7 +5285,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
     if (calendarVersion >= currentCalendarVersion())
         return false;
 
-    kDebug() << "Adjusting version" << calendarVersion;
+    qDebug() << "Adjusting version" << calendarVersion;
     const bool pre_0_7    = (calendarVersion < Version(0,7,0));
     const bool pre_0_9    = (calendarVersion < Version(0,9,0));
     const bool pre_0_9_2  = (calendarVersion < Version(0,9,2));
