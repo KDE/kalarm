@@ -22,7 +22,7 @@
 
 #include "collectionattribute.h"
 
-#include <kdebug.h>
+#include <qdebug.h>
 
 namespace KAlarmCal
 {

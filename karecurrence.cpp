@@ -32,7 +32,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QBitArray>
 
