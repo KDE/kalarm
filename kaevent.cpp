@@ -42,7 +42,7 @@ using namespace KHolidays;
 #include <kconfiggroup.h>
 #endif
 #include <kglobal.h>
-#include <qdebug.h>
+#include <kdebug.h>
 
 #ifndef KALARMCAL_USE_KRESOURCES
 using namespace KCalCore;

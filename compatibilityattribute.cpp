@@ -22,7 +22,7 @@
 
 #include "compatibilityattribute.h"
 
-#include <qdebug.h>
+#include <kdebug.h>
 
 namespace KAlarmCal
 {
