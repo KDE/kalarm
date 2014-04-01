@@ -41,7 +41,7 @@
 
 #include <kglobal.h>
 #include <klocalizedstring.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QMap>
 #include <QFile>
