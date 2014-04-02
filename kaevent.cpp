@@ -2118,7 +2118,7 @@ void KAEventPrivate::setCommandError(KAEvent::CmdErrType error, bool writeConfig
     mCommandError = error;
     if (writeConfig)
     {
-        KConfigGroup config(KGlobal::config(), mCmdErrConfigGroup);
+        KConfigGroup config(KSharedConfig::openConfig(), mCmdErrConfigGroup);
         if (mCommandError == KAEvent::CMD_NO_ERROR)
             config.deleteEntry(mEventID);
         else
