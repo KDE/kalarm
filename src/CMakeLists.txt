@@ -48,7 +48,6 @@ generate_export_header(kalarmcal)
 file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h" "\n// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif\n")
 
 target_link_libraries(kalarmcal
-                      kcal
                       kholidays
                       kpimidentities
                       KF5::CoreAddons
