@@ -25,11 +25,7 @@
 
 #include "kalarmcal_export.h"
 
-#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/todo.h>
-#else
-namespace KCal { class Todo; }
-#endif
 #include <QtCore/QString>
 
 
@@ -87,17 +83,10 @@ class KALARMCAL_EXPORT AlarmText
         void setEmail(const QString& to, const QString& from, const QString& cc, const QString& time,
                       const QString& subject, const QString& body, unsigned long kmailSerialNumber = 0);
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Set the instance contents to be a todo.
          *  @param todo Todo instance to set as the text
          */
         void setTodo(const KCalCore::Todo::Ptr& todo);
-#else
-        /** Set the instance contents to be a todo.
-         *  @param todo Todo instance to set as the text
-         */
-        void setTodo(const KCal::Todo* todo);
-#endif
 
         /** Return the text for a text message alarm, in display format.
          *  - An email is returned as a sequence of headers followed by the message body.

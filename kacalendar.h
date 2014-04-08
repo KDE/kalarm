@@ -24,36 +24,24 @@
 #define KALARM_KACALENDAR_H
 
 #include "kalarmcal_export.h"
-#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/filestorage.h>
 #include <kcalcore/calendar.h>
 #include <kcalcore/event.h>
 #include <akonadi/collection.h>
-#endif
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>
 
-#ifndef KALARMCAL_USE_KRESOURCES
 namespace KCalCore {
   class Alarm;
 }
-#else
-namespace KCal {
-  class Event;
-  class Alarm;
-  class CalendarLocal;
-}
-#endif
 
 namespace KAlarmCal
 {
 
-#ifndef KALARMCAL_USE_KRESOURCES
 extern const QLatin1String KALARMCAL_EXPORT MIME_BASE;      //!< The base mime type for KAlarm alarms
 extern const QLatin1String KALARMCAL_EXPORT MIME_ACTIVE;    //!< The mime type for KAlarm active alarms
 extern const QLatin1String KALARMCAL_EXPORT MIME_ARCHIVED;  //!< The mime type for KAlarm archived alarms
 extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type for KAlarm alarm templates
-#endif
 
 /**
  * @short Class representing attributes of a KAlarm calendar.
@@ -66,7 +54,6 @@ extern const QLatin1String KALARMCAL_EXPORT MIME_TEMPLATE;  //!< The mime type f
  */
 namespace KACalendar
 {
-#ifndef KALARMCAL_USE_KRESOURCES
     /** Compatibility of resource backend calendar format. */
     enum Compatibility
     {
@@ -77,17 +64,6 @@ namespace KACalendar
         Incompatible = 0x08             //!< not written by KAlarm, or in a newer KAlarm version
     };
     Q_DECLARE_FLAGS(Compat, Compatibility)
-#else
-    /** Compatibility of resource calendar format. */
-    enum Compat
-    {
-        Current,       //!< in current KAlarm format
-        Converted,     //!< in current KAlarm format, but not yet saved
-        Convertible,   //!< in an older KAlarm format
-        Incompatible,  //!< not written by KAlarm, or in a newer KAlarm version
-        ByEvent        //!< individual events have their own compatibility status
-    };
-#endif
 
     /** Special calendar storage format version codes.
      *  Positive version values are actual KAlarm format version numbers.
@@ -95,9 +71,7 @@ namespace KACalendar
     enum
     {
         CurrentFormat      = 0,    //!< current KAlarm format
-#ifndef KALARMCAL_USE_KRESOURCES
         MixedFormat        = -2,   //!< calendar may contain more than one version
-#endif
         IncompatibleFormat = -1    //!< not written by KAlarm, or a newer KAlarm version
     };
 
@@ -114,18 +88,10 @@ namespace KACalendar
                                    unknown KAlarm format;
      *          >0 the older KAlarm version which wrote the calendar
      */
-#ifndef KALARMCAL_USE_KRESOURCES
     KALARMCAL_EXPORT int updateVersion(const KCalCore::FileStorage::Ptr&, QString& versionString);
-#else
-    KALARMCAL_EXPORT int updateVersion(KCal::CalendarLocal& calendar, const QString& localFile, QString& versionString);
-#endif
 
-#ifndef KALARMCAL_USE_KRESOURCES
     /** Set the KAlarm version custom property for a calendar. */
     KALARMCAL_EXPORT void setKAlarmVersion(const KCalCore::Calendar::Ptr&);
-#else
-    KALARMCAL_EXPORT void setKAlarmVersion(KCal::CalendarLocal&);
-#endif
 
     /** Set the program name and version for use in calendars. */
     KALARMCAL_EXPORT void setProductId(const QByteArray& progName, const QByteArray& progVersion);
@@ -163,7 +129,6 @@ namespace CalEvent
     Q_DECLARE_FLAGS(Types, Type)
 
     KALARMCAL_EXPORT QString uid(const QString& id, Type);
-#ifndef KALARMCAL_USE_KRESOURCES
     KALARMCAL_EXPORT Type    status(const KCalCore::Event::Ptr&, QString* param = 0);
     KALARMCAL_EXPORT void    setStatus(const KCalCore::Event::Ptr&, Type, const QString& param = QString());
 
@@ -175,10 +140,6 @@ namespace CalEvent
     KALARMCAL_EXPORT QString mimeType(Type);
     /** Return the mime type strings corresponding to alarm Types. */
     KALARMCAL_EXPORT QStringList mimeTypes(Types);
-#else
-    KALARMCAL_EXPORT Type    status(const KCal::Event*, QString* param = 0);
-    KALARMCAL_EXPORT void    setStatus(KCal::Event*, Type, const QString& param = QString());
-#endif
 } // namespace CalEvent
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(CalEvent::Types)

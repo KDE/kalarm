@@ -30,33 +30,19 @@
 #include "kacalendar.h"
 #include "repetition.h"
 
-#ifndef KALARMCAL_USE_KRESOURCES
 #include <akonadi/collection.h>
 #include <akonadi/item.h>
 #include <kcalcore/person.h>
 #include <kcalcore/calendar.h>
-#else
-#include <kcal/person.h>
-#endif
 
 #include <QtCore/QBitArray>
 #include <QColor>
 #include <QFont>
 #include <QtCore/QVector>
-#ifdef KALARMCAL_USE_KRESOURCES
-#include <QtCore/QList>
-#endif
 #include <QtCore/QSharedDataPointer>
 #include <QtCore/QMetaType>
 
 namespace KHolidays { class HolidayRegion; }
-#ifdef KALARMCAL_USE_KRESOURCES
-namespace KCal {
-    class CalendarLocal;
-    class Event;
-}
-class AlarmResource;
-#endif
 
 namespace KAlarmCal
 {
@@ -357,19 +343,11 @@ class KALARMCAL_EXPORT KAEvent
          */
         KAEvent(const KDateTime&, const QString& text, const QColor& bg, const QColor& fg,
                 const QFont& f, SubAction, int lateCancel, Flags flags, bool changesPending = false);
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Construct an event and initialise it from a KCalCore::Event. */
         explicit KAEvent(const KCalCore::Event::Ptr&);
 
         /** Initialise the instance from a KCalCore::Event. */
         void set(const KCalCore::Event::Ptr&);
-#else
-        /** Construct an event and initialise it from a KCal::Event. */
-        explicit KAEvent(const KCal::Event*);
-
-        /** Initialise the instance from a KCal::Event. */
-        void set(const KCal::Event*);
-#endif
 
         KAEvent(const KAEvent& other);
         ~KAEvent();
@@ -397,7 +375,6 @@ class KALARMCAL_EXPORT KAEvent
                  const QColor& fg, const QFont& font, SubAction action, int lateCancel,
                  Flags flags, bool changesPending = false);
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Update an existing KCalCore::Event with the KAEvent data.
          *  @param event  Event to update.
          *  @param u      how to deal with the Event's UID.
@@ -408,13 +385,6 @@ class KALARMCAL_EXPORT KAEvent
          *                             are left untouched.
          */
         bool updateKCalEvent(const KCalCore::Event::Ptr& event, UidAction u, bool setCustomProperties = true) const;
-#else
-        /** Update an existing KCal::Event with the KAEvent data.
-         *  @param event  Event to update.
-         *  @param u      how to deal with the Event's UID.
-         */
-        bool updateKCalEvent(KCal::Event* event, UidAction u) const;
-#endif
 
         /** Return whether the instance represents a valid event. */
         bool isValid() const;
@@ -424,12 +394,10 @@ class KALARMCAL_EXPORT KAEvent
         /** Return the enabled status of the alarm. */
         bool enabled() const;
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Set the read-only status of the alarm. */
         void setReadOnly(bool ro);
         /** Return the read-only status of the alarm. */
         bool isReadOnly() const;
-#endif
 
         /** Set the event to be archived when it expires or is deleted.
          *  Normally this is set when the event has triggered at least once.
@@ -470,7 +438,6 @@ class KALARMCAL_EXPORT KAEvent
         /** Return the revision number of the event (SEQUENCE property in iCalendar). */
         int revision() const;
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Set the ID of the Akonadi Collection which contains the event. */
         void setCollectionId(Akonadi::Collection::Id id);
         /** Set the ID of the Akonadi Collection which contains the event.
@@ -503,18 +470,6 @@ class KALARMCAL_EXPORT KAEvent
 
         /** Return the original KCalCore::Event's custom properties in the source calendar. */
         QMap<QByteArray, QString> customProperties() const;
-#else
-        /** Set the resource which owns this event.
-         *  Note that this is stored for convenience only - it is not used by this class.
-         *  @see resource()
-        */
-        void setResource(AlarmResource* r);
-
-        /** Get the resource which owns this event, as set by setResource().
-         *  Note that this is stored for convenience only - it is not used by this class.
-        */
-        AlarmResource* resource() const;
-#endif
 
         /** Return the action sub-type of the event's main alarm. For display alarms,
          *  this is MESSAGE or FILE, while other types of alarm simply return the
@@ -603,21 +558,8 @@ class KALARMCAL_EXPORT KAEvent
         bool commandXterm() const;
         /** Return whether the command output is to be displayed in an alarm message window. */
         bool commandDisplay() const;
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Set or clear the command execution error for the last time the alarm triggered. */
         void setCommandError(CmdErrType error) const;
-#else
-        /** Set or clear the command execution error for the last time the alarm triggered.
-         *  @param writeConfig  true to write the error status to the config file.
-         */
-        void setCommandError(CmdErrType error, bool writeConfig = true) const;
-        /** Initialise the last command error status of the alarm from the config file.
-         *  @param configString  the parameter read from the config file containing the command alarm error status.
-         */
-        void setCommandError(const QString& configString);
-        /** The config file group identifier containing command alarm error statuses. */
-        static QString commandErrorConfigGroup();
-#endif
         /** Return the command execution error for the last time the alarm triggered. */
         CmdErrType commandError() const;
 
@@ -636,13 +578,8 @@ class KALARMCAL_EXPORT KAEvent
         bool copyToKOrganizer() const;
 
         /** Set the email related data for the event. */
-#ifndef KALARMCAL_USE_KRESOURCES
         void setEmail(uint from, const KCalCore::Person::List&, const QString& subject,
                       const QStringList& attachments);
-#else
-        void setEmail(uint from, const QList<KCal::Person>&, const QString& subject,
-                      const QStringList& attachments);
-#endif
 
         /** Return the email message body, for an email alarm.
          *  @return email body, or empty if not an email alarm
@@ -655,11 +592,7 @@ class KALARMCAL_EXPORT KAEvent
         uint emailFromId() const;
 
         /** Return the list of email addressees, including names, for an email alarm. */
-#ifndef KALARMCAL_USE_KRESOURCES
         KCalCore::Person::List emailAddressees() const;
-#else
-        QList<KCal::Person> emailAddressees() const;
-#endif
 
         /** Return a list of the email addresses, including names, for an email alarm. */
         QStringList emailAddresses() const;
@@ -672,12 +605,7 @@ class KALARMCAL_EXPORT KAEvent
         /** Concatenate a list of email addresses into a string.
          *  @param sep  separator string to insert between addresses.
          */
-#ifndef KALARMCAL_USE_KRESOURCES
         static QString joinEmailAddresses(const KCalCore::Person::List& addresses, const QString& sep);
-#else
-        static QString joinEmailAddresses(const QList<KCal::Person>& addresses, const QString& sep);
-#endif
-
         /** Return the list of email addressees, excluding names, for an email alarm. */
         QStringList emailPureAddresses() const;
 
@@ -1150,11 +1078,7 @@ class KALARMCAL_EXPORT KAEvent
         /** Return the longest interval which can occur between consecutive recurrences.
          *  @see recurInterval()
          */
-#ifndef KALARMCAL_USE_KRESOURCES
         KCalCore::Duration longestRecurrenceInterval() const;
-#else
-        KCal::Duration longestRecurrenceInterval() const;
-#endif
 
         /** Adjust the event date/time to the first recurrence of the event, on or after
          *  the event start date/time. The event start date may not be a recurrence date,
@@ -1238,13 +1162,8 @@ class KALARMCAL_EXPORT KAEvent
          *  @param showDefer  whether the Defer button was displayed
          *  @return @c true if successful, @c false if alarm was not copied.
          */
-#ifndef KALARMCAL_USE_KRESOURCES
         bool setDisplaying(const KAEvent& event, KAAlarm::Type type, Akonadi::Collection::Id colId, const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer);
-#else
-        bool setDisplaying(const KAEvent& event, KAAlarm::Type type, const QString& resourceID, const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer);
-#endif
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Reinstate the original event from the 'displaying' event.
          *  This instance is initialised from the supplied displaying @p event,
          *  and appropriate adjustments are made to convert it back to the
@@ -1255,9 +1174,6 @@ class KALARMCAL_EXPORT KAEvent
          *  @param showDefer  updated to true if Defer button was displayed, else false
          */
         void reinstateFromDisplaying(const KCalCore::Event::Ptr& event, Akonadi::Collection::Id& colId, bool& showEdit, bool& showDefer);
-#else
-        void reinstateFromDisplaying(const KCal::Event* event, QString& resourceID, bool& showEdit, bool& showDefer);
-#endif
 
         /** Return the original alarm which the displaying alarm refers to.
          *  Note that the caller is responsible for ensuring that the event was
@@ -1345,16 +1261,10 @@ class KALARMCAL_EXPORT KAEvent
          *                          which does not require the adjustment.
          *  @return @c true if any conversions were done.
          */
-#ifndef KALARMCAL_USE_KRESOURCES
         static bool convertKCalEvents(const KCalCore::Calendar::Ptr&, int calendarVersion);
-#else
-        static bool convertKCalEvents(KCal::CalendarLocal&, int calendarVersion);
-#endif
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Return a list of pointers to a list of KAEvent objects. */
         static List ptrList(QVector<KAEvent>& events);
-#endif
 
         /** Output the event's data as debug output. */
         void dumpDebug() const;

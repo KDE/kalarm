@@ -22,13 +22,8 @@
 
 #include "karecurrence.h"
 
-#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/recurrence.h>
 #include <kcalcore/icalformat.h>
-#else
-#include <kcal/recurrence.h>
-#include <kcal/icalformat.h>
-#endif
 #include <kglobal.h>
 #include <klocale.h>
 #include <klocalizedstring.h>
@@ -36,12 +31,7 @@
 
 #include <QBitArray>
 
-#ifndef KALARMCAL_USE_KRESOURCES
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
-
 namespace KAlarmCal
 {
 

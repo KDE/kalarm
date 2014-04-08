@@ -23,12 +23,7 @@
 #include "repetition.h"
 #include <kdatetime.h>
 
-#ifndef KALARMCAL_USE_KRESOURCES
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
-
 namespace KAlarmCal
 {
 

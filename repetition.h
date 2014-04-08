@@ -24,11 +24,7 @@
 #define KALARM_REPETITION_H
 
 #include "kalarmcal_export.h"
-#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/duration.h>
-#else
-#include <kcal/duration.h>
-#endif
 
 class KDateTime;
 
@@ -52,17 +48,10 @@ class KALARMCAL_EXPORT Repetition
          */
         Repetition();
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Constructor.
          *  Initialises with the specified @p interval and @p count.
          */
         Repetition(const KCalCore::Duration& interval, int count);
-#else
-        /** Constructor.
-         *  Initialises with the specified @p interval and @p count.
-         */
-        Repetition(const KCal::Duration& interval, int count);
-#endif
 
         Repetition(const Repetition& other);
 
@@ -70,27 +59,13 @@ class KALARMCAL_EXPORT Repetition
 
         Repetition& operator=(const Repetition& other);
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Initialises the instance with the specified @p interval and @p count. */
         void set(const KCalCore::Duration& interval, int count);
-#else
-        /** Initialises the instance with the specified @p interval and @p count. */
-        void set(const KCal::Duration& interval, int count);
-#endif
-
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Sets the @p interval. The repetition count is unchanged unless
          *  The repetition count is set to zero if @p interval is zero; otherwise
          *  the repetition count is unchanged.
          */
         void set(const KCalCore::Duration& interval);
-#else
-        /** Sets the @p interval. The repetition count is unchanged unless
-         *  The repetition count is set to zero if @p interval is zero; otherwise
-         *  the repetition count is unchanged.
-         */
-        void set(const KCal::Duration& interval);
-#endif
 
         /** Returns whether a repetition is defined.
          *  @return true if a repetition is defined, false if not.
@@ -108,7 +83,6 @@ class KALARMCAL_EXPORT Repetition
         /** Return the number of repetitions. */
         int count() const;
 
-#ifndef KALARMCAL_USE_KRESOURCES
         /** Return the interval between repetitions. */
         KCalCore::Duration interval() const;
 
@@ -119,18 +93,6 @@ class KALARMCAL_EXPORT Repetition
          *  @param count the number of repetitions to find the duration of.
          */
         KCalCore::Duration duration(int count) const;
-#else
-        /** Return the interval between repetitions. */
-        KCal::Duration interval() const;
-
-        /** Return the overall duration of the repetition. */
-        KCal::Duration duration() const;
-
-        /** Return the overall duration of a specified number of repetitions.
-         *  @param count the number of repetitions to find the duration of.
-         */
-        KCal::Duration duration(int count) const;
-#endif
 
         /** Check whether the repetition interval is in terms of days (as opposed to minutes). */
         bool isDaily() const;

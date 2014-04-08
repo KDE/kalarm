@@ -26,29 +26,16 @@
 #include "identities.h"
 #include "version.h"
 
-#ifndef KALARMCAL_USE_KRESOURCES
 #include <kcalcore/memorycalendar.h>
-#else
-#include <kcal/calendarlocal.h>
-#endif
 #include <kholidays/holidays.h>
 using namespace KHolidays;
 
 #include <ksystemtimezone.h>
 #include <klocalizedstring.h>
-#ifdef KALARMCAL_USE_KRESOURCES
-#include <ksharedconfig.h>
-#include <kglobal.h>
-#include <kconfiggroup.h>
-#endif
 #include <kglobal.h>
 #include <qdebug.h>
 
-#ifndef KALARMCAL_USE_KRESOURCES
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
 using namespace KHolidays;
 
 namespace KAlarmCal
@@ -56,24 +43,13 @@ namespace KAlarmCal
 
 //=============================================================================
 
-#ifndef KALARMCAL_USE_KRESOURCES
 typedef KCalCore::Person  EmailAddress;
 class EmailAddressList : public KCalCore::Person::List
-#else
-typedef KCal::Person  EmailAddress;
-class EmailAddressList : public QList<KCal::Person>
-#endif
 {
     public:
-#ifndef KALARMCAL_USE_KRESOURCES
         EmailAddressList() : KCalCore::Person::List() { }
         EmailAddressList(const KCalCore::Person::List& list)  { operator=(list); }
         EmailAddressList& operator=(const KCalCore::Person::List&);
-#else
-        EmailAddressList() : QList<KCal::Person>() { }
-        EmailAddressList(const QList<KCal::Person>& list)  { operator=(list); }
-        EmailAddressList& operator=(const QList<KCal::Person>&);
-#endif
         operator QStringList() const;
         QString     join(const QString& separator) const;
         QStringList pureAddresses() const;
@@ -152,11 +128,7 @@ class KAEventPrivate : public QSharedData
 
         struct AlarmData
         {
-#ifndef KALARMCAL_USE_KRESOURCES
             Alarm::Ptr                  alarm;
-#else
-            const Alarm*                alarm;
-#endif
             QString                     cleanText;       // text or audio file name
             uint                        emailFromId;
             QFont                       font;
@@ -183,19 +155,11 @@ class KAEventPrivate : public QSharedData
         KAEventPrivate(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
                        const QFont& f, KAEvent::SubAction, int lateCancel, KAEvent::Flags flags,
                        bool changesPending = false);
-#ifndef KALARMCAL_USE_KRESOURCES
         explicit KAEventPrivate(const KCalCore::Event::Ptr&);
-#else
-        explicit KAEventPrivate(const KCal::Event*);
-#endif
         KAEventPrivate(const KAEventPrivate&);
         ~KAEventPrivate()         { delete mRecurrence; }
         KAEventPrivate&    operator=(const KAEventPrivate& e)       { if (&e != this) copy(e);  return *this; }
-#ifndef KALARMCAL_USE_KRESOURCES
         void               set(const KCalCore::Event::Ptr&);
-#else
-        void               set(const KCal::Event*);
-#endif
         void               set(const KDateTime&, const QString& message, const QColor& bg, const QColor& fg,
                                const QFont&, KAEvent::SubAction, int lateCancel, KAEvent::Flags flags,
                                bool changesPending = false);
@@ -209,26 +173,15 @@ class KAEventPrivate : public QSharedData
         void               activateReminderAfter(const DateTime& mainAlarmTime);
         void               defer(const DateTime&, bool reminder, bool adjustRecurrence = false);
         void               cancelDefer();
-#ifndef KALARMCAL_USE_KRESOURCES
         bool               setDisplaying(const KAEventPrivate&, KAAlarm::Type, Akonadi::Collection::Id, const KDateTime& dt, bool showEdit, bool showDefer);
         void               reinstateFromDisplaying(const KCalCore::Event::Ptr&, Akonadi::Collection::Id&, bool& showEdit, bool& showDefer);
-#else
-        bool               setDisplaying(const KAEventPrivate&, KAAlarm::Type, const QString& resourceID, const KDateTime& dt, bool showEdit, bool showDefer);
-        void               reinstateFromDisplaying(const KCal::Event*, QString& resourceID, bool& showEdit, bool& showDefer);
-        void               setCommandError(const QString& configString);
-        void               setCommandError(KAEvent::CmdErrType, bool writeConfig) const;
-#endif
         void               startChanges()                 { ++mChangeCount; }
         void               endChanges();
         void               removeExpiredAlarm(KAAlarm::Type);
         KAAlarm            alarm(KAAlarm::Type) const;
         KAAlarm            firstAlarm() const;
         KAAlarm            nextAlarm(KAAlarm::Type) const;
-#ifndef KALARMCAL_USE_KRESOURCES
         bool               updateKCalEvent(const KCalCore::Event::Ptr&, KAEvent::UidAction, bool setCustomProperties = true) const;
-#else
-        bool               updateKCalEvent(KCal::Event*, KAEvent::UidAction) const;
-#endif
         DateTime           mainDateTime(bool withRepeats = false) const
                                    { return (withRepeats && mNextRepeat && mRepetition)
                                             ? mRepetition.duration(mNextRepeat).end(mNextMainDateTime.kDateTime()) : mNextMainDateTime; }
@@ -242,13 +195,8 @@ class KAEventPrivate : public QSharedData
         KAEvent::OccurType nextOccurrence(const KDateTime& preDateTime, DateTime& result, KAEvent::OccurOption = KAEvent::IGNORE_REPETITION) const;
         KAEvent::OccurType previousOccurrence(const KDateTime& afterDateTime, DateTime& result, bool includeRepetitions = false) const;
         void               setRecurrence(const KARecurrence&);
-#ifndef KALARMCAL_USE_KRESOURCES
         bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
         bool               setRecur(KCalCore::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
-#else
-        bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const QDate& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
-        bool               setRecur(KCal::RecurrenceRule::PeriodType, int freq, int count, const KDateTime& end, KARecurrence::Feb29Type = KARecurrence::Feb29_None);
-#endif
         KARecurrence::Type checkRecur() const;
         void               clearRecur();
         void               calcTriggerTimes() const;
@@ -257,20 +205,11 @@ class KAEventPrivate : public QSharedData
 #else
         void               dumpDebug() const;
 #endif
-#ifndef KALARMCAL_USE_KRESOURCES
         static bool        convertRepetition(const KCalCore::Event::Ptr&);
         static bool        convertStartOfDay(const KCalCore::Event::Ptr&);
         static DateTime    readDateTime(const KCalCore::Event::Ptr&, bool dateOnly, DateTime& start);
         static void        readAlarms(const KCalCore::Event::Ptr&, void* alarmMap, bool cmdDisplay = false);
         static void        readAlarm(const KCalCore::Alarm::Ptr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
-#else
-        static bool        convertRepetition(KCal::Event*);
-        static bool        convertStartOfDay(KCal::Event*);
-        static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
-        static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
-        static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
-#endif
-
     private:
         void               copy(const KAEventPrivate&);
         bool               mayOccurDailyDuringWork(const KDateTime&) const;
@@ -278,31 +217,19 @@ class KAEventPrivate : public QSharedData
         void               calcNextWorkingTime(const DateTime& nextTrigger) const;
         DateTime           nextWorkingTime() const;
         KAEvent::OccurType nextRecurrence(const KDateTime& preDateTime, DateTime& result) const;
-#ifndef KALARMCAL_USE_KRESOURCES
         void               setAudioAlarm(const KCalCore::Alarm::Ptr&) const;
         KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr&, const DateTime&, const QStringList& types, AlarmType = INVALID_ALARM) const;
         KCalCore::Alarm::Ptr initKCalAlarm(const KCalCore::Event::Ptr&, int startOffsetSecs, const QStringList& types, AlarmType = INVALID_ALARM) const;
-#else
-        void               setAudioAlarm(KCal::Alarm*) const;
-        KCal::Alarm*       initKCalAlarm(KCal::Event*, const DateTime&, const QStringList& types, AlarmType = INVALID_ALARM) const;
-        KCal::Alarm*       initKCalAlarm(KCal::Event*, int startOffsetSecs, const QStringList& types, AlarmType = INVALID_ALARM) const;
-#endif
         inline void        set_deferral(DeferType);
         inline void        activate_reminder(bool activate);
 
     public:
-#ifdef KALARMCAL_USE_KRESOURCES
-        static QString     mCmdErrConfigGroup; // config file group for command error recording
-#endif
         static QFont       mDefaultFont;       // default alarm message font
         static const KHolidays::HolidayRegion* mHolidays;  // holiday region to use
         static QBitArray   mWorkDays;          // working days of the week
         static QTime       mWorkDayStart;      // start time of the working day
         static QTime       mWorkDayEnd;        // end time of the working day
         static int         mWorkTimeIndex;     // incremented every time working days/times are changed
-#ifdef KALARMCAL_USE_KRESOURCES
-        AlarmResource*     mResource;          // resource which owns the event (for convenience - not used by this class)
-#endif
         mutable DateTime   mAllTrigger;        // next trigger time, including reminders, ignoring working hours
         mutable DateTime   mMainTrigger;       // next trigger time, ignoring reminders and working hours
         mutable DateTime   mAllWorkTrigger;    // next trigger time, taking account of reminders and working hours
@@ -311,14 +238,10 @@ class KAEventPrivate : public QSharedData
 
         QString            mEventID;           // UID: KCal::Event unique ID
         QString            mTemplateName;      // alarm template's name, or null if normal event
-#ifndef KALARMCAL_USE_KRESOURCES
         QMap<QByteArray, QString> mCustomProperties;  // KCal::Event's non-KAlarm custom properties
         Akonadi::Item::Id  mItemId;            // Akonadi::Item ID for this event
         mutable Akonadi::Collection::Id mCollectionId; // ID of collection containing the event, or for a displaying event,
                                                // saved collection ID (not the collection the event is in)
-#else
-        QString            mOriginalResourceId;// saved resource ID (not the resource the event is in)
-#endif
         QString            mText;              // message text, file URL, command, email body [or audio file for KAAlarm]
         QString            mAudioFile;         // ATTACH: audio file to play
         QString            mPreAction;         // command to execute before alarm is displayed
@@ -364,10 +287,8 @@ class KAEventPrivate : public QSharedData
         KAEvent::SubAction mActionSubType;     // sub-action type for the event's main alarm
         CalEvent::Type     mCategory;      // event category (active, archived, template, ...)
         KAEvent::ExtraActionOptions mExtraActionOptions;// options for pre- or post-alarm actions
-#ifndef KALARMCAL_USE_KRESOURCES
         KACalendar::Compat mCompatibility; // event's storage format compatibility
         bool               mReadOnly;          // event is read-only in its original calendar file
-#endif
         bool               mConfirmAck;        // alarm acknowledgement requires confirmation by user
         bool               mUseDefaultFont;    // use default message font, not mFont
         bool               mCommandScript;     // the command text is a script, not a shell command line
@@ -503,9 +424,6 @@ const QString    KAEventPrivate::DISP_DEFER = QLatin1String("DEFER");
 const QString    KAEventPrivate::DISP_EDIT  = QLatin1String("EDIT");
 
 // Command error strings
-#ifdef KALARMCAL_USE_KRESOURCES
-QString          KAEventPrivate::mCmdErrConfigGroup = QLatin1String("CommandErrors");
-#endif
 const QString    KAEventPrivate::CMD_ERROR_VALUE      = QLatin1String("MAIN");
 const QString    KAEventPrivate::CMD_ERROR_PRE_VALUE  = QLatin1String("PRE");
 const QString    KAEventPrivate::CMD_ERROR_POST_VALUE = QLatin1String("POST");
@@ -519,11 +437,7 @@ QTime                           KAEventPrivate::mWorkDayStart(9, 0, 0);
 QTime                           KAEventPrivate::mWorkDayEnd(17, 0, 0);
 int                             KAEventPrivate::mWorkTimeIndex = 1;
 
-#ifndef KALARMCAL_USE_KRESOURCES
 static void setProcedureAlarm(const Alarm::Ptr&, const QString& commandLine);
-#else
-static void setProcedureAlarm(Alarm*, const QString& commandLine);
-#endif
 static QString reminderToString(int minutes);
 
 /*=============================================================================
@@ -571,14 +485,9 @@ KAEvent::KAEvent()
 
 KAEventPrivate::KAEventPrivate()
     :
-#ifdef KALARMCAL_USE_KRESOURCES
-      mResource(0),
-#endif
       mCommandError(KAEvent::CMD_NO_ERROR),
-#ifndef KALARMCAL_USE_KRESOURCES
       mItemId(-1),
       mCollectionId(-1),
-#endif
       mReminderMinutes(0),
       mReminderActive(NO_REMINDER),
       mRevision(0),
@@ -592,10 +501,8 @@ KAEventPrivate::KAEventPrivate()
       mExcludeHolidays(0),
       mWorkTimeOnly(0),
       mCategory(CalEvent::EMPTY),
-#ifndef KALARMCAL_USE_KRESOURCES
       mCompatibility(KACalendar::Current),
       mReadOnly(false),
-#endif
       mConfirmAck(false),
       mEmailBcc(false),
       mBeep(false),
@@ -617,20 +524,12 @@ KAEventPrivate::KAEventPrivate(const KDateTime& dt, const QString& message, cons
     set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending);
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 KAEvent::KAEvent(const Event::Ptr& e)
-#else
-KAEvent::KAEvent(const Event* e)
-#endif
     : d(new KAEventPrivate(e))
 {
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 KAEventPrivate::KAEventPrivate(const Event::Ptr& e)
-#else
-KAEventPrivate::KAEventPrivate(const Event* e)
-#endif
     : mRecurrence(0)
 {
     set(e);
@@ -662,9 +561,6 @@ KAEvent& KAEvent::operator=(const KAEvent& other)
 */
 void KAEventPrivate::copy(const KAEventPrivate& event)
 {
-#ifdef KALARMCAL_USE_KRESOURCES
-    mResource                = event.mResource;
-#endif
     mAllTrigger              = event.mAllTrigger;
     mMainTrigger             = event.mMainTrigger;
     mAllWorkTrigger          = event.mAllWorkTrigger;
@@ -672,13 +568,9 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
     mCommandError            = event.mCommandError;
     mEventID                 = event.mEventID;
     mTemplateName            = event.mTemplateName;
-#ifndef KALARMCAL_USE_KRESOURCES
     mCustomProperties        = event.mCustomProperties;
     mItemId                  = event.mItemId;
     mCollectionId            = event.mCollectionId;
-#else
-    mOriginalResourceId      = event.mOriginalResourceId;
-#endif
     mText                    = event.mText;
     mAudioFile               = event.mAudioFile;
     mPreAction               = event.mPreAction;
@@ -720,10 +612,8 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
     mActionSubType           = event.mActionSubType;
     mCategory                = event.mCategory;
     mExtraActionOptions      = event.mExtraActionOptions;
-#ifndef KALARMCAL_USE_KRESOURCES
     mCompatibility           = event.mCompatibility;
     mReadOnly                = event.mReadOnly;
-#endif
     mConfirmAck              = event.mConfirmAck;
     mUseDefaultFont          = event.mUseDefaultFont;
     mCommandScript           = event.mCommandScript;
@@ -752,11 +642,7 @@ void KAEventPrivate::copy(const KAEventPrivate& event)
         mRecurrence = 0;
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEvent::set(const Event::Ptr& e)
-#else
-void KAEvent::set(const Event* e)
-#endif
 {
     d->set(e);
 }
@@ -764,28 +650,16 @@ void KAEvent::set(const Event* e)
 /******************************************************************************
 * Initialise the KAEventPrivate from a KCal::Event.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEventPrivate::set(const Event::Ptr& event)
-#else
-void KAEventPrivate::set(const Event* event)
-#endif
-{
     startChanges();
     // Extract status from the event
     mCommandError           = KAEvent::CMD_NO_ERROR;
-#ifdef KALARMCAL_USE_KRESOURCES
-    mResource               = 0;
-#endif
     mEventID                = event->uid();
     mRevision               = event->revision();
     mTemplateName.clear();
     mLogFile.clear();
-#ifndef KALARMCAL_USE_KRESOURCES
     mItemId                 = -1;
     mCollectionId           = -1;
-#else
-    mOriginalResourceId.clear();
-#endif
     mTemplateAfterTime      = -1;
     mBeep                   = false;
     mSpeak                  = false;
@@ -811,10 +685,8 @@ void KAEventPrivate::set(const Event* event)
     mChangeCount            = 0;
     mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
     mFgColour               = QColor(0, 0, 0);          // and black foreground
-#ifndef KALARMCAL_USE_KRESOURCES
     mCompatibility          = KACalendar::Current;
     mReadOnly               = event->isReadOnly();
-#endif
     mUseDefaultFont         = true;
     mEnabled                = true;
     clearRecur();
@@ -828,13 +700,9 @@ void KAEventPrivate::set(const Event* event)
         int n = params.count();
         if (n)
         {
-#ifndef KALARMCAL_USE_KRESOURCES
             const qlonglong id = params[0].toLongLong(&ok);
             if (ok)
                 mCollectionId = id;   // original collection ID which contained the event
-#else
-            mOriginalResourceId = params[0];
-#endif
             for (int i = 1;  i < n;  ++i)
             {
                 if (params[i] == DISP_DEFER)
@@ -844,7 +712,6 @@ void KAEventPrivate::set(const Event* event)
             }
         }
     }
-#ifndef KALARMCAL_USE_KRESOURCES
     // Store the non-KAlarm custom properties of the event
     const QByteArray kalarmKey = "X-KDE-" + KACalendar::APPNAME + '-';
     mCustomProperties = event->customProperties();
@@ -855,7 +722,6 @@ void KAEventPrivate::set(const Event* event)
         else
             ++it;
     }
-#endif
 
     bool dateOnly = false;
     QStringList flags = event->customProperty(KACalendar::APPNAME, FLAGS_PROPERTY).split(SC, QString::SkipEmptyParts);
@@ -980,11 +846,7 @@ void KAEventPrivate::set(const Event* event)
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
     if (mCategory == CalEvent::TEMPLATE)
         mTemplateName = event->summary();
-#ifndef KALARMCAL_USE_KRESOURCES
     if (event->customStatus() == DISABLED_STATUS)
-#else
-    if (event->statusStr() == DISABLED_STATUS)
-#endif
         mEnabled = false;
 
     // Extract status from the event's alarms.
@@ -1257,13 +1119,8 @@ void KAEventPrivate::set(const KDateTime& dateTime, const QString& text, const Q
     }
     mEventID.clear();
     mTemplateName.clear();
-#ifndef KALARMCAL_USE_KRESOURCES
     mItemId                 = -1;
     mCollectionId           = -1;
-#else
-    mResource               = 0;
-    mOriginalResourceId.clear();
-#endif
     mPreAction.clear();
     mPostAction.clear();
     mText                   = (mActionSubType == KAEvent::COMMAND) ? text.trimmed()
@@ -1319,10 +1176,8 @@ void KAEventPrivate::set(const KDateTime& dateTime, const QString& text, const Q
     mArchive                = false;
     mReminderAfterTime      = DateTime();
     mExtraActionOptions     = 0;
-#ifndef KALARMCAL_USE_KRESOURCES
     mCompatibility          = KACalendar::Current;
     mReadOnly               = false;
-#endif
     mCommandError           = KAEvent::CMD_NO_ERROR;
     mChangeCount            = changesPending ? 1 : 0;
     mTriggerChanged         = true;
@@ -1334,24 +1189,12 @@ void KAEventPrivate::set(const KDateTime& dateTime, const QString& text, const Q
 * properties are cleared and replaced with the KAEvent's custom properties. If
 * false, the KCal::Event's non-KAlarm custom properties are left untouched.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 bool KAEvent::updateKCalEvent(const KCalCore::Event::Ptr& e, UidAction u, bool setCustomProperties) const
 {
     return d->updateKCalEvent(e, u, setCustomProperties);
 }
 
-#else
-bool KAEvent::updateKCalEvent(KCal::Event* e, UidAction u) const
-{
-    return d->updateKCalEvent(e, u);
-}
-#endif
-
-#ifndef KALARMCAL_USE_KRESOURCES
 bool KAEventPrivate::updateKCalEvent(const Event::Ptr& ev, KAEvent::UidAction uidact, bool setCustomProperties) const
-#else
-bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
-#endif
 {
     // If it's an archived event, the event start date/time will be adjusted to its original
     // value instead of its next occurrence, and the expired main alarm will be reinstated.
@@ -1367,20 +1210,14 @@ bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
     const bool readOnly = ev->isReadOnly();
     if (uidact == KAEvent::UID_SET)
         ev->setUid(mEventID);
-#ifndef KALARMCAL_USE_KRESOURCES
     ev->setReadOnly(mReadOnly);
-#else
-    ev->setReadOnly(false);
-#endif
     ev->setTransparency(Event::Transparent);
 
     // Set up event-specific data
 
     // Set up custom properties.
-#ifndef KALARMCAL_USE_KRESOURCES
     if (setCustomProperties)
         ev->setCustomProperties(mCustomProperties);
-#endif
     ev->removeCustomProperty(KACalendar::APPNAME, FLAGS_PROPERTY);
     ev->removeCustomProperty(KACalendar::APPNAME, NEXT_RECUR_PROPERTY);
     ev->removeCustomProperty(KACalendar::APPNAME, REPEAT_PROPERTY);
@@ -1389,21 +1226,13 @@ bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
     QString param;
     if (mCategory == CalEvent::DISPLAYING)
     {
-#ifndef KALARMCAL_USE_KRESOURCES
         param = QString::number(mCollectionId);   // original collection ID which contained the event
-#else
-        param = mOriginalResourceId;
-#endif
         if (mDisplayingDefer)
             param += SC + DISP_DEFER;
         if (mDisplayingEdit)
             param += SC + DISP_EDIT;
     }
-#ifndef KALARMCAL_USE_KRESOURCES
     CalEvent::setStatus(ev, mCategory, param);
-#else
-    CalEvent::setStatus(ev, mCategory, param);
-#endif
     QStringList flags;
     if (mStartDateTime.isDateOnly())
         flags += DATE_ONLY_FLAG;
@@ -1652,30 +1481,18 @@ bool KAEventPrivate::updateKCalEvent(Event* ev, KAEvent::UidAction uidact) const
 * NOTE: The variant taking a DateTime calculates the offset from mStartDateTime,
 *       which is not suitable for an alarm in a recurring event.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr& event, const DateTime& dt, const QStringList& types, AlarmType type) const
-#else
-Alarm* KAEventPrivate::initKCalAlarm(Event* event, const DateTime& dt, const QStringList& types, AlarmType type) const
-#endif
 {
     const int startOffset = dt.isDateOnly() ? mStartDateTime.secsTo(dt)
                                       : mStartDateTime.calendarKDateTime().secsTo(dt.calendarKDateTime());
     return initKCalAlarm(event, startOffset, types, type);
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr& event, int startOffsetSecs, const QStringList& types, AlarmType type) const
-#else
-Alarm* KAEventPrivate::initKCalAlarm(Event* event, int startOffsetSecs, const QStringList& types, AlarmType type) const
-#endif
 {
     QStringList alltypes;
     QStringList flags;
-#ifndef KALARMCAL_USE_KRESOURCES
     Alarm::Ptr alarm = event->newAlarm();
-#else
-    Alarm* alarm = event->newAlarm();
-#endif
     alarm->setEnabled(true);
     if (type != MAIN_ALARM)
     {
@@ -1795,7 +1612,6 @@ bool KAEvent::enabled() const
     return d->mEnabled;
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEvent::setReadOnly(bool ro)
 {
     d->mReadOnly = ro;
@@ -1805,7 +1621,6 @@ bool KAEvent::isReadOnly() const
 {
     return d->mReadOnly;
 }
-#endif
 
 void KAEvent::setArchive()
 {
@@ -1899,7 +1714,6 @@ int KAEvent::revision() const
     return d->mRevision;
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEvent::setCollectionId(Akonadi::Collection::Id id)
 {
     d->mCollectionId = id;
@@ -1963,18 +1777,6 @@ QMap<QByteArray, QString> KAEvent::customProperties() const
 {
     return d->mCustomProperties;
 }
-
-#else
-void KAEvent::setResource(AlarmResource* r)
-{
-    d->mResource = r;
-}
-
-AlarmResource* KAEvent::resource() const
-{
-    return d->mResource;
-}
-#endif
 
 KAEvent::SubAction KAEvent::actionSubType() const
 {
@@ -2094,81 +1896,10 @@ bool KAEvent::commandDisplay() const
     return d->mCommandDisplay;
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEvent::setCommandError(CmdErrType t) const
 {
     d->mCommandError = t;
 }
-
-#else
-/******************************************************************************
-* Set the command last error status.
-* If 'writeConfig' is true, the status is written to the config file.
-*/
-void KAEvent::setCommandError(CmdErrType t, bool writeConfig) const
-{
-    d->setCommandError(t, writeConfig);
-}
-
-void KAEventPrivate::setCommandError(KAEvent::CmdErrType error, bool writeConfig) const
-{
-    qDebug() << mEventID << "," << error;
-    if (error == mCommandError)
-        return;
-    mCommandError = error;
-    if (writeConfig)
-    {
-        KConfigGroup config(KSharedConfig::openConfig(), mCmdErrConfigGroup);
-        if (mCommandError == KAEvent::CMD_NO_ERROR)
-            config.deleteEntry(mEventID);
-        else
-        {
-            QString errtext;
-            switch (mCommandError)
-            {
-                case KAEvent::CMD_ERROR:       errtext = CMD_ERROR_VALUE;  break;
-                case KAEvent::CMD_ERROR_PRE:   errtext = CMD_ERROR_PRE_VALUE;  break;
-                case KAEvent::CMD_ERROR_POST:  errtext = CMD_ERROR_POST_VALUE;  break;
-                case KAEvent::CMD_ERROR_PRE_POST:
-                    errtext = CMD_ERROR_PRE_VALUE + ',' + CMD_ERROR_POST_VALUE;
-                    break;
-                default:
-                    break;
-            }
-            config.writeEntry(mEventID, errtext);
-        }
-        config.sync();
-    }
-}
-
-/******************************************************************************
-* Initialise the command last error status of the alarm from the config file.
-*/
-void KAEvent::setCommandError(const QString& configString)
-{
-    d->setCommandError(configString);
-}
-
-void KAEventPrivate::setCommandError(const QString& configString)
-{
-    mCommandError = KAEvent::CMD_NO_ERROR;
-    const QStringList errs = configString.split(',');
-    if (errs.indexOf(CMD_ERROR_VALUE) >= 0)
-        mCommandError = KAEvent::CMD_ERROR;
-    else
-    {
-        if (errs.indexOf(CMD_ERROR_PRE_VALUE) >= 0)
-            mCommandError = KAEvent::CMD_ERROR_PRE;
-        if (errs.indexOf(CMD_ERROR_POST_VALUE) >= 0)
-            mCommandError = static_cast<KAEvent::CmdErrType>(mCommandError | KAEvent::CMD_ERROR_POST);
-    }
-}
-
-QString KAEvent::commandErrorConfigGroup()
-{
-    return KAEventPrivate::mCmdErrConfigGroup;
-}
-#endif
 
 KAEvent::CmdErrType KAEvent::commandError() const
 {
@@ -2197,13 +1928,8 @@ bool KAEvent::copyToKOrganizer() const
     return d->mCopyToKOrganizer;
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEvent::setEmail(uint from, const KCalCore::Person::List& addresses, const QString& subject,
                       const QStringList& attachments)
-#else
-void KAEvent::setEmail(uint from, const QList<KCal::Person>& addresses, const QString& subject,
-                      const QStringList& attachments)
-#endif
 {
     d->mEmailFromIdentity = from;
     d->mEmailAddresses    = addresses;
@@ -2221,11 +1947,7 @@ uint KAEvent::emailFromId() const
     return d->mEmailFromIdentity;
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 KCalCore::Person::List KAEvent::emailAddressees() const
-#else
-QList<KCal::Person> KAEvent::emailAddressees() const
-#endif
 {
     return d->mEmailAddresses;
 }
@@ -2240,11 +1962,7 @@ QString KAEvent::emailAddresses(const QString& sep) const
     return d->mEmailAddresses.join(sep);
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 QString KAEvent::joinEmailAddresses(const KCalCore::Person::List& addresses, const QString& separator)
-#else
-QString KAEvent::joinEmailAddresses(const QList<KCal::Person>& addresses, const QString& separator)
-#endif
 {
     return EmailAddressList(addresses).join(separator);
 }
@@ -3659,22 +3377,13 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KDateTime& afterDate
 * saved in case their end time expires before the next login.
 * Reply = true if successful, false if alarm was not copied.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 bool KAEvent::setDisplaying(const KAEvent& e, KAAlarm::Type t, Akonadi::Collection::Id id, const KDateTime& dt, bool showEdit, bool showDefer)
-#else
-bool KAEvent::setDisplaying(const KAEvent& e, KAAlarm::Type t, const QString& id, const KDateTime& dt, bool showEdit, bool showDefer)
-#endif
 {
     return d->setDisplaying(*e.d, t, id, dt, showEdit, showDefer);
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type alarmType, Akonadi::Collection::Id collectionId,
                                    const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
-#else
-bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type alarmType, const QString& resourceID,
-                                   const KDateTime& repeatAtLoginTime, bool showEdit, bool showDefer)
-#endif
 {
     if (!mDisplaying
     &&  (alarmType == KAAlarm::MAIN_ALARM
@@ -3690,12 +3399,8 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
             *this = event;
             // Change the event ID to avoid duplicating the same unique ID as the original event
             setCategory(CalEvent::DISPLAYING);
-#ifndef KALARMCAL_USE_KRESOURCES
             mItemId             = -1;    // the display event doesn't have an associated Item
             mCollectionId       = collectionId;  // original collection ID which contained the event
-#else
-            mOriginalResourceId = resourceID;
-#endif
             mDisplayingDefer    = showDefer;
             mDisplayingEdit     = showEdit;
             mDisplaying         = true;
@@ -3718,33 +3423,20 @@ bool KAEventPrivate::setDisplaying(const KAEventPrivate& event, KAAlarm::Type al
 /******************************************************************************
 * Reinstate the original event from the 'displaying' event.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEvent::reinstateFromDisplaying(const KCalCore::Event::Ptr& e, Akonadi::Collection::Id& id, bool& showEdit, bool& showDefer)
-#else
-void KAEvent::reinstateFromDisplaying(const KCal::Event* e, QString& id, bool& showEdit, bool& showDefer)
-#endif
 {
     d->reinstateFromDisplaying(e, id, showEdit, showDefer);
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEventPrivate::reinstateFromDisplaying(const Event::Ptr& kcalEvent, Akonadi::Collection::Id& collectionId, bool& showEdit, bool& showDefer)
-#else
-void KAEventPrivate::reinstateFromDisplaying(const Event* kcalEvent, QString& resourceID, bool& showEdit, bool& showDefer)
-#endif
 {
     set(kcalEvent);
     if (mDisplaying)
     {
         // Retrieve the original event's unique ID
         setCategory(CalEvent::ACTIVE);
-#ifndef KALARMCAL_USE_KRESOURCES
         collectionId = mCollectionId;
         mCollectionId = -1;
-#else
-        resourceID   = mOriginalResourceId;
-        mOriginalResourceId.clear();
-#endif
         showDefer    = mDisplayingDefer;
         showEdit     = mDisplayingEdit;
         mDisplaying  = false;
@@ -4024,7 +3716,6 @@ void KAEventPrivate::endChanges()
         --mChangeCount;
 }
 
-#ifndef KALARMCAL_USE_KRESOURCES
 /******************************************************************************
 * Return a list of pointers to KAEvent objects.
 */
@@ -4035,7 +3726,6 @@ KAEvent::List KAEvent::ptrList(QVector<KAEvent>& objList)
         ptrs += &objList[i];
     return ptrs;
 }
-#endif
 
 void KAEvent::dumpDebug() const
 {
@@ -4048,9 +3738,6 @@ void KAEvent::dumpDebug() const
 void KAEventPrivate::dumpDebug() const
 {
     qDebug() << "KAEvent dump:";
-#ifdef KALARMCAL_USE_KRESOURCES
-    if (mResource) { qDebug() << "-- mResource:" << (void*)mResource; }
-#endif
     qDebug() << "-- mEventID:" << mEventID;
     qDebug() << "-- mActionSubType:" << (mActionSubType == KAEvent::MESSAGE ? "MESSAGE" : mActionSubType == KAEvent::FILE ? "FILE" : mActionSubType == KAEvent::COMMAND ? "COMMAND" : mActionSubType == KAEvent::EMAIL ? "EMAIL" : mActionSubType == KAEvent::AUDIO ? "AUDIO" : "??");
     qDebug() << "-- mNextMainDateTime:" << mNextMainDateTime.toString();
@@ -4130,12 +3817,10 @@ void KAEventPrivate::dumpDebug() const
     qDebug() << "-- mArchiveRepeatAtLogin:" << mArchiveRepeatAtLogin;
     qDebug() << "-- mConfirmAck:" << mConfirmAck;
     qDebug() << "-- mEnabled:" << mEnabled;
-#ifndef KALARMCAL_USE_KRESOURCES
     qDebug() << "-- mItemId:" << mItemId;
     qDebug() << "-- mCollectionId:" << mCollectionId;
     qDebug() << "-- mCompatibility:" << mCompatibility;
     qDebug() << "-- mReadOnly:" << mReadOnly;
-#endif
     if (mReminderMinutes)
     {
         qDebug() << "-- mReminderMinutes:" << mReminderMinutes;
@@ -4177,11 +3862,7 @@ void KAEventPrivate::dumpDebug() const
 * Fetch the start and next date/time for a KCal::Event.
 * Reply = next main date/time.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 DateTime KAEventPrivate::readDateTime(const Event::Ptr& event, bool dateOnly, DateTime& start)
-#else
-DateTime KAEventPrivate::readDateTime(const Event* event, bool dateOnly, DateTime& start)
-#endif
 {
     start = event->dtStart();
     if (dateOnly)
@@ -4220,11 +3901,7 @@ DateTime KAEventPrivate::readDateTime(const Event* event, bool dateOnly, DateTim
 * Parse the alarms for a KCal::Event.
 * Reply = map of alarm data, indexed by KAAlarm::Type
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEventPrivate::readAlarms(const Event::Ptr& event, void* almap, bool cmdDisplay)
-#else
-void KAEventPrivate::readAlarms(const Event* event, void* almap, bool cmdDisplay)
-#endif
 {
     AlarmMap* alarmMap = (AlarmMap*)almap;
     const Alarm::List alarms = event->alarms();
@@ -4263,11 +3940,7 @@ void KAEventPrivate::readAlarms(const Event* event, void* almap, bool cmdDisplay
 * If 'audioMain' is true, the event contains an audio alarm but no display alarm.
 * Reply = alarm ID (sequence number)
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEventPrivate::readAlarm(const Alarm::Ptr& alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
-#else
-void KAEventPrivate::readAlarm(const Alarm* alarm, AlarmData& data, bool audioMain, bool cmdDisplay)
-#endif
 {
     // Parse the next alarm's text
     data.alarm            = alarm;
@@ -5143,11 +4816,7 @@ bool KAEventPrivate::mayOccurDailyDuringWork(const KDateTime& kdt) const
 /******************************************************************************
 * Set the specified alarm to be an audio alarm with the given file name.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 void KAEventPrivate::setAudioAlarm(const Alarm::Ptr& alarm) const
-#else
-void KAEventPrivate::setAudioAlarm(Alarm* alarm) const
-#endif
 {
     alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
     if (mSoundVolume >= 0)
@@ -5220,11 +4889,7 @@ KARecurrence::Type KAEventPrivate::checkRecur() const
 * is saved, no information is lost or corrupted.
 * Reply = true if any conversions were done.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 bool KAEvent::convertKCalEvents(const Calendar::Ptr& calendar, int calendarVersion)
-#else
-bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
-#endif
 {
     // KAlarm pre-0.9 codes held in the alarm's DESCRIPTION property
     static const QChar   SEPARATOR        = QLatin1Char(';');
@@ -5311,18 +4976,10 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
         localZone = KSystemTimeZones::local();
 
     bool converted = false;
-#ifndef KALARMCAL_USE_KRESOURCES
     const Event::List events = calendar->rawEvents();
-#else
-    const Event::List events = calendar.rawEvents();
-#endif
     for (int ei = 0, eend = events.count();  ei < eend;  ++ei)
     {
-#ifndef KALARMCAL_USE_KRESOURCES
         Event::Ptr event = events[ei];
-#else
-        Event* event = events[ei];
-#endif
         const Alarm::List alarms = event->alarms();
         if (alarms.isEmpty())
             continue;    // KAlarm isn't interested in events without alarms
@@ -5357,11 +5014,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
              */
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
             {
-#ifndef KALARMCAL_USE_KRESOURCES
                 Alarm::Ptr alarm = alarms[ai];
-#else
-                Alarm* alarm = alarms[ai];
-#endif
                 bool atLogin    = false;
                 bool deferral   = false;
                 bool lateCancel = false;
@@ -5489,11 +5142,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
 
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
             {
-#ifndef KALARMCAL_USE_KRESOURCES
                 Alarm::Ptr alarm = alarms[ai];
-#else
-                Alarm* alarm = alarms[ai];
-#endif
                 alarm->setStartOffset(start.secsTo(alarm->time()));
             }
 
@@ -5501,11 +5150,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
             {
                 for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
                 {
-#ifndef KALARMCAL_USE_KRESOURCES
                     Alarm::Ptr alarm = alarms[ai];
-#else
-                    Alarm* alarm = alarms[ai];
-#endif
                     if (alarm->type() == Alarm::Display)
                         alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY,
                                                  QString::fromLatin1("%1;;").arg(cats.at(0)));
@@ -5519,11 +5164,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 {
                     cats.removeAt(i);
 
-#ifndef KALARMCAL_USE_KRESOURCES
                     Alarm::Ptr alarm = event->newAlarm();
-#else
-                    Alarm* alarm = event->newAlarm();
-#endif
                     alarm->setEnabled(true);
                     alarm->setAudioAlarm();
                     KDateTime dt = event->dtStart();    // default
@@ -5565,11 +5206,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
              */
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
             {
-#ifndef KALARMCAL_USE_KRESOURCES
                 Alarm::Ptr alarm = alarms[ai];
-#else
-                Alarm* alarm = alarms[ai];
-#endif
                 if (alarm->type() == Alarm::Display)
                 {
                     const QString oldtext = alarm->text();
@@ -5688,11 +5325,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
             bool mainExpired = true;
             for (int i = 0, alend = alarms.count();  i < alend;  ++i)
             {
-#ifndef KALARMCAL_USE_KRESOURCES
                 Alarm::Ptr alarm = alarms[i];
-#else
-                Alarm* alarm = alarms[i];
-#endif
                 if (!alarm->hasStartOffset())
                     continue;
                 // Find whether the alarm triggers at the same time as the main
@@ -5756,11 +5389,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
                 // Convert deferred alarms
                 for (int i = 0, alend = alarms.count();  i < alend;  ++i)
                 {
-#ifndef KALARMCAL_USE_KRESOURCES
                     Alarm::Ptr alarm = alarms[i];
-#else
-                    Alarm* alarm = alarms[i];
-#endif
                     if (!alarm->hasStartOffset())
                         continue;
                     const QString property = alarm->customProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY);
@@ -5788,11 +5417,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
              */
             for (int i = 0, alend = alarms.count();  i < alend;  ++i)
             {
-#ifndef KALARMCAL_USE_KRESOURCES
                 Alarm::Ptr alarm = alarms[i];
-#else
-                Alarm* alarm = alarms[i];
-#endif
                 const QString name = alarm->customProperty(KACalendar::APPNAME, KMAIL_ID_PROPERTY);
                 if (name.isEmpty())
                     continue;
@@ -5866,11 +5491,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
 
             for (int i = 0, alend = alarms.count();  i < alend;  ++i)
             {
-#ifndef KALARMCAL_USE_KRESOURCES
                 Alarm::Ptr alarm = alarms[i];
-#else
-                Alarm* alarm = alarms[i];
-#endif
                 // Convert EMAILID, SPEAK, ERRCANCEL, ERRNOSHOW properties
                 QStringList flags;
                 QString property = alarm->customProperty(KACalendar::APPNAME, EMAIL_ID_PROPERTY);
@@ -5949,11 +5570,7 @@ bool KAEvent::convertKCalEvents(CalendarLocal& calendar, int calendarVersion)
 * Set the time for a date-only event to 00:00.
 * Reply = true if the event was updated.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 bool KAEventPrivate::convertStartOfDay(const Event::Ptr& event)
-#else
-bool KAEventPrivate::convertStartOfDay(Event* event)
-#endif
 {
     bool changed = false;
     const QTime midnight(0, 0);
@@ -5978,21 +5595,13 @@ bool KAEventPrivate::convertStartOfDay(Event* event)
                 {
                     // Found a timed deferral alarm, so adjust the offset
                     deferralOffset = data.alarm->startOffset().asSeconds();
-#ifndef KALARMCAL_USE_KRESOURCES
                     const_cast<Alarm*>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
-#else
-                    const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
-#endif
                 }
                 else if (data.type == AUDIO_ALARM
                 &&       data.alarm->startOffset().asSeconds() == deferralOffset)
                 {
                     // Audio alarm is set for the same time as the above deferral alarm
-#ifndef KALARMCAL_USE_KRESOURCES
                     const_cast<Alarm*>(data.alarm.data())->setStartOffset(deferralOffset - adjustment);
-#else
-                    const_cast<Alarm*>(data.alarm)->setStartOffset(deferralOffset - adjustment);
-#endif
                 }
             }
             changed = true;
@@ -6020,11 +5629,7 @@ bool KAEventPrivate::convertStartOfDay(Event* event)
                 altime.setTime(midnight);
                 deferralOffset = data.alarm->startOffset().asSeconds();
                 newDeferralOffset = event->dtStart().secsTo(altime);
-#ifndef KALARMCAL_USE_KRESOURCES
                 const_cast<Alarm*>(data.alarm.data())->setStartOffset(newDeferralOffset);
-#else
-                const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
-#endif
                 foundDeferral = true;
                 changed = true;
             }
@@ -6033,11 +5638,7 @@ bool KAEventPrivate::convertStartOfDay(Event* event)
                  &&  data.alarm->startOffset().asSeconds() == deferralOffset)
             {
                 // Audio alarm is set for the same time as the above deferral alarm
-#ifndef KALARMCAL_USE_KRESOURCES
                 const_cast<Alarm*>(data.alarm.data())->setStartOffset(newDeferralOffset);
-#else
-                const_cast<Alarm*>(data.alarm)->setStartOffset(newDeferralOffset);
-#endif
                 changed = true;
             }
         }
@@ -6053,11 +5654,7 @@ bool KAEventPrivate::convertStartOfDay(Event* event)
 * a daylight saving time change.
 * Reply = true if any conversions were done.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 bool KAEventPrivate::convertRepetition(const Event::Ptr& event)
-#else
-bool KAEventPrivate::convertRepetition(Event* event)
-#endif
 {
     const Alarm::List alarms = event->alarms();
     if (alarms.isEmpty())
@@ -6069,11 +5666,7 @@ bool KAEventPrivate::convertRepetition(Event* event)
     const bool readOnly = event->isReadOnly();
     for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai)
     {
-#ifndef KALARMCAL_USE_KRESOURCES
         Alarm::Ptr alarm = alarms[ai];
-#else
-        Alarm* alarm = alarms[ai];
-#endif
         if (alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0)
         {
             if (!converted)
@@ -6224,20 +5817,12 @@ const char* KAAlarm::debugType(Type type)
 * Sets the list of email addresses, removing any empty addresses.
 * Reply = false if empty addresses were found.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 EmailAddressList& EmailAddressList::operator=(const Person::List& addresses)
-#else
-EmailAddressList& EmailAddressList::operator=(const QList<Person>& addresses)
-#endif
 {
     clear();
     for (int p = 0, end = addresses.count();  p < end;  ++p)
     {
-#ifndef KALARMCAL_USE_KRESOURCES
         if (!addresses[p]->email().isEmpty())
-#else
-        if (!addresses[p].email().isEmpty())
-#endif
             append(addresses[p]);
     }
     return *this;
@@ -6282,13 +5867,8 @@ QString EmailAddressList::address(int index) const
         return QString();
     QString result;
     bool quote = false;
-#ifndef KALARMCAL_USE_KRESOURCES
     const Person::Ptr person = (*this)[index];
     const QString name = person->name();
-#else
-    const Person person = (*this)[index];
-    const QString name = person.name();
-#endif
     if (!name.isEmpty())
     {
         // Need to enclose the name in quotes if it has any special characters
@@ -6302,20 +5882,12 @@ QString EmailAddressList::address(int index) const
                 break;
             }
         }
-#ifndef KALARMCAL_USE_KRESOURCES
         result += (*this)[index]->name();
-#else
-        result += (*this)[index].name();
-#endif
         result += (quote ? QLatin1String("\" <") : QLatin1String(" <"));
         quote = true;    // need angle brackets round email address
     }
 
-#ifndef KALARMCAL_USE_KRESOURCES
     result += person->email();
-#else
-    result += person.email();
-#endif
     if (quote)
         result += QLatin1Char('>');
     return result;
@@ -6328,11 +5900,7 @@ QStringList EmailAddressList::pureAddresses() const
 {
     QStringList list;
     for (int p = 0, end = count();  p < end;  ++p)
-#ifndef KALARMCAL_USE_KRESOURCES
         list += at(p)->email();
-#else
-        list += at(p).email();
-#endif
     return list;
 }
 
@@ -6349,11 +5917,7 @@ QString EmailAddressList::pureAddresses(const QString& separator) const
             first = false;
         else
             result += separator;
-#ifndef KALARMCAL_USE_KRESOURCES
         result += at(p)->email();
-#else
-        result += at(p).email();
-#endif
     }
     return result;
 }
@@ -6367,11 +5931,7 @@ QString EmailAddressList::pureAddresses(const QString& separator) const
 * The command line is first split into its program file and arguments before
 * initialising the alarm.
 */
-#ifndef KALARMCAL_USE_KRESOURCES
 static void setProcedureAlarm(const Alarm::Ptr& alarm, const QString& commandLine)
-#else
-static void setProcedureAlarm(Alarm* alarm, const QString& commandLine)
-#endif
 {
     QString command;
     QString arguments;
