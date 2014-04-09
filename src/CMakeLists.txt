@@ -58,6 +58,29 @@ set_target_properties(kalarmcal PROPERTIES
                      )
 install(TARGETS kalarmcal EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+
+ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
+  HEADER_NAMES
+  AlarmText  
+  CollectionAttribute  
+  CompatibilityAttribute  
+  DateTime  
+  EventAttribute  
+  KAAlarm  
+  KAEvent  
+  KARecurrence  
+  Repetition
+  REQUIRED_HEADERS KAlarmCal_HEADERS
+  PREFIX KAlarmCal
+)
+
+
+install(FILES
+    ${KAlarmCal_CamelCase_HEADERS}
+    DESTINATION ${INCLUDE_INSTALL_DIR}/KAlarmCal
+    COMPONENT Devel
+)
+
 install(FILES
 	alarmtext.h
 	datetime.h
@@ -68,6 +91,7 @@ install(FILES
 	karecurrence.h
 	repetition.h
 	version.h
+        ${KAlarmCal_HEADERS}
 	DESTINATION ${INCLUDE_INSTALL_DIR}/kalarmcal
 	COMPONENT Devel
 )
