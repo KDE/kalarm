@@ -27,7 +27,7 @@
 
 #include "kacalendar.h"
 
-#include <akonadi/attribute.h>
+#include <AkonadiCore/attribute.h>
 
 #include <QColor>
 

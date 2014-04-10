@@ -27,7 +27,7 @@
 #include <kcalcore/filestorage.h>
 #include <kcalcore/calendar.h>
 #include <kcalcore/event.h>
-#include <akonadi/collection.h>
+#include <AkonadiCore/collection.h>
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>
 

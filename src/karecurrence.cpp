@@ -30,6 +30,7 @@
 #include <qdebug.h>
 
 #include <QBitArray>
+#include <QDate>
 
 using namespace KCalCore;
 namespace KAlarmCal

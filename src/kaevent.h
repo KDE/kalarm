@@ -30,8 +30,8 @@
 #include "kacalendar.h"
 #include "repetition.h"
 
-#include <akonadi/collection.h>
-#include <akonadi/item.h>
+#include <AkonadiCore/collection.h>
+#include <AkonadiCore/item.h>
 #include <kcalcore/person.h>
 #include <kcalcore/calendar.h>
 

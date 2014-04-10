@@ -1,12 +1,8 @@
-project(kalarmcal)
+# The includes in akonadi/ use exceptions, we must enable them here for clang to be happy.
+kde_enable_exceptions()
 
 find_package(Qt5 NO_MODULE REQUIRED COMPONENTS Sql)
 find_package(KF5 NO_MODULE REQUIRED COMPONENTS CoreAddons ItemViews)
-
-# The library version should be the same as that returned by
-# KAEvent::currentCalendarVersion()  (see kaevent.cpp)
-set(LIB_VERSION 2.7.0)
-set(LIB_SOVERSION 2)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 add_definitions( -DQT_NO_CAST_FROM_ASCII )
@@ -28,35 +24,35 @@ set(kalarmcal_LIB_SRCS
     repetition.cpp
     version.cpp
    )
-    # The includes in akonadi/ use exceptions, we must enable them here for clang to be happy.
-    kde_enable_exceptions()
 
-    set(kalarmcal_LIB_SRCS ${kalarmcal_LIB_SRCS}
-	collectionattribute.cpp
-	compatibilityattribute.cpp
-	eventattribute.cpp
-       )
+set(kalarmcal_LIB_SRCS ${kalarmcal_LIB_SRCS}
+    collectionattribute.cpp
+    compatibilityattribute.cpp
+    eventattribute.cpp
+    )
 
-include_directories(
-  ${CMAKE_BINARY_DIR}/kcalcore
-  ${CMAKE_BINARY_DIR}/akonadi
-  ${CMAKE_BINARY_DIR}/kholidays
-  ${CMAKE_BINARY_DIR}/kpimidentities
-)
-add_library(kalarmcal ${LIBRARY_TYPE} ${kalarmcal_LIB_SRCS})
-generate_export_header(kalarmcal)
-file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h" "\n// This library was built to use Akonadi.\n// It must be rebuilt in order to use KResources.\n#ifdef KALARMCAL_USE_KRESOURCES\n#undef KALARMCAL_USE_KRESOURCES\n#endif\n")
 
-target_link_libraries(kalarmcal
-                      kholidays
-                      kpimidentities
+add_library(KF5KAlarmCal ${kalarmcal_LIB_SRCS})
+
+generate_export_header(KF5KAlarmCal BASE_NAME kalarmcal)
+
+add_library(KF5::KAlarmCal ALIAS KF5KAlarmCal)
+
+target_link_libraries(KF5KAlarmCal
+                      KF5::Holidays
+                      KF5::PimIdentities
                       KF5::CoreAddons
+                      KF5::CalendarCore
                       )
-set_target_properties(kalarmcal PROPERTIES 
-                      VERSION ${LIB_VERSION} 
-                      SOVERSION ${LIB_SOVERSION} 
-                     )
-install(TARGETS kalarmcal EXPORT kdepimlibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+set_target_properties(KF5KAlarmCal PROPERTIES
+      VERSION ${KALARMCAL_VERSION_STRING}
+      SOVERSION ${KALARMCAL_SOVERSION}
+      EXPORT_NAME KAlarmCal
+)
+
+
+install(TARGETS KF5KAlarmCal EXPORT KF5KAlarmCalTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
@@ -66,7 +62,6 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   CompatibilityAttribute  
   DateTime  
   EventAttribute  
-  KAAlarm  
   KAEvent  
   KARecurrence  
   Repetition

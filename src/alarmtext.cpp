@@ -28,6 +28,7 @@
 #include <klocalizedstring.h>
 #include <kglobal.h>
 #include <QStringList>
+#include <QDateTime>
 
 namespace KAlarmCal
 {
