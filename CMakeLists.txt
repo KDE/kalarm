@@ -27,7 +27,7 @@ ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KALARMCAL
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 
 ########### Find packages ###########
-find_package(KF5KDE4Support ${KF5_VERSION} CONFIG REQUIRED)
+find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5KIO ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5PimIdentities ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5Holidays ${KF5_VERSION} CONFIG REQUIRED)
