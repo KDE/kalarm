@@ -43,6 +43,7 @@ target_link_libraries(KF5KAlarmCal
                       KF5::PimIdentities
                       KF5::CoreAddons
                       KF5::CalendarCore
+                      KF5::AkonadiCore
                       )
 
 set_target_properties(KF5KAlarmCal PROPERTIES

@@ -651,6 +651,7 @@ void KAEvent::set(const Event::Ptr& e)
 * Initialise the KAEventPrivate from a KCal::Event.
 */
 void KAEventPrivate::set(const Event::Ptr& event)
+{
     startChanges();
     // Extract status from the event
     mCommandError           = KAEvent::CMD_NO_ERROR;

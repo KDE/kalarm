@@ -27,7 +27,7 @@
 
 #include "kaevent.h"
 
-#include <AkonadiCore/attribute.h>
+#include <attribute.h>
 
 namespace KAlarmCal
 {
