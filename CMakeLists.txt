@@ -29,11 +29,11 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 ########### Find packages ###########
 find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 find_package(KF5KIO ${KF5_VERSION} CONFIG REQUIRED)
-find_package(KF5PimIdentities ${KF5_VERSION} CONFIG REQUIRED)
-find_package(KF5Holidays ${KF5_VERSION} CONFIG REQUIRED)
 
-if(${CMAKE_SOURCE_DIR} STREQUAL ${Akonadi-Notes_SOURCE_DIR})
+if(${CMAKE_SOURCE_DIR} STREQUAL ${KAlarmCal_SOURCE_DIR})
   find_package(KF5Akonadi CONFIG REQUIRED)
+  find_package(KF5PimIdentities ${KF5_VERSION} CONFIG REQUIRED)
+  find_package(KF5Holidays ${KF5_VERSION} CONFIG REQUIRED)
 endif()
 
 ########### Targets ###########
