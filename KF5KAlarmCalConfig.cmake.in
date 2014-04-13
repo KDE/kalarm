@@ -1,7 +1,5 @@
 @PACKAGE_INIT@
 
-# Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
-
 find_dependency(KF5AkonadiCore "@KF5_VERSION@")
 find_dependency(KF5AkonadiWidgets "@KF5_VERSION@")
 
