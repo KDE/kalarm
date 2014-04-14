@@ -363,6 +363,8 @@ class KAEventPrivate : public QSharedData
 // KAlarm version which first used the current calendar/event format.
 // If this changes, KAEvent::convertKCalEvents() must be changed correspondingly.
 // The string version is the KAlarm version string used in the calendar file.
+
+//QT5 Fix library version
 QByteArray KAEvent::currentCalendarVersionString()  { return QByteArray("2.7.0"); }
 int        KAEvent::currentCalendarVersion()        { return Version(2,7,0); }
 
