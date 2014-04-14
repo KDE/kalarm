@@ -22,8 +22,8 @@
 
 #include "identities.h"
 
-#include <kpimidentities/identitymanager.h>
-#include <kpimidentities/identity.h>
+#include <identitymanager.h>
+#include <identity.h>
 
 static KPIMIdentities::IdentityManager* mIdentityManager = 0;
 
