@@ -1,9 +1,6 @@
 # The includes in akonadi/ use exceptions, we must enable them here for clang to be happy.
 kde_enable_exceptions()
 
-find_package(Qt5 NO_MODULE REQUIRED COMPONENTS Sql)
-find_package(KF5 NO_MODULE REQUIRED COMPONENTS CoreAddons ItemViews)
-
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 add_definitions( -DQT_NO_CAST_FROM_ASCII )
 add_definitions( -DQT_NO_CAST_TO_ASCII )
