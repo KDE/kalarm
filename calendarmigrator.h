@@ -1,7 +1,7 @@
 /*
  *  calendarmigrator.h  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,13 +48,15 @@ class CalendarMigrator : public QObject
         static CalendarMigrator* instance();
         static void execute();
         static void updateToCurrentFormat(const Akonadi::Collection&, bool ignoreKeepFormat, QWidget* parent);
+        static bool completed()    { return mCompleted; }
         template <class Interface> static Interface* getAgentInterface(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
     signals:
         /** Signal emitted when a resource is about to be created, and when creation has
          *  completed (successfully or not).
+         *  @param id    collection ID if @p finished is true, else invalid
          */
-        void creating(const QString& path, bool finished);
+        void creating(const QString& path, Akonadi::Collection::Id id, bool finished);
 
     private slots:
         void collectionFetchResult(KJob*);
@@ -71,6 +73,7 @@ class CalendarMigrator : public QObject
         QList<CalendarCreator*> mCalendarsPending;   // pending calendar migration or creation jobs
         QList<Akonadi::CollectionFetchJob*> mFetchesPending;  // pending collection fetch jobs for existing resources
         CalEvent::Types mExistingAlarmTypes;   // alarm types provided by existing Akonadi resources
+        static bool     mCompleted;            // execute() has completed
 
         friend class CalendarUpdater;
 };
