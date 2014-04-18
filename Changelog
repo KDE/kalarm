@@ -1,6 +1,10 @@
 KAlarm Change Log
 
-=== Version 2.10.7 --- 21 March 2014 ===
+=== Version 2.10.8 --- 18 April 2014 ===
+- [Akonadi] Fix wrong startup message about no writable active alarm calendar.
+- [Akonadi] Fix setting Akonadi resource read-only making it unusable (requires kdepim-runtime 4.12.5) [KDE Bug 332889]
+
+=== Version 2.10.7 (KDE 4.12.4) --- 21 March 2014 ===
 - [Akonadi] Fix deletion of alarm copies from KOrganiser not working.
 - Fix crash after session restoration has nothing to restore [KDE Bug 331719]
 - Prevent data in birthday import dialogue being editable.
