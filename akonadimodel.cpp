@@ -93,7 +93,8 @@ AkonadiModel* AkonadiModel::instance()
 AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     : EntityTreeModel(monitor, parent),
       mMonitor(monitor),
-      mResourcesChecked(false)
+      mResourcesChecked(false),
+      mMigrating(false)
 {
     // Set lazy population to enable the contents of unselected collections to be ignored
     setItemPopulationStrategy(LazyPopulation);
@@ -127,7 +128,9 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 #endif
     connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
     connect(monitor, SIGNAL(collectionRemoved(Akonadi::Collection)), SLOT(slotCollectionRemoved(Akonadi::Collection)));
-    connect(CalendarMigrator::instance(), SIGNAL(creating(QString,bool)), SLOT(slotCollectionBeingCreated(QString,bool)));
+    connect(CalendarMigrator::instance(), SIGNAL(creating(QString,Akonadi::Collection::Id,bool)),
+                                          SLOT(slotCollectionBeingCreated(QString,Akonadi::Collection::Id,bool)));
+    connect(CalendarMigrator::instance(), SIGNAL(destroyed(QObject*)), SLOT(slotMigrationCompleted()));
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
     Preferences::connect(SIGNAL(archivedColourChanged(QColor)), this, SLOT(slotUpdateArchivedColour(QColor)));
     Preferences::connect(SIGNAL(disabledColourChanged(QColor)), this, SLOT(slotUpdateDisabledColour(QColor)));
@@ -155,8 +158,17 @@ void AkonadiModel::checkResources(ServerManager::State state)
     if (!mResourcesChecked  &&  state == ServerManager::Running)
     {
         mResourcesChecked = true;
+        mMigrating = true;
         CalendarMigrator::execute();
     }
+}
+
+/******************************************************************************
+* Return whether calendar migration has completed.
+*/
+bool AkonadiModel::isMigrationCompleted() const
+{
+    return mResourcesChecked && !mMigrating;
 }
 
 /******************************************************************************
@@ -1630,6 +1642,18 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
         refresh(col);
         CalendarMigrator::updateToCurrentFormat(col, false, MainWindow::mainMainWindow());
     }
+
+    if (mMigrating)
+    {
+        mCollectionIdsBeingCreated.removeAll(collection.id());
+        if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty()
+        &&  CalendarMigrator::completed())
+        {
+            kDebug() << "Migration completed";
+            mMigrating = false;
+            emit migrationCompleted();
+        }
+    }
 }
 
 /******************************************************************************
@@ -1649,12 +1673,28 @@ void AkonadiModel::slotCollectionRemoved(const Collection& collection)
 /******************************************************************************
 * Called when a collection creation is about to start, or has completed.
 */
-void AkonadiModel::slotCollectionBeingCreated(const QString& path, bool finished)
+void AkonadiModel::slotCollectionBeingCreated(const QString& path, Akonadi::Collection::Id id, bool finished)
 {
     if (finished)
+    {
         mCollectionsBeingCreated.removeAll(path);
+        mCollectionIdsBeingCreated << id;
+    }
     else
         mCollectionsBeingCreated << path;
+}
+
+/******************************************************************************
+* Called when calendar migration has completed.
+*/
+void AkonadiModel::slotMigrationCompleted()
+{
+    if (mCollectionsBeingCreated.isEmpty() && mCollectionIdsBeingCreated.isEmpty())
+    {
+        kDebug() << "Migration completed";
+        mMigrating = false;
+        emit migrationCompleted();
+    }
 }
 
 /******************************************************************************

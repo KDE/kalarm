@@ -166,6 +166,8 @@ KAlarmApp::KAlarmApp()
                                           SLOT(purgeNewArchivedDefault(Akonadi::Collection)));
         connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
                                           SLOT(checkWritableCalendar()));
+        connect(AkonadiModel::instance(), SIGNAL(migrationCompleted()),
+                                          SLOT(checkWritableCalendar()));
 #endif
 
         KConfigGroup config(KGlobal::config(), "General");
@@ -1151,7 +1153,8 @@ kDebug();
     if (mReadOnly)
         return;    // don't need write access to calendars
 #ifdef USE_AKONADI
-    if (!AkonadiModel::instance()->isCollectionTreeFetched())
+    if (!AkonadiModel::instance()->isCollectionTreeFetched()
+    ||  !AkonadiModel::instance()->isMigrationCompleted())
         return;
 #endif
     static bool done = false;
