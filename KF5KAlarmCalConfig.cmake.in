@@ -2,5 +2,9 @@
 
 find_dependency(KF5AkonadiCore "@KF5_VERSION@")
 find_dependency(KF5AkonadiWidgets "@KF5_VERSION@")
+find_dependency(KF5KDELibs4Support "@KF5_VERSION@")
+find_dependency(KF5KIO "@KF5_VERSION@")
+find_dependency(KF5PimIdentities "@KF5_VERSION@")
+find_dependency(KF5Holidays "@KF5_VERSION@")
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5AkonadiNotesTargets.cmake")
