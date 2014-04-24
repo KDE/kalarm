@@ -2371,10 +2371,13 @@ KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
         if (reply.error().type() == QDBusError::UnknownObject)
         {
             kError() << "deleteIncidence() D-Bus error: still starting";
-            return KAlarm::UPDATE_KORG_ERRSTART;
+            status = KAlarm::UPDATE_KORG_ERRSTART;
         }
-        status.set(KAlarm::UPDATE_KORG_ERR, reply.error().message());
-        kError() << "deleteIncidence(" << newID << ") D-Bus call failed:" << status.message;
+        else
+        {
+            status.set(KAlarm::UPDATE_KORG_ERR, reply.error().message());
+            kError() << "deleteIncidence(" << newID << ") D-Bus call failed:" << status.message;
+        }
     }
     else if (!reply.value())
     {
