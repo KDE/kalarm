@@ -42,11 +42,11 @@
 #include "resourceconfigdialog.h"
 
 #ifdef USE_AKONADI
-#include <akonadi/agentmanager.h>
-#include <akonadi/agentinstancecreatejob.h>
-#include <akonadi/agenttype.h>
+#include <AkonadiCore/agentmanager.h>
+#include <AkonadiCore/agentinstancecreatejob.h>
+#include <AkonadiCore/agenttype.h>
 #include <akonadi/collectionpropertiesdialog.h>
-#include <akonadi/entitydisplayattribute.h>
+#include <AkonadiCore/entitydisplayattribute.h>
 #else
 #include <kcal/resourcecalendar.h>
 #endif

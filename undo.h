@@ -28,7 +28,7 @@
 #include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
-#include <akonadi/collection.h>
+#include <AkonadiCore/collection.h>
 #endif
 #include <QList>
 #include <QStringList>

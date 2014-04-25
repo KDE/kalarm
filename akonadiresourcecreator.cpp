@@ -25,8 +25,8 @@
 #include "controlinterface.h"
 
 #include <akonadi/agentfilterproxymodel.h>
-#include <akonadi/agentinstancecreatejob.h>
-#include <akonadi/agentmanager.h>
+#include <AkonadiCore/agentinstancecreatejob.h>
+#include <AkonadiCore/agentmanager.h>
 #include <akonadi/agenttypedialog.h>
 #include <akonadi/dbusconnectionpool.h>
 

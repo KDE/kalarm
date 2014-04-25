@@ -32,8 +32,8 @@
 #include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
-#include <akonadi/collection.h>
-#include <akonadi/item.h>
+#include <AkonadiCore/collection.h>
+#include <AkonadiCore/item.h>
 #endif
 
 #include <QList>

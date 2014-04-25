@@ -26,8 +26,8 @@
 
 #include <kalarmcal/kacalendar.h>
 
-#include <akonadi/agentinstance.h>
-#include <akonadi/agenttype.h>
+#include <AkonadiCore/agentinstance.h>
+#include <AkonadiCore/agenttype.h>
 
 using namespace KAlarmCal;
 

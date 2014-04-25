@@ -30,12 +30,12 @@
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/version.h>
 
-#include <akonadi/agentinstancecreatejob.h>
-#include <akonadi/agentmanager.h>
-#include <akonadi/collectionfetchjob.h>
-#include <akonadi/collectionfetchscope.h>
+#include <AkonadiCore/agentinstancecreatejob.h>
+#include <AkonadiCore/agentmanager.h>
+#include <AkonadiCore/collectionfetchjob.h>
+#include <AkonadiCore/collectionfetchscope.h>
 #include <akonadi/collectionmodifyjob.h>
-#include <akonadi/entitydisplayattribute.h>
+#include <AkonadiCore/entitydisplayattribute.h>
 #include <akonadi/resourcesynchronizationjob.h>
 
 #include <klocale.h>

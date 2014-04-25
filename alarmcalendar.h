@@ -31,7 +31,7 @@
 #include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
-#include <akonadi/collection.h>
+#include <AkonadiCore/collection.h>
 #include <kcalcore/filestorage.h>
 #include <kcalcore/event.h>
 #include <QHash>

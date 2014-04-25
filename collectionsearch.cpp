@@ -24,12 +24,12 @@
 
 #include "collectionsearch.h"
 
-#include <akonadi/agentinstance.h>
-#include <akonadi/agentmanager.h>
-#include <akonadi/collectionfetchjob.h>
-#include <akonadi/collectionfetchscope.h>
-#include <akonadi/itemfetchjob.h>
-#include <akonadi/itemdeletejob.h>
+#include <AkonadiCore/agentinstance.h>
+#include <AkonadiCore/agentmanager.h>
+#include <AkonadiCore/collectionfetchjob.h>
+#include <AkonadiCore/collectionfetchscope.h>
+#include <AkonadiCore/itemfetchjob.h>
+#include <AkonadiCore/itemdeletejob.h>
 
 #include <QStringList>
 #include <QTimer>

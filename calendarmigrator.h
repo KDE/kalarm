@@ -23,8 +23,8 @@
 
 #include <kalarmcal/kacalendar.h>
 
-#include <akonadi/agentinstance.h>
-#include <akonadi/collection.h>
+#include <AkonadiCore/agentinstance.h>
+#include <AkonadiCore/collection.h>
 
 class KJob;
 namespace KRES { class Resource; }

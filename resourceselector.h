@@ -29,7 +29,7 @@
 #include "akonadimodel.h"
 #include "collectionmodel.h"
 
-#include <akonadi/agentinstance.h>
+#include <AkonadiCore/agentinstance.h>
 #else
 #include "alarmresource.h"
 #include "alarmresources.h"

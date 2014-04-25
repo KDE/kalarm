@@ -33,7 +33,7 @@
 #include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
-#include <akonadi/item.h>
+#include <AkonadiCore/item.h>
 #include <kcalcore/calendar.h>
 #else
 #include <kcal/calendar.h>

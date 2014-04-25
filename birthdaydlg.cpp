@@ -36,7 +36,7 @@
 #include "specialactions.h"
 
 #include <akonadi/control.h>
-#include <akonadi/entitymimetypefiltermodel.h>
+#include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <klocale.h>
 #include <kglobal.h>

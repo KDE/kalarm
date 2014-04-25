@@ -24,10 +24,10 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <akonadi/changerecorder.h>
-#include <akonadi/entitydisplayattribute.h>
-#include <akonadi/itemfetchscope.h>
-#include <akonadi/session.h>
+#include <AkonadiCore/changerecorder.h>
+#include <AkonadiCore/entitydisplayattribute.h>
+#include <AkonadiCore/itemfetchscope.h>
+#include <AkonadiCore/session.h>
 #include <kabc/addressee.h>
 
 #include <kglobal.h>

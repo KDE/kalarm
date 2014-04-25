@@ -26,11 +26,11 @@
 #include <kalarmcal/collectionattribute.h>
 #include <kalarmcal/compatibilityattribute.h>
 
-#include <akonadi/agentmanager.h>
-#include <akonadi/collectiondialog.h>
+#include <AkonadiCore/agentmanager.h>
+#include <AkonadiWidgets/collectiondialog.h>
 #include <akonadi/collectiondeletejob.h>
 #include <akonadi/collectionmodifyjob.h>
-#include <akonadi/entitymimetypefiltermodel.h>
+#include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <klocale.h>
 

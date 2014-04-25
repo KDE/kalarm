@@ -35,20 +35,20 @@
 #include <kalarmcal/eventattribute.h>
 
 #include <akonadi/agentfilterproxymodel.h>
-#include <akonadi/agentinstancecreatejob.h>
-#include <akonadi/agentmanager.h>
-#include <akonadi/agenttype.h>
+#include <AkonadiCore/agentinstancecreatejob.h>
+#include <AkonadiCore/agentmanager.h>
+#include <AkonadiCore/agenttype.h>
 #include <akonadi/agenttypedialog.h>
-#include <akonadi/attributefactory.h>
-#include <akonadi/changerecorder.h>
+#include <AkonadiCore/attributefactory.h>
+#include <AkonadiCore/changerecorder.h>
 #include <akonadi/collectiondeletejob.h>
 #include <akonadi/collectionmodifyjob.h>
-#include <akonadi/entitydisplayattribute.h>
-#include <akonadi/item.h>
-#include <akonadi/itemcreatejob.h>
-#include <akonadi/itemmodifyjob.h>
-#include <akonadi/itemdeletejob.h>
-#include <akonadi/itemfetchscope.h>
+#include <AkonadiCore/entitydisplayattribute.h>
+#include <AkonadiCore/item.h>
+#include <AkonadiCore/itemcreatejob.h>
+#include <AkonadiCore/itemmodifyjob.h>
+#include <AkonadiCore/itemdeletejob.h>
+#include <AkonadiCore/itemfetchscope.h>
 
 #include <klocale.h>
 #include <kcolorutils.h>

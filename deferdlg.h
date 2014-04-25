@@ -26,7 +26,7 @@
 #endif
 
 #include <kalarmcal/datetime.h>
-#include <akonadi/collection.h>
+#include <AkonadiCore/collection.h>
 #include <kdialog.h>
 
 class AlarmTimeWidget;
