@@ -35,7 +35,7 @@
 #include "soundpicker.h"
 #include "specialactions.h"
 
-#include <akonadi/control.h>
+#include <AkonadiCore/control.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <klocale.h>

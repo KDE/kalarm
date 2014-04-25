@@ -45,7 +45,7 @@
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agenttype.h>
-#include <akonadi/collectionpropertiesdialog.h>
+#include <AkonadiWidgets/collectionpropertiesdialog.h>
 #include <AkonadiCore/entitydisplayattribute.h>
 #else
 #include <kcal/resourcecalendar.h>

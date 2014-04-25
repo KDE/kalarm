@@ -54,7 +54,7 @@
 #ifdef USE_AKONADI
 #include <kcalcore/memorycalendar.h>
 #include <kcalutils/icaldrag.h>
-#include <akonadi/control.h>
+#include <AkonadiCore/control.h>
 using namespace KCalCore;
 using namespace KCalUtils;
 #else

@@ -34,15 +34,15 @@
 #include <kalarmcal/compatibilityattribute.h>
 #include <kalarmcal/eventattribute.h>
 
-#include <akonadi/agentfilterproxymodel.h>
+#include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/agenttype.h>
-#include <akonadi/agenttypedialog.h>
+#include <AkonadiWidgets/agenttypedialog.h>
 #include <AkonadiCore/attributefactory.h>
 #include <AkonadiCore/changerecorder.h>
-#include <akonadi/collectiondeletejob.h>
-#include <akonadi/collectionmodifyjob.h>
+#include <AkonadiCore/collectiondeletejob.h>
+#include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <AkonadiCore/item.h>
 #include <AkonadiCore/itemcreatejob.h>

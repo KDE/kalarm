@@ -27,7 +27,7 @@
 #include <kalarmcal/kaevent.h>
 
 #include <AkonadiCore/entitytreemodel.h>
-#include <akonadi/servermanager.h>
+#include <AkonadiCore/servermanager.h>
 
 #include <QSize>
 #include <QColor>

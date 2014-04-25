@@ -28,8 +28,8 @@
 
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiWidgets/collectiondialog.h>
-#include <akonadi/collectiondeletejob.h>
-#include <akonadi/collectionmodifyjob.h>
+#include <AkonadiCore/collectiondeletejob.h>
+#include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <klocale.h>

@@ -25,7 +25,7 @@
 
 #include <kalarmcal/kacalendar.h>
 
-#include <akonadi/favoritecollectionsmodel.h>
+#include <AkonadiCore/favoritecollectionsmodel.h>
 #include <kcheckableproxymodel.h>
 #include <kdescendantsproxymodel.h>
 #include <kdeversion.h>

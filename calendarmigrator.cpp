@@ -34,7 +34,7 @@
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/collectionfetchjob.h>
 #include <AkonadiCore/collectionfetchscope.h>
-#include <akonadi/collectionmodifyjob.h>
+#include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <akonadi/resourcesynchronizationjob.h>
 

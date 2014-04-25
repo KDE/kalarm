@@ -24,11 +24,11 @@
 #include "kalarmdirsettings.h"
 #include "controlinterface.h"
 
-#include <akonadi/agentfilterproxymodel.h>
+#include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>
-#include <akonadi/agenttypedialog.h>
-#include <akonadi/dbusconnectionpool.h>
+#include <AkonadiWidgets/agenttypedialog.h>
+#include <AkonadiCore/dbusconnectionpool.h>
 
 #include <kmessagebox.h>
 #include <klocale.h>
