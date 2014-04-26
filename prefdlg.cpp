@@ -92,6 +92,7 @@ using namespace KHolidays;
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QResizeEvent>
+#include <KHelpClient>
 
 #ifdef USE_AKONADI
 using namespace KCalCore;
@@ -212,7 +213,7 @@ KAlarmPrefDlg::~KAlarmPrefDlg()
 
 void KAlarmPrefDlg::slotHelp()
 {
-    KToolInvocation::invokeHelp(QLatin1String("preferences"));
+    KHelpClient::invokeHelp(QLatin1String("preferences"));
 }
 
 // Apply the preferences that are currently selected
