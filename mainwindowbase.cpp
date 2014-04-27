@@ -26,33 +26,10 @@
 
 
 MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)
-    : KXmlGuiWindow(parent, f),
-      disableQuit(false)
+    : KXmlGuiWindow(parent, f)
 {
     setWindowModality(Qt::WindowModal);
 }
 
-/******************************************************************************
-* Called when a close event is received.
-* Only quits the application if there is no system tray icon displayed.
-*/
-void MainWindowBase::closeEvent(QCloseEvent* ce)
-{
-    disableQuit = theApp()->trayIconDisplayed();
-    KMainWindow::closeEvent(ce);
-    disableQuit = false;
-    ce->accept();           // allow window to close even if it's the last main window
-}
-
-/******************************************************************************
-* Called when the window is being closed.
-* Returns true if the application should quit.
-*/
-bool MainWindowBase::queryExit()
-{
-    if (kapp->sessionSaving())
-        return true;
-    return disableQuit ? false : KMainWindow::queryExit();
-}
 #include "moc_mainwindowbase.cpp"
 // vim: et sw=4:
