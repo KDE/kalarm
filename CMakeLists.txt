@@ -188,11 +188,11 @@ if(KALARM_USE_AKONADI)
         KF5::CalendarCore
         KF5::CalendarUtils
         KF5::Abc
-        KF5::KMime
+        KF5::Mime
         KF5::PimIdentities
         KF5::MailTransport
         KF5::AkonadiCore
-        KF5::AkonadiKMime
+        KF5::AkonadiMime
         KF5::AkonadiContact
         KF5::Holidays
         KF5::PimUtils
@@ -207,11 +207,11 @@ else()
         KF5::KAlarmCal
         ${KDEPIMLIBS_KCAL_LIBS}
         KF5::Abc
-        KF5::KMime
+        KF5::Mime
         KF5::PimIdentities
         KF5::MailTransport
         KF5::AkonadiCore
-        KF5::AkonadiKMime
+        KF5::AkonadiMime
         KF5::AkonadiContact
         KF5::Holidays
         KF5::PimUtils
