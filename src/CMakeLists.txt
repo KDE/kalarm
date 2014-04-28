@@ -63,7 +63,6 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   KARecurrence
   Repetition
   REQUIRED_HEADERS KAlarmCal_HEADERS
-  PREFIX KAlarmCal
 )
 
 
