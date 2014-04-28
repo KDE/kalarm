@@ -70,7 +70,7 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
 
 install(FILES
     ${KAlarmCal_CamelCase_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/KAlarmCal
+    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal
     COMPONENT Devel
 )
 
@@ -85,13 +85,13 @@ install(FILES
 	repetition.h
 	version.h
         ${KAlarmCal_HEADERS}
-	DESTINATION ${INCLUDE_INSTALL_DIR}/kalarmcal
+	DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/kalarmcal
 	COMPONENT Devel
 )
 install(FILES
 	    collectionattribute.h
 	    compatibilityattribute.h
 	    eventattribute.h
-	    DESTINATION ${INCLUDE_INSTALL_DIR}/kalarmcal
+	    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/kalarmcal
 	    COMPONENT Devel
            )
