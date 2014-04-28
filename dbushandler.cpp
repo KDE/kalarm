@@ -34,7 +34,7 @@
 #include <kalarmcal/karecurrence.h>
 
 #ifdef USE_AKONADI
-#include <kcalcore/duration.h>
+#include <KCalCore/duration.h>
 using namespace KCalCore;
 #else
 #include <kcal/duration.h>

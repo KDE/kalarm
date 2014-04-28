@@ -34,7 +34,7 @@
 
 #ifdef USE_AKONADI
 #include <AkonadiCore/item.h>
-#include <kcalcore/calendar.h>
+#include <KCalCore/calendar.h>
 #else
 #include <kcal/calendar.h>
 #endif

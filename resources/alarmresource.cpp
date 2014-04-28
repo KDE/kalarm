@@ -24,8 +24,8 @@
 using namespace KCal;
 #include "alarmresources.h"
 
-#include <kabc/lock.h>
-#include <kabc/locknull.h>
+#include <KABC/lock.h>
+#include <KABC/locknull.h>
 #include <kcal/calendarlocal.h>
 
 #include <kconfig.h>

@@ -32,8 +32,8 @@
 
 #ifdef USE_AKONADI
 #include <AkonadiCore/collection.h>
-#include <kcalcore/filestorage.h>
-#include <kcalcore/event.h>
+#include <KCalCore/filestorage.h>
+#include <KCalCore/event.h>
 #include <QHash>
 #endif
 #include <kurl.h>

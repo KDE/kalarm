@@ -29,20 +29,20 @@
 
 #include <kalarmcal/identities.h>
 
-#include <kpimidentities/identitymanager.h>
-#include <kpimidentities/identity.h>
-#include <kpimutils/email.h>
-#include <mailtransport/transportmanager.h>
-#include <mailtransport/transport.h>
-#include <mailtransport/messagequeuejob.h>
+#include <KPIMIdentities/identitymanager.h>
+#include <KPIMIdentities/identity.h>
+#include <KPIMUtils/email.h>
+#include <MailTransport/transportmanager.h>
+#include <MailTransport/transport.h>
+#include <MailTransport/messagequeuejob.h>
 #ifdef USE_AKONADI
-#include <kcalcore/person.h>
+#include <KCalCore/person.h>
 #else
 #include <kcal/person.h>
 #endif
-#include <kmime/kmime_header_parsing.h>
-#include <kmime/kmime_headers.h>
-#include <kmime/kmime_message.h>
+#include <KMime/kmime_header_parsing.h>
+#include <KMime/kmime_headers.h>
+#include <KMime/kmime_message.h>
 
 #include <kstandarddirs.h>
 #include <klocale.h>

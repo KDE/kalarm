@@ -27,9 +27,9 @@
 
 #include <kalarmcal/identities.h>
 
-#include <kpimidentities/identity.h>
-#include <kpimidentities/identitymanager.h>
-#include <kholidays/holidays.h>
+#include <KPIMIdentities/identity.h>
+#include <KPIMIdentities/identitymanager.h>
+#include <KHolidays/holidays.h>
 
 #include <kglobal.h>
 #include <kconfiggroup.h>

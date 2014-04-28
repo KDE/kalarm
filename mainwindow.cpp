@@ -50,10 +50,10 @@
 #include <kalarmcal/kaevent.h>
 
 #include <libkdepim/misc/maillistdrag.h>
-#include <kmime/kmime_content.h>
+#include <KMime/kmime_content.h>
 #ifdef USE_AKONADI
-#include <kcalcore/memorycalendar.h>
-#include <kcalutils/icaldrag.h>
+#include <KCalCore/memorycalendar.h>
+#include <KCalUtils/icaldrag.h>
 #include <AkonadiCore/control.h>
 using namespace KCalCore;
 using namespace KCalUtils;

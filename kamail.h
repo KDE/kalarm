@@ -24,7 +24,7 @@
 #include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
-#include <kcalcore/person.h>
+#include <KCalCore/person.h>
 #else
 #include <kcal/person.h>
 #endif
