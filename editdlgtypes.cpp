@@ -49,7 +49,7 @@
 
 #include <KAlarmCal/identities.h>
 
-#include <akonadi/contact/emailaddressselectiondialog.h>
+#include <Akonadi/contact/emailaddressselectiondialog.h>
 #ifdef USE_AKONADI
 #include <KCalCore/person.h>
 #include <KCalUtils/icaldrag.h>

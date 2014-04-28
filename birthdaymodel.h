@@ -21,7 +21,7 @@
 #ifndef BIRTHDAYMODEL_H
 #define BIRTHDAYMODEL_H
 
-#include <akonadi/contact/contactstreemodel.h>
+#include <Akonadi/contact/contactstreemodel.h>
 
 #include <QSortFilterProxyModel>
 
