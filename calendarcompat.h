@@ -24,7 +24,7 @@
 #ifndef USE_AKONADI
 
 #include "alarmresource.h"
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/kacalendar.h>
 namespace KCal { class CalendarLocal; }
 
 

@@ -24,7 +24,7 @@
 #include "kalarmapp.h"
 #include "kamail.h"
 
-#include <kalarmcal/identities.h>
+#include <KAlarmCal/identities.h>
 
 #include <kcmdlineargs.h>
 

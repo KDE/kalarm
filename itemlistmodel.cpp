@@ -21,7 +21,7 @@
 #include "itemlistmodel.h"
 #include "collectionmodel.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/kaevent.h>
 
 #include <kselectionproxymodel.h>
 

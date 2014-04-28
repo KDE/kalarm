@@ -23,8 +23,8 @@
 #include "messagebox.h"
 #include "preferences.h"
 
-#include <kalarmcal/collectionattribute.h>
-#include <kalarmcal/compatibilityattribute.h>
+#include <KAlarmCal/collectionattribute.h>
+#include <KAlarmCal/compatibilityattribute.h>
 
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiWidgets/collectiondialog.h>

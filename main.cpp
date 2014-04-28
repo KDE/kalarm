@@ -22,7 +22,7 @@
 
 #include "kalarmapp.h"
 
-#include <kalarmcal/version.h>
+#include <KAlarmCal/version.h>
 
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>

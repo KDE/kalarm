@@ -32,7 +32,7 @@
 #include "timezonecombo.h"
 #include "alarmtimewidget.h"
 
-#include <kalarmcal/datetime.h>
+#include <KAlarmCal/datetime.h>
 
 #include <kdatecombobox.h>
 #include <kdialog.h>

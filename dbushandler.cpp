@@ -30,8 +30,8 @@
 #include "dbushandler.h"
 #include <kalarmadaptor.h>
 
-#include <kalarmcal/identities.h>
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/identities.h>
+#include <KAlarmCal/karecurrence.h>
 
 #ifdef USE_AKONADI
 #include <KCalCore/duration.h>

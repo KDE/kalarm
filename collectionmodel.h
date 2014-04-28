@@ -23,7 +23,7 @@
 
 #include "akonadimodel.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/kacalendar.h>
 
 #include <AkonadiCore/favoritecollectionsmodel.h>
 #include <kcheckableproxymodel.h>

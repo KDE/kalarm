@@ -24,8 +24,8 @@
 #include "editdlg.h"
 #include "preferences.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/alarmtext.h>
+#include <KAlarmCal/kaevent.h>
 
 #ifndef USE_AKONADI
 #include <kcal/person.h>

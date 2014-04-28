@@ -28,7 +28,7 @@
 #include "synchtimer.h"
 #include "eventlistmodel.moc"
 
-#include <kalarmcal/alarmtext.h>
+#include <KAlarmCal/alarmtext.h>
 
 #include <klocale.h>
 #include <kiconloader.h>

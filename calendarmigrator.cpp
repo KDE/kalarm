@@ -26,9 +26,9 @@
 #include "mainwindow.h"
 #include "messagebox.h"
 
-#include <kalarmcal/collectionattribute.h>
-#include <kalarmcal/compatibilityattribute.h>
-#include <kalarmcal/version.h>
+#include <KAlarmCal/collectionattribute.h>
+#include <KAlarmCal/compatibilityattribute.h>
+#include <KAlarmCal/version.h>
 
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>

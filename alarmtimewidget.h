@@ -21,7 +21,7 @@
 #ifndef ALARMTIMEWIDGET_H
 #define ALARMTIMEWIDGET_H
 
-#include <kalarmcal/datetime.h>
+#include <KAlarmCal/datetime.h>
 #include <QFrame>
 
 class QAbstractButton;

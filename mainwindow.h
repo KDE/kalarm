@@ -30,7 +30,7 @@
 #include "mainwindowbase.h"
 #include "undo.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <AkonadiCore/item.h>

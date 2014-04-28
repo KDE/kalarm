@@ -25,7 +25,7 @@
 #include "resourceremote.h"
 #include "alarmresources.moc"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/kacalendar.h>
 
 #include <kresources/selectdialog.h>
 #include <kcal/calformat.h>

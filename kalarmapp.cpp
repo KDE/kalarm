@@ -46,8 +46,8 @@
 
 #include "kspeechinterface.h"
 
-#include <kalarmcal/datetime.h>
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/datetime.h>
+#include <KAlarmCal/karecurrence.h>
 
 #include <klocale.h>
 #include <kstandarddirs.h>

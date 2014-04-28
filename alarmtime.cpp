@@ -21,7 +21,7 @@
 #include "alarmtime.h"
 #include "preferences.h"
 
-#include <kalarmcal/datetime.h>
+#include <KAlarmCal/datetime.h>
 
 #include <ksystemtimezone.h>
 #include <kglobal.h>

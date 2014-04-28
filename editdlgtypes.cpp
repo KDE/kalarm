@@ -47,7 +47,7 @@
 #include "templatepickdlg.h"
 #include "timespinbox.h"
 
-#include <kalarmcal/identities.h>
+#include <KAlarmCal/identities.h>
 
 #include <akonadi/contact/emailaddressselectiondialog.h>
 #ifdef USE_AKONADI

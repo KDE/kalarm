@@ -23,7 +23,7 @@
 
 #include "editdlg.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/kaevent.h>
 
 #include <kstatusnotifieritem.h>
 #include <QIcon>

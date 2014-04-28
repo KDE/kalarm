@@ -25,7 +25,7 @@
 
 #include "kalarm_resources_export.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/kacalendar.h>
 
 #include <kcal/resourcecached.h>
 #include <QMap>

@@ -22,7 +22,7 @@
 #include "birthdaymodel.h"
 #include "alarmcalendar.h"
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/kaevent.h>
 
 #include <AkonadiCore/changerecorder.h>
 #include <AkonadiCore/entitydisplayattribute.h>

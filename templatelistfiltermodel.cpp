@@ -21,8 +21,8 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "templatelistfiltermodel.h"
 
-#include <kalarmcal/kaevent.h>
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/kaevent.h>
+#include <KAlarmCal/kacalendar.h>
 
 #include <kdebug.h>
 

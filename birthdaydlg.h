@@ -20,7 +20,7 @@
 #ifndef BIRTHDAYDLG_H
 #define BIRTHDAYDLG_H
 
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/kaevent.h>
 
 #include <kdialog.h>
 #include <klineedit.h>

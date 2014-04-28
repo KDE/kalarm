@@ -44,8 +44,8 @@
 #include "templatelistview.h"
 #include "templatemenuaction.h"
 
-#include <kalarmcal/identities.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/identities.h>
+#include <KAlarmCal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <KCalCore/event.h>

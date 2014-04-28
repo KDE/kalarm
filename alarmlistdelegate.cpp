@@ -30,7 +30,7 @@
 #endif
 #include "functions.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/kacalendar.h>
 
 #include <kcolorscheme.h>
 #include <kdebug.h>

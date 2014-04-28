@@ -29,10 +29,10 @@
 #include "kalarmsettings.h"
 #include "kalarmdirsettings.h"
 
-#include <kalarmcal/alarmtext.h>
-#include <kalarmcal/collectionattribute.h>
-#include <kalarmcal/compatibilityattribute.h>
-#include <kalarmcal/eventattribute.h>
+#include <KAlarmCal/alarmtext.h>
+#include <KAlarmCal/collectionattribute.h>
+#include <KAlarmCal/compatibilityattribute.h>
+#include <KAlarmCal/eventattribute.h>
 
 #include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>

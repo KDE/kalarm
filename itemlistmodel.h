@@ -23,8 +23,8 @@
 
 #include "akonadimodel.h"
 
-#include <kalarmcal/kacalendar.h>
-#include <kalarmcal/kaevent.h>
+#include <KAlarmCal/kacalendar.h>
+#include <KAlarmCal/kaevent.h>
 
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 

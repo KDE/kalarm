@@ -24,7 +24,7 @@
 #ifndef RECURRENCEEDIT_H
 #define RECURRENCEEDIT_H
 
-#include <kalarmcal/repetition.h>
+#include <KAlarmCal/repetition.h>
 
 #include <kdatetime.h>
 

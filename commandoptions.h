@@ -26,8 +26,8 @@
 #include "eventid.h"
 #endif
 
-#include <kalarmcal/kaevent.h>
-#include <kalarmcal/karecurrence.h>
+#include <KAlarmCal/kaevent.h>
+#include <KAlarmCal/karecurrence.h>
 
 #include <kdatetime.h>
 #include <QByteArray>

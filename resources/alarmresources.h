@@ -27,7 +27,7 @@
 #include "alarmresource.h"
 #include "kalarm_resources_export.h"
 
-#include <kalarmcal/kacalendar.h>
+#include <KAlarmCal/kacalendar.h>
 
 #include <kresources/manager.h>
 #include <kdatetime.h>

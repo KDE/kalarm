@@ -27,7 +27,7 @@
 #include "messagebox.h"
 #include "preferences.h"
 
-#include <kalarmcal/identities.h>
+#include <KAlarmCal/identities.h>
 
 #include <KPIMIdentities/identitymanager.h>
 #include <KPIMIdentities/identity.h>
