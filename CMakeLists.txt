@@ -10,20 +10,7 @@ set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 option(KALARM_USE_AKONADI "Build to use Akonadi" ON)
 
-# Kalarm from kdepim master needs kdepimlibs 4.7
-if(${KDE_VERSION} VERSION_LESS 4.6.40)
-  set(KALARM_USE_AKONADI FALSE)
-endif()
 
-if(KALARM_USE_KRESOURCES AND KALARM_USE_AKONADI)
-    message(STATUS "Kalarmcal (in kdepimlibs) was built to use KResources, not Akonadi. KAlarm will NOT be built with Akonadi support.")
-    set(KALARM_USE_AKONADI FALSE)
-elseif(NOT KALARM_USE_KRESOURCES AND NOT KALARM_USE_AKONADI)
-    message(STATUS "Kalarmcal (in kdepimlibs) was built to use Akonadi, not KResources. KAlarm will be built WITH Akonadi support.")
-    set(KALARM_USE_AKONADI TRUE)
-endif()
-
-if(KALARM_USE_AKONADI)
     add_definitions(-DUSE_AKONADI)
     if (NOT CMAKE_VERSION VERSION_LESS 2.8.12 AND (CMAKE_VERSION VERSION_LESS 2.8.12.1
             OR CMAKE_VERSION VERSION_LESS 2.8.13 # Temporary measure because build.kde.org uses a datestamped CMake version
@@ -31,21 +18,7 @@ if(KALARM_USE_AKONADI)
         # http://public.kitware.com/Bug/view.php?id=14535
         set(CMAKE_AUTOMOC_MOC_OPTIONS -DUSE_AKONADI)
     endif()
-else()
-    add_definitions(-DUSE_KRESOURCES)
-    add_definitions(
-        -DKRESOURCES_DEPRECATED=
-        -DKABC_DEPRECATED=
-        -DKCAL_DEPRECATED=
-    )
-    # This one won't be needed when CMake 2.8.13 is depended on.
-    add_definitions(
-        -DKRESOURCES_DEPRECATED_EXPORT=KRESOURCES_EXPORT
-        -DKABC_DEPRECATED_EXPORT=KABC_EXPORT
-        -DKCAL_DEPRECATED_EXPORT=KCAL_EXPORT
-    )
-endif()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
+kde_enable_exceptions()
 
 
 if(KALARM_USE_AKONADI)
@@ -174,11 +147,11 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
    )
 endif()
 
-kde4_add_ui_files(kalarm_bin_SRCS
+qt5_wrap_ui(kalarm_bin_SRCS
     wakedlg.ui
 )
 
-qt4_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
+qt5_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
 if (KMAIL_SUPPORTED)
     qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/org.kde.kmail.kmail.xml)
 endif ()
@@ -192,14 +165,14 @@ if(KALARM_USE_AKONADI)
     qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
 
     qt4_add_dbus_interfaces(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml)
-#    qt4_add_dbus_adaptor(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml agentbase.h Akonadi::AgentBase controladaptor Akonadi__ControlAdaptor)
+#    qt5_add_dbus_adaptor(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml agentbase.h Akonadi::AgentBase controladaptor Akonadi__ControlAdaptor)
 endif()
 
-kde4_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
+kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
 #if (UNIX)
 kde4_add_app_icon(kalarm_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/ox*-app-kalarm.png")
-kde4_add_executable(kalarm_bin ${kalarm_bin_SRCS})
+add_executable(kalarm_bin ${kalarm_bin_SRCS})
 if(KALARM_USE_AKONADI)
     add_dependencies(kalarm_bin kalarm_resource_xml kalarmdir_resource_xml)
 endif()
@@ -211,39 +184,39 @@ set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
 if(KALARM_USE_AKONADI)
     target_link_libraries(kalarm_bin
-        ${KDEPIMLIBS_KALARMCAL_LIBS}
-        ${KDEPIMLIBS_KCALCORE_LIBS}
-        ${KDEPIMLIBS_KCALUTILS_LIBS}
-        ${KDEPIMLIBS_KABC_LIBS}
-        ${KDEPIMLIBS_KMIME_LIBS}
-        ${KDEPIMLIBS_KPIMIDENTITIES_LIBS}
-        ${KDEPIMLIBS_MAILTRANSPORT_LIBS}
-        ${KDEPIMLIBS_AKONADI_LIBS}
-        ${KDEPIMLIBS_AKONADI_KMIME_LIBS}
-        ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}
-        ${KDEPIMLIBS_KHOLIDAYS_LIBS}
-        ${KDEPIMLIBS_KPIMUTILS_LIBS}
+        KF5::KAlarmCal
+        KF5::CalendarCore
+        KF5::CalendarUtils
+        KF5::Abc
+        KF5::KMime
+        KF5::PimIdentities
+        KF5::MailTransport
+        KF5::AkonadiCore
+        KF5::AkonadiKMime
+        KF5::AkonadiContact
+        KF5::Holidays
+        KF5::PimUtils
         kdepim
-        ${KDE4_KCMUTILS_LIBS}
+        KF5::KCMUtils
         ${KDE4_PHONON_LIBS}
         ${X11_X11_LIB}
     )
 else()
     target_link_libraries(kalarm_bin
         kalarm_resources
-        ${KDEPIMLIBS_KALARMCAL_LIBS}
+        KF5::KAlarmCal
         ${KDEPIMLIBS_KCAL_LIBS}
-        ${KDEPIMLIBS_KABC_LIBS}
-        ${KDEPIMLIBS_KMIME_LIBS}
-        ${KDEPIMLIBS_KPIMIDENTITIES_LIBS}
-        ${KDEPIMLIBS_MAILTRANSPORT_LIBS}
-        ${KDEPIMLIBS_AKONADI_LIBS}
-        ${KDEPIMLIBS_AKONADI_KMIME_LIBS}
-        ${KDEPIMLIBS_AKONADI_CONTACT_LIBS}
-        ${KDEPIMLIBS_KHOLIDAYS_LIBS}
-        ${KDEPIMLIBS_KPIMUTILS_LIBS}
+        KF5::Abc
+        KF5::KMime
+        KF5::PimIdentities
+        KF5::MailTransport
+        KF5::AkonadiCore
+        KF5::AkonadiKMime
+        KF5::AkonadiContact
+        KF5::Holidays
+        KF5::PimUtils
         kdepim
-        ${KDE4_KCMUTILS_LIBS}
+        KF5::KCMUtils
         ${KDE4_PHONON_LIBS}
         ${X11_X11_LIB}
     )
@@ -265,8 +238,9 @@ install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults
 
 ########### KAuth helper ###############
 
-kde4_add_executable(kalarm_helper rtcwakeaction.cpp)
-target_link_libraries(kalarm_helper ${KDE4_KDECORE_LIBS})
+add_executable(kalarm_helper rtcwakeaction.cpp)
+target_link_libraries(kalarm_helper )
 install(TARGETS kalarm_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 kde4_install_auth_helper_files(kalarm_helper org.kde.kalarmrtcwake root)
-kde4_install_auth_actions(org.kde.kalarmrtcwake rtcwakeaction.actions)
+#PORT TO QT5
+#kde4_install_auth_actions(org.kde.kalarmrtcwake rtcwakeaction.actions)
