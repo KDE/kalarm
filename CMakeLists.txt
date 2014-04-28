@@ -20,7 +20,7 @@ set(KF5_VERSION "4.98.0")
 
 ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KALARMCAL
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_version.h"
-                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5KAlarmCalConfigVersion.cmake"
+                        PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfigVersion.cmake"
                         SOVERSION 5
 )
 
@@ -42,22 +42,22 @@ endif()
 add_subdirectory(src)
 
 ########### CMake Config Files ###########
-set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5KAlarmCal")
+set(CMAKECONFIG_INSTALL_DIR "${CMAKECONFIG_INSTALL_PREFIX}/KF5AlarmCalendar")
 
 ecm_configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF5KAlarmCalConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5KAlarmCalConfig.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF5AlarmCalendarConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfig.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
 )
 
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5KAlarmCalConfig.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5KAlarmCalConfigVersion.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfigVersion.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
 
-install(EXPORT KF5KAlarmCalTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5KAlarmCalTargets.cmake NAMESPACE KF5::)
+install(EXPORT KF5AlarmCalendarTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5AlarmCalendarTargets.cmake NAMESPACE KF5::)
 
 install(FILES
    ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_version.h

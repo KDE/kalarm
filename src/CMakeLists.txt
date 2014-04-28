@@ -24,13 +24,13 @@ set(kalarmcal_LIB_SRCS ${kalarmcal_LIB_SRCS}
     )
 
 
-add_library(KF5KAlarmCal ${kalarmcal_LIB_SRCS})
+add_library(KF5AlarmCalendar ${kalarmcal_LIB_SRCS})
 
-generate_export_header(KF5KAlarmCal BASE_NAME kalarmcal)
+generate_export_header(KF5AlarmCalendar BASE_NAME kalarmcal)
 
-add_library(KF5::KAlarmCal ALIAS KF5KAlarmCal)
+add_library(KF5::AlarmCalendar ALIAS KF5AlarmCalendar)
 
-target_link_libraries(KF5KAlarmCal
+target_link_libraries(KF5AlarmCalendar
                       KF5::Holidays
                       KF5::PimIdentities
                       KF5::CoreAddons
@@ -38,29 +38,29 @@ target_link_libraries(KF5KAlarmCal
                       KF5::AkonadiCore
                       )
 
-set_target_properties(KF5KAlarmCal PROPERTIES
+set_target_properties(KF5AlarmCalendar PROPERTIES
       VERSION ${KALARMCAL_VERSION_STRING}
       SOVERSION ${KALARMCAL_SOVERSION}
-      EXPORT_NAME KAlarmCal
+      EXPORT_NAME AlarmCalendar
 )
 
 
-target_include_directories(KF5KAlarmCal INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal>")
-target_include_directories(KF5KAlarmCal PUBLIC "$<BUILD_INTERFACE:${KAlarmCal_SOURCE_DIR}/src;${KAlarmCal_BINARY_DIR}/src>")
+target_include_directories(KF5AlarmCalendar INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal>")
+target_include_directories(KF5AlarmCalendar PUBLIC "$<BUILD_INTERFACE:${KAlarmCal_SOURCE_DIR}/src;${KAlarmCal_BINARY_DIR}/src>")
 
 
-install(TARGETS KF5KAlarmCal EXPORT KF5KAlarmCalTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5AlarmCalendar EXPORT KF5AlarmCalendarTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   HEADER_NAMES
-  AlarmText  
-  CollectionAttribute  
-  CompatibilityAttribute  
-  DateTime  
-  EventAttribute  
-  KAEvent  
-  KARecurrence  
+  AlarmText
+  CollectionAttribute
+  CompatibilityAttribute
+  DateTime
+  EventAttribute
+  KAEvent
+  KARecurrence
   Repetition
   REQUIRED_HEADERS KAlarmCal_HEADERS
   PREFIX KAlarmCal
@@ -68,18 +68,10 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
 
 
 install(FILES
-        alarmtext.h
-        datetime.h
+        ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
         identities.h
         kacalendar.h
-        kaevent.h
-        ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
-        karecurrence.h
-        repetition.h
         version.h
-        collectionattribute.h
-        compatibilityattribute.h
-        eventattribute.h
         ${KAlarmCal_HEADERS}
     ${KAlarmCal_CamelCase_HEADERS}
     DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal
