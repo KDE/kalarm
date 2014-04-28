@@ -184,7 +184,7 @@ set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
 if(KALARM_USE_AKONADI)
     target_link_libraries(kalarm_bin
-        KF5::KAlarmCal
+        KF5::AlarmCalendar
         KF5::CalendarCore
         KF5::CalendarUtils
         KF5::Abc
@@ -204,7 +204,7 @@ if(KALARM_USE_AKONADI)
 else()
     target_link_libraries(kalarm_bin
         kalarm_resources
-        KF5::KAlarmCal
+        KF5::AlarmCalendar
         ${KDEPIMLIBS_KCAL_LIBS}
         KF5::Abc
         KF5::Mime
