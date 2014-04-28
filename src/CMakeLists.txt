@@ -5,11 +5,6 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 add_definitions( -DQT_NO_CAST_FROM_ASCII )
 add_definitions( -DQT_NO_CAST_TO_ASCII )
 
-
-include_directories(
-  ${kcalcore_BINARY_DIR}
-)
-
 ########### next target ###############
 set(kalarmcal_LIB_SRCS
     kacalendar.cpp
@@ -50,6 +45,10 @@ set_target_properties(KF5KAlarmCal PROPERTIES
 )
 
 
+target_include_directories(KF5KAlarmCal INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal>")
+target_include_directories(KF5KAlarmCal PUBLIC "$<BUILD_INTERFACE:${KAlarmCal_SOURCE_DIR}/src;${KAlarmCal_BINARY_DIR}/src>")
+
+
 install(TARGETS KF5KAlarmCal EXPORT KF5KAlarmCalTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
@@ -69,29 +68,20 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
 
 
 install(FILES
+        alarmtext.h
+        datetime.h
+        identities.h
+        kacalendar.h
+        kaevent.h
+        ${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
+        karecurrence.h
+        repetition.h
+        version.h
+        collectionattribute.h
+        compatibilityattribute.h
+        eventattribute.h
+        ${KAlarmCal_HEADERS}
     ${KAlarmCal_CamelCase_HEADERS}
     DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal
     COMPONENT Devel
 )
-
-install(FILES
-	alarmtext.h
-	datetime.h
-	identities.h
-	kacalendar.h
-	kaevent.h
-	${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_export.h
-	karecurrence.h
-	repetition.h
-	version.h
-        ${KAlarmCal_HEADERS}
-	DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/kalarmcal
-	COMPONENT Devel
-)
-install(FILES
-	    collectionattribute.h
-	    compatibilityattribute.h
-	    eventattribute.h
-	    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/kalarmcal
-	    COMPONENT Devel
-           )
