@@ -62,7 +62,7 @@ set(libkalarm_SRCS
     lib/itembox.cpp
     lib/kalocale.cpp
     lib/label.cpp
-    lib/messagebox.cpp
+    #REACTIVATE lib/messagebox.cpp
     lib/packedlayout.cpp
     lib/pushbutton.cpp
     lib/radiobutton.cpp
@@ -155,7 +155,7 @@ qt5_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBu
 if (KMAIL_SUPPORTED)
     qt4_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/org.kde.kmail.kmail.xml)
 endif ()
-qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
+#REACTIVATE qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
 if(KALARM_USE_AKONADI)
     kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)

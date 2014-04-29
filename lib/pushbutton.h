@@ -22,6 +22,7 @@
 #define PUSHBUTTON_H
 
 #include <kpushbutton.h>
+#include <KIcon>
 class QMouseEvent;
 class QKeyEvent;
 

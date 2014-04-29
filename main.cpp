@@ -25,7 +25,7 @@
 #include <KAlarmCal/version.h>
 
 #include <kcmdlineargs.h>
-#include <kaboutdata.h>
+#include <k4aboutdata.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -36,9 +36,9 @@
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm"), KALARM_VERSION,
+    K4AboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm"), KALARM_VERSION,
         ki18n("Personal alarm message, command and email scheduler for KDE"),
-        KAboutData::License_GPL,
+        K4AboutData::License_GPL,
         ki18n("Copyright 2001-2014, David Jarvie"), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");
     aboutData.addAuthor(ki18n("David Jarvie"), KLocalizedString(), "djarvie@kde.org");
     aboutData.setOrganizationDomain("kde.org");

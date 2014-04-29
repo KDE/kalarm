@@ -24,11 +24,7 @@
 #include "editdlgtypes.h"
 
 #include "alarmcalendar.h"
-#ifdef USE_AKONADI
 #include "collectionmodel.h"
-#else
-#include "alarmresources.h"
-#endif
 #include "alarmtimewidget.h"
 #include "autoqpointer.h"
 #include "buttongroup.h"
@@ -39,7 +35,7 @@
 #include "latecancel.h"
 #include "lineedit.h"
 #include "mainwindow.h"
-#include "messagebox.h"
+//QT5 #include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
 #include "radiobutton.h"
@@ -63,6 +59,8 @@
 #include <kvbox.h>
 #include <kwindowsystem.h>
 #include <kdebug.h>
+#include <KIcon>
+#include <KTimeZone>
 
 #include <QLabel>
 #include <QGroupBox>
@@ -960,7 +958,7 @@ bool EditAlarmDlg::validate()
         if (!errmsg.isEmpty())
         {
             mTemplateName->setFocus();
-            KAMessageBox::sorry(this, errmsg);
+            //QT5 KAMessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -1008,21 +1006,18 @@ bool EditAlarmDlg::validate()
                                                   "The start date/time does not match the alarm's recurrence pattern, "
                                                   "so it will be adjusted to the date/time of the next recurrence (%1).",
                                                   KGlobal::locale()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
+#if 0 //QT5
                 if (KAMessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
                     return false;
+#endif
             }
         }
 
         if (timedRecurrence)
         {
             KAEvent event;
-#ifdef USE_AKONADI
             Akonadi::Collection c;
             getEvent(event, c);     // this may adjust mAlarmDateTime
-#else
-            AlarmResource* r;
-            getEvent(event, r);     // this may adjust mAlarmDateTime
-#endif
             KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
             bool dateOnly = mAlarmDateTime.isDateOnly();
             if ((dateOnly  &&  mAlarmDateTime.date() < now.date())
@@ -1032,14 +1027,18 @@ bool EditAlarmDlg::validate()
                 // has already expired, so we must adjust it.
                 if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
                 {
+#if 0 //QT5
                     KAMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
+#endif
                 }
                 if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::DISPLAY_TRIGGER).isValid())
                 {
+#if 0 //QT5
                     if (KAMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
                         != KMessageBox::Continue)
                         return false;
+#endif
                 }
             }
         }
@@ -1049,7 +1048,7 @@ bool EditAlarmDlg::validate()
         {
             mTabs->setCurrentIndex(mRecurPageIndex);
             errWidget->setFocus();
-            KAMessageBox::sorry(this, errmsg);
+            //QT5 KAMessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -1066,8 +1065,8 @@ bool EditAlarmDlg::validate()
             {
                 mTabs->setCurrentIndex(mMainPageIndex);
                 mReminder->setFocusOnCount();
-                KAMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
-                                                Reminder::i18n_chk_FirstRecurrenceOnly()));
+                //QT5 KAMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
+                                                //Reminder::i18n_chk_FirstRecurrenceOnly()));
                 return false;
             }
         }
@@ -1081,14 +1080,14 @@ bool EditAlarmDlg::validate()
             if (longestRecurMinutes > 0
             &&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminder)
             {
-                KAMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
+                //QT5 KAMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
             if (!recurEvent.repetition().isDaily()
             &&  ((mTemplate && mTemplateAnyTime->isChecked())  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
             {
-                KAMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
+                //QT5 KAMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
@@ -1097,7 +1096,6 @@ bool EditAlarmDlg::validate()
     if (!checkText(mAlarmMessage))
         return false;
 
-#ifdef USE_AKONADI
     mCollection = Akonadi::Collection();
     // An item ID = -2 indicates that the caller already
     // knows which collection to use.
@@ -1119,41 +1117,12 @@ bool EditAlarmDlg::validate()
             mCollection = CollectionControlModel::destination(type, this, false, &cancelled);
         if (!mCollection.isValid())
         {
-            if (!cancelled)
-                KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
-            return false;
-        }
-    }
-#else
-    mResource = 0;
-    // A null resource event ID indicates that the caller already
-    // knows which resource to use.
-    if (!mResourceEventId.isNull())
-    {
-        if (!mResourceEventId.isEmpty())
-        {
-            mResource = AlarmCalendar::resources()->resourceForEvent(mResourceEventId);
-            if (mResource)
-            {
-                CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
-                if (mResource->alarmType() != type)
-                    mResource = 0;   // event may have expired while dialog was open
+            if (!cancelled) {
+                //QT5 KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
             }
-        }
-        bool cancelled = false;
-        if (!mResource  ||  !mResource->writable())
-        {
-            CalEvent::Type type = mTemplate ? CalEvent::TEMPLATE : CalEvent::ACTIVE;
-            mResource = AlarmResources::instance()->destination(type, this, false, &cancelled);
-        }
-        if (!mResource)
-        {
-            if (!cancelled)
-                KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
             return false;
         }
     }
-#endif
     return true;
 }
 

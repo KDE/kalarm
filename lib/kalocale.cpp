@@ -24,7 +24,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <KLocalizedString>
 
 namespace KAlarm
 {
@@ -46,6 +46,7 @@ int localeFirstDayOfWeek()
 */
 QString weekDayName(int day, const KLocale* locale)
 {
+#if 0 //QT5
     switch (day)
     {
         case 1: return ki18nc("@option Name of the weekday", "Monday").toString(locale);
@@ -56,6 +57,7 @@ QString weekDayName(int day, const KLocale* locale)
         case 6: return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
         case 7: return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
     }
+#endif
     return QString();
 }
 
