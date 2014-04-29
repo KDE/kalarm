@@ -32,8 +32,8 @@
 
 #include <collection.h>
 #include <item.h>
-#include <kcalcore/person.h>
-#include <kcalcore/calendar.h>
+#include <person.h>
+#include <calendar.h>
 
 #include <QtCore/QBitArray>
 #include <QColor>

@@ -24,9 +24,9 @@
 #define KALARM_KACALENDAR_H
 
 #include "kalarmcal_export.h"
-#include <kcalcore/filestorage.h>
-#include <kcalcore/calendar.h>
-#include <kcalcore/event.h>
+#include <filestorage.h>
+#include <calendar.h>
+#include <event.h>
 #include <collection.h>
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>

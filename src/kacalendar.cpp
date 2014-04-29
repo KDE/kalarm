@@ -27,9 +27,9 @@
 
 #include "collectionattribute.h"
 
-#include <kcalcore/event.h>
-#include <kcalcore/alarm.h>
-#include <kcalcore/memorycalendar.h>
+#include <event.h>
+#include <alarm.h>
+#include <memorycalendar.h>
 
 #include <kmessagebox.h>
 

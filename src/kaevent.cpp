@@ -26,8 +26,8 @@
 #include "identities.h"
 #include "version.h"
 
-#include <kcalcore/memorycalendar.h>
-#include <kholidays/holidays.h>
+#include <memorycalendar.h>
+#include <holidays.h>
 using namespace KHolidays;
 
 #include <ksystemtimezone.h>

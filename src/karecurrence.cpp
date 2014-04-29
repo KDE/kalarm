@@ -22,8 +22,8 @@
 
 #include "karecurrence.h"
 
-#include <kcalcore/recurrence.h>
-#include <kcalcore/icalformat.h>
+#include <recurrence.h>
+#include <icalformat.h>
 #include <kglobal.h>
 #include <klocale.h>
 #include <klocalizedstring.h>

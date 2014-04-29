@@ -25,8 +25,8 @@
 
 #include "kalarmcal_export.h"
 
-#include <kcalcore/recurrencerule.h>
-#include <kcalcore/duration.h>
+#include <recurrencerule.h>
+#include <duration.h>
 namespace KCalCore { class Recurrence; }
 
 #include <QtCore/QBitArray>
