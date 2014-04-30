@@ -15,13 +15,10 @@ set(kalarmcal_LIB_SRCS
     datetime.cpp
     repetition.cpp
     version.cpp
-   )
-
-set(kalarmcal_LIB_SRCS ${kalarmcal_LIB_SRCS}
     collectionattribute.cpp
     compatibilityattribute.cpp
     eventattribute.cpp
-    )
+)
 
 
 add_library(KF5AlarmCalendar ${kalarmcal_LIB_SRCS})
@@ -36,7 +33,7 @@ target_link_libraries(KF5AlarmCalendar
                       KF5::CoreAddons
                       KF5::CalendarCore
                       KF5::AkonadiCore
-                      )
+)
 
 set_target_properties(KF5AlarmCalendar PROPERTIES
       VERSION ${KALARMCAL_VERSION_STRING}
@@ -72,7 +69,7 @@ install(FILES
         kacalendar.h
         version.h
         ${KAlarmCal_HEADERS}
-    ${KAlarmCal_CamelCase_HEADERS}
-    DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal
-    COMPONENT Devel
+        ${KAlarmCal_CamelCase_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal
+        COMPONENT Devel
 )
