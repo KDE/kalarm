@@ -8,9 +8,6 @@ add_definitions( -DQT_NO_CAST_TO_ASCII )
 
 set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
-option(KALARM_USE_AKONADI "Build to use Akonadi" ON)
-
-
     add_definitions(-DUSE_AKONADI)
     if (NOT CMAKE_VERSION VERSION_LESS 2.8.12 AND (CMAKE_VERSION VERSION_LESS 2.8.12.1
             OR CMAKE_VERSION VERSION_LESS 2.8.13 # Temporary measure because build.kde.org uses a datestamped CMake version
@@ -21,7 +18,6 @@ option(KALARM_USE_AKONADI "Build to use Akonadi" ON)
 kde_enable_exceptions()
 
 
-if(KALARM_USE_AKONADI)
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/
@@ -30,21 +26,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libkdepim/
     ${Boost_INCLUDE_DIR}
 )
-else()
-include_directories(
-    ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/resources
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/libkdepim/
-    ${Boost_INCLUDE_DIR}
-)
-endif()
 
-if(NOT KALARM_USE_AKONADI)
-    add_subdirectory(resources)
-endif()
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
@@ -126,7 +108,6 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     templatemenuaction.cpp
     wakedlg.cpp
 )
-if(KALARM_USE_AKONADI)
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     akonadimodel.cpp
     akonadiresourcecreator.cpp
@@ -136,16 +117,6 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     calendarmigrator.cpp
     eventid.cpp
    )
-else()
-set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
-    calendarcompat.cpp
-    eventlistmodel.cpp
-    alarmlistfiltermodel.cpp
-    resourceconfigdialog.cpp
-    resourcemodelview.cpp
-    templatelistfiltermodel.cpp
-   )
-endif()
 
 qt5_wrap_ui(kalarm_bin_SRCS
     wakedlg.ui
@@ -157,70 +128,45 @@ if (KMAIL_SUPPORTED)
 endif ()
 #REACTIVATE qt4_add_dbus_interfaces(kalarm_bin_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
-if(KALARM_USE_AKONADI)
-    kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
-    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
+kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
+qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
 
-    kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
-    qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
+kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmdirresource.kcfg org.kde.Akonadi.KAlarmDir.Settings)
+qt4_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarmDir.Settings.xml kalarmdirsettings KAlarmDirSettings)
 
-    qt4_add_dbus_interfaces(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml)
-#    qt5_add_dbus_adaptor(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml agentbase.h Akonadi::AgentBase controladaptor Akonadi__ControlAdaptor)
-endif()
+qt4_add_dbus_interfaces(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml)
+#qt5_add_dbus_adaptor(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freedesktop.Akonadi.Agent.Control.xml agentbase.h Akonadi::AgentBase controladaptor Akonadi__ControlAdaptor)
 
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
 #if (UNIX)
 kde4_add_app_icon(kalarm_bin_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/ox*-app-kalarm.png")
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
-if(KALARM_USE_AKONADI)
-    add_dependencies(kalarm_bin kalarm_resource_xml kalarmdir_resource_xml)
-endif()
+add_dependencies(kalarm_bin kalarm_resource_xml kalarmdir_resource_xml)
 if (KMAIL_SUPPORTED)
     add_dependencies(kalarm_bin kmail_xml)
 endif ()
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
-if(KALARM_USE_AKONADI)
-    target_link_libraries(kalarm_bin
-        KF5::AlarmCalendar
-        KF5::CalendarCore
-        KF5::CalendarUtils
-        KF5::Abc
-        KF5::Mime
-        KF5::PimIdentities
-        KF5::MailTransport
-        KF5::AkonadiCore
-        KF5::AkonadiMime
-        KF5::AkonadiContact
-        KF5::Holidays
-        KF5::PimUtils
-        kdepim
-        KF5::KCMUtils
-        ${KDE4_PHONON_LIBS}
-        ${X11_X11_LIB}
-    )
-else()
-    target_link_libraries(kalarm_bin
-        kalarm_resources
-        KF5::AlarmCalendar
-        ${KDEPIMLIBS_KCAL_LIBS}
-        KF5::Abc
-        KF5::Mime
-        KF5::PimIdentities
-        KF5::MailTransport
-        KF5::AkonadiCore
-        KF5::AkonadiMime
-        KF5::AkonadiContact
-        KF5::Holidays
-        KF5::PimUtils
-        kdepim
-        KF5::KCMUtils
-        ${KDE4_PHONON_LIBS}
-        ${X11_X11_LIB}
-    )
-endif()
+target_link_libraries(kalarm_bin
+KF5::AlarmCalendar
+KF5::CalendarCore
+KF5::CalendarUtils
+KF5::Abc
+KF5::Mime
+KF5::PimIdentities
+KF5::MailTransport
+KF5::AkonadiCore
+KF5::AkonadiMime
+KF5::AkonadiContact
+KF5::Holidays
+KF5::PimUtils
+kdepim
+KF5::KCMUtils
+${KDE4_PHONON_LIBS}
+${X11_X11_LIB}
+)
 
 
 install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
