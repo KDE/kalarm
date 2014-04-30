@@ -26,7 +26,7 @@
 #include <KAlarmCal/kaevent.h>
 
 #ifdef USE_AKONADI
-#include <KCalCore/duration.h>
+#include <KCalCore/Duration>
 #else
 #include <kcal/duration.h>
 #endif

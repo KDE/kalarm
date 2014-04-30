@@ -51,7 +51,7 @@
 
 #include <Akonadi/Contact/emailaddressselectiondialog.h>
 #ifdef USE_AKONADI
-#include <KCalCore/person.h>
+#include <KCalCore/Person>
 #include <KCalUtils/icaldrag.h>
 using namespace KCalCore;
 #else

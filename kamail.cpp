@@ -36,7 +36,7 @@
 #include <MailTransport/transport.h>
 #include <MailTransport/messagequeuejob.h>
 #ifdef USE_AKONADI
-#include <KCalCore/person.h>
+#include <KCalCore/Person>
 #else
 #include <kcal/person.h>
 #endif

@@ -36,8 +36,8 @@
 #include "preferences.h"
 
 #ifdef USE_AKONADI
-#include <KCalCore/memorycalendar.h>
-#include <KCalCore/icalformat.h>
+#include <KCalCore/MemoryCalendar>
+#include <KCalCore/IcalFormat>
 #else
 #include <kcal/calendarlocal.h>
 #include <kcal/icalformat.h>

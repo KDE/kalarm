@@ -22,7 +22,7 @@
 #define TIMEPERIOD_H
 
 #ifdef USE_AKONADI
-#include <KCalCore/duration.h>
+#include <KCalCore/Duration>
 #else
 #include <kcal/duration.h>
 #endif

@@ -48,10 +48,10 @@
 #include <KAlarmCal/kaevent.h>
 
 #ifdef USE_AKONADI
-#include <KCalCore/event.h>
-#include <KCalCore/icalformat.h>
-#include <KCalCore/person.h>
-#include <KCalCore/duration.h>
+#include <KCalCore/Event>
+#include <KCalCore/IcalFormat>
+#include <KCalCore/Person>
+#include <KCalCore/Duration>
 using namespace KCalCore;
 #else
 #include <kcal/event.h>

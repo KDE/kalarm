@@ -42,7 +42,7 @@
 #include <KAlarmCal/karecurrence.h>
 
 #ifdef USE_AKONADI
-#include <KCalCore/event.h>
+#include <KCalCore/Event>
 using namespace KCalCore;
 #else
 #include <kcal/event.h>

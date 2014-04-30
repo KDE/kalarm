@@ -24,7 +24,7 @@
 #include "checkbox.h"
 
 #ifdef USE_AKONADI
-#include <KCalCore/duration.h>
+#include <KCalCore/Duration>
 using namespace KCalCore;
 #else
 #include <kcal/duration.h>

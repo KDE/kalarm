@@ -52,7 +52,7 @@
 #include <libkdepim/misc/maillistdrag.h>
 #include <KMime/kmime_content.h>
 #ifdef USE_AKONADI
-#include <KCalCore/memorycalendar.h>
+#include <KCalCore/MemoryCalendar>
 #include <KCalUtils/icaldrag.h>
 #include <AkonadiCore/control.h>
 using namespace KCalCore;
