@@ -49,7 +49,7 @@ target_include_directories(KF5AlarmCalendar INTERFACE "$<INSTALL_INTERFACE:${KF5
 target_include_directories(KF5AlarmCalendar PUBLIC "$<BUILD_INTERFACE:${KAlarmCal_SOURCE_DIR}/src;${KAlarmCal_BINARY_DIR}/src>")
 
 
-install(TARGETS KF5AlarmCalendar EXPORT KF5AlarmCalendarTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5AlarmCalendar EXPORT KF5AlarmCalendarTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
