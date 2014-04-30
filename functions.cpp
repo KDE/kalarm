@@ -49,7 +49,7 @@
 
 #ifdef USE_AKONADI
 #include <KCalCore/Event>
-#include <KCalCore/IcalFormat>
+#include <KCalCore/ICalFormat>
 #include <KCalCore/Person>
 #include <KCalCore/Duration>
 using namespace KCalCore;
