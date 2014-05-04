@@ -112,6 +112,7 @@ QString     KAlarmApp::mFatalMessage;
 KAlarmApp::KAlarmApp()
     : KUniqueApplication(),
       mInitialised(false),
+      mRedisplayAlarms(false),
       mQuitting(false),
       mReadOnly(false),
       mLoginAlarmsDone(false),
@@ -574,7 +575,19 @@ int KAlarmApp::newInstance()
          * to happen under the Xfce desktop.)
          */
         if (AlarmCalendar::resources())
+        {
+#ifdef USE_AKONADI
+            if (AkonadiModel::instance()->isCollectionTreeFetched())
+            {
+                mRedisplayAlarms = false;
+                MessageWin::redisplayAlarms();
+            }
+            else
+                mRedisplayAlarms = true;
+#else
             MessageWin::redisplayAlarms();
+#endif
+        }
     }
 
     --mActiveCount;
@@ -1151,7 +1164,13 @@ kDebug();
     if (mReadOnly)
         return;    // don't need write access to calendars
 #ifdef USE_AKONADI
-    if (!AkonadiModel::instance()->isCollectionTreeFetched()
+    bool treeFetched = AkonadiModel::instance()->isCollectionTreeFetched();
+    if (treeFetched && mRedisplayAlarms)
+    {
+        mRedisplayAlarms = false;
+        MessageWin::redisplayAlarms();
+    }
+    if (!treeFetched
     ||  !AkonadiModel::instance()->isMigrationCompleted())
         return;
 #endif
