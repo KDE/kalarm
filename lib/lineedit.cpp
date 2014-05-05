@@ -22,7 +22,7 @@
 #include "lineedit.h"
 
 #include <libkdepim/misc/maillistdrag.h>
-#include <KABC/vcarddrag.h>
+#include <KABC/kabc/vcarddrag.h>
 #ifdef USE_AKONADI
 #include <KCalUtils/icaldrag.h>
 #else
