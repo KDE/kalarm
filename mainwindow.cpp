@@ -53,7 +53,7 @@
 #include <KMime/kmime_content.h>
 #ifdef USE_AKONADI
 #include <KCalCore/MemoryCalendar>
-#include <KCalUtils/icaldrag.h>
+#include <KCalUtils/kcalutils/icaldrag.h>
 #include <AkonadiCore/control.h>
 using namespace KCalCore;
 using namespace KCalUtils;

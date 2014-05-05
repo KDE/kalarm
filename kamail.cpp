@@ -29,12 +29,12 @@
 
 #include <KAlarmCal/identities.h>
 
-#include <KPIMIdentities/identitymanager.h>
-#include <KPIMIdentities/identity.h>
+#include <KPIMIdentities/kpimidentities/identitymanager.h>
+#include <KPIMIdentities/kpimidentities/identity.h>
 #include <KPIMUtils/kpimutils/email.h>
-#include <MailTransport/transportmanager.h>
-#include <MailTransport/transport.h>
-#include <MailTransport/messagequeuejob.h>
+#include <MailTransport/mailtransport/transportmanager.h>
+#include <MailTransport/mailtransport/transport.h>
+#include <MailTransport/mailtransport/messagequeuejob.h>
 #ifdef USE_AKONADI
 #include <KCalCore/Person>
 #else

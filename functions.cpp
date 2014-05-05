@@ -60,9 +60,9 @@ using namespace KCalCore;
 #include <kcal/duration.h>
 using namespace KCal;
 #endif
-#include <KPIMIdentities/identitymanager.h>
-#include <KPIMIdentities/identity.h>
-#include <KHolidays/holidays.h>
+#include <KPIMIdentities/kpimidentities/identitymanager.h>
+#include <KPIMIdentities/kpimidentities/identity.h>
+#include <KHolidays/kholidays/holidays.h>
 
 #include <kconfiggroup.h>
 #include <kaction.h>

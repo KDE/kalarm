@@ -57,7 +57,7 @@
 
 #include <KAlarmCal/identities.h>
 
-#include <KHolidays/holidays.h>
+#include <KHolidays/kholidays/holidays.h>
 using namespace KHolidays;
 
 #include <kvbox.h>

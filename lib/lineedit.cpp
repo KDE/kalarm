@@ -24,7 +24,7 @@
 #include <libkdepim/misc/maillistdrag.h>
 #include <KABC/kabc/vcarddrag.h>
 #ifdef USE_AKONADI
-#include <KCalUtils/icaldrag.h>
+#include <KCalUtils/kcalutils/icaldrag.h>
 #else
 #include <kcal/icaldrag.h>
 #endif

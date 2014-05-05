@@ -22,7 +22,7 @@
 #define EMAILIDCOMBO_H
 
 #include "combobox.h"
-#include <KPIMIdentities/identitycombo.h>
+#include <KPIMIdentities/kpimidentities/identitycombo.h>
 
 class QMouseEvent;
 class QKeyEvent;

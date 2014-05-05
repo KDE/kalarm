@@ -52,7 +52,7 @@
 #include <Akonadi/Contact/emailaddressselectiondialog.h>
 #ifdef USE_AKONADI
 #include <KCalCore/Person>
-#include <KCalUtils/icaldrag.h>
+#include <KCalUtils/kcalutils/icaldrag.h>
 using namespace KCalCore;
 #else
 #include <kcal/person.h>
