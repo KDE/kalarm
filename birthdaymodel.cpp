@@ -28,7 +28,7 @@
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiCore/session.h>
-#include <KABC/kabc/addressee.h>
+#include <kabc/addressee.h>
 
 #include <kglobal.h>
 #include <klocale.h>

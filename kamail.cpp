@@ -40,9 +40,9 @@
 #else
 #include <kcal/person.h>
 #endif
-#include <KMime/kmime_header_parsing.h>
-#include <KMime/kmime_headers.h>
-#include <KMime/kmime_message.h>
+#include <kmime/kmime_header_parsing.h>
+#include <kmime/kmime_headers.h>
+#include <kmime/kmime_message.h>
 
 #include <kstandarddirs.h>
 #include <klocale.h>

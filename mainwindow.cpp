@@ -50,7 +50,7 @@
 #include <KAlarmCal/kaevent.h>
 
 #include <libkdepim/misc/maillistdrag.h>
-#include <KMime/kmime_content.h>
+#include <kmime/kmime_content.h>
 #ifdef USE_AKONADI
 #include <KCalCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>
