@@ -25,7 +25,7 @@
 
 #include "kalarmcal_export.h"
 
-#include <todo.h>
+#include <kcalcore/todo.h>
 #include <QtCore/QString>
 
 

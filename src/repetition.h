@@ -24,7 +24,7 @@
 #define KALARM_REPETITION_H
 
 #include "kalarmcal_export.h"
-#include <duration.h>
+#include <kcalcore/duration.h>
 
 class KDateTime;
 
