@@ -31,7 +31,7 @@
 
 #include <KPIMIdentities/identitymanager.h>
 #include <KPIMIdentities/identity.h>
-#include <KPIMUtils/email.h>
+#include <KPIMUtils/kpimutils/email.h>
 #include <MailTransport/transportmanager.h>
 #include <MailTransport/transport.h>
 #include <MailTransport/messagequeuejob.h>
