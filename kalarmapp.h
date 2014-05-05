@@ -232,6 +232,7 @@ class KAlarmApp : public KUniqueApplication
         static int         mFatalError;          // a fatal error has occurred - just wait to exit
         static QString     mFatalMessage;        // fatal error message to output
         bool               mInitialised;         // initialisation complete: ready to process execution queue
+        bool               mRedisplayAlarms;     // need to redisplay alarms when collection tree fetched
         bool               mQuitting;            // a forced quit is in progress
         bool               mReadOnly;            // only read-only access to calendars is needed
         bool               mLoginAlarmsDone;     // alarms repeated at login have been processed
