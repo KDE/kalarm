@@ -59,6 +59,7 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   KAEvent
   KARecurrence
   Repetition
+  PREFIX KAlarmCal
   REQUIRED_HEADERS KAlarmCal_HEADERS
 )
 
@@ -70,6 +71,6 @@ install(FILES
         version.h
         ${KAlarmCal_HEADERS}
         ${KAlarmCal_CamelCase_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/kalarmcal
         COMPONENT Devel
 )
