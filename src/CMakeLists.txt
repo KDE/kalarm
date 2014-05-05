@@ -74,3 +74,9 @@ install(FILES
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/kalarmcal
         COMPONENT Devel
 )
+install(FILES
+        ${KAlarmCal_CamelCase_HEADERS}
+        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/KAlarmCal/
+        COMPONENT Devel
+)
+
