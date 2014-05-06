@@ -105,7 +105,7 @@ bool AlarmCalendar::initialiseCalendars()
     resources->showProgress(true);
     Preferences::setBackend(Preferences::Kresources);
 #endif
-    Preferences::self()->writeConfig();
+    Preferences::self()->save();
     mResourcesCalendar = new AlarmCalendar();
     mDisplayCalendar = new AlarmCalendar(displayCal, CalEvent::DISPLAYING);
     KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);

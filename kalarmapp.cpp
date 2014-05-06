@@ -141,7 +141,7 @@ KAlarmApp::KAlarmApp()
     if (!Preferences::noAutoStart())
     {
         Preferences::setAutoStart(true);
-        Preferences::self()->writeConfig();
+        Preferences::self()->save();
     }
     Preferences::connect(SIGNAL(startOfDayChanged(QTime)), this, SLOT(changeStartOfDay()));
     Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotWorkTimeChanged(QTime,QTime,QBitArray)));
@@ -272,7 +272,7 @@ bool KAlarmApp::restoreSession()
     Preferences::setAutoStart(true);
     Preferences::setNoAutoStart(false);
     Preferences::setAskAutoStart(true);  // cancel any start-at-login prompt suppression
-    Preferences::self()->writeConfig();
+    Preferences::self()->save();
 
     if (!initCheck(true))     // open the calendar file (needed for main windows), don't process queue yet
     {
@@ -734,7 +734,7 @@ void KAlarmApp::doQuit(QWidget* parent)
             default:
                 return;
         }
-        Preferences::self()->writeConfig();
+        Preferences::self()->save();
     }
     quitIf(0, true);
 }

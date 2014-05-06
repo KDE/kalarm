@@ -64,6 +64,7 @@
 #include <QtDBus/QtDBus>
 
 #include <pwd.h>
+#include <KCharsets>
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
@@ -723,7 +724,7 @@ const QTextCodec* codecForName(const QByteArray& str)
         return 0;
     QByteArray codec = str;
     kAsciiToLower(codec.data());
-    return KGlobal::charsets()->codecForName(QLatin1String(codec));
+    return KCharsets::charsets()->codecForName(QLatin1String(codec));
 }
 
 /******************************************************************************

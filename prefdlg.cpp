@@ -245,7 +245,7 @@ void KAlarmPrefDlg::slotApply()
     mStorePage->apply(false);
     mTimePage->apply(false);
     mMiscPage->apply(false);
-    Preferences::self()->writeConfig();
+    Preferences::self()->save();
 }
 
 // Apply the preferences that are currently selected
@@ -375,7 +375,7 @@ PrefsTabBase::PrefsTabBase(StackedScrollGroup* scrollGroup)
 void PrefsTabBase::apply(bool syncToDisc)
 {
     if (syncToDisc)
-        Preferences::self()->writeConfig();
+        Preferences::self()->save();
 }
 
 void PrefsTabBase::addAlignedLabel(QLabel* label)
