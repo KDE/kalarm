@@ -35,6 +35,7 @@
 
 #include <QHeaderView>
 #include <QApplication>
+#include <KSharedConfig>
 
 
 AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
@@ -48,7 +49,7 @@ AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
 void AlarmListView::setModel(QAbstractItemModel* model)
 {
     EventListView::setModel(model);
-    KConfigGroup config(KGlobal::config(), mConfigGroup.constData());
+    KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup.constData());
     QByteArray settings = config.readEntry("ListHead", QByteArray());
     if (!settings.isEmpty())
         header()->restoreState(settings);
@@ -72,7 +73,7 @@ void AlarmListView::setModel(QAbstractItemModel* model)
 */
 void AlarmListView::sectionMoved()
 {
-    KConfigGroup config(KGlobal::config(), mConfigGroup.constData());
+    KConfigGroup config(KSharedConfig::openConfig(), mConfigGroup.constData());
     config.writeEntry("ListHead", header()->saveState());
     config.sync();
 }

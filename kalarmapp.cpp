@@ -76,6 +76,7 @@
 #include <ctype.h>
 #include <iostream>
 #include <climits>
+#include <KSharedConfig>
 
 static const QLatin1String KTTSD_DBUS_SERVICE("org.kde.kttsd");
 static const QLatin1String KTTDS_DBUS_PATH("/KSpeech");
@@ -169,7 +170,7 @@ KAlarmApp::KAlarmApp()
                                           SLOT(checkWritableCalendar()));
 #endif
 
-        KConfigGroup config(KGlobal::config(), "General");
+        KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
         mOldShowInSystemTray = wantShowInSystemTray();
         DateTime::setStartOfDay(Preferences::startOfDay());
@@ -1034,7 +1035,7 @@ bool KAlarmApp::checkSystemTray()
 
         // Store the new setting in the config file, so that if KAlarm exits it will
         // restart with the correct default.
-        KConfigGroup config(KGlobal::config(), "General");
+        KConfigGroup config(KSharedConfig::openConfig(), "General");
         config.writeEntry("NoSystemTray", mNoSystemTray);
         config.sync();
 

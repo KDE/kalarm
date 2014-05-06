@@ -92,6 +92,7 @@ using namespace KCal;
 #include <QResizeEvent>
 #include <QCloseEvent>
 #include <QDesktopWidget>
+#include <KSharedConfig>
 
 using namespace KAlarmCal;
 
@@ -150,14 +151,14 @@ MainWindow::MainWindow(bool restored)
     setWindowModality(Qt::WindowModal);
     setObjectName(QLatin1String("MainWin"));    // used by LikeBack
     setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
-    KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
     mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);
     mShowTime      = config.readEntry(SHOW_TIME_KEY, true);
     mShowTimeTo    = config.readEntry(SHOW_TIME_TO_KEY, false);
     if (!restored)
     {
-        KConfigGroup wconfig(KGlobal::config(), WINDOW_NAME);
+        KConfigGroup wconfig(KSharedConfig::openConfig(), WINDOW_NAME);
         mResourcesWidth = wconfig.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
     }
 
@@ -246,7 +247,7 @@ MainWindow::~MainWindow()
         else
             theApp()->trayWindow()->removeWindow(this);
     }
-    KGlobal::config()->sync();    // save any new window size to disc
+    KSharedConfig::openConfig()->sync();    // save any new window size to disc
     theApp()->quitIf();
 }
 
@@ -397,7 +398,7 @@ void MainWindow::resourcesResized()
             mResourcesWidth = 0;
         else if (mainMainWindow() == this)
         {
-            KConfigGroup config(KGlobal::config(), WINDOW_NAME);
+            KConfigGroup config(KSharedConfig::openConfig(), WINDOW_NAME);
             config.writeEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), mResourcesWidth);
         }
     }
@@ -615,7 +616,7 @@ void MainWindow::initActions()
     setStandardToolBarMenuEnabled(true);
     createGUI(UI_FILE);
     // Load menu and toolbar settings
-    applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
 
     mContextMenu = static_cast<KMenu*>(factory()->container(QLatin1String("listContext"), this));
     mActionsMenu = static_cast<KMenu*>(factory()->container(QLatin1String("actions"), this));
@@ -940,7 +941,7 @@ void MainWindow::slotShowTime()
     else
     {
         mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-        KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+        KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
         config.writeEntry(SHOW_TIME_KEY, mShowTime);
         config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
     }
@@ -958,7 +959,7 @@ void MainWindow::slotShowTimeTo()
     else
     {
         mListView->selectTimeColumns(mShowTime, mShowTimeTo);
-        KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+        KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
         config.writeEntry(SHOW_TIME_KEY, mShowTime);
         config.writeEntry(SHOW_TIME_TO_KEY, mShowTimeTo);
     }
@@ -979,7 +980,7 @@ void MainWindow::slotShowArchived()
     mListFilterModel->setStatusFilter(mShowArchived ? CalEvent::ACTIVE | CalEvent::ARCHIVED : CalEvent::ACTIVE);
 #endif
     mListView->reset();
-    KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     config.writeEntry(SHOW_ARCHIVED_KEY, mShowArchived);
 }
 
@@ -1130,7 +1131,7 @@ void MainWindow::slotToggleResourceSelector()
     else
         mResourceSelector->hide();
 
-    KConfigGroup config(KGlobal::config(), VIEW_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     config.writeEntry(SHOW_RESOURCES_KEY, mShowResources);
 }
 
@@ -1293,7 +1294,7 @@ void MainWindow::slotConfigureKeys()
 */
 void MainWindow::slotConfigureToolbar()
 {
-    saveMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
+    saveMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
     KEditToolBar dlg(factory());
     connect(&dlg, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     dlg.exec();
@@ -1306,7 +1307,7 @@ void MainWindow::slotConfigureToolbar()
 void MainWindow::slotNewToolbarConfig()
 {
     createGUI(UI_FILE);
-    applyMainWindowSettings(KGlobal::config()->group(WINDOW_NAME));
+    applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
 }
 
 /******************************************************************************

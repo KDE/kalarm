@@ -24,6 +24,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kglobal.h>
+#include <KSharedConfig>
 
 
 QMap<QString, KMessageBox::ButtonCode> KAMessageBox::mContinueDefaults;
@@ -96,7 +97,7 @@ bool KAMessageBox::setDefaultShouldBeShownContinue(const QString& dontShowAgainN
     if (dontShowAgainName.isEmpty())
         return false;
     // First check whether there is an existing setting
-    KConfigGroup config(KGlobal::config(), "Notification Messages");
+    KConfigGroup config(KSharedConfig::openConfig(), "Notification Messages");
     if (config.hasKey(dontShowAgainName))
         return false;
 
@@ -154,7 +155,7 @@ void KAMessageBox::saveDontShowAgain(const QString& dontShowAgainName, bool yesn
 {
     if (dontShowAgainName.isEmpty())
         return;
-    KConfigGroup config(KGlobal::config(), "Notification Messages");
+    KConfigGroup config(KSharedConfig::openConfig(), "Notification Messages");
     KConfig::WriteConfigFlags flags = (dontShowAgainName[0] == QLatin1Char(':')) ? KConfig::Global | KConfig::Persistent : KConfig::Persistent;
     if (yesno)
         config.writeEntry(dontShowAgainName, QString::fromLatin1(dontShow ? yesnoResult : ""), flags);

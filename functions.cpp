@@ -97,6 +97,7 @@ using namespace KCal;
 #include <QtDBus/QtDBus>
 #include <QTimer>
 #include <qglobal.h>
+#include <KSharedConfig>
 
 #ifdef USE_AKONADI
 using namespace Akonadi;
@@ -1311,7 +1312,7 @@ void editNewTemplate(const KAEvent* preset, QWidget* parent)
 */
 QStringList checkRtcWakeConfig(bool checkEventExists)
 {
-    KConfigGroup config(KGlobal::config(), "General");
+    KConfigGroup config(KSharedConfig::openConfig(), "General");
     QStringList params = config.readEntry("RtcWake", QStringList());
 #ifdef USE_AKONADI
     if (params.count() == 3  &&  params[2].toUInt() > KDateTime::currentUtcDateTime().toTime_t())
@@ -1340,7 +1341,7 @@ QStringList checkRtcWakeConfig(bool checkEventExists)
 */
 void deleteRtcWakeConfig()
 {
-    KConfigGroup config(KGlobal::config(), "General");
+    KConfigGroup config(KSharedConfig::openConfig(), "General");
     config.deleteEntry("RtcWake");
     config.sync();
 }
@@ -1991,7 +1992,7 @@ void setDontShowErrors(const QString& eventId, const QString& tag)
 */
 bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
-    KConfigGroup config(KGlobal::config(), window);
+    KConfigGroup config(KSharedConfig::openConfig(), window);
     QWidget* desktop = KApplication::desktop();
     QSize s = QSize(config.readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), (int)0),
                     config.readEntry(QString::fromLatin1("Height %1").arg(desktop->height()), (int)0));
@@ -2009,7 +2010,7 @@ bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 */
 void writeConfigWindowSize(const char* window, const QSize& size, int splitterWidth)
 {
-    KConfigGroup config(KGlobal::config(), window);
+    KConfigGroup config(KSharedConfig::openConfig(), window);
     QWidget* desktop = KApplication::desktop();
     config.writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
     config.writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());

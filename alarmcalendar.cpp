@@ -54,6 +54,7 @@
 #include <kfileitem.h>
 #include <ktemporaryfile.h>
 #include <kdebug.h>
+#include <KSharedConfig>
 
 #ifdef USE_AKONADI
 using namespace Akonadi;
@@ -608,7 +609,7 @@ void AlarmCalendar::updateKAEvents(AlarmResource* resource, KCal::CalendarLocal*
         return;
 
 #ifndef USE_AKONADI
-    KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
+    KConfigGroup config(KSharedConfig::openConfig(), KAEvent::commandErrorConfigGroup());
 #endif
     Event::List kcalevents = cal->rawEvents();
     for (i = 0, end = kcalevents.count();  i < end;  ++i)
@@ -1774,7 +1775,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID)
 #else
 
     // Delete any command execution error flags for the alarm.
-    KConfigGroup config(KGlobal::config(), KAEvent::commandErrorConfigGroup());
+    KConfigGroup config(KSharedConfig::openConfig(), KAEvent::commandErrorConfigGroup());
     if (config.hasKey(id))
     {
             config.deleteEntry(id);

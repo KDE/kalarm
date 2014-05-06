@@ -37,6 +37,7 @@
 #include <kdebug.h>
 
 #include <QTimer>
+#include <KSharedConfig>
 
 using namespace KAlarmCal;
 
@@ -57,7 +58,7 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
     setButtons(Close);
     mUi = new Ui_WakeFromSuspendDlgWidget;
     mUi->setupUi(mainWidget());
-    KConfigGroup config(KGlobal::config(), "General");
+    KConfigGroup config(KSharedConfig::openConfig(), "General");
     mUi->advanceWakeTime->setValue(Preferences::wakeFromSuspendAdvance());
 
     mMainWindow = qobject_cast<MainWindow*>(parent);
@@ -200,7 +201,7 @@ void WakeFromSuspendDlg::useWakeClicked()
 #else
         param << event->id() << QString::number(triggerTime);
 #endif
-        KConfigGroup config(KGlobal::config(), "General");
+        KConfigGroup config(KSharedConfig::openConfig(), "General");
         config.writeEntry("RtcWake", param);
         config.sync();
         Preferences::setWakeFromSuspendAdvance(advance);

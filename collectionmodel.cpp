@@ -40,6 +40,7 @@
 #include <QToolTip>
 #include <QTimer>
 #include <QObject>
+#include <KSharedConfig>
 
 using namespace Akonadi;
 using namespace KAlarmCal;
@@ -658,7 +659,7 @@ CollectionControlModel* CollectionControlModel::instance()
 }
 
 CollectionControlModel::CollectionControlModel(QObject* parent)
-    : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KGlobal::config(), "Collections"), parent),
+    : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KSharedConfig::openConfig(), "Collections"), parent),
       mPopulatedCheckLoop(0)
 {
     // Initialise the list of enabled collections

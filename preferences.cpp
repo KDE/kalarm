@@ -40,6 +40,7 @@
 
 #include <time.h>
 #include <unistd.h>
+#include <KSharedConfig>
 
 using namespace KHolidays;
 using namespace KAlarmCal;
@@ -359,7 +360,7 @@ QString translateXTermPath(const QString& cmdline, bool write)
     }
     // Translate any home directory specification at the start of the
     // executable's path.
-    KConfigGroup group(KGlobal::config(), GENERAL_SECTION);
+    KConfigGroup group(KSharedConfig::openConfig(), GENERAL_SECTION);
     if (write)
     {
         group.writePathEntry(TEMP, cmd);

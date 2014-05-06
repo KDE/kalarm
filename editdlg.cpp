@@ -72,6 +72,7 @@
 #include <QShowEvent>
 #include <QScrollBar>
 #include <QTimer>
+#include <KSharedConfig>
 
 using namespace KCal;
 using namespace KAlarmCal;
@@ -449,7 +450,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     setButtonWhatsThis(Ok, i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
 
     // Hide optional controls
-    KConfigGroup config(KGlobal::config(), EDIT_MORE_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), EDIT_MORE_GROUP);
     showOptions(config.readEntry(EDIT_MORE_KEY, false));
 
     // Initialise the state of all controls according to the specified event, if any
@@ -1191,7 +1192,7 @@ void EditAlarmDlg::slotHelp()
 void EditAlarmDlg::slotDefault()
 {
     showOptions(!mShowingMore);
-    KConfigGroup config(KGlobal::config(), EDIT_MORE_GROUP);
+    KConfigGroup config(KSharedConfig::openConfig(), EDIT_MORE_GROUP);
     config.writeEntry(EDIT_MORE_KEY, mShowingMore);
 }
 
