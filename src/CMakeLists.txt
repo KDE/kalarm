@@ -80,3 +80,8 @@ install(FILES
         COMPONENT Devel
 )
 
+
+ecm_generate_pri_file(BASE_NAME KAlarmCal LIB_NAME KF5AlarmCal DEPS "Holidays PimIdentities CoreAddons CalendarCore AkonadiCore" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/)
+install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
+
+
