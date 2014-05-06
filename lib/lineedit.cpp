@@ -68,7 +68,7 @@ void LineEdit::init()
 {
     if (mType == Url)
     {
-        //QT5 setCompletionMode(KGlobalSettings::CompletionShell);
+        setCompletionMode(KCompletion::CompletionShell);
         KUrlCompletion* comp = new KUrlCompletion(KUrlCompletion::FileCompletion);
         comp->setReplaceHome(true);
         setCompletionObject(comp);
@@ -76,7 +76,7 @@ void LineEdit::init()
     }
     else 
     {
-        //QT5setCompletionMode(KGlobalSettings::CompletionNone);
+        setCompletionMode(KCompletion::CompletionNone);
     }
 }
 
