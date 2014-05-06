@@ -24,7 +24,7 @@
 #include "functions.h"
 #include "templatemenuaction.h"
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 
 #include <kmenu.h>
 #include <kactionmenu.h>

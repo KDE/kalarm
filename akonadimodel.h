@@ -23,8 +23,8 @@
 
 #include "eventid.h"
 
-#include <KAlarmCal/kacalendar.h>
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kacalendar.h>
+#include <kalarmcal/kaevent.h>
 
 #include <AkonadiCore/entitytreemodel.h>
 #include <AkonadiCore/servermanager.h>

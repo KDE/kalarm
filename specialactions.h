@@ -21,7 +21,7 @@
 #ifndef SPECIALACTIONS_H
 #define SPECIALACTIONS_H
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 #include <kdialog.h>
 #include <QWidget>
 #include <QPushButton>

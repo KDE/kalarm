@@ -33,7 +33,7 @@
 #include "synchtimer.h"
 #include "templatemenuaction.h"
 
-#include <KAlarmCal/alarmtext.h>
+#include <kalarmcal/alarmtext.h>
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>

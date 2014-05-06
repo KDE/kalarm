@@ -25,7 +25,7 @@
 #include "eventid.h"
 #endif
 
-#include <KAlarmCal/datetime.h>
+#include <kalarmcal/datetime.h>
 #include <AkonadiCore/collection.h>
 #include <kdialog.h>
 

@@ -25,7 +25,7 @@
 
 #include "autodeletelist.h"
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <AkonadiCore/collection.h>

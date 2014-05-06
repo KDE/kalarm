@@ -29,7 +29,7 @@
 #include "kamail.h"
 #include "preferences.h"
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 
 #include <kuniqueapplication.h>
 

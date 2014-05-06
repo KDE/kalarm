@@ -29,7 +29,7 @@
 #include "messagebox.h"
 #include "preferences.h"
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 
 #include <kglobal.h>
 #include <klocale.h>

@@ -46,8 +46,8 @@
 #include "traywindow.h"
 #include "wakedlg.h"
 
-#include <KAlarmCal/alarmtext.h>
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/alarmtext.h>
+#include <kalarmcal/kaevent.h>
 
 #include <libkdepim/misc/maillistdrag.h>
 #include <kmime/kmime_content.h>

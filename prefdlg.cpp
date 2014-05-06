@@ -55,7 +55,7 @@
 #include "prefdlg_p.h"
 #include "prefdlg.h"
 
-#include <KAlarmCal/identities.h>
+#include <kalarmcal/identities.h>
 
 #include <KHolidays/kholidays/holidays.h>
 using namespace KHolidays;

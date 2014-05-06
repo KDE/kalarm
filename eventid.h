@@ -21,7 +21,7 @@
 #ifndef EVENTID_H
 #define EVENTID_H
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 #include <QPair>
 #include <QDebug>
 

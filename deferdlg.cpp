@@ -27,8 +27,8 @@
 #include "kalarmapp.h"
 #include "messagebox.h"
 
-#include <KAlarmCal/datetime.h>
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/datetime.h>
+#include <kalarmcal/kaevent.h>
 
 #include <kglobal.h>
 #include <klocale.h>

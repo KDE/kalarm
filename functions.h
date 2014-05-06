@@ -28,7 +28,7 @@
 #include "eventid.h"
 #endif
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 #ifdef USE_AKONADI
 #include <AkonadiCore/collection.h>
 #include <AkonadiCore/item.h>

@@ -23,7 +23,7 @@
 
 #include "kalarmiface.h"
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <KCalCore/Duration>

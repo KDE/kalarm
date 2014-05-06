@@ -21,7 +21,7 @@
 #ifndef KAMAIL_H
 #define KAMAIL_H
 
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <KCalCore/Person>

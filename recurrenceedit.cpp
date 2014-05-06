@@ -38,8 +38,8 @@
 #include "timespinbox.h"
 #include "buttongroup.h"
 
-#include <KAlarmCal/kaevent.h>
-#include <KAlarmCal/karecurrence.h>
+#include <kalarmcal/kaevent.h>
+#include <kalarmcal/karecurrence.h>
 
 #ifdef USE_AKONADI
 #include <KCalCore/Event>

@@ -21,9 +21,9 @@
 #ifndef EDITDLG_H
 #define EDITDLG_H
 
-#include <KAlarmCal/alarmtext.h>
-#include <KAlarmCal/datetime.h>
-#include <KAlarmCal/kaevent.h>
+#include <kalarmcal/alarmtext.h>
+#include <kalarmcal/datetime.h>
+#include <kalarmcal/kaevent.h>
 
 #ifdef USE_AKONADI
 #include <AkonadiCore/collection.h>

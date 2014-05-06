@@ -23,7 +23,7 @@
 
 #include "radiobutton.h"
 
-#include <KAlarmCal/karecurrence.h>
+#include <kalarmcal/karecurrence.h>
 
 #include <QList>
 #include <QVector>
