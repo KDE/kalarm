@@ -52,7 +52,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <ktemporaryfile.h>
 #include <kfileitem.h>
 #include <kglobal.h>

@@ -66,7 +66,7 @@ using namespace KHolidays;
 #include <kstandarddirs.h>
 #include <kshell.h>
 #include <klineedit.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kcombobox.h>

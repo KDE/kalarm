@@ -22,7 +22,7 @@
 #include "autostart.h"
 
 #include <kcmdlineargs.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
@@ -41,8 +41,8 @@ static const int AUTOSTART_DELAY = 30;
 
 int main(int argc, char *argv[])
 {
-    KAboutData aboutData(PROGRAM_NAME, "kalarm", ki18n("KAlarm Autostart"),
-        PROGRAM_VERSION, ki18n("KAlarm autostart at login"), KAboutData::License_GPL,
+    K4AboutData aboutData(PROGRAM_NAME, "kalarm", ki18n("KAlarm Autostart"),
+        PROGRAM_VERSION, ki18n("KAlarm autostart at login"), K4AboutData::License_GPL,
         ki18n("Copyright 2001,2008 David Jarvie"), KLocalizedString(),
         "http://www.astrojar.org.uk/kalarm");
     aboutData.addAuthor(ki18n("David Jarvie"), ki18n("Maintainer"), "djarvie@kde.org");

@@ -44,7 +44,7 @@
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <kstandardguiitem.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <klocale.h>
 #include <kconfig.h>
 #include <kiconloader.h>

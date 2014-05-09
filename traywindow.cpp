@@ -39,7 +39,7 @@
 #include <ktoggleaction.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <kmenu.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>

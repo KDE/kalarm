@@ -79,7 +79,7 @@ using namespace KCal;
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <kxmlguifactory.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <kdebug.h>
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>

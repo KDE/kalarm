@@ -49,7 +49,7 @@
 #ifndef USE_AKONADI
 #include <kconfig.h>
 #endif
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <ktemporaryfile.h>

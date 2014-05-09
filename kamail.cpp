@@ -46,7 +46,7 @@
 
 #include <kstandarddirs.h>
 #include <klocale.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
 #include <ktemporaryfile.h>

@@ -29,7 +29,7 @@
 #include <klineedit.h>
 #include <khbox.h>
 #include <kapplication.h>
-#include <kaboutdata.h>
+#include <K4AboutData>
 #include <klocale.h>
 #include <kdebug.h>
 
