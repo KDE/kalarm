@@ -67,6 +67,7 @@ using namespace KCal;
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtAlgorithms>
+#include <KLocale>
 
 
 class ListWidget : public QListWidget
@@ -616,7 +617,7 @@ void RecurrenceEdit::addException()
     if (insert)
     {
         mExceptionDates.insert(it, date);
-        mExceptionDateList->insertItem(index, new QListWidgetItem(KGlobal::locale()->formatDate(date)));
+        mExceptionDateList->insertItem(index, new QListWidgetItem(KLocale::global()->formatDate(date)));
         emit contentsChanged();
     }
     mExceptionDateList->setCurrentItem(mExceptionDateList->item(index));
@@ -923,7 +924,7 @@ void RecurrenceEdit::set(const KAEvent& event)
     qSort(mExceptionDates);
     mExceptionDateList->clear();
     for (int i = 0, iend = mExceptionDates.count();  i < iend;  ++i)
-        new QListWidgetItem(KGlobal::locale()->formatDate(mExceptionDates[i]), mExceptionDateList);
+        new QListWidgetItem(KLocale::global()->formatDate(mExceptionDates[i]), mExceptionDateList);
     enableExceptionButtons();
     mExcludeHolidays->setChecked(event.holidaysExcluded());
     mWorkTimeOnly->setChecked(event.workTimeOnly());
@@ -1212,7 +1213,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
     QGridLayout* dgrid = new QGridLayout(box);
     dgrid->setMargin(0);
     dgrid->setSpacing(KDialog::spacingHint());
-    const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+    const KCalendarSystem* calendar = KLocale::global()->calendar();
     for (int i = 0;  i < 7;  ++i)
     {
         int day = KAlarm::localeDayInWeek_to_weekDay(i);
@@ -1408,7 +1409,7 @@ MonthYearRule::MonthYearRule(const QString& freqText, const QString& freqWhatsTh
 
     mDayOfWeekCombo = new ComboBox(box);
     mDayOfWeekCombo->setEditable(false);
-    const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+    const KCalendarSystem* calendar = KLocale::global()->calendar();
     for (int i = 0;  i < 7;  ++i)
     {
         int day = KAlarm::localeDayInWeek_to_weekDay(i);
@@ -1568,7 +1569,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     QGridLayout* grid = new QGridLayout(w);
     grid->setMargin(0);
     grid->setSpacing(KDialog::spacingHint());
-    const KCalendarSystem* calendar = KGlobal::locale()->calendar();
+    const KCalendarSystem* calendar = KLocale::global()->calendar();
     int year = KDateTime::currentLocalDate().year();
     for (int i = 0;  i < 12;  ++i)
     {

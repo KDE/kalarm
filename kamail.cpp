@@ -65,6 +65,7 @@
 
 #include <pwd.h>
 #include <KCharsets>
+#include <KLocale>
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
@@ -691,7 +692,7 @@ QByteArray autoDetectCharset(const QString& text)
         QByteArray encoding = charsets[i];
         if (encoding == "locale")
         {
-            encoding = QTextCodec::codecForName(KGlobal::locale()->encoding())->name();
+            encoding = QTextCodec::codecForName(KLocale::global()->encoding())->name();
             kAsciiToLower(encoding.data());
         }
         if (text.isEmpty())

@@ -93,6 +93,7 @@ using namespace KCal;
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <KSharedConfig>
+#include <KLocale>
 
 using namespace KAlarmCal;
 
@@ -582,12 +583,12 @@ void MainWindow::initActions()
         QAction * act = KStandardAction::undo(this, 0, actions);
         undoShortcut     = KShortcut(act->shortcuts());
         undoText         = act->text();
-        undoTextStripped = KGlobal::locale()->removeAcceleratorMarker(undoText);
+        undoTextStripped = KLocale::global()->removeAcceleratorMarker(undoText);
         delete act;
         act = KStandardAction::redo(this, 0, actions);
         redoShortcut     = KShortcut(act->shortcuts());
         redoText         = act->text();
-        redoTextStripped = KGlobal::locale()->removeAcceleratorMarker(redoText);
+        redoTextStripped = KLocale::global()->removeAcceleratorMarker(redoText);
         delete act;
     }
     mActionUndo = new KToolBarPopupAction(KIcon(QLatin1String("edit-undo")), undoText, this);
@@ -1168,7 +1169,7 @@ void MainWindow::slotFindActive(bool active)
 */
 void MainWindow::slotUndo()
 {
-    Undo::undo(this, KGlobal::locale()->removeAcceleratorMarker(mActionUndo->text()));
+    Undo::undo(this, KLocale::global()->removeAcceleratorMarker(mActionUndo->text()));
 }
 
 /******************************************************************************
@@ -1176,7 +1177,7 @@ void MainWindow::slotUndo()
 */
 void MainWindow::slotRedo()
 {
-    Undo::redo(this, KGlobal::locale()->removeAcceleratorMarker(mActionRedo->text()));
+    Undo::redo(this, KLocale::global()->removeAcceleratorMarker(mActionRedo->text()));
 }
 
 /******************************************************************************
@@ -1438,7 +1439,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         dt.setTime_t(summary.date());
         QString body = KAMail::getMailBody(summary.serialNumber());
         alarmText.setEmail(summary.to(), summary.from(), QString(),
-                           KGlobal::locale()->formatDateTime(dt), summary.subject(),
+                           KLocale::global()->formatDateTime(dt), summary.subject(),
                            body, summary.serialNumber());
     }
 #endif

@@ -30,6 +30,7 @@
 
 #include <QTimer>
 #include <QtDBus/QtDBus>
+#include <KLocale>
 
 // Number of seconds to wait before autostarting KAlarm.
 // Allow plenty of time for session restoration to happen first.
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
 
     AutostartApp app;
-    KGlobal::locale()->insertCatalog(QLatin1String("kalarm"));
+    //QT5 KLocale::global()->insertCatalog(QLatin1String("kalarm"));
     return app.exec();
 }
 

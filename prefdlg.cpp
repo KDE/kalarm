@@ -93,6 +93,7 @@ using namespace KHolidays;
 #include <QStyle>
 #include <QResizeEvent>
 #include <KHelpClient>
+#include <KLocale>
 
 #ifdef USE_AKONADI
 using namespace KCalCore;
@@ -657,7 +658,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     foreach (const QString& regionCode, regions)
     {
         QString name = HolidayRegion::name(regionCode);
-        QString languageName = KGlobal::locale()->languageCodeToName(HolidayRegion::languageCode(regionCode));
+        QString languageName = KLocale::global()->languageCodeToName(HolidayRegion::languageCode(regionCode));
         QString label = languageName.isEmpty() ? name : i18nc("Holiday region, region language", "%1 (%2)", name, languageName);
         regionsMap.insert(label, regionCode);
     }
@@ -695,7 +696,7 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     layout->addWidget(daybox);
     QGridLayout* wgrid = new QGridLayout(daybox);
     wgrid->setSpacing(KDialog::spacingHint());
-    const KLocale* locale = KGlobal::locale();
+    const KLocale* locale = KLocale::global();
     for (int i = 0;  i < 7;  ++i)
     {
         int day = KAlarm::localeDayInWeek_to_weekDay(i);

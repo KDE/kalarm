@@ -28,10 +28,11 @@
 #include <QDebug>
 
 #include <stdio.h>
+#include <KLocale>
 
 RtcWakeAction::RtcWakeAction()
 {
-    KGlobal::locale()->insertCatalog(QLatin1String("kalarm"));
+    //QT5 KLocale::global()->insertCatalog(QLatin1String("kalarm"));
 }
 
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)

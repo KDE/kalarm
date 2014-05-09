@@ -54,6 +54,7 @@
 
 #include <stdlib.h>
 #include <limits.h>
+#include <KLocale>
 
 using namespace KAlarmCal;
 
@@ -391,7 +392,7 @@ QString TrayWindow::tooltipAlarmText() const
             // The alarm is due today, or early tomorrow
             if (Preferences::showTooltipAlarmTime())
             {
-                item.text += KGlobal::locale()->formatTime(item.dateTime.time());
+                item.text += KLocale::global()->formatTime(item.dateTime.time());
                 item.text += QLatin1Char(' ');
             }
             if (Preferences::showTooltipTimeToAlarm())

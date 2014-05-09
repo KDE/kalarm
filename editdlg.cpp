@@ -73,6 +73,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <KSharedConfig>
+#include <KLocale>
 
 using namespace KCal;
 using namespace KAlarmCal;
@@ -1002,11 +1003,11 @@ bool EditAlarmDlg::validate()
                 QString prompt = dateOnly ? i18nc("@info The parameter is a date value",
                                                   "The start date does not match the alarm's recurrence pattern, "
                                                   "so it will be adjusted to the date of the next recurrence (%1).",
-                                                  KGlobal::locale()->formatDate(next.date(), KLocale::ShortDate))
+                                                  KLocale::global()->formatDate(next.date(), KLocale::ShortDate))
                                           : i18nc("@info The parameter is a date/time value",
                                                   "The start date/time does not match the alarm's recurrence pattern, "
                                                   "so it will be adjusted to the date/time of the next recurrence (%1).",
-                                                  KGlobal::locale()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
+                                                  KLocale::global()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
 #if 0 //QT5
                 if (KAMessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
                     return false;

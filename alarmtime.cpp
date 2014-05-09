@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <qapplication.h>
+#include <KLocale>
 
 using namespace KAlarmCal;
 
@@ -40,7 +41,7 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
         return i18nc("@info/plain Alarm never occurs", "Never");
-    KLocale* locale = KGlobal::locale();
+    KLocale* locale = KLocale::global();
     KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
     QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
     if (!dateTime.isDateOnly()

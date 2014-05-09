@@ -22,6 +22,7 @@
 #include <ksystemtimezone.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <KLocale>
 
 bool TimeZoneCombo::mCatalogLoaded = false;
 
@@ -30,7 +31,7 @@ TimeZoneCombo::TimeZoneCombo(QWidget* parent)
 {
     if (!mCatalogLoaded)
     {
-        KGlobal::locale()->insertCatalog(QLatin1String("timezones4")); // for time zone translations
+        //QT5 KLocale::global()->insertCatalog(QLatin1String("timezones4")); // for time zone translations
         mCatalogLoaded = true;
     }
     QString utc = KTimeZone::utc().name();

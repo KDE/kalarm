@@ -28,6 +28,7 @@
 #include <klocale.h>
 
 #include <QTime>
+#include <KLocale>
 
 TimeEdit::TimeEdit(QWidget* parent)
     : KHBox(parent),
@@ -36,7 +37,7 @@ TimeEdit::TimeEdit(QWidget* parent)
       mPmIndex(-1),
       mReadOnly(false)
 {
-    bool use12hour = KGlobal::locale()->use12Clock();
+    bool use12hour = KLocale::global()->use12Clock();
     mSpinBox = new TimeSpinBox(!use12hour, this);
     mSpinBox->setFixedSize(mSpinBox->sizeHint());
     connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));

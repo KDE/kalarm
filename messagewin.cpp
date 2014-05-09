@@ -90,6 +90,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <KLocale>
 
 #ifdef USE_AKONADI
 using namespace KCalCore;
@@ -895,7 +896,7 @@ QString MessageWin::dateTimeToDisplay()
     if (mDateTime.isValid())
     {
         if (mDateTime.isDateOnly())
-            tm = KGlobal::locale()->formatDate(mDateTime.date(), KLocale::ShortDate);
+            tm = KLocale::global()->formatDate(mDateTime.date(), KLocale::ShortDate);
         else
         {
             bool showZone = false;
@@ -911,7 +912,7 @@ QString MessageWin::dateTimeToDisplay()
                 local.setTimeSpec(KDateTime::Spec::LocalZone());
                 showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
             }
-            tm = KGlobal::locale()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
+            tm = KLocale::global()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
         }
     }
     return tm;
