@@ -45,8 +45,6 @@
 using namespace KCalCore;
 using Akonadi::Collection;
 
-static const KCatalogLoader loader(QLatin1String("libkalarmcal"));
-
 namespace KAlarmCal
 {
 
