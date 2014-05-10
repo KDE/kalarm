@@ -298,7 +298,12 @@ bool KAlarmApp::restoreSession()
             MessageWin* win = new MessageWin;
             win->restore(i, false);
             if (win->isValid())
-                win->show();
+            {
+#ifdef USE_AKONADI
+                if (AkonadiModel::instance()->isCollectionTreeFetched())
+#endif
+                    win->show();
+            }
             else
                 delete win;
         }
@@ -1160,7 +1165,6 @@ bool KAlarmApp::wantShowInSystemTray() const
 */
 void KAlarmApp::checkWritableCalendar()
 {
-kDebug();
     if (mReadOnly)
         return;    // don't need write access to calendars
 #ifdef USE_AKONADI
@@ -1178,7 +1182,7 @@ kDebug();
     if (done)
         return;
     done = true;
-kDebug()<<"checking";
+    kDebug();
     // Find whether there are any writable active alarm calendars
 #ifdef USE_AKONADI
     bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();

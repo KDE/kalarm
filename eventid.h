@@ -1,7 +1,7 @@
 /*
  *  eventid.h  -  KAlarm unique event identifier for Akonadi
  *  Program:  kalarm
- *  Copyright © 2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2012,2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,6 +50,7 @@ struct EventId : public QPair<Akonadi::Collection::Id, QString>
 
     Akonadi::Collection::Id collectionId() const  { return first; }
     QString                 eventId() const       { return second; }
+    void                    setCollectionId(Akonadi::Collection::Id id)  { first = id; }
 };
 
 // Declare as a movable type (note that QString is movable).

@@ -1,7 +1,7 @@
 /*
  *  akonadimodel.h  -  KAlarm calendar file access using Akonadi
  *  Program:  kalarm
- *  Copyright © 2010-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -84,6 +84,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         static AkonadiModel* instance();
 
+        ~AkonadiModel();
+
         /** Return the display name for a collection. */
         QString displayName(Akonadi::Collection&) const;
         /** Return the storage type (file/directory/URL etc.) for a collection. */
@@ -150,7 +152,12 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         KAEvent event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
 
+        /** Return an event's model index, based on its itemId() value. */
         QModelIndex eventIndex(const KAEvent&);
+        /** Search for an event's item ID. This method ignores any itemId() value
+         *  contained in the KAEvent. The collectionId() is used if available.
+         */
+        Akonadi::Item::Id findItemId(const KAEvent&);
 
 #if 0
         /** Return all events in a collection, optionally of a specified type. */
