@@ -31,6 +31,7 @@
 
 #include <QBitArray>
 #include <QDate>
+#include <KLocale>
 
 using namespace KCalCore;
 namespace KAlarmCal
@@ -1044,7 +1045,7 @@ Duration KARecurrence::longestInterval() const
             int maxgap = 1;
             // Use the user's definition of the week, starting at the
             // day of the week specified by the user's locale.
-            int weekStart = KGlobal::locale()->weekStartDay() - 1;  // zero-based
+            int weekStart = KLocale::global()->weekStartDay() - 1;  // zero-based
             for (int i = 0;  i < 7;  ++i)
             {
                 // Get the standard KDE day-of-week number (zero-based)

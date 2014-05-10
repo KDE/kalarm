@@ -29,6 +29,7 @@
 #include <kglobal.h>
 #include <QStringList>
 #include <QDateTime>
+#include <KLocale>
 
 namespace KAlarmCal
 {
@@ -157,8 +158,8 @@ void AlarmText::setTodo(const KCalCore::Todo::Ptr& todo)
         KDateTime due = todo->dtDue(false);   // fetch the next due date
         if (todo->hasStartDate()  &&  todo->dtStart() != due)
         {
-            d->mTime = todo->allDay() ? KGlobal::locale()->formatDate(due.date(), KLocale::ShortDate)
-                                      : KGlobal::locale()->formatDateTime(due.dateTime());
+            d->mTime = todo->allDay() ? KLocale::global()->formatDate(due.date(), KLocale::ShortDate)
+                                      : KLocale::global()->formatDateTime(due.dateTime());
         }
     }
 }

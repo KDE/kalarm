@@ -27,6 +27,7 @@
 #include <ktimezone.h>
 
 #include <QDateTime>
+#include <KLocale>
 
 namespace KAlarmCal
 {
@@ -345,7 +346,7 @@ QString DateTime::toString(const QString& format) const
 
 QString DateTime::formatLocale(bool shortFormat) const
 {
-    return KGlobal::locale()->formatDateTime(d->mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
+    return KLocale::global()->formatDateTime(d->mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
 }
 
 void DateTime::setStartOfDay(const QTime& sod)
