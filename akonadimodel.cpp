@@ -412,7 +412,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             return mIconSize;
                         case Qt::AccessibleTextRole:
 #ifdef __GNUC__
-#warning Implement this
+#warning Implement accessibility
 #endif
                             return QString();
                         case ValueRole:
@@ -1160,6 +1160,33 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
 QModelIndex AkonadiModel::eventIndex(const KAEvent& event)
 {
     return itemIndex(event.itemId());
+}
+
+/******************************************************************************
+* Search for an event's item ID. This method ignores any itemId() value
+* contained in the KAEvent. The collectionId() is used if available.
+*/
+Item::Id AkonadiModel::findItemId(const KAEvent& event)
+{
+    Collection::Id colId = event.collectionId();
+    QModelIndex start = (colId < 0) ? index(0, 0) : collectionIndex(Collection(colId));
+    Qt::MatchFlags flags = (colId < 0) ? Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive | Qt::MatchWrap
+                                       : Qt::MatchExactly | Qt::MatchRecursive | Qt::MatchCaseSensitive;
+    const QModelIndexList indexes = match(start, RemoteIdRole, event.id(), -1, flags);
+    foreach (const QModelIndex& ix, indexes)
+    {
+        if (ix.isValid())
+        {
+            Item::Id id = ix.data(ItemIdRole).toLongLong();
+            if (id >= 0)
+            {
+                if (colId < 0
+                ||  ix.data(ParentCollectionRole).value<Collection>().id() == colId)
+                    return id;
+            }
+        }
+    }
+    return -1;
 }
 
 #if 0
