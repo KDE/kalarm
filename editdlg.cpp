@@ -1119,9 +1119,10 @@ bool EditAlarmDlg::validate()
             mCollection = CollectionControlModel::destination(type, this, false, &cancelled);
         if (!mCollection.isValid())
         {
-            if (!cancelled) {
-                //QT5 KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
-            }
+#if 0 //QT5
+            if (!cancelled)
+                KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
+#endif
             return false;
         }
     }

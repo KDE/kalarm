@@ -75,9 +75,7 @@ void LineEdit::init()
         setAutoDeleteCompletionObject(true);
     }
     else 
-    {
         setCompletionMode(KCompletion::CompletionNone);
-    }
 }
 
 /******************************************************************************
