@@ -86,9 +86,9 @@ class MessageWin : public MainWindowBase
         virtual QSize       sizeHint() const;
         static int          instanceCount(bool excludeAlwaysHidden = false);
 #ifdef USE_AKONADI
-        static MessageWin*  findEvent(const EventId& eventId);
+        static MessageWin*  findEvent(const EventId& eventId, MessageWin* exclude = 0);
 #else
-        static MessageWin*  findEvent(const QString& eventId);
+        static MessageWin*  findEvent(const QString& eventId, MessageWin* exclude = 0);
 #endif
         static void         redisplayAlarms();
         static void         stopAudio(bool wait = false);
@@ -114,6 +114,9 @@ class MessageWin : public MainWindowBase
         void                activeWindowChanged(WId);
         void                checkDeferralLimit();
         void                displayMainWindow();
+#ifdef USE_AKONADI
+        void                showRestoredAlarm();
+#endif
 #ifdef KMAIL_SUPPORTED
         void                slotShowKMailMessage();
 #endif
@@ -146,6 +149,7 @@ class MessageWin : public MainWindowBase
 #endif
         bool                haveErrorMessage(unsigned msg) const;
         void                clearErrorMessage(unsigned msg) const;
+        void                redisplayAlarm();
 #ifdef USE_AKONADI
         static bool         reinstateFromDisplaying(const KCalCore::Event::Ptr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
 #else
@@ -159,6 +163,7 @@ class MessageWin : public MainWindowBase
 #else
         static QMap<QString, unsigned> mErrorMessages; // error messages currently displayed, by event ID
 #endif
+        static bool         mRedisplayed;     // redisplayAlarms() was called
         // Sound file playing
         static QPointer<AudioThread> mAudioThread;   // thread to play audio file
         // Properties needed by readProperties()
