@@ -267,7 +267,7 @@ bool KAlarmApp::restoreSession()
     kapp->sessionConfig();
 
     // When KAlarm is session restored, automatically set start-at-login to true.
-    Preferences::self()->readConfig();
+    Preferences::self()->load();
     Preferences::setAutoStart(true);
     Preferences::setNoAutoStart(false);
     Preferences::setAskAutoStart(true);  // cancel any start-at-login prompt suppression
