@@ -164,7 +164,7 @@ KF5::Holidays
 KF5::PimUtils
 kdepim
 KF5::KCMUtils
-${KDE4_PHONON_LIBS}
+Phonon::phonon4qt5
 ${X11_X11_LIB}
 )
 
