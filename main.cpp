@@ -36,6 +36,7 @@
 
 int main(int argc, char *argv[])
 {
+    KLocalizedString::setApplicationDomain("kalarm");
     K4AboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm"), KALARM_VERSION,
         ki18n("Personal alarm message, command and email scheduler for KDE"),
         K4AboutData::License_GPL,
