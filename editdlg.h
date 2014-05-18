@@ -36,7 +36,7 @@ class QAbstractButton;
 class QGroupBox;
 class QFrame;
 class QVBoxLayout;
-class KLineEdit;
+class QLineEdit;
 class KTabWidget;
 class ButtonGroup;
 class TimeEdit;
@@ -157,7 +157,7 @@ class EditAlarmDlg : public KDialog
         bool                mRecurSetDefaultEndDate;   // adjust default end date/time when recurrence tab is displayed
 
         // Templates
-        KLineEdit*          mTemplateName;
+        QLineEdit*          mTemplateName;
         ButtonGroup*        mTemplateTimeGroup;
         RadioButton*        mTemplateDefaultTime; // no alarm time is specified
         RadioButton*        mTemplateUseTimeAfter;// alarm time is specified as an offset from current

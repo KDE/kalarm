@@ -33,7 +33,7 @@ class QPushButton;
 class QLabel;
 class QSpinBox;
 class KTimeZone;
-class KLineEdit;
+class QLineEdit;
 class KVBox;
 class KComboBox;
 class FontColourChooser;
@@ -97,7 +97,7 @@ class MiscPrefTab : public PrefsTabBase
         QCheckBox*    mConfirmAlarmDeletion;
         TimeSpinBox*  mDefaultDeferTime;
         ButtonGroup*  mXtermType;
-        KLineEdit*    mXtermCommand;
+        QLineEdit*    mXtermCommand;
         int           mXtermFirst;              // id of first terminal window radio button
         int           mXtermCount;              // number of terminal window types
 };
@@ -176,7 +176,7 @@ class EmailPrefTab : public PrefsTabBase
     private:
         void         setEmailAddress(Preferences::MailFrom, const QString& address);
         void         setEmailBccAddress(bool useSystemSettings, const QString& address);
-        QString      validateAddr(ButtonGroup*, KLineEdit* addr, const QString& msg);
+        QString      validateAddr(ButtonGroup*, QLineEdit* addr, const QString& msg);
 
         ButtonGroup* mEmailClient;
         RadioButton* mKMailButton;
@@ -185,11 +185,11 @@ class EmailPrefTab : public PrefsTabBase
         RadioButton* mFromAddrButton;
         RadioButton* mFromCCentreButton;
         RadioButton* mFromKMailButton;
-        KLineEdit*   mEmailAddress;
+        QLineEdit*   mEmailAddress;
         ButtonGroup* mBccAddressGroup;
         RadioButton* mBccAddrButton;
         RadioButton* mBccCCentreButton;
-        KLineEdit*   mEmailBccAddress;
+        QLineEdit*   mEmailBccAddress;
         QCheckBox*   mEmailQueuedNotify;
         QCheckBox*   mEmailCopyToKMail;
         bool         mAddressChanged;
@@ -222,7 +222,7 @@ class EditPrefTab : public PrefsTabBase
         QCheckBox*      mEmailBcc;
         KComboBox*      mSound;
         QLabel*         mSoundFileLabel;
-        KLineEdit*      mSoundFile;
+        QLineEdit*      mSoundFile;
         QPushButton*    mSoundFileBrowse;
         QCheckBox*      mSoundRepeat;
         QCheckBox*      mCopyToKOrganizer;
@@ -270,7 +270,7 @@ class ViewPrefTab : public PrefsTabBase
         SpinBox*      mTooltipMaxAlarmCount;
         QCheckBox*    mTooltipShowTime;
         QCheckBox*    mTooltipShowTimeTo;
-        KLineEdit*    mTooltipTimeToPrefix;
+        QLineEdit*    mTooltipTimeToPrefix;
         QLabel*       mTooltipTimeToPrefixLabel;
         ButtonGroup*  mWindowPosition;
         QSpinBox*     mWindowButtonDelay;

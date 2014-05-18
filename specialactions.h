@@ -29,7 +29,7 @@
 using namespace KAlarmCal;
 
 class QResizeEvent;
-class KLineEdit;
+class QLineEdit;
 class CheckBox;
 
 
@@ -78,8 +78,8 @@ class SpecialActions : public QWidget
         void         slotPreActionChanged(const QString& text);
 
     private:
-        KLineEdit*   mPreAction;
-        KLineEdit*   mPostAction;
+        QLineEdit*   mPreAction;
+        QLineEdit*   mPostAction;
         CheckBox*    mCancelOnError;
         CheckBox*    mDontShowError;
         CheckBox*    mExecOnDeferral;

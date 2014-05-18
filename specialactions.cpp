@@ -173,7 +173,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     box->setSpacing(KDialog::spacingHint());
     vlayout->addWidget(box);
     QLabel* label = new QLabel(i18nc("@label:textbox", "Command:"), box);
-    mPreAction = new KLineEdit(box);
+    mPreAction = new QLineEdit(box);
     label->setBuddy(mPreAction);
     connect(mPreAction, SIGNAL(textChanged(QString)), SLOT(slotPreActionChanged(QString)));
     box->setWhatsThis(i18nc("@info:whatsthis",
@@ -208,7 +208,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     box->setSpacing(KDialog::spacingHint());
     vlayout->addWidget(box);
     label = new QLabel(i18nc("@label:textbox", "Command:"), box);
-    mPostAction = new KLineEdit(box);
+    mPostAction = new QLineEdit(box);
     label->setBuddy(mPostAction);
     box->setWhatsThis(i18nc("@info:whatsthis",
                             "<para>Enter a shell command to execute after the alarm window is closed.</para>"

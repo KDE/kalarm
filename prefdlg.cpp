@@ -486,7 +486,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
         ++index;
     }
 
-    // QHBox used here doesn't allow the KLineEdit to expand!?
+    // QHBox used here doesn't allow the QLineEdit to expand!?
     QHBoxLayout* hlayout = new QHBoxLayout();
     hlayout->setSpacing(KDialog::spacingHint());
     grid->addLayout(hlayout, row + 1, 0, 1, 3, Qt::AlignLeft);
@@ -496,7 +496,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     mXtermType->addButton(radio, mXtermCount);
     if (mXtermFirst < 0)
         mXtermFirst = mXtermCount;   // note the id of the first button
-    mXtermCommand = new KLineEdit(group);
+    mXtermCommand = new QLineEdit(group);
     mXtermCommand->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     hlayout->addWidget(mXtermCommand);
     QString wt = 
@@ -1021,7 +1021,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     mFromAddressGroup->addButton(mFromAddrButton, Preferences::MAIL_FROM_ADDR);
     label->setBuddy(mFromAddrButton);
     grid->addWidget(mFromAddrButton, 1, 1);
-    mEmailAddress = new KLineEdit(group);
+    mEmailAddress = new QLineEdit(group);
     connect(mEmailAddress, SIGNAL(textChanged(QString)), SLOT(slotAddressChanged()));
     QString whatsThis = i18nc("@info:whatsthis", "Your email address, used to identify you as the sender when sending email alarms.");
     mFromAddrButton->setWhatsThis(whatsThis);
@@ -1057,7 +1057,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     mBccAddressGroup->addButton(mBccAddrButton, Preferences::MAIL_FROM_ADDR);
     label->setBuddy(mBccAddrButton);
     grid->addWidget(mBccAddrButton, 5, 1);
-    mEmailBccAddress = new KLineEdit(group);
+    mEmailBccAddress = new QLineEdit(group);
     whatsThis = i18nc("@info:whatsthis", "Your email address, used for blind copying email alarms to yourself. "
                      "If you want blind copies to be sent to your account on the computer which <application>KAlarm</application> runs on, you can simply enter your user login name.");
     mBccAddrButton->setWhatsThis(whatsThis);
@@ -1158,7 +1158,7 @@ QString EmailPrefTab::validate()
     return QString();
 }
 
-QString EmailPrefTab::validateAddr(ButtonGroup* group, KLineEdit* addr, const QString& msg)
+QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QString& msg)
 {
     QString errmsg = i18nc("@info", "<para>%1</para><para>Are you sure you want to save your changes?</para>", msg);
     switch (group->selectedId())
@@ -1334,7 +1334,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     box->setMargin(0);
     box->setSpacing(KDialog::spacingHint());
     mSoundFileLabel = new QLabel(i18nc("@label:textbox", "Sound file:"), box);
-    mSoundFile = new KLineEdit(box);
+    mSoundFile = new QLineEdit(box);
     mSoundFileLabel->setBuddy(mSoundFile);
     mSoundFileBrowse = new QPushButton(box);
     mSoundFileBrowse->setIcon(KIcon(SmallIcon(QLatin1String("document-open"))));
@@ -1680,7 +1680,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     box->setMargin(0);
     box->setSpacing(KDialog::spacingHint());
     mTooltipTimeToPrefixLabel = new QLabel(i18nc("@label:textbox", "Prefix:"), box);
-    mTooltipTimeToPrefix = new KLineEdit(box);
+    mTooltipTimeToPrefix = new QLineEdit(box);
     mTooltipTimeToPrefixLabel->setBuddy(mTooltipTimeToPrefix);
     box->setWhatsThis(i18nc("@info:whatsthis", "Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip."));
     box->setFixedHeight(box->sizeHint().height());

@@ -74,12 +74,12 @@ class BirthdayDlg : public KDialog
 };
 
 
-class BLineEdit : public KLineEdit
+class BLineEdit : public QLineEdit
 {
         Q_OBJECT
     public:
-        explicit BLineEdit(QWidget* parent = 0)                       : KLineEdit(parent) { }
-        explicit BLineEdit(const QString& text, QWidget* parent = 0)  : KLineEdit(text, parent) { }
+        explicit BLineEdit(QWidget* parent = 0)                       : QLineEdit(parent) { }
+        explicit BLineEdit(const QString& text, QWidget* parent = 0)  : QLineEdit(text, parent) { }
 
     signals:
         void         focusLost();

@@ -233,7 +233,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         box->setSpacing(spacingHint());
         QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"), box);
         label->setFixedSize(label->sizeHint());
-        mTemplateName = new KLineEdit(box);
+        mTemplateName = new QLineEdit(box);
         mTemplateName->setReadOnly(mReadOnly);
         connect(mTemplateName, SIGNAL(userTextChanged(QString)), SLOT(contentsChanged()));
         label->setBuddy(mTemplateName);
