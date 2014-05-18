@@ -54,7 +54,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>

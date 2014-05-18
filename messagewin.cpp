@@ -55,7 +55,7 @@
 #include <kwindowsystem.h>
 #include <kio/netaccess.h>
 #include <knotification.h>
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <ksqueezedtextlabel.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
