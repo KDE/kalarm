@@ -357,31 +357,31 @@ void ResourceSelector::selectionChanged()
 */
 void ResourceSelector::initActions(KActionCollection* actions)
 {
-    mActionReload      = new QAction(KIcon(QLatin1String("view-refresh")), i18nc("@action Reload calendar", "Re&load"), this);
+    mActionReload      = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18nc("@action Reload calendar", "Re&load"), this);
     actions->addAction(QLatin1String("resReload"), mActionReload);
     connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
-    mActionShowDetails = new QAction(KIcon(QLatin1String("help-about")), i18nc("@action", "Show &Details"), this);
+    mActionShowDetails = new QAction(QIcon::fromTheme(QLatin1String("help-about")), i18nc("@action", "Show &Details"), this);
     actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
     connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
-    mActionSetColour   = new QAction(KIcon(QLatin1String("color-picker")), i18nc("@action", "Set &Color..."), this);
+    mActionSetColour   = new QAction(QIcon::fromTheme(QLatin1String("color-picker")), i18nc("@action", "Set &Color..."), this);
     actions->addAction(QLatin1String("resSetColour"), mActionSetColour);
     connect(mActionSetColour, SIGNAL(triggered(bool)), SLOT(setColour()));
     mActionClearColour   = new QAction(i18nc("@action", "Clear C&olor"), this);
     actions->addAction(QLatin1String("resClearColour"), mActionClearColour);
     connect(mActionClearColour, SIGNAL(triggered(bool)), SLOT(clearColour()));
-    mActionEdit        = new QAction(KIcon(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
+    mActionEdit        = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("resEdit"), mActionEdit);
     connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
     mActionUpdate      = new QAction(i18nc("@action", "&Update Calendar Format"), this);
     actions->addAction(QLatin1String("resUpdate"), mActionUpdate);
     connect(mActionUpdate, SIGNAL(triggered(bool)), SLOT(updateResource()));
-    mActionRemove      = new QAction(KIcon(QLatin1String("edit-delete")), i18nc("@action", "&Remove"), this);
+    mActionRemove      = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "&Remove"), this);
     actions->addAction(QLatin1String("resRemove"), mActionRemove);
     connect(mActionRemove, SIGNAL(triggered(bool)), SLOT(removeResource()));
     mActionSetDefault  = new KToggleAction(this);
     actions->addAction(QLatin1String("resDefault"), mActionSetDefault);
     connect(mActionSetDefault, SIGNAL(triggered(bool)), SLOT(setStandard()));
-    QAction* action    = new QAction(KIcon(QLatin1String("document-new")), i18nc("@action", "&Add..."), this);
+    QAction* action    = new QAction(QIcon::fromTheme(QLatin1String("document-new")), i18nc("@action", "&Add..."), this);
     actions->addAction(QLatin1String("resAdd"), action);
     connect(action, SIGNAL(triggered(bool)), SLOT(addResource()));
     mActionImport      = new QAction(i18nc("@action", "Im&port..."), this);

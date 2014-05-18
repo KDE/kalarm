@@ -460,17 +460,17 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
     connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
 
-    mActionCopy = new QAction(KIcon(QLatin1String("edit-copy")), i18nc("@action", "&Copy..."), this);
+    mActionCopy = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18nc("@action", "&Copy..."), this);
     actions->addAction(QLatin1String("copy"), mActionCopy);
     mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
     connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
-    mActionModify = new QAction(KIcon(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
+    mActionModify = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("modify"), mActionModify);
     mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
-    mActionDelete = new QAction(KIcon(QLatin1String("edit-delete")), i18nc("@action", "&Delete"), this);
+    mActionDelete = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "&Delete"), this);
     actions->addAction(QLatin1String("delete"), mActionDelete);
     mActionDelete->setShortcut(QKeySequence::Delete);
     connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
@@ -517,7 +517,7 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
     connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
 
-    mActionToggleResourceSel = new KToggleAction(KIcon(QLatin1String("view-choose")), i18nc("@action", "Show &Calendars"), this);
+    mActionToggleResourceSel = new KToggleAction(QIcon::fromTheme(QLatin1String("view-choose")), i18nc("@action", "Show &Calendars"), this);
     actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
     connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
 
@@ -541,7 +541,7 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("export"), mActionExport);
     connect(mActionExport, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
 
-    action = new QAction(KIcon(QLatin1String("view-refresh")), i18nc("@action", "&Refresh Alarms"), this);
+    action = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18nc("@action", "&Refresh Alarms"), this);
     actions->addAction(QLatin1String("refreshAlarms"), action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
 
@@ -561,12 +561,12 @@ void MainWindow::initActions()
         //QT5 redoTextStripped = KLocale::global()->removeAcceleratorMarker(redoText);
         delete act;
     }
-    mActionUndo = new KToolBarPopupAction(KIcon(QLatin1String("edit-undo")), undoText, this);
+    mActionUndo = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-undo")), undoText, this);
     actions->addAction(QLatin1String("edit_undo"), mActionUndo);
     //QT5 mActionUndo->setShortcut(undoShortcut);
     connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
 
-    mActionRedo = new KToolBarPopupAction(KIcon(QLatin1String("edit-redo")), redoText, this);
+    mActionRedo = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-redo")), redoText, this);
     actions->addAction(QLatin1String("edit_redo"), mActionRedo);
     //QT5 mActionRedo->setShortcut(redoShortcut);
     connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));

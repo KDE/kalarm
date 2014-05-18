@@ -197,7 +197,7 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 */
 QAction * createStopPlayAction(QObject* parent)
 {
-    QAction * action = new QAction(KIcon(QLatin1String("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
+    QAction * action = new QAction(QIcon::fromTheme(QLatin1String("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
     action->setEnabled(MessageWin::isAudioPlaying());
     QObject::connect(action, SIGNAL(triggered(bool)), theApp(), SLOT(stopAudio()));
     // The following line ensures that all instances are kept in the same state
