@@ -1113,9 +1113,6 @@ void MessageWin::redisplayAlarm()
     if (event)
     {
         mEvent = *event;
-#ifndef USE_AKONADI
-        mResource = AlarmCalendar::resources()->resourceForEvent(mEventId);
-#endif
         mShowEdit = true;
     }
     else

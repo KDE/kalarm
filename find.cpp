@@ -21,9 +21,6 @@
 #include "kalarm.h"
 #include "find.h"
 
-#ifndef USE_AKONADI
-#include "alarmlistfiltermodel.h"
-#endif
 #include "alarmlistview.h"
 #include "eventlistview.h"
 #include "messagebox.h"

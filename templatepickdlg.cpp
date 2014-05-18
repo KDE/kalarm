@@ -21,10 +21,6 @@
 #include "kalarm.h"
 #include "templatepickdlg.h"
 
-#ifndef USE_AKONADI
-#include "eventlistmodel.h"
-#include "templatelistfiltermodel.h"
-#endif
 #include "functions.h"
 #include "shellprocess.h"
 #include "templatelistview.h"

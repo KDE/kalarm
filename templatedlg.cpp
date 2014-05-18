@@ -23,11 +23,6 @@
 
 #include "editdlg.h"
 #include "alarmcalendar.h"
-#ifndef USE_AKONADI
-#include "alarmresources.h"
-#include "eventlistmodel.h"
-#include "templatelistfiltermodel.h"
-#endif
 #include "functions.h"
 #include "messagebox.h"
 #include "newalarmaction.h"

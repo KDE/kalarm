@@ -35,9 +35,6 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#ifndef USE_AKONADI
-#include <kconfig.h>
-#endif
 #include <K4AboutData>
 #include <kio/netaccess.h>
 #include <kfileitem.h>

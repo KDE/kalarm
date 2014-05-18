@@ -22,10 +22,6 @@
 #include "eventlistview.h"
 
 #include "find.h"
-#ifndef USE_AKONADI
-#include "eventlistmodel.h"
-#include "templatelistfiltermodel.h"
-#endif
 
 #include <kglobalsettings.h>
 #include <klocale.h>

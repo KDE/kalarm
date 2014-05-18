@@ -66,9 +66,6 @@ using namespace Akonadi;
 
 ResourceSelector::ResourceSelector(QWidget* parent)
     : QFrame(parent),
-#ifndef USE_AKONADI
-      mCalendar(calendar),
-#endif
       mContextMenu(0),
       mActionReload(0),
       mActionShowDetails(0),

@@ -475,9 +475,6 @@ UpdateResult updateTemplate(KAEvent& event, QWidget* msgParent)
         return UpdateResult(status);
     }
 
-#ifndef USE_AKONADI
-    EventListModel::templates()->updateEvent(newEvent);
-#endif
     return UpdateResult(UPDATE_OK);
 }
 
@@ -1885,9 +1882,6 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
     ICalFormat format;
     format.setTimeSpec(Preferences::timeZone(true));
     QString iCal = format.toICalString(kcalEvent);
-#ifndef USE_AKONADI
-    delete kcalEvent;
-#endif
 
     // Send the event to KOrganizer
     KAlarm::UpdateResult status = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface

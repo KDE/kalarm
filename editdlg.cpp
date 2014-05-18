@@ -148,9 +148,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* pa
       mDeferChangeButton(0),
       mTimeWidget(0),
       mShowInKorganizer(0),
-#ifndef USE_AKONADI
-      mResource(0),
-#endif
       mDeferGroupHeight(0),
       mTemplate(Template),
       mNewAlarm(true),
@@ -174,9 +171,6 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, Q
       mDeferChangeButton(0),
       mTimeWidget(0),
       mShowInKorganizer(0),
-#ifndef USE_AKONADI
-      mResource(0),
-#endif
       mDeferGroupHeight(0),
       mEventId(newAlarm ? QString() : event->id()),
       mTemplate(Template),

@@ -25,11 +25,6 @@
 #include "alarmlistdelegate.h"
 #include "autoqpointer.h"
 #include "alarmlistview.h"
-#ifndef USE_AKONADI
-#include "alarmlistfiltermodel.h"
-#include "alarmresources.h"
-#include "eventlistmodel.h"
-#endif
 #include "birthdaydlg.h"
 #include "functions.h"
 #include "kalarmapp.h"

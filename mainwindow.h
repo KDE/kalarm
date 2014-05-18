@@ -23,9 +23,6 @@
 
 /** @file mainwindow.h - main application window */
 
-#ifndef USE_AKONADI
-#include "alarmresources.h"
-#endif
 #include "editdlg.h"
 #include "mainwindowbase.h"
 #include "undo.h"

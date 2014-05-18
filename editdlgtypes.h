@@ -27,9 +27,6 @@
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
 
-#ifndef USE_AKONADI
-#include <kcal/person.h>
-#endif
 
 #include <kurl.h>
 

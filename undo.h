@@ -31,9 +31,6 @@
 #include <QList>
 #include <QStringList>
 
-#ifndef USE_AKONADI
-class AlarmResource;
-#endif
 class UndoItem;
 using namespace KAlarmCal;
 
