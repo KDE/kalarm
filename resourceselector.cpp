@@ -33,7 +33,7 @@
 #include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
-#include "resourceconfigdialog.h"
+//#include "resourceconfigdialog.h"
 
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/agentinstancecreatejob.h>

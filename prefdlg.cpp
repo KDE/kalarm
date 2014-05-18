@@ -160,7 +160,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     //QT5 setDefaultButton(Ok);
     setFaceType(List);
     //QT5 showButtonSeparator(true);
-    mTabScrollGroup = new StackedScrollGroup(this, this);
+    //QT5 mTabScrollGroup = new StackedScrollGroup(this, this);
 
     mMiscPage = new MiscPrefTab(mTabScrollGroup);
     mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab General preferences", "General"));
@@ -255,8 +255,10 @@ void KAlarmPrefDlg::slotOk()
     kDebug();
     mValid = true;
     slotApply();
+#if 0 //QT5
     if (mValid)
         KDialog::accept();
+#endif
 }
 
 // Discard the current preferences and close the dialog
@@ -264,7 +266,7 @@ void KAlarmPrefDlg::slotCancel()
 {
     kDebug();
     restore(false);
-    KDialog::reject();
+    //QT5 KDialog::reject();
 }
 
 // Reset all controls to the application defaults
@@ -330,7 +332,7 @@ QSize KAlarmPrefDlg::minimumSizeHint() const
 
 void KAlarmPrefDlg::showEvent(QShowEvent* e)
 {
-    KDialog::showEvent(e);
+    //QT5 KDialog::showEvent(e);
     if (!mShown)
     {
         mTabScrollGroup->adjustSize(true);

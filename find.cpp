@@ -37,6 +37,7 @@
 #include <kwindowsystem.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <KDialog>
 
 #include <QGroupBox>
 #include <QCheckBox>
@@ -67,10 +68,12 @@ class FindDlg : public KFindDialog
     protected slots:
         void slotButtonClicked(int button)
         {
-            if (button == Ok)
+#if 0 //QT5
+            if (button == KDialog::Ok)
                 emit okClicked();
             else
                 KFindDialog::slotButtonClicked(button);
+#endif
         }
 };
 

@@ -18,9 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-// kdepimlibs and kdepim-runtime 4.12.4 minimum are required
 #include <kdeversion.h>
-#if defined(USE_AKONADI) && KDE_IS_VERSION(4,12,4)
 
 #include "collectionsearch.h"
 
@@ -30,6 +28,8 @@
 #include <AkonadiCore/collectionfetchscope.h>
 #include <AkonadiCore/itemfetchjob.h>
 #include <AkonadiCore/itemdeletejob.h>
+
+#include <KDebug>
 
 #include <QStringList>
 #include <QTimer>
@@ -174,6 +174,5 @@ void CollectionSearch::finish()
 }
 
 #include "moc_collectionsearch.cpp"
-#endif
 
 // vim: et sw=4:

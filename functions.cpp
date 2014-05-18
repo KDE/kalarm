@@ -1377,6 +1377,7 @@ void Private::cancelRtcWake()
 */
 bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
 {
+#if 0 //QT5
     QVariantMap args;
     args[QLatin1String("time")] = triggerTime;
     KAuth::Action action(QLatin1String("org.kde.kalarmrtcwake.settimer"));
@@ -1393,18 +1394,18 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
             int errcode = reply.errorCode();
             switch (reply.type())
             {
-                case KAuth::ActionReply::KAuthError:
+                case KAuth::ActionReply::KAuthErrorType:
                     kDebug() << "Authorisation error:" << errcode;
                     switch (errcode)
                     {
-                        case KAuth::ActionReply::AuthorizationDenied:
-                        case KAuth::ActionReply::UserCancelled:
+                        case KAuth::ActionReply::AuthorizationDeniedError:
+                        case KAuth::ActionReply::UserCancelledError:
                             return false;   // the user should already know about this
                         default:
                             break;
                     }
                     break;
-                case KAuth::ActionReply::HelperError:
+                case KAuth::ActionReply::HelperErrorType:
                     kDebug() << "Helper error:" << errcode;
                     errcode += 100;    // make code distinguishable from KAuthError type
                     break;
@@ -1416,6 +1417,7 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
         KAMessageBox::information(parent, errmsg);
         return false;
     }
+#endif
     return true;
 }
 

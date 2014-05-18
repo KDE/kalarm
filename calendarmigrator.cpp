@@ -36,7 +36,7 @@
 #include <AkonadiCore/collectionfetchscope.h>
 #include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitydisplayattribute.h>
-#include <akonadi/resourcesynchronizationjob.h>
+#include <AkonadiCore/resourcesynchronizationjob.h>
 
 #include <klocale.h>
 #include <kconfiggroup.h>

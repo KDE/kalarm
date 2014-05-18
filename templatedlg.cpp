@@ -122,7 +122,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     layout->addWidget(mDeleteButton);
 
     KActionCollection* actions = new KActionCollection(this);
-    KAction* act = KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
+    QAction* act = KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
     topLevelWidget()->addAction(act);
     act = KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
     topLevelWidget()->addAction(act);

@@ -33,6 +33,7 @@
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <klocale.h>
+#include <KDebug>
 
 #include <QApplication>
 #include <QMouseEvent>

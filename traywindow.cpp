@@ -48,6 +48,8 @@
 #include <kiconeffect.h>
 #include <kconfig.h>
 #include <kdebug.h>
+#include <KGlobal>
+#include <KIconLoader>
 
 #include <QList>
 #include <QTimer>
@@ -87,11 +89,11 @@ TrayWindow::TrayWindow(MainWindow* parent)
     // - setIconByName() doesn't work for this one!
     mIconDisabled.addPixmap(KIconLoader::global()->loadIcon(QLatin1String("kalarm-disabled"), KIconLoader::Panel));
     setStatus(KStatusNotifierItem::Active);
-
+#if 0 //QT5
     // Set up the context menu
-    KActionCollection* actions = actionCollection();
+    QList<QAction *> actions = actionCollection();
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
-    actions->addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
+    actions.addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
     contextMenu()->addAction(mActionEnabled);
     connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(setEnabledStatus(bool)));
     contextMenu()->addSeparator();
@@ -175,6 +177,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
     // Update when tooltip preferences are modified
     Preferences::connect(SIGNAL(tooltipPreferencesChanged()), mToolTipUpdateTimer, SLOT(start()));
+#endif
 }
 
 TrayWindow::~TrayWindow()

@@ -50,8 +50,10 @@
 #include <AkonadiCore/itemdeletejob.h>
 #include <AkonadiCore/itemfetchscope.h>
 
+#include <KDebug>
 #include <klocale.h>
 #include <kcolorutils.h>
+#include <KIconLoader>
 
 #include <QApplication>
 #include <QFileInfo>
@@ -363,7 +365,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             if (type == KAEvent::ACT_COMMAND)
                             {
                                 if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                                    return Qt::red;
+                                    return QColor(Qt::red);
                             }
                             break;
                         }
@@ -371,12 +373,12 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             if (event.commandError() != KAEvent::CMD_NO_ERROR)
                             {
                                 if (event.actionTypes() == KAEvent::ACT_COMMAND)
-                                    return Qt::white;
+                                    return QColor(Qt::white);
                                 QColor colour = Qt::red;
                                 int r, g, b;
                                 event.bgColour().getRgb(&r, &g, &b);
                                 if (r > 128  &&  g <= 128  &&  b <= 128)
-                                    colour = Qt::white;
+                                    colour = QColor(Qt::white);
                                 return colour;
                             }
                             break;

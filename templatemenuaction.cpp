@@ -45,7 +45,7 @@ TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, 
 */
 void TemplateMenuAction::slotInitMenu()
 {
-    KMenu* m = menu();
+    QMenu* m = menu();
     m->clear();
     mOriginalTexts.clear();
 

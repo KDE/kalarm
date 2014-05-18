@@ -24,8 +24,7 @@
 #include "editdlg.h"
 #include <kactionmenu.h>
 #include <QMap>
-
-class KAction;
+#include <KAction>
 class TemplateMenuAction;
 
 class NewAlarmAction : public KActionMenu
