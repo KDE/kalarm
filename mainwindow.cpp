@@ -54,7 +54,7 @@ using namespace KCalUtils;
 
 #include <kmenubar.h>
 #include <ktoolbar.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kinputdialog.h>
@@ -589,9 +589,9 @@ void MainWindow::initActions()
     // Load menu and toolbar settings
     applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
 
-    mContextMenu = static_cast<KMenu*>(factory()->container(QLatin1String("listContext"), this));
-    mActionsMenu = static_cast<KMenu*>(factory()->container(QLatin1String("actions"), this));
-    KMenu* resourceMenu = static_cast<KMenu*>(factory()->container(QLatin1String("resourceContext"), this));
+    mContextMenu = static_cast<QMenu*>(factory()->container(QLatin1String("listContext"), this));
+    mActionsMenu = static_cast<QMenu*>(factory()->container(QLatin1String("actions"), this));
+    QMenu* resourceMenu = static_cast<QMenu*>(factory()->container(QLatin1String("resourceContext"), this));
     mResourceSelector->setContextMenu(resourceMenu);
     mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
     connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));

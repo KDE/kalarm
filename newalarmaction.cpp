@@ -28,7 +28,7 @@
 #include "shellprocess.h"
 #include "templatemenuaction.h"
 
-#include <kmenu.h>
+#include <QMenu>
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kstandardshortcut.h>

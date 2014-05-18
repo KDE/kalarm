@@ -195,8 +195,8 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         KToggleAction*       mActionShowTimeTo;
         KToggleAction*       mActionShowArchived;
         KToggleAction*       mActionSpreadWindows;
-        KMenu*               mActionsMenu;
-        KMenu*               mContextMenu;
+        QMenu*               mActionsMenu;
+        QMenu*               mContextMenu;
         QMap<QAction*, int>  mUndoMenuIds;         // items in the undo/redo menu, in order of appearance
         int                  mResourcesWidth;      // width of resource selector widget
         bool                 mHiddenTrayParent;    // on session restoration, hide this window

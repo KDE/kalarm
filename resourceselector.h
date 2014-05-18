@@ -42,7 +42,7 @@ class QAction;
 class KActionCollection;
 class KToggleAction;
 class KComboBox;
-class KMenu;
+class QMenu;
 class ResourceView;
 class AkonadiResourceCreator;
 namespace Akonadi {
@@ -59,7 +59,7 @@ class ResourceSelector : public QFrame
     public:
         explicit ResourceSelector(QWidget* parent = 0);
         void  initActions(KActionCollection*);
-        void  setContextMenu(KMenu*);
+        void  setContextMenu(QMenu*);
 
     signals:
         void  resized(const QSize& oldSize, const QSize& newSize);
@@ -99,7 +99,7 @@ class ResourceSelector : public QFrame
         QPushButton*    mDeleteButton;
         QPushButton*    mEditButton;
         CalEvent::Type  mCurrentAlarmType;
-        KMenu*          mContextMenu;
+        QMenu*          mContextMenu;
         QAction *        mActionReload;
         QAction *        mActionShowDetails;
         QAction *        mActionSetColour;

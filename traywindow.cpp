@@ -40,7 +40,7 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <K4AboutData>
-#include <kmenu.h>
+#include <QMenu>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kstandardaction.h>

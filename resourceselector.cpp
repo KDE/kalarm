@@ -46,7 +46,7 @@
 #include <kglobal.h>
 #include <kcombobox.h>
 #include <kinputdialog.h>
-#include <kmenu.h>
+#include <QMenu>
 #include <kdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
@@ -392,7 +392,7 @@ void ResourceSelector::initActions(KActionCollection* actions)
     connect(mActionExport, SIGNAL(triggered(bool)), SLOT(exportCalendar()));
 }
 
-void ResourceSelector::setContextMenu(KMenu* menu)
+void ResourceSelector::setContextMenu(QMenu* menu)
 {
     mContextMenu = menu;
 }
