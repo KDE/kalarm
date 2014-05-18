@@ -86,7 +86,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
     switch (result)
     {
         case 0:
-            return ActionReply::SuccessReply;
+            return ActionReply::SuccessType;
         case -2:
             errmsg = i18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QLatin1String("rtcwake"));
             break;
