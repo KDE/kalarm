@@ -23,11 +23,7 @@
 
 #undef QT3_SUPPORT
 
-#ifdef USE_AKONADI
 #define VERSION_SUFFIX "-ak"
-#else
-#define VERSION_SUFFIX "-res"
-#endif
 #define KALARM_VERSION "2.10.9" VERSION_SUFFIX
 
 #define KALARM_NAME "KAlarm"

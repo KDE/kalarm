@@ -1919,39 +1919,9 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 KAlarm::UpdateResult deleteFromKOrganizer(const QString& eventID)
 {
     const QString newID = uidKOrganizer(eventID);
-#if defined(USE_AKONADI) && KDE_IS_VERSION(4,12,4)   // kdepimlibs/kdepim-runtime 4.12.4 are required
     new CollectionSearch(KORG_MIME_TYPE, newID, true);  // this auto-deletes when complete
     // Ignore errors
     return KAlarm::UpdateResult(KAlarm::UPDATE_OK);
-#else
-    KAlarm::UpdateResult status = runKOrganizer();   // start KOrganizer if it isn't already running, and create its D-Bus interface
-    if (status != KAlarm::UPDATE_OK)
-        return status;
-    QList<QVariant> args;
-    args << newID << true;
-    QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("deleteIncidence"), args);
-    if (!reply.isValid())
-    {
-        if (reply.error().type() == QDBusError::UnknownObject)
-        {
-            kError() << "deleteIncidence() D-Bus error: still starting";
-            status = KAlarm::UPDATE_KORG_ERRSTART;
-        }
-        else
-        {
-            status.set(KAlarm::UPDATE_KORG_ERR, reply.error().message());
-            kError() << "deleteIncidence(" << newID << ") D-Bus call failed:" << status.message;
-        }
-    }
-    else if (!reply.value())
-    {
-        status = KAlarm::UPDATE_KORG_FUNCERR;
-        kDebug() << "deleteIncidence(" << newID << ") D-Bus call returned false";
-    }
-    else
-        kDebug() << newID << ": success";
-    return status;
-#endif
 }
 
 /******************************************************************************
