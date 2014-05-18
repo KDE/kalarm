@@ -103,7 +103,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     connect(mActionNew->fromTemplateAlarmAction(), SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
     contextMenu()->addSeparator();
 
-    KAction* a = KAlarm::createStopPlayAction(this);
+    QAction * a = KAlarm::createStopPlayAction(this);
     actions->addAction(QLatin1String("tStopPlay"), a);
     contextMenu()->addAction(a);
     QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), a, SLOT(setVisible(bool)));

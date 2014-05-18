@@ -38,7 +38,7 @@ using namespace KAlarmCal;
 
 class QPushButton;
 class QResizeEvent;
-class KAction;
+class QAction;
 class KActionCollection;
 class KToggleAction;
 class KComboBox;
@@ -100,15 +100,15 @@ class ResourceSelector : public QFrame
         QPushButton*    mEditButton;
         CalEvent::Type  mCurrentAlarmType;
         KMenu*          mContextMenu;
-        KAction*        mActionReload;
-        KAction*        mActionShowDetails;
-        KAction*        mActionSetColour;
-        KAction*        mActionClearColour;
-        KAction*        mActionEdit;
-        KAction*        mActionUpdate;
-        KAction*        mActionRemove;
-        KAction*        mActionImport;
-        KAction*        mActionExport;
+        QAction *        mActionReload;
+        QAction *        mActionShowDetails;
+        QAction *        mActionSetColour;
+        QAction *        mActionClearColour;
+        QAction *        mActionEdit;
+        QAction *        mActionUpdate;
+        QAction *        mActionRemove;
+        QAction *        mActionImport;
+        QAction *        mActionExport;
         KToggleAction*  mActionSetDefault;
 };
 
