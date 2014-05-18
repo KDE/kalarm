@@ -184,9 +184,10 @@ install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults
 
 ########### KAuth helper ###############
 
-add_executable(kalarm_helper rtcwakeaction.cpp)
-target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
-install(TARGETS kalarm_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
-kde4_install_auth_helper_files(kalarm_helper org.kde.kalarmrtcwake root)
+#REACTIVATE IT
+#add_executable(kalarm_helper rtcwakeaction.cpp)
+#target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
+#install(TARGETS kalarm_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+#kde4_install_auth_helper_files(kalarm_helper org.kde.kalarmrtcwake root)
 #PORT TO QT5
 #kde4_install_auth_actions(org.kde.kalarmrtcwake rtcwakeaction.actions)

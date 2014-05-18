@@ -94,11 +94,15 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
             errmsg = i18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(QLatin1String(" ")), result);
             break;
     }
+#if 0 //QT5
     ActionReply reply(ActionReply::HelperErrorReply);
     reply.setErrorCode(result);
     reply.setErrorDescription(errmsg);
     qDebug() << "RtcWakeAction::settimer: Code=" << reply.errorCode() << reply.errorDescription();
     return reply;
+#else
+    return 0;
+#endif
 }
 
 //QT5 KDE4_AUTH_HELPER_MAIN("org.kde.kalarmrtcwake", RtcWakeAction)

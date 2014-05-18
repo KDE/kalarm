@@ -14,7 +14,7 @@
   <include>qnamespace.h</include>
 
   <kcfgfile name="kalarmrc"/>
-
+<!--
   <signal name="showInSystemTrayChanged">
     <argument type="Bool">ShowInSystemTray</argument>
   </signal>
@@ -55,7 +55,7 @@
   </signal>
   <signal name="tooltipPreferencesChanged">
   </signal>
-
+-->
   <group name="General">
     <entry name="Version" type="String" hidden="true">
       <label context="@label">KAlarm version</label>
@@ -72,12 +72,12 @@
     <entry name="Base_TimeZone" key="TimeZone" type="String">
       <label context="@label">Time zone</label>
       <whatsthis context="@info:whatsthis">Select the time zone which &lt;application>KAlarm&lt;/application> should use as its default for displaying and entering dates and times.</whatsthis>
-      <emit signal="base_TimeZoneChanged"/>
+      <!-- <emit signal="base_TimeZoneChanged"/> -->
     </entry>
     <entry name="Base_HolidayRegion" key="HolidayRegion" type="String">
       <label context="@label">Holiday region</label>
       <whatsthis context="@info:whatsthis">Select the holiday region to use.</whatsthis>
-      <emit signal="base_HolidayRegionChanged"/>
+      <!-- <emit signal="base_HolidayRegionChanged"/> -->
     </entry>
     <entry name="DefaultFgColour" key="MessageForegroundColour" type="Color">
       <label context="@label">Foreground color</label>
@@ -93,19 +93,19 @@
       <label context="@label">Message font</label>
       <whatsthis context="@info:whatsthis">Default font for displaying alarm messages.</whatsthis>
       <default code="true">QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold)</default>
-      <emit signal="messageFontChanged"/>
+      <!-- <emit signal="messageFontChanged"/> -->
     </entry>
     <entry name="ShowInSystemTray" type="Bool">
       <label context="@label">Show in system tray</label>
       <whatsthis context="@info:whatsthis">&lt;para>Check to show &lt;application>KAlarm&lt;/application>'s icon in the system tray. Showing it in the system tray provides easy access and a status indication.&lt;/para></whatsthis>
       <default>true</default>
-      <emit signal="showInSystemTrayChanged"/>
+      <!-- <emit signal="showInSystemTrayChanged"/>-->
     </entry>
     <entry name="AutoHideSystemTray" type="Int">
       <label context="@label">Auto-hide in system tray if no alarms due within period</label>
       <whatsthis context="@info:whatsthis">&lt;para>Enter -1 to auto-hide &lt;application>KAlarm&lt;/application>'s icon in the system tray when there are no active alarms.&lt;/para>&lt;para>To auto-hide the system tray icon when there are no alarms due within a set period of time, enter the time period in minutes.&lt;/para>&lt;para>Enter 0 to always show the system tray icon.&lt;/para></whatsthis>
       <default>1440</default>
-      <emit signal="autoHideSystemTrayChanged"/>
+      <!-- <emit signal="autoHideSystemTrayChanged"/> -->
     </entry>
     <entry name="AutoStart" key="AutoStart" type="Bool">
       <label context="@label">Start at login</label>
@@ -125,7 +125,7 @@
       <label context="@label">Prompt for which calendar to store in</label>
       <whatsthis context="@info:whatsthis">&lt;para>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.&lt;/para>&lt;para>Note that archived alarms are always stored in the default archived alarm calendar.&lt;/para></whatsthis>
       <default>true</default>
-      <emit signal="askResourceChanged"/>
+      <!-- <emit signal="askResourceChanged"/> -->
     </entry>
     <entry name="ModalMessages" type="Bool">
       <label context="@label">Message windows have a title bar and take keyboard focus</label>
@@ -152,25 +152,25 @@
       </whatsthis>
       <default>5</default>
       <min>-1</min>
-      <emit signal="tooltipPreferencesChanged"/>
+      <!-- <emit signal="tooltipPreferencesChanged"/> -->
     </entry>
     <entry name="ShowTooltipAlarmTime" type="Bool">
       <label context="@label">Show alarm times in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Specify whether to show in the system tray tooltip, the time at which each alarm is due.</whatsthis>
       <default>true</default>
-      <emit signal="tooltipPreferencesChanged"/>
+      <!-- <emit signal="tooltipPreferencesChanged"/> -->
     </entry>
     <entry name="ShowTooltipTimeToAlarm" type="Bool">
       <label context="@label">Show time to alarms in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Specify whether to show in the system tray tooltip, how long until each alarm is due.</whatsthis>
       <default>true</default>
-      <emit signal="tooltipPreferencesChanged"/>
+      <!-- <emit signal="tooltipPreferencesChanged"/> -->
     </entry>
     <entry name="TooltipTimeToPrefix" type="String">
       <label context="@label">Time-to-alarm prefix in system tray tooltip</label>
       <whatsthis context="@info:whatsthis">Enter the text to be displayed in front of the time until the alarm, in the system tray tooltip.</whatsthis>
       <default code="true">QLatin1String("+")</default>
-      <emit signal="tooltipPreferencesChanged"/>
+      <!-- <emit signal="tooltipPreferencesChanged"/> -->
     </entry>
     <entry name="EmailClient" key="EmailClient" type="Enum">
       <label context="@label">Email client</label>
@@ -204,37 +204,37 @@
       <label context="@label">Start of day for date-only alarms</label>
       <whatsthis context="@info:whatsthis">The earliest time of day at which a date-only alarm will be triggered.</whatsthis>
       <default>QDateTime(QDate(1900,1,1),QTime(0,0))</default>
-      <emit signal="base_StartOfDayChanged"/>
+      <!-- <emit signal="base_StartOfDayChanged"/> -->
     </entry>
     <entry name="Base_WorkDayStart" key="WorkDayStart" type="DateTime">
       <label context="@label">Start time of working day</label>
       <whatsthis context="@info:whatsthis">The start time of the working day.</whatsthis>
       <default>QDateTime(QDate(1900,1,1),QTime(8,0))</default>
-      <emit signal="base_WorkTimeChanged"/>
+      <!-- <emit signal="base_WorkTimeChanged"/> -->
     </entry>
     <entry name="Base_WorkDayEnd" key="WorkDayEnd" type="DateTime">
       <label context="@label">End time of working day</label>
       <whatsthis context="@info:whatsthis">The end time of the working day.</whatsthis>
       <default>QDateTime(QDate(1900,1,1),QTime(17,0))</default>
-      <emit signal="base_WorkTimeChanged"/>
+      <!-- <emit signal="base_WorkTimeChanged"/> -->
     </entry>
     <entry name="Base_WorkDays" key="WorkDays" type="UInt">
       <label context="@label">Working days</label>
       <whatsthis context="@info:whatsthis">OR'ed bits indicating which days of the week are work days, 1 = Monday ... 64 = Sunday.</whatsthis>
       <default code="true">KAlarm::defaultWorkDays()</default>
-      <emit signal="base_WorkTimeChanged"/>
+      <!-- <emit signal="base_WorkTimeChanged"/> -->
     </entry>
     <entry name="DisabledColour" type="Color">
       <label context="@label">Disabled alarm color</label>
       <whatsthis context="@info:whatsthis">Choose the text color in the alarm list for disabled alarms.</whatsthis>
       <default code="true">KColorScheme(QPalette::Disabled).foreground(KColorScheme::InactiveText).color()</default>
-      <emit signal="disabledColourChanged"/>
+      <!-- <emit signal="disabledColourChanged"/> -->
     </entry>
     <entry name="ArchivedColour" key="ExpiredColour" type="Color">
       <label context="@label">Archived alarm color</label>
       <whatsthis context="@info:whatsthis">Choose the text color in the alarm list for archived alarms.</whatsthis>
       <default code="true">KColorScheme(QPalette::Active).foreground(KColorScheme::VisitedText).color()</default>
-      <emit signal="archivedColourChanged"/>
+      <!-- <emit signal="archivedColourChanged"/> -->
     </entry>
     <entry name="ArchivedKeepDays" key="ExpiredKeepDays" type="Int">
       <label context="@label">Days to keep expired alarms</label>
@@ -245,7 +245,7 @@
       </whatsthis>
       <default>7</default>
       <min>-1</min>
-      <emit signal="archivedKeepDaysChanged"/>
+      <!-- <emit signal="archivedKeepDaysChanged"/> -->
     </entry>
     <entry name="KOrgEventDuration" type="Int">
       <label context="@label">KOrganizer event duration</label>
@@ -354,7 +354,7 @@
         <choice name="None"><label context="@option">Do not repeat</label></choice>
       </choices>
       <default>Mar1</default>
-      <emit signal="feb29TypeChanged"/>
+      <!-- <emit signal="feb29TypeChanged"/> -->
     </entry>
     <entry name="DefaultReminderUnits" key="RemindUnits" type="Enum">
       <label context="@label">Reminder units</label>
