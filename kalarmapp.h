@@ -23,9 +23,7 @@
 
 /** @file kalarmapp.h - the KAlarm application object */
 
-#ifdef USE_AKONADI
 #include "eventid.h"
-#endif
 #include "kamail.h"
 #include "preferences.h"
 
@@ -39,9 +37,7 @@
 
 class KDateTime;
 namespace KCal { class Event; }
-#ifdef USE_AKONADI
 namespace Akonadi { class Collection; }
-#endif
 class DBusHandler;
 class MainWindow;
 class TrayWindow;
@@ -92,29 +88,18 @@ class KAlarmApp : public KUniqueApplication
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,
                                          int repeatInterval, int repeatCount,
-#ifdef USE_AKONADI
                                          uint mailFromID = 0, const KCalCore::Person::List& mailAddresses = KCalCore::Person::List(),
-#else
-                                         uint mailFromID = 0, const QList<KCal::Person>& mailAddresses = QList<KCal::Person>(),
-#endif
                                          const QString& mailSubject = QString(),
                                          const QStringList& mailAttachments = QStringList());
-#ifdef USE_AKONADI
         bool               dbusTriggerEvent(const EventId& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
         bool               dbusDeleteEvent(const EventId& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
-#else
-        bool               dbusTriggerEvent(const QString& eventID)   { return dbusHandleEvent(eventID, EVENT_TRIGGER); }
-        bool               dbusDeleteEvent(const QString& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
-#endif
         QString            dbusList();
 
     public slots:
         void               processQueue();
         void               setAlarmsEnabled(bool);
-#ifdef USE_AKONADI
         void               purgeNewArchivedDefault(const Akonadi::Collection&);
         void               atLoginEventAdded(const KAEvent&);
-#endif
         void               notifyAudioStopped()  { notifyAudioPlaying(false); }
         void               stopAudio();
         void               spreadWindows(bool);
@@ -146,9 +131,7 @@ class KAlarmApp : public KUniqueApplication
         void               slotMessageFontChanged(const QFont&);
         void               setArchivePurgeDays();
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
-#ifdef USE_AKONADI
         void               purgeAfterDelay();
-#endif
         void               slotCommandExited(ShellProcess*);
         void               slotDBusServiceUnregistered(const QString& serviceName);
 
@@ -181,39 +164,22 @@ class KAlarmApp : public KUniqueApplication
         };
         struct ActionQEntry
         {
-#ifdef USE_AKONADI
             ActionQEntry(EventFunc f, const EventId& id) : function(f), eventId(id) { }
-#else
-            ActionQEntry(EventFunc f, const QString& id) : function(f), eventId(id) { }
-#endif
             ActionQEntry(const KAEvent& e, EventFunc f = EVENT_HANDLE) : function(f), event(e) { }
             ActionQEntry() { }
             EventFunc  function;
-#ifdef USE_AKONADI
             EventId    eventId;
-#else
-            QString    eventId;
-#endif
             KAEvent    event;
         };
 
         bool               initialise();
-#ifdef USE_AKONADI
         bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, Akonadi::Collection::Id = -1);
-#else
-        bool               initCheck(bool calendarOnly = false);
-#endif
         bool               quitIf(int exitCode, bool force = false);
         bool               checkSystemTray();
         void               startProcessQueue();
         void               queueAlarmId(const KAEvent&);
-#ifdef USE_AKONADI
         bool               dbusHandleEvent(const EventId&, EventFunc);
         bool               handleEvent(const EventId&, EventFunc, bool checkDuplicates = false);
-#else
-        bool               dbusHandleEvent(const QString& eventID, EventFunc);
-        bool               handleEvent(const QString& eventID, EventFunc);
-#endif
         int                rescheduleAlarm(KAEvent&, const KAAlarm&, bool updateCalAndDisplay,
                                            const KDateTime& nextDt = KDateTime());
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);

@@ -35,11 +35,7 @@
 #include <MailTransport/mailtransport/transportmanager.h>
 #include <MailTransport/mailtransport/transport.h>
 #include <MailTransport/mailtransport/messagequeuejob.h>
-#ifdef USE_AKONADI
 #include <KCalCore/Person>
-#else
-#include <kcal/person.h>
-#endif
 #include <kmime/kmime_header_parsing.h>
 #include <kmime/kmime_headers.h>
 #include <kmime/kmime_message.h>
@@ -290,17 +286,9 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(from);
 
     KMime::Headers::To* to = new KMime::Headers::To;
-#ifdef USE_AKONADI
     KCalCore::Person::List toList = data.event.emailAddressees();
-#else
-    QList<KCal::Person> toList = data.event.emailAddressees();
-#endif
     for (int i = 0, count = toList.count();  i < count;  ++i)
-#ifdef USE_AKONADI
         to->addAddress(toList[i]->email().toLatin1(), toList[i]->name());
-#else
-        to->addAddress(toList[i].email().toLatin1(), toList[i].name());
-#endif
     message.setHeader(to);
 
     if (!data.bcc.isEmpty())
@@ -436,18 +424,10 @@ void KAMail::notifyQueued(const KAEvent& event)
     KMime::Types::Address addr;
     QString localhost = QLatin1String("localhost");
     QString hostname  = QHostInfo::localHostName();
-#ifdef USE_AKONADI
     KCalCore::Person::List addresses = event.emailAddressees();
-#else
-    QList<KCal::Person> addresses = event.emailAddressees();
-#endif
     for (int i = 0, end = addresses.count();  i < end;  ++i)
     {
-#ifdef USE_AKONADI
         QByteArray email = addresses[i]->email().toLocal8Bit();
-#else
-        QByteArray email = addresses[i].email().toLocal8Bit();
-#endif
         const char* em = email;
         if (!email.isEmpty()
         &&  HeaderParsing::parseAddress(em, em + email.length(), addr))
@@ -476,11 +456,7 @@ QString KAMail::controlCentreAddress()
 * entered by the user.
 * Reply = the invalid item if error, else empty string.
 */
-#ifdef USE_AKONADI
 QString KAMail::convertAddresses(const QString& items, KCalCore::Person::List& list)
-#else
-QString KAMail::convertAddresses(const QString& items, QList<KCal::Person>& list)
-#endif
 {
     list.clear();
     QString invalidItem;
@@ -489,12 +465,8 @@ QString KAMail::convertAddresses(const QString& items, QList<KCal::Person>& list
         return invalidItem;
     for (int i = 0, count = mailboxes.count();  i < count;  ++i)
     {
-#ifdef USE_AKONADI
         KCalCore::Person::Ptr person(new KCalCore::Person(mailboxes[i].name(), mailboxes[i].addrSpec().asString()));
         list += person;
-#else
-        list += KCal::Person(mailboxes[i].name(), mailboxes[i].addrSpec().asString());
-#endif
     }
     return QString();
 }

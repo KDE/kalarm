@@ -1852,11 +1852,7 @@ TextEdit::TextEdit(QWidget* parent)
 
 void TextEdit::dragEnterEvent(QDragEnterEvent* e)
 {
-#ifdef USE_AKONADI
     if (KCalUtils::ICalDrag::canDecode(e->mimeData()))
-#else
-    if (KCal::ICalDrag::canDecode(e->mimeData()))
-#endif
         e->ignore();   // don't accept "text/calendar" objects
     KTextEdit::dragEnterEvent(e);
 }

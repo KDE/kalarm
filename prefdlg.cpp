@@ -21,11 +21,7 @@
 #include "kalarm.h"
 
 #include "alarmcalendar.h"
-#ifdef USE_AKONADI
 #include "collectionmodel.h"
-#else
-#include "alarmresources.h"
-#endif
 #include "alarmtimewidget.h"
 #include "buttongroup.h"
 #include "colourbutton.h"
@@ -95,11 +91,7 @@ using namespace KHolidays;
 #include <KHelpClient>
 #include <KLocale>
 
-#ifdef USE_AKONADI
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
 using namespace KAlarmCal;
 
 static const char PREF_DIALOG_NAME[] = "PrefDialog";
@@ -891,11 +883,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     mClearArchived = new QPushButton(i18nc("@action:button", "Clear Archived Alarms"), group);
     mClearArchived->setFixedSize(mClearArchived->sizeHint());
     connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
-#ifdef USE_AKONADI
     mClearArchived->setWhatsThis((CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, false).count() <= 1)
-#else
-    mClearArchived->setWhatsThis((AlarmResources::instance()->activeCount(CalEvent::ARCHIVED, false) <= 1)
-#endif
             ? i18nc("@info:whatsthis", "Delete all existing archived alarms.")
             : i18nc("@info:whatsthis", "Delete all existing archived alarms (from the default archived alarm calendar only)."));
     grid->addWidget(mClearArchived, 2, 1, Qt::AlignLeft);
@@ -941,11 +929,7 @@ void StorePrefTab::slotArchivedToggled(bool)
 {
     bool keep = mKeepArchived->isChecked();
     if (keep  &&  !mOldKeepArchived  &&  mCheckKeepChanges
-#ifdef USE_AKONADI
     &&  !CollectionControlModel::getStandard(CalEvent::ARCHIVED).isValid())
-#else
-    &&  !AlarmResources::instance()->getStandardResource(CalEvent::ARCHIVED))
-#endif
     {
         KAMessageBox::sorry(topWidget(),
              i18nc("@info", "<para>A default calendar is required in order to archive alarms, but none is currently enabled.</para>"
@@ -963,11 +947,7 @@ void StorePrefTab::slotArchivedToggled(bool)
 
 void StorePrefTab::slotClearArchived()
 {
-#ifdef USE_AKONADI
     bool single = CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, false).count() <= 1;
-#else
-    bool single = AlarmResources::instance()->activeCount(CalEvent::ARCHIVED, false) <= 1;
-#endif
     if (KAMessageBox::warningContinueCancel(topWidget(), single ? i18nc("@info", "Do you really want to delete all archived alarms?")
                                                                 : i18nc("@info", "Do you really want to delete all alarms in the default archived alarm calendar?"))
             != KMessageBox::Continue)

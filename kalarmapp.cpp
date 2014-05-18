@@ -28,11 +28,7 @@
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
-#ifdef USE_AKONADI
 #include "collectionmodel.h"
-#else
-#include "eventlistmodel.h"
-#endif
 #include "functions.h"
 #include "kamail.h"
 #include "mainwindow.h"
@@ -81,9 +77,7 @@
 static const QLatin1String KTTSD_DBUS_SERVICE("org.kde.kttsd");
 static const QLatin1String KTTDS_DBUS_PATH("/KSpeech");
 
-#ifdef USE_AKONADI
 static const int AKONADI_TIMEOUT = 30;   // timeout (seconds) for Akonadi collections to be populated
-#endif
 
 static void setEventCommandError(const KAEvent&, KAEvent::CmdErrType);
 static void clearEventCommandError(const KAEvent&, KAEvent::CmdErrType);
@@ -159,14 +153,12 @@ KAlarmApp::KAlarmApp()
     KAEvent::setDefaultFont(Preferences::messageFont());
     if (initialise())   // initialise calendars and alarm timer
     {
-#ifdef USE_AKONADI
         connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
                                           SLOT(purgeNewArchivedDefault(Akonadi::Collection)));
         connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
                                           SLOT(checkWritableCalendar()));
         connect(AkonadiModel::instance(), SIGNAL(migrationCompleted()),
                                           SLOT(checkWritableCalendar()));
-#endif
 
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
@@ -235,9 +227,7 @@ bool KAlarmApp::initialise()
         if (AlarmCalendar::initialiseCalendars())
         {
             connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
-#ifdef USE_AKONADI
             connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
-#endif
             return true;
         }
     }
@@ -298,9 +288,7 @@ bool KAlarmApp::restoreSession()
             win->restore(i, false);
             if (win->isValid())
             {
-#ifdef USE_AKONADI
                 if (AkonadiModel::instance()->isCollectionTreeFetched())
-#endif
                     win->show();
             }
             else
@@ -369,27 +357,15 @@ int KAlarmApp::newInstance()
                 EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the Akonadi collection to be populated.
-#ifdef USE_AKONADI
                 if (!initCheck(true, true, options.eventId().collectionId()))
-#else
-                if (!initCheck(true))
-#endif
                     exitCode = 1;
                 else
                 {
                     startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
-#ifdef USE_AKONADI
                     if (!handleEvent(options.eventId(), function, true))
-#else
-                    if (!handleEvent(options.eventId(), function))
-#endif
                     {
-#ifdef USE_AKONADI
                         CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
-#else
-                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found", QLatin1String("--") + options.commandName(), options.eventId()));
-#endif
                         exitCode = 1;
                     }
                 }
@@ -400,11 +376,7 @@ int KAlarmApp::newInstance()
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for all Akonadi collections to be populated.
                 mReadOnly = true;   // don't need write access to calendars
-#ifdef USE_AKONADI
                 if (!initCheck(true, true))
-#else
-                if (!initCheck(true))
-#endif
                     exitCode = 1;
                 else
                 {
@@ -417,19 +389,11 @@ int KAlarmApp::newInstance()
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm.
                 // Open the calendar and wait for the Akonadi collection to be populated.
-#ifdef USE_AKONADI
                 if (!initCheck(false, true, options.eventId().collectionId()))
-#else
-                if (!initCheck())
-#endif
                     exitCode = 1;
                 else if (!KAlarm::editAlarmById(options.eventId()))
                 {
-#ifdef USE_AKONADI
                     CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
-#else
-                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QLatin1String("--") + options.commandName(), options.eventId()));
-#endif
                     exitCode = 1;
                 }
                 break;
@@ -580,7 +544,6 @@ int KAlarmApp::newInstance()
          */
         if (AlarmCalendar::resources())
         {
-#ifdef USE_AKONADI
             if (AkonadiModel::instance()->isCollectionTreeFetched())
             {
                 mRedisplayAlarms = false;
@@ -588,9 +551,6 @@ int KAlarmApp::newInstance()
             }
             else
                 mRedisplayAlarms = true;
-#else
-            MessageWin::redisplayAlarms();
-#endif
         }
     }
 
@@ -846,11 +806,7 @@ void KAlarmApp::checkNextDueAlarm()
 */
 void KAlarmApp::queueAlarmId(const KAEvent& event)
 {
-#ifdef USE_AKONADI
     EventId id(event);
-#else
-    const QString id(event.id());
-#endif
     for (int i = 0, end = mActionQueue.count();  i < end;  ++i)
     {
         if (mActionQueue[i].function == EVENT_HANDLE  &&  mActionQueue[i].eventId == id)
@@ -956,7 +912,6 @@ void KAlarmApp::processQueue()
     }
 }
 
-#ifdef USE_AKONADI
 /******************************************************************************
 * Called when a repeat-at-login alarm has been added externally.
 * Queues the alarm for triggering.
@@ -976,7 +931,6 @@ void KAlarmApp::atLoginEventAdded(const KAEvent& event)
         }
     }
 }
-#endif
 
 /******************************************************************************
 * Called when the system tray main window is closed.
@@ -1166,7 +1120,6 @@ void KAlarmApp::checkWritableCalendar()
 {
     if (mReadOnly)
         return;    // don't need write access to calendars
-#ifdef USE_AKONADI
     bool treeFetched = AkonadiModel::instance()->isCollectionTreeFetched();
     if (treeFetched && mRedisplayAlarms)
     {
@@ -1176,18 +1129,13 @@ void KAlarmApp::checkWritableCalendar()
     if (!treeFetched
     ||  !AkonadiModel::instance()->isMigrationCompleted())
         return;
-#endif
     static bool done = false;
     if (done)
         return;
     done = true;
     kDebug();
     // Find whether there are any writable active alarm calendars
-#ifdef USE_AKONADI
     bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
-#else
-    bool active = AlarmResources::instance()->activeCount(CalEvent::ACTIVE, true);
-#endif
     if (!active)
     {
         kWarning() << "No writable active calendar";
@@ -1198,7 +1146,6 @@ void KAlarmApp::checkWritableCalendar()
     }
 }
 
-#ifdef USE_AKONADI
 /******************************************************************************
 * Called when a new collection has been added, or when a collection has been
 * set as the standard collection for its type.
@@ -1228,7 +1175,6 @@ void KAlarmApp::purgeAfterDelay()
     else
         setArchivePurgeDays();
 }
-#endif
 
 /******************************************************************************
 * Called when the length of time to keep archived alarms changes in KAlarm's
@@ -1279,27 +1225,15 @@ void KAlarmApp::purge(int daysToKeep)
 */
 QStringList KAlarmApp::scheduledAlarmList()
 {
-#ifdef USE_AKONADI
     QVector<KAEvent> events = KAlarm::getSortedActiveEvents(this);
-#else
-    KAEvent::List events = KAlarm::getSortedActiveEvents();
-#endif
     QStringList alarms;
     for (int i = 0, count = events.count();  i < count;  ++i)
     {
-#ifdef USE_AKONADI
         KAEvent* event = &events[i];
-#else
-        KAEvent* event = events[i];
-#endif
         KDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone();
-#ifdef USE_AKONADI
         Akonadi::Collection c(event->collectionId());
         AkonadiModel::instance()->refresh(c);
         QString text(c.resource() + QLatin1String(":"));
-#else
-        QString text;
-#endif
         text += event->id() + QLatin1Char(' ')
              +  dateTime.toString(QLatin1String("%Y%m%dT%H%M "))
              +  AlarmText::summary(*event, 1);
@@ -1351,11 +1285,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
                               int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                               const QFont& font, const QString& audioFile, float audioVolume, int reminderMinutes,
                               const KARecurrence& recurrence, int repeatInterval, int repeatCount,
-#ifdef USE_AKONADI
                               uint mailFromID, const KCalCore::Person::List& mailAddresses,
-#else
-                              uint mailFromID, const QList<KCal::Person>& mailAddresses,
-#endif
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
     kDebug() << text;
@@ -1410,11 +1340,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
 * Optionally display the event. Delete the event from the calendar file and
 * from every main window instance.
 */
-#ifdef USE_AKONADI
 bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
-#else
-bool KAlarmApp::dbusHandleEvent(const QString& eventID, EventFunc function)
-#endif
 {
     kDebug() << eventID;
     mActionQueue.append(ActionQEntry(function, eventID));
@@ -1442,16 +1368,11 @@ QString KAlarmApp::dbusList()
 * Reply = false if event ID not found, or if more than one event with the same
 *         ID is found.
 */
-#ifdef USE_AKONADI
 bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDuplicates)
-#else
-bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
-#endif
 {
     // Delete any expired wake-on-suspend config data
     KAlarm::checkRtcWakeConfig();
 
-#ifdef USE_AKONADI
     const QString eventID(id.eventId());
     KAEvent* event = AlarmCalendar::resources()->event(id, checkDuplicates);
     if (!event)
@@ -1462,14 +1383,6 @@ bool KAlarmApp::handleEvent(const QString& eventID, EventFunc function)
             kWarning() << "Event ID not found:" << eventID;
         return false;
     }
-#else
-    KAEvent* event = AlarmCalendar::resources()->event(eventID);
-    if (!event)
-    {
-        kWarning() << "Event ID not found:" << eventID;
-        return false;
-    }
-#endif
     switch (function)
     {
         case EVENT_CANCEL:
@@ -1887,11 +1800,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         {
             // Display a message, file or command output, provided that the same event
             // isn't already being displayed
-#ifdef USE_AKONADI
             MessageWin* win = MessageWin::findEvent(EventId(event));
-#else
-            MessageWin* win = MessageWin::findEvent(event.id());
-#endif
             // Find if we're changing a reminder message to the real message
             bool reminder = (alarm.type() & KAAlarm::REMINDER_ALARM);
             bool replaceReminder = !reminder && win && (win->alarmType() & KAAlarm::REMINDER_ALARM);
@@ -1997,11 +1906,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         {
             // Play the sound, provided that the same event
             // isn't already playing
-#ifdef USE_AKONADI
             MessageWin* win = MessageWin::findEvent(EventId(event));
-#else
-            MessageWin* win = MessageWin::findEvent(event.id());
-#endif
             if (!win)
             {
                 // There isn't already a message for this event.
@@ -2417,11 +2322,7 @@ void KAlarmApp::slotDBusServiceUnregistered(const QString& serviceName)
 * If this is the first time through, open the calendar file, and start
 * processing the execution queue.
 */
-#ifdef USE_AKONADI
 bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Collection::Id collectionId)
-#else
-bool KAlarmApp::initCheck(bool calendarOnly)
-#endif
 {
     static bool firstTime = true;
     if (firstTime)
@@ -2452,16 +2353,12 @@ bool KAlarmApp::initCheck(bool calendarOnly)
     if (!calendarOnly)
         startProcessQueue();      // start processing the execution queue
 
-#ifdef USE_AKONADI
     if (waitForCollection)
     {
-#if KDE_IS_VERSION(4,9,80)
         // Wait for one or all Akonadi collections to be populated
         if (!CollectionControlModel::instance()->waitUntilPopulated(collectionId, AKONADI_TIMEOUT))
             return false;
-#endif
     }
-#endif
     return true;
 }
 
@@ -2487,39 +2384,23 @@ void setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
     if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
         err = KAEvent::CMD_ERROR_PRE_POST;
     event.setCommandError(err);
-#ifdef USE_AKONADI
     KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
-#else
-    KAEvent* ev = AlarmCalendar::resources()->event(event.id());
-#endif
     if (ev  &&  ev->commandError() != err)
         ev->setCommandError(err);
-#ifdef USE_AKONADI
     AkonadiModel::instance()->updateCommandError(event);
-#else
-    EventListModel::alarms()->updateCommandError(event.id());
-#endif
 }
 
 void clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
 {
     KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
     event.setCommandError(newerr);
-#ifdef USE_AKONADI
     KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
-#else
-    KAEvent* ev = AlarmCalendar::resources()->event(event.id());
-#endif
     if (ev)
     {
         newerr = static_cast<KAEvent::CmdErrType>(ev->commandError() & ~err);
         ev->setCommandError(newerr);
     }
-#ifdef USE_AKONADI
     AkonadiModel::instance()->updateCommandError(event);
-#else
-    EventListModel::alarms()->updateCommandError(event.id());
-#endif
 }
 
 

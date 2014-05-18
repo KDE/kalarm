@@ -21,11 +21,7 @@
 #ifndef TIMEPERIOD_H
 #define TIMEPERIOD_H
 
-#ifdef USE_AKONADI
 #include <KCalCore/Duration>
-#else
-#include <kcal/duration.h>
-#endif
 #include <khbox.h>
 #include <QString>
 
@@ -86,22 +82,14 @@ class TimePeriod : public KHBox
          */
         void          setUnits(Units units);
         /** Gets the entered time period. */
-#ifdef USE_AKONADI
         KCalCore::Duration period() const;
-#else
-        KCal::Duration period() const;
-#endif
         /** Initialises the time period value.
          *  @param period The value of the time period to set. If zero, the time period
          *                is left unchanged.
          *  @param dateOnly True to restrict the units available in the combo box to days or weeks.
          *  @param defaultUnits The units to display initially in the combo box.
          */
-#ifdef USE_AKONADI
         void          setPeriod(const KCalCore::Duration& period, bool dateOnly, Units defaultUnits);
-#else
-        void          setPeriod(const KCal::Duration& period, bool dateOnly, Units defaultUnits);
-#endif
         /** Returns true if minutes and hours/minutes units are disabled. */
         bool          isDateOnly() const             { return mDateOnlyOffset; }
         /** Enables or disables minutes and hours/minutes units in the combo box. To
@@ -130,11 +118,7 @@ class TimePeriod : public KHBox
         /** This signal is emitted whenever the value held in the widget changes.
          *  @param period The current value of the time period.
          */
-#ifdef USE_AKONADI
         void            valueChanged(const KCalCore::Duration& period);
-#else
-        void            valueChanged(const KCal::Duration& period);
-#endif
 
     private slots:
         void            slotUnitsSelected(int index);
@@ -142,11 +126,7 @@ class TimePeriod : public KHBox
         void            slotTimeChanged(int minutes);
 
     private:
-#ifdef USE_AKONADI
         Units           setDateOnly(const KCalCore::Duration&, bool dateOnly, bool signal);
-#else
-        Units           setDateOnly(const KCal::Duration&, bool dateOnly, bool signal);
-#endif
         void            setUnitRange();
         void            showHourMin(bool hourMin);
         void            adjustDayWeekShown();

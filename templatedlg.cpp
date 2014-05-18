@@ -74,22 +74,12 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     QBoxLayout* layout = new QVBoxLayout();
     layout->setMargin(0);
     topLayout->addLayout(layout);
-#ifdef USE_AKONADI
     mListFilterModel = new TemplateListModel(this);
     if (!ShellProcess::authorised())
         mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
-#else
-    mListFilterModel = new TemplateListFilterModel(EventListModel::templates());
-    if (!ShellProcess::authorised())
-        mListFilterModel->setTypeFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
-#endif
     mListView = new TemplateListView(topWidget);
     mListView->setModel(mListFilterModel);
-#ifdef USE_AKONADI
     mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
-#else
-    mListView->sortByColumn(TemplateListFilterModel::TemplateNameColumn, Qt::AscendingOrder);
-#endif
     mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     mListView->setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
     mListView->setItemDelegate(new TemplateListDelegate(mListView));
@@ -167,15 +157,9 @@ void TemplateDlg::slotNew(EditAlarmDlg::Type type)
 */
 void TemplateDlg::slotCopy()
 {
-#ifdef USE_AKONADI
     KAEvent event = mListView->selectedEvent();
     if (event.isValid())
         KAlarm::editNewTemplate(&event, mListView);
-#else
-    KAEvent* event = mListView->selectedEvent();
-    if (event)
-        KAlarm::editNewTemplate(event, mListView);
-#endif
 }
 
 /******************************************************************************
@@ -184,15 +168,9 @@ void TemplateDlg::slotCopy()
 */
 void TemplateDlg::slotEdit()
 {
-#ifdef USE_AKONADI
     KAEvent event = mListView->selectedEvent();
     if (event.isValid())
         KAlarm::editTemplate(&event, mListView);
-#else
-    KAEvent* event = mListView->selectedEvent();
-    if (event)
-        KAlarm::editTemplate(event, mListView);
-#endif
 }
 
 /******************************************************************************
@@ -201,11 +179,7 @@ void TemplateDlg::slotEdit()
 */
 void TemplateDlg::slotDelete()
 {
-#ifdef USE_AKONADI
     QVector<KAEvent> events = mListView->selectedEvents();
-#else
-    KAEvent::List events = mListView->selectedEvents();
-#endif
     int n = events.count();
     if (KAMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm template?",
                                                          "Do you really want to delete the %1 selected alarm templates?", n),
@@ -214,25 +188,15 @@ void TemplateDlg::slotDelete()
             != KMessageBox::Continue)
         return;
 
-#ifdef USE_AKONADI
     KAEvent::List delEvents;
-#else
-    QStringList delEvents;
-#endif
     Undo::EventList undos;
     AlarmCalendar* resources = AlarmCalendar::resources();
     for (int i = 0;  i < n;  ++i)
     {
-#ifdef USE_AKONADI
         KAEvent* event = &events[i];
         delEvents.append(event);
         Akonadi::Collection c = resources->collectionForEvent(event->itemId());
         undos.append(*event, c);
-#else
-        const KAEvent* event = events[i];
-        delEvents.append(event->id());
-        undos.append(*event, resources->resourceForEvent(event->id()));
-#endif
     }
     KAlarm::deleteTemplates(delEvents, this);
     Undo::saveDeletes(undos);
@@ -246,22 +210,13 @@ void TemplateDlg::slotDelete()
 void TemplateDlg::slotSelectionChanged()
 {
     AlarmCalendar* resources = AlarmCalendar::resources();
-#ifdef USE_AKONADI
     QVector<KAEvent> events = mListView->selectedEvents();
-#else
-    KAEvent::List events = mListView->selectedEvents();
-#endif
     int count = events.count();
     bool readOnly = false;
     for (int i = 0;  i < count;  ++i)
     {
-#ifdef USE_AKONADI
         const KAEvent* event = &events[i];
         if (resources->eventReadOnly(event->itemId()))
-#else
-        const KAEvent* event = events[i];
-        if (resources->eventReadOnly(event->id()))
-#endif
         {
             readOnly = true;
             break;

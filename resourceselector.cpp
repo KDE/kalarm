@@ -64,11 +64,7 @@ using namespace KCalCore;
 using namespace Akonadi;
 
 
-#ifdef USE_AKONADI
 ResourceSelector::ResourceSelector(QWidget* parent)
-#else
-ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
-#endif
     : QFrame(parent),
 #ifndef USE_AKONADI
       mCalendar(calendar),
@@ -79,11 +75,7 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
       mActionSetColour(0),
       mActionClearColour(0),
       mActionEdit(0),
-#ifdef USE_AKONADI
       mActionUpdate(0),
-#else
-      mActionSave(0),
-#endif
       mActionRemove(0),
       mActionImport(0),
       mActionExport(0),
@@ -104,15 +96,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
     topLayout->addWidget(mAlarmType);
     // No spacing between combo box and listview.
 
-#ifdef USE_AKONADI
     CollectionFilterCheckListModel* model = new CollectionFilterCheckListModel(this);
     mListView = new CollectionView(model, this);
-#else
-    ResourceModel* model = ResourceModel::instance();
-    ResourceFilterModel* filterModel = new ResourceFilterModel(model, this);
-    mListView = new ResourceView(this);
-    mListView->setModel(filterModel);
-#endif
     connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mListView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(contextMenuRequested(QPoint)));
@@ -142,12 +127,8 @@ ResourceSelector::ResourceSelector(AlarmResources* calendar, QWidget* parent)
     connect(mEditButton, SIGNAL(clicked()), SLOT(editResource()));
     connect(mDeleteButton, SIGNAL(clicked()), SLOT(removeResource()));
 
-#ifdef USE_AKONADI
     connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
                                       SLOT(slotCollectionAdded(Akonadi::Collection)));
-#else
-    connect(mCalendar, SIGNAL(resourceStatusChanged(AlarmResource*,AlarmResources::Change)), SLOT(slotStatusChanged(AlarmResource*,AlarmResources::Change)));
-#endif
 
     connect(mAlarmType, SIGNAL(activated(int)), SLOT(alarmTypeSelected()));
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
@@ -182,19 +163,13 @@ void ResourceSelector::alarmTypeSelected()
     // in reinstateAlarmTypeScrollBars() description).
     mListView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     mListView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-#ifdef USE_AKONADI
     mListView->collectionModel()->setEventTypeFilter(mCurrentAlarmType);
-#else
-    static_cast<ResourceFilterModel*>(mListView->model())->setFilter(mCurrentAlarmType);
-#endif
     mAddButton->setWhatsThis(addTip);
     mAddButton->setToolTip(addTip);
     // WORKAROUND: Switch scroll bars back on after allowing geometry to update ...
     QTimer::singleShot(0, this, SLOT(reinstateAlarmTypeScrollBars()));
 
-#ifdef USE_AKONADI
     selectionChanged();   // enable/disable buttons
-#endif
 }
 
 /******************************************************************************
@@ -221,51 +196,12 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 */
 void ResourceSelector::addResource()
 {
-#ifdef USE_AKONADI
     AkonadiResourceCreator* creator = new AkonadiResourceCreator(mCurrentAlarmType, this);
     connect(creator, SIGNAL(finished(AkonadiResourceCreator*,bool)), 
                      SLOT(resourceAdded(AkonadiResourceCreator*,bool)));
     creator->createResource();
-#else
-    AlarmResourceManager* manager = mCalendar->resourceManager();
-    QStringList descs = manager->resourceTypeDescriptions();
-    bool ok = false;
-    QString desc = KInputDialog::getItem(i18nc("@title:window", "Calendar Configuration"),
-                                         i18nc("@info", "Select storage type of new calendar:"), descs, 0, false, &ok, this);
-    if (!ok  ||  descs.isEmpty())
-        return;
-    QString type = manager->resourceTypeNames()[descs.indexOf(desc)];
-    AlarmResource* resource = dynamic_cast<AlarmResource*>(manager->createResource(type));
-    if (!resource)
-    {
-        KAMessageBox::error(this, i18nc("@info", "Unable to create calendar of type <resource>%1</resource>.", type));
-        return;
-    }
-    resource->setResourceName(i18nc("@info/plain", "%1 calendar", type));
-    resource->setAlarmType(mCurrentAlarmType);
-    resource->setActive(false);   // prevent setReadOnly() declaring it as unwritable before we've tried to load it
-
-    // Use AutoQPointer to guard against crash on application exit while
-    // the dialogue is still open. It prevents double deletion (both on
-    // deletion of ResourceSelector, and on return from this function).
-    AutoQPointer<ResourceConfigDialog> dlg = new ResourceConfigDialog(this, resource);
-    if (dlg->exec() == QDialog::Accepted)
-    {
-        resource->setEnabled(true);
-        resource->setTimeSpec(Preferences::timeZone());
-        manager->add(resource);
-        manager->writeConfig();
-        mCalendar->resourceAdded(resource);   // load the resource and connect in-process change signals
-    }
-    else
-    {
-        delete resource;
-        resource = 0;
-    }
-#endif
 }
 
-#ifdef USE_AKONADI
 /******************************************************************************
 * Called when the job started by AkonadiModel::addCollection() has completed.
 */
@@ -322,14 +258,12 @@ void ResourceSelector::slotCollectionAdded(const Collection& collection)
         }
     }
 }
-#endif
 
 /******************************************************************************
 * Edit the currently selected resource.
 */
 void ResourceSelector::editResource()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     if (collection.isValid())
     {
@@ -337,46 +271,8 @@ void ResourceSelector::editResource()
         if (instance.isValid())
             instance.configure(this);
     }
-#else
-    AlarmResource* resource = currentResource();
-    if (!resource)
-        return;
-    bool readOnly = resource->readOnly();
-    // Use AutoQPointer to guard against crash on application exit while
-    // the dialogue is still open. It prevents double deletion (both on
-    // deletion of ResourceSelector, and on return from this function).
-    AutoQPointer<ResourceConfigDialog> dlg = new ResourceConfigDialog(this, resource);
-    if (dlg->exec() == QDialog::Accepted)
-    {
-        // Act on any changed settings.
-        // Read-only is handled automatically by AlarmResource::setReadOnly().
-        if (!readOnly  &&  resource->readOnly()  &&  resource->standardResource())
-        {
-            // A standard resource is being made read-only.
-            if (resource->alarmType() == CalEvent::ACTIVE)
-            {
-                KAMessageBox::sorry(this, i18nc("@info", "You cannot make your default active alarm calendar read-only."));
-                resource->setReadOnly(false);
-            }
-            else if (resource->alarmType() == CalEvent::ARCHIVED  &&  Preferences::archivedKeepDays())
-            {
-                // Only allow the archived alarms standard resource to be made read-only
-                // if we're not saving archived alarms.
-                KAMessageBox::sorry(this, i18nc("@info", "You cannot make your default archived alarm calendar "
-                                                "read-only while expired alarms are configured to be kept."));
-                resource->setReadOnly(false);
-            }
-            else if (KAMessageBox::warningContinueCancel(this, i18nc("@info", "Do you really want to make your default calendar read-only?"))
-                       == KMessageBox::Cancel)
-            {
-                resource->setReadOnly(false);
-            }
-        }
-    }
-#endif
 }
 
-#ifdef USE_AKONADI
 /******************************************************************************
 * Update the backend storage format for the currently selected resource in the
 * displayed list.
@@ -389,14 +285,12 @@ void ResourceSelector::updateResource()
     AkonadiModel::instance()->refresh(collection);  // update with latest data
     CalendarMigrator::updateToCurrentFormat(collection, true, this);
 }
-#endif
 
 /******************************************************************************
 * Remove the currently selected resource from the displayed list.
 */
 void ResourceSelector::removeResource()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     if (!collection.isValid())
         return;
@@ -408,15 +302,6 @@ void ResourceSelector::removeResource()
     CalEvent::Type stdType = (standardTypes & CalEvent::ACTIVE)   ? CalEvent::ACTIVE
                                    : (standardTypes & CalEvent::ARCHIVED) ? CalEvent::ARCHIVED
                                    : CalEvent::EMPTY;
-#else
-    AlarmResource* resource = currentResource();
-    if (!resource)
-        return;
-    QString name = resource->resourceName();
-    bool std = resource->standardResource();
-    // Check if it's the standard resource for its type.
-    CalEvent::Type stdType = std ? resource->alarmType() : CalEvent::EMPTY;
-#endif
     if (stdType == CalEvent::ACTIVE)
     {
         KAMessageBox::sorry(this, i18nc("@info", "You cannot remove your default active alarm calendar."));
@@ -430,7 +315,6 @@ void ResourceSelector::removeResource()
                                         "while expired alarms are configured to be kept."));
         return;
     }
-#ifdef USE_AKONADI
     QString text;
     if (standardTypes)
     {
@@ -454,27 +338,10 @@ void ResourceSelector::removeResource()
                      name, CollectionControlModel::typeListForDisplay(allTypes));
     else
         text = i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
-#else
-    QString text = std ? i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name)
-                       : i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
-#endif
     if (KAMessageBox::warningContinueCancel(this, text, QString(), KStandardGuiItem::remove()) == KMessageBox::Cancel)
         return;
 
-#ifdef USE_AKONADI
     AkonadiModel::instance()->removeCollection(collection);
-#else
-    // Remove resource from alarm and resource lists before deleting it, to avoid
-    // crashes when display updates occur immediately after it is deleted.
-    if (resource->alarmType() == CalEvent::TEMPLATE)
-        EventListModel::templates()->removeResource(resource);
-    else
-        EventListModel::alarms()->removeResource(resource);
-    ResourceModel::instance()->removeResource(resource);
-    AlarmResourceManager* manager = mCalendar->resourceManager();
-    manager->remove(resource);
-    manager->writeConfig();
-#endif
 }
 
 /******************************************************************************
@@ -496,11 +363,6 @@ void ResourceSelector::initActions(KActionCollection* actions)
     mActionReload      = new KAction(KIcon(QLatin1String("view-refresh")), i18nc("@action Reload calendar", "Re&load"), this);
     actions->addAction(QLatin1String("resReload"), mActionReload);
     connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
-#ifndef USE_AKONADI
-    mActionSave        = new KAction(KIcon(QLatin1String("document-save")), i18nc("@action", "&Save"), this);
-    actions->addAction(QLatin1String("resSave"), mActionSave);
-    connect(mActionSave, SIGNAL(triggered(bool)), SLOT(saveResource()));
-#endif
     mActionShowDetails = new KAction(KIcon(QLatin1String("help-about")), i18nc("@action", "Show &Details"), this);
     actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
     connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
@@ -513,11 +375,9 @@ void ResourceSelector::initActions(KActionCollection* actions)
     mActionEdit        = new KAction(KIcon(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("resEdit"), mActionEdit);
     connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
-#ifdef USE_AKONADI
     mActionUpdate      = new KAction(i18nc("@action", "&Update Calendar Format"), this);
     actions->addAction(QLatin1String("resUpdate"), mActionUpdate);
     connect(mActionUpdate, SIGNAL(triggered(bool)), SLOT(updateResource()));
-#endif
     mActionRemove      = new KAction(KIcon(QLatin1String("edit-delete")), i18nc("@action", "&Remove"), this);
     actions->addAction(QLatin1String("resRemove"), mActionRemove);
     connect(mActionRemove, SIGNAL(triggered(bool)), SLOT(removeResource()));
@@ -549,33 +409,20 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         return;
     bool active    = false;
     bool writable  = false;
-#ifdef USE_AKONADI
     bool updatable = false;
     Collection collection;
-#else
-    AlarmResource* resource = 0;
-#endif
     if (mListView->selectionModel()->hasSelection())
     {
         QModelIndex index = mListView->indexAt(viewportPos);
         if (index.isValid())
-#ifdef USE_AKONADI
             collection = mListView->collectionModel()->collection(index);
-#else
-            resource = static_cast<ResourceFilterModel*>(mListView->model())->resource(index);
-#endif
         else
             mListView->clearSelection();
     }
     CalEvent::Type type = currentResourceType();
-#ifdef USE_AKONADI
     bool haveCalendar = collection.isValid();
-#else
-    bool haveCalendar = resource;
-#endif
     if (haveCalendar)
     {
-#ifdef USE_AKONADI
         // Note: the CollectionControlModel functions call AkonadiModel::refresh(collection)
         active   = CollectionControlModel::isEnabled(collection, type);
         KACalendar::Compat compatibility;
@@ -587,26 +434,14 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
             updatable = true; // the calendar format is convertible to the current KAlarm format
         if (!(AkonadiModel::instance()->types(collection) & type))
             type = CalEvent::EMPTY;
-#else
-        active   = resource->isEnabled();
-        type     = resource->alarmType();
-        writable = resource->writable();
-#endif
     }
     mActionReload->setEnabled(active);
     mActionShowDetails->setEnabled(haveCalendar);
     mActionSetColour->setEnabled(haveCalendar);
     mActionClearColour->setEnabled(haveCalendar);
-#ifdef USE_AKONADI
     mActionClearColour->setVisible(AkonadiModel::instance()->backgroundColor(collection).isValid());
-#else
-    mActionClearColour->setVisible(resource && resource->colour().isValid());
-    mActionSave->setEnabled(active && writable);
-#endif
     mActionEdit->setEnabled(haveCalendar);
-#ifdef USE_AKONADI
     mActionUpdate->setEnabled(updatable);
-#endif
     mActionRemove->setEnabled(haveCalendar);
     mActionImport->setEnabled(active && writable);
     mActionExport->setEnabled(active);
@@ -619,11 +454,7 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
         default:  break;
     }
     mActionSetDefault->setText(text);
-#ifdef USE_AKONADI
     bool standard = CollectionControlModel::isStandard(collection, type);
-#else
-    bool standard = (resource  &&  resource == mCalendar->getStandardResource(static_cast<CalEvent::Type>(type))  &&  resource->standardResource());
-#endif
     mActionSetDefault->setChecked(active && writable && standard);
     mActionSetDefault->setEnabled(active && writable);
     mContextMenu->popup(mListView->viewport()->mapToGlobal(viewportPos));
@@ -634,15 +465,9 @@ void ResourceSelector::contextMenuRequested(const QPoint& viewportPos)
 */
 void ResourceSelector::reloadResource()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     if (collection.isValid())
         AkonadiModel::instance()->reloadCollection(collection);
-#else
-    AlarmResource* resource = currentResource();
-    if (resource)
-        AlarmCalendar::resources()->loadResource(resource, this);
-#endif
 }
 
 /******************************************************************************
@@ -650,13 +475,7 @@ void ResourceSelector::reloadResource()
 */
 void ResourceSelector::saveResource()
 {
-#ifdef USE_AKONADI
     // Save resource is not applicable to Akonadi
-#else
-    AlarmResource* resource = currentResource();
-    if (resource)
-        resource->save();
-#endif
 }
 
 /******************************************************************************
@@ -668,7 +487,6 @@ void ResourceSelector::archiveDaysChanged(int days)
 {
     if (days)
     {
-#ifdef USE_AKONADI
         if (!CollectionControlModel::getStandard(CalEvent::ARCHIVED).isValid())
         {
             Collection::List cols = CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, true);
@@ -678,12 +496,6 @@ void ResourceSelector::archiveDaysChanged(int days)
                 theApp()->purgeNewArchivedDefault(cols[0]);
             }
         }
-#else
-        AlarmResources* resources = AlarmResources::instance();
-        AlarmResource* std = resources->getStandardResource(CalEvent::ARCHIVED);
-        if (std  &&  !std->standardResource())
-            resources->setStandardResource(std);
-#endif
     }
 }
 
@@ -693,7 +505,6 @@ void ResourceSelector::archiveDaysChanged(int days)
 */
 void ResourceSelector::setStandard()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     if (collection.isValid())
     {
@@ -705,48 +516,8 @@ void ResourceSelector::setStandard()
         if (alarmType == CalEvent::ARCHIVED)
             theApp()->purgeNewArchivedDefault(collection);
     }
-#else
-    AlarmResource* resource = currentResource();
-    if (resource)
-    {
-        if (mActionSetDefault->isChecked())
-        {
-            resource->setEnabled(true);
-            mCalendar->setStandardResource(resource);
-        }
-        else
-            resource->setStandardResource(false);
-    }
-#endif
 }
 
-#ifndef USE_AKONADI
-/******************************************************************************
-* Called when a calendar status has changed.
-*/
-void ResourceSelector::slotStatusChanged(AlarmResource* resource, AlarmResources::Change change)
-{
-    if (change == AlarmResources::WrongType  &&  resource->isWrongAlarmType())
-    {
-        QString text;
-        switch (resource->alarmType())
-        {
-            case CalEvent::ACTIVE:
-                text = i18nc("@info/plain", "It is not an active alarm calendar.");
-                break;
-            case CalEvent::ARCHIVED:
-                text = i18nc("@info/plain", "It is not an archived alarm calendar.");
-                break;
-            case CalEvent::TEMPLATE:
-                text = i18nc("@info/plain", "It is not an alarm template calendar.");
-                break;
-            default:
-                return;
-        }
-        KAMessageBox::sorry(this, i18nc("@info", "<para>Calendar <resource>%1</resource> has been disabled:</para><para>%2</para>", resource->resourceName(), text));
-    }
-}
-#endif
 
 /******************************************************************************
 * Called from the context menu to merge alarms from an external calendar into
@@ -754,12 +525,8 @@ void ResourceSelector::slotStatusChanged(AlarmResource* resource, AlarmResources
 */
 void ResourceSelector::importCalendar()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     AlarmCalendar::importAlarms(this, (collection.isValid() ? &collection : 0));
-#else
-    AlarmCalendar::importAlarms(this, currentResource());
-#endif
 }
 
 /******************************************************************************
@@ -768,13 +535,8 @@ void ResourceSelector::importCalendar()
 */
 void ResourceSelector::exportCalendar()
 {
-#ifdef USE_AKONADI
     Collection calendar = currentResource();
     if (calendar.isValid())
-#else
-    AlarmResource* calendar = currentResource();
-    if (calendar)
-#endif
         AlarmCalendar::exportAlarms(AlarmCalendar::resources()->events(calendar), this);
 }
 
@@ -783,7 +545,6 @@ void ResourceSelector::exportCalendar()
 */
 void ResourceSelector::setColour()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     if (collection.isValid())
     {
@@ -793,17 +554,6 @@ void ResourceSelector::setColour()
         if (KColorDialog::getColor(colour, QColor(), this) == KColorDialog::Accepted)
             AkonadiModel::instance()->setBackgroundColor(collection, colour);
     }
-#else
-    AlarmResource* resource = currentResource();
-    if (resource)
-    {
-        QColor colour = resource->colour();
-        if (!colour.isValid())
-            colour = QApplication::palette().color(QPalette::Base);
-        if (KColorDialog::getColor(colour, QColor(), this) == KColorDialog::Accepted)
-            resource->setColour(colour);
-    }
-#endif
 }
 
 /******************************************************************************
@@ -812,15 +562,9 @@ void ResourceSelector::setColour()
 */
 void ResourceSelector::clearColour()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     if (collection.isValid())
         AkonadiModel::instance()->setBackgroundColor(collection, QColor());
-#else
-    AlarmResource* resource = currentResource();
-    if (resource)
-        resource->setColour(QColor());
-#endif
 }
 
 /******************************************************************************
@@ -828,7 +572,6 @@ void ResourceSelector::clearColour()
 */
 void ResourceSelector::showInfo()
 {
-#ifdef USE_AKONADI
     Collection collection = currentResource();
     if (collection.isValid())
     {
@@ -874,31 +617,15 @@ void ResourceSelector::showInfo()
         // the information, don't raise a KNotify event.
         KAMessageBox::information(this, text, QString(), QString(), 0);
     }
-#else
-    AlarmResource* resource = currentResource();
-    if (resource)
-    {
-        // Display the collection information. Because the user requested
-        // the information, don't raise a KNotify event.
-        KAMessageBox::information(this, resource->infoText(), QString(), QString(), 0);
-    }
-#endif
 }
 
 /******************************************************************************
 * Return the currently selected resource in the list.
 */
-#ifdef USE_AKONADI
 Collection ResourceSelector::currentResource() const
 {
     return mListView->collection(mListView->selectionModel()->currentIndex());
 }
-#else
-AlarmResource* ResourceSelector::currentResource() const
-{
-    return mListView->resource(mListView->selectionModel()->currentIndex());
-}
-#endif
 
 /******************************************************************************
 * Return the currently selected resource type.
