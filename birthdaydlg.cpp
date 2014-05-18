@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <kdescendantsproxymodel.h>
 #include <khbox.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QAction>
 #include <QGroupBox>

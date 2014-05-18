@@ -434,10 +434,10 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
     switch (change)
     {
         case AkonadiModel::Enabled:
-            kDebug() << "Enabled" << collection.id();
+            qDebug() << "Enabled" << collection.id();
             break;
         case AkonadiModel::AlarmTypes:
-            kDebug() << "AlarmTypes" << collection.id();
+            qDebug() << "AlarmTypes" << collection.id();
             break;
         default:
             return;
@@ -736,7 +736,7 @@ bool CollectionControlModel::isEnabled(const Collection& collection, CalEvent::T
 */
 CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection, CalEvent::Types types, bool enabled)
 {
-    kDebug() << "id:" << collection.id() << ", alarm types" << types << "->" << enabled;
+    qDebug() << "id:" << collection.id() << ", alarm types" << types << "->" << enabled;
     if (!collection.isValid()  ||  (!enabled && !instance()->collections().contains(collection)))
         return CalEvent::EMPTY;
     Collection col = collection;
@@ -758,7 +758,7 @@ CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection,
 */
 CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& collection, CalEvent::Types types, bool inserted)
 {
-    kDebug() << "id:" << collection.id() << ", types=" << types;
+    qDebug() << "id:" << collection.id() << ", types=" << types;
     CalEvent::Types disallowedStdTypes(0);
     CalEvent::Types stdTypes(0);
 
@@ -846,14 +846,14 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
         case AkonadiModel::Enabled:
         {
             const CalEvent::Types enabled = static_cast<CalEvent::Types>(value.toInt());
-            kDebug() << "id:" << collection.id() << ", enabled=" << enabled << ", inserted=" << inserted;
+            qDebug() << "id:" << collection.id() << ", enabled=" << enabled << ", inserted=" << inserted;
             setEnabledStatus(collection, enabled, inserted);
             break;
         }
         case AkonadiModel::ReadOnly:
         {
             bool readOnly = value.toBool();
-            kDebug() << "id:" << collection.id() << ", readOnly=" << readOnly;
+            qDebug() << "id:" << collection.id() << ", readOnly=" << readOnly;
             if (readOnly)
             {
                 // A read-only collection can't be the default for any alarm type
@@ -1283,7 +1283,7 @@ bool CollectionControlModel::isPopulated(Collection::Id colId)
 */
 bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeout)
 {
-    kDebug();
+    qDebug();
     int result = 1;
     AkonadiModel* model = AkonadiModel::instance();
     while (!model->isCollectionTreeFetched()

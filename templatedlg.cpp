@@ -32,7 +32,7 @@
 
 #include <klocale.h>
 #include <kguiitem.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <kaction.h>

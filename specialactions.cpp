@@ -31,7 +31,7 @@
 #include <kapplication.h>
 #include <K4AboutData>
 #include <klocale.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QLabel>
 #include <QGroupBox>

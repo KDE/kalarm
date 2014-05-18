@@ -47,7 +47,7 @@
 #include <kstandardguiitem.h>
 #include <kiconeffect.h>
 #include <kconfig.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <KGlobal>
 #include <KIconLoader>
 
@@ -79,7 +79,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
       mStatusUpdateTimer(new QTimer(this)),
       mHaveDisabledAlarms(false)
 {
-    kDebug();
+    qDebug();
     setToolTipIconByName(QLatin1String("kalarm"));
     setToolTipTitle(KGlobal::mainComponent().aboutData()->programName());
     setIconByName(QLatin1String("kalarm"));
@@ -167,7 +167,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
 TrayWindow::~TrayWindow()
 {
-    kDebug();
+    qDebug();
     theApp()->removeWindow(this);
     emit deleted();
 }
@@ -221,7 +221,7 @@ void TrayWindow::slotQuitAfter()
 */
 void TrayWindow::setEnabledStatus(bool status)
 {
-    kDebug() << (int)status;
+    qDebug() << (int)status;
     updateIcon();
     updateStatus();
     updateToolTip();
@@ -233,7 +233,7 @@ void TrayWindow::setEnabledStatus(bool status)
 */
 void TrayWindow::slotHaveDisabledAlarms(bool haveDisabled)
 {
-    kDebug() << haveDisabled;
+    qDebug() << haveDisabled;
     mHaveDisabledAlarms = haveDisabled;
     updateIcon();
     updateToolTip();
@@ -397,12 +397,12 @@ QString TrayWindow::tooltipAlarmText() const
             items.insert(it, item);
         }
     }
-    kDebug();
+    qDebug();
     QString text;
     int count = 0;
     for (i = 0, iend = items.count();  i < iend;  ++i)
     {
-        kDebug() << "--" << (count+1) << ")" << items[i].text;
+        qDebug() << "--" << (count+1) << ")" << items[i].text;
         if (i > 0)
             text += QLatin1String("<br />");
         text += items[i].text;

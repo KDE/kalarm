@@ -22,7 +22,7 @@
 #include "eventid.h"
 #include "collectionmodel.h"
 
-#include <kdebug.h>
+#include <qdebug.h>
 #include <QString>
 #include <QRegExp>
 

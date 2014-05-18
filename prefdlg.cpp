@@ -75,7 +75,7 @@ using namespace KHolidays;
 #include <kwindowsystem.h>
 #endif
 #include <ktoolinvocation.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QLabel>
 #include <QCheckBox>
@@ -212,7 +212,7 @@ void KAlarmPrefDlg::slotHelp()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotApply()
 {
-    kDebug();
+    qDebug();
     QString errmsg = mEmailPage->validate();
     if (!errmsg.isEmpty())
     {
@@ -244,7 +244,7 @@ void KAlarmPrefDlg::slotApply()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
-    kDebug();
+    qDebug();
     mValid = true;
     slotApply();
 #if 0 //QT5
@@ -256,7 +256,7 @@ void KAlarmPrefDlg::slotOk()
 // Discard the current preferences and close the dialog
 void KAlarmPrefDlg::slotCancel()
 {
-    kDebug();
+    qDebug();
     restore(false);
     //QT5 KDialog::reject();
 }
@@ -285,7 +285,7 @@ void KAlarmPrefDlg::slotDefault()
 // Discard the current preferences and use the present ones
 void KAlarmPrefDlg::restore(bool defaults)
 {
-    kDebug() << (defaults ? "defaults" : "");
+    qDebug() << (defaults ? "defaults" : "");
     if (defaults)
         Preferences::self()->useDefaults(true);
     mEmailPage->restore(defaults, true);

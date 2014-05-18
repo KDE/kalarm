@@ -58,7 +58,7 @@
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <KIcon>
 #include <KTimeZone>
 
@@ -101,7 +101,7 @@ QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:chec
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, GetResourceType getResource)
 {
-    kDebug();
+    qDebug();
     switch (type)
     {
         case DISPLAY:  return new EditDisplayAlarmDlg(Template, parent, getResource);
@@ -1168,7 +1168,7 @@ void EditAlarmDlg::slotDefault()
 */
 void EditAlarmDlg::showOptions(bool more)
 {
-    kDebug() << (more ? "More" : "Less");
+    qDebug() << (more ? "More" : "Less");
     if (more)
     {
         mMoreOptions->show();

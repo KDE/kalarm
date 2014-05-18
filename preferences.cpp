@@ -35,7 +35,7 @@
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <ksystemtimezone.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 
 #include <time.h>

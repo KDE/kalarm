@@ -32,7 +32,7 @@
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kstandardshortcut.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 using namespace KAlarmCal;
 

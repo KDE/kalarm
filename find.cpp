@@ -33,7 +33,7 @@
 #include <kseparator.h>
 #include <kwindowsystem.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <KDialog>
 
 #include <QGroupBox>

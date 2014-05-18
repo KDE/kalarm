@@ -41,7 +41,7 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QTimer>
 
@@ -143,7 +143,7 @@ CalendarMigrator::CalendarMigrator(QObject* parent)
 
 CalendarMigrator::~CalendarMigrator()
 {
-    kDebug();
+    qDebug();
     mInstance = 0;
 }
 
@@ -170,7 +170,7 @@ void CalendarMigrator::execute()
 */
 void CalendarMigrator::migrateOrCreate()
 {
-    kDebug();
+    qDebug();
 
     // First, check whether any Akonadi resources already exist, and if
     // so, find their alarm types.
@@ -247,12 +247,12 @@ void CalendarMigrator::collectionFetchResult(KJob* j)
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
-        kError() << "CollectionFetchJob" << id << "error: " << j->errorString();
+        qCritical() << "CollectionFetchJob" << id << "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
         if (collections.isEmpty())
-            kError() << "No collections found for resource" << id;
+            qCritical() << "No collections found for resource" << id;
         else
             mExistingAlarmTypes |= CalEvent::types(collections[0].contentMimeTypes());
     }
@@ -275,7 +275,7 @@ void CalendarMigrator::collectionFetchResult(KJob* j)
 */
 void CalendarMigrator::createDefaultResources()
 {
-    kDebug();
+    qDebug();
     CalendarCreator* creator;
     if (!(mExistingAlarmTypes & CalEvent::ACTIVE))
     {
@@ -366,7 +366,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
 */
 void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool ignoreKeepFormat, QWidget* parent)
 {
-    kDebug() << collection.id();
+    qDebug() << collection.id();
     if (CalendarUpdater::containsCollection(collection.id()))
         return;   // prevent multiple simultaneous user prompts
     const AgentInstance agent = AgentManager::self()->instance(collection.resource());
@@ -378,7 +378,7 @@ void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool 
         dirResource = true;
     else
     {
-        kError() << "Invalid agent type" << id;
+        qCritical() << "Invalid agent type" << id;
         return;
     }
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
@@ -417,7 +417,7 @@ bool CalendarUpdater::containsCollection(Collection::Id id)
 
 bool CalendarUpdater::update()
 {
-    kDebug() << mCollection.id() << (mDirResource ? "directory" : "file");
+    qDebug() << mCollection.id() << (mDirResource ? "directory" : "file");
     bool result = true;
     if (!mDuplicate     // prevent concurrent updates
     &&  mCollection.hasAttribute<CompatibilityAttribute>())   // must know format to update
@@ -432,13 +432,13 @@ bool CalendarUpdater::update()
             if (!mIgnoreKeepFormat
             &&  mCollection.hasAttribute<CollectionAttribute>()
             &&  mCollection.attribute<CollectionAttribute>()->keepFormat())
-                kDebug() << "Not updating format (previous user choice)";
+                qDebug() << "Not updating format (previous user choice)";
             else
             {
                 // The user hasn't previously said not to convert it
                 const QString versionString = KAlarmCal::getVersionString(compatAttr->version());
                 const QString msg = KAlarm::conversionPrompt(mCollection.name(), versionString, false);
-                kDebug() << "Version" << versionString;
+                qDebug() << "Version" << versionString;
                 if (KAMessageBox::warningYesNo(qobject_cast<QWidget*>(mParent), msg) != KMessageBox::Yes)
                     result = false;   // the user chose not to update the calendar
                 else
@@ -488,17 +488,17 @@ bool CalendarUpdater::update()
 */
 template <class Interface> bool CalendarMigrator::updateStorageFormat(const AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
-    kDebug();
+    qDebug();
     Interface* iface = getAgentInterface<Interface>(agent, errorMessage, parent);
     if (!iface)
     {
-        kDebug() << errorMessage;
+        qDebug() << errorMessage;
         return false;
     }
     iface->setUpdateStorageFormat(true);
     iface->writeConfig();
     delete iface;
-    kDebug() << "true";
+    qDebug() << "true";
     return true;
 }
 
@@ -514,7 +514,7 @@ template <class Interface> Interface* CalendarMigrator::getAgentInterface(const 
     if (!iface->isValid())
     {
         errorMessage = iface->lastError().message();
-        kDebug() << "D-Bus error accessing resource:" << errorMessage;
+        qDebug() << "D-Bus error accessing resource:" << errorMessage;
         delete iface;
         return 0;
     }
@@ -549,7 +549,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
     }
     else
     {
-        kError() << "Invalid resource type:" << resourceType;
+        qCritical() << "Invalid resource type:" << resourceType;
         return;
     }
     mPath = config.readPathEntry(pathKey, QLatin1String(""));
@@ -559,7 +559,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
         case 2:  mAlarmType = CalEvent::ARCHIVED;  break;
         case 4:  mAlarmType = CalEvent::TEMPLATE;  break;
         default:
-            kError() << "Invalid alarm type for resource";
+            qCritical() << "Invalid alarm type for resource";
             return;
     }
     mName     = config.readEntry("ResourceName", QString());
@@ -567,7 +567,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
     mReadOnly = config.readEntry("ResourceIsReadOnly", true);
     mEnabled  = config.readEntry("ResourceIsActive", false);
     mStandard = config.readEntry("Standard", false);
-    kDebug() << "Migrating:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
+    qDebug() << "Migrating:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
 }
 
 /******************************************************************************
@@ -586,7 +586,7 @@ CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, 
       mFinished(false)
 {
     mPath = KStandardDirs::locateLocal("appdata", file);
-    kDebug() << "New:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
+    qDebug() << "New:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
 }
 
 /******************************************************************************
@@ -609,13 +609,13 @@ void CalendarCreator::agentCreated(KJob* j)
     if (j->error())
     {
         mErrorMessage = j->errorString();
-        kError() << "AgentInstanceCreateJob error:" << mErrorMessage;
+        qCritical() << "AgentInstanceCreateJob error:" << mErrorMessage;
         finish(false);
         return;
     }
 
     // Configure the Akonadi Agent
-    kDebug() << mName;
+    qDebug() << mName;
     AgentInstanceCreateJob* job = static_cast<AgentInstanceCreateJob*>(j);
     mAgent = job->instance();
     mAgent.setName(mName);
@@ -632,7 +632,7 @@ void CalendarCreator::agentCreated(KJob* j)
             ok = writeRemoteFileConfig();
             break;
         default:
-            kError() << "Invalid resource type";
+            qCritical() << "Invalid resource type";
             break;
     }
     if (!ok)
@@ -654,11 +654,11 @@ void CalendarCreator::agentCreated(KJob* j)
 */
 void CalendarCreator::resourceSynchronised(KJob* j)
 {
-    kDebug() << mName;
+    qDebug() << mName;
     if (j->error())
     {
         // Don't give up on error - we can still try to fetch the collection
-        kError() << "ResourceSynchronizationJob error: " << j->errorString();
+        qCritical() << "ResourceSynchronizationJob error: " << j->errorString();
     }
     mCollectionFetchRetryCount = 0;
     fetchCollection();
@@ -728,11 +728,11 @@ template <class Interface> Interface* CalendarCreator::writeBasicConfig()
 */
 void CalendarCreator::collectionFetchResult(KJob* j)
 {
-    kDebug() << mName;
+    qDebug() << mName;
     if (j->error())
     {
         mErrorMessage = j->errorString();
-        kError() << "CollectionFetchJob error: " << mErrorMessage;
+        qCritical() << "CollectionFetchJob error: " << mErrorMessage;
         finish(true);
         return;
     }
@@ -743,20 +743,20 @@ void CalendarCreator::collectionFetchResult(KJob* j)
         if (++mCollectionFetchRetryCount >= 10)
         {
             mErrorMessage = i18nc("@info/plain", "New configuration timed out");
-            kError() << "Timeout fetching collection for resource";
+            qCritical() << "Timeout fetching collection for resource";
             finish(true);
             return;
         }
         // Need to wait a bit longer until the resource has initialised and
         // created its collection. Retry after 200ms.
-        kDebug() << "Retrying";
+        qDebug() << "Retrying";
         QTimer::singleShot(200, this, SLOT(fetchCollection()));
         return;
     }
     if (collections.count() > 1)
     {
         mErrorMessage = i18nc("@info/plain", "New configuration was corrupt");
-        kError() << "Wrong number of collections for this resource:" << collections.count();
+        qCritical() << "Wrong number of collections for this resource:" << collections.count();
         finish(true);
         return;
     }
@@ -825,12 +825,12 @@ void CalendarCreator::modifyCollectionJobDone(KJob* j)
     if (j->error())
     {
         mErrorMessage = j->errorString();
-        kError() << "CollectionFetchJob error: " << mErrorMessage;
+        qCritical() << "CollectionFetchJob error: " << mErrorMessage;
         finish(true);
     }
     else
     {
-        kDebug() << "Completed:" << mName;
+        qDebug() << "Completed:" << mName;
         finish(false);
     }
 }

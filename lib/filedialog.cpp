@@ -25,7 +25,7 @@
 
 #include <klocale.h>
 #include <krecentdocument.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <KUrl>
 
 #include <QCheckBox>
@@ -45,7 +45,7 @@ QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWid
     if (!specialDir && !defaultDir)
     {
         if (!dir.isLocalFile())
-            kWarning() << "FileDialog::getSaveFileName called with non-local start dir " << dir;
+            qWarning() << "FileDialog::getSaveFileName called with non-local start dir " << dir;
         dlg->setSelection(dir.isLocalFile() ? dir.toLocalFile() : dir.path());  // may also be a filename
     }
     dlg->setOperationMode(Saving);

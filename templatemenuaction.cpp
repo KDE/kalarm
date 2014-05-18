@@ -28,7 +28,7 @@
 
 #include <QMenu>
 #include <kactionmenu.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 
 TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, QObject* parent)

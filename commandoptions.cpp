@@ -164,7 +164,7 @@ CommandOptions::CommandOptions()
         }
         else
         {
-            kDebug() << "Message";
+            qDebug() << "Message";
             mCommand       = NEW;
             mCommandName   = "message";
             mEditType      = EditAlarmDlg::DISPLAY;
@@ -431,7 +431,7 @@ CommandOptions::CommandOptions()
             // No arguments - run interactively & display the main window
             if (!mError.isEmpty())
                 break;
-            kDebug() << "Interactive";
+            qDebug() << "Interactive";
             if (mArgs->isSet("ack-confirm"))
                 mError += QLatin1String("--ack-confirm ");
             if (mArgs->isSet("attach"))
@@ -512,7 +512,7 @@ bool CommandOptions::checkCommand(const QByteArray& command, Command code, EditA
     &&  (allowedEditType == EditAlarmDlg::NO_TYPE
       || (allowedEditType != EditAlarmDlg::NO_TYPE  &&  (mCommand != NEW || mEditType != allowedEditType))))
         setErrorIncompatible(mCommandName, "--" + command);
-    kDebug().nospace() << " --" << command;
+    qDebug().nospace() << " --" << command;
     mCommand = code;
     mCommandName = command;
     return true;

@@ -27,7 +27,7 @@
 #include <kcmdlineargs.h>
 #include <k4aboutdata.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <stdlib.h>
 
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     }
 
     // This is the first time through
-    kDebug() << "initialising";
+    qDebug() << "initialising";
     KAlarmApp* app = KAlarmApp::getInstance();
     app->restoreSession();
     return app->exec();

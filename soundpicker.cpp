@@ -35,7 +35,7 @@
 #include <kiconloader.h>
 #include <khbox.h>
 #include <phonon/backendcapabilities.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QTimer>
 #include <QLabel>

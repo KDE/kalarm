@@ -28,7 +28,7 @@
 #include <kalarmcal/kacalendar.h>
 
 #include <kcolorscheme.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QApplication>
 

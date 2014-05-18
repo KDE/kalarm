@@ -22,7 +22,7 @@
 #include "desktop.h"
 
 #include <kdialog.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QStyle>
 
@@ -132,7 +132,7 @@ QSize StackedScrollGroup::adjustSize(bool force)
     {
         mHeightReduction = y;
         mMinHeight = maxTabHeight - y;
-        kDebug() << "Scrolling: max tab height=" << maxTabHeight << ", reduction=" << mHeightReduction << "-> min tab height=" << mMinHeight;
+        qDebug() << "Scrolling: max tab height=" << maxTabHeight << ", reduction=" << mHeightReduction << "-> min tab height=" << mMinHeight;
         if (mMinHeight > 0)
         {
             for (int i = 0, count = mWidgets.count();  i < count;  ++i)

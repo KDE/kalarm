@@ -47,7 +47,7 @@
 #include <kcombobox.h>
 #include <kinputdialog.h>
 #include <QMenu>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <kicon.h>
 #include <kactioncollection.h>
 #include <kaction.h>

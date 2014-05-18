@@ -37,7 +37,7 @@
 #include <kio/netaccess.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <KGlobal>
 
 #include <QLabel>

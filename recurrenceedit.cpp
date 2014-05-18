@@ -50,7 +50,7 @@ using namespace KCalCore;
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <kdatecombobox.h>
 
 #include <QPushButton>
@@ -94,7 +94,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
       mNoEmitTypeChanged(true),
       mReadOnly(readOnly)
 {
-    kDebug();
+    qDebug();
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setMargin(0);
     topLayout->setSpacing(KDialog::spacingHint());

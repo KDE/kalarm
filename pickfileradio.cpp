@@ -24,7 +24,7 @@
 #include "buttongroup.h"
 #include "lineedit.h"
 
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QPushButton>
 #include <QTimer>

@@ -27,7 +27,7 @@
 #include <klocale.h>
 #include <kdialog.h>
 #include <khbox.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QHBoxLayout>
 

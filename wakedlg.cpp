@@ -34,7 +34,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfiggroup.h>
-#include <kdebug.h>
+#include <qdebug.h>
 
 #include <QTimer>
 #include <KSharedConfig>

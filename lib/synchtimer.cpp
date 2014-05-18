@@ -20,7 +20,7 @@
 
 #include "kalarm.h"
 #include "synchtimer.h"
-#include <kdebug.h>
+#include <qdebug.h>
 #include <QTimer>
 
 
@@ -113,7 +113,7 @@ MinuteTimer* MinuteTimer::instance()
 */
 void MinuteTimer::slotTimer()
 {
-    kDebug();
+    qDebug();
     int interval = 62 - QTime::currentTime().second();
     mTimer->start(interval * 1000);     // execute a single shot
 }
@@ -217,7 +217,7 @@ void DailyTimer::start()
         next = QDateTime(now.date().addDays(1), mTime);
     uint interval = next.toTime_t() - now.toTime_t();
     mTimer->start(interval * 1000);    // execute a single shot
-    kDebug() << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
+    qDebug() << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
 
 /******************************************************************************
@@ -234,7 +234,7 @@ void DailyTimer::slotTimer()
     QDateTime next = QDateTime(mLastDate.addDays(1), mTime);
     uint interval = next.toTime_t() - now.toTime_t();
     mTimer->start(interval * 1000);    // execute a single shot
-    kDebug() << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
+    qDebug() << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
 #include "moc_synchtimer.cpp"
 // vim: et sw=4:

@@ -221,10 +221,10 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
     }
     if (index.isValid())
     {
-        kDebug();
+        qDebug();
         ItemListModel* itemModel = qobject_cast<ItemListModel*>(model);
         if (!itemModel)
-            kError() << "Invalid cast to ItemListModel*";
+            qCritical() << "Invalid cast to ItemListModel*";
         else
         {
             KAEvent event = itemModel->event(index);
