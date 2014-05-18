@@ -155,11 +155,11 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 {
     setAttribute(Qt::WA_DeleteOnClose);
     setObjectName(QLatin1String("PrefDlg"));    // used by LikeBack
-    setCaption(i18nc("@title:window", "Configure"));
-    setButtons(Help | Default | Ok | Apply | Cancel);
-    setDefaultButton(Ok);
+    setWindowTitle(i18nc("@title:window", "Configure"));
+    //QT5 setButtons(Help | Default | Ok | Apply | Cancel);
+    //QT5 setDefaultButton(Ok);
     setFaceType(List);
-    showButtonSeparator(true);
+    //QT5 showButtonSeparator(true);
     mTabScrollGroup = new StackedScrollGroup(this, this);
 
     mMiscPage = new MiscPrefTab(mTabScrollGroup);
@@ -324,7 +324,8 @@ QSize KAlarmPrefDlg::minimumSizeHint() const
             return s;
         }
     }
-    return KDialog::minimumSizeHint();
+    //QT5 return KDialog::minimumSizeHint();
+    return QSize();
 }
 
 void KAlarmPrefDlg::showEvent(QShowEvent* e)

@@ -39,7 +39,7 @@
 #include "shellprocess.h"
 #include "synchtimer.h"
 
-#include "kspeechinterface.h"
+//QT5 #include "kspeechinterface.h"
 
 #include <kstandarddirs.h>
 #include <kaction.h>
@@ -68,6 +68,7 @@
 #include <netwm.h>
 #include <QX11Info>
 #endif
+#include <KGlobal>
 
 #include <QScrollBar>
 #include <QtDBus/QtDBus>
@@ -806,7 +807,7 @@ void MessageWin::initView()
     const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
     const unsigned long wstate = (modal ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
     WId winid = winId();
-    KWindowSystem::setState(winid, wstate);
+    //QT5 KWindowSystem::setState(winid, wstate);
     KWindowSystem::setOnAllDesktops(winid, true);
 
     mInitialised = true;   // the window's widgets have been created
@@ -1516,6 +1517,7 @@ void MessageWin::playAudio()
 */
 void MessageWin::slotSpeak()
 {
+#if 0 //QT5
     QString error;
     OrgKdeKSpeechInterface* kspeech = theApp()->kspeechInterface(error);
     if (!kspeech)
@@ -1536,6 +1538,7 @@ void MessageWin::slotSpeak()
             clearErrorMessage(ErrMsg_Speak);
         }
     }
+#endif
 }
 
 /******************************************************************************

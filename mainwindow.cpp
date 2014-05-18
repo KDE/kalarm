@@ -84,6 +84,9 @@ using namespace KCal;
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
 #include <kicon.h>
+#include <KTimeZone>
+#include <KGlobal>
+#include <KShortcut>
 
 #include <QSplitter>
 #include <QByteArray>
@@ -482,7 +485,7 @@ void MainWindow::initActions()
     action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, SIGNAL(triggered(bool)), SLOT(slotNewAudio()));
 
-    action = mActionNew->fromTemplateAlarmAction();
+    //QT5 action = mActionNew->fromTemplateAlarmAction();
     actions->addAction(QLatin1String("newFromTemplate"), action);
     connect(action, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
 
@@ -553,7 +556,7 @@ void MainWindow::initActions()
 
     mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
     actions->addAction(QLatin1String("spread"), mActionSpreadWindows);
-    mActionSpreadWindows->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
+    //QT5 mActionSpreadWindows->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 
     mActionImportAlarms = new KAction(i18nc("@action", "Import &Alarms..."), this);
     actions->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
@@ -575,30 +578,30 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("refreshAlarms"), action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
 
-    action = KAlarm::createAlarmEnableAction(this);
-    actions->addAction(QLatin1String("alarmsEnable"), action);
+    KToggleAction *toggleAction = KAlarm::createAlarmEnableAction(this);
+    actions->addAction(QLatin1String("alarmsEnable"), toggleAction);
     if (undoText.isNull())
     {
         // Get standard texts, etc., for Undo and Redo actions
         QAction * act = KStandardAction::undo(this, 0, actions);
         undoShortcut     = KShortcut(act->shortcuts());
         undoText         = act->text();
-        undoTextStripped = KLocale::global()->removeAcceleratorMarker(undoText);
+        //QT5 undoTextStripped = KLocale::global()->removeAcceleratorMarker(undoText);
         delete act;
         act = KStandardAction::redo(this, 0, actions);
         redoShortcut     = KShortcut(act->shortcuts());
         redoText         = act->text();
-        redoTextStripped = KLocale::global()->removeAcceleratorMarker(redoText);
+        //QT5 redoTextStripped = KLocale::global()->removeAcceleratorMarker(redoText);
         delete act;
     }
     mActionUndo = new KToolBarPopupAction(KIcon(QLatin1String("edit-undo")), undoText, this);
     actions->addAction(QLatin1String("edit_undo"), mActionUndo);
-    mActionUndo->setShortcut(undoShortcut);
+    //QT5 mActionUndo->setShortcut(undoShortcut);
     connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
 
     mActionRedo = new KToolBarPopupAction(KIcon(QLatin1String("edit-redo")), redoText, this);
     actions->addAction(QLatin1String("edit_redo"), mActionRedo);
-    mActionRedo->setShortcut(redoShortcut);
+    //QT5 mActionRedo->setShortcut(redoShortcut);
     connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
 
     KStandardAction::find(mListView, SLOT(slotFind()), actions);
@@ -608,7 +611,7 @@ void MainWindow::initActions()
     KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
     // Quit only once the event loop is called; otherwise, the parent window will
     // be deleted while still processing the action, resulting in a crash.
-    KAction* act = KStandardAction::quit(0, 0, actions);
+    QAction* act = KStandardAction::quit(0, 0, actions);
     connect(act, SIGNAL(triggered(bool)), SLOT(slotQuit()), Qt::QueuedConnection);
     KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
@@ -1169,7 +1172,7 @@ void MainWindow::slotFindActive(bool active)
 */
 void MainWindow::slotUndo()
 {
-    Undo::undo(this, KLocale::global()->removeAcceleratorMarker(mActionUndo->text()));
+    //QT5 Undo::undo(this, KLocale::global()->removeAcceleratorMarker(mActionUndo->text()));
 }
 
 /******************************************************************************
@@ -1177,7 +1180,7 @@ void MainWindow::slotUndo()
 */
 void MainWindow::slotRedo()
 {
-    Undo::redo(this, KLocale::global()->removeAcceleratorMarker(mActionRedo->text()));
+    //QT5 Undo::redo(this, KLocale::global()->removeAcceleratorMarker(mActionRedo->text()));
 }
 
 /******************************************************************************
@@ -1295,7 +1298,8 @@ void MainWindow::slotConfigureKeys()
 */
 void MainWindow::slotConfigureToolbar()
 {
-    saveMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
+    KConfigGroup grp(KSharedConfig::openConfig()->group(WINDOW_NAME));
+    saveMainWindowSettings(grp);
     KEditToolBar dlg(factory());
     connect(&dlg, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     dlg.exec();

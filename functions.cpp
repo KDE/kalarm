@@ -2161,7 +2161,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     AutoQPointer<KFileDialog> fileDlg = new KFileDialog(initialDir, filter, parent);
     fileDlg->setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
     fileDlg->setMode(KFile::File | mode);
-    fileDlg->setCaption(caption);
+    fileDlg->setWindowTitle(caption);
     if (!initialFile.isEmpty())
         fileDlg->setSelection(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)

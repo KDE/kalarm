@@ -38,6 +38,7 @@
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
 #include <kdebug.h>
+#include <KGlobal>
 
 #include <QLabel>
 #include <QDir>

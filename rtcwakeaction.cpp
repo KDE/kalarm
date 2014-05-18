@@ -25,6 +25,7 @@
 #include <kprocess.h>
 #include <kdatetime.h>
 
+#include <kauthactionreply.h>
 #include <QDebug>
 
 #include <stdio.h>
@@ -93,13 +94,13 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
             errmsg = i18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(QLatin1String(" ")), result);
             break;
     }
-    ActionReply reply(ActionReply::HelperError);
+    ActionReply reply(ActionReply::HelperErrorReply);
     reply.setErrorCode(result);
     reply.setErrorDescription(errmsg);
     qDebug() << "RtcWakeAction::settimer: Code=" << reply.errorCode() << reply.errorDescription();
     return reply;
 }
 
-KDE4_AUTH_HELPER_MAIN("org.kde.kalarmrtcwake", RtcWakeAction)
+//QT5 KDE4_AUTH_HELPER_MAIN("org.kde.kalarmrtcwake", RtcWakeAction)
 
 // vim: et sw=4:

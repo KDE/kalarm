@@ -27,29 +27,19 @@
 #include "kalarm.h"
 #include "alarmcalendar.h"
 #include "autoqpointer.h"
-#ifdef USE_AKONADI
 #include "akonadiresourcecreator.h"
 #include "calendarmigrator.h"
 #include "kalarmapp.h"
-#else
-#include "alarmresources.h"
-#include "eventlistmodel.h"
-#include "resourcemodelview.h"
-#endif
 #include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
 #include "resourceconfigdialog.h"
 
-#ifdef USE_AKONADI
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agenttype.h>
 #include <AkonadiWidgets/collectionpropertiesdialog.h>
 #include <AkonadiCore/entitydisplayattribute.h>
-#else
-#include <kcal/resourcecalendar.h>
-#endif
 
 #include <kdialog.h>
 #include <klocale.h>
@@ -70,14 +60,8 @@
 #include <QResizeEvent>
 #include <QApplication>
 
-#ifdef USE_AKONADI
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
-#ifdef USE_AKONADI
 using namespace Akonadi;
-#endif
 
 
 #ifdef USE_AKONADI

@@ -54,6 +54,7 @@
 #include <kfileitem.h>
 #include <ktemporaryfile.h>
 #include <kdebug.h>
+#include <KTimeZone>
 #include <KSharedConfig>
 
 #ifdef USE_AKONADI

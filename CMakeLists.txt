@@ -44,7 +44,7 @@ set(libkalarm_SRCS
     lib/itembox.cpp
     lib/kalocale.cpp
     lib/label.cpp
-    #REACTIVATE lib/messagebox.cpp
+    lib/messagebox.cpp
     lib/packedlayout.cpp
     lib/pushbutton.cpp
     lib/radiobutton.cpp
@@ -165,7 +165,7 @@ KF5::PimUtils
 kdepim
 KF5::KCMUtils
 Phonon::phonon4qt5
-${X11_X11_LIB}
+KF5::Auth
 )
 
 
@@ -185,7 +185,7 @@ install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults
 ########### KAuth helper ###############
 
 add_executable(kalarm_helper rtcwakeaction.cpp)
-target_link_libraries(kalarm_helper )
+target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
 install(TARGETS kalarm_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 kde4_install_auth_helper_files(kalarm_helper org.kde.kalarmrtcwake root)
 #PORT TO QT5

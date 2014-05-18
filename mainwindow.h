@@ -214,8 +214,8 @@ class MainWindow : public MainWindowBase, public KCal::Calendar::CalendarObserve
         KAction*             mActionDeleteForce;
         KAction*             mActionReactivate;
         KAction*             mActionEnable;
-        KAction*             mActionFindNext;
-        KAction*             mActionFindPrev;
+        QAction*             mActionFindNext;
+        QAction*             mActionFindPrev;
         KToolBarPopupAction* mActionUndo;
         KToolBarPopupAction* mActionRedo;
         KToggleAction*       mActionToggleTrayIcon;

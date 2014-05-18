@@ -44,6 +44,7 @@
 #include <kmime/kmime_headers.h>
 #include <kmime/kmime_message.h>
 
+#include <KTimeZone>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <K4AboutData>

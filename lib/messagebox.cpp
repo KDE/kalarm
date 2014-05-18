@@ -29,15 +29,15 @@
 
 QMap<QString, KMessageBox::ButtonCode> KAMessageBox::mContinueDefaults;
 
-const KAMessageBox::Options KAMessageBox::NoAppModal = KMessageBox::Options(KMessageBox::Notify | KAMessageBox::WindowModal);
+const KMessageBox::Options KAMessageBox::NoAppModal = KMessageBox::Options(KMessageBox::Notify | KMessageBox::WindowModal);
 
 /******************************************************************************
 * Set the default button for continue/cancel message boxes with the specified
 * 'dontAskAgainName'.
 */
-void KAMessageBox::setContinueDefault(const QString& dontAskAgainName, ButtonCode defaultButton)
+void KAMessageBox::setContinueDefault(const QString& dontAskAgainName, KMessageBox::ButtonCode defaultButton)
 {
-    mContinueDefaults[dontAskAgainName] = (defaultButton == Cancel ? Cancel : Continue);
+    mContinueDefaults[dontAskAgainName] = (defaultButton == KMessageBox::Cancel ? KMessageBox::Cancel : KMessageBox::Continue);
 }
 
 /******************************************************************************
@@ -46,10 +46,10 @@ void KAMessageBox::setContinueDefault(const QString& dontAskAgainName, ButtonCod
 */
 KMessageBox::ButtonCode KAMessageBox::getContinueDefault(const QString& dontAskAgainName)
 {
-    ButtonCode defaultButton = Continue;
+    KMessageBox::ButtonCode defaultButton = KMessageBox::Continue;
     if (!dontAskAgainName.isEmpty())
     {
-        QMap<QString, ButtonCode>::ConstIterator it = mContinueDefaults.constFind(dontAskAgainName);
+        QMap<QString, KMessageBox::ButtonCode>::ConstIterator it = mContinueDefaults.constFind(dontAskAgainName);
         if (it != mContinueDefaults.constEnd())
             defaultButton = it.value();
     }
@@ -61,18 +61,18 @@ KMessageBox::ButtonCode KAMessageBox::getContinueDefault(const QString& dontAskA
 * If 'dontAskAgainName' is specified, the message box will only be suppressed
 * if the user chose Continue last time.
 */
-int KAMessageBox::warningContinueCancel(QWidget* parent, ButtonCode defaultButton, const QString& text,
+int KAMessageBox::warningContinueCancel(QWidget* parent, KMessageBox::ButtonCode defaultButton, const QString& text,
                                       const QString& caption, const KGuiItem& buttonContinue,
                                       const QString& dontAskAgainName)
 {
     setContinueDefault(dontAskAgainName, defaultButton);
-    if (defaultButton != Cancel)
+    if (defaultButton != KMessageBox::Cancel)
         return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
 
     // Cancel is the default button, so we have to use KMessageBox::warningYesNo()
     if (!dontAskAgainName.isEmpty())
     {
-        ButtonCode b;
+        KMessageBox::ButtonCode b;
         if (!shouldBeShownYesNo(dontAskAgainName, b)
         &&  b != KMessageBox::Yes)
         {
@@ -114,10 +114,10 @@ bool KAMessageBox::setDefaultShouldBeShownContinue(const QString& dontShowAgainN
 */
 bool KAMessageBox::shouldBeShownContinue(const QString& dontShowAgainName)
 {
-    if (getContinueDefault(dontShowAgainName) != Cancel)
+    if (getContinueDefault(dontShowAgainName) != KMessageBox::Cancel)
         return KMessageBox::shouldBeShownContinue(dontShowAgainName);
     // Cancel is the default button, so we have to use a yes/no message box
-    ButtonCode b;
+    KMessageBox::ButtonCode b;
     return shouldBeShownYesNo(dontShowAgainName, b);
 }
 
@@ -127,9 +127,9 @@ bool KAMessageBox::shouldBeShownContinue(const QString& dontShowAgainName)
 * If 'dontShow' is true, the message box will be suppressed and it will return
 * 'result'.
 */
-void KAMessageBox::saveDontShowAgainYesNo(const QString& dontShowAgainName, bool dontShow, ButtonCode result)
+void KAMessageBox::saveDontShowAgainYesNo(const QString& dontShowAgainName, bool dontShow, KMessageBox::ButtonCode result)
 {
-    saveDontShowAgain(dontShowAgainName, true, dontShow, (result == Yes ? "yes" : "no"));
+    saveDontShowAgain(dontShowAgainName, true, dontShow, (result == KMessageBox::Yes ? "yes" : "no"));
 }
 
 /******************************************************************************
@@ -142,8 +142,8 @@ void KAMessageBox::saveDontShowAgainYesNo(const QString& dontShowAgainName, bool
 */
 void KAMessageBox::saveDontShowAgainContinue(const QString& dontShowAgainName, bool dontShow)
 {
-    if (getContinueDefault(dontShowAgainName) == Cancel)
-        saveDontShowAgainYesNo(dontShowAgainName, dontShow, Yes);
+    if (getContinueDefault(dontShowAgainName) == KMessageBox::Cancel)
+        saveDontShowAgainYesNo(dontShowAgainName, dontShow, KMessageBox::Yes);
     else
         saveDontShowAgain(dontShowAgainName, false, dontShow);
 }

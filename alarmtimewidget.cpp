@@ -33,7 +33,7 @@
 #include "alarmtimewidget.h"
 
 #include <kalarmcal/datetime.h>
-
+#include <KTimeZone>
 #include <kdatecombobox.h>
 #include <kdialog.h>
 #include <klocale.h>

@@ -44,7 +44,7 @@
 #include "startdaytimer.h"
 #include "traywindow.h"
 
-#include "kspeechinterface.h"
+//QT5 #include "kspeechinterface.h"
 
 #include <kalarmcal/datetime.h>
 #include <kalarmcal/karecurrence.h>
@@ -58,7 +58,7 @@
 #include <kglobal.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
-#include <kspeech.h>
+//QT5 #include <kspeech.h>
 #include <ktoolinvocation.h>
 #include <netwm.h>
 #include <kdebug.h>
@@ -2375,6 +2375,7 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
 */
 OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
 {
+#if 0 //QT5
     error.clear();
     QDBusConnection client = QDBusConnection::sessionBus();
     if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
@@ -2395,6 +2396,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
         mKSpeech->setApplicationName(KGlobal::mainComponent().aboutData()->programName());
         mKSpeech->setDefaultPriority(KSpeech::jpMessage);
     }
+#endif
     return mKSpeech;
 }
 

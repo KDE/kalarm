@@ -76,6 +76,7 @@ using namespace KCal;
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
 #include <QStandardItemModel>
+#include <QMimeType>
 
 using namespace KAlarmCal;
 
@@ -685,7 +686,8 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
             KAlarm::FileErr err = KAlarm::checkFileExists(alarmtext, url);
             if (err == KAlarm::FileErr_None)
             {
-                switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).mimeTypePtr()))
+#if 0 //QT5
+                switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).currentMimeType()))
                 {
                     case KAlarm::TextFormatted:
                     case KAlarm::TextPlain:
@@ -696,6 +698,7 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
                         err = KAlarm::FileErr_NotTextImage;
                         break;
                 }
+#endif
             }
             if (err != KAlarm::FileErr_None  &&  showErrorMessage)
             {
@@ -1499,7 +1502,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool n
 {
     kDebug() << "Event.id()";
     init(event);
-    KPushButton* tryButton = button(Try);
+    QPushButton* tryButton = button(Try);
     tryButton->setEnabled(!MessageWin::isAudioPlaying());
     connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(slotAudioPlaying(bool)));
 }

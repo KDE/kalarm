@@ -23,6 +23,7 @@
 
 #include <kactionmenu.h>
 #include <QMap>
+#include <KIcon>
 class QAction;
 namespace KAlarmCal { class KAEvent; }
 

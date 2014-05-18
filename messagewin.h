@@ -39,6 +39,7 @@
 #include <QList>
 #include <QMap>
 #include <QPointer>
+#include <QDateTime>
 
 class QShowEvent;
 class QMoveEvent;
