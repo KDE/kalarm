@@ -23,11 +23,7 @@
 
 #include <libkdepim/misc/maillistdrag.h>
 #include <kabc/vcarddrag.h>
-#ifdef USE_AKONADI
 #include <KCalUtils/kcalutils/icaldrag.h>
-#else
-#include <kcal/icaldrag.h>
-#endif
 
 #include <kurl.h>
 #include <kurlcompletion.h>
@@ -106,11 +102,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
     const QMimeData* data = e->mimeData();
     bool ok;
-#ifdef USE_AKONADI
     if (KCalUtils::ICalDrag::canDecode(data))
-#else
-    if (KCal::ICalDrag::canDecode(data))
-#endif
         ok = false;   // don't accept "text/calendar" objects
     else
         ok = (data->hasText()

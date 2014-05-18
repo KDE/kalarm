@@ -32,9 +32,7 @@ class QTimer;
 class KToggleAction;
 class MainWindow;
 class NewAlarmAction;
-#ifdef USE_AKONADI
 class AlarmListModel;
-#endif
 
 using namespace KAlarmCal;
 
@@ -72,9 +70,7 @@ class TrayWindow : public KStatusNotifierItem
         QIcon           mIconDisabled;
         KToggleAction*  mActionEnabled;
         NewAlarmAction* mActionNew;
-#ifdef USE_AKONADI
         mutable AlarmListModel* mAlarmsModel; // active alarms sorted in time order
-#endif
         QTimer*         mStatusUpdateTimer;
         QTimer*         mToolTipUpdateTimer;
         bool            mHaveDisabledAlarms;  // some individually disabled alarms exist

@@ -21,9 +21,7 @@
 #ifndef DEFERDLG_H
 #define DEFERDLG_H
 
-#ifdef USE_AKONADI
 #include "eventid.h"
-#endif
 
 #include <kalarmcal/datetime.h>
 #include <AkonadiCore/collection.h>
@@ -57,11 +55,7 @@ class DeferAlarmDlg : public KDialog
         AlarmTimeWidget* mTimeWidget;
         DateTime         mAlarmDateTime;
         DateTime         mLimitDateTime;   // latest date/time allowed for deferral
-#ifdef USE_AKONADI
         EventId          mLimitEventId;    // event IDs from whose recurrences to derive the limit date/time for deferral
-#else
-        QString          mLimitEventId;    // event from whose recurrences to derive the limit date/time for deferral
-#endif
         int              mDeferMinutes;    // number of minutes deferral selected, or 0 if date/time entered
 };
 

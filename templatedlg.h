@@ -26,11 +26,7 @@
 class QResizeEvent;
 class QPushButton;
 class NewAlarmAction;
-#ifdef USE_AKONADI
 class TemplateListModel;
-#else
-class TemplateListFilterModel;
-#endif
 class TemplateListView;
 
 
@@ -59,11 +55,7 @@ class TemplateDlg : public KDialog
 
         static TemplateDlg* mInstance;   // the current instance, to prevent multiple dialogues
 
-#ifdef USE_AKONADI
         TemplateListModel* mListFilterModel;
-#else
-        TemplateListFilterModel* mListFilterModel;
-#endif
         TemplateListView*  mListView;
         QPushButton*       mEditButton;
         QPushButton*       mCopyButton;

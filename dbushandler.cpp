@@ -33,13 +33,8 @@
 #include <kalarmcal/identities.h>
 #include <kalarmcal/karecurrence.h>
 
-#ifdef USE_AKONADI
 #include <KCalCore/Duration>
 using namespace KCalCore;
-#else
-#include <kcal/duration.h>
-using namespace KCal;
-#endif
 
 #include <kdebug.h>
 
@@ -64,20 +59,12 @@ DBusHandler::DBusHandler()
 
 bool DBusHandler::cancelEvent(const QString& eventId)
 {
-#ifdef USE_AKONADI
     return theApp()->dbusDeleteEvent(EventId(eventId));
-#else
-    return theApp()->dbusDeleteEvent(eventId);
-#endif
 }
 
 bool DBusHandler::triggerEvent(const QString& eventId)
 {
-#ifdef USE_AKONADI
     return theApp()->dbusTriggerEvent(EventId(eventId));
-#else
-    return theApp()->dbusTriggerEvent(eventId);
-#endif
 }
 
 QString DBusHandler::list()
@@ -256,11 +243,7 @@ bool DBusHandler::scheduleAudio(const QString& audioUrl, int volumePercent, cons
 
 bool DBusHandler::edit(const QString& eventID)
 {
-#ifdef USE_AKONADI
     return KAlarm::editAlarmById(EventId(eventID));
-#else
-    return KAlarm::editAlarmById(eventID);
-#endif
 }
 
 bool DBusHandler::editNew(int type)
@@ -373,11 +356,7 @@ bool DBusHandler::scheduleEmail(const QString& fromID, const QString& addresses,
             return false;
         }
     }
-#ifdef USE_AKONADI
     KCalCore::Person::List addrs;
-#else
-    QList<KCal::Person> addrs;
-#endif
     QString bad = KAMail::convertAddresses(addresses, addrs);
     if (!bad.isEmpty())
     {

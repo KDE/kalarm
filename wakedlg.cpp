@@ -98,21 +98,12 @@ void WakeFromSuspendDlg::enableDisableUseButton()
     if (enable)
     {
         QString wakeFromSuspendId = KAlarm::checkRtcWakeConfig().value(0);
-#ifdef USE_AKONADI
         const KAEvent event = mMainWindow->selectedEvent();
         enable = event.isValid()
               && event.category() == CalEvent::ACTIVE
               && event.enabled()
               && !event.mainDateTime().isDateOnly()
               && event.id() != wakeFromSuspendId;
-#else
-        const KAEvent* event = mMainWindow->selectedEvent();
-        enable = event && event->isValid()
-              && event->category() == CalEvent::ACTIVE
-              && event->enabled()
-              && !event->mainDateTime().isDateOnly()
-              && event->id() != wakeFromSuspendId;
-#endif
     }
     mUi->useWakeButton->setEnabled(enable);
     checkPendingAlarm();
@@ -144,17 +135,12 @@ void WakeFromSuspendDlg::showWakeClicked()
         QStringList params = KAlarm::checkRtcWakeConfig();
         if (!params.isEmpty())
         {
-#ifdef USE_AKONADI
             KAEvent* event = AlarmCalendar::resources()->event(EventId(params[0].toLongLong(), params[1]));
             if (event)
             {
                 mMainWindow->selectEvent(event->itemId());
                 return;
             }
-#else
-            mMainWindow->selectEvent(params[0]);
-            return;
-#endif
         }
     }
     mMainWindow->clearSelection();
@@ -166,17 +152,10 @@ void WakeFromSuspendDlg::showWakeClicked()
 */
 void WakeFromSuspendDlg::useWakeClicked()
 {
-#ifdef USE_AKONADI
     KAEvent event = mMainWindow->selectedEvent();
     if (!event.isValid())
         return;
     KDateTime dt = event.mainDateTime().kDateTime();
-#else
-    KAEvent* event = mMainWindow->selectedEvent();
-    if (!event)
-        return;
-    KDateTime dt = event->mainDateTime().kDateTime();
-#endif
     if (dt.isDateOnly())
     {
         KAMessageBox::sorry(this, i18nc("@info", "Cannot schedule wakeup time for a date-only alarm"));
@@ -196,11 +175,7 @@ void WakeFromSuspendDlg::useWakeClicked()
     if (KAlarm::setRtcWakeTime(triggerTime, this))
     {
         QStringList param;
-#ifdef USE_AKONADI
         param << QString::number(event.collectionId()) << event.id() << QString::number(triggerTime);
-#else
-        param << event->id() << QString::number(triggerTime);
-#endif
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         config.writeEntry("RtcWake", param);
         config.sync();

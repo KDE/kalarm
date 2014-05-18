@@ -41,13 +41,8 @@
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/karecurrence.h>
 
-#ifdef USE_AKONADI
 #include <KCalCore/Event>
 using namespace KCalCore;
-#else
-#include <kcal/event.h>
-using namespace KCal;
-#endif
 
 #include <kglobal.h>
 #include <klocale.h>

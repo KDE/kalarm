@@ -25,21 +25,14 @@
 #ifndef RESOURCESELECTOR_H
 #define RESOURCESELECTOR_H
 
-#ifdef USE_AKONADI
 #include "akonadimodel.h"
 #include "collectionmodel.h"
 
 #include <AkonadiCore/agentinstance.h>
-#else
-#include "alarmresource.h"
-#include "alarmresources.h"
-#endif
 
 #include <QFrame>
 #include <QSize>
-#ifdef USE_AKONADI
 #include <QList>
-#endif
 
 using namespace KAlarmCal;
 
@@ -51,14 +44,10 @@ class KToggleAction;
 class KComboBox;
 class KMenu;
 class ResourceView;
-#ifdef USE_AKONADI
 class AkonadiResourceCreator;
 namespace Akonadi {
     class Collection;
 }
-#else
-using KCal::ResourceCalendar;
-#endif
 
 
 /**
@@ -68,12 +57,7 @@ class ResourceSelector : public QFrame
 {
         Q_OBJECT
     public:
-#ifdef USE_AKONADI
         explicit ResourceSelector(QWidget* parent = 0);
-#else
-        explicit ResourceSelector(AlarmResources*, QWidget* parent = 0);
-        AlarmResources* calendar() const    { return mCalendar; }
-#endif
         void  initActions(KActionCollection*);
         void  setContextMenu(KMenu*);
 
@@ -87,9 +71,7 @@ class ResourceSelector : public QFrame
         void  alarmTypeSelected();
         void  addResource();
         void  editResource();
-#ifdef USE_AKONADI
         void  updateResource();
-#endif
         void  removeResource();
         void  selectionChanged();
         void  contextMenuRequested(const QPoint&);
@@ -102,27 +84,16 @@ class ResourceSelector : public QFrame
         void  exportCalendar();
         void  showInfo();
         void  archiveDaysChanged(int days);
-#ifdef USE_AKONADI
         void  resourceAdded(AkonadiResourceCreator*, bool success);
         void  slotCollectionAdded(const Akonadi::Collection&);
-#else
-        void  slotStatusChanged(AlarmResource*, AlarmResources::Change);
-#endif
         void  reinstateAlarmTypeScrollBars();
 
     private:
         CalEvent::Type currentResourceType() const;
-#ifdef USE_AKONADI
         Akonadi::Collection currentResource() const;
 
         CollectionView* mListView;
         QList<Akonadi::AgentInstance> mAddAgents;   // agent added by addResource()
-#else
-        AlarmResource*  currentResource() const;
-
-        AlarmResources* mCalendar;
-        ResourceView*   mListView;
-#endif
         KComboBox*      mAlarmType;
         QPushButton*    mAddButton;
         QPushButton*    mDeleteButton;
@@ -134,11 +105,7 @@ class ResourceSelector : public QFrame
         KAction*        mActionSetColour;
         KAction*        mActionClearColour;
         KAction*        mActionEdit;
-#ifdef USE_AKONADI
         KAction*        mActionUpdate;
-#else
-        KAction*        mActionSave;
-#endif
         KAction*        mActionRemove;
         KAction*        mActionImport;
         KAction*        mActionExport;

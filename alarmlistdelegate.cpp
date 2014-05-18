@@ -21,13 +21,8 @@
 #include "kalarm.h"
 #include "alarmlistdelegate.h"
 
-#ifdef USE_AKONADI
 #include "akonadimodel.h"
 #define ITEM_LIST_MODEL AlarmListModel
-#else
-#include "eventlistmodel.h"
-#define ITEM_LIST_MODEL EventListModel
-#endif
 #include "functions.h"
 
 #include <kalarmcal/kacalendar.h>
@@ -44,11 +39,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
     if (index.isValid())
     {
         if (opt.state & QStyle::State_Selected
-#ifdef USE_AKONADI
         &&  !index.data(AkonadiModel::EnabledRole).toBool())
-#else
-        &&  !index.data(EventListModel::EnabledRole).toBool())
-#endif
         {
             // Make the text colour for selected disabled alarms
             // distinguishable from enabled alarms.
@@ -80,13 +71,8 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             }
             case ITEM_LIST_MODEL::ColourColumn:
             {
-#ifdef USE_AKONADI
                 const KAEvent event = static_cast<const ItemListModel*>(index.model())->event(index);
                 if (event.isValid()  &&  event.commandError() != KAEvent::CMD_NO_ERROR)
-#else
-                const KAEvent* event = static_cast<const EventListFilterModel*>(index.model())->event(index);
-                if (event  &&  event->commandError() != KAEvent::CMD_NO_ERROR)
-#endif
                 {
                     opt.font.setBold(true);
                     opt.font.setStyleHint(QFont::Serif);

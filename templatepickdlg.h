@@ -26,11 +26,7 @@
 
 class QResizeEvent;
 namespace KCal { class Event; }
-#ifdef USE_AKONADI
 class TemplateListModel;
-#else
-class TemplateListFilterModel;
-#endif
 class TemplateListView;
 
 using namespace KAlarmCal;
@@ -40,21 +36,13 @@ class TemplatePickDlg : public KDialog
         Q_OBJECT
     public:
         explicit TemplatePickDlg(KAEvent::Actions, QWidget* parent = 0);
-#ifdef USE_AKONADI
         KAEvent        selectedTemplate() const;
-#else
-        const KAEvent* selectedTemplate() const;
-#endif
     protected:
         virtual void   resizeEvent(QResizeEvent*);
     private slots:
         void           slotSelectionChanged();
     private:
-#ifdef USE_AKONADI
         TemplateListModel* mListFilterModel;
-#else
-        TemplateListFilterModel* mListFilterModel;
-#endif
         TemplateListView*  mListView;
 };
 

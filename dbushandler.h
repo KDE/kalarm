@@ -25,11 +25,7 @@
 
 #include <kalarmcal/kaevent.h>
 
-#ifdef USE_AKONADI
 #include <KCalCore/Duration>
-#else
-#include <kcal/duration.h>
-#endif
 
 class KUrl;
 
@@ -94,45 +90,21 @@ class DBusHandler : public QObject, public KAlarmIface
         static bool scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
                                     const QString& bgColor, const QString& fgColor, const QString& fontStr,
                                     const KUrl& audioFile, int reminderMins, const KARecurrence&,
-#ifdef USE_AKONADI
                                     const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-#else
-                                    const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
-#endif
         static bool scheduleFile(const KUrl& file, const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
                                  const KUrl& audioFile, int reminderMins, const KARecurrence&,
-#ifdef USE_AKONADI
                                  const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-#else
-                                 const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
-#endif
         static bool scheduleCommand(const QString& commandLine, const KDateTime& start, int lateCancel, unsigned flags,
-#ifdef USE_AKONADI
                                     const KARecurrence&, const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-#else
-                                    const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
-#endif
         static bool scheduleEmail(const QString& fromID, const QString& addresses, const QString& subject, const QString& message,
                                   const QString& attachments, const KDateTime& start, int lateCancel, unsigned flags,
-#ifdef USE_AKONADI
                                   const KARecurrence&, const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-#else
-                                  const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
-#endif
         static bool scheduleAudio(const QString& audioUrl, int volumePercent, const KDateTime& start, int lateCancel, unsigned flags,
-#ifdef USE_AKONADI
                                   const KARecurrence&, const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-#else
-                                  const KARecurrence&, const KCal::Duration& subRepeatDuration = KCal::Duration(0), int subRepeatCount = 0);
-#endif
         static KDateTime convertDateTime(const QString& dateTime, const KDateTime& = KDateTime());
         static KAEvent::Flags convertStartFlags(const KDateTime& start, unsigned flags);
         static QColor    convertBgColour(const QString& bgColor);
-#ifdef USE_AKONADI
         static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence, int subRepeatInterval, KCalCore::Duration& subRepeatDuration);
-#else
-        static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, const QString& icalRecurrence, int subRepeatInterval, KCal::Duration& subRepeatDuration);
-#endif
         static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, int recurCount);
         static bool      convertRecurrence(KDateTime& start, KARecurrence&, const QString& startDateTime, int recurType, int recurInterval, const QString& endDateTime);
         static bool      convertRecurrence(KARecurrence&, const KDateTime& start, int recurType, int recurInterval, int recurCount, const KDateTime& end);

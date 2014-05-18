@@ -39,17 +39,10 @@ static int maxCount = 12;
 #endif
 
 // Simplify access to Undo::Event struct
-#ifdef USE_AKONADI
 #define RESOURCE_PARAM_TYPE  const Collection&
 #define EVENT_RESOURCE collection
-#else
-#define RESOURCE_PARAM_TYPE  AlarmResource*
-#define EVENT_RESOURCE resource
-#endif
 
-#ifdef USE_AKONADI
 using namespace Akonadi;
-#endif
 
 class UndoItem
 {
@@ -64,11 +57,7 @@ class UndoItem
         virtual QString    eventID() const       { return QString(); }
         virtual QString    oldEventID() const    { return QString(); }
         virtual QString    newEventID() const    { return QString(); }
-#ifdef USE_AKONADI
         virtual Collection collection() const    { return Collection(); }
-#else
-        virtual AlarmResource* resource() const  { return 0; }
-#endif
         int                id() const            { return mId; }
         Undo::Type         type() const          { return mType; }
         void               setType(Undo::Type t) { mType = t; }
@@ -130,11 +119,7 @@ class UndoAdd : public UndoItem
         virtual Operation  operation() const     { return ADD; }
         virtual QString    defaultActionText() const;
         virtual QString    description() const   { return mDescription; }
-#ifdef USE_AKONADI
         virtual Collection collection() const    { return mResource; }
-#else
-        virtual AlarmResource* resource() const  { return mResource; }
-#endif
         virtual QString    eventID() const       { return mEventId; }
         virtual QString    newEventID() const    { return mEventId; }
         virtual UndoItem*  restore()             { return doRestore(); }
@@ -142,11 +127,7 @@ class UndoAdd : public UndoItem
         UndoItem*          doRestore(bool setArchive = false);
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
     private:
-#ifdef USE_AKONADI
         Collection     mResource;  // collection containing the event
-#else
-        AlarmResource* mResource;  // resource calendar containing the event
-#endif
         QString        mEventId;
         QString        mDescription;
 };
@@ -160,21 +141,13 @@ class UndoEdit : public UndoItem
         virtual Operation  operation() const     { return EDIT; }
         virtual QString    defaultActionText() const;
         virtual QString    description() const   { return mDescription; }
-#ifdef USE_AKONADI
         virtual Collection collection() const    { return mResource; }
-#else
-        virtual AlarmResource* resource() const  { return mResource; }
-#endif
         virtual QString    eventID() const       { return mNewEventId; }
         virtual QString    oldEventID() const    { return mOldEvent->id(); }
         virtual QString    newEventID() const    { return mNewEventId; }
         virtual UndoItem*  restore();
     private:
-#ifdef USE_AKONADI
         Collection     mResource;  // collection containing the event
-#else
-        AlarmResource* mResource;  // resource calendar containing the event
-#endif
         KAEvent*       mOldEvent;
         QString        mNewEventId;
         QString        mDescription;
@@ -190,11 +163,7 @@ class UndoDelete : public UndoItem
         virtual Operation  operation() const     { return DELETE; }
         virtual QString    defaultActionText() const;
         virtual QString    description() const   { return UndoItem::description(*mEvent); }
-#ifdef USE_AKONADI
         virtual Collection collection() const    { return mResource; }
-#else
-        virtual AlarmResource* resource() const  { return mResource; }
-#endif
         virtual QString    eventID() const       { return mEvent->id(); }
         virtual QString    oldEventID() const    { return mEvent->id(); }
         virtual UndoItem*  restore();
@@ -202,11 +171,7 @@ class UndoDelete : public UndoItem
     protected:
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
     private:
-#ifdef USE_AKONADI
         Collection     mResource;  // collection containing the event
-#else
-        AlarmResource* mResource;  // resource calendar containing the event
-#endif
         KAEvent*       mEvent;
         QStringList    mDontShowErrors;
 };
@@ -812,11 +777,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
 {
     // Retrieve the current state of the alarm
     kDebug() << mEventId;
-#ifdef USE_AKONADI
     const KAEvent* ev = AlarmCalendar::getEvent(EventId(mResource.id(), mEventId));
-#else
-    const KAEvent* ev = AlarmCalendar::getEvent(mEventId);
-#endif
     if (!ev)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
@@ -858,11 +819,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
             break;
         }
         case CalEvent::TEMPLATE:
-#ifdef USE_AKONADI
             if (KAlarm::deleteTemplate(event) != KAlarm::UPDATE_OK)
-#else
-            if (KAlarm::deleteTemplate(event.id()) != KAlarm::UPDATE_OK)
-#endif
                 mRestoreError = ERR_TEMPLATE;
             break;
         case CalEvent::ARCHIVED:    // redoing the deletion of an archived alarm
@@ -948,11 +905,7 @@ UndoItem* UndoEdit::restore()
 {
     kDebug() << mNewEventId;
     // Retrieve the current state of the alarm
-#ifdef USE_AKONADI
     const KAEvent* event = AlarmCalendar::getEvent(EventId(mResource.id(), mNewEventId));
-#else
-    const KAEvent* event = AlarmCalendar::getEvent(mNewEventId);
-#endif
     if (!event)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
@@ -962,11 +915,7 @@ UndoItem* UndoEdit::restore()
 
     // Create a redo item to restore the edit
     Undo::Type t = (type() == Undo::UNDO) ? Undo::REDO : (type() == Undo::REDO) ? Undo::UNDO : Undo::NONE;
-#ifdef USE_AKONADI
     UndoItem* undo = new UndoEdit(t, newEvent, mOldEvent->id(), mResource, KAlarm::dontShowErrors(EventId(newEvent)), mDescription);
-#else
-    UndoItem* undo = new UndoEdit(t, newEvent, mOldEvent->id(), mResource, KAlarm::dontShowErrors(mNewEventId), mDescription);
-#endif
 
     switch (calendar())
     {
@@ -990,11 +939,7 @@ UndoItem* UndoEdit::restore()
                         mRestoreWarningKorg = status;
                     // fall through to default
                 default:
-#ifdef USE_AKONADI
                     KAlarm::setDontShowErrors(EventId(*mOldEvent), mDontShowErrors);
-#else
-                    KAlarm::setDontShowErrors(mOldEvent->id(), mDontShowErrors);
-#endif
                     break;
             }
             break;
@@ -1074,11 +1019,7 @@ UndoItem* UndoDelete::restore()
             {
                 // It was archived when it was deleted
                 mEvent->setCategory(CalEvent::ARCHIVED);
-#ifdef USE_AKONADI
                 KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, &mResource);
-#else
-                KAlarm::UpdateResult status = KAlarm::reactivateEvent(*mEvent, mResource);
-#endif
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1101,11 +1042,7 @@ UndoItem* UndoDelete::restore()
             }
             else
             {
-#ifdef USE_AKONADI
                 KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, 0, true);
-#else
-                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, mResource, 0, true);
-#endif
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1126,29 +1063,17 @@ UndoItem* UndoDelete::restore()
                         break;
                 }
             }
-#ifdef USE_AKONADI
             KAlarm::setDontShowErrors(EventId(*mEvent), mDontShowErrors);
-#else
-            KAlarm::setDontShowErrors(mEvent->id(), mDontShowErrors);
-#endif
             break;
         case CalEvent::TEMPLATE:
-#ifdef USE_AKONADI
             if (KAlarm::addTemplate(*mEvent, &mResource) != KAlarm::UPDATE_OK)
-#else
-            if (KAlarm::addTemplate(*mEvent, mResource) != KAlarm::UPDATE_OK)
-#endif
             {
                 mRestoreError = ERR_CREATE;
                 return 0;
             }
             break;
         case CalEvent::ARCHIVED:
-#ifdef USE_AKONADI
             if (!KAlarm::addArchivedEvent(*mEvent, &mResource))
-#else
-            if (!KAlarm::addArchivedEvent(*mEvent, mResource))
-#endif
             {
                 mRestoreError = ERR_CREATE;
                 return 0;
@@ -1339,11 +1264,7 @@ Undo::Event::Event(const KAEvent& e, RESOURCE_PARAM_TYPE r)
       EVENT_RESOURCE(r)
 {
     if (e.category() == CalEvent::ACTIVE)
-#ifdef USE_AKONADI
         dontShowErrors = KAlarm::dontShowErrors(EventId(e));
-#else
-        dontShowErrors = KAlarm::dontShowErrors(e.id());
-#endif
 }
 
 // vim: et sw=4:

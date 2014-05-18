@@ -21,13 +21,7 @@
 #include "kalarm.h"
 #include "alarmlistview.h"
 
-#ifdef USE_AKONADI
 #define ALARM_LIST_MODEL AlarmListModel
-#else
-#include "eventlistmodel.h"
-#include "alarmlistfiltermodel.h"
-#define ALARM_LIST_MODEL EventListModel
-#endif
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>

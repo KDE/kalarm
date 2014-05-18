@@ -24,17 +24,13 @@
 /** @file messagewin.h - displays an alarm message */
 
 #include "autoqpointer.h"
-#ifdef USE_AKONADI
 #include "eventid.h"
-#endif
 #include "mainwindowbase.h"
 
 #include <kalarmcal/kaevent.h>
 
-#ifdef USE_AKONADI
 #include <AkonadiCore/collection.h>
 #include <AkonadiCore/item.h>
-#endif
 
 #include <QList>
 #include <QMap>
@@ -86,11 +82,7 @@ class MessageWin : public MainWindowBase
         virtual void        show();
         virtual QSize       sizeHint() const;
         static int          instanceCount(bool excludeAlwaysHidden = false);
-#ifdef USE_AKONADI
         static MessageWin*  findEvent(const EventId& eventId, MessageWin* exclude = 0);
-#else
-        static MessageWin*  findEvent(const QString& eventId, MessageWin* exclude = 0);
-#endif
         static void         redisplayAlarms();
         static void         stopAudio(bool wait = false);
         static bool         isAudioPlaying();
@@ -115,9 +107,7 @@ class MessageWin : public MainWindowBase
         void                activeWindowChanged(WId);
         void                checkDeferralLimit();
         void                displayMainWindow();
-#ifdef USE_AKONADI
         void                showRestoredAlarm();
-#endif
 #ifdef KMAIL_SUPPORTED
         void                slotShowKMailMessage();
 #endif
@@ -143,27 +133,15 @@ class MessageWin : public MainWindowBase
         void                playAudio();
         void                setDeferralLimit(const KAEvent&);
         void                alarmShowing(KAEvent&);
-#ifdef USE_AKONADI
         bool                retrieveEvent(KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
-#else
-        bool                retrieveEvent(KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
-#endif
         bool                haveErrorMessage(unsigned msg) const;
         void                clearErrorMessage(unsigned msg) const;
         void                redisplayAlarm();
-#ifdef USE_AKONADI
         static bool         reinstateFromDisplaying(const KCalCore::Event::Ptr&, KAEvent&, Akonadi::Collection&, bool& showEdit, bool& showDefer);
-#else
-        static bool         reinstateFromDisplaying(const KCal::Event*, KAEvent&, AlarmResource*&, bool& showEdit, bool& showDefer);
-#endif
         static bool         isSpread(const QPoint& topLeft);
 
         static QList<MessageWin*>      mWindowList;    // list of existing message windows
-#ifdef USE_AKONADI
         static QMap<EventId, unsigned> mErrorMessages; // error messages currently displayed, by event ID
-#else
-        static QMap<QString, unsigned> mErrorMessages; // error messages currently displayed, by event ID
-#endif
         static bool         mRedisplayed;     // redisplayAlarms() was called
         // Sound file playing
         static QPointer<AudioThread> mAudioThread;   // thread to play audio file
@@ -173,12 +151,8 @@ class MessageWin : public MainWindowBase
         QColor              mBgColour, mFgColour;
         DateTime            mDateTime;        // date/time displayed in the message window
         QDateTime           mCloseTime;       // UTC time at which window should be auto-closed
-#ifdef USE_AKONADI
         Akonadi::Item::Id   mEventItemId;
         EventId             mEventId;
-#else
-        QString             mEventId;
-#endif
         QString             mAudioFile;
         float               mVolume;
         float               mFadeVolume;
@@ -199,11 +173,7 @@ class MessageWin : public MainWindowBase
         // Miscellaneous
         KAEvent             mEvent;           // the whole event, for updating the calendar file
         KAEvent             mOriginalEvent;   // the original event supplied to the constructor
-#ifdef USE_AKONADI
         Akonadi::Collection mCollection;      // collection which the event comes/came from
-#else
-        AlarmResource*      mResource;        // resource which the event comes/came from
-#endif
         QLabel*             mTimeLabel;       // trigger time label
         QLabel*             mRemainingText;   // the remaining time (for a reminder window)
         PushButton*         mOkButton;

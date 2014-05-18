@@ -50,15 +50,9 @@
 #include <kalarmcal/identities.h>
 
 #include <Akonadi/Contact/emailaddressselectiondialog.h>
-#ifdef USE_AKONADI
 #include <KCalCore/Person>
 #include <KCalUtils/kcalutils/icaldrag.h>
 using namespace KCalCore;
-#else
-#include <kcal/person.h>
-#include <kcal/icaldrag.h>
-using namespace KCal;
-#endif
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -1220,13 +1214,8 @@ void EditEmailAlarmDlg::setAction(KAEvent::SubAction action, const AlarmText& al
 /******************************************************************************
 * Initialise various values in the New Alarm dialogue.
 */
-#ifdef USE_AKONADI
 void EditEmailAlarmDlg::setEmailFields(uint fromID, const KCalCore::Person::List& addresses,
                                        const QString& subject, const QStringList& attachments)
-#else
-void EditEmailAlarmDlg::setEmailFields(uint fromID, const QList<KCal::Person>& addresses,
-                                       const QString& subject, const QStringList& attachments)
-#endif
 {
     if (fromID)
         mEmailFromList->setCurrentIdentity(fromID);

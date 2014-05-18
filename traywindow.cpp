@@ -75,9 +75,7 @@ struct TipItem
 TrayWindow::TrayWindow(MainWindow* parent)
     : KStatusNotifierItem(parent),
       mAssocMainWindow(parent),
-#ifdef USE_AKONADI
       mAlarmsModel(0),
-#endif
       mStatusUpdateTimer(new QTimer(this)),
       mHaveDisabledAlarms(false)
 {
@@ -144,7 +142,6 @@ TrayWindow::TrayWindow(MainWindow* parent)
     MinuteTimer::connect(mToolTipUpdateTimer, SLOT(start()));
 
     // Update when alarms are modified
-#ifdef USE_AKONADI
     connect(AlarmListModel::all(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
             mToolTipUpdateTimer, SLOT(start()));
     connect(AlarmListModel::all(), SIGNAL(rowsInserted(QModelIndex,int,int)),
@@ -155,18 +152,6 @@ TrayWindow::TrayWindow(MainWindow* parent)
             mToolTipUpdateTimer, SLOT(start()));
     connect(AlarmListModel::all(), SIGNAL(modelReset()),
             mToolTipUpdateTimer, SLOT(start()));
-#else
-    connect(EventListModel::alarms(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(EventListModel::alarms(), SIGNAL(rowsInserted(QModelIndex,int,int)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(EventListModel::alarms(), SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(EventListModel::alarms(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            mToolTipUpdateTimer, SLOT(start()));
-    connect(EventListModel::alarms(), SIGNAL(modelReset()),
-            mToolTipUpdateTimer, SLOT(start()));
-#endif
 
     // Set auto-hide status when next alarm or preferences change
     mStatusUpdateTimer->setSingleShot(true);
@@ -368,28 +353,16 @@ QString TrayWindow::tooltipAlarmText() const
     // Get today's and tomorrow's alarms, sorted in time order
     int i, iend;
     QList<TipItem> items;
-#ifdef USE_AKONADI
     QVector<KAEvent> events = KAlarm::getSortedActiveEvents(const_cast<TrayWindow*>(this), &mAlarmsModel);
-#else
-    KAEvent::List events = KAlarm::getSortedActiveEvents(KDateTime(now.date(), QTime(0,0,0), KDateTime::LocalZone), tomorrow);
-#endif
     for (i = 0, iend = events.count();  i < iend;  ++i)
     {
-#ifdef USE_AKONADI
         KAEvent* event = &events[i];
-#else
-        KAEvent* event = events[i];
-#endif
         if (event->actionSubType() == KAEvent::MESSAGE)
         {
             TipItem item;
             QDateTime dateTime = event->nextTrigger(KAEvent::DISPLAY_TRIGGER).effectiveKDateTime().toLocalZone().dateTime();
             if (dateTime > tomorrow.dateTime())
-#ifdef USE_AKONADI
                 break;   // ignore alarms after tomorrow at the current clock time
-#else
-                continue;   // ignore alarms after tomorrow at the current clock time
-#endif
             item.dateTime = dateTime;
 
             // The alarm is due today, or early tomorrow

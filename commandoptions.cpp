@@ -74,13 +74,9 @@ CommandOptions::CommandOptions()
     ||  checkCommand("cancelEvent", CANCEL_EVENT)
     ||  checkCommand("edit", EDIT))
     {
-#ifdef USE_AKONADI
         // Fetch the event ID. This can optionally include a prefix of the
         // resource ID followed by a colon delimiter.
         mEventId = EventId(mArgs->getOption(mCommandName));
-#else
-        mEventId = mArgs->getOption(mCommandName);
-#endif
     }
     if (checkCommand("edit-new-preset", EDIT_NEW_PRESET))
     {
@@ -189,12 +185,8 @@ CommandOptions::CommandOptions()
             QString addr = params[i];
             if (!KAMail::checkAddress(addr))
                 setError(i18nc("@info:shell", "<icode>%1</icode>: invalid email address", QLatin1String("--mail")));
-#ifdef USE_AKONADI
             KCalCore::Person::Ptr person(new KCalCore::Person(QString(), addr));
             mAddressees += person;
-#else
-            mAddressees += KCal::Person(QString(), addr);
-#endif
         }
         params = mArgs->getOptionList("attach");
         for (int i = 0, count = params.count();  i < count;  ++i)

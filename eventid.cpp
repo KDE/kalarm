@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifdef USE_AKONADI
 
 #include "eventid.h"
 #include "collectionmodel.h"
@@ -50,7 +49,5 @@ EventId::EventId(const QString& resourceEventId)
         second = resourceEventId;
     }
 }
-
-#endif
 
 // vim: et sw=4:

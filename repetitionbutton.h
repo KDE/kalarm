@@ -36,11 +36,7 @@ class TimeSelector;
 class TimePeriod;
 class RepetitionDlg;
 
-#ifdef USE_AKONADI
 namespace KCalCore { class Duration; }
-#else
-namespace KCal { class Duration; }
-#endif
 
 class RepetitionButton : public QPushButton
 {
@@ -87,13 +83,8 @@ class RepetitionDlg : public KDialog
     private slots:
         void       typeClicked();
         void       countChanged(int);
-#ifdef USE_AKONADI
         void       intervalChanged(const KCalCore::Duration&);
         void       durationChanged(const KCalCore::Duration&);
-#else
-        void       intervalChanged(const KCal::Duration&);
-        void       durationChanged(const KCal::Duration&);
-#endif
         void       repetitionToggled(bool);
 
     private:

@@ -34,11 +34,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-#ifdef USE_AKONADI
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
 
 
 /*=============================================================================
@@ -168,11 +164,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
                       i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
                       true, page);
     mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
-#ifdef USE_AKONADI
     connect(mTimeSelector, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(intervalChanged(KCalCore::Duration)));
-#else
-    connect(mTimeSelector, SIGNAL(valueChanged(KCal::Duration)), SLOT(intervalChanged(KCal::Duration)));
-#endif
     connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
     topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
@@ -212,11 +204,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     layout->addWidget(mDurationButton);
     mDuration = new TimePeriod(true, mButtonBox);
     mDuration->setFixedSize(mDuration->sizeHint());
-#ifdef USE_AKONADI
     connect(mDuration, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(durationChanged(KCalCore::Duration)));
-#else
-    connect(mDuration, SIGNAL(valueChanged(KCal::Duration)), SLOT(durationChanged(KCal::Duration)));
-#endif
     mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
     layout->addWidget(mDuration);
     mDurationButton->setFocusWidget(mDuration);

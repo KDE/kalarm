@@ -31,11 +31,7 @@
 
 #include <QHBoxLayout>
 
-#ifdef USE_AKONADI
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
 
 
 TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhatsThis,
@@ -59,11 +55,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     mPeriod = new TimePeriod(allowHourMinute, box);
     mPeriod->setFixedSize(mPeriod->sizeHint());
     mPeriod->setSelectOnStep(false);
-#ifdef USE_AKONADI
     connect(mPeriod, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(periodChanged(KCalCore::Duration)));
-#else
-    connect(mPeriod, SIGNAL(valueChanged(KCal::Duration)), SLOT(periodChanged(KCal::Duration)));
-#endif
     mSelect->setFocusWidget(mPeriod);
     mPeriod->setEnabled(false);
 

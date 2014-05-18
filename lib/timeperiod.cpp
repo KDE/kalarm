@@ -29,11 +29,7 @@
 
 #include <QStackedWidget>
 
-#ifdef USE_AKONADI
 using namespace KCalCore;
-#else
-using namespace KCal;
-#endif
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.

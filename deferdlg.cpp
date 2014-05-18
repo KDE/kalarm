@@ -152,12 +152,8 @@ void DeferAlarmDlg::setLimit(const DateTime& limit)
 */
 DateTime DeferAlarmDlg::setLimit(const KAEvent& event)
 {
-#ifdef USE_AKONADI
     Q_ASSERT(event.collectionId() >= 0);
     mLimitEventId = EventId(event);
-#else
-    mLimitEventId = event.id();
-#endif
     const KAEvent* evnt = AlarmCalendar::getEvent(mLimitEventId);
     mLimitDateTime = evnt ? evnt->deferralLimit() : DateTime();
     mTimeWidget->setMaxDateTime(mLimitDateTime);

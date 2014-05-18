@@ -27,9 +27,7 @@
 
 #include <kalarmcal/kaevent.h>
 
-#ifdef USE_AKONADI
 #include <AkonadiCore/collection.h>
-#endif
 #include <QList>
 #include <QStringList>
 
@@ -51,44 +49,24 @@ class Undo : public QObject
         struct Event
         {
             Event() {}
-#ifdef USE_AKONADI
             Event(const KAEvent&, const Akonadi::Collection&);
-#else
-            Event(const KAEvent&, AlarmResource*);
-#endif
             KAEvent        event;
-#ifdef USE_AKONADI
             mutable Akonadi::Collection collection;
-#else
-            AlarmResource* resource;
-#endif
             QStringList    dontShowErrors;
         };
         class EventList : public QList<Event>
         {
         public:
-#ifdef USE_AKONADI
             void append(const KAEvent& e, const Akonadi::Collection& c)  { QList<Event>::append(Event(e, c)); }
-#else
-            void append(const KAEvent& e, AlarmResource* r)  { QList<Event>::append(Event(e, r)); }
-#endif
         };
 
         static Undo*       instance();
-#ifdef USE_AKONADI
         static void        saveAdd(const KAEvent&, const Akonadi::Collection&, const QString& name = QString());
-#else
-        static void        saveAdd(const KAEvent&, AlarmResource*, const QString& name = QString());
-#endif
         static void        saveAdds(const EventList&, const QString& name = QString());
         static void        saveEdit(const Event& oldEvent, const KAEvent& newEvent);
         static void        saveDelete(const Event&, const QString& name = QString());
         static void        saveDeletes(const EventList&, const QString& name = QString());
-#ifdef USE_AKONADI
         static void        saveReactivate(const KAEvent&, const Akonadi::Collection&, const QString& name = QString());
-#else
-        static void        saveReactivate(const KAEvent&, AlarmResource*, const QString& name = QString());
-#endif
         static void        saveReactivates(const EventList&, const QString& name = QString());
         static bool        undo(QWidget* parent, const QString& action)
                                               { return undo(0, UNDO, parent, action); }

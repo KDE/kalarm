@@ -193,7 +193,6 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
 {
     switch (getResource)
     {
-#ifdef USE_AKONADI
         case RES_USE_EVENT_ID:
             if (event)
             {
@@ -208,22 +207,6 @@ void EditAlarmDlg::init(const KAEvent* event, GetResourceType getResource)
         default:
             mCollectionItemId = -2;
             break;
-#else
-        case RES_USE_EVENT_ID:
-            if (event)
-            {
-                mResourceEventId = event->id();
-                break;
-            }
-            // fall through to RES_PROMPT
-        case RES_PROMPT:
-            mResourceEventId = QString("");   // empty but non-null
-            break;
-        case RES_IGNORE:
-        default:
-            mResourceEventId.clear();         // null
-            break;
-#endif
     }
 }
 
@@ -733,17 +716,9 @@ void EditAlarmDlg::contentsChanged()
 * The data is returned in the supplied KAEvent instance.
 * Reply = false if the only change has been to an existing deferral.
 */
-#ifdef USE_AKONADI
 bool EditAlarmDlg::getEvent(KAEvent& event, Akonadi::Collection& collection)
-#else
-bool EditAlarmDlg::getEvent(KAEvent& event, AlarmResource*& resource)
-#endif
 {
-#ifdef USE_AKONADI
     collection = mCollection;
-#else
-    resource = mResource;
-#endif
     if (mChanged)
     {
         // It's a new event, or the edit controls have changed
@@ -1176,14 +1151,10 @@ void EditAlarmDlg::slotHelp()
     // deletion of EditAlarmDlg, and on return from this function).
     AutoQPointer<TemplatePickDlg> dlg = new TemplatePickDlg(type, this);
     if (dlg->exec() == QDialog::Accepted)
-#ifdef USE_AKONADI
     {
         KAEvent event = dlg->selectedTemplate();
         initValues(&event);
     }
-#else
-    initValues(dlg->selectedTemplate());
-#endif
 }
 
 /******************************************************************************

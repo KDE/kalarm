@@ -26,13 +26,8 @@
 #include "timeselector.h"
 #include "reminder.h"
 
-#ifdef USE_AKONADI
 #include <KCalCore/Duration>
 using namespace KCalCore;
-#else
-#include <kcal/duration.h>
-using namespace KCal;
-#endif
 
 #include <kglobal.h>
 #include <klocale.h>
@@ -71,11 +66,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     mTimeSignCombo->setCurrentIndex(0);   // default to "in advance"
     mTime->setFixedSize(mTime->sizeHint());
     connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
-#ifdef USE_AKONADI
     connect(mTime, SIGNAL(valueChanged(KCalCore::Duration)), SIGNAL(changed()));
-#else
-    connect(mTime, SIGNAL(valueChanged(KCal::Duration)), SIGNAL(changed()));
-#endif
     connect(mTimeSignCombo, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()));
     topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 

@@ -22,13 +22,7 @@
 #include "templatelistview.h"
 
 #include "functions.h"
-#ifdef USE_AKONADI
 #define TEMPLATE_LIST_MODEL TemplateListModel
-#else
-#include "eventlistmodel.h"
-#include "templatelistfiltermodel.h"
-#define TEMPLATE_LIST_MODEL TemplateListFilterModel
-#endif
 
 #include <klocale.h>
 
@@ -50,11 +44,7 @@ void TemplateListView::setModel(QAbstractItemModel* model)
     header()->setStretchLastSection(true);
     header()->setResizeMode(TEMPLATE_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-#ifdef USE_AKONADI
     header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, ItemListModel::iconWidth() + 2*margin + 2);
-#else
-    header()->resizeSection(TEMPLATE_LIST_MODEL::TypeColumn, EventListModel::iconWidth() + 2*margin + 2);
-#endif
 }
 
 void TemplateListDelegate::edit(KAEvent* event, EventListView* view)

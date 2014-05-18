@@ -21,7 +21,6 @@
 #ifndef COLLECTIONSEARCH_H
 #define COLLECTIONSEARCH_H
 
-#ifdef USE_AKONADI
 
 #include <AkonadiCore/collection.h>
 #include <AkonadiCore/item.h>
@@ -80,7 +79,6 @@ class CollectionSearch : public QObject
         bool                                   mDelete;
 };
 
-#endif
 #endif // COLLECTIONSEARCH_H
 
 // vim: et sw=4:
