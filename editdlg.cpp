@@ -35,7 +35,7 @@
 #include "latecancel.h"
 #include "lineedit.h"
 #include "mainwindow.h"
-//QT5 #include "messagebox.h"
+#include "messagebox.h"
 #include "packedlayout.h"
 #include "preferences.h"
 #include "radiobutton.h"
@@ -929,7 +929,7 @@ bool EditAlarmDlg::validate()
         if (!errmsg.isEmpty())
         {
             mTemplateName->setFocus();
-            //QT5 KAMessageBox::sorry(this, errmsg);
+            KAMessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -977,10 +977,8 @@ bool EditAlarmDlg::validate()
                                                   "The start date/time does not match the alarm's recurrence pattern, "
                                                   "so it will be adjusted to the date/time of the next recurrence (%1).",
                                                   KLocale::global()->formatDateTime(next.kDateTime(), KLocale::ShortDate));
-#if 0 //QT5
                 if (KAMessageBox::warningContinueCancel(this, prompt) != KMessageBox::Continue)
                     return false;
-#endif
             }
         }
 
@@ -998,18 +996,14 @@ bool EditAlarmDlg::validate()
                 // has already expired, so we must adjust it.
                 if (event.nextOccurrence(now, mAlarmDateTime, KAEvent::ALLOW_FOR_REPETITION) == KAEvent::NO_OCCURRENCE)
                 {
-#if 0 //QT5
                     KAMessageBox::sorry(this, i18nc("@info", "Recurrence has already expired"));
                     return false;
-#endif
                 }
                 if (event.workTimeOnly()  &&  !event.nextTrigger(KAEvent::DISPLAY_TRIGGER).isValid())
                 {
-#if 0 //QT5
                     if (KAMessageBox::warningContinueCancel(this, i18nc("@info", "The alarm will never occur during working hours"))
                         != KMessageBox::Continue)
                         return false;
-#endif
                 }
             }
         }
@@ -1019,7 +1013,7 @@ bool EditAlarmDlg::validate()
         {
             mTabs->setCurrentIndex(mRecurPageIndex);
             errWidget->setFocus();
-            //QT5 KAMessageBox::sorry(this, errmsg);
+            KAMessageBox::sorry(this, errmsg);
             return false;
         }
     }
@@ -1036,8 +1030,8 @@ bool EditAlarmDlg::validate()
             {
                 mTabs->setCurrentIndex(mMainPageIndex);
                 mReminder->setFocusOnCount();
-                //QT5 KAMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
-                                                //Reminder::i18n_chk_FirstRecurrenceOnly()));
+                KAMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
+                                                Reminder::i18n_chk_FirstRecurrenceOnly()));
                 return false;
             }
         }
@@ -1051,14 +1045,14 @@ bool EditAlarmDlg::validate()
             if (longestRecurMinutes > 0
             &&  recurEvent.repetition().intervalMinutes() * recurEvent.repetition().count() >= longestRecurMinutes - reminder)
             {
-                //QT5 KAMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
+                KAMessageBox::sorry(this, i18nc("@info", "The duration of a repetition within the recurrence must be less than the recurrence interval minus any reminder period"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
             if (!recurEvent.repetition().isDaily()
             &&  ((mTemplate && mTemplateAnyTime->isChecked())  ||  (!mTemplate && mAlarmDateTime.isDateOnly())))
             {
-                //QT5 KAMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
+                KAMessageBox::sorry(this, i18nc("@info", "For a repetition within the recurrence, its period must be in units of days or weeks for a date-only alarm"));
                 mRecurrenceEdit->activateSubRepetition();   // display the alarm repetition dialog again
                 return false;
             }
@@ -1088,10 +1082,8 @@ bool EditAlarmDlg::validate()
             mCollection = CollectionControlModel::destination(type, this, false, &cancelled);
         if (!mCollection.isValid())
         {
-#if 0 //QT5
             if (!cancelled)
                 KAMessageBox::sorry(this, i18nc("@info", "You must select a calendar to save the alarm in"));
-#endif
             return false;
         }
     }
