@@ -42,6 +42,7 @@ static const int AUTOSTART_DELAY = 30;
 
 int main(int argc, char *argv[])
 {
+    KLocalizedString::setApplicationDomain("kalarm");
     K4AboutData aboutData(PROGRAM_NAME, "kalarm", ki18n("KAlarm Autostart"),
         PROGRAM_VERSION, ki18n("KAlarm autostart at login"), K4AboutData::License_GPL,
         ki18n("Copyright 2001,2008 David Jarvie"), KLocalizedString(),
@@ -56,7 +57,6 @@ int main(int argc, char *argv[])
     KCmdLineArgs::addCmdLineOptions(options);
 
     AutostartApp app;
-    //QT5 KLocale::global()->insertCatalog(QLatin1String("kalarm"));
     return app.exec();
 }
 
