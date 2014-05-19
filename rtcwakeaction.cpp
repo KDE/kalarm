@@ -33,7 +33,7 @@
 
 RtcWakeAction::RtcWakeAction()
 {
-    //QT5 KLocale::global()->insertCatalog(QLatin1String("kalarm"));
+    KLocalizedString::setApplicationDomain("kalarm");
 }
 
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)

@@ -1785,10 +1785,8 @@ QString CommandEdit::text() const
 QString CommandEdit::text(EditAlarmDlg* dlg, bool showErrorMessage) const
 {
     QString result = text();
-#if 0 //QT5
     if (showErrorMessage  &&  result.isEmpty())
         KAMessageBox::sorry(dlg, i18nc("@info", "Please enter a command or script to execute"));
-#endif
     return result;
 }
 
