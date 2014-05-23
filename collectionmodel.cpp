@@ -673,12 +673,10 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
 
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                                       SLOT(statusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
-#if KDE_IS_VERSION(4,9,80)
     connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
                                       SLOT(collectionPopulated()));
     connect(AkonadiModel::instance(), SIGNAL(collectionPopulated(Akonadi::Collection::Id)),
                                       SLOT(collectionPopulated()));
-#endif
 }
 
 /******************************************************************************
@@ -1255,7 +1253,6 @@ Collection CollectionControlModel::collectionForResource(const QString& resource
     return Collection();
 }
 
-#if KDE_IS_VERSION(4,9,80)
 /******************************************************************************
 * Return whether all enabled collections have been populated.
 */
@@ -1299,7 +1296,6 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
     mPopulatedCheckLoop = 0;
     return result;
 }
-#endif
 
 /******************************************************************************
 * Exit from the populated event loop when a collection has been populated.

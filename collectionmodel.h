@@ -265,7 +265,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         static Akonadi::Collection collectionForResource(const QString& resourceId);
 
-#if KDE_IS_VERSION(4,9,80)
         /** Return whether one or all enabled collections have been populated,
          *  i.e. whether their items have been fetched.
          */
@@ -278,7 +277,6 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  @return  true if successful.
          */
         bool waitUntilPopulated(Akonadi::Collection::Id colId = -1, int timeout = 0);
-#endif
 
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
 
