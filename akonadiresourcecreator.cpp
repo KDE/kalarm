@@ -155,7 +155,7 @@ void AkonadiResourceCreator::setResourceAlarmType()
     else
     {
         iface.setAlarmTypes(CalEvent::mimeTypes(mDefaultType));
-        iface.writeConfig();
+        iface.save();
         mAgentInstance.reconfigure();   // notify the agent that its configuration has changed
     }
 }

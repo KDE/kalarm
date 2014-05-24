@@ -496,7 +496,7 @@ template <class Interface> bool CalendarMigrator::updateStorageFormat(const Agen
         return false;
     }
     iface->setUpdateStorageFormat(true);
-    iface->writeConfig();
+    iface->save();
     delete iface;
     qDebug() << "true";
     return true;
@@ -681,7 +681,7 @@ bool CalendarCreator::writeLocalFileConfig()
     if (!iface)
         return false;
     iface->setMonitorFile(true);
-    iface->writeConfig();   // save the Agent config changes
+    iface->save();   // save the Agent config changes
     delete iface;
     return true;
 }
@@ -692,7 +692,7 @@ bool CalendarCreator::writeLocalDirectoryConfig()
     if (!iface)
         return false;
     iface->setMonitorFiles(true);
-    iface->writeConfig();   // save the Agent config changes
+    iface->save();   // save the Agent config changes
     delete iface;
     return true;
 }
@@ -703,7 +703,7 @@ bool CalendarCreator::writeRemoteFileConfig()
     if (!iface)
         return false;
     iface->setMonitorFile(true);
-    iface->writeConfig();   // save the Agent config changes
+    iface->save();   // save the Agent config changes
     delete iface;
     return true;
 }
