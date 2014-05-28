@@ -66,7 +66,7 @@ using namespace KHolidays;
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <kstandardguiitem.h>
 #include <ksystemtimezone.h>
 #include <kicon.h>
@@ -1191,7 +1191,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
 {
     KLocalizedString defsetting = ki18nc("@info:whatsthis", "The default setting for <interface>%1</interface> in the alarm edit dialog.");
 
-    mTabs = new KTabWidget(topWidget());
+    mTabs = new QTabWidget(topWidget());
     StackedGroupT<KVBox>* tabgroup = new StackedGroupT<KVBox>(mTabs);
     StackedWidgetT<KVBox>* topGeneral = new StackedWidgetT<KVBox>(tabgroup);
     topGeneral->setMargin(KDialog::marginHint()/2);
@@ -1578,7 +1578,7 @@ QString EditPrefTab::validate()
 ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     : PrefsTabBase(scrollGroup)
 {
-    mTabs = new KTabWidget(topWidget());
+    mTabs = new QTabWidget(topWidget());
     KVBox* topGeneral = new KVBox();
     topGeneral->setMargin(KDialog::marginHint()/2);
     topGeneral->setSpacing(KDialog::spacingHint());

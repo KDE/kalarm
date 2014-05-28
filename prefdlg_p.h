@@ -212,7 +212,7 @@ class EditPrefTab : public PrefsTabBase
         void         slotBrowseSoundFile();
 
     private:
-        KTabWidget*     mTabs;
+        QTabWidget*     mTabs;
         QCheckBox*      mAutoClose;
         QCheckBox*      mConfirmAck;
         KComboBox*      mReminderUnits;
@@ -259,7 +259,7 @@ class ViewPrefTab : public PrefsTabBase
     private:
         void         setTooltip(int maxAlarms, bool time, bool timeTo, const QString& prefix);
 
-        KTabWidget*   mTabs;
+        QTabWidget*   mTabs;
         ColourButton* mDisabledColour;
         ColourButton* mArchivedColour;
         QGroupBox*    mShowInSystemTray;

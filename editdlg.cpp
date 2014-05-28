@@ -240,7 +240,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
         box->setFixedHeight(box->sizeHint().height());
     }
-    mTabs = new KTabWidget(mainWidget);
+    mTabs = new QTabWidget(mainWidget);
     mTabScrollGroup = new StackedScrollGroup(this, mTabs);
 
     StackedScrollWidget* mainScroll = new StackedScrollWidget(mTabScrollGroup);

@@ -37,7 +37,7 @@ class QGroupBox;
 class QFrame;
 class QVBoxLayout;
 class QLineEdit;
-class KTabWidget;
+class QTabWidget;
 class ButtonGroup;
 class TimeEdit;
 class RadioButton;
@@ -148,7 +148,7 @@ class EditAlarmDlg : public KDialog
     protected:
         KAEvent::SubAction  mAlarmType;           // actual alarm type
     private:
-        KTabWidget*         mTabs;                // the tabs in the dialog
+        QTabWidget*         mTabs;                // the tabs in the dialog
         StackedScrollGroup* mTabScrollGroup;
         int                 mMainPageIndex;
         int                 mRecurPageIndex;
