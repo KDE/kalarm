@@ -111,7 +111,7 @@ set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
     eventid.cpp
    )
 
-qt5_wrap_ui(kalarm_bin_SRCS
+ki18n_wrap_ui(kalarm_bin_SRCS
     wakedlg.ui
 )
 
