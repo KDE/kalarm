@@ -37,7 +37,7 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${KAlarmCal_SOURCE_DIR})
   find_package(KF5Holidays ${KF5_VERSION} CONFIG REQUIRED)
 endif()
 
-add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal\")
+add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
 
 ########### Targets ###########
 
