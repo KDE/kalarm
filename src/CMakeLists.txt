@@ -1,7 +1,6 @@
 # The includes in akonadi/ use exceptions, we must enable them here for clang to be happy.
 kde_enable_exceptions()
 
-add_definitions(-DKDE_DEFAULT_DEBUG_AREA=5955)
 add_definitions( -DQT_NO_CAST_FROM_ASCII )
 add_definitions( -DQT_NO_CAST_TO_ASCII )
 
@@ -72,7 +71,6 @@ install(FILES
         kacalendar.h
         version.h
         ${KAlarmCal_HEADERS}
-        ${KAlarmCal_CamelCase_HEADERS}
         DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/kalarmcal
         COMPONENT Devel
 )
