@@ -237,7 +237,7 @@ bool isUTC(const QString& localFile)
 namespace CalEvent
 {
 
-// Struct to contain static strings, to allow use of K_GLOBAL_STATIC
+// Struct to contain static strings, to allow use of Q_GLOBAL_STATIC
 // to delete them on program termination.
 struct StaticStrings
 {
@@ -266,7 +266,7 @@ struct StaticStrings
     // Old KAlarm format identifiers
     const QString TEMPLATE_UID;
 };
-K_GLOBAL_STATIC(StaticStrings, staticStrings)
+Q_GLOBAL_STATIC(StaticStrings, staticStrings)
 
 /******************************************************************************
 * Convert a unique ID to indicate that the event is in a specified calendar file.
