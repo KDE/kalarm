@@ -24,7 +24,7 @@
 
 #include <kcalcore/recurrence.h>
 #include <kcalcore/icalformat.h>
-#include <kglobal.h>
+
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <qdebug.h>

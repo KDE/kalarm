@@ -33,7 +33,7 @@
 
 #include <kmessagebox.h>
 
-#include <kglobal.h>
+
 #include <klocalizedstring.h>
 #include <qdebug.h>
 
