@@ -105,6 +105,6 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 #endif
 }
 
-//QT5 KDE4_AUTH_HELPER_MAIN("org.kde.kalarmrtcwake", RtcWakeAction)
+KAUTH_HELPER_MAIN("org.kde.kalarmrtcwake", RtcWakeAction)
 
 // vim: et sw=4:
