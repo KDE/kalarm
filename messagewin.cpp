@@ -47,7 +47,7 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kdialog.h>
-#include <ktextbrowser.h>
+#include <qtextbrowser.h>
 #include <ksystemtimezone.h>
 #include <kglobalsettings.h>
 #include <kmimetype.h>
@@ -463,7 +463,7 @@ void MessageWin::initView()
                     if (!(dir = info.isDir()))
                     {
                         opened = true;
-                        KTextBrowser* view = new KTextBrowser(topWidget);
+                        QTextBrowser* view = new QTextBrowser(topWidget);
                         view->setFrameStyle(QFrame::NoFrame);
                         view->setWordWrapMode(QTextOption::NoWrap);
                         QPalette pal = view->viewport()->palette();
