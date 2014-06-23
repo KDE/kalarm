@@ -100,10 +100,10 @@ static const char*   SHOW_RESOURCES_KEY = "ShowResources";
 
 static QString   undoText;
 static QString   undoTextStripped;
-static KShortcut undoShortcut;
+static QList<QKeySequence>  undoShortcut;
 static QString   redoText;
 static QString   redoTextStripped;
-static KShortcut redoShortcut;
+static QList<QKeySequence> redoShortcut;
 
 
 /*=============================================================================
@@ -551,24 +551,24 @@ void MainWindow::initActions()
     {
         // Get standard texts, etc., for Undo and Redo actions
         QAction * act = KStandardAction::undo(this, 0, actions);
-        undoShortcut     = KShortcut(act->shortcuts());
+        undoShortcut     = act->shortcuts();
         undoText         = act->text();
         //QT5 undoTextStripped = KLocale::global()->removeAcceleratorMarker(undoText);
         delete act;
         act = KStandardAction::redo(this, 0, actions);
-        redoShortcut     = KShortcut(act->shortcuts());
+        redoShortcut     = act->shortcuts();
         redoText         = act->text();
         //QT5 redoTextStripped = KLocale::global()->removeAcceleratorMarker(redoText);
         delete act;
     }
     mActionUndo = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-undo")), undoText, this);
     actions->addAction(QLatin1String("edit_undo"), mActionUndo);
-    //QT5 mActionUndo->setShortcut(undoShortcut);
+    mActionUndo->setShortcuts(undoShortcut);
     connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
 
     mActionRedo = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-redo")), redoText, this);
     actions->addAction(QLatin1String("edit_redo"), mActionRedo);
-    //QT5 mActionRedo->setShortcut(redoShortcut);
+    mActionRedo->setShortcuts(redoShortcut);
     connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
 
     KStandardAction::find(mListView, SLOT(slotFind()), actions);
