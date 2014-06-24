@@ -31,7 +31,6 @@
 
 #include <KDebug>
 
-#include <QStringList>
 #include <QTimer>
 
 using namespace Akonadi;

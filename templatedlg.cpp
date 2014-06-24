@@ -36,7 +36,6 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <QMenu>
 
 #include <QPushButton>
 #include <QVBoxLayout>

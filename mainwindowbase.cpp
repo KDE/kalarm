@@ -22,7 +22,6 @@
 #include "kalarmapp.h"
 #include "mainwindowbase.h"
 
-#include <QCloseEvent>
 
 
 MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)

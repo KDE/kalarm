@@ -22,7 +22,6 @@
 #define EDITDLG_P_H
 
 #include <ktextedit.h>
-#include <QTabWidget>
 #include <QFrame>
 class QDragEnterEvent;
 class QShowEvent;

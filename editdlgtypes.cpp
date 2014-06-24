@@ -70,7 +70,6 @@ using namespace KCalCore;
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
 #include <QStandardItemModel>
-#include <QMimeType>
 
 using namespace KAlarmCal;
 

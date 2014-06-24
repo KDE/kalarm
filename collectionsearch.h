@@ -28,7 +28,6 @@
 #include <QObject>
 #include <QMap>
 #include <QList>
-#include <QStringList>
 
 class KJob;
 namespace Akonadi
