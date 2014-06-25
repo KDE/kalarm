@@ -57,7 +57,7 @@ using namespace KCalUtils;
 #include <QMenu>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <kinputdialog.h>
+#include <qinputdialog.h>
 #include <ksystemtrayicon.h>
 #include <kstandardaction.h>
 #include <kiconloader.h>
@@ -1385,8 +1385,8 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             else if (alarmText.isScript())
                 types += i18nc("@item:inlistbox", "Command Alarm");
             bool ok = false;
-            QString type = KInputDialog::getItem(i18nc("@title:window", "Alarm Type"),
-                                                 i18nc("@info", "Choose alarm type to create:"), types, 0, false, &ok, mainMainWindow());
+            QString type = QInputDialog::getItem(mainMainWindow(), i18nc("@title:window", "Alarm Type"),
+                                                 i18nc("@info", "Choose alarm type to create:"), types, 0, false, &ok);
             if (!ok)
                 return;   // user didn't press OK
             int i = types.indexOf(type);

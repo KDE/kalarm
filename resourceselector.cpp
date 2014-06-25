@@ -45,7 +45,7 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcombobox.h>
-#include <kinputdialog.h>
+#include <qinputdialog.h>
 #include <QMenu>
 #include <qdebug.h>
 #include <kicon.h>
