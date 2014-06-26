@@ -1,5 +1,3 @@
-# The includes in akonadi/ use exceptions, we must enable them here for clang to be happy.
-kde_enable_exceptions()
 
 add_definitions( -DQT_NO_CAST_FROM_ASCII )
 add_definitions( -DQT_NO_CAST_TO_ASCII )
