@@ -72,7 +72,6 @@ using namespace KCalUtils;
 #include <qdebug.h>
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
-#include <kicon.h>
 #include <KTimeZone>
 #include <KGlobal>
 #include <KShortcut>

@@ -64,7 +64,6 @@ using namespace KCalCore;
 #include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
 #include <kfiledialog.h>
-#include <kicon.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <qdebug.h>
