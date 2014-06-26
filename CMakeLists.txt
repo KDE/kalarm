@@ -8,7 +8,7 @@ add_definitions( -DQT_NO_CAST_TO_ASCII )
 
 set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
-kde_enable_exceptions()
+
 
 
 include_directories(
