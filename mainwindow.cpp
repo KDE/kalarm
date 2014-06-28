@@ -85,6 +85,7 @@ using namespace KCalUtils;
 #include <QDesktopWidget>
 #include <KSharedConfig>
 #include <KLocale>
+#include <KLocalizedString>
 
 using namespace KAlarmCal;
 
@@ -552,12 +553,12 @@ void MainWindow::initActions()
         QAction * act = KStandardAction::undo(this, 0, actions);
         undoShortcut     = act->shortcuts();
         undoText         = act->text();
-        //QT5 undoTextStripped = KLocale::global()->removeAcceleratorMarker(undoText);
+        undoTextStripped = KLocalizedString::removeAcceleratorMarker(undoText);
         delete act;
         act = KStandardAction::redo(this, 0, actions);
         redoShortcut     = act->shortcuts();
         redoText         = act->text();
-        //QT5 redoTextStripped = KLocale::global()->removeAcceleratorMarker(redoText);
+        redoTextStripped = KLocalizedString::removeAcceleratorMarker(redoText);
         delete act;
     }
     mActionUndo = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-undo")), undoText, this);
@@ -1048,7 +1049,7 @@ void MainWindow::slotFindActive(bool active)
 */
 void MainWindow::slotUndo()
 {
-    //QT5 Undo::undo(this, KLocale::global()->removeAcceleratorMarker(mActionUndo->text()));
+    Undo::undo(this, KLocalizedString::removeAcceleratorMarker(mActionUndo->text()));
 }
 
 /******************************************************************************
@@ -1056,7 +1057,7 @@ void MainWindow::slotUndo()
 */
 void MainWindow::slotRedo()
 {
-    //QT5 Undo::redo(this, KLocale::global()->removeAcceleratorMarker(mActionRedo->text()));
+    Undo::redo(this, KLocalizedString::removeAcceleratorMarker(mActionRedo->text()));
 }
 
 /******************************************************************************
