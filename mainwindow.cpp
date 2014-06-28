@@ -452,7 +452,7 @@ void MainWindow::initActions()
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, SIGNAL(triggered(bool)), SLOT(slotNewAudio()));
 
-    //QT5 action = mActionNew->fromTemplateAlarmAction();
+    action = mActionNew->fromTemplateAlarmAction();
     actions->addAction(QLatin1String("newFromTemplate"), action);
     connect(action, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
 
