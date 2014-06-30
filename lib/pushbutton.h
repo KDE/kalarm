@@ -21,23 +21,24 @@
 #ifndef PUSHBUTTON_H
 #define PUSHBUTTON_H
 
-#include <kpushbutton.h>
+#include <QPushButton>
 #include <KIcon>
+#include <KGuiItem>
 class QMouseEvent;
 class QKeyEvent;
 
 
 /**
- *  @short A KPushButton with read-only option.
+ *  @short A QPushButton with read-only option.
  *
- *  The PushButton class is a KPushButton with a read-only option.
+ *  The PushButton class is a QPushButton with a read-only option.
  *
  *  The widget may be set as read-only. This has the same effect as disabling it, except
  *  that its appearance is unchanged.
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class PushButton : public KPushButton
+class PushButton : public QPushButton
 {
         Q_OBJECT
         Q_PROPERTY(bool readOnly READ isReadOnly WRITE setReadOnly)

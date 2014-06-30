@@ -22,31 +22,33 @@
 
 #include <QMouseEvent>
 #include <QKeyEvent>
-
+#include <KGuiItem>
 
 PushButton::PushButton(QWidget* parent)
-    : KPushButton(parent),
+    : QPushButton(parent),
       mFocusPolicy(focusPolicy()),
       mReadOnly(false),
       mNoHighlight(false)
 { }
 
 PushButton::PushButton(const KGuiItem& text, QWidget* parent)
-    : KPushButton(text, parent),
+    : QPushButton(parent),
       mFocusPolicy(focusPolicy()),
       mReadOnly(false),
       mNoHighlight(false)
-{ }
+{
+     KGuiItem::assign(this, text);
+}
 
 PushButton::PushButton(const QString& text, QWidget* parent)
-    : KPushButton(text, parent),
+    : QPushButton(text, parent),
       mFocusPolicy(focusPolicy()),
       mReadOnly(false),
       mNoHighlight(false)
 { }
 
 PushButton::PushButton(const KIcon& icon, const QString& text, QWidget* parent)
-    : KPushButton(icon, text, parent),
+    : QPushButton(icon, text, parent),
       mFocusPolicy(focusPolicy()),
       mReadOnly(false),
       mNoHighlight(false)
@@ -72,7 +74,7 @@ void PushButton::mousePressEvent(QMouseEvent* e)
         if (e->button() == Qt::LeftButton)
             return;
     }
-    KPushButton::mousePressEvent(e);
+    QPushButton::mousePressEvent(e);
 }
 
 void PushButton::mouseReleaseEvent(QMouseEvent* e)
@@ -83,13 +85,13 @@ void PushButton::mouseReleaseEvent(QMouseEvent* e)
         if (e->button() == Qt::LeftButton)
             return;
     }
-    KPushButton::mouseReleaseEvent(e);
+    QPushButton::mouseReleaseEvent(e);
 }
 
 void PushButton::mouseMoveEvent(QMouseEvent* e)
 {
     if (!mReadOnly)
-        KPushButton::mouseMoveEvent(e);
+        QPushButton::mouseMoveEvent(e);
 }
 
 void PushButton::keyPressEvent(QKeyEvent* e)
@@ -108,13 +110,13 @@ void PushButton::keyPressEvent(QKeyEvent* e)
                 return;
         }
     }
-    KPushButton::keyPressEvent(e);
+    QPushButton::keyPressEvent(e);
 }
 
 void PushButton::keyReleaseEvent(QKeyEvent* e)
 {
     if (!mReadOnly)
-        KPushButton::keyReleaseEvent(e);
+        QPushButton::keyReleaseEvent(e);
 }
 
 bool PushButton::event(QEvent* e)
@@ -125,7 +127,7 @@ bool PushButton::event(QEvent* e)
         if (e->type() == QEvent::HoverEnter)
             return true;
     }
-    return KPushButton::event(e);
+    return QPushButton::event(e);
 }
 #include "moc_pushbutton.cpp"
 // vim: et sw=4:
