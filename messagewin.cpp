@@ -711,7 +711,7 @@ void MessageWin::initView()
         // Silence button to stop sound repetition
         const QPixmap pixmap = MainBarIcon(QLatin1String("media-playback-stop"));
         mSilenceButton = new PushButton(topWidget);
-        mSilenceButton->setIcon(KIcon(pixmap));
+        mSilenceButton->setIcon(pixmap);
         grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
         mSilenceButton->setToolTip(i18nc("@info:tooltip", "Stop sound"));
         mSilenceButton->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
@@ -725,7 +725,7 @@ void MessageWin::initView()
         // KMail button
         const QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
         mKMailButton = new PushButton(topWidget);
-        mKMailButton->setIcon(KIcon(pixmap));
+        mKMailButton->setIcon(pixmap);
         connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
         grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
         mKMailButton->setToolTip(i18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
@@ -735,7 +735,7 @@ void MessageWin::initView()
     // KAlarm button
     const QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
     mKAlarmButton = new PushButton(topWidget);
-    mKAlarmButton->setIcon(KIcon(pixmap));
+    mKAlarmButton->setIcon(pixmap);
     connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
     grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
     mKAlarmButton->setToolTip(i18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
