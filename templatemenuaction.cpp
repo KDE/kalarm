@@ -31,7 +31,7 @@
 #include <qdebug.h>
 
 
-TemplateMenuAction::TemplateMenuAction(const KIcon& icon, const QString& label, QObject* parent)
+TemplateMenuAction::TemplateMenuAction(const QIcon& icon, const QString& label, QObject* parent)
     : KActionMenu(icon, label, parent)
 {
     setDelayed(false);

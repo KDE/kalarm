@@ -71,7 +71,7 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         mAudioAction->setShortcut(AUDIO_KEY);
 
         // Include New From Template only in non-template menu
-        mTemplateAction = new TemplateMenuAction(KIcon(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
+        mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
         connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)), SLOT(slotCalendarStatusChanged()));
         connect(TemplateListModel::all(), SIGNAL(haveEventsStatus(bool)), SLOT(slotCalendarStatusChanged()));
