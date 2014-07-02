@@ -14,7 +14,6 @@
   <include>qnamespace.h</include>
 
   <kcfgfile name="kalarmrc"/>
-<!-- PORT TO QT5!
   <signal name="showInSystemTrayChanged">
     <argument type="Bool">ShowInSystemTray</argument>
   </signal>
@@ -55,7 +54,6 @@
   </signal>
   <signal name="tooltipPreferencesChanged">
   </signal>
--->
   <group name="General">
     <entry name="Version" type="String" hidden="true">
       <label context="@label">KAlarm version</label>
