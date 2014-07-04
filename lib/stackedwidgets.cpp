@@ -21,7 +21,7 @@
 #include "stackedwidgets.h"
 #include "desktop.h"
 
-#include <kdialog.h>
+#include <qdialog.h>
 #include <qdebug.h>
 
 #include <QStyle>
@@ -37,7 +37,7 @@ StackedScrollWidget::StackedScrollWidget(StackedScrollGroup* group, QWidget* par
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 }
 
-StackedScrollGroup::StackedScrollGroup(KDialog* dlg, QObject* tabParent)
+StackedScrollGroup::StackedScrollGroup(QDialog* dlg, QObject* tabParent)
     : StackedGroupT<QScrollArea>(tabParent),
       mDialog(dlg),
       mMinHeight(-1),
@@ -126,7 +126,7 @@ QSize StackedScrollGroup::adjustSize(bool force)
     // There is no stored size, or the deferral group is visible.
     // Allow the tab contents to be scrolled vertically if that is necessary
     // to avoid the dialog exceeding the screen height.
-    QSize dlgsize = mDialog->KDialog::minimumSizeHint();
+    QSize dlgsize = mDialog->QDialog::minimumSizeHint();
     int y = dlgsize.height() + decoration - desk;
     if (y > 0)
     {
@@ -149,7 +149,7 @@ QSize StackedScrollGroup::adjustSize(bool force)
         for (QWidget* w = mWidgets[0]->parentWidget();  w && w != mDialog;  w = w->parentWidget())
             w->setMinimumHeight(qMin(w->minimumSizeHint().height(), w->sizeHint().height()));
         dlgsize.setHeight(dlgsize.height() - mHeightReduction);
-        s = mDialog->KDialog::minimumSizeHint();
+        s = mDialog->QDialog::minimumSizeHint();
         if (s.height() > dlgsize.height())
             dlgsize.setHeight(s.height());
         mDialog->setMinimumHeight(dlgsize.height());

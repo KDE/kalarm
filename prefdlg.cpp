@@ -148,11 +148,10 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     setAttribute(Qt::WA_DeleteOnClose);
     setObjectName(QLatin1String("PrefDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Configure"));
-    //QT5 setButtons(Help | Default | Ok | Apply | Cancel);
-    //QT5 setDefaultButton(Ok);
+    setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply );
+    button(QDialogButtonBox::Ok)->setDefault(true); 
     setFaceType(List);
-    //QT5 showButtonSeparator(true);
-    //QT5 mTabScrollGroup = new StackedScrollGroup(this, this);
+    mTabScrollGroup = new StackedScrollGroup(this, this);
 
     mMiscPage = new MiscPrefTab(mTabScrollGroup);
     mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab General preferences", "General"));

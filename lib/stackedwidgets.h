@@ -23,7 +23,7 @@
 
 #include <QList>
 #include <QScrollArea>
-class KDialog;
+class QDialog;
 
 template <class T> class StackedGroupT;
 
@@ -116,7 +116,7 @@ class StackedScrollWidget : public StackedWidgetT<QScrollArea>
 class StackedScrollGroup : public StackedGroupT<QScrollArea>
 {
     public:
-        explicit StackedScrollGroup(KDialog*, QObject* tabParent);
+        explicit StackedScrollGroup(QDialog*, QObject* tabParent);
         virtual QSize minimumSizeHint() const;
         int           heightReduction() const { return mHeightReduction; }
         QSize         adjustSize(bool force = false);
@@ -126,7 +126,7 @@ class StackedScrollGroup : public StackedGroupT<QScrollArea>
     private:
         QSize         maxMinimumSizeHint() const;
 
-        KDialog* mDialog;
+        QDialog* mDialog;
         int      mMinHeight;
         int      mHeightReduction;
         bool     mSized;
