@@ -246,10 +246,8 @@ void KAlarmPrefDlg::slotOk()
     qDebug();
     mValid = true;
     slotApply();
-#if 0 //QT5
     if (mValid)
-        KDialog::accept();
-#endif
+        QDialog::accept();
 }
 
 // Discard the current preferences and close the dialog
@@ -257,7 +255,7 @@ void KAlarmPrefDlg::slotCancel()
 {
     qDebug();
     restore(false);
-    //QT5 KDialog::reject();
+    KPageDialog::reject();
 }
 
 // Reset all controls to the application defaults
@@ -317,13 +315,12 @@ QSize KAlarmPrefDlg::minimumSizeHint() const
             return s;
         }
     }
-    //QT5 return KDialog::minimumSizeHint();
-    return QSize();
+    return KPageDialog::minimumSizeHint();
 }
 
 void KAlarmPrefDlg::showEvent(QShowEvent* e)
 {
-    //QT5 KDialog::showEvent(e);
+    KPageDialog::showEvent(e);
     if (!mShown)
     {
         mTabScrollGroup->adjustSize(true);
