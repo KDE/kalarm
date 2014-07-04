@@ -18,6 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+//QT5 reactivate after #include "config-kdepim.h"
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "functions.h"
 #include "functions_p.h"
@@ -69,7 +70,7 @@ using namespace KCalCore;
 #include <qdebug.h>
 #include <ktoolinvocation.h>
 
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
 #include <kwindowsystem.h>
 #include <kxmessages.h>
 #include <kstartupinfo.h>
@@ -1408,7 +1409,7 @@ QString runKMail(bool minimise)
 */
 bool Private::startKMailMinimised()
 {
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
     NETRootInfo i(QX11Info::display(), NET::Supported);
     if (i.isSupported(NET::WM2KDETemporaryRules))
     {
@@ -1455,7 +1456,7 @@ bool Private::startKMailMinimised()
 */
 void Private::windowAdded(WId w)
 {
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
     static const int SUPPORTED_TYPES = NET::NormalMask | NET::DesktopMask | NET::DockMask
                                      | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
                                      | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;

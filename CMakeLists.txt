@@ -161,6 +161,10 @@ Phonon::phonon4qt5
 KF5::Auth
 )
 
+if (Qt5X11Extras_FOUND)
+  target_link_libraries(kalarm_bin Qt5::X11Extras)
+endif()
+
 
 install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 #endif (UNIX)

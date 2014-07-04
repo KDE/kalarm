@@ -18,6 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+//QT5 reactivate after porting #include "config-kdepim.h"
 #include "kalarm.h"
 #include "messagewin_p.h"
 #include "messagewin.h"
@@ -62,9 +63,9 @@
 #include <phonon/volumefadereffect.h>
 #include <qdebug.h>
 #include <ktoolinvocation.h>
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
 #include <netwm.h>
-#include <QX11Info>
+#include <qx11info_x11.h>
 #endif
 #include <KGlobal>
 
@@ -94,7 +95,7 @@
 using namespace KCalCore;
 using namespace KAlarmCal;
 
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
 enum FullScreenType { NoFullScreen = 0, FullScreen = 1, FullScreenActive = 2 };
 static FullScreenType haveFullScreenWindow(int screen);
 static FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<FullScreenType>& screenTypes);
@@ -2276,7 +2277,7 @@ bool MessageWin::getWorkAreaAndModal()
 {
     mScreenNumber = -1;
     const bool modal = Preferences::modalMessages();
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
     const QDesktopWidget* desktop = qApp->desktop();
     const int numScreens = desktop->numScreens();
     if (numScreens > 1)
@@ -2363,7 +2364,7 @@ qDebug()<<"full="<<full<<", screen="<<mScreenNumber;
     return modal;
 }
 
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
 /******************************************************************************
 * In a multi-screen setup (not a single virtual desktop), find whether the
 * specified screen has a full screen window on it.

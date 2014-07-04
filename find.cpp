@@ -25,6 +25,7 @@
 #include "eventlistview.h"
 #include "messagebox.h"
 #include "preferences.h"
+#include "config-kdepim.h"
 
 #include <kalarmcal/kaevent.h>
 
@@ -115,7 +116,7 @@ void Find::display()
 
     if (mDialog)
     {
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
         KWindowSystem::activateWindow(mDialog->winId());
 #endif
     }

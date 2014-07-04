@@ -19,7 +19,8 @@
  */
 
 #include "desktop.h"
-#ifdef Q_WS_X11
+#include "config-kdepim.h"
+#if KDEPIM_HAVE_X11
 #include <kwindowsystem.h>
 #endif
 #include <QApplication>
@@ -33,7 +34,7 @@ namespace KAlarm {
 */
 QRect desktopWorkArea(int screen)
 {
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
     if (screen < 0)
         return KWindowSystem::workArea();
 #endif

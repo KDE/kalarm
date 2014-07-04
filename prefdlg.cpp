@@ -70,7 +70,7 @@ using namespace KHolidays;
 #include <kstandardguiitem.h>
 #include <ksystemtimezone.h>
 #include <kicon.h>
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
 #include <kwindowinfo.h>
 #include <kwindowsystem.h>
 #endif
@@ -131,7 +131,7 @@ void KAlarmPrefDlg::display()
     }
     else
     {
-#ifdef Q_WS_X11
+#if KDEPIM_HAVE_X11
         KWindowInfo info = KWindowSystem::windowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
         KWindowSystem::setCurrentDesktop(info.desktop());
 #endif
