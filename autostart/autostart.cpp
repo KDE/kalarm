@@ -88,7 +88,7 @@ void AutostartApp::slotAutostart()
         else
         {
             QString prog = args->arg(0);
-            QString exe = KStandardDirs::locate("exe", prog);
+            QString exe = KStandardDirs::findExe(prog);
             if (exe.isEmpty())
                 kWarning(5900) << "Executable not found:" << prog;
             else

@@ -42,6 +42,7 @@
 #include <qdebug.h>
 #include <KTimeZone>
 #include <KSharedConfig>
+#include <QStandardPaths>
 
 using namespace Akonadi;
 using namespace KCalCore;
@@ -67,7 +68,7 @@ AlarmCalendar* AlarmCalendar::mDisplayCalendar = 0;
 */
 bool AlarmCalendar::initialiseCalendars()
 {
-    QString displayCal = KStandardDirs::locateLocal("appdata", displayCalendarName);
+    QString displayCal = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + displayCalendarName;
     AkonadiModel::instance();
     CollectionControlModel::setAskDestinationPolicy(Preferences::askResource());
     Preferences::setBackend(Preferences::Akonadi);

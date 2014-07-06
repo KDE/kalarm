@@ -44,6 +44,7 @@
 #include <qdebug.h>
 
 #include <QTimer>
+#include <QStandardPaths>
 
 using namespace Akonadi;
 using namespace KAlarmCal;
@@ -195,7 +196,7 @@ void CalendarMigrator::migrateOrCreate()
     {
         // There are no Akonadi resources, so migrate any KResources alarm
         // calendars from pre-Akonadi versions of KAlarm.
-        const QString configFile = KStandardDirs::locateLocal("config", QLatin1String("kresources/alarms/stdrc"));
+        const QString configFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/kresources/alarms/stdrc");
         const KConfig config(configFile, KConfig::SimpleConfig);
 
         // Fetch all the KResource identifiers which are actually in use
@@ -585,7 +586,7 @@ CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, 
       mNew(true),
       mFinished(false)
 {
-    mPath = KStandardDirs::locateLocal("appdata", file);
+    mPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + file;
     qDebug() << "New:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
 }
 

@@ -59,7 +59,7 @@ using namespace KCalCore;
 #include <kdbusservicestarter.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
+
 #include <kauth.h>
 #include <ksystemtimezone.h>
 #include <kstandardguiitem.h>
@@ -85,6 +85,7 @@ using namespace KCalCore;
 #include <QTimer>
 #include <qglobal.h>
 #include <KSharedConfig>
+#include <QStandardPaths>
 
 using namespace Akonadi;
 
@@ -1502,7 +1503,7 @@ QStringList dontShowErrors(const EventId& eventId)
 {
     if (eventId.isEmpty())
         return QStringList();
-    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
     return group.readEntry(id, QStringList());
@@ -1528,7 +1529,7 @@ void setDontShowErrors(const EventId& eventId, const QStringList& tags)
 {
     if (eventId.isEmpty())
         return;
-    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
     if (tags.isEmpty())
@@ -1546,7 +1547,7 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
 {
     if (eventId.isEmpty()  ||  tag.isEmpty())
         return;
-    KConfig config(KStandardDirs::locateLocal("appdata", ALARM_OPTS_FILE));
+    KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
     const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
     QStringList tags = group.readEntry(id, QStringList());

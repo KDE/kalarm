@@ -42,7 +42,7 @@
 #include <K4AboutData>
 #include <QMenu>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
+
 #include <kstandardaction.h>
 #include <kstandardguiitem.h>
 #include <kiconeffect.h>

@@ -40,7 +40,7 @@
 
 //QT5 #include "kspeechinterface.h"
 
-#include <kstandarddirs.h>
+
 #include <kaction.h>
 #include <kstandardguiitem.h>
 #include <K4AboutData>
