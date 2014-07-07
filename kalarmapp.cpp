@@ -172,7 +172,7 @@ KAlarmApp::KAlarmApp()
     if (!mSpeechEnabled) { qDebug() << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
     const QString korg = QLatin1String("korganizer");
-    mKOrganizerEnabled = !KStandardDirs::findExe(korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
+    mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
     if (!mKOrganizerEnabled) { qDebug() << "KOrganizer options disabled (KOrganizer not found)"; }
 }
 

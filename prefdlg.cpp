@@ -464,7 +464,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     {
         QString cmd = xtermCommands[mXtermCount];
         QStringList args = KShell::splitArgs(cmd);
-        if (args.isEmpty()  ||  KStandardDirs::findExe(args[0]).isEmpty())
+        if (args.isEmpty()  ||  QStandardPaths::findExecutable(args[0]).isEmpty())
             continue;
         QRadioButton* radio = new QRadioButton(args[0], group);
         radio->setMinimumSize(radio->sizeHint());
@@ -539,7 +539,7 @@ void MiscPrefTab::apply(bool syncToDisc)
         {
             QStringList args = KShell::splitArgs(cmd);
             cmd = args.isEmpty() ? QString() : args[0];
-            if (KStandardDirs::findExe(cmd).isEmpty())
+            if (QStandardPaths::findExecutable(cmd).isEmpty())
             {
                 mXtermCommand->setFocus();
                 if (KAMessageBox::warningContinueCancel(topWidget(), i18nc("@info", "Command to invoke terminal window not found: <command>%1</command>", cmd))
