@@ -73,6 +73,7 @@
 #include <iostream>
 #include <climits>
 #include <KSharedConfig>
+#include <QStandardPaths>
 
 static const QLatin1String KTTSD_DBUS_SERVICE("org.kde.kttsd");
 static const QLatin1String KTTDS_DBUS_PATH("/KSpeech");

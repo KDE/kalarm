@@ -24,13 +24,14 @@
 #include <kcmdlineargs.h>
 #include <K4AboutData>
 #include <klocale.h>
-#include <kstandarddirs.h>
+
 #include <kprocess.h>
 #include <kdebug.h>
 
 #include <QTimer>
 #include <QtDBus/QtDBus>
 #include <KLocale>
+#include <QStandardPaths>
 
 // Number of seconds to wait before autostarting KAlarm.
 // Allow plenty of time for session restoration to happen first.

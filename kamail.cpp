@@ -41,7 +41,7 @@
 #include <kmime/kmime_message.h>
 
 #include <KTimeZone>
-#include <kstandarddirs.h>
+
 #include <klocale.h>
 #include <K4AboutData>
 #include <kfileitem.h>
@@ -63,6 +63,7 @@
 #include <pwd.h>
 #include <KCharsets>
 #include <KLocale>
+#include <QStandardPaths>
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"

@@ -59,7 +59,7 @@ using namespace KHolidays;
 #include <kvbox.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
+
 #include <kshell.h>
 #include <klineedit.h>
 #include <K4AboutData>
@@ -90,6 +90,7 @@ using namespace KHolidays;
 #include <QResizeEvent>
 #include <KHelpClient>
 #include <KLocale>
+#include <QStandardPaths>
 
 using namespace KCalCore;
 using namespace KAlarmCal;
