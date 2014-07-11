@@ -280,7 +280,8 @@ void KAMail::slotEmailSent(KJob* job)
 void initHeaders(KMime::Message& message, KAMail::JobData& data)
 {
     KMime::Headers::Date* date = new KMime::Headers::Date;
-    date->setDateTime(KDateTime::currentDateTime(Preferences::timeZone()));
+//QT5 port it
+    date->setDateTime(QDateTime::currentDateTime(/*Preferences::timeZone()*/));
     message.setHeader(date);
 
     KMime::Headers::From* from = new KMime::Headers::From;
