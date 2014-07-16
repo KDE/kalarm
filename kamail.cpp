@@ -120,13 +120,13 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         if (identity.isNull())
         {
             qCritical() << "Identity" << jobdata.event.emailFromId() << "not found";
-            errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
+            errmsgs = errors(xi18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
             return -1;
         }
         if (identity.primaryEmailAddress().isEmpty())
         {
             qCritical() << "Identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
-            errmsgs = errors(i18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
+            errmsgs = errors(xi18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
             return -1;
         }
         jobdata.from = identity.fullEmailAddr();
@@ -136,16 +136,16 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         switch (Preferences::emailFrom())
         {
             case Preferences::MAIL_FROM_KMAIL:
-                errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured (no default email identity found)</para>"
+                errmsgs = errors(xi18nc("@info", "<para>No 'From' email address is configured (no default email identity found)</para>"
                                                 "<para>Please set it in <application>KMail</application> or in the <application>KAlarm</application> Configuration dialog.</para>"));
                 break;
             case Preferences::MAIL_FROM_SYS_SETTINGS:
-                errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
+                errmsgs = errors(xi18nc("@info", "<para>No 'From' email address is configured.</para>"
                                                 "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Configuration dialog.</para>"));
                 break;
             case Preferences::MAIL_FROM_ADDR:
             default:
-                errmsgs = errors(i18nc("@info", "<para>No 'From' email address is configured.</para>"
+                errmsgs = errors(xi18nc("@info", "<para>No 'From' email address is configured.</para>"
                                                 "<para>Please set it in the <application>KAlarm</application> Configuration dialog.</para>"));
                 break;
         }
@@ -194,7 +194,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         if (!transport)
         {
             qCritical() << "No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
-            errmsgs = errors(i18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
+            errmsgs = errors(xi18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
             return -1;
         }
     }
@@ -359,12 +359,12 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         {
             QString attachment = QString::fromLatin1((*at).toLocal8Bit());
             KUrl url(attachment);
-            QString attachError = i18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
+            QString attachError = xi18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
             url.cleanPath();
             KIO::UDSEntry uds;
             if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
                 qCritical() << "Not found:" << attachment;
-                return i18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
+                return xi18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
             }
             KFileItem fi(uds, url);
             if (fi.isDir()  ||  !fi.isReadable()) {

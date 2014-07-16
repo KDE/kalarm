@@ -148,7 +148,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
     mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
     connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged()));
-    mListView->setWhatsThis(i18nc("@info:whatsthis",
+    mListView->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Select birthdays to set alarms for.<nl/>"
           "This list shows all birthdays in <application>KAddressBook</application> except those for which alarms already exist.</para>"
           "<para>You can select multiple birthdays at one time by dragging the mouse over the list, "

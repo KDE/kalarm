@@ -699,7 +699,7 @@ void MessageWin::initView()
     mDeferButton->setFixedSize(mDeferButton->sizeHint());
     connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
     grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
-    mDeferButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
+    mDeferButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
                                     "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
 
     if (mNoDefer)
@@ -729,8 +729,8 @@ void MessageWin::initView()
         mKMailButton->setIcon(pixmap);
         connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
         grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
-        mKMailButton->setToolTip(i18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
-        mKMailButton->setWhatsThis(i18nc("@info:whatsthis", "Locate and highlight this email in <application>KMail</application>"));
+        mKMailButton->setToolTip(xi18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
+        mKMailButton->setWhatsThis(xi18nc("@info:whatsthis", "Locate and highlight this email in <application>KMail</application>"));
     }
 
     // KAlarm button
@@ -739,8 +739,8 @@ void MessageWin::initView()
     mKAlarmButton->setIcon(pixmap);
     connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
     grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
-    mKAlarmButton->setToolTip(i18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
-    mKAlarmButton->setWhatsThis(i18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
+    mKAlarmButton->setToolTip(xi18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
+    mKAlarmButton->setWhatsThis(xi18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
 
     int butsize = mKAlarmButton->sizeHint().height();
     if (mSilenceButton)
@@ -1558,7 +1558,7 @@ void AudioThread::run()
     Phonon::MediaSource source(url);
     if (source.type() == Phonon::MediaSource::Invalid)
     {
-        mError = i18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
+        mError = xi18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
         mMutex.unlock();
         qCritical() << "Open failure:" << audioFile;
         return;
@@ -1656,7 +1656,7 @@ void AudioThread::playStateChanged(Phonon::State newState)
         if (!err.isEmpty())
         {
             qCritical() << "Play failure:" << mFile << ":" << err;
-            mError = i18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
+            mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
             exit(1);
         }
     }
@@ -2033,7 +2033,7 @@ void MessageWin::slotShowKMailMessage()
     if (!reply.isValid())
         qCritical() << "kmail D-Bus call failed:" << reply.error().message();
     else if (!reply.value())
-        KAMessageBox::sorry(this, i18nc("@info", "Unable to locate this email in <application>KMail</application>"));
+        KAMessageBox::sorry(this, xi18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }
 #endif
 
@@ -2191,7 +2191,7 @@ void MessageWin::slotDefer()
             {
                 // The event doesn't exist any more !?!, so recurrence data,
                 // flags, and more, have been lost.
-                KAMessageBox::error(this, i18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
+                KAMessageBox::error(this, xi18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
                 raise();
                 delete mDeferDlg;
                 mDeferDlg = 0;

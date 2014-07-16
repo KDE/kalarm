@@ -807,13 +807,13 @@ void displayKOrgUpdateError(QWidget* parent, UpdateError code, UpdateResult korg
     switch (korgError.status)
     {
         case UPDATE_KORG_ERRINIT:
-            msg = i18nc("@info", "<para>%1</para><para>(Could not start KOrganizer)</para>", errmsg);
+            msg = xi18nc("@info", "<para>%1</para><para>(Could not start KOrganizer)</para>", errmsg);
             break;
         case UPDATE_KORG_ERRSTART:
-            msg = i18nc("@info", "<para>%1</para><para>(KOrganizer not fully started)</para>", errmsg);
+            msg = xi18nc("@info", "<para>%1</para><para>(KOrganizer not fully started)</para>", errmsg);
             break;
         case UPDATE_KORG_ERR:
-            msg = i18nc("@info", "<para>%1</para><para>(Error communicating with KOrganizer)</para>", errmsg);
+            msg = xi18nc("@info", "<para>%1</para><para>(Error communicating with KOrganizer)</para>", errmsg);
             break;
         default:
             msg = errmsg;
@@ -1325,12 +1325,12 @@ void outputAlarmWarnings(QWidget* parent, const KAEvent* event)
 {
     if (event  &&  event->actionTypes() == KAEvent::ACT_EMAIL
     &&  Preferences::emailAddress().isEmpty())
-        KAMessageBox::information(parent, i18nc("@info Please set the 'From' email address...",
+        KAMessageBox::information(parent, xi18nc("@info Please set the 'From' email address...",
                                                 "<para>%1</para><para>Please set it in the Configuration dialog.</para>", KAMail::i18n_NeedFromEmailAddress()));
 
     if (!theApp()->alarmsEnabled())
     {
-        if (KAMessageBox::warningYesNo(parent, i18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
+        if (KAMessageBox::warningYesNo(parent, xi18nc("@info", "<para>Alarms are currently disabled.</para><para>Do you want to enable alarms now?</para>"),
                                        QString(), KGuiItem(i18nc("@action:button", "Enable")), KGuiItem(i18nc("@action:button", "Keep Disabled")),
                                        QLatin1String("EditEnableAlarms"))
                         == KMessageBox::Yes)
@@ -1398,7 +1398,7 @@ QString runKMail(bool minimise)
         if (KToolInvocation::startServiceByDesktopName(QLatin1String("kmail"), QString(), &errmsg))
         {
             qCritical() << "Couldn't start KMail (" << errmsg << ")";
-            return i18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
+            return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
         }
     }
     return QString();
@@ -1687,11 +1687,11 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
                 KAMessageBox::sorry(errmsgParent, errmsg);
                 return false;
             case FileErr_Directory:
-                KAMessageBox::sorry(errmsgParent, i18nc("@info", "<filename>%1</filename> is a folder", file));
+                KAMessageBox::sorry(errmsgParent, xi18nc("@info", "<filename>%1</filename> is a folder", file));
                 return false;
-            case FileErr_Nonexistent:   errmsg = i18nc("@info", "<filename>%1</filename> not found", file);  break;
-            case FileErr_Unreadable:    errmsg = i18nc("@info", "<filename>%1</filename> is not readable", file);  break;
-            case FileErr_NotTextImage:  errmsg = i18nc("@info", "<filename>%1</filename> appears not to be a text or image file", file);  break;
+            case FileErr_Nonexistent:   errmsg = xi18nc("@info", "<filename>%1</filename> not found", file);  break;
+            case FileErr_Unreadable:    errmsg = xi18nc("@info", "<filename>%1</filename> is not readable", file);  break;
+            case FileErr_NotTextImage:  errmsg = xi18nc("@info", "<filename>%1</filename> appears not to be a text or image file", file);  break;
             default:
                 break;
         }
@@ -1760,13 +1760,13 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
 QString conversionPrompt(const QString& calendarName, const QString& calendarVersion, bool whole)
 {
     QString msg = whole
-                ? i18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
+                ? xi18nc("@info", "Calendar <resource>%1</resource> is in an old format (<application>KAlarm</application> version %2), "
                        "and will be read-only unless you choose to update it to the current format.",
                        calendarName, calendarVersion)
-                : i18nc("@info", "Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
+                : xi18nc("@info", "Some or all of the alarms in calendar <resource>%1</resource> are in an old <application>KAlarm</application> format, "
                        "and will be read-only unless you choose to update them to the current format.",
                        calendarName);
-    return i18nc("@info", "<para>%1</para><para>"
+    return xi18nc("@info", "<para>%1</para><para>"
                  "<warning>Do not update the calendar if it is also used with an older version of <application>KAlarm</application> "
                  "(e.g. on another computer). If you do so, the calendar may become unusable there.</warning></para>"
                  "<para>Do you wish to update the calendar?</para>", msg);

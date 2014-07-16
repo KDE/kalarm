@@ -334,15 +334,15 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
     if (!creator->errorMessage().isEmpty())
     {
         QString errmsg = creator->newCalendar()
-                       ? i18nc("@info/plain", "Failed to create default calendar <resource>%1</resource>", creator->resourceName())
-                       : i18nc("@info/plain 'Import Alarms' is the name of a menu option",
+                       ? xi18nc("@info/plain", "Failed to create default calendar <resource>%1</resource>", creator->resourceName())
+                       : xi18nc("@info/plain 'Import Alarms' is the name of a menu option",
                                "Failed to convert old configuration for calendar <resource>%1</resource>. "
                                "Please use Import Alarms to load its alarms into a new or existing calendar.", creator->resourceName());
         const QString locn = i18nc("@info/plain File path or URL", "Location: %1", creator->path());
         if (creator->errorMessage().isEmpty())
-            errmsg = i18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
+            errmsg = xi18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
         else
-            errmsg = i18nc("@info", "<para>%1</para><para>%2<nl/>(%3)</para>", errmsg, locn, creator->errorMessage());
+            errmsg = xi18nc("@info", "<para>%1</para><para>%2<nl/>(%3)</para>", errmsg, locn, creator->errorMessage());
         KAMessageBox::error(MainWindow::mainMainWindow(), errmsg);
     }
     creator->deleteLater();
@@ -464,8 +464,8 @@ bool CalendarUpdater::update()
                     if (!errmsg.isEmpty())
                     {
                         KAMessageBox::error(MainWindow::mainMainWindow(),
-                                            i18nc("@info", "%1<nl/>(%2)",
-                                                  i18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
+                                            xi18nc("@info", "%1<nl/>(%2)",
+                                                  xi18nc("@info/plain", "Failed to update format of calendar <resource>%1</resource>", mCollection.name()),
                                             errmsg));
                     }
                 }

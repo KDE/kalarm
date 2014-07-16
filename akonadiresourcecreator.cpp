@@ -106,7 +106,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
     if (j->error())
     {
         qCritical() << "Failed to create new calendar resource:" << j->errorString();
-        KMessageBox::error(0, i18nc("@info", "%1<nl/>(%2)", i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
+        KMessageBox::error(0, xi18nc("@info", "%1<nl/>(%2)", i18nc("@info/plain", "Failed to create new calendar resource"), j->errorString()));
         exitWithError();
     }
     else

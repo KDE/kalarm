@@ -866,22 +866,22 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                     switch (std)
                     {
                         case CalEvent::ACTIVE:
-                            msg = i18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                            msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for active alarms.",
                                         collection.name());
                             break;
                         case CalEvent::ARCHIVED:
-                            msg = i18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                            msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for archived alarms.",
                                         collection.name());
                             break;
                         case CalEvent::TEMPLATE:
-                            msg = i18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
+                            msg = xi18nc("@info", "The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for alarm templates.",
                                         collection.name());
                             break;
                         default:
-                            msg = i18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
+                            msg = xi18nc("@info", "<para>The calendar <resource>%1</resource> has been made read-only. "
                                                  "This was the default calendar for:%2</para>"
                                                  "<para>Please select new default calendars.</para>",
                                         collection.name(), typeListForDisplay(std));
@@ -889,7 +889,7 @@ void CollectionControlModel::statusChanged(const Collection& collection, Akonadi
                             break;
                     }
                     if (singleType)
-                        msg = i18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
+                        msg = xi18nc("@info", "<para>%1</para><para>Please select a new default calendar.</para>", msg);
                     KAMessageBox::information(messageParent, msg);
                 }
             }

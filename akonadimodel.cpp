@@ -911,18 +911,18 @@ QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types type
     const QString readonly = readOnlyTooltip(collection);
     const bool writable = readonly.isEmpty();
     if (inactive  &&  !writable)
-        return i18nc("@info:tooltip",
+        return xi18nc("@info:tooltip",
                      "%1"
                      "<nl/>%2: <filename>%3</filename>"
                      "<nl/>%4, %5",
                      name, type, locn, disabled, readonly);
     if (inactive  ||  !writable)
-        return i18nc("@info:tooltip",
+        return xi18nc("@info:tooltip",
                      "%1"
                      "<nl/>%2: <filename>%3</filename>"
                      "<nl/>%4",
                      name, type, locn, (inactive ? disabled : readonly));
-    return i18nc("@info:tooltip",
+    return xi18nc("@info:tooltip",
                  "%1"
                  "<nl/>%2: <filename>%3</filename>",
                  name, type, locn);
@@ -1096,9 +1096,9 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
     if (j->error())
     {
         emit collectionDeleted(jobData.id, false);
-        const QString errMsg = i18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
+        const QString errMsg = xi18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
         qCritical() << errMsg << ":" << j->errorString();
-        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
         emit collectionDeleted(jobData.id, true);
@@ -1147,9 +1147,9 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
             mCollectionsDeleted.removeAll(id);
         else
         {
-            const QString errMsg = i18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
+            const QString errMsg = xi18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
             qCritical() << "Id:" << collection.id() << errMsg << ":" << j->errorString();
-            KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+            KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
         }
     }
     else
@@ -1478,7 +1478,7 @@ void AkonadiModel::itemJobDone(KJob* j)
             const Item current = itemById(itemId);    // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
-        KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
     {

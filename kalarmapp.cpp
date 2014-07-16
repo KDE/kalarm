@@ -366,7 +366,7 @@ int KAlarmApp::newInstance()
                     dontRedisplay = true;
                     if (!handleEvent(options.eventId(), function, true))
                     {
-                        CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
+                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
                         exitCode = 1;
                     }
                 }
@@ -394,7 +394,7 @@ int KAlarmApp::newInstance()
                     exitCode = 1;
                 else if (!KAlarm::editAlarmById(options.eventId()))
                 {
-                    CommandOptions::printError(i18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
+                    CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QLatin1String("--") + options.commandName(), options.eventId().eventId()));
                     exitCode = 1;
                 }
                 break;
@@ -580,7 +580,7 @@ void KAlarmApp::checkKtimezoned()
     {
         qDebug() << "ktimezoned not running: using UTC only";
         KAMessageBox::information(MainWindow::mainMainWindow(),
-                                  i18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
+                                  xi18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
                      QString(), QLatin1String("tzunavailable"));
     }
 }
@@ -679,7 +679,7 @@ void KAlarmApp::doQuit(QWidget* parent)
         if (!Preferences::autoStartChangedByUser())
         {
             option = KAMessageBox::questionYesNoCancel(parent,
-                                         i18nc("@info", "Do you want to start KAlarm at login?<nl/>"
+                                         xi18nc("@info", "Do you want to start KAlarm at login?<nl/>"
                                                         "(Note that alarms will be disabled if KAlarm is not started.)"),
                                          QString(), KStandardGuiItem::yes(), KStandardGuiItem::no(),
                                          KStandardGuiItem::cancel(), Preferences::ASK_AUTO_START);
@@ -1139,7 +1139,7 @@ void KAlarmApp::checkWritableCalendar()
     {
         qWarning() << "No writable active calendar";
         KAMessageBox::information(MainWindow::mainMainWindow(),
-                                  i18nc("@info", "Alarms cannot be created or updated, because no writable active alarm calendar is enabled.<nl/><nl/>"
+                                  xi18nc("@info", "Alarms cannot be created or updated, because no writable active alarm calendar is enabled.<nl/><nl/>"
                                                  "To fix this, use <interface>View | Show Calendars</interface> to check or change calendar statuses."),
                                   QString(), QLatin1String("noWritableCal"));
     }

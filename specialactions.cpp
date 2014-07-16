@@ -175,7 +175,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     mPreAction = new QLineEdit(box);
     label->setBuddy(mPreAction);
     connect(mPreAction, SIGNAL(textChanged(QString)), SLOT(slotPreActionChanged(QString)));
-    box->setWhatsThis(i18nc("@info:whatsthis",
+    box->setWhatsThis(xi18nc("@info:whatsthis",
                             "<para>Enter a shell command to execute before the alarm is displayed.</para>"
                             "<para>Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.</para>"
                             "<para><note>KAlarm will wait for the command to complete before displaying the alarm.</note></para>"));
@@ -183,7 +183,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
 
     // Cancel if error in pre-alarm action
     mExecOnDeferral = new CheckBox(i18nc("@option:check", "Execute for deferred alarms"), group);
-    mExecOnDeferral->setWhatsThis(i18nc("@info:whatsthis", "<para>If unchecked, the command is only executed before the alarm proper is displayed.</para>"
+    mExecOnDeferral->setWhatsThis(xi18nc("@info:whatsthis", "<para>If unchecked, the command is only executed before the alarm proper is displayed.</para>"
                                                            "<para>If checked, the pre-alarm command is also executed before a deferred alarm is displayed.</para>"));
     vlayout->addWidget(mExecOnDeferral, 0, Qt::AlignLeft);
 
@@ -209,7 +209,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     label = new QLabel(i18nc("@label:textbox", "Command:"), box);
     mPostAction = new QLineEdit(box);
     label->setBuddy(mPostAction);
-    box->setWhatsThis(i18nc("@info:whatsthis",
+    box->setWhatsThis(xi18nc("@info:whatsthis",
                             "<para>Enter a shell command to execute after the alarm window is closed.</para>"
                             "<para>Note that it is not executed after closing a reminder window. If you defer "
                             "the alarm, it is not executed until the alarm is finally acknowledged or closed.</para>"));

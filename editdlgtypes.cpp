@@ -174,7 +174,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(slotAlarmTypeChanged(int)));
     connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SLOT(contentsChanged()));
     label->setBuddy(mTypeCombo);
-    box->setWhatsThis(i18nc("@info:whatsthis", "<para>Select what the alarm should display:"
+    box->setWhatsThis(xi18nc("@info:whatsthis", "<para>Select what the alarm should display:"
           "<list><item><interface>%1</interface>: the alarm will display the text message you type in.</item>"
           "<item><interface>%2</interface>: the alarm will display the contents of a text or image file.</item>"
           "<item><interface>%3</interface>: the alarm will display the output from a command.</item></list></para>",
@@ -254,7 +254,7 @@ Reminder* EditDisplayAlarmDlg::createReminder(QWidget* parent)
 {
     static const QString reminderText = i18nc("@info:whatsthis", "Enter how long in advance of or after the main alarm to display a reminder alarm.");
     return new Reminder(i18nc("@info:whatsthis", "Check to additionally display a reminder in advance of or after the main alarm time(s)."),
-                        i18nc("@info:whatsthis", "<para>Enter how long in advance of or after the main alarm to display a reminder alarm.</para><para>%1</para>", TimeSpinBox::shiftWhatsThis()),
+                        xi18nc("@info:whatsthis", "<para>Enter how long in advance of or after the main alarm to display a reminder alarm.</para><para>%1</para>", TimeSpinBox::shiftWhatsThis()),
                         i18nc("@info:whatsthis", "Select whether the reminder should be triggered before or after the main alarm"),
                         true, true, parent);
 }
@@ -986,7 +986,7 @@ void EditCommandAlarmDlg::type_executedTry(const QString& text, void* result)
     &&  mCmdOutputGroup->checkedButton() != mCmdExecInTerm)
     {
         theApp()->commandMessage(proc, this);
-        KAMessageBox::information(this, i18nc("@info", "Command executed: <icode>%1</icode>", text));
+        KAMessageBox::information(this, xi18nc("@info", "Command executed: <icode>%1</icode>", text));
         theApp()->commandMessage(proc, 0);
     }
 }
@@ -1332,7 +1332,7 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
         if (!bad.isEmpty())
         {
             mEmailToEdit->setFocus();
-            KAMessageBox::error(this, i18nc("@info", "Invalid email address: <email>%1</email>", bad));
+            KAMessageBox::error(this, xi18nc("@info", "Invalid email address: <email>%1</email>", bad));
             return false;
         }
     }
@@ -1356,7 +1356,7 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
                 break;      // empty
             case -1:
                 mEmailAttachList->setFocus();
-                KAMessageBox::error(this, i18nc("@info", "Invalid email attachment: <filename>%1</filename>", att));
+                KAMessageBox::error(this, xi18nc("@info", "Invalid email attachment: <filename>%1</filename>", att));
                 return false;
         }
     }
@@ -1387,10 +1387,10 @@ void EditEmailAlarmDlg::slotTrySuccess()
     to.replace(QLatin1Char('<'), QLatin1String("&lt;"));
     to.replace(QLatin1Char('>'), QLatin1String("&gt;"));
     if (mEmailBcc->isChecked())
-        msg = QLatin1String("<qt>") + i18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
+        msg = QLatin1String("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
                     to, Preferences::emailBccAddress()) + QLatin1String("</qt>");
     else
-        msg = QLatin1String("<qt>") + i18nc("@info", "Email sent to:<nl/>%1", to) + QLatin1String("</qt>");
+        msg = QLatin1String("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1", to) + QLatin1String("</qt>");
     KAMessageBox::information(this, msg);
 }
 

@@ -162,7 +162,7 @@ void WakeFromSuspendDlg::useWakeClicked()
         return;
     }
     if (KAMessageBox::warningContinueCancel(this,
-                i18nc("@info", "<para>This wakeup will cancel any existing wakeup which has been set by KAlarm "
+                xi18nc("@info", "<para>This wakeup will cancel any existing wakeup which has been set by KAlarm "
                                "or any other application, because your computer can only schedule a single wakeup time.</para>"
                                "<para><b>Note:</b> Wake From Suspend is not supported at all on some computers, especially older ones, "
                                "and some computers only support setting a wakeup time up to 24 hours ahead. "

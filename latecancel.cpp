@@ -47,7 +47,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
       mReadOnly(false),
       mAutoCloseShown(false)
 {
-    QString whatsThis = i18nc("@info:whatsthis",
+    QString whatsThis = xi18nc("@info:whatsthis",
                               "<para>If checked, the alarm will be canceled if it cannot be triggered within the "
                              "specified period after its scheduled time. Possible reasons for not triggering "
                              "include your being logged off, X not running, or <application>KAlarm</application> not running.</para>"

@@ -333,7 +333,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTime = new TimeEdit(box);
         mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
         mTemplateTime->setReadOnly(mReadOnly);
-        mTemplateTime->setWhatsThis(i18nc("@info:whatsthis",
+        mTemplateTime->setWhatsThis(xi18nc("@info:whatsthis",
               "<para>Enter the start time for alarms based on this template.</para><para>%1</para>",
               TimeSpinBox::shiftWhatsThis()));
         connect(mTemplateTime, SIGNAL(valueChanged(int)), SLOT(contentsChanged()));
@@ -344,7 +344,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "Date only"), templateTimeBox);
         mTemplateAnyTime->setFixedSize(mTemplateAnyTime->sizeHint());
         mTemplateAnyTime->setReadOnly(mReadOnly);
-        mTemplateAnyTime->setWhatsThis(i18nc("@info:whatsthis", "Set the <interface>Any time</interface> option for alarms based on this template."));
+        mTemplateAnyTime->setWhatsThis(xi18nc("@info:whatsthis", "Set the <interface>Any time</interface> option for alarms based on this template."));
         mTemplateTimeGroup->addButton(mTemplateAnyTime);
         grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
@@ -363,7 +363,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
         mTemplateTimeAfter->setReadOnly(mReadOnly);
         connect(mTemplateTimeAfter, SIGNAL(valueChanged(int)), SLOT(contentsChanged()));
-        mTemplateTimeAfter->setWhatsThis(i18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
+        mTemplateTimeAfter->setWhatsThis(xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
                                                AlarmTimeWidget::i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
         box->setFixedHeight(box->sizeHint().height());
         grid->addWidget(box, 1, 1, Qt::AlignLeft);
@@ -1030,7 +1030,7 @@ bool EditAlarmDlg::validate()
             {
                 mTabs->setCurrentIndex(mMainPageIndex);
                 mReminder->setFocusOnCount();
-                KAMessageBox::sorry(this, i18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
+                KAMessageBox::sorry(this, xi18nc("@info", "Reminder period must be less than the recurrence interval, unless <interface>%1</interface> is checked.",
                                                 Reminder::i18n_chk_FirstRecurrenceOnly()));
                 return false;
             }

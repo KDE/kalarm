@@ -115,7 +115,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     blayout->addWidget(mEditButton);
     blayout->addWidget(mDeleteButton);
     mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the highlighted calendar"));
-    mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "<para>Remove the highlighted calendar from the list.</para>"
+    mDeleteButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Remove the highlighted calendar from the list.</para>"
                                      "<para>The calendar itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));
     mEditButton->setDisabled(true);
     mDeleteButton->setDisabled(true);
@@ -322,18 +322,18 @@ void ResourceSelector::removeResource()
             QString otherTypes;
             CalEvent::Types nonStandardTypes(allTypes & ~standardTypes);
             if (nonStandardTypes != currentType)
-                otherTypes = i18nc("@info", "<para>It also contains:%1</para>", CollectionControlModel::typeListForDisplay(nonStandardTypes));
-            text = i18nc("@info", "<para><resource>%1</resource> is the default calendar for:%2</para>%3"
+                otherTypes = xi18nc("@info", "<para>It also contains:%1</para>", CollectionControlModel::typeListForDisplay(nonStandardTypes));
+            text = xi18nc("@info", "<para><resource>%1</resource> is the default calendar for:%2</para>%3"
                                   "<para>Do you really want to remove it from all calendar lists?</para>", name, stdTypes, otherTypes);
         }
         else
-            text = i18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name);
+            text = xi18nc("@info", "Do you really want to remove your default calendar (<resource>%1</resource>) from the list?", name);
     }
     else if (allTypes != currentType)
-        text = i18nc("@info", "<para><resource>%1</resource> contains:%2</para><para>Do you really want to remove it from all calendar lists?</para>",
+        text = xi18nc("@info", "<para><resource>%1</resource> contains:%2</para><para>Do you really want to remove it from all calendar lists?</para>",
                      name, CollectionControlModel::typeListForDisplay(allTypes));
     else
-        text = i18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
+        text = xi18nc("@info", "Do you really want to remove the calendar <resource>%1</resource> from the list?", name);
     if (KAMessageBox::warningContinueCancel(this, text, QString(), KStandardGuiItem::remove()) == KMessageBox::Cancel)
         return;
 
@@ -599,7 +599,7 @@ void ResourceSelector::showInfo()
         QString std = CollectionControlModel::isStandard(collection, alarmType)
                     ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
                     : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
-        QString text = i18nc("@info",
+        QString text = xi18nc("@info",
                              "<title>%1</title>"
                              "<para>ID: %2<nl/>"
                              "Calendar type: %3<nl/>"

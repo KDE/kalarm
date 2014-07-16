@@ -115,7 +115,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mDateEdit = new KDateComboBox(topWidget);
     mDateEdit->setOptions(KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     connect(mDateEdit, SIGNAL(dateEntered(QDate)), SLOT(dateTimeChanged()));
-    mDateEdit->setWhatsThis(i18nc("@info:whatsthis",
+    mDateEdit->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Enter the date to schedule the alarm.</para>"
           "<para>%1</para>", (mDeferring ? tzText : recurText)));
     mAtTimeRadio->setFocusWidget(mDateEdit);
@@ -126,7 +126,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mTimeEdit = new TimeEdit(timeBox);
     mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
     connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
-    mTimeEdit->setWhatsThis(i18nc("@info:whatsthis",
+    mTimeEdit->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Enter the time to schedule the alarm.</para>"
           "<para>%1</para>"
           "<para>%2</para>", (mDeferring ? tzText : recurText), TimeSpinBox::shiftWhatsThis()));
@@ -159,8 +159,8 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mDelayTimeEdit->setValue(1439);
     mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
     connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
-    mDelayTimeEdit->setWhatsThis(mDeferring ? i18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
-                                            : i18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
+    mDelayTimeEdit->setWhatsThis(mDeferring ? xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
+                                            : xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
     mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
 
     // Set up the layout, either narrow or wide
@@ -218,7 +218,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         // Time zone checkbox
         mNoTimeZone = new CheckBox(i18nc("@option:check", "Ignore time zone"), topWidget);
         connect(mNoTimeZone, SIGNAL(toggled(bool)), SLOT(slotTimeZoneToggled(bool)));
-        mNoTimeZone->setWhatsThis(i18nc("@info:whatsthis",
+        mNoTimeZone->setWhatsThis(xi18nc("@info:whatsthis",
                                         "<para>Check to use the local computer time, ignoring time zones.</para>"
                                         "<para>You are recommended not to use this option if the alarm has a "
                                         "recurrence specified in hours/minutes. If you do, the alarm may "

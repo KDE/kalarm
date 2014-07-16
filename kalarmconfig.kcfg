@@ -134,7 +134,7 @@
       <label context="@label">Delay before message window buttons are enabled</label>
       <whatsthis context="@info:whatsthis">&lt;para>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled.
         &lt;list>&lt;item>0 to position message windows as far from the cursor as possible with no enable delay.&lt;/item>
-        &lt;item>&gt; 0 to position in center of screen and specify delay before enabling buttons.&lt;/item>
+        &lt;item>> 0 to position in center of screen and specify delay before enabling buttons.&lt;/item>
         &lt;item>-1 for no special positioning and no enable delay.&lt;/item>&lt;/list>&lt;/para>
       </whatsthis>
       <default>0</default>

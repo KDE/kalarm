@@ -404,7 +404,7 @@ void MainWindow::show()
         // Show error message now that the main window has been displayed.
         // Waiting until now lets the user easily associate the message with
         // the main window which is faulty.
-        KAMessageBox::error(this, i18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", UI_FILE));
+        KAMessageBox::error(this, xi18nc("@info", "Failure to create menus (perhaps <filename>%1</filename> missing or corrupted)", UI_FILE));
         mMenuError = false;
     }
 }
