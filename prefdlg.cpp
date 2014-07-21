@@ -189,12 +189,11 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
     mEditPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("document-properties"))));
     addPage(mEditPageItem);
-
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
-    connect(this, SIGNAL(cancelClicked()), SLOT(slotCancel()));
-    connect(this, SIGNAL(applyClicked()), SLOT(slotApply()));
-    connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));
-    connect(this, SIGNAL(helpClicked()), SLOT(slotHelp()));
+    connect(button(QDialogButtonBox::Ok), SIGNAL(clicked()), SLOT(slotOk()));
+    connect(button(QDialogButtonBox::Cancel), SIGNAL(clicked()), SLOT(slotCancel()));
+    connect(button(QDialogButtonBox::Apply), SIGNAL(clicked()), SLOT(slotApply()));
+    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()), SLOT(slotDefault()));
+    connect(button(QDialogButtonBox::Help), SIGNAL(clicked()), SLOT(slotHelp()));
     restore(false);
     adjustSize();
 }
