@@ -27,7 +27,6 @@
 #include <kglobal.h>
 #include <kfontchooser.h>
 #include <kfontdialog.h>
-#include <kcolordialog.h>
 #include <khbox.h>
 
 #include <QGroupBox>

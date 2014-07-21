@@ -51,7 +51,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <ktoggleaction.h>
-#include <kcolordialog.h>
+#include <QColorDialog>
 
 #include <QLabel>
 #include <QPushButton>
@@ -547,7 +547,8 @@ void ResourceSelector::setColour()
         QColor colour = AkonadiModel::instance()->backgroundColor(collection);
         if (!colour.isValid())
             colour = QApplication::palette().color(QPalette::Base);
-        if (KColorDialog::getColor(colour, QColor(), this) == KColorDialog::Accepted)
+        colour = QColorDialog::getColor(QColor(), this);
+        if ( colour.isValid() )
             AkonadiModel::instance()->setBackgroundColor(collection, colour);
     }
 }
