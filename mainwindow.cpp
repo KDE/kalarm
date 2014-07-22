@@ -143,7 +143,7 @@ MainWindow::MainWindow(bool restored)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
     setObjectName(QLatin1String("MainWin"));    // used by LikeBack
-    setPlainCaption(KGlobal::mainComponent().aboutData()->programName());
+    setPlainCaption(KComponentData::mainComponent().aboutData()->programName());
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
     mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);

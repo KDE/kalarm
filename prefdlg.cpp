@@ -471,7 +471,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
         mXtermType->addButton(radio, mXtermCount);
         if (mXtermFirst < 0)
             mXtermFirst = mXtermCount;   // note the id of the first button
-        cmd.replace(QLatin1String("%t"), KGlobal::mainComponent().aboutData()->programName());
+        cmd.replace(QLatin1String("%t"), KComponentData::mainComponent().aboutData()->programName());
         cmd.replace(QLatin1String("%c"), QLatin1String("<command>"));
         cmd.replace(QLatin1String("%w"), QLatin1String("<command; sleep>"));
         cmd.replace(QLatin1String("%C"), QLatin1String("[command]"));

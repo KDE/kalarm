@@ -307,7 +307,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(subject);
 
     KMime::Headers::UserAgent* agent = new KMime::Headers::UserAgent;
-    agent->fromUnicodeString(KGlobal::mainComponent().aboutData()->programName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
+    agent->fromUnicodeString(KComponentData::mainComponent().aboutData()->programName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
     message.setHeader(agent);
 
     KMime::Headers::MessageID* id = new KMime::Headers::MessageID;

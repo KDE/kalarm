@@ -2070,7 +2070,7 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
     qDebug() << command << "," << event.id();
     tempScriptFile.clear();
     QString cmd = Preferences::cmdXTermCommand();
-    cmd.replace(QLatin1String("%t"), KGlobal::mainComponent().aboutData()->programName());     // set the terminal window title
+    cmd.replace(QLatin1String("%t"), KComponentData::mainComponent().aboutData()->programName());     // set the terminal window title
     if (cmd.indexOf(QLatin1String("%C")) >= 0)
     {
         // Execute the command from a temporary script file
@@ -2297,7 +2297,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
     {
         mKSpeech = new OrgKdeKSpeechInterface(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, QDBusConnection::sessionBus());
         mKSpeech->setParent(theApp());
-        mKSpeech->setApplicationName(KGlobal::mainComponent().aboutData()->programName());
+        mKSpeech->setApplicationName(KComponentData::mainComponent().aboutData()->programName());
         mKSpeech->setDefaultPriority(KSpeech::jpMessage);
     }
 #endif

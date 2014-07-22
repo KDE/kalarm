@@ -734,7 +734,7 @@ void MessageWin::initView()
     }
 
     // KAlarm button
-    const QPixmap pixmap = iconLoader.loadIcon(KGlobal::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
+    const QPixmap pixmap = iconLoader.loadIcon(KComponentData::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
     mKAlarmButton = new PushButton(topWidget);
     mKAlarmButton->setIcon(pixmap);
     connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
