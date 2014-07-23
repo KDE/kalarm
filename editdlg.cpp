@@ -235,7 +235,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         label->setFixedSize(label->sizeHint());
         mTemplateName = new QLineEdit(box);
         mTemplateName->setReadOnly(mReadOnly);
-        connect(mTemplateName, SIGNAL(userTextChanged(QString)), SLOT(contentsChanged()));
+        connect(mTemplateName, SIGNAL(textEdited(QString)), SLOT(contentsChanged()));
         label->setBuddy(mTemplateName);
         box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
         box->setFixedHeight(box->sizeHint().height());
