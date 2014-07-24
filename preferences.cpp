@@ -99,7 +99,7 @@ Preferences::Preferences()
     QObject::connect(this, SIGNAL(base_HolidayRegionChanged(QString)), SLOT(holidaysChange(QString)));
     QObject::connect(this, SIGNAL(base_WorkTimeChanged(QDateTime,QDateTime,int)), SLOT(workTimeChange(QDateTime,QDateTime,int)));
 
-    readConfig();
+    load();
     // Fetch the KAlarm version and backend which wrote the previous config file
     mPreviousVersion = version();
     mPreviousBackend = backend();

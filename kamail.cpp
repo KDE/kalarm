@@ -182,7 +182,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             transport->setRequiresAuthentication(false);
             transport->setStorePassword(false);
             manager->addTransport(transport);
-            transport->writeConfig();
+            transport->save();
             qDebug() << "Creating sendmail transport, id=" << transport->id();
         }
     }
