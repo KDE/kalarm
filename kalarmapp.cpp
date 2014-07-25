@@ -2119,7 +2119,7 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
 */
 QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell, const KAEvent& event, const KAAlarm& alarm) const
 {
-    KTemporaryFile tmpFile;
+    QTemporaryFile tmpFile;
     tmpFile.setAutoRemove(false);     // don't delete file when it is destructed
     if (!tmpFile.open())
         qCritical() << "Unable to create a temporary script file";

@@ -210,7 +210,7 @@ bool AlarmCalendar::open()
                 created = saveCal(mICalUrl.toLocalFile());
             else
             {
-                KTemporaryFile tmpFile;
+                QTemporaryFile tmpFile;
                 tmpFile.setAutoRemove(false);
                 tmpFile.open();
                 created = saveCal(tmpFile.fileName());
@@ -749,11 +749,11 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     {
         // One or more alarms have been exported to the calendar.
         // Save the calendar to file.
-        KTemporaryFile* tempFile = 0;
+        QTemporaryFile* tempFile = 0;
         bool local = url.isLocalFile();
         if (!local)
         {
-            tempFile = new KTemporaryFile;
+            tempFile = new QTemporaryFile;
             file = tempFile->fileName();
         }
         calStorage->setFileName(file);
