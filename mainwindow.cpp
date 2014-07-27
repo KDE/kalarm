@@ -52,7 +52,7 @@
 using namespace KCalCore;
 using namespace KCalUtils;
 
-#include <kmenubar.h>
+#include <QMenuBar>
 #include <ktoolbar.h>
 #include <QMenu>
 #include <kaction.h>
