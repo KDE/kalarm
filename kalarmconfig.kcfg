@@ -7,7 +7,7 @@
 
   <include>"timeperiod.h"</include>
   <include>"kalocale.h"</include>
-  <include>KGlobalSettings</include>
+  <include>QFontDatabase</include>
   <include>KColorScheme</include>
   <include>QFont</include>
   <include>QColor</include>
@@ -90,7 +90,7 @@
     <entry name="MessageFont" type="Font">
       <label context="@label">Message font</label>
       <whatsthis context="@info:whatsthis">Default font for displaying alarm messages.</whatsthis>
-      <default code="true">QFont(KGlobalSettings::generalFont().family(), 16, QFont::Bold)</default>
+      <default code="true">QFont(QFontDatabase::systemFont(QFontDatabase::GeneralFont).family(), 16, QFont::Bold)</default>
       <!-- <emit signal="messageFontChanged"/> -->
     </entry>
     <entry name="ShowInSystemTray" type="Bool">
