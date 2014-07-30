@@ -28,7 +28,10 @@
 
 class QString;
 
-namespace KPIMIdentities { class IdentityManager; }
+namespace KPIMIdentities
+{
+class IdentityManager;
+}
 
 namespace KAlarmCal
 {
@@ -40,18 +43,17 @@ namespace KAlarmCal
  */
 namespace Identities
 {
-    /** Return the unique identity manager instance. It is created if it does not already exist. */
-    KALARMCAL_EXPORT KPIMIdentities::IdentityManager* identityManager();
+/** Return the unique identity manager instance. It is created if it does not already exist. */
+KALARMCAL_EXPORT KPIMIdentities::IdentityManager *identityManager();
 
-    /** Return whether any identities exist. */
-    KALARMCAL_EXPORT bool identitiesExist();
+/** Return whether any identities exist. */
+KALARMCAL_EXPORT bool identitiesExist();
 
-    /** Fetch the uoid of an identity name or uoid string. */
-    KALARMCAL_EXPORT uint identityUoid(const QString& identityUoidOrName);
+/** Fetch the uoid of an identity name or uoid string. */
+KALARMCAL_EXPORT uint identityUoid(const QString &identityUoidOrName);
 }
 
 }
 
 #endif // KALARM_IDENTITIES_H
 
-// vim: et sw=4:

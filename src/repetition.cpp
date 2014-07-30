@@ -29,20 +29,19 @@ namespace KAlarmCal
 
 class Repetition::Private
 {
-    public:
-        Private() : mInterval(0), mCount(0) {}
-        Private(const Duration& interval, int count)
-            : mInterval(interval), mCount(count)
-        {
-            if ((!count && interval) || (count && !interval))
-            {
-                mCount = 0;
-                mInterval = 0;
-            }
+public:
+    Private() : mInterval(0), mCount(0) {}
+    Private(const Duration &interval, int count)
+        : mInterval(interval), mCount(count)
+    {
+        if ((!count && interval) || (count && !interval)) {
+            mCount = 0;
+            mInterval = 0;
         }
+    }
 
-        Duration mInterval;   // sub-repetition interval
-        int      mCount;      // sub-repetition count (excluding the first time)
+    Duration mInterval;   // sub-repetition interval
+    int      mCount;      // sub-repetition count (excluding the first time)
 };
 
 Repetition::Repetition()
@@ -50,12 +49,12 @@ Repetition::Repetition()
 {
 }
 
-Repetition::Repetition(const Duration& interval, int count)
+Repetition::Repetition(const Duration &interval, int count)
     : d(new Private(interval, count))
 {
 }
 
-Repetition::Repetition(const Repetition& other)
+Repetition::Repetition(const Repetition &other)
     : d(new Private(*other.d))
 {
 }
@@ -65,34 +64,32 @@ Repetition::~Repetition()
     delete d;
 }
 
-Repetition& Repetition::operator=(const Repetition& other)
+Repetition &Repetition::operator=(const Repetition &other)
 {
-    if (&other != this)
+    if (&other != this) {
         *d = *other.d;
+    }
     return *this;
 }
 
-void Repetition::set(const Duration& interval, int count)
+void Repetition::set(const Duration &interval, int count)
 {
-    if (!count || !interval)
-    {
+    if (!count || !interval) {
         d->mCount = 0;
         d->mInterval = 0;
-    }
-    else
-    {
+    } else {
         d->mCount = count;
         d->mInterval = interval;
     }
 }
 
-void Repetition::set(const Duration& interval)
+void Repetition::set(const Duration &interval)
 {
-    if (d->mCount)
-    {
+    if (d->mCount) {
         d->mInterval = interval;
-        if (!interval)
+        if (!interval) {
             d->mCount = 0;
+        }
     }
 }
 
@@ -101,7 +98,7 @@ Repetition::operator bool() const
     return d->mCount;
 }
 
-bool Repetition::operator==(const Repetition& r) const
+bool Repetition::operator==(const Repetition &r) const
 {
     return d->mInterval == r.d->mInterval && d->mCount == r.d->mCount;
 }
@@ -146,20 +143,19 @@ int Repetition::intervalSeconds() const
     return d->mInterval.asSeconds();
 }
 
-int Repetition::nextRepeatCount(const KDateTime& from, const KDateTime& preDateTime) const
+int Repetition::nextRepeatCount(const KDateTime &from, const KDateTime &preDateTime) const
 {
     return d->mInterval.isDaily()
-         ? from.daysTo(preDateTime) / d->mInterval.asDays() + 1
-         : static_cast<int>(from.secsTo_long(preDateTime) / d->mInterval.asSeconds()) + 1;
+           ? from.daysTo(preDateTime) / d->mInterval.asDays() + 1
+           : static_cast<int>(from.secsTo_long(preDateTime) / d->mInterval.asSeconds()) + 1;
 }
 
-int Repetition::previousRepeatCount(const KDateTime& from, const KDateTime& afterDateTime) const
+int Repetition::previousRepeatCount(const KDateTime &from, const KDateTime &afterDateTime) const
 {
     return d->mInterval.isDaily()
-         ? from.daysTo(afterDateTime.addSecs(-1)) / d->mInterval.asDays()
-         : static_cast<int>((from.secsTo_long(afterDateTime) - 1) / d->mInterval.asSeconds());
+           ? from.daysTo(afterDateTime.addSecs(-1)) / d->mInterval.asDays()
+           : static_cast<int>((from.secsTo_long(afterDateTime) - 1) / d->mInterval.asSeconds());
 }
 
 } // namespace KAlarmCal
 
-// vim: et sw=4:

@@ -21,7 +21,6 @@
  */
 #include "datetime.h"
 
-
 #include <klocale.h>
 #include <klocalizedstring.h>
 #include <ktimezone.h>
@@ -34,15 +33,15 @@ namespace KAlarmCal
 
 class DateTime::Private
 {
-    public:
-        Private() {}
-        Private(const QDate& d, const KDateTime::Spec& spec) : mDateTime(d, spec) {}
-        Private(const QDate& d, const QTime& t, const KDateTime::Spec& spec) : mDateTime(d, t, spec) {}
-        Private(const QDateTime& dt, const KDateTime::Spec& spec) : mDateTime(dt, spec) {}
-        Private(const KDateTime& dt) : mDateTime(dt) {}
+public:
+    Private() {}
+    Private(const QDate &d, const KDateTime::Spec &spec) : mDateTime(d, spec) {}
+    Private(const QDate &d, const QTime &t, const KDateTime::Spec &spec) : mDateTime(d, t, spec) {}
+    Private(const QDateTime &dt, const KDateTime::Spec &spec) : mDateTime(dt, spec) {}
+    Private(const KDateTime &dt) : mDateTime(dt) {}
 
-        static QTime mStartOfDay;
-        KDateTime    mDateTime;
+    static QTime mStartOfDay;
+    KDateTime    mDateTime;
 };
 
 QTime DateTime::Private::mStartOfDay;
@@ -52,27 +51,27 @@ DateTime::DateTime()
 {
 }
 
-DateTime::DateTime(const QDate& d, const KDateTime::Spec& spec)
+DateTime::DateTime(const QDate &d, const KDateTime::Spec &spec)
     : d(new Private(d, spec))
 {
 }
 
-DateTime::DateTime(const QDate& d, const QTime& t, const KDateTime::Spec& spec)
+DateTime::DateTime(const QDate &d, const QTime &t, const KDateTime::Spec &spec)
     : d(new Private(d, t, spec))
 {
 }
 
-DateTime::DateTime(const QDateTime& dt, const KDateTime::Spec& spec)
+DateTime::DateTime(const QDateTime &dt, const KDateTime::Spec &spec)
     : d(new Private(dt, spec))
 {
 }
 
-DateTime::DateTime(const KDateTime& dt)
+DateTime::DateTime(const KDateTime &dt)
     : d(new Private(dt))
 {
 }
 
-DateTime::DateTime(const DateTime& dt)
+DateTime::DateTime(const DateTime &dt)
     : d(new Private(*dt.d))
 {
 }
@@ -82,14 +81,15 @@ DateTime::~DateTime()
     delete d;
 }
 
-DateTime& DateTime::operator=(const DateTime& dt)
+DateTime &DateTime::operator=(const DateTime &dt)
 {
-    if (&dt != this)
+    if (&dt != this) {
         *d = *dt.d;
+    }
     return *this;
 }
 
-DateTime& DateTime::operator=(const KDateTime& dt)
+DateTime &DateTime::operator=(const KDateTime &dt)
 {
     d->mDateTime = dt;
     return *this;
@@ -120,7 +120,7 @@ QDate DateTime::date() const
     return d->mDateTime.date();
 }
 
-void DateTime::setDate(const QDate& date)
+void DateTime::setDate(const QDate &date)
 {
     d->mDateTime.setDate(date);
 }
@@ -140,15 +140,14 @@ QTime DateTime::effectiveTime() const
     return d->mDateTime.isDateOnly() ? d->mStartOfDay : d->mDateTime.time();
 }
 
-void DateTime::setTime(const QTime& t)
+void DateTime::setTime(const QTime &t)
 {
     d->mDateTime.setTime(t);
 }
 
 QDateTime DateTime::effectiveDateTime() const
 {
-    if (d->mDateTime.isDateOnly())
-    {
+    if (d->mDateTime.isDateOnly()) {
         QDateTime dt = d->mDateTime.dateTime();    // preserve Qt::UTC or Qt::LocalTime
         dt.setTime(d->mStartOfDay);
         return dt;
@@ -156,15 +155,14 @@ QDateTime DateTime::effectiveDateTime() const
     return d->mDateTime.dateTime();
 }
 
-void DateTime::setDateTime(const QDateTime& dt)
+void DateTime::setDateTime(const QDateTime &dt)
 {
     d->mDateTime.setDateTime(dt);
 }
 
 KDateTime DateTime::effectiveKDateTime() const
 {
-    if (d->mDateTime.isDateOnly())
-    {
+    if (d->mDateTime.isDateOnly()) {
         KDateTime dt = d->mDateTime;
         dt.setTime(d->mStartOfDay);
         return dt;
@@ -174,8 +172,7 @@ KDateTime DateTime::effectiveKDateTime() const
 
 KDateTime DateTime::calendarKDateTime() const
 {
-    if (d->mDateTime.isDateOnly())
-    {
+    if (d->mDateTime.isDateOnly()) {
         KDateTime dt = d->mDateTime;
         dt.setTime(QTime(0, 0));
         return dt;
@@ -263,7 +260,7 @@ DateTime DateTime::toClockTime() const
     return DateTime(d->mDateTime.toClockTime());
 }
 
-DateTime DateTime::toZone(const KTimeZone& zone) const
+DateTime DateTime::toZone(const KTimeZone &zone) const
 {
     return DateTime(d->mDateTime.toZone(zone));
 }
@@ -308,40 +305,42 @@ DateTime DateTime::addYears(int n) const
     return DateTime(d->mDateTime.addYears(n));
 }
 
-int DateTime::daysTo(const DateTime& dt) const
+int DateTime::daysTo(const DateTime &dt) const
 {
     return d->mDateTime.daysTo(dt.d->mDateTime);
 }
 
-int DateTime::minsTo(const DateTime& dt) const
+int DateTime::minsTo(const DateTime &dt) const
 {
     return d->mDateTime.secsTo(dt.d->mDateTime) / 60;
 }
 
-int DateTime::secsTo(const DateTime& dt) const
+int DateTime::secsTo(const DateTime &dt) const
 {
     return d->mDateTime.secsTo(dt.d->mDateTime);
 }
 
-qint64 DateTime::secsTo_long(const DateTime& dt) const
+qint64 DateTime::secsTo_long(const DateTime &dt) const
 {
     return d->mDateTime.secsTo_long(dt.d->mDateTime);
 }
 
 QString DateTime::toString(Qt::DateFormat f) const
 {
-    if (d->mDateTime.isDateOnly())
+    if (d->mDateTime.isDateOnly()) {
         return d->mDateTime.date().toString(f);
-    else
+    } else {
         return d->mDateTime.dateTime().toString(f);
+    }
 }
 
-QString DateTime::toString(const QString& format) const
+QString DateTime::toString(const QString &format) const
 {
-    if (d->mDateTime.isDateOnly())
+    if (d->mDateTime.isDateOnly()) {
         return d->mDateTime.date().toString(format);
-    else
+    } else {
         return d->mDateTime.dateTime().toString(format);
+    }
 }
 
 QString DateTime::formatLocale(bool shortFormat) const
@@ -349,7 +348,7 @@ QString DateTime::formatLocale(bool shortFormat) const
     return KLocale::global()->formatDateTime(d->mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
 }
 
-void DateTime::setStartOfDay(const QTime& sod)
+void DateTime::setStartOfDay(const QTime &sod)
 {
     Private::mStartOfDay = sod;
 }
@@ -364,26 +363,24 @@ QTime DateTime::startOfDay()
     return Private::mStartOfDay;
 }
 
-bool operator==(const DateTime& dt1, const DateTime& dt2)
+bool operator==(const DateTime &dt1, const DateTime &dt2)
 {
     return dt1.d->mDateTime == dt2.d->mDateTime;
 }
 
-bool operator==(const KDateTime& dt1, const DateTime& dt2)
+bool operator==(const KDateTime &dt1, const DateTime &dt2)
 {
     return dt1 == dt2.d->mDateTime;
 }
 
-bool operator<(const DateTime& dt1, const DateTime& dt2)
+bool operator<(const DateTime &dt1, const DateTime &dt2)
 {
-    if (dt1.d->mDateTime.isDateOnly()  &&  !dt2.d->mDateTime.isDateOnly())
-    {
+    if (dt1.d->mDateTime.isDateOnly()  &&  !dt2.d->mDateTime.isDateOnly()) {
         KDateTime dt = dt1.d->mDateTime.addDays(1);
         dt.setTime(DateTime::Private::mStartOfDay);
         return dt <= dt2.d->mDateTime;
     }
-    if (!dt1.d->mDateTime.isDateOnly()  &&  dt2.d->mDateTime.isDateOnly())
-    {
+    if (!dt1.d->mDateTime.isDateOnly()  &&  dt2.d->mDateTime.isDateOnly()) {
         KDateTime dt = dt2.d->mDateTime;
         dt.setTime(DateTime::Private::mStartOfDay);
         return dt1.d->mDateTime < dt;
@@ -393,4 +390,3 @@ bool operator<(const DateTime& dt1, const DateTime& dt2)
 
 } // namespace KAlarmCal
 
-// vim: et sw=4:

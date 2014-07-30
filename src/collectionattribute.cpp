@@ -29,15 +29,15 @@ namespace KAlarmCal
 
 class CollectionAttribute::Private
 {
-    public:
-        Private() : mEnabled(CalEvent::EMPTY),
-                    mStandard(CalEvent::EMPTY),
-                    mKeepFormat(false)  {}
+public:
+    Private() : mEnabled(CalEvent::EMPTY),
+        mStandard(CalEvent::EMPTY),
+        mKeepFormat(false)  {}
 
-        QColor           mBackgroundColour; // background color for collection and its alarms
-        CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
-        CalEvent::Types  mStandard;         // whether the collection is a standard collection
-        bool             mKeepFormat;       // whether user has chosen to keep old calendar storage format
+    QColor           mBackgroundColour; // background color for collection and its alarms
+    CalEvent::Types  mEnabled;          // which alarm types the collection is enabled for
+    CalEvent::Types  mStandard;         // whether the collection is a standard collection
+    bool             mKeepFormat;       // whether user has chosen to keep old calendar storage format
 };
 
 CollectionAttribute::CollectionAttribute()
@@ -45,7 +45,7 @@ CollectionAttribute::CollectionAttribute()
 {
 }
 
-CollectionAttribute::CollectionAttribute(const CollectionAttribute& rhs)
+CollectionAttribute::CollectionAttribute(const CollectionAttribute &rhs)
     : Akonadi::Attribute(rhs),
       d(new Private(*rhs.d))
 {
@@ -56,17 +56,16 @@ CollectionAttribute::~CollectionAttribute()
     delete d;
 }
 
-CollectionAttribute& CollectionAttribute::operator=(const CollectionAttribute& other)
+CollectionAttribute &CollectionAttribute::operator=(const CollectionAttribute &other)
 {
-    if (&other != this)
-    {
+    if (&other != this) {
         Attribute::operator=(other);
         *d = *other.d;
     }
     return *this;
 }
 
-CollectionAttribute* CollectionAttribute::clone() const
+CollectionAttribute *CollectionAttribute::clone() const
 {
     return new CollectionAttribute(*this);
 }
@@ -83,19 +82,17 @@ CalEvent::Types CollectionAttribute::enabled() const
 
 void CollectionAttribute::setEnabled(CalEvent::Type type, bool enabled)
 {
-    switch (type)
-    {
-        case CalEvent::ACTIVE:
-        case CalEvent::ARCHIVED:
-        case CalEvent::TEMPLATE:
-            break;
-        default:
-            return;
+    switch (type) {
+    case CalEvent::ACTIVE:
+    case CalEvent::ARCHIVED:
+    case CalEvent::TEMPLATE:
+        break;
+    default:
+        return;
     }
-    if (enabled)
+    if (enabled) {
         d->mEnabled |= type;
-    else
-    {
+    } else {
         d->mEnabled  &= ~type;
         d->mStandard &= ~type;
     }
@@ -109,14 +106,13 @@ void CollectionAttribute::setEnabled(CalEvent::Types types)
 
 bool CollectionAttribute::isStandard(CalEvent::Type type) const
 {
-    switch (type)
-    {
-        case CalEvent::ACTIVE:
-        case CalEvent::ARCHIVED:
-        case CalEvent::TEMPLATE:
-            return d->mStandard & type;
-        default:
-            return false;
+    switch (type) {
+    case CalEvent::ACTIVE:
+    case CalEvent::ARCHIVED:
+    case CalEvent::TEMPLATE:
+        return d->mStandard & type;
+    default:
+        return false;
     }
 }
 
@@ -127,18 +123,18 @@ CalEvent::Types CollectionAttribute::standard() const
 
 void CollectionAttribute::setStandard(CalEvent::Type type, bool standard)
 {
-    switch (type)
-    {
-        case CalEvent::ACTIVE:
-        case CalEvent::ARCHIVED:
-        case CalEvent::TEMPLATE:
-            if (standard)
-                d->mStandard = static_cast<CalEvent::Types>(d->mStandard | type);
-            else
-                d->mStandard = static_cast<CalEvent::Types>(d->mStandard & ~type);
-            break;
-        default:
-            break;
+    switch (type) {
+    case CalEvent::ACTIVE:
+    case CalEvent::ARCHIVED:
+    case CalEvent::TEMPLATE:
+        if (standard) {
+            d->mStandard = static_cast<CalEvent::Types>(d->mStandard | type);
+        } else {
+            d->mStandard = static_cast<CalEvent::Types>(d->mStandard & ~type);
+        }
+        break;
+    default:
+        break;
     }
 }
 
@@ -152,7 +148,7 @@ QColor CollectionAttribute::backgroundColor() const
     return d->mBackgroundColour;
 }
 
-void CollectionAttribute::setBackgroundColor(const QColor& c)
+void CollectionAttribute::setBackgroundColor(const QColor &c)
 {
     d->mBackgroundColour = c;
 }
@@ -180,20 +176,20 @@ QByteArray CollectionAttribute::name()
 QByteArray CollectionAttribute::serialized() const
 {
     QByteArray v = QByteArray::number(d->mEnabled) + ' '
-                 + QByteArray::number(d->mStandard) + ' '
-                 + QByteArray(d->mKeepFormat ? "1" : "0") + ' '
-                 + QByteArray(d->mBackgroundColour.isValid() ? "1" : "0");
+                   + QByteArray::number(d->mStandard) + ' '
+                   + QByteArray(d->mKeepFormat ? "1" : "0") + ' '
+                   + QByteArray(d->mBackgroundColour.isValid() ? "1" : "0");
     if (d->mBackgroundColour.isValid())
         v += ' '
-          + QByteArray::number(d->mBackgroundColour.red()) + ' '
-          + QByteArray::number(d->mBackgroundColour.green()) + ' '
-          + QByteArray::number(d->mBackgroundColour.blue()) + ' '
-          + QByteArray::number(d->mBackgroundColour.alpha());
+             + QByteArray::number(d->mBackgroundColour.red()) + ' '
+             + QByteArray::number(d->mBackgroundColour.green()) + ' '
+             + QByteArray::number(d->mBackgroundColour.blue()) + ' '
+             + QByteArray::number(d->mBackgroundColour.alpha());
     qDebug() << v;
     return v;
 }
 
-void CollectionAttribute::deserialize(const QByteArray& data)
+void CollectionAttribute::deserialize(const QByteArray &data)
 {
     qDebug() << data;
 
@@ -208,56 +204,51 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     const QList<QByteArray> items = data.simplified().split(' ');
     int count = items.count();
     int index = 0;
-    if (count > index)
-    {
+    if (count > index) {
         // 0: type(s) of alarms for which the collection is enabled
         c[0] = items[index++].toInt(&ok);
-        if (!ok  ||  (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE)))
-        {
+        if (!ok  || (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE))) {
             qCritical() << "Invalid alarm types:" << c[0];
             return;
         }
         d->mEnabled = static_cast<CalEvent::Types>(c[0]);
     }
-    if (count > index)
-    {
+    if (count > index) {
         // 1: type(s) of alarms for which the collection is the standard collection
         c[0] = items[index++].toInt(&ok);
-        if (!ok  ||  (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE)))
-        {
+        if (!ok  || (c[0] & ~(CalEvent::ACTIVE | CalEvent::ARCHIVED | CalEvent::TEMPLATE))) {
             qCritical() << "Invalid alarm types:" << c[0];
             return;
         }
-        if (d->mEnabled)
+        if (d->mEnabled) {
             d->mStandard = static_cast<CalEvent::Types>(c[0]);
+        }
     }
-    if (count > index)
-    {
+    if (count > index) {
         // 2: keep old calendar storage format
         c[0] = items[index++].toInt(&ok);
-        if (!ok)
+        if (!ok) {
             return;
+        }
         d->mKeepFormat = c[0];
     }
-    if (count > index)
-    {
+    if (count > index) {
         // 3: background color valid flag
         c[0] = items[index++].toInt(&ok);
-        if (!ok)
+        if (!ok) {
             return;
-        if (c[0])
-        {
-            if (count < index + 4)
-            {
+        }
+        if (c[0]) {
+            if (count < index + 4) {
                 qCritical() << "Invalid number of background color elements";
                 return;
             }
             // 4-7: background color elements
-            for (int i = 0;  i < 4;  ++i)
-            {
+            for (int i = 0;  i < 4;  ++i) {
                 c[i] = items[index++].toInt(&ok);
-                if (!ok)
+                if (!ok) {
                     return;
+                }
             }
             d->mBackgroundColour.setRgb(c[0], c[1], c[2], c[3]);
         }
@@ -266,4 +257,3 @@ void CollectionAttribute::deserialize(const QByteArray& data)
 
 } // namespace KAlarmCal
 
-// vim: et sw=4:

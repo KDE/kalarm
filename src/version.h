@@ -33,7 +33,7 @@ namespace KAlarmCal
 KALARMCAL_EXPORT int Version(int major, int minor, int rev);
 
 /** Convert a version string to an integer. */
-KALARMCAL_EXPORT int getVersionNumber(const QString& version, QString* subVersion = 0);
+KALARMCAL_EXPORT int getVersionNumber(const QString &version, QString *subVersion = 0);
 
 /** Convert a version integer to a string. */
 KALARMCAL_EXPORT QString getVersionString(int version);
@@ -42,4 +42,3 @@ KALARMCAL_EXPORT QString getVersionString(int version);
 
 #endif // KALARM_VERSION_H
 
-// vim: et sw=4:

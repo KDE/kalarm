@@ -25,17 +25,18 @@
 #include <identitymanager.h>
 #include <identity.h>
 
-static KPIMIdentities::IdentityManager* mIdentityManager = 0;
+static KPIMIdentities::IdentityManager *mIdentityManager = 0;
 
 namespace KAlarmCal
 {
 namespace Identities
 {
 
-KPIMIdentities::IdentityManager* identityManager()
+KPIMIdentities::IdentityManager *identityManager()
 {
-    if (!mIdentityManager)
-        mIdentityManager = new KPIMIdentities::IdentityManager(true);   // create a read-only kmail identity manager
+    if (!mIdentityManager) {
+        mIdentityManager = new KPIMIdentities::IdentityManager(true);    // create a read-only kmail identity manager
+    }
     return mIdentityManager;
 }
 
@@ -51,18 +52,15 @@ bool identitiesExist()
 /******************************************************************************
 * Fetch the uoid of an email identity name or uoid string.
 */
-uint identityUoid(const QString& identityUoidOrName)
+uint identityUoid(const QString &identityUoidOrName)
 {
     bool ok;
     uint id = identityUoidOrName.toUInt(&ok);
-    if (!ok  ||  identityManager()->identityForUoid(id).isNull())
-    {
+    if (!ok  ||  identityManager()->identityForUoid(id).isNull()) {
         identityManager();   // fetch it if not already done
         for (KPIMIdentities::IdentityManager::ConstIterator it = mIdentityManager->begin();
-             it != mIdentityManager->end();  ++it)
-        {
-            if ((*it).identityName() == identityUoidOrName)
-            {
+                it != mIdentityManager->end();  ++it) {
+            if ((*it).identityName() == identityUoidOrName) {
                 id = (*it).uoid();
                 break;
             }
@@ -75,4 +73,3 @@ uint identityUoid(const QString& identityUoidOrName)
 
 } // namespace KAlarmCal
 
-// vim: et sw=4:

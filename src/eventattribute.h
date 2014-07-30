@@ -46,41 +46,40 @@ namespace KAlarmCal
 
 class KALARMCAL_EXPORT EventAttribute : public Akonadi::Attribute
 {
-    public:
-        EventAttribute();
+public:
+    EventAttribute();
 
-        /** Copy constructor. */
-        EventAttribute(const EventAttribute& other);
+    /** Copy constructor. */
+    EventAttribute(const EventAttribute &other);
 
-        /** Assignment operator. */
-        EventAttribute& operator=(const EventAttribute& other);
+    /** Assignment operator. */
+    EventAttribute &operator=(const EventAttribute &other);
 
-        virtual ~EventAttribute();
+    virtual ~EventAttribute();
 
-        /** Return the last command execution error for the item. */
-        KAEvent::CmdErrType commandError() const;
+    /** Return the last command execution error for the item. */
+    KAEvent::CmdErrType commandError() const;
 
-        /** Set the last command execution error for the item. */
-        void setCommandError(KAEvent::CmdErrType err);
+    /** Set the last command execution error for the item. */
+    void setCommandError(KAEvent::CmdErrType err);
 
-        /** Reimplemented from Attribute */
-        virtual QByteArray type() const;
-        /** Reimplemented from Attribute */
-        virtual EventAttribute* clone() const;
-        /** Reimplemented from Attribute */
-        virtual QByteArray serialized() const;
-        /** Reimplemented from Attribute */
-        virtual void deserialize(const QByteArray& data);
+    /** Reimplemented from Attribute */
+    virtual QByteArray type() const;
+    /** Reimplemented from Attribute */
+    virtual EventAttribute *clone() const;
+    /** Reimplemented from Attribute */
+    virtual QByteArray serialized() const;
+    /** Reimplemented from Attribute */
+    virtual void deserialize(const QByteArray &data);
 
-    private:
-        //@cond PRIVATE
-        class Private;
-        Private* const d;
-        //@endcond
+private:
+    //@cond PRIVATE
+    class Private;
+    Private *const d;
+    //@endcond
 };
 
 } // namespace KAlarmCal
 
 #endif // KALARM_EVENT_ATTRIBUTE_H
 
-// vim: et sw=4:

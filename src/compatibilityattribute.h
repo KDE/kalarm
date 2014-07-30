@@ -46,55 +46,54 @@ namespace KAlarmCal
 
 class KALARMCAL_EXPORT CompatibilityAttribute : public Akonadi::Attribute
 {
-    public:
-        /** Default constructor. Creates an incompatible attribute. */
-        CompatibilityAttribute();
+public:
+    /** Default constructor. Creates an incompatible attribute. */
+    CompatibilityAttribute();
 
-        /** Copy constructor. */
-        CompatibilityAttribute(const CompatibilityAttribute& other);
+    /** Copy constructor. */
+    CompatibilityAttribute(const CompatibilityAttribute &other);
 
-        /** Assignment operator. */
-        CompatibilityAttribute& operator=(const CompatibilityAttribute& other);
+    /** Assignment operator. */
+    CompatibilityAttribute &operator=(const CompatibilityAttribute &other);
 
-        virtual ~CompatibilityAttribute();
+    virtual ~CompatibilityAttribute();
 
-        /** Return the compatibility status for the entity. */
-        KACalendar::Compat compatibility() const;
+    /** Return the compatibility status for the entity. */
+    KACalendar::Compat compatibility() const;
 
-        /** Set the compatibility status for the entity. */
-        void setCompatibility(KACalendar::Compat c);
+    /** Set the compatibility status for the entity. */
+    void setCompatibility(KACalendar::Compat c);
 
-        /** Return the KAlarm version of the backend calendar format.
-         *  @return version number in the format returned by KAlarmCal::Version().
-         */
-        int version() const;
+    /** Return the KAlarm version of the backend calendar format.
+     *  @return version number in the format returned by KAlarmCal::Version().
+     */
+    int version() const;
 
-        /** Set the KAlarm version of the backend calendar format.
-         *  @param v  version number in the format returned by KAlarmCal::Version().
-         */
-        void setVersion(int v);
+    /** Set the KAlarm version of the backend calendar format.
+     *  @param v  version number in the format returned by KAlarmCal::Version().
+     */
+    void setVersion(int v);
 
-        /** Reimplemented from Attribute */
-        virtual QByteArray type() const;
-        /** Reimplemented from Attribute */
-        virtual CompatibilityAttribute* clone() const;
-        /** Reimplemented from Attribute */
-        virtual QByteArray serialized() const;
-        /** Reimplemented from Attribute */
-        virtual void deserialize(const QByteArray& data);
+    /** Reimplemented from Attribute */
+    virtual QByteArray type() const;
+    /** Reimplemented from Attribute */
+    virtual CompatibilityAttribute *clone() const;
+    /** Reimplemented from Attribute */
+    virtual QByteArray serialized() const;
+    /** Reimplemented from Attribute */
+    virtual void deserialize(const QByteArray &data);
 
-        /** Return the attribute name. */
-        static QByteArray name();
+    /** Return the attribute name. */
+    static QByteArray name();
 
-    private:
-        //@cond PRIVATE
-        class Private;
-        Private* const d;
-        //@endcond
+private:
+    //@cond PRIVATE
+    class Private;
+    Private *const d;
+    //@endcond
 };
 
 } // namespace KAlarmCal
 
 #endif // KALARM_COMPATIBILITY_ATTRIBUTE_H
 
-// vim: et sw=4:

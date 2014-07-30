@@ -30,10 +30,10 @@ namespace KAlarmCal
 
 class EventAttribute::Private
 {
-    public:
-        Private() : mCommandError(KAEvent::CMD_NO_ERROR) {}
+public:
+    Private() : mCommandError(KAEvent::CMD_NO_ERROR) {}
 
-        KAEvent::CmdErrType mCommandError;         // the last command execution error for the alarm
+    KAEvent::CmdErrType mCommandError;         // the last command execution error for the alarm
 };
 
 EventAttribute::EventAttribute()
@@ -41,7 +41,7 @@ EventAttribute::EventAttribute()
 {
 }
 
-EventAttribute::EventAttribute(const EventAttribute& rhs)
+EventAttribute::EventAttribute(const EventAttribute &rhs)
     : Akonadi::Attribute(rhs),
       d(new Private(*rhs.d))
 {
@@ -52,10 +52,9 @@ EventAttribute::~EventAttribute()
     delete d;
 }
 
-EventAttribute& EventAttribute::operator=(const EventAttribute& other)
+EventAttribute &EventAttribute::operator=(const EventAttribute &other)
 {
-    if (&other != this)
-    {
+    if (&other != this) {
         Attribute::operator=(other);
         *d = *other.d;
     }
@@ -77,7 +76,7 @@ QByteArray EventAttribute::type() const
     return "KAlarmEvent";
 }
 
-EventAttribute* EventAttribute::clone() const
+EventAttribute *EventAttribute::clone() const
 {
     return new EventAttribute(*this);
 }
@@ -89,7 +88,7 @@ QByteArray EventAttribute::serialized() const
     return v;
 }
 
-void EventAttribute::deserialize(const QByteArray& data)
+void EventAttribute::deserialize(const QByteArray &data)
 {
     qDebug() << data;
 
@@ -99,20 +98,19 @@ void EventAttribute::deserialize(const QByteArray& data)
     bool ok;
     int c[1];
     const QList<QByteArray> items = data.simplified().split(' ');
-    switch (items.count())
-    {
-        case 1:
-            c[0] = items[0].toInt(&ok);
-            if (!ok  ||  (c[0] & ~(KAEvent::CMD_ERROR | KAEvent::CMD_ERROR_PRE | KAEvent::CMD_ERROR_POST)))
-                return;
-            d->mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
-            break;
+    switch (items.count()) {
+    case 1:
+        c[0] = items[0].toInt(&ok);
+        if (!ok  || (c[0] & ~(KAEvent::CMD_ERROR | KAEvent::CMD_ERROR_PRE | KAEvent::CMD_ERROR_POST))) {
+            return;
+        }
+        d->mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 
 } // namespace KAlarmCal
 
-// vim: et sw=4:
