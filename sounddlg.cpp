@@ -33,7 +33,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <khbox.h>
+#include <QHBoxLayout>
 #include <kio/netaccess.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
@@ -159,14 +159,17 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         layout->addWidget(label);
     }
 
-    KHBox* box = new KHBox(this);
-    box->setMargin(0);
+    QWidget* box = new QWidget(this);
+    QHBoxLayout *boxHBoxLayout = new QHBoxLayout(box);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setMargin(0);
     layout->addWidget(box);
 
     if (showPlay)
     {
         // File play button
         mFilePlay = new QPushButton(box);
+        boxHBoxLayout->addWidget(mFilePlay);
         mFilePlay->setIcon(SmallIcon(QLatin1String("media-playback-start")));
         connect(mFilePlay, SIGNAL(clicked()), SLOT(playSound()));
         mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
@@ -175,6 +178,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 
     // File name edit box
     mFileEdit = new LineEdit(LineEdit::Url, box);
+    boxHBoxLayout->addWidget(mFileEdit);
     mFileEdit->setAcceptDrops(true);
     mFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a sound file to play."));
     if (label)
@@ -183,6 +187,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 
     // File browse button
     mFileBrowseButton = new PushButton(box);
+    boxHBoxLayout->addWidget(mFileBrowseButton);
     mFileBrowseButton->setIcon(KIcon(SmallIcon(QLatin1String("document-open"))));
     int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
@@ -208,18 +213,23 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         QVBoxLayout* glayout = new QVBoxLayout(mRepeatGroupBox);
 
         // Pause between repetitions
-        KHBox* box = new KHBox(mRepeatGroupBox);
-        box->setMargin(0);
-        box->setSpacing(KDialog::spacingHint());
+        QWidget* box = new QWidget(mRepeatGroupBox);
+        boxHBoxLayout = new QHBoxLayout(box);
+        boxHBoxLayout->setMargin(0);
+        boxHBoxLayout->setMargin(0);
+        boxHBoxLayout->setSpacing(KDialog::spacingHint());
         glayout->addWidget(box);
         label = new QLabel(i18nc("@label:spinbox Length of time to pause between repetitions", "Pause between repetitions:"), box);
+        boxHBoxLayout->addWidget(label);
         label->setFixedSize(label->sizeHint());
         mRepeatPause = new SpinBox(0, 999, box);
+        boxHBoxLayout->addWidget(mRepeatPause);
         mRepeatPause->setSingleShiftStep(10);
         mRepeatPause->setFixedSize(mRepeatPause->sizeHint());
         label->setBuddy(mRepeatPause);
         connect(mRepeatPause, SIGNAL(valueChanged(int)), SIGNAL(changed()));
         label = new QLabel(i18nc("@label", "seconds"), box);
+        boxHBoxLayout->addWidget(label);
         label->setFixedSize(label->sizeHint());
         box->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to pause between repetitions."));
     }
@@ -236,17 +246,21 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     grid->setColumnMinimumWidth(1, indentWidth);
 
     // 'Set volume' checkbox
-    box = new KHBox(group);
-    box->setMargin(0);
-    box->setSpacing(KDialog::spacingHint());
+    box = new QWidget(group);
+    boxHBoxLayout = new QHBoxLayout(box);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setSpacing(KDialog::spacingHint());
     grid->addWidget(box, 1, 0, 1, 3);
     mVolumeCheckbox = new CheckBox(i18nc("@option:check", "Set volume"), box);
+    boxHBoxLayout->addWidget(mVolumeCheckbox);
     mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
     connect(mVolumeCheckbox, SIGNAL(toggled(bool)), SLOT(slotVolumeToggled(bool)));
     mVolumeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to choose the volume for playing the sound file."));
 
     // Volume slider
     mVolumeSlider = new Slider(0, 100, 10, Qt::Horizontal, box);
+    boxHBoxLayout->addWidget(mVolumeSlider);
     mVolumeSlider->setTickPosition(QSlider::TicksBelow);
     mVolumeSlider->setTickInterval(10);
     mVolumeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -262,29 +276,38 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     grid->addWidget(mFadeCheckbox, 2, 1, 1, 2, Qt::AlignLeft);
 
     // Fade time
-    mFadeBox = new KHBox(group);
-    mFadeBox->setMargin(0);
-    mFadeBox->setSpacing(KDialog::spacingHint());
+    mFadeBox = new QWidget(group);
+    QHBoxLayout *mFadeBoxHBoxLayout = new QHBoxLayout(mFadeBox);
+    mFadeBoxHBoxLayout->setMargin(0);
+    mFadeBoxHBoxLayout->setMargin(0);
+    mFadeBoxHBoxLayout->setSpacing(KDialog::spacingHint());
     grid->addWidget(mFadeBox, 3, 2, Qt::AlignLeft);
     label = new QLabel(i18nc("@label:spinbox Time period over which to fade the sound", "Fade time:"), mFadeBox);
+    mFadeBoxHBoxLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
     mFadeTime = new SpinBox(1, 999, mFadeBox);
+    mFadeBoxHBoxLayout->addWidget(mFadeTime);
     mFadeTime->setSingleShiftStep(10);
     mFadeTime->setFixedSize(mFadeTime->sizeHint());
     label->setBuddy(mFadeTime);
     connect(mFadeTime, SIGNAL(valueChanged(int)), SIGNAL(changed()));
     label = new QLabel(i18nc("@label", "seconds"), mFadeBox);
+    mFadeBoxHBoxLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
     mFadeBox->setWhatsThis(i18nc("@info:whatsthis", "Enter how many seconds to fade the sound before reaching the set volume."));
 
     // Fade slider
-    mFadeVolumeBox = new KHBox(group);
-    mFadeVolumeBox->setMargin(0);
-    mFadeVolumeBox->setSpacing(KDialog::spacingHint());
+    mFadeVolumeBox = new QWidget(group);
+    QHBoxLayout *mFadeVolumeBoxHBoxLayout = new QHBoxLayout(mFadeVolumeBox);
+    mFadeVolumeBoxHBoxLayout->setMargin(0);
+    mFadeVolumeBoxHBoxLayout->setMargin(0);
+    mFadeVolumeBoxHBoxLayout->setSpacing(KDialog::spacingHint());
     grid->addWidget(mFadeVolumeBox, 4, 2);
     label = new QLabel(i18nc("@label:slider", "Initial volume:"), mFadeVolumeBox);
+    mFadeVolumeBoxHBoxLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
     mFadeSlider = new Slider(0, 100, 10, Qt::Horizontal, mFadeVolumeBox);
+    mFadeVolumeBoxHBoxLayout->addWidget(mFadeSlider);
     mFadeSlider->setTickPosition(QSlider::TicksBelow);
     mFadeSlider->setTickInterval(10);
     mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));

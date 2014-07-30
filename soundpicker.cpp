@@ -33,7 +33,7 @@
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <khbox.h>
+#include <QHBoxLayout>
 #include <phonon/backendcapabilities.h>
 #include <qdebug.h>
 
@@ -62,11 +62,14 @@ SoundPicker::SoundPicker(QWidget* parent)
     QHBoxLayout* soundLayout = new QHBoxLayout(this);
     soundLayout->setMargin(0);
     soundLayout->setSpacing(KDialog::spacingHint());
-    mTypeBox = new KHBox(this);    // this is to control the QWhatsThis text display area
-    mTypeBox->setMargin(0);
-    mTypeBox->setSpacing(KDialog::spacingHint());
+    mTypeBox = new QWidget(this);    // this is to control the QWhatsThis text display area
+    QHBoxLayout *mTypeBoxHBoxLayout = new QHBoxLayout(mTypeBox);
+    mTypeBoxHBoxLayout->setMargin(0);
+    mTypeBoxHBoxLayout->setMargin(0);
+    mTypeBoxHBoxLayout->setSpacing(KDialog::spacingHint());
 
     QLabel* label = new QLabel(i18n_label_Sound(), mTypeBox);
+    mTypeBoxHBoxLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
 
     // Sound type combo box
@@ -80,6 +83,7 @@ SoundPicker::SoundPicker(QWidget* parent)
     }
 
     mTypeCombo = new ComboBox(mTypeBox);
+    mTypeBoxHBoxLayout->addWidget(mTypeCombo);
     mTypeCombo->addItem(i18n_combo_None());     // index None
     mTypeCombo->addItem(i18n_combo_Beep());     // index Beep
     mTypeCombo->addItem(i18n_combo_File());     // index PlayFile

@@ -58,7 +58,7 @@ using namespace KCalCore;
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
-#include <khbox.h>
+#include <QHBoxLayout>
 #include <qdebug.h>
 
 #include <QLabel>
@@ -145,12 +145,16 @@ QString EditDisplayAlarmDlg::type_caption() const
 void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
     // Display type combo box
-    KHBox* box = new KHBox(parent);    // to group widgets for QWhatsThis text
-    box->setMargin(0);
-    box->setSpacing(KDialog::spacingHint());
+    QWidget* box = new QWidget(parent);    // to group widgets for QWhatsThis text
+    QHBoxLayout *boxHBoxLayout = new QHBoxLayout(box);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setSpacing(KDialog::spacingHint());
     QLabel* label = new QLabel(i18nc("@label:listbox", "Display type:"), box);
+    boxHBoxLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
     mTypeCombo = new ComboBox(box);
+    boxHBoxLayout->addWidget(mTypeCombo);
     QString textItem    = i18nc("@item:inlistbox", "Text message");
     QString fileItem    = i18nc("@item:inlistbox", "File contents");
     QString commandItem = i18nc("@item:inlistbox", "Command output");
@@ -179,7 +183,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
           "<item><interface>%2</interface>: the alarm will display the contents of a text or image file.</item>"
           "<item><interface>%3</interface>: the alarm will display the output from a command.</item></list></para>",
           textItem, fileItem, commandItem));
-    box->setStretchFactor(new QWidget(box), 1);    // left adjust the control
+    boxHBoxLayout->setStretchFactor(new QWidget(box), 1);    // left adjust the control
     frameLayout->addWidget(box);
 
     // Text message edit box
@@ -190,16 +194,20 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     frameLayout->addWidget(mTextMessageEdit);
 
     // File name edit box
-    mFileBox = new KHBox(parent);
-    mFileBox->setMargin(0);
+    mFileBox = new QWidget(parent);
+    QHBoxLayout *mFileBoxHBoxLayout = new QHBoxLayout(mFileBox);
+    mFileBoxHBoxLayout->setMargin(0);
+    mFileBoxHBoxLayout->setMargin(0);
     frameLayout->addWidget(mFileBox);
     mFileMessageEdit = new LineEdit(LineEdit::Url, mFileBox);
+    mFileBoxHBoxLayout->addWidget(mFileMessageEdit);
     mFileMessageEdit->setAcceptDrops(true);
     mFileMessageEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a text or image file to display."));
     connect(mFileMessageEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
 
     // File browse button
     mFileBrowseButton = new QPushButton(mFileBox);
+    mFileBoxHBoxLayout->addWidget(mFileBrowseButton);
     mFileBrowseButton->setIcon(SmallIcon(QLatin1String("document-open")));
     int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
@@ -241,8 +249,10 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     }
 
     // Top-adjust the controls
-    mFilePadding = new KHBox(parent);
-    mFilePadding->setMargin(0);
+    mFilePadding = new QWidget(parent);
+    QHBoxLayout *mFilePaddingHBoxLayout = new QHBoxLayout(mFilePadding);
+    mFilePaddingHBoxLayout->setMargin(0);
+    mFilePaddingHBoxLayout->setMargin(0);
     frameLayout->addWidget(mFilePadding);
     frameLayout->setStretchFactor(mFilePadding, 1);
 }
@@ -783,10 +793,13 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     vlayout->addWidget(mCmdExecInTerm, 0, Qt::AlignLeft);
 
     // Log file name edit box
-    KHBox* box = new KHBox(mCmdOutputBox);
-    box->setMargin(0);
+    QWidget* box = new QWidget(mCmdOutputBox);
+    QHBoxLayout *boxHBoxLayout = new QHBoxLayout(box);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setMargin(0);
     (new QWidget(box))->setFixedWidth(mCmdExecInTerm->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth));   // indent the edit box
     mCmdLogFileEdit = new LineEdit(LineEdit::Url, box);
+    boxHBoxLayout->addWidget(mCmdLogFileEdit);
     mCmdLogFileEdit->setAcceptDrops(true);
     mCmdLogFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or path of the log file."));
     connect(mCmdLogFileEdit, SIGNAL(textChanged(QString)), SLOT(contentsChanged()));
@@ -794,6 +807,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // Log file browse button.
     // The file browser dialog is activated by the PickLogFileRadio class.
     QPushButton* browseButton = new QPushButton(box);
+    boxHBoxLayout->addWidget(browseButton);
     browseButton->setIcon(SmallIcon(QLatin1String("document-open")));
     int size = browseButton->sizeHint().height();
     browseButton->setFixedSize(size, size);
@@ -817,8 +831,10 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     vlayout->addWidget(mCmdDiscardOutput, 0, Qt::AlignLeft);
 
     // Top-adjust the controls
-    mCmdPadding = new KHBox(parent);
-    mCmdPadding->setMargin(0);
+    mCmdPadding = new QWidget(parent);
+    QHBoxLayout *mCmdPaddingHBoxLayout = new QHBoxLayout(mCmdPadding);
+    mCmdPaddingHBoxLayout->setMargin(0);
+    mCmdPaddingHBoxLayout->setMargin(0);
     frameLayout->addWidget(mCmdPadding);
     frameLayout->setStretchFactor(mCmdPadding, 1);
 }
@@ -1517,8 +1533,10 @@ void EditAudioAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     frameLayout->addWidget(mSoundConfig);
 
     // Top-adjust the controls
-    mPadding = new KHBox(parent);
-    mPadding->setMargin(0);
+    mPadding = new QWidget(parent);
+    QHBoxLayout *mPaddingHBoxLayout = new QHBoxLayout(mPadding);
+    mPaddingHBoxLayout->setMargin(0);
+    mPaddingHBoxLayout->setMargin(0);
     frameLayout->addWidget(mPadding);
     frameLayout->setStretchFactor(mPadding, 1);
 }

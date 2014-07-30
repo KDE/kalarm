@@ -28,7 +28,7 @@
 class QPushButton;
 class QShowEvent;
 class QResizeEvent;
-class KHBox;
+
 namespace Phonon { class MediaObject; }
 class GroupBox;
 class PushButton;
@@ -81,9 +81,9 @@ class SoundWidget : public QWidget
         CheckBox*      mVolumeCheckbox;
         Slider*        mVolumeSlider;
         CheckBox*      mFadeCheckbox;
-        KHBox*         mFadeBox;
+        QWidget *         mFadeBox;
         SpinBox*       mFadeTime;
-        KHBox*         mFadeVolumeBox;
+        QWidget *         mFadeVolumeBox;
         Slider*        mFadeSlider;
         mutable KUrl         mUrl;
         mutable QString      mValidatedFile;

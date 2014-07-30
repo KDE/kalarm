@@ -26,7 +26,7 @@
 
 class QAbstractButton;
 class KDateComboBox;
-class KHBox;
+
 class ButtonGroup;
 class RadioButton;
 class CheckBox;
@@ -95,7 +95,7 @@ class AlarmTimeWidget : public QFrame
         TimeEdit*        mTimeEdit;
         TimeSpinBox*     mDelayTimeEdit;
         PushButton*      mTimeZoneButton;
-        KHBox*           mTimeZoneBox;      // contains label and time zone combo box
+        QWidget *           mTimeZoneBox;      // contains label and time zone combo box
         CheckBox*        mNoTimeZone;
         TimeZoneCombo*   mTimeZone;
         KDateTime        mMinDateTime;      // earliest allowed date/time

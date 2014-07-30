@@ -27,7 +27,7 @@
 #include <kglobal.h>
 #include <kfontchooser.h>
 #include <kfontdialog.h>
-#include <khbox.h>
+#include <QHBoxLayout>
 
 #include <QGroupBox>
 #include <QPushButton>
@@ -62,27 +62,35 @@ FontColourChooser::FontColourChooser(QWidget *parent,
     hlayout->addLayout(colourLayout);
     if (fg)
     {
-        KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
-        box->setMargin(0);
-        box->setSpacing(KDialog::spacingHint()/2);
+        QWidget* box = new QWidget(page);    // to group widgets for QWhatsThis text
+        QHBoxLayout *boxHBoxLayout = new QHBoxLayout(box);
+        boxHBoxLayout->setMargin(0);
+        boxHBoxLayout->setMargin(0);
+        boxHBoxLayout->setSpacing(KDialog::spacingHint()/2);
         colourLayout->addWidget(box);
 
         QLabel* label = new QLabel(i18nc("@label:listbox", "Foreground color:"), box);
-        box->setStretchFactor(new QWidget(box), 0);
+        boxHBoxLayout->addWidget(label);
+        boxHBoxLayout->setStretchFactor(new QWidget(box), 0);
         mFgColourButton = new ColourButton(box);
+        boxHBoxLayout->addWidget(mFgColourButton);
         connect(mFgColourButton, SIGNAL(changed(QColor)), SLOT(setSampleColour()));
         label->setBuddy(mFgColourButton);
         box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message foreground color"));
     }
 
-    KHBox* box = new KHBox(page);    // to group widgets for QWhatsThis text
-    box->setMargin(0);
-    box->setSpacing(KDialog::spacingHint()/2);
+    QWidget* box = new QWidget(page);    // to group widgets for QWhatsThis text
+    QHBoxLayout *boxHBoxLayout = new QHBoxLayout(box);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setMargin(0);
+    boxHBoxLayout->setSpacing(KDialog::spacingHint()/2);
     colourLayout->addWidget(box);
 
     QLabel* label = new QLabel(i18nc("@label:listbox", "Background color:"), box);
-    box->setStretchFactor(new QWidget(box), 0);
+    boxHBoxLayout->addWidget(label);
+    boxHBoxLayout->setStretchFactor(new QWidget(box), 0);
     mBgColourButton = new ColourButton(box);
+    boxHBoxLayout->addWidget(mBgColourButton);
     connect(mBgColourButton, SIGNAL(changed(QColor)), SLOT(setSampleColour()));
     label->setBuddy(mBgColourButton);
     box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message background color"));

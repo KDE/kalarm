@@ -27,7 +27,7 @@
 #include <QFrame>
 #include <QString>
 
-class KHBox;
+
 class ComboBox;
 class PushButton;
 
@@ -115,7 +115,7 @@ class SoundPicker : public QFrame
 
     private:
         ComboBox*      mTypeCombo;
-        KHBox*         mTypeBox;
+        QWidget *         mTypeBox;
         PushButton*    mFilePicker;
         KUrl           mFile;         // sound file to play when alarm is triggered
         float          mVolume;       // volume for file, or < 0 to not set volume
