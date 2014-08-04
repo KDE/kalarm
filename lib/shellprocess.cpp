@@ -23,7 +23,7 @@
 #include <kde_file.h>
 #include <kapplication.h>
 #include <klocale.h>
-#include <kdebug.h>
+#include <qdebug.h>
 #include <kauthorized.h>
 
 #include "shellprocess.h"
@@ -82,7 +82,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
     mExitCode = exitCode;
     if (exitStatus != NormalExit)
     {
-        kWarning(5950) << mCommand << ":" << mShellName << ": crashed/killed";
+        qWarning() << mCommand << ":" << mShellName << ": crashed/killed";
         mStatus = DIED;
     }
     else
@@ -91,7 +91,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
         if ((mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127))
         ||  (mShellName == "ksh"  &&  exitCode == 127))
         {
-            kWarning(5950) << mCommand << ":" << mShellName << ": not found or not executable";
+            qWarning() << mCommand << ":" << mShellName << ": not found or not executable";
             mStatus = NOT_FOUND;
         }
     }
