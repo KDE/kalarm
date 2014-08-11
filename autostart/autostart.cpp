@@ -23,14 +23,15 @@
 
 #include <kcmdlineargs.h>
 #include <K4AboutData>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <kprocess.h>
-#include <kdebug.h>
+#include "kalarm_autostart_debug.h"
+#include <QDebug>
 
 #include <QTimer>
 #include <QtDBus/QtDBus>
-#include <KLocale>
+
 #include <QStandardPaths>
 
 // Number of seconds to wait before autostarting KAlarm.
@@ -80,21 +81,21 @@ void AutostartApp::slotAutostart()
 {
     QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String(KALARM_DBUS_SERVICE));
     if (reply.isValid()  &&  reply.value())
-        kDebug(5900) << "KAlarm already running";
+        qCDebug(KALARMAUTOSTART_LOG) << "KAlarm already running";
     else
     {
         KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
         if (args->count() <= 0)
-            kWarning(5900) << "No command line";
+            qCWarning(KALARMAUTOSTART_LOG) << "No command line";
         else
         {
             QString prog = args->arg(0);
             QString exe = QStandardPaths::findExecutable(prog);
             if (exe.isEmpty())
-                kWarning(5900) << "Executable not found:" << prog;
+                qCWarning(KALARMAUTOSTART_LOG) << "Executable not found:" << prog;
             else
             {
-                kDebug(5900) << "Starting" << prog;
+                qCDebug(KALARMAUTOSTART_LOG) << "Starting" << prog;
                 KProcess proc;
                 proc << exe;
                 for (int i = 1;  i < args->count();  ++i)

@@ -3,13 +3,14 @@ include_directories( ../  )
 ########### next target ###############
 
 set(kalarmautostart_SRCS 
-	autostart.cpp 
+	autostart.cpp
+        kalarm_autostart_debug.cpp 
 )
 
 kde4_add_app_icon(kalarmautostart_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/ox*-app-kalarm.png")
 
 add_executable(kalarmautostart ${kalarmautostart_SRCS})
 
-target_link_libraries(kalarmautostart  KF5::KDELibs4Support)
+target_link_libraries(kalarmautostart  KF5::I18n KF5::CoreAddons Qt5::Widgets KF5::KDELibs4Support)
 
 install(TARGETS kalarmautostart  ${INSTALL_TARGETS_DEFAULT_ARGS} )

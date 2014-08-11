@@ -583,7 +583,7 @@ void SpinMirror::setFrame()
         bool oxygen  = mMainSpinbox->style()->inherits("Oxygen::Style"); // KDE >= 4.4 Oxygen style
         bool oxygen1 = mMainSpinbox->style()->inherits("OxygenStyle");   // KDE <= 4.3 Oxygen style
         int editOffsetY = oxygen ? 5 : oxygen1 ? 6 : 2;   // offset to edit field
-        int editOffsetX = (oxygen || oxygen1) ? (KDE::version() >= KDE_MAKE_VERSION(4,6,0) ? 4 : 2) : 2;   // offset to edit field
+        int editOffsetX = (oxygen || oxygen1) ? 4 : 2;   // offset to edit field
         int x = rtl ? r.right() - editOffsetX : r.left() + editOffsetX;
         p = grabWidget(mMainSpinbox, QRect(x, 0, 1, height()));
         // Blot out edit field stuff from the middle of the slice
@@ -772,7 +772,7 @@ static QRect spinBoxEditFieldRect(const QWidget* w, const QStyleOptionSpinBox& o
     QRect r = w->style()->subControlRect(QStyle::CC_SpinBox, &option, QStyle::SC_SpinBoxEditField);
     if (isOxygenStyle(w))
     {
-        int xadjust = (KDE::version() >= KDE_MAKE_VERSION(4,6,0)) ? 3 : 2;
+        int xadjust = 3;
         r.adjust(xadjust, 2, -xadjust, -2);
     }
     return r;
