@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.cpp  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -678,6 +678,7 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
                                       SLOT(collectionPopulated()));
     connect(AkonadiModel::instance(), SIGNAL(collectionPopulated(Akonadi::Collection::Id)),
                                       SLOT(collectionPopulated()));
+    connect(AkonadiModel::instance(), SIGNAL(serverStopped()), SLOT(reset()));
 }
 
 /******************************************************************************
@@ -1296,6 +1297,20 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
     delete mPopulatedCheckLoop;
     mPopulatedCheckLoop = 0;
     return result;
+}
+
+/******************************************************************************
+* Called when the Akonadi server has stopped. Reset the model.
+*/
+void CollectionControlModel::reset()
+{
+    delete mPopulatedCheckLoop;
+    mPopulatedCheckLoop = 0;
+
+    // Clear the collections list. This is required because addCollection() or
+    // setCollections() don't work if the collections which they specify are
+    // already in the list.
+    setCollections(Collection::List());
 }
 
 /******************************************************************************

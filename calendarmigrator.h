@@ -45,6 +45,7 @@ class CalendarMigrator : public QObject
     public:
         ~CalendarMigrator();
         static CalendarMigrator* instance();
+        static void reset();
         static void execute();
         static void updateToCurrentFormat(const Akonadi::Collection&, bool ignoreKeepFormat, QWidget* parent);
         static bool completed()    { return mCompleted; }

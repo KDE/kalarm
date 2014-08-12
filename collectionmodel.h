@@ -1,7 +1,7 @@
 /*
  *  collectionmodel.h  -  Akonadi collection models
  *  Program:  kalarm
- *  Copyright © 2010-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2010-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -284,6 +284,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static QString typeListForDisplay(CalEvent::Types);
 
     private slots:
+        void reset();
         void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
         void collectionPopulated();
 
