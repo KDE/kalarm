@@ -172,6 +172,7 @@ install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(PROGRAMS kalarm.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(PROGRAMS kalarm.autostart.desktop DESTINATION ${AUTOSTART_INSTALL_DIR})
+install(FILES kalarm.appdata.xml DESTINATION ${CMAKE_INSTALL_METAINFODIR})
 install(FILES kalarmconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 install(FILES kalarmui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kalarm)
 install(FILES org.kde.kalarm.kalarm.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
