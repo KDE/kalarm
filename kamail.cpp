@@ -28,7 +28,7 @@
 #include "preferences.h"
 
 #include <kalarmcal/identities.h>
-
+#include <KUrl>
 #include <KPIMIdentities/kpimidentities/identitymanager.h>
 #include <KPIMIdentities/kpimidentities/identity.h>
 #include <KPIMUtils/kpimutils/email.h>

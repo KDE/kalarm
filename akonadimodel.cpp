@@ -51,6 +51,7 @@
 #include <AkonadiCore/itemfetchscope.h>
 
 #include <KDebug>
+#include <KUrl>
 #include <klocale.h>
 #include <kcolorutils.h>
 #include <KIconLoader>

@@ -34,6 +34,7 @@
 
 #include <klocale.h>
 #include <KDebug>
+#include <KUrl>
 
 #include <QApplication>
 #include <QMouseEvent>

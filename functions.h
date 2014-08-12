@@ -31,6 +31,7 @@
 #include <AkonadiCore/item.h>
 #include <kfile.h>
 #include <kmimetype.h>
+#include <KUrl>
 
 #include <QSize>
 #include <QString>
