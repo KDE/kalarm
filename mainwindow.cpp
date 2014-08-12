@@ -462,33 +462,33 @@ void MainWindow::initActions()
 
     mActionCopy = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18nc("@action", "&Copy..."), this);
     actions->addAction(QLatin1String("copy"), mActionCopy);
-    mActionCopy->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_Insert));
+    actions->setDefaultShortcut(mActionCopy,QKeySequence(Qt::SHIFT + Qt::Key_Insert));
     connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
     mActionModify = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("modify"), mActionModify);
-    mActionModify->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_E));
+    actions->setDefaultShortcut(mActionModify,QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
     mActionDelete = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "&Delete"), this);
     actions->addAction(QLatin1String("delete"), mActionDelete);
-    mActionDelete->setShortcut(QKeySequence::Delete);
+    actions->setDefaultShortcut(mActionDelete,QKeySequence::Delete);
     connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
 
     // Set up Shift-Delete as a shortcut to delete without confirmation
     mActionDeleteForce = new QAction(i18nc("@action", "Delete Without Confirmation"), this);
     actions->addAction(QLatin1String("delete-force"), mActionDeleteForce);
-    mActionDeleteForce->setShortcut(QKeySequence::Delete + Qt::SHIFT);
+    actions->setDefaultShortcut(mActionDeleteForce,QKeySequence::Delete + Qt::SHIFT);
     connect(mActionDeleteForce, SIGNAL(triggered(bool)), SLOT(slotDeleteForce()));
 
     mActionReactivate = new QAction(i18nc("@action", "Reac&tivate"), this);
     actions->addAction(QLatin1String("undelete"), mActionReactivate);
-    mActionReactivate->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_R));
+    actions->setDefaultShortcut(mActionReactivate, QKeySequence(Qt::CTRL + Qt::Key_R));
     connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
 
     mActionEnable = new QAction(this);
     actions->addAction(QLatin1String("disable"), mActionEnable);
-    mActionEnable->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_B));
+    actions->setDefaultShortcut(mActionEnable, QKeySequence(Qt::CTRL + Qt::Key_B));
     connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
 
     action = new QAction(i18nc("@action", "Wake From Suspend..."), this);
@@ -505,12 +505,12 @@ void MainWindow::initActions()
 
     mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
     actions->addAction(QLatin1String("showTimeToAlarms"), mActionShowTimeTo);
-    mActionShowTimeTo->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    actions->setDefaultShortcut(mActionShowTimeTo,QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
     mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
     actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
-    mActionShowArchived->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
+    actions->setDefaultShortcut(mActionShowArchived,QKeySequence(Qt::CTRL + Qt::Key_P));
     connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
     mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System &Tray"), this);
