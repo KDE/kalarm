@@ -286,6 +286,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         static QString typeListForDisplay(CalEvent::Types);
 
     private slots:
+        void reset();
         void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
         void collectionPopulated();
 

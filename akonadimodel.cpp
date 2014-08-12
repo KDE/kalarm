@@ -128,9 +128,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 #endif
     connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
     connect(monitor, SIGNAL(collectionRemoved(Akonadi::Collection)), SLOT(slotCollectionRemoved(Akonadi::Collection)));
-    connect(CalendarMigrator::instance(), SIGNAL(creating(QString,Akonadi::Collection::Id,bool)),
-                                          SLOT(slotCollectionBeingCreated(QString,Akonadi::Collection::Id,bool)));
-    connect(CalendarMigrator::instance(), SIGNAL(destroyed(QObject*)), SLOT(slotMigrationCompleted()));
+    initCalendarMigrator();
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
     Preferences::connect(SIGNAL(archivedColourChanged(QColor)), this, SLOT(slotUpdateArchivedColour(QColor)));
     Preferences::connect(SIGNAL(disabledColourChanged(QColor)), this, SLOT(slotUpdateDisabledColour(QColor)));
@@ -153,20 +151,52 @@ AkonadiModel::~AkonadiModel()
 }
 
 /******************************************************************************
-* Called when the server manager is running, i.e. the agent manager knows about
+* Called when the server manager changes state.
+* If it is now running, i.e. the agent manager knows about
 * all existing resources.
-* Once it is running, if necessary migrate any KResources alarm calendars from
+* Once it is running, i.e. the agent manager knows about
+* all existing resources, if necessary migrate any KResources alarm calendars from
 * pre-Akonadi versions of KAlarm, or create default Akonadi calendar resources
 * if any are missing.
 */
 void AkonadiModel::checkResources(ServerManager::State state)
 {
-    if (!mResourcesChecked  &&  state == ServerManager::Running)
+    switch (state)
     {
-        mResourcesChecked = true;
-        mMigrating = true;
-        CalendarMigrator::execute();
+        case ServerManager::Running:
+            if (!mResourcesChecked)
+            {
+                kDebug() << "Server running";
+                mResourcesChecked = true;
+                mMigrating = true;
+                CalendarMigrator::execute();
+            }
+            break;
+        case ServerManager::NotRunning:
+            kDebug() << "Server stopped";
+            mResourcesChecked = false;
+            mMigrating = false;
+            mCollectionAlarmTypes.clear();
+            mCollectionRights.clear();
+            mCollectionEnabled.clear();
+            initCalendarMigrator();
+            emit serverStopped();
+            break;
+        default:
+            break;
     }
+}
+
+/******************************************************************************
+* Initialise the calendar migrator so that it can be run (either for the first
+* time, or again).
+*/
+void AkonadiModel::initCalendarMigrator()
+{
+    CalendarMigrator::reset();
+    connect(CalendarMigrator::instance(), SIGNAL(creating(QString,Akonadi::Collection::Id,bool)),
+                                          SLOT(slotCollectionBeingCreated(QString,Akonadi::Collection::Id,bool)));
+    connect(CalendarMigrator::instance(), SIGNAL(destroyed(QObject*)), SLOT(slotMigrationCompleted()));
 }
 
 /******************************************************************************
@@ -1654,13 +1684,13 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     // Check for the collection being enabled/disabled
     if (attributeNames.contains(CollectionAttribute::name()))
     {
-        static bool first = true;
+        static bool firstEnabled = true;
         const CalEvent::Types oldEnabled = mCollectionEnabled.value(collection.id(), CalEvent::EMPTY);
         const CalEvent::Types newEnabled = collection.hasAttribute<CollectionAttribute>() ? collection.attribute<CollectionAttribute>()->enabled() : CalEvent::EMPTY;
-        if (first  ||  newEnabled != oldEnabled)
+        if (firstEnabled  ||  newEnabled != oldEnabled)
         {
             kDebug() << "Collection" << collection.id() << ": enabled ->" << newEnabled;
-            first = false;
+            firstEnabled = false;
             mCollectionEnabled[collection.id()] = newEnabled;
             emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled), rowInserted);
         }

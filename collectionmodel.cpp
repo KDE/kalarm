@@ -677,6 +677,7 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     connect(AkonadiModel::instance(), SIGNAL(collectionPopulated(Akonadi::Collection::Id)),
                                       SLOT(collectionPopulated()));
 #endif
+    connect(AkonadiModel::instance(), SIGNAL(serverStopped()), SLOT(reset()));
 }
 
 /******************************************************************************
@@ -1298,6 +1299,20 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
     return result;
 }
 #endif
+
+/******************************************************************************
+* Called when the Akonadi server has stopped. Reset the model.
+*/
+void CollectionControlModel::reset()
+{
+    delete mPopulatedCheckLoop;
+    mPopulatedCheckLoop = 0;
+
+    // Clear the collections list. This is required because addCollection() or
+    // setCollections() don't work if the collections which they specify are
+    // already in the list.
+    setCollections(Collection::List());
+}
 
 /******************************************************************************
 * Exit from the populated event loop when a collection has been populated.

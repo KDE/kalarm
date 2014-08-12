@@ -244,6 +244,9 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Signal emitted when calendar migration/creation has completed. */
         void migrationCompleted();
 
+        /** Signal emitted when the Akonadi server has stopped. */
+        void serverStopped();
+
     protected:
         virtual QVariant entityHeaderData(int section, Qt::Orientation, int role, HeaderGroup) const;
         virtual int entityColumnCount(HeaderGroup) const;
@@ -291,6 +294,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         };
 
         AkonadiModel(Akonadi::ChangeRecorder*, QObject* parent);
+        void      initCalendarMigrator();
         KAEvent   event(const Akonadi::Item&, const QModelIndex&, Akonadi::Collection*) const;
         void      signalDataChanged(bool (*checkFunc)(const Akonadi::Item&), int startColumn, int endColumn, const QModelIndex& parent);
         void      setCollectionChanged(const Akonadi::Collection&, const QSet<QByteArray>&, bool rowInserted);

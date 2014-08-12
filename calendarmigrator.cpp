@@ -148,6 +148,14 @@ CalendarMigrator::~CalendarMigrator()
 }
 
 /******************************************************************************
+* Reset to allow migration to be run again.
+*/
+void CalendarMigrator::reset()
+{
+    mCompleted = false;
+}
+
+/******************************************************************************
 * Create and return the unique CalendarMigrator instance.
 */
 CalendarMigrator* CalendarMigrator::instance()
