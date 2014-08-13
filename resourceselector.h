@@ -100,15 +100,15 @@ class ResourceSelector : public QFrame
         QPushButton*    mEditButton;
         CalEvent::Type  mCurrentAlarmType;
         QMenu*          mContextMenu;
-        QAction *        mActionReload;
-        QAction *        mActionShowDetails;
-        QAction *        mActionSetColour;
-        QAction *        mActionClearColour;
-        QAction *        mActionEdit;
-        QAction *        mActionUpdate;
-        QAction *        mActionRemove;
-        QAction *        mActionImport;
-        QAction *        mActionExport;
+        QAction*        mActionReload;
+        QAction*        mActionShowDetails;
+        QAction*        mActionSetColour;
+        QAction*        mActionClearColour;
+        QAction*        mActionEdit;
+        QAction*        mActionUpdate;
+        QAction*        mActionRemove;
+        QAction*        mActionImport;
+        QAction*        mActionExport;
         KToggleAction*  mActionSetDefault;
 };
 

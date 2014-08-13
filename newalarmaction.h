@@ -33,10 +33,10 @@ class NewAlarmAction : public KActionMenu
     public:
         NewAlarmAction(bool templates, const QString& label, QObject* parent);
         virtual ~NewAlarmAction() {}
-        QAction * displayAlarmAction() const  { return mDisplayAction; }
-        QAction * commandAlarmAction() const  { return mCommandAction; }
-        QAction * emailAlarmAction() const    { return mEmailAction; }
-        QAction * audioAlarmAction() const    { return mAudioAction; }
+        QAction* displayAlarmAction() const  { return mDisplayAction; }
+        QAction* commandAlarmAction() const  { return mCommandAction; }
+        QAction* emailAlarmAction() const    { return mEmailAction; }
+        QAction* audioAlarmAction() const    { return mAudioAction; }
         TemplateMenuAction* fromTemplateAlarmAction() const  { return mTemplateAction; }
 
     signals:
@@ -48,10 +48,10 @@ class NewAlarmAction : public KActionMenu
         void   slotCalendarStatusChanged();
 
     private:
-        QAction *            mDisplayAction;
-        QAction *            mCommandAction;
-        QAction *            mEmailAction;
-        QAction *            mAudioAction;
+        QAction*            mDisplayAction;
+        QAction*            mCommandAction;
+        QAction*            mEmailAction;
+        QAction*            mAudioAction;
         TemplateMenuAction* mTemplateAction;   // New From Template action, for non-template menu only
         QMap<QAction*, EditAlarmDlg::Type> mTypes;
 };

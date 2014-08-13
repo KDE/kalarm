@@ -52,24 +52,22 @@
 using namespace KCalCore;
 using namespace KCalUtils;
 
-#include <QMenuBar>
 #include <ktoolbar.h>
-#include <QMenu>
 #include <kaction.h>
 #include <kactioncollection.h>
-#include <qinputdialog.h>
 #include <ksystemtrayicon.h>
 #include <kstandardaction.h>
 #include <kiconloader.h>
 #include <kurl.h>
 #include <klocale.h>
+#include <KLocalizedString>
 #include <kglobalsettings.h>
+#include <KSharedConfig>
 #include <kconfiggroup.h>
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <kxmlguifactory.h>
 #include <K4AboutData>
-#include <qdebug.h>
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
 #include <KTimeZone>
@@ -83,9 +81,10 @@ using namespace KCalUtils;
 #include <QResizeEvent>
 #include <QCloseEvent>
 #include <QDesktopWidget>
-#include <KSharedConfig>
-#include <KLocale>
-#include <KLocalizedString>
+#include <QMenuBar>
+#include <QMenu>
+#include <qinputdialog.h>
+#include <qdebug.h>
 
 using namespace KAlarmCal;
 
@@ -432,7 +431,7 @@ void MainWindow::initActions()
     mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
     actions->addAction(QLatin1String("new"), mActionNew);
 
-    QAction * action = mActionNew->displayAlarmAction();
+    QAction* action = mActionNew->displayAlarmAction();
     actions->addAction(QLatin1String("newDisplay"), action);
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, SIGNAL(triggered(bool)), SLOT(slotNewDisplay()));
@@ -462,23 +461,23 @@ void MainWindow::initActions()
 
     mActionCopy = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18nc("@action", "&Copy..."), this);
     actions->addAction(QLatin1String("copy"), mActionCopy);
-    actions->setDefaultShortcut(mActionCopy,QKeySequence(Qt::SHIFT + Qt::Key_Insert));
+    actions->setDefaultShortcut(mActionCopy, QKeySequence(Qt::SHIFT + Qt::Key_Insert));
     connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
 
     mActionModify = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("modify"), mActionModify);
-    actions->setDefaultShortcut(mActionModify,QKeySequence(Qt::CTRL + Qt::Key_E));
+    actions->setDefaultShortcut(mActionModify, QKeySequence(Qt::CTRL + Qt::Key_E));
     connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
 
     mActionDelete = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "&Delete"), this);
     actions->addAction(QLatin1String("delete"), mActionDelete);
-    actions->setDefaultShortcut(mActionDelete,QKeySequence::Delete);
+    actions->setDefaultShortcut(mActionDelete, QKeySequence::Delete);
     connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
 
     // Set up Shift-Delete as a shortcut to delete without confirmation
     mActionDeleteForce = new QAction(i18nc("@action", "Delete Without Confirmation"), this);
     actions->addAction(QLatin1String("delete-force"), mActionDeleteForce);
-    actions->setDefaultShortcut(mActionDeleteForce,QKeySequence::Delete + Qt::SHIFT);
+    actions->setDefaultShortcut(mActionDeleteForce, QKeySequence::Delete + Qt::SHIFT);
     connect(mActionDeleteForce, SIGNAL(triggered(bool)), SLOT(slotDeleteForce()));
 
     mActionReactivate = new QAction(i18nc("@action", "Reac&tivate"), this);
@@ -505,12 +504,12 @@ void MainWindow::initActions()
 
     mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
     actions->addAction(QLatin1String("showTimeToAlarms"), mActionShowTimeTo);
-    actions->setDefaultShortcut(mActionShowTimeTo,QKeySequence(Qt::CTRL + Qt::Key_I));
+    actions->setDefaultShortcut(mActionShowTimeTo, QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
 
     mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
     actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
-    actions->setDefaultShortcut(mActionShowArchived,QKeySequence(Qt::CTRL + Qt::Key_P));
+    actions->setDefaultShortcut(mActionShowArchived, QKeySequence(Qt::CTRL + Qt::Key_P));
     connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
 
     mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System &Tray"), this);
@@ -545,12 +544,12 @@ void MainWindow::initActions()
     actions->addAction(QLatin1String("refreshAlarms"), action);
     connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
 
-    KToggleAction *toggleAction = KAlarm::createAlarmEnableAction(this);
+    KToggleAction* toggleAction = KAlarm::createAlarmEnableAction(this);
     actions->addAction(QLatin1String("alarmsEnable"), toggleAction);
     if (undoText.isNull())
     {
         // Get standard texts, etc., for Undo and Redo actions
-        QAction * act = KStandardAction::undo(this, 0, actions);
+        QAction* act = KStandardAction::undo(this, 0, actions);
         undoShortcut     = act->shortcuts();
         undoText         = act->text();
         undoTextStripped = KLocalizedString::removeAcceleratorMarker(undoText);

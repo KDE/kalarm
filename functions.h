@@ -124,7 +124,7 @@ void                editTemplate(KAEvent*, QWidget* parent = 0);
 void                execNewAlarmDlg(EditAlarmDlg*);
 /** Create a "New From Template" QAction */
 KToggleAction*      createAlarmEnableAction(QObject* parent);
-QAction *            createStopPlayAction(QObject* parent);
+QAction*            createStopPlayAction(QObject* parent);
 KToggleAction*      createSpreadWindowsAction(QObject* parent);
 /** Returns a list of all alarm templates.
  *  If shell commands are disabled, command alarm templates are omitted.

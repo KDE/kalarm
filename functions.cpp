@@ -40,6 +40,8 @@
 #include "templatelistview.h"
 #include "templatemenuaction.h"
 
+#include "config-kdepim.h"
+
 #include <kalarmcal/identities.h>
 #include <kalarmcal/kaevent.h>
 
@@ -53,13 +55,13 @@ using namespace KCalCore;
 #include <KHolidays/kholidays/holidays.h>
 
 #include <kconfiggroup.h>
+#include <KSharedConfig>
 #include <kaction.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kdbusservicestarter.h>
 #include <kglobal.h>
 #include <klocale.h>
-
 #include <kauth.h>
 #include <ksystemtimezone.h>
 #include <kstandardguiitem.h>
@@ -67,7 +69,6 @@ using namespace KCalCore;
 #include <kfiledialog.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
-#include <qdebug.h>
 #include <ktoolinvocation.h>
 
 #if KDEPIM_HAVE_X11
@@ -84,8 +85,8 @@ using namespace KCalCore;
 #include <QtDBus/QtDBus>
 #include <QTimer>
 #include <qglobal.h>
-#include <KSharedConfig>
 #include <QStandardPaths>
+#include <qdebug.h>
 
 using namespace Akonadi;
 
@@ -196,9 +197,9 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 /******************************************************************************
 * Create a "Stop Play" action.
 */
-QAction * createStopPlayAction(QObject* parent)
+QAction* createStopPlayAction(QObject* parent)
 {
-    QAction * action = new QAction(QIcon::fromTheme(QLatin1String("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
+    QAction* action = new QAction(QIcon::fromTheme(QLatin1String("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
     action->setEnabled(MessageWin::isAudioPlaying());
     QObject::connect(action, SIGNAL(triggered(bool)), theApp(), SLOT(stopAudio()));
     // The following line ensures that all instances are kept in the same state

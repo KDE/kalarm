@@ -173,19 +173,19 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         QSplitter*           mSplitter;            // splits window into list and resource selector
         QMap<EditAlarmDlg*, KAEvent> mEditAlarmMap; // edit alarm dialogs to be handled by this window
         KToggleAction*       mActionToggleResourceSel;
-        QAction *             mActionImportAlarms;
-        QAction *             mActionExportAlarms;
-        QAction *             mActionExport;
-        QAction *             mActionImportBirthdays;
-        QAction *             mActionTemplates;
+        QAction*             mActionImportAlarms;
+        QAction*             mActionExportAlarms;
+        QAction*             mActionExport;
+        QAction*             mActionImportBirthdays;
+        QAction*             mActionTemplates;
         NewAlarmAction*      mActionNew;
-        QAction *             mActionCreateTemplate;
-        QAction *             mActionCopy;
-        QAction *             mActionModify;
-        QAction *             mActionDelete;
-        QAction *             mActionDeleteForce;
-        QAction *             mActionReactivate;
-        QAction *             mActionEnable;
+        QAction*             mActionCreateTemplate;
+        QAction*             mActionCopy;
+        QAction*             mActionModify;
+        QAction*             mActionDelete;
+        QAction*             mActionDeleteForce;
+        QAction*             mActionReactivate;
+        QAction*             mActionEnable;
         QAction*             mActionFindNext;
         QAction*             mActionFindPrev;
         KToolBarPopupAction* mActionUndo;

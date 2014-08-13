@@ -40,23 +40,21 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <K4AboutData>
-#include <QMenu>
 #include <kmessagebox.h>
-
 #include <kstandardaction.h>
 #include <kstandardguiitem.h>
 #include <kiconeffect.h>
 #include <kconfig.h>
-#include <qdebug.h>
 #include <KGlobal>
 #include <KIconLoader>
 
 #include <QList>
 #include <QTimer>
+#include <QMenu>
+#include <qdebug.h>
 
 #include <stdlib.h>
 #include <limits.h>
-#include <KLocale>
 
 using namespace KAlarmCal;
 
@@ -89,7 +87,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     setStatus(KStatusNotifierItem::Active);
 #if 0 //QT5
     // Set up the context menu
-    QList<QAction *> actions = actionCollection();
+    QList<QAction*> actions = actionCollection();
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
     actions.addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
     contextMenu()->addAction(mActionEnabled);
@@ -103,7 +101,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     connect(mActionNew->fromTemplateAlarmAction(), SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
     contextMenu()->addSeparator();
 
-    QAction * a = KAlarm::createStopPlayAction(this);
+    QAction* a = KAlarm::createStopPlayAction(this);
     actions->addAction(QLatin1String("tStopPlay"), a);
     contextMenu()->addAction(a);
     QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), a, SLOT(setVisible(bool)));

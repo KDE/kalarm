@@ -37,7 +37,7 @@
  */
 class KAMessageBox
 {
-public:
+    public:
         /** KAMessageBox types.
          *  @li CONT_CANCEL_DEF_CONT - Continue/Cancel, with Continue as the default button.
          *  @li CONT_CANCEL_DEF_CANCEL - Continue/Cancel, with Cancel as the default button.
