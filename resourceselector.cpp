@@ -45,19 +45,19 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcombobox.h>
-#include <qinputdialog.h>
-#include <QMenu>
-#include <qdebug.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <ktoggleaction.h>
-#include <QColorDialog>
 
 #include <QLabel>
 #include <QPushButton>
 #include <QTimer>
 #include <QResizeEvent>
 #include <QApplication>
+#include <qinputdialog.h>
+#include <QColorDialog>
+#include <QMenu>
+#include <qdebug.h>
 
 using namespace KCalCore;
 using namespace Akonadi;
@@ -547,8 +547,8 @@ void ResourceSelector::setColour()
         QColor colour = AkonadiModel::instance()->backgroundColor(collection);
         if (!colour.isValid())
             colour = QApplication::palette().color(QPalette::Base);
-        colour = QColorDialog::getColor(QColor(), this);
-        if ( colour.isValid() )
+        colour = QColorDialog::getColor(colour, this);
+        if (colour.isValid())
             AkonadiModel::instance()->setBackgroundColor(collection, colour);
     }
 }
