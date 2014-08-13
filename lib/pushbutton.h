@@ -22,10 +22,10 @@
 #define PUSHBUTTON_H
 
 #include <QPushButton>
-#include <KIcon>
-#include <KGuiItem>
 class QMouseEvent;
 class QKeyEvent;
+class KGuiItem;
+class KIcon;
 
 
 /**
@@ -48,10 +48,10 @@ class PushButton : public QPushButton
          */
         explicit PushButton(QWidget* parent);
         /** Constructor for a push button which displays a text.
-         *  @param text The text to show on the button.
+         *  @param gui    The text, icon etc. to show on the button.
          *  @param parent The parent object of this widget.
          */
-        PushButton(const KGuiItem& text, QWidget* parent);
+        PushButton(const KGuiItem& gui, QWidget* parent);
         /** Constructor for a push button which displays a text.
          *  @param text The text to show on the button.
          *  @param parent The parent object of this widget.
