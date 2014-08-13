@@ -28,9 +28,9 @@
 
 #include <klineedit.h>
 #include <klocale.h>
-#include <qdebug.h>
 
 #include <QVBoxLayout>
+#include <qdebug.h>
 
 
 /*=============================================================================

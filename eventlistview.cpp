@@ -25,11 +25,11 @@
 
 #include <kglobalsettings.h>
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
+#include <kdebug.h>
 
 
 EventListView::EventListView(QWidget* parent)

@@ -26,10 +26,10 @@
 #include "templatelistview.h"
 
 #include <klocale.h>
-#include <qdebug.h>
 
 #include <QVBoxLayout>
 #include <QResizeEvent>
+#include <qdebug.h>
 
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 

@@ -34,7 +34,6 @@
 #include <kseparator.h>
 #include <kwindowsystem.h>
 #include <klocale.h>
-#include <qdebug.h>
 #include <KDialog>
 
 #include <QGroupBox>
@@ -42,6 +41,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QRegExp>
+#include <qdebug.h>
 
 using namespace KAlarmCal;
 

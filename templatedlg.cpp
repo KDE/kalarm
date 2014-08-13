@@ -32,7 +32,6 @@
 
 #include <klocale.h>
 #include <kguiitem.h>
-#include <qdebug.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 #include <kaction.h>
@@ -42,6 +41,7 @@
 #include <QHBoxLayout>
 #include <QBoxLayout>
 #include <QResizeEvent>
+#include <qdebug.h>
 
 using namespace KCal;
 

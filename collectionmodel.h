@@ -28,7 +28,6 @@
 #include <AkonadiCore/favoritecollectionsmodel.h>
 #include <kcheckableproxymodel.h>
 #include <kdescendantsproxymodel.h>
-#include <kdeversion.h>
 
 #include <QSortFilterProxyModel>
 #include <QListView>

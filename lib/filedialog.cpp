@@ -21,14 +21,14 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "filedialog.h"
 #include "autoqpointer.h"
-#include <KFileWidget>
 
+#include <KFileWidget>
 #include <klocale.h>
 #include <krecentdocument.h>
-#include <qdebug.h>
 #include <KUrl>
 
 #include <QCheckBox>
+#include <qdebug.h>
 
 
 QCheckBox* FileDialog::mAppendCheck = 0;

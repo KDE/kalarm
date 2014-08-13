@@ -39,10 +39,10 @@
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <ktemporaryfile.h>
-#include <qdebug.h>
 #include <KTimeZone>
 #include <KSharedConfig>
 #include <QStandardPaths>
+#include <qdebug.h>
 
 using namespace Akonadi;
 using namespace KCalCore;

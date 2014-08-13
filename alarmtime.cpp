@@ -26,9 +26,8 @@
 #include <ksystemtimezone.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <qdebug.h>
 #include <qapplication.h>
-#include <KLocale>
+#include <qdebug.h>
 
 using namespace KAlarmCal;
 

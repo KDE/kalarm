@@ -33,10 +33,10 @@ using namespace KCalCore;
 #include <klocale.h>
 #include <kdialog.h>
 #include <kdatetime.h>
-#include <qdebug.h>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <qdebug.h>
 
 
 // Collect these widget labels together to ensure consistent wording and

@@ -33,11 +33,11 @@
 
 #include <kglobal.h>
 #include <klocale.h>
+#include <KSharedConfig>
 #include <kconfiggroup.h>
-#include <qdebug.h>
 
 #include <QTimer>
-#include <KSharedConfig>
+#include <qdebug.h>
 
 using namespace KAlarmCal;
 

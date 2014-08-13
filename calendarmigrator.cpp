@@ -41,10 +41,10 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
-#include <qdebug.h>
 
 #include <QTimer>
 #include <QStandardPaths>
+#include <qdebug.h>
 
 using namespace Akonadi;
 using namespace KAlarmCal;

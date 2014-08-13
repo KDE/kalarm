@@ -51,6 +51,8 @@
 #include "prefdlg_p.h"
 #include "prefdlg.h"
 
+#include "config-kdepim.h"
+
 #include <kalarmcal/identities.h>
 
 #include <KHolidays/kholidays/holidays.h>
@@ -59,14 +61,12 @@ using namespace KHolidays;
 #include <kvbox.h>
 #include <kglobal.h>
 #include <klocale.h>
-
 #include <kshell.h>
 #include <klineedit.h>
 #include <K4AboutData>
 #include <kapplication.h>
 #include <kiconloader.h>
 #include <kcombobox.h>
-#include <QTabWidget>
 #include <kstandardguiitem.h>
 #include <ksystemtimezone.h>
 #include <kicon.h>
@@ -75,12 +75,13 @@ using namespace KHolidays;
 #include <kwindowsystem.h>
 #endif
 #include <ktoolinvocation.h>
-#include <qdebug.h>
+#include <KHelpClient>
 
 #include <QLabel>
 #include <QCheckBox>
 #include <QRadioButton>
 #include <QPushButton>
+#include <QTabWidget>
 #include <QSpinBox>
 #include <QGroupBox>
 #include <QGridLayout>
@@ -88,9 +89,8 @@ using namespace KHolidays;
 #include <QVBoxLayout>
 #include <QStyle>
 #include <QResizeEvent>
-#include <KHelpClient>
-#include <KLocale>
 #include <QStandardPaths>
+#include <qdebug.h>
 
 using namespace KCalCore;
 using namespace KAlarmCal;

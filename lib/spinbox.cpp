@@ -18,8 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <qdebug.h>
-
 #include "spinbox.h"
 
 #include <QLineEdit>
@@ -31,6 +29,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
+#include <qdebug.h>
 
 
 SpinBox::SpinBox(QWidget* parent)

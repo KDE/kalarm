@@ -28,7 +28,6 @@
 #include <klocale.h>
 
 #include <QTime>
-#include <KLocale>
 
 TimeEdit::TimeEdit(QWidget* parent)
     : KHBox(parent),

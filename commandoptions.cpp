@@ -23,10 +23,10 @@
 #include "alarmtime.h"
 #include "kalarmapp.h"
 #include "kamail.h"
-#include <KDebug>
 #include <kalarmcal/identities.h>
 
 #include <kcmdlineargs.h>
+#include <qdebug.h>
 
 #include <iostream>
 

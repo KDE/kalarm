@@ -20,8 +20,9 @@
 
 #include "kalarm.h"
 #include "synchtimer.h"
-#include <qdebug.h>
+
 #include <QTimer>
+#include <qdebug.h>
 
 
 /*=============================================================================

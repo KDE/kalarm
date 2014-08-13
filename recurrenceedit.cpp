@@ -50,7 +50,6 @@ using namespace KCalCore;
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <kmessagebox.h>
-#include <qdebug.h>
 #include <kdatecombobox.h>
 
 #include <QPushButton>
@@ -62,7 +61,7 @@ using namespace KCalCore;
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtAlgorithms>
-#include <KLocale>
+#include <qdebug.h>
 
 
 class ListWidget : public QListWidget

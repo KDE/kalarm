@@ -58,8 +58,6 @@ using namespace KCalCore;
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
-#include <QHBoxLayout>
-#include <qdebug.h>
 
 #include <QLabel>
 #include <QDir>
@@ -70,6 +68,7 @@ using namespace KCalCore;
 #include <QVBoxLayout>
 #include <QDragEnterEvent>
 #include <QStandardItemModel>
+#include <qdebug.h>
 
 using namespace KAlarmCal;
 

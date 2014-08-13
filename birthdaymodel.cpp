@@ -32,7 +32,6 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <KLocale>
 
 using namespace KAlarmCal;
 

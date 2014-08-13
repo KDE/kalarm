@@ -53,12 +53,11 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kconfig.h>
+#include <KSharedConfig>
 #include <kfiledialog.h>
-#include <QPushButton>
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>
-#include <qdebug.h>
 #include <KIcon>
 #include <KTimeZone>
 
@@ -72,8 +71,7 @@
 #include <QShowEvent>
 #include <QScrollBar>
 #include <QTimer>
-#include <KSharedConfig>
-#include <KLocale>
+#include <qdebug.h>
 
 using namespace KCal;
 using namespace KAlarmCal;

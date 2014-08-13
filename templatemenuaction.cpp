@@ -26,8 +26,8 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <QMenu>
 #include <kactionmenu.h>
+#include <QMenu>
 #include <qdebug.h>
 
 

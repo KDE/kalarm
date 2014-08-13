@@ -28,10 +28,10 @@
 #include "shellprocess.h"
 #include "templatemenuaction.h"
 
-#include <QMenu>
 #include <kactionmenu.h>
 #include <klocale.h>
 #include <kstandardshortcut.h>
+#include <QMenu>
 #include <qdebug.h>
 
 using namespace KAlarmCal;

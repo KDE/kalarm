@@ -22,9 +22,9 @@
 #include "eventid.h"
 #include "collectionmodel.h"
 
-#include <qdebug.h>
 #include <QString>
 #include <QRegExp>
+#include <qdebug.h>
 
 /** Set by event ID and optional resource ID, in the format "[rid:]eid". */
 EventId::EventId(const QString& resourceEventId)

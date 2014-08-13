@@ -33,13 +33,12 @@
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <QHBoxLayout>
 #include <phonon/backendcapabilities.h>
-#include <qdebug.h>
 
 #include <QTimer>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <qdebug.h>
 
 
 static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type to combo index

@@ -18,15 +18,16 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <stdlib.h>
-#include <qglobal.h>
+#include "shellprocess.h"
+
 #include <kde_file.h>
 #include <kapplication.h>
 #include <klocale.h>
 #include <qdebug.h>
 #include <kauthorized.h>
+#include <qglobal.h>
 
-#include "shellprocess.h"
+#include <stdlib.h>
 
 
 QByteArray ShellProcess::mShellName;

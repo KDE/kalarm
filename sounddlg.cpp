@@ -30,23 +30,23 @@
 #include "soundpicker.h"
 #include "spinbox.h"
 
+#include <KGlobal>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
-#include <QHBoxLayout>
 #include <kio/netaccess.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
-#include <qdebug.h>
-#include <KGlobal>
 
 #include <QLabel>
 #include <QDir>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QShowEvent>
 #include <QResizeEvent>
+#include <qdebug.h>
 
 
 // Collect these widget labels together to ensure consistent wording and

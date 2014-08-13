@@ -24,7 +24,6 @@
 #include "spinbox.h"
 
 #include <QGraphicsView>
-
 class QMouseEvent;
 class QPaintEvent;
 

@@ -23,8 +23,6 @@
 #include "spinbox2.h"
 #include "spinbox2_p.h"
 
-#include <qdebug.h>
-
 #include <QMouseEvent>
 #include <QStyleOptionSpinBox>
 #include <QGraphicsPixmapItem>
@@ -37,6 +35,7 @@
 #include <QApplication>
 #include <QPixmap>
 #include <QMatrix>
+#include <qdebug.h>
 
 #include <stdlib.h>
 

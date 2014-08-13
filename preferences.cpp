@@ -32,15 +32,14 @@
 #include <KHolidays/kholidays/holidays.h>
 
 #include <kglobal.h>
+#include <KSharedConfig>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <ksystemtimezone.h>
 #include <qdebug.h>
 
-
 #include <time.h>
 #include <unistd.h>
-#include <KSharedConfig>
 
 using namespace KHolidays;
 using namespace KAlarmCal;

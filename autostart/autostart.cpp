@@ -20,19 +20,17 @@
 
 #include "kalarm.h"
 #include "autostart.h"
+#include "kalarm_autostart_debug.h"
 
 #include <kcmdlineargs.h>
 #include <K4AboutData>
 #include <KLocalizedString>
-
 #include <kprocess.h>
-#include "kalarm_autostart_debug.h"
-#include <QDebug>
 
 #include <QTimer>
 #include <QtDBus/QtDBus>
-
 #include <QStandardPaths>
+#include <QDebug>
 
 // Number of seconds to wait before autostarting KAlarm.
 // Allow plenty of time for session restoration to happen first.

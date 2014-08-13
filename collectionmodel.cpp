@@ -35,6 +35,7 @@
 #include <klocale.h>
 #include <KDebug>
 #include <KUrl>
+#include <KSharedConfig>
 
 #include <QApplication>
 #include <QMouseEvent>
@@ -42,7 +43,6 @@
 #include <QToolTip>
 #include <QTimer>
 #include <QObject>
-#include <KSharedConfig>
 
 using namespace Akonadi;
 using namespace KAlarmCal;

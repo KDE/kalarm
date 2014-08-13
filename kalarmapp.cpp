@@ -48,6 +48,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kconfig.h>
+#include <KSharedConfig>
 #include <K4AboutData>
 #include <ktemporaryfile.h>
 #include <kfileitem.h>
@@ -57,7 +58,6 @@
 //QT5 #include <kspeech.h>
 #include <ktoolinvocation.h>
 #include <netwm.h>
-#include <qdebug.h>
 #include <kshell.h>
 #include <ksystemtrayicon.h>
 #include <ksystemtimezone.h>
@@ -67,13 +67,13 @@
 #include <QFile>
 #include <QTextStream>
 #include <QtDBus/QtDBus>
+#include <QStandardPaths>
+#include <qdebug.h>
 
 #include <stdlib.h>
 #include <ctype.h>
 #include <iostream>
 #include <climits>
-#include <KSharedConfig>
-#include <QStandardPaths>
 
 static const QLatin1String KTTSD_DBUS_SERVICE("org.kde.kttsd");
 static const QLatin1String KTTDS_DBUS_PATH("/KSpeech");

@@ -38,7 +38,6 @@
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/agenttype.h>
-#include <AkonadiWidgets/agenttypedialog.h>
 #include <AkonadiCore/attributefactory.h>
 #include <AkonadiCore/changerecorder.h>
 #include <AkonadiCore/collectiondeletejob.h>
@@ -49,6 +48,7 @@
 #include <AkonadiCore/itemmodifyjob.h>
 #include <AkonadiCore/itemdeletejob.h>
 #include <AkonadiCore/itemfetchscope.h>
+#include <AkonadiWidgets/agenttypedialog.h>
 
 #include <KDebug>
 #include <KUrl>

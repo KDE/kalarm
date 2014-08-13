@@ -46,7 +46,7 @@
 #include <kactioncollection.h>
 #include <kdescendantsproxymodel.h>
 #include <khbox.h>
-#include <qdebug.h>
+#include <KSharedConfig>
 
 #include <QAction>
 #include <QGroupBox>
@@ -55,7 +55,7 @@
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <KSharedConfig>
+#include <qdebug.h>
 
 using namespace KCal;
 

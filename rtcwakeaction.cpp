@@ -24,12 +24,10 @@
 #include <klocale.h>
 #include <kprocess.h>
 #include <kdatetime.h>
-
 #include <kauthactionreply.h>
 #include <QDebug>
 
 #include <stdio.h>
-#include <KLocale>
 
 RtcWakeAction::RtcWakeAction()
 {

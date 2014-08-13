@@ -22,9 +22,8 @@
 #include "desktop.h"
 
 #include <qdialog.h>
-#include <qdebug.h>
-
 #include <QStyle>
+#include <qdebug.h>
 
 
 StackedScrollWidget::StackedScrollWidget(StackedScrollGroup* group, QWidget* parent)

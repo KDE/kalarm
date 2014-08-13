@@ -24,10 +24,9 @@
 #include "buttongroup.h"
 #include "lineedit.h"
 
-#include <qdebug.h>
-
 #include <QPushButton>
 #include <QTimer>
+#include <qdebug.h>
 
 
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)

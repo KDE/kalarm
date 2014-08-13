@@ -32,9 +32,9 @@
 
 #include <kmessagebox.h>
 #include <klocale.h>
-#include <qdebug.h>
 
 #include <QTimer>
+#include <qdebug.h>
 
 using namespace Akonadi;
 using namespace KAlarmCal;

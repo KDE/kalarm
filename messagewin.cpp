@@ -48,7 +48,6 @@
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kdialog.h>
-#include <qtextbrowser.h>
 #include <ksystemtimezone.h>
 #include <kglobalsettings.h>
 #include <kmimetype.h>
@@ -56,19 +55,19 @@
 #include <kwindowsystem.h>
 #include <kio/netaccess.h>
 #include <knotification.h>
-#include <QPushButton>
 #include <ksqueezedtextlabel.h>
+#include <ktoolinvocation.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>
-#include <qdebug.h>
-#include <ktoolinvocation.h>
 #if KDEPIM_HAVE_X11
 #include <netwm.h>
 #include <qx11info_x11.h>
 #endif
 #include <KGlobal>
 
+#include <qtextbrowser.h>
+#include <QPushButton>
 #include <QScrollBar>
 #include <QtDBus/QtDBus>
 #include <QFile>
@@ -87,10 +86,10 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QMutexLocker>
+#include <qdebug.h>
 
 #include <stdlib.h>
 #include <string.h>
-#include <KLocale>
 
 using namespace KCalCore;
 using namespace KAlarmCal;

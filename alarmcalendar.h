@@ -29,8 +29,8 @@
 #include <AkonadiCore/collection.h>
 #include <KCalCore/FileStorage>
 #include <KCalCore/Event>
-#include <QHash>
 #include <kurl.h>
+#include <QHash>
 #include <QObject>
 
 

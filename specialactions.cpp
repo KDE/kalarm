@@ -27,15 +27,15 @@
 #include "shellprocess.h"
 
 #include <klineedit.h>
-#include <QHBoxLayout>
 #include <kapplication.h>
 #include <klocale.h>
-#include <qdebug.h>
 
 #include <QLabel>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QResizeEvent>
+#include <qdebug.h>
 
 
 /*=============================================================================

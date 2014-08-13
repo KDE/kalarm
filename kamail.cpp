@@ -28,7 +28,6 @@
 #include "preferences.h"
 
 #include <kalarmcal/identities.h>
-#include <KUrl>
 #include <KPIMIdentities/kpimidentities/identitymanager.h>
 #include <KPIMIdentities/kpimidentities/identity.h>
 #include <KPIMUtils/kpimutils/email.h>
@@ -41,7 +40,7 @@
 #include <kmime/kmime_message.h>
 
 #include <KTimeZone>
-
+#include <KUrl>
 #include <klocale.h>
 #include <K4AboutData>
 #include <kfileitem.h>
@@ -51,19 +50,18 @@
 #include <kcodecs.h>
 #include <kcharsets.h>
 #include <kascii.h>
-#include <qdebug.h>
+#include <KCharsets>
 
 #include <QFile>
 #include <QHostInfo>
 #include <QList>
 #include <QByteArray>
 #include <QTextCodec>
+#include <QStandardPaths>
 #include <QtDBus/QtDBus>
+#include <qdebug.h>
 
 #include <pwd.h>
-#include <KCharsets>
-#include <KLocale>
-#include <QStandardPaths>
 
 #ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
