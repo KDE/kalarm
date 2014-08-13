@@ -28,6 +28,7 @@
 #include "sounddlg.h"
 #include "soundpicker.h"
 
+#include <KIcon>
 #include <kglobal.h>
 #include <klocale.h>
 #include <kfiledialog.h>

@@ -1411,6 +1411,7 @@ QString runKMail(bool minimise)
 */
 bool Private::startKMailMinimised()
 {
+#if 0 //PORT QT5
 #if KDEPIM_HAVE_X11
     NETRootInfo i(QX11Info::display(), NET::Supported);
     if (i.isSupported(NET::WM2KDETemporaryRules))
@@ -1450,6 +1451,9 @@ bool Private::startKMailMinimised()
 #else
     return false;
 #endif
+#else
+    return false;
+#endif
 }
 
 /******************************************************************************
@@ -1458,6 +1462,7 @@ bool Private::startKMailMinimised()
 */
 void Private::windowAdded(WId w)
 {
+#if 0 //Port QT5
 #if KDEPIM_HAVE_X11
     static const int SUPPORTED_TYPES = NET::NormalMask | NET::DesktopMask | NET::DockMask
                                      | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
@@ -1487,6 +1492,7 @@ void Private::windowAdded(WId w)
     XMapWindow(QX11Info::display(), w);
     XSync(QX11Info::display(), False);
     QApplication::flush();
+#endif
 #endif
 }
 
