@@ -22,15 +22,14 @@
 #include "alarmlistdelegate.h"
 
 #include "akonadimodel.h"
-#define ITEM_LIST_MODEL AlarmListModel
 #include "functions.h"
 
 #include <kalarmcal/kacalendar.h>
 
 #include <kcolorscheme.h>
-#include <qdebug.h>
 
 #include <QApplication>
+#include <qdebug.h>
 
 
 void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
@@ -47,7 +46,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
         }
         switch (index.column())
         {
-            case ITEM_LIST_MODEL::TimeColumn:
+            case AlarmListModel::TimeColumn:
             {
                 QString str = index.data(Qt::DisplayRole).toString();
                 // Need to pad out spacing to align times without leading zeroes
@@ -69,7 +68,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
                 }
                 break;
             }
-            case ITEM_LIST_MODEL::ColourColumn:
+            case AlarmListModel::ColourColumn:
             {
                 const KAEvent event = static_cast<const ItemListModel*>(index.model())->event(index);
                 if (event.isValid()  &&  event.commandError() != KAEvent::CMD_NO_ERROR)
@@ -93,7 +92,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
     {
         switch (index.column())
         {
-            case ITEM_LIST_MODEL::TimeColumn:
+            case AlarmListModel::TimeColumn:
             {
                 int h = option.fontMetrics.lineSpacing();
                 const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
@@ -111,7 +110,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
                     w += option.fontMetrics.width(str);
                 return QSize(w, h);
             }
-            case ITEM_LIST_MODEL::ColourColumn:
+            case AlarmListModel::ColourColumn:
             {
                 int h = option.fontMetrics.lineSpacing();
                 return QSize(h * 3 / 4, h);

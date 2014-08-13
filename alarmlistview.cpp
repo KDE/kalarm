@@ -21,15 +21,13 @@
 #include "kalarm.h"
 #include "alarmlistview.h"
 
-#define ALARM_LIST_MODEL AlarmListModel
-
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 #include <kglobal.h>
+#include <KSharedConfig>
 
 #include <QHeaderView>
 #include <QApplication>
-#include <KSharedConfig>
 
 
 AlarmListView::AlarmListView(const QByteArray& configGroup, QWidget* parent)
@@ -49,16 +47,16 @@ void AlarmListView::setModel(QAbstractItemModel* model)
         header()->restoreState(settings);
     header()->setMovable(true);
     header()->setStretchLastSection(false);
-    header()->setResizeMode(ALARM_LIST_MODEL::TimeColumn, QHeaderView::ResizeToContents);
-    header()->setResizeMode(ALARM_LIST_MODEL::TimeToColumn, QHeaderView::ResizeToContents);
-    header()->setResizeMode(ALARM_LIST_MODEL::RepeatColumn, QHeaderView::ResizeToContents);
-    header()->setResizeMode(ALARM_LIST_MODEL::ColourColumn, QHeaderView::Fixed);
-    header()->setResizeMode(ALARM_LIST_MODEL::TypeColumn, QHeaderView::Fixed);
-    header()->setResizeMode(ALARM_LIST_MODEL::TextColumn, QHeaderView::Stretch);
+    header()->setResizeMode(AlarmListModel::TimeColumn, QHeaderView::ResizeToContents);
+    header()->setResizeMode(AlarmListModel::TimeToColumn, QHeaderView::ResizeToContents);
+    header()->setResizeMode(AlarmListModel::RepeatColumn, QHeaderView::ResizeToContents);
+    header()->setResizeMode(AlarmListModel::ColourColumn, QHeaderView::Fixed);
+    header()->setResizeMode(AlarmListModel::TypeColumn, QHeaderView::Fixed);
+    header()->setResizeMode(AlarmListModel::TextColumn, QHeaderView::Stretch);
     header()->setStretchLastSection(true);   // necessary to ensure ResizeToContents columns do resize to contents!
     const int margin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin);
-    header()->resizeSection(ALARM_LIST_MODEL::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);
-    header()->resizeSection(ALARM_LIST_MODEL::TypeColumn, ALARM_LIST_MODEL::iconWidth() + 2*margin + 2);
+    header()->resizeSection(AlarmListModel::ColourColumn, viewOptions().fontMetrics.lineSpacing() * 3 / 4);
+    header()->resizeSection(AlarmListModel::TypeColumn, AlarmListModel::iconWidth() + 2*margin + 2);
 }
 
 /******************************************************************************
@@ -80,30 +78,30 @@ void AlarmListView::selectTimeColumns(bool time, bool timeTo)
     if (!time  &&  !timeTo)
         return;       // always show at least one time column
 //    bool changed = false;
-    bool hidden = header()->isSectionHidden(ALARM_LIST_MODEL::TimeColumn);
+    bool hidden = header()->isSectionHidden(AlarmListModel::TimeColumn);
     if (time  &&  hidden)
     {
         // Unhide the time column
-        header()->setSectionHidden(ALARM_LIST_MODEL::TimeColumn, false);
+        header()->setSectionHidden(AlarmListModel::TimeColumn, false);
 //        changed = true;
     }
     else if (!time  &&  !hidden)
     {
         // Hide the time column
-        header()->setSectionHidden(ALARM_LIST_MODEL::TimeColumn, true);
+        header()->setSectionHidden(AlarmListModel::TimeColumn, true);
 //        changed = true;
     }
-    hidden = header()->isSectionHidden(ALARM_LIST_MODEL::TimeToColumn);
+    hidden = header()->isSectionHidden(AlarmListModel::TimeToColumn);
     if (timeTo  &&  hidden)
     {
         // Unhide the time-to-alarm column
-        header()->setSectionHidden(ALARM_LIST_MODEL::TimeToColumn, false);
+        header()->setSectionHidden(AlarmListModel::TimeToColumn, false);
 //        changed = true;
     }
     else if (!timeTo  &&  !hidden)
     {
         // Hide the time-to-alarm column
-        header()->setSectionHidden(ALARM_LIST_MODEL::TimeToColumn, true);
+        header()->setSectionHidden(AlarmListModel::TimeToColumn, true);
 //        changed = true;
     }
 //    if (changed)
