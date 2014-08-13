@@ -934,6 +934,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
         KACalendar::Compat caltype = fix(calStorage);
         CalEvent::Types wantedTypes = collection && collection->isValid() ? CalEvent::types(collection->contentMimeTypes()) : CalEvent::EMPTY;
         Collection activeColl, archiveColl, templateColl;
+        Event::List events = cal->rawEvents();
 #else
         KACalendar::Compat caltype = CalendarCompat::fix(cal, filename);
         CalEvent::Type wantedType = resource ? resource->alarmType() : CalEvent::EMPTY;
@@ -943,11 +944,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, AlarmResource* resource)
         AlarmResource* templateRes = 0;
         bool saveRes = false;
         bool enabled = true;
-#endif
         KAEvent::List newEvents;
-#ifdef USE_AKONADI
-        Event::List events = cal->rawEvents();
-#else
         Event::List events = cal.rawEvents();
 #endif
         for (int i = 0, end = events.count();  i < end;  ++i)
