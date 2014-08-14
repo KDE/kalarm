@@ -22,7 +22,6 @@
 #define PUSHBUTTON_H
 
 #include <QPushButton>
-#include <KIcon>
 class QMouseEvent;
 class QKeyEvent;
 class KGuiItem;

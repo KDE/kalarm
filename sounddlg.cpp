@@ -30,6 +30,7 @@
 #include "soundpicker.h"
 #include "spinbox.h"
 
+#include <KIcon>
 #include <KGlobal>
 #include <klocale.h>
 #include <kstandarddirs.h>
