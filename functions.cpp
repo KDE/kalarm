@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-//QT5 reactivate after #include "config-kdepim.h"
+#include "config-kdepim.h"
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "functions.h"
 #include "functions_p.h"
@@ -1422,7 +1422,7 @@ bool Private::startKMailMinimised()
                           "wmclasscomplete=false\n"
                           "minimize=true\nminimizerule=3\n"
                           "type=") + QString().setNum(NET::Normal) + QLatin1String("\ntyperule=2");
-        msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1, false);
+        msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1);
         qApp->flush();
     }
     else
