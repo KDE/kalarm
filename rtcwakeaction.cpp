@@ -21,7 +21,7 @@
 #include "rtcwakeaction.h"
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kprocess.h>
 #include <kdatetime.h>
 #include <kauthactionreply.h>

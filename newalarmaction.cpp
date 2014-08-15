@@ -29,7 +29,7 @@
 #include "templatemenuaction.h"
 
 #include <kactionmenu.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandardshortcut.h>
 #include <QMenu>
 #include <qdebug.h>

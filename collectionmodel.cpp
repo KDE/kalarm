@@ -32,7 +32,7 @@
 #include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <KDebug>
 #include <KUrl>
 #include <KSharedConfig>

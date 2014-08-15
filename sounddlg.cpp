@@ -32,7 +32,7 @@
 
 #include <KIcon>
 #include <KGlobal>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kiconloader.h>
 #include <kio/netaccess.h>

@@ -21,7 +21,7 @@
 #ifndef FONTCOLOUR_H
 #define FONTCOLOUR_H
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <QWidget>
 #include <QStringList>
 

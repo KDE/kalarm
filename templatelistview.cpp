@@ -24,7 +24,7 @@
 #include "functions.h"
 #define TEMPLATE_LIST_MODEL TemplateListModel
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QHeaderView>
 #include <QApplication>

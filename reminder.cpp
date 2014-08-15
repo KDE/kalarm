@@ -29,8 +29,7 @@
 #include <KCalCore/Duration>
 using namespace KCalCore;
 
-#include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 #include <kdatetime.h>
 

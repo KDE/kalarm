@@ -31,7 +31,7 @@
 #include <AkonadiCore/dbusconnectionpool.h>
 
 #include <kmessagebox.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QTimer>
 #include <qdebug.h>

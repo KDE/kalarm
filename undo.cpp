@@ -29,7 +29,7 @@
 #include <kalarmcal/kaevent.h>
 
 #include <kapplication.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <qdebug.h>
 
 static int maxCount = 12;

@@ -24,7 +24,7 @@
 #include "find.h"
 
 #include <kglobalsettings.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QMouseEvent>
 #include <QToolTip>

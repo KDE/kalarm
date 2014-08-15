@@ -52,7 +52,7 @@
 
 #include <KDebug>
 #include <KUrl>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kcolorutils.h>
 #include <KIconLoader>
 

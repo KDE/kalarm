@@ -38,7 +38,7 @@
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <AkonadiCore/resourcesynchronizationjob.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 

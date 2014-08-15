@@ -61,7 +61,7 @@ using namespace KCalCore;
 #include <kactioncollection.h>
 #include <kdbusservicestarter.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kauth.h>
 #include <ksystemtimezone.h>
 #include <kstandardguiitem.h>

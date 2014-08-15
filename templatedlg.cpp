@@ -30,7 +30,7 @@
 #include "templatelistview.h"
 #include "undo.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kguiitem.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>

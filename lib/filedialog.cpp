@@ -23,7 +23,7 @@
 #include "autoqpointer.h"
 
 #include <KFileWidget>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <krecentdocument.h>
 #include <KUrl>
 

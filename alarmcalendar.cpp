@@ -33,7 +33,7 @@
 #include <KCalCore/ICalFormat>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <K4AboutData>
 #include <kio/netaccess.h>

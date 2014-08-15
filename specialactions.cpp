@@ -28,7 +28,7 @@
 
 #include <klineedit.h>
 #include <kapplication.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QLabel>
 #include <QGroupBox>

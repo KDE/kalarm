@@ -22,7 +22,7 @@
 
 #include "timespinbox.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 
 
 /*=============================================================================

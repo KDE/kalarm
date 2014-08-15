@@ -33,7 +33,7 @@
 #include <kfind.h>
 #include <kseparator.h>
 #include <kwindowsystem.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <KDialog>
 
 #include <QGroupBox>

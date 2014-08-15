@@ -42,7 +42,7 @@
 #include <AkonadiCore/entitydisplayattribute.h>
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kglobal.h>
 #include <kcombobox.h>
 #include <kactioncollection.h>

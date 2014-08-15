@@ -26,7 +26,7 @@
 #include <KCalCore/Duration>
 using namespace KCalCore;
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 
 #include <QStackedWidget>

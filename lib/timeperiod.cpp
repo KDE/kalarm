@@ -24,7 +24,7 @@
 #include "spinbox.h"
 #include "timespinbox.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 
 #include <QStackedWidget>

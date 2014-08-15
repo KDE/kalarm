@@ -30,7 +30,7 @@
 
 #include <KIcon>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kiconloader.h>

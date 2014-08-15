@@ -22,7 +22,7 @@
 
 #include <kde_file.h>
 #include <kapplication.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <qdebug.h>
 #include <kauthorized.h>
 #include <qglobal.h>

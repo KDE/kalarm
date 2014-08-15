@@ -45,7 +45,7 @@
 #include <kalarmcal/datetime.h>
 #include <kalarmcal/karecurrence.h>
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <KSharedConfig>

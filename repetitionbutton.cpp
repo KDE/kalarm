@@ -28,7 +28,7 @@
 #include "timeselector.h"
 
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QGroupBox>
 #include <QVBoxLayout>

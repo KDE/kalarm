@@ -24,7 +24,7 @@
 #include "combobox.h"
 #include "timeselector.h"
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kdialog.h>
 #include <QHBoxLayout>
 #include <qdebug.h>

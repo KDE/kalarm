@@ -36,7 +36,7 @@
 #include <KTimeZone>
 #include <kdatecombobox.h>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QGroupBox>
 #include <QGridLayout>

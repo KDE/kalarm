@@ -32,7 +32,7 @@
 #include <kalarmcal/kaevent.h>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <KSharedConfig>
 #include <kconfiggroup.h>
 

@@ -54,7 +54,7 @@
 #include <KCalUtils/kcalutils/icaldrag.h>
 using namespace KCalCore;
 
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kiconloader.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>

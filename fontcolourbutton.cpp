@@ -27,7 +27,7 @@
 #include "pushbutton.h"
 
 #include <klineedit.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QVBoxLayout>
 #include <qdebug.h>
