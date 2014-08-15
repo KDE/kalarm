@@ -33,7 +33,7 @@
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <KLocalizedString>
-#include <KDebug>
+#include <QDebug>
 #include <KUrl>
 #include <KSharedConfig>
 

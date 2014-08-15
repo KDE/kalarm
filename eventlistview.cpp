@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
-#include <kdebug.h>
+#include <QDebug>
 
 
 EventListView::EventListView(QWidget* parent)
@@ -101,7 +101,7 @@ KAEvent EventListView::selectedEvent() const
     QModelIndexList list = selectionModel()->selectedRows();
     if (list.count() != 1)
         return KAEvent();
-kDebug(0)<<"SelectedEvent() count="<<list.count();
+qDebug()<<"SelectedEvent() count="<<list.count();
     const ItemListModel* model = static_cast<const ItemListModel*>(list[0].model());
     return model->event(list[0]);
 }

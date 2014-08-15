@@ -22,7 +22,7 @@
 #define TEMPLATEMENUACTION_H
 
 #include <kactionmenu.h>
-#include <KIcon>
+#include <QIcon>
 #include <QMap>
 class QAction;
 namespace KAlarmCal { class KAEvent; }

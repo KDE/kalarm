@@ -50,7 +50,7 @@
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiWidgets/agenttypedialog.h>
 
-#include <KDebug>
+#include <QDebug>
 #include <KUrl>
 #include <KLocalizedString>
 #include <kcolorutils.h>
@@ -169,14 +169,14 @@ void AkonadiModel::checkResources(ServerManager::State state)
         case ServerManager::Running:
             if (!mResourcesChecked)
             {
-                kDebug() << "Server running";
+                qDebug() << "Server running";
                 mResourcesChecked = true;
                 mMigrating = true;
                 CalendarMigrator::execute();
             }
             break;
         case ServerManager::NotRunning:
-            kDebug() << "Server stopped";
+            qDebug() << "Server stopped";
             mResourcesChecked = false;
             mMigrating = false;
             mCollectionAlarmTypes.clear();

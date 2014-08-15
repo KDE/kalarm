@@ -56,7 +56,7 @@ using namespace KCalCore;
 
 #include <kconfiggroup.h>
 #include <KSharedConfig>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kdbusservicestarter.h>

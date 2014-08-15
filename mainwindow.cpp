@@ -53,7 +53,7 @@ using namespace KCalCore;
 using namespace KCalUtils;
 
 #include <ktoolbar.h>
-#include <kaction.h>
+#include <QAction>
 #include <kactioncollection.h>
 #include <ksystemtrayicon.h>
 #include <kstandardaction.h>

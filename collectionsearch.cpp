@@ -29,7 +29,7 @@
 #include <AkonadiCore/itemfetchjob.h>
 #include <AkonadiCore/itemdeletejob.h>
 
-#include <KDebug>
+#include <QDebug>
 
 #include <QTimer>
 

@@ -46,7 +46,7 @@
 #include <kglobal.h>
 #include <kcombobox.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <ktoggleaction.h>
 
 #include <QLabel>

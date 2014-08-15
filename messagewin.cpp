@@ -41,7 +41,7 @@
 //QT5 #include "kspeechinterface.h"
 
 
-#include <kaction.h>
+#include <QAction>
 #include <kstandardguiitem.h>
 #include <K4AboutData>
 #include <klocale.h>
