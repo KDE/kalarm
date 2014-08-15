@@ -44,7 +44,7 @@
 #include <QAction>
 #include <kstandardguiitem.h>
 #include <K4AboutData>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <kiconloader.h>
 #include <kdialog.h>

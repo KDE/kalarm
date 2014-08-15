@@ -59,7 +59,7 @@ using namespace KCalUtils;
 #include <kstandardaction.h>
 #include <kiconloader.h>
 #include <kurl.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <KLocalizedString>
 #include <kglobalsettings.h>
 #include <KSharedConfig>

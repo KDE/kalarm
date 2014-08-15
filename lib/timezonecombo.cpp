@@ -21,7 +21,7 @@
 #include "timezonecombo.h"
 #include <ksystemtimezone.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 bool TimeZoneCombo::mCatalogLoaded = false;
 

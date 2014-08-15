@@ -60,7 +60,7 @@ using namespace KHolidays;
 
 #include <kvbox.h>
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kshell.h>
 #include <klineedit.h>
 #include <K4AboutData>

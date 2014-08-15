@@ -41,7 +41,7 @@
 
 #include <KTimeZone>
 #include <KUrl>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <K4AboutData>
 #include <kfileitem.h>
 #include <kio/netaccess.h>

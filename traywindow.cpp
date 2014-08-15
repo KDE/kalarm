@@ -38,7 +38,7 @@
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
 #include <kapplication.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <K4AboutData>
 #include <kmessagebox.h>
 #include <kstandardaction.h>

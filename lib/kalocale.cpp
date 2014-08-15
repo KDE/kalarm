@@ -22,7 +22,7 @@
 #include "kalocale.h"
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <KLocalizedString>
 #include <qdebug.h>
 

@@ -51,7 +51,7 @@
 #include <libkdepim/misc/maillistdrag.h>
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <KSharedConfig>
 #include <kfiledialog.h>

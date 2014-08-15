@@ -25,7 +25,7 @@
 #include "timeedit.h"
 
 #include <kglobal.h>
-#include <klocale.h>
+#include <KLocalizedString>
 
 #include <QTime>
 
