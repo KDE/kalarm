@@ -35,7 +35,6 @@
 #include <QQueue>
 
 namespace Akonadi {
-    class AgentInstance;
 }
 class QPixmap;
 class KJob;

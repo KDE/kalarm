@@ -44,7 +44,6 @@ class QWidget;
 class QAction;
 class QAction;
 class KToggleAction;
-class AlarmResource;
 class MainWindow;
 class AlarmListModel;
 
