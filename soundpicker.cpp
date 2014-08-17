@@ -32,7 +32,7 @@
 #include <kglobal.h>
 #include <KLocalizedString>
 #include <kfiledialog.h>
-#include <kstandarddirs.h>
+
 #include <kiconloader.h>
 #include <phonon/backendcapabilities.h>
 
@@ -40,6 +40,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <qdebug.h>
+#include <QStandardPaths>
 
 
 static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type to combo index
@@ -327,8 +328,10 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
     static QString kdeSoundDir;     // directory containing KDE sound files
     if (defaultDir.isEmpty())
     {
-        if (kdeSoundDir.isNull())
-            kdeSoundDir = KGlobal::dirs()->findResourceDir("sound", QLatin1String("KDE-Sys-Warning.ogg"));
+        if (kdeSoundDir.isNull()) {
+            kdeSoundDir= QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("sound/") + QLatin1String("KDE-Sys-Warning.ogg"));
+            kdeSoundDir = QFileInfo(kdeSoundDir).absolutePath();
+        }
         defaultDir = kdeSoundDir;
     }
     QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1String(" "));
