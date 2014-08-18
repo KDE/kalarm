@@ -54,7 +54,6 @@
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <KSharedConfig>
-#include <kfiledialog.h>
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>
