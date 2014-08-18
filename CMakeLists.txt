@@ -27,7 +27,6 @@ ecm_setup_version(${KDEPIMLIBS_VERSION} VARIABLE_PREFIX KALARMCAL
 
 ########### Find packages ###########
 find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
-find_package(KF5KIO ${KF5_VERSION} CONFIG REQUIRED)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${KAlarmCal_SOURCE_DIR})
   find_package(KF5Akonadi ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
