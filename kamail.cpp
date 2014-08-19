@@ -187,7 +187,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     {
         qDebug() << "Sending via KDE";
         const int transportId = identity.transport().isEmpty() ? -1 : identity.transport().toInt();
-        transport = manager->transportById( transportId, true );
+        transport = manager->transportById(transportId, true);
         if (!transport)
         {
             qCritical() << "No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
@@ -359,24 +359,28 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QString attachError = xi18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
             url.cleanPath();
             KIO::UDSEntry uds;
-            if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow())) {
+            if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
+            {
                 qCritical() << "Not found:" << attachment;
                 return xi18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
             }
             KFileItem fi(uds, url);
-            if (fi.isDir()  ||  !fi.isReadable()) {
+            if (fi.isDir()  ||  !fi.isReadable())
+            {
                 qCritical() << "Not file/not readable:" << attachment;
                 return attachError;
             }
 
             // Read the file contents
             QString tmpFile;
-            if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow())) {
+            if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow()))
+            {
                 qCritical() << "Load failure:" << attachment;
                 return attachError;
             }
             QFile file(tmpFile);
-            if (!file.open(QIODevice::ReadOnly)) {
+            if (!file.open(QIODevice::ReadOnly))
+            {
                 qDebug() << "tmp load error:" << attachment;
                 return attachError;
             }
@@ -384,7 +388,8 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QByteArray contents = file.readAll();
             file.close();
             bool atterror = false;
-            if (contents.size() < size) {
+            if (contents.size() < size)
+            {
                 qDebug() << "Read error:" << attachment;
                 atterror = true;
             }

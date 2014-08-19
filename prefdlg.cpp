@@ -149,7 +149,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     setAttribute(Qt::WA_DeleteOnClose);
     setObjectName(QLatin1String("PrefDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Configure"));
-    setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply );
+    setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply);
     button(QDialogButtonBox::Ok)->setDefault(true); 
     setFaceType(List);
     mTabScrollGroup = new StackedScrollGroup(this, this);
@@ -1007,7 +1007,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     grid->setColumnStretch(2, 1);
 
     // 'From' email address controls ...
-    QLabel *label = new Label(i18nc("@label 'From' email address", "From:"), group);
+    QLabel* label = new Label(i18nc("@label 'From' email address", "From:"), group);
     grid->addWidget(label, 1, 0);
     mFromAddressGroup = new ButtonGroup(group);
     connect(mFromAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotFromAddrChanged(QAbstractButton*)));

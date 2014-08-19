@@ -145,7 +145,7 @@ class KAMessageBox
         static int questionYesNoCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
                                        const KGuiItem& buttonYes = KStandardGuiItem::yes(),
                                        const KGuiItem& buttonNo = KStandardGuiItem::no(),
-                                       const KGuiItem &buttonCancel = KStandardGuiItem::cancel(),
+                                       const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
                                        const QString& dontAskAgainName = QString(), KMessageBox::Options options = KMessageBox::Options(KMessageBox::Notify|KMessageBox::WindowModal))
         { return KMessageBox::questionYesNoCancel(parent, text, caption, buttonYes, buttonNo, buttonCancel, dontAskAgainName, options); }
 

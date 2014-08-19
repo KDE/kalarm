@@ -35,8 +35,8 @@
 #include <QHBoxLayout>
 
 
-FontColourChooser::FontColourChooser(QWidget *parent,
-          const QStringList &fontList, const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)
+FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontList,
+           const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)
     : QWidget(parent),
       mFgColourButton(0),
       mReadOnly(false)
