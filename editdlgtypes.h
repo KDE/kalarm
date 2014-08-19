@@ -27,13 +27,11 @@
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
 
-
 #include <kurl.h>
 
 class QAbstractButton;
 class QGroupBox;
 class KComboBox;
-
 class EmailIdCombo;
 class CheckBox;
 class ComboBox;
@@ -100,8 +98,8 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 
         // Display alarm options
         ComboBox*           mTypeCombo;
-        QWidget *              mFileBox;
-        QWidget *              mFilePadding;
+        QWidget*            mFileBox;
+        QWidget*            mFilePadding;
         SoundPicker*        mSoundPicker;
         CheckBox*           mConfirmAck;
         FontColourButton*   mFontColourButton;
@@ -184,7 +182,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
         PickLogFileRadio*   mCmdLogToFile;
         RadioButton*        mCmdDiscardOutput;
         LineEdit*           mCmdLogFileEdit;     // log file URL edit box
-        QWidget *              mCmdPadding;
+        QWidget*            mCmdPadding;
 
         // Initial state of all controls
         bool                mSavedCmdScript;        // mCmdEdit->isScript() status
@@ -299,7 +297,7 @@ class EditAudioAlarmDlg : public EditAlarmDlg
 
         // Audio alarm options
         SoundWidget*        mSoundConfig;
-        QWidget *              mPadding;          // allow top-adjustment of controls
+        QWidget*            mPadding;          // allow top-adjustment of controls
 
         // Initial state of all controls
         QString             mSavedFile;        // sound file

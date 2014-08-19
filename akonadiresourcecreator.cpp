@@ -27,8 +27,8 @@
 #include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>
-#include <AkonadiWidgets/agenttypedialog.h>
 #include <AkonadiCore/dbusconnectionpool.h>
+#include <AkonadiWidgets/agenttypedialog.h>
 
 #include <kmessagebox.h>
 #include <KLocalizedString>

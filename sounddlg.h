@@ -28,7 +28,6 @@
 class QPushButton;
 class QShowEvent;
 class QResizeEvent;
-
 namespace Phonon { class MediaObject; }
 class GroupBox;
 class PushButton;
@@ -72,19 +71,19 @@ class SoundWidget : public QWidget
         void           playFinished();
 
     private:
-        static QString mDefaultDir;     // current default directory for mFileEdit
-        QPushButton*   mFilePlay;
-        LineEdit*      mFileEdit;
-        PushButton*    mFileBrowseButton;
-        GroupBox*      mRepeatGroupBox;
-        SpinBox*       mRepeatPause;
-        CheckBox*      mVolumeCheckbox;
-        Slider*        mVolumeSlider;
-        CheckBox*      mFadeCheckbox;
-        QWidget *         mFadeBox;
-        SpinBox*       mFadeTime;
-        QWidget *         mFadeVolumeBox;
-        Slider*        mFadeSlider;
+        static QString       mDefaultDir;     // current default directory for mFileEdit
+        QPushButton*         mFilePlay;
+        LineEdit*            mFileEdit;
+        PushButton*          mFileBrowseButton;
+        GroupBox*            mRepeatGroupBox;
+        SpinBox*             mRepeatPause;
+        CheckBox*            mVolumeCheckbox;
+        Slider*              mVolumeSlider;
+        CheckBox*            mFadeCheckbox;
+        QWidget*             mFadeBox;
+        SpinBox*             mFadeTime;
+        QWidget*             mFadeVolumeBox;
+        Slider*              mFadeSlider;
         mutable KUrl         mUrl;
         mutable QString      mValidatedFile;
         Phonon::MediaObject* mPlayer;

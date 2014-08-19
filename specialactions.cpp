@@ -168,22 +168,20 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     vlayout->setSpacing(KDialog::spacingHint());
 
     QWidget* box = new QWidget(group);   // this is to control the QWhatsThis text display area
-    QHBoxLayout *boxHBoxLayout = new QHBoxLayout(box);
-    boxHBoxLayout->setMargin(0);
-    boxHBoxLayout->setMargin(0);
-    boxHBoxLayout->setSpacing(KDialog::spacingHint());
     vlayout->addWidget(box);
+    QHBoxLayout* boxLayout = new QHBoxLayout(box);
+    boxLayout->setMargin(0);
     QLabel* label = new QLabel(i18nc("@label:textbox", "Command:"), box);
-    boxHBoxLayout->addWidget(label);
+    boxLayout->addWidget(label);
     mPreAction = new QLineEdit(box);
-    boxHBoxLayout->addWidget(mPreAction);
+    boxLayout->addWidget(mPreAction);
     label->setBuddy(mPreAction);
     connect(mPreAction, SIGNAL(textChanged(QString)), SLOT(slotPreActionChanged(QString)));
     box->setWhatsThis(xi18nc("@info:whatsthis",
                             "<para>Enter a shell command to execute before the alarm is displayed.</para>"
                             "<para>Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.</para>"
                             "<para><note>KAlarm will wait for the command to complete before displaying the alarm.</note></para>"));
-    boxHBoxLayout->setStretchFactor(mPreAction, 1);
+    boxLayout->setStretchFactor(mPreAction, 1);
 
     // Cancel if error in pre-alarm action
     mExecOnDeferral = new CheckBox(i18nc("@option:check", "Execute for deferred alarms"), group);
@@ -207,21 +205,19 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     vlayout->setSpacing(KDialog::spacingHint());
 
     box = new QWidget(group);   // this is to control the QWhatsThis text display area
-    boxHBoxLayout = new QHBoxLayout(box);
-    boxHBoxLayout->setMargin(0);
-    boxHBoxLayout->setMargin(0);
-    boxHBoxLayout->setSpacing(KDialog::spacingHint());
     vlayout->addWidget(box);
+    boxLayout = new QHBoxLayout(box);
+    boxLayout->setMargin(0);
     label = new QLabel(i18nc("@label:textbox", "Command:"), box);
-    boxHBoxLayout->addWidget(label);
+    boxLayout->addWidget(label);
     mPostAction = new QLineEdit(box);
-    boxHBoxLayout->addWidget(mPostAction);
+    boxLayout->addWidget(mPostAction);
     label->setBuddy(mPostAction);
     box->setWhatsThis(xi18nc("@info:whatsthis",
                             "<para>Enter a shell command to execute after the alarm window is closed.</para>"
                             "<para>Note that it is not executed after closing a reminder window. If you defer "
                             "the alarm, it is not executed until the alarm is finally acknowledged or closed.</para>"));
-    boxHBoxLayout->setStretchFactor(mPostAction, 1);
+    boxLayout->setStretchFactor(mPostAction, 1);
 
     mExecOnDeferral->setEnabled(enableCheckboxes);
     mCancelOnError->setEnabled(enableCheckboxes);

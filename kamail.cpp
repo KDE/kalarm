@@ -50,7 +50,6 @@
 #include <kcodecs.h>
 #include <kcharsets.h>
 #include <kascii.h>
-#include <KCharsets>
 
 #include <QFile>
 #include <QHostInfo>

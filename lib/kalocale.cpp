@@ -23,7 +23,6 @@
 
 #include <kglobal.h>
 #include <KLocalizedString>
-#include <KLocalizedString>
 #include <qdebug.h>
 
 namespace KAlarm

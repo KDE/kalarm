@@ -34,8 +34,8 @@
 #include <kguiitem.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
-#include <QAction>
 
+#include <QAction>
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

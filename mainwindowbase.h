@@ -23,8 +23,6 @@
 
 #include <kxmlguiwindow.h>
 
-
-
 /**
  *  The MainWindowBase class is a base class for KAlarm's main window and message window.
  *  When the window is closed, it only allows the application to quit if there is no

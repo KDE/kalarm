@@ -18,7 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "config-kdepim.h"
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "functions.h"
 #include "functions_p.h"
@@ -56,7 +55,6 @@ using namespace KCalCore;
 
 #include <kconfiggroup.h>
 #include <KSharedConfig>
-#include <QAction>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
 #include <kdbusservicestarter.h>
@@ -79,6 +77,7 @@ using namespace KCalCore;
 #include <QX11Info>
 #endif
 
+#include <QAction>
 #include <QDir>
 #include <QRegExp>
 #include <QDesktopWidget>

@@ -50,7 +50,6 @@
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiWidgets/agenttypedialog.h>
 
-#include <QDebug>
 #include <KUrl>
 #include <KLocalizedString>
 #include <kcolorutils.h>
@@ -59,6 +58,7 @@
 #include <QApplication>
 #include <QFileInfo>
 #include <QTimer>
+#include <QDebug>
 
 using namespace Akonadi;
 using namespace KAlarmCal;

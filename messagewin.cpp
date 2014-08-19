@@ -41,7 +41,6 @@
 //QT5 #include "kspeechinterface.h"
 
 
-#include <QAction>
 #include <kstandardguiitem.h>
 #include <K4AboutData>
 #include <KLocalizedString>
@@ -66,6 +65,7 @@
 #endif
 #include <KGlobal>
 
+#include <QAction>
 #include <qtextbrowser.h>
 #include <QPushButton>
 #include <QScrollBar>

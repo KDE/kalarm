@@ -38,17 +38,17 @@
 #include <AkonadiCore/agentmanager.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agenttype.h>
-#include <AkonadiWidgets/collectionpropertiesdialog.h>
 #include <AkonadiCore/entitydisplayattribute.h>
+#include <AkonadiWidgets/collectionpropertiesdialog.h>
 
 #include <kdialog.h>
 #include <KLocalizedString>
 #include <kglobal.h>
 #include <kcombobox.h>
 #include <kactioncollection.h>
-#include <QAction>
 #include <ktoggleaction.h>
 
+#include <QAction>
 #include <QLabel>
 #include <QPushButton>
 #include <QTimer>

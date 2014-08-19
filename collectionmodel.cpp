@@ -27,13 +27,12 @@
 #include <kalarmcal/compatibilityattribute.h>
 
 #include <AkonadiCore/agentmanager.h>
-#include <AkonadiWidgets/collectiondialog.h>
 #include <AkonadiCore/collectiondeletejob.h>
 #include <AkonadiCore/collectionmodifyjob.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
+#include <AkonadiWidgets/collectiondialog.h>
 
 #include <KLocalizedString>
-#include <QDebug>
 #include <KUrl>
 #include <KSharedConfig>
 
@@ -43,6 +42,7 @@
 #include <QToolTip>
 #include <QTimer>
 #include <QObject>
+#include <QDebug>
 
 using namespace Akonadi;
 using namespace KAlarmCal;

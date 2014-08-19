@@ -29,9 +29,8 @@
 #include <AkonadiCore/itemfetchjob.h>
 #include <AkonadiCore/itemdeletejob.h>
 
-#include <QDebug>
-
 #include <QTimer>
+#include <QDebug>
 
 using namespace Akonadi;
 

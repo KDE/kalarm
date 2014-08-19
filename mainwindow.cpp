@@ -53,13 +53,11 @@ using namespace KCalCore;
 using namespace KCalUtils;
 
 #include <ktoolbar.h>
-#include <QAction>
 #include <kactioncollection.h>
 #include <ksystemtrayicon.h>
 #include <kstandardaction.h>
 #include <kiconloader.h>
 #include <kurl.h>
-#include <KLocalizedString>
 #include <KLocalizedString>
 #include <kglobalsettings.h>
 #include <KSharedConfig>
@@ -74,6 +72,7 @@ using namespace KCalUtils;
 #include <KGlobal>
 #include <KShortcut>
 
+#include <QAction>
 #include <QSplitter>
 #include <QByteArray>
 #include <QDragEnterEvent>

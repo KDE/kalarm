@@ -29,8 +29,6 @@
 #include <QHBoxLayout>
 #include <qdebug.h>
 
-#include <QHBoxLayout>
-
 using namespace KCalCore;
 
 
@@ -50,12 +48,11 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     layout->addWidget(mSelect);
 
     QWidget* box = new QWidget(this);    // to group widgets for QWhatsThis text
-    QHBoxLayout *boxHBoxLayout = new QHBoxLayout(box);
-    boxHBoxLayout->setMargin(0);
-    boxHBoxLayout->setSpacing(KDialog::spacingHint());
     layout->addWidget(box);
+    QHBoxLayout* boxLayout = new QHBoxLayout(box);
+    boxLayout->setMargin(0);
     mPeriod = new TimePeriod(allowHourMinute, box);
-    boxHBoxLayout->addWidget(mPeriod);
+    boxLayout->addWidget(mPeriod);
     mPeriod->setFixedSize(mPeriod->sizeHint());
     mPeriod->setSelectOnStep(false);
     connect(mPeriod, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(periodChanged(KCalCore::Duration)));

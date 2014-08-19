@@ -34,8 +34,6 @@
 #include <QMap>
 #include <QQueue>
 
-namespace Akonadi {
-}
 class QPixmap;
 class KJob;
 

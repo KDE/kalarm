@@ -24,7 +24,6 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <kglobal.h>
-#include <KSharedConfig>
 
 
 QMap<QString, KMessageBox::ButtonCode> KAMessageBox::mContinueDefaults;

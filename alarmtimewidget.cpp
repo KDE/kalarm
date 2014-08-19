@@ -123,11 +123,11 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
     // Time edit box and Any time checkbox
     QWidget* timeBox = new QWidget(topWidget);
-    QHBoxLayout *timeBoxHBoxLayout = new QHBoxLayout(timeBox);
-    timeBoxHBoxLayout->setMargin(0);
-    timeBoxHBoxLayout->setSpacing(2*KDialog::spacingHint());
+    QHBoxLayout* timeBoxHLayout = new QHBoxLayout(timeBox);
+    timeBoxHLayout->setMargin(0);
+    timeBoxHLayout->setSpacing(2*KDialog::spacingHint());
     mTimeEdit = new TimeEdit(timeBox);
-    timeBoxHBoxLayout->addWidget(mTimeEdit);
+    timeBoxHLayout->addWidget(mTimeEdit);
     mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
     connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
     mTimeEdit->setWhatsThis(xi18nc("@info:whatsthis",
@@ -145,7 +145,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     {
         mAnyTimeAllowed = true;
         mAnyTimeCheckBox = new CheckBox(i18nc("@option:check", "Any time"), timeBox);
-        timeBoxHBoxLayout->addWidget(mAnyTimeCheckBox);
+        timeBoxHLayout->addWidget(mAnyTimeCheckBox);
         mAnyTimeCheckBox->setFixedSize(mAnyTimeCheckBox->sizeHint());
         connect(mAnyTimeCheckBox, SIGNAL(toggled(bool)), SLOT(slotAnyTimeToggled(bool)));
         mAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis",
@@ -210,14 +210,12 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
         // Time zone selector
         mTimeZoneBox = new QWidget(topWidget);   // this is to control the QWhatsThis text display area
-        QHBoxLayout *mTimeZoneBoxHBoxLayout = new QHBoxLayout(mTimeZoneBox);
-        mTimeZoneBoxHBoxLayout->setMargin(0);
-        mTimeZoneBoxHBoxLayout->setMargin(0);
-        mTimeZoneBoxHBoxLayout->setSpacing(KDialog::spacingHint());
+        QHBoxLayout* hlayout = new QHBoxLayout(mTimeZoneBox);
+        hlayout->setMargin(0);
         QLabel* label = new QLabel(i18nc("@label:listbox", "Time zone:"), mTimeZoneBox);
-        mTimeZoneBoxHBoxLayout->addWidget(label);
+        hlayout->addWidget(label);
         mTimeZone = new TimeZoneCombo(mTimeZoneBox);
-        mTimeZoneBoxHBoxLayout->addWidget(mTimeZone);
+        hlayout->addWidget(mTimeZone);
         mTimeZone->setMaxVisibleItems(15);
         connect(mTimeZone, SIGNAL(activated(int)), SLOT(slotTimeZoneChanged()));
         mTimeZoneBox->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));

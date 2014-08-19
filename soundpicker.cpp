@@ -32,15 +32,14 @@
 #include <kglobal.h>
 #include <KLocalizedString>
 #include <kfiledialog.h>
-
 #include <kiconloader.h>
 #include <phonon/backendcapabilities.h>
 
 #include <QTimer>
 #include <QLabel>
 #include <QHBoxLayout>
-#include <qdebug.h>
 #include <QStandardPaths>
+#include <qdebug.h>
 
 
 static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type to combo index
@@ -64,13 +63,11 @@ SoundPicker::SoundPicker(QWidget* parent)
     soundLayout->setMargin(0);
     soundLayout->setSpacing(KDialog::spacingHint());
     mTypeBox = new QWidget(this);    // this is to control the QWhatsThis text display area
-    QHBoxLayout *mTypeBoxHBoxLayout = new QHBoxLayout(mTypeBox);
-    mTypeBoxHBoxLayout->setMargin(0);
-    mTypeBoxHBoxLayout->setMargin(0);
-    mTypeBoxHBoxLayout->setSpacing(KDialog::spacingHint());
+    QHBoxLayout* typeBoxLayout = new QHBoxLayout(mTypeBox);
+    typeBoxLayout->setMargin(0);
 
     QLabel* label = new QLabel(i18n_label_Sound(), mTypeBox);
-    mTypeBoxHBoxLayout->addWidget(label);
+    typeBoxLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
 
     // Sound type combo box
@@ -84,7 +81,7 @@ SoundPicker::SoundPicker(QWidget* parent)
     }
 
     mTypeCombo = new ComboBox(mTypeBox);
-    mTypeBoxHBoxLayout->addWidget(mTypeCombo);
+    typeBoxLayout->addWidget(mTypeCombo);
     mTypeCombo->addItem(i18n_combo_None());     // index None
     mTypeCombo->addItem(i18n_combo_Beep());     // index Beep
     mTypeCombo->addItem(i18n_combo_File());     // index PlayFile
@@ -328,8 +325,9 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
     static QString kdeSoundDir;     // directory containing KDE sound files
     if (defaultDir.isEmpty())
     {
-        if (kdeSoundDir.isNull()) {
-            kdeSoundDir= QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("sound/") + QLatin1String("KDE-Sys-Warning.ogg"));
+        if (kdeSoundDir.isNull())
+        {
+            kdeSoundDir = QStandardPaths::locate(QStandardPaths::GenericDataLocation, QLatin1String("sound/KDE-Sys-Warning.ogg"));
             kdeSoundDir = QFileInfo(kdeSoundDir).absolutePath();
         }
         defaultDir = kdeSoundDir;
@@ -337,5 +335,7 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
     QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1String(" "));
     return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }
+
 #include "moc_soundpicker.cpp"
+
 // vim: et sw=4:
