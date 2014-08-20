@@ -32,6 +32,7 @@
 
 #include <kglobal.h>
 #include <KLocalizedString>
+#include <QLocale>
 
 using namespace KAlarmCal;
 
@@ -79,7 +80,7 @@ QVariant BirthdayModel::entityData(const Akonadi::Item& item, int column, int ro
     {
         QDate date = Akonadi::ContactsTreeModel::entityData(item, column, DateRole).toDate();
         if (date.isValid())
-            return KLocale::global()->formatDate(date, KLocale::ShortDate);
+            return QLocale().toString(date, QLocale::ShortFormat);
     }
     return Akonadi::ContactsTreeModel::entityData(item, column, role);
 }

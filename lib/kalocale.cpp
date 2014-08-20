@@ -24,6 +24,7 @@
 #include <kglobal.h>
 #include <KLocalizedString>
 #include <qdebug.h>
+#include <QLocale>
 
 namespace KAlarm
 {
@@ -36,7 +37,7 @@ int localeFirstDayOfWeek()
 {
     static int firstDay = 0;
     if (!firstDay)
-        firstDay = KLocale::global()->weekStartDay();
+        firstDay = QLocale().firstDayOfWeek();
     return firstDay;
 }
 
