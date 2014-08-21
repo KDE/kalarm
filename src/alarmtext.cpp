@@ -509,15 +509,15 @@ void AlarmText::Private::setUpTranslations()
 {
     initialise();
     if (mFromPrefix.isNull()) {
-        mFromPrefix    = i18nc("@info/plain 'From' email address", "From:");
-        mToPrefix      = i18nc("@info/plain Email addressee", "To:");
-        mCcPrefix      = i18nc("@info/plain Copy-to in email headers", "Cc:");
-        mDatePrefix    = i18nc("@info/plain", "Date:");
-        mSubjectPrefix = i18nc("@info/plain Email subject", "Subject:");
+        mFromPrefix    = i18nc("@info 'From' email address", "From:");
+        mToPrefix      = i18nc("@info Email addressee", "To:");
+        mCcPrefix      = i18nc("@info Copy-to in email headers", "Cc:");
+        mDatePrefix    = i18nc("@info", "Date:");
+        mSubjectPrefix = i18nc("@info Email subject", "Subject:");
         // Todo prefixes
-        mTitlePrefix   = i18nc("@info/plain Todo calendar item's title field", "To-do:");
-        mLocnPrefix    = i18nc("@info/plain Todo calendar item's location field", "Location:");
-        mDuePrefix     = i18nc("@info/plain Todo calendar item's due date/time", "Due:");
+        mTitlePrefix   = i18nc("@info Todo calendar item's title field", "To-do:");
+        mLocnPrefix    = i18nc("@info Todo calendar item's location field", "Location:");
+        mDuePrefix     = i18nc("@info Todo calendar item's due date/time", "Due:");
     }
 }
 

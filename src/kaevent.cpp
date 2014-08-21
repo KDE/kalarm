@@ -3026,34 +3026,34 @@ void KAEventPrivate::setFirstRecurrence()
 QString KAEvent::recurrenceText(bool brief) const
 {
     if (d->mRepeatAtLogin) {
-        return brief ? i18nc("@info/plain Brief form of 'At Login'", "Login") : i18nc("@info/plain", "At login");
+        return brief ? i18nc("@info Brief form of 'At Login'", "Login") : i18nc("@info", "At login");
     }
     if (d->mRecurrence) {
         const int frequency = d->mRecurrence->frequency();
         switch (d->mRecurrence->defaultRRuleConst()->recurrenceType()) {
         case RecurrenceRule::rMinutely:
             if (frequency < 60) {
-                return i18ncp("@info/plain", "1 Minute", "%1 Minutes", frequency);
+                return i18ncp("@info", "1 Minute", "%1 Minutes", frequency);
             } else if (frequency % 60 == 0) {
-                return i18ncp("@info/plain", "1 Hour", "%1 Hours", frequency / 60);
+                return i18ncp("@info", "1 Hour", "%1 Hours", frequency / 60);
             } else {
                 QString mins;
-                return i18nc("@info/plain Hours and minutes", "%1h %2m", frequency / 60, mins.sprintf("%02d", frequency % 60));
+                return i18nc("@info Hours and minutes", "%1h %2m", frequency / 60, mins.sprintf("%02d", frequency % 60));
             }
         case RecurrenceRule::rDaily:
-            return i18ncp("@info/plain", "1 Day", "%1 Days", frequency);
+            return i18ncp("@info", "1 Day", "%1 Days", frequency);
         case RecurrenceRule::rWeekly:
-            return i18ncp("@info/plain", "1 Week", "%1 Weeks", frequency);
+            return i18ncp("@info", "1 Week", "%1 Weeks", frequency);
         case RecurrenceRule::rMonthly:
-            return i18ncp("@info/plain", "1 Month", "%1 Months", frequency);
+            return i18ncp("@info", "1 Month", "%1 Months", frequency);
         case RecurrenceRule::rYearly:
-            return i18ncp("@info/plain", "1 Year", "%1 Years", frequency);
+            return i18ncp("@info", "1 Year", "%1 Years", frequency);
         case RecurrenceRule::rNone:
         default:
             break;
         }
     }
-    return brief ? QString() : i18nc("@info/plain No recurrence", "None");
+    return brief ? QString() : i18nc("@info No recurrence", "None");
 }
 
 /******************************************************************************
@@ -3114,21 +3114,21 @@ QString KAEvent::repetitionText(bool brief) const
         if (!d->mRepetition.isDaily()) {
             const int minutes = d->mRepetition.intervalMinutes();
             if (minutes < 60) {
-                return i18ncp("@info/plain", "1 Minute", "%1 Minutes", minutes);
+                return i18ncp("@info", "1 Minute", "%1 Minutes", minutes);
             }
             if (minutes % 60 == 0) {
-                return i18ncp("@info/plain", "1 Hour", "%1 Hours", minutes / 60);
+                return i18ncp("@info", "1 Hour", "%1 Hours", minutes / 60);
             }
             QString mins;
-            return i18nc("@info/plain Hours and minutes", "%1h %2m", minutes / 60, mins.sprintf("%02d", minutes % 60));
+            return i18nc("@info Hours and minutes", "%1h %2m", minutes / 60, mins.sprintf("%02d", minutes % 60));
         }
         const int days = d->mRepetition.intervalDays();
         if (days % 7) {
-            return i18ncp("@info/plain", "1 Day", "%1 Days", days);
+            return i18ncp("@info", "1 Day", "%1 Days", days);
         }
-        return i18ncp("@info/plain", "1 Week", "%1 Weeks", days / 7);
+        return i18ncp("@info", "1 Week", "%1 Weeks", days / 7);
     }
-    return brief ? QString() : i18nc("@info/plain No repetition", "None");
+    return brief ? QString() : i18nc("@info No repetition", "None");
 }
 
 /******************************************************************************
