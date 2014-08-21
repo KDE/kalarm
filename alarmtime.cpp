@@ -39,7 +39,7 @@ int AlarmTime::mTimeHourPos = -2;
 QString AlarmTime::alarmTimeText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
-        return i18nc("@info/plain Alarm never occurs", "Never");
+        return i18nc("@info Alarm never occurs", "Never");
     KLocale* locale = KLocale::global();
     KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
     QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
@@ -77,13 +77,13 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
 QString AlarmTime::timeToAlarmText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
-        return i18nc("@info/plain Alarm never occurs", "Never");
+        return i18nc("@info Alarm never occurs", "Never");
     KDateTime now = KDateTime::currentUtcDateTime();
     if (dateTime.isDateOnly())
     {
         int days = now.date().daysTo(dateTime.date());
         // xgettext: no-c-format
-        return i18nc("@info/plain n days", "%1d", days);
+        return i18nc("@info n days", "%1d", days);
     }
     int mins = (now.secsTo(dateTime.effectiveKDateTime()) + 59) / 60;
     if (mins < 0)
@@ -92,10 +92,10 @@ QString AlarmTime::timeToAlarmText(const DateTime& dateTime)
     minutes[0] = (mins%60) / 10 + '0';
     minutes[1] = (mins%60) % 10 + '0';
     if (mins < 24*60)
-        return i18nc("@info/plain hours:minutes", "%1:%2", mins/60, QLatin1String(minutes));
+        return i18nc("@info hours:minutes", "%1:%2", mins/60, QLatin1String(minutes));
     int days = mins / (24*60);
     mins = mins % (24*60);
-    return i18nc("@info/plain days hours:minutes", "%1d %2:%3", days, mins/60, QLatin1String(minutes));
+    return i18nc("@info days hours:minutes", "%1d %2:%3", days, mins/60, QLatin1String(minutes));
 }
 
 /******************************************************************************

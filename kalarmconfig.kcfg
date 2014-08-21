@@ -69,7 +69,7 @@
     </entry>
     <entry name="Base_TimeZone" key="TimeZone" type="String">
       <label context="@label">Time zone</label>
-      <whatsthis context="@info:whatsthis">Select the time zone which &lt;application>KAlarm&lt;/application> should use as its default for displaying and entering dates and times.</whatsthis>
+      <whatsthis context="@info:whatsthis">Select the time zone which KAlarm should use as its default for displaying and entering dates and times.</whatsthis>
       <!-- <emit signal="base_TimeZoneChanged"/> -->
     </entry>
     <entry name="Base_HolidayRegion" key="HolidayRegion" type="String">
@@ -95,19 +95,19 @@
     </entry>
     <entry name="ShowInSystemTray" type="Bool">
       <label context="@label">Show in system tray</label>
-      <whatsthis context="@info:whatsthis">&lt;para>Check to show &lt;application>KAlarm&lt;/application>'s icon in the system tray. Showing it in the system tray provides easy access and a status indication.&lt;/para></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>Check to show KAlarm's icon in the system tray. Showing it in the system tray provides easy access and a status indication.&lt;/p></whatsthis>
       <default>true</default>
       <!-- <emit signal="showInSystemTrayChanged"/>-->
     </entry>
     <entry name="AutoHideSystemTray" type="Int">
       <label context="@label">Auto-hide in system tray if no alarms due within period</label>
-      <whatsthis context="@info:whatsthis">&lt;para>Enter -1 to auto-hide &lt;application>KAlarm&lt;/application>'s icon in the system tray when there are no active alarms.&lt;/para>&lt;para>To auto-hide the system tray icon when there are no alarms due within a set period of time, enter the time period in minutes.&lt;/para>&lt;para>Enter 0 to always show the system tray icon.&lt;/para></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>Enter -1 to auto-hide KAlarm's icon in the system tray when there are no active alarms.&lt;/p>&lt;p>To auto-hide the system tray icon when there are no alarms due within a set period of time, enter the time period in minutes.&lt;/p>&lt;p>Enter 0 to always show the system tray icon.&lt;/p></whatsthis>
       <default>1440</default>
       <!-- <emit signal="autoHideSystemTrayChanged"/> -->
     </entry>
     <entry name="AutoStart" key="AutoStart" type="Bool">
       <label context="@label">Start at login</label>
-      <whatsthis context="@info:whatsthis">&lt;para>Automatically start &lt;application>KAlarm&lt;/application> whenever you start KDE.&lt;/para>&lt;para>This option should always be checked unless you intend to discontinue use of &lt;application>KAlarm&lt;/application>.&lt;/para></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>Automatically start KAlarm whenever you start KDE.&lt;/p>&lt;p>This option should always be checked unless you intend to discontinue use of KAlarm.&lt;/p></whatsthis>
       <default>false</default>
     </entry>
     <entry name="NoAutoStart" key="NoAutoStart" type="Bool" hidden="true">
@@ -121,21 +121,21 @@
     </entry>
     <entry name="AskResource" type="Bool">
       <label context="@label">Prompt for which calendar to store in</label>
-      <whatsthis context="@info:whatsthis">&lt;para>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.&lt;/para>&lt;para>Note that archived alarms are always stored in the default archived alarm calendar.&lt;/para></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>When saving a new alarm or alarm template, prompt for which calendar to store it in, if there is more than one active calendar.&lt;/p>&lt;p>Note that archived alarms are always stored in the default archived alarm calendar.&lt;/p></whatsthis>
       <default>true</default>
       <!-- <emit signal="askResourceChanged"/> -->
     </entry>
     <entry name="ModalMessages" type="Bool">
       <label context="@label">Message windows have a title bar and take keyboard focus</label>
-      <whatsthis context="@info:whatsthis">&lt;para>Specify the characteristics of alarm message windows:&lt;list>&lt;item>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.&lt;/item>&lt;item>If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.&lt;/item>&lt;/list>&lt;/para></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>Specify the characteristics of alarm message windows:&lt;ul>&lt;li>If checked, the window is a normal window with a title bar, which grabs keyboard input when it is displayed.&lt;/li>&lt;li>If unchecked, the window does not interfere with your typing when it is displayed, but it has no title bar and cannot be moved or resized.&lt;/li>&lt;/ul>&lt;/p></whatsthis>
       <default>true</default>
     </entry>
     <entry name="MessageButtonDelay" type="Int">
       <label context="@label">Delay before message window buttons are enabled</label>
-      <whatsthis context="@info:whatsthis">&lt;para>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled.
-        &lt;list>&lt;item>0 to position message windows as far from the cursor as possible with no enable delay.&lt;/item>
-        &lt;item>> 0 to position in center of screen and specify delay before enabling buttons.&lt;/item>
-        &lt;item>-1 for no special positioning and no enable delay.&lt;/item>&lt;/list>&lt;/para>
+      <whatsthis context="@info:whatsthis">&lt;p>Specify the positioning of alarm message windows, and the delay in seconds after a window shows until its buttons are enabled.
+        &lt;ul>&lt;li>0 to position message windows as far from the cursor as possible with no enable delay.&lt;/li>
+        &lt;li>> 0 to position in center of screen and specify delay before enabling buttons.&lt;/li>
+        &lt;li>-1 for no special positioning and no enable delay.&lt;/li>&lt;/ul>&lt;/p>
       </whatsthis>
       <default>0</default>
       <min>-1</min>
@@ -143,10 +143,10 @@
     </entry>
     <entry name="TooltipAlarmCount" type="Int">
       <label context="@label">Number of alarms to show in system tray tooltip</label>
-      <whatsthis context="@info:whatsthis">&lt;para>How many alarms due in the next 24 hours to show in the system tray tooltip:
-        &lt;list>&lt;item>0 to display none&lt;/item>
-        &lt;item>-1 to display all&lt;/item>
-        &lt;item>>0 to set a limit.&lt;/item>&lt;/list>&lt;/para>
+      <whatsthis context="@info:whatsthis">&lt;p>How many alarms due in the next 24 hours to show in the system tray tooltip:
+        &lt;ul>&lt;li>0 to display none&lt;/li>
+        &lt;li>-1 to display all&lt;/li>
+        &lt;li>>0 to set a limit.&lt;/li>&lt;/ul>&lt;/p>
       </whatsthis>
       <default>5</default>
       <min>-1</min>
@@ -172,7 +172,7 @@
     </entry>
     <entry name="EmailClient" key="EmailClient" type="Enum">
       <label context="@label">Email client</label>
-      <whatsthis context="@info:whatsthis">&lt;para>How to send email when an email alarm is triggered.&lt;list>&lt;item>KMail: The email is sent automatically via &lt;application>KMail&lt;/application>. &lt;application>KMail&lt;/application> is started first if necessary.&lt;/item>&lt;item>Sendmail: The email is sent automatically. This option will only work if your system is configured to use &lt;application>sendmail&lt;/application> or a sendmail compatible mail transport agent.&lt;/item>&lt;/list>&lt;/para></whatsthis>
+      <whatsthis context="@info:whatsthis">&lt;p>How to send email when an email alarm is triggered.&lt;ul>&lt;li>KMail: The email is sent automatically via KMail. KMail is started first if necessary.&lt;/li>&lt;li>Sendmail: The email is sent automatically. This option will only work if your system is configured to use sendmail or a sendmail compatible mail transport agent.&lt;/li>&lt;/ul>&lt;/p></whatsthis>
       <choices name="MailClient">
         <choice name="sendmail"><label context="@option">Sendmail</label></choice>
         <choice name="kmail"><label context="@option">KMail</label></choice>
@@ -236,10 +236,10 @@
     </entry>
     <entry name="ArchivedKeepDays" key="ExpiredKeepDays" type="Int">
       <label context="@label">Days to keep expired alarms</label>
-      <whatsthis context="@info:whatsthis">&lt;para>Specify how many days to keep alarms after they expire or are deleted (except deleted alarms which were never triggered):
-        &lt;list>&lt;item>0 to not keep&lt;/item>
-        &lt;item>-1 to keep indefinitely&lt;/item>
-        &lt;item>>0 number of days to keep.&lt;/item>&lt;/list>&lt;/para>
+      <whatsthis context="@info:whatsthis">&lt;p>Specify how many days to keep alarms after they expire or are deleted (except deleted alarms which were never triggered):
+        &lt;ul>&lt;li>0 to not keep&lt;/li>
+        &lt;li>-1 to keep indefinitely&lt;/li>
+        &lt;li>>0 number of days to keep.&lt;/li>&lt;/ul>&lt;/p>
       </whatsthis>
       <default>7</default>
       <min>-1</min>
@@ -345,7 +345,7 @@
     </entry>
     <entry name="DefaultFeb29Type" key="Feb29Recur" type="Enum">
       <label context="@label">In non-leap years, repeat yearly February 29th alarms on:</label>
-      <whatsthis context="@info:whatsthis">For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.&lt;note>The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.&lt;/note></whatsthis>
+      <whatsthis context="@info:whatsthis">For yearly recurrences, choose what date, if any, alarms due on February 29th should occur in non-leap years.&lt;i>Note&lt;/i>: The next scheduled occurrence of existing alarms is not re-evaluated when you change this setting.</whatsthis>
       <choices name="Feb29Type" prefix="Feb29_">
         <choice name="Feb28"><label context="@option">February 28th</label></choice>
         <choice name="Mar1"><label context="@option">March 1st</label></choice>

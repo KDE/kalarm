@@ -83,10 +83,10 @@ static QByteArray autoDetectCharset(const QString& text);
 static const QTextCodec* codecForName(const QByteArray& str);
 
 QString KAMail::i18n_NeedFromEmailAddress()
-{ return i18nc("@info/plain", "A 'From' email address must be configured in order to execute email alarms."); }
+{ return i18nc("@info", "A 'From' email address must be configured in order to execute email alarms."); }
 
 QString KAMail::i18n_sent_mail()
-{ return i18nc("@info/plain KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
+{ return i18nc("@info KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
 KAMail*                              KAMail::mInstance = 0;   // used only to enable signals/slots to work
 QQueue<MailTransport::MessageQueueJob*> KAMail::mJobs;

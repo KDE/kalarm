@@ -584,22 +584,22 @@ void ResourceSelector::showInfo()
         CalEvent::Types altypes = AkonadiModel::instance()->types(collection);
         QStringList alarmTypes;
         if (altypes & CalEvent::ACTIVE)
-            alarmTypes << i18nc("@info/plain", "Active alarms");
+            alarmTypes << i18nc("@info", "Active alarms");
         if (altypes & CalEvent::ARCHIVED)
-            alarmTypes << i18nc("@info/plain", "Archived alarms");
+            alarmTypes << i18nc("@info", "Archived alarms");
         if (altypes & CalEvent::TEMPLATE)
-            alarmTypes << i18nc("@info/plain", "Alarm templates");
-        QString alarmTypeString = alarmTypes.join(i18nc("@info/plain List separator", ", "));
+            alarmTypes << i18nc("@info", "Alarm templates");
+        QString alarmTypeString = alarmTypes.join(i18nc("@info List separator", ", "));
         KACalendar::Compat compat;
         QString perms = AkonadiModel::readOnlyTooltip(collection);
         if (perms.isEmpty())
-            perms = i18nc("@info/plain", "Read-write");
+            perms = i18nc("@info", "Read-write");
         QString enabled = CollectionControlModel::isEnabled(collection, alarmType)
-                    ? i18nc("@info/plain", "Enabled")
-                    : i18nc("@info/plain", "Disabled");
+                    ? i18nc("@info", "Enabled")
+                    : i18nc("@info", "Disabled");
         QString std = CollectionControlModel::isStandard(collection, alarmType)
-                    ? i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "Yes")
-                    : i18nc("@info/plain Parameter in 'Default calendar: Yes/No'", "No");
+                    ? i18nc("@info Parameter in 'Default calendar: Yes/No'", "Yes")
+                    : i18nc("@info Parameter in 'Default calendar: Yes/No'", "No");
         QString text = xi18nc("@info",
                              "<title>%1</title>"
                              "<para>ID: %2<nl/>"

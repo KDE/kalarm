@@ -288,7 +288,7 @@ void CalendarMigrator::createDefaultResources()
     CalendarCreator* creator;
     if (!(mExistingAlarmTypes & CalEvent::ACTIVE))
     {
-        creator = new CalendarCreator(CalEvent::ACTIVE, QLatin1String("calendar.ics"), i18nc("@info/plain", "Active Alarms"));
+        creator = new CalendarCreator(CalEvent::ACTIVE, QLatin1String("calendar.ics"), i18nc("@info", "Active Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
@@ -296,7 +296,7 @@ void CalendarMigrator::createDefaultResources()
     }
     if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
     {
-        creator = new CalendarCreator(CalEvent::ARCHIVED, QLatin1String("expired.ics"), i18nc("@info/plain", "Archived Alarms"));
+        creator = new CalendarCreator(CalEvent::ARCHIVED, QLatin1String("expired.ics"), i18nc("@info", "Archived Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
@@ -304,7 +304,7 @@ void CalendarMigrator::createDefaultResources()
     }
     if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
     {
-        creator = new CalendarCreator(CalEvent::TEMPLATE, QLatin1String("template.ics"), i18nc("@info/plain", "Alarm Templates"));
+        creator = new CalendarCreator(CalEvent::TEMPLATE, QLatin1String("template.ics"), i18nc("@info", "Alarm Templates"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
@@ -346,7 +346,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
                        : xi18nc("@info/plain 'Import Alarms' is the name of a menu option",
                                "Failed to convert old configuration for calendar <resource>%1</resource>. "
                                "Please use Import Alarms to load its alarms into a new or existing calendar.", creator->resourceName());
-        const QString locn = i18nc("@info/plain File path or URL", "Location: %1", creator->path());
+        const QString locn = i18nc("@info File path or URL", "Location: %1", creator->path());
         if (creator->errorMessage().isEmpty())
             errmsg = xi18nc("@info", "<para>%1</para><para>%2</para>", errmsg, locn);
         else
@@ -459,7 +459,7 @@ bool CalendarUpdater::update()
                         // Refetch the collection's details because anything could
                         // have happened since the prompt was first displayed.
                         if (!AkonadiModel::instance()->refresh(mCollection))
-                            errmsg = i18nc("@info/plain", "Invalid collection");
+                            errmsg = i18nc("@info", "Invalid collection");
                     }
                     if (errmsg.isEmpty())
                     {
@@ -751,7 +751,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     {
         if (++mCollectionFetchRetryCount >= 10)
         {
-            mErrorMessage = i18nc("@info/plain", "New configuration timed out");
+            mErrorMessage = i18nc("@info", "New configuration timed out");
             qCritical() << "Timeout fetching collection for resource";
             finish(true);
             return;
@@ -764,7 +764,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     }
     if (collections.count() > 1)
     {
-        mErrorMessage = i18nc("@info/plain", "New configuration was corrupt");
+        mErrorMessage = i18nc("@info", "New configuration was corrupt");
         qCritical() << "Wrong number of collections for this resource:" << collections.count();
         finish(true);
         return;

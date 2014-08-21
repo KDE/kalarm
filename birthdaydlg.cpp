@@ -80,7 +80,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     // Prefix and suffix to the name in the alarm text
     // Get default prefix and suffix texts from config file
     KConfigGroup config(KSharedConfig::openConfig(), "General");
-    mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info/plain", "Birthday: "));
+    mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info", "Birthday: "));
     mSuffixText = config.readEntry("BirthdaySuffix");
 
     QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), topWidget);

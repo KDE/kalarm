@@ -50,7 +50,7 @@ const int AlarmTimeWidget::maxDelayTime = 999*60 + 59;    // < 1000 hours
 
 QString AlarmTimeWidget::i18n_TimeAfterPeriod()
 {
-    return i18nc("@info/plain", "Enter the length of time (in hours and minutes) after "
+    return i18nc("@info", "Enter the length of time (in hours and minutes) after "
                 "the current time to schedule the alarm.");
 }
 
@@ -81,10 +81,10 @@ AlarmTimeWidget::AlarmTimeWidget(Mode mode, QWidget* parent)
 
 void AlarmTimeWidget::init(Mode mode, const QString& title)
 {
-    static const QString recurText = i18nc("@info/plain",
+    static const QString recurText = i18nc("@info",
                                            "If a recurrence is configured, the start date/time will be adjusted "
                                            "to the first recurrence on or after the entered date/time.");
-    static const QString tzText = i18nc("@info/plain",
+    static const QString tzText = i18nc("@info",
                                         "This uses KAlarm's default time zone, set in the Configuration dialog.");
 
     QWidget* topWidget;

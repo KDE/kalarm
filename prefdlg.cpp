@@ -1149,7 +1149,7 @@ QString EmailPrefTab::validate()
     if (mBccAddressChanged)
     {
         mBccAddressChanged = false;
-        return validateAddr(mBccAddressGroup, mEmailBccAddress, i18nc("@info/plain", "No valid 'Bcc' email address is specified."));
+        return validateAddr(mBccAddressGroup, mEmailBccAddress, i18nc("@info", "No valid 'Bcc' email address is specified."));
     }
     return QString();
 }

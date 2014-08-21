@@ -921,9 +921,9 @@ QString AkonadiModel::displayName(Akonadi::Collection& collection) const
 QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 {
     const KUrl url = collection.remoteId();
-    return !url.isLocalFile()                     ? i18nc("@info/plain", "URL")
-           : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info/plain Directory in filesystem", "Directory")
-           :                                        i18nc("@info/plain", "File");
+    return !url.isLocalFile()                     ? i18nc("@info", "URL")
+           : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info Directory in filesystem", "Directory")
+           :                                        i18nc("@info", "File");
 }
 
 /******************************************************************************
@@ -938,7 +938,7 @@ QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types type
     const QString locn = url.pathOrUrl();
     const bool inactive = !collection.hasAttribute<CollectionAttribute>()
                        || !(collection.attribute<CollectionAttribute>()->enabled() & types);
-    const QString disabled = i18nc("@info/plain", "Disabled");
+    const QString disabled = i18nc("@info", "Disabled");
     const QString readonly = readOnlyTooltip(collection);
     const bool writable = readonly.isEmpty();
     if (inactive  &&  !writable)
@@ -971,11 +971,11 @@ QString AkonadiModel::readOnlyTooltip(const Collection& collection)
         case 1:
             return QString();
         case 0:
-            return i18nc("@info/plain", "Read-only (old format)");
+            return i18nc("@info", "Read-only (old format)");
         default:
             if (compat == KACalendar::Current)
-                return i18nc("@info/plain", "Read-only");
-            return i18nc("@info/plain", "Read-only (other format)");
+                return i18nc("@info", "Read-only");
+            return i18nc("@info", "Read-only (other format)");
     }
 }
 
@@ -1493,11 +1493,11 @@ void AkonadiModel::itemJobDone(KJob* j)
     {
         QString errMsg;
         if (jobClass == "Akonadi::ItemCreateJob")
-            errMsg = i18nc("@info/plain", "Failed to create alarm.");
+            errMsg = i18nc("@info", "Failed to create alarm.");
         else if (jobClass == "Akonadi::ItemModifyJob")
-            errMsg = i18nc("@info/plain", "Failed to update alarm.");
+            errMsg = i18nc("@info", "Failed to update alarm.");
         else if (jobClass == "Akonadi::ItemDeleteJob")
-            errMsg = i18nc("@info/plain", "Failed to delete alarm.");
+            errMsg = i18nc("@info", "Failed to delete alarm.");
         else
             Q_ASSERT(0);
         qCritical() << errMsg << itemId << ":" << j->errorString();

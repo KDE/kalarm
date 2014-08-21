@@ -278,7 +278,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mRangeButtonGroup->addButton(mEndDateButton);
     mEndDateEdit = new KDateComboBox(mRangeButtonBox);
     mEndDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
-    static const QString tzText = i18nc("@info/plain", "This uses the same time zone as the start time.");
+    static const QString tzText = i18nc("@info", "This uses the same time zone as the start time.");
     mEndDateEdit->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Enter the last date to repeat the alarm.</para><para>%1</para>", tzText));
     connect(mEndDateEdit, SIGNAL(dateEdited(QDate)), SIGNAL(contentsChanged()));
