@@ -1,7 +1,7 @@
 /*
  *  kalocale.cpp  -  miscellaneous locale functions
  *  Program:  kalarm
- *  Copyright © 2003-2009 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,14 +30,17 @@ namespace KAlarm
 {
 
 /******************************************************************************
-*  Return the first day of the week for the user's locale.
-*  Reply = 1 (Mon) .. 7 (Sun).
+* Return the first day of the week for the user's locale.
+* Reply = 1 (Mon) .. 7 (Sun).
 */
 int localeFirstDayOfWeek()
 {
     static int firstDay = 0;
     if (!firstDay)
+    {
+        Q_ASSERT(Qt::Monday == 1 && Qt::Sunday == 7);  // all weekday numbering assumes this
         firstDay = QLocale().firstDayOfWeek();
+    }
     return firstDay;
 }
 
@@ -49,13 +52,13 @@ QString weekDayName(int day, const KLocale* locale)
 #if 0 //QT5
     switch (day)
     {
-        case 1: return ki18nc("@option Name of the weekday", "Monday").toString(locale);
-        case 2: return ki18nc("@option Name of the weekday", "Tuesday").toString(locale);
-        case 3: return ki18nc("@option Name of the weekday", "Wednesday").toString(locale);
-        case 4: return ki18nc("@option Name of the weekday", "Thursday").toString(locale);
-        case 5: return ki18nc("@option Name of the weekday", "Friday").toString(locale);
-        case 6: return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
-        case 7: return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
+        case Qt::Monday:    return ki18nc("@option Name of the weekday", "Monday").toString(locale);
+        case Qt::Tuesday:   return ki18nc("@option Name of the weekday", "Tuesday").toString(locale);
+        case Qt::Wednesday: return ki18nc("@option Name of the weekday", "Wednesday").toString(locale);
+        case Qt::Thursday:  return ki18nc("@option Name of the weekday", "Thursday").toString(locale);
+        case Qt::Friday:    return ki18nc("@option Name of the weekday", "Friday").toString(locale);
+        case Qt::Saturday:  return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
+        case Qt::Sunday:    return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
     }
 #endif
     return QString();
