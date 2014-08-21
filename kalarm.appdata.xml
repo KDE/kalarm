@@ -10,6 +10,7 @@
   <name xml:lang="nds">KAlarm</name>
   <name xml:lang="nl">KAlarm</name>
   <name xml:lang="pl">KAlarm</name>
+  <name xml:lang="pt">KAlarm</name>
   <name xml:lang="ro">KAlarm</name>
   <name xml:lang="sk">KAlarm</name>
   <name xml:lang="sl">KAlarm</name>
@@ -27,6 +28,7 @@
   <summary xml:lang="nds">Persöönlich Anstöötgever</summary>
   <summary xml:lang="nl">Persoonlijke alarmplanner</summary>
   <summary xml:lang="pl">Planowanie alarmów osobistych</summary>
+  <summary xml:lang="pt">Calendarização de Alarmes Pessoais</summary>
   <summary xml:lang="ro">Planificator personal de alarme</summary>
   <summary xml:lang="sk">Osobný plánovač alarmov</summary>
   <summary xml:lang="sl">Osebni razporejevalnik alarmov</summary>
@@ -44,6 +46,7 @@
     <p xml:lang="nds">KAlarm is en persöönlich Planer för Anstootnarichten, Befehlen un Nettbreven.</p>
     <p xml:lang="nl">Kalarm is een persoonlijke planner voor herinneringen, commando's en e-mailberichten</p>
     <p xml:lang="pl">KAlarm jest osobistym programem do planowania wiadomości alarmowych, poleceń i wiadomości pocztowych</p>
+    <p xml:lang="pt">O KAlarm é um sistema para agendar alarmes com mensagens, comandos e e-mails</p>
     <p xml:lang="sl">Kalarm je osebni razporejevalnik alarmov, ukazov in e-pošte</p>
     <p xml:lang="sr">К‑аларм је лични распоређивач алармних порука, наредаба и е‑поште.</p>
     <p xml:lang="sr-Latn">K‑alarm je lični raspoređivač alarmnih poruka, naredaba i e‑pošte.</p>
@@ -59,6 +62,7 @@
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
+    <p xml:lang="pt">Funcionalidades:</p>
     <p xml:lang="ro">Caracteristici:</p>
     <p xml:lang="sk">Funkcie:</p>
     <p xml:lang="sl">Zmožnosti:</p>
@@ -76,6 +80,7 @@
       <li xml:lang="nds">Anstööt mit Dien egen oder vun en Programm opstellt Texten oder en Text- oder Bilddatei wiesen</li>
       <li xml:lang="nl">Te tonen herinneringen met uw eigen tekstberichten, de tekst gegenereerd door een commando of een tekst of afbeeldingsbestand.</li>
       <li xml:lang="pl">Wyświetlanie alarmów przy użyciu własnych wiadomości tekstowych, tekstu wytworzonego przez polecenie lub plik tekstowy czy obraz.</li>
+      <li xml:lang="pt">Mostra os alarmes com a sua própria mensagem de texto, o texto gerado por um comando ou ainda um ficheiro de imagem ou de texto.</li>
       <li xml:lang="sl">Prikazovanje alarmov z vašim besedilom, z besedilom, ki ga je ustvaril ukaz ali z besedilno oz. slikovno datoteko.</li>
       <li xml:lang="sr">Приказ аларма са ручно задатим текстом, текстом као излазом наредбе, или текстуалног фајла или слике.</li>
       <li xml:lang="sr-Latn">Prikaz alarma sa ručno zadatim tekstom, tekstom kao izlazom naredbe, ili tekstualnog fajla ili slike.</li>
@@ -90,6 +95,7 @@
       <li xml:lang="nds">Höörbor Anstööt mit en Klangdatei</li>
       <li xml:lang="nl">Hoorbaar alarm met een geluidsbestand</li>
       <li xml:lang="pl">Alarmy dźwiękowe używające pliku dźwiękowego</li>
+      <li xml:lang="pt">Alarme audível com um ficheiro de som</li>
       <li xml:lang="sl">Zvočni alarm z uporabo zvočne datoteke.</li>
       <li xml:lang="sr">Чујни аларм путем звучног фајла.</li>
       <li xml:lang="sr-Latn">Čujni alarm putem zvučnog fajla.</li>
@@ -104,6 +110,7 @@
       <li xml:lang="nds">Wedderkamen Anstööt na Stünnen/Minuten, na Daag, Weken, Maanden oder elk Johr, oder jümmers, wenn Du Di anmellen deist.</li>
       <li xml:lang="nl">Een zich herhalend alarm op basis van uren/minuten, dagelijks, wekelijks, maandelijks of jaarlijks of instellen om het af te laten gaan elke keer dat u zich aanmeld.</li>
       <li xml:lang="pl">Powtarzające się alarmy w odstępach co godzinę/minutę, dziennie, tygodniowo, miesięcznie, rocznie lub uruchamiane przy każdym logowaniu</li>
+      <li xml:lang="pt">Alarmes repetidos com frequência horária, diária, semanal, mensal ou actual, ou com a possibilidade de activação de cada vez que inicia a sua sessão.</li>
       <li xml:lang="sl">Ponavljanje alarma vsako uro/minuto, tedensko, mesečno ali letno, lahko pa nastavite, da se sproži ob vsaki prijavi.</li>
       <li xml:lang="sr">Понављајући аларм, на сат/минут, дневно, седмично, месечно или годишње, као и при сваком пријављивању корисника.</li>
       <li xml:lang="sr-Latn">Ponavljajući alarm, na sat/minut, dnevno, sedmično, mesečno ili godišnje, kao i pri svakom prijavljivanju korisnika.</li>
@@ -118,6 +125,7 @@
       <li xml:lang="nds">Instellbor Anstootklöör un -Schriftoort</li>
       <li xml:lang="nl">Kleuren van te tonen herinneringen en keuze uit lettertypen</li>
       <li xml:lang="pl">Własne kolory i czcionki dla wyświetlanych alarmów</li>
+      <li xml:lang="pt">Personalização das cores e tipos de letra dos alarmes visíveis</li>
       <li xml:lang="sl">Prilagoditev barve alarmov in pisav.</li>
       <li xml:lang="sr">Прилагођавање боја и фонтова аларма.</li>
       <li xml:lang="sr-Latn">Prilagođavanje boja i fontova alarma.</li>
@@ -132,6 +140,7 @@
       <li xml:lang="nds">Ünnerstütt en Reeg Anstootkalenners, so kannst Du Anstööt twischen Klapp- un normaal Reekner uttuschen.</li>
       <li xml:lang="nl">Ondersteuning voor meerdere alarm-agenda's, die u bijvoorbeeld herinneringen laat delen tussen een laptop en desktopcomputer.</li>
       <li xml:lang="pl">Obsługa wielu kalendarzy alarmów, które na przykład umożliwiają współdzielenie alarmów pomiędzy komputerem przenośnym i biurkowym.</li>
+      <li xml:lang="pt">Suporte para diversos calendários de alarmes, os quais lhe permitem por exemplo partilhar alarmes entre um portátil e um computador pessoal.</li>
       <li xml:lang="sl">Podpora več koledarjem z alarmi, kar na primer pomeni, da lahko delite alarme med namiznim in prenosnim računalnikom.</li>
       <li xml:lang="sr">Подршка за више алармних календара, што на пример омогућава дељење аларма између преносног и стоног рачунара.</li>
       <li xml:lang="sr-Latn">Podrška za više alarmnih kalendara, što na primer omogućava deljenje alarma između prenosnog i stonog računara.</li>
