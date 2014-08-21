@@ -85,40 +85,38 @@ TrayWindow::TrayWindow(MainWindow* parent)
     // - setIconByName() doesn't work for this one!
     mIconDisabled.addPixmap(KIconLoader::global()->loadIcon(QLatin1String("kalarm-disabled"), KIconLoader::Panel));
     setStatus(KStatusNotifierItem::Active);
-#if 0 //QT5
     // Set up the context menu
-    QList<QAction*> actions = actionCollection();
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
-    actions.addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
+    addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
     contextMenu()->addAction(mActionEnabled);
     connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(setEnabledStatus(bool)));
     contextMenu()->addSeparator();
 
     mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
-    actions->addAction(QLatin1String("tNew"), mActionNew);
+    addAction(QLatin1String("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
     connect(mActionNew, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNewAlarm(EditAlarmDlg::Type)));
     connect(mActionNew->fromTemplateAlarmAction(), SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
     contextMenu()->addSeparator();
 
     QAction* a = KAlarm::createStopPlayAction(this);
-    actions->addAction(QLatin1String("tStopPlay"), a);
+    addAction(QLatin1String("tStopPlay"), a);
     contextMenu()->addAction(a);
     QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), a, SLOT(setVisible(bool)));
     QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(updateStatus()));
 
     a = KAlarm::createSpreadWindowsAction(this);
-    actions->addAction(QLatin1String("tSpread"), a);
+    addAction(QLatin1String("tSpread"), a);
     contextMenu()->addAction(a);
     contextMenu()->addSeparator();
-    contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), actions));
-
+    contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), this));
+#if 0 //QT5
     // Replace the default handler for the Quit context menu item
     const char* quitName = KStandardAction::name(KStandardAction::Quit);
     QAction* qa = actions->action(QLatin1String(quitName));
     disconnect(qa, SIGNAL(triggered(bool)), 0, 0);
     connect(qa, SIGNAL(triggered(bool)), SLOT(slotQuit()));
-
+#endif
     // Set icon to correspond with the alarms enabled menu status
     setEnabledStatus(theApp()->alarmsEnabled());
 
@@ -160,7 +158,6 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
     // Update when tooltip preferences are modified
     Preferences::connect(SIGNAL(tooltipPreferencesChanged()), mToolTipUpdateTimer, SLOT(start()));
-#endif
 }
 
 TrayWindow::~TrayWindow()
