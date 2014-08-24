@@ -50,7 +50,7 @@
 #include <kconfig.h>
 #include <KSharedConfig>
 #include <K4AboutData>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <kfileitem.h>
 #include <kglobal.h>
 #include <kstandardguiitem.h>

@@ -38,7 +38,7 @@
 #include <K4AboutData>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
-#include <ktemporaryfile.h>
+#include <QTemporaryFile>
 #include <KTimeZone>
 #include <KSharedConfig>
 #include <QStandardPaths>
