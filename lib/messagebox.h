@@ -136,7 +136,7 @@ class KAMessageBox : public KMessageBox
         static int questionYesNoCancel(QWidget* parent, const QString& text, const QString& caption = QString(),
                                        const KGuiItem& buttonYes = KStandardGuiItem::yes(),
                                        const KGuiItem& buttonNo = KStandardGuiItem::no(),
-                                       const KGuiItem &buttonCancel = KStandardGuiItem::cancel(),
+                                       const KGuiItem& buttonCancel = KStandardGuiItem::cancel(),
                                        const QString& dontAskAgainName = QString(),
                                        Options options = Options(Notify|WindowModal))
         { return KMessageBox::questionYesNoCancel(parent, text, caption, buttonYes, buttonNo, buttonCancel, dontAskAgainName, options); }
@@ -145,7 +145,6 @@ class KAMessageBox : public KMessageBox
          * default button is Cancel, and it defaults to window-modal, not
          * application-modal.
          * @param parent           Parent widget
-         * @param defaultButton    The default button for the message box. Valid values are Continue or Cancel.
          * @param text             Message string
          * @param caption          Caption (window title) of the message box
          * @param buttonContinue   The text for the first button (default = "Continue")
