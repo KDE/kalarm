@@ -1,7 +1,7 @@
 /*
  *  messagebox.cpp  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008,2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2008,2011,2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,34 +53,6 @@ KMessageBox::ButtonCode KAMessageBox::getContinueDefault(const QString& dontAskA
             defaultButton = it.value();
     }
     return defaultButton;
-}
-
-/******************************************************************************
-* Continue/cancel message box with the option as to which button is the default.
-* If 'dontAskAgainName' is specified, the message box will only be suppressed
-* if the user chose Continue last time.
-*/
-int KAMessageBox::warningContinueCancel(QWidget* parent, KMessageBox::ButtonCode defaultButton, const QString& text,
-                                      const QString& caption, const KGuiItem& buttonContinue,
-                                      const QString& dontAskAgainName)
-{
-    setContinueDefault(dontAskAgainName, defaultButton);
-    if (defaultButton != KMessageBox::Cancel)
-        return KMessageBox::warningContinueCancel(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
-
-    // Cancel is the default button, so we have to use KMessageBox::warningYesNo()
-    if (!dontAskAgainName.isEmpty())
-    {
-        KMessageBox::ButtonCode b;
-        if (!shouldBeShownYesNo(dontAskAgainName, b)
-        &&  b != KMessageBox::Yes)
-        {
-            // Notification has been suppressed, but No (alias Cancel) is the default,
-            // so unsuppress notification.
-            saveDontShowAgain(dontAskAgainName, true, false);
-        }
-    }
-    return warningYesNo(parent, text, caption, buttonContinue, KStandardGuiItem::cancel(), dontAskAgainName);
 }
 
 /******************************************************************************
