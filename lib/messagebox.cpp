@@ -1,7 +1,7 @@
 /*
  *  messagebox.cpp  -  enhanced KMessageBox class
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2008,2011,2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007,2008,2011 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -56,7 +56,6 @@ KMessageBox::ButtonCode KAMessageBox::getContinueDefault(const QString& dontAskA
 }
 
 /******************************************************************************
-<<<<<<< HEAD
 * Continue/cancel message box with the option as to which button is the default.
 * If 'dontAskAgainName' is specified, the message box will only be suppressed
 * if the user chose Continue last time.
@@ -85,8 +84,6 @@ int KAMessageBox::warningContinueCancel(QWidget* parent, KMessageBox::ButtonCode
 }
 
 /******************************************************************************
-=======
->>>>>>> 99ca0fbf08670ed2c243089486a4b6e6db9f61b9
 * If there is no current setting for whether a non-yes/no message box should be
 * shown, set it to 'defaultShow'.
 * If a continue/cancel message box has Cancel as the default button, either

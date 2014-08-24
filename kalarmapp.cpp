@@ -658,19 +658,18 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 void KAlarmApp::doQuit(QWidget* parent)
 {
     qDebug();
-    if (KAMessageBox::warningCancelContinue(parent,
+    if (KAMessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
                                             i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
-                                            QString(), KStandardGuiItem::quit(),
-                                            KStandardGuiItem::cancel(), Preferences::QUIT_WARN
-                                           ) != KMessageBox::Continue)
+                                            QString(), KStandardGuiItem::quit(), Preferences::QUIT_WARN
+                                           ) != KMessageBox::Yes)
         return;
     if (!KAlarm::checkRtcWakeConfig(true).isEmpty())
     {
         // A wake-on-suspend alarm is set
-        if (KAMessageBox::warningCancelContinue(parent,
+        if (KAMessageBox::warningContinueCancel(parent, KMessageBox::Cancel,
                                                 i18nc("@info", "Quitting will cancel the scheduled Wake from Suspend."),
                                                 QString(), KStandardGuiItem::quit()
-                                               ) != KMessageBox::Continue)
+                                               ) != KMessageBox::Yes)
             return;
         mCancelRtcWake = true;
     }
