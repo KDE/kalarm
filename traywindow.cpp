@@ -39,18 +39,18 @@
 #include <ktoggleaction.h>
 #include <kapplication.h>
 #include <KLocalizedString>
-#include <K4AboutData>
 #include <kmessagebox.h>
 #include <kstandardaction.h>
 #include <kstandardguiitem.h>
 #include <kiconeffect.h>
 #include <kconfig.h>
-#include <KGlobal>
 #include <KIconLoader>
+#include <KLocale>
+#include <K4AboutData>
 
+#include <QMenu>
 #include <QList>
 #include <QTimer>
-#include <QMenu>
 #include <qdebug.h>
 
 #include <stdlib.h>

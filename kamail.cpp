@@ -39,14 +39,12 @@
 #include <kmime/kmime_headers.h>
 #include <kmime/kmime_message.h>
 
+#include <K4AboutData>
 #include <KLocale>
-#include <KTimeZone>
 #include <KUrl>
 #include <KLocalizedString>
-#include <K4AboutData>
 #include <kfileitem.h>
 #include <kio/netaccess.h>
-#include <QTemporaryFile>
 #include <kemailsettings.h>
 #include <kcodecs.h>
 #include <kcharsets.h>

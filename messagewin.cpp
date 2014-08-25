@@ -39,10 +39,9 @@
 #include "synchtimer.h"
 
 //QT5 #include "kspeechinterface.h"
-
-
-#include <kstandardguiitem.h>
 #include <K4AboutData>
+#include <KLocale>
+#include <kstandardguiitem.h>
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <kiconloader.h>
@@ -62,9 +61,7 @@
 #include <netwm.h>
 #include <qx11info_x11.h>
 #endif
-#include <KGlobal>
 
-#include <QAction>
 #include <qtextbrowser.h>
 #include <QPushButton>
 #include <QScrollBar>

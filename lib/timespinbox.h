@@ -22,8 +22,7 @@
 #define TIMESPINBOX_H
 
 #include "spinbox2.h"
-#include <QDateTime>
-
+#include <QTime>
 
 /**
  *  @short Hours/minutes time entry widget.

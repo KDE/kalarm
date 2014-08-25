@@ -31,7 +31,6 @@
 #include <kabc/addressee.h>
 
 #include <kglobal.h>
-#include <KLocalizedString>
 #include <QLocale>
 
 using namespace KAlarmCal;

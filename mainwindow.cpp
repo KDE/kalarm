@@ -51,7 +51,8 @@
 #include <AkonadiCore/control.h>
 using namespace KCalCore;
 using namespace KCalUtils;
-
+#include <KLocale>
+#include <K4AboutData>
 #include <ktoolbar.h>
 #include <kactioncollection.h>
 #include <ksystemtrayicon.h>
@@ -64,12 +65,10 @@ using namespace KCalUtils;
 #include <kshortcutsdialog.h>
 #include <kedittoolbar.h>
 #include <kxmlguifactory.h>
-#include <K4AboutData>
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
-#include <KTimeZone>
-#include <KGlobal>
 #include <KShortcut>
+#include <KTimeZone>
 
 #include <QAction>
 #include <QSplitter>
@@ -79,7 +78,6 @@ using namespace KCalUtils;
 #include <QResizeEvent>
 #include <QCloseEvent>
 #include <QDesktopWidget>
-#include <QMenuBar>
 #include <QMenu>
 #include <qinputdialog.h>
 #include <qdebug.h>

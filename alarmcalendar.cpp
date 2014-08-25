@@ -32,14 +32,13 @@
 #include <KCalCore/MemoryCalendar>
 #include <KCalCore/ICalFormat>
 
+#include <KTimeZone>
 #include <kglobal.h>
 #include <KLocalizedString>
 #include <kstandarddirs.h>
-#include <K4AboutData>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <QTemporaryFile>
-#include <KTimeZone>
 #include <KSharedConfig>
 #include <QStandardPaths>
 #include <qdebug.h>

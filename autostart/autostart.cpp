@@ -30,7 +30,6 @@
 #include <QTimer>
 #include <QtDBus/QtDBus>
 #include <QStandardPaths>
-#include <QDebug>
 
 // Number of seconds to wait before autostarting KAlarm.
 // Allow plenty of time for session restoration to happen first.
