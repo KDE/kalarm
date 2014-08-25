@@ -48,7 +48,6 @@
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <ksystemtimezone.h>
-#include <kglobalsettings.h>
 #include <kmimetype.h>
 #include <ktextedit.h>
 #include <kwindowsystem.h>
