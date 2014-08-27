@@ -28,8 +28,8 @@
 #include "preferences.h"
 
 #include <kalarmcal/identities.h>
-#include <KPIMIdentities/kpimidentities/identitymanager.h>
-#include <KPIMIdentities/kpimidentities/identity.h>
+#include <KIdentityManagement/kidentitymanagement/identitymanager.h>
+#include <KIdentityManagement/kidentitymanagement/identity.h>
 #include <KPIMUtils/kpimutils/email.h>
 #include <MailTransport/mailtransport/transportmanager.h>
 #include <MailTransport/mailtransport/transport.h>
@@ -107,7 +107,7 @@ KAMail* KAMail::instance()
 int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 {
     QString err;
-    KPIMIdentities::Identity identity;
+    KIdentityManagement::Identity identity;
     if (!jobdata.event.emailFromId())
         jobdata.from = Preferences::emailAddress();
     else

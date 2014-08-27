@@ -24,8 +24,8 @@
 #include <QKeyEvent>
 
 
-EmailIdCombo::EmailIdCombo(KPIMIdentities::IdentityManager* manager, QWidget* parent)
-    : KPIMIdentities::IdentityCombo(manager, parent),
+EmailIdCombo::EmailIdCombo(KIdentityManagement::IdentityManager* manager, QWidget* parent)
+    : KIdentityManagement::IdentityCombo(manager, parent),
       mReadOnly(false)
 { }
 
@@ -37,31 +37,31 @@ void EmailIdCombo::mousePressEvent(QMouseEvent* e)
         if (e->button() == Qt::LeftButton)
             return;
     }
-    KPIMIdentities::IdentityCombo::mousePressEvent(e);
+    KIdentityManagement::IdentityCombo::mousePressEvent(e);
 }
 
 void EmailIdCombo::mouseReleaseEvent(QMouseEvent* e)
 {
     if (!mReadOnly)
-        KPIMIdentities::IdentityCombo::mouseReleaseEvent(e);
+        KIdentityManagement::IdentityCombo::mouseReleaseEvent(e);
 }
 
 void EmailIdCombo::mouseMoveEvent(QMouseEvent* e)
 {
     if (!mReadOnly)
-        KPIMIdentities::IdentityCombo::mouseMoveEvent(e);
+        KIdentityManagement::IdentityCombo::mouseMoveEvent(e);
 }
 
 void EmailIdCombo::keyPressEvent(QKeyEvent* e)
 {
     if (!mReadOnly  ||  e->key() == Qt::Key_Escape)
-        KPIMIdentities::IdentityCombo::keyPressEvent(e);
+        KIdentityManagement::IdentityCombo::keyPressEvent(e);
 }
 
 void EmailIdCombo::keyReleaseEvent(QKeyEvent* e)
 {
     if (!mReadOnly)
-        KPIMIdentities::IdentityCombo::keyReleaseEvent(e);
+        KIdentityManagement::IdentityCombo::keyReleaseEvent(e);
 }
 #include "moc_emailidcombo.cpp"
 // vim: et sw=4:

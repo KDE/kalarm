@@ -22,17 +22,17 @@
 #define EMAILIDCOMBO_H
 
 #include "combobox.h"
-#include <KPIMIdentities/kpimidentities/identitycombo.h>
+#include <KIdentityManagement/kidentitymanagement/identitycombo.h>
 
 class QMouseEvent;
 class QKeyEvent;
 
 
-class EmailIdCombo : public KPIMIdentities::IdentityCombo
+class EmailIdCombo : public KIdentityManagement::IdentityCombo
 {
         Q_OBJECT
     public:
-        explicit EmailIdCombo(KPIMIdentities::IdentityManager*, QWidget* parent = 0);
+        explicit EmailIdCombo(KIdentityManagement::IdentityManager*, QWidget* parent = 0);
         void  setReadOnly(bool ro)    { mReadOnly = ro; }
 
     protected:

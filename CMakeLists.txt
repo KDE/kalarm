@@ -147,7 +147,7 @@ KF5::CalendarCore
 KF5::CalendarUtils
 KF5::Abc
 KF5::Mime
-KF5::PimIdentities
+KF5::IdentityManagement
 KF5::MailTransport
 KF5::AkonadiCore
 KF5::AkonadiMime

@@ -49,8 +49,8 @@
 #include <KCalCore/Person>
 #include <KCalCore/Duration>
 using namespace KCalCore;
-#include <KPIMIdentities/kpimidentities/identitymanager.h>
-#include <KPIMIdentities/kpimidentities/identity.h>
+#include <KIdentityManagement/kidentitymanagement/identitymanager.h>
+#include <KIdentityManagement/kidentitymanagement/identity.h>
 #include <KHolidays/kholidays/holidays.h>
 
 #include <kconfiggroup.h>
