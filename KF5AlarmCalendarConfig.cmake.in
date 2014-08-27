@@ -2,7 +2,7 @@
 
 find_dependency(KF5Akonadi "@KDEPIMLIBS_VERSION@")
 find_dependency(KF5KDELibs4Support "@KF5_VERSION@")
-find_dependency(KF5PimIdentities "@KDEPIMLIBS_VERSION@")
+find_dependency(KF5IdentityManagement "@KDEPIMLIBS_VERSION@")
 find_dependency(KF5Holidays "@KDEPIMLIBS_VERSION@")
 find_dependency(KF5CalendarCore "@KDEPIMLIBS_VERSION@")
 
