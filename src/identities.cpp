@@ -25,17 +25,17 @@
 #include <identitymanager.h>
 #include <identity.h>
 
-static KPIMIdentities::IdentityManager *mIdentityManager = 0;
+static KIdentityManagement::IdentityManager *mIdentityManager = 0;
 
 namespace KAlarmCal
 {
 namespace Identities
 {
 
-KPIMIdentities::IdentityManager *identityManager()
+KIdentityManagement::IdentityManager *identityManager()
 {
     if (!mIdentityManager) {
-        mIdentityManager = new KPIMIdentities::IdentityManager(true);    // create a read-only kmail identity manager
+        mIdentityManager = new KIdentityManagement::IdentityManager(true);    // create a read-only kmail identity manager
     }
     return mIdentityManager;
 }
@@ -58,7 +58,7 @@ uint identityUoid(const QString &identityUoidOrName)
     uint id = identityUoidOrName.toUInt(&ok);
     if (!ok  ||  identityManager()->identityForUoid(id).isNull()) {
         identityManager();   // fetch it if not already done
-        for (KPIMIdentities::IdentityManager::ConstIterator it = mIdentityManager->begin();
+        for (KIdentityManagement::IdentityManager::ConstIterator it = mIdentityManager->begin();
                 it != mIdentityManager->end();  ++it) {
             if ((*it).identityName() == identityUoidOrName) {
                 id = (*it).uoid();

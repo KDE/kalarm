@@ -31,7 +31,7 @@ find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 if(${CMAKE_SOURCE_DIR} STREQUAL ${KAlarmCal_SOURCE_DIR})
   find_package(KF5Akonadi ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
   find_package(KF5CalendarCore ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
-  find_package(KF5PimIdentities ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
+  find_package(KF5IdentityManagement ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
   find_package(KF5Holidays ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
 endif()
 

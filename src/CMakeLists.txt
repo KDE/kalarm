@@ -27,7 +27,7 @@ add_library(KF5::AlarmCalendar ALIAS KF5AlarmCalendar)
 target_link_libraries(KF5AlarmCalendar
 PUBLIC
                       KF5::Holidays
-                      KF5::PimIdentities
+                      KF5::IdentityManagement
                       KF5::CoreAddons
                       KF5::CalendarCore
                       KF5::AkonadiCore
