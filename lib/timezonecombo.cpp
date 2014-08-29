@@ -23,16 +23,10 @@
 #include <kglobal.h>
 #include <KLocalizedString>
 
-bool TimeZoneCombo::mCatalogLoaded = false;
 
 TimeZoneCombo::TimeZoneCombo(QWidget* parent)
     : ComboBox(parent)
 {
-    if (!mCatalogLoaded)
-    {
-        //QT5 KLocale::global()->insertCatalog(QLatin1String("timezones4")); // for time zone translations
-        mCatalogLoaded = true;
-    }
     QString utc = KTimeZone::utc().name();
     addItem(utc);   // put UTC at start of list
     mZoneNames << utc;
