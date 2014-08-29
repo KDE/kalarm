@@ -30,21 +30,32 @@
 #include <QVBoxLayout>
 #include <QResizeEvent>
 #include <qdebug.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
 
 TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
     QWidget* topWidget = new QWidget(this);
-    setMainWidget(topWidget);
-    setCaption(i18nc("@title:window", "Choose Alarm Template"));
-    setButtons(Ok|Cancel);
-    setDefaultButton(Ok);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    mainLayout->addWidget(topWidget);
+    setWindowTitle(i18nc("@title:window", "Choose Alarm Template"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    mOkButton = buttonBox->button(QDialogButtonBox::Ok);
+    mOkButton->setDefault(true);
+    mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    mainLayout->addWidget(buttonBox);
+    mOkButton->setDefault(true);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
     topLayout->setMargin(0);
-    topLayout->setSpacing(spacingHint());
+    //QT5 topLayout->setSpacing(spacingHint());
 
     // Display the list of templates, but exclude command alarms if in kiosk mode.
     KAEvent::Actions shown = KAEvent::ACT_ALL;
@@ -57,6 +68,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     mListFilterModel->setAlarmActionsEnabled(type);
     mListFilterModel->setAlarmActionFilter(shown);
     mListView = new TemplateListView(topWidget);
+    mainLayout->addWidget(mListView);
     mListView->setModel(mListFilterModel);
     mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
     mListView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -90,7 +102,7 @@ void TemplatePickDlg::slotSelectionChanged()
     bool enable = !mListView->selectionModel()->selectedRows().isEmpty();
     if (enable)
         enable = mListView->model()->flags(mListView->selectedIndex()) & Qt::ItemIsEnabled;
-    enableButtonOk(enable);
+    mOkButton->setEnabled(enable);
 }
 
 /******************************************************************************
@@ -101,7 +113,7 @@ void TemplatePickDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
         KAlarm::writeConfigWindowSize(TMPL_PICK_DIALOG_NAME, re->size());
-    KDialog::resizeEvent(re);
+    QDialog::resizeEvent(re);
 }
 
 #include "moc_templatepickdlg.cpp"

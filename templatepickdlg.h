@@ -22,8 +22,8 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <kdialog.h>
-
+#include <QDialog>
+class QPushButton;
 class QResizeEvent;
 namespace KCal { class Event; }
 class TemplateListModel;
@@ -31,7 +31,7 @@ class TemplateListView;
 
 using namespace KAlarmCal;
 
-class TemplatePickDlg : public KDialog
+class TemplatePickDlg : public QDialog
 {
         Q_OBJECT
     public:
@@ -44,6 +44,7 @@ class TemplatePickDlg : public KDialog
     private:
         TemplateListModel* mListFilterModel;
         TemplateListView*  mListView;
+        QPushButton* mOkButton;
 };
 
 #endif // TEMPLATEPICKDLG_H
