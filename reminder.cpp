@@ -64,7 +64,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     mTimeSignCombo->setWhatsThis(beforeAfterWhatsThis);
     mTimeSignCombo->setCurrentIndex(0);   // default to "in advance"
     mTime->setFixedSize(mTime->sizeHint());
-    connect(mTime, SIGNAL(toggled(bool)), SLOT(slotReminderToggled(bool)));
+    connect(mTime, &TimeSelector::toggled, this, &Reminder::slotReminderToggled);
     connect(mTime, SIGNAL(valueChanged(KCalCore::Duration)), SIGNAL(changed()));
     connect(mTimeSignCombo, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()));
     topLayout->addWidget(mTime, 0, Qt::AlignLeft);
