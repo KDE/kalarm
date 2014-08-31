@@ -1109,6 +1109,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;
 #ifdef USE_AKONADI
+    // Temporarily initialise mCollectionId and mEventId - they will be set by redisplayAlarm()
     mCollection          = Akonadi::Collection();
     mEventId             = EventId(mCollection.id(), eventId);
 #else
