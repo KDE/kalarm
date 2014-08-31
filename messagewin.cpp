@@ -1059,6 +1059,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     mCommandError        = KAEvent::CmdErrType(config.readEntry("CmdErr", static_cast<int>(KAEvent::CMD_NO_ERROR)));
     mDontShowAgain       = config.readEntry("DontShowAgain", QString());
     mShowEdit            = false;
+    // Temporarily initialise mCollection and mEventId - they will be set by redisplayAlarm()
     mCollection          = Akonadi::Collection();
     mEventId             = EventId(mCollection.id(), eventId);
     qDebug() << eventId;
