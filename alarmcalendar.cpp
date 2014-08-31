@@ -38,8 +38,8 @@
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
-#include <QTemporaryFile>
 #include <KSharedConfig>
+#include <QTemporaryFile>
 #include <QStandardPaths>
 #include <qdebug.h>
 

@@ -48,7 +48,6 @@ class TimeZoneCombo : public ComboBox
         void setTimeZone(const KTimeZone& tz);
 
     private:
-        static bool mCatalogLoaded;
         QStringList mZoneNames;
 };
 

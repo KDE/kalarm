@@ -35,7 +35,7 @@
 #define PROGRAM_NAME "kalarm"
 
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     Kdelibs4ConfigMigrator migrate(QLatin1String("kalarm"));
     migrate.setConfigFiles(QStringList() << QLatin1String("kalarmrc"));

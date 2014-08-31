@@ -22,9 +22,9 @@
 #include "synchtimer.h"
 
 #include <QTimer>
-#include <qdebug.h>
 #include <QDateTime>
 #include <QTime>
+#include <qdebug.h>
 
 /*=============================================================================
 =  Class: SynchTimer

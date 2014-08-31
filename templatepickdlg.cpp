@@ -41,11 +41,11 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     : QDialog(parent)
 {
     QWidget* topWidget = new QWidget(this);
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     mainLayout->addWidget(topWidget);
     setWindowTitle(i18nc("@title:window", "Choose Alarm Template"));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
     mOkButton = buttonBox->button(QDialogButtonBox::Ok);
     mOkButton->setDefault(true);
     mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
