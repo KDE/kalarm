@@ -44,7 +44,7 @@ class TemplatePickDlg : public QDialog
     private:
         TemplateListModel* mListFilterModel;
         TemplateListView*  mListView;
-        QPushButton* mOkButton;
+        QPushButton*       mOkButton;
 };
 
 #endif // TEMPLATEPICKDLG_H

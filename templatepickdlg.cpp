@@ -26,13 +26,13 @@
 #include "templatelistview.h"
 
 #include <KLocalizedString>
+#include <KConfigGroup>
 
 #include <QVBoxLayout>
 #include <QResizeEvent>
-#include <qdebug.h>
-#include <KConfigGroup>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <qdebug.h>
 
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 
@@ -46,16 +46,14 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     mainLayout->addWidget(topWidget);
     setWindowTitle(i18nc("@title:window", "Choose Alarm Template"));
     QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    mainLayout->addWidget(buttonBox);
     mOkButton = buttonBox->button(QDialogButtonBox::Ok);
     mOkButton->setDefault(true);
     mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    mainLayout->addWidget(buttonBox);
-    mOkButton->setDefault(true);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
     topLayout->setMargin(0);
-    //QT5 topLayout->setSpacing(spacingHint());
 
     // Display the list of templates, but exclude command alarms if in kiosk mode.
     KAEvent::Actions shown = KAEvent::ACT_ALL;
