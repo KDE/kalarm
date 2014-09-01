@@ -50,8 +50,8 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     mOkButton = buttonBox->button(QDialogButtonBox::Ok);
     mOkButton->setDefault(true);
     mOkButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &TemplatePickDlg::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &TemplatePickDlg::reject);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
     topLayout->setMargin(0);
 
@@ -73,7 +73,7 @@ TemplatePickDlg::TemplatePickDlg(KAEvent::Actions type, QWidget* parent)
     mListView->setWhatsThis(i18nc("@info:whatsthis", "Select a template to base the new alarm on."));
     connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged()));
     // Require a real double click (even if KDE is in single-click mode) to accept the selection
-    connect(mListView, SIGNAL(doubleClicked(QModelIndex)), SLOT(accept()));
+    connect(mListView, &TemplateListView::doubleClicked, this, &TemplatePickDlg::accept);
     topLayout->addWidget(mListView);
 
     slotSelectionChanged();        // enable or disable the OK button

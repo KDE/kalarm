@@ -61,7 +61,7 @@ QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWid
         // Show an 'append' option in the dialogue.
         // Note that the dialogue will take ownership of the QCheckBox.
         mAppendCheck = new QCheckBox(i18nc("@option:check", "Append to existing file"), 0);
-        connect(mAppendCheck, SIGNAL(toggled(bool)), dlg, SLOT(appendToggled(bool)));
+        connect(mAppendCheck, &QCheckBox::toggled, dlg.data(), &FileDialog::appendToggled);
         dlg->fileWidget()->setCustomWidget(mAppendCheck);
         *append = false;
     }
