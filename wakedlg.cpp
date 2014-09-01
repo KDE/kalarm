@@ -71,14 +71,14 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
 
     // Update the Show and Cancel button status every 5 seconds
     mTimer = new QTimer(this);
-    connect(mTimer, SIGNAL(timeout()), SLOT(checkPendingAlarm()));
+    connect(mTimer, &QTimer::timeout, this, &WakeFromSuspendDlg::checkPendingAlarm);
     mTimer->start(5000);
 
-    connect(mMainWindow, SIGNAL(selectionChanged()), SLOT(enableDisableUseButton()));
-    connect(mUi->showWakeButton, SIGNAL(clicked()), SLOT(showWakeClicked()));
-    connect(mUi->useWakeButton, SIGNAL(clicked()), SLOT(useWakeClicked()));
-    connect(mUi->cancelWakeButton, SIGNAL(clicked()), SLOT(cancelWakeClicked()));
-
+    connect(mMainWindow, &MainWindow::selectionChanged, this, &WakeFromSuspendDlg::enableDisableUseButton);
+    connect(mUi->showWakeButton, &QPushButton::clicked, this, &WakeFromSuspendDlg::showWakeClicked);
+    connect(mUi->useWakeButton, &QPushButton::clicked, this, &WakeFromSuspendDlg::useWakeClicked);
+    connect(mUi->cancelWakeButton, &QPushButton::clicked, this, &WakeFromSuspendDlg::cancelWakeClicked);
+    
     connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(enableDisableUseButton()));
 }
 
