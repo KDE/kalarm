@@ -29,16 +29,16 @@
 #include <klineedit.h>
 #include <kapplication.h>
 #include <KLocalizedString>
+#include <KConfigGroup>
 
 #include <QLabel>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QResizeEvent>
-#include <qdebug.h>
-#include <KConfigGroup>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <qdebug.h>
 
 
 /*=============================================================================
@@ -107,28 +107,25 @@ SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& po
     : QDialog(parent)
 {
     setWindowTitle(i18nc("@title:window", "Special Alarm Actions"));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
-    QVBoxLayout *mainLayout = new QVBoxLayout;
+    QVBoxLayout* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
-    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
-    okButton->setDefault(true);
-    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &SpecialActionsDlg::reject);
-    okButton->setDefault(true);
-    connect(okButton, &QPushButton::clicked, this, &SpecialActionsDlg::slotOk);
 
     QWidget* page = new QWidget(this);
     mainLayout->addWidget(page);
-    mainLayout->addWidget(buttonBox);
     QVBoxLayout* layout = new QVBoxLayout(page);
     layout->setMargin(0);
-    //QT5 layout->setSpacing(spacingHint());
 
     mActions = new SpecialActions(enableCheckboxes, page);
-    mainLayout->addWidget(mActions);
-    mActions->setActions(preAction, postAction, options);
     layout->addWidget(mActions);
-    //QT5 layout->addSpacing(spacingHint());
+    mActions->setActions(preAction, postAction, options);
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    mainLayout->addWidget(buttonBox);
+    QPushButton* okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &SpecialActionsDlg::reject);
+    connect(okButton, &QPushButton::clicked, this, &SpecialActionsDlg::slotOk);
 
     QSize s;
     if (KAlarm::readConfigWindowSize(SPEC_ACT_DIALOG_NAME, s))
@@ -169,14 +166,11 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setMargin(0);
-//TODO PORT QT5     topLayout->setSpacing(QDialog::spacingHint());
 
     // Pre-alarm action
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Pre-Alarm Action"), this);
     topLayout->addWidget(group);
     QVBoxLayout* vlayout = new QVBoxLayout(group);
-//TODO PORT QT5     vlayout->setMargin(QDialog::marginHint());
-//TODO PORT QT5     vlayout->setSpacing(QDialog::spacingHint());
 
     QWidget* box = new QWidget(group);   // this is to control the QWhatsThis text display area
     vlayout->addWidget(box);
@@ -212,8 +206,6 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     group = new QGroupBox(i18nc("@title:group", "Post-Alarm Action"), this);
     topLayout->addWidget(group);
     vlayout = new QVBoxLayout(group);
-//TODO PORT QT5     vlayout->setMargin(QDialog::marginHint());
-//TODO PORT QT5     vlayout->setSpacing(QDialog::spacingHint());
 
     box = new QWidget(group);   // this is to control the QWhatsThis text display area
     vlayout->addWidget(box);
@@ -283,5 +275,7 @@ void SpecialActions::slotPreActionChanged(const QString& text)
         mDontShowError->setEnabled(textValid);
     }
 }
+
 #include "moc_specialactions.cpp"
+
 // vim: et sw=4:
