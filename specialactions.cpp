@@ -36,6 +36,9 @@
 #include <QVBoxLayout>
 #include <QResizeEvent>
 #include <qdebug.h>
+#include <KConfigGroup>
+#include <QDialogButtonBox>
+#include <QPushButton>
 
 
 /*=============================================================================
@@ -51,7 +54,7 @@ SpecialActionsButton::SpecialActionsButton(bool enableCheckboxes, QWidget* paren
 {
     setCheckable(true);
     setChecked(false);
-    connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
+    connect(this, &SpecialActionsButton::clicked, this, &SpecialActionsButton::slotButtonPressed);
     setWhatsThis(i18nc("@info:whatsthis", "Specify actions to execute before and after the alarm is displayed."));
 }
 
@@ -101,23 +104,31 @@ static const char SPEC_ACT_DIALOG_NAME[] = "SpecialActionsDialog";
 SpecialActionsDlg::SpecialActionsDlg(const QString& preAction, const QString& postAction,
                                      KAEvent::ExtraActionOptions options, bool enableCheckboxes,
                                      QWidget* parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    setCaption(i18nc("@title:window", "Special Alarm Actions"));
-    setButtons(Ok|Cancel);
-    setDefaultButton(Ok);
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+    setWindowTitle(i18nc("@title:window", "Special Alarm Actions"));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    setLayout(mainLayout);
+    QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setDefault(true);
+    okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &SpecialActionsDlg::reject);
+    okButton->setDefault(true);
+    connect(okButton, &QPushButton::clicked, this, &SpecialActionsDlg::slotOk);
 
     QWidget* page = new QWidget(this);
-    setMainWidget(page);
+    mainLayout->addWidget(page);
+    mainLayout->addWidget(buttonBox);
     QVBoxLayout* layout = new QVBoxLayout(page);
     layout->setMargin(0);
-    layout->setSpacing(spacingHint());
+    //QT5 layout->setSpacing(spacingHint());
 
     mActions = new SpecialActions(enableCheckboxes, page);
+    mainLayout->addWidget(mActions);
     mActions->setActions(preAction, postAction, options);
     layout->addWidget(mActions);
-    layout->addSpacing(spacingHint());
+    //QT5 layout->addSpacing(spacingHint());
 
     QSize s;
     if (KAlarm::readConfigWindowSize(SPEC_ACT_DIALOG_NAME, s))
@@ -142,7 +153,7 @@ void SpecialActionsDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
         KAlarm::writeConfigWindowSize(SPEC_ACT_DIALOG_NAME, re->size());
-    KDialog::resizeEvent(re);
+    QDialog::resizeEvent(re);
 }
 
 
@@ -158,14 +169,14 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setMargin(0);
-    topLayout->setSpacing(KDialog::spacingHint());
+//TODO PORT QT5     topLayout->setSpacing(QDialog::spacingHint());
 
     // Pre-alarm action
     QGroupBox* group = new QGroupBox(i18nc("@title:group", "Pre-Alarm Action"), this);
     topLayout->addWidget(group);
     QVBoxLayout* vlayout = new QVBoxLayout(group);
-    vlayout->setMargin(KDialog::marginHint());
-    vlayout->setSpacing(KDialog::spacingHint());
+//TODO PORT QT5     vlayout->setMargin(QDialog::marginHint());
+//TODO PORT QT5     vlayout->setSpacing(QDialog::spacingHint());
 
     QWidget* box = new QWidget(group);   // this is to control the QWhatsThis text display area
     vlayout->addWidget(box);
@@ -176,7 +187,7 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     mPreAction = new QLineEdit(box);
     boxLayout->addWidget(mPreAction);
     label->setBuddy(mPreAction);
-    connect(mPreAction, SIGNAL(textChanged(QString)), SLOT(slotPreActionChanged(QString)));
+    connect(mPreAction, &QLineEdit::textChanged, this, &SpecialActions::slotPreActionChanged);
     box->setWhatsThis(xi18nc("@info:whatsthis",
                             "<para>Enter a shell command to execute before the alarm is displayed.</para>"
                             "<para>Note that it is executed only when the alarm proper is displayed, not when a reminder or deferred alarm is displayed.</para>"
@@ -201,8 +212,8 @@ SpecialActions::SpecialActions(bool enableCheckboxes, QWidget* parent)
     group = new QGroupBox(i18nc("@title:group", "Post-Alarm Action"), this);
     topLayout->addWidget(group);
     vlayout = new QVBoxLayout(group);
-    vlayout->setMargin(KDialog::marginHint());
-    vlayout->setSpacing(KDialog::spacingHint());
+//TODO PORT QT5     vlayout->setMargin(QDialog::marginHint());
+//TODO PORT QT5     vlayout->setSpacing(QDialog::spacingHint());
 
     box = new QWidget(group);   // this is to control the QWhatsThis text display area
     vlayout->addWidget(box);

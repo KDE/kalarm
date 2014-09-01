@@ -22,7 +22,7 @@
 #define SPECIALACTIONS_H
 
 #include <kalarmcal/kaevent.h>
-#include <kdialog.h>
+#include <QDialog>
 #include <QWidget>
 #include <QPushButton>
 
@@ -89,7 +89,7 @@ class SpecialActions : public QWidget
 
 
 // Pre- and post-alarm actions dialog displayed by the push button
-class SpecialActionsDlg : public KDialog
+class SpecialActionsDlg : public QDialog
 {
         Q_OBJECT
     public:
