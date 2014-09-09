@@ -170,7 +170,7 @@ install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install(PROGRAMS kalarm.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(PROGRAMS org.kde.kalarm.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 install(PROGRAMS kalarm.autostart.desktop DESTINATION ${AUTOSTART_INSTALL_DIR})
 install(FILES kalarm.appdata.xml DESTINATION ${CMAKE_INSTALL_METAINFODIR})
 install(FILES kalarmconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
@@ -181,10 +181,8 @@ install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults
 
 ########### KAuth helper ###############
 
-#REACTIVATE IT
 add_executable(kalarm_helper rtcwakeaction.cpp)
 target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
 install(TARGETS kalarm_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 kauth_install_helper_files(kalarm_helper org.kde.kalarmrtcwake root)
-#PORT TO QT5
 kauth_install_actions(org.kde.kalarmrtcwake rtcwakeaction.actions)

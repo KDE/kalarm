@@ -144,3 +144,4 @@ Terminal=false
 X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Utility;X-KDE-Utilities-PIM;
+X-DBUS-ServiceName=org.kde.kalarm
