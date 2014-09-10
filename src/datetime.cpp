@@ -389,4 +389,3 @@ bool operator<(const DateTime &dt1, const DateTime &dt2)
 }
 
 } // namespace KAlarmCal
-

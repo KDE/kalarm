@@ -59,7 +59,7 @@ uint identityUoid(const QString &identityUoidOrName)
     if (!ok  ||  identityManager()->identityForUoid(id).isNull()) {
         identityManager();   // fetch it if not already done
         for (KIdentityManagement::IdentityManager::ConstIterator it = mIdentityManager->begin();
-                it != mIdentityManager->end();  ++it) {
+             it != mIdentityManager->end();  ++it) {
             if ((*it).identityName() == identityUoidOrName) {
                 id = (*it).uoid();
                 break;
@@ -72,4 +72,3 @@ uint identityUoid(const QString &identityUoidOrName)
 } // namespace Identities
 
 } // namespace KAlarmCal
-

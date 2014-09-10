@@ -71,6 +71,7 @@ public:
         ANNUAL_DATE,   //!< yearly, on a specified date in each of the specified months
         ANNUAL_POS     //!< yearly, on specified weekdays in the specified weeks of the specified months
     };
+
     /** When annual February 29th recurrences should occur in non-leap years. */
     enum Feb29Type {
         Feb29_Feb28,   //!< occurs on 28 February in non-leap years
@@ -82,6 +83,7 @@ public:
     KARecurrence(const KCalCore::Recurrence &r);
     KARecurrence(const KARecurrence &r);
     ~KARecurrence();
+
     /**
      * Assignment operator.
      * @param r the recurrence which will be assigned to this.
@@ -166,6 +168,7 @@ public:
      * @return the current start/time of the recurrence.
      */
     KDateTime startDateTime() const;
+
     /** Return the start date/time of the recurrence */
     QDate startDate() const;
 

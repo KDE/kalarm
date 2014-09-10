@@ -74,13 +74,13 @@ public:
      */
     void setVersion(int v);
 
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual QByteArray type() const;
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual CompatibilityAttribute *clone() const;
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual QByteArray serialized() const;
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual void deserialize(const QByteArray &data);
 
     /** Return the attribute name. */

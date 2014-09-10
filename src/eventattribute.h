@@ -63,13 +63,13 @@ public:
     /** Set the last command execution error for the item. */
     void setCommandError(KAEvent::CmdErrType err);
 
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual QByteArray type() const;
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual EventAttribute *clone() const;
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual QByteArray serialized() const;
-    /** Reimplemented from Attribute */
+    // Reimplemented from Attribute
     virtual void deserialize(const QByteArray &data);
 
 private:

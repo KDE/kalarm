@@ -93,26 +93,32 @@ public:
      *  - A script or plain text is returned without interpretation.
      */
     QString displayText() const;
+
     /** Return the 'To' header parameter for an email alarm.
      *  @return 'from' value, or empty if not an email text.
      */
     QString to() const;
+
     /** Return the 'From' header parameter for an email alarm.
      *  @return 'from' value, or empty if not an email text.
      */
     QString from() const;
+
     /** Return the 'Cc' header parameter for an email alarm.
      *  @return 'cc' value, or empty if not an email text.
      */
     QString cc() const;
+
     /** Return the 'Date' header parameter for an email alarm.
      *  @return 'date' value, or empty if not an email text.
      */
     QString time() const;
+
     /** Return the 'Subject' header parameter for an email alarm.
      *  @return 'subject' value, or empty if not an email text.
      */
     QString subject() const;
+
     /** Return the email message body.
      *  @return message body, or empty if not an email text.
      */
@@ -122,14 +128,17 @@ public:
      *  @return summary text, or empty if not a todo.
      */
     QString summary() const;
+
     /** Return the location text for a todo.
      *  @return location text, or empty if not a todo.
      */
     QString location() const;
+
     /** Return the due date text for a todo.
      *  @return due date text, or empty if not a todo.
      */
     QString due() const;
+
     /** Return the description text for a todo.
      *  @return description text, or empty if not a todo.
      */
@@ -137,10 +146,13 @@ public:
 
     /** Return whether there is any text. */
     bool isEmpty() const;
+
     /** Return whether the instance contains the text of an email. */
     bool isEmail() const;
+
     /** Return whether the instance contains the text of a script. */
     bool isScript() const;
+
     /** Return whether the instance contains the text of a todo. */
     bool isTodo() const;
 

@@ -101,8 +101,8 @@ QByteArray CompatibilityAttribute::name()
 
 QByteArray CompatibilityAttribute::serialized() const
 {
-    QByteArray v = QByteArray::number(d->mCompatibility) + ' '
-                   + QByteArray::number(d->mVersion);
+    const QByteArray v = QByteArray::number(d->mCompatibility) + ' '
+                       + QByteArray::number(d->mVersion);
     qDebug() << v;
     return v;
 }
@@ -117,12 +117,12 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
 
     bool ok;
     const QList<QByteArray> items = data.simplified().split(' ');
-    int count = items.count();
+    const int count = items.count();
     int index = 0;
     if (count > index) {
         // 0: calendar format compatibility
-        int c = items[index++].toInt(&ok);
-        KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Converted | KACalendar::Convertible | KACalendar::Incompatible | KACalendar::Unknown);
+        const int c = items[index++].toInt(&ok);
+        const KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Converted | KACalendar::Convertible | KACalendar::Incompatible | KACalendar::Unknown);
         if (!ok  || (c & AllCompat) != c) {
             qCritical() << "Invalid compatibility:" << c;
             return;
@@ -131,7 +131,7 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
     }
     if (count > index) {
         // 1: KAlarm calendar version number
-        int c = items[index++].toInt(&ok);
+        const int c = items[index++].toInt(&ok);
         if (!ok) {
             qCritical() << "Invalid version:" << c;
             return;
@@ -141,4 +141,3 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
 }
 
 } // namespace KAlarmCal
-

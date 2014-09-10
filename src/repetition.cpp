@@ -146,15 +146,15 @@ int Repetition::intervalSeconds() const
 int Repetition::nextRepeatCount(const KDateTime &from, const KDateTime &preDateTime) const
 {
     return d->mInterval.isDaily()
-           ? from.daysTo(preDateTime) / d->mInterval.asDays() + 1
-           : static_cast<int>(from.secsTo_long(preDateTime) / d->mInterval.asSeconds()) + 1;
+         ? from.daysTo(preDateTime) / d->mInterval.asDays() + 1
+         : static_cast<int>(from.secsTo_long(preDateTime) / d->mInterval.asSeconds()) + 1;
 }
 
 int Repetition::previousRepeatCount(const KDateTime &from, const KDateTime &afterDateTime) const
 {
     return d->mInterval.isDaily()
-           ? from.daysTo(afterDateTime.addSecs(-1)) / d->mInterval.asDays()
-           : static_cast<int>((from.secsTo_long(afterDateTime) - 1) / d->mInterval.asSeconds());
+         ? from.daysTo(afterDateTime.addSecs(-1)) / d->mInterval.asDays()
+         : static_cast<int>((from.secsTo_long(afterDateTime) - 1) / d->mInterval.asSeconds());
 }
 
 } // namespace KAlarmCal

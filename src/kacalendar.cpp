@@ -59,7 +59,7 @@ static bool isUTC(const QString &localFile);
 class Private
 {
 public:
-    static int  readKAlarmVersion(const FileStorage::Ptr &, QString &subVersion, QString &versionString);
+    static int readKAlarmVersion(const FileStorage::Ptr &, QString &subVersion, QString &versionString);
 
     static QByteArray mIcalProductId;
 };
@@ -100,7 +100,7 @@ void setKAlarmVersion(const Calendar::Ptr &calendar)
 int updateVersion(const FileStorage::Ptr &fileStorage, QString &versionString)
 {
     QString subVersion;
-    int version = Private::readKAlarmVersion(fileStorage, subVersion, versionString);
+    const int version = Private::readKAlarmVersion(fileStorage, subVersion, versionString);
     if (version == CurrentFormat) {
         return CurrentFormat;    // calendar is in the current KAlarm format
     }
@@ -151,7 +151,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
         if (prodid.isEmpty()) {
             // Check whether the calendar file is empty, in which case
             // it can be written to freely.
-            QFileInfo fi(fileStorage->fileName());
+            const QFileInfo fi(fileStorage->fileName());
             if (!fi.size()) {
                 return KACalendar::CurrentFormat;
             }
@@ -173,7 +173,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
         // Extract the KAlarm version string
         versionString = prodid.mid(i + progname.length()).trimmed();
         i = versionString.indexOf(QLatin1Char('/'));
-        int j = versionString.indexOf(QLatin1Char(' '));
+        const int j = versionString.indexOf(QLatin1Char(' '));
         if (j >= 0  &&  j < i) {
             i = j;
         }
@@ -185,7 +185,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
     if (versionString == QLatin1String(KAEvent::currentCalendarVersionString())) {
         return KACalendar::CurrentFormat;    // the calendar is in the current KAlarm format
     }
-    int ver = KAlarmCal::getVersionNumber(versionString, &subVersion);
+    const int ver = KAlarmCal::getVersionNumber(versionString, &subVersion);
     if (ver == KAEvent::currentCalendarVersion()) {
         return KACalendar::CurrentFormat;    // the calendar is in the current KAlarm format
     }
@@ -207,7 +207,7 @@ bool isUTC(const QString &localFile)
     }
     QTextStream ts(&file);
     ts.setCodec("ISO 8859-1");
-    QByteArray text = ts.readAll().toLocal8Bit();
+    const QByteArray text = ts.readAll().toLocal8Bit();
     file.close();
 
     // Extract the CREATED property for the first VEVENT from the calendar
@@ -295,12 +295,12 @@ QString uid(const QString &id, Type status)
     if (status != oldType  &&  i > 0) {
         QString part;
         switch (status) {
-        case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
-        case DISPLAYING:  part = staticStrings->DISPLAYING_UID;  break;
-        case ACTIVE:
-        case TEMPLATE:
-        case EMPTY:
-        default:          part = QLatin1String("-");  break;
+            case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
+            case DISPLAYING:  part = staticStrings->DISPLAYING_UID;  break;
+            case ACTIVE:
+            case TEMPLATE:
+            case EMPTY:
+            default:          part = QLatin1String("-");  break;
         }
         result.replace(i, len, part);
     }
@@ -334,7 +334,7 @@ Type status(const Event::Ptr &event, QString *param)
     if (!event) {
         return EMPTY;
     }
-    Alarm::List alarms = event->alarms();
+    const Alarm::List alarms = event->alarms();
     if (alarms.isEmpty()) {
         return EMPTY;
     }
@@ -347,7 +347,7 @@ Type status(const Event::Ptr &event, QString *param)
         if (it != properties.constEnd()) {
             return it.value();
         }
-        int i = property.indexOf(QLatin1Char(';'));
+        const int i = property.indexOf(QLatin1Char(';'));
         if (i < 0) {
             return EMPTY;
         }
@@ -363,7 +363,7 @@ Type status(const Event::Ptr &event, QString *param)
 
     // The event either wasn't written by KAlarm, or was written by a pre-2.0 version.
     // Check first for an old KAlarm format, which indicated the event type in its UID.
-    QString uid = event->uid();
+    const QString uid = event->uid();
     if (uid.indexOf(staticStrings->ARCHIVED_UID) > 0) {
         return ARCHIVED;
     }
@@ -387,13 +387,13 @@ void setStatus(const Event::Ptr &event, Type status, const QString &param)
     }
     QString text;
     switch (status) {
-    case ACTIVE:      text = staticStrings->ACTIVE_STATUS;  break;
-    case TEMPLATE:    text = staticStrings->TEMPLATE_STATUS;  break;
-    case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
-    case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
-    default:
-        event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
-        return;
+        case ACTIVE:      text = staticStrings->ACTIVE_STATUS;  break;
+        case TEMPLATE:    text = staticStrings->TEMPLATE_STATUS;  break;
+        case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
+        case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
+        default:
+            event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+            return;
     }
     if (!param.isEmpty()) {
         text += QLatin1Char(';') + param;
@@ -435,10 +435,10 @@ Types types(const QStringList &mimeTypes)
 QString mimeType(Type type)
 {
     switch (type) {
-    case ACTIVE:    return MIME_ACTIVE;
-    case ARCHIVED:  return MIME_ARCHIVED;
-    case TEMPLATE:  return MIME_TEMPLATE;
-    default:        return QString();
+        case ACTIVE:    return MIME_ACTIVE;
+        case ARCHIVED:  return MIME_ARCHIVED;
+        case TEMPLATE:  return MIME_TEMPLATE;
+        default:        return QString();
     }
 }
 
@@ -457,4 +457,3 @@ QStringList mimeTypes(Types types)
 } // namespace CalEvent
 
 } // namespace KAlarmCal
-

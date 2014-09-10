@@ -30,7 +30,8 @@ namespace KAlarmCal
 class CollectionAttribute::Private
 {
 public:
-    Private() : mEnabled(CalEvent::EMPTY),
+    Private()
+      : mEnabled(CalEvent::EMPTY),
         mStandard(CalEvent::EMPTY),
         mKeepFormat(false)  {}
 
@@ -83,12 +84,12 @@ CalEvent::Types CollectionAttribute::enabled() const
 void CollectionAttribute::setEnabled(CalEvent::Type type, bool enabled)
 {
     switch (type) {
-    case CalEvent::ACTIVE:
-    case CalEvent::ARCHIVED:
-    case CalEvent::TEMPLATE:
-        break;
-    default:
-        return;
+        case CalEvent::ACTIVE:
+        case CalEvent::ARCHIVED:
+        case CalEvent::TEMPLATE:
+            break;
+        default:
+            return;
     }
     if (enabled) {
         d->mEnabled |= type;
@@ -107,12 +108,12 @@ void CollectionAttribute::setEnabled(CalEvent::Types types)
 bool CollectionAttribute::isStandard(CalEvent::Type type) const
 {
     switch (type) {
-    case CalEvent::ACTIVE:
-    case CalEvent::ARCHIVED:
-    case CalEvent::TEMPLATE:
-        return d->mStandard & type;
-    default:
-        return false;
+        case CalEvent::ACTIVE:
+        case CalEvent::ARCHIVED:
+        case CalEvent::TEMPLATE:
+            return d->mStandard & type;
+        default:
+            return false;
     }
 }
 
@@ -124,17 +125,17 @@ CalEvent::Types CollectionAttribute::standard() const
 void CollectionAttribute::setStandard(CalEvent::Type type, bool standard)
 {
     switch (type) {
-    case CalEvent::ACTIVE:
-    case CalEvent::ARCHIVED:
-    case CalEvent::TEMPLATE:
-        if (standard) {
-            d->mStandard = static_cast<CalEvent::Types>(d->mStandard | type);
-        } else {
-            d->mStandard = static_cast<CalEvent::Types>(d->mStandard & ~type);
-        }
-        break;
-    default:
-        break;
+        case CalEvent::ACTIVE:
+        case CalEvent::ARCHIVED:
+        case CalEvent::TEMPLATE:
+            if (standard) {
+                d->mStandard = static_cast<CalEvent::Types>(d->mStandard | type);
+            } else {
+                d->mStandard = static_cast<CalEvent::Types>(d->mStandard & ~type);
+            }
+            break;
+        default:
+            break;
     }
 }
 
@@ -176,15 +177,15 @@ QByteArray CollectionAttribute::name()
 QByteArray CollectionAttribute::serialized() const
 {
     QByteArray v = QByteArray::number(d->mEnabled) + ' '
-                   + QByteArray::number(d->mStandard) + ' '
-                   + QByteArray(d->mKeepFormat ? "1" : "0") + ' '
-                   + QByteArray(d->mBackgroundColour.isValid() ? "1" : "0");
+                 + QByteArray::number(d->mStandard) + ' '
+                 + QByteArray(d->mKeepFormat ? "1" : "0") + ' '
+                 + QByteArray(d->mBackgroundColour.isValid() ? "1" : "0");
     if (d->mBackgroundColour.isValid())
         v += ' '
-             + QByteArray::number(d->mBackgroundColour.red()) + ' '
-             + QByteArray::number(d->mBackgroundColour.green()) + ' '
-             + QByteArray::number(d->mBackgroundColour.blue()) + ' '
-             + QByteArray::number(d->mBackgroundColour.alpha());
+           + QByteArray::number(d->mBackgroundColour.red()) + ' '
+           + QByteArray::number(d->mBackgroundColour.green()) + ' '
+           + QByteArray::number(d->mBackgroundColour.blue()) + ' '
+           + QByteArray::number(d->mBackgroundColour.alpha());
     qDebug() << v;
     return v;
 }
@@ -202,7 +203,7 @@ void CollectionAttribute::deserialize(const QByteArray &data)
     bool ok;
     int c[4];
     const QList<QByteArray> items = data.simplified().split(' ');
-    int count = items.count();
+    const int count = items.count();
     int index = 0;
     if (count > index) {
         // 0: type(s) of alarms for which the collection is enabled
@@ -256,4 +257,3 @@ void CollectionAttribute::deserialize(const QByteArray &data)
 }
 
 } // namespace KAlarmCal
-

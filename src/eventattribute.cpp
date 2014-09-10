@@ -83,7 +83,7 @@ EventAttribute *EventAttribute::clone() const
 
 QByteArray EventAttribute::serialized() const
 {
-    QByteArray v = QByteArray::number(d->mCommandError);
+    const QByteArray v = QByteArray::number(d->mCommandError);
     qDebug() << v;
     return v;
 }
@@ -99,18 +99,17 @@ void EventAttribute::deserialize(const QByteArray &data)
     int c[1];
     const QList<QByteArray> items = data.simplified().split(' ');
     switch (items.count()) {
-    case 1:
-        c[0] = items[0].toInt(&ok);
-        if (!ok  || (c[0] & ~(KAEvent::CMD_ERROR | KAEvent::CMD_ERROR_PRE | KAEvent::CMD_ERROR_POST))) {
-            return;
-        }
-        d->mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
-        break;
+        case 1:
+            c[0] = items[0].toInt(&ok);
+            if (!ok  || (c[0] & ~(KAEvent::CMD_ERROR | KAEvent::CMD_ERROR_PRE | KAEvent::CMD_ERROR_POST))) {
+                return;
+            }
+            d->mCommandError = static_cast<KAEvent::CmdErrType>(c[0]);
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 }
 
 } // namespace KAlarmCal
-

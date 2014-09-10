@@ -139,6 +139,7 @@ public:
 
     /** Set the alarm's trigger time. */
     void setTime(const DateTime &dt);
+
     /** Set the alarm's trigger time. */
     void setTime(const KDateTime &dt);
 
@@ -382,11 +383,13 @@ public:
 
     /** Enable or disable the alarm. */
     void setEnabled(bool enable);
+
     /** Return the enabled status of the alarm. */
     bool enabled() const;
 
     /** Set the read-only status of the alarm. */
     void setReadOnly(bool ro);
+
     /** Return the read-only status of the alarm. */
     bool isReadOnly() const;
 
@@ -394,11 +397,13 @@ public:
      *  Normally this is set when the event has triggered at least once.
      */
     void setArchive();
+
     /** Return whether the event should be archived when it expires or is deleted. */
     bool toBeArchived() const;
 
     /** Return whether the event's main alarm has expired. If so, a deferral alarm will exist. */
     bool mainExpired() const;
+
     /** Return whether the event has expired.
      *  @return @c true if the event has expired and is currently being displayed,
      *               or it is an archived event.
@@ -426,11 +431,13 @@ public:
 
     /** Increment the revision number of the event (SEQUENCE property in iCalendar). */
     void incrementRevision();
+
     /** Return the revision number of the event (SEQUENCE property in iCalendar). */
     int revision() const;
 
     /** Set the ID of the Akonadi Collection which contains the event. */
     void setCollectionId(Akonadi::Collection::Id id);
+
     /** Set the ID of the Akonadi Collection which contains the event.
      *  @warning This is a const method, which means that any other instance
      *           which references the same shared data will also be
@@ -439,11 +446,13 @@ public:
      *           copying. Use with caution!
      */
     void setCollectionId_const(Akonadi::Collection::Id id) const;
+
     /** Return the ID of the Akonadi Collection which contains the event. */
     Akonadi::Collection::Id  collectionId() const;
 
     /** Set the ID of the Akonadi Item which contains the event. */
     void setItemId(Akonadi::Item::Id id);
+
     /** Return the ID of the Akonadi Item which contains the event. */
     Akonadi::Item::Id  itemId() const;
 
@@ -456,6 +465,7 @@ public:
 
     /** Note the event's storage format compatibility compared to the current KAlarm calendar format. */
     void setCompatibility(KACalendar::Compat c);
+
     /** Return the event's storage format compatibility compared to the current KAlarm calendar format. */
     KACalendar::Compat compatibility() const;
 
@@ -516,41 +526,52 @@ public:
      *  which incorporate checks on alarm type.
      */
     QString cleanText() const;
+
     /** Return the message text for a display alarm, or the email body for
      *  an email alarm.
      *  @return message/email text, or empty if not a display or email alarm. */
     QString message() const;
+
     /** Return the message text for a display alarm.
      *  @return message text, or empty if not a text display alarm. */
     QString displayMessage() const;
+
     /** Return the path of the file whose contents are to be shown, for a display alarm.
      *  @return file path, or empty if not a file display alarm. */
     QString fileName() const;
 
     /** Return the message window background color, for a display alarm. */
     QColor bgColour() const;
+
     /** Return the message window foreground color, for a display alarm. */
     QColor fgColour() const;
 
     /** Set the global default font for alarm message texts. */
     static void setDefaultFont(const QFont &font);
+
     /** Return whether to use the default font (as set by setDefaultFont())
      *  for alarm message texts. */
     bool useDefaultFont() const;
+
     /** Return the font to use for alarm message texts. */
     QFont font() const;
 
     /** Return the command or script to execute, for a command alarm.
      *  @return command, or empty if not a command alarm. */
     QString command() const;
+
     /** Return whether a command script is specified, for a command alarm. */
     bool commandScript() const;
+
     /** Return whether to execute the command in a terminal window, for a command alarm. */
     bool commandXterm() const;
+
     /** Return whether the command output is to be displayed in an alarm message window. */
     bool commandDisplay() const;
+
     /** Set or clear the command execution error for the last time the alarm triggered. */
     void setCommandError(CmdErrType error) const;
+
     /** Return the command execution error for the last time the alarm triggered. */
     CmdErrType commandError() const;
 
@@ -705,20 +726,10 @@ public:
      *  @param pre  shell command to execute before the alarm is displayed
      *  @param post shell command to execute after the alarm is acknowledged
      *  @param options options for pre- or post-alarm actions
-     *  @see preAction(), postAction(), cancelOnPreActionError(), dontShowPreActionError()
+     *  @see preAction(), postAction(), extraActionOptions()
      *  @since 4.9
      */
     void setActions(const QString &pre, const QString &post, ExtraActionOptions options);
-
-    /** Set the pre-alarm and post-alarm actions, and their options.
-     *  @param pre  shell command to execute before the alarm is displayed
-     *  @param post shell command to execute after the alarm is acknowledged
-     *  @param cancelOnError true to cancel the alarm if the pre-alarm action fails
-     *  @param dontShowError true to not notify the error if the pre-alarm action fails
-     *  @see preAction(), postAction(), cancelOnPreActionError(), dontShowPreActionError()
-     *  @deprecated Use alternative form of setActions() instead.
-     */
-    void setActions(const QString &pre, const QString &post, bool cancelOnError, bool dontShowError);
 
     /** Return the shell command to execute before the alarm is displayed. */
     QString preAction() const;
@@ -733,19 +744,6 @@ public:
      *  @since 4.9
      */
     ExtraActionOptions extraActionOptions() const;
-
-    /** Return whether the alarm is to be cancelled if the pre-alarm action fails.
-     *  @see preAction(), setActions()
-     *  @deprecated Use preActionOptions() instead
-     */
-    bool cancelOnPreActionError() const;
-
-    /** Return whether the user should not be notified if the pre-alarm action fails.
-     *  @return @c true if the user will not be notified, @c false if the user will be notified
-     *  @see preAction(), setActions()
-     *  @deprecated Use preActionOptions() instead
-     */
-    bool dontShowPreActionError() const;
 
     /** Set an additional reminder alarm.
      *  @param minutes  number of minutes BEFORE the main alarm; if negative, the reminder
@@ -770,15 +768,18 @@ public:
      *  @see setReminder()
      */
     int reminderMinutes() const;
+
     /** Return whether a reminder is currently due (before the next, or after the last,
      *  main alarm/recurrence).
      *  @see reminderDeferral()
      */
     bool reminderActive() const;
+
     /** Return whether the reminder alarm is triggered only for the first recurrence.
      *  @see setReminder()
      */
     bool reminderOnceOnly() const;
+
     /** Return whether there is currently a deferred reminder alarm pending. */
     bool reminderDeferral() const;
 
@@ -797,16 +798,19 @@ public:
      *  @see defer()
      */
     void cancelDefer();
+
     /** Set defaults for the deferral dialog.
      *  @param minutes   default number of minutes, or 0 to select time control.
      *  @param dateOnly  true to select date-only by default.
      *  @see deferDefaultMinutes()
      */
     void setDeferDefaultMinutes(int minutes, bool dateOnly = false);
+
     /** Return whether there is currently a deferred alarm pending.
      *  @see defer(), deferDateTime()
      */
     bool deferred() const;
+
     /** Return the time at which the currently pending deferred alarm should trigger.
      *  @return trigger time, or invalid if no deferral pending.
      *  @see defer(), deferred()
@@ -824,6 +828,7 @@ public:
      *  @see setDeferDefaultMinutes()
      */
     int deferDefaultMinutes() const;
+
     /** Return the default date-only setting used in the deferral dialog. */
     bool deferDefaultDateOnly() const;
 
@@ -832,11 +837,13 @@ public:
      *  @see mainDateTime()
      */
     DateTime startDateTime() const;
+
     /** Set the next time to trigger the alarm (excluding sub-repetitions).
      *  Note that for a recurring event, this should match one of the
      *  recurrence times.
      */
     void setTime(const KDateTime &dt);
+
     /** Return the next time the main alarm will trigger.
      *  @param withRepeats  true to include sub-repetitions, false to exclude them.
      *  @see mainTime(), startDateTime(), setTime()
@@ -846,6 +853,7 @@ public:
     /** Return the time at which the main alarm will next trigger.
      *  Sub-repetitions are ignored. */
     QTime mainTime() const;
+
     /** Return the time at which the last sub-repetition of the main
      *  alarm will occur.
      *  @return last sub-repetition time, or main alarm time if no
@@ -876,6 +884,7 @@ public:
      *  @see createdDateTime()
      */
     void setCreatedDateTime(const KDateTime &dt);
+
     /** Return the date/time the event was created, or saved in the archive calendar.
      *  @see setCreatedDateTime()
      */
@@ -902,6 +911,7 @@ public:
      *  @see holidaysExcluded(), setHolidays()
      */
     void setExcludeHolidays(bool exclude);
+
     /** Return whether the alarm is disabled on holiday dates.
      *  @see setExcludeHolidays()
      */
@@ -925,6 +935,7 @@ public:
      *  @see workTimeOnly(), setWorkTime()
      */
     void setWorkTimeOnly(bool wto);
+
     /** Return whether the alarm is disabled on non-working days and outside working hours.
      *  @see setWorkTimeOnly()
      */
@@ -1048,11 +1059,13 @@ public:
      *  @see recurType()
      */
     bool recurs() const;
+
     /** Return the recurrence period type for the event.
      *  Note that this does not test for repeat-at-login.
      *  @see recurInterval()
      */
     KARecurrence::Type recurType() const;
+
     /** Return the full recurrence data for the event.
      *  @return recurrence data, or null if none.
      *  @see recurrenceText()
@@ -1195,6 +1208,7 @@ public:
      *  @see firstAlarm()
      */
     KAAlarm nextAlarm(const KAAlarm &previousAlarm) const;
+
     /** Return the next alarm for the event, after the specified alarm type.
      *  @see firstAlarm()
      */
@@ -1222,6 +1236,7 @@ public:
      *  updates to occur.
      */
     void startChanges();
+
     /** Call when a group of changes preceded by startChanges() is complete, to
      *  allow resultant updates to occur.
      */
