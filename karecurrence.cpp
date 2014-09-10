@@ -218,10 +218,10 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
                                  const KDateTime& end)
 {
     clear();
-    Feb29Type feb29Type = (f29 == -1) ? mDefaultFeb29 : static_cast<Feb29Type>(f29);
+    const Feb29Type feb29Type = (f29 == -1) ? mDefaultFeb29 : static_cast<Feb29Type>(f29);
     if (count < -1)
         return false;
-    bool dateOnly = start.isDateOnly();
+    const bool dateOnly = start.isDateOnly();
     if (!count  &&  ((!dateOnly && !end.isValid())
                   || (dateOnly && !end.date().isValid())))
         return false;
@@ -274,7 +274,7 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
 */
 bool KARecurrence::set(const QString& icalRRULE)
 {
-    static QString RRULE = QLatin1String("RRULE:");
+    static const QString RRULE = QLatin1String("RRULE:");
     d->clear();
     if (icalRRULE.isEmpty())
         return true;
@@ -314,14 +314,13 @@ void KARecurrence::Private::fix()
     RecurrenceRule* rrules[2];
     const RecurrenceRule::List rrulelist = mRecurrence.rRules();
     int rri = 0;
-    int rrend = rrulelist.count();
+    const int rrend = rrulelist.count();
     for (int i = 0;  i < 2  &&  rri < rrend;  ++i, ++rri)
     {
         RecurrenceRule* rrule = rrulelist[rri];
         rrules[i] = rrule;
         bool stop = true;
-        int rtype = mRecurrence.recurrenceType(rrule);
-        switch (rtype)
+        switch (mRecurrence.recurrenceType(rrule))
         {
             case Recurrence::rHourly:
                 // Convert an hourly recurrence to a minutely one
@@ -356,7 +355,7 @@ void KARecurrence::Private::fix()
                     ||  rrule->startDt()   != rrules[0]->startDt())
                         break;
                 }
-                QList<int> ds = rrule->byYearDays();
+                const QList<int> ds = rrule->byYearDays();
                 if (!ds.isEmpty()  &&  ds.first() == 60)
                 {
                     ++convert;    // this rule needs to be converted
@@ -390,7 +389,7 @@ void KARecurrence::Private::fix()
                     if (day == -1)
                     {
                         // Last day of the month - only combine if it's February
-                        QList<int> months = rrule->byMonths();
+                        const QList<int> months = rrule->byMonths();
                         if (months.count() != 1  ||  months.first() != 2)
                             day = 0;
                     }
@@ -431,7 +430,7 @@ void KARecurrence::Private::fix()
             RecurrenceRule* rr = rrules[0];
             rrules[0] = rrules[1];    // the 29th rule
             rrules[1] = rr;
-            int d = days[0];
+            const int d = days[0];
             days[0] = days[1];
             days[1] = d;        // the non-29th day
         }
@@ -513,10 +512,10 @@ void KARecurrence::Private::writeRecurrence(const KARecurrence* q, Recurrence& r
             break;
         case ANNUAL_DATE:
         {
-            QList<int> months = rrule->byMonths();
-            QList<int> days   = mRecurrence.monthDays();
-            bool special = (mFeb29Type != Feb29_None  &&  !days.isEmpty()
-                            &&  days.first() == 29  &&  months.removeAll(2));
+            QList<int>     months = rrule->byMonths();
+            const QList<int> days = mRecurrence.monthDays();
+            const bool special = (mFeb29Type != Feb29_None  &&  !days.isEmpty()
+                                  &&  days.first() == 29  &&  months.removeAll(2));
             RecurrenceRule* rrule1 = recur.defaultRRule();
             rrule1->setByMonths(months);
             rrule1->setByMonthDays(days);
@@ -575,15 +574,15 @@ void KARecurrence::Private::writeRecurrence(const KARecurrence* q, Recurrence& r
                          * all. In that case, retain it so that the February 29th characteristic
                          * is not lost should the user later change the recurrence count.
                          */
-                        KDateTime end = endDateTime();
-                        int count1 = rrule1->durationTo(end)
-                                     - (rrule1->recursOn(mRecurrence.startDate(), mRecurrence.startDateTime().timeSpec()) ? 0 : 1);
+                        const KDateTime end = endDateTime();
+                        const int count1 = rrule1->durationTo(end)
+                                           - (rrule1->recursOn(mRecurrence.startDate(), mRecurrence.startDateTime().timeSpec()) ? 0 : 1);
                         if (count1 > 0)
                             rrule1->setDuration(count1);
                         else
                             rrule1->setEndDt(mRecurrence.startDateTime());
-                        int count2 = rrule2->durationTo(end)
-                                     - (rrule2->recursOn(mRecurrence.startDate(), mRecurrence.startDateTime().timeSpec()) ? 0 : 1);
+                        const int count2 = rrule2->durationTo(end)
+                                           - (rrule2->recursOn(mRecurrence.startDate(), mRecurrence.startDateTime().timeSpec()) ? 0 : 1);
                         if (count2 > 0)
                             rrule2->setDuration(count2);
                         else
@@ -951,7 +950,7 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule* rrule1, const 
         // Swap the two rules to make rr1 have the earlier end date
         rr1 = rrule2;
         rr2 = rrule1;
-        KDateTime e = end1;
+        const KDateTime e = end1;
         end1 = end2;
         end2 = e;
     }
@@ -978,7 +977,7 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule* rrule1, const 
             end = end2.date();
             return count1 + count2;
         }
-        QDate prev2 = rr2->getPreviousDate(next1).date();
+        const QDate prev2 = rr2->getPreviousDate(next1).date();
         end = (prev2 > end1.date()) ? prev2 : end1.date();
     }
     if (count2)
@@ -992,7 +991,7 @@ int KARecurrence::Private::combineDurations(const RecurrenceRule* rrule1, const 
 */
 Duration KARecurrence::longestInterval() const
 {
-    int freq = d->mRecurrence.frequency();
+    const int freq = d->mRecurrence.frequency();
     switch (type())
     {
         case MINUTELY:
@@ -1029,7 +1028,7 @@ Duration KARecurrence::longestInterval() const
                         last = i;
                     }
                 }
-                int wrap = freq*7 - last + first;
+                const int wrap = freq*7 - last + first;
                 if (wrap > maxgap)
                     maxgap = wrap;
                 return Duration(maxgap, Duration::Days);
@@ -1047,13 +1046,13 @@ Duration KARecurrence::longestInterval() const
         {
             // Find which days of the week it recurs on, and if on more than
             // one, reduce the maximum interval accordingly.
-            QBitArray ds = d->mRecurrence.days();
+            const QBitArray ds = d->mRecurrence.days();
             int first = -1;
             int last  = -1;
             int maxgap = 1;
             // Use the user's definition of the week, starting at the
             // day of the week specified by the user's locale.
-            int weekStart = KGlobal::locale()->weekStartDay() - 1;  // zero-based
+            const int weekStart = KGlobal::locale()->weekStartDay() - 1;  // zero-based
             for (int i = 0;  i < 7;  ++i)
             {
                 // Get the standard KDE day-of-week number (zero-based)
@@ -1069,7 +1068,7 @@ Duration KARecurrence::longestInterval() const
             }
             if (first < 0)
                 break;    // no days recur
-            int span = last - first;
+            const int span = last - first;
             if (freq > 1)
                 return Duration(freq*7 - span, Duration::Days);
             if (7 - span > maxgap)
@@ -1099,13 +1098,13 @@ Duration KARecurrence::longestInterval() const
                     first = months[i];
                 else
                 {
-                    int span = QDate(2001, last, 1).daysTo(QDate(2001, months[i], 1));
+                    const int span = QDate(2001, last, 1).daysTo(QDate(2001, months[i], 1));
                     if (span > maxgap)
                         maxgap = span;
                 }
                 last = months[i];
             }
-            int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
+            const int span = QDate(2001, first, 1).daysTo(QDate(2001, last, 1));
             if (freq > 1)
                 return Duration(freq*365 - span, Duration::Days);
             if (365 - span > maxgap)

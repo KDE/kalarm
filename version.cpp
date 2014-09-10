@@ -42,7 +42,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
     //      if the representation returned by this method changes.
     if (subVersion)
         subVersion->clear();
-    int count = version.count(QLatin1Char('.')) + 1;
+    const int count = version.count(QLatin1Char('.')) + 1;
     if (count < 2)
         return 0;
     bool ok;
@@ -57,7 +57,7 @@ int getVersionNumber(const QString& version, QString* subVersion)
     {
         // Issue number: allow other characters to follow the last digit
         const QString issue = version.section(QLatin1Char('.'), 2);
-        int n = issue.length();
+        const int n = issue.length();
         if (!n  ||  !issue[0].isDigit())
             return 0;
         int i;

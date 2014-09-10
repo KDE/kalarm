@@ -84,7 +84,7 @@ EventAttribute* EventAttribute::clone() const
 
 QByteArray EventAttribute::serialized() const
 {
-    QByteArray v = QByteArray::number(d->mCommandError);
+    const QByteArray v = QByteArray::number(d->mCommandError);
     kDebug() << v;
     return v;
 }

@@ -131,9 +131,9 @@ int updateVersion(CalendarLocal& calendar, const QString& localFile, QString& ve
 {
     QString subVersion;
 #ifndef KALARMCAL_USE_KRESOURCES
-    int version = Private::readKAlarmVersion(fileStorage, subVersion, versionString);
+    const int version = Private::readKAlarmVersion(fileStorage, subVersion, versionString);
 #else
-    int version = Private::readKAlarmVersion(calendar, localFile, subVersion, versionString);
+    const int version = Private::readKAlarmVersion(calendar, localFile, subVersion, versionString);
 #endif
     if (version == CurrentFormat)
         return CurrentFormat;       // calendar is in the current KAlarm format
@@ -205,9 +205,9 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
             // Check whether the calendar file is empty, in which case
             // it can be written to freely.
 #ifndef KALARMCAL_USE_KRESOURCES
-            QFileInfo fi(fileStorage->fileName());
+            const QFileInfo fi(fileStorage->fileName());
 #else
-            QFileInfo fi(localFile);
+            const QFileInfo fi(localFile);
 #endif
             if (!fi.size())
                 return KACalendar::CurrentFormat;
@@ -229,7 +229,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
         // Extract the KAlarm version string
         versionString = prodid.mid(i + progname.length()).trimmed();
         i = versionString.indexOf(QLatin1Char('/'));
-        int j = versionString.indexOf(QLatin1Char(' '));
+        const int j = versionString.indexOf(QLatin1Char(' '));
         if (j >= 0  &&  j < i)
             i = j;
         if (i <= 0)
@@ -238,7 +238,7 @@ int Private::readKAlarmVersion(CalendarLocal& calendar, const QString& localFile
     }
     if (versionString == QLatin1String(KAEvent::currentCalendarVersionString()))
         return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
-    int ver = KAlarmCal::getVersionNumber(versionString, &subVersion);
+    const int ver = KAlarmCal::getVersionNumber(versionString, &subVersion);
     if (ver == KAEvent::currentCalendarVersion())
         return KACalendar::CurrentFormat;      // the calendar is in the current KAlarm format
     return KAlarmCal::getVersionNumber(versionString, &subVersion);
@@ -258,7 +258,7 @@ bool isUTC(const QString& localFile)
         return false;
     QTextStream ts(&file);
     ts.setCodec("ISO 8859-1");
-    QByteArray text = ts.readAll().toLocal8Bit();
+    const QByteArray text = ts.readAll().toLocal8Bit();
     file.close();
 
     // Extract the CREATED property for the first VEVENT from the calendar
@@ -401,7 +401,7 @@ Type status(const Event* event, QString* param)
         param->clear();
     if (!event)
         return EMPTY;
-    Alarm::List alarms = event->alarms();
+    const Alarm::List alarms = event->alarms();
     if (alarms.isEmpty())
         return EMPTY;
 
@@ -413,7 +413,7 @@ Type status(const Event* event, QString* param)
         PropertyMap::ConstIterator it = properties.constFind(property);
         if (it != properties.constEnd())
             return it.value();
-        int i = property.indexOf(QLatin1Char(';'));
+        const int i = property.indexOf(QLatin1Char(';'));
         if (i < 0)
             return EMPTY;
         it = properties.constFind(property.left(i));
@@ -426,7 +426,7 @@ Type status(const Event* event, QString* param)
 
     // The event either wasn't written by KAlarm, or was written by a pre-2.0 version.
     // Check first for an old KAlarm format, which indicated the event type in its UID.
-    QString uid = event->uid();
+    const QString uid = event->uid();
     if (uid.indexOf(staticStrings->ARCHIVED_UID) > 0)
         return ARCHIVED;
     if (uid.indexOf(staticStrings->TEMPLATE_UID) > 0)

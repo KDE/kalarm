@@ -206,7 +206,7 @@ void CollectionAttribute::deserialize(const QByteArray& data)
     bool ok;
     int c[4];
     const QList<QByteArray> items = data.simplified().split(' ');
-    int count = items.count();
+    const int count = items.count();
     int index = 0;
     if (count > index)
     {

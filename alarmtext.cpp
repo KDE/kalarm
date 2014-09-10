@@ -379,7 +379,7 @@ QString AlarmText::summary(const KAEvent& event, int maxLines, bool* truncated)
 */
 bool AlarmText::checkIfEmail(const QString& text)
 {
-    QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
+    const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
     return Private::emailHeaderCount(lines);
 }
 
@@ -391,7 +391,7 @@ bool AlarmText::checkIfEmail(const QString& text)
 QString AlarmText::emailHeaders(const QString& text, bool subjectOnly)
 {
     const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-    int n = Private::emailHeaderCount(lines);
+    const int n = Private::emailHeaderCount(lines);
     if (!n)
         return QString();
     if (subjectOnly)
@@ -415,7 +415,7 @@ QString AlarmText::fromCalendarText(const QString& text, bool& email)
 {
     Private::initialise();
     const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-    int maxn = lines.count();
+    const int maxn = lines.count();
     if (maxn >= 4
     &&  lines[0].startsWith(Private::mFromPrefixEn)
     &&  lines[1].startsWith(Private::mToPrefixEn))
@@ -455,7 +455,7 @@ QString AlarmText::toCalendarText(const QString& text)
 {
     Private::setUpTranslations();
     const QStringList lines = text.split(QLatin1Char('\n'), QString::SkipEmptyParts);
-    int maxn = lines.count();
+    const int maxn = lines.count();
     if (maxn >= 4
     &&  lines[0].startsWith(Private::mFromPrefix)
     &&  lines[1].startsWith(Private::mToPrefix))
@@ -524,7 +524,7 @@ void AlarmText::Private::setUpTranslations()
 int AlarmText::Private::emailHeaderCount(const QStringList& lines)
 {
     setUpTranslations();
-    int maxn = lines.count();
+    const int maxn = lines.count();
     if (maxn >= 4
     &&  lines[0].startsWith(mFromPrefix)
     &&  lines[1].startsWith(mToPrefix))
