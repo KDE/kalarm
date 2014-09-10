@@ -38,6 +38,7 @@
 #include "shellprocess.h"
 #include "synchtimer.h"
 
+//TODO Port to QtSpeech
 //QT5 #include "kspeechinterface.h"
 #include <K4AboutData>
 #include <KLocale>

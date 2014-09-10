@@ -40,6 +40,7 @@
 #include "startdaytimer.h"
 #include "traywindow.h"
 
+// Port to QtSpeech
 //QT5 #include "kspeechinterface.h"
 
 #include <kalarmcal/datetime.h>
