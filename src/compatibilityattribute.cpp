@@ -123,8 +123,7 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
         // 0: calendar format compatibility
         const int c = items[index++].toInt(&ok);
         const KACalendar::Compat AllCompat(KACalendar::Current | KACalendar::Converted | KACalendar::Convertible | KACalendar::Incompatible | KACalendar::Unknown);
-        if (!ok  || (c & AllCompat) != c) 
-        {
+        if (!ok  || (c & AllCompat) != c) {
             qCritical() << "Invalid compatibility:" << c;
             return;
         }
@@ -133,8 +132,7 @@ void CompatibilityAttribute::deserialize(const QByteArray &data)
     if (count > index) {
         // 1: KAlarm calendar version number
         const int c = items[index++].toInt(&ok);
-        if (!ok) 
-        {
+        if (!ok) {
             qCritical() << "Invalid version:" << c;
             return;
         }
