@@ -2141,18 +2141,6 @@ void KAEvent::setActions(const QString &pre, const QString &post, ExtraActionOpt
     d->mExtraActionOptions = options;
 }
 
-void KAEvent::setActions(const QString &pre, const QString &post, bool cancelOnError, bool dontShowError)
-{
-    ExtraActionOptions opts(0);
-    if (cancelOnError) {
-        opts |= CancelOnPreActError;
-    }
-    if (dontShowError) {
-        opts |= DontShowPreActError;
-    }
-    setActions(pre, post, opts);
-}
-
 QString KAEvent::preAction() const
 {
     return d->mPreAction;
