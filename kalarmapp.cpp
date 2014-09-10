@@ -1839,7 +1839,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                     return result;     // display the message after the command completes
                 }
                 // Error executing command
-                if (event.cancelOnPreActionError())
+                if (event.extraActionOptions() & KAEvent::CancelOnPreActError)
                 {
                     // Cancel the rest of the alarm execution
                     qDebug() << event.id() << ": pre-action failed: cancelled";
@@ -2192,7 +2192,8 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                 else
                     commandErrorMsg(proc, *pd->event, pd->alarm, pd->flags);
 
-                if (executeAlarm  &&  pd->event->cancelOnPreActionError())
+                if (executeAlarm
+                &&  (pd->event->extraActionOptions() & KAEvent::CancelOnPreActError))
                 {
                     qDebug() << pd->event->id() << ": pre-action failed: cancelled";
                     if (pd->reschedule())
@@ -2225,7 +2226,7 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
     QString dontShowAgain;
     if (flags & ProcData::PRE_ACTION)
     {
-        if (event.dontShowPreActionError())
+        if (event.extraActionOptions() & KAEvent::DontShowPreActError)
             return;   // don't notify user of any errors for the alarm
         errmsgs += i18nc("@info", "Pre-alarm action:");
         dontShowAgain = QLatin1String("Pre");
