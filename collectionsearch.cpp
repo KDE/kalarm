@@ -59,7 +59,7 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
                 CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
                 job->fetchScope().setResource(agent.identifier());
                 mCollectionJobs << job;
-                connect(job, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
+                connect(job, &CollectionFetchJob::result, this, &CollectionSearch::collectionFetchResult);
             }
         }
     }
@@ -97,7 +97,7 @@ void CollectionSearch::collectionFetchResult(KJob* j)
                     ItemFetchJob* ijob = new ItemFetchJob(item, this);
                     ijob->setCollection(c);
                     mItemFetchJobs[ijob] = c.id();
-                    connect(ijob, SIGNAL(result(KJob*)), SLOT(itemFetchResult(KJob*)));
+                    connect(ijob, &ItemFetchJob::result, this, &CollectionSearch::itemFetchResult);
                 }
             }
         }
@@ -129,7 +129,7 @@ void CollectionSearch::itemFetchResult(KJob* j)
             {
                 ItemDeleteJob* djob = new ItemDeleteJob(item, this);
                 mItemDeleteJobs[djob] = mItemFetchJobs[job];
-                connect(djob, SIGNAL(result(KJob*)), SLOT(itemDeleteResult(KJob*)));
+                connect(djob, &ItemDeleteJob::result, this, &CollectionSearch::itemDeleteResult);
             }
         }
         else

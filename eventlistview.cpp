@@ -132,7 +132,7 @@ void EventListView::slotFind()
     if (!mFind)
     {
         mFind = new Find(this);
-        connect(mFind, SIGNAL(active(bool)), SIGNAL(findActive(bool)));
+        connect(mFind, &Find::active, this, &EventListView::findActive);
     }
     mFind->display();
 }

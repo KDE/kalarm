@@ -72,7 +72,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         boxHLayout->setStretchFactor(new QWidget(box), 0);
         mFgColourButton = new ColourButton(box);
         boxHLayout->addWidget(mFgColourButton);
-        connect(mFgColourButton, SIGNAL(changed(QColor)), SLOT(setSampleColour()));
+        connect(mFgColourButton, &ColourButton::changed, this, &FontColourChooser::setSampleColour);
         label->setBuddy(mFgColourButton);
         box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message foreground color"));
     }
@@ -88,7 +88,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
     boxHLayout->setStretchFactor(new QWidget(box), 0);
     mBgColourButton = new ColourButton(box);
     boxHLayout->addWidget(mBgColourButton);
-    connect(mBgColourButton, SIGNAL(changed(QColor)), SLOT(setSampleColour()));
+    connect(mBgColourButton, &ColourButton::changed, this, &FontColourChooser::setSampleColour);
     label->setBuddy(mBgColourButton);
     box->setWhatsThis(i18nc("@info:whatsthis", "Select the alarm message background color"));
     hlayout->addStretch();
@@ -100,7 +100,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         topLayout->addLayout(layout);
         mDefaultFont = new CheckBox(i18nc("@option:check", "Use default font"), page);
         mDefaultFont->setMinimumSize(mDefaultFont->sizeHint());
-        connect(mDefaultFont, SIGNAL(toggled(bool)), SLOT(slotDefaultFontToggled(bool)));
+        connect(mDefaultFont, &CheckBox::toggled, this, &FontColourChooser::slotDefaultFontToggled);
         mDefaultFont->setWhatsThis(i18nc("@info:whatsthis", "Check to use the default font current at the time the alarm is displayed."));
         layout->addWidget(mDefaultFont);
         layout->addWidget(new QWidget(page));    // left adjust the widget

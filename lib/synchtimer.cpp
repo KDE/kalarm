@@ -55,7 +55,7 @@ void SynchTimer::connecT(QObject* receiver, const char* member)
     mConnections.append(connection);
     if (!mTimer->isActive())
     {
-        connect(mTimer, SIGNAL(timeout()), this, SLOT(slotTimer()));
+        connect(mTimer, &QTimer::timeout, this, &SynchTimer::slotTimer);
         start();
     }
 }

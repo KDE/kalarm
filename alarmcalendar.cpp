@@ -125,9 +125,9 @@ AlarmCalendar::AlarmCalendar()
       mHaveDisabledAlarms(false)
 {
     AkonadiModel* model = AkonadiModel::instance();
-    connect(model, SIGNAL(eventsAdded(AkonadiModel::EventList)), SLOT(slotEventsAdded(AkonadiModel::EventList)));
-    connect(model, SIGNAL(eventsToBeRemoved(AkonadiModel::EventList)), SLOT(slotEventsToBeRemoved(AkonadiModel::EventList)));
-    connect(model, SIGNAL(eventChanged(AkonadiModel::Event)), SLOT(slotEventChanged(AkonadiModel::Event)));
+    connect(model, &AkonadiModel::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
+    connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
+    connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
     connect(model, SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                    SLOT(slotCollectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
     Preferences::connect(SIGNAL(askResourceChanged(bool)), this, SLOT(setAskResource(bool)));

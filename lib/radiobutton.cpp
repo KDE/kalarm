@@ -60,9 +60,9 @@ void RadioButton::setFocusWidget(QWidget* w, bool enable)
     mFocusWidget = w;
     mFocusWidgetEnable = enable;
     if (w)
-        connect(this, SIGNAL(clicked()), SLOT(slotClicked()));
+        connect(this, &RadioButton::clicked, this, &RadioButton::slotClicked);
     else
-        disconnect(this, SIGNAL(clicked()), this, SLOT(slotClicked()));
+        disconnect(this, &RadioButton::clicked, this, &RadioButton::slotClicked);
 }
 
 /******************************************************************************

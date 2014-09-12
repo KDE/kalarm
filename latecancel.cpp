@@ -65,8 +65,8 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     QHBoxLayout* hlayout = new QHBoxLayout(mCheckboxFrame);
     hlayout->setMargin(0);
     mCheckbox = new CheckBox(i18n_chk_CancelIfLate(), mCheckboxFrame);
-    connect(mCheckbox, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-    connect(mCheckbox, SIGNAL(toggled(bool)), SIGNAL(changed()));
+    connect(mCheckbox, &CheckBox::toggled, this, &LateCancelSelector::slotToggled);
+    connect(mCheckbox, &CheckBox::toggled, this, &LateCancelSelector::changed);
     mCheckbox->setWhatsThis(whatsThis);
     hlayout->addWidget(mCheckbox, 0, Qt::AlignLeft);
 
@@ -77,8 +77,8 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     mTimeSelector = new TimeSelector(i18nc("@option:check Cancel if late by 10 minutes", "Cancel if late by"),
                                      whatsThis, i18nc("@info:whatsthis", "Enter how late will cause the alarm to be canceled"),
                                      allowHourMinute, mTimeSelectorFrame);
-    connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(slotToggled(bool)));
-    connect(mTimeSelector, SIGNAL(valueChanged(KCalCore::Duration)), SIGNAL(changed()));
+    connect(mTimeSelector, &TimeSelector::toggled, this, &LateCancelSelector::slotToggled);
+    connect(mTimeSelector, &TimeSelector::valueChanged, this, &LateCancelSelector::changed);
     hlayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
     hlayout = new QHBoxLayout();
@@ -86,7 +86,7 @@ LateCancelSelector::LateCancelSelector(bool allowHourMinute, QWidget* parent)
     hlayout->addSpacing(3*KDialog::spacingHint());
     topLayout->addLayout(hlayout);
     mAutoClose = new CheckBox(i18n_chk_AutoCloseWin(), this);
-    connect(mAutoClose, SIGNAL(toggled(bool)), SIGNAL(changed()));
+    connect(mAutoClose, &CheckBox::toggled, this, &LateCancelSelector::changed);
     mAutoClose->setWhatsThis(i18nc("@info:whatsthis", "Automatically close the alarm window after the expiry of the late-cancellation period"));
     hlayout->addWidget(mAutoClose);
     hlayout->addStretch();

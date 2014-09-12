@@ -221,7 +221,7 @@ bool KAlarmApp::initialise()
     {
         mAlarmTimer = new QTimer(this);
         mAlarmTimer->setSingleShot(true);
-        connect(mAlarmTimer, SIGNAL(timeout()), SLOT(checkNextDueAlarm()));
+        connect(mAlarmTimer, &QTimer::timeout, this, &KAlarmApp::checkNextDueAlarm);
     }
     if (!AlarmCalendar::resources())
     {
@@ -964,7 +964,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
                 creating = false;
             }
             mTrayWindow = new TrayWindow(parent ? parent : MainWindow::firstWindow());
-            connect(mTrayWindow, SIGNAL(deleted()), SIGNAL(trayIconToggled()));
+            connect(mTrayWindow, &TrayWindow::deleted, this, &KAlarmApp::trayIconToggled);
             emit trayIconToggled();
 
             if (!checkSystemTray())
@@ -2013,7 +2013,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
         proc = new ShellProcess(cmd);
         proc->setEnv(QLatin1String("KALARM_UID"), event.id(), true);
         proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
-        connect(proc, SIGNAL(shellExited(ShellProcess*)), SLOT(slotCommandExited(ShellProcess*)));
+        connect(proc, &ShellProcess::shellExited, this, &KAlarmApp::slotCommandExited);
         if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slot)
         {
             connect(proc, SIGNAL(receivedStdout(ShellProcess*)), receiver, slot);

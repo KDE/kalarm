@@ -46,8 +46,8 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool
     setButtonGuiItem(User1, KGuiItem(i18nc("@action:button", "Cancel Deferral")));
     if (!cancelButton)
         showButton(User1, false);
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
-    connect(this, SIGNAL(user1Clicked()), SLOT(slotCancelDeferral()));
+    connect(this, &DeferAlarmDlg::okClicked, this, &DeferAlarmDlg::slotOk);
+    connect(this, &DeferAlarmDlg::user1Clicked, this, &DeferAlarmDlg::slotCancelDeferral);
 
     QWidget* page = new QWidget(this);
     setMainWidget(page);
@@ -58,7 +58,7 @@ DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool
     mTimeWidget = new AlarmTimeWidget((anyTimeOption ? AlarmTimeWidget::DEFER_ANY_TIME : AlarmTimeWidget::DEFER_TIME), page);
     mTimeWidget->setDateTime(initialDT);
     mTimeWidget->setMinDateTimeIsCurrent();
-    connect(mTimeWidget, SIGNAL(pastMax()), SLOT(slotPastLimit()));
+    connect(mTimeWidget, &AlarmTimeWidget::pastMax, this, &DeferAlarmDlg::slotPastLimit);
     layout->addWidget(mTimeWidget);
     layout->addSpacing(spacingHint());
 

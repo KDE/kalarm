@@ -69,7 +69,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
 
-    connect(this, SIGNAL(okClicked()), SLOT(slotOk()));
+    connect(this, &BirthdayDlg::okClicked, this, &BirthdayDlg::slotOk);
 
     QWidget* topWidget = new QWidget(this);
     setMainWidget(topWidget);
@@ -94,7 +94,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mPrefix = new BLineEdit(mPrefixText, textGroup);
     mPrefix->setMinimumSize(mPrefix->sizeHint());
     label->setBuddy(mPrefix);
-    connect(mPrefix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
+    connect(mPrefix, &BLineEdit::focusLost, this, &BirthdayDlg::slotTextLostFocus);
     mPrefix->setWhatsThis(i18nc("@info:whatsthis",
           "Enter text to appear before the person's name in the alarm message, "
           "including any necessary trailing spaces."));
@@ -106,7 +106,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mSuffix = new BLineEdit(mSuffixText, textGroup);
     mSuffix->setMinimumSize(mSuffix->sizeHint());
     label->setBuddy(mSuffix);
-    connect(mSuffix, SIGNAL(focusLost()), SLOT(slotTextLostFocus()));
+    connect(mSuffix, &BLineEdit::focusLost, this, &BirthdayDlg::slotTextLostFocus);
     mSuffix->setWhatsThis(i18nc("@info:whatsthis",
           "Enter text to appear after the person's name in the alarm message, "
           "including any necessary leading spaces."));
@@ -121,7 +121,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     Akonadi::Control::start();
 
     BirthdayModel* model = BirthdayModel::instance();
-    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(resizeViewColumns()));
+    connect(model, &BirthdayModel::dataChanged, this, &BirthdayDlg::resizeViewColumns);
 
     KDescendantsProxyModel* descendantsModel = new KDescendantsProxyModel(this);
     descendantsModel->setSourceModel(model);
@@ -175,7 +175,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mFontColourButton = new FontColourButton(group);
     mFontColourButton->setMaximumHeight(mFontColourButton->sizeHint().height() * 3/2);
     hlayout->addWidget(mFontColourButton);
-    connect(mFontColourButton, SIGNAL(selected(QColor,QColor)), SLOT(setColours(QColor,QColor)));
+    connect(mFontColourButton, &FontColourButton::selected, this, &BirthdayDlg::setColours);
 
     // How much advance warning to give
     mReminder = new Reminder(i18nc("@info:whatsthis", "Check to display a reminder in advance of or after the birthday."),

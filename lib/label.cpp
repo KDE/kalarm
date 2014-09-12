@@ -52,7 +52,7 @@ Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WindowFla
 void Label::setBuddy(QWidget* bud)
 {
     if (mRadioButton)
-        disconnect(mRadioButton, SIGNAL(destroyed()), this, SLOT(buddyDead()));
+        disconnect(mRadioButton, &QRadioButton::destroyed, this, &Label::buddyDead);
     QWidget* w = bud;
     if (w)
     {
@@ -76,7 +76,7 @@ void Label::setBuddy(QWidget* bud)
             mFocusWidget = new LabelFocusWidget(this);
         QLabel::setBuddy(mFocusWidget);
         mRadioButton = (QRadioButton*)bud;
-        connect(mRadioButton, SIGNAL(destroyed()), this, SLOT(buddyDead()));
+        connect(mRadioButton, &QRadioButton::destroyed, this, &Label::buddyDead);
     }
 }
 

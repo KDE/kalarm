@@ -95,7 +95,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
     addAction(QLatin1String("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
-    connect(mActionNew, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNewAlarm(EditAlarmDlg::Type)));
+    connect(mActionNew, &NewAlarmAction::selected, this, &TrayWindow::slotNewAlarm);
     connect(mActionNew->fromTemplateAlarmAction(), SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
     contextMenu()->addSeparator();
 
@@ -115,14 +115,14 @@ TrayWindow::TrayWindow(MainWindow* parent)
     const char* quitName = KStandardAction::name(KStandardAction::Quit);
     QAction* qa = actions->action(QLatin1String(quitName));
     disconnect(qa, SIGNAL(triggered(bool)), 0, 0);
-    connect(qa, SIGNAL(triggered(bool)), SLOT(slotQuit()));
+    connect(qa, &QAction::triggered, this, &TrayWindow::slotQuit);
 #endif
     // Set icon to correspond with the alarms enabled menu status
     setEnabledStatus(theApp()->alarmsEnabled());
 
     connect(AlarmCalendar::resources(), SIGNAL(haveDisabledAlarmsChanged(bool)), SLOT(slotHaveDisabledAlarms(bool)));
-    connect(this, SIGNAL(activateRequested(bool,QPoint)), SLOT(slotActivateRequested()));
-    connect(this, SIGNAL(secondaryActivateRequested(QPoint)), SLOT(slotSecondaryActivateRequested()));
+    connect(this, &TrayWindow::activateRequested, this, &TrayWindow::slotActivateRequested);
+    connect(this, &TrayWindow::secondaryActivateRequested, this, &TrayWindow::slotSecondaryActivateRequested);
     slotHaveDisabledAlarms(AlarmCalendar::resources()->haveDisabledAlarms());
 
     // Hack: KSNI does not let us know when it is about to show the tooltip,
@@ -132,7 +132,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     mToolTipUpdateTimer = new QTimer(this);
     mToolTipUpdateTimer->setInterval(0);
     mToolTipUpdateTimer->setSingleShot(true);
-    connect(mToolTipUpdateTimer, SIGNAL(timeout()), SLOT(updateToolTip()));
+    connect(mToolTipUpdateTimer, &QTimer::timeout, this, &TrayWindow::updateToolTip);
 
     // Update every minute to show accurate deadlines
     MinuteTimer::connect(mToolTipUpdateTimer, SLOT(start()));
@@ -151,7 +151,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
     // Set auto-hide status when next alarm or preferences change
     mStatusUpdateTimer->setSingleShot(true);
-    connect(mStatusUpdateTimer, SIGNAL(timeout()), SLOT(updateStatus()));
+    connect(mStatusUpdateTimer, &QTimer::timeout, this, &TrayWindow::updateStatus);
     connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(updateStatus()));
     Preferences::connect(SIGNAL(autoHideSystemTrayChanged(int)), this, SLOT(updateStatus()));
     updateStatus();

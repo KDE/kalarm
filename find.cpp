@@ -189,7 +189,7 @@ void Find::display()
         mEmailType->setChecked(mOptions & FIND_EMAIL);
         mAudioType->setChecked(mOptions & FIND_AUDIO);
 
-        connect(mDialog, SIGNAL(okClicked()), this, SLOT(slotFind()));
+        connect(mDialog.data(), &FindDlg::okClicked, this, &Find::slotFind);
     }
 
     // Only display active/archived options if archived alarms are being kept
@@ -292,7 +292,7 @@ void Find::slotFind()
     else
     {
         mFind = new KFind(mLastPattern, options, mListView, mDialog);
-        connect(mFind, SIGNAL(destroyed()), SLOT(slotKFindDestroyed()));
+        connect(mFind, &KFind::destroyed, this, &Find::slotKFindDestroyed);
         mFind->closeFindNextDialog();    // prevent 'Find Next' dialog appearing
     }
 

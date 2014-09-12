@@ -42,7 +42,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     layout->setSpacing(KDialog::spacingHint());
     mSelect = new CheckBox(selectText, this);
     mSelect->setFixedSize(mSelect->sizeHint());
-    connect(mSelect, SIGNAL(toggled(bool)), SLOT(selectToggled(bool)));
+    connect(mSelect, &CheckBox::toggled, this, &TimeSelector::selectToggled);
     mSelect->setWhatsThis(selectWhatsThis);
     layout->addWidget(mSelect);
 
@@ -54,7 +54,7 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
     boxLayout->addWidget(mPeriod);
     mPeriod->setFixedSize(mPeriod->sizeHint());
     mPeriod->setSelectOnStep(false);
-    connect(mPeriod, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(periodChanged(KCalCore::Duration)));
+    connect(mPeriod, &TimePeriod::valueChanged, this, &TimeSelector::periodChanged);
     mSelect->setFocusWidget(mPeriod);
     mPeriod->setEnabled(false);
 

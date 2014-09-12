@@ -138,8 +138,8 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     Preferences::connect(SIGNAL(holidaysChanged(KHolidays::HolidayRegion)), this, SLOT(slotUpdateHolidays()));
     Preferences::connect(SIGNAL(workTimeChanged(QTime,QTime,QBitArray)), this, SLOT(slotUpdateWorkingHours()));
 
-    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotRowsInserted(QModelIndex,int,int)));
-    connect(this, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)));
+    connect(this, &AkonadiModel::rowsInserted, this, &AkonadiModel::slotRowsInserted);
+    connect(this, &AkonadiModel::rowsAboutToBeRemoved, this, &AkonadiModel::slotRowsAboutToBeRemoved);
     connect(monitor, SIGNAL(itemChanged(Akonadi::Item,QSet<QByteArray>)), SLOT(slotMonitoredItemChanged(Akonadi::Item,QSet<QByteArray>)));
 
     connect(ServerManager::self(), SIGNAL(stateChanged(Akonadi::ServerManager::State)),
@@ -601,7 +601,7 @@ qDebug()<<"Set standard:"<<types<<", was="<<attr->standard();
             CollectionAttribute* att = c.attribute<CollectionAttribute>(Entity::AddIfMissing);
             *att = *attr;
             CollectionModifyJob* job = new CollectionModifyJob(c, this);
-            connect(job, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
+            connect(job, &CollectionModifyJob::result, this, &AkonadiModel::modifyCollectionJobDone);
             return true;
         }
     }
@@ -1095,7 +1095,7 @@ bool AkonadiModel::removeCollection(const Akonadi::Collection& collection)
         agentManager->removeInstance(instance);
 #if 0
     CollectionDeleteJob* job = new CollectionDeleteJob(col);
-    connect(job, SIGNAL(result(KJob*)), SLOT(deleteCollectionJobDone(KJob*)));
+    connect(job, &CollectionDeleteJob::result, this, &AkonadiModel::deleteCollectionJobDone);
     mPendingCollectionJobs[job] = CollJobData(col.id(), displayName(col));
     job->start();
 #endif
@@ -1363,7 +1363,7 @@ bool AkonadiModel::addEvent(KAEvent& event, Collection& collection)
     event.setItemId(item.id());
 qDebug()<<"-> item id="<<item.id();
     ItemCreateJob* job = new ItemCreateJob(item, collection);
-    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+    connect(job, &ItemCreateJob::result, this, &AkonadiModel::itemJobDone);
     mPendingItemJobs[job] = item.id();
     job->start();
 qDebug()<<"...exiting";
@@ -1422,7 +1422,7 @@ bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
     }
     const Item item = ix.data(ItemRole).value<Item>();
     ItemDeleteJob* job = new ItemDeleteJob(item);
-    connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+    connect(job, &ItemDeleteJob::result, this, &AkonadiModel::itemJobDone);
     mPendingItemJobs[job] = itemId;
     job->start();
     return true;
@@ -1463,7 +1463,7 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
             mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
             ItemModifyJob* job = new ItemModifyJob(newItem);
             job->disableRevisionCheck();
-            connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+            connect(job, &ItemModifyJob::result, this, &AkonadiModel::itemJobDone);
             mPendingItemJobs[job] = item.id();
             qDebug() << "Executing Modify job for item" << item.id() << ", revision=" << newItem.revision();
         }
@@ -1572,7 +1572,7 @@ qDebug()<<"No more jobs queued";
         mItemModifyJobQueue[item.id()] = Item();   // mark the queued item as now executing
         ItemModifyJob* job = new ItemModifyJob(qitem);
         job->disableRevisionCheck();
-        connect(job, SIGNAL(result(KJob*)), SLOT(itemJobDone(KJob*)));
+        connect(job, &ItemModifyJob::result, this, &AkonadiModel::itemJobDone);
         mPendingItemJobs[job] = qitem.id();
         qDebug() << "Executing queued Modify job for item" << qitem.id() << ", revision=" << qitem.revision();
     }

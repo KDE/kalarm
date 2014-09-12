@@ -43,7 +43,7 @@ FontColourButton::FontColourButton(QWidget* parent)
       mDefaultFont(true),
       mReadOnly(false)
 {
-    connect(this, SIGNAL(clicked()), SLOT(slotButtonPressed()));
+    connect(this, &FontColourButton::clicked, this, &FontColourButton::slotButtonPressed);
     setWhatsThis(i18nc("@info:whatsthis", "Choose the font, and foreground and background color, for the alarm message."));
 }
 
@@ -107,7 +107,7 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
         mChooser->setFont(font);
     layout->addWidget(mChooser);
     layout->addSpacing(KDialog::spacingHint());
-    connect(this,SIGNAL(okClicked()),SLOT(slotOk()));
+    connect(this, &FontColourDlg::okClicked, this, &FontColourDlg::slotOk);
 }
 
 /******************************************************************************

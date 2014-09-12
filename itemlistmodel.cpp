@@ -54,8 +54,8 @@ ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
     setHeaderGroup(EntityTreeModel::ItemListHeaders);
     setSortRole(AkonadiModel::SortRole);
     setDynamicSortFilter(true);
-    connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotRowsInserted()));
-    connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(slotRowsRemoved()));
+    connect(this, &ItemListModel::rowsInserted, this, &ItemListModel::slotRowsInserted);
+    connect(this, &ItemListModel::rowsRemoved, this, &ItemListModel::slotRowsRemoved);
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                                       SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
 }

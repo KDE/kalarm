@@ -93,10 +93,10 @@ Preferences* Preferences::self()
 
 Preferences::Preferences()
 {
-    QObject::connect(this, SIGNAL(base_StartOfDayChanged(QDateTime)), SLOT(startDayChange(QDateTime)));
-    QObject::connect(this, SIGNAL(base_TimeZoneChanged(QString)), SLOT(timeZoneChange(QString)));
-    QObject::connect(this, SIGNAL(base_HolidayRegionChanged(QString)), SLOT(holidaysChange(QString)));
-    QObject::connect(this, SIGNAL(base_WorkTimeChanged(QDateTime,QDateTime,int)), SLOT(workTimeChange(QDateTime,QDateTime,int)));
+    QObject::connect(this, &Preferences::base_StartOfDayChanged, this, &Preferences::startDayChange);
+    QObject::connect(this, &Preferences::base_TimeZoneChanged, this, &Preferences::timeZoneChange);
+    QObject::connect(this, &Preferences::base_HolidayRegionChanged, this, &Preferences::holidaysChange);
+    QObject::connect(this, &Preferences::base_WorkTimeChanged, this, &Preferences::workTimeChange);
 
     load();
     // Fetch the KAlarm version and backend which wrote the previous config file

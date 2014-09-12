@@ -86,22 +86,22 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     QPushButton* button = new QPushButton(i18nc("@action:button", "New"), topWidget);
     mNewAction = new NewAlarmAction(true, i18nc("@action", "New"), this);
     button->setMenu(mNewAction->menu());
-    connect(mNewAction, SIGNAL(selected(EditAlarmDlg::Type)), SLOT(slotNew(EditAlarmDlg::Type)));
+    connect(mNewAction, &NewAlarmAction::selected, this, &TemplateDlg::slotNew);
     button->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template"));
     layout->addWidget(button);
 
     mEditButton = new QPushButton(i18nc("@action:button", "Edit..."), topWidget);
-    connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
+    connect(mEditButton, &QPushButton::clicked, this, &TemplateDlg::slotEdit);
     mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the currently highlighted alarm template"));
     layout->addWidget(mEditButton);
 
     mCopyButton = new QPushButton(i18nc("@action:button", "Copy"), topWidget);
-    connect(mCopyButton, SIGNAL(clicked()), SLOT(slotCopy()));
+    connect(mCopyButton, &QPushButton::clicked, this, &TemplateDlg::slotCopy);
     mCopyButton->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template based on a copy of the currently highlighted template"));
     layout->addWidget(mCopyButton);
 
     mDeleteButton = new QPushButton(i18nc("@action:button", "Delete"), topWidget);
-    connect(mDeleteButton, SIGNAL(clicked()), SLOT(slotDelete()));
+    connect(mDeleteButton, &QPushButton::clicked, this, &TemplateDlg::slotDelete);
     mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Delete the currently highlighted alarm template"));
     layout->addWidget(mDeleteButton);
 

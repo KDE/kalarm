@@ -96,7 +96,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     mListView = new CollectionView(model, this);
     connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(mListView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(contextMenuRequested(QPoint)));
+    connect(mListView, &CollectionView::customContextMenuRequested, this, &ResourceSelector::contextMenuRequested);
     mListView->setWhatsThis(i18nc("@info:whatsthis",
                                   "List of available calendars of the selected type. The checked state shows whether a calendar "
                                  "is enabled (checked) or disabled (unchecked). The default calendar is shown in bold."));
@@ -119,14 +119,14 @@ ResourceSelector::ResourceSelector(QWidget* parent)
                                      "<para>The calendar itself is left intact, and may subsequently be reinstated in the list if desired.</para>"));
     mEditButton->setDisabled(true);
     mDeleteButton->setDisabled(true);
-    connect(mAddButton, SIGNAL(clicked()), SLOT(addResource()));
-    connect(mEditButton, SIGNAL(clicked()), SLOT(editResource()));
-    connect(mDeleteButton, SIGNAL(clicked()), SLOT(removeResource()));
+    connect(mAddButton, &QPushButton::clicked, this, &ResourceSelector::addResource);
+    connect(mEditButton, &QPushButton::clicked, this, &ResourceSelector::editResource);
+    connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
     connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
                                       SLOT(slotCollectionAdded(Akonadi::Collection)));
 
-    connect(mAlarmType, SIGNAL(activated(int)), SLOT(alarmTypeSelected()));
+    connect(mAlarmType, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
 
     Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(archiveDaysChanged(int)));
@@ -358,37 +358,37 @@ void ResourceSelector::initActions(KActionCollection* actions)
 {
     mActionReload      = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18nc("@action Reload calendar", "Re&load"), this);
     actions->addAction(QLatin1String("resReload"), mActionReload);
-    connect(mActionReload, SIGNAL(triggered(bool)), SLOT(reloadResource()));
+    connect(mActionReload, &QAction::triggered, this, &ResourceSelector::reloadResource);
     mActionShowDetails = new QAction(QIcon::fromTheme(QLatin1String("help-about")), i18nc("@action", "Show &Details"), this);
     actions->addAction(QLatin1String("resDetails"), mActionShowDetails);
-    connect(mActionShowDetails, SIGNAL(triggered(bool)), SLOT(showInfo()));
+    connect(mActionShowDetails, &QAction::triggered, this, &ResourceSelector::showInfo);
     mActionSetColour   = new QAction(QIcon::fromTheme(QLatin1String("color-picker")), i18nc("@action", "Set &Color..."), this);
     actions->addAction(QLatin1String("resSetColour"), mActionSetColour);
-    connect(mActionSetColour, SIGNAL(triggered(bool)), SLOT(setColour()));
+    connect(mActionSetColour, &QAction::triggered, this, &ResourceSelector::setColour);
     mActionClearColour   = new QAction(i18nc("@action", "Clear C&olor"), this);
     actions->addAction(QLatin1String("resClearColour"), mActionClearColour);
-    connect(mActionClearColour, SIGNAL(triggered(bool)), SLOT(clearColour()));
+    connect(mActionClearColour, &QAction::triggered, this, &ResourceSelector::clearColour);
     mActionEdit        = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("resEdit"), mActionEdit);
-    connect(mActionEdit, SIGNAL(triggered(bool)), SLOT(editResource()));
+    connect(mActionEdit, &QAction::triggered, this, &ResourceSelector::editResource);
     mActionUpdate      = new QAction(i18nc("@action", "&Update Calendar Format"), this);
     actions->addAction(QLatin1String("resUpdate"), mActionUpdate);
-    connect(mActionUpdate, SIGNAL(triggered(bool)), SLOT(updateResource()));
+    connect(mActionUpdate, &QAction::triggered, this, &ResourceSelector::updateResource);
     mActionRemove      = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "&Remove"), this);
     actions->addAction(QLatin1String("resRemove"), mActionRemove);
-    connect(mActionRemove, SIGNAL(triggered(bool)), SLOT(removeResource()));
+    connect(mActionRemove, &QAction::triggered, this, &ResourceSelector::removeResource);
     mActionSetDefault  = new KToggleAction(this);
     actions->addAction(QLatin1String("resDefault"), mActionSetDefault);
-    connect(mActionSetDefault, SIGNAL(triggered(bool)), SLOT(setStandard()));
+    connect(mActionSetDefault, &KToggleAction::triggered, this, &ResourceSelector::setStandard);
     QAction* action    = new QAction(QIcon::fromTheme(QLatin1String("document-new")), i18nc("@action", "&Add..."), this);
     actions->addAction(QLatin1String("resAdd"), action);
-    connect(action, SIGNAL(triggered(bool)), SLOT(addResource()));
+    connect(action, &QAction::triggered, this, &ResourceSelector::addResource);
     mActionImport      = new QAction(i18nc("@action", "Im&port..."), this);
     actions->addAction(QLatin1String("resImport"), mActionImport);
-    connect(mActionImport, SIGNAL(triggered(bool)), SLOT(importCalendar()));
+    connect(mActionImport, &QAction::triggered, this, &ResourceSelector::importCalendar);
     mActionExport      = new QAction(i18nc("@action", "E&xport..."), this);
     actions->addAction(QLatin1String("resExport"), mActionExport);
-    connect(mActionExport, SIGNAL(triggered(bool)), SLOT(exportCalendar()));
+    connect(mActionExport, &QAction::triggered, this, &ResourceSelector::exportCalendar);
 }
 
 void ResourceSelector::setContextMenu(QMenu* menu)

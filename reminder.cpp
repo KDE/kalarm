@@ -65,8 +65,8 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     mTimeSignCombo->setCurrentIndex(0);   // default to "in advance"
     mTime->setFixedSize(mTime->sizeHint());
     connect(mTime, &TimeSelector::toggled, this, &Reminder::slotReminderToggled);
-    connect(mTime, SIGNAL(valueChanged(KCalCore::Duration)), SIGNAL(changed()));
-    connect(mTimeSignCombo, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()));
+    connect(mTime, &TimeSelector::valueChanged, this, &Reminder::changed);
+    connect(mTimeSignCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &Reminder::changed);
     topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 
     if (showOnceOnly)
@@ -77,7 +77,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
         topLayout->addLayout(layout);
         mOnceOnly = new CheckBox(i18n_chk_FirstRecurrenceOnly(), this);
         mOnceOnly->setFixedSize(mOnceOnly->sizeHint());
-        connect(mOnceOnly, SIGNAL(toggled(bool)), SIGNAL(changed()));
+        connect(mOnceOnly, &CheckBox::toggled, this, &Reminder::changed);
         mOnceOnly->setWhatsThis(i18nc("@info:whatsthis", "Display the reminder only for the first time the alarm is scheduled"));
         layout->addWidget(mOnceOnly);
         layout->addStretch();

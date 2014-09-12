@@ -87,8 +87,8 @@ SoundPicker::SoundPicker(QWidget* parent)
     mTypeCombo->addItem(i18n_combo_File());     // index PlayFile
     mSpeakShowing = !theApp()->speechEnabled();
     showSpeak(!mSpeakShowing);            // index Speak (only displayed if appropriate)
-    connect(mTypeCombo, SIGNAL(activated(int)), SLOT(slotTypeSelected(int)));
-    connect(mTypeCombo, SIGNAL(currentIndexChanged(int)), SIGNAL(changed()));
+    connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::activated), this, &SoundPicker::slotTypeSelected);
+    connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &SoundPicker::changed);
     label->setBuddy(mTypeCombo);
     soundLayout->addWidget(mTypeBox);
 
@@ -97,7 +97,7 @@ SoundPicker::SoundPicker(QWidget* parent)
     mFilePicker->setIcon(KIcon(SmallIcon(QLatin1String("audio-x-generic"))));
     int size = mFilePicker->sizeHint().height();
     mFilePicker->setFixedSize(size, size);
-    connect(mFilePicker, SIGNAL(clicked()), SLOT(slotPickFile()));
+    connect(mFilePicker, &PushButton::clicked, this, &SoundPicker::slotPickFile);
     mFilePicker->setToolTip(i18nc("@info:tooltip", "Configure sound file"));
     mFilePicker->setWhatsThis(i18nc("@info:whatsthis", "Configure a sound file to play when the alarm is displayed."));
     soundLayout->addWidget(mFilePicker);
