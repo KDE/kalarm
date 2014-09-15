@@ -11,6 +11,7 @@
   <name xml:lang="es">KAlarm</name>
   <name xml:lang="fr">KAlarm</name>
   <name xml:lang="hu">KAlarm</name>
+  <name xml:lang="nb">KAlarm</name>
   <name xml:lang="nds">KAlarm</name>
   <name xml:lang="nl">KAlarm</name>
   <name xml:lang="pl">KAlarm</name>
@@ -34,6 +35,7 @@
   <summary xml:lang="es">Planificador de alarmas personal</summary>
   <summary xml:lang="fr">Planificateur d'alarme personnel</summary>
   <summary xml:lang="hu">Emlékeztetőkezelő</summary>
+  <summary xml:lang="nb">Personlig varslingsplanlegger</summary>
   <summary xml:lang="nds">Persöönlich Anstöötgever</summary>
   <summary xml:lang="nl">Persoonlijke alarmplanner</summary>
   <summary xml:lang="pl">Planowanie alarmów osobistych</summary>
@@ -57,6 +59,7 @@
     <p xml:lang="es">KAlarm es un mensaje personal de alarmas, órdenes y planificador de correo</p>
     <p xml:lang="fr">KAlarm est un programmateur personnel de message d'alarme, de commande et de courrier électronique</p>
     <p xml:lang="hu">A KAlarm egy személyi emlékeztető üzenet, parancs és e-mail ütemező</p>
+    <p xml:lang="nb">Kalarm er en personlig varslingsstyring for melding, kommandoer og e-post</p>
     <p xml:lang="nds">KAlarm is en persöönlich Planer för Anstootnarichten, Befehlen un Nettbreven.</p>
     <p xml:lang="nl">Kalarm is een persoonlijke planner voor herinneringen, commando's en e-mailberichten</p>
     <p xml:lang="pl">KAlarm jest osobistym programem do planowania wiadomości alarmowych, poleceń i wiadomości pocztowych</p>
@@ -78,6 +81,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="hu">Szolgáltatások:</p>
+    <p xml:lang="nb">Egenskaper:</p>
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Możliwości:</p>
@@ -100,6 +104,7 @@
       <li xml:lang="es">Muestra alarmas usando su propio mensaje de texto, el texto generado por una orden o un archivo de texto o imagen.</li>
       <li xml:lang="fr">Affiche des alarmes avec votre propre texte de message, un texte généré par une commande, ou un fichier texte ou image.</li>
       <li xml:lang="hu">Emlékeztetők megjelenítése saját szöveges üzenet, egy parancs által generált szöveg, vagy egy szöveg- vagy képfájl használatával.</li>
+      <li xml:lang="nb">Viser varslinger med dine egne tekstmeldinger, tekst laget av en kommando, eller en tekst- eller bildefil.</li>
       <li xml:lang="nds">Anstööt mit Dien egen oder vun en Programm opstellt Texten oder en Text- oder Bilddatei wiesen</li>
       <li xml:lang="nl">Te tonen herinneringen met uw eigen tekstberichten, de tekst gegenereerd door een commando of een tekst of afbeeldingsbestand.</li>
       <li xml:lang="pl">Wyświetlanie alarmów przy użyciu własnych wiadomości tekstowych, tekstu wytworzonego przez polecenie lub plik tekstowy czy obraz.</li>
@@ -120,6 +125,7 @@
       <li xml:lang="es">Alarmas sonoras usando un archivo de sonido</li>
       <li xml:lang="fr">Alarme sonore utilisant un fichier audio</li>
       <li xml:lang="hu">Hangos emlékeztetők egy hangfájl használatával.</li>
+      <li xml:lang="nb">Hørbar varsling ved bruk av en lydfil</li>
       <li xml:lang="nds">Höörbor Anstööt mit en Klangdatei</li>
       <li xml:lang="nl">Hoorbaar alarm met een geluidsbestand</li>
       <li xml:lang="pl">Alarmy dźwiękowe używające pliku dźwiękowego</li>
@@ -140,6 +146,7 @@
       <li xml:lang="es">Alarmas repetitivas en una base de horas/minutos, diaria, semanal, mensual o anual, o establecerla para ejecutarse cada vez que usted accede al sistema.</li>
       <li xml:lang="fr">Alarme récurrente sur une période en minutes, heures, jours, semaines, mois ou années, ou positionnée pour se déclencher à chaque fois que vous vous identifiez.</li>
       <li xml:lang="hu">Ismétlődő emlékeztetők óránkénti/percenkénti, napi, heti, havi vagy évenkénti gyakorisággal, vagy minden bejelentkezéskor.</li>
+      <li xml:lang="nb">Gjentatt varsling basert på time/minutt, daglig, ukentlig, månedlig eller årlig, eller la den utløses hver gang du logger inn.</li>
       <li xml:lang="nds">Wedderkamen Anstööt na Stünnen/Minuten, na Daag, Weken, Maanden oder elk Johr, oder jümmers, wenn Du Di anmellen deist.</li>
       <li xml:lang="nl">Een zich herhalend alarm op basis van uren/minuten, dagelijks, wekelijks, maandelijks of jaarlijks of instellen om het af te laten gaan elke keer dat u zich aanmeld.</li>
       <li xml:lang="pl">Powtarzające się alarmy w odstępach co godzinę/minutę, dziennie, tygodniowo, miesięcznie, rocznie lub uruchamiane przy każdym logowaniu</li>
@@ -160,6 +167,7 @@
       <li xml:lang="es">Muestra la personalización de colores  y tipos de letra de la alarma</li>
       <li xml:lang="fr">Personnalisation de la police et de la couleur des alarmes visuelles</li>
       <li xml:lang="hu">Emlékeztetők színének és betűtípusának testre szabása.</li>
+      <li xml:lang="nb">Skrift og farger for varslinger kan settes opp</li>
       <li xml:lang="nds">Instellbor Anstootklöör un -Schriftoort</li>
       <li xml:lang="nl">Kleuren van te tonen herinneringen en keuze uit lettertypen</li>
       <li xml:lang="pl">Własne kolory i czcionki dla wyświetlanych alarmów</li>
@@ -180,6 +188,7 @@
       <li xml:lang="es">Admite varios calendarios de alarma, lo cual, p. ej. le permite compartir alarmas entre un ordenador portátil y uno de escritorio.</li>
       <li xml:lang="fr">Prise en charge de plusieurs calendriers d'alarmes, ce qui vous permet par exemple de partager des alarmes entre un ordinateur portable et un ordinateur de bureau.</li>
       <li xml:lang="hu">Több naptár használata, lehetővé téve ezzel az emlékeztetők megosztását például a hordozható és az asztali számítógépe között.</li>
+      <li xml:lang="nb">Støtte for flere varslingskalendere, slik kan du for eksempel dele varslinger mellom en bærbar og en skrivebordsmaskin.</li>
       <li xml:lang="nds">Ünnerstütt en Reeg Anstootkalenners, so kannst Du Anstööt twischen Klapp- un normaal Reekner uttuschen.</li>
       <li xml:lang="nl">Ondersteuning voor meerdere alarm-agenda's, die u bijvoorbeeld herinneringen laat delen tussen een laptop en desktopcomputer.</li>
       <li xml:lang="pl">Obsługa wielu kalendarzy alarmów, które na przykład umożliwiają współdzielenie alarmów pomiędzy komputerem przenośnym i biurkowym.</li>
