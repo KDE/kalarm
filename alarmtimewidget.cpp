@@ -100,7 +100,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     }
     mDeferring = mode & DEFER_TIME;
     mButtonGroup = new ButtonGroup(this);
-    connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotButtonSet(QAbstractButton*)));
+    connect(mButtonGroup, &ButtonGroup::buttonSet, this, &AlarmTimeWidget::slotButtonSet);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
     topLayout->setSpacing(KDialog::spacingHint());
     topLayout->setMargin(title.isEmpty() ? 0 : KDialog::marginHint());
@@ -115,7 +115,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     // Date edit box
     mDateEdit = new KDateComboBox(topWidget);
     mDateEdit->setOptions(KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
-    connect(mDateEdit, SIGNAL(dateEntered(QDate)), SLOT(dateTimeChanged()));
+    connect(mDateEdit, &KDateComboBox::dateEntered, this, &AlarmTimeWidget::dateTimeChanged);
     mDateEdit->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Enter the date to schedule the alarm.</para>"
           "<para>%1</para>", (mDeferring ? tzText : recurText)));
@@ -129,7 +129,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mTimeEdit = new TimeEdit(timeBox);
     timeBoxHLayout->addWidget(mTimeEdit);
     mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
-    connect(mTimeEdit, SIGNAL(valueChanged(int)), SLOT(dateTimeChanged()));
+    connect(mTimeEdit, &TimeEdit::valueChanged, this, &AlarmTimeWidget::dateTimeChanged);
     mTimeEdit->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Enter the time to schedule the alarm.</para>"
           "<para>%1</para>"
@@ -147,7 +147,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mAnyTimeCheckBox = new CheckBox(i18nc("@option:check", "Any time"), timeBox);
         timeBoxHLayout->addWidget(mAnyTimeCheckBox);
         mAnyTimeCheckBox->setFixedSize(mAnyTimeCheckBox->sizeHint());
-        connect(mAnyTimeCheckBox, SIGNAL(toggled(bool)), SLOT(slotAnyTimeToggled(bool)));
+        connect(mAnyTimeCheckBox, &CheckBox::toggled, this, &AlarmTimeWidget::slotAnyTimeToggled);
         mAnyTimeCheckBox->setWhatsThis(i18nc("@info:whatsthis",
               "Check to specify only a date (without a time) for the alarm. The alarm will trigger at the first opportunity on the selected date."));
     }
@@ -163,7 +163,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mDelayTimeEdit = new TimeSpinBox(1, maxDelayTime, topWidget);
     mDelayTimeEdit->setValue(1439);
     mDelayTimeEdit->setFixedSize(mDelayTimeEdit->sizeHint());
-    connect(mDelayTimeEdit, SIGNAL(valueChanged(int)), SLOT(delayTimeChanged(int)));
+    connect(mDelayTimeEdit, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &AlarmTimeWidget::delayTimeChanged);
     mDelayTimeEdit->setWhatsThis(mDeferring ? xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>", i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis())
                                             : xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para><para>%3</para>", i18n_TimeAfterPeriod(), recurText, TimeSpinBox::shiftWhatsThis()));
     mAfterTimeRadio->setFocusWidget(mDelayTimeEdit);
@@ -196,7 +196,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
         // Time zone selection push button
         mTimeZoneButton = new PushButton(i18nc("@action:button", "Time Zone..."), topWidget);
-        connect(mTimeZoneButton, SIGNAL(clicked()), SLOT(showTimeZoneSelector()));
+        connect(mTimeZoneButton, &PushButton::clicked, this, &AlarmTimeWidget::showTimeZoneSelector);
         mTimeZoneButton->setWhatsThis(i18nc("@info:whatsthis",
               "Choose a time zone for this alarm which is different from the default time zone set in KAlarm's configuration dialog."));
         grid->addWidget(mTimeZoneButton, 2, 2, 1, 2, Qt::AlignRight);
@@ -217,14 +217,14 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mTimeZone = new TimeZoneCombo(mTimeZoneBox);
         hlayout->addWidget(mTimeZone);
         mTimeZone->setMaxVisibleItems(15);
-        connect(mTimeZone, SIGNAL(activated(int)), SLOT(slotTimeZoneChanged()));
+        connect(mTimeZone, static_cast<void (TimeZoneCombo::*)(int)>(&TimeZoneCombo::activated), this, &AlarmTimeWidget::slotTimeZoneChanged);
         mTimeZoneBox->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));
         label->setBuddy(mTimeZone);
         layout->addWidget(mTimeZoneBox);
 
         // Time zone checkbox
         mNoTimeZone = new CheckBox(i18nc("@option:check", "Ignore time zone"), topWidget);
-        connect(mNoTimeZone, SIGNAL(toggled(bool)), SLOT(slotTimeZoneToggled(bool)));
+        connect(mNoTimeZone, &CheckBox::toggled, this, &AlarmTimeWidget::slotTimeZoneToggled);
         mNoTimeZone->setWhatsThis(xi18nc("@info:whatsthis",
                                         "<para>Check to use the local computer time, ignoring time zones.</para>"
                                         "<para>You are recommended not to use this option if the alarm has a "

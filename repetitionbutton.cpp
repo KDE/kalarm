@@ -52,7 +52,7 @@ RepetitionButton::RepetitionButton(const QString& caption, bool waitForInitialis
 {
     setCheckable(true);
     setChecked(false);
-    connect(this, SIGNAL(clicked()), SLOT(slotPressed()));
+    connect(this, &RepetitionButton::clicked, this, &RepetitionButton::slotPressed);
 }
 
 void RepetitionButton::set(const Repetition& repetition)
@@ -164,14 +164,14 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
                       i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
                       true, page);
     mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
-    connect(mTimeSelector, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(intervalChanged(KCalCore::Duration)));
-    connect(mTimeSelector, SIGNAL(toggled(bool)), SLOT(repetitionToggled(bool)));
+    connect(mTimeSelector, &TimeSelector::valueChanged, this, &RepetitionDlg::intervalChanged);
+    connect(mTimeSelector, &TimeSelector::toggled, this, &RepetitionDlg::repetitionToggled);
     topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
     mButtonBox = new QGroupBox(page);
     topLayout->addWidget(mButtonBox);
     mButtonGroup = new ButtonGroup(mButtonBox);
-    connect(mButtonGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(typeClicked()));
+    connect(mButtonGroup, &ButtonGroup::buttonSet, this, &RepetitionDlg::typeClicked);
 
     QVBoxLayout* vlayout = new QVBoxLayout(mButtonBox);
     vlayout->setMargin(marginHint());
@@ -188,7 +188,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     mCount->setFixedSize(mCount->sizeHint());
     mCount->setSingleShiftStep(10);
     mCount->setSelectOnStep(false);
-    connect(mCount, SIGNAL(valueChanged(int)), SLOT(countChanged(int)));
+    connect(mCount, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &RepetitionDlg::countChanged);
     mCount->setWhatsThis(i18nc("@info:whatsthis", "Enter the number of times to trigger the alarm after its initial occurrence"));
     layout->addWidget(mCount);
     mCountButton->setFocusWidget(mCount);
@@ -204,7 +204,7 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     layout->addWidget(mDurationButton);
     mDuration = new TimePeriod(true, mButtonBox);
     mDuration->setFixedSize(mDuration->sizeHint());
-    connect(mDuration, SIGNAL(valueChanged(KCalCore::Duration)), SLOT(durationChanged(KCalCore::Duration)));
+    connect(mDuration, &TimePeriod::valueChanged, this, &RepetitionDlg::durationChanged);
     mDuration->setWhatsThis(i18nc("@info:whatsthis", "Enter the length of time to repeat the alarm"));
     layout->addWidget(mDuration);
     mDurationButton->setFocusWidget(mDuration);

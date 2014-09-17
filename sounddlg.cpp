@@ -172,7 +172,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         mFilePlay = new QPushButton(box);
         boxHLayout->addWidget(mFilePlay);
         mFilePlay->setIcon(SmallIcon(QLatin1String("media-playback-start")));
-        connect(mFilePlay, SIGNAL(clicked()), SLOT(playSound()));
+        connect(mFilePlay, &QPushButton::clicked, this, &SoundWidget::playSound);
         mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
         mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));
     }
@@ -184,7 +184,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFileEdit->setWhatsThis(i18nc("@info:whatsthis", "Enter the name or URL of a sound file to play."));
     if (label)
         label->setBuddy(mFileEdit);
-    connect(mFileEdit, SIGNAL(textChanged(QString)), SIGNAL(changed()));
+    connect(mFileEdit, &LineEdit::textChanged, this, &SoundWidget::changed);
 
     // File browse button
     mFileBrowseButton = new PushButton(box);
@@ -192,7 +192,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFileBrowseButton->setIcon(KIcon(SmallIcon(QLatin1String("document-open"))));
     int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
-    connect(mFileBrowseButton, SIGNAL(clicked()), SLOT(slotPickFile()));
+    connect(mFileBrowseButton, &PushButton::clicked, this, &SoundWidget::slotPickFile);
     mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
     mFileBrowseButton->setWhatsThis(i18nc("@info:whatsthis", "Select a sound file to play."));
 
@@ -209,7 +209,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         mRepeatGroupBox = new GroupBox(i18n_chk_Repeat(), this);
         mRepeatGroupBox->setCheckable(true);
         mRepeatGroupBox->setWhatsThis(i18nc("@info:whatsthis", "If checked, the sound file will be played repeatedly for as long as the message is displayed."));
-        connect(mRepeatGroupBox, SIGNAL(toggled(bool)), SIGNAL(changed()));
+        connect(mRepeatGroupBox, &GroupBox::toggled, this, &SoundWidget::changed);
         layout->addWidget(mRepeatGroupBox);
         QVBoxLayout* glayout = new QVBoxLayout(mRepeatGroupBox);
 
@@ -226,7 +226,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         mRepeatPause->setSingleShiftStep(10);
         mRepeatPause->setFixedSize(mRepeatPause->sizeHint());
         label->setBuddy(mRepeatPause);
-        connect(mRepeatPause, SIGNAL(valueChanged(int)), SIGNAL(changed()));
+        connect(mRepeatPause, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &SoundWidget::changed);
         label = new QLabel(i18nc("@label", "seconds"), box);
         boxHLayout->addWidget(label);
         label->setFixedSize(label->sizeHint());
@@ -252,7 +252,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mVolumeCheckbox = new CheckBox(i18nc("@option:check", "Set volume"), box);
     boxHLayout->addWidget(mVolumeCheckbox);
     mVolumeCheckbox->setFixedSize(mVolumeCheckbox->sizeHint());
-    connect(mVolumeCheckbox, SIGNAL(toggled(bool)), SLOT(slotVolumeToggled(bool)));
+    connect(mVolumeCheckbox, &CheckBox::toggled, this, &SoundWidget::slotVolumeToggled);
     mVolumeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to choose the volume for playing the sound file."));
 
     // Volume slider
@@ -263,12 +263,12 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mVolumeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     mVolumeSlider->setWhatsThis(i18nc("@info:whatsthis", "Choose the volume for playing the sound file."));
     mVolumeCheckbox->setFocusWidget(mVolumeSlider);
-    connect(mVolumeSlider, SIGNAL(valueChanged(int)), SIGNAL(changed()));
+    connect(mVolumeSlider, &Slider::valueChanged, this, &SoundWidget::changed);
 
     // Fade checkbox
     mFadeCheckbox = new CheckBox(i18nc("@option:check", "Fade"), group);
     mFadeCheckbox->setFixedSize(mFadeCheckbox->sizeHint());
-    connect(mFadeCheckbox, SIGNAL(toggled(bool)), SLOT(slotFadeToggled(bool)));
+    connect(mFadeCheckbox, &CheckBox::toggled, this, &SoundWidget::slotFadeToggled);
     mFadeCheckbox->setWhatsThis(i18nc("@info:whatsthis", "Select to fade the volume when the sound file first starts to play."));
     grid->addWidget(mFadeCheckbox, 2, 1, 1, 2, Qt::AlignLeft);
 
@@ -285,7 +285,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFadeTime->setSingleShiftStep(10);
     mFadeTime->setFixedSize(mFadeTime->sizeHint());
     label->setBuddy(mFadeTime);
-    connect(mFadeTime, SIGNAL(valueChanged(int)), SIGNAL(changed()));
+    connect(mFadeTime, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &SoundWidget::changed);
     label = new QLabel(i18nc("@label", "seconds"), mFadeBox);
     boxHLayout->addWidget(label);
     label->setFixedSize(label->sizeHint());
@@ -305,7 +305,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     mFadeSlider->setTickInterval(10);
     mFadeSlider->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     label->setBuddy(mFadeSlider);
-    connect(mFadeSlider, SIGNAL(valueChanged(int)), SIGNAL(changed()));
+    connect(mFadeSlider, &Slider::valueChanged, this, &SoundWidget::changed);
     mFadeVolumeBox->setWhatsThis(i18nc("@info:whatsthis", "Choose the initial volume for playing the sound file."));
 
     slotVolumeToggled(false);
@@ -453,7 +453,7 @@ void SoundWidget::playSound()
     mPlayer->setCurrentSource(mUrl);
     Phonon::createPath(mPlayer, output);
 #endif
-    connect(mPlayer, SIGNAL(finished()), SLOT(playFinished()));
+    connect(mPlayer, &Phonon::MediaObject::finished, this, &SoundWidget::playFinished);
     mFilePlay->setIcon(SmallIcon(QLatin1String("media-playback-stop")));   // change the play button to a stop button
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
