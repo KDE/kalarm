@@ -27,7 +27,7 @@
 #include <QModelIndex>
 
 class QCheckBox;
-class FindDlg;
+class KFindDialog;
 class KFind;
 class KSeparator;
 class EventListView;
@@ -55,7 +55,7 @@ class Find : public QObject
         QModelIndex nextItem(const QModelIndex&, bool forward) const;
 
         EventListView*     mListView;        // parent list view
-        QPointer<FindDlg>  mDialog;
+        QPointer<KFindDialog>  mDialog;
         QCheckBox*         mArchived;
         QCheckBox*         mLive;
         KSeparator*        mActiveArchivedSep;

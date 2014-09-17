@@ -58,24 +58,6 @@ enum {
 static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIND_FILE | FIND_COMMAND | FIND_EMAIL | FIND_AUDIO;
 
 
-class FindDlg : public KFindDialog
-{
-    public:
-        FindDlg(QWidget* parent, long options = 0, const QStringList& findStrings = QStringList(), bool hasSelection = false)
-            : KFindDialog(parent, options, findStrings, hasSelection) {}
-    protected slots:
-        void slotButtonClicked(int button)
-        {
-#if 0 //QT5
-            if (button == KDialog::Ok)
-                emit okClicked();
-            else
-                KFindDialog::slotButtonClicked(button);
-#endif
-        }
-};
-
-
 Find::Find(EventListView* parent)
     : QObject(parent),
       mListView(parent),
@@ -122,7 +104,7 @@ void Find::display()
     }
     else
     {
-        mDialog = new FindDlg(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
+        mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
         mDialog->setModal(false);
         mDialog->setObjectName(QLatin1String("FindDlg"));
         mDialog->setHasSelection(false);
@@ -189,7 +171,7 @@ void Find::display()
         mEmailType->setChecked(mOptions & FIND_EMAIL);
         mAudioType->setChecked(mOptions & FIND_AUDIO);
 
-        connect(mDialog.data(), &FindDlg::okClicked, this, &Find::slotFind);
+        connect(mDialog.data(), &KFindDialog::okClicked, this, &Find::slotFind);
     }
 
     // Only display active/archived options if archived alarms are being kept
