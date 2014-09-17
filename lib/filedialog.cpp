@@ -51,10 +51,8 @@ QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWid
     dlg->setOperationMode(Saving);
     dlg->setMode(KFile::File | KFile::LocalOnly);
     dlg->setConfirmOverwrite(true);
-#if 0 //QT5
     if (!caption.isEmpty())
-        dlg->setCaption(caption);
-#endif
+        dlg->setWindowTitle(caption);
     mAppendCheck = 0;
     if (append)
     {
