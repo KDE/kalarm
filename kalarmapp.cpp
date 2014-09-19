@@ -56,7 +56,6 @@
 #include <kglobal.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
-//QT5 #include <kspeech.h>
 #include <ktoolinvocation.h>
 #include <netwm.h>
 #include <kshell.h>

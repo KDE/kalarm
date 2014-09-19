@@ -39,7 +39,6 @@
 #include "synchtimer.h"
 
 //TODO Port to QtSpeech
-//QT5 #include "kspeechinterface.h"
 #include <K4AboutData>
 #include <KLocale>
 #include <kstandardguiitem.h>
@@ -1376,7 +1375,7 @@ void MessageWin::playAudio()
 */
 void MessageWin::slotSpeak()
 {
-#if 0 //QT5
+#if 0 //QT5 port qtspeech
     QString error;
     OrgKdeKSpeechInterface* kspeech = theApp()->kspeechInterface(error);
     if (!kspeech)
