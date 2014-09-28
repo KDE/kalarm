@@ -38,6 +38,7 @@
 #include "timespinbox.h"
 #include "buttongroup.h"
 
+#include <KHBox>
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/karecurrence.h>
 

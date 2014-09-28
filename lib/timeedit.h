@@ -21,7 +21,6 @@
 #ifndef TIMEEDIT_H
 #define TIMEEDIT_H
 
-#include <khbox.h>
 #include <QTime>
 class ComboBox;
 class TimeSpinBox;
@@ -46,7 +45,7 @@ class TimeSpinBox;
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class TimeEdit : public KHBox
+class TimeEdit : public QWidget
 {
         Q_OBJECT
     public:

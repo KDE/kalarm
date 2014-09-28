@@ -27,17 +27,23 @@
 #include <kglobal.h>
 #include <KLocalizedString>
 
+#include <QHBoxLayout>
 #include <QTime>
 
 TimeEdit::TimeEdit(QWidget* parent)
-    : KHBox(parent),
+    : QWidget(parent),
       mAmPm(0),
       mAmIndex(-1),
       mPmIndex(-1),
       mReadOnly(false)
 {
+    QHBoxLayout *hbox = new QHBoxLayout;
+    hbox->setMargin(0);
+    setLayout(hbox);
     bool use12hour = KLocale::global()->use12Clock();
     mSpinBox = new TimeSpinBox(!use12hour, this);
+    hbox->addWidget(mSpinBox);
+
     mSpinBox->setFixedSize(mSpinBox->sizeHint());
     connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
     if (use12hour)
@@ -45,6 +51,7 @@ TimeEdit::TimeEdit(QWidget* parent)
         mAmPm = new ComboBox(this);
         setAmPmCombo(1, 1);     // add "am" and "pm" options to the combo box
         mAmPm->setFixedSize(mAmPm->sizeHint());
+        hbox->addWidget(mAmPm);
         connect(mAmPm, SIGNAL(highlighted(int)), SLOT(slotAmPmChanged(int)));
     }
 }

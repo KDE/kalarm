@@ -27,6 +27,7 @@
 #include <KLocalizedString>
 #include <kdialog.h>
 
+#include <QHBoxLayout>
 #include <QStackedWidget>
 
 using namespace KCalCore;
@@ -46,14 +47,18 @@ static const int maxMinutes = 1000*60-1;   // absolute maximum value for hours:m
 =============================================================================*/
 
 TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
-    : KHBox(parent),
+    : QWidget(parent),
       mMaxDays(9999),
       mNoHourMinute(!allowHourMinute),
       mReadOnly(false)
 {
-    setSpacing(KDialog::spacingHint());
+    QHBoxLayout *layout = new QHBoxLayout;
+    setLayout(layout);
+    layout->setSpacing(KDialog::spacingHint());
+    layout->setMargin(0);
 
     mSpinStack = new QStackedWidget(this);
+    layout->addWidget(mSpinStack);
     mSpinBox = new SpinBox(mSpinStack);
     mSpinBox->setSingleStep(1);
     mSpinBox->setSingleShiftStep(10);
@@ -71,6 +76,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     showHourMin(!mNoHourMinute);
 
     mUnitsCombo = new ComboBox(this);
+    layout->addWidget(mUnitsCombo);
     mUnitsCombo->setEditable(false);
     if (mNoHourMinute)
         mDateOnlyOffset = 2;

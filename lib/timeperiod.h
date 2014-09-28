@@ -22,7 +22,7 @@
 #define TIMEPERIOD_H
 
 #include <KCalCore/Duration>
-#include <khbox.h>
+#include <QWidget>
 #include <QString>
 
 class QStackedWidget;
@@ -48,7 +48,7 @@ class TimeSpinBox;
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class TimePeriod : public KHBox
+class TimePeriod : public QWidget
 {
         Q_OBJECT
     public:
