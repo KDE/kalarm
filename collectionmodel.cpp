@@ -927,6 +927,7 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& col
                 // The collection duplicates the backend storage
                 // used by another enabled collection.
                 // N.B. don't refresh this collection - assume no change.
+                kDebug() << "Collection" << c.id() << "duplicates backend for" << collection.id();
                 if (c.hasAttribute<CollectionAttribute>())
                 {
                     types &= ~c.attribute<CollectionAttribute>()->enabled();
