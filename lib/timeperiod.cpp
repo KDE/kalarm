@@ -52,13 +52,11 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
       mNoHourMinute(!allowHourMinute),
       mReadOnly(false)
 {
-    QHBoxLayout *layout = new QHBoxLayout;
+    QHBoxLayout* layout = new QHBoxLayout;
     setLayout(layout);
-    layout->setSpacing(KDialog::spacingHint());
     layout->setMargin(0);
 
     mSpinStack = new QStackedWidget(this);
-    layout->addWidget(mSpinStack);
     mSpinBox = new SpinBox(mSpinStack);
     mSpinBox->setSingleStep(1);
     mSpinBox->setSingleShiftStep(10);
@@ -74,9 +72,9 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     mSpinStack->setFixedSize(mSpinBox->sizeHint().expandedTo(mTimeSpinBox->sizeHint()));
     mHourMinuteRaised = mNoHourMinute;
     showHourMin(!mNoHourMinute);
+    layout->addWidget(mSpinStack);
 
     mUnitsCombo = new ComboBox(this);
-    layout->addWidget(mUnitsCombo);
     mUnitsCombo->setEditable(false);
     if (mNoHourMinute)
         mDateOnlyOffset = 2;
@@ -91,6 +89,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     mMaxUnitShown = Weeks;
     mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
     connect(mUnitsCombo, SIGNAL(activated(int)), SLOT(slotUnitsSelected(int)));
+    layout->addWidget(mUnitsCombo);
 
     setFocusProxy(mUnitsCombo);
     setTabOrder(mUnitsCombo, mSpinStack);

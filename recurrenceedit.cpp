@@ -38,7 +38,6 @@
 #include "timespinbox.h"
 #include "buttongroup.h"
 
-#include <KHBox>
 #include <kalarmcal/kaevent.h>
 #include <kalarmcal/karecurrence.h>
 
@@ -52,6 +51,7 @@ using namespace KCalCore;
 #include <kdialog.h>
 #include <kmessagebox.h>
 #include <kdatecombobox.h>
+#include <KHBox>
 
 #include <QPushButton>
 #include <QLabel>

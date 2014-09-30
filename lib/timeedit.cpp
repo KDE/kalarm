@@ -37,22 +37,22 @@ TimeEdit::TimeEdit(QWidget* parent)
       mPmIndex(-1),
       mReadOnly(false)
 {
-    QHBoxLayout *hbox = new QHBoxLayout;
-    hbox->setMargin(0);
-    setLayout(hbox);
+    QHBoxLayout* layout = new QHBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    setLayout(layout);
     bool use12hour = KLocale::global()->use12Clock();
     mSpinBox = new TimeSpinBox(!use12hour, this);
-    hbox->addWidget(mSpinBox);
-
     mSpinBox->setFixedSize(mSpinBox->sizeHint());
     connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
+    layout->addWidget(mSpinBox);
     if (use12hour)
     {
         mAmPm = new ComboBox(this);
         setAmPmCombo(1, 1);     // add "am" and "pm" options to the combo box
         mAmPm->setFixedSize(mAmPm->sizeHint());
-        hbox->addWidget(mAmPm);
         connect(mAmPm, SIGNAL(highlighted(int)), SLOT(slotAmPmChanged(int)));
+        layout->addWidget(mAmPm);
     }
 }
 
