@@ -66,7 +66,8 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
     mTime->setFixedSize(mTime->sizeHint());
     connect(mTime, &TimeSelector::toggled, this, &Reminder::slotReminderToggled);
     connect(mTime, &TimeSelector::valueChanged, this, &Reminder::changed);
-    connect(mTimeSignCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &Reminder::changed);
+    connect(mTimeSignCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged),
+            this, &Reminder::changed);
     topLayout->addWidget(mTime, 0, Qt::AlignLeft);
 
     if (showOnceOnly)

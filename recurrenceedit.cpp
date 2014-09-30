@@ -256,8 +256,10 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     mRepeatCountEntry->setSelectOnStep(false);
     mRepeatCountEntry->setReadOnly(mReadOnly);
     mRepeatCountEntry->setWhatsThis(i18nc("@info:whatsthis", "Enter the total number of times to trigger the alarm"));
-    connect(mRepeatCountEntry, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &RecurrenceEdit::repeatCountChanged);
-    connect(mRepeatCountEntry, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &RecurrenceEdit::contentsChanged);
+    connect(mRepeatCountEntry, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged),
+            this, &RecurrenceEdit::repeatCountChanged);
+    connect(mRepeatCountEntry, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged),
+            this, &RecurrenceEdit::contentsChanged);
     mRepeatCountButton->setFocusWidget(mRepeatCountEntry);
     mRepeatCountLabel = new QLabel(i18nc("@label", "occurrence(s)"), mRangeButtonBox);
     mRepeatCountLabel->setFixedSize(mRepeatCountLabel->sizeHint());
