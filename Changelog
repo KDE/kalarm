@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.10.11 --- 12 August 2014 ===
+=== Version 2.10.12 --- 30 September 2014 ===
+- Make New Audio Alarm dialogue use sound file repeat preference setting.
+
+=== Version 2.10.11 (KDE 4.14.0) --- 12 August 2014 ===
 - [Akonadi] Fix alarms not being redisplayed after Akonadi server restarts
             (requires kdepimlibs 4.14.0) [KDE Bug 336942]
 
