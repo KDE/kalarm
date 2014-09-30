@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1545,7 +1545,8 @@ void EditAudioAlarmDlg::type_initValues(const KAEvent* event)
     else
     {
         // Set the values to their defaults
-        mSoundConfig->set(Preferences::defaultSoundFile(), Preferences::defaultSoundVolume());
+        mSoundConfig->set(Preferences::defaultSoundFile(), Preferences::defaultSoundVolume(),
+                          -1, 0, (Preferences::defaultSoundRepeat() ? 0 : -1));
     }
 }
 
