@@ -11,6 +11,7 @@
   <name xml:lang="es">KAlarm</name>
   <name xml:lang="fr">KAlarm</name>
   <name xml:lang="hu">KAlarm</name>
+  <name xml:lang="lt">KAlarm</name>
   <name xml:lang="nb">KAlarm</name>
   <name xml:lang="nds">KAlarm</name>
   <name xml:lang="nl">KAlarm</name>
@@ -81,6 +82,7 @@
     <p xml:lang="es">Características:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="hu">Szolgáltatások:</p>
+    <p xml:lang="lt">Galimybės:</p>
     <p xml:lang="nb">Egenskaper:</p>
     <p xml:lang="nds">Markmalen:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -143,7 +145,7 @@
       <li>Recurring alarm on an hours/minutes, daily, weekly, monthly or annual basis, or set it to trigger every time you log in.</li>
       <li xml:lang="ca">Alarma repetida en una hora/minut, cada dia, setmanal, mensual o anual, o definir activar-la cada vegada que accediu al sistema</li>
       <li xml:lang="en-GB">Recurring alarm on an hours/minutes, daily, weekly, monthly or annual basis, or set it to trigger every time you log in.</li>
-      <li xml:lang="es">Alarmas repetitivas en una base de horas/minutos, diaria, semanal, mensual o anual, o establecerla para ejecutarse cada vez que usted accede al sistema.</li>
+      <li xml:lang="es">Alarmas repetitivas en una base de horas/minutos, diaria, semanal, mensual o anual, o establecerla para activarse cada vez que usted accede al sistema.</li>
       <li xml:lang="fr">Alarme récurrente sur une période en minutes, heures, jours, semaines, mois ou années, ou positionnée pour se déclencher à chaque fois que vous vous identifiez.</li>
       <li xml:lang="hu">Ismétlődő emlékeztetők óránkénti/percenkénti, napi, heti, havi vagy évenkénti gyakorisággal, vagy minden bejelentkezéskor.</li>
       <li xml:lang="nb">Gjentatt varsling basert på time/minutt, daglig, ukentlig, månedlig eller årlig, eller la den utløses hver gang du logger inn.</li>
@@ -164,7 +166,7 @@
       <li>Display alarms color and font customization</li>
       <li xml:lang="ca">Mostra les alarmes amb un color i tipus de lletra personalitzats</li>
       <li xml:lang="en-GB">Display alarms colour and font customisation</li>
-      <li xml:lang="es">Muestra la personalización de colores  y tipos de letra de la alarma</li>
+      <li xml:lang="es">Muestra la personalización de colores y tipos de letra de la alarma</li>
       <li xml:lang="fr">Personnalisation de la police et de la couleur des alarmes visuelles</li>
       <li xml:lang="hu">Emlékeztetők színének és betűtípusának testre szabása.</li>
       <li xml:lang="nb">Skrift og farger for varslinger kan settes opp</li>
@@ -185,7 +187,7 @@
       <li>Support for multiple alarm calendars, which for example enables you to share alarms between a laptop and desktop computer.</li>
       <li xml:lang="ca">Implementa múltiples calendaris d'alarma, amb els quals serà possible compartir les alarmes entre un ordinador portàtil i l'ordinador de sobretaula</li>
       <li xml:lang="en-GB">Support for multiple alarm calendars, which for example enables you to share alarms between a laptop and desktop computer.</li>
-      <li xml:lang="es">Admite varios calendarios de alarma, lo cual, p. ej. le permite compartir alarmas entre un ordenador portátil y uno de escritorio.</li>
+      <li xml:lang="es">Admite varios calendarios de alarma, lo cual, p. ej. le permite compartir alarmas entre un equipo portátil y uno de escritorio.</li>
       <li xml:lang="fr">Prise en charge de plusieurs calendriers d'alarmes, ce qui vous permet par exemple de partager des alarmes entre un ordinateur portable et un ordinateur de bureau.</li>
       <li xml:lang="hu">Több naptár használata, lehetővé téve ezzel az emlékeztetők megosztását például a hordozható és az asztali számítógépe között.</li>
       <li xml:lang="nb">Støtte for flere varslingskalendere, slik kan du for eksempel dele varslinger mellom en bærbar og en skrivebordsmaskin.</li>
