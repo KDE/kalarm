@@ -69,7 +69,7 @@ void SpinBox::init()
 
     // Detect when the text field is edited
     connect(lineEdit(), SIGNAL(textChanged(QString)), SLOT(textEdited()));
-    connect(this, SIGNAL(valueChanged(int)), SLOT(valueChange()));
+    connect(this, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &SpinBox::valueChange);
 }
 
 void SpinBox::setReadOnly(bool ro)

@@ -217,9 +217,9 @@ void EditAlarmDlg::init(const KAEvent* event)
     setButtonText(Help, i18nc("@action:button", "Load Template..."));
     setButtonIcon(Help, KIcon());
     setButtonIcon(Default, KIcon());
-    connect(this, SIGNAL(tryClicked()), SLOT(slotTry()));
-    connect(this, SIGNAL(defaultClicked()), SLOT(slotDefault()));  // More/Less Options button
-    connect(this, SIGNAL(helpClicked()), SLOT(slotHelp()));  // Load Template button
+    connect(this, &EditAlarmDlg::tryClicked, this, &EditAlarmDlg::slotTry);
+    connect(this, &EditAlarmDlg::defaultClicked, this, &EditAlarmDlg::slotDefault); // More/Less Options button
+    connect(this, &EditAlarmDlg::helpClicked, this, &EditAlarmDlg::slotHelp); // Load Template button
     KVBox* mainWidget = new KVBox(this);
     mainWidget->setMargin(0);
     setMainWidget(mainWidget);
@@ -232,7 +232,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         label->setFixedSize(label->sizeHint());
         mTemplateName = new QLineEdit(box);
         mTemplateName->setReadOnly(mReadOnly);
-        connect(mTemplateName, SIGNAL(textEdited(QString)), SLOT(contentsChanged()));
+        connect(mTemplateName, &QLineEdit::textEdited, this, &EditAlarmDlg::contentsChanged);
         label->setBuddy(mTemplateName);
         box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
         box->setFixedHeight(box->sizeHint().height());
@@ -245,7 +245,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     mMainPageIndex = 0;
     PageFrame* mainPage = new PageFrame(mainScroll);
     mainScroll->setWidget(mainPage);   // mainPage becomes the child of mainScroll
-    connect(mainPage, SIGNAL(shown()), SLOT(slotShowMainPage()));
+    connect(mainPage, &PageFrame::shown, this, &EditAlarmDlg::slotShowMainPage);
     QVBoxLayout* topLayout = new QVBoxLayout(mainPage);
     topLayout->setMargin(marginHint());
     topLayout->setSpacing(spacingHint());
@@ -258,11 +258,11 @@ void EditAlarmDlg::init(const KAEvent* event)
     recurTab->setMargin(marginHint());
     recurScroll->setWidget(recurTab);   // recurTab becomes the child of recurScroll
     mRecurrenceEdit = new RecurrenceEdit(mReadOnly, recurTab);
-    connect(mRecurrenceEdit, SIGNAL(shown()), SLOT(slotShowRecurrenceEdit()));
-    connect(mRecurrenceEdit, SIGNAL(typeChanged(int)), SLOT(slotRecurTypeChange(int)));
-    connect(mRecurrenceEdit, SIGNAL(frequencyChanged()), SLOT(slotRecurFrequencyChange()));
-    connect(mRecurrenceEdit, SIGNAL(repeatNeedsInitialisation()), SLOT(slotSetSubRepetition()));
-    connect(mRecurrenceEdit, SIGNAL(contentsChanged()), SLOT(contentsChanged()));
+    connect(mRecurrenceEdit, &RecurrenceEdit::shown, this, &EditAlarmDlg::slotShowRecurrenceEdit);
+    connect(mRecurrenceEdit, &RecurrenceEdit::typeChanged, this, &EditAlarmDlg::slotRecurTypeChange);
+    connect(mRecurrenceEdit, &RecurrenceEdit::frequencyChanged, this, &EditAlarmDlg::slotRecurFrequencyChange);
+    connect(mRecurrenceEdit, &RecurrenceEdit::repeatNeedsInitialisation, this, &EditAlarmDlg::slotSetSubRepetition);
+    connect(mRecurrenceEdit, &RecurrenceEdit::contentsChanged, this, &EditAlarmDlg::contentsChanged);
 
     // Controls specific to the alarm type
     QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
@@ -289,7 +289,7 @@ void EditAlarmDlg::init(const KAEvent* event)
 
         mDeferChangeButton = new QPushButton(i18nc("@action:button", "Change..."), mDeferGroup);
         mDeferChangeButton->setFixedSize(mDeferChangeButton->sizeHint());
-        connect(mDeferChangeButton, SIGNAL(clicked()), SLOT(slotEditDeferral()));
+        connect(mDeferChangeButton, &QPushButton::clicked, this, &EditAlarmDlg::slotEditDeferral);
         mDeferChangeButton->setWhatsThis(i18nc("@info:whatsthis", "Change the alarm's deferred time, or cancel the deferral"));
         hlayout->addWidget(mDeferChangeButton);
 //??        mDeferGroup->addSpace(0);
@@ -308,8 +308,8 @@ void EditAlarmDlg::init(const KAEvent* event)
         grid->setMargin(marginHint());
         grid->setSpacing(spacingHint());
         mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
-        connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotTemplateTimeType(QAbstractButton*)));
-        connect(mTemplateTimeGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(contentsChanged()));
+        connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::slotTemplateTimeType);
+        connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::contentsChanged);
 
         mTemplateDefaultTime = new RadioButton(i18nc("@option:radio", "Default time"), templateTimeBox);
         mTemplateDefaultTime->setFixedSize(mTemplateDefaultTime->sizeHint());
@@ -333,7 +333,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTime->setWhatsThis(xi18nc("@info:whatsthis",
               "<para>Enter the start time for alarms based on this template.</para><para>%1</para>",
               TimeSpinBox::shiftWhatsThis()));
-        connect(mTemplateTime, SIGNAL(valueChanged(int)), SLOT(contentsChanged()));
+        connect(mTemplateTime, &TimeEdit::valueChanged, this, &EditAlarmDlg::contentsChanged);
         box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
         box->setFixedHeight(box->sizeHint().height());
         grid->addWidget(box, 0, 1, Qt::AlignLeft);
@@ -359,7 +359,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeAfter->setValue(1439);
         mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
         mTemplateTimeAfter->setReadOnly(mReadOnly);
-        connect(mTemplateTimeAfter, SIGNAL(valueChanged(int)), SLOT(contentsChanged()));
+        connect(mTemplateTimeAfter, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &EditAlarmDlg::contentsChanged);
         mTemplateTimeAfter->setWhatsThis(xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
                                                AlarmTimeWidget::i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
         box->setFixedHeight(box->sizeHint().height());
@@ -370,8 +370,8 @@ void EditAlarmDlg::init(const KAEvent* event)
     else
     {
         mTimeWidget = new AlarmTimeWidget(i18nc("@title:group", "Time"), AlarmTimeWidget::AT_TIME, mainPage);
-        connect(mTimeWidget, SIGNAL(dateOnlyToggled(bool)), SLOT(slotAnyTimeToggled(bool)));
-        connect(mTimeWidget, SIGNAL(changed(KDateTime)), SLOT(contentsChanged()));
+        connect(mTimeWidget, &AlarmTimeWidget::dateOnlyToggled, this, &EditAlarmDlg::slotAnyTimeToggled);
+        connect(mTimeWidget, &AlarmTimeWidget::changed, this, &EditAlarmDlg::contentsChanged);
         topLayout->addWidget(mTimeWidget);
     }
 
@@ -388,15 +388,15 @@ void EditAlarmDlg::init(const KAEvent* event)
     if (mReminder)
     {
         mReminder->setFixedSize(mReminder->sizeHint());
-        connect(mReminder, SIGNAL(changed()), SLOT(contentsChanged()));
+        connect(mReminder, &Reminder::changed, this, &EditAlarmDlg::contentsChanged);
         moreLayout->addWidget(mReminder, 0, Qt::AlignLeft);
         if (mTimeWidget)
-            connect(mTimeWidget, SIGNAL(changed(KDateTime)), mReminder, SLOT(setDefaultUnits(KDateTime)));
+            connect(mTimeWidget, &AlarmTimeWidget::changed, mReminder, &Reminder::setDefaultUnits);
     }
 
     // Late cancel selector - default = allow late display
     mLateCancel = new LateCancelSelector(true, mMoreOptions);
-    connect(mLateCancel, SIGNAL(changed()), SLOT(contentsChanged()));
+    connect(mLateCancel, &LateCancelSelector::changed, this, &EditAlarmDlg::contentsChanged);
     moreLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
     PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
@@ -408,7 +408,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     if (confirmAck)
     {
         confirmAck->setFixedSize(confirmAck->sizeHint());
-        connect(confirmAck, SIGNAL(toggled(bool)), SLOT(contentsChanged()));
+        connect(confirmAck, &CheckBox::toggled, this, &EditAlarmDlg::contentsChanged);
         playout->addWidget(confirmAck);
     }
 
@@ -417,7 +417,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         // Show in KOrganizer checkbox
         mShowInKorganizer = new CheckBox(i18n_chk_ShowInKOrganizer(), mMoreOptions);
         mShowInKorganizer->setFixedSize(mShowInKorganizer->sizeHint());
-        connect(mShowInKorganizer, SIGNAL(toggled(bool)), SLOT(contentsChanged()));
+        connect(mShowInKorganizer, &CheckBox::toggled, this, &EditAlarmDlg::contentsChanged);
         mShowInKorganizer->setWhatsThis(i18nc("@info:whatsthis", "Check to copy the alarm into KOrganizer's calendar"));
         playout->addWidget(mShowInKorganizer);
     }

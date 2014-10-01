@@ -142,8 +142,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
     connect(this, &AkonadiModel::rowsAboutToBeRemoved, this, &AkonadiModel::slotRowsAboutToBeRemoved);
     connect(monitor, SIGNAL(itemChanged(Akonadi::Item,QSet<QByteArray>)), SLOT(slotMonitoredItemChanged(Akonadi::Item,QSet<QByteArray>)));
 
-    connect(ServerManager::self(), SIGNAL(stateChanged(Akonadi::ServerManager::State)),
-                                   SLOT(checkResources(Akonadi::ServerManager::State)));
+    connect(ServerManager::self(), &ServerManager::stateChanged, this, &AkonadiModel::checkResources);
     checkResources(ServerManager::state());
 }
 

@@ -126,8 +126,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
                                       SLOT(slotCollectionAdded(Akonadi::Collection)));
 
-    connect(mAlarmType, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated),
-            this, &ResourceSelector::alarmTypeSelected);
+    connect(mAlarmType, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
 
     Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(archiveDaysChanged(int)));
@@ -194,8 +193,7 @@ void ResourceSelector::reinstateAlarmTypeScrollBars()
 void ResourceSelector::addResource()
 {
     AkonadiResourceCreator* creator = new AkonadiResourceCreator(mCurrentAlarmType, this);
-    connect(creator, SIGNAL(finished(AkonadiResourceCreator*,bool)), 
-                     SLOT(resourceAdded(AkonadiResourceCreator*,bool)));
+    connect(creator, &AkonadiResourceCreator::finished, this, &ResourceSelector::resourceAdded);
     creator->createResource();
 }
 

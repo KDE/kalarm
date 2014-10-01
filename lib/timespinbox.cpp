@@ -52,7 +52,7 @@ TimeSpinBox::TimeSpinBox(bool use24hour, QWidget* parent)
     setShiftSteps(5, 360);    // shift-left button increments 5 min / 6 hours
     setSelectOnStep(false);
     setAlignment(Qt::AlignHCenter);
-    connect(this, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
+    connect(this, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &TimeSpinBox::slotValueChanged);
 }
 
 /******************************************************************************

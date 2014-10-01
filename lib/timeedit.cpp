@@ -44,14 +44,14 @@ TimeEdit::TimeEdit(QWidget* parent)
     bool use12hour = KLocale::global()->use12Clock();
     mSpinBox = new TimeSpinBox(!use12hour, this);
     mSpinBox->setFixedSize(mSpinBox->sizeHint());
-    connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotValueChanged(int)));
+    connect(mSpinBox, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &TimeEdit::slotValueChanged);
     layout->addWidget(mSpinBox);
     if (use12hour)
     {
         mAmPm = new ComboBox(this);
         setAmPmCombo(1, 1);     // add "am" and "pm" options to the combo box
         mAmPm->setFixedSize(mAmPm->sizeHint());
-        connect(mAmPm, SIGNAL(highlighted(int)), SLOT(slotAmPmChanged(int)));
+        connect(mAmPm, static_cast<void (ComboBox::*)(int)>(&ComboBox::highlighted), this, &TimeEdit::slotAmPmChanged);
         layout->addWidget(mAmPm);
     }
 }

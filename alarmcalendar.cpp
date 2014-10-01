@@ -128,8 +128,7 @@ AlarmCalendar::AlarmCalendar()
     connect(model, &AkonadiModel::eventsAdded, this, &AlarmCalendar::slotEventsAdded);
     connect(model, &AkonadiModel::eventsToBeRemoved, this, &AlarmCalendar::slotEventsToBeRemoved);
     connect(model, &AkonadiModel::eventChanged, this, &AlarmCalendar::slotEventChanged);
-    connect(model, SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
-                   SLOT(slotCollectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
+    connect(model, &AkonadiModel::collectionStatusChanged, this, &AlarmCalendar::slotCollectionStatusChanged);
     Preferences::connect(SIGNAL(askResourceChanged(bool)), this, SLOT(setAskResource(bool)));
 }
 

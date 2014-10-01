@@ -61,12 +61,12 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     mSpinBox->setSingleStep(1);
     mSpinBox->setSingleShiftStep(10);
     mSpinBox->setRange(1, mMaxDays);
-    connect(mSpinBox, SIGNAL(valueChanged(int)), SLOT(slotDaysChanged(int)));
+    connect(mSpinBox, static_cast<void (SpinBox::*)(int)>(&SpinBox::valueChanged), this, &TimePeriod::slotDaysChanged);
     mSpinStack->addWidget(mSpinBox);
 
     mTimeSpinBox = new TimeSpinBox(0, 99999, mSpinStack);
     mTimeSpinBox->setRange(1, maxMinutes);    // max 999H59M
-    connect(mTimeSpinBox, SIGNAL(valueChanged(int)), SLOT(slotTimeChanged(int)));
+    connect(mTimeSpinBox, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &TimePeriod::slotTimeChanged);
     mSpinStack->addWidget(mTimeSpinBox);
 
     mSpinStack->setFixedSize(mSpinBox->sizeHint().expandedTo(mTimeSpinBox->sizeHint()));
@@ -88,7 +88,7 @@ TimePeriod::TimePeriod(bool allowHourMinute, QWidget* parent)
     mUnitsCombo->addItem(i18n_weeks());
     mMaxUnitShown = Weeks;
     mUnitsCombo->setFixedSize(mUnitsCombo->sizeHint());
-    connect(mUnitsCombo, SIGNAL(activated(int)), SLOT(slotUnitsSelected(int)));
+    connect(mUnitsCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::activated), this, &TimePeriod::slotUnitsSelected);
     layout->addWidget(mUnitsCombo);
 
     setFocusProxy(mUnitsCombo);
