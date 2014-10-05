@@ -158,7 +158,6 @@ class KAEventPrivate : public QSharedData
             const Alarm*                alarm;
 #endif
             QString                     cleanText;       // text or audio file name
-            uint                        emailFromId;
             QFont                       font;
             QColor                      bgColour, fgColour;
             float                       soundVolume;
@@ -166,11 +165,12 @@ class KAEventPrivate : public QSharedData
             int                         fadeSeconds;
             int                         repeatSoundPause;
             int                         nextRepeat;
-            bool                        speak;
+            uint                        emailFromId;
             KAEventPrivate::AlarmType   type;
             KAAlarm::Action             action;
             int                         displayingFlags;
             KAEvent::ExtraActionOptions extraActionOptions;
+            bool                        speak;
             bool                        defaultFont;
             bool                        isEmailText;
             bool                        commandScript;
@@ -261,13 +261,13 @@ class KAEventPrivate : public QSharedData
         static bool        convertRepetition(const KCalCore::Event::Ptr&);
         static bool        convertStartOfDay(const KCalCore::Event::Ptr&);
         static DateTime    readDateTime(const KCalCore::Event::Ptr&, bool dateOnly, DateTime& start);
-        static void        readAlarms(const KCalCore::Event::Ptr&, void* alarmMap, bool cmdDisplay = false);
+        static void        readAlarms(const KCalCore::Event::Ptr&, AlarmMap*, bool cmdDisplay = false);
         static void        readAlarm(const KCalCore::Alarm::Ptr&, AlarmData&, bool audioMain, bool cmdDisplay = false);
 #else
         static bool        convertRepetition(KCal::Event*);
         static bool        convertStartOfDay(KCal::Event*);
         static DateTime    readDateTime(const KCal::Event*, bool dateOnly, DateTime& start);
-        static void        readAlarms(const KCal::Event*, void* alarmMap, bool cmdDisplay = false);
+        static void        readAlarms(const KCal::Event*, AlarmMap*, bool cmdDisplay = false);
         static void        readAlarm(const KCal::Alarm*, AlarmData&, bool audioMain, bool cmdDisplay = false);
 #endif
 
@@ -1123,7 +1123,7 @@ void KAEventPrivate::set(const Event* event)
                 // alarm in the event (if it has expired and then been deferred)
                 if (!set)
                 {
-                    mActionSubType = (KAEvent::SubAction)data.action;
+                    mActionSubType = static_cast<KAEvent::SubAction>(data.action);
                     mText = (mActionSubType == KAEvent::COMMAND) ? data.cleanText.trimmed() : data.cleanText;
                     switch (data.action)
                     {
@@ -1249,7 +1249,7 @@ void KAEventPrivate::set(const KDateTime& dateTime, const QString& text, const Q
         case KAEvent::COMMAND:
         case KAEvent::EMAIL:
         case KAEvent::AUDIO:
-            mActionSubType = (KAEvent::SubAction)action;
+            mActionSubType = static_cast<KAEvent::SubAction>(action);
             break;
         default:
             mActionSubType = KAEvent::MESSAGE;
@@ -3801,7 +3801,7 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
     KAAlarm::Private* const al_d = al.d;
     if (mAlarmCount)
     {
-        al_d->mActionType    = (KAAlarm::Action)mActionSubType;
+        al_d->mActionType    = static_cast<KAAlarm::Action>(mActionSubType);
         al_d->mRepeatAtLogin = false;
         al_d->mDeferred      = false;
         switch (type)
@@ -4221,12 +4221,11 @@ DateTime KAEventPrivate::readDateTime(const Event* event, bool dateOnly, DateTim
 * Reply = map of alarm data, indexed by KAAlarm::Type
 */
 #ifndef KALARMCAL_USE_KRESOURCES
-void KAEventPrivate::readAlarms(const Event::Ptr& event, void* almap, bool cmdDisplay)
+void KAEventPrivate::readAlarms(const Event::Ptr& event, AlarmMap* alarmMap, bool cmdDisplay)
 #else
-void KAEventPrivate::readAlarms(const Event* event, void* almap, bool cmdDisplay)
+void KAEventPrivate::readAlarms(const Event* event, AlarmMap* alarmMap, bool cmdDisplay)
 #endif
 {
-    AlarmMap* alarmMap = (AlarmMap*)almap;
     const Alarm::List alarms = event->alarms();
 
     // Check if it's an audio event with no display alarm
