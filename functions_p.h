@@ -35,7 +35,7 @@ class Private : public QObject
 {
         Q_OBJECT
     public:
-        explicit Private(QObject* parent = 0) : QObject(parent) {}
+        explicit Private(QObject* parent = 0) : QObject(parent), mMsgParent(0) {}
         static bool startKMailMinimised();
         static Private* instance()
         {
