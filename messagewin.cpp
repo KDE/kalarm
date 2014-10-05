@@ -461,6 +461,9 @@ void MessageWin::initView()
         // Reminder
         if (reminder)
         {
+            // Create a label "time\nReminder" by inserting the time at the
+            // start of the translated string, allowing for possible HTML tags
+            // enclosing "Reminder".
             QString s = i18nc("@info", "Reminder");
             QRegExp re(QLatin1String("^(<[^>]+>)*"));
             re.indexIn(s);
