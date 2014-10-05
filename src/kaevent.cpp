@@ -128,7 +128,6 @@ public:
     struct AlarmData {
         Alarm::Ptr                  alarm;
         QString                     cleanText;       // text or audio file name
-        uint                        emailFromId;
         QFont                       font;
         QColor                      bgColour, fgColour;
         float                       soundVolume;
@@ -136,11 +135,12 @@ public:
         int                         fadeSeconds;
         int                         repeatSoundPause;
         int                         nextRepeat;
-        bool                        speak;
+        uint                        emailFromId;
         KAEventPrivate::AlarmType   type;
         KAAlarm::Action             action;
         int                         displayingFlags;
         KAEvent::ExtraActionOptions extraActionOptions;
+        bool                        speak;
         bool                        defaultFont;
         bool                        isEmailText;
         bool                        commandScript;
@@ -221,7 +221,7 @@ public:
     static bool        convertRepetition(const KCalCore::Event::Ptr &);
     static bool        convertStartOfDay(const KCalCore::Event::Ptr &);
     static DateTime    readDateTime(const KCalCore::Event::Ptr &, bool dateOnly, DateTime &start);
-    static void        readAlarms(const KCalCore::Event::Ptr &, void *alarmMap, bool cmdDisplay = false);
+    static void        readAlarms(const KCalCore::Event::Ptr &, AlarmMap *, bool cmdDisplay = false);
     static void        readAlarm(const KCalCore::Alarm::Ptr &, AlarmData &, bool audioMain, bool cmdDisplay = false);
 private:
     void               copy(const KAEventPrivate &);
@@ -995,7 +995,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
                 // Ensure that the basic fields are set up even if there is no main
                 // alarm in the event (if it has expired and then been deferred)
                 if (!set) {
-                    mActionSubType = (KAEvent::SubAction)data.action;
+                    mActionSubType = static_cast<KAEvent::SubAction>(data.action);
                     mText = (mActionSubType == KAEvent::COMMAND) ? data.cleanText.trimmed() : data.cleanText;
                     switch (data.action) {
                         case KAAlarm::COMMAND:
@@ -1118,7 +1118,7 @@ void KAEventPrivate::set(const KDateTime &dateTime, const QString &text, const Q
         case KAEvent::COMMAND:
         case KAEvent::EMAIL:
         case KAEvent::AUDIO:
-            mActionSubType = (KAEvent::SubAction)action;
+            mActionSubType = static_cast<KAEvent::SubAction>(action);
             break;
         default:
             mActionSubType = KAEvent::MESSAGE;
@@ -3466,7 +3466,7 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
     KAAlarm al;       // this sets type to INVALID_ALARM
     KAAlarm::Private *const al_d = al.d;
     if (mAlarmCount) {
-        al_d->mActionType    = (KAAlarm::Action)mActionSubType;
+        al_d->mActionType    = static_cast<KAAlarm::Action>(mActionSubType);
         al_d->mRepeatAtLogin = false;
         al_d->mDeferred      = false;
         switch (type) {
@@ -3858,9 +3858,8 @@ DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool dateOnly, Da
 * Parse the alarms for a KCal::Event.
 * Reply = map of alarm data, indexed by KAAlarm::Type
 */
-void KAEventPrivate::readAlarms(const Event::Ptr &event, void *almap, bool cmdDisplay)
+void KAEventPrivate::readAlarms(const Event::Ptr &event, AlarmMap *alarmMap, bool cmdDisplay)
 {
-    AlarmMap *alarmMap = (AlarmMap *)almap;
     const Alarm::List alarms = event->alarms();
 
     // Check if it's an audio event with no display alarm
