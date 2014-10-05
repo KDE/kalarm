@@ -3832,15 +3832,28 @@ DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool dateOnly, Da
         start.setDateOnly(true);
     }
     DateTime next = start;
+    const int SZ_YEAR  = 4;                           // number of digits in year value
+    const int SZ_MONTH = 2;                           // number of digits in month value
+    const int SZ_DAY   = 2;                           // number of digits in day value
+    const int SZ_DATE  = SZ_YEAR + SZ_MONTH + SZ_DAY; // total size of date value
+    const int IX_TIME  = SZ_DATE + 1;                 // offset to time value
+    const int SZ_HOUR  = 2;                           // number of digits in hour value
+    const int SZ_MIN   = 2;                           // number of digits in minute value
+    const int SZ_SEC   = 2;                           // number of digits in second value
+    const int SZ_TIME  = SZ_HOUR + SZ_MIN + SZ_SEC;   // total size of time value
     const QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY);
-    if (prop.length() >= 8) {
+    if (prop.length() >= SZ_DATE) {
         // The next due recurrence time is specified
-        const QDate d(prop.left(4).toInt(), prop.mid(4, 2).toInt(), prop.mid(6, 2).toInt());
+        const QDate d(prop.left(SZ_YEAR).toInt(),
+                      prop.mid(SZ_YEAR, SZ_MONTH).toInt(),
+                      prop.mid(SZ_YEAR + SZ_MONTH, SZ_DAY).toInt());
         if (d.isValid()) {
-            if (dateOnly  &&  prop.length() == 8) {
+            if (dateOnly  &&  prop.length() == SZ_DATE) {
                 next.setDate(d);
-            } else if (!dateOnly  &&  prop.length() == 15  &&  prop[8] == QLatin1Char('T')) {
-                const QTime t(prop.mid(9, 2).toInt(), prop.mid(11, 2).toInt(), prop.mid(13, 2).toInt());
+            } else if (!dateOnly  &&  prop.length() == IX_TIME + SZ_TIME  &&  prop[SZ_DATE] == QLatin1Char('T')) {
+                const QTime t(prop.mid(IX_TIME, SZ_HOUR).toInt(),
+                              prop.mid(IX_TIME + SZ_HOUR, SZ_MIN).toInt(),
+                              prop.mid(IX_TIME + SZ_HOUR + SZ_MIN, SZ_SEC).toInt());
                 if (t.isValid()) {
                     next.setDate(d);
                     next.setTime(t);
