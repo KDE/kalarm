@@ -174,10 +174,10 @@ MainWindow::MainWindow(bool restored)
     mListView->sortByColumn(mShowTime ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
     mListView->setItemDelegate(new AlarmListDelegate(mListView));
     connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelection()));
-    connect(mListView, SIGNAL(contextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)));
+    connect(mListView, &AlarmListView::contextMenuRequested, this, &MainWindow::slotContextMenuRequested);
     connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
                        SLOT(slotCalendarStatusChanged()));
-    connect(mResourceSelector, SIGNAL(resized(QSize,QSize)), SLOT(resourcesResized()));
+    connect(mResourceSelector, &ResourceSelector::resized, this, &MainWindow::resourcesResized);
     mListView->installEventFilter(this);
     initActions();
 
@@ -422,7 +422,7 @@ void MainWindow::initActions()
 
     mActionTemplates = new QAction(i18nc("@action", "&Templates..."), this);
     actions->addAction(QLatin1String("templates"), mActionTemplates);
-    connect(mActionTemplates, SIGNAL(triggered(bool)), SLOT(slotTemplates()));
+    connect(mActionTemplates, &QAction::triggered, this, &MainWindow::slotTemplates);
 
     mActionNew = new NewAlarmAction(false, i18nc("@action", "&New"), this);
     actions->addAction(QLatin1String("new"), mActionNew);
@@ -430,65 +430,65 @@ void MainWindow::initActions()
     QAction* action = mActionNew->displayAlarmAction();
     actions->addAction(QLatin1String("newDisplay"), action);
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-    connect(action, SIGNAL(triggered(bool)), SLOT(slotNewDisplay()));
+    connect(action, &QAction::triggered, this, &MainWindow::slotNewDisplay);
 
     action = mActionNew->commandAlarmAction();
     actions->addAction(QLatin1String("newCommand"), action);
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-    connect(action, SIGNAL(triggered(bool)), SLOT(slotNewCommand()));
+    connect(action, &QAction::triggered, this, &MainWindow::slotNewCommand);
 
     action = mActionNew->emailAlarmAction();
     actions->addAction(QLatin1String("newEmail"), action);
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-    connect(action, SIGNAL(triggered(bool)), SLOT(slotNewEmail()));
+    connect(action, &QAction::triggered, this, &MainWindow::slotNewEmail);
 
     action = mActionNew->audioAlarmAction();
     actions->addAction(QLatin1String("newAudio"), action);
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
-    connect(action, SIGNAL(triggered(bool)), SLOT(slotNewAudio()));
+    connect(action, &QAction::triggered, this, &MainWindow::slotNewAudio);
 
-    action = mActionNew->fromTemplateAlarmAction();
-    actions->addAction(QLatin1String("newFromTemplate"), action);
-    connect(action, SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
+    TemplateMenuAction *templateMenuAction = mActionNew->fromTemplateAlarmAction();
+    actions->addAction(QLatin1String("newFromTemplate"), templateMenuAction);
+    connect(templateMenuAction, &TemplateMenuAction::selected, this, &MainWindow::slotNewFromTemplate);
 
     mActionCreateTemplate = new QAction(i18nc("@action", "Create Tem&plate..."), this);
     actions->addAction(QLatin1String("createTemplate"), mActionCreateTemplate);
-    connect(mActionCreateTemplate, SIGNAL(triggered(bool)), SLOT(slotNewTemplate()));
+    connect(mActionCreateTemplate, &QAction::triggered, this, &MainWindow::slotNewTemplate);
 
     mActionCopy = new QAction(QIcon::fromTheme(QLatin1String("edit-copy")), i18nc("@action", "&Copy..."), this);
     actions->addAction(QLatin1String("copy"), mActionCopy);
     actions->setDefaultShortcut(mActionCopy, QKeySequence(Qt::SHIFT + Qt::Key_Insert));
-    connect(mActionCopy, SIGNAL(triggered(bool)), SLOT(slotCopy()));
+    connect(mActionCopy, &QAction::triggered, this, &MainWindow::slotCopy);
 
     mActionModify = new QAction(QIcon::fromTheme(QLatin1String("document-properties")), i18nc("@action", "&Edit..."), this);
     actions->addAction(QLatin1String("modify"), mActionModify);
     actions->setDefaultShortcut(mActionModify, QKeySequence(Qt::CTRL + Qt::Key_E));
-    connect(mActionModify, SIGNAL(triggered(bool)), SLOT(slotModify()));
+    connect(mActionModify, &QAction::triggered, this, &MainWindow::slotModify);
 
     mActionDelete = new QAction(QIcon::fromTheme(QLatin1String("edit-delete")), i18nc("@action", "&Delete"), this);
     actions->addAction(QLatin1String("delete"), mActionDelete);
     actions->setDefaultShortcut(mActionDelete, QKeySequence::Delete);
-    connect(mActionDelete, SIGNAL(triggered(bool)), SLOT(slotDeleteIf()));
+    connect(mActionDelete, &QAction::triggered, this, &MainWindow::slotDeleteIf);
 
     // Set up Shift-Delete as a shortcut to delete without confirmation
     mActionDeleteForce = new QAction(i18nc("@action", "Delete Without Confirmation"), this);
     actions->addAction(QLatin1String("delete-force"), mActionDeleteForce);
     actions->setDefaultShortcut(mActionDeleteForce, QKeySequence::Delete + Qt::SHIFT);
-    connect(mActionDeleteForce, SIGNAL(triggered(bool)), SLOT(slotDeleteForce()));
+    connect(mActionDeleteForce, &QAction::triggered, this, &MainWindow::slotDeleteForce);
 
     mActionReactivate = new QAction(i18nc("@action", "Reac&tivate"), this);
     actions->addAction(QLatin1String("undelete"), mActionReactivate);
     actions->setDefaultShortcut(mActionReactivate, QKeySequence(Qt::CTRL + Qt::Key_R));
-    connect(mActionReactivate, SIGNAL(triggered(bool)), SLOT(slotReactivate()));
+    connect(mActionReactivate, &QAction::triggered, this, &MainWindow::slotReactivate);
 
     mActionEnable = new QAction(this);
     actions->addAction(QLatin1String("disable"), mActionEnable);
     actions->setDefaultShortcut(mActionEnable, QKeySequence(Qt::CTRL + Qt::Key_B));
-    connect(mActionEnable, SIGNAL(triggered(bool)), SLOT(slotEnable()));
+    connect(mActionEnable, &QAction::triggered, this, &MainWindow::slotEnable);
 
     action = new QAction(i18nc("@action", "Wake From Suspend..."), this);
     actions->addAction(QLatin1String("wakeSuspend"), action);
-    connect(action, SIGNAL(triggered(bool)), SLOT(slotWakeFromSuspend()));
+    connect(action, &QAction::triggered, this, &MainWindow::slotWakeFromSuspend);
 
     action = KAlarm::createStopPlayAction(this);
     actions->addAction(QLatin1String("stopAudio"), action);
@@ -496,25 +496,25 @@ void MainWindow::initActions()
 
     mActionShowTime = new KToggleAction(i18n_a_ShowAlarmTimes(), this);
     actions->addAction(QLatin1String("showAlarmTimes"), mActionShowTime);
-    connect(mActionShowTime, SIGNAL(triggered(bool)), SLOT(slotShowTime()));
+    connect(mActionShowTime, &KToggleAction::triggered, this, &MainWindow::slotShowTime);
 
     mActionShowTimeTo = new KToggleAction(i18n_o_ShowTimeToAlarms(), this);
     actions->addAction(QLatin1String("showTimeToAlarms"), mActionShowTimeTo);
     actions->setDefaultShortcut(mActionShowTimeTo, QKeySequence(Qt::CTRL + Qt::Key_I));
-    connect(mActionShowTimeTo, SIGNAL(triggered(bool)), SLOT(slotShowTimeTo()));
+    connect(mActionShowTimeTo, &KToggleAction::triggered, this, &MainWindow::slotShowTimeTo);
 
     mActionShowArchived = new KToggleAction(i18nc("@action", "Show Archi&ved Alarms"), this);
     actions->addAction(QLatin1String("showArchivedAlarms"), mActionShowArchived);
     actions->setDefaultShortcut(mActionShowArchived, QKeySequence(Qt::CTRL + Qt::Key_P));
-    connect(mActionShowArchived, SIGNAL(triggered(bool)), SLOT(slotShowArchived()));
+    connect(mActionShowArchived, &KToggleAction::triggered, this, &MainWindow::slotShowArchived);
 
     mActionToggleTrayIcon = new KToggleAction(i18nc("@action", "Show in System &Tray"), this);
     actions->addAction(QLatin1String("showInSystemTray"), mActionToggleTrayIcon);
-    connect(mActionToggleTrayIcon, SIGNAL(triggered(bool)), SLOT(slotToggleTrayIcon()));
+    connect(mActionToggleTrayIcon, &KToggleAction::triggered, this, &MainWindow::slotToggleTrayIcon);
 
     mActionToggleResourceSel = new KToggleAction(QIcon::fromTheme(QLatin1String("view-choose")), i18nc("@action", "Show &Calendars"), this);
     actions->addAction(QLatin1String("showResources"), mActionToggleResourceSel);
-    connect(mActionToggleResourceSel, SIGNAL(triggered(bool)), SLOT(slotToggleResourceSelector()));
+    connect(mActionToggleResourceSel, &KToggleAction::triggered, this, &MainWindow::slotToggleResourceSelector);
 
     mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
     actions->addAction(QLatin1String("spread"), mActionSpreadWindows);
@@ -522,23 +522,23 @@ void MainWindow::initActions()
 
     mActionImportAlarms = new QAction(i18nc("@action", "Import &Alarms..."), this);
     actions->addAction(QLatin1String("importAlarms"), mActionImportAlarms);
-    connect(mActionImportAlarms, SIGNAL(triggered(bool)), SLOT(slotImportAlarms()));
+    connect(mActionImportAlarms, &QAction::triggered, this, &MainWindow::slotImportAlarms);
 
     mActionImportBirthdays = new QAction(i18nc("@action", "Import &Birthdays..."), this);
     actions->addAction(QLatin1String("importBirthdays"), mActionImportBirthdays);
-    connect(mActionImportBirthdays, SIGNAL(triggered(bool)), SLOT(slotBirthdays()));
+    connect(mActionImportBirthdays, &QAction::triggered, this, &MainWindow::slotBirthdays);
 
     mActionExportAlarms = new QAction(i18nc("@action", "E&xport Selected Alarms..."), this);
     actions->addAction(QLatin1String("exportAlarms"), mActionExportAlarms);
-    connect(mActionExportAlarms, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
+    connect(mActionExportAlarms, &QAction::triggered, this, &MainWindow::slotExportAlarms);
 
     mActionExport = new QAction(i18nc("@action", "E&xport..."), this);
     actions->addAction(QLatin1String("export"), mActionExport);
-    connect(mActionExport, SIGNAL(triggered(bool)), SLOT(slotExportAlarms()));
+    connect(mActionExport, &QAction::triggered, this, &MainWindow::slotExportAlarms);
 
     action = new QAction(QIcon::fromTheme(QLatin1String("view-refresh")), i18nc("@action", "&Refresh Alarms"), this);
     actions->addAction(QLatin1String("refreshAlarms"), action);
-    connect(action, SIGNAL(triggered(bool)), SLOT(slotRefreshAlarms()));
+    connect(action, &QAction::triggered, this, &MainWindow::slotRefreshAlarms);
 
     KToggleAction* toggleAction = KAlarm::createAlarmEnableAction(this);
     actions->addAction(QLatin1String("alarmsEnable"), toggleAction);
@@ -559,12 +559,12 @@ void MainWindow::initActions()
     mActionUndo = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-undo")), undoText, this);
     actions->addAction(QLatin1String("edit_undo"), mActionUndo);
     mActionUndo->setShortcuts(undoShortcut);
-    connect(mActionUndo, SIGNAL(triggered(bool)), SLOT(slotUndo()));
+    connect(mActionUndo, &KToolBarPopupAction::triggered, this, &MainWindow::slotUndo);
 
     mActionRedo = new KToolBarPopupAction(QIcon::fromTheme(QLatin1String("edit-redo")), redoText, this);
     actions->addAction(QLatin1String("edit_redo"), mActionRedo);
     mActionRedo->setShortcuts(redoShortcut);
-    connect(mActionRedo, SIGNAL(triggered(bool)), SLOT(slotRedo()));
+    connect(mActionRedo, &KToolBarPopupAction::triggered, this, &MainWindow::slotRedo);
 
     KStandardAction::find(mListView, SLOT(slotFind()), actions);
     mActionFindNext = KStandardAction::findNext(mListView, SLOT(slotFindNext()), actions);
@@ -574,7 +574,7 @@ void MainWindow::initActions()
     // Quit only once the event loop is called; otherwise, the parent window will
     // be deleted while still processing the action, resulting in a crash.
     QAction* act = KStandardAction::quit(0, 0, actions);
-    connect(act, SIGNAL(triggered(bool)), SLOT(slotQuit()), Qt::QueuedConnection);
+    connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
     KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
     KStandardAction::preferences(this, SLOT(slotPreferences()), actions);
@@ -594,7 +594,7 @@ void MainWindow::initActions()
     connect(mActionRedo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
     connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
     connect(Undo::instance(), SIGNAL(changed(QString,QString)), SLOT(slotUndoStatus(QString,QString)));
-    connect(mListView, SIGNAL(findActive(bool)), SLOT(slotFindActive(bool)));
+    connect(mListView, &AlarmListView::findActive, this, &MainWindow::slotFindActive);
     Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
     Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
     connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
@@ -1173,7 +1173,7 @@ void MainWindow::slotConfigureToolbar()
     KConfigGroup grp(KSharedConfig::openConfig()->group(WINDOW_NAME));
     saveMainWindowSettings(grp);
     KEditToolBar dlg(factory());
-    connect(&dlg, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
+    connect(&dlg, &KEditToolBar::newToolBarConfig, this, &MainWindow::slotNewToolbarConfig);
     dlg.exec();
 }
 
@@ -1556,8 +1556,8 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
 void MainWindow::editAlarm(EditAlarmDlg* dlg, const KAEvent& event)
 {
     mEditAlarmMap[dlg] = event;
-    connect(dlg, SIGNAL(accepted()), SLOT(editAlarmOk()));
-    connect(dlg, SIGNAL(destroyed(QObject*)), SLOT(editAlarmDeleted(QObject*)));
+    connect(dlg, &KEditToolBar::accepted, this, &MainWindow::editAlarmOk);
+    connect(dlg, &KEditToolBar::destroyed, this, &MainWindow::editAlarmDeleted);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);   // ensure no memory leaks
     dlg->show();
 }

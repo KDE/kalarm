@@ -92,8 +92,7 @@ void AkonadiResourceCreator::getAgentType()
         return;
     }
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(mAgentType, mParent);
-    connect(job, &AgentInstanceCreateJob::result,
-            this, &AkonadiResourceCreator::agentInstanceCreated);
+    connect(job, &AgentInstanceCreateJob::result, this, &AkonadiResourceCreator::agentInstanceCreated);
     job->start();
 }
 
@@ -133,10 +132,8 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         }
         else
         {
-            connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogAccepted,
-                    this, &AkonadiResourceCreator::configurationDialogAccepted);
-            connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogRejected,
-                    this, &AkonadiResourceCreator::exitWithError);
+            connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogAccepted, this, &AkonadiResourceCreator::configurationDialogAccepted);
+            connect(agentControlIface, &org::freedesktop::Akonadi::Agent::Control::configurationDialogRejected, this, &AkonadiResourceCreator::exitWithError);
         }
         mAgentInstance.configure(mParent);
 
