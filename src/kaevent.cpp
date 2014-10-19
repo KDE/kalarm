@@ -2687,20 +2687,17 @@ void KAEvent::setRecurrence(const KARecurrence &recurrence)
 void KAEventPrivate::setRecurrence(const KARecurrence &recurrence)
 {
     startChanges();   // prevent multiple trigger time evaluation here
-    delete mRecurrence;
     if (recurrence.recurs()) {
+        delete mRecurrence;
         mRecurrence = new KARecurrence(recurrence);
         mRecurrence->setStartDateTime(mStartDateTime.effectiveKDateTime(), mStartDateTime.isDateOnly());
         mTriggerChanged = true;
-    } else {
-        if (mRecurrence) {
-            mTriggerChanged = true;
-        }
-        mRecurrence = 0;
-    }
 
-    // Adjust sub-repetition values to fit the recurrence.
-    setRepetition(mRepetition);
+        // Adjust sub-repetition values to fit the recurrence.
+        setRepetition(mRepetition);
+    } else {
+        clearRecur();
+    }
 
     endChanges();
 }
