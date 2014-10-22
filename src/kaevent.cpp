@@ -265,7 +265,7 @@ public:
     KDateTime          mAtLoginDateTime;   // repeat-at-login end time
     DateTime           mDeferralTime;      // extra time to trigger alarm (if alarm or reminder deferred)
     DateTime           mDisplayingTime;    // date/time shown in the alarm currently being displayed
-    int                mDisplayingFlags;   // type of alarm which is currently being displayed
+    int                mDisplayingFlags;   // type of alarm which is currently being displayed (for display alarm)
     int                mReminderMinutes;   // how long in advance reminder is to be, or 0 if none (<0 for reminder AFTER the alarm)
     DateTime           mReminderAfterTime; // if mReminderActive true, time to trigger reminder AFTER the main alarm, or invalid if not pending
     ReminderType       mReminderActive;    // whether a reminder is due (before next, or after last, main alarm/recurrence)
@@ -537,7 +537,8 @@ KAEvent::KAEvent(const KDateTime &dt, const QString &message, const QColor &bg, 
 
 KAEventPrivate::KAEventPrivate(const KDateTime &dt, const QString &message, const QColor &bg, const QColor &fg, const QFont &f,
                                KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags, bool changesPending)
-    : mRecurrence(0)
+    : mRevision(0),
+      mRecurrence(0)
 {
     set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending);
 }
@@ -1057,12 +1058,12 @@ void KAEventPrivate::set(const Event::Ptr &event)
     } else if (mRepetition) {
         // Convert a repetition with no recurrence into a recurrence
         if (mRepetition.isDaily()) {
-            recur->setDaily(mRepetition.intervalDays());
+            setRecur(RecurrenceRule::rDaily, mRepetition.intervalDays(), mRepetition.count() + 1, QDate());
         } else {
-            recur->setMinutely(mRepetition.intervalMinutes());
+            setRecur(RecurrenceRule::rMinutely, mRepetition.intervalMinutes(), mRepetition.count() + 1, KDateTime());
         }
-        recur->setDuration(mRepetition.count() + 1);
         mRepetition.set(0, 0);
+        mTriggerChanged = true;
     }
 
     if (mRepeatAtLogin) {
