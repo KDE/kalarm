@@ -67,7 +67,6 @@ using namespace KCalUtils;
 #include <kxmlguifactory.h>
 #include <ktoggleaction.h>
 #include <ktoolbarpopupaction.h>
-#include <KShortcut>
 #include <KTimeZone>
 
 #include <QAction>
@@ -417,7 +416,7 @@ void MainWindow::hideEvent(QHideEvent* he)
 */
 void MainWindow::initActions()
 {
-    KShortcut dummy;
+    //KShortcut dummy;
     KActionCollection* actions = actionCollection();
 
     mActionTemplates = new QAction(i18nc("@action", "&Templates..."), this);
