@@ -27,7 +27,7 @@
 #include <AkonadiCore/agentfilterproxymodel.h>
 #include <AkonadiCore/agentinstancecreatejob.h>
 #include <AkonadiCore/agentmanager.h>
-#include <AkonadiCore/dbusconnectionpool.h>
+#include <kdbusconnectionpool.h>
 #include <AkonadiWidgets/agenttypedialog.h>
 
 #include <kmessagebox.h>
@@ -123,7 +123,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         // notified of the user cancelling the operation.
         org::freedesktop::Akonadi::Agent::Control* agentControlIface =
                     new org::freedesktop::Akonadi::Agent::Control(QLatin1String("org.freedesktop.Akonadi.Agent.") + mAgentInstance.identifier(),
-                                                                  QLatin1String("/"), DBusConnectionPool::threadConnection(), this);
+                                                                  QLatin1String("/"), KDBusConnectionPool::threadConnection(), this);
         bool controlOk = agentControlIface && agentControlIface->isValid();
         if (!controlOk)
         {
