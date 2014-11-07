@@ -33,6 +33,10 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${KAlarmCal_SOURCE_DIR})
   find_package(KF5CalendarCore ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
   find_package(KF5IdentityManagement ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
   find_package(KF5Holidays ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
+else()
+  # IMPORTED targets are scoped, so KF5::AkonadiPrivate found in ../akonadi
+  # won't work here, and it is a PUBLIC dependency of KF5::Akonadi
+  find_package(KF5AkonadiServer ${KF5AkonadiServer_MIN_VERSION} CONFIG REQUIRED)
 endif()
 
 add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
