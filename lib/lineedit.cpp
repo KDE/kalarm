@@ -22,7 +22,7 @@
 #include "lineedit.h"
 
 #include <libkdepim/misc/maillistdrag.h>
-#include <kabc/vcarddrag.h>
+#include <kcontacts/vcarddrag.h>
 #include <KCalUtils/kcalutils/icaldrag.h>
 
 #include <kurl.h>
@@ -108,7 +108,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
         ok = (data->hasText()
            || KUrl::List::canDecode(data)
            || (mType != Url && KPIM::MailList::canDecode(data))
-           || (mType == Emails && KABC::VCardDrag::canDecode(data)));
+           || (mType == Emails && KContacts::VCardDrag::canDecode(data)));
     if (ok)
         e->accept(rect());
     else
@@ -121,7 +121,7 @@ void LineEdit::dropEvent(QDropEvent* e)
     QString               newText;
     QStringList           newEmails;
     KUrl::List            files;
-    KABC::Addressee::List addrList;
+    KContacts::Addressee::List addrList;
 
     if (mType != Url
     &&  KPIM::MailList::canDecode(data))
@@ -138,10 +138,10 @@ void LineEdit::dropEvent(QDropEvent* e)
     }
     // This must come before KUrl
     else if (mType == Emails
-    &&  KABC::VCardDrag::canDecode(data)  &&  KABC::VCardDrag::fromMimeData(data, addrList))
+    &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
     {
         // KAddressBook entries
-        for (KABC::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
+        for (KContacts::Addressee::List::Iterator it = addrList.begin();  it != addrList.end();  ++it)
         {
             QString em((*it).fullEmail());
             if (!em.isEmpty())

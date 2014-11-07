@@ -28,7 +28,7 @@
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiCore/session.h>
-#include <kabc/addressee.h>
+#include <kcontacts/addressee.h>
 
 #include <kglobal.h>
 #include <QLocale>
@@ -65,7 +65,7 @@ BirthdayModel* BirthdayModel::instance()
         recorder->fetchCollection(true);
         recorder->setItemFetchScope(scope);
         recorder->setCollectionMonitored(Akonadi::Collection::root());
-        recorder->setMimeTypeMonitored(KABC::Addressee::mimeType(), true);
+        recorder->setMimeTypeMonitored(KContacts::Addressee::mimeType(), true);
 
         mInstance = new BirthdayModel(recorder);
     }
