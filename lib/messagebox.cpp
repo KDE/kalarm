@@ -23,7 +23,6 @@
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <kglobal.h>
 
 
 QMap<QString, KMessageBox::ButtonCode> KAMessageBox::mContinueDefaults;

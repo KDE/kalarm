@@ -23,7 +23,6 @@
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include <kglobal.h>
 
 #include <QHeaderView>
 #include <QApplication>

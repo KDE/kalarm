@@ -57,7 +57,6 @@
 #include <khbox.h>
 #include <kvbox.h>
 #include <kwindowsystem.h>
-#include <KIcon>
 #include <KTimeZone>
 
 #include <QLabel>
@@ -215,8 +214,8 @@ void EditAlarmDlg::init(const KAEvent* event)
     setButtons((mReadOnly ? Cancel|Try|Default : mTemplate ? Ok|Cancel|Try|Default : Ok|Cancel|Try|Help|Default));
     setDefaultButton(mReadOnly ? Cancel : Ok);
     setButtonText(Help, i18nc("@action:button", "Load Template..."));
-    setButtonIcon(Help, KIcon());
-    setButtonIcon(Default, KIcon());
+    setButtonIcon(Help, QIcon());
+    setButtonIcon(Default, QIcon());
     connect(this, &EditAlarmDlg::tryClicked, this, &EditAlarmDlg::slotTry);
     connect(this, &EditAlarmDlg::defaultClicked, this, &EditAlarmDlg::slotDefault); // More/Less Options button
     connect(this, &EditAlarmDlg::helpClicked, this, &EditAlarmDlg::slotHelp); // Load Template button

@@ -40,7 +40,6 @@
 
 #include <KLocalizedString>
 #include <kconfiggroup.h>
-#include <kstandarddirs.h>
 
 #include <QTimer>
 #include <QStandardPaths>

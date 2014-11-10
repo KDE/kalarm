@@ -30,7 +30,6 @@
 #include <AkonadiCore/session.h>
 #include <kcontacts/addressee.h>
 
-#include <kglobal.h>
 #include <QLocale>
 
 using namespace KAlarmCal;
