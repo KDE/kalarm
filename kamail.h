@@ -66,9 +66,7 @@ class KAMail : public QObject
         static QString     convertAddresses(const QString& addresses, KCalCore::Person::List&);
         static QString     convertAttachments(const QString& attachments, QStringList& list);
         static QString     controlCentreAddress();
-#ifdef KMAIL_SUPPORTED
         static QString     getMailBody(quint32 serialNumber);
-#endif
         static QString     i18n_NeedFromEmailAddress();
         static QString     i18n_sent_mail();
 

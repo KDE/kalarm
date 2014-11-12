@@ -61,12 +61,10 @@
 
 #include <pwd.h>
 
-#ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
 
 static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 //static const QLatin1String KMAIL_DBUS_PATH("/KMail");
-#endif
 
 namespace HeaderParsing
 {
@@ -615,7 +613,6 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
     return errs;
 }
 
-#ifdef KMAIL_SUPPORTED
 /******************************************************************************
 * Get the body of an email from KMail, given its serial number.
 */
@@ -635,7 +632,6 @@ QString KAMail::getMailBody(quint32 serialNumber)
     }
     return reply.value();
 }
-#endif
 
 /******************************************************************************
 * Extract the pure addresses from given email addresses.

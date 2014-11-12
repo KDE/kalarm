@@ -96,11 +96,9 @@ static FullScreenType haveFullScreenWindow(int screen);
 static FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<FullScreenType>& screenTypes);
 #endif
 
-#ifdef KMAIL_SUPPORTED
 #include "kmailinterface.h"
 static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
 static const QLatin1String KMAIL_DBUS_PATH("/KMail");
-#endif
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -182,11 +180,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mDefaultDeferMinutes(event->deferDefaultMinutes()),
       mAlarmType(alarm.type()),
       mAction(event->actionSubType()),
-#ifdef KMAIL_SUPPORTED
       mKMailSerialNumber(event->kmailSerialNumber()),
-#else
-      mKMailSerialNumber(0),
-#endif
       mCommandError(event->commandError()),
       mRestoreHeight(0),
       mAudioRepeatPause(event->repeatSoundPause()),
@@ -2011,7 +2005,6 @@ void MessageWin::slotOk()
     close();
 }
 
-#ifdef KMAIL_SUPPORTED
 /******************************************************************************
 * Called when the KMail button is clicked.
 * Tells KMail to display the email message displayed in this message window.
@@ -2034,7 +2027,6 @@ void MessageWin::slotShowKMailMessage()
     else if (!reply.value())
         KAMessageBox::sorry(this, xi18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }
-#endif
 
 /******************************************************************************
 * Called when the Edit... button is clicked.

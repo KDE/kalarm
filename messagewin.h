@@ -108,9 +108,7 @@ class MessageWin : public MainWindowBase
         void                checkDeferralLimit();
         void                displayMainWindow();
         void                showRestoredAlarm();
-#ifdef KMAIL_SUPPORTED
         void                slotShowKMailMessage();
-#endif
         void                slotSpeak();
         void                audioTerminating();
         void                startAudio();

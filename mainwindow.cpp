@@ -1297,7 +1297,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
                            getMailHeader("Subject", content),
                    body, sernum);
     }
-#ifdef KMAIL_SUPPORTED
     else if (KPIM::MailList::canDecode(data))
     {
         mailList = KPIM::MailList::fromMimeData(data);
@@ -1313,7 +1312,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
                            KLocale::global()->formatDateTime(dt), summary.subject(),
                            body, summary.serialNumber());
     }
-#endif
     else if (ICalDrag::fromMimeData(data, calendar))
     {
         // iCalendar - If events are included, use the first event
