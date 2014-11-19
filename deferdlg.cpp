@@ -30,7 +30,6 @@
 #include <kalarmcal/datetime.h>
 #include <kalarmcal/kaevent.h>
 
-#include <kglobal.h>
 #include <KLocalizedString>
 
 #include <QVBoxLayout>

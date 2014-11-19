@@ -21,7 +21,7 @@
 #include "pushbutton.h"
 
 #include <KGuiItem>
-#include <KIcon>
+#include <QIcon>
 #include <QMouseEvent>
 #include <QKeyEvent>
 
@@ -48,7 +48,7 @@ PushButton::PushButton(const QString& text, QWidget* parent)
       mNoHighlight(false)
 { }
 
-PushButton::PushButton(const KIcon& icon, const QString& text, QWidget* parent)
+PushButton::PushButton(const QIcon& icon, const QString& text, QWidget* parent)
     : QPushButton(icon, text, parent),
       mFocusPolicy(focusPolicy()),
       mReadOnly(false),

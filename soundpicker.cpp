@@ -28,8 +28,7 @@
 #include "sounddlg.h"
 #include "soundpicker.h"
 
-#include <KIcon>
-#include <kglobal.h>
+#include <QIcon>
 #include <KLocalizedString>
 #include <kfiledialog.h>
 #include <kiconloader.h>
@@ -94,7 +93,7 @@ SoundPicker::SoundPicker(QWidget* parent)
 
     // Sound file picker button
     mFilePicker = new PushButton(this);
-    mFilePicker->setIcon(KIcon(SmallIcon(QLatin1String("audio-x-generic"))));
+    mFilePicker->setIcon(QIcon(SmallIcon(QLatin1String("audio-x-generic"))));
     int size = mFilePicker->sizeHint().height();
     mFilePicker->setFixedSize(size, size);
     connect(mFilePicker, &PushButton::clicked, this, &SoundPicker::slotPickFile);

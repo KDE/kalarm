@@ -30,7 +30,7 @@
 #include "soundpicker.h"
 #include "spinbox.h"
 
-#include <KIcon>
+#include <QIcon>
 #include <KGlobal>
 #include <KLocalizedString>
 #include <kstandarddirs.h>
@@ -189,7 +189,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     // File browse button
     mFileBrowseButton = new PushButton(box);
     boxHLayout->addWidget(mFileBrowseButton);
-    mFileBrowseButton->setIcon(KIcon(SmallIcon(QLatin1String("document-open"))));
+    mFileBrowseButton->setIcon(QIcon(SmallIcon(QLatin1String("document-open"))));
     int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
     connect(mFileBrowseButton, &PushButton::clicked, this, &SoundWidget::slotPickFile);

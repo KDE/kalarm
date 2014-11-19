@@ -33,7 +33,6 @@
 #include <KCalCore/ICalFormat>
 
 #include <KTimeZone>
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <kstandarddirs.h>
 #include <kio/netaccess.h>

@@ -39,7 +39,6 @@
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <KLocalizedString>
-#include <kglobal.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>
 #include <kstandardaction.h>

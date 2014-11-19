@@ -24,7 +24,6 @@
 #include "checkbox.h"
 #include "fontcolour.h"
 
-#include <kglobal.h>
 #include <kfontchooser.h>
 #include <kfontdialog.h>
 

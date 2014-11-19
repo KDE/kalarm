@@ -53,7 +53,6 @@
 #include <K4AboutData>
 #include <QTemporaryFile>
 #include <kfileitem.h>
-#include <kglobal.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
 #include <ktoolinvocation.h>

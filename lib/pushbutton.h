@@ -25,7 +25,7 @@
 class QMouseEvent;
 class QKeyEvent;
 class KGuiItem;
-class KIcon;
+class QIcon;
 
 
 /**
@@ -62,7 +62,7 @@ class PushButton : public QPushButton
          *  @param text The text to show on the button.
          *  @param parent The parent object of this widget.
          */
-        PushButton(const KIcon& icon, const QString& text, QWidget* parent);
+        PushButton(const QIcon &icon, const QString& text, QWidget* parent);
         /** Sets whether the push button is read-only for the user.
          *  @param readOnly True to set the widget read-only, false to enable its action.
          *  @param noHighlight True to prevent the button being highlighted on mouse-over.

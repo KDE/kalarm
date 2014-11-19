@@ -69,7 +69,7 @@ using namespace KHolidays;
 #include <kcombobox.h>
 #include <kstandardguiitem.h>
 #include <ksystemtimezone.h>
-#include <kicon.h>
+#include <qicon.h>
 #if KDEPIM_HAVE_X11
 #include <kwindowinfo.h>
 #include <kwindowsystem.h>
@@ -157,37 +157,37 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     mMiscPage = new MiscPrefTab(mTabScrollGroup);
     mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab General preferences", "General"));
     mMiscPageItem->setHeader(i18nc("@title General preferences", "General"));
-    mMiscPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("preferences-other"))));
+    mMiscPageItem->setIcon(QIcon(DesktopIcon(QLatin1String("preferences-other"))));
     addPage(mMiscPageItem);
 
     mTimePage = new TimePrefTab(mTabScrollGroup);
     mTimePageItem = new KPageWidgetItem(mTimePage, i18nc("@title:tab", "Time & Date"));
     mTimePageItem->setHeader(i18nc("@title", "Time and Date"));
-    mTimePageItem->setIcon(KIcon(DesktopIcon(QLatin1String("preferences-system-time"))));
+    mTimePageItem->setIcon(QIcon(DesktopIcon(QLatin1String("preferences-system-time"))));
     addPage(mTimePageItem);
 
     mStorePage = new StorePrefTab(mTabScrollGroup);
     mStorePageItem = new KPageWidgetItem(mStorePage, i18nc("@title:tab", "Storage"));
     mStorePageItem->setHeader(i18nc("@title", "Alarm Storage"));
-    mStorePageItem->setIcon(KIcon(DesktopIcon(QLatin1String("system-file-manager"))));
+    mStorePageItem->setIcon(QIcon(DesktopIcon(QLatin1String("system-file-manager"))));
     addPage(mStorePageItem);
 
     mEmailPage = new EmailPrefTab(mTabScrollGroup);
     mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab Email preferences", "Email"));
     mEmailPageItem->setHeader(i18nc("@title", "Email Alarm Settings"));
-    mEmailPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("internet-mail"))));
+    mEmailPageItem->setIcon(QIcon(DesktopIcon(QLatin1String("internet-mail"))));
     addPage(mEmailPageItem);
 
     mViewPage = new ViewPrefTab(mTabScrollGroup);
     mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
     mViewPageItem->setHeader(i18nc("@title", "View Settings"));
-    mViewPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("preferences-desktop-theme"))));
+    mViewPageItem->setIcon(QIcon(DesktopIcon(QLatin1String("preferences-desktop-theme"))));
     addPage(mViewPageItem);
 
     mEditPage = new EditPrefTab(mTabScrollGroup);
     mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
     mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
-    mEditPageItem->setIcon(KIcon(DesktopIcon(QLatin1String("document-properties"))));
+    mEditPageItem->setIcon(QIcon(DesktopIcon(QLatin1String("document-properties"))));
     addPage(mEditPageItem);
     connect(button(QDialogButtonBox::Ok), SIGNAL(clicked()), SLOT(slotOk()));
     connect(button(QDialogButtonBox::Cancel), SIGNAL(clicked()), SLOT(slotCancel()));
@@ -1333,7 +1333,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSoundFile = new QLineEdit(box);
     mSoundFileLabel->setBuddy(mSoundFile);
     mSoundFileBrowse = new QPushButton(box);
-    mSoundFileBrowse->setIcon(KIcon(SmallIcon(QLatin1String("document-open"))));
+    mSoundFileBrowse->setIcon(QIcon(SmallIcon(QLatin1String("document-open"))));
     int size = mSoundFileBrowse->sizeHint().height();
     mSoundFileBrowse->setFixedSize(size, size);
     connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
