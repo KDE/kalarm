@@ -29,7 +29,6 @@
 
 #include <QStringList>
 #include <QDateTime>
-#include <KLocale>
 
 namespace
 {

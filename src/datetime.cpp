@@ -26,7 +26,6 @@
 #include <ktimezone.h>
 
 #include <QDateTime>
-#include <KLocale>
 
 namespace KAlarmCal
 {
