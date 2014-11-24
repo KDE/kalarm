@@ -163,7 +163,7 @@ void LineEdit::dropEvent(QDropEvent* e)
                 QString mailto = QLatin1String("mailto");
                 for (KUrl::List::Iterator it = files.begin();  it != files.end();  ++it)
                 {
-                    if ((*it).protocol() == mailto)
+                    if ((*it).scheme() == mailto)
                         newEmails.append((*it).path());
                 }
                 break;
@@ -179,7 +179,7 @@ void LineEdit::dropEvent(QDropEvent* e)
         QString txt = data->text();
         if (mType == Emails)
         {
-            // Remove newlines from a list of email addresses, and allow an eventual mailto: protocol
+            // Remove newlines from a list of email addresses, and allow an eventual mailto: scheme
             QString mailto = QLatin1String("mailto:");
             newEmails = txt.split(QRegExp(QLatin1String("[\r\n]+")), QString::SkipEmptyParts);
             for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
