@@ -569,7 +569,7 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 {
     qDebug();
-    KUrl url = KFileDialog::getOpenUrl(KUrl("filedialog:///importalarms"),
+    QUrl url = KFileDialog::getOpenUrl(KUrl("filedialog:///importalarms"),
                                        QString::fromLatin1("*.vcs *.ics|%1").arg(i18nc("@info", "Calendar Files")), parent);
     if (url.isEmpty())
     {
@@ -581,7 +581,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
         qDebug() << "Invalid URL";
         return false;
     }
-    qDebug() << url.prettyUrl();
+    qDebug() << url.toDisplayString();
 
     bool success = true;
     QString filename;
@@ -591,8 +591,8 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
         filename = url.toLocalFile();
         if (!KStandardDirs::exists(filename))
         {
-            qDebug() << "File '" << url.prettyUrl() <<"' not found";
-            KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.prettyUrl()));
+            qDebug() << "File '" << url.toDisplayString() <<"' not found";
+            KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
             return false;
         }
     }
@@ -601,7 +601,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
         if (!KIO::NetAccess::download(url, filename, MainWindow::mainMainWindow()))
         {
             qCritical() << "Download failure";
-            KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.prettyUrl()));
+            KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.toDisplayString()));
             return false;
         }
         qDebug() << "--- Downloaded to" << filename;
@@ -614,7 +614,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     if (!success)
     {
         qDebug() << "Error loading calendar '" << filename <<"'";
-        KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.prettyUrl()));
+        KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));
     }
     else
     {
