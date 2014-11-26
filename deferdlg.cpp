@@ -167,5 +167,4 @@ void DeferAlarmDlg::slotCancelDeferral()
     mAlarmDateTime = DateTime();
     accept();
 }
-#include "moc_deferdlg.cpp"
 // vim: et sw=4:
