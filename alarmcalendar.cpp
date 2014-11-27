@@ -1555,6 +1555,6 @@ KACalendar::Compat fix(const FileStorage::Ptr& fileStorage)
         return KACalendar::Incompatible;  // calendar was created by another program, or an unknown version of KAlarm
     return KACalendar::Current;
 }
-#include "moc_alarmcalendar.cpp"
+
 
 // vim: et sw=4:

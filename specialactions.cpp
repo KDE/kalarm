@@ -276,6 +276,6 @@ void SpecialActions::slotPreActionChanged(const QString& text)
     }
 }
 
-#include "moc_specialactions.cpp"
+
 
 // vim: et sw=4:

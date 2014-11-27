@@ -227,5 +227,5 @@ void Reminder::setDefaultUnits(const KDateTime& dt)
     }
     mTime->setUnits(units);
 }
-#include "moc_reminder.cpp"
+
 // vim: et sw=4:

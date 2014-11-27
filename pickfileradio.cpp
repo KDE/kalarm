@@ -187,5 +187,5 @@ void PickFileRadio::setLastButton()
         mLastButton->setChecked(true);
     mRevertButton = false;
 }
-#include "moc_pickfileradio.cpp"
+
 // vim: et sw=4:

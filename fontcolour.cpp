@@ -226,6 +226,6 @@ void FontColourChooser::slotDefaultFontToggled(bool on)
 {
     mFontChooser->setEnabled(!on);
 }
-#include "moc_fontcolour.cpp"
+
 
 // vim: et sw=4:

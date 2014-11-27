@@ -699,5 +699,5 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
         emit changed(KDateTime(dt.date(), dt.time(), mTimeSpec));
     }
 }
-#include "moc_alarmtimewidget.cpp"
+
 // vim: et sw=4:

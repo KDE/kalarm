@@ -48,5 +48,5 @@ void StartOfDayTimer::startOfDayChanged()
     changeTime(Preferences::startOfDay(), true);
 }
 
-#include "moc_startdaytimer.cpp"
+
 // vim: et sw=4:

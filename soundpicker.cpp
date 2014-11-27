@@ -335,6 +335,6 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
     return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
 }
 
-#include "moc_soundpicker.cpp"
+
 
 // vim: et sw=4:

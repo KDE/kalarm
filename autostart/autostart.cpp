@@ -103,5 +103,5 @@ void AutostartApp::slotAutostart()
     }
     exit();
 }
-#include "moc_autostart.cpp"
+
 // vim: et sw=4:

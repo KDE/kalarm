@@ -119,5 +119,5 @@ void AlarmListView::dataChanged(const QModelIndex& topLeft, const QModelIndex& b
     }
 }
 */
-#include "moc_alarmlistview.cpp"
+
 // vim: et sw=4:

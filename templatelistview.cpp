@@ -51,5 +51,5 @@ void TemplateListDelegate::edit(KAEvent* event, EventListView* view)
 {
     KAlarm::editTemplate(event, static_cast<TemplateListView*>(view));
 }
-#include "moc_templatelistview.cpp"
+
 // vim: et sw=4:

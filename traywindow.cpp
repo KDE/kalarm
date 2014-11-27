@@ -415,5 +415,5 @@ void TrayWindow::removeWindow(MainWindow* win)
     if (win == mAssocMainWindow)
         mAssocMainWindow = 0;
 }
-#include "moc_traywindow.cpp"
+
 // vim: et sw=4:

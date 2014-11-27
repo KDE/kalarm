@@ -30,5 +30,5 @@ MainWindowBase::MainWindowBase(QWidget* parent, Qt::WindowFlags f)
     setWindowModality(Qt::WindowModal);
 }
 
-#include "moc_mainwindowbase.cpp"
+
 // vim: et sw=4:

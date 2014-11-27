@@ -557,5 +557,5 @@ bool DBusHandler::convertRecurrence(KARecurrence& recurrence, const KDateTime& s
     recurrence.set(type, recurInterval, recurCount, start, end);
     return true;
 }
-#include "moc_dbushandler.cpp"
+
 // vim: et sw=4:

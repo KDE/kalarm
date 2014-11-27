@@ -171,6 +171,6 @@ void CollectionSearch::finish()
     deleteLater();
 }
 
-#include "moc_collectionsearch.cpp"
+
 
 // vim: et sw=4:

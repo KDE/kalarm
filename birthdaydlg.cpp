@@ -370,5 +370,5 @@ void BirthdayDlg::slotTextLostFocus()
         mBirthdaySortModel->setPrefixSuffix(mPrefixText, mSuffixText);
     }
 }
-#include "moc_birthdaydlg.cpp"
+
 // vim: et sw=4:

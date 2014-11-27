@@ -114,5 +114,5 @@ void TemplatePickDlg::resizeEvent(QResizeEvent* re)
     QDialog::resizeEvent(re);
 }
 
-#include "moc_templatepickdlg.cpp"
+
 // vim: et sw=4:

@@ -561,5 +561,5 @@ void SoundWidget::slotFadeToggled(bool on)
     mFadeVolumeBox->setEnabled(on);
     emit changed();
 }
-#include "moc_sounddlg.cpp"
+
 // vim: et sw=4:

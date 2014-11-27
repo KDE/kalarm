@@ -113,5 +113,5 @@ void NewAlarmAction::slotCalendarStatusChanged()
     mTemplateAction->setEnabled(active && haveEvents);
     setEnabled(active);
 }
-#include "moc_newalarmaction.cpp"
+
 // vim: et sw=4:
