@@ -85,6 +85,7 @@ WakeFromSuspendDlg::~WakeFromSuspendDlg()
 {
     if (mInstance == this)
         mInstance = 0;
+    delete mUi;
 }
 
 /******************************************************************************
