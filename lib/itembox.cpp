@@ -33,5 +33,5 @@ void ItemBox::leftAlign()
 {
     mLayout->addStretch();
 }
-#include "moc_itembox.cpp"
+
 // vim: et sw=4:

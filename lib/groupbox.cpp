@@ -91,5 +91,5 @@ void GroupBox::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QGroupBox::keyReleaseEvent(e);
 }
-#include "moc_groupbox.cpp"
+
 // vim: et sw=4:

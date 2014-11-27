@@ -326,5 +326,5 @@ QValidator::State TimeSpinBox::validate(QString& text, int&) const
     }
     return state;
 }
-#include "moc_timespinbox.cpp"
+
 // vim: et sw=4:

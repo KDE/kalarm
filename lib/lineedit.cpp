@@ -210,5 +210,5 @@ void LineEdit::dropEvent(QDropEvent* e)
     if (!newText.isEmpty())
         insert(newText);
 }
-#include "moc_lineedit.cpp"
+
 // vim: et sw=4:

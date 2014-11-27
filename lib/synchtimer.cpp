@@ -238,5 +238,5 @@ void DailyTimer::slotTimer()
     mTimer->start(interval * 1000);    // execute a single shot
     qDebug() << "at" << mTime.hour() << ":" << mTime.minute() << ": interval =" << interval/3600 << ":" << (interval/60)%60 << ":" << interval%60;
 }
-#include "moc_synchtimer.cpp"
+
 // vim: et sw=4:

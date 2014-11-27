@@ -213,5 +213,5 @@ void TimeEdit::setAmPmCombo(int am, int pm)
         mAmPm->setCurrentIndex(mAmIndex);
     }
 }
-#include "moc_timeedit.cpp"
+
 // vim: et sw=4:

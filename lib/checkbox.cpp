@@ -135,5 +135,5 @@ void CheckBox::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QCheckBox::keyReleaseEvent(e);
 }
-#include "moc_checkbox.cpp"
+
 // vim: et sw=4:

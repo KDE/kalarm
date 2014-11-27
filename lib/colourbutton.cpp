@@ -70,5 +70,5 @@ void ColourButton::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         KColorButton::keyReleaseEvent(e);
 }
-#include "moc_colourbutton.cpp"
+
 // vim: et sw=4:

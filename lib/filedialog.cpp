@@ -82,5 +82,5 @@ void FileDialog::appendToggled(bool ticked)
 {
     setConfirmOverwrite(!ticked);
 }
-#include "moc_filedialog.cpp"
+
 // vim: et sw=4:

@@ -87,5 +87,5 @@ void Slider::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QSlider::keyReleaseEvent(e);
 }
-#include "moc_slider.cpp"
+
 // vim: et sw=4:

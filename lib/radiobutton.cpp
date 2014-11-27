@@ -136,5 +136,5 @@ void RadioButton::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         QRadioButton::keyReleaseEvent(e);
 }
-#include "moc_radiobutton.cpp"
+
 // vim: et sw=4:

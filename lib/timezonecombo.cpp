@@ -53,5 +53,5 @@ void TimeZoneCombo::setTimeZone(const KTimeZone& tz)
     if (index >= 0)
         setCurrentIndex(index);
 }
-#include "moc_timezonecombo.cpp"
+
 // vim: et sw=4:

@@ -73,5 +73,5 @@ void ComboBox::keyReleaseEvent(QKeyEvent* e)
     if (!mReadOnly)
         KComboBox::keyReleaseEvent(e);
 }
-#include "moc_combobox.cpp"
+
 // vim: et sw=4:

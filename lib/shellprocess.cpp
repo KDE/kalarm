@@ -222,5 +222,5 @@ bool ShellProcess::authorised()
     }
     return mAuthorised;
 }
-#include "moc_shellprocess.cpp"
+
 // vim: et sw=4:
