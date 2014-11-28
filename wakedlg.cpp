@@ -58,7 +58,6 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
     setButtons(Close);
     mUi = new Ui_WakeFromSuspendDlgWidget;
     mUi->setupUi(mainWidget());
-    KConfigGroup config(KSharedConfig::openConfig(), "General");
     mUi->advanceWakeTime->setValue(Preferences::wakeFromSuspendAdvance());
 
     mMainWindow = qobject_cast<MainWindow*>(parent);
@@ -86,6 +85,7 @@ WakeFromSuspendDlg::~WakeFromSuspendDlg()
 {
     if (mInstance == this)
         mInstance = 0;
+    delete mUi;
 }
 
 /******************************************************************************
