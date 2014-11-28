@@ -130,7 +130,7 @@ class SpinBox : public QSpinBox
          */
         virtual int  shiftStepAdjustment(int oldValue, int shiftStep);
         /** Receives events destined for the spin widget or for the edit field. */
-        virtual bool eventFilter(QObject*, QEvent*);
+        bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
         virtual void paintEvent(QPaintEvent*);
         virtual void focusOutEvent(QFocusEvent*);
