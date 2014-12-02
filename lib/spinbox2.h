@@ -262,7 +262,7 @@ class SpinBox2 : public QFrame
         void             init();
         void             arrange();
         void             updateMirror();
-        bool             eventFilter(QObject*, QEvent*);
+        bool             eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
         void             spinboxResized(QResizeEvent*);
         void             setUpdown2Size();
         int              whichButton(QObject* spinWidget, const QPoint&);
