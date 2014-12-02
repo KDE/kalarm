@@ -90,9 +90,9 @@ class EditAlarmDlg : public KDialog
         EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
                      GetResourceType = RES_PROMPT, bool readOnly = false);
         void            init(const KAEvent* event);
-        virtual void    resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
-        virtual void    showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        virtual void    closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+        void    resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void    showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void    closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
         virtual QString type_caption() const = 0;
         virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
         virtual void    type_initValues(const KAEvent*) = 0;
