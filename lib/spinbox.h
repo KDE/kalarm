@@ -132,15 +132,15 @@ class SpinBox : public QSpinBox
         /** Receives events destined for the spin widget or for the edit field. */
         bool eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
-        virtual void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
-        virtual void focusOutEvent(QFocusEvent*) Q_DECL_OVERRIDE;
-        virtual void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void mouseDoubleClickEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        virtual void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        virtual void wheelEvent(QWheelEvent*) Q_DECL_OVERRIDE;
+        void paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+        void focusOutEvent(QFocusEvent*) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void mouseDoubleClickEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void wheelEvent(QWheelEvent*) Q_DECL_OVERRIDE;
 
     private slots:
         void         textEdited();

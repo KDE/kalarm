@@ -71,12 +71,12 @@ class PushButton : public QPushButton
         /** Returns true if the widget is read only. */
         virtual bool  isReadOnly() const  { return mReadOnly; }
     protected:
-        virtual void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        virtual void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        virtual bool event(QEvent*) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        bool event(QEvent*) Q_DECL_OVERRIDE;
     private:
         Qt::FocusPolicy mFocusPolicy;   // default focus policy for the PushButton
         bool            mReadOnly;      // value cannot be changed

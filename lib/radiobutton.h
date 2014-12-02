@@ -71,11 +71,11 @@ class RadioButton : public QRadioButton
          */
         void     setFocusWidget(QWidget* widget, bool enable = true);
     protected:
-        virtual void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        virtual void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        virtual void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
     protected slots:
         void         slotClicked();
     private:

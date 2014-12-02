@@ -85,9 +85,9 @@ class LineEdit : public KLineEdit
         /** Sets the contents of the line edit to be @p str. */
         virtual void setText(const QString& str);
     protected:
-        virtual void focusInEvent(QFocusEvent*) Q_DECL_OVERRIDE;
-        virtual void dragEnterEvent(QDragEnterEvent*) Q_DECL_OVERRIDE;
-        virtual void dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
+        void focusInEvent(QFocusEvent*) Q_DECL_OVERRIDE;
+        void dragEnterEvent(QDragEnterEvent*) Q_DECL_OVERRIDE;
+        void dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
     private:
         void         init();
 
