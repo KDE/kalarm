@@ -60,8 +60,8 @@ class SoundWidget : public QWidget
         void           changed();      // emitted whenever any contents change
 
     protected:
-        virtual void   showEvent(QShowEvent*);
-        virtual void   resizeEvent(QResizeEvent*);
+        virtual void   showEvent(QShowEvent* Q_DECL_OVERRIDE);
+        void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     private slots:
         void           slotPickFile();

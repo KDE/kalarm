@@ -91,10 +91,10 @@ class MessageWin : public MainWindowBase
         static bool         spread(bool scatter);
 
     protected:
-        virtual void        showEvent(QShowEvent*);
-        virtual void        moveEvent(QMoveEvent*);
-        virtual void        resizeEvent(QResizeEvent*);
-        virtual void        closeEvent(QCloseEvent*);
+        void        showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void        moveEvent(QMoveEvent*) Q_DECL_OVERRIDE;
+        void        resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void        closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
         virtual void        saveProperties(KConfigGroup&);
         virtual void        readProperties(const KConfigGroup&);
 

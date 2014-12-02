@@ -90,12 +90,12 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         void           selectionChanged();
 
     protected:
-        virtual void   resizeEvent(QResizeEvent*);
-        virtual void   showEvent(QShowEvent*);
-        virtual void   hideEvent(QHideEvent*);
-        virtual void   closeEvent(QCloseEvent*);
+        void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void   showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void   hideEvent(QHideEvent*) Q_DECL_OVERRIDE;
+        void   closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
         virtual void   dragEnterEvent(QDragEnterEvent* e)  { executeDragEnterEvent(e); }
-        virtual void   dropEvent(QDropEvent*);
+        void   dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
         virtual void   saveProperties(KConfigGroup&);
         virtual void   readProperties(const KConfigGroup&);
 
