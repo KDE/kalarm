@@ -134,13 +134,13 @@ public:
     void setKeepFormat(bool keep);
 
     // Reimplemented from Attribute
-    virtual QByteArray type() const;
+    virtual QByteArray type() const Q_DECL_OVERRIDE;
     // Reimplemented from Attribute
-    virtual CollectionAttribute *clone() const;
+    virtual CollectionAttribute *clone() const Q_DECL_OVERRIDE;
     // Reimplemented from Attribute
-    virtual QByteArray serialized() const;
+    virtual QByteArray serialized() const Q_DECL_OVERRIDE;
     // Reimplemented from Attribute
-    virtual void deserialize(const QByteArray &data);
+    virtual void deserialize(const QByteArray &data) Q_DECL_OVERRIDE;
 
     /** Return the attribute name. */
     static QByteArray name();
