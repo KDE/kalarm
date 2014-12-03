@@ -240,8 +240,8 @@ class SpinBox2 : public QFrame
     protected:
         virtual QString  textFromValue(int v) const    { return mSpinbox->textFromVal(v); }
         virtual int      valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
-        virtual void     paintEvent(QPaintEvent*);
-        virtual void     showEvent(QShowEvent*);
+        void     paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+        virtual void     showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         virtual void     styleChange(QStyle&);
         virtual void     getMetrics() const;
 
