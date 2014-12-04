@@ -241,7 +241,7 @@ class SpinBox2 : public QFrame
         virtual QString  textFromValue(int v) const    { return mSpinbox->textFromVal(v); }
         virtual int      valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
         void     paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
-        virtual void     showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void     showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         virtual void     styleChange(QStyle&);
         virtual void     getMetrics() const;
 
