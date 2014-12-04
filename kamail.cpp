@@ -30,7 +30,6 @@
 #include <kalarmcal/identities.h>
 #include <KIdentityManagement/kidentitymanagement/identitymanager.h>
 #include <KIdentityManagement/kidentitymanagement/identity.h>
-#include <KPIMUtils/kpimutils/email.h>
 #include <MailTransport/mailtransport/transportmanager.h>
 #include <MailTransport/mailtransport/transport.h>
 #include <MailTransport/mailtransport/messagequeuejob.h>
@@ -39,6 +38,7 @@
 #include <kmime/kmime_headers.h>
 #include <kmime/kmime_message.h>
 
+#include <KEmailAddress>
 #include <K4AboutData>
 #include <KLocale>
 #include <KUrl>
@@ -638,16 +638,16 @@ QString KAMail::getMailBody(quint32 serialNumber)
 */
 QString extractEmailAndNormalize(const QString& emailAddress)
 {
-    return KPIMUtils::extractEmailAddress(KPIMUtils::normalizeAddressesAndEncodeIdn(emailAddress));
+    return KEmailAddress::extractEmailAddress(KEmailAddress::normalizeAddressesAndEncodeIdn(emailAddress));
 }
 
 QStringList extractEmailsAndNormalize(const QString& emailAddresses)
 {
-    const QStringList splitEmails(KPIMUtils::splitAddressList(emailAddresses));
+    const QStringList splitEmails(KEmailAddress::splitAddressList(emailAddresses));
     QStringList normalizedEmail;
     Q_FOREACH(const QString& email, splitEmails)
     {
-        normalizedEmail << KPIMUtils::extractEmailAddress(KPIMUtils::normalizeAddressesAndEncodeIdn(email));
+        normalizedEmail << KEmailAddress::extractEmailAddress(KEmailAddress::normalizeAddressesAndEncodeIdn(email));
     }
     return normalizedEmail;
 }

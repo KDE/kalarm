@@ -149,7 +149,7 @@ KF5::AkonadiCore
 KF5::AkonadiMime
 KF5::AkonadiContact
 KF5::Holidays
-KF5::PimUtils
+KF5::Codecs
 kdepim
 KF5::KCMUtils
 Phonon::phonon4qt5
