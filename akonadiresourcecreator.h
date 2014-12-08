@@ -42,10 +42,10 @@ class AkonadiResourceCreator : public QObject
         void createResource();
         Akonadi::AgentInstance agentInstance() const   { return mAgentInstance; }
 
-    signals:
+    Q_SIGNALS:
         void finished(AkonadiResourceCreator*, bool success);
 
-    private slots:
+    private Q_SLOTS:
         void getAgentType();
         void agentInstanceCreated(KJob*);
         void configurationDialogAccepted();

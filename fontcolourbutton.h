@@ -46,11 +46,11 @@ class FontColourButton : public PushButton
                                  { mReadOnly = ro; PushButton::setReadOnly(ro, noHighlight); }
         virtual bool  isReadOnly() const     { return mReadOnly; }
 
-    signals:
+    Q_SIGNALS:
         /** Signal emitted whenever a font or colour has been selected. */
         void          selected(const QColor& fg, const QColor& bg);
 
-    protected slots:
+    protected Q_SLOTS:
         void          slotButtonPressed();
 
     private:
@@ -75,7 +75,7 @@ class FontColourDlg : public KDialog
         void         setReadOnly(bool);
         bool         isReadOnly() const    { return mReadOnly; }
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void slotOk();
 
     private:

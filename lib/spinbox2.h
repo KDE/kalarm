@@ -215,7 +215,7 @@ class SpinBox2 : public QFrame
          */
         virtual void     stepBy(int increment)       { addValue(increment); }
 
-    public slots:
+    public Q_SLOTS:
         /** Sets the current value to @p val. */
         void             setValue(int val)           { mSpinbox->setValue(val); }
         /** Increments the current value by adding the unshifted step increment for
@@ -231,7 +231,7 @@ class SpinBox2 : public QFrame
         /** Sets whether the widget is enabled. */
         virtual void     setEnabled(bool enabled);
 
-    signals:
+    Q_SIGNALS:
         /** Signal which is emitted whenever the value of the spin box changes. */
         void             valueChanged(int value);
         /** Signal which is emitted whenever the value of the spin box changes. */
@@ -249,11 +249,11 @@ class SpinBox2 : public QFrame
         mutable int      wSpinboxHide;    // width at left of 'mSpinbox' hidden by second spin widget
         mutable QPoint   mButtonPos;      // position of buttons inside mirror widget
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void     valueChange();
         virtual void     stepPage(int);
 
-    private slots:
+    private Q_SLOTS:
         void             updateMirrorButtons();
         void             updateMirrorFrame();
         void             paintTimer();

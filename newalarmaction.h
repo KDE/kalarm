@@ -39,10 +39,10 @@ class NewAlarmAction : public KActionMenu
         QAction* audioAlarmAction() const    { return mAudioAction; }
         TemplateMenuAction* fromTemplateAlarmAction() const  { return mTemplateAction; }
 
-    signals:
+    Q_SIGNALS:
         void   selected(EditAlarmDlg::Type);
 
-    private slots:
+    private Q_SLOTS:
         void   slotSelected(QAction*);
         void   slotInitMenu();
         void   slotCalendarStatusChanged();

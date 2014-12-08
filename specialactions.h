@@ -45,11 +45,11 @@ class SpecialActionsButton : public QPushButton
         virtual void   setReadOnly(bool ro)   { mReadOnly = ro; }
         virtual bool   isReadOnly() const     { return mReadOnly; }
 
-    signals:
+    Q_SIGNALS:
         /** Signal emitted whenever the widget has been changed. */
         void           selected();
 
-    protected slots:
+    protected Q_SLOTS:
         void           slotButtonPressed();
 
     private:
@@ -74,7 +74,7 @@ class SpecialActions : public QWidget
         void         setReadOnly(bool);
         bool         isReadOnly() const    { return mReadOnly; }
 
-    private slots:
+    private Q_SLOTS:
         void         slotPreActionChanged(const QString& text);
 
     private:
@@ -105,7 +105,7 @@ class SpecialActionsDlg : public QDialog
     protected:
         void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void slotOk();
 
     private:

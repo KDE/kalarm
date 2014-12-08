@@ -42,10 +42,10 @@ class Find : public QObject
         void        display();
         void        findNext(bool forward)     { findNext(forward, false, false); }
 
-    signals:
+    Q_SIGNALS:
         void        active(bool);
 
-    private slots:
+    private Q_SLOTS:
         void        slotFind();
         void        slotKFindDestroyed()       { emit active(false); }
         void        slotSelectionChanged();

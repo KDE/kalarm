@@ -111,7 +111,7 @@ class ShellProcess : public KProcess
          */
         static const QByteArray& shellPath();
 
-    signals:
+    Q_SIGNALS:
         /** Signal emitted when the shell process execution completes. It is not emitted
          *  if start() did not attempt to start the command execution, e.g. in kiosk mode.
          */
@@ -121,7 +121,7 @@ class ShellProcess : public KProcess
         /** Signal emitted when input is available from the process's stderr. */
         void  receivedStderr(ShellProcess*);
 
-    private slots:
+    private Q_SLOTS:
         void  writtenStdin(qint64 bytes);
         void  stdoutReady()         { emit receivedStdout(this); }
         void  stderrReady()         { emit receivedStderr(this); }

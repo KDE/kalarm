@@ -61,13 +61,13 @@ class ResourceSelector : public QFrame
         void  initActions(KActionCollection*);
         void  setContextMenu(QMenu*);
 
-    signals:
+    Q_SIGNALS:
         void  resized(const QSize& oldSize, const QSize& newSize);
 
     protected:
         void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
-    private slots:
+    private Q_SLOTS:
         void  alarmTypeSelected();
         void  addResource();
         void  editResource();

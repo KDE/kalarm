@@ -56,14 +56,14 @@ class SoundWidget : public QWidget
 
         static QString i18n_chk_Repeat();      // text of Repeat checkbox
 
-    signals:
+    Q_SIGNALS:
         void           changed();      // emitted whenever any contents change
 
     protected:
         virtual void   showEvent(QShowEvent* Q_DECL_OVERRIDE);
         void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
-    private slots:
+    private Q_SLOTS:
         void           slotPickFile();
         void           slotVolumeToggled(bool on);
         void           slotFadeToggled(bool on);
@@ -109,7 +109,7 @@ class SoundDlg : public KDialog
     protected:
         virtual void   resizeEvent(QResizeEvent*);
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void   slotButtonClicked(int button);
 
     private:

@@ -88,13 +88,13 @@ class Preferences : public PreferencesBase
 
         virtual bool useDefaults(bool def)   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
 
-    signals:
+    Q_SIGNALS:
         void  timeZoneChanged(const KTimeZone& newTz);
         void  holidaysChanged(const KHolidays::HolidayRegion& newHolidays);
         void  startOfDayChanged(const QTime& newStartOfDay);
         void  workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
-    private slots:
+    private Q_SLOTS:
         void  timeZoneChange(const QString&);
         void  holidaysChange(const QString& regionCode);
         void  startDayChange(const QDateTime&);

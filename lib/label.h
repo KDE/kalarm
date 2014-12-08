@@ -72,7 +72,7 @@ class Label : public QLabel
          */
         virtual void      setBuddy(QWidget* buddy);
 
-    private slots:
+    private Q_SLOTS:
         void              buddyDead();
 
     private:

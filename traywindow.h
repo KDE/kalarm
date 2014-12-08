@@ -46,10 +46,10 @@ class TrayWindow : public KStatusNotifierItem
         MainWindow*  assocMainWindow() const               { return mAssocMainWindow; }
         void         setAssocMainWindow(MainWindow* win)   { mAssocMainWindow = win; }
 
-    signals:
+    Q_SIGNALS:
         void         deleted();
 
-    private slots:
+    private Q_SLOTS:
         void         slotActivateRequested();
         void         slotSecondaryActivateRequested();
         void         slotNewAlarm(EditAlarmDlg::Type);

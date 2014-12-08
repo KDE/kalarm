@@ -110,7 +110,7 @@ class SpinBox : public QSpinBox
         /** Initialise a QStyleOptionSpinBox with this instance's details. */
         void         initStyleOption(QStyleOptionSpinBox&) const;
 
-    signals:
+    Q_SIGNALS:
         /** Signal emitted when the spin box's value is stepped (by the shifted or unshifted increment).
          *  @param step The requested step in the spin box's value. Note that the actual change in value
          *              may have been less than this.
@@ -142,7 +142,7 @@ class SpinBox : public QSpinBox
         void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
         void wheelEvent(QWheelEvent*) Q_DECL_OVERRIDE;
 
-    private slots:
+    private Q_SLOTS:
         void         textEdited();
         void         valueChange();
     private:

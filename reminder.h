@@ -50,13 +50,13 @@ class Reminder : public QFrame
 
         static QString i18n_chk_FirstRecurrenceOnly();    // text of 'Reminder for first recurrence only' checkbox
 
-    public slots:
+    public Q_SLOTS:
         void           setDefaultUnits(const KDateTime&);
 
-    signals:
+    Q_SIGNALS:
         void           changed();
 
-    private slots:
+    private Q_SLOTS:
         void           slotReminderToggled(bool);
 
     private:

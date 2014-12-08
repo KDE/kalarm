@@ -114,13 +114,13 @@ class TimePeriod : public QWidget
          */
         void          setWhatsThises(const QString& units, const QString& dayWeek, const QString& hourMin = QString());
 
-    signals:
+    Q_SIGNALS:
         /** This signal is emitted whenever the value held in the widget changes.
          *  @param period The current value of the time period.
          */
         void            valueChanged(const KCalCore::Duration& period);
 
-    private slots:
+    private Q_SLOTS:
         void            slotUnitsSelected(int index);
         void            slotDaysChanged(int);
         void            slotTimeChanged(int minutes);

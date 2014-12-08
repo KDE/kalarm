@@ -98,7 +98,7 @@ class MessageWin : public MainWindowBase
         virtual void        saveProperties(KConfigGroup&);
         virtual void        readProperties(const KConfigGroup&);
 
-    private slots:
+    private Q_SLOTS:
         void                slotOk();
         void                slotEdit();
         void                slotDefer();

@@ -59,7 +59,7 @@ class KAlarmPrefDlg : public KPageDialog
         void  showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         void  resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void slotOk();
         virtual void slotApply();
         virtual void slotHelp();

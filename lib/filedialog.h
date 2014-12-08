@@ -35,7 +35,7 @@ class FileDialog : public KFileDialog
         static QString getSaveFileName(const KUrl& dir = KUrl(), const QString& filter = QString(),
                                        QWidget* parent = 0, const QString& caption = QString(), bool* append = 0);
 
-    private slots:
+    private Q_SLOTS:
         void appendToggled(bool);
 
     private:

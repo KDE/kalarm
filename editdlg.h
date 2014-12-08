@@ -118,14 +118,14 @@ class EditAlarmDlg : public KDialog
         Reminder*       reminder() const           { return mReminder; }
         LateCancelSelector* lateCancel() const     { return mLateCancel; }
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void    slotTry();
         virtual void    slotHelp();      // Load Template
         virtual void    slotDefault();   // More/Less Options
         virtual void    slotButtonClicked(int button);
         void            contentsChanged();
 
-    private slots:
+    private Q_SLOTS:
         void            slotRecurTypeChange(int repeatType);
         void            slotRecurFrequencyChange();
         void            slotEditDeferral();

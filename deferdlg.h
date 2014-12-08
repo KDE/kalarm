@@ -44,11 +44,11 @@ class DeferAlarmDlg : public KDialog
         void             setDeferMinutes(int mins);
         int              deferMinutes() const  { return mDeferMinutes; }
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void     slotOk();
         virtual void     slotCancelDeferral();
 
-    private slots:
+    private Q_SLOTS:
         void             slotPastLimit();
 
     private:

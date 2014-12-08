@@ -129,10 +129,10 @@ class SoundPicker : public QFrame
         static QString i18n_combo_Speak();  // text of Speak combo box item
         static QString i18n_combo_File();   // text of File combo box item
 
-    signals:
+    Q_SIGNALS:
         void           changed();     // emitted when any contents change
 
-    private slots:
+    private Q_SLOTS:
         void           slotTypeSelected(int id);
         void           slotPickFile();
         void           setLastType();

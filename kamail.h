@@ -70,7 +70,7 @@ class KAMail : public QObject
         static QString     i18n_NeedFromEmailAddress();
         static QString     i18n_sent_mail();
 
-    private slots:
+    private Q_SLOTS:
         void               slotEmailSent(KJob*);
 
     private:

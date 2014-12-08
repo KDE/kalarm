@@ -57,10 +57,10 @@ class SynchTimer : public QObject
 
         QTimer*             mTimer;
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void        slotTimer() = 0;
 
-    private slots:
+    private Q_SLOTS:
         void                slotReceiverGone(QObject* r)  { disconnecT(r); }
 
     private:
@@ -97,7 +97,7 @@ class MinuteTimer : public SynchTimer
         static MinuteTimer* instance();
         virtual void        start()    { slotTimer(); }
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void slotTimer();
 
     private:
@@ -160,7 +160,7 @@ class DailyTimer : public SynchTimer
         static DailyTimer* fixedInstance(const QTime& timeOfDay, bool create = true);
         virtual void start();
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void slotTimer();
 
     private:

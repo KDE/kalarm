@@ -92,20 +92,20 @@ class TimeEdit : public QWidget
         /** Sets the maximum value of the widget. */
         void          setMaximum(const QTime& time)  { setMaximum(time.hour()*60 + time.minute()); }
 
-    public slots:
+    public Q_SLOTS:
         /** Sets the value of the widget. */
         virtual void  setValue(int minutes);
         /** Sets the value of the widget. */
         void          setValue(const QTime& t)     { setValue(t.hour()*60 + t.minute()); }
 
-    signals:
+    Q_SIGNALS:
         /** This signal is emitted every time the value of the widget changes
          *  (for whatever reason).
          *  @param minutes The new value.
          */
         void          valueChanged(int minutes);
 
-    private slots:
+    private Q_SLOTS:
         void          slotValueChanged(int);
         void          slotAmPmChanged(int item);
 

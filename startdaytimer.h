@@ -55,7 +55,7 @@ class StartOfDayTimer : public DailyTimer
         StartOfDayTimer();
         static StartOfDayTimer* instance();
 
-    private slots:
+    private Q_SLOTS:
         void startOfDayChanged();
 
     private:

@@ -85,10 +85,10 @@ class CollectionCheckListModel : public KCheckableProxyModel
         virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
         virtual bool setData(const QModelIndex&, const QVariant& value, int role);
 
-    signals:
+    Q_SIGNALS:
         void collectionTypeChange(CollectionCheckListModel*);
 
-    private slots:
+    private Q_SLOTS:
         void selectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
         void slotRowsInserted(const QModelIndex& parent, int start, int end);
         void collectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
@@ -122,7 +122,7 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
-    private slots:
+    private Q_SLOTS:
         void collectionTypeChanged(CollectionCheckListModel*);
 
     private:
@@ -282,7 +282,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         /** Return a bulleted list of alarm types for inclusion in an i18n message. */
         static QString typeListForDisplay(CalEvent::Types);
 
-    private slots:
+    private Q_SLOTS:
         void reset();
         void statusChanged(const Akonadi::Collection&, AkonadiModel::Change, const QVariant& value, bool inserted);
         void collectionPopulated();

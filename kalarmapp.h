@@ -95,7 +95,7 @@ class KAlarmApp : public KUniqueApplication
         bool               dbusDeleteEvent(const EventId& eventID)    { return dbusHandleEvent(eventID, EVENT_CANCEL); }
         QString            dbusList();
 
-    public slots:
+    public Q_SLOTS:
         void               processQueue();
         void               setAlarmsEnabled(bool);
         void               purgeNewArchivedDefault(const Akonadi::Collection&);
@@ -105,7 +105,7 @@ class KAlarmApp : public KUniqueApplication
         void               spreadWindows(bool);
         void               emailSent(KAMail::JobData&, const QStringList& errmsgs, bool copyerr = false);
 
-    signals:
+    Q_SIGNALS:
         void               trayIconToggled();
         void               alarmEnabledToggled(bool);
         void               audioPlaying(bool);
@@ -118,7 +118,7 @@ class KAlarmApp : public KUniqueApplication
     private:
         typedef Preferences::Feb29Type Feb29Type;   // allow it to be used in SIGNAL mechanism
 
-    private slots:
+    private Q_SLOTS:
         void               quitFatal();
         void               checkNextDueAlarm();
         void               checkKtimezoned();

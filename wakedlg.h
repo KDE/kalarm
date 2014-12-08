@@ -34,7 +34,7 @@ class WakeFromSuspendDlg : public KDialog
         static WakeFromSuspendDlg* create(QWidget* parent);
         ~WakeFromSuspendDlg();
 
-    private slots:
+    private Q_SLOTS:
         void enableDisableUseButton();
         void showWakeClicked();
         void useWakeClicked();

@@ -85,7 +85,7 @@ class Undo : public QObject
         // Types for use by UndoItem class and its descendants
         typedef AutoDeleteList<UndoItem> List;
 
-    signals:
+    Q_SIGNALS:
         void               changed(const QString& undo, const QString& redo);
 
     protected:

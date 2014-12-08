@@ -51,14 +51,14 @@ class CalendarMigrator : public QObject
         static bool completed()    { return mCompleted; }
         template <class Interface> static Interface* getAgentInterface(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);
 
-    signals:
+    Q_SIGNALS:
         /** Signal emitted when a resource is about to be created, and when creation has
          *  completed (successfully or not).
          *  @param id    collection ID if @p finished is true, else invalid
          */
         void creating(const QString& path, Akonadi::Collection::Id id, bool finished);
 
-    private slots:
+    private Q_SLOTS:
         void collectionFetchResult(KJob*);
         void creatingCalendar(const QString& path);
         void calendarCreated(CalendarCreator*);

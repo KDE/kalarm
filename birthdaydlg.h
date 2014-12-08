@@ -47,10 +47,10 @@ class BirthdayDlg : public KDialog
         explicit BirthdayDlg(QWidget* parent = 0);
         QVector<KAEvent> events() const;
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void   slotOk();
 
-    private slots:
+    private Q_SLOTS:
         void           slotSelectionChanged();
         void           slotTextLostFocus();
         void           resizeViewColumns();
@@ -81,7 +81,7 @@ class BLineEdit : public QLineEdit
         explicit BLineEdit(QWidget* parent = 0)                       : QLineEdit(parent) { }
         explicit BLineEdit(const QString& text, QWidget* parent = 0)  : QLineEdit(text, parent) { }
 
-    signals:
+    Q_SIGNALS:
         void         focusLost();
 
     protected:

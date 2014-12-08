@@ -39,7 +39,7 @@ class TemplatePickDlg : public QDialog
         KAEvent        selectedTemplate() const;
     protected:
         void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
-    private slots:
+    private Q_SLOTS:
         void           slotSelectionChanged();
     private:
         TemplateListModel* mListFilterModel;

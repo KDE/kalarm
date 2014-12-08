@@ -47,12 +47,12 @@ class EventListView : public QTreeView
         void              setEditOnSingleClick(bool e) { mEditOnSingleClick = e; }
         bool              editOnSingleClick() const    { return mEditOnSingleClick; }
 
-    public slots:
+    public Q_SLOTS:
         virtual void      slotFind();
         virtual void      slotFindNext()       { findNext(true); }
         virtual void      slotFindPrev()       { findNext(false); }
 
-    signals:
+    Q_SIGNALS:
         void              contextMenuRequested(const QPoint& globalPos);
         void              findActive(bool);
 

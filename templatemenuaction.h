@@ -33,10 +33,10 @@ class TemplateMenuAction : public KActionMenu
     public:
         TemplateMenuAction(const QIcon& icon, const QString& label, QObject* parent);
         virtual ~TemplateMenuAction() {}
-    signals:
+    Q_SIGNALS:
         void   selected(const KAEvent*);
 
-    private slots:
+    private Q_SLOTS:
         void   slotInitMenu();
         void   slotSelected(QAction*);
 

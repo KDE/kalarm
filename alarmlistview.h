@@ -36,7 +36,7 @@ class AlarmListView : public EventListView
         virtual void      setModel(QAbstractItemModel*);
         void              selectTimeColumns(bool time, bool timeTo);
 
-    private slots:
+    private Q_SLOTS:
         void              sectionMoved();
 
     private:

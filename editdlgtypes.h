@@ -87,7 +87,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
 
-    private slots:
+    private Q_SLOTS:
         void            slotAlarmTypeChanged(int index);
         void            slotPickFile();
         void            slotCmdScriptToggled(bool);
@@ -170,7 +170,7 @@ class EditCommandAlarmDlg : public EditAlarmDlg
         virtual void    type_executedTry(const QString& text, void* obj);
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
 
-    private slots:
+    private Q_SLOTS:
         void            slotCmdScriptToggled(bool);
 
     private:
@@ -223,7 +223,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         virtual void    type_aboutToTry();
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
 
-    private slots:
+    private Q_SLOTS:
         void            slotTrySuccess();
         void            openAddressBook();
         void            slotAddAttachment();
@@ -285,10 +285,10 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         virtual void    type_executedTry(const QString& text, void* obj);
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const;
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void    slotTry();
 
-    private slots:
+    private Q_SLOTS:
         void            audioWinDestroyed()  { slotAudioPlaying(false); }
         void            slotAudioPlaying(bool playing);
 

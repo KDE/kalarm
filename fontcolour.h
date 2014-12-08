@@ -53,7 +53,7 @@ class FontColourChooser : public QWidget
         void              setReadOnly(bool);
         virtual bool      eventFilter(QObject*, QEvent*);
 
-    private slots:
+    private Q_SLOTS:
         void              setSampleColour();
         void              slotDefaultFontToggled(bool);
 

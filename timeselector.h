@@ -47,11 +47,11 @@ class TimeSelector : public QFrame
         void         setMaximum(int hourmin, int days);
         void         setFocusOnCount();
 
-    signals:
+    Q_SIGNALS:
         void         toggled(bool);             // selection checkbox has been toggled
         void         valueChanged(const KCalCore::Duration&); // value has changed
 
-    protected slots:
+    protected Q_SLOTS:
         void         selectToggled(bool);
         void         periodChanged(const KCalCore::Duration&);
 

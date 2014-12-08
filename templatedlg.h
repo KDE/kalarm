@@ -37,13 +37,13 @@ class TemplateDlg : public KDialog
         static TemplateDlg*  create(QWidget* parent = 0);
         ~TemplateDlg();
 
-    signals:
+    Q_SIGNALS:
         void          emptyToggled(bool notEmpty);
 
     protected:
         void  resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
-    private slots:
+    private Q_SLOTS:
         void          slotNew(EditAlarmDlg::Type);
         void          slotCopy();
         void          slotEdit();

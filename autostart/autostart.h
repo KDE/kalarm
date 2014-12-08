@@ -30,7 +30,7 @@ class AutostartApp : public KApplication
         AutostartApp();
         ~AutostartApp()  {}
 
-    private slots:
+    private Q_SLOTS:
         void slotAutostart();
 };
 

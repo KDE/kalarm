@@ -95,10 +95,10 @@ class RecurrenceEdit : public QFrame
         static QString i18n_combo_Monthly();           // text of 'Monthly' selection
         static QString i18n_combo_Yearly();            // text of 'Yearly' selection
 
-    public slots:
+    public Q_SLOTS:
         void          setDateTime(const KDateTime& start)   { mCurrStartDateTime = start; }
 
-    signals:
+    Q_SIGNALS:
         void          shown();
         void          typeChanged(int recurType);   // returns a RepeatType value
         void          frequencyChanged();
@@ -108,7 +108,7 @@ class RecurrenceEdit : public QFrame
     protected:
         void  showEvent(QShowEvent*) Q_DECL_OVERRIDE;
 
-    private slots:
+    private Q_SLOTS:
         void          periodClicked(QAbstractButton*);
         void          rangeTypeClicked();
         void          repeatCountChanged(int value);

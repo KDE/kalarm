@@ -94,16 +94,16 @@ class PickFileRadio : public RadioButton
         /** Returns the associated file browse push button. */
         QPushButton*    pushButton() const  { return mButton; }
 
-    public slots:
+    public Q_SLOTS:
         /** Enables or disables the radio button, and adjusts the enabled state of the
          *  associated browse button and file name edit box.
          */
         virtual void    setEnabled(bool);
 
-    signals:
+    Q_SIGNALS:
         void          fileChanged();   // emitted whenever the selected file changes
 
-    private slots:
+    private Q_SLOTS:
         void          slotSelectionChanged(QAbstractButton*);
         QString       slotPickFile();
         void          setLastButton();

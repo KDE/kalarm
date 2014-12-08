@@ -76,7 +76,7 @@ class RadioButton : public QRadioButton
         void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
         void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
         void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-    protected slots:
+    protected Q_SLOTS:
         void         slotClicked();
     private:
         Qt::FocusPolicy mFocusPolicy;       // default focus policy for the QRadioButton

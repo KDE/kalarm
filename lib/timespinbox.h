@@ -96,7 +96,7 @@ class TimeSpinBox : public SpinBox2
         virtual QSize   sizeHint() const;
         virtual QSize   minimumSizeHint() const;
 
-    public slots:
+    public Q_SLOTS:
         /** Sets the value of the spin box.
          *  @param minutes The new value of the spin box, expressed in minutes.
          */
@@ -108,7 +108,7 @@ class TimeSpinBox : public SpinBox2
         virtual QString textFromValue(int v) const;
         virtual int     valueFromText(const QString&) const;
 
-    private slots:
+    private Q_SLOTS:
         void            slotValueChanged(int value);
 
     private:

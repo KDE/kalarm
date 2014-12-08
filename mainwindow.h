@@ -83,10 +83,10 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         static QString i18n_o_ShowTimeToAlarms();     // text of 'Show Time to Alarms' action, with 'O' shortcut
         static QString i18n_chk_ShowTimeToAlarm();    // text of 'Show time until alarm' checkbox
 
-    public slots:
+    public Q_SLOTS:
         virtual void   show();
 
-    signals:
+    Q_SIGNALS:
         void           selectionChanged();
 
     protected:
@@ -99,7 +99,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         virtual void   saveProperties(KConfigGroup&);
         virtual void   readProperties(const KConfigGroup&);
 
-    private slots:
+    private Q_SLOTS:
         void           slotNew(EditAlarmDlg::Type);
         void           slotNewDisplay()   { slotNew(EditAlarmDlg::DISPLAY); }
         void           slotNewCommand()   { slotNew(EditAlarmDlg::COMMAND); }

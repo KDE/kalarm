@@ -58,7 +58,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
 
         static int   iconWidth()  { return AkonadiModel::iconSize().width(); }
 
-    signals:
+    Q_SIGNALS:
         /** Signal emitted when either the first item is added to the model,
          *  or when the last item is deleted from the model.
          */
@@ -67,7 +67,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
     protected:
         virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
 
-    private slots:
+    private Q_SLOTS:
         void slotRowsInserted();
         void slotRowsRemoved();
         void collectionStatusChanged(const Akonadi::Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted);

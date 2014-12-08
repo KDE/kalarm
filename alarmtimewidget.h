@@ -65,12 +65,12 @@ class AlarmTimeWidget : public QFrame
         static QString   i18n_TimeAfterPeriod();
         static const int maxDelayTime;    // maximum time from now
 
-    signals:
+    Q_SIGNALS:
         void             changed(const KDateTime&);
         void             dateOnlyToggled(bool anyTime);
         void             pastMax();
 
-    private slots:
+    private Q_SLOTS:
         void             updateTimes();
         void             slotButtonSet(QAbstractButton*);
         void             dateTimeChanged();

@@ -74,14 +74,14 @@ class ButtonGroup : public QButtonGroup
          *  @param id Button ID
          */
         void         setButton(int id);
-    signals:
+    Q_SIGNALS:
         /** Signal emitted whenever whenever any button in the group changes state,
          *  for whatever reason.
          *  @param button The button which is now selected
          */
         void         buttonSet(QAbstractButton* button);
 
-    private slots:
+    private Q_SLOTS:
         void         slotButtonToggled(bool);
 
     private:

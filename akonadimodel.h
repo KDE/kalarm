@@ -200,7 +200,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
 
         static QSize iconSize()  { return mIconSize; }
 
-    signals:
+    Q_SIGNALS:
         /** Signal emitted when a collection has been added to the model. */
         void collectionAdded(const Akonadi::Collection&);
 
@@ -248,7 +248,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         virtual QVariant entityHeaderData(int section, Qt::Orientation, int role, HeaderGroup) const;
         virtual int entityColumnCount(HeaderGroup) const;
 
-    private slots:
+    private Q_SLOTS:
         void checkResources(Akonadi::ServerManager::State);
         void slotMigrationCompleted();
         void slotCollectionChanged(const Akonadi::Collection& c, const QSet<QByteArray>& attrNames)

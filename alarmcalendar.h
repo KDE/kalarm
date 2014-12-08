@@ -90,13 +90,13 @@ class AlarmCalendar : public QObject
         static bool           importAlarms(QWidget*, Akonadi::Collection* = 0);
         static bool           exportAlarms(const KAEvent::List&, QWidget* parent);
 
-    signals:
+    Q_SIGNALS:
         void                  earliestAlarmChanged();
         void                  haveDisabledAlarmsChanged(bool haveDisabled);
         void                  atLoginEventAdded(const KAEvent&);
         void                  calendarSaved(AlarmCalendar*);
 
-    private slots:
+    private Q_SLOTS:
         void                  setAskResource(bool ask);
         void                  slotCollectionStatusChanged(const Akonadi::Collection&, AkonadiModel::Change,
                                                           const QVariant& value, bool inserted);

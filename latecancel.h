@@ -48,10 +48,10 @@ class LateCancelSelector : public QFrame
         static QString  i18n_chk_AutoCloseWin();     // text of 'Auto-close window after this time' checkbox
         static QString  i18n_chk_AutoCloseWinLC();   // text of 'Auto-close window after late-cancellation time' checkbox
 
-    signals:
+    Q_SIGNALS:
         void            changed();          // emitted whenever any change occurs
 
-    private slots:
+    private Q_SLOTS:
         void            slotToggled(bool);
 
     private:

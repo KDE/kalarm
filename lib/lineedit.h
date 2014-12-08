@@ -81,7 +81,7 @@ class LineEdit : public KLineEdit
          *  setText() is called.
          */
         void         setCursorAtEnd(bool end = true)  { mSetCursorAtEnd = end; }
-    public slots:
+    public Q_SLOTS:
         /** Sets the contents of the line edit to be @p str. */
         virtual void setText(const QString& str);
     protected:

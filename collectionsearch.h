@@ -52,7 +52,7 @@ class CollectionSearch : public QObject
     public:
         explicit CollectionSearch(const QString& mimeType, const QString& gid = QString(), bool remove = false);
 
-    signals:
+    Q_SIGNALS:
         // Signal emitted if action is to fetch all collections for the mime type
         void collections(const Akonadi::Collection::List&);
         // Signal emitted if action is to fetch all items with the remote ID
@@ -60,7 +60,7 @@ class CollectionSearch : public QObject
         // Signal emitted if action is to delete all items with the remote ID
         void deleted(int count);
 
-    private slots:
+    private Q_SLOTS:
         void collectionFetchResult(KJob*);
         void itemFetchResult(KJob*);
         void itemDeleteResult(KJob*);

@@ -51,11 +51,11 @@ class RepetitionButton : public QPushButton
         virtual void   setReadOnly(bool ro)     { mReadOnly = ro; }
         virtual bool   isReadOnly() const       { return mReadOnly; }
 
-    signals:
+    Q_SIGNALS:
         void           needsInitialisation();   // dialog has been created and needs set() to be called
         void           changed();               // the repetition dialog has been edited
 
-    private slots:
+    private Q_SLOTS:
         void           slotPressed()            { activate(mWaitForInit); }
 
     private:
@@ -80,7 +80,7 @@ class RepetitionDlg : public KDialog
         void       set(const Repetition&, bool dateOnly = false, int maxDuration = -1);
         Repetition repetition() const;   // get the repetition interval and count
 
-    private slots:
+    private Q_SLOTS:
         void       typeClicked();
         void       countChanged(int);
         void       intervalChanged(const KCalCore::Duration&);
