@@ -75,7 +75,7 @@ class BirthdaySortModel : public QSortFilterProxyModel
         void setPrefixSuffix(const QString& prefix, const QString& suffix);
 
     protected:
-        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
 
     private:
         QStringList mContactsWithAlarm;

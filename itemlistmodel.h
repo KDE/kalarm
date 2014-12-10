@@ -65,7 +65,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         void         haveEventsStatus(bool have);
 
     protected:
-        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void slotRowsInserted();
@@ -114,8 +114,8 @@ class AlarmListModel : public ItemListModel
         virtual QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
 
     protected:
-        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
-        virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
 
     private:
         static AlarmListModel* mAllInstance;
@@ -162,8 +162,8 @@ class TemplateListModel : public ItemListModel
         virtual Qt::ItemFlags flags(const QModelIndex&) const;
 
     protected:
-        virtual bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
-        virtual bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
 
     private:
         static TemplateListModel* mAllInstance;

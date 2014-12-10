@@ -117,10 +117,10 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
         void setEventTypeFilter(CalEvent::Type);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
-        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void collectionTypeChanged(CollectionCheckListModel*);
