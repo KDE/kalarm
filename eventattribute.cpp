@@ -74,7 +74,8 @@ void EventAttribute::setCommandError(KAEvent::CmdErrType err)
 
 QByteArray EventAttribute::type() const
 {
-    return "KAlarmEvent";
+    static const QByteArray sType( "KAlarmEvent" );
+    return sType;
 }
 
 EventAttribute* EventAttribute::clone() const
