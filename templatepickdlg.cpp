@@ -32,7 +32,7 @@
 #include <QResizeEvent>
 #include <QDialogButtonBox>
 #include <QPushButton>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 static const char TMPL_PICK_DIALOG_NAME[] = "TemplatePickDialog";
 

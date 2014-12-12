@@ -37,7 +37,7 @@
 using namespace KCalCore;
 
 #include <QtDBus/QtDBus>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 #include <stdlib.h>
 
@@ -50,7 +50,7 @@ static const char* REQUEST_DBUS_OBJECT = "/kalarm";   // D-Bus object path of KA
 =============================================================================*/
 DBusHandler::DBusHandler()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     new KalarmAdaptor(this);
     QDBusConnection::sessionBus().registerObject(QLatin1String(REQUEST_DBUS_OBJECT), this);
 }
@@ -501,7 +501,7 @@ bool DBusHandler::convertRecurrence(KDateTime& start, KARecurrence& recurrence,
     if (subRepeatInterval  &&  recurrence.type() == KARecurrence::NO_RECUR)
     {
         subRepeatInterval = 0;
-        qWarning() << "D-Bus call: no recurrence specified, so sub-repetition ignored";
+        qCWarning(KALARM_LOG) << "D-Bus call: no recurrence specified, so sub-repetition ignored";
     }
     if (subRepeatInterval  &&  !(subRepeatInterval % (24*60)))
         subRepeatDuration = Duration(subRepeatInterval / (24*60), Duration::Days);

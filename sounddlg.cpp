@@ -47,7 +47,7 @@
 #include <QGridLayout>
 #include <QShowEvent>
 #include <QResizeEvent>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 // Collect these widget labels together to ensure consistent wording and

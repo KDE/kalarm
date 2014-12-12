@@ -25,7 +25,7 @@
 #include <kprocess.h>
 #include <kdatetime.h>
 #include <kauthactionreply.h>
-#include <QDebug>
+#include "kalarm_debug.h"
 
 #include <stdio.h>
 
@@ -37,7 +37,7 @@ RtcWakeAction::RtcWakeAction()
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 {
     unsigned t = args[QLatin1String("time")].toUInt();
-    qDebug() << "RtcWakeAction::settimer(" << t << ")";
+    qCDebug(KALARM_LOG) << "RtcWakeAction::settimer(" << t << ")";
 
     // Find the rtcwake executable
     QString exe(QLatin1String("/usr/sbin/rtcwake"));   // default location
@@ -59,7 +59,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
             if (*start)
             {
                 exe = QString::fromLocal8Bit(start);
-                qDebug() << "RtcWakeAction::settimer:" << exe;
+                qCDebug(KALARM_LOG) << "RtcWakeAction::settimer:" << exe;
             }
         }
     }
@@ -96,7 +96,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
     ActionReply reply(ActionReply::HelperErrorReply);
     reply.setErrorCode(result);
     reply.setErrorDescription(errmsg);
-    qDebug() << "RtcWakeAction::settimer: Code=" << reply.errorCode() << reply.errorDescription();
+    qCDebug(KALARM_LOG) << "RtcWakeAction::settimer: Code=" << reply.errorCode() << reply.errorDescription();
     return reply;
 #else
     return 0;

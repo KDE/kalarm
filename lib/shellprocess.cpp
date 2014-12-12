@@ -23,7 +23,7 @@
 #include <kde_file.h>
 #include <kapplication.h>
 #include <KLocalizedString>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 #include <kauthorized.h>
 #include <qglobal.h>
 
@@ -77,13 +77,13 @@ bool ShellProcess::start(OpenMode openMode)
 */
 void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
 {
-    qDebug() << exitCode << "," << exitStatus;
+    qCDebug(KALARM_LOG) << exitCode << "," << exitStatus;
     mStdinQueue.clear();
     mStatus = SUCCESS;
     mExitCode = exitCode;
     if (exitStatus != NormalExit)
     {
-        qWarning() << mCommand << ":" << mShellName << ": crashed/killed";
+        qCWarning(KALARM_LOG) << mCommand << ":" << mShellName << ": crashed/killed";
         mStatus = DIED;
     }
     else
@@ -92,7 +92,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
         if ((mShellName == "bash"  &&  (exitCode == 126 || exitCode == 127))
         ||  (mShellName == "ksh"  &&  exitCode == 127))
         {
-            qWarning() << mCommand << ":" << mShellName << ": not found or not executable";
+            qCWarning(KALARM_LOG) << mCommand << ":" << mShellName << ": not found or not executable";
             mStatus = NOT_FOUND;
         }
     }

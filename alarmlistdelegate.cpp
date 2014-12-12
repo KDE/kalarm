@@ -29,7 +29,7 @@
 #include <kcolorscheme.h>
 
 #include <QApplication>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const

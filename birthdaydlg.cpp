@@ -54,7 +54,7 @@
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KCal;
 

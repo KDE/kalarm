@@ -28,7 +28,7 @@
 #include <k4aboutdata.h>
 #include <Kdelibs4ConfigMigrator>
 #include <KLocalizedString>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 #include <stdlib.h>
 
@@ -132,7 +132,7 @@ int main(int argc, char* argv[])
     }
 
     // This is the first time through
-    qDebug() << "initialising";
+    qCDebug(KALARM_LOG) << "initialising";
     KAlarmApp* app = KAlarmApp::getInstance();
     app->restoreSession();
     return app->exec();

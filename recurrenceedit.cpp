@@ -62,7 +62,7 @@ using namespace KCalCore;
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtAlgorithms>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 class ListWidget : public QListWidget
@@ -94,7 +94,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
       mNoEmitTypeChanged(true),
       mReadOnly(readOnly)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     QVBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setMargin(0);
     topLayout->setSpacing(KDialog::spacingHint());

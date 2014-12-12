@@ -41,7 +41,7 @@
 #include <QHBoxLayout>
 #include <QBoxLayout>
 #include <QResizeEvent>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KCal;
 

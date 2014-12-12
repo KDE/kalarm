@@ -38,7 +38,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QStandardPaths>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 static QMap<Preferences::SoundType, int> indexes;    // mapping from sound type to combo index

@@ -33,7 +33,7 @@
 #include <KLocalizedString>
 
 #include <QVBoxLayout>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 DeferAlarmDlg::DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent)

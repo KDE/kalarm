@@ -35,7 +35,7 @@
 #include <QApplication>
 #include <QPixmap>
 #include <QMatrix>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 #include <stdlib.h>
 
@@ -316,7 +316,7 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
     bool updateButtons = false;
     if (obj == mSpinbox)
     {
-//if (e->type() != QEvent::Paint) qDebug()<<e->type();
+//if (e->type() != QEvent::Paint) qCDebug(KALARM_LOG)<<e->type();
         switch (e->type())
         {
             case QEvent::Enter:
@@ -383,7 +383,7 @@ void SpinBox2::arrange()
         r.moveLeft(0);
     mSpinboxFrame->setGeometry(r);
     mSpinbox->setGeometry(mRightToLeft ? 0 : -wSpinboxHide, 0, mSpinboxFrame->width() + wSpinboxHide, height());
-//    qDebug() << "arrowRect="<<arrowRect<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
+//    qCDebug(KALARM_LOG) << "arrowRect="<<arrowRect<<", mUpdown2="<<mUpdown2->geometry()<<", mSpinboxFrame="<<mSpinboxFrame->geometry()<<", mSpinbox="<<mSpinbox->geometry()<<", width="<<width();
 
     mSpinMirror->resize(wUpdown2, mUpdown2->height());
     mSpinMirror->setGeometry(arrowRect);
@@ -437,7 +437,7 @@ void SpinBox2::getMetrics() const
         }
     }
     mButtonPos = QPoint(butx, butRect.top());
-//    qDebug() << "wUpdown2="<<wUpdown2<<", wSpinboxHide="<<wSpinboxHide<<", frame right="<<r.right() - butRect.right();
+//    qCDebug(KALARM_LOG) << "wUpdown2="<<wUpdown2<<", wSpinboxHide="<<wSpinboxHide<<", frame right="<<r.right() - butRect.right();
 }
 
 /******************************************************************************
@@ -630,7 +630,7 @@ void SpinMirror::setButtons()
 
 void SpinMirror::setButtonPos(const QPoint& pos)
 {
-    //qDebug()<<pos;
+    //qCDebug(KALARM_LOG)<<pos;
     int x = pos.x();
     int y = pos.y();
     if (isOxygenStyle(this))
@@ -709,7 +709,7 @@ QPoint SpinMirror::spinboxPoint(const QPoint& param) const
 */
 bool SpinMirror::event(QEvent* e)
 {
-//qDebug()<<e->type();
+//qCDebug(KALARM_LOG)<<e->type();
     QHoverEvent *he = 0;
     switch (e->type())
     {

@@ -30,7 +30,7 @@
 #include <KLocalizedString>
 
 #include <QVBoxLayout>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 /*=============================================================================

@@ -24,7 +24,7 @@
 
 #include <QString>
 #include <QRegExp>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 /** Set by event ID and optional resource ID, in the format "[rid:]eid". */
 EventId::EventId(const QString& resourceEventId)

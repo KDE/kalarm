@@ -26,7 +26,7 @@
 
 #include <kdialog.h>
 #include <QHBoxLayout>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KCalCore;
 

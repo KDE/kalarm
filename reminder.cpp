@@ -35,7 +35,7 @@ using namespace KCalCore;
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 // Collect these widget labels together to ensure consistent wording and

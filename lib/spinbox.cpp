@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QEvent>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 SpinBox::SpinBox(QWidget* parent)

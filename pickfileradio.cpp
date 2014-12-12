@@ -26,7 +26,7 @@
 
 #include <QPushButton>
 #include <QTimer>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)

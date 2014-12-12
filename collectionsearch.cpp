@@ -30,7 +30,7 @@
 #include <AkonadiCore/itemdeletejob.h>
 
 #include <QTimer>
-#include <QDebug>
+#include "kalarm_debug.h"
 
 using namespace Akonadi;
 
@@ -119,7 +119,7 @@ void CollectionSearch::itemFetchResult(KJob* j)
 {
     ItemFetchJob* job = static_cast<ItemFetchJob*>(j);
     if (j->error())
-        qDebug() << "ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
+        qCDebug(KALARM_LOG) << "ItemFetchJob: collection" << mItemFetchJobs[job] << "GID" << mGid << "error: " << j->errorString();
     else
     {
         if (mDelete)
@@ -148,7 +148,7 @@ void CollectionSearch::itemDeleteResult(KJob* j)
 {
     ItemDeleteJob* job = static_cast<ItemDeleteJob*>(j);
     if (j->error())
-        qDebug() << "ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
+        qCDebug(KALARM_LOG) << "ItemDeleteJob: resource" << mItemDeleteJobs[job] << "GID" << mGid << "error: " << j->errorString();
     else
         ++mDeleteCount;
     mItemDeleteJobs.remove(job);

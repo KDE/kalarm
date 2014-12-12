@@ -30,7 +30,7 @@
 
 #include <kapplication.h>
 #include <KLocalizedString>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 static int maxCount = 12;
 
@@ -344,7 +344,7 @@ void Undo::removeRedos(const QString& eventID)
     for (int i = 0;  i < mRedoList.count();  )
     {
         UndoItem* item = mRedoList[i];
-//qDebug()<<item->eventID()<<" (looking for"<<id<<")";
+//qCDebug(KALARM_LOG)<<item->eventID()<<" (looking for"<<id<<")";
         if (item->operation() == UndoItem::MULTI)
         {
             if (item->deleteID(id))
@@ -541,9 +541,9 @@ QList<int> Undo::ids(Undo::Type type)
         }
         if (!omit)
             ids.append(item->id());
-//else qDebug()<<"Undo::ids(): omit"<<item->actionText()<<":"<<item->description();
+//else qCDebug(KALARM_LOG)<<"Undo::ids(): omit"<<item->actionText()<<":"<<item->description();
     }
-//qDebug()<<"Undo::ids():"<<n<<" ->"<<ids.count();
+//qCDebug(KALARM_LOG)<<"Undo::ids():"<<n<<" ->"<<ids.count();
     return ids;
 }
 
@@ -776,7 +776,7 @@ UndoAdd::UndoAdd(Undo::Type type, const KAEvent& event, RESOURCE_PARAM_TYPE reso
 UndoItem* UndoAdd::doRestore(bool setArchive)
 {
     // Retrieve the current state of the alarm
-    qDebug() << mEventId;
+    qCDebug(KALARM_LOG) << mEventId;
     const KAEvent* ev = AlarmCalendar::getEvent(EventId(mResource.id(), mEventId));
     if (!ev)
     {
@@ -903,7 +903,7 @@ UndoEdit::~UndoEdit()
 */
 UndoItem* UndoEdit::restore()
 {
-    qDebug() << mNewEventId;
+    qCDebug(KALARM_LOG) << mNewEventId;
     // Retrieve the current state of the alarm
     const KAEvent* event = AlarmCalendar::getEvent(EventId(mResource.id(), mNewEventId));
     if (!event)
@@ -1010,7 +1010,7 @@ UndoDelete::~UndoDelete()
 */
 UndoItem* UndoDelete::restore()
 {
-    qDebug() << mEvent->id();
+    qCDebug(KALARM_LOG) << mEvent->id();
     // Restore the original event
     switch (calendar())
     {
@@ -1157,7 +1157,7 @@ QString UndoDeletes::defaultActionText() const
 */
 UndoItem* UndoReactivate::restore()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     // Validate the alarm's calendar
     switch (calendar())
     {
@@ -1200,7 +1200,7 @@ QString UndoReactivate::defaultActionText() const
 */
 UndoItem* UndoDeactivate::restore()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     // Validate the alarm's calendar
     switch (calendar())
     {

@@ -28,7 +28,7 @@
 #include <KUrl>
 
 #include <QCheckBox>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 
 QCheckBox* FileDialog::mAppendCheck = 0;
@@ -45,7 +45,7 @@ QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWid
     if (!specialDir && !defaultDir)
     {
         if (!dir.isLocalFile())
-            qWarning() << "FileDialog::getSaveFileName called with non-local start dir " << dir;
+            qCWarning(KALARM_LOG) << "FileDialog::getSaveFileName called with non-local start dir " << dir;
         dlg->setSelection(dir.isLocalFile() ? dir.toLocalFile() : dir.path());  // may also be a filename
     }
     dlg->setOperationMode(Saving);

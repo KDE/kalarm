@@ -41,7 +41,7 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QRegExp>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 

@@ -32,7 +32,7 @@
 #include <KLocalizedString>
 #include <kstandardshortcut.h>
 #include <QMenu>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 

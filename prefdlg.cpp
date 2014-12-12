@@ -90,7 +90,7 @@ using namespace KHolidays;
 #include <QStyle>
 #include <QResizeEvent>
 #include <QStandardPaths>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KCalCore;
 using namespace KAlarmCal;
@@ -211,7 +211,7 @@ void KAlarmPrefDlg::slotHelp()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotApply()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     QString errmsg = mEmailPage->validate();
     if (!errmsg.isEmpty())
     {
@@ -243,7 +243,7 @@ void KAlarmPrefDlg::slotApply()
 // Apply the preferences that are currently selected
 void KAlarmPrefDlg::slotOk()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     mValid = true;
     slotApply();
     if (mValid)
@@ -253,7 +253,7 @@ void KAlarmPrefDlg::slotOk()
 // Discard the current preferences and close the dialog
 void KAlarmPrefDlg::slotCancel()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     restore(false);
     KPageDialog::reject();
 }
@@ -282,7 +282,7 @@ void KAlarmPrefDlg::slotDefault()
 // Discard the current preferences and use the present ones
 void KAlarmPrefDlg::restore(bool defaults)
 {
-    qDebug() << (defaults ? "defaults" : "");
+    qCDebug(KALARM_LOG) << (defaults ? "defaults" : "");
     if (defaults)
         Preferences::self()->useDefaults(true);
     mEmailPage->restore(defaults, true);

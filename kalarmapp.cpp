@@ -67,7 +67,7 @@
 #include <QTextStream>
 #include <QtDBus/QtDBus>
 #include <QStandardPaths>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -124,7 +124,7 @@ KAlarmApp::KAlarmApp()
       mAlarmsEnabled(true),
       mSpeechEnabled(false)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
 #ifndef NDEBUG
     KAlarm::setTestModeConditions();
 #endif
@@ -169,11 +169,11 @@ KAlarmApp::KAlarmApp()
 
     // Check if the speech synthesis daemon is installed
     mSpeechEnabled = (KServiceTypeTrader::self()->query(QLatin1String("DBUS/Text-to-Speech"), QLatin1String("Name == 'KTTSD'")).count() > 0);
-    if (!mSpeechEnabled) { qDebug() << "Speech synthesis disabled (KTTSD not found)"; }
+    if (!mSpeechEnabled) { qCDebug(KALARM_LOG) << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
     const QString korg = QLatin1String("korganizer");
     mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
-    if (!mKOrganizerEnabled) { qDebug() << "KOrganizer options disabled (KOrganizer not found)"; }
+    if (!mKOrganizerEnabled) { qCDebug(KALARM_LOG) << "KOrganizer options disabled (KOrganizer not found)"; }
 }
 
 /******************************************************************************
@@ -223,7 +223,7 @@ bool KAlarmApp::initialise()
     }
     if (!AlarmCalendar::resources())
     {
-        qDebug() << "initialising calendars";
+        qCDebug(KALARM_LOG) << "initialising calendars";
         if (AlarmCalendar::initialiseCalendars())
         {
             connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
@@ -248,7 +248,7 @@ bool KAlarmApp::restoreSession()
     }
 
     // Process is being restored by session management.
-    qDebug() << "Restoring";
+    qCDebug(KALARM_LOG) << "Restoring";
     ++mActiveCount;
     // Create the session config object now.
     // This is necessary since if initCheck() below causes calendars to be updated,
@@ -300,7 +300,7 @@ bool KAlarmApp::restoreSession()
     if (trayParent  ||  wantShowInSystemTray())
     {
         if (!MainWindow::count())
-            qWarning() << "no main window to be restored!?";
+            qCWarning(KALARM_LOG) << "no main window to be restored!?";
         else
         {
             displayTrayIcon(true, trayParent);
@@ -328,7 +328,7 @@ bool KAlarmApp::restoreSession()
 */
 int KAlarmApp::newInstance()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     if (mFatalError)
     {
         quitFatal();
@@ -577,7 +577,7 @@ void KAlarmApp::checkKtimezoned()
     done = true;
     if (!KSystemTimeZones::isTimeZoneDaemonAvailable())
     {
-        qDebug() << "ktimezoned not running: using UTC only";
+        qCDebug(KALARM_LOG) << "ktimezoned not running: using UTC only";
         KAMessageBox::information(MainWindow::mainMainWindow(),
                                   xi18nc("@info", "Time zones are not accessible:<nl/>KAlarm will use the UTC time zone.<nl/><nl/>(The KDE time zone service is not available:<nl/>check that <application>ktimezoned</application> is installed.)"),
                      QString(), QLatin1String("tzunavailable"));
@@ -634,7 +634,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     // NOTE: Everything which is terminated/deleted here must where applicable
     //       be initialised in the initialise() method, in case KAlarm is
     //       started again before application exit completes!
-    qDebug() << exitCode << ": quitting";
+    qCDebug(KALARM_LOG) << exitCode << ": quitting";
     MessageWin::stopAudio(true);
     if (mCancelRtcWake)
     {
@@ -656,7 +656,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
 */
 void KAlarmApp::doQuit(QWidget* parent)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     if (KAMessageBox::warningCancelContinue(parent,
                                             i18nc("@info", "Quitting will disable alarms (once any alarm message windows are closed)."),
                                             QString(), KStandardGuiItem::quit(),
@@ -766,12 +766,12 @@ void KAlarmApp::checkNextDueAlarm()
     KDateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
     KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
     qint64 interval = now.secsTo_long(nextDt);
-    qDebug() << "now:" << qPrintable(now.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
+    qCDebug(KALARM_LOG) << "now:" << qPrintable(now.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
     if (interval <= 0)
     {
         // Queue the alarm
         queueAlarmId(*nextEvent);
-        qDebug() << nextEvent->id() << ": due now";
+        qCDebug(KALARM_LOG) << nextEvent->id() << ": due now";
         QTimer::singleShot(0, this, SLOT(processQueue()));
     }
     else
@@ -793,7 +793,7 @@ void KAlarmApp::checkNextDueAlarm()
         interval *= 1000;
         if (interval > INT_MAX)
             interval = INT_MAX;
-        qDebug() << nextEvent->id() << "wait" << interval/1000 << "seconds";
+        qCDebug(KALARM_LOG) << nextEvent->id() << "wait" << interval/1000 << "seconds";
         mAlarmTimer->start(static_cast<int>(interval));
     }
 }
@@ -821,7 +821,7 @@ void KAlarmApp::startProcessQueue()
 {
     if (!mInitialised)
     {
-        qDebug();
+        qCDebug(KALARM_LOG);
         mInitialised = true;
         QTimer::singleShot(0, this, SLOT(processQueue()));    // process anything already queued
     }
@@ -842,7 +842,7 @@ void KAlarmApp::processQueue()
 {
     if (mInitialised  &&  !mProcessingQueue)
     {
-        qDebug();
+        qCDebug(KALARM_LOG);
         mProcessingQueue = true;
 
         // Refresh alarms if that's been queued
@@ -944,7 +944,7 @@ void KAlarmApp::removeWindow(TrayWindow*)
 */
 bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     static bool creating = false;
     if (show)
     {
@@ -986,7 +986,7 @@ bool KAlarmApp::checkSystemTray()
         return true;
     if (KSystemTrayIcon::isSystemTrayAvailable() == mNoSystemTray)
     {
-        qDebug() << "changed ->" << mNoSystemTray;
+        qCDebug(KALARM_LOG) << "changed ->" << mNoSystemTray;
         mNoSystemTray = !mNoSystemTray;
 
         // Store the new setting in the config file, so that if KAlarm exits it will
@@ -1132,12 +1132,12 @@ void KAlarmApp::checkWritableCalendar()
     if (done)
         return;
     done = true;
-    qDebug();
+    qCDebug(KALARM_LOG);
     // Find whether there are any writable active alarm calendars
     bool active = !CollectionControlModel::enabledCollections(CalEvent::ACTIVE, true).isEmpty();
     if (!active)
     {
-        qWarning() << "No writable active calendar";
+        qCWarning(KALARM_LOG) << "No writable active calendar";
         KAMessageBox::information(MainWindow::mainMainWindow(),
                                   xi18nc("@info", "Alarms cannot be created or updated, because no writable active alarm calendar is enabled.<nl/><nl/>"
                                                  "To fix this, use <interface>View | Show Calendars</interface> to check or change calendar statuses."),
@@ -1157,7 +1157,7 @@ void KAlarmApp::purgeNewArchivedDefault(const Akonadi::Collection& collection)
     {
         // Allow time (1 minute) for AkonadiModel to be populated with the
         // collection's events before purging it.
-        qDebug() << collection.id() << ": standard archived...";
+        qCDebug(KALARM_LOG) << collection.id() << ": standard archived...";
         QTimer::singleShot(60000, this, SLOT(purgeAfterDelay()));
     }
 }
@@ -1287,7 +1287,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
                               uint mailFromID, const KCalCore::Person::List& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
-    qDebug() << text;
+    qCDebug(KALARM_LOG) << text;
     if (!dateTime.isValid())
         return false;
     KDateTime now = KDateTime::currentUtcDateTime();
@@ -1341,7 +1341,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
 */
 bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
 {
-    qDebug() << eventID;
+    qCDebug(KALARM_LOG) << eventID;
     mActionQueue.append(ActionQEntry(function, eventID));
     if (mInitialised)
         QTimer::singleShot(0, this, SLOT(processQueue()));
@@ -1353,7 +1353,7 @@ bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
 */
 QString KAlarmApp::dbusList()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     return scheduledAlarmList().join(QLatin1String("\n")) + QLatin1Char('\n');
 }
 
@@ -1377,15 +1377,15 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
     if (!event)
     {
         if (id.collectionId() != -1)
-            qWarning() << "Event ID not found, or duplicated:" << eventID;
+            qCWarning(KALARM_LOG) << "Event ID not found, or duplicated:" << eventID;
         else
-            qWarning() << "Event ID not found:" << eventID;
+            qCWarning(KALARM_LOG) << "Event ID not found:" << eventID;
         return false;
     }
     switch (function)
     {
         case EVENT_CANCEL:
-            qDebug() << eventID << ", CANCEL";
+            qCDebug(KALARM_LOG) << eventID << ", CANCEL";
             KAlarm::deleteEvent(*event, true);
             break;
 
@@ -1393,7 +1393,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
         case EVENT_HANDLE:     // handle it if it's due
         {
             KDateTime now = KDateTime::currentUtcDateTime();
-            qDebug() << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm"))) << "UTC";
+            qCDebug(KALARM_LOG) << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm"))) << "UTC";
             bool updateCalAndDisplay = false;
             bool alarmToExecuteValid = false;
             KAAlarm alarmToExecute;
@@ -1416,7 +1416,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                     ||  nextDT > now.toTimeSpec(KDateTime::ClockTime))
                     {
                         // This alarm is definitely not due yet
-                        qDebug() << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not due";
+                        qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not due";
                         continue;
                     }
                 }
@@ -1437,12 +1437,12 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                         reschedule = !event->isWorkingTime(nextDT);
                     rescheduleWork = reschedule;
                     if (reschedule)
-                        qDebug() << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours";
+                        qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << "at" << nextDT.dateTime() << ": not during working hours";
                 }
                 if (!reschedule  &&  alarm.repeatAtLogin())
                 {
                     // Alarm is to be displayed at every login.
-                    qDebug() << "REPEAT_AT_LOGIN";
+                    qCDebug(KALARM_LOG) << "REPEAT_AT_LOGIN";
                     // Check if the main alarm is already being displayed.
                     // (We don't want to display both at the same time.)
                     if (alarmToExecute.isValid())
@@ -1454,7 +1454,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                 if (!reschedule  &&  event->lateCancel())
                 {
                     // Alarm is due, and it is to be cancelled if too late.
-                    qDebug() << "LATE_CANCEL";
+                    qCDebug(KALARM_LOG) << "LATE_CANCEL";
                     bool cancel = false;
                     if (alarm.dateTime().isDateOnly())
                     {
@@ -1555,12 +1555,12 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                 }
                 if (!alarmToExecuteValid)
                 {
-                    qDebug() << "Alarm" << alarm.type() << ": execute";
+                    qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << ": execute";
                     alarmToExecute = alarm;             // note the alarm to be displayed
                     alarmToExecuteValid = true;         // only trigger one alarm for the event
                 }
                 else
-                    qDebug() << "Alarm" << alarm.type() << ": skip";
+                    qCDebug(KALARM_LOG) << "Alarm" << alarm.type() << ": skip";
             }
 
             // If there is an alarm to execute, do this last after rescheduling/cancelling
@@ -1580,7 +1580,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
                 }
                 if (updateCalAndDisplay)
                     KAlarm::updateEvent(*event);     // update the window lists and calendar file
-                else if (function != EVENT_TRIGGER) { qDebug() << "No action"; }
+                else if (function != EVENT_TRIGGER) { qCDebug(KALARM_LOG) << "No action"; }
             }
             break;
         }
@@ -1598,7 +1598,7 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
         // doShellCommand() will error if the user is not authorised to run
         // shell commands.
         QString command = event.postAction();
-        qDebug() << event.id() << ":" << command;
+        qCDebug(KALARM_LOG) << event.id() << ":" << command;
         doShellCommand(command, event, 0, ProcData::POST_ACTION);
     }
 }
@@ -1616,7 +1616,7 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
 */
 int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool updateCalAndDisplay, const KDateTime& nextDt)
 {
-    qDebug() << "Alarm type:" << alarm.type();
+    qCDebug(KALARM_LOG) << "Alarm type:" << alarm.type();
     int reply = 0;
     bool update = false;
     event.startChanges();
@@ -1654,7 +1654,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
             {
                 case KAEvent::NO_OCCURRENCE:
                     // All repetitions are finished, so cancel the event
-                    qDebug() << "No occurrence";
+                    qCDebug(KALARM_LOG) << "No occurrence";
                     if (event.reminderMinutes() < 0  &&  last.isValid()
                     &&  alarm.type() != KAAlarm::AT_LOGIN_ALARM  &&  !event.mainExpired())
                     {
@@ -1727,7 +1727,7 @@ int KAlarmApp::rescheduleAlarm(KAEvent& event, const KAAlarm& alarm, bool update
 */
 bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool updateCalAndDisplay)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     if (alarmType == KAAlarm::MAIN_ALARM  &&  !event.displaying()  &&  event.toBeArchived())
     {
         // The event is being deleted. Save it in the archived resources first.
@@ -1772,7 +1772,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
     if (!mAlarmsEnabled  ||  !event.enabled())
     {
         // The event (or all events) is disabled
-        qDebug() << event.id() << ": disabled";
+        qCDebug(KALARM_LOG) << event.id() << ": disabled";
         if (reschedule)
             rescheduleAlarm(event, alarm, true);
         return 0;
@@ -1821,7 +1821,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                     ProcData* pd = mCommandProcesses[i];
                     if (pd->event->id() == event.id()  &&  (pd->flags & ProcData::PRE_ACTION))
                     {
-                        qDebug() << "Already executing pre-DISPLAY command";
+                        qCDebug(KALARM_LOG) << "Already executing pre-DISPLAY command";
                         return pd->process;   // already executing - don't duplicate the action
                     }
                 }
@@ -1829,7 +1829,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 // doShellCommand() will error if the user is not authorised to run
                 // shell commands.
                 QString command = event.preAction();
-                qDebug() << "Pre-DISPLAY command:" << command;
+                qCDebug(KALARM_LOG) << "Pre-DISPLAY command:" << command;
                 int flags = (reschedule ? ProcData::RESCHEDULE : 0) | (allowDefer ? ProcData::ALLOW_DEFER : 0);
                 if (doShellCommand(command, event, &alarm, (flags | ProcData::PRE_ACTION)))
                 {
@@ -1840,7 +1840,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                 if (event.extraActionOptions() & KAEvent::CancelOnPreActError)
                 {
                     // Cancel the rest of the alarm execution
-                    qDebug() << event.id() << ": pre-action failed: cancelled";
+                    qCDebug(KALARM_LOG) << event.id() << ": pre-action failed: cancelled";
                     if (reschedule)
                         rescheduleAlarm(event, alarm, true);
                     return 0;
@@ -1880,7 +1880,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         }
         case KAAlarm::EMAIL:
         {
-            qDebug() << "EMAIL to:" << event.emailAddresses(QLatin1String(","));
+            qCDebug(KALARM_LOG) << "EMAIL to:" << event.emailAddresses(QLatin1String(","));
             QStringList errmsgs;
             KAMail::JobData data(event, alarm, reschedule, (reschedule || allowDefer));
             data.queued = true;
@@ -1934,7 +1934,7 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
     {
         // Some error occurred, although the email may have been sent successfully
         if (errmsgs.count() > 1)
-            qDebug() << (copyerr ? "Copy error:" : "Failed:") << errmsgs[1];
+            qCDebug(KALARM_LOG) << (copyerr ? "Copy error:" : "Failed:") << errmsgs[1];
         MessageWin::showError(data.event, data.alarm.dateTime(), errmsgs);
     }
     else if (data.queued)
@@ -1956,7 +1956,7 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
     if (event.commandScript())
     {
         // Store the command script in a temporary file for execution
-        qDebug() << "Script";
+        qCDebug(KALARM_LOG) << "Script";
         QString tmpfile = createTempScriptFile(command, false, event, alarm);
         if (tmpfile.isEmpty())
         {
@@ -1967,7 +1967,7 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
     }
     else
     {
-        qDebug() << command;
+        qCDebug(KALARM_LOG) << command;
         return doShellCommand(command, event, &alarm, flags, receiver, slot);
     }
 }
@@ -1987,7 +1987,7 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
 */
 ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, const QObject* receiver, const char* slot)
 {
-    qDebug() << command << "," << event.id();
+    qCDebug(KALARM_LOG) << command << "," << event.id();
     QIODevice::OpenMode mode = QIODevice::WriteOnly;
     QString cmd;
     QString tmpXtermFile;
@@ -2049,7 +2049,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
     }
 
     // Error executing command - report it
-    qWarning() << "Command failed to start";
+    qCWarning(KALARM_LOG) << "Command failed to start";
     commandErrorMsg(proc, event, alarm, flags);
     if (pd)
     {
@@ -2067,7 +2067,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
 */
 QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& event, const KAAlarm* alarm, int flags, QString& tempScriptFile) const
 {
-    qDebug() << command << "," << event.id();
+    qCDebug(KALARM_LOG) << command << "," << event.id();
     tempScriptFile.clear();
     QString cmd = Preferences::cmdXTermCommand();
     cmd.replace(QLatin1String("%t"), KComponentData::mainComponent().aboutData()->programName());     // set the terminal window title
@@ -2147,7 +2147,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
 */
 void KAlarmApp::slotCommandExited(ShellProcess* proc)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     // Find this command in the command list
     for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
     {
@@ -2159,7 +2159,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
             ShellProcess::Status status = proc->status();
             if (status == ShellProcess::SUCCESS  &&  !proc->exitCode())
             {
-                qDebug() << pd->event->id() << ": SUCCESS";
+                qCDebug(KALARM_LOG) << pd->event->id() << ": SUCCESS";
                 clearEventCommandError(*pd->event, pd->preAction() ? KAEvent::CMD_ERROR_PRE
                                                  : pd->postAction() ? KAEvent::CMD_ERROR_POST
                                                  : KAEvent::CMD_ERROR);
@@ -2168,9 +2168,9 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
             {
                 QString errmsg = proc->errorMessage();
                 if (status == ShellProcess::SUCCESS  ||  status == ShellProcess::NOT_FOUND)
-                    qWarning() << pd->event->id() << ":" << errmsg << "exit status =" << status << ", code =" << proc->exitCode();
+                    qCWarning(KALARM_LOG) << pd->event->id() << ":" << errmsg << "exit status =" << status << ", code =" << proc->exitCode();
                 else
-                    qWarning() << pd->event->id() << ":" << errmsg << "exit status =" << status;
+                    qCWarning(KALARM_LOG) << pd->event->id() << ":" << errmsg << "exit status =" << status;
                 if (pd->messageBoxParent)
                 {
                     // Close the existing informational KMessageBox for this process
@@ -2193,7 +2193,7 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
                 if (executeAlarm
                 &&  (pd->event->extraActionOptions() & KAEvent::CancelOnPreActError))
                 {
-                    qDebug() << pd->event->id() << ": pre-action failed: cancelled";
+                    qCDebug(KALARM_LOG) << pd->event->id() << ": pre-action failed: cancelled";
                     if (pd->reschedule())
                         rescheduleAlarm(*pd->event, *pd->alarm, true);
                     executeAlarm = false;
@@ -2290,7 +2290,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
         mKSpeech = 0;
         if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
         {
-            qDebug() << "Failed to start kttsd:" << error;
+            qCDebug(KALARM_LOG) << "Failed to start kttsd:" << error;
             return 0;
         }
     }
@@ -2326,7 +2326,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Co
 {
     static bool firstTime = true;
     if (firstTime)
-        qDebug() << "first time";
+        qCDebug(KALARM_LOG) << "first time";
 
     if (initialise()  ||  firstTime)
     {

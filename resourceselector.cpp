@@ -57,7 +57,7 @@
 #include <qinputdialog.h>
 #include <QColorDialog>
 #include <QMenu>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KCalCore;
 using namespace Akonadi;

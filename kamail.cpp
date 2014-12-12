@@ -57,7 +57,7 @@
 #include <QTextCodec>
 #include <QStandardPaths>
 #include <QtDBus/QtDBus>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 #include <pwd.h>
 
@@ -146,14 +146,14 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         return -1;
     }
     jobdata.bcc  = (jobdata.event.emailBcc() ? Preferences::emailBccAddress() : QString());
-    qDebug() << "To:" << jobdata.event.emailAddresses(QLatin1String(","))
+    qCDebug(KALARM_LOG) << "To:" << jobdata.event.emailAddresses(QLatin1String(","))
                   << endl << "Subject:" << jobdata.event.emailSubject();
 
     MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
     MailTransport::Transport* transport = 0;
     if (Preferences::emailClient() == Preferences::sendmail)
     {
-        qDebug() << "Sending via sendmail";
+        qCDebug(KALARM_LOG) << "Sending via sendmail";
         const QList<MailTransport::Transport*> transports = manager->transports();
         for (int i = 0, count = transports.count();  i < count;  ++i)
         {
@@ -177,12 +177,12 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             transport->setStorePassword(false);
             manager->addTransport(transport);
             transport->save();
-            qDebug() << "Creating sendmail transport, id=" << transport->id();
+            qCDebug(KALARM_LOG) << "Creating sendmail transport, id=" << transport->id();
         }
     }
     else
     {
-        qDebug() << "Sending via KDE";
+        qCDebug(KALARM_LOG) << "Sending via KDE";
         const int transportId = identity.transport().isEmpty() ? -1 : identity.transport().toInt();
         transport = manager->transportById(transportId, true);
         if (!transport)
@@ -192,7 +192,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             return -1;
         }
     }
-    qDebug() << "Using transport" << transport->name() << ", id=" << transport->id();
+    qCDebug(KALARM_LOG) << "Using transport" << transport->name() << ", id=" << transport->id();
 
     KMime::Message::Ptr message = KMime::Message::Ptr(new KMime::Message);
     initHeaders(*message, jobdata);
@@ -378,7 +378,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QFile file(tmpFile);
             if (!file.open(QIODevice::ReadOnly))
             {
-                qDebug() << "tmp load error:" << attachment;
+                qCDebug(KALARM_LOG) << "tmp load error:" << attachment;
                 return attachError;
             }
             qint64 size = file.size();
@@ -387,7 +387,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             bool atterror = false;
             if (contents.size() < size)
             {
-                qDebug() << "Read error:" << attachment;
+                qCDebug(KALARM_LOG) << "Read error:" << attachment;
                 atterror = true;
             }
 
@@ -679,7 +679,7 @@ QByteArray autoDetectCharset(const QString& text)
         {
             const QTextCodec *codec = codecForName(encoding);
             if (!codec)
-                qDebug() <<"Auto-Charset: Something is wrong and I cannot get a codec. [" << encoding <<"]";
+                qCDebug(KALARM_LOG) <<"Auto-Charset: Something is wrong and I cannot get a codec. [" << encoding <<"]";
             else
             {
                  if (codec->canEncode(text))

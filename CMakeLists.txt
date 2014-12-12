@@ -54,6 +54,7 @@ set(libkalarm_SRCS
 )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS}
+    kalarm_debug.cpp
     birthdaydlg.cpp
     birthdaymodel.cpp
     main.cpp
@@ -177,7 +178,7 @@ install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults
 
 ########### KAuth helper ###############
 
-add_executable(kalarm_helper rtcwakeaction.cpp)
+add_executable(kalarm_helper rtcwakeaction.cpp kalarm_debug.cpp)
 target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
 install(TARGETS kalarm_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 kauth_install_helper_files(kalarm_helper org.kde.kalarmrtcwake root)

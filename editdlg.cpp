@@ -69,7 +69,7 @@
 #include <QShowEvent>
 #include <QScrollBar>
 #include <QTimer>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KCal;
 using namespace KAlarmCal;
@@ -97,7 +97,7 @@ QString EditAlarmDlg::i18n_chk_ShowInKOrganizer()   { return i18nc("@option:chec
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, GetResourceType getResource)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     switch (type)
     {
         case DISPLAY:  return new EditDisplayAlarmDlg(Template, parent, getResource);
@@ -1156,7 +1156,7 @@ void EditAlarmDlg::slotDefault()
 */
 void EditAlarmDlg::showOptions(bool more)
 {
-    qDebug() << (more ? "More" : "Less");
+    qCDebug(KALARM_LOG) << (more ? "More" : "Less");
     if (more)
     {
         mMoreOptions->show();

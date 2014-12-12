@@ -26,7 +26,7 @@
 #include <kalarmcal/identities.h>
 
 #include <kcmdlineargs.h>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 #include <iostream>
 
@@ -164,7 +164,7 @@ CommandOptions::CommandOptions()
         }
         else
         {
-            qDebug() << "Message";
+            qCDebug(KALARM_LOG) << "Message";
             mCommand       = NEW;
             mCommandName   = "message";
             mEditType      = EditAlarmDlg::DISPLAY;
@@ -431,7 +431,7 @@ CommandOptions::CommandOptions()
             // No arguments - run interactively & display the main window
             if (!mError.isEmpty())
                 break;
-            qDebug() << "Interactive";
+            qCDebug(KALARM_LOG) << "Interactive";
             if (mArgs->isSet("ack-confirm"))
                 mError += QLatin1String("--ack-confirm ");
             if (mArgs->isSet("attach"))
@@ -512,7 +512,7 @@ bool CommandOptions::checkCommand(const QByteArray& command, Command code, EditA
     &&  (allowedEditType == EditAlarmDlg::NO_TYPE
       || (allowedEditType != EditAlarmDlg::NO_TYPE  &&  (mCommand != NEW || mEditType != allowedEditType))))
         setErrorIncompatible(mCommandName, "--" + command);
-    qDebug().nospace() << " --" << command;
+    qCDebug(KALARM_LOG).nospace() << " --" << command;
     mCommand = code;
     mCommandName = command;
     return true;

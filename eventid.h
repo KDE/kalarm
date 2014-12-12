@@ -23,7 +23,7 @@
 
 #include <kalarmcal/kaevent.h>
 #include <QPair>
-#include <QDebug>
+#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 

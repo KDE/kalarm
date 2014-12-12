@@ -37,7 +37,7 @@
 #include <kconfiggroup.h>
 
 #include <QTimer>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 

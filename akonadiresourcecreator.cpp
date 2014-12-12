@@ -34,7 +34,7 @@
 #include <KLocalizedString>
 
 #include <QTimer>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace Akonadi;
 using namespace KAlarmCal;
@@ -57,7 +57,7 @@ void AkonadiResourceCreator::createResource()
 
 void AkonadiResourceCreator::getAgentType()
 {
-    qDebug() << "Type:" << mDefaultType;
+    qCDebug(KALARM_LOG) << "Type:" << mDefaultType;
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
@@ -128,7 +128,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         if (!controlOk)
         {
             delete agentControlIface;
-            qWarning() << "Unable to access D-Bus interface of created agent.";
+            qCWarning(KALARM_LOG) << "Unable to access D-Bus interface of created agent.";
         }
         else
         {

@@ -29,7 +29,7 @@
 #include <QMouseEvent>
 #include <QToolTip>
 #include <QApplication>
-#include <QDebug>
+#include "kalarm_debug.h"
 
 
 EventListView::EventListView(QWidget* parent)
@@ -101,7 +101,7 @@ KAEvent EventListView::selectedEvent() const
     QModelIndexList list = selectionModel()->selectedRows();
     if (list.count() != 1)
         return KAEvent();
-qDebug()<<"SelectedEvent() count="<<list.count();
+qCDebug(KALARM_LOG)<<"SelectedEvent() count="<<list.count();
     const ItemListModel* model = static_cast<const ItemListModel*>(list[0].model());
     return model->event(list[0]);
 }
@@ -221,7 +221,7 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
     }
     if (index.isValid())
     {
-        qDebug();
+        qCDebug(KALARM_LOG);
         ItemListModel* itemModel = qobject_cast<ItemListModel*>(model);
         if (!itemModel)
             qCritical() << "Invalid cast to ItemListModel*";

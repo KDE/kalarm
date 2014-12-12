@@ -82,7 +82,7 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QMutexLocker>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -213,7 +213,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mNoCloseConfirm(false),
       mDisableDeferral(false)
 {
-    qDebug() << (void*)this << "event" << mEventId;
+    qCDebug(KALARM_LOG) << (void*)this << "event" << mEventId;
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
     setObjectName(QLatin1String("MessageWin"));    // used by LikeBack
@@ -320,7 +320,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
       mNoCloseConfirm(false),
       mDisableDeferral(false)
 {
-    qDebug() << "errmsg";
+    qCDebug(KALARM_LOG) << "errmsg";
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
     setObjectName(QLatin1String("ErrorWin"));    // used by LikeBack
@@ -355,7 +355,7 @@ MessageWin::MessageWin()
       mNoCloseConfirm(false),
       mDisableDeferral(false)
 {
-    qDebug() << (void*)this << "restore";
+    qCDebug(KALARM_LOG) << (void*)this << "restore";
     setAttribute(WidgetFlags);
     setWindowModality(Qt::WindowModal);
     setObjectName(QLatin1String("RestoredMsgWin"));    // used by LikeBack
@@ -368,7 +368,7 @@ MessageWin::MessageWin()
 */
 MessageWin::~MessageWin()
 {
-    qDebug() << (void*)this << mEventId;
+    qCDebug(KALARM_LOG) << (void*)this << mEventId;
     if (AudioThread::mAudioOwner == this  &&  !mAudioThread.isNull())
         mAudioThread->quit();
     mErrorMessages.remove(mEventId);
@@ -1059,7 +1059,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     // Temporarily initialise mCollection and mEventId - they will be set by redisplayAlarm()
     mCollection          = Akonadi::Collection();
     mEventId             = EventId(mCollection.id(), eventId);
-    qDebug() << eventId;
+    qCDebug(KALARM_LOG) << eventId;
     if (mAlarmType != KAAlarm::INVALID_ALARM)
     {
         // Recreate the event from the calendar file (if possible)
@@ -1084,7 +1084,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
 */
 void MessageWin::showRestoredAlarm()
 {
-    qDebug() << mEventId;
+    qCDebug(KALARM_LOG) << mEventId;
     redisplayAlarm();
     show();
 }
@@ -1096,11 +1096,11 @@ void MessageWin::redisplayAlarm()
 {
     mCollection = AkonadiModel::instance()->collectionForItem(mEventItemId);
     mEventId.setCollectionId(mCollection.id());
-    qDebug() << mEventId;
+    qCDebug(KALARM_LOG) << mEventId;
     // Delete any already existing window for the same event
     MessageWin* duplicate = findEvent(mEventId, this);
     if (duplicate)
-        qDebug() << "Deleting duplicate window:" << mEventId;
+        qCDebug(KALARM_LOG) << "Deleting duplicate window:" << mEventId;
     delete duplicate;
 
     KAEvent* event = AlarmCalendar::resources()->event(mEventId);
@@ -1128,7 +1128,7 @@ void MessageWin::redisplayAlarms()
 {
     if (mRedisplayed)
         return;
-    qDebug();
+    qCDebug(KALARM_LOG);
     mRedisplayed = true;
     AlarmCalendar* cal = AlarmCalendar::displayCalendar();
     if (cal->isOpen())
@@ -1145,7 +1145,7 @@ void MessageWin::redisplayAlarms()
                 event.setItemId(id);
             const EventId eventId(event);
             if (findEvent(eventId))
-                qDebug() << "Message window already exists:" << eventId;
+                qCDebug(KALARM_LOG) << "Message window already exists:" << eventId;
             else
             {
                 // This event should be displayed, but currently isn't being
@@ -1155,7 +1155,7 @@ void MessageWin::redisplayAlarms()
                     qCritical() << "Invalid alarm: id=" << eventId;
                     continue;
                 }
-                qDebug() << eventId;
+                qCDebug(KALARM_LOG) << eventId;
                 const bool login = alarm.repeatAtLogin();
                 const int flags = NO_RESCHEDULE | (login ? NO_DEFER : 0) | NO_INIT_VIEW;
                 MessageWin* win = new MessageWin(&event, alarm, flags);
@@ -1196,7 +1196,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, Akonadi::Collection& resource, bo
         resource  = Akonadi::Collection();
         showEdit  = true;
         showDefer = true;
-        qDebug() << event.id() << ": success";
+        qCDebug(KALARM_LOG) << event.id() << ": success";
     }
     return true;
 }
@@ -1213,7 +1213,7 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
     event.reinstateFromDisplaying(kcalEvent, collectionId, showEdit, showDefer);
     event.setCollectionId(collectionId);
     collection = AkonadiModel::instance()->collectionById(collectionId);
-    qDebug() << EventId(event) << ": success";
+    qCDebug(KALARM_LOG) << EventId(event) << ": success";
     return true;
 }
 
@@ -1224,7 +1224,7 @@ bool MessageWin::reinstateFromDisplaying(const Event::Ptr& kcalEvent, KAEvent& e
 */
 void MessageWin::alarmShowing(KAEvent& event)
 {
-    qDebug() << event.id() << "," << KAAlarm::debugType(mAlarmType);
+    qCDebug(KALARM_LOG) << event.id() << "," << KAAlarm::debugType(mAlarmType);
     const KAAlarm alarm = event.alarm(mAlarmType);
     if (!alarm.isValid())
     {
@@ -1386,7 +1386,7 @@ void MessageWin::slotSpeak()
     }
     if (!kspeech->say(mMessage, 0))
     {
-        qDebug() << "SayMessage() D-Bus error";
+        qCDebug(KALARM_LOG) << "SayMessage() D-Bus error";
         if (!haveErrorMessage(ErrMsg_Speak))
         {
             KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call say() failed"));
@@ -1412,7 +1412,7 @@ void MessageWin::startAudio()
     }
     else
     {
-        qDebug() << QThread::currentThread();
+        qCDebug(KALARM_LOG) << QThread::currentThread();
         mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
         connect(mAudioThread, SIGNAL(readyToPlay()), SLOT(playReady()));
         connect(mAudioThread, SIGNAL(finished()), SLOT(playFinished()));
@@ -1438,7 +1438,7 @@ bool MessageWin::isAudioPlaying()
 */
 void MessageWin::stopAudio(bool wait)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     if (mAudioThread)
         mAudioThread->stop(wait);
 }
@@ -1505,7 +1505,7 @@ AudioThread::AudioThread(MessageWin* parent, const QString& audioFile, float vol
 */
 AudioThread::~AudioThread()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     stop(true);   // stop playing and tidy up (timeout 3 seconds)
     delete mAudioObject;
     mAudioObject = 0;
@@ -1521,7 +1521,7 @@ AudioThread::~AudioThread()
 */
 void AudioThread::stop(bool waiT)
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     quit();       // stop playing and tidy up
     wait(3000);   // wait for run() to exit (timeout 3 seconds)
     if (!isFinished())
@@ -1544,7 +1544,7 @@ void AudioThread::run()
         mMutex.unlock();
         return;
     }
-    qDebug() << QThread::currentThread() << mFile;
+    qCDebug(KALARM_LOG) << QThread::currentThread() << mFile;
     const QString audioFile = mFile;
     const QUrl url = QUrl::fromUserInput(mFile);
     mFile = url.isLocalFile() ? url.toLocalFile() : url.toString();
@@ -1631,7 +1631,7 @@ void AudioThread::checkAudioPlay()
     }
 
     // Start playing the file, either for the first time or again
-    qDebug() << "start";
+    qCDebug(KALARM_LOG) << "start";
     mAudioObject->play();
     mMutex.unlock();
 }
@@ -2011,7 +2011,7 @@ void MessageWin::slotOk()
 */
 void MessageWin::slotShowKMailMessage()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     if (!mKMailSerialNumber)
         return;
     const QString err = KAlarm::runKMail(false);
@@ -2040,7 +2040,7 @@ void MessageWin::slotShowKMailMessage()
 */
 void MessageWin::slotEdit()
 {
-    qDebug();
+    qCDebug(KALARM_LOG);
     MainWindow* mainWin = MainWindow::mainMainWindow();
     mEditDlg = EditAlarmDlg::create(false, &mOriginalEvent, false, mainWin, EditAlarmDlg::RES_IGNORE);
     KWindowSystem::setMainWindow(mEditDlg, winId());
@@ -2164,7 +2164,7 @@ void MessageWin::slotDefer()
         if (event)
         {
             // The event still exists in the active calendar
-            qDebug() << "Deferring event" << mEventId;
+            qCDebug(KALARM_LOG) << "Deferring event" << mEventId;
             KAEvent newev(*event);
             newev.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
             newev.setDeferDefaultMinutes(delayMins);
@@ -2190,7 +2190,7 @@ void MessageWin::slotDefer()
                 mEditButton->setEnabled(false);
                 return;
             }
-            qDebug() << "Deferring retrieved event" << mEventId;
+            qCDebug(KALARM_LOG) << "Deferring retrieved event" << mEventId;
             event.defer(dateTime, (mAlarmType & KAAlarm::REMINDER_ALARM), true);
             event.setDeferDefaultMinutes(delayMins);
             event.setCommandError(mCommandError);
@@ -2314,7 +2314,7 @@ bool MessageWin::getWorkAreaAndModal()
             // The screens are completely separate from each other.
             int inactiveScreen = -1;
             FullScreenType full = haveFullScreenWindow(mScreenNumber);
-qDebug()<<"full="<<full<<", screen="<<mScreenNumber;
+qCDebug(KALARM_LOG)<<"full="<<full<<", screen="<<mScreenNumber;
             if (full == NoFullScreen)
                 return modal;   // KAlarm's screen doesn't contain a full screen window
             if (full == FullScreen)
@@ -2369,7 +2369,7 @@ FullScreenType haveFullScreenWindow(int screen)
     const Window activeWindow = rootInfo.activeWindow();
     const Window* windows     = rootInfo.clientList();
     const int windowCount     = rootInfo.clientListCount();
-qDebug()<<"Screen"<<screen<<": Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(screen);
+qCDebug(KALARM_LOG)<<"Screen"<<screen<<": Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(screen);
 NETRect geom;
 NETRect frame;
     for (int w = 0;  w < windowCount;  ++w)
@@ -2380,12 +2380,12 @@ const QRect fr(frame.pos.x, frame.pos.y, frame.size.width, frame.size.height);
 const QRect gm(geom.pos.x, geom.pos.y, geom.size.width, geom.size.height);
         if (winInfo.state() & NET::FullScreen)
         {
-qDebug()<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<gm<<", frame="<<fr;
+qCDebug(KALARM_LOG)<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<gm<<", frame="<<fr;
             type = FullScreen;
             if (windows[w] == activeWindow)
                 return FullScreenActive;
         }
-//else { qDebug()<<"Found normal: "<<windows[w]<<", geom="<<gm<<", frame="<<fr; }
+//else { qCDebug(KALARM_LOG)<<"Found normal: "<<windows[w]<<", geom="<<gm<<", frame="<<fr; }
     }
     return type;
 }
@@ -2404,7 +2404,7 @@ FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, QVector<
     const Window activeWindow = rootInfo.activeWindow();
     const Window* windows     = rootInfo.clientList();
     const int windowCount     = rootInfo.clientListCount();
-qDebug()<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(0);
+qCDebug(KALARM_LOG)<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWindow<<", geom="<<qApp->desktop()->screenGeometry(0);
     NETRect netgeom;
     NETRect netframe;
     for (int w = 0;  w < windowCount;  ++w)
@@ -2416,12 +2416,12 @@ qDebug()<<"Virtual desktops: Window count="<<windowCount<<", active="<<activeWin
             const bool active = (windows[w] == activeWindow);
             winInfo.kdeGeometry(netframe, netgeom);
             const QRect winRect(netgeom.pos.x, netgeom.pos.y, netgeom.size.width, netgeom.size.height);
-qDebug()<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
+qCDebug(KALARM_LOG)<<"Found FULL SCREEN: "<<windows[w]<<", geom="<<winRect;
             for (int s = 0, count = screenRects.count();  s < count;  ++s)
             {
                 if (screenRects[s].contains(winRect))
                 {
-qDebug()<<"FULL SCREEN on screen"<<s<<", active="<<active;
+qCDebug(KALARM_LOG)<<"FULL SCREEN on screen"<<s<<", active="<<active;
                     if (active)
                         screenTypes[s] = result = FullScreenActive;
                     else

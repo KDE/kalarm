@@ -27,7 +27,7 @@
 #include <kglobal.h>
 #include <KLocalizedString>
 #include <qapplication.h>
-#include <qdebug.h>
+#include "kalarm_debug.h"
 
 using namespace KAlarmCal;
 
