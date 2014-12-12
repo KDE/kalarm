@@ -96,8 +96,8 @@ QByteArray CompatibilityAttribute::type() const
 
 QByteArray CompatibilityAttribute::name()
 {
-    static const QByteArray sType( "KAlarmCompatibility" );
-    return sType;
+    static const QByteArray attType("KAlarmCompatibility");
+    return attType;
 }
 
 QByteArray CompatibilityAttribute::serialized() const
