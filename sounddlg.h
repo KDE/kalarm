@@ -60,7 +60,7 @@ class SoundWidget : public QWidget
         void           changed();      // emitted whenever any contents change
 
     protected:
-        virtual void   showEvent(QShowEvent* Q_DECL_OVERRIDE);
+        void   showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
