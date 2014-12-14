@@ -22,7 +22,7 @@
 
 #include "compatibilityattribute.h"
 
-#include <qdebug.h>
+#include "kalarmcal_debug.h"
 
 namespace KAlarmCal
 {
@@ -104,13 +104,13 @@ QByteArray CompatibilityAttribute::serialized() const
 {
     const QByteArray v = QByteArray::number(d->mCompatibility) + ' '
                        + QByteArray::number(d->mVersion);
-    qDebug() << v;
+    qCDebug(KALARMCAL_LOG) << v;
     return v;
 }
 
 void CompatibilityAttribute::deserialize(const QByteArray &data)
 {
-    qDebug() << data;
+    qCDebug(KALARMCAL_LOG) << data;
 
     // Set default values
     d->mCompatibility = KACalendar::Incompatible;

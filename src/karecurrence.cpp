@@ -26,7 +26,7 @@
 #include <kcalcore/icalformat.h>
 
 #include <klocalizedstring.h>
-#include <qdebug.h>
+#include "kalarmcal_debug.h"
 
 #include <QBitArray>
 #include <QDate>

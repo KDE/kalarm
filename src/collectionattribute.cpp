@@ -22,7 +22,7 @@
 
 #include "collectionattribute.h"
 
-#include <qdebug.h>
+#include "kalarmcal_debug.h"
 
 namespace KAlarmCal
 {
@@ -186,13 +186,13 @@ QByteArray CollectionAttribute::serialized() const
            + QByteArray::number(d->mBackgroundColour.green()) + ' '
            + QByteArray::number(d->mBackgroundColour.blue()) + ' '
            + QByteArray::number(d->mBackgroundColour.alpha());
-    qDebug() << v;
+    qCDebug(KALARMCAL_LOG) << v;
     return v;
 }
 
 void CollectionAttribute::deserialize(const QByteArray &data)
 {
-    qDebug() << data;
+    qCDebug(KALARMCAL_LOG) << data;
 
     // Set default values
     d->mEnabled          = CalEvent::EMPTY;

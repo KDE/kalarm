@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 
 #include <klocalizedstring.h>
-#include <qdebug.h>
+#include "kalarmcal_debug.h"
 
 #include <QMap>
 #include <QFile>
@@ -118,9 +118,9 @@ int updateVersion(const FileStorage::Ptr &fileStorage, QString &versionString)
         if (isUTC(localFile)) {
             ver = -version;
         }
-        qDebug() << "KAlarm version 0.5.7 (" << (ver < 0 ? "" : "non-") << "UTC)";
+        qCDebug(KALARMCAL_LOG) << "KAlarm version 0.5.7 (" << (ver < 0 ? "" : "non-") << "UTC)";
     } else {
-        qDebug() << "KAlarm version" << version;
+        qCDebug(KALARMCAL_LOG) << "KAlarm version" << version;
     }
 
     // Convert events to current KAlarm format for when/if the calendar is saved
@@ -142,7 +142,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
     subVersion.clear();
     Calendar::Ptr calendar = fileStorage->calendar();
     versionString = calendar->customProperty(KACalendar::APPNAME, VERSION_PROPERTY);
-    qDebug() << "File=" << fileStorage->fileName() << ", version=" << versionString;
+    qCDebug(KALARMCAL_LOG) << "File=" << fileStorage->fileName() << ", version=" << versionString;
 
     if (versionString.isEmpty()) {
         // Pre-KAlarm 1.4 defined the KAlarm version number in the PRODID field.

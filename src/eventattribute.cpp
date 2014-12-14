@@ -21,7 +21,7 @@
  */
 
 #include "eventattribute.h"
-
+#include "kalarmcal_debug.h"
 #include <QList>
 #include <QByteArray>
 
@@ -85,13 +85,13 @@ EventAttribute *EventAttribute::clone() const
 QByteArray EventAttribute::serialized() const
 {
     const QByteArray v = QByteArray::number(d->mCommandError);
-    qDebug() << v;
+    qCDebug(KALARMCAL_LOG) << v;
     return v;
 }
 
 void EventAttribute::deserialize(const QByteArray &data)
 {
-    qDebug() << data;
+    qCDebug(KALARMCAL_LOG) << data;
 
     // Set default values
     d->mCommandError = KAEvent::CMD_NO_ERROR;
