@@ -295,12 +295,12 @@ QString uid(const QString &id, Type status)
     if (status != oldType  &&  i > 0) {
         QString part;
         switch (status) {
-            case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
-            case DISPLAYING:  part = staticStrings->DISPLAYING_UID;  break;
-            case ACTIVE:
-            case TEMPLATE:
-            case EMPTY:
-            default:          part = QLatin1String("-");  break;
+        case ARCHIVED:    part = staticStrings->ARCHIVED_UID;  break;
+        case DISPLAYING:  part = staticStrings->DISPLAYING_UID;  break;
+        case ACTIVE:
+        case TEMPLATE:
+        case EMPTY:
+        default:          part = QLatin1String("-");  break;
         }
         result.replace(i, len, part);
     }
@@ -387,13 +387,13 @@ void setStatus(const Event::Ptr &event, Type status, const QString &param)
     }
     QString text;
     switch (status) {
-        case ACTIVE:      text = staticStrings->ACTIVE_STATUS;  break;
-        case TEMPLATE:    text = staticStrings->TEMPLATE_STATUS;  break;
-        case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
-        case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
-        default:
-            event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
-            return;
+    case ACTIVE:      text = staticStrings->ACTIVE_STATUS;  break;
+    case TEMPLATE:    text = staticStrings->TEMPLATE_STATUS;  break;
+    case ARCHIVED:    text = staticStrings->ARCHIVED_STATUS;  break;
+    case DISPLAYING:  text = staticStrings->DISPLAYING_STATUS;  break;
+    default:
+        event->removeCustomProperty(KACalendar::APPNAME, staticStrings->STATUS_PROPERTY);
+        return;
     }
     if (!param.isEmpty()) {
         text += QLatin1Char(';') + param;
@@ -435,10 +435,10 @@ Types types(const QStringList &mimeTypes)
 QString mimeType(Type type)
 {
     switch (type) {
-        case ACTIVE:    return MIME_ACTIVE;
-        case ARCHIVED:  return MIME_ARCHIVED;
-        case TEMPLATE:  return MIME_TEMPLATE;
-        default:        return QString();
+    case ACTIVE:    return MIME_ACTIVE;
+    case ARCHIVED:  return MIME_ARCHIVED;
+    case TEMPLATE:  return MIME_TEMPLATE;
+    default:        return QString();
     }
 }
 

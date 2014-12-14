@@ -20,4 +20,3 @@
 #include "kalarmcal_debug.h"
 Q_LOGGING_CATEGORY(KALARMCAL_LOG, "log_kalarmcal")
 
-

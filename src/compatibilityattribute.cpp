@@ -103,7 +103,7 @@ QByteArray CompatibilityAttribute::name()
 QByteArray CompatibilityAttribute::serialized() const
 {
     const QByteArray v = QByteArray::number(d->mCompatibility) + ' '
-                       + QByteArray::number(d->mVersion);
+                         + QByteArray::number(d->mVersion);
     qCDebug(KALARMCAL_LOG) << v;
     return v;
 }
