@@ -147,9 +147,9 @@ class CollectionView : public QListView
         Akonadi::Collection  collection(const QModelIndex&) const;
 
     protected:
-        virtual void setModel(QAbstractItemModel*);
-        virtual void mouseReleaseEvent(QMouseEvent*);
-        virtual bool viewportEvent(QEvent*);
+        void setModel(QAbstractItemModel*) Q_DECL_OVERRIDE;
+        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        bool viewportEvent(QEvent*) Q_DECL_OVERRIDE;
 };
 
 
