@@ -52,7 +52,7 @@ class TimeEdit : public QWidget
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit TimeEdit(QWidget* parent = 0);
+        explicit TimeEdit(QWidget* parent = Q_NULLPTR);
         /** Returns true if the widget is read only. */
         bool          isReadOnly() const           { return mReadOnly; }
         /** Sets whether the widget is read-only for the user. If read-only,

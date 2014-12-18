@@ -75,7 +75,7 @@ class RepetitionDlg : public KDialog
 {
         Q_OBJECT
     public:
-        RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = 0);
+        RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent = Q_NULLPTR);
         void       setReadOnly(bool);
         void       set(const Repetition&, bool dateOnly = false, int maxDuration = -1);
         Repetition repetition() const;   // get the repetition interval and count

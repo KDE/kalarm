@@ -44,12 +44,12 @@ class Slider : public QSlider
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit Slider(QWidget* parent = 0);
+        explicit Slider(QWidget* parent = Q_NULLPTR);
         /** Constructor.
          *  @param orient The orientation of the slider, either Qt::Horizonal or Qt::Vertical.
          *  @param parent The parent object of this widget.
          */
-        explicit Slider(Qt::Orientation orient, QWidget* parent = 0);
+        explicit Slider(Qt::Orientation orient, QWidget* parent = Q_NULLPTR);
         /** Constructor.
          *  @param minValue The minimum value which the slider can have.
          *  @param maxValue The maximum value which the slider can have.
@@ -58,7 +58,7 @@ class Slider : public QSlider
          *  @param parent The parent object of this widget.
          */
         Slider(int minValue, int maxValue, int pageStep, Qt::Orientation orient,
-               QWidget* parent = 0);
+               QWidget* parent = Q_NULLPTR);
         /** Returns true if the slider is read only. */
         bool         isReadOnly() const  { return mReadOnly; }
         /** Sets whether the slider is read-only for the user.

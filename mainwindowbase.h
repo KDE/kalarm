@@ -35,7 +35,7 @@ class MainWindowBase : public KXmlGuiWindow
         Q_OBJECT
 
     public:
-        explicit MainWindowBase(QWidget* parent = 0, Qt::WindowFlags f = Qt::Window);
+        explicit MainWindowBase(QWidget* parent = Q_NULLPTR, Qt::WindowFlags f = Qt::Window);
 };
 
 #endif // MAINWINDOWBASE_H

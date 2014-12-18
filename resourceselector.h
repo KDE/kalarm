@@ -57,7 +57,7 @@ class ResourceSelector : public QFrame
 {
         Q_OBJECT
     public:
-        explicit ResourceSelector(QWidget* parent = 0);
+        explicit ResourceSelector(QWidget* parent = Q_NULLPTR);
         void  initActions(KActionCollection*);
         void  setContextMenu(QMenu*);
 

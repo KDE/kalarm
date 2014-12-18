@@ -41,7 +41,7 @@ class StackedWidgetT : public T
          *  @param parent The parent object of this widget.
          *  @param name The name of this widget.
          */
-        explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = 0)
+        explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = Q_NULLPTR)
               : T(parent),
                 mGroup(group)
         {
@@ -103,7 +103,7 @@ class StackedScrollGroup;
 class StackedScrollWidget : public StackedWidgetT<QScrollArea>
 {
     public:
-        explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = 0);
+        explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = Q_NULLPTR);
         QWidget* widget() const  { return viewport()->findChild<QWidget*>(); }
 };
 

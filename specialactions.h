@@ -37,7 +37,7 @@ class SpecialActionsButton : public QPushButton
 {
         Q_OBJECT
     public:
-        explicit SpecialActionsButton(bool enableCheckboxes, QWidget* parent = 0);
+        explicit SpecialActionsButton(bool enableCheckboxes, QWidget* parent = Q_NULLPTR);
         void           setActions(const QString& pre, const QString& post, KAEvent::ExtraActionOptions);
         const QString& preAction() const      { return mPreAction; }
         const QString& postAction() const     { return mPostAction; }
@@ -66,7 +66,7 @@ class SpecialActions : public QWidget
 {
         Q_OBJECT
     public:
-        explicit SpecialActions(bool enableCheckboxes, QWidget* parent = 0);
+        explicit SpecialActions(bool enableCheckboxes, QWidget* parent = Q_NULLPTR);
         void         setActions(const QString& pre, const QString& post, KAEvent::ExtraActionOptions);
         QString      preAction() const;
         QString      postAction() const;
@@ -95,7 +95,7 @@ class SpecialActionsDlg : public QDialog
     public:
         SpecialActionsDlg(const QString& preAction, const QString& postAction,
                           KAEvent::ExtraActionOptions, bool enableCheckboxes,
-                          QWidget* parent = 0);
+                          QWidget* parent = Q_NULLPTR);
         QString        preAction() const     { return mActions->preAction(); }
         QString        postAction() const    { return mActions->postAction(); }
         KAEvent::ExtraActionOptions options() const  { return mActions->options(); }

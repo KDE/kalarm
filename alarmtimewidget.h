@@ -46,8 +46,8 @@ class AlarmTimeWidget : public QFrame
             DEFER_TIME     = 0x02,  // "Defer to ..."
             DEFER_ANY_TIME = DEFER_TIME | 0x04  // "Defer to ..." with 'any time' option
         };
-        AlarmTimeWidget(const QString& groupBoxTitle, Mode, QWidget* parent = 0);
-        explicit AlarmTimeWidget(Mode, QWidget* parent = 0);
+        AlarmTimeWidget(const QString& groupBoxTitle, Mode, QWidget* parent = Q_NULLPTR);
+        explicit AlarmTimeWidget(Mode, QWidget* parent = Q_NULLPTR);
         KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
         void             setDateTime(const DateTime&);
         void             setMinDateTimeIsCurrent();

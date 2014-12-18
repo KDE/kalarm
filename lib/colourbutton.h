@@ -41,7 +41,7 @@ class ColourButton : public KColorButton
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit ColourButton(QWidget* parent = 0);
+        explicit ColourButton(QWidget* parent = Q_NULLPTR);
         /** Returns the selected colour. */
         QColor       colour() const              { return color(); }
         /** Sets the selected colour to @p c. */

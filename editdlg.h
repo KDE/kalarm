@@ -63,9 +63,9 @@ class EditAlarmDlg : public KDialog
             RES_IGNORE         // don't get resource
         };
 
-        static EditAlarmDlg* create(bool Template, Type, QWidget* parent = 0,
+        static EditAlarmDlg* create(bool Template, Type, QWidget* parent = Q_NULLPTR,
                                     GetResourceType = RES_PROMPT);
-        static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
+        static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
                                     GetResourceType = RES_PROMPT, bool readOnly = false);
         virtual ~EditAlarmDlg();
         bool            getEvent(KAEvent&, Akonadi::Collection&);
@@ -85,9 +85,9 @@ class EditAlarmDlg : public KDialog
         static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
     protected:
-        EditAlarmDlg(bool Template, KAEvent::SubAction, QWidget* parent = 0,
+        EditAlarmDlg(bool Template, KAEvent::SubAction, QWidget* parent = Q_NULLPTR,
                      GetResourceType = RES_PROMPT);
-        EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
+        EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
                      GetResourceType = RES_PROMPT, bool readOnly = false);
         void            init(const KAEvent* event);
         void    resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;

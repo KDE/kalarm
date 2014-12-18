@@ -34,7 +34,7 @@ class TemplateDlg : public KDialog
 {
         Q_OBJECT
     public:
-        static TemplateDlg*  create(QWidget* parent = 0);
+        static TemplateDlg*  create(QWidget* parent = Q_NULLPTR);
         ~TemplateDlg();
 
     Q_SIGNALS:

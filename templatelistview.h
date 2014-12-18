@@ -30,7 +30,7 @@ class TemplateListView : public EventListView
 {
         Q_OBJECT
     public:
-        explicit TemplateListView(QWidget* parent = 0);
+        explicit TemplateListView(QWidget* parent = Q_NULLPTR);
         virtual void setModel(QAbstractItemModel*);
 };
 

@@ -108,18 +108,18 @@ bool                showFileErrMessage(const QString& filename, FileErr, FileErr
 QString             pathOrUrl(const QString& url);
 
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
-                               const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = 0);
-bool                editNewAlarm(const QString& templateName, QWidget* parent = 0);
-void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = 0);
-void                editNewAlarm(KAEvent::SubAction, QWidget* parent = 0, const AlarmText* = 0);
-void                editNewAlarm(const KAEvent* preset, QWidget* parent = 0);
-void                editAlarm(KAEvent*, QWidget* parent = 0);
-bool                editAlarmById(const EventId& eventID, QWidget* parent = 0);
+                               const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = Q_NULLPTR);
+bool                editNewAlarm(const QString& templateName, QWidget* parent = Q_NULLPTR);
+void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = Q_NULLPTR);
+void                editNewAlarm(KAEvent::SubAction, QWidget* parent = Q_NULLPTR, const AlarmText* = 0);
+void                editNewAlarm(const KAEvent* preset, QWidget* parent = Q_NULLPTR);
+void                editAlarm(KAEvent*, QWidget* parent = Q_NULLPTR);
+bool                editAlarmById(const EventId& eventID, QWidget* parent = Q_NULLPTR);
 void                updateEditedAlarm(EditAlarmDlg*, KAEvent&, Akonadi::Collection&);
-void                viewAlarm(const KAEvent*, QWidget* parent = 0);
-void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = 0);
-void                editNewTemplate(const KAEvent* preset, QWidget* parent = 0);
-void                editTemplate(KAEvent*, QWidget* parent = 0);
+void                viewAlarm(const KAEvent*, QWidget* parent = Q_NULLPTR);
+void                editNewTemplate(EditAlarmDlg::Type, QWidget* parent = Q_NULLPTR);
+void                editNewTemplate(const KAEvent* preset, QWidget* parent = Q_NULLPTR);
+void                editTemplate(KAEvent*, QWidget* parent = Q_NULLPTR);
 void                execNewAlarmDlg(EditAlarmDlg*);
 /** Create a "New From Template" QAction */
 KToggleAction*      createAlarmEnableAction(QObject* parent);

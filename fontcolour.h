@@ -34,7 +34,7 @@ class FontColourChooser : public QWidget
 {
         Q_OBJECT
     public:
-        explicit FontColourChooser(QWidget* parent = 0,
+        explicit FontColourChooser(QWidget* parent = Q_NULLPTR,
                const QStringList& fontList = QStringList(),
                const QString& frameLabel = i18n("Requested font"),
                bool fg = true, bool defaultFont = false, int visibleListSize = 8);

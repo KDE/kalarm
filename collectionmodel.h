@@ -141,7 +141,7 @@ class CollectionView : public QListView
 {
         Q_OBJECT
     public:
-        explicit CollectionView(CollectionFilterCheckListModel*, QWidget* parent = 0);
+        explicit CollectionView(CollectionFilterCheckListModel*, QWidget* parent = Q_NULLPTR);
         CollectionFilterCheckListModel* collectionModel() const  { return static_cast<CollectionFilterCheckListModel*>(model()); }
         Akonadi::Collection  collection(int row) const;
         Akonadi::Collection  collection(const QModelIndex&) const;

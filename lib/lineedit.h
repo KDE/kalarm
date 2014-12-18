@@ -66,11 +66,11 @@ class LineEdit : public KLineEdit
          *  @param type The content type for the line edit.
          *  @param parent The parent object of this widget.
          */
-        explicit LineEdit(Type type, QWidget* parent = 0);
+        explicit LineEdit(Type type, QWidget* parent = Q_NULLPTR);
         /** Constructs a line edit whose content type is Text.
          *  @param parent The parent object of this widget.
          */
-        explicit LineEdit(QWidget* parent = 0);
+        explicit LineEdit(QWidget* parent = Q_NULLPTR);
         /** Return the entered text.
          *  If the type is Url, tilde expansion is performed.
          */

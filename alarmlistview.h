@@ -32,7 +32,7 @@ class AlarmListView : public EventListView
 {
         Q_OBJECT
     public:
-        explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = 0);
+        explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = Q_NULLPTR);
         void      setModel(QAbstractItemModel*) Q_DECL_OVERRIDE;
         void              selectTimeColumns(bool time, bool timeTo);
 

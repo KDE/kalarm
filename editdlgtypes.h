@@ -53,8 +53,8 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
 {
         Q_OBJECT
     public:
-        explicit EditDisplayAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
-        EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
+        explicit EditDisplayAlarmDlg(bool Template, QWidget* parent = Q_NULLPTR, GetResourceType = RES_PROMPT);
+        EditDisplayAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
                      GetResourceType = RES_PROMPT, bool readOnly = false);
 
         // Methods to initialise values in the New Alarm dialogue.
@@ -143,8 +143,8 @@ class EditCommandAlarmDlg : public EditAlarmDlg
 {
         Q_OBJECT
     public:
-        explicit EditCommandAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
-        EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
+        explicit EditCommandAlarmDlg(bool Template, QWidget* parent = Q_NULLPTR, GetResourceType = RES_PROMPT);
+        EditCommandAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
                             GetResourceType = RES_PROMPT, bool readOnly = false);
 
         // Methods to initialise values in the New Alarm dialogue.
@@ -195,8 +195,8 @@ class EditEmailAlarmDlg : public EditAlarmDlg
 {
         Q_OBJECT
     public:
-        explicit EditEmailAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
-        EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
+        explicit EditEmailAlarmDlg(bool Template, QWidget* parent = Q_NULLPTR, GetResourceType = RES_PROMPT);
+        EditEmailAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
                           GetResourceType = RES_PROMPT, bool readOnly = false);
 
         // Methods to initialise values in the New Alarm dialogue.
@@ -261,8 +261,8 @@ class EditAudioAlarmDlg : public EditAlarmDlg
 {
         Q_OBJECT
     public:
-        explicit EditAudioAlarmDlg(bool Template, QWidget* parent = 0, GetResourceType = RES_PROMPT);
-        EditAudioAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = 0,
+        explicit EditAudioAlarmDlg(bool Template, QWidget* parent = Q_NULLPTR, GetResourceType = RES_PROMPT);
+        EditAudioAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
                      GetResourceType = RES_PROMPT, bool readOnly = false);
 
         // Methods to initialise values in the New Alarm dialogue.

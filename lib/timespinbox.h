@@ -50,13 +50,13 @@ class TimeSpinBox : public SpinBox2
          *                   False for entry of 12-hour clock times (range 12:00 to 11:59).
          *  @param parent The parent object of this widget.
          */
-        explicit TimeSpinBox(bool use24hour, QWidget* parent = 0);
+        explicit TimeSpinBox(bool use24hour, QWidget* parent = Q_NULLPTR);
         /** Constructor for a non-wrapping time spin box which can be used to enter a length of time.
          *  @param minMinute The minimum value which the spin box can hold, in minutes.
          *  @param maxMinute  The maximum value which the spin box can hold, in minutes.
          *  @param parent The parent object of this widget.
          */
-        TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = 0);
+        TimeSpinBox(int minMinute, int maxMinute, QWidget* parent = Q_NULLPTR);
         /** Returns true if the spin box holds a valid value.
          *  An invalid value is displayed as asterisks.
          */

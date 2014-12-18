@@ -37,7 +37,7 @@ class ItemBox : public KHBox
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit ItemBox(QWidget* parent = 0);
+        explicit ItemBox(QWidget* parent = Q_NULLPTR);
         void leftAlign();
 
     private:

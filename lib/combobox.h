@@ -43,7 +43,7 @@ class ComboBox : public KComboBox
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit ComboBox(QWidget* parent = 0);
+        explicit ComboBox(QWidget* parent = Q_NULLPTR);
         /** Returns true if the widget is read only. */
         bool         isReadOnly() const          { return mReadOnly; }
         /** Sets whether the combo box is read-only for the user. If read-only,

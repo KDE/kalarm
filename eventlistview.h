@@ -34,7 +34,7 @@ class EventListView : public QTreeView
 {
         Q_OBJECT
     public:
-        explicit EventListView(QWidget* parent = 0);
+        explicit EventListView(QWidget* parent = Q_NULLPTR);
         ItemListModel*    itemModel() const    { return static_cast<ItemListModel*>(model()); }
         KAEvent           event(int row) const;
         KAEvent           event(const QModelIndex&) const;
