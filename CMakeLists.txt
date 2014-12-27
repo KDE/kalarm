@@ -17,9 +17,12 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
 
 set(KF5_VERSION "5.5.0")
-set(KDEPIMLIBS_VERSION "4.79.0")
-
-ecm_setup_version(${KDEPIMLIBS_VERSION} VARIABLE_PREFIX KALARMCAL
+set(KALARMLIB_VERSION "4.79.0")
+set(CALENDARCORELIB_VERSION "4.79.0")
+set(HOLIDAYLIB_VERSION "4.79.0")
+set(IDENTITYMANAGERLIB_VERSION "4.79.0")
+set(AKONADILIB_VERSION "4.79.0")
+ecm_setup_version(${KALARMLIB_VERSION} VARIABLE_PREFIX KALARMCAL
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfigVersion.cmake"
                         SOVERSION 5
@@ -28,10 +31,10 @@ ecm_setup_version(${KDEPIMLIBS_VERSION} VARIABLE_PREFIX KALARMCAL
 ########### Find packages ###########
 find_package(KF5KDELibs4Support ${KF5_VERSION} CONFIG REQUIRED)
 
-find_package(KF5Akonadi ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
-find_package(KF5CalendarCore ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
-find_package(KF5IdentityManagement ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
-find_package(KF5Holidays ${KDEPIMLIBS_VERSION} CONFIG REQUIRED)
+find_package(KF5Akonadi ${AKONADILIB_VERSION} CONFIG REQUIRED)
+find_package(KF5CalendarCore ${CALENDARCORELIB_VERSION} CONFIG REQUIRED)
+find_package(KF5IdentityManagement ${IDENTITYMANAGERLIB_VERSION} CONFIG REQUIRED)
+find_package(KF5Holidays ${HOLIDAYLIB_VERSION} CONFIG REQUIRED)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
 add_definitions("-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII")
