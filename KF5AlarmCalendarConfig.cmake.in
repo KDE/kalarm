@@ -1,9 +1,9 @@
 @PACKAGE_INIT@
 
-find_dependency(KF5Akonadi "@AKONADILIB_VERSION@")
+find_dependency(KF5Akonadi "@AKONADI_LIB_VERSION@")
 find_dependency(KF5KDELibs4Support "@KF5_VERSION@")
-find_dependency(KF5IdentityManagement "@IDENTITYMANAGERLIB_VERSION@")
-find_dependency(KF5Holidays "@HOLIDAYLIB_VERSION@")
-find_dependency(KF5CalendarCore "@CALENDARCORELIB_VERSION@")
+find_dependency(KF5IdentityManagement "@IDENTITYMANAGER_LIB_VERSION@")
+find_dependency(KF5Holidays "@HOLIDAY_LIB_VERSION@")
+find_dependency(KF5CalendarCore "@CALENDARCORE_LIB_VERSION@")
 
 include("${CMAKE_CURRENT_LIST_DIR}/KF5AlarmCalendarTargets.cmake")
