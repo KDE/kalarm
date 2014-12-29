@@ -67,14 +67,14 @@ class CalendarCreator : public QObject
         QString        errorMessage() const   { return mErrorMessage; }
         void           createAgent(const QString& agentType, QObject* parent);
 
-    public slots:
+    public Q_SLOTS:
         void agentCreated(KJob*);
 
-    signals:
+    Q_SIGNALS:
         void creating(const QString& path);
         void finished(CalendarCreator*);
 
-    private slots:
+    private Q_SLOTS:
         void fetchCollection();
         void collectionFetchResult(KJob*);
         void resourceSynchronised(KJob*);
@@ -118,7 +118,7 @@ class CalendarUpdater : public QObject
         // Check whether any instance is for the given collection ID
         static bool containsCollection(Collection::Id);
 
-    public slots:
+    public Q_SLOTS:
         bool update();
 
     private:
