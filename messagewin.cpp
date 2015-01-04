@@ -109,7 +109,7 @@ static const int proximityMultiple = 10;         // multiple of button height di
 class MessageText : public KTextEdit
 {
     public:
-        MessageText(QWidget* parent = 0)
+        MessageText(QWidget* parent = Q_NULLPTR)
             : KTextEdit(parent),
               mNewLine(false)
         {
