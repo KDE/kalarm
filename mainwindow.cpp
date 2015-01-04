@@ -428,25 +428,25 @@ void MainWindow::initActions()
 
     QAction* action = mActionNew->displayAlarmAction();
     actions->addAction(QLatin1String("newDisplay"), action);
-#pragma "port QT5"
+#pragma message("port QT5")
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, &QAction::triggered, this, &MainWindow::slotNewDisplay);
 
     action = mActionNew->commandAlarmAction();
     actions->addAction(QLatin1String("newCommand"), action);
-#pragma "port QT5"
+#pragma message("port QT5")
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, &QAction::triggered, this, &MainWindow::slotNewCommand);
 
     action = mActionNew->emailAlarmAction();
     actions->addAction(QLatin1String("newEmail"), action);
-#pragma "port QT5"
+#pragma message("port QT5")
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, &QAction::triggered, this, &MainWindow::slotNewEmail);
 
     action = mActionNew->audioAlarmAction();
     actions->addAction(QLatin1String("newAudio"), action);
-#pragma "port QT5"
+#pragma message("port QT5")
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, &QAction::triggered, this, &MainWindow::slotNewAudio);
 
@@ -521,7 +521,7 @@ void MainWindow::initActions()
 
     mActionSpreadWindows = KAlarm::createSpreadWindowsAction(this);
     actions->addAction(QLatin1String("spread"), mActionSpreadWindows);
-#pragma "port QT5"
+#pragma message("port QT5")
 
     //QT5 mActionSpreadWindows->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
 
