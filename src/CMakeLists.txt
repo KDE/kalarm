@@ -42,7 +42,7 @@ set_target_properties(KF5AlarmCalendar PROPERTIES
 )
 
 
-target_include_directories(KF5AlarmCalendar INTERFACE "$<INSTALL_INTERFACE:${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal>")
+target_include_directories(KF5AlarmCalendar INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal>")
 target_include_directories(KF5AlarmCalendar PUBLIC "$<BUILD_INTERFACE:${KAlarmCal_SOURCE_DIR}/src;${KAlarmCal_BINARY_DIR}/src>")
 
 
@@ -70,17 +70,17 @@ install(FILES
         kacalendar.h
         version.h
         ${KAlarmCal_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/kalarmcal
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/kalarmcal
         COMPONENT Devel
 )
 install(FILES
         ${KAlarmCal_CamelCase_HEADERS}
-        DESTINATION ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/KAlarmCal/
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/KAlarmCal/
         COMPONENT Devel
 )
 
 
-ecm_generate_pri_file(BASE_NAME KAlarmCal LIB_NAME KF5AlarmCal DEPS "Holidays PimIdentities CoreAddons CalendarCore AkonadiCore" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KF5_INCLUDE_INSTALL_DIR}/KAlarmCal/)
+ecm_generate_pri_file(BASE_NAME KAlarmCal LIB_NAME KF5AlarmCal DEPS "Holidays PimIdentities CoreAddons CalendarCore AkonadiCore" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KAlarmCal/)
 install(FILES ${PRI_FILENAME} DESTINATION ${ECM_MKSPECS_INSTALL_DIR})
 
 
