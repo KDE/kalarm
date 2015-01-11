@@ -162,24 +162,24 @@ if (Qt5X11Extras_FOUND)
 endif()
 
 
-install(TARGETS kalarm_bin ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 #endif (UNIX)
 
 ########### install files ###############
 
-install(PROGRAMS org.kde.kalarm.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install(PROGRAMS kalarm.autostart.desktop DESTINATION ${AUTOSTART_INSTALL_DIR})
-install(FILES kalarm.appdata.xml DESTINATION ${CMAKE_INSTALL_METAINFODIR})
-install(FILES kalarmconfig.kcfg DESTINATION ${KCFG_INSTALL_DIR})
-install(FILES kalarmui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/kalarm)
-install(FILES org.kde.kalarm.kalarm.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
-install(FILES kalarm.upd DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
-install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults.pl kalarm-2.0.2-general.pl kalarm-2.1.5-general.pl DESTINATION ${KCONF_UPDATE_INSTALL_DIR})
+install(PROGRAMS org.kde.kalarm.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install(PROGRAMS kalarm.autostart.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
+install(FILES kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
+install(FILES kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
+install(FILES kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kalarm)
+install(FILES org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
+install(FILES kalarm.upd DESTINATION ${KDE_INSTALL_KCONFUPDATEDIR})
+install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults.pl kalarm-2.0.2-general.pl kalarm-2.1.5-general.pl DESTINATION ${KDE_INSTALL_KCONFUPDATEDIR})
 
 ########### KAuth helper ###############
 
 add_executable(kalarm_helper rtcwakeaction.cpp kalarm_debug.cpp)
 target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
-install(TARGETS kalarm_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS kalarm_helper DESTINATION ${KDE_INSTALL_LIBEXECDIR})
 kauth_install_helper_files(kalarm_helper org.kde.kalarmrtcwake root)
 kauth_install_actions(org.kde.kalarmrtcwake rtcwakeaction.actions)
