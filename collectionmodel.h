@@ -78,7 +78,7 @@ class CollectionCheckListModel : public KCheckableProxyModel
 {
         Q_OBJECT
     public:
-        explicit CollectionCheckListModel(CalEvent::Type, QObject* parent = 0);
+        explicit CollectionCheckListModel(CalEvent::Type, QObject* parent = Q_NULLPTR);
         ~CollectionCheckListModel();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;

@@ -93,7 +93,7 @@ class AlarmListModel : public ItemListModel
             ColumnCount
         };
 
-        explicit AlarmListModel(QObject* parent = 0);
+        explicit AlarmListModel(QObject* parent = Q_NULLPTR);
         ~AlarmListModel();
 
         /** Return the model containing all active and archived alarms. */
@@ -139,7 +139,7 @@ class TemplateListModel : public ItemListModel
             ColumnCount
         };
 
-        explicit TemplateListModel(QObject* parent = 0);
+        explicit TemplateListModel(QObject* parent = Q_NULLPTR);
         ~TemplateListModel();
 
         /** Return the model containing all alarm templates. */
