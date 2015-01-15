@@ -59,7 +59,7 @@ class CollectionListModel : public KDescendantsProxyModel
         Akonadi::Collection collection(const QModelIndex&) const;
         QModelIndex collectionIndex(const Akonadi::Collection&) const;
         virtual bool isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const;
-        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     private:
         bool mUseCollectionColour;

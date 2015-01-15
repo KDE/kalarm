@@ -110,8 +110,8 @@ class AlarmListModel : public ItemListModel
          */
         CalEvent::Types eventTypeFilter() const   { return mFilterTypes; }
 
-        virtual int  columnCount(const QModelIndex& = QModelIndex()) const  { return ColumnCount; }
-        virtual QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
+        int  columnCount(const QModelIndex& = QModelIndex()) const  Q_DECL_OVERRIDE { return ColumnCount; }
+        QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;

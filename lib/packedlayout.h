@@ -48,7 +48,7 @@ class PackedLayout : public QLayout
         virtual QLayoutItem* itemAt(int index) const;
         virtual QLayoutItem* takeAt(int index);
         virtual void setGeometry(const QRect& r);
-        virtual QSize sizeHint() const  { return minimumSize(); }
+        QSize sizeHint() const  Q_DECL_OVERRIDE { return minimumSize(); }
         virtual QSize minimumSize() const;
         virtual Qt::Orientations expandingDirections() const  { return Qt::Vertical | Qt::Horizontal; }
         virtual void invalidate()  { mWidthCached = mHeightCached = false; }
