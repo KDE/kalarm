@@ -41,13 +41,13 @@ class AudioThread : public QThread
 
         static MessageWin*   mAudioOwner;    // window which owns the unique AudioThread
 
-    signals:
+    Q_SIGNALS:
         void    readyToPlay();
 
     protected:
         virtual void run();
 
-    private slots:
+    private Q_SLOTS:
         void    checkAudioPlay();
         void    playStateChanged(Phonon::State);
         void    stopPlay();

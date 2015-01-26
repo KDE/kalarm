@@ -85,7 +85,7 @@ class MiscPrefTab : public PrefsTabBase
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
-    private slots:
+    private Q_SLOTS:
         void         slotAutostartClicked();
         void         slotOtherTerminalToggled(bool);
 
@@ -137,7 +137,7 @@ class StorePrefTab : public PrefsTabBase
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
-    private slots:
+    private Q_SLOTS:
         void         slotArchivedToggled(bool);
         void         slotClearArchived();
 
@@ -167,7 +167,7 @@ class EmailPrefTab : public PrefsTabBase
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
-    private slots:
+    private Q_SLOTS:
         void         slotEmailClientChanged(QAbstractButton*);
         void         slotFromAddrChanged(QAbstractButton*);
         void         slotBccAddrChanged(QAbstractButton*);
@@ -208,7 +208,7 @@ class EditPrefTab : public PrefsTabBase
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
-    private slots:
+    private Q_SLOTS:
         void         slotBrowseSoundFile();
 
     private:
@@ -248,7 +248,7 @@ class ViewPrefTab : public PrefsTabBase
         virtual void restore(bool defaults, bool allTabs);
         virtual void apply(bool syncToDisc);
 
-    private slots:
+    private Q_SLOTS:
         void         slotTooltipAlarmsToggled(bool);
         void         slotTooltipMaxToggled(bool);
         void         slotTooltipTimeToggled(bool);

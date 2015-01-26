@@ -46,7 +46,7 @@ class Private : public QObject
 
         QWidget* mMsgParent;
 
-    public slots:
+    public Q_SLOTS:
         void windowAdded(WId);
         void cancelRtcWake();
 
@@ -63,7 +63,7 @@ class PrivateNewAlarmDlg : public QObject
         explicit PrivateNewAlarmDlg(EditAlarmDlg*);
         void accept(EditAlarmDlg*);
 
-    private slots:
+    private Q_SLOTS:
         void okClicked();
         void cancelClicked();
 };

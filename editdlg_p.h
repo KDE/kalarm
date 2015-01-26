@@ -38,7 +38,7 @@ class PageFrame : public QFrame
     protected:
         virtual void     showEvent(QShowEvent*)    { emit shown(); }
 
-    signals:
+    Q_SIGNALS:
         void             shown();
 };
 
@@ -68,11 +68,11 @@ class CommandEdit : public QWidget
         virtual QSize minimumSizeHint() const;
         virtual QSize sizeHint() const   { return minimumSizeHint(); }
 
-    signals:
+    Q_SIGNALS:
         void      scriptToggled(bool);
         void      changed();        // emitted when any changes occur
 
-    private slots:
+    private Q_SLOTS:
         void      slotCmdScriptToggled(bool);
 
     private:

@@ -66,7 +66,7 @@ class Rule : public NoRule
         virtual void     saveState();
         virtual bool     stateChanged() const;
 
-    signals:
+    Q_SIGNALS:
         void             frequencyChanged();
         void             changed();          // emitted whenever any control changes
 
@@ -144,17 +144,17 @@ class MonthYearRule : public Rule
         virtual void     saveState();
         virtual bool     stateChanged() const;
 
-    signals:
+    Q_SIGNALS:
         void             typeChanged(DayPosType);
 
     protected:
         DayPosType       buttonType(QAbstractButton* b) const  { return b == mDayButton ? DATE : POS; }
         virtual void     daySelected(int /*day*/)  { }
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void     clicked(QAbstractButton*);
 
-    private slots:
+    private Q_SLOTS:
         virtual void     slotDaySelected(int index);
 
     private:
@@ -200,10 +200,10 @@ class YearlyRule : public MonthYearRule
     protected:
         virtual void     daySelected(int day);
 
-    protected slots:
+    protected Q_SLOTS:
         virtual void     clicked(QAbstractButton*);
 
-    private slots:
+    private Q_SLOTS:
         void             enableFeb29();
 
     private:

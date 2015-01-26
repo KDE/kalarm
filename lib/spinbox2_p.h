@@ -44,7 +44,7 @@ class ExtraSpinBox : public SpinBox
                      : SpinBox(minValue, maxValue, parent), mInhibitPaintSignal(0) { }
         void         inhibitPaintSignal(int i)  { mInhibitPaintSignal = i; }
 
-    signals:
+    Q_SIGNALS:
         void         painted();
 
     protected:
