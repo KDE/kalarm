@@ -252,7 +252,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  @param cancelled If non-null: set to true if the user cancelled
          *             the prompt dialogue; set to false if any other error.
          */
-        static Akonadi::Collection destination(CalEvent::Type, QWidget* promptParent = 0, bool noPrompt = false, bool* cancelled = 0);
+        static Akonadi::Collection destination(CalEvent::Type, QWidget* promptparent = Q_NULLPTR, bool noPrompt = false, bool* cancelled = 0);
 
         /** Return the enabled collections which contain a specified mime type.
          *  If 'writable' is true, only writable collections are included.

@@ -38,7 +38,7 @@ class TemplateListDelegate : public EventListDelegate
 {
         Q_OBJECT
     public:
-        explicit TemplateListDelegate(TemplateListView* parent = 0)
+        explicit TemplateListDelegate(TemplateListView* parent = Q_NULLPTR)
                    : EventListDelegate(parent) {}
         virtual void edit(KAEvent*, EventListView*);
 };

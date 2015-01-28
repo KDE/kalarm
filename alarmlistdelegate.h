@@ -30,7 +30,7 @@ class AlarmListDelegate : public EventListDelegate
 {
         Q_OBJECT
     public:
-        explicit AlarmListDelegate(AlarmListView* parent = 0)
+        explicit AlarmListDelegate(AlarmListView* parent = Q_NULLPTR)
                    : EventListDelegate(parent) {}
         void paint(QPainter*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE;
         QSize sizeHint(const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE;
