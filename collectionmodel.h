@@ -50,7 +50,7 @@ class CollectionListModel : public KDescendantsProxyModel
 {
         Q_OBJECT
     public:
-        explicit CollectionListModel(QObject* parent = 0);
+        explicit CollectionListModel(QObject* parent = Q_NULLPTR);
         void setEventTypeFilter(CalEvent::Type);
         void setFilterWritable(bool writable);
         void setFilterEnabled(bool enabled);
@@ -113,7 +113,7 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
 {
         Q_OBJECT
     public:
-        explicit CollectionFilterCheckListModel(QObject* parent = 0);
+        explicit CollectionFilterCheckListModel(QObject* parent = Q_NULLPTR);
         void setEventTypeFilter(CalEvent::Type);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
@@ -288,7 +288,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         void collectionPopulated();
 
     private:
-        explicit CollectionControlModel(QObject* parent = 0);
+        explicit CollectionControlModel(QObject* parent = Q_NULLPTR);
         void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, Akonadi::Collection::List&) const;
         CalEvent::Types setEnabledStatus(const Akonadi::Collection&, CalEvent::Types, bool inserted);
         static CalEvent::Types checkTypesToEnable(const Akonadi::Collection&, const Akonadi::Collection::List&, CalEvent::Types);

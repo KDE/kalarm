@@ -68,7 +68,7 @@ template <class T>
 class StackedGroupT : public QObject
 {
     public:
-        explicit StackedGroupT(QObject* parent = 0) : QObject(parent) {}
+        explicit StackedGroupT(QObject* parent = Q_NULLPTR) : QObject(parent) {}
         void  addWidget(StackedWidgetT<T>* w)     { mWidgets += w; }
         void  removeWidget(StackedWidgetT<T>* w)  { mWidgets.removeAll(w); }
         virtual QSize minimumSizeHint() const;
