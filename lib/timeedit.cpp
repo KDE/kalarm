@@ -32,7 +32,7 @@
 
 TimeEdit::TimeEdit(QWidget* parent)
     : QWidget(parent),
-      mAmPm(0),
+      mAmPm(Q_NULLPTR),
       mAmIndex(-1),
       mPmIndex(-1),
       mReadOnly(false)

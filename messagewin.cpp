@@ -125,7 +125,7 @@ class MessageText : public KTextEdit
             pal.setColor(viewport()->backgroundRole(), c);
             viewport()->setPalette(pal);
         }
-        virtual QSize sizeHint() const
+        virtual QSize sizeHint() const Q_DECL_OVERRIDE
         {
             const QSizeF docsize = document()->size();
             return QSize(static_cast<int>(docsize.width() + 0.99) + verticalScrollBar()->width(),
@@ -157,7 +157,7 @@ bool                    MessageWin::mRedisplayed = false;
 // sound files simultaneously would result in a cacophony, and besides
 // that, Phonon currently crashes...
 QPointer<AudioThread> MessageWin::mAudioThread;
-MessageWin*           AudioThread::mAudioOwner = 0;
+MessageWin*           AudioThread::mAudioOwner = Q_NULLPTR;
 
 /******************************************************************************
 * Construct the message window for the specified alarm.
@@ -166,7 +166,7 @@ MessageWin*           AudioThread::mAudioOwner = 0;
 * displayed.
 */
 MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
-    : MainWindowBase(0, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint))),
+    : MainWindowBase(Q_NULLPTR, static_cast<Qt::WindowFlags>(WFLAGS | WFLAGS2 | ((flags & ALWAYS_HIDE) || getWorkAreaAndModal() ? Qt::WindowType(0) : Qt::X11BypassWindowManagerHint))),
       mMessage(event->cleanText()),
       mFont(event->font()),
       mBgColour(event->bgColour()),
@@ -190,16 +190,16 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
       mEvent(*event),
       mOriginalEvent(*event),
       mCollection(AlarmCalendar::resources()->collectionForEvent(mEventItemId)),
-      mTimeLabel(0),
-      mRemainingText(0),
-      mEditButton(0),
-      mDeferButton(0),
-      mSilenceButton(0),
-      mKMailButton(0),
-      mCommandText(0),
-      mDontShowAgainCheck(0),
-      mEditDlg(0),
-      mDeferDlg(0),
+      mTimeLabel(Q_NULLPTR),
+      mRemainingText(Q_NULLPTR),
+      mEditButton(Q_NULLPTR),
+      mDeferButton(Q_NULLPTR),
+      mSilenceButton(Q_NULLPTR),
+      mKMailButton(Q_NULLPTR),
+      mCommandText(Q_NULLPTR),
+      mDontShowAgainCheck(Q_NULLPTR),
+      mEditDlg(Q_NULLPTR),
+      mDeferDlg(Q_NULLPTR),
       mAlwaysHide(flags & ALWAYS_HIDE),
       mErrorWindow(false),
       mInitialised(false),
@@ -281,7 +281,7 @@ void MessageWin::showError(const KAEvent& event, const DateTime& alarmDateTime,
 */
 MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
                        const QStringList& errmsgs, const QString& dontShowAgain)
-    : MainWindowBase(0, WFLAGS | WFLAGS2),
+    : MainWindowBase(Q_NULLPTR, WFLAGS | WFLAGS2),
       mMessage(event->cleanText()),
       mDateTime(alarmDateTime),
       mEventItemId(event->itemId()),
@@ -299,16 +299,16 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
       mInvalid(false),
       mEvent(*event),
       mOriginalEvent(*event),
-      mTimeLabel(0),
-      mRemainingText(0),
-      mEditButton(0),
-      mDeferButton(0),
-      mSilenceButton(0),
-      mKMailButton(0),
-      mCommandText(0),
-      mDontShowAgainCheck(0),
-      mEditDlg(0),
-      mDeferDlg(0),
+      mTimeLabel(Q_NULLPTR),
+      mRemainingText(Q_NULLPTR),
+      mEditButton(Q_NULLPTR),
+      mDeferButton(Q_NULLPTR),
+      mSilenceButton(Q_NULLPTR),
+      mKMailButton(Q_NULLPTR),
+      mCommandText(Q_NULLPTR),
+      mDontShowAgainCheck(Q_NULLPTR),
+      mEditDlg(Q_NULLPTR),
+      mDeferDlg(Q_NULLPTR),
       mAlwaysHide(false),
       mErrorWindow(true),
       mInitialised(false),
@@ -334,17 +334,17 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
 * The window is initialised by readProperties().
 */
 MessageWin::MessageWin()
-    : MainWindowBase(0, WFLAGS),
-      mTimeLabel(0),
-      mRemainingText(0),
-      mEditButton(0),
-      mDeferButton(0),
-      mSilenceButton(0),
-      mKMailButton(0),
-      mCommandText(0),
-      mDontShowAgainCheck(0),
-      mEditDlg(0),
-      mDeferDlg(0),
+    : MainWindowBase(Q_NULLPTR, WFLAGS),
+      mTimeLabel(Q_NULLPTR),
+      mRemainingText(Q_NULLPTR),
+      mEditButton(Q_NULLPTR),
+      mDeferButton(Q_NULLPTR),
+      mSilenceButton(Q_NULLPTR),
+      mKMailButton(Q_NULLPTR),
+      mCommandText(Q_NULLPTR),
+      mDontShowAgainCheck(Q_NULLPTR),
+      mEditDlg(Q_NULLPTR),
+      mDeferDlg(Q_NULLPTR),
       mAlwaysHide(false),
       mErrorWindow(false),
       mInitialised(false),
@@ -1181,7 +1181,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, Akonadi::Collection& resource, bo
     {
         // The event isn't in the displaying calendar.
         // Try to retrieve it from the archive calendar.
-        KAEvent* ev = 0;
+        KAEvent* ev = Q_NULLPTR;
         Akonadi::Collection archiveCol = CollectionControlModel::getStandard(CalEvent::ARCHIVED);
         if (archiveCol.isValid())
             ev = AlarmCalendar::resources()->event(EventId(archiveCol.id(), CalEvent::uid(mEventId.eventId(), CalEvent::ARCHIVED)));
@@ -1338,7 +1338,7 @@ MessageWin* MessageWin::findEvent(const EventId& eventId, MessageWin* exclude)
                 return w;
         }
     }
-    return 0;
+    return Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -1492,7 +1492,7 @@ AudioThread::AudioThread(MessageWin* parent, const QString& audioFile, float vol
       mFadeVolume(fadeVolume),
       mFadeSeconds(fadeSeconds),
       mRepeatPause(repeatPause),
-      mAudioObject(0)
+      mAudioObject(Q_NULLPTR)
 {
     if (mAudioOwner)
         qCritical() << "mAudioOwner already set";
@@ -1508,9 +1508,9 @@ AudioThread::~AudioThread()
     qCDebug(KALARM_LOG);
     stop(true);   // stop playing and tidy up (timeout 3 seconds)
     delete mAudioObject;
-    mAudioObject = 0;
+    mAudioObject = Q_NULLPTR;
     if (mAudioOwner == parent())
-        mAudioOwner = 0;
+        mAudioOwner = Q_NULLPTR;
     // Notify after deleting mAudioThread, so that isAudioPlaying() will
     // return the correct value.
     QTimer::singleShot(0, theApp(), SLOT(notifyAudioStopped()));
@@ -1672,7 +1672,7 @@ void AudioThread::stopPlay()
             delete effects[i];
         }
         delete mAudioObject;
-        mAudioObject = 0;
+        mAudioObject = Q_NULLPTR;
     }
     mMutex.unlock();
     quit();   // exit the event loop, if it's still running
@@ -1697,9 +1697,9 @@ void MessageWin::repeat(const KAAlarm& alarm)
         // Cancel any deferral dialog so that the user notices something's going on,
         // and also because the deferral time limit will have changed.
         delete mDeferDlg;
-        mDeferDlg = 0;
+        mDeferDlg = Q_NULLPTR;
     }
-    KAEvent* event = mEventId.isEmpty() ? 0 : AlarmCalendar::resources()->event(mEventId);
+    KAEvent* event = mEventId.isEmpty() ? Q_NULLPTR : AlarmCalendar::resources()->event(mEventId);
     if (event)
     {
         mAlarmType = alarm.type();    // store new alarm type for use if it is later deferred
@@ -2059,7 +2059,7 @@ void MessageWin::slotEdit()
 */
 void MessageWin::editCloseOk()
 {
-    mEditDlg = 0;
+    mEditDlg = Q_NULLPTR;
     mNoCloseConfirm = true;   // allow window to close without confirmation prompt
     close();
 }
@@ -2070,7 +2070,7 @@ void MessageWin::editCloseOk()
 */
 void MessageWin::editCloseCancel()
 {
-    mEditDlg = 0;
+    mEditDlg = Q_NULLPTR;
     setButtonsReadOnly(false);
 }
 
@@ -2160,7 +2160,7 @@ void MessageWin::slotDefer()
         const int      delayMins = mDeferDlg->deferMinutes();
         // Fetch the up-to-date alarm from the calendar. Note that it could have
         // changed since it was displayed.
-        const KAEvent* event = mEventId.isEmpty() ? 0 : AlarmCalendar::resources()->event(mEventId);
+        const KAEvent* event = mEventId.isEmpty() ? Q_NULLPTR : AlarmCalendar::resources()->event(mEventId);
         if (event)
         {
             // The event still exists in the active calendar
@@ -2185,7 +2185,7 @@ void MessageWin::slotDefer()
                 KAMessageBox::error(this, xi18nc("@info", "<para>Cannot defer alarm:</para><para>Alarm not found.</para>"));
                 raise();
                 delete mDeferDlg;
-                mDeferDlg = 0;
+                mDeferDlg = Q_NULLPTR;
                 mDeferButton->setEnabled(false);
                 mEditButton->setEnabled(false);
                 return;
@@ -2216,7 +2216,7 @@ void MessageWin::slotDefer()
     else
         raise();
     delete mDeferDlg;
-    mDeferDlg = 0;
+    mDeferDlg = Q_NULLPTR;
 }
 
 /******************************************************************************

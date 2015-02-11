@@ -60,7 +60,7 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
 {
         Q_OBJECT
     public:
-        explicit CollectionMimeTypeFilterModel(QObject* parent = 0);
+        explicit CollectionMimeTypeFilterModel(QObject* parent = Q_NULLPTR);
         void setEventTypeFilter(CalEvent::Type);
         void setFilterWritable(bool writable);
         void setFilterEnabled(bool enabled);
@@ -242,7 +242,7 @@ QVariant CollectionListModel::data(const QModelIndex& index, int role) const
 = which are disabled for that alarm type, are unchecked.
 =============================================================================*/
 
-CollectionListModel* CollectionCheckListModel::mModel = 0;
+CollectionListModel* CollectionCheckListModel::mModel = Q_NULLPTR;
 int                  CollectionCheckListModel::mInstanceCount = 0;
 
 CollectionCheckListModel::CollectionCheckListModel(CalEvent::Type type, QObject* parent)
@@ -251,7 +251,7 @@ CollectionCheckListModel::CollectionCheckListModel(CalEvent::Type type, QObject*
 {
     ++mInstanceCount;
     if (!mModel)
-        mModel = new CollectionListModel(0);
+        mModel = new CollectionListModel(Q_NULLPTR);
     setSourceModel(mModel);    // the source model is NOT filtered by alarm type
     mSelectionModel = new QItemSelectionModel(mModel);
     setSelectionModel(mSelectionModel);
@@ -279,7 +279,7 @@ CollectionCheckListModel::~CollectionCheckListModel()
     if (--mInstanceCount <= 0)
     {
         delete mModel;
-        mModel = 0;
+        mModel = Q_NULLPTR;
     }
 }
 
@@ -650,7 +650,7 @@ bool CollectionView::viewportEvent(QEvent* e)
 = collection models.
 =============================================================================*/
 
-CollectionControlModel* CollectionControlModel::mInstance = 0;
+CollectionControlModel* CollectionControlModel::mInstance = Q_NULLPTR;
 bool                    CollectionControlModel::mAskDestination = false;
 
 CollectionControlModel* CollectionControlModel::instance()
@@ -662,7 +662,7 @@ CollectionControlModel* CollectionControlModel::instance()
 
 CollectionControlModel::CollectionControlModel(QObject* parent)
     : FavoriteCollectionsModel(AkonadiModel::instance(), KConfigGroup(KSharedConfig::openConfig(), "Collections"), parent),
-      mPopulatedCheckLoop(0)
+      mPopulatedCheckLoop(Q_NULLPTR)
 {
     // Initialise the list of enabled collections
     EntityMimeTypeFilterModel* filter = new EntityMimeTypeFilterModel(this);
@@ -759,8 +759,8 @@ CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection,
 CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& collection, CalEvent::Types types, bool inserted)
 {
     qCDebug(KALARM_LOG) << "id:" << collection.id() << ", types=" << types;
-    CalEvent::Types disallowedStdTypes(0);
-    CalEvent::Types stdTypes(0);
+    CalEvent::Types disallowedStdTypes(Q_NULLPTR);
+    CalEvent::Types stdTypes(Q_NULLPTR);
 
     // Prevent the enabling of duplicate alarm types if another collection
     // uses the same backend storage.
@@ -1296,7 +1296,7 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
         result = mPopulatedCheckLoop->exec();
     }
     delete mPopulatedCheckLoop;
-    mPopulatedCheckLoop = 0;
+    mPopulatedCheckLoop = Q_NULLPTR;
     return result;
 }
 
@@ -1306,7 +1306,7 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
 void CollectionControlModel::reset()
 {
     delete mPopulatedCheckLoop;
-    mPopulatedCheckLoop = 0;
+    mPopulatedCheckLoop = Q_NULLPTR;
 
     // Clear the collections list. This is required because addCollection() or
     // setCollections() don't work if the collections which they specify are

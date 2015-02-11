@@ -53,8 +53,8 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         /** Determine whether the model contains any items. */
         bool         haveEvents() const;
 
-        virtual int  columnCount(const QModelIndex& parent = QModelIndex()) const;
-        virtual Qt::ItemFlags flags(const QModelIndex&) const;
+        int  columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+        Qt::ItemFlags flags(const QModelIndex&) const Q_DECL_OVERRIDE;
 
         static int   iconWidth()  { return AkonadiModel::iconSize().width(); }
 
@@ -157,9 +157,9 @@ class TemplateListModel : public ItemListModel
         /** Set which alarm types should be shown as disabled in the model. */
         KAEvent::Actions setAlarmActionsEnabled() const  { return mActionsEnabled; }
 
-        virtual int  columnCount(const QModelIndex& = QModelIndex()) const  { return ColumnCount; }
-        virtual QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const;
-        virtual Qt::ItemFlags flags(const QModelIndex&) const;
+        virtual int  columnCount(const QModelIndex& = QModelIndex()) const Q_DECL_OVERRIDE  { return ColumnCount; }
+        QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        Qt::ItemFlags flags(const QModelIndex&) const Q_DECL_OVERRIDE;
 
     protected:
         bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;

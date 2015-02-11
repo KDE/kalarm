@@ -69,7 +69,7 @@ class ListWidget : public QListWidget
 {
     public:
         explicit ListWidget(QWidget* parent) : QListWidget(parent) {}
-        virtual QSize sizeHint() const  { return minimumSizeHint(); }
+        virtual QSize sizeHint() const Q_DECL_OVERRIDE  { return minimumSizeHint(); }
 };
 
 // Collect these widget labels together to ensure consistent wording and
@@ -85,7 +85,7 @@ QString RecurrenceEdit::i18n_combo_Yearly()         { return i18nc("@item:inlist
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     : QFrame(parent),
-      mRule(0),
+      mRule(Q_NULLPTR),
       mRuleButtonType(INVALID_RECUR),
       mDailyShown(false),
       mWeeklyShown(false),
@@ -278,7 +278,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
                 "<para><note>This applies to the main recurrence only. It does not limit any sub-repetition which will occur regardless after the last main recurrence.</note></para>"));
     mRangeButtonGroup->addButton(mEndDateButton);
     mEndDateEdit = new KDateComboBox(mRangeButtonBox);
-    mEndDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
+    mEndDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(Q_NULLPTR) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     static const QString tzText = i18nc("@info", "This uses the same time zone as the start time.");
     mEndDateEdit->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Enter the last date to repeat the alarm.</para><para>%1</para>", tzText));
@@ -328,9 +328,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 
     if (mReadOnly)
     {
-        mExceptionDateEdit     = 0;
-        mChangeExceptionButton = 0;
-        mDeleteExceptionButton = 0;
+        mExceptionDateEdit     = Q_NULLPTR;
+        mChangeExceptionButton = Q_NULLPTR;
+        mDeleteExceptionButton = Q_NULLPTR;
     }
     else
     {
@@ -338,7 +338,7 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
         vlayout->setMargin(0);
         hlayout->addLayout(vlayout);
         mExceptionDateEdit = new KDateComboBox(mExceptionGroup);
-        mExceptionDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
+        mExceptionDateEdit->setOptions(mReadOnly ? KDateComboBox::Options(Q_NULLPTR) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
         mExceptionDateEdit->setDate(KDateTime::currentLocalDate());
         mExceptionDateEdit->setWhatsThis(i18nc("@info:whatsthis",
               "Enter a date to insert in the exceptions list. "
@@ -406,12 +406,12 @@ void RecurrenceEdit::showMoreOptions(bool more)
 QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& errorMessage) const
 {
     if (mAtLoginButton->isChecked())
-        return 0;
+        return Q_NULLPTR;
     const_cast<RecurrenceEdit*>(this)->mCurrStartDateTime = startDateTime;
     if (mEndDateButton->isChecked())
     {
         // N.B. End date/time takes the same time spec as start date/time
-        QWidget* errWidget = 0;
+        QWidget* errWidget = Q_NULLPTR;
         bool noTime = !mEndTimeEdit->isEnabled();
         QDate endDate = mEndDateEdit->date();
         if (endDate < startDateTime.date())
@@ -427,7 +427,7 @@ QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& erro
         }
     }
     if (!mRule)
-        return 0;
+        return Q_NULLPTR;
     return mRule->validate(errorMessage);
 }
 
@@ -442,12 +442,12 @@ void RecurrenceEdit::periodClicked(QAbstractButton* button)
     bool subdaily = (button == mSubDailyButton);
     if (none)
     {
-        mRule = 0;
+        mRule = Q_NULLPTR;
         mRuleButtonType = NO_RECUR;
     }
     else if (atLogin)
     {
-        mRule = 0;
+        mRule = Q_NULLPTR;
         mRuleButtonType = AT_LOGIN;
         mEndDateButton->setChecked(true);
     }
@@ -1111,14 +1111,14 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
     label->setFixedSize(label->sizeHint());
     if (time)
     {
-        mIntSpinBox = 0;
+        mIntSpinBox = Q_NULLPTR;
         mSpinBox = mTimeSpinBox = new TimeSpinBox(1, 5999, box);
         mTimeSpinBox->setFixedSize(mTimeSpinBox->sizeHint());
         mTimeSpinBox->setReadOnly(readOnly);
     }
     else
     {
-        mTimeSpinBox = 0;
+        mTimeSpinBox = Q_NULLPTR;
         mSpinBox = mIntSpinBox = new SpinBox(1, 999, box);
         mIntSpinBox->setFixedSize(mIntSpinBox->sizeHint());
         mIntSpinBox->setReadOnly(readOnly);
@@ -1277,7 +1277,7 @@ QWidget* DayWeekRule::validate(QString& errorMessage)
 {
     for (int i = 0;  i < 7;  ++i)
         if (mDayBox[i]->isChecked())
-            return 0;
+            return Q_NULLPTR;
     errorMessage = i18nc("@info", "No day selected");
     return mDayBox[0];
 }
@@ -1680,7 +1680,7 @@ QWidget* YearlyRule::validate(QString& errorMessage)
 {
     for (int i = 0;  i < 12;  ++i)
         if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
-            return 0;
+            return Q_NULLPTR;
     errorMessage = i18nc("@info", "No month selected");
     return mMonthBox[0];
 }

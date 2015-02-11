@@ -66,7 +66,7 @@ QAbstractButton* ButtonGroup::find(int id) const
 {
     QMap<int, QAbstractButton*>::ConstIterator it = mIds.find(id);
     if (it == mIds.constEnd())
-        return 0;
+        return Q_NULLPTR;
     return it.value();
 }
 

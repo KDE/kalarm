@@ -40,7 +40,7 @@ SynchTimer::SynchTimer()
 SynchTimer::~SynchTimer()
 {
     delete mTimer;
-    mTimer = 0;
+    mTimer = Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -98,7 +98,7 @@ void SynchTimer::disconnecT(QObject* receiver, const char* member)
 =  Application-wide timer synchronized to the minute boundary.
 =============================================================================*/
 
-MinuteTimer* MinuteTimer::mInstance = 0;
+MinuteTimer* MinuteTimer::mInstance = Q_NULLPTR;
 
 MinuteTimer* MinuteTimer::instance()
 {
@@ -147,7 +147,7 @@ DailyTimer* DailyTimer::fixedInstance(const QTime& timeOfDay, bool create)
     for (int i = 0, end = mFixedTimers.count();  i < end;  ++i)
         if (mFixedTimers[i]->mTime == timeOfDay)
             return mFixedTimers[i];
-    return create ? new DailyTimer(timeOfDay, true) : 0;
+    return create ? new DailyTimer(timeOfDay, true) : Q_NULLPTR;
 }
 
 /******************************************************************************

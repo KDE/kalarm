@@ -83,7 +83,7 @@ class CommandOptions
     private:
         bool        checkCommand(const QByteArray& command, Command, EditAlarmDlg::Type = EditAlarmDlg::NO_TYPE);
         inline void setError(const QString& error);
-        void        setErrorRequires(const char* opt, const char* opt2, const char* opt3 = 0);
+        void        setErrorRequires(const char* opt, const char* opt2, const char* opt3 = Q_NULLPTR);
         void        setErrorParameter(const char* opt);
         void        setErrorIncompatible(const QByteArray& opt1, const QByteArray& opt2);
         void        checkEditType(EditAlarmDlg::Type type, const QByteArray& opt)

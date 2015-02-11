@@ -86,7 +86,7 @@ class Preferences : public PreferencesBase
         static const QLatin1String CONFIRM_ALARM_DELETION;
         static const QLatin1String EMAIL_QUEUED_NOTIFY;
 
-        virtual bool useDefaults(bool def)   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
+        virtual bool useDefaults(bool def) Q_DECL_OVERRIDE   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
 
     Q_SIGNALS:
         void  timeZoneChanged(const KTimeZone& newTz);

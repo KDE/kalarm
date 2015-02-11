@@ -41,7 +41,7 @@
 
 using namespace KAlarmCal;
 
-WakeFromSuspendDlg* WakeFromSuspendDlg::mInstance = 0;
+WakeFromSuspendDlg* WakeFromSuspendDlg::mInstance = Q_NULLPTR;
 
 WakeFromSuspendDlg* WakeFromSuspendDlg::create(QWidget* parent)
 {
@@ -84,7 +84,7 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
 WakeFromSuspendDlg::~WakeFromSuspendDlg()
 {
     if (mInstance == this)
-        mInstance = 0;
+        mInstance = Q_NULLPTR;
     delete mUi;
 }
 

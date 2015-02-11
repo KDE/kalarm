@@ -92,7 +92,7 @@ using namespace Akonadi;
 namespace
 {
 bool            refreshAlarmsQueued = false;
-QDBusInterface* korgInterface = 0;
+QDBusInterface* korgInterface = Q_NULLPTR;
 
 struct UpdateStatusData
 {
@@ -149,7 +149,7 @@ QString uidKOrganizer(const QString& eventID);
 namespace KAlarm
 {
 
-Private* Private::mInstance = 0;
+Private* Private::mInstance = Q_NULLPTR;
 
 /******************************************************************************
 * Display a main window with the specified event selected.
@@ -333,7 +333,7 @@ bool addArchivedEvent(KAEvent& event, Collection* collection)
         newev->setCreatedDateTime(KDateTime::currentUtcDateTime());   // time stamp to control purging
     }
     // Note that archived resources are automatically saved after changes are made
-    if (!cal->addEvent(newevent, 0, false, collection))
+    if (!cal->addEvent(newevent, Q_NULLPTR, false, collection))
         return false;
     event = *newev;   // update event ID etc.
 
@@ -759,7 +759,7 @@ void purgeArchive(int purgeDays)
 */
 QVector<KAEvent> getSortedActiveEvents(QObject* parent, AlarmListModel** model)
 {
-    AlarmListModel* mdl = 0;
+    AlarmListModel* mdl = Q_NULLPTR;
     if (!model)
         model = &mdl;
     if (!*model)
@@ -965,7 +965,7 @@ bool editNewAlarm(const QString& templateName, QWidget* parent)
 */
 void editNewTemplate(EditAlarmDlg::Type type, QWidget* parent)
 {
-    ::editNewTemplate(type, 0, parent);
+    ::editNewTemplate(type, Q_NULLPTR, parent);
 }
 
 /******************************************************************************
@@ -1974,7 +1974,7 @@ KAlarm::UpdateResult runKOrganizer()
             status.set(KAlarm::UPDATE_KORG_ERRSTART, korgInterface->lastError().message());
             qCWarning(KALARM_LOG) << "Unable to access " KORG_DBUS_PATH " D-Bus interface:" << status.message;
             delete korgInterface;
-            korgInterface = 0;
+            korgInterface = Q_NULLPTR;
         }
     }
     return status;

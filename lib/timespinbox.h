@@ -67,7 +67,7 @@ class TimeSpinBox : public SpinBox2
          */
         void            setValid(bool);
         /** Determine whether the current input is valid. */
-        virtual QValidator::State validate(QString&, int& pos) const;
+        QValidator::State validate(QString&, int& pos) const Q_DECL_OVERRIDE;
         /** Returns the current value held in the spin box.
          *  If an invalid value is displayed, returns a value lower than the minimum value.
          */
@@ -75,11 +75,11 @@ class TimeSpinBox : public SpinBox2
         /** Sets the maximum value which can be held in the spin box.
          *  @param minutes The maximum value expressed in minutes.
          */
-        virtual void    setMinimum(int minutes);
+        void    setMinimum(int minutes) Q_DECL_OVERRIDE;
         /** Sets the maximum value which can be held in the spin box.
          *  @param minutes The maximum value expressed in minutes.
          */
-        virtual void    setMaximum(int minutes)      { SpinBox2::setMaximum(minutes); }
+        virtual void    setMaximum(int minutes) Q_DECL_OVERRIDE      { SpinBox2::setMaximum(minutes); }
         /** Sets the maximum value which can be held in the spin box. */
         void            setMaximum(const QTime& t)   { SpinBox2::setMaximum(t.hour()*60 + t.minute()); }
         /** Returns the maximum value which can be held in the spin box. */
@@ -87,14 +87,14 @@ class TimeSpinBox : public SpinBox2
         /** Called whenever the user triggers a step, to adjust the value of the spin box.
          *  If the value was previously invalid, the spin box is set to the minimum value.
          */
-        virtual void    stepBy(int increment);
+        void    stepBy(int increment) Q_DECL_OVERRIDE;
         /** Returns a text describing use of the shift key as an accelerator for
          *  the spin buttons, designed for incorporation into WhatsThis texts.
          */
         static QString  shiftWhatsThis();
 
-        virtual QSize   sizeHint() const;
-        virtual QSize   minimumSizeHint() const;
+        QSize   sizeHint() const Q_DECL_OVERRIDE;
+        QSize   minimumSizeHint() const Q_DECL_OVERRIDE;
 
     public Q_SLOTS:
         /** Sets the value of the spin box.
@@ -105,8 +105,8 @@ class TimeSpinBox : public SpinBox2
         void            setValue(const QTime& t)     { setValue(t.hour()*60 + t.minute()); }
 
     protected:
-        virtual QString textFromValue(int v) const;
-        virtual int     valueFromText(const QString&) const;
+        QString textFromValue(int v) const Q_DECL_OVERRIDE;
+        int     valueFromText(const QString&) const Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void            slotValueChanged(int value);

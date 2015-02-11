@@ -73,7 +73,7 @@ struct TipItem
 TrayWindow::TrayWindow(MainWindow* parent)
     : KStatusNotifierItem(parent),
       mAssocMainWindow(parent),
-      mAlarmsModel(0),
+      mAlarmsModel(Q_NULLPTR),
       mStatusUpdateTimer(new QTimer(this)),
       mHaveDisabledAlarms(false)
 {
@@ -413,7 +413,7 @@ QString TrayWindow::tooltipAlarmText() const
 void TrayWindow::removeWindow(MainWindow* win)
 {
     if (win == mAssocMainWindow)
-        mAssocMainWindow = 0;
+        mAssocMainWindow = Q_NULLPTR;
 }
 
 // vim: et sw=4:

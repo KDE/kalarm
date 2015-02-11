@@ -31,7 +31,7 @@ class TemplateListView : public EventListView
         Q_OBJECT
     public:
         explicit TemplateListView(QWidget* parent = Q_NULLPTR);
-        virtual void setModel(QAbstractItemModel*);
+        void setModel(QAbstractItemModel*) Q_DECL_OVERRIDE;
 };
 
 class TemplateListDelegate : public EventListDelegate
@@ -40,7 +40,7 @@ class TemplateListDelegate : public EventListDelegate
     public:
         explicit TemplateListDelegate(TemplateListView* parent = Q_NULLPTR)
                    : EventListDelegate(parent) {}
-        virtual void edit(KAEvent*, EventListView*);
+        void edit(KAEvent*, EventListView*) Q_DECL_OVERRIDE;
 };
 
 #endif // TEMPLATELISTVIEW_H

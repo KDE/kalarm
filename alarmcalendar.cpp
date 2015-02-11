@@ -51,8 +51,8 @@ static KACalendar::Compat fix(const KCalCore::FileStorage::Ptr&);
 static const QString displayCalendarName = QLatin1String("displaying.ics");
 static const Collection::Id DISPLAY_COL_ID = -1;   // collection ID used for displaying calendar
 
-AlarmCalendar* AlarmCalendar::mResourcesCalendar = 0;
-AlarmCalendar* AlarmCalendar::mDisplayCalendar = 0;
+AlarmCalendar* AlarmCalendar::mResourcesCalendar = Q_NULLPTR;
+AlarmCalendar* AlarmCalendar::mDisplayCalendar = Q_NULLPTR;
 
 
 /******************************************************************************
@@ -84,9 +84,9 @@ bool AlarmCalendar::initialiseCalendars()
 void AlarmCalendar::terminateCalendars()
 {
     delete mResourcesCalendar;
-    mResourcesCalendar = 0;
+    mResourcesCalendar = Q_NULLPTR;
     delete mDisplayCalendar;
-    mDisplayCalendar = 0;
+    mDisplayCalendar = Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -97,7 +97,7 @@ AlarmCalendar* AlarmCalendar::displayCalendarOpen()
     if (mDisplayCalendar->open())
         return mDisplayCalendar;
     qCritical() << "Open error";
-    return 0;
+    return Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -107,7 +107,7 @@ AlarmCalendar* AlarmCalendar::displayCalendarOpen()
 KAEvent* AlarmCalendar::getEvent(const EventId& eventId)
 {
     if (eventId.eventId().isEmpty())
-        return 0;
+        return Q_NULLPTR;
     return mResourcesCalendar->event(eventId);
 }
 
@@ -402,7 +402,7 @@ void AlarmCalendar::updateDisplayKAEvents()
         delete event;
     }
     events.clear();
-    mEarliestAlarm[key] = 0;
+    mEarliestAlarm[key] = Q_NULLPTR;
     Calendar::Ptr cal = mCalendarStorage->calendar();
     if (!cal)
         return;
@@ -746,7 +746,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     {
         // One or more alarms have been exported to the calendar.
         // Save the calendar to file.
-        QTemporaryFile* tempFile = 0;
+        QTemporaryFile* tempFile = Q_NULLPTR;
         bool local = url.isLocalFile();
         if (!local)
         {
@@ -871,7 +871,7 @@ bool AlarmCalendar::addEvent(KAEvent& evnt, QWidget* promptParent, bool useEvent
     }
 
     Collection::Id key = (collection && collection->isValid()) ? collection->id() : -1;
-    Event::Ptr kcalEvent((mCalType == RESOURCES) ? (Event*)0 : new Event);
+    Event::Ptr kcalEvent((mCalType == RESOURCES) ? (Event*)Q_NULLPTR : new Event);
     KAEvent* event = new KAEvent(evnt);
     QString id = event->id();
     if (type == CalEvent::ACTIVE)
@@ -965,7 +965,7 @@ void AlarmCalendar::addNewEvent(const Collection& collection, KAEvent* event, bo
     &&  event->category() == CalEvent::ACTIVE)
     {
         // Update the earliest alarm to trigger
-        KAEvent* earliest = mEarliestAlarm.value(key, (KAEvent*)0);
+        KAEvent* earliest = mEarliestAlarm.value(key, (KAEvent*)Q_NULLPTR);
         if (replace  &&  earliest == event)
             findEarliestAlarm(key);
         else
@@ -1048,7 +1048,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent& evnt)
 KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
 {
     if (!mOpen  ||  mCalType != RESOURCES)
-        return 0;
+        return Q_NULLPTR;
     KAEvent* kaevnt = event(EventId(*evnt));
     if (kaevnt)
     {
@@ -1061,7 +1061,7 @@ KAEvent* AlarmCalendar::updateEvent(const KAEvent* evnt)
         }
     }
     qCDebug(KALARM_LOG) << "error";
-    return 0;
+    return Q_NULLPTR;
 }
 
 
@@ -1194,7 +1194,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const QString& eventID, const 
 KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
 {
     if (!isValid())
-        return 0;
+        return Q_NULLPTR;
     const QString eventId = uniqueID.eventId();
     if (uniqueID.collectionId() == -1  &&  checkDuplicates)
     {
@@ -1204,15 +1204,15 @@ KAEvent* AlarmCalendar::event(const EventId& uniqueID, bool checkDuplicates)
         if (list.count() > 1)
         {
             qCWarning(KALARM_LOG) << "Multiple events found with ID" << eventId;
-            return 0;
+            return Q_NULLPTR;
         }
         if (list.isEmpty())
-            return 0;
+            return Q_NULLPTR;
         return list[0];
     }
     KAEventMap::ConstIterator it = mEventMap.constFind(uniqueID);
     if (it == mEventMap.constEnd())
-        return 0;
+        return Q_NULLPTR;
     return it.value();
 }
 
@@ -1235,14 +1235,14 @@ Event::Ptr AlarmCalendar::kcalEvent(const QString& uniqueID)
 KAEvent* AlarmCalendar::templateEvent(const QString& templateName)
 {
     if (templateName.isEmpty())
-        return 0;
+        return Q_NULLPTR;
     KAEvent::List eventlist = events(CalEvent::TEMPLATE);
     for (int i = 0, end = eventlist.count();  i < end;  ++i)
     {
         if (eventlist[i]->templateName() == templateName)
             return eventlist[i];
     }
-    return 0;
+    return Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -1456,7 +1456,7 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
 {
     EarliestMap::Iterator eit = mEarliestAlarm.find(key);
     if (eit != mEarliestAlarm.end())
-        eit.value() = 0;
+        eit.value() = Q_NULLPTR;
     if (mCalType != RESOURCES
     ||  key < 0)
         return;
@@ -1464,7 +1464,7 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
     if (rit == mResourceMap.constEnd())
         return;
     const KAEvent::List& events = rit.value();
-    KAEvent* earliest = 0;
+    KAEvent* earliest = Q_NULLPTR;
     KDateTime earliestTime;
     for (int i = 0, end = events.count();  i < end;  ++i)
     {
@@ -1489,7 +1489,7 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
 */
 KAEvent* AlarmCalendar::earliestAlarm() const
 {
-    KAEvent* earliest = 0;
+    KAEvent* earliest = Q_NULLPTR;
     KDateTime earliestTime;
     for (EarliestMap::ConstIterator eit = mEarliestAlarm.constBegin();  eit != mEarliestAlarm.constEnd();  ++eit)
     {

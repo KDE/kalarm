@@ -82,7 +82,7 @@ class SpinBox : public QSpinBox
         /** Called whenever the user triggers a step, to adjust the value of
          *  the spin box by the unshifted increment.
          */
-        virtual void stepBy(int steps);
+        void stepBy(int steps) Q_DECL_OVERRIDE;
         /** Returns the unshifted step increment, i.e. the amount by which the spin box value
          *  changes when a spin button is clicked without the shift key being pressed.
          */

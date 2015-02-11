@@ -69,7 +69,7 @@ class AlarmCalendar : public QObject
         KCalCore::Event::List kcalEvents(CalEvent::Type s = CalEvent::EMPTY);   // display calendar only
         bool                  eventReadOnly(Akonadi::Item::Id) const;
         Akonadi::Collection   collectionForEvent(Akonadi::Item::Id) const;
-        bool                  addEvent(KAEvent&, QWidget* promptparent = Q_NULLPTR, bool useEventID = false, Akonadi::Collection* = 0, bool noPrompt = false, bool* cancelled = 0);
+        bool                  addEvent(KAEvent&, QWidget* promptparent = Q_NULLPTR, bool useEventID = false, Akonadi::Collection* = Q_NULLPTR, bool noPrompt = false, bool* cancelled = Q_NULLPTR);
         bool                  modifyEvent(const EventId& oldEventId, KAEvent& newEvent);
         KAEvent*              updateEvent(const KAEvent&);
         KAEvent*              updateEvent(const KAEvent*);
@@ -87,7 +87,7 @@ class AlarmCalendar : public QObject
         static AlarmCalendar* displayCalendar()      { return mDisplayCalendar; }
         static AlarmCalendar* displayCalendarOpen();
         static KAEvent*       getEvent(const EventId&);
-        static bool           importAlarms(QWidget*, Akonadi::Collection* = 0);
+        static bool           importAlarms(QWidget*, Akonadi::Collection* = Q_NULLPTR);
         static bool           exportAlarms(const KAEvent::List&, QWidget* parent);
 
     Q_SIGNALS:

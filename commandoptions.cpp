@@ -41,7 +41,7 @@ void CommandOptions::setError(const QString& error)
 CommandOptions::CommandOptions()
     : mCommand(NONE),
       mEditActionSet(false),
-      mRecurrence(0),
+      mRecurrence(Q_NULLPTR),
       mRepeatCount(0),
       mRepeatInterval(0),
       mLateCancel(0),

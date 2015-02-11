@@ -48,7 +48,7 @@ class StartOfDayTimer : public DailyTimer
          *  @param member Slot to disconnect. If null, all slots belonging to
          *                @p receiver will be disconnected.
          */
-        static void disconnect(QObject* receiver, const char* member = 0)
+        static void disconnect(QObject* receiver, const char* member = Q_NULLPTR)
                            { if (mInstance) mInstance->disconnecT(receiver, member); }
 
     protected:

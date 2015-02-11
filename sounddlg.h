@@ -107,10 +107,10 @@ class SoundDlg : public KDialog
         QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
 
     protected:
-        virtual void   resizeEvent(QResizeEvent*);
+        void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     protected Q_SLOTS:
-        virtual void   slotButtonClicked(int button);
+        void   slotButtonClicked(int button) Q_DECL_OVERRIDE;
 
     private:
         SoundWidget*   mSoundWidget;

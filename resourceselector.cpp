@@ -65,17 +65,17 @@ using namespace Akonadi;
 
 ResourceSelector::ResourceSelector(QWidget* parent)
     : QFrame(parent),
-      mContextMenu(0),
-      mActionReload(0),
-      mActionShowDetails(0),
-      mActionSetColour(0),
-      mActionClearColour(0),
-      mActionEdit(0),
-      mActionUpdate(0),
-      mActionRemove(0),
-      mActionImport(0),
-      mActionExport(0),
-      mActionSetDefault(0)
+      mContextMenu(Q_NULLPTR),
+      mActionReload(Q_NULLPTR),
+      mActionShowDetails(Q_NULLPTR),
+      mActionSetColour(Q_NULLPTR),
+      mActionClearColour(Q_NULLPTR),
+      mActionEdit(Q_NULLPTR),
+      mActionUpdate(Q_NULLPTR),
+      mActionRemove(Q_NULLPTR),
+      mActionImport(Q_NULLPTR),
+      mActionExport(Q_NULLPTR),
+      mActionSetDefault(Q_NULLPTR)
 {
     QBoxLayout* topLayout = new QVBoxLayout(this);
     topLayout->setMargin(KDialog::spacingHint());   // use spacingHint for the margin
@@ -521,7 +521,7 @@ void ResourceSelector::setStandard()
 void ResourceSelector::importCalendar()
 {
     Collection collection = currentResource();
-    AlarmCalendar::importAlarms(this, (collection.isValid() ? &collection : 0));
+    AlarmCalendar::importAlarms(this, (collection.isValid() ? &collection : Q_NULLPTR));
 }
 
 /******************************************************************************
@@ -611,7 +611,7 @@ void ResourceSelector::showInfo()
                              name, id, calType, alarmTypeString, storage, location, perms, enabled, std);
         // Display the collection information. Because the user requested
         // the information, don't raise a KNotify event.
-        KAMessageBox::information(this, text, QString(), QString(), 0);
+        KAMessageBox::information(this, text, QString(), QString(), Q_NULLPTR);
     }
 }
 

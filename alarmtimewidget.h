@@ -48,7 +48,7 @@ class AlarmTimeWidget : public QFrame
         };
         AlarmTimeWidget(const QString& groupBoxTitle, Mode, QWidget* parent = Q_NULLPTR);
         explicit AlarmTimeWidget(Mode, QWidget* parent = Q_NULLPTR);
-        KDateTime        getDateTime(int* minsFromNow = 0, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = 0) const;
+        KDateTime        getDateTime(int* minsFromNow = Q_NULLPTR, bool checkExpired = true, bool showErrorMessage = true, QWidget** errorWidget = Q_NULLPTR) const;
         void             setDateTime(const DateTime&);
         void             setMinDateTimeIsCurrent();
         void             setMinDateTime(const KDateTime& = KDateTime());
@@ -60,7 +60,7 @@ class AlarmTimeWidget : public QFrame
         void             enableAnyTime(bool enable);
         void             selectTimeFromNow(int minutes = 0);
         void             showMoreOptions(bool);
-        QSize            sizeHint() const              { return minimumSizeHint(); }
+        QSize            sizeHint() const Q_DECL_OVERRIDE              { return minimumSizeHint(); }
 
         static QString   i18n_TimeAfterPeriod();
         static const int maxDelayTime;    // maximum time from now

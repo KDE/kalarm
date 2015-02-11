@@ -35,7 +35,7 @@
 using namespace KAlarmCal;
 
 
-BirthdayModel* BirthdayModel::mInstance = 0;
+BirthdayModel* BirthdayModel::mInstance = Q_NULLPTR;
 
 BirthdayModel::BirthdayModel(Akonadi::ChangeRecorder* recorder)
     : Akonadi::ContactsTreeModel(recorder)
@@ -46,7 +46,7 @@ BirthdayModel::BirthdayModel(Akonadi::ChangeRecorder* recorder)
 BirthdayModel::~BirthdayModel()
 {
     if (this == mInstance)
-        mInstance = 0;
+        mInstance = Q_NULLPTR;
 }
 
 BirthdayModel* BirthdayModel::instance()

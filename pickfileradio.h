@@ -69,12 +69,12 @@ class PickFileRadio : public RadioButton
          *  @param button Push button to invoke the file picker dialog.
          *  @param edit File name edit widget, or null if there is none.
          */
-        void            init(QPushButton* button, LineEdit* edit = 0);
+        void            init(QPushButton* button, LineEdit* edit = Q_NULLPTR);
         /** Sets whether the radio button and associated widgets are read-only for the user.
          *  If read-only, their states cannot be changed by the user.
          *  @param readOnly True to set the widgets read-only, false to set them read-write.
          */
-        virtual void    setReadOnly(bool readOnly);
+        void    setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
         /** Chooses a file, for example by displaying a file selection dialog.
          *  This method is called when the push button is clicked - the client
          *  should not activate a file selection dialog directly.

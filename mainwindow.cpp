@@ -105,7 +105,7 @@ static QList<QKeySequence> redoShortcut;
 =============================================================================*/
 
 MainWindow::WindowList   MainWindow::mWindowList;
-TemplateDlg*             MainWindow::mTemplateDlg = 0;
+TemplateDlg*             MainWindow::mTemplateDlg = Q_NULLPTR;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -127,7 +127,7 @@ MainWindow* MainWindow::create(bool restored)
 }
 
 MainWindow::MainWindow(bool restored)
-    : MainWindowBase(0, Qt::WindowContextHelpButtonHint),
+    : MainWindowBase(Q_NULLPTR, Qt::WindowContextHelpButtonHint),
       mResourcesWidth(-1),
       mHiddenTrayParent(false),
       mShown(false),
@@ -201,9 +201,9 @@ MainWindow::~MainWindow()
 
     // Prevent view updates during window destruction
     delete mResourceSelector;
-    mResourceSelector = 0;
+    mResourceSelector = Q_NULLPTR;
     delete mListView;
-    mListView = 0;
+    mListView = Q_NULLPTR;
 
     if (theApp()->trayWindow())
     {
@@ -251,7 +251,7 @@ void MainWindow::readProperties(const KConfigGroup& config)
 */
 MainWindow* MainWindow::mainMainWindow()
 {
-    MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : 0;
+    MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : Q_NULLPTR;
     if (tray  &&  tray->isVisible())
         return tray;
     for (int i = 0, end = mWindowList.count();  i < end;  ++i)
@@ -260,7 +260,7 @@ MainWindow* MainWindow::mainMainWindow()
     if (tray)
         return tray;
     if (mWindowList.isEmpty())
-        return 0;
+        return Q_NULLPTR;
     return mWindowList[0];
 }
 
@@ -550,12 +550,12 @@ void MainWindow::initActions()
     if (undoText.isNull())
     {
         // Get standard texts, etc., for Undo and Redo actions
-        QAction* act = KStandardAction::undo(this, 0, actions);
+        QAction* act = KStandardAction::undo(this, Q_NULLPTR, actions);
         undoShortcut     = act->shortcuts();
         undoText         = act->text();
         undoTextStripped = KLocalizedString::removeAcceleratorMarker(undoText);
         delete act;
-        act = KStandardAction::redo(this, 0, actions);
+        act = KStandardAction::redo(this, Q_NULLPTR, actions);
         redoShortcut     = act->shortcuts();
         redoText         = act->text();
         redoTextStripped = KLocalizedString::removeAcceleratorMarker(redoText);
@@ -578,7 +578,7 @@ void MainWindow::initActions()
     KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
     // Quit only once the event loop is called; otherwise, the parent window will
     // be deleted while still processing the action, resulting in a crash.
-    QAction* act = KStandardAction::quit(0, 0, actions);
+    QAction* act = KStandardAction::quit(Q_NULLPTR, Q_NULLPTR, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
     KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
@@ -795,7 +795,7 @@ void MainWindow::slotReactivate()
     // Add the alarms to the displayed lists and to the calendar file
     Undo::EventList undos;
     QVector<EventId> ineligibleIDs;
-    KAlarm::reactivateEvents(events, ineligibleIDs, 0, this);
+    KAlarm::reactivateEvents(events, ineligibleIDs, Q_NULLPTR, this);
 
     // Create the undo list, excluding ineligible events
     AlarmCalendar* resources = AlarmCalendar::resources();
@@ -972,7 +972,7 @@ void MainWindow::slotTemplatesEnd()
     if (mTemplateDlg)
     {
         mTemplateDlg->delayedDestruct();   // this deletes the dialog once it is safe to do so
-        mTemplateDlg = 0;
+        mTemplateDlg = Q_NULLPTR;
         enableTemplateMenuItem(true);      // re-enable menu item in all windows
     }
 }
@@ -1531,7 +1531,7 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
         {
             // The window is visible, so close it
             win->close();
-            return 0;
+            return Q_NULLPTR;
         }
         else
         {

@@ -80,9 +80,9 @@ class MessageWin : public MainWindowBase
         bool                isValid() const        { return !mInvalid; }
         bool                alwaysHidden() const   { return mAlwaysHide; }
         virtual void        show();
-        virtual QSize       sizeHint() const;
+        QSize       sizeHint() const Q_DECL_OVERRIDE;
         static int          instanceCount(bool excludeAlwaysHidden = false);
-        static MessageWin*  findEvent(const EventId& eventId, MessageWin* exclude = 0);
+        static MessageWin*  findEvent(const EventId& eventId, MessageWin* exclude = Q_NULLPTR);
         static void         redisplayAlarms();
         static void         stopAudio(bool wait = false);
         static bool         isAudioPlaying();
@@ -95,8 +95,8 @@ class MessageWin : public MainWindowBase
         void        moveEvent(QMoveEvent*) Q_DECL_OVERRIDE;
         void        resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
         void        closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-        virtual void        saveProperties(KConfigGroup&);
-        virtual void        readProperties(const KConfigGroup&);
+        void        saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
+        void        readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void                slotOk();

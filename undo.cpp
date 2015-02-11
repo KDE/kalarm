@@ -104,9 +104,9 @@ template <class T> class UndoMulti : public UndoMultiBase
     public:
         UndoMulti(Undo::Type, const Undo::EventList&, const QString& name);
         UndoMulti(Undo::Type t, Undo::List* undos, const QString& name)  : UndoMultiBase(t, undos, name) { }
-        virtual Operation operation() const     { return MULTI; }
-        virtual UndoItem* restore();
-        virtual bool      deleteID(const QString& id);
+        virtual Operation operation() const Q_DECL_OVERRIDE     { return MULTI; }
+        virtual UndoItem* restore() Q_DECL_OVERRIDE;
+        virtual bool      deleteID(const QString& id) Q_DECL_OVERRIDE;
         virtual UndoItem* createRedo(Undo::List*) = 0;
 };
 
@@ -116,13 +116,13 @@ class UndoAdd : public UndoItem
         UndoAdd(Undo::Type, const Undo::Event&, const QString& name = QString());
         UndoAdd(Undo::Type, const KAEvent&, RESOURCE_PARAM_TYPE, const QString& name = QString());
         UndoAdd(Undo::Type, const KAEvent&, RESOURCE_PARAM_TYPE, const QString& name, CalEvent::Type);
-        virtual Operation  operation() const     { return ADD; }
-        virtual QString    defaultActionText() const;
-        virtual QString    description() const   { return mDescription; }
-        virtual Collection collection() const    { return mResource; }
-        virtual QString    eventID() const       { return mEventId; }
-        virtual QString    newEventID() const    { return mEventId; }
-        virtual UndoItem*  restore()             { return doRestore(); }
+        virtual Operation  operation() const Q_DECL_OVERRIDE     { return ADD; }
+        virtual QString    defaultActionText() const Q_DECL_OVERRIDE;
+        virtual QString    description() const Q_DECL_OVERRIDE   { return mDescription; }
+        virtual Collection collection() const Q_DECL_OVERRIDE    { return mResource; }
+        virtual QString    eventID() const Q_DECL_OVERRIDE       { return mEventId; }
+        virtual QString    newEventID() const Q_DECL_OVERRIDE    { return mEventId; }
+        virtual UndoItem*  restore() Q_DECL_OVERRIDE             { return doRestore(); }
     protected:
         UndoItem*          doRestore(bool setArchive = false);
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
@@ -138,14 +138,14 @@ class UndoEdit : public UndoItem
         UndoEdit(Undo::Type, const KAEvent& oldEvent, const QString& newEventID,
                  RESOURCE_PARAM_TYPE, const QStringList& dontShowErrors, const QString& description);
         ~UndoEdit();
-        virtual Operation  operation() const     { return EDIT; }
-        virtual QString    defaultActionText() const;
-        virtual QString    description() const   { return mDescription; }
-        virtual Collection collection() const    { return mResource; }
-        virtual QString    eventID() const       { return mNewEventId; }
-        virtual QString    oldEventID() const    { return mOldEvent->id(); }
-        virtual QString    newEventID() const    { return mNewEventId; }
-        virtual UndoItem*  restore();
+        virtual Operation  operation() const Q_DECL_OVERRIDE     { return EDIT; }
+        virtual QString    defaultActionText() const Q_DECL_OVERRIDE;
+        virtual QString    description() const Q_DECL_OVERRIDE   { return mDescription; }
+        virtual Collection collection() const Q_DECL_OVERRIDE    { return mResource; }
+        virtual QString    eventID() const Q_DECL_OVERRIDE       { return mNewEventId; }
+        virtual QString    oldEventID() const Q_DECL_OVERRIDE    { return mOldEvent->id(); }
+        virtual QString    newEventID() const Q_DECL_OVERRIDE    { return mNewEventId; }
+        virtual UndoItem*  restore() Q_DECL_OVERRIDE;
     private:
         Collection     mResource;  // collection containing the event
         KAEvent*       mOldEvent;
@@ -160,13 +160,13 @@ class UndoDelete : public UndoItem
         UndoDelete(Undo::Type, const Undo::Event&, const QString& name = QString());
         UndoDelete(Undo::Type, const KAEvent&, RESOURCE_PARAM_TYPE, const QStringList& dontShowErrors, const QString& name = QString());
         ~UndoDelete();
-        virtual Operation  operation() const     { return DELETE; }
-        virtual QString    defaultActionText() const;
-        virtual QString    description() const   { return UndoItem::description(*mEvent); }
-        virtual Collection collection() const    { return mResource; }
-        virtual QString    eventID() const       { return mEvent->id(); }
-        virtual QString    oldEventID() const    { return mEvent->id(); }
-        virtual UndoItem*  restore();
+        virtual Operation  operation() const Q_DECL_OVERRIDE     { return DELETE; }
+        virtual QString    defaultActionText() const Q_DECL_OVERRIDE;
+        virtual QString    description() const Q_DECL_OVERRIDE   { return UndoItem::description(*mEvent); }
+        virtual Collection collection() const Q_DECL_OVERRIDE    { return mResource; }
+        virtual QString    eventID() const Q_DECL_OVERRIDE       { return mEvent->id(); }
+        virtual QString    oldEventID() const Q_DECL_OVERRIDE    { return mEvent->id(); }
+        virtual UndoItem*  restore() Q_DECL_OVERRIDE;
         KAEvent*           event() const         { return mEvent; }
     protected:
         virtual UndoItem*  createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
@@ -183,11 +183,11 @@ class UndoReactivate : public UndoAdd
                  : UndoAdd(t, e.event, e.EVENT_RESOURCE, name, CalEvent::ACTIVE) { }
         UndoReactivate(Undo::Type t, const KAEvent& e, RESOURCE_PARAM_TYPE r, const QString& name = QString())
                  : UndoAdd(t, e, r, name, CalEvent::ACTIVE) { }
-        virtual Operation operation() const     { return REACTIVATE; }
-        virtual QString   defaultActionText() const;
-        virtual UndoItem* restore();
+        virtual Operation operation() const Q_DECL_OVERRIDE     { return REACTIVATE; }
+        virtual QString   defaultActionText() const Q_DECL_OVERRIDE;
+        virtual UndoItem* restore() Q_DECL_OVERRIDE;
     protected:
-        virtual UndoItem* createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
+        virtual UndoItem* createRedo(const KAEvent&, RESOURCE_PARAM_TYPE) Q_DECL_OVERRIDE;
 };
 
 class UndoDeactivate : public UndoDelete
@@ -195,11 +195,11 @@ class UndoDeactivate : public UndoDelete
     public:
         UndoDeactivate(Undo::Type t, const KAEvent& e, RESOURCE_PARAM_TYPE r, const QString& name = QString())
                  : UndoDelete(t, e, r, QStringList(), name) { }
-        virtual Operation operation() const     { return DEACTIVATE; }
-        virtual QString   defaultActionText() const;
-        virtual UndoItem* restore();
+        virtual Operation operation() const Q_DECL_OVERRIDE     { return DEACTIVATE; }
+        virtual QString   defaultActionText() const Q_DECL_OVERRIDE;
+        virtual UndoItem* restore() Q_DECL_OVERRIDE;
     protected:
-        virtual UndoItem* createRedo(const KAEvent&, RESOURCE_PARAM_TYPE);
+        virtual UndoItem* createRedo(const KAEvent&, RESOURCE_PARAM_TYPE) Q_DECL_OVERRIDE;
 };
 
 class UndoAdds : public UndoMulti<UndoAdd>
@@ -209,8 +209,8 @@ class UndoAdds : public UndoMulti<UndoAdd>
                           : UndoMulti<UndoAdd>(t, events, name) { }   // UNDO only
         UndoAdds(Undo::Type t, Undo::List* undos, const QString& name)
                           : UndoMulti<UndoAdd>(t, undos, name) { }
-        virtual QString   defaultActionText() const;
-        virtual UndoItem* createRedo(Undo::List*);
+        virtual QString   defaultActionText() const Q_DECL_OVERRIDE;
+        virtual UndoItem* createRedo(Undo::List*) Q_DECL_OVERRIDE;
 };
 
 class UndoDeletes : public UndoMulti<UndoDelete>
@@ -220,8 +220,8 @@ class UndoDeletes : public UndoMulti<UndoDelete>
                           : UndoMulti<UndoDelete>(t, events, name) { }   // UNDO only
         UndoDeletes(Undo::Type t, Undo::List* undos, const QString& name)
                           : UndoMulti<UndoDelete>(t, undos, name) { }
-        virtual QString   defaultActionText() const;
-        virtual UndoItem* createRedo(Undo::List*);
+        virtual QString   defaultActionText() const Q_DECL_OVERRIDE;
+        virtual UndoItem* createRedo(Undo::List*) Q_DECL_OVERRIDE;
 };
 
 class UndoReactivates : public UndoMulti<UndoReactivate>
@@ -231,11 +231,11 @@ class UndoReactivates : public UndoMulti<UndoReactivate>
                           : UndoMulti<UndoReactivate>(t, events, name) { }   // UNDO only
         UndoReactivates(Undo::Type t, Undo::List* undos, const QString& name)
                           : UndoMulti<UndoReactivate>(t, undos, name) { }
-        virtual QString   defaultActionText() const;
-        virtual UndoItem* createRedo(Undo::List*);
+        virtual QString   defaultActionText() const Q_DECL_OVERRIDE;
+        virtual UndoItem* createRedo(Undo::List*) Q_DECL_OVERRIDE;
 };
 
-Undo*       Undo::mInstance = 0;
+Undo*       Undo::mInstance = Q_NULLPTR;
 Undo::List  Undo::mUndoList;
 Undo::List  Undo::mRedoList;
 
@@ -451,7 +451,7 @@ void Undo::remove(UndoItem* item, bool undo)
 void Undo::replace(UndoItem* old, UndoItem* New)
 {
     Type type = old->type();
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
     if (!list)
         return;
     int i = list->indexOf(old);
@@ -468,7 +468,7 @@ void Undo::replace(UndoItem* old, UndoItem* New)
 */
 QString Undo::actionText(Undo::Type type)
 {
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
     return (list && !list->isEmpty()) ? (*list)[0]->actionText() : QString();
 }
 
@@ -501,7 +501,7 @@ QList<int> Undo::ids(Undo::Type type)
     QList<int> ids;
     QStringList ignoreIDs;
 //int n=0;
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
     if (!list)
         return ids;
     for (int i = 0, end = list->count();  i < end;  ++i)
@@ -561,7 +561,7 @@ void Undo::emitChanged()
 */
 UndoItem* Undo::getItem(int id, Undo::Type type)
 {
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : 0;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
     if (list)
     {
         for (int i = 0, end = list->count();  i < end;  ++i)
@@ -570,7 +570,7 @@ UndoItem* Undo::getItem(int id, Undo::Type type)
                 return (*list)[i];
         }
     }
-    return 0;
+    return Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -694,7 +694,7 @@ UndoItem* UndoMulti<T>::restore()
     if (newUndos->isEmpty())
     {
         delete newUndos;
-        return 0;
+        return Q_NULLPTR;
     }
 
     // Create a redo item to delete the alarm again
@@ -781,7 +781,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
     if (!ev)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
-        return 0;
+        return Q_NULLPTR;
     }
     KAEvent event(*ev); 
 
@@ -828,7 +828,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
         default:
             delete undo;
             mRestoreError = ERR_PROG;
-            return 0;
+            return Q_NULLPTR;
     }
     return undo;
 }
@@ -909,7 +909,7 @@ UndoItem* UndoEdit::restore()
     if (!event)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
-        return 0;
+        return Q_NULLPTR;
     }
     KAEvent newEvent(*event); 
 
@@ -952,7 +952,7 @@ UndoItem* UndoEdit::restore()
         default:
             delete undo;
             mRestoreError = ERR_PROG;
-            return 0;
+            return Q_NULLPTR;
     }
     return undo;
 }
@@ -1035,14 +1035,14 @@ UndoItem* UndoDelete::restore()
                     case KAlarm::UPDATE_FAILED:
                     case KAlarm::SAVE_FAILED:
                         mRestoreError = ERR_ARCHIVED;
-                        return 0;
+                        return Q_NULLPTR;
                     case KAlarm::UPDATE_OK:
                         break;
                 }
             }
             else
             {
-                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, 0, true);
+                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, Q_NULLPTR, true);
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1058,7 +1058,7 @@ UndoItem* UndoDelete::restore()
                     case KAlarm::UPDATE_FAILED:
                     case KAlarm::SAVE_FAILED:
                         mRestoreError = ERR_CREATE;
-                        return 0;
+                        return Q_NULLPTR;
                     case KAlarm::UPDATE_OK:
                         break;
                 }
@@ -1069,19 +1069,19 @@ UndoItem* UndoDelete::restore()
             if (KAlarm::addTemplate(*mEvent, &mResource) != KAlarm::UPDATE_OK)
             {
                 mRestoreError = ERR_CREATE;
-                return 0;
+                return Q_NULLPTR;
             }
             break;
         case CalEvent::ARCHIVED:
             if (!KAlarm::addArchivedEvent(*mEvent, &mResource))
             {
                 mRestoreError = ERR_CREATE;
-                return 0;
+                return Q_NULLPTR;
             }
             break;
         default:
             mRestoreError = ERR_PROG;
-            return 0;
+            return Q_NULLPTR;
     }
 
     // Create a redo item to delete the alarm again
@@ -1165,7 +1165,7 @@ UndoItem* UndoReactivate::restore()
             break;
         default:
             mRestoreError = ERR_PROG;
-            return 0;
+            return Q_NULLPTR;
     }
     return UndoAdd::doRestore(true);     // restore alarm, ensuring that it is re-archived
 }
@@ -1208,7 +1208,7 @@ UndoItem* UndoDeactivate::restore()
             break;
         default:
             mRestoreError = ERR_PROG;
-            return 0;
+            return Q_NULLPTR;
     }
 
     return UndoDelete::restore();

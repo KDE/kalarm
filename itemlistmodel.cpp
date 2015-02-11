@@ -188,7 +188,7 @@ bool ItemListModel::haveEvents() const
 = types in enabled collections.
 Equivalent to AlarmListFilterModel
 =============================================================================*/
-AlarmListModel* AlarmListModel::mAllInstance = 0;
+AlarmListModel* AlarmListModel::mAllInstance = Q_NULLPTR;
 
 AlarmListModel::AlarmListModel(QObject* parent)
     : ItemListModel(CalEvent::ACTIVE | CalEvent::ARCHIVED, parent),
@@ -199,7 +199,7 @@ AlarmListModel::AlarmListModel(QObject* parent)
 AlarmListModel::~AlarmListModel()
 {
     if (this == mAllInstance)
-        mAllInstance = 0;
+        mAllInstance = Q_NULLPTR;
 }
 
 AlarmListModel* AlarmListModel::all()
@@ -258,7 +258,7 @@ QVariant AlarmListModel::headerData(int section, Qt::Orientation orientation, in
 = in enabled collections.
 Equivalent to TemplateListFilterModel
 =============================================================================*/
-TemplateListModel* TemplateListModel::mAllInstance = 0;
+TemplateListModel* TemplateListModel::mAllInstance = Q_NULLPTR;
 
 TemplateListModel::TemplateListModel(QObject* parent)
     : ItemListModel(CalEvent::TEMPLATE, parent),
@@ -270,7 +270,7 @@ TemplateListModel::TemplateListModel(QObject* parent)
 TemplateListModel::~TemplateListModel()
 {
     if (this == mAllInstance)
-        mAllInstance = 0;
+        mAllInstance = Q_NULLPTR;
 }
 
 TemplateListModel* TemplateListModel::all()

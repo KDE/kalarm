@@ -24,7 +24,7 @@
 #include "startdaytimer.h"
 
 
-StartOfDayTimer* StartOfDayTimer::mInstance = 0;
+StartOfDayTimer* StartOfDayTimer::mInstance = Q_NULLPTR;
 
 StartOfDayTimer::StartOfDayTimer()
     : DailyTimer(Preferences::startOfDay(), false)

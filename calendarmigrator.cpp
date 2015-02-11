@@ -132,19 +132,19 @@ class CalendarUpdater : public QObject
 };
 
 
-CalendarMigrator* CalendarMigrator::mInstance = 0;
+CalendarMigrator* CalendarMigrator::mInstance = Q_NULLPTR;
 bool              CalendarMigrator::mCompleted = false;
 
 CalendarMigrator::CalendarMigrator(QObject* parent)
     : QObject(parent),
-      mExistingAlarmTypes(0)
+      mExistingAlarmTypes(Q_NULLPTR)
 {
 }
 
 CalendarMigrator::~CalendarMigrator()
 {
     qCDebug(KALARM_LOG);
-    mInstance = 0;
+    mInstance = Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -524,7 +524,7 @@ template <class Interface> Interface* CalendarMigrator::getAgentInterface(const 
         errorMessage = iface->lastError().message();
         qCDebug(KALARM_LOG) << "D-Bus error accessing resource:" << errorMessage;
         delete iface;
-        return 0;
+        return Q_NULLPTR;
     }
     return iface;
 }
@@ -539,7 +539,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
       mFinished(false)
 {
     // Read the resource configuration parameters from the config
-    const char* pathKey = 0;
+    const char* pathKey = Q_NULLPTR;
     if (resourceType == QLatin1String("file"))
     {
         mResourceType = LocalFile;

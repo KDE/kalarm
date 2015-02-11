@@ -125,8 +125,8 @@ class SpinBox2 : public QFrame
         /** Determine whether the current input is valid. */
         virtual QValidator::State validate(QString&, int& /*pos*/) const  { return QValidator::Acceptable; }
 
-        virtual QSize    sizeHint() const;
-        virtual QSize    minimumSizeHint() const;
+        QSize    sizeHint() const Q_DECL_OVERRIDE;
+        QSize    minimumSizeHint() const Q_DECL_OVERRIDE;
 
         /** Returns the minimum value of the spin box. */
         int              minimum() const             { return mMinValue; }
@@ -277,17 +277,17 @@ class SpinBox2 : public QFrame
                                 : SpinBox(parent), owner(sb2) { }
                 MainSpinBox(int minValue, int maxValue, SpinBox2* sb2, QWidget* parent)
                                 : SpinBox(minValue, maxValue, parent), owner(sb2) { }
-                virtual QString textFromValue(int v) const  { return owner->textFromValue(v); }
-                virtual int     valueFromText(const QString& t) const
+                virtual QString textFromValue(int v) const Q_DECL_OVERRIDE  { return owner->textFromValue(v); }
+                virtual int     valueFromText(const QString& t) const Q_DECL_OVERRIDE
                                                             { return owner->valueFromText(t); }
                 QString         textFromVal(int v) const    { return SpinBox::textFromValue(v); }
                 int             valFromText(const QString& t) const
                                                             { return SpinBox::valueFromText(t); }
-                virtual int     shiftStepAdjustment(int oldValue, int shiftStep);
-                virtual QValidator::State validate(QString& text, int& pos) const
+                int     shiftStepAdjustment(int oldValue, int shiftStep) Q_DECL_OVERRIDE;
+                virtual QValidator::State validate(QString& text, int& pos) const Q_DECL_OVERRIDE
                                                             { return owner->validate(text, pos); }
             protected:
-                virtual void    resizeEvent(QResizeEvent* e) { owner->spinboxResized(e); SpinBox::resizeEvent(e); }
+                virtual void    resizeEvent(QResizeEvent* e) Q_DECL_OVERRIDE { owner->spinboxResized(e); SpinBox::resizeEvent(e); }
             private:
                 SpinBox2* owner;   // owner SpinBox2
         };

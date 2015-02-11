@@ -82,8 +82,8 @@ class CollectionCheckListModel : public KCheckableProxyModel
         ~CollectionCheckListModel();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
-        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
-        virtual bool setData(const QModelIndex&, const QVariant& value, int role);
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        bool setData(const QModelIndex&, const QVariant& value, int role) Q_DECL_OVERRIDE;
 
     Q_SIGNALS:
         void collectionTypeChange(CollectionCheckListModel*);
@@ -252,7 +252,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  @param cancelled If non-null: set to true if the user cancelled
          *             the prompt dialogue; set to false if any other error.
          */
-        static Akonadi::Collection destination(CalEvent::Type, QWidget* promptparent = Q_NULLPTR, bool noPrompt = false, bool* cancelled = 0);
+        static Akonadi::Collection destination(CalEvent::Type, QWidget* promptparent = Q_NULLPTR, bool noPrompt = false, bool* cancelled = Q_NULLPTR);
 
         /** Return the enabled collections which contain a specified mime type.
          *  If 'writable' is true, only writable collections are included.
@@ -277,7 +277,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         bool waitUntilPopulated(Akonadi::Collection::Id colId = -1, int timeout = 0);
 
-        virtual QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
 
         /** Return a bulleted list of alarm types for inclusion in an i18n message. */
         static QString typeListForDisplay(CalEvent::Types);

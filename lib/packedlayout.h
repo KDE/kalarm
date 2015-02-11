@@ -41,17 +41,17 @@ class PackedLayout : public QLayout
         explicit PackedLayout(Qt::Alignment alignment);
         ~PackedLayout();
         // Override QLayout methods
-        virtual bool hasHeightForWidth() const  { return true; }
-        virtual int heightForWidth(int w) const;
-        virtual int count() const  { return mItems.count(); }
-        virtual void addItem(QLayoutItem* item);
-        virtual QLayoutItem* itemAt(int index) const;
-        virtual QLayoutItem* takeAt(int index);
-        virtual void setGeometry(const QRect& r);
+        virtual bool hasHeightForWidth() const Q_DECL_OVERRIDE  { return true; }
+        int heightForWidth(int w) const Q_DECL_OVERRIDE;
+        virtual int count() const Q_DECL_OVERRIDE  { return mItems.count(); }
+        void addItem(QLayoutItem* item) Q_DECL_OVERRIDE;
+        QLayoutItem* itemAt(int index) const Q_DECL_OVERRIDE;
+        QLayoutItem* takeAt(int index) Q_DECL_OVERRIDE;
+        void setGeometry(const QRect& r) Q_DECL_OVERRIDE;
         QSize sizeHint() const  Q_DECL_OVERRIDE { return minimumSize(); }
-        virtual QSize minimumSize() const;
-        virtual Qt::Orientations expandingDirections() const  { return Qt::Vertical | Qt::Horizontal; }
-        virtual void invalidate()  { mWidthCached = mHeightCached = false; }
+        QSize minimumSize() const Q_DECL_OVERRIDE;
+        virtual Qt::Orientations expandingDirections() const Q_DECL_OVERRIDE  { return Qt::Vertical | Qt::Horizontal; }
+        virtual void invalidate() Q_DECL_OVERRIDE  { mWidthCached = mHeightCached = false; }
 
     private:
         int arrange(const QRect&, bool set) const;

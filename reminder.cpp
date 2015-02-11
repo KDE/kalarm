@@ -83,7 +83,7 @@ Reminder::Reminder(const QString& reminderWhatsThis, const QString& valueWhatsTh
         layout->addStretch();
     }
     else
-        mOnceOnly = 0;
+        mOnceOnly = Q_NULLPTR;
 }
 
 /******************************************************************************

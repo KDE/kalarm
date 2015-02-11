@@ -67,7 +67,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         KAEvent            selectedEvent() const;
         void               editAlarm(EditAlarmDlg*, const KAEvent&);
         void               clearSelection();
-        virtual bool       eventFilter(QObject*, QEvent*);
+        bool       eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
 
         static void        refresh();
         static void        executeDragEnterEvent(QDragEnterEvent*);
@@ -75,7 +75,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         static void        closeAll();
         static MainWindow* toggleWindow(MainWindow*);
         static MainWindow* mainMainWindow();
-        static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? 0 : mWindowList[0]; }
+        static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? Q_NULLPTR : mWindowList[0]; }
         static int         count()            { return mWindowList.count(); }
 
         static QString i18n_a_ShowAlarmTimes();       // text of 'Show Alarm Times' action, with 'A' shortcut
@@ -94,10 +94,10 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         void   showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         void   hideEvent(QHideEvent*) Q_DECL_OVERRIDE;
         void   closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-        virtual void   dragEnterEvent(QDragEnterEvent* e)  { executeDragEnterEvent(e); }
+        virtual void   dragEnterEvent(QDragEnterEvent* e) Q_DECL_OVERRIDE  { executeDragEnterEvent(e); }
         void   dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
-        virtual void   saveProperties(KConfigGroup&);
-        virtual void   readProperties(const KConfigGroup&);
+        void   saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
+        void   readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void           slotNew(EditAlarmDlg::Type);

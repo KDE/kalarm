@@ -42,9 +42,9 @@ class FontColourButton : public PushButton
         QFont         font() const           { return mFont; }
         QColor        bgColour() const       { return mBgColour; }
         QColor        fgColour() const       { return mFgColour; }
-        virtual void  setReadOnly(bool ro, bool noHighlight = false)
+        virtual void  setReadOnly(bool ro, bool noHighlight = false) Q_DECL_OVERRIDE
                                  { mReadOnly = ro; PushButton::setReadOnly(ro, noHighlight); }
-        virtual bool  isReadOnly() const     { return mReadOnly; }
+        virtual bool  isReadOnly() const Q_DECL_OVERRIDE     { return mReadOnly; }
 
     Q_SIGNALS:
         /** Signal emitted whenever a font or colour has been selected. */

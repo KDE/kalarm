@@ -118,7 +118,7 @@ static QString xtermCommands[] = {
 = Class KAlarmPrefDlg
 =============================================================================*/
 
-KAlarmPrefDlg* KAlarmPrefDlg::mInstance = 0;
+KAlarmPrefDlg* KAlarmPrefDlg::mInstance = Q_NULLPTR;
 
 void KAlarmPrefDlg::display()
 {
@@ -200,7 +200,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
 {
-    mInstance = 0;
+    mInstance = Q_NULLPTR;
 }
 
 void KAlarmPrefDlg::slotHelp()
@@ -1417,7 +1417,7 @@ void EditPrefTab::restore(bool, bool allTabs)
             case TimePeriod::Minutes:      index = 0; break;
         }
         mReminderUnits->setCurrentIndex(index);
-        KAEvent::ExtraActionOptions opts(0);
+        KAEvent::ExtraActionOptions opts(Q_NULLPTR);
         if (Preferences::defaultExecPreActionOnDeferral())
             opts |= KAEvent::ExecPreActOnDeferral;
         if (Preferences::defaultCancelOnPreActionError())

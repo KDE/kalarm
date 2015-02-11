@@ -34,7 +34,7 @@
 
 EventListView::EventListView(QWidget* parent)
     : QTreeView(parent),
-      mFind(0),
+      mFind(Q_NULLPTR),
       mEditOnSingleClick(false)
 {
     setRootIsDecorated(false);    // don't show expander icons for child-less items

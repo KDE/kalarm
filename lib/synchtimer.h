@@ -52,7 +52,7 @@ class SynchTimer : public QObject
         SynchTimer();
         virtual void        start() = 0;
         void                connecT(QObject* receiver, const char* member);
-        void                disconnecT(QObject* receiver, const char* member = 0);
+        void                disconnecT(QObject* receiver, const char* member = Q_NULLPTR);
         bool                hasConnections() const   { return !mConnections.isEmpty(); }
 
         QTimer*             mTimer;
@@ -77,7 +77,7 @@ class MinuteTimer : public SynchTimer
 {
         Q_OBJECT
     public:
-        virtual ~MinuteTimer()  { mInstance = 0; }
+        virtual ~MinuteTimer()  { mInstance = Q_NULLPTR; }
         /** Connect to the timer signal.
          *  @param receiver Receiving object.
          *  @param member Slot to activate.
@@ -89,16 +89,16 @@ class MinuteTimer : public SynchTimer
          *  @param member Slot to disconnect. If null, all slots belonging to
          *                @p receiver will be disconnected.
          */
-        static void disconnect(QObject* receiver, const char* member = 0)
+        static void disconnect(QObject* receiver, const char* member = Q_NULLPTR)
                            { if (mInstance) mInstance->disconnecT(receiver, member); }
 
     protected:
         MinuteTimer() : SynchTimer() { }
         static MinuteTimer* instance();
-        virtual void        start()    { slotTimer(); }
+        virtual void        start() Q_DECL_OVERRIDE    { slotTimer(); }
 
     protected Q_SLOTS:
-        virtual void slotTimer();
+        void slotTimer() Q_DECL_OVERRIDE;
 
     private:
         static MinuteTimer* mInstance;     // the one and only instance
@@ -132,7 +132,7 @@ class DailyTimer : public SynchTimer
          *  @param member Slot to disconnect. If null, all slots belonging to
          *                @p receiver will be disconnected.
          */
-        static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = 0);
+        static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = Q_NULLPTR);
         /** Change the time at which this variable timer triggers.
          *  @param newTimeOfDay New time at which the timer should trigger.
          *  @param triggerMissed If true, and if @p newTimeOfDay < @p oldTimeOfDay, and if the current
@@ -158,10 +158,10 @@ class DailyTimer : public SynchTimer
          *  @return The instance for @p timeOfDay, or 0 if it does not exist.
          */
         static DailyTimer* fixedInstance(const QTime& timeOfDay, bool create = true);
-        virtual void start();
+        void start() Q_DECL_OVERRIDE;
 
     protected Q_SLOTS:
-        virtual void slotTimer();
+        void slotTimer() Q_DECL_OVERRIDE;
 
     private:
         static QList<DailyTimer*>  mFixedTimers;   // list of timers whose trigger time is fixed
@@ -189,7 +189,7 @@ class MidnightTimer
          *  @param member Slot to disconnect. If null, all slots belonging to
          *                @p receiver will be disconnected.
          */
-        static void disconnect(QObject* receiver, const char* member = 0)
+        static void disconnect(QObject* receiver, const char* member = Q_NULLPTR)
                            { DailyTimer::disconnect(QTime(0,0), receiver, member); }
 
 };

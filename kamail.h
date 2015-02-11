@@ -61,7 +61,7 @@ class KAMail : public QObject
 
         static int         send(JobData&, QStringList& errmsgs);
         static int         checkAddress(QString& address);
-        static int         checkAttachment(QString& attachment, KUrl* = 0);
+        static int         checkAttachment(QString& attachment, KUrl* = Q_NULLPTR);
         static bool        checkAttachment(const KUrl&);
         static QString     convertAddresses(const QString& addresses, KCalCore::Person::List&);
         static QString     convertAttachments(const QString& attachments, QStringList& list);

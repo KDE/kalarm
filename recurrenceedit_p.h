@@ -58,11 +58,11 @@ class Rule : public NoRule
     public:
         Rule(const QString& freqText, const QString& freqWhatsThis, bool time, bool readOnly,
              QWidget* parent);
-        int              frequency() const;
+        int              frequency() const override;
         void             setFrequency(int);
         virtual void     setFrequencyFocus()     { mSpinBox->setFocus(); }
         QVBoxLayout*     layout() const          { return mLayout; }
-        virtual QWidget* validate(QString&)      { return 0; }
+        virtual QWidget* validate(QString&)      { return nullptr; }
         virtual void     saveState();
         virtual bool     stateChanged() const;
 
@@ -98,9 +98,9 @@ class DayWeekRule : public Rule
         void             setDays(bool);
         void             setDays(const QBitArray& days);
         void             setDay(int dayOfWeek);
-        virtual QWidget* validate(QString& errorMessage);
-        virtual void     saveState();
-        virtual bool     stateChanged() const;
+        virtual QWidget* validate(QString& errorMessage) override;
+        virtual void     saveState() override;
+        virtual bool     stateChanged() const override;
 
     private:
         CheckBox*        mDayBox[7];
@@ -141,8 +141,8 @@ class MonthYearRule : public Rule
         void             setDate(int dayOfMonth);
         void             setPosition(int week, int dayOfWeek);
         void             setDefaultValues(int dayOfMonth, int dayOfWeek);
-        virtual void     saveState();
-        virtual bool     stateChanged() const;
+        virtual void     saveState() override;
+        virtual bool     stateChanged() const override;
 
     Q_SIGNALS:
         void             typeChanged(DayPosType);
@@ -193,15 +193,15 @@ class YearlyRule : public MonthYearRule
         void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
         KARecurrence::Feb29Type feb29Type() const;
         void             setFeb29Type(KARecurrence::Feb29Type);
-        virtual QWidget* validate(QString& errorMessage);
-        virtual void     saveState();
-        virtual bool     stateChanged() const;
+        virtual QWidget* validate(QString& errorMessage) override;
+        virtual void     saveState() override;
+        virtual bool     stateChanged() const override;
 
     protected:
-        virtual void     daySelected(int day);
+        virtual void     daySelected(int day) override;
 
     protected Q_SLOTS:
-        virtual void     clicked(QAbstractButton*);
+        virtual void     clicked(QAbstractButton*) override;
 
     private Q_SLOTS:
         void             enableFeb29();

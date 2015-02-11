@@ -80,7 +80,7 @@ class EditAlarmDlg : public KDialog
         void            setLateCancel(int minutes);
         void            setShowInKOrganizer(bool);
 
-        virtual QSize   sizeHint() const    { return minimumSizeHint(); }
+        virtual QSize   sizeHint() const Q_DECL_OVERRIDE    { return minimumSizeHint(); }
 
         static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
@@ -105,8 +105,8 @@ class EditAlarmDlg : public KDialog
         virtual bool    type_validate(bool trial) = 0;
         virtual void    type_aboutToTry() {}
         virtual void    type_executedTry(const QString& text, void* obj) { Q_UNUSED(text); Q_UNUSED(obj); }
-        virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return 0; }
-        virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { Q_UNUSED(parent); return 0; }
+        virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return Q_NULLPTR; }
+        virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { Q_UNUSED(parent); return Q_NULLPTR; }
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const = 0;
 
         void            showMainPage();
@@ -122,7 +122,7 @@ class EditAlarmDlg : public KDialog
         virtual void    slotTry();
         virtual void    slotHelp();      // Load Template
         virtual void    slotDefault();   // More/Less Options
-        virtual void    slotButtonClicked(int button);
+        void    slotButtonClicked(int button) Q_DECL_OVERRIDE;
         void            contentsChanged();
 
     private Q_SLOTS:
@@ -141,7 +141,7 @@ class EditAlarmDlg : public KDialog
         void            initValues(const KAEvent*);
         void            setEvent(KAEvent&, const QString& text, bool trial);
         bool            validate();
-        void            setRecurTabTitle(const KAEvent* = 0);
+        void            setRecurTabTitle(const KAEvent* = Q_NULLPTR);
         virtual bool    stateChanged() const;
         void            showOptions(bool more);
 

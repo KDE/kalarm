@@ -26,14 +26,14 @@
 RadioButton::RadioButton(QWidget* parent)
     : QRadioButton(parent),
       mFocusPolicy(focusPolicy()),
-      mFocusWidget(0),
+      mFocusWidget(Q_NULLPTR),
       mReadOnly(false)
 { }
 
 RadioButton::RadioButton(const QString& text, QWidget* parent)
     : QRadioButton(text, parent),
       mFocusPolicy(focusPolicy()),
-      mFocusWidget(0),
+      mFocusWidget(Q_NULLPTR),
       mReadOnly(false)
 { }
 

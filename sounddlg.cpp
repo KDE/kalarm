@@ -142,10 +142,10 @@ QString SoundWidget::mDefaultDir;
 
 SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     : QWidget(parent),
-      mFilePlay(0),
-      mRepeatGroupBox(0),
-      mRepeatPause(0),
-      mPlayer(0),
+      mFilePlay(Q_NULLPTR),
+      mRepeatGroupBox(Q_NULLPTR),
+      mRepeatPause(Q_NULLPTR),
+      mPlayer(Q_NULLPTR),
       mReadOnly(false),
       mEmptyFileAllowed(false)
 {
@@ -153,7 +153,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     layout->setMargin(0);
     layout->setSpacing(KDialog::spacingHint());
 
-    QLabel* label = 0;
+    QLabel* label = Q_NULLPTR;
     if (!showPlay)
     {
         label = new QLabel(i18nc("@label", "Sound file:"), this);
@@ -314,7 +314,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 SoundWidget::~SoundWidget()
 {
     delete mPlayer;   // this stops playing if not already stopped
-    mPlayer = 0;
+    mPlayer = Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -466,7 +466,7 @@ void SoundWidget::playSound()
 void SoundWidget::playFinished()
 {
     delete mPlayer;   // this stops playing if not already stopped
-    mPlayer = 0;
+    mPlayer = Q_NULLPTR;
     mFilePlay->setIcon(SmallIcon(QLatin1String("media-playback-start")));
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));

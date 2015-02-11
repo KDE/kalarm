@@ -52,7 +52,7 @@ class KAlarmApp : public KUniqueApplication
         Q_OBJECT
     public:
         ~KAlarmApp();
-        virtual int        newInstance();
+        int        newInstance() Q_DECL_OVERRIDE;
         static KAlarmApp*  getInstance();
         bool               checkCalendar()                 { return initCheck(); }
         bool               wantShowInSystemTray() const;
@@ -69,13 +69,13 @@ class KAlarmApp : public KUniqueApplication
         void               removeWindow(TrayWindow*);
         TrayWindow*        trayWindow() const              { return mTrayWindow; }
         MainWindow*        trayMainWindow() const;
-        bool               displayTrayIcon(bool show, MainWindow* = 0);
+        bool               displayTrayIcon(bool show, MainWindow* = Q_NULLPTR);
         bool               trayIconDisplayed() const       { return mTrayWindow; }
-        bool               editNewAlarm(MainWindow* = 0);
+        bool               editNewAlarm(MainWindow* = Q_NULLPTR);
         virtual void       commitData(QSessionManager&);
 
         void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
-        ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, const QObject* receiver = 0, const char* slot = 0);
+        ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, const QObject* receiver = Q_NULLPTR, const char* slot = Q_NULLPTR);
         void               alarmCompleted(const KAEvent&);
         void               rescheduleAlarm(KAEvent& e, const KAAlarm& a)   { rescheduleAlarm(e, a, true); }
         void               purgeAll()             { purge(0); }
@@ -185,7 +185,7 @@ class KAlarmApp : public KUniqueApplication
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
         bool               cancelReminderAndDeferral(KAEvent&);
         ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*,
-                                          int flags = 0, const QObject* receiver = 0, const char* slot = 0);
+                                          int flags = 0, const QObject* receiver = Q_NULLPTR, const char* slot = Q_NULLPTR);
         QString            composeXTermCommand(const QString& command, const KAEvent&, const KAAlarm*,
                                                int flags, QString& tempScriptFile) const;
         QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&) const;

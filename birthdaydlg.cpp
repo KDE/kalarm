@@ -61,7 +61,7 @@ using namespace KCal;
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
     : KDialog(parent),
-      mSpecialActionsButton(0)
+      mSpecialActionsButton(Q_NULLPTR)
 {
     setObjectName(QStringLiteral("BirthdayDlg"));    // used by LikeBack
     setCaption(i18nc("@title:window", "Import Birthdays From KAddressBook"));
@@ -234,7 +234,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
                       Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
     if (mSpecialActionsButton)
     {
-        KAEvent::ExtraActionOptions opts(0);
+        KAEvent::ExtraActionOptions opts(Q_NULLPTR);
         if (Preferences::defaultExecPreActionOnDeferral())
             opts |= KAEvent::ExecPreActOnDeferral;
         if (Preferences::defaultCancelOnPreActionError())

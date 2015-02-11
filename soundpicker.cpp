@@ -332,7 +332,7 @@ QString SoundPicker::browseFile(QString& defaultDir, const QString& initialFile)
         defaultDir = kdeSoundDir;
     }
     QString filter = Phonon::BackendCapabilities::availableMimeTypes().join(QLatin1String(" "));
-    return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, 0);
+    return KAlarm::browseFile(i18nc("@title:window", "Choose Sound File"), defaultDir, initialFile, filter, KFile::ExistingOnly, Q_NULLPTR);
 }
 
 

@@ -30,10 +30,10 @@ class FileDialog : public KFileDialog
         Q_OBJECT
     public:
         FileDialog(const KUrl& startDir, const QString& filter,
-                   QWidget* parent, QWidget* widget = 0)
+                   QWidget* parent, QWidget* widget = Q_NULLPTR)
               : KFileDialog(startDir, filter, parent, widget) {}
         static QString getSaveFileName(const KUrl& dir = KUrl(), const QString& filter = QString(),
-                                       QWidget* parent = Q_NULLPTR, const QString& caption = QString(), bool* append = 0);
+                                       QWidget* parent = Q_NULLPTR, const QString& caption = QString(), bool* append = Q_NULLPTR);
 
     private Q_SLOTS:
         void appendToggled(bool);

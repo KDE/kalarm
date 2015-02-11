@@ -71,12 +71,12 @@ static const Collection::Rights writableRights = Collection::CanChangeItem | Col
 = Class: AkonadiModel
 =============================================================================*/
 
-AkonadiModel* AkonadiModel::mInstance = 0;
-QPixmap*      AkonadiModel::mTextIcon = 0;
-QPixmap*      AkonadiModel::mFileIcon = 0;
-QPixmap*      AkonadiModel::mCommandIcon = 0;
-QPixmap*      AkonadiModel::mEmailIcon = 0;
-QPixmap*      AkonadiModel::mAudioIcon = 0;
+AkonadiModel* AkonadiModel::mInstance = Q_NULLPTR;
+QPixmap*      AkonadiModel::mTextIcon = Q_NULLPTR;
+QPixmap*      AkonadiModel::mFileIcon = Q_NULLPTR;
+QPixmap*      AkonadiModel::mCommandIcon = Q_NULLPTR;
+QPixmap*      AkonadiModel::mEmailIcon = Q_NULLPTR;
+QPixmap*      AkonadiModel::mAudioIcon = Q_NULLPTR;
 QSize         AkonadiModel::mIconSize;
 int           AkonadiModel::mTimeHourPos = -2;
 
@@ -149,7 +149,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 AkonadiModel::~AkonadiModel()
 {
     if (mInstance == this)
-        mInstance = 0;
+        mInstance = Q_NULLPTR;
 }
 
 /******************************************************************************
@@ -541,7 +541,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
     {
         // This is a Collection row
         bool updateCollection = false;
-        CollectionAttribute* attr = 0;
+        CollectionAttribute* attr = Q_NULLPTR;
         switch (role)
         {
             case Qt::BackgroundRole:
@@ -1267,12 +1267,12 @@ KAEvent AkonadiModel::event(Item::Id itemId) const
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return KAEvent();
-    return event(ix.data(ItemRole).value<Item>(), ix, 0);
+    return event(ix.data(ItemRole).value<Item>(), ix, Q_NULLPTR);
 }
 
 KAEvent AkonadiModel::event(const QModelIndex& index) const
 {
-    return event(index.data(ItemRole).value<Item>(), index, 0);
+    return event(index.data(ItemRole).value<Item>(), index, Q_NULLPTR);
 }
 
 KAEvent AkonadiModel::event(const Item& item, const QModelIndex& index, Collection* collection) const

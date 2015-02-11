@@ -139,7 +139,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     if (mode == DEFER_TIME)
     {
         mAnyTimeAllowed = false;
-        mAnyTimeCheckBox = 0;
+        mAnyTimeCheckBox = Q_NULLPTR;
     }
     else
     {
@@ -252,7 +252,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 void AlarmTimeWidget::setReadOnly(bool ro)
 {
     mAtTimeRadio->setReadOnly(ro);
-    mDateEdit->setOptions(ro ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
+    mDateEdit->setOptions(ro ? KDateComboBox::Options(Q_NULLPTR) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     mTimeEdit->setReadOnly(ro);
     if (mAnyTimeCheckBox)
         mAnyTimeCheckBox->setReadOnly(ro);
@@ -289,7 +289,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
     if (minsFromNow)
         *minsFromNow = 0;
     if (errorWidget)
-        *errorWidget = 0;
+        *errorWidget = Q_NULLPTR;
     KDateTime now = KDateTime::currentUtcDateTime();
     now.setTime(QTime(now.time().hour(), now.time().minute(), 0));
     if (!mAtTimeRadio->isChecked())

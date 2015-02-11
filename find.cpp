@@ -61,8 +61,8 @@ static long FIND_KALARM_OPTIONS = FIND_LIVE | FIND_ARCHIVED | FIND_MESSAGE | FIN
 Find::Find(EventListView* parent)
     : QObject(parent),
       mListView(parent),
-      mDialog(0),
-      mFind(0),
+      mDialog(Q_NULLPTR),
+      mFind(Q_NULLPTR),
       mOptions(0),
       mFound(false)
 {
@@ -73,7 +73,7 @@ Find::~Find()
 {
     delete mDialog;    // automatically set to 0
     delete mFind;
-    mFind = 0;
+    mFind = Q_NULLPTR;
 }
 
 void Find::slotSelectionChanged()
