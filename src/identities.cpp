@@ -25,7 +25,7 @@
 #include <identitymanager.h>
 #include <identity.h>
 
-static KIdentityManagement::IdentityManager *mIdentityManager = 0;
+static KIdentityManagement::IdentityManager *mIdentityManager = Q_NULLPTR;
 
 namespace KAlarmCal
 {
