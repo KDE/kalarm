@@ -157,7 +157,7 @@ class TemplateListModel : public ItemListModel
         /** Set which alarm types should be shown as disabled in the model. */
         KAEvent::Actions setAlarmActionsEnabled() const  { return mActionsEnabled; }
 
-        virtual int  columnCount(const QModelIndex& = QModelIndex()) const Q_DECL_OVERRIDE  { return ColumnCount; }
+        int  columnCount(const QModelIndex& = QModelIndex()) const Q_DECL_OVERRIDE  { return ColumnCount; }
         QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
         Qt::ItemFlags flags(const QModelIndex&) const Q_DECL_OVERRIDE;
 

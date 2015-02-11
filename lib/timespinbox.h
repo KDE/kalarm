@@ -79,7 +79,7 @@ class TimeSpinBox : public SpinBox2
         /** Sets the maximum value which can be held in the spin box.
          *  @param minutes The maximum value expressed in minutes.
          */
-        virtual void    setMaximum(int minutes) Q_DECL_OVERRIDE      { SpinBox2::setMaximum(minutes); }
+        void    setMaximum(int minutes) Q_DECL_OVERRIDE      { SpinBox2::setMaximum(minutes); }
         /** Sets the maximum value which can be held in the spin box. */
         void            setMaximum(const QTime& t)   { SpinBox2::setMaximum(t.hour()*60 + t.minute()); }
         /** Returns the maximum value which can be held in the spin box. */

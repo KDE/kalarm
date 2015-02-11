@@ -73,7 +73,7 @@ class EventListDelegate : public QItemDelegate
         Q_OBJECT
     public:
         explicit EventListDelegate(EventListView* parent = Q_NULLPTR) : QItemDelegate(parent) {}
-        virtual QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE  { return Q_NULLPTR; }
+        QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE  { return Q_NULLPTR; }
         bool editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&) Q_DECL_OVERRIDE;
         virtual void edit(KAEvent*, EventListView*) = 0;
 };

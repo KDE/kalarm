@@ -83,7 +83,7 @@ class PickLogFileRadio : public PickFileRadio
     public:
     PickLogFileRadio(QPushButton* b, LineEdit* e, const QString& text, ButtonGroup* group, QWidget* parent)
         : PickFileRadio(b, e, text, group, parent) { }
-    virtual QString pickFile() Q_DECL_OVERRIDE    // called when browse button is pressed to select a log file
+    QString pickFile() Q_DECL_OVERRIDE    // called when browse button is pressed to select a log file
     {
         return KAlarm::browseFile(i18nc("@title:window", "Choose Log File"), mDefaultDir, fileEdit()->text(), QString(),
                                   KFile::LocalOnly, parentWidget());

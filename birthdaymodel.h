@@ -56,7 +56,7 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
         static BirthdayModel* instance();
 
         QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-        virtual QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE
+        QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE
                                     { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
 
   private:

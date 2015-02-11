@@ -83,8 +83,8 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         bool    type_stateChanged() const Q_DECL_OVERRIDE;
         void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) Q_DECL_OVERRIDE;
         KAEvent::Flags getAlarmFlags() const Q_DECL_OVERRIDE;
-        virtual bool    type_validate(bool trial) Q_DECL_OVERRIDE { Q_UNUSED(trial); return true; }
-        virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent) Q_DECL_OVERRIDE  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
+        bool    type_validate(bool trial) Q_DECL_OVERRIDE { Q_UNUSED(trial); return true; }
+        CheckBox* type_createConfirmAckCheckbox(QWidget* parent) Q_DECL_OVERRIDE  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
         bool    checkText(QString& result, bool showErrorMessage = true) const Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
@@ -213,7 +213,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         QString type_caption() const Q_DECL_OVERRIDE;
         void    type_init(QWidget* parent, QVBoxLayout* frameLayout) Q_DECL_OVERRIDE;
         void    type_initValues(const KAEvent*) Q_DECL_OVERRIDE;
-        virtual void    type_showOptions(bool) Q_DECL_OVERRIDE  {}
+        void    type_showOptions(bool) Q_DECL_OVERRIDE  {}
         void    setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
         void    saveState(const KAEvent*) Q_DECL_OVERRIDE;
         bool    type_stateChanged() const Q_DECL_OVERRIDE;
@@ -275,13 +275,13 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         QString type_caption() const Q_DECL_OVERRIDE;
         void    type_init(QWidget* parent, QVBoxLayout* frameLayout) Q_DECL_OVERRIDE;
         void    type_initValues(const KAEvent*) Q_DECL_OVERRIDE;
-        virtual void    type_showOptions(bool) Q_DECL_OVERRIDE  {}
+        void    type_showOptions(bool) Q_DECL_OVERRIDE  {}
         void    setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
         void    saveState(const KAEvent*) Q_DECL_OVERRIDE;
         bool    type_stateChanged() const Q_DECL_OVERRIDE;
         void    type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) Q_DECL_OVERRIDE;
         KAEvent::Flags getAlarmFlags() const Q_DECL_OVERRIDE;
-        virtual bool    type_validate(bool trial) Q_DECL_OVERRIDE { Q_UNUSED(trial); return true; }
+        bool    type_validate(bool trial) Q_DECL_OVERRIDE { Q_UNUSED(trial); return true; }
         void    type_executedTry(const QString& text, void* obj) Q_DECL_OVERRIDE;
         bool    checkText(QString& result, bool showErrorMessage = true) const Q_DECL_OVERRIDE;
 

@@ -125,7 +125,7 @@ class MessageText : public KTextEdit
             pal.setColor(viewport()->backgroundRole(), c);
             viewport()->setPalette(pal);
         }
-        virtual QSize sizeHint() const Q_DECL_OVERRIDE
+        QSize sizeHint() const Q_DECL_OVERRIDE
         {
             const QSizeF docsize = document()->size();
             return QSize(static_cast<int>(docsize.width() + 0.99) + verticalScrollBar()->width(),

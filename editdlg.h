@@ -80,7 +80,7 @@ class EditAlarmDlg : public KDialog
         void            setLateCancel(int minutes);
         void            setShowInKOrganizer(bool);
 
-        virtual QSize   sizeHint() const Q_DECL_OVERRIDE    { return minimumSizeHint(); }
+        QSize   sizeHint() const Q_DECL_OVERRIDE    { return minimumSizeHint(); }
 
         static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 

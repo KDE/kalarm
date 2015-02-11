@@ -94,7 +94,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         void   showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         void   hideEvent(QHideEvent*) Q_DECL_OVERRIDE;
         void   closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-        virtual void   dragEnterEvent(QDragEnterEvent* e) Q_DECL_OVERRIDE  { executeDragEnterEvent(e); }
+        void   dragEnterEvent(QDragEnterEvent* e) Q_DECL_OVERRIDE  { executeDragEnterEvent(e); }
         void   dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
         void   saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
         void   readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;

@@ -95,7 +95,7 @@ class MinuteTimer : public SynchTimer
     protected:
         MinuteTimer() : SynchTimer() { }
         static MinuteTimer* instance();
-        virtual void        start() Q_DECL_OVERRIDE    { slotTimer(); }
+        void        start() Q_DECL_OVERRIDE    { slotTimer(); }
 
     protected Q_SLOTS:
         void slotTimer() Q_DECL_OVERRIDE;
