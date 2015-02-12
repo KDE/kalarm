@@ -36,10 +36,10 @@ class PageFrame : public QFrame
         explicit PageFrame(QWidget* parent = nullptr) : QFrame(parent) { }
 
     protected:
-        virtual void     showEvent(QShowEvent*) override    { emit shown(); }
+        void      showEvent(QShowEvent*) override    { emit shown(); }
 
     Q_SIGNALS:
-        void             shown();
+        void      shown();
 };
 
 class TextEdit : public KTextEdit
@@ -47,11 +47,11 @@ class TextEdit : public KTextEdit
         Q_OBJECT
     public:
         explicit TextEdit(QWidget* parent);
-        virtual QSize sizeHint() const override         { return minimumSizeHint(); }
-        virtual QSize minimumSizeHint() const override  { return minimumSize(); }
+        QSize     sizeHint() const override         { return minimumSizeHint(); }
+        QSize     minimumSizeHint() const override  { return minimumSize(); }
 
     protected:
-        virtual void dragEnterEvent(QDragEnterEvent*) override;
+        void      dragEnterEvent(QDragEnterEvent*) override;
 };
 
 class CommandEdit : public QWidget
@@ -65,8 +65,8 @@ class CommandEdit : public QWidget
         QString   text(EditAlarmDlg*, bool showErrorMessage) const;
         void      setText(const AlarmText&);
         void      setReadOnly(bool);
-        virtual QSize minimumSizeHint() const override;
-        virtual QSize sizeHint() const override   { return minimumSizeHint(); }
+        QSize     minimumSizeHint() const override;
+        QSize     sizeHint() const override   { return minimumSizeHint(); }
 
     Q_SIGNALS:
         void      scriptToggled(bool);

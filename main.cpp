@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     migrate.migrate();
 
     KLocalizedString::setApplicationDomain("kalarm");
-    K4AboutData aboutData(PROGRAM_NAME, Q_NULLPTR, ki18n("KAlarm"), KALARM_VERSION,
+    K4AboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm"), KALARM_VERSION,
         ki18n("Personal alarm message, command and email scheduler for KDE"),
         K4AboutData::License_GPL,
         ki18n("Copyright 2001-2014, David Jarvie"), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");

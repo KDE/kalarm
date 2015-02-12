@@ -48,7 +48,7 @@
 
 SpecialActionsButton::SpecialActionsButton(bool enableCheckboxes, QWidget* parent)
     : QPushButton(i18nc("@action:button", "Special Actions..."), parent),
-      mOptions(Q_NULLPTR),
+      mOptions(0),
       mEnableCheckboxes(enableCheckboxes),
       mReadOnly(false)
 {
@@ -248,7 +248,7 @@ QString SpecialActions::postAction() const
 
 KAEvent::ExtraActionOptions SpecialActions::options() const
 {
-    KAEvent::ExtraActionOptions opts = Q_NULLPTR;
+    KAEvent::ExtraActionOptions opts = 0;
     if (mExecOnDeferral->isChecked())  opts |= KAEvent::ExecPreActOnDeferral;
     if (mCancelOnError->isChecked())   opts |= KAEvent::CancelOnPreActError;
     if (mDontShowError->isChecked())   opts |= KAEvent::DontShowPreActError;

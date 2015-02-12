@@ -687,7 +687,7 @@ QByteArray autoDetectCharset(const QString& text)
             }
         }
     }
-    return Q_NULLPTR;
+    return QByteArray();
 }
 
 //-----------------------------------------------------------------------------

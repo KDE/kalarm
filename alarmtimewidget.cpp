@@ -252,7 +252,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 void AlarmTimeWidget::setReadOnly(bool ro)
 {
     mAtTimeRadio->setReadOnly(ro);
-    mDateEdit->setOptions(ro ? KDateComboBox::Options(Q_NULLPTR) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
+    mDateEdit->setOptions(ro ? KDateComboBox::Options(0) : KDateComboBox::EditDate | KDateComboBox::SelectDate | KDateComboBox::DatePicker);
     mTimeEdit->setReadOnly(ro);
     if (mAnyTimeCheckBox)
         mAnyTimeCheckBox->setReadOnly(ro);

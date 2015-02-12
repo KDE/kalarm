@@ -108,7 +108,7 @@ bool                showFileErrMessage(const QString& filename, FileErr, FileErr
 QString             pathOrUrl(const QString& url);
 
 QString             browseFile(const QString& caption, QString& defaultDir, const QString& initialFile = QString(),
-                               const QString& filter = QString(), KFile::Modes mode = Q_NULLPTR, QWidget* parent = Q_NULLPTR);
+                               const QString& filter = QString(), KFile::Modes mode = 0, QWidget* parent = Q_NULLPTR);
 bool                editNewAlarm(const QString& templateName, QWidget* parent = Q_NULLPTR);
 void                editNewAlarm(EditAlarmDlg::Type, QWidget* parent = Q_NULLPTR);
 void                editNewAlarm(KAEvent::SubAction, QWidget* parent = Q_NULLPTR, const AlarmText* = Q_NULLPTR);

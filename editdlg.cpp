@@ -798,7 +798,7 @@ void EditAlarmDlg::setEvent(KAEvent& event, const QString& text, bool trial)
 */
 KAEvent::Flags EditAlarmDlg::getAlarmFlags() const
 {
-    KAEvent::Flags flags(Q_NULLPTR);
+    KAEvent::Flags flags(0);
     if (mShowInKorganizer && mShowInKorganizer->isEnabled() && mShowInKorganizer->isChecked())
         flags |= KAEvent::COPY_KORGANIZER;
     if (mRecurrenceEdit->repeatType() == RecurrenceEdit::AT_LOGIN)

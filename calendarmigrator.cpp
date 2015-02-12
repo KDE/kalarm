@@ -137,7 +137,7 @@ bool              CalendarMigrator::mCompleted = false;
 
 CalendarMigrator::CalendarMigrator(QObject* parent)
     : QObject(parent),
-      mExistingAlarmTypes(Q_NULLPTR)
+      mExistingAlarmTypes(0)
 {
 }
 

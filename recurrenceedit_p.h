@@ -98,9 +98,9 @@ class DayWeekRule : public Rule
         void             setDays(bool);
         void             setDays(const QBitArray& days);
         void             setDay(int dayOfWeek);
-        virtual QWidget* validate(QString& errorMessage) override;
-        virtual void     saveState() override;
-        virtual bool     stateChanged() const override;
+        QWidget*         validate(QString& errorMessage) override;
+        void             saveState() override;
+        bool             stateChanged() const override;
 
     private:
         CheckBox*        mDayBox[7];
@@ -141,8 +141,8 @@ class MonthYearRule : public Rule
         void             setDate(int dayOfMonth);
         void             setPosition(int week, int dayOfWeek);
         void             setDefaultValues(int dayOfMonth, int dayOfWeek);
-        virtual void     saveState() override;
-        virtual bool     stateChanged() const override;
+        void             saveState() override;
+        bool             stateChanged() const override;
 
     Q_SIGNALS:
         void             typeChanged(DayPosType);
@@ -193,15 +193,15 @@ class YearlyRule : public MonthYearRule
         void             setDefaultValues(int dayOfMonth, int dayOfWeek, int month);
         KARecurrence::Feb29Type feb29Type() const;
         void             setFeb29Type(KARecurrence::Feb29Type);
-        virtual QWidget* validate(QString& errorMessage) override;
-        virtual void     saveState() override;
-        virtual bool     stateChanged() const override;
+        QWidget*         validate(QString& errorMessage) override;
+        void             saveState() override;
+        bool             stateChanged() const override;
 
     protected:
-        virtual void     daySelected(int day) override;
+        void             daySelected(int day) override;
 
     protected Q_SLOTS:
-        virtual void     clicked(QAbstractButton*) override;
+        void             clicked(QAbstractButton*) override;
 
     private Q_SLOTS:
         void             enableFeb29();

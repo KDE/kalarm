@@ -48,7 +48,7 @@ class ExtraSpinBox : public SpinBox
         void         painted();
 
     protected:
-        virtual void paintEvent(QPaintEvent*) override;
+        void         paintEvent(QPaintEvent*) override;
 
     private:
         int          mInhibitPaintSignal;
@@ -75,14 +75,14 @@ class SpinMirror : public QGraphicsView
         void         setButtonPos(const QPoint&);
 
     protected:
-        virtual bool event(QEvent*) override;
-        virtual void resizeEvent(QResizeEvent*) override;
+        bool         event(QEvent*) override;
+        void         resizeEvent(QResizeEvent*) override;
         virtual void styleChange(QStyle&);
-        virtual void mousePressEvent(QMouseEvent* e) override        { mouseEvent(e); }
-        virtual void mouseReleaseEvent(QMouseEvent* e) override      { mouseEvent(e); }
-        virtual void mouseMoveEvent(QMouseEvent* e) override         { mouseEvent(e); }
-        virtual void mouseDoubleClickEvent(QMouseEvent* e) override  { mouseEvent(e); }
-        virtual void wheelEvent(QWheelEvent*) override;
+        void         mousePressEvent(QMouseEvent* e) override        { mouseEvent(e); }
+        void         mouseReleaseEvent(QMouseEvent* e) override      { mouseEvent(e); }
+        void         mouseMoveEvent(QMouseEvent* e) override         { mouseEvent(e); }
+        void         mouseDoubleClickEvent(QMouseEvent* e) override  { mouseEvent(e); }
+        void         wheelEvent(QWheelEvent*) override;
 
     private:
         void         mouseEvent(QMouseEvent*);
