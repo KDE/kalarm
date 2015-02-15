@@ -60,8 +60,8 @@ class SoundWidget : public QWidget
         void           changed();      // emitted whenever any contents change
 
     protected:
-        void   showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void           showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void           resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void           slotPickFile();
@@ -107,10 +107,10 @@ class SoundDlg : public KDialog
         QString        defaultDir() const    { return mSoundWidget->defaultDir(); }
 
     protected:
-        void   resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void           resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     protected Q_SLOTS:
-        void   slotButtonClicked(int button) Q_DECL_OVERRIDE;
+        void           slotButtonClicked(int button) Q_DECL_OVERRIDE;
 
     private:
         SoundWidget*   mSoundWidget;

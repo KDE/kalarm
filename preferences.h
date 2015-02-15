@@ -86,19 +86,19 @@ class Preferences : public PreferencesBase
         static const QLatin1String CONFIRM_ALARM_DELETION;
         static const QLatin1String EMAIL_QUEUED_NOTIFY;
 
-        bool useDefaults(bool def) Q_DECL_OVERRIDE   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
+        bool                    useDefaults(bool def) Q_DECL_OVERRIDE   { mUsingDefaults = def;  return PreferencesBase::useDefaults(def); }
 
     Q_SIGNALS:
-        void  timeZoneChanged(const KTimeZone& newTz);
-        void  holidaysChanged(const KHolidays::HolidayRegion& newHolidays);
-        void  startOfDayChanged(const QTime& newStartOfDay);
-        void  workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
+        void                    timeZoneChanged(const KTimeZone& newTz);
+        void                    holidaysChanged(const KHolidays::HolidayRegion& newHolidays);
+        void                    startOfDayChanged(const QTime& newStartOfDay);
+        void                    workTimeChanged(const QTime& startTime, const QTime& endTime, const QBitArray& workDays);
 
     private Q_SLOTS:
-        void  timeZoneChange(const QString&);
-        void  holidaysChange(const QString& regionCode);
-        void  startDayChange(const QDateTime&);
-        void  workTimeChange(const QDateTime&, const QDateTime&, int days);
+        void                    timeZoneChange(const QString&);
+        void                    holidaysChange(const QString& regionCode);
+        void                    startDayChange(const QDateTime&);
+        void                    workTimeChange(const QDateTime&, const QDateTime&, int days);
 
     private:
         Preferences();         // only one instance allowed

@@ -41,7 +41,7 @@ class TemplateDlg : public KDialog
         void          emptyToggled(bool notEmpty);
 
     protected:
-        void  resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void          resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void          slotNew(EditAlarmDlg::Type);

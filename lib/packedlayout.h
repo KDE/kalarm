@@ -41,24 +41,24 @@ class PackedLayout : public QLayout
         explicit PackedLayout(Qt::Alignment alignment);
         ~PackedLayout();
         // Override QLayout methods
-        bool hasHeightForWidth() const Q_DECL_OVERRIDE  { return true; }
-        int heightForWidth(int w) const Q_DECL_OVERRIDE;
-        int count() const Q_DECL_OVERRIDE  { return mItems.count(); }
-        void addItem(QLayoutItem* item) Q_DECL_OVERRIDE;
-        QLayoutItem* itemAt(int index) const Q_DECL_OVERRIDE;
-        QLayoutItem* takeAt(int index) Q_DECL_OVERRIDE;
-        void setGeometry(const QRect& r) Q_DECL_OVERRIDE;
-        QSize sizeHint() const  Q_DECL_OVERRIDE { return minimumSize(); }
-        QSize minimumSize() const Q_DECL_OVERRIDE;
+        bool             hasHeightForWidth() const Q_DECL_OVERRIDE  { return true; }
+        int              heightForWidth(int w) const Q_DECL_OVERRIDE;
+        int              count() const Q_DECL_OVERRIDE  { return mItems.count(); }
+        void             addItem(QLayoutItem* item) Q_DECL_OVERRIDE;
+        QLayoutItem*     itemAt(int index) const Q_DECL_OVERRIDE;
+        QLayoutItem*     takeAt(int index) Q_DECL_OVERRIDE;
+        void             setGeometry(const QRect& r) Q_DECL_OVERRIDE;
+        QSize            sizeHint() const  Q_DECL_OVERRIDE { return minimumSize(); }
+        QSize            minimumSize() const Q_DECL_OVERRIDE;
         Qt::Orientations expandingDirections() const Q_DECL_OVERRIDE  { return Qt::Vertical | Qt::Horizontal; }
-        void invalidate() Q_DECL_OVERRIDE  { mWidthCached = mHeightCached = false; }
+        void             invalidate() Q_DECL_OVERRIDE  { mWidthCached = mHeightCached = false; }
 
     private:
-        int arrange(const QRect&, bool set) const;
+        int              arrange(const QRect&, bool set) const;
         QList<QLayoutItem*> mItems;
-        Qt::Alignment mAlignment;
-        mutable int mWidthCached;
-        mutable int mHeightCached;
+        Qt::Alignment       mAlignment;
+        mutable int         mWidthCached;
+        mutable int         mHeightCached;
 };
 
 #endif // PACKEDLAYOUT_H

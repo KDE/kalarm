@@ -67,16 +67,16 @@ class PushButton : public QPushButton
          *  @param readOnly True to set the widget read-only, false to enable its action.
          *  @param noHighlight True to prevent the button being highlighted on mouse-over.
          */
-        virtual void  setReadOnly(bool readOnly, bool noHighlight = false);
+        virtual void setReadOnly(bool readOnly, bool noHighlight = false);
         /** Returns true if the widget is read only. */
-        virtual bool  isReadOnly() const  { return mReadOnly; }
+        virtual bool isReadOnly() const  { return mReadOnly; }
     protected:
-        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        bool event(QEvent*) Q_DECL_OVERRIDE;
+        void         mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void         keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        bool         event(QEvent*) Q_DECL_OVERRIDE;
     private:
         Qt::FocusPolicy mFocusPolicy;   // default focus policy for the PushButton
         bool            mReadOnly;      // value cannot be changed

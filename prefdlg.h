@@ -56,8 +56,8 @@ class KAlarmPrefDlg : public KPageDialog
         KPageWidgetItem*   mViewPageItem;
 
     protected:
-        void  showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        void  resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void         showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void         resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     protected Q_SLOTS:
         virtual void slotOk();
@@ -72,8 +72,8 @@ class KAlarmPrefDlg : public KPageDialog
 
         static KAlarmPrefDlg* mInstance;
         StackedScrollGroup*   mTabScrollGroup;
-        bool         mShown;
-        bool         mValid;
+        bool                  mShown;
+        bool                  mValid;
 };
 
 #endif // PREFDLG_H

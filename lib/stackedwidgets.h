@@ -117,7 +117,7 @@ class StackedScrollGroup : public StackedGroupT<QScrollArea>
 {
     public:
         explicit StackedScrollGroup(QDialog*, QObject* tabParent);
-        QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+        QSize         minimumSizeHint() const Q_DECL_OVERRIDE;
         int           heightReduction() const { return mHeightReduction; }
         QSize         adjustSize(bool force = false);
         void          setSized()              { mSized = true; }

@@ -71,11 +71,11 @@ class CheckBox : public QCheckBox
          */
         void         setFocusWidget(QWidget* widget, bool enable = true);
     protected:
-        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void         mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void         keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
     protected Q_SLOTS:
         void         slotClicked();
     private:

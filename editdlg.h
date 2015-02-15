@@ -80,7 +80,7 @@ class EditAlarmDlg : public KDialog
         void            setLateCancel(int minutes);
         void            setShowInKOrganizer(bool);
 
-        QSize   sizeHint() const Q_DECL_OVERRIDE    { return minimumSizeHint(); }
+        QSize           sizeHint() const Q_DECL_OVERRIDE    { return minimumSizeHint(); }
 
         static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
@@ -90,9 +90,9 @@ class EditAlarmDlg : public KDialog
         EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
                      GetResourceType = RES_PROMPT, bool readOnly = false);
         void            init(const KAEvent* event);
-        void    resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
-        void    showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        void    closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+        void            resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void            showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void            closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
         virtual QString type_caption() const = 0;
         virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
         virtual void    type_initValues(const KAEvent*) = 0;
@@ -122,7 +122,7 @@ class EditAlarmDlg : public KDialog
         virtual void    slotTry();
         virtual void    slotHelp();      // Load Template
         virtual void    slotDefault();   // More/Less Options
-        void    slotButtonClicked(int button) Q_DECL_OVERRIDE;
+        void            slotButtonClicked(int button) Q_DECL_OVERRIDE;
         void            contentsChanged();
 
     private Q_SLOTS:

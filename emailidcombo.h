@@ -33,7 +33,7 @@ class EmailIdCombo : public KIdentityManagement::IdentityCombo
         Q_OBJECT
     public:
         explicit EmailIdCombo(KIdentityManagement::IdentityManager*, QWidget* parent = Q_NULLPTR);
-        void  setReadOnly(bool ro)    { mReadOnly = ro; }
+        void setReadOnly(bool ro)    { mReadOnly = ro; }
 
     protected:
         void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;

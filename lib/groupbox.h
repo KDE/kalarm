@@ -53,15 +53,15 @@ class GroupBox : public QGroupBox
         /** Sets whether the group box is read-only for the user.
          *  @param readOnly True to set the widget read-only, false to enable its action.
          */
-        virtual void  setReadOnly(bool readOnly);
+        virtual void setReadOnly(bool readOnly);
         /** Returns true if the widget is read only. */
-        virtual bool  isReadOnly() const  { return mReadOnly; }
+        virtual bool isReadOnly() const  { return mReadOnly; }
     protected:
-        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void         mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void         keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void         keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
     private:
         bool  mReadOnly;      // value cannot be changed
 };

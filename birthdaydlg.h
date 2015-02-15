@@ -78,14 +78,14 @@ class BLineEdit : public QLineEdit
 {
         Q_OBJECT
     public:
-        explicit BLineEdit(QWidget* parent = Q_NULLPTR)                       : QLineEdit(parent) { }
-        explicit BLineEdit(const QString& text, QWidget* parent = Q_NULLPTR)  : QLineEdit(text, parent) { }
+        explicit BLineEdit(QWidget* parent = Q_NULLPTR)                       : QLineEdit(parent) {}
+        explicit BLineEdit(const QString& text, QWidget* parent = Q_NULLPTR)  : QLineEdit(text, parent) {}
 
     Q_SIGNALS:
         void         focusLost();
 
     protected:
-        void focusOutEvent(QFocusEvent*) Q_DECL_OVERRIDE { emit focusLost(); }
+        void         focusOutEvent(QFocusEvent*) Q_DECL_OVERRIDE { emit focusLost(); }
 };
 
 #endif // BIRTHDAYDLG_H

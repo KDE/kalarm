@@ -53,7 +53,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         /** Determine whether the model contains any items. */
         bool         haveEvents() const;
 
-        int  columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
+        int          columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
         Qt::ItemFlags flags(const QModelIndex&) const Q_DECL_OVERRIDE;
 
         static int   iconWidth()  { return AkonadiModel::iconSize().width(); }
@@ -65,12 +65,12 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         void         haveEventsStatus(bool have);
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool         filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
-        void slotRowsInserted();
-        void slotRowsRemoved();
-        void collectionStatusChanged(const Akonadi::Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted);
+        void         slotRowsInserted();
+        void         slotRowsRemoved();
+        void         collectionStatusChanged(const Akonadi::Collection& collection, AkonadiModel::Change change, const QVariant&, bool inserted);
 
     private:
         CalEvent::Types mAllowedTypes; // types of events allowed in this model

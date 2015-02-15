@@ -65,7 +65,7 @@ class ResourceSelector : public QFrame
         void  resized(const QSize& oldSize, const QSize& newSize);
 
     protected:
-        void resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void  resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void  alarmTypeSelected();

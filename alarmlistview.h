@@ -33,14 +33,14 @@ class AlarmListView : public EventListView
         Q_OBJECT
     public:
         explicit AlarmListView(const QByteArray& configGroup, QWidget* parent = Q_NULLPTR);
-        void      setModel(QAbstractItemModel*) Q_DECL_OVERRIDE;
-        void              selectTimeColumns(bool time, bool timeTo);
+        void        setModel(QAbstractItemModel*) Q_DECL_OVERRIDE;
+        void        selectTimeColumns(bool time, bool timeTo);
 
     private Q_SLOTS:
-        void              sectionMoved();
+        void        sectionMoved();
 
     private:
-        QByteArray        mConfigGroup;
+        QByteArray  mConfigGroup;
 };
 
 #endif // ALARMLISTVIEW_H

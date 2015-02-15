@@ -106,7 +106,7 @@ class RecurrenceEdit : public QFrame
         void          contentsChanged();
 
     protected:
-        void  showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void          showEvent(QShowEvent*) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void          periodClicked(QAbstractButton*);

@@ -125,8 +125,8 @@ class SpinBox2 : public QFrame
         /** Determine whether the current input is valid. */
         virtual QValidator::State validate(QString&, int& /*pos*/) const  { return QValidator::Acceptable; }
 
-        QSize    sizeHint() const Q_DECL_OVERRIDE;
-        QSize    minimumSizeHint() const Q_DECL_OVERRIDE;
+        QSize            sizeHint() const Q_DECL_OVERRIDE;
+        QSize            minimumSizeHint() const Q_DECL_OVERRIDE;
 
         /** Returns the minimum value of the spin box. */
         int              minimum() const             { return mMinValue; }
@@ -240,8 +240,8 @@ class SpinBox2 : public QFrame
     protected:
         virtual QString  textFromValue(int v) const    { return mSpinbox->textFromVal(v); }
         virtual int      valueFromText(const QString& t) const  { return mSpinbox->valFromText(t); }
-        void     paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
-        void     showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void             paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
+        void             showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         virtual void     styleChange(QStyle&);
         virtual void     getMetrics() const;
 
@@ -279,13 +279,13 @@ class SpinBox2 : public QFrame
                                 : SpinBox(minValue, maxValue, parent), owner(sb2) { }
                 QString textFromValue(int v) const Q_DECL_OVERRIDE  { return owner->textFromValue(v); }
                 int     valueFromText(const QString& t) const Q_DECL_OVERRIDE
-                                                            { return owner->valueFromText(t); }
-                QString         textFromVal(int v) const    { return SpinBox::textFromValue(v); }
-                int             valFromText(const QString& t) const
-                                                            { return SpinBox::valueFromText(t); }
+                                                    { return owner->valueFromText(t); }
+                QString textFromVal(int v) const    { return SpinBox::textFromValue(v); }
+                int     valFromText(const QString& t) const
+                                                    { return SpinBox::valueFromText(t); }
                 int     shiftStepAdjustment(int oldValue, int shiftStep) Q_DECL_OVERRIDE;
                 QValidator::State validate(QString& text, int& pos) const Q_DECL_OVERRIDE
-                                                            { return owner->validate(text, pos); }
+                                                    { return owner->validate(text, pos); }
             protected:
                 void    resizeEvent(QResizeEvent* e) Q_DECL_OVERRIDE { owner->spinboxResized(e); SpinBox::resizeEvent(e); }
             private:

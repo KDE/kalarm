@@ -52,7 +52,7 @@ class KAlarmApp : public KUniqueApplication
         Q_OBJECT
     public:
         ~KAlarmApp();
-        int        newInstance() Q_DECL_OVERRIDE;
+        int                newInstance() Q_DECL_OVERRIDE;
         static KAlarmApp*  getInstance();
         bool               checkCalendar()                 { return initCheck(); }
         bool               wantShowInSystemTray() const;

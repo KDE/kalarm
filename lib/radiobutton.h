@@ -71,13 +71,13 @@ class RadioButton : public QRadioButton
          */
         void     setFocusWidget(QWidget* widget, bool enable = true);
     protected:
-        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void     mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void     mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void     mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
+        void     keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void     keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
     protected Q_SLOTS:
-        void         slotClicked();
+        void     slotClicked();
     private:
         Qt::FocusPolicy mFocusPolicy;       // default focus policy for the QRadioButton
         QWidget*        mFocusWidget;       // widget to receive focus when button is clicked on

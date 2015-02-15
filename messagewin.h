@@ -80,7 +80,7 @@ class MessageWin : public MainWindowBase
         bool                isValid() const        { return !mInvalid; }
         bool                alwaysHidden() const   { return mAlwaysHide; }
         virtual void        show();
-        QSize       sizeHint() const Q_DECL_OVERRIDE;
+        QSize               sizeHint() const Q_DECL_OVERRIDE;
         static int          instanceCount(bool excludeAlwaysHidden = false);
         static MessageWin*  findEvent(const EventId& eventId, MessageWin* exclude = Q_NULLPTR);
         static void         redisplayAlarms();
@@ -91,12 +91,12 @@ class MessageWin : public MainWindowBase
         static bool         spread(bool scatter);
 
     protected:
-        void        showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        void        moveEvent(QMoveEvent*) Q_DECL_OVERRIDE;
-        void        resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
-        void        closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-        void        saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
-        void        readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;
+        void                showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void                moveEvent(QMoveEvent*) Q_DECL_OVERRIDE;
+        void                resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void                closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+        void                saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
+        void                readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void                slotOk();
