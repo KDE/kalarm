@@ -118,11 +118,11 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     if (!mTextIcon)
     {
-        mTextIcon    = new QPixmap(SmallIcon(QLatin1String("dialog-information")));
-        mFileIcon    = new QPixmap(SmallIcon(QLatin1String("document-open")));
-        mCommandIcon = new QPixmap(SmallIcon(QLatin1String("system-run")));
-        mEmailIcon   = new QPixmap(SmallIcon(QLatin1String("mail-message-unread")));
-        mAudioIcon   = new QPixmap(SmallIcon(QLatin1String("audio-x-generic")));
+        mTextIcon    = new QPixmap(SmallIcon(QStringLiteral("dialog-information")));
+        mFileIcon    = new QPixmap(SmallIcon(QStringLiteral("document-open")));
+        mCommandIcon = new QPixmap(SmallIcon(QStringLiteral("system-run")));
+        mEmailIcon   = new QPixmap(SmallIcon(QStringLiteral("mail-message-unread")));
+        mAudioIcon   = new QPixmap(SmallIcon(QStringLiteral("audio-x-generic")));
         mIconSize = mTextIcon->size().expandedTo(mFileIcon->size()).expandedTo(mCommandIcon->size()).expandedTo(mEmailIcon->size()).expandedTo(mAudioIcon->size());
     }
 
