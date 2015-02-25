@@ -1,5 +1,5 @@
 REVIEWBOARD_URL = "https://git.reviewboard.kde.org"
-#REPOSITORY = "git://anongit.kde.org/kalarmcal"
+REPOSITORY = "git://anongit.kde.org/kalarmcal"
 BRANCH = "master"
 TARGET_GROUPS = "kdepimlibs"
 TARGET_PEOPLE = "mlaurent"
