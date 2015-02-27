@@ -7,7 +7,8 @@ set(kalarmautostart_SRCS
         kalarm_autostart_debug.cpp 
 )
 
-kde4_add_app_icon(kalarmautostart_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/ox*-app-kalarm.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/hi*-apps-kalarm.png")
+ecm_add_app_icon(kalarmautostart_SRCS ICONS ${ICONS_SRCS})
 
 add_executable(kalarmautostart ${kalarmautostart_SRCS})
 
