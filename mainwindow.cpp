@@ -146,7 +146,7 @@ MainWindow::MainWindow(bool restored)
     if (!restored)
     {
         KConfigGroup wconfig(KSharedConfig::openConfig(), WINDOW_NAME);
-        mResourcesWidth = wconfig.readEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
+        mResourcesWidth = wconfig.readEntry(QStringLiteral("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
     }
 
     setAcceptDrops(true);         // allow drag-and-drop onto this window
@@ -364,7 +364,7 @@ void MainWindow::resourcesResized()
         else if (mainMainWindow() == this)
         {
             KConfigGroup config(KSharedConfig::openConfig(), WINDOW_NAME);
-            config.writeEntry(QString::fromLatin1("Splitter %1").arg(KApplication::desktop()->width()), mResourcesWidth);
+            config.writeEntry(QStringLiteral("Splitter %1").arg(KApplication::desktop()->width()), mResourcesWidth);
         }
     }
 }
@@ -1132,7 +1132,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
     else
     {
         mActionUndo->setEnabled(true);
-        mActionUndo->setText(QString::fromLatin1("%1 %2").arg(undoText).arg(undo));
+        mActionUndo->setText(QStringLiteral("%1 %2").arg(undoText).arg(undo));
     }
     if (redo.isNull())
     {
@@ -1142,7 +1142,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
     else
     {
         mActionRedo->setEnabled(true);
-        mActionRedo->setText(QString::fromLatin1("%1 %2").arg(redoText).arg(redo));
+        mActionRedo->setText(QStringLiteral("%1 %2").arg(redoText).arg(redo));
     }
 }
 
