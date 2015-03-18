@@ -66,6 +66,8 @@ AlarmCalendar* AlarmCalendar::mDisplayCalendar = Q_NULLPTR;
 */
 bool AlarmCalendar::initialiseCalendars()
 {
+    QDir dir;
+    dir.mkpath(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
     QString displayCal = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + displayCalendarName;
     AkonadiModel::instance();
     CollectionControlModel::setAskDestinationPolicy(Preferences::askResource());
