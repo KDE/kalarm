@@ -130,7 +130,7 @@ qt5_add_dbus_interfaces(kalarm_bin_SRCS ${AKONADI_DBUS_INTERFACES_DIR}/org.freed
 kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 
 #if (UNIX)
-file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/hi*-apps-kalarm.png")
+file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/*-apps-kalarm.png")
 ecm_add_app_icon(kalarm_bin_SRCS ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
 add_dependencies(kalarm_bin kalarm_resource_xml kalarmdir_resource_xml)
