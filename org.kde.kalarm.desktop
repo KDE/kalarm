@@ -142,6 +142,6 @@ GenericName[zh_CN]=个人日程提醒
 GenericName[zh_TW]=個人鬧鐘排程程式
 Terminal=false
 X-DBUS-StartupType=Unique
-X-KDE-StartupNotify=true
+StartupNotify=true
 Categories=Qt;KDE;Utility;X-KDE-Utilities-PIM;
 X-DBUS-ServiceName=org.kde.kalarm
