@@ -1,4 +1,4 @@
 ecm_install_icons( ICONS 
-ox16-actions-document-new-from-template.png  ox16-actions-new-command-alarm.png           ox22-actions-kalarm-disabled.png      ox22-actions-kalarm.png           ox22-actions-new-command-alarm.png
-ox16-actions-new-audio-alarm.png             ox22-actions-document-new-from-template.png  ox22-actions-kalarm-partdisabled.png  ox22-actions-new-audio-alarm.png
-DESTINATION ${KDE_INSTALL_DATADIR}/kalarm/icons )
+16-actions-document-new-from-template.png  16-actions-new-command-alarm.png           22-actions-kalarm-disabled.png      22-actions-kalarm.png           22-actions-new-command-alarm.png
+16-actions-new-audio-alarm.png             22-actions-document-new-from-template.png  22-actions-kalarm-partdisabled.png  22-actions-new-audio-alarm.png
+DESTINATION ${KDE_INSTALL_DATADIR}/kalarm/icons THEME oxygen)
