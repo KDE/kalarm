@@ -37,9 +37,9 @@
 
 int main(int argc, char* argv[])
 {
-    Kdelibs4ConfigMigrator migrate(QLatin1String("kalarm"));
-    migrate.setConfigFiles(QStringList() << QLatin1String("kalarmrc"));
-    migrate.setUiFiles(QStringList() << QLatin1String("kalarmui.rc"));
+    Kdelibs4ConfigMigrator migrate(QStringLiteral("kalarm"));
+    migrate.setConfigFiles(QStringList() << QStringLiteral("kalarmrc"));
+    migrate.setUiFiles(QStringList() << QStringLiteral("kalarmui.rc"));
     migrate.migrate();
 
     KLocalizedString::setApplicationDomain("kalarm");
@@ -148,7 +148,7 @@ int Version()
 {
     static int version = 0;
     if (!version)
-        version = KAlarmCal::getVersionNumber(QLatin1String(KALARM_VERSION));
+        version = KAlarmCal::getVersionNumber(QStringLiteral(KALARM_VERSION));
     return version;
 }
 

@@ -182,7 +182,7 @@ void TimeSpinBox::setValid(bool valid)
     {
         mInvalid = true;
         SpinBox2::setMinimum(mMinimumValue - 1);
-        setSpecialValueText(QLatin1String("**:**"));
+        setSpecialValueText(QStringLiteral("**:**"));
         SpinBox2::setValue(mMinimumValue - 1);
     }
 }
