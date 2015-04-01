@@ -30,7 +30,7 @@
 EventId::EventId(const QString& resourceEventId)
 {
     bool resourceOk = false;
-    QRegExp rx(QLatin1String("^\\w+:"));
+    QRegExp rx(QStringLiteral("^\\w+:"));
     if (rx.indexIn(resourceEventId) == 0)
     {
         // A resource ID has been supplied, so use it

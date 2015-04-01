@@ -106,7 +106,7 @@ void Find::display()
     {
         mDialog = new KFindDialog(mListView, mOptions, mHistory, (mListView->selectionModel()->selectedRows().count() > 1));
         mDialog->setModal(false);
-        mDialog->setObjectName(QLatin1String("FindDlg"));
+        mDialog->setObjectName(QStringLiteral("FindDlg"));
         mDialog->setHasSelection(false);
         QWidget* kalarmWidgets = mDialog->findExtension();
 
@@ -335,7 +335,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
             case KAEvent::ACT_EMAIL:
                 if (!(mOptions & FIND_EMAIL))
                     break;
-                mFind->setData(event->emailAddresses(QLatin1String(", ")));
+                mFind->setData(event->emailAddresses(QStringLiteral(", ")));
                 found = (mFind->find() == KFind::Match);
                 if (found)
                     break;
@@ -343,7 +343,7 @@ void Find::findNext(bool forward, bool checkEnd, bool fromCurrent)
                 found = (mFind->find() == KFind::Match);
                 if (found)
                     break;
-                mFind->setData(event->emailAttachments().join(QLatin1String(", ")));
+                mFind->setData(event->emailAttachments().join(QStringLiteral(", ")));
                 found = (mFind->find() == KFind::Match);
                 if (found)
                     break;

@@ -36,11 +36,11 @@
 
 using namespace KAlarmCal;
 
-#define DISP_ICON     QLatin1String("window-new")
-#define CMD_ICON      QLatin1String("new-command-alarm")
-#define MAIL_ICON     QLatin1String("mail-message-new")
-#define AUDIO_ICON    QLatin1String("new-audio-alarm")
-#define TEMPLATE_ICON QLatin1String("document-new-from-template")
+#define DISP_ICON     QStringLiteral("window-new")
+#define CMD_ICON      QStringLiteral("new-command-alarm")
+#define MAIL_ICON     QStringLiteral("mail-message-new")
+#define AUDIO_ICON    QStringLiteral("new-audio-alarm")
+#define TEMPLATE_ICON QStringLiteral("document-new-from-template")
 #define DISP_KEY      QKeySequence(Qt::CTRL + Qt::Key_D)
 #define CMD_KEY       QKeySequence(Qt::CTRL + Qt::Key_C)
 #define MAIL_KEY      QKeySequence(Qt::CTRL + Qt::Key_M)
@@ -48,7 +48,7 @@ using namespace KAlarmCal;
 
 
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
-    : KActionMenu(QIcon::fromTheme(QLatin1String("document-new")), label, parent),
+    : KActionMenu(QIcon::fromTheme(QStringLiteral("document-new")), label, parent),
       mTemplateAction(Q_NULLPTR)
 {
     mDisplayAction = new QAction(QIcon::fromTheme(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
