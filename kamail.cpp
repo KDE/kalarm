@@ -48,7 +48,6 @@
 #include <kemailsettings.h>
 #include <kcodecs.h>
 #include <kcharsets.h>
-#include <kascii.h>
 
 #include <QFile>
 #include <QHostInfo>
@@ -666,7 +665,7 @@ QByteArray autoDetectCharset(const QString& text)
         if (encoding == "locale")
         {
             encoding = QTextCodec::codecForName(KLocale::global()->encoding())->name();
-            kAsciiToLower(encoding.data());
+            encoding = encoding.toLower();
         }
         if (text.isEmpty())
             return encoding;
@@ -696,8 +695,7 @@ const QTextCodec* codecForName(const QByteArray& str)
 {
     if (str.isEmpty())
         return Q_NULLPTR;
-    QByteArray codec = str;
-    kAsciiToLower(codec.data());
+    QByteArray codec = str.toLower();
     return KCharsets::charsets()->codecForName(QLatin1String(codec));
 }
 
