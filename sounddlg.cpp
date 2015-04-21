@@ -171,7 +171,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
         // File play button
         mFilePlay = new QPushButton(box);
         boxHLayout->addWidget(mFilePlay);
-        mFilePlay->setIcon(SmallIcon(QLatin1String("media-playback-start")));
+        mFilePlay->setIcon(SmallIcon(QStringLiteral("media-playback-start")));
         connect(mFilePlay, &QPushButton::clicked, this, &SoundWidget::playSound);
         mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
         mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));
@@ -189,7 +189,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     // File browse button
     mFileBrowseButton = new PushButton(box);
     boxHLayout->addWidget(mFileBrowseButton);
-    mFileBrowseButton->setIcon(QIcon(SmallIcon(QLatin1String("document-open"))));
+    mFileBrowseButton->setIcon(QIcon(SmallIcon(QStringLiteral("document-open"))));
     int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
     connect(mFileBrowseButton, &PushButton::clicked, this, &SoundWidget::slotPickFile);
@@ -454,7 +454,7 @@ void SoundWidget::playSound()
     Phonon::createPath(mPlayer, output);
 #endif
     connect(mPlayer, &Phonon::MediaObject::finished, this, &SoundWidget::playFinished);
-    mFilePlay->setIcon(SmallIcon(QLatin1String("media-playback-stop")));   // change the play button to a stop button
+    mFilePlay->setIcon(SmallIcon(QStringLiteral("media-playback-stop")));   // change the play button to a stop button
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Stop sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Stop playing the sound"));
     mPlayer->play();
@@ -467,7 +467,7 @@ void SoundWidget::playFinished()
 {
     delete mPlayer;   // this stops playing if not already stopped
     mPlayer = Q_NULLPTR;
-    mFilePlay->setIcon(SmallIcon(QLatin1String("media-playback-start")));
+    mFilePlay->setIcon(SmallIcon(QStringLiteral("media-playback-start")));
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));
 }
@@ -492,7 +492,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
     if (err == KAlarm::FileErr_Nonexistent)
     {
         mUrl = KUrl(file);
-        if (mUrl.isLocalFile()  &&  !file.startsWith(QLatin1String("/")))
+        if (mUrl.isLocalFile()  &&  !file.startsWith(QStringLiteral("/")))
         {
             // It's a relative path.
             // Find the first sound resource that contains files.

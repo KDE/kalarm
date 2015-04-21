@@ -160,7 +160,7 @@ void LineEdit::dropEvent(QDropEvent* e)
             case Emails:
             {
                 // Email entry field - ignore all but mailto: URLs
-                QString mailto = QLatin1String("mailto");
+                QString mailto = QStringLiteral("mailto");
                 for (KUrl::List::Iterator it = files.begin();  it != files.end();  ++it)
                 {
                     if ((*it).scheme() == mailto)
@@ -180,8 +180,8 @@ void LineEdit::dropEvent(QDropEvent* e)
         if (mType == Emails)
         {
             // Remove newlines from a list of email addresses, and allow an eventual mailto: scheme
-            QString mailto = QLatin1String("mailto:");
-            newEmails = txt.split(QRegExp(QLatin1String("[\r\n]+")), QString::SkipEmptyParts);
+            QString mailto = QStringLiteral("mailto:");
+            newEmails = txt.split(QRegExp(QStringLiteral("[\r\n]+")), QString::SkipEmptyParts);
             for (QStringList::Iterator it = newEmails.begin();  it != newEmails.end();  ++it)
             {
                 if ((*it).startsWith(mailto))
@@ -200,12 +200,12 @@ void LineEdit::dropEvent(QDropEvent* e)
 
     if (newEmails.count())
     {
-        newText = newEmails.join(QLatin1String(","));
+        newText = newEmails.join(QStringLiteral(","));
         int c = cursorPosition();
         if (c > 0)
-            newText.prepend(QLatin1String(","));
+            newText.prepend(QStringLiteral(","));
         if (c < static_cast<int>(text().length()))
-            newText.append(QLatin1String(","));
+            newText.append(QStringLiteral(","));
     }
     if (!newText.isEmpty())
         insert(newText);

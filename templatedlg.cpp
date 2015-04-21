@@ -178,7 +178,7 @@ void TemplateDlg::slotDelete()
     if (KAMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm template?",
                                                          "Do you really want to delete the %1 selected alarm templates?", n),
                                             i18ncp("@title:window", "Delete Alarm Template", "Delete Alarm Templates", n),
-                                            KGuiItem(i18nc("@action:button", "&Delete"), QLatin1String("edit-delete")))
+                                            KGuiItem(i18nc("@action:button", "&Delete"), QStringLiteral("edit-delete")))
             != KMessageBox::Continue)
         return;
 

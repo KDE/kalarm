@@ -50,7 +50,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
             {
                 QString str = index.data(Qt::DisplayRole).toString();
                 // Need to pad out spacing to align times without leading zeroes
-                int i = str.indexOf(QLatin1String(" ~"));    // look for indicator that leading zeroes are omitted
+                int i = str.indexOf(QStringLiteral(" ~"));    // look for indicator that leading zeroes are omitted
                 if (i >= 0)
                 {
                     QVariant value;
@@ -99,7 +99,7 @@ QSize AlarmListDelegate::sizeHint(const QStyleOptionViewItem& option, const QMod
                 int w = 2 * textMargin;
                 QString str = index.data(Qt::DisplayRole).toString();
                 // Need to pad out spacing to align times without leading zeroes
-                int i = str.indexOf(QLatin1String(" ~"));    // look for indicator that leading zeroes are omitted
+                int i = str.indexOf(QStringLiteral(" ~"));    // look for indicator that leading zeroes are omitted
                 if (i >= 0)
                 {
                     int digitWidth = option.fontMetrics.width(QLatin1Char('0'));

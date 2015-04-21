@@ -79,7 +79,7 @@ void AkonadiResourceCreator::getAgentType()
             return;
     }
     dlg->agentFilterProxyModel()->addMimeTypeFilter(mimeType);
-    dlg->agentFilterProxyModel()->addCapabilityFilter(QLatin1String("Resource"));
+    dlg->agentFilterProxyModel()->addCapabilityFilter(QStringLiteral("Resource"));
     if (dlg->exec() != QDialog::Accepted)
     {
         emit finished(this, false);
@@ -114,16 +114,16 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         // Set the default alarm type for a directory resource config dialog
         mAgentInstance = job->instance();
         QString type = mAgentInstance.type().identifier();
-        if (type == QLatin1String("akonadi_kalarm_dir_resource"))
+        if (type == QStringLiteral("akonadi_kalarm_dir_resource"))
             setResourceAlarmType<OrgKdeAkonadiKAlarmDirSettingsInterface>();
-        else if (type == QLatin1String("akonadi_kalarm_resource"))
+        else if (type == QStringLiteral("akonadi_kalarm_resource"))
             setResourceAlarmType<OrgKdeAkonadiKAlarmSettingsInterface>();
 
         // Display the resource config dialog, but first ensure we get
         // notified of the user cancelling the operation.
         org::freedesktop::Akonadi::Agent::Control* agentControlIface =
-                    new org::freedesktop::Akonadi::Agent::Control(QLatin1String("org.freedesktop.Akonadi.Agent.") + mAgentInstance.identifier(),
-                                                                  QLatin1String("/"), KDBusConnectionPool::threadConnection(), this);
+                    new org::freedesktop::Akonadi::Agent::Control(QStringLiteral("org.freedesktop.Akonadi.Agent.") + mAgentInstance.identifier(),
+                                                                  QStringLiteral("/"), KDBusConnectionPool::threadConnection(), this);
         bool controlOk = agentControlIface && agentControlIface->isValid();
         if (!controlOk)
         {
@@ -148,8 +148,8 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
 template <class Settings>
 void AkonadiResourceCreator::setResourceAlarmType()
 {
-    Settings iface(QLatin1String("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
-                   QLatin1String("/Settings"), QDBusConnection::sessionBus(), this);
+    Settings iface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
+                   QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
     if (!iface.isValid())
         qCritical() << "Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
     else

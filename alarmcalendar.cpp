@@ -48,7 +48,7 @@ using namespace KAlarmCal;
 
 static KACalendar::Compat fix(const KCalCore::FileStorage::Ptr&);
 
-static const QString displayCalendarName = QLatin1String("displaying.ics");
+static const QString displayCalendarName = QStringLiteral("displaying.ics");
 static const Collection::Id DISPLAY_COL_ID = -1;   // collection ID used for displaying calendar
 
 AlarmCalendar* AlarmCalendar::mResourcesCalendar = Q_NULLPTR;
@@ -76,7 +76,7 @@ bool AlarmCalendar::initialiseCalendars()
     mResourcesCalendar = new AlarmCalendar();
     mDisplayCalendar = new AlarmCalendar(displayCal, CalEvent::DISPLAYING);
     KACalendar::setProductId(KALARM_NAME, KALARM_VERSION);
-    CalFormat::setApplication(QLatin1String(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
+    CalFormat::setApplication(QStringLiteral(KALARM_NAME), QString::fromLatin1(KACalendar::icalProductId()));
     return true;
 }
 
@@ -157,7 +157,7 @@ AlarmCalendar::AlarmCalendar(const QString& path, CalEvent::Type type)
     }
     mUrl.setPath(path);       // N.B. constructor mUrl(path) doesn't work with UNIX paths
     QString icalPath = path;
-    icalPath.replace(QLatin1String("\\.vcs$"), QLatin1String(".ics"));
+    icalPath.replace(QStringLiteral("\\.vcs$"), QStringLiteral(".ics"));
     mICalUrl.setPath(icalPath);
     mCalType = (path == icalPath) ? LOCAL_ICAL : LOCAL_VCAL;    // is the calendar in ICal or VCal format?
 }
@@ -362,7 +362,7 @@ void AlarmCalendar::close()
         if (!mLocalFile.isEmpty())
         {
             KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
-            mLocalFile = QLatin1String("");
+            mLocalFile = QStringLiteral("");
         }
     }
     // Flag as closed now to prevent removeKAEvents() doing silly things
