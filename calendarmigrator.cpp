@@ -657,7 +657,7 @@ void CalendarCreator::agentCreated(KJob* j)
 }
 
 /******************************************************************************
-* Called when a resource synchronisation job has completed.
+* Called when a resource synchronization job has completed.
 * Fetches the collection which this agent manages.
 */
 void CalendarCreator::resourceSynchronised(KJob* j)

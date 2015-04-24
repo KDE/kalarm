@@ -1063,7 +1063,7 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
             switch (reply.type())
             {
                 case KAuth::ActionReply::KAuthErrorType:
-                    qCDebug(KALARM_LOG) << "Authorisation error:" << errcode;
+                    qCDebug(KALARM_LOG) << "Authorization error:" << errcode;
                     switch (errcode)
                     {
                         case KAuth::ActionReply::AuthorizationDeniedError:
