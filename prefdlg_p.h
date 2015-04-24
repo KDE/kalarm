@@ -82,8 +82,8 @@ class MiscPrefTab : public PrefsTabBase
     public:
         explicit MiscPrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults, bool allTabs);
-        virtual void apply(bool syncToDisc);
+        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
+        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void         slotAutostartClicked();
@@ -110,8 +110,8 @@ class TimePrefTab : public PrefsTabBase
     public:
         explicit TimePrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults, bool allTabs);
-        virtual void apply(bool syncToDisc);
+        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
+        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
 
     private:
         void         setWorkDays(const QBitArray& days);
@@ -164,8 +164,8 @@ class EmailPrefTab : public PrefsTabBase
         explicit EmailPrefTab(StackedScrollGroup*);
 
         QString      validate();
-        virtual void restore(bool defaults, bool allTabs);
-        virtual void apply(bool syncToDisc);
+        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
+        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void         slotEmailClientChanged(QAbstractButton*);
@@ -205,8 +205,8 @@ class EditPrefTab : public PrefsTabBase
         explicit EditPrefTab(StackedScrollGroup*);
 
         QString      validate();
-        virtual void restore(bool defaults, bool allTabs);
-        virtual void apply(bool syncToDisc);
+        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
+        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void         slotBrowseSoundFile();
