@@ -79,7 +79,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 {
     qCDebug(KALARM_LOG);
     setToolTipIconByName(QLatin1String("kalarm"));
-    setToolTipTitle(KComponentData::mainComponent().aboutData()->programName());
+    setToolTipTitle(KAboutData::applicationData().componentName());
     setIconByName(QLatin1String("kalarm"));
     // Load the disabled icon for use by setIconByPixmap()
     // - setIconByName() doesn't work for this one!
