@@ -142,7 +142,7 @@ void TimePeriod::setMaximum(int hourmin, int days)
     setUnitRange();
     Duration mins = period();
     if (mins != oldmins)
-        emit valueChanged(mins);
+        Q_EMIT valueChanged(mins);
 }
 
 /******************************************************************************
@@ -223,7 +223,7 @@ void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Uni
 
     Duration newinterval = period();
     if (newinterval != oldinterval)
-        emit valueChanged(newinterval);
+        Q_EMIT valueChanged(newinterval);
 }
 
 /******************************************************************************
@@ -275,7 +275,7 @@ TimePeriod::Units TimePeriod::setDateOnly(const Duration& perod, bool dateOnly, 
     {
         Duration newinterval = period();
         if (newinterval != oldinterval)
-            emit valueChanged(newinterval);
+            Q_EMIT valueChanged(newinterval);
     }
     return units;
 }
@@ -370,7 +370,7 @@ void TimePeriod::slotUnitsSelected(int index)
 {
     setUnitRange();
     showHourMin(index + mDateOnlyOffset == HoursMinutes);
-    emit valueChanged(period());
+    Q_EMIT valueChanged(period());
 }
 
 /******************************************************************************
@@ -379,7 +379,7 @@ void TimePeriod::slotUnitsSelected(int index)
 void TimePeriod::slotDaysChanged(int)
 {
     if (!mHourMinuteRaised)
-        emit valueChanged(period());
+        Q_EMIT valueChanged(period());
 }
 
 /******************************************************************************
@@ -388,7 +388,7 @@ void TimePeriod::slotDaysChanged(int)
 void TimePeriod::slotTimeChanged(int)
 {
     if (mHourMinuteRaised)
-        emit valueChanged(period());
+        Q_EMIT valueChanged(period());
 }
 
 /******************************************************************************

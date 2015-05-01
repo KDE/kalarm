@@ -839,7 +839,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 */
 void EditAlarmDlg::closeEvent(QCloseEvent* ce)
 {
-    emit rejected();
+    Q_EMIT rejected();
     KDialog::closeEvent(ce);
 }
 

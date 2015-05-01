@@ -96,7 +96,7 @@ void ShellProcess::slotExited(int exitCode, QProcess::ExitStatus exitStatus)
             mStatus = NOT_FOUND;
         }
     }
-    emit shellExited(this);
+    Q_EMIT shellExited(this);
 }
 
 /******************************************************************************

@@ -66,7 +66,7 @@ class RepetitionButton : public QPushButton
         Repetition     mRepetition;   // repetition interval and count
         int            mMaxDuration;  // maximum allowed duration in minutes, or -1 for infinite
         bool           mDateOnly;     // hours/minutes cannot be displayed
-        bool           mWaitForInit;  // emit needsInitialisation() when button pressed, display when initialise() called
+        bool           mWaitForInit;  // Q_EMIT needsInitialisation() when button pressed, display when initialise() called
         bool           mReadOnly;
 };
 

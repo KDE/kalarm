@@ -143,7 +143,7 @@ void Preferences::setTimeZone(const KTimeZone& tz)
 void Preferences::timeZoneChange(const QString& zone)
 {
     Q_UNUSED(zone);
-    emit mInstance->timeZoneChanged(timeZone(false));
+    Q_EMIT mInstance->timeZoneChanged(timeZone(false));
 }
 
 const HolidayRegion& Preferences::holidays()
@@ -165,7 +165,7 @@ void Preferences::setHolidayRegion(const QString& regionCode)
 void Preferences::holidaysChange(const QString& regionCode)
 {
     Q_UNUSED(regionCode);
-    emit mInstance->holidaysChanged(holidays());
+    Q_EMIT mInstance->holidaysChanged(holidays());
 }
 
 void Preferences::setStartOfDay(const QTime& t)
@@ -173,14 +173,14 @@ void Preferences::setStartOfDay(const QTime& t)
     if (t != self()->mBase_StartOfDay.time())
     {
         self()->setBase_StartOfDay(QDateTime(QDate(1900,1,1), t));
-        emit mInstance->startOfDayChanged(t);
+        Q_EMIT mInstance->startOfDayChanged(t);
     }
 }
 
 // Called when the start of day value has changed in the config file
 void Preferences::startDayChange(const QDateTime& dt)
 {
-    emit mInstance->startOfDayChanged(dt.time());
+    Q_EMIT mInstance->startOfDayChanged(dt.time());
 }
 
 QBitArray Preferences::workDays()
@@ -207,7 +207,7 @@ void Preferences::workTimeChange(const QDateTime& start, const QDateTime& end, i
     for (int i = 0;  i < 7;  ++i)
         if (days & (1 << i))
             dayBits.setBit(i);
-    emit mInstance->workTimeChanged(start.time(), end.time(), dayBits);
+    Q_EMIT mInstance->workTimeChanged(start.time(), end.time(), dayBits);
 }
 
 Preferences::MailFrom Preferences::emailFrom()

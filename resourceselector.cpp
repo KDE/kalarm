@@ -639,7 +639,7 @@ CalEvent::Type ResourceSelector::currentResourceType() const
 
 void ResourceSelector::resizeEvent(QResizeEvent* re)
 {
-    emit resized(re->oldSize(), re->size());
+    Q_EMIT resized(re->oldSize(), re->size());
 }
 
 // vim: et sw=4:

@@ -40,9 +40,9 @@ using namespace Akonadi;
 * Its subsequent actions depend on the parameters:
 * - If 'remove' is true, it will locate all Items with the specified 'gid' and
 *   delete them. The deleted() signal will be emitted.
-* - Otherwise, if 'gid' is specified, it will emit the signal items() to
+* - Otherwise, if 'gid' is specified, it will Q_EMIT the signal items() to
 *   notify all Items with that GID.
-* - Otherwise, it will emit the signal collections() to notify all Collections.
+* - Otherwise, it will Q_EMIT the signal collections() to notify all Collections.
 */
 CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, bool remove)
     : mMimeType(mimeType),
@@ -163,11 +163,11 @@ void CollectionSearch::itemDeleteResult(KJob* j)
 void CollectionSearch::finish()
 {
     if (mDelete)
-        emit deleted(mDeleteCount);
+        Q_EMIT deleted(mDeleteCount);
     else if (mGid.isEmpty())
-        emit collections(mCollections);
+        Q_EMIT collections(mCollections);
     else
-        emit items(mItems);
+        Q_EMIT items(mItems);
     deleteLater();
 }
 

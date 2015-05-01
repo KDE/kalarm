@@ -559,7 +559,7 @@ void SoundWidget::slotFadeToggled(bool on)
 {
     mFadeBox->setEnabled(on);
     mFadeVolumeBox->setEnabled(on);
-    emit changed();
+    Q_EMIT changed();
 }
 
 // vim: et sw=4:

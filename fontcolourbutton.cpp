@@ -76,7 +76,7 @@ void FontColourButton::slotButtonPressed()
         mFont        = dlg->font();
         mBgColour    = dlg->bgColour();
         mFgColour    = dlg->fgColour();
-        emit selected(mFgColour, mBgColour);
+        Q_EMIT selected(mFgColour, mBgColour);
     }
 }
 

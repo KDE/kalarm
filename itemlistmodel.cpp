@@ -73,7 +73,7 @@ void ItemListModel::slotRowsInserted()
     if (!mHaveEvents  &&  rowCount())
     {
         mHaveEvents = true;
-        emit haveEventsStatus(true);
+        Q_EMIT haveEventsStatus(true);
     }
 }
 
@@ -85,7 +85,7 @@ void ItemListModel::slotRowsRemoved()
     if (mHaveEvents  &&  !rowCount())
     {
         mHaveEvents = false;
-        emit haveEventsStatus(false);
+        Q_EMIT haveEventsStatus(false);
     }
 }
 
@@ -132,7 +132,7 @@ bool ItemListModel::setData(const QModelIndex& ix, const QVariant&, int role)
     {
 //??? update event
         int row = ix.row();
-        emit dataChanged(index(row, 0), index(row, AkonadiModel::ColumnCount - 1));
+        Q_EMIT dataChanged(index(row, 0), index(row, AkonadiModel::ColumnCount - 1));
         return true;
     }
     return false;

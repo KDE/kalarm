@@ -1833,7 +1833,7 @@ void CommandEdit::slotCmdScriptToggled(bool on)
         mCommandEdit->show();
         mCommandEdit->setFocus();
     }
-    emit scriptToggled(on);
+    Q_EMIT scriptToggled(on);
 }
 
 /******************************************************************************

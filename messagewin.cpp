@@ -1579,7 +1579,7 @@ void AudioThread::run()
     mPlayedOnce = false;
     mPausing    = false;
     mMutex.unlock();
-    emit readyToPlay();
+    Q_EMIT readyToPlay();
     checkAudioPlay();
 
     // Start an event loop.

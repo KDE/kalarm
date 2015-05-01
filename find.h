@@ -47,7 +47,7 @@ class Find : public QObject
 
     private Q_SLOTS:
         void        slotFind();
-        void        slotKFindDestroyed()       { emit active(false); }
+        void        slotKFindDestroyed()       { Q_EMIT active(false); }
         void        slotSelectionChanged();
 
     private:

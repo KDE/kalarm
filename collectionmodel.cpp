@@ -110,10 +110,10 @@ void CollectionMimeTypeFilterModel::setFilterEnabled(bool enabled)
 {
     if (enabled != mEnabledOnly)
     {
-        emit layoutAboutToBeChanged();
+        Q_EMIT layoutAboutToBeChanged();
         mEnabledOnly = enabled;
         invalidateFilter();
-        emit layoutChanged();
+        Q_EMIT layoutChanged();
     }
 }
 
@@ -402,7 +402,7 @@ void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int s
         if (collection.isValid())
             setSelectionStatus(collection, ix);
     }
-    emit layoutChanged();   // this is needed to make CollectionFilterCheckListModel update
+    Q_EMIT layoutChanged();   // this is needed to make CollectionFilterCheckListModel update
 }
 
 /******************************************************************************
@@ -447,7 +447,7 @@ void CollectionCheckListModel::collectionStatusChanged(const Collection& collect
     if (ix.isValid())
         setSelectionStatus(collection, ix);
     if (change == AkonadiModel::AlarmTypes)
-        emit collectionTypeChange(this);
+        Q_EMIT collectionTypeChange(this);
 }
 
 /******************************************************************************

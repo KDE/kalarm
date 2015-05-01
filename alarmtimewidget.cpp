@@ -500,7 +500,7 @@ void AlarmTimeWidget::setAnyTime()
     int old = mAnyTime;
     mAnyTime = (mAtTimeRadio->isChecked() && mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked()) ? 1 : 0;
     if (mAnyTime != old)
-        emit dateOnlyToggled(mAnyTime);
+        Q_EMIT dateOnlyToggled(mAnyTime);
 }
 
 /******************************************************************************
@@ -546,7 +546,7 @@ void AlarmTimeWidget::updateTimes()
                 ||  (!mAnyTime && now.time() > mTimeEdit->maxTime()))
                 {
                     mPastMax = true;
-                    emit pastMax();
+                    Q_EMIT pastMax();
                 }
                 else if (mMinDateTimeIsNow  &&  !mMinMaxTimeSet)
                 {
@@ -595,9 +595,9 @@ void AlarmTimeWidget::slotAnyTimeToggled(bool on)
     mTimeEdit->setEnabled(!on && mAtTimeRadio->isChecked());
     setAnyTime();
     if (on)
-        emit changed(KDateTime(mDateEdit->date(), mTimeSpec));
+        Q_EMIT changed(KDateTime(mDateEdit->date(), mTimeSpec));
     else
-        emit changed(KDateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec));
+        Q_EMIT changed(KDateTime(mDateEdit->date(), mTimeEdit->time(), mTimeSpec));
 }
 
 /******************************************************************************
@@ -674,9 +674,9 @@ void AlarmTimeWidget::dateTimeChanged()
         mDelayTimeEdit->setValue(minutes);
     mDelayTimeEdit->blockSignals(blocked);
     if (mAnyTimeAllowed && mAnyTimeCheckBox && mAnyTimeCheckBox->isChecked())
-        emit changed(KDateTime(dt.date(), mTimeSpec));
+        Q_EMIT changed(KDateTime(dt.date(), mTimeSpec));
     else
-        emit changed(dt);
+        Q_EMIT changed(dt);
 }
 
 /******************************************************************************
@@ -696,7 +696,7 @@ void AlarmTimeWidget::delayTimeChanged(int minutes)
         mDateEdit->setDate(dt.date());
         mTimeEdit->blockSignals(blockedT);
         mDateEdit->blockSignals(blockedD);
-        emit changed(KDateTime(dt.date(), dt.time(), mTimeSpec));
+        Q_EMIT changed(KDateTime(dt.date(), dt.time(), mTimeSpec));
     }
 }
 

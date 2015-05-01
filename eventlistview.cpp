@@ -189,7 +189,7 @@ bool EventListView::viewportEvent(QEvent* e)
 */
 void EventListView::contextMenuEvent(QContextMenuEvent* e)
 {
-    emit contextMenuRequested(e->globalPos());
+    Q_EMIT contextMenuRequested(e->globalPos());
 }
 
 

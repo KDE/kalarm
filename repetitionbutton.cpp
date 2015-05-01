@@ -83,7 +83,7 @@ void RepetitionButton::activate(bool waitForInitialisation)
         mDialog = new RepetitionDlg(i18nc("@title:window", "Alarm Sub-Repetition"), mReadOnly, this);
     mDialog->set(mRepetition, mDateOnly, mMaxDuration);
     if (waitForInitialisation)
-        emit needsInitialisation();     // request dialog initialisation
+        Q_EMIT needsInitialisation();     // request dialog initialisation
     else
         displayDialog();    // display the dialog now
 }
@@ -131,7 +131,7 @@ void RepetitionButton::displayDialog()
     delete mDialog;
     mDialog = Q_NULLPTR;
     if (change)
-        emit changed();   // delete dialog first, or initialise() will redisplay dialog
+        Q_EMIT changed();   // delete dialog first, or initialise() will redisplay dialog
 }
 
 

@@ -99,7 +99,7 @@ void TimeSelector::setChecked(bool on)
     if (on != mSelect->isChecked())
     {
         mSelect->setChecked(on);
-        emit valueChanged(period());
+        Q_EMIT valueChanged(period());
     }
 }
 
@@ -155,8 +155,8 @@ void TimeSelector::selectToggled(bool on)
         mSignWidget->setEnabled(on);
     if (on)
         mPeriod->setFocus();
-    emit toggled(on);
-    emit valueChanged(period());
+    Q_EMIT toggled(on);
+    Q_EMIT valueChanged(period());
 }
 
 /******************************************************************************
@@ -165,7 +165,7 @@ void TimeSelector::selectToggled(bool on)
 void TimeSelector::periodChanged(const Duration& period)
 {
     if (mSelect->isChecked())
-        emit valueChanged(period);
+        Q_EMIT valueChanged(period);
 }
 
 // vim: et sw=4:

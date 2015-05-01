@@ -164,7 +164,7 @@ TrayWindow::~TrayWindow()
 {
     qCDebug(KALARM_LOG);
     theApp()->removeWindow(this);
-    emit deleted();
+    Q_EMIT deleted();
 }
 
 /******************************************************************************

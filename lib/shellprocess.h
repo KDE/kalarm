@@ -123,8 +123,8 @@ class ShellProcess : public KProcess
 
     private Q_SLOTS:
         void  writtenStdin(qint64 bytes);
-        void  stdoutReady()         { emit receivedStdout(this); }
-        void  stderrReady()         { emit receivedStderr(this); }
+        void  stdoutReady()         { Q_EMIT receivedStdout(this); }
+        void  stderrReady()         { Q_EMIT receivedStderr(this); }
         void  slotExited(int exitCode, QProcess::ExitStatus);
 
     private:

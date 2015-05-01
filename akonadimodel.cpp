@@ -182,7 +182,7 @@ void AkonadiModel::checkResources(ServerManager::State state)
             mCollectionRights.clear();
             mCollectionEnabled.clear();
             initCalendarMigrator();
-            emit serverStopped();
+            Q_EMIT serverStopped();
             break;
         default:
             break;
@@ -535,7 +535,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
 {
     if (!index.isValid())
         return false;
-    // NOTE: need to emit dataChanged() whenever something is updated (except via a job).
+    // NOTE: need to Q_EMIT dataChanged() whenever something is updated (except via a job).
     Collection collection = index.data(CollectionRole).value<Collection>();
     if (collection.isValid())
     {
@@ -720,7 +720,7 @@ QVariant AkonadiModel::entityHeaderData(int section, Qt::Orientation orientation
 }
 
 /******************************************************************************
-* Recursive function to emit the dataChanged() signal for all items in a
+* Recursive function to Q_EMIT the dataChanged() signal for all items in a
 * specified column range.
 */
 void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startColumn, int endColumn, const QModelIndex& parent)
@@ -736,7 +736,7 @@ void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startCo
         {
             if ((*checkFunc)(item))
             {
-                // For efficiency, emit a single signal for each group of
+                // For efficiency, Q_EMIT a single signal for each group of
                 // consecutive items, rather than a separate signal for each item.
                 if (start < 0)
                     start = row;
@@ -745,14 +745,14 @@ void AkonadiModel::signalDataChanged(bool (*checkFunc)(const Item&), int startCo
             }
         }
         if (start >= 0)
-            emit dataChanged(index(start, startColumn, parent), index(end, endColumn, parent));
+            Q_EMIT dataChanged(index(start, startColumn, parent), index(end, endColumn, parent));
         start = -1;
         if (!isItem)
             signalDataChanged(checkFunc, startColumn, endColumn, ix);
     }
 
     if (start >= 0)
-        emit dataChanged(index(start, startColumn, parent), index(end, endColumn, parent));
+        Q_EMIT dataChanged(index(start, startColumn, parent), index(end, endColumn, parent));
 }
 
 /******************************************************************************
@@ -1125,13 +1125,13 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
     }
     if (j->error())
     {
-        emit collectionDeleted(jobData.id, false);
+        Q_EMIT collectionDeleted(jobData.id, false);
         const QString errMsg = xi18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
         qCritical() << errMsg << ":" << j->errorString();
         KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
-        emit collectionDeleted(jobData.id, true);
+        Q_EMIT collectionDeleted(jobData.id, true);
 }
 #endif
 
@@ -1172,7 +1172,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
     const Collection::Id id = collection.id();
     if (j->error())
     {
-        emit collectionModified(id, false);
+        Q_EMIT collectionModified(id, false);
         if (mCollectionsDeleted.contains(id))
             mCollectionsDeleted.removeAll(id);
         else
@@ -1183,7 +1183,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
         }
     }
     else
-        emit collectionModified(id, true);
+        Q_EMIT collectionModified(id, true);
 }
 
 /******************************************************************************
@@ -1500,7 +1500,7 @@ void AkonadiModel::itemJobDone(KJob* j)
         else
             Q_ASSERT(0);
         qCritical() << errMsg << itemId << ":" << j->errorString();
-        emit itemDone(itemId, false);
+        Q_EMIT itemDone(itemId, false);
 
         if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
         {
@@ -1520,7 +1520,7 @@ void AkonadiModel::itemJobDone(KJob* j)
             qCDebug(KALARM_LOG) << "item id=" << static_cast<ItemCreateJob*>(j)->item().id();
             mItemsBeingCreated << static_cast<ItemCreateJob*>(j)->item().id();
         }
-        emit itemDone(itemId);
+        Q_EMIT itemDone(itemId);
     }
 
 /*    if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")
@@ -1597,7 +1597,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
                 QSet<QByteArray> attrs;
                 attrs += CollectionAttribute::name();
                 setCollectionChanged(collection, attrs, true);
-                emit collectionAdded(collection);
+                Q_EMIT collectionAdded(collection);
 
                 if (!mCollectionsBeingCreated.contains(collection.remoteId())
                 &&  (collection.rights() & writableRights) == writableRights)
@@ -1621,7 +1621,7 @@ void AkonadiModel::slotRowsInserted(const QModelIndex& parent, int start, int en
     }
     const EventList events = eventList(parent, start, end);
     if (!events.isEmpty())
-        emit eventsAdded(events);
+        Q_EMIT eventsAdded(events);
 }
 
 /******************************************************************************
@@ -1635,7 +1635,7 @@ void AkonadiModel::slotRowsAboutToBeRemoved(const QModelIndex& parent, int start
     {
         foreach (const Event& event, events)
             qCDebug(KALARM_LOG) << "Collection:" << event.collection.id() << ", Event ID:" << event.event.id();
-        emit eventsToBeRemoved(events);
+        Q_EMIT eventsToBeRemoved(events);
     }
 }
 
@@ -1669,7 +1669,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     {
         qCDebug(KALARM_LOG) << "Collection" << collection.id() << ": rights ->" << newRights;
         mCollectionRights[collection.id()] = newRights;
-        emit collectionStatusChanged(collection, ReadOnly, (newRights != writableRights), rowInserted);
+        Q_EMIT collectionStatusChanged(collection, ReadOnly, (newRights != writableRights), rowInserted);
     }
 
     // Check for a change in content mime types
@@ -1680,7 +1680,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
     {
         qCDebug(KALARM_LOG) << "Collection" << collection.id() << ": alarm types ->" << newAlarmTypes;
         mCollectionAlarmTypes[collection.id()] = newAlarmTypes;
-        emit collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes), rowInserted);
+        Q_EMIT collectionStatusChanged(collection, AlarmTypes, static_cast<int>(newAlarmTypes), rowInserted);
     }
 
     // Check for the collection being enabled/disabled
@@ -1694,7 +1694,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
             qCDebug(KALARM_LOG) << "Collection" << collection.id() << ": enabled ->" << newEnabled;
             firstEnabled = false;
             mCollectionEnabled[collection.id()] = newEnabled;
-            emit collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled), rowInserted);
+            Q_EMIT collectionStatusChanged(collection, Enabled, static_cast<int>(newEnabled), rowInserted);
         }
     }
 
@@ -1716,7 +1716,7 @@ void AkonadiModel::setCollectionChanged(const Collection& collection, const QSet
         {
             qCDebug(KALARM_LOG) << "Migration completed";
             mMigrating = false;
-            emit migrationCompleted();
+            Q_EMIT migrationCompleted();
         }
     }
 }
@@ -1758,7 +1758,7 @@ void AkonadiModel::slotMigrationCompleted()
     {
         qCDebug(KALARM_LOG) << "Migration completed";
         mMigrating = false;
-        emit migrationCompleted();
+        Q_EMIT migrationCompleted();
     }
 }
 
@@ -1780,7 +1780,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
         if (index.isValid())
         {
             // Wait to ensure that the base EntityTreeModel has processed the
-            // itemChanged() signal first, before we emit eventChanged().
+            // itemChanged() signal first, before we Q_EMIT eventChanged().
             Collection c = data(index, ParentCollectionRole).value<Collection>();
             evnt.setCollectionId(c.id());
             mPendingEventChanges.enqueue(Event(evnt, c));
@@ -1791,14 +1791,14 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
 }
 
 /******************************************************************************
-* Called to emit a signal when an event in the monitored collections has
+* Called to Q_EMIT a signal when an event in the monitored collections has
 * changed.
 */
 void AkonadiModel::slotEmitEventChanged()
 {
     while (!mPendingEventChanges.isEmpty())
     {
-        emit eventChanged(mPendingEventChanges.dequeue());
+        Q_EMIT eventChanged(mPendingEventChanges.dequeue());
     }
 }
 

@@ -518,7 +518,7 @@ void ExtraSpinBox::paintEvent(QPaintEvent* e)
 {
     SpinBox::paintEvent(e);
     if (!mInhibitPaintSignal)
-        emit painted();
+        Q_EMIT painted();
     else
         --mInhibitPaintSignal;
 }

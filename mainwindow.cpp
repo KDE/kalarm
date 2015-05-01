@@ -1427,7 +1427,7 @@ void MainWindow::slotSelection()
     if (!count)
     {
         selectionCleared();    // disable actions
-        emit selectionChanged();
+        Q_EMIT selectionChanged();
         return;
     }
 
@@ -1480,7 +1480,7 @@ void MainWindow::slotSelection()
     if (enableEnable || enableDisable)
         setEnableText(enableEnable);
 
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 }
 
 /******************************************************************************

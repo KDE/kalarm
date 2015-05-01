@@ -80,7 +80,7 @@ void TemplateMenuAction::slotSelected(QAction* action)
     if (it == mOriginalTexts.constEnd()  ||  it.value().isEmpty())
         return;
     KAEvent* templ = AlarmCalendar::resources()->templateEvent(it.value());
-    emit selected(templ);
+    Q_EMIT selected(templ);
 }
 
 

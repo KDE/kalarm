@@ -120,7 +120,7 @@ void SpinBox::stepBy(int steps)
 {
     int increment = steps * QSpinBox::singleStep();
     addValue(increment);
-    emit stepped(increment);
+    Q_EMIT stepped(increment);
 }
 
 /******************************************************************************
@@ -403,7 +403,7 @@ bool SpinBox::setShiftStepping(bool shift, int currentButton)
                     else
                         newval = (newval <= minval) ? minval : mMaxValue;
                     QSpinBox::setValue(newval);
-                    emit stepped(step);
+                    Q_EMIT stepped(step);
                     return true;
                 }
 

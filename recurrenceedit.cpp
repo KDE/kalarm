@@ -498,7 +498,7 @@ void RecurrenceEdit::periodClicked(QAbstractButton* button)
         rangeTypeClicked();
         mSubRepetition->setEnabled(!(none || atLogin));
         if (!mNoEmitTypeChanged)
-            emit typeChanged(mRuleButtonType);
+            Q_EMIT typeChanged(mRuleButtonType);
     }
 }
 
@@ -530,7 +530,7 @@ void RecurrenceEdit::showEvent(QShowEvent*)
         mRule->setFrequencyFocus();
     else
         mRuleButtonGroup->checkedButton()->setFocus();
-    emit shown();
+    Q_EMIT shown();
 }
 
 /******************************************************************************
@@ -613,7 +613,7 @@ void RecurrenceEdit::addException()
     {
         mExceptionDates.insert(it, date);
         mExceptionDateList->insertItem(index, new QListWidgetItem(KLocale::global()->formatDate(date)));
-        emit contentsChanged();
+        Q_EMIT contentsChanged();
     }
     mExceptionDateList->setCurrentItem(mExceptionDateList->item(index));
     enableExceptionButtons();
@@ -637,7 +637,7 @@ void RecurrenceEdit::changeException()
         {
             mExceptionDates.removeAt(index);
             mExceptionDateList->takeItem(index);
-            emit contentsChanged();
+            Q_EMIT contentsChanged();
             addException();
         }
     }
@@ -654,7 +654,7 @@ void RecurrenceEdit::deleteException()
         int index = mExceptionDateList->row(item);
         mExceptionDates.removeAt(index);
         mExceptionDateList->takeItem(index);
-        emit contentsChanged();
+        Q_EMIT contentsChanged();
         enableExceptionButtons();
     }
 }

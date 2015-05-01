@@ -323,7 +323,7 @@ void CalendarMigrator::createDefaultResources()
 */
 void CalendarMigrator::creatingCalendar(const QString& path)
 {
-    emit creating(path, -1, false);
+    Q_EMIT creating(path, -1, false);
 }
 
 /******************************************************************************
@@ -336,7 +336,7 @@ void CalendarMigrator::calendarCreated(CalendarCreator* creator)
     if (i < 0)
         return;    // calendar already finished
 
-    emit creating(creator->path(), creator->collectionId(), true);
+    Q_EMIT creating(creator->path(), creator->collectionId(), true);
 
     if (!creator->errorMessage().isEmpty())
     {
@@ -602,7 +602,7 @@ CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, 
 */
 void CalendarCreator::createAgent(const QString& agentType, QObject* parent)
 {
-    emit creating(mPath);
+    Q_EMIT creating(mPath);
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
     connect(job, SIGNAL(result(KJob*)), SLOT(agentCreated(KJob*)));
     job->start();
@@ -854,7 +854,7 @@ void CalendarCreator::finish(bool cleanup)
         if (cleanup)
             AgentManager::self()->removeInstance(mAgent);
         mFinished = true;
-        emit finished(this);
+        Q_EMIT finished(this);
     }
 }
 

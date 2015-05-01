@@ -963,7 +963,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
             }
             mTrayWindow = new TrayWindow(parent ? parent : MainWindow::firstWindow());
             connect(mTrayWindow, &TrayWindow::deleted, this, &KAlarmApp::trayIconToggled);
-            emit trayIconToggled();
+            Q_EMIT trayIconToggled();
 
             if (!checkSystemTray())
                 quitIf(0);    // exit the application if there are no open windows
@@ -1249,7 +1249,7 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
     if (enabled != mAlarmsEnabled)
     {
         mAlarmsEnabled = enabled;
-        emit alarmEnabledToggled(enabled);
+        Q_EMIT alarmEnabledToggled(enabled);
         if (!enabled)
             KAlarm::cancelRtcWake(Q_NULLPTR);
         else if (!mProcessingQueue)
@@ -1263,7 +1263,7 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
 void KAlarmApp::spreadWindows(bool spread)
 {
     spread = MessageWin::spread(spread);
-    emit spreadWindowsToggled(spread);
+    Q_EMIT spreadWindowsToggled(spread);
 }
 
 /******************************************************************************
@@ -1272,7 +1272,7 @@ void KAlarmApp::spreadWindows(bool spread)
 */
 void KAlarmApp::setSpreadWindowsState(bool spread)
 {
-    emit spreadWindowsToggled(spread);
+    Q_EMIT spreadWindowsToggled(spread);
 }
 
 /******************************************************************************
@@ -1938,7 +1938,7 @@ void KAlarmApp::emailSent(KAMail::JobData& data, const QStringList& errmsgs, boo
         MessageWin::showError(data.event, data.alarm.dateTime(), errmsgs);
     }
     else if (data.queued)
-        emit execAlarmSuccess();
+        Q_EMIT execAlarmSuccess();
 }
 
 /******************************************************************************
@@ -2367,7 +2367,7 @@ bool KAlarmApp::initCheck(bool calendarOnly, bool waitForCollection, Akonadi::Co
 */
 void KAlarmApp::notifyAudioPlaying(bool playing)
 {
-    emit audioPlaying(playing);
+    Q_EMIT audioPlaying(playing);
 }
 
 /******************************************************************************

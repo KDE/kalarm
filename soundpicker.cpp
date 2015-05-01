@@ -301,7 +301,7 @@ void SoundPicker::slotPickFile()
     else
         mTypeCombo->setToolTip(mFile.prettyUrl());
     if (accepted  ||  mFile != oldfile)
-        emit changed();
+        Q_EMIT changed();
 }
 
 /******************************************************************************

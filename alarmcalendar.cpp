@@ -345,7 +345,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
             mUrl  = mICalUrl;
             mCalType = LOCAL_ICAL;
         }
-        emit calendarSaved(this);
+        Q_EMIT calendarSaved(this);
     }
 
     mUpdateSave = false;
@@ -473,7 +473,7 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
         // Emit signal only if we're not in the process of closing the calendar
         if (!closing  &&  mOpen)
         {
-            emit earliestAlarmChanged();
+            Q_EMIT earliestAlarmChanged();
             if (mHaveDisabledAlarms)
                 checkForDisabledAlarms();
         }
@@ -543,7 +543,7 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
     checkForDisabledAlarms(!enabled, enabled);
     if (added  &&  enabled  &&  event.event.category() == CalEvent::ACTIVE
     &&  event.event.repeatAtLogin())
-        emit atLoginEventAdded(event.event);
+        Q_EMIT atLoginEventAdded(event.event);
 }
 
 /******************************************************************************
@@ -977,7 +977,7 @@ void AlarmCalendar::addNewEvent(const Collection& collection, KAEvent* event, bo
             &&  (!earliest  ||  dt < earliest->nextTrigger(KAEvent::ALL_TRIGGER)))
             {
                 mEarliestAlarm[key] = event;
-                emit earliestAlarmChanged();
+                Q_EMIT earliestAlarmChanged();
             }
         }
     }
@@ -1384,7 +1384,7 @@ void AlarmCalendar::checkForDisabledAlarms(bool oldEnabled, bool newEnabled)
         else if (!newEnabled  &&  !mHaveDisabledAlarms)
         {
             mHaveDisabledAlarms = true;
-            emit haveDisabledAlarmsChanged(true);
+            Q_EMIT haveDisabledAlarmsChanged(true);
         }
     }
 }
@@ -1409,7 +1409,7 @@ void AlarmCalendar::checkForDisabledAlarms()
     if (disabled != mHaveDisabledAlarms)
     {
         mHaveDisabledAlarms = disabled;
-        emit haveDisabledAlarmsChanged(disabled);
+        Q_EMIT haveDisabledAlarmsChanged(disabled);
     }
 }
 
@@ -1482,7 +1482,7 @@ void AlarmCalendar::findEarliestAlarm(Collection::Id key)
         }
     }
     mEarliestAlarm[key] = earliest;
-    emit earliestAlarmChanged();
+    Q_EMIT earliestAlarmChanged();
 }
 
 /******************************************************************************

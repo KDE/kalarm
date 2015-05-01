@@ -101,7 +101,7 @@ class Undo : public QObject
         static UndoItem*   getItem(int id, Type);
         static int         findItem(int id, Type);
         void               emitChanged(const QString& undo, const QString& redo)
-                                           { emit changed(undo, redo); }
+                                           { Q_EMIT changed(undo, redo); }
 
         static Undo*       mInstance;     // the one and only Undo instance
         static List        mUndoList;     // edit history for undo, latest undo first

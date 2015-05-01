@@ -154,7 +154,7 @@ void TimeEdit::slotValueChanged(int value)
         else if (!pm  &&  value >= 720)
             mAmPm->setCurrentIndex(mPmIndex);
     }
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }
 
 /******************************************************************************

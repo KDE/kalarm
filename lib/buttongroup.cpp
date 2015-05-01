@@ -93,7 +93,7 @@ void ButtonGroup::setButton(int id)
  */
 void ButtonGroup::slotButtonToggled(bool)
 {
-    emit buttonSet(checkedButton());
+    Q_EMIT buttonSet(checkedButton());
 }
 
 // vim: et sw=4:

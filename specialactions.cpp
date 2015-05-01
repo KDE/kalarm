@@ -86,7 +86,7 @@ void SpecialActionsButton::slotButtonPressed()
         mPreAction  = dlg->preAction();
         mPostAction = dlg->postAction();
         mOptions    = dlg->options();
-        emit selected();
+        Q_EMIT selected();
     }
         if (dlg)
             setChecked(!mPreAction.isEmpty() || !mPostAction.isEmpty());

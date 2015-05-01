@@ -300,7 +300,7 @@ void Find::slotFind()
     // Execute the search
     findNext(true, checkEnd, false);
     if (mFind  &&  newFind)
-        emit active(true);
+        Q_EMIT active(true);
 }
 
 /******************************************************************************

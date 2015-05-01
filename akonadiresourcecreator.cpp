@@ -75,20 +75,20 @@ void AkonadiResourceCreator::getAgentType()
             mimeType = KAlarmCal::MIME_TEMPLATE;
             break;
         default:
-            emit finished(this, false);
+            Q_EMIT finished(this, false);
             return;
     }
     dlg->agentFilterProxyModel()->addMimeTypeFilter(mimeType);
     dlg->agentFilterProxyModel()->addCapabilityFilter(QStringLiteral("Resource"));
     if (dlg->exec() != QDialog::Accepted)
     {
-        emit finished(this, false);
+        Q_EMIT finished(this, false);
         return;
     }
     mAgentType = dlg->agentType();
     if (!mAgentType.isValid())
     {
-        emit finished(this, false);
+        Q_EMIT finished(this, false);
         return;
     }
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(mAgentType, mParent);
@@ -138,7 +138,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         mAgentInstance.configure(mParent);
 
         if (!controlOk)
-            emit finished(this, true);  // don't actually know the result in this case
+            Q_EMIT finished(this, true);  // don't actually know the result in this case
     }
 }
 
@@ -165,7 +165,7 @@ void AkonadiResourceCreator::setResourceAlarmType()
 */
 void AkonadiResourceCreator::configurationDialogAccepted()
 {
-    emit finished(this, true);
+    Q_EMIT finished(this, true);
 }
 
 /******************************************************************************
@@ -175,7 +175,7 @@ void AkonadiResourceCreator::configurationDialogAccepted()
 void AkonadiResourceCreator::exitWithError()
 {
     AgentManager::self()->removeInstance(mAgentInstance);
-    emit finished(this, false);
+    Q_EMIT finished(this, false);
 }
 
 // vim: et sw=4:
