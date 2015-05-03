@@ -114,9 +114,9 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
         // Set the default alarm type for a directory resource config dialog
         mAgentInstance = job->instance();
         QString type = mAgentInstance.type().identifier();
-        if (type == QStringLiteral("akonadi_kalarm_dir_resource"))
+        if (type == QLatin1String("akonadi_kalarm_dir_resource"))
             setResourceAlarmType<OrgKdeAkonadiKAlarmDirSettingsInterface>();
-        else if (type == QStringLiteral("akonadi_kalarm_resource"))
+        else if (type == QLatin1String("akonadi_kalarm_resource"))
             setResourceAlarmType<OrgKdeAkonadiKAlarmSettingsInterface>();
 
         // Display the resource config dialog, but first ensure we get
