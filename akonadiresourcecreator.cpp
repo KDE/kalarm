@@ -105,7 +105,7 @@ void AkonadiResourceCreator::agentInstanceCreated(KJob* j)
     AgentInstanceCreateJob* job = static_cast<AgentInstanceCreateJob*>(j);
     if (j->error())
     {
-        qCritical() << "Failed to create new calendar resource:" << j->errorString();
+        qCCritical(KALARM_LOG) << "Failed to create new calendar resource:" << j->errorString();
         KMessageBox::error(Q_NULLPTR, xi18nc("@info", "%1<nl/>(%2)", i18nc("@info", "Failed to create new calendar resource"), j->errorString()));
         exitWithError();
     }
@@ -151,7 +151,7 @@ void AkonadiResourceCreator::setResourceAlarmType()
     Settings iface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + mAgentInstance.identifier(),
                    QStringLiteral("/Settings"), QDBusConnection::sessionBus(), this);
     if (!iface.isValid())
-        qCritical() << "Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
+        qCCritical(KALARM_LOG) << "Error creating D-Bus interface for" << mAgentInstance.identifier() << "resource configuration.";
     else
     {
         iface.setAlarmTypes(CalEvent::mimeTypes(mDefaultType));

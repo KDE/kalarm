@@ -696,7 +696,7 @@ UpdateResult enableEvents(QVector<KAEvent>& events, bool enable, QWidget* msgPar
             // Update the event in the calendar file
             KAEvent* newev = cal->updateEvent(event);
             if (!newev)
-                qCritical() << "Error updating event in calendar:" << event->id();
+                qCCritical(KALARM_LOG) << "Error updating event in calendar:" << event->id();
             else
             {
                 cal->disabledChanged(newev);
@@ -1197,7 +1197,7 @@ bool editAlarmById(const EventId& id, QWidget* parent)
     }
     if (AlarmCalendar::resources()->eventReadOnly(event->itemId()))
     {
-        qCritical() << eventID << ": read-only";
+        qCCritical(KALARM_LOG) << eventID << ": read-only";
         return false;
     }
     switch (event->category())
@@ -1206,7 +1206,7 @@ bool editAlarmById(const EventId& id, QWidget* parent)
         case CalEvent::TEMPLATE:
             break;
         default:
-            qCritical() << eventID << ": event not active or template";
+            qCCritical(KALARM_LOG) << eventID << ": event not active or template";
             return false;
     }
     editAlarm(event, parent);
@@ -1396,7 +1396,7 @@ QString runKMail(bool minimise)
             return QString();
         if (KToolInvocation::startServiceByDesktopName(QLatin1String("kmail"), QString(), &errmsg))
         {
-            qCritical() << "Couldn't start KMail (" << errmsg << ")";
+            qCCritical(KALARM_LOG) << "Couldn't start KMail (" << errmsg << ")";
             return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
         }
     }
@@ -1901,12 +1901,12 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
         if (reply.error().type() == QDBusError::UnknownObject)
         {
             status =  KAlarm::UPDATE_KORG_ERRSTART;
-            qCritical() << "addIncidence() D-Bus error: still starting";
+            qCCritical(KALARM_LOG) << "addIncidence() D-Bus error: still starting";
         }
         else
         {
             status.set(KAlarm::UPDATE_KORG_ERR, reply.error().message());
-            qCritical() << "addIncidence(" << uid << ") D-Bus call failed:" << status.message;
+            qCCritical(KALARM_LOG) << "addIncidence(" << uid << ") D-Bus call failed:" << status.message;
         }
     }
     else if (!reply.value())

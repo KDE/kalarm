@@ -953,7 +953,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
         config.writeEntry("EventItemID", mEventItemId);
         config.writeEntry("AlarmType", static_cast<int>(mAlarmType));
         if (mAlarmType == KAAlarm::INVALID_ALARM)
-            qCritical() << "Invalid alarm: id=" << mEventId << ", alarm count=" << mEvent.alarmCount();
+            qCCritical(KALARM_LOG) << "Invalid alarm: id=" << mEventId << ", alarm count=" << mEvent.alarmCount();
         config.writeEntry("Message", mMessage);
         config.writeEntry("Type", static_cast<int>(mAction));
         config.writeEntry("Font", mFont);
@@ -1012,7 +1012,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     if (mAlarmType == KAAlarm::INVALID_ALARM)
     {
         mInvalid = true;
-        qCritical() << "Invalid alarm: id=" << eventId;
+        qCCritical(KALARM_LOG) << "Invalid alarm: id=" << eventId;
     }
     mMessage             = config.readEntry("Message");
     mAction              = static_cast<KAEvent::SubAction>(config.readEntry("Type", 0));
@@ -1152,7 +1152,7 @@ void MessageWin::redisplayAlarms()
                 const KAAlarm alarm = event.convertDisplayingAlarm();
                 if (alarm.type() == KAAlarm::INVALID_ALARM)
                 {
-                    qCritical() << "Invalid alarm: id=" << eventId;
+                    qCCritical(KALARM_LOG) << "Invalid alarm: id=" << eventId;
                     continue;
                 }
                 qCDebug(KALARM_LOG) << eventId;
@@ -1191,7 +1191,7 @@ bool MessageWin::retrieveEvent(KAEvent& event, Akonadi::Collection& resource, bo
         event.setArchive();     // ensure that it gets re-archived if it's saved
         event.setCategory(CalEvent::ACTIVE);
         if (mEventId.eventId() != event.id())
-            qCritical() << "Wrong event ID";
+            qCCritical(KALARM_LOG) << "Wrong event ID";
         event.setEventId(mEventId.eventId());
         resource  = Akonadi::Collection();
         showEdit  = true;
@@ -1228,7 +1228,7 @@ void MessageWin::alarmShowing(KAEvent& event)
     const KAAlarm alarm = event.alarm(mAlarmType);
     if (!alarm.isValid())
     {
-        qCritical() << "Alarm type not found:" << event.id() << ":" << mAlarmType;
+        qCCritical(KALARM_LOG) << "Alarm type not found:" << event.id() << ":" << mAlarmType;
         return;
     }
     if (!mAlwaysHide)
@@ -1495,7 +1495,7 @@ AudioThread::AudioThread(MessageWin* parent, const QString& audioFile, float vol
       mAudioObject(Q_NULLPTR)
 {
     if (mAudioOwner)
-        qCritical() << "mAudioOwner already set";
+        qCCritical(KALARM_LOG) << "mAudioOwner already set";
     mAudioOwner = parent;
 }
 
@@ -1553,7 +1553,7 @@ void AudioThread::run()
     {
         mError = xi18nc("@info", "Cannot open audio file: <filename>%1</filename>", audioFile);
         mMutex.unlock();
-        qCritical() << "Open failure:" << audioFile;
+        qCCritical(KALARM_LOG) << "Open failure:" << audioFile;
         return;
     }
     mAudioObject = new Phonon::MediaObject();
@@ -1648,7 +1648,7 @@ void AudioThread::playStateChanged(Phonon::State newState)
         const QString err = mAudioObject->errorString();
         if (!err.isEmpty())
         {
-            qCritical() << "Play failure:" << mFile << ":" << err;
+            qCCritical(KALARM_LOG) << "Play failure:" << mFile << ":" << err;
             mError = xi18nc("@info", "<para>Error playing audio file: <filename>%1</filename></para><para>%2</para>", mFile, err);
             exit(1);
         }
@@ -2023,7 +2023,7 @@ void MessageWin::slotShowKMailMessage()
     org::kde::kmail::kmail kmail(KMAIL_DBUS_SERVICE, KMAIL_DBUS_PATH, QDBusConnection::sessionBus());
     QDBusReply<bool> reply = kmail.showMail((qint64)mKMailSerialNumber);
     if (!reply.isValid())
-        qCritical() << "kmail D-Bus call failed:" << reply.error().message();
+        qCCritical(KALARM_LOG) << "kmail D-Bus call failed:" << reply.error().message();
     else if (!reply.value())
         KAMessageBox::sorry(this, xi18nc("@info", "Unable to locate this email in <application>KMail</application>"));
 }

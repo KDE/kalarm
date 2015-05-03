@@ -1127,7 +1127,7 @@ void AkonadiModel::deleteCollectionJobDone(KJob* j)
     {
         Q_EMIT collectionDeleted(jobData.id, false);
         const QString errMsg = xi18nc("@info", "Failed to remove calendar <resource>%1</resource>.", jobData.displayName);
-        qCritical() << errMsg << ":" << j->errorString();
+        qCCritical(KALARM_LOG) << errMsg << ":" << j->errorString();
         KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
     }
     else
@@ -1178,7 +1178,7 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
         else
         {
             const QString errMsg = xi18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
-            qCritical() << "Id:" << collection.id() << errMsg << ":" << j->errorString();
+            qCCritical(KALARM_LOG) << "Id:" << collection.id() << errMsg << ":" << j->errorString();
             KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
         }
     }
@@ -1499,7 +1499,7 @@ void AkonadiModel::itemJobDone(KJob* j)
             errMsg = i18nc("@info", "Failed to delete alarm.");
         else
             Q_ASSERT(0);
-        qCritical() << errMsg << itemId << ":" << j->errorString();
+        qCCritical(KALARM_LOG) << errMsg << itemId << ":" << j->errorString();
         Q_EMIT itemDone(itemId, false);
 
         if (itemId >= 0  &&  jobClass == "Akonadi::ItemModifyJob")

@@ -112,13 +112,13 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         identity = Identities::identityManager()->identityForUoid(jobdata.event.emailFromId());
         if (identity.isNull())
         {
-            qCritical() << "Identity" << jobdata.event.emailFromId() << "not found";
+            qCCritical(KALARM_LOG) << "Identity" << jobdata.event.emailFromId() << "not found";
             errmsgs = errors(xi18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> not found", jobdata.event.emailFromId()));
             return -1;
         }
         if (identity.primaryEmailAddress().isEmpty())
         {
-            qCritical() << "Identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
+            qCCritical(KALARM_LOG) << "Identity" << identity.identityName() << "uoid" << identity.uoid() << ": no email address";
             errmsgs = errors(xi18nc("@info", "Invalid 'From' email address.<nl/>Email identity <resource>%1</resource> has no email address", identity.identityName()));
             return -1;
         }
@@ -186,7 +186,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         transport = manager->transportById(transportId, true);
         if (!transport)
         {
-            qCritical() << "No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
+            qCCritical(KALARM_LOG) << "No mail transport found for identity" << identity.identityName() << "uoid" << identity.uoid();
             errmsgs = errors(xi18nc("@info", "No mail transport configured for email identity <resource>%1</resource>", identity.identityName()));
             return -1;
         }
@@ -198,7 +198,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     err = appendBodyAttachments(*message, jobdata);
     if (!err.isNull())
     {
-        qCritical() << "Error compiling message:" << err;
+        qCCritical(KALARM_LOG) << "Error compiling message:" << err;
         errmsgs = errors(err);
         return -1;
     }
@@ -236,14 +236,14 @@ void KAMail::slotEmailSent(KJob* job)
     QStringList errmsgs;
     if (job->error())
     {
-        qCritical() << "Failed:" << job->errorString();
+        qCCritical(KALARM_LOG) << "Failed:" << job->errorString();
         errmsgs = errors(job->errorString(), SEND_ERROR);
     }
     JobData jobdata;
     if (mJobs.isEmpty()  ||  mJobData.isEmpty()  ||  job != mJobs.head())
     {
         // The queue has been corrupted, so we can't locate the job's data
-        qCritical() << "Wrong job at head of queue: wiping queue";
+        qCCritical(KALARM_LOG) << "Wrong job at head of queue: wiping queue";
         mJobs.clear();
         mJobData.clear();
         if (!errmsgs.isEmpty())
@@ -357,13 +357,13 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             KIO::UDSEntry uds;
             if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
             {
-                qCritical() << "Not found:" << attachment;
+                qCCritical(KALARM_LOG) << "Not found:" << attachment;
                 return xi18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
             }
             KFileItem fi(uds, url);
             if (fi.isDir()  ||  !fi.isReadable())
             {
-                qCritical() << "Not file/not readable:" << attachment;
+                qCCritical(KALARM_LOG) << "Not file/not readable:" << attachment;
                 return attachError;
             }
 
@@ -371,7 +371,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QString tmpFile;
             if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow()))
             {
-                qCritical() << "Load failure:" << attachment;
+                qCCritical(KALARM_LOG) << "Load failure:" << attachment;
                 return attachError;
             }
             QFile file(tmpFile);
@@ -626,7 +626,7 @@ QString KAMail::getMailBody(quint32 serialNumber)
     QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("getDecodedBodyPart"), args);
     if (!reply.isValid())
     {
-        qCritical() << "D-Bus call failed:" << reply.error().message();
+        qCCritical(KALARM_LOG) << "D-Bus call failed:" << reply.error().message();
         return QString();
     }
     return reply.value();

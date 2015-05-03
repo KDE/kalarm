@@ -98,7 +98,7 @@ AlarmCalendar* AlarmCalendar::displayCalendarOpen()
 {
     if (mDisplayCalendar->open())
         return mDisplayCalendar;
-    qCritical() << "Open error";
+    qCCritical(KALARM_LOG) << "Open error";
     return Q_NULLPTR;
 }
 
@@ -247,7 +247,7 @@ int AlarmCalendar::load()
         QString tmpFile;
         if (!KIO::NetAccess::download(mUrl, tmpFile, MainWindow::mainMainWindow()))
         {
-            qCritical() << "Download failure";
+            qCCritical(KALARM_LOG) << "Download failure";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", mUrl.prettyUrl()));
             return -1;
@@ -264,7 +264,7 @@ int AlarmCalendar::load()
             KFileItem fi(uds, mUrl);
             if (!fi.size())
                 return 0;     // file is zero length
-            qCritical() << "Error loading calendar file '" << tmpFile <<"'";
+            qCCritical(KALARM_LOG) << "Error loading calendar file '" << tmpFile <<"'";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mUrl.prettyUrl()));
             // load() could have partially populated the calendar, so clear it out
@@ -322,7 +322,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
         mCalendarStorage->setSaveFormat(new ICalFormat);
         if (!mCalendarStorage->save())
         {
-            qCritical() << "Saving" << saveFilename << "failed.";
+            qCCritical(KALARM_LOG) << "Saving" << saveFilename << "failed.";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Failed to save calendar to <filename>%1</filename>", mICalUrl.prettyUrl()));
             return false;
@@ -332,7 +332,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
         {
             if (!KIO::NetAccess::upload(saveFilename, mICalUrl, MainWindow::mainMainWindow()))
             {
-                qCritical() << saveFilename << "upload failed.";
+                qCCritical(KALARM_LOG) << saveFilename << "upload failed.";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
                                     xi18nc("@info", "Cannot upload calendar to <filename>%1</filename>", mICalUrl.prettyUrl()));
                 return false;
@@ -451,7 +451,7 @@ void AlarmCalendar::removeKAEvents(Collection::Id key, bool closing, CalEvent::T
             if (remove)
             {
                 if (key != DISPLAY_COL_ID)
-                    qCritical() << "Event" << event->id() << ", collection" << event->collectionId() << "Indexed under collection" << key;
+                    qCCritical(KALARM_LOG) << "Event" << event->id() << ", collection" << event->collectionId() << "Indexed under collection" << key;
             }
             else
                 remove = event->category() & types;
@@ -514,7 +514,7 @@ void AlarmCalendar::slotEventChanged(const AkonadiModel::Event& event)
 {
     if (!event.isConsistent())
     {
-        qCritical() << "Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
+        qCCritical(KALARM_LOG) << "Inconsistent AkonadiModel::Event: event:" << event.event.collectionId() << ", collection" << event.collection.id();
         return;
     }
 
@@ -555,7 +555,7 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
     for (int i = 0, count = events.count();  i < count;  ++i)
     {
         if (!events[i].isConsistent())
-            qCritical() << "Inconsistent AkonadiModel::Event: event:" << events[i].event.collectionId() << ", collection" << events[i].collection.id();
+            qCCritical(KALARM_LOG) << "Inconsistent AkonadiModel::Event: event:" << events[i].event.collectionId() << ", collection" << events[i].collection.id();
         else if (mEventMap.contains(events[i].eventId()))
             deleteEventInternal(events[i].event, events[i].collection, false);
     }
@@ -575,7 +575,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
                                        QString::fromLatin1("*.vcs *.ics|%1").arg(i18nc("@info", "Calendar Files")), parent);
     if (url.isEmpty())
     {
-        qCritical() << "Empty URL";
+        qCCritical(KALARM_LOG) << "Empty URL";
         return false;
     }
     if (!url.isValid())
@@ -602,7 +602,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     {
         if (!KIO::NetAccess::download(url, filename, MainWindow::mainMainWindow()))
         {
-            qCritical() << "Download failure";
+            qCCritical(KALARM_LOG) << "Download failure";
             KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.toDisplayString()));
             return false;
         }
@@ -719,7 +719,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         KFileItem fi(uds, url);
         if (fi.size())
         {
-            qCritical() << "Error loading calendar file" << file << "for append";
+            qCCritical(KALARM_LOG) << "Error loading calendar file" << file << "for append";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Error loading calendar to append to:<nl/><filename>%1</filename>", url.prettyUrl()));
             return false;
@@ -759,14 +759,14 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         calStorage->setSaveFormat(new ICalFormat);
         if (!calStorage->save())
         {
-            qCritical() << file << ": failed";
+            qCCritical(KALARM_LOG) << file << ": failed";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
             success = false;
         }
         else if (!local  &&  !KIO::NetAccess::upload(file, url, parent))
         {
-            qCritical() << file << ": upload failed";
+            qCCritical(KALARM_LOG) << file << ": upload failed";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
             success = false;
@@ -999,7 +999,7 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
     bool noNewId = newId.isEmpty();
     if (!noNewId  &&  oldEventId == newId)
     {
-        qCritical() << "Same IDs";
+        qCCritical(KALARM_LOG) << "Same IDs";
         return false;
     }
     if (!mOpen)
@@ -1011,7 +1011,7 @@ bool AlarmCalendar::modifyEvent(const EventId& oldEventId, KAEvent& newEvent)
         KAEvent* storedEvent = event(oldEventId);
         if (!storedEvent)
         {
-            qCritical() << "Old event not found";
+            qCCritical(KALARM_LOG) << "Old event not found";
             return false;
         }
         if (noNewId)
@@ -1129,7 +1129,7 @@ CalEvent::Type AlarmCalendar::deleteEventInternal(const KAEvent& event, const Co
         return CalEvent::EMPTY;
     if (event.collectionId() != collection.id())
     {
-        qCritical() << "Event" << event.id() << ": collection" << event.collectionId() << "differs from 'collection'" << collection.id();
+        qCCritical(KALARM_LOG) << "Event" << event.id() << ": collection" << event.collectionId() << "differs from 'collection'" << collection.id();
         return CalEvent::EMPTY;
     }
     return deleteEventInternal(event.id(), event, collection, deleteFromAkonadi);

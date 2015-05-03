@@ -2122,7 +2122,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
     QTemporaryFile tmpFile;
     tmpFile.setAutoRemove(false);     // don't delete file when it is destructed
     if (!tmpFile.open())
-        qCritical() << "Unable to create a temporary script file";
+        qCCritical(KALARM_LOG) << "Unable to create a temporary script file";
     else
     {
         tmpFile.setPermissions(QFile::ReadUser | QFile::WriteUser | QFile::ExeUser);
@@ -2132,7 +2132,7 @@ QString KAlarmApp::createTempScriptFile(const QString& command, bool insertShell
         stream << command;
         stream.flush();
         if (tmpFile.error() != QFile::NoError)
-            qCritical() << "Error" << tmpFile.errorString() << " writing to temporary script file";
+            qCCritical(KALARM_LOG) << "Error" << tmpFile.errorString() << " writing to temporary script file";
         else
             return tmpFile.fileName();
     }

@@ -224,7 +224,7 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
         qCDebug(KALARM_LOG);
         ItemListModel* itemModel = qobject_cast<ItemListModel*>(model);
         if (!itemModel)
-            qCritical() << "Invalid cast to ItemListModel*";
+            qCCritical(KALARM_LOG) << "Invalid cast to ItemListModel*";
         else
         {
             KAEvent event = itemModel->event(index);

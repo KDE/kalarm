@@ -79,7 +79,7 @@ void CollectionSearch::collectionFetchResult(KJob* j)
 {
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
     if (j->error())
-        qCritical() << "CollectionFetchJob" << job->fetchScope().resource() << "error: " << j->errorString();
+        qCCritical(KALARM_LOG) << "CollectionFetchJob" << job->fetchScope().resource() << "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();

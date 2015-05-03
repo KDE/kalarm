@@ -255,12 +255,12 @@ void CalendarMigrator::collectionFetchResult(KJob* j)
     CollectionFetchJob* job = static_cast<CollectionFetchJob*>(j);
     const QString id = job->fetchScope().resource();
     if (j->error())
-        qCritical() << "CollectionFetchJob" << id << "error: " << j->errorString();
+        qCCritical(KALARM_LOG) << "CollectionFetchJob" << id << "error: " << j->errorString();
     else
     {
         const Collection::List collections = job->collections();
         if (collections.isEmpty())
-            qCritical() << "No collections found for resource" << id;
+            qCCritical(KALARM_LOG) << "No collections found for resource" << id;
         else
             mExistingAlarmTypes |= CalEvent::types(collections[0].contentMimeTypes());
     }
@@ -386,7 +386,7 @@ void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool 
         dirResource = true;
     else
     {
-        qCritical() << "Invalid agent type" << id;
+        qCCritical(KALARM_LOG) << "Invalid agent type" << id;
         return;
     }
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
@@ -557,7 +557,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
     }
     else
     {
-        qCritical() << "Invalid resource type:" << resourceType;
+        qCCritical(KALARM_LOG) << "Invalid resource type:" << resourceType;
         return;
     }
     mPath = config.readPathEntry(pathKey, QLatin1String(""));
@@ -567,7 +567,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
         case 2:  mAlarmType = CalEvent::ARCHIVED;  break;
         case 4:  mAlarmType = CalEvent::TEMPLATE;  break;
         default:
-            qCritical() << "Invalid alarm type for resource";
+            qCCritical(KALARM_LOG) << "Invalid alarm type for resource";
             return;
     }
     mName     = config.readEntry("ResourceName", QString());
@@ -617,7 +617,7 @@ void CalendarCreator::agentCreated(KJob* j)
     if (j->error())
     {
         mErrorMessage = j->errorString();
-        qCritical() << "AgentInstanceCreateJob error:" << mErrorMessage;
+        qCCritical(KALARM_LOG) << "AgentInstanceCreateJob error:" << mErrorMessage;
         finish(false);
         return;
     }
@@ -640,7 +640,7 @@ void CalendarCreator::agentCreated(KJob* j)
             ok = writeRemoteFileConfig();
             break;
         default:
-            qCritical() << "Invalid resource type";
+            qCCritical(KALARM_LOG) << "Invalid resource type";
             break;
     }
     if (!ok)
@@ -666,7 +666,7 @@ void CalendarCreator::resourceSynchronised(KJob* j)
     if (j->error())
     {
         // Don't give up on error - we can still try to fetch the collection
-        qCritical() << "ResourceSynchronizationJob error: " << j->errorString();
+        qCCritical(KALARM_LOG) << "ResourceSynchronizationJob error: " << j->errorString();
     }
     mCollectionFetchRetryCount = 0;
     fetchCollection();
@@ -740,7 +740,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     if (j->error())
     {
         mErrorMessage = j->errorString();
-        qCritical() << "CollectionFetchJob error: " << mErrorMessage;
+        qCCritical(KALARM_LOG) << "CollectionFetchJob error: " << mErrorMessage;
         finish(true);
         return;
     }
@@ -751,7 +751,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
         if (++mCollectionFetchRetryCount >= 10)
         {
             mErrorMessage = i18nc("@info", "New configuration timed out");
-            qCritical() << "Timeout fetching collection for resource";
+            qCCritical(KALARM_LOG) << "Timeout fetching collection for resource";
             finish(true);
             return;
         }
@@ -764,7 +764,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     if (collections.count() > 1)
     {
         mErrorMessage = i18nc("@info", "New configuration was corrupt");
-        qCritical() << "Wrong number of collections for this resource:" << collections.count();
+        qCCritical(KALARM_LOG) << "Wrong number of collections for this resource:" << collections.count();
         finish(true);
         return;
     }
@@ -833,7 +833,7 @@ void CalendarCreator::modifyCollectionJobDone(KJob* j)
     if (j->error())
     {
         mErrorMessage = j->errorString();
-        qCritical() << "CollectionFetchJob error: " << mErrorMessage;
+        qCCritical(KALARM_LOG) << "CollectionFetchJob error: " << mErrorMessage;
         finish(true);
     }
     else
