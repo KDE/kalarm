@@ -265,7 +265,7 @@ QVector<KAEvent> BirthdayDlg::events() const
     if (!count)
         return list;
     QDate today = KDateTime::currentLocalDate();
-    KDateTime todayStart(today, KDateTime::ClockTime);
+    KDateTime todayStart(today, KDateTime::Spec(KDateTime::ClockTime));
     int thisYear = today.year();
     int reminder = mReminder->minutes();
     for (int i = 0;  i < count;  ++i)
@@ -277,7 +277,7 @@ QVector<KAEvent> BirthdayDlg::events() const
         date.setYMD(thisYear, date.month(), date.day());
         if (date <= today)
             date.setYMD(thisYear + 1, date.month(), date.day());
-        KAEvent event(KDateTime(date, KDateTime::ClockTime),
+        KAEvent event(KDateTime(date, KDateTime::Spec(KDateTime::ClockTime)),
                       mPrefix->text() + name + mSuffix->text(),
                       mFontColourButton->bgColour(), mFontColourButton->fgColour(),
                       mFontColourButton->font(), KAEvent::MESSAGE, mLateCancel->minutes(),
