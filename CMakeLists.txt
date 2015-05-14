@@ -155,6 +155,7 @@ kdepim
 KF5::KCMUtils
 Phonon::phonon4qt5
 KF5::Auth
+KF5::DBusAddons
 )
 
 if (Qt5X11Extras_FOUND)
