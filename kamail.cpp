@@ -433,7 +433,7 @@ void KAMail::notifyQueued(const KAEvent& event)
         if (!email.isEmpty()
         &&  HeaderParsing::parseAddress(em, em + email.length(), addr))
         {
-            QString domain = addr.mailboxList.first().addrSpec().domain;
+            QString domain = addr.mailboxList.at(0).addrSpec().domain;
             if (!domain.isEmpty()  &&  domain != localhost  &&  domain != hostname)
             {
                 KAMessageBox::information(MainWindow::mainMainWindow(), i18nc("@info", "An email has been queued to be sent"), QString(), Preferences::EMAIL_QUEUED_NOTIFY);
