@@ -35,7 +35,7 @@
 #include "soundpicker.h"
 #include "specialactions.h"
 
-#include <AkonadiCore/control.h>
+#include <AkonadiWidgets/controlgui.h>
 #include <AkonadiCore/entitymimetypefiltermodel.h>
 
 #include <KLocalizedString>
@@ -117,7 +117,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     layout->setMargin(0);
 
     // Start Akonadi server as we need it for the birthday model to access contacts information
-    Akonadi::Control::start();
+    Akonadi::ControlGui::start();
 
     BirthdayModel* model = BirthdayModel::instance();
     connect(model, &BirthdayModel::dataChanged, this, &BirthdayDlg::resizeViewColumns);

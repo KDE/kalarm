@@ -48,7 +48,7 @@
 #include <kmime/kmime_content.h>
 #include <KCalCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>
-#include <AkonadiCore/control.h>
+#include <AkonadiWidgets/controlgui.h>
 using namespace KCalCore;
 using namespace KCalUtils;
 #include <KLocale>
@@ -159,7 +159,7 @@ MainWindow::MainWindow(bool restored)
     setCentralWidget(mSplitter);
 
     // Create the calendar resource selector widget
-    Akonadi::Control::widgetNeedsAkonadi(this);
+    Akonadi::ControlGui::widgetNeedsAkonadi(this);
     mResourceSelector = new ResourceSelector(mSplitter);
     mSplitter->setStretchFactor(0, 0);   // don't resize resource selector when window is resized
     mSplitter->setStretchFactor(1, 1);
