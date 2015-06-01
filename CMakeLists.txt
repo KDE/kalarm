@@ -101,6 +101,7 @@ set(kalarm_bin_SRCS ${libkalarm_SRCS}
     wakedlg.cpp
 )
 set(kalarm_bin_SRCS ${kalarm_bin_SRCS}
+    kalarmmigrateapplication.cpp
     akonadimodel.cpp
     akonadiresourcecreator.cpp
     collectionmodel.cpp
@@ -155,6 +156,7 @@ KF5::KCMUtils
 Phonon::phonon4qt5
 KF5::Auth
 KF5::DBusAddons
+pimcommon
 )
 
 if (Qt5X11Extras_FOUND)
