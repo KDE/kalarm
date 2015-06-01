@@ -21,12 +21,12 @@
 #include "kalarm.h"
 
 #include "kalarmapp.h"
+#include "kalarmmigrateapplication.h"
 
 #include <kalarmcal/version.h>
 
 #include <kcmdlineargs.h>
 #include <k4aboutdata.h>
-#include <Kdelibs4ConfigMigrator>
 #include <KLocalizedString>
 #include "kalarm_debug.h"
 
@@ -37,9 +37,7 @@
 
 int main(int argc, char* argv[])
 {
-    Kdelibs4ConfigMigrator migrate(QStringLiteral("kalarm"));
-    migrate.setConfigFiles(QStringList() << QStringLiteral("kalarmrc"));
-    migrate.setUiFiles(QStringList() << QStringLiteral("kalarmui.rc"));
+    KAlarmMigrateApplication migrate;
     migrate.migrate();
 
     KLocalizedString::setApplicationDomain("kalarm");
