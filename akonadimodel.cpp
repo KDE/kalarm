@@ -556,7 +556,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             }
             case EnabledTypesRole:
             {
-                const CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
+                const CalEvent::Types types = static_cast<CalEvent::Types>(value.toInt());
                 attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->enabled() == types)
                     return true;   // no change
@@ -569,16 +569,16 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 if (collection.hasAttribute<CollectionAttribute>()
                 &&  isCompatible(collection))
                 {
-                    const CalEvent::Types types = static_cast<CalEvent::Types>(value.value<int>());
+                    const CalEvent::Types types = static_cast<CalEvent::Types>(value.toInt());
                     attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
-qCDebug(KALARM_LOG)<<"Set standard:"<<types<<", was="<<attr->standard();
+                    qCDebug(KALARM_LOG)<<"Set standard:"<<types<<", was="<<attr->standard();
                     attr->setStandard(types);
                     updateCollection = true;
                 }
                 break;
             case KeepFormatRole:
             {
-                const bool keepFormat = value.value<bool>();
+                const bool keepFormat = value.toBool();
                 attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
                 if (attr->keepFormat() == keepFormat)
                     return true;   // no change
