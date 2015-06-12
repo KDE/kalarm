@@ -3690,7 +3690,9 @@ void KAEventPrivate::endChanges()
 KAEvent::List KAEvent::ptrList(QVector<KAEvent> &objList)
 {
     KAEvent::List ptrs;
-    for (int i = 0, count = objList.count();  i < count;  ++i) {
+    const int count = objList.count();
+    ptrs.reserve(count);
+    for (int i = 0; i < count; ++i) {
         ptrs += &objList[i];
     }
     return ptrs;
