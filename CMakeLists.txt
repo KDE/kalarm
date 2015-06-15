@@ -152,7 +152,6 @@ KF5::AkonadiContact
 KF5::Holidays
 KF5::Codecs
 kdepim
-KF5::KCMUtils
 Phonon::phonon4qt5
 KF5::Auth
 KF5::DBusAddons
