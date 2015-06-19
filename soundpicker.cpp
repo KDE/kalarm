@@ -30,7 +30,6 @@
 
 #include <QIcon>
 #include <KLocalizedString>
-#include <kfiledialog.h>
 #include <kiconloader.h>
 #include <phonon/backendcapabilities.h>
 
