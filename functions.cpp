@@ -1433,7 +1433,7 @@ bool Private::startKMailMinimised()
     // We are not using KApplication, so the env remained set.
     KStartupInfoId id = KStartupInfo::currentStartupIdEnv();
     KProcess* proc = new KProcess;
-    (*proc) << QLatin1String("kmail");
+    (*proc) << QStringLiteral("kmail");
     int pid = proc->startDetached();
     if (!pid)
     {

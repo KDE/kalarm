@@ -59,7 +59,7 @@ bool ShellProcess::start(OpenMode openMode)
     connect(this, SIGNAL(readyReadStandardOutput()), SLOT(stdoutReady()));
     connect(this, SIGNAL(readyReadStandardError()), SLOT(stderrReady()));
     QStringList args;
-    args << QLatin1String("-c") << mCommand;
+    args << QStringLiteral("-c") << mCommand;
     QProcess::start(QLatin1String(shellName()), args, openMode);
     if (!waitForStarted())
     {

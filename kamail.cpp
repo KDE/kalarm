@@ -166,7 +166,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         if (!transport)
         {
             QStringList paths;
-            paths << QLatin1String("/sbin") << QLatin1String("/usr/sbin") << QLatin1String("/usr/lib");
+            paths << QStringLiteral("/sbin") << QStringLiteral("/usr/sbin") << QStringLiteral("/usr/lib");
             QString command = QStandardPaths::findExecutable(QLatin1String("sendmail"), paths);
             transport = manager->createTransport();
             transport->setName(QLatin1String("sendmail"));
