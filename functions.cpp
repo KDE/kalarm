@@ -1612,7 +1612,7 @@ FileType fileType(const KMimeType::Ptr& mimetype)
         return TextApplication;
     if (mimetype->is(QLatin1String("text/plain")))
         return TextPlain;
-    if (mimetype->name().startsWith(QLatin1String("image/")))
+    if (mimetype->name().startsWith(QStringLiteral("image/")))
         return Image;
     return Unknown;
 }
