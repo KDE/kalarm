@@ -472,10 +472,10 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
         if (mXtermFirst < 0)
             mXtermFirst = mXtermCount;   // note the id of the first button
         cmd.replace(QLatin1String("%t"), KComponentData::mainComponent().aboutData()->programName());
-        cmd.replace(QLatin1String("%c"), QLatin1String("<command>"));
-        cmd.replace(QLatin1String("%w"), QLatin1String("<command; sleep>"));
-        cmd.replace(QLatin1String("%C"), QLatin1String("[command]"));
-        cmd.replace(QLatin1String("%W"), QLatin1String("[command; sleep]"));
+        cmd.replace(QLatin1String("%c"), QStringLiteral("<command>"));
+        cmd.replace(QLatin1String("%w"), QStringLiteral("<command; sleep>"));
+        cmd.replace(QLatin1String("%C"), QStringLiteral("[command]"));
+        cmd.replace(QLatin1String("%W"), QStringLiteral("[command; sleep]"));
         radio->setWhatsThis(
                 xi18nc("@info:whatsthis", "Check to execute command alarms in a terminal window by <icode>%1</icode>", cmd));
         grid->addWidget(radio, (row = index/3), index % 3, Qt::AlignLeft);

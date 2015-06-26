@@ -287,7 +287,7 @@ void CalendarMigrator::createDefaultResources()
     CalendarCreator* creator;
     if (!(mExistingAlarmTypes & CalEvent::ACTIVE))
     {
-        creator = new CalendarCreator(CalEvent::ACTIVE, QLatin1String("calendar.ics"), i18nc("@info", "Active Alarms"));
+        creator = new CalendarCreator(CalEvent::ACTIVE, QStringLiteral("calendar.ics"), i18nc("@info", "Active Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
@@ -295,7 +295,7 @@ void CalendarMigrator::createDefaultResources()
     }
     if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
     {
-        creator = new CalendarCreator(CalEvent::ARCHIVED, QLatin1String("expired.ics"), i18nc("@info", "Archived Alarms"));
+        creator = new CalendarCreator(CalEvent::ARCHIVED, QStringLiteral("expired.ics"), i18nc("@info", "Archived Alarms"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
@@ -303,7 +303,7 @@ void CalendarMigrator::createDefaultResources()
     }
     if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
     {
-        creator = new CalendarCreator(CalEvent::TEMPLATE, QLatin1String("template.ics"), i18nc("@info", "Alarm Templates"));
+        creator = new CalendarCreator(CalEvent::TEMPLATE, QStringLiteral("template.ics"), i18nc("@info", "Alarm Templates"));
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
@@ -560,7 +560,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
         qCCritical(KALARM_LOG) << "Invalid resource type:" << resourceType;
         return;
     }
-    mPath = config.readPathEntry(pathKey, QLatin1String(""));
+    mPath = config.readPathEntry(pathKey, QStringLiteral(""));
     switch (config.readEntry("AlarmType", (int)0))
     {
         case 1:  mAlarmType = CalEvent::ACTIVE;  break;

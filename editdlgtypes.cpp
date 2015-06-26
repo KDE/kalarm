@@ -1232,7 +1232,7 @@ void EditEmailAlarmDlg::setEmailFields(uint fromID, const KCalCore::Person::List
     if (fromID)
         mEmailFromList->setCurrentIdentity(fromID);
     if (!addresses.isEmpty())
-        mEmailToEdit->setText(KAEvent::joinEmailAddresses(addresses, QLatin1String(", ")));
+        mEmailToEdit->setText(KAEvent::joinEmailAddresses(addresses, QStringLiteral(", ")));
     if (!subject.isEmpty())
         mEmailSubjectEdit->setText(subject);
     if (!attachments.isEmpty())
@@ -1396,9 +1396,9 @@ void EditEmailAlarmDlg::slotTrySuccess()
 {
     disconnect(theApp(), SIGNAL(execAlarmSuccess()), this, SLOT(slotTrySuccess()));
     QString msg;
-    QString to = KAEvent::joinEmailAddresses(mEmailAddresses, QLatin1String("<nl/>"));
-    to.replace(QLatin1Char('<'), QLatin1String("&lt;"));
-    to.replace(QLatin1Char('>'), QLatin1String("&gt;"));
+    QString to = KAEvent::joinEmailAddresses(mEmailAddresses, QStringLiteral("<nl/>"));
+    to.replace(QLatin1Char('<'), QStringLiteral("&lt;"));
+    to.replace(QLatin1Char('>'), QStringLiteral("&gt;"));
     if (mEmailBcc->isChecked())
         msg = QLatin1String("<qt>") + xi18nc("@info", "Email sent to:<nl/>%1<nl/>Bcc: <email>%2</email>",
                     to, Preferences::emailBccAddress()) + QLatin1String("</qt>");

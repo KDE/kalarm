@@ -1895,7 +1895,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
         return status;
     QList<QVariant> args;
     args << iCal;
-    QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QLatin1String("addIncidence"), args);
+    QDBusReply<bool> reply = korgInterface->callWithArgumentList(QDBus::Block, QStringLiteral("addIncidence"), args);
     if (!reply.isValid())
     {
         if (reply.error().type() == QDBusError::UnknownObject)
@@ -1947,7 +1947,7 @@ KAlarm::UpdateResult runKOrganizer()
     // If Kontact is running, there is a load() method which needs to be called to
     // load KOrganizer into Kontact. But if KOrganizer is running independently,
     // the load() method doesn't exist.
-    QDBusInterface iface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_LOAD_PATH), QLatin1String("org.kde.PIMUniqueApplication"));
+    QDBusInterface iface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_LOAD_PATH), QStringLiteral("org.kde.PIMUniqueApplication"));
     if (!iface.isValid())
     {
         status.set(KAlarm::UPDATE_KORG_ERR, iface.lastError().message());

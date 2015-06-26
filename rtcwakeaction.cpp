@@ -86,7 +86,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
         case 0:
             return ActionReply::SuccessType;
         case -2:
-            errmsg = xi18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QLatin1String("rtcwake"));
+            errmsg = xi18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QStringLiteral("rtcwake"));
             break;
         default:
             errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(QLatin1String(" ")), result);

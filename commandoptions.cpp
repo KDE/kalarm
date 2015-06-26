@@ -184,7 +184,7 @@ CommandOptions::CommandOptions()
         {
             QString addr = params[i];
             if (!KAMail::checkAddress(addr))
-                setError(xi18nc("@info:shell", "<icode>%1</icode>: invalid email address", QLatin1String("--mail")));
+                setError(xi18nc("@info:shell", "<icode>%1</icode>: invalid email address", QStringLiteral("--mail")));
             KCalCore::Person::Ptr person(new KCalCore::Person(QString(), addr));
             mAddressees += person;
         }
@@ -233,7 +233,7 @@ CommandOptions::CommandOptions()
                 // Background colour is specified
                 QString colourText = mArgs->getOption("color");
                 if (colourText[0] == QLatin1Char('0') && colourText[1].toLower() == QLatin1Char('x'))
-                    colourText.replace(0, 2, QLatin1String("#"));
+                    colourText.replace(0, 2, QStringLiteral("#"));
                 mBgColour.setNamedColor(colourText);
                 if (!mBgColour.isValid())
                     setErrorParameter("--color");
@@ -243,7 +243,7 @@ CommandOptions::CommandOptions()
                 // Foreground colour is specified
                 QString colourText = mArgs->getOption("colorfg");
                 if (colourText[0] == QLatin1Char('0') && colourText[1].toLower() == QLatin1Char('x'))
-                    colourText.replace(0, 2, QLatin1String("#"));
+                    colourText.replace(0, 2, QStringLiteral("#"));
                 mFgColour.setNamedColor(colourText);
                 if (!mFgColour.isValid())
                     setErrorParameter("--colorfg");
@@ -297,11 +297,11 @@ CommandOptions::CommandOptions()
                     if (!ok)
                         setErrorParameter("--until");
                     else if (mAlarmTime.isDateOnly()  &&  !endTime.isDateOnly())
-                        setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", QLatin1String("--until")));
+                        setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", QStringLiteral("--until")));
                     if (!mAlarmTime.isDateOnly()  &&  endTime.isDateOnly())
                         endTime.setTime(QTime(23,59,59));
                     if (endTime < mAlarmTime)
-                        setError(xi18nc("@info:shell", "<icode>%1</icode> earlier than <icode>%2</icode>", QLatin1String("--until"), QLatin1String("--time")));
+                        setError(xi18nc("@info:shell", "<icode>%1</icode> earlier than <icode>%2</icode>", QStringLiteral("--until"), QStringLiteral("--time")));
                 }
                 else
                     count = -1;
@@ -312,7 +312,7 @@ CommandOptions::CommandOptions()
                 if (!convInterval(mArgs->getOption("interval").toLocal8Bit(), recurType, interval, !haveRecurrence))
                     setErrorParameter("--interval");
                 else if (mAlarmTime.isDateOnly()  &&  recurType == KARecurrence::MINUTELY)
-                    setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", QLatin1String("--interval")));
+                    setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", QStringLiteral("--interval")));
 
                 if (haveRecurrence)
                 {
@@ -322,7 +322,7 @@ CommandOptions::CommandOptions()
                         int longestInterval = mRecurrence->longestInterval();
                         if (count * interval > longestInterval)
                             setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is longer than <icode>%3</icode> interval",
-                                           QLatin1String("--interval"), QLatin1String("--repeat"), QLatin1String("--recurrence")));
+                                           QLatin1String("--interval"), QStringLiteral("--repeat"), QStringLiteral("--recurrence")));
                         mRepeatCount    = count;
                         mRepeatInterval = interval;
                     }
@@ -371,7 +371,7 @@ CommandOptions::CommandOptions()
                 if (mArgs->isSet("beep"))
                     setErrorIncompatible("--beep", "--speak");
                 else if (!theApp()->speechEnabled())
-                    setError(xi18nc("@info:shell", "<icode>%1</icode> requires speech synthesis to be configured using Jovie", QLatin1String("--speak")));
+                    setError(xi18nc("@info:shell", "<icode>%1</icode> requires speech synthesis to be configured using Jovie", QStringLiteral("--speak")));
             }
             bool onceOnly = mArgs->isSet("reminder-once");
             if (mArgs->isSet("reminder")  ||  onceOnly)

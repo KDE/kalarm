@@ -622,8 +622,8 @@ QString KAMail::getMailBody(quint32 serialNumber)
 #ifdef __GNUC__
 #warning Set correct DBus interface/object for kmail
 #endif
-    QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QLatin1String("KMailIface"));
-    QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QLatin1String("getDecodedBodyPart"), args);
+    QDBusInterface iface(KMAIL_DBUS_SERVICE, QString(), QStringLiteral("KMailIface"));
+    QDBusReply<QString> reply = iface.callWithArgumentList(QDBus::Block, QStringLiteral("getDecodedBodyPart"), args);
     if (!reply.isValid())
     {
         qCCritical(KALARM_LOG) << "D-Bus call failed:" << reply.error().message();

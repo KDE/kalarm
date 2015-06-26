@@ -754,7 +754,7 @@ void MainWindow::slotDelete(bool force)
         if (KAMessageBox::warningContinueCancel(this, i18ncp("@info", "Do you really want to delete the selected alarm?",
                                                              "Do you really want to delete the %1 selected alarms?", n),
                                                 i18ncp("@title:window", "Delete Alarm", "Delete Alarms", n),
-                                                KGuiItem(i18nc("@action:button", "&Delete"), QLatin1String("edit-delete")),
+                                                KGuiItem(i18nc("@action:button", "&Delete"), QStringLiteral("edit-delete")),
                                                 KStandardGuiItem::cancel(),
                                                 Preferences::CONFIRM_ALARM_DELETION)
             != KMessageBox::Continue)
