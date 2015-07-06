@@ -1748,7 +1748,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
         return fileDlg ? QLatin1String("") : QString();  // return null only if dialog was deleted
     KUrl url = fileDlg->selectedUrl();
     if (url.isEmpty())
-        return QLatin1String("");   // return empty, non-null string
+        return QStringLiteral("");   // return empty, non-null string
     defaultDir = url.isLocalFile() ? url.upUrl().toLocalFile() : url.directory();
     return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
 }
