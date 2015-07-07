@@ -1269,7 +1269,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     KUrl::List         files;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
 #ifndef NDEBUG
-    QString fmts = data->formats().join(QLatin1String(", "));
+    QString fmts = data->formats().join(QStringLiteral(", "));
     qCDebug(KALARM_LOG) << fmts;
 #endif
 
