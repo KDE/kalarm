@@ -41,7 +41,10 @@ using namespace KCalCore;
 
 #include <stdlib.h>
 
-static const char* REQUEST_DBUS_OBJECT = "/kalarm";   // D-Bus object path of KAlarm's request interface
+namespace
+{
+const QString REQUEST_DBUS_OBJECT("/kalarm");   // D-Bus object path of KAlarm's request interface
+}
 
 
 /*=============================================================================
@@ -52,7 +55,7 @@ DBusHandler::DBusHandler()
 {
     qCDebug(KALARM_LOG);
     new KalarmAdaptor(this);
-    QDBusConnection::sessionBus().registerObject(QLatin1String(REQUEST_DBUS_OBJECT), this);
+    QDBusConnection::sessionBus().registerObject(REQUEST_DBUS_OBJECT, this);
 }
 
 

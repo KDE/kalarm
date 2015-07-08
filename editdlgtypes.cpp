@@ -1181,7 +1181,7 @@ void EditEmailAlarmDlg::type_initValues(const KAEvent* event)
     {
         // Set the values to those for the specified event
         mEmailAttachList->addItems(event->emailAttachments());
-        mEmailToEdit->setText(event->emailAddresses(QLatin1String(", ")));
+        mEmailToEdit->setText(event->emailAddresses(QStringLiteral(", ")));
         mEmailSubjectEdit->setText(event->emailSubject());
         mEmailBcc->setChecked(event->emailBcc());
         if (mEmailFromList)

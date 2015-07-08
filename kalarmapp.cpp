@@ -165,7 +165,7 @@ KAlarmApp::KAlarmApp()
     }
 
     // Check if the speech synthesis daemon is installed
-    mSpeechEnabled = (KServiceTypeTrader::self()->query(QLatin1String("DBUS/Text-to-Speech"), QStringLiteral("Name == 'KTTSD'")).count() > 0);
+    mSpeechEnabled = (KServiceTypeTrader::self()->query(QStringLiteral("DBUS/Text-to-Speech"), QStringLiteral("Name == 'KTTSD'")).count() > 0);
     if (!mSpeechEnabled) { qCDebug(KALARM_LOG) << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
     const QString korg = QLatin1String("korganizer");
@@ -269,8 +269,8 @@ bool KAlarmApp::restoreSession()
     MainWindow* trayParent = Q_NULLPTR;
     for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
     {
-        QString type = KMainWindow::classNameOfToplevel(i);
-        if (type == QLatin1String("MainWindow"))
+        const QString type = KMainWindow::classNameOfToplevel(i);
+        if (type == QStringLiteral("MainWindow"))
         {
             MainWindow* win = MainWindow::create(true);
             win->restore(i, false);
@@ -279,7 +279,7 @@ bool KAlarmApp::restoreSession()
             else
                 win->show();
         }
-        else if (type == QLatin1String("MessageWin"))
+        else if (type == QStringLiteral("MessageWin"))
         {
             MessageWin* win = new MessageWin;
             win->restore(i, false);
@@ -763,7 +763,7 @@ void KAlarmApp::checkNextDueAlarm()
     KDateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
     KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
     qint64 interval = now.secsTo_long(nextDt);
-    qCDebug(KALARM_LOG) << "now:" << qPrintable(now.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QLatin1String("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
+    qCDebug(KALARM_LOG) << "now:" << qPrintable(now.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
     if (interval <= 0)
     {
         // Queue the alarm
@@ -1231,7 +1231,7 @@ QStringList KAlarmApp::scheduledAlarmList()
         AkonadiModel::instance()->refresh(c);
         QString text(c.resource() + QLatin1String(":"));
         text += event->id() + QLatin1Char(' ')
-             +  dateTime.toString(QLatin1String("%Y%m%dT%H%M "))
+             +  dateTime.toString(QStringLiteral("%Y%m%dT%H%M "))
              +  AlarmText::summary(*event, 1);
         alarms << text;
     }
@@ -1351,7 +1351,7 @@ bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
 QString KAlarmApp::dbusList()
 {
     qCDebug(KALARM_LOG);
-    return scheduledAlarmList().join(QLatin1String("\n")) + QLatin1Char('\n');
+    return scheduledAlarmList().join(QStringLiteral("\n")) + QLatin1Char('\n');
 }
 
 /******************************************************************************
@@ -1390,7 +1390,7 @@ bool KAlarmApp::handleEvent(const EventId& id, EventFunc function, bool checkDup
         case EVENT_HANDLE:     // handle it if it's due
         {
             KDateTime now = KDateTime::currentUtcDateTime();
-            qCDebug(KALARM_LOG) << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString(QLatin1String("yyyy-MM-dd hh:mm"))) << "UTC";
+            qCDebug(KALARM_LOG) << eventID << "," << (function==EVENT_TRIGGER?"TRIGGER:":"HANDLE:") << qPrintable(now.dateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm"))) << "UTC";
             bool updateCalAndDisplay = false;
             bool alarmToExecuteValid = false;
             KAAlarm alarmToExecute;
@@ -1877,7 +1877,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         }
         case KAAlarm::EMAIL:
         {
-            qCDebug(KALARM_LOG) << "EMAIL to:" << event.emailAddresses(QLatin1String(","));
+            qCDebug(KALARM_LOG) << "EMAIL to:" << event.emailAddresses(QStringLiteral(","));
             QStringList errmsgs;
             KAMail::JobData data(event, alarm, reschedule, (reschedule || allowDefer));
             data.queued = true;
@@ -2006,7 +2006,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
         // Use ShellProcess, which automatically checks whether the user is
         // authorised to run shell commands.
         proc = new ShellProcess(cmd);
-        proc->setEnv(QLatin1String("KALARM_UID"), event.id(), true);
+        proc->setEnv(QStringLiteral("KALARM_UID"), event.id(), true);
         proc->setOutputChannelMode(KProcess::MergedChannels);   // combine stdout & stderr
         connect(proc, &ShellProcess::shellExited, this, &KAlarmApp::slotCommandExited);
         if ((flags & ProcData::DISP_OUTPUT)  &&  receiver && slot)
@@ -2285,7 +2285,7 @@ OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
         // kttsd is not running, so start it
         delete mKSpeech;
         mKSpeech = 0;
-        if (KToolInvocation::startServiceByDesktopName(QLatin1String("kttsd"), QStringList(), &error))
+        if (KToolInvocation::startServiceByDesktopName(QStringLiteral("kttsd"), QStringList(), &error))
         {
             qCDebug(KALARM_LOG) << "Failed to start kttsd:" << error;
             return 0;

@@ -1394,7 +1394,7 @@ QString runKMail(bool minimise)
         QString errmsg;
         if (minimise  &&  Private::startKMailMinimised())
             return QString();
-        if (KToolInvocation::startServiceByDesktopName(QLatin1String("kmail"), QString(), &errmsg))
+        if (KToolInvocation::startServiceByDesktopName(QStringLiteral("kmail"), QString(), &errmsg))
         {
             qCCritical(KALARM_LOG) << "Couldn't start KMail (" << errmsg << ")";
             return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
@@ -1606,11 +1606,11 @@ void writeConfigWindowSize(const char* window, const QSize& size, int splitterWi
 */
 FileType fileType(const KMimeType::Ptr& mimetype)
 {
-    if (mimetype->is(QLatin1String("text/html")))
+    if (mimetype->is(QStringLiteral("text/html")))
         return TextFormatted;
-    if (mimetype->is(QLatin1String("application/x-executable")))
+    if (mimetype->is(QStringLiteral("application/x-executable")))
         return TextApplication;
-    if (mimetype->is(QLatin1String("text/plain")))
+    if (mimetype->is(QStringLiteral("text/plain")))
         return TextPlain;
     if (mimetype->name().startsWith(QStringLiteral("image/")))
         return Image;
@@ -1627,7 +1627,7 @@ FileErr checkFileExists(QString& filename, KUrl& url)
     url = KUrl();
     FileErr err = FileErr_None;
     QString file = filename;
-    QRegExp f(QLatin1String("^file:/+"));
+    QRegExp f(QStringLiteral("^file:/+"));
     if (f.indexIn(file) >= 0)
         file = file.mid(f.matchedLength() - 1);
     // Convert any relative file path to absolute
@@ -1675,7 +1675,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
     {
         // If file is a local file, remove "file://" from name
         QString file = filename;
-        QRegExp f(QLatin1String("^file:/+"));
+        QRegExp f(QStringLiteral("^file:/+"));
         if (f.indexIn(file) >= 0)
             file = file.mid(f.matchedLength() - 1);
 
@@ -1712,7 +1712,7 @@ bool showFileErrMessage(const QString& filename, FileErr err, FileErr blankError
 */
 QString pathOrUrl(const QString& url)
 {
-    static const QRegExp localfile(QLatin1String("^file:/+"));
+    static const QRegExp localfile(QStringLiteral("^file:/+"));
     return (localfile.indexIn(url) >= 0) ? url.mid(localfile.matchedLength() - 1) : url;
 }
 
@@ -1732,7 +1732,7 @@ QString pathOrUrl(const QString& url)
 QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
                    const QString& filter, KFile::Modes mode, QWidget* parent)
 {
-    QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
+    QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QStringLiteral("/[^/]*$")))
                        : !defaultDir.isEmpty()  ? defaultDir
                        :                          QDir::homePath();
     // Use AutoQPointer to guard against crash on application exit while
@@ -1745,7 +1745,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     if (!initialFile.isEmpty())
         fileDlg->setSelection(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)
-        return fileDlg ? QLatin1String("") : QString();  // return null only if dialog was deleted
+        return fileDlg ? QStringLiteral("") : QString();  // return null only if dialog was deleted
     KUrl url = fileDlg->selectedUrl();
     if (url.isEmpty())
         return QStringLiteral("");   // return empty, non-null string
@@ -1799,7 +1799,7 @@ void setTestModeConditions()
 void setSimulatedSystemTime(const KDateTime& dt)
 {
     KDateTime::setSimulatedSystemTime(dt);
-    qCDebug(KALARM_LOG) << "New time =" << qPrintable(KDateTime::currentLocalDateTime().toString(QLatin1String("%Y-%m-%d %H:%M %:Z")));
+    qCDebug(KALARM_LOG) << "New time =" << qPrintable(KDateTime::currentLocalDateTime().toString(QStringLiteral("%Y-%m-%d %H:%M %:Z")));
 }
 #endif
 
@@ -1869,7 +1869,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
                          ? Identities::identityManager()->identityForUoid(event.emailFromId()).fullEmailAddr()
                          : Preferences::emailAddress();
             AlarmText atext;
-            atext.setEmail(event.emailAddresses(QLatin1String(", ")), from, QString(), QString(), event.emailSubject(), QString());
+            atext.setEmail(event.emailAddresses(QStringLiteral(", ")), from, QString(), QString(), event.emailSubject(), QString());
             kcalEvent->setSummary(atext.displayText());
             userEmail = from;
             break;
@@ -1937,7 +1937,7 @@ KAlarm::UpdateResult runKOrganizer()
 {
     KAlarm::UpdateResult status;
     QString error, dbusService;
-    int result = KDBusServiceStarter::self()->findServiceFor(QLatin1String("DBUS/Organizer"), QString(), &error, &dbusService);
+    int result = KDBusServiceStarter::self()->findServiceFor(QStringLiteral("DBUS/Organizer"), QString(), &error, &dbusService);
     if (result)
     {
         status.set(KAlarm::UPDATE_KORG_ERRINIT, error);
@@ -1947,14 +1947,14 @@ KAlarm::UpdateResult runKOrganizer()
     // If Kontact is running, there is a load() method which needs to be called to
     // load KOrganizer into Kontact. But if KOrganizer is running independently,
     // the load() method doesn't exist.
-    QDBusInterface iface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_LOAD_PATH), QStringLiteral("org.kde.PIMUniqueApplication"));
+    QDBusInterface iface(KORG_DBUS_SERVICE, QStringLiteral(KORG_DBUS_LOAD_PATH), QStringLiteral("org.kde.PIMUniqueApplication"));
     if (!iface.isValid())
     {
         status.set(KAlarm::UPDATE_KORG_ERR, iface.lastError().message());
         qCWarning(KALARM_LOG) << "Unable to access " KORG_DBUS_LOAD_PATH " D-Bus interface:" << status.message;
         return status;
     }
-    QDBusReply<bool> reply = iface.call(QLatin1String("load"));
+    QDBusReply<bool> reply = iface.call(QStringLiteral("load"));
     if ((!reply.isValid() || !reply.value())
     &&  iface.lastError().type() != QDBusError::UnknownMethod)
     {
@@ -1968,7 +1968,7 @@ KAlarm::UpdateResult runKOrganizer()
     if (!korgInterface  ||  !korgInterface->isValid())
     {
         delete korgInterface;
-        korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, QLatin1String(KORG_DBUS_PATH), KORG_DBUS_IFACE);
+        korgInterface = new QDBusInterface(KORG_DBUS_SERVICE, QStringLiteral(KORG_DBUS_PATH), KORG_DBUS_IFACE);
         if (!korgInterface->isValid())
         {
             status.set(KAlarm::UPDATE_KORG_ERRSTART, korgInterface->lastError().message());

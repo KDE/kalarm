@@ -58,7 +58,7 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
             if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
             {
                 QString fmt = locale->timeFormat();
-                int i = fmt.indexOf(QRegExp(QLatin1String("%[kl]")));   // check if leading zeroes are omitted
+                int i = fmt.indexOf(QRegExp(QStringLiteral("%[kl]")));   // check if leading zeroes are omitted
                 if (i >= 0  &&  i == fmt.indexOf(QLatin1Char('%')))   // and whether the hour is first
                     mTimeHourPos = i;             // yes, so need to align
             }
@@ -235,12 +235,12 @@ KDateTime AlarmTime::applyTimeZone(const QString& tzstring, const QDate& date, c
 {
     bool error = false;
     KDateTime::Spec spec = KDateTime::LocalZone;
-    QString zone = tzstring.trimmed();
+    const QString zone = tzstring.trimmed();
     if (!zone.isEmpty())
     {
-        if (zone == QLatin1String("Clock"))
+        if (zone == QStringLiteral("Clock"))
             spec = KDateTime::ClockTime;
-        else if (zone == QLatin1String("UTC"))
+        else if (zone == QStringLiteral("UTC"))
             spec = KDateTime::UTC;
         else
         {

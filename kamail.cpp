@@ -145,7 +145,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         return -1;
     }
     jobdata.bcc  = (jobdata.event.emailBcc() ? Preferences::emailBccAddress() : QString());
-    qCDebug(KALARM_LOG) << "To:" << jobdata.event.emailAddresses(QLatin1String(","))
+    qCDebug(KALARM_LOG) << "To:" << jobdata.event.emailAddresses(QStringLiteral(","))
                   << endl << "Subject:" << jobdata.event.emailSubject();
 
     MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
@@ -169,7 +169,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             paths << QStringLiteral("/sbin") << QStringLiteral("/usr/sbin") << QStringLiteral("/usr/lib");
             QString command = QStandardPaths::findExecutable(QStringLiteral("sendmail"), paths);
             transport = manager->createTransport();
-            transport->setName(QLatin1String("sendmail"));
+            transport->setName(QStringLiteral("sendmail"));
             transport->setType(MailTransport::Transport::EnumType::Sendmail);
             transport->setHost(command);
             transport->setRequiresAuthentication(false);
@@ -209,7 +209,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     // MessageQueueJob email addresses must be pure, i.e. without display name. Note
     // that display names are included in the actual headers set up by initHeaders().
     mailjob->addressAttribute().setFrom(extractEmailAndNormalize(jobdata.from));
-    mailjob->addressAttribute().setTo(extractEmailsAndNormalize(jobdata.event.emailAddresses(QLatin1String(","))));
+    mailjob->addressAttribute().setTo(extractEmailsAndNormalize(jobdata.event.emailAddresses(QStringLiteral(","))));
     if (!jobdata.bcc.isEmpty())
         mailjob->addressAttribute().setBcc(extractEmailsAndNormalize(jobdata.bcc));
     MailTransport::SentBehaviourAttribute::SentBehaviour sentAction =
@@ -423,8 +423,8 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 void KAMail::notifyQueued(const KAEvent& event)
 {
     KMime::Types::Address addr;
-    QString localhost = QLatin1String("localhost");
-    QString hostname  = QHostInfo::localHostName();
+    const QString localhost = QLatin1String("localhost");
+    const QString hostname  = QHostInfo::localHostName();
     KCalCore::Person::List addresses = event.emailAddressees();
     for (int i = 0, end = addresses.count();  i < end;  ++i)
     {

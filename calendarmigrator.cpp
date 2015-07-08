@@ -1,7 +1,7 @@
 /*
  *  calendarmigrator.cpp  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2015 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,6 +48,11 @@
 using namespace Akonadi;
 using namespace KAlarmCal;
 
+namespace
+{
+const QString KALARM_RESOURCE("akonadi_kalarm_resource");
+const QString KALARM_DIR_RESOURCE("akonadi_kalarm_dir_resource");
+}
 
 // Creates, or migrates from KResources, a single alarm calendar
 class CalendarCreator : public QObject
@@ -186,8 +191,7 @@ void CalendarMigrator::migrateOrCreate()
     foreach (const AgentInstance& agent, agents)
     {
         const QString type = agent.type().identifier();
-        if (type == QLatin1String("akonadi_kalarm_resource")
-        ||  type == QLatin1String("akonadi_kalarm_dir_resource"))
+        if (type == KALARM_RESOURCE  ||  type == KALARM_DIR_RESOURCE)
         {
             // Fetch the resource's collection to determine its alarm types
             CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
@@ -203,7 +207,7 @@ void CalendarMigrator::migrateOrCreate()
     {
         // There are no Akonadi resources, so migrate any KResources alarm
         // calendars from pre-Akonadi versions of KAlarm.
-        const QString configFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QLatin1String("/kresources/alarms/stdrc");
+        const QString configFile = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + QStringLiteral("/kresources/alarms/stdrc");
         const KConfig config(configFile, KConfig::SimpleConfig);
 
         // Fetch all the KResource identifiers which are actually in use
@@ -215,15 +219,15 @@ void CalendarMigrator::migrateOrCreate()
         CalendarCreator* creator;
         foreach (const QString& id, keys)
         {
-            const KConfigGroup configGroup = config.group(QLatin1String("Resource_") + id);
+            const KConfigGroup configGroup = config.group(QStringLiteral("Resource_") + id);
             const QString resourceType = configGroup.readEntry("ResourceType", QString());
             QString agentType;
-            if (resourceType == QLatin1String("file"))
-                agentType = QLatin1String("akonadi_kalarm_resource");
-            else if (resourceType == QLatin1String("dir"))
-                agentType = QLatin1String("akonadi_kalarm_dir_resource");
-            else if (resourceType == QLatin1String("remote"))
-                agentType = QLatin1String("akonadi_kalarm_resource");
+            if (resourceType == QStringLiteral("file"))
+                agentType = KALARM_RESOURCE;
+            else if (resourceType == QStringLiteral("dir"))
+                agentType = KALARM_DIR_RESOURCE;
+            else if (resourceType == QStringLiteral("remote"))
+                agentType = KALARM_RESOURCE;
             else
                 continue;   // unknown resource type - can't convert
 
@@ -291,7 +295,7 @@ void CalendarMigrator::createDefaultResources()
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
-        creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
+        creator->createAgent(KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
     {
@@ -299,7 +303,7 @@ void CalendarMigrator::createDefaultResources()
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
-        creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
+        creator->createAgent(KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
     {
@@ -307,7 +311,7 @@ void CalendarMigrator::createDefaultResources()
         connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
         connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
         mCalendarsPending << creator;
-        creator->createAgent(QLatin1String("akonadi_kalarm_resource"), this);
+        creator->createAgent(KALARM_RESOURCE, this);
     }
 
     if (mCalendarsPending.isEmpty())
@@ -380,9 +384,9 @@ void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool 
     const AgentInstance agent = AgentManager::self()->instance(collection.resource());
     const QString id = agent.type().identifier();
     bool dirResource;
-    if (id == QLatin1String("akonadi_kalarm_resource"))
+    if (id == KALARM_RESOURCE)
         dirResource = false;
-    else if (id == QLatin1String("akonadi_kalarm_dir_resource"))
+    else if (id == KALARM_DIR_RESOURCE)
         dirResource = true;
     else
     {
@@ -517,8 +521,8 @@ template <class Interface> bool CalendarMigrator::updateStorageFormat(const Agen
 */
 template <class Interface> Interface* CalendarMigrator::getAgentInterface(const AgentInstance& agent, QString& errorMessage, QObject* parent)
 {
-    Interface* iface = new Interface(QLatin1String("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
-              QLatin1String("/Settings"), QDBusConnection::sessionBus(), parent);
+    Interface* iface = new Interface(QStringLiteral("org.freedesktop.Akonadi.Resource.") + agent.identifier(),
+              QStringLiteral("/Settings"), QDBusConnection::sessionBus(), parent);
     if (!iface->isValid())
     {
         errorMessage = iface->lastError().message();
@@ -540,17 +544,17 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
 {
     // Read the resource configuration parameters from the config
     const char* pathKey = Q_NULLPTR;
-    if (resourceType == QLatin1String("file"))
+    if (resourceType == QStringLiteral("file"))
     {
         mResourceType = LocalFile;
         pathKey = "CalendarURL";
     }
-    else if (resourceType == QLatin1String("dir"))
+    else if (resourceType == QStringLiteral("dir"))
     {
         mResourceType = LocalDir;
         pathKey = "CalendarURL";
     }
-    else if (resourceType == QLatin1String("remote"))
+    else if (resourceType == QStringLiteral("remote"))
     {
         mResourceType = RemoteFile;
         pathKey = "DownloadUrl";
@@ -774,7 +778,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     mCollectionId = collection.id();
     collection.setContentMimeTypes(CalEvent::mimeTypes(mAlarmType));
     EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
-    dattr->setIconName(QLatin1String("kalarm"));
+    dattr->setIconName(QStringLiteral("kalarm"));
     CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
     attr->setEnabled(mEnabled ? mAlarmType : CalEvent::EMPTY);
     if (mStandard)

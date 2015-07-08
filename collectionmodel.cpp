@@ -605,7 +605,7 @@ bool CollectionView::viewportEvent(QEvent* e)
             int i = toolTip.indexOf(QLatin1Char('@'));
             if (i > 0)
             {
-                int j = toolTip.indexOf(QRegExp(QLatin1String("<(nl|br)"), Qt::CaseInsensitive), i + 1);
+                int j = toolTip.indexOf(QRegExp(QStringLiteral("<(nl|br)"), Qt::CaseInsensitive), i + 1);
                 int k = toolTip.indexOf(QLatin1Char('@'), j);
                 const QString name = toolTip.mid(i + 1, j - i - 1);
                 value = model()->data(index, Qt::FontRole);
@@ -954,7 +954,7 @@ QString CollectionControlModel::typeListForDisplay(CalEvent::Types alarmTypes)
     if (alarmTypes & CalEvent::TEMPLATE)
         list += QLatin1String("<item>") + i18nc("@info", "Alarm Templates") + QLatin1String("</item>");
     if (!list.isEmpty())
-        list = QLatin1String("<list>") + list + QLatin1String("</list>");
+        list = QStringLiteral("<list>") + list + QStringLiteral("</list>");
     return list;
 }
 
