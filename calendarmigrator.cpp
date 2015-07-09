@@ -50,8 +50,8 @@ using namespace KAlarmCal;
 
 namespace
 {
-const QString KALARM_RESOURCE("akonadi_kalarm_resource");
-const QString KALARM_DIR_RESOURCE("akonadi_kalarm_dir_resource");
+const QString KALARM_RESOURCE(QStringLiteral("akonadi_kalarm_resource"));
+const QString KALARM_DIR_RESOURCE(QStringLiteral("akonadi_kalarm_dir_resource"));
 }
 
 // Creates, or migrates from KResources, a single alarm calendar

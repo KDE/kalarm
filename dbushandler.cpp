@@ -43,7 +43,7 @@ using namespace KCalCore;
 
 namespace
 {
-const QString REQUEST_DBUS_OBJECT("/kalarm");   // D-Bus object path of KAlarm's request interface
+const QString REQUEST_DBUS_OBJECT(QStringLiteral("/kalarm"));   // D-Bus object path of KAlarm's request interface
 }
 
 
