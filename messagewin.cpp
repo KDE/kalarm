@@ -97,8 +97,8 @@ static FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, Q
 #endif
 
 #include "kmailinterface.h"
-static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
-static const QLatin1String KMAIL_DBUS_PATH("/KMail");
+static const QString(QStringLiteral(KMAIL_DBUS_SERVICE("org.kde.kmail"));
+static const QString(QStringLiteral(KMAIL_DBUS_PATH("/KMail"));
 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
@@ -216,7 +216,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     qCDebug(KALARM_LOG) << (void*)this << "event" << mEventId;
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
-    setObjectName(QLatin1String("MessageWin"));    // used by LikeBack
+    setObjectName(QStringLiteral("MessageWin"));    // used by LikeBack
     if (alarm.type() & KAAlarm::REMINDER_ALARM)
     {
         if (event->reminderMinutes() < 0)
@@ -239,7 +239,7 @@ MessageWin::MessageWin(const KAEvent* event, const KAAlarm& alarm, int flags)
     }
     // Set to save settings automatically, but don't save window size.
     // File alarm window size is saved elsewhere.
-    setAutoSaveSettings(QLatin1String("MessageWin"), false);
+    setAutoSaveSettings(QStringLiteral("MessageWin"), false);
     mWindowList.append(this);
     if (event->autoClose())
         mCloseTime = alarm.dateTime().effectiveKDateTime().toUtc().dateTime().addSecs(event->lateCancel() * 60);
@@ -323,7 +323,7 @@ MessageWin::MessageWin(const KAEvent* event, const DateTime& alarmDateTime,
     qCDebug(KALARM_LOG) << "errmsg";
     setAttribute(static_cast<Qt::WidgetAttribute>(WidgetFlags));
     setWindowModality(Qt::WindowModal);
-    setObjectName(QLatin1String("ErrorWin"));    // used by LikeBack
+    setObjectName(QStringLiteral("ErrorWin"));    // used by LikeBack
     getWorkAreaAndModal();
     initView();
     mWindowList.append(this);
@@ -358,7 +358,7 @@ MessageWin::MessageWin()
     qCDebug(KALARM_LOG) << (void*)this << "restore";
     setAttribute(WidgetFlags);
     setWindowModality(Qt::WindowModal);
-    setObjectName(QLatin1String("RestoredMsgWin"));    // used by LikeBack
+    setObjectName(QStringLiteral("RestoredMsgWin"));    // used by LikeBack
     getWorkAreaAndModal();
     mWindowList.append(this);
 }
@@ -418,7 +418,7 @@ void MessageWin::initView()
             // start of the translated string, allowing for possible HTML tags
             // enclosing "Reminder".
             QString s = i18nc("@info", "Reminder");
-            QRegExp re(QLatin1String("^(<[^>]+>)*"));
+            QRegExp re(QStringLiteral("^(<[^>]+>)*"));
             re.indexIn(s);
             s.insert(re.matchedLength(), mTimeLabel->text() + QLatin1String("<br/>"));
             mTimeLabel->setText(s);
@@ -465,7 +465,7 @@ void MessageWin::initView()
                         view->setTextColor(mFgColour);
                         view->setCurrentFont(mFont);
                         KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                        if (mime->is(QLatin1String("application/octet-stream")))
+                        if (mime->is(QStringLiteral("application/octet-stream")))
                             mime = KMimeType::findByFileContent(tmpFile);
                         switch (KAlarm::fileType(mime))
                         {
@@ -603,7 +603,7 @@ void MessageWin::initView()
                 QLabel* label = new QLabel(i18nc("@info Email addressee", "To:"), frame);
                 label->setFixedSize(label->sizeHint());
                 grid->addWidget(label, 0, 0, Qt::AlignLeft);
-                label = new QLabel(mEvent.emailAddresses(QLatin1String("\n")), frame);
+                label = new QLabel(mEvent.emailAddresses(QStringLiteral("\n")), frame);
                 label->setFixedSize(label->sizeHint());
                 grid->addWidget(label, 0, 1, Qt::AlignLeft);
 
@@ -639,7 +639,7 @@ void MessageWin::initView()
         layout->addStretch();
         topLayout->addLayout(layout);
         QLabel* label = new QLabel(topWidget);
-        label->setPixmap(DesktopIcon(QLatin1String("dialog-error")));
+        label->setPixmap(DesktopIcon(QStringLiteral("dialog-error")));
         label->setFixedSize(label->sizeHint());
         layout->addWidget(label, 0, Qt::AlignRight);
         QVBoxLayout* vlayout = new QVBoxLayout();
@@ -702,7 +702,7 @@ void MessageWin::initView()
     if (!mAudioFile.isEmpty()  &&  (mVolume || mFadeVolume > 0))
     {
         // Silence button to stop sound repetition
-        const QPixmap pixmap = MainBarIcon(QLatin1String("media-playback-stop"));
+        const QPixmap pixmap = MainBarIcon(QStringLiteral("media-playback-stop"));
         mSilenceButton = new PushButton(topWidget);
         mSilenceButton->setIcon(pixmap);
         grid->addWidget(mSilenceButton, 0, gridIndex++, Qt::AlignHCenter);
@@ -716,7 +716,7 @@ void MessageWin::initView()
     if (mKMailSerialNumber)
     {
         // KMail button
-        const QPixmap pixmap = iconLoader.loadIcon(QLatin1String("internet-mail"), KIconLoader::MainToolbar);
+        const QPixmap pixmap = iconLoader.loadIcon(QStringLiteral("internet-mail"), KIconLoader::MainToolbar);
         mKMailButton = new PushButton(topWidget);
         mKMailButton->setIcon(pixmap);
         connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
@@ -933,7 +933,7 @@ void MessageWin::readProcessOutput(ShellProcess* proc)
         // Strip any trailing newline, to avoid showing trailing blank line
         // in message window.
         if (mCommandText->newLine())
-            mCommandText->append(QLatin1String("\n"));
+            mCommandText->append(QStringLiteral("\n"));
         const int nl = data.endsWith('\n') ? 1 : 0;
         mCommandText->setNewLine(nl);
         mCommandText->insertPlainText(QString::fromLocal8Bit(data.data(), data.length() - nl));
@@ -967,7 +967,7 @@ void MessageWin::saveProperties(KConfigGroup& config)
             config.writeEntry("DateOnly", mDateTime.isDateOnly());
             QString zone;
             if (mDateTime.isUtc())
-                zone = QLatin1String("UTC");
+                zone = QStringLiteral("UTC");
             else
             {
                 const KTimeZone tz = mDateTime.timeZone();
@@ -1025,7 +1025,7 @@ void MessageWin::readProperties(const KConfigGroup& config)
     const QString zone   = config.readEntry("TimeZone");
     if (zone.isEmpty())
         mDateTime = KDateTime(dt, KDateTime::ClockTime);
-    else if (zone == QLatin1String("UTC"))
+    else if (zone == QStringLiteral("UTC"))
     {
         dt.setTimeSpec(Qt::UTC);
         mDateTime = KDateTime(dt, KDateTime::UTC);
@@ -2149,7 +2149,7 @@ void MessageWin::checkDeferralLimit()
 void MessageWin::slotDefer()
 {
     mDeferDlg = new DeferAlarmDlg(KDateTime::currentDateTime(Preferences::timeZone()).addSecs(60), mDateTime.isDateOnly(), false, this);
-    mDeferDlg->setObjectName(QLatin1String("DeferDlg"));    // used by LikeBack
+    mDeferDlg->setObjectName(QStringLiteral("DeferDlg"));    // used by LikeBack
     mDeferDlg->setDeferMinutes(mDefaultDeferMinutes > 0 ? mDefaultDeferMinutes : Preferences::defaultDeferTime());
     mDeferDlg->setLimit(mEvent);
     if (!Preferences::modalMessages())

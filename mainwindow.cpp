@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -83,21 +83,24 @@ using namespace KCalUtils;
 
 using namespace KAlarmCal;
 
-static const QString UI_FILE     = QLatin1String("kalarmui.rc");
-static const char*   WINDOW_NAME = "MainWindow";
+namespace
+{
+const QString UI_FILE(QStringLiteral("kalarmui.rc"));
+const char*   WINDOW_NAME = "MainWindow";
 
-static const char*   VIEW_GROUP         = "View";
-static const char*   SHOW_TIME_KEY      = "ShowAlarmTime";
-static const char*   SHOW_TIME_TO_KEY   = "ShowTimeToAlarm";
-static const char*   SHOW_ARCHIVED_KEY  = "ShowArchivedAlarms";
-static const char*   SHOW_RESOURCES_KEY = "ShowResources";
+const char*   VIEW_GROUP         = "View";
+const char*   SHOW_TIME_KEY      = "ShowAlarmTime";
+const char*   SHOW_TIME_TO_KEY   = "ShowTimeToAlarm";
+const char*   SHOW_ARCHIVED_KEY  = "ShowArchivedAlarms";
+const char*   SHOW_RESOURCES_KEY = "ShowResources";
 
-static QString   undoText;
-static QString   undoTextStripped;
-static QList<QKeySequence>  undoShortcut;
-static QString   redoText;
-static QString   redoTextStripped;
-static QList<QKeySequence> redoShortcut;
+QString             undoText;
+QString             undoTextStripped;
+QList<QKeySequence> undoShortcut;
+QString             redoText;
+QString             redoTextStripped;
+QList<QKeySequence> redoShortcut;
+}
 
 
 /*=============================================================================
@@ -136,7 +139,7 @@ MainWindow::MainWindow(bool restored)
     qCDebug(KALARM_LOG);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
-    setObjectName(QLatin1String("MainWin"));    // used by LikeBack
+    setObjectName(QStringLiteral("MainWin"));    // used by LikeBack
     setPlainCaption(KComponentData::mainComponent().aboutData()->programName());
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
@@ -180,7 +183,7 @@ MainWindow::MainWindow(bool restored)
     mListView->installEventFilter(this);
     initActions();
 
-    setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
+    setAutoSaveSettings(QStringLiteral(WINDOW_NAME), true);    // save toolbars, window sizes etc.
     mWindowList.append(this);
     if (mWindowList.count() == 1)
     {
@@ -589,9 +592,9 @@ void MainWindow::initActions()
     // Load menu and toolbar settings
     applyMainWindowSettings(KSharedConfig::openConfig()->group(WINDOW_NAME));
 
-    mContextMenu = static_cast<QMenu*>(factory()->container(QLatin1String("listContext"), this));
-    mActionsMenu = static_cast<QMenu*>(factory()->container(QLatin1String("actions"), this));
-    QMenu* resourceMenu = static_cast<QMenu*>(factory()->container(QLatin1String("resourceContext"), this));
+    mContextMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("listContext"), this));
+    mActionsMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("actions"), this));
+    QMenu* resourceMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("resourceContext"), this));
     mResourceSelector->setContextMenu(resourceMenu);
     mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
     connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
@@ -1277,7 +1280,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
      * provide more than one mime type.
      * Don't change them without careful thought !!
      */
-    if (!(bytes = data->data(QLatin1String("message/rfc822"))).isEmpty())
+    if (!(bytes = data->data(QStringLiteral("message/rfc822"))).isEmpty())
     {
         // Email message(s). Ignore all but the first.
         qCDebug(KALARM_LOG) << "email";

@@ -51,8 +51,8 @@ static const char* GENERAL_SECTION  = "General";
 static const char* TEMP = "Temp";
 
 // Values for EmailFrom entry
-static const QString FROM_SYS_SETTINGS = QLatin1String("@SystemSettings");
-static const QString FROM_KMAIL        = QLatin1String("@KMail");
+static const QString FROM_SYS_SETTINGS(QStringLiteral("@SystemSettings"));
+static const QString FROM_KMAIL(QStringLiteral("@KMail"));
 
 // Config file entry names for notification messages
 const QLatin1String Preferences::QUIT_WARN("QuitWarn");
@@ -105,7 +105,7 @@ Preferences::Preferences()
     // Update the KAlarm version in the config file, but don't call
     // writeConfig() here - leave it to be written only if the config file
     // is updated with other data.
-    setVersion(QLatin1String(KALARM_VERSION));
+    setVersion(QStringLiteral(KALARM_VERSION));
 }
 
 void Preferences::setAskAutoStart(bool yes)

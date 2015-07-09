@@ -78,42 +78,42 @@ TrayWindow::TrayWindow(MainWindow* parent)
       mHaveDisabledAlarms(false)
 {
     qCDebug(KALARM_LOG);
-    setToolTipIconByName(QLatin1String("kalarm"));
+    setToolTipIconByName(QStringLiteral("kalarm"));
     setToolTipTitle(KAboutData::applicationData().componentName());
-    setIconByName(QLatin1String("kalarm"));
+    setIconByName(QStringLiteral("kalarm"));
     // Load the disabled icon for use by setIconByPixmap()
     // - setIconByName() doesn't work for this one!
-    mIconDisabled.addPixmap(KIconLoader::global()->loadIcon(QLatin1String("kalarm-disabled"), KIconLoader::Panel));
+    mIconDisabled.addPixmap(KIconLoader::global()->loadIcon(QStringLiteral("kalarm-disabled"), KIconLoader::Panel));
     setStatus(KStatusNotifierItem::Active);
     // Set up the context menu
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
-    addAction(QLatin1String("tAlarmsEnable"), mActionEnabled);
+    addAction(QStringLiteral("tAlarmsEnable"), mActionEnabled);
     contextMenu()->addAction(mActionEnabled);
     connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(setEnabledStatus(bool)));
     contextMenu()->addSeparator();
 
     mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
-    addAction(QLatin1String("tNew"), mActionNew);
+    addAction(QStringLiteral("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
     connect(mActionNew, &NewAlarmAction::selected, this, &TrayWindow::slotNewAlarm);
     connect(mActionNew->fromTemplateAlarmAction(), SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
     contextMenu()->addSeparator();
 
     QAction* a = KAlarm::createStopPlayAction(this);
-    addAction(QLatin1String("tStopPlay"), a);
+    addAction(QStringLiteral("tStopPlay"), a);
     contextMenu()->addAction(a);
     QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), a, SLOT(setVisible(bool)));
     QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(updateStatus()));
 
     a = KAlarm::createSpreadWindowsAction(this);
-    addAction(QLatin1String("tSpread"), a);
+    addAction(QStringLiteral("tSpread"), a);
     contextMenu()->addAction(a);
     contextMenu()->addSeparator();
     contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), this));
 #if 0 //QT5
     // Replace the default handler for the Quit context menu item
     const char* quitName = KStandardAction::name(KStandardAction::Quit);
-    QAction* qa = actions->action(QLatin1String(quitName));
+    QAction* qa = actions->action(QStringLiteral(quitName));
     disconnect(qa, SIGNAL(triggered(bool)), 0, 0);
     connect(qa, &QAction::triggered, this, &TrayWindow::slotQuit);
 #endif
@@ -328,7 +328,7 @@ void TrayWindow::updateToolTip()
 void TrayWindow::updateIcon()
 {
     if (theApp()->alarmsEnabled())
-        setIconByName(mHaveDisabledAlarms ? QLatin1String("kalarm-partdisabled") : QLatin1String("kalarm"));
+        setIconByName(mHaveDisabledAlarms ? QStringLiteral("kalarm-partdisabled") : QStringLiteral("kalarm"));
     else
         setIconByPixmap(mIconDisabled);
 }

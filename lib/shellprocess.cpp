@@ -217,7 +217,7 @@ bool ShellProcess::authorised()
 {
     if (!mInitialised)
     {
-        mAuthorised = KAuthorized::authorizeKAction(QLatin1String("shell_access"));
+        mAuthorised = KAuthorized::authorizeKAction(QStringLiteral("shell_access"));
         mInitialised = true;
     }
     return mAuthorised;

@@ -36,11 +36,11 @@ RtcWakeAction::RtcWakeAction()
 
 ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 {
-    unsigned t = args[QLatin1String("time")].toUInt();
+    unsigned t = args[QStringLiteral("time")].toUInt();
     qCDebug(KALARM_LOG) << "RtcWakeAction::settimer(" << t << ")";
 
     // Find the rtcwake executable
-    QString exe(QLatin1String("/usr/sbin/rtcwake"));   // default location
+    QString exe(QStringLiteral("/usr/sbin/rtcwake"));   // default location
     FILE* wh = popen("whereis -b rtcwake", "r");
     if (wh)
     {
@@ -89,7 +89,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
             errmsg = xi18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QStringLiteral("rtcwake"));
             break;
         default:
-            errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(QLatin1String(" ")), result);
+            errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(QStringLiteral(" ")), result);
             break;
     }
 #if 0 //QT5
