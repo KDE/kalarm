@@ -97,9 +97,9 @@ static FullScreenType findFullScreenWindows(const QVector<QRect>& screenRects, Q
 #endif
 
 #include "kmailinterface.h"
-static const QString(QStringLiteral(KMAIL_DBUS_SERVICE("org.kde.kmail"));
-static const QString(QStringLiteral(KMAIL_DBUS_PATH("/KMail"));
-
+static const QLatin1String KMAIL_DBUS_SERVICE("org.kde.kmail");
+static const QLatin1String KMAIL_DBUS_PATH("/KMail");
+ 
 // The delay for enabling message window buttons if a zero delay is
 // configured, i.e. the windows are placed far from the cursor.
 static const int proximityButtonDelay = 1000;    // (milliseconds)

@@ -183,7 +183,7 @@ MainWindow::MainWindow(bool restored)
     mListView->installEventFilter(this);
     initActions();
 
-    setAutoSaveSettings(QStringLiteral(WINDOW_NAME), true);    // save toolbars, window sizes etc.
+    setAutoSaveSettings(QLatin1String(WINDOW_NAME), true);    // save toolbars, window sizes etc.
     mWindowList.append(this);
     if (mWindowList.count() == 1)
     {
