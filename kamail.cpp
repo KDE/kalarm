@@ -423,7 +423,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 void KAMail::notifyQueued(const KAEvent& event)
 {
     KMime::Types::Address addr;
-    const QString localhost = QLatin1String("localhost");
+    const QString localhost = QStringLiteral("localhost");
     const QString hostname  = QHostInfo::localHostName();
     KCalCore::Person::List addresses = event.emailAddressees();
     for (int i = 0, end = addresses.count();  i < end;  ++i)

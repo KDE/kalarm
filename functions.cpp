@@ -1510,7 +1510,7 @@ QStringList dontShowErrors(const EventId& eventId)
         return QStringList();
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QStringLiteral("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
     return group.readEntry(id, QStringList());
 }
 
@@ -1592,10 +1592,10 @@ void writeConfigWindowSize(const char* window, const QSize& size, int splitterWi
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
     QWidget* desktop = KApplication::desktop();
-    config.writeEntry(QString::fromLatin1("Width %1").arg(desktop->width()), size.width());
-    config.writeEntry(QString::fromLatin1("Height %1").arg(desktop->height()), size.height());
+    config.writeEntry(QStringLiteral("Width %1").arg(desktop->width()), size.width());
+    config.writeEntry(QStringLiteral("Height %1").arg(desktop->height()), size.height());
     if (splitterWidth >= 0)
-        config.writeEntry(QString::fromLatin1("Splitter %1").arg(desktop->width()), splitterWidth);
+        config.writeEntry(QStringLiteral("Splitter %1").arg(desktop->width()), splitterWidth);
     config.sync();
 }
 
