@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.11.0 --- July 2015 ===
+- Use KDE Frameworks.
+
 === Version 2.10.12 (KDE 4.14.2) --- 30 September 2014 ===
 - Make New Audio Alarm dialogue use sound file repeat preference setting.
 
