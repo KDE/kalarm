@@ -110,13 +110,15 @@ TrayWindow::TrayWindow(MainWindow* parent)
     contextMenu()->addAction(a);
     contextMenu()->addSeparator();
     contextMenu()->addAction(KStandardAction::preferences(this, SLOT(slotPreferences()), this));
-#if 0 //QT5
-    // Replace the default handler for the Quit context menu item
-    const char* quitName = KStandardAction::name(KStandardAction::Quit);
-    QAction* qa = actions->action(QStringLiteral(quitName));
-    disconnect(qa, SIGNAL(triggered(bool)), 0, 0);
-    connect(qa, &QAction::triggered, this, &TrayWindow::slotQuit);
-#endif
+
+    // Disable standard quit behaviour. We have to intercept the quit even,
+    // if the main window is hidden.
+    QAction *act = action(QStringLiteral("quit"));
+    if (act) {
+        act->disconnect(SIGNAL(triggered(bool)), this, SLOT(maybeQuit()));
+        connect(act, &QAction::triggered, this, &TrayWindow::slotQuit);
+    }
+
     // Set icon to correspond with the alarms enabled menu status
     setEnabledStatus(theApp()->alarmsEnabled());
 
