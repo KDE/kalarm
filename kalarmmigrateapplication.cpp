@@ -34,9 +34,8 @@ void KAlarmMigrateApplication::migrate()
     migrate.migrate();
 
     // Migrate folders and files.
-    if (mMigrator.checkIfNecessary()) {
+    if (mMigrator.checkIfNecessary())
         mMigrator.start();
-    }
 }
 
 void KAlarmMigrateApplication::initializeMigrator()

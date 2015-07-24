@@ -113,8 +113,9 @@ TrayWindow::TrayWindow(MainWindow* parent)
 
     // Disable standard quit behaviour. We have to intercept the quit even,
     // if the main window is hidden.
-    QAction *act = action(QStringLiteral("quit"));
-    if (act) {
+    QAction* act = action(QStringLiteral("quit"));
+    if (act)
+    {
         act->disconnect(SIGNAL(triggered(bool)), this, SLOT(maybeQuit()));
         connect(act, &QAction::triggered, this, &TrayWindow::slotQuit);
     }
