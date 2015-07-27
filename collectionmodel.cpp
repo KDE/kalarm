@@ -1211,7 +1211,7 @@ Collection CollectionControlModel::destination(CalEvent::Type type, QWidget* pro
             // the dialogue is still open. It prevents double deletion (both on
             // deletion of 'promptParent', and on return from this function).
             AutoQPointer<CollectionDialog> dlg = new CollectionDialog(model, promptParent);
-            dlg->setCaption(i18nc("@title:window", "Choose Calendar"));
+            dlg->setWindowTitle(i18nc("@title:window", "Choose Calendar"));
             dlg->setDefaultCollection(standard);
             dlg->setMimeTypeFilter(QStringList(CalEvent::mimeType(type)));
             if (dlg->exec())
