@@ -150,6 +150,8 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
 
     MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
     MailTransport::Transport* transport = Q_NULLPTR;
+#warning Remove sendmail support!
+#if 0
     if (Preferences::emailClient() == Preferences::sendmail)
     {
         qCDebug(KALARM_LOG) << "Sending via sendmail";
@@ -180,6 +182,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
         }
     }
     else
+#endif
     {
         qCDebug(KALARM_LOG) << "Sending via KDE";
         const int transportId = identity.transport().isEmpty() ? -1 : identity.transport().toInt();
