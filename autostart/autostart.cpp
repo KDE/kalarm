@@ -86,8 +86,8 @@ void AutostartApp::slotAutostart()
             qCWarning(KALARMAUTOSTART_LOG) << "No command line";
         else
         {
-            QString prog = args->arg(0);
-            QString exe = QStandardPaths::findExecutable(prog);
+            const QString prog = args->arg(0);
+            const QString exe = QStandardPaths::findExecutable(prog);
             if (exe.isEmpty())
                 qCWarning(KALARMAUTOSTART_LOG) << "Executable not found:" << prog;
             else
