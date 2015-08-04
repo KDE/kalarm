@@ -325,7 +325,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         message.contentType()->setMimeType("text/plain");
         message.contentType()->setCharset("utf-8");
         message.fromUnicodeString(data.event.message());
-        QList<KMime::Headers::contentEncoding> encodings = KMime::encodingsForData(message.body());
+        auto encodings = KMime::encodingsForData(message.body());
         encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
         message.contentTransferEncoding()->setEncoding(encodings[0]);
         message.assemble();
@@ -343,7 +343,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             content->contentType()->setMimeType("text/plain");
             content->contentType()->setCharset("utf-8");
             content->fromUnicodeString(data.event.message());
-            QList<KMime::Headers::contentEncoding> encodings = KMime::encodingsForData(content->body());
+            auto encodings = KMime::encodingsForData(content->body());
             encodings.removeAll(KMime::Headers::CE8Bit);  // not handled by KMime
             content->contentTransferEncoding()->setEncoding(encodings[0]);
             content->assemble();
