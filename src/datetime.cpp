@@ -321,7 +321,7 @@ int DateTime::secsTo(const DateTime &dt) const
 
 qint64 DateTime::secsTo_long(const DateTime &dt) const
 {
-    return d->mDateTime.secsTo_long(dt.d->mDateTime);
+    return d->mDateTime.secsTo(dt.d->mDateTime);
 }
 
 QString DateTime::toString(Qt::DateFormat f) const
