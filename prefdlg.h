@@ -39,7 +39,7 @@ class KAlarmPrefDlg : public KPageDialog
     public:
         static void display();
         ~KAlarmPrefDlg();
-        virtual QSize minimumSizeHint() const;
+        QSize minimumSizeHint() const Q_DECL_OVERRIDE;
 
         MiscPrefTab*       mMiscPage;
         TimePrefTab*       mTimePage;

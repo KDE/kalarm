@@ -64,7 +64,7 @@ class PrefsTabBase : public StackedScrollWidget
         static int   indentWidth()      { return mIndentWidth; }
 
     protected:
-        virtual void showEvent(QShowEvent*);
+        void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
 
     private:
         static int   mIndentWidth;       // indent width for checkboxes etc.
@@ -134,8 +134,8 @@ class StorePrefTab : public PrefsTabBase
     public:
         explicit StorePrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults, bool allTabs);
-        virtual void apply(bool syncToDisc);
+        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
+        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void         slotArchivedToggled(bool);
@@ -245,8 +245,8 @@ class ViewPrefTab : public PrefsTabBase
     public:
         explicit ViewPrefTab(StackedScrollGroup*);
 
-        virtual void restore(bool defaults, bool allTabs);
-        virtual void apply(bool syncToDisc);
+        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
+        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
 
     private Q_SLOTS:
         void         slotTooltipAlarmsToggled(bool);
