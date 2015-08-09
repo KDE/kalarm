@@ -2310,7 +2310,7 @@ void KAlarmApp::slotDBusServiceUnregistered(const QString& serviceName)
 {
     if (serviceName == KTTSD_DBUS_SERVICE)
     {
-        delete mKSpeech;
+        // delete mKSpeech; // TODO: port to Qt5 / KF5
         mKSpeech = Q_NULLPTR;
     }
 }
