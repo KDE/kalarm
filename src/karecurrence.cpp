@@ -45,7 +45,7 @@ public:
     Recurrence_p(const Recurrence_p &r) : Recurrence(r) {}
 };
 
-class KARecurrence::Private
+class Q_DECL_HIDDEN KARecurrence::Private
 {
 public:
     Private()

@@ -28,7 +28,7 @@
 namespace KAlarmCal
 {
 
-class EventAttribute::Private
+class Q_DECL_HIDDEN EventAttribute::Private
 {
 public:
     Private() : mCommandError(KAEvent::CMD_NO_ERROR) {}

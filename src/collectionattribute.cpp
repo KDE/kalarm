@@ -27,7 +27,7 @@
 namespace KAlarmCal
 {
 
-class CollectionAttribute::Private
+class Q_DECL_HIDDEN CollectionAttribute::Private
 {
 public:
     Private()

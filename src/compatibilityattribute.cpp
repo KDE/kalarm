@@ -27,7 +27,7 @@
 namespace KAlarmCal
 {
 
-class CompatibilityAttribute::Private
+class Q_DECL_HIDDEN CompatibilityAttribute::Private
 {
 public:
     Private()

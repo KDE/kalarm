@@ -27,7 +27,7 @@ using namespace KCalCore;
 namespace KAlarmCal
 {
 
-class Repetition::Private
+class Q_DECL_HIDDEN Repetition::Private
 {
 public:
     Private() : mInterval(0), mCount(0) {}

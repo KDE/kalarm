@@ -30,7 +30,7 @@
 namespace KAlarmCal
 {
 
-class DateTime::Private
+class Q_DECL_HIDDEN DateTime::Private
 {
 public:
     Private() {}

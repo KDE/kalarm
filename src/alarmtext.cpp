@@ -41,7 +41,7 @@ const int MAIL_MIN_LINES = 4;   // allow for From, To, no CC, Date, Subject
 namespace KAlarmCal
 {
 
-class AlarmText::Private
+class Q_DECL_HIDDEN AlarmText::Private
 {
 public:
     enum Type { None, Email, Script, Todo };

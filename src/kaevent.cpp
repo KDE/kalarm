@@ -63,7 +63,7 @@ private:
 
 //=============================================================================
 
-class KAAlarm::Private
+class Q_DECL_HIDDEN KAAlarm::Private
 {
 public:
     Private();
@@ -81,7 +81,7 @@ public:
 
 //=============================================================================
 
-class KAEventPrivate : public QSharedData
+class Q_DECL_HIDDEN KAEventPrivate : public QSharedData
 {
 public:
     // Read-only internal flags additional to KAEvent::Flags enum values.
