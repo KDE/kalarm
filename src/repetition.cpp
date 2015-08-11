@@ -34,7 +34,7 @@ public:
     Private(const Duration &interval, int count)
         : mInterval(interval), mCount(count)
     {
-        if ((!count && interval) || (count && !interval)) {
+        if ((!count && !interval.isNull()) || (count && interval.isNull())) {
             mCount = 0;
             mInterval = 0;
         }
@@ -74,7 +74,7 @@ Repetition &Repetition::operator=(const Repetition &other)
 
 void Repetition::set(const Duration &interval, int count)
 {
-    if (!count || !interval) {
+    if (!count || interval.isNull()) {
         d->mCount = 0;
         d->mInterval = 0;
     } else {
@@ -87,7 +87,7 @@ void Repetition::set(const Duration &interval)
 {
     if (d->mCount) {
         d->mInterval = interval;
-        if (!interval) {
+        if (interval.isNull()) {
             d->mCount = 0;
         }
     }
