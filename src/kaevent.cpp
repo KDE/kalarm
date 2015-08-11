@@ -906,7 +906,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
             mMainExpired = false;
             alTime = dateTime;
             alTime.setDateOnly(mStartDateTime.isDateOnly());
-            if (data.alarm->repeatCount()  &&  data.alarm->snoozeTime()) {
+            if (data.alarm->repeatCount()  &&  !data.alarm->snoozeTime().isNull()) {
                 mRepetition.set(data.alarm->snoozeTime(), data.alarm->repeatCount());   // values may be adjusted in setRecurrence()
                 mNextRepeat = data.nextRepeat;
             }
@@ -1075,7 +1075,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
         setRepeatAtLoginTrue(false);   // clear other incompatible statuses
     }
 
-    if (mMainExpired  &&  deferralOffset  &&  checkRecur() != KARecurrence::NO_RECUR) {
+    if (mMainExpired  &&  !deferralOffset.isNull()  &&  checkRecur() != KARecurrence::NO_RECUR) {
         // Adjust the deferral time for an expired recurrence, since the
         // offset is relative to the first actual occurrence.
         DateTime dt = mRecurrence->getNextDateTime(mStartDateTime.addDays(-1).kDateTime());
@@ -4270,7 +4270,7 @@ void KAEventPrivate::calcNextWorkingTime(const DateTime &nextTrigger) const
         const int repeatFreq = mRepetition.intervalDays();
         const bool weeklyRepeat = mRepetition && !(repeatFreq % 7);
         const Duration interval = mRecurrence->regularInterval();
-        if ((interval  &&  !(interval.asDays() % 7))
+        if ((!interval.isNull()  &&  !(interval.asDays() % 7))
                 ||  nDayPos == 1) {
             // It recurs on the same day each week
             if (!mRepetition || weeklyRepeat) {
@@ -4732,7 +4732,7 @@ bool KAEventPrivate::mayOccurDailyDuringWork(const KDateTime &kdt) const
     }
     // Check if it always occurs on the same day of the week
     const Duration interval = mRecurrence->regularInterval();
-    if (interval  &&  interval.isDaily()  &&  !(interval.asDays() % 7)) {
+    if (!interval.isNull()  &&  interval.isDaily()  &&  !(interval.asDays() % 7)) {
         // It recurs weekly
         if (!mRepetition  || (mRepetition.isDaily() && !(mRepetition.intervalDays() % 7))) {
             return false;    // any repetitions are also weekly
