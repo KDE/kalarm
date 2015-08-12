@@ -399,13 +399,13 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
 
             // Set the content type
             KMimeType::Ptr type = KMimeType::findByUrl(url);
-            KMime::Headers::ContentType* ctype = new KMime::Headers::ContentType(content);
+            KMime::Headers::ContentType* ctype = new KMime::Headers::ContentType;
             ctype->fromUnicodeString(type->name(), autoDetectCharset(type->name()));
             ctype->setName(attachment, "local");
             content->setHeader(ctype);
 
             // Set the encoding
-            KMime::Headers::ContentTransferEncoding* cte = new KMime::Headers::ContentTransferEncoding(content);
+            KMime::Headers::ContentTransferEncoding* cte = new KMime::Headers::ContentTransferEncoding;
             cte->setEncoding(KMime::Headers::CEbase64);
             cte->setDecoded(false);
             content->setHeader(cte);
