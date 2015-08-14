@@ -2,9 +2,9 @@ include_directories( ../  )
 
 ########### next target ###############
 
-set(kalarmautostart_SRCS 
-	autostart.cpp
-        kalarm_autostart_debug.cpp 
+set(kalarmautostart_SRCS
+    autostart.cpp
+    kalarm_autostart_debug.cpp
 )
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/*-apps-kalarm.png")
