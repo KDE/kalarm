@@ -168,7 +168,7 @@ KAlarmApp::KAlarmApp()
     mSpeechEnabled = (KServiceTypeTrader::self()->query(QStringLiteral("DBUS/Text-to-Speech"), QStringLiteral("Name == 'KTTSD'")).count() > 0);
     if (!mSpeechEnabled) { qCDebug(KALARM_LOG) << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
-    const QString korg = QLatin1String("korganizer");
+    const QString korg = QStringLiteral("korganizer");
     mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
     if (!mKOrganizerEnabled) { qCDebug(KALARM_LOG) << "KOrganizer options disabled (KOrganizer not found)"; }
 }
@@ -2025,7 +2025,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
                 heading.sprintf("\n******* KAlarm %s *******\n", dateTime.toLatin1().data());
             }
             else
-                heading = QLatin1String("\n******* KAlarm *******\n");
+                heading = QStringLiteral("\n******* KAlarm *******\n");
             QFile logfile(event.logFile());
             if (logfile.open(QIODevice::Append | QIODevice::Text))
             {
@@ -2224,19 +2224,19 @@ void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, 
         if (event.extraActionOptions() & KAEvent::DontShowPreActError)
             return;   // don't notify user of any errors for the alarm
         errmsgs += i18nc("@info", "Pre-alarm action:");
-        dontShowAgain = QLatin1String("Pre");
+        dontShowAgain = QStringLiteral("Pre");
         cmderr = KAEvent::CMD_ERROR_PRE;
     }
     else if (flags & ProcData::POST_ACTION)
     {
         errmsgs += i18nc("@info", "Post-alarm action:");
-        dontShowAgain = QLatin1String("Post");
+        dontShowAgain = QStringLiteral("Post");
         cmderr = (event.commandError() == KAEvent::CMD_ERROR_PRE)
                ? KAEvent::CMD_ERROR_PRE_POST : KAEvent::CMD_ERROR_POST;
     }
     else
     {
-        dontShowAgain = QLatin1String("Exec");
+        dontShowAgain = QStringLiteral("Exec");
         cmderr = KAEvent::CMD_ERROR;
     }
 

@@ -76,7 +76,7 @@ AutostartApp::AutostartApp()
 
 void AutostartApp::slotAutostart()
 {
-    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QLatin1String(KALARM_DBUS_SERVICE));
+    QDBusReply<bool> reply = QDBusConnection::sessionBus().interface()->isServiceRegistered(QStringLiteral(KALARM_DBUS_SERVICE));
     if (reply.isValid()  &&  reply.value())
         qCDebug(KALARMAUTOSTART_LOG) << "KAlarm already running";
     else
