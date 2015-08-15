@@ -158,7 +158,7 @@ int Private::readKAlarmVersion(const FileStorage::Ptr &fileStorage, QString &sub
         }
 
         // Find the KAlarm identifier
-        QString progname = QLatin1String(" KAlarm ");
+        QString progname = QStringLiteral(" KAlarm ");
         int i = prodid.indexOf(progname, 0, Qt::CaseInsensitive);
         if (i < 0) {
             // Older versions used KAlarm's translated name in the product ID, which
@@ -242,13 +242,13 @@ namespace CalEvent
 struct StaticStrings {
     StaticStrings()
         : STATUS_PROPERTY("TYPE"),
-          ACTIVE_STATUS(QLatin1String("ACTIVE")),
-          TEMPLATE_STATUS(QLatin1String("TEMPLATE")),
-          ARCHIVED_STATUS(QLatin1String("ARCHIVED")),
-          DISPLAYING_STATUS(QLatin1String("DISPLAYING")),
-          ARCHIVED_UID(QLatin1String("-exp-")),
-          DISPLAYING_UID(QLatin1String("-disp-")),
-          TEMPLATE_UID(QLatin1String("-tmpl-"))
+          ACTIVE_STATUS(QStringLiteral("ACTIVE")),
+          TEMPLATE_STATUS(QStringLiteral("TEMPLATE")),
+          ARCHIVED_STATUS(QStringLiteral("ARCHIVED")),
+          DISPLAYING_STATUS(QStringLiteral("DISPLAYING")),
+          ARCHIVED_UID(QStringLiteral("-exp-")),
+          DISPLAYING_UID(QStringLiteral("-disp-")),
+          TEMPLATE_UID(QStringLiteral("-tmpl-"))
     {}
     // Event custom properties.
     // Note that all custom property names are prefixed with X-KDE-KALARM- in the calendar file.
@@ -300,7 +300,7 @@ QString uid(const QString &id, Type status)
         case ACTIVE:
         case TEMPLATE:
         case EMPTY:
-        default:          part = QLatin1String("-");  break;
+        default:          part = QStringLiteral("-");  break;
         }
         result.replace(i, len, part);
     }

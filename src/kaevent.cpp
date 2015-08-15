@@ -392,64 +392,64 @@ int        KAEvent::currentCalendarVersion()
 
 // Event properties
 const QByteArray KAEventPrivate::FLAGS_PROPERTY("FLAGS");              // X-KDE-KALARM-FLAGS property
-const QString    KAEventPrivate::DATE_ONLY_FLAG        = QLatin1String("DATE");
-const QString    KAEventPrivate::EMAIL_BCC_FLAG        = QLatin1String("BCC");
-const QString    KAEventPrivate::CONFIRM_ACK_FLAG      = QLatin1String("ACKCONF");
-const QString    KAEventPrivate::KORGANIZER_FLAG       = QLatin1String("KORG");
-const QString    KAEventPrivate::EXCLUDE_HOLIDAYS_FLAG = QLatin1String("EXHOLIDAYS");
-const QString    KAEventPrivate::WORK_TIME_ONLY_FLAG   = QLatin1String("WORKTIME");
-const QString    KAEventPrivate::REMINDER_ONCE_FLAG    = QLatin1String("ONCE");
-const QString    KAEventPrivate::DEFER_FLAG            = QLatin1String("DEFER");   // default defer interval for this alarm
-const QString    KAEventPrivate::LATE_CANCEL_FLAG      = QLatin1String("LATECANCEL");
-const QString    KAEventPrivate::AUTO_CLOSE_FLAG       = QLatin1String("LATECLOSE");
-const QString    KAEventPrivate::TEMPL_AFTER_TIME_FLAG = QLatin1String("TMPLAFTTIME");
-const QString    KAEventPrivate::KMAIL_SERNUM_FLAG     = QLatin1String("KMAIL");
-const QString    KAEventPrivate::ARCHIVE_FLAG          = QLatin1String("ARCHIVE");
+const QString    KAEventPrivate::DATE_ONLY_FLAG        = QStringLiteral("DATE");
+const QString    KAEventPrivate::EMAIL_BCC_FLAG        = QStringLiteral("BCC");
+const QString    KAEventPrivate::CONFIRM_ACK_FLAG      = QStringLiteral("ACKCONF");
+const QString    KAEventPrivate::KORGANIZER_FLAG       = QStringLiteral("KORG");
+const QString    KAEventPrivate::EXCLUDE_HOLIDAYS_FLAG = QStringLiteral("EXHOLIDAYS");
+const QString    KAEventPrivate::WORK_TIME_ONLY_FLAG   = QStringLiteral("WORKTIME");
+const QString    KAEventPrivate::REMINDER_ONCE_FLAG    = QStringLiteral("ONCE");
+const QString    KAEventPrivate::DEFER_FLAG            = QStringLiteral("DEFER");   // default defer interval for this alarm
+const QString    KAEventPrivate::LATE_CANCEL_FLAG      = QStringLiteral("LATECANCEL");
+const QString    KAEventPrivate::AUTO_CLOSE_FLAG       = QStringLiteral("LATECLOSE");
+const QString    KAEventPrivate::TEMPL_AFTER_TIME_FLAG = QStringLiteral("TMPLAFTTIME");
+const QString    KAEventPrivate::KMAIL_SERNUM_FLAG     = QStringLiteral("KMAIL");
+const QString    KAEventPrivate::ARCHIVE_FLAG          = QStringLiteral("ARCHIVE");
 
 const QByteArray KAEventPrivate::NEXT_RECUR_PROPERTY("NEXTRECUR");     // X-KDE-KALARM-NEXTRECUR property
 const QByteArray KAEventPrivate::REPEAT_PROPERTY("REPEAT");            // X-KDE-KALARM-REPEAT property
 const QByteArray KAEventPrivate::LOG_PROPERTY("LOG");                  // X-KDE-KALARM-LOG property
-const QString    KAEventPrivate::xtermURL = QLatin1String("xterm:");
-const QString    KAEventPrivate::displayURL = QLatin1String("display:");
+const QString    KAEventPrivate::xtermURL = QStringLiteral("xterm:");
+const QString    KAEventPrivate::displayURL = QStringLiteral("display:");
 
 // - General alarm properties
 const QByteArray KAEventPrivate::TYPE_PROPERTY("TYPE");                // X-KDE-KALARM-TYPE property
-const QString    KAEventPrivate::FILE_TYPE                  = QLatin1String("FILE");
-const QString    KAEventPrivate::AT_LOGIN_TYPE              = QLatin1String("LOGIN");
-const QString    KAEventPrivate::REMINDER_TYPE              = QLatin1String("REMINDER");
-const QString    KAEventPrivate::TIME_DEFERRAL_TYPE         = QLatin1String("DEFERRAL");
-const QString    KAEventPrivate::DATE_DEFERRAL_TYPE         = QLatin1String("DATE_DEFERRAL");
-const QString    KAEventPrivate::DISPLAYING_TYPE            = QLatin1String("DISPLAYING");   // used only in displaying calendar
-const QString    KAEventPrivate::PRE_ACTION_TYPE            = QLatin1String("PRE");
-const QString    KAEventPrivate::POST_ACTION_TYPE           = QLatin1String("POST");
-const QString    KAEventPrivate::SOUND_REPEAT_TYPE          = QLatin1String("SOUNDREPEAT");
+const QString    KAEventPrivate::FILE_TYPE                  = QStringLiteral("FILE");
+const QString    KAEventPrivate::AT_LOGIN_TYPE              = QStringLiteral("LOGIN");
+const QString    KAEventPrivate::REMINDER_TYPE              = QStringLiteral("REMINDER");
+const QString    KAEventPrivate::TIME_DEFERRAL_TYPE         = QStringLiteral("DEFERRAL");
+const QString    KAEventPrivate::DATE_DEFERRAL_TYPE         = QStringLiteral("DATE_DEFERRAL");
+const QString    KAEventPrivate::DISPLAYING_TYPE            = QStringLiteral("DISPLAYING");   // used only in displaying calendar
+const QString    KAEventPrivate::PRE_ACTION_TYPE            = QStringLiteral("PRE");
+const QString    KAEventPrivate::POST_ACTION_TYPE           = QStringLiteral("POST");
+const QString    KAEventPrivate::SOUND_REPEAT_TYPE          = QStringLiteral("SOUNDREPEAT");
 const QByteArray KAEventPrivate::NEXT_REPEAT_PROPERTY("NEXTREPEAT");   // X-KDE-KALARM-NEXTREPEAT property
-const QString    KAEventPrivate::HIDDEN_REMINDER_FLAG = QLatin1String("HIDE");
+const QString    KAEventPrivate::HIDDEN_REMINDER_FLAG = QStringLiteral("HIDE");
 // - Display alarm properties
 const QByteArray KAEventPrivate::FONT_COLOUR_PROPERTY("FONTCOLOR");    // X-KDE-KALARM-FONTCOLOR property
 // - Email alarm properties
-const QString    KAEventPrivate::EMAIL_ID_FLAG        = QLatin1String("EMAILID");
+const QString    KAEventPrivate::EMAIL_ID_FLAG        = QStringLiteral("EMAILID");
 // - Audio alarm properties
 const QByteArray KAEventPrivate::VOLUME_PROPERTY("VOLUME");            // X-KDE-KALARM-VOLUME property
-const QString    KAEventPrivate::SPEAK_FLAG           = QLatin1String("SPEAK");
+const QString    KAEventPrivate::SPEAK_FLAG           = QStringLiteral("SPEAK");
 // - Command alarm properties
-const QString    KAEventPrivate::EXEC_ON_DEFERRAL_FLAG = QLatin1String("EXECDEFER");
-const QString    KAEventPrivate::CANCEL_ON_ERROR_FLAG  = QLatin1String("ERRCANCEL");
-const QString    KAEventPrivate::DONT_SHOW_ERROR_FLAG  = QLatin1String("ERRNOSHOW");
+const QString    KAEventPrivate::EXEC_ON_DEFERRAL_FLAG = QStringLiteral("EXECDEFER");
+const QString    KAEventPrivate::CANCEL_ON_ERROR_FLAG  = QStringLiteral("ERRCANCEL");
+const QString    KAEventPrivate::DONT_SHOW_ERROR_FLAG  = QStringLiteral("ERRNOSHOW");
 
 // Event status strings
-const QString    KAEventPrivate::DISABLED_STATUS            = QLatin1String("DISABLED");
+const QString    KAEventPrivate::DISABLED_STATUS            = QStringLiteral("DISABLED");
 
 // Displaying event ID identifier
-const QString    KAEventPrivate::DISP_DEFER = QLatin1String("DEFER");
-const QString    KAEventPrivate::DISP_EDIT  = QLatin1String("EDIT");
+const QString    KAEventPrivate::DISP_DEFER = QStringLiteral("DEFER");
+const QString    KAEventPrivate::DISP_EDIT  = QStringLiteral("EDIT");
 
 // Command error strings
-const QString    KAEventPrivate::CMD_ERROR_VALUE      = QLatin1String("MAIN");
-const QString    KAEventPrivate::CMD_ERROR_PRE_VALUE  = QLatin1String("PRE");
-const QString    KAEventPrivate::CMD_ERROR_POST_VALUE = QLatin1String("POST");
+const QString    KAEventPrivate::CMD_ERROR_VALUE      = QStringLiteral("MAIN");
+const QString    KAEventPrivate::CMD_ERROR_PRE_VALUE  = QStringLiteral("PRE");
+const QString    KAEventPrivate::CMD_ERROR_POST_VALUE = QStringLiteral("POST");
 
-const QString    KAEventPrivate::SC = QLatin1String(";");
+const QString    KAEventPrivate::SC = QStringLiteral(";");
 
 QFont                           KAEventPrivate::mDefaultFont;
 const KHolidays::HolidayRegion *KAEventPrivate::mHolidays = Q_NULLPTR;
@@ -1337,7 +1337,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
         if (!archived  &&  checkRecur() != KARecurrence::NO_RECUR) {
             QDateTime dt = mNextMainDateTime.kDateTime().toTimeSpec(mStartDateTime.timeSpec()).dateTime();
             ev->setCustomProperty(KACalendar::APPNAME, NEXT_RECUR_PROPERTY,
-                                  dt.toString(mNextMainDateTime.isDateOnly() ? QLatin1String("yyyyMMdd") : QLatin1String("yyyyMMddThhmmss")));
+                                  dt.toString(mNextMainDateTime.isDateOnly() ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss")));
         }
         // Add the main alarm
         initKCalAlarm(ev, 0, QStringList(), MAIN_ALARM);
@@ -1598,7 +1598,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffse
     }
     alltypes += types;
     if (!alltypes.isEmpty()) {
-        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(QLatin1String(",")));
+        alarm->setCustomProperty(KACalendar::APPNAME, TYPE_PROPERTY, alltypes.join(QStringLiteral(",")));
     }
     if (!flags.isEmpty()) {
         alarm->setCustomProperty(KACalendar::APPNAME, FLAGS_PROPERTY, flags.join(SC));
@@ -3746,9 +3746,9 @@ void KAEventPrivate::dumpDebug() const
         qCDebug(KALARMCAL_LOG) << "-- mLogFile:" << mLogFile;
     } else if (mActionSubType == KAEvent::EMAIL) {
         qCDebug(KALARMCAL_LOG) << "-- mEmail: FromKMail:" << mEmailFromIdentity;
-        qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QLatin1String(","));
+        qCDebug(KALARMCAL_LOG) << "--         Addresses:" << mEmailAddresses.join(QStringLiteral(","));
         qCDebug(KALARMCAL_LOG) << "--         Subject:" << mEmailSubject;
-        qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QLatin1String(","));
+        qCDebug(KALARMCAL_LOG) << "--         Attachments:" << mEmailAttachments.join(QStringLiteral(","));
         qCDebug(KALARMCAL_LOG) << "--         Bcc:" << mEmailBcc;
     } else if (mActionSubType == KAEvent::AUDIO) {
         qCDebug(KALARMCAL_LOG) << "-- mAudioFile:" << mAudioFile;
@@ -4836,43 +4836,43 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
     static const QChar   LATE_CANCEL_CODE = QLatin1Char('C');
     static const QChar   AT_LOGIN_CODE    = QLatin1Char('L');   // subsidiary alarm at every login
     static const QChar   DEFERRAL_CODE    = QLatin1Char('D');   // extra deferred alarm
-    static const QString TEXT_PREFIX      = QLatin1String("TEXT:");
-    static const QString FILE_PREFIX      = QLatin1String("FILE:");
-    static const QString COMMAND_PREFIX   = QLatin1String("CMD:");
+    static const QString TEXT_PREFIX      = QStringLiteral("TEXT:");
+    static const QString FILE_PREFIX      = QStringLiteral("FILE:");
+    static const QString COMMAND_PREFIX   = QStringLiteral("CMD:");
 
     // KAlarm pre-0.9.2 codes held in the event's CATEGORY property
-    static const QString BEEP_CATEGORY    = QLatin1String("BEEP");
+    static const QString BEEP_CATEGORY    = QStringLiteral("BEEP");
 
     // KAlarm pre-1.1.1 LATECANCEL category with no parameter
-    static const QString LATE_CANCEL_CAT = QLatin1String("LATECANCEL");
+    static const QString LATE_CANCEL_CAT = QStringLiteral("LATECANCEL");
 
     // KAlarm pre-1.3.0 TMPLDEFTIME category with no parameter
-    static const QString TEMPL_DEF_TIME_CAT = QLatin1String("TMPLDEFTIME");
+    static const QString TEMPL_DEF_TIME_CAT = QStringLiteral("TMPLDEFTIME");
 
     // KAlarm pre-1.3.1 XTERM category
-    static const QString EXEC_IN_XTERM_CAT  = QLatin1String("XTERM");
+    static const QString EXEC_IN_XTERM_CAT  = QStringLiteral("XTERM");
 
     // KAlarm pre-1.9.0 categories
-    static const QString DATE_ONLY_CATEGORY        = QLatin1String("DATE");
-    static const QString EMAIL_BCC_CATEGORY        = QLatin1String("BCC");
-    static const QString CONFIRM_ACK_CATEGORY      = QLatin1String("ACKCONF");
-    static const QString KORGANIZER_CATEGORY       = QLatin1String("KORG");
-    static const QString DEFER_CATEGORY            = QLatin1String("DEFER;");
-    static const QString ARCHIVE_CATEGORY          = QLatin1String("SAVE");
-    static const QString ARCHIVE_CATEGORIES        = QLatin1String("SAVE:");
-    static const QString LATE_CANCEL_CATEGORY      = QLatin1String("LATECANCEL;");
-    static const QString AUTO_CLOSE_CATEGORY       = QLatin1String("LATECLOSE;");
-    static const QString TEMPL_AFTER_TIME_CATEGORY = QLatin1String("TMPLAFTTIME;");
-    static const QString KMAIL_SERNUM_CATEGORY     = QLatin1String("KMAIL:");
-    static const QString LOG_CATEGORY              = QLatin1String("LOG:");
+    static const QString DATE_ONLY_CATEGORY        = QStringLiteral("DATE");
+    static const QString EMAIL_BCC_CATEGORY        = QStringLiteral("BCC");
+    static const QString CONFIRM_ACK_CATEGORY      = QStringLiteral("ACKCONF");
+    static const QString KORGANIZER_CATEGORY       = QStringLiteral("KORG");
+    static const QString DEFER_CATEGORY            = QStringLiteral("DEFER;");
+    static const QString ARCHIVE_CATEGORY          = QStringLiteral("SAVE");
+    static const QString ARCHIVE_CATEGORIES        = QStringLiteral("SAVE:");
+    static const QString LATE_CANCEL_CATEGORY      = QStringLiteral("LATECANCEL;");
+    static const QString AUTO_CLOSE_CATEGORY       = QStringLiteral("LATECLOSE;");
+    static const QString TEMPL_AFTER_TIME_CATEGORY = QStringLiteral("TMPLAFTTIME;");
+    static const QString KMAIL_SERNUM_CATEGORY     = QStringLiteral("KMAIL:");
+    static const QString LOG_CATEGORY              = QStringLiteral("LOG:");
 
     // KAlarm pre-1.5.0/1.9.9 properties
     static const QByteArray KMAIL_ID_PROPERTY("KMAILID");    // X-KDE-KALARM-KMAILID property
 
     // KAlarm pre-2.6.0 properties
     static const QByteArray ARCHIVE_PROPERTY("ARCHIVE");     // X-KDE-KALARM-ARCHIVE property
-    static const QString ARCHIVE_REMINDER_ONCE_TYPE = QLatin1String("ONCE");
-    static const QString REMINDER_ONCE_TYPE         = QLatin1String("REMINDER_ONCE");
+    static const QString ARCHIVE_REMINDER_ONCE_TYPE = QStringLiteral("ONCE");
+    static const QString REMINDER_ONCE_TYPE         = QStringLiteral("REMINDER_ONCE");
     static const QByteArray EMAIL_ID_PROPERTY("EMAILID");         // X-KDE-KALARM-EMAILID property
     static const QByteArray SPEAK_PROPERTY("SPEAK");              // X-KDE-KALARM-SPEAK property
     static const QByteArray CANCEL_ON_ERROR_PROPERTY("ERRCANCEL");// X-KDE-KALARM-ERRCANCEL property
@@ -5019,7 +5019,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     addLateCancel = true;
                 }
                 if (types.count() > 0) {
-                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QLatin1String(",")));
+                    alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::TYPE_PROPERTY, types.join(QStringLiteral(",")));
                 }
 
                 if (pre_0_7  &&  alarm->repeatCount() > 0  &&  alarm->snoozeTime().value() > 0) {
@@ -5145,7 +5145,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
             int i;
             while ((i = cats.indexOf(TEMPL_DEF_TIME_CAT)) >= 0) {
                 cats.removeAt(i);
-                (flags += KAEventPrivate::TEMPL_AFTER_TIME_FLAG) += QLatin1String("0");
+                (flags += KAEventPrivate::TEMPL_AFTER_TIME_FLAG) += QStringLiteral("0");
             }
         }
 
@@ -5189,7 +5189,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 } else if (cat.startsWith(KMAIL_SERNUM_CATEGORY)) {
                     (flags += KAEventPrivate::KMAIL_SERNUM_FLAG) += cat.mid(KMAIL_SERNUM_CATEGORY.length());
                 } else if (cat == ARCHIVE_CATEGORY) {
-                    event->setCustomProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY, QLatin1String("0"));
+                    event->setCustomProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY, QStringLiteral("0"));
                 } else if (cat.startsWith(ARCHIVE_CATEGORIES)) {
                     event->setCustomProperty(KACalendar::APPNAME, ARCHIVE_PROPERTY, cat.mid(ARCHIVE_CATEGORIES.length()));
                 } else if (cat.startsWith(LOG_CATEGORY)) {
@@ -5212,7 +5212,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
         }
 
         if (addLateCancel) {
-            (flags += KAEventPrivate::LATE_CANCEL_FLAG) += QLatin1String("1");
+            (flags += KAEventPrivate::LATE_CANCEL_FLAG) += QStringLiteral("1");
         }
         if (!flags.isEmpty()) {
             event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY, flags.join(KAEventPrivate::SC));
@@ -5274,7 +5274,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                         if (nextMainDateTime != startDateTime) {
                             QDateTime dt = nextMainDateTime.dateTime();
                             event->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY,
-                                                     dt.toString(dateOnly ? QLatin1String("yyyyMMdd") : QLatin1String("yyyyMMddThhmmss")));
+                                                     dt.toString(dateOnly ? QStringLiteral("yyyyMMdd") : QStringLiteral("yyyyMMddThhmmss")));
                         }
                     }
                     alarm->setStartOffset(0);

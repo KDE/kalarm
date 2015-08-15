@@ -266,7 +266,7 @@ bool KARecurrence::Private::init(RecurrenceRule::PeriodType recurType, int freq,
 */
 bool KARecurrence::set(const QString &icalRRULE)
 {
-    static const QString RRULE = QLatin1String("RRULE:");
+    static const QString RRULE = QStringLiteral("RRULE:");
     d->clear();
     if (icalRRULE.isEmpty()) {
         return true;

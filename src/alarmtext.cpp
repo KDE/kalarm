@@ -92,11 +92,11 @@ void AlarmText::Private::initialise()
 {
     if (!mInitialised) {
         mInitialised     = true;
-        mFromPrefixEn    = QLatin1String("From:");
-        mToPrefixEn      = QLatin1String("To:");
-        mCcPrefixEn      = QLatin1String("Cc:");
-        mDatePrefixEn    = QLatin1String("Date:");
-        mSubjectPrefixEn = QLatin1String("Subject:");
+        mFromPrefixEn    = QStringLiteral("From:");
+        mToPrefixEn      = QStringLiteral("To:");
+        mCcPrefixEn      = QStringLiteral("Cc:");
+        mDatePrefixEn    = QStringLiteral("Date:");
+        mSubjectPrefixEn = QStringLiteral("Subject:");
     }
 }
 
@@ -316,7 +316,7 @@ unsigned long AlarmText::kmailSerialNumber() const
 */
 QString AlarmText::summary(const KAEvent &event, int maxLines, bool *truncated)
 {
-    static const QRegExp localfile(QLatin1String("^file:/+"));
+    static const QRegExp localfile(QStringLiteral("^file:/+"));
     QString text;
     switch (event.actionSubType()) {
     case KAEvent::AUDIO:
