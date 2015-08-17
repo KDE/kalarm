@@ -398,9 +398,10 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             content->setBody(coded + "\n\n");
 
             // Set the content type
-            KMimeType::Ptr type = KMimeType::findByUrl(url);
+            QMimeDatabase mimeDb;
+            QString typeName = mimeDb.mimeTypeForUrl(url).name();
             KMime::Headers::ContentType* ctype = new KMime::Headers::ContentType;
-            ctype->fromUnicodeString(type->name(), autoDetectCharset(type->name()));
+            ctype->fromUnicodeString(typeName, autoDetectCharset(typeName));
             ctype->setName(attachment, "local");
             content->setHeader(ctype);
 

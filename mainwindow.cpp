@@ -78,6 +78,7 @@ using namespace KCalUtils;
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QMenu>
+#include <QMimeDatabase>
 #include <qinputdialog.h>
 #include "kalarm_debug.h"
 
@@ -1359,8 +1360,9 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     {
         qCDebug(KALARM_LOG) << "URL";
         // Try to find the mime type of the file, without downloading a remote file
-        KMimeType::Ptr mimeType = KMimeType::findByUrl(files[0]);
-        action = mimeType->name().startsWith(QStringLiteral("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
+        QMimeDatabase mimeDb;
+        const QString mimeTypeName = mimeDb.mimeTypeForUrl(files[0]).name();
+        action = mimeTypeName.startsWith(QStringLiteral("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
         alarmText.setText(files[0].prettyUrl());
     }
     else if (data->hasText())
