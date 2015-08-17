@@ -863,10 +863,10 @@ QString MessageWin::dateTimeToDisplay()
                 // zone. Note that the iCalendar time zone might represent the local
                 // time zone in a slightly different way from the system time zone,
                 // so the zone comparison above might not produce the desired result.
-                const QString tz = mDateTime.kDateTime().toString(QString::fromLatin1("%Z"));
+                const QString tz = mDateTime.kDateTime().toString(QStringLiteral("%Z"));
                 KDateTime local = mDateTime.kDateTime();
                 local.setTimeSpec(KDateTime::Spec::LocalZone());
-                showZone = (local.toString(QString::fromLatin1("%Z")) != tz);
+                showZone = (local.toString(QStringLiteral("%Z")) != tz);
             }
             tm = KLocale::global()->formatDateTime(mDateTime.kDateTime(), KLocale::ShortDate, KLocale::DateTimeFormatOptions(showZone ? KLocale::TimeZone : 0));
         }

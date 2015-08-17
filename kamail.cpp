@@ -611,7 +611,7 @@ QStringList KAMail::errors(const QString& err, ErrType prefix)
     }
     if (err.isEmpty())
         return QStringList(error1);
-    QStringList errs(QString::fromLatin1("%1:").arg(error1));
+    QStringList errs(QStringLiteral("%1:").arg(error1));
     errs += err;
     return errs;
 }

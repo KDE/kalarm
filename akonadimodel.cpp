@@ -414,13 +414,13 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                             break;
                         case Qt::DisplayRole:
                             if (event.commandError() != KAEvent::CMD_NO_ERROR)
-                                return QString::fromLatin1("!");
+                                return QLatin1String("!");
                             break;
                         case SortRole:
                         {
                             const unsigned i = (event.actionTypes() == KAEvent::ACT_DISPLAY)
                                                ? event.bgColour().rgb() : 0;
-                            return QString::fromLatin1("%1").arg(i, 6, 10, QLatin1Char('0'));
+                            return QStringLiteral("%1").arg(i, 6, 10, QLatin1Char('0'));
                         }
                         default:
                             break;
@@ -450,7 +450,7 @@ QVariant AkonadiModel::data(const QModelIndex& index, int role) const
                         case ValueRole:
                             return static_cast<int>(event.actionSubType());
                         case SortRole:
-                            return QString::fromLatin1("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
+                            return QStringLiteral("%1").arg(event.actionSubType(), 2, 10, QLatin1Char('0'));
                     }
                     break;
                 case TextColumn:
@@ -1025,7 +1025,7 @@ QString AkonadiModel::repeatOrder(const KAEvent& event) const
                 break;
         }
     }
-    return QString::fromLatin1("%1%2").arg(static_cast<char>('0' + repeatOrder)).arg(repeatInterval, 8, 10, QLatin1Char('0'));
+    return QStringLiteral("%1%2").arg(static_cast<char>('0' + repeatOrder)).arg(repeatInterval, 8, 10, QLatin1Char('0'));
 }
 
 /******************************************************************************

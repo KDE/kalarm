@@ -84,7 +84,7 @@ inline QString recurText(const KAEvent& event)
 {
     QString r;
     if (event.repetition())
-        r = QString::fromLatin1("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
+        r = QStringLiteral("%1 / %2").arg(event.recurrenceText()).arg(event.repetitionText());
     else
         r = event.recurrenceText();
     return i18nc("@title:tab", "Recurrence - [%1]", r);

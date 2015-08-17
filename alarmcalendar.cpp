@@ -572,7 +572,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 {
     qCDebug(KALARM_LOG);
     QUrl url = KFileDialog::getOpenUrl(KUrl("filedialog:///importalarms"),
-                                       QString::fromLatin1("*.vcs *.ics|%1").arg(i18nc("@info", "Calendar Files")), parent);
+                                       QStringLiteral("*.vcs *.ics|%1").arg(i18nc("@info", "Calendar Files")), parent);
     if (url.isEmpty())
     {
         qCCritical(KALARM_LOG) << "Empty URL";
@@ -696,7 +696,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 {
     bool append;
     QString file = FileDialog::getSaveFileName(KUrl("kfiledialog:///exportalarms"),
-                                               QString::fromLatin1("*.ics|%1").arg(i18nc("@info", "Calendar Files")),
+                                               QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")),
                                                parent, i18nc("@title:window", "Choose Export Calendar"),
                                                &append);
     if (file.isEmpty())

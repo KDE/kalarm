@@ -1536,7 +1536,7 @@ void setDontShowErrors(const EventId& eventId, const QStringList& tags)
         return;
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QStringLiteral("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
     if (tags.isEmpty())
         group.deleteEntry(id);
     else
@@ -1554,7 +1554,7 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
         return;
     KConfig config(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + ALARM_OPTS_FILE);
     KConfigGroup group(&config, DONT_SHOW_ERRORS_GROUP);
-    const QString id = QString::fromLatin1("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
+    const QString id = QStringLiteral("%1:%2").arg(eventId.collectionId()).arg(eventId.eventId());
     QStringList tags = group.readEntry(id, QStringList());
     if (tags.indexOf(tag) < 0)
     {
