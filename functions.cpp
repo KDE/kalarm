@@ -1574,13 +1574,13 @@ bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
     QWidget* desktop = KApplication::desktop();
-    QSize s = QSize(config.readEntry(QString::fromLatin1("Width %1").arg(desktop->width()), (int)0),
-                    config.readEntry(QString::fromLatin1("Height %1").arg(desktop->height()), (int)0));
+    QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktop->width()), (int)0),
+                    config.readEntry(QStringLiteral("Height %1").arg(desktop->height()), (int)0));
     if (s.isEmpty())
         return false;
     result = s;
     if (splitterWidth)
-        *splitterWidth = config.readEntry(QString::fromLatin1("Splitter %1").arg(desktop->width()), -1);
+        *splitterWidth = config.readEntry(QStringLiteral("Splitter %1").arg(desktop->width()), -1);
     return true;
 }
 
