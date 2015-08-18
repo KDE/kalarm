@@ -19,7 +19,7 @@ include_directories(
 add_subdirectory(appicons)
 add_subdirectory(pixmaps)
 add_subdirectory(autostart)
-
+add_subdirectory(kconf_update)
 
 ########### next target ###############
 set(libkalarm_SRCS
@@ -171,8 +171,6 @@ install(FILES kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 install(FILES kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
 install(FILES kalarmui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/kalarm)
 install(FILES org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACEDIR})
-install(FILES kalarm.upd DESTINATION ${KDE_INSTALL_KCONFUPDATEDIR})
-install(PROGRAMS kalarm-version.pl kalarm-1.2.1-general.pl kalarm-1.9.5-defaults.pl kalarm-2.0.2-general.pl kalarm-2.1.5-general.pl DESTINATION ${KDE_INSTALL_KCONFUPDATEDIR})
 
 ########### KAuth helper ###############
 
