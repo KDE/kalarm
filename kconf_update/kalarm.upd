@@ -1,3 +1,5 @@
+Version=5
+
 # KAlarm version 1.9.5
 #
 Id=1.9.5
@@ -77,3 +79,8 @@ Id=2.3.2
 File=kalarmrc
 Group=General
 RemoveKey=Sod
+
+# KAlarm version 15.08
+# Update entry in kickoffrc after the .desktop file has been renamed in 15.08
+Id=kalarm-15.08-kickoff
+Script=kalarm-15.08-kickoff.sh,sh
