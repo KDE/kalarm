@@ -4,7 +4,6 @@ add_definitions( -DQT_NO_CAST_TO_ASCII )
 
 ########### next target ###############
 set(kalarmcal_LIB_SRCS
-    kalarmcal_debug.cpp
     kacalendar.cpp
     karecurrence.cpp
     alarmtext.cpp
@@ -18,6 +17,7 @@ set(kalarmcal_LIB_SRCS
     eventattribute.cpp
 )
 
+ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME log_kalarmcal)
 
 add_library(KF5AlarmCalendar ${kalarmcal_LIB_SRCS})
 
