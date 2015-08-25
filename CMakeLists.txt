@@ -21,6 +21,9 @@ add_subdirectory(pixmaps)
 add_subdirectory(autostart)
 add_subdirectory(kconf_update)
 
+set(libkalarm_common_SRCS)
+ecm_qt_declare_logging_category(libkalarm_common_SRCS HEADER kalarm_debug.h IDENTIFIER KALARM_LOG CATEGORY_NAME log_kalarm)
+
 ########### next target ###############
 set(libkalarm_SRCS
     lib/buttongroup.cpp
@@ -51,7 +54,7 @@ set(libkalarm_SRCS
 )
 
 set(kalarm_bin_SRCS ${libkalarm_SRCS}
-    kalarm_debug.cpp
+    ${libkalarm_common_SRCS}
     birthdaydlg.cpp
     birthdaymodel.cpp
     main.cpp
@@ -174,7 +177,7 @@ install(FILES org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACED
 
 ########### KAuth helper ###############
 
-add_executable(kalarm_helper rtcwakeaction.cpp kalarm_debug.cpp)
+add_executable(kalarm_helper rtcwakeaction.cpp ${libkalarm_common_SRCS})
 target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
 install(TARGETS kalarm_helper DESTINATION ${KDE_INSTALL_LIBEXECDIR})
 kauth_install_helper_files(kalarm_helper org.kde.kalarmrtcwake root)

@@ -4,8 +4,9 @@ include_directories( ../  )
 
 set(kalarmautostart_SRCS
     autostart.cpp
-    kalarm_autostart_debug.cpp
 )
+
+ecm_qt_declare_logging_category(kalarmautostart_SRCS HEADER kalarm_autostart_debug.h IDENTIFIER KALARMAUTOSTART_LOG CATEGORY_NAME log_autostart_kalarm)
 
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/../appicons/*-apps-kalarm.png")
 ecm_add_app_icon(kalarmautostart_SRCS ICONS ${ICONS_SRCS})
