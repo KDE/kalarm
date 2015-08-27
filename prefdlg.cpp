@@ -157,37 +157,37 @@ KAlarmPrefDlg::KAlarmPrefDlg()
     mMiscPage = new MiscPrefTab(mTabScrollGroup);
     mMiscPageItem = new KPageWidgetItem(mMiscPage, i18nc("@title:tab General preferences", "General"));
     mMiscPageItem->setHeader(i18nc("@title General preferences", "General"));
-    mMiscPageItem->setIcon(QIcon(DesktopIcon(QStringLiteral("preferences-other"))));
+    mMiscPageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-other")));
     addPage(mMiscPageItem);
 
     mTimePage = new TimePrefTab(mTabScrollGroup);
     mTimePageItem = new KPageWidgetItem(mTimePage, i18nc("@title:tab", "Time & Date"));
     mTimePageItem->setHeader(i18nc("@title", "Time and Date"));
-    mTimePageItem->setIcon(QIcon(DesktopIcon(QStringLiteral("preferences-system-time"))));
+    mTimePageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-system-time")));
     addPage(mTimePageItem);
 
     mStorePage = new StorePrefTab(mTabScrollGroup);
     mStorePageItem = new KPageWidgetItem(mStorePage, i18nc("@title:tab", "Storage"));
     mStorePageItem->setHeader(i18nc("@title", "Alarm Storage"));
-    mStorePageItem->setIcon(QIcon(DesktopIcon(QStringLiteral("system-file-manager"))));
+    mStorePageItem->setIcon(QIcon::fromTheme(QStringLiteral("system-file-manager")));
     addPage(mStorePageItem);
 
     mEmailPage = new EmailPrefTab(mTabScrollGroup);
     mEmailPageItem = new KPageWidgetItem(mEmailPage, i18nc("@title:tab Email preferences", "Email"));
     mEmailPageItem->setHeader(i18nc("@title", "Email Alarm Settings"));
-    mEmailPageItem->setIcon(QIcon(DesktopIcon(QStringLiteral("internet-mail"))));
+    mEmailPageItem->setIcon(QIcon::fromTheme(QStringLiteral("internet-mail")));
     addPage(mEmailPageItem);
 
     mViewPage = new ViewPrefTab(mTabScrollGroup);
     mViewPageItem = new KPageWidgetItem(mViewPage, i18nc("@title:tab", "View"));
     mViewPageItem->setHeader(i18nc("@title", "View Settings"));
-    mViewPageItem->setIcon(QIcon(DesktopIcon(QStringLiteral("preferences-desktop-theme"))));
+    mViewPageItem->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-theme")));
     addPage(mViewPageItem);
 
     mEditPage = new EditPrefTab(mTabScrollGroup);
     mEditPageItem = new KPageWidgetItem(mEditPage, i18nc("@title:tab", "Edit"));
     mEditPageItem->setHeader(i18nc("@title", "Default Alarm Edit Settings"));
-    mEditPageItem->setIcon(QIcon(DesktopIcon(QStringLiteral("document-properties"))));
+    mEditPageItem->setIcon(QIcon::fromTheme(QStringLiteral("document-properties")));
     addPage(mEditPageItem);
     connect(button(QDialogButtonBox::Ok), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotOk);
     connect(button(QDialogButtonBox::Cancel), &QAbstractButton::clicked, this, &KAlarmPrefDlg::slotCancel);

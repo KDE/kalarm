@@ -638,8 +638,8 @@ void MessageWin::initView()
         layout->setMargin(2*KDialog::marginHint());
         layout->addStretch();
         topLayout->addLayout(layout);
-        QLabel* label = new QLabel(topWidget);
-        label->setPixmap(DesktopIcon(QStringLiteral("dialog-error")));
+        QLabel* label = new QLabel(topWidget);        
+        label->setPixmap(QIcon::fromTheme(QLatin1String("dialog-error")).pixmap(IconSize(KIconLoader::Desktop), IconSize(KIconLoader::Desktop)));
         label->setFixedSize(label->sizeHint());
         layout->addWidget(label, 0, Qt::AlignRight);
         QVBoxLayout* vlayout = new QVBoxLayout();
