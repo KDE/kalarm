@@ -1333,7 +1333,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSoundFile = new QLineEdit(box);
     mSoundFileLabel->setBuddy(mSoundFile);
     mSoundFileBrowse = new QPushButton(box);
-    mSoundFileBrowse->setIcon(QIcon(SmallIcon(QStringLiteral("document-open"))));
+    mSoundFileBrowse->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     int size = mSoundFileBrowse->sizeHint().height();
     mSoundFileBrowse->setFixedSize(size, size);
     connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));

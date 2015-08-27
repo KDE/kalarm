@@ -205,7 +205,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // File browse button
     mFileBrowseButton = new QPushButton(mFileBox);
     fileBoxHLayout->addWidget(mFileBrowseButton);
-    mFileBrowseButton->setIcon(SmallIcon(QStringLiteral("document-open")));
+    mFileBrowseButton->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     int size = mFileBrowseButton->sizeHint().height();
     mFileBrowseButton->setFixedSize(size, size);
     mFileBrowseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
@@ -805,7 +805,7 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     // The file browser dialog is activated by the PickLogFileRadio class.
     QPushButton* browseButton = new QPushButton(box);
     boxHLayout->addWidget(browseButton);
-    browseButton->setIcon(SmallIcon(QStringLiteral("document-open")));
+    browseButton->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
     int size = browseButton->sizeHint().height();
     browseButton->setFixedSize(size, size);
     browseButton->setToolTip(i18nc("@info:tooltip", "Choose a file"));
@@ -1110,7 +1110,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     grid->addWidget(mEmailToEdit, 1, 1);
 
     mEmailAddressButton = new QPushButton(parent);
-    mEmailAddressButton->setIcon(SmallIcon(QStringLiteral("help-contents")));
+    mEmailAddressButton->setIcon(QIcon::fromTheme(QStringLiteral("help-contents")));
     int size = mEmailAddressButton->sizeHint().height();
     mEmailAddressButton->setFixedSize(size, size);
     connect(mEmailAddressButton, &QPushButton::clicked, this, &EditEmailAlarmDlg::openAddressBook);
