@@ -75,7 +75,7 @@ void AlarmListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& opt
                 {
                     opt.font.setBold(true);
                     opt.font.setStyleHint(QFont::Serif);
-                    opt.font.setPixelSize(opt.rect.height() - 2);
+                    opt.font.setPointSize(opt.rect.height() - 2);
                 }
                 break;
             }
