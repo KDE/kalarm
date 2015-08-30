@@ -34,7 +34,6 @@
 
 #include <KTimeZone>
 #include <KLocalizedString>
-#include <kstandarddirs.h>
 #include <kio/netaccess.h>
 #include <kfileitem.h>
 #include <KSharedConfig>
@@ -591,7 +590,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     if (local)
     {
         filename = url.toLocalFile();
-        if (!KStandardDirs::exists(filename))
+        if (!QFile::exists(filename))
         {
             qCDebug(KALARM_LOG) << "File '" << url.toDisplayString() <<"' not found";
             KAMessageBox::error(parent, xi18nc("@info", "Could not load calendar <filename>%1</filename>.", url.toDisplayString()));

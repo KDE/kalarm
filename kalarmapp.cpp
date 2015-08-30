@@ -44,7 +44,6 @@
 #include <kalarmcal/karecurrence.h>
 
 #include <KLocalizedString>
-#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <KSharedConfig>
 #include <K4AboutData>
@@ -169,7 +168,7 @@ KAlarmApp::KAlarmApp()
     if (!mSpeechEnabled) { qCDebug(KALARM_LOG) << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
     const QString korg = QStringLiteral("korganizer");
-    mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isNull()  ||  !KStandardDirs::findExe(korg).isNull();
+    mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isEmpty();
     if (!mKOrganizerEnabled) { qCDebug(KALARM_LOG) << "KOrganizer options disabled (KOrganizer not found)"; }
 }
 
