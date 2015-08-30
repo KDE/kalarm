@@ -132,6 +132,7 @@ int main(int argc, char* argv[])
     // This is the first time through
     qCDebug(KALARM_LOG) << "initialising";
     KAlarmApp* app = KAlarmApp::getInstance();
+    app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     app->restoreSession();
     return app->exec();
 }
