@@ -51,7 +51,7 @@
 using namespace KCalCore;
 #include <KIdentityManagement/kidentitymanagement/identitymanager.h>
 #include <KIdentityManagement/kidentitymanagement/identity.h>
-#include <KHolidays/kholidays/holidays.h>
+#include <KHolidays/HolidayRegion>
 
 #include <kconfiggroup.h>
 #include <KSharedConfig>
