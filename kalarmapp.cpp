@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1280,7 +1280,7 @@ void KAlarmApp::setSpreadWindowsState(bool spread)
 bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, const KDateTime& dateTime,
                               int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                               const QFont& font, const QString& audioFile, float audioVolume, int reminderMinutes,
-                              const KARecurrence& recurrence, int repeatInterval, int repeatCount,
+                              const KARecurrence& recurrence, KCalCore::Duration repeatInterval, int repeatCount,
                               uint mailFromID, const KCalCore::Person::List& mailAddresses,
                               const QString& mailSubject, const QStringList& mailAttachments)
 {
