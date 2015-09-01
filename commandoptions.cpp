@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -307,9 +307,9 @@ CommandOptions::CommandOptions()
                     count = -1;
 
                 // Get the recurrence interval
-                int interval;
+                int intervalOfType;
                 KARecurrence::Type recurType;
-                if (!convInterval(mArgs->getOption("interval").toLocal8Bit(), recurType, interval, !haveRecurrence))
+                if (!convInterval(mArgs->getOption("interval").toLocal8Bit(), recurType, intervalOfType, !haveRecurrence))
                     setErrorParameter("--interval");
                 else if (mAlarmTime.isDateOnly()  &&  recurType == KARecurrence::MINUTELY)
                     setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> parameter for date-only alarm", QStringLiteral("--interval")));
@@ -318,13 +318,14 @@ CommandOptions::CommandOptions()
                 {
                     if (mRecurrence)
                     {
-                        // There is a also a recurrence specified, so set up a sub-repetition
-                        int longestInterval = mRecurrence->longestInterval();
-                        if (count * interval > longestInterval)
+                        // There is a also a recurrence specified, so set up a sub-repetition.
+                        // In this case, 'intervalOfType' is in minutes.
+                        mRepeatInterval = KCalCore::Duration(intervalOfType * 60);
+                        KCalCore::Duration longestInterval = mRecurrence->longestInterval();
+                        if (mRepeatInterval * count > longestInterval)
                             setError(xi18nc("@info:shell", "Invalid <icode>%1</icode> and <icode>%2</icode> parameters: repetition is longer than <icode>%3</icode> interval",
                                            QLatin1String("--interval"), QStringLiteral("--repeat"), QStringLiteral("--recurrence")));
-                        mRepeatCount    = count;
-                        mRepeatInterval = interval;
+                        mRepeatCount = count;
                     }
                 }
                 else
@@ -332,7 +333,7 @@ CommandOptions::CommandOptions()
                     // There is no other recurrence specified, so convert the repetition
                     // parameters into a KCal::Recurrence
                     mRecurrence = new KARecurrence;
-                    mRecurrence->set(recurType, interval, count, mAlarmTime, endTime);
+                    mRecurrence->set(recurType, intervalOfType, count, mAlarmTime, endTime);
                 }
             }
             else
@@ -553,7 +554,7 @@ void CommandOptions::checkEditType(EditAlarmDlg::Type type1, EditAlarmDlg::Type 
 /******************************************************************************
 * Convert a non-zero positive time interval command line parameter.
 * 'timeInterval' receives the count for the recurType. If 'allowMonthYear' is
-* false, weeks are converted to days in 'timeInterval'.
+* false, weeks and days are converted to minutes.
 * Reply = true if successful.
 */
 static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurType, int& timeInterval, bool allowMonthYear)
@@ -613,6 +614,7 @@ static bool convInterval(const QByteArray& timeParam, KARecurrence::Type& recurT
                 // fall through to DAILY
             case KARecurrence::DAILY:
                 interval *= 24*60;
+                recurType = KARecurrence::MINUTELY;
                 break;
             default:
                 break;

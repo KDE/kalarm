@@ -1,7 +1,7 @@
 /*
  *  commandoptions.h  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ class CommandOptions
         KDateTime           alarmTime() const         { return mAlarmTime; }
         KARecurrence*       recurrence() const        { return mRecurrence; }
         int                 subRepeatCount() const    { return mRepeatCount; }
-        int                 subRepeatInterval() const { return mRepeatInterval; }
+        KCalCore::Duration  subRepeatInterval() const { return mRepeatInterval; }
         int                 lateCancel() const        { return mLateCancel; }
         QColor              bgColour() const          { return mBgColour; }
         QColor              fgColour() const          { return mFgColour; }
@@ -103,7 +103,7 @@ class CommandOptions
         KDateTime           mAlarmTime;      // NEW: alarm time
         KARecurrence*       mRecurrence;     // NEW: recurrence
         int                 mRepeatCount;    // NEW: sub-repetition count
-        int                 mRepeatInterval; // NEW: sub-repetition interval
+        KCalCore::Duration  mRepeatInterval; // NEW: sub-repetition interval
         int                 mLateCancel;     // NEW: late-cancellation interval
         QColor              mBgColour;       // NEW: background colour
         QColor              mFgColour;       // NEW: foreground colour

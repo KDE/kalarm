@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -87,7 +87,7 @@ class KAlarmApp : public KUniqueApplication
                                          int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
                                          const QFont&, const QString& audioFile, float audioVolume,
                                          int reminderMinutes, const KARecurrence& recurrence,
-                                         int repeatInterval, int repeatCount,
+                                         KCalCore::Duration repeatInterval, int repeatCount,
                                          uint mailFromID = 0, const KCalCore::Person::List& mailAddresses = KCalCore::Person::List(),
                                          const QString& mailSubject = QString(),
                                          const QStringList& mailAttachments = QStringList());
