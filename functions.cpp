@@ -1604,15 +1604,15 @@ void writeConfigWindowSize(const char* window, const QSize& size, int splitterWi
 * If a text file, its type is distinguished.
 * Reply = file type.
 */
-FileType fileType(const KMimeType::Ptr& mimetype)
+FileType fileType(const QMimeType& mimetype)
 {
-    if (mimetype->is(QStringLiteral("text/html")))
+    if (mimetype.inherits(QStringLiteral("text/html")))
         return TextFormatted;
-    if (mimetype->is(QStringLiteral("application/x-executable")))
+    if (mimetype.inherits(QStringLiteral("application/x-executable")))
         return TextApplication;
-    if (mimetype->is(QStringLiteral("text/plain")))
+    if (mimetype.inherits(QStringLiteral("text/plain")))
         return TextPlain;
-    if (mimetype->name().startsWith(QStringLiteral("image/")))
+    if (mimetype.name().startsWith(QLatin1String("image/")))
         return Image;
     return Unknown;
 }

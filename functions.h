@@ -30,12 +30,12 @@
 #include <AkonadiCore/collection.h>
 #include <AkonadiCore/item.h>
 #include <kfile.h>
-#include <kmimetype.h>
 #include <KUrl>
 
 #include <QSize>
 #include <QString>
 #include <QVector>
+#include <QMimeType>
 
 using namespace KAlarmCal;
 
@@ -90,7 +90,7 @@ void                writeConfigWindowSize(const char* window, const QSize&, int 
 /** Check from its mime type whether a file appears to be a text or image file.
  *  If a text file, its type is distinguished.
  */
-FileType            fileType(const KMimeType::Ptr& mimetype);
+FileType            fileType(const QMimeType& mimetype);
 /** Check that a file exists and is a plain readable file, optionally a text/image file.
  *  Display a Continue/Cancel error message if 'errmsgParent' non-null.
  */
