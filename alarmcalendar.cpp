@@ -34,7 +34,8 @@
 
 #include <KTimeZone>
 #include <KLocalizedString>
-#include <kio/netaccess.h>
+#include <KIO/StoredTransferJob>
+#include <KJobWidgets>
 #include <kfileitem.h>
 #include <KSharedConfig>
 #include <QTemporaryFile>
@@ -199,8 +200,9 @@ bool AlarmCalendar::open()
 
         // Check for file's existence, assuming that it does exist when uncertain,
         // to avoid overwriting it.
-        if (!KIO::NetAccess::exists(mUrl, KIO::NetAccess::SourceSide, MainWindow::mainMainWindow())
-        ||  load() == 0)
+        auto statJob = KIO::stat(mUrl.url(), KIO::StatJob::SourceSide, 2);
+        KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
+        if (!statJob->exec() ||  load() == 0)
         {
             // The calendar file doesn't yet exist, or it's zero length, so create a new one
             bool created = false;
@@ -242,28 +244,41 @@ int AlarmCalendar::load()
         if (!mCalendarStorage)
             return -2;
 
+        QString filename;
         qCDebug(KALARM_LOG) << mUrl.prettyUrl();
-        QString tmpFile;
-        if (!KIO::NetAccess::download(mUrl, tmpFile, MainWindow::mainMainWindow()))
-        {
-            qCCritical(KALARM_LOG) << "Download failure";
-            KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", mUrl.prettyUrl()));
-            return -1;
+        if (!mUrl.isLocalFile()) {
+            auto getJob = KIO::storedGet(mUrl.url());
+            KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
+            if (!getJob->exec())
+            {
+                qCCritical(KALARM_LOG) << "Download failure";
+                KAMessageBox::error(MainWindow::mainMainWindow(),
+                                    xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", mUrl.prettyUrl()));
+                return -1;
+            }
+            QTemporaryFile tmpFile;
+            tmpFile.setAutoRemove(false);
+            tmpFile.write(getJob->data());
+            qCDebug(KALARM_LOG) << "--- Downloaded to" << tmpFile.fileName();
+            filename = tmpFile.fileName();
+        } else {
+            filename = mUrl.toLocalFile();
         }
-        qCDebug(KALARM_LOG) << "--- Downloaded to" << tmpFile;
         mCalendarStorage->calendar()->setTimeSpec(Preferences::timeZone(true));
-        mCalendarStorage->setFileName(tmpFile);
+        mCalendarStorage->setFileName(filename);
         if (!mCalendarStorage->load())
         {
             // Check if the file is zero length
-            KIO::NetAccess::removeTempFile(tmpFile);
-            KIO::UDSEntry uds;
-            KIO::NetAccess::stat(mUrl, uds, MainWindow::mainMainWindow());
-            KFileItem fi(uds, mUrl);
-            if (!fi.size())
-                return 0;     // file is zero length
-            qCCritical(KALARM_LOG) << "Error loading calendar file '" << tmpFile <<"'";
+            if (mUrl.isLocalFile()) {
+                auto statJob = KIO::stat(mUrl.upUrl());
+                KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
+                statJob->exec();
+                KFileItem fi(statJob->statResult(), mUrl);
+                if (!fi.size())
+                    return 0;     // file is zero length
+            }
+
+            qCCritical(KALARM_LOG) << "Error loading calendar file '" << filename <<"'";
             KAMessageBox::error(MainWindow::mainMainWindow(),
                                 xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mUrl.prettyUrl()));
             // load() could have partially populated the calendar, so clear it out
@@ -274,8 +289,10 @@ int AlarmCalendar::load()
             return -1;
         }
         if (!mLocalFile.isEmpty())
-            KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
-        mLocalFile = tmpFile;
+            if (mLocalFile.startsWith(QDir::tempPath())) {
+                QFile::remove(mLocalFile);
+            }
+        mLocalFile = filename;
         fix(mCalendarStorage);   // convert events to current KAlarm format for when calendar is saved
         updateDisplayKAEvents();
     }
@@ -329,7 +346,11 @@ bool AlarmCalendar::saveCal(const QString& newFile)
 
         if (!mICalUrl.isLocalFile())
         {
-            if (!KIO::NetAccess::upload(saveFilename, mICalUrl, MainWindow::mainMainWindow()))
+            QFile file(saveFilename);
+            file.open(QIODevice::ReadOnly);
+            auto putJob = KIO::storedPut(&file, mICalUrl.url(), -1);
+            KJobWidgets::setWindow(putJob, MainWindow::mainMainWindow());
+            if (!putJob->exec())
             {
                 qCCritical(KALARM_LOG) << saveFilename << "upload failed.";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
@@ -360,7 +381,9 @@ void AlarmCalendar::close()
     {
         if (!mLocalFile.isEmpty())
         {
-            KIO::NetAccess::removeTempFile(mLocalFile);   // removes it only if it IS a temporary file
+            if (mLocalFile.startsWith(QDir::tempPath())) { // removes it only if it IS a temporary file
+                QFile::remove(mLocalFile);
+            }
             mLocalFile = QStringLiteral("");
         }
     }
@@ -599,12 +622,19 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     }
     else
     {
-        if (!KIO::NetAccess::download(url, filename, MainWindow::mainMainWindow()))
+        auto getJob = KIO::storedGet(url.url());
+        KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
+        if (!getJob->exec())
         {
             qCCritical(KALARM_LOG) << "Download failure";
             KAMessageBox::error(parent, xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", url.toDisplayString()));
             return false;
         }
+        QTemporaryFile tmpFile;
+        tmpFile.setAutoRemove(false);
+        tmpFile.write(getJob->data());
+        tmpFile.seek(0);
+        filename = tmpFile.fileName();
         qCDebug(KALARM_LOG) << "--- Downloaded to" << filename;
     }
 
@@ -680,7 +710,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 
     }
     if (!local)
-        KIO::NetAccess::removeTempFile(filename);
+        QFile::remove(filename);
     return success;
 }
 
@@ -714,8 +744,10 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     if (append  &&  !calStorage->load())
     {
         KIO::UDSEntry uds;
-        KIO::NetAccess::stat(url, uds, parent);
-        KFileItem fi(uds, url);
+        auto statJob = KIO::stat(url.url(), KIO::StatJob::SourceSide, 2);
+        KJobWidgets::setWindow(statJob, parent);
+        statJob->exec();
+        KFileItem fi(statJob->statResult(), url);
         if (fi.size())
         {
             qCCritical(KALARM_LOG) << "Error loading calendar file" << file << "for append";
@@ -763,12 +795,19 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
                                 xi18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
             success = false;
         }
-        else if (!local  &&  !KIO::NetAccess::upload(file, url, parent))
+        else if (!local)
         {
-            qCCritical(KALARM_LOG) << file << ": upload failed";
-            KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
-            success = false;
+            QFile qFile(file);
+            qFile.open(QIODevice::ReadOnly);
+            auto uploadJob = KIO::storedPut(&qFile, url.url(), -1);
+            KJobWidgets::setWindow(uploadJob, parent);
+            if (!uploadJob->exec())
+            {
+                qCCritical(KALARM_LOG) << file << ": upload failed";
+                KAMessageBox::error(MainWindow::mainMainWindow(),
+                                    xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
+                success = false;
+            }
         }
         delete tempFile;
     }

@@ -44,7 +44,8 @@
 #include <KUrl>
 #include <KLocalizedString>
 #include <kfileitem.h>
-#include <kio/netaccess.h>
+#include <KIO/StatJob>
+#include <KJobWidgets>
 #include <kemailsettings.h>
 #include <kcodecs.h>
 #include <kcharsets.h>
@@ -358,12 +359,14 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QString attachError = xi18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
             url.cleanPath();
             KIO::UDSEntry uds;
-            if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
+            auto statJob = KIO::stat(url.url(), KIO::StatJob::SourceSide, 2);
+            KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
+            if (!statJob->exec())
             {
                 qCCritical(KALARM_LOG) << "Not found:" << attachment;
                 return xi18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
             }
-            KFileItem fi(uds, url);
+            KFileItem fi(statJob->statResult(), url);
             if (fi.isDir()  ||  !fi.isReadable())
             {
                 qCCritical(KALARM_LOG) << "Not file/not readable:" << attachment;
@@ -371,23 +374,16 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             }
 
             // Read the file contents
-            QString tmpFile;
-            if (!KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow()))
+            auto downloadJob = KIO::storedGet(url.url());
+            KJobWidgets::setWindow(downloadJob, MainWindow::mainMainWindow());
+            if (!downloadJob->exec())
             {
                 qCCritical(KALARM_LOG) << "Load failure:" << attachment;
                 return attachError;
             }
-            QFile file(tmpFile);
-            if (!file.open(QIODevice::ReadOnly))
-            {
-                qCDebug(KALARM_LOG) << "tmp load error:" << attachment;
-                return attachError;
-            }
-            qint64 size = file.size();
-            QByteArray contents = file.readAll();
-            file.close();
+            const QByteArray contents = downloadJob->data();
             bool atterror = false;
-            if (contents.size() < size)
+            if (contents.size() < fi.size())
             {
                 qCDebug(KALARM_LOG) << "Read error:" << attachment;
                 atterror = true;
@@ -589,10 +585,12 @@ int KAMail::checkAttachment(QString& attachment, KUrl* url)
 */
 bool KAMail::checkAttachment(const KUrl& url)
 {
-    KIO::UDSEntry uds;
-    if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
+    auto statJob = KIO::stat(url.url());
+    KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
+    if (!statJob->exec()) {
         return false;       // doesn't exist
-    KFileItem fi(uds, url);
+    }
+    KFileItem fi(statJob->statResult(), url);
     if (fi.isDir()  ||  !fi.isReadable())
         return false;
     return true;

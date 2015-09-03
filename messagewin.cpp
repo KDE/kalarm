@@ -50,10 +50,10 @@
 #include <kiconloader.h>
 #include <kdialog.h>
 #include <ksystemtimezone.h>
-#include <kmimetype.h>
 #include <ktextedit.h>
 #include <kwindowsystem.h>
-#include <kio/netaccess.h>
+#include <KIO/StoredTransferJob>
+#include <KJobWidgets>
 #include <knotification.h>
 #include <ksqueezedtextlabel.h>
 #include <ktoolinvocation.h>
@@ -85,6 +85,7 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QMutexLocker>
+#include <QMimeDatabase>
 #include "kalarm_debug.h"
 
 #include <stdlib.h>
@@ -448,17 +449,23 @@ void MessageWin::initView()
                 topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
                 // Display contents of file
-                bool opened = false;
-                bool dir = false;
-                QString tmpFile;
                 const KUrl url(mMessage);
-                if (KIO::NetAccess::download(url, tmpFile, MainWindow::mainMainWindow()))
-                {
-                    QFile qfile(tmpFile);
-                    const QFileInfo info(qfile);
-                    if (!(dir = info.isDir()))
-                    {
+
+                auto statJob =  KIO::stat(url.url(), KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
+                const bool exists = statJob->exec();
+                const bool isDir = statJob->statResult().isDir();
+
+                bool opened = false;
+                if (exists && !isDir) {
+                    auto job = KIO::storedGet(url.url());
+                    KJobWidgets::setWindow(job, MainWindow::mainMainWindow());
+                    if (job->exec()) {
                         opened = true;
+                        const QByteArray data = job->data();
+                        QTemporaryFile tmpFile;
+                        tmpFile.write(data);
+                        tmpFile.seek(0);
+
                         QTextBrowser* view = new QTextBrowser(topWidget);
                         view->setFrameStyle(QFrame::NoFrame);
                         view->setWordWrapMode(QTextOption::NoWrap);
@@ -467,27 +474,21 @@ void MessageWin::initView()
                         view->viewport()->setPalette(pal);
                         view->setTextColor(mFgColour);
                         view->setCurrentFont(mFont);
-                        KMimeType::Ptr mime = KMimeType::findByUrl(url);
-                        if (mime->is(QStringLiteral("application/octet-stream")))
-                            mime = KMimeType::findByFileContent(tmpFile);
+                        QMimeDatabase db;
+                        QMimeType mime = db.mimeTypeForUrl(url);
+                        if (mime.name() == QLatin1String("application/octet-stream"))
+                            mime = db.mimeTypeForData(&tmpFile);
                         switch (KAlarm::fileType(mime))
                         {
                             case KAlarm::Image:
-                                view->setHtml(QLatin1String("<img source=\"") + tmpFile + QLatin1String("\">"));
+                                view->setHtml(QLatin1String("<img source=\"") + tmpFile.fileName() + QLatin1String("\">"));
                                 break;
                             case KAlarm::TextFormatted:
-                                view->QTextBrowser::setSource(tmpFile);   //krazy:exclude=qclasses
+                                view->QTextBrowser::setSource(QUrl::fromLocalFile(tmpFile.fileName()));   //krazy:exclude=qclasses
                                 break;
                             default:
                             {
-                                // Assume a plain text file
-                                if (qfile.open(QIODevice::ReadOnly))
-                                {
-                                    QTextStream str(&qfile);
-
-                                    view->setPlainText(str.readAll());
-                                    qfile.close();
-                                }
+                                view->setPlainText(QString::fromUtf8(data));
                                 break;
                             }
                         }
@@ -502,13 +503,10 @@ void MessageWin::initView()
                         view->resize(QSize(h, h).expandedTo(view->sizeHint()));
                         view->setWhatsThis(i18nc("@info:whatsthis", "The contents of the file to be displayed"));
                     }
-                    KIO::NetAccess::removeTempFile(tmpFile);
                 }
-                if (!opened)
-                {
-                    // File couldn't be opened
-                    const bool exists = KIO::NetAccess::exists(url, KIO::NetAccess::SourceSide, MainWindow::mainMainWindow());
-                    mErrorMsgs += dir ? i18nc("@info", "File is a folder") : exists ? i18nc("@info", "Failed to open file") : i18nc("@info", "File not found");
+
+                if (!exists || isDir || !opened) {
+                    mErrorMsgs += isDir ? i18nc("@info", "File is a folder") : exists ? i18nc("@info", "Failed to open file") : i18nc("@info", "File not found");
                 }
                 break;
             }

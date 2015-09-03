@@ -56,7 +56,6 @@ using namespace KCalCore;
 
 #include <KLocalizedString>
 #include <kiconloader.h>
-#include <kio/netaccess.h>
 #include <kfileitem.h>
 
 #include <QLabel>

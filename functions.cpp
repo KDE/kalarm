@@ -64,7 +64,8 @@ using namespace KCalCore;
 #include <kstandardguiitem.h>
 #include <kstandardshortcut.h>
 #include <kfiledialog.h>
-#include <kio/netaccess.h>
+#include <KIO/StatJob>
+#include <KJobWidgets>
 #include <kfileitem.h>
 #include <ktoolinvocation.h>
 
@@ -1638,12 +1639,13 @@ FileErr checkFileExists(QString& filename, KUrl& url)
         url = file;
         url.cleanPath();
         filename = url.prettyUrl();
-        KIO::UDSEntry uds;
-        if (!KIO::NetAccess::stat(url, uds, MainWindow::mainMainWindow()))
+        auto statJob = KIO::stat(url.url(), KIO::StatJob::SourceSide, 2);
+        KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
+        if (!statJob->exec())
             err = FileErr_Nonexistent;
         else
         {
-            KFileItem fi(uds, url);
+            KFileItem fi(statJob->statResult(), url);
             if (fi.isDir())             err = FileErr_Directory;
             else if (!fi.isReadable())  err = FileErr_Unreadable;
         }
