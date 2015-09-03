@@ -21,7 +21,6 @@
 #include "shellprocess.h"
 
 #include <kde_file.h>
-#include <kapplication.h>
 #include <KLocalizedString>
 #include "kalarm_debug.h"
 #include <kauthorized.h>

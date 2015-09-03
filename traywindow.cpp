@@ -37,7 +37,6 @@
 
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
-#include <kapplication.h>
 #include <KLocalizedString>
 #include <kmessagebox.h>
 #include <kstandardaction.h>

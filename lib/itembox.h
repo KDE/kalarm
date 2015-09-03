@@ -21,16 +21,14 @@
 #ifndef ITEMBOX_H
 #define ITEMBOX_H
 
-#include <khbox.h>
-class QHBoxLayout;
-
+#include <QHBoxLayout>
 
 /**
- *  @short A KHBox with left-adjustment
+ *  @short A QHBoxLayout with left-adjustment
  *
  *  @author David Jarvie <djarvie@kde.org>
  */
-class ItemBox : public KHBox
+class ItemBox : public QHBoxLayout
 {
         Q_OBJECT
     public:
@@ -39,9 +37,6 @@ class ItemBox : public KHBox
          */
         explicit ItemBox(QWidget* parent = Q_NULLPTR);
         void leftAlign();
-
-    private:
-        QHBoxLayout* mLayout;
 };
 
 #endif // ITEMBOX_H

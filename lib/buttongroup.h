@@ -46,7 +46,7 @@ class ButtonGroup : public QButtonGroup
         /** Constructor.
          *  @param parent The parent object of this widget
          */
-        explicit ButtonGroup(QObject* parent);
+        explicit ButtonGroup(QObject* parent = Q_NULLPTR);
         /** Adds a button to the group.
          *  The button is not given an ID.
          *  This overrides the addButton() method of QButtonGroup.

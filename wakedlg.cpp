@@ -31,7 +31,6 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <kconfiggroup.h>

@@ -56,7 +56,6 @@
 #include <KJobWidgets>
 #include <knotification.h>
 #include <ksqueezedtextlabel.h>
-#include <ktoolinvocation.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
 #include <phonon/volumefadereffect.h>

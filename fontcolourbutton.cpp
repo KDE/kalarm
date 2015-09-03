@@ -26,7 +26,6 @@
 #include "preferences.h"
 #include "pushbutton.h"
 
-#include <klineedit.h>
 #include <KLocalizedString>
 
 #include <QVBoxLayout>

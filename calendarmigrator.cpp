@@ -39,7 +39,7 @@
 #include <AkonadiCore/resourcesynchronizationjob.h>
 
 #include <KLocalizedString>
-#include <kconfiggroup.h>
+#include <KConfig>
 
 #include <QTimer>
 #include <QStandardPaths>

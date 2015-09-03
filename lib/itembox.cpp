@@ -23,15 +23,13 @@
 
 
 ItemBox::ItemBox(QWidget* parent)
-    : KHBox(parent)
+    : QHBoxLayout(parent)
 {
-    mLayout = qobject_cast<QHBoxLayout*>(layout());
-    Q_ASSERT(mLayout);
 }
 
 void ItemBox::leftAlign()
 {
-    mLayout->addStretch();
+    addStretch();
 }
 
 // vim: et sw=4:

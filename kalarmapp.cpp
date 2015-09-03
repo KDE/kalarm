@@ -51,10 +51,8 @@
 #include <kfileitem.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
-#include <ktoolinvocation.h>
 #include <netwm.h>
 #include <kshell.h>
-#include <ksystemtrayicon.h>
 #include <ksystemtimezone.h>
 
 #include <QObject>
@@ -63,6 +61,7 @@
 #include <QTextStream>
 #include <QtDBus/QtDBus>
 #include <QStandardPaths>
+#include <QSystemTrayIcon>
 #include "kalarm_debug.h"
 
 #include <stdlib.h>
@@ -486,7 +485,7 @@ int KAlarmApp::newInstance()
 
             case CommandOptions::TRAY:
                 // Display only the system tray icon
-                if (Preferences::showInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable())
+                if (Preferences::showInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable())
                 {
                     if (!initCheck()   // open the calendar, start processing execution queue
                     ||  !displayTrayIcon(true))
@@ -936,7 +935,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
     {
         if (!mTrayWindow  &&  !creating)
         {
-            if (!KSystemTrayIcon::isSystemTrayAvailable())
+            if (!QSystemTrayIcon::isSystemTrayAvailable())
                 return false;
             if (!MainWindow::count())
             {
@@ -970,7 +969,7 @@ bool KAlarmApp::checkSystemTray()
 {
     if (!mTrayWindow)
         return true;
-    if (KSystemTrayIcon::isSystemTrayAvailable() == mNoSystemTray)
+    if (QSystemTrayIcon::isSystemTrayAvailable() == mNoSystemTray)
     {
         qCDebug(KALARM_LOG) << "changed ->" << mNoSystemTray;
         mNoSystemTray = !mNoSystemTray;
@@ -1093,7 +1092,7 @@ void KAlarmApp::slotFeb29TypeChanged(Preferences::Feb29Type type)
 */
 bool KAlarmApp::wantShowInSystemTray() const
 {
-    return Preferences::showInSystemTray()  &&  KSystemTrayIcon::isSystemTrayAvailable();
+    return Preferences::showInSystemTray()  &&  QSystemTrayIcon::isSystemTrayAvailable();
 }
 
 /******************************************************************************

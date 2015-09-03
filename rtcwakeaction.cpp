@@ -22,10 +22,11 @@
 
 #include <kglobal.h>
 #include <KLocalizedString>
-#include <kprocess.h>
-#include <kdatetime.h>
 #include <kauthactionreply.h>
 #include "kalarm_debug.h"
+
+#include <QProcess>
+#include <QDateTime>
 
 #include <stdio.h>
 
@@ -66,7 +67,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 
     // Set the wakeup by executing the rtcwake command
     int result = -2;   // default = command not found
-    KProcess proc;
+    QProcess proc;
     if (!exe.isEmpty())
     {
         // The wakeup time is set using a time from now ("-s") in preference to
@@ -76,9 +77,12 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
 
         // If 't' is zero, the current wakeup is cancelled by setting a new wakeup
         // time 2 seconds from now, which will then expire.
-        unsigned now = KDateTime::currentUtcDateTime().toTime_t();
-        proc << exe << QStringLiteral("-m") << QStringLiteral("no") << QStringLiteral("-s") << QString::number(t ? t - now : 2);
-        result = proc.execute(5000);   // allow a timeout of 5 seconds
+        unsigned now = QDateTime::currentDateTimeUtc().toTime_t();
+        proc.setProgram(exe);
+        proc.setArguments({ QStringLiteral("-m"), QStringLiteral("no"), QStringLiteral("-s"), QString::number(t ? t - now : 2) });
+        proc.start();
+        proc.waitForStarted(5000); // allow a timeout of 5 seconds
+        result = proc.exitCode();
     }
     QString errmsg;
     switch (result)
@@ -89,14 +93,14 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
             errmsg = xi18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QStringLiteral("rtcwake"));
             break;
         default:
-            errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1</command><nl/>Error code: %2.", proc.program().join(QStringLiteral(" ")), result);
+            errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</command><nl/>Error code: %3.", proc.program(), proc.arguments().join(QStringLiteral(" ")), result);
             break;
     }
 #if 0 //QT5
     ActionReply reply(ActionReply::HelperErrorReply);
     reply.setErrorCode(result);
     reply.setErrorDescription(errmsg);
-    qCDebug(KALARM_LOG) << "RtcWakeAction::settimer: Code=" << reply.errorCode() << reply.errorDescription();
+    qCDebug(KALARM_LOG) , "RtcWakeAction::settimer: Code=" , reply.errorCode() , reply.errorDescription();
     return reply;
 #else
     return 0;

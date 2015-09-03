@@ -21,7 +21,7 @@
 #include "kalarm.h"   //krazy:exclude=includes (kalarm.h must be first)
 #include "kalocale.h"
 
-#include <kglobal.h>
+#include <KLocale>
 #include <KLocalizedString>
 #include "kalarm_debug.h"
 #include <QLocale>
@@ -49,19 +49,7 @@ int localeFirstDayOfWeek()
 */
 QString weekDayName(int day, const KLocale* locale)
 {
-#if 0 //QT5
-    switch (day)
-    {
-        case Qt::Monday:    return ki18nc("@option Name of the weekday", "Monday").toString(locale);
-        case Qt::Tuesday:   return ki18nc("@option Name of the weekday", "Tuesday").toString(locale);
-        case Qt::Wednesday: return ki18nc("@option Name of the weekday", "Wednesday").toString(locale);
-        case Qt::Thursday:  return ki18nc("@option Name of the weekday", "Thursday").toString(locale);
-        case Qt::Friday:    return ki18nc("@option Name of the weekday", "Friday").toString(locale);
-        case Qt::Saturday:  return ki18nc("@option Name of the weekday", "Saturday").toString(locale);
-        case Qt::Sunday:    return ki18nc("@option Name of the weekday", "Sunday").toString(locale);
-    }
-#endif
-    return QString();
+    return QLocale().dayName(day);
 }
 
 /******************************************************************************

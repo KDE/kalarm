@@ -54,8 +54,6 @@
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <KSharedConfig>
-#include <khbox.h>
-#include <kvbox.h>
 #include <kwindowsystem.h>
 #include <KTimeZone>
 
@@ -219,24 +217,31 @@ void EditAlarmDlg::init(const KAEvent* event)
     connect(this, &EditAlarmDlg::tryClicked, this, &EditAlarmDlg::slotTry);
     connect(this, &EditAlarmDlg::defaultClicked, this, &EditAlarmDlg::slotDefault); // More/Less Options button
     connect(this, &EditAlarmDlg::helpClicked, this, &EditAlarmDlg::slotHelp); // Load Template button
-    KVBox* mainWidget = new KVBox(this);
-    mainWidget->setMargin(0);
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout* mainLayout = new QVBoxLayout(mainWidget);
+    mainLayout->setMargin(0);
     setMainWidget(mainWidget);
     if (mTemplate)
     {
-        KHBox* box = new KHBox(mainWidget);
+        QFrame *frame = new QFrame;
+        QHBoxLayout* box = new QHBoxLayout();
+        frame->setLayout(box);
         box->setMargin(0);
         box->setSpacing(spacingHint());
-        QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"), box);
+        QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"));
         label->setFixedSize(label->sizeHint());
-        mTemplateName = new QLineEdit(box);
+        box->addWidget(label);
+        mTemplateName = new QLineEdit();
         mTemplateName->setReadOnly(mReadOnly);
         connect(mTemplateName, &QLineEdit::textEdited, this, &EditAlarmDlg::contentsChanged);
         label->setBuddy(mTemplateName);
-        box->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
-        box->setFixedHeight(box->sizeHint().height());
+        box->addWidget(mTemplateName);
+        frame->setWhatsThis(i18nc("@info:whatsthis", "Enter the name of the alarm template"));
+        frame->setFixedHeight(box->sizeHint().height());
+        mainLayout->addWidget(frame);
     }
     mTabs = new QTabWidget(mainWidget);
+    mainLayout->addWidget(mTabs);
     mTabScrollGroup = new StackedScrollGroup(this, mTabs);
 
     StackedScrollWidget* mainScroll = new StackedScrollWidget(mTabScrollGroup);
@@ -253,10 +258,13 @@ void EditAlarmDlg::init(const KAEvent* event)
     StackedScrollWidget* recurScroll = new StackedScrollWidget(mTabScrollGroup);
     mTabs->addTab(recurScroll, QString());
     mRecurPageIndex = 1;
-    KVBox* recurTab = new KVBox();
-    recurTab->setMargin(marginHint());
+    QFrame *recurTab = new QFrame;
+    QVBoxLayout* recurTabLayout = new QVBoxLayout();
+    recurTabLayout->setMargin(marginHint());
+    recurTab->setLayout(recurTabLayout);
     recurScroll->setWidget(recurTab);   // recurTab becomes the child of recurScroll
-    mRecurrenceEdit = new RecurrenceEdit(mReadOnly, recurTab);
+    mRecurrenceEdit = new RecurrenceEdit(mReadOnly);
+    recurTabLayout->addWidget(mRecurrenceEdit);
     connect(mRecurrenceEdit, &RecurrenceEdit::shown, this, &EditAlarmDlg::slotShowRecurrenceEdit);
     connect(mRecurrenceEdit, &RecurrenceEdit::typeChanged, this, &EditAlarmDlg::slotRecurTypeChange);
     connect(mRecurrenceEdit, &RecurrenceEdit::frequencyChanged, this, &EditAlarmDlg::slotRecurFrequencyChange);
@@ -318,22 +326,26 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeGroup->addButton(mTemplateDefaultTime);
         grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
-        KHBox* box = new KHBox(templateTimeBox);
-        box->setMargin(0);
-        box->setSpacing(spacingHint());
+        QFrame *box = new QFrame(templateTimeBox);
+        QHBoxLayout* layout = new QHBoxLayout();
+        layout->setMargin(0);
+        layout->setSpacing(spacingHint());
+        box->setLayout(layout);
         mTemplateUseTime = new RadioButton(i18nc("@option:radio", "Time:"), box);
         mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
         mTemplateUseTime->setReadOnly(mReadOnly);
         mTemplateUseTime->setWhatsThis(i18nc("@info:whatsthis", "Specify a start time for alarms based on this template."));
+        layout->addWidget(mTemplateUseTime);
         mTemplateTimeGroup->addButton(mTemplateUseTime);
-        mTemplateTime = new TimeEdit(box);
+        mTemplateTime = new TimeEdit();
         mTemplateTime->setFixedSize(mTemplateTime->sizeHint());
         mTemplateTime->setReadOnly(mReadOnly);
         mTemplateTime->setWhatsThis(xi18nc("@info:whatsthis",
               "<para>Enter the start time for alarms based on this template.</para><para>%1</para>",
               TimeSpinBox::shiftWhatsThis()));
         connect(mTemplateTime, &TimeEdit::valueChanged, this, &EditAlarmDlg::contentsChanged);
-        box->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
+        layout->addWidget(mTemplateTime);
+        layout->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
         box->setFixedHeight(box->sizeHint().height());
         grid->addWidget(box, 0, 1, Qt::AlignLeft);
 
@@ -344,23 +356,25 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeGroup->addButton(mTemplateAnyTime);
         grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
-        box = new KHBox(templateTimeBox);
-        box->setMargin(0);
-        box->setSpacing(spacingHint());
+        layout = new QHBoxLayout(templateTimeBox);
+        layout->setMargin(0);
+        layout->setSpacing(spacingHint());
         mTemplateUseTimeAfter = new RadioButton(i18nc("@option:radio", "Time from now:"), box);
         mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
         mTemplateUseTimeAfter->setReadOnly(mReadOnly);
         mTemplateUseTimeAfter->setWhatsThis(i18nc("@info:whatsthis",
                                                   "Set alarms based on this template to start after the specified time "
                                                  "interval from when the alarm is created."));
+        layout->addWidget(mTemplateUseTimeAfter);
         mTemplateTimeGroup->addButton(mTemplateUseTimeAfter);
-        mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime, box);
+        mTemplateTimeAfter = new TimeSpinBox(1, maxDelayTime);
         mTemplateTimeAfter->setValue(1439);
         mTemplateTimeAfter->setFixedSize(mTemplateTimeAfter->sizeHint());
         mTemplateTimeAfter->setReadOnly(mReadOnly);
         connect(mTemplateTimeAfter, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &EditAlarmDlg::contentsChanged);
         mTemplateTimeAfter->setWhatsThis(xi18nc("@info:whatsthis", "<para>%1</para><para>%2</para>",
                                                AlarmTimeWidget::i18n_TimeAfterPeriod(), TimeSpinBox::shiftWhatsThis()));
+        layout->addWidget(mTemplateTimeAfter);
         box->setFixedHeight(box->sizeHint().height());
         grid->addWidget(box, 1, 1, Qt::AlignLeft);
 

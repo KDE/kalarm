@@ -28,7 +28,7 @@
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <KLocalizedString>
 #include "kalarm_debug.h"
 
@@ -246,7 +246,7 @@ Undo::List  Undo::mRedoList;
 Undo* Undo::instance()
 {
     if (!mInstance)
-        mInstance = new Undo(kapp);
+        mInstance = new Undo(qApp);
     return mInstance;
 }
 

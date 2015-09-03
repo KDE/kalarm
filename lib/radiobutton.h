@@ -48,12 +48,12 @@ class RadioButton : public QRadioButton
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit RadioButton(QWidget* parent);
+        explicit RadioButton(QWidget* parent = Q_NULLPTR);
         /** Constructor.
          *  @param text Text to display.
          *  @param parent The parent object of this widget.
          */
-        RadioButton(const QString& text, QWidget* parent);
+        RadioButton(const QString& text, QWidget* parent = Q_NULLPTR);
         /** Returns true if the widget is read only. */
         bool     isReadOnly() const          { return mReadOnly; }
         /** Sets whether the radio button is read-only for the user. If read-only,

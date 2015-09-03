@@ -58,6 +58,7 @@ using namespace KCalCore;
 #include <kiconloader.h>
 #include <kfileitem.h>
 
+#include <QComboBox>
 #include <QLabel>
 #include <QDir>
 #include <QStyle>
@@ -1143,7 +1144,7 @@ void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 0, 0);
 
-    mEmailAttachList = new KComboBox(parent);
+    mEmailAttachList = new QComboBox(parent);
     mEmailAttachList->setEditable(true);
     mEmailAttachList->setMinimumSize(mEmailAttachList->sizeHint());
     if (mEmailAttachList->lineEdit())

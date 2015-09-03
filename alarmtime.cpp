@@ -24,9 +24,9 @@
 #include <kalarmcal/datetime.h>
 
 #include <ksystemtimezone.h>
-#include <kglobal.h>
 #include <KLocalizedString>
-#include <qapplication.h>
+#include <KLocale>
+#include <QApplication>
 #include "kalarm_debug.h"
 
 using namespace KAlarmCal;

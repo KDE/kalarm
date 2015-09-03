@@ -41,8 +41,6 @@
 
 #include <kdialog.h>
 #include <KLocalizedString>
-#include <kglobal.h>
-#include <kcombobox.h>
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
 
@@ -54,6 +52,7 @@
 #include <QApplication>
 #include <qinputdialog.h>
 #include <QColorDialog>
+#include <QComboBox>
 #include <QMenu>
 #include "kalarm_debug.h"
 
@@ -81,7 +80,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     QLabel* label = new QLabel(i18nc("@title:group", "Calendars"), this);
     topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
-    mAlarmType = new KComboBox(this);
+    mAlarmType = new QComboBox(this);
     mAlarmType->addItem(i18nc("@item:inlistbox", "Active Alarms"));
     mAlarmType->addItem(i18nc("@item:inlistbox", "Archived Alarms"));
     mAlarmType->addItem(i18nc("@item:inlistbox", "Alarm Templates"));
@@ -124,7 +123,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
                                       SLOT(slotCollectionAdded(Akonadi::Collection)));
 
-    connect(mAlarmType, static_cast<void (KComboBox::*)(int)>(&KComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
+    connect(mAlarmType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
 
     Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(archiveDaysChanged(int)));

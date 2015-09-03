@@ -31,7 +31,7 @@
 
 class QAbstractButton;
 class QGroupBox;
-class KComboBox;
+class QComboBox;
 class EmailIdCombo;
 class CheckBox;
 class ComboBox;
@@ -238,7 +238,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         QPushButton*    mEmailAddressButton; // email open address book button
         LineEdit*       mEmailSubjectEdit;
         TextEdit*       mEmailMessageEdit;   // email body edit box
-        KComboBox*      mEmailAttachList;
+        QComboBox*      mEmailAttachList;
         QPushButton*    mEmailAddAttachButton;
         QPushButton*    mEmailRemoveButton;
         CheckBox*       mEmailBcc;

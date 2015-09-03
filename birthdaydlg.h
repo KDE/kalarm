@@ -23,8 +23,8 @@
 #include <kalarmcal/kaevent.h>
 
 #include <kdialog.h>
-#include <klineedit.h>
 #include <QVector>
+#include <QLineEdit>
 
 class QFocusEvent;
 class QTreeView;

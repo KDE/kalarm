@@ -24,8 +24,8 @@
 #include "checkbox.h"
 #include "fontcolour.h"
 
+#include <kdialog.h>
 #include <kfontchooser.h>
-#include <kfontdialog.h>
 
 #include <QGroupBox>
 #include <QPushButton>

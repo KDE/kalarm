@@ -20,7 +20,6 @@
 
 #include "timezonecombo.h"
 #include <ksystemtimezone.h>
-#include <kglobal.h>
 #include <KLocalizedString>
 
 

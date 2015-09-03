@@ -26,8 +26,6 @@
 #include "functions.h"
 #include "shellprocess.h"
 
-#include <klineedit.h>
-#include <kapplication.h>
 #include <KLocalizedString>
 #include <KConfigGroup>
 
@@ -38,6 +36,7 @@
 #include <QResizeEvent>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QLineEdit>
 #include "kalarm_debug.h"
 
 

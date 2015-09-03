@@ -24,7 +24,7 @@
 #include "timespinbox.h"
 #include "timeedit.h"
 
-#include <kglobal.h>
+#include <KLocale>
 #include <KLocalizedString>
 
 #include <QHBoxLayout>

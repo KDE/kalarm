@@ -41,7 +41,7 @@ class QResizeEvent;
 class QAction;
 class KActionCollection;
 class KToggleAction;
-class KComboBox;
+class QComboBox;
 class QMenu;
 class ResourceView;
 class AkonadiResourceCreator;
@@ -94,7 +94,7 @@ class ResourceSelector : public QFrame
 
         CollectionView* mListView;
         QList<Akonadi::AgentInstance> mAddAgents;   // agent added by addResource()
-        KComboBox*      mAlarmType;
+        QComboBox*      mAlarmType;
         QPushButton*    mAddButton;
         QPushButton*    mDeleteButton;
         QPushButton*    mEditButton;
