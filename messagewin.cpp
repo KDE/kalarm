@@ -38,7 +38,10 @@
 #include "shellprocess.h"
 #include "synchtimer.h"
 
-//TODO Port to QtSpeech
+#include <pimcommon/texttospeech/texttospeech.h>
+//QT5 reactivate after porting (activated by config-kdepim.h include in texttospeech.h)
+#undef KDEPIM_HAVE_X11
+
 #include <K4AboutData>
 #include <KLocale>
 #include <kstandardguiitem.h>
@@ -1372,28 +1375,14 @@ void MessageWin::playAudio()
 */
 void MessageWin::slotSpeak()
 {
-#if 0 //QT5 port qtspeech
-    QString error;
-    OrgKdeKSpeechInterface* kspeech = theApp()->kspeechInterface(error);
-    if (!kspeech)
-    {
-        if (!haveErrorMessage(ErrMsg_Speak))
-        {
-            KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), error);
-            clearErrorMessage(ErrMsg_Speak);
-        }
+    PimCommon::TextToSpeech *tts = PimCommon::TextToSpeech::self();
+    if (!tts->isReady()) {
+        KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "Text-to-speech subsystem is not available"));
+        clearErrorMessage(ErrMsg_Speak);
         return;
     }
-    if (!kspeech->say(mMessage, 0))
-    {
-        qCDebug(KALARM_LOG) << "SayMessage() D-Bus error";
-        if (!haveErrorMessage(ErrMsg_Speak))
-        {
-            KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "D-Bus call say() failed"));
-            clearErrorMessage(ErrMsg_Speak);
-        }
-    }
-#endif
+
+    tts->say(mMessage);
 }
 
 /******************************************************************************

@@ -58,6 +58,8 @@
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
 
+#include <pimcommon/texttospeech/texttospeech.h>
+
 #include <kvbox.h>
 #include <kglobal.h>
 #include <KLocalizedString>
@@ -1313,7 +1315,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSound->addItem(SoundPicker::i18n_combo_None());         // index 0
     mSound->addItem(SoundPicker::i18n_combo_Beep());         // index 1
     mSound->addItem(SoundPicker::i18n_combo_File());         // index 2
-    if (theApp()->speechEnabled())
+    if (PimCommon::TextToSpeech::self()->isReady())
         mSound->addItem(SoundPicker::i18n_combo_Speak());  // index 3
     mSound->setMinimumSize(mSound->sizeHint());
     mSound->setWhatsThis(defsetting.subs(SoundPicker::i18n_label_Sound()).toString());

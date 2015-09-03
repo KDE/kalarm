@@ -25,6 +25,8 @@
 #include "kamail.h"
 #include <kalarmcal/identities.h>
 
+#include <pimcommon/texttospeech/texttospeech.h>
+
 #include <kcmdlineargs.h>
 #include "kalarm_debug.h"
 
@@ -371,8 +373,8 @@ CommandOptions::CommandOptions()
             {
                 if (mArgs->isSet("beep"))
                     setErrorIncompatible("--beep", "--speak");
-                else if (!theApp()->speechEnabled())
-                    setError(xi18nc("@info:shell", "<icode>%1</icode> requires speech synthesis to be configured using Jovie", QStringLiteral("--speak")));
+                else if (!PimCommon::TextToSpeech::self()->isReady())
+                    setError(xi18nc("@info:shell", "<icode>%1</icode> requires KAlarm to be compiled with QTextToSpeech support", QStringLiteral("--speak")));
             }
             bool onceOnly = mArgs->isSet("reminder-once");
             if (mArgs->isSet("reminder")  ||  onceOnly)

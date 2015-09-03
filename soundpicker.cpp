@@ -28,6 +28,8 @@
 #include "sounddlg.h"
 #include "soundpicker.h"
 
+#include <pimcommon/texttospeech/texttospeech.h>
+
 #include <QIcon>
 #include <KLocalizedString>
 #include <kiconloader.h>
@@ -83,7 +85,7 @@ SoundPicker::SoundPicker(QWidget* parent)
     mTypeCombo->addItem(i18n_combo_None());     // index None
     mTypeCombo->addItem(i18n_combo_Beep());     // index Beep
     mTypeCombo->addItem(i18n_combo_File());     // index PlayFile
-    mSpeakShowing = !theApp()->speechEnabled();
+    mSpeakShowing = !PimCommon::TextToSpeech::self()->isReady();
     showSpeak(!mSpeakShowing);            // index Speak (only displayed if appropriate)
     connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::activated), this, &SoundPicker::slotTypeSelected);
     connect(mTypeCombo, static_cast<void (ComboBox::*)(int)>(&ComboBox::currentIndexChanged), this, &SoundPicker::changed);
@@ -121,7 +123,7 @@ void SoundPicker::setReadOnly(bool readOnly)
 */
 void SoundPicker::showSpeak(bool show)
 {
-    if (!theApp()->speechEnabled())
+    if (!PimCommon::TextToSpeech::self()->isReady())
         show = false;    // speech capability is not installed
     if (show == mSpeakShowing)
         return;    // no change

@@ -70,9 +70,6 @@
 #include <iostream>
 #include <climits>
 
-static const QLatin1String KTTSD_DBUS_SERVICE("org.kde.kttsd");
-static const QLatin1String KTTDS_DBUS_PATH("/KSpeech");
-
 static const int AKONADI_TIMEOUT = 30;   // timeout (seconds) for Akonadi collections to be populated
 
 static void setEventCommandError(const KAEvent&, KAEvent::CmdErrType);
@@ -112,13 +109,11 @@ KAlarmApp::KAlarmApp()
       mAlarmTimer(Q_NULLPTR),
       mArchivedPurgeDays(-1),      // default to not purging
       mPurgeDaysQueued(-1),
-      mKSpeech(Q_NULLPTR),
       mPendingQuit(false),
       mCancelRtcWake(false),
       mProcessingQueue(false),
       mSessionClosingDown(false),
-      mAlarmsEnabled(true),
-      mSpeechEnabled(false)
+      mAlarmsEnabled(true)
 {
     qCDebug(KALARM_LOG);
 #ifndef NDEBUG
@@ -141,8 +136,6 @@ KAlarmApp::KAlarmApp()
     Preferences::connect(SIGNAL(messageFontChanged(QFont)), this, SLOT(slotMessageFontChanged(QFont)));
     slotFeb29TypeChanged(Preferences::defaultFeb29Type());
 
-    connect(QDBusConnection::sessionBus().interface(), SIGNAL(serviceUnregistered(QString)),
-            SLOT(slotDBusServiceUnregistered(QString)));
     KAEvent::setStartOfDay(Preferences::startOfDay());
     KAEvent::setWorkTime(Preferences::workDays(), Preferences::workDayStart(), Preferences::workDayEnd());
     KAEvent::setHolidays(Preferences::holidays());
@@ -163,9 +156,6 @@ KAlarmApp::KAlarmApp()
         mPrefsArchivedColour = Preferences::archivedColour();
     }
 
-    // Check if the speech synthesis daemon is installed
-    mSpeechEnabled = (KServiceTypeTrader::self()->query(QStringLiteral("DBUS/Text-to-Speech"), QStringLiteral("Name == 'KTTSD'")).count() > 0);
-    if (!mSpeechEnabled) { qCDebug(KALARM_LOG) << "Speech synthesis disabled (KTTSD not found)"; }
     // Check if KOrganizer is installed
     const QString korg = QStringLiteral("korganizer");
     mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isEmpty();
@@ -2266,51 +2256,6 @@ void KAlarmApp::commandMessage(ShellProcess* proc, QWidget* parent)
             pd->messageBoxParent = parent;
             break;
         }
-    }
-}
-
-/******************************************************************************
-* Return a D-Bus interface object for KSpeech.
-* The KTTSD D-Bus service is started if necessary.
-* If the service cannot be started, 'error' is set to an error text.
-*/
-OrgKdeKSpeechInterface* KAlarmApp::kspeechInterface(QString& error) const
-{
-#if 0 //QT5
-    error.clear();
-    QDBusConnection client = QDBusConnection::sessionBus();
-    if (!client.interface()->isServiceRegistered(KTTSD_DBUS_SERVICE))
-    {
-        // kttsd is not running, so start it
-        delete mKSpeech;
-        mKSpeech = 0;
-        if (KToolInvocation::startServiceByDesktopName(QStringLiteral("kttsd"), QStringList(), &error))
-        {
-            qCDebug(KALARM_LOG) << "Failed to start kttsd:" << error;
-            return 0;
-        }
-    }
-    if (!mKSpeech)
-    {
-        mKSpeech = new OrgKdeKSpeechInterface(KTTSD_DBUS_SERVICE, KTTDS_DBUS_PATH, QDBusConnection::sessionBus());
-        mKSpeech->setParent(theApp());
-        mKSpeech->setApplicationName(KComponentData::mainComponent().aboutData()->programName());
-        mKSpeech->setDefaultPriority(KSpeech::jpMessage);
-    }
-#endif
-    return mKSpeech;
-}
-
-/******************************************************************************
-* Called when a D-Bus service unregisters.
-* If it's the KTTSD service, delete the KSpeech interface object.
-*/
-void KAlarmApp::slotDBusServiceUnregistered(const QString& serviceName)
-{
-    if (serviceName == KTTSD_DBUS_SERVICE)
-    {
-        // delete mKSpeech; // TODO: port to Qt5 / KF5
-        mKSpeech = Q_NULLPTR;
     }
 }
 

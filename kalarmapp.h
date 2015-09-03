@@ -42,7 +42,6 @@ class DBusHandler;
 class MainWindow;
 class TrayWindow;
 class ShellProcess;
-class OrgKdeKSpeechInterface;
 
 using namespace KAlarmCal;
 
@@ -57,8 +56,6 @@ class KAlarmApp : public KUniqueApplication
         bool               checkCalendar()                 { return initCheck(); }
         bool               wantShowInSystemTray() const;
         bool               alarmsEnabled() const           { return mAlarmsEnabled; }
-        bool               speechEnabled() const           { return mSpeechEnabled; }
-        OrgKdeKSpeechInterface* kspeechInterface(QString& error) const;
         bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
         bool               restoreSession();
         bool               sessionClosingDown() const      { return mSessionClosingDown; }
@@ -133,7 +130,6 @@ class KAlarmApp : public KUniqueApplication
         void               slotPurge()                     { purge(mArchivedPurgeDays); }
         void               purgeAfterDelay();
         void               slotCommandExited(ShellProcess*);
-        void               slotDBusServiceUnregistered(const QString& serviceName);
 
     private:
         enum EventFunc
@@ -210,7 +206,6 @@ class KAlarmApp : public KUniqueApplication
         int                mPurgeDaysQueued;     // >= 0 to purge the archive calendar from KAlarmApp::processLoop()
         QList<ProcData*>   mCommandProcesses;    // currently active command alarm processes
         QQueue<ActionQEntry> mActionQueue;       // queued commands and actions
-        mutable OrgKdeKSpeechInterface* mKSpeech;// KSpeech D-Bus interface object
         int                mPendingQuitCode;     // exit code for a pending quit
         bool               mPendingQuit;         // quit once the DCOP command and shell command queues have been processed
         bool               mCancelRtcWake;       // cancel RTC wake on quitting
@@ -219,7 +214,6 @@ class KAlarmApp : public KUniqueApplication
         bool               mSessionClosingDown;  // session manager is closing the application
         bool               mOldShowInSystemTray; // showing in system tray was selected
         bool               mAlarmsEnabled;       // alarms are enabled
-        bool               mSpeechEnabled;       // speech synthesis is enabled (kttsd exists)
         bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
 };
 
