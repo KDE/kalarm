@@ -25,9 +25,9 @@
 #include "alarmtext.h"
 #include "identities.h"
 #include "version.h"
-
+#include <kholidays/holidayregion.h>
 #include <kcalcore/memorycalendar.h>
-#include <kholidays/holidays.h>
+#include <kholidays/holiday.h>
 using namespace KHolidays;
 
 #include <ksystemtimezone.h>
