@@ -46,6 +46,8 @@
 #include <QGridLayout>
 #include <QShowEvent>
 #include <QResizeEvent>
+#include <QDialogButtonBox>
+#include <QStyle>
 #include "kalarm_debug.h"
 
 
@@ -58,14 +60,21 @@ static const char SOUND_DIALOG_NAME[] = "SoundDialog";
 
 SoundDlg::SoundDlg(const QString& file, float volume, float fadeVolume, int fadeSeconds, int repeatPause,
                    const QString& caption, QWidget* parent)
-    : KDialog(parent),
+    : QDialog(parent),
       mReadOnly(false)
 {
+    QVBoxLayout *layout = new QVBoxLayout(this);
     mSoundWidget = new SoundWidget(true, true, this);
-    setMainWidget(mSoundWidget);
-    setCaption(caption);
-    setButtons(Ok|Cancel);
-    setDefaultButton(Ok);
+    layout->addWidget(mSoundWidget);
+
+    mButtonBox = new QDialogButtonBox;
+    mButtonBox->addButton(QDialogButtonBox::Ok);
+    mButtonBox->addButton(QDialogButtonBox::Cancel);
+    connect(mButtonBox, &QDialogButtonBox::clicked,
+            this, &SoundDlg::slotButtonClicked);
+    layout->addWidget(mButtonBox);
+
+    setWindowTitle(caption);
 
     // Restore the dialog size from last time
     QSize s;
@@ -87,13 +96,14 @@ void SoundDlg::setReadOnly(bool readOnly)
         mReadOnly = readOnly;
         if (readOnly)
         {
-            setButtons(Cancel);
-            setDefaultButton(Cancel);
+            mButtonBox->clear();
+            mButtonBox->addButton(QDialogButtonBox::Cancel);
         }
         else
         {
-            setButtons(Ok|Cancel);
-            setDefaultButton(Ok);
+            mButtonBox->clear();
+            mButtonBox->addButton(QDialogButtonBox::Ok);
+            mButtonBox->addButton(QDialogButtonBox::Cancel);
         }
     }
 }
@@ -113,15 +123,15 @@ void SoundDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
         KAlarm::writeConfigWindowSize(SOUND_DIALOG_NAME, re->size());
-    KDialog::resizeEvent(re);
+    QDialog::resizeEvent(re);
 }
 
 /******************************************************************************
 * Called when the OK or Cancel button is clicked.
 */
-void SoundDlg::slotButtonClicked(int button)
+void SoundDlg::slotButtonClicked(QAbstractButton *button)
 {
-    if (button == Ok)
+    if (button == mButtonBox->button(QDialogButtonBox::Ok))
     {
         if (mReadOnly)
             reject();
@@ -129,7 +139,8 @@ void SoundDlg::slotButtonClicked(int button)
             accept();
     }
     else
-        KDialog::slotButtonClicked(button);
+        reject();
+
 }
 
 
@@ -149,8 +160,6 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
       mEmptyFileAllowed(false)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setMargin(0);
-    layout->setSpacing(KDialog::spacingHint());
 
     QLabel* label = Q_NULLPTR;
     if (!showPlay)
@@ -236,10 +245,10 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     QGroupBox* group = new QGroupBox(i18nc("@title:group Sound volume", "Volume"), this);
     layout->addWidget(group);
     QGridLayout* grid = new QGridLayout(group);
-    grid->setMargin(KDialog::marginHint());
-    grid->setSpacing(KDialog::spacingHint());
+    grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     grid->setColumnStretch(2, 1);
-    int indentWidth = 3 * KDialog::spacingHint();
+    int indentWidth = 3 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
     grid->setColumnMinimumWidth(0, indentWidth);
     grid->setColumnMinimumWidth(1, indentWidth);
 

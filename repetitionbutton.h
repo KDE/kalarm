@@ -23,7 +23,7 @@
 
 #include <kalarmcal/repetition.h>
 
-#include <kdialog.h>
+#include <QDialog>
 #include <QPushButton>
 
 using namespace KAlarmCal;
@@ -71,7 +71,7 @@ class RepetitionButton : public QPushButton
 };
 
 
-class RepetitionDlg : public KDialog
+class RepetitionDlg : public QDialog
 {
         Q_OBJECT
     public:

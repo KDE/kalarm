@@ -67,6 +67,7 @@
 #include <QShowEvent>
 #include <QScrollBar>
 #include <QTimer>
+#include <QDialogButtonBox>
 #include "kalarm_debug.h"
 
 using namespace KCal;
@@ -132,7 +133,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 *   event   != to initialise the dialog to show the specified event's data.
 */
 EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* parent, GetResourceType getResource)
-    : KDialog(parent),
+    : QDialog(parent),
       mAlarmType(action),
       mMainPageShown(false),
       mRecurPageShown(false),
@@ -148,14 +149,15 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* pa
       mDesiredReadOnly(false),
       mReadOnly(false),
       mShowingMore(true),
-      mSavedEvent(Q_NULLPTR)
+      mSavedEvent(Q_NULLPTR),
+      mLoadTemplateButton(Q_NULLPTR)
 {
     init(Q_NULLPTR, getResource);
 }
 
 EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
                            GetResourceType getResource, bool readOnly)
-    : KDialog(parent),
+    : QDialog(parent),
       mAlarmType(event->actionSubType()),
       mMainPageShown(false),
       mRecurPageShown(false),
@@ -172,7 +174,8 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, Q
       mDesiredReadOnly(readOnly),
       mReadOnly(readOnly),
       mShowingMore(true),
-      mSavedEvent(Q_NULLPTR)
+      mSavedEvent(Q_NULLPTR),
+      mLoadTemplateButton(Q_NULLPTR)
 {
     init(event, getResource);
 }
@@ -208,26 +211,43 @@ void EditAlarmDlg::init(const KAEvent* event)
                                    : i18nc("@title:window", "Alarm [read-only]");
     else
         caption = type_caption();
-    setCaption(caption);
-    setButtons((mReadOnly ? Cancel|Try|Default : mTemplate ? Ok|Cancel|Try|Default : Ok|Cancel|Try|Help|Default));
-    setDefaultButton(mReadOnly ? Cancel : Ok);
-    setButtonText(Help, i18nc("@action:button", "Load Template..."));
-    setButtonIcon(Help, QIcon());
-    setButtonIcon(Default, QIcon());
-    connect(this, &EditAlarmDlg::tryClicked, this, &EditAlarmDlg::slotTry);
-    connect(this, &EditAlarmDlg::defaultClicked, this, &EditAlarmDlg::slotDefault); // More/Less Options button
-    connect(this, &EditAlarmDlg::helpClicked, this, &EditAlarmDlg::slotHelp); // Load Template button
-    QWidget *mainWidget = new QWidget(this);
-    QVBoxLayout* mainLayout = new QVBoxLayout(mainWidget);
-    mainLayout->setMargin(0);
-    setMainWidget(mainWidget);
+    setWindowTitle(caption);
+
+    // Create button box now so taht types can work with it, but don't insert
+    // it into layout just yet
+    mButtonBox = new QDialogButtonBox(this);
+    if (mReadOnly) {
+        mButtonBox->addButton(QDialogButtonBox::Cancel);
+        mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
+        mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
+    } else if (mTemplate) {
+        mButtonBox->addButton(QDialogButtonBox::Ok);
+        mButtonBox->addButton(QDialogButtonBox::Cancel);
+        mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
+        mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
+    } else {
+        mButtonBox->addButton(QDialogButtonBox::Ok);
+        mButtonBox->addButton(QDialogButtonBox::Cancel);
+        mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
+        mLoadTemplateButton = mButtonBox->addButton(i18nc("@action:button", "Load Template..."),
+                                                    QDialogButtonBox::HelpRole);
+        mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
+    }
+    connect(mButtonBox, &QDialogButtonBox::clicked,
+            this, &EditAlarmDlg::slotButtonClicked);
+
+    if (mButtonBox->button(QDialogButtonBox::Ok)) {
+        mButtonBox->button(QDialogButtonBox::Ok)->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
+    }
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
     if (mTemplate)
     {
         QFrame *frame = new QFrame;
         QHBoxLayout* box = new QHBoxLayout();
         frame->setLayout(box);
         box->setMargin(0);
-        box->setSpacing(spacingHint());
+        box->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         QLabel* label = new QLabel(i18nc("@label:textbox", "Template name:"));
         label->setFixedSize(label->sizeHint());
         box->addWidget(label);
@@ -240,7 +260,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         frame->setFixedHeight(box->sizeHint().height());
         mainLayout->addWidget(frame);
     }
-    mTabs = new QTabWidget(mainWidget);
+    mTabs = new QTabWidget(this);
     mainLayout->addWidget(mTabs);
     mTabScrollGroup = new StackedScrollGroup(this, mTabs);
 
@@ -251,8 +271,8 @@ void EditAlarmDlg::init(const KAEvent* event)
     mainScroll->setWidget(mainPage);   // mainPage becomes the child of mainScroll
     connect(mainPage, &PageFrame::shown, this, &EditAlarmDlg::slotShowMainPage);
     QVBoxLayout* topLayout = new QVBoxLayout(mainPage);
-    topLayout->setMargin(marginHint());
-    topLayout->setSpacing(spacingHint());
+    topLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Recurrence tab
     StackedScrollWidget* recurScroll = new StackedScrollWidget(mTabScrollGroup);
@@ -260,7 +280,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     mRecurPageIndex = 1;
     QFrame *recurTab = new QFrame;
     QVBoxLayout* recurTabLayout = new QVBoxLayout();
-    recurTabLayout->setMargin(marginHint());
+    recurTabLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
     recurTab->setLayout(recurTabLayout);
     recurScroll->setWidget(recurTab);   // recurTab becomes the child of recurScroll
     mRecurrenceEdit = new RecurrenceEdit(mReadOnly);
@@ -275,8 +295,8 @@ void EditAlarmDlg::init(const KAEvent* event)
     QGroupBox* actionBox = new QGroupBox(i18nc("@title:group", "Action"), mainPage);
     topLayout->addWidget(actionBox, 1);
     QVBoxLayout* layout = new QVBoxLayout(actionBox);
-    layout->setMargin(marginHint());
-    layout->setSpacing(spacingHint());
+    layout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     type_init(actionBox, layout);
 
@@ -286,8 +306,8 @@ void EditAlarmDlg::init(const KAEvent* event)
         mDeferGroup = new QGroupBox(i18nc("@title:group", "Deferred Alarm"), mainPage);
         topLayout->addWidget(mDeferGroup);
         QHBoxLayout* hlayout = new QHBoxLayout(mDeferGroup);
-        hlayout->setMargin(marginHint());
-        hlayout->setSpacing(spacingHint());
+        hlayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        hlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         QLabel* label = new QLabel(i18nc("@label", "Deferred to:"), mDeferGroup);
         label->setFixedSize(label->sizeHint());
         hlayout->addWidget(label);
@@ -310,10 +330,10 @@ void EditAlarmDlg::init(const KAEvent* event)
     if (mTemplate)
     {
         QGroupBox* templateTimeBox = new QGroupBox(i18nc("@title:group", "Time"), mainPage);
-        hlayout->addWidget(templateTimeBox);
+        topLayout->addWidget(templateTimeBox);
         QGridLayout* grid = new QGridLayout(templateTimeBox);
-        grid->setMargin(marginHint());
-        grid->setSpacing(spacingHint());
+        grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         mTemplateTimeGroup = new ButtonGroup(templateTimeBox);
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::slotTemplateTimeType);
         connect(mTemplateTimeGroup, &ButtonGroup::buttonSet, this, &EditAlarmDlg::contentsChanged);
@@ -326,11 +346,10 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeGroup->addButton(mTemplateDefaultTime);
         grid->addWidget(mTemplateDefaultTime, 0, 0, Qt::AlignLeft);
 
-        QFrame *box = new QFrame(templateTimeBox);
-        QHBoxLayout* layout = new QHBoxLayout();
+        QWidget *box = new QWidget(templateTimeBox);
+        QHBoxLayout* layout = new QHBoxLayout(box);
         layout->setMargin(0);
-        layout->setSpacing(spacingHint());
-        box->setLayout(layout);
+        layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         mTemplateUseTime = new RadioButton(i18nc("@option:radio", "Time:"), box);
         mTemplateUseTime->setFixedSize(mTemplateUseTime->sizeHint());
         mTemplateUseTime->setReadOnly(mReadOnly);
@@ -345,8 +364,7 @@ void EditAlarmDlg::init(const KAEvent* event)
               TimeSpinBox::shiftWhatsThis()));
         connect(mTemplateTime, &TimeEdit::valueChanged, this, &EditAlarmDlg::contentsChanged);
         layout->addWidget(mTemplateTime);
-        layout->setStretchFactor(new QWidget(box), 1);    // left adjust the controls
-        box->setFixedHeight(box->sizeHint().height());
+        layout->addStretch(1);
         grid->addWidget(box, 0, 1, Qt::AlignLeft);
 
         mTemplateAnyTime = new RadioButton(i18nc("@option:radio", "Date only"), templateTimeBox);
@@ -356,9 +374,10 @@ void EditAlarmDlg::init(const KAEvent* event)
         mTemplateTimeGroup->addButton(mTemplateAnyTime);
         grid->addWidget(mTemplateAnyTime, 1, 0, Qt::AlignLeft);
 
-        layout = new QHBoxLayout(templateTimeBox);
+        box = new QWidget(templateTimeBox);
+        layout = new QHBoxLayout(box);
         layout->setMargin(0);
-        layout->setSpacing(spacingHint());
+        layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         mTemplateUseTimeAfter = new RadioButton(i18nc("@option:radio", "Time from now:"), box);
         mTemplateUseTimeAfter->setFixedSize(mTemplateUseTimeAfter->sizeHint());
         mTemplateUseTimeAfter->setReadOnly(mReadOnly);
@@ -394,7 +413,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     topLayout->addWidget(mMoreOptions);
     QVBoxLayout* moreLayout = new QVBoxLayout(mMoreOptions);
     moreLayout->setMargin(0);
-    moreLayout->setSpacing(spacingHint());
+    moreLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Reminder
     mReminder = createReminder(mMoreOptions);
@@ -413,7 +432,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     moreLayout->addWidget(mLateCancel, 0, Qt::AlignLeft);
 
     PackedLayout* playout = new PackedLayout(Qt::AlignJustify);
-    playout->setSpacing(2*spacingHint());
+    playout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     moreLayout->addLayout(playout);
 
     // Acknowledgement confirmation required - default = no confirmation
@@ -435,7 +454,7 @@ void EditAlarmDlg::init(const KAEvent* event)
         playout->addWidget(mShowInKorganizer);
     }
 
-    setButtonWhatsThis(Ok, i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
+    mainLayout->addWidget(mButtonBox);
 
     // Hide optional controls
     KConfigGroup config(KSharedConfig::openConfig(), EDIT_MORE_GROUP);
@@ -579,7 +598,9 @@ void EditAlarmDlg::initValues(const KAEvent* event)
         mDeferGroup->hide();
 
     bool empty = AlarmCalendar::resources()->events(CalEvent::TEMPLATE).isEmpty();
-    enableButton(Help, !empty);   // Load Templates button
+    if (mLoadTemplateButton) {
+        mLoadTemplateButton->setEnabled(!empty);
+    }
 }
 
 /******************************************************************************
@@ -711,8 +732,8 @@ void EditAlarmDlg::contentsChanged()
 {
     // Don't do anything if it's a new alarm or we're still initialising
     // (i.e. mSavedEvent null).
-    if (mSavedEvent  &&  button(Ok))
-        button(Ok)->setEnabled(stateChanged() || mDeferDateTime.kDateTime() != mSavedDeferTime);
+    if (mSavedEvent  &&  mButtonBox->button(QDialogButtonBox::Ok))
+        mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(stateChanged() || mDeferDateTime.kDateTime() != mSavedDeferTime);
 }
 
 /******************************************************************************
@@ -829,11 +850,11 @@ KAEvent::Flags EditAlarmDlg::getAlarmFlags() const
 */
 void EditAlarmDlg::showEvent(QShowEvent* se)
 {
-    KDialog::showEvent(se);
+    QDialog::showEvent(se);
     if (!mDeferGroupHeight)
     {
         if (mDeferGroup)
-            mDeferGroupHeight = mDeferGroup->height() + spacingHint();
+            mDeferGroupHeight = mDeferGroup->height() + style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
         QSize s;
         if (KAlarm::readConfigWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s))
         {
@@ -854,7 +875,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
 void EditAlarmDlg::closeEvent(QCloseEvent* ce)
 {
     Q_EMIT rejected();
-    KDialog::closeEvent(ce);
+    QDialog::closeEvent(ce);
 }
 
 /******************************************************************************
@@ -889,21 +910,27 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
         s.setHeight(s.height() - (!mDeferGroup || mDeferGroup->isHidden() ? 0 : mDeferGroupHeight));
         KAlarm::writeConfigWindowSize(mTemplate ? TEMPLATE_DIALOG_NAME : EDIT_DIALOG_NAME, s);
     }
-    KDialog::resizeEvent(re);
+    QDialog::resizeEvent(re);
 }
 
 /******************************************************************************
 * Called when any button is clicked.
 */
-void EditAlarmDlg::slotButtonClicked(int button)
+void EditAlarmDlg::slotButtonClicked(QAbstractButton *button)
 {
-    if (button == Ok)
-    {
-        if (validate())
+    if (button == mTryButton) {
+        slotTry();
+    } else if (button == mLoadTemplateButton) {
+        slotHelp();
+    } else if (button == mMoreLessButton) {
+        slotDefault();
+    } else if (button == mButtonBox->button(QDialogButtonBox::Ok)) {
+        if (validate()) {
             accept();
+        }
+    } else {
+        reject();
     }
-    else
-        KDialog::slotButtonClicked(button);
 }
 
 /******************************************************************************
@@ -1174,12 +1201,12 @@ void EditAlarmDlg::showOptions(bool more)
     if (more)
     {
         mMoreOptions->show();
-        setButtonText(Default, i18nc("@action:button", "Less Options <<"));
+        mMoreLessButton->setText(i18nc("@action:Button", "Less Options <<"));
     }
     else
     {
         mMoreOptions->hide();
-        setButtonText(Default, i18nc("@action:button", "More Options >>"));
+        mMoreLessButton->setText(i18nc("@action:button", "More Options >>"));
     }
     if (mTimeWidget)
         mTimeWidget->showMoreOptions(more);

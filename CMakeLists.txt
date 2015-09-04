@@ -151,6 +151,7 @@ KF5::AkonadiMime
 KF5::AkonadiContact
 KF5::Holidays
 KF5::Codecs
+KF5::ConfigCore
 kdepim
 Phonon::phonon4qt5
 KF5::Auth

@@ -145,6 +145,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
     // Display type combo box
     QWidget* box = new QWidget(parent);    // to group widgets for QWhatsThis text
+
     QHBoxLayout* boxHLayout = new QHBoxLayout(box);
     boxHLayout->setMargin(0);
     QLabel* label = new QLabel(i18nc("@label:listbox", "Display type:"), box);
@@ -226,7 +227,7 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
     connect(mSoundPicker, &SoundPicker::changed, this, &EditDisplayAlarmDlg::contentsChanged);
     hlayout->addWidget(mSoundPicker);
-    hlayout->addSpacing(2*spacingHint());
+    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hlayout->addStretch();
 
     // Font and colour choice button and sample text
@@ -614,7 +615,7 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
             mCmdEdit->hide();
             mTextMessageEdit->show();
             mSoundPicker->showSpeak(true);
-            setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the alarm message now"));
+            mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Display the alarm message now"));
             focus = mTextMessageEdit;
             break;
         case tFILE:    // file contents
@@ -623,7 +624,7 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
             mFilePadding->show();
             mCmdEdit->hide();
             mSoundPicker->showSpeak(false);
-            setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the file now"));
+            mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Display the file now"));
             mFileMessageEdit->setNoSelect();
             focus = mFileMessageEdit;
             break;
@@ -633,7 +634,7 @@ void EditDisplayAlarmDlg::slotAlarmTypeChanged(int index)
             slotCmdScriptToggled(mCmdEdit->isScript());  // show/hide mFilePadding
             mCmdEdit->show();
             mSoundPicker->showSpeak(true);
-            setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Display the command output now"));
+            mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Display the command output now"));
             focus = mCmdEdit;
             break;
     }
@@ -765,7 +766,7 @@ QString EditCommandAlarmDlg::type_caption() const
 */
 void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
-    setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Execute the specified command now"));
+    mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Execute the specified command now"));
 
     mCmdEdit = new CommandEdit(parent);
     connect(mCmdEdit, &CommandEdit::scriptToggled, this, &EditCommandAlarmDlg::slotCmdScriptToggled);
@@ -777,8 +778,8 @@ void EditCommandAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
     mCmdOutputBox = new QGroupBox(i18nc("@title:group", "Command Output"), parent);
     frameLayout->addWidget(mCmdOutputBox);
     QVBoxLayout* vlayout = new QVBoxLayout(mCmdOutputBox);
-    vlayout->setMargin(marginHint());
-    vlayout->setSpacing(spacingHint());
+    vlayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mCmdOutputGroup = new ButtonGroup(mCmdOutputBox);
     connect(mCmdOutputGroup, &ButtonGroup::buttonSet, this, &EditCommandAlarmDlg::contentsChanged);
 
@@ -1074,7 +1075,7 @@ QString EditEmailAlarmDlg::type_caption() const
 */
 void EditEmailAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 {
-    setButtonWhatsThis(Try, i18nc("@info:whatsthis", "Send the email to the specified addressees now"));
+    mTryButton->setWhatsThis(i18nc("@info:whatsthis", "Send the email to the specified addressees now"));
 
     QGridLayout* grid = new QGridLayout();
     grid->setMargin(0);
@@ -1503,8 +1504,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool n
 {
     qCDebug(KALARM_LOG) << "Event.id()";
     init(event);
-    QPushButton* tryButton = button(Try);
-    tryButton->setEnabled(!MessageWin::isAudioPlaying());
+    mTryButton->setEnabled(!MessageWin::isAudioPlaying());
     connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(slotAudioPlaying(bool)));
 }
 
@@ -1696,28 +1696,27 @@ void EditAudioAlarmDlg::type_executedTry(const QString&, void* result)
 */
 void EditAudioAlarmDlg::slotAudioPlaying(bool playing)
 {
-    QPushButton* tryButton = button(Try);
     if (!playing)
     {
         // Nothing is playing, so enable the Try button
-        tryButton->setEnabled(true);
-        tryButton->setCheckable(false);
-        tryButton->setChecked(false);
+        mTryButton->setEnabled(true);
+        mTryButton->setCheckable(false);
+        mTryButton->setChecked(false);
         mMessageWin = Q_NULLPTR;
     }
     else if (mMessageWin)
     {
         // The test sound file is playing, so enable the Try button and depress it
-        tryButton->setEnabled(true);
-        tryButton->setCheckable(true);
-        tryButton->setChecked(true);
+        mTryButton->setEnabled(true);
+        mTryButton->setCheckable(true);
+        mTryButton->setChecked(true);
     }
     else
     {
         // An alarm is playing, so disable the Try button
-        tryButton->setEnabled(false);
-        tryButton->setCheckable(false);
-        tryButton->setChecked(false);
+        mTryButton->setEnabled(false);
+        mTryButton->setCheckable(false);
+        mTryButton->setChecked(false);
     }
 }
 
@@ -1731,7 +1730,7 @@ CommandEdit::CommandEdit(QWidget* parent)
 {
     QVBoxLayout* vlayout = new QVBoxLayout(this);
     vlayout->setMargin(0);
-    vlayout->setSpacing(KDialog::spacingHint());
+    vlayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTypeScript = new CheckBox(EditCommandAlarmDlg::i18n_chk_EnterScript(), this);
     mTypeScript->setFixedSize(mTypeScript->sizeHint());
     mTypeScript->setWhatsThis(i18nc("@info:whatsthis", "Check to enter the contents of a script instead of a shell command line"));
@@ -1843,7 +1842,7 @@ QSize CommandEdit::minimumSizeHint() const
 {
     QSize t(mTypeScript->minimumSizeHint());
     QSize s(mCommandEdit->minimumSizeHint().expandedTo(mScriptEdit->minimumSizeHint()));
-    s.setHeight(s.height() + KDialog::spacingHint() + t.height());
+    s.setHeight(s.height() + style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing) + t.height());
     if (s.width() < t.width())
         s.setWidth(t.width());
     return s;

@@ -34,6 +34,7 @@
 #include <kguiitem.h>
 #include <kstandardaction.h>
 #include <kactioncollection.h>
+#include <KSeparator>
 
 #include <QAction>
 #include <QPushButton>
@@ -52,26 +53,23 @@ TemplateDlg* TemplateDlg::mInstance = Q_NULLPTR;
 
 
 TemplateDlg::TemplateDlg(QWidget* parent)
-    : KDialog(parent)
+    : QDialog(parent)
 {
-    QWidget* topWidget = new QWidget(this);
-    setMainWidget(topWidget);
-    setButtons(Close);
-    setDefaultButton(Close);
     setModal(false);
-    setCaption(i18nc("@title:window", "Alarm Templates"));
-    showButtonSeparator(true);
-    QBoxLayout* topLayout = new QHBoxLayout(topWidget);
-    topLayout->setMargin(0);
-    topLayout->setSpacing(spacingHint());
+    setWindowTitle(i18nc("@title:window", "Alarm Templates"));
+
+    QBoxLayout* topLayout = new QVBoxLayout(this);
+
+    QBoxLayout* hlayout = new QHBoxLayout(this);
+    topLayout->addLayout(hlayout);
 
     QBoxLayout* layout = new QVBoxLayout();
     layout->setMargin(0);
-    topLayout->addLayout(layout);
+    hlayout->addLayout(layout);
     mListFilterModel = new TemplateListModel(this);
     if (!ShellProcess::authorised())
         mListFilterModel->setAlarmActionFilter(static_cast<KAEvent::Actions>(KAEvent::ACT_ALL & ~KAEvent::ACT_COMMAND));
-    mListView = new TemplateListView(topWidget);
+    mListView = new TemplateListView(this);
     mListView->setModel(mListFilterModel);
     mListView->sortByColumn(TemplateListModel::TemplateNameColumn, Qt::AscendingOrder);
     mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -82,35 +80,44 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 
     layout = new QVBoxLayout();
     layout->setMargin(0);
-    topLayout->addLayout(layout);
-    QPushButton* button = new QPushButton(i18nc("@action:button", "New"), topWidget);
+    hlayout->addLayout(layout);
+    QPushButton* button = new QPushButton(i18nc("@action:button", "New"));
     mNewAction = new NewAlarmAction(true, i18nc("@action", "New"), this);
     button->setMenu(mNewAction->menu());
     connect(mNewAction, &NewAlarmAction::selected, this, &TemplateDlg::slotNew);
     button->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template"));
     layout->addWidget(button);
 
-    mEditButton = new QPushButton(i18nc("@action:button", "Edit..."), topWidget);
+    mEditButton = new QPushButton(i18nc("@action:button", "Edit..."));
     connect(mEditButton, &QPushButton::clicked, this, &TemplateDlg::slotEdit);
     mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the currently highlighted alarm template"));
     layout->addWidget(mEditButton);
 
-    mCopyButton = new QPushButton(i18nc("@action:button", "Copy"), topWidget);
+    mCopyButton = new QPushButton(i18nc("@action:button", "Copy"));
     connect(mCopyButton, &QPushButton::clicked, this, &TemplateDlg::slotCopy);
     mCopyButton->setWhatsThis(i18nc("@info:whatsthis", "Create a new alarm template based on a copy of the currently highlighted template"));
     layout->addWidget(mCopyButton);
 
-    mDeleteButton = new QPushButton(i18nc("@action:button", "Delete"), topWidget);
+    mDeleteButton = new QPushButton(i18nc("@action:button", "Delete"));
     connect(mDeleteButton, &QPushButton::clicked, this, &TemplateDlg::slotDelete);
     mDeleteButton->setWhatsThis(i18nc("@info:whatsthis", "Delete the currently highlighted alarm template"));
     layout->addWidget(mDeleteButton);
+
+    layout->addStretch();
+
+    topLayout->addWidget(new KSeparator(Qt::Horizontal, this));
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+    buttonBox->addButton(QDialogButtonBox::Close);
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            this, &QDialog::close);
+    topLayout->addWidget(buttonBox);
 
     KActionCollection* actions = new KActionCollection(this);
     QAction* act = KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
     topLevelWidget()->addAction(act);
     act = KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
     topLevelWidget()->addAction(act);
-
     slotSelectionChanged();          // enable/disable buttons as appropriate
 
     QSize s;
@@ -229,7 +236,7 @@ void TemplateDlg::resizeEvent(QResizeEvent* re)
 {
     if (isVisible())
         KAlarm::writeConfigWindowSize(TMPL_DIALOG_NAME, re->size());
-    KDialog::resizeEvent(re);
+    QDialog::resizeEvent(re);
 }
 
 // vim: et sw=4:

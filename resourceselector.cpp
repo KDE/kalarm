@@ -39,7 +39,6 @@
 #include <AkonadiCore/entitydisplayattribute.h>
 #include <AkonadiWidgets/collectionpropertiesdialog.h>
 
-#include <kdialog.h>
 #include <KLocalizedString>
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
@@ -75,7 +74,6 @@ ResourceSelector::ResourceSelector(QWidget* parent)
       mActionSetDefault(Q_NULLPTR)
 {
     QBoxLayout* topLayout = new QVBoxLayout(this);
-    topLayout->setMargin(KDialog::spacingHint());   // use spacingHint for the margin
 
     QLabel* label = new QLabel(i18nc("@title:group", "Calendars"), this);
     topLayout->addWidget(label, 0, Qt::AlignHCenter);
@@ -98,11 +96,9 @@ ResourceSelector::ResourceSelector(QWidget* parent)
                                   "List of available calendars of the selected type. The checked state shows whether a calendar "
                                  "is enabled (checked) or disabled (unchecked). The default calendar is shown in bold."));
     topLayout->addWidget(mListView, 1);
-    topLayout->addSpacing(KDialog::spacingHint());
 
     PackedLayout* blayout = new PackedLayout(Qt::AlignHCenter);
     blayout->setMargin(0);
-    blayout->setSpacing(KDialog::spacingHint());
     topLayout->addLayout(blayout);
 
     mAddButton    = new QPushButton(i18nc("@action:button", "Add..."), this);

@@ -35,7 +35,6 @@
 #include <kalarmcal/datetime.h>
 #include <KTimeZone>
 #include <kdatecombobox.h>
-#include <kdialog.h>
 #include <KLocalizedString>
 
 #include <QGroupBox>
@@ -102,8 +101,8 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     mButtonGroup = new ButtonGroup(this);
     connect(mButtonGroup, &ButtonGroup::buttonSet, this, &AlarmTimeWidget::slotButtonSet);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    topLayout->setSpacing(KDialog::spacingHint());
-    topLayout->setMargin(title.isEmpty() ? 0 : KDialog::marginHint());
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    topLayout->setMargin(title.isEmpty() ? 0 : style()->pixelMetric(QStyle::PM_DefaultChildMargin));
 
     // At time radio button/label
     mAtTimeRadio = new RadioButton((mDeferring ? i18nc("@option:radio", "Defer to date/time:") : i18nc("@option:radio", "At date/time:")), topWidget);
@@ -125,7 +124,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     QWidget* timeBox = new QWidget(topWidget);
     QHBoxLayout* timeBoxHLayout = new QHBoxLayout(timeBox);
     timeBoxHLayout->setMargin(0);
-    timeBoxHLayout->setSpacing(2*KDialog::spacingHint());
+    timeBoxHLayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     mTimeEdit = new TimeEdit(timeBox);
     timeBoxHLayout->addWidget(mTimeEdit);
     mTimeEdit->setFixedSize(mTimeEdit->sizeHint());
@@ -206,7 +205,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
 
         QHBoxLayout* layout = new QHBoxLayout();
         topLayout->addLayout(layout);
-        layout->setSpacing(2*KDialog::spacingHint());
+        layout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
         // Time zone selector
         mTimeZoneBox = new QWidget(topWidget);   // this is to control the QWhatsThis text display area

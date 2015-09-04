@@ -48,7 +48,6 @@
 #include <KLocalizedString>
 #include <kconfig.h>
 #include <kiconloader.h>
-#include <kdialog.h>
 #include <ksystemtimezone.h>
 #include <ktextedit.h>
 #include <kwindowsystem.h>
@@ -396,8 +395,8 @@ void MessageWin::initView()
     QWidget* topWidget = new QWidget(this);
     setCentralWidget(topWidget);
     QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    topLayout->setMargin(KDialog::marginHint());
-    topLayout->setSpacing(KDialog::spacingHint());
+    topLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     QPalette labelPalette = palette();
     labelPalette.setColor(backgroundRole(), labelPalette.color(QPalette::Window));
@@ -527,7 +526,7 @@ void MessageWin::initView()
                 text->setMaximumWidth(s.width() + text->scrollBarWidth());
                 text->setWhatsThis(i18nc("@info:whatsthis", "The alarm message"));
                 const int vspace = lineSpacing/2;
-                const int hspace = lineSpacing - KDialog::marginHint();
+                const int hspace = lineSpacing - style()->pixelMetric(QStyle::PM_DefaultChildMargin);
                 topLayout->addSpacing(vspace);
                 topLayout->addStretch();
                 // Don't include any horizontal margins if message is 2/3 screen width
@@ -580,7 +579,7 @@ void MessageWin::initView()
                 MinuteTimer::connect(this, SLOT(setRemainingTextMinute()));   // update every minute
             }
             topLayout->addWidget(mRemainingText, 0, Qt::AlignHCenter);
-            topLayout->addSpacing(KDialog::spacingHint());
+            topLayout->addSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
             topLayout->addStretch();
         }
     }
@@ -597,8 +596,8 @@ void MessageWin::initView()
                 frame->setWhatsThis(i18nc("@info:whatsthis", "The email to send"));
                 topLayout->addWidget(frame, 0, Qt::AlignHCenter);
                 QGridLayout* grid = new QGridLayout(frame);
-                grid->setMargin(KDialog::marginHint());
-                grid->setSpacing(KDialog::spacingHint());
+                grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+                grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
                 QLabel* label = new QLabel(i18nc("@info Email addressee", "To:"), frame);
                 label->setFixedSize(label->sizeHint());
@@ -635,10 +634,10 @@ void MessageWin::initView()
     {
         setCaption(i18nc("@title:window", "Error"));
         QHBoxLayout* layout = new QHBoxLayout();
-        layout->setMargin(2*KDialog::marginHint());
+        layout->setMargin(2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin));
         layout->addStretch();
         topLayout->addLayout(layout);
-        QLabel* label = new QLabel(topWidget);        
+        QLabel* label = new QLabel(topWidget);
         label->setPixmap(QIcon::fromTheme(QLatin1String("dialog-error")).pixmap(IconSize(KIconLoader::Desktop), IconSize(KIconLoader::Desktop)));
         label->setFixedSize(label->sizeHint());
         layout->addWidget(label, 0, Qt::AlignRight);
@@ -757,7 +756,8 @@ void MessageWin::initView()
     mKAlarmButton->setEnabled(false);
 
     topLayout->activate();
-    setMinimumSize(QSize(grid->sizeHint().width() + 2*KDialog::marginHint(), sizeHint().height()));
+    setMinimumSize(QSize(grid->sizeHint().width() + 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin),
+                         sizeHint().height()));
     const bool modal = !(windowFlags() & Qt::X11BypassWindowManagerHint);
     const unsigned long wstate = (modal ? NET::Modal : 0) | NET::Sticky | NET::StaysOnTop;
     WId winid = winId();
@@ -1747,7 +1747,7 @@ QSize MessageWin::sizeHint() const
             {
                 // For command output, expand the window to accommodate the text
                 const QSize texthint = mCommandText->sizeHint();
-                int w = texthint.width() + 2*KDialog::marginHint();
+                int w = texthint.width() + 2 * style()->pixelMetric(QStyle::PM_DefaultChildMargin);
                 if (w < width())
                     w = width();
                 const int ypadding = height() - mCommandText->height();

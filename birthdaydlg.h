@@ -22,7 +22,7 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <kdialog.h>
+#include <QDialog>
 #include <QVector>
 #include <QLineEdit>
 
@@ -37,10 +37,11 @@ class LateCancelSelector;
 class Reminder;
 class BLineEdit;
 class BirthdaySortModel;
+class QDialogButtonBox;
 
 using namespace KAlarmCal;
 
-class BirthdayDlg : public KDialog
+class BirthdayDlg : public QDialog
 {
         Q_OBJECT
     public:
@@ -68,6 +69,7 @@ class BirthdayDlg : public KDialog
         LateCancelSelector*   mLateCancel;
         SpecialActionsButton* mSpecialActionsButton;
         RepetitionButton*     mSubRepetition;
+        QDialogButtonBox *    mButtonBox;
         QString               mPrefixText;   // last entered value of prefix text
         QString               mSuffixText;   // last entered value of suffix text
         KAEvent::Flags        mFlags;        // event flag bits

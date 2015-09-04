@@ -53,27 +53,21 @@
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QDialogButtonBox>
 #include "kalarm_debug.h"
 
 using namespace KCal;
 
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
-    : KDialog(parent),
+    : QDialog(parent),
       mSpecialActionsButton(Q_NULLPTR)
 {
     setObjectName(QStringLiteral("BirthdayDlg"));    // used by LikeBack
-    setCaption(i18nc("@title:window", "Import Birthdays From KAddressBook"));
-    setButtons(Ok | Cancel);
-    setDefaultButton(Ok);
+    setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));
 
-    connect(this, &BirthdayDlg::okClicked, this, &BirthdayDlg::slotOk);
-
-    QWidget* topWidget = new QWidget(this);
-    setMainWidget(topWidget);
-    QVBoxLayout* topLayout = new QVBoxLayout(topWidget);
-    topLayout->setMargin(0);
-    topLayout->setSpacing(spacingHint());
+    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    topLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Prefix and suffix to the name in the alarm text
     // Get default prefix and suffix texts from config file
@@ -81,11 +75,11 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mPrefixText = config.readEntry("BirthdayPrefix", i18nc("@info", "Birthday: "));
     mSuffixText = config.readEntry("BirthdaySuffix");
 
-    QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), topWidget);
+    QGroupBox* textGroup = new QGroupBox(i18nc("@title:group", "Alarm Text"), this);
     topLayout->addWidget(textGroup);
     QGridLayout* grid = new QGridLayout(textGroup);
-    grid->setMargin(marginHint());
-    grid->setSpacing(spacingHint());
+    grid->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    grid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     QLabel* label = new QLabel(i18nc("@label:textbox", "Prefix:"), textGroup);
     label->setFixedSize(label->sizeHint());
     grid->addWidget(label, 0, 0);
@@ -110,7 +104,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
           "including any necessary leading spaces."));
     grid->addWidget(mSuffix, 1, 1);
 
-    QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), topWidget);
+    QGroupBox* group = new QGroupBox(i18nc("@title:group", "Select Birthdays"), this);
     topLayout->addWidget(group);
     QVBoxLayout* layout = new QVBoxLayout(group);
     layout->setMargin(0);
@@ -153,11 +147,11 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
           "or by clicking the mouse while pressing Ctrl or Shift.</para>"));
     layout->addWidget(mListView);
 
-    group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), topWidget);
+    group = new QGroupBox(i18nc("@title:group", "Alarm Configuration"), this);
     topLayout->addWidget(group);
     QVBoxLayout* groupLayout = new QVBoxLayout(group);
-    groupLayout->setMargin(marginHint());
-    groupLayout->setSpacing(spacingHint());
+    groupLayout->setMargin(style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+    groupLayout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
 
     // Sound checkbox and file selector
     QHBoxLayout* hlayout = new QHBoxLayout();
@@ -166,7 +160,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mSoundPicker = new SoundPicker(group);
     mSoundPicker->setFixedSize(mSoundPicker->sizeHint());
     hlayout->addWidget(mSoundPicker);
-    hlayout->addSpacing(2*spacingHint());
+    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hlayout->addStretch();
 
     // Font and colour choice button and sample text
@@ -189,12 +183,12 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     // Acknowledgement confirmation required - default = no confirmation
     hlayout = new QHBoxLayout();
     hlayout->setMargin(0);
-    hlayout->setSpacing(2*spacingHint());
+    hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     groupLayout->addLayout(hlayout);
     mConfirmAck = EditDisplayAlarmDlg::createConfirmAckCheckbox(group);
     mConfirmAck->setFixedSize(mConfirmAck->sizeHint());
     hlayout->addWidget(mConfirmAck);
-    hlayout->addSpacing(2*spacingHint());
+    hlayout->addSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     hlayout->addStretch();
 
     if (ShellProcess::authorised())    // don't display if shell commands not allowed (e.g. kiosk mode)
@@ -208,7 +202,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     // Late display checkbox - default = allow late display
     hlayout = new QHBoxLayout();
     hlayout->setMargin(0);
-    hlayout->setSpacing(2*spacingHint());
+    hlayout->setSpacing(2 * style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
     groupLayout->addLayout(hlayout);
     mLateCancel = new LateCancelSelector(false, group);
     mLateCancel->setFixedSize(mLateCancel->sizeHint());
@@ -243,6 +237,17 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
         mSpecialActionsButton->setActions(Preferences::defaultPreAction(), Preferences::defaultPostAction(), opts);
     }
 
+
+    mButtonBox = new QDialogButtonBox(this);
+    mButtonBox->addButton(QDialogButtonBox::Ok);
+    mButtonBox->addButton(QDialogButtonBox::Cancel);
+    connect(mButtonBox, &QDialogButtonBox::accepted,
+            this, &BirthdayDlg::slotOk);
+    connect(mButtonBox, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
+    topLayout->addWidget(mButtonBox);
+
+
     KActionCollection* actions = new KActionCollection(this);
     KStandardAction::selectAll(mListView, SLOT(selectAll()), actions);
     KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
@@ -250,7 +255,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     foreach (QAction* action, actions->actions())
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
-    enableButtonOk(false);     // only enable OK button when something is selected
+    mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false); // only enable OK button when something is selected
 }
 
 /******************************************************************************
@@ -318,7 +323,7 @@ void BirthdayDlg::slotOk()
     if (mSoundPicker->repeatPause() >= 0)                 mFlags |= KAEvent::REPEAT_SOUND;
     if (mConfirmAck->isChecked())                         mFlags |= KAEvent::CONFIRM_ACK;
     if (mFontColourButton->defaultFont())                 mFlags |= KAEvent::DEFAULT_FONT;
-    KDialog::accept();
+    QDialog::accept();
 }
 
 /******************************************************************************
@@ -327,7 +332,7 @@ void BirthdayDlg::slotOk()
 */
 void BirthdayDlg::slotSelectionChanged()
 {
-    enableButtonOk(mListView->selectionModel()->hasSelection());
+    mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(mListView->selectionModel()->hasSelection());
 }
 
 /******************************************************************************

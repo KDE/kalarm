@@ -21,7 +21,7 @@
 #define TEMPLATEDLG_H
 
 #include "editdlg.h"
-#include <kdialog.h>
+#include <QDialog>
 
 class QResizeEvent;
 class QPushButton;
@@ -30,7 +30,7 @@ class TemplateListModel;
 class TemplateListView;
 
 
-class TemplateDlg : public KDialog
+class TemplateDlg : public QDialog
 {
         Q_OBJECT
     public:

@@ -25,15 +25,16 @@
 
 #include <kalarmcal/datetime.h>
 #include <AkonadiCore/collection.h>
-#include <kdialog.h>
+#include <QDialog>
 
 class AlarmTimeWidget;
+class QDialogButtonBox;
 namespace KAlarmCal { class KAEvent; }
 
 using namespace KAlarmCal;
 
 
-class DeferAlarmDlg : public KDialog
+class DeferAlarmDlg : public QDialog
 {
         Q_OBJECT
     public:
@@ -53,6 +54,7 @@ class DeferAlarmDlg : public KDialog
 
     private:
         AlarmTimeWidget* mTimeWidget;
+        QDialogButtonBox* mButtonBox;
         DateTime         mAlarmDateTime;
         DateTime         mLimitDateTime;   // latest date/time allowed for deferral
         EventId          mLimitEventId;    // event IDs from whose recurrences to derive the limit date/time for deferral

@@ -27,12 +27,12 @@
 #include "timeperiod.h"
 #include "timeselector.h"
 
-#include <kdialog.h>
 #include <KLocalizedString>
 
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QDialogButtonBox>
 
 using namespace KCalCore;
 
@@ -144,38 +144,31 @@ static const int MAX_COUNT = 9999;    // maximum range for count spinbox
 
 
 RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* parent)
-    : KDialog(parent),
+    : QDialog(parent),
       mMaxDuration(-1),
       mDateOnly(false),
       mReadOnly(readOnly)
 {
-    setCaption(caption);
-    setButtons(Ok|Cancel);
-    int spacing = spacingHint();
-    QWidget* page = new QWidget(this);
-    setMainWidget(page);
-    QVBoxLayout* topLayout = new QVBoxLayout(page);
-    topLayout->setMargin(0);
-    topLayout->setSpacing(spacing);
+    setWindowTitle(caption);
+
+    QVBoxLayout* topLayout = new QVBoxLayout(this);
 
     mTimeSelector = new TimeSelector(i18nc("@option:check Repeat every 10 minutes", "Repeat every"),
                       i18nc("@info:whatsthis", "Instead of the alarm triggering just once at each recurrence, "
                             "checking this option makes the alarm trigger multiple times at each recurrence."),
                       i18nc("@info:whatsthis", "Enter the time between repetitions of the alarm"),
-                      true, page);
+                      true, this);
     mTimeSelector->setFixedSize(mTimeSelector->sizeHint());
     connect(mTimeSelector, &TimeSelector::valueChanged, this, &RepetitionDlg::intervalChanged);
     connect(mTimeSelector, &TimeSelector::toggled, this, &RepetitionDlg::repetitionToggled);
     topLayout->addWidget(mTimeSelector, 0, Qt::AlignLeft);
 
-    mButtonBox = new QGroupBox(page);
+    mButtonBox = new QGroupBox(this);
     topLayout->addWidget(mButtonBox);
     mButtonGroup = new ButtonGroup(mButtonBox);
     connect(mButtonGroup, &ButtonGroup::buttonSet, this, &RepetitionDlg::typeClicked);
 
     QVBoxLayout* vlayout = new QVBoxLayout(mButtonBox);
-    vlayout->setMargin(marginHint());
-    vlayout->setSpacing(spacing);
     QHBoxLayout* layout = new QHBoxLayout();
     layout->setMargin(0);
     vlayout->addLayout(layout);
@@ -209,6 +202,15 @@ RepetitionDlg::RepetitionDlg(const QString& caption, bool readOnly, QWidget* par
     layout->addWidget(mDuration);
     mDurationButton->setFocusWidget(mDuration);
     layout->addStretch();
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
+    buttonBox->addButton(QDialogButtonBox::Ok);
+    buttonBox->addButton(QDialogButtonBox::Cancel);
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            this, &QDialog::reject);
+    topLayout->addWidget(buttonBox);
 
     mCountButton->setChecked(true);
     repetitionToggled(false);

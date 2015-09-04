@@ -25,7 +25,6 @@
 #include <KFileWidget>
 #include <KLocalizedString>
 #include <krecentdocument.h>
-#include <KUrl>
 
 #include <QCheckBox>
 #include "kalarm_debug.h"
@@ -34,14 +33,14 @@
 QCheckBox* FileDialog::mAppendCheck = Q_NULLPTR;
 
 
-QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWidget* parent, const QString& caption, bool* append)
+QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWidget* parent, const QString& caption, bool* append)
 {
     bool defaultDir = dir.isEmpty();
     bool specialDir = !defaultDir && dir.scheme() == QStringLiteral("kfiledialog");
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
-    AutoQPointer<FileDialog> dlg = new FileDialog(specialDir ? dir : KUrl(), filter, parent);
+    AutoQPointer<FileDialog> dlg = new FileDialog(specialDir ? dir : QUrl(), filter, parent);
     if (!specialDir && !defaultDir)
     {
         if (!dir.isLocalFile())
@@ -73,7 +72,7 @@ QString FileDialog::getSaveFileName(const KUrl& dir, const QString& filter, QWid
     {
         if (append)
             *append = mAppendCheck->isChecked();
-        KRecentDocument::add(filename);
+        KRecentDocument::add(QUrl::fromLocalFile(filename));
     }
     return filename;
 }

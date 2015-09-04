@@ -22,12 +22,12 @@
 #define FONTCOLOURBUTTON_H
 
 #include "pushbutton.h"
-#include <kdialog.h>
+
+#include <QDialog>
 #include <QFont>
 #include <QColor>
 
 class FontColourChooser;
-
 
 class FontColourButton : public PushButton
 {
@@ -62,7 +62,7 @@ class FontColourButton : public PushButton
 
 
 // Font and colour selection dialog displayed by the push button
-class FontColourDlg : public KDialog
+class FontColourDlg : public QDialog
 {
         Q_OBJECT
     public:

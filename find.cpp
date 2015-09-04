@@ -34,13 +34,14 @@
 #include <kseparator.h>
 #include <kwindowsystem.h>
 #include <KLocalizedString>
-#include <KDialog>
 
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QRegExp>
+#include <QStyle>
+#include <QApplication>
 #include "kalarm_debug.h"
 
 using namespace KAlarmCal;
@@ -113,12 +114,12 @@ void Find::display()
         // Alarm types
         QVBoxLayout* layout = new QVBoxLayout(kalarmWidgets);
         layout->setMargin(0);
-        layout->setSpacing(KDialog::spacingHint());
+        layout->setSpacing(qApp->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         QGroupBox* group = new QGroupBox(i18nc("@title:group", "Alarm Type"), kalarmWidgets);
         layout->addWidget(group);
         QGridLayout* grid = new QGridLayout(group);
-        grid->setMargin(KDialog::marginHint());
-        grid->setSpacing(KDialog::spacingHint());
+        grid->setMargin(qApp->style()->pixelMetric(QStyle::PM_DefaultChildMargin));
+        grid->setSpacing(qApp->style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
         grid->setColumnStretch(1, 1);
 
         // Live & archived alarm selection

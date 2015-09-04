@@ -22,7 +22,7 @@
 #define SOUNDDLG_H
 
 #include <kurl.h>
-#include <kdialog.h>
+#include <QDialog>
 #include <QString>
 
 class QPushButton;
@@ -35,6 +35,8 @@ class CheckBox;
 class SpinBox;
 class Slider;
 class LineEdit;
+class QDialogButtonBox;
+class QAbstractButton;
 
 
 class SoundWidget : public QWidget
@@ -92,7 +94,7 @@ class SoundWidget : public QWidget
 };
 
 
-class SoundDlg : public KDialog
+class SoundDlg : public QDialog
 {
         Q_OBJECT
     public:
@@ -110,10 +112,11 @@ class SoundDlg : public KDialog
         void           resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
 
     protected Q_SLOTS:
-        void           slotButtonClicked(int button) Q_DECL_OVERRIDE;
+        void           slotButtonClicked(QAbstractButton *button);
 
     private:
         SoundWidget*   mSoundWidget;
+        QDialogButtonBox *mButtonBox;
         bool           mReadOnly;
 };
 

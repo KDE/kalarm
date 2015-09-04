@@ -975,7 +975,7 @@ void MainWindow::slotTemplatesEnd()
 {
     if (mTemplateDlg)
     {
-        mTemplateDlg->delayedDestruct();   // this deletes the dialog once it is safe to do so
+        mTemplateDlg->deleteLater();   // this deletes the dialog once it is safe to do so
         mTemplateDlg = Q_NULLPTR;
         enableTemplateMenuItem(true);      // re-enable menu item in all windows
     }

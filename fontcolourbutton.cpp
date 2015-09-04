@@ -29,6 +29,8 @@
 #include <KLocalizedString>
 
 #include <QVBoxLayout>
+#include <QStyle>
+#include <QDialogButtonBox>
 #include "kalarm_debug.h"
 
 
@@ -87,17 +89,14 @@ void FontColourButton::slotButtonPressed()
 
 FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, const QFont& font,
                              bool defaultFont, const QString& caption, QWidget* parent)
-    : KDialog(parent),
+    : QDialog(parent),
       mReadOnly(false)
 {
-    setCaption(caption);
-    setButtons(Ok|Cancel);
-    QWidget* page = new QWidget(this);
-    setMainWidget(page);
-    QVBoxLayout* layout = new QVBoxLayout(page);
-    layout->setMargin(0);
-    layout->setSpacing(spacingHint());
-    mChooser = new FontColourChooser(page, QStringList(), QString(), true, true);
+    setWindowTitle(caption);
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    mChooser = new FontColourChooser(this, QStringList(), QString(), true, true);
     mChooser->setBgColour(bgColour);
     mChooser->setFgColour(fgColour);
     if (defaultFont)
@@ -105,8 +104,16 @@ FontColourDlg::FontColourDlg(const QColor& bgColour, const QColor& fgColour, con
     else
         mChooser->setFont(font);
     layout->addWidget(mChooser);
-    layout->addSpacing(KDialog::spacingHint());
-    connect(this, &FontColourDlg::okClicked, this, &FontColourDlg::slotOk);
+    layout->addSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(this);
+    buttonBox->addButton(QDialogButtonBox::Ok);
+    buttonBox->addButton(QDialogButtonBox::Cancel);
+    layout->addWidget(buttonBox);
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &FontColourDlg::slotOk);
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            this, &FontColourDlg::reject);
 }
 
 /******************************************************************************

@@ -25,7 +25,6 @@
 #include "timespinbox.h"
 
 #include <KLocalizedString>
-#include <kdialog.h>
 
 #include <QHBoxLayout>
 #include <QStackedWidget>

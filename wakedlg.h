@@ -21,13 +21,13 @@
 #ifndef WAKEDLG_H
 #define WAKEDLG_H
 
-#include <kdialog.h>
+#include <QDialog>
 
 class QTimer;
 class MainWindow;
 class Ui_WakeFromSuspendDlgWidget;
 
-class WakeFromSuspendDlg : public KDialog
+class WakeFromSuspendDlg : public QDialog
 {
         Q_OBJECT
     public:

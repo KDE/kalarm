@@ -27,7 +27,8 @@
 
 #include <AkonadiCore/collection.h>
 
-#include <kdialog.h>
+#include <QDialog>
+#include <QTime>
 
 class QLabel;
 class QShowEvent;
@@ -48,11 +49,12 @@ class RecurrenceEdit;
 class Reminder;
 class StackedScrollGroup;
 class TimeSpinBox;
+class QDialogButtonBox;
 
 using namespace KAlarmCal;
 
 
-class EditAlarmDlg : public KDialog
+class EditAlarmDlg : public QDialog
 {
         Q_OBJECT
     public:
@@ -122,7 +124,7 @@ class EditAlarmDlg : public KDialog
         virtual void    slotTry();
         virtual void    slotHelp();      // Load Template
         virtual void    slotDefault();   // More/Less Options
-        void            slotButtonClicked(int button) Q_DECL_OVERRIDE;
+        void            slotButtonClicked(QAbstractButton *button);
         void            contentsChanged();
 
     private Q_SLOTS:
@@ -147,6 +149,12 @@ class EditAlarmDlg : public KDialog
 
     protected:
         KAEvent::SubAction  mAlarmType;           // actual alarm type
+
+        QDialogButtonBox*   mButtonBox;
+        QAbstractButton*    mTryButton;
+        QAbstractButton*    mLoadTemplateButton;
+        QAbstractButton*    mMoreLessButton;
+
     private:
         QTabWidget*         mTabs;                // the tabs in the dialog
         StackedScrollGroup* mTabScrollGroup;
