@@ -1623,9 +1623,9 @@ FileType fileType(const QMimeType& mimetype)
 * Updates 'filename' and 'url' even if an error occurs, since 'filename' may
 * be needed subsequently by showFileErrMessage().
 */
-FileErr checkFileExists(QString& filename, KUrl& url)
+FileErr checkFileExists(QString& filename, QUrl& url)
 {
-    url = KUrl();
+    url = QUrl();
     FileErr err = FileErr_None;
     QString file = filename;
     QRegExp f(QStringLiteral("^file:/+"));
@@ -1637,9 +1637,9 @@ FileErr checkFileExists(QString& filename, KUrl& url)
     if (i > 0  &&  file[i - 1] == QLatin1Char(':'))
     {
         url = file;
-        url.cleanPath();
-        filename = url.prettyUrl();
-        auto statJob = KIO::stat(url.url(), KIO::StatJob::SourceSide, 2);
+        const QString displayStr = url.toDisplayString();
+        filename = displayStr.mid(displayStr.lastIndexOf(QLatin1Char('/')) + 1);
+        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
         KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
         if (!statJob->exec())
             err = FileErr_Nonexistent;
@@ -1748,11 +1748,11 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
         fileDlg->setSelection(initialFile);
     if (fileDlg->exec() != QDialog::Accepted)
         return fileDlg ? QStringLiteral("") : QString();  // return null only if dialog was deleted
-    KUrl url = fileDlg->selectedUrl();
+    QUrl url = fileDlg->selectedUrl();
     if (url.isEmpty())
         return QStringLiteral("");   // return empty, non-null string
-    defaultDir = url.isLocalFile() ? url.upUrl().toLocalFile() : url.directory();
-    return (mode & KFile::LocalOnly) ? url.pathOrUrl() : url.prettyUrl();
+    defaultDir = url.isLocalFile() ? KIO::upUrl(url).toLocalFile() : url.adjusted(QUrl::RemoveFilename).path();
+    return (mode & KFile::LocalOnly) ? url.toDisplayString(QUrl::PreferLocalFile) : url.toDisplayString();
 }
 
 /******************************************************************************

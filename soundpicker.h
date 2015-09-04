@@ -23,9 +23,9 @@
 
 #include "preferences.h"
 
-#include <kurl.h>
 #include <QFrame>
 #include <QString>
+#include <QUrl>
 
 class ComboBox;
 class PushButton;
@@ -86,7 +86,7 @@ class SoundPicker : public QFrame
         /** If the 'file' option is selected, returns the URL of the chosen file.
          *  Otherwise returns an empty URL.
          */
-        KUrl           file() const;
+        QUrl           file() const;
 
         /** Returns the volume and fade characteristics for playing a sound file.
          *  @param fadeVolume  Receives the initial volume if the volume is to
@@ -104,7 +104,7 @@ class SoundPicker : public QFrame
         int            repeatPause() const;
 
         /** Returns the current file URL regardless of whether the 'file' option is selected. */
-        KUrl           fileSetting() const   { return mFile; }
+        QUrl           fileSetting() const   { return mFile; }
 
         /** Returns the current file repetition setting regardless of whether
          *  the 'file' option is selected.
@@ -141,7 +141,7 @@ class SoundPicker : public QFrame
         ComboBox*      mTypeCombo;
         QWidget*       mTypeBox;
         PushButton*    mFilePicker;
-        KUrl           mFile;         // sound file to play when alarm is triggered
+        QUrl           mFile;         // sound file to play when alarm is triggered
         float          mVolume;       // volume for file, or < 0 to not set volume
         float          mFadeVolume;   // initial volume for file, or < 0 for no fading
         int            mFadeSeconds;  // fade interval in seconds

@@ -290,7 +290,7 @@ QVector<KAEvent> BirthdayDlg::events() const
         int   fadeSecs;
         float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
         int   repeatPause = mSoundPicker->repeatPause();
-        event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs, repeatPause);
+        event.setAudioFile(mSoundPicker->file().toDisplayString(), volume, fadeVolume, fadeSecs, repeatPause);
         QVector<int> months(1, date.month());
         event.setRecurAnnualByDate(1, months, 0, KARecurrence::defaultFeb29Type(), -1, QDate());
         event.setRepetition(mSubRepetition->repetition());

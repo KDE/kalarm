@@ -84,6 +84,7 @@
 #include <QDesktopWidget>
 #include <QMutexLocker>
 #include <QMimeDatabase>
+#include <QUrl>
 #include "kalarm_debug.h"
 
 #include <stdlib.h>
@@ -447,15 +448,15 @@ void MessageWin::initView()
                 topLayout->addWidget(label, 0, Qt::AlignHCenter);
 
                 // Display contents of file
-                const KUrl url(mMessage);
+                const QUrl url = QUrl::fromUserInput(mMessage, QString(), QUrl::AssumeLocalFile);
 
-                auto statJob =  KIO::stat(url.url(), KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
+                auto statJob =  KIO::stat(url, KIO::StatJob::SourceSide, 0, KIO::HideProgressInfo);
                 const bool exists = statJob->exec();
                 const bool isDir = statJob->statResult().isDir();
 
                 bool opened = false;
                 if (exists && !isDir) {
-                    auto job = KIO::storedGet(url.url());
+                    auto job = KIO::storedGet(url);
                     KJobWidgets::setWindow(job, MainWindow::mainMainWindow());
                     if (job->exec()) {
                         opened = true;

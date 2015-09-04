@@ -30,12 +30,12 @@
 #include <AkonadiCore/collection.h>
 #include <AkonadiCore/item.h>
 #include <kfile.h>
-#include <KUrl>
 
 #include <QSize>
 #include <QString>
 #include <QVector>
 #include <QMimeType>
+#include <QUrl>
 
 using namespace KAlarmCal;
 
@@ -101,7 +101,7 @@ enum FileErr {
     FileErr_BlankDisplay,    // blank error to use for file to display
     FileErr_BlankPlay        // blank error to use for file to play
 };
-FileErr             checkFileExists(QString& filename, KUrl&);
+FileErr             checkFileExists(QString& filename, QUrl&);
 bool                showFileErrMessage(const QString& filename, FileErr, FileErr blankError, QWidget* errmsgParent);
 
 /** If a url string is a local file, strip off the 'file:/' prefix. */

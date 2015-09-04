@@ -50,11 +50,11 @@
 #include <AkonadiCore/itemfetchscope.h>
 #include <AkonadiWidgets/agenttypedialog.h>
 
-#include <KUrl>
 #include <KLocalizedString>
 #include <kcolorutils.h>
 #include <KIconLoader>
 
+#include <QUrl>
 #include <QApplication>
 #include <QFileInfo>
 #include <QTimer>
@@ -919,7 +919,7 @@ QString AkonadiModel::displayName(Akonadi::Collection& collection) const
 */
 QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 {
-    const KUrl url = collection.remoteId();
+    const QUrl url = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
     return !url.isLocalFile()                     ? i18nc("@info", "URL")
            : QFileInfo(url.toLocalFile()).isDir() ? i18nc("@info Directory in filesystem", "Directory")
            :                                        i18nc("@info", "File");
@@ -932,9 +932,9 @@ QString AkonadiModel::storageType(const Akonadi::Collection& collection) const
 QString AkonadiModel::tooltip(const Collection& collection, CalEvent::Types types) const
 {
     const QString name = QLatin1Char('@') + collection.displayName();   // insert markers for stripping out name
-    const KUrl url = collection.remoteId();
+    const QUrl url = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
     const QString type = QLatin1Char('@') + storageType(collection);   // file/directory/URL etc.
-    const QString locn = url.pathOrUrl();
+    const QString locn = url.toDisplayString(QUrl::PreferLocalFile);
     const bool inactive = !collection.hasAttribute<CollectionAttribute>()
                        || !(collection.attribute<CollectionAttribute>()->enabled() & types);
     const QString disabled = i18nc("@info", "Disabled");

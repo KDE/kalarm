@@ -155,10 +155,10 @@ AlarmCalendar::AlarmCalendar(const QString& path, CalEvent::Type type)
             Q_ASSERT(false);   // invalid event type for a calendar
             break;
     }
-    mUrl.setPath(path);       // N.B. constructor mUrl(path) doesn't work with UNIX paths
+    mUrl = QUrl::fromUserInput(path, QString(), QUrl::AssumeLocalFile);
     QString icalPath = path;
     icalPath.replace(QStringLiteral("\\.vcs$"), QStringLiteral(".ics"));
-    mICalUrl.setPath(icalPath);
+    mICalUrl = QUrl::fromUserInput(icalPath, QString(), QUrl::AssumeLocalFile);
     mCalType = (path == icalPath) ? LOCAL_ICAL : LOCAL_VCAL;    // is the calendar in ICal or VCal format?
 }
 
@@ -191,7 +191,7 @@ bool AlarmCalendar::open()
         if (!mUrl.isValid())
             return false;
 
-        qCDebug(KALARM_LOG) << mUrl.prettyUrl();
+        qCDebug(KALARM_LOG) << mUrl.toDisplayString();
         if (!mCalendarStorage)
         {
             MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
@@ -245,7 +245,7 @@ int AlarmCalendar::load()
             return -2;
 
         QString filename;
-        qCDebug(KALARM_LOG) << mUrl.prettyUrl();
+        qCDebug(KALARM_LOG) << mUrl.toDisplayString();
         if (!mUrl.isLocalFile()) {
             auto getJob = KIO::storedGet(mUrl.url());
             KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
@@ -253,7 +253,7 @@ int AlarmCalendar::load()
             {
                 qCCritical(KALARM_LOG) << "Download failure";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
-                                    xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", mUrl.prettyUrl()));
+                                    xi18nc("@info", "Cannot download calendar: <filename>%1</filename>", mUrl.toDisplayString()));
                 return -1;
             }
             QTemporaryFile tmpFile;
@@ -270,7 +270,7 @@ int AlarmCalendar::load()
         {
             // Check if the file is zero length
             if (mUrl.isLocalFile()) {
-                auto statJob = KIO::stat(mUrl.upUrl());
+                auto statJob = KIO::stat(KIO::upUrl(mUrl));
                 KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
                 statJob->exec();
                 KFileItem fi(statJob->statResult(), mUrl);
@@ -280,7 +280,7 @@ int AlarmCalendar::load()
 
             qCCritical(KALARM_LOG) << "Error loading calendar file '" << filename <<"'";
             KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mUrl.prettyUrl()));
+                                xi18nc("@info", "<para>Error loading calendar:</para><para><filename>%1</filename></para><para>Please fix or delete the file.</para>", mUrl.toDisplayString()));
             // load() could have partially populated the calendar, so clear it out
             mCalendarStorage->calendar()->close();
             mCalendarStorage->calendar().clear();
@@ -310,7 +310,7 @@ bool AlarmCalendar::reload()
     if (!mCalendarStorage)
         return false;
     {
-        qCDebug(KALARM_LOG) << mUrl.prettyUrl();
+        qCDebug(KALARM_LOG) << mUrl.toDisplayString();
         close();
         return open();
     }
@@ -340,7 +340,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
         {
             qCCritical(KALARM_LOG) << "Saving" << saveFilename << "failed.";
             KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Failed to save calendar to <filename>%1</filename>", mICalUrl.prettyUrl()));
+                                xi18nc("@info", "Failed to save calendar to <filename>%1</filename>", mICalUrl.toDisplayString()));
             return false;
         }
 
@@ -354,7 +354,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
             {
                 qCCritical(KALARM_LOG) << saveFilename << "upload failed.";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
-                                    xi18nc("@info", "Cannot upload calendar to <filename>%1</filename>", mICalUrl.prettyUrl()));
+                                    xi18nc("@info", "Cannot upload calendar to <filename>%1</filename>", mICalUrl.toDisplayString()));
                 return false;
             }
         }
@@ -593,7 +593,7 @@ void AlarmCalendar::slotEventsToBeRemoved(const AkonadiModel::EventList& events)
 bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 {
     qCDebug(KALARM_LOG);
-    QUrl url = KFileDialog::getOpenUrl(KUrl("filedialog:///importalarms"),
+    QUrl url = KFileDialog::getOpenUrl(QUrl(QStringLiteral("filedialog:///importalarms")),
                                        QStringLiteral("*.vcs *.ics|%1").arg(i18nc("@info", "Calendar Files")), parent);
     if (url.isEmpty())
     {
@@ -724,20 +724,20 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
 bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
 {
     bool append;
-    QString file = FileDialog::getSaveFileName(KUrl("kfiledialog:///exportalarms"),
+    QString file = FileDialog::getSaveFileName(QUrl(QStringLiteral("kfiledialog:///exportalarms")),
                                                QStringLiteral("*.ics|%1").arg(i18nc("@info", "Calendar Files")),
                                                parent, i18nc("@title:window", "Choose Export Calendar"),
                                                &append);
     if (file.isEmpty())
         return false;
-    KUrl url;
+    QUrl url;
     url.setPath(file);
     if (!url.isValid())
     {
         qCDebug(KALARM_LOG) << "Invalid URL";
         return false;
     }
-    qCDebug(KALARM_LOG) << url.prettyUrl();
+    qCDebug(KALARM_LOG) << url.toDisplayString();
 
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
@@ -752,7 +752,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         {
             qCCritical(KALARM_LOG) << "Error loading calendar file" << file << "for append";
             KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Error loading calendar to append to:<nl/><filename>%1</filename>", url.prettyUrl()));
+                                xi18nc("@info", "Error loading calendar to append to:<nl/><filename>%1</filename>", url.toDisplayString()));
             return false;
         }
     }
@@ -792,7 +792,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         {
             qCCritical(KALARM_LOG) << file << ": failed";
             KAMessageBox::error(MainWindow::mainMainWindow(),
-                                xi18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
+                                xi18nc("@info", "Failed to save new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
             success = false;
         }
         else if (!local)
@@ -805,7 +805,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
             {
                 qCCritical(KALARM_LOG) << file << ": upload failed";
                 KAMessageBox::error(MainWindow::mainMainWindow(),
-                                    xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.prettyUrl()));
+                                    xi18nc("@info", "Cannot upload new calendar to:<nl/><filename>%1</filename>", url.toDisplayString()));
                 success = false;
             }
         }

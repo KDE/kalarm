@@ -574,7 +574,7 @@ void EditDisplayAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, con
     int   fadeSecs;
     float volume = mSoundPicker->volume(fadeVolume, fadeSecs);
     int   repeatPause = mSoundPicker->repeatPause();
-    event.setAudioFile(mSoundPicker->file().prettyUrl(), volume, fadeVolume, fadeSecs, repeatPause);
+    event.setAudioFile(mSoundPicker->file().toDisplayString(), volume, fadeVolume, fadeSecs, repeatPause);
     if (!trial  &&  reminder()->isEnabled())
         event.setReminder(reminder()->minutes(), reminder()->isOnceOnly());
     if (mSpecialActionsButton  &&  mSpecialActionsButton->isEnabled())
@@ -683,12 +683,12 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
         case tFILE:
         {
             QString alarmtext = mFileMessageEdit->text().trimmed();
-            KUrl url;
+            QUrl url;
             KAlarm::FileErr err = KAlarm::checkFileExists(alarmtext, url);
             if (err == KAlarm::FileErr_None)
             {
-#if 0 //QT5
-                switch (KAlarm::fileType(KFileItem(KFileItem::Unknown, KFileItem::Unknown, url).currentMimeType()))
+                KFileItem fi(url);
+                switch (KAlarm::fileType(fi.currentMimeType()))
                 {
                     case KAlarm::TextFormatted:
                     case KAlarm::TextPlain:
@@ -699,7 +699,6 @@ bool EditDisplayAlarmDlg::checkText(QString& result, bool showErrorMessage) cons
                         err = KAlarm::FileErr_NotTextImage;
                         break;
                 }
-#endif
             }
             if (err != KAlarm::FileErr_None  &&  showErrorMessage)
             {
@@ -1631,9 +1630,9 @@ void EditAudioAlarmDlg::type_setEvent(KAEvent& event, const KDateTime& dt, const
     int   fadeSecs;
     mSoundConfig->getVolume(volume, fadeVolume, fadeSecs);
     int   repeatPause = mSoundConfig->repeatPause();
-    KUrl url;
+    QUrl url;
     mSoundConfig->file(url, false);
-    event.setAudioFile(url.prettyUrl(), volume, fadeVolume, fadeSecs, repeatPause, isTemplate());
+    event.setAudioFile(url.toString(), volume, fadeVolume, fadeSecs, repeatPause, isTemplate());
 }
 
 /******************************************************************************
@@ -1651,13 +1650,13 @@ KAEvent::Flags EditAudioAlarmDlg::getAlarmFlags() const
 */
 bool EditAudioAlarmDlg::checkText(QString& result, bool showErrorMessage) const
 {
-    KUrl url;
+    QUrl url;
     if (!mSoundConfig->file(url, showErrorMessage))
     {
         result.clear();
         return false;
     }
-    result = url.pathOrUrl();
+    result = url.isLocalFile() ? url.toLocalFile() : url.toString();
     return true;
 }
 

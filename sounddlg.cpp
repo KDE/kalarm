@@ -108,9 +108,9 @@ void SoundDlg::setReadOnly(bool readOnly)
     }
 }
 
-KUrl SoundDlg::getFile() const
+QUrl SoundDlg::getFile() const
 {
-    KUrl url;
+    QUrl url;
     mSoundWidget->file(url);
     return url;
 }
@@ -376,7 +376,7 @@ QString SoundWidget::fileName() const
 /******************************************************************************
 * Validate the entered file and return it.
 */
-bool SoundWidget::file(KUrl& url, bool showErrorMessage) const
+bool SoundWidget::file(QUrl& url, bool showErrorMessage) const
 {
     bool result = validate(showErrorMessage);
     url = mUrl;
@@ -499,7 +499,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
         return true;
     if (err == KAlarm::FileErr_Nonexistent)
     {
-        mUrl = KUrl(file);
+        mUrl = QUrl::fromUserInput(file, QString(), QUrl::AssumeLocalFile);
         if (mUrl.isLocalFile()  &&  !file.startsWith(QStringLiteral("/")))
         {
             // It's a relative path.
@@ -514,8 +514,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     dir = soundDirs[i];
                     if (dir.isReadable() && dir.count() > 2)
                     {
-                        mUrl.setPath(soundDirs[i]);
-                        mUrl.addPath(file);
+                        mUrl.setPath(soundDirs[i] + QDir::separator() + file);
                         QString f = mUrl.toLocalFile();
                         err = KAlarm::checkFileExists(f, mUrl);
                         if (err == KAlarm::FileErr_None)
@@ -530,8 +529,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
             }
             if (err == KAlarm::FileErr_Nonexistent)
             {
-                mUrl.setPath(QDir::homePath());
-                mUrl.addPath(file);
+                mUrl.setPath(QDir::homePath() + QDir::separator() + file);
                 QString f = mUrl.toLocalFile();
                 err = KAlarm::checkFileExists(f, mUrl);
                 if (err == KAlarm::FileErr_None)

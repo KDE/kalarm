@@ -570,7 +570,7 @@ void ResourceSelector::showInfo()
         QString calType = AgentManager::self()->instance(id).type().name();
         QString storage = AkonadiModel::instance()->storageType(collection);
         QString location = collection.remoteId();
-        KUrl url(location);
+        QUrl url = QUrl::fromUserInput(location, QString(), QUrl::AssumeLocalFile);
         if (url.isLocalFile())
             location = url.path();
         CalEvent::Types altypes = AkonadiModel::instance()->types(collection);

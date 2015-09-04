@@ -135,6 +135,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* parent, GetResourceType getResource)
     : QDialog(parent),
       mAlarmType(action),
+      mLoadTemplateButton(Q_NULLPTR),
       mMainPageShown(false),
       mRecurPageShown(false),
       mRecurSetDefaultEndDate(true),
@@ -149,8 +150,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* pa
       mDesiredReadOnly(false),
       mReadOnly(false),
       mShowingMore(true),
-      mSavedEvent(Q_NULLPTR),
-      mLoadTemplateButton(Q_NULLPTR)
+      mSavedEvent(Q_NULLPTR)
 {
     init(Q_NULLPTR, getResource);
 }
@@ -159,6 +159,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, Q
                            GetResourceType getResource, bool readOnly)
     : QDialog(parent),
       mAlarmType(event->actionSubType()),
+      mLoadTemplateButton(Q_NULLPTR),
       mMainPageShown(false),
       mRecurPageShown(false),
       mRecurSetDefaultEndDate(true),
@@ -174,8 +175,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, Q
       mDesiredReadOnly(readOnly),
       mReadOnly(readOnly),
       mShowingMore(true),
-      mSavedEvent(Q_NULLPTR),
-      mLoadTemplateButton(Q_NULLPTR)
+      mSavedEvent(Q_NULLPTR)
 {
     init(event, getResource);
 }

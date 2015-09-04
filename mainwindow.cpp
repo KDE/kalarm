@@ -58,7 +58,6 @@ using namespace KCalUtils;
 #include <ksystemtrayicon.h>
 #include <kstandardaction.h>
 #include <kiconloader.h>
-#include <kurl.h>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <kconfiggroup.h>
@@ -80,6 +79,7 @@ using namespace KCalUtils;
 #include <QMenu>
 #include <QMimeDatabase>
 #include <qinputdialog.h>
+#include <QUrl>
 #include "kalarm_debug.h"
 
 using namespace KAlarmCal;
@@ -1237,7 +1237,7 @@ void MainWindow::executeDragEnterEvent(QDragEnterEvent* e)
     const QMimeData* data = e->mimeData();
     bool accept = ICalDrag::canDecode(data) ? !e->source()   // don't accept "text/calendar" objects from this application
                                                :    data->hasText()
-                                                 || KUrl::List::canDecode(data)
+                                                 || data->hasUrls()
                                                  || KPIM::MailList::canDecode(data);
     if (accept)
         e->acceptProposedAction();
@@ -1270,7 +1270,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     QByteArray         bytes;
     AlarmText          alarmText;
     KPIM::MailList     mailList;
-    KUrl::List         files;
+    QList<QUrl>        files;
     MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
 #ifndef NDEBUG
     QString fmts = data->formats().join(QStringLiteral(", "));
@@ -1356,14 +1356,14 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         KAlarm::editNewAlarm(&ev, win);
         return;
     }
-    else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
+    else if (!(files = data->urls()).isEmpty())
     {
         qCDebug(KALARM_LOG) << "URL";
         // Try to find the mime type of the file, without downloading a remote file
         QMimeDatabase mimeDb;
         const QString mimeTypeName = mimeDb.mimeTypeForUrl(files[0]).name();
         action = mimeTypeName.startsWith(QStringLiteral("audio/")) ? KAEvent::AUDIO : KAEvent::FILE;
-        alarmText.setText(files[0].prettyUrl());
+        alarmText.setText(files[0].toDisplayString());
     }
     else if (data->hasText())
     {

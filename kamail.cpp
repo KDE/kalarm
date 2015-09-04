@@ -41,7 +41,6 @@
 #include <KEmailAddress>
 #include <K4AboutData>
 #include <KLocale>
-#include <KUrl>
 #include <KLocalizedString>
 #include <kfileitem.h>
 #include <KIO/StatJob>
@@ -50,6 +49,7 @@
 #include <kcodecs.h>
 #include <kcharsets.h>
 
+#include <QUrl>
 #include <QFile>
 #include <QHostInfo>
 #include <QList>
@@ -355,38 +355,47 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
         for (QStringList::Iterator at = attachments.begin();  at != attachments.end();  ++at)
         {
             QString attachment = QString::fromLatin1((*at).toLocal8Bit());
-            KUrl url(attachment);
+            QUrl url = QUrl::fromUserInput(attachment, QString(), QUrl::AssumeLocalFile);
             QString attachError = xi18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
-            url.cleanPath();
-            KIO::UDSEntry uds;
-            auto statJob = KIO::stat(url.url(), KIO::StatJob::SourceSide, 2);
-            KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
-            if (!statJob->exec())
-            {
-                qCCritical(KALARM_LOG) << "Not found:" << attachment;
-                return xi18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
-            }
-            KFileItem fi(statJob->statResult(), url);
-            if (fi.isDir()  ||  !fi.isReadable())
-            {
-                qCCritical(KALARM_LOG) << "Not file/not readable:" << attachment;
-                return attachError;
-            }
-
-            // Read the file contents
-            auto downloadJob = KIO::storedGet(url.url());
-            KJobWidgets::setWindow(downloadJob, MainWindow::mainMainWindow());
-            if (!downloadJob->exec())
-            {
-                qCCritical(KALARM_LOG) << "Load failure:" << attachment;
-                return attachError;
-            }
-            const QByteArray contents = downloadJob->data();
+            QByteArray contents;
             bool atterror = false;
-            if (contents.size() < fi.size())
-            {
-                qCDebug(KALARM_LOG) << "Read error:" << attachment;
-                atterror = true;
+            if (!url.isLocalFile()) {
+                KIO::UDSEntry uds;
+                auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
+                KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
+                if (!statJob->exec())
+                {
+                    qCCritical(KALARM_LOG) << "Not found:" << attachment;
+                    return xi18nc("@info", "Attachment not found: <filename>%1</filename>", attachment);
+                }
+                KFileItem fi(statJob->statResult(), url);
+                if (fi.isDir()  ||  !fi.isReadable())
+                {
+                    qCCritical(KALARM_LOG) << "Not file/not readable:" << attachment;
+                    return attachError;
+                }
+
+                // Read the file contents
+                auto downloadJob = KIO::storedGet(url.url());
+                KJobWidgets::setWindow(downloadJob, MainWindow::mainMainWindow());
+                if (!downloadJob->exec())
+                {
+                    qCCritical(KALARM_LOG) << "Load failure:" << attachment;
+                    return attachError;
+                }
+                contents = downloadJob->data();
+                if (contents.size() < fi.size())
+                {
+                    qCDebug(KALARM_LOG) << "Read error:" << attachment;
+                    atterror = true;
+                }
+            } else {
+                QFile f(url.toLocalFile());
+                if (!f.open(QIODevice::ReadOnly)) {
+                    qCCritical(KALARM_LOG) << "Load failure:" << attachment;
+                    return attachError;
+                }
+                contents = f.readAll();
             }
 
             QByteArray coded = KCodecs::base64Encode(contents, true);
@@ -529,7 +538,6 @@ int KAMail::checkAddress(QString& address)
 */
 QString KAMail::convertAttachments(const QString& items, QStringList& list)
 {
-    KUrl url;
     list.clear();
     int length = items.length();
     for (int next = 0;  next < length;  )
@@ -558,23 +566,23 @@ QString KAMail::convertAttachments(const QString& items, QStringList& list)
 
 /******************************************************************************
 * Check for the existence of the attachment file.
-* If non-null, '*url' receives the KUrl of the attachment.
+* If non-null, '*url' receives the QUrl of the attachment.
 * Reply = 1 if attachment exists
 *       = 0 if null name
 *       = -1 if doesn't exist.
 */
-int KAMail::checkAttachment(QString& attachment, KUrl* url)
+int KAMail::checkAttachment(QString& attachment, QUrl* url)
 {
     attachment = attachment.trimmed();
     if (attachment.isEmpty())
     {
         if (url)
-            *url = KUrl();
+            *url = QUrl();
         return 0;
     }
     // Check that the file exists
-    KUrl u(attachment);
-    u.cleanPath();
+    QUrl u = QUrl::fromUserInput(attachment, QString(), QUrl::AssumeLocalFile);
+    u.setPath(QDir::cleanPath(u.path()));
     if (url)
         *url = u;
     return checkAttachment(u) ? 1 : -1;
@@ -583,9 +591,9 @@ int KAMail::checkAttachment(QString& attachment, KUrl* url)
 /******************************************************************************
 * Check for the existence of the attachment file.
 */
-bool KAMail::checkAttachment(const KUrl& url)
+bool KAMail::checkAttachment(const QUrl& url)
 {
-    auto statJob = KIO::stat(url.url());
+    auto statJob = KIO::stat(url);
     KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
     if (!statJob->exec()) {
         return false;       // doesn't exist

@@ -27,7 +27,7 @@
 
 #include <KCalCore/Duration>
 
-class KUrl;
+class QUrl;
 
 using namespace KAlarmCal;
 
@@ -89,10 +89,10 @@ class DBusHandler : public QObject, public KAlarmIface
     private:
         static bool scheduleMessage(const QString& message, const KDateTime& start, int lateCancel, unsigned flags,
                                     const QString& bgColor, const QString& fgColor, const QString& fontStr,
-                                    const KUrl& audioFile, int reminderMins, const KARecurrence&,
+                                    const QUrl& audioFile, int reminderMins, const KARecurrence&,
                                     const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
-        static bool scheduleFile(const KUrl& file, const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
-                                 const KUrl& audioFile, int reminderMins, const KARecurrence&,
+        static bool scheduleFile(const QUrl& file, const KDateTime& start, int lateCancel, unsigned flags, const QString& bgColor,
+                                 const QUrl& audioFile, int reminderMins, const KARecurrence&,
                                  const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);
         static bool scheduleCommand(const QString& commandLine, const KDateTime& start, int lateCancel, unsigned flags,
                                     const KARecurrence&, const KCalCore::Duration& subRepeatDuration = KCalCore::Duration(0), int subRepeatCount = 0);

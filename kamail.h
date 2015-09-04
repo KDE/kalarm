@@ -30,7 +30,7 @@
 #include <QStringList>
 #include <QQueue>
 
-class KUrl;
+class QUrl;
 class KJob;
 namespace MailTransport  { class MessageQueueJob; }
 namespace KMime {
@@ -61,8 +61,8 @@ class KAMail : public QObject
 
         static int         send(JobData&, QStringList& errmsgs);
         static int         checkAddress(QString& address);
-        static int         checkAttachment(QString& attachment, KUrl* = Q_NULLPTR);
-        static bool        checkAttachment(const KUrl&);
+        static int         checkAttachment(QString& attachment, QUrl* = Q_NULLPTR);
+        static bool        checkAttachment(const QUrl&);
         static QString     convertAddresses(const QString& addresses, KCalCore::Person::List&);
         static QString     convertAttachments(const QString& attachments, QStringList& list);
         static QString     controlCentreAddress();

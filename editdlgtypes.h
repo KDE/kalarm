@@ -27,8 +27,6 @@
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
 
-#include <kurl.h>
-
 class QAbstractButton;
 class QGroupBox;
 class QComboBox;
@@ -121,7 +119,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         Preferences::SoundType mSavedSoundType;     // mSoundPicker sound type
         bool                mSavedSound;            // mSoundPicker sound status
         int                 mSavedRepeatPause;      // mSoundPicker repeat pause
-        KUrl                mSavedSoundFile;        // mSoundPicker sound file
+        QUrl                mSavedSoundFile;        // mSoundPicker sound file
         float               mSavedSoundVolume;      // mSoundPicker volume
         float               mSavedSoundFadeVolume;  // mSoundPicker fade volume
         int                 mSavedSoundFadeSeconds; // mSoundPicker fade time

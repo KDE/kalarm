@@ -172,9 +172,9 @@ Preferences::SoundType SoundPicker::sound() const
 * Return the selected sound file, if the File option is selected.
 * Returns empty URL if File is not currently selected.
 */
-KUrl SoundPicker::file() const
+QUrl SoundPicker::file() const
 {
-    return (mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]) ? mFile : KUrl();
+    return (mTypeCombo->currentIndex() == indexes[Preferences::Sound_File]) ? mFile : QUrl();
 }
 
 /******************************************************************************
@@ -213,14 +213,14 @@ void SoundPicker::set(Preferences::SoundType type, const QString& f, float volum
 {
     if (type == Preferences::Sound_File  &&  f.isEmpty())
         type = Preferences::Sound_Beep;
-    mFile        = KUrl(f);
+    mFile        = QUrl::fromUserInput(f, QString(), QUrl::AssumeLocalFile);
     mVolume      = volume;
     mFadeVolume  = fadeVolume;
     mFadeSeconds = fadeSeconds;
     mRepeatPause = repeatPause;
     mTypeCombo->setCurrentIndex(indexes[type]);  // this doesn't trigger slotTypeSelected()
     mFilePicker->setEnabled(type == Preferences::Sound_File);
-    mTypeCombo->setToolTip(type == Preferences::Sound_File ? mFile.prettyUrl() : QString());
+    mTypeCombo->setToolTip(type == Preferences::Sound_File ? mFile.toDisplayString() : QString());
     mLastType = type;
 }
 
@@ -254,7 +254,7 @@ void SoundPicker::slotTypeSelected(int id)
                 return;    // revert to previously selected type
         }
         mFilePicker->setEnabled(true);
-        mTypeCombo->setToolTip(mFile.prettyUrl());
+        mTypeCombo->setToolTip(mFile.toDisplayString());
     }
     mLastType = newType;
 }
@@ -264,11 +264,11 @@ void SoundPicker::slotTypeSelected(int id)
 */
 void SoundPicker::slotPickFile()
 {
-    KUrl oldfile = mFile;
+    QUrl oldfile = mFile;
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of EditAlarmDlg, and on return from this function).
-    AutoQPointer<SoundDlg> dlg = new SoundDlg(mFile.prettyUrl(), mVolume, mFadeVolume, mFadeSeconds, mRepeatPause, i18nc("@title:window", "Sound File"), this);
+    AutoQPointer<SoundDlg> dlg = new SoundDlg(mFile.toDisplayString(), mVolume, mFadeVolume, mFadeSeconds, mRepeatPause, i18nc("@title:window", "Sound File"), this);
     dlg->setReadOnly(mReadOnly);
     bool accepted = (dlg->exec() == QDialog::Accepted);
     if (mReadOnly)
@@ -278,7 +278,7 @@ void SoundPicker::slotPickFile()
         float volume, fadeVolume;
         int   fadeTime;
         dlg->getVolume(volume, fadeVolume, fadeTime);
-        KUrl file    = dlg->getFile();
+        QUrl file    = dlg->getFile();
         if (!file.isEmpty())
             mFile    = file;
         mRepeatPause = dlg->repeatPause();
@@ -300,7 +300,7 @@ void SoundPicker::slotPickFile()
         mTypeCombo->setToolTip(QString());
     }
     else
-        mTypeCombo->setToolTip(mFile.prettyUrl());
+        mTypeCombo->setToolTip(mFile.toDisplayString());
     if (accepted  ||  mFile != oldfile)
         Q_EMIT changed();
 }

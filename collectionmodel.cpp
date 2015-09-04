@@ -33,9 +33,9 @@
 #include <AkonadiWidgets/collectiondialog.h>
 
 #include <KLocalizedString>
-#include <KUrl>
 #include <KSharedConfig>
 
+#include <QUrl>
 #include <QApplication>
 #include <QMouseEvent>
 #include <QHelpEvent>
@@ -920,10 +920,11 @@ CalEvent::Types CollectionControlModel::checkTypesToEnable(const Collection& col
     if (types)
     {
         // At least on alarm type is to be enabled
-        const KUrl location(collection.remoteId());
+        const QUrl location = QUrl::fromUserInput(collection.remoteId(), QString(), QUrl::AssumeLocalFile);
         foreach (const Collection& c, collections)
         {
-            if (c.id() != collection.id()  &&  KUrl(c.remoteId()) == location)
+            const QUrl cLocation = QUrl::fromUserInput(c.remoteId(), QString(), QUrl::AssumeLocalFile);
+            if (c.id() != collection.id()  &&  cLocation == location)
             {
                 // The collection duplicates the backend storage
                 // used by another enabled collection.

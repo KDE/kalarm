@@ -29,9 +29,10 @@
 #include <AkonadiCore/collection.h>
 #include <KCalCore/FileStorage>
 #include <KCalCore/Event>
-#include <kurl.h>
+
 #include <QHash>
 #include <QObject>
+#include <QUrl>
 
 
 using namespace KAlarmCal;
@@ -77,8 +78,8 @@ class AlarmCalendar : public QObject
         bool                  deleteDisplayEvent(const QString& eventID, bool save = false);
         void                  purgeEvents(const KAEvent::List&);
         bool                  isOpen();
-        QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.prettyUrl(); }
-        QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.url(); }
+        QString               path() const           { return (mCalType == RESOURCES) ? QString() : mUrl.toDisplayString(); }
+        QString               urlString() const      { return (mCalType == RESOURCES) ? QString() : mUrl.toString(); }
         void                  adjustStartOfDay();
 
         static bool           initialiseCalendars();
@@ -134,8 +135,8 @@ class AlarmCalendar : public QObject
         KAEventMap            mEventMap;           // lookup of all events by UID
         EarliestMap           mEarliestAlarm;      // alarm with earliest trigger time, by resource
         QList<QString>        mPendingAlarms;      // IDs of alarms which are currently being processed after triggering
-        KUrl                  mUrl;                // URL of current calendar file
-        KUrl                  mICalUrl;            // URL of iCalendar file
+        QUrl                  mUrl;                // URL of current calendar file
+        QUrl                  mICalUrl;            // URL of iCalendar file
         QString               mLocalFile;          // calendar file, or local copy if it's a remote file
         CalType               mCalType;            // what type of calendar mCalendar is (resources/ical/vcal)
         CalEvent::Type        mEventType;         // what type of events the calendar file is for

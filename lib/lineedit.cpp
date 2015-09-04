@@ -25,10 +25,10 @@
 #include <kcontacts/vcarddrag.h>
 #include <KCalUtils/kcalutils/icaldrag.h>
 
-#include <kurl.h>
 #include <kurlcompletion.h>
 #include <kshell.h>
 
+#include <QUrl>
 #include <QRegExp>
 #include <QMimeData>
 #include <QDragEnterEvent>
@@ -106,7 +106,7 @@ void LineEdit::dragEnterEvent(QDragEnterEvent* e)
         ok = false;   // don't accept "text/calendar" objects
     else
         ok = (data->hasText()
-           || KUrl::List::canDecode(data)
+           || data->hasUrls()
            || (mType != Url && KPIM::MailList::canDecode(data))
            || (mType == Emails && KContacts::VCardDrag::canDecode(data)));
     if (ok)
@@ -120,7 +120,7 @@ void LineEdit::dropEvent(QDropEvent* e)
     const QMimeData* data = e->mimeData();
     QString               newText;
     QStringList           newEmails;
-    KUrl::List            files;
+    QList<QUrl>           files;
     KContacts::Addressee::List addrList;
 
     if (mType != Url
@@ -136,7 +136,7 @@ void LineEdit::dropEvent(QDropEvent* e)
                 setText(mailList.first().subject());    // replace any existing text
         }
     }
-    // This must come before KUrl
+    // This must come before QUrl
     else if (mType == Emails
     &&  KContacts::VCardDrag::canDecode(data)  &&  KContacts::VCardDrag::fromMimeData(data, addrList))
     {
@@ -148,20 +148,20 @@ void LineEdit::dropEvent(QDropEvent* e)
                 newEmails.append(em);
         }
     }
-    else if (!(files = KUrl::List::fromMimeData(data)).isEmpty())
+    else if (!(files = data->urls()).isEmpty())
     {
         // URL(s)
         switch (mType)
         {
             case Url:
                 // URL entry field - ignore all but the first dropped URL
-                setText(files.first().prettyUrl());    // replace any existing text
+                setText(files.first().toDisplayString());    // replace any existing text
                 break;
             case Emails:
             {
                 // Email entry field - ignore all but mailto: URLs
                 QString mailto = QStringLiteral("mailto");
-                for (KUrl::List::Iterator it = files.begin();  it != files.end();  ++it)
+                for (QList<QUrl>::Iterator it = files.begin();  it != files.end();  ++it)
                 {
                     if ((*it).scheme() == mailto)
                         newEmails.append((*it).path());
@@ -169,7 +169,7 @@ void LineEdit::dropEvent(QDropEvent* e)
                 break;
             }
             case Text:
-                newText = files.first().prettyUrl();
+                newText = files.first().toDisplayString();
                 break;
         }
     }
@@ -186,7 +186,7 @@ void LineEdit::dropEvent(QDropEvent* e)
             {
                 if ((*it).startsWith(mailto))
                 {
-                    KUrl url(*it);
+                    QUrl url = QUrl::fromUserInput(*it);
                     *it = url.path();
                 }
             }
