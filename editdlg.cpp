@@ -48,7 +48,7 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 
-#include <libkdepim/misc/maillistdrag.h>
+#include <Libkdepim/MaillistDrag>
 
 #include <kglobal.h>
 #include <KLocalizedString>

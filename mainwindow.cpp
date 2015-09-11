@@ -44,7 +44,7 @@
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
 
-#include <libkdepim/misc/maillistdrag.h>
+#include <Libkdepim/MaillistDrag>
 #include <kmime/kmime_content.h>
 #include <KCalCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>

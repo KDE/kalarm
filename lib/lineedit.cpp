@@ -21,7 +21,7 @@
 #include "kalarm.h"
 #include "lineedit.h"
 
-#include <libkdepim/misc/maillistdrag.h>
+#include <Libkdepim/MaillistDrag>
 #include <kcontacts/vcarddrag.h>
 #include <KCalUtils/kcalutils/icaldrag.h>
 
