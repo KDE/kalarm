@@ -38,7 +38,7 @@
 #include "shellprocess.h"
 #include "synchtimer.h"
 
-#include <pimcommon/texttospeech/texttospeech.h>
+#include <PimCommon/TextToSpeech>
 //QT5 reactivate after porting (activated by config-kdepim.h include in texttospeech.h)
 #undef KDEPIM_HAVE_X11
 

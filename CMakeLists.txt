@@ -156,7 +156,7 @@ KF5::Libkdepim
 Phonon::phonon4qt5
 KF5::Auth
 KF5::DBusAddons
-pimcommon
+KF5::PimCommon
 )
 
 if (Qt5X11Extras_FOUND)

@@ -58,7 +58,7 @@
 #include <KHolidays/HolidayRegion>
 using namespace KHolidays;
 
-#include <pimcommon/texttospeech/texttospeech.h>
+#include <PimCommon/TextToSpeech>
 
 #include <kglobal.h>
 #include <KLocalizedString>

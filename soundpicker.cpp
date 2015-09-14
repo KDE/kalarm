@@ -28,7 +28,7 @@
 #include "sounddlg.h"
 #include "soundpicker.h"
 
-#include <pimcommon/texttospeech/texttospeech.h>
+#include <PimCommon/TextToSpeech>
 
 #include <QIcon>
 #include <KLocalizedString>

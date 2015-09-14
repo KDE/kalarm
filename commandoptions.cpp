@@ -25,7 +25,7 @@
 #include "kamail.h"
 #include <kalarmcal/identities.h>
 
-#include <pimcommon/texttospeech/texttospeech.h>
+#include <PimCommon/TextToSpeech>
 
 #include <kcmdlineargs.h>
 #include "kalarm_debug.h"
