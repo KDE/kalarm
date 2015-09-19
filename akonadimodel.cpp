@@ -130,7 +130,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 #warning Only want to monitor collection properties, not content, when this becomes possible
 #endif
     connect(monitor, SIGNAL(collectionChanged(Akonadi::Collection,QSet<QByteArray>)), SLOT(slotCollectionChanged(Akonadi::Collection,QSet<QByteArray>)));
-    connect(monitor, SIGNAL(collectionRemoved(Akonadi::Collection)), SLOT(slotCollectionRemoved(Akonadi::Collection)));
+    connect(monitor, &Monitor::collectionRemoved, this, &AkonadiModel::slotCollectionRemoved);
     initCalendarMigrator();
     MinuteTimer::connect(this, SLOT(slotUpdateTimeTo()));
     Preferences::connect(SIGNAL(archivedColourChanged(QColor)), this, SLOT(slotUpdateArchivedColour(QColor)));
@@ -140,7 +140,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 
     connect(this, &AkonadiModel::rowsInserted, this, &AkonadiModel::slotRowsInserted);
     connect(this, &AkonadiModel::rowsAboutToBeRemoved, this, &AkonadiModel::slotRowsAboutToBeRemoved);
-    connect(monitor, SIGNAL(itemChanged(Akonadi::Item,QSet<QByteArray>)), SLOT(slotMonitoredItemChanged(Akonadi::Item,QSet<QByteArray>)));
+    connect(monitor, &Monitor::itemChanged, this, &AkonadiModel::slotMonitoredItemChanged);
 
     connect(ServerManager::self(), &ServerManager::stateChanged, this, &AkonadiModel::checkResources);
     checkResources(ServerManager::state());
@@ -196,9 +196,9 @@ void AkonadiModel::checkResources(ServerManager::State state)
 void AkonadiModel::initCalendarMigrator()
 {
     CalendarMigrator::reset();
-    connect(CalendarMigrator::instance(), SIGNAL(creating(QString,Akonadi::Collection::Id,bool)),
-                                          SLOT(slotCollectionBeingCreated(QString,Akonadi::Collection::Id,bool)));
-    connect(CalendarMigrator::instance(), SIGNAL(destroyed(QObject*)), SLOT(slotMigrationCompleted()));
+    connect(CalendarMigrator::instance(), &CalendarMigrator::creating,
+                                          this, &AkonadiModel::slotCollectionBeingCreated);
+    connect(CalendarMigrator::instance(), &QObject::destroyed, this, &AkonadiModel::slotMigrationCompleted);
 }
 
 /******************************************************************************
@@ -1784,7 +1784,7 @@ void AkonadiModel::slotMonitoredItemChanged(const Akonadi::Item& item, const QSe
             Collection c = data(index, ParentCollectionRole).value<Collection>();
             evnt.setCollectionId(c.id());
             mPendingEventChanges.enqueue(Event(evnt, c));
-            QTimer::singleShot(0, this, SLOT(slotEmitEventChanged()));
+            QTimer::singleShot(0, this, &AkonadiModel::slotEmitEventChanged);
             break;
         }
     }

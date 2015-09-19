@@ -35,8 +35,8 @@ TemplateMenuAction::TemplateMenuAction(const QIcon& icon, const QString& label, 
     : KActionMenu(icon, label, parent)
 {
     setDelayed(false);
-    connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
-    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
+    connect(menu(), &QMenu::aboutToShow, this, &TemplateMenuAction::slotInitMenu);
+    connect(menu(), &QMenu::triggered, this, &TemplateMenuAction::slotSelected);
 }
 
 /******************************************************************************

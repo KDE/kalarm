@@ -73,13 +73,13 @@ NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* pa
         // Include New From Template only in non-template menu
         mTemplateAction = new TemplateMenuAction(QIcon::fromTheme(TEMPLATE_ICON), i18nc("@action", "New Alarm From &Template"), parent);
         menu()->addAction(mTemplateAction);
-        connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)), SLOT(slotCalendarStatusChanged()));
-        connect(TemplateListModel::all(), SIGNAL(haveEventsStatus(bool)), SLOT(slotCalendarStatusChanged()));
+        connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged, this, &NewAlarmAction::slotCalendarStatusChanged);
+        connect(TemplateListModel::all(), &ItemListModel::haveEventsStatus, this, &NewAlarmAction::slotCalendarStatusChanged);
         slotCalendarStatusChanged();   // initialise action states
     }
     setDelayed(false);
-    connect(menu(), SIGNAL(aboutToShow()), SLOT(slotInitMenu()));
-    connect(menu(), SIGNAL(triggered(QAction*)), SLOT(slotSelected(QAction*)));
+    connect(menu(), &QMenu::aboutToShow, this, &NewAlarmAction::slotInitMenu);
+    connect(menu(), &QMenu::triggered, this, &NewAlarmAction::slotSelected);
 }
 
 /******************************************************************************

@@ -255,17 +255,17 @@ CollectionCheckListModel::CollectionCheckListModel(CalEvent::Type type, QObject*
     setSourceModel(mModel);    // the source model is NOT filtered by alarm type
     mSelectionModel = new QItemSelectionModel(mModel);
     setSelectionModel(mSelectionModel);
-    connect(mSelectionModel, SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                             SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    connect(mSelectionModel, &QItemSelectionModel::selectionChanged,
+                             this, &CollectionCheckListModel::selectionChanged);
     connect(mModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
-    connect(mModel, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotRowsInserted(QModelIndex,int,int)));
+    connect(mModel, &QAbstractItemModel::rowsInserted, this, &CollectionCheckListModel::slotRowsInserted);
     // This is probably needed to make CollectionFilterCheckListModel update
     // (similarly to when rows are inserted).
     connect(mModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), SIGNAL(layoutAboutToBeChanged()));
     connect(mModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), SIGNAL(layoutChanged()));
 
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
-                                      SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
+    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
+                                      this, &CollectionCheckListModel::collectionStatusChanged);
 
     // Initialise checked status for all collections.
     // Note that this is only necessary if the model is recreated after
@@ -476,9 +476,9 @@ CollectionFilterCheckListModel::CollectionFilterCheckListModel(QObject* parent)
       mAlarmType(CalEvent::EMPTY)
 {
     setDynamicSortFilter(true);
-    connect(mActiveModel, SIGNAL(collectionTypeChange(CollectionCheckListModel*)), SLOT(collectionTypeChanged(CollectionCheckListModel*)));
-    connect(mArchivedModel, SIGNAL(collectionTypeChange(CollectionCheckListModel*)), SLOT(collectionTypeChanged(CollectionCheckListModel*)));
-    connect(mTemplateModel, SIGNAL(collectionTypeChange(CollectionCheckListModel*)), SLOT(collectionTypeChanged(CollectionCheckListModel*)));
+    connect(mActiveModel, &CollectionCheckListModel::collectionTypeChange, this, &CollectionFilterCheckListModel::collectionTypeChanged);
+    connect(mArchivedModel, &CollectionCheckListModel::collectionTypeChange, this, &CollectionFilterCheckListModel::collectionTypeChanged);
+    connect(mTemplateModel, &CollectionCheckListModel::collectionTypeChange, this, &CollectionFilterCheckListModel::collectionTypeChanged);
 }
 
 void CollectionFilterCheckListModel::setEventTypeFilter(CalEvent::Type type)
@@ -672,12 +672,12 @@ CollectionControlModel::CollectionControlModel(QObject* parent)
     findEnabledCollections(filter, QModelIndex(), collections);
     setCollections(collections);
 
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
-                                      SLOT(statusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
-    connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
-                                      SLOT(collectionPopulated()));
-    connect(AkonadiModel::instance(), SIGNAL(collectionPopulated(Akonadi::Collection::Id)),
-                                      SLOT(collectionPopulated()));
+    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
+                                      this, &CollectionControlModel::statusChanged);
+    connect(AkonadiModel::instance(), &EntityTreeModel::collectionTreeFetched,
+                                      this, &CollectionControlModel::collectionPopulated);
+    connect(AkonadiModel::instance(), &EntityTreeModel::collectionPopulated,
+                                      this, &CollectionControlModel::collectionPopulated);
     connect(AkonadiModel::instance(), SIGNAL(serverStopped()), SLOT(reset()));
 }
 
@@ -1293,7 +1293,7 @@ bool CollectionControlModel::waitUntilPopulated(Collection::Id colId, int timeou
         if (!mPopulatedCheckLoop)
             mPopulatedCheckLoop = new QEventLoop(this);
         if (timeout > 0)
-            QTimer::singleShot(timeout * 1000, mPopulatedCheckLoop, SLOT(quit()));
+            QTimer::singleShot(timeout * 1000, mPopulatedCheckLoop, &QEventLoop::quit);
         result = mPopulatedCheckLoop->exec();
     }
     delete mPopulatedCheckLoop;

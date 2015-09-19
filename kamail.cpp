@@ -225,7 +225,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     if (mJobs.count() == 1)
     {
         // There are no jobs already active or queued, so send now
-        connect(mailjob, SIGNAL(result(KJob*)), instance(), SLOT(slotEmailSent(KJob*)));
+        connect(mailjob, &KJob::result, instance(), &KAMail::slotEmailSent);
         mailjob->start();
     }
     return 0;
@@ -266,7 +266,7 @@ void KAMail::slotEmailSent(KJob* job)
     if (!mJobs.isEmpty())
     {
         // Send the next queued email
-        connect(mJobs.head(), SIGNAL(result(KJob*)), instance(), SLOT(slotEmailSent(KJob*)));
+        connect(mJobs.head(), &KJob::result, instance(), &KAMail::slotEmailSent);
         mJobs.head()->start();
     }
 }

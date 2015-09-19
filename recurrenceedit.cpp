@@ -1218,7 +1218,7 @@ DayWeekRule::DayWeekRule(const QString& freqText, const QString& freqWhatsThis, 
         mDayBox[i] = new CheckBox(calendar->weekDayName(day), box);
         mDayBox[i]->setFixedSize(mDayBox[i]->sizeHint());
         mDayBox[i]->setReadOnly(readOnly);
-        connect(mDayBox[i], SIGNAL(toggled(bool)), SIGNAL(changed()));
+        connect(mDayBox[i], &QAbstractButton::toggled, this, &Rule::changed);
         dgrid->addWidget(mDayBox[i], i%4, i/4, Qt::AlignLeft);
     }
     box->setFixedSize(box->sizeHint());
@@ -1581,10 +1581,10 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
         mMonthBox[i] = new CheckBox(calendar->monthName(i + 1, year, KCalendarSystem::ShortName), w);
         mMonthBox[i]->setFixedSize(mMonthBox[i]->sizeHint());
         mMonthBox[i]->setReadOnly(readOnly);
-        connect(mMonthBox[i], SIGNAL(toggled(bool)), SIGNAL(changed()));
+        connect(mMonthBox[i], &QAbstractButton::toggled, this, &Rule::changed);
         grid->addWidget(mMonthBox[i], i%3, i/3, Qt::AlignLeft);
     }
-    connect(mMonthBox[1], SIGNAL(toggled(bool)), SLOT(enableFeb29()));
+    connect(mMonthBox[1], &QAbstractButton::toggled, this, &YearlyRule::enableFeb29);
     w->setFixedHeight(w->sizeHint().height());
     w->setWhatsThis(i18nc("@info:whatsthis", "Select the months of the year in which to repeat the alarm"));
 

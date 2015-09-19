@@ -187,9 +187,9 @@ KToggleAction* createAlarmEnableAction(QObject* parent)
 {
     KToggleAction* action = new KToggleAction(i18nc("@action", "Enable &Alarms"), parent);
     action->setChecked(theApp()->alarmsEnabled());
-    QObject::connect(action, SIGNAL(toggled(bool)), theApp(), SLOT(setAlarmsEnabled(bool)));
+    QObject::connect(action, &QAction::toggled, theApp(), &KAlarmApp::setAlarmsEnabled);
     // The following line ensures that all instances are kept in the same state
-    QObject::connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), action, SLOT(setChecked(bool)));
+    QObject::connect(theApp(), &KAlarmApp::alarmEnabledToggled, action, &QAction::setChecked);
     return action;
 }
 
@@ -200,9 +200,9 @@ QAction* createStopPlayAction(QObject* parent)
 {
     QAction* action = new QAction(QIcon::fromTheme(QStringLiteral("media-playback-stop")), i18nc("@action", "Stop Play"), parent);
     action->setEnabled(MessageWin::isAudioPlaying());
-    QObject::connect(action, SIGNAL(triggered(bool)), theApp(), SLOT(stopAudio()));
+    QObject::connect(action, &QAction::triggered, theApp(), &KAlarmApp::stopAudio);
     // The following line ensures that all instances are kept in the same state
-    QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), action, SLOT(setEnabled(bool)));
+    QObject::connect(theApp(), &KAlarmApp::audioPlaying, action, &QAction::setEnabled);
     return action;
 }
 
@@ -212,9 +212,9 @@ QAction* createStopPlayAction(QObject* parent)
 KToggleAction* createSpreadWindowsAction(QObject* parent)
 {
     KToggleAction* action = new KToggleAction(i18nc("@action", "Spread Windows"), parent);
-    QObject::connect(action, SIGNAL(triggered(bool)), theApp(), SLOT(spreadWindows(bool)));
+    QObject::connect(action, &QAction::triggered, theApp(), &KAlarmApp::spreadWindows);
     // The following line ensures that all instances are kept in the same state
-    QObject::connect(theApp(), SIGNAL(spreadWindowsToggled(bool)), action, SLOT(setChecked(bool)));
+    QObject::connect(theApp(), &KAlarmApp::spreadWindowsToggled, action, &QAction::setChecked);
     return action;
 }
 
@@ -891,8 +891,8 @@ void execNewAlarmDlg(EditAlarmDlg* editDlg)
 PrivateNewAlarmDlg::PrivateNewAlarmDlg(EditAlarmDlg* dlg)
     : QObject(dlg)
 {
-    connect(dlg, SIGNAL(accepted()), SLOT(okClicked()));
-    connect(dlg, SIGNAL(rejected()), SLOT(cancelClicked()));
+    connect(dlg, &QDialog::accepted, this, &PrivateNewAlarmDlg::okClicked);
+    connect(dlg, &QDialog::rejected, this, &PrivateNewAlarmDlg::cancelClicked);
 }
 
 /******************************************************************************
@@ -1024,7 +1024,7 @@ void cancelRtcWake(QWidget* msgParent, const QString& eventId)
     if (!wakeup.isEmpty()  &&  (eventId.isEmpty() || wakeup[0] == eventId))
     {
         Private::instance()->mMsgParent = msgParent ? msgParent : MainWindow::mainMainWindow();
-        QTimer::singleShot(0, Private::instance(), SLOT(cancelRtcWake()));
+        QTimer::singleShot(0, Private::instance(), &Private::cancelRtcWake);
     }
 }
 

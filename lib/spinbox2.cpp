@@ -101,8 +101,8 @@ void SpinBox2::init()
     connect(mSpinbox, SIGNAL(valueChanged(int)), SLOT(valueChange()));
     connect(mSpinbox, SIGNAL(valueChanged(int)), SIGNAL(valueChanged(int)));
     connect(mSpinbox, SIGNAL(valueChanged(QString)), SIGNAL(valueChanged(QString)));
-    connect(mUpdown2, SIGNAL(stepped(int)), SLOT(stepPage(int)));
-    connect(mUpdown2, SIGNAL(painted()), SLOT(paintTimer()));
+    connect(mUpdown2, &SpinBox::stepped, this, &SpinBox2::stepPage);
+    connect(mUpdown2, &ExtraSpinBox::painted, this, &SpinBox2::paintTimer);
 }
 
 void SpinBox2::setReadOnly(bool ro)
@@ -264,12 +264,12 @@ void SpinBox2::styleChange(QStyle&)
 void SpinBox2::paintEvent(QPaintEvent* e)
 {
     QFrame::paintEvent(e);
-    QTimer::singleShot(0, this, SLOT(updateMirrorFrame()));
+    QTimer::singleShot(0, this, &SpinBox2::updateMirrorFrame);
 }
 
 void SpinBox2::paintTimer()
 {
-    QTimer::singleShot(0, this, SLOT(updateMirrorButtons()));
+    QTimer::singleShot(0, this, &SpinBox2::updateMirrorButtons);
 }
 
 void SpinBox2::updateMirrorButtons()
@@ -366,7 +366,7 @@ bool SpinBox2::eventFilter(QObject* obj, QEvent* e)
         }
     }
     if (updateButtons)
-        QTimer::singleShot(0, this, SLOT(updateMirrorButtons()));
+        QTimer::singleShot(0, this, &SpinBox2::updateMirrorButtons);
     return false;
 }
 

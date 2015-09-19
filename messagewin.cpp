@@ -670,7 +670,7 @@ void MessageWin::initView()
     mOkButton->clearFocus();
     mOkButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
     mOkButton->setFixedSize(mOkButton->sizeHint());
-    connect(mOkButton, SIGNAL(clicked()), SLOT(slotOk()));
+    connect(mOkButton, &QAbstractButton::clicked, this, &MessageWin::slotOk);
     grid->addWidget(mOkButton, 0, gridIndex++, Qt::AlignHCenter);
     mOkButton->setWhatsThis(i18nc("@info:whatsthis", "Acknowledge the alarm"));
 
@@ -680,7 +680,7 @@ void MessageWin::initView()
         mEditButton = new PushButton(i18nc("@action:button", "&Edit..."), topWidget);
         mEditButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
         mEditButton->setFixedSize(mEditButton->sizeHint());
-        connect(mEditButton, SIGNAL(clicked()), SLOT(slotEdit()));
+        connect(mEditButton, &QAbstractButton::clicked, this, &MessageWin::slotEdit);
         grid->addWidget(mEditButton, 0, gridIndex++, Qt::AlignHCenter);
         mEditButton->setWhatsThis(i18nc("@info:whatsthis", "Edit the alarm."));
     }
@@ -689,7 +689,7 @@ void MessageWin::initView()
     mDeferButton = new PushButton(i18nc("@action:button", "&Defer..."), topWidget);
     mDeferButton->setFocusPolicy(Qt::ClickFocus);    // don't allow keyboard selection
     mDeferButton->setFixedSize(mDeferButton->sizeHint());
-    connect(mDeferButton, SIGNAL(clicked()), SLOT(slotDefer()));
+    connect(mDeferButton, &QAbstractButton::clicked, this, &MessageWin::slotDefer);
     grid->addWidget(mDeferButton, 0, gridIndex++, Qt::AlignHCenter);
     mDeferButton->setWhatsThis(xi18nc("@info:whatsthis", "<para>Defer the alarm until later.</para>"
                                     "<para>You will be prompted to specify when the alarm should be redisplayed.</para>"));
@@ -719,7 +719,7 @@ void MessageWin::initView()
         const QPixmap pixmap = iconLoader.loadIcon(QStringLiteral("internet-mail"), KIconLoader::MainToolbar);
         mKMailButton = new PushButton(topWidget);
         mKMailButton->setIcon(pixmap);
-        connect(mKMailButton, SIGNAL(clicked()), SLOT(slotShowKMailMessage()));
+        connect(mKMailButton, &QAbstractButton::clicked, this, &MessageWin::slotShowKMailMessage);
         grid->addWidget(mKMailButton, 0, gridIndex++, Qt::AlignHCenter);
         mKMailButton->setToolTip(xi18nc("@info:tooltip Locate this email in KMail", "Locate in <application>KMail</application>"));
         mKMailButton->setWhatsThis(xi18nc("@info:whatsthis", "Locate and highlight this email in <application>KMail</application>"));
@@ -729,7 +729,7 @@ void MessageWin::initView()
     const QPixmap pixmap = iconLoader.loadIcon(KComponentData::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
     mKAlarmButton = new PushButton(topWidget);
     mKAlarmButton->setIcon(pixmap);
-    connect(mKAlarmButton, SIGNAL(clicked()), SLOT(displayMainWindow()));
+    connect(mKAlarmButton, &QAbstractButton::clicked, this, &MessageWin::displayMainWindow);
     grid->addWidget(mKAlarmButton, 0, gridIndex++, Qt::AlignHCenter);
     mKAlarmButton->setToolTip(xi18nc("@info:tooltip", "Activate <application>KAlarm</application>"));
     mKAlarmButton->setWhatsThis(xi18nc("@info:whatsthis", "Activate <application>KAlarm</application>"));
@@ -1071,8 +1071,8 @@ void MessageWin::readProperties(const KConfigGroup& config)
             // Close any other window for this alarm which has already been restored by redisplayAlarms()
             if (!AkonadiModel::instance()->isCollectionTreeFetched())
             {
-                connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
-                                                  SLOT(showRestoredAlarm()));
+                connect(AkonadiModel::instance(), &Akonadi::EntityTreeModel::collectionTreeFetched,
+                                                  this, &MessageWin::showRestoredAlarm);
                 return;
             }
             redisplayAlarm();
@@ -1363,7 +1363,7 @@ void MessageWin::playAudio()
     {
         // The message is to be spoken. In case of error messges,
         // call it on a timer to allow the window to display first.
-        QTimer::singleShot(0, this, SLOT(slotSpeak()));
+        QTimer::singleShot(0, this, &MessageWin::slotSpeak);
     }
 }
 
@@ -1395,16 +1395,16 @@ void MessageWin::startAudio()
     {
         // An audio file is already playing for another message
         // window, so wait until it has finished.
-        connect(mAudioThread, SIGNAL(destroyed(QObject*)), SLOT(audioTerminating()));
+        connect(mAudioThread.data(), &QObject::destroyed, this, &MessageWin::audioTerminating);
     }
     else
     {
         qCDebug(KALARM_LOG) << QThread::currentThread();
         mAudioThread = new AudioThread(this, mAudioFile, mVolume, mFadeVolume, mFadeSeconds, mAudioRepeatPause);
-        connect(mAudioThread, SIGNAL(readyToPlay()), SLOT(playReady()));
-        connect(mAudioThread, SIGNAL(finished()), SLOT(playFinished()));
+        connect(mAudioThread.data(), &AudioThread::readyToPlay, this, &MessageWin::playReady);
+        connect(mAudioThread.data(), &QThread::finished, this, &MessageWin::playFinished);
         if (mSilenceButton)
-            connect(mSilenceButton, SIGNAL(clicked()), mAudioThread, SLOT(quit()));
+            connect(mSilenceButton, &QAbstractButton::clicked, mAudioThread.data(), &QThread::quit);
         // Notify after creating mAudioThread, so that isAudioPlaying() will
         // return the correct value.
         theApp()->notifyAudioPlaying(true);
@@ -1436,7 +1436,7 @@ void MessageWin::stopAudio(bool wait)
 */
 void MessageWin::audioTerminating()
 {
-    QTimer::singleShot(0, this, SLOT(startAudio()));
+    QTimer::singleShot(0, this, &MessageWin::startAudio);
 }
 
 /******************************************************************************
@@ -1500,7 +1500,7 @@ AudioThread::~AudioThread()
         mAudioOwner = Q_NULLPTR;
     // Notify after deleting mAudioThread, so that isAudioPlaying() will
     // return the correct value.
-    QTimer::singleShot(0, theApp(), SLOT(notifyAudioStopped()));
+    QTimer::singleShot(0, theApp(), &KAlarmApp::notifyAudioStopped);
 }
 
 /******************************************************************************
@@ -1561,8 +1561,8 @@ void AudioThread::run()
             mPath.insertEffect(fader);
         }
     }
-    connect(mAudioObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)), SLOT(playStateChanged(Phonon::State)), Qt::DirectConnection);
-    connect(mAudioObject, SIGNAL(finished()), SLOT(checkAudioPlay()), Qt::DirectConnection);
+    connect(mAudioObject, &Phonon::MediaObject::stateChanged, this, &AudioThread::playStateChanged, Qt::DirectConnection);
+    connect(mAudioObject, &Phonon::MediaObject::finished, this, &AudioThread::checkAudioPlay, Qt::DirectConnection);
     mPlayedOnce = false;
     mPausing    = false;
     mMutex.unlock();
@@ -1572,7 +1572,7 @@ void AudioThread::run()
     // Start an event loop.
     // The function will exit once exit() or quit() is called.
     // First, ensure that the thread object is deleted once it has completed.
-    connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
+    connect(this, &QThread::finished, this, &QObject::deleteLater);
     exec();
     stopPlay();
 }
@@ -1609,7 +1609,7 @@ void AudioThread::checkAudioPlay()
             {
                 // Pause before playing the file again
                 mPausing = true;
-                QTimer::singleShot(mRepeatPause * 1000, this, SLOT(checkAudioPlay()));
+                QTimer::singleShot(mRepeatPause * 1000, this, &AudioThread::checkAudioPlay);
                 mMutex.unlock();
                 return;
             }
@@ -1723,7 +1723,7 @@ void MessageWin::show()
         int delay = KDateTime::currentUtcDateTime().dateTime().secsTo(mCloseTime);
         if (delay < 0)
             delay = 0;
-        QTimer::singleShot(delay * 1000, this, SLOT(close()));
+        QTimer::singleShot(delay * 1000, this, &QWidget::close);
         if (!delay)
             return;    // don't show the window if auto-closing is already due
     }
@@ -1857,7 +1857,7 @@ void MessageWin::showEvent(QShowEvent* se)
     }
 
     // Set the window size etc. once the frame size is known
-    QTimer::singleShot(0, this, SLOT(frameDrawn()));
+    QTimer::singleShot(0, this, &MessageWin::frameDrawn);
 
     mShown = true;
 }
@@ -1907,7 +1907,7 @@ void MessageWin::displayComplete()
     {
         // Enable the window's buttons either now or after the configured delay
         if (mButtonDelay > 0)
-            QTimer::singleShot(mButtonDelay, this, SLOT(enableButtons()));
+            QTimer::singleShot(mButtonDelay, this, &MessageWin::enableButtons);
         else
             enableButtons();
     }
@@ -2033,10 +2033,10 @@ void MessageWin::slotEdit()
     KWindowSystem::setMainWindow(mEditDlg, winId());
     KWindowSystem::setOnAllDesktops(mEditDlg->winId(), false);
     setButtonsReadOnly(true);
-    connect(mEditDlg, SIGNAL(accepted()), SLOT(editCloseOk()));
-    connect(mEditDlg, SIGNAL(rejected()), SLOT(editCloseCancel()));
-    connect(mEditDlg, SIGNAL(destroyed(QObject*)), SLOT(editCloseCancel()));
-    connect(KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)), SLOT(activeWindowChanged(WId)));
+    connect(mEditDlg, &QDialog::accepted, this, &MessageWin::editCloseOk);
+    connect(mEditDlg, &QDialog::rejected, this, &MessageWin::editCloseCancel);
+    connect(mEditDlg, &QObject::destroyed, this, &MessageWin::editCloseCancel);
+    connect(KWindowSystem::self(), &KWindowSystem::activeWindowChanged, this, &MessageWin::activeWindowChanged);
     mainWin->editAlarm(mEditDlg, mOriginalEvent);
 }
 
@@ -2121,7 +2121,7 @@ void MessageWin::checkDeferralLimit()
         n = KDateTime::currentUtcDateTime().dateTime().secsTo(mDeferLimit);
         if (n > 0)
         {
-            QTimer::singleShot(n * 1000, this, SLOT(checkDeferralLimit()));
+            QTimer::singleShot(n * 1000, this, &MessageWin::checkDeferralLimit);
             return;
         }
     }

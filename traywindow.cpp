@@ -88,21 +88,21 @@ TrayWindow::TrayWindow(MainWindow* parent)
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
     addAction(QStringLiteral("tAlarmsEnable"), mActionEnabled);
     contextMenu()->addAction(mActionEnabled);
-    connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(setEnabledStatus(bool)));
+    connect(theApp(), &KAlarmApp::alarmEnabledToggled, this, &TrayWindow::setEnabledStatus);
     contextMenu()->addSeparator();
 
     mActionNew = new NewAlarmAction(false, i18nc("@action", "&New Alarm"), this);
     addAction(QStringLiteral("tNew"), mActionNew);
     contextMenu()->addAction(mActionNew);
     connect(mActionNew, &NewAlarmAction::selected, this, &TrayWindow::slotNewAlarm);
-    connect(mActionNew->fromTemplateAlarmAction(), SIGNAL(selected(const KAEvent*)), SLOT(slotNewFromTemplate(const KAEvent*)));
+    connect(mActionNew->fromTemplateAlarmAction(), &TemplateMenuAction::selected, this, &TrayWindow::slotNewFromTemplate);
     contextMenu()->addSeparator();
 
     QAction* a = KAlarm::createStopPlayAction(this);
     addAction(QStringLiteral("tStopPlay"), a);
     contextMenu()->addAction(a);
-    QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), a, SLOT(setVisible(bool)));
-    QObject::connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(updateStatus()));
+    QObject::connect(theApp(), &KAlarmApp::audioPlaying, a, &QAction::setVisible);
+    QObject::connect(theApp(), &KAlarmApp::audioPlaying, this, &TrayWindow::updateStatus);
 
     a = KAlarm::createSpreadWindowsAction(this);
     addAction(QStringLiteral("tSpread"), a);
@@ -122,7 +122,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     // Set icon to correspond with the alarms enabled menu status
     setEnabledStatus(theApp()->alarmsEnabled());
 
-    connect(AlarmCalendar::resources(), SIGNAL(haveDisabledAlarmsChanged(bool)), SLOT(slotHaveDisabledAlarms(bool)));
+    connect(AlarmCalendar::resources(), &AlarmCalendar::haveDisabledAlarmsChanged, this, &TrayWindow::slotHaveDisabledAlarms);
     connect(this, &TrayWindow::activateRequested, this, &TrayWindow::slotActivateRequested);
     connect(this, &TrayWindow::secondaryActivateRequested, this, &TrayWindow::slotSecondaryActivateRequested);
     slotHaveDisabledAlarms(AlarmCalendar::resources()->haveDisabledAlarms());
@@ -154,7 +154,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
     // Set auto-hide status when next alarm or preferences change
     mStatusUpdateTimer->setSingleShot(true);
     connect(mStatusUpdateTimer, &QTimer::timeout, this, &TrayWindow::updateStatus);
-    connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(updateStatus()));
+    connect(AlarmCalendar::resources(), &AlarmCalendar::earliestAlarmChanged, this, &TrayWindow::updateStatus);
     Preferences::connect(SIGNAL(autoHideSystemTrayChanged(int)), this, SLOT(updateStatus()));
     updateStatus();
 
@@ -205,7 +205,7 @@ void TrayWindow::slotPreferences()
 void TrayWindow::slotQuit()
 {
     // Note: QTimer::singleShot(0, ...) never calls the slot.
-    QTimer::singleShot(1, this, SLOT(slotQuitAfter()));
+    QTimer::singleShot(1, this, &TrayWindow::slotQuitAfter);
 }
 void TrayWindow::slotQuitAfter()
 {

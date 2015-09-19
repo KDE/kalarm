@@ -75,7 +75,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
     mListView->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
     mListView->setWhatsThis(i18nc("@info:whatsthis", "The list of alarm templates"));
     mListView->setItemDelegate(new TemplateListDelegate(mListView));
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged()));
+    connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &TemplateDlg::slotSelectionChanged);
     layout->addWidget(mListView);
 
     layout = new QVBoxLayout();

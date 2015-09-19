@@ -416,7 +416,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
 
     // Start at login
     mAutoStart = new QCheckBox(i18nc("@option:check", "Start at login"), group);
-    connect(mAutoStart, SIGNAL(clicked()), SLOT(slotAutostartClicked()));
+    connect(mAutoStart, &QAbstractButton::clicked, this, &MiscPrefTab::slotAutostartClicked);
     mAutoStart->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Automatically start <application>KAlarm</application> whenever you start KDE.</para>"
           "<para>This option should always be checked unless you intend to discontinue use of <application>KAlarm</application>.</para>"));
@@ -490,7 +490,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
     grid->addLayout(hlayout, row + 1, 0, 1, 3, Qt::AlignLeft);
     QRadioButton* radio = new QRadioButton(i18nc("@option:radio Other terminal window command", "Other:"), group);
     hlayout->addWidget(radio);
-    connect(radio, SIGNAL(toggled(bool)), SLOT(slotOtherTerminalToggled(bool)));
+    connect(radio, &QAbstractButton::toggled, this, &MiscPrefTab::slotOtherTerminalToggled);
     mXtermType->addButton(radio, mXtermCount);
     if (mXtermFirst < 0)
         mXtermFirst = mXtermCount;   // note the id of the first button
@@ -885,7 +885,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     grid->setColumnStretch(1, 1);
     grid->setColumnMinimumWidth(0, indentWidth());
     mKeepArchived = new QCheckBox(i18nc("@option:check", "Keep alarms after expiry"), group);
-    connect(mKeepArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
+    connect(mKeepArchived, &QAbstractButton::toggled, this, &StorePrefTab::slotArchivedToggled);
     mKeepArchived->setWhatsThis(
           i18nc("@info:whatsthis", "Check to archive alarms after expiry or deletion (except deleted alarms which were never triggered)."));
     grid->addWidget(mKeepArchived, 0, 0, 1, 2, Qt::AlignLeft);
@@ -897,7 +897,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     mPurgeArchived = new QCheckBox(i18nc("@option:check", "Discard archived alarms after:"));
     mPurgeArchived->setMinimumSize(mPurgeArchived->sizeHint());
     box->addWidget(mPurgeArchived);
-    connect(mPurgeArchived, SIGNAL(toggled(bool)), SLOT(slotArchivedToggled(bool)));
+    connect(mPurgeArchived, &QAbstractButton::toggled, this, &StorePrefTab::slotArchivedToggled);
     mPurgeAfter = new SpinBox();
     mPurgeAfter->setMinimum(1);
     mPurgeAfter->setSingleShiftStep(10);
@@ -911,7 +911,7 @@ StorePrefTab::StorePrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(widget, 1, 1, Qt::AlignLeft);
 
     mClearArchived = new QPushButton(i18nc("@action:button", "Clear Archived Alarms"), group);
-    connect(mClearArchived, SIGNAL(clicked()), SLOT(slotClearArchived()));
+    connect(mClearArchived, &QAbstractButton::clicked, this, &StorePrefTab::slotClearArchived);
     mClearArchived->setWhatsThis((CollectionControlModel::enabledCollections(CalEvent::ARCHIVED, false).count() <= 1)
             ? i18nc("@info:whatsthis", "Delete all existing archived alarms.")
             : i18nc("@info:whatsthis", "Delete all existing archived alarms (from the default archived alarm calendar only)."));
@@ -1011,7 +1011,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     mSendmailButton->setMinimumSize(mSendmailButton->sizeHint());
     box->addWidget(mSendmailButton);
     mEmailClient->addButton(mSendmailButton, Preferences::sendmail);
-    connect(mEmailClient, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotEmailClientChanged(QAbstractButton*)));
+    connect(mEmailClient, &ButtonGroup::buttonSet, this, &EmailPrefTab::slotEmailClientChanged);
     widget->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Choose how to send email when an email alarm is triggered."
           "<list><item><interface>%1</interface>: The email is sent automatically via <application>KMail</application>. <application>KMail</application> is started first if necessary.</item>"
@@ -1049,7 +1049,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     label = new Label(i18nc("@label 'From' email address", "From:"), group);
     grid->addWidget(label, 1, 0);
     mFromAddressGroup = new ButtonGroup(group);
-    connect(mFromAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotFromAddrChanged(QAbstractButton*)));
+    connect(mFromAddressGroup, &ButtonGroup::buttonSet, this, &EmailPrefTab::slotFromAddrChanged);
 
     // Line edit to enter a 'From' email address
     mFromAddrButton = new RadioButton(group);
@@ -1057,7 +1057,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     label->setBuddy(mFromAddrButton);
     grid->addWidget(mFromAddrButton, 1, 1);
     mEmailAddress = new QLineEdit(group);
-    connect(mEmailAddress, SIGNAL(textChanged(QString)), SLOT(slotAddressChanged()));
+    connect(mEmailAddress, &QLineEdit::textChanged, this, &EmailPrefTab::slotAddressChanged);
     QString whatsThis = i18nc("@info:whatsthis", "Your email address, used to identify you as the sender when sending email alarms.");
     mFromAddrButton->setWhatsThis(whatsThis);
     mEmailAddress->setWhatsThis(whatsThis);
@@ -1085,7 +1085,7 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     label = new Label(i18nc("@label 'Bcc' email address", "Bcc:"), group);
     grid->addWidget(label, 5, 0);
     mBccAddressGroup = new ButtonGroup(group);
-    connect(mBccAddressGroup, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotBccAddrChanged(QAbstractButton*)));
+    connect(mBccAddressGroup, &ButtonGroup::buttonSet, this, &EmailPrefTab::slotBccAddrChanged);
 
     // Line edit to enter a 'Bcc' email address
     mBccAddrButton = new RadioButton(group);
@@ -1386,7 +1386,7 @@ EditPrefTab::EditPrefTab(StackedScrollGroup* scrollGroup)
     mSoundFileLabel->setBuddy(mSoundFile);
     mSoundFileBrowse = new QPushButton();
     mSoundFileBrowse->setIcon(QIcon::fromTheme(QStringLiteral("document-open")));
-    connect(mSoundFileBrowse, SIGNAL(clicked()), SLOT(slotBrowseSoundFile()));
+    connect(mSoundFileBrowse, &QAbstractButton::clicked, this, &EditPrefTab::slotBrowseSoundFile);
     mSoundFileBrowse->setToolTip(i18nc("@info:tooltip", "Choose a sound file"));
     box->addWidget(mSoundFileBrowse);
     widget->setWhatsThis(i18nc("@info:whatsthis", "Enter the default sound file to use in the alarm edit dialog."));
@@ -1653,7 +1653,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     grid->setColumnMinimumWidth(0, indentWidth());
 
     mAutoHideSystemTray = new ButtonGroup(mShowInSystemTray);
-    connect(mAutoHideSystemTray, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotAutoHideSysTrayChanged(QAbstractButton*)));
+    connect(mAutoHideSystemTray, &ButtonGroup::buttonSet, this, &ViewPrefTab::slotAutoHideSysTrayChanged);
 
     QRadioButton* radio = new QRadioButton(i18nc("@option:radio Always show KAlarm icon", "Always show"), mShowInSystemTray);
     mAutoHideSystemTray->addButton(radio, 0);
@@ -1698,7 +1698,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
 
     mTooltipShowAlarms = new QCheckBox(i18nc("@option:check", "Show next &24 hours' alarms"), group);
     mTooltipShowAlarms->setMinimumSize(mTooltipShowAlarms->sizeHint());
-    connect(mTooltipShowAlarms, SIGNAL(toggled(bool)), SLOT(slotTooltipAlarmsToggled(bool)));
+    connect(mTooltipShowAlarms, &QAbstractButton::toggled, this, &ViewPrefTab::slotTooltipAlarmsToggled);
     mTooltipShowAlarms->setWhatsThis(
           i18nc("@info:whatsthis", "Specify whether to include in the system tray tooltip, a summary of alarms due in the next 24 hours."));
     grid->addWidget(mTooltipShowAlarms, 0, 0, 1, 3, Qt::AlignLeft);
@@ -1710,7 +1710,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     mTooltipMaxAlarms = new QCheckBox(i18nc("@option:check", "Maximum number of alarms to show:"));
     mTooltipMaxAlarms->setMinimumSize(mTooltipMaxAlarms->sizeHint());
     box->addWidget(mTooltipMaxAlarms);
-    connect(mTooltipMaxAlarms, SIGNAL(toggled(bool)), SLOT(slotTooltipMaxToggled(bool)));
+    connect(mTooltipMaxAlarms, &QAbstractButton::toggled, this, &ViewPrefTab::slotTooltipMaxToggled);
     mTooltipMaxAlarmCount = new SpinBox(1, 99);
     mTooltipMaxAlarmCount->setSingleShiftStep(5);
     mTooltipMaxAlarmCount->setMinimumSize(mTooltipMaxAlarmCount->sizeHint());
@@ -1722,13 +1722,13 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
 
     mTooltipShowTime = new QCheckBox(MainWindow::i18n_chk_ShowAlarmTime(), group);
     mTooltipShowTime->setMinimumSize(mTooltipShowTime->sizeHint());
-    connect(mTooltipShowTime, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToggled(bool)));
+    connect(mTooltipShowTime, &QAbstractButton::toggled, this, &ViewPrefTab::slotTooltipTimeToggled);
     mTooltipShowTime->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, the time at which each alarm is due."));
     grid->addWidget(mTooltipShowTime, 2, 1, 1, 2, Qt::AlignLeft);
 
     mTooltipShowTimeTo = new QCheckBox(MainWindow::i18n_chk_ShowTimeToAlarm(), group);
     mTooltipShowTimeTo->setMinimumSize(mTooltipShowTimeTo->sizeHint());
-    connect(mTooltipShowTimeTo, SIGNAL(toggled(bool)), SLOT(slotTooltipTimeToToggled(bool)));
+    connect(mTooltipShowTimeTo, &QAbstractButton::toggled, this, &ViewPrefTab::slotTooltipTimeToToggled);
     mTooltipShowTimeTo->setWhatsThis(i18nc("@info:whatsthis", "Specify whether to show in the system tray tooltip, how long until each alarm is due."));
     grid->addWidget(mTooltipShowTimeTo, 3, 1, 1, 2, Qt::AlignLeft);
 
@@ -1792,7 +1792,7 @@ ViewPrefTab::ViewPrefTab(StackedScrollGroup* scrollGroup)
     grid->setColumnStretch(1, 1);
     grid->setColumnMinimumWidth(0, indentWidth());
     mWindowPosition = new ButtonGroup(group);
-    connect(mWindowPosition, SIGNAL(buttonSet(QAbstractButton*)), SLOT(slotWindowPosChanged(QAbstractButton*)));
+    connect(mWindowPosition, &ButtonGroup::buttonSet, this, &ViewPrefTab::slotWindowPosChanged);
 
     QString whatsthis = xi18nc("@info:whatsthis",
           "<para>Choose how to reduce the chance of alarm messages being accidentally acknowledged:"

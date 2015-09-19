@@ -67,7 +67,7 @@ Find::Find(EventListView* parent)
       mOptions(0),
       mFound(false)
 {
-    connect(mListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), SLOT(slotSelectionChanged()));
+    connect(mListView->selectionModel(), &QItemSelectionModel::currentChanged, this, &Find::slotSelectionChanged);
 }
 
 Find::~Find()

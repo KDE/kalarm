@@ -139,7 +139,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
     mListView->setTextElideMode(Qt::ElideRight);
     mListView->header()->setResizeMode(BirthdayModel::NameColumn, QHeaderView::Stretch);
     mListView->header()->setResizeMode(BirthdayModel::DateColumn, QHeaderView::ResizeToContents);
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelectionChanged()));
+    connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &BirthdayDlg::slotSelectionChanged);
     mListView->setWhatsThis(xi18nc("@info:whatsthis",
           "<para>Select birthdays to set alarms for.<nl/>"
           "This list shows all birthdays in <application>KAddressBook</application> except those for which alarms already exist.</para>"

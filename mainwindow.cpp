@@ -176,10 +176,10 @@ MainWindow::MainWindow(bool restored)
     mListView->selectTimeColumns(mShowTime, mShowTimeTo);
     mListView->sortByColumn(mShowTime ? AlarmListModel::TimeColumn : AlarmListModel::TimeToColumn, Qt::AscendingOrder);
     mListView->setItemDelegate(new AlarmListDelegate(mListView));
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(slotSelection()));
+    connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &MainWindow::slotSelection);
     connect(mListView, &AlarmListView::contextMenuRequested, this, &MainWindow::slotContextMenuRequested);
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
-                       SLOT(slotCalendarStatusChanged()));
+    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
+                       this, &MainWindow::slotCalendarStatusChanged);
     connect(mResourceSelector, &ResourceSelector::resized, this, &MainWindow::resourcesResized);
     mListView->installEventFilter(this);
     initActions();
@@ -598,15 +598,15 @@ void MainWindow::initActions()
     QMenu* resourceMenu = static_cast<QMenu*>(factory()->container(QStringLiteral("resourceContext"), this));
     mResourceSelector->setContextMenu(resourceMenu);
     mMenuError = (!mContextMenu  ||  !mActionsMenu  ||  !resourceMenu);
-    connect(mActionUndo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitUndoMenu()));
-    connect(mActionUndo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotUndoItem(QAction*)));
-    connect(mActionRedo->menu(), SIGNAL(aboutToShow()), SLOT(slotInitRedoMenu()));
-    connect(mActionRedo->menu(), SIGNAL(triggered(QAction*)), SLOT(slotRedoItem(QAction*)));
-    connect(Undo::instance(), SIGNAL(changed(QString,QString)), SLOT(slotUndoStatus(QString,QString)));
+    connect(mActionUndo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitUndoMenu);
+    connect(mActionUndo->menu(), &QMenu::triggered, this, &MainWindow::slotUndoItem);
+    connect(mActionRedo->menu(), &QMenu::aboutToShow, this, &MainWindow::slotInitRedoMenu);
+    connect(mActionRedo->menu(), &QMenu::triggered, this, &MainWindow::slotRedoItem);
+    connect(Undo::instance(), &Undo::changed, this, &MainWindow::slotUndoStatus);
     connect(mListView, &AlarmListView::findActive, this, &MainWindow::slotFindActive);
     Preferences::connect(SIGNAL(archivedKeepDaysChanged(int)), this, SLOT(updateKeepArchived(int)));
     Preferences::connect(SIGNAL(showInSystemTrayChanged(bool)), this, SLOT(updateTrayIconAction()));
-    connect(theApp(), SIGNAL(trayIconToggled()), SLOT(updateTrayIconAction()));
+    connect(theApp(), &KAlarmApp::trayIconToggled, this, &MainWindow::updateTrayIconAction);
 
     // Set menu item states
     setEnableText(true);
@@ -963,7 +963,7 @@ void MainWindow::slotTemplates()
     {
         mTemplateDlg = TemplateDlg::create(this);
         enableTemplateMenuItem(false);     // disable menu item in all windows
-        connect(mTemplateDlg, SIGNAL(finished()), SLOT(slotTemplatesEnd()));
+        connect(mTemplateDlg, &QDialog::finished, this, &MainWindow::slotTemplatesEnd);
         mTemplateDlg->show();
     }
 }

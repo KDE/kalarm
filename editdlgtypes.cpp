@@ -1385,8 +1385,8 @@ bool EditEmailAlarmDlg::type_validate(bool trial)
 void EditEmailAlarmDlg::type_aboutToTry()
 {
     // Disconnect any previous connections, to prevent multiple messages being output
-    disconnect(theApp(), SIGNAL(execAlarmSuccess()), this, SLOT(slotTrySuccess()));
-    connect(theApp(), SIGNAL(execAlarmSuccess()), SLOT(slotTrySuccess()));
+    disconnect(theApp(), &KAlarmApp::execAlarmSuccess, this, &EditEmailAlarmDlg::slotTrySuccess);
+    connect(theApp(), &KAlarmApp::execAlarmSuccess, this, &EditEmailAlarmDlg::slotTrySuccess);
 }
 
 /******************************************************************************
@@ -1394,7 +1394,7 @@ void EditEmailAlarmDlg::type_aboutToTry()
 */
 void EditEmailAlarmDlg::slotTrySuccess()
 {
-    disconnect(theApp(), SIGNAL(execAlarmSuccess()), this, SLOT(slotTrySuccess()));
+    disconnect(theApp(), &KAlarmApp::execAlarmSuccess, this, &EditEmailAlarmDlg::slotTrySuccess);
     QString msg;
     QString to = KAEvent::joinEmailAddresses(mEmailAddresses, QStringLiteral("<nl/>"));
     to.replace(QLatin1Char('<'), QStringLiteral("&lt;"));
@@ -1504,7 +1504,7 @@ EditAudioAlarmDlg::EditAudioAlarmDlg(bool Template, const KAEvent* event, bool n
     qCDebug(KALARM_LOG) << "Event.id()";
     init(event);
     mTryButton->setEnabled(!MessageWin::isAudioPlaying());
-    connect(theApp(), SIGNAL(audioPlaying(bool)), SLOT(slotAudioPlaying(bool)));
+    connect(theApp(), &KAlarmApp::audioPlaying, this, &EditAudioAlarmDlg::slotAudioPlaying);
 }
 
 /******************************************************************************

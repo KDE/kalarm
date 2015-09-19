@@ -198,7 +198,7 @@ void CalendarMigrator::migrateOrCreate()
             CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
             job->fetchScope().setResource(agent.identifier());
             mFetchesPending << job;
-            connect(job, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
+            connect(job, &KJob::result, this, &CalendarMigrator::collectionFetchResult);
             // Note: Once all collections have been fetched, any missing
             //       default resources will be created.
         }
@@ -237,8 +237,8 @@ void CalendarMigrator::migrateOrCreate()
                 delete creator;
             else
             {
-                connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-                connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
+                connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
+                connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
                 mExistingAlarmTypes |= creator->alarmType();
                 mCalendarsPending << creator;
                 creator->createAgent(agentType, this);
@@ -293,24 +293,24 @@ void CalendarMigrator::createDefaultResources()
     if (!(mExistingAlarmTypes & CalEvent::ACTIVE))
     {
         creator = new CalendarCreator(CalEvent::ACTIVE, QStringLiteral("calendar.ics"), i18nc("@info", "Active Alarms"));
-        connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
+        connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
+        connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
         mCalendarsPending << creator;
         creator->createAgent(KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::ARCHIVED))
     {
         creator = new CalendarCreator(CalEvent::ARCHIVED, QStringLiteral("expired.ics"), i18nc("@info", "Archived Alarms"));
-        connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
+        connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
+        connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
         mCalendarsPending << creator;
         creator->createAgent(KALARM_RESOURCE, this);
     }
     if (!(mExistingAlarmTypes & CalEvent::TEMPLATE))
     {
         creator = new CalendarCreator(CalEvent::TEMPLATE, QStringLiteral("template.ics"), i18nc("@info", "Alarm Templates"));
-        connect(creator, SIGNAL(finished(CalendarCreator*)), SLOT(calendarCreated(CalendarCreator*)));
-        connect(creator, SIGNAL(creating(QString)), SLOT(creatingCalendar(QString)));
+        connect(creator, &CalendarCreator::finished, this, &CalendarMigrator::calendarCreated);
+        connect(creator, &CalendarCreator::creating, this, &CalendarMigrator::creatingCalendar);
         mCalendarsPending << creator;
         creator->createAgent(KALARM_RESOURCE, this);
     }
@@ -395,7 +395,7 @@ void CalendarMigrator::updateToCurrentFormat(const Collection& collection, bool 
         return;
     }
     CalendarUpdater* updater = new CalendarUpdater(collection, dirResource, ignoreKeepFormat, false, parent);
-    QTimer::singleShot(0, updater, SLOT(update()));
+    QTimer::singleShot(0, updater, &CalendarUpdater::update);
 }
 
 
@@ -609,7 +609,7 @@ void CalendarCreator::createAgent(const QString& agentType, QObject* parent)
 {
     Q_EMIT creating(mPath);
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
-    connect(job, SIGNAL(result(KJob*)), SLOT(agentCreated(KJob*)));
+    connect(job, &KJob::result, this, &CalendarCreator::agentCreated);
     job->start();
 }
 
@@ -657,7 +657,7 @@ void CalendarCreator::agentCreated(KJob* j)
 
     // Wait for the resource to create its collection.
     ResourceSynchronizationJob* sjob = new ResourceSynchronizationJob(mAgent);
-    connect(sjob, SIGNAL(result(KJob*)), SLOT(resourceSynchronised(KJob*)));
+    connect(sjob, &KJob::result, this, &CalendarCreator::resourceSynchronised);
     sjob->start();   // this is required (not an Akonadi::Job)
 }
 
@@ -684,7 +684,7 @@ void CalendarCreator::fetchCollection()
 {
     CollectionFetchJob* job = new CollectionFetchJob(Collection::root(), CollectionFetchJob::FirstLevel);
     job->fetchScope().setResource(mAgent.identifier());
-    connect(job, SIGNAL(result(KJob*)), SLOT(collectionFetchResult(KJob*)));
+    connect(job, &KJob::result, this, &CalendarCreator::collectionFetchResult);
     job->start();
 }
 
@@ -763,7 +763,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
         // Need to wait a bit longer until the resource has initialised and
         // created its collection. Retry after 200ms.
         qCDebug(KALARM_LOG) << "Retrying";
-        QTimer::singleShot(200, this, SLOT(fetchCollection()));
+        QTimer::singleShot(200, this, &CalendarCreator::fetchCollection);
         return;
     }
     if (collections.count() > 1)
@@ -825,7 +825,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     CollectionAttribute* att = c.attribute<CollectionAttribute>(Entity::AddIfMissing);
     *att = *attr;
     CollectionModifyJob* cmjob = new CollectionModifyJob(c, this);
-    connect(cmjob, SIGNAL(result(KJob*)), this, SLOT(modifyCollectionJobDone(KJob*)));
+    connect(cmjob, &KJob::result, this, &CalendarCreator::modifyCollectionJobDone);
 }
 
 /******************************************************************************

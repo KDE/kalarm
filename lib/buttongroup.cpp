@@ -35,7 +35,7 @@ ButtonGroup::ButtonGroup(QObject* parent)
 void ButtonGroup::addButton(QAbstractButton* button)
 {
     QButtonGroup::addButton(button);
-    connect(button, SIGNAL(toggled(bool)), SLOT(slotButtonToggled(bool)));
+    connect(button, &QAbstractButton::toggled, this, &ButtonGroup::slotButtonToggled);
 }
 
 /******************************************************************************

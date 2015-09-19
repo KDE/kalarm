@@ -89,7 +89,7 @@ ResourceSelector::ResourceSelector(QWidget* parent)
 
     CollectionFilterCheckListModel* model = new CollectionFilterCheckListModel(this);
     mListView = new CollectionView(model, this);
-    connect(mListView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), SLOT(selectionChanged()));
+    connect(mListView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ResourceSelector::selectionChanged);
     mListView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(mListView, &CollectionView::customContextMenuRequested, this, &ResourceSelector::contextMenuRequested);
     mListView->setWhatsThis(i18nc("@info:whatsthis",
@@ -116,8 +116,8 @@ ResourceSelector::ResourceSelector(QWidget* parent)
     connect(mEditButton, &QPushButton::clicked, this, &ResourceSelector::editResource);
     connect(mDeleteButton, &QPushButton::clicked, this, &ResourceSelector::removeResource);
 
-    connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
-                                      SLOT(slotCollectionAdded(Akonadi::Collection)));
+    connect(AkonadiModel::instance(), &AkonadiModel::collectionAdded,
+                                      this, &ResourceSelector::slotCollectionAdded);
 
     connect(mAlarmType, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), this, &ResourceSelector::alarmTypeSelected);
     QTimer::singleShot(0, this, SLOT(alarmTypeSelected()));
@@ -156,7 +156,7 @@ void ResourceSelector::alarmTypeSelected()
     mAddButton->setWhatsThis(addTip);
     mAddButton->setToolTip(addTip);
     // WORKAROUND: Switch scroll bars back on after allowing geometry to update ...
-    QTimer::singleShot(0, this, SLOT(reinstateAlarmTypeScrollBars()));
+    QTimer::singleShot(0, this, &ResourceSelector::reinstateAlarmTypeScrollBars);
 
     selectionChanged();   // enable/disable buttons
 }

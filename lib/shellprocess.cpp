@@ -53,10 +53,10 @@ bool ShellProcess::start(OpenMode openMode)
         mStatus = UNAUTHORISED;
         return false;
     }
-    connect(this, SIGNAL(bytesWritten(qint64)), SLOT(writtenStdin(qint64)));
+    connect(this, &QIODevice::bytesWritten, this, &ShellProcess::writtenStdin);
     connect(this, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotExited(int,QProcess::ExitStatus)));
-    connect(this, SIGNAL(readyReadStandardOutput()), SLOT(stdoutReady()));
-    connect(this, SIGNAL(readyReadStandardError()), SLOT(stderrReady()));
+    connect(this, &QProcess::readyReadStandardOutput, this, &ShellProcess::stdoutReady);
+    connect(this, &QProcess::readyReadStandardError, this, &ShellProcess::stderrReady);
     QStringList args;
     args << QStringLiteral("-c") << mCommand;
     QProcess::start(QLatin1String(shellName()), args, openMode);

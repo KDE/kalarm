@@ -52,7 +52,7 @@ AkonadiResourceCreator::AkonadiResourceCreator(CalEvent::Type defaultType, QWidg
 */
 void AkonadiResourceCreator::createResource()
 {
-    QTimer::singleShot(0, this, SLOT(getAgentType()));
+    QTimer::singleShot(0, this, &AkonadiResourceCreator::getAgentType);
 }
 
 void AkonadiResourceCreator::getAgentType()

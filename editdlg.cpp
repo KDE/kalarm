@@ -1213,7 +1213,7 @@ void EditAlarmDlg::showOptions(bool more)
     type_showOptions(more);
     mRecurrenceEdit->showMoreOptions(more);
     mShowingMore = more;
-    QTimer::singleShot(0, this, SLOT(slotResize()));
+    QTimer::singleShot(0, this, &EditAlarmDlg::slotResize);
 }
 
 /******************************************************************************

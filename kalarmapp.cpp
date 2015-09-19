@@ -141,12 +141,12 @@ KAlarmApp::KAlarmApp()
     KAEvent::setDefaultFont(Preferences::messageFont());
     if (initialise())   // initialise calendars and alarm timer
     {
-        connect(AkonadiModel::instance(), SIGNAL(collectionAdded(Akonadi::Collection)),
-                                          SLOT(purgeNewArchivedDefault(Akonadi::Collection)));
-        connect(AkonadiModel::instance(), SIGNAL(collectionTreeFetched(Akonadi::Collection::List)),
-                                          SLOT(checkWritableCalendar()));
-        connect(AkonadiModel::instance(), SIGNAL(migrationCompleted()),
-                                          SLOT(checkWritableCalendar()));
+        connect(AkonadiModel::instance(), &AkonadiModel::collectionAdded,
+                                          this, &KAlarmApp::purgeNewArchivedDefault);
+        connect(AkonadiModel::instance(), &Akonadi::EntityTreeModel::collectionTreeFetched,
+                                          this, &KAlarmApp::checkWritableCalendar);
+        connect(AkonadiModel::instance(), &AkonadiModel::migrationCompleted,
+                                          this, &KAlarmApp::checkWritableCalendar);
 
         KConfigGroup config(KSharedConfig::openConfig(), "General");
         mNoSystemTray        = config.readEntry("NoSystemTray", false);
@@ -211,8 +211,8 @@ bool KAlarmApp::initialise()
         qCDebug(KALARM_LOG) << "initialising calendars";
         if (AlarmCalendar::initialiseCalendars())
         {
-            connect(AlarmCalendar::resources(), SIGNAL(earliestAlarmChanged()), SLOT(checkNextDueAlarm()));
-            connect(AlarmCalendar::resources(), SIGNAL(atLoginEventAdded(KAEvent)), SLOT(atLoginEventAdded(KAEvent)));
+            connect(AlarmCalendar::resources(), &AlarmCalendar::earliestAlarmChanged, this, &KAlarmApp::checkNextDueAlarm);
+            connect(AlarmCalendar::resources(), &AlarmCalendar::atLoginEventAdded, this, &KAlarmApp::atLoginEventAdded);
             return true;
         }
     }
@@ -301,7 +301,7 @@ bool KAlarmApp::restoreSession()
         return false;    // quitIf() can sometimes return, despite calling exit()
 
     // Check whether the KDE time zone daemon is running (but don't hold up initialisation)
-    QTimer::singleShot(0, this, SLOT(checkKtimezoned()));
+    QTimer::singleShot(0, this, &KAlarmApp::checkKtimezoned);
 
     startProcessQueue();      // start processing the execution queue
     return true;
@@ -548,7 +548,7 @@ int KAlarmApp::newInstance()
     quitIf(exitCode);
 
     // Check whether the KDE time zone daemon is running (but don't hold up initialisation)
-    QTimer::singleShot(0, this, SLOT(checkKtimezoned()));
+    QTimer::singleShot(0, this, &KAlarmApp::checkKtimezoned);
 
     return exitCode;
 }
@@ -708,7 +708,7 @@ void KAlarmApp::displayFatalError(const QString& message)
         mFatalError = 1;
         mFatalMessage = message;
         if (theInstance)
-            QTimer::singleShot(0, theInstance, SLOT(quitFatal()));
+            QTimer::singleShot(0, theInstance, &KAlarmApp::quitFatal);
     }
 }
 
@@ -732,7 +732,7 @@ void KAlarmApp::quitFatal()
                 theInstance->quitIf(1, true);
             break;
     }
-    QTimer::singleShot(1000, this, SLOT(quitFatal()));
+    QTimer::singleShot(1000, this, &KAlarmApp::quitFatal);
 }
 
 /******************************************************************************
@@ -757,7 +757,7 @@ void KAlarmApp::checkNextDueAlarm()
         // Queue the alarm
         queueAlarmId(*nextEvent);
         qCDebug(KALARM_LOG) << nextEvent->id() << ": due now";
-        QTimer::singleShot(0, this, SLOT(processQueue()));
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
     }
     else
     {
@@ -808,7 +808,7 @@ void KAlarmApp::startProcessQueue()
     {
         qCDebug(KALARM_LOG);
         mInitialised = true;
-        QTimer::singleShot(0, this, SLOT(processQueue()));    // process anything already queued
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);    // process anything already queued
     }
 }
 
@@ -911,7 +911,7 @@ void KAlarmApp::atLoginEventAdded(const KAEvent& event)
         {
             mActionQueue.enqueue(ActionQEntry(EVENT_HANDLE, EventId(ev)));
             if (mInitialised)
-                QTimer::singleShot(0, this, SLOT(processQueue()));
+                QTimer::singleShot(0, this, &KAlarmApp::processQueue);
         }
     }
 }
@@ -1143,7 +1143,7 @@ void KAlarmApp::purgeNewArchivedDefault(const Akonadi::Collection& collection)
         // Allow time (1 minute) for AkonadiModel to be populated with the
         // collection's events before purging it.
         qCDebug(KALARM_LOG) << collection.id() << ": standard archived...";
-        QTimer::singleShot(60000, this, SLOT(purgeAfterDelay()));
+        QTimer::singleShot(60000, this, &KAlarmApp::purgeAfterDelay);
     }
 }
 
@@ -1315,7 +1315,7 @@ bool KAlarmApp::scheduleEvent(KAEvent::SubAction action, const QString& text, co
     // Queue the alarm for insertion into the calendar file
     mActionQueue.enqueue(ActionQEntry(event));
     if (mInitialised)
-        QTimer::singleShot(0, this, SLOT(processQueue()));
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
     return true;
 }
 
@@ -1329,7 +1329,7 @@ bool KAlarmApp::dbusHandleEvent(const EventId& eventID, EventFunc function)
     qCDebug(KALARM_LOG) << eventID;
     mActionQueue.append(ActionQEntry(function, eventID));
     if (mInitialised)
-        QTimer::singleShot(0, this, SLOT(processQueue()));
+        QTimer::singleShot(0, this, &KAlarmApp::processQueue);
     return true;
 }
 

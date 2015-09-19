@@ -79,7 +79,7 @@ WakeFromSuspendDlg::WakeFromSuspendDlg(QWidget* parent)
     connect(mUi->cancelWakeButton, &QPushButton::clicked, this, &WakeFromSuspendDlg::cancelWakeClicked);
     connect(mUi->buttonBox, &QDialogButtonBox::rejected, this, &WakeFromSuspendDlg::close);
 
-    connect(theApp(), SIGNAL(alarmEnabledToggled(bool)), SLOT(enableDisableUseButton()));
+    connect(theApp(), &KAlarmApp::alarmEnabledToggled, this, &WakeFromSuspendDlg::enableDisableUseButton);
 }
 
 WakeFromSuspendDlg::~WakeFromSuspendDlg()

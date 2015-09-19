@@ -56,8 +56,8 @@ ItemListModel::ItemListModel(CalEvent::Types allowed, QObject* parent)
     setDynamicSortFilter(true);
     connect(this, &ItemListModel::rowsInserted, this, &ItemListModel::slotRowsInserted);
     connect(this, &ItemListModel::rowsRemoved, this, &ItemListModel::slotRowsRemoved);
-    connect(AkonadiModel::instance(), SIGNAL(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)),
-                                      SLOT(collectionStatusChanged(Akonadi::Collection,AkonadiModel::Change,QVariant,bool)));
+    connect(AkonadiModel::instance(), &AkonadiModel::collectionStatusChanged,
+                                      this, &ItemListModel::collectionStatusChanged);
 }
 
 int ItemListModel::columnCount(const QModelIndex& /*parent*/) const

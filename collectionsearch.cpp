@@ -68,7 +68,7 @@ CollectionSearch::CollectionSearch(const QString& mimeType, const QString& gid, 
     {
         // There are no resources containing the mime type, so ensure that a
         // signal is emitted after construction.
-        QTimer::singleShot(0, this, SLOT(finish()));
+        QTimer::singleShot(0, this, &CollectionSearch::finish);
     }
 }
 
