@@ -20,7 +20,7 @@
 #ifndef KALARMMIGRATEAPPLICATION_H
 #define KALARMMIGRATEAPPLICATION_H
 
-#include <migration/migrateapplicationfiles.h>
+#include <pimcommon/migrateapplicationfiles.h>
 
 class KAlarmMigrateApplication
 {
