@@ -149,7 +149,7 @@ Qt::ItemFlags ItemListModel::flags(const QModelIndex& index) const
 /******************************************************************************
 * Return the index to a specified event.
 */
-QModelIndex ItemListModel::eventIndex(Entity::Id itemId) const
+QModelIndex ItemListModel::eventIndex(Item::Id itemId) const
 {
     QModelIndexList list = match(QModelIndex(), AkonadiModel::ItemIdRole, itemId, 1, Qt::MatchExactly | Qt::MatchRecursive);
     if (list.isEmpty())

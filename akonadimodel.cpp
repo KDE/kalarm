@@ -547,7 +547,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             case Qt::BackgroundRole:
             {
                 const QColor colour = value.value<QColor>();
-                attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
                 if (attr->backgroundColor() == colour)
                     return true;   // no change
                 attr->setBackgroundColor(colour);
@@ -557,7 +557,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             case EnabledTypesRole:
             {
                 const CalEvent::Types types = static_cast<CalEvent::Types>(value.toInt());
-                attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
                 if (attr->enabled() == types)
                     return true;   // no change
                 qCDebug(KALARM_LOG) << "Set enabled:" << types << ", was=" << attr->enabled();
@@ -570,7 +570,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                 &&  isCompatible(collection))
                 {
                     const CalEvent::Types types = static_cast<CalEvent::Types>(value.toInt());
-                    attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                    attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
                     qCDebug(KALARM_LOG)<<"Set standard:"<<types<<", was="<<attr->standard();
                     attr->setStandard(types);
                     updateCollection = true;
@@ -579,7 +579,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             case KeepFormatRole:
             {
                 const bool keepFormat = value.toBool();
-                attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+                attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
                 if (attr->keepFormat() == keepFormat)
                     return true;   // no change
                 attr->setKeepFormat(keepFormat);
@@ -597,7 +597,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
             // for applications. So create a new Collection instance and only set a
             // value for CollectionAttribute.
             Collection c(collection.id());
-            CollectionAttribute* att = c.attribute<CollectionAttribute>(Entity::AddIfMissing);
+            CollectionAttribute* att = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
             *att = *attr;
             CollectionModifyJob* job = new CollectionModifyJob(c, this);
             connect(job, &CollectionModifyJob::result, this, &AkonadiModel::modifyCollectionJobDone);
@@ -625,7 +625,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
                         {
                             if (err == KAEvent::CMD_NO_ERROR  &&  !item.hasAttribute<EventAttribute>())
                                 return true;   // no change
-                            EventAttribute* attr = item.attribute<EventAttribute>(Entity::AddIfMissing);
+                            EventAttribute* attr = item.attribute<EventAttribute>(Item::AddIfMissing);
                             if (attr->commandError() == err)
                                 return true;   // no change
                             attr->setCommandError(err);
@@ -1382,7 +1382,7 @@ bool AkonadiModel::updateEvent(KAEvent& event)
     qCDebug(KALARM_LOG) << "ID:" << event.id();
     return updateEvent(event.itemId(), event);
 }
-bool AkonadiModel::updateEvent(Akonadi::Entity::Id itemId, KAEvent& newEvent)
+bool AkonadiModel::updateEvent(Akonadi::Item::Id itemId, KAEvent& newEvent)
 {
 qCDebug(KALARM_LOG)<<"item id="<<itemId;
     const QModelIndex ix = itemIndex(itemId);
@@ -1408,7 +1408,7 @@ bool AkonadiModel::deleteEvent(const KAEvent& event)
 {
     return deleteEvent(event.itemId());
 }
-bool AkonadiModel::deleteEvent(Akonadi::Entity::Id itemId)
+bool AkonadiModel::deleteEvent(Akonadi::Item::Id itemId)
 {
     qCDebug(KALARM_LOG) << itemId;
     const QModelIndex ix = itemIndex(itemId);
@@ -1479,8 +1479,8 @@ void AkonadiModel::queueItemModifyJob(const Item& item)
 */
 void AkonadiModel::itemJobDone(KJob* j)
 {
-    const QMap<KJob*, Entity::Id>::iterator it = mPendingItemJobs.find(j);
-    Entity::Id itemId = -1;
+    const QMap<KJob*, Item::Id>::iterator it = mPendingItemJobs.find(j);
+    Item::Id itemId = -1;
     if (it != mPendingItemJobs.end())
     {
         itemId = it.value();

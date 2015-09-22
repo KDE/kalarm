@@ -780,7 +780,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     collection.setContentMimeTypes(CalEvent::mimeTypes(mAlarmType));
     EntityDisplayAttribute* dattr = collection.attribute<EntityDisplayAttribute>(Collection::AddIfMissing);
     dattr->setIconName(QStringLiteral("kalarm"));
-    CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Entity::AddIfMissing);
+    CollectionAttribute* attr = collection.attribute<CollectionAttribute>(Collection::AddIfMissing);
     attr->setEnabled(mEnabled ? mAlarmType : CalEvent::EMPTY);
     if (mStandard)
         attr->setStandard(mAlarmType);
@@ -822,7 +822,7 @@ void CalendarCreator::collectionFetchResult(KJob* j)
     // for applications. So create a new Collection instance and only set a
     // value for CollectionAttribute.
     Collection c(collection.id());
-    CollectionAttribute* att = c.attribute<CollectionAttribute>(Entity::AddIfMissing);
+    CollectionAttribute* att = c.attribute<CollectionAttribute>(Collection::AddIfMissing);
     *att = *attr;
     CollectionModifyJob* cmjob = new CollectionModifyJob(c, this);
     connect(cmjob, &KJob::result, this, &CalendarCreator::modifyCollectionJobDone);
