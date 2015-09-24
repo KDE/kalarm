@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.11.1 --- 1 September 2015 ===
+=== Version 2.11.2 --- 24 September 2015 ===
+- Enable typing into New Alarm dialogue while alarm is displayed (Unity desktop) [KDE Bug 352889]
+
+=== Version 2.11.1 (KDE Applications 15.08.1)--- 1 September 2015 ===
 - Fix conversion error in sub-repetition value from command line or D-Bus command.
 
 === Version 2.11.0 --- July 2015 ===

@@ -79,6 +79,8 @@ class KAlarmApp : public KUniqueApplication
         void               commandMessage(ShellProcess*, QWidget* parent);
         void               notifyAudioPlaying(bool playing);
         void               setSpreadWindowsState(bool spread);
+        bool               windowFocusBroken() const;
+        bool               needWindowFocusFix() const;
         // Methods called indirectly by the DCOP interface
         bool               scheduleEvent(KAEvent::SubAction, const QString& text, const KDateTime&,
                                          int lateCancel, KAEvent::Flags flags, const QColor& bg, const QColor& fg,
@@ -215,6 +217,7 @@ class KAlarmApp : public KUniqueApplication
         bool               mOldShowInSystemTray; // showing in system tray was selected
         bool               mAlarmsEnabled;       // alarms are enabled
         bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
+        bool               mWindowFocusBroken;   // keyboard focus transfer between windows doesn't work
 };
 
 inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }
