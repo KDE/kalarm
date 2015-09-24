@@ -1,7 +1,7 @@
 /*
  *  editdlg.h  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -82,6 +82,7 @@ class EditAlarmDlg : public KDialog
 
         QSize           sizeHint() const Q_DECL_OVERRIDE    { return minimumSizeHint(); }
 
+        static int      instanceCount();
         static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
     protected:
@@ -93,6 +94,7 @@ class EditAlarmDlg : public KDialog
         void            resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
         void            showEvent(QShowEvent*) Q_DECL_OVERRIDE;
         void            closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
+        bool            eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
         virtual QString type_caption() const = 0;
         virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
         virtual void    type_initValues(const KAEvent*) = 0;
@@ -135,6 +137,7 @@ class EditAlarmDlg : public KDialog
         void            slotTemplateTimeType(QAbstractButton*);
         void            slotSetSubRepetition();
         void            slotResize();
+        void            focusFixTimer();
 
     private:
         void            init(const KAEvent* event, GetResourceType getResource);
@@ -148,6 +151,7 @@ class EditAlarmDlg : public KDialog
     protected:
         KAEvent::SubAction  mAlarmType;           // actual alarm type
     private:
+        static QList<EditAlarmDlg*> mWindowList;  // list of instances
         QTabWidget*         mTabs;                // the tabs in the dialog
         StackedScrollGroup* mTabScrollGroup;
         int                 mMainPageIndex;
