@@ -274,7 +274,7 @@ Repetition RepetitionDlg::repetition() const
 {
     int count = 0;
     Duration interval = mTimeSelector->period();
-    if (interval)
+    if (!interval.isNull())
     {
         if (mCountButton->isChecked())
             count = mCount->value();
@@ -307,7 +307,7 @@ void RepetitionDlg::intervalChanged(const Duration& interval)
 void RepetitionDlg::countChanged(int count)
 {
     Duration interval = mTimeSelector->period();
-    if (interval)
+    if (!interval.isNull())
     {
         bool blocked = mDuration->signalsBlocked();
         mDuration->blockSignals(true);
@@ -324,7 +324,7 @@ void RepetitionDlg::countChanged(int count)
 void RepetitionDlg::durationChanged(const Duration& duration)
 {
     Duration interval = mTimeSelector->period();
-    if (interval)
+    if (!interval.isNull())
     {
         bool blocked = mCount->signalsBlocked();
         mCount->blockSignals(true);

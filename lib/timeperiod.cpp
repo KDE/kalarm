@@ -177,7 +177,7 @@ void TimePeriod::setPeriod(const Duration& perod, bool dateOnly, TimePeriod::Uni
     if (!dateOnly  &&  mNoHourMinute)
         dateOnly = true;
     int item;
-    if (perod)
+    if (!perod.isNull())
     {
         int count = perod.value();
         if (perod.isDaily())

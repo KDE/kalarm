@@ -400,7 +400,7 @@ int KAlarmApp::newInstance()
                     if (options.alarmTime().isValid())
                         editDlg->setTime(options.alarmTime());
                     if (options.recurrence())
-                        editDlg->setRecurrence(*options.recurrence(), options.subRepeatInterval(), options.subRepeatCount());
+                        editDlg->setRecurrence(*options.recurrence(), options.subRepeatInterval(), options.subRepeatCount()); // FIXME: subRepeatInterval bool->int implicit cast is not what we want
                     else if (options.flags() & KAEvent::REPEAT_AT_LOGIN)
                         editDlg->setRepeatAtLogin();
                     editDlg->setAction(options.editAction(), AlarmText(options.text()));
