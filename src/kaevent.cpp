@@ -780,7 +780,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
                 ++i;
             }
             const int len = flag.length() - 1;
-            mReminderMinutes = -flag.left(len).toInt();    // -> 0 if conversion fails
+            mReminderMinutes = -flag.leftRef(len).toInt();    // -> 0 if conversion fails
             switch (flag.at(len).toLatin1()) {
             case 'M':  break;
             case 'H':  mReminderMinutes *= 60;  break;
@@ -3844,16 +3844,16 @@ DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool dateOnly, Da
     const QString prop = event->customProperty(KACalendar::APPNAME, KAEventPrivate::NEXT_RECUR_PROPERTY);
     if (prop.length() >= SZ_DATE) {
         // The next due recurrence time is specified
-        const QDate d(prop.left(SZ_YEAR).toInt(),
-                      prop.mid(SZ_YEAR, SZ_MONTH).toInt(),
-                      prop.mid(SZ_YEAR + SZ_MONTH, SZ_DAY).toInt());
+        const QDate d(prop.leftRef(SZ_YEAR).toInt(),
+                      prop.midRef(SZ_YEAR, SZ_MONTH).toInt(),
+                      prop.midRef(SZ_YEAR + SZ_MONTH, SZ_DAY).toInt());
         if (d.isValid()) {
             if (dateOnly  &&  prop.length() == SZ_DATE) {
                 next.setDate(d);
             } else if (!dateOnly  &&  prop.length() == IX_TIME + SZ_TIME  &&  prop[SZ_DATE] == QLatin1Char('T')) {
-                const QTime t(prop.mid(IX_TIME, SZ_HOUR).toInt(),
-                              prop.mid(IX_TIME + SZ_HOUR, SZ_MIN).toInt(),
-                              prop.mid(IX_TIME + SZ_HOUR + SZ_MIN, SZ_SEC).toInt());
+                const QTime t(prop.midRef(IX_TIME, SZ_HOUR).toInt(),
+                              prop.midRef(IX_TIME + SZ_HOUR, SZ_MIN).toInt(),
+                              prop.midRef(IX_TIME + SZ_HOUR + SZ_MIN, SZ_SEC).toInt());
                 if (t.isValid()) {
                     next.setDate(d);
                     next.setTime(t);

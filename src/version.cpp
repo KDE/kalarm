@@ -69,7 +69,7 @@ int getVersionNumber(const QString &version, QString *subVersion)
         if (subVersion) {
             *subVersion = issue.mid(i);
         }
-        v = issue.left(i).toUInt();   // issue number
+        v = issue.leftRef(i).toUInt();   // issue number
         vernum += (v < 99 ? v : 99);
     }
     return vernum;
