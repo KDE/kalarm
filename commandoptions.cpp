@@ -25,7 +25,7 @@
 #include "kamail.h"
 #include <kalarmcal/identities.h>
 
-#include <PimCommon/TextToSpeech>
+#include <kpimtextedit/texttospeech.h>
 
 #include <kcmdlineargs.h>
 #include "kalarm_debug.h"
@@ -373,7 +373,7 @@ CommandOptions::CommandOptions()
             {
                 if (mArgs->isSet("beep"))
                     setErrorIncompatible("--beep", "--speak");
-                else if (!PimCommon::TextToSpeech::self()->isReady())
+                else if (!KPIMTextEdit::TextToSpeech::self()->isReady())
                     setError(xi18nc("@info:shell", "<icode>%1</icode> requires KAlarm to be compiled with QTextToSpeech support", QStringLiteral("--speak")));
             }
             bool onceOnly = mArgs->isSet("reminder-once");

@@ -38,7 +38,7 @@
 #include "shellprocess.h"
 #include "synchtimer.h"
 
-#include <PimCommon/TextToSpeech>
+#include <kpimtextedit/texttospeech.h>
 //QT5 reactivate after porting (activated by config-kdepim.h include in texttospeech.h)
 #undef KDEPIM_HAVE_X11
 
@@ -1373,7 +1373,7 @@ void MessageWin::playAudio()
 */
 void MessageWin::slotSpeak()
 {
-    PimCommon::TextToSpeech *tts = PimCommon::TextToSpeech::self();
+    KPIMTextEdit::TextToSpeech *tts = KPIMTextEdit::TextToSpeech::self();
     if (!tts->isReady()) {
         KAMessageBox::detailedError(MainWindow::mainMainWindow(), i18nc("@info", "Unable to speak message"), i18nc("@info", "Text-to-speech subsystem is not available"));
         clearErrorMessage(ErrMsg_Speak);
