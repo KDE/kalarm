@@ -77,7 +77,7 @@ int getVersionNumber(const QString &version, QString *subVersion)
 
 QString getVersionString(int version)
 {
-    return QString::fromLatin1("%1.%2.%3").arg(version / 10000).arg((version % 10000) / 100).arg(version % 100);
+    return QStringLiteral("%1.%2.%3").arg(version / 10000).arg((version % 10000) / 100).arg(version % 100);
 }
 
 } // namespace KAlarmCal

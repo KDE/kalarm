@@ -1346,7 +1346,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
     } else if (mRepetition) {
         // Alarm repetition is normally held in the main alarm, but since
         // the main alarm has expired, store in a custom property.
-        const QString param = QString::fromLatin1("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
+        const QString param = QStringLiteral("%1:%2").arg(mRepetition.intervalMinutes()).arg(mRepetition.count());
         ev->setCustomProperty(KACalendar::APPNAME, REPEAT_PROPERTY, param);
     }
 
@@ -1585,7 +1585,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffse
         }
         if (display)
             alarm->setCustomProperty(KACalendar::APPNAME, FONT_COLOUR_PROPERTY,
-                                     QString::fromLatin1("%1;%2;%3").arg(mBgColour.name())
+                                     QStringLiteral("%1;%2;%3").arg(mBgColour.name())
                                      .arg(mFgColour.name())
                                      .arg(mUseDefaultFont ? QString() : mFont.toString()));
         break;
@@ -4759,7 +4759,7 @@ void KAEventPrivate::setAudioAlarm(const Alarm::Ptr &alarm) const
     alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
     if (mSoundVolume >= 0)
         alarm->setCustomProperty(KACalendar::APPNAME, VOLUME_PROPERTY,
-                                 QString::fromLatin1("%1;%2;%3;%4").arg(QString::number(mSoundVolume, 'f', 2))
+                                 QStringLiteral("%1;%2;%3;%4").arg(QString::number(mSoundVolume, 'f', 2))
                                  .arg(QString::number(mFadeVolume, 'f', 2))
                                  .arg(mFadeSeconds));
 }
@@ -5080,7 +5080,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     Alarm::Ptr alarm = alarms[ai];
                     if (alarm->type() == Alarm::Display)
                         alarm->setCustomProperty(KACalendar::APPNAME, KAEventPrivate::FONT_COLOUR_PROPERTY,
-                                                 QString::fromLatin1("%1;;").arg(cats.at(0)));
+                                                 QStringLiteral("%1;;").arg(cats.at(0)));
                 }
                 cats.removeAt(0);
             }
@@ -5893,7 +5893,7 @@ QString reminderToString(int minutes)
     if (minutes < 0) {
         count = -count;
     }
-    return QString::fromLatin1("%1%2").arg(count).arg(unit);
+    return QStringLiteral("%1%2").arg(count).arg(unit);
 }
 
 } // namespace KAlarmCal
