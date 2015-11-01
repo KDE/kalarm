@@ -891,7 +891,7 @@ void EditAlarmDlg::showEvent(QShowEvent* se)
     if (theApp()->needWindowFocusFix())
     {
         QApplication::setActiveWindow(this);
-        QTimer::singleShot(0, this, SLOT(focusFixTimer()));
+        QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);
     }
 }
 
@@ -908,7 +908,7 @@ void EditAlarmDlg::focusFixTimer()
     &&  QApplication::focusWidget()->window() != this)
     {
         QApplication::setActiveWindow(this);
-        QTimer::singleShot(0, this, SLOT(focusFixTimer()));
+        QTimer::singleShot(0, this, &EditAlarmDlg::focusFixTimer);
     }
 }
 
