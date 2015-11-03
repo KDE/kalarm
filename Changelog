@@ -1,10 +1,16 @@
 KAlarm Change Log
 
-=== Version 2.11.2 --- 24 September 2015 ===
+=== Version 2.11.3 --- 3 November 2015 ===
+- Re-enable use of sendmail for email alarms.
+
+=== Version 2.11.2 (KDE Applications 15.08.2) --- 24 September 2015 ===
 - Enable typing into New Alarm dialogue while alarm is displayed (Unity desktop) [KDE Bug 352889]
 
-=== Version 2.11.1 (KDE Applications 15.08.1)--- 1 September 2015 ===
+=== Version 2.11.1 (KDE Applications 15.08.1) --- 1 September 2015 ===
 - Fix conversion error in sub-repetition value from command line or D-Bus command.
+
+=== Version 2.11.0 (KDE Applications 15.08.0) --- 30 July 2015 ===
+- Disable use of sendmail for email alarms, due to removal from Akonadi.
 
 === Version 2.11.0 --- July 2015 ===
 - Use KDE Frameworks.
