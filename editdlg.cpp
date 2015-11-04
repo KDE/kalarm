@@ -595,7 +595,7 @@ void EditAlarmDlg::setTime(const DateTime& start)
 {
     mTimeWidget->setDateTime(start);
 }
-void EditAlarmDlg::setRecurrence(const KARecurrence& recur, int subRepeatInterval, int subRepeatCount)
+void EditAlarmDlg::setRecurrence(const KARecurrence& recur, const KCalCore::Duration& subRepeatInterval, int subRepeatCount)
 {
     KAEvent event;
     event.setTime(mTimeWidget->getDateTime(Q_NULLPTR, false, false));
