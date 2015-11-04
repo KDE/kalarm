@@ -402,7 +402,8 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
             QString attachError = xi18nc("@info", "Error attaching file: <filename>%1</filename>", attachment);
             QByteArray contents;
             bool atterror = false;
-            if (!url.isLocalFile()) {
+            if (!url.isLocalFile())
+            {
                 KIO::UDSEntry uds;
                 auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
                 KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
@@ -432,9 +433,12 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
                     qCDebug(KALARM_LOG) << "Read error:" << attachment;
                     atterror = true;
                 }
-            } else {
+            }
+            else
+            {
                 QFile f(url.toLocalFile());
-                if (!f.open(QIODevice::ReadOnly)) {
+                if (!f.open(QIODevice::ReadOnly))
+                {
                     qCCritical(KALARM_LOG) << "Load failure:" << attachment;
                     return attachError;
                 }
@@ -638,9 +642,8 @@ bool KAMail::checkAttachment(const QUrl& url)
 {
     auto statJob = KIO::stat(url);
     KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
-    if (!statJob->exec()) {
+    if (!statJob->exec())
         return false;       // doesn't exist
-    }
     KFileItem fi(statJob->statResult(), url);
     if (fi.isDir()  ||  !fi.isReadable())
         return false;
