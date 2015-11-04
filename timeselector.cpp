@@ -128,10 +128,11 @@ Duration TimeSelector::period() const
 */
 void TimeSelector::setPeriod(const Duration& period, bool dateOnly, TimePeriod::Units defaultUnits)
 {
-    mSelect->setChecked(!period.isNull());
-    mPeriod->setEnabled(!period.isNull());
+    bool havePeriod = !period.isNull();
+    mSelect->setChecked(havePeriod);
+    mPeriod->setEnabled(havePeriod);
     if (mSignWidget)
-        mSignWidget->setEnabled(!period.isNull());
+        mSignWidget->setEnabled(havePeriod);
     mPeriod->setPeriod(period, dateOnly, defaultUnits);
 }
 
