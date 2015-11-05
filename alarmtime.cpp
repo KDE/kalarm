@@ -58,7 +58,7 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
             if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
             {
                 QString fmt = locale->timeFormat();
-                int i = fmt.indexOf(QRegExp(QStringLiteral("%[kl]")));   // check if leading zeroes are omitted
+                int i = fmt.indexOf(QRegExp(QLatin1String("%[kl]")));   // check if leading zeroes are omitted
                 if (i >= 0  &&  i == fmt.indexOf(QLatin1Char('%')))   // and whether the hour is first
                     mTimeHourPos = i;             // yes, so need to align
             }

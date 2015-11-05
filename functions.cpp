@@ -1734,7 +1734,7 @@ QString pathOrUrl(const QString& url)
 QString browseFile(const QString& caption, QString& defaultDir, const QString& initialFile,
                    const QString& filter, KFile::Modes mode, QWidget* parent)
 {
-    QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QStringLiteral("/[^/]*$")))
+    QString initialDir = !initialFile.isEmpty() ? QString(initialFile).remove(QRegExp(QLatin1String("/[^/]*$")))
                        : !defaultDir.isEmpty()  ? defaultDir
                        :                          QDir::homePath();
     // Use AutoQPointer to guard against crash on application exit while
