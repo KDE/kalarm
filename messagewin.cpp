@@ -2335,7 +2335,7 @@ qCDebug(KALARM_LOG)<<"full="<<full<<", screen="<<mScreenNumber;
     if (modal)
     {
         const WId activeId = KWindowSystem::activeWindow();
-        const KWindowInfo wi = KWindowSystem::windowInfo(activeId, NET::WMState);
+        const KWindowInfo wi = KWindowInfo(activeId, NET::WMState);
         if (wi.valid()  &&  wi.hasState(NET::FullScreen))
             return false;    // the active window is full screen.
     }

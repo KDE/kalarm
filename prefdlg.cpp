@@ -134,7 +134,7 @@ void KAlarmPrefDlg::display()
     else
     {
 #if KDEPIM_HAVE_X11
-        KWindowInfo info = KWindowSystem::windowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
+        KWindowInfo info = KWindowInfo(mInstance->winId(), NET::WMGeometry | NET::WMDesktop);
         KWindowSystem::setCurrentDesktop(info.desktop());
 #endif
         mInstance->setWindowState(mInstance->windowState() & ~Qt::WindowMinimized); // un-minimize it if necessary
