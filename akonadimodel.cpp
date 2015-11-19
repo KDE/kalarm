@@ -1177,9 +1177,9 @@ void AkonadiModel::modifyCollectionJobDone(KJob* j)
             mCollectionsDeleted.removeAll(id);
         else
         {
-            const QString errMsg = xi18nc("@info", "Failed to update calendar <resource>%1</resource>.", displayName(collection));
+            const QString errMsg = i18nc("@info", "Failed to update calendar \"%1\".", displayName(collection));
             qCCritical(KALARM_LOG) << "Id:" << collection.id() << errMsg << ":" << j->errorString();
-            KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+            KAMessageBox::error(MainWindow::mainMainWindow(), i18nc("@info", "%1\n(%2)", errMsg, j->errorString()));
         }
     }
     else
