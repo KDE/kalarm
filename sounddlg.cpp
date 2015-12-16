@@ -34,7 +34,6 @@
 #include <KGlobal>
 #include <KLocalizedString>
 #include <kstandarddirs.h>
-#include <kiconloader.h>
 #include <phonon/mediaobject.h>
 #include <phonon/audiooutput.h>
 

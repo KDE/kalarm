@@ -55,7 +55,6 @@
 using namespace KCalCore;
 
 #include <KLocalizedString>
-#include <kiconloader.h>
 #include <kfileitem.h>
 
 #include <QComboBox>

@@ -32,7 +32,6 @@
 
 #include <QIcon>
 #include <KLocalizedString>
-#include <kiconloader.h>
 #include <phonon/backendcapabilities.h>
 
 #include <QTimer>

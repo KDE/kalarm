@@ -52,7 +52,6 @@
 
 #include <KLocalizedString>
 #include <kcolorutils.h>
-#include <KIconLoader>
 
 #include <QUrl>
 #include <QApplication>

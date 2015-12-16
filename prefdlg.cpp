@@ -66,7 +66,6 @@ using namespace KHolidays;
 #include <klineedit.h>
 #include <K4AboutData>
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <kstandardguiitem.h>
 #include <ksystemtimezone.h>
 #include <qicon.h>

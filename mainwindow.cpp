@@ -57,7 +57,6 @@ using namespace KCalUtils;
 #include <kactioncollection.h>
 #include <ksystemtrayicon.h>
 #include <kstandardaction.h>
-#include <kiconloader.h>
 #include <KLocalizedString>
 #include <KSharedConfig>
 #include <kconfiggroup.h>

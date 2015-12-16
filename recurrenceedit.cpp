@@ -46,7 +46,6 @@ using namespace KCalCore;
 
 #include <KLocalizedString>
 #include <kcalendarsystem.h>
-#include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kdatecombobox.h>
 
