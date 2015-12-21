@@ -217,19 +217,24 @@ void EditAlarmDlg::init(const KAEvent* event)
         caption = type_caption();
     setWindowTitle(caption);
 
-    // Create button box now so taht types can work with it, but don't insert
+    // Create button box now so that types can work with it, but don't insert
     // it into layout just yet
     mButtonBox = new QDialogButtonBox(this);
-    if (mReadOnly) {
+    if (mReadOnly)
+    {
         mButtonBox->addButton(QDialogButtonBox::Cancel);
         mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
         mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
-    } else if (mTemplate) {
+    }
+    else if (mTemplate)
+    {
         mButtonBox->addButton(QDialogButtonBox::Ok);
         mButtonBox->addButton(QDialogButtonBox::Cancel);
         mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
         mMoreLessButton = mButtonBox->addButton(QDialogButtonBox::RestoreDefaults);
-    } else {
+    }
+    else
+    {
         mButtonBox->addButton(QDialogButtonBox::Ok);
         mButtonBox->addButton(QDialogButtonBox::Cancel);
         mTryButton = mButtonBox->addButton(i18nc("@action:button", "Try"), QDialogButtonBox::ActionRole);
@@ -240,9 +245,8 @@ void EditAlarmDlg::init(const KAEvent* event)
     connect(mButtonBox, &QDialogButtonBox::clicked,
             this, &EditAlarmDlg::slotButtonClicked);
 
-    if (mButtonBox->button(QDialogButtonBox::Ok)) {
+    if (mButtonBox->button(QDialogButtonBox::Ok))
         mButtonBox->button(QDialogButtonBox::Ok)->setWhatsThis(i18nc("@info:whatsthis", "Schedule the alarm at the specified time."));
-    }
 
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     if (mTemplate)
@@ -618,9 +622,8 @@ void EditAlarmDlg::initValues(const KAEvent* event)
         mDeferGroup->hide();
 
     bool empty = AlarmCalendar::resources()->events(CalEvent::TEMPLATE).isEmpty();
-    if (mLoadTemplateButton) {
+    if (mLoadTemplateButton)
         mLoadTemplateButton->setEnabled(!empty);
-    }
 }
 
 /******************************************************************************
@@ -978,19 +981,19 @@ void EditAlarmDlg::resizeEvent(QResizeEvent* re)
 */
 void EditAlarmDlg::slotButtonClicked(QAbstractButton *button)
 {
-    if (button == mTryButton) {
+    if (button == mTryButton)
         slotTry();
-    } else if (button == mLoadTemplateButton) {
+    else if (button == mLoadTemplateButton)
         slotHelp();
-    } else if (button == mMoreLessButton) {
+    else if (button == mMoreLessButton)
         slotDefault();
-    } else if (button == mButtonBox->button(QDialogButtonBox::Ok)) {
-        if (validate()) {
+    else if (button == mButtonBox->button(QDialogButtonBox::Ok))
+    {
+        if (validate())
             accept();
-        }
-    } else {
-        reject();
     }
+    else
+        reject();
 }
 
 /******************************************************************************
