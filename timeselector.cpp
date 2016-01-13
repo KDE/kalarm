@@ -1,7 +1,7 @@
 /*
  *  timeselector.cpp  -  widget to optionally set a time period
  *  Program:  kalarm
- *  Copyright © 2004,2005,2007,2009-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -67,8 +67,11 @@ TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhats
 ComboBox* TimeSelector::createSignCombo()
 {
     delete mSignWidget;
-    mSignWidget = new ComboBox(mPeriod->parentWidget());
+    QWidget* p = mPeriod->parentWidget();
+    mSignWidget = new ComboBox(p);
+    mSignWidget = new ComboBox(p);
     mSignWidget->setEnabled(mPeriod->isEnabled());
+    p->layout()->addWidget(mSignWidget);
     return mSignWidget;
 }
 
