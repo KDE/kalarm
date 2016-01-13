@@ -46,9 +46,9 @@
 
 #include <Libkdepim/MaillistDrag>
 #include <kmime/kmime_content.h>
+#include <AkonadiWidgets/controlgui.h>
 #include <KCalCore/MemoryCalendar>
 #include <KCalUtils/kcalutils/icaldrag.h>
-#include <AkonadiWidgets/controlgui.h>
 using namespace KCalCore;
 using namespace KCalUtils;
 #include <KLocale>
@@ -454,7 +454,7 @@ void MainWindow::initActions()
     //QT5 action->setGlobalShortcut(dummy);   // actions->addAction() must be called first!
     connect(action, &QAction::triggered, this, &MainWindow::slotNewAudio);
 
-    TemplateMenuAction *templateMenuAction = mActionNew->fromTemplateAlarmAction();
+    TemplateMenuAction* templateMenuAction = mActionNew->fromTemplateAlarmAction();
     actions->addAction(QStringLiteral("newFromTemplate"), templateMenuAction);
     connect(templateMenuAction, &TemplateMenuAction::selected, this, &MainWindow::slotNewFromTemplate);
 
