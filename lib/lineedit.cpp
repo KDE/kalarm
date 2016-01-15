@@ -62,6 +62,7 @@ LineEdit::LineEdit(QWidget* parent)
 
 void LineEdit::init()
 {
+    setAcceptDrops(false);
     if (mType == Url)
     {
         setCompletionMode(KCompletion::CompletionShell);
