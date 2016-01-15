@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.11.3 --- 4 November 2015 ===
+=== Version 2.11.4 --- 13 January 2016 ===
+- Fix reminder time edit being covered by 'in advance' combo [KDE Bug 357018]
+
+=== Version 2.11.3 (KDE Applications 15.08.3) --- 4 November 2015 ===
 - Re-enable use of sendmail for email alarms.
 - Fix conversion error in sub-repetition interval from command line.
 
