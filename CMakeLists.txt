@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project(KAlarmCal)
 
 # ECM setup
-find_package(ECM 5.14.0 CONFIG REQUIRED)
+find_package(ECM 5.17.0 CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(GenerateExportHeader)
@@ -17,12 +17,12 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings)
 include(ECMQtDeclareLoggingCategory)
 
-set(KF5_VERSION "5.12.0")
-set(KALARM_LIB_VERSION "4.79.0")
-set(CALENDARCORE_LIB_VERSION "4.82.0")
-set(HOLIDAY_LIB_VERSION "4.80.0")
-set(IDENTITYMANAGER_LIB_VERSION "4.79.0")
-set(AKONADI_LIB_VERSION "4.79.0")
+set(KF5_VERSION "5.17.0")
+set(KALARM_LIB_VERSION "5.1.40")
+set(CALENDARCORE_LIB_VERSION "5.1.40")
+set(HOLIDAY_LIB_VERSION "5.1.40")
+set(IDENTITYMANAGER_LIB_VERSION "5.1.40")
+set(AKONADI_LIB_VERSION "5.1.40")
 ecm_setup_version(${KALARM_LIB_VERSION} VARIABLE_PREFIX KALARMCAL
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kalarmcal_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5AlarmCalendarConfigVersion.cmake"
