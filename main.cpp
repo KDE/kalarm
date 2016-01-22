@@ -1,7 +1,7 @@
 /*
  *  main.cpp
  *  Program:  kalarm
- *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     K4AboutData aboutData(PROGRAM_NAME, 0, ki18n("KAlarm"), KALARM_VERSION,
         ki18n("Personal alarm message, command and email scheduler for KDE"),
         K4AboutData::License_GPL,
-        ki18n("Copyright 2001-2015, David Jarvie"), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");
+        ki18n("Copyright 2001-%1, David Jarvie").subs(2016), KLocalizedString(), "http://www.astrojar.org.uk/kalarm");
     aboutData.addAuthor(ki18n("David Jarvie"), KLocalizedString(), "djarvie@kde.org");
     aboutData.setOrganizationDomain("kde.org");
 
