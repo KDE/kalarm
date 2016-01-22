@@ -1,7 +1,7 @@
 /*
  *  editdlg.cpp  -  dialog to create or modify an alarm or alarm template
  *  Program:  kalarm
- *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -496,6 +496,8 @@ void EditAlarmDlg::init(const KAEvent* event)
 
 EditAlarmDlg::~EditAlarmDlg()
 {
+    delete mButtonBox;
+    mButtonBox = Q_NULLPTR;    // prevent text edit contentsChanged() signal triggering a crash
     delete mSavedEvent;
     mWindowList.removeAll(this);
 }
@@ -755,7 +757,7 @@ void EditAlarmDlg::contentsChanged()
 {
     // Don't do anything if it's a new alarm or we're still initialising
     // (i.e. mSavedEvent null).
-    if (mSavedEvent  &&  mButtonBox->button(QDialogButtonBox::Ok))
+    if (mSavedEvent  &&  mButtonBox  &&  mButtonBox->button(QDialogButtonBox::Ok))
         mButtonBox->button(QDialogButtonBox::Ok)->setEnabled(stateChanged() || mDeferDateTime.kDateTime() != mSavedDeferTime);
 }
 
