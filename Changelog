@@ -3,6 +3,7 @@ KAlarm Change Log
 === Version 2.11.4 --- 22 January 2016 ===
 - Fix reminder time edit being covered by 'in advance' combo [KDE Bug 357018]
 - Fix crash after editing an alarm, if spell check is enabled [KDE Bug 356048]
+- Fix occasional crash on startup [KDE Bug 358217]
 
 === Version 2.11.3 (KDE Applications 15.08.3) --- 4 November 2015 ===
 - Re-enable use of sendmail for email alarms.
