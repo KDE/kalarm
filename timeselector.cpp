@@ -69,7 +69,6 @@ ComboBox* TimeSelector::createSignCombo()
     delete mSignWidget;
     QWidget* p = mPeriod->parentWidget();
     mSignWidget = new ComboBox(p);
-    mSignWidget = new ComboBox(p);
     mSignWidget->setEnabled(mPeriod->isEnabled());
     p->layout()->addWidget(mSignWidget);
     return mSignWidget;
