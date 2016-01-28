@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -39,15 +39,17 @@
 #include "shellprocess.h"
 #include "startdaytimer.h"
 #include "traywindow.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/datetime.h>
 #include <kalarmcal/karecurrence.h>
 
+#include <KDBusService>
 #include <KLocalizedString>
 #include <kconfig.h>
+#include <KConfigGui>
+#include <KAboutData>
 #include <KSharedConfig>
-#include <K4AboutData>
-#include <QTemporaryFile>
 #include <kfileitem.h>
 #include <kstandardguiitem.h>
 #include <kservicetypetrader.h>
@@ -59,10 +61,11 @@
 #include <QTimer>
 #include <QFile>
 #include <QTextStream>
+#include <QTemporaryFile>
 #include <QtDBus/QtDBus>
 #include <QStandardPaths>
 #include <QSystemTrayIcon>
-#include "kalarm_debug.h"
+#include <QCommandLineParser>
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -87,7 +90,7 @@ static inline int maxLateness(int lateCancel)
 }
 
 
-KAlarmApp*  KAlarmApp::theInstance  = Q_NULLPTR;
+KAlarmApp*  KAlarmApp::mInstance  = Q_NULLPTR;
 int         KAlarmApp::mActiveCount = 0;
 int         KAlarmApp::mFatalError  = 0;
 QString     KAlarmApp::mFatalMessage;
@@ -96,8 +99,8 @@ QString     KAlarmApp::mFatalMessage;
 /******************************************************************************
 * Construct the application.
 */
-KAlarmApp::KAlarmApp()
-    : KUniqueApplication(),
+KAlarmApp::KAlarmApp(int& argc, char** argv)
+    : QApplication(argc, argv),
       mInitialised(false),
       mRedisplayAlarms(false),
       mQuitting(false),
@@ -111,13 +114,17 @@ KAlarmApp::KAlarmApp()
       mPendingQuit(false),
       mCancelRtcWake(false),
       mProcessingQueue(false),
-      mSessionClosingDown(false),
       mAlarmsEnabled(true)
 {
     qCDebug(KALARM_LOG);
 #ifndef NDEBUG
     KAlarm::setTestModeConditions();
 #endif
+
+    // Make this a unique application.
+    KDBusService* s = new KDBusService(KDBusService::Unique);
+    connect(this, &KAlarmApp::aboutToQuit, s, &KDBusService::deleteLater);
+    connect(s, &KDBusService::activateRequested, this, &KAlarmApp::activate);
 
     setQuitOnLastWindowClosed(false);
     Preferences::self();    // read KAlarm configuration
@@ -181,16 +188,16 @@ KAlarmApp::~KAlarmApp()
 * Return the one and only KAlarmApp instance.
 * If it doesn't already exist, it is created first.
 */
-KAlarmApp* KAlarmApp::getInstance()
+KAlarmApp* KAlarmApp::create(int& argc, char** argv)
 {
-    if (!theInstance)
+    if (!mInstance)
     {
-        theInstance = new KAlarmApp;
+        mInstance = new KAlarmApp(argc, argv);
 
         if (mFatalError)
-            theInstance->quitFatal();
+            mInstance->quitFatal();
     }
-    return theInstance;
+    return mInstance;
 }
 
 /******************************************************************************
@@ -242,7 +249,7 @@ bool KAlarmApp::restoreSession()
     // This is necessary since if initCheck() below causes calendars to be updated,
     // the session config created after that points to an invalid file, resulting
     // in no windows being restored followed by a later crash.
-    kapp->sessionConfig();
+    KConfigGui::sessionConfig();
 
     // When KAlarm is session restored, automatically set start-at-login to true.
     Preferences::self()->load();
@@ -311,30 +318,42 @@ bool KAlarmApp::restoreSession()
 }
 
 /******************************************************************************
-* Called for a KUniqueApplication when a new instance of the application is
+* Called for a unique QApplication when a new instance of the application is
 * started.
 */
-int KAlarmApp::newInstance()
+void KAlarmApp::activate(const QStringList& args, const QString& workingDirectory)
 {
+    Q_UNUSED(workingDirectory)
     qCDebug(KALARM_LOG);
     if (mFatalError)
     {
         quitFatal();
-        return 1;
+//        return 1;
+        return;
     }
+
+    // Parse and interpret command line arguments.
+    QCommandLineParser parser;
+    KAboutData::applicationData().setupCommandLine(&parser);
+    parser.setApplicationDescription(QApplication::applicationDisplayName());
+    const QStringList newArgs = CommandOptions::setOptions(&parser, args);
+    parser.process(newArgs);
+    KAboutData::applicationData().processCommandLine(&parser);
+
     ++mActiveCount;
     int exitCode = 0;               // default = success
     static bool firstInstance = true;
     bool dontRedisplay = false;
     if (!firstInstance || !isSessionRestored())
     {
-        CommandOptions options;   // fetch and parse command line options
+        CommandOptions::process();
+        CommandOptions* options = CommandOptions::instance();   // fetch command line options
 #ifndef NDEBUG
-        if (options.simulationTime().isValid())
-            KAlarm::setSimulatedSystemTime(options.simulationTime());
+        if (options->simulationTime().isValid())
+            KAlarm::setSimulatedSystemTime(options->simulationTime());
 #endif
-        CommandOptions::Command command = options.command();
-        if (options.disableAll())
+        CommandOptions::Command command = options->command();
+        if (options->disableAll())
             setAlarmsEnabled(false);   // disable alarm monitoring
         switch (command)
         {
@@ -345,15 +364,15 @@ int KAlarmApp::newInstance()
                 EventFunc function = (command == CommandOptions::TRIGGER_EVENT) ? EVENT_TRIGGER : EVENT_CANCEL;
                 // Open the calendar, don't start processing execution queue yet,
                 // and wait for the Akonadi collection to be populated.
-                if (!initCheck(true, true, options.eventId().collectionId()))
+                if (!initCheck(true, true, options->eventId().collectionId()))
                     exitCode = 1;
                 else
                 {
                     startProcessQueue();      // start processing the execution queue
                     dontRedisplay = true;
-                    if (!handleEvent(options.eventId(), function, true))
+                    if (!handleEvent(options->eventId(), function, true))
                     {
-                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QStringLiteral("--") + options.commandName(), options.eventId().eventId()));
+                        CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not unique", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
                         exitCode = 1;
                     }
                 }
@@ -377,11 +396,11 @@ int KAlarmApp::newInstance()
             case CommandOptions::EDIT:
                 // Edit a specified existing alarm.
                 // Open the calendar and wait for the Akonadi collection to be populated.
-                if (!initCheck(false, true, options.eventId().collectionId()))
+                if (!initCheck(false, true, options->eventId().collectionId()))
                     exitCode = 1;
-                else if (!KAlarm::editAlarmById(options.eventId()))
+                else if (!KAlarm::editAlarmById(options->eventId()))
                 {
-                    CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QStringLiteral("--") + options.commandName(), options.eventId().eventId()));
+                    CommandOptions::printError(xi18nc("@info:shell", "%1: Event <resource>%2</resource> not found, or not editable", QStringLiteral("--") + options->commandName(), options->eventId().eventId()));
                     exitCode = 1;
                 }
                 break;
@@ -396,42 +415,42 @@ int KAlarmApp::newInstance()
                     // Use AutoQPointer to guard against crash on application exit while
                     // the dialogue is still open. It prevents double deletion (both on
                     // deletion of parent, and on return from this function).
-                    AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, options.editType());
-                    if (options.alarmTime().isValid())
-                        editDlg->setTime(options.alarmTime());
-                    if (options.recurrence())
-                        editDlg->setRecurrence(*options.recurrence(), options.subRepeatInterval(), options.subRepeatCount());
-                    else if (options.flags() & KAEvent::REPEAT_AT_LOGIN)
+                    AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, options->editType());
+                    if (options->alarmTime().isValid())
+                        editDlg->setTime(options->alarmTime());
+                    if (options->recurrence())
+                        editDlg->setRecurrence(*options->recurrence(), options->subRepeatInterval(), options->subRepeatCount());
+                    else if (options->flags() & KAEvent::REPEAT_AT_LOGIN)
                         editDlg->setRepeatAtLogin();
-                    editDlg->setAction(options.editAction(), AlarmText(options.text()));
-                    if (options.lateCancel())
-                        editDlg->setLateCancel(options.lateCancel());
-                    if (options.flags() & KAEvent::COPY_KORGANIZER)
+                    editDlg->setAction(options->editAction(), AlarmText(options->text()));
+                    if (options->lateCancel())
+                        editDlg->setLateCancel(options->lateCancel());
+                    if (options->flags() & KAEvent::COPY_KORGANIZER)
                         editDlg->setShowInKOrganizer(true);
-                    switch (options.editType())
+                    switch (options->editType())
                     {
                         case EditAlarmDlg::DISPLAY:
                         {
                             // EditAlarmDlg::create() always returns EditDisplayAlarmDlg for type = DISPLAY
                             EditDisplayAlarmDlg* dlg = qobject_cast<EditDisplayAlarmDlg*>(editDlg);
-                            if (options.fgColour().isValid())
-                                dlg->setFgColour(options.fgColour());
-                            if (options.bgColour().isValid())
-                                dlg->setBgColour(options.bgColour());
-                            if (!options.audioFile().isEmpty()
-                            ||  options.flags() & (KAEvent::BEEP | KAEvent::SPEAK))
+                            if (options->fgColour().isValid())
+                                dlg->setFgColour(options->fgColour());
+                            if (options->bgColour().isValid())
+                                dlg->setBgColour(options->bgColour());
+                            if (!options->audioFile().isEmpty()
+                            ||  options->flags() & (KAEvent::BEEP | KAEvent::SPEAK))
                             {
-                                KAEvent::Flags flags = options.flags();
+                                KAEvent::Flags flags = options->flags();
                                 Preferences::SoundType type = (flags & KAEvent::BEEP) ? Preferences::Sound_Beep
                                                             : (flags & KAEvent::SPEAK) ? Preferences::Sound_Speak
                                                             : Preferences::Sound_File;
-                                dlg->setAudio(type, options.audioFile(), options.audioVolume(), (flags & KAEvent::REPEAT_SOUND ? 0 : -1));
+                                dlg->setAudio(type, options->audioFile(), options->audioVolume(), (flags & KAEvent::REPEAT_SOUND ? 0 : -1));
                             }
-                            if (options.reminderMinutes())
-                                dlg->setReminder(options.reminderMinutes(), (options.flags() & KAEvent::REMINDER_ONCE));
-                            if (options.flags() & KAEvent::CONFIRM_ACK)
+                            if (options->reminderMinutes())
+                                dlg->setReminder(options->reminderMinutes(), (options->flags() & KAEvent::REMINDER_ONCE));
+                            if (options->flags() & KAEvent::CONFIRM_ACK)
                                 dlg->setConfirmAck(true);
-                            if (options.flags() & KAEvent::AUTO_CLOSE)
+                            if (options->flags() & KAEvent::AUTO_CLOSE)
                                 dlg->setAutoClose(true);
                             break;
                         }
@@ -441,12 +460,12 @@ int KAlarmApp::newInstance()
                         {
                             // EditAlarmDlg::create() always returns EditEmailAlarmDlg for type = EMAIL
                             EditEmailAlarmDlg* dlg = qobject_cast<EditEmailAlarmDlg*>(editDlg);
-                            if (options.fromID()
-                            ||  !options.addressees().isEmpty()
-                            ||  !options.subject().isEmpty()
-                            ||  !options.attachments().isEmpty())
-                                dlg->setEmailFields(options.fromID(), options.addressees(), options.subject(), options.attachments());
-                            if (options.flags() & KAEvent::EMAIL_BCC)
+                            if (options->fromID()
+                            ||  !options->addressees().isEmpty()
+                            ||  !options->subject().isEmpty()
+                            ||  !options->attachments().isEmpty())
+                                dlg->setEmailFields(options->fromID(), options->addressees(), options->subject(), options->attachments());
+                            if (options->flags() & KAEvent::EMAIL_BCC)
                                 dlg->setBcc(true);
                             break;
                         }
@@ -454,8 +473,8 @@ int KAlarmApp::newInstance()
                         {
                             // EditAlarmDlg::create() always returns EditAudioAlarmDlg for type = AUDIO
                             EditAudioAlarmDlg* dlg = qobject_cast<EditAudioAlarmDlg*>(editDlg);
-                            if (!options.audioFile().isEmpty()  ||  options.audioVolume() >= 0)
-                                dlg->setAudio(options.audioFile(), options.audioVolume());
+                            if (!options->audioFile().isEmpty()  ||  options->audioVolume() >= 0)
+                                dlg->setAudio(options->audioFile(), options->audioVolume());
                             break;
                         }
                         case EditAlarmDlg::NO_TYPE:
@@ -470,19 +489,19 @@ int KAlarmApp::newInstance()
                 if (!initCheck())
                     exitCode = 1;
                 else
-                    KAlarm::editNewAlarm(options.templateName());
+                    KAlarm::editNewAlarm(options->templateName());
                 break;
 
             case CommandOptions::NEW:
                 // Display a message or file, execute a command, or send an email
                 if (!initCheck()
-                ||  !scheduleEvent(options.editAction(), options.text(), options.alarmTime(),
-                                   options.lateCancel(), options.flags(), options.bgColour(),
-                                   options.fgColour(), QFont(), options.audioFile(), options.audioVolume(),
-                                   options.reminderMinutes(), (options.recurrence() ? *options.recurrence() : KARecurrence()),
-                                   options.subRepeatInterval(), options.subRepeatCount(),
-                                   options.fromID(), options.addressees(),
-                                   options.subject(), options.attachments()))
+                ||  !scheduleEvent(options->editAction(), options->text(), options->alarmTime(),
+                                   options->lateCancel(), options->flags(), options->bgColour(),
+                                   options->fgColour(), QFont(), options->audioFile(), options->audioVolume(),
+                                   options->reminderMinutes(), (options->recurrence() ? *options->recurrence() : KARecurrence()),
+                                   options->subRepeatInterval(), options->subRepeatCount(),
+                                   options->fromID(), options->addressees(),
+                                   options->subject(), options->attachments()))
                     exitCode = 1;
                 break;
 
@@ -499,7 +518,7 @@ int KAlarmApp::newInstance()
             case CommandOptions::NONE:
                 // No arguments - run interactively & display the main window
 #ifndef NDEBUG
-                if (options.simulationTime().isValid()  &&  !firstInstance)
+                if (options->simulationTime().isValid()  &&  !firstInstance)
                     break;   // simulating time: don't open main window if already running
 #endif
                 if (!initCheck())
@@ -553,7 +572,7 @@ int KAlarmApp::newInstance()
     // Check whether the KDE time zone daemon is running (but don't hold up initialisation)
     QTimer::singleShot(0, this, &KAlarmApp::checkKtimezoned);
 
-    return exitCode;
+//    return exitCode;
 }
 
 void KAlarmApp::checkKtimezoned()
@@ -691,16 +710,6 @@ void KAlarmApp::doQuit(QWidget* parent)
 }
 
 /******************************************************************************
-* Called when the session manager is about to close down the application.
-*/
-void KAlarmApp::commitData(QSessionManager& sm)
-{
-    mSessionClosingDown = true;
-    KUniqueApplication::commitData(sm);
-    mSessionClosingDown = false;         // reset in case shutdown is cancelled
-}
-
-/******************************************************************************
 * Display an error message for a fatal error. Prevent further actions since
 * the program state is unsafe.
 */
@@ -710,8 +719,8 @@ void KAlarmApp::displayFatalError(const QString& message)
     {
         mFatalError = 1;
         mFatalMessage = message;
-        if (theInstance)
-            QTimer::singleShot(0, theInstance, &KAlarmApp::quitFatal);
+        if (mInstance)
+            QTimer::singleShot(0, mInstance, &KAlarmApp::quitFatal);
     }
 }
 
@@ -731,8 +740,8 @@ void KAlarmApp::quitFatal()
             mFatalError = 3;
             // fall through to '3'
         case 3:
-            if (theInstance)
-                theInstance->quitIf(1, true);
+            if (mInstance)
+                mInstance->quitIf(1, true);
             break;
     }
     QTimer::singleShot(1000, this, &KAlarmApp::quitFatal);
@@ -2079,7 +2088,7 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
     qCDebug(KALARM_LOG) << command << "," << event.id();
     tempScriptFile.clear();
     QString cmd = Preferences::cmdXTermCommand();
-    cmd.replace(QLatin1String("%t"), KComponentData::mainComponent().aboutData()->programName());     // set the terminal window title
+    cmd.replace(QLatin1String("%t"), KAboutData::applicationData().displayName());  // set the terminal window title
     if (cmd.indexOf(QLatin1String("%C")) >= 0)
     {
         // Execute the command from a temporary script file

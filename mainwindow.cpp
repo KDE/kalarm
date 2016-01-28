@@ -1,7 +1,7 @@
 /*
  *  mainwindow.cpp  -  main application window
  *  Program:  kalarm
- *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 #include "templatepickdlg.h"
 #include "traywindow.h"
 #include "wakedlg.h"
+#include "kalarm_debug.h"
 
 #include <kalarmcal/alarmtext.h>
 #include <kalarmcal/kaevent.h>
@@ -52,10 +53,9 @@
 using namespace KCalCore;
 using namespace KCalUtils;
 #include <KLocale>
-#include <K4AboutData>
+#include <KAboutData>
 #include <ktoolbar.h>
 #include <kactioncollection.h>
-#include <ksystemtrayicon.h>
 #include <kstandardaction.h>
 #include <KLocalizedString>
 #include <KSharedConfig>
@@ -79,7 +79,7 @@ using namespace KCalUtils;
 #include <QMimeDatabase>
 #include <qinputdialog.h>
 #include <QUrl>
-#include "kalarm_debug.h"
+#include <QSystemTrayIcon>
 
 using namespace KAlarmCal;
 
@@ -140,7 +140,7 @@ MainWindow::MainWindow(bool restored)
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowModality(Qt::WindowModal);
     setObjectName(QStringLiteral("MainWin"));    // used by LikeBack
-    setPlainCaption(KComponentData::mainComponent().aboutData()->programName());
+    setPlainCaption(KAboutData::applicationData().displayName());
     KConfigGroup config(KSharedConfig::openConfig(), VIEW_GROUP);
     mShowResources = config.readEntry(SHOW_RESOURCES_KEY, false);
     mShowArchived  = config.readEntry(SHOW_ARCHIVED_KEY, false);
@@ -149,7 +149,7 @@ MainWindow::MainWindow(bool restored)
     if (!restored)
     {
         KConfigGroup wconfig(KSharedConfig::openConfig(), WINDOW_NAME);
-        mResourcesWidth = wconfig.readEntry(QStringLiteral("Splitter %1").arg(KApplication::desktop()->width()), (int)0);
+        mResourcesWidth = wconfig.readEntry(QStringLiteral("Splitter %1").arg(qApp->desktop()->width()), (int)0);
     }
 
     setAcceptDrops(true);         // allow drag-and-drop onto this window
@@ -220,6 +220,7 @@ MainWindow::~MainWindow()
 }
 
 /******************************************************************************
+* Called when the QApplication::saveStateRequest() signal has been emitted.
 * Save settings to the session managed config file, for restoration
 * when the program is restored.
 */
@@ -273,7 +274,7 @@ MainWindow* MainWindow::mainMainWindow()
 bool MainWindow::isTrayParent() const
 {
     TrayWindow* tray = theApp()->trayWindow();
-    if (!tray  ||  !KSystemTrayIcon::isSystemTrayAvailable())
+    if (!tray  ||  !QSystemTrayIcon::isSystemTrayAvailable())
         return false;
     if (tray->assocMainWindow() == this)
         return true;
@@ -367,7 +368,7 @@ void MainWindow::resourcesResized()
         else if (mainMainWindow() == this)
         {
             KConfigGroup config(KSharedConfig::openConfig(), WINDOW_NAME);
-            config.writeEntry(QStringLiteral("Splitter %1").arg(KApplication::desktop()->width()), mResourcesWidth);
+            config.writeEntry(QStringLiteral("Splitter %1").arg(qApp->desktop()->width()), mResourcesWidth);
         }
     }
 }
@@ -1034,7 +1035,7 @@ void MainWindow::showErrorMessage(const QString& msg)
 */
 void MainWindow::updateTrayIconAction()
 {
-    mActionToggleTrayIcon->setEnabled(KSystemTrayIcon::isSystemTrayAvailable());
+    mActionToggleTrayIcon->setEnabled(QSystemTrayIcon::isSystemTrayAvailable());
     mActionToggleTrayIcon->setChecked(theApp()->trayIconDisplayed());
 }
 
@@ -1211,7 +1212,7 @@ void MainWindow::slotQuit()
 */
 void MainWindow::closeEvent(QCloseEvent* ce)
 {
-    if (!theApp()->sessionClosingDown())
+    if (!qApp->isSavingSession())
     {
         // The user (not the session manager) wants to close the window.
         if (isTrayParent())

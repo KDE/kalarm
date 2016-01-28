@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,8 +29,7 @@
 
 #include <kalarmcal/kaevent.h>
 
-#include <kuniqueapplication.h>
-
+#include <QApplication>
 #include <QPointer>
 #include <QQueue>
 #include <QList>
@@ -46,19 +45,18 @@ class ShellProcess;
 using namespace KAlarmCal;
 
 
-class KAlarmApp : public KUniqueApplication
+class KAlarmApp : public QApplication
 {
         Q_OBJECT
     public:
         ~KAlarmApp();
-        int                newInstance() Q_DECL_OVERRIDE;
-        static KAlarmApp*  getInstance();
+        static KAlarmApp*  create(int& argc, char** argv);
+        static KAlarmApp*  instance()                      { return mInstance; }
         bool               checkCalendar()                 { return initCheck(); }
         bool               wantShowInSystemTray() const;
         bool               alarmsEnabled() const           { return mAlarmsEnabled; }
         bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
         bool               restoreSession();
-        bool               sessionClosingDown() const      { return mSessionClosingDown; }
         bool               quitIf()                        { return quitIf(0); }
         void               doQuit(QWidget* parent);
         static void        displayFatalError(const QString& message);
@@ -69,7 +67,6 @@ class KAlarmApp : public KUniqueApplication
         bool               displayTrayIcon(bool show, MainWindow* = Q_NULLPTR);
         bool               trayIconDisplayed() const       { return mTrayWindow; }
         bool               editNewAlarm(MainWindow* = Q_NULLPTR);
-        virtual void       commitData(QSessionManager&);
 
         void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
         ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, const QObject* receiver = Q_NULLPTR, const char* slot = Q_NULLPTR);
@@ -95,6 +92,7 @@ class KAlarmApp : public KUniqueApplication
         QString            dbusList();
 
     public Q_SLOTS:
+        void               activate(const QStringList& args, const QString& workingDirectory);
         void               processQueue();
         void               setAlarmsEnabled(bool);
         void               purgeNewArchivedDefault(const Akonadi::Collection&);
@@ -110,9 +108,6 @@ class KAlarmApp : public KUniqueApplication
         void               audioPlaying(bool);
         void               spreadWindowsToggled(bool);
         void               execAlarmSuccess();
-
-    protected:
-        KAlarmApp();
 
     private:
         typedef Preferences::Feb29Type Feb29Type;   // allow it to be used in SIGNAL mechanism
@@ -170,6 +165,7 @@ class KAlarmApp : public KUniqueApplication
             KAEvent    event;
         };
 
+        KAlarmApp(int& argc, char** argv);
         bool               initialise();
         bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, Akonadi::Collection::Id = -1);
         bool               quitIf(int exitCode, bool force = false);
@@ -191,7 +187,7 @@ class KAlarmApp : public KUniqueApplication
         void               purge(int daysToKeep);
         QStringList        scheduledAlarmList();
 
-        static KAlarmApp*  theInstance;          // the one and only KAlarmApp instance
+        static KAlarmApp*  mInstance;            // the one and only KAlarmApp instance
         static int         mActiveCount;         // number of active instances without main windows
         static int         mFatalError;          // a fatal error has occurred - just wait to exit
         static QString     mFatalMessage;        // fatal error message to output
@@ -213,14 +209,13 @@ class KAlarmApp : public KUniqueApplication
         bool               mCancelRtcWake;       // cancel RTC wake on quitting
         bool               mProcessingQueue;     // a mActionQueue entry is currently being processed
         bool               mNoSystemTray;        // no system tray exists
-        bool               mSessionClosingDown;  // session manager is closing the application
         bool               mOldShowInSystemTray; // showing in system tray was selected
         bool               mAlarmsEnabled;       // alarms are enabled
         bool               mKOrganizerEnabled;   // KOrganizer options are enabled (korganizer exists)
         bool               mWindowFocusBroken;   // keyboard focus transfer between windows doesn't work
 };
 
-inline KAlarmApp* theApp()  { return KAlarmApp::getInstance(); }
+inline KAlarmApp* theApp()  { return KAlarmApp::instance(); }
 
 #endif // KALARMAPP_H
 

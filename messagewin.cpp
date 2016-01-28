@@ -42,7 +42,7 @@
 //QT5 reactivate after porting (activated by config-kdepim.h include in texttospeech.h)
 #define KDEPIM_HAVE_X11 0
 
-#include <K4AboutData>
+#include <KAboutData>
 #include <KLocale>
 #include <kstandardguiitem.h>
 #include <KLocalizedString>
@@ -726,7 +726,7 @@ void MessageWin::initView()
     }
 
     // KAlarm button
-    const QPixmap pixmap = iconLoader.loadIcon(KComponentData::mainComponent().aboutData()->appName(), KIconLoader::MainToolbar);
+    const QPixmap pixmap = iconLoader.loadIcon(KAboutData::applicationData().componentName(), KIconLoader::MainToolbar);
     mKAlarmButton = new PushButton(topWidget);
     mKAlarmButton->setIcon(pixmap);
     connect(mKAlarmButton, &QAbstractButton::clicked, this, &MessageWin::displayMainWindow);
@@ -1960,7 +1960,7 @@ void MessageWin::resizeEvent(QResizeEvent* re)
 void MessageWin::closeEvent(QCloseEvent* ce)
 {
     // Don't prompt or delete the alarm from the display calendar if the session is closing
-    if (!mErrorWindow  &&  !theApp()->sessionClosingDown())
+    if (!mErrorWindow  &&  !qApp->isSavingSession())
     {
         if (mConfirmAck  &&  !mNoCloseConfirm)
         {

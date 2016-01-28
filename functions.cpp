@@ -1574,7 +1574,7 @@ void setDontShowErrors(const EventId& eventId, const QString& tag)
 bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
-    QWidget* desktop = KApplication::desktop();
+    QWidget* desktop = qApp->desktop();
     QSize s = QSize(config.readEntry(QStringLiteral("Width %1").arg(desktop->width()), (int)0),
                     config.readEntry(QStringLiteral("Height %1").arg(desktop->height()), (int)0));
     if (s.isEmpty())
@@ -1592,7 +1592,7 @@ bool readConfigWindowSize(const char* window, QSize& result, int* splitterWidth)
 void writeConfigWindowSize(const char* window, const QSize& size, int splitterWidth)
 {
     KConfigGroup config(KSharedConfig::openConfig(), window);
-    QWidget* desktop = KApplication::desktop();
+    QWidget* desktop = qApp->desktop();
     config.writeEntry(QStringLiteral("Width %1").arg(desktop->width()), size.width());
     config.writeEntry(QStringLiteral("Height %1").arg(desktop->height()), size.height());
     if (splitterWidth >= 0)

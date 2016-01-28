@@ -45,7 +45,7 @@
 #include <kconfig.h>
 #include <KIconLoader>
 #include <KLocale>
-#include <K4AboutData>
+#include <KAboutData>
 
 #include <QMenu>
 #include <QList>
@@ -78,7 +78,7 @@ TrayWindow::TrayWindow(MainWindow* parent)
 {
     qCDebug(KALARM_LOG);
     setToolTipIconByName(QStringLiteral("kalarm"));
-    setToolTipTitle(KAboutData::applicationData().componentName());
+    setToolTipTitle(KAboutData::applicationData().displayName());
     setIconByName(QStringLiteral("kalarm"));
     // Load the disabled icon for use by setIconByPixmap()
     // - setIconByName() doesn't work for this one!

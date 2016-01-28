@@ -1,7 +1,7 @@
 /*
  *  prefdlg.cpp  -  program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -64,8 +64,7 @@ using namespace KHolidays;
 #include <KLocalizedString>
 #include <kshell.h>
 #include <klineedit.h>
-#include <K4AboutData>
-#include <kapplication.h>
+#include <KAboutData>
 #include <kstandardguiitem.h>
 #include <ksystemtimezone.h>
 #include <qicon.h>
@@ -472,7 +471,7 @@ MiscPrefTab::MiscPrefTab(StackedScrollGroup* scrollGroup)
         mXtermType->addButton(radio, mXtermCount);
         if (mXtermFirst < 0)
             mXtermFirst = mXtermCount;   // note the id of the first button
-        cmd.replace(QStringLiteral("%t"), KComponentData::mainComponent().aboutData()->programName());
+        cmd.replace(QStringLiteral("%t"), KAboutData::applicationData().displayName());
         cmd.replace(QStringLiteral("%c"), QStringLiteral("<command>"));
         cmd.replace(QStringLiteral("%w"), QStringLiteral("<command; sleep>"));
         cmd.replace(QStringLiteral("%C"), QStringLiteral("[command]"));

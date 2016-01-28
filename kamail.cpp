@@ -39,7 +39,7 @@
 #include <kmime/kmime_message.h>
 
 #include <KEmailAddress>
-#include <K4AboutData>
+#include <KAboutData>
 #include <KLocale>
 #include <KLocalizedString>
 #include <kfileitem.h>
@@ -249,7 +249,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
             return -1;
         }
 
-        MailTransport::MessageQueueJob* mailjob = new MailTransport::MessageQueueJob(kapp);
+        MailTransport::MessageQueueJob* mailjob = new MailTransport::MessageQueueJob(qApp);
         mailjob->setMessage(message);
         mailjob->transportAttribute().setTransportId(transport->id());
         // MessageQueueJob email addresses must be pure, i.e. without display name. Note
@@ -347,7 +347,7 @@ void initHeaders(KMime::Message& message, KAMail::JobData& data)
     message.setHeader(subject);
 
     KMime::Headers::UserAgent* agent = new KMime::Headers::UserAgent;
-    agent->fromUnicodeString(KComponentData::mainComponent().aboutData()->programName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
+    agent->fromUnicodeString(KAboutData::applicationData().displayName() + QLatin1String("/" KALARM_VERSION), "us-ascii");
     message.setHeader(agent);
 
     KMime::Headers::MessageID* id = new KMime::Headers::MessageID;
