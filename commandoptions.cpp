@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -387,7 +387,7 @@ CommandOptions::CommandOptions()
                 QByteArray optval = mArgs->getOption(onceOnly ? "reminder-once" : "reminder").toLocal8Bit();
                 bool after = (optval[0] == '+');
                 if (after)
-                    optval = optval.right(1);
+                    optval.remove(0, 1);   // it's a reminder after the main alarm
                 if (!convInterval(optval, recurType, mReminderMinutes))
                     setErrorParameter(opt);
                 else if (recurType == KARecurrence::MINUTELY  &&  mAlarmTime.isDateOnly())

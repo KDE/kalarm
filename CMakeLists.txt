@@ -1,13 +1,11 @@
 project(kalarm)
 
 add_definitions(-DQT_STRICT_ITERATORS)
-
-add_definitions( -DQT_NO_CAST_FROM_ASCII )
-add_definitions( -DQT_NO_CAST_TO_ASCII )
+add_definitions(-DQT_NO_CAST_FROM_ASCII)
+add_definitions(-DQT_NO_CAST_TO_ASCII)
+add_definitions(-DQT_MESSAGELOGCONTEXT)
 
 set(CMAKE_AUTOMOC_RELAXED_MODE ON)
-
-
 
 
 include_directories(
@@ -22,7 +20,11 @@ add_subdirectory(autostart)
 add_subdirectory(kconf_update)
 
 set(libkalarm_common_SRCS)
-ecm_qt_declare_logging_category(libkalarm_common_SRCS HEADER kalarm_debug.h IDENTIFIER KALARM_LOG CATEGORY_NAME log_kalarm)
+ecm_qt_declare_logging_category(libkalarm_common_SRCS
+                                HEADER kalarm_debug.h
+                                IDENTIFIER KALARM_LOG
+                                CATEGORY_NAME log_kalarm
+                                DEFAULT_SEVERITY Warning)
 
 ########### next target ###############
 set(libkalarm_SRCS
@@ -139,24 +141,24 @@ add_dependencies(kalarm_bin kmail_xml)
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 
 target_link_libraries(kalarm_bin
-KF5::AlarmCalendar
-KF5::CalendarCore
-KF5::CalendarUtils
-KF5::Contacts
-KF5::Mime
-KF5::IdentityManagement
-KF5::MailTransport
-KF5::AkonadiCore
-KF5::AkonadiMime
-KF5::AkonadiContact
-KF5::Holidays
-KF5::Codecs
-KF5::ConfigCore
-KF5::Libkdepim
-Phonon::phonon4qt5
-KF5::Auth
-KF5::DBusAddons
-KF5::PimCommon
+    KF5::AlarmCalendar
+    KF5::CalendarCore
+    KF5::CalendarUtils
+    KF5::Contacts
+    KF5::Mime
+    KF5::IdentityManagement
+    KF5::MailTransport
+    KF5::AkonadiCore
+    KF5::AkonadiMime
+    KF5::AkonadiContact
+    KF5::Holidays
+    KF5::Codecs
+    KF5::ConfigCore
+    KF5::Libkdepim
+    Phonon::phonon4qt5
+    KF5::Auth
+    KF5::DBusAddons
+    KF5::PimCommon
 )
 
 if (Qt5X11Extras_FOUND)
