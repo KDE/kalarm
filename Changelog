@@ -1,10 +1,11 @@
 KAlarm Change Log
 
-=== Version 2.11.4 --- 27 January 2016 ===
+=== Version 2.11.4 --- 1 February 2016 ===
 - Fix reminder time edit being covered by 'in advance' combo [KDE Bug 357018]
 - Fix crash after editing an alarm, if spell check is enabled [KDE Bug 356048]
 - Fix occasional crash on startup [KDE Bug 358217]
 - Fix specification on command line of a reminder after the alarm.
+- Fix deferral time of date-only recurring alarms [KDE Bug 346060]
 
 === Version 2.11.3 (KDE Applications 15.08.3) --- 4 November 2015 ===
 - Re-enable use of sendmail for email alarms.
@@ -17,10 +18,8 @@ KAlarm Change Log
 - Fix conversion error in sub-repetition value from command line or D-Bus command.
 
 === Version 2.11.0 (KDE Applications 15.08.0) --- 30 July 2015 ===
-- Disable use of sendmail for email alarms, due to removal from Akonadi.
-
-=== Version 2.11.0 --- July 2015 ===
 - Use KDE Frameworks.
+- Disable use of sendmail for email alarms, due to removal from Akonadi.
 
 === Version 2.10.12 (KDE 4.14.2) --- 30 September 2014 ===
 - Make New Audio Alarm dialogue use sound file repeat preference setting.
