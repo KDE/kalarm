@@ -6,6 +6,7 @@ KAlarm Change Log
 - Fix occasional crash on startup [KDE Bug 358217]
 - Fix specification on command line of a reminder after the alarm.
 - Fix deferral time of date-only recurring alarms [KDE Bug 346060]
+- Fix frequency edit field missing from recurrence editor.
 
 === Version 2.11.3 (KDE Applications 15.08.3) --- 4 November 2015 ===
 - Re-enable use of sendmail for email alarms.
