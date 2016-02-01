@@ -2,7 +2,7 @@
  *  kaevent.cpp  -  represents calendar events
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2001-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -944,8 +944,11 @@ void KAEventPrivate::set(const Event::Ptr &event)
         case DEFERRED_REMINDER_ALARM:
         case DEFERRED_ALARM:
             mDeferral = (data.type == DEFERRED_REMINDER_ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
-            mDeferralTime = dateTime;
-            if (!data.timedDeferral) {
+            if (data.timedDeferral) {
+                // Don't use start-of-day time for applying timed deferral alarm offset
+                mDeferralTime = data.alarm->hasStartOffset() ? data.alarm->startOffset().end(mNextMainDateTime.calendarKDateTime()) : data.alarm->time();
+	    } else {
+                mDeferralTime = dateTime;
                 mDeferralTime.setDateOnly(true);
             }
             if (data.alarm->hasStartOffset()) {
