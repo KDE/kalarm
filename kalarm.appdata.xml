@@ -18,6 +18,7 @@
   <name xml:lang="fr">KAlarm</name>
   <name xml:lang="gl">KAlarm</name>
   <name xml:lang="hu">KAlarm</name>
+  <name xml:lang="ia">KAlarm</name>
   <name xml:lang="it">KAlarm</name>
   <name xml:lang="ko">KAlarm</name>
   <name xml:lang="lt">KAlarm</name>
@@ -54,6 +55,7 @@
   <summary xml:lang="fr">Planificateur d'alarme personnel</summary>
   <summary xml:lang="gl">Programador persoal de alarmas</summary>
   <summary xml:lang="hu">Emlékeztetőkezelő</summary>
+  <summary xml:lang="ia">Planificator de alarma personal</summary>
   <summary xml:lang="it">Programmatore degli avvisi personali</summary>
   <summary xml:lang="ko">개인 알람 스케줄러</summary>
   <summary xml:lang="nb">Personlig varslingsplanlegger</summary>
@@ -120,6 +122,7 @@
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
     <p xml:lang="hu">Szolgáltatások:</p>
+    <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="lt">Ypatybės:</p>
