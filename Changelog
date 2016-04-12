@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.11.4 --- 1 February 2016 ===
+=== Version 2.11.5 --- 11 April 2016 ===
+- Fix alarm times out by an hour in daylight savings time (needs kcalcore 16.04) [KDE Bug 336738]
+
+=== Version 2.11.4 (KDE Applications 15.12.3) --- 1 February 2016 ===
 - Fix reminder time edit being covered by 'in advance' combo [KDE Bug 357018]
 - Fix crash after editing an alarm, if spell check is enabled [KDE Bug 356048]
 - Fix occasional crash on startup [KDE Bug 358217]
