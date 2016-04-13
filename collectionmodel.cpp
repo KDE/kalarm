@@ -397,6 +397,7 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
 */
 void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
+    Q_EMIT layoutAboutToBeChanged();
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = mapToSource(index(row, 0, parent));
