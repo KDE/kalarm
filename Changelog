@@ -3,6 +3,7 @@ KAlarm Change Log
 === Version 2.11.5 --- 13 April 2016 ===
 - Fix alarm times out by an hour in daylight savings time (needs kcalcore 16.04) [KDE Bug 336738]
 - Don't show spurious extra calendar after adding new calendar [KDE Bug 361543]
+- Fix crash when adding new calendar [KDE Bugs 361539, 361717]
 
 === Version 2.11.4 (KDE Applications 15.12.3) --- 1 February 2016 ===
 - Fix reminder time edit being covered by 'in advance' combo [KDE Bug 357018]
