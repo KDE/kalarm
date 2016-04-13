@@ -124,6 +124,8 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
     AkonadiModel* model = AkonadiModel::instance();
     const QModelIndex ix = model->index(sourceRow, 0, sourceParent);
     const Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
+    if (collection.remoteId().isEmpty())
+        return false;   // invalidly configured resource
     if (!AgentManager::self()->instance(collection.resource()).isValid())
         return false;
     if (!mWritableOnly  &&  mAlarmType == CalEvent::EMPTY)
