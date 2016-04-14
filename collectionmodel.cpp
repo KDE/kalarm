@@ -124,6 +124,8 @@ bool CollectionMimeTypeFilterModel::filterAcceptsRow(int sourceRow, const QModel
     AkonadiModel* model = AkonadiModel::instance();
     const QModelIndex ix = model->index(sourceRow, 0, sourceParent);
     const Collection collection = model->data(ix, AkonadiModel::CollectionRole).value<Collection>();
+    if (collection.remoteId().isEmpty())
+        return false;   // invalidly configured resource
     if (!AgentManager::self()->instance(collection.resource()).isValid())
         return false;
     if (!mWritableOnly  &&  mAlarmType == CalEvent::EMPTY)
@@ -395,6 +397,7 @@ bool CollectionCheckListModel::setData(const QModelIndex& index, const QVariant&
 */
 void CollectionCheckListModel::slotRowsInserted(const QModelIndex& parent, int start, int end)
 {
+    Q_EMIT layoutAboutToBeChanged();
     for (int row = start;  row <= end;  ++row)
     {
         const QModelIndex ix = mapToSource(index(row, 0, parent));
