@@ -1,11 +1,4 @@
-project(kalarm)
 
-add_definitions(-DQT_STRICT_ITERATORS)
-add_definitions(-DQT_NO_CAST_FROM_ASCII)
-add_definitions(-DQT_NO_CAST_TO_ASCII)
-add_definitions(-DQT_MESSAGELOGCONTEXT)
-
-set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 
 include_directories(
