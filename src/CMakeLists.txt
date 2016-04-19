@@ -112,7 +112,8 @@ ki18n_wrap_ui(kalarm_bin_SRCS
 )
 
 qt5_add_dbus_adaptor(kalarm_bin_SRCS org.kde.kalarm.kalarm.xml dbushandler.h DBusHandler)
-qt5_add_dbus_interfaces(kalarm_bin_SRCS ${CMAKE_BINARY_DIR}/kmail/src/org.kde.kmail.kmail.xml)
+
+qt5_add_dbus_interfaces(kalarm_bin_SRCS kmail/org.kde.kmail.kmail.xml)
 
 kcfg_generate_dbus_interface(${CMAKE_CURRENT_SOURCE_DIR}/kalarmresource.kcfg org.kde.Akonadi.KAlarm.Settings)
 qt5_add_dbus_interface(kalarm_bin_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Akonadi.KAlarm.Settings.xml kalarmsettings KAlarmSettings)
@@ -129,7 +130,7 @@ kconfig_add_kcfg_files(kalarm_bin_SRCS GENERATE_MOC kalarmconfig.kcfgc)
 file(GLOB ICONS_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/appicons/*-apps-kalarm.png")
 ecm_add_app_icon(kalarm_bin_SRCS ICONS ${ICONS_SRCS})
 add_executable(kalarm_bin ${kalarm_bin_SRCS})
-add_dependencies(kalarm_bin kmail_xml)
+add_dependencies(kalarm_bin kmail_interface_xml)
 
 set_target_properties(kalarm_bin PROPERTIES OUTPUT_NAME kalarm)
 

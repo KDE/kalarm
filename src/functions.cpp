@@ -39,7 +39,7 @@
 #include "templatelistview.h"
 #include "templatemenuaction.h"
 
-#include "config-kdepim.h"
+#include "config-kalarm.h"
 
 #include <kalarmcal/identities.h>
 #include <kalarmcal/kaevent.h>

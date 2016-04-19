@@ -18,7 +18,7 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "config-kdepim.h"
+#include "config-kalarm.h"
 #include "kalarm.h"
 #include "messagewin_p.h"
 #include "messagewin.h"
@@ -39,7 +39,7 @@
 #include "synchtimer.h"
 
 #include <kpimtextedit/texttospeech.h>
-//QT5 reactivate after porting (activated by config-kdepim.h include in texttospeech.h)
+//QT5 reactivate after porting (activated by config-kalarm.h include in texttospeech.h)
 #define KDEPIM_HAVE_X11 0
 
 #include <KAboutData>

@@ -74,9 +74,14 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${kalarm_SOURCE_DIR})
     find_package(Xsltproc)
     set_package_properties(Xsltproc PROPERTIES DESCRIPTION "XSLT processor from libxslt" TYPE REQUIRED PURPOSE "Required to generate D-Bus interfaces for all Akonadi resources.")
 
-    include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
+    if (NOT APPLE)
+        find_package(X11)
+    endif()
 endif()
+set(KDEPIM_HAVE_X11 ${X11_FOUND})
+configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kalarm.h )
 
+include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
 add_definitions(-DQT_STRICT_ITERATORS)
 add_definitions(-DQT_NO_CAST_FROM_ASCII)

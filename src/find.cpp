@@ -25,7 +25,7 @@
 #include "eventlistview.h"
 #include "messagebox.h"
 #include "preferences.h"
-#include "config-kdepim.h"
+#include "config-kalarm.h"
 
 #include <kalarmcal/kaevent.h>
 
