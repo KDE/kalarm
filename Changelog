@@ -1,6 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.11.5 --- 13 April 2016 ===
+=== Version 2.11.6 --- 20 April 2016 ===
+- Prevent KAlarm autostarting on non-KDE desktops if start-at-login is disabled.
+
+=== Version 2.11.5 (KDE Applications 16.04.0) --- 13 April 2016 ===
 - Fix alarm times out by an hour in daylight savings time (needs kcalcore 16.04) [KDE Bug 336738]
 - Don't show spurious extra calendar after adding new calendar [KDE Bug 361543]
 - Fix crash when adding new calendar [KDE Bugs 361539, 361717]

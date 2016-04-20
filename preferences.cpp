@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@
 #include <ksystemtimezone.h>
 #include "kalarm_debug.h"
 
+#include <QStandardPaths>
+
 #include <time.h>
 #include <unistd.h>
 
@@ -48,6 +50,8 @@ static const char* GENERAL_SECTION  = "General";
 
 // Config file entry name for temporary use
 static const char* TEMP = "Temp";
+
+static const QString AUTOSTART_FILE(QStringLiteral("kalarm.autostart.desktop"));
 
 // Values for EmailFrom entry
 static const QString FROM_SYS_SETTINGS(QStringLiteral("@SystemSettings"));
@@ -110,6 +114,109 @@ Preferences::Preferences()
 void Preferences::setAskAutoStart(bool yes)
 {
     KAMessageBox::saveDontShowAgainYesNo(ASK_AUTO_START, !yes);
+}
+
+/******************************************************************************
+* Set the NoAutoStart condition.
+* On KDE desktops, the "X-KDE-autostart-condition" entry in
+* kalarm.autostart.desktop references this to determine whether to autostart KAlarm.
+* On non-KDE desktops, the "X-KDE-autostart-condition" entry in
+* kalarm.autostart.desktop doesn't have any effect, so that KAlarm will be
+* autostarted even if it is set not to autostart. Adding a "Hidden" entry to a
+* user-modifiable copy of the file fixes this.
+*/
+void Preferences::setNoAutoStart(bool yes)
+{
+    // Find the existing kalarm.autostart.desktop file, and whether it's writable.
+    bool existsRW = false;
+    QString autostartFile;
+    const QStringList autostartDirs = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
+    Q_FOREACH(const QString& dir, autostartDirs)
+    {
+        const QString file = dir + QStringLiteral("/autostart/") + AUTOSTART_FILE;
+        if (QFile::exists(file))
+        {
+            QFileInfo info(file);
+            if (info.isReadable())
+            {
+                autostartFile = file;
+                existsRW = info.isWritable();
+                break;
+            }
+        }
+    }
+
+    // If the existing file isn't writable, create a writable file and get its path.
+    if (!existsRW)
+    {
+        autostartFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/autostart/") + AUTOSTART_FILE;
+        if (QFile::exists(autostartFile))
+        {
+            QFileInfo info(autostartFile);
+            if (!info.isReadable() || !info.isWritable())
+            {
+                qCWarning(KALARM_LOG) << "Autostart file is not read/write:" << autostartFile;
+                return;
+            }
+        }
+    }
+
+    // Read the writable file and remove any "Hidden=" entries
+    QFile file(autostartFile);
+    if (file.open(QIODevice::ReadWrite))
+    {
+        bool update = false;
+        QStringList lines;
+        QTextStream stream(&file);
+        stream.setCodec("UTF-8");
+        stream.setAutoDetectUnicode(true);
+        if (existsRW)
+        {
+            lines = stream.readAll().split(QLatin1Char('\n'));
+            for (int i = 0; i < lines.size(); ++i)
+            {
+                const QString line = lines[i].trimmed();
+                if (line.isEmpty())
+                {
+                    lines.removeAt(i);
+                    --i;
+                }
+                else if (line.startsWith(QStringLiteral("Hidden=")))
+                {
+                    lines.removeAt(i);
+                    update = true;
+                    --i;
+                }
+            }
+        }
+
+        if (yes)
+        {
+            // If a local kalarm.autostart.desktop file exists, add a "Hidden"
+            // entry to prevent autostart from happening. Otherwise, create a file
+            // with only a "Hidden" entry.
+            lines += QStringLiteral("Hidden=true");
+            update = true;
+        }
+        else
+        {
+            // Remove any local kalarm.autostart.desktop "Hidden" entry, and if
+            // that was the only entry in the file, remove the file.
+            if (lines.isEmpty())
+            {
+                // The file only contains a "Hidden=" entry.
+                if (file.remove())
+                    update = false;
+            }
+        }
+        if (update)
+        {
+            // Write the updated file
+            file.resize(0);
+            stream << lines.join(QLatin1Char('\n')) << "\n";
+        }
+    }
+    self()->setBase_NoAutoStart(yes);
 }
 
 /******************************************************************************
