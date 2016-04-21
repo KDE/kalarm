@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2010 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -48,6 +48,8 @@ class Preferences : public PreferencesBase
         static QString          previousVersion()                { return mPreviousVersion; }
         static Backend          previousBackend()                { return mPreviousBackend; }
         static void             setAskAutoStart(bool yes);
+        static bool             noAutoStart()                    { return self()->base_NoAutoStart(); }
+        static void             setNoAutoStart(bool yes);
         static KTimeZone        timeZone(bool reload = false);
         static void             setTimeZone(const KTimeZone&);
         static const KHolidays::HolidayRegion& holidays();
