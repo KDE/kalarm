@@ -3,6 +3,7 @@ project(kalarm)
 if(${CMAKE_SOURCE_DIR} STREQUAL ${kalarm_SOURCE_DIR})
     cmake_minimum_required(VERSION 2.8.12)
     find_package(ECM 5.20.0 REQUIRED NO_MODULE)
+    set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
     include(ECMInstallIcons)
 
     include(ECMOptionalAddSubdirectory)
@@ -71,6 +72,7 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${kalarm_SOURCE_DIR})
     find_package(KF5CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
     find_package(Boost 1.34.0)
     set_package_properties(Boost PROPERTIES DESCRIPTION "Boost C++ Libraries" URL "http://www.boost.org" TYPE REQUIRED PURPOSE "Boost is required for building most KDEPIM applications")
+    add_definitions(-DQT_USE_QSTRINGBUILDER)
 
 
     if (NOT APPLE)
