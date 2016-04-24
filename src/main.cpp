@@ -43,9 +43,7 @@ int main(int argc, char* argv[])
     KAlarmApp* app = KAlarmApp::create(argc, argv);
     QStringList args = app->arguments();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-#if QT_VERSION >= 0x050600
     app->setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
 
     KLocalizedString::setApplicationDomain("kalarm");
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n("KAlarm"),
