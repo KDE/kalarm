@@ -92,7 +92,7 @@ add_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_definitions(-DQT_NO_CAST_TO_ASCII)
 add_definitions(-DQT_MESSAGELOGCONTEXT)
 
-set(CMAKE_AUTOMOC_RELAXED_MODE ON)
+#set(CMAKE_AUTOMOC_RELAXED_MODE ON)
 
 add_subdirectory(src)
 
