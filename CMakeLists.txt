@@ -17,8 +17,11 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 
+set(PIM_VERSION "5.2.40")
+
 set(KF5_VERSION "5.19.0")
-set(KALARM_LIB_VERSION "5.2.40")
+set(KALARM_LIB_VERSION ${PIM_VERSION})
+
 set(CALENDARCORE_LIB_VERSION "5.2.40")
 set(HOLIDAY_LIB_VERSION "5.2.40")
 set(IDENTITYMANAGER_LIB_VERSION "5.2.40")
