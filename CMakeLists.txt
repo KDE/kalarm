@@ -51,7 +51,7 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${kalarm_SOURCE_DIR})
 
     # Find KF5 package
     find_package(KF5DBusAddons ${KF5_VERSION} CONFIG REQUIRED)
-    find_package(KF5DocTools REQUIRED)
+    find_package(KF5DocTools ${KF5_VERSION} REQUIRED)
     find_package(KF5KCMUtils ${KF5_VERSION} CONFIG REQUIRED)
     find_package(Phonon4Qt5 CONFIG REQUIRED)
 
