@@ -1,0 +1,3 @@
+log_kalarm kalarm (kalarm)
+log_autostart_kalarm kalarm (autostart_kalarm)
+log_koalarmclient kalarm (koalarmclient)
