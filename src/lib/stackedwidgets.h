@@ -48,8 +48,8 @@ class StackedWidgetT : public T
             mGroup->addWidget(this);
         }
         ~StackedWidgetT()  { mGroup->removeWidget(this); }
-        virtual QSize sizeHint() const         { return minimumSizeHint(); }
-        virtual QSize minimumSizeHint() const  { return mGroup->minimumSizeHint(); }
+        QSize sizeHint() const         Q_DECL_OVERRIDE { return minimumSizeHint(); }
+        QSize minimumSizeHint() const  Q_DECL_OVERRIDE { return mGroup->minimumSizeHint(); }
 
     private:
         StackedGroupT<T>* mGroup;
