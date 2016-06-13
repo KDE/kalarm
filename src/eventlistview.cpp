@@ -207,8 +207,9 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
             break;
         case QEvent::MouseButtonRelease:
         {
-            if (!static_cast<EventListView*>(parent())->editOnSingleClick()
-            ||  !KGlobalSettings::singleClick())
+            EventListView* view = static_cast<EventListView*>(parent());
+            if (!view->editOnSingleClick()
+            ||  !view->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, Q_NULLPTR, view))
                 return false;
             QMouseEvent* me = static_cast<QMouseEvent*>(e);
             if (me->button() != Qt::LeftButton  ||  me->buttons()
