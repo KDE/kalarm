@@ -420,7 +420,7 @@ QString KAMail::appendBodyAttachments(KMime::Message& message, JobData& data)
                 }
 
                 // Read the file contents
-                auto downloadJob = KIO::storedGet(url.url());
+                auto downloadJob = KIO::storedGet(url);
                 KJobWidgets::setWindow(downloadJob, MainWindow::mainMainWindow());
                 if (!downloadJob->exec())
                 {

@@ -200,7 +200,7 @@ bool AlarmCalendar::open()
 
         // Check for file's existence, assuming that it does exist when uncertain,
         // to avoid overwriting it.
-        auto statJob = KIO::stat(mUrl.url(), KIO::StatJob::SourceSide, 2);
+        auto statJob = KIO::stat(mUrl, KIO::StatJob::SourceSide, 2);
         KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
         if (!statJob->exec() ||  load() == 0)
         {
@@ -247,7 +247,7 @@ int AlarmCalendar::load()
         QString filename;
         qCDebug(KALARM_LOG) << mUrl.toDisplayString();
         if (!mUrl.isLocalFile()) {
-            auto getJob = KIO::storedGet(mUrl.url());
+            auto getJob = KIO::storedGet(mUrl);
             KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
             if (!getJob->exec())
             {
@@ -348,7 +348,7 @@ bool AlarmCalendar::saveCal(const QString& newFile)
         {
             QFile file(saveFilename);
             file.open(QIODevice::ReadOnly);
-            auto putJob = KIO::storedPut(&file, mICalUrl.url(), -1);
+            auto putJob = KIO::storedPut(&file, mICalUrl, -1);
             KJobWidgets::setWindow(putJob, MainWindow::mainMainWindow());
             if (!putJob->exec())
             {
@@ -622,7 +622,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     }
     else
     {
-        auto getJob = KIO::storedGet(url.url());
+        auto getJob = KIO::storedGet(url);
         KJobWidgets::setWindow(getJob, MainWindow::mainMainWindow());
         if (!getJob->exec())
         {
@@ -744,7 +744,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     if (append  &&  !calStorage->load())
     {
         KIO::UDSEntry uds;
-        auto statJob = KIO::stat(url.url(), KIO::StatJob::SourceSide, 2);
+        auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
         KJobWidgets::setWindow(statJob, parent);
         statJob->exec();
         KFileItem fi(statJob->statResult(), url);
@@ -799,7 +799,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
         {
             QFile qFile(file);
             qFile.open(QIODevice::ReadOnly);
-            auto uploadJob = KIO::storedPut(&qFile, url.url(), -1);
+            auto uploadJob = KIO::storedPut(&qFile, url, -1);
             KJobWidgets::setWindow(uploadJob, parent);
             if (!uploadJob->exec())
             {

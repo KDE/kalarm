@@ -1625,20 +1625,18 @@ FileType fileType(const QMimeType& mimetype)
 */
 FileErr checkFileExists(QString& filename, QUrl& url)
 {
-    url = QUrl();
-    FileErr err = FileErr_None;
-    QString file = filename;
-    QRegExp f(QStringLiteral("^file:/+"));
-    if (f.indexIn(file) >= 0)
-        file = file.mid(f.matchedLength() - 1);
     // Convert any relative file path to absolute
     // (using home directory as the default)
-    int i = file.indexOf(QLatin1Char('/'));
-    if (i > 0  &&  file[i - 1] == QLatin1Char(':'))
+    // This also supports absolute paths and absolute urls
+    url = QUrl::fromUserInput(filename, QDir::homePath());
+    FileErr err = FileErr_None;
+    if (filename.isEmpty())
     {
-        url = file;
-        const QString displayStr = url.toDisplayString();
-        filename = displayStr.mid(displayStr.lastIndexOf(QLatin1Char('/')) + 1);
+        err = FileErr_Blank;    // blank file name
+    }
+    else if (!url.isLocalFile())
+    {
+        filename = url.toDisplayString();
         auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
         KJobWidgets::setWindow(statJob, MainWindow::mainMainWindow());
         if (!statJob->exec())
@@ -1650,15 +1648,11 @@ FileErr checkFileExists(QString& filename, QUrl& url)
             else if (!fi.isReadable())  err = FileErr_Unreadable;
         }
     }
-    else if (file.isEmpty())
-        err = FileErr_Blank;    // blank file name
     else
     {
-        // It's a local file - convert to absolute path & check validity
-        QFileInfo info(file);
-        QDir::setCurrent(QDir::homePath());
-        filename = info.absoluteFilePath();
-        url.setPath(filename);
+        // It's a local file
+        filename = url.toLocalFile();
+        QFileInfo info(filename);
         if      (info.isDir())        err = FileErr_Directory;
         else if (!info.exists())      err = FileErr_Nonexistent;
         else if (!info.isReadable())  err = FileErr_Unreadable;
@@ -1740,7 +1734,7 @@ QString browseFile(const QString& caption, QString& defaultDir, const QString& i
     // Use AutoQPointer to guard against crash on application exit while
     // the dialogue is still open. It prevents double deletion (both on
     // deletion of parent, and on return from this function).
-    AutoQPointer<KFileDialog> fileDlg = new KFileDialog(initialDir, filter, parent);
+    AutoQPointer<KFileDialog> fileDlg = new KFileDialog(QUrl::fromLocalFile(initialDir), filter, parent);
     fileDlg->setOperationMode(mode & KFile::ExistingOnly ? KFileDialog::Opening : KFileDialog::Saving);
     fileDlg->setMode(KFile::File | mode);
     fileDlg->setWindowTitle(caption);

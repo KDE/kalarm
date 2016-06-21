@@ -498,7 +498,6 @@ bool SoundWidget::validate(bool showErrorMessage) const
         return true;
     if (err == KAlarm::FileErr_Nonexistent)
     {
-        mUrl = QUrl::fromUserInput(file, QString(), QUrl::AssumeLocalFile);
         if (mUrl.isLocalFile()  &&  !file.startsWith(QStringLiteral("/")))
         {
             // It's a relative path.
@@ -513,8 +512,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
                     dir = soundDirs[i];
                     if (dir.isReadable() && dir.count() > 2)
                     {
-                        mUrl.setPath(soundDirs[i] + QDir::separator() + file);
-                        QString f = mUrl.toLocalFile();
+                        QString f = soundDirs[i] + QDir::separator() + file;
                         err = KAlarm::checkFileExists(f, mUrl);
                         if (err == KAlarm::FileErr_None)
                             return true;
@@ -528,8 +526,7 @@ bool SoundWidget::validate(bool showErrorMessage) const
             }
             if (err == KAlarm::FileErr_Nonexistent)
             {
-                mUrl.setPath(QDir::homePath() + QDir::separator() + file);
-                QString f = mUrl.toLocalFile();
+                QString f = QDir::homePath() + QDir::separator() + file;
                 err = KAlarm::checkFileExists(f, mUrl);
                 if (err == KAlarm::FileErr_None)
                     return true;
