@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -44,12 +44,12 @@
 #include <kiconeffect.h>
 #include <kconfig.h>
 #include <KIconLoader>
-#include <KLocale>
 #include <KAboutData>
 
 #include <QMenu>
 #include <QList>
 #include <QTimer>
+#include <QLocale>
 #include "kalarm_debug.h"
 
 #include <stdlib.h>
@@ -365,7 +365,7 @@ QString TrayWindow::tooltipAlarmText() const
             // The alarm is due today, or early tomorrow
             if (Preferences::showTooltipAlarmTime())
             {
-                item.text += KLocale::global()->formatTime(item.dateTime.time());
+                item.text += QLocale::system().toString(item.dateTime.time(), QLocale::ShortFormat);
                 item.text += QLatin1Char(' ');
             }
             if (Preferences::showTooltipTimeToAlarm())

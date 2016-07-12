@@ -1,7 +1,7 @@
 /*
  *  alarmtime.cpp  -  conversion functions for alarm times
  *  Program:  kalarm
- *  Copyright © 2007-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@
 
 #include <ksystemtimezone.h>
 #include <KLocalizedString>
-#include <KLocale>
+#include <QLocale>
 #include <QApplication>
 #include "kalarm_debug.h"
 
@@ -40,16 +40,16 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
-    KLocale* locale = KLocale::global();
-    KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
-    QString dateTimeText = locale->formatDate(kdt.date(), KLocale::ShortDate);
+    QLocale locale = QLocale::system();
+    const KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
+    QString dateTimeText = locale.toString(kdt.date(), QLocale::ShortFormat);
     if (!dateTime.isDateOnly()
     ||  (!dateTime.isClockTime()  &&  kdt.utcOffset() != dateTime.utcOffset()))
     {
         // Display the time of day if it's a date/time value, or if it's
         // a date-only value but it's in a different time zone
         dateTimeText += QLatin1Char(' ');
-        QString time = locale->formatTime(kdt.time());
+        const QString time = locale.toString(kdt.time(), QLocale::ShortFormat);
         if (mTimeHourPos == -2)
         {
             // Initialise the position of the hour within the time string, if leading
@@ -57,9 +57,11 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
             mTimeHourPos = -1;     // default = alignment isn't possible/sensible
             if (QApplication::isLeftToRight())    // don't try to align right-to-left languages
             {
-                QString fmt = locale->timeFormat();
-                int i = fmt.indexOf(QRegExp(QLatin1String("%[kl]")));   // check if leading zeroes are omitted
-                if (i >= 0  &&  i == fmt.indexOf(QLatin1Char('%')))   // and whether the hour is first
+                // Check if leading zeroes are omitted, and whether the hour is first
+                const QString fmt = locale.timeFormat(QLocale::ShortFormat);
+                int i = fmt.indexOf(QRegExp(QLatin1String("[hH]")));
+                int first = fmt.indexOf(QRegExp(QLatin1String("[hHmszaA]")));
+                if (i >= 0  &&  i == first  &&  (i == fmt.size() - 1  ||  fmt[i] != fmt[i + 1]))
                     mTimeHourPos = i;             // yes, so need to align
             }
         }
