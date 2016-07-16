@@ -89,6 +89,7 @@ using namespace KHolidays;
 #include <QResizeEvent>
 #include <QStandardPaths>
 #include <QComboBox>
+#include <QLocale>
 #include "kalarm_debug.h"
 
 using namespace KCalCore;
@@ -704,11 +705,11 @@ TimePrefTab::TimePrefTab(StackedScrollGroup* scrollGroup)
     layout->addWidget(daybox);
     QGridLayout* wgrid = new QGridLayout(daybox);
     wgrid->setSpacing(style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    const KLocale* locale = KLocale::global();
+    const QLocale locale;
     for (int i = 0;  i < 7;  ++i)
     {
         int day = KAlarm::localeDayInWeek_to_weekDay(i);
-        mWorkDays[i] = new QCheckBox(KAlarm::weekDayName(day, locale), daybox);
+        mWorkDays[i] = new QCheckBox(locale.dayName(day), daybox);
         wgrid->addWidget(mWorkDays[i], i/3, i%3, Qt::AlignLeft);
     }
     daybox->setWhatsThis(i18nc("@info:whatsthis", "Check the days in the week which are work days"));

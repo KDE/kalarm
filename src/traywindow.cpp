@@ -365,7 +365,7 @@ QString TrayWindow::tooltipAlarmText() const
             // The alarm is due today, or early tomorrow
             if (Preferences::showTooltipAlarmTime())
             {
-                item.text += QLocale::system().toString(item.dateTime.time(), QLocale::ShortFormat);
+                item.text += QLocale().toString(item.dateTime.time(), QLocale::ShortFormat);
                 item.text += QLatin1Char(' ');
             }
             if (Preferences::showTooltipTimeToAlarm())

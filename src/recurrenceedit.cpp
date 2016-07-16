@@ -59,6 +59,7 @@ using namespace KCalCore;
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QtAlgorithms>
+#include <QLocale>
 #include "kalarm_debug.h"
 
 
@@ -609,7 +610,7 @@ void RecurrenceEdit::addException()
     if (insert)
     {
         mExceptionDates.insert(it, date);
-        mExceptionDateList->insertItem(index, new QListWidgetItem(KLocale::global()->formatDate(date)));
+        mExceptionDateList->insertItem(index, new QListWidgetItem(QLocale().toString(date, QLocale::LongFormat)));
         Q_EMIT contentsChanged();
     }
     mExceptionDateList->setCurrentItem(mExceptionDateList->item(index));
@@ -916,7 +917,7 @@ void RecurrenceEdit::set(const KAEvent& event)
     qSort(mExceptionDates);
     mExceptionDateList->clear();
     for (int i = 0, iend = mExceptionDates.count();  i < iend;  ++i)
-        new QListWidgetItem(KLocale::global()->formatDate(mExceptionDates[i]), mExceptionDateList);
+        new QListWidgetItem(QLocale().toString(mExceptionDates[i], QLocale::LongFormat), mExceptionDateList);
     enableExceptionButtons();
     mExcludeHolidays->setChecked(event.holidaysExcluded());
     mWorkTimeOnly->setChecked(event.workTimeOnly());

@@ -85,6 +85,7 @@
 #include <QMutexLocker>
 #include <QMimeDatabase>
 #include <QUrl>
+#include <QLocale>
 #include "kalarm_debug.h"
 
 #include <stdlib.h>
@@ -853,7 +854,7 @@ QString MessageWin::dateTimeToDisplay()
     if (mDateTime.isValid())
     {
         if (mDateTime.isDateOnly())
-            tm = KLocale::global()->formatDate(mDateTime.date(), KLocale::ShortDate);
+            tm = QLocale().toString(mDateTime.date(), QLocale::ShortFormat);
         else
         {
             bool showZone = false;

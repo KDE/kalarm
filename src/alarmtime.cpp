@@ -40,7 +40,7 @@ QString AlarmTime::alarmTimeText(const DateTime& dateTime)
 {
     if (!dateTime.isValid())
         return i18nc("@info Alarm never occurs", "Never");
-    QLocale locale = QLocale::system();
+    QLocale locale;
     const KDateTime kdt = dateTime.effectiveKDateTime().toTimeSpec(Preferences::timeZone());
     QString dateTimeText = locale.toString(kdt.date(), QLocale::ShortFormat);
     if (!dateTime.isDateOnly()
