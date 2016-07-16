@@ -2,7 +2,7 @@
  *  karecurrence.cpp  -  recurrence with special yearly February 29th handling
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2005-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2005-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -30,7 +30,7 @@
 
 #include <QBitArray>
 #include <QDate>
-#include <KLocale>
+#include <QLocale>
 
 using namespace KCalCore;
 namespace KAlarmCal
@@ -1035,7 +1035,7 @@ Duration KARecurrence::longestInterval() const
         int maxgap = 1;
         // Use the user's definition of the week, starting at the
         // day of the week specified by the user's locale.
-        const int weekStart = KLocale::global()->weekStartDay() - 1;  // zero-based
+        const int weekStart = QLocale().firstDayOfWeek() - 1;  // zero-based
         for (int i = 0;  i < 7;  ++i) {
             // Get the standard KDE day-of-week number (zero-based)
             // for the day-of-week number in the user's locale.

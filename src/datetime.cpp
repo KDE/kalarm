@@ -2,7 +2,7 @@
  *  datetime.cpp  -  date/time with start-of-day time for date-only values
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2003,2005-2007,2009-2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2003,2005-2007,2009-2011,2016 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -21,11 +21,11 @@
  */
 #include "datetime.h"
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 #include <ktimezone.h>
 
 #include <QDateTime>
+#include <QLocale>
 
 namespace KAlarmCal
 {
@@ -344,7 +344,9 @@ QString DateTime::toString(const QString &format) const
 
 QString DateTime::formatLocale(bool shortFormat) const
 {
-    return KLocale::global()->formatDateTime(d->mDateTime, (shortFormat ? KLocale::ShortDate : KLocale::LongDate));
+    QLocale::FormatType format = shortFormat ? QLocale::ShortFormat : QLocale::LongFormat;
+    return d->mDateTime.isDateOnly() ? QLocale().toString(d->mDateTime.date(), format)
+                                     : QLocale().toString(d->mDateTime.dateTime(), format);
 }
 
 void DateTime::setStartOfDay(const QTime &sod)

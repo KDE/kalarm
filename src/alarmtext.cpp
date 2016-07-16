@@ -2,7 +2,7 @@
  *  alarmtext.cpp  -  text/email alarm text conversion
  *  This file is part of kalarmcal library, which provides access to KAlarm
  *  calendar data.
- *  Copyright © 2004,2005,2007-2013 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2004,2005,2007-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This library is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Library General Public License as published
@@ -24,11 +24,11 @@
 
 #include "kaevent.h"
 
-#include <klocale.h>
 #include <klocalizedstring.h>
 
 #include <QStringList>
 #include <QDateTime>
+#include <QLocale>
 
 namespace
 {
@@ -164,8 +164,8 @@ void AlarmText::setTodo(const KCalCore::Todo::Ptr &todo)
     if (todo->hasDueDate()) {
         KDateTime due = todo->dtDue(false);   // fetch the next due date
         if (todo->hasStartDate()  &&  todo->dtStart() != due) {
-            d->mTime = todo->allDay() ? KLocale::global()->formatDate(due.date(), KLocale::ShortDate)
-                       : KLocale::global()->formatDateTime(due.dateTime());
+            d->mTime = todo->allDay() ? QLocale().toString(due.date(), QLocale::ShortFormat)
+                                      : QLocale().toString(due.dateTime(), QLocale::ShortFormat);
         }
     }
 }
