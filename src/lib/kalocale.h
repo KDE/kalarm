@@ -21,9 +21,6 @@
 #ifndef LOCALE_H
 #define LOCALE_H
 
-#include <QString>
-class KLocale;
-
 namespace KAlarm
 {
 
@@ -31,9 +28,6 @@ namespace KAlarm
 *   Reply = 1 (Mon) .. 7 (Sun).
 */
 int        localeFirstDayOfWeek();
-
-/** Return the week day name (Monday = 1). */
-QString    weekDayName(int day, const KLocale*);
 
 /* Given a standard KDE day number, return the day number in the week for the user's locale.
  * Standard day number = 1 (Mon) .. 7 (Sun)
@@ -47,7 +41,7 @@ inline int weekDay_to_localeDayInWeek(int weekDay)  { return (weekDay + 7 - loca
  */
 inline int localeDayInWeek_to_weekDay(int index)  { return (index + localeFirstDayOfWeek() - 1) % 7 + 1; }
 
-uint defaultWorkDays();
+unsigned defaultWorkDays();
 
 } // namespace KAlarm
 

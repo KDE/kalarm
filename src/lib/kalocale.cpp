@@ -45,14 +45,6 @@ int localeFirstDayOfWeek()
 }
 
 /******************************************************************************
-* Return the week day name (Monday = 1).
-*/
-QString weekDayName(int day, const KLocale* locale)
-{
-    return QLocale().dayName(day);
-}
-
-/******************************************************************************
 * Return the default work days in the week, as a bit mask.
 * They are determined by the start and end work days in system settings.
 */
