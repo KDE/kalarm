@@ -1,7 +1,7 @@
 /*
  *  timeedit.cpp  -  time-of-day edit widget, with AM/PM shown depending on locale
  *  Program:  kalarm
- *  Copyright © 2001-2006 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2006,2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -24,11 +24,16 @@
 #include "timespinbox.h"
 #include "timeedit.h"
 
-#include <KLocale>
 #include <KLocalizedString>
 
 #include <QHBoxLayout>
+#include <QLocale>
 #include <QTime>
+
+namespace
+{
+bool use12HourClock();
+}
 
 TimeEdit::TimeEdit(QWidget* parent)
     : QWidget(parent),
@@ -41,7 +46,7 @@ TimeEdit::TimeEdit(QWidget* parent)
     layout->setMargin(0);
     layout->setSpacing(0);
     setLayout(layout);
-    bool use12hour = KLocale::global()->use12Clock();
+    bool use12hour = use12HourClock();
     mSpinBox = new TimeSpinBox(!use12hour, this);
     mSpinBox->setFixedSize(mSpinBox->sizeHint());
     connect(mSpinBox, static_cast<void (TimeSpinBox::*)(int)>(&TimeSpinBox::valueChanged), this, &TimeEdit::slotValueChanged);
@@ -212,6 +217,17 @@ void TimeEdit::setAmPmCombo(int am, int pm)
         mPmIndex = -1;
         mAmPm->setCurrentIndex(mAmIndex);
     }
+}
+
+namespace
+{
+
+bool use12HourClock()
+{
+    const QString fmt = QLocale::system().timeFormat();
+    // 'A' or 'a' = show am/pm; 'H' displays 24-hour format regardless.
+    return fmt.contains(QLatin1Char('a'), Qt::CaseInsensitive) && !fmt.contains(QLatin1Char('H'));
+}
 }
 
 // vim: et sw=4:
