@@ -201,12 +201,12 @@ void LineEdit::dropEvent(QDropEvent* e)
 
     if (newEmails.count())
     {
-        newText = newEmails.join(QStringLiteral(","));
+        newText = newEmails.join(QLatin1Char(','));
         int c = cursorPosition();
         if (c > 0)
-            newText.prepend(QStringLiteral(","));
+            newText.prepend(QLatin1Char(','));
         if (c < static_cast<int>(text().length()))
-            newText.append(QStringLiteral(","));
+            newText.append(QLatin1Char(','));
     }
     if (!newText.isEmpty())
         insert(newText);
