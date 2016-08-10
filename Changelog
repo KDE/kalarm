@@ -1,13 +1,15 @@
 KAlarm Change Log
 
-=== Version 2.11.8 --- 13 July 2016 ===
-- Use the default time format in alarm list and system tray status popup.
+=== Version 2.11.8 (KDE Applications 16.08.1) --- 13 July 2016 ===
+- Use the default time format in alarm list and system tray status popup
+  [KAlarm Forum: https://forum.kde.org/viewtopic.php?f=229&t=133788]
 
 === Version 2.11.7 (KDE Applications 16.04.3) --- 11 June 2016 ===
 - Always use current setting for email sender address when sending emails [KDE Bug 359163]
 
 === Version 2.11.6 (KDE Applications 16.04.1) --- 20 April 2016 ===
-- Prevent KAlarm autostarting on non-KDE desktops if start-at-login is disabled.
+- Prevent KAlarm autostarting on non-KDE desktops if start-at-login is disabled
+  [KAlarm Forum: https://forum.kde.org/viewtopic.php?f=229&t=131410]
 
 === Version 2.11.5 (KDE Applications 16.04.0) --- 13 April 2016 ===
 - Fix alarm times out by an hour in daylight savings time (needs kcalcore 16.04) [KDE Bug 336738]
