@@ -122,13 +122,14 @@ void Preferences::setAskAutoStart(bool yes)
 * kalarm.autostart.desktop references this to determine whether to autostart KAlarm.
 * On non-KDE desktops, the "X-KDE-autostart-condition" entry in
 * kalarm.autostart.desktop doesn't have any effect, so that KAlarm will be
-* autostarted even if it is set not to autostart. Adding a "Hidden" entry to a
-* user-modifiable copy of the file fixes this.
+* autostarted even if it is set not to autostart. Adding a "Hidden" entry to,
+* and removing the "OnlyShowIn=KDE" entry from, a user-modifiable copy of the
+* file fixes this.
 */
 void Preferences::setNoAutoStart(bool yes)
 {
     // Find the existing kalarm.autostart.desktop file, and whether it's writable.
-    bool existsRW = false;
+    bool existingRO = true;   // whether the existing file is read-only
     QString autostartFile;
     const QStringList autostartDirs = QStandardPaths::standardLocations(QStandardPaths::GenericConfigLocation);
     Q_FOREACH(const QString& dir, autostartDirs)
@@ -140,82 +141,87 @@ void Preferences::setNoAutoStart(bool yes)
             if (info.isReadable())
             {
                 autostartFile = file;
-                existsRW = info.isWritable();
+                existingRO = !info.isWritable();
                 break;
             }
         }
     }
 
-    // If the existing file isn't writable, create a writable file and get its path.
-    if (!existsRW)
+    // If the existing file isn't writable, find the path to create a writable copy
+    QString autostartFileRW = autostartFile;
+    if (existingRO)
     {
-        autostartFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/autostart/") + AUTOSTART_FILE;
-        if (QFile::exists(autostartFile))
+        autostartFileRW = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + QStringLiteral("/autostart/") + AUTOSTART_FILE;
+        if (autostartFileRW.isEmpty())
         {
-            QFileInfo info(autostartFile);
+            qCWarning(KALARM_LOG) << "No writable autostart file path";
+            return;
+        }
+        if (QFile::exists(autostartFileRW))
+        {
+            QFileInfo info(autostartFileRW);
             if (!info.isReadable() || !info.isWritable())
             {
-                qCWarning(KALARM_LOG) << "Autostart file is not read/write:" << autostartFile;
+                qCWarning(KALARM_LOG) << "Autostart file is not read/write:" << autostartFileRW;
                 return;
             }
         }
     }
 
-    // Read the writable file and remove any "Hidden=" entries
-    QFile file(autostartFile);
-    if (file.open(QIODevice::ReadWrite))
+    // Read the existing file and remove any "Hidden=" and "OnlyShowIn=" entries
+    bool update = false;
+    QStringList lines;
     {
-        bool update = false;
-        QStringList lines;
+        QFile file(autostartFile);
+        if (!file.open(QIODevice::ReadOnly))
+        {
+            qCWarning(KALARM_LOG) << "Error reading autostart file:" << autostartFile;
+            return;
+        }
         QTextStream stream(&file);
         stream.setCodec("UTF-8");
         stream.setAutoDetectUnicode(true);
-        if (existsRW)
+        lines = stream.readAll().split(QLatin1Char('\n'));
+        for (int i = 0; i < lines.size(); ++i)
         {
-            lines = stream.readAll().split(QLatin1Char('\n'));
-            for (int i = 0; i < lines.size(); ++i)
+            const QString line = lines[i].trimmed();
+            if (line.isEmpty())
             {
-                const QString line = lines[i].trimmed();
-                if (line.isEmpty())
-                {
-                    lines.removeAt(i);
-                    --i;
-                }
-                else if (line.startsWith(QStringLiteral("Hidden=")))
-                {
-                    lines.removeAt(i);
-                    update = true;
-                    --i;
-                }
+                lines.removeAt(i);
+                --i;
             }
-        }
-
-        if (yes)
-        {
-            // If a local kalarm.autostart.desktop file exists, add a "Hidden"
-            // entry to prevent autostart from happening. Otherwise, create a file
-            // with only a "Hidden" entry.
-            lines += QStringLiteral("Hidden=true");
-            update = true;
-        }
-        else
-        {
-            // Remove any local kalarm.autostart.desktop "Hidden" entry, and if
-            // that was the only entry in the file, remove the file.
-            if (lines.isEmpty())
+            else if (line.startsWith(QStringLiteral("Hidden="))
+                 ||  line.startsWith(QStringLiteral("OnlyShowIn=")))
             {
-                // The file only contains a "Hidden=" entry.
-                if (file.remove())
-                    update = false;
+                lines.removeAt(i);
+                update = true;
+                --i;
             }
-        }
-        if (update)
-        {
-            // Write the updated file
-            file.resize(0);
-            stream << lines.join(QLatin1Char('\n')) << "\n";
         }
     }
+
+    if (yes)
+    {
+        // Add a "Hidden" entry to the local kalarm.autostart.desktop file, to
+        // prevent autostart from happening.
+        lines += QStringLiteral("Hidden=true");
+        update = true;
+    }
+    if (update)
+    {
+        // Write the updated file
+        QFile file(autostartFileRW);
+        if (!file.open(QIODevice::WriteOnly))
+        {
+            qCWarning(KALARM_LOG) << "Error writing autostart file:" << autostartFileRW;
+            return;
+        }
+        QTextStream stream(&file);
+        stream.setCodec("UTF-8");
+        stream << lines.join(QLatin1Char('\n')) << "\n";
+        qCDebug(KALARM_LOG) << "Written" << autostartFileRW;
+    }
+
     self()->setBase_NoAutoStart(yes);
 }
 

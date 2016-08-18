@@ -130,6 +130,9 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     Preferences::self();    // read KAlarm configuration
     if (!Preferences::noAutoStart())
     {
+        // Strip out any "OnlyShowIn=KDE" list from kalarm.autostart.desktop
+        Preferences::setNoAutoStart(false);
+        // Enable kalarm.autostart.desktop to start KAlarm
         Preferences::setAutoStart(true);
         Preferences::self()->save();
     }

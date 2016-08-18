@@ -128,3 +128,4 @@ Comment[zh_TW]=KAlarm 登入時自動啟動
 Terminal=false
 X-KDE-autostart-phase=2
 X-KDE-autostart-condition=kalarmrc:General:AutoStart:false
+OnlyShowIn=KDE
