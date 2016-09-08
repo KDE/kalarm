@@ -2,6 +2,7 @@
 Name=KAlarm
 Name[af]=K-alarm
 Name[ar]=برنامج المنبه KAlarm
+Name[ast]=KAlarm
 Name[be]=KAlarm
 Name[bg]=Аларма
 Name[br]=KAlarm
@@ -73,6 +74,7 @@ Icon=kalarm
 
 [org.kde.kalarmrtcwake.settimer]
 Name=Set RTC wakeup time
+Name[ast]=Afitar tiempu RTC d'esconsueñu
 Name[bs]=Postavlja vrijeme buđenja sata realnog vremena
 Name[ca]=Defineix l'hora d'activació de l'RTC
 Name[ca@valencia]=Defineix l'hora d'activació de l'RTC
@@ -115,6 +117,7 @@ Name[x-test]=xxSet RTC wakeup timexx
 Name[zh_CN]=设置实时时钟唤醒时间
 Name[zh_TW]=設定 RTC 喚醒時間
 Description=Set RTC wake-from-suspend time
+Description[ast]=Afita'l tiempu RTC d'esconsueñu
 Description[bs]=Postavlja vrijeme buđenja iz suspenzije sata realnog vremena
 Description[ca]=Defineix l'hora d'activació des de suspensió de l'RTC
 Description[ca@valencia]=Defineix l'hora d'activació des de suspensió de l'RTC
