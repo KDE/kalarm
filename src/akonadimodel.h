@@ -34,6 +34,11 @@
 #include <QMap>
 #include <QQueue>
 
+namespace Akonadi
+{
+class ChangeRecorder;
+}
+
 class QPixmap;
 class KJob;
 
