@@ -224,7 +224,7 @@ namespace
 
 bool use12HourClock()
 {
-    const QString fmt = QLocale::system().timeFormat();
+    const QString fmt = QLocale().timeFormat();
     // 'A' or 'a' = show am/pm; 'H' displays 24-hour format regardless.
     return fmt.contains(QLatin1Char('a'), Qt::CaseInsensitive) && !fmt.contains(QLatin1Char('H'));
 }
