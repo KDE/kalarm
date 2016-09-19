@@ -16,7 +16,7 @@ set(libkalarm_common_SRCS)
 ecm_qt_declare_logging_category(libkalarm_common_SRCS
                                 HEADER kalarm_debug.h
                                 IDENTIFIER KALARM_LOG
-                                CATEGORY_NAME log_kalarm
+                                CATEGORY_NAME org.kde.pim.kalarm
                                 DEFAULT_SEVERITY Warning)
 
 ########### next target ###############
