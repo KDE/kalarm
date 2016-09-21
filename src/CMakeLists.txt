@@ -17,7 +17,7 @@ set(kalarmcal_LIB_SRCS
     eventattribute.cpp
 )
 
-ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME log_kalarmcal)
+ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal)
 
 add_library(KF5AlarmCalendar ${kalarmcal_LIB_SRCS})
 
