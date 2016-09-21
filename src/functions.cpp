@@ -1626,14 +1626,17 @@ FileType fileType(const QMimeType& mimetype)
 FileErr checkFileExists(QString& filename, QUrl& url)
 {
     // Convert any relative file path to absolute
-    // (using home directory as the default)
-    // This also supports absolute paths and absolute urls
-    url = QUrl::fromUserInput(filename, QDir::homePath());
+    // (using home directory as the default).
+    // This also supports absolute paths and absolute urls.
     FileErr err = FileErr_None;
+    url = QUrl::fromUserInput(filename, QDir::homePath());
     if (filename.isEmpty())
     {
+        url = QUrl();
         err = FileErr_Blank;    // blank file name
     }
+    else if (!url.isValid())
+        err = FileErr_Nonexistent;
     else if (!url.isLocalFile())
     {
         filename = url.toDisplayString();
