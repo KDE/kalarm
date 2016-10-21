@@ -1,7 +1,7 @@
 /*
  *  calendarmigrator.cpp  -  migrates or creates KAlarm Akonadi resources
  *  Program:  kalarm
- *  Copyright © 2011-2015 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011-2016 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -69,7 +69,7 @@ class CalendarCreator : public QObject
         bool           newCalendar() const    { return mNew; }
         QString        resourceName() const   { return mName; }
         Collection::Id collectionId() const   { return mCollectionId; }
-        QString        path() const           { return mPath; }
+        QString        path() const           { return mUrlString; }
         QString        errorMessage() const   { return mErrorMessage; }
         void           createAgent(const QString& agentType, QObject* parent);
 
@@ -98,7 +98,7 @@ class CalendarCreator : public QObject
         AgentInstance    mAgent;
         CalEvent::Type   mAlarmType;
         ResourceType     mResourceType;
-        QString          mPath;
+        QString          mUrlString;
         QString          mName;
         QColor           mColour;
         QString          mErrorMessage;
@@ -565,7 +565,8 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
         qCCritical(KALARM_LOG) << "Invalid resource type:" << resourceType;
         return;
     }
-    mPath = config.readPathEntry(pathKey, QStringLiteral(""));
+    const QString path = config.readPathEntry(pathKey, QString());
+    mUrlString = QUrl::fromUserInput(path).toString();
     switch (config.readEntry("AlarmType", (int)0))
     {
         case 1:  mAlarmType = CalEvent::ACTIVE;  break;
@@ -580,7 +581,7 @@ CalendarCreator::CalendarCreator(const QString& resourceType, const KConfigGroup
     mReadOnly = config.readEntry("ResourceIsReadOnly", true);
     mEnabled  = config.readEntry("ResourceIsActive", false);
     mStandard = config.readEntry("Standard", false);
-    qCDebug(KALARM_LOG) << "Migrating:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
+    qCDebug(KALARM_LOG) << "Migrating:" << mName << ", type=" << mAlarmType << ", path=" << mUrlString;
 }
 
 /******************************************************************************
@@ -598,8 +599,9 @@ CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, 
       mNew(true),
       mFinished(false)
 {
-    mPath = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + file;
-    qCDebug(KALARM_LOG) << "New:" << mName << ", type=" << mAlarmType << ", path=" << mPath;
+    const QString path = QStandardPaths::writableLocation(QStandardPaths::DataLocation) + QLatin1Char('/') + file;
+    mUrlString = QUrl::fromLocalFile(path).toString();
+    qCDebug(KALARM_LOG) << "New:" << mName << ", type=" << mAlarmType << ", path=" << mUrlString;
 }
 
 /******************************************************************************
@@ -607,7 +609,7 @@ CalendarCreator::CalendarCreator(CalEvent::Type alarmType, const QString& file, 
 */
 void CalendarCreator::createAgent(const QString& agentType, QObject* parent)
 {
-    Q_EMIT creating(mPath);
+    Q_EMIT creating(mUrlString);
     AgentInstanceCreateJob* job = new AgentInstanceCreateJob(agentType, parent);
     connect(job, &KJob::result, this, &CalendarCreator::agentCreated);
     job->start();
@@ -655,7 +657,7 @@ void CalendarCreator::agentCreated(KJob* j)
     }
     mAgent.reconfigure();   // notify the agent that its configuration has been changed
 
-    // Wait for the resource to create its collection.
+    // Wait for the resource to create its collection and synchronize the backend storage.
     ResourceSynchronizationJob* sjob = new ResourceSynchronizationJob(mAgent);
     connect(sjob, &KJob::result, this, &CalendarCreator::resourceSynchronised);
     sjob->start();   // this is required (not an Akonadi::Job)
@@ -672,6 +674,8 @@ void CalendarCreator::resourceSynchronised(KJob* j)
     {
         // Don't give up on error - we can still try to fetch the collection
         qCCritical(KALARM_LOG) << "ResourceSynchronizationJob error: " << j->errorString();
+        // Try again to synchronize the backend storage.
+        mAgent.synchronize();
     }
     mCollectionFetchRetryCount = 0;
     fetchCollection();
@@ -728,7 +732,7 @@ template <class Interface> Interface* CalendarCreator::writeBasicConfig()
     {
         iface->setReadOnly(mReadOnly);
         iface->setDisplayName(mName);
-        iface->setPath(mPath);
+        iface->setPath(mUrlString);    // this must be a full URL, not a local path
         iface->setAlarmTypes(CalEvent::mimeTypes(mAlarmType));
         iface->setUpdateStorageFormat(false);
     }
