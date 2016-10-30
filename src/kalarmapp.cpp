@@ -34,6 +34,7 @@
 #include "mainwindow.h"
 #include "messagebox.h"
 #include "messagewin.h"
+#include "kalarmmigrateapplication.h"
 #include "preferences.h"
 #include "prefdlg.h"
 #include "shellprocess.h"
@@ -117,6 +118,9 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
       mAlarmsEnabled(true)
 {
     qCDebug(KALARM_LOG);
+    KAlarmMigrateApplication migrate;
+    migrate.migrate();
+
 #ifndef NDEBUG
     KAlarm::setTestModeConditions();
 #endif

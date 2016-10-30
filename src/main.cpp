@@ -21,7 +21,6 @@
 #include "kalarm.h"
 
 #include "kalarmapp.h"
-#include "kalarmmigrateapplication.h"
 #include "kalarm_debug.h"
 
 #include <kalarmcal/version.h>
@@ -37,9 +36,6 @@
 
 int main(int argc, char* argv[])
 {
-    KAlarmMigrateApplication migrate;
-    migrate.migrate();
-
     KAlarmApp* app = KAlarmApp::create(argc, argv);
     QStringList args = app->arguments();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
