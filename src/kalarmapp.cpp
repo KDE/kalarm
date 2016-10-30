@@ -122,7 +122,7 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
 #endif
 
     // Make this a unique application.
-    KDBusService* s = new KDBusService(KDBusService::Unique);
+    KDBusService* s = new KDBusService(KDBusService::Unique, this);
     connect(this, &KAlarmApp::aboutToQuit, s, &KDBusService::deleteLater);
     connect(s, &KDBusService::activateRequested, this, &KAlarmApp::activate);
 
@@ -335,11 +335,19 @@ void KAlarmApp::activate(const QStringList& args, const QString& workingDirector
         return;
     }
 
+    // The D-Bus call to activate a subsequent instance of KAlarm may not supply
+    // any arguments, but we need one.
+    if (!args.isEmpty()  &&  mActivateArg0.isEmpty())
+        mActivateArg0 = args[0];
+    QStringList fixedArgs(args);
+    if (args.isEmpty()  &&  !mActivateArg0.isEmpty())
+        fixedArgs << mActivateArg0;
+
     // Parse and interpret command line arguments.
     QCommandLineParser parser;
     KAboutData::applicationData().setupCommandLine(&parser);
     parser.setApplicationDescription(QApplication::applicationDisplayName());
-    const QStringList newArgs = CommandOptions::setOptions(&parser, args);
+    const QStringList newArgs = CommandOptions::setOptions(&parser, fixedArgs);
     parser.process(newArgs);
     KAboutData::applicationData().processCommandLine(&parser);
 

@@ -1,7 +1,8 @@
 KAlarm Change Log
 
-=== Version 2.11.10 (KDE Applications 16.08.3) --- 21 October 2016 ===
+=== Version 2.11.10 (KDE Applications 16.08.3) --- 30 October 2016 ===
 + Fix default calendar files not being created on first run [KDE Bug 362962]
++ Fix crash when a second instance of KAlarm is started [KDE Bug 371628]
 
 === Version 2.11.9 (KDE Applications 16.08.1) --- 18 August 2016 ===
 * Prevent KAlarm autostarting on non-KDE desktops if it has never been run [KDE Bug 366562]

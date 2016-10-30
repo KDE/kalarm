@@ -196,6 +196,7 @@ class KAlarmApp : public QApplication
         bool               mQuitting;            // a forced quit is in progress
         bool               mReadOnly;            // only read-only access to calendars is needed
         bool               mLoginAlarmsDone;     // alarms repeated at login have been processed
+        QString            mActivateArg0;        // activate()'s first arg the first time it was called
         DBusHandler*       mDBusHandler;         // the parent of the main DCOP receiver object
         TrayWindow*        mTrayWindow;          // active system tray icon
         QTimer*            mAlarmTimer;          // activates KAlarm when next alarm is due
