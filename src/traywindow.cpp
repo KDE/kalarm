@@ -281,7 +281,7 @@ void TrayWindow::updateStatus()
             if (event  &&  period > 0)
             {
                 KDateTime dt = event->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
-                qint64 delay = KDateTime::currentLocalDateTime().secsTo_long(dt);
+                qint64 delay = KDateTime::currentLocalDateTime().secsTo(dt);
                 delay -= static_cast<qint64>(period) * 60;   // delay until icon to be shown
                 active = (delay <= 0);
                 if (!active)

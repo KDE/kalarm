@@ -773,7 +773,7 @@ void KAlarmApp::checkNextDueAlarm()
         return;   // there are no alarms pending
     KDateTime nextDt = nextEvent->nextTrigger(KAEvent::ALL_TRIGGER).effectiveKDateTime();
     KDateTime now = KDateTime::currentDateTime(Preferences::timeZone());
-    qint64 interval = now.secsTo_long(nextDt);
+    qint64 interval = now.secsTo(nextDt);
     qCDebug(KALARM_LOG) << "now:" << qPrintable(now.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", next:" << qPrintable(nextDt.toString(QStringLiteral("%Y-%m-%d %H:%M %:Z"))) << ", due:" << interval;
     if (interval <= 0)
     {
