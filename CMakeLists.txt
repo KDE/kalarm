@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8.12)
 project(KAlarmCal)
 
 # ECM setup
-set(KF5_VERSION "5.27.0")
+set(KF5_VERSION "5.28.0")
 find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
