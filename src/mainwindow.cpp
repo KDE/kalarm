@@ -1136,7 +1136,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
     else
     {
         mActionUndo->setEnabled(true);
-        mActionUndo->setText(QStringLiteral("%1 %2").arg(undoText).arg(undo));
+        mActionUndo->setText(QStringLiteral("%1 %2").arg(undoText, undo));
     }
     if (redo.isNull())
     {
@@ -1146,7 +1146,7 @@ void MainWindow::slotUndoStatus(const QString& undo, const QString& redo)
     else
     {
         mActionRedo->setEnabled(true);
-        mActionRedo->setText(QStringLiteral("%1 %2").arg(redoText).arg(redo));
+        mActionRedo->setText(QStringLiteral("%1 %2").arg(redoText, redo));
     }
 }
 

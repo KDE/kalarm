@@ -259,7 +259,6 @@ void EditDisplayAlarmDlg::type_init(QWidget* parent, QVBoxLayout* frameLayout)
 */
 Reminder* EditDisplayAlarmDlg::createReminder(QWidget* parent)
 {
-    static const QString reminderText = i18nc("@info:whatsthis", "Enter how long in advance of or after the main alarm to display a reminder alarm.");
     return new Reminder(i18nc("@info:whatsthis", "Check to additionally display a reminder in advance of or after the main alarm time(s)."),
                         xi18nc("@info:whatsthis", "<para>Enter how long in advance of or after the main alarm to display a reminder alarm.</para><para>%1</para>", TimeSpinBox::shiftWhatsThis()),
                         i18nc("@info:whatsthis", "Select whether the reminder should be triggered before or after the main alarm"),

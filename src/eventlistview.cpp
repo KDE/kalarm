@@ -117,6 +117,7 @@ QVector<KAEvent> EventListView::selectedEvents() const
     if (count)
     {
         const ItemListModel* model = static_cast<const ItemListModel*>(ixlist[0].model());
+        elist.reserve(count);
         for (int i = 0;  i < count;  ++i)
             elist += model->event(ixlist[i]);
     }
