@@ -1588,9 +1588,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffse
         }
         if (display)
             alarm->setCustomProperty(KACalendar::APPNAME, FONT_COLOUR_PROPERTY,
-                                     QStringLiteral("%1;%2;%3").arg(mBgColour.name())
-                                     .arg(mFgColour.name())
-                                     .arg(mUseDefaultFont ? QString() : mFont.toString()));
+                                     QStringLiteral("%1;%2;%3").arg(mBgColour.name(), mFgColour.name(), mUseDefaultFont ? QString() : mFont.toString()));
         break;
     }
     case DEFERRED_ALARM:
@@ -4762,9 +4760,7 @@ void KAEventPrivate::setAudioAlarm(const Alarm::Ptr &alarm) const
     alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
     if (mSoundVolume >= 0)
         alarm->setCustomProperty(KACalendar::APPNAME, VOLUME_PROPERTY,
-                                 QStringLiteral("%1;%2;%3;%4").arg(QString::number(mSoundVolume, 'f', 2))
-                                 .arg(QString::number(mFadeVolume, 'f', 2))
-                                 .arg(mFadeSeconds));
+                                 QStringLiteral("%1;%2;%3;%4").arg(QString::number(mSoundVolume, 'f', 2), QString::number(mFadeVolume, 'f', 2), QString::number(mFadeSeconds)));
 }
 
 /******************************************************************************
