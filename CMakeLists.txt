@@ -18,7 +18,7 @@ include(KDECMakeSettings)
 include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 include(ECMQtDeclareLoggingCategory)
 
-set(PIM_VERSION "5.3.80")
+set(PIM_VERSION "5.4.40")
 
 set(KALARM_LIB_VERSION ${PIM_VERSION})
 
