@@ -1,7 +1,5 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
-  <!ENTITY kappname "&kalarm;">
-  <!ENTITY package "kdepim">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE"><!-- change language only here -->
 ]>
@@ -41,11 +39,11 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2013-05-28</date>
-<releaseinfo>2.10.03 (&kde; 4.11)</releaseinfo>
+<date>2016-12-06</date>
+<releaseinfo>2.11.11 (Applications 16.12)</releaseinfo>
 
 <abstract>
-<para>&kalarm; is a personal alarm message, command and email scheduler for &kde;.</para>
+<para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
 </abstract>
 
 
@@ -84,7 +82,7 @@ message.</para>
 <para>Alarms may also be scheduled from the command line, or via &DBus;
 calls from programs.</para>
 
-<para>When an alarm message is due, it is displayed on each &kde;
+<para>When an alarm message is due, it is displayed on each
 desktop to ensure that you don't miss it. The message window shows the
 time for which the alarm was scheduled. It usually has a defer option
 to ask for the alarm to be displayed again later. An example of an
@@ -730,7 +728,7 @@ you can change if you wish.</para>
 <varlistentry>
 <term>Storage type</term>
 <listitem>
-<para>&kalarm; handles three alarm calendar storage
+<para>&kalarm; handles two alarm calendar storage
 types:</para>
 
 <itemizedlist>
@@ -749,7 +747,7 @@ folder. This storage method has the advantage that in the event of
 file corruption, you should lose only one alarm, not the entire
 calendar.</para>
 </listitem>
-
+<!--FIXME not in kf5?
 <listitem><para>Remote file: Alarms are stored in a single remote
 file in iCalendar format. This storage method allows you to access
 your alarm data remotely no matter where you are, or enables alarm
@@ -773,6 +771,7 @@ and reload configuration parameters, or adopting a policy that users
 other than the alarm calendar's owner should open it in read-only
 mode.</para></warning>
 </listitem>
+-->
 </itemizedlist>
 </listitem>
 </varlistentry>
@@ -909,24 +908,6 @@ retriggered.</para></warning>
 </varlistentry>
 
 <varlistentry>
-<term><menuchoice><guimenuitem>Save</guimenuitem></menuchoice></term>
-<listitem>
-<para>Save any changes to the selected calendar. The calendar is
-updated with any alarm changes which have occurred since the last time
-the calendar was saved or reloaded. This is only useful for remote
-calendars, since local calendars are automatically saved after every
-change. You can configure when and how frequently a remote calendar
-should be automatically saved, using its configuration dialog (via
-the <menuchoice><guimenuitem>Edit...</guimenuitem></menuchoice>
-context menu option).</para>
-
-<warning><para>If you save a remote calendar which is shared with other
-users, any changes which they have made since you last reloaded the
-calendar (automatically or manually) will be lost.</para></warning>
-</listitem>
-</varlistentry>
-
-<varlistentry>
 <term><menuchoice><guimenuitem>Import...</guimenuitem></menuchoice></term>
 <listitem>
 <para>Import alarms from an external calendar file into the selected
@@ -978,9 +959,11 @@ belong to a particular calendar.</para>
 <term><menuchoice><guimenuitem>Clear Color</guimenuitem></menuchoice></term>
 <listitem>
 <para>Clear color highlighting for this calendar's alarms in the alarm
-list.</para>
+list. The option only appears after <guimenuitem>Set Color</guimenuitem> has
+been used on this calendar.</para>
 </listitem>
 </varlistentry>
+
 </variablelist>
 
 </sect3>
@@ -1239,7 +1222,7 @@ displayed. Choose:</para>
 <listitem>
 <para><guilabel>Beep</guilabel> to sound a beep.</para>
 </listitem>
-
+<!--FIXME not in kf5?
 <listitem>
 <para><guilabel>Speak</guilabel> to have the alarm message spoken as
 well as being displayed. This option is only available if you have
@@ -1247,7 +1230,7 @@ well as being displayed. This option is only available if you have
 together with a compatible speech synthesizer, &eg;
 <application>Festival</application>.</para>
 </listitem>
-
+-->
 <listitem>
 <para><guilabel>Sound file</guilabel> to play an audio file. Use the
 button on the right to display the Sound File dialog which lets you
@@ -1485,8 +1468,7 @@ this option inapplicable.</para>
 copy of the email to yourself when the alarm is triggered. The email
 address to which the copy will be sent may be set in the
 <link linkend="preferences-email">Configuration dialog</link>, the
-default being your email address set in the &kde; System
-Settings.</para>
+default being your email address set in the &systemsettings;.</para>
 </listitem>
 </itemizedlist>
 
@@ -1911,7 +1893,7 @@ been made.</para>
 <sect1 id="message-window">
 <title>Alarm Message Window</title>
 
-<para>When an alarm message is due, it is displayed on each &kde;
+<para>When an alarm message is due, it is displayed on each
 desktop and cannot be covered by ordinary windows, to ensure that
 you see it. The message window shows the time for which the alarm was
 scheduled, so that you can see when it popped up if you were away from
@@ -2144,7 +2126,7 @@ icon and main windows.</action></para>
 <sect2>
 <title>Displaying &kalarm; in the System Tray</title>
 
-<para>You must be running the &kde; desktop or another suitable window
+<para>You must be running the &plasma; desktop or another suitable window
 manager in order to display &kalarm; in the system tray.</para>
 
 <para>Select <menuchoice><guimenu>View</guimenu>
@@ -2436,7 +2418,7 @@ This displays the Configuration dialog.</para>
 <itemizedlist>
 <listitem>
 <para><guilabel>Start at login</guilabel>: &kalarm; will be started
-automatically at &kde; session login, ensuring that &kalarm; runs at
+automatically at session login, ensuring that &kalarm; runs at
 all times unless you manually quit.</para>
 
 <warning><para>This option should always be checked unless you intend
@@ -2529,9 +2511,9 @@ quoted before being inserted into the terminal window command.</para>
 </sect1>
 
 <sect1 id="preferences-time">
-<title>Time and Date</title>
+<title>Time &amp; Date</title>
 
-<para>The <guilabel>Time and Date</guilabel> section lets you set
+<para>The <guilabel>Time &amp; Date</guilabel> section lets you set
 options relating to time and date:</para>
 
 <itemizedlist>
@@ -2655,19 +2637,8 @@ client to be used to send email alarms:</para>
 
 <itemizedlist>
 <listitem><para><guilabel>KMail</guilabel>: When an email alarm is
-triggered, the email is sent using &kmail; (which is started first if
-necessary) as follows:</para>
-
-<itemizedlist>
-<listitem><para>If &kmail; is version 1.7 or later, the email is sent
-automatically.</para>
-</listitem>
-
-<listitem><para>If &kmail; is an older version, the email is added to
-&kmail;'s <filename>outbox</filename> folder for later
-transmission.</para>
-</listitem>
-</itemizedlist>
+triggered, the email is sent automatically using &kmail; (which is
+started first if necessary.</para>
 </listitem>
 
 <listitem><para><guilabel>Sendmail</guilabel>: When an email alarm is
@@ -2682,10 +2653,10 @@ agent such as <application>postfix</application> or
 </listitem>
 
 <listitem>
-<para><guilabel>Copy sent emails into &kmail;'s sent-items folder</guilabel>:
+<para><guilabel>Copy sent emails into &kmail;'s "sent-mail" folder</guilabel>:
 Select this option if, every time an email alarm is triggered, you
 want a copy of the transmitted email to be stored in &kmail;'s
-<filename>sent-items</filename> folder.</para>
+<filename>sent-mail</filename> folder.</para>
 
 <note><para>This option is not available when &kmail; is selected as
 the email client, since &kmail; automatically does this.</para></note>
@@ -2712,7 +2683,7 @@ address.</para>
 
 <listitem><para>Select <guilabel>Use address from System
 Settings</guilabel> to use the email address which is configured in the
-&kde; System Settings.</para>
+&systemsettings;.</para>
 </listitem>
 
 <listitem><para>Select <guilabel>Use &kmail; identities</guilabel> to
@@ -2738,7 +2709,7 @@ login name here.</para>
 
 <listitem><para>Select <guilabel>Use address from System
 Settings</guilabel> to use the email address which is configured in the
-&kde; System Settings.</para>
+&systemsettings;.</para>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -3209,6 +3180,7 @@ time.</para>
   <entry>The subject line of the email. <option>--mail</option> must
   be specified with this option.</entry>
 </row>
+<!-- test-set-time time (debug mode)-->
 <row>
   <entry><option>-t</option>, <option>--time
   <replaceable>date/time</replaceable></option></entry>
@@ -3223,6 +3195,11 @@ time.</para>
   <userinput>Europe/London</userinput>), <userinput>UTC</userinput>
   representing the UTC time zone, or <userinput>Clock</userinput> to
   use the local computer clock and ignore time zones.</entry>
+</row>
+<row>
+  <entry><option>--triggerEvent
+  <replaceable>eventID</replaceable></option></entry>
+  <entry>Trigger alarm with the specified event ID.</entry>
 </row>
 <row>
   <entry><option>-v</option>, <option>--volume
@@ -3333,57 +3310,14 @@ including displaying the
 </tgroup>
 </informaltable>
 
-</sect1>
-
-<sect1 id="cmdline-help">
-<title>Help Options</title>
-
-<para>The following help options are common to all
-&kde; programs:</para>
-
-<informaltable>
-<tgroup cols="2">
-<thead>
-<row>
-  <entry>Option</entry>
-  <entry>Description</entry>
-</row>
-</thead>
-<tbody>
-<row>
-  <entry><option>--help</option></entry>
-  <entry>Shows a brief options help text.</entry>
-</row>
-<row>
-  <entry><option>--help-qt</option></entry>
-  <entry>Shows numerous generic &Qt;-specific options.</entry>
-</row>
-<row>
-  <entry><option>--help-kde</option></entry>
-  <entry>Shows numerous generic &kde;-specific options.</entry>
-</row>
-<row>
-  <entry><option>--help-all</option></entry>
-  <entry>Shows all options.</entry>
-</row>
-<row>
-  <entry><option>--author</option></entry>
-  <entry>Shows the names and email addresses of &kalarm; authors.</entry>
-</row>
-<row>
-  <entry><option>-v</option>, <option>--version</option></entry>
-  <entry>Shows the running versions of the &Qt; library , &kde; and
-  &kalarm;.</entry>
-</row>
-<row>
-  <entry><option>--license</option></entry>
-  <entry>Show license information.</entry>
-</row>
-</tbody>
-</tgroup>
-</informaltable>
+<para>See also:</para>
+<simplelist>
+<member>kf5options(7)</member>
+<member>qt5options(7)</member>
+</simplelist>
 
 </sect1>
+
 </chapter>
 
 <chapter id="developers">
@@ -4698,9 +4632,7 @@ QString list()
 <refsect2>
 <title>Return value</title>
 <para>List of alarms, separated by newlines, each in the format
-<returnvalue><replaceable>resource_id</replaceable>:<replaceable>UID</replaceable> <replaceable>time</replaceable> <replaceable>text</replaceable></returnvalue> (if using Akonadi),
-or
-<returnvalue><replaceable>UID</replaceable> <replaceable>time</replaceable> <replaceable>text</replaceable></returnvalue> (if using KResources).</para>
+<returnvalue><replaceable>resource_id</replaceable>:<replaceable>UID</replaceable> <replaceable>time</replaceable> <replaceable>text</replaceable></returnvalue></para>
 </refsect2>
 </refsynopsisdiv>
 
@@ -4783,23 +4715,14 @@ information).</para></note>
 <chapter id="faq">
 <title>Questions and Answers</title>
 
-&reporting.bugs;
-&updating.documentation;
-
 <qandaset id="faqlist">
 <qandaentry>
 <question>
 <para>What configuration files does &kalarm; use?</para>
 </question>
 <answer>
-<para><filename>$KDEHOME/share/config/kalarmrc</filename>
+<para><filename>kalarmrc</filename> in the folder <command>qtpaths --paths GenericConfigLocation</command>
 holds your &kalarm; preferences.</para>
-<para>
-<filename>$KDEHOME/share/config/kresources/alarms/stdrc</filename>
-holds your alarm calendar configuration.</para>
-
-<para>($<envar>KDEHOME</envar> is usually
-<filename class="directory">&tilde;/.kde</filename> or similar.)</para>
 </answer>
 </qandaentry>
 
@@ -4810,27 +4733,25 @@ holds your alarm calendar configuration.</para>
 <answer>
 
 <para>The names of the calendar files which &kalarm; creates the first
-time it is run are as follows (but these may be overridden by entries
-in the <parameter>General</parameter> section of &kalarm;'s preferences
-file):</para>
+time it is run are as follows:</para>
 
 <itemizedlist>
 <listitem>
-<para><filename>$KDEHOME/share/apps/kalarm/calendar.ics</filename>
-holds active alarms (overridable by the
-<parameter>Calendar</parameter> entry).</para>
+<para><filename>kalarm/calendar.ics</filename>
+in the folder <command>qtpaths --paths GenericDataLocation</command>
+holds active alarms.</para>
 </listitem>
 
 <listitem>
-<para><filename>$KDEHOME/share/apps/kalarm/expired.ics</filename>
-holds archived alarms (overridable by the
-<parameter>ExpiredCalendar</parameter> entry).</para>
+<para><filename>kalarm/expired.ics</filename>
+in the folder <command>qtpaths --paths GenericDataLocation</command>
+holds archived alarms.</para>
 </listitem>
 
 <listitem>
-<para><filename>$KDEHOME/share/apps/kalarm/template.ics</filename>
-holds  alarm templates (overridable by the
-<parameter>TemplateCalendar</parameter> entry).</para>
+<para><filename>kalarm/template.ics</filename>
+in the folder <command>qtpaths --paths GenericDataLocation</command>
+holds  alarm templates.</para>
 </listitem>
 </itemizedlist>
 
@@ -4839,8 +4760,8 @@ viewing each calendar's details in the alarm calendars list. The file
 names are stored in the alarm calendar configuration file.</para>
 
 <para>Details of alarms currently being displayed are stored in the
-calendar file
-<filename>$KDEHOME/share/apps/kalarm/displaying.ics</filename>.</para>
+calendar file <filename>kalarm/displaying.ics</filename>
+in the folder <command>qtpaths --paths GenericDataLocation</command>.</para>
 </answer>
 </qandaentry>
 
@@ -4886,6 +4807,19 @@ that the session manager has time to do its job) before starting
 </answer>
 </qandaentry>
 
+<qandaentry>
+<question>
+<para>How can I use &kalarm; on a non-&plasma; desktop?</para>
+</question>
+<answer>
+<para>To run &kalarm; on a non-&plasma; desktop, the main requirement is
+to ensure that &kalarm; is run automatically whenever you log in. More
+detailed instructions are contained in the
+<filename>INSTALL</filename> file which is distributed with
+&kalarm;.</para>
+</answer>
+</qandaentry>
+
 </qandaset>
 </chapter>
 
@@ -4918,109 +4852,6 @@ application, which has been available for &kde; 2 onwards.
 </para>
 
 </chapter>
-
-<appendix id="installation">
-<title>Installation</title>
-
-<sect1 id="getting-kalarm">
-<title>How to Obtain &kalarm;</title>
-
-&install.intro.documentation;
-
-<para>&kalarm; is also available as a standalone package for &kde; 4,
-as well as older versions for &kde; 3 and &kde; 2, from
-<ulink url="http://www.astrojar.org.uk/kalarm">http://www.astrojar.org.uk/kalarm</ulink>
-</para>
-
-</sect1>
-
-<sect1 id="requirements">
-<title>Requirements</title>
-
-<para>&kalarm; requires the standard &kde; libraries to be installed
-(the <filename>kdelibs</filename> and <filename>kdepimlibs</filename>
-packages), plus the <filename>kdebase/runtime</filename> package. To
-compile from source, you also need the relevant library development
-packages, and the &Qt; development package.</para>
-
-<para>The following optional packages enhance &kalarm; at runtime if
-they are installed:</para>
-
-<itemizedlist>
-<listitem><para>&jovie; (from kdeaccessibility package): if installed
-and configured, together with a compatible speech synthesizer package,
-it allows &kalarm; to speak alarm messages when they are
-displayed.</para>
-</listitem>
-</itemizedlist>
-
-<para>You can find a list of changes in the
-<filename>Changelog</filename> file, or at <ulink
-url="http://www.astrojar.org.uk/kalarm">http://www.astrojar.org.uk/kalarm</ulink>.</para>
-</sect1>
-
-<sect1 id="compilation">
-<title>Compilation and Installation</title>
-
-<para>If you cannot obtain a suitable precompiled binary package, you
-need to compile &kalarm; yourself from source files. Get the source
-package file <filename>kdepim-x.x.tar.bz2</filename> or
-<filename>kalarm-x.x.tar.bz2</filename> (or similar), depending on
-whether you want to install &package; or just &kalarm;. Unpack it in a
-new folder using a command similar to
-<userinput><command>tar</command> <option>xvfj
-<replaceable>package.tar.bz2</replaceable></option></userinput>, and
-change to the folder which has been created.</para>
-
-&install.compile.documentation;
-
-<warning><para>If you install &kalarm; into a folder different from
-where &kde; is installed, it will not run correctly unless you make
-its location known to &kde;. To do this, you must prefix the
-<envar>KDEDIRS</envar> environment variable with &kalarm;'s location,
-each time before you start &kde;.</para>
-
-<para>For example, if &kde; is installed in
-<literal>/opt/kde</literal>, <envar>KDEDIRS</envar> might normally
-be set to <literal>/etc/opt/kde:/opt/kde</literal>. If you install
-&kalarm; into <literal>/usr/local</literal>, you would need to set
-<envar>KDEDIRS</envar> to
-<literal>/usr/local:/etc/opt/kde:/opt/kde</literal> before starting
-&kde;.</para></warning>
-
-<para>The standalone version of &kalarm; has a special configuration
-option which allows you to select which languages documentation is to
-be installed for by specifying a language code, or a list of language
-codes, as a parameter to <command>./configure</command>. By default,
-documentation in all available languages is installed. A list of
-documentation languages included in the package, together with their
-codes, is in the <filename>DOC-LANGUAGES</filename> file. For example,
-to install only French and British English documentation:</para>
-
-<para><userinput><command>./configure</command> --enable-doc-language=<replaceable>"fr en_GB"</replaceable></userinput></para>
-
-<para>Note that this option has no effect on which user interface
-translations are installed.</para>
-
-</sect1>
-
-<sect1 id="configuration">
-<title>Configuration</title>
-
-<para>No special configuration is required to set up &kalarm; to run
-on the &kde; desktop. Once you have run &kalarm; for the first time,
-it will start every time you log in, in order to monitor scheduled
-alarms.</para>
-
-<para>To run &kalarm; on a non-&kde; desktop, the main requirement is
-to ensure that &kalarm; is run automatically whenever you log in. More
-detailed instructions are contained in the
-<filename>INSTALL</filename> file which is distributed with
-&kalarm;.</para>
-
-</sect1>
-
-</appendix>
 
 &documentation.index;
 </book>
