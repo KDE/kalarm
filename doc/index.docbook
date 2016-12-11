@@ -2638,7 +2638,7 @@ client to be used to send email alarms:</para>
 <itemizedlist>
 <listitem><para><guilabel>KMail</guilabel>: When an email alarm is
 triggered, the email is sent automatically using &kmail; (which is
-started first if necessary.</para>
+started first if necessary).</para>
 </listitem>
 
 <listitem><para><guilabel>Sendmail</guilabel>: When an email alarm is
