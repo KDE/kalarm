@@ -111,7 +111,9 @@ configure_file(src/config-kalarm.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kala
 
 include_directories(${kalarm_SOURCE_DIR} ${kalarm_BINARY_DIR})
 
-add_definitions(-DQT_STRICT_ITERATORS)
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_definitions(-DQT_STRICT_ITERATORS)
+endif()
 add_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_definitions(-DQT_NO_CAST_TO_ASCII)
 add_definitions(-DQT_MESSAGELOGCONTEXT)
