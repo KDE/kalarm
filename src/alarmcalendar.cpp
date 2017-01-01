@@ -1,7 +1,7 @@
 /*
  *  alarmcalendar.cpp  -  KAlarm calendar file access
  *  Program:  kalarm
- *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -730,11 +730,10 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
                                                &append);
     if (file.isEmpty())
         return false;
-    QUrl url;
-    url.setPath(file);
+    QUrl url = QUrl::fromLocalFile(file);
     if (!url.isValid())
     {
-        qCDebug(KALARM_LOG) << "Invalid URL";
+        qCDebug(KALARM_LOG) << "Invalid URL" << url;
         return false;
     }
     qCDebug(KALARM_LOG) << url.toDisplayString();

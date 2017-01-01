@@ -1,5 +1,10 @@
 KAlarm Change Log
 
+=== Version 2.11.12 (KDE Applications 16.12.1) --- 1 January 2017 ===
++ Fix Export Alarms file save error [KDE Bug 374337]
++ Fix arrow/page up/down keys not working in date edit control
+  (needs KDE Frameworks 5.30) [KDE Bug 373886]
+
 === Version 2.11.11 (KDE Applications 16.12.0) --- 16 November 2016 ===
 + Fix crash on exit [KDE Bug 372223]
 
