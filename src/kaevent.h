@@ -822,7 +822,7 @@ public:
      *                    the type of occurrence which currently limits the deferral.
      *  @return deferral limit, or invalid if no limit
      */
-    DateTime deferralLimit(DeferLimitType *limitType = Q_NULLPTR) const;
+    DateTime deferralLimit(DeferLimitType *limitType = nullptr) const;
 
     /** Return the default deferral interval used in the deferral dialog.
      *  @see setDeferDefaultMinutes()

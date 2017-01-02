@@ -200,7 +200,7 @@ public:
     {
         return mRepetition ? mRepetition.duration().end(mNextMainDateTime.kDateTime()) : mNextMainDateTime;
     }
-    DateTime           deferralLimit(KAEvent::DeferLimitType * = Q_NULLPTR) const;
+    DateTime           deferralLimit(KAEvent::DeferLimitType * = nullptr) const;
     KAEvent::Flags     flags() const;
     bool               isWorkingTime(const KDateTime &) const;
     bool               setRepetition(const Repetition &);
@@ -452,7 +452,7 @@ const QString    KAEventPrivate::CMD_ERROR_POST_VALUE = QStringLiteral("POST");
 const QString    KAEventPrivate::SC = QStringLiteral(";");
 
 QFont                           KAEventPrivate::mDefaultFont;
-const KHolidays::HolidayRegion *KAEventPrivate::mHolidays = Q_NULLPTR;
+const KHolidays::HolidayRegion *KAEventPrivate::mHolidays = nullptr;
 QBitArray                       KAEventPrivate::mWorkDays(7);
 QTime                           KAEventPrivate::mWorkDayStart(9, 0, 0);
 QTime                           KAEventPrivate::mWorkDayEnd(17, 0, 0);
@@ -509,14 +509,14 @@ KAEventPrivate::KAEventPrivate()
     mReminderMinutes(0),
     mReminderActive(NO_REMINDER),
     mRevision(0),
-    mRecurrence(Q_NULLPTR),
+    mRecurrence(nullptr),
     mNextRepeat(0),
     mAlarmCount(0),
     mDeferral(NO_DEFERRAL),
     mChangeCount(0),
     mTriggerChanged(false),
     mLateCancel(0),
-    mExcludeHolidays(Q_NULLPTR),
+    mExcludeHolidays(nullptr),
     mWorkTimeOnly(0),
     mCategory(CalEvent::EMPTY),
     mCompatibility(KACalendar::Current),
@@ -538,7 +538,7 @@ KAEvent::KAEvent(const KDateTime &dt, const QString &message, const QColor &bg, 
 KAEventPrivate::KAEventPrivate(const KDateTime &dt, const QString &message, const QColor &bg, const QColor &fg, const QFont &f,
                                KAEvent::SubAction action, int lateCancel, KAEvent::Flags flags, bool changesPending)
     : mRevision(0),
-      mRecurrence(Q_NULLPTR)
+      mRecurrence(nullptr)
 {
     set(dt, message, bg, fg, f, action, lateCancel, flags, changesPending);
 }
@@ -549,14 +549,14 @@ KAEvent::KAEvent(const Event::Ptr &e)
 }
 
 KAEventPrivate::KAEventPrivate(const Event::Ptr &e)
-    : mRecurrence(Q_NULLPTR)
+    : mRecurrence(nullptr)
 {
     set(e);
 }
 
 KAEventPrivate::KAEventPrivate(const KAEventPrivate &e)
     : QSharedData(e),
-      mRecurrence(Q_NULLPTR)
+      mRecurrence(nullptr)
 {
     copy(e);
 }
@@ -659,7 +659,7 @@ void KAEventPrivate::copy(const KAEventPrivate &event)
     if (event.mRecurrence) {
         mRecurrence = new KARecurrence(*event.mRecurrence);
     } else {
-        mRecurrence = Q_NULLPTR;
+        mRecurrence = nullptr;
     }
 }
 
@@ -702,7 +702,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
     mDeferDefaultMinutes    = 0;
     mLateCancel             = 0;
     mKMailSerialNumber      = 0;
-    mExcludeHolidays        = Q_NULLPTR;
+    mExcludeHolidays        = nullptr;
     mWorkTimeOnly           = 0;
     mChangeCount            = 0;
     mBgColour               = QColor(255, 255, 255);    // missing/invalid colour - return white background
@@ -871,7 +871,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
     mRepeatAtLogin      = false;
     mDisplaying         = false;
     mCommandScript      = false;
-    mExtraActionOptions = Q_NULLPTR;
+    mExtraActionOptions = nullptr;
     mDeferral           = NO_DEFERRAL;
     mSoundVolume        = -1;
     mFadeVolume         = -1;
@@ -1158,7 +1158,7 @@ void KAEventPrivate::set(const KDateTime &dateTime, const QString &text, const Q
     mCommandXterm           = flags & KAEvent::EXEC_IN_XTERM;
     mCommandDisplay         = flags & KAEvent::DISPLAY_COMMAND;
     mCopyToKOrganizer       = flags & KAEvent::COPY_KORGANIZER;
-    mExcludeHolidays        = (flags & KAEvent::EXCL_HOLIDAYS) ? mHolidays : Q_NULLPTR;
+    mExcludeHolidays        = (flags & KAEvent::EXCL_HOLIDAYS) ? mHolidays : nullptr;
     mWorkTimeOnly           = flags & KAEvent::WORK_TIME_ONLY;
     mEmailBcc               = flags & KAEvent::EMAIL_BCC;
     mEnabled                = !(flags & KAEvent::DISABLED);
@@ -1185,7 +1185,7 @@ void KAEventPrivate::set(const KDateTime &dateTime, const QString &text, const Q
     mDisplayingEdit         = false;
     mArchive                = false;
     mReminderAfterTime      = DateTime();
-    mExtraActionOptions     = Q_NULLPTR;
+    mExtraActionOptions     = nullptr;
     mCompatibility          = KACalendar::Current;
     mReadOnly               = false;
     mCommandError           = KAEvent::CMD_NO_ERROR;
@@ -1659,7 +1659,7 @@ KAEvent::Flags KAEvent::flags() const
 
 KAEvent::Flags KAEventPrivate::flags() const
 {
-    KAEvent::Flags result(Q_NULLPTR);
+    KAEvent::Flags result(nullptr);
     if (mBeep) {
         result |= KAEvent::BEEP;
     }
@@ -2585,7 +2585,7 @@ bool KAEvent::repeatAtLogin(bool includeArchived) const
 
 void KAEvent::setExcludeHolidays(bool ex)
 {
-    d->mExcludeHolidays = ex ? KAEventPrivate::mHolidays : Q_NULLPTR;
+    d->mExcludeHolidays = ex ? KAEventPrivate::mHolidays : nullptr;
     // Option only affects recurring alarms
     d->mTriggerChanged = (d->checkRecur() != KARecurrence::NO_RECUR);
 }
@@ -2670,7 +2670,7 @@ void KAEventPrivate::clearRecur()
 {
     if (mRecurrence || mRepetition) {
         delete mRecurrence;
-        mRecurrence = Q_NULLPTR;
+        mRecurrence = nullptr;
         mRepetition.set(0, 0);
         mTriggerChanged = true;
     }
@@ -3940,7 +3940,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             }
             data.cleanText += alarm->programArguments();
         }
-        data.extraActionOptions = Q_NULLPTR;
+        data.extraActionOptions = nullptr;
         if (flags.contains(KAEventPrivate::EXEC_ON_DEFERRAL_FLAG)) {
             data.extraActionOptions |= KAEvent::ExecPreActOnDeferral;
         }

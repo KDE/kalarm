@@ -168,7 +168,7 @@ public:
      *                    if the text returned has been truncated, other than to
      *                    strip a trailing newline, or false otherwise
      */
-    static QString summary(const KAEvent &event, int maxLines = 1, bool *truncated = Q_NULLPTR);
+    static QString summary(const KAEvent &event, int maxLines = 1, bool *truncated = nullptr);
 
     /** Return whether a text is an email, with at least To and From headers.
      *  @param text  text to check

@@ -127,7 +127,7 @@ enum Type {
 Q_DECLARE_FLAGS(Types, Type)
 
 KALARMCAL_EXPORT QString uid(const QString &id, Type);
-KALARMCAL_EXPORT Type    status(const KCalCore::Event::Ptr &, QString *param = Q_NULLPTR);
+KALARMCAL_EXPORT Type    status(const KCalCore::Event::Ptr &, QString *param = nullptr);
 KALARMCAL_EXPORT void    setStatus(const KCalCore::Event::Ptr &, Type, const QString &param = QString());
 
 /** Return the alarm Type for a mime type string. */
