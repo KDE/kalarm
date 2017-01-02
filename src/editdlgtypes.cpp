@@ -1,7 +1,7 @@
 /*
  *  editdlgtypes.cpp  -  dialogs to create or edit alarm or alarm template types
  *  Program:  kalarm
- *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -982,6 +982,13 @@ bool EditCommandAlarmDlg::type_validate(bool trial)
         }
         // Convert the log file to an absolute path
         mCmdLogFileEdit->setText(info.absoluteFilePath());
+    }
+    else if (mCmdOutputGroup->checkedButton() == mCmdExecInTerm)
+    {
+        if (KAMessageBox::warningContinueCancel(this, xi18nc("@info", "<para>No terminal is selected for command alarms.</para>"
+                                                             "<para>Please set it in the <application>KAlarm</application> Configuration dialog.</para>"))
+                != KMessageBox::Continue)
+            return false;
     }
     return true;
 }

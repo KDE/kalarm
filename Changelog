@@ -1,5 +1,8 @@
 KAlarm Change Log
 
+=== Version 2.11.13 (KDE Applications 17.04) --- 2 January 2017 ===
++ Report if terminal for command alarms is not configured.
+
 === Version 2.11.12 (KDE Applications 16.12.1) --- 1 January 2017 ===
 + Fix Export Alarms file save error [KDE Bug 374337]
 + Fix arrow/page up/down keys not working in date edit control

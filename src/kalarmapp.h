@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.h  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -183,7 +183,7 @@ class KAlarmApp : public QApplication
         QString            composeXTermCommand(const QString& command, const KAEvent&, const KAAlarm*,
                                                int flags, QString& tempScriptFile) const;
         QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&) const;
-        void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
+        void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0, const QStringList& errmsgs = QStringList());
         void               purge(int daysToKeep);
         QStringList        scheduledAlarmList();
 

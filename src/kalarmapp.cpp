@@ -1,7 +1,7 @@
 /*
  *  kalarmapp.cpp  -  the KAlarm application object
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -2028,6 +2028,14 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
     {
         // Execute the command in a terminal window.
         cmd = composeXTermCommand(command, event, alarm, flags, tmpXtermFile);
+        if (cmd.isEmpty())
+        {
+            qCWarning(KALARM_LOG) << "Command failed (no terminal selected)";
+            QStringList errors;
+            errors << i18nc("@info", "Failed to execute command\n(no terminal selected for command alarms)");
+            commandErrorMsg(Q_NULLPTR, event, alarm, flags, errors);
+            return Q_NULLPTR;
+        }
     }
     else
     {
@@ -2103,6 +2111,8 @@ QString KAlarmApp::composeXTermCommand(const QString& command, const KAEvent& ev
     qCDebug(KALARM_LOG) << command << "," << event.id();
     tempScriptFile.clear();
     QString cmd = Preferences::cmdXTermCommand();
+    if (cmd.isEmpty())
+        return QString();   // no terminal application is configured
     cmd.replace(QLatin1String("%t"), KAboutData::applicationData().displayName());  // set the terminal window title
     if (cmd.indexOf(QLatin1String("%C")) >= 0)
     {
@@ -2250,11 +2260,11 @@ void KAlarmApp::slotCommandExited(ShellProcess* proc)
 /******************************************************************************
 * Output an error message for a shell command, and record the alarm's error status.
 */
-void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, const KAAlarm* alarm, int flags)
+void KAlarmApp::commandErrorMsg(const ShellProcess* proc, const KAEvent& event, const KAAlarm* alarm, int flags, const QStringList& errors)
 {
     KAEvent::CmdErrType cmderr;
-    QStringList errmsgs;
     QString dontShowAgain;
+    QStringList errmsgs = errors;
     if (flags & ProcData::PRE_ACTION)
     {
         if (event.extraActionOptions() & KAEvent::DontShowPreActError)
