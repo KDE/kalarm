@@ -1622,6 +1622,7 @@ FileType fileType(const QMimeType& mimetype)
 * Check that a file exists and is a plain readable file.
 * Updates 'filename' and 'url' even if an error occurs, since 'filename' may
 * be needed subsequently by showFileErrMessage().
+* 'filename' is in user input format and may be a local file path or URL.
 */
 FileErr checkFileExists(QString& filename, QUrl& url)
 {
@@ -1629,7 +1630,7 @@ FileErr checkFileExists(QString& filename, QUrl& url)
     // (using home directory as the default).
     // This also supports absolute paths and absolute urls.
     FileErr err = FileErr_None;
-    url = QUrl::fromUserInput(filename, QDir::homePath());
+    url = QUrl::fromUserInput(filename, QDir::homePath(), QUrl::AssumeLocalFile);
     if (filename.isEmpty())
     {
         url = QUrl();
@@ -1637,7 +1638,16 @@ FileErr checkFileExists(QString& filename, QUrl& url)
     }
     else if (!url.isValid())
         err = FileErr_Nonexistent;
-    else if (!url.isLocalFile())
+    else if (url.isLocalFile())
+    {
+        // It's a local file
+        filename = url.toLocalFile();
+        QFileInfo info(filename);
+        if      (info.isDir())        err = FileErr_Directory;
+        else if (!info.exists())      err = FileErr_Nonexistent;
+        else if (!info.isReadable())  err = FileErr_Unreadable;
+    }
+    else
     {
         filename = url.toDisplayString();
         auto statJob = KIO::stat(url, KIO::StatJob::SourceSide, 2);
@@ -1650,15 +1660,6 @@ FileErr checkFileExists(QString& filename, QUrl& url)
             if (fi.isDir())             err = FileErr_Directory;
             else if (!fi.isReadable())  err = FileErr_Unreadable;
         }
-    }
-    else
-    {
-        // It's a local file
-        filename = url.toLocalFile();
-        QFileInfo info(filename);
-        if      (info.isDir())        err = FileErr_Directory;
-        else if (!info.exists())      err = FileErr_Nonexistent;
-        else if (!info.isReadable())  err = FileErr_Unreadable;
     }
     return err;
 }
