@@ -149,7 +149,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         /** Return the alarm with the specified unique identifier.
          *  @return the event, or invalid event if no such event exists.
          */
-        KAEvent event(const Akonadi::Item& item) const  { return event(item, QModelIndex(), Q_NULLPTR); }
+        KAEvent event(const Akonadi::Item& item) const  { return event(item, QModelIndex(), nullptr); }
         KAEvent event(Akonadi::Item::Id) const;
         KAEvent event(const QModelIndex&) const;
         using QObject::event;   // prevent warning about hidden virtual method
@@ -289,7 +289,7 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         };
         struct CollTypeData  // data for configuration dialog for collection creation job
         {
-            CollTypeData() : parent(Q_NULLPTR), alarmType(CalEvent::EMPTY) {}
+            CollTypeData() : parent(nullptr), alarmType(CalEvent::EMPTY) {}
             CollTypeData(CalEvent::Type t, QWidget* p) : parent(p), alarmType(t) {}
             QWidget*               parent;
             CalEvent::Type alarmType;

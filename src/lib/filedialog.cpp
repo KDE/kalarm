@@ -30,7 +30,7 @@
 #include "kalarm_debug.h"
 
 
-QCheckBox* FileDialog::mAppendCheck = Q_NULLPTR;
+QCheckBox* FileDialog::mAppendCheck = nullptr;
 
 
 QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWidget* parent, const QString& caption, bool* append)
@@ -52,12 +52,12 @@ QString FileDialog::getSaveFileName(const QUrl& dir, const QString& filter, QWid
     dlg->setConfirmOverwrite(true);
     if (!caption.isEmpty())
         dlg->setWindowTitle(caption);
-    mAppendCheck = Q_NULLPTR;
+    mAppendCheck = nullptr;
     if (append)
     {
         // Show an 'append' option in the dialogue.
         // Note that the dialogue will take ownership of the QCheckBox.
-        mAppendCheck = new QCheckBox(i18nc("@option:check", "Append to existing file"), Q_NULLPTR);
+        mAppendCheck = new QCheckBox(i18nc("@option:check", "Append to existing file"), nullptr);
         connect(mAppendCheck, &QCheckBox::toggled, dlg.data(), &FileDialog::appendToggled);
         dlg->fileWidget()->setCustomWidget(mAppendCheck);
         *append = false;

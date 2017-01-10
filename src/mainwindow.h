@@ -75,7 +75,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         static void        closeAll();
         static MainWindow* toggleWindow(MainWindow*);
         static MainWindow* mainMainWindow();
-        static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? Q_NULLPTR : mWindowList[0]; }
+        static MainWindow* firstWindow()      { return mWindowList.isEmpty() ? nullptr : mWindowList[0]; }
         static int         count()            { return mWindowList.count(); }
 
         static QString i18n_a_ShowAlarmTimes();       // text of 'Show Alarm Times' action, with 'A' shortcut

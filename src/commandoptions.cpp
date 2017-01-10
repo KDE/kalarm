@@ -38,9 +38,9 @@ namespace
 bool convInterval(const QString& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 }
 
-CommandOptions*              CommandOptions::mInstance = Q_NULLPTR;
-QCommandLineParser*          CommandOptions::mParser = Q_NULLPTR;
-QVector<QCommandLineOption*> CommandOptions::mOptions(Num_Options, Q_NULLPTR);
+CommandOptions*              CommandOptions::mInstance = nullptr;
+QCommandLineParser*          CommandOptions::mParser = nullptr;
+QVector<QCommandLineOption*> CommandOptions::mOptions(Num_Options, nullptr);
 QStringList                  CommandOptions::mExecArguments;
 
 void CommandOptions::setError(const QString& error)
@@ -252,7 +252,7 @@ void CommandOptions::process()
 CommandOptions::CommandOptions()
     : mCommand(NONE),
       mEditActionSet(false),
-      mRecurrence(Q_NULLPTR),
+      mRecurrence(nullptr),
       mRepeatCount(0),
       mRepeatInterval(0),
       mLateCancel(0),

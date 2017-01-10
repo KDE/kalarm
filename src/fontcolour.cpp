@@ -37,7 +37,7 @@
 FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontList,
            const QString& frameLabel, bool fg, bool defaultFont, int visibleListSize)
     : QWidget(parent),
-      mFgColourButton(Q_NULLPTR),
+      mFgColourButton(nullptr),
       mReadOnly(false)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
@@ -104,7 +104,7 @@ FontColourChooser::FontColourChooser(QWidget* parent, const QStringList& fontLis
         layout->addWidget(new QWidget(page));    // left adjust the widget
     }
     else
-        mDefaultFont = Q_NULLPTR;
+        mDefaultFont = nullptr;
 
     mFontChooser = new KFontChooser(page, KFontChooser::DisplayFrame, fontList, visibleListSize);
     mFontChooser->installEventFilter(this);   // for read-only mode

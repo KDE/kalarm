@@ -83,7 +83,7 @@ QString RecurrenceEdit::i18n_combo_Yearly()         { return i18nc("@item:inlist
 
 RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
     : QFrame(parent),
-      mRule(Q_NULLPTR),
+      mRule(nullptr),
       mRuleButtonType(INVALID_RECUR),
       mDailyShown(false),
       mWeeklyShown(false),
@@ -326,9 +326,9 @@ RecurrenceEdit::RecurrenceEdit(bool readOnly, QWidget* parent)
 
     if (mReadOnly)
     {
-        mExceptionDateEdit     = Q_NULLPTR;
-        mChangeExceptionButton = Q_NULLPTR;
-        mDeleteExceptionButton = Q_NULLPTR;
+        mExceptionDateEdit     = nullptr;
+        mChangeExceptionButton = nullptr;
+        mDeleteExceptionButton = nullptr;
     }
     else
     {
@@ -404,12 +404,12 @@ void RecurrenceEdit::showMoreOptions(bool more)
 QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& errorMessage) const
 {
     if (mAtLoginButton->isChecked())
-        return Q_NULLPTR;
+        return nullptr;
     const_cast<RecurrenceEdit*>(this)->mCurrStartDateTime = startDateTime;
     if (mEndDateButton->isChecked())
     {
         // N.B. End date/time takes the same time spec as start date/time
-        QWidget* errWidget = Q_NULLPTR;
+        QWidget* errWidget = nullptr;
         bool noTime = !mEndTimeEdit->isEnabled();
         QDate endDate = mEndDateEdit->date();
         if (endDate < startDateTime.date())
@@ -425,7 +425,7 @@ QWidget* RecurrenceEdit::checkData(const KDateTime& startDateTime, QString& erro
         }
     }
     if (!mRule)
-        return Q_NULLPTR;
+        return nullptr;
     return mRule->validate(errorMessage);
 }
 
@@ -440,12 +440,12 @@ void RecurrenceEdit::periodClicked(QAbstractButton* button)
     bool subdaily = (button == mSubDailyButton);
     if (none)
     {
-        mRule = Q_NULLPTR;
+        mRule = nullptr;
         mRuleButtonType = NO_RECUR;
     }
     else if (atLogin)
     {
-        mRule = Q_NULLPTR;
+        mRule = nullptr;
         mRuleButtonType = AT_LOGIN;
         mEndDateButton->setChecked(true);
     }
@@ -1113,7 +1113,7 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
     boxLayout->addWidget(label, 0, Qt::AlignLeft);
     if (time)
     {
-        mIntSpinBox = Q_NULLPTR;
+        mIntSpinBox = nullptr;
         mSpinBox = mTimeSpinBox = new TimeSpinBox(1, 5999, box);
         mTimeSpinBox->setFixedSize(mTimeSpinBox->sizeHint());
         mTimeSpinBox->setReadOnly(readOnly);
@@ -1121,7 +1121,7 @@ Rule::Rule(const QString& freqText, const QString& freqWhatsThis, bool time, boo
     }
     else
     {
-        mTimeSpinBox = Q_NULLPTR;
+        mTimeSpinBox = nullptr;
         mSpinBox = mIntSpinBox = new SpinBox(1, 999, box);
         mIntSpinBox->setFixedSize(mIntSpinBox->sizeHint());
         mIntSpinBox->setReadOnly(readOnly);
@@ -1278,7 +1278,7 @@ QWidget* DayWeekRule::validate(QString& errorMessage)
 {
     for (int i = 0;  i < 7;  ++i)
         if (mDayBox[i]->isChecked())
-            return Q_NULLPTR;
+            return nullptr;
     errorMessage = i18nc("@info", "No day selected");
     return mDayBox[0];
 }
@@ -1677,7 +1677,7 @@ QWidget* YearlyRule::validate(QString& errorMessage)
 {
     for (int i = 0;  i < 12;  ++i)
         if (mMonthBox[i]->isChecked()  &&  mMonthBox[i]->isEnabled())
-            return Q_NULLPTR;
+            return nullptr;
     errorMessage = i18nc("@info", "No month selected");
     return mMonthBox[0];
 }

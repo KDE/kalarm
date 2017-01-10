@@ -61,14 +61,14 @@ class SpinBox2 : public QFrame
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit SpinBox2(QWidget* parent = Q_NULLPTR);
+        explicit SpinBox2(QWidget* parent = nullptr);
         /** Constructor.
          *  @param minValue The minimum value which the spin box can have.
          *  @param maxValue The maximum value which the spin box can have.
          *  @param pageStep The (unshifted) step interval for the left-hand spin buttons.
          *  @param parent The parent object of this widget.
          */
-        SpinBox2(int minValue, int maxValue, int pageStep = 1, QWidget* parent = Q_NULLPTR);
+        SpinBox2(int minValue, int maxValue, int pageStep = 1, QWidget* parent = nullptr);
         /** Sets whether the spin box can be changed by the user.
          *  @param readOnly True to set the widget read-only, false to set it read-write.
          */

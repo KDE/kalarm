@@ -86,7 +86,7 @@ QString KAMail::i18n_NeedFromEmailAddress()
 QString KAMail::i18n_sent_mail()
 { return i18nc("@info KMail folder name: this should be translated the same as in kmail", "sent-mail"); }
 
-KAMail*                              KAMail::mInstance = Q_NULLPTR;   // used only to enable signals/slots to work
+KAMail*                              KAMail::mInstance = nullptr;   // used only to enable signals/slots to work
 QQueue<MailTransport::MessageQueueJob*> KAMail::mJobs;
 QQueue<KAMail::JobData>                 KAMail::mJobData;
 
@@ -153,7 +153,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
     KMime::Message::Ptr message = KMime::Message::Ptr(new KMime::Message);
 
     MailTransport::TransportManager* manager = MailTransport::TransportManager::self();
-    MailTransport::Transport* transport = Q_NULLPTR;
+    MailTransport::Transport* transport = nullptr;
     if (Preferences::emailClient() == Preferences::sendmail)
     {
         qCDebug(KALARM_LOG) << "Sending via sendmail";
@@ -751,7 +751,7 @@ QByteArray autoDetectCharset(const QString& text)
 const QTextCodec* codecForName(const QByteArray& str)
 {
     if (str.isEmpty())
-        return Q_NULLPTR;
+        return nullptr;
     QByteArray codec = str.toLower();
     return KCharsets::charsets()->codecForName(QLatin1String(codec));
 }

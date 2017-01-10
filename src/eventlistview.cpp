@@ -34,7 +34,7 @@
 
 EventListView::EventListView(QWidget* parent)
     : QTreeView(parent),
-      mFind(Q_NULLPTR),
+      mFind(nullptr),
       mEditOnSingleClick(false)
 {
     setRootIsDecorated(false);    // don't show expander icons for child-less items
@@ -210,7 +210,7 @@ bool EventListDelegate::editorEvent(QEvent* e, QAbstractItemModel* model, const 
         {
             EventListView* view = static_cast<EventListView*>(parent());
             if (!view->editOnSingleClick()
-            ||  !view->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, Q_NULLPTR, view))
+            ||  !view->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, nullptr, view))
                 return false;
             QMouseEvent* me = static_cast<QMouseEvent*>(e);
             if (me->button() != Qt::LeftButton  ||  me->buttons()

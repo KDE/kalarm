@@ -48,13 +48,13 @@ class SpinBox : public QSpinBox
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit SpinBox(QWidget* parent = Q_NULLPTR);
+        explicit SpinBox(QWidget* parent = nullptr);
         /** Constructor.
          *  @param minValue The minimum value which the spin box can have.
          *  @param maxValue The maximum value which the spin box can have.
          *  @param parent The parent object of this widget.
          */
-        SpinBox(int minValue, int maxValue, QWidget* parent = Q_NULLPTR);
+        SpinBox(int minValue, int maxValue, QWidget* parent = nullptr);
         /** Returns true if the widget is read only. */
         bool         isReadOnly() const                    { return mReadOnly; }
         /** Sets whether the spin box can be changed by the user.

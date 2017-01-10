@@ -42,7 +42,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         /** Constructor.
          *  @param allowed the alarm types (active/archived/template) included in this model
          */
-        explicit ItemListModel(CalEvent::Types allowed, QObject* parent = Q_NULLPTR);
+        explicit ItemListModel(CalEvent::Types allowed, QObject* parent = nullptr);
 
         CalEvent::Types includedTypes() const  { return mAllowedTypes; }
         KAEvent      event(int row) const;
@@ -93,7 +93,7 @@ class AlarmListModel : public ItemListModel
             ColumnCount
         };
 
-        explicit AlarmListModel(QObject* parent = Q_NULLPTR);
+        explicit AlarmListModel(QObject* parent = nullptr);
         ~AlarmListModel();
 
         /** Return the model containing all active and archived alarms. */
@@ -139,7 +139,7 @@ class TemplateListModel : public ItemListModel
             ColumnCount
         };
 
-        explicit TemplateListModel(QObject* parent = Q_NULLPTR);
+        explicit TemplateListModel(QObject* parent = nullptr);
         ~TemplateListModel();
 
         /** Return the model containing all alarm templates. */

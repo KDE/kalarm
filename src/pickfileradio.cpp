@@ -32,8 +32,8 @@
 PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString& text, ButtonGroup* group, QWidget* parent)
     : RadioButton(text, parent),
       mGroup(group),
-      mEdit(Q_NULLPTR),
-      mLastButton(Q_NULLPTR),
+      mEdit(nullptr),
+      mLastButton(nullptr),
       mRevertButton(false)
 {
     Q_ASSERT(parent);
@@ -43,9 +43,9 @@ PickFileRadio::PickFileRadio(QPushButton* button, LineEdit* edit, const QString&
 PickFileRadio::PickFileRadio(const QString& text, ButtonGroup* group, QWidget* parent)
     : RadioButton(text, parent),
       mGroup(group),
-      mEdit(Q_NULLPTR),
-      mButton(Q_NULLPTR),
-      mLastButton(Q_NULLPTR),
+      mEdit(nullptr),
+      mButton(nullptr),
+      mLastButton(nullptr),
       mRevertButton(false)
 {
     Q_ASSERT(parent);

@@ -41,7 +41,7 @@ class StackedWidgetT : public T
          *  @param parent The parent object of this widget.
          *  @param name The name of this widget.
          */
-        explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = Q_NULLPTR)
+        explicit StackedWidgetT(StackedGroupT<T>* group, QWidget* parent = nullptr)
               : T(parent),
                 mGroup(group)
         {
@@ -68,7 +68,7 @@ template <class T>
 class StackedGroupT : public QObject
 {
     public:
-        explicit StackedGroupT(QObject* parent = Q_NULLPTR) : QObject(parent) {}
+        explicit StackedGroupT(QObject* parent = nullptr) : QObject(parent) {}
         void  addWidget(StackedWidgetT<T>* w)     { mWidgets += w; }
         void  removeWidget(StackedWidgetT<T>* w)  { mWidgets.removeAll(w); }
         virtual QSize minimumSizeHint() const;
@@ -103,7 +103,7 @@ class StackedScrollGroup;
 class StackedScrollWidget : public StackedWidgetT<QScrollArea>
 {
     public:
-        explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = Q_NULLPTR);
+        explicit StackedScrollWidget(StackedScrollGroup* group, QWidget* parent = nullptr);
         QWidget* widget() const  { return viewport()->findChild<QWidget*>(); }
 };
 

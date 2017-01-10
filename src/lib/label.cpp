@@ -25,20 +25,20 @@
 
 Label::Label(QWidget* parent, Qt::WindowFlags f)
     : QLabel(parent, f),
-      mRadioButton(Q_NULLPTR),
-      mFocusWidget(Q_NULLPTR)
+      mRadioButton(nullptr),
+      mFocusWidget(nullptr)
 { }
 
 Label::Label(const QString& text, QWidget* parent, Qt::WindowFlags f)
     : QLabel(text, parent, f),
-      mRadioButton(Q_NULLPTR),
-      mFocusWidget(Q_NULLPTR)
+      mRadioButton(nullptr),
+      mFocusWidget(nullptr)
 { }
 
 Label::Label(QWidget* buddy, const QString& text, QWidget* parent, Qt::WindowFlags f)
     : QLabel(text, parent, f),
-      mRadioButton(Q_NULLPTR),
-      mFocusWidget(Q_NULLPTR)
+      mRadioButton(nullptr),
+      mFocusWidget(nullptr)
 {
     setBuddy(buddy);
 }
@@ -59,15 +59,15 @@ void Label::setBuddy(QWidget* bud)
         while (w->focusProxy())
             w = w->focusProxy();
         if (!qobject_cast<QRadioButton*>(w))
-            w = Q_NULLPTR;
+            w = nullptr;
     }
     if (!w)
     {
         // The buddy widget isn't a radio button
         QLabel::setBuddy(bud);
         delete mFocusWidget;
-        mFocusWidget = Q_NULLPTR;
-        mRadioButton = Q_NULLPTR;
+        mFocusWidget = nullptr;
+        mRadioButton = nullptr;
     }
     else
     {
@@ -83,8 +83,8 @@ void Label::setBuddy(QWidget* bud)
 void Label::buddyDead()
 {
     delete mFocusWidget;
-    mFocusWidget = Q_NULLPTR;
-    mRadioButton = Q_NULLPTR;
+    mFocusWidget = nullptr;
+    mRadioButton = nullptr;
 }
 
 /******************************************************************************

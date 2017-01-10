@@ -44,7 +44,7 @@
  */
 static const char* mirrorStyles[] = {
     "QPlastiqueStyle", "QCleanlooksStyle",
-    Q_NULLPTR    // list terminator
+    nullptr    // list terminator
 };
 static bool isMirrorStyle(const QStyle*);
 static bool isOxygenStyle(const QWidget*);
@@ -710,7 +710,7 @@ QPoint SpinMirror::spinboxPoint(const QPoint& param) const
 bool SpinMirror::event(QEvent* e)
 {
 //qCDebug(KALARM_LOG)<<e->type();
-    QHoverEvent *he = Q_NULLPTR;
+    QHoverEvent *he = nullptr;
     switch (e->type())
     {
         case QEvent::Leave:

@@ -32,7 +32,7 @@ class EmailIdCombo : public KIdentityManagement::IdentityCombo
 {
         Q_OBJECT
     public:
-        explicit EmailIdCombo(KIdentityManagement::IdentityManager*, QWidget* parent = Q_NULLPTR);
+        explicit EmailIdCombo(KIdentityManagement::IdentityManager*, QWidget* parent = nullptr);
         void setReadOnly(bool ro)    { mReadOnly = ro; }
 
     protected:

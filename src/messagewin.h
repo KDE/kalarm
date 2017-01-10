@@ -82,7 +82,7 @@ class MessageWin : public MainWindowBase
         virtual void        show();
         QSize               sizeHint() const Q_DECL_OVERRIDE;
         static int          instanceCount(bool excludeAlwaysHidden = false);
-        static MessageWin*  findEvent(const EventId& eventId, MessageWin* exclude = Q_NULLPTR);
+        static MessageWin*  findEvent(const EventId& eventId, MessageWin* exclude = nullptr);
         static void         redisplayAlarms();
         static void         stopAudio(bool wait = false);
         static bool         isAudioPlaying();

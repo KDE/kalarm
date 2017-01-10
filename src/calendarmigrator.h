@@ -64,7 +64,7 @@ class CalendarMigrator : public QObject
         void calendarCreated(CalendarCreator*);
 
     private:
-        CalendarMigrator(QObject* parent = Q_NULLPTR);
+        CalendarMigrator(QObject* parent = nullptr);
         void migrateOrCreate();
         void createDefaultResources();
         template <class Interface> static bool updateStorageFormat(const Akonadi::AgentInstance&, QString& errorMessage, QObject* parent);

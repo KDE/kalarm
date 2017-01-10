@@ -151,16 +151,16 @@ QString SoundWidget::mDefaultDir;
 
 SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
     : QWidget(parent),
-      mFilePlay(Q_NULLPTR),
-      mRepeatGroupBox(Q_NULLPTR),
-      mRepeatPause(Q_NULLPTR),
-      mPlayer(Q_NULLPTR),
+      mFilePlay(nullptr),
+      mRepeatGroupBox(nullptr),
+      mRepeatPause(nullptr),
+      mPlayer(nullptr),
       mReadOnly(false),
       mEmptyFileAllowed(false)
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
 
-    QLabel* label = Q_NULLPTR;
+    QLabel* label = nullptr;
     if (!showPlay)
     {
         label = new QLabel(i18nc("@label", "Sound file:"), this);
@@ -321,7 +321,7 @@ SoundWidget::SoundWidget(bool showPlay, bool showRepeat, QWidget* parent)
 SoundWidget::~SoundWidget()
 {
     delete mPlayer;   // this stops playing if not already stopped
-    mPlayer = Q_NULLPTR;
+    mPlayer = nullptr;
 }
 
 /******************************************************************************
@@ -473,7 +473,7 @@ void SoundWidget::playSound()
 void SoundWidget::playFinished()
 {
     delete mPlayer;   // this stops playing if not already stopped
-    mPlayer = Q_NULLPTR;
+    mPlayer = nullptr;
     mFilePlay->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
     mFilePlay->setToolTip(i18nc("@info:tooltip", "Test the sound"));
     mFilePlay->setWhatsThis(i18nc("@info:whatsthis", "Play the selected sound file."));

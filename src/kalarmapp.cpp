@@ -91,7 +91,7 @@ static inline int maxLateness(int lateCancel)
 }
 
 
-KAlarmApp*  KAlarmApp::mInstance  = Q_NULLPTR;
+KAlarmApp*  KAlarmApp::mInstance  = nullptr;
 int         KAlarmApp::mActiveCount = 0;
 int         KAlarmApp::mFatalError  = 0;
 QString     KAlarmApp::mFatalMessage;
@@ -108,8 +108,8 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
       mReadOnly(false),
       mLoginAlarmsDone(false),
       mDBusHandler(new DBusHandler()),
-      mTrayWindow(Q_NULLPTR),
-      mAlarmTimer(Q_NULLPTR),
+      mTrayWindow(nullptr),
+      mAlarmTimer(nullptr),
       mArchivedPurgeDays(-1),      // default to not purging
       mPurgeDaysQueued(-1),
       mPendingQuit(false),
@@ -271,7 +271,7 @@ bool KAlarmApp::restoreSession()
         quitIf(1, true);    // error opening the main calendar - quit
         return false;
     }
-    MainWindow* trayParent = Q_NULLPTR;
+    MainWindow* trayParent = nullptr;
     for (int i = 1;  KMainWindow::canBeRestored(i);  ++i)
     {
         const QString type = KMainWindow::classNameOfToplevel(i);
@@ -631,7 +631,7 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
         if (mActiveCount > 0  ||  MessageWin::instanceCount(true))  // ignore always-hidden windows (e.g. audio alarms)
             return false;
         int mwcount = MainWindow::count();
-        MainWindow* mw = mwcount ? MainWindow::firstWindow() : Q_NULLPTR;
+        MainWindow* mw = mwcount ? MainWindow::firstWindow() : nullptr;
         if (mwcount > 1  ||  (mwcount && (!mw->isHidden() || !mw->isTrayParent())))
             return false;
         // There are no windows left except perhaps a main window which is a hidden
@@ -660,11 +660,11 @@ bool KAlarmApp::quitIf(int exitCode, bool force)
     MessageWin::stopAudio(true);
     if (mCancelRtcWake)
     {
-        KAlarm::setRtcWakeTime(0, Q_NULLPTR);
+        KAlarm::setRtcWakeTime(0, nullptr);
         KAlarm::deleteRtcWakeConfig();
     }
     delete mAlarmTimer;     // prevent checking for alarms after deleting calendars
-    mAlarmTimer = Q_NULLPTR;
+    mAlarmTimer = nullptr;
     mInitialised = false;   // prevent processQueue() from running
     AlarmCalendar::terminateCalendars();
     exit(exitCode);
@@ -751,7 +751,7 @@ void KAlarmApp::quitFatal()
             return;
         case 1:
             mFatalError = 2;
-            KMessageBox::error(Q_NULLPTR, mFatalMessage);   // this is an application modal window
+            KMessageBox::error(nullptr, mFatalMessage);   // this is an application modal window
             mFatalError = 3;
             // fall through to '3'
         case 3:
@@ -891,7 +891,7 @@ void KAlarmApp::processQueue()
                     execAlarm(entry.event, entry.event.firstAlarm(), false);
                     break;
                 case EVENT_HANDLE:
-                    KAlarm::addEvent(entry.event, Q_NULLPTR, Q_NULLPTR, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
+                    KAlarm::addEvent(entry.event, nullptr, nullptr, KAlarm::ALLOW_KORG_UPDATE | KAlarm::NO_RESOURCE_PROMPT);
                     break;
                 case EVENT_CANCEL:
                     break;
@@ -948,7 +948,7 @@ void KAlarmApp::atLoginEventAdded(const KAEvent& event)
 */
 void KAlarmApp::removeWindow(TrayWindow*)
 {
-    mTrayWindow = Q_NULLPTR;
+    mTrayWindow = nullptr;
 }
 
 /******************************************************************************
@@ -984,7 +984,7 @@ bool KAlarmApp::displayTrayIcon(bool show, MainWindow* parent)
     else
     {
         delete mTrayWindow;
-        mTrayWindow = Q_NULLPTR;
+        mTrayWindow = nullptr;
     }
     return true;
 }
@@ -1018,7 +1018,7 @@ bool KAlarmApp::checkSystemTray()
 */
 MainWindow* KAlarmApp::trayMainWindow() const
 {
-    return mTrayWindow ? mTrayWindow->assocMainWindow() : Q_NULLPTR;
+    return mTrayWindow ? mTrayWindow->assocMainWindow() : nullptr;
 }
 
 /******************************************************************************
@@ -1032,9 +1032,9 @@ void KAlarmApp::slotShowInSystemTrayChanged()
     {
         // The system tray run mode has changed
         ++mActiveCount;         // prevent the application from quitting
-        MainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : Q_NULLPTR;
+        MainWindow* win = mTrayWindow ? mTrayWindow->assocMainWindow() : nullptr;
         delete mTrayWindow;     // remove the system tray icon if it is currently shown
-        mTrayWindow = Q_NULLPTR;
+        mTrayWindow = nullptr;
         mOldShowInSystemTray = newShowInSysTray;
         if (newShowInSysTray)
         {
@@ -1263,7 +1263,7 @@ void KAlarmApp::setAlarmsEnabled(bool enabled)
         mAlarmsEnabled = enabled;
         Q_EMIT alarmEnabledToggled(enabled);
         if (!enabled)
-            KAlarm::cancelRtcWake(Q_NULLPTR);
+            KAlarm::cancelRtcWake(nullptr);
         else if (!mProcessingQueue)
             checkNextDueAlarm();
     }
@@ -1632,7 +1632,7 @@ void KAlarmApp::alarmCompleted(const KAEvent& event)
         // shell commands.
         QString command = event.postAction();
         qCDebug(KALARM_LOG) << event.id() << ":" << command;
-        doShellCommand(command, event, Q_NULLPTR, ProcData::POST_ACTION);
+        doShellCommand(command, event, nullptr, ProcData::POST_ACTION);
     }
 }
 
@@ -1808,7 +1808,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
         qCDebug(KALARM_LOG) << event.id() << ": disabled";
         if (reschedule)
             rescheduleAlarm(event, alarm, true);
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     void* result = (void*)1;
@@ -1876,7 +1876,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
                     qCDebug(KALARM_LOG) << event.id() << ": pre-action failed: cancelled";
                     if (reschedule)
                         rescheduleAlarm(event, alarm, true);
-                    return Q_NULLPTR;
+                    return nullptr;
                 }
                 // Display the message even though it failed
             }
@@ -1922,7 +1922,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             {
                 // The email has either been sent or failed - not queued
                 if (ans < 0)
-                    result = Q_NULLPTR;  // failure
+                    result = nullptr;  // failure
                 data.queued = false;
                 emailSent(data, errmsgs, (ans > 0));
             }
@@ -1953,7 +1953,7 @@ void* KAlarmApp::execAlarm(KAEvent& event, const KAAlarm& alarm, bool reschedule
             return win;
         }
         default:
-            return Q_NULLPTR;
+            return nullptr;
     }
     return result;
 }
@@ -1994,7 +1994,7 @@ ShellProcess* KAlarmApp::execCommandAlarm(const KAEvent& event, const KAAlarm& a
         if (tmpfile.isEmpty())
         {
             setEventCommandError(event, KAEvent::CMD_ERROR);
-            return Q_NULLPTR;
+            return nullptr;
         }
         return doShellCommand(tmpfile, event, &alarm, (flags | ProcData::TEMP_FILE), receiver, slot);
     }
@@ -2033,8 +2033,8 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
             qCWarning(KALARM_LOG) << "Command failed (no terminal selected)";
             QStringList errors;
             errors << i18nc("@info", "Failed to execute command\n(no terminal selected for command alarms)");
-            commandErrorMsg(Q_NULLPTR, event, alarm, flags, errors);
-            return Q_NULLPTR;
+            commandErrorMsg(nullptr, event, alarm, flags, errors);
+            return nullptr;
         }
     }
     else
@@ -2043,8 +2043,8 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
         mode = QIODevice::ReadWrite;
     }
 
-    ProcData* pd = Q_NULLPTR;
-    ShellProcess* proc = Q_NULLPTR;
+    ProcData* pd = nullptr;
+    ShellProcess* proc = nullptr;
     if (!cmd.isEmpty())
     {
         // Use ShellProcess, which automatically checks whether the user is
@@ -2079,7 +2079,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
             }
             proc->setStandardOutputFile(event.logFile(), QIODevice::Append);
         }
-        pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : Q_NULLPTR), flags);
+        pd = new ProcData(proc, new KAEvent(event), (alarm ? new KAAlarm(*alarm) : nullptr), flags);
         if (flags & ProcData::TEMP_FILE)
             pd->tempFiles += command;
         if (!tmpXtermFile.isEmpty())
@@ -2097,7 +2097,7 @@ ShellProcess* KAlarmApp::doShellCommand(const QString& command, const KAEvent& e
         mCommandProcesses.removeAt(mCommandProcesses.indexOf(pd));
         delete pd;
     }
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 /******************************************************************************
@@ -2406,7 +2406,7 @@ KAlarmApp::ProcData::ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f)
     : process(p),
       event(e),
       alarm(a),
-      messageBoxParent(Q_NULLPTR),
+      messageBoxParent(nullptr),
       flags(f)
 { }
 

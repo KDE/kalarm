@@ -181,7 +181,7 @@ class KAMessageBox
         static const KMessageBox::Options NoAppModal;
 
     private:
-        static void saveDontShowAgain(const QString& dontShowAgainName, bool yesno, bool dontShow, const char* yesnoResult = Q_NULLPTR);
+        static void saveDontShowAgain(const QString& dontShowAgainName, bool yesno, bool dontShow, const char* yesnoResult = nullptr);
         static QMap<QString, KMessageBox::ButtonCode> mContinueDefaults;
 };
 

@@ -52,7 +52,7 @@ class SynchTimer : public QObject
         SynchTimer();
         virtual void        start() = 0;
         void                connecT(QObject* receiver, const char* member);
-        void                disconnecT(QObject* receiver, const char* member = Q_NULLPTR);
+        void                disconnecT(QObject* receiver, const char* member = nullptr);
         bool                hasConnections() const   { return !mConnections.isEmpty(); }
 
         QTimer*             mTimer;
@@ -77,7 +77,7 @@ class MinuteTimer : public SynchTimer
 {
         Q_OBJECT
     public:
-        virtual ~MinuteTimer()  { mInstance = Q_NULLPTR; }
+        virtual ~MinuteTimer()  { mInstance = nullptr; }
         /** Connect to the timer signal.
          *  @param receiver Receiving object.
          *  @param member Slot to activate.
@@ -89,7 +89,7 @@ class MinuteTimer : public SynchTimer
          *  @param member Slot to disconnect. If null, all slots belonging to
          *                @p receiver will be disconnected.
          */
-        static void disconnect(QObject* receiver, const char* member = Q_NULLPTR)
+        static void disconnect(QObject* receiver, const char* member = nullptr)
                            { if (mInstance) mInstance->disconnecT(receiver, member); }
 
     protected:
@@ -132,7 +132,7 @@ class DailyTimer : public SynchTimer
          *  @param member Slot to disconnect. If null, all slots belonging to
          *                @p receiver will be disconnected.
          */
-        static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = Q_NULLPTR);
+        static void disconnect(const QTime& timeOfDay, QObject* receiver, const char* member = nullptr);
         /** Change the time at which this variable timer triggers.
          *  @param newTimeOfDay New time at which the timer should trigger.
          *  @param triggerMissed If true, and if @p newTimeOfDay < @p oldTimeOfDay, and if the current
@@ -189,7 +189,7 @@ class MidnightTimer
          *  @param member Slot to disconnect. If null, all slots belonging to
          *                @p receiver will be disconnected.
          */
-        static void disconnect(QObject* receiver, const char* member = Q_NULLPTR)
+        static void disconnect(QObject* receiver, const char* member = nullptr)
                            { DailyTimer::disconnect(QTime(0,0), receiver, member); }
 
 };

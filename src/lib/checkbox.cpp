@@ -26,14 +26,14 @@
 CheckBox::CheckBox(QWidget* parent)
     : QCheckBox(parent),
       mFocusPolicy(focusPolicy()),
-      mFocusWidget(Q_NULLPTR),
+      mFocusWidget(nullptr),
       mReadOnly(false)
 { }
 
 CheckBox::CheckBox(const QString& text, QWidget* parent)
     : QCheckBox(text, parent),
       mFocusPolicy(focusPolicy()),
-      mFocusWidget(Q_NULLPTR),
+      mFocusWidget(nullptr),
       mReadOnly(false)
 { }
 

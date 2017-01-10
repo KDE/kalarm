@@ -33,7 +33,7 @@ using namespace KCalCore;
 TimeSelector::TimeSelector(const QString& selectText, const QString& selectWhatsThis,
                            const QString& valueWhatsThis, bool allowHourMinute, QWidget* parent)
     : QFrame(parent),
-      mSignWidget(Q_NULLPTR),
+      mSignWidget(nullptr),
       mReadOnly(false)
 {
     QHBoxLayout* layout = new QHBoxLayout(this);

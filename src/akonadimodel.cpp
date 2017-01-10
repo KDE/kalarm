@@ -70,12 +70,12 @@ static const Collection::Rights writableRights = Collection::CanChangeItem | Col
 = Class: AkonadiModel
 =============================================================================*/
 
-AkonadiModel* AkonadiModel::mInstance = Q_NULLPTR;
-QPixmap*      AkonadiModel::mTextIcon = Q_NULLPTR;
-QPixmap*      AkonadiModel::mFileIcon = Q_NULLPTR;
-QPixmap*      AkonadiModel::mCommandIcon = Q_NULLPTR;
-QPixmap*      AkonadiModel::mEmailIcon = Q_NULLPTR;
-QPixmap*      AkonadiModel::mAudioIcon = Q_NULLPTR;
+AkonadiModel* AkonadiModel::mInstance = nullptr;
+QPixmap*      AkonadiModel::mTextIcon = nullptr;
+QPixmap*      AkonadiModel::mFileIcon = nullptr;
+QPixmap*      AkonadiModel::mCommandIcon = nullptr;
+QPixmap*      AkonadiModel::mEmailIcon = nullptr;
+QPixmap*      AkonadiModel::mAudioIcon = nullptr;
 QSize         AkonadiModel::mIconSize;
 int           AkonadiModel::mTimeHourPos = -2;
 
@@ -148,7 +148,7 @@ AkonadiModel::AkonadiModel(ChangeRecorder* monitor, QObject* parent)
 AkonadiModel::~AkonadiModel()
 {
     if (mInstance == this)
-        mInstance = Q_NULLPTR;
+        mInstance = nullptr;
 }
 
 /******************************************************************************
@@ -540,7 +540,7 @@ bool AkonadiModel::setData(const QModelIndex& index, const QVariant& value, int 
     {
         // This is a Collection row
         bool updateCollection = false;
-        CollectionAttribute* attr = Q_NULLPTR;
+        CollectionAttribute* attr = nullptr;
         switch (role)
         {
             case Qt::BackgroundRole:
@@ -1266,12 +1266,12 @@ KAEvent AkonadiModel::event(Item::Id itemId) const
     const QModelIndex ix = itemIndex(itemId);
     if (!ix.isValid())
         return KAEvent();
-    return event(ix.data(ItemRole).value<Item>(), ix, Q_NULLPTR);
+    return event(ix.data(ItemRole).value<Item>(), ix, nullptr);
 }
 
 KAEvent AkonadiModel::event(const QModelIndex& index) const
 {
-    return event(index.data(ItemRole).value<Item>(), index, Q_NULLPTR);
+    return event(index.data(ItemRole).value<Item>(), index, nullptr);
 }
 
 KAEvent AkonadiModel::event(const Item& item, const QModelIndex& index, Collection* collection) const

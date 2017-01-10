@@ -69,10 +69,10 @@ const bool  default_confirmAlarmDeletion = true;
 static QString translateXTermPath(const QString& cmdline, bool write);
 
 
-Preferences*   Preferences::mInstance = Q_NULLPTR;
+Preferences*   Preferences::mInstance = nullptr;
 bool           Preferences::mUsingDefaults = false;
 KTimeZone      Preferences::mSystemTimeZone;
-HolidayRegion* Preferences::mHolidays = Q_NULLPTR;   // always non-null after Preferences initialisation
+HolidayRegion* Preferences::mHolidays = nullptr;   // always non-null after Preferences initialisation
 QString        Preferences::mPreviousVersion;
 Preferences::Backend Preferences::mPreviousBackend;
 // Change tracking

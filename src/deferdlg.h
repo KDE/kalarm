@@ -38,7 +38,7 @@ class DeferAlarmDlg : public QDialog
 {
         Q_OBJECT
     public:
-        DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = Q_NULLPTR);
+        DeferAlarmDlg(const DateTime& initialDT, bool anyTimeOption, bool cancelButton, QWidget* parent = nullptr);
         void             setLimit(const DateTime&);
         DateTime         setLimit(const KAEvent& event);
         const DateTime&  getDateTime() const   { return mAlarmDateTime; }

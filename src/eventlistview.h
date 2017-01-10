@@ -34,7 +34,7 @@ class EventListView : public QTreeView
 {
         Q_OBJECT
     public:
-        explicit EventListView(QWidget* parent = Q_NULLPTR);
+        explicit EventListView(QWidget* parent = nullptr);
         ItemListModel*    itemModel() const    { return static_cast<ItemListModel*>(model()); }
         KAEvent           event(int row) const;
         KAEvent           event(const QModelIndex&) const;
@@ -72,8 +72,8 @@ class EventListDelegate : public QItemDelegate
 {
         Q_OBJECT
     public:
-        explicit EventListDelegate(EventListView* parent = Q_NULLPTR) : QItemDelegate(parent) {}
-        QWidget*     createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE  { return Q_NULLPTR; }
+        explicit EventListDelegate(EventListView* parent = nullptr) : QItemDelegate(parent) {}
+        QWidget*     createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE  { return nullptr; }
         bool         editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&) Q_DECL_OVERRIDE;
         virtual void edit(KAEvent*, EventListView*) = 0;
 };

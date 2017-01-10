@@ -44,12 +44,12 @@ class GroupBox : public QGroupBox
         /** Constructor.
          *  @param parent The parent object of this widget.
          */
-        explicit GroupBox(QWidget* parent = Q_NULLPTR);
+        explicit GroupBox(QWidget* parent = nullptr);
         /** Constructor for a group box with a title text.
          *  @param title The title text.
          *  @param parent The parent object of this widget.
          */
-        explicit GroupBox(const QString& title, QWidget* parent = Q_NULLPTR);
+        explicit GroupBox(const QString& title, QWidget* parent = nullptr);
         /** Sets whether the group box is read-only for the user.
          *  @param readOnly True to set the widget read-only, false to enable its action.
          */

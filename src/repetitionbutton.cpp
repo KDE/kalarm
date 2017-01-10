@@ -44,7 +44,7 @@ using namespace KCalCore;
 
 RepetitionButton::RepetitionButton(const QString& caption, bool waitForInitialisation, QWidget* parent)
     : QPushButton(caption, parent),
-      mDialog(Q_NULLPTR),
+      mDialog(nullptr),
       mMaxDuration(-1),
       mDateOnly(false),
       mWaitForInit(waitForInitialisation),
@@ -129,7 +129,7 @@ void RepetitionButton::displayDialog()
     }
     setChecked(mRepetition);
     delete mDialog;
-    mDialog = Q_NULLPTR;
+    mDialog = nullptr;
     if (change)
         Q_EMIT changed();   // delete dialog first, or initialise() will redisplay dialog
 }

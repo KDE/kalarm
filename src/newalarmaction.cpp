@@ -49,7 +49,7 @@ using namespace KAlarmCal;
 
 NewAlarmAction::NewAlarmAction(bool templates, const QString& label, QObject* parent)
     : KActionMenu(QIcon::fromTheme(QStringLiteral("document-new")), label, parent),
-      mTemplateAction(Q_NULLPTR)
+      mTemplateAction(nullptr)
 {
     mDisplayAction = new QAction(QIcon::fromTheme(DISP_ICON), (templates ? i18nc("@item:inmenu", "&Display Alarm Template") : i18nc("@action", "New Display Alarm")), parent);
     menu()->addAction(mDisplayAction);

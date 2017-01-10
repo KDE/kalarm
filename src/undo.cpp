@@ -235,7 +235,7 @@ class UndoReactivates : public UndoMulti<UndoReactivate>
         UndoItem*         createRedo(Undo::List*) Q_DECL_OVERRIDE;
 };
 
-Undo*       Undo::mInstance = Q_NULLPTR;
+Undo*       Undo::mInstance = nullptr;
 Undo::List  Undo::mUndoList;
 Undo::List  Undo::mRedoList;
 
@@ -451,7 +451,7 @@ void Undo::remove(UndoItem* item, bool undo)
 void Undo::replace(UndoItem* old, UndoItem* New)
 {
     Type type = old->type();
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     if (!list)
         return;
     int i = list->indexOf(old);
@@ -468,7 +468,7 @@ void Undo::replace(UndoItem* old, UndoItem* New)
 */
 QString Undo::actionText(Undo::Type type)
 {
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     return (list && !list->isEmpty()) ? (*list)[0]->actionText() : QString();
 }
 
@@ -501,7 +501,7 @@ QList<int> Undo::ids(Undo::Type type)
     QList<int> ids;
     QStringList ignoreIDs;
 //int n=0;
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     if (!list)
         return ids;
     for (int i = 0, end = list->count();  i < end;  ++i)
@@ -561,7 +561,7 @@ void Undo::emitChanged()
 */
 UndoItem* Undo::getItem(int id, Undo::Type type)
 {
-    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : Q_NULLPTR;
+    List* list = (type == UNDO) ? &mUndoList : (type == REDO) ? &mRedoList : nullptr;
     if (list)
     {
         for (int i = 0, end = list->count();  i < end;  ++i)
@@ -570,7 +570,7 @@ UndoItem* Undo::getItem(int id, Undo::Type type)
                 return (*list)[i];
         }
     }
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 /******************************************************************************
@@ -694,7 +694,7 @@ UndoItem* UndoMulti<T>::restore()
     if (newUndos->isEmpty())
     {
         delete newUndos;
-        return Q_NULLPTR;
+        return nullptr;
     }
 
     // Create a redo item to delete the alarm again
@@ -781,7 +781,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
     if (!ev)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
-        return Q_NULLPTR;
+        return nullptr;
     }
     KAEvent event(*ev); 
 
@@ -828,7 +828,7 @@ UndoItem* UndoAdd::doRestore(bool setArchive)
         default:
             delete undo;
             mRestoreError = ERR_PROG;
-            return Q_NULLPTR;
+            return nullptr;
     }
     return undo;
 }
@@ -909,7 +909,7 @@ UndoItem* UndoEdit::restore()
     if (!event)
     {
         mRestoreError = ERR_NOT_FOUND;    // alarm is no longer in calendar
-        return Q_NULLPTR;
+        return nullptr;
     }
     KAEvent newEvent(*event); 
 
@@ -952,7 +952,7 @@ UndoItem* UndoEdit::restore()
         default:
             delete undo;
             mRestoreError = ERR_PROG;
-            return Q_NULLPTR;
+            return nullptr;
     }
     return undo;
 }
@@ -1035,14 +1035,14 @@ UndoItem* UndoDelete::restore()
                     case KAlarm::UPDATE_FAILED:
                     case KAlarm::SAVE_FAILED:
                         mRestoreError = ERR_ARCHIVED;
-                        return Q_NULLPTR;
+                        return nullptr;
                     case KAlarm::UPDATE_OK:
                         break;
                 }
             }
             else
             {
-                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, Q_NULLPTR, true);
+                KAlarm::UpdateResult status = KAlarm::addEvent(*mEvent, &mResource, nullptr, true);
                 switch (status.status)
                 {
                     case KAlarm::UPDATE_KORG_FUNCERR:
@@ -1058,7 +1058,7 @@ UndoItem* UndoDelete::restore()
                     case KAlarm::UPDATE_FAILED:
                     case KAlarm::SAVE_FAILED:
                         mRestoreError = ERR_CREATE;
-                        return Q_NULLPTR;
+                        return nullptr;
                     case KAlarm::UPDATE_OK:
                         break;
                 }
@@ -1069,19 +1069,19 @@ UndoItem* UndoDelete::restore()
             if (KAlarm::addTemplate(*mEvent, &mResource) != KAlarm::UPDATE_OK)
             {
                 mRestoreError = ERR_CREATE;
-                return Q_NULLPTR;
+                return nullptr;
             }
             break;
         case CalEvent::ARCHIVED:
             if (!KAlarm::addArchivedEvent(*mEvent, &mResource))
             {
                 mRestoreError = ERR_CREATE;
-                return Q_NULLPTR;
+                return nullptr;
             }
             break;
         default:
             mRestoreError = ERR_PROG;
-            return Q_NULLPTR;
+            return nullptr;
     }
 
     // Create a redo item to delete the alarm again
@@ -1165,7 +1165,7 @@ UndoItem* UndoReactivate::restore()
             break;
         default:
             mRestoreError = ERR_PROG;
-            return Q_NULLPTR;
+            return nullptr;
     }
     return UndoAdd::doRestore(true);     // restore alarm, ensuring that it is re-archived
 }
@@ -1208,7 +1208,7 @@ UndoItem* UndoDeactivate::restore()
             break;
         default:
             mRestoreError = ERR_PROG;
-            return Q_NULLPTR;
+            return nullptr;
     }
 
     return UndoDelete::restore();

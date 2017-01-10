@@ -108,7 +108,7 @@ QList<QKeySequence> redoShortcut;
 =============================================================================*/
 
 MainWindow::WindowList   MainWindow::mWindowList;
-TemplateDlg*             MainWindow::mTemplateDlg = Q_NULLPTR;
+TemplateDlg*             MainWindow::mTemplateDlg = nullptr;
 
 // Collect these widget labels together to ensure consistent wording and
 // translations across different modules.
@@ -130,7 +130,7 @@ MainWindow* MainWindow::create(bool restored)
 }
 
 MainWindow::MainWindow(bool restored)
-    : MainWindowBase(Q_NULLPTR, Qt::WindowContextHelpButtonHint),
+    : MainWindowBase(nullptr, Qt::WindowContextHelpButtonHint),
       mResourcesWidth(-1),
       mHiddenTrayParent(false),
       mShown(false),
@@ -204,9 +204,9 @@ MainWindow::~MainWindow()
 
     // Prevent view updates during window destruction
     delete mResourceSelector;
-    mResourceSelector = Q_NULLPTR;
+    mResourceSelector = nullptr;
     delete mListView;
-    mListView = Q_NULLPTR;
+    mListView = nullptr;
 
     if (theApp()->trayWindow())
     {
@@ -255,7 +255,7 @@ void MainWindow::readProperties(const KConfigGroup& config)
 */
 MainWindow* MainWindow::mainMainWindow()
 {
-    MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : Q_NULLPTR;
+    MainWindow* tray = theApp()->trayWindow() ? theApp()->trayWindow()->assocMainWindow() : nullptr;
     if (tray  &&  tray->isVisible())
         return tray;
     for (int i = 0, end = mWindowList.count();  i < end;  ++i)
@@ -264,7 +264,7 @@ MainWindow* MainWindow::mainMainWindow()
     if (tray)
         return tray;
     if (mWindowList.isEmpty())
-        return Q_NULLPTR;
+        return nullptr;
     return mWindowList[0];
 }
 
@@ -554,12 +554,12 @@ void MainWindow::initActions()
     if (undoText.isNull())
     {
         // Get standard texts, etc., for Undo and Redo actions
-        QAction* act = KStandardAction::undo(this, Q_NULLPTR, actions);
+        QAction* act = KStandardAction::undo(this, nullptr, actions);
         undoShortcut     = act->shortcuts();
         undoText         = act->text();
         undoTextStripped = KLocalizedString::removeAcceleratorMarker(undoText);
         delete act;
-        act = KStandardAction::redo(this, Q_NULLPTR, actions);
+        act = KStandardAction::redo(this, nullptr, actions);
         redoShortcut     = act->shortcuts();
         redoText         = act->text();
         redoTextStripped = KLocalizedString::removeAcceleratorMarker(redoText);
@@ -582,7 +582,7 @@ void MainWindow::initActions()
     KStandardAction::deselect(mListView, SLOT(clearSelection()), actions);
     // Quit only once the event loop is called; otherwise, the parent window will
     // be deleted while still processing the action, resulting in a crash.
-    QAction* act = KStandardAction::quit(Q_NULLPTR, Q_NULLPTR, actions);
+    QAction* act = KStandardAction::quit(nullptr, nullptr, actions);
     connect(act, &QAction::triggered, this, &MainWindow::slotQuit, Qt::QueuedConnection);
     KStandardAction::keyBindings(this, SLOT(slotConfigureKeys()), actions);
     KStandardAction::configureToolbars(this, SLOT(slotConfigureToolbar()), actions);
@@ -799,7 +799,7 @@ void MainWindow::slotReactivate()
     // Add the alarms to the displayed lists and to the calendar file
     Undo::EventList undos;
     QVector<EventId> ineligibleIDs;
-    KAlarm::reactivateEvents(events, ineligibleIDs, Q_NULLPTR, this);
+    KAlarm::reactivateEvents(events, ineligibleIDs, nullptr, this);
 
     // Create the undo list, excluding ineligible events
     AlarmCalendar* resources = AlarmCalendar::resources();
@@ -976,7 +976,7 @@ void MainWindow::slotTemplatesEnd()
     if (mTemplateDlg)
     {
         mTemplateDlg->deleteLater();   // this deletes the dialog once it is safe to do so
-        mTemplateDlg = Q_NULLPTR;
+        mTemplateDlg = nullptr;
         enableTemplateMenuItem(true);      // re-enable menu item in all windows
     }
 }
@@ -1536,7 +1536,7 @@ MainWindow* MainWindow::toggleWindow(MainWindow* win)
         {
             // The window is visible, so close it
             win->close();
-            return Q_NULLPTR;
+            return nullptr;
         }
         else
         {

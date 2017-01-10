@@ -49,7 +49,7 @@ using namespace KCal;
 static const char TMPL_DIALOG_NAME[] = "TemplateDialog";
 
 
-TemplateDlg* TemplateDlg::mInstance = Q_NULLPTR;
+TemplateDlg* TemplateDlg::mInstance = nullptr;
 
 
 TemplateDlg::TemplateDlg(QWidget* parent)
@@ -130,7 +130,7 @@ TemplateDlg::TemplateDlg(QWidget* parent)
 */
 TemplateDlg::~TemplateDlg()
 {
-    mInstance = Q_NULLPTR;
+    mInstance = nullptr;
 }
 
 /******************************************************************************
@@ -139,7 +139,7 @@ TemplateDlg::~TemplateDlg()
 TemplateDlg* TemplateDlg::create(QWidget* parent)
 {
     if (mInstance)
-        return Q_NULLPTR;
+        return nullptr;
     mInstance = new TemplateDlg(parent);
     return mInstance;
 }

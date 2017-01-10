@@ -124,7 +124,7 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KDateTime& dateT
     char* end;
     bool noTime;
     // Get the minute value
-    if ((s = strchr(timeStr, ':')) == Q_NULLPTR)
+    if ((s = strchr(timeStr, ':')) == nullptr)
         noTime = true;
     else
     {
@@ -134,7 +134,7 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KDateTime& dateT
         if (end == s  ||  *end  ||  dt[4] >= 60)
             return false;
         // Get the hour value
-        if ((s = strrchr(timeStr, '-')) == Q_NULLPTR)
+        if ((s = strrchr(timeStr, '-')) == nullptr)
             s = timeStr;
         else
             *s++ = 0;
@@ -147,7 +147,7 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KDateTime& dateT
     {
         noDate = false;
         // Get the day value
-        if ((s = strrchr(timeStr, '-')) == Q_NULLPTR)
+        if ((s = strrchr(timeStr, '-')) == nullptr)
             s = timeStr;
         else
             *s++ = 0;
@@ -157,7 +157,7 @@ bool AlarmTime::convertTimeString(const QByteArray& timeString, KDateTime& dateT
         if (s != timeStr)
         {
             // Get the month value
-            if ((s = strrchr(timeStr, '-')) == Q_NULLPTR)
+            if ((s = strrchr(timeStr, '-')) == nullptr)
                 s = timeStr;
             else
                 *s++ = 0;

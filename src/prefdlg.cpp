@@ -118,7 +118,7 @@ static QString xtermCommands[] = {
 = Class KAlarmPrefDlg
 =============================================================================*/
 
-KAlarmPrefDlg* KAlarmPrefDlg::mInstance = Q_NULLPTR;
+KAlarmPrefDlg* KAlarmPrefDlg::mInstance = nullptr;
 
 void KAlarmPrefDlg::display()
 {
@@ -200,7 +200,7 @@ KAlarmPrefDlg::KAlarmPrefDlg()
 
 KAlarmPrefDlg::~KAlarmPrefDlg()
 {
-    mInstance = Q_NULLPTR;
+    mInstance = nullptr;
 }
 
 void KAlarmPrefDlg::slotHelp()

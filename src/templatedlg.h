@@ -34,7 +34,7 @@ class TemplateDlg : public QDialog
 {
         Q_OBJECT
     public:
-        static TemplateDlg*  create(QWidget* parent = Q_NULLPTR);
+        static TemplateDlg*  create(QWidget* parent = nullptr);
         ~TemplateDlg();
 
     Q_SIGNALS:

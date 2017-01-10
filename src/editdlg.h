@@ -65,9 +65,9 @@ class EditAlarmDlg : public QDialog
             RES_IGNORE         // don't get resource
         };
 
-        static EditAlarmDlg* create(bool Template, Type, QWidget* parent = Q_NULLPTR,
+        static EditAlarmDlg* create(bool Template, Type, QWidget* parent = nullptr,
                                     GetResourceType = RES_PROMPT);
-        static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
+        static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
                                     GetResourceType = RES_PROMPT, bool readOnly = false);
         virtual ~EditAlarmDlg();
         bool            getEvent(KAEvent&, Akonadi::Collection&);
@@ -88,9 +88,9 @@ class EditAlarmDlg : public QDialog
         static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
 
     protected:
-        EditAlarmDlg(bool Template, KAEvent::SubAction, QWidget* parent = Q_NULLPTR,
+        EditAlarmDlg(bool Template, KAEvent::SubAction, QWidget* parent = nullptr,
                      GetResourceType = RES_PROMPT);
-        EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = Q_NULLPTR,
+        EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
                      GetResourceType = RES_PROMPT, bool readOnly = false);
         void            init(const KAEvent* event);
         void            resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
@@ -109,8 +109,8 @@ class EditAlarmDlg : public QDialog
         virtual bool    type_validate(bool trial) = 0;
         virtual void    type_aboutToTry() {}
         virtual void    type_executedTry(const QString& text, void* obj) { Q_UNUSED(text); Q_UNUSED(obj); }
-        virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return Q_NULLPTR; }
-        virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { Q_UNUSED(parent); return Q_NULLPTR; }
+        virtual Reminder* createReminder(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }
+        virtual CheckBox* type_createConfirmAckCheckbox(QWidget* parent)  { Q_UNUSED(parent); return nullptr; }
         virtual bool    checkText(QString& result, bool showErrorMessage = true) const = 0;
 
         void            showMainPage();
@@ -146,7 +146,7 @@ class EditAlarmDlg : public QDialog
         void            initValues(const KAEvent*);
         void            setEvent(KAEvent&, const QString& text, bool trial);
         bool            validate();
-        void            setRecurTabTitle(const KAEvent* = Q_NULLPTR);
+        void            setRecurTabTitle(const KAEvent* = nullptr);
         virtual bool    stateChanged() const;
         void            showOptions(bool more);
 

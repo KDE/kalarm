@@ -45,7 +45,7 @@ class BirthdayDlg : public QDialog
 {
         Q_OBJECT
     public:
-        explicit BirthdayDlg(QWidget* parent = Q_NULLPTR);
+        explicit BirthdayDlg(QWidget* parent = nullptr);
         QVector<KAEvent> events() const;
 
     protected Q_SLOTS:
@@ -80,8 +80,8 @@ class BLineEdit : public QLineEdit
 {
         Q_OBJECT
     public:
-        explicit BLineEdit(QWidget* parent = Q_NULLPTR)                       : QLineEdit(parent) {}
-        explicit BLineEdit(const QString& text, QWidget* parent = Q_NULLPTR)  : QLineEdit(text, parent) {}
+        explicit BLineEdit(QWidget* parent = nullptr)                       : QLineEdit(parent) {}
+        explicit BLineEdit(const QString& text, QWidget* parent = nullptr)  : QLineEdit(text, parent) {}
 
     Q_SIGNALS:
         void         focusLost();

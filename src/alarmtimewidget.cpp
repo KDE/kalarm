@@ -138,7 +138,7 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
     if (mode == DEFER_TIME)
     {
         mAnyTimeAllowed = false;
-        mAnyTimeCheckBox = Q_NULLPTR;
+        mAnyTimeCheckBox = nullptr;
     }
     else
     {
@@ -288,7 +288,7 @@ KDateTime AlarmTimeWidget::getDateTime(int* minsFromNow, bool checkExpired, bool
     if (minsFromNow)
         *minsFromNow = 0;
     if (errorWidget)
-        *errorWidget = Q_NULLPTR;
+        *errorWidget = nullptr;
     KDateTime now = KDateTime::currentUtcDateTime();
     now.setTime(QTime(now.time().hour(), now.time().minute(), 0));
     if (!mAtTimeRadio->isChecked())

@@ -61,17 +61,17 @@ using namespace Akonadi;
 
 ResourceSelector::ResourceSelector(QWidget* parent)
     : QFrame(parent),
-      mContextMenu(Q_NULLPTR),
-      mActionReload(Q_NULLPTR),
-      mActionShowDetails(Q_NULLPTR),
-      mActionSetColour(Q_NULLPTR),
-      mActionClearColour(Q_NULLPTR),
-      mActionEdit(Q_NULLPTR),
-      mActionUpdate(Q_NULLPTR),
-      mActionRemove(Q_NULLPTR),
-      mActionImport(Q_NULLPTR),
-      mActionExport(Q_NULLPTR),
-      mActionSetDefault(Q_NULLPTR)
+      mContextMenu(nullptr),
+      mActionReload(nullptr),
+      mActionShowDetails(nullptr),
+      mActionSetColour(nullptr),
+      mActionClearColour(nullptr),
+      mActionEdit(nullptr),
+      mActionUpdate(nullptr),
+      mActionRemove(nullptr),
+      mActionImport(nullptr),
+      mActionExport(nullptr),
+      mActionSetDefault(nullptr)
 {
     QBoxLayout* topLayout = new QVBoxLayout(this);
 
@@ -514,7 +514,7 @@ void ResourceSelector::setStandard()
 void ResourceSelector::importCalendar()
 {
     Collection collection = currentResource();
-    AlarmCalendar::importAlarms(this, (collection.isValid() ? &collection : Q_NULLPTR));
+    AlarmCalendar::importAlarms(this, (collection.isValid() ? &collection : nullptr));
 }
 
 /******************************************************************************

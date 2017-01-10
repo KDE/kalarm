@@ -52,13 +52,13 @@ void PackedLayout::addItem(QLayoutItem* item)
 
 QLayoutItem* PackedLayout::itemAt(int index) const
 {
-    return (index >= 0 && index < mItems.count()) ? mItems[index] : Q_NULLPTR;
+    return (index >= 0 && index < mItems.count()) ? mItems[index] : nullptr;
 }
 
 QLayoutItem* PackedLayout::takeAt(int index)
 {
     if (index < 0  ||  index >= mItems.count())
-        return Q_NULLPTR;
+        return nullptr;
     return mItems.takeAt(index);
 }
 

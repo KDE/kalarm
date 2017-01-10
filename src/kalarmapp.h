@@ -64,12 +64,12 @@ class KAlarmApp : public QApplication
         void               removeWindow(TrayWindow*);
         TrayWindow*        trayWindow() const              { return mTrayWindow; }
         MainWindow*        trayMainWindow() const;
-        bool               displayTrayIcon(bool show, MainWindow* = Q_NULLPTR);
+        bool               displayTrayIcon(bool show, MainWindow* = nullptr);
         bool               trayIconDisplayed() const       { return mTrayWindow; }
-        bool               editNewAlarm(MainWindow* = Q_NULLPTR);
+        bool               editNewAlarm(MainWindow* = nullptr);
 
         void*              execAlarm(KAEvent&, const KAAlarm&, bool reschedule, bool allowDefer = true, bool noPreAction = false);
-        ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, const QObject* receiver = Q_NULLPTR, const char* slot = Q_NULLPTR);
+        ShellProcess*      execCommandAlarm(const KAEvent&, const KAAlarm&, const QObject* receiver = nullptr, const char* slot = nullptr);
         void               alarmCompleted(const KAEvent&);
         void               rescheduleAlarm(KAEvent& e, const KAAlarm& a)   { rescheduleAlarm(e, a, true); }
         void               purgeAll()             { purge(0); }
@@ -179,7 +179,7 @@ class KAlarmApp : public QApplication
         bool               cancelAlarm(KAEvent&, KAAlarm::Type, bool updateCalAndDisplay);
         bool               cancelReminderAndDeferral(KAEvent&);
         ShellProcess*      doShellCommand(const QString& command, const KAEvent&, const KAAlarm*,
-                                          int flags = 0, const QObject* receiver = Q_NULLPTR, const char* slot = Q_NULLPTR);
+                                          int flags = 0, const QObject* receiver = nullptr, const char* slot = nullptr);
         QString            composeXTermCommand(const QString& command, const KAEvent&, const KAAlarm*,
                                                int flags, QString& tempScriptFile) const;
         QString            createTempScriptFile(const QString& command, bool insertShell, const KAEvent&, const KAAlarm&) const;

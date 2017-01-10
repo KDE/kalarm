@@ -61,7 +61,7 @@ using namespace KCal;
 
 BirthdayDlg::BirthdayDlg(QWidget* parent)
     : QDialog(parent),
-      mSpecialActionsButton(Q_NULLPTR)
+      mSpecialActionsButton(nullptr)
 {
     setObjectName(QStringLiteral("BirthdayDlg"));    // used by LikeBack
     setWindowTitle(i18nc("@title:window", "Import Birthdays From KAddressBook"));

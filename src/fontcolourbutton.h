@@ -33,7 +33,7 @@ class FontColourButton : public PushButton
 {
         Q_OBJECT
     public:
-        explicit FontColourButton(QWidget* parent = Q_NULLPTR);
+        explicit FontColourButton(QWidget* parent = nullptr);
         void          setDefaultFont();
         void          setFont(const QFont&);
         void          setBgColour(const QColor& c) { mBgColour = c; }
@@ -67,7 +67,7 @@ class FontColourDlg : public QDialog
         Q_OBJECT
     public:
         FontColourDlg(const QColor& bg, const QColor& fg, const QFont&, bool defaultFont,
-                      const QString& caption, QWidget* parent = Q_NULLPTR);
+                      const QString& caption, QWidget* parent = nullptr);
         bool         defaultFont() const   { return mDefaultFont; }
         QFont        font() const          { return mFont; }
         QColor       bgColour() const      { return mBgColour; }

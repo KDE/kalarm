@@ -50,7 +50,7 @@ class CollectionListModel : public KDescendantsProxyModel
 {
         Q_OBJECT
     public:
-        explicit CollectionListModel(QObject* parent = Q_NULLPTR);
+        explicit CollectionListModel(QObject* parent = nullptr);
         void setEventTypeFilter(CalEvent::Type);
         void setFilterWritable(bool writable);
         void setFilterEnabled(bool enabled);
@@ -78,7 +78,7 @@ class CollectionCheckListModel : public KCheckableProxyModel
 {
         Q_OBJECT
     public:
-        explicit CollectionCheckListModel(CalEvent::Type, QObject* parent = Q_NULLPTR);
+        explicit CollectionCheckListModel(CalEvent::Type, QObject* parent = nullptr);
         ~CollectionCheckListModel();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
@@ -113,7 +113,7 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
 {
         Q_OBJECT
     public:
-        explicit CollectionFilterCheckListModel(QObject* parent = Q_NULLPTR);
+        explicit CollectionFilterCheckListModel(QObject* parent = nullptr);
         void setEventTypeFilter(CalEvent::Type);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
@@ -141,7 +141,7 @@ class CollectionView : public QListView
 {
         Q_OBJECT
     public:
-        explicit CollectionView(CollectionFilterCheckListModel*, QWidget* parent = Q_NULLPTR);
+        explicit CollectionView(CollectionFilterCheckListModel*, QWidget* parent = nullptr);
         CollectionFilterCheckListModel* collectionModel() const  { return static_cast<CollectionFilterCheckListModel*>(model()); }
         Akonadi::Collection  collection(int row) const;
         Akonadi::Collection  collection(const QModelIndex&) const;
@@ -252,7 +252,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          *  @param cancelled If non-null: set to true if the user cancelled
          *             the prompt dialogue; set to false if any other error.
          */
-        static Akonadi::Collection destination(CalEvent::Type, QWidget* promptparent = Q_NULLPTR, bool noPrompt = false, bool* cancelled = Q_NULLPTR);
+        static Akonadi::Collection destination(CalEvent::Type, QWidget* promptparent = nullptr, bool noPrompt = false, bool* cancelled = nullptr);
 
         /** Return the enabled collections which contain a specified mime type.
          *  If 'writable' is true, only writable collections are included.
@@ -288,7 +288,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
         void collectionPopulated();
 
     private:
-        explicit CollectionControlModel(QObject* parent = Q_NULLPTR);
+        explicit CollectionControlModel(QObject* parent = nullptr);
         void findEnabledCollections(const Akonadi::EntityMimeTypeFilterModel*, const QModelIndex& parent, Akonadi::Collection::List&) const;
         CalEvent::Types setEnabledStatus(const Akonadi::Collection&, CalEvent::Types, bool inserted);
         static CalEvent::Types checkTypesToEnable(const Akonadi::Collection&, const Akonadi::Collection::List&, CalEvent::Types);

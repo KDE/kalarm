@@ -108,7 +108,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, Type type, QWidget* parent, Ge
         case AUDIO:    return new EditAudioAlarmDlg(Template, parent, getResource);
         default:  break;
     }
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool newAlarm, QWidget* parent,
@@ -124,7 +124,7 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
         default:
             break;
     }
-    return Q_NULLPTR;
+    return nullptr;
 }
 
 
@@ -138,24 +138,24 @@ EditAlarmDlg* EditAlarmDlg::create(bool Template, const KAEvent* event, bool new
 EditAlarmDlg::EditAlarmDlg(bool Template, KAEvent::SubAction action, QWidget* parent, GetResourceType getResource)
     : QDialog(parent),
       mAlarmType(action),
-      mLoadTemplateButton(Q_NULLPTR),
+      mLoadTemplateButton(nullptr),
       mMainPageShown(false),
       mRecurPageShown(false),
       mRecurSetDefaultEndDate(true),
-      mTemplateName(Q_NULLPTR),
-      mDeferGroup(Q_NULLPTR),
-      mDeferChangeButton(Q_NULLPTR),
-      mTimeWidget(Q_NULLPTR),
-      mShowInKorganizer(Q_NULLPTR),
+      mTemplateName(nullptr),
+      mDeferGroup(nullptr),
+      mDeferChangeButton(nullptr),
+      mTimeWidget(nullptr),
+      mShowInKorganizer(nullptr),
       mDeferGroupHeight(0),
       mTemplate(Template),
       mNewAlarm(true),
       mDesiredReadOnly(false),
       mReadOnly(false),
       mShowingMore(true),
-      mSavedEvent(Q_NULLPTR)
+      mSavedEvent(nullptr)
 {
-    init(Q_NULLPTR, getResource);
+    init(nullptr, getResource);
     mWindowList.append(this);
 }
 
@@ -163,15 +163,15 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, Q
                            GetResourceType getResource, bool readOnly)
     : QDialog(parent),
       mAlarmType(event->actionSubType()),
-      mLoadTemplateButton(Q_NULLPTR),
+      mLoadTemplateButton(nullptr),
       mMainPageShown(false),
       mRecurPageShown(false),
       mRecurSetDefaultEndDate(true),
-      mTemplateName(Q_NULLPTR),
-      mDeferGroup(Q_NULLPTR),
-      mDeferChangeButton(Q_NULLPTR),
-      mTimeWidget(Q_NULLPTR),
-      mShowInKorganizer(Q_NULLPTR),
+      mTemplateName(nullptr),
+      mDeferGroup(nullptr),
+      mDeferChangeButton(nullptr),
+      mTimeWidget(nullptr),
+      mShowInKorganizer(nullptr),
       mDeferGroupHeight(0),
       mEventId(newAlarm ? QString() : event->id()),
       mTemplate(Template),
@@ -179,7 +179,7 @@ EditAlarmDlg::EditAlarmDlg(bool Template, const KAEvent* event, bool newAlarm, Q
       mDesiredReadOnly(readOnly),
       mReadOnly(readOnly),
       mShowingMore(true),
-      mSavedEvent(Q_NULLPTR)
+      mSavedEvent(nullptr)
 {
     init(event, getResource);
     mWindowList.append(this);
@@ -477,7 +477,7 @@ void EditAlarmDlg::init(const KAEvent* event)
     if (!mNewAlarm)
     {
         // Save the initial state of all controls so that we can later tell if they have changed
-        saveState((event && (mTemplate || !event->isTemplate())) ? event : Q_NULLPTR);
+        saveState((event && (mTemplate || !event->isTemplate())) ? event : nullptr);
         contentsChanged();    // enable/disable OK button
     }
 
@@ -498,7 +498,7 @@ void EditAlarmDlg::init(const KAEvent* event)
 EditAlarmDlg::~EditAlarmDlg()
 {
     delete mButtonBox;
-    mButtonBox = Q_NULLPTR;    // prevent text edit contentsChanged() signal triggering a crash
+    mButtonBox = nullptr;    // prevent text edit contentsChanged() signal triggering a crash
     delete mSavedEvent;
     mWindowList.removeAll(this);
 }
@@ -614,12 +614,12 @@ void EditAlarmDlg::initValues(const KAEvent* event)
         mLateCancel->setMinutes((Preferences::defaultLateCancel() ? 1 : 0), false, TimePeriod::HoursMinutes);
         if (mShowInKorganizer)
             mShowInKorganizer->setChecked(Preferences::defaultCopyToKOrganizer());
-        type_initValues(Q_NULLPTR);
+        type_initValues(nullptr);
         mRecurrenceEdit->setDefaults(defaultTime);   // must be called after mTimeWidget is set up, to ensure correct date-only enabling
         slotRecurFrequencyChange();      // update the Recurrence text
     }
     if (mReminder  &&  mTimeWidget)
-        mReminder->setDefaultUnits(mTimeWidget->getDateTime(Q_NULLPTR, false, false));
+        mReminder->setDefaultUnits(mTimeWidget->getDateTime(nullptr, false, false));
 
     if (!deferGroupVisible  &&  mDeferGroup)
         mDeferGroup->hide();
@@ -639,7 +639,7 @@ void EditAlarmDlg::setTime(const DateTime& start)
 void EditAlarmDlg::setRecurrence(const KARecurrence& recur, const KCalCore::Duration& subRepeatInterval, int subRepeatCount)
 {
     KAEvent event;
-    event.setTime(mTimeWidget->getDateTime(Q_NULLPTR, false, false));
+    event.setTime(mTimeWidget->getDateTime(nullptr, false, false));
     event.setRecurrence(recur);
     event.setRepetition(Repetition(subRepeatInterval, subRepeatCount - 1));
     mRecurrenceEdit->set(event);
@@ -650,7 +650,7 @@ void EditAlarmDlg::setRepeatAtLogin()
 }
 void EditAlarmDlg::setLateCancel(int minutes)
 {
-    mLateCancel->setMinutes(minutes, mTimeWidget->getDateTime(Q_NULLPTR, false, false).isDateOnly(),
+    mLateCancel->setMinutes(minutes, mTimeWidget->getDateTime(nullptr, false, false).isDateOnly(),
                             TimePeriod::HoursMinutes);
 }
 void EditAlarmDlg::setShowInKOrganizer(bool show)
@@ -685,7 +685,7 @@ void EditAlarmDlg::setReadOnly(bool readOnly)
 void EditAlarmDlg::saveState(const KAEvent* event)
 {
     delete mSavedEvent;
-    mSavedEvent = Q_NULLPTR;
+    mSavedEvent = nullptr;
     if (event)
         mSavedEvent = new KAEvent(*event);
     if (mTemplate)
@@ -697,7 +697,7 @@ void EditAlarmDlg::saveState(const KAEvent* event)
     }
     checkText(mSavedTextFileCommandMessage, false);
     if (mTimeWidget)
-        mSavedDateTime = mTimeWidget->getDateTime(Q_NULLPTR, false, false);
+        mSavedDateTime = mTimeWidget->getDateTime(nullptr, false, false);
     mSavedLateCancel       = mLateCancel->minutes();
     if (mShowInKorganizer)
         mSavedShowInKorganizer = mShowInKorganizer->isChecked();
@@ -730,7 +730,7 @@ bool EditAlarmDlg::stateChanged() const
     }
     else
     {
-        KDateTime dt = mTimeWidget->getDateTime(Q_NULLPTR, false, false);
+        KDateTime dt = mTimeWidget->getDateTime(nullptr, false, false);
         if (mSavedDateTime.timeSpec() != dt.timeSpec()  ||  mSavedDateTime != dt)
             return true;
     }
@@ -1039,7 +1039,7 @@ bool EditAlarmDlg::validate()
     else if (mTimeWidget)
     {
         QWidget* errWidget;
-        mAlarmDateTime = mTimeWidget->getDateTime(Q_NULLPTR, !timedRecurrence, false, &errWidget);
+        mAlarmDateTime = mTimeWidget->getDateTime(nullptr, !timedRecurrence, false, &errWidget);
         if (errWidget)
         {
             // It's more than just an existing deferral being changed, so the time matters
@@ -1292,7 +1292,7 @@ void EditAlarmDlg::slotEditDeferral()
     bool limit = true;
     Repetition repetition = mRecurrenceEdit->subRepetition();
     DateTime start = mSavedEvent->recurs() ? (mExpiredRecurrence ? DateTime() : mSavedEvent->mainDateTime())
-                   : mTimeWidget->getDateTime(Q_NULLPTR, !repetition, !mExpiredRecurrence);
+                   : mTimeWidget->getDateTime(nullptr, !repetition, !mExpiredRecurrence);
     if (!start.isValid())
     {
         if (!mExpiredRecurrence)
@@ -1384,7 +1384,7 @@ void EditAlarmDlg::slotShowRecurrenceEdit()
     mRecurPageIndex = mTabs->currentIndex();
     if (!mReadOnly  &&  !mTemplate)
     {
-        mAlarmDateTime = mTimeWidget->getDateTime(Q_NULLPTR, false, false);
+        mAlarmDateTime = mTimeWidget->getDateTime(nullptr, false, false);
         KDateTime now = KDateTime::currentDateTime(mAlarmDateTime.timeSpec());
         bool expired = (mAlarmDateTime.effectiveKDateTime() < now);
         if (mRecurSetDefaultEndDate)
@@ -1415,7 +1415,7 @@ void EditAlarmDlg::slotRecurTypeChange(int repeatType)
         mTimeWidget->enableAnyTime(!recurs || repeatType != RecurrenceEdit::SUBDAILY);
         if (atLogin)
         {
-            mAlarmDateTime = mTimeWidget->getDateTime(Q_NULLPTR, false, false);
+            mAlarmDateTime = mTimeWidget->getDateTime(nullptr, false, false);
             mRecurrenceEdit->setEndDateTime(mAlarmDateTime.kDateTime());
         }
         if (mReminder)

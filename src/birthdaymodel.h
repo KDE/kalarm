@@ -70,7 +70,7 @@ class BirthdaySortModel : public QSortFilterProxyModel
 {
         Q_OBJECT
     public:
-        explicit BirthdaySortModel(QObject* parent = Q_NULLPTR);
+        explicit BirthdaySortModel(QObject* parent = nullptr);
 
         void setPrefixSuffix(const QString& prefix, const QString& suffix);
 
