@@ -604,7 +604,7 @@ void ResourceSelector::showInfo()
                              name, id, calType, alarmTypeString, storage, location, perms, enabled, std);
         // Display the collection information. Because the user requested
         // the information, don't raise a KNotify event.
-        KAMessageBox::information(this, text, QString(), QString(), 0);
+        KAMessageBox::information(this, text, QString(), QString(), nullptr);
     }
 }
 

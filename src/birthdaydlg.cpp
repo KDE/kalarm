@@ -227,7 +227,7 @@ BirthdayDlg::BirthdayDlg(QWidget* parent)
                       Preferences::defaultSoundVolume(), -1, 0, Preferences::defaultSoundRepeat());
     if (mSpecialActionsButton)
     {
-        KAEvent::ExtraActionOptions opts(0);
+        KAEvent::ExtraActionOptions opts(nullptr);
         if (Preferences::defaultExecPreActionOnDeferral())
             opts |= KAEvent::ExecPreActOnDeferral;
         if (Preferences::defaultCancelOnPreActionError())
