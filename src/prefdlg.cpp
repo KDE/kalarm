@@ -1466,7 +1466,7 @@ void EditPrefTab::restore(bool, bool allTabs)
             case TimePeriod::Minutes:      index = 0; break;
         }
         mReminderUnits->setCurrentIndex(index);
-        KAEvent::ExtraActionOptions opts(nullptr);
+        KAEvent::ExtraActionOptions opts(0);
         if (Preferences::defaultExecPreActionOnDeferral())
             opts |= KAEvent::ExecPreActOnDeferral;
         if (Preferences::defaultCancelOnPreActionError())

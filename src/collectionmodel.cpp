@@ -762,8 +762,8 @@ CalEvent::Types CollectionControlModel::setEnabled(const Collection& collection,
 CalEvent::Types CollectionControlModel::setEnabledStatus(const Collection& collection, CalEvent::Types types, bool inserted)
 {
     qCDebug(KALARM_LOG) << "id:" << collection.id() << ", types=" << types;
-    CalEvent::Types disallowedStdTypes(nullptr);
-    CalEvent::Types stdTypes(nullptr);
+    CalEvent::Types disallowedStdTypes(0);
+    CalEvent::Types stdTypes(0);
 
     // Prevent the enabling of duplicate alarm types if another collection
     // uses the same backend storage.
