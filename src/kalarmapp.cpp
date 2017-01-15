@@ -174,7 +174,7 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     mKOrganizerEnabled = !QStandardPaths::findExecutable(korg).isEmpty();
     if (!mKOrganizerEnabled) { qCDebug(KALARM_LOG) << "KOrganizer options disabled (KOrganizer not found)"; }
     // Check if the window manager can't handle keyboard focus transfer between windows
-    mWindowFocusBroken = (QProcessEnvironment::systemEnvironment().value(QStringLiteral("XDG_CURRENT_DESKTOP")) == QLatin1String("Unity"));
+    mWindowFocusBroken = (KAlarm::currentDesktopIdentity() == KAlarm::Desktop::Unity);
     if (mWindowFocusBroken) { qCDebug(KALARM_LOG) << "Window keyboard focus broken"; }
 }
 

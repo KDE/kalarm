@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -975,6 +975,25 @@ void editNewTemplate(EditAlarmDlg::Type type, QWidget* parent)
 void editNewTemplate(const KAEvent* preset, QWidget* parent)
 {
     ::editNewTemplate(EditAlarmDlg::Type(0), preset, parent);
+}
+
+/******************************************************************************
+* Find the identity of the desktop we are running on.
+*/
+QString currentDesktopIdentityName()
+{
+    return QProcessEnvironment::systemEnvironment().value(QStringLiteral("XDG_CURRENT_DESKTOP"));
+}
+
+/******************************************************************************
+* Find the identity of the desktop we are running on.
+*/
+Desktop currentDesktopIdentity()
+{
+    const QString desktop = currentDesktopIdentityName();
+    if (desktop == QStringLiteral("KDE"))    return Desktop::Kde;
+    if (desktop == QStringLiteral("Unity"))  return Desktop::Unity;
+    return Desktop::Other;
 }
 
 /******************************************************************************

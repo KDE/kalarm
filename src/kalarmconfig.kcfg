@@ -18,7 +18,7 @@
     <argument type="Bool">ShowInSystemTray</argument>
   </signal>
   <signal name="autoHideSystemTrayChanged">
-    <argument type="Int">AutoHideSystemTray</argument>
+    <argument type="Int">Base_AutoHideSystemTray</argument>
   </signal>
   <signal name="askResourceChanged">
     <argument type="Bool">AskResource</argument>
@@ -99,11 +99,16 @@
       <default>true</default>
       <!-- <emit signal="showInSystemTrayChanged"/>-->
     </entry>
-    <entry name="AutoHideSystemTray" type="Int">
+    <entry name="Base_AutoHideSystemTray" key="AutoHideSystemTray" type="Int">
       <label context="@label">Auto-hide in system tray if no alarms due within period</label>
       <whatsthis context="@info:whatsthis">&lt;p>Enter -1 to auto-hide KAlarm's icon in the system tray when there are no active alarms.&lt;/p>&lt;p>To auto-hide the system tray icon when there are no alarms due within a set period of time, enter the time period in minutes.&lt;/p>&lt;p>Enter 0 to always show the system tray icon.&lt;/p></whatsthis>
       <default>1440</default>
       <!-- <emit signal="autoHideSystemTrayChanged"/> -->
+    </entry>
+    <entry name="NoAutoHideSystemTrayDesktops" type="StringList" hidden="true">
+      <label context="@label">Desktops without auto-hide in system tray</label>
+      <whatsthis context="@info:whatsthis">Desktops for which the auto-hide in system tray option is not available.</whatsthis>
+      <default>Unity</default>
     </entry>
     <entry name="AutoStart" key="AutoStart" type="Bool">
       <label context="@label">Start at login</label>

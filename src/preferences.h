@@ -1,7 +1,7 @@
 /*
  *  preferences.h  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -41,6 +41,8 @@ class Preferences : public PreferencesBase
 
         static Preferences*     self();
         static void             connect(const char* signal, const QObject* receiver, const char* member);
+        static int              autoHideSystemTray();
+        static void             setAutoHideSystemTray(int timeout);
         static bool             autoStartChangedByUser()         { return mAutoStartChangedByUser; }
         static void             setAutoStartChangedByUser(bool c){ mAutoStartChangedByUser = c; }
 

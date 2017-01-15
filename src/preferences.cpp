@@ -1,7 +1,7 @@
 /*
  *  preferences.cpp  -  program preference settings
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -109,6 +109,29 @@ Preferences::Preferences()
     // writeConfig() here - leave it to be written only if the config file
     // is updated with other data.
     setVersion(QStringLiteral(KALARM_VERSION));
+}
+
+/******************************************************************************
+* Auto hiding of the system tray icon is only allowed on desktops which provide
+* GUI controls to show hidden icons.
+*/
+int Preferences::autoHideSystemTray()
+{
+    if(noAutoHideSystemTrayDesktops().contains(KAlarm::currentDesktopIdentityName()))
+        return 0;   // never hide
+    return self()->mBase_AutoHideSystemTray;
+}
+
+/******************************************************************************
+* Auto hiding of the system tray icon is only allowed on desktops which provide
+* GUI controls to show hidden icons, so while KAlarm is running on such a
+* desktop, don't allow changes to the setting.
+*/
+void Preferences::setAutoHideSystemTray(int timeout)
+{
+    if(noAutoHideSystemTrayDesktops().contains(KAlarm::currentDesktopIdentityName()))
+        return;
+    self()->setBase_AutoHideSystemTray(timeout);
 }
 
 void Preferences::setAskAutoStart(bool yes)

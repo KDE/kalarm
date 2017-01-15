@@ -1,7 +1,7 @@
 /*
  *  functions.h  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2004-2014 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2007-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -81,6 +81,14 @@ struct UpdateResult
     bool operator!=(UpdateStatus s) const  { return status != s; }
     void set(UpdateStatus s) { operator=(s); }
     void set(UpdateStatus s, const QString& m) { status = s; message = m; }
+};
+
+/** Desktop identity, obtained from XDG_CURRENT_DESKTOP. */
+enum class Desktop
+{
+    Kde,      //!< KDE (KDE 4 and Plasma both identify as "KDE")
+    Unity,    //!< Unity
+    Other
 };
 
 /** Display a main window with the specified event selected */
@@ -165,6 +173,8 @@ UpdateResult        enableEvents(QVector<KAEvent>&, bool enable, QWidget* msgPar
 QVector<KAEvent>    getSortedActiveEvents(QObject* parent, AlarmListModel** model = nullptr);
 void                purgeArchive(int purgeDays);    // must only be called from KAlarmApp::processQueue()
 void                displayKOrgUpdateError(QWidget* parent, UpdateError, UpdateResult korgError, int nAlarms = 0);
+Desktop             currentDesktopIdentity();
+QString             currentDesktopIdentityName();
 QStringList         checkRtcWakeConfig(bool checkEventExists = false);
 void                deleteRtcWakeConfig();
 void                cancelRtcWake(QWidget* msgParent, const QString& eventId = QString());

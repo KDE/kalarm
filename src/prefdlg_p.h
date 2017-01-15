@@ -1,7 +1,7 @@
 /*
  *  prefdlg_p.h  -  private classes for program preferences dialog
  *  Program:  kalarm
- *  Copyright © 2001-2012 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -259,7 +259,8 @@ class ViewPrefTab : public PrefsTabBase
         QTabWidget*   mTabs;
         ColourButton* mDisabledColour;
         ColourButton* mArchivedColour;
-        QGroupBox*    mShowInSystemTray;
+        QCheckBox*    mShowInSystemTrayCheck;
+        QGroupBox*    mShowInSystemTrayGroup;
         ButtonGroup*  mAutoHideSystemTray;
         TimePeriod*   mAutoHideSystemTrayPeriod;
         QCheckBox*    mTooltipShowAlarms;
