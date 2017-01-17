@@ -1319,7 +1319,6 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
         dt.setTime_t(summary.date());
         QString body = KAMail::getMailBody(summary.serialNumber());
         alarmText.setEmail(summary.to(), summary.from(), QString(),
-#error
                            KLocale::global()->formatDateTime(dt), summary.subject(),
                            body, summary.serialNumber());
     }
