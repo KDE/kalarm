@@ -1,7 +1,7 @@
 /*
  *  traywindow.cpp  -  the KDE system tray applet
  *  Program:  kalarm
- *  Copyright © 2002-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,6 @@
 #include <kstandardguiitem.h>
 #include <kiconeffect.h>
 #include <kconfig.h>
-#include <KIconLoader>
 #include <KAboutData>
 
 #include <QMenu>
@@ -80,9 +79,6 @@ TrayWindow::TrayWindow(MainWindow* parent)
     setToolTipIconByName(QStringLiteral("kalarm"));
     setToolTipTitle(KAboutData::applicationData().displayName());
     setIconByName(QStringLiteral("kalarm"));
-    // Load the disabled icon for use by setIconByPixmap()
-    // - setIconByName() doesn't work for this one!
-    mIconDisabled.addPixmap(KIconLoader::global()->loadIcon(QStringLiteral("kalarm-disabled"), KIconLoader::Panel));
     setStatus(KStatusNotifierItem::Active);
     // Set up the context menu
     mActionEnabled = KAlarm::createAlarmEnableAction(this);
@@ -329,10 +325,9 @@ void TrayWindow::updateToolTip()
 */
 void TrayWindow::updateIcon()
 {
-    if (theApp()->alarmsEnabled())
-        setIconByName(mHaveDisabledAlarms ? QStringLiteral("kalarm-partdisabled") : QStringLiteral("kalarm"));
-    else
-        setIconByPixmap(mIconDisabled);
+    setIconByName(!theApp()->alarmsEnabled() ? QStringLiteral("kalarm-disabled")
+                  : mHaveDisabledAlarms ? QStringLiteral("kalarm-partdisabled")
+                  : QStringLiteral("kalarm"));
 }
 
 /******************************************************************************

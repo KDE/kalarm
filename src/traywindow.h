@@ -67,7 +67,6 @@ class TrayWindow : public KStatusNotifierItem
         void         updateIcon();
 
         MainWindow*     mAssocMainWindow;     // main window associated with this, or null
-        QIcon           mIconDisabled;
         KToggleAction*  mActionEnabled;
         NewAlarmAction* mActionNew;
         mutable AlarmListModel* mAlarmsModel; // active alarms sorted in time order
