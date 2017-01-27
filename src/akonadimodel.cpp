@@ -1507,7 +1507,9 @@ void AkonadiModel::itemJobDone(KJob* j)
             const Item current = itemById(itemId);    // fetch the up-to-date item
             checkQueuedItemModifyJob(current);
         }
-        KAMessageBox::error(MainWindow::mainMainWindow(), xi18nc("@info", "%1<nl/>(%2)", errMsg, j->errorString()));
+        // Don't show error details by default, since it's from Akonadi and likely
+        // to be too technical for general users.
+        KAMessageBox::detailedError(MainWindow::mainMainWindow(), errMsg, j->errorString());
     }
     else
     {
