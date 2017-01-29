@@ -75,9 +75,6 @@
 
 static const int AKONADI_TIMEOUT = 30;   // timeout (seconds) for Akonadi collections to be populated
 
-static void setEventCommandError(const KAEvent&, KAEvent::CmdErrType);
-static void clearEventCommandError(const KAEvent&, KAEvent::CmdErrType);
-
 /******************************************************************************
 * Find the maximum number of seconds late which a late-cancel alarm is allowed
 * to be. This is calculated as the late cancel interval, plus a few seconds
@@ -1770,6 +1767,12 @@ bool KAlarmApp::cancelAlarm(KAEvent& event, KAAlarm::Type alarmType, bool update
     event.removeExpiredAlarm(alarmType);
     if (!event.alarmCount())
     {
+        // If it's a command alarm being executed, mark it as deleted
+        ProcData* pd = findCommandProcess(event.id());
+        if (pd)
+            pd->eventDeleted = true;
+
+        // Delete it
         KAlarm::deleteEvent(event, false);
         return true;
     }
@@ -2366,9 +2369,15 @@ void KAlarmApp::stopAudio()
     MessageWin::stopAudio();
 }
 
-
-void setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
+/******************************************************************************
+* Set the command error for the specified alarm.
+*/
+void KAlarmApp::setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err) const
 {
+    ProcData* pd = findCommandProcess(event.id());
+    if (pd && pd->eventDeleted)
+        return;   // the alarm has been deleted, so can't set error status
+
     if (err == KAEvent::CMD_ERROR_POST  &&  event.commandError() == KAEvent::CMD_ERROR_PRE)
         err = KAEvent::CMD_ERROR_PRE_POST;
     event.setCommandError(err);
@@ -2378,8 +2387,15 @@ void setEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
     AkonadiModel::instance()->updateCommandError(event);
 }
 
-void clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
+/******************************************************************************
+* Clear the command error for the specified alarm.
+*/
+void KAlarmApp::clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err) const
 {
+    ProcData* pd = findCommandProcess(event.id());
+    if (pd && pd->eventDeleted)
+        return;   // the alarm has been deleted, so can't set error status
+
     KAEvent::CmdErrType newerr = static_cast<KAEvent::CmdErrType>(event.commandError() & ~err);
     event.setCommandError(newerr);
     KAEvent* ev = AlarmCalendar::resources()->event(EventId(event));
@@ -2391,13 +2407,28 @@ void clearEventCommandError(const KAEvent& event, KAEvent::CmdErrType err)
     AkonadiModel::instance()->updateCommandError(event);
 }
 
+/******************************************************************************
+* Find the currently executing command process for an event ID, if any.
+*/
+KAlarmApp::ProcData* KAlarmApp::findCommandProcess(const QString& eventId) const
+{
+    for (int i = 0, end = mCommandProcesses.count();  i < end;  ++i)
+    {
+        ProcData* pd = mCommandProcesses[i];
+        if (pd->event->id() == eventId)
+            return pd;
+    }
+    return Q_NULLPTR;
+}
+
 
 KAlarmApp::ProcData::ProcData(ShellProcess* p, KAEvent* e, KAAlarm* a, int f)
     : process(p),
       event(e),
       alarm(a),
       messageBoxParent(Q_NULLPTR),
-      flags(f)
+      flags(f),
+      eventDeleted(false)
 { }
 
 KAlarmApp::ProcData::~ProcData()

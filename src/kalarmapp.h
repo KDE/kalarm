@@ -154,6 +154,7 @@ class KAlarmApp : public QApplication
             QPointer<QWidget> messageBoxParent;
             QStringList       tempFiles;
             int               flags;
+            bool              eventDeleted;
         };
         struct ActionQEntry
         {
@@ -186,6 +187,9 @@ class KAlarmApp : public QApplication
         void               commandErrorMsg(const ShellProcess*, const KAEvent&, const KAAlarm*, int flags = 0);
         void               purge(int daysToKeep);
         QStringList        scheduledAlarmList();
+        void               setEventCommandError(const KAEvent&, KAEvent::CmdErrType) const;
+        void               clearEventCommandError(const KAEvent&, KAEvent::CmdErrType) const;
+        ProcData*          findCommandProcess(const QString& eventId) const;
 
         static KAlarmApp*  mInstance;            // the one and only KAlarmApp instance
         static int         mActiveCount;         // number of active instances without main windows

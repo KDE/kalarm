@@ -1,8 +1,9 @@
 KAlarm Change Log
 
-=== Version 2.11.13 --- 26 January 2017 ===
+=== Version 2.11.13 --- 29 January 2017 ===
 + Fix system tray icon used for "some alarms disabled"
 + Improved system tray icons (requires Plasma 5.9) [KDE Bug 362631]
++ Don't show misleading "Failed to update alarm" if command alarm fails [KDE Bug 375615]
 
 === Version 2.11.12 (KDE Applications 16.12.1) --- 1 January 2017 ===
 + Fix Export Alarms file save error [KDE Bug 374337]
