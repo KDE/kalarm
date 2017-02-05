@@ -1575,7 +1575,7 @@ YearlyRule::YearlyRule(bool readOnly, QWidget* parent)
     w->setWhatsThis(i18nc("@info:whatsthis", "Select the months of the year in which to repeat the alarm"));
 
     // February 29th handling option
-    QHBoxLayout* f29box = new QHBoxLayout(this);
+    QHBoxLayout* f29box = new QHBoxLayout;
     layout()->addLayout(f29box);
     w = new QWidget(this);     // this is to control the QWhatsThis text display area
     f29box->addWidget(w, 0, Qt::AlignLeft);
