@@ -31,6 +31,7 @@
 #include <QDir>
 #include <QScopedPointer>
 
+#include <iostream>
 #include <stdlib.h>
 
 #define PROGRAM_NAME "kalarm"
@@ -41,7 +42,7 @@ int main(int argc, char* argv[])
     // before libraries unload, to avoid crashes during clean-up.
     QScopedPointer<KAlarmApp> app(KAlarmApp::create(argc, argv));
 
-    QStringList args = app->arguments();
+    const QStringList args = app->arguments();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     app->setAttribute(Qt::AA_EnableHighDpiScaling);
 
@@ -58,7 +59,17 @@ int main(int argc, char* argv[])
 
     qCDebug(KALARM_LOG) << "initialising";
 
-    app->activate(args, QDir::currentPath());
+    QString outputText;
+    int exitCode = app->activate(args, QDir::currentPath(), outputText);
+    if (exitCode >= 0)
+    {
+        if (exitCode > 0)
+            std::cout << qPrintable(outputText) << std::endl;
+        else
+            std::cerr << qPrintable(outputText) << std::endl;
+        exit(exitCode);
+    }
+
     app->restoreSession();
     return app->exec();
 }

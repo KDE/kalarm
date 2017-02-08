@@ -122,11 +122,6 @@ KAlarmApp::KAlarmApp(int& argc, char** argv)
     KAlarm::setTestModeConditions();
 #endif
 
-    // Make this a unique application.
-    KDBusService* s = new KDBusService(KDBusService::Unique, this);
-    connect(this, &KAlarmApp::aboutToQuit, s, &KDBusService::deleteLater);
-    connect(s, &KDBusService::activateRequested, this, &KAlarmApp::activate);
-
     setQuitOnLastWindowClosed(false);
     Preferences::self();    // read KAlarm configuration
     if (!Preferences::noAutoStart())
@@ -324,16 +319,29 @@ bool KAlarmApp::restoreSession()
 /******************************************************************************
 * Called for a unique QApplication when a new instance of the application is
 * started.
+* Reply: exit code (>= 0), or -1 to continue execution.
+*        If exit code >= 0, 'outputText' holds text to output before terminating.
 */
-void KAlarmApp::activate(const QStringList& args, const QString& workingDirectory)
+void KAlarmApp::activateByDBus(const QStringList& args, const QString& workingDirectory)
+{
+  activateInstance(args, workingDirectory, nullptr);
+}
+
+/******************************************************************************
+* Called to start a new instance of the application.
+* Reply: exit code (>= 0), or -1 to continue execution.
+*        If exit code >= 0, 'outputText' holds text to output before terminating.
+*/
+int KAlarmApp::activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText)
 {
     Q_UNUSED(workingDirectory)
     qCDebug(KALARM_LOG);
+    if (outputText)
+        outputText->clear();
     if (mFatalError)
     {
         quitFatal();
-//        return 1;
-        return;
+        return 1;
     }
 
     // The D-Bus call to activate a subsequent instance of KAlarm may not supply
@@ -348,25 +356,65 @@ void KAlarmApp::activate(const QStringList& args, const QString& workingDirector
     QCommandLineParser parser;
     KAboutData::applicationData().setupCommandLine(&parser);
     parser.setApplicationDescription(QApplication::applicationDisplayName());
-    const QStringList newArgs = CommandOptions::setOptions(&parser, fixedArgs);
-    parser.process(newArgs);
+    CommandOptions* options = new CommandOptions;
+    const QStringList newArgs = options->setOptions(&parser, fixedArgs);
+    options->parse();
     KAboutData::applicationData().processCommandLine(&parser);
 
     ++mActiveCount;
     int exitCode = 0;               // default = success
     static bool firstInstance = true;
     bool dontRedisplay = false;
-    if (!firstInstance || !isSessionRestored())
+    CommandOptions::Command command = CommandOptions::NONE;
+    bool processOptions = (!firstInstance || !isSessionRestored());
+    if (processOptions)
     {
-        CommandOptions::process();
-        CommandOptions* options = CommandOptions::instance();   // fetch command line options
+        options->process();
 #ifndef NDEBUG
         if (options->simulationTime().isValid())
             KAlarm::setSimulatedSystemTime(options->simulationTime());
 #endif
-        CommandOptions::Command command = options->command();
+        command = options->command();
         if (options->disableAll())
             setAlarmsEnabled(false);   // disable alarm monitoring
+
+        // Handle options which exit with a terminal message, before
+        // making the application a unique application, since a
+        // unique application won't output to the terminal if another
+        // instance is already running.
+        switch (command)
+        {
+            case CommandOptions::CMD_ERROR:
+                if (outputText)
+                {
+                    *outputText = options->outputText();
+                    delete options;
+                    return 1;
+                }
+                mReadOnly = true;   // don't need write access to calendars
+                exitCode = 1;
+                break;
+            case CommandOptions::EXIT:
+                if (outputText)
+                {
+                    *outputText = options->outputText();
+                    delete options;
+                    return 0;
+                }
+                exitCode = -1;
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Make this a unique application.
+    KDBusService* s = new KDBusService(KDBusService::Unique, this);
+    connect(this, &KAlarmApp::aboutToQuit, s, &KDBusService::deleteLater);
+    connect(s, &KDBusService::activateRequested, this, &KAlarmApp::activateByDBus);
+
+    if (processOptions)
+    {
         switch (command)
         {
             case CommandOptions::TRIGGER_EVENT:
@@ -537,19 +585,23 @@ void KAlarmApp::activate(const QStringList& args, const QString& workingDirector
                     exitCode = 1;
                 else
                 {
-                    MainWindow* win = MainWindow::create();
-                    if (command == CommandOptions::TRAY)
-                        win->setWindowState(win->windowState() | Qt::WindowMinimized);
-                    win->show();
+                    if (mTrayWindow  &&  mTrayWindow->assocMainWindow()  &&  !mTrayWindow->assocMainWindow()->isVisible())
+                        mTrayWindow->showAssocMainWindow();
+                    else
+                    {
+                        MainWindow* win = MainWindow::create();
+                        if (command == CommandOptions::TRAY)
+                            win->setWindowState(win->windowState() | Qt::WindowMinimized);
+                        win->show();
+                    }
                 }
                 break;
-
-            case CommandOptions::CMD_ERROR:
-                mReadOnly = true;   // don't need write access to calendars
-                exitCode = 1;
+            default:
                 break;
         }
     }
+    if (options != CommandOptions::firstInstance())
+        delete options;
 
     // If this is the first time through, redisplay any alarm message windows
     // from last time.
@@ -579,12 +631,12 @@ void KAlarmApp::activate(const QStringList& args, const QString& workingDirector
     // Quit the application if this was the last/only running "instance" of the program.
     // Executing 'return' doesn't work very well since the program continues to
     // run if no windows were created.
-    quitIf(exitCode);
+    quitIf(exitCode >= 0 ? exitCode : 0);
 
     // Check whether the KDE time zone daemon is running (but don't hold up initialisation)
     QTimer::singleShot(0, this, &KAlarmApp::checkKtimezoned);
 
-//    return exitCode;
+    return -1;   // continue executing the application instance
 }
 
 void KAlarmApp::checkKtimezoned()

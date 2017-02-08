@@ -1,7 +1,7 @@
 /*
  *  commandoptions.cpp  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,15 +38,27 @@ namespace
 bool convInterval(const QString& timeParam, KARecurrence::Type&, int& timeInterval, bool allowMonthYear = false);
 }
 
-CommandOptions*              CommandOptions::mInstance = nullptr;
-QCommandLineParser*          CommandOptions::mParser = nullptr;
-QVector<QCommandLineOption*> CommandOptions::mOptions(Num_Options, nullptr);
-QStringList                  CommandOptions::mExecArguments;
+CommandOptions* CommandOptions::mFirstInstance = nullptr;
 
-void CommandOptions::setError(const QString& error)
+CommandOptions::CommandOptions()
+  : mParser(nullptr),
+    mOptions(Num_Options, nullptr),
+    mCommand(NONE),
+    mEditActionSet(false),
+    mRecurrence(nullptr),
+    mRepeatCount(0),
+    mRepeatInterval(0),
+    mLateCancel(0),
+    mBgColour(Preferences::defaultBgColour()),
+    mFgColour(Preferences::defaultFgColour()),
+    mReminderMinutes(0),
+    mAudioVolume(-1),
+    mFromID(0),
+    mFlags(KAEvent::DEFAULT_FONT),
+    mDisableAll(false)
 {
-    if (mError.isEmpty())
-        mError = error;
+    if (!mFirstInstance)
+        mFirstInstance = this;
 }
 
 /******************************************************************************
@@ -221,13 +233,13 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                                    QStringLiteral("[message]"));
 
     // Check for any options which eat up all following arguments.
-    QStringList arguments;
+    mNonExecArguments.clear();
     for (int i = 0;  i < args.size();  ++i)
     {
         const QString arg = args[i];
         if (arg == QStringLiteral("--nofork"))
             continue;     // Ignore debugging option
-        arguments << arg;
+        mNonExecArguments << arg;
         if (arg == optionName(EXEC)  ||  arg == optionName(EXEC, true)
         ||  arg == optionName(EXEC_DISPLAY)  ||  arg == optionName(EXEC_DISPLAY, true))
         {
@@ -239,31 +251,35 @@ QStringList CommandOptions::setOptions(QCommandLineParser* parser, const QString
                 mExecArguments << args[i];
         }
     }
-qCDebug(KALARM_LOG) << arguments;
-    return arguments;
+    return mNonExecArguments;
+}
+
+void CommandOptions::parse()
+{
+    if (!mParser->parse(mNonExecArguments))
+    {
+        setError(mParser->errorText());
+        return;
+    }
+    if (mParser->isSet(QStringLiteral("help")))
+    {
+        mCommand = EXIT;
+        mError = mParser->helpText();
+        return;
+    }
+    if (mParser->isSet(QStringLiteral("version")))
+    {
+        mCommand = EXIT;
+        mError = QCoreApplication::applicationName() + QStringLiteral(" ") + QCoreApplication::applicationVersion();
+        return;
+    }
 }
 
 void CommandOptions::process()
 {
-    if (!mInstance)
-        mInstance = new CommandOptions();
-}
+    if (mCommand == CMD_ERROR  ||  mCommand == EXIT)
+        return;
 
-CommandOptions::CommandOptions()
-    : mCommand(NONE),
-      mEditActionSet(false),
-      mRecurrence(nullptr),
-      mRepeatCount(0),
-      mRepeatInterval(0),
-      mLateCancel(0),
-      mBgColour(Preferences::defaultBgColour()),
-      mFgColour(Preferences::defaultFgColour()),
-      mReminderMinutes(0),
-      mAudioVolume(-1),
-      mFromID(0),
-      mFlags(KAEvent::DEFAULT_FONT),
-      mDisableAll(false)
-{
 #ifndef NDEBUG
     if (mParser->isSet(*mOptions[TEST_SET_TIME]))
     {
@@ -684,15 +700,19 @@ CommandOptions::CommandOptions()
     }
 
     if (!mError.isEmpty())
-    {
-        printError(mError);
-        mCommand = CMD_ERROR;
-    }
+        setError(mError);
+}
+
+void CommandOptions::setError(const QString& errmsg)
+{
+    qCWarning(KALARM_LOG) << errmsg;
+    mCommand = CMD_ERROR;
+    if (mError.isEmpty())
+        mError = errmsg + i18nc("@info:shell", "\nUse --help to get a list of available command line options.\n");
 }
 
 void CommandOptions::printError(const QString& errmsg)
 {
-qCDebug(KALARM_LOG)<<"ERROR=====================";
     // Note: we can't use mArgs->usage() since that also quits any other
     // running 'instances' of the program.
     std::cerr << errmsg.toLocal8Bit().data()
@@ -754,7 +774,7 @@ QString CommandOptions::arg(int n)
     return (n < args.size()) ? args[n] : QString();
 }
 
-QString CommandOptions::optionName(Option opt, bool shortName)
+QString CommandOptions::optionName(Option opt, bool shortName) const
 {
     if (opt == Opt_Message)
         return QStringLiteral("message");
