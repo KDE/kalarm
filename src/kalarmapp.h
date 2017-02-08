@@ -56,6 +56,8 @@ class KAlarmApp : public QApplication
         bool               wantShowInSystemTray() const;
         bool               alarmsEnabled() const           { return mAlarmsEnabled; }
         bool               korganizerEnabled() const       { return mKOrganizerEnabled; }
+        int                activate(const QStringList& args, const QString& workingDirectory, QString& outputText)
+                                                           { return activateInstance(args, workingDirectory, &outputText); }
         bool               restoreSession();
         bool               quitIf()                        { return quitIf(0); }
         void               doQuit(QWidget* parent);
@@ -92,7 +94,7 @@ class KAlarmApp : public QApplication
         QString            dbusList();
 
     public Q_SLOTS:
-        void               activate(const QStringList& args, const QString& workingDirectory);
+        void               activateByDBus(const QStringList& args, const QString& workingDirectory);
         void               processQueue();
         void               setAlarmsEnabled(bool);
         void               purgeNewArchivedDefault(const Akonadi::Collection&);
@@ -168,6 +170,7 @@ class KAlarmApp : public QApplication
 
         KAlarmApp(int& argc, char** argv);
         bool               initialise();
+        int                activateInstance(const QStringList& args, const QString& workingDirectory, QString* outputText);
         bool               initCheck(bool calendarOnly = false, bool waitForCollection = false, Akonadi::Collection::Id = -1);
         bool               quitIf(int exitCode, bool force = false);
         bool               checkSystemTray();

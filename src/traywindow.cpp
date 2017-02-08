@@ -233,6 +233,19 @@ void TrayWindow::slotHaveDisabledAlarms(bool haveDisabled)
 }
 
 /******************************************************************************
+* Show the associated main window.
+*/
+void TrayWindow::showAssocMainWindow()
+{
+    if (mAssocMainWindow)
+    {
+        mAssocMainWindow->show();
+        mAssocMainWindow->raise();
+        mAssocMainWindow->activateWindow();
+    }
+}
+
+/******************************************************************************
 * A left click displays the KAlarm main window.
 */
 void TrayWindow::slotActivateRequested()

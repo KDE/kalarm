@@ -1,7 +1,7 @@
 /*
  *  commandoptions.h  -  extract command line options
  *  Program:  kalarm
- *  Copyright © 2001-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,7 @@ class CommandOptions
         {
             CMD_ERROR,        // error in command line options
             NONE,             // no command
+            EXIT,             // print outputText() and exit
             TRAY,             // --tray
             TRIGGER_EVENT,    // --triggerEvent
             CANCEL_EVENT,     // --cancelEvent
@@ -52,9 +53,11 @@ class CommandOptions
             NEW,              // --file, --exec-display, --exec, --mail, message
             LIST              // --list
         };
-        static QStringList setOptions(QCommandLineParser*, const QStringList& args);
-        static void process();
-        static CommandOptions* instance()             { return mInstance; }
+        QStringList setOptions(QCommandLineParser*, const QStringList& args);
+        static CommandOptions* firstInstance()        { return mFirstInstance; }
+        CommandOptions();
+        void                parse();
+        void                process();
         Command             command() const           { return mCommand; }
         QString             commandName() const       { return optionName(mCommandOpt); }
         EventId             eventId() const           { return mEventId; }
@@ -78,6 +81,7 @@ class CommandOptions
         uint                fromID() const            { return mFromID; }
         KAEvent::Flags      flags() const             { return mFlags; }
         bool                disableAll() const        { return mDisableAll; }
+        QString             outputText() const        { return mError; }
 #ifndef NDEBUG
         KDateTime           simulationTime() const    { return mSimulationTime; }
 #endif
@@ -132,22 +136,22 @@ class CommandOptions
             Opt_Message        // special value representing "message"
         };
 
-        explicit CommandOptions();
         bool        checkCommand(Option, Command, EditAlarmDlg::Type = EditAlarmDlg::NO_TYPE);
-        inline void setError(const QString& error);
+        void        setError(const QString& error);
         void        setErrorRequires(Option opt, Option opt2, Option opt3 = Num_Options);
         void        setErrorParameter(Option);
         void        setErrorIncompatible(Option opt1, Option opt2);
         void        checkEditType(EditAlarmDlg::Type type, Option opt)
                                   { checkEditType(type, EditAlarmDlg::NO_TYPE, opt); }
         void        checkEditType(EditAlarmDlg::Type, EditAlarmDlg::Type, Option);
-        static QString arg(int n);
-        static QString optionName(Option, bool shortName = false);
+        QString     arg(int n);
+        QString     optionName(Option, bool shortName = false) const;
 
-        static CommandOptions* mInstance;      // the unique instance
-        static QCommandLineParser* mParser;
-        static QVector<QCommandLineOption*> mOptions;  // all possible command line options
-        static QStringList     mExecArguments; // arguments for --exec or --exec-display
+        static CommandOptions* mFirstInstance;      // the first instance
+        QCommandLineParser* mParser;
+        QVector<QCommandLineOption*> mOptions;  // all possible command line options
+        QStringList         mNonExecArguments; // arguments except for --exec or --exec-display parameters
+        QStringList         mExecArguments;  // arguments for --exec or --exec-display
         QString             mError;          // error message
         Command             mCommand;        // the selected command
         Option              mCommandOpt;     // option for the selected command
