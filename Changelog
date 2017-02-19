@@ -4,9 +4,10 @@ KAlarm Change Log
 + Report if terminal for command alarms is not configured.
 + Don't allow 'auto-hide in system tray' on Unity desktop [KDE Bug 373848]
 
-=== Version 2.11.14 --- 8 February 2017 ===
+=== Version 2.11.14 --- 19 February 2017 ===
 + Fix not showing main window if activated again while already running with --tray [Bug 374520]
 + Fix --help, --version and option errors not being reported if KAlarm is already running.
++ Make command options --edit-new-* work [KDE Bug 376209]
 
 === Version 2.11.13 (KDE Applications 16.12.2) --- 29 January 2017 ===
 + Fix system tray icon used for "some alarms disabled"

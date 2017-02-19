@@ -24,7 +24,6 @@
 #include "alarmcalendar.h"
 #include "alarmlistview.h"
 #include "alarmtime.h"
-#include "autoqpointer.h"
 #include "commandoptions.h"
 #include "dbushandler.h"
 #include "editdlgtypes.h"
@@ -472,10 +471,7 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                     exitCode = 1;
                 else
                 {
-                    // Use AutoQPointer to guard against crash on application exit while
-                    // the dialogue is still open. It prevents double deletion (both on
-                    // deletion of parent, and on return from this function).
-                    AutoQPointer<EditAlarmDlg> editDlg = EditAlarmDlg::create(false, options->editType());
+                    EditAlarmDlg* editDlg = EditAlarmDlg::create(false, options->editType(), MainWindow::mainMainWindow());
                     if (options->alarmTime().isValid())
                         editDlg->setTime(options->alarmTime());
                     if (options->recurrence())
@@ -540,6 +536,10 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                         case EditAlarmDlg::NO_TYPE:
                             break;
                     }
+                    // Execute the edit dialogue. Note that if no other instance of KAlarm is
+                    // running, this new instance will not exit after the dialogue is closed.
+                    // This is deliberate, since exiting would mean that KAlarm wouldn't
+                    // trigger the new alarm.
                     KAlarm::execNewAlarmDlg(editDlg);
                 }
                 break;
@@ -549,7 +549,13 @@ int KAlarmApp::activateInstance(const QStringList& args, const QString& workingD
                 if (!initCheck())
                     exitCode = 1;
                 else
+                {
+                    // Execute the edit dialogue. Note that if no other instance of KAlarm is
+                    // running, this new instance will not exit after the dialogue is closed.
+                    // This is deliberate, since exiting would mean that KAlarm wouldn't
+                    // trigger the new alarm.
                     KAlarm::editNewAlarm(options->templateName());
+                }
                 break;
 
             case CommandOptions::NEW:
