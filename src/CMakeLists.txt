@@ -152,6 +152,7 @@ target_link_libraries(kalarm_bin
     KF5::Auth
     KF5::DBusAddons
     KF5::PimCommon
+    KF5::AkonadiWidgets
 )
 
 if (Qt5X11Extras_FOUND)
