@@ -140,7 +140,7 @@ target_link_libraries(kalarm_bin
     KF5::Contacts
     KF5::Mime
     KF5::IdentityManagement
-    KF5::MailTransport
+    KF5::MailTransportAkonadi
     KF5::AkonadiCore
     KF5::AkonadiMime
     KF5::AkonadiContact

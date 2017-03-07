@@ -30,9 +30,9 @@
 #include <kalarmcal/identities.h>
 #include <KIdentityManagement/kidentitymanagement/identitymanager.h>
 #include <KIdentityManagement/kidentitymanagement/identity.h>
-#include <MailTransport/mailtransport/transportmanager.h>
-#include <MailTransport/mailtransport/transport.h>
-#include <MailTransport/mailtransport/messagequeuejob.h>
+#include <mailtransport/transportmanager.h>
+#include <mailtransport/transport.h>
+#include <mailtransportakonadi/messagequeuejob.h>
 #include <KCalCore/Person>
 #include <kmime/kmime_header_parsing.h>
 #include <kmime/kmime_headers.h>
