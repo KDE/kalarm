@@ -177,6 +177,6 @@ install(FILES org.kde.kalarm.kalarm.xml DESTINATION ${KDE_INSTALL_DBUSINTERFACED
 
 add_executable(kalarm_helper rtcwakeaction.cpp ${libkalarm_common_SRCS})
 target_link_libraries(kalarm_helper KF5::Auth KF5::KDELibs4Support)
-install(TARGETS kalarm_helper DESTINATION ${KDE_INSTALL_LIBEXECDIR})
+install(TARGETS kalarm_helper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 kauth_install_helper_files(kalarm_helper org.kde.kalarmrtcwake root)
 kauth_install_actions(org.kde.kalarmrtcwake rtcwakeaction.actions)
