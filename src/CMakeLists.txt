@@ -165,8 +165,8 @@ install(TARGETS kalarm_bin ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install(PROGRAMS org.kde.kalarm.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
-install(PROGRAMS kalarm.autostart.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
+install(FILES org.kde.kalarm.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES kalarm.autostart.desktop DESTINATION ${KDE_INSTALL_AUTOSTARTDIR})
 install(FILES org.kde.kalarm.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 install(FILES kalarmconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR})
