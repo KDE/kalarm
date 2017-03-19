@@ -47,7 +47,7 @@
   <summary xml:lang="ar">مجدول منبّه شخصيّ</summary>
   <summary xml:lang="bs">Raspoređivač osobnih alarma</summary>
   <summary xml:lang="ca">Planificador personal per a alarmes</summary>
-  <summary xml:lang="ca-valencia">Programador d'alarma personal</summary>
+  <summary xml:lang="ca-valencia">Planificador personal per a alarmes</summary>
   <summary xml:lang="cs">Osobní plánovač alarmů</summary>
   <summary xml:lang="de">Persönliche Termin-Erinnerung</summary>
   <summary xml:lang="en-GB">Personal Alarm Scheduler</summary>
@@ -83,7 +83,7 @@
   <description>
     <p>KAlarm is a personal alarm message, command and email scheduler</p>
     <p xml:lang="ca">El KAlarm és un planificador personal per a alarmes de missatge, ordres i correu electrònic.</p>
-    <p xml:lang="ca-valencia">El KAlarm és un programador personal per a alarmes de missatge, ordes i correu electrònic.</p>
+    <p xml:lang="ca-valencia">El KAlarm és un planificador personal per a alarmes de missatge, ordes i correu electrònic.</p>
     <p xml:lang="de">KAlarm ist ein Planer für Erinnerungsnachrichten sowie für termingesteuerten E-Mail-Versand und Befehlsausführungen</p>
     <p xml:lang="en-GB">KAlarm is a personal alarm message, command and email scheduler</p>
     <p xml:lang="es">KAlarm es un mensaje personal de alarmas, órdenes y planificador de correo</p>
