@@ -1467,8 +1467,7 @@ this option inapplicable.</para>
 <para>Check <guilabel>Copy email to self</guilabel> to send a blind
 copy of the email to yourself when the alarm is triggered. The email
 address to which the copy will be sent may be set in the
-<link linkend="preferences-email">Configuration dialog</link>, the
-default being your email address set in the &systemsettings;.</para>
+<link linkend="preferences-email">Configuration dialog</link>.</para>
 </listitem>
 </itemizedlist>
 
@@ -2681,11 +2680,6 @@ email alarms:</para>
 address.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use address from System
-Settings</guilabel> to use the email address which is configured in the
-&systemsettings;.</para>
-</listitem>
-
 <listitem><para>Select <guilabel>Use &kmail; identities</guilabel> to
 be able to choose at the time you configure an email alarm which of
 &kmail;'s email identities to use. &kmail;'s default identity will be
@@ -2707,10 +2701,6 @@ computer which &kalarm; runs on, you could simply enter your user
 login name here.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use address from System
-Settings</guilabel> to use the email address which is configured in the
-&systemsettings;.</para>
-</listitem>
 </itemizedlist>
 </listitem>
 </itemizedlist>
