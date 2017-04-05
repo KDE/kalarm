@@ -418,14 +418,12 @@ Type type(const QString &mimeType)
 Types types(const QStringList &mimeTypes)
 {
     Types types = nullptr;
-    foreach (const QString &type, mimeTypes) {
+    for (const QString &type : mimeTypes) {
         if (type == MIME_ACTIVE) {
             types |= ACTIVE;
-        }
-        if (type == MIME_ARCHIVED) {
+        } else if (type == MIME_ARCHIVED) {
             types |= ARCHIVED;
-        }
-        if (type == MIME_TEMPLATE) {
+        } else if (type == MIME_TEMPLATE) {
             types |= TEMPLATE;
         }
     }
