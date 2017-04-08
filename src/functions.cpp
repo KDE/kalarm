@@ -1414,7 +1414,7 @@ QString runKMail(bool minimise)
         QString errmsg;
         if (minimise  &&  Private::startKMailMinimised())
             return QString();
-        if (KToolInvocation::startServiceByDesktopName(QStringLiteral("org.kde.kmail"), QString(), &errmsg))
+        if (KToolInvocation::startServiceByDesktopName(QStringLiteral("org.kde.kmail2"), QString(), &errmsg))
         {
             qCCritical(KALARM_LOG) << "Couldn't start KMail (" << errmsg << ")";
             return xi18nc("@info", "Unable to start <application>KMail</application><nl/>(<message>%1</message>)", errmsg);
