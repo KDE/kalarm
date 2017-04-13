@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui>
-<kpartgui name="kalarm" version="220" >
+<!DOCTYPE gui>
+<gui name="kalarm" version="220" >
  <ToolBar noMerge="1" name="mainToolBar" >
   <Action name="new" />
   <Separator/>
@@ -104,4 +104,4 @@
   <Action name="resImport" />
   <Action name="resExport" />
  </Menu>
-</kpartgui>
+</gui>
