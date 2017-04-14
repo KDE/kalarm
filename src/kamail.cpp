@@ -1,7 +1,7 @@
 /*
  *  kamail.cpp  -  email functions
  *  Program:  kalarm
- *  Copyright © 2002-2016 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2002-2017 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -136,7 +136,7 @@ int KAMail::send(JobData& jobdata, QStringList& errmsgs)
                 break;
             case Preferences::MAIL_FROM_SYS_SETTINGS:
                 errmsgs = errors(xi18nc("@info", "<para>No 'From' email address is configured.</para>"
-                                                "<para>Please set it in the KDE System Settings or in the <application>KAlarm</application> Configuration dialog.</para>"));
+                                                "<para>Please set a default address in <application>KMail</application> or KDE System Settings or in the <application>KAlarm</application> Configuration dialog.</para>"));
                 break;
             case Preferences::MAIL_FROM_ADDR:
             default:
@@ -500,7 +500,7 @@ void KAMail::notifyQueued(const KAEvent& event)
 }
 
 /******************************************************************************
-* Fetch the user's email address configured in the KDE System Settings.
+* Fetch the user's email address configured in KMail or KDE System Settings.
 */
 QString KAMail::controlCentreAddress()
 {

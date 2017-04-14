@@ -1064,10 +1064,10 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(mEmailAddress, 1, 2);
 
     // 'From' email address to be taken from System Settings
-    mFromCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from System Settings"), group);
+    mFromCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application> or System Settings"), group);
     mFromAddressGroup->addButton(mFromCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
     mFromCCentreButton->setWhatsThis(
-          i18nc("@info:whatsthis", "Check to use the email address set in KDE System Settings, to identify you as the sender when sending email alarms."));
+          xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application> or KDE System Settings, to identify you as the sender when sending email alarms."));
     grid->addWidget(mFromCCentreButton, 2, 1, 1, 2, Qt::AlignLeft);
 
     // 'From' email address to be picked from KMail's identities when the email alarm is configured
@@ -1100,10 +1100,10 @@ EmailPrefTab::EmailPrefTab(StackedScrollGroup* scrollGroup)
     grid->addWidget(mEmailBccAddress, 5, 2);
 
     // 'Bcc' email address to be taken from System Settings
-    mBccCCentreButton = new RadioButton(i18nc("@option:radio", "Use address from System Settings"), group);
+    mBccCCentreButton = new RadioButton(xi18nc("@option:radio", "Use default address from <application>KMail</application> or System Settings"), group);
     mBccAddressGroup->addButton(mBccCCentreButton, Preferences::MAIL_FROM_SYS_SETTINGS);
     mBccCCentreButton->setWhatsThis(
-          i18nc("@info:whatsthis", "Check to use the email address set in KDE System Settings, for blind copying email alarms to yourself."));
+          xi18nc("@info:whatsthis", "Check to use the default email address set in <application>KMail</application> or KDE System Settings, for blind copying email alarms to yourself."));
     grid->addWidget(mBccCCentreButton, 6, 1, 1, 2, Qt::AlignLeft);
 
     topLayout()->addStretch();    // top adjust the widgets
@@ -1198,7 +1198,7 @@ QString EmailPrefTab::validateAddr(ButtonGroup* group, QLineEdit* addr, const QS
         case Preferences::MAIL_FROM_SYS_SETTINGS:
             if (!KAMail::controlCentreAddress().isEmpty())
                 return QString();
-            errmsg = i18nc("@info", "No email address is currently set in KDE System Settings. %1", errmsg);
+            errmsg = xi18nc("@info", "No default email address is currently set in <application>KMail</application> or KDE System Settings. %1", errmsg);
             break;
         case Preferences::MAIL_FROM_KMAIL:
             if (Identities::identitiesExist())
