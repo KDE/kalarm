@@ -1468,7 +1468,7 @@ this option inapplicable.</para>
 copy of the email to yourself when the alarm is triggered. The email
 address to which the copy will be sent may be set in the
 <link linkend="preferences-email">Configuration dialog</link>, the
-default being your email address set in the &systemsettings;.</para>
+default being your email address set in &kmail; or the &systemsettings;.</para>
 </listitem>
 </itemizedlist>
 
@@ -2681,9 +2681,9 @@ email alarms:</para>
 address.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use address from System
-Settings</guilabel> to use the email address which is configured in the
-&systemsettings;.</para>
+<listitem><para>Select <guilabel>Use default address from KMail or System
+Settings</guilabel> to use your default email address which is configured
+in &kmail; or the &systemsettings;.</para>
 </listitem>
 
 <listitem><para>Select <guilabel>Use &kmail; identities</guilabel> to
@@ -2707,9 +2707,9 @@ computer which &kalarm; runs on, you could simply enter your user
 login name here.</para>
 </listitem>
 
-<listitem><para>Select <guilabel>Use address from System
-Settings</guilabel> to use the email address which is configured in the
-&systemsettings;.</para>
+<listitem><para>Select <guilabel>Use default address from KMail or System
+Settings</guilabel> to use your default email address which is configured
+in &kmail; or the &systemsettings;.</para>
 </listitem>
 </itemizedlist>
 </listitem>
