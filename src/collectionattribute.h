@@ -134,13 +134,13 @@ public:
     void setKeepFormat(bool keep);
 
     // Reimplemented from Attribute
-    QByteArray type() const Q_DECL_OVERRIDE;
+    QByteArray type() const override;
     // Reimplemented from Attribute
-    CollectionAttribute *clone() const Q_DECL_OVERRIDE;
+    CollectionAttribute *clone() const override;
     // Reimplemented from Attribute
-    QByteArray serialized() const Q_DECL_OVERRIDE;
+    QByteArray serialized() const override;
     // Reimplemented from Attribute
-    void deserialize(const QByteArray &data) Q_DECL_OVERRIDE;
+    void deserialize(const QByteArray &data) override;
 
     /** Return the attribute name. */
     static QByteArray name();

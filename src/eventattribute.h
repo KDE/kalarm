@@ -64,13 +64,13 @@ public:
     void setCommandError(KAEvent::CmdErrType err);
 
     // Reimplemented from Attribute
-    QByteArray type() const Q_DECL_OVERRIDE;
+    QByteArray type() const override;
     // Reimplemented from Attribute
-    EventAttribute *clone() const Q_DECL_OVERRIDE;
+    EventAttribute *clone() const override;
     // Reimplemented from Attribute
-    QByteArray serialized() const Q_DECL_OVERRIDE;
+    QByteArray serialized() const override;
     // Reimplemented from Attribute
-    void deserialize(const QByteArray &data) Q_DECL_OVERRIDE;
+    void deserialize(const QByteArray &data) override;
 
 private:
     //@cond PRIVATE
