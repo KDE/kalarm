@@ -62,7 +62,7 @@ class PrefsTabBase : public StackedScrollWidget
         static int   indentWidth()      { return mIndentWidth; }
 
     protected:
-        void showEvent(QShowEvent*) Q_DECL_OVERRIDE;
+        void showEvent(QShowEvent*) override;
 
     private:
         static int   mIndentWidth;       // indent width for checkboxes etc.
@@ -79,8 +79,8 @@ class MiscPrefTab : public PrefsTabBase
     public:
         explicit MiscPrefTab(StackedScrollGroup*);
 
-        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
-        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
+        void restore(bool defaults, bool allTabs) override;
+        void apply(bool syncToDisc) override;
 
     private Q_SLOTS:
         void         slotAutostartClicked();
@@ -107,8 +107,8 @@ class TimePrefTab : public PrefsTabBase
     public:
         explicit TimePrefTab(StackedScrollGroup*);
 
-        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
-        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
+        void restore(bool defaults, bool allTabs) override;
+        void apply(bool syncToDisc) override;
 
     private:
         void         setWorkDays(const QBitArray& days);
@@ -131,8 +131,8 @@ class StorePrefTab : public PrefsTabBase
     public:
         explicit StorePrefTab(StackedScrollGroup*);
 
-        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
-        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
+        void restore(bool defaults, bool allTabs) override;
+        void apply(bool syncToDisc) override;
 
     private Q_SLOTS:
         void         slotArchivedToggled(bool);
@@ -161,8 +161,8 @@ class EmailPrefTab : public PrefsTabBase
         explicit EmailPrefTab(StackedScrollGroup*);
 
         QString      validate();
-        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
-        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
+        void restore(bool defaults, bool allTabs) override;
+        void apply(bool syncToDisc) override;
 
     private Q_SLOTS:
         void         slotEmailClientChanged(QAbstractButton*);
@@ -202,8 +202,8 @@ class EditPrefTab : public PrefsTabBase
         explicit EditPrefTab(StackedScrollGroup*);
 
         QString      validate();
-        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
-        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
+        void restore(bool defaults, bool allTabs) override;
+        void apply(bool syncToDisc) override;
 
     private Q_SLOTS:
         void         slotBrowseSoundFile();
@@ -242,8 +242,8 @@ class ViewPrefTab : public PrefsTabBase
     public:
         explicit ViewPrefTab(StackedScrollGroup*);
 
-        void restore(bool defaults, bool allTabs) Q_DECL_OVERRIDE;
-        void apply(bool syncToDisc) Q_DECL_OVERRIDE;
+        void restore(bool defaults, bool allTabs) override;
+        void apply(bool syncToDisc) override;
 
     private Q_SLOTS:
         void         slotTooltipAlarmsToggled(bool);

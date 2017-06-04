@@ -74,7 +74,7 @@ class PickFileRadio : public RadioButton
          *  If read-only, their states cannot be changed by the user.
          *  @param readOnly True to set the widgets read-only, false to set them read-write.
          */
-        void            setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
+        void            setReadOnly(bool readOnly) override;
         /** Chooses a file, for example by displaying a file selection dialog.
          *  This method is called when the push button is clicked - the client
          *  should not activate a file selection dialog directly.

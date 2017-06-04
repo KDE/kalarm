@@ -51,7 +51,7 @@ class FontColourChooser : public QWidget
         void              setSampleText(const QString& text);
         bool              isReadOnly() const     { return mReadOnly; }
         void              setReadOnly(bool);
-        bool              eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+        bool              eventFilter(QObject*, QEvent*) override;
 
     private Q_SLOTS:
         void              setSampleColour();

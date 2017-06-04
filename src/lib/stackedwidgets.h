@@ -48,8 +48,8 @@ class StackedWidgetT : public T
             mGroup->addWidget(this);
         }
         ~StackedWidgetT()  { mGroup->removeWidget(this); }
-        QSize sizeHint() const         Q_DECL_OVERRIDE { return minimumSizeHint(); }
-        QSize minimumSizeHint() const  Q_DECL_OVERRIDE { return mGroup->minimumSizeHint(); }
+        QSize sizeHint() const         override { return minimumSizeHint(); }
+        QSize minimumSizeHint() const  override { return mGroup->minimumSizeHint(); }
 
     private:
         StackedGroupT<T>* mGroup;
@@ -117,7 +117,7 @@ class StackedScrollGroup : public StackedGroupT<QScrollArea>
 {
     public:
         explicit StackedScrollGroup(QDialog*, QObject* tabParent);
-        QSize         minimumSizeHint() const Q_DECL_OVERRIDE;
+        QSize         minimumSizeHint() const override;
         int           heightReduction() const { return mHeightReduction; }
         QSize         adjustSize(bool force = false);
         void          setSized()              { mSized = true; }

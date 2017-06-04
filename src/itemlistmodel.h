@@ -53,8 +53,8 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         /** Determine whether the model contains any items. */
         bool         haveEvents() const;
 
-        int          columnCount(const QModelIndex& parent = QModelIndex()) const Q_DECL_OVERRIDE;
-        Qt::ItemFlags flags(const QModelIndex&) const Q_DECL_OVERRIDE;
+        int          columnCount(const QModelIndex& parent = QModelIndex()) const override;
+        Qt::ItemFlags flags(const QModelIndex&) const override;
 
         static int   iconWidth()  { return AkonadiModel::iconSize().width(); }
 
@@ -65,7 +65,7 @@ class ItemListModel : public Akonadi::EntityMimeTypeFilterModel
         void         haveEventsStatus(bool have);
 
     protected:
-        bool         filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool         filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
     private Q_SLOTS:
         void         slotRowsInserted();
@@ -110,12 +110,12 @@ class AlarmListModel : public ItemListModel
          */
         CalEvent::Types eventTypeFilter() const   { return mFilterTypes; }
 
-        int  columnCount(const QModelIndex& = QModelIndex()) const  Q_DECL_OVERRIDE { return ColumnCount; }
-        QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        int  columnCount(const QModelIndex& = QModelIndex()) const  override { return ColumnCount; }
+        QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
-        bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+        bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const override;
 
     private:
         static AlarmListModel* mAllInstance;
@@ -157,13 +157,13 @@ class TemplateListModel : public ItemListModel
         /** Set which alarm types should be shown as disabled in the model. */
         KAEvent::Actions setAlarmActionsEnabled() const  { return mActionsEnabled; }
 
-        int  columnCount(const QModelIndex& = QModelIndex()) const Q_DECL_OVERRIDE  { return ColumnCount; }
-        QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-        Qt::ItemFlags flags(const QModelIndex&) const Q_DECL_OVERRIDE;
+        int  columnCount(const QModelIndex& = QModelIndex()) const override  { return ColumnCount; }
+        QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
+        Qt::ItemFlags flags(const QModelIndex&) const override;
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
-        bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
+        bool filterAcceptsColumn(int sourceCol, const QModelIndex& sourceParent) const override;
 
     private:
         static TemplateListModel* mAllInstance;

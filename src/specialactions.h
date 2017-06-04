@@ -103,7 +103,7 @@ class SpecialActionsDlg : public QDialog
         bool           isReadOnly() const    { return mActions->isReadOnly(); }
 
     protected:
-        void           resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void           resizeEvent(QResizeEvent*) override;
 
     protected Q_SLOTS:
         virtual void slotOk();

@@ -45,7 +45,7 @@ class AudioThread : public QThread
         void    readyToPlay();
 
     protected:
-        void run() Q_DECL_OVERRIDE;
+        void run() override;
 
     private Q_SLOTS:
         void    checkAudioPlay();

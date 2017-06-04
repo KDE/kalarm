@@ -39,7 +39,7 @@ class KAlarmPrefDlg : public KPageDialog
     public:
         static void display();
         ~KAlarmPrefDlg();
-        QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+        QSize minimumSizeHint() const override;
 
         MiscPrefTab*       mMiscPage;
         TimePrefTab*       mTimePage;
@@ -56,8 +56,8 @@ class KAlarmPrefDlg : public KPageDialog
         KPageWidgetItem*   mViewPageItem;
 
     protected:
-        void         showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        void         resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void         showEvent(QShowEvent*) override;
+        void         resizeEvent(QResizeEvent*) override;
 
     protected Q_SLOTS:
         virtual void slotOk();

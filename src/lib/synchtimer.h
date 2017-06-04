@@ -95,10 +95,10 @@ class MinuteTimer : public SynchTimer
     protected:
         MinuteTimer() : SynchTimer() { }
         static MinuteTimer* instance();
-        void        start() Q_DECL_OVERRIDE    { slotTimer(); }
+        void        start() override    { slotTimer(); }
 
     protected Q_SLOTS:
-        void        slotTimer() Q_DECL_OVERRIDE;
+        void        slotTimer() override;
 
     private:
         static MinuteTimer* mInstance;     // the one and only instance
@@ -158,10 +158,10 @@ class DailyTimer : public SynchTimer
          *  @return The instance for @p timeOfDay, or 0 if it does not exist.
          */
         static DailyTimer* fixedInstance(const QTime& timeOfDay, bool create = true);
-        void start() Q_DECL_OVERRIDE;
+        void start() override;
 
     protected Q_SLOTS:
-        void slotTimer() Q_DECL_OVERRIDE;
+        void slotTimer() override;
 
     private:
         static QList<DailyTimer*>  mFixedTimers;   // list of timers whose trigger time is fixed

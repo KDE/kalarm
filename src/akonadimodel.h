@@ -110,8 +110,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
          */
         void updateCommandError(const KAEvent&);
 
-        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-        bool setData(const QModelIndex&, const QVariant& value, int role) Q_DECL_OVERRIDE;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+        bool setData(const QModelIndex&, const QVariant& value, int role) override;
 
         /** Refresh the specified collection instance with up to date data. */
         bool refresh(Akonadi::Collection&) const;
@@ -250,8 +250,8 @@ class AkonadiModel : public Akonadi::EntityTreeModel
         void serverStopped();
 
     protected:
-        QVariant entityHeaderData(int section, Qt::Orientation, int role, HeaderGroup) const Q_DECL_OVERRIDE;
-        int entityColumnCount(HeaderGroup) const Q_DECL_OVERRIDE;
+        QVariant entityHeaderData(int section, Qt::Orientation, int role, HeaderGroup) const override;
+        int entityColumnCount(HeaderGroup) const override;
 
     private Q_SLOTS:
         void checkResources(Akonadi::ServerManager::State);

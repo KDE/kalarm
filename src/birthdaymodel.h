@@ -55,8 +55,8 @@ class BirthdayModel : public Akonadi::ContactsTreeModel
          */
         static BirthdayModel* instance();
 
-        QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-        QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE
+        QVariant entityData(const Akonadi::Item&, int column, int role = Qt::DisplayRole) const override;
+        QVariant entityData(const Akonadi::Collection& collection, int column, int role = Qt::DisplayRole) const override
                                     { return Akonadi::ContactsTreeModel::entityData(collection, column, role); }
 
   private:
@@ -75,7 +75,7 @@ class BirthdaySortModel : public QSortFilterProxyModel
         void setPrefixSuffix(const QString& prefix, const QString& suffix);
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
     private:
         QStringList mContactsWithAlarm;

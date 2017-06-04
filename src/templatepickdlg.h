@@ -38,7 +38,7 @@ class TemplatePickDlg : public QDialog
         explicit TemplatePickDlg(KAEvent::Actions, QWidget* parent = nullptr);
         KAEvent        selectedTemplate() const;
     protected:
-        void           resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
+        void           resizeEvent(QResizeEvent*) override;
     private Q_SLOTS:
         void           slotSelectionChanged();
     private:

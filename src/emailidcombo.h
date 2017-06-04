@@ -36,11 +36,11 @@ class EmailIdCombo : public KIdentityManagement::IdentityCombo
         void setReadOnly(bool ro)    { mReadOnly = ro; }
 
     protected:
-        void mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        void keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
+        void mousePressEvent(QMouseEvent*) override;
+        void mouseReleaseEvent(QMouseEvent*) override;
+        void mouseMoveEvent(QMouseEvent*) override;
+        void keyPressEvent(QKeyEvent*) override;
+        void keyReleaseEvent(QKeyEvent*) override;
 
     private:
         bool    mReadOnly;      // value cannot be changed

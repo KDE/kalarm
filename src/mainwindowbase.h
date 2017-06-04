@@ -38,7 +38,7 @@ class MainWindowBase : public KXmlGuiWindow
         explicit MainWindowBase(QWidget* parent = nullptr, Qt::WindowFlags f = Qt::Window);
 
     protected:
-        void enterEvent(QEvent*) Q_DECL_OVERRIDE;
+        void enterEvent(QEvent*) override;
 };
 
 #endif // MAINWINDOWBASE_H

@@ -67,7 +67,7 @@ class ListWidget : public QListWidget
 {
     public:
         explicit ListWidget(QWidget* parent) : QListWidget(parent) {}
-        QSize sizeHint() const Q_DECL_OVERRIDE  { return minimumSizeHint(); }
+        QSize sizeHint() const override  { return minimumSizeHint(); }
 };
 
 // Collect these widget labels together to ensure consistent wording and

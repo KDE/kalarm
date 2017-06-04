@@ -58,7 +58,7 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         // Methods to initialise values in the New Alarm dialogue.
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence().
-        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) Q_DECL_OVERRIDE;
+        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) override;
         void            setBgColour(const QColor&);
         void            setFgColour(const QColor&);
         void            setConfirmAck(bool);
@@ -66,24 +66,24 @@ class EditDisplayAlarmDlg : public EditAlarmDlg
         void            setAudio(Preferences::SoundType, const QString& file = QString(), float volume = -1, int repeatPause = -1);
         void            setReminder(int minutes, bool onceOnly);
 
-        Reminder*       createReminder(QWidget* parent) Q_DECL_OVERRIDE;
+        Reminder*       createReminder(QWidget* parent) override;
         static CheckBox* createConfirmAckCheckbox(QWidget* parent);
 
         static QString  i18n_chk_ConfirmAck();    // text of 'Confirm acknowledgement' checkbox
 
     protected:
-        QString         type_caption() const Q_DECL_OVERRIDE;
-        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) Q_DECL_OVERRIDE;
-        void            type_initValues(const KAEvent*) Q_DECL_OVERRIDE;
-        void            type_showOptions(bool more) Q_DECL_OVERRIDE;
-        void            setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
-        void            saveState(const KAEvent*) Q_DECL_OVERRIDE;
-        bool            type_stateChanged() const Q_DECL_OVERRIDE;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) Q_DECL_OVERRIDE;
-        KAEvent::Flags  getAlarmFlags() const Q_DECL_OVERRIDE;
-        bool            type_validate(bool trial) Q_DECL_OVERRIDE { Q_UNUSED(trial); return true; }
-        CheckBox*       type_createConfirmAckCheckbox(QWidget* parent) Q_DECL_OVERRIDE  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
-        bool            checkText(QString& result, bool showErrorMessage = true) const Q_DECL_OVERRIDE;
+        QString         type_caption() const override;
+        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
+        void            type_initValues(const KAEvent*) override;
+        void            type_showOptions(bool more) override;
+        void            setReadOnly(bool readOnly) override;
+        void            saveState(const KAEvent*) override;
+        bool            type_stateChanged() const override;
+        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        KAEvent::Flags  getAlarmFlags() const override;
+        bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
+        CheckBox*       type_createConfirmAckCheckbox(QWidget* parent) override  { mConfirmAck = createConfirmAckCheckbox(parent); return mConfirmAck; }
+        bool            checkText(QString& result, bool showErrorMessage = true) const override;
 
     private Q_SLOTS:
         void            slotAlarmTypeChanged(int index);
@@ -148,25 +148,25 @@ class EditCommandAlarmDlg : public EditAlarmDlg
         // Methods to initialise values in the New Alarm dialogue.
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence().
-        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) Q_DECL_OVERRIDE;
+        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) override;
 
         static QString  i18n_chk_EnterScript();        // text of 'Enter a script' checkbox
         static QString  i18n_radio_ExecInTermWindow(); // text of 'Execute in terminal window' radio button
         static QString  i18n_chk_ExecInTermWindow();   // text of 'Execute in terminal window' checkbox
 
     protected:
-        QString         type_caption() const Q_DECL_OVERRIDE;
-        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) Q_DECL_OVERRIDE;
-        void            type_initValues(const KAEvent*) Q_DECL_OVERRIDE;
-        void            type_showOptions(bool more) Q_DECL_OVERRIDE;
-        void            setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
-        void            saveState(const KAEvent*) Q_DECL_OVERRIDE;
-        bool            type_stateChanged() const Q_DECL_OVERRIDE;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) Q_DECL_OVERRIDE;
-        KAEvent::Flags  getAlarmFlags() const Q_DECL_OVERRIDE;
-        bool            type_validate(bool trial) Q_DECL_OVERRIDE;
-        void            type_executedTry(const QString& text, void* obj) Q_DECL_OVERRIDE;
-        bool            checkText(QString& result, bool showErrorMessage = true) const Q_DECL_OVERRIDE;
+        QString         type_caption() const override;
+        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
+        void            type_initValues(const KAEvent*) override;
+        void            type_showOptions(bool more) override;
+        void            setReadOnly(bool readOnly) override;
+        void            saveState(const KAEvent*) override;
+        bool            type_stateChanged() const override;
+        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        KAEvent::Flags  getAlarmFlags() const override;
+        bool            type_validate(bool trial) override;
+        void            type_executedTry(const QString& text, void* obj) override;
+        bool            checkText(QString& result, bool showErrorMessage = true) const override;
 
     private Q_SLOTS:
         void            slotCmdScriptToggled(bool);
@@ -200,7 +200,7 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         // Methods to initialise values in the New Alarm dialogue.
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence().
-        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) Q_DECL_OVERRIDE;
+        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) override;
         void            setEmailFields(uint fromID, const KCalCore::Person::List&, const QString& subject,
                                        const QStringList& attachments);
         void            setBcc(bool);
@@ -208,18 +208,18 @@ class EditEmailAlarmDlg : public EditAlarmDlg
         static QString  i18n_chk_CopyEmailToSelf();    // text of 'Copy email to self' checkbox
 
     protected:
-        QString         type_caption() const Q_DECL_OVERRIDE;
-        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) Q_DECL_OVERRIDE;
-        void            type_initValues(const KAEvent*) Q_DECL_OVERRIDE;
-        void            type_showOptions(bool) Q_DECL_OVERRIDE  {}
-        void            setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
-        void            saveState(const KAEvent*) Q_DECL_OVERRIDE;
-        bool            type_stateChanged() const Q_DECL_OVERRIDE;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) Q_DECL_OVERRIDE;
-        KAEvent::Flags  getAlarmFlags() const Q_DECL_OVERRIDE;
-        bool            type_validate(bool trial) Q_DECL_OVERRIDE;
-        void            type_aboutToTry() Q_DECL_OVERRIDE;
-        bool            checkText(QString& result, bool showErrorMessage = true) const Q_DECL_OVERRIDE;
+        QString         type_caption() const override;
+        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
+        void            type_initValues(const KAEvent*) override;
+        void            type_showOptions(bool) override  {}
+        void            setReadOnly(bool readOnly) override;
+        void            saveState(const KAEvent*) override;
+        bool            type_stateChanged() const override;
+        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        KAEvent::Flags  getAlarmFlags() const override;
+        bool            type_validate(bool trial) override;
+        void            type_aboutToTry() override;
+        bool            checkText(QString& result, bool showErrorMessage = true) const override;
 
     private Q_SLOTS:
         void            slotTrySuccess();
@@ -266,25 +266,25 @@ class EditAudioAlarmDlg : public EditAlarmDlg
         // Methods to initialise values in the New Alarm dialogue.
         // N.B. setTime() must be called first to set the date-only characteristic,
         //      followed by setRecurrence().
-        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) Q_DECL_OVERRIDE;
+        void            setAction(KAEvent::SubAction, const AlarmText& = AlarmText()) override;
         void            setAudio(const QString& file, float volume = -1);
 
     protected:
-        QString         type_caption() const Q_DECL_OVERRIDE;
-        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) Q_DECL_OVERRIDE;
-        void            type_initValues(const KAEvent*) Q_DECL_OVERRIDE;
-        void            type_showOptions(bool) Q_DECL_OVERRIDE  {}
-        void            setReadOnly(bool readOnly) Q_DECL_OVERRIDE;
-        void            saveState(const KAEvent*) Q_DECL_OVERRIDE;
-        bool            type_stateChanged() const Q_DECL_OVERRIDE;
-        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) Q_DECL_OVERRIDE;
-        KAEvent::Flags  getAlarmFlags() const Q_DECL_OVERRIDE;
-        bool            type_validate(bool trial) Q_DECL_OVERRIDE { Q_UNUSED(trial); return true; }
-        void            type_executedTry(const QString& text, void* obj) Q_DECL_OVERRIDE;
-        bool            checkText(QString& result, bool showErrorMessage = true) const Q_DECL_OVERRIDE;
+        QString         type_caption() const override;
+        void            type_init(QWidget* parent, QVBoxLayout* frameLayout) override;
+        void            type_initValues(const KAEvent*) override;
+        void            type_showOptions(bool) override  {}
+        void            setReadOnly(bool readOnly) override;
+        void            saveState(const KAEvent*) override;
+        bool            type_stateChanged() const override;
+        void            type_setEvent(KAEvent&, const KDateTime&, const QString& text, int lateCancel, bool trial) override;
+        KAEvent::Flags  getAlarmFlags() const override;
+        bool            type_validate(bool trial) override { Q_UNUSED(trial); return true; }
+        void            type_executedTry(const QString& text, void* obj) override;
+        bool            checkText(QString& result, bool showErrorMessage = true) const override;
 
     protected Q_SLOTS:
-        void            slotTry() Q_DECL_OVERRIDE;
+        void            slotTry() override;
 
     private Q_SLOTS:
         void            audioWinDestroyed()  { slotAudioPlaying(false); }

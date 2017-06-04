@@ -60,7 +60,7 @@ class AlarmTimeWidget : public QFrame
         void             enableAnyTime(bool enable);
         void             selectTimeFromNow(int minutes = 0);
         void             showMoreOptions(bool);
-        QSize            sizeHint() const Q_DECL_OVERRIDE              { return minimumSizeHint(); }
+        QSize            sizeHint() const override              { return minimumSizeHint(); }
 
         static QString   i18n_TimeAfterPeriod();
         static const int maxDelayTime;    // maximum time from now

@@ -83,11 +83,11 @@ class LineEdit : public KLineEdit
         void         setCursorAtEnd(bool end = true)  { mSetCursorAtEnd = end; }
     public Q_SLOTS:
         /** Sets the contents of the line edit to be @p str. */
-        void         setText(const QString& str) Q_DECL_OVERRIDE;
+        void         setText(const QString& str) override;
     protected:
-        void         focusInEvent(QFocusEvent*) Q_DECL_OVERRIDE;
-        void         dragEnterEvent(QDragEnterEvent*) Q_DECL_OVERRIDE;
-        void         dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
+        void         focusInEvent(QFocusEvent*) override;
+        void         dragEnterEvent(QDragEnterEvent*) override;
+        void         dropEvent(QDropEvent*) override;
     private:
         void         init();
 

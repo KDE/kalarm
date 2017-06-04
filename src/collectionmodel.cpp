@@ -69,7 +69,7 @@ class CollectionMimeTypeFilterModel : public Akonadi::EntityMimeTypeFilterModel
         QModelIndex collectionIndex(const Akonadi::Collection&) const;
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
     private:
         CalEvent::Type mAlarmType;  // collection content type contained in this model

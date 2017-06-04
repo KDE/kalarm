@@ -59,7 +59,7 @@ class CollectionListModel : public KDescendantsProxyModel
         Akonadi::Collection collection(const QModelIndex&) const;
         QModelIndex collectionIndex(const Akonadi::Collection&) const;
         virtual bool isDescendantOf(const QModelIndex& ancestor, const QModelIndex& descendant) const;
-        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
     private:
         bool mUseCollectionColour;
@@ -82,8 +82,8 @@ class CollectionCheckListModel : public KCheckableProxyModel
         ~CollectionCheckListModel();
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
-        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-        bool setData(const QModelIndex&, const QVariant& value, int role) Q_DECL_OVERRIDE;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
+        bool setData(const QModelIndex&, const QVariant& value, int role) override;
 
     Q_SIGNALS:
         void collectionTypeChange(CollectionCheckListModel*);
@@ -117,10 +117,10 @@ class CollectionFilterCheckListModel : public QSortFilterProxyModel
         void setEventTypeFilter(CalEvent::Type);
         Akonadi::Collection collection(int row) const;
         Akonadi::Collection collection(const QModelIndex&) const;
-        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
     protected:
-        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const Q_DECL_OVERRIDE;
+        bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const override;
 
     private Q_SLOTS:
         void collectionTypeChanged(CollectionCheckListModel*);
@@ -147,9 +147,9 @@ class CollectionView : public QListView
         Akonadi::Collection  collection(const QModelIndex&) const;
 
     protected:
-        void setModel(QAbstractItemModel*) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        bool viewportEvent(QEvent*) Q_DECL_OVERRIDE;
+        void setModel(QAbstractItemModel*) override;
+        void mouseReleaseEvent(QMouseEvent*) override;
+        bool viewportEvent(QEvent*) override;
 };
 
 
@@ -277,7 +277,7 @@ class CollectionControlModel : public Akonadi::FavoriteCollectionsModel
          */
         bool waitUntilPopulated(Akonadi::Collection::Id colId = -1, int timeout = 0);
 
-        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+        QVariant data(const QModelIndex&, int role = Qt::DisplayRole) const override;
 
         /** Return a bulleted list of alarm types for inclusion in an i18n message. */
         static QString typeListForDisplay(CalEvent::Types);

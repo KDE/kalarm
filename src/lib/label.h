@@ -90,7 +90,7 @@ class LabelFocusWidget : public QWidget
         explicit LabelFocusWidget(QWidget* parent);
 
     protected:
-        void focusInEvent(QFocusEvent*) Q_DECL_OVERRIDE;
+        void focusInEvent(QFocusEvent*) override;
 };
 
 #endif // LABEL_H

@@ -67,7 +67,7 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         KAEvent            selectedEvent() const;
         void               editAlarm(EditAlarmDlg*, const KAEvent&);
         void               clearSelection();
-        bool               eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+        bool               eventFilter(QObject*, QEvent*) override;
 
         static void        refresh();
         static void        executeDragEnterEvent(QDragEnterEvent*);
@@ -90,14 +90,14 @@ class MainWindow : public MainWindowBase, public KCalCore::Calendar::CalendarObs
         void           selectionChanged();
 
     protected:
-        void           resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
-        void           showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        void           hideEvent(QHideEvent*) Q_DECL_OVERRIDE;
-        void           closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-        void           dragEnterEvent(QDragEnterEvent* e) Q_DECL_OVERRIDE  { executeDragEnterEvent(e); }
-        void           dropEvent(QDropEvent*) Q_DECL_OVERRIDE;
-        void           saveProperties(KConfigGroup&) Q_DECL_OVERRIDE;
-        void           readProperties(const KConfigGroup&) Q_DECL_OVERRIDE;
+        void           resizeEvent(QResizeEvent*) override;
+        void           showEvent(QShowEvent*) override;
+        void           hideEvent(QHideEvent*) override;
+        void           closeEvent(QCloseEvent*) override;
+        void           dragEnterEvent(QDragEnterEvent* e) override  { executeDragEnterEvent(e); }
+        void           dropEvent(QDropEvent*) override;
+        void           saveProperties(KConfigGroup&) override;
+        void           readProperties(const KConfigGroup&) override;
 
     private Q_SLOTS:
         void           slotNew(EditAlarmDlg::Type);

@@ -82,7 +82,7 @@ class SpinBox : public QSpinBox
         /** Called whenever the user triggers a step, to adjust the value of
          *  the spin box by the unshifted increment.
          */
-        void         stepBy(int steps) Q_DECL_OVERRIDE;
+        void         stepBy(int steps) override;
         /** Returns the unshifted step increment, i.e. the amount by which the spin box value
          *  changes when a spin button is clicked without the shift key being pressed.
          */
@@ -130,17 +130,17 @@ class SpinBox : public QSpinBox
          */
         virtual int  shiftStepAdjustment(int oldValue, int shiftStep);
         /** Receives events destined for the spin widget or for the edit field. */
-        bool         eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+        bool         eventFilter(QObject*, QEvent*) override;
 
-        void         paintEvent(QPaintEvent*) Q_DECL_OVERRIDE;
-        void         focusOutEvent(QFocusEvent*) Q_DECL_OVERRIDE;
-        void         mousePressEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void         mouseDoubleClickEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void         mouseReleaseEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void         mouseMoveEvent(QMouseEvent*) Q_DECL_OVERRIDE;
-        void         keyPressEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        void         keyReleaseEvent(QKeyEvent*) Q_DECL_OVERRIDE;
-        void         wheelEvent(QWheelEvent*) Q_DECL_OVERRIDE;
+        void         paintEvent(QPaintEvent*) override;
+        void         focusOutEvent(QFocusEvent*) override;
+        void         mousePressEvent(QMouseEvent*) override;
+        void         mouseDoubleClickEvent(QMouseEvent*) override;
+        void         mouseReleaseEvent(QMouseEvent*) override;
+        void         mouseMoveEvent(QMouseEvent*) override;
+        void         keyPressEvent(QKeyEvent*) override;
+        void         keyReleaseEvent(QKeyEvent*) override;
+        void         wheelEvent(QWheelEvent*) override;
 
     private Q_SLOTS:
         void         textEdited();

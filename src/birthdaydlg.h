@@ -87,7 +87,7 @@ class BLineEdit : public QLineEdit
         void         focusLost();
 
     protected:
-        void         focusOutEvent(QFocusEvent*) Q_DECL_OVERRIDE { Q_EMIT focusLost(); }
+        void         focusOutEvent(QFocusEvent*) override { Q_EMIT focusLost(); }
 };
 
 #endif // BIRTHDAYDLG_H

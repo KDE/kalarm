@@ -57,8 +57,8 @@ class EventListView : public QTreeView
         void              findActive(bool);
 
     protected:
-        bool              viewportEvent(QEvent*) Q_DECL_OVERRIDE;
-        void              contextMenuEvent(QContextMenuEvent*) Q_DECL_OVERRIDE;
+        bool              viewportEvent(QEvent*) override;
+        void              contextMenuEvent(QContextMenuEvent*) override;
     private:
         void              findNext(bool forward);
 
@@ -73,8 +73,8 @@ class EventListDelegate : public QItemDelegate
         Q_OBJECT
     public:
         explicit EventListDelegate(EventListView* parent = nullptr) : QItemDelegate(parent) {}
-        QWidget*     createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const Q_DECL_OVERRIDE  { return nullptr; }
-        bool         editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&) Q_DECL_OVERRIDE;
+        QWidget*     createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const override  { return nullptr; }
+        bool         editorEvent(QEvent*, QAbstractItemModel*, const QStyleOptionViewItem&, const QModelIndex&) override;
         virtual void edit(KAEvent*, EventListView*) = 0;
 };
 

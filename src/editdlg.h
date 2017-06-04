@@ -82,7 +82,7 @@ class EditAlarmDlg : public QDialog
         void            setLateCancel(int minutes);
         void            setShowInKOrganizer(bool);
 
-        QSize           sizeHint() const Q_DECL_OVERRIDE    { return minimumSizeHint(); }
+        QSize           sizeHint() const override    { return minimumSizeHint(); }
 
         static int      instanceCount();
         static QString  i18n_chk_ShowInKOrganizer();   // text of 'Show in KOrganizer' checkbox
@@ -93,10 +93,10 @@ class EditAlarmDlg : public QDialog
         EditAlarmDlg(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
                      GetResourceType = RES_PROMPT, bool readOnly = false);
         void            init(const KAEvent* event);
-        void            resizeEvent(QResizeEvent*) Q_DECL_OVERRIDE;
-        void            showEvent(QShowEvent*) Q_DECL_OVERRIDE;
-        void            closeEvent(QCloseEvent*) Q_DECL_OVERRIDE;
-        bool            eventFilter(QObject*, QEvent*) Q_DECL_OVERRIDE;
+        void            resizeEvent(QResizeEvent*) override;
+        void            showEvent(QShowEvent*) override;
+        void            closeEvent(QCloseEvent*) override;
+        bool            eventFilter(QObject*, QEvent*) override;
         virtual QString type_caption() const = 0;
         virtual void    type_init(QWidget* parent, QVBoxLayout* frameLayout) = 0;
         virtual void    type_initValues(const KAEvent*) = 0;
