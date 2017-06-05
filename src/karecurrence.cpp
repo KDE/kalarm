@@ -318,6 +318,9 @@ void KARecurrence::Private::fix()
             // Convert an hourly recurrence to a minutely one
             rrule->setRecurrenceType(RecurrenceRule::rMinutely);
             rrule->setFrequency(rrule->frequency() * 60);
+#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        Q_FALLTHROUGH();
+#endif
         // fall through to rMinutely
         case Recurrence::rMinutely:
         case Recurrence::rDaily:
@@ -491,6 +494,9 @@ void KARecurrence::Private::writeRecurrence(const KARecurrence *q, Recurrence &r
             break;
         }
     // fall through to rWeekly
+#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        Q_FALLTHROUGH();
+#endif
     case WEEKLY:
     case MONTHLY_POS:
         recur.defaultRRule(true)->setByDays(rrule->byDays());
