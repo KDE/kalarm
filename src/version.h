@@ -24,7 +24,7 @@
 #define KALARM_VERSION_H
 
 #include "kalarmcal_export.h"
-#include <QtCore/QString>
+#include <QString>
 
 namespace KAlarmCal
 {

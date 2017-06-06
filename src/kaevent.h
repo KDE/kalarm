@@ -35,12 +35,12 @@
 #include <kcalcore/person.h>
 #include <kcalcore/calendar.h>
 
-#include <QtCore/QBitArray>
+#include <QBitArray>
 #include <QColor>
 #include <QFont>
-#include <QtCore/QVector>
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QMetaType>
+#include <QVector>
+#include <QSharedDataPointer>
+#include <QMetaType>
 
 namespace KHolidays
 {

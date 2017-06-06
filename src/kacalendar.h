@@ -28,8 +28,8 @@
 #include <kcalcore/calendar.h>
 #include <kcalcore/event.h>
 #include <collection.h>
-#include <QtCore/QByteArray>
-#include <QtCore/QStringList>
+#include <QByteArray>
+#include <QStringList>
 
 namespace KCalCore
 {

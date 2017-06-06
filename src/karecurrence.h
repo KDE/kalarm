@@ -32,7 +32,7 @@ namespace KCalCore
 class Recurrence;
 }
 
-#include <QtCore/QBitArray>
+#include <QBitArray>
 
 namespace KAlarmCal
 {

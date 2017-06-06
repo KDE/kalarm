@@ -26,7 +26,7 @@
 #include "kalarmcal_export.h"
 
 #include <kcalcore/todo.h>
-#include <QtCore/QString>
+#include <QString>
 
 namespace KAlarmCal
 {
