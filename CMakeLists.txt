@@ -4,7 +4,7 @@ set(PIM_VERSION "5.6.40")
 project(KAlarmCal VERSION ${PIM_VERSION})
 
 # ECM setup
-set(KF5_VERSION "5.35.0")
+set(KF5_VERSION "5.36.0")
 find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
