@@ -913,10 +913,8 @@ void KAEventPrivate::set(const Event::Ptr &event)
             if (data.action != KAAlarm::AUDIO) {
                 break;
             }
-        // Fall through to AUDIO_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+            // Fall through to AUDIO_ALARM
+            Q_FALLTHROUGH();
         case AUDIO_ALARM:
             mAudioFile   = data.cleanText;
             mSpeak       = data.speak  &&  mAudioFile.isEmpty();
@@ -990,20 +988,16 @@ void KAEventPrivate::set(const Event::Ptr &event)
                 setDeferralTime = true;
                 noSetNextTime = true;
             }
-        // fall through to REMINDER_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+            // fall through to REMINDER_ALARM
+            Q_FALLTHROUGH();
         case REMINDER_ALARM:
         case AT_LOGIN_ALARM:
         case DISPLAYING_ALARM:
             if (!set  &&  !noSetNextTime) {
                 mNextMainDateTime = alTime;
             }
-        // fall through to MAIN_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+            // fall through to MAIN_ALARM
+            Q_FALLTHROUGH();
         case MAIN_ALARM:
             // Ensure that the basic fields are set up even if there is no main
             // alarm in the event (if it has expired and then been deferred)
@@ -1016,20 +1010,16 @@ void KAEventPrivate::set(const Event::Ptr &event)
                     if (!mCommandDisplay) {
                         break;
                     }
-                // fall through to MESSAGE
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+                    // fall through to MESSAGE
+                    Q_FALLTHROUGH();
                 case KAAlarm::MESSAGE:
                     mFont           = data.font;
                     mUseDefaultFont = data.defaultFont;
                     if (data.isEmailText) {
                         isEmailText = true;
                     }
-                // fall through to FILE
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+                    // fall through to FILE
+                    Q_FALLTHROUGH();
                 case KAAlarm::FILE:
                     mBgColour = data.bgColour;
                     mFgColour = data.fgColour;
@@ -1559,10 +1549,7 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffse
         if (mRepetition)
             alarm->setCustomProperty(KACalendar::APPNAME, NEXT_REPEAT_PROPERTY,
                                      QString::number(mNextRepeat));
-    // fall through to INVALID_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
         Q_FALLTHROUGH();
-#endif
     case REMINDER_ALARM:
     case INVALID_ALARM: {
         if (types == QStringList(REMINDER_TYPE)
@@ -1575,10 +1562,8 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffse
         switch (mActionSubType) {
         case KAEvent::FILE:
             alltypes += FILE_TYPE;
-        // fall through to MESSAGE
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+            // fall through to MESSAGE
+            Q_FALLTHROUGH();
         case KAEvent::MESSAGE:
             alarm->setDisplayAlarm(AlarmText::toCalendarText(mText));
             display = true;
@@ -3514,10 +3499,8 @@ KAAlarm KAEventPrivate::alarm(KAAlarm::Type type) const
             if (mDeferral != REMINDER_DEFERRAL) {
                 break;
             }
-        // fall through to DEFERRED_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+            // fall through to DEFERRED_ALARM
+            Q_FALLTHROUGH();
         case KAAlarm::DEFERRED_ALARM:
             if (mDeferral != NO_DEFERRAL) {
                 al_d->mType             = (mDeferral == REMINDER_DEFERRAL) ? KAAlarm::DEFERRED_REMINDER_ALARM : KAAlarm::DEFERRED_ALARM;
@@ -3592,10 +3575,8 @@ KAAlarm KAEventPrivate::nextAlarm(KAAlarm::Type previousType) const
         if (mReminderActive == ACTIVE_REMINDER) {
             return alarm(KAAlarm::REMINDER_ALARM);
         }
-    // fall through to REMINDER_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        // fall through to REMINDER_ALARM
         Q_FALLTHROUGH();
-#endif
     case KAAlarm::REMINDER_ALARM:
         // There can only be one deferral alarm
         if (mDeferral == REMINDER_DEFERRAL) {
@@ -3604,27 +3585,21 @@ KAAlarm KAEventPrivate::nextAlarm(KAAlarm::Type previousType) const
         if (mDeferral == NORMAL_DEFERRAL) {
             return alarm(KAAlarm::DEFERRED_ALARM);
         }
-    // fall through to DEFERRED_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        // fall through to DEFERRED_ALARM
         Q_FALLTHROUGH();
-#endif
     case KAAlarm::DEFERRED_REMINDER_ALARM:
     case KAAlarm::DEFERRED_ALARM:
         if (mRepeatAtLogin) {
             return alarm(KAAlarm::AT_LOGIN_ALARM);
         }
-    // fall through to AT_LOGIN_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        // fall through to AT_LOGIN_ALARM
         Q_FALLTHROUGH();
-#endif
     case KAAlarm::AT_LOGIN_ALARM:
         if (mDisplaying) {
             return alarm(KAAlarm::DISPLAYING_ALARM);
         }
-    // fall through to DISPLAYING_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        // fall through to DISPLAYING_ALARM
         Q_FALLTHROUGH();
-#endif
     case KAAlarm::DISPLAYING_ALARM:
     // fall through to default
     case KAAlarm::INVALID_ALARM:
@@ -3667,10 +3642,8 @@ void KAEventPrivate::removeExpiredAlarm(KAAlarm::Type type)
             mDisplaying = false;
             --mAlarmCount;
         }
-    // fall through to AT_LOGIN_ALARM
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        // fall through to AT_LOGIN_ALARM
         Q_FALLTHROUGH();
-#endif
     case KAAlarm::AT_LOGIN_ALARM:
         if (mRepeatAtLogin) {
             // Remove the at-login alarm, but keep a note of it for archiving purposes
@@ -3992,10 +3965,8 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
         if (!cmdDisplay) {
             break;
         }
-    // fall through to Display
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
+        // fall through to Display
         Q_FALLTHROUGH();
-#endif
     case Alarm::Display: {
         if (alarm->type() == Alarm::Display) {
             data.action    = KAAlarm::MESSAGE;
@@ -5039,10 +5010,8 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 switch (action) {
                 case KAAlarm::FILE:
                     types += KAEventPrivate::FILE_TYPE;
-                // fall through to MESSAGE
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+                    // fall through to MESSAGE
+                    Q_FALLTHROUGH();
                 case KAAlarm::MESSAGE:
                     alarm->setDisplayAlarm(altxt);
                     break;
@@ -5901,10 +5870,8 @@ static void setProcedureAlarm(const Alarm::Ptr &alarm, const QString &commandLin
                     quoteChar = ch;
                     break;
                 }
-            // fall through to default
-#if QT_VERSION >= QT_VERSION_CHECK(5,8,0)
-        Q_FALLTHROUGH();
-#endif
+                // fall through to default
+                Q_FALLTHROUGH();
             default:
                 command += ch;
                 break;
