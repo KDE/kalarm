@@ -5,7 +5,15 @@ project(KAlarmCal VERSION ${PIM_VERSION})
 
 # ECM setup
 set(KF5_VERSION "5.37.0")
-find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
+option(RUN_UNINSTALL "test run uninstalled apps (experimental)" FALSE)
+
+set(ECM_VERSION ${KF5_VERSION})
+# ECM setup
+if (RUN_UNINSTALL)
+   set(ECM_VERSION "5.38.0")
+endif()
+
+find_package(ECM ${ECM_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 include(GenerateExportHeader)
