@@ -855,7 +855,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
         }
     }
     mNextMainDateTime = readDateTime(event, dateOnly, mStartDateTime);
-    mCreatedDateTime = event->created();
+    mCreatedDateTime = KCalCore::q2k(event->created());
     if (dateOnly  &&  !mRepetition.isDaily()) {
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
     }
@@ -1484,7 +1484,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
         ev->clearRecurrence();
     }
     if (mCreatedDateTime.isValid()) {
-        ev->setCreated(mCreatedDateTime);
+        ev->setCreated(KCalCore::k2q(mCreatedDateTime));
     }
     ev->setReadOnly(readOnly);
     ev->endUpdates();     // finally issue an update notification
@@ -5075,7 +5075,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              * Convert BEEP category into an audio alarm with no audio file.
              */
             if (CalEvent::status(event) == CalEvent::ARCHIVED) {
-                event->setCreated(event->dtEnd());
+                event->setCreated(KCalCore::k2q(event->dtEnd()));
             }
             KDateTime start = event->dtStart();
             if (event->allDay()) {
