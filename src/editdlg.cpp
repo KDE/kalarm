@@ -50,6 +50,8 @@
 
 #include <Libkdepim/MaillistDrag>
 
+#include <KCalCore/Utils>
+
 #include <kglobal.h>
 #include <KLocalizedString>
 #include <kconfig.h>
@@ -1313,7 +1315,7 @@ void EditAlarmDlg::slotEditDeferral()
                 mTimeWidget->getDateTime();    // output the appropriate error message
                 return;
             }
-            start = repetition.duration(repeatNum).end(start.kDateTime());
+            start = KCalCore::q2k(repetition.duration(repeatNum).end(KCalCore::k2q(start.kDateTime())));
         }
     }
 
