@@ -24,9 +24,10 @@
 #define KALARM_KARECURRENCE_H
 
 #include "kalarmcal_export.h"
-
+#include <KDateTime>
 #include <kcalcore/recurrencerule.h>
 #include <kcalcore/duration.h>
+#include <kcalcore/incidencebase.h>
 namespace KCalCore
 {
 class Recurrence;

@@ -33,6 +33,8 @@ using namespace KHolidays;
 #include <ksystemtimezone.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
+#include <kcalcore/utils.h>
+
 #include "kalarmcal_debug.h"
 
 using namespace KCalCore;
@@ -5299,7 +5301,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 // It's an expired recurrence.
                 // Set the alarm offset relative to the first actual occurrence
                 // (taking account of possible exceptions).
-                KDateTime dt = event->recurrence()->getNextDateTime(startDateTime.addDays(-1));
+                KDateTime dt = KCalCore::q2k(event->recurrence()->getNextDateTime(KCalCore::k2q(startDateTime).addDays(-1)));
                 dt.setDateOnly(dateOnly);
                 adjustment = startDateTime.secsTo(dt);
             } else {
