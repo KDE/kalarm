@@ -80,6 +80,7 @@ using namespace KCalUtils;
 #include <qinputdialog.h>
 #include <QUrl>
 #include <QSystemTrayIcon>
+#include <QTimeZone>
 
 using namespace KAlarmCal;
 
@@ -1271,7 +1272,7 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
     AlarmText          alarmText;
     KPIM::MailList     mailList;
     QList<QUrl>        files;
-    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
+    MemoryCalendar::Ptr calendar(new MemoryCalendar(QTimeZone(Preferences::timeZone(true).name().toUtf8())));
 #ifndef NDEBUG
     QString fmts = data->formats().join(QStringLiteral(", "));
     qCDebug(KALARM_LOG) << fmts;

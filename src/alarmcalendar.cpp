@@ -40,6 +40,7 @@
 #include <KSharedConfig>
 #include <QTemporaryFile>
 #include <QStandardPaths>
+#include <QTimeZone>
 #include "kalarm_debug.h"
 
 using namespace Akonadi;
@@ -194,7 +195,7 @@ bool AlarmCalendar::open()
         qCDebug(KALARM_LOG) << mUrl.toDisplayString();
         if (!mCalendarStorage)
         {
-            MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
+            MemoryCalendar::Ptr calendar(new MemoryCalendar(QTimeZone(Preferences::timeZone(true).name().toUtf8())));
             mCalendarStorage = FileStorage::Ptr(new FileStorage(calendar));
         }
 
@@ -264,7 +265,7 @@ int AlarmCalendar::load()
         } else {
             filename = mUrl.toLocalFile();
         }
-        mCalendarStorage->calendar()->setTimeSpec(Preferences::timeZone(true));
+        mCalendarStorage->calendar()->setTimeZone(QTimeZone(Preferences::timeZone(true).name().toUtf8()));
         mCalendarStorage->setFileName(filename);
         if (!mCalendarStorage->load())
         {
@@ -639,7 +640,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     }
 
     // Read the calendar and add its alarms to the current calendars
-    MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::timeZone(true)));
+    MemoryCalendar::Ptr cal(new MemoryCalendar(QTimeZone(Preferences::timeZone(true).name().toUtf8())));
     FileStorage::Ptr calStorage(new FileStorage(cal, filename));
     success = calStorage->load();
     if (!success)
@@ -738,7 +739,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     }
     qCDebug(KALARM_LOG) << url.toDisplayString();
 
-    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::timeZone(true)));
+    MemoryCalendar::Ptr calendar(new MemoryCalendar(QTimeZone(Preferences::timeZone(true).name().toUtf8())));
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
     if (append  &&  !calStorage->load())
     {

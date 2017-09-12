@@ -85,6 +85,7 @@ using namespace KCalCore;
 #include <QTimer>
 #include <qglobal.h>
 #include <QStandardPaths>
+#include <QTimeZone>
 #include "kalarm_debug.h"
 
 using namespace Akonadi;
@@ -1905,7 +1906,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 
     // Translate the event into string format
     ICalFormat format;
-    format.setTimeSpec(Preferences::timeZone(true));
+    format.setTimeZone(QTimeZone(Preferences::timeZone(true).name().toUtf8()));
     QString iCal = format.toICalString(kcalEvent);
 
     // Send the event to KOrganizer
