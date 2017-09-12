@@ -5220,7 +5220,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              * It's a KAlarm pre-1.9.2 calendar file.
              * Convert from clock time to the local system time zone.
              */
-            event->shiftTimes(KDateTime::ClockTime, localZone);
+            event->shiftTimes(QTimeZone::systemTimeZone(), QTimeZone::systemTimeZone());
             converted = true;
         }
 

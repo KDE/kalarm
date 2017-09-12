@@ -421,7 +421,7 @@ public:
      * @param oldSpec the time specification which provides the clock times
      * @param newSpec the new time specification
      */
-    void shiftTimes(const KDateTime::Spec &oldSpec, const KDateTime::Spec &newSpec);
+    void shiftTimes(const QTimeZone &oldSpec, const QTimeZone &newSpec);
 
     KCalCore::RecurrenceRule *defaultRRuleConst() const;
     /** Return the recurrence's period type. */

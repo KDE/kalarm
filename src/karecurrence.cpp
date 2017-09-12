@@ -1216,7 +1216,7 @@ void KARecurrence::addExDate(const QDate &exdate)
     d->mRecurrence.addExDate(exdate);
 }
 
-void KARecurrence::shiftTimes(const KDateTime::Spec &oldSpec, const KDateTime::Spec &newSpec)
+void KARecurrence::shiftTimes(const QTimeZone &oldSpec, const QTimeZone &newSpec)
 {
     d->mRecurrence.shiftTimes(oldSpec, newSpec);
 }
