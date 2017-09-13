@@ -48,9 +48,9 @@
 #include "timeedit.h"
 #include "timespinbox.h"
 
-#include <Libkdepim/MaillistDrag>
+#include <KAlarmCal/Utils>
 
-#include <KCalCore/Utils>
+#include <Libkdepim/MaillistDrag>
 
 #include <kglobal.h>
 #include <KLocalizedString>
@@ -1315,7 +1315,7 @@ void EditAlarmDlg::slotEditDeferral()
                 mTimeWidget->getDateTime();    // output the appropriate error message
                 return;
             }
-            start = KCalCore::q2k(repetition.duration(repeatNum).end(KCalCore::k2q(start.kDateTime())));
+            start = q2k(repetition.duration(repeatNum).end(k2q(start.kDateTime())));
         }
     }
 
