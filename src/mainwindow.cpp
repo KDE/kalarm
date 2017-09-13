@@ -49,6 +49,7 @@
 #include <kmime/kmime_content.h>
 #include <AkonadiWidgets/controlgui.h>
 #include <KCalCore/MemoryCalendar>
+#include <KCalCore/Utils>
 #include <KCalUtils/kcalutils/icaldrag.h>
 using namespace KCalCore;
 using namespace KCalUtils;
@@ -1340,9 +1341,9 @@ void MainWindow::executeDropEvent(MainWindow* win, QDropEvent* e)
             return;
         Todo::Ptr todo = todos[0];
         alarmText.setTodo(todo);
-        KDateTime start = todo->dtStart(true);
+        KDateTime start = KCalCore::q2k(todo->dtStart(true), todo->allDay());
         if (!start.isValid()  &&  todo->hasDueDate())
-            start = todo->dtDue(true);
+            start = KCalCore::q2k(todo->dtDue(true), todo->allDay());
         KAEvent::Flags flags = KAEvent::DEFAULT_FONT;
         if (start.isDateOnly())
             flags |= KAEvent::ANY_TIME;
