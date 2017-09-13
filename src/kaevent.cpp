@@ -1330,9 +1330,9 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
      * UTC DATE-TIME value. So always use a time relative to DTSTART instead of
      * an absolute time.
      */
-    ev->setDtStart(mStartDateTime.calendarKDateTime());
+    ev->setDtStart(KCalCore::k2q(mStartDateTime.calendarKDateTime()));
     ev->setAllDay(false);
-    ev->setDtEnd(KDateTime());
+    ev->setDtEnd(QDateTime());
 
     const DateTime dtMain = archived ? mStartDateTime : mNextMainDateTime;
     int      ancillaryType = 0;   // 0 = invalid, 1 = time, 2 = offset
@@ -3840,7 +3840,7 @@ void KAEventPrivate::dumpDebug() const
 */
 DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool dateOnly, DateTime &start)
 {
-    start = event->dtStart();
+    start = KCalCore::q2k(event->dtStart());
     if (dateOnly) {
         // A date-only event is indicated by the X-KDE-KALARM-FLAGS:DATE property, not
         // by a date-only start date/time (for the reasons given in updateKCalEvent()).
@@ -5075,19 +5075,18 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              * Convert BEEP category into an audio alarm with no audio file.
              */
             if (CalEvent::status(event) == CalEvent::ARCHIVED) {
-                event->setCreated(KCalCore::k2q(event->dtEnd()));
+                event->setCreated(event->dtEnd());
             }
-            KDateTime start = event->dtStart();
+            QDateTime start = event->dtStart();
             if (event->allDay()) {
-                event->setAllDay(false);
                 start.setTime(QTime(0, 0));
                 flags += KAEventPrivate::DATE_ONLY_FLAG;
             }
-            event->setDtEnd(KDateTime());
+            event->setDtEnd(QDateTime());
 
             for (int ai = 0, aend = alarms.count();  ai < aend;  ++ai) {
                 Alarm::Ptr alarm = alarms[ai];
-                alarm->setStartOffset(start.secsTo(KCalCore::q2k(alarm->time())));
+                alarm->setStartOffset(start.secsTo(alarm->time()));
             }
 
             if (!cats.isEmpty()) {
@@ -5107,14 +5106,14 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                     Alarm::Ptr alarm = event->newAlarm();
                     alarm->setEnabled(true);
                     alarm->setAudioAlarm();
-                    KDateTime dt = event->dtStart();    // default
+                    QDateTime dt = event->dtStart();    // default
 
                     // Parse and order the alarms to know which one's date/time to use
                     KAEventPrivate::AlarmMap alarmMap;
                     KAEventPrivate::readAlarms(event, &alarmMap);
                     KAEventPrivate::AlarmMap::ConstIterator it = alarmMap.constBegin();
                     if (it != alarmMap.constEnd()) {
-                        dt = KCalCore::q2k(it.value().alarm->time());
+                        dt = it.value().alarm->time();
                         break;
                     }
                     alarm->setStartOffset(start.secsTo(dt));
@@ -5245,7 +5244,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              */
             const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
             const bool dateOnly = flags.contains(KAEventPrivate::DATE_ONLY_FLAG);
-            KDateTime startDateTime = event->dtStart();
+            KDateTime startDateTime = KCalCore::q2k(event->dtStart(), dateOnly);
             if (dateOnly) {
                 startDateTime.setDateOnly(true);
             }
@@ -5489,10 +5488,10 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
     const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
     if (flags.indexOf(KAEventPrivate::DATE_ONLY_FLAG) >= 0) {
         // It's an untimed event, so fix it
-        const KDateTime oldDt = event->dtStart();
+        const KDateTime oldDt = KCalCore::q2k(event->dtStart());
         const int adjustment = oldDt.time().secsTo(midnight);
         if (adjustment) {
-            event->setDtStart(KDateTime(oldDt.date(), midnight, oldDt.timeSpec()));
+            event->setDtStart(QDateTime(oldDt.date(), midnight, KCalCore::specToZone(oldDt.timeSpec())));
             int deferralOffset = 0;
             AlarmMap alarmMap;
             readAlarms(event, &alarmMap);
@@ -5529,7 +5528,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
             }
             if ((data.type & DEFERRED_ALARM)  &&  !data.timedDeferral) {
                 // Found a date-only deferral alarm, so adjust its time
-                KDateTime altime = KCalCore::q2k(data.alarm->startOffset().end(KCalCore::k2q(nextMainDateTime)));
+                QDateTime altime = data.alarm->startOffset().end(KCalCore::k2q(nextMainDateTime));
                 altime.setTime(midnight);
                 deferralOffset = data.alarm->startOffset().asSeconds();
                 newDeferralOffset = event->dtStart().secsTo(altime);

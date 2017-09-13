@@ -32,6 +32,7 @@ PUBLIC
                       KF5::CoreAddons
                       KF5::CalendarCore
                       KF5::AkonadiCore
+                      KF5::KDELibs4Support
 PRIVATE
 )
 

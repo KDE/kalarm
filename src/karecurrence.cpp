@@ -871,7 +871,7 @@ DateTimeList KARecurrence::timesInInterval(const KDateTime &start, const KDateTi
     DateTimeList rv;
     rv.reserve(l.size());
     for (const auto &qdt : l) {
-        rv << KCalCore::q2k(qdt);
+        rv << qdt;
     }
     return rv;
 }
@@ -1199,7 +1199,7 @@ DateTimeList KARecurrence::exDateTimes() const
     DateTimeList rv;
     rv.reserve(l.size());
     for (const auto &qdt : l) {
-        rv << KCalCore::q2k(qdt);
+        rv << qdt;
     }
     return rv;
 }
@@ -1214,7 +1214,7 @@ void KARecurrence::setExDateTimes(const DateTimeList &exdates)
     SortableList<QDateTime> l;
     l.reserve(exdates.size());
     for (const auto &kdt : exdates) {
-        l << KCalCore::k2q(kdt);
+        l << kdt;
     }
     d->mRecurrence.setExDateTimes(l);
 }
