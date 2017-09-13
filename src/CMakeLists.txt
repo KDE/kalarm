@@ -15,6 +15,7 @@ set(kalarmcal_LIB_SRCS
     collectionattribute.cpp
     compatibilityattribute.cpp
     eventattribute.cpp
+    utils.cpp
 )
 
 ecm_qt_declare_logging_category(kalarmcal_LIB_SRCS HEADER kalarmcal_debug.h IDENTIFIER KALARMCAL_LOG CATEGORY_NAME org.kde.pim.kalarmcal)
@@ -60,6 +61,7 @@ ecm_generate_headers(KAlarmCal_CamelCase_HEADERS
   KAEvent
   KARecurrence
   Repetition
+  Utils
   PREFIX KAlarmCal
   REQUIRED_HEADERS KAlarmCal_HEADERS
 )

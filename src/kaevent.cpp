@@ -25,6 +25,8 @@
 #include "alarmtext.h"
 #include "identities.h"
 #include "version.h"
+#include "utils.h"
+
 #include <kholidays/holidayregion.h>
 #include <kcalcore/memorycalendar.h>
 #include <kholidays/holiday.h>
@@ -33,7 +35,6 @@ using namespace KHolidays;
 #include <ksystemtimezone.h>
 #include <klocalizedstring.h>
 #include <kglobal.h>
-#include <kcalcore/utils.h>
 
 #include "kalarmcal_debug.h"
 
@@ -196,11 +197,11 @@ public:
     DateTime           mainDateTime(bool withRepeats = false) const
     {
         return (withRepeats && mNextRepeat && mRepetition)
-               ? KCalCore::q2k(mRepetition.duration(mNextRepeat).end(KCalCore::k2q(mNextMainDateTime.kDateTime()))) : mNextMainDateTime;
+               ? q2k(mRepetition.duration(mNextRepeat).end(k2q(mNextMainDateTime.kDateTime()))) : mNextMainDateTime;
     }
     DateTime           mainEndRepeatTime() const
     {
-        return mRepetition ? KCalCore::q2k(mRepetition.duration().end(KCalCore::k2q(mNextMainDateTime.kDateTime()))) : mNextMainDateTime;
+        return mRepetition ? q2k(mRepetition.duration().end(k2q(mNextMainDateTime.kDateTime()))) : mNextMainDateTime;
     }
     DateTime           deferralLimit(KAEvent::DeferLimitType * = nullptr) const;
     KAEvent::Flags     flags() const;
@@ -855,7 +856,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
         }
     }
     mNextMainDateTime = readDateTime(event, dateOnly, mStartDateTime);
-    mCreatedDateTime = KCalCore::q2k(event->created());
+    mCreatedDateTime = q2k(event->created());
     if (dateOnly  &&  !mRepetition.isDaily()) {
         mRepetition.set(Duration(mRepetition.intervalDays(), Duration::Days));
     }
@@ -902,7 +903,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
     Duration deferralOffset;
     for (AlarmMap::ConstIterator it = alarmMap.constBegin();  it != alarmMap.constEnd();  ++it) {
         const AlarmData &data = it.value();
-        const DateTime dateTime = data.alarm->hasStartOffset() ? KCalCore::q2k(data.alarm->startOffset().end(KCalCore::k2q(mNextMainDateTime.effectiveKDateTime()))) : KCalCore::q2k(data.alarm->time());
+        const DateTime dateTime = data.alarm->hasStartOffset() ? q2k(data.alarm->startOffset().end(k2q(mNextMainDateTime.effectiveKDateTime()))) : q2k(data.alarm->time());
         switch (data.type) {
         case MAIN_ALARM:
             mMainExpired = false;
@@ -949,7 +950,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
             mDeferral = (data.type == DEFERRED_REMINDER_ALARM) ? REMINDER_DEFERRAL : NORMAL_DEFERRAL;
             if (data.timedDeferral) {
                 // Don't use start-of-day time for applying timed deferral alarm offset
-                mDeferralTime = data.alarm->hasStartOffset() ? KCalCore::q2k(data.alarm->startOffset().end(KCalCore::k2q(mNextMainDateTime.calendarKDateTime()))) : KCalCore::q2k(data.alarm->time());
+                mDeferralTime = data.alarm->hasStartOffset() ? q2k(data.alarm->startOffset().end(k2q(mNextMainDateTime.calendarKDateTime()))) : q2k(data.alarm->time());
 	    } else {
                 mDeferralTime = dateTime;
                 mDeferralTime.setDateOnly(true);
@@ -1091,10 +1092,10 @@ void KAEventPrivate::set(const Event::Ptr &event)
         DateTime dt = mRecurrence->getNextDateTime(mStartDateTime.addDays(-1).kDateTime());
         dt.setDateOnly(mStartDateTime.isDateOnly());
         if (mDeferralTime.isDateOnly()) {
-            mDeferralTime = KCalCore::q2k(deferralOffset.end(KCalCore::k2q(dt.kDateTime())));
+            mDeferralTime = q2k(deferralOffset.end(k2q(dt.kDateTime())));
             mDeferralTime.setDateOnly(true);
         } else {
-            mDeferralTime = KCalCore::q2k(deferralOffset.end(KCalCore::k2q(dt.effectiveKDateTime())));
+            mDeferralTime = q2k(deferralOffset.end(k2q(dt.effectiveKDateTime())));
         }
     }
     if (mDeferral != NO_DEFERRAL) {
@@ -1330,7 +1331,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
      * UTC DATE-TIME value. So always use a time relative to DTSTART instead of
      * an absolute time.
      */
-    ev->setDtStart(KCalCore::k2q(mStartDateTime.calendarKDateTime()));
+    ev->setDtStart(k2q(mStartDateTime.calendarKDateTime()));
     ev->setAllDay(false);
     ev->setDtEnd(QDateTime());
 
@@ -1484,7 +1485,7 @@ bool KAEventPrivate::updateKCalEvent(const Event::Ptr &ev, KAEvent::UidAction ui
         ev->clearRecurrence();
     }
     if (mCreatedDateTime.isValid()) {
-        ev->setCreated(KCalCore::k2q(mCreatedDateTime));
+        ev->setCreated(k2q(mCreatedDateTime));
     }
     ev->setReadOnly(readOnly);
     ev->endUpdates();     // finally issue an update notification
@@ -3150,7 +3151,7 @@ bool KAEventPrivate::occursAfter(const KDateTime &preDateTime, bool includeRepet
     }
 
     if (includeRepetitions  &&  mRepetition) {
-        if (preDateTime < KCalCore::q2k(mRepetition.duration().end(KCalCore::k2q(dt)))) {
+        if (preDateTime < q2k(mRepetition.duration().end(k2q(dt)))) {
             return true;
         }
     }
@@ -3180,7 +3181,7 @@ KAEvent::OccurType KAEventPrivate::setNextOccurrence(const KDateTime &preDateTim
     // we find the earliest recurrence which has a repetition falling after
     // the specified preDateTime.
     if (mRepetition) {
-        pre = KCalCore::q2k(mRepetition.duration(-mRepetition.count()).end(KCalCore::k2q(preDateTime)));
+        pre = q2k(mRepetition.duration(-mRepetition.count()).end(k2q(preDateTime)));
     }
 
     DateTime afterPre;          // next recurrence after 'pre'
@@ -3249,7 +3250,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KDateTime &preDateTime, 
         if (!mRepetition) {
             includeRepetitions = KAEvent::IGNORE_REPETITION;
         } else {
-            pre = KCalCore::q2k(mRepetition.duration(-mRepetition.count()).end(KCalCore::k2q(preDateTime)));
+            pre = q2k(mRepetition.duration(-mRepetition.count()).end(k2q(preDateTime)));
         }
     }
 
@@ -3269,7 +3270,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KDateTime &preDateTime, 
         // RETURN_REPETITION or ALLOW_FOR_REPETITION
         // The next occurrence is a sub-repetition
         int repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
-        const DateTime repeatDT = KCalCore::q2k(mRepetition.duration(repetition).end(KCalCore::k2q(result.kDateTime())));
+        const DateTime repeatDT = q2k(mRepetition.duration(repetition).end(k2q(result.kDateTime())));
         if (recurs) {
             // We've found a recurrence before the specified date/time, which has
             // a sub-repetition after the date/time.
@@ -3283,7 +3284,7 @@ KAEvent::OccurType KAEventPrivate::nextOccurrence(const KDateTime &preDateTime, 
                 if (includeRepetitions == KAEvent::RETURN_REPETITION  &&  result <= preDateTime) {
                     // The next occurrence is a sub-repetition
                     repetition = mRepetition.nextRepeatCount(result.kDateTime(), preDateTime);
-                    result = KCalCore::q2k(mRepetition.duration(repetition).end(KCalCore::k2q(result.kDateTime())));
+                    result = q2k(mRepetition.duration(repetition).end(k2q(result.kDateTime())));
                     type = static_cast<KAEvent::OccurType>(type | KAEvent::OCCURRENCE_REPEAT);
                 }
                 return type;
@@ -3349,7 +3350,7 @@ KAEvent::OccurType KAEventPrivate::previousOccurrence(const KDateTime &afterDate
         // Find the latest repetition which is before the specified time.
         const int repetition = mRepetition.previousRepeatCount(result.effectiveKDateTime(), afterDateTime);
         if (repetition > 0) {
-            result = KCalCore::q2k(mRepetition.duration(qMin(repetition, mRepetition.count())).end(KCalCore::k2q(result.kDateTime())));
+            result = q2k(mRepetition.duration(qMin(repetition, mRepetition.count())).end(k2q(result.kDateTime())));
             return static_cast<KAEvent::OccurType>(type | KAEvent::OCCURRENCE_REPEAT);
         }
     }
@@ -3840,7 +3841,7 @@ void KAEventPrivate::dumpDebug() const
 */
 DateTime KAEventPrivate::readDateTime(const Event::Ptr &event, bool dateOnly, DateTime &start)
 {
-    start = KCalCore::q2k(event->dtStart());
+    start = q2k(event->dtStart());
     if (dateOnly) {
         // A date-only event is indicated by the X-KDE-KALARM-FLAGS:DATE property, not
         // by a date-only start date/time (for the reasons given in updateKCalEvent()).
@@ -5052,12 +5053,12 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 if (adjustSummerTime) {
                     // The calendar file was written by the KDE 3.0.0 version of KAlarm 0.5.7.
                     // Summer time was ignored when converting to UTC.
-                    KDateTime dt = KCalCore::q2k(alarm->time());
+                    KDateTime dt = q2k(alarm->time());
                     const time_t t = dt.toTime_t();
                     const struct tm *dtm = localtime(&t);
                     if (dtm->tm_isdst) {
                         dt = dt.addSecs(-3600);
-                        alarm->setTime(KCalCore::k2q(dt));
+                        alarm->setTime(k2q(dt));
                     }
                 }
             }
@@ -5244,7 +5245,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
              */
             const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
             const bool dateOnly = flags.contains(KAEventPrivate::DATE_ONLY_FLAG);
-            KDateTime startDateTime = KCalCore::q2k(event->dtStart(), dateOnly);
+            KDateTime startDateTime = q2k(event->dtStart(), dateOnly);
             if (dateOnly) {
                 startDateTime.setDateOnly(true);
             }
@@ -5282,7 +5283,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                         // All main alarms are supposed to be at the same time, so
                         // don't readjust the event's time for subsequent main alarms.
                         mainExpired = false;
-                        nextMainDateTime = KCalCore::q2k(alarm->time());
+                        nextMainDateTime = q2k(alarm->time());
                         nextMainDateTime.setDateOnly(dateOnly);
                         nextMainDateTime = nextMainDateTime.toTimeSpec(startDateTime);
                         if (nextMainDateTime != startDateTime) {
@@ -5300,7 +5301,7 @@ bool KAEvent::convertKCalEvents(const Calendar::Ptr &calendar, int calendarVersi
                 // It's an expired recurrence.
                 // Set the alarm offset relative to the first actual occurrence
                 // (taking account of possible exceptions).
-                KDateTime dt = KCalCore::q2k(event->recurrence()->getNextDateTime(KCalCore::k2q(startDateTime).addDays(-1)));
+                KDateTime dt = q2k(event->recurrence()->getNextDateTime(k2q(startDateTime).addDays(-1)));
                 dt.setDateOnly(dateOnly);
                 adjustment = startDateTime.secsTo(dt);
             } else {
@@ -5488,10 +5489,10 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
     const QStringList flags = event->customProperty(KACalendar::APPNAME, KAEventPrivate::FLAGS_PROPERTY).split(KAEventPrivate::SC, QString::SkipEmptyParts);
     if (flags.indexOf(KAEventPrivate::DATE_ONLY_FLAG) >= 0) {
         // It's an untimed event, so fix it
-        const KDateTime oldDt = KCalCore::q2k(event->dtStart());
+        const KDateTime oldDt = q2k(event->dtStart());
         const int adjustment = oldDt.time().secsTo(midnight);
         if (adjustment) {
-            event->setDtStart(QDateTime(oldDt.date(), midnight, KCalCore::specToZone(oldDt.timeSpec())));
+            event->setDtStart(QDateTime(oldDt.date(), midnight, specToZone(oldDt.timeSpec())));
             int deferralOffset = 0;
             AlarmMap alarmMap;
             readAlarms(event, &alarmMap);
@@ -5528,7 +5529,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
             }
             if ((data.type & DEFERRED_ALARM)  &&  !data.timedDeferral) {
                 // Found a date-only deferral alarm, so adjust its time
-                QDateTime altime = data.alarm->startOffset().end(KCalCore::k2q(nextMainDateTime));
+                QDateTime altime = data.alarm->startOffset().end(k2q(nextMainDateTime));
                 altime.setTime(midnight);
                 deferralOffset = data.alarm->startOffset().asSeconds();
                 newDeferralOffset = event->dtStart().secsTo(altime);
@@ -5650,7 +5651,7 @@ KAAlarm::Type KAAlarm::type() const
 DateTime KAAlarm::dateTime(bool withRepeats) const
 {
     return (withRepeats && d->mNextRepeat && d->mRepetition)
-           ? KCalCore::q2k(d->mRepetition.duration(d->mNextRepeat).end(KCalCore::k2q(d->mNextMainDateTime.kDateTime())))
+           ? q2k(d->mRepetition.duration(d->mNextRepeat).end(k2q(d->mNextMainDateTime.kDateTime())))
            : d->mNextMainDateTime;
 }
 
