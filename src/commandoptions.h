@@ -28,7 +28,6 @@
 #include <kalarmcal/karecurrence.h>
 
 #include <kdatetime.h>
-#include <QByteArray>
 #include <QColor>
 #include <QStringList>
 class QCommandLineParser;

@@ -28,7 +28,6 @@
 
 #include <QHBoxLayout>
 #include <QLocale>
-#include <QTime>
 
 namespace
 {

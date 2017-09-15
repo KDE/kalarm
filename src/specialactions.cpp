@@ -27,7 +27,6 @@
 #include "shellprocess.h"
 
 #include <KLocalizedString>
-#include <KConfigGroup>
 
 #include <QLabel>
 #include <QGroupBox>

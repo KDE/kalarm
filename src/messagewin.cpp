@@ -68,7 +68,6 @@
 #include <QScrollBar>
 #include <QtDBus/QtDBus>
 #include <QFile>
-#include <QFileInfo>
 #include <QCheckBox>
 #include <QLabel>
 #include <QPalette>

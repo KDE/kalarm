@@ -26,7 +26,6 @@
 #include <kalarmcal/kaevent.h>
 
 #include <kstatusnotifieritem.h>
-#include <QIcon>
 
 class QTimer;
 class KToggleAction;

@@ -22,7 +22,6 @@
 #include "kalocale.h"
 
 #include <KLocale>
-#include <KLocalizedString>
 #include "kalarm_debug.h"
 #include <QLocale>
 

@@ -26,7 +26,6 @@
 #include "templatelistview.h"
 
 #include <KLocalizedString>
-#include <KConfigGroup>
 
 #include <QVBoxLayout>
 #include <QResizeEvent>

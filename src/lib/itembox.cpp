@@ -19,7 +19,6 @@
  */
 
 #include "itembox.h"
-#include <QBoxLayout>
 
 
 ItemBox::ItemBox(QWidget* parent)
