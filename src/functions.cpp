@@ -1906,7 +1906,7 @@ KAlarm::UpdateResult sendToKOrganizer(const KAEvent& event)
 
     // Translate the event into string format
     ICalFormat format;
-    format.setTimeZone(QTimeZone(Preferences::timeZone(true).name().toUtf8()));
+    format.setTimeZone(Preferences::qTimeZone(true));
     QString iCal = format.toICalString(kcalEvent);
 
     // Send the event to KOrganizer

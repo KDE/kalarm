@@ -195,7 +195,7 @@ bool AlarmCalendar::open()
         qCDebug(KALARM_LOG) << mUrl.toDisplayString();
         if (!mCalendarStorage)
         {
-            MemoryCalendar::Ptr calendar(new MemoryCalendar(QTimeZone(Preferences::timeZone(true).name().toUtf8())));
+            MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::qTimeZone(true)));
             mCalendarStorage = FileStorage::Ptr(new FileStorage(calendar));
         }
 
@@ -265,7 +265,7 @@ int AlarmCalendar::load()
         } else {
             filename = mUrl.toLocalFile();
         }
-        mCalendarStorage->calendar()->setTimeZone(QTimeZone(Preferences::timeZone(true).name().toUtf8()));
+        mCalendarStorage->calendar()->setTimeZone(Preferences::qTimeZone(true));
         mCalendarStorage->setFileName(filename);
         if (!mCalendarStorage->load())
         {
@@ -640,7 +640,7 @@ bool AlarmCalendar::importAlarms(QWidget* parent, Collection* collection)
     }
 
     // Read the calendar and add its alarms to the current calendars
-    MemoryCalendar::Ptr cal(new MemoryCalendar(QTimeZone(Preferences::timeZone(true).name().toUtf8())));
+    MemoryCalendar::Ptr cal(new MemoryCalendar(Preferences::qTimeZone(true)));
     FileStorage::Ptr calStorage(new FileStorage(cal, filename));
     success = calStorage->load();
     if (!success)
@@ -739,7 +739,7 @@ bool AlarmCalendar::exportAlarms(const KAEvent::List& events, QWidget* parent)
     }
     qCDebug(KALARM_LOG) << url.toDisplayString();
 
-    MemoryCalendar::Ptr calendar(new MemoryCalendar(QTimeZone(Preferences::timeZone(true).name().toUtf8())));
+    MemoryCalendar::Ptr calendar(new MemoryCalendar(Preferences::qTimeZone(true)));
     FileStorage::Ptr calStorage(new FileStorage(calendar, file));
     if (append  &&  !calStorage->load())
     {

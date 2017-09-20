@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QDateTime>
+#include <QTimeZone>
 
 class KTimeZone;
 namespace KHolidays { class HolidayRegion; }
@@ -53,6 +54,7 @@ class Preferences : public PreferencesBase
         static bool             noAutoStart()                    { return self()->base_NoAutoStart(); }
         static void             setNoAutoStart(bool yes);
         static KTimeZone        timeZone(bool reload = false);
+        static QTimeZone        qTimeZone(bool reload = false);
         static void             setTimeZone(const KTimeZone&);
         static const KHolidays::HolidayRegion& holidays();
         static void             setHolidayRegion(const QString& regionCode);

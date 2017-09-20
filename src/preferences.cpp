@@ -270,6 +270,11 @@ KTimeZone Preferences::timeZone(bool reload)
     return tz;
 }
 
+QTimeZone Preferences::qTimeZone(bool reload)
+{
+    return QTimeZone(timeZone(reload).name().toUtf8());
+}
+
 void Preferences::setTimeZone(const KTimeZone& tz)
 {
     self()->setBase_TimeZone(tz.isValid() ? tz.name() : QString());
