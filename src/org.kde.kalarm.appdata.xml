@@ -227,7 +227,7 @@
       <li xml:lang="et">Korduvad häired tundide, minutite, päevade, nädalate, kuude või aastate kaupa või häire käivitamine igal sisselogimisel</li>
       <li xml:lang="fi">Toistuva hälytys tietyllä ajanhetkellä, päivittäin, viikoittain, kuukausittain tai vuosittain tai joka kerta kirjautuessasi.</li>
       <li xml:lang="fr">Alarme récurrente sur une période en minutes, heures, jours, semaines, mois ou années, ou positionnée pour se déclencher à chaque fois que vous vous identifiez.</li>
-      <li xml:lang="gl">Alarma con repetición cada certo número de horas e minutos, diariamente, semanalmente, mensualmente, anualmente, ou disparada automaticamente cada vez que inicia sesión no sistema.</li>
+      <li xml:lang="gl">Alarma con repetición cada certo número de horas e minutos, diariamente, semanalmente, mensualmente, anualmente, ou disparada automaticamente cada vez que accede.</li>
       <li xml:lang="hu">Ismétlődő emlékeztetők óránkénti/percenkénti, napi, heti, havi vagy évenkénti gyakorisággal, vagy minden bejelentkezéskor.</li>
       <li xml:lang="it">Avvisi ricorrenti secondi intervalli di ore/minuti, giornalieri, settimanali, mensili o annuali, o impostati per attivarsi quando accedi al sistema.</li>
       <li xml:lang="ko">시/분, 일간, 주간, 월간, 년간 및 로그인 할 때마다 반복되는 알람</li>
