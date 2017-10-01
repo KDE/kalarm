@@ -5492,7 +5492,7 @@ bool KAEventPrivate::convertStartOfDay(const Event::Ptr &event)
         const KDateTime oldDt = q2k(event->dtStart());
         const int adjustment = oldDt.time().secsTo(midnight);
         if (adjustment) {
-            event->setDtStart(QDateTime(oldDt.date(), midnight, specToZone(oldDt.timeSpec())));
+            event->setDtStart(ktoq(KDateTime(oldDt.date(), midnight, oldDt.timeSpec())));
             int deferralOffset = 0;
             AlarmMap alarmMap;
             readAlarms(event, &alarmMap);

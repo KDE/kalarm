@@ -2,6 +2,7 @@
   This file is part of the kalarmcal library.
 
   Copyright (c) 2017  Daniel Vrátil <dvratil@kde.org>
+  Copyright (c) 2017  David Jarvie <djarvie@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -30,14 +31,19 @@
 
 namespace KAlarmCal {
 
+/** Get the KDateTime::Spec for a QDateTime */
+KALARMCAL_EXPORT KDateTime::Spec kTimeSpec(const QDateTime &dt);
+
 /** Convert a QTimeZone to a KDateTime::Spec */
 KALARMCAL_EXPORT KDateTime::Spec zoneToSpec(const QTimeZone &zone);
 
 /** Convert a QTimeZone to a KDateTime::Spec */
 KALARMCAL_EXPORT QTimeZone specToZone(const KDateTime::Spec &spec);
 
-/** Convert KDateTime to QDateTime, correctly preserves timespec */
+/** Convert KDateTime to QDateTime, correctly preserving timespec */
 KALARMCAL_EXPORT QDateTime k2q(const KDateTime &kdt);
+
+/** Convert QDateTime to KDateTime, correctly preserving timespec */
 KALARMCAL_EXPORT KDateTime q2k(const QDateTime &qdt, bool isAllDay = false);
 
 }

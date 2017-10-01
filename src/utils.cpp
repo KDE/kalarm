@@ -2,6 +2,7 @@
   This file is part of the kalarmcal library.
 
   Copyright (c) 2017  Daniel Vrátil <dvratil@kde.org>
+  Copyright (c) 2017  David Jarvie <djarvie@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +25,25 @@
 #include <KTimeZone>
 #include <KSystemTimeZones>
 #include <QDebug>
+
+KDateTime::Spec KAlarmCal::kTimeSpec(const QDateTime &dt)
+{
+    if (dt.isValid()) {
+        switch (dt.timeSpec()) {
+            case Qt::LocalTime:
+                return KDateTime::LocalZone;
+            case Qt::UTC:
+                return KDateTime::UTC;
+            case Qt::OffsetFromUTC:
+                return KDateTime::Spec(KDateTime::OffsetFromUTC, dt.offsetFromUtc());
+            case Qt::TimeZone:
+                return KSystemTimeZones::zone(QString::fromLatin1(dt.timeZone().id()));
+            default:
+                break;
+        }
+    }
+    return KDateTime::Invalid;
+}
 
 KDateTime::Spec KAlarmCal::zoneToSpec(const QTimeZone& zone)
 {
@@ -137,19 +157,36 @@ QTimeZone KAlarmCal::specToZone(const KDateTime::Spec &spec)
 QDateTime KAlarmCal::k2q(const KDateTime &kdt)
 {
     if (kdt.isValid()) {
-        return QDateTime(kdt.date(), kdt.time(), specToZone(kdt.timeSpec()));
-    } else {
-        return QDateTime();
+        switch (kdt.timeType()) {
+            case KDateTime::LocalZone:
+            case KDateTime::ClockTime:
+                return QDateTime(kdt.date(), kdt.time(), Qt::LocalTime);
+            case KDateTime::UTC:
+                return QDateTime(kdt.date(), kdt.time(), Qt::UTC);
+            case KDateTime::OffsetFromUTC:
+                return QDateTime(kdt.date(), kdt.time(), Qt::OffsetFromUTC, kdt.timeSpec().utcOffset());
+            case KDateTime::TimeZone: {
+                auto tz = QTimeZone(kdt.timeZone().name().toUtf8());
+                if (!tz.isValid()) {
+                    tz = resolveCustomTZ(kdt.timeZone());
+                    qDebug() << "Resolved" << kdt.timeZone().name() << "to" << tz.id();
+                }
+                return QDateTime(kdt.date(), kdt.time(), tz);
+            }
+            case KDateTime::Invalid:
+            default:
+                break;
+        }
     }
+    return QDateTime();
 }
 
 KDateTime KAlarmCal::q2k(const QDateTime &qdt, bool allDay)
 {
     if (qdt.isValid()) {
-        KDateTime kdt(qdt.date(), qdt.time(), zoneToSpec(qdt.timeZone()));
+        KDateTime kdt(qdt.date(), qdt.time(), kTimeSpec(qdt));
         kdt.setDateOnly(allDay && qdt.time() == QTime(0, 0, 0));
         return kdt;
-    } else {
-        return KDateTime();
     }
+    return KDateTime();
 }
