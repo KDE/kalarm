@@ -11,3 +11,4 @@ SetUserTexts=true
 SourceIncludeFiles=kalarmcal/identities.h
 IncludeFiles=kalarm_debug.h
 CategoryLoggingName=KALARM_LOG
+TranslationSystem=kde
