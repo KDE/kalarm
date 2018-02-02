@@ -1,7 +1,7 @@
 [Domain]
 Name=KAlarm
 Name[af]=K-alarm
-Name[ar]=برنامج المنبه KAlarm
+Name[ar]=منبّهك
 Name[ast]=KAlarm
 Name[be]=KAlarm
 Name[bg]=Аларма
@@ -74,6 +74,7 @@ Icon=kalarm
 
 [org.kde.kalarmrtcwake.settimer]
 Name=Set RTC wakeup time
+Name[ar]=اضبط وقت استيقاظ RTC
 Name[bs]=Postavlja vrijeme buđenja sata realnog vremena
 Name[ca]=Defineix l'hora d'activació de l'RTC
 Name[ca@valencia]=Defineix l'hora d'activació de l'RTC
@@ -116,6 +117,7 @@ Name[x-test]=xxSet RTC wakeup timexx
 Name[zh_CN]=设置实时时钟唤醒时间
 Name[zh_TW]=設定 RTC 喚醒時間
 Description=Set RTC wake-from-suspend time
+Description[ar]=اضبط وقت استيقاظ RTC من التّعليق
 Description[bs]=Postavlja vrijeme buđenja iz suspenzije sata realnog vremena
 Description[ca]=Defineix l'hora d'activació des de suspensió de l'RTC
 Description[ca@valencia]=Defineix l'hora d'activació des de suspensió de l'RTC

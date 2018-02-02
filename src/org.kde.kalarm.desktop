@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=KAlarm
 Name[af]=K-alarm
-Name[ar]=برنامج المنبه KAlarm
+Name[ar]=منبّهك
 Name[ast]=KAlarm
 Name[be]=KAlarm
 Name[bg]=Аларма
@@ -76,7 +76,7 @@ Icon=kalarm
 X-DocPath=kalarm/index.html
 GenericName=Personal Alarm Scheduler
 GenericName[af]=Persoonlike alarm skeduleerder
-GenericName[ar]=مجدول التنبيهات الشخصي
+GenericName[ar]=مجدوِل المنبّهات الشخصيّ
 GenericName[bg]=Настройки на аларма
 GenericName[bs]=Razpoređivač osobnih alarma
 GenericName[ca]=Planificador personal per a alarmes
