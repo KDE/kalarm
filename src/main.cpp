@@ -45,7 +45,6 @@ int main(int argc, char* argv[])
     const QStringList args = app->arguments();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     app->setAttribute(Qt::AA_EnableHighDpiScaling);
-    app->setDesktopFileName(QStringLiteral("org.kde.kalarm"));
 
     KLocalizedString::setApplicationDomain("kalarm");
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n("KAlarm"),
@@ -56,6 +55,7 @@ int main(int argc, char* argv[])
                          QStringLiteral("http://www.astrojar.org.uk/kalarm"));
     aboutData.addAuthor(i18n("David Jarvie"), i18n("Author"), QStringLiteral("djarvie@kde.org"));
     aboutData.setOrganizationDomain("kde.org");
+    aboutData.setDesktopFileName(QStringLiteral("org.kde.kalarm"));
     KAboutData::setApplicationData(aboutData);
 
     qCDebug(KALARM_LOG) << "initialising";
