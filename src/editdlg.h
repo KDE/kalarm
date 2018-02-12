@@ -69,7 +69,7 @@ class EditAlarmDlg : public QDialog
                                     GetResourceType = RES_PROMPT);
         static EditAlarmDlg* create(bool Template, const KAEvent*, bool newAlarm, QWidget* parent = nullptr,
                                     GetResourceType = RES_PROMPT, bool readOnly = false);
-        virtual ~EditAlarmDlg();
+        ~EditAlarmDlg() override;
         bool            getEvent(KAEvent&, Akonadi::Collection&);
 
         // Methods to initialise values in the New Alarm dialogue.

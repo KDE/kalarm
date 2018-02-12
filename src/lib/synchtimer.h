@@ -39,7 +39,7 @@ class SynchTimer : public QObject
 {
         Q_OBJECT
     public:
-        virtual ~SynchTimer();
+        ~SynchTimer() override;
 
         struct Connection
         {
@@ -117,7 +117,7 @@ class DailyTimer : public SynchTimer
 {
         Q_OBJECT
     public:
-        virtual ~DailyTimer();
+        ~DailyTimer() override;
         /** Connect to the timer signal which triggers at the given fixed time of day.
          *  A new timer is created if necessary.
          *  @param timeOfDay Time at which the timer is to trigger.

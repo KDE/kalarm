@@ -46,7 +46,7 @@ class AlarmCalendar : public QObject
 {
         Q_OBJECT
     public:
-        virtual ~AlarmCalendar();
+        ~AlarmCalendar() override;
         bool                  valid() const         { return (mCalType == RESOURCES) || mUrl.isValid(); }
         CalEvent::Type        type() const          { return (mCalType == RESOURCES) ? CalEvent::EMPTY : mEventType; }
         bool                  open();
