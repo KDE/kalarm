@@ -59,7 +59,7 @@ public:
     /** Assignment operator. */
     CollectionAttribute &operator=(const CollectionAttribute &other);
 
-    virtual ~CollectionAttribute();
+    ~CollectionAttribute() override;
 
     /** Return whether the collection is enabled for a specified alarm type
      *  (active, archived, template or displaying).

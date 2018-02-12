@@ -55,7 +55,7 @@ public:
     /** Assignment operator. */
     EventAttribute &operator=(const EventAttribute &other);
 
-    virtual ~EventAttribute();
+    ~EventAttribute() override;
 
     /** Return the last command execution error for the item. */
     KAEvent::CmdErrType commandError() const;

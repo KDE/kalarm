@@ -56,7 +56,7 @@ public:
     /** Assignment operator. */
     CompatibilityAttribute &operator=(const CompatibilityAttribute &other);
 
-    virtual ~CompatibilityAttribute();
+    ~CompatibilityAttribute() override;
 
     /** Return the compatibility status for the entity. */
     KACalendar::Compat compatibility() const;
