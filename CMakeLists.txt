@@ -4,7 +4,7 @@ set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
 
 project(kalarm VERSION "2.11.16")
 
-set(KF5_VERSION "5.42.0")
+set(KF5_VERSION "5.43.0")
 
 find_package(ECM ${KF5_VERSION} CONFIG REQUIRED)
 set(CMAKE_MODULE_PATH ${kalarm_SOURCE_DIR}/cmake/modules ${ECM_MODULE_PATH})
