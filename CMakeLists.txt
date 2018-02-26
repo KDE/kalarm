@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-set(PIM_VERSION "5.7.40")
+set(PIM_VERSION "5.7.80")
 
 project(KAlarmCal VERSION ${PIM_VERSION})
 
