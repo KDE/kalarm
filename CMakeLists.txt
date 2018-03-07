@@ -26,6 +26,7 @@ include(ECMCoverageOption)
 set(KALARM_LIB_VERSION ${PIM_VERSION})
 
 set(CALENDARCORE_LIB_VERSION "5.7.40")
+set(CALENDARUTILS_LIB_VERSION "5.7.40")
 set(HOLIDAY_LIB_VERSION "5.7.40")
 set(IDENTITYMANAGER_LIB_VERSION "5.7.40")
 set(AKONADI_LIB_VERSION "5.7.40")
@@ -42,6 +43,7 @@ find_package(KF5Akonadi ${AKONADI_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5CalendarCore ${CALENDARCORE_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5IdentityManagement ${IDENTITYMANAGER_LIB_VERSION} CONFIG REQUIRED)
 find_package(KF5Holidays ${HOLIDAY_LIB_VERSION} CONFIG REQUIRED)
+find_package(KF5CalendarUtils ${CALENDARUTILS_LIB_VERSION} CONFIG REQUIRED)
 
 add_definitions(-DTRANSLATION_DOMAIN=\"libkalarmcal5\")
 add_definitions("-DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII")
@@ -49,6 +51,7 @@ add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
 ########### Targets ###########
 
 add_subdirectory(src)
+add_subdirectory(serializers)
 
 ########### CMake Config Files ###########
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5AlarmCalendar")
