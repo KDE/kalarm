@@ -1,7 +1,7 @@
 /*
  *  rtcwakeaction.cpp  -  KAuth helper application to execute rtcwake commands
  *  Program:  kalarm
- *  Copyright © 2011 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2011,2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -88,7 +88,7 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
     switch (result)
     {
         case 0:
-            return ActionReply::SuccessType;
+            return ActionReply::SuccessReply();
         case -2:
             errmsg = xi18nc("@text/plain", "Could not run <command>%1</command> to set wake from suspend", QStringLiteral("rtcwake"));
             break;
@@ -96,15 +96,10 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
             errmsg = xi18nc("@text/plain", "Error setting wake from suspend.<nl/>Command was: <command>%1 %2</command><nl/>Error code: %3.", proc.program(), proc.arguments().join(QStringLiteral(" ")), result);
             break;
     }
-#if 0 //QT5
-    ActionReply reply(ActionReply::HelperErrorReply);
-    reply.setErrorCode(result);
+    ActionReply reply = ActionReply::HelperErrorReply(result);
     reply.setErrorDescription(errmsg);
-    qCDebug(KALARM_LOG) , "RtcWakeAction::settimer: Code=" , reply.errorCode() , reply.errorDescription();
+    qCDebug(KALARM_LOG) << "RtcWakeAction::settimer: Code=" << reply.errorCode() << reply.errorDescription();
     return reply;
-#else
-    return 0;
-#endif
 }
 
 KAUTH_HELPER_MAIN("org.kde.kalarmrtcwake", RtcWakeAction)
