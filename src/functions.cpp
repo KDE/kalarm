@@ -1,7 +1,7 @@
 /*
  *  functions.cpp  -  miscellaneous functions
  *  Program:  kalarm
- *  Copyright © 2001-2017 by David Jarvie <djarvie@kde.org>
+ *  Copyright © 2001-2018 by David Jarvie <djarvie@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1066,38 +1066,26 @@ void Private::cancelRtcWake()
 */
 bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
 {
-#if 0 //QT5
     QVariantMap args;
     args[QLatin1String("time")] = triggerTime;
-    KAuth::Action action(QLatin1String("org.kde.kalarmrtcwake.settimer"));
-    action.setHelperID(QLatin1String("org.kde.kalarmrtcwake"));
+    KAuth::Action action(QStringLiteral("org.kde.kalarmrtcwake.settimer"));
+    action.setHelperId(QStringLiteral("org.kde.kalarmrtcwake"));
     action.setParentWidget(parent);
     action.setArguments(args);
-    KAuth::ActionReply reply = action.execute();
-    if (reply.failed())
+    KAuth::ExecuteJob* job = action.execute();
+    if (!job->exec())
     {
-        QString errmsg = reply.errorDescription();
-        qCDebug(KALARM_LOG) << "Error code=" << reply.errorCode() << errmsg;
+        QString errmsg = job->errorString();
+        qCDebug(KALARM_LOG) << "Error code=" << job->error() << errmsg;
         if (errmsg.isEmpty())
         {
-            int errcode = reply.errorCode();
-            switch (reply.type())
+            int errcode = job->error();
+            switch (errcode)
             {
-                case KAuth::ActionReply::KAuthErrorType:
+                case KAuth::ActionReply::AuthorizationDeniedError:
+                case KAuth::ActionReply::UserCancelledError:
                     qCDebug(KALARM_LOG) << "Authorization error:" << errcode;
-                    switch (errcode)
-                    {
-                        case KAuth::ActionReply::AuthorizationDeniedError:
-                        case KAuth::ActionReply::UserCancelledError:
-                            return false;   // the user should already know about this
-                        default:
-                            break;
-                    }
-                    break;
-                case KAuth::ActionReply::HelperErrorType:
-                    qCDebug(KALARM_LOG) << "Helper error:" << errcode;
-                    errcode += 100;    // make code distinguishable from KAuthError type
-                    break;
+                    return false;   // the user should already know about this
                 default:
                     break;
             }
@@ -1106,7 +1094,6 @@ bool setRtcWakeTime(unsigned triggerTime, QWidget* parent)
         KAMessageBox::information(parent, errmsg);
         return false;
     }
-#endif
     return true;
 }
 
