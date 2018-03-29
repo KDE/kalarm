@@ -72,7 +72,7 @@ Name[zh_CN]=KAlarm
 Name[zh_TW]=KAlarm 鬧鐘
 Icon=kalarm
 
-[org.kde.kalarmrtcwake.settimer]
+[org.kde.kalarm.rtcwake.settimer]
 Name=Set RTC wakeup time
 Name[ar]=اضبط وقت استيقاظ RTC
 Name[bs]=Postavlja vrijeme buđenja sata realnog vremena

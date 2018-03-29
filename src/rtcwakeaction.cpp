@@ -20,7 +20,6 @@
 
 #include "rtcwakeaction.h"
 
-#include <kglobal.h>
 #include <KLocalizedString>
 #include <kauthactionreply.h>
 #include "kalarm_debug.h"
@@ -102,6 +101,6 @@ ActionReply RtcWakeAction::settimer(const QVariantMap& args)
     return reply;
 }
 
-KAUTH_HELPER_MAIN("org.kde.kalarmrtcwake", RtcWakeAction)
+KAUTH_HELPER_MAIN("org.kde.kalarm.rtcwake", RtcWakeAction)
 
 // vim: et sw=4:
