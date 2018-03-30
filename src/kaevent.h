@@ -208,7 +208,7 @@ public:
         ANY_TIME        = 0x08,    //!< only a date is specified for the alarm, not a time
         CONFIRM_ACK     = 0x10,    //!< closing the alarm message window requires a confirmation prompt
         EMAIL_BCC       = 0x20,    //!< blind copy the email to the user
-        DEFAULT_FONT    = 0x40,    //!< use the default alarm message font
+        DEFAULT_FONT    = 0x40,    //!< use the default alarm message font. Overrides any specified font.
         REPEAT_SOUND    = 0x80,    //!< repeat the sound file while the alarm is displayed
         DISABLED        = 0x100,   //!< the alarm is currently disabled
         AUTO_CLOSE      = 0x200,   //!< auto-close the alarm window after the late-cancel period
@@ -316,7 +316,8 @@ public:
     KAEvent();
 
     /** Construct an event and initialise with the specified parameters.
-     *  @param dt    start date/time.
+     *  @param dt    start date/time. If @dt is date-only, or if #ANY_TIME flag
+     *               is specified, the event will be date-only.
      *  @param text  alarm message (@p action = #MESSAGE);
      *               file to display (@p action = #FILE);
      *               command to execute (@p action = #COMMAND);
@@ -324,7 +325,8 @@ public:
      *               audio file (@p action = #AUDIO).
      *  @param bg    background color (for display alarms, ignored otherwise).
      *  @param fg    foreground color (for display alarms, ignored otherwise).
-     *  @param font  font (for display alarms, ignored otherwise).
+     *  @param font  font (for display alarms, ignored otherwise). Ignored if
+     *               #DEFAULT_FONT flag is specified.
      *  @param action         alarm action type.
      *  @param lateCancel     late-cancellation period (minutes), else 0.
      *  @param flags          OR of #Flag enum values.
@@ -333,12 +335,29 @@ public:
      *                        to the instance; call endChanges() when changes
      *                        are complete.
      */
-    KAEvent(const KDateTime &, const QString &text, const QColor &bg, const QColor &fg,
-            const QFont &f, SubAction, int lateCancel, Flags flags, bool changesPending = false);
-    /** Construct an event and initialise it from a KCalCore::Event. */
+    KAEvent(const KDateTime &dt, const QString &text, const QColor &bg, const QColor &fg,
+            const QFont &font, SubAction action, int lateCancel, Flags flags, bool changesPending = false);
+    /** Construct an event and initialise it from a KCalCore::Event.
+     *
+     *  The initialisation is identical to that performed by set().
+     */
     explicit KAEvent(const KCalCore::Event::Ptr &);
 
-    /** Initialise the instance from a KCalCore::Event. */
+    /** Initialise the instance from a KCalCore::Event.
+     *
+     *  It uses the following properties from KCalCore::Event:
+     *  - Unique ID.
+     *  - Summary.
+     *  - Creation date/time.
+     *  - Start date/time.
+     *  - Recurrence rule.
+     *  - Alarms.
+     *  - Read only.
+     *  - Custom properties. X-KDE-KALARM- properties are interpreted and used to
+     *    set numerous KAEvent properties; non-KAlarm properties are simply stored.
+     *  - Custom status if equal to "DISABLED".
+     *  - Revision number.
+     */
     void set(const KCalCore::Event::Ptr &);
 
     KAEvent(const KAEvent &other);
@@ -725,11 +744,11 @@ public:
     /** Set the pre-alarm and post-alarm actions, and their options.
      *  @param pre  shell command to execute before the alarm is displayed
      *  @param post shell command to execute after the alarm is acknowledged
-     *  @param options options for pre- or post-alarm actions
+     *  @param preOptions options for pre-alarm actions
      *  @see preAction(), postAction(), extraActionOptions()
      *  @since 4.9
      */
-    void setActions(const QString &pre, const QString &post, ExtraActionOptions options);
+    void setActions(const QString &pre, const QString &post, ExtraActionOptions preOptions);
 
     /** Return the shell command to execute before the alarm is displayed. */
     QString preAction() const;
@@ -739,8 +758,8 @@ public:
      */
     QString postAction() const;
 
-    /** Return the pre- and post-alarm action options.
-     *  @see preAction(), postAction(), setActions()
+    /** Return the pre-alarm action options.
+     *  @see preAction(), setActions()
      *  @since 4.9
      */
     ExtraActionOptions extraActionOptions() const;
@@ -833,7 +852,8 @@ public:
     bool deferDefaultDateOnly() const;
 
     /** Return the start time for the event. If the event recurs, this is the
-     *  time of the first recurrence.
+     *  time of the first recurrence. If the event is date-only, this returns a
+     *  date-only value.
      *  @see mainDateTime()
      */
     DateTime startDateTime() const;
@@ -913,6 +933,7 @@ public:
     void setExcludeHolidays(bool exclude);
 
     /** Return whether the alarm is disabled on holiday dates.
+     *  If no holiday region has been set by setHolidays(), this returns false;
      *  @see setExcludeHolidays()
      */
     bool holidaysExcluded() const;

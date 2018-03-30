@@ -780,7 +780,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
             flag = flags.at(++i);
             if (flag == KAEventPrivate::REMINDER_ONCE_FLAG) {
                 mReminderOnceOnly = true;
-                ++i;
+                flag = flags.at(++i);
             }
             const int len = flag.length() - 1;
             mReminderMinutes = -flag.leftRef(len).toInt();    // -> 0 if conversion fails
@@ -874,7 +874,7 @@ void KAEventPrivate::set(const Event::Ptr &event)
     mRepeatAtLogin      = false;
     mDisplaying         = false;
     mCommandScript      = false;
-    mExtraActionOptions = nullptr;
+    mExtraActionOptions = 0;
     mDeferral           = NO_DEFERRAL;
     mSoundVolume        = -1;
     mFadeVolume         = -1;
@@ -1122,7 +1122,8 @@ void KAEventPrivate::set(const KDateTime &dateTime, const QString &text, const Q
 {
     clearRecur();
     mStartDateTime = dateTime;
-    mStartDateTime.setDateOnly(flags & KAEvent::ANY_TIME);
+    if (flags & KAEvent::ANY_TIME)
+        mStartDateTime.setDateOnly(true);
     mNextMainDateTime = mStartDateTime;
     switch (action) {
     case KAEvent::MESSAGE:
@@ -1157,7 +1158,6 @@ void KAEventPrivate::set(const KDateTime &dateTime, const QString &text, const Q
     mLateCancel             = lateCancel;     // do this before setting flags
     mDeferral               = NO_DEFERRAL;    // do this before setting flags
 
-    mStartDateTime.setDateOnly(flags & KAEvent::ANY_TIME);
     set_deferral((flags & DEFERRAL) ? NORMAL_DEFERRAL : NO_DEFERRAL);
     mRepeatAtLogin          = flags & KAEvent::REPEAT_AT_LOGIN;
     mConfirmAck             = flags & KAEvent::CONFIRM_ACK;
@@ -1193,7 +1193,7 @@ void KAEventPrivate::set(const KDateTime &dateTime, const QString &text, const Q
     mDisplayingEdit         = false;
     mArchive                = false;
     mReminderAfterTime      = DateTime();
-    mExtraActionOptions     = nullptr;
+    mExtraActionOptions     = 0;
     mCompatibility          = KACalendar::Current;
     mReadOnly               = false;
     mCommandError           = KAEvent::CMD_NO_ERROR;
@@ -1587,11 +1587,10 @@ Alarm::Ptr KAEventPrivate::initKCalAlarm(const Event::Ptr &event, int startOffse
             break;
         case KAEvent::AUDIO:
             setAudioAlarm(alarm);
-            if (mRepeatSoundPause >= 0) {
-                alltypes += SOUND_REPEAT_TYPE;
-                if (type == MAIN_ALARM) {
-                    alltypes += QString::number(mRepeatSoundPause);
-                }
+            if (mRepeatSoundPause >= 0  &&  type == MAIN_ALARM) {
+                // Indicate repeating sound in the main alarm by a non-standard
+                // method, since it might have a sub-repetition too.
+                alltypes << SOUND_REPEAT_TYPE << QString::number(mRepeatSoundPause);
             }
             break;
         }
@@ -1668,7 +1667,7 @@ KAEvent::Flags KAEvent::flags() const
 
 KAEvent::Flags KAEventPrivate::flags() const
 {
-    KAEvent::Flags result(nullptr);
+    KAEvent::Flags result(0);
     if (mBeep) {
         result |= KAEvent::BEEP;
     }
@@ -3955,7 +3954,7 @@ void KAEventPrivate::readAlarm(const Alarm::Ptr &alarm, AlarmData &data, bool au
             }
             data.cleanText += alarm->programArguments();
         }
-        data.extraActionOptions = nullptr;
+        data.extraActionOptions = 0;
         if (flags.contains(KAEventPrivate::EXEC_ON_DEFERRAL_FLAG)) {
             data.extraActionOptions |= KAEvent::ExecPreActOnDeferral;
         }
@@ -4776,7 +4775,7 @@ void KAEventPrivate::setAudioAlarm(const Alarm::Ptr &alarm) const
     alarm->setAudioAlarm(mAudioFile);  // empty for a beep or for speaking
     if (mSoundVolume >= 0)
         alarm->setCustomProperty(KACalendar::APPNAME, VOLUME_PROPERTY,
-                                 QStringLiteral("%1;%2;%3;%4").arg(QString::number(mSoundVolume, 'f', 2), QString::number(mFadeVolume, 'f', 2), QString::number(mFadeSeconds)));
+                                 QStringLiteral("%1;%2;%3").arg(QString::number(mSoundVolume, 'f', 2), QString::number(mFadeVolume, 'f', 2), QString::number(mFadeSeconds)));
 }
 
 /******************************************************************************
@@ -5840,6 +5839,7 @@ QString EmailAddressList::pureAddresses(const QString &separator) const
 */
 static void setProcedureAlarm(const Alarm::Ptr &alarm, const QString &commandLine)
 {
+    //TODO: cater for environment variables prefixed to command
     QString command;
     QString arguments;
     QChar quoteChar;
