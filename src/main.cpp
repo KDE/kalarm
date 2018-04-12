@@ -27,6 +27,7 @@
 
 #include <KAboutData>
 #include <KLocalizedString>
+#include <KCrash>
 
 #include <QDir>
 #include <QScopedPointer>
@@ -45,6 +46,8 @@ int main(int argc, char* argv[])
     const QStringList args = app->arguments();
     app->setAttribute(Qt::AA_UseHighDpiPixmaps, true);
     app->setAttribute(Qt::AA_EnableHighDpiScaling);
+    KCrash::initialize();
+
 
     KLocalizedString::setApplicationDomain("kalarm");
     KAboutData aboutData(QStringLiteral(PROGRAM_NAME), i18n("KAlarm"),
