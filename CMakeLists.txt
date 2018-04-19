@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-set(KDEPIM_VERSION_NUMBER "5.8.0")
+set(KDEPIM_VERSION_NUMBER "5.8.1")
 set(PIM_VERSION ${KDEPIM_VERSION_NUMBER})
 
 project(kalarm VERSION "2.11.16")
