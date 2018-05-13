@@ -31,7 +31,7 @@
 </authorgroup>
 
 <copyright>
-<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year>
+<year>2001</year><year>2002</year><year>2003</year><year>2004</year><year>2005</year><year>2006</year><year>2007</year><year>2008</year><year>2009</year><year>2010</year><year>2011</year><year>2012</year><year>2013</year><year>2016</year><year>2018</year>
 <holder>&David.Jarvie;</holder>
 </copyright>
 
@@ -39,8 +39,8 @@
 
 <!-- Don't change format of date and version of the documentation -->
 
-<date>2016-12-06</date>
-<releaseinfo>2.11.11 (Applications 16.12)</releaseinfo>
+<date>2018-04-16</date>
+<releaseinfo>2.12.0 (Applications 18.08)</releaseinfo>
 
 <abstract>
 <para>&kalarm; is a personal alarm message, command and email scheduler by &kde;.</para>
@@ -1580,14 +1580,9 @@ will be your computer's time zone unless you have changed it.</para>
 </listitem>
 
 <listitem>
-<para>Check <guilabel>Ignore time zone</guilabel> if you want to use
-the local computer time (on whichever computer &kalarm; happens to be
-running on at the time), ignoring time zones.</para>
-
-<warning><para>You are recommended not to select this option if the
-alarm has a recurrence specified in hours and minutes; if you do, the
-alarm may occur at unexpected times after daylight saving time
-shifts.</para></warning>
+<para>Select <guilabel>System time zone</guilabel> if you want to use
+the local computer time zone (on whichever computer &kalarm; happens to
+be running on at the time).</para>
 </listitem>
 </itemizedlist>
 
@@ -3192,9 +3187,8 @@ time.</para>
   If no time zone is specified, the local system time zone is
   assumed. If a time zone specifier <replaceable>TZ</replaceable> is
   present, it may be the name of a system time zone (&eg;
-  <userinput>Europe/London</userinput>), <userinput>UTC</userinput>
-  representing the UTC time zone, or <userinput>Clock</userinput> to
-  use the local computer clock and ignore time zones.</entry>
+  <userinput>Europe/London</userinput>), or <userinput>UTC</userinput>
+  representing the UTC time zone.</entry>
 </row>
 <row>
   <entry><option>--triggerEvent
@@ -3501,7 +3495,7 @@ returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
 <replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
-<replaceable>HH:MM[:SS] [Clock]</replaceable> (as returned by
+<replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
 specified, today's date is used. Note that any seconds value is
 ignored.</para>
@@ -3509,9 +3503,8 @@ ignored.</para>
 <para>If no time zone is specified, the local system time zone is
 assumed. If a time zone specifier <replaceable>TZ</replaceable> is
 present, it may be the name of a system time zone (&eg;
-<userinput>Europe/London</userinput>), <userinput>UTC</userinput>
-representing the UTC time zone, or <userinput>Clock</userinput> to use
-the local computer clock and ignore time zones.</para>
+<userinput>Europe/London</userinput>), or <userinput>UTC</userinput>
+representing the UTC time zone.</para>
 </listitem>
 </varlistentry>
 
@@ -3754,7 +3747,7 @@ returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
 <replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
-<replaceable>HH:MM[:SS] [Clock]</replaceable> (as returned by
+<replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
 specified, today's date is used. Note that any seconds value is
 ignored.</para>
@@ -3762,9 +3755,8 @@ ignored.</para>
 <para>If no time zone is specified, the local system time zone is
 assumed. If a time zone specifier <replaceable>TZ</replaceable> is
 present, it may be the name of a system time zone (&eg;
-<userinput>Europe/London</userinput>), <userinput>UTC</userinput>
-representing the UTC time zone, or <userinput>Clock</userinput> to use
-the local computer clock and ignore time zones.</para>
+<userinput>Europe/London</userinput>), or <userinput>UTC</userinput>
+representing the UTC time zone.</para>
 </listitem>
 </varlistentry>
 
@@ -3971,7 +3963,7 @@ returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
 <replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
-<replaceable>HH:MM[:SS] [Clock]</replaceable> (as returned by
+<replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
 specified, today's date is used. Note that any seconds value is
 ignored.</para>
@@ -3979,9 +3971,8 @@ ignored.</para>
 <para>If no time zone is specified, the local system time zone is
 assumed. If a time zone specifier <replaceable>TZ</replaceable> is
 present, it may be the name of a system time zone (&eg;
-<userinput>Europe/London</userinput>), <userinput>UTC</userinput>
-representing the UTC time zone, or <userinput>Clock</userinput> to use
-the local computer clock and ignore time zones.</para>
+<userinput>Europe/London</userinput>), or <userinput>UTC</userinput>
+representing the UTC time zone.</para>
 </listitem>
 </varlistentry>
 
@@ -4196,7 +4187,7 @@ returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
 <replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
-<replaceable>HH:MM[:SS] [Clock]</replaceable> (as returned by
+<replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
 specified, today's date is used. Note that any seconds value is
 ignored.</para>
@@ -4204,9 +4195,8 @@ ignored.</para>
 <para>If no time zone is specified, the local system time zone is
 assumed. If a time zone specifier <replaceable>TZ</replaceable> is
 present, it may be the name of a system time zone (&eg;
-<userinput>Europe/London</userinput>), <userinput>UTC</userinput>
-representing the UTC time zone, or <userinput>Clock</userinput> to use
-the local computer clock and ignore time zones.</para>
+<userinput>Europe/London</userinput>), or <userinput>UTC</userinput>
+representing the UTC time zone.</para>
 </listitem>
 </varlistentry>
 
@@ -4389,7 +4379,7 @@ returned by <methodname>QDate::toString(Qt::ISODate)</methodname>). For
 an alarm with a date and time, the string should be in the format
 <replaceable>YYYY-MM-DDTHH:MM[:SS] [TZ]</replaceable> (as returned by
 <methodname>QDateTime::toString(Qt::ISODate)</methodname>) or
-<replaceable>HH:MM[:SS] [Clock]</replaceable> (as returned by
+<replaceable>HH:MM[:SS]</replaceable> (as returned by
 <methodname>QTime::toString(Qt::ISODate)</methodname>). If no date is
 specified, today's date is used. Note that any seconds value is
 ignored.</para>
@@ -4397,9 +4387,8 @@ ignored.</para>
 <para>If no time zone is specified, the local system time zone is
 assumed. If a time zone specifier <replaceable>TZ</replaceable> is
 present, it may be the name of a system time zone (&eg;
-<userinput>Europe/London</userinput>), <userinput>UTC</userinput>
-representing the UTC time zone, or <userinput>Clock</userinput> to use
-the local computer clock and ignore time zones.</para>
+<userinput>Europe/London</userinput>), or <userinput>UTC</userinput>
+representing the UTC time zone.</para>
 </listitem>
 </varlistentry>
 

@@ -1,5 +1,14 @@
 KAlarm Change Log
 
+=== Version 2.12.0 (KDE Applications 18.08) --- 18 April 2018 ===
++ Use KADateTime instead of deprecated KDateTime.
++ Remove 'clock time' option, in favour of local system time zone.
++ Fix evaluation of work days.
++ Fix reminder-once alarms not being correctly loaded from calendar file.
++ Fix some regressions introduced in version 2.11.0, including:
+    Make global shortcuts available.
+    Default sound file selection dialogue to the system sound files directory.
+
 === Version 2.11.16 (KDE Applications 17.04.1) --- 15 April 2017 ===
 + Fix option text for using default email address from KMail/System Settings [KDE Bug 378722]
 

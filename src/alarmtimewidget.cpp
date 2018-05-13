@@ -220,17 +220,10 @@ void AlarmTimeWidget::init(Mode mode, const QString& title)
         mTimeZoneBox->setWhatsThis(i18nc("@info:whatsthis", "Select the time zone to use for this alarm."));
         label->setBuddy(mTimeZone);
         layout->addWidget(mTimeZoneBox);
-
-        // Time zone checkbox
-        mNoTimeZone = new CheckBox(i18nc("@option:check", "Use local time zone"), topWidget);
-        connect(mNoTimeZone, &CheckBox::toggled, this, &AlarmTimeWidget::slotTimeZoneToggled);
-        mNoTimeZone->setWhatsThis(xi18nc("@info:whatsthis", "Check to use the computer's default time zone."));
-        layout->addWidget(mNoTimeZone);
         layout->addStretch();
 
         // Initially show only the time zone button, not time zone selector
         mTimeZoneBox->hide();
-        mNoTimeZone->hide();
     }
 
     // Initialise the radio button statuses
@@ -253,10 +246,7 @@ void AlarmTimeWidget::setReadOnly(bool ro)
         mAnyTimeCheckBox->setReadOnly(ro);
     mAfterTimeRadio->setReadOnly(ro);
     if (!mDeferring)
-    {
         mTimeZone->setReadOnly(ro);
-        mNoTimeZone->setReadOnly(ro);
-    }
     mDelayTimeEdit->setReadOnly(ro);
 }
 
@@ -364,8 +354,7 @@ void AlarmTimeWidget::setDateTime(const DateTime& dt)
         mTimeSpec = dt.timeSpec().isValid() ? dt.timeSpec() : KADateTime::LocalZone;
     else
     {
-        const QTimeZone tz = dt.timeZone();
-        mNoTimeZone->setChecked(!tz.isValid());
+        const QTimeZone tz = (dt.timeSpec() == KADateTime::LocalZone) ? QTimeZone() : dt.timeZone();
         mTimeZone->setTimeZone(tz);
         slotTimeZoneChanged();
     }
@@ -601,13 +590,8 @@ void AlarmTimeWidget::slotAnyTimeToggled(bool on)
 */
 void AlarmTimeWidget::slotTimeZoneChanged()
 {
-    if (mNoTimeZone->isChecked())
-        mTimeSpec = KADateTime::LocalZone;
-    else
-    {
-        QTimeZone tz = mTimeZone->timeZone();
-        mTimeSpec = tz.isValid() ? KADateTime::Spec(tz) : KADateTime::LocalZone;
-    }
+    const QTimeZone tz = mTimeZone->timeZone();
+    mTimeSpec = tz.isValid() ? KADateTime::Spec(tz) : KADateTime::LocalZone;
     if (!mTimeZoneBox->isVisible()  &&  mTimeSpec != Preferences::timeSpec())
     {
         // The current time zone is not the default one, so
@@ -620,15 +604,6 @@ void AlarmTimeWidget::slotTimeZoneChanged()
 }
 
 /******************************************************************************
-* Called after the mNoTimeZone checkbox has been toggled.
-*/
-void AlarmTimeWidget::slotTimeZoneToggled(bool on)
-{
-    mTimeZone->setEnabled(!on);
-    slotTimeZoneChanged();
-}
-
-/******************************************************************************
 * Called after the mTimeZoneButton button has been clicked.
 * Show the time zone selection controls, and hide the button.
 */
@@ -636,7 +611,6 @@ void AlarmTimeWidget::showTimeZoneSelector()
 {
     mTimeZoneButton->hide();
     mTimeZoneBox->show();
-    mNoTimeZone->show();
 }
 
 /******************************************************************************

@@ -416,7 +416,6 @@ UpdateResult modifyEvent(KAEvent& oldEvent, KAEvent& newEvent, QWidget* msgParen
 
                 // Remove "Don't show error messages again" for the old alarm
                 setDontShowErrors(oldId);
-
             }
         }
     }

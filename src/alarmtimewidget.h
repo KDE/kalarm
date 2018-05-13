@@ -77,7 +77,6 @@ class AlarmTimeWidget : public QFrame
         void              delayTimeChanged(int);
         void              slotAnyTimeToggled(bool);
         void              slotTimeZoneChanged();
-        void              slotTimeZoneToggled(bool);
         void              showTimeZoneSelector();
 
     private:
@@ -95,7 +94,6 @@ class AlarmTimeWidget : public QFrame
         TimeSpinBox*      mDelayTimeEdit;
         PushButton*       mTimeZoneButton;
         QWidget*          mTimeZoneBox;      // contains label and time zone combo box
-        CheckBox*         mNoTimeZone;
         TimeZoneCombo*    mTimeZone;
         KADateTime        mMinDateTime;      // earliest allowed date/time
         KADateTime        mMaxDateTime;      // latest allowed date/time
